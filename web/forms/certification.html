@@ -6,13 +6,12 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-06-14 18:20:01 $'
-  *  '$Revision: 1.2 $'
+  *      '$Date: 2002-08-29 05:30:09 $'
+  *  '$Revision: 1.3 $'
   *
   *
   -->
-  
-<HTML><!-- #BeginTemplate "/Templates/VegBank_Master.dwt" -->
+<html>
 <HEAD>
 <!-- #BeginEditable "doctitle" --> 
 <TITLE>VegBank Certification</TITLE>
@@ -163,6 +162,7 @@
         </select>
         </font></td>
     </tr>
+<!--
     <tr> 
       <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">6 
         - Attach brief CV</font></span></td>
@@ -170,6 +170,7 @@
         <input type="file" name="cv">
         </font></td>
     </tr>
+-->
     <tr> 
       <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">7 
         - Highest degree* </font></span></td>
@@ -213,9 +214,9 @@
         - ESA Certified Ecologist ?* #</font></span></td>
       <td colspan="3" height="21"><font face="Georgia, Times New Roman, Times, serif" size="2"> 
         No 
-        <input type="radio" name="esaPos" value="radiobutton" checked>
+        <input type="radio" name="esaPos" value="no" checked>
         ; Yes 
-        <input type="radio" name="esaPos" value="radiobutton">
+        <input type="radio" name="esaPos" value="yes">
         </font></td>
     </tr>
     <tr> 
@@ -231,8 +232,10 @@
     <tr> 
       <td colspan="3"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">14 
         - List up to 5 relevant publications/theses <br>
+<!--
         (any others may be included in an attached CV):</font></span></td>
-      <td colspan="2"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
+-->    
+		<td colspan="2"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
     </tr>
     <tr> 
       <td width="9%"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
@@ -277,7 +280,7 @@
     </tr>
     <tr> 
       <td colspan="3"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">18 
-        - Briefly describe your prior experience with the VegBank archive, in 
+        - Briefly describe your prior experience with the VegBank archive, if 
         any:*</font></span></td>
       <td colspan="2"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
     </tr>
@@ -383,7 +386,7 @@
     </tr>
     <tr> 
       <td colspan="2">
-        <select name="region2">
+        <select name="nvcExpRegionB">
           <option>US/CAN - NE </option>
           <option>US - SE</option>
           <option>US/CAN - Midwest </option>
@@ -403,7 +406,7 @@
         </select>
       </td>
       <td width="19%"> 
-        <select name="veg2">
+        <select name="nvcExpVegB">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -412,7 +415,7 @@
         </select>
       </td>
       <td width="15%"> 
-        <select name="flora2">
+        <select name="nvcExpFloristicsB">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -421,7 +424,7 @@
         </select>
       </td>
       <td width="33%"> 
-        <select name="nvc2">
+        <select name="nvcExpNVCB">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -432,7 +435,7 @@
     </tr>
     <tr> 
       <td colspan="2"><font face="Georgia, Times New Roman, Times, serif" size="2">
-        <select name="region3">
+        <select name="nvcExpRegionC">
           <option>US/CAN - NE </option>
           <option>US - SE</option>
           <option>US/CAN - Midwest </option>
@@ -452,7 +455,7 @@
         </select>
         </font> </td>
       <td width="19%"> 
-        <select name="veg3">
+        <select name="nvcExpVegC">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -461,7 +464,7 @@
         </select>
       </td>
       <td width="15%"> 
-        <select name="flora3">
+        <select name="nvcExpFloristicsC">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -470,7 +473,7 @@
         </select>
       </td>
       <td width="33%"> 
-        <select name="nvc3">
+        <select name="nvcExpNVCC">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -496,22 +499,24 @@
     </tr>
     <tr> 
       <td colspan="3"><font face="Georgia, Times New Roman, Times, serif" size="2">Name 
-        <input type="text" name="refName2" size="50" maxlength="50">
+        <input type="text" name="esaSponsorNameB" size="50" maxlength="50">
         </font></td>
       <td colspan="2"> email 
-        <input type="text" name="refEmail2">
+        <input type="text" name="esaSponsorEmailB">
       </td>
     </tr>
-    <tr> 
+
+   <tr> 
       <td colspan="3"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">23 
         - Check if you would be interested in serving as a peer reviewer for proposed 
         changes in the US-NVC?</font></span></td>
       <td colspan="2"><font face="Georgia, Times New Roman, Times, serif" size="2"> 
-        <input type="radio" name="peerReview" value="radiobutton">
+        <input type="radio" name="peerReview" value="yes">
         </font></td>
     </tr>
+
     <tr> 
-      <td colspan="3"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">24 
+      <td colspan="3"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">24
         - Additional statements:</font></span></td>
       <td colspan="2"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
     </tr>

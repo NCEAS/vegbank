@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-08-13 15:42:23 $'
-  *  '$Revision: 1.10 $'
+  *      '$Date: 2002-08-29 05:30:08 $'
+  *  '$Revision: 1.11 $'
   *
   *
   -->
@@ -59,7 +59,7 @@
     <table border=0 cellpadding=5 width="366" height="55">
       <tr>
     					<td align=left valign=bottom>
-    					<font face="Helvetica,Arial,Verdana" size=6 color=23238E> Plant Taxonomy Lookup
+    					<font face="Helvetica,Arial,Verdana" size=6 color=23238E> Plant Concept Lookup
     					</font><br>
     					</td>
    				</tr>
@@ -124,9 +124,9 @@
         <td align=left valign=top width="556"> <font face="Helvetica,Arial,Verdana" color=000000> 
           <input type = "radio" name="taxonNameType" value = "%" checked >
       Any <br>
-      <input type = "radio" name="taxonNameType" value = "scientificName">
+      <input type = "radio" name="taxonNameType" value = "scientific Name">
       Scientific name<br>
-      <input type = "radio" name="taxonNameType" value = "commonName">
+      <input type = "radio" name="taxonNameType" value = "common Name">
       Common name<br>
       <input type = "radio" name="taxonNameType" value = "Code">
       Code <br>
@@ -149,9 +149,13 @@
       Genus <br>
       <input type = "radio" name="taxonLevel" value = "species">
       Species <br>
+      <input type = "radio" name="taxonLevel" value = "subspecies">
+      Sub-species <br>
       <input type = "radio" name="taxonLevel" value = "variety">
       Variety <span class="itemsmall"> -- Names with variety are of form "Genus 
       species var. variety"</span><br>
+			<input type = "radio" name="taxonLevel" value = "hybrid">
+      Hybrid <br>
       </font> </td>
   </tr>
   <!-- HORIZONTAL LINE -->
@@ -162,11 +166,15 @@
   </tr>
   <tr>
         <td width="156" align=left valign=top height="70"> <b>Date:</b> </td>
-        <td align=left valign=top height="70" width="556"> <font face="Helvetica,Arial,Verdana" color=000000> 
-          <input type="text" name="startDate">
+        <td align=left valign=top height="70" width="556"> 
+				<font face="Helvetica,Arial,Verdana" color=000000> 
+  <!--        <input type="text" name="startDate">
             Start <br>
-            <input type="text" name="stopDate">
-            Stop 
+	-->
+            <input type="text" name="targetDate">
+						<span class="itemsmall"> -- If left blank, today's date will be used 
+						<a href=/forms/hints.html#dateformats> <img height="14" width="14" border="0" src="/vegbank/images/question.gif"></a> </span>
+             
 			</font>
           </td>
   </tr>
