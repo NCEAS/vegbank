@@ -1,0 +1,619 @@
+Option Compare Database
+Option Explicit
+Const debuglevl = 0
+''module is for linking to different forms, so that it is only done once!
+
+Public Function openF_simpleImport(strTable As String)
+  DoCmd.OpenForm "basicImp_ImportMap", , , , , , strTable
+End Function
+
+Public Function openF_listOfLoadTbls()
+  DoCmd.OpenForm "ViewLoadTbls"
+End Function
+
+Public Function openF_VegBankModViewMenu()
+  DoCmd.OpenForm "viewVBSwitch"
+End Function
+
+Public Function openF_mainMenu(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  DoCmd.OpenForm "NavForm"
+  DoCmd.Restore
+End Function
+
+Public Function openF_secMenuLearn()
+  DoCmd.OpenForm "SecondMenu_LearnMore"
+End Function
+
+Public Function openF_secMenuImportLegacy()
+  DoCmd.OpenForm "SecondMenu_importLegacy"
+End Function
+
+Public Function openF_secMenuEnterData()
+  DoCmd.OpenForm "SecondMenu_enterNewData"
+End Function
+
+Public Function openF_importFromVegBank()
+  DoCmd.OpenForm "importVegBankFile"
+End Function
+
+Public Function openF_SpecList(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  DoCmd.OpenForm "Z_user_B_specList"
+End Function
+
+Public Function openF_loadCustomFormats()
+  DoCmd.OpenForm "W_customFormats"
+End Function
+
+Public Function openF_VegBranchOptions()
+  DoCmd.OpenForm "Y_OptionsStored"
+End Function
+
+Public Function openF_SpecList_new(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  DoCmd.OpenForm "Z_user_B_specList_new"
+End Function
+
+Public Function openF_accCodeMaintain(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  DoCmd.OpenForm "x_accessionCode_maintain"
+End Function
+
+Public Function openF_metadata_plantComm(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  DoCmd.OpenForm "MetaData_Plant_Comm"
+End Function
+Public Function openF_metadata(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  DoCmd.OpenForm "MetaDataSwitchboard"
+End Function
+
+Public Function openF_projContrib(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  DoCmd.OpenForm "Y_ProjContrib"
+End Function
+
+Public Function openF_datacheck(Optional blnCloseMe As Boolean, Optional strListErrsShow As String)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  If IsFormOpen("dataCheckSwitchboard") Then DoCmd.Close acForm, "dataCheckSwitchBoard", acSavePrompt
+  DoCmd.OpenForm "DataCheckSwitchboard", , , , , , strListErrsShow
+End Function
+
+Public Function openF_migrate(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+    DoCmd.OpenForm "MigrateData_Final"
+End Function
+
+''matching plants and communities
+Public Function openF_matchPlants(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  DoCmd.OpenForm "Z_USER_B_vb_View"
+End Function
+Public Function openF_matchComms(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  DoCmd.OpenForm "Z_USER_H_vb_View"
+End Function
+
+
+
+Public Function openF_howPlantsAreMatched(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  DoCmd.OpenForm "Z_B_PriorityConceptLookup"
+End Function
+
+Public Function openF_howCommsAreMatched(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  DoCmd.OpenForm "Z_H_PriorityConceptLookup"
+End Function
+
+Public Function openF_loaddataoverview(Optional blnCloseMe As Boolean, Optional strTable As String)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  DoCmd.OpenForm "LoadGroupSwitch", , , , , , strTable
+
+End Function
+
+Public Function openF_changeRankingOf(strTableName As String)
+  If IsFormOpen("rank_tables_gui") Then
+    DoCmd.Close acForm, "rank_tables_gui"
+  End If
+  DoCmd.OpenForm "rank_tables_gui", , , , , , strTableName
+  
+End Function
+
+Public Function openF_StoreRanksAsTblQry()
+  DoCmd.OpenForm "rank_tables"
+  
+End Function
+
+Public Function openF_taxMapTool()
+  DoCmd.OpenForm "TaxConcMapTool"
+End Function
+
+Public Function openF_VBForm(strName As String, Optional dblHow As Double, _
+   Optional strIDs As String, Optional blnWarnEdit As Boolean, Optional blnStopOnNeg1IDs As Boolean, Optional blnRefreshMEFirst As Boolean)
+  'intHow = 1 for edit (1.1=edit + add) (1.2=edit+delete), -1 for entry, 2 for readonly
+  'pass either a PK for strIDs (or a list of PKs) or a WHERE statement, without the where
+  If blnRefreshMEFirst Then
+    Call rereshCurrForm
+  End If
+  
+  If debuglevl > 0 Then Debug.Print "openF_VBForm>> " & strName & " : " & dblHow & " strIDS:" & strIDs
+  If blnStopOnNeg1IDs And strIDs = "-1" Then
+    msgBox "Sorry, there is nothing more to view, the reference is null.", vbExclamation
+    Exit Function
+  End If
+  Dim strWHERE As String
+  strWHERE = ""
+  If InStr(strIDs, "=") > 0 Or InStr(strIDs, ">") > 0 Or InStr(strIDs, "<") > 0 Then
+   'strIDs is where statement, without the where
+    strWHERE = strIDs
+  Else
+    If strIDs <> "" Then strWHERE = WhatIsPKOf(strName) & " in (" & strIDs & ")"
+  End If
+  
+  'could add manual filters in the event forms are renamed here: select case strname...
+  DoCmd.OpenForm strName, , , strWHERE
+  If dblHow <> 0 Then Call Frm_makeEditable(dblHow, strName, blnWarnEdit)
+  
+End Function
+
+Public Function showHideVegBankModMenu(blnShow As Boolean)
+  'function shows or hides vegbank module menu, dep on blnShow
+  If blnShow Then
+    DoCmd.ShowToolbar "vegbank_mod_toolbar", acToolbarYes
+  Else
+    DoCmd.ShowToolbar "vegbank_mod_toolbar", acToolbarNo
+  End If
+End Function
+
+Public Function showHideBasicEntMenu(blnShow As Boolean)
+  'function shows or hides menu, dep on blnShow
+    If blnShow Then
+    DoCmd.ShowToolbar "basicEnt_forms", acToolbarYes
+  Else
+    DoCmd.ShowToolbar "basicEnt_forms", acToolbarNo
+  End If
+End Function
+
+
+Public Function getCurrentObsIDEquals() As String
+  'function gets observation_ID=Num from current form, if available
+  On Error GoTo noObsID
+  Dim strCurrFormName As String
+  strCurrFormName = Screen.ActiveForm.Name
+  Debug.Print strCurrFormName; " is current form"
+  getCurrentObsIDEquals = "observation_ID=" & Screen.ActiveForm.Controls("observation_ID")
+  
+exitGetOBSID:
+  Exit Function
+noObsID:
+  Debug.Print "No obsID on: " & strCurrFormName
+  getCurrentObsIDEquals = ""
+  Resume exitGetOBSID
+End Function
+
+Public Function openF_plotObs_VB(Optional strIDs As String, Optional strPlotObs As String, Optional intLargeForm As Integer)
+  'function opens form to view plot and observation data
+  'strIDs being passed is fine, so long as strPlotObs is passed (plot or observation) to tell what the IDs are talking about
+  'intLargeForm = 1 yields the form with no tabs, 0 = tabbed form , 2 looks to see what form is open and uses that form
+  'JAN-15-2004 MTL
+  Dim blnLargeForm As Boolean
+  blnLargeForm = False 'default
+  Select Case intLargeForm
+    Case 1
+      blnLargeForm = True
+    Case 2
+      'screen is on large form, use it!
+      If Screen.ActiveForm.Name = "obs_plot_big" Then blnLargeForm = True
+  End Select
+  
+  If InStr(strIDs, ",") > 0 Or strIDs = "" Or Not (IsNumeric(strIDs)) Then
+    'multiple IDs, get form filtered to right plots
+    
+  Dim strWHERE As String
+  
+  
+  If strIDs <> "" And strPlotObs <> "" Then
+    Select Case strPlotObs
+      Case "plot"
+        strWHERE = "plot_ID in (" & strIDs & ")"
+      Case "observation"
+        strWHERE = "observation_ID in (" & strIDs & ")"
+      Case Else
+        strWHERE = ""
+    End Select
+  End If
+  
+  
+  'override with where statement, if has operator in it
+  If InStr(strIDs, "=") > 0 Or InStr(strIDs, ">") > 0 Or InStr(strIDs, "<") > 0 Then
+   'strIDs is where statement, without the where
+    strWHERE = strIDs
+  End If
+  
+  DoCmd.OpenForm "obs_plot" & IIf(blnLargeForm, "_big", ""), , , strWHERE
+    Debug.Print "just opened obs_plot with filter=" & strWHERE
+    
+  Else 'just one ID,  or -1
+    If strIDs = "-1" Then
+      'cannot get plot
+      msgBox "Cannot show the plot requested: there is no such plot/observation"
+    Else
+      If strPlotObs = "plot" Then
+        'get obs_ID that corresponds to this plotID
+        strIDs = getvalFrmSQL("select min(observation_ID) from observation where plot_ID=" & strIDs)
+      End If
+      Dim lngID As Long
+      lngID = strIDs
+      'try to find exactly the obs they are looking for
+      Call frm_findVal("obs_plot" & IIf(blnLargeForm, "_big", ""), "observation_ID", lngID)
+    End If
+  End If
+  
+End Function
+
+
+Public Function openF_loaddata(Optional blnCloseMe As Boolean, Optional tblName As String)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  Dim strWHERE As String
+  strWHERE = ""
+  If tblName <> "" Then strWHERE = " tableName=""" & tblName & """"
+  DoCmd.OpenForm "master_switchboard", , , strWHERE
+
+End Function
+
+Public Function openF_migrStats(strName As String)
+  'opens migrations stats, given a migration name
+  If strName <> "" Then
+   DoCmd.OpenForm "Z_Migr_stats", , , "migrationName=" & SQLizeTxt(strName)
+   Forms!Z_Migr_stats!currentMigrName = strName
+  Else
+   DoCmd.OpenForm "Z_Migr_stats"
+  End If
+End Function
+
+Public Function openF_ManualMatchForm(strFld As String)
+  On Error Resume Next
+  DoCmd.Close acForm, "Z_VB_Reconcile"
+  DoCmd.OpenForm "Z_VB_Reconcile", , , , , , strFld
+End Function
+
+Public Function openF_viewLoadTbls(Optional blnCloseMe As Boolean)
+  If blnCloseMe Then
+    DoCmd.Close
+  End If
+  Call CheckTblForRecs("mod", "loading")
+  DoCmd.OpenForm "viewLoadTbls"
+End Function
+
+Public Function openF_tableMeter(strModule As String, blnLimitNum As Boolean, _
+   strOperator As String, strNumberRecs As String, Optional strMigrName As String, Optional blnOpenOptionFrm As Boolean)
+ ''take input from form to create new table meter, after checking above
+ 
+ 
+ If strMigrName <> "" Then
+   'override mod if asking only for loading
+   If strModule = "loading" Then strModule = ""
+ End If
+ '----------LOGICAL CHECKS---------------
+ Dim strWHERE As String
+ If strModule = "NONE" Then
+   msgBox "Please choose a module to graph"
+   GoTo exitthis
+ End If
+ If strMigrName = "!@!NONE@!" Then
+   msgBox "Please choose a migration name for which to graph stats"
+   GoTo exitthis
+ End If
+   Dim strWhereMod As String ' which module(s) to include
+   Select Case strModule
+     Case "" ' blank means all
+       strWhereMod = "([mod]=""vegbank"" or [mod]=""loading"")"
+     Case Else
+       strWhereMod = "([mod]=""" & strModule & """)"
+   End Select
+  
+ If blnLimitNum Then
+   Select Case strOperator
+   Case "<", "<=", ">", ">=", "=", "<>"
+   Case Else
+     msgBox "Please choose a valid operator, such as '>' (greater than)"
+     GoTo exitthis
+   End Select
+   If Not IsNumeric(strNumberRecs) Then
+     msgBox "Please specify a numeric value for number of records required"
+     GoTo exitthis
+   End If
+   Dim strWhereOp As String
+   strWhereOp = "(numberOfRecs  " & strOperator & strNumberRecs & ")"
+   strWHERE = " WHERE " & strWhereOp & " AND " & strWhereMod
+ Else
+   strWhereOp = "true"
+   strWHERE = " WHERE " & strWhereMod
+ End If
+ Dim strCapT As String
+ strCapT = IIf(strModule = "", "both modules", strModule & " module") _
+    & IIf(blnLimitNum, " limited to : " & strOperator & strNumberRecs, "")
+  
+ '-----optionally open options form, first, so behind other form
+ If blnOpenOptionFrm Then Call openF_TableMeterOptions
+  
+ '----------CREATE NEW graph AND OPEN-----------------------
+ If strMigrName <> "" Then
+    strWhereOp = "WHERE " & substTextForText(strWhereOp, "numberofREcs", "countAdded")
+    Call MakeNewGraph("Migration Stats Graph:" & strMigrName & ", " & strCapT, _
+    " FROM Z_migrationStats_UI " & strWhereOp & " AND migrationNAme=""" & strMigrName & """", strModule, "param1", _
+    "--Table Name--", "", _
+    "countRecAft", "countAdded", "Total Records in table after migration (number migrated)", False)
+ Else
+  
+ Call MakeNewGraph("Number of records per table: " & strCapT, _
+   " FROM Z_tableDescription_FriendlyNm " & strWHERE, strModule, "friendLyName", _
+    "--Table Name--", "", "numberOfRecs", "", "Count of Records per Table", False)
+End If
+exitthis:
+ Exit Function
+End Function
+Public Function openF_TableMeterOptions()
+  DoCmd.OpenForm "GraphingOptions"
+End Function
+
+Public Function frm_delete_tempgraphs()
+   'deletes a table Meter forms, which are dynamically produced to show status of records, if they aren't open
+   Dim frmCurr As Object, strName As String, colToDel As New Collection, inttemp As Integer
+   For Each frmCurr In CurrentProject.AllForms
+   strName = frmCurr.Name
+      If strName Like definePrefix("tempGraph") & "*" And InStr(strName, "__") Then
+       
+        If IsFormOpen(strName) = False Then 'if open, leave alone
+           Debug.Print "frm_delete_tempgraphs>> deleting!: " & strName
+          
+          colToDel.Add (strName)
+          
+        End If
+      End If
+      
+   Next frmCurr
+   For inttemp = 1 To colToDel.Count
+     On Error GoTo cantDel
+     DoCmd.DeleteObject acForm, colToDel(inttemp)
+   Next
+   
+exitDel:
+Exit Function
+cantDel:
+   Debug.Print "frm_delete_tempgraphs>> can't delete: " & strName & Err.Description
+   Resume Next
+End Function
+
+
+Public Function MakeNewGraph(strTitle As String, strSQLSuffix As String, strModuleUpdate As String, _
+  strLabelField As String, strLabelLbl As String, strHLinkField As String, strNum1Field As String, strNum2Field As String, _
+  strNumbersLabel As String, Optional blnNotLog As Boolean, Optional dblXscale As Double)
+  'function create a new generic graph
+  'strSQLSuffix is " FROM tbl wHERE xjdkslafjkdlas " : everything starting with FROM
+  If debuglevl > 0 Then
+    Debug.Print "MakeNewGraph>> init:" & strTitle & " | SQL:" & strSQLSuffix
+  End If
+  Dim strProcPos As String
+  strProcPos = UpdateProcessingPosX(0, 0, "", True, "Preparing graph:" & strTitle)
+   Dim dblX As Double, dblY As Double, dblOrigX As Double
+  dblOrigX = 0.5 * 1440
+  'constants for width and height, in inches
+  'X is X unit, Y is height for main controls
+  If blnNotLog And dblXscale <> 0 Then
+    dblX = dblXscale * 1440
+  Else
+    dblX = dblOrigX
+  End If
+  dblY = (1 / 6) * 1440
+  
+  'update # recs on tables
+  Call UpdateProcessingPosX(1, 1, strProcPos)
+  'update number of recs per table, as instructed by passed params
+  Call CheckTblForRecs("mod", strModuleUpdate)
+  
+'--------------------------WRITE NEW FORM-------------------------------------------
+  'get new form name
+  Dim strNewForm As String, frmCurr As Form, strTempName As String
+  strNewForm = getNewFrmName(definePrefix("tempGraph"), "")
+  DoCmd.CopyObject , strNewForm, acForm, "tableMeterTemplate"
+  DoCmd.OpenForm strNewForm, acDesign
+  Set frmCurr = Forms(strNewForm)
+  
+  Dim rstTbls As New ADODB.Recordset, ctlCurr As Control, lngMaxRex As Long, lngNumTbls As Long
+  
+  'open rst to get max info
+  rstTbls.Open "select max(" & strNum1Field & ") as maxNum__1, " & _
+    IIf(strNum2Field <> "", " max(" & strNum2Field & ") as maxNum__2,  ", "") _
+    & " count(1) as count__lbls " & strSQLSuffix, CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  If Not rstTbls.EOF Then
+  lngMaxRex = Nz(rstTbls!maxNum__1, 1)
+  If strNum2Field <> "" Then
+    If Nz(rstTbls!maxNum__2, 1) > lngMaxRex Then
+      lngMaxRex = Nz(rstTbls!maxNum__2, 1)
+    End If
+  End If
+  lngNumTbls = Nz(rstTbls!count__lbls, 1) ' numner of labels
+  Else
+  lngMaxRex = 1
+  lngNumTbls = 1
+   
+  End If
+  
+  rstTbls.Close
+
+Dim intLogs As Integer, inttemp As Integer, ctlnew As New Control
+  '---set a few form options
+  frmCurr.Caption = strTitle
+  frmCurr.Controls("LabelHDRTableName").Caption = strLabelLbl
+  frmCurr.Controls("LabelHDRNumREcs").Caption = strNumbersLabel & IIf(blnNotLog, " (normal scale)", " (log scale)")
+  frmCurr.Controls("LabelHDRNumREcs").SizeToFit
+  '--------------- MAKE NEW FORM CORRECT HEIGHT --------------------------------------
+  'keep track of how many tables(rows)
+  Dim intTableNum As Integer ' start with table 0
+  intTableNum = 0
+  'get tables to show on new form
+  rstTbls.Open "select * " & strSQLSuffix, CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+   With rstTbls
+    Do Until .EOF
+      
+      'copy blue bar
+      Set ctlCurr = frmCurr("boxBlue")
+      Set ctlnew = copyControl(ctlCurr)
+      ctlnew.Top = dblY * intTableNum
+      ctlnew.Name = ctlCurr.Name & intTableNum
+      Dim lngWidth As Long
+      lngWidth = 0
+      If Not IsNull(.Fields(strNum1Field)) Then
+        If blnNotLog Then
+          lngWidth = .Fields(strNum1Field) * dblX
+        Else
+          If .Fields(strNum1Field) > 0 Then lngWidth = (((Log(.Fields(strNum1Field))) / Log(10)) + 1) * dblX  'inches per log10(10)
+        End If
+        If lngWidth < 0 Then
+          ctlnew.Left = ctlnew.Left + lngWidth '(substracts from current lefT)
+        End If
+      End If
+      ctlnew.Width = Abs(lngWidth)
+      ctlnew.Visible = True
+      
+      'if another numeric field, calc width of it, too
+      If strNum2Field <> "" Then
+      'copy green bar
+       Set ctlCurr = frmCurr("boxGreen")
+       Set ctlnew = copyControl(ctlCurr)
+       ctlnew.Top = dblY * intTableNum
+       ctlnew.Name = ctlCurr.Name & intTableNum
+       lngWidth = 0
+       If Not IsNull(.Fields(strNum2Field)) Then
+        If blnNotLog Then
+          lngWidth = .Fields(strNum2Field) * dblX
+        Else
+          If .Fields(strNum2Field) > 0 Then lngWidth = (((Log(.Fields(strNum2Field))) / Log(10)) + 1) * dblX 'inches per log10(10)
+        End If
+        If lngWidth < 0 Then
+          ctlnew.Left = ctlnew.Left + lngWidth '(substracts from current lefT)
+        End If
+       End If
+       ctlnew.Width = Abs(lngWidth)
+       ctlnew.Visible = True
+      End If
+      
+      'copy control that says what table this is:
+      Set ctlCurr = frmCurr("LabelTableName")
+      Set ctlnew = copyControl(ctlCurr)
+      ctlnew.Top = dblY * intTableNum
+      ctlnew.Caption = Nz(.Fields(strLabelField))
+     ' ctlNEw.SizeToFit ' right aligned, size to fit not needed.
+      ctlnew.Name = ctlCurr.Name & intTableNum
+      ctlnew.Visible = True
+      
+      
+      'copy label that say value of number
+      Set ctlCurr = frmCurr("LabelYellowNum")
+      Set ctlnew = copyControl(ctlCurr)
+      ctlnew.Top = dblY * intTableNum
+      ctlnew.Name = ctlCurr.Name & intTableNum
+      If strNum2Field <> "" Then
+      ctlnew.Caption = Nz(.Fields(strNum1Field), 0) & IIf(strNum2Field <> "", " (" & Nz(.Fields(strNum2Field), 0) & ")", "")
+      Else
+        ctlnew.Caption = Nz(.Fields(strNum1Field), 0)
+      End If
+      
+      ctlnew.SizeToFit
+      ctlnew.Visible = True
+      'update proc pos form
+      Call UpdateProcessingPosX(100 * intTableNum / (lngNumTbls + 1), 1, strProcPos)
+      'next table coming up
+      intTableNum = intTableNum + 1 'first table = 0, then 1,2,3,4...
+    .MoveNext
+    Loop
+   End With
+ 
+  '-------------- MAKE NEW FORM RIGHT WIDTH-------------------------------------
+  'get number of log groups to show: controls width of form
+  Dim dblGrain As Double ' how to calc next value
+  If lngMaxRex = 0 Then
+   intLogs = 1
+  Else
+   'int Logs is the number of scale markings needed
+   If blnNotLog Then
+     intLogs = (lngMaxRex / (dblOrigX / dblX)) - 1
+     dblGrain = dblOrigX / dblX
+   Else
+     intLogs = Int(Log(lngMaxRex) / Log(10)) + 1
+     dblGrain = 10
+   End If
+  End If
+  
+  For inttemp = 0 To intLogs
+    
+    Set ctlCurr = frmCurr.Controls("lineLog")
+    Set ctlnew = copyControl(ctlCurr)
+    'change a few things about line
+    ctlnew.Name = ctlCurr.Name & inttemp
+    ctlnew.Left = ctlCurr.Left + (1 + inttemp) * (dblOrigX)  ''spacing
+    ctlnew.Height = dblY * lngNumTbls
+    '---also add caption below, in footer
+    Set ctlCurr = frmCurr.Controls("labelLogNum")
+    Set ctlnew = copyControl(ctlCurr)
+    'change a few things about line
+    ctlnew.Name = ctlCurr.Name & inttemp
+    ctlnew.Left = ctlCurr.Left + (1 + inttemp) * (dblOrigX)  ' spacing
+    'get caption: for scale marker
+    Dim lngTempCaption As Long
+    If blnNotLog Then
+      'arithmetic, use *
+      lngTempCaption = dblGrain * (1 + inttemp)
+    Else 'log scale, use ^
+      lngTempCaption = dblGrain ^ (inttemp)
+    End If
+    
+    ctlnew.Caption = lngTempCaption
+    ctlnew.SizeToFit
+    ctlnew.Height = ctlnew.Height + 50 'just a hair too small, perhaps b/c of top margin
+  Next inttemp
+Call UpdateProcessingPosX(100, 1, strProcPos)
+DoCmd.Close acForm, strNewForm, acSaveYes
+DoCmd.OpenForm strNewForm, acNormal
+
+End Function
+
+Private Function testadjfakldsjfkladsdfjklasdlllll()
+MakeNewGraph "Good title!", " FROM testGraph", "", "labelGoo", "gooey stuff", "", "numUno", "numDos", "lake population before and after", True, 0.2
+End Function
+

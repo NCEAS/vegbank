@@ -1,0 +1,1403 @@
+Option Compare Database
+Option Explicit
+''add new xml export option
+Const intWriteDebugComments = 0
+Const lngCharsToDumpStrXML = 25000 'not used yet
+Const overwriteDebug = True 'true if should always insert debugging comments into XML
+Const blnSkipAllFldsWhereAccCodeRecog = True 'true if skipping all fields, even reqd ones if something is recog: needs new schema!
+
+Public Function interpretXMLSuppress(intCaseAssessionCodeSuppress As Integer) As String
+  'returns string of list of accession code prefixes to suppress details when encountered
+  Dim strRep As String
+  If intCaseAssessionCodeSuppress = 0 Then
+  'no suppress
+    strRep = ""
+  Else
+  'do suppress
+  'get default db
+   Dim strDB As String, rstToSuppress As New ADODB.Recordset
+   strDB = getvalFrmSQL("select [abbrev] from [x_accessionInfo] where [suppressXML]=1")
+   'default to VB.
+   If strDB = "" Then strDB = "VB."
+   If intCaseAssessionCodeSuppress = 1 Then
+    'suppress on DB only
+     strRep = strDB & "."
+   Else 'suppress on tbls, get prefixes
+     rstToSuppress.Open "select * from x_accessionInfo where suppressXML=" & intCaseAssessionCodeSuppress, CurrentProject.Connection _
+       , adOpenForwardOnly, adLockReadOnly, adCmdText
+     With rstToSuppress
+       Do Until .EOF
+         strRep = strRep & strDB & "." & !abbrev & ".,"
+       .MoveNext
+       Loop
+     
+     End With
+   End If
+      
+  End If '>0
+  interpretXMLSuppress = strRep
+End Function
+
+Public Function form_writePlotsToFile(intWhatPlots As Integer, strThesePlots As String, intSupport As Integer, intSchema As Integer, _
+  strFile_1 As String, strComments As String, Optional intCaseAssessionCodeSuppress As Integer, Optional blnNOTUDef As Boolean, _
+  Optional lngDivideIntoParts As Long, Optional lngObsIDGTMe As Long, Optional ByVal lngBatchNum As Long)
+  ''function writes plots and supporting data to file, based on options specified in form
+Dim blnCallingNew As Boolean, lngNextBatchMinObsID As Long
+ 'deal with real file name
+  Dim strFile As String
+  If lngBatchNum > 0 Then
+    strFile = addSuffFileNm(strFile_1, "_" & lngBatchNum)
+  Else
+    strFile = strFile_1
+  End If
+On Error GoTo err_formWRite
+Dim strAccessionPrefixStop As String
+strAccessionPrefixStop = interpretXMLSuppress(intCaseAssessionCodeSuppress)
+' strAccessionPrefixStop is prefix for accession code (VB.) which if an accessionCode starts with that, it will not recurse into inverted children: makes XML smaller if entities are already recognized
+Dim strSchemaName As String 'schema name depends on suppression of certain elements, if suppression, then simpler xsd.
+strSchemaName = "vegbank-data-ver" & GetVersion("vegbank") & IIf(Len(strAccessionPrefixStop) > 0, "-simple", "") & ".xsd"
+Dim strerrmore As String
+'first check that file can be written to:
+If prepareFileToWrite(strFile, True, ".xml", "vegbranch_export.xml") = False Then
+  'error in filename, exit without writing to file
+  strerrmore = "Cannot write to file. " & strFile
+  GoTo exitFormWriteXML
+End If
+'start of XML doc
+  Dim strRoot As String
+  strRoot = "<?xml version='1.0' encoding='UTF-16'?>" & vbCr
+  Select Case intSchema
+    Case 1 'local
+      strRoot = strRoot & "<VegBankPackage xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xsi:noNamespaceSchemaLocation=""" & strSchemaName & """>"
+    Case 2 'web
+      strRoot = strRoot & "<VegBankPackage xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xsi:noNamespaceSchemaLocation=""http://vegbank.org/vegdocs/xml/" & strSchemaName & """>"
+    Case 3 'none
+      strRoot = strRoot & "<VegBankPackage>"
+  End Select
+  'DONE with ROOT: write!
+  Call WriteLineToFile(strRoot, strFile, -1)
+  
+  Dim strPrefix As String
+  strPrefix = "<doc-VegBankVersion>" & xmlize_txt(GetVersion("vegbank")) & "</doc-VegBankVersion>" & vbCr _
+  & "<doc-date>" & xmlize_txt(Now(), "datetime") & "</doc-date>" & vbCr _
+  & "<doc-author>" & xmlize_txt(getCurrentPartyName()) & "</doc-author>" & vbCr _
+  & "<doc-authorSoftware>" & xmlize_txt("VegBranch, version: " & GetVersion("vegbranch", True)) & "</doc-authorSoftware>" & vbCr _
+  & "<doc-comments>" & xmlize_txt(strComments) & "</doc-comments>" & vbCr
+  'DONE with prefix
+  Call WriteLineToFile(strPrefix, strFile, -1)
+  
+  Dim dteStartExport As Date
+  dteStartExport = Now()
+'supporting data gets written first
+  
+'grab which tables need to be written as support data
+  Dim colTbls As New Collection
+  Dim rstGetTBLS As New ADODB.Recordset
+  rstGetTBLS.Open "Select tableNAme from z_tableDescription where exporttbl>=1 order by exporttbl;", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstGetTBLS
+    Do Until .EOF
+      'grab each table and add to colTbls collection
+      colTbls.Add (!TableName)
+    .MoveNext
+    Loop
+ 
+  End With
+  rstGetTBLS.Close
+'Debug.Print colTbls.Count & " tables found for supporting data "
+  
+'construct where statement for those things that are "new"
+     Dim strWHERE As String, strVegBrAccCode As String, strWhereObs As String
+     'get VegBranch accession code prefix (start with whole codE)
+     strVegBrAccCode = writeNewAccCode("observation", 1)
+     Debug.Print strVegBrAccCode
+'     then limit to prefix
+     strVegBrAccCode = Left(strVegBrAccCode, InStr(strVegBrAccCode, "."))
+     strWHERE = " left(accessionCode," & Len(strVegBrAccCode) & ")=""" & strVegBrAccCode & """"
+     strWhereObs = strWHERE
+     Debug.Print strWHERE
+  
+  Dim strSuppXML As String
+  Select Case intSupport
+    Case 1 'regular support- only what follows for plots
+      'do nothing here
+      strSuppXML = ""
+    Case 2, 3 'all new supporting data, or all data (3)
+      'send requests for all supporting data where accessionCode is of vegBranch type, or for all (3)
+
+     If intSupport = 3 Then
+       'overwrite strWhere
+       strWHERE = " true"
+       If msgBox("Are you sure you want to export ALL supporting data, including all plants and communities in vegBranch?  This will take a lot of time and diskspace.", vbYesNoCancel) <> vbYes Then
+         GoTo err_formWRite
+       End If
+     End If
+     'loop through collection of tables and request data for each
+     Dim inttemp As Integer
+     For inttemp = 1 To colTbls.Count
+       'add current supporting XML to string that is collecting it
+       strSuppXML = table2xml(colTbls(inttemp), "", , strWHERE, (intWriteDebugComments > 0), True, True, strAccessionPrefixStop)
+       'WRITE SUPPLEMENTAL TABLES TO FILE
+       Call WriteLineToFile(strSuppXML, strFile, -1)
+     Next inttemp
+     
+      
+  End Select
+
+  Dim strPlotsXML As String
+  Select Case intWhatPlots 'request obs one by one to use progress meter
+    Case 1 'all plots
+      strWhereObs = "WHERE TRUE "
+    Case 2 'all new plots
+      strWhereObs = " WHERE " & strWhereObs '  accessionCode is null" ' the rest is already set above
+    Case 3 'selected plots
+      strWhereObs = " WHERE observation_ID in (" & strThesePlots & ")"
+    Case 4 ' no plots
+      strWhereObs = " WHERE 1=2"
+    Case Else
+      strWhereObs = "" 'unknown
+   End Select
+   strWhereObs = strWhereObs & " AND observation_ID>" & lngObsIDGTMe
+    'get obses to write
+    Dim rstObs As New ADODB.Recordset, lngObses As Long, lngCountObs As Long, strProcFrmName As String
+    rstObs.Open "select * from Observation " & strWhereObs & " order by Observation_ID", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+    'get count of them
+    Dim lngObsesOrig As Long 'original total #
+    
+    lngObsesOrig = getvalFrmSQL("select count(1) from Observation " & strWhereObs)
+    
+    lngObses = lngObsesOrig
+    If lngDivideIntoParts > 0 And lngObses > lngDivideIntoParts Then
+      lngObses = lngDivideIntoParts
+    End If
+    Dim strProgressMessage As String, lngFilesToGo As Long
+If lngDivideIntoParts > 0 Then ' not div by 0
+    lngFilesToGo = Int(lngObsesOrig / ((lngDivideIntoParts)))
+    If lngObsesOrig Mod lngDivideIntoParts = 0 Then
+      'overestimated
+      lngFilesToGo = lngFilesToGo - 1
+    End If
+End If
+    strProgressMessage = "Writing XML for: " & lngObses & " observation(s)" & Chr(13) & "File " & lngBatchNum + 1 _
+      & " of " & lngBatchNum + 1 + lngFilesToGo
+    
+    lngCountObs = 0
+    'open form saying what's going on
+    strProcFrmName = UpdateProcessingPosX(0, 0, "", True, strProgressMessage)
+    strPlotsXML = ""
+    With rstObs
+    Do Until .EOF
+      'write xml for one obs
+      strPlotsXML = autoG_table2xml_observation("observation_ID=" & !OBSERVATION_ID, 1, Not blnNOTUDef, strAccessionPrefixStop)
+      'write PLOTS xml
+      Call WriteLineToFile(strPlotsXML, strFile, -1)
+      lngCountObs = lngCountObs + 1
+      Call UpdateProcessingPosX(Int(100 * lngCountObs / (lngObses)), 0, strProcFrmName, , , "finished " & lngCountObs & " of " & lngObses)
+    
+    
+    'check to see if stop this process and call next
+  If lngDivideIntoParts > 0 And lngCountObs >= lngDivideIntoParts Then
+    'break into parts, recurse here and append _batch_# to file name
+    'recurse this function with new filename and adjust value of minimum obs
+    blnCallingNew = True
+    lngNextBatchMinObsID = !OBSERVATION_ID
+  'later:  lngBatchNum = lngBatchNum + 1
+    'make sure that this is to be done:
+    .MoveNext
+    If .EOF Then
+      blnCallingNew = False
+    End If
+    GoTo escapeObsLoop
+  End If
+    .MoveNext
+    Loop
+    End With
+escapeObsLoop:
+    Call UpdateProcessingPosX(100, 0, strProcFrmName)
+    rstObs.Close
+    Set rstObs = Nothing
+   'old way:
+    'Case 1 'all plots
+   '   strPlotsXML = table2xml("observation", "", , " true", (intWriteDebugComments > 0), True, Not blnNOTUDef, strAccessionPrefixStop)
+   ' Case 2 'all new plots
+   '   strPlotsXML = table2xml("observation", "", , " accession_number is null", (intWriteDebugComments > 0), True, Not blnNOTUDef, strAccessionPrefixStop)
+  '  Case 3 'selected plot
+  '    strPlotsXML = autoG_table2xml_observation("observation_ID in (" & strThesePlots & ")", 1, Not blnNOTUDef, strAccessionPrefixStop)
+  '  Case 4 ' no plots
+  '    strPlotsXML = ""
+ ' End Select
+  
+
+ 
+ Dim strSuffix As String
+ strSuffix = "<!-- end write: " & xmlize_txt(Now(), "datetime") & " -->  " & vbCr & "</VegBankPackage>"
+  
+ 'originally wrote everything here, now just suffix:
+ Call WriteLineToFile(strSuffix, strFile, -1)
+ 
+ If Not blnCallingNew Then
+   msgBox strFile & " written successfully!" & Chr(13) & "Export took:" & FriendlyDate(dteStartExport, Now(), True)
+ Else
+   'calling new function, never report that last was done
+   Call form_writePlotsToFile(intWhatPlots, strThesePlots, intSupport, intSchema, strFile_1, strComments, _
+   intCaseAssessionCodeSuppress, blnNOTUDef, lngDivideIntoParts, lngNextBatchMinObsID, lngBatchNum + 1)
+ End If
+exitFormWriteXML:
+ Exit Function
+err_formWRite:
+ msgBox "Error trying to write to file: " & strFile & Chr(13) & Err.Description & Chr(13) & strerrmore & Chr(13) & "Please try again."
+ If strerrmore <> "" Then GoTo exitFormWriteXML 'avoid double error
+ Resume exitFormWriteXML
+End Function
+
+Public Function prepareFileToWrite(strFile As String, blnOverwrite As Boolean, strExt As String, Optional strDefaultName As String) As Boolean
+ 'prepares a file to write to, given append or overwrite : strExt is ".xml" or similar
+ Dim strerrmore As String
+ On Error GoTo errWriteFile
+ Select Case strExt
+   Case ".xml", ".txt", ".csv", ".html"
+     'ok
+   Case Else
+     strerrmore = "unrecognized file type: only allow xml, txt, and csv"
+     GoTo errWriteFile
+ End Select
+    
+  Dim fs As Object
+  Dim a As Object, awrite As Object
+
+Set fs = CreateObject("Scripting.FileSystemObject")
+
+'get file name if none supplied:
+ If strFile = "" Or strFile = "@prompt@" Then
+    strFile = InputBox(IIf(strFile = "@prompt@", "", "Invalid file name!" & Chr(13)) _
+      & "What name would you like to use for your new file (full path or just name of file)?", , strDefaultName)
+End If
+'cancelled exit this
+ If strFile = "" Then GoTo cancelFileWrite
+ 
+ If Right(strFile, Len(strExt)) <> strExt And strFile <> "" Then strFile = strFile & strExt
+  If InStr(strFile, "\") = 0 And strFile <> "" Then 'just file name, supply path
+    strFile = CurrentProject.Path & "\" & strFile
+   
+  End If
+ If fs.FileExists(strFile) Then
+  If blnOverwrite Then
+     'need to check to see if we can overwrite xml destination file
+   
+   Dim intResp As Integer
+   intResp = msgBox("The file, " & strFile & " already exists.  Overwrite it?", vbYesNo, "VegBranch")
+   If intResp = vbNo Then
+     strFile = "@prompt@"
+     'call new instance and request name there
+     prepareFileToWrite = prepareFileToWrite(strFile, blnOverwrite, strExt, strDefaultName)
+     GoTo exitthis
+   Else
+     'yes: ok to overwrite file
+   End If
+  Else 'file exists, but not given permission to overwrite
+   strerrmore = "The file already exists: " & strFile & ", but you do not have permission to overwrite it.  Select a new file name and try again, please."
+   GoTo errWriteFile
+  End If
+ Else
+   'file does not exist : OK
+   
+ End If
+ 
+
+
+ 
+ 
+ 'create and overwrite destination file (already checked with owner)
+'MsgBox "about to create : " & strFile
+ Set awrite = fs.CreateTextFile(strFile, True)
+  
+  awrite.Close
+  prepareFileToWrite = True
+  GoTo exitthis
+cancelFileWrite:
+ prepareFileToWrite = False
+  
+exitthis:
+ Exit Function
+errWriteFile:
+msgBox "error in writing file (make sure file has valid path and you can write to this location): " & strFile & Chr(13) _
+   & Err.Description & Chr(13) & strerrmore
+ prepareFileToWrite = False
+ If strerrmore <> "" Then GoTo exitthis 'avoid double error
+ Resume exitthis
+End Function
+
+Public Function table2xml(strTbl As String, strIDs As String, Optional lngIteration As Long, _
+   Optional strWHERE As String, Optional ByVal blnDebug As Boolean, Optional blnProcForm As Boolean, Optional blnUDef As Boolean _
+   , Optional ByVal strAccPrefixToStop As String, Optional blnInitStaticLongs As Boolean) As String
+   'orig
+   table2xml = table2xml_new(strTbl, strIDs, lngIteration, strWHERE, blnDebug, blnProcForm, blnUDef, strAccPrefixToStop, blnInitStaticLongs)
+End Function
+     
+
+Public Function table2xml_orig(strTbl As String, strIDs As String, Optional lngIteration As Long, _
+   Optional strWHERE As String, Optional ByVal blnDebug As Boolean, Optional blnProcForm As Boolean, Optional blnUDef As Boolean _
+     , Optional ByVal strAccPrefixToStop As String, Optional blnInitStaticLongs As Boolean) As String
+''strAccPrefixToStop is a prefix for accessionCodes, that, if matched, will stop the entry of inverted elements: ie this plantConcept is on vegbank, don't give all the info on it: can be list
+Static statGetTblInfo As Long
+Static statGetFldInfo As Long
+Static statStartEnt As Long
+Static statStartFK As Long
+Static statStartFld As Long
+Static statWriteInvert As Long
+Static statWriteUDef As Long
+
+If blnInitStaticLongs Then
+Debug.Print statGetTblInfo; " statGetTblInfo"
+Debug.Print statGetFldInfo; " statGetFldInfo"
+Debug.Print statStartEnt; " statStartEnt"
+Debug.Print statStartFK; " statStartFK"
+Debug.Print statStartFld; " statStartFld"
+Debug.Print statWriteInvert; " statWriteInvert"
+Debug.Print statWriteUDef; " statWriteUDef"
+ 
+ statGetTblInfo = 0
+ statGetFldInfo = 0
+ statStartEnt = 0
+ statStartFK = 0
+ statStartFld = 0
+ statWriteInvert = 0
+ statWriteUDef = 0
+ Exit Function
+End If
+
+'autoGenerated:
+Dim strThisFcnNameIs As String
+strThisFcnNameIs = "table2xml"
+Dim strXMLBigger As String
+'@tempcommentOut@reportDebug strThisFcnNameIs, False
+'endAutoGenerated----''
+'make it override blnDebug?
+If overwriteDebug = True Then blnDebug = True
+
+  ''takes a table and returns it as XML, given table names and comma list of PK's
+  If lngIteration >= 40 Then
+    msgBox "too many iterations, >=40"
+    'autoGenerated:
+    '@tempcommentOut@reportDebug strThisFcnNameIs, True, "exit"
+    'endAutoGenerated----''
+    
+    Exit Function
+  End If
+ 
+ ''-- FIRST GET TABLE INFO
+ statGetTblInfo = statGetTblInfo + 1
+  Dim rstFlds As New ADODB.Recordset, colFlds As New Collection, strPK As String, colKeys As New Collection, _
+     colFKType As New Collection, colFKName As New Collection, colReferences As New Collection, colDataType As New Collection, _
+     colClosedList As New Collection
+  rstFlds.Open "SELECT * from Z_FieldDesc_simpleOrd where TableName=""" & strTbl & """ and model='logical' and (not (xmlExportSkip=1)) ORDER BY seq ;", _
+     CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstFlds
+  Do Until .EOF
+  '  Debug.Print "in here"
+    statGetFldInfo = statGetFldInfo + 1
+    colFlds.Add (!FieldName)
+    colDataType.Add (Nz(!dataType, "n/a")), (!FieldName)
+    colKeys.Add Nz((!key), "n/a"), (!FieldName)
+    colClosedList.Add Nz(!ClosedList, ""), (!FieldName)
+    colFKType.Add Nz((!relType), "n/a"), (!FieldName)
+    colFKName.Add Nz((!relName), "n/a"), (!FieldName)
+    colReferences.Add Nz((!References), "n/a"), (!FieldName)
+    If !key = "PK" Then
+      strPK = !FieldName
+    End If
+  .MoveNext
+  Loop
+  End With
+  rstFlds.Close
+
+''---------NOW GET TABLE DATA -------
+Dim strXML As String, strFullSQL As String
+Dim rstData As New ADODB.Recordset
+If strWHERE <> "" Then
+  'manual where statement
+  strFullSQL = "SELECT * FROM [" & strTbl & "] WHERE " & strWHERE & " ORDER BY [" & strPK & "];"
+Else
+  strFullSQL = "SELECT * FROM [" & strTbl & "] WHERE [" & strPK & "] in (" & strIDs & ") ORDER BY [" & strPK & "];"
+End If
+rstData.Open strFullSQL, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  
+Dim lngCountRECS As Long, lngCurrent As Long, strProcFrmName As String
+If blnProcForm Then
+  'show position of this migration:
+  'first see how many records to output
+  Dim strPKof As String, strCountSQL As String
+  'get PKname to count
+  strPKof = WhatIsPKOf(strTbl)
+  'get sql that will count recs
+  strCountSQL = "SELECT count([" & strPKof & "]) FROM [" & strTbl & "] WHERE " & IIf(strWHERE <> "", strWHERE, "[" & strPK & "] in (" & strIDs & ")")
+  'record total number of recs
+  lngCountRECS = getvalFrmSQL(strCountSQL)
+  If lngCountRECS = 0 Then Debug.Print "No records for: " & strTbl
+  'init form and get name
+  strProcFrmName = UpdateProcessingPosX(0, 0, "", True, "Writing XML for: " & strTbl)
+End If
+  With rstData
+   
+    Do Until .EOF
+    statStartEnt = statStartEnt + 1
+    strXML = strXML & xml_Ent(strTbl)
+    If blnDebug Then strXML = strXML & "<!-- " & Now() & " -->"
+    'increase count of recs
+    
+    lngCurrent = lngCurrent + 1
+       '' START GETTING DATA to XML string
+       Dim inttemp As Integer
+       For inttemp = 1 To colFlds.Count
+         Dim strThisField As String
+         strThisField = colFlds(inttemp)
+         Select Case colKeys(strThisField)
+           Case "FK"
+               'is a FK - see what kind of FK:
+               If colFKType(strThisField) = "inverted" Then
+                 ''inverted relationship - don't add this, except you can add comment
+                 If blnDebug Then strXML = strXML & "<!-- inverted FK : " & strThisField & "-->"
+               Else ' not inverted fk
+                 '' assume normal FK
+                   'check to see if null or not.  If null, add comment and skip
+                 If IsNull(.Fields(strThisField).Value) Then
+                   If blnDebug Then strXML = strXML & "<!-- null normal FK : " & strThisField & "-->"
+                 Else ' is not null
+                   
+                 
+                   'insert Foreign entity
+                   Dim strRef As String, strForTbl As String
+                   strRef = colReferences(strThisField)
+                   strForTbl = Left(strRef, InStr(strRef, ".") - 1)
+                   
+                 If strForTbl = strTbl And .Fields(strPK).Value = .Fields(strThisField).Value Then
+                   'avoid recursive loop and don't print this
+                   If blnDebug Then strXML = strXML & "<!-- recursive foreign field : " & strThisField & " -->"
+                 Else 'not recursive to self
+                 
+                   
+                 strXML = strXML & xml_Ent(strTbl & "." & strThisField) ''<!-- insert field atts here (ie notes)-->
+                   ' recursively call this function again to insert the foreign table of this PK
+                  statStartFK = statStartFK + 1
+                   strXML = strXML & table2xml(strForTbl, (.Fields(strThisField).Value), lngIteration + 1, , blnDebug, _
+                       False, blnUDef, strAccPrefixToStop)
+                 strXML = strXML & xml_Ent(strTbl & "." & strThisField, True)
+                 End If 'recursive to self
+                 End If ' null or not
+               End If ' inverted FK or not
+           Case Else ' not an FK
+         
+           'simply report value of field
+           ''RULE: don't include null values at all:
+           If Not IsNull(.Fields(strThisField).Value) Then
+            statStartFld = statStartFld + 1
+            strXML = strXML & xml_Ent(strTbl & "." & strThisField) ''<!-- insert field atts here (ie notes)-->
+            'get data type, if datetime or boolean
+            Dim strDT As String
+            Select Case colDataType(strThisField)
+              Case "date/time"
+               strDT = "datetime"
+              Case "yes/no"
+                strDT = "boolean"
+              Case Else
+               strDT = ""
+            End Select
+            Dim strTempValue As String
+            strTempValue = Nz(.Fields(strThisField).Value, "")
+            If colClosedList(strThisField) <> "no" Then
+       '       Debug.Print "FIXED: " & strThisField
+              strTempValue = getClosedListValCap(strTbl, strThisField, strTempValue, False)
+            End If
+            strXML = strXML & xmlize_txt(strTempValue, strDT)
+            strXML = strXML & xml_Ent(strTbl & "." & strThisField, True)
+           
+          End If 'non-nulls
+          End Select '?
+       Next inttemp
+       'scan for other tables that are related to this one via inverted relationships:
+    'if the current table has the field on it: accessionCode and the value of that accessionCode starts with strAccPrefixToStop ;
+    'then we don't get recursive interted elelemtns
+    Dim blnGetInverts As Boolean
+    blnGetInverts = True 'unless proven false:
+    If strAccPrefixToStop <> "" Then
+       'check for accession code on this table
+       If fieldExistOnTbl("AccessionCode", strTbl) Then
+          'aha, we have accessionCode, see what its value is
+          'Debug.Print "have accession code table: " & strTbl
+          Dim strTempAccCode As String
+          strTempAccCode = Nz(!accessionCode, "")
+          If doPrefixesMatchAccCode(strAccPrefixToStop, strTempAccCode) Then
+            'ok, so have accession code here that matches prefix to stop on: don't get inverted elements
+            If blnDebug Then
+              strXML = strXML & "<!-- inverted elements not added, due to accession Code being recognized as universal VB element --> "
+            End If
+            blnGetInverts = False
+           ' Debug.Print "skipping some inverts"
+          End If
+       End If
+    End If
+      
+    If blnGetInverts Then
+      Dim rstGetInverts As New ADODB.Recordset
+    '  Debug.Print "select * from Z_fieldDesc_simpleOrd where left([references],instr([references],"".""))=""" & strTbl _
+         & "."" and [key]=""FK"" and RelType=""inverted"" and [model]='logical'"
+      rstGetInverts.Open "select * from Z_fieldDesc_simpleOrd where left([references],instr([references],"".""))=""" & strTbl _
+         & "."" and [key]=""FK"" and RelType=""inverted"" and [model]='logical' and ( (xmlExportSkip=0)) ORDER BY [tableName], [seq]", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+      With rstGetInverts
+        statWriteInvert = statWriteInvert + 1
+        If blnDebug Then strXML = strXML & "<!-- checking for inverted relationship elements -->"
+        Do Until .EOF
+        If blnDebug Then strXML = strXML & "<!-- there are inverted rels -->"
+        
+          Dim strRealTemp As String
+          strRealTemp = table2xml(!TableName, 0, lngIteration + 1, !FieldName & "=" & rstData.Fields(strPK).Value, blnDebug, _
+              False, blnUDef, strAccPrefixToStop)
+          If strRealTemp <> "" Then 'only add if there are inverted data values to add:
+            If !relName <> "n/a" Then strXML = strXML & xml_Ent(!relName)
+            strXML = strXML & strRealTemp
+            If !relName <> "n/a" Then strXML = strXML & xml_Ent(!relName, True)
+          End If
+        .MoveNext
+        Loop
+      End With
+      rstGetInverts.Close
+    End If 'blnInverts
+      ''<!-- insert table entities here (ie userdefined)-->
+      If blnUDef Then
+        'look for userDefined fields to add here
+        'have table name and need record:
+        Dim lngTblRecord As Long
+        lngTblRecord = .Fields(WhatIsPKOf(strTbl))
+        'get defined value records which may apply to this:
+        Dim rstUDef As New ADODB.Recordset
+        rstUDef.Open "SELECT definedValue.*, userDefined.tablename FROM userDefined INNER JOIN definedValue ON userDefined.userdefined_id " _
+         & " = definedValue.userdefined_id  WHERE userDefined.tableNAme=""" & strTbl & """ AND definedValue.tableRecord_ID=" & lngTblRecord & ";", _
+           CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+        With rstUDef
+        Do Until .EOF
+           statWriteUDef = statWriteUDef + 1
+           'have a definedValue to add
+         '  Debug.Print "writing a defined value to XML!"
+           strXML = strXML & table2xml("definedValue", !definedValue_ID, lngIteration + 1, "", blnDebug, False, blnUDef, strAccPrefixToStop)
+        .MoveNext
+        Loop
+        End With
+        rstUDef.Close
+      End If
+      
+    strXML = strXML & xml_Ent(strTbl, True)
+    .MoveNext
+    
+    'update processing pos, if blnprocform
+    If blnProcForm Then
+    ' If lngCountRECS = 0 Then
+       'cheat by adding one to both lngCurrent and lngCountREcs
+      ' lngCurrent = lngCurrent + 1
+     '  lngCountRECS = lngCountRECS + 1
+      ' MsgBox "should add one to both!"
+    ' End If
+    ' Debug.Print "currently : " & Int((lngCurrent / lngCountRECS) * 100) & "%"
+     Call UpdateProcessingPosX(Int((lngCurrent / (lngCountRECS)) * 100), 0, strProcFrmName, , , strTbl & " " & lngCurrent & " of " & lngCountRECS)
+    ' MsgBox "updated!"
+    End If
+    
+    Loop
+    
+  End With
+table2xml_orig = strXML
+'Debug.Print strXML
+'autoGenerated:
+'@tempcommentOut@reportDebug strThisFcnNameIs, True, "end"
+'endAutoGenerated----''
+
+End Function
+
+
+Public Function table2xml_new(strTbl As String, strIDs As String, Optional lngIteration As Long, _
+   Optional strWHERE As String, Optional ByVal blnDebug As Boolean, Optional blnProcForm As Boolean, Optional blnUDef As Boolean _
+     , Optional ByVal strAccPrefixToStop As String, Optional blnInitStaticLongs As Boolean) As String
+''strAccPrefixToStop is a prefix for accessionCodes, that, if matched, will stop the entry of inverted elements: ie this plantConcept is on vegbank, don't give all the info on it: can be list
+Static statGetTblInfo As Long
+Static statGetFldInfo As Long
+Static statStartEnt As Long
+Static statStartFK As Long
+Static statStartFld As Long
+Static statWriteInvert As Long
+Static statWriteUDef As Long
+
+If blnInitStaticLongs Then
+Debug.Print statGetTblInfo; " statGetTblInfo"
+Debug.Print statGetFldInfo; " statGetFldInfo"
+Debug.Print statStartEnt; " statStartEnt"
+Debug.Print statStartFK; " statStartFK"
+Debug.Print statStartFld; " statStartFld"
+Debug.Print statWriteInvert; " statWriteInvert"
+Debug.Print statWriteUDef; " statWriteUDef"
+ 
+ statGetTblInfo = 0
+ statGetFldInfo = 0
+ statStartEnt = 0
+ statStartFK = 0
+ statStartFld = 0
+ statWriteInvert = 0
+ statWriteUDef = 0
+ Exit Function
+End If
+
+'autoGenerated:
+Dim strThisFcnNameIs As String
+strThisFcnNameIs = "table2xml"
+Dim strXMLBigger As String
+'@tempcommentOut@reportDebug strThisFcnNameIs, False
+'endAutoGenerated----''
+'make it override blnDebug?
+If overwriteDebug = True Then blnDebug = True
+
+  ''takes a table and returns it as XML, given table names and comma list of PK's
+  If lngIteration >= 40 Then
+    msgBox "too many iterations, >=40"
+    'autoGenerated:
+    '@tempcommentOut@reportDebug strThisFcnNameIs, True, "exit"
+    'endAutoGenerated----''
+    
+    Exit Function
+  End If
+ 
+ ''-- FIRST GET TABLE INFO
+ statGetTblInfo = statGetTblInfo + 1
+  Dim rstFlds As New ADODB.Recordset, colFlds As New Collection, strPKof As String, colKeys As New Collection, _
+     colFKType As New Collection, colFKName As New Collection, colReferences As New Collection, colDataType As New Collection, _
+     colClosedList As New Collection
+ ' rstFlds.Open "SELECT * from Z_FieldDesc_simpleOrd where TableName=""" & strTbl & """ and model='logical' and (not (xmlExportSkip=1)) ORDER BY seq ;", _
+     CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+ ' With rstFlds
+ ' Do Until .EOF
+  '  Debug.Print "in here"
+ '   statGetFldInfo = statGetFldInfo + 1
+ '   colFlds.Add (!fieldName)
+ Set colFlds = fcnGetFieldsCol(strTbl)
+ '   colDataType.Add (Nz(!dataType, "n/a")), (!fieldName)
+ '   colKeys.Add Nz((!key), "n/a"), (!fieldName)
+ '   colClosedList.Add Nz(!ClosedList, ""), (!fieldName)
+ '   colFKType.Add Nz((!relType), "n/a"), (!fieldName)
+ '   colFKName.Add Nz((!relName), "n/a"), (!fieldName)
+ '   colReferences.Add Nz((!References), "n/a"), (!fieldName)
+ '  If !key = "PK" Then
+      strPKof = WhatIsPKOf(strTbl)
+ '   End If
+ ' .MoveNext
+ ' Loop
+ ' End With
+ ' rstFlds.Close
+
+''---------NOW GET TABLE DATA -------
+Dim strXML As String, strFullSQL As String, strRightCapTableName As String
+strRightCapTableName = getvalFrmSQL("select TableName from Z_tableDescription where tableName='" & strTbl & "';")
+Dim rstData As New ADODB.Recordset
+If strWHERE <> "" Then
+  'manual where statement
+  strFullSQL = "SELECT * FROM [" & strTbl & "] WHERE " & strWHERE & " ORDER BY [" & strPKof & "];"
+Else
+  strFullSQL = "SELECT * FROM [" & strTbl & "] WHERE [" & strPKof & "] in (" & strIDs & ") ORDER BY [" & strPKof & "];"
+End If
+rstData.Open strFullSQL, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  
+Dim lngCountRECS As Long, lngCurrent As Long, strProcFrmName As String
+If blnProcForm Then
+  'show position of this migration:
+  'first see how many records to output
+  Dim strCountSQL As String
+ 
+  'get sql that will count recs
+  strCountSQL = "SELECT count([" & strPKof & "]) FROM [" & strTbl & "] WHERE " & IIf(strWHERE <> "", strWHERE, "[" & strPKof & "] in (" & strIDs & ")")
+  'record total number of recs
+  lngCountRECS = getvalFrmSQL(strCountSQL)
+  If lngCountRECS = 0 Then Debug.Print "No records for: " & strTbl
+  'init form and get name
+  strProcFrmName = UpdateProcessingPosX(0, 0, "", True, "Writing XML for: " & strTbl)
+End If
+  With rstData
+   
+    Do Until .EOF
+'one record
+    statStartEnt = statStartEnt + 1
+    strXML = strXML & xml_Ent(strRightCapTableName)
+    If blnDebug Then strXML = strXML & "<!-- " & Now() & " -->"
+    'increase count of recs
+    lngCurrent = lngCurrent + 1
+     Dim inttemp As Integer
+    If fieldExistOnTbl("accessionCode", strTbl) Then
+      'check to see if accessionCode recognized
+      Dim strCurrAccCode As String
+      strCurrAccCode = Nz(!accessionCode, "")
+      If strCurrAccCode <> "" Then
+        'has accessionCode as field, and it isn't null!  how exciting, now check to see if matches value that escapes rest of fields' printing:
+        If doPrefixesMatchAccCode(strAccPrefixToStop, strCurrAccCode) Then
+          'escape! print accCode and escape this entity!
+          For inttemp = 1 To colFlds.Count
+            If colFlds(inttemp) = strPKof Or colFlds(inttemp) = "accessionCode" Then
+              'write these: 'don't need to xmlize these 2 fields
+              strXML = strXML & xml_Ent(strRightCapTableName & "." & colFlds(inttemp)) & .Fields(colFlds(inttemp)) & _
+                xml_Ent(strRightCapTableName & "." & colFlds(inttemp), True)
+            End If
+          Next inttemp
+          
+          GoTo concludeThisEnt
+        End If
+      End If
+    End If
+    
+       '' START GETTING DATA to XML string
+      
+       For inttemp = 1 To colFlds.Count
+         Dim strThisField As String
+         strThisField = colFlds(inttemp)
+         Select Case fcnColkey(strTbl, strThisField)
+           Case "FK"
+               'is a FK - see what kind of FK:
+               If fcnColrelType(strTbl, strThisField) = "inverted" Then
+                 ''inverted relationship - don't add this, except you can add comment
+                 If blnDebug Then strXML = strXML & "<!-- inverted FK : " & strThisField & "-->"
+               Else ' not inverted fk
+                 '' assume normal FK
+                   'check to see if null or not.  If null, add comment and skip
+                 If IsNull(.Fields(strThisField).Value) Then
+                   If blnDebug Then strXML = strXML & "<!-- null normal FK : " & strThisField & "-->"
+                 Else ' is not null
+                   
+                 
+                   'insert Foreign entity
+                   Dim strRef As String, strForTbl As String
+                   strRef = fcnColReferences(strTbl, strThisField)
+                   strForTbl = Left(strRef, InStr(strRef, ".") - 1)
+                   
+                 If strForTbl = strTbl And .Fields(strPKof).Value = .Fields(strThisField).Value Then
+                   'avoid recursive loop and don't print this
+                   If blnDebug Then strXML = strXML & "<!-- recursive foreign field : " & strThisField & " -->"
+                 Else 'not recursive to self
+                 
+                   
+                 strXML = strXML & xml_Ent(strRightCapTableName & "." & strThisField) ''<!-- insert field atts here (ie notes)-->
+                   ' recursively call this function again to insert the foreign table of this PK
+                  statStartFK = statStartFK + 1
+                   strXML = strXML & table2xml(strForTbl, (.Fields(strThisField).Value), lngIteration + 1, , blnDebug, _
+                       False, blnUDef, strAccPrefixToStop)
+                 strXML = strXML & xml_Ent(strRightCapTableName & "." & strThisField, True)
+                 End If 'recursive to self
+                 End If ' null or not
+               End If ' inverted FK or not
+           Case Else ' not an FK
+         
+           'simply report value of field
+           ''RULE: don't include null values at all:
+           If Not IsNull(.Fields(strThisField).Value) Then
+            statStartFld = statStartFld + 1
+            strXML = strXML & xml_Ent(strRightCapTableName & "." & strThisField) ''<!-- insert field atts here (ie notes)-->
+            'get data type, if datetime or boolean
+            Dim strDT As String
+            Select Case fcnColDataType(strTbl, strThisField)
+              Case "date/time"
+               strDT = "datetime"
+              Case "yes/no"
+                strDT = "boolean"
+              Case Else
+               strDT = ""
+            End Select
+            Dim strTempValue As String
+            strTempValue = Nz(.Fields(strThisField).Value, "")
+            If fcnColClosedList(strTbl, strThisField) <> "no" Then
+       '       Debug.Print "FIXED: " & strThisField
+              strTempValue = getClosedListValCap(strTbl, strThisField, strTempValue, False)
+            End If
+            strXML = strXML & xmlize_txt(strTempValue, strDT)
+            strXML = strXML & xml_Ent(strRightCapTableName & "." & strThisField, True)
+           
+          End If 'non-nulls
+          End Select '?
+       Next inttemp
+       'scan for other tables that are related to this one via inverted relationships:
+    'if the current table has the field on it: accessionCode and the value of that accessionCode starts with strAccPrefixToStop ;
+    'then we don't get recursive interted elelemtns
+    Dim blnGetInverts As Boolean
+    blnGetInverts = True 'unless proven false:
+    If strAccPrefixToStop <> "" Then
+       'check for accession code on this table
+       If fieldExistOnTbl("AccessionCode", strTbl) Then
+          'aha, we have accessionCode, see what its value is
+          'Debug.Print "have accession code table: " & strTbl
+          Dim strTempAccCode As String
+          strTempAccCode = Nz(!accessionCode, "")
+          If doPrefixesMatchAccCode(strAccPrefixToStop, strTempAccCode) Then
+            'ok, so have accession code here that matches prefix to stop on: don't get inverted elements
+            If blnDebug Then
+              strXML = strXML & "<!-- inverted elements not added, due to accession Code being recognized as universal VB element --> "
+            End If
+            blnGetInverts = False
+           ' Debug.Print "skipping some inverts"
+          End If
+       End If
+    End If
+      
+    If blnGetInverts Then
+      Dim rstGetInverts As New ADODB.Recordset
+      Dim strCollectInverts As String
+      strCollectInverts = "" 'another place to put data so that not constantly appending to real large string
+    '  Debug.Print "select * from Z_fieldDesc_simpleOrd where left([references],instr([references],"".""))=""" & strTbl _
+         & "."" and [key]=""FK"" and RelType=""inverted"" and [model]='logical'"
+      rstGetInverts.Open "select * from Z_fieldDesc_simpleOrd where left([references],instr([references],"".""))=""" & strTbl _
+         & "."" and [key]=""FK"" and RelType=""inverted"" and [model]='logical' and ( (xmlExportSkip=0)) ORDER BY [tableName], [seq]", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+      With rstGetInverts
+        statWriteInvert = statWriteInvert + 1
+        If blnDebug Then strCollectInverts = strCollectInverts & "<!-- checking for inverted relationship elements -->"
+        Do Until .EOF
+        If blnDebug Then strCollectInverts = strCollectInverts & "<!-- there are inverted rels -->"
+        
+          Dim strRealTemp As String
+          strRealTemp = table2xml(!TableName, 0, lngIteration + 1, !FieldName & "=" & rstData.Fields(strPKof).Value, blnDebug, _
+              False, blnUDef, strAccPrefixToStop)
+          If strRealTemp <> "" Then 'only add if there are inverted data values to add:
+            If !relName <> "n/a" Then strCollectInverts = strCollectInverts & xml_Ent(!relName)
+            strCollectInverts = strCollectInverts & strRealTemp
+            If !relName <> "n/a" Then strCollectInverts = strCollectInverts & xml_Ent(!relName, True)
+          End If
+        .MoveNext
+        Loop
+      End With
+      rstGetInverts.Close
+      strXML = strXML & strCollectInverts
+    End If 'blnInverts
+      ''<!-- insert table entities here (ie userdefined)-->
+      If blnUDef Then
+        'look for userDefined fields to add here
+        'have table name and need record:
+        Dim lngTblRecord As Long
+        lngTblRecord = .Fields(WhatIsPKOf(strTbl))
+        'get defined value records which may apply to this:
+        Dim rstUDef As New ADODB.Recordset
+        rstUDef.Open "SELECT definedValue.*, userDefined.tablename FROM userDefined INNER JOIN definedValue ON userDefined.userdefined_id " _
+         & " = definedValue.userdefined_id  WHERE userDefined.tableNAme=""" & strTbl & """ AND definedValue.tableRecord_ID=" & lngTblRecord & ";", _
+           CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+        With rstUDef
+        Do Until .EOF
+           statWriteUDef = statWriteUDef + 1
+           'have a definedValue to add
+         '  Debug.Print "writing a defined value to XML!"
+           strXML = strXML & table2xml("definedValue", !definedValue_ID, lngIteration + 1, "", blnDebug, False, blnUDef, strAccPrefixToStop)
+        .MoveNext
+        Loop
+        End With
+        rstUDef.Close
+      End If
+concludeThisEnt:
+    strXML = strXML & xml_Ent(strRightCapTableName, True)
+    .MoveNext
+    
+    'update processing pos, if blnprocform
+    If blnProcForm Then
+    ' If lngCountRECS = 0 Then
+       'cheat by adding one to both lngCurrent and lngCountREcs
+      ' lngCurrent = lngCurrent + 1
+     '  lngCountRECS = lngCountRECS + 1
+      ' MsgBox "should add one to both!"
+    ' End If
+    ' Debug.Print "currently : " & Int((lngCurrent / lngCountRECS) * 100) & "%"
+     
+     Call UpdateProcessingPosX(Int((lngCurrent / (lngCountRECS)) * 100), 0, strProcFrmName, , , strTbl & " " & lngCurrent & " of " & lngCountRECS)
+    ' MsgBox "updated!"
+    End If
+    
+    'transfer this to bigger string package
+     strXMLBigger = strXMLBigger & strXML
+     'reset smaller string recepticle
+     strXML = ""
+    
+    Loop
+    
+  End With
+table2xml_new = strXMLBigger
+Call UpdateProcessingPosX(100, 0, strProcFrmName)
+'Debug.Print strXML
+'autoGenerated:
+'@tempcommentOut@reportDebug strThisFcnNameIs, True, "end"
+'endAutoGenerated----''
+
+End Function
+
+
+Public Function writeUDefFldsToXML(strTbl As String, lngTblRecord As Long, Optional strAccPrefixToStop As String) As String
+   Dim strXML As String
+ 'look for userDefined fields to add here
+        'get defined value records which may apply to this:
+        Dim rstUDef As New ADODB.Recordset
+        rstUDef.Open "SELECT definedValue.*, userDefined.tablename FROM userDefined INNER JOIN definedValue ON userDefined.userdefined_id " _
+         & " = definedValue.userdefined_id  WHERE userDefined.tableNAme=""" & strTbl & """ AND definedValue.tableRecord_ID=" & lngTblRecord & ";", _
+           CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+        With rstUDef
+        Do Until .EOF
+           'statWriteUDef = statWriteUDef + 1
+           'have a definedValue to add
+         '  Debug.Print "writing a defined value to XML!"
+           strXML = strXML & autoG_table2xml_definedValue("DefinedValue_ID=" & !definedValue_ID, 0, True, strAccPrefixToStop)
+        .MoveNext
+        Loop
+        End With
+        rstUDef.Close
+        Set rstUDef = Nothing
+        writeUDefFldsToXML = strXML
+End Function
+
+Public Function xml_Ent(strEntName As String, Optional blnEnd As Boolean) As String
+ 'function takes a name of an xml entity, conditions it to xml and returns it within <> and ends the entity if blnEnd
+
+'autoGenerated:
+Dim strThisFcnNameIs As String
+strThisFcnNameIs = "xml_Ent"
+'@tempcommentOut@reportDebug strThisFcnNameIs, False
+'endAutoGenerated----''
+
+  xml_Ent = "<" & IIf(blnEnd, "/", "") & xmlize_txt(strEntName) & ">"
+'autoGenerated:
+'@tempcommentOut@reportDebug strThisFcnNameIs, True, "end"
+'endAutoGenerated----''
+
+End Function
+
+Public Function SmartDebugPrint(strString As String, Optional blnNoPrint As Boolean) As String
+'autoGenerated:
+Dim strThisFcnNameIs As String
+strThisFcnNameIs = "SmartDebugPrint"
+'@tempcommentOut@reportDebug strThisFcnNameIs, False
+'endAutoGenerated----''
+Dim strRet As String
+strRet = ""
+  Dim strNotYet As String
+  strNotYet = strString
+  Dim lngCutOff As Long, lngPrinted As Long
+  lngCutOff = 100
+  Do Until lngPrinted >= Len(strString)
+    Dim inttemp As Long, intAdj As Long
+    For inttemp = 1 To lngCutOff
+      Select Case Mid(strNotYet, lngCutOff + 1 - inttemp, 2)
+        Case "><"
+           'break middle
+           intAdj = 0
+       ' Case "<" 'break before
+        '  intAdj = 1
+        Case Else
+          intAdj = -1
+       End Select
+       If intAdj <> -1 Then Exit For
+     Next inttemp
+    
+    Dim lngLenPrint As Long
+    If inttemp >= lngCutOff Then
+      lngLenPrint = lngCutOff
+    Else
+        lngLenPrint = lngCutOff + 1 - inttemp - intAdj
+    End If
+    Dim strToPrint As String
+    strToPrint = Left(strNotYet, lngLenPrint)
+    strRet = strRet & Chr(13) & Chr(10) & strToPrint
+    If Not blnNoPrint Then
+      
+      Debug.Print strToPrint
+    End If
+    If lngLenPrint < Len(strNotYet) Then
+      strNotYet = Right(strNotYet, Len(strNotYet) - (lngLenPrint))
+    Else
+      strNotYet = ""
+    End If
+    lngPrinted = lngPrinted + lngLenPrint
+  Loop
+'autoGenerated:
+'@tempcommentOut@reportDebug strThisFcnNameIs, True, "end"
+'endAutoGenerated----''
+SmartDebugPrint = strRet
+End Function
+
+ 
+ Public Function getClosedListValCap(strTbl As String, strFld As String, strVal As String, Optional blnRepErr As Boolean) As String
+ 'autoGenerated:
+ Dim strThisFcnNameIs As String
+ strThisFcnNameIs = "getClosedListValCap"
+ '@tempcommentOut@reportDebug strThisFcnNameIs, False
+ 'endAutoGenerated----''
+ 
+
+   'function looks up a value in a closed list table and returns the correct capitalization of that value, as
+   'this matters for XML, but doesn't for access database
+  On Error GoTo cantGetval
+   Dim rstTemp As New ADODB.Recordset
+   rstTemp.Open "SELECT [Listvalue] from fieldList WHERE tableName=""" & strTbl & """ and FieldName=""" & strFld & """ and  [Listvalue]=""" & strVal & """;", _
+     CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+   If rstTemp.EOF Then
+     'error, report if set to
+     If blnRepErr Then Debug.Print "getClosedListValCap >> can't find value: " & strVal & " for list on tbl : " & strTbl & " and field: " & strFld
+     
+     'keep current value
+     getClosedListValCap = strVal
+   Else
+     'get values
+     getClosedListValCap = rstTemp!listvalue
+   End If
+exitthis:
+   'autoGenerated:
+   '@tempcommentOut@reportDebug strThisFcnNameIs, True, "exit"
+   'endAutoGenerated----''
+   
+Exit Function
+cantGetval:
+   If blnRepErr Then
+     Debug.Print "getClosedListValCap >> SERIOUS ERROR: " & Err.Description & Chr(13) & "tbl: " & strTbl; " fld: " & strFld & " value : " & strVal
+   End If
+   getClosedListValCap = strVal
+ 'autoGenerated:
+ '@tempcommentOut@reportDebug strThisFcnNameIs, True, "end"
+ 'endAutoGenerated----''
+ 
+End Function
+
+Public Function reportDebug(strFcn As String, blnEnd As Boolean, Optional strComment As String)
+
+  'reports time of start and end of function
+  Dim strTimeComma As String
+  strTimeComma = IIf(blnEnd, " null ,", "") & "#" & Now() & "#" & IIf(blnEnd, "", ", null ")
+  DoCmd.RunSQL "INSERT INTO [debug] (functionName, timeStart, timeEnd, comment) values (""" & strFcn & """," & strTimeComma & "," & IIf(strComment = "", "null", """" & strComment & """") & ");"
+
+End Function
+
+
+Public Function getDurationsDebug()
+  
+'calcs duration of lines in debug file
+Dim rstGoo As New ADODB.Recordset, dtePrev As Date
+rstGoo.Open "debug", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+With rstGoo
+Do Until .EOF
+dtePrev = IIf(IsNull(!timeStart), !timeend, !timeStart)
+.MoveNext
+If Not .EOF Then
+ !durationSec = (IIf(IsNull(!timeStart), !timeend, !timeStart) - dtePrev) * 24 * 60 * 60
+ .Update
+End If
+
+Loop
+
+End With
+
+End Function
+
+Public Function doPrefixesMatchAccCode(ByVal strPrefixes As String, ByVal strCode As String) As Boolean
+  'function evaluations if the strText starts with one of the strPrefixes listed, comma separated
+  'rule: accCode prefix must be entire chunk: chunks are divided by periods
+  On Error GoTo ErrAssumeNotMatch
+  strPrefixes = "," & strPrefixes & ","
+  'get chunks
+  Dim strChunk As String, intNextDot As Integer, intLast As Integer, blnPrefOK As Boolean
+  intLast = 1
+  intNextDot = InStr(intLast, strCode, ".")
+  Do Until intNextDot = 0 Or blnPrefOK = True
+    
+    strChunk = Left(strCode, intNextDot)
+    
+    If InStr(strPrefixes, "," & strChunk & ",") Then
+      blnPrefOK = True
+    End If
+    intNextDot = InStr(intLast, strCode, ".")
+    intLast = intNextDot + 1
+  Loop
+  doPrefixesMatchAccCode = blnPrefOK
+  
+exitthis:
+  Exit Function
+ErrAssumeNotMatch:
+  Debug.Print "doPrefixesMatchAccCode>> error! " & Err.Description & " prefs:" & strPrefixes & "  ; code: " & strCode
+  doPrefixesMatchAccCode = False
+  Resume exitthis
+End Function
+
+Public Function stringLongnessTestForAppend(lngNum As Long, lngOuter As Long) As Double
+  Dim lngTemp As Long, strTemp As String, strAdd As String, dtestart As Date, lngT2 As Long, strT2 As String, intLen As Long
+  dtestart = Now()
+  strAdd = "googley burr de what ga thru be far za oop yee ta!" & Chr(13)
+ For lngT2 = 1 To lngOuter
+  
+  For lngTemp = 1 To lngNum
+  '  strTemp = strTemp & strAdd
+   ' Debug.Print strTemp
+  Next lngTemp
+  strT2 = strT2 & strTemp
+  strTemp = ""
+ Next
+  
+  Debug.Print dtestart & "|" & Now() & " len=" & Len(strT2)
+  stringLongnessTestForAppend = (Now() - dtestart) * 24 * 60 * 60
+End Function
+
+Public Function createCodeToDocFlds()
+  'creates more functions that streamline xml export process by hardcoding (generated from the model) once the values, rather than always looking up.
+  'This needs to be run and the file extracted from this replace the autoGen_xml_export module, if the model changes.
+  Dim strFile As String, inttemp As Integer, strIfNull As String, strWhereForFields As String
+  strWhereForFields = " and model='logical' and (not (xmlExportSkip=1)) ORDER BY seq"
+  strFile = "C:\temp\doc_vbr_fields.txt"
+  If prepareFileToWrite(strFile, True, ".txt", strFile) Then
+   Call WriteLineToFile("'Run the following functions:createCodeToDocFlds() &  createCodeToDocFlds_morecomplete() ", strFile)
+   Call WriteLineToFile("'Take the exported functions' output files in C:\temp and stack them and insert into this module", strFile)
+   Call WriteLineToFile("Option Compare Database", strFile)
+   Call WriteLineToFile("Option Explicit", strFile)
+   
+    Call WriteLineToFile("' ignore this first line", strFile)
+ Dim colWhat As New Collection
+'replaces:
+'    colDataType.Add (Nz(!dataType, "n/a")), (!fieldName)
+ '   colKeys.Add Nz((!key), "n/a"), (!fieldName)
+  '  colClosedList.Add Nz(!ClosedList, ""), (!fieldName)
+   ' colFKType.Add Nz((!relType), "n/a"), (!fieldName)
+'    colFKName.Add Nz((!relName), "n/a"), (!fieldName)
+ '   colReferences.Add Nz((!References), "n/a"), (!fieldName)
+ 
+  colWhat.Add "DataType"
+  colWhat.Add "key"
+  colWhat.Add "ClosedList" 'should be "" instead of other
+  colWhat.Add "relType"
+  colWhat.Add "relName"
+  colWhat.Add "References"
+ For inttemp = 1 To colWhat.Count
+ If colWhat(inttemp) = "ClosedList" Then
+   strIfNull = ""
+ Else
+   strIfNull = "n/a"
+ End If
+ 'function declaration
+ Call WriteLineToFile("Public function fcnCol" & colWhat(inttemp) & "(strTbl as string, strFld as string) as string", strFile)
+ Call WriteLineToFile("dim strRet as string", strFile)
+ Call WriteLineToFile(" select case strTbl", strFile)
+    Dim rstTbl As New ADODB.Recordset, rstFld As New ADODB.Recordset
+    rstTbl.Open "select * from Z_TableDescription where [mod]='vegbank' ", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+    With rstTbl
+    Do Until .EOF
+      'get each table
+      Call WriteLineToFile("  case """ & !TableName & """", strFile) 'is this table
+      Dim strCurrTbl As String
+      strCurrTbl = !TableName
+      Call WriteLineToFile("    select case strFld", strFile)
+      
+      rstFld.Open "select * from Z_FieldDesc_simpleOrd where [tableName]=" & SQLizeTxt(strCurrTbl) & strWhereForFields _
+         , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+         With rstFld
+         Do Until .EOF
+           'get each field
+           Call WriteLineToFile("    case """ & !FieldName & """", strFile)
+           Call WriteLineToFile("      strRet = """ & Nz(.Fields(colWhat(inttemp)), strIfNull) & """", strFile)
+         .MoveNext
+         Loop
+         End With
+         rstFld.Close
+         Set rstFld = Nothing
+         Call WriteLineToFile("    end select 'field", strFile)
+    .MoveNext
+    Loop
+    End With
+    rstTbl.Close
+    Set rstTbl = Nothing
+  
+ 
+ Call WriteLineToFile(" end select 'table ", strFile)
+ Call WriteLineToFile(" fcnCol" & colWhat(inttemp) & "=strRet", strFile)
+  'end fcn
+ Call WriteLineToFile("end function ", strFile)
+ Next inttemp
+ 'special case, col for fields as collection manually coded
+  Call WriteLineToFile("Public function fcnGetFieldsCol(strTbl as string) as collection", strFile)
+   Call WriteLineToFile("  dim colFlds as new collection", strFile)
+   Call WriteLineToFile("  select case strTbl", strFile)
+     rstTbl.Open "select * from Z_TableDescription where [mod]='vegbank';", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+    With rstTbl
+    Do Until .EOF
+      'get each table
+       strCurrTbl = !TableName
+       Call WriteLineToFile("    case """ & strCurrTbl & """", strFile)
+      rstFld.Open "select * from Z_FieldDesc_simpleOrd where [tableName]=" & SQLizeTxt(strCurrTbl) & strWhereForFields _
+         , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+         With rstFld
+         Do Until .EOF
+           'get each field
+           Call WriteLineToFile("       colFlds.add """ & !FieldName & """", strFile)
+         .MoveNext
+         Loop
+         End With
+         rstFld.Close
+         Set rstFld = Nothing
+    .MoveNext
+    Loop
+    End With
+    rstTbl.Close
+    Set rstTbl = Nothing
+  Call WriteLineToFile("  end select", strFile)
+   Call WriteLineToFile("  set fcnGetFieldsCol=colFlds", strFile)
+    Call WriteLineToFile("end function", strFile)
+End If 'file ok to write to
+End Function
+
+Public Function createCodeToDocFlds_morecomplete()
+  'creates more functions that streamline xml export process by hardcoding (generated from the model) once the values, rather than always looking up.
+  'This needs to be run and the file extracted from this replace the autoGen_xml_export module, if the model changes.
+  Dim strFile As String, inttemp As Integer, strIfNull As String, strWhereForFields As String
+  strWhereForFields = " and model='logical' and (not (xmlExportSkip=1)) ORDER BY seq"
+  strFile = "C:\temp\doc_vbr_fields_more.txt"
+  If prepareFileToWrite(strFile, True, ".txt", strFile) Then
+ '  Call WriteLineToFile("Option Compare Database", strFile)
+ '  Call WriteLineToFile("Option Explicit", strFile)
+   
+    Call WriteLineToFile("' ignore this first line", strFile)
+    Call WriteLineToFile("' created by function: createCodeToDocFlds_morecomplete", strFile)
+ 
+    Dim rstTbl As New ADODB.Recordset, rstFld As New ADODB.Recordset
+    rstTbl.Open "select * from Z_TableDescription where [mod]='vegbank' ", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+    With rstTbl
+    Do Until .EOF
+      'get each table
+      Dim strCurrTbl As String
+      strCurrTbl = !TableName
+      'function declaration
+ Call WriteLineToFile("Public function autoG_table2xml_" & strCurrTbl & _
+   "(strWHERE as string, lngIteration As Long, blnUDef as boolean, Optional ByVal strAccPrefixToStop As String) as string", strFile)
+ Call WriteLineToFile("  dim rstData as new adodb.recordset, strX as string, strTemp as string, strTemp2 as string, strBigger as string ", strFile)
+ Call WriteLineToFile("  rstData.Open ""select * from [" & strCurrTbl & "] WHERE "" & strWhere, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText", strFile)
+ Dim rstData As New ADODB.Recordset 'rm
+ Call WriteLineToFile("  with rstData" & vbCr & "  do until .eof", strFile)
+ Call WriteLineToFile("  dim blnRecog as boolean 'this is var to signal skipping ahead", strFile)
+ Call WriteLineToFile("  blnRecog = false 'default", strFile)
+ 'write start of tbl:
+ Call WriteLineToFile("  strx = strX & xml_ent(""" & strCurrTbl & """)", strFile)
+ Dim blnThisTblHasAC As Boolean
+ 
+ If fieldExistOnTbl("accessionCode", strCurrTbl) Then
+ blnThisTblHasAC = True
+ 'first thing to do: check if recognized vegbank entity
+   Call WriteLineToFile("    if not isnull(!accessionCode) then", strFile)
+     Call WriteLineToFile("       if doPrefixesMatchAccCode(strAccPrefixToStop,!accessionCode) then", strFile)
+       Call WriteLineToFile("'write only PK and accessinCode, then leave this rec", strFile)
+       Call WriteLineToFile("blnRecog = true", strFile)
+       Call WriteLineToFile("goto ThisTblPK", strFile)
+     Call WriteLineToFile("       end if 'recog src", strFile)
+   Call WriteLineToFile("    end if 'accCode not null", strFile)
+ Else
+  blnThisTblHasAC = False
+ End If 'acccode exist
+ 
+      
+      rstFld.Open "select * from Z_FieldDesc_simpleOrd where [tableName]=" & SQLizeTxt(strCurrTbl) & strWhereForFields _
+         , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+         With rstFld
+         Do Until .EOF
+           'get each field
+           Call WriteLineToFile("  '" & !FieldName, strFile)
+           Dim strCurrFld  As String
+           strCurrFld = !FieldName
+            If !key = "PK" Then Call WriteLineToFile("ThisTblPK:", strFile) 'label to get this quick
+             If strCurrFld = "accessionCode" Then Call WriteLineToFile("ThisTblAccCode:", strFile) 'label to get here quick
+            
+           'only write if non null
+           Call WriteLineToFile("   if not isnull(.fields(""" & strCurrFld & """)) then", strFile)
+           Call WriteLineToFile("      'isn't null", strFile)
+             'is FK?
+           If !key = "FK" Then 'FK
+             'is inverted? skip then
+             If !relType = "inverted" Then
+               'skip this
+               Call WriteLineToFile("        'skip inverted!", strFile)
+             Else 'normal
+               'start ent
+             '  Call WriteLineToFile("   strTemp=""""", strFile)
+             '  Call WriteLineToFile("     strTemp = strTemp &  xml_ent(""" & strCurrTbl & "." & strCurrFld & """)", strFile)
+               Call WriteLineToFile("  'get normalized record!", strFile)
+                Dim strRef As String, strForTbl As String
+                   strRef = !References
+                   strForTbl = Left(strRef, InStr(strRef, ".") - 1)
+                   Dim strAvoidSelfRecurse As String
+                If strForTbl = strCurrTbl Then
+                  strAvoidSelfRecurse = " & "" AND [" & WhatIsPKOf(strForTbl) & "]<>"" & .fields(""" & WhatIsPKOf(strCurrTbl) & """)"
+                Else
+                  'nothing
+                  strAvoidSelfRecurse = ""
+                End If
+                Call WriteLineToFile("    strTemp =  autoG_table2xml_" & strForTbl & "(""[" & WhatIsPKOf(strForTbl) & "]="" & .fields(""" & strCurrFld & """)" & strAvoidSelfRecurse _
+                  & " , lngiteration+1,blnUDef,straccprefixtostop)", strFile)
+               Call WriteLineToFile("    if len(strTemp)>0 then ", strFile)
+                Call WriteLineToFile("      strX = strX & xml_ent(""" & strCurrTbl & "." & strCurrFld & """) & strTemp", strFile)
+                'end ent
+                Call WriteLineToFile("     strX = strX &  xml_ent(""" & strCurrTbl & "." & strCurrFld & """,true)", strFile)
+               Call WriteLineToFile("   end if 'normalized rec exists: ie not recursive", strFile)
+             End If
+           Else 'not FK
+             'print data
+             'start ent
+               Call WriteLineToFile("     strX = strX &  xml_ent(""" & strCurrTbl & "." & strCurrFld & """)", strFile)
+               Call WriteLineToFile("     strX = strX &  xmlize_txt(.Fields(""" & strCurrFld & """),""" & !dataType & """)", strFile)
+               'end ent
+               Call WriteLineToFile("     strX = strX &  xml_ent(""" & strCurrTbl & "." & strCurrFld & """,true)", strFile)
+             If !key = "PK" And blnThisTblHasAC Then
+               'consider zooming ahead
+               Call WriteLineToFile("if blnrecog then goto ThisTblAccCode", strFile)
+             End If
+             If strCurrFld = "accessionCode" Then
+               Call WriteLineToFile("if blnrecog then goto DoneWithRec", strFile)
+             End If
+           End If
+           Call WriteLineToFile("   end if  ' is not null ", strFile)
+         .MoveNext
+         Loop
+         End With
+         rstFld.Close
+         Set rstFld = Nothing
+      'need to get inverted relationship items here:
+      Call WriteLineToFile(" Dim strRealTemp As String ", strFile)
+ Dim rstGetInverts As New ADODB.Recordset, strToWrite As String
+ strToWrite = ""
+      rstGetInverts.Open "select * from Z_fieldDesc_simpleOrd where left([references],instr([references],"".""))=""" & strCurrTbl _
+         & "."" and [key]=""FK"" and RelType=""inverted"" and [model]='logical' and ( (xmlExportSkip=0)) ORDER BY [tableName], [seq]", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+      With rstGetInverts
+        Do Until .EOF
+          strToWrite = " strRealTemp = autoG_table2xml_" & !TableName & "(""[" & !FieldName & "] ="" &  .Fields(""" & Right(!References, Len(!References) - InStr(!References, ".")) & """), lngIteration + 1, " _
+               & " blnUDef, strAccPrefixToStop)" & vbCr
+        strToWrite = strToWrite & "  If strRealTemp <> """" Then 'only add if there are inverted data values to add: " & vbCr
+        If !relName <> "n/a" Then strToWrite = strToWrite & " strX = strX & xml_Ent(""" & !relName & """)"
+        strToWrite = strToWrite & "    strX = strX & strRealTemp "
+        If !relName <> "n/a" Then strToWrite = strToWrite & "strX = strX & xml_Ent(""" & !relName & """, True)"
+        strToWrite = strToWrite & vbCr & "  End If"
+      Call WriteLineToFile("    " & strToWrite & vbCr & "  ", strFile)
+      strToWrite = ""
+        .MoveNext
+        Loop
+      End With
+      rstGetInverts.Close
+      Set rstGetInverts = Nothing
+    
+      
+      
+      'handle UDef
+      Call WriteLineToFile("  if blnUDef then", strFile)
+      Call WriteLineToFile("    strx=strX &  writeUDefFldsToXML(""" & strCurrTbl & """,.fields(""" & WhatIsPKOf(strCurrTbl) & """).value, strAccPrefixToStop)", strFile)
+      Call WriteLineToFile("  end if 'blnUDEF", strFile)
+      'done here
+      Call WriteLineToFile("  doneWithRec:", strFile)
+      
+      Call WriteLineToFile("  .movenext 'record", strFile)
+      
+      Call WriteLineToFile("  strx = strX & xml_ent(""" & strCurrTbl & """,true)", strFile)
+      Call WriteLineToFile("  strBigger = strBigger & strX 'put into bigger string container", strFile)
+      Call WriteLineToFile("  strX = """" 'reset strX", strFile)
+      Call WriteLineToFile("   loop" & vbCr & "  end with" & vbCr & "  rstData.close" & vbCr & "  set rstData=nothing", strFile)
+      Call WriteLineToFile("  autoG_table2xml_" & strCurrTbl & "=strBigger", strFile)
+      Call WriteLineToFile("end function", strFile)
+    .MoveNext 'tbl
+    Loop
+    End With
+    rstTbl.Close
+    Set rstTbl = Nothing
+  
+ 
+End If 'file ok to write to
+End Function
+

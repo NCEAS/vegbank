@@ -1,0 +1,61 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Combo23_Change()
+  'this one optioncontrols2 real options
+  Select Case Nz(Me.Combo23, -1)
+    Case 0
+      'prompt me
+      Me.TellUserOptionsConfirm = True
+    Case 1
+      'turn off
+      Me.TellUserOptionsConfirm = False
+      Me.TurnOffConfirmations = True
+    Case 2
+     'leave alone
+      Me.TellUserOptionsConfirm = False
+      Me.TurnOffConfirmations = False
+  End Select
+End Sub
+
+Private Function setCombo23(blnTurnOff As Boolean, blnTell As Boolean)
+    If blnTell Then
+      Me.Combo23 = 0
+    Else
+      If blnTurnOff Then
+        Me.Combo23 = 1
+      Else
+        Me.Combo23 = 2
+      End If
+    End If
+End Function
+
+Private Sub Command5_Click()
+  'loop through controls and set values for each option that matches control name
+  Dim ctlCurr As Control
+  For Each ctlCurr In Me.Controls
+    Dim strVal As String
+    strVal = getvalFrmSQL("select optionName from Y_optionsStored where optionName=" & SQLizeTxt(ctlCurr.Name))
+    If strVal <> "" Then
+      'this control should be set according to value
+      Debug.Print "setting:" & ctlCurr.Name & " to " & ctlCurr.Value
+      Call GetSet_manual_option(ctlCurr.Name, True, ctlCurr.Value, False)
+    End If
+  Next
+  DoCmd.Close acForm, Me.Name
+End Sub
+
+Private Sub Form_Load()
+  'loop through controls and fill in values for those that have options named the same thing with values in options
+  Dim ctlCurr As Control
+  For Each ctlCurr In Me.Controls
+    Debug.Print ctlCurr.Name & " ... checking"
+    Dim strVal As String
+    strVal = getvalFrmSQL("select optionValue from Y_optionsStored where optionName=" & SQLizeTxt(ctlCurr.Name))
+    If strVal <> "" Then
+      'this control should be set according to value
+      ctlCurr.Value = strVal
+    End If
+  Next
+  Call setCombo23(Me.TurnOffConfirmations, Me.TellUserOptionsConfirm)
+End Sub

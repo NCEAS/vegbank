@@ -1,0 +1,12 @@
+Option Compare Database
+Option Explicit
+
+
+Private Sub DontTranslateValue_Click()
+  If Not IsNull(Me!FieldValue) Then
+    Me!VegBankValue = Me!FieldValue
+  Else
+    'can't keep a null values
+    msgBox "Please choose a field where you have a value to translate.  Do provide a default value, check the Default Value check box."
+  End If
+End Sub

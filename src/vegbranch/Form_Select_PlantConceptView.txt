@@ -1,0 +1,15 @@
+Option Compare Database
+Option Explicit
+
+
+Private Sub Command5_Click()
+  Me!PlantParty_ID = Me!PartyPerspective
+  Me!plantNameSystem = Me!PlNmSys
+  DoCmd.RunSQL "UPDATE VegTaxaClientSummary SET updated = False;"
+  DoCmd.Close acForm, Me.Name, acSavePrompt
+End Sub
+
+Private Sub Form_Load()
+  Me!PartyPerspective = Me!PlantParty_ID
+  Me!PlNmSys = Me!plantNameSystem
+End Sub

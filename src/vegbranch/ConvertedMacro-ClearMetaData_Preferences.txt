@@ -1,0 +1,76 @@
+Option Compare Database
+Option Explicit
+
+'------------------------------------------------------------
+' ClearMetaData_Preferences
+'
+'------------------------------------------------------------
+Function ClearMetaData_Preferences()
+On Error GoTo ClearMetaData_Preferences_Err
+
+    With Forms!clearMetaDataForm
+        ' All are here Conditional!
+        If (!ClearOtherTrans) Then
+            ' clear all translation criteria
+            DoCmd.RunSQL "DELETE Y_Translate_anyField.*  FROM Y_Translate_anyField;", -1
+        End If
+        If (!ClearOtherTrans) Then
+            ' clear fields to translate (convert)
+            DoCmd.RunSQL "DELETE FieldsToConvertUsr.*  FROM FieldsToConvertUsr;  ", -1
+        End If
+        If (!clearPlotPref) Then
+            ' Clear Plot  defaults
+            DoCmd.RunSQL "UPDATE Default_metaData2 SET Default_metaData2.defConfid = Null, Default_metaData2.defReason = Null, Default_metaData2.defPermanence = Null, Default_metaData2.defCoverDisp = Null;", -1
+        End If
+        If (!clearPlotPref) Then
+            ' Clear Plot  defaults
+            DoCmd.RunSQL "UPDATE Default_metaData2 SET Default_metaData2.defAutoTaxCvr = Null, Default_metaData2.defStemSamplMeth = Null, Default_metaData2.deforigDataLoc = Null, defMethodNarr = Null, defLayoutNarr = null, defPlotSize= null;", -1
+        End If
+        If (!ClearOtherPref) Then
+            ' Clear non-plot  defaults
+            DoCmd.RunSQL "UPDATE Default_metaData2 SET CoverMethod = Null, StratumMethod = Null, CM_accCode=null, SM_accCode=null ," _
+            & " projID = Null, proj_accCode=null, DefaultParty = Null, Party_accCode=null, vbDefaultPartyID=null;", -1
+            
+        End If
+       ' If (!clearFailPlots) Then
+            ' clears failed plots table
+       '     DoCmd.RunSQL "delete Z_Failed_Plots.* FROM Z_Failed_Plots;", -1
+       ' End If
+    '    If (!ClearProjContrib) Then
+    '        DoCmd.RunSQL "DELETE Y_ProjContrib.* from Y_ProjContrib;", -1
+    '    End If
+        If (!clearImpFldNm) Then
+            DoCmd.RunSQL "DELETE W_Convert_CSVColNames.*  FROM W_Convert_CSVColNames;  ", -1
+        End If
+        If (!clearReconcile) Then
+            DoCmd.RunSQL "DELETE Z_VB_Reconcile.* FROM Z_VB_Reconcile;", -1
+        End If
+        If (!clearDoneCheckBoxes) Then
+            DoCmd.RunSQL "Update Y_dataTranslate_src SET [isTranslated]=false", -1
+        End If
+        If (!clearPlantMatch) Then
+            DoCmd.RunSQL "Delete * from Z_B_VB_LookupNms", -1
+        End If
+        If (!clearCommMatch) Then
+            DoCmd.RunSQL "Delete * from Z_H_VB_LookupNms", -1
+        End If
+        If (!clearMigrStats) Then
+            DoCmd.RunSQL "delete * from Z_MigrationStats", -1
+        End If
+        Call CheckTblForRecs("mod", "loading")
+       ' Beep
+        msgBox "Done with preference clearing", vbInformation, "VegBank in Access"
+        DoCmd.Close , ""
+    End With
+
+
+ClearMetaData_Preferences_Exit:
+    Exit Function
+
+ClearMetaData_Preferences_Err:
+    msgBox Error$
+    Resume ClearMetaData_Preferences_Exit
+
+End Function
+
+

@@ -1,0 +1,81 @@
+Option Compare Database
+Option Explicit
+
+Private Sub cmb_selectedPlot_Click()
+  applyFilterToCurrForm "tableName = """ & Me!cmb_selectedPlot & """", "", True
+End Sub
+
+Private Sub cmd_Browse_Click()
+  Dim strTemp As String
+  strTemp = BrowseForFile("*.csv,*.mdb")
+  If strTemp <> "" Then Me!FileLocation = strTemp
+  Call Command249_Click
+End Sub
+
+Private Sub cmd_NextTbl_Click()
+    ''find next table, if there is one
+    Dim dblRecToFind As Double
+  dblRecToFind = dbMisc_GetPrevNext("Next", "load_tablesToLoad", "importOrder", [ImportOrder])
+'  Debug.Print [ImportOrder]
+ ' Debug.Print dblRecToFind
+  If dblRecToFind = [ImportOrder] Then
+    If msgBox("There is not a next table.  Would you like to move on to metadata?", vbYesNo) = vbYes Then
+      DoCmd.RunMacro "OpenMetaDataSwitchboard"
+      Exit Sub
+    End If
+  Else
+    'get new table
+    DoCmd.OpenForm Me.Name, , , "ImportOrder = " & dblRecToFind
+  End If
+End Sub
+
+Private Sub cmd_PrevTbl_Click()
+    ''find previous table, if there is one
+    Dim dblRecToFind As Double
+  dblRecToFind = dbMisc_GetPrevNext("Prev", "load_tablesToLoad", "importOrder", [ImportOrder])
+  Debug.Print [ImportOrder]
+  Debug.Print dblRecToFind
+  If dblRecToFind = [ImportOrder] Then
+    msgBox "There is not a previous table.", vbInformation
+  Else
+    'get new table
+    DoCmd.OpenForm Me.Name, , , "ImportOrder = " & dblRecToFind
+  End If
+End Sub
+
+Private Sub Command249_Click()
+  'lookup tables on a database and return them to combo box on this form
+  On Error GoTo cantGetTables
+  Dim strCrit As String
+  strCrit = Nz([ImportFromTable], "")
+  
+ Dim strList As String
+ strList = "select [name],iif([type]=1,'table','query') as tblqry from MSysObjects in '" & Me.FileLocation.Value & "' where type in (5,1) and left(name,4)<>'MSys' and lefT(name,4)<>'~sq_' ORDER BY [name]"
+ ' Debug.Print ":" & strList
+    
+  Dim ctlThis As Control
+  Set ctlThis = Me.Controls!ImportFromTable
+  ctlThis.RowSource = strList
+  ctlThis.Requery
+  If strList = "" Then ctlThis.Value = Null
+  
+getTblsExit:
+  Exit Sub
+cantGetTables:
+  msgBox "Sorry, can't get tables and queries for this database.  Make sure it is a valid path and an .mdb file.  If you have a lot of tables in this database, limit the tableNames returned by filling in a prefix for tables in this list, for example: plot_" & Chr(13) & Err.Description
+  Resume getTblsExit
+End Sub
+
+Private Sub fileLocAsDefault_Click()
+  Me.Refresh 'complete pending updates
+  If AreYouSure("Do you want to make:" & Chr(13) & Me.FileLocation & Chr(13) & "the default file location for all loading tables?") Then
+    DoCmd.RunSQL "update Z_tableDescription SET fileLocation=" & SQLizeTxt(Me.FileLocation) & " where [mod]='loading';"
+  End If
+End Sub
+
+Private Sub Form_Current()
+If cmb_selectedPlot <> Me!TableName Then cmb_selectedPlot = Me!TableName
+'  cmb_selectedPlot.Requery
+End Sub
+
+

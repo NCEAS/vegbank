@@ -1,0 +1,111 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command10_Click()
+  ''insert a new field for constant
+  Dim rstInsertNew As New ADODB.Recordset
+  rstInsertNew.Open "W_Convert_CSVColNames", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+  With rstInsertNew
+  .AddNew
+  !FormatName = [FormatName]
+  !TableName = [TableName]
+  !RowForFormatTbl = [RowForFormatTbl]
+  !SortOrd = [SortOrd]
+  .Update
+  Dim lngPK As Long
+  lngPK = !ConvertFieldNamesID
+  End With
+  rstInsertNew.Close
+  Me.Requery
+  Me.ConvertFieldNamesID.SetFocus
+  DoCmd.FindRecord lngPK, , , , , acCurrent
+  Me.VegBankFieldName.SetFocus
+End Sub
+
+Private Sub Command8_Click()
+  'get table name:
+  Dim strTable As String
+  'on error resume next
+  strTable = Forms![FieldNameConversion]![Table]
+  If IsNull([VegBankFieldName]) Then
+    msgBox "Select a VegBank field name first, then push help for the field's definition"
+    Exit Sub
+  End If
+  findFieldinDescr (strTable & "." & [VegBankFieldName])
+  
+End Sub
+
+Private Sub Command20_Click()
+  Dim blnShow As Boolean
+  If Me!Command20.Caption = "more>>" Then
+     blnShow = True
+     Me!Command20.Caption = "<<more"
+  Else
+     Me!Command20.Caption = "more>>"
+     blnShow = False
+  End If
+  Me!Image14.Visible = blnShow
+  Me!ValueToWrite.Visible = blnShow
+  Me!Command9.Visible = blnShow
+  Me!Command10.Visible = blnShow
+  Me!Label13.Visible = blnShow
+  Me!ConvertFieldNamesID.Visible = blnShow
+  Me.Label16.Visible = blnShow
+End Sub
+
+Private Sub Command26_Click()
+  ''looks for field in DD
+  'first set stored ID to 0
+  Call DD_GetPutFieldID(0, "put")
+  Dim strName As String
+  strName = DD_GetFieldInfo(DD_BrowseForFieldID([TableName]), "field")
+  If strName <> "" Then
+    'field selected:
+    Me!VegBankFieldName = strName
+  End If
+End Sub
+
+Private Sub Command9_Click()
+  If IsNull(Me!UserFieldName) Then
+    'delete field
+    Dim lngTemp As Long
+    lngTemp = Me!ConvertFieldNamesID
+    Me.Refresh
+    DoCmd.RunSQL "delete * from W_Convert_CSVColNames where ConvertFieldNamesID=" & lngTemp
+    Me.Refresh
+  Else
+    'set to skip
+    Me!VegBankFieldName = "!SkipField:" & Me!UserFieldName
+  End If
+End Sub
+
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+  'look for same values in another row:
+If Not IsNull(Me!VegBankFieldName) Then
+  Dim strOtherField As String, rstOthers As New ADODB.Recordset, intResp As Integer
+  rstOthers.Open "select * FROM W_convert_csvColNames where formatName=" & SQLizeTxt(Me!FormatName) & " and tableName=" & SQLizeTxt([TableName]) _
+    & " and vegbankFieldName=" & SQLizeTxt(Me!VegBankFieldName) & " and convertFieldNamesID <> " & [ConvertFieldNamesID], CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  If Not rstOthers.EOF Then
+    'have another record with same combination and will get rejected by index!
+    strOtherField = Nz(rstOthers!UserFieldName)
+   If strOtherField <> "" Then
+    'this would create a duplicate, cancel
+    intResp = MsgBox_cust("Sorry, but you have already mapped one of your fields (" & strOtherField & ") to this VegBank Field Name (" & Me!VegBankFieldName & ").  " _
+    , "remove other mapping,remove current mapping", "You can't match two fields in your data to the same VegBank field name.  " _
+    & "Please remove the other mapping (" & strOtherField & "->" & Me!VegBankFieldName & ") or the current mapping (" & Me!UserFieldName & "->" & Me!VegBankFieldName & ").")
+    Select Case intResp
+      Case 1
+        'remove other mapping
+        rstOthers!VegBankFieldName = Null
+        rstOthers.Update
+        
+      Case 2
+        Me!VegBankFieldName = Null
+      Case Else
+        Cancel = 1
+        msgBox "Cancelling allows you can choose a different field name, but you cannot move to another record until you change this mapping."
+    End Select
+   End If ' ""
+ End If 'not EOF
+End If 'not null
+End Sub

@@ -1,0 +1,29 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Text0_AfterUpdate()
+  With Me.sub_Z_USER_J_UD!TableName
+  DoCmd.GoToControl "sub_Z_user_J_UD"
+  DoCmd.GoToControl "UserdefinedName"
+  Select Case Me.Text0
+    Case "C"
+    .RowSource = "plot;observation"
+    .DefaultValue = """observation"""
+    .Enabled = True
+    Case "D"
+    .RowSource = "TaxonObservation"
+    .DefaultValue = """TaxonObservation"""
+    .Enabled = False
+    Case "E"
+    .RowSource = "StemCount, StemLocation"
+    .DefaultValue = """StemCount"""
+    .Enabled = True
+    Case "F"
+    .RowSource = "SoilObs"
+    .DefaultValue = """SoilObs"""
+    .Enabled = False
+  End Select
+  End With
+  Me.Requery
+
+End Sub

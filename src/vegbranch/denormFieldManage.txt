@@ -1,0 +1,23 @@
+Option Compare Database
+Option Explicit
+
+Public Function denorm_stratum_stratumMethod_ID(Optional lngObsID As Long, Optional blnFixWrongs As Boolean)
+  'function updates any stratum records where stratumMethod is null: or wrong
+  Dim strWHERE As String
+  strWHERE = " WHERE "
+  If lngObsID > 0 Then
+     strWHERE = strWHERE & " ( stratum.observation_ID=" & lngObsID & ")"
+  Else
+     strWHERE = strWHERE & " ( true ) "
+  End If
+  If blnFixWrongs Then
+    strWHERE = strWHERE & " AND ((stratum.STRATUMMETHOD_ID)<>[observation].[STRATUMMETHOD_ID])"
+  Else
+    strWHERE = strWHERE & " AND ((stratum.stratumMethod_ID) is null)"
+  End If
+  Dim strBaseSQL As String
+  strBaseSQL = "UPDATE observation INNER JOIN stratum ON observation.OBSERVATION_ID = stratum.OBSERVATION_ID SET stratum.STRATUMMETHOD_ID = [observation].[STRATUMMETHOD_ID]"
+  DoCmd.RunSQL strBaseSQL & strWHERE
+'WHERE ((((stratum.STRATUMMETHOD_ID)<>[observation].[STRATUMMETHOD_ID]) AND ((stratum.OBSERVATION_ID)=5));
+  
+End Function

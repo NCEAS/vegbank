@@ -1,0 +1,8 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Form_Load()
+  'get list of tables and queries
+  Me.TableQuery.RowSource = "SELECT name, iif(type=1,'table','query') FROM MSysObjects IN '" & Me.OpenArgs _
+    & "' WHERE ([type]=1 or [type]=5) and left([name],4)<>'MSys' and left(name,3)<>'~sq' order by name;"
+End Sub

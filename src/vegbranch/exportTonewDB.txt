@@ -1,0 +1,393 @@
+Option Compare Database
+Option Explicit
+''module is obsolete and can probably be removed : MTL 27-Apr-2004
+Function exportToVegOnlyDB()
+
+'give user option of exporting all taxa or just ones they used
+Dim blnReduce As Boolean
+If AreYouSure("Do you want to LIMIT the plant Taxa exported to ONLY taxa you use?" & Chr(13) _
+   & "Clicking yes will drastically reduce the size of the database to upload to VegBank." & Chr(13) _
+   & "Clicking no will include every taxon of VegBranch (including preloaded ones) in your export to VegBank," & Chr(13) _
+   & "whether you reference it or not." & Chr(13) _
+   & "Clicking YES is recommended.") Then
+     blnReduce = True
+   Else
+     blnReduce = False
+   End If
+
+'Create a new database for only VegBank tables
+   Dim wrkDefault As Object
+    Dim dbsNew As Object
+
+    ' Get default Workspace.
+    Set wrkDefault = DBEngine.Workspaces(0)
+
+    ' Make sure there isn't already a file with the name of
+    ' the new database.
+    If Dir(CurrentProject.Path & "\VegBranch_export.mdb") <> "" Then
+      If AreYouSure("The database """ & CurrentProject.Path & "\VegBranch_export.mdb" _
+         & """ already exists.  Delete it?") Then
+         Kill CurrentProject.Path & "\VegBranch_export.mdb"
+      Else
+         Exit Function
+      End If
+    End If
+    
+    Dim strDBLoc As String
+    strDBLoc = CurrentProject.Path & "\VegBranch_export.mdb"
+    
+'first Calculate which plants to export (if user wishes to reduce size):
+If blnReduce Then GetPlantTaxaToKeep
+    
+    ' Create a new  database
+    Set dbsNew = wrkDefault.CreateDatabase(strDBLoc, DB_LANG_GENERAL)
+    'send versioning table to new db so that VegBank may know what VegBranch version it's dealing with
+    Call CustExprt_TableToForeignDb(strDBLoc, "Y_Version", "Y_Version", False)
+  'get recordset that contains table names to export
+  Dim rstCurr As New ADODB.Recordset
+  Dim cnnLocal As Connection
+  Dim intCount As Integer
+  
+  Set cnnLocal = CurrentProject.Connection
+  intCount = 0
+'opens table to run through values and change type sizes, for varchars only
+    rstCurr.Open "Z_TableDescription", cnnLocal, , , adCmdTable
+  With rstCurr
+    Do Until .EOF
+      If !mod = "VegBank" Then 'only VegBank tables
+      intCount = intCount + 1
+    Dim blnStrucOnly As Boolean
+    blnStrucOnly = False
+    'if part of plantTaxa submodule, just send structure, _
+    ' then add data with subsequent Queries, if user reduces size of export
+    If (!submodule = "planttaxa") And blnReduce Then blnStrucOnly = True
+    
+    'transfer current database object (table) to the export database
+    Dim strTableName As String
+    strTableName = !TableName
+    CustExprt_TableToForeignDb dbsNew.Name, strTableName, strTableName, blnStrucOnly
+    
+      ''DoCmd.TransferDatabase acExport, "Microsoft Access", _
+    dbsNew.Name, acTable, strTableName, strTableName, blnStrucOnly
+          'if a plant taxon table and user wishes to reduce size of export, export plants
+          If (!submodule = "planttaxa") And blnReduce Then
+             'send plant data to new database:
+             'append only records recorded in temp_plant_keep
+              Dim strSQLtoNewDB, strShrtTbl As String
+              'short table name
+              strShrtTbl = Right(strTableName, Len(strTableName) - 5)
+              strSQLtoNewDB = "INSERT INTO " & strTableName & " IN '" & strDBLoc & "' " _
+                & " SELECT " & strTableName & ".* " _
+                & " FROM temp_plant_keep INNER JOIN " & strTableName & " ON temp_plant_keep.PK = " _
+                & strTableName & "." & strTableName & "_ID" _
+                & " WHERE (((temp_plant_keep.table)=""" & strShrtTbl & """));"
+              'runSQL
+              DoCmd.RunSQL strSQLtoNewDB
+          End If
+      End If 'VB tables
+      .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+
+dbsNew.Close
+End Function
+
+
+
+Function GetPlantTaxaToKeep(Optional blnInclParents As Boolean, Optional blnInclChildren As Boolean, Optional ByVal strPlantComm As String)
+  ''function figures out which records in PlantTaxa module to keep based on _
+  'what is used in TaxObs/Int and related records in other plantTaxa tables
+  If strPlantComm = "" Then strPlantComm = "plant" 'default
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+  
+  'ASSUMES PRESEEDED !!
+  
+  'store all plantConcepts to keep in table :temp_Plant_Keep
+  'first delete all records in temp_plant_keep
+ '' DoCmd.RunSQL "delete * FROM temp_plant_keep;"
+  
+  
+  
+  '--add all concepts used in TaxonInterp
+    'seed concepts to keep
+  '' runQuerySQLWithReplacements "expPlt_TaxInt"
+  
+  '--then add recursively more concepts, statuses, correlations, lineages, usages
+  Dim lngCount As Long, blnDone As Boolean, rstCount As New ADODB.Recordset
+  Dim intLoop As Long
+  lngCount = 0
+  intLoop = 0
+  blnDone = False
+  
+  If blnInclChildren Then ' grab direct children first.  Not after getting current parents.
+   DoCmd.SetWarnings False
+    For intLoop = 1 To 15
+   runQuerySQLWithReplacements "expPlt_plConc_frmStat_children", "plant", strPlantComm
+    Next intLoop
+  End If
+   DoCmd.SetWarnings True
+  intLoop = 0
+  
+  
+  Do Until blnDone
+   
+   intLoop = intLoop + 1
+   'turn warnings off, errors handled by indexes in temp_plant_keep
+   DoCmd.SetWarnings False
+   'add new round of concepts
+   runQuerySQLWithReplacements "expPlt_plConc", "plant", strPlantComm
+   
+   'add new statuses from concept
+   runQuerySQLWithReplacements "expPlt_plStatus_frmConc", "plant", strPlantComm
+   'add new statuses following lineage 1
+   runQuerySQLWithReplacements "expPlt_plStatus_frmLing1", "plant", strPlantComm
+   'add new statuses following lineage 2
+   runQuerySQLWithReplacements "expPlt_plStatus_frmLing2", "plant", strPlantComm
+   'add new statuses from correlation
+   runQuerySQLWithReplacements "expPlt_plStatus_frmCorr", "plant", strPlantComm
+   'add new conceps from correlation
+   runQuerySQLWithReplacements "expPlt_plConc_frmCorr", "plant", strPlantComm
+   
+  If blnInclParents Then
+   'add new conceps from status
+   runQuerySQLWithReplacements "expPlt_plConc_frmStat", "plant", strPlantComm
+  End If
+   
+   
+   DoCmd.SetWarnings True
+  
+  'count records
+   rstCount.Open "SELECT count(keepID) AS countRec FROM temp_" & strPlantComm & "_Keep;", _
+      cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+   'if no records were added last time strSQL was run, so we are done, all parents are in
+   If lngCount = rstCount!CountRec Then blnDone = True
+   lngCount = rstCount!CountRec
+   rstCount.Close
+   Debug.Print "Iteration " & intLoop & ", records: " & lngCount
+
+  Loop
+  
+  'now we have iteratively captured all concepts and statuses that will be included in export package
+  ''get Correlations, Lineage, and Usage
+  
+  
+  DoCmd.SetWarnings False
+  'add correlations
+  runQuerySQLWithReplacements "expPlt_plCorr_frmStat", "plant", strPlantComm
+  runQuerySQLWithReplacements "expPlt_plCorr_frmConc", "plant", strPlantComm
+  
+  'add usages
+  runQuerySQLWithReplacements "expPlt_plUsag_frmConc", "plant", strPlantComm
+  
+  'add lineages
+  runQuerySQLWithReplacements "expPlt_plLing1", "plant", strPlantComm
+  runQuerySQLWithReplacements "expPlt_plLing2", "plant", strPlantComm
+  
+  'add plantNames
+  runQuerySQLWithReplacements "expPlt_plName_frmConc", "plant", strPlantComm
+ ' docmd.openquery "expPlt_plName_frmTxInt"
+  'docmd.openquery "expPlt_plName_frmTxObs"
+  runQuerySQLWithReplacements "expPlt_plName_frmUsg", "plant", strPlantComm
+    
+  'add plantReferences
+  runQuerySQLWithReplacements "expPlt_plRef_frmStat", "plant", strPlantComm
+  runQuerySQLWithReplacements "expPlt_plRef_frmName", "plant", strPlantComm
+  runQuerySQLWithReplacements "expPlt_plRef_frmConc", "plant", strPlantComm
+'  docmd.openquery "expPlt_plRef_frmTxObs"
+  
+  DoCmd.SetWarnings True
+  
+End Function
+
+Public Function addPlantCommsfromIntTables(strPlantComm As String)
+ Select Case strPlantComm
+   Case "plant"
+   DoCmd.OpenQuery "expPlt_TaxInt"
+    DoCmd.OpenQuery "expPlt_TaxAlt"
+   Case "comm"
+     DoCmd.OpenQuery "expPlt_CommInt"
+  End Select
+End Function
+
+Public Function runQuerySQLWithReplacements(strQryName As String, strSearch As String, strReplace As String)
+  'function gets a query's SQL and uses search and replace to run SQL based on new SQL: ie for comm instead of plant
+  If strSearch = strReplace Then
+    'just run the qry
+    DoCmd.OpenQuery strQryName
+  Else
+    'different strSearch that strREplace, get SQL to change it
+    Dim strSQL As String
+    strSQL = CurrentDb.querydefs(strQryName).SQL
+    strSQL = substTextForText_once(strSQL, strSearch, strReplace, 1)
+    Debug.Print strSQL
+    DoCmd.RunSQL strSQL
+  End If
+End Function
+
+
+Function GetPlantTaxaToKeep_old()
+  ''function figures out which records in PlantTaxa module to keep based on _
+  'what is used in TaxObs/Int and related records in other plantTaxa tables
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+  
+  '*********************************
+  '*************ASSUMES that temp_plant_keep is already seeded with starting concepts
+  '*********************************
+  
+  'store all plantConcepts to keep in table :temp_Plant_Keep
+  'first delete all records in temp_plant_keep
+ ' DoCmd.RunSQL "delete * FROM temp_plant_keep;"
+  
+  '--add all concepts used in TaxonInterp
+    'seed concepts to keep
+ ' DoCmd.OpenQuery "expPlt_TaxInt"
+  
+  '--then add recursively more concepts, statuses, correlations, lineages, usages
+  Dim lngCount As Long, blnDone As Boolean, rstCount As New ADODB.Recordset
+  Dim intLoop As Long
+  lngCount = 0
+  intLoop = 0
+  blnDone = False
+  Do Until blnDone
+   
+   intLoop = intLoop + 1
+   'turn warnings off, errors handled by indexes in temp_plant_keep
+   DoCmd.SetWarnings False
+   'add new round of concepts
+   DoCmd.OpenQuery "expPlt_plConc"
+   
+   'add new statuses from concept
+   DoCmd.OpenQuery "expPlt_plStatus_frmConc"
+   'add new statuses following lineage 1
+   DoCmd.OpenQuery "expPlt_plStatus_frmLing1"
+   'add new statuses following lineage 2
+   DoCmd.OpenQuery "expPlt_plStatus_frmLing2"
+   'add new statuses from correlation
+   DoCmd.OpenQuery "expPlt_plStatus_frmCorr"
+   'add new conceps from correlation
+   DoCmd.OpenQuery "expPlt_plConc_frmCorr"
+   'add new conceps from status
+   DoCmd.OpenQuery "expPlt_plConc_frmStat"
+   DoCmd.SetWarnings True
+  
+  'count records
+   rstCount.Open "SELECT count(keepID) AS countRec FROM temp_Plant_Keep;", _
+      cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+   'if no records were added last time strSQL was run, so we are done, all parents are in
+   If lngCount = rstCount!CountRec Then blnDone = True
+   lngCount = rstCount!CountRec
+   rstCount.Close
+   Debug.Print "Iteration " & intLoop & ", records: " & lngCount
+
+  Loop
+  
+  'now we have iteratively captured all concepts and statuses that will be included in export package
+  ''get Correlations, Lineage, and Usage
+  
+  
+  DoCmd.SetWarnings False
+  'add correlations
+  DoCmd.OpenQuery "expPlt_plCorr_frmStat"
+  DoCmd.OpenQuery "expPlt_plCorr_frmConc"
+  
+  'add usages
+  DoCmd.OpenQuery "expPlt_plUsag_frmConc"
+  
+  'add lineages
+  DoCmd.OpenQuery "expPlt_plLing1"
+  DoCmd.OpenQuery "expPlt_plLing2"
+  
+  'add plantNames
+  DoCmd.OpenQuery "expPlt_plName_frmConc"
+  DoCmd.OpenQuery "expPlt_plName_frmTxInt"
+  DoCmd.OpenQuery "expPlt_plName_frmTxObs"
+  DoCmd.OpenQuery "expPlt_plName_frmUsg"
+    
+  'add plantParties
+  DoCmd.OpenQuery "expPlt_plParty_frmUsg"
+  DoCmd.OpenQuery "expPlt_plParty_frmStat"
+  
+  'add plantParties recursively
+  blnDone = False
+  lngCount = 0
+  intLoop = 0
+  Do Until blnDone
+    intLoop = intLoop + 1
+    DoCmd.OpenQuery "expPlt_plParty_currNm"
+    DoCmd.OpenQuery "expPlt_plParty_Own"
+    'count records
+   rstCount.Open "SELECT count(keepID) AS countRec FROM temp_Plant_Keep;", _
+      cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+   'if no records were added last time strSQL was run, so we are done, all parents are in
+   If lngCount = rstCount!CountRec Then blnDone = True
+   lngCount = rstCount!CountRec
+   rstCount.Close
+   Debug.Print "Party Iteration " & intLoop & ", records: " & lngCount
+  Loop
+  
+  'add plantReferences
+  DoCmd.OpenQuery "expPlt_plRef_frmStat"
+  DoCmd.OpenQuery "expPlt_plRef_frmName"
+  DoCmd.OpenQuery "expPlt_plRef_frmConc"
+  DoCmd.OpenQuery "expPlt_plRef_frmTxObs"
+  
+  DoCmd.SetWarnings True
+  
+End Function
+
+Public Function DeletePlantsNotKept(Optional ByVal strPlantComm As String)
+  If strPlantComm = "" Then strPlantComm = "plant" 'dfeulat
+If msgBox("Are you SURE you want to delete all " & strPlantComm & "s not listed as kept?", vbYesNo + vbQuestion) = vbYes Then
+  runQuerySQLWithReplacements "del_Correlation", "plant", strPlantComm
+  runQuerySQLWithReplacements "del_Status", "plant", strPlantComm
+  runQuerySQLWithReplacements "del_Usage", "plant", strPlantComm
+  runQuerySQLWithReplacements "del_Concept", "plant", strPlantComm
+  runQuerySQLWithReplacements "del_Name", "plant", strPlantComm
+  
+End If
+End Function
+
+
+
+Function testExpNew()
+  CustExprt_TableToForeignDb "C:\data\VegBank\vegBranch_export.mdb", "party", "thisPartAAerA", False
+End Function
+
+Public Function CustExprt_TableToForeignDb(strDBSName As String, strSrcTbl, strDestTbl, blnStrucOnly)
+'function creates a new table on the foreign database, even if from a linked table on the source
+Dim dbsCurr  As Object, wrkDef As Object, dbsFor As Object
+    ' Get default Workspace.
+    Set wrkDef = DBEngine.Workspaces(0)
+'open current db and foreign db
+Set dbsCurr = CurrentDb
+Set dbsFor = wrkDef.OpenDatabase(strDBSName)
+
+Dim tdfCurr As Object, fldCurr As Object, tdfDest As Object
+'create new table
+Set tdfDest = dbsFor.CreateTableDef(strDestTbl)
+Set tdfCurr = dbsCurr.tabledefs(strSrcTbl)
+Dim strBrktList As String
+strBrktList = ""
+'iterate over each field in table and create new to new table
+For Each fldCurr In tdfCurr.Fields
+  ''Set field = object.CreateField (name, type, size)
+  ''add field to foreign database:
+  tdfDest.Fields.Append tdfDest.CreateField(fldCurr.Name, fldCurr.Type, fldCurr.size)
+  'bracketed list of all fields in this table
+  strBrktList = strBrktList & IIf(strBrktList <> "", ",", "") & "[" & tdfCurr.Name & "]"
+Next fldCurr
+
+''append table:
+dbsFor.tabledefs.Append tdfDest
+
+If Not blnStrucOnly Then
+  'add data:
+  Dim strSQL As String
+  strSQL = "INSERT INTO [" & strDestTbl & "] IN '" & strDBSName & "' SELECT [" & tdfCurr.Name & "].* FROM [" & tdfCurr.Name & "]"
+  DoCmd.RunSQL strSQL
+End If
+
+End Function

@@ -1,0 +1,405 @@
+Option Compare Database
+Option Explicit
+
+
+''The following functions written by Michael Lee (mikelee@unc.edu) for the VegBank project http://vegbank.org 17-Mar-2003
+Public Function NormalizeFile(blnAutoDetect As Boolean, strSource As String, strDest As String, Optional blnLbls As Boolean, _
+     Optional intTopIDrows As Long, Optional intLeftIDcols As Long, Optional blnExample As Boolean)
+On Error GoTo Normalizer_err
+ ''function takes a denormalized file and normalizes it.  If blnAutoDetect is true, then fcn tries to guess blnLbls, intTop..., and intLeft...
+  'strDest and strSource are the input and output files
+  'blnExample = true creates example denormalized file with given number of left and top id row/cols
+  
+' Dim strSource As String
+ 'Dim strDest As String
+' Dim intTopIDrows As Long
+ 'Dim intLeftIDcols As Long
+' intLeftIDcols = InputBox("How many identification columns to the left of your data?", , 1)
+ 'intTopIDrows = InputBox("How many identification rows above your data?", , 1)
+ Debug.Print "start:" & Now()
+' strSource = "C:\Documents and Settings\mitchella\My Documents\REAL_big_76.csv"
+ 'strDest = "C:\Documents and Settings\mitchella\My Documents\REAL_big-output76.csv"
+ 
+  Dim fs As Object
+  Dim a As Object, awrite As Object
+  Dim intCurrLine As Long, strTxt As String, strTxtNew As String
+  Dim strUserFld As String, strNewHeaders As String
+  strNewHeaders = ""
+Set fs = CreateObject("Scripting.FileSystemObject")
+
+  'make sure destination file is a .csv file:
+ If (Right(strDest, 4) <> ".csv") Then
+   msgBox "Must be a .csv file to write"
+   Exit Function
+ End If
+ 
+ 'check dest file
+If fs.FileExists(strDest) Then
+   If msgBox("The destination file, " & strDest & " exists.  Overwrite it?", vbYesNo + vbQuestion) = vbNo Then
+      msgBox "Please specify a new location and try again."
+      Exit Function
+   End If
+End If
+  'create (and overwrite?) destination file
+ Set awrite = fs.CreateTextFile(strDest, True)
+
+'optionally create example file
+If blnExample Then
+  Call createExampleFile(awrite, intLeftIDcols, intTopIDrows)
+  Exit Function
+End If
+
+'check src file
+If fs.FileExists(strSource) Then
+   Set a = fs.openTextFile(strSource, 1, False, 0)
+Else
+  msgBox "could not find " & strSource & ". Try again. "
+  Exit Function
+End If
+
+On Error GoTo AutoDetectTrouble
+'if blnAutoDetec, then open file and try to figure out dimensions
+If blnAutoDetect Then
+   Dim strDetect As String, blnDetected As Boolean, colDetectEmpty As New Collection, intCurrColmn As Long
+   blnDetected = False
+   strDetect = ""
+   intCurrLine = 0
+   Do Until blnDetected
+     intCurrLine = intCurrLine + 1
+     strDetect = a.readline
+     Call EmptyCollection(colDetectEmpty)
+     Set colDetectEmpty = csv_parseCSVstring(strDetect, ",")
+     'examine collection, if on row 1
+     If intCurrLine = 1 Then
+      For intCurrColmn = 1 To colDetectEmpty.Count
+       'if non-blank cell, then we have reached the end of left hand id rows
+       If colDetectEmpty(intCurrColmn) <> "" Then
+         intLeftIDcols = intCurrColmn
+         Exit For
+       End If
+      Next intCurrColmn
+     End If
+     If colDetectEmpty(1) <> "" Then
+       'have reached last line of id rows
+       intTopIDrows = intCurrLine
+       'now look at "middle cell" to see if it is of format: var1|var2|var3 - if so then these are likely headers
+       strDetect = colDetectEmpty(intLeftIDcols)
+       If InStr(strDetect, "|") Then
+         'this file has row/column labels
+         blnLbls = True
+       Else
+         'does not have headers:
+         blnLbls = False
+         'adjust num of row and col hdrs, as this file has no labels
+         intLeftIDcols = intLeftIDcols - 1
+         intTopIDrows = intTopIDrows - 1
+       End If
+       
+       'have detected end
+       blnDetected = True
+     End If
+   Loop
+   'reopen text file
+   a.Close
+   Set a = fs.openTextFile(strSource, 1, False, 0)
+   If msgBox("Is correct?   " & Chr(13) & intLeftIDcols & " columns to left of data" & Chr(13) & " and " & intTopIDrows & " rows above data" _
+     & Chr(13) & IIf(blnLbls, " and there are labels", "NO labels"), vbYesNoCancel) <> vbYes Then
+      msgBox "You have cancelled the normalizer.  Please try specifying the layout of the table manually."
+    GoTo normalizer_exit
+   End If
+End If 'autodetect finished
+On Error GoTo Normalizer_err
+
+'MsgBox "Left:" & intLeftIDcols & "  ; top:" & intTopIDrows & "  ; labels: " & blnLbls
+
+intCurrLine = 1
+Dim colVals As New Collection, strCurrRowID As String, intAllCOLS As Long
+Dim colHdr As New Collection, colNewHdr As New Collection
+With a
+  Do Until .atendofstream
+    ''make sure colVals is empty
+    Call EmptyCollection(colVals)
+    
+    'handle instance where delimiter crosses lines:
+    Dim intCurrLineQuot As Long
+    intCurrLineQuot = 1
+    strTxt = ""
+    'if odd number of quotes, then we need to continue getting csv line
+    While Int(intCurrLineQuot / 2) <> (intCurrLineQuot / 2)
+      strTxt = strTxt & IIf(strTxt <> "", vbCr, "") & .readline
+      intCurrLineQuot = CountOccOf(strTxt, """")
+    Wend
+    
+    Set colVals = csv_parseCSVstring(strTxt, ",")
+    If intCurrLine = 1 Then
+      'set overall count of columns
+      intAllCOLS = colVals.Count
+    End If
+    If intCurrLine <= intTopIDrows Then
+      'reading in header row(s)
+      Dim col3Hdrs As New Collection, blnDiffCols As Boolean
+      If colVals.Count <> intAllCOLS Then
+        blnDiffCols = True
+      End If
+      For intCurrColmn = 1 To colVals.Count
+        ''assign header row to colHdr
+        'Debug.Print colVals(intCurrColmn)
+        If intCurrLine = intTopIDrows And intCurrColmn = intLeftIDcols Then
+          ''special case, divided like this: rowIDlabel|colIDlabel|celldatalabel
+
+          EmptyCollection col3Hdrs
+          Dim strTempHdrs As String
+          strTempHdrs = colVals(intCurrColmn)
+          If Left(strTempHdrs, 1) = """" And Right(strTempHdrs, 1) = """" Then
+            'dequote:
+            strTempHdrs = Right(strTempHdrs, Len(strTempHdrs) - 1)
+            strTempHdrs = Left(strTempHdrs, Len(strTempHdrs) - 1)
+          End If
+          Set col3Hdrs = csv_parseCSVstring(strTempHdrs, "|")
+         ' MsgBox (colVals(intCurrColmn))
+          Dim strHorzLbl As String, strCellLbl As String
+          If col3Hdrs.Count = 3 Then
+             'standard hor|vert|data label
+             colHdr.Add (col3Hdrs(2)), "H_row_" & (intCurrLine) & "_" & (intCurrColmn)
+             
+             strHorzLbl = col3Hdrs(1)
+             strCellLbl = col3Hdrs(3)
+          Else
+             'not 3 labels, give empty label to this col
+             colHdr.Add (""), "H_row_" & (intCurrLine) & "_" & (intCurrColmn)
+             strHorzLbl = col3Hdrs(1)
+     '        MsgBox "HorzLbl: " & strHorzLbl
+             strCellLbl = ""
+          End If
+        '  MsgBox (col3Hdrs(1) & " | " & col3Hdrs(2) & " | " & col3Hdrs(3))
+        Else
+          colHdr.Add (colVals(intCurrColmn)), "H_row_" & (intCurrLine) & "_" & (intCurrColmn)
+        End If
+      Next intCurrColmn
+    End If
+      If intCurrLine = intTopIDrows Then
+        'compile colNewHdr
+        Dim intR2 As Long, intC2 As Long
+        ''loop over each column that has header data
+        Call EmptyCollection(colNewHdr)
+        For intC2 = 1 To intAllCOLS 'edited start back to 1
+          ''loop over each ID ROW above data
+          Dim strCOL_ID As String
+          strCOL_ID = ""
+          For intR2 = 1 To intTopIDrows
+            'compile a list of variables to store that were column identifiers
+            strCOL_ID = strCOL_ID & colHdr("H_row_" & intR2 & "_" & intC2) & ","
+          Next intR2
+          'store new set of identifiers in collection corresponding to column number
+          colNewHdr.Add strCOL_ID, "H_" & intC2
+          'Debug.Print "col" & intC2 & ":" & strCOL_ID
+        Next intC2
+        
+       End If
+    If intCurrLine >= intTopIDrows Then
+      'not a header row, write data:
+      strCurrRowID = ""
+      'get list of ID rows :
+      Dim intLeftIDs As Long
+      For intLeftIDs = 1 To intLeftIDcols
+       If intLeftIDs = intLeftIDcols And intCurrLine = intTopIDrows Then
+        'insert parsed strHorzLbl from above
+        strCurrRowID = strCurrRowID & strHorzLbl & ","
+       Else
+        strCurrRowID = strCurrRowID & colVals(intLeftIDs) & ","
+       End If
+      Next intLeftIDs
+      'Debug.Print "row" & intCurrLine & ":" & strCurrRowID
+      If intCurrLine > intTopIDrows Then
+        'get data items
+         For intCurrColmn = intLeftIDcols + 1 To colVals.Count
+          awrite.writeLine strCurrRowID & colNewHdr("H_" & intCurrColmn) & colVals(intCurrColmn)
+         Next intCurrColmn
+      Else
+        'write data hdr : this is the first thing written
+        'check for blank headers and fill them in
+        Dim strFirstRow As String, colChkHdrs As New Collection, lngHdrToChk As Long, strCell As String
+        strFirstRow = strCurrRowID & colNewHdr("H_" & intLeftIDcols) & strCellLbl
+        Call EmptyCollection(colChkHdrs)
+        Set colChkHdrs = csv_parseCSVstring(strFirstRow, ",")
+        strFirstRow = ""
+        For lngHdrToChk = 1 To colChkHdrs.Count
+          If colChkHdrs(lngHdrToChk) = "" Then
+            'what type of header is this?
+            If lngHdrToChk > intLeftIDcols Then
+              strCell = "unknownTopLabel" & lngHdrToChk - intLeftIDcols
+              If lngHdrToChk = colChkHdrs.Count Then
+                strCell = "unknownCellDataLabel"
+              End If
+              
+            Else
+              strCell = "unknownLeftLabel" & lngHdrToChk
+            End If
+            
+          Else
+            strCell = colChkHdrs(lngHdrToChk)
+          End If
+          strFirstRow = strFirstRow & IIf(strFirstRow = "", "", ",") & strCell
+        Next lngHdrToChk
+        
+        
+        
+        awrite.writeLine strFirstRow
+      End If
+    End If 'Hdr row or not
+    
+    intCurrLine = intCurrLine + 1 'increase row number that we are on
+  Loop
+  
+End With
+Debug.Print "end:" & Now()
+msgBox strDest & Chr(13) & " has been successfully created, using " & Chr(13) & intLeftIDcols & " identifcation columns to the left and " & Chr(13) & intTopIDrows _
+  & " identification rows above the data." & Chr(13) & "Row and Columns headers were " & IIf(blnLbls, "", "**not** ") & "used.", vbInformation
+normalizer_exit:
+
+Exit Function
+Normalizer_err:
+  Call msgBox("Error in attempting to normalize your file." & Chr(13) & _
+    "Make sure the destination file is in a directory that can be written and that the drive has free space for the new file." _
+    & Chr(13) & Err.Description, vbExclamation)
+    Resume normalizer_exit
+AutoDetectTrouble:
+  msgBox "There was an error in trying to autoDetect how many header rows and columns you have.  Please try specifying these manually."
+  Resume normalizer_exit
+    
+End Function
+
+
+
+Public Function createExampleFile(awrite As Object, intLeftIDcols As Long, intTopIDrows As Long)
+
+'writes a new example file that is denormalized
+'insert!
+Dim strTemp As String
+Dim intline As Long, lngWide As Long, intCol As Long
+lngWide = 30
+For intline = 1 To 50
+'Debug.Print intline
+strTemp = ""
+  For intCol = 1 To lngWide
+    Dim strCell As String
+    'X,Y as -1,0,1
+    Dim X As Integer, Y As Integer
+    X = (-intLeftIDcols + intCol) / IIf((intLeftIDcols - intCol) = 0, 1, Abs(intLeftIDcols - intCol))
+    Y = (-intTopIDrows + intline) / IIf((intTopIDrows - intline) = 0, 1, Abs(intTopIDrows - intline))
+    Select Case (10 * (X + 1)) + (Y + 1)
+      Case 0
+        strCell = ""
+      Case 10
+        strCell = "Tlbl" & intline
+      Case 20, 21
+        strCell = "Tdta_" & intline & "_" & intCol
+      Case 1
+        strCell = "Llbl" & intCol
+      Case 11
+        strCell = "Llbl" & intCol & "|" & "Tlbl" & intline & "|" & "cellLBL"
+      Case 2, 12
+        strCell = "Ldta_" & intline & "_" & intCol
+      Case 22
+        strCell = "cdta_" & intline & "_" & intCol
+    End Select
+    strTemp = strTemp & strCell & ","
+  Next intCol
+awrite.writeLine Left(strTemp, Len(strTemp) - 1)
+Next intline
+
+End Function
+
+
+
+Public Function FillInHierarchyCSV(strSource As String, strDest As String)
+ 'fills in heirarchy csv file: useful for taxonomy data
+ 
+ Debug.Print "start:" & Now()
+ 
+  Dim fs As Object
+  Dim a As Object, awrite As Object
+  Dim intCurrLine As Long, strTxt As String, strTxtNew As String
+
+Set fs = CreateObject("Scripting.FileSystemObject")
+
+  'make sure destination file is a .csv file:
+ If (Right(strDest, 4) <> ".csv") Then
+   msgBox "Must be a .csv file to write"
+   Exit Function
+ End If
+ 
+ 'check dest file
+If fs.FileExists(strDest) Then
+   If msgBox("The destination file, " & strDest & " exists.  Overwrite it?", vbYesNo + vbQuestion) = vbNo Then
+      msgBox "Please specify a new location and try again."
+      Exit Function
+   End If
+End If
+  'create (and overwrite?) destination file
+ Set awrite = fs.CreateTextFile(strDest, True)
+
+'check src file
+If fs.FileExists(strSource) Then
+   Set a = fs.openTextFile(strSource, 1, False, 0)
+Else
+  msgBox "could not find " & strSource & ". Try again. "
+  Exit Function
+End If
+
+'have ok source and destination files: read src and write to dest
+Dim colVals As New Collection, strCurrRowID As String, intAllCOLS As Long, _
+  colToFill As New Collection, strToWrite As String, inttemp As Long, thisVal As String
+'rules: only fill in where data holes are to LEFT of data:
+'  X                    ->  X
+'  _ , Y                ->  X , Y
+'  _ , _, _, Z          ->  X , Y , _, Z
+
+With a
+  Do Until .atendofstream
+    ''make sure colVals is empty
+    Call EmptyCollection(colVals)
+    strToWrite = ""
+    strTxt = a.readline
+    Set colVals = csv_parseCSVstring(strTxt, ",")
+    For inttemp = 1 To colVals.Count
+      'see where blank rows
+      thisVal = colVals(inttemp)
+      If thisVal = "" Or thisVal = """""" Or thisVal = "''" Then
+        'this is empty value, get fillin value, if available
+        If inttemp <= colToFill.Count Then
+            'have a fill in value, use it
+            thisVal = colToFill("Fill" & inttemp)
+        End If
+      End If
+       strToWrite = strToWrite & IIf(strToWrite = "", "", ",") & thisVal
+      'replace colToFill value with the one here
+      If ItemOnColl(colToFill, "Fill" & inttemp) Then
+        colToFill.Remove "Fill" & inttemp
+      End If
+      colToFill.Add (thisVal), "Fill" & inttemp
+      
+    Next inttemp
+    'write value to new file
+    'Debug.Print strToWrite
+    awrite.writeLine strToWrite
+    
+    'need to remove any extraneous fill in values from colToFill, if there
+    If colVals.Count < colToFill.Count Then
+     For inttemp = colVals.Count + 1 To colToFill.Count
+        If ItemOnColl(colToFill, "Fill" & inttemp) Then
+          colToFill.Remove "Fill" & inttemp
+        End If
+     Next inttemp
+    End If
+  Loop
+End With
+
+
+
+
+
+
+End Function
+
+

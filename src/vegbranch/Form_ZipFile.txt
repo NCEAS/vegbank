@@ -1,0 +1,118 @@
+Option Compare Database
+Option Explicit
+Private Const strDefExecNm = "winzip32.exe"
+Private Const strDefLoc = "C:\Program Files\WinZip\" & strDefExecNm
+Private Const strDefFolder = "C:\Program Files\"
+Private Const strDefDrive = "C:\"
+
+
+Private Sub cmdFindExecFile_Click()
+  'look first in common location:
+  Dim strFileFound As String, strTemp As String
+  If Dir(strDefLoc) <> "" Then
+    'found the file at 'normal' loc
+    strFileFound = strDefLoc
+  Else
+    strTemp = file_searchForFile(strDefExecNm, strDefFolder, True)
+    If strTemp <> "" Then 'found it
+       strFileFound = strTemp
+    Else
+       If AreYouSure("Cannot find executable file in " & strDefFolder & Chr(13) & "Search whole drive (this will take a while)") Then
+         strTemp = file_searchForFile(strDefExecNm, strDefDrive, True)
+         If strTemp <> "" Then strFileFound = strTemp
+       End If
+    End If
+  End If
+  If strFileFound = "" Then
+    msgBox "Can't find " & strDefExecNm & ", please browse for the winzip executable file if it exists on your machine."
+  Else
+    Me.execFileLoc = strFileFound
+  End If
+  
+End Sub
+
+Private Sub cmdOpenFolder_Click()
+  Call openFolderOfFile(Nz([zipFileToWrite]))
+End Sub
+
+Private Sub cmdSuggestName_Click()
+   Me.zipFileToWrite = IIf(IsNull(Me.fileToZip), Null, Me.fileToZip & ".zip")
+End Sub
+
+
+Private Sub cmdZipFile_Click()
+  Call zipThisFile
+End Sub
+
+Private Function zipThisFile() As Boolean
+ On Error GoTo errInZip
+  If validateZipForm() = True Then
+    'ok to zip:
+    Shell ((Me.execFileLoc) & " -a -ex """ & Me.zipFileToWrite & """ """ & Me.fileToZip & """")
+    zipThisFile = True
+    If AreYouSure("File was zipped successfully to: " & Me.zipFileToWrite & Chr(13) & "Open that folder to see file?") Then
+      cmdOpenFolder_Click
+    End If
+  End If
+exitthis:
+  Exit Function
+errInZip:
+  msgBox "Sorry, an error in zipping file. " & Err.Description
+  Resume exitthis
+
+End Function
+
+Private Sub Form_Load()
+  
+  'make sure form labels are white:
+  Call frm_textBoxesAllWhite(Me.Name)
+  ''check to see if can autozip
+  If Nz(Me.OpenArgs, "") <> "" Then
+    'file name passed, set
+    Me.fileToZip = Me.OpenArgs
+    'set default zip location
+    cmdSuggestName_Click
+    'zip file:
+    If zipThisFile() Then
+      'zipped successfully, close form
+      DoCmd.Close acForm, Me.Name, acSavePrompt
+    End If
+  End If
+End Sub
+
+Private Function validateZipForm() As Boolean
+  'make sure values are valid on the zip form
+  Call frm_textBoxesAllWhite(Me.Name)
+  'get current dir for filetozip if none
+  If InStr(Nz(Me.fileToZip, "\"), "\") = 0 Then
+    Me.fileToZip = CurrentProject.Path & "\" & Me.fileToZip
+  End If
+  If InStr(Nz(Me.zipFileToWrite, "\"), "\") = 0 Then
+    Me.zipFileToWrite = CurrentProject.Path & "\" & Me.zipFileToWrite
+  End If
+  
+  If Dir(Nz(Me.fileToZip, "---")) = "" Then
+    msgBox "Please specify a valid name of a file to zip."
+    validateZipForm = False
+    frm_highlightErrFld "fileToZip", Me.Name
+    GoTo exitthis
+  End If
+  If Dir(Nz(Me.execFileLoc, "---")) = "" Or Right(Me.execFileLoc, 4) <> ".exe" Then
+    msgBox "Please specify a valid name for the winzip executable form."
+    validateZipForm = False
+    frm_highlightErrFld "execFileLoc", Me.Name
+    GoTo exitthis
+  End If
+  'check zip name:
+  If Dir(Nz(Me.zipFileToWrite, "")) <> "" Or Right(Me.zipFileToWrite, 4) <> ".zip" Then
+    msgBox "Please specify a valid name for the destination zip file, ending in .zip and a file that doesn't exist."
+    validateZipForm = False
+    frm_highlightErrFld "zipFileToWrite", Me.Name
+    GoTo exitthis
+  End If
+  'still here, then OK
+  validateZipForm = True
+  
+exitthis:
+  Exit Function
+End Function

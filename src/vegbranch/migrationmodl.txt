@@ -1,0 +1,755 @@
+Option Compare Database
+Option Explicit
+
+Public Function migr_confirmThenMigr2(strMigrName As String)
+'function when user presses a migration button on Migrate Data Form
+'@replcCommentOut@ On Error GoTo MigrationError
+'allow us to update name if need to
+Dim ctlName As Control
+Set ctlName = Forms!migrateData_final!MigrName
+
+'provide default name if no name is supplied
+If strMigrName = "" Then
+  strMigrName = "unnamed @" & Now()
+End If
+
+'ensure name is unique
+Dim intAdd As Integer
+Do Until getvalFrmSQL("select first(migrationName) from z_migrationStats where migrationName=""" & strMigrName & IIf(intAdd > 0, intAdd, "") & """;") = ""
+  intAdd = intAdd + 1
+Loop
+strMigrName = strMigrName & IIf(intAdd > 0, intAdd, "")
+ctlName.Value = strMigrName
+If intAdd > 0 Then
+  msgBox "The name of your migration has been changed to : " & strMigrName & " as the old name was already in use."
+End If
+
+'confirm migration
+Dim intResp As Integer
+intResp = msgBox("Are you sure you want to migrate data from the loading tables to the Vegbank tables?", vbYesNo, "VegBranch")
+If intResp = vbYes Then 'yes, they want ot migrate data
+  ''check to see if there are errors lurking still on the data_chk table
+ If chk_GetNumErrs() > 0 Then 'error still exist
+   If vbYes <> msgBox("There are still errors reported on the data check form.  If you opt to continue with migration, your data will not be migrated correctly.  Continue Anyway?" _
+     & Chr(13) & "It is strongly recommended you press NO and then go back to the data checking form and fix errors, then return here to migrate.", vbExclamation + vbYesNoCancel, "VegBranch") Then
+     msgBox "Nothing migrated.", vbInformation
+     Exit Function
+   End If 'asking user to cancel migration b/c errors
+ End If 'errors still exist
+   'record migration stats and reset current PK values
+   Dim dtestart As Date
+   dtestart = Now()
+    Call writeMigrStats(strMigrName, Now(), True)
+      
+      'migrate parties, always!
+      Call migrateParties
+      
+      If Forms!migrateData_final!chkB Then
+        'migrate plants
+        Call migratePlantTaxonomyModule
+      End If
+      
+      If Forms!migrateData_final!chkH Then
+        'migrate comms
+        Call migrateCommTaxonomyModule
+      End If
+      
+      If Forms!migrateData_final!chkC Then
+        'migrate plots
+        Call MigrateLoadingTbls_ToVBTbls
+      End If
+    Call writeMigrStats(strMigrName, Now(), False)
+  'done!
+  Debug.Print "migr_confirmThenMigr2>> Migration finished, took from : " & dtestart & " to :" & Now()
+  msgBox "Done with migration! Click the button 'migration Stats' for information about records added just now." & Chr(13) _
+    & "FYI, Migration took " & FriendlyDate(dtestart, Now(), True), vbInformation, "VegBranch"
+ DoCmd.Close acForm, "LoadingStatus"
+  
+End If 'user confirms they want to migrate their data
+exitMigrFcn:
+
+Exit Function
+
+MigrationError:
+msgBox "An error occurred in migration!  Sorry, but migration will now stop."
+Resume exitMigrFcn
+End Function
+
+Public Function Migr_confirmThenMigr(strMod As String, Optional intMissSpecList As Long, Optional intMissCommList As Long, _
+  Optional intNewSpec As Long, Optional intNewComm As Long, Optional strMigrName As String)
+'function when user presses a migration button on Migrate Data Form
+On Error GoTo MigrationError
+'allow us to update name if need to
+Dim ctlName As Control
+Set ctlName = Forms!migrateData_final!MigrName
+
+'provide default name if no name is supplied
+If strMigrName = "" Then
+  strMigrName = strMod & " data at : " & Now()
+End If
+
+'ensure name is unique
+Dim intAdd As Integer
+Do Until getvalFrmSQL("select first(migrationName) from z_migrationStats where migrationName=""" & strMigrName & IIf(intAdd > 0, intAdd, "") & """;") = ""
+  intAdd = intAdd + 1
+Loop
+strMigrName = strMigrName & IIf(intAdd > 0, intAdd, "")
+ctlName.Value = strMigrName
+If intAdd > 0 Then
+  msgBox "The name of your migration has been changed to : " & strMigrName & " as the old name was already in use."
+End If
+
+'confirm migration
+Dim intResp As Integer
+intResp = msgBox("Are you sure you want to migrate data from the loading tables to the Vegbank tables?", vbYesNo, "VegBranch")
+If intResp = vbYes Then 'yes, they want ot migrate data
+  ''check to see if there are errors lurking still on the data_chk table
+ If chk_GetNumErrs() > 0 Then 'error still exist
+   If vbYes <> msgBox("There are still errors reported on the data check form.  If you opt to continue with migration, your data will not be migrated correctly.  Continue Anyway?" _
+     & Chr(13) & "It is strongly recommended you press NO and then go back to the data checking form and fix errors, then return here to migrate.", vbExclamation + vbYesNoCancel, "VegBranch") Then
+     msgBox "Nothing migrated.", vbInformation
+     Exit Function
+   End If 'asking user to cancel migration b/c errors
+ End If 'errors still exist
+  Select Case strMod
+    Case "plot"
+      'check for new plants first
+      If intNewSpec > 0 Then
+        If msgBox("You have " & intNewSpec & " new plant(s)and should migrate plants before migrating plots to the vegbank module." _
+          & Chr(13) & "Trying to add plots first could result in errors.  Do you want to continue anyway (press YES)?  Press No to cancel.", _
+          vbYesNo, "Plants First") = vbYes Then
+          'continuing
+        Else
+          GoTo exitMigrFcn
+        End If
+      End If
+      'check for new comms first
+      If intNewComm > 0 Then
+        If msgBox("You have " & intNewComm & " new communities and should migrate them before migrating plots to the vegbank module." _
+          & Chr(13) & "Trying to add plots first could result in errors.  Do you want to continue anyway (press YES)?  Press No to cancel.", _
+          vbYesNo, "Communities First") = vbYes Then
+          'continuing
+        Else
+          GoTo exitMigrFcn
+        End If
+      End If
+      'migrate plots
+      Call writeMigrStats(strMigrName, Now(), True)
+      Call MigrateLoadingTbls_ToVBTbls
+      Call writeMigrStats(strMigrName, Now(), False)
+    Case "plant"
+      'check for new plants not in the species list
+      If intMissSpecList > 0 Then
+        If msgBox("You have " & intMissSpecList & " new plants that are not in your species list.  Plants are deemed 'new' if they cannot be found " _
+        & " if the vegbank module, or you have designated them as new plants in the match plants form.  You should add these to the species list " _
+        & " before migrating plants to the vegbank module.  " _
+          & Chr(13) & "Do you want to continue anyway (press YES)?  Press No to cancel.", _
+          vbYesNo, "New plants missing") = vbYes Then
+          'continuing
+        Else
+          GoTo exitMigrFcn
+        End If
+      End If
+        Call writeMigrStats(strMigrName, Now(), True)
+      Call migratePlantTaxonomyModule
+         Call writeMigrStats(strMigrName, Now(), False)
+    Case "comm"
+      'check for new comms not in the comm concept table
+      If intMissCommList > 0 Then
+        If msgBox("You have " & intMissCommList & " new communities that are not in your community concept loading table.  Communities are deemed 'new' if they cannot be found " _
+        & " if the vegbank module, or you have designated them as new communities in the match communities form.  You should add these to the community concept loading table " _
+        & " before migrating communities to the vegbank module.  " _
+          & Chr(13) & "Do you want to continue anyway (press YES)?  Press No to cancel.", _
+          vbYesNo, "New plants missing") = vbYes Then
+          'continuing
+        Else
+          GoTo exitMigrFcn
+        End If
+      End If
+          Call writeMigrStats(strMigrName, Now(), True)
+      Call migrateCommTaxonomyModule
+            Call writeMigrStats(strMigrName, Now(), False)
+  End Select
+End If 'user confirms they want to migrate their data
+exitMigrFcn:
+Exit Function
+
+MigrationError:
+msgBox "An error occurred in migration!  Sorry, but migration will now stop."
+
+End Function
+
+Function testadfdsafdsa()
+  Debug.Print InterpretPartiesToVegBank(False)
+End Function
+
+Public Function WhatIsPKOf(strTbl As String) As String
+  ''gets PK name of a table from Z_FieldDescription
+  Dim rstGetPK As New ADODB.Recordset
+  rstGetPK.Open "SELECT fieldNAme FROM Z_FieldDescription WHERE tableName = """ & strTbl & """  AND [key]=""PK"";", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstGetPK
+    If Not .EOF Then
+      ''found a fieldName that is PK
+      WhatIsPKOf = !FieldName
+    End If
+  End With
+  rstGetPK.Close
+End Function
+
+Function fdakfjdlaf()
+  InitZTblPKsForMigration False
+End Function
+
+Public Function InitZTblPKsForMigration(Optional blnVBConnect As Boolean)
+  ''initializes Loading table fields for migration -- max PK and min PK
+  ''-- if blnVBConnect = true, then writes max PK's to different field in Z_TableDescription
+  Dim rstTbls As New ADODB.Recordset, cnnLoc As Connection
+  Set cnnLoc = CurrentProject.Connection
+  rstTbls.Open "SELECT * FROM Z_TableDescription WHERE [mod]=""VegBank"" or [mod]=""Loading"";", _
+    cnnLoc, adOpenForwardOnly, adLockOptimistic, adCmdText
+  
+   With rstTbls
+     Do Until .EOF
+       'recordset for collecting max and min PK values
+       Dim rstMM As New ADODB.Recordset
+       'string to store PK name
+       Dim pkNm As String
+       pkNm = WhatIsPKOf(!TableName)
+       If pkNm <> "" Then
+       rstMM.Open "SELECT max([" & pkNm & "]) as max_PK, min([" & pkNm & "]) as min_PK, count([" & pkNm & "]) as count_RECS FROM [" _
+           & !TableName & "]", cnnLoc, adOpenForwardOnly, adLockReadOnly, adCmdText
+       If Not rstMM.EOF Then
+         'update max and min PK's
+         If blnVBConnect Then
+          !MaxPKOnConnect = Nz(rstMM!max_PK, 0)
+         Else
+          !MaxPKb4Migr = Nz(rstMM!max_PK, 0)
+          !minPKb4Migr = Nz(rstMM!min_PK, 0)
+          !countRecb4Migr = Nz(rstMM!count_RECS, 0)
+         End If
+         .Update
+       Else
+         'if no records, then set to 0
+         If blnVBConnect Then
+          !MaxPKOnConnect = 0
+         Else
+          !MaxPKb4Migr = 0
+          !minPKb4Migr = 0
+          !countRecb4Migr = 0
+         End If
+         .Update
+       End If
+       rstMM.Close
+       ''set min and max for collections way of accessing
+       Call GetMM_PK_new(!TableName, "min", True, !minPKb4Migr)
+       Call GetMM_PK_new(!TableName, "max", True, !MaxPKb4Migr)
+       Else
+         'PK not found -- table probably not interesting to us
+         Debug.Print "No PK for: " & !TableName
+       End If
+     .MoveNext
+     Loop
+   End With
+   rstTbls.Close
+End Function
+
+
+Public Function GetMM_PK_new(strTbl As String, MinMax As String, Optional blnPut As Boolean, Optional lngValue As Long) As Long
+    'initializes a value in static collection for data, or returns it, using central collection, not Z_TableDesc
+    Static colMinPKs As New Collection, colMaxPKs As New Collection
+  
+    
+   ' On Error GoTo errPKCol
+    If blnPut Then 'store the PK value
+      If MinMax = "max" Then
+        'dealing with max pks
+        Call removeKeyFrmCol(colMaxPKs, strTbl)
+        colMaxPKs.Add (GetMM_PK_oldkeep(strTbl, MinMax)), (strTbl)
+      Else 'mins
+        Call removeKeyFrmCol(colMinPKs, strTbl)
+        colMinPKs.Add (GetMM_PK_oldkeep(strTbl, MinMax)), (strTbl)
+      End If
+
+      
+    Else 'getting value
+      If MinMax = "max" Then
+        GetMM_PK_new = colMaxPKs(strTbl)
+      Else 'mins
+        GetMM_PK_new = colMinPKs(strTbl)
+      End If
+    End If
+    
+    
+exitthis:
+    Exit Function
+errPKCol:
+    msgBox "error in getting/storing PK for " & strTbl & Chr(13) & Err.Description
+    Resume exitthis
+End Function
+
+Public Function removeKeyFrmCol(colColl As Collection, strKey As String)
+  On Error Resume Next
+  colColl.Remove strKey
+End Function
+
+Public Function GetMM_PK_newxx(strTbl As String, MinMax As String) As Long
+  ''gets the max or min PK from a table, as in Z_TableDescription
+  'only accurate after function is run: InitZTblPKsForMigration
+  Dim rstGetPK As New ADODB.Recordset
+  rstGetPK.Open "SELECT * FROM Z_TableDescription WHERE tableName = """ & strTbl & """;", _
+     CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstGetPK
+    If .EOF Then
+      'nothing to get - this is an error!
+      GetMM_PK_new = 0
+      Debug.Print "FAILED TO get PK from " & strTbl & " !!!"
+    Else
+      'can get min or max pk
+      If MinMax = "max" Then
+        'get min
+        GetMM_PK_new = !MaxPKb4Migr
+      Else 'get max
+        GetMM_PK_new = !minPKb4Migr
+      End If
+      
+    End If
+  End With
+  rstGetPK.Close
+     
+End Function
+
+
+Public Function GetMM_PK(strTbl As String, MinMax As String) As Long
+  ''gets the max or min PK from a table, as in Z_TableDescription
+  'only accurate after function is run: InitZTblPKsForMigration
+  Dim rstGetPK As New ADODB.Recordset
+  rstGetPK.Open "SELECT * FROM Z_TableDescription WHERE tableName = """ & strTbl & """;", _
+     CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstGetPK
+    If .EOF Then
+      'nothing to get - this is an error!
+      GetMM_PK = 0
+      Debug.Print "FAILED TO get PK from " & strTbl & " !!!"
+    Else
+      'can get min or max pk
+      If MinMax = "max" Then
+        'get min
+        GetMM_PK = !MaxPKb4Migr
+      Else 'get max
+        GetMM_PK = !minPKb4Migr
+      End If
+      
+    End If
+  End With
+  rstGetPK.Close
+     
+End Function
+
+
+Public Function GetMM_PK_oldkeep(strTbl As String, MinMax As String) As Long
+  ''gets the max or min PK from a table, as in Z_TableDescription
+  'only accurate after function is run: InitZTblPKsForMigration
+  Dim rstGetPK As New ADODB.Recordset
+  rstGetPK.Open "SELECT * FROM Z_TableDescription WHERE tableName = """ & strTbl & """;", _
+     CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstGetPK
+    If .EOF Then
+      'nothing to get - this is an error!
+      GetMM_PK_oldkeep = 0
+      Debug.Print "FAILED TO get PK from " & strTbl & " !!!"
+    Else
+      'can get min or max pk
+      If MinMax = "max" Then
+        'get min
+        GetMM_PK_oldkeep = !MaxPKb4Migr
+      Else 'get max
+        GetMM_PK_oldkeep = !minPKb4Migr
+      End If
+      
+    End If
+  End With
+  rstGetPK.Close
+     
+End Function
+
+Public Function getPartyIDFromPartyCode(strPCode As String) As Long
+  ''function gets a VegBank Party_ID from a UserParty Code
+  ''Parties must obviously be migrated to VegBank before referencing these Party_ID's
+  Dim rstParty As New ADODB.Recordset
+  rstParty.Open "SELECT * FROM append_A_to_party_equiv WHERE userPartyCode = """ & strPCode & """;", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstParty
+  If .EOF Then
+    getPartyIDFromPartyCode = -1
+  Else
+    getPartyIDFromPartyCode = Nz(!newParty_ID, -1)
+  End If
+  End With
+End Function
+Function getCurrentPartyName() As String
+ 'gets name of current operator
+Dim strName As String
+
+strName = getvalFrmSQL("SELECT trim(givenName & ' ' & middleName & ' ' & surname & iif(len(organizationNAme)>0,' organization: ' & organizationName,''))" _
+& "  FROM Default_metaData2 INNER JOIN z_USER_A_Party ON Default_metaData2.DefaultParty = z_USER_A_Party.UserPartyCode; ")
+getCurrentPartyName = strName
+
+End Function
+
+Public Function getMetaData2Value(strVal As String) As Long
+  ''function returns a value that is stored in the table DefaultMetadata2
+  If fieldExistOnTbl(strVal, "Default_MetaData2") Then
+    Dim rstDef2 As New ADODB.Recordset
+    rstDef2.Open "SELECT " & strVal & " FROM Default_MetaData2", CurrentProject.Connection _
+       , adOpenForwardOnly, adLockReadOnly, adCmdText
+    With rstDef2
+    If Not (.EOF) Then
+      Dim varVal As Variant
+      varVal = Nz(.Fields(strVal), -1)
+      If strVal = "DefaultParty" Then
+        varVal = getPartyIDFromPartyCode((varVal))
+      End If
+      If IsNumeric(varVal) Then
+        getMetaData2Value = varVal
+      Else
+        Debug.Print "MetaData2 value was not numeric : " & strVal & " =  " & varVal
+        getMetaData2Value = -1
+      End If
+    Else
+      Debug.Print "NO records in Default_metadata2!"
+      getMetaData2Value = -1
+    End If
+    End With
+  Else
+    Debug.Print strVal & " not found in Default_MetaData2!"
+    getMetaData2Value = -1
+  End If
+End Function
+
+Public Function getStratumType_ID(strIndex As String, Optional lngStrMeth As Long) As Long
+''this function gets a stratum Type ID from the current stratum Type
+'Dim lngStrMeth As Long
+If lngStrMeth <= 0 Then lngStrMeth = getMetaData2Value("stratumMethod")
+If lngStrMeth <> -1 Then
+  ''found str meth
+  Dim rstType As New ADODB.Recordset
+  rstType.Open "SELECT stratumType_ID FROM stratumType WHERE stratumMethod_ID=  " & lngStrMeth _
+     & " AND stratumIndex = """ & strIndex & """;", CurrentProject.Connection, _
+     adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstType
+    If .EOF Then
+      'can't find index
+      getStratumType_ID = -1
+    Else
+      getStratumType_ID = !STRATUMTYPE_ID
+    End If
+  
+  End With
+Else
+  ''didn't find str meth
+  getStratumType_ID = -1
+End If
+End Function
+
+'Public Function getStratum_ID(strAuthPlCode As String, strIndex As String) As Long
+  ''function opens Z_C equivalent query and calculates the stratum_ID for a plotCode and stratum Index
+  ''not used -- still convert D2 table into D and migrate from D
+  'Dim rstStr As New ADODB.Recordset
+  'rstStr.Open "SELECT * FROM append_C_getNewPKs WHERE authorPlotCode = """ & strAuthPlCode _
+   '  & """;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+'  With rstStr
+ ' If .EOF Then
+  '  ''can't find plot!
+   ' Debug.Print "plot not found, can't get stratum_ID : " & strAuthPlCode
+    'getStratum_ID = -1
+'  Else
+ '   ''can find plot
+  '  Dim intTemp As Integer
+   ' ''look thru 9 stratum fields in Z_USER_C
+    'For intTemp = 1 To 9
+'      If .Fields("STratumIndex" & intTemp) = strIndex Then
+     '   ''found correct index - only taking first, not chk for duplicates
+      ''  getStratum_ID = !UnAdjustedStratumID + intTemp
+        'GoTo foundindx
+'      End If
+ '   Next intTemp
+  '  ''if passes thru here, then stratum index not found, set to -1
+   ' getStratum_ID = -1
+'foun'dindx:
+ ' End If
+ ' End With
+'End Function
+
+Public Function getRoleID(strRole As String) As Long
+  ''function returns a role ID given a role Code
+  
+    Dim rstRole As New ADODB.Recordset
+    rstRole.Open "SELECT Role_ID FROM aux_Role WHERE roleCode = """ & strRole & """;", CurrentProject.Connection _
+       , adOpenForwardOnly, adLockReadOnly, adCmdText
+    With rstRole
+    If Not (.EOF) Then
+      getRoleID = !ROLE_ID
+    Else
+      Debug.Print "NO records in Aux_Role that match:" & strRole
+      getRoleID = -1
+    End If
+    End With
+    rstRole.Close
+End Function
+
+Public Function getPI_ID(strPlot As String) As Long
+ ''function gets plot PI id, if it can be found, else -1
+ Dim rstPlot As New ADODB.Recordset
+ rstPlot.Open "SELECT * FROM Z_USER_C_PlotData WHERE AuthorPlotCode = """ & strPlot & """;", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+ With rstPlot
+ If .EOF Then
+   ''can't find plot
+   Debug.Print "getPlotAuthorID >> can't find plot:" & strPlot
+   getPI_ID = -1
+ Else
+   Dim inttemp As Integer, lngRoleTemp As Long, lngRoleTarg As Long, lngID As Long
+   ''default author ID = -1.  only replaced if author found
+   lngID = -1
+   ''look thru plot contributors to find author:
+   lngRoleTarg = getRoleID("PI")
+   For inttemp = 1 To 5
+     ''get "current" field's role_ID
+     lngRoleTemp = trans_ManualMatch_getVBVal("role", Nz(.Fields("role" & inttemp)))
+     If lngRoleTemp = lngRoleTarg And lngRoleTemp <> -1 Then
+      ''found plot PI!
+      lngID = getPartyIDFromPartyCode(Nz(.Fields("Contrib" & inttemp)))
+      Exit For
+     End If
+   Next
+   getPI_ID = lngID
+ End If
+ End With
+ rstPlot.Close
+ 
+End Function
+
+Function userDefn_RunALL_CDEF()
+On Error GoTo userDefn_RunALL_CDEF_Err
+
+    ' runs append query for C1-C35 matching table "OB"
+    ''DoCmd.RunMacro "UserDefn_append1OfC_obs", 35, ""
+    UserDefn_append "observation", 35
+    UserDefn_append "plot", 35
+    UserDefn_append "TaxonObservation", 25
+    UserDefn_append "stemCount", 25
+    UserDefn_append "stemLocation", 25
+    UserDefn_append "soilObs", 35
+    
+userDefn_RunALL_CDEF_Exit:
+    Exit Function
+
+userDefn_RunALL_CDEF_Err:
+    msgBox Error$
+    Resume userDefn_RunALL_CDEF_Exit
+
+End Function
+
+Public Function UserDefn_append(strTbl As String, intHowMany As Integer)
+On Error GoTo UserDefn_append1OfC_obs_Err
+
+    Dim strSQL As String, strSrc As String, strSrcPK As String, strLtr As String
+    strSQL = ""
+    ''find where to get this data from:
+    Select Case strTbl
+      Case "plot"
+        strSrc = "append_C_GetNewPKs"
+        strSrcPK = "NewPlotID"
+        strLtr = "C"
+      Case "observation"
+        strSrc = "append_C_GetNewPKs"
+        strSrcPK = "NewObsID"
+        strLtr = "C"
+      Case "TaxonObservation"
+        strSrc = "append_D_getPKs"
+        strSrcPK = "NewTaxObsID"
+        strLtr = "D"
+      Case "stemCount"
+        strSrc = "append_E_to_stemcount_equiv"
+        strSrcPK = "NewStemID"
+        strLtr = "E"
+      Case "stemLocation"
+        strSrc = "append_E_to_stemcount_equiv"
+        strSrcPK = "NewStemLocID"
+        strLtr = "E"
+      Case "soilObs"
+        strSrc = "append_F_GetPKs"
+        strSrcPK = "NewSoilID"
+        strLtr = "F"
+      Case "taxonImportance"
+        strSrc = "append_D2_getPKs"
+        strSrcPK = "NewTaxImpID"
+        strLtr = "D2"
+    End Select
+    
+    Dim lngCount As Integer
+    For lngCount = 1 To intHowMany
+    ' adds  new SQL
+    strSQL = "INSERT INTO definedValue (UserDefined_ID,TableRecord_ID,definedValue) " _
+      & " SELECT [VB_ID] ," & strSrcPK & ", UserDef" _
+      & lngCount & " FROM " & strSrc & ", Z_USER_J_UD WHERE (((UserDef" & lngCount _
+      & ") Is Not Null) AND ((UTbl)=""" & strLtr & """)AND((UNum)=" & lngCount & ")AND((TableName)=""" & strTbl & """));"
+    
+    ' runs SQL, appending to table definedValue the results
+    'Debug.Print strSQL
+    DoCmd.RunSQL strSQL
+    Next lngCount
+    
+UserDefn_append1OfC_obs_Exit:
+    Exit Function
+
+UserDefn_append1OfC_obs_Err:
+    msgBox Error$
+    Resume UserDefn_append1OfC_obs_Exit
+
+End Function
+
+Public Function writeMigrStats(strMigrName As String, dteWhen As Date, blnBefore As Boolean, Optional blnNoInit As Boolean)
+  'writes standard stats to Z_MigrationStats
+  'migration must have a name  and must have a dte, blnBefore if this is before the migration (to compare before and aft)
+  'recalc values on tables, counts, min and max PKs
+  If Not blnNoInit Then Call InitZTblPKsForMigration
+  'send min PK to table
+  DoCmd.RunSQL "INSERT INTO Z_MigrationStats (migrationName, migrationDate, StatName, param1, statValue, beforeMigr) SELECT """ _
+    & strMigrName & """ , #" & dteWhen & "# , ""minPK"" , tableName, minPKb4Migr, " _
+    & blnBefore & " FROM Z_tableDescription WHERE [mod]=""vegbank"" or [mod]=""loading"";"
+  'send max PK to table
+  DoCmd.RunSQL "INSERT INTO Z_MigrationStats (migrationName, migrationDate, StatName, param1, statValue, beforeMigr) SELECT """ _
+    & strMigrName & """ , #" & dteWhen & "# , ""maxPK"" , tableName, maxPKb4Migr, " _
+    & blnBefore & " FROM Z_tableDescription WHERE [mod]=""vegbank"" or [mod]=""loading"";"
+   'send count to table
+  DoCmd.RunSQL "INSERT INTO Z_MigrationStats (migrationName, migrationDate, StatName, param1, statValue, beforeMigr) SELECT """ _
+    & strMigrName & """ , #" & dteWhen & "# , ""countRecs"" , tableName, countRecb4Migr, " _
+    & blnBefore & " FROM Z_tableDescription WHERE [mod]=""vegbank"" or [mod]=""loading"";"
+     
+End Function
+
+Public Function writeTempMigrReport(strTable As String, Optional lngLow As Double, Optional lngHigh As Long, Optional strNotes As String)
+  'function writes and opens new query that shows the VB table mentioned in strTable
+  'lngLow and lngHigh are boundary PK's
+  'pass 0 to ignore one or both of these
+  'strNotes is a reminder field, comes first
+  Dim strName As String 'name of query to write
+  strName = getNewQryName(definePrefix("tempMigrationReports") & strTable, "")
+  Dim strSQL As String, strWHERE As String
+  If strNotes <> "" Then
+    'add field as reminder, removing single quotes
+    strSQL = "'" & substTextForText(strNotes, "'", "`") & "' as notesOnThis, "
+  End If
+  If lngLow + lngHigh > 0 Then
+    'have a low and/or high
+    Dim strPK As String
+    strPK = WhatIsPKOf(strTable)
+    strWHERE = IIf(lngLow > 0, " strPK>=" & lngLow, "")
+    strWHERE = " WHERE " & IIf(lngLow > 0, strPK & ">" & lngLow, " true ") & " AND " & IIf(lngHigh > 0, strPK & "<=" & lngHigh, " true ")
+  End If
+  
+  strSQL = "SELECT " & strSQL & " * FROM " & definePrefix("viewTranslateQry") & strTable & strWHERE & ";"
+  'define query and open it
+  Call EditQrySql(strName, strSQL, False)
+  'open read only
+  DoCmd.OpenQuery strName, acViewNormal, acReadOnly
+End Function
+
+Public Function removeTempMigrReports()
+  'function deletes queries that prefix with definePrefix("tempMigrationReports")
+  Dim colQrys As New Collection, qdfTemp As Object
+  For Each qdfTemp In CurrentDb.querydefs
+    If qdfTemp.Name Like definePrefix("tempMigrationReports") & "*" And InStr(qdfTemp.Name, "__") > 0 Then colQrys.Add qdfTemp.Name
+  Next
+  Dim inttemp As Integer
+  For inttemp = 1 To colQrys.Count
+    closeQryNoErr colQrys(inttemp)
+    DoCmd.DeleteObject acQuery, colQrys(inttemp)
+  Next inttemp
+End Function
+
+
+Public Function closeQryNoErr(strQry As String)
+  On Error Resume Next
+  DoCmd.Close acQuery, strQry, acSaveNo
+End Function
+
+Public Function deleteMigrationStats(strMigrationName As String)
+  'deletes a migration from stats
+  If AreYouSure("Do you want to delete all information about the migration: " & strMigrationName & Chr(13) & "This does not affect the migrated data.") Then
+    'delete the info about migrations
+    
+    DoCmd.RunSQL "delete * from Z_migrationStats " & _
+      IIf(strMigrationName <> "--all--", "where migrationName=""" & strMigrationName & """", "") & ";"
+  End If
+  Call recalcCurrForm(True)
+End Function
+
+Public Function fuzzLatLong(varLatLong As Variant, strConfid As String) As Variant
+  Dim intConfid As Integer
+  Select Case strConfid
+    Case "1", "2", "3"
+      intConfid = strConfid
+    Case Else
+      intConfid = 0
+  End Select
+  If IsNull(varLatLong) Or Not IsNumeric(Nz(varLatLong)) Or intConfid = 0 Or intConfid > 3 Then
+    ' the value is null or not numeric, or no fuzzing is needed
+    fuzzLatLong = varLatLong
+  Else 'not null and is numeric and needs fuzzing
+    Dim dblLatLong As Double, dblFuzz As Double
+    dblLatLong = varLatLong
+    'fuzz to nearest .01 if intConfid=1, .1 if =2, 1 if =3
+    dblFuzz = Round(dblLatLong, 3 - intConfid)
+
+    'ok, now if the values are too close, then round ifferently, ie add or subtract one unit
+    Dim dblRange As Double
+    dblRange = (10 ^ (intConfid - 4)) * 2
+    
+    If Abs(dblFuzz - dblLatLong) < dblRange Then
+     ' Debug.Print Abs(dblFuzz - dblLatLong) & " is diff to orig, min diff=" & dblRange
+      'here the value after fuzzing is still too close to the original value, so we fuzz the "other" direction
+      'this means adding or subtracting the 10^(intConfid-3) to the fuzzed rounded value
+    '  Debug.Print "(" & dblRange & ")"
+      Dim intAddSubt As Integer
+      intAddSubt = (dblFuzz > dblLatLong) * 2 + 1 '-1 if subtract, +1 if add
+      dblFuzz = dblFuzz + (intAddSubt) * (10 ^ (intConfid - 3))
+    End If
+    fuzzLatLong = dblFuzz
+  End If
+End Function
+
+Public Function reverseMigrationVB_toLoading()
+  'start process of loading plots into loading tables from vegbank
+Dim strName As String
+strName = UpdateProcessingPosX(0, 0, "", True, "Reversing Migration", "putting vegbank module plots into the loading module for faster viewing")
+  Call UpdateProcessingPosX(10, 0, strName, False, , "adding parties...")
+  DoCmd.OpenQuery "move_VB_to_A_run"
+  Call UpdateProcessingPosX(30, 0, strName, False, , "adding stratum definitions...")
+  DoCmd.OpenQuery "reverseMigr_toC2_str_RUN"
+  
+  Call UpdateProcessingPosX(33, 0, strName, False, , "adding places...")
+  DoCmd.OpenQuery "reverseMigr_toC2_plc_RUN"
+  Call UpdateProcessingPosX(36, 0, strName, False, , "adding obsContrib...")
+  DoCmd.OpenQuery "reverseMigr_toC2_obC_RUN"
+  Call UpdateProcessingPosX(40, 0, strName, False, , "adding taxa per plot..")
+  DoCmd.OpenQuery "reverseMigr_toD2_RUN"
+  Call UpdateProcessingPosX(70, 0, strName, False, , "adding stems per plot..")
+  DoCmd.OpenQuery "reverseMigr_toE_RUN"
+  Call UpdateProcessingPosX(80, 0, strName, False, , "adding soils..")
+  DoCmd.OpenQuery "reverseMigr_toF_RUN"
+  Call UpdateProcessingPosX(85, 0, strName, False, , "adding disturbance info..")
+  DoCmd.OpenQuery "reverseMigr_toG_RUN"
+  Call UpdateProcessingPosX(90, 0, strName, False, , "adding community-plot assignments..")
+  DoCmd.OpenQuery "reverseMigr_toI_RUN"
+  
+  'at end, so that other things still import: duplicates are removed once this is run
+  Call UpdateProcessingPosX(95, 0, strName, False, , "adding plots...")
+  DoCmd.OpenQuery "reverseMigr_toC_RUN"
+  
+  Call UpdateProcessingPosX(100, 0, strName, False, , "done")
+  msgBox "finshed with reverse Migration!"
+  DoCmd.OpenForm "revMigr_C"
+End Function

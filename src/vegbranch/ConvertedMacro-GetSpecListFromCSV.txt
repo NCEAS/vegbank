@@ -1,0 +1,29 @@
+Option Compare Database
+Option Explicit
+
+'------------------------------------------------------------
+' GetSpecListFromCSV
+'
+'------------------------------------------------------------
+Function GetSpecListFromCSV()
+On Error GoTo GetSpecListFromCSV_Err
+
+    DoCmd.OpenForm "ImportingData", acNormal, "", "", , acNormal
+    DoCmd.RepaintObject , ""
+    DoCmd.TransferText acImportDelim, "", "Z_User_B_SpecList", Forms!ImportingData!B_Location, True, ""
+    DoCmd.RunSQL "UPDATE LoadingStatus SET LoadingStatus.AddDataB = True;  ", -1
+    Call CheckFieldsForFields("Z_User_B_SpecList", "table")
+    DoCmd.Close acForm, "ImportingData"
+    DoCmd.Requery ""
+
+
+GetSpecListFromCSV_Exit:
+    Exit Function
+
+GetSpecListFromCSV_Err:
+    msgBox Error$
+    Resume GetSpecListFromCSV_Exit
+
+End Function
+
+

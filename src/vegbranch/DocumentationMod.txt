@@ -1,0 +1,970 @@
+Option Compare Database
+Option Explicit
+Const strTableForDoc = "doc_control"
+
+Public Function ReptThisText(strTxt As String, lngRept As Integer, Optional intSpacer As Integer, Optional strSpacer As String) As String
+''repeats strtxt lngRept times
+'if intSpacer>0 then inserts the specified character after each intSpacer repetitions
+If lngRept <= 0 Then
+  ReptThisText = ""
+  Exit Function
+End If
+Dim lngTemp As Long, strTemp As String
+For lngTemp = 1 To lngRept
+  strTemp = strTemp & strTxt
+  If intSpacer > 0 Then
+    If Int(lngTemp / intSpacer) = (lngTemp / intSpacer) Then
+      'add spacer
+      If strSpacer = "" Then strSpacer = "|"
+      strTemp = strTemp & strSpacer
+    End If
+  End If
+Next lngTemp
+ReptThisText = strTemp
+End Function
+
+
+Public Function doc_rebuildMenu()
+  'recreates menu of items on documentation table:
+  DoCmd.RunSQL "UPDATE x_documentation SET x_documentation.TopicMenu = ReptThisText(""--"",[TopicLevel]) & [currentTopic];"
+  DoCmd.RunSQL "Update X_documentation Set sortORd = lineID where ((sortOrd) is null);"
+End Function
+
+
+Public Function extra__dbMisc_GetPrevNext(strNextPrev As String, strTable As String, strFld As String, _
+   lngCurrVal As Double) As Double
+  'moveNext or movePrevious on a table for a field, unfiltering if filtered
+  dbMisc_GetPrevNext = lngCurrVal 'default to current Val
+' On Error GoTo ErrGetPrevNExt
+  
+  Dim cnnLoc As Connection
+  Dim rstCurr As New ADODB.Recordset
+  Set cnnLoc = CurrentProject.Connection
+  Dim strMinMax As String, strGtLt As String
+  If strNextPrev = "Next" Then
+    ''for SQL to select the min of everything g.t. the current value
+    strMinMax = "min"
+    strGtLt = ">"
+  Else
+    ''for SQL to select the max of everything l.t. the current value
+    strMinMax = "max"
+    strGtLt = "<"
+  End If
+    
+  rstCurr.Open "SELECT " & strMinMax & "([" & strFld & "]) as NewLine FROM [" & strTable & _
+     "] WHERE [" & strFld & "] " & strGtLt & lngCurrVal, _
+     cnnLoc, adOpenStatic, adLockReadOnly, adCmdText
+  If Not rstCurr.EOF Then
+    If Not IsNull(rstCurr!NewLine) Then
+      dbMisc_GetPrevNext = rstCurr!NewLine
+    End If
+  End If
+  Exit Function
+ErrGetPrevNExt:
+  'print that error has occurred, old value should be passed
+  Debug.Print "dbMisc_GetPrevNext>>  ERROR in getting Prev or NExt : " & strNextPrev & " : " & _
+     strTable & " . " & strFld & " =  " & lngCurrVal
+End Function
+
+Public Function doc_getPrevNextInstr(strPrevNext As String, lngLineID As Double)
+  Dim lngNewLine As Double
+  lngNewLine = dbMisc_GetPrevNext(strPrevNext, "x_documentation_qry", "LineID", lngLineID)
+  If lngLineID <> lngNewLine Then
+    ''different Line ID to go get
+    Doc_FindInstruction lngNewLine
+  End If
+End Function
+
+Public Function Doc_NewRecOnForm(strFormName, strCtlName, lngLineID)
+  Forms(strFormName).Controls(strCtlName).Value = lngLineID
+End Function
+
+Public Function Doc_FindInstruction(dblInstrID As Double)
+'function takes the user to the instruction ID line in the data entry instructions at red ?'s
+If dblInstrID <> -1 Then
+  DoCmd.OpenForm "x_documentation", , , "lineID=" & dblInstrID
+  Forms!X_documentation.Controls("DataEntryInstructions").SetFocus
+ ' Forms!X_documentation.SetFocus
+End If
+End Function
+
+Public Function IsLineIDOK(lineID As Double) As Boolean
+If lineID = -2 Then IsLineIDOK = True
+'  If getvalFrmSQL("select lineID from x_documentation where lineID=" & lineID) <> "" Then
+    IsLineIDOK = True
+'  End If
+  
+End Function
+
+Public Function ShowHideQuestions(Optional blnDontChng As Boolean, Optional blnSubFrms As Boolean, Optional strOverrideShow As String)
+  ''function shows or hides all ?'s in the current form, depending on visibility of lbl_ShowHideQuestions
+  ''if blnSubFrms is true then looks in subforms too (only one level)
+ On Error GoTo errShowHide
+  Dim frmCurr As Form, blnShow As Boolean
+  ''grab active form
+
+
+  Set frmCurr = Screen.ActiveForm
+  
+  'if set manually, with strOverrideShow, then ignore current setting and set the way requested:
+  Select Case strOverrideShow
+    Case "true"
+      blnShow = True
+    Case "false"
+      blnShow = False
+    Case Else
+  
+  'check to see if we should show or hide ?'s, based on visibility of lbl_ShowHideQuestions
+  If frmCurr.Controls("lbl_ShowHideQuestions").Visible = True Then
+    'slash is visible, make all invisible
+    blnShow = False
+  Else
+    'slash is invisible, make all visible
+    blnShow = True
+  End If
+  End Select
+  
+  
+  If blnDontChng Then
+    ''we are asked not to change ?'s visible or not, but to refresh what is should be visible only
+    blnShow = Not blnShow
+  End If
+  
+  Dim ctlCurr As Control, ctlCurr2 As Control
+  For Each ctlCurr In frmCurr.Controls
+    If ctlCurr.ControlType = acLabel Then
+      If ctlCurr.Caption = "?" Then
+        ctlCurr.Visible = blnShow
+       ' ctlCurr.ControlTipText = "Click for help"
+      End If
+    End If
+    If ctlCurr.ControlType = acSubform Then
+     If ctlCurr.Enabled Then ''skip for disabled forms
+   '   Debug.Print "subform!"
+      For Each ctlCurr2 In ctlCurr.Form.Controls
+    '    Debug.Print ctlCurr2.Name
+        If ctlCurr2.ControlType = acLabel Then
+         If ctlCurr2.Caption = "?" Then
+           ctlCurr2.Visible = blnShow
+           ' ctlCurr2.ControlTipText = "Click for help"
+         End If
+        End If
+      Next ctlCurr2
+     End If
+    End If
+  Next ctlCurr
+  
+  frmCurr.Controls("lbl_ShowHideQuestions").Visible = blnShow
+  Exit Function
+errShowHide:
+  msgBox "could not change view of help question marks on this form!" & Chr(13) & Err.Description, vbExclamation
+End Function
+
+Private Function ctlFixOrangeSteps(ctlCurr As Control, blnShow As Boolean)
+   Select Case ctlCurr.ControlType
+      Case acLabel, acTextBox
+       If ctlCurr.ForeColor = 33023 Then
+         ctlCurr.Visible = blnShow
+        ' ctlCurr.ControlTipText = "Click for help"
+       End If
+   End Select
+End Function
+
+Public Function ShowHideOrangeSteps(blnShow As Boolean)
+  ''function shows or hides all orange steps current form, depending on blnShow
+ On Error GoTo errShowHide
+  Dim frmCurr As Form
+  ''grab active form
+
+  Set frmCurr = Screen.ActiveForm
+  
+  Dim ctlCurr As Control, ctlCurr2 As Control
+  
+  For Each ctlCurr In frmCurr.Controls
+    Call ctlFixOrangeSteps(ctlCurr, blnShow)
+    If ctlCurr.ControlType = acSubform Then
+      
+     If ctlCurr.Enabled Then ''skip for disabled forms
+   '   Debug.Print "subform!"
+      For Each ctlCurr2 In ctlCurr.Form.Controls
+    '    Debug.Print ctlCurr2.Name
+       Call ctlFixOrangeSteps(ctlCurr2, blnShow)
+      Next ctlCurr2
+     End If
+    End If
+    
+  Next ctlCurr
+  
+exitthis:
+  Exit Function
+errShowHide:
+  msgBox "Sorry, could not change view of steps on this form!" & Chr(13) & Err.Description, vbExclamation
+  Resume exitthis:
+End Function
+
+Public Function getHelpForComboHelp()
+  On Error GoTo cantgetHelp
+  Dim lngNum As Long
+  lngNum = Screen.ActiveControl.Value
+  Dim strHelp As String
+  strHelp = getvalFrmSQL("select helpFunction from HelpComboSrc Where helpType_ID=" & lngNum)
+  If strHelp <> "" Then
+    Debug.Print "getHelpForComboHelp>> eval:" & strHelp
+    Eval (strHelp)
+  End If
+exitthis:
+  Exit Function
+cantgetHelp:
+  msgBox "Sorry, cannot get the help requested." & Chr(13) & Err.Description
+  Resume exitthis
+End Function
+
+Public Function getHelpForPrevControl(Optional blnForm As Boolean)
+  'function gets previous control, sets focus, and then asks for help
+  If Not blnForm Then Screen.PreviousControl.SetFocus
+  Call getHelpForCurrentControl
+End Function
+
+Public Function getHelpBaseURL() As String
+  'base path of help: should end in / or \
+  'can be set to read from options
+  getHelpBaseURL = "http://vegbank.org/vegdocs/vegbranch/help/"
+End Function
+
+Public Function getHelpForCurrentControl()
+  On Error GoTo noHelpAtAlL
+  'get current form
+  Dim strForm As String, strFormHelp As String
+  strForm = Screen.ActiveForm.Name
+  strFormHelp = getvalFrmSQL("select formHelp from Z_formdescription where formNAme='" & strForm & "';")
+  Dim strCtl As String, strCtlHelp As String
+  On Error Resume Next
+    strCtl = Screen.ActiveControl.Name
+    strCtlHelp = Screen.ActiveControl.StatusBarText
+  On Error GoTo noHelpAtAlL
+  
+  'open help form
+  If IsFormOpen("help") Then DoCmd.Close acForm, "help", acSaveNo
+  'IIf(blnDialog, acDialog, acWindowNormal)
+  'save opening parameters as one string
+  Dim strOpenArgs As String
+  strOpenArgs = SQLizeTxt(strForm, """") & "," & SQLizeTxt(strFormHelp, """") & "," _
+    & SQLizeTxt(strCtl, """") & "," & SQLizeTxt(strCtlHelp, """")
+  DoCmd.OpenForm "help", , , , , , """notdialog""," & strOpenArgs 'let help form know that it isn't opened as dialog
+  
+  'attempt to switch focus, if fails, then open dialog
+  
+  Forms("help").SetFocus
+  If Screen.ActiveForm.Name <> "help" Then 'must have a form that is opened to dialog, then open help dialog, too
+   ' msgBox "trying to make dialog help"
+    'close help
+    If IsFormOpen("help") Then DoCmd.Close acForm, "help", acSaveNo
+    DoCmd.OpenForm "help", , , , , acDialog, """dialog""," & strOpenArgs ' let help form know that it is dialog
+  End If
+
+
+ ' MsgBox "No Help yet available for: " & strTemp
+exitthis:
+  Exit Function
+noHelpAtAlL:
+  msgBox "Sorry, No Help for this yet." & Chr(13) & Err.Description
+  Resume exitthis
+End Function
+
+'--------------------------------- WEB HELP FROM ANYWHERE IN VEGBRANCH
+Public Function getWebHelpForForm(Optional strForm As String)
+  On Error GoTo noHelpAtAlL
+  'figure out where we are
+  Dim strTemp As String, strURL As String
+   strTemp = help_whereAmI()
+   If strForm = "" Then strForm = Screen.ActiveForm.Name
+   Dim strVer As String
+   'get last update for this form, to go to right URL
+   strVer = getvalFrmSQL("select lastUpdateVers from Z_Formdescription where formName='" & strForm & "';")
+   If strVer = "" Then
+     strVer = GetVersion("vegbranch") 'default to this version
+   End If
+   'gets base URL and then in the middle, whether \ (local windowS) or / (web) is used
+   strURL = getHelpBaseURL() & strVer & Right(getHelpBaseURL, 1) & "Help.form." _
+   & LCase(strForm) & ".html"
+  ' Debug.Print "looking up:" & strURL
+   Call Application.FollowHyperlink(strURL, , True)
+  
+ ' MsgBox "No Help yet available for: " & strTemp
+exitthis:
+  Exit Function
+noHelpAtAlL:
+  If strTemp = "." Then
+    msgBox "You are currently on the database window. This is used to open tables, queries, forms, etc. manually.  Only advanced users should use this window, and should never rename or change VegBranch objects.  No help is available for this."
+    Resume exitthis
+  End If
+  If Left(strTemp, 10) = "datasheet." Then
+    msgBox "You are currently in a table or query.  Sorry, but no help is available for these at the moment."
+    Resume exitthis
+  End If
+  msgBox "Sorry, No Help for this." & Chr(13) & "--details:" & Err.Description & Chr(13) & strURL & Chr(13) & strTemp
+  Resume exitthis
+End Function
+
+'--------------------------------- WEB HELP FROM ANYWHERE IN VEGBRANCH
+Private Function getHelpForCurrentControl_orig(Optional blnForm As Boolean)
+  On Error GoTo noHelpAtAlL
+  'figure out where we are
+  Dim strTemp As String, strURL As String
+   strTemp = help_whereAmI()
+   'gets base URL and then in the middle, whether \ (local windowS) or / (web) is used
+   strURL = getHelpBaseURL() & GetVersion("vegbranch") & Right(getHelpBaseURL, 1) & "Help." _
+   & LCase(IIf(blnForm, "overview.form." & Screen.ActiveForm.Name & ".", strTemp)) & "html"
+  ' Debug.Print "looking up:" & strURL
+   Call Application.FollowHyperlink(strURL, , True)
+  
+ ' MsgBox "No Help yet available for: " & strTemp
+exitthis:
+  Exit Function
+noHelpAtAlL:
+  If strTemp = "." Then
+    msgBox "You are currently on the database window. This is used to open tables, queries, forms, etc. manually.  Only advanced users should use this window, and should never rename or change VegBranch objects.  No help is available for this."
+    Resume exitthis
+  End If
+  If Left(strTemp, 10) = "datasheet." Then
+    msgBox "You are currently in a table or query.  Sorry, but no help is available for these at the moment."
+    Resume exitthis
+  End If
+  msgBox "Sorry, No Help for this." & Chr(13) & "--details:" & Err.Description & Chr(13) & strURL & Chr(13) & strTemp
+  Resume exitthis
+End Function
+
+
+Public Function addHelpToGlobalRightClickMenu()
+ Debug.Print "addHelpToGlobalRightClickMenu>> added as application shortcutbar"
+ setAppShortCutMenuBar "globalHelp"
+End Function
+
+Public Function RightClickChangeTo(strMenu As String)
+  If strMenu = "Std" Then strMenu = "" 'standard one is nothing
+  setAppShortCutMenuBar strMenu
+End Function
+
+Public Function setAppShortCutMenuBar(strMenu As String)
+  Static blnNotAgain As Boolean
+  'blnNotAgain = False 'to reset this
+  If blnNotAgain Then GoTo exitthis ': no more!
+  On Error GoTo nextAtt
+  Application.ShortcutMenuBar = strMenu
+exitthis:
+  Exit Function
+nextAtt:
+  If strMenu = "" Then
+    'error, should be able to set to ""
+    msgBox "could not set shortcut menu bar to default, """", which is a strange error"
+    blnNotAgain = True
+  End If
+  Resume nextAttRes
+nextAttRes: 'get new menu (there are 3 for each pop-up custom toolbar, when done, then oh well)
+  Dim strNum As String, intNum As Integer, strMenuBase As String
+  strNum = Right(strMenu, 1)
+  If IsNumeric(strNum) Then
+    intNum = strNum
+    intNum = intNum + 1
+    strMenuBase = Left(strMenu, Len(strMenu) - 1)
+  Else
+    intNum = 1
+    strMenuBase = strMenu
+  End If
+  'try strMenuBase & intNum
+  If intNum > 4 Then
+    msgBox "Sorry, could not set the right click menu, as these toolbars somehow strangely get deleted from access.  The 3 redundant toolbars that were prepared with VegBranch have all been deleted somehow.  Sorry, the right click menus will be standard access menus.  Use the upper toolbar for help, please."
+    Call setAppShortCutMenuBar("")
+    blnNotAgain = True
+    GoTo exitthis
+  End If
+  Debug.Print "setAppShortCutMenuBar>> " & strMenu & " failed, trying:" & strMenuBase & intNum
+  Call setAppShortCutMenuBar(strMenuBase & intNum)
+  GoTo exitthis
+End Function
+
+Public Function help_whereAmI() As String
+  'figures out where one is in the application and reports it as collection
+  Dim colNew As New Collection, strName As String, strType As String, inttemp As Integer, strRep As String, strTemp As String
+  strType = help_currentObjectType(strName)
+ ' Debug.Print strType
+  Call help_getNamesOfCurrCtl_Parents(colNew)
+   If colNew.Count > 0 Then
+    If strName <> colNew(colNew.Count) Then
+      Debug.Print "name1 <> name2: " & strName & ";" & colNew(colNew.Count)
+    End If
+   End If
+  colNew.Add (strType)
+  Dim colRealNew As New Collection, colSubFrmNames As New Collection
+  For inttemp = 1 To colNew.Count
+    'reverse order of colNew
+    colRealNew.Add (colNew(colNew.Count - inttemp + 1))
+  Next inttemp
+  
+  For inttemp = 1 To colRealNew.Count
+     strTemp = colRealNew(inttemp)
+     'if we are at 3 and count gt 3, then have to change name
+     If colRealNew(1) = "form" And inttemp >= 3 And colRealNew.Count > inttemp Then
+       Dim ctlCurr As Object, int2 As Integer
+       'set ctlCurr to form
+         Set ctlCurr = Forms(colRealNew(2))
+         'get control that was selected before
+         
+          For int2 = 1 To colSubFrmNames.Count
+             Set ctlCurr = ctlCurr.Controls(colSubFrmNames(int2))
+          Next int2
+          'find name of control with sourceObject = strTemp
+          strTemp = help_findCtlNameWSrcObj(ctlCurr, strTemp)
+          colSubFrmNames.Add (strTemp)
+         
+     End If
+       strRep = strRep & strTemp & "."
+     
+  Next inttemp
+   
+   'needed where form is currently on, but no controls (ERDKey, otherwise very rare)
+   If strType = "form" And strRep = strType & "." Then strRep = strRep & Screen.ActiveForm.Name & "."
+   strRep = help_locationReWrite(strRep)
+   help_whereAmI = strRep
+End Function
+
+Public Function help_findCtlNameWSrcObj(ctlCurr As Object, strSourceObj As String) As String
+  'function finds name of current control's parents, if parents include subforms, since STUPIDLY the parent.name reference to sourceObject, not name
+  'default as srcObj, if not found
+  help_findCtlNameWSrcObj = strSourceObj
+  On Error GoTo errThis
+  Dim ctlnew As Control
+  For Each ctlnew In ctlCurr.Controls
+    If ctlnew.ControlType = acSubform Then
+      'consider this one
+      If ctlnew.SourceObject = strSourceObj Then
+        'this is it!
+        help_findCtlNameWSrcObj = ctlnew.Name
+        GoTo exitthis
+      End If
+    End If
+  Next ctlnew
+exitthis:
+  Exit Function
+errThis:
+  Resume exitthis
+End Function
+
+Public Function help_locationReWrite(strIn As String) As String
+   'rewrites some locations, so that help can be more generalized for those situations
+   Debug.Print "checking loc for:" & strIn
+   Dim strRep As String, strCheck As String
+   strRep = strIn 'default
+   
+   strCheck = "form.erd_vegbank.Flds_"
+   If Left(strIn, Len(strCheck)) = strCheck Then
+     strRep = "form.erd_vegbank."
+   End If
+   strCheck = "form.z_fieldDesc_countRecs.DD_tabletoShow."
+   If Left(strIn, Len(strCheck)) = strCheck Then
+     strRep = "form.z_fieldDesc_countRecs.sub_tableView."
+   End If
+   
+   help_locationReWrite = strRep
+End Function
+
+
+Public Function help_getNamesOfCurrCtl_Parents(ByRef colAddTo As Collection)
+  On Error GoTo exitthis
+  Dim objTemp As Object, i As Integer
+  Set objTemp = Screen.ActiveControl
+   For i = 1 To 10
+    colAddTo.Add (objTemp.Name)
+    Debug.Print objTemp.Name
+    Set objTemp = objTemp.Parent
+   Next i
+  
+exitthis:
+  Exit Function
+End Function
+
+Public Function help_currentObjectType(strRetName As String) As String
+  'finds out if the current position is on (and returns):
+  ' form
+  ' datasheet (table or query)
+  ' report
+  ' page  (dataAccess)
+  Dim strRep As String
+  On Error GoTo notForm
+  strRetName = Screen.ActiveForm.Name
+  strRep = "form"
+  GoTo exitthis
+maybeDataSheet:
+  On Error GoTo notDS
+  strRetName = Screen.ActiveDatasheet.Name
+  strRep = "datasheet"
+  GoTo exitthis
+maybeReport:
+  On Error GoTo notReport
+  strRetName = Screen.ActiveReport.Name
+  strRep = "Report"
+  GoTo exitthis
+maybePage:
+  On Error GoTo notPage
+  strRetName = Screen.ActiveDataAccessPage.Name
+  strRep = "Page"
+  GoTo exitthis
+
+exitthis:
+help_currentObjectType = strRep
+'done!
+  Exit Function
+notForm:
+  Resume maybeDataSheet
+notDS:
+  Resume maybeReport
+notReport:
+  Resume maybePage
+notPage:
+  Resume exitthis
+dontknow: 'exit without knowing
+  Resume exitthis
+End Function
+
+
+Sub ListCommandBars()
+    Dim cbr As Object
+    For Each cbr In CommandBars
+       listbar 1, cbr
+    Next cbr
+End Sub
+
+Sub listbar(level As Integer, thisbar As Object)
+    Dim cbrctl As Object
+    Dim indent As Integer
+    ' Indent the command bar depending on its level in
+    ' the menu structure.
+    For indent = 1 To level
+        Debug.Print "   ";
+    Next indent
+    'Debug.Print thisbar.Type
+    If InStr(thisbar.Name, "filter") Or InStr(thisbar.Name, "copy") Or InStr(thisbar.Name, "properties") Or InStr(thisbar.Name, "sort") Then
+    Select Case thisbar.Type
+        Case 0 ' msoBarTypeMenuBar
+            Debug.Print "Menu Bar: " & thisbar.Name
+        Case 1 ' msoBarTypeNormal
+            Debug.Print "Toolbar: " & thisbar.Name
+        Case 2 ' msoBarTypePopup
+            Debug.Print "Popup: " & thisbar.Name
+    End Select
+    End If
+    For Each cbrctl In thisbar.Controls
+    ' If the control doesn't have a command bar associated
+    ' with it, then don't print it.
+        If cbrctl.Type <> 1 And cbrctl.Type <> 2 _
+              And cbrctl.Type <> 4 And cbrctl.Type <> 16 _
+              And cbrctl.Type <> 18 Then
+'            listbar level + 1, cbrctl.commandbar
+        End If
+    Next cbrctl
+End Sub
+
+
+Public Function doc_allFormsWriteToTbl(strWHERE As String)
+'writes all control information to doc_control table!
+'ctlcurr.ControlType = 112 Then 'is subform recurse!
+DoCmd.RunSQL "delete * from doc_control where [keep]=false;"
+'NEED TO STILL GET RECURSIVE SubForm controls.  For simple, bound fields to vegbank module fields, can add field defn
+Dim frmCurr As Object
+Dim ctlCurr As Object
+'write FORM itself to this
+Dim lngForms As Long, lngCtl As Long
+'lngForms = doc_writeCtlToHelp("FORM", 0) Form:-1 HARDCODE
+lngForms = -1
+
+For Each frmCurr In CurrentProject.AllForms
+  'Debug.Print frmCurr.Name
+  If frmCurr.Name Like strWHERE Then
+   DoCmd.OpenForm frmCurr.Name, acDesign
+   'insert form into control table
+   lngCtl = doc_writeCtlToHelp(frmCurr.Name, lngForms, , Forms(frmCurr.Name).Caption, frmCurr.Name)
+   Call doc_writeControlsOnObj(Forms(frmCurr.Name), lngCtl, frmCurr.Name)
+   'reparent any object that are under pages or tabcontrols or option groups
+  ' Call doc_reparentPgTcOg(frmCurr.Name, lngCtl)
+   Call doc_reparentCtls(frmCurr.Name)
+   DoCmd.Close acForm, frmCurr.Name
+   'consider any subforms not done on this form:
+   Dim rstTemp As New ADODB.Recordset
+   rstTemp.Open "select * from doc_control WHERE [keep]=false AND (controlToCopy is not null) " _
+     & " AND formNAme=" & SQLizeTxt(frmCurr.Name) & " and controlCopied=false", _
+      CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+   With rstTemp
+   Do Until .EOF
+     If Left(!controlToCopy, 6) <> "Table." And Left(!controlToCopy, 6) <> "Query." Then
+      Debug.Print "getting subform:" & !controlToCopy & " for " & !formName
+      DoCmd.OpenForm !controlToCopy, acDesign
+      'dont write intial form, only controls of it
+      Call doc_writeControlsOnObj(Forms(!controlToCopy), !doc_Control_ID, frmCurr.Name)
+      DoCmd.Close acForm, !controlToCopy
+      !controlCopied = True
+      .Update
+     End If
+   .MoveNext
+   Loop
+   End With
+   rstTemp.Close
+   
+   
+  End If
+Next frmCurr
+End Function
+  
+Public Function doc_reparentCtls(strFrmName As String)
+  'function realigns objects that are children of pages or tab controls or Option groups for a from, which is assumed to be open
+  Dim frmCurr As Form, ctlCurr As Control, ctlChild As Control
+  Set frmCurr = Forms(strFrmName)
+  For Each ctlCurr In frmCurr.Controls
+    Select Case ctlCurr.ControlType
+      Case acPage, acTabCtl, acOptionGroup  'aha, these have children, make it so
+        'get children of current object and realign in doc_control to reflect this
+        Dim lngPar As Long
+        lngPar = getvalFrmSQL("select doc_Control_ID from [" & strTableForDoc & "] WHERE formname=" & SQLizeTxt(strFrmName) _
+          & " AND ctlName=" & SQLizeTxt(ctlCurr.Name))
+        If lngPar > 0 Then
+          For Each ctlChild In ctlCurr.Controls
+            'realign this to reflect parentage of control, not form
+            Debug.Print "moving control from : " & strFrmName & " to " & lngPar & " , name:" & ctlChild.Name
+            DoCmd.RunSQL "UPDATE [" & strTableForDoc & "] SET ctlParent_ID=" & lngPar & " WHERE formname=" & SQLizeTxt(strFrmName) _
+              & " AND ctlName=" & SQLizeTxt(ctlChild.Name)
+          Next ctlChild
+        Else
+          msgBox "cant find object, which is parent:" & strFrmName & "!" & ctlCurr.Name
+          
+        End If
+        
+    End Select
+  Next ctlCurr
+End Function
+
+  
+Public Function doc_writeControlsOnObj(ctlObj As Object, lngParent As Long, Optional strFormName As String)
+  'writes all subcontrols to doc page
+  Dim ctlTemp As Object, lngTemp As Long
+ ' Debug.Print ctlObj.Name
+
+For Each ctlTemp In ctlObj.Controls
+  Select Case ctlTemp.ControlType
+    Case acSubform, acPage, acBoundObjectFrame, acCheckBox, acComboBox, acCommandButton, acCustomControl, acImage, acListBox, acOptionButton, acOptionGroup, acObjectFrame, acTabCtl, acTextBox, acToggleButton
+    'get info
+    lngTemp = doc_writeCtlToHelp(ctlTemp.Name, lngParent, ctlTemp, , strFormName)
+    Case acLabel, acLine, acPageBreak, acRectangle  'ignore
+    Case Else
+      msgBox "unexpected type:" & ctlTemp.ControlType
+  End Select
+Next
+
+End Function
+
+Public Function doc_writeCtlToHelp(strName As String, lngPar As Long, Optional ctlCurr As Variant, Optional strCaption As String, Optional strMasterName As String) As Long
+  'writes control to doc_control and returns pk of new one
+  Dim rstInsert As New ADODB.Recordset
+  rstInsert.Open "doc_control", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+  
+  rstInsert.AddNew
+  rstInsert!formName = strMasterName
+  rstInsert!ctlName = strName
+  rstInsert!ctlparent_id = lngPar
+  If strCaption <> "" Then
+    rstInsert!labelCaption = strCaption
+  End If
+  If IsMissing(ctlCurr) Then
+    'see if form, and if so, attempt to get help string for it
+    If lngPar = -1 Then
+      'is form: get help
+      rstInsert!helptext = getvalFrmSQL("select formHelp from z_formDescription where formname=" & SQLizeTxt(strName))
+    End If
+  Else ' passed control
+      Dim strNewCapt As String
+      strNewCapt = doc_existPropOnCtl(ctlCurr, "caption")
+      If ctlCurr.ControlType = acPage And strNewCapt = "" Then
+        strNewCapt = ctlCurr.Name 'default for access to display name where no caption on page
+      End If
+      
+      If strNewCapt = "" Then
+        strNewCapt = doc_existPropOnCtl(ctlCurr, "controlTipText")
+      End If
+      Dim strTempLblCap As String
+      strTempLblCap = doc_getCtlsLabelCaption(ctlCurr)
+      Debug.Print ctlCurr.Name & ":" & strNewCapt & " -- " & strTempLblCap
+      If Len(strTempLblCap) > 0 Then strNewCapt = strTempLblCap
+    
+      rstInsert!labelCaption = strNewCapt
+      rstInsert!Skip = doc_autoSkipFields(strMasterName, strName)
+    rstInsert!ControlType = ctlCurr.ControlType
+    Dim strTab As String
+    strTab = doc_existPropOnCtl(ctlCurr, "tabIndex")
+    If strTab = "" Then
+      'get height, as this is good secondary indicator of order
+      strTab = doc_existPropOnCtl(ctlCurr, "height")
+    End If
+    If IsNumeric(strTab) And strTab <> "" Then rstInsert!SortOrd = strTab
+    rstInsert!ctlSection = doc_existPropOnCtl(ctlCurr, "Section")
+    If ctlCurr.ControlType = acSubform Then
+      'instruct form to copy
+      rstInsert!controlToCopy = ctlCurr.SourceObject
+    End If
+    Dim strStatusBarTxt As String
+   If ctlCurr.ControlType <> acImage Then
+    strStatusBarTxt = ctlCurr.StatusBarText
+   Else
+    strStatusBarTxt = ""
+   End If
+    If IsNumeric(strStatusBarTxt) Then
+      strStatusBarTxt = getvalFrmSQL("select DataEntryInstructions from x_documentation WHERE lineID=" & strStatusBarTxt)
+    End If
+    'help for close
+    If (doc_existPropOnCtl(ctlCurr, "caption") = "cancel" Or doc_existPropOnCtl(ctlCurr, "caption") = "close") And doc_existPropOnCtl(ctlCurr, "onclick") = "closeForm" Then
+      strStatusBarTxt = "press this button to close this form."
+    End If
+    
+    rstInsert!helptext = strStatusBarTxt
+     Dim strCtlParenSrc As String
+     strCtlParenSrc = doc_getRecSrc_Parents(ctlCurr)
+     
+    
+  '  If ctlCurr.ControlType <> acSubform Then
+  '  If ctlCurr.ControlType <> acOptionButton Then
+    
+      Debug.Print ctlCurr.ControlType
+      Select Case ctlCurr.ControlType
+        Case acBoundObjectFrame, acCheckBox, acComboBox, acListBox, acOptionButton, acOptionGroup, acTextBox, acToggleButton, acLabel, 104, 112, 103, 123
+          rstInsert!hyperlinkTxt = doc_existPropOnCtl(ctlCurr, "HyperlinkAddress")
+          rstInsert!subHyperlinkTxt = doc_existPropOnCtl(ctlCurr, "HyperlinkSubAddress")
+          rstInsert!OnClick = doc_existPropOnCtl(ctlCurr, "OnClick")
+          rstInsert!ondclick = doc_existPropOnCtl(ctlCurr, "OnDblClick")
+        Case Else
+          If Len(doc_existPropOnCtl(ctlCurr, "HyperlinkAddress") & doc_existPropOnCtl(ctlCurr, "HyperlinkSubAddress") _
+            & doc_existPropOnCtl(ctlCurr, "OnClick") & doc_existPropOnCtl(ctlCurr, "OnDblClick")) > 0 Then
+            msgBox "missed type:" & ctlCurr.ControlType
+          End If
+      End Select
+    'see if need to skip this:
+    If Len(rstInsert!hyperlinkTxt & rstInsert!subHyperlinkTxt & rstInsert!OnClick & rstInsert!ondclick) = 0 Then
+      'happens when clicking this: skip this?
+      If ctlCurr.ControlType = acImage Then
+        rstInsert!Skip = True
+      End If
+      If ctlCurr.ControlType = acTextBox Or ctlCurr.ControlType = acLabel Then
+       If ctlCurr.Enabled = False And ctlCurr.Locked = True Then
+        rstInsert!Skip = True
+       End If
+      End If
+    End If
+    
+    If Len(strCtlParenSrc) > 0 Then
+
+      Select Case ctlCurr.ControlType
+       Case acBoundObjectFrame, acCheckBox, acComboBox, acListBox, acTextBox
+         'Debug.Print ctlCurr.ControlType
+         'get labelCpation, if exist
+         'redundant : rstInsert!labelCaption = doc_getCtlsLabelCaption(ctlCurr)
+         If ctlCurr.ControlSource <> "" And InStr(ctlCurr.ControlSource, "=") = 0 Then
+        'parent has recordsrc, find this one's src
+        'get parent name
+      '  Debug.Print ctlCurr.Name & " ** " & strCtlParenName
+        
+       ' Dim rstTemp As Recordset, fldTemp As Object
+        'rstTemp.Open ctlCurr.Parent.RecordSource, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly
+        'Set fldTemp = rstTemp.Fields(ctlCurr.ControlSource)
+        rstInsert!SourceField = strCtlParenSrc & "][" & ctlCurr.ControlSource
+       End If
+      End Select
+
+      
+    End If
+  '  End If
+  '  End If
+  End If 'is missing
+  rstInsert.Update
+  doc_writeCtlToHelp = rstInsert!doc_Control_ID
+  rstInsert.Close
+End Function
+
+Public Function doc_getRecSrc_Parents(ctlCurr As Variant) As String
+  'passes back a form or subform
+  Dim objTempPar As Object, strRep As String
+  
+  
+    'this control has parent, woohoo!  see if parent has recSrc
+    Set objTempPar = ctlCurr
+    strRep = "@none@" 'so far
+    Do Until doc_objHasParent(objTempPar) = False Or strRep <> "@none@"
+       Set objTempPar = objTempPar.Parent
+       strRep = doc_whatIsObjRecSrc(objTempPar)
+    Loop
+    doc_getRecSrc_Parents = strRep
+  
+  
+End Function
+Public Function doc_objHasParent(ctlCurr As Object) As Boolean
+  'sees if obj has parent
+  On Error GoTo none
+  Dim ctlTemp As Object
+  Set ctlTemp = ctlCurr.Parent
+  'made it!
+   doc_objHasParent = True
+exitthis:
+  Exit Function
+none:
+  doc_objHasParent = False
+  Resume exitthis
+End Function
+
+Public Function doc_whatIsObjRecSrc(ctlCurr As Object) As String
+'fcn gets string that is record source of current object, if exists, else @none@ (error)
+  On Error GoTo none
+  doc_whatIsObjRecSrc = ctlCurr.RecordSource
+exitthis:
+  Exit Function
+none:
+  doc_whatIsObjRecSrc = "@none@"
+  Resume exitthis
+End Function
+
+Public Function doc_existPropOnCtl(ctlCurr As Variant, propName As String) As String
+  On Error GoTo none
+  doc_existPropOnCtl = ctlCurr.Properties(propName)
+exitthis:
+  Exit Function
+  
+none:
+  doc_existPropOnCtl = ""
+  Resume exitthis
+End Function
+
+Public Function doc_getCtlsLabelCaption(ctlCurr As Variant) As String
+ 'gets labels caption
+  Dim ctl2 As Control, strRep As String
+On Error GoTo nonefound1
+If ctlCurr.ControlType <> acSubform Then
+  For Each ctl2 In ctlCurr.Controls
+    If ctl2.ControlType = acLabel Then
+        strRep = ctl2.Caption
+      '  MsgBox "got " & ctl2.Caption
+        
+        Exit For
+    End If
+  Next ctl2
+End If 'subform, this dont worky
+Check2:
+  If strRep = "" Then
+    'couldn't find caption, look for ctl in same form that is named lbl_ & ctlCurr.name
+    On Error GoTo tryAgain
+    strRep = ctlCurr.Parent.Controls(ctlCurr.Name & "_Label").Caption
+    'if not errored out, then exit this
+    Debug.Print "found:" & ctlCurr.Name & "_label"
+    GoTo exitthis
+tryingOnceMore:
+    On Error GoTo nonefound
+  '  MsgBox ctlCurr.Name
+    strRep = ctlCurr.Parent.Controls("lbl_" & ctlCurr.Name).Caption
+    Debug.Print "found: " & "lbl_" & ctlCurr.Name
+  End If
+  
+  
+  
+exitthis:
+  doc_getCtlsLabelCaption = strRep
+  Exit Function
+nonefound:
+ ' MsgBox Err.Description
+  Resume exitthis
+nonefound1:
+  Resume Check2
+tryAgain:
+  'cant find the one, try another
+  Resume tryingOnceMore
+End Function
+
+Private Function ndfjaklfjdksljfklds()
+  doc_sendDocToXMLFile "C:\vegbank\sandbox\vegbranch_dev\help\vegbr-auto1.xml"
+End Function
+Public Function doc_sendDocToXMLFile(strXMLFile As String)
+  'write hierarchical xml
+  'find root FORM element
+If prepareFileToWrite(strXMLFile, True, ".xml", "vegbranch_form_doc.xml") Then
+  
+  Dim lngFormParent As Long, strXML As String
+  strXML = "<?xml version='1.0' encoding='UTF-8'?>  <?xml-stylesheet type='text/xsl' href='branch2html.xsl'?><vegbranchHelp>"
+  strXML = strXML & "<version><versionNumber>" & GetVersion("vegbranch") & "</versionNumber>"
+  lngFormParent = -1 'HARDCodegetvalFrmSQL("select doc_control_id from " & strTableForDoc & " where ctlName='FORM' and ctlParent_ID=0;")
+  'have this, iterate to children
+  Debug.Print "formsParent:" & lngFormParent
+  strXML = strXML & doc_writeRecToString(lngFormParent, "form")
+  
+  strXML = strXML & "</version></vegbranchHelp>"
+  Call WriteLineToFile(strXML, strXMLFile)
+Else
+    msgBox "cancelled"
+End If
+End Function
+
+Public Function doc_writeRecToString(lngParent As Long, strWhich As String) As String
+  'writes record to string, given rst and form or ctl
+  Dim strXML As String, rstRST As New ADODB.Recordset
+  rstRST.Open "select * from " & strTableForDoc & " where ctlParent_ID=" & lngParent & " AND skip=false  ORDER BY abs(ctlSection-0.7),sortOrd ", CurrentProject.Connection, adOpenForwardOnly _
+    , adLockReadOnly, adCmdText
+  With rstRST
+  Do Until .EOF
+    strXML = strXML & "<" & strWhich & ">"
+    strXML = strXML & "  <name>" & xmlize_txt(LCase(!ctlName)) & "</name>"
+    strXML = strXML & "  <caption>" & xmlize_txt(Nz(!labelCaption)) & "</caption>"
+    If strWhich = "form" Then
+     strXML = strXML & "  <formType>" & getvalFrmSQL("select formType from z_formDescription where formName=" & SQLizeTxt(!ctlName)) & "</formType>"
+     strXML = strXML & "  <subfrm>" & getvalFrmSQL("select subfrm from z_formDescription where formName=" & SQLizeTxt(!ctlName)) & "</subfrm>"
+    End If
+    strXML = strXML & "  <ctlType>" & Nz(!ControlType, -1) & "</ctlType>"
+    strXML = strXML & "  <help>" & HTMLize_txt((Nz(!helptext, "--sorry, no help yet--"))) & "</help>"
+      'find children
+      strXML = strXML & doc_writeRecToString(!doc_Control_ID, "control")
+    strXML = strXML & "</" & strWhich & ">"
+  .MoveNext
+  Loop
+  End With
+  rstRST.Close
+  doc_writeRecToString = strXML
+End Function
+
+Public Function doc_autoSkipFields(strForm As String, strField As String) As Boolean
+  'says whether you should skip the current field or not
+  If strForm = "erd_vegbank" Then
+    If strField Like "flds_*" Or strField Like "arrImg_*" Then
+      doc_autoSkipFields = True
+    End If
+    If strField = "Command517" Then
+      doc_autoSkipFields = True
+    End If
+  End If
+  If strForm = "Y_optionsStored" Then
+    If strField = "TellUserOptionsConfirm" Or strField = "turnOffConfirmations" Then
+      doc_autoSkipFields = True
+    End If
+  End If
+End Function
+
+Public Function newdoc_addAnyNewForms()
+  Dim dbsCurr As Object, frmCurr As AccessObject
+  Set dbsCurr = CurrentProject
+  
+    
+  For Each frmCurr In dbsCurr.AllForms
+    DoCmd.SetWarnings False
+     DoCmd.RunSQL ("INSERT INTO Z_formdescription (formName, formType) SELECT " & SQLizeTxt(frmCurr.Name) & ",'new!'")
+    DoCmd.SetWarnings True
+     DoCmd.RunSQL "UPDATE Z_formDescription SET lastModifiedDate = #" & frmCurr.DateModified & "# WHERE formName='" & frmCurr.Name & "';"
+  ' If Left(frmCurr.Name, 7) = "Z_USER_" Then
+  '   Debug.Print frmCurr.Name & ":" & frmCurr.Properties.Count
+  '   If frmCurr.Properties.Count > 0 Then
+  '     Debug.Print "   " & frmCurr.Properties(0)
+  '   End If
+  ' End If
+     
+  Next frmCurr
+    
+  
+End Function

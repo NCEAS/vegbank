@@ -1,0 +1,237 @@
+Option Compare Database
+Option Explicit
+
+
+
+
+
+Private Sub Command200_Click()
+  DoCmd.OpenQuery "App_NewZStemsToZCover"
+  Me.Requery
+End Sub
+
+
+Private Sub D2Errs_DblClick(Cancel As Integer)
+  DoCmd.OpenQuery "check_d2_StrataMissingInC"
+End Sub
+
+
+Private Sub CheckAllErrors_Click()
+  'check all errors again
+  
+  checkSomeError -1
+  Me.dataCheckTime = getvalFrmSQL("select dcTimeTaken from optimize_dataChk_totTime")
+ Call filterThisForm
+ Call Form_Activate
+ ' Me.Repaint
+ ' Me.Refresh
+ ' Me.SetFocus
+End Sub
+
+Private Sub chkAgainOneField_Click()
+  checkSomeError Me!errorID
+  Call Form_Activate
+End Sub
+
+Private Sub dchk_showLess()
+  'set focus on show more button
+ ' Me.cmd_showMore.SetFocus
+  
+ ' lngStartHt = Me.cmd_showLess.Height
+  
+ ' Me.cmd_showLess.Visible = False
+End Sub
+
+Private Sub cmd_showMore_Click()
+'  Me.cmd_showLess.Visible = True
+  Dim inttemp As Integer, lngStHt2 As Long
+  If cmd_showMore.Caption = "more >>" Then
+    ''show more
+     For inttemp = 1 To 20
+      ' Me.cmd_showLess.Height = 1440 * (3 / 8) * inttemp / 20
+        Me.LongExplanation.Height = 1440 * 0.75 * inttemp / 20
+        Me.Repaint
+      Next inttemp
+      Me.LongExplanation.SetFocus
+      cmd_showMore.Caption = "Less <<"
+  Else
+    'show less
+    lngStHt2 = Me.LongExplanation.Height
+    For inttemp = 1 To 20
+    '  Me.cmd_showLess.Height = (lngStartHt) * (20 - inttemp) / 20
+      Me.LongExplanation.Height = (lngStHt2) * (20 - inttemp) / 20
+      Me.Detail.Height = 50
+      Me.Repaint
+    Next inttemp
+    cmd_showMore.Caption = "More >>"
+  End If
+End Sub
+
+Private Sub CmdExplErr_Click()
+  Me.CmdExplErr.HyperlinkAddress = Me.CmdExplErr.HyperlinkAddress & "#" & Nz(Me!HyperMoreExpl, "")
+End Sub
+
+Private Sub CmdShowDetailsErr_Click()
+  On Error GoTo ErrInDetailFind
+     'get the location (macro or query) of the details of this error
+    Call ManualHyperLinkReadOnly(Me!HyperDetail, True, False) 'function interprets text as a hyperlink
+  
+  Exit Sub
+ErrInDetailFind:
+  msgBox "An Error occurred and the details of this error could not be displayed."
+End Sub
+
+
+
+
+Private Function filterThisForm()
+  Call applyFilterToCurrForm(Nz(Me.cmb_filtNumErrs, "TRUE") & " AND " & IIf(Len(Me.OpenArgs) > 0, "errorID in (" & Me.OpenArgs & ")", "true") _
+    & " AND " & IIf(IsNull(Me.cmb_filtCategory), "TRUE", "CheckCategory=""" & Me.cmb_filtCategory & """") _
+    & " AND " & IIf(IsNull(Me.cmb_filtSeverity), "TRUE", "errorSeverity=""" & Me.cmb_filtSeverity & """"), Me.Name)
+End Function
+
+
+
+Private Sub Form_Activate()
+ If Me!checkingStatus = "(checked)" Then
+   Me.TotErrMsg.Caption = SumErrorsFlash()
+   Me.TotErrMsg.FontSize = 16
+   Call flashMsg
+'   Me.Requery
+'   Debug.Print "Flashed : " & Now()
+ Else
+ '  Debug.Print "no flash : " & Now()
+ End If
+End Sub
+
+  Public Function SumErrorsFlash() As String
+  'count total number of errors, even if none
+  Dim strErrs As String
+  strErrs = chk_GetNumErrs()
+      Select Case strErrs
+        Case "-1"
+          strErrs = "UNKNOWN ERROR IN COUNTING ERRORS!"
+        Case "0"
+          strErrs = "No Errors, continue!"
+        Case "1"
+          strErrs = "1 Error!"
+        Case Else
+          strErrs = strErrs & " Errors!"
+      End Select
+ On Error Resume Next
+      SumErrorsFlash = strErrs
+  End Function
+  
+  Private Function flashMsg()
+  DoCmd.Restore
+  'make number of errors blink a few times
+  Me.TotErrMsg.Visible = True
+  Me.Repaint
+  pauseAFewSec (0.15)
+  
+  Me.TotErrMsg.Visible = False
+  Me.Repaint
+  pauseAFewSec (0.1)
+  
+  
+  Me.TotErrMsg.Visible = True
+ ' Me.TotErrMsg.FontSize = 28
+  Me.Repaint
+  pauseAFewSec (0.15)
+  Me.TotErrMsg.Visible = False
+  Me.Repaint
+  pauseAFewSec (0.05)
+  
+  Me.TotErrMsg.Visible = True
+ ' Me.TotErrMsg.FontSize = 22
+  Me.Repaint
+  'don't move totErrMsg left and right
+  GoTo SkipLeftRt
+  Dim i As Integer
+  For i = 1 To 20
+    Me.TotErrMsg.Left = Me.TotErrMsg.Left + 30
+    Me.Repaint
+    pauseAFewSec (0.005)
+  Next i
+  For i = 1 To 20
+    Me.TotErrMsg.Left = Me.TotErrMsg.Left - 30
+    Me.Repaint
+    pauseAFewSec (0.005)
+  Next i
+SkipLeftRt:
+End Function
+
+Public Function pauseAFewSec(length As Double)
+  Dim i As Long, start As Double
+  start = Timer
+  'Debug.Print Timer
+  Do While Timer < (length + start)
+   If Timer - (length + start) > 20 Then Exit Function 'disallows waiting more than 20 sec
+  Loop
+  'Debug.Print "counted to " & length
+  'Debug.Print Timer
+End Function
+
+Private Sub Form_Load()
+  'apply filter to limit what is shown
+  If Len(Me.OpenArgs) > 0 Then
+    'dont apply filter, diff caption
+    Me.TotErrMsg.Caption = "Some errors checked. Another process requires these errors to be fixed."
+    
+    Me.cmb_filtNumErrs.Value = Null
+    Call filterThisForm
+  Else
+    'Call applyFilterToCurrForm("NumErrs>0", Me.Name)
+    Call filterThisForm
+  End If
+End Sub
+
+Private Sub Form_Open(Cancel As Integer)
+ ' If Len(Me.OpenArgs) > 0 Then
+ '   Me.TotErrMsg.Caption = "Some errors checked. Another process requires these errors to be fixed."
+ ' Else
+    Me.TotErrMsg.Caption = "To Start, press 'Check All Errors' >>>"
+'  End If
+  Me.TotErrMsg.FontSize = 11
+  
+End Sub
+
+'Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+ ' If Shift = 1 Then
+  '  GetPutVar "shift", "put", True
+   ' Debug.Print "Shift went down! " & Now()
+'  End If
+'End Sub
+
+'Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
+ ' If Shift = 1 Then
+  '  GetPutVar "shift", "put", False
+   ' Debug.Print "Shift Came up! " & Now()
+ ' End If
+'End Sub
+
+
+Private Sub Text317_Click()
+  If Me!FixSQL <> "n/a" Then
+    ManualHyperLink Me!FixSQL
+'      checkSomeError Me!errorID
+   If Me.fixSuppressMsg = False Then 'let user know something happened
+    msgBox "Quick fix completed.  Press 'check again' if you want to double check that this did resolve this error completely.", , "VegBranch"
+   End If ' msg not suppressed
+  Else
+    msgBox "Sorry, but no quick fix exists for this error."
+  End If
+  'put away from text, as this isn't really a button
+  Me.chkAgainOneField.SetFocus
+End Sub
+
+Private Function checkSomeError(lngID As Long)
+  '' function passes arg to checkForErrors and sets and resets checkingStatus
+  Me!checkingStatus = "(checking)"
+  Me.Refresh
+  Me.Repaint
+    Call checkForErrors(lngID)
+  Me!checkingStatus = "(checked)"
+  Me.Refresh
+'  Me.Requery
+End Function

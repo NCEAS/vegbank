@@ -1,0 +1,200 @@
+Option Compare Database
+Option Explicit
+
+
+Public Function basicEnt_updatedomStratum()
+  Dim rstPlots As New ADODB.Recordset
+  rstPlots.Open "select dominantStratum from Z_USER_C_plotData;", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+
+  With rstPlots
+Do Until .EOF
+    If Not (IsNull(!dominantstratum)) Then
+      Select Case !dominantstratum
+        Case "1"
+          !dominantstratum = "Tree"
+        Case "2"
+          !dominantstratum = "Shrub"
+        Case "3"
+          !dominantstratum = "Herb"
+        Case "4"
+          !dominantstratum = "Nonvascular"
+        Case "5"
+          !dominantstratum = "Floating"
+        Case "6"
+          !dominantstratum = "Submerged"
+        Case "7"
+          !dominantstratum = Null
+      End Select
+      .Update
+    End If
+.MoveNext
+Loop
+  End With
+  rstPlots.Close
+End Function
+
+Public Function basicEnt_seeFieldInfo()
+  'figure out where I am then display field info in data dictionary
+  On Error GoTo cantFind
+  Dim frmCurr As Form, ctlCurr As Control
+  Set ctlCurr = Screen.ActiveControl
+  Set frmCurr = Screen.ActiveForm
+  Dim strTbl As String, strFld As String
+  strTbl = frmCurr.RecordSource
+  strFld = ctlCurr.ControlSource
+  If InStr(strTbl, "SELECT ") = 1 Then
+    strTbl = findSrcTblOnSQL(strTbl, strFld)
+  End If
+
+  If Not fieldExistOnTbl(strFld, strTbl) Then
+    'doesn't exist, try to find as subform
+    strTbl = ctlCurr.Parent.RecordSource
+  End If
+  If InStr(strTbl, "SELECT ") = 1 Then
+    strTbl = findSrcTblOnSQL(strTbl, strFld)
+  End If
+   
+   Call FindFieldInDD(strTbl & "." & strFld)
+exitthis:
+  Exit Function
+cantFind:
+  msgBox "Sorry, can't show information on this field.  It isn't a standard field."
+  Resume exitthis
+End Function
+
+Public Function basicEnt_seeFieldList()
+  'figure out where I am, then display information on the current list
+  On Error GoTo cantFind
+  Dim ctlCurr As Control
+  Set ctlCurr = Screen.ActiveControl
+  Dim strSrc As String, strTbl As String, strFld As String, strAux As String
+  strSrc = ctlCurr.RowSource
+  Dim colParse As New Collection, inttemp As Integer
+  Set colParse = csv_parseCSVstring(strSrc, " ")
+  For inttemp = 1 To colParse.Count
+    If InStr(colParse(inttemp), "aux_") = 1 Then
+      strAux = colParse(inttemp)
+      Exit For
+    End If
+  Next inttemp
+  
+  'trip aux_ from front
+  strAux = Right(strAux, Len(strAux) - 4)
+  strTbl = Left(strAux, InStr(strAux, "_") - 1)
+  strFld = Right(strAux, Len(strAux) - InStr(strAux, "_"))
+  Call getFieldList(strTbl, strFld, 1)
+  
+exitthis:
+  Exit Function
+cantFind:
+  msgBox "Sorry, can't show information on this list."
+  Resume exitthis
+End Function
+
+Public Function basicEnt_setDefValue(Optional blnOnlyUndoConfirm As Boolean)
+  'sets default value for the current field
+Static blnNoConfirm As Boolean
+If blnOnlyUndoConfirm Then
+  blnNoConfirm = False
+  Exit Function
+End If
+
+If Left(Screen.ActiveForm.Name, 9) = "basicEnt_" Then
+  'consider doing this
+  
+  
+  Dim frmCurr As Form, ctlCurr As Control, strValue As String
+  Dim strValueToShow As String, strFieldNameToShow As String
+  Set ctlCurr = Screen.ActiveControl
+  strValueToShow = Nz(ctlCurr.Value, "[null]")
+  strFieldNameToShow = ctlCurr.ControlSource
+  
+  
+  
+  strValue = Nz(ctlCurr.Value)
+  If Not blnNoConfirm Then
+    Dim inttemp As Integer
+    inttemp = MsgBox_cust("Do you really want to set a default value:" & strValueToShow & " for field:" & strFieldNameToShow, _
+     "Set once,Do not set,Set always", _
+     "Press 'Set once' to set the default value for this field, press 'Do not set' to cancel this, or " _
+     & "press 'Set always' to not show this message again.", "Confirm Default Value")
+  Else
+    'already confirmed that this should take place
+    inttemp = 1
+  End If
+    If inttemp = 1 Or inttemp = 3 Then
+      'yes, set value
+      ctlCurr.DefaultValue = SQLizeTxt(strValue, , True)
+      msgBox "Successfully set default value for:" & strFieldNameToShow & "   to :" & strValueToShow & " until you close this form." _
+        & Chr(13) & "You can erase this by removing the value from this field, then setting the blank field as the default value.", vbInformation, "VegBranch"
+    Else
+      msgBox "cancelled", vbExclamation, "VegBranch"
+    End If
+    If inttemp = 3 Then blnNoConfirm = True
+    
+Else
+  msgBox "Sorry, cannot set the default value outside of basic data entry forms"
+
+End If
+  
+End Function
+
+Public Function basicEnt_ChkReqdFieldsAreNotNull() As Boolean
+  'returns true if all fields are OK, else false
+  Dim frmCurr As Form, ctlCurr As Control
+  Set frmCurr = Screen.ActiveForm
+  For Each ctlCurr In frmCurr
+    Select Case ctlCurr.ControlType
+      Case acTextBox, acComboBox, acListBox
+        If ctlCurr.BackColor = basicEntReqdColor() Then
+           'check to see if has a value
+           If Nz(ctlCurr.Value) = "" And ctlCurr.Visible = True Then
+             'error
+             ctlCurr.SetFocus
+             msgBox "You must fill in a value for " & ctlCurr.ControlSource & Chr(13) & "as it is a required field."
+             basicEnt_ChkReqdFieldsAreNotNull = False
+             Exit For
+           End If
+        End If
+    End Select
+  Next ctlCurr
+  basicEnt_ChkReqdFieldsAreNotNull = True
+End Function
+
+Public Function basicEnt_prepDataToMigrate(Optional blnCloseMe As Boolean)
+  'function prepares data to be migrated, essentially doing the translation and data checking steps "behind the scenes"
+If blnCloseMe Then
+  DoCmd.Close
+End If
+  
+  'perform known translation steps
+
+
+Dim strName As String
+strName = UpdateProcessingPosX(0, 0, "", True, "Translating your data values")
+  'role
+Call UpdateProcessingPosX(10, 0, strName)
+   Call trans_ManualMatchField("Role", False)
+Call UpdateProcessingPosX(30, 0, strName)
+   'plants
+   Call populate_Z_B_LkNms(True)
+Call UpdateProcessingPosX(70, 0, strName)
+   'create normalized plot data for placeNames
+Call moveCtoC2_runall
+Call UpdateProcessingPosX(80, 0, strName)
+  'create presence data (D)
+Call moveD2toD_runall
+Call UpdateProcessingPosX(100, 0, strName)
+''--translations all done--
+
+'start data checking: all errors
+Dim lngErrs As Long
+lngErrs = checkForErrors(-1, True)
+If lngErrs > 0 Then
+  msgBox "Sorry, you have errors in your data which need resolving.  Please fix these errors, then move to migration."
+  Call openF_datacheck
+Else
+  msgBox "Your data are ready for migration.  The migration form will guide you through this."
+  Call openF_migrate
+End If
+End Function

@@ -1,0 +1,1438 @@
+Option Compare Database
+Option Explicit
+
+Public Function writeLoadModFilesToCSV()
+  Dim strFile As String
+  strFile = CurrentProject.Path & "\VegBranch_LoadingModule_Fields.csv"
+  If prepareFileToWrite(strFile, True, ".csv", "VegBranch_LoadingModule_Fields.csv") = False Then
+    'error in filename, exit without writing to file
+    msgBox "cancelled, nothing written"
+    Exit Function
+  End If
+  DoCmd.TransferText acExportDelim, , "VegBranch_LoadingModule_Fields", strFile, True
+  If msgBox(strFile & Chr(13) & " was successfully written.  Open this file?", vbYesNo) = vbYes Then
+    Application.FollowHyperlink strFile
+  End If
+End Function
+
+
+Function RestoreDefaultFileLoc()
+   ''this function restores the default locations to read in data in the same folder as this database is in
+Debug.Print "ERROR - should not restore file locs here!"
+Exit Function
+    DoCmd.RunSQL "Delete * from W_FileLocations;"
+    Dim strSQL, strRoot As String
+    
+    strRoot = """" & CurrentProject.Path & "\"""
+    
+    strSQL = "INSERT INTO W_FileLocations ( TableName, FileLocation )" _
+& " SELECT Z_TableDescription.TableName, " & strRoot & " & IIf(Left(Mid([TableName],10,Len([tableName])-9),1)=""_"",Mid([TableName],11,Len([tableName])-10),Mid([TableName],10,Len([tableName])-9)) & "".csv"" AS Expr1" _
+& " FROM Z_TableDescription " _
+& " WHERE (((Z_TableDescription.[mod])=""loading"")); "
+    'Debug.Print strRoot
+    DoCmd.RunSQL strSQL
+
+End Function
+
+Function FormGetCommaHdrs(strTable As String, strLoc As String, blnOptions As Boolean, Optional strFileTable As String)
+  ''function checks file location and table, then prompts user for options, if they wanted to see options,
+  ''then runs function to match user field names to VegBank field names
+  'make sure any changes have been made to form
+  Call rereshCurrForm
+  Dim lngRow As Long, strFormatName As String, strRow As String, strFileType As String
+'default values:
+  Select Case Right(strLoc, 4)
+    Case ".csv"
+      strFileType = "csv"
+    Case ".mdb"
+      strFileType = "mdb"
+      If strFileTable = "" Then
+        msgBox "Please select a valid table for the database you've selected."
+        Exit Function
+      End If
+    Case Else
+      strFileType = "unknown"
+        msgBox strLoc & " is not a valid file location -- must be a .csv file!"
+        Exit Function
+      
+  End Select
+    
+  If strTable = "" Then
+    msgBox strTable & " is not a valid table to import to!"
+    Exit Function
+  End If
+  lngRow = 1
+  strFormatName = "temp"
+  If blnOptions Then
+    ''check to see if previous sets of data have been imported
+    Dim cnnLoc As Connection
+    Dim rstChk As New ADODB.Recordset
+    Set cnnLoc = CurrentProject.Connection
+    rstChk.Open "SELECT W_Convert_CSVColNames.* from W_Convert_CSVColNames WHERE tableName = """ _
+          & strTable & """;", cnnLoc, adOpenForwardOnly, adLockReadOnly, adCmdText
+  '  If Not (rstChk.EOF) Then
+      'there exists at least one set of field names for this table
+  '    Dim intRsp As Integer
+  '    intRsp = msgBox("This loading table has been converted to VegBank field Names before." _
+  '       & Chr(13) & "Do you want to use conversion criteria that were previously used?", vbYesNo)
+   '   If intRsp = vbYes Then
+   '       OpenFieldNameConv strTable, rstChk!FormatName
+   '     Exit Function
+   '   End If
+   ' End If '' exists field name conversion criteria
+    
+  If strFileType = "csv" Then
+    ''ask which row data is stored on, what framework
+    strRow = 1 'could have a feature here that changes where field rows are read. disabled now for simplicity
+    'Debug.Print strRow
+    'If IsNumeric(Trim(strRow)) Then
+    '  lngRow = strRow
+    'Else
+    '  MsgBox "Please enter a numeric value, usually 1"
+    '  Exit Function
+    'End If
+    lngRow = 1
+  End If
+    Dim intResp As Integer
+   ' intResp = msgBox("Would you like to save the field names and conversion data you are about to provide?", vbYesNo)
+   ' If intResp = vbYes Then
+   '   strFormatName = InputBox("What would you like to name this format?", , strFormatName)
+    '  If strFormatName = "" Then
+    strFormatName = "temp"
+   ' End If
+  End If
+  'Debug.Print lngRow
+ ' Debug.Print strFormatName
+  Select Case strFileType
+    Case "csv"
+      GetWriteCommaHeaders False, strLoc, lngRow, strFormatName, strTable, "---", False
+    Case "mdb"
+      getTableHdrsToConvert_mdb strLoc, strFormatName, strTable, False, strFileTable
+  End Select
+End Function
+
+Public Function getFldsFromTblQry(strTable As String, Optional strDBPath As String) As String
+  'returns list of fields as string, comma separated
+ On Error GoTo errcantGet
+ Dim rstGetFields As New ADODB.Recordset
+ rstGetFields.Open "select * from [" & strTable & "] " & IIf(strDBPath <> "", "in '" & strDBPath & "'", "") & ";", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+ Dim fldCurr As Field
+  Dim strRet As String
+ For Each fldCurr In rstGetFields.Fields
+   strRet = strRet & IIf(strRet = "", "", ",") & fldCurr.Name
+ Next fldCurr
+ getFldsFromTblQry = strRet
+exitthis:
+ Exit Function
+errcantGet:
+ getFldsFromTblQry = ""
+ Resume exitthis
+End Function
+
+Public Function getTableHdrsToConvert_mdb(strDBPath As String, strFormat As String, strToTable As String, _
+blnDOESNOTHING As Boolean, strFromTable As String)
+  'function reads in a foreign database table and sends field names to conversion table
+  On Error GoTo errGettingtableHdrs
+  
+ 
+  'delete any criteria in frame-table before adding new
+      DoCmd.RunSQL "Delete * from W_Convert_CSVColNames WHERE formatName = """ _
+           & strFormat & """ and tableName = """ & strToTable & """;"
+ Dim strFlds As String, inttemp As Integer
+ strFlds = getFldsFromTblQry(strFromTable, strDBPath)
+ Dim colFlds As New Collection
+ Set colFlds = csv_parseCSVstring(strFlds, ",")
+ Dim strerr As String
+ strerr = "Sorry, couldn't get table headers from database:" & strDBPath & " and table/query:" & strFromTable
+ If strFlds = "" Then
+   msgBox strerr
+   GoTo exitGetTblHdrs
+ End If
+ 'call function that matches automatically if matched
+ Call attemptAutoMatchFieldsToTbl(strFormat, strToTable, colFlds, False)
+' For inttemp = 1 To colFlds.Count
+    'send this to table for user to specify new name:
+      'try to see if this one matches:
+ '            Dim blnInsertVBFieldMatch As Boolean
+  '           blnInsertVBFieldMatch = False 'default
+   '          If fieldExistOnTbl(colFlds(inttemp), strToTable) Then
+    '           blnInsertVBFieldMatch = True
+     '        End If
+      ''       DoCmd.RunSQL "INSERT INTO W_Convert_CSVColNames (formatName, tableName, UserFieldName, VegBankFieldName, RowForFormatTbl) " _
+                & " SELECT """ & strFormat & """,""" & strToTable & """,""" & colFlds(inttemp) & """," & IIf(blnInsertVBFieldMatch, """" & colFlds(inttemp) & """", "null") & "," & 1 & ";"
+    
+   '  DoCmd.RunSQL "INSERT INTO W_Convert_CSVColNames (formatName, tableName, UserFieldName, RowForFormatTbl) " _
+                & " SELECT """ & strFormat & """,""" & strToTable & """,""" & colFlds(inttemp) & """,1;"
+' Next inttemp
+   DoCmd.RunSQL "UPDATE W_Convert_CSVColNames SET SortOrd = ConvertFieldNamesID WHERE ((SortOrd) is null);"
+   Call OpenFieldNameConv(strToTable, strFormat)
+        
+exitGetTblHdrs:
+  Exit Function
+errGettingtableHdrs:
+  msgBox strerr & Chr(13) & Err.Description
+  Resume exitGetTblHdrs
+End Function
+
+Public Function attemptAutoMatchFieldsToTbl(strFormat As String, strToTable As String, colFlds As Collection, Optional blnSkipNoMatch As Boolean) As Boolean
+  'function writes values to W_convert_cvsColNames with the format name you provide, and automatches any that do match
+  'reports TRUE if succeeds, false if error
+  'blnSkipNoMatch is TRUE if fields shouldn't be written to file if they aren't matched exactly (simpleImport) and false (regular import)
+ On Error GoTo errThis
+  Dim inttemp As Integer
+   For inttemp = 1 To colFlds.Count
+    'send this to table for user to specify new name:
+      'try to see if this one matches:
+             Dim blnInsertVBFieldMatch As Boolean
+             blnInsertVBFieldMatch = False 'default
+             If fieldExistOnTbl(colFlds(inttemp), strToTable) Then
+               blnInsertVBFieldMatch = True
+             End If
+             If blnInsertVBFieldMatch Or Not blnSkipNoMatch Then 'only write if matches or not told to skip
+               DoCmd.RunSQL "INSERT INTO W_Convert_CSVColNames (formatName, tableName, UserFieldName, VegBankFieldName, RowForFormatTbl) " _
+                & " SELECT """ & strFormat & """,""" & strToTable & """,""" & colFlds(inttemp) & """," & IIf(blnInsertVBFieldMatch, """" & colFlds(inttemp) & """", "null") & "," & 1 & ";"
+             End If
+  Next inttemp
+attemptAutoMatchFieldsToTbl = True
+exitthis:
+Exit Function
+errThis:
+attemptAutoMatchFieldsToTbl = False
+Resume exitthis
+End Function
+
+Function GetWriteCommaHeaders(blnWriteFile As Boolean, strSource As String, lngRow As Long, _
+           strFrame As String, strTable As String, strDest As String, Optional blnDOESNOTHING As Boolean)
+  'make sure any changes have been made to form
+  rereshCurrForm
+  Debug.Print IIf(blnWriteFile, "Writing .csv file", "Getting .csv or .mdb File column headers") & " from " & strSource
+  'function takes a .csv file and reads in "header" columns on specified row
+  'then user can convert field names to VegBank field names in a form
+  'a new csv file is written if blnWriteFile
+  '---blnWriteFile is true is file is to be written (false if just getting names)
+  '---strSource is location of .csv file to read
+  '---lngRow is the row number for user field names
+  '---strFrame is format name
+  '---strTable is table name
+  '---strDest is destination string filename
+  '---blnDOESNOTHING DOES NOTHING but still here in case referenced from some code somewhere
+  Dim fs As Object
+  Dim a As Object, awrite As Object
+  Dim intCount As Long, strTxt As String, strTxtNew As String
+  Dim strUserFld As String, strNewHeaders As String
+  strNewHeaders = ""
+Set fs = CreateObject("Scripting.FileSystemObject")
+
+If blnWriteFile Then 'several things to do/check
+checkFileOK:
+ If fs.FileExists(strDest) Then
+   'need to check to see if we can overwrite cvs destination file
+   Dim intResp As Integer
+   intResp = msgBox("The file, " & strDest & " already exists.  Overwrite it?", vbYesNo, "VegBranch")
+   If intResp = vbNo Then
+     strDest = InputBox("Please enter a new filename for the new .csv file", , strDest)
+     If strDest = "" Then
+       'operation cancelled
+       msgBox "File NOT written.  No new filename was supplied.", vbCritical
+       Exit Function
+     End If
+     GoTo checkFileOK
+   End If
+ End If
+  'make sure destination file is a .csv file:
+  If (Right(strDest, 4) <> ".csv") Then
+   msgBox "Must be a .csv file to write"
+   Exit Function
+ End If
+ 'create and overwrite destination file (already checked with owner)
+ Set awrite = fs.CreateTextFile(strDest, True)
+End If  'WRiteFile
+
+If Not (blnWriteFile) Then
+  'delete any criteria in frame-table before adding new
+      DoCmd.RunSQL "Delete * from W_Convert_CSVColNames WHERE formatName = """ _
+           & strFrame & """ and tableName = """ & strTable & """;"
+End If
+
+If fs.FileExists(strSource) Then
+   Dim lngWhatEncode As Long
+  lngWhatEncode = getEncodingOfFile(strSource)
+
+  Set a = fs.openTextFile(strSource, 1, False, (0 + lngWhatEncode))
+Else
+   msgBox "File : " & strSource & " cannot be found.  Try another file name.", vbCritical
+   Exit Function
+End If
+''see if there are additional fields to add with default values set for this format and table:
+Dim rstAddFlds As New ADODB.Recordset
+rstAddFlds.Open "SELECT * FROM W_Convert_CSVColNames WHERE formatNAme = """ _
+   & strFrame & """ and tableName = """ & strTable & """ AND (([ValueToWrite]) is not null);", _
+   CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+With rstAddFlds
+''field names to add and field values to add
+Dim strAdditionalHdr As String, strAdditionalData As String, strNewVal As String
+strAdditionalHdr = ""
+strAdditionalData = ""
+Do Until .EOF
+  strNewVal = !ValueToWrite
+  ''make sure that no " will corrupt csv format for new values
+  strNewVal = substTextForText(strNewVal, """", "&quot;")
+  strNewVal = substTextForText(strNewVal, "&quot;", """""")
+  strAdditionalData = strAdditionalData & """" & strNewVal & """" & ","
+  strAdditionalHdr = strAdditionalHdr & """" & !VegBankFieldName & """" & ","
+.MoveNext
+Loop
+End With
+rstAddFlds.Close
+
+intCount = 0
+With a
+  Do Until .atendofstream
+    strTxt = .readline
+    'strTxt = "test,""sim""ple,first,thing,"
+    intCount = intCount + 1
+     
+     If intCount = lngRow Then
+        Dim lngStrLength As Long, lngTempLen As Long
+        lngStrLength = Len(strTxt)
+        strTxtNew = strTxt
+        
+        Do Until lngTempLen >= lngStrLength + 1
+         strUserFld = FindNextField(strTxtNew, ",")
+         'Debug.Print strUserFld
+         lngTempLen = lngTempLen + Len(strUserFld) + 1
+           
+         If strTxtNew <> strUserFld Then
+           strTxtNew = Right(strTxtNew, Len(strTxtNew) - Len(strUserFld) - 1)
+         End If
+         
+           'add to table that holds translations
+            'dequote string
+            strUserFld = substTextForText(strUserFld, """", "")
+            If strUserFld = "" Then
+              msgBox "There are column headers that lack valid characters"
+              Exit Function
+            End If
+          If Not (blnWriteFile) Then
+             'user will specify criteria
+             'try to see if this one matches:
+             Dim blnInsertVBFieldMatch As Boolean
+             blnInsertVBFieldMatch = False 'default
+             If fieldExistOnTbl(strUserFld, strTable) Then
+               blnInsertVBFieldMatch = True
+             End If
+             DoCmd.RunSQL "INSERT INTO W_Convert_CSVColNames (formatName, tableName, UserFieldName, VegBankFieldName, RowForFormatTbl) " _
+                & " SELECT """ & strFrame & """,""" & strTable & """,""" & strUserFld & """," & IIf(blnInsertVBFieldMatch, """" & strUserFld & """", "null") & "," & lngRow & ";"
+           
+          End If
+          If blnWriteFile Then
+            Dim strVBFieldName As String
+            strVBFieldName = Nz(GetVBFieldName(strUserFld, strFrame, strTable), "")
+            If strVBFieldName = "" Then
+              msgBox "Could not find Your field Name : " & strUserFld & Chr(13) _
+                & "Make sure that you have specified Loading field names for all your fields and try again."
+              Exit Function
+            End If
+          strNewHeaders = strNewHeaders & IIf(Len(strNewHeaders) > 0, ",", "") _
+               & strVBFieldName
+          End If
+        Loop
+     End If
+     
+     If blnWriteFile Then 'write new file : with new field names and field data, if applicable
+       If intCount = lngRow Then  'write new headers
+         awrite.writeLine strAdditionalHdr & strNewHeaders
+       End If
+       If intCount > lngRow Then 'write data under headers only
+         awrite.writeLine strAdditionalData & strTxt
+       End If
+     Else   'don't write a new file, exit if got headers
+       If (intCount > lngRow) Then
+         'open form to specfify conversion criteria
+            'update sortOrd as PK -- this allows us to add "new" fields to insert in order
+            DoCmd.RunSQL "UPDATE W_Convert_CSVColNames SET SortOrd = ConvertFieldNamesID WHERE ((SortOrd) is null);"
+         Call OpenFieldNameConv(strTable, strFrame)
+         Exit Function
+       End If
+     End If '' writing or not writing new file
+  Loop
+End With
+
+If blnWriteFile Then
+  'close file that has been created and report its successful creation
+  msgBox strDest & Chr(13) & "was succesfully created." & Chr(13) & _
+     "VegBranch will update this as the location for importing."
+  awrite.Close
+  
+  ''need to update source file as newly created csv file for fileLocations table
+  Dim cnnLoc As Connection
+  Dim rstChngFileLoc As New ADODB.Recordset
+  Set cnnLoc = CurrentProject.Connection
+  rstChngFileLoc.Open "SELECT * from Z_TableDescription WHERE tableName = """ & strTable & """;", _
+    cnnLoc, adOpenForwardOnly, adLockOptimistic, adCmdText
+  If Not (rstChngFileLoc.EOF) Then
+    rstChngFileLoc!FileLocation = Trim(strDest)
+    rstChngFileLoc.Update
+    Debug.Print strDest
+  End If
+  
+  intResp = msgBox("Would you like to import your data from the file" & Chr(13) & _
+     strDest & Chr(13) & "right now?", vbYesNo)
+  If intResp = vbYes Then
+     'proceed with import
+     Call ImportCSVToTable(strTable, strDest)
+     If IsFormOpen("FieldNameConversion") Then
+       DoCmd.Close acForm, "FieldNameConversion", acSaveYes
+     End If
+  End If
+  
+End If 'blnWriteFile
+
+End Function
+
+
+Public Function FindNextField(strTxt As String, strDelim As String) As String
+'function takes a string and find next delimiter (not embedded in quotes)
+'and returns the next field value
+Dim lngInt As Long, strOne As String, blnQuote As Boolean
+''currently not inside quotes
+blnQuote = False
+
+For lngInt = 1 To Len(strTxt)
+   strOne = Mid(strTxt, lngInt, 1)
+   If strOne = """" Then
+     'turns quotes on or off
+     blnQuote = Not (blnQuote)
+   End If
+   If (strOne = strDelim) And Not (blnQuote) Then
+     ''have delimiter not inside quotes
+     FindNextField = Left(strTxt, lngInt - 1) '(without delim)
+     Exit Function
+   End If
+Next lngInt
+''if we reached here, then there are no delimiters
+FindNextField = strTxt
+End Function
+
+
+
+Public Function GetVBFieldName(strUserFld As String, strFrame As String, strTable As String)
+'looks up the VB field name given User Field Name, frame and table
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstCurr As New ADODB.Recordset
+
+rstCurr.Open "SELECT * FROM W_Convert_CSVColNames WHERE FormatName = """ _
+      & strFrame & """ AND TableName = """ & strTable & """ AND UserFieldName = """ & _
+      strUserFld & """;", cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+With rstCurr
+  If Not (.EOF) Then
+    GetVBFieldName = !VegBankFieldName
+   ' Debug.Print strUserFld & "-->" & !VegBankFieldName & " | " & strFrame & "," & strTable
+    Exit Function
+  End If
+End With
+'if not defined for some reason (field not in file)
+Debug.Print "***" & strUserFld & "--> !NOTHING  | " & strFrame & "," & strTable
+GetVBFieldName = ""
+End Function
+
+
+
+Function OpenFieldNameConv(strTable As String, strFormat As String, Optional blnDOESNOTHING As Boolean)
+         DoCmd.OpenForm "FieldNameConversion"
+         Forms!FieldNameConversion!Table = strTable
+         Forms!FieldNameConversion!Format = strFormat
+
+End Function
+         
+Public Function importMDBtoTable_changeFlds(strFormat As String, strToTable As String, strDBPath As String, strFromTable As String, _
+  Optional blnValidate As Boolean, Optional blnNoSuccessMsg As Boolean) As Boolean
+'imports data, given new field names for format and table
+On Error GoTo err_importChangeFields
+Dim rstFlds As New ADODB.Recordset
+rstFlds.Open "SELECT * FROM W_Convert_CSVColNames WHERE formatNAme = """ _
+   & strFormat & """ and tableName = """ & strToTable & """ and left(VegBankFieldName,11)<>""!SkipField:"";", _
+   CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+With rstFlds
+''field names to add and field values to add
+Dim strOrigNames As String, strNewNames As String, strNewVal As String, strErrors As String
+strOrigNames = ""
+strNewNames = ""
+strErrors = ""
+Do Until .EOF
+  strNewVal = Nz(!ValueToWrite, "")
+  ''make sure that no " will corrupt csv format for new values
+  If blnValidate Then
+    If IsNull(!UserFieldName) Then
+      'constant must be used here
+      strErrors = strErrors & IIf(strErrors = "", "", vbCR_2()) & validateFldToFld(strToTable, !VegBankFieldName, "", "", "", !ValueToWrite)
+    Else
+      strErrors = strErrors & IIf(strErrors = "", "", vbCr) & validateFldToFld(strToTable, !VegBankFieldName, strFromTable, !UserFieldName, strDBPath)
+    End If
+  End If
+  strNewVal = substTextForText_once(strNewVal, """", """""")
+  strOrigNames = strOrigNames & IIf(strOrigNames = "", "", ",") & IIf(strNewVal = "", "[" & !UserFieldName & "]", """" & strNewVal & """")
+  strNewNames = strNewNames & IIf(strNewNames = "", "", ",") & "[" & !VegBankFieldName & "]"
+.MoveNext
+Loop
+End With
+rstFlds.Close
+
+If strErrors <> "" And blnValidate Then
+  If vbYes = msgBox("Errors have been detected in your data which may cause your data not to import correctly, or not at all.  Would you like to STOP now and see the error report?", vbYesNo) Then
+    'stop this function and display errors
+    DoCmd.OpenForm "error_report", acNormal, , , , acDialog, strErrors
+    If msgBox("Continue importing data?", vbYesNoCancel) <> vbYes Then
+      GoTo exitFcn
+    End If
+  End If
+End If
+
+Dim strSQL As String
+strSQL = "INSERT INTO [" & strToTable & "] (" & strNewNames & ") SELECT " & strOrigNames & " FROM [" & strFromTable & "] in '" & strDBPath & "';"
+Debug.Print strSQL
+On Error GoTo SQLErr
+DoCmd.RunSQL strSQL
+  If Not blnNoSuccessMsg Then msgBox "Your data were successfully imported!"
+  importMDBtoTable_changeFlds = True
+exitFcn:
+Exit Function
+SQLErr:
+If msgBox("You cancelled the query, which probably means that datatypes are not the same in your data as in VegBranch's.  Would you like VegBranch to analyze your data to see what the problem is?", vbYesNo) = vbYes Then
+  importMDBtoTable_changeFlds strFormat, strToTable, strDBPath, strFromTable, True
+End If
+  Resume exitFcn
+err_importChangeFields:
+  msgBox "Sorry, there was an error importing from your database.  Press the tips button on the import form for hints on what may solve these errors." & Chr(13) & Err.Description
+  Resume exitFcn
+End Function
+         
+Public Function validateFldToFld(strToTbl As String, strToFld As String, strFromTbl As String, strFromFld As String, _
+    Optional strDBPath As String, Optional strConstant As String) As String
+  'function chks a tbl field source to destination
+  'get destination type and size
+  Dim lngType As Long, lngSize As Long, strTemp As String, strRet As String
+  lngType = getFieldTypeSize(strToTbl, strToFld, lngSize)
+  strRet = ""
+  Dim strSQL As String, strerr As String
+  If strConstant <> "" Then
+    'change SQL to use
+    strSQL = """" & strConstant & """"
+    strFromFld = """" & strConstant & """"
+  Else
+  strFromFld = "[" & strFromFld & "]"
+  strSQL = "SELECT " & strFromFld & " FROM [" & strFromTbl & "] " & IIf(strDBPath <> "", " IN '" & strDBPath & "' ", "") _
+     & " GROUP BY " & strFromFld
+  
+  
+  End If
+  
+  Dim strCrit As String
+  strerr = "This concerns data that you are trying to add to field: " & strToFld & vbCR_2()
+  Select Case lngType
+              Case 1
+                strTemp = "Yes/No"
+                'check to make sure true or false
+                strCrit = " not (isboolean(" & strFromFld & "))"
+                strerr = strerr & "Boolean fields should be 'yes' or 'no', 'true' or 'false', '-1' (true), or '0' (false)"
+              Case 4
+                strTemp = "Long Integer"
+                strCrit = "  not (islongInt(" & strFromFld & "))"
+                strerr = strerr & "Long Integer fields should be numeric, but not fractional and between -2,147,483,648 and 2,147,483,647.  Fractional values will be rounded if you continue."
+              Case 7
+                strTemp = "Double"
+                strCrit = " not (isdbl(" & strFromFld & "))"
+                strerr = strerr & "Double (type) fields should be numeric and : from -1.79769313486231E308 to -4.94065645841247E-324 for negative values and from 4.94065645841247E-324 to 1.79769313486232E308 for positive values. "
+              Case 8
+                strTemp = "Date/Time"
+                strCrit = " (not (isdate(" & strFromFld & "))) and (" & strFromFld & " is not null) "
+                strerr = strerr & "Date/Time fields should have month, day, and year.  If only day is omitted, 1 is assumed.  If only year is omitted, this year is assumed.  Settings depend on your system settings.  Generally DD-MMM-YYYY will work, ie 30-MAR-1981.  Time is also allowed, like this: 18-OCT-2003 14:31:03"
+              Case 10
+                strTemp = "Text"
+                strCrit = "  (len(" & strFromFld & ")>" & lngSize & ")"
+                strerr = strerr & "Text fields have limits on the length of the string allowed.  This field is limited to : " & lngSize & " characters.  The values here are longer than that.  The values will be truncated if you continue to import."
+              Case 11
+                strTemp = "OLE Object"
+                strCrit = "  not (isobject(" & strFromFld & "))"
+                strerr = strerr & "OLE object is the data type, which must be an object.  Sorry, but this has not been tested."
+              Case 12
+                strTemp = "Memo"
+                'always ok
+                validateFldToFld = ""
+                Exit Function
+              Case Else
+                msgBox "Cannot validate this field, not prepared for data type number:" & lngType
+                validateFldToFld = ""
+                strerr = strerr & "the data type : " & lngType & " was not expected.  Please contact vegbank help : help@vegbank.org."
+                Exit Function
+  End Select
+ ' strSQL = strSQL & " HAVING " & strCrit
+  Dim rstChk As New ADODB.Recordset, blnErrors As Boolean 'open records that fail:
+ ' Debug.Print strSQL
+If strConstant <> "" Then
+    
+    Debug.Print strCrit & " is evaluated to : " & Eval(strCrit)
+    If Eval(strCrit) = True Then
+      'error with constant
+      blnErrors = True
+      strRet = "----------------Error Report-----checked at: " & Now() & "----------" & vbCR_2() _
+    & "    Data read from constant value you specified:    " & strFromFld & vbCR_2() & "    Error description: " _
+    & strerr & vbCR_2()
+      
+    End If
+  Else 'regular from field
+  strSQL = strSQL & " HAVING " & strCrit
+  rstChk.Open strSQL, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstChk
+  If Not .EOF Then
+  blnErrors = True
+  strRet = "----------------Error Report-----checked at: " & Now() & "----------" & vbCR_2() _
+    & "    Data read from field:" & strFromFld & " in table:" & strFromTbl & vbCR_2() & "    Error description: " _
+    & strerr & vbCR_2() & "----the following values had errors:-------------"
+  End If
+  Do Until .EOF
+    strRet = strRet & vbCR_2() & .Fields(0).Value
+  '  Debug.Print "value:" & .Fields(0).Value
+  .MoveNext
+  Loop
+  End With
+End If
+  If blnErrors Then strRet = strRet & vbCR_2() & "-----------------------end of this error report--------------------" & vbCR_2() & vbCR_2()
+  validateFldToFld = strRet
+End Function
+         
+         Public Function vbCR_2() As String
+           vbCR_2 = Chr(13) & Chr(10)
+         End Function
+         
+      Function testERR()
+         If IsFormOpen("error_report") Then
+           DoCmd.Close acForm, "error_report"
+         End If
+         DoCmd.OpenForm "error_report", , , , , , "grrrr" & vbCr & "2" & Chr(13) & "3" & Chr(10) & "4" & Chr(13) & Chr(10) & "5" & Chr(10) & Chr(13) & "6"
+      End Function
+      
+Public Function addErrToReport(strTxt As String) As String
+  
+
+End Function
+
+
+Public Function ImportMDBtoTable(strToTable As String, strDBPath As String, strFromTable As String)
+   'crafts very simple SQL to import an mdb file directly
+On Error GoTo importMDBErr
+  Dim strFlds As String
+  strFlds = getFldsFromTblQry(strFromTable, strDBPath)
+' Debug.Print strFlds
+   strFlds = "[" & substTextForText_once(strFlds, ",", "],[") & "]"
+' Debug.Print ">>"; strFlds
+   Dim strSQL As String
+' Debug.Print "SQL:"; strFlds
+   strSQL = "INSERT INTO [" & strToTable & "] (" & strFlds & ") SELECT " & strFlds & " FROM [" & strFromTable & "] in '" & strDBPath & "';"
+   DoCmd.RunSQL strSQL
+   msgBox "successfully imported data from : " & strFromTable
+exitImportMDB:
+   Exit Function
+importMDBErr:
+   msgBox "Sorry, couldn't import from " & strDBPath & "  table/query:" & strFromTable & Chr(13) & Err.Description
+   Resume exitImportMDB
+End Function
+   
+
+         
+Function ImportCSVToTable(strTable As String, strFile As String, Optional blnNoValidate As Boolean, Optional strFromTable As String)
+''this replaces macros that individually imported tables
+''this function imports a file (strFile = file location) to a table (strTable)
+'strFromTable is table/query name for importing from an MDB file
+'make sure any changes have been made to form
+If Right(strFile, 4) = ".mdb" Then
+  ImportMDBtoTable strTable, strFile, strFromTable
+  Exit Function
+End If
+
+Call rereshCurrForm
+    Dim fs As Object
+    Set fs = CreateObject("Scripting.FileSystemObject")
+    If Not fs.FileExists(strFile) Then
+      'file does not exist
+      msgBox strFile & Chr(13) & "does not exist.  Enter a different filename."
+      Exit Function
+    End If
+
+
+If Not blnNoValidate Then
+If importCSV2table_new(strTable, strFile, True, False) Then ' there are errors!
+  If msgBox("There are errors detected in your file.  Do you wish to try to ignore the errors and proceed with import?" & _
+     Chr(13) & "It is recommended that you press NO and see what your errors are.", vbYesNo) = vbNo Then
+     
+     Exit Function
+  End If
+End If
+End If
+'On Error GoTo err_import
+    
+
+     ' DoCmd.TransferText acImportDelim, "", strTable, strFile, True, ""
+        Dim blnDone As Boolean
+        blnDone = importCSV2table_new(strTable, strFile, False, True)
+
+      If Len(strTable) > 7 Then
+        'let loadingStatus table know file is imported
+        If Mid(strTable, 8, 1) <> "J" Then
+           DoCmd.RunSQL "UPDATE LoadingStatus SET LoadingStatus.AddData" _
+             & Mid(strTable, 8, 1) & " = True;  ", -1
+        End If
+      End If
+      Call CheckFieldsForFields(strTable, "table")
+    
+    DoCmd.Requery ""
+    If IsFormOpen("ImportFileLocations") Then DoCmd.Close acForm, "ImportFileLocations", acSaveYes
+    ''update number of records per each table
+    Call CheckTblForRecs("tableName", strTable)
+importCSV_Exit:
+       'requery load data form to reflect change in number of records in newly imported tbl
+    If IsFormOpen("Master_SwitchBoard") Then Forms!Master_SwitchBoard.Requery
+    Exit Function
+
+err_import:
+    msgBox Error$
+    Resume importCSV_Exit
+
+End Function
+
+
+Public Function troubleShootCSVimport(strTable As String, strFile As String, blnDoImport As Boolean) As Boolean
+ 'checks strFile .csv file for compatible format with strTable
+  'blnDoImport is to actually perform the import, regardless of errors
+ '---returns
+ 'false if import after
+ 'true if don't import after
+ 
+ Dim strErrFile As String
+ strErrFile = strFile & "_VgBrch_ErrRept.txt"
+ 
+      'will import file into a new table then see what values are not valid
+      'get fieldInfo from Z_FieldDescription Table
+        Dim cnnLocal As Connection
+        Set cnnLocal = CurrentProject.Connection
+        Dim rstFlds2 As New ADODB.Recordset
+        Dim colFieldTypes As New Collection, colFieldSizes As New Collection
+        Dim colNulls As New Collection, colUnique As New Collection
+        Dim strErrorMsg As String
+        
+        rstFlds2.Open "SELECT * FROM Z_FieldDescription WHERE [module] = ""loading"" AND tableNAme = """ & strTable & """;", _
+           cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+        
+        If rstFlds2.EOF Then
+           msgBox strTable & " is missing data in the VegBranch data dictionary." & Chr(13) & _
+             "VegBranch cannot troubleshoot this import process", vbCritical
+           strErrorMsg = "ABORTED"
+           GoTo exitcheckfile
+        End If
+        
+        With rstFlds2
+          Do Until .EOF
+            'get data into collections to be easily referenced by fieldName
+               Dim strCType As String, strCNulls As String, strCUnq As String, lngCFS As Long
+               strCType = !dataType
+               colFieldTypes.Add strCType, !FieldName
+               lngCFS = Nz(!FieldSize, 0)
+               colFieldSizes.Add lngCFS, !FieldName
+               strCNulls = !Nulls
+               colNulls.Add strCNulls, !FieldName
+               colUnique.Add IIf(Left(!FieldNotes, 12) = "uniqueValues", True, False), !FieldName
+          .MoveNext
+          Loop
+        End With
+        rstFlds2.Close
+      
+        strErrorMsg = ""
+                
+        'a couple of spacing characters
+        Dim strSpacer As String, strIndent As String
+        strSpacer = Chr(13)
+        strIndent = ">"
+
+'READ in file directly from .csv format:
+
+  Dim fs As Object
+  Dim a As Object
+  
+Set fs = CreateObject("Scripting.FileSystemObject")
+  Set a = fs.openTextFile(strFile, 1)
+  Dim strLine As String
+  'field names from header
+  Dim colFieldOrder As New Collection
+          Dim intLoop2 As Long, strFld As String, lngLineNum As Long
+        Dim strWhereAmI As String, strFldVal As String
+  
+          lngLineNum = 0 'header row
+          
+          'recordset that imports
+          Dim rstImport As New ADODB.Recordset
+          rstImport.Open strTable, cnnLocal, adOpenStatic, adLockOptimistic, adCmdTable
+          
+  With a
+    Do Until .atendofstream
+    strLine = .readline
+       ' Debug.Print strLine
+        lngLineNum = lngLineNum + 1
+        
+        If lngLineNum < 2 Then  'field headers
+          Dim intOrd As Long  'counts field Number
+          intOrd = 0
+            Do Until strLine = ""
+             intOrd = intOrd + 1
+            'get new FieldName : parse
+              strFldVal = FindNextField(strLine, ",")
+              'reset strLine to without the new field
+              
+              strLine = Right(strLine, Len(strLine) - Len(strFldVal))
+              If strLine <> "" Then strLine = Right(strLine, Len(strLine) - 1)
+              
+              'If strFldVal has quotes, get rid of them:
+              If Left(strFldVal, 1) = """" And Right(strFldVal, 1) = """" Then
+                 strFldVal = Right(strFldVal, Len(strFldVal) - 1)
+                 strFldVal = Left(strFldVal, Len(strFldVal) - 1)
+              End If
+              
+              colFieldOrder.Add strFldVal, "F" & intOrd
+                'test for accurate fieldNames:
+                Dim strFldsNotFound As String
+                If FindKeyInCol(colFieldSizes, strFldVal) Then
+                  'found the field, it's ok
+                Else
+                  'didn't find field
+                  If Left(strFldVal, 10) = "!SkipField" Then
+                    ''this field should be skipped, don't report
+                  Else
+                  'report error:
+                     strFldsNotFound = strFldsNotFound & IIf(strFldsNotFound = "", "", ", ") & strFldVal
+                  '  strErrorMsg = strErrorMsg & IIf(strErrorMsg = "", "", ", ") & strFldVal
+                  End If
+                End If
+
+            '  Debug.Print "F" & intOrd & " : " & colFieldOrder("F" & intOrd)
+            Loop  'until strLine is empty
+                               
+            If strFldsNotFound <> "" Then
+          'errors have been found, report and import w/o these fields:
+             strFldsNotFound = "VegBranch found fieldName(s) that exist in your file: " & strSpacer _
+              & strIndent & strFile & strSpacer & "But are not in the table you are exporting to:" & strSpacer & _
+              strIndent & strTable & strSpacer & "Field(s): " & strSpacer & strIndent & strFldsNotFound
+             
+             If blnDoImport Then
+                'report fields not going to make it and request user confirm that it should still go on
+                If msgBox(strFldsNotFound & Chr(13) & Chr(13) & "VegBranch can still import the file, ignoring these fields." & Chr(13) _
+                  & "Do you want to continue importing your file, omitting these fiedls?", vbYesNo + vbQuestion) = vbNo Then
+                    msgBox "Data NOT imported!", vbExclamation
+                  Exit Function
+                End If
+             End If
+            End If
+              
+        Else   'data
+            'all fields are found, now we need to check validity of data in fields
+            If blnDoImport Then
+               rstImport.AddNew
+            End If
+            
+            For intLoop2 = 1 To colFieldOrder.Count
+              'get new FieldValue
+              strFldVal = FindNextField(strLine, ",")
+              'reset strLine to without the new field
+              
+              strLine = Right(strLine, Len(strLine) - Len(strFldVal))
+              If strLine <> "" Then strLine = Right(strLine, Len(strLine) - 1)
+              
+              'If strFldVal has quotes, get rid of them:
+              If Left(strFldVal, 1) = """" And Right(strFldVal, 1) = """" Then
+                 strFldVal = Right(strFldVal, Len(strFldVal) - 1)
+                 strFldVal = Left(strFldVal, Len(strFldVal) - 1)
+              End If
+              'remove the double quotes in a field value
+              strFldVal = substTextForText(strFldVal, """""", """")
+        
+        
+              'get current fieldName
+              strFld = colFieldOrder("F" & intLoop2)
+        If fieldExistOnTbl(strFld, strTable) Then 'write field
+              Dim strErrMsg As String
+              On Error GoTo ErrDoImport
+                strErrMsg = "Field"
+                If blnDoImport And strFldVal <> "" Then rstImport.Fields(strFld).Value = strFldVal
+              On Error GoTo 0
+              'Define where in the .csv we currently are
+              strWhereAmI = "Line " & lngLineNum & ": Field: " & strFld
+          '    Debug.Print strWhereAmI & ": " & strFldVal
+              'check that data exists in field is required
+              If colNulls(strFld) = "no" Then
+                 If Len(Trim(strFldVal)) = 0 Then
+                     strErrorMsg = strErrorMsg & strSpacer & strIndent & _
+                        strWhereAmI & "  is Required, but your data contains a null value."
+                 End If
+              End If
+              
+              Select Case colFieldTypes(strFld)
+                Case "Long Integer", "Double"
+                  ' Debug.Print strWhereAmI & " = " & .Fields(strFld).Value
+                   If (Not IsNumeric(Trim(strFldVal))) And Trim(strFldVal) <> "" Then
+                      strErrorMsg = strErrorMsg & strSpacer & strIndent & strWhereAmI & _
+                         "  is a Numeric field, but you have non-numeric data: " & _
+                         Trim(strFldVal)
+                   End If
+                Case "Date/Time"
+                  If (Not IsDate(Trim(strFldVal))) And Trim(strFldVal) <> "" Then
+                      strErrorMsg = strErrorMsg & strSpacer & strIndent & strWhereAmI & _
+                         "  is a Date field, but you have non-Date data: " & _
+                         Trim(strFldVal)
+                  End If
+                Case "Text"
+                  If Len(strFldVal) > colFieldSizes(strFld) Then
+                      strErrorMsg = strErrorMsg & strSpacer & strIndent & strWhereAmI & _
+                         "  is a text field of length " & colFieldSizes(strFld) & _
+                         ", but your value is longer: " & Len(strFldVal) & ",  """ & Trim(strFldVal) & """"
+                         
+                  End If
+              End Select
+    End If ''field found!
+            Next intLoop2
+      On Error GoTo ErrDoImport
+        strErrMsg = "Record"
+        If blnDoImport Then rstImport.Update
+      On Error GoTo 0
+      
+      End If ' field headers vs. data
+                
+          Loop
+        End With ' with A file
+        
+        If strErrorMsg <> "" Then
+          'report error from data checking and exit
+          If Not blnDoImport Then
+                reportErr strErrorMsg, strErrFile
+                GoTo exitcheckfile
+          End If
+        End If
+
+exitcheckfile:
+troubleShootCSVimport = False
+If strErrorMsg <> "" Then
+  Dim intResp As Integer
+  If Not blnDoImport Then
+    intResp = msgBox("You have errors that have been written to file." & Chr(13) & "Do you want to import the data anyway (which may cause problematic errors)?", vbYesNo)
+    If intResp = vbNo Then troubleShootCSVimport = True
+  Else
+    troubleShootCSVimport = True
+  End If
+End If
+Exit Function
+
+ErrDoImport:
+  reportErr "ERRORS DURING IMPORT!" & Chr(13) & strErrMsg & " not imported." & strWhereAmI, strErrFile
+  'cancel last update if error in updating
+  'tell user of error and ask if they want to continue
+  If msgBox("There were errors in import, which were written to the file: " & strErrFile & _
+     Chr(13) & Err.Description & Chr(13) & "continue import?", vbYesNo) = vbNo Then
+     Exit Function
+  End If
+Resume Next
+
+End Function
+
+Function testfindnxtfld()
+  Dim strTxt As String, strFld As String
+  strTxt = """teset"",test,three,8,""this, thing"""
+  Do Until Len(strTxt) = 0
+    strFld = FindNextField(strTxt, ",")
+    Debug.Print strFld
+    strTxt = Right(strTxt, Len(strTxt) - Len(strFld))
+    If strTxt <> "" Then strTxt = Right(strTxt, Len(strTxt) - 1)
+  Loop
+End Function
+
+
+
+Public Function reportErr(strerr As String, strErrFile As String)
+  'function opens a text file report and dumps error message into it so that user can copy message or stare at it for a while
+  'On Error Resume Next
+      Dim fs2 As Object
+      Dim objErrFile As Object
+      Set fs2 = CreateObject("Scripting.FileSystemObject")
+  'opens err log and appends results
+  If Right(strErrFile, 4) <> ".txt" Then Exit Function 'must be a .txt file
+ Set objErrFile = fs2.openTextFile(strErrFile, 8, True)
+  objErrFile.writeLine
+  objErrFile.writeLine "Error Log : " & Now()
+  objErrFile.writeLine "---------------------------------------------------------------"
+  objErrFile.writeLine strerr
+  Debug.Print "ERRORS written to file"
+ ' MsgBox "Errors written to file: " & strErrFile, vbInformation
+  
+End Function
+
+Public Function FindKeyInCol(colTest As Collection, strKey As String) As Boolean
+  'fcn looks for the key value as a member of the collection
+  'returns true if found, false otherwise
+  'intStart is 1 for custom collections, 0 for non
+  On Error GoTo endFindCol
+  FindKeyInCol = False
+  If IsError(colTest(strKey)) Then
+     FindKeyInCol = False
+  Else
+     FindKeyInCol = True
+  End If
+  Exit Function
+endFindCol:
+  FindKeyInCol = False
+  Resume ExitThisFCN
+ExitThisFCN:
+End Function
+
+Function fjdkafjklajlllll()
+  Debug.Print importCSV2table_new("temp_zfld", "C:\Documents and Settings\Administrator\Desktop\Z_Field.csv", True, True)
+End Function
+
+Public Function importCSV2table_new(strTable As String, strFile As String, _
+   blnValidate As Boolean, blnWrite As Boolean, Optional strFieldNames As String) As Boolean
+ 'checks strFile .csv file for compatible format with strTable
+  'blnValidate is true if validating file, not writing it
+  'strFieldNames are to be passed in fieldnames not in file : use getColHdrs to count field names in function that calls this if nec.
+ '---returns
+ 'false if import after
+ 'true if don't import after
+ 
+ Dim strErrFile As String, strErrorMsg As String
+ strErrFile = strFile & "_VgBrch_ErrRept.txt"
+    
+        strErrorMsg = ""
+        'a couple of spacing characters
+        Dim strSpacer As String, strIndent As String
+        strSpacer = vbCr
+        strIndent = ">"
+
+'READ in file directly from .csv format:
+
+  Dim fs As Object
+  Dim a As Object
+  
+Set fs = CreateObject("Scripting.FileSystemObject")
+  
+  Dim lngTotFileLines As Long
+  lngTotFileLines = GetFileLines(strFile)
+  openProcessingPos (IIf(blnWrite, "importing", "validating") & " your data")
+  
+  Dim lngWhatEncode As Long
+  lngWhatEncode = getEncodingOfFile(strFile)
+
+  Set a = fs.openTextFile(strFile, 1, , lngWhatEncode)
+  
+  Dim strLine As String
+  'field names from header
+  Dim colFieldOrder As New Collection
+          Dim intLoop2 As Long, strFld As String, lngLineNum As Long
+        Dim strWhereAmI As String, strFldVal As String
+  
+          lngLineNum = 0 'header row
+          
+         'recordset that imports
+          Dim rstImport As New ADODB.Recordset
+          rstImport.Open strTable, CurrentProject.Connection, adOpenStatic, adLockOptimistic, adCmdTable
+         Dim colHdrs As New Collection, colVals As New Collection, lngColTemp As Long, strFldsNotFound As String
+  With a
+    Do Until .atendofstream
+        'handle instance where delimiter crosses lines:
+         Dim intCurrLineQuot As Long
+         intCurrLineQuot = 1
+         strLine = ""
+         'if odd number of quotes, then we need to continue getting csv line
+         While Int(intCurrLineQuot / 2) <> (intCurrLineQuot / 2)
+           'dont read from the file the first time if read fieldnames from elsewhere
+              
+             If strFieldNames <> "" And lngLineNum = 0 Then
+               'deal with headers that are not in the file, if applicable
+               strLine = strFieldNames
+               intCurrLineQuot = 0 'no quotes, or they are taken care of
+               'add to length of file
+               'lngLineNum = lngLineNum + 1
+               lngTotFileLines = lngTotFileLines + 1
+             Else
+               'normal: read line
+               strLine = strLine & IIf(strLine <> "", vbCr, "") & .readline
+               intCurrLineQuot = CountOccOf(strLine, """")
+             
+             End If
+         Wend
+       ' Debug.Print strLine
+        lngLineNum = lngLineNum + 1
+        UpdateProcessingPosition (lngLineNum / lngTotFileLines) * 100, 2
+        '       Debug.Print lngLineNum
+                
+        If lngLineNum < 2 Then  'field headers
+          'this row goes to headers
+          Call EmptyCollection(colHdrs)
+          Set colHdrs = csv_parseCSVstring(strLine, ",", True)
+      '    Debug.Print colHdrs.Count & " headers"
+          strFldsNotFound = areFldsOnTbl(strLine, strTable, False)
+            If strFldsNotFound <> "" Then
+          'errors have been found, report and import w/o these fields:
+             strFldsNotFound = "VegBranch found fieldName(s) that exist in your file: " & strSpacer _
+              & strIndent & strFile & strSpacer & "But are not in the table you are exporting to:" & strSpacer & _
+              strIndent & strTable & strSpacer & "Field(s): " & strSpacer & strIndent & strFldsNotFound
+             
+             If blnWrite Then
+                'report fields not going to make it and request user confirm that it should still go on
+                If msgBox(strFldsNotFound & Chr(13) & Chr(13) & "VegBranch can still import the file, ignoring these fields." & Chr(13) _
+                  & "Do you want to continue importing your file, omitting these fiedls?", vbYesNo + vbQuestion) = vbNo Then
+                    msgBox "Data NOT imported!", vbExclamation
+                  GoTo exitChkFile
+                  Exit Function
+                End If
+             End If
+            End If
+           If blnValidate Then
+             'collect info about each field to provide validating process
+             Dim colHdrs_Type As New Collection, colHdrs_Size As New Collection, colHdrs_Reqd As New Collection, strTemp1 As String
+             Dim dbsCurr As Object, tdfCurr As Object, fldCurr As Object
+             Set dbsCurr = CurrentDb
+             Set tdfCurr = dbsCurr.tabledefs(strTable)
+             For lngColTemp = 1 To colHdrs.Count
+                'populate 3 collections to examine type, reqd, and field size
+               If fieldExistOnTbl(colHdrs(lngColTemp), strTable) Then
+                  Set fldCurr = tdfCurr.Fields(colHdrs(lngColTemp))
+                  'gets type in text format
+                  colHdrs_Type.Add (Interpret_FieldTypeInt(fldCurr.Type, fldCurr.Attributes)), fldCurr.Name
+                  ' if required, starts with a "R,", else with a ,
+                  colHdrs_Reqd.Add (fldCurr.Required), fldCurr.Name
+                  'add size
+                  colHdrs_Size.Add (fldCurr.size), fldCurr.Name
+               End If ' field exist
+             Next lngColTemp
+           End If ' blnValidate
+        Else   'data
+            Call EmptyCollection(colVals)
+            Set colVals = csv_parseCSVstring(strLine, ",", True)
+            'all fields are found, now we need to check validity of data in fields
+            If blnWrite Then
+               rstImport.AddNew
+            End If
+            
+            For lngColTemp = 1 To colVals.Count
+              'get new FieldValue
+              strFldVal = colVals(lngColTemp)
+        
+              'get current fieldName
+              strFld = colHdrs(lngColTemp)
+        If fieldExistOnTbl(strFld, strTable) Then 'write field
+              Dim strErrMsg As String
+              
+              'Define where in the .csv we currently are
+              strWhereAmI = "Line " & lngLineNum & ": Field: " & strFld
+              
+              On Error GoTo ErrDoImport
+                strErrMsg = "Field"
+                If blnWrite And strFldVal <> "" Then
+                   rstImport.Fields(strFld).Value = strFldVal
+                End If
+              On Error GoTo 0
+          '    Debug.Print strWhereAmI & ": " & strFldVal
+              'check that data exists in field is required
+If blnValidate Then
+            'check types
+              Select Case colHdrs_Type(strFld)
+                Case "Long Integer", "Double"
+                  ' Debug.Print strWhereAmI & " = " & .Fields(strFld).Value
+                   If (Not IsNumeric(Trim(strFldVal))) And Trim(strFldVal) <> "" Then
+                      strErrorMsg = strErrorMsg & strSpacer & strIndent & strWhereAmI & _
+                         "  is a Numeric field, but you have non-numeric data: " & _
+                         Trim(strFldVal)
+                   End If
+                Case "Date/Time"
+                  If (Not IsDate(Trim(strFldVal))) And Trim(strFldVal) <> "" Then
+                      strErrorMsg = strErrorMsg & strSpacer & strIndent & strWhereAmI & _
+                         "  is a Date field, but you have non-Date data: " & _
+                         Trim(strFldVal)
+                  End If
+                Case "Text"
+                  If Len(strFldVal) > colHdrs_Size(strFld) Then
+                      strErrorMsg = strErrorMsg & strSpacer & strIndent & strWhereAmI & _
+                         "  is a text field of length " & colHdrs_Size(strFld) & _
+                         ", but your value is longer: " & Len(strFldVal) & ",  """ & Trim(strFldVal) & """"
+                         
+                  End If
+              End Select
+              'check reqd
+              If colHdrs_Reqd(strFld) And Trim(strFldVal) = "" Then
+                  strErrorMsg = strErrorMsg & strSpacer & strIndent & strWhereAmI & _
+                         "  is a required field " & _
+                         ", but your value is null!"
+              End If
+
+End If ' validate
+    End If ''field found!
+            Next lngColTemp
+      On Error GoTo ErrDoImport
+        strErrMsg = "Record"
+        If blnWrite Then rstImport.Update
+      On Error GoTo 0
+      
+      End If ' field headers vs. data
+                
+          Loop
+        End With ' with A file
+        If strErrorMsg <> "" Then
+          'report error from data checking
+                reportErr strErrorMsg, strErrFile
+        End If
+
+'exitcheckfile:
+
+If strErrorMsg = "" Then
+importCSV2table_new = False  'no errors (false)
+   Else ' errors exist
+   importCSV2table_new = True
+   If msgBox("Errors written to file: " & strErrFile & Chr(13) & "Open this file?", vbYesNo) = vbYes Then
+      Application.FollowHyperlink strErrFile
+   End If
+End If
+exitChkFile:
+UpdateProcessingPosition 100, 0
+Exit Function
+
+ErrDoImport:
+  reportErr "ERRORS DURING IMPORT!" & Chr(13) & strErrMsg & " not imported." & strWhereAmI & Chr(13) & Err.Description, strErrFile
+  'cancel last update if error in updating
+    If msgBox("There were errors in import, which were written to the file: " & strErrFile & _
+     Chr(13) & Err.Description & Chr(13) & "continue import?", vbYesNo) = vbNo Then
+     Resume exitChkFile
+  End If
+Resume Next
+
+End Function
+
+Public Function getEncodingOfFile(strFile As String) As Long
+'function checks a file's encoding, returning 0 if ascii and 1 if unicode
+On Error GoTo assumeASCII
+
+  Dim fs As Object, aWhatEncode As Object, lngWhatEncode As Long, strEncode As String
+  
+  Set fs = CreateObject("Scripting.FileSystemObject")
+  Set aWhatEncode = fs.openTextFile(strFile, 1, , 0)
+  strEncode = aWhatEncode.readline
+ ' Debug.Print strEncode & " is encoding check!"
+  If Left(strEncode, 2) = "ÿþ" Then
+    lngWhatEncode = -1 'unicode
+  Else
+    lngWhatEncode = 0 'ascii
+  End If
+  Set aWhatEncode = Nothing
+exitthis:
+ getEncodingOfFile = lngWhatEncode
+Exit Function
+assumeASCII:
+  'error, assume ascii
+  lngWhatEncode = 0 'ascii
+  Resume exitthis
+End Function
+
+Public Function GetFileLines(strFile As String) As Long
+  On Error GoTo errGetLines
+  Dim fs, a, lngTemp As Long, strTemp As String
+  Set fs = CreateObject("Scripting.FileSystemObject")
+  'open file
+  Set a = fs.openTextFile(strFile, 1)
+  lngTemp = 0
+  Do Until a.atendofstream
+    strTemp = a.readline
+    'count all lines
+    lngTemp = lngTemp + 1
+  Loop
+  GetFileLines = lngTemp
+exitGL:
+Exit Function
+errGetLines:
+  'error report -1 and exit
+  GetFileLines = -1
+  Resume exitGL
+End Function
+
+Public Function smartImportFile(strFile As String, strToTbl As String, strFromTbl As String)
+  'commit any changes to currform
+  rereshCurrForm
+  'confirm that they do want to add more data if there is already data in this table:
+  Dim strRecs As String
+  strRecs = getvalFrmSQL("select count(1) from [" & strToTbl & "]")
+  If strRecs <> "0" Then
+    'have recs
+    Select Case MsgBox_cust("You already have data in this table (" & strRecs & " records).", "ADD to the data,OVERWRITE old data,STOP import", _
+      "You can ADD the data your are importing to the data that are already there, or you can OVERWRITE the old data and use the new data only.")
+      Case 0, 3
+        'cancel
+        GoTo exitthisNoImport
+      Case 1
+        'continue, normal
+      Case 2
+        If AreYouSure("Do you want to delete the " & strRecs & " records in " & getTableNickName(strToTbl)) Then
+          DoCmd.RunSQL "delete * from [" & strToTbl & "];"
+          'now continue as normal
+        Else 'they cancelled.
+          GoTo exitthisNoImport
+        End If
+     End Select
+  End If 'have records in this table already
+  'imports a file, testing on its own whether or not conversion of field names is needed
+  If seeIfFileFieldMatch(strToTbl, strFile, strFromTbl) Then
+    'field match perfectly, import directly
+    Call ImportCSVToTable(strToTbl, strFile, False, strFromTbl)
+  Else
+    'fields need conversion
+    msgBox "Your field names/column headers did not all match vegbank field names for the table you are importing to." _
+    & " You will now be asked to provide conversion criteria for these fields.", , "VegBranch"
+    Call FormGetCommaHdrs(strToTbl, strFile, True, strFromTbl)
+  End If
+  Call CheckTblForRecs("mod", "loading", True)
+exitthis:
+  Exit Function
+exitthisNoImport:
+  msgBox "nothing imported."
+  GoTo exitthis
+End Function
+
+
+Public Function seeIfFileFieldMatch(strTable As String, strFile As String, strMDBFromTable As String) As Boolean
+  'function determines if field conversion is necessary
+  'MTL Jan-26-2004
+     
+    'get hdrs
+     Dim colHdrs As New Collection
+     Set colHdrs = getColHdrs(strFile, strMDBFromTable)
+     'have headers, see if they match fields in table.
+     Dim inttemp As Integer, blnRep As Boolean
+     blnRep = True 'assume true until one is not found
+     For inttemp = 1 To colHdrs.Count
+       If fieldExistOnTbl(colHdrs(inttemp), strTable) Then
+         'this one is found, continue
+       Else
+         'not found, blnRep is false
+         blnRep = False
+         Exit For
+       End If
+     Next inttemp
+     seeIfFileFieldMatch = blnRep
+
+End Function
+
+
+Public Function getColHdrs(strFile As String, Optional strFRMtable As String) As Collection
+  'function reads file and returns headers as collection of headers
+  'MTL Jan-26-2004
+ Select Case Right(strFile, 4)
+   Case ".txt", ".csv"
+  
+     Dim fs, a, lngTemp As Long, strTemp As String
+    Set fs = CreateObject("Scripting.FileSystemObject")
+    'open file
+    Set a = fs.openTextFile(strFile, 1)
+    lngTemp = 0
+  
+      strTemp = a.readline
+      'count all lines
+       lngTemp = lngTemp + 1
+     
+   Case ".mdb"
+     'database
+     Dim tdfCurr As Object
+     strTemp = getFldsFromTblQry(strFRMtable, strFile)
+ End Select
+ Set getColHdrs = csv_parseCSVstring(strTemp, ",", True)
+End Function
+
+Public Function parseFileString(strWhole As String, strDrv As String, strDirPath As String, strFileName As String _
+  , strExt As String) As Boolean
+  'function parses full path name into drive, directory path and file name : returns to Vars passed to this!
+  'returns false if error
+  Dim strTemp As String
+  If InStr(strWhole, ":\") > 0 Then
+    strDrv = Left(strWhole, InStr(strWhole, ":\"))
+    'Drv like C:
+    strTemp = Right(strWhole, Len(strWhole) - Len(strDrv))
+    strFileName = getLastToChar(strTemp, "\", 0)
+    strDirPath = Left(strTemp, Len(strTemp) - Len(strFileName))
+    'get extension off filename
+    If InStr(strFileName, ".") > 0 Then
+      strExt = "." & getLastToChar(strFileName, ".", 0)
+      strFileName = Left(strFileName, InStr(strFileName, ".") - 1)
+    
+    End If
+    
+    parseFileString = True
+  Else
+    'incomplete path
+    If InStr(strWhole, "\") = 0 Then
+      'assume current dir, recurse
+      parseFileString = parseFileString(CurrentProject.Path & "\" & strWhole, strDrv, strDirPath, strFileName, strExt)
+    Else
+      parseFileString = False
+    End If
+  End If
+  
+End Function
+
+Public Function openFolderOfFile(strFile As String)
+  'function opens folder in MS explorer of folder on fileSystem:
+  On Error GoTo cantFindFile
+  If strFile = "" Then
+    msgBox "Please specify a file name."
+    GoTo exitthis
+  End If
+  Dim strDrv As String, strPath As String, strName As String, strExt As String
+  If parseFileString(strFile, strDrv, strPath, strName, strExt) Then
+    'successful parse
+    
+    'open link to folder:
+    Application.FollowHyperlink strDrv & strPath, , True
+   
+  Else
+    'cant parse
+    msgBox "Cannot make sense of your filename: " & strPath & ".  Make sure this is a valid name."
+    GoTo exitthis
+  End If
+    
+  
+exitthis:
+  Exit Function
+cantFindFile:
+  msgBox "sorry, cannot find the folder for file: " & strPath
+  Resume exitthis
+End Function
+
+
+Function xzxzxztestParse()
+  Dim strWhole As String, strDrv As String, strPath As String, strName As String, strExt As String
+  strWhole = "C:\goo\filenm.tr"
+  
+  
+Debug.Print parseFileString(strWhole, strDrv, strPath, strName, strExt)
+Debug.Print strDrv
+Debug.Print strPath
+Debug.Print strName
+Debug.Print strExt
+
+End Function
+
+
+Public Function getLastToChar(strTxt As String, strChar As String, intComp As Integer) As String
+  'function takes end of word up to last character and returns all, not including character
+  'ie getLastToChar("thisthat.theother",".")="theother"
+  'useful for getting extensions, filenames from paths, etc.
+  Dim inttemp As Long
+  For inttemp = 0 To Len(strTxt) - 1
+    If StrComp(Mid(strTxt, Len(strTxt) - inttemp, 1), strChar, intComp) = 0 Then
+      'stop processing and return what we have:
+      getLastToChar = Right(strTxt, inttemp)
+      Exit For
+    End If
+  Next inttemp
+
+End Function

@@ -1,0 +1,27 @@
+Option Compare Database
+Option Explicit
+
+Public Function CNCT_setFormControlVal(strFrm As String, ctlNm As String, strVal As String, blnBrowse As Boolean)
+''If blnBrowse is true, then a file is browsed For:, using strVal as extension filter
+''sets a function control value
+If blnBrowse Then
+  strVal = BrowseForFile(strVal)
+End If
+Forms(strFrm).Controls(ctlNm).Value = IIf(strVal = "", Null, strVal)
+
+End Function
+
+Public Function CNCT_ConnectToDB(strDBPath As String, strOptions As String)
+  If Len(strDBPath) > 4 Then
+    If Right(strDBPath, 4) = ".mdb" Then
+      ''connect!
+      CNCT_DefaultConnect strDBPath, strOptions
+    Else
+      msgBox "Not a valid database name!", vbCritical
+    End If
+  Else
+    msgBox "Not a valid database name!", vbCritical
+  End If
+End Function
+
+

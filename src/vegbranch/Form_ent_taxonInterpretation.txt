@@ -1,0 +1,38 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command53_Click()
+  Me.Undo
+  DoCmd.Close acForm, Me.Name
+End Sub
+
+Private Sub Command76_Click()
+  Dim strListOfCtls As String, blnShow As Boolean
+  strListOfCtls = "collectionNumber_dtl,taxonFit_dtl,taxonConfidence_dtl,PLANTCONCEPT_ID_dtl,originalInterpretation_dtl,currentInterpretation_dtl,authorObsCode,authorPlantName,collectionNumber_dtl_lbl,taxonFit_dtl_lbl,taxonConfidence_dtl_lbl,PLANTCONCEPT_ID_dtl_lbl,originalInterpretation_dtl_lbl,currentInterpretation_dtl_lbl"
+  blnShow = Not (Me.PLANTCONCEPT_ID_dtl.Visible)
+  Call frm_height2Zero(strListOfCtls, blnShow)
+  If Not blnShow Then
+    Me.Detail.Height = 0
+  End If
+End Sub
+
+Private Sub Form_AfterUpdate()
+  'let temp entry table know about customized taxonInts
+  DoCmd.RunSQL "UPDATE ent_temp_taxonImp_Int_Obs SET isTaxIntCustomized=2 where currTaxonObservation_ID=" & Me.TAXONOBSERVATION_ID
+End Sub
+
+Private Sub Form_Current()
+  'refresh taxonAlt list
+  Me.List80.Requery
+End Sub
+
+Private Sub top__taxonObservation_ID_Enter()
+   Static lngObs As Long
+If Me.top__OBSERVATION_ID <> lngObs Then 'update list
+  lngObs = Me.top__OBSERVATION_ID
+  Call openProcessingPos("getting new list of plants used on this plot...", "select an observation if none appear!")
+  Call UpdateProcessingPosition(43, 1)
+    Me.Recalc
+  Call UpdateProcessingPosition(100, 1)
+End If
+End Sub

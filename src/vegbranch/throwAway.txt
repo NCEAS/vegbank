@@ -1,0 +1,9 @@
+Option Compare Database
+Option Explicit
+
+
+Function write2plants()
+  Dim strRep As String
+  strRep = autoG_table2xml_plantConcept("plantConcept_ID>192 and plantConcept_ID<195", 0, False)
+  Call WriteLineToFile("<root>" & strRep & "</root>", "C:\temp\testout.xml")
+End Function

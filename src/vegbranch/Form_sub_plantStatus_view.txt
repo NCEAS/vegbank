@@ -1,0 +1,9 @@
+Option Compare Database
+Option Explicit
+
+Private Sub CorrelatedConcepts_Enter()
+  Me.CorrelatedConcepts.RowSource = "SELECT plantCorrelation.PLANTCONCEPT_ID, plantName.plantName AS name, plantCorrelation.plantConvergence AS convergence, plantCorrelation.correlationStart AS start, plantCorrelation.correlationStop AS stop " _
+& " FROM plantName INNER JOIN (plantConcept INNER JOIN plantCorrelation ON plantConcept.PLANTCONCEPT_ID = plantCorrelation.PLANTCONCEPT_ID) ON plantName.PLANTNAME_ID = plantConcept.PLANTNAME_ID " _
+& " WHERE plantSTATUS_ID = " & Me!PLANTSTATUS_ID
+  'Me.Recalc
+End Sub

@@ -1,0 +1,38 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command50_Click()
+'shows more of the left side of the data dictionary
+  Dim strNewCap As String, dblRatio As Double
+  dblRatio = 1.9
+  If Left(Command50.Caption, 4) = "show" Then
+    'show more
+    ' do not change dblRatio
+    strNewCap = "<<less of this side"
+  Else
+    dblRatio = 1 / dblRatio
+    strNewCap = "show more of this side>>"
+  End If
+  Dim lngNewHt As Long
+  lngNewHt = Me.Z_FieldDescription.Form.Detail.Height * dblRatio * dblRatio
+  Me.Z_FieldDescription.Controls("FieldNotesUp").Height = lngNewHt
+  Me.Z_FieldDescription.Controls("FieldDefinitionUp").Height = lngNewHt
+  Me.Z_FieldDescription.Form.Detail.Height = lngNewHt
+  
+  Me.Z_FieldDescription.Width = Me.Z_FieldDescription.Width * dblRatio
+  
+  Me.Command50.Caption = strNewCap
+End Sub
+
+Private Sub Command72_Click()
+  'search field names for string
+  Me.Z_FieldDescription.Form.Filter = GetSQLSearchStr("fieldName", Nz([searchFor], ""), "and")
+  Me.Z_FieldDescription.Form.FilterOn = True
+End Sub
+
+Private Sub Form_Load()
+  If Not IsNull(Me.OpenArgs) Then
+    ''find field:
+    FindFieldInDD Me.OpenArgs
+  End If
+End Sub

@@ -1,0 +1,93 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Check73_Click()
+  ''add new concept:
+  Dim blnTemp As Boolean
+  blnTemp = Me!Check73
+  ''show or hide portion of form:
+  Dim colCtls As New Collection
+colCtls.Add "reference"
+colCtls.Add "reference_Label"
+colCtls.Add "plantDescription"
+colCtls.Add "plantDescription_Label"
+colCtls.Add "plantLevel"
+colCtls.Add "plantLevel_Label"
+colCtls.Add "plantParentCode"
+colCtls.Add "plantParentCode_Label"
+colCtls.Add "Box51"
+colCtls.Add "Label52"
+colCtls.Add "Label69"
+colCtls.Add "Label81"
+Dim inttemp As Integer
+For inttemp = 1 To colCtls.Count
+  Me.Controls(colCtls(inttemp)).Visible = blnTemp
+Next inttemp
+
+If blnTemp And Me!Option77 = False Then
+  ''new concept, add perspective, too
+  Me!Option77 = True
+  Option77_Click
+End If
+
+End Sub
+
+Private Sub Form_Current()
+  Check73_Click
+  Option77_Click
+End Sub
+
+Private Sub Option77_Click()
+  Dim blnTemp As Boolean
+  blnTemp = Me!Option77
+  ''show or hide portion of form:
+  Dim colCtls As New Collection
+colCtls.Add "plantConceptStatus"
+colCtls.Add "plantConceptStatus_Label"
+colCtls.Add "plantPartyComments"
+colCtls.Add "plantPartyComments_Label"
+colCtls.Add "plantSynConverg1"
+colCtls.Add "plantSynConverg2"
+colCtls.Add "plantSynConverg3"
+colCtls.Add "plantSynConverg4"
+colCtls.Add "plantSynCode1_Label"
+colCtls.Add "plantSynConverg1_Label"
+colCtls.Add "Box50"
+colCtls.Add "Box53"
+colCtls.Add "Label56"
+colCtls.Add "Label57"
+colCtls.Add "Label58"
+colCtls.Add "Label59"
+colCtls.Add "plantSynCode1"
+colCtls.Add "plantSynCode2"
+colCtls.Add "plantSynCode3"
+colCtls.Add "plantSynCode4"
+colCtls.Add "Label70"
+
+'---usage---
+colCtls.Add "plantCommonNameSystem"
+colCtls.Add "otherPlantNameSystem"
+colCtls.Add "commShortNameSystem"
+colCtls.Add "otherPlantName"
+colCtls.Add "plantCommonName"
+colCtls.Add "plantShortName"
+colCtls.Add "plantNameSystem"
+colCtls.Add "plantNameStatus"
+colCtls.Add "plantShortNameStatus"
+colCtls.Add "plantCommonNameStatus"
+colCtls.Add "OtherplantNameStatus"
+colCtls.Add "Label68"
+Dim inttemp As Integer
+For inttemp = 1 To colCtls.Count
+  Me.Controls(colCtls(inttemp)).Visible = blnTemp
+Next inttemp
+
+If Not (blnTemp) And Me!Check73 = True Then
+  ''if there is no party perspective, then the concept is not new
+  Me!Check73 = False
+  Check73_Click
+End If
+
+  
+End Sub
+

@@ -1,0 +1,142 @@
+Option Compare Database
+Option Explicit
+
+
+Public Function getAccessionCode(strTbl As String, lngID As Long, Optional blnAddIfNull As Boolean) As String
+ ''gets the accession code, given a PK, if there is one
+ Dim strTemp As String
+ strTemp = getvalFrmSQL("SELECT accessionCode from " & strTbl & " where [" & WhatIsPKOf(strTbl) & "]=" & lngID & ";")
+ If strTemp = "" And blnAddIfNull Then
+   strTemp = FillInMissingAccCodesInVBModl(strTbl, lngID)
+   strTemp = getvalFrmSQL("SELECT accessionCode from " & strTbl & " where [" & WhatIsPKOf(strTbl) & "]=" & lngID & ";")
+ End If
+ getAccessionCode = strTemp
+End Function
+
+Public Function accessionCodeValid(ByVal strCode As String) As Boolean
+  'returns true if accessionCode format is valid, false otherwise
+  'assume false unless true:
+  accessionCodeValid = False
+  Dim colCode As New Collection
+  Set colCode = csv_parseCSVstring(strCode, ".")
+  'must have DB.Tbl.PK#.Confim.Date format = 3-5 items
+  If colCode.Count >= 3 And colCode.Count <= 5 Then
+    If colCode.Count < 4 Then colCode.Add "OKTEXT"
+    If colCode.Count < 5 Then colCode.Add "1/1/2004"
+    '1 must be Alpha only, ditto for 2, 3 numeric, 4 is alphanum, 5 is date
+      accessionCodeValid = isAlpha(colCode(1)) * isAlpha(colCode(2)) * IsNumeric(colCode(3)) * isAlphaNumeric(colCode(4)) * IsDate(colCode(5))
+  End If
+End Function
+
+Public Function getPKfromAccessionCode(strAccession As String, Optional strTbl As String) As Long
+ Dim inttemp As Integer, strTemp As String, intStart As Integer, lngRet As Long
+ 'no accesion code
+ If Trim(strAccession) = " " Or Trim(strAccession) = "" Then GoTo exitThisOK
+ 'invalid accCode
+ If Not accessionCodeValid(strAccession) Then GoTo exitThisOK
+ 
+ On Error GoTo exitErr
+ 'get second phrase separated by .
+ intStart = 0
+ If strTbl = "" Then
+   For inttemp = 1 To Len(strAccession)
+     If Mid(strAccession, inttemp, 1) = "." Then
+       If intStart > 0 Then Exit For
+       intStart = inttemp + 1
+     End If
+   Next inttemp
+   strTbl = Mid(strAccession, intStart, (inttemp) - (intStart))
+ End If
+ 'if in translation table, use that value:
+ Dim strRealTbl As String
+ strRealTbl = getAccessionInfo("table", strTbl)
+ If strRealTbl <> "" Then strTbl = strRealTbl
+ 
+ 
+'get PK of table
+ strTemp = getvalFrmSQL("SELECT [" & WhatIsPKOf(strTbl) & "] from " & strTbl & " where accessionCode=""" & strAccession & """;")
+ If IsNumeric(strTemp) And strTemp <> "" Then
+  lngRet = strTemp
+ End If
+exitThisOK:
+ If lngRet = 0 Then
+   getPKfromAccessionCode = -1
+ Else
+  getPKfromAccessionCode = lngRet
+ End If
+ Exit Function
+exitErr:
+ Debug.Print "getPKFromAccessionCode>> err: " & Err.Description
+ Resume exitThisOK
+End Function
+
+Public Function getAccessionInfo(strType As String, strAbbrv As String, Optional blnInvert As Boolean) As String
+ 'function   looks in x_accessionInfo and fetches any info found on abbrev
+ 'if blnINvert, then get abbrev from fulltext
+ Dim strTemp As String
+ 
+ If blnInvert Then
+ strTemp = getvalFrmSQL("select abbrev from x_accessionInfo where infoType=""" & strType & """ and fulltext= """ & strAbbrv & """;")
+  Else
+strTemp = getvalFrmSQL("select fulltext from x_accessionInfo where infoType=""" & strType & """ and abbrev= """ & strAbbrv & """;")
+ End If
+
+getAccessionInfo = strTemp
+End Function
+
+Public Function writeNewAccCode(strTable As String, lngID As Long) As String
+  'function returns a new AccessionCode, given table and ID in table.  Assumes vegbranch database and generates a 15Char random string for confirm code
+  Dim strTemp As String, inttemp As Integer
+  strTemp = getAccessionInfo("table", strTable, True)
+  Dim strRdm As String
+  strRdm = DateDiff("s", #1/1/2001#, Now())             'number of seconds this millineum
+  For inttemp = 1 To 7 'hardCODE  confirm code length, after datechk
+    strRdm = strRdm & getRandomChar()
+  Next inttemp
+  writeNewAccCode = "VBrTEMP." & strTemp & "." & lngID & "." & strRdm 'HARDcODE  db : hardcoded b/c this function will be accessed a lot: dont want manual lookup
+End Function
+
+
+Public Function FillInMissingAccCodesInVBModl(Optional strTblOnly As String, Optional lngPKOnly As Long)
+  'function looks in vegbank module for any accessionCodes that are null and writes new ones
+  'MTL 10-Jan-2004
+  
+  
+  Dim rstFlds As New ADODB.Recordset
+  rstFlds.Open "select * from Z_FieldDescription where [module]=""vegbank"" and [fieldName]=""accessionCode""" _
+    & IIf(strTblOnly <> "", " and tableName=" & SQLizeTxt(strTblOnly), "") & ";", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstFlds
+  Do Until .EOF
+    'have table, write SQL to update any null accessionCodes
+    Dim strSQL As String
+    Dim strWhatToUpdate As String
+    If lngPKOnly <= 0 Then
+      strWhatToUpdate = " accessionCode is null"
+    Else
+      strWhatToUpdate = "[" & WhatIsPKOf(!TableName) & "] =" & lngPKOnly
+    End If
+    strSQL = "UPDATE [" & !TableName & "] SET AccessionCode= " _
+      & " writeNewAccCode(""" & !TableName & """,[" & WhatIsPKOf(!TableName) & "])  WHERE " & strWhatToUpdate & ";"
+    DoCmd.RunSQL strSQL
+  .MoveNext
+  Loop
+  End With
+End Function
+
+Public Function getRandomChar() As String
+  Dim lngTemp As Integer
+  lngTemp = Int(Rnd() * 36) + 1
+  'now have something between 1 and 36
+  'if 1-26 then A-Z
+  Dim strTemp As String
+  If lngTemp <= 26 Then
+    strTemp = Chr(lngTemp + 64) 'A-Z from 1-26
+  Else
+    strTemp = lngTemp - 27 '0-9
+  End If
+   getRandomChar = strTemp
+   
+End Function
+
+

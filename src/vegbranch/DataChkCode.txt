@@ -1,0 +1,419 @@
+Option Compare Database
+Option Explicit
+Const debugVal = 0
+
+''DATA checking module
+
+   Public Function checkForErrors(intWhich As Long, Optional blnNoCountAlerts As Boolean, Optional blnNoWriteToTbl As Boolean) As Long
+     'function checks for errors using the SQL error definitions in table: Y_dataChk_SQL
+     'and returns number of errors to same table
+     'intWhich = -1 if checking all fields, otherwise errorID
+    If debugVal > 0 Then Debug.Print "checkForErrors>> checkingID: " & intWhich
+    Dim strCurrentlyDoing As String, lngReportHowMany As Long
+    lngReportHowMany = 0
+    On Error GoTo ChkErr_CodeErr
+     Dim blnShift As Boolean
+   '  If GetPutVar("shift", "get") = True Then
+    '   blnShift = True
+     'Else
+    '   blnShift = False
+    ' End If
+    ''disabling SHIFT quick data check.
+     blnShift = False
+
+     If intWhich = -1 Then
+        'check for data only when checking all fields
+        Call CheckFieldsForFields("loading", "module", True)
+         
+     
+          ''intialize PK's in Z_TableDesc
+          Call InitZTblPKsForMigration
+        'open processing form if checking all
+        Call openProcessingPos("Checking for Errors", "This may take a few minutes")
+     End If
+     
+     Dim cnnLocal As Connection
+     Dim rstCurr As New ADODB.Recordset
+     Set cnnLocal = CurrentProject.Connection
+     
+     'open table from which to read SQL and report errors to
+     rstCurr.Open "SELECT * FROM Y_dataChk_SQL ORDER BY errorID DESC;", _
+        cnnLocal, adOpenStatic, adLockOptimistic, adCmdText
+     Dim intTotNumChecks As Long
+     intTotNumChecks = rstCurr.RecordCount
+     'Debug.Print intTotNumChecks
+     
+     Dim intCount As Long
+       intCount = 0
+     With rstCurr
+        Dim rstTemp As New ADODB.Recordset
+      Do Until .EOF
+        intCount = intCount + 1
+        'open temp recordset that counts number of errors for type of error of record
+        'Debug.Print !ErrorSQLCount
+        If intWhich = -1 Or intWhich = !errorID Then
+        ''do anything ahead of time which needs doing before checking
+        !internalTimeStart = Now()
+        strCurrentlyDoing = "checking: " & !Explanation
+        If !PreOp <> "n/a" And blnShift = False Then
+          'execute anything that needs execution before calculating errors
+          If intWhich <> -1 Or _
+               !PreOp <> "code CheckFieldsForFields (""loading"", ""module"")" Then
+               strCurrentlyDoing = "PreOp:" & strCurrentlyDoing
+            'not checking all fields, only one field, and it requires that fields be checked for data
+            'check for data only when checking all fields
+            If debugVal > 1 Then Debug.Print "checkForErrors>> " & strCurrentlyDoing
+            ManualHyperLink !PreOp
+           ' Debug.Print "checking : " & !PreOp
+          End If 'execute PreOP
+        End If 'PreOp
+        strCurrentlyDoing = "checking: " & !Explanation
+         'get error SQL statements to check
+         rstTemp.Open Trim(!ErrorSQLCount), cnnLocal, adOpenDynamic, adLockReadOnly, adCmdText
+           If rstTemp.EOF Then
+             Debug.Print "Could not execute SQL for " & !errorID
+           Else
+             
+             If Not (blnNoCountAlerts And !errorSeverity = "alert") Then lngReportHowMany = lngReportHowMany + rstTemp!errcount
+             
+             If Not blnNoWriteToTbl Then
+               !NumErrs = rstTemp!errcount
+              
+               .Update
+             End If
+             'update processing position to reflect that another error has been checked:
+             If intWhich = -1 Then UpdateProcessingPosition (intCount / intTotNumChecks) * 100, 0
+           End If
+         rstTemp.Close
+         !internalTimeend = Now()
+         
+        End If 'if ok error to check
+      .MoveNext
+      Loop
+     End With
+     'make sure processing form is closed - update time of last data check
+     If intWhich = -1 Then
+       UpdateProcessingPosition 100, 0
+       Call GetPutVar("LastDataChkTime", "put", Now())
+     End If
+     checkForErrors = lngReportHowMany
+     Exit Function
+ChkErr_CodeErr:
+     Debug.Print "checkForErrors>> ERROR! - " & Err.Description & strCurrentlyDoing
+     msgBox "VegBranch encountered an error in trying to check a field.  VegBranch will skip this error type and move to the next." _
+       & Chr(13) & strCurrentlyDoing & Chr(13) & Err.Description, vbExclamation
+     Resume Next
+End Function
+
+
+Public Function checkForMultErrors(strList As String) As Long
+  'to check more than one error (ID), but not all errors (-1), send this function as list of errorIDs to check
+  If debugVal > 1 Then Debug.Print "checkForMultErrors>> init. w/ " & strList
+  Dim colErrs As New Collection
+  Set colErrs = csv_parseCSVstring(strList, ",")
+  Dim inttemp As Integer, lngRep As Long
+  For inttemp = 1 To colErrs.Count
+    If isLongInt(colErrs(inttemp)) Then
+      If debugVal > 0 Then Debug.Print "checkForMultErrors>> checking: " & colErrs(inttemp)
+      lngRep = lngRep + checkForErrors(colErrs(inttemp))
+    End If
+  Next inttemp
+  checkForMultErrors = lngRep
+End Function
+
+Public Function chk_GetNumErrs() As Long
+  'gets current number of errors recorded on Y_dataChk_SQL -- does not check for errors, just reports errors there
+  Dim cnnLocal As Connection
+  Dim rstTotErr As New ADODB.Recordset
+  Set cnnLocal = CurrentProject.Connection
+  rstTotErr.Open "SELECT Sum(Y_dataChk_SQL.NumErrs) AS TotErr FROM Y_dataChk_SQL where errorSeverity='error';" _
+    , cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTotErr
+    If Not .EOF Then
+      chk_GetNumErrs = !TotErr
+    Else
+      Debug.Print "chk_GetNumErrs >> error! can't find any records"
+      chk_GetNumErrs = -1
+    End If
+  End With
+End Function
+
+
+
+Public Function ManualHyperLink(ByVal strDtl As String, Optional blnReadOnly As Boolean, Optional blnCloseFirst As Boolean)
+  'function interprets text as hyperlink, ie "macro gr4" will run the macro gr4
+  
+  strDtl = Trim(strDtl)
+ ' Debug.Print strDtl
+  On Error GoTo ManHLink_err
+ If InStr(strDtl, ";") > 0 Then
+   Dim colMultLink As New Collection
+   Set colMultLink = csv_parseCSVstring(strDtl, ";", True)
+   strDtl = colMultLink(1)
+ End If
+  Dim strObjName As String
+  
+' Debug.Print "NEW: " & strDtl
+  If Left(strDtl, 9) = "tblOrQry " Then
+    strObjName = Right(strDtl, Len(strDtl) - 9)
+    If TableExist(strObjName) Then
+      'is table
+      strDtl = "table " & strObjName
+    Else
+      strDtl = "query " & strObjName
+    End If
+    'strDtl will get acted on later
+  End If
+  
+  If Left(strDtl, 6) = "macro " Then
+    strObjName = Right(strDtl, Len(strDtl) - 6)
+    DoCmd.RunMacro strObjName
+  End If
+  If Left(strDtl, 6) = "query " Then
+    strObjName = Right(strDtl, Len(strDtl) - 6)
+    If blnCloseFirst Then Call closeObjNoErr(strObjName, acQuery)
+    DoCmd.OpenQuery strObjName, , IIf(blnReadOnly, acReadOnly, acEdit)
+  End If
+  
+  If Left(strDtl, 5) = "form " Then
+    strObjName = Right(strDtl, Len(strDtl) - 5)
+    If blnCloseFirst Then Call closeObjNoErr(strObjName, acForm)
+    DoCmd.OpenForm strObjName, , , , IIf(blnReadOnly, acFormReadOnly, acFormPropertySettings)
+  End If
+  
+  If Left(strDtl, 6) = "table " Then
+    strObjName = Right(strDtl, Len(strDtl) - 6)
+    If blnCloseFirst Then Call closeObjNoErr(strObjName, acTable)
+    DoCmd.OpenTable strObjName, , IIf(blnReadOnly, acReadOnly, acEdit)
+  End If
+  
+  If Left(strDtl, 7) = "report " Then
+    strObjName = Right(strDtl, Len(strDtl) - 7)
+    If blnCloseFirst Then Call closeObjNoErr(strObjName, acReport)
+    DoCmd.OpenReport strObjName
+  End If
+  
+  If Left(strDtl, 5) = "code " Or Left(strDtl, 5) = "call " Then
+    Eval (Right(strDtl, Len(strDtl) - 5))
+  End If
+  
+  
+  If strDtl = "n/a" Then
+    msgBox "This is currently not available."
+  End If
+  Dim inttemp As Integer
+  If colMultLink.Count > 1 Then
+   For inttemp = 2 To colMultLink.Count
+     Call ManualHyperLink(colMultLink(inttemp), blnReadOnly, blnCloseFirst)
+   Next inttemp
+  End If
+  
+exitManHLink:
+  Exit Function
+ManHLink_err:
+  msgBox "Cannot follow hyperlink: " & strDtl & Chr(13) & Err.Description
+  Resume exitManHLink
+End Function
+
+
+Public Function CheckClosedListForErrs(Optional blnJustFieldNames As Boolean, Optional strTblDotFld As String)
+''this function tests adherence to closed lists and reports errors to table
+'' Y_ClosedListErr : table, field, value, count?
+'may pass Table.field string to limit scope, ie just get values for a certain field
+Debug.Print "CheckClosedListForErrs >> init.--" & Now()
+
+
+Dim rstFld As New ADODB.Recordset
+'get list of fields to check
+rstFld.Open "SELECT * FROM DataChk_closedReq " & IIf(strTblDotFld = "", "", " WHERE tbl & '.' & fld = '" & strTblDotFld & "'"), _
+  CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+
+DoCmd.RunSQL "DELETE * from Y_ClosedListErr " & IIf(strTblDotFld = "", "", " WHERE tbl &'.' & fld = '" & strTblDotFld & "'")
+
+With rstFld
+  Do Until .EOF
+  
+If Not blnJustFieldNames Then 'get details and counts
+  
+     If !destClosedList = "yes" Then
+       DoCmd.RunSQL "INSERT INTO Y_ClosedListErr ( tbl, fld, [values], counts )" _
+& " SELECT First(""" & !tbl & """) AS tbl, First(""" & !fld & """) AS fld, " _
+& !tbl & "." & !fld & " AS val, Count(" & !tbl & "." & !fld & ") AS num " _
+& " FROM " & !tbl _
+& " WHERE false=chk_closedListValue('" & !destTbl & "','" & !destFld & "','' & [" & !tbl & "].[" & !fld & "])" _
+& " GROUP BY " & !tbl & "." & !fld _
+& " HAVING (Count(" & !tbl & "." & !fld & ")>0) ;"
+     End If
+       'boolean field
+     If !ClosedList = "bool" Then
+       DoCmd.RunSQL "INSERT INTO Y_ClosedListErr ( tbl, fld, [values], counts )" _
+& " SELECT First(""" & !tbl & """) AS tbl, First(""" & !fld & """) AS fld, " _
+& !tbl & "." & !fld & " AS val, Count(" & !tbl & "." & !fld & ") AS num " _
+& " FROM " & !tbl _
+& " GROUP BY " & !tbl & "." & !fld _
+& " HAVING (Count(" & !tbl & "." & !fld & ")>0) AND (" & !tbl & "." & !fld & "<> ""False"") AND (" & !tbl & "." & !fld & "<> ""0"") AND (" _
+& !tbl & "." & !fld & "<> ""True"") (" & !tbl & "." & !fld & "<> ""-1"") ;"
+     End If
+    
+Else
+
+ 'get just names of fields: quicker
+ If !destClosedList = "yes" Then
+       DoCmd.RunSQL "INSERT INTO Y_ClosedListErr ( tbl, fld )" _
+& " SELECT first('" & !tbl & "'), first('" & !fld & "') " _
+& " FROM " & !tbl _
+& " WHERE [" & !fld & "] is not null AND [" & !fld & "] <> '' AND [" & !fld & "] not in (SELECT listValue from FieldList where tableName='" & !destTbl & "' and fieldname='" & !destFld & "')"
+
+     End If
+       'boolean field
+     If !ClosedList = "bool" Then
+       DoCmd.RunSQL "INSERT INTO Y_ClosedListErr ( tbl, fld )" _
+& " SELECT first('" & !tbl & "'), first('" & !fld & "') " _
+& " FROM " & !tbl _
+& " WHERE [" & !fld & "] is not null AND [" & !fld & "] <> '' AND [" & !fld & "] <> 'false' and [" & !fld & "] <> 'true' and [" & !fld & "] <> '-1' and [" & !fld & "] <> '0'"
+     End If
+
+
+
+End If
+    
+    .MoveNext
+  Loop
+End With
+'need to clean up the table, as nulls are reported, and can't get them to go away
+DoCmd.RunSQL "DELETE * FROM  Y_ClosedListErr WHERE tbl is null and fld is null"
+
+
+End Function
+
+Public Function Chk_ClosedListValue(ByVal strTbl As String, ByVal strFld As String, strValue As String) As Boolean
+  'reutrns true if value is ok, false otherwise
+  Dim rstChkVal As New ADODB.Recordset
+  'if table is loading module table, use vegbank module table to check value
+  If get_fieldInfo(strTbl, strFld, "module") = "loading" Then
+    'use destination field and table to check value
+    Dim strRef As String
+    strRef = get_fieldInfo(strTbl, strFld, "destinationField")
+    If InStr(strRef, ".") Then 'have a good reference
+      strTbl = Left(strRef, InStr(strRef, ".") - 1)
+      strFld = Right(strRef, Len(strRef) - InStr(strRef, "."))
+    End If
+  End If
+  rstChkVal.Open "SELECT valueDesc from FieldList WHERE tableNAme=""" & strTbl & """ AND FieldNAme=""" & strFld & """ AND listValue=""" _
+   & strValue & """;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstChkVal.EOF Then
+    Chk_ClosedListValue = False
+  Else
+    Chk_ClosedListValue = True
+  End If
+End Function
+
+Public Function chk_AllValueConformList(strTbl As String, strFld As String) As Boolean
+  'function checks to see if all values in a table.field are in appropriate list
+  'if ALL values are OK (or null) then returns TRUE, else false
+  Dim strSQL As String, rstList As New ADODB.Recordset
+  strSQL = "SELECT [" & strFld & "] from [" & strTbl & "] WHERE false=chk_closedListValue(""" & strTbl & """,""" & strFld _
+    & """,[" & strFld & "]) and not isnull([" & strFld & "])"
+  rstList.Open strSQL, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstList.EOF Then 'all values OK
+    chk_AllValueConformList = True
+  Else
+    chk_AllValueConformList = False
+  End If
+End Function
+
+
+
+''Function test524fd8sa6()
+'AddFieldToConvert 338
+''End Function
+
+Public Function AddFieldToConvert(FieldID As Long)
+  ''function takes a fieldID and adds it to FieldsToConvertUsr unless it is already there, in which case:
+  ''successFullyTrans becomes false and translateThisTime becomes true
+  Dim cnnLocal As Connection
+  Dim rstFields As New ADODB.Recordset
+  Set cnnLocal = CurrentProject.Connection
+
+  rstFields.Open "SELECT * FROM FieldsToConvertUsr WHERE FieldIdToConvert = " & FieldID & " ;", _
+      cnnLocal, adOpenForwardOnly, adLockOptimistic, adCmdText
+      
+  With rstFields
+    If rstFields.EOF Then  'need to add the field
+       DoCmd.RunSQL "INSERT INTO FieldsToConvertUsr (FieldIDToConvert, ConvertThisTime) " _
+         & " SELECT " & FieldID & " , True ;"
+    Else  'field there, check convert box and uncheck "done" box
+       !ConvertThisTime = True
+       !SuccessfullyTranslated = False
+       .Update
+    End If
+  End With
+End Function
+
+Public Function EditQrySql(strQry As String, strSQL As String, blnOpen As Boolean)
+  ''edits the SQL of an extant query or creates a new query based on SQL
+  If TableExist(strQry) Then
+    ''can't create or edit qry - it's a table!
+    msgBox "Can't edit SQL of query, because it's a table already: " & strQry
+    Exit Function
+  End If
+  Dim qdfTemp As Object, dbsCurr As Object
+  Set dbsCurr = CurrentDb
+  If Not (QueryExist(strQry)) Then
+    'qry dnE, create new
+    Set qdfTemp = dbsCurr.CreateQueryDef(strQry, strSQL)
+  Else
+    'qry exists, edit its SQL
+    Set qdfTemp = dbsCurr.querydefs(strQry)
+    qdfTemp.SQL = strSQL
+  End If
+  CurrentDb.querydefs.Refresh
+  'unhide any hidden columns
+  Call UnHideAllFields(strQry, "query")
+  If blnOpen Then
+    On Error Resume Next
+    DoCmd.Close acQuery, strQry, acSaveNo
+    DoCmd.OpenQuery strQry
+  End If
+End Function
+
+Function fjdklfjsk()
+  Call chkr_GetFieldsReqdUpdateQry("Z_USER_H_commConcept", "fmmConceptStatus")
+End Function
+
+Public Function chkr_GetFieldsReqdUpdateQry(strTbl As String, strFld As String)
+ ''function edits SQL of qry: transl_req_edit to show missing values from above field
+ Dim strFlds As String
+ strFlds = chkr_GetDescrFieldsOfTbl(strTbl)
+ If InStr(strFlds, "[" & strFld & "]") = 0 Then
+   ''current field in question not in the list of descriptive fields, add it
+   strFlds = strFlds & IIf(strFlds = "", "", ",") & "[" & strFld & "]"
+ End If
+ Dim strSQL As String
+ strSQL = "SELECT " & strFlds & ", """ & strFld & " cannot be null (blank)"" as [what is wrong]" _
+   & " FROM [" & strTbl & "]" _
+   & " WHERE (([" & strFld & "]) IS null);"
+ Call EditQrySql("dataChk_reqd_flds", strSQL, True)
+End Function
+
+Public Function chkr_GetDescrFieldsOfTbl(strTbl As String) As String
+''function looks in Z_FieldDescriptionORD and pulls out the fields that are descriptive of a table
+''and returns them as a comma delimited list string
+Dim rstDescr As New ADODB.Recordset
+'open rst to get descr fields for this tbl
+rstDescr.Open "SELECT * FROM Z_FieldDescriptionORD WHERE TableName = """ & strTbl & """ AND DescrOfTbl = true", _
+   CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+With rstDescr
+Dim strRet As String
+strRet = ""
+Do Until .EOF
+''add field to list
+strRet = strRet & IIf(strRet = "", "", ",") & "[" & !FieldName & "]"
+
+.MoveNext
+Loop
+End With
+chkr_GetDescrFieldsOfTbl = strRet
+End Function
+
+

@@ -1,0 +1,153 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command32_Click()
+      highLightThisGroup ("all group")
+End Sub
+
+Private Sub img_all_group_Click()
+      highLightThisGroup ("all group")
+End Sub
+
+Private Sub Form_Load()
+ ''if openArgs table passed, go to that table:
+ If Len(Me.OpenArgs) > 0 Then
+   'highlight the "all" group
+   Call lbl_All_Group_Click
+   Me.list_tables = Me.OpenArgs
+   Call getTextToShow
+   Call setAbleButtons(True)
+ End If
+End Sub
+
+Private Sub lbl_All_Group_Click()
+    highLightThisGroup ("all group")
+End Sub
+
+Private Sub lbl_plot_group_Click()
+  highLightThisGroup ("plot group")
+End Sub
+Private Sub img_plot_group_Click()
+  highLightThisGroup ("plot group")
+End Sub
+
+Private Sub lbl_taxa_group_Click()
+  highLightThisGroup ("taxa group")
+End Sub
+Private Sub img_taxa_group_Click()
+  highLightThisGroup ("taxa group")
+End Sub
+
+Private Sub lbl_community_group_Click()
+  highLightThisGroup ("community group")
+End Sub
+Private Sub img_community_group_Click()
+  highLightThisGroup ("community group")
+End Sub
+
+Private Sub lbl_user_defined_group_Click()
+  highLightThisGroup ("user defined group")
+End Sub
+Private Sub img_user_defined_group_Click()
+  highLightThisGroup ("user defined group")
+End Sub
+
+Private Sub lbl_people_group_Click()
+  highLightThisGroup ("people group")
+End Sub
+Private Sub img_people_group_Click()
+  highLightThisGroup ("people group")
+End Sub
+
+
+Private Sub list_tables_AfterUpdate()
+  Call getTextToShow
+End Sub
+
+Private Sub whatToShow_AfterUpdate()
+  'change control source for text box to show what is requested
+  Call getTextToShow
+End Sub
+
+Private Function getTextToShow()
+  'shows proper text in textBox
+  'table from list
+  'field from whattoshow
+  If IsNull([list_tables]) Then
+    Me.textToShow.Value = "--select a table to see information about it--"
+    
+  Else
+    If IsNull([whatToShow]) Then
+      Me.textToShow.Value = "--select what you want information you want to see  --"
+      
+    
+    Else
+      'translate int
+      Dim strField As String
+  Select Case Me.whatToShow.Value
+    Case 1
+      'summary
+      strField = "TableSummary"
+    Case 2
+      'description
+      strField = "TableDescription"
+    Case 3
+      strField = "TableReqd"
+  End Select
+    '' Debug.Print "here!"
+      Me.textToShow.Value = getvalFrmSQL("SELECT " & strField & " FROM Z_tableDescription WHERE tableName=""" & [list_tables] & """;")
+    
+    
+    End If
+   setAbleButtons (True)
+  End If
+End Function
+
+Private Function setAbleButtons(blnEnable As Boolean)
+ Me.viewtbl.Enabled = blnEnable
+   Me.viewDD.Enabled = blnEnable
+   Me.viewfrm.Enabled = blnEnable
+  ' Me.loadtoTbl.Enabled = blnEnable
+End Function
+
+
+Private Function highLightThisGroup(strGroup As String)
+  ''first hide all labels that start with lbl_ and end in " group"
+  'and also boxes
+  Me.list_tables.SetFocus
+  Dim greyCOlor As Long
+  Dim yellowColor As Long
+  greyCOlor = -2147483633
+  yellowColor = 8454143
+  
+  Dim ctlCurr As Control
+  For Each ctlCurr In Me.Controls
+    If ctlCurr.ControlType = acLabel Then
+      If Left(ctlCurr.Name, 4) = "lbl_" And Right(ctlCurr.Name, 6) = " group" Then
+        ''grey out font
+        ctlCurr.ForeColor = greyCOlor
+      End If
+    End If
+    If ctlCurr.ControlType = acRectangle Then
+      If Left(ctlCurr.Name, 4) = "box_" And Right(ctlCurr.Name, 6) = " group" Then
+        ctlCurr.Visible = False
+      End If
+    End If
+    
+  Next ctlCurr
+  'now set current group to display
+  Me.Controls("lbl_" & strGroup).ForeColor = yellowColor
+  Me.Controls("box_" & strGroup).Visible = True
+  'update list box to show only plots that belong:
+  Me.list_tables = Null
+  setAbleButtons False
+  If strGroup <> "all group" Then
+    'only some tables:
+    Me.list_tables.RowSource = "SELECT tableName, Z_TableDescription.tableNickName FROM Z_TableDescription INNER JOIN Z_LoadingGroups ON Z_TableDescription.TableName=Z_LoadingGroups.LoadingTable WHERE (((Z_LoadingGroups.LoadingGroupName)=""" & strGroup & """)) ORDER BY Z_LoadingGroups.sortOrd; "
+  Else
+    'all tables
+    Me.list_tables.RowSource = "SELECT tableName, Z_TableDescription.tableNickName FROM Z_TableDescription INNER JOIN Z_LoadingGroups ON Z_TableDescription.TableName=Z_LoadingGroups.LoadingTable  ORDER BY Z_LoadingGroups.sortOrd; "
+  End If
+  Call getTextToShow
+End Function
+

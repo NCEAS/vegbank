@@ -1,0 +1,17 @@
+Option Compare Database
+Option Explicit
+
+Private Sub STRATUMTYPE_ID_Enter()
+  Dim lngStratum As Long
+  If IsNull(Me.stratummethod_id) Then
+    lngStratum = -1
+  Else
+    lngStratum = Me.stratummethod_id
+  End If
+  If (Me.STRATUMTYPE_ID.Tag) & "" <> (lngStratum) & "" Then
+   ' Debug.Print "setting to: " & lngStratum & " : @ " & Now()
+    Me.STRATUMTYPE_ID.RowSource = "select stratumType_ID, stratumIndex, stratumName, stratumDescription from stratumType where stratumMethod_ID=" & lngStratum
+    Me.STRATUMTYPE_ID.Tag = lngStratum
+    Me.Recalc
+  End If
+End Sub

@@ -1,0 +1,56 @@
+Option Compare Database
+Option Explicit
+
+Private Sub cmdConnectToDB_Click()
+  'connect to new db, see what module first
+  
+  Call CNCT_ConnectToDB(Nz([DbConnectTo], ""), ConnectForm_rightMods(True))
+End Sub
+
+Private Sub Command13_Click()
+Call chkLinkTbls("checking", "", False, ConnectForm_rightMods(True))
+End Sub
+
+Private Sub Command15_Click()
+  Call chkLinkTbls("dropping", "", False, ConnectForm_rightMods(True))
+End Sub
+
+Private Sub connectToWhatMod_Change()
+Call ConnectForm_rightMods
+End Sub
+
+Private Sub Form_Load()
+  'on load, see if openargs are sensible: module type, if so, show that mod
+  
+    Dim strTemp As String
+    
+    strTemp = Nz(Me.OpenArgs, "")
+'  Debug.Print "W_connectToDB: load, args:$" & strTemp & "^"
+    Select Case strTemp
+      Case ""   'vegbank module
+        Me.connectToWhatMod = "V"
+      Case Else 'NPS plots custom loader module
+        Me.connectToWhatMod = strTemp
+    End Select
+    Call ConnectForm_rightMods
+End Sub
+
+Private Function ConnectForm_rightMods(Optional blnNameReturn As Boolean) As String
+  'function takes info for this module and sets up form so that it serves the information
+  'passes full module name back from function
+  Dim strRep As String, strName As String
+  Select Case Nz(Me.connectToWhatMod, "")
+    
+    Case "N" 'NPS PLOTS MODULE
+      'Debug.Print "have NPS mod"
+      strRep = "('NPS-PLOTS db')"
+      strName = "NPS-PLOTS db"
+    Case Else
+      'vegbank module
+      strRep = "('vegbank','vb_closed')"
+      strName = "vegbank"
+  End Select
+  Me.RecordSource = "SELECT * FROM Z_TableDescription WHERE [mod] in " & strRep & ";"
+  Me.Requery
+  ConnectForm_rightMods = IIf(blnNameReturn, strName, strRep)
+End Function

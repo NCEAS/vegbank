@@ -1,0 +1,1302 @@
+Option Compare Database
+Option Explicit
+
+Public Function MigratePlantModule()
+''function accesses other functions and queries to migrate the plant taxon module from
+'--loading table B to plantTAXA module
+Dim blnPlCodes As Boolean
+Dim cnnLocal  As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstTemp As New ADODB.Recordset
+rstTemp.Open "default_MetaData2", cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdTable
+If rstTemp.EOF And rstTemp.BOF Then
+  msgBox "Metadata is missing.  Return to metadata form and complete metadata."
+  Exit Function
+End If
+'variable to hold whether plantCodes should be migrated into PlantName
+blnPlCodes = rstTemp!MigratePlantCodes
+
+'append new PlantNames
+Debug.Print "migratePlantModule > APPENDING PLANT NAMES (" & Now() & ")"
+DoCmd.OpenQuery "append_B_to_PlName"
+
+''append concepts NOT associated with preloaded (USDA) code
+Debug.Print "migratePlantModule > APPENDING CONCEPTS (" & Now() & ")"
+DoCmd.OpenQuery "append_B_to_PlConcept"
+
+'append codes to the archive, those without preloaded codes
+Debug.Print "migratePlantModule > APPENDING to archive (" & Now() & ")"
+DoCmd.OpenQuery "append_B_to_Archive", acViewNormal, acReadOnly
+
+'append codes to the archive, those WITH preloaded codes
+Debug.Print "migratePlantModule > APPENDING preloaded code-concepts to archive (" & Now() & ")"
+DoCmd.OpenQuery "append_B_to_Archive_preLoadCodes", acViewNormal, acReadOnly
+
+'update ParentPlantCodes to PlantConcept_IDs in PlantConcept (needs archive)
+Debug.Print "migratePlantModule > UPDATING Plant Parent codes to ID's (" & Now() & ")"
+updateParentPlantConc
+
+'update the archivedStatus field in Z_USER_B to 1, if 0 previously
+Debug.Print "migratePlantModule > UPDATING ArchivedStatus to 1 (" & Now() & ")"
+DoCmd.RunSQL "UPDATE Z_USER_B_specList SET Z_USER_B_specList.ArchivedStatus = 1" _
+     & "   WHERE (((Z_USER_B_specList.ArchivedStatus)=0));"
+
+'update vb_synConcID in archive to allow TaxonInterpretation to add currentConcepts
+UpdatePlantSyn_inArc
+
+'append to PlantStatus and store the plantStatus_ID in the archive:
+Debug.Print "migratePlantModule > APPENDING to plantStatus (" & Now() & ")"
+AddAndArchivePlantStatus
+
+'append plantCorrelations (RunSQL inside the following method:)
+Debug.Print "migratePlantModule > APPENDING to plantCorrelation (" & Now() & ")"
+addPlantCorrelations
+
+'append plantUsages  (plantCodes are appended to plantName in this step if blnPlCodes)
+Debug.Print "migratePlantModule > APPENDING to plantUsage (" & Now() & ")"
+addPlantUsages (blnPlCodes)
+
+End Function
+
+
+
+Function updateParentPlantConc()
+'function updates parent plant concept Ids in PlantConcept
+'--takes the user species list (B) and the archive
+'--finds parent concept IDs using the archive and updates table plantConcept
+
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstCurr As New ADODB.Recordset
+
+'gets all records from user species list where parentCode specified (and not already archived)
+rstCurr.Open "SELECT Z_USER_B_specList.*, Y_User_arc_PlConc.VBPlConc " _
+& " FROM Z_USER_B_specList INNER JOIN Y_User_arc_PlConc ON Z_USER_B_specList.plantCode = Y_User_arc_PlConc.plantCode " _
+& " WHERE (((Z_USER_B_specList.ArchivedStatus)<1) AND ((Z_USER_B_specList.plantParentCode) Is Not Null));", _
+    cnnLocal, , , adCmdText
+'recordset to find parent concept ID ; recordset to change the concept parentID
+Dim rstParent As New ADODB.Recordset, rstConcept As New ADODB.Recordset
+Dim strCurrParCode As String
+Dim lngConceptIDToAlter As Long
+With rstCurr
+  Do Until .EOF
+    strCurrParCode = !plantParentCode
+    'opens recordset that shows one record (or none) reflect the plantCode and associated conceptID
+    rstParent.Open "Select * FROM Y_USER_arc_plConc WHERE plantCode = """ & strCurrParCode & """;", _
+       cnnLocal, , , adCmdText
+    If rstParent.EOF And rstParent.BOF Then
+      'parentCode not found
+      msgBox "Error!  The parent code " & strCurrParCode & " was not found!  Exiting procedure."
+      'Exit Function
+    Else
+      'parentCode is found
+      lngConceptIDToAlter = !vbPlConc
+      rstConcept.Open "select * from plantConcept WHERE plantConcept_ID = " _
+            & lngConceptIDToAlter & ";", cnnLocal, , adLockOptimistic, adCmdText
+           If rstConcept.EOF And rstConcept.BOF Then
+               'parentCode not found
+               msgBox "Error!  The plant Concept " & lngConceptIDToAlter & " was not found!  Exiting procedure."
+               Exit Function
+           Else
+               'edit the concept parent ID
+               rstConcept!plantPArent = rstParent!vbPlConc
+               rstConcept.Update
+           End If  'EOF and BOF of rstConcept
+     rstConcept.Close
+    End If  'EOF and BOF of rstParent
+    rstParent.Close
+    .MoveNext
+  Loop
+End With
+
+End Function
+
+Function AddAndArchivePlantStatus()
+'function adds plantStatuses from species list (B) to PlantStatus
+'then updates plant Status Ids in User Plant archive (Y_USER_Arc_plConc)
+'--accesses the user species list (B) and the archive
+
+'need plant Party:
+Dim lngPlantParty_ID As Long
+lngPlantParty_ID = getPartyID()
+If lngPlantParty_ID = -1 Then
+  'does not exist in Party - must add
+  msgBox "You must specify who you are in the metadata form to add your plants."
+  Exit Function
+End If
+
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+'recordset containing data from Z_USER_B and from plantArchive (to update):
+'--uses a blank StatusID in the archive as evidence of needing to add to plantStatus
+Dim rstUserPlants As New ADODB.Recordset
+
+'recordset containing PlantStatus table, to add to and gather Status_IDs from
+Dim rstStatus As New ADODB.Recordset
+
+rstUserPlants.Open "SELECT Y_User_arc_PlConc.plantCode, Y_User_arc_PlConc.VBPlStatus, Y_User_arc_PlConc.VBPlConc, Z_USER_B_specList.plantConceptStatus, Z_USER_B_specList.plantPartyComments, Z_USER_B_specList.archivedStatus " _
+   & " FROM Y_User_arc_PlConc INNER JOIN Z_USER_B_specList ON Y_User_arc_PlConc.plantCode = Z_USER_B_specList.plantCode " _
+   & " WHERE (((Y_User_arc_PlConc.VBPlStatus) Is Null));", cnnLocal, adOpenForwardOnly, adLockOptimistic, adCmdText
+
+rstStatus.Open "PlantStatus", cnnLocal, , adLockOptimistic, adCmdTable
+With rstUserPlants
+Do Until .EOF
+  'SQL of rstUSerPlants selects only records where StatusID (VBplStatus) is null
+  'we assume that these should be added to plantStatus,
+  'then the StatusID updated to match in the archive
+
+'first, add new record to PlantStatus
+  rstStatus.AddNew
+  rstStatus!PLANTCONCEPT_ID = !vbPlConc
+  rstStatus!plantConceptStatus = !plantConceptStatus
+  'the following "select case" statement is commented out, but could be used to
+    ''help the user avoid errors if they dont specify concept statuses
+  'Select Case !plantConceptStatus
+   ' Case "accepted", "not accepted"
+    '  rstStatus!plantConceptStatus = !plantConceptStatus
+   ' Case Else
+      'if concept status is not (accepted or not accepted), then it is undetermined
+    '  rstStatus!plantConceptStatus = "undetermined"
+  'End Select
+  rstStatus!startDate = Now()
+  rstStatus!plantPartyComments = !plantPartyComments
+  rstStatus!PlantParty_ID = lngPlantParty_ID
+  'update the new record in PlantStatus
+  rstStatus.Update
+  'get the PK for the plantStatus table and store it with the plantCode in the archive
+  !vbPlStatus = rstStatus!PLANTSTATUS_ID
+  'documents that Status has been added in Z_user_B
+  !ArchivedStatus = 2
+  'update archive
+  'Debug.Print "updating : " & !plantCode
+  .Update
+  'move to next archive record
+  .MoveNext
+Loop
+End With
+rstUserPlants.Close
+rstStatus.Close
+End Function
+
+Function testPlParty()
+ Debug.Print getPartyID()
+' Debug.Print getMetaData2Value("DefaultParty")
+End Function
+
+
+
+Public Function addPlantCorrelations()
+'this function takes PlantCorrelations in Z_USER_B and appends them to plantCorrelation
+'--this can handle 4 Synonyms and convergences
+'--times are automatically handled
+'--the convergence values are assumed to match accurately the closed list
+'--convergences that do not match the closed list will cause errors
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstCurr As New ADODB.Recordset
+
+'opens a recordset with all 4 synonyms and convergences, along with codes and conceptID's
+rstCurr.Open "SELECT Z_USER_B_specList.plantCode, Z_USER_B_specList.archivedStatus, Y_User_arc_PlConc.VBPlStatus, Z_USER_B_specList.plantSynCode1, Z_USER_B_specList.plantSynConverg1, Z_USER_B_specList.plantSynCode2, Z_USER_B_specList.plantSynConverg2, Z_USER_B_specList.plantSynCode3, Z_USER_B_specList.plantSynConverg3, Z_USER_B_specList.plantSynCode4, Z_USER_B_specList.plantSynConverg4" _
+   & "  FROM Y_User_arc_PlConc INNER JOIN Z_USER_B_specList ON Y_User_arc_PlConc.plantCode = Z_USER_B_specList.plantCode;", _
+   cnnLocal, , adLockOptimistic, adCmdText
+
+Dim lngStatID As Long, lngConcID As Long
+Dim timCurrentTime As Date, strSQL As String
+Dim strConverg As String, intLoop As Integer
+'store current time so that all Correlations are started at the same time
+timCurrentTime = Now()
+With rstCurr
+  Do Until .EOF
+If !ArchivedStatus = 2 Then  'has had status added, but not correlations
+  lngStatID = !vbPlStatus
+For intLoop = 1 To 4
+  If Not IsNull(.Fields("plantSynCode" & intLoop)) Then 'code is not null
+    lngConcID = getConceptID(.Fields("plantSynCode" & intLoop))
+    strConverg = .Fields("plantSynConverg" & intLoop)
+  
+    If lngConcID <> -1 Then
+     'valid concept name -- add a correlation
+     'RUNSQL should suffice??
+     strSQL = "INSERT INTO plantCorrelation ( PLANTSTATUS_ID, PLANTCONCEPT_ID, correlationStart, plantConvergence )" _
+       & " SELECT " & lngStatID & " AS Expr1," _
+       & lngConcID & " AS Expr2, #" _
+       & timCurrentTime & "# AS Expr3, """ _
+       & strConverg & """ AS Expr4;"
+     DoCmd.RunSQL strSQL
+     
+    Else
+     'found a non-valid concept - ask user to stop operation or ignore
+       Dim intResp As Integer
+       intResp = msgBox("Found a code that can't be resolved: " & .Fields("plantSynCode" & intLoop) _
+          & Chr(13) & "Ignore and continue (Yes) or Quit (No)", vbYesNo)
+       If intResp = vbNo Then Exit Function
+    End If 'valid/non-valid concept
+  End If 'code is not null
+Next intLoop
+!ArchivedStatus = 3
+.Update
+End If 'archivedStatus = 2
+  .MoveNext
+  Loop
+
+End With
+End Function
+
+'Function testgetConcept()
+ ' Debug.Print getConceptID("1ACRURt")
+'End Function
+
+Public Function getConceptID(strConcCode As String) As Long
+'this function is passed a plantCode and returns the plantConcept_ID associated with it
+'it favors the user's codes.  If no matching userCode is found, then it looks for a preloaded code
+'if no preloaded codes are found, it returns -1
+If Nz(Len(strConcCode), 0) < 1 Then
+  'code does not exist
+  getConceptID = -1
+  Exit Function
+End If
+
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstCurr As New ADODB.Recordset
+'opens the user plant archive
+rstCurr.Open "select * FROM Y_User_arc_PlConc WHERE plantCode = """ & strConcCode & """ ;", _
+cnnLocal, , adLockOptimistic, adCmdText
+With rstCurr
+If Not (.EOF And .BOF) Then
+  'successful find of code; return concept and exit
+  getConceptID = !vbPlConc
+Else
+  'have not yet found concept, try preloaded codes:
+  rstCurr.Close
+  rstCurr.Open "select * FROM Y_USER_arc_plConc where preloadedCode = """ & strConcCode & """;", _
+cnnLocal, adOpenDynamic, adLockOptimistic, adCmdText
+  If Not (.EOF And .BOF) Then
+     'successful find of code; return concept and exit
+      getConceptID = !vbPlConc
+      Else
+      'cannot find code
+      getConceptID = -1
+   End If
+End If
+End With
+rstCurr.Close
+End Function
+
+
+Function testgetName()
+  Debug.Print getNameID("Acru")
+End Function
+
+Public Function getNameID(strName As String) As Long
+'this function is passed a plantCode and returns the plantName_ID associated with it
+'it favors the user's codes.  If no matching userCode is found, then it looks for a preloaded code
+'if no preloaded codes are found, it returns -1
+If Nz(Len(strName), 0) < 1 Then
+  'code does not exist
+  getNameID = -1
+  Exit Function
+End If
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstCurr As New ADODB.Recordset
+'opens the user plant archive
+rstCurr.Open "select * FROM plantName WHERE plantName = """ & strName & """ ;", _
+cnnLocal, , adLockOptimistic, adCmdText
+With rstCurr
+If Not (.EOF And .BOF) Then
+  'successful find of name; return Name and exit
+  getNameID = !PLANTNAME_ID
+Else
+  getNameID = -1
+End If
+End With
+rstCurr.Close
+End Function
+
+Function fdafds()
+  addPlantUsages True
+End Function
+
+
+Public Function addPlantUsages(blnCodes As Boolean) 'true passed here adds codes to usage table
+'this function adds records to plantUsage using the data in Z_USER_B
+'--Syn1-Syn4 codes will be looked up if these name usages are specified
+'--if otherName class matches classes of plantName or plantNameCommon,
+'------the latter name(s) are considered not standard and the former is standard
+If blnCodes Then
+  'append plant Codes to plantName
+  Debug.Print "addPlantUsages > APPENDING PLANT CODES"
+  DoCmd.OpenQuery "append_B_to_PlName_plCodes", acViewNormal, acReadOnly
+End If
+
+'need plant Party:
+Dim lngPlantParty_ID As Long
+lngPlantParty_ID = getPartyID()
+If lngPlantParty_ID = -1 Then
+  'does not exist in Party - must add
+  msgBox "You must specify who you are in the metadata form to add your plants."
+  Exit Function
+End If
+
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstCurr As New ADODB.Recordset
+
+Dim strSQL As String, timNow As Date
+timNow = Now()
+strSQL = "SELECT Y_User_arc_PlConc.plantCode, Z_USER_B_specList.usedPlantName, " _
+& "Z_USER_B_specList.plantName, Z_USER_B_specList.plantNameSystem, " _
+& "Z_USER_B_specList.plantCommonName, Z_USER_B_specList.plantCommonNameSystem, " _
+& "Z_USER_B_specList.otherPlantName, Z_USER_B_specList.otherPlantNameSystem, " _
+& "Y_User_arc_PlConc.VBPlConc, Z_USER_B_specList.ArchivedStatus, " _
+& "Z_USER_B_specList.plantSynCode1, Z_USER_B_specList.plantSynCode2, " _
+& "Z_USER_B_specList.plantSynCode3, Z_USER_B_specList.plantSynCode4 " _
+& "FROM Y_User_arc_PlConc INNER JOIN Z_USER_B_specList ON " _
+& " Y_User_arc_PlConc.plantCode = Z_USER_B_specList.plantCode " _
+& "WHERE (((Z_USER_B_specList.ArchivedStatus)<4));"
+'open recordset that drives the addition of usages:
+rstCurr.Open strSQL, cnnLocal, adOpenDynamic, adLockOptimistic, adCmdText
+With rstCurr
+Do Until .EOF
+
+Select Case !usedPlantName
+  Case "Normal"
+  'use the standard names supplied in the record
+  appendOnePlantUsageSet !vbPlConc, "standard", !plantName, _
+     Nz(!plantNameSystem, ""), Nz(!plantCommonName, ""), Nz(!plantCommonNameSystem, ""), _
+     Nz(!otherPlantName, ""), Nz(!otherPlantNameSystem, ""), timNow, lngPlantParty_ID
+  Case "Syn1", "Syn2", "Syn3", "Syn4"
+     Dim intWhichSyn As Integer
+     intWhichSyn = Right(!usedPlantName, 1)
+     'the current names are not standard:
+     appendOnePlantUsageSet !vbPlConc, "not standard", !plantName, _
+     Nz(!plantNameSystem, ""), Nz(!plantCommonName, ""), Nz(!plantCommonNameSystem, ""), _
+     Nz(!otherPlantName, ""), Nz(!otherPlantNameSystem, ""), timNow, lngPlantParty_ID
+     'use the synoym's names as the standard,
+     
+     appendCodePlantUsageSet !vbPlConc, "standard", .Fields("plantSynCode" & intWhichSyn), _
+            timNow, lngPlantParty_ID
+   Case Else
+     msgBox "A plant name does not have a usage and will be skipped: " & !plantCode
+     GoTo NextUsageRec
+End Select
+If blnCodes Then
+  'add codes as usage
+   appendOnePlantUsageSet !vbPlConc, "standard", !plantCode, "code", "", "", _
+                         "", "", timNow, lngPlantParty_ID
+End If
+
+!ArchivedStatus = 4
+.Update
+
+NextUsageRec:
+.MoveNext
+Loop
+End With
+
+End Function
+
+
+Public Function appendOnePlantUsageSet(intPlConc As Long, strNmStatus As String, _
+    strName As String, strNameSys As String, strCom As String, strComSys As String, _
+    strOther As String, strOtherSys As String, timNow As Date, lngParty As Long)
+''function takes the 3 names and systems supplied by the standard record of Z_USER_B
+''-- and appends them to plantUsage, along with plantConcept and status
+    Dim lngNameID As Long, strTempStatus As String, strTempSystem As String, strTempName As String
+    Dim strSQL As String
+
+    
+    'PlantName (which is required to exist)
+    strTempName = strName
+    lngNameID = getNameID(strTempName)
+    If lngNameID = -1 Then
+       msgBox "ERROR!! Name not found : " & strName & Chr(13) & "Name Skipped"
+    End If
+    strTempSystem = strNameSys
+    If strNameSys = strOtherSys Or strNameSys = strComSys Then
+       'the plant name is in a system that is overridden by another name
+       strTempStatus = "not standard"
+    Else
+       'take whatever status is passed here
+       strTempStatus = strNmStatus
+    End If
+    strSQL = "insert into plantUsage (plantName_ID,plantConcept_ID,usageStart,plantNameStatus,plantParty_ID, " _
+       & "classSystem, plantName) select " & lngNameID & "," & intPlConc & ", #" & timNow & "#, """ _
+       & strTempStatus & """," & lngParty & ",""" & strTempSystem & """,""" & strTempName & """;"
+    DoCmd.RunSQL strSQL, True
+    
+    
+    'Common Name (which may not exist)
+    If Len(strCom) < 1 Then GoTo OtherNameProcess
+    strTempName = strCom
+    lngNameID = getNameID(strTempName)
+
+    If lngNameID = -1 Then
+       msgBox "ERROR!! Name not found : " & strCom & Chr(13) & "Name Skipped"
+    End If
+    strTempSystem = strComSys
+    If strComSys = strOtherSys Then
+       'the plant name is in a system that is overridden by another name
+       strTempStatus = "not standard"
+    Else
+       'take whatever status is passed here
+       strTempStatus = strNmStatus
+    End If
+        strSQL = "insert into plantUsage (plantName_ID,plantConcept_ID,usageStart,plantNameStatus,plantParty_ID, " _
+       & "classSystem, plantName) select " & lngNameID & "," & intPlConc & ", #" & timNow & "#, """ _
+       & strTempStatus & """," & lngParty & ",""" & strTempSystem & """,""" & strTempName & """;"
+    DoCmd.RunSQL strSQL, True
+        
+OtherNameProcess:
+    'Other Name (which may not exist)
+    If Len(strOther) < 1 Then GoTo endOfProcess
+        strTempName = strOther
+    lngNameID = getNameID(strTempName)
+    
+    If lngNameID = -1 Then
+       msgBox "ERROR!! Name not found : " & strOther & Chr(13) & "Name Skipped"
+    End If
+    strTempSystem = strOtherSys
+       
+       'take whatever status is passed here
+       strTempStatus = strNmStatus
+    strSQL = "insert into plantUsage (plantName_ID,plantConcept_ID,usageStart,plantNameStatus,plantParty_ID, " _
+       & "classSystem, plantName) select " & lngNameID & "," & intPlConc & ", #" & timNow & "#, """ _
+       & strTempStatus & """," & lngParty & ",""" & strTempSystem & """,""" & strTempName & """;"
+    DoCmd.RunSQL strSQL, True
+    
+endOfProcess:
+    
+End Function
+
+Public Function appendCodePlantUsageSet(lngPlConc As Long, strStatus As String, strCode As String, _
+       timNow As Date, lngParty As Long)
+''this function takes a code, strCode, and matches it to a PLANTcode in Z_USER_B
+ '-- it then takes the fields that correspond to that PlantCode (Names and NameSystems)
+ '----and appends them to PlantUsage using the method appendOnePlantUsageSet
+ 'If no matching plantCode exists, it attempts to find a matching name in the user plant archive
+ '-- preloaded codes.  Only one name is in this case appended, and it is assumed Scientific
+
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstCurr As New ADODB.Recordset
+Dim rstPreLoad As New ADODB.Recordset
+
+rstCurr.Open "SELECT * from Z_USER_B_specList WHERE plantCode = """ & strCode & """;", cnnLocal, _
+         , adLockReadOnly, adCmdText
+
+With rstCurr
+If .EOF And .BOF Then
+  'code not found  - try preloaded codes and names associated with them
+  rstPreLoad.Open "SELECT * from Y_USER_arc_PlConc WHERE preLoadedCode = """ & strCode & """;", cnnLocal, _
+         , adLockReadOnly, adCmdText
+  If rstPreLoad.BOF And rstPreLoad.EOF Then
+  'code not found
+    msgBox "Syn Code was not found: """ & strCode & """.  This code skipped"
+  Else
+    ''manually add plantName_ID with system "SCIENTIFIC" to plantUsage
+    DoCmd.RunSQL "INSERT INTO plantUsage (plantName_ID,plantconcept_ID,usageStart,plantNameStatus," _
+     & "plantParty_ID,classSystem) SELECT " & rstPreLoad!VBplName & "," & lngPlConc & ",#" & timNow & "#,""" _
+     & strStatus & """," & lngParty & ",""Scientific"";"
+  
+    ''add in all plantNames into Usage where null (denormalized format)
+    DoCmd.RunSQL "UPDATE plantName INNER JOIN plantUsage ON plantName.PLANTNAME_ID = plantUsage.PLANTNAME_ID SET plantUsage.plantName = [plantName].[plantName]" _
+              & " WHERE (((plantUsage.plantName) Is Null));"
+
+  
+  End If  ' Preload
+  rstPreLoad.Close
+  
+Else
+  'code IS found
+    appendOnePlantUsageSet lngPlConc, strStatus, !plantName, _
+     Nz(!plantNameSystem, ""), Nz(!plantCommonName, ""), Nz(!plantCommonNameSystem, ""), _
+     Nz(!otherPlantName, ""), Nz(!otherPlantNameSystem, ""), timNow, lngParty
+End If
+
+End With
+rstCurr.Close
+
+End Function
+
+
+Function createVegTaxaSummary()
+'DoCmd.RunSQL "  create table veg_taxa_summary ( " _
+    & " plantusage_id integer, " _
+    & " plantname_id integer, " _
+    & " plantconcept_id integer, plantName varchar(230), " _
+    & " plantDescription varchar(230), plantnamestatus varchar(23), " _
+    & " classsystem varchar(23), plantlevel varchar(23), " _
+    & " parentName varchar(230), acceptedSynonym varchar(80), " _
+    & " startDate date, stopDate Date ); "
+'DoCmd.RunSQL " INSERT INTO veg_taxa_summary (plantusage_id, plantname_id, plantconcept_id, plantName, classsystem, plantnamestatus, startdate, stopDate, acceptedSynonym) " _
+ & " SELECT plantusage_id, plantname_id, plantconcept_id, plantname, classsystem, plantnamestatus, usagestart, usagestop, acceptedSynonym from plantusage where plantusage_id > 0; "
+
+'DoCmd.RunSQL "update  veg_taxa_summary  set plantDescription = (select plantDescription from plantConcept where veg_taxa_summary.plantconcept_id = plantconcept.plantconcept_id );"
+'--UPDATE THE PLANT LEVEL (E.G., SPECIES GENUS VARIETY)
+'DoCmd.RunSQL "Update veg_taxa_summary set plantlevel = (select plantlevel from plantconcept where veg_taxa_summary.plantconcept_id = plantconcept.plantconcept_id );"
+'--UPDATE THE PARENT NAME
+'DoCmd.RunSQL "Update veg_taxa_summary  set parentName = (select plantparentname from plantstatus where veg_taxa_summary.plantconcept_id = plantstatus.plantconcept_id );"
+End Function
+
+
+Function CreateBatchConceptNames()
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstCurr As New ADODB.Recordset
+rstCurr.Open "plantConcept", cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdTable
+With rstCurr
+Do Until !PLANTCONCEPT_ID > 82160
+  createClientVegTaxaSummary !PLANTCONCEPT_ID, 18, "code"
+.MoveNext
+Loop
+End With
+rstCurr.Close
+End Function
+
+Function notant()
+  GetTaxInterpConceptSummaries 1
+End Function
+
+Function GetTaxInterpConceptSummaries(lngObsID As Long)
+  'updates TaxonInterpForm's plantConcepts for one observation only
+  createBatchTaxInterpVTSumm "SELECT * FROM TaxInt_Current WHERE OBSERVATION_ID = " _
+          & lngObsID
+End Function
+
+
+Public Function createBatchTaxInterpVTSumm(strSQLtoQuery As String)
+''receives a query name that contains plantConcept_ID  - makes sure that all are updated
+
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstPref As New ADODB.Recordset
+rstPref.Open "Default_MetaData2", cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdTable
+If rstPref.EOF Then
+  msgBox "metadata is lacking.  Please provide plantParty and plantNameSystem."
+  Exit Function
+End If
+
+Dim rstCurrt As New ADODB.Recordset
+Set cnnLocal = CurrentProject.Connection
+'opens Query to gather and update PlantConcept_IDs in VegTaxaClientSummary
+rstCurrt.Open strSQLtoQuery, cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+
+With rstCurrt
+  Do Until .EOF
+    createClientVegTaxaSummary !PLANTCONCEPT_ID, rstPref!PlantParty_ID, rstPref!plantNameSystem
+  .MoveNext
+  Loop
+End With
+rstCurrt.Close
+
+End Function
+
+Public Function createClientVegTaxaSummary(lngConcept As Long, lngParty As Long, strSystem As String)
+'function creates a summary record for a given concept status
+
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+
+'check to see if plantConcept_ID already exists on summary:
+Dim rstSummary As New ADODB.Recordset
+rstSummary.Open "SELECT * from VegTaxaClientSummary where plantConcept_ID = " & lngConcept, _
+       cnnLocal, adOpenStatic, adLockOptimistic, adCmdText
+With rstSummary
+If .EOF And .BOF Then
+  'record does not YET exist
+  .AddNew
+  !PLANTCONCEPT_ID = lngConcept
+End If
+If !Updated Then
+  'concept already updated, can exit function
+  Exit Function
+End If
+'leave open for editing and nullify all fields that may have been previously written
+!ConceptStatus = Null
+!ReferenceName = Null
+!plantName = Null
+!plantNameSystem = Null
+!plantNameStatus = Null
+!AcceptedSynonym = Null
+!PlantPartyName = Null
+.Update
+End With
+
+'---------FIND DATA IN PLANTUSAGE
+Dim rstUsage As New ADODB.Recordset
+rstUsage.Open "SELECT * from plantUSAGE WHERE (((UsageStop) is Null)) and " _
+           & " (plantConcept_ID = " & lngConcept & ");", _
+           cnnLocal, adOpenStatic, adLockReadOnly, adCmdText
+With rstUsage
+If .EOF And .BOF Then
+  'usage does not Exist for this concept at all, which should not be
+  Debug.Print "createClientVegTaxaSummary  > ERROR - no usage for concept " & lngConcept
+  Exit Function
+End If
+'a collection of criteria to search for, in order of importance:
+Dim colCriteria As New Collection
+colCriteria.Add "PlantParty_ID = " & lngParty
+colCriteria.Add "classSystem = '" & strSystem & "'"
+colCriteria.Add "plantNameStatus = 'standard'"
+Dim lngUsageID As Long
+lngUsageID = SearchRstFor(rstUsage, "plantUSAGE_ID", colCriteria)
+
+If lngUsageID = -1 Then
+  'an error occured in the referenced method
+  Debug.Print "createClientVegTaxaSummary >>err - no usage PK returned " & lngConcept
+  Exit Function
+End If
+
+.Filter = "plantUsage_ID = " & lngUsageID
+If .EOF And .BOF Then
+  'usage does not Exist
+  Debug.Print "createClientVegTaxaSummary >>err2 Usage returned is invalid" & lngUsageID
+  Exit Function
+End If
+'add data to summary from Usage:
+rstSummary!plantName = !plantName
+rstSummary!plantNameSystem = !classSystem
+rstSummary!plantNameStatus = !plantNameStatus
+'get partyName associated with Usage record
+Dim rstParty As New ADODB.Recordset, lngPartyUsage As Long
+lngPartyUsage = !PlantParty_ID
+rstParty.Open "SELECT * from plantParty where plantParty_ID = " & lngPartyUsage & ";" _
+          , cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+          
+rstSummary!PlantPartyName = Trim(Trim(Nz(rstParty!givenName, "")) & " " & Trim(Nz(rstParty!surName, ""))) & "(org:" & Nz(rstParty!organizationName) & ")"
+
+End With
+rstParty.Close
+rstUsage.Close
+
+'-----------ADD DATA FROM PLANTSTATUS
+Dim rstStatus As New ADODB.Recordset
+rstStatus.Open "SELECT * from plantStatus where (((stopdate) is null)) AND (plantConcept_ID = " _
+    & lngConcept & ");", cnnLocal, adOpenStatic, adLockReadOnly, adCmdText
+Dim lngStatus_ID As Long
+Dim colCritSt As New Collection
+colCritSt.Add "PlantParty_ID = " & lngParty
+colCritSt.Add "PlantParty_ID = " & lngPartyUsage
+'find status that matches the concept, first from the party requested,
+'---then from party that may have supplied Usage
+lngStatus_ID = SearchRstFor(rstStatus, "plantStatus_ID", colCritSt)
+If lngStatus_ID = -1 Then
+   Debug.Print "createClientVegTaxaSummary > " _
+      & "ERR3: could not find a current status with party for the concept: " & lngConcept
+   Exit Function
+End If
+With rstStatus
+.Filter = "plantStatus_ID = " & lngStatus_ID
+If .EOF And .BOF Then
+   Debug.Print "createClientVegTaxaSummary > ERR4: invalid Status returned: " & lngStatus_ID
+   Exit Function
+End If
+rstSummary!ConceptStatus = !plantConceptStatus
+
+'---------find PLANTCORRELATION data----------------
+
+If !plantConceptStatus <> "accepted" Then  'not an accepted concept, find Syn
+   'The concept is not accepted, attempt to find "equal" or "less than" convergent concept thru correlation
+   ''equal preferred over less than (accomplished by sort order)
+   Dim rstCorr As New ADODB.Recordset
+   rstCorr.Open "SELECT * from plantCorrelation where (plantStatus_ID = " & lngStatus_ID & _
+        ") AND (((CorrelationStop) is null)) AND " _
+        & "( (plantConvergence = 'equal') OR (plantConvergence = 'less than')) " _
+        & "ORDER BY plantConvergence;", _
+      cnnLocal, adOpenStatic, adLockReadOnly, adCmdText
+   With rstCorr
+     If Not (.EOF And .BOF) Then
+        'here, a record exists, so an accepted synonym exists
+        Dim rstSyn As New ADODB.Recordset
+        rstSyn.Open "SELECT * from plantConcept WHERE plantConcept_ID = " & !PLANTCONCEPT_ID & ";" _
+             , cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+        With rstSyn
+          If .EOF And .BOF Then
+            'concept not found (should not be allowed in db structure
+            Debug.Print "createClientVegTaxaSummary >>> ERR! Concept from Corr not in Concept: " & rstCorr!PLANTCONCEPT_ID
+          Else
+            ''found!
+            rstSummary!AcceptedSynonym = !plantName & ": " & GetPlRefName(!PLANTCONCEPT_ID)
+          End If
+        End With
+        rstSyn.Close
+     End If
+   End With
+   rstCorr.Close
+   
+End If ''not accepted concept
+
+End With
+rstStatus.Close
+
+rstSummary!ReferenceName = GetPlRefName(rstSummary!PLANTCONCEPT_ID)
+rstSummary!Updated = True
+rstSummary.Update
+rstSummary.Close
+End Function
+
+Public Function SearchRstFor(rstCurr As ADODB.Recordset, strRetFld As String, _
+        colCrit As Collection) As Long
+''this function finds criteria in order of the collection, where the collection
+''contains criteria strings like : "Number = 6" ; "Type = 'Good' ; "severity like 't4*'
+'The ordinal order of the collection is the priority of the search
+'returns the PK of the recordset, as named by strRetFld
+Dim lngCount As Long
+Dim strOneCriteria As String
+lngCount = colCrit.Count
+Dim intLoop As Long
+With rstCurr
+.Filter = ""
+ For intLoop = 1 To lngCount
+ .MoveFirst
+ strOneCriteria = colCrit(intLoop)
+ .find colCrit(intLoop), , adSearchForward
+ If Not .EOF Then
+   'is found, filter to only those value
+   
+   If .Filter = 0 Then
+     'no filter currently on recordset
+     .Filter = "(" & colCrit(intLoop) & ")"
+   Else
+     'add filter (as AND) to current filter on recordset
+     .Filter = "(" & .Filter & ") AND (" & colCrit(intLoop) & ")"
+   End If
+ Else
+   'not found
+   .MoveFirst
+ End If
+ Next intLoop
+ 
+ If .EOF And .BOF Then
+   Debug.Print "ERROR, filtered to nothing!"
+   SearchRstFor = -1
+ Else
+   SearchRstFor = .Fields(strRetFld).Value
+ End If
+ 
+End With
+End Function
+
+Public Function GetPlRefName(lngConcept As Long) As String
+'function accesses PlantConcept to retrieve Reference_ID's, from which it accesses Reference Names
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+
+'check to see if plantConcept_ID already exists on summary:
+Dim rstRef As New ADODB.Recordset
+rstRef.Open "SELECT Reference.shortName , plantConcept.PLANTCONCEPT_ID " _
+& " FROM Reference INNER JOIN plantConcept ON Reference.REFERENCE_ID = plantConcept.REFERENCE_ID" _
+ & " WHERE plantconcept_ID = " & lngConcept & ";" _
+   , cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+With rstRef
+If .EOF And .BOF Then
+  GetPlRefName = "!invalid Concept"
+Else
+  GetPlRefName = !shortName
+End If
+End With
+rstRef.Close
+End Function
+
+Public Function CheckNeedUpdate(strQueryName As String, lngObsID As Long)
+  'function checks current observation's plantConcept_ID's to see if an update of
+  'the VegTaxaClientSummary is necessary
+  'used by various forms
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+  Dim rstCurr As New ADODB.Recordset
+  Dim rstPref As New ADODB.Recordset
+  rstPref.Open "Default_MetaData2", cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdTable
+  
+  rstCurr.Open "SELECT plantConcept_ID, updated FROM " & strQueryName & " WHERE ((updated = false) OR (((Updated) Is Null)))" _
+       & " AND observation_ID = " & lngObsID & ";", _
+       cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstCurr
+    Do Until .EOF 'if no records need updating, then .eof is true after opening recordset
+      If rstPref.EOF Then
+        msgBox "metadata is lacking.  Please provide plantParty and plantNameSystem."
+        DoCmd.OpenForm "Select_PlantConceptView"
+        Exit Function
+      End If
+      ''update one needed PlantConcept_ID
+      createClientVegTaxaSummary !PLANTCONCEPT_ID, rstPref!PlantParty_ID, rstPref!plantNameSystem
+    .MoveNext
+    Loop
+  End With
+End Function
+
+
+Public Function UpdatePlantSyn_inArc()
+''this function updates the plantSynonym Concept ID's in the plant archive to supply
+'taxInt table with current taxonInterpretations
+
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstArc As New ADODB.Recordset
+Dim rstSyn As New ADODB.Recordset
+
+'open the user species list, where archivedStatus = 1 (in archive, not yet fully processed)
+Dim rstSpec As New ADODB.Recordset
+rstSpec.Open "SELECT * from Z_USER_B_specList WHERE archivedStatus= 1;", cnnLocal, _
+      adOpenForwardOnly, adLockReadOnly, adCmdText
+
+Dim strAccSyn As String, strCurrCode As String, lngSynConc As Long
+
+With rstSpec
+Do Until .EOF
+  strCurrCode = !plantCode
+  strAccSyn = ""
+ If IsValidSyn(Nz(!plantSynCode4, " "), Nz(!plantSynConverg4, " ")) Then strAccSyn = !plantSynCode4
+ If IsValidSyn(Nz(!plantSynCode3, " "), Nz(!plantSynConverg3, " ")) Then strAccSyn = !plantSynCode3
+ If IsValidSyn(Nz(!plantSynCode2, " "), Nz(!plantSynConverg2, " ")) Then strAccSyn = !plantSynCode2
+ If IsValidSyn(Nz(!plantSynCode1, " "), Nz(!plantSynConverg1, " ")) Then strAccSyn = !plantSynCode1
+If strAccSyn <> "" Then  'strAccSyn exists
+  'open archive to find concept ID for syn:
+  rstSyn.Open "select * from Y_USER_arc_plConc WHERE plantCode = """ & strAccSyn & """;", _
+   cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstSyn.EOF And rstSyn.BOF Then
+    'cant find concept, set id to -1
+    lngSynConc = -1
+  Else
+    lngSynConc = rstSyn!vbPlConc
+  End If
+  rstSyn.Close
+  If lngSynConc <> -1 Then
+    'open the archive to edit
+    rstArc.Open "select * FROM Y_USER_arc_plConc WHERE plantCode = """ & strCurrCode & """;", _
+        cnnLocal, adOpenStatic, adLockOptimistic, adCmdText
+    If rstArc.EOF And rstArc.BOF Then
+      Debug.Print "UpdatePlantSyn_inArc >> ERROR, can't find plantCode in archive! " & strCurrCode
+    Else
+      rstArc!vb_synConc_ID = lngSynConc
+      rstArc.Update
+    End If
+    rstArc.Close
+  End If 'lngSynCoc <> -1
+
+End If 'strAccSyn exists
+
+.MoveNext
+Loop
+End With
+rstSpec.Close
+
+End Function
+
+Public Function IsValidSyn(strCode As String, strConv As String) As Boolean
+'function decides if a SynCode and Convergence are valid (ie not null and equal or less than)
+IsValidSyn = False
+If strCode = " " Or strConv = " " Then
+  IsValidSyn = False
+  Exit Function
+End If
+If Nz(Len(strCode), 0) > 0 Then
+  'strCode exists
+  If strConv = "equal" Or strConv = "less than" Then
+    IsValidSyn = True
+  End If
+End If
+End Function
+
+Function UpdatePlantConcToKeep(strWhich As String)
+  'function writes all plantconcept_ID's to temp_plantConcKeep table
+  'so that these are not deleted when plantConcept_ID's are deleted (to save disk space in export)
+  
+  'sets up table of kept plantConcepts
+  'deletes all taxa not used by taxonInterp (if strWhich = "not used")
+  'or deletes all taxa not referenced by a preloaded code (if strWhich = "not preload")
+  
+  'delete list of plantConcepts to keep
+  DoCmd.RunSQL "DELETE temp_PlantConcKeep.*  FROM temp_PlantConcKeep;"
+  
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+  Dim rstCount As New ADODB.Recordset
+  'add all plantConcepts referenced by TaxonInterpretation to "keep list"
+  Dim strSQL As String, lngCount As Long
+  
+'first get list of which concepts to keep (all others deleted)
+  If strWhich = "not used" Then
+
+ 'sql statement to "feed" initial table if we want to delete not used taxa
+strSQL = "INSERT INTO temp_plantConcKeep ( plantConcept_ID ) SELECT plantConcept.PLANTCONCEPT_ID " _
+      & " FROM plantConcept INNER JOIN taxonInterpretation ON plantConcept.PLANTCONCEPT_ID" _
+      & " = taxonInterpretation.PLANTCONCEPT_ID  GROUP BY plantConcept.plantConcept_ID;"
+     
+  Else
+    If strWhich = "not preload" Then
+    'sql to keep concepts that are referenced by preloaded codes
+       strSQL = "INSERT INTO temp_PlantConcKeep ( plantConcept_ID ) " _
+& " SELECT Y_User_arc_PlConc.VBPlConc " _
+& " FROM Y_User_arc_PlConc " _
+& " WHERE (((Y_User_arc_PlConc.preloadedCode) Is Not Null)) " _
+& " GROUP BY Y_User_arc_PlConc.VBPlConc " _
+& " ORDER BY Y_User_arc_PlConc.VBPlConc;"
+
+    Else
+      msgBox "none deleted, please enter valid which code"
+      Exit Function
+    End If ' not preload
+  End If ' not used
+    
+  
+  
+  'Debug.Print strSQL
+  DoCmd.RunSQL strSQL
+  
+  'SQL string that adds parents of current taxa
+  strSQL = "INSERT INTO temp_PlantConcKeep ( plantConcept_ID ) SELECT plantConcept_1.PLANTCONCEPT_ID " _
+& " FROM ((plantConcept INNER JOIN temp_PlantConcKeep ON plantConcept.PLANTCONCEPT_ID = temp_PlantConcKeep.plantConcept_ID) INNER JOIN plantConcept AS plantConcept_1 ON plantConcept.plantParent = plantConcept_1.PLANTCONCEPT_ID) LEFT JOIN temp_PlantConcKeep AS temp_PlantConcKeep_1 ON plantConcept_1.PLANTCONCEPT_ID = temp_PlantConcKeep_1.plantConcept_ID " _
+& " WHERE (((temp_PlantConcKeep_1.PLANTCONCEPT_ID) Is Null)) GROUP BY plantConcept_1.PLANTCONCEPT_ID; "
+  'count total number of records to keep
+  
+  lngCount = 0
+  'boolean variable is true when all records to keep have been collected into temp_plantConcKeep table
+  Dim blnDone As Boolean
+  blnDone = False
+Do Until blnDone
+  'Debug.Print lngcount & " records so far"
+  'count records
+  rstCount.Open "SELECT count(plantConcept_ID) AS countRec FROM temp_plantConcKeep;", _
+    cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  'if no records were added last time strSQL was run, so we are done, all parents are in
+  If lngCount = rstCount!CountRec Then blnDone = True
+  lngCount = rstCount!CountRec
+  rstCount.Close
+  ''add parents of taxa already on keep list
+  DoCmd.RunSQL strSQL
+Loop
+  
+End Function
+
+Function getRidOfSomeplants()
+  delNotUsedPlConc "not preload"
+End Function
+
+Public Function delNotUsedPlConc(strWhich As String)
+  'deletes all taxa not used by taxonInterp (if strWhich = "not used")
+  'or deletes all taxa not referenced by a preloaded code (if strWhich = "not preload")
+  '-does not delete parents of taxa referenced by taxonInterp
+  
+  If strWhich = "not used" Or strWhich = "not preload" Then
+'first get list of which concepts to keep (all others deleted)
+     UpdatePlantConcToKeep (strWhich)
+  Else
+      '  in other proc : MsgBox "none deleted, please enter valid which code"
+      Exit Function
+  End If
+  
+  
+  'then delete concepts and all evidence of the concepts that aren't used
+  DelBatchPlConc
+  'delete names, references, parties not used
+  CleanUpPlantTaxMod
+  'recheck fields
+  checkALLFieldsNow
+End Function
+
+Public Function DelBatchPlConc() 'old!!
+''function deletes all plantConcepts not in the table "temp_plantConcKeep"
+  Debug.Print Now() & " started to del plant concepts"
+
+  'delete plantCorrelations that apply to the concept
+  DoCmd.RunSQL "DELETE DISTINCTROW temp_PlantConcKeep.plantConcept_ID, plantCorrelation.* " _
+& " FROM plantCorrelation LEFT JOIN temp_PlantConcKeep ON plantCorrelation.PLANTCONCEPT_ID = temp_PlantConcKeep.plantConcept_ID " _
+& " WHERE (((temp_PlantConcKeep.plantConcept_ID) Is Null)); "
+  '----correlations are now half gone
+  'delete plantCorr that apply to plantStatus
+  DoCmd.RunSQL "DELETE DISTINCTROW plantCorrelation.*  FROM plantCorrelation INNER JOIN temp_plantStatusDel ON plantCorrelation.PLANTSTATUS_ID = temp_plantStatusDel.PLANTSTATUS_ID;"
+  '----correlations are all gone
+
+     'del plantLineage records that don't apply
+  DoCmd.RunSQL "DELETE DISTINCTROW plantLineage.* FROM plantLineage INNER JOIN temp_plantStatusDel ON plantLineage.childPlantStatus_ID = temp_plantStatusDel.PLANTSTATUS_ID;"
+  DoCmd.RunSQL "DELETE DISTINCTROW plantLineage.* FROM plantLineage INNER JOIN temp_plantStatusDel ON plantLineage.parentPLANTSTATUS_ID = temp_plantStatusDel.PLANTSTATUS_ID;"
+     
+     'del plantStatus records that apply
+  DoCmd.RunSQL "DELETE DISTINCTROW plantStatus.* FROM temp_plantStatusDel INNER JOIN plantStatus ON temp_plantStatusDel.PLANTSTATUS_ID = plantStatus.PLANTSTATUS_ID; "
+
+  
+     'del plantUsage records that apply
+  DoCmd.RunSQL "DELETE DISTINCTROW temp_PlantConcKeep.plantConcept_ID, plantUsage.* " _
+& " FROM plantUsage LEFT JOIN temp_PlantConcKeep ON plantUsage.PLANTCONCEPT_ID = temp_PlantConcKeep.plantConcept_ID " _
+& " WHERE (((temp_PlantConcKeep.plantConcept_ID) Is Null));"
+
+     'update concept_ID's that reference these concepts to null:
+  DoCmd.RunSQL "UPDATE plantConcept LEFT JOIN temp_PlantConcKeep ON plantConcept.plantParent = temp_PlantConcKeep.plantConcept_ID SET plantConcept.plantParent = Null" _
+& " WHERE (((temp_PlantConcKeep.plantConcept_ID) Is Null) AND ((plantConcept.plantParent) Is Not Null));"
+  
+     'del concept record itself
+  DoCmd.RunSQL "DELETE DISTINCTROW temp_PlantConcKeep.plantConcept_ID, plantConcept.*  " _
+    & " FROM temp_PlantConcKeep RIGHT JOIN plantConcept ON temp_PlantConcKeep.plantConcept_ID = plantConcept.PLANTCONCEPT_ID" _
+    & " WHERE (((temp_PlantConcKeep.plantConcept_ID) Is Null)); "
+
+     'del concept records in Concept Summary table:
+     DoCmd.RunSQL "DELETE DISTINCTROW temp_PlantConcKeep.plantConcept_ID, vegTaxaClientSummary.* " _
+        & " FROM temp_PlantConcKeep RIGHT JOIN vegTaxaClientSummary ON temp_PlantConcKeep.plantConcept_ID = vegTaxaClientSummary.PlantConcept_ID " _
+        & " WHERE (((temp_PlantConcKeep.plantConcept_ID) Is Null));"
+
+      'update user loading table to "not archived status"
+'    DoCmd.RunSQL "UPDATE temp_plantCodes_toUnArchive INNER JOIN Z_USER_B_specList ON temp_plantCodes_toUnArchive.plantCode = Z_USER_B_specList.plantCode SET Z_USER_B_specList.ArchivedStatus = 0;"
+  
+  'del records from archive:
+ '   DoCmd.RunSQL "DELETE DISTINCTROW Y_User_arc_PlConc.* " _
+& " FROM temp_plantCodes_toUnArchive INNER JOIN Y_User_arc_PlConc ON temp_plantCodes_toUnArchive.VBPlConc = Y_User_arc_PlConc.VBPlConc;"
+
+  'del unused plant names
+    ''clear table that stores unused plant names
+  DoCmd.RunSQL "delete * FROM temp_plantNameDel;"
+  'add names to del to tbl
+  DoCmd.RunSQL "INSERT INTO temp_plantNameDel ( PLANTNAME_ID )" _
+& " SELECT DISTINCTROW plantName.PLANTNAME_ID " _
+& " FROM plantName_IDs_InUse RIGHT JOIN plantName ON plantName_IDs_InUse.PLANTNAME_ID = plantName.PLANTNAME_ID " _
+& " WHERE (((plantName_IDs_InUse.PLANTNAME_ID) Is Null)); "
+
+  'delete names that are in temp_plantNameDel
+  DoCmd.RunSQL "DELETE DISTINCTROW plantName.*  FROM plantName INNER JOIN temp_plantNameDel ON plantName.PLANTNAME_ID = temp_plantNameDel.PLANTNAME_ID;"
+  'delete names in temp_plantNameDel
+  DoCmd.RunSQL "delete * FROM temp_plantNameDel;"
+  
+  If msgBox("del list of plantNames to delete?", vbYesNo) = vbYes Then
+    DoCmd.RunSQL "DELETE * FROM temp_PlantConcKeep"
+  End If
+
+Debug.Print Now() & " finished del plant concepts"
+
+End Function
+
+Public Function CleanUpPlantTaxMod()
+''function deletes superfluous plantNames, plantParties, and plantReferences
+'(That is, those that are not used)
+
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstRef As New ADODB.Recordset
+Dim rstParty As New ADODB.Recordset
+
+'first, delete plantParty not referenced by plantStatus or plantUsage:
+'DoCmd.RunSQL "DELETE DISTINCTROW pltTax_PartyInUse.PLANTPARTY_ID, plantParty.* " _
+& " FROM pltTax_PartyInUse RIGHT JOIN plantParty ON pltTax_PartyInUse.PLANTPARTY_ID = plantParty.PLANTPARTY_ID " _
+& " WHERE (((pltTax_PartyInUse.PLANTPARTY_ID) Is Null));"
+
+rstParty.Open "SELECT plantParty.PLANTParty_ID FROM pltTax_PartyInUse RIGHT JOIN plantParty ON pltTax_PartyInUse.PLANTParty_ID = plantParty.PLANTParty_ID " _
+& " WHERE (((pltTax_PartyInUse.PLANTParty_ID) Is Null));", cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+With rstParty
+Do Until .EOF
+  DoCmd.RunSQL "DELETE plantParty.* FROM plantParty WHERE plantParty_ID = " & !PlantParty_ID & ";"
+.MoveNext
+Loop
+End With
+rstParty.Close
+
+
+'then, delete plantNames not in use:
+'DoCmd.RunSQL " DELETE DISTINCTROW pltTax_PlantNamesInUse.PLANTNAME_ID, plantName.* " _
+& " FROM pltTax_PlantNamesInUse RIGHT JOIN plantName ON pltTax_PlantNamesInUse.PLANTNAME_ID = plantName.PLANTNAME_ID " _
+& " WHERE (((pltTax_PlantNamesInUse.PLANTNAME_ID) Is Null));"
+
+'delete list of plantNAmes to delete
+DoCmd.RunSQL "delete temp_plantNameDel.* from temp_plantNameDel;"
+'refigure which plantNames should be deleted
+DoCmd.RunSQL "INSERT INTO temp_plantNameDel ( PLANTNAME_ID )  SELECT plantName.PLANTNAME_ID " _
+& " FROM pltTax_PlantNamesInUse RIGHT JOIN plantName ON pltTax_PlantNamesInUse.PLANTNAME_ID = plantName.PLANTNAME_ID " _
+& " WHERE (((pltTax_PlantNamesInUse.PLANTNAME_ID) Is Null)); "
+
+'now delete plantNames that are not used:
+DoCmd.RunSQL "DELETE plantName.*" _
+& " FROM plantName INNER JOIN temp_plantNameDel ON plantName.PLANTNAME_ID = temp_plantNameDel.PLANTNAME_ID;"
+
+
+'lastly, delete plantReferences not in use:
+'DoCmd.RunSQL " DELETE DISTINCTROW pltTax_RefInUse.PLANTREFERENCE_ID, plantReference.* " _
+& " FROM pltTax_RefInUse RIGHT JOIN plantReference ON pltTax_RefInUse.PLANTREFERENCE_ID = plantReference.PLANTREFERENCE_ID " _
+& " WHERE (((pltTax_RefInUse.PLANTREFERENCE_ID) Is Null)); "
+
+
+rstRef.Open " SELECT plantReference.PLANTREFERENCE_ID FROM pltTax_RefInUse RIGHT JOIN plantReference ON pltTax_RefInUse.PLANTREFERENCE_ID = plantReference.PLANTREFERENCE_ID " _
+& " WHERE (((pltTax_RefInUse.PLANTREFERENCE_ID) Is Null));", cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+With rstRef
+Do Until .EOF
+  DoCmd.RunSQL "DELETE plantReference.* FROM plantREference WHERE plantREference_ID = " & !PLANTREFERENCE_ID & ";"
+.MoveNext
+Loop
+End With
+rstRef.Close
+
+End Function
+
+
+
+
+Private Function DelcommConcept(lngConc_ID As Long)
+''function deletes a comm concept and all records pertaining to it (useful for exporting data to VegBank)
+''SLOW  - only use for a few conceptIDs to del, otherwise use delBatchPlConc
+  Dim strWHERE As String
+  'WHERE statement for all SQL upcoming :
+  strWHERE = "  WHERE commConcept_ID = " & lngConc_ID & ";"
+  
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+  Dim rstCheckTaxInt As New ADODB.Recordset
+  rstCheckTaxInt.Open "SELECT * From commInterpretation " & strWHERE, _
+      cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstCheckTaxInt.EOF Then
+    'OK, there are no rstCheckTaxInt records
+  Else
+    msgBox "Cannot delete comm concept ID = " & lngConc_ID & Chr(13) _
+       & "There are record in CommInterpretation that reference this concept." & Chr(13) _
+       & "First delete the records in CommInterpretation, then delete the concept.", vbCritical
+    Exit Function
+  End If
+  'delete commCorrelations that apply to the concept
+  DoCmd.RunSQL "Delete commCorrelation.* FROM commCorrelation " & strWHERE
+  DoCmd.RunSQL "DELETE commCorrelation.* FROM commCorrelation WHERE commStatus_ID in (select commStatus_ID from commStatus " & strWHERE & ");"
+  'get recordset of all commStatus records that apply to this concept
+  Dim rstStat As New ADODB.Recordset
+
+  'recordset of all Status_ID that apply
+  rstStat.Open "SELECT commStatus_ID FROM commStatus " & strWHERE, cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstStat
+  Do Until .EOF
+     'Step thru commStatus recordset, deleting first commLineages
+     DoCmd.RunSQL "DELETE commLineage.* from commLineage WHERE childcommStatus_ID = " _
+        & lngConc_ID & " OR  parentcommStatus_ID = " & lngConc_ID & ";"
+  .MoveNext
+  Loop
+  End With
+  rstStat.Close
+     'del commStatus records that apply
+  DoCmd.RunSQL "DELETE commStatus.* FROM commStatus " & strWHERE
+  
+     'del commUsage records that apply
+  DoCmd.RunSQL "DELETE commUsage.* FROM commUsage " & strWHERE
+
+     
+     'update concept_ID's that reference this concept to null:
+  DoCmd.RunSQL "UPDATE commstatus SET commstatus.commParent_ID = Null" _
+        & "  WHERE (((commstatus.commParent_ID)=" & lngConc_ID & "));"
+  
+     'del concept record itself
+  DoCmd.RunSQL "DELETE commConcept.* FROM commConcept " & strWHERE
+  
+     'del concept records in Concept Summary table:
+'     DoCmd.RunSQL "DELETE vegTaxaClientSummary.* FROM vegTaxaClientSummary " _
+         & strWhere
+  
+     'find records that apply to this concept in user archive
+  Dim rstArc As New ADODB.Recordset
+ ' rstArc.Open "SELECT * from Y_USER_arc_plConc WHERE VBplConc = " & lngConc_ID & ";", _
+     cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  
+  With rstArc
+ ' Do Until .EOF
+    'update user loading table to "not archived status"
+  '  DoCmd.RunSQL "UPDATE Z_USER_B_specList SET Z_USER_B_specList.ArchivedStatus = 0" _
+           & " WHERE (((Z_USER_B_specList.commCode)=""" & !commCode & """));"
+ ' .MoveNext
+ ' Loop
+  End With
+ ' rstArc.Close
+  'del records from archive:
+  '  DoCmd.RunSQL "delete Y_USER_arc_plConc.* from Y_USER_arc_plConc WHERE VBplConc = " & lngConc_ID & ";"
+  
+End Function
+
+Private Function DelPlantConcept(lngConc_ID As Long)
+''function deletes a plant concept and all records pertaining to it (useful for exporting data to VegBank)
+''SLOW  - only use for a few conceptIDs to del, otherwise use delBatchPlConc
+  Dim strWHERE As String
+  'WHERE statement for all SQL upcoming :
+  strWHERE = "  WHERE plantConcept_ID = " & lngConc_ID & ";"
+  
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+  Dim rstCheckTaxInt As New ADODB.Recordset
+  rstCheckTaxInt.Open "SELECT * From taxonInterpretation " & strWHERE, _
+      cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstCheckTaxInt.EOF Then
+    'OK, there are no rstCheckTaxInt records
+  Else
+    msgBox "Cannot delete plant concept ID = " & lngConc_ID & Chr(13) _
+       & "There are record in TaxonInterpretation that reference this concept." & Chr(13) _
+       & "First delete the records in TaxonInterpretation, then delete the concept.", vbCritical
+    Exit Function
+  End If
+  'delete plantCorrelations that apply to the concept
+  DoCmd.RunSQL "Delete plantCorrelation.* FROM plantCorrelation " & strWHERE
+  DoCmd.RunSQL "DELETE plantCorrelation.* FROM plantCorrelation WHERE plantStatus_ID in (select plantStatus_ID from plantStatus " & strWHERE & ");"
+  'get recordset of all plantStatus records that apply to this concept
+  Dim rstStat As New ADODB.Recordset
+
+  'recordset of all Status_ID that apply
+  rstStat.Open "SELECT plantStatus_ID FROM plantStatus " & strWHERE, cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstStat
+  Do Until .EOF
+     'Step thru PlantStatus recordset, deleting first plantLineages
+     DoCmd.RunSQL "DELETE plantLineage.* from plantLineage WHERE childplantStatus_ID = " _
+        & lngConc_ID & " OR  parentplantStatus_ID = " & lngConc_ID & ";"
+  .MoveNext
+  Loop
+  End With
+  rstStat.Close
+     'del plantStatus records that apply
+  DoCmd.RunSQL "DELETE plantStatus.* FROM plantStatus " & strWHERE
+  
+     'del plantUsage records that apply
+  DoCmd.RunSQL "DELETE plantUsage.* FROM plantUsage " & strWHERE
+
+     
+     'update concept_ID's that reference this concept to null:
+  DoCmd.RunSQL "UPDATE plantstatus SET plantstatus.plantParent_ID = Null" _
+        & "  WHERE (((plantstatus.plantParent_ID)=" & lngConc_ID & "));"
+  
+     'del concept record itself
+  DoCmd.RunSQL "DELETE plantConcept.* FROM plantConcept " & strWHERE
+  
+     'del concept records in Concept Summary table:
+     DoCmd.RunSQL "DELETE vegTaxaClientSummary.* FROM vegTaxaClientSummary " _
+         & strWHERE
+  
+     'find records that apply to this concept in user archive
+  Dim rstArc As New ADODB.Recordset
+ ' rstArc.Open "SELECT * from Y_USER_arc_plConc WHERE VBplConc = " & lngConc_ID & ";", _
+     cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  
+  With rstArc
+ ' Do Until .EOF
+    'update user loading table to "not archived status"
+  '  DoCmd.RunSQL "UPDATE Z_USER_B_specList SET Z_USER_B_specList.ArchivedStatus = 0" _
+           & " WHERE (((Z_USER_B_specList.plantCode)=""" & !plantCode & """));"
+ ' .MoveNext
+ ' Loop
+  End With
+ ' rstArc.Close
+  'del records from archive:
+  '  DoCmd.RunSQL "delete Y_USER_arc_plConc.* from Y_USER_arc_plConc WHERE VBplConc = " & lngConc_ID & ";"
+  
+End Function
+
+
+Public Function DelUSDACodesNotRef()
+  'DATACHECK form
+  'delete preloaded code references that do not match any real preloaded codes
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+  Dim rstSrc As New ADODB.Recordset
+  
+  'get USDA codes that are not found
+  rstSrc.Open "check_B_LackPreLoadCode", cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdTable
+  
+  With rstSrc
+  Do Until .EOF
+    'set to null all USDA codes that match the preloaded code
+    DoCmd.RunSQL "UPDATE Z_USER_B_specList SET Z_USER_B_specList.USDACode = Null  " _
+& "  WHERE (((Z_USER_B_specList.USDACode)=""" & !USDACode & """));"
+
+    .MoveNext
+  Loop
+  End With
+  rstSrc.Close
+  Me.Requery
+End Function

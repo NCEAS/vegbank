@@ -1,0 +1,1568 @@
+Option Compare Database
+Option Explicit
+
+Public Function miscMaintainDB()
+FindDestFieldsGetIDs
+getLoadTblDefnNotesForZFld
+doc_rebuildMenu
+FixWeirdAposInClosedLists
+WriteQrysForLoadTblsView
+WriteQrysForLoadTblsView_levels
+replaceTokens_dataChk_src
+writeAUX_queries
+writeViewVBQrys
+'make blank the executable locations in z_exec
+DoCmd.RunSQL "update z_exec set execFileLoc=null;"
+
+
+End Function
+
+Public Function prepareVBranchForRelease()
+  'delete loading tables
+  Call Delete_Z_USER_ALL
+  'delete preferences
+  DoCmd.RunMacro "OpenClearMetadataForm"
+  Call ClearMetaData_Preferences
+ ' DoCmd.Close acForm, "ClearMetaDataForm"
+  msgBox "ok to here"
+  Call miscMaintainDB
+  Call checkAccCodes2VBMod(True)
+  If getvalFrmSQL("select plot_ID from plot") <> "" Then
+    msgBox "delete plots!"
+    Debug.Print "deletePlots  " & getvalFrmSQL("select min(plot_ID) from plot") & "," & getvalFrmSQL("select max(plot_ID) from plot")
+    Debug.Print "--also remove any addresses and phone numbers--"
+  End If
+  'remove views of plantConcepts
+  DoCmd.RunSQL "delete * from vegTaxaClientSummary;"
+  'remove browsed file list
+  DoCmd.RunSQL "delete * from W_BrowsedFiles;"
+  'remove any records of errors
+  DoCmd.RunSQL "update Y_dataChk_SQL SET numErrs=0;"
+  'remove errors in movedata
+  DoCmd.RunSQL "update Y_moveData set errorsFound = 0;"
+  'set default options:
+  Call GetSet_manual_option("TurnOffConfirmations", True, "false")
+  Call GetSet_manual_option("TellUserOptionsConfirm", True, "true")
+  Call GetSet_manual_option("DateQuery", True, "")
+  Call GetSet_manual_option("VegBankModuleAccepted", True, "0")
+  'remove import temp data
+  DoCmd.RunSQL "DELETE * from import_xml_PKht;"
+  DoCmd.RunSQL "DELETE * from import_xml_data;"
+  'delete recs from temp_plant_keep & temp_comm_keep
+  DoCmd.RunSQL "delete * from temp_plant_keep;"
+  DoCmd.RunSQL "delete * from temp_comm_keep;"
+  'delete namedPlaces cache
+  DoCmd.RunSQL "delete * from Z_C2_placesCache;"
+  
+  msgBox "update Version number!"
+  msgBox "make sure fields sync-ed: see log for functions!"
+  Debug.Print "getTableInfoAccess()"
+  Debug.Print "getTableInfoAccess_LoadingModl()"
+  Debug.Print "docmd.runsql ""delete * from Z_actualFields;"""
+  msgBox "Check constants in fields: see log!"
+  Debug.Print "export_xml | Const overwriteDebug = False"
+  Call openF_howPlantsAreMatched
+  Call openF_howCommsAreMatched
+  Call CheckTblForRecs("mod", "vegbank")
+  Call CheckTblForRecs("mod", "loading")
+  Call CheckFieldsForFields("all", "all", True)
+  'set to 0 number of fields per table
+  DoCmd.RunSQL "UPDATE Z_FieldDescription SET RecordsNotNull=0, PercentNotNull=-900;"
+  DoCmd.RunSQL "UPDATE Z_TableDescription SET NumberOfRecs=0;"
+  DoCmd.RunSQL "UPDATE Z_TableDescription SET FileLocation='C:\temp\exampleFile.csv';"
+  DoCmd.RunSQL "UPDATE Z_TableDescription SET ImportFromTable=null;"
+  'disconnect NPS:
+  Call chkLinkTbls("dropping", "", True, "NPS-PLOTS db")
+  DoCmd.RunSQL "delete * from cust_NPS_stemErr;"
+'  If AreYouSure("Do you want to delete information about controls: this has been exported to XML?") Then
+'    DoCmd.RunSQL "DELETE * from doc_control"
+'  End If
+  msgBox "last thing - disconnect vegbank module & compact & delete ThrowAway Module code"
+End Function
+
+Public Function testVegBranchWriteable() As Boolean
+  'returns true if VegBranch is writable (needs to be) or false if not
+  On Error GoTo notOK
+  Dim rstTemp As New ADODB.Recordset
+  rstTemp.Open "select [testWriteHere] from OneNullRec", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstTemp
+    If .EOF Then 'fix
+      'should have rec here!
+      .AddNew
+      !testWriteHere = "fixed this, which was gone!" & Now()
+      .Update
+      testVegBranchWriteable = True
+    Else
+      'test update
+      !testWriteHere = "writable at: " & Now()
+      .Update
+      testVegBranchWriteable = True
+    End If
+  End With
+  rstTemp.Close
+  Set rstTemp = Nothing
+exitthis:
+  Exit Function
+notOK:
+  'can't write for some reason: probably in zip archive, read only file or on CD.
+  testVegBranchWriteable = False
+  Resume exitthis
+End Function
+
+Public Function MakeRightClickCorrect()
+  'sometimes Access 2003 doens't load the correct right-click menu, this makes sure it is correct
+'  Debug.Print "MakeRightClickCorrect>> init." & Now()
+  Dim strShouldBe As String
+  strShouldBe = Nz(GetSet_manual_option("rightClickMenu", False))
+  If Not (strShouldBe) = Nz(Application.ShortcutMenuBar) Then
+    'if here, then right click menu not set correctly, set it!
+    Debug.Print "MakeRightClickCorrect>> fixed right click menu " & Now()
+    setAppShortCutMenuBar strShouldBe
+  End If
+  'check size of db:
+    Dim lngSizeToWarn As Long
+    lngSizeToWarn = GetSet_manual_option("FileSizeWarning", False)
+    If lngSizeToWarn > 0 Then
+      Dim fs, f
+      Set fs = CreateObject("Scripting.FileSystemObject")
+      Set f = fs.GetFile(CurrentProject.FullName)
+       'Debug.Print f.size
+       'check to see if too big
+      If (f.size / 1000000) > (lngSizeToWarn) Then 'option is MB, size is B
+        'warn them
+        msgBox "WARNING!  VegBranch is getting large.  The current size is:" & Round(f.size / 1000000, 1) & " Megabytes." & Chr(13) _
+          & "You should compact and repair this database soon (and make a backup copy before doing that)." _
+          & Chr(13) & "Compact and repair with Tools | Database Utilities | Compact and Repair" _
+          & Chr(13) & Chr(13) & "You can change when this message appears in VegBranch options.", vbCritical, "VegBranch File Size Warning"
+      End If
+    End If
+End Function
+
+Private Function writeAUX_queries()
+  'writes queries based on FieldInfo data
+  Dim rstTemp As New ADODB.Recordset
+  rstTemp.Open "SELECT tableName, fieldName from fieldList group by tableName,fieldName", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+  Do Until .EOF
+    Call EditQrySql("aux_" & !TableName & "_" & !FieldName, "SELECT listValue as [values], valueDesc as valueDescription, sortOrd" _
+     & " FROM fieldList WHERE tableName = """ & !TableName & """ AND fieldNAme= """ & !FieldName & """ ORDER by sortOrd, listValue;", False)
+  
+  .MoveNext
+  Loop
+  End With
+End Function
+
+
+Public Function WriteQrysForLoadTblsView()
+  ''this function writes new query definitions based on which fields are to be exported to xls
+  ''this hides database fields from users while "viewing" loading tables
+  
+  Dim cnnLocal As Connection
+  Dim rstCurr As New ADODB.Recordset
+  Set cnnLocal = CurrentProject.Connection
+  'get list of fields to include in new tables
+    
+  rstCurr.Open "SELECT Z_FieldDescriptionOrd.TableName, Z_FieldDescriptionOrd.FieldName " _
+& " FROM Z_FieldDescriptionOrd " _
+& " WHERE (((Z_FieldDescriptionOrd.modsorted)=""loading"") AND ((Z_FieldDescriptionOrd.exportToXLS)>0)) " _
+      , cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstCurr
+  Dim strSQL, strCurrTbl, strLastTbl As String
+  Dim dbsNow As Object
+  Set dbsNow = CurrentDb
+  Do Until .EOF
+    'will add a field to SQL statement until all fields added (ie in a new table)
+      'adding comma if strSQL contains names already
+    strSQL = strSQL & IIf(strSQL = "", "", ",") & "[" & !FieldName & "]"
+    strCurrTbl = !TableName
+  'move to new record, perhaps out of dataset, handled by new IF .eof phrase
+  .MoveNext
+    
+    strLastTbl = strCurrTbl
+    If .EOF Then
+       'include very last table, which goes into .eof
+       strCurrTbl = ""
+    Else
+       strCurrTbl = !TableName
+    End If
+    If strCurrTbl <> strLastTbl Then
+       'write and execute new query definition
+       Call EditQrySql(strLastTbl & "_qry", "SELECT " & strSQL & " FROM " & strLastTbl & ";", False)
+      ' Dim qdfNow As Object
+      ' Set qdfNow = dbsNow.querydefs(strLastTbl & "_qry")
+      ' qdfNow.sql = "SELECT " & strSQL & " FROM " & strLastTbl & ";"
+       'reset StrSQL
+       strSQL = ""
+    End If
+    
+  Loop
+  End With
+
+  
+End Function
+
+Public Function WriteQrysForLoadTblsView_levels()
+  ''this function writes new query definitions based on which fields are to be exported to xls
+  ''this hides database fields from users while "viewing" loading tables
+  ''shows only certain levels and below, based on fieldUseGroup (1,1.5,2,3,4)
+  Dim colLevelsToGet As New Collection, strLevs As String, inttemp As Integer, strLevel As String
+  strLevs = SQLValuesToCSV("select fieldUseGroup from z_fieldDescription where fieldUseGroup > 0 group by fieldUseGroup", """")
+  Set colLevelsToGet = csv_parseCSVstring(strLevs, ",", True)
+For inttemp = 1 To colLevelsToGet.Count
+strLevel = colLevelsToGet(inttemp)
+  Dim cnnLocal As Connection
+  Dim rstCurr As New ADODB.Recordset
+  Set cnnLocal = CurrentProject.Connection
+  'get list of fields to include in new tables
+    
+  rstCurr.Open "SELECT Z_FieldDescriptionOrd.TableName, Z_FieldDescriptionOrd.FieldName " _
+& " FROM Z_FieldDescriptionOrd " _
+& " WHERE (fieldUseGroup<=" & strLevel & " AND fieldUseGroup>0) AND (((Z_FieldDescriptionOrd.modsorted)=""loading"") AND ((Z_FieldDescriptionOrd.exportToXLS)>0)) " _
+      , cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstCurr
+  Dim strSQL, strCurrTbl, strLastTbl As String
+  Dim dbsNow As Object
+  Set dbsNow = CurrentDb
+  Do Until .EOF
+    'will add a field to SQL statement until all fields added (ie in a new table)
+      'adding comma if strSQL contains names already
+    strSQL = strSQL & IIf(strSQL = "", "", ",") & "[" & !FieldName & "]"
+    strCurrTbl = !TableName
+  'move to new record, perhaps out of dataset, handled by new IF .eof phrase
+  .MoveNext
+    
+    strLastTbl = strCurrTbl
+    If .EOF Then
+       'include very last table, which goes into .eof
+       strCurrTbl = ""
+    Else
+       strCurrTbl = !TableName
+    End If
+    If strCurrTbl <> strLastTbl Then
+       'write and execute new query definition
+       Call EditQrySql(strLastTbl & "_qry_" & (substTextForText(strLevel, ".", "d")), "SELECT " & strSQL & " FROM " & strLastTbl & ";", False)
+      ' Dim qdfNow As Object
+      ' Set qdfNow = dbsNow.querydefs(strLastTbl & "_qry")
+      ' qdfNow.sql = "SELECT " & strSQL & " FROM " & strLastTbl & ";"
+       'reset StrSQL
+       strSQL = ""
+    End If
+    
+  Loop
+  End With
+  rstCurr.Close
+Next inttemp
+End Function
+
+Public Function writeViewVBQrys()
+  'writes views of vegbank tables, each query starting with view_trns_TABLENAME
+  Dim rstGetTBLS As New ADODB.Recordset
+  rstGetTBLS.Open "SELECT * from Z_TableDescription WHERE [mod]=""vegbank"" or [mod]=""loading"";", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstGetTBLS
+    Do Until .EOF
+      'now have one table, write query for it
+      Dim strQName As String
+      strQName = "view_trns_" & !TableName
+    If !mod = "vegbank" Then
+      
+      Dim rstGetFlds As New ADODB.Recordset
+      rstGetFlds.Open "SELECT * from Z_FieldDescription WHERE tableName=""" & !TableName & """ AND model=""logical"" ORDER BY Iif(isnull(orderID),Z_FieldDescr_Id,orderID) " _
+         , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+      With rstGetFlds
+      Dim strSQL As String, strOne As String
+      Do Until .EOF
+        If !key = "FK" Then 'what kind of field is this?
+          'foreign key: translate it
+          strOne = " getTrnsFldVal(""" & !References & """,nz([" & !FieldName & "],-1)) AS trnsl_" & !FieldName
+          
+          Else 'not FK, just get field
+          'add fieldname to this
+          strOne = !FieldName
+          
+        End If
+        strSQL = strSQL & IIf(strSQL = "", "", ", ") & strOne
+      .MoveNext 'field
+      Loop
+      End With
+      'MsgBox !TableName & " : " & Chr(13) & strSQL
+      rstGetFlds.Close
+      'write SQL for this table:
+    Else
+      'loading mod : just get all fields
+      strSQL = " * "
+    End If
+      Call EditQrySql(definePrefix("viewTranslateQry") & !TableName, "SELECT " & strSQL & " FROM [" & !TableName & "];", False)
+      'reset SQL
+      strSQL = ""
+    .MoveNext 'table
+    Loop
+  End With
+End Function
+
+Public Function definePrefix(strWhich As String) As String
+  'defines prefixes for names, generally for built queries
+  Dim strTemp As String
+  Select Case strWhich
+    Case "viewTranslateQry"
+      strTemp = "view_trnsl"
+    Case "tempMigrationReports"
+      strTemp = "migr__temp" ' must contain a __ in name, used to prevent accidental deletions later
+    Case "tempProcessingForms"
+      strTemp = "temp__processing"
+    Case "tableMeter"
+      strTemp = "temp__tableMeter"
+    Case "tempGraph"
+      strTemp = "temp__GenericGraph"
+  End Select
+  'make sure not ""
+  definePrefix = strTemp & "_"
+End Function
+
+Public Function getTrnsFldVal(strRefs As String, lngID As Long) As String
+  'gets SQL string of fields to translate FK
+  'returns field1,field2 as values for insertion into SELECT statement
+  Dim strTbl As String
+  'get table name from strRefs
+  strTbl = Left(strRefs, InStr(strRefs, ".") - 1)
+  
+  Dim rstGetDescFld As New ADODB.Recordset, strRep As String
+  rstGetDescFld.Open "SELECT * from Z_FieldDEscription WHERE tableNAme  = """ & strTbl & """ AND DescrOfTbl;" _
+    , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstGetDescFld
+  Do Until .EOF
+      strRep = strRep & IIf(strRep = "", "", " | ") & getFieldVal(!TableName, !FieldName, lngID)
+  .MoveNext
+  Loop
+  End With
+  getTrnsFldVal = strRep
+End Function
+
+Public Function getFieldVal(ByVal strTbl As String, ByVal strFld As String, ByVal lngPK As Long) As String
+  'function reports value on a table, given field and PK
+  'first check to see if this field itself should also be translated
+  If get_fieldInfo(strTbl, strFld, "key") = "FK" Then
+    'is FK, must translate!
+    Dim strNewRefs As String
+    strNewRefs = get_fieldInfo(strTbl, strFld, "references")
+    getFieldVal = getTrnsFldVal(strNewRefs, getvalFrmSQL("SELECT [" & strFld & "] FROM [" & strTbl & "] WHERE [" & WhatIsPKOf(strTbl) & "]=" & lngPK))
+  Else
+    'simple get value
+    getFieldVal = getvalFrmSQL("SELECT [" & strFld & "] FROM [" & strTbl & "] WHERE [" & WhatIsPKOf(strTbl) & "]=" & lngPK)
+  End If
+  
+End Function
+
+Public Function FindDestFieldsGetIDs()
+''function gets Destination Field IDs from the destination format table.field in Z_Tbl
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstCurr As New ADODB.Recordset
+
+Dim rstGetData As New ADODB.Recordset
+
+'get records that have destination fields
+rstCurr.Open "SELECT * FROM Z_FieldDescription WHERE (((Z_FieldDescription.DestinationField) Is Not Null));", _
+         cnnLocal, adOpenForwardOnly, adLockPessimistic, adCmdText
+Dim strTarget As String
+With rstCurr
+Do Until .EOF
+If (Nz((!DestFieldID), 0) > 0) Or (!DestinationField = "n/a") Then GoTo nextRec
+'field to find ID for
+Dim lngTemp As Long
+lngTemp = getFieldID((!DestinationField))
+If lngTemp <> 0 Then !DestFieldID = lngTemp
+
+nextRec:
+.MoveNext
+Loop
+End With
+
+End Function
+
+Public Function getFieldID(strTblFld As String) As Variant
+Dim rstGetData As New ADODB.Recordset
+rstGetData.Open "Select * FROM Maint_Z_Tbl_find_DestFlds WHERE TblDotFld = """ & strTblFld & """;", _
+   CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+If rstGetData.EOF And rstGetData.BOF Then
+  Debug.Print "Field not found: " & strTblFld
+Else
+  'field is found
+  getFieldID = rstGetData!Z_FieldDescr_Id
+End If  'the field exists
+End Function
+
+Public Function MainMenuMessage() As String
+  Dim strTemp As String
+If QuickLinkChk() = False Then
+  strTemp = "YOU MUST CONNECT to a vegbank module."
+Else
+  
+  If Eval(GetSet_manual_option("VegBankModuleAccepted") = False) Then
+    'need to accept vegbank module
+    strTemp = "YOU MUST ACCEPT the vegbank module."
+  Else
+    strTemp = ""
+  End If
+End If
+  MainMenuMessage = strTemp
+  ' orig: strTemp = IIf(Eval(GetSet_manual_option("VegBankModuleAccepted") = False) Or QuickLinkChk() = False, "MUST CONNECT AND ACCEPT VegBank module", Null)
+End Function
+
+Public Function OnOpenVegBranch()
+''function performs vital operations on VegBranch startup
+    ''hide toolbar(s) - web
+  DoCmd.RunMacro "HideFormToolBar"
+  Forms!NavForm.TimerInterval = 1000 'one second
+  If Not (testVegBranchWriteable()) Then
+    'VegBranch is not writeable, report and continue anyway
+    If Not AreYouSure("VegBranch is read-only!!  This could be because you are running VegBranch from a CD, or inside a .zip archive file, or because the database is set as read-only." & Chr(13) _
+      & " To fix, close the database, then copy VegBranch to a location where you have write permissions." & Chr(13) _
+      & " Do you want to open VegBranch anyway (errors WILL occur!)") Then
+      GoTo exitthisAndDB
+    End If
+  End If
+  'then set default context shortcutvar to include vegbranch help
+  If GetOption("Confirm Record Changes") Or GetOption("Confirm Document Deletions") Or _
+    GetOption("Confirm Action Queries") Then
+    ''check to see if user wants to change all the above to false
+    If GetSet_manual_option("TellUserOptionsConfirm", False) = True Then
+      ''open form to explain confirmations and let user turn on/off
+      DoCmd.OpenForm "ConfirmOptions", , , , , acDialog
+    End If
+  End If
+  ''store user setting for confirmation of queries, rec changes, doc dels -> return with exit of this form
+  ChangeOptionsConfirm False
+  chkThenAttemptReconnectVBmod
+exitthis:
+  Exit Function
+exitthisAndDB:
+  Application.Quit
+End Function
+
+Public Function OnOpenVegBranch_justAfterStart()
+ ' Call rereshCurrForm
+ ' Static blnDone As Boolean
+ ' If Not blnDone Then
+    Call addHelpToGlobalRightClickMenu
+    'blnDone = True
+ ' Else
+ '   Debug.Print "already set @" & Now()
+ ' End If
+    Forms!NavForm.TimerInterval = 0 'shouldnt do this again automatically!
+End Function
+
+Public Function chkThenAttemptReconnectVBmod()
+  ''function checks to see if connected database is valid, if not, it prompts user to:
+  '1) let VegBranch connect to default VegBank module db
+  '2) let user browse for valid VegBank database
+  '3) do nada!
+On Error GoTo errChkReconnect
+  If Not (QuickLinkChk()) Then
+    ''the quick check of just plot reveals that VegBranch is not connected to a VegBank module db
+    ''find the default database
+      Dim strToGet As String, strHR As String
+      strHR = Chr(13) & "------------------------------------" & Chr(13)
+      
+      strToGet = file_searchForFile("vegbank_module*.mdb", CurrentProject.Path, False)
+    If strToGet <> "" Then
+      'have found potential db:
+      If msgBox("VegBranch is not connected to a VegBank module database." & Chr(13) _
+        & "If you have just downloaded VegBranch, this is normal, just press YES." & Chr(13) & Chr(13) _
+        & "Do you want VegBranch to attempt to connect to :" & strHR & strToGet & strHR & "?" & Chr(13) _
+        & "Press YES for VegBranch to connect to the VegBank module database found in the same folder as VegBranch." & Chr(13) _
+        & "Press NO to browse for the VegBank module database location yourself.", vbYesNoCancel, "VegBranch connect to VegBank Module") = vbYes Then
+      
+        CNCT_DefaultConnect strToGet, ""
+      Else
+        ''open browse for new db form
+        DoCmd.OpenForm "W_ConnectToDb"
+      End If
+    Else ' can't find valid vegbank module mdb
+       If msgBox("VegBranch is not connected to a VegBank module database." & Chr(13) _
+        & "There is no access database file titled 'VegBank_Module' in the same folder as VegBranch." & Chr(13) _
+        & "If you have just downloaded VegBranch, please download a vegbank module and unzip into the same folder as vegbranch and press YES." & Chr(13) & Chr(13) _
+        & "Should VegBranch try to find a VegBank Module again?" & Chr(13) _
+        & "Press NO to browse for the VegBank module database location yourself.", vbYesNoCancel, "VegBranch cannot find a VegBank Module") = vbYes Then
+         'try again!
+         Call chkThenAttemptReconnectVBmod
+       Else 'open browse form
+          DoCmd.OpenForm "W_ConnectToDb"
+       End If 'not found, but try again
+    End If 'found file or not
+  End If 'VB module is connected OK
+exitthis:
+  If IsFormOpen("NavForm") Then
+    Forms!NavForm.Requery
+  End If
+  Exit Function
+
+errChkReconnect:
+  Debug.Print "chkThenAttemptReconnectVBMod>> error! " & Err.Description
+  Resume exitthis
+End Function
+
+Public Function QuickLinkChk() As Boolean
+  'function checks only one table (plot) to see if db for linked tables is valid
+  On Error GoTo QLErr
+  Dim dbCurr As Object
+  Set dbCurr = CurrentDb
+  dbCurr.tabledefs("plot").refreshLink
+  QuickLinkChk = True
+  Exit Function
+''couldn't refresh table
+QLErr:
+  QuickLinkChk = False
+  
+End Function
+
+Public Function OnCloseVegBranch()
+''function performs vital operations on VegBranch closing
+
+'   MsgBox "finished options on closing on vegbranch"
+If QuickLinkChk() Then
+  'if VegBank module is valid, then make sure accessionCodes are up-to-date
+  Call openProcessingPos("Tidying up loose ends before closing VegBranch")
+  'if VegBank Module is accepted, then we DO update accCodes in manual Match section:
+ ' Call UpdateProcessingPosition(20, 0)
+  
+  Call UpdateProcessingPosition(40, 0)
+  Call checkAccCodes2VBMod(False, True)
+  Call UpdateProcessingPosition(100, 0)
+End If
+   ChangeOptionsConfirm True 'last thing to do!
+End Function
+
+Public Function ExportVegBankTbls()
+    Dim intResp As Integer
+  intResp = msgBox("Are you sure you want to create a new database with only VegBank module data?" _
+  & Chr(13) & "Pressing YES will create a new database called VegBranch_export.mdb in the same directory (folder) as this database.", vbYesNo, "VegBranch")
+  If intResp = vbYes Then
+    exportToVegOnlyDB
+    msgBox "Exported to VegBranch_export.mdb in the same directory (folder) as this database."
+  End If
+End Function
+
+Public Function ExitVegBranch()
+  'quit VegBranch
+  Dim intResp As Integer
+  intResp = msgBox("Are you sure you want to exit VegBranch?", vbYesNo + vbExclamation)
+  If intResp = vbYes Then
+
+  'return settings to how they were before VegBranch was opened.
+'  Dim cnnLocal As Connection
+ ' Dim rstOpt As New ADODB.Recordset
+  'Set cnnLocal = CurrentProject.Connection
+'  rstOpt.Open "Y_optionsStored", cnnLocal, adOpenForwardOnly, adLockOptimistic, adCmdTable
+ ' With rstOpt
+  '  If Not .EOF Then
+   '   SetOption "Confirm Action Queries", !ActQry
+    '  SetOption "Confirm Document Deletions", !DelDoc
+     ' SetOption "Confirm Record Changes", !RecChg
+ '   End If
+  'End With
+  
+  Application.Quit acPrompt
+  
+  End If
+End Function
+
+Public Function showDBWindow()
+  'show database window
+  DoCmd.SelectObject acTable, , True
+End Function
+
+Public Function NavFormRestore()
+  'On Error Resume Next
+  Forms!NavForm.Caption = "VegBranch Main Menu"
+End Function
+
+Public Function NavFormMinimize()
+ ' On Error GoTo NFMinErr
+  DoCmd.Minimize
+  Forms!NavForm.Caption = "Dbl Click for MainMenu"
+  Exit Function
+NFMinErr:
+Debug.Print "ERROR in minimizing NavForm!"
+End Function
+
+
+Public Function deleteAnObs(lngObsID As Long, Optional blnConfirm As Boolean)
+  'function deletes an observation and all records from other tables that must be deleted if obs deleteed
+  If blnConfirm Then
+    ''confirm to delete the obs
+    If Not AreYouSure("Do you really want to permantently delete this observation from the vegBank module?") Then
+      ''cancelled
+      Exit Function
+    End If
+  End If
+  'simple fk relationships
+  DoCmd.RunSQL "DELETE * from graphic WHERE observation_ID = " & lngObsID & ";"
+  DoCmd.RunSQL "DELETE * from disturbanceObs WHERE observation_ID = " & lngObsID & ";"
+  DoCmd.RunSQL "DELETE * from soilObs WHERE observation_ID = " & lngObsID & ";"
+  DoCmd.RunSQL "DELETE * from observationSynonym WHERE primaryobservation_ID = " & lngObsID & " OR synonymObservation_ID=" & lngObsID & ";"
+  DoCmd.RunSQL "DELETE * from observationContributor WHERE observation_ID = " & lngObsID & ";"
+   
+  'more complex -- several layers of tables:
+
+    ''TaxAlt
+   DoCmd.RunSQL "DELETE DISTINCTROW taxonAlt.* " _
+& " FROM (taxonObservation INNER JOIN taxonInterpretation ON taxonObservation.TAXONOBSERVATION_ID = taxonInterpretation.TAXONOBSERVATION_ID) INNER JOIN taxonAlt ON taxonInterpretation.TAXONINTERPRETATION_ID = taxonAlt.taxonInterpretation_ID " _
+& " WHERE (((taxonObservation.OBSERVATION_ID)= " & lngObsID & "));"
+    ''TaxInterp
+    DoCmd.RunSQL "DELETE DISTINCTROW taxonInterpretation.* " _
+& " FROM taxonObservation INNER JOIN taxonInterpretation ON taxonObservation.TAXONOBSERVATION_ID = taxonInterpretation.TAXONOBSERVATION_ID " _
+& " WHERE (((taxonObservation.OBSERVATION_ID)= " & lngObsID & "));"
+
+
+
+    ''stemLocation
+  DoCmd.RunSQL "DELETE DISTINCTROW stemLocation.* " _
+& " FROM (taxonObservation INNER JOIN (taxonImportance INNER JOIN stemCount ON taxonImportance.taxonimportance_id = stemCount.taxonimportance_id) ON taxonObservation.taxonobservation_id = taxonImportance.taxonobservation_id) INNER JOIN stemLocation ON stemCount.stemcount_id = stemLocation.stemcount_id " _
+& " WHERE (((taxonObservation.OBSERVATION_ID)= " & lngObsID & "));"
+    
+    
+    ''stemLocation
+  DoCmd.RunSQL "DELETE DISTINCTROW stemLocation.* " _
+& " FROM (taxonObservation INNER JOIN (taxonImportance INNER JOIN stemCount ON taxonImportance.taxonimportance_id = stemCount.taxonimportance_id) ON taxonObservation.taxonobservation_id = taxonImportance.taxonobservation_id) INNER JOIN stemLocation ON stemCount.stemcount_id = stemLocation.stemcount_id " _
+& " WHERE (((taxonObservation.OBSERVATION_ID)= " & lngObsID & "));"
+    
+    ''stemCount
+  DoCmd.RunSQL "DELETE DISTINCTROW stemCount.*, taxonObservation.observation_id " _
+& " FROM taxonObservation INNER JOIN (taxonImportance INNER JOIN stemCount ON taxonImportance.taxonimportance_id = stemCount.taxonimportance_id) ON taxonObservation.taxonobservation_id = taxonImportance.taxonobservation_id " _
+& " WHERE (((taxonObservation.OBSERVATION_ID)= " & lngObsID & "));"
+  
+  DoCmd.RunSQL "DELETE DISTINCTROW taxonImportance.* " _
+& " FROM taxonObservation INNER JOIN taxonImportance ON taxonObservation.TAXONOBSERVATION_ID = taxonImportance.TAXONOBSERVATION_ID " _
+& " WHERE (((taxonObservation.OBSERVATION_ID)= " & lngObsID & "));"
+     '' -- 2nd from stratum side -- shouldn't be necessary, but just in case
+    DoCmd.RunSQL "DELETE DISTINCTROW taxonImportance.* " _
+& " FROM stratum INNER JOIN taxonImportance ON stratum.STRATUM_ID = taxonImportance.STRATUM_ID " _
+& " WHERE (((stratum.OBSERVATION_ID)=" & lngObsID & ")); "
+    
+
+  
+    ''TaxonObs
+  DoCmd.RunSQL "DELETE DISTINCTROW taxonObservation.* FROM taxonObservation " _
+& " WHERE (((taxonObservation.OBSERVATION_ID)= " & lngObsID & "));"
+    ''stratum
+    DoCmd.RunSQL "DELETE DISTINCTROW stratum.OBSERVATION_ID, stratum.* FROM stratum " _
+& " WHERE (((stratum.OBSERVATION_ID)=" & lngObsID & ")); "
+  
+  'commInterp
+  DoCmd.RunSQL "DELETE DISTINCTROW commInterpretation.* " _
+& " FROM commClass INNER JOIN commInterpretation ON commClass.COMMCLASS_ID = commInterpretation.COMMCLASS_ID " _
+& " WHERE (((commClass.OBSERVATION_ID)=" & lngObsID & ")); "
+  'classContrib
+  DoCmd.RunSQL " DELETE DISTINCTROW classcontributor.* " _
+& " FROM commClass INNER JOIN classcontributor ON commClass.COMMCLASS_ID = classcontributor.COMMCLASS_ID " _
+& " WHERE (((commClass.OBSERVATION_ID)=" & lngObsID & ")); "
+  'commClass
+  DoCmd.RunSQL "DELETE DISTINCTROW  commClass.* FROM commClass" _
+& " WHERE (((commClass.OBSERVATION_ID)=" & lngObsID & ")); "
+
+   'obs
+   DoCmd.RunSQL "DELETE observation.* from observation WHERE observation_ID = " & lngObsID & ";"
+   If blnConfirm Then
+    ''tell user success!
+    msgBox "Plot deleted successfully", vbInformation, "VegBranch"
+  End If
+End Function
+
+Private Function deleteAPlot(lngPlotID As Long, Optional blnConfirm As Boolean)
+  'deletes a plot and all observations that apply to it
+  If blnConfirm Then
+    ''confirm to delete the plot
+    If Not AreYouSure("Do you really want to permantently delete this plot from the vegBank module?") Then
+      ''cancelled
+      Exit Function
+    End If
+  End If
+  Dim rstPlt As New ADODB.Recordset, colObsID As New Collection
+  rstPlt.Open "SELECT observation_ID from observation WHERE plot_ID = " & lngPlotID & ";" _
+    , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstPlt
+    Do Until .EOF
+      'collect all Obs_ID's to delete
+      colObsID.Add (!OBSERVATION_ID)
+    .MoveNext
+    Loop
+  End With
+  rstPlt.Close
+  Dim lngTemp As Long
+  'iterate over all Obs_ID's to delete
+  Debug.Print "deleting " & colObsID.Count; " obs'es and no hobbitses, nice hobbitses"
+  For lngTemp = 1 To colObsID.Count
+    Call deleteAnObs(colObsID(lngTemp), False)
+  Next lngTemp
+  'delete all place records
+  DoCmd.RunSQL "DELETE place.* from place WHERE plot_ID = " & lngPlotID & ";"
+  DoCmd.RunSQL "DELETE embargo.* from embargo WHERE plot_ID = " & lngPlotID & ";"
+  'del plot itself
+  DoCmd.RunSQL "update plot set parent_ID=null WHERE parent_ID=" & lngPlotID & ";"
+  DoCmd.RunSQL "DELETE plot.* from plot WHERE plot_ID = " & lngPlotID & ";"
+   If blnConfirm Then
+    ''tell user success!
+    msgBox "Plot deleted successfully", vbInformation, "VegBranch"
+  End If
+End Function
+
+Public Function findStringInQrySQL(strText As String, Optional blnFix As Boolean, Optional strRepl As String, Optional blnWhole As Boolean)
+  ''function finds a string in SQL statements of query
+  ''reporting query names to immediate window
+  Dim qdfTemp As Object, dbsCurr As Object, strReplaceSQL As String
+  Set dbsCurr = CurrentDb
+  
+  For Each qdfTemp In dbsCurr.querydefs
+    If InStr(qdfTemp.SQL, strText) <> 0 Then
+      Debug.Print qdfTemp.Name
+      If blnFix Then
+         Debug.Print "Current SQL: "
+         Debug.Print qdfTemp.SQL
+        Debug.Print "--end--"
+         strReplaceSQL = substTextForText_once(qdfTemp.SQL, strText, strRepl, 1, blnWhole)
+         Debug.Print "------replace with----"
+         Debug.Print strReplaceSQL
+         msgBox "Ctl-Break to decide"
+         If msgBox("Replace old SQL with new?", vbYesNo) = vbYes Then
+           'replace query old contents with new
+           Call EditQrySql(qdfTemp.Name, strReplaceSQL, False)
+         End If
+         
+      End If
+    End If
+  Next qdfTemp
+End Function
+
+
+Private Function deleteAllNonAux_Tbls_inVB()
+  If msgBox("are you sure you want to delete contents of all vegbank tables?", vbYesNo) = vbYes Then
+     Dim rstDel As New ADODB.Recordset
+     rstDel.Open "SELECT * FROM Z_TableDescription WHERE [mod]=""vegbank"" and left(tableName,4) <> ""aux_"" AND tableName<>""FieldList""" _
+        & " ORDER BY [ImportOrder] desc ;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+     With rstDel
+     Do Until .EOF
+           Debug.Print "deleting from " & !TableName
+           DoCmd.RunSQL "DELETE * FROM [" & !TableName & "];"
+     .MoveNext
+     Loop
+     End With
+     msgBox "remember to compact and repair!", vbInformation
+  End If
+End Function
+
+Private Function LoadTablesAllow0Len()
+' remove : Exit Function below
+allowzerolengthOnTable "z_USER_A_Party"
+allowzerolengthOnTable "z_USER_C_plotData"
+allowzerolengthOnTable "z_USER_D_CoverData"
+allowzerolengthOnTable "z_USER_E_stemData"
+allowzerolengthOnTable "Z_USER_F_SoilData"
+allowzerolengthOnTable "Z_USER_G_Disturbance"
+allowzerolengthOnTable "Z_USER_I_PlotComm"
+allowzerolengthOnTable "Z_USER_J_UD"
+allowzerolengthOnTable "z_USER_B_SpecList"
+allowzerolengthOnTable "Z_USER_D2_StrataCover"
+allowzerolengthOnTable "Z_USER_H_CommConcept"
+End Function
+
+Private Function allowzerolengthOnTable(strTable As String)
+Exit Function 'remove
+  'remove constraint that zero length strings are not allowed on table
+  Dim dbs As Object
+  Dim tdfCurr As Object, fldCurr As Object
+  Set dbs = CurrentDb
+  Set tdfCurr = dbs.tabledefs(strTable)
+  For Each fldCurr In tdfCurr.Fields
+    If Not fldCurr.AllowZeroLength Then
+      Select Case fldCurr.Type
+        Case 10, 12
+          Debug.Print fldCurr.Name
+         'Debug.Print fldCurr.Type
+         fldCurr.AllowZeroLength = True
+      End Select
+    End If
+  Next
+End Function
+
+Public Function updateZeroLenStringToNull(strTable As String)
+   Dim dbs As Object
+  Dim tdfCurr As Object, fldCurr As Object
+  Set dbs = CurrentDb
+  Set tdfCurr = dbs.tabledefs(strTable)
+  'look at each field
+  For Each fldCurr In tdfCurr.Fields
+    'if zero len allowed and not required
+    If fldCurr.AllowZeroLength And (fldCurr.Required = False) Then
+      'and is text or memo field
+      Select Case fldCurr.Type
+        Case 10, 12
+          'construct sql
+          Dim strSQL As String
+          strSQL = "UPDATE [" & strTable & "] SET [" & fldCurr.Name & "]=Null WHERE [" & fldCurr.Name & "]='';"
+          DoCmd.RunSQL strSQL
+      End Select
+    End If
+  Next
+End Function
+
+
+
+Public Function deletePlots(minPlot As Long, maxPlot As Long)
+'msgBox "must change function manually to access this function: deletePlots"
+'Exit Function
+Dim rstPlots As New ADODB.Recordset
+rstPlots.Open "select plot_ID from plot where plot_ID>=" & minPlot & " and plot_ID<=" & maxPlot & ";", _
+  CurrentProject.Connection, adOpenStatic, adLockReadOnly, adCmdText
+  With rstPlots
+  Do Until .EOF
+  Debug.Print "deleting : " & !plot_id
+  deleteAPlot !plot_id
+  
+  .MoveNext
+  Loop
+  End With
+
+End Function
+
+Private Function renamedAllPlots()
+If getvalFrmSQL("select 'something' from plot where left(authorplotcode,1)<>""_""") = "something" Then
+  DoCmd.RunSQL "  UPDATE plot SET plot.authorPlotCode = '_' & [authorPlotCode]; "
+  DoCmd.RunSQL "  UPDATE observation SET authorObsCode = '_' & [authorObsCode]; "
+Else
+  Debug.Print "no plots fail to start with _"
+End If
+End Function
+
+Public Function deleteLoadingTbl(strTbl As String, Optional blnNoConfirm As Boolean)
+  'function deletes data from a loading table
+  'if there are records, prompts for confirmation- if no records, then exits (Why delete?)
+  'make sure loading table:
+  If get_tableInfo(strTbl, "mod") = "loading" Then
+    'have loading table, check # recs
+    Dim varTemp As Variant
+    varTemp = getvalFrmSQL("select count(1) from " & strTbl)
+    If varTemp > 0 Then
+      'make sure it's ok to delete
+      If blnNoConfirm Then
+        'it is OK
+      Else
+        'ask user if it's ok
+        If AreYouSure("Do you really want to delete all the records in the loading table: " & Chr(13) _
+          & get_tableInfo(strTbl, "tableNickName") & Chr(13) & "[" & strTbl & "]" & Chr(13) & Chr(13) _
+          & "Press no if you are unsure.") Then
+          'is ok, continue
+        Else 'dont do it
+          GoTo exitDelTbl
+        End If
+        'delete recs in table
+        
+        DoCmd.RunSQL "DELETE * FROM " & strTbl
+      End If
+      
+    End If
+  
+  Else
+    Debug.Print "deleteLoadingTbl>> not a loading table, no records deleted: " & strTbl
+  End If
+exitDelTbl:
+End Function
+
+Public Function replaceTokens_dataChk_src()
+  'function replaces tokens in the Y_dataChk_SQL table with loading table nick names and letters in the field that is read
+  'source is still retained so that this may be done again if nicknames change
+  'MTL : 07-JAN-2004
+  Dim colLoadTbls As New Collection, rstGetCols As New ADODB.Recordset
+  rstGetCols.Open "select tableNAme from Z_TableDescription where [mod]=""loading"";", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstGetCols
+  Do Until .EOF
+    colLoadTbls.Add (!TableName)
+  .MoveNext
+  Loop
+  End With
+  
+  'now have collection of all loading table names
+  'convert this into loading table letters
+  Dim colLetters As New Collection, colTemp As New Collection, inttemp As Integer, colNicks As New Collection
+  For inttemp = 1 To colLoadTbls.Count
+    EmptyCollection colTemp
+    Set colTemp = csv_parseCSVstring(colLoadTbls(inttemp), "_")
+    'add letter to collection
+    colLetters.Add (colTemp(3))
+    colNicks.Add get_tableInfo(colLoadTbls(inttemp), "TablenickName") & " (" & colTemp(3) & ")", (colTemp(3))
+  Next
+  'now have letters and nicknames to use
+  'For inttemp = 1 To colLetters.Count
+  '  Debug.Print "replace : @" & colLetters(inttemp) & "@  with : " & colNicks(colLetters(inttemp))
+  'Next
+  'loop through data check source and replace tokens
+  Dim rstGetSrc As New ADODB.Recordset
+  rstGetSrc.Open "select * from y_dataChk_SQL;", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstGetSrc
+  Do Until .EOF
+     Dim strRemoveToks As String
+     strRemoveToks = Nz(!Expl_src, "")
+     For inttemp = 1 To colLetters.Count
+       strRemoveToks = substTextForText(strRemoveToks, "@" & colLetters(inttemp) & "@", colNicks(colLetters(inttemp)))
+     Next inttemp
+     If strRemoveToks <> "" Then
+       !Explanation = strRemoveToks
+     Else
+       !Explanation = Null
+     End If
+     strRemoveToks = Nz(!longExpl_src, "")
+     For inttemp = 1 To colLetters.Count
+       strRemoveToks = substTextForText(strRemoveToks, "@" & colLetters(inttemp) & "@", colNicks(colLetters(inttemp)))
+     Next inttemp
+     If strRemoveToks <> "" Then
+       !LongExplanation = strRemoveToks
+     Else
+       !LongExplanation = Null
+     End If
+     
+     
+     
+     .Update
+  .MoveNext
+  Loop
+  End With
+End Function
+
+Public Function getLoadTblDefnNotesForZFld()
+  'function "gets" field definition and field notes for fields in Z_FieldDescription where a field has dest field and @GET@ for notes or defn
+  'MTL 2004-JAN-08
+  Dim rstZFLD As New ADODB.Recordset
+  rstZFLD.Open "SELECT * from Z_fieldDescription WHERE [module]=""loading"" and (FieldNotes=""@GET@"" or FieldDefinition=""@GET@"")", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstZFLD
+   Do Until .EOF
+    If Not IsNull(!DestinationField) Then
+     Dim strTbl As String, strFld As String, strVal As String
+     'get field and table names
+     strTbl = Left(!DestinationField, InStr(!DestinationField, ".") - 1)
+     strFld = Right(!DestinationField, Len(!DestinationField) - InStr(!DestinationField, "."))
+     strVal = get_fieldInfo(strTbl, strFld, "fieldNotes")
+     If strVal <> "" And !FieldNotes = "@get@" Then 'update notes
+       !FieldNotes = strVal
+     End If
+     strVal = get_fieldInfo(strTbl, strFld, "fieldDefinition")
+     If strVal <> "" And !FieldDefinition = "@get@" Then 'update defn
+       !FieldDefinition = strVal
+     End If
+     
+    Else
+     'destination field null: error report it
+     Debug.Print "getLoadTblDefnNotesForZfld>> error for " & !TableName & "." & !FieldName & " does not have dest field"
+    End If
+    .MoveNext
+   Loop
+  End With
+  
+End Function
+
+Public Function html_LoadTblFields(strTblLtr As String) As String
+  'function gets loading table names and defintions for fields (very simple table format) and returns as html table
+  '2004-FEB-04 MTL
+  Dim rstTemp As New ADODB.Recordset
+  rstTemp.Open "SELECT *   FROM Z_TableDescription INNER JOIN " _
+  & " Z_FieldDescription ON Z_TableDescription.TableName = Z_FieldDescription.TableName   " _
+  & " WHERE tblLetter=""" & strTblLtr & """ and fieldUseGroup >=0 " _
+  & " ORDER BY IIf([fieldUseGroup]=0,100,[fieldUseGroup]), IIf(IsNull([OrderID]),[Z_FieldDescr_Id],[OrderID]);", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+  Dim intLastGrp As Double, strRep As String, intCount As Double
+  intLastGrp = -99
+  Do Until .EOF
+    intCount = intCount + 1
+    If !fieldUseGroup <> intLastGrp Then
+      'write small header
+      strRep = strRep & "<tr><td class='color" & Replace(!fieldUseGroup, ".", "_") & "' colspan='3'>" & vbCr & "<span class='normal'>&raquo; "
+      Select Case !fieldUseGroup '0=internal field, 1= required, 2=commonly used, 3=sometimes used, 4=seldom used, 5=advanced users only
+        Case 0
+          strRep = strRep & "Internal VegBranch fields, please do not edit directly:"
+        Case 1
+          strRep = strRep & "Required fields; you should always fill in values for these:"
+        Case 1.5
+          strRep = strRep & "Best Practice fields:"
+        Case 2
+          strRep = strRep & "Commonly used fields:"
+        Case 3
+          strRep = strRep & "Sometimes used fields:"
+        Case 4
+          strRep = strRep & "Fields for expert users:"
+       ' Case 5
+       '   strRep = strRep & "Fields for expert users:"
+      End Select
+      strRep = strRep & "</span></td></tr>" & vbCr
+    End If
+    'show field name
+    
+    strRep = strRep & "<tr valign='top' align='left'><td width='5%'/><td " & getGrey() & "><span class='weight1 normal'>" & HTMLize_txt(!FieldName) & "</span><br/>" _
+    & "<span class='normal'>&nbsp;&nbsp;" & Nz(!dataType, "??") & IIf(!dataType = "text", " (" & Nz(!FieldSize, "??") & ")", "") & "</span></td>" & vbCr
+    'show defn
+    strRep = strRep & "<td " & getGrey(True) & "><span class='item'>" & HTMLize_txt(Nz(!FieldDefinition, "n/a")) & "</span></td></tr>" & vbCr
+    intLastGrp = !fieldUseGroup
+  .MoveNext
+  Loop
+  .Close
+  End With
+  
+  html_LoadTblFields = "<table width='90%'>" & strRep & "</table>"
+  Exit Function
+End Function
+Public Function writeAllLoadingTableInfoToHTML()
+  'writes all html files for loading tables
+   Dim rstTemp As New ADODB.Recordset, strTblLtr As String, strRep As String
+  rstTemp.Open "SELECT * FROM Z_TableDescription where tblLetter is not null", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+  Do Until .EOF
+    strTblLtr = !tblLetter
+  Dim strFile As String
+  strFile = CurrentProject.Path & "\" & html_loadTblFilePref() & LCase(strTblLtr) & ".html"
+'Debug.Print strFile
+Call prepareFileToWrite(strFile, True, ".html")
+strRep = html_fileHeader("VegBranch- loading table information - " & !tableNickName) & vbCr _
+  & "<a name='top'></a>" & html_LoadTblInfo(strTblLtr) & vbCr _
+  & "<hr /><a name='fields'></a><h3 class='left'>Fields (Columns) in this table:</h3>" & vbCr _
+  & html_LoadTblFields(strTblLtr) & vbCr _
+  & "<p><a href='#top'>top</a></p><hr /><a name='examples'></a><h3 class='left'>Examples of this data table:</h3>" & vbCr _
+  & html_writeExamples(!TableName, "example_" & !TableName & "_") & "<p><a href='#top'>top</a></p>"
+
+strRep = strRep & "@vegbank_footer_html_onerow@ </body> </html>"
+Call WriteLineToFile(strRep, strFile)
+ .MoveNext
+ Loop
+ End With
+ rstTemp.Close
+End Function
+
+Public Function html_writeExamples(strTable As String, strCSVPrefix As String) As String
+  'writes the example tables to html:
+  'MTL 2004-10-29
+  Dim rstGetExampleNames As New ADODB.Recordset, strRep As String
+  rstGetExampleNames.Open "select * from xamples_available where firstOfExampleTable='" & strTable & "' and firstofTrueExample=-1;" _
+     , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+     With rstGetExampleNames
+     Do Until .EOF
+        'now write one example
+        strRep = strRep & "<h4 class='left'>" & HTMLize_txt(!firstOfExampleDescription) & ":</h4>"
+        
+        'write this example to SQL file:
+        Call writeSQLForTableExample(!exampleName, True)
+        strRep = strRep & SQLtoHTML("select * from xample_shown")
+        'write csv to go with this:
+        strRep = strRep & "<p>Download this example as a <a href='" & LCase(strCSVPrefix & !exampleName & ".csv") & "'>.csv file</a></p>"
+        DoCmd.TransferText acExportDelim, , "xample_shown", CurrentProject.Path & "\" & LCase(strCSVPrefix & !exampleName & ".csv"), True
+     .MoveNext
+     Loop
+     End With
+   rstGetExampleNames.Close
+   Set rstGetExampleNames = Nothing
+     html_writeExamples = strRep
+End Function
+
+Public Function html_linkToLoadTbls(Optional strTblLtr As String) As String
+  'links to all loading tables
+  Dim rstTemp As New ADODB.Recordset, strRep As String
+   rstTemp.Open "SELECT * FROM Z_TableDescription where tblLetter is not null ORDER BY tblLetter", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+  strRep = "<p>Navigation between loading tables:<br />" _
+  
+  Do Until .EOF
+     If !tblLetter <> strTblLtr Then
+        strRep = strRep & " <a href='" & html_loadTblFilePref & LCase(!tblLetter) & ".html'>" & HTMLize_txt(!tableNickName) & "</a> "
+     Else
+       strRep = strRep & " " & HTMLize_txt(!tableNickName) & " "
+     End If
+  .MoveNext
+  If Not .EOF Then strRep = strRep & " | "
+  Loop
+  End With
+  strRep = strRep & "</p>"
+  rstTemp.Close
+  html_linkToLoadTbls = strRep
+End Function
+Public Function html_loadTblFilePref() As String
+  html_loadTblFilePref = "overview-"
+End Function
+
+Public Function getGrey(Optional blnGetLast As Boolean) As String
+  'function retuns class="grey" for every other call; unless blnGetLast then just returns whatever was last called
+  Static blnISGrey As Boolean
+  If Not blnGetLast Then
+    blnISGrey = Not blnISGrey
+  End If
+  If blnISGrey Then
+    getGrey = " class='grey' "
+  Else
+    getGrey = ""
+  End If
+End Function
+
+Public Function html_LoadTblInfo(strTblLtr As String) As String
+  'function gets loading table names and info (very simple table format) and returns as html table
+  '2004-FEB-04 MTL
+  Dim rstTemp As New ADODB.Recordset, strRep As String
+  rstTemp.Open "select * from Z_TableDescription where tblLetter=""" & strTblLtr & """;", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+   If Not .EOF Then
+     'have table: get info
+     strRep = "@vegbank_header_html_normal@ <br/><h2><img src='@vbr_imageserver@" & LCase(strTblLtr) & "_icon.jpg' /><a href='@vegbranch_link@vegbranch.html'>VegBranch</a> Loading Tables Overview -- " & HTMLize_txt(!tableNickName & " (" & !tblLetter & ")") & "</h2>" & vbCr
+     'get links to other tables:
+    strRep = strRep & html_linkToLoadTbls(strTblLtr)
+     strRep = strRep & "<p>Jump to a different part of this page: <a href='#fields'>Field Descriptions</a> | <a href='#examples'>Example Data</a></p>"
+     
+     
+     'start html table
+     strRep = strRep & "<table>"
+     'fields to show:
+     '"TableSummary","TableDescription","TableReqd","TablesInVB","TableAutoGen","tableQuestions","tableExpertise"
+ strRep = strRep & "<tr" & getGrey() & "><td><span class='weight1 normal'>Summary: </span></td><td class='item'> " & HTMLize_txt(!TableSummary) & "</td></tr>" & vbCr
+ strRep = strRep & "<tr" & getGrey() & "><td><span class='weight1 normal'>Description: </span></td><td class='item'> " & HTMLize_txt(!TableDescription) & "</td></tr>" & vbCr
+ strRep = strRep & "<tr" & getGrey() & "><td><span class='weight1 normal'>Required in VegBranch: </span></td><td class='item'> " & HTMLize_txt(!TableReqd) & "</td></tr>" & vbCr
+ strRep = strRep & "<tr" & getGrey() & "><td><span class='weight1 normal'>Represents VegBank Tables: </span></td><td class='item'> " & web_markupVBtables(!TablesInVB) & "</td></tr>" & vbCr
+ strRep = strRep & "<tr" & getGrey() & "><td><span class='weight1 normal'>VegBranch can generate for you: </span></td><td class='item'> " & HTMLize_txt(!TableAutoGen) & "</td></tr>" & vbCr
+ strRep = strRep & "<tr" & getGrey() & "><td><span class='weight1 normal'>Questions: </span></td><td class='item'> " & HTMLize_txt(!tableQuestions) & "</td></tr>" & vbCr
+ strRep = strRep & "<tr" & getGrey() & "><td><span class='weight1 normal'>Expertise Level: </span></td><td class='item'> " & HTMLize_txt(!tableExpertise) & "</td></tr>" & vbCr
+     'end html table
+     strRep = strRep & "</table>" & vbCr
+   End If
+  .Close
+  End With
+  html_LoadTblInfo = strRep
+End Function
+
+Public Function html_fileHeader(strTitle As String) As String
+ 'std VegBranch html file header:
+ Dim strRep As String
+ strRep = "<html> <head> <title>" & xmlize_txt(strTitle) & "</title><link rel='stylesheet' href='@stylesheet@' type='text/css' />" _
+& "<style type='text/css'>" _
+ & "          td.color1 {background-color: FF6666} " & vbCr _
+  & "          td.color1_5 {background-color: FF9966} " & vbCr _
+  & "         td.color2 {background-color: FFCC99} " & vbCr _
+   & "        td.color3 {background-color: FFFF99} " & vbCr _
+    & "       td.color4 {background-color: 99FFCC} " & vbCr _
+    & "       td.color0 {background-color: 9999FF} " & vbCr _
+     & "      .weight1 {font-weight:bold} " & vbCr _
+   & "      </style> " & vbCr _
+& " </head>" & vbCr _
+& " <body>"
+html_fileHeader = strRep
+End Function
+
+
+Private Function deleteAllButSampleNamedPlaces()
+  Const intHowMany = 16
+  'function deletes all but first intHowMany places for each placeSystem
+  Dim colSQL As New Collection, rstTemp As New ADODB.Recordset, colSystems As New Collection
+  rstTemp.Open "Select placeSystem from namedPlace group by placeSystem;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+  Do Until .EOF
+    colSystems.Add (!placeSystem)
+  .MoveNext
+  Loop
+  End With
+  rstTemp.Close
+  'for each system, get intHowMany_th record # and craft sql to delete higher than that
+  Dim intLoop As Integer, intCount As Integer
+  For intLoop = 1 To colSystems.Count
+    'open rst and get intHowMany_th record number: if not that many, no SQL
+    rstTemp.Open "select * from namedPlace where placeSystem = " & SQLizeTxt(colSystems(intLoop)) & " order by namedPlace_ID ;", CurrentProject.Connection _
+      , adOpenForwardOnly, adLockReadOnly, adCmdText
+    With rstTemp
+    intCount = 1
+    Do Until .EOF Or intCount > intHowMany
+       
+       If intCount = intHowMany Then
+         'get sql to delete in this system records with bigger pk than this
+         colSQL.Add "DELETE * FROM namedPlace where placeSystem = " & SQLizeTxt(colSystems(intLoop)) & " AND namedplace_ID>" & !namedPLace_Id & " ;"
+       End If
+       intCount = intCount + 1
+    .MoveNext
+    Loop
+    End With
+    rstTemp.Close
+  Next intLoop
+  
+  For intLoop = 1 To colSQL.Count
+    Debug.Print colSQL(intLoop)
+    DoCmd.RunSQL colSQL(intLoop)
+  Next intLoop
+  
+End Function
+
+Private Function deleteAllButSampleSoilTaxa()
+  Dim intGetLevel As Integer, inttemp As Integer
+  intGetLevel = getvalFrmSQL("select max(soilLevel) from soilTaxon;")
+  For inttemp = 0 To intGetLevel
+  DoCmd.RunSQL "delete * from soilTaxon  where soiltaxon_ID > 52 and soilLevel=" & intGetLevel - inttemp
+  Next
+End Function
+
+Private Function deleteProjects()
+  DoCmd.RunSQL "delete * from projectContributor;"
+  DoCmd.RunSQL "delete * from project;"
+End Function
+
+Private Function deleteAllButCorrectParties()
+ 'deletes non-used parties from party tables
+ Dim strList As String
+ Dim rstTemp As New ADODB.Recordset
+ rstTemp.Open "select partY_Id from maint_currentUsedPartyIDs where party_ID is not null;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+ With rstTemp
+ Do Until .EOF
+   strList = strList & IIf(strList = "", "", ",") & !PARTY_ID
+ .MoveNext
+ Loop
+ End With
+ rstTemp.Close
+ 
+ If strList <> "" Then
+  If AreYouSure("Delete all but the following parties?  " & strList) Then
+  DoCmd.RunSQL "DELETE * from address where party_ID not in (" & strList & ");"
+  DoCmd.RunSQL "DELETE * from telephone where party_ID not in (" & strList & ");"
+  DoCmd.RunSQL "DELETE * from party where party_ID not in (" & strList & ");"
+  End If
+ End If
+End Function
+
+Private Function deleteSomeCommsPlants()
+  DoCmd.OpenForm "DeletePlantsCommsForm"
+End Function
+
+
+Private Function FixDataTypeSizes()
+  Dim rstCurr As New ADODB.Recordset
+  Dim fldCurr As Field
+  Dim cnnLocal As Connection
+  Dim intCount As Integer
+  
+  Set cnnLocal = CurrentProject.Connection
+  intCount = 0
+'opens query to run through values and change type sizes, for varchars only
+    rstCurr.Open "misc_change_Size_inSource", cnnLocal, , , adCmdTable
+    
+  With rstCurr
+    Do Until .EOF
+      intCount = intCount + 1
+      DoCmd.RunSQL "ALTER TABLE  " & ![origT] & " ALTER COLUMN " & !origF & _
+        "  " & ![AccessSQL] & " ( " & !dSize & " ) ;"
+      
+      
+      Debug.Print
+      .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+  msgBox (intCount & " changed")
+End Function
+
+Private Function FixDataTypes()
+  Dim rstCurr As New ADODB.Recordset
+  Dim fldCurr As Field
+  Dim cnnLocal As Connection
+  Dim intCount As Integer
+  
+  Set cnnLocal = CurrentProject.Connection
+  intCount = 0
+'opens query to run through values and change types
+    rstCurr.Open "misc_change_DT_inSource", cnnLocal, , , adCmdTable
+  Dim intResp As Integer
+  With rstCurr
+    Do Until .EOF
+      intResp = msgBox("Do you want to change " & !origT & "." & !origF & " to " & !AccessSQL, vbYesNo)
+      If intResp = vbYes Then
+        intCount = intCount + 1
+        DoCmd.RunSQL "ALTER TABLE  " & ![origT] & " ALTER COLUMN " & !origF & _
+          "  " & ![AccessSQL] & " ;"
+      End If
+      Debug.Print
+      .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+  msgBox (intCount & " changed")
+
+End Function
+
+Public Function UpdateZ_DescJoinedSubField()
+
+  'On Error GoTo Err_nothing
+  Dim intCheckEmpty As Integer
+  Dim strJoinChild1 As String, strJoinChild As String
+  Dim strJoin2 As String
+  Dim strJoinMast1 As String, strJoinMaster As String
+    
+  If Forms!Z_FieldDesc_countRecs!Empty <> "neither" Then    'linked by empty status
+     strJoin2 = "empty"
+     'MsgBox ("empty based")
+  Else ' not linked by empty status
+     strJoin2 = "one"
+    'MsgBox ("ALL fields")
+  End If  'end empty status query that sets second join field
+  
+  If Forms!Z_FieldDesc_countRecs!allTbl2 = "YES" Then 'show fields in all tables
+     strJoinMast1 = "one"
+     strJoinChild1 = "one"
+     'MsgBox ("ALL tabls")
+  Else ' limit to table in tbl field
+     strJoinMast1 = "tbl"
+     strJoinChild1 = "TableName"
+     'MsgBox ("one tbl")
+  End If 'end check of all tables' fields or limit to one tbl
+  'update join of subform
+  strJoinMaster = strJoinMast1 & ";" & strJoin2
+  strJoinChild = strJoinChild1 & ";" & strJoin2
+  'MsgBox (strJoinMaster)
+  
+  'moves away from subform to be made not visible
+'  DoCmd.GoToControl "Tbl"
+  'made not visible to avoid blinking
+'  Forms!Z_FieldDesc_countRecs!Z_FieldDescription.Visible = False
+  'the following set to null so as to avoid error (2001)
+  Forms!Z_FieldDesc_countRecs!Z_FieldDescription.LinkMasterFields = ""
+  Forms!Z_FieldDesc_countRecs!Z_FieldDescription.LinkChildFields = ""
+  
+  'Forms!Z_FieldDEsc_countRecs.Requery
+  'Forms!Z_FieldDEsc_countRecs!Z_FieldDescription.Requery
+  Forms!Z_FieldDesc_countRecs!Z_FieldDescription.LinkMasterFields = strJoinMaster
+  Forms!Z_FieldDesc_countRecs!Z_FieldDescription.LinkChildFields = strJoinChild
+  'made visible again
+ ' Forms!Z_FieldDesc_countRecs!Z_FieldDescription.Visible = True
+  'select correct field in the details panel
+  On Error Resume Next
+  Forms!Z_FieldDesc_countRecs!CurrFieldID = Forms!Z_FieldDesc_countRecs!Z_FieldDescription!Z_FieldDescr_Id
+  Exit Function
+Err_nothing:
+  msgBox "Error, could not show these records", vbCritical, "VegBranch"
+End Function
+
+Public Function doNothing()
+  'does nothing! KEEP for help_combo
+End Function
+
+Public Function EmailABugToVegBank()
+  Application.FollowHyperlink "mailto:help@vegbank.org?subject=VegBranch%20Bug%20version%20" & GetVersion("VegBranch")
+End Function
+
+Public Function fix_do_VegBankModule()
+  'performs a series of fix queries on vegbank module
+  Dim strName As String, intFixes As Integer, intFix As Integer
+  intFixes = 6
+  intFix = 1
+  strName = UpdateProcessingPosX(0, 0, "", True, "updating your VegBank Module", "fixing named places' descriptions ")
+  
+  DoCmd.OpenQuery "fix_do_namedPlace"
+  Call UpdateProcessingPosX(Int(intFix * 100 / intFixes), 0, strName, , , "adding some places")
+  intFix = intFix + 1
+  DoCmd.OpenQuery "fix_do_namedPlace_2USRegions"
+  Call UpdateProcessingPosX(Int(intFix * 100 / intFixes), 0, strName, , , "adding country names for quadrangles and counties")
+  intFix = intFix + 1
+  
+  DoCmd.OpenQuery "fix_do_states_getCountryNames"
+  Call UpdateProcessingPosX(Int(intFix * 100 / intFixes), 0, strName, , , "Fixing NPS Cover Method Indexes")
+  intFix = intFix + 1
+  
+  Call fix_NPS_CoverIndexes
+  Call UpdateProcessingPosX(Int(intFix * 100 / intFixes), 0, strName, , , "updating USDA plants with new usage.status_ID field")
+  intFix = intFix + 1
+  
+  DoCmd.RunSQL "UPDATE DISTINCTROW (party INNER JOIN ((plantConcept INNER JOIN plantUsage ON plantConcept.PLANTCONCEPT_ID = plantUsage.PLANTCONCEPT_ID) INNER JOIN plantStatus ON plantConcept.PLANTCONCEPT_ID = plantStatus.PLANTCONCEPT_ID) ON party.PARTY_ID = plantUsage.PARTY_ID) INNER JOIN party AS party_1 ON plantStatus.PARTY_ID = party_1.PARTY_ID SET plantUsage.PLANTSTATUS_ID = [PLANTSTATUS].[PLANTSTATUS_ID] WHERE (((party.accessionCode)='VB.Py.511.USDANRCSPLANTS2') AND ((party_1.accessionCode)='VB.Py.511.USDANRCSPLANTS2') AND ((plantUsage.PLANTSTATUS_ID) Is Null));", False
+  Call UpdateProcessingPosX(Int(intFix * 100 / intFixes), 0, strName, , , "updating NatureServe communities with new usage.status_ID field")
+  intFix = intFix + 1
+  
+  DoCmd.RunSQL "UPDATE DISTINCTROW party INNER JOIN ((commConcept INNER JOIN (commStatus INNER JOIN party AS party_1 ON commStatus.PARTY_ID = party_1.PARTY_ID) ON commConcept.COMMCONCEPT_ID = commStatus.COMMCONCEPT_ID) INNER JOIN commUsage ON commConcept.COMMCONCEPT_ID = commUsage.COMMCONCEPT_ID) ON party.PARTY_ID = commUsage.PARTY_ID SET commUsage.COMMSTATUS_ID = [commSTATUS].[commSTATUS_ID] WHERE (((commUsage.COMMSTATUS_ID) Is Null) AND ((party.accessionCode)='VB.Py.512.NATURESERVE') AND ((party_1.accessionCode)='VB.Py.512.NATURESERVE'));", False
+  
+  Call UpdateProcessingPosX(100, 0, strName)
+    
+'  DoCmd.RunSQL "UPDATE commUsage SET commUsage.COMMSTATUS_ID = getvalfrmsql(""select min(commstatus_id) from commstatus where commstatus.commconcept_id=commUsage.commConcept_ID and commstatus.party_Id=commusage.party_ID"");"
+'  DoCmd.RunSQL "update plantUsage set plantstatus_id=getvalfrmsql(""select min(plantstatus_id) from plantstatus where plantstatus.plantconcept_id=" & plantusage.PLANTCONCEPT_ID & " and plantstatus.party_Id=" & plantusage.PARTY_ID & """);"
+  msgBox "Finished with fixes.", , "VegBranch"
+End Function
+
+Public Function fix_NPS_CoverIndexes()
+  'check that is needed
+  Dim rstNPSCover As New ADODB.Recordset
+  rstNPSCover.Open "select * from fix_vbm_check_npsCoveRIndexes", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstNPSCover
+  If Not .EOF Then
+    If !needsPatch Then
+      'does need patch
+      Dim lngCM As Long, strPref As String
+      lngCM = !npsCM
+      strPref = "insert into CoverIndex (coverMethod_ID, coverCode, lowerLimit, upperLimit, coverPercent) select " & lngCM & ","
+      DoCmd.RunSQL strPref & "'01',0,1,0.5"
+      DoCmd.RunSQL strPref & "'02',1,5,3"
+      DoCmd.RunSQL strPref & "'03',5,25,15"
+      DoCmd.RunSQL strPref & "'04',25,50,37.5"
+      DoCmd.RunSQL strPref & "'05',50,75,62.5"
+      DoCmd.RunSQL strPref & "'06',75,100,87.5"
+      ''-- again  , without the 0
+      DoCmd.RunSQL strPref & "'1',0,1,0.5"
+      DoCmd.RunSQL strPref & "'2',1,5,3"
+      DoCmd.RunSQL strPref & "'3',5,25,15"
+      DoCmd.RunSQL strPref & "'4',25,50,37.5"
+      DoCmd.RunSQL strPref & "'5',50,75,62.5"
+      DoCmd.RunSQL strPref & "'6',75,100,87.5"
+    End If
+  End If
+  End With
+  rstNPSCover.Close
+  End Function
+
+Public Function importDataFromAnotherVegBranch(Optional strFromDB As String)
+  'function takes data from one VegBranch and puts it into this one
+ Dim blnStop As Boolean
+  If MsgBox_cust("Do you want to remove data from this VegBranch and import from another?", "Yes-import,No-don't,cancel", "This WILL remove all data from this VegBranch and you'll be prompted to provide a location for a different VegBranch to import data from it.  Close database from which you are importing first.  Does not affect the VegBank Module at all.", "Import data from another VegBranch?") <> 1 Then
+    blnStop = True
+  End If
+ If strFromDB = "" Then
+ 
+ If Not blnStop Then
+     ' First, get path of VegBranch to get:
+      strFromDB = BrowseForFile("*.mdb")
+      If strFromDB = "" Then
+        blnStop = True
+      End If
+   End If
+ Else
+   'have the file path already
+ End If
+  'check connection
+  On Error GoTo badconnection
+  Dim rstChkCnct As New ADODB.Recordset
+  rstChkCnct.Open "select versionTxt from Y_version in '" & strFromDB & "' WHERE ThisDbVersion=true", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  'if this happened without error is ok.
+  rstChkCnct.Close
+  On Error GoTo cantconnect
+  
+  If blnStop = False Then
+     'do the import.
+     
+     'now, get list of tables to import all data from: (deleting current data in this db)
+     Dim rstTbls As New ADODB.Recordset
+     rstTbls.Open "select * from Z_tabledescription where [mod]='loading' or [mod]='userdata'", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+     With rstTbls
+      
+         Dim dbs As Object, tdfCurr As Object, fldCurr As Object
+         Set dbs = CurrentDb
+      Do Until .EOF
+         'ok have table names
+         Dim strTbl As String
+         strTbl = !TableName
+         'get list of fields that are the same in each db:
+         Dim strFlds As String
+         strFlds = "" 'init list of fields
+         Set tdfCurr = dbs.tabledefs(strTbl)
+         'get list of fields on this table
+         For Each fldCurr In tdfCurr.Fields
+           'if exists on other table, bring it in
+           If fieldExistOnTbl(fldCurr.Name, strTbl, strFromDB) Then
+             'it does exist on other table, add this field to list of fields to copy
+             strFlds = strFlds & IIf(strFlds = "", "", ",") & "[" & fldCurr.Name & "]"
+           End If
+         Next
+         If strFlds <> "" Then
+           'has some fields in common, copy
+           'delete current data in table:
+          If globaldebug > 0 Then
+            If Not AreYouSure("import data from " & strTbl) Then GoTo exitthis
+          End If
+            DoCmd.RunSQL "delete * from [" & strTbl & "];"
+            'now, read in data from foreign db
+            Dim strSQL As String
+            strSQL = "INSERT INTO [" & strTbl & "] (" & strFlds & ") SELECT " & strFlds & " FROM [" & strTbl & "] IN '" & strFromDB & "';"
+            Debug.Print strSQL
+          If globaldebug > 0 Then
+         '   If Not AreYouSure("runSQL " & strSQL) Then GoTo exitthis
+          End If
+            DoCmd.RunSQL strSQL
+            
+         Else 'no fields in common
+           If msgBox("The table:" & strTbl & " had no fields in common between the 2 databases.  Continue import?", vbYesNoCancel, "VegBranch import data") <> vbYes Then
+             GoTo exitthis
+           End If
+         End If
+         
+      .MoveNext
+      Loop
+     End With
+     rstTbls.Close
+     Set rstTbls = Nothing
+     msgBox "Data imported successully.  Now attempting to Link to same VegBank Module as that VegBranch."
+     On Error GoTo cantConnectVegBankModule
+     'get connection from other VegBranch and then connect to that VegBank module, if it is connected
+     Dim strConnection As String
+     strConnection = getvalFrmSQL("select linkedTo from Z_tableDescription in '" & strFromDB & "' where tableName='plot'")
+     If strConnection <> "" Then
+       'attempt to connect this VegBranch to the VegBank Module the other one is linked to
+       Call CNCT_ConnectToDB(strConnection, "vegbank")
+     Else
+       msgBox "The other VegBranch was not linked to a VegBank Module.  Please use the 'link VegBank Module Form' to link to a valid VegBank Module." _
+         & Chr(13) & "This form will now open"
+         DoCmd.OpenForm "W_ConnectToDb"
+     End If
+     
+  Else
+    msgBox "cancelled."
+  End If
+exitthis:
+  Exit Function
+badconnection:
+  msgBox "Can't connect to the database you supplied, or it is not valid.  Make sure the database is closed.  Path you gave:" & strFromDB & Chr(13) & "error details:" & Err.Description
+  Resume exitthis
+cantconnect:
+  msgBox "Error in attempting to connect to VegBranch.  Make sure it is REALLY a VegBranch database with all valid tables intact." & Chr(13) & "error details:" & Err.Description
+  Resume exitthis
+cantConnectVegBankModule:
+msgBox "An error occurred in trying to link to the VegBank Module that the other VegBranch was connected to.  Please link using the form now displayed."
+ DoCmd.OpenForm "W_ConnectToDb"
+ Resume exitthis
+End Function
+
+Public Function AllDenorms(Optional blnForceUpdate As Boolean)
+  Call update_commName_ConcUsg(blnForceUpdate)
+  Call update_plantName_ConcUsg(blnForceUpdate)
+End Function
+
+Public Function updateClosedListSource(strFile As String)
+  'function takes location of file you downloaded from VegBank.org and then imports it into temp table, then loads into the vegbank module if no errors
+  Dim strErrorMsg As String
+  strErrorMsg = "Sorry, there was an error trying to import your file.  Make sure it is a valid 'VegBranch Closed List Update' file downloaded from VegBank and that you are properly connected to a VegBank Module."
+  On Error GoTo cannotImport
+  'reset the current temp field's data:
+  DoCmd.RunSQL "delete * from fieldList_tempimport;"
+  
+  If fastBlindIMport("fieldList_tempimport", strFile, True, "Reading your update lists file") Then
+   'check to see how many records are in the table, must not be 0 values
+   Dim strTemp As String
+   strTemp = getvalFrmSQL("select ""ok"" from fieldList_tempimport having count(1)>0")
+   If strTemp = "ok" Then
+     'have the data in temp file, check connection to VegBank Module:
+     If QuickLinkChk() Then
+       'connected and have data, do the switch:
+       DoCmd.RunSQL "delete * from [fieldList];"
+       DoCmd.RunSQL "INSERT INTO fieldList (tableName,fieldName,listValue,valueDesc,sortOrd) SELECT tableName,fieldName,listValue,valueDesc,sortOrd FROM fieldList_tempimport;"
+       msgBox "Successfully updated your closed and open list values!", , "VegBranch"
+       GoTo exitthis
+     Else
+       msgBox "You are not linked to a valid VegBank Module.  Please connect to a VegBank Module and try again."
+     End If
+   Else
+     msgBox "No records were imported, the file appears to be empty."
+   End If
+  Else
+    msgBox strErrorMsg
+  End If
+  
+  
+exitthis:
+  Exit Function
+cannotImport:
+  msgBox strErrorMsg _
+    & Chr(13) & "Error details: " & Err.Description
+    Resume exitthis
+End Function

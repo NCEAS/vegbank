@@ -1,0 +1,1536 @@
+Option Compare Database
+Option Explicit
+Const debugVal = 0
+
+''module deals with forms in a generic manner
+
+
+Public Function frm_chngFontSize(size As String, Optional blnEntireForm As Boolean)
+  'function changes font size on detail controls in current form
+  'can be +1 +2 , -1, -2 to increase/decrease by #
+  'or set to particular size: pass 8,7,6,10 etc.
+  On Error GoTo ErrFunction
+  Dim strRelative As String, intAddRelative As Integer, intAbsolute As Integer, intMultRelative As Integer
+  strRelative = Left(size, 1)
+  Select Case strRelative
+    Case "+", "-"
+     'adjust controls, based on their current size
+      intAddRelative = Right(size, Len(size) - 1)
+      If strRelative = "-" Then intAddRelative = -1 * intAddRelative
+      intAbsolute = 0
+      intMultRelative = 1
+    Case "*", "/"
+      'adjust controls, based on their content, but multiply or divide (test!!)
+      intAddRelative = 0
+      intAbsolute = 0
+      intMultRelative = Right(size, Len(size) - 1)
+      If strRelative = "/" Then intMultRelative = 1 / intMultRelative
+    Case Else
+      intAddRelative = 0
+      intMultRelative = 0
+      intAbsolute = size
+  End Select
+  Dim intOldSize As Integer
+  'loop thru controls on current form
+  Dim frmCurr As Form, ctlCurr As Control, intGetNew As Integer
+  Set frmCurr = Screen.ActiveForm
+If blnEntireForm Then ' all controls
+  For Each ctlCurr In frmCurr.Controls
+    Select Case ctlCurr.ControlType
+      Case acListBox, acComboBox, acLabel, acTextBox, acCommandButton
+        ctlCurr.FontSize = (ctlCurr.FontSize + intAddRelative) * intMultRelative + intAbsolute
+    End Select
+  Next ctlCurr
+Else 'only detail controls
+  For Each ctlCurr In frmCurr.Detail.Controls
+    Select Case ctlCurr.ControlType
+      Case acListBox, acComboBox, acLabel, acTextBox, acCommandButton
+        intGetNew = (ctlCurr.FontSize + intAddRelative) * intMultRelative + intAbsolute
+        If intGetNew > 0 And intGetNew < 127 Then
+          ctlCurr.FontSize = intGetNew
+        Else
+          If msgBox("Cannot adjust font to " & intGetNew & "  continue? ", vbYesNo) = vbYes Then
+            
+          Else
+            'stop this .
+            GoTo ExitThisFCN
+          End If
+          
+        End If
+    End Select
+  Next ctlCurr
+End If
+
+ExitThisFCN:
+Exit Function
+ErrFunction:
+  msgBox "Sorry, but an error occurred in changing the size of fonts on this form. Cannot continue." _
+    & Chr(13) & "Details: " & Err.Description
+  Debug.Print "frm_ChngFontSize>> ERROR! " & Err.Description
+  Resume ExitThisFCN
+End Function
+
+
+Public Function frm_ctlChng(strCtl As String, strHowMove As String, strDir As String, _
+  Optional dblChange As Double, Optional blnsizeOK As Boolean)
+  
+  ''function widens or narrows a control on a form or moves it,
+  ''  given the control name and
+  ''stretch or move and up dn lt or rt
+  ' zoom does both, using proportion, i.e. :
+    'orig:
+    '  XX  YY
+    '----
+    'new:
+    '
+    '   XXX   YYY
+    '   XXX   YYY
+  
+  
+  
+  Dim intFixRoundIssue
+  intFixRoundIssue = 50 'number of units to overadjust so that errors don't occur
+  
+On Error GoTo errCtlChng
+  If dblChange = 0 And strHowMove <> "zoom" Then
+    ''Debug.Print "rewrote size to .5"
+    dblChange = 0.5
+  End If
+  'get original width and height, to do proportion.
+    If (dblChange = 0 Or dblChange) And strHowMove = "zoom" > 1 Then
+      Debug.Print "frm_ctlChng>> dblChange should be % for Zooming.  was : " & dblChange & "  FIXED to 5%"
+      dblChange = 0.05
+    End If
+    Dim intVert As Integer, intHorz As Integer ' do these changes?
+'vars to cancel out changes that won't happen
+Select Case strDir
+  Case "up", "dn"
+    intVert = 1
+    intHorz = 0 'no horiz adjust
+  Case "uplt", "dnrt"
+    intVert = 1
+    intHorz = 1
+  Case "lt", "rt"
+    intVert = 0 'no vert adjust
+    intHorz = 1
+End Select
+'get new var for actual change
+  Dim dblRealChange As Double
+  Select Case strHowMove 'addition/subtraction
+    Case "move", "stretch"
+      Select Case strDir
+        Case "up", "lt" 'smaller
+          dblRealChange = -1440 * dblChange
+        Case "rt", "dn" 'bigger
+          dblRealChange = 1440 * dblChange
+        End Select
+    Case "zoom" 'proportion
+      Select Case strDir
+       Case "up", "lt", "uplt" 'smaller
+         dblRealChange = -1 * dblChange
+       Case "dn", "rt", "dnrt" 'bigger
+         dblRealChange = dblChange
+        End Select
+  End Select
+  
+Dim frmCurr As Object
+  Set frmCurr = Screen.ActiveControl.Parent
+Dim ctlCurr As Control
+If Not blnsizeOK Then ' things to do only once if this is called iteratively
+  '  Debug.Print frmCurr.Width
+End If
+
+'check form to see if resizing it will not exceed 22 inches
+Dim dblFrmHt As Double, dblFrmWidth As Double
+  
+   Select Case strHowMove
+    Case "move", "stretch" 'top of left adj
+          dblFrmHt = frmCurr.Detail.Height + (dblRealChange * intVert)
+          dblFrmWidth = frmCurr.Width + (dblRealChange * intHorz)
+   
+    Case "zoom" 'stretches and moves controls proportionately
+            dblFrmHt = frmCurr.Detail.Height + (dblRealChange * frmCurr.Detail.Height * intVert)
+            dblFrmWidth = frmCurr.Width + (dblRealChange * frmCurr.Width * intHorz)
+    End Select
+  
+  
+  
+If (Not blnsizeOK) And ((dblFrmWidth + intFixRoundIssue) > (22 * 1440) Or ((dblFrmHt + intFixRoundIssue) > (22 * 1440))) Then
+  ''form will be too big.  Pass boolean here so that if the form has been made bigger by another one of these, this won't override
+  msgBox "Can't adjust the size any more, as this would make the form bigger than Microsoft allows, 22 inches."
+  Debug.Print "frm_ctlChng>>  currentWid:" & frmCurr.Width & "  | need: " & dblFrmWidth
+  Debug.Print "frm_ctlChng>>  currentHt: " & frmCurr.Detail.Height & " | need: " & dblFrmHt
+  GoTo ExitThisFCN
+End If
+
+
+
+Select Case strCtl ' a few special cases
+  Case "!all!"
+    'use all the controls on the form: size is already checked
+    For Each ctlCurr In frmCurr.Controls
+      Call frm_ctlChng(ctlCurr.Name, strHowMove, strDir, dblChange, True)
+    Next ctlCurr
+  Case "!detail!"
+    'use all the controls in the detail section of form: size is already checked
+    For Each ctlCurr In frmCurr.Detail.Controls
+      Call frm_ctlChng(ctlCurr.Name, strHowMove, strDir, dblChange, True)
+    Next ctlCurr
+  Case Else ' the rest of this function
+    
+
+If InStr(strCtl, ",") > 0 Then  ''multiple controls passed, envoke separate instances for each ctl
+    ''get collection of controls to change
+    Dim colCtls As New Collection
+    Set colCtls = csv_parseCSVstring(strCtl, ",")
+    Dim intCount As Integer
+    For intCount = 1 To colCtls.Count
+      Call frm_ctlChng(colCtls(intCount), strHowMove, strDir, dblChange, True)
+    Next intCount
+    
+Else 'called only one control to change - do it
+  Set ctlCurr = frmCurr.Controls(strCtl)
+  
+  Dim strCtlName As String
+  Dim strDimensions As String
+  strCtlName = ctlCurr.Name
+  strDimensions = "T:" & ctlCurr.Top & "L:" & ctlCurr.Left & "W:" & ctlCurr.Width & "H:" & ctlCurr.Height
+  If debugVal > 0 Then
+    Debug.Print "frm_ctlChng>> NAME:" & strCtlName & " orig DIM: " & strDimensions
+  End If
+  
+  Select Case strHowMove
+    Case "move" 'top of left adj
+          ctlCurr.Top = ctlCurr.Top + (dblRealChange * intVert)
+          ctlCurr.Left = ctlCurr.Left + (dblRealChange * intHorz)
+    Case "stretch" 'height or width adj
+          ctlCurr.Height = ctlCurr.Height + (dblRealChange * intVert)
+          ctlCurr.Width = ctlCurr.Width + (dblRealChange * intHorz)
+   
+  Case "zoom" 'stretches and moves controls proportionately
+            'consider making whole form bigger
+            If debugVal > 0 Then
+         '     Debug.Print "HtCurr: " & frmCurr.Detail.Height
+          '    Debug.Print "NEED:" & ((ctlCurr.Height + ctlCurr.Top) + ((ctlCurr.Height + ctlCurr.Top) * dblRealChange * intVert))
+           '   Debug.Print "WdCurr:" & frmCurr.Width
+            '  Debug.Print "WNEED:" & ((ctlCurr.Width + ctlCurr.Left) + ((ctlCurr.Width + ctlCurr.Left) * dblRealChange * intHorz))
+            End If
+            
+            If frmCurr.Detail.Height < intFixRoundIssue + _
+              ((ctlCurr.Height + ctlCurr.Top) + ((ctlCurr.Height + ctlCurr.Top) * dblRealChange * intVert)) Then
+             If debugVal > 0 Then Debug.Print "frm_ctlChng>> frmHt adj to: " & frmCurr.Detail.Height + (frmCurr.Detail.Height * dblRealChange * intVert) + intFixRoundIssue _
+               & " for ctl: " & ctlCurr.Name
+              frmCurr.Detail.Height = frmCurr.Detail.Height + (frmCurr.Detail.Height * dblRealChange * intVert) + intFixRoundIssue 'avoid rounding issue
+            End If
+            If frmCurr.Width < intFixRoundIssue + _
+             ((ctlCurr.Width + ctlCurr.Left) + ((ctlCurr.Width + ctlCurr.Left) * dblRealChange * intHorz)) Then
+             If debugVal > 0 Then Debug.Print "frm_ctlChng>> frmWd adj to: "; frmCurr.Width + (frmCurr.Width * dblRealChange * intHorz) + intFixRoundIssue  'avoid rounding issue
+              frmCurr.Width = frmCurr.Width + (frmCurr.Width * dblRealChange * intHorz) + intFixRoundIssue 'avoid rounding issue
+            End If
+            strDimensions = strDimensions
+            ctlCurr.Height = ctlCurr.Height + (dblRealChange * ctlCurr.Height * intVert)
+            Dim strDel As String, strDel2 As String
+            strDel = ctlCurr.Height
+            strDel2 = ctlCurr.Top
+            ctlCurr.Top = ctlCurr.Top + (dblRealChange * ctlCurr.Top * intVert)
+            ctlCurr.Width = ctlCurr.Width + (dblRealChange * ctlCurr.Width * intHorz)
+            ctlCurr.Left = ctlCurr.Left + (dblRealChange * ctlCurr.Left * intHorz)
+  End Select ' zoom stretch etc.
+
+End If '' multiple or just one control
+
+End Select 'special case or not
+
+  If (Not blnsizeOK) Then
+   Select Case strDir
+    Case "up", "uplt", "lt"
+      ''make sure detail of form is not too large
+      If intVert = 1 Then frmCurr.Detail.Height = 33
+      ''make sure right hand side of form isn't too far right
+      If intHorz Then
+      ' Debug.Print "MADE FORM LESS WIDE!"
+        frmCurr.Width = 33
+      End If
+   End Select
+  End If
+ExitThisFCN:
+  Exit Function
+errCtlChng:
+  msgBox "Sorry, but an error occurred in trying to change the controls on this form.  Details: " & Err.Description
+  Debug.Print "frm_ctlChng>> ERROR: " & Err.Description
+ Resume ExitThisFCN
+
+End Function
+
+Public Function frm_getCtlProp(ctlCurr As Control, strPropertyName As String) As String
+  'gets a form control, specified
+  On Error GoTo errGetProp
+  frm_getCtlProp = ctlCurr.Properties(strPropertyName)
+  
+exitGetProp:
+  Exit Function
+errGetProp:
+  If debugVal > 0 Then Debug.Print "frm_getCtlProp>> can't find property:" & strPropertyName & " for control " & ctlCurr.Name
+  frm_getCtlProp = ""
+  Resume exitGetProp
+End Function
+Public Function frm_SETCtlProp(ctlCurr As Object, strPropertyName As String, strPropertyValue As String) As String
+  'SEts a form control, specified
+  On Error GoTo errGetProp
+   ctlCurr.Properties(strPropertyName) = (strPropertyValue)
+  
+exitGetProp:
+  Exit Function
+errGetProp:
+   Debug.Print "frm_SETCtlProp>> ERROR! can't set property:" & strPropertyName & " for object " & ctlCurr.Name
+  
+  Resume exitGetProp
+End Function
+
+
+Public Function frm_tagControls(blnOverwriteTags As Boolean, Optional blnDetailOnly As Boolean)
+  'function tags controls for a form with the current location, font size, visibility: can be used to restore form to original state
+  'set up values to collect:
+  Dim colPropsToRec As New Collection
+ 
+  colPropsToRec.Add "Height"
+  colPropsToRec.Add "Left"
+  colPropsToRec.Add "Top"
+  colPropsToRec.Add "Width"
+  colPropsToRec.Add "Visible"
+  colPropsToRec.Add "FontSize"
+  
+  Dim frmCurr As Form
+  Set frmCurr = Screen.ActiveForm
+  'set tags for form sections and form itself
+  frmCurr.Detail.Tag = putTagValue(frmCurr.Detail.Tag, "height", frmCurr.Detail.Height + 25, blnOverwriteTags)
+  If Not blnDetailOnly Then
+    frmCurr.Tag = putTagValue(frmCurr.Tag, "width", frmCurr.Width + 25, blnOverwriteTags)
+  
+    frmCurr.FormFooter.Tag = putTagValue(frmCurr.FormFooter.Tag, "height", frmCurr.FormFooter.Height + 25, blnOverwriteTags)
+    frmCurr.FormHeader.Tag = putTagValue(frmCurr.FormHeader.Tag, "height", frmCurr.FormHeader.Height + 25, blnOverwriteTags)
+  End If
+  
+  Dim ctlCurr As Control, inttemp As Integer, strPropVal As String
+  'get all controls
+  
+  Dim ctlsToGet
+  If Not blnDetailOnly Then
+    Set ctlsToGet = frmCurr.Controls
+  Else
+    Set ctlsToGet = frmCurr.Section("Detail").Controls
+  End If
+  For Each ctlCurr In ctlsToGet
+     Dim strCurrTag As String, strOneTag As String, strOldVal As String
+     strCurrTag = ctlCurr.Tag
+     For inttemp = 1 To colPropsToRec.Count
+       'loop through props to record
+       strPropVal = frm_getCtlProp(ctlCurr, colPropsToRec(inttemp))
+       If strPropVal <> "" Then strCurrTag = putTagValue(strCurrTag, colPropsToRec(inttemp), strPropVal, blnOverwriteTags)
+     Next inttemp
+  '  Debug.Print ctlCurr.Name & " TAG=" & strCurrTag
+    ctlCurr.Tag = strCurrTag
+  Next ctlCurr
+exitTagControls:
+  Exit Function
+End Function
+
+Public Function frm_restoreObjFromTag(objCurr As Object)
+  Dim strCurrTag As String, strName As String, strVal As String, inttemp As Integer, strPropVal As String, colTags As New Collection
+     strCurrTag = objCurr.Tag
+     'parse tag
+     Set colTags = csv_parseCSVstring(strCurrTag, ",", False)
+     For inttemp = 1 To colTags.Count
+       'loop through props to write
+       'skip empties
+       If colTags(inttemp) <> "" Then
+         If InStr(colTags(inttemp), ":") > 0 Then
+           'have :
+           strName = Left(colTags(inttemp), InStr(colTags(inttemp), ":") - 1)
+           strVal = Right(colTags(inttemp), Len(colTags(inttemp)) - InStr(colTags(inttemp), ":"))
+           'set the property
+     '      Debug.Print "would set: " & strName & "=" & strVal
+           Call frm_SETCtlProp(objCurr, strName, strVal)
+         Else ' no :
+           If debugVal > 0 Then Debug.Print "frm_restoreObjFromTag>> tag not right: " & colTags(inttemp)
+         End If 'yes/no :
+       End If ' empty
+     Next inttemp
+      
+   
+End Function
+
+Public Function frm_restoreFromTags(Optional blnOnlyDetail As Boolean)
+  'function restores the form's controls that have tags that are recognized as valid for the control type
+  Dim frmCurr As Form
+  Set frmCurr = Screen.ActiveForm
+  
+  Dim ctlCurr As Control
+  If Not blnOnlyDetail Then
+    Call frm_restoreObjFromTag(frmCurr)
+    Call frm_restoreObjFromTag(frmCurr.FormHeader)
+    Call frm_restoreObjFromTag(frmCurr.FormFooter)
+    Call frm_restoreObjFromTag(frmCurr.Detail)
+    
+    'get all controls
+  
+    For Each ctlCurr In frmCurr.Controls
+       Call frm_restoreObjFromTag(ctlCurr)
+    Next ctlCurr
+    Call frm_restoreObjFromTag(frmCurr)
+    Call frm_restoreObjFromTag(frmCurr.FormHeader)
+    Call frm_restoreObjFromTag(frmCurr.FormFooter)
+    Call frm_restoreObjFromTag(frmCurr.Detail)
+    
+    
+    
+  Else
+    Call frm_restoreObjFromTag(frmCurr.Detail)
+     'get all ctls in detail
+    For Each ctlCurr In frmCurr.Detail.Controls
+       Call frm_restoreObjFromTag(ctlCurr)
+    Next ctlCurr
+    Call frm_restoreObjFromTag(frmCurr.Detail)
+  
+  End If
+  
+exitRestoreTagControls:
+  Exit Function
+End Function
+
+Public Function FormExist(strName As String) As Boolean
+  'checks to see if a form name exists in current db
+  On Error GoTo Qerr
+  Dim qryCheck As Object
+  Dim dbs As Object
+  Set dbs = CurrentProject
+  Set qryCheck = dbs.AllForms(strName)
+    
+      FormExist = True
+      'Debug.Print strTblName & " exists"
+      Exit Function
+Qerr:
+  FormExist = False
+End Function
+
+Function existForm(strFrmName As String) As Boolean
+  'function evaluates if a form name exists and returns true if so
+    Dim obj As AccessObject, dbs As Object
+    Set dbs = Application.CurrentProject
+  Dim intLoop As Integer
+  For intLoop = 0 To dbs.AllForms.Count - 1
+    'Debug.Print dbs.AllForms(intloop).Name
+    If dbs.AllForms(intLoop).Name = strFrmName Then
+      'form name does exist
+      existForm = True
+
+      Exit Function
+    End If
+  Next intLoop
+  'could not find form name
+  existForm = False
+End Function
+
+Function existCntl(frm As Form, strControlName As String) As Boolean
+  'function evaluates if a control name exists on a form and returns a boolean TRUE if it is found
+  Dim ctlCurrent As Control, intLoop As Integer
+  For intLoop = 0 To frm.Controls.Count - 1
+    If frm.Controls(intLoop).Name = strControlName Then
+      'control name does exist
+      existCntl = True
+      Exit Function
+    End If
+  Next intLoop
+  'could not find control name
+  existCntl = False
+End Function
+
+Public Function applyFilterToCurrForm(strFilterCrit As Variant, Optional strFormName As String, Optional blnDontReqry As Boolean)
+  On Error GoTo filterErr
+  Dim frmCurr As Form
+  If strFormName = "" Then
+    Set frmCurr = Screen.ActiveForm
+  Else
+    Set frmCurr = Forms(strFormName)
+  End If
+  
+  If strFilterCrit = "" Or IsNull(strFilterCrit) Then
+     'no criteria passed, unfilter
+     frmCurr.FilterOn = False
+  Else
+    frmCurr.Filter = strFilterCrit
+    frmCurr.FilterOn = True
+  End If
+  If Not blnDontReqry Then frmCurr.Requery
+  Exit Function
+filterErr:
+  msgBox "Error in filtering form: " & Err.Description & Chr(13) & "Please enclose the entire criteria in quotes, or use no quotes."
+  Resume ExitThisFCN
+ExitThisFCN:
+End Function
+
+Public Function unfilterCurrForm(Optional blnMakeNotDataEntry As Boolean, Optional blnNoWarnDEOff As Boolean, _
+  Optional blnUseCtlParent As Boolean)
+  Dim frmCurr As Form
+  If blnUseCtlParent Then
+   Set frmCurr = Screen.ActiveControl.Parent
+  Else
+   Set frmCurr = Screen.ActiveForm
+  End If
+  frmCurr.FilterOn = False
+  If blnMakeNotDataEntry And frmCurr.DataEntry = True Then
+    If Not blnNoWarnDEOff Then msgBox "Showing all records on this form means that you will be able to edit existing data.  Please use caution!"
+    frmCurr.DataEntry = False
+  End If
+  frmCurr.Requery
+End Function
+
+Public Function setFormControl(strControlNm As String, strValue As String, Optional strFormName As String)
+  
+  If strFormName = "" Then
+    strFormName = Screen.ActiveForm.Name
+  End If
+  If strValue <> "" Then
+    Forms(strFormName).Controls(strControlNm) = strValue
+  End If
+End Function
+
+Public Function frm_setControlAsMeCaption()
+
+Public Function IsFormOpen(strFormName As String) As Boolean
+  'checks to see if a form is open (so that code can manipulate or close it)
+  IsFormOpen = False
+  Dim intLoop As Integer
+  For intLoop = 0 To Forms.Count - 1
+     If Forms(intLoop).Name = strFormName Then
+       IsFormOpen = True
+       Exit Function
+     End If
+  Next intLoop
+End Function
+
+Public Function reportExisT(strName As String) As Boolean
+  'sees if report exists
+  Dim rptCurr As Object
+  On Error GoTo notHerE
+  Set rptCurr = CurrentProject.AllReports(strName)
+  reportExisT = True
+exitthis:
+  Exit Function
+notHerE:
+  reportExisT = False
+  Resume exitthis
+End Function
+
+Public Function closeObjNoErr(strName As String, acTypE As Variant) As Boolean
+  'closes object, prompting for save, ignores errors
+  On Error Resume Next
+    DoCmd.Close acTypE, strName, acSavePrompt
+
+End Function
+
+Public Function db_misc_refreshForm()
+  ''refreshes current form
+  On Error Resume Next
+  Dim frmCurr As Form
+  Set frmCurr = Screen.ActiveForm
+  frmCurr.Refresh
+End Function
+
+
+Public Function dealWithUDefOnForms(strFormName As String, intNumShow As Integer, intMAx As Integer)
+  'function shows or hides user defined fields and labels and interpretations on forms
+  Dim inttemp As Integer, strShow As String, strHide As String
+  strShow = ""
+  strHide = ""
+  For inttemp = 1 To intNumShow
+     strShow = strShow & "UserDef_interp" & inttemp & ",UserDef" & inttemp & ",Lbl_UserDef" & inttemp & ","
+  Next inttemp
+  For inttemp = intNumShow + 1 To intMAx
+  'these are to be hidden
+     strHide = strHide & "UserDef_interp" & inttemp & ",UserDef" & inttemp & ",Lbl_UserDef" & inttemp & ","
+  Next inttemp
+  'trim , from end
+  If strShow <> "" Then
+     strShow = Left(strShow, Len(strShow) - 1)
+     Call ShowTheControls(strShow, True, strFormName, True, True, True)
+  End If
+  If strHide <> "" Then
+    strHide = Left(strHide, Len(strHide) - 1)
+    Call ShowTheControls(strHide, False, strFormName, True, True, True)
+  End If
+End Function
+
+Public Function getTagValue(strTemp As String, strName As String, Optional blnSuppressPrint As Boolean) As String
+  'gets a value out of a list like this: strTemp is full tag list
+  'value1:xxx,value2:yyy,value3:zzz
+  If InStr(strTemp, strName & ":") > 0 Then
+        Dim strTop As String
+        strTop = strTemp
+        strTop = Right(strTemp, Len(strTemp) - InStr(strTemp, strName & ":"))
+        'now looks like this:  oldtop:xxx,junk
+        strTop = Right(strTop, Len(strTop) - Len(strName))
+        'xxx,junk
+        If InStr(strTop, ",") Then
+          strTop = Left(strTop, InStr(strTop, ",") - 1)
+          'xxx
+        End If
+        getTagValue = strTop
+   Else
+     If Not blnSuppressPrint Then
+       Debug.Print "Name not found, name = " & strName & " --- list = " & strTemp
+     End If
+     getTagValue = ""
+   End If
+End Function
+
+Public Function putTagValue(strOldTag As String, strPropNAme As String, strPropVal As String, Optional blnOverwrite As Boolean)
+  'takes an old tag value, inspects and adds new tag if needs to, else replaces old tag with new, if blnOverwrite
+  
+  Dim strOldVal As String, strRet As String
+  If InStr(strPropVal & strPropNAme, ":") Or InStr(strPropVal & strPropNAme, ",") Then
+    'illegal characters in tag or value
+    If debugVal > 0 Then
+      Debug.Print "putTagValue>> illegal chars in property=" & strPropNAme & "   | value= " & strPropVal
+      GoTo exitPutTag
+    End If
+  End If
+  
+  If strPropVal = "" Or strPropNAme = "" Then
+    Debug.Print "putTagVAlue>> blank values for propName=" & strPropNAme & " or propVAlue = " & strPropVal
+    GoTo exitPutTag
+  End If
+  
+  strRet = "," & strOldTag & "," 'default 'comma start and comma end
+  strOldVal = getTagValue(strOldTag, strPropNAme, True)
+  
+  If strOldVal = "" Then 'didn't find old value, append this value onto the current tag
+   strRet = strRet & strPropNAme & ":" & strPropVal & "," 'comma start and comma end
+  Else
+     'found old tag value. ok to overwrite?
+     If blnOverwrite Then
+        'is ok to overwrite
+        If strOldVal <> strPropVal Then 'otherwise don't need to, it's already there
+          strRet = substTextForText(strRet, "," & strPropNAme & ":" & strOldVal & ",", "," & strPropNAme & ":" & strPropVal & ",")
+          If strRet = "," & strOldTag & "," Then
+            Debug.Print "putTagVal: error! thought I had replaced property: " & strPropNAme & " , value=" _
+              & strOldVal & " with " & strPropVal & " but it did not succeed.  no change made!"
+          End If 'diff tag
+        End If 'diff values
+      End If 'overwrite
+   End If 'new tag property for control
+   
+
+  strRet = substTextForText(strRet, ",,", ",") ' remove double commas, exhaustively
+  If strRet = "," Then strRet = "" ' if long comma, nothing
+exitPutTag:
+  putTagValue = strRet
+  Exit Function
+End Function
+
+Public Function getTheNamesOnFooterOfForm()
+  Dim ctlCurr As Control, formCurr As Form
+  Set formCurr = Screen.ActiveForm
+  For Each ctlCurr In formCurr.Controls
+    If ctlCurr.Section = acFooter Then Debug.Print ctlCurr.Name
+  Next
+End Function
+
+Public Function maint_getTheNamesOnSELECTIONOfForm()
+  Dim ctlCurr As Control, formCurr As Form
+  Set formCurr = Screen.ActiveForm
+  For Each ctlCurr In formCurr.Controls
+    If ctlCurr.InSelection = True Then
+      Debug.Print ctlCurr.Name
+    End If
+  Next
+End Function
+
+Public Function sortCurrForm(strSortBy As String, Optional strForm As String)
+  If strForm = "" Then strForm = Screen.ActiveForm.Name
+  Dim frmForm As Form
+  Set frmForm = Forms(strForm)
+  frmForm.OrderBy = strSortBy
+  frmForm.OrderByOn = True
+End Function
+
+Public Function ShowTheControls(strCtls As String, Optional blnShow As Integer, Optional strFrmNm As String, _
+   Optional blnVertPos As Boolean, Optional blnDontChngVis As Boolean, Optional blnSmartShow As Boolean, _
+   Optional blnNoRETag As Boolean, Optional blnReQuery As Boolean)
+ ''  On Error Resume Next
+  'function shows or hides controls on the frm : frmCurr
+  'strCtls is a comma - delimited list of controls'
+  'blnShow is true to show fields, false to hide (-2 to figure out from old tag: blnVertPos must be true, -3 to check first item and reverse visibility)
+  'blnVertPos is true to change vertical position to 0 or read from tag what new vertical position should be
+  'blnDontChngVis true results in no change of visibility, just change in position
+  'blnSmartShow is true if uses blnShow to make visible and top not 0 and ht not 0, _
+      OR visible=false and top=0 AND HT =0
+  Dim frmCurr As Form
+  If strFrmNm <> "" Then ' form specified
+    Set frmCurr = Forms(strFrmNm)
+  Else ' get current form
+    Set frmCurr = Screen.ActiveForm
+  End If
+  Dim colCtls As New Collection
+  
+  Set colCtls = csv_parseCSVstring(strCtls, ",")
+  Dim inttemp As Integer, lngTemp As Long
+    Dim strDetHt As String
+    'set max ht for detail
+    strDetHt = getTagValue(frmCurr.Detail.Tag, "maxHt", True)
+    If IsNumeric(strDetHt) And strDetHt <> "" Then
+      lngTemp = strDetHt
+      If lngTemp > frmCurr.Detail.Height Then
+        'frmCurr.Detail.Tag = "oldHt:" & frmCurr.Detail.Height
+        frmCurr.Detail.Height = lngTemp
+      End If
+    End If
+
+  For inttemp = 1 To colCtls.Count
+'-----------------have one control
+    Dim ctlThisOne As Control
+    Set ctlThisOne = frmCurr.Controls(colCtls(inttemp))
+    If debugVal > 0 Then Debug.Print "showTheControls>> working with Ctl:" & ctlThisOne.Name & "  |Tag:" & ctlThisOne.Tag
+    
+    
+    With ctlThisOne
+    
+    If blnVertPos Then
+  '------------DEALING WITH CHANGING VERT POSITION BY USING TAGS-------------------------------
+      ''Debug.Print frmCurr.Controls(colCtls(inttemp)).Top
+      Dim strTemp As String, strVal As String, strNewTag As String
+    '  strNewTag = "oldTop:" & ((.Top - 360) * 8) + 240 & ",oldHt:" & (.Height)
+     strNewTag = ""
+    ' "oldTop:" & (.Top) & ",oldHt:" & (.Height) & ",oldVis:" & .Visible
+    '  Debug.Print strNewTag
+      'get extra info stored with ctl
+      strTemp = .Tag
+      'maybe reset height
+      strVal = getTagValue(strTemp, "oldht", True)
+      If IsNumeric(strVal) And strVal <> "" Then 'adjust top
+        If Not (blnSmartShow) Or ThinkAboutChange(blnShow, strVal) Then
+          strNewTag = strNewTag & IIf(strNewTag = "", "", ",") & "oldHt:" & .Height
+          Call frm_makeSureNotTooBig(ctlThisOne, (strVal), .Top)
+          .Height = strVal
+          If debugVal > 0 Then Debug.Print "showTheControls>> " & ctlThisOne.Name & "  |Height Now:" & strVal
+        Else
+          strNewTag = strNewTag & IIf(strNewTag = "", "", ",") & "oldHt:" & strVal
+        End If
+      Else
+   '     Debug.Print "didn't adjust ht for " & colCtls(intTemp) & " tag:" & strTemp
+      End If 'adjust ht
+      
+      'maybe reset top
+      strVal = getTagValue(strTemp, "oldtop", True)
+      If IsNumeric(strVal) And strVal <> "" Then 'adjust top
+        'lngTemp = strVal
+        'If (lngTemp) > frmCurr.Detail.Height Then
+        '  frmCurr.Detail.Height = (lngTemp) + .Height + 1
+        ''  Debug.Print "adjusted detail's height!)" & frmCurr.Detail.Height & " + " & .Height
+        'End If
+        If Not (blnSmartShow) Or ThinkAboutChange(blnShow, strVal) Then
+         strNewTag = strNewTag & IIf(strNewTag = "", "", ",") & "oldtop:" & .Top
+         Call frm_makeSureNotTooBig(ctlThisOne, (strVal), .Height)
+         .Top = strVal
+         If debugVal > 0 Then Debug.Print "showTheControls>> " & ctlThisOne.Name & "  |Top Now:" & strVal
+        Else
+         strNewTag = strNewTag & IIf(strNewTag = "", "", ",") & "oldtop:" & strVal
+        End If
+      Else
+   '     Debug.Print "didn't adjust top for " & colCtls(intTemp) & " tag:" & strTemp
+      End If 'adjust top
+      
+      'maybe reset vis:
+      strVal = getTagValue(strTemp, "oldVis", True)
+      If debugVal > 0 Then Debug.Print strVal & " is the old visibility"
+      If strVal <> "" Then
+        If isBoolean(strVal) Then
+          'reset visibility and record old value for reversing this
+          
+         If Not (blnSmartShow) Or ThinkAboutChange(blnShow, strVal) Then
+          strNewTag = strNewTag & IIf(strNewTag = "", "", ",") & "oldVis:" & .Visible
+          .Visible = strVal
+         Else
+          strNewTag = strNewTag & IIf(strNewTag = "", "", ",") & "oldVis:" & strVal
+         End If
+        End If
+      End If
+      If Not blnNoRETag Then .Tag = strNewTag
+      If debugVal > 0 Then Debug.Print "showTheControls>> " & ctlThisOne.Name & "  |newTag " & strNewTag
+    End If ' blnVertPos
+    
+    If blnShow = -3 Then
+      Dim blnInit As Boolean
+      If blnInit = False Then
+        'set blnShow
+        blnShow = Not (.Visible)
+        blnInit = True
+      End If
+    End If
+    If Not blnDontChngVis And blnShow <> -2 Then .Visible = blnShow
+    End With
+  Next inttemp
+    
+    'set detail ht to minimum allowed
+   ' If IsNumeric(strDetHt) And strDetHt <> "" Then
+   '   lngTemp = strDetHt
+   '   If lngTemp < frmCurr.Detail.Height Then
+       ' frmCurr.Detail.Tag = "oldHt:" & frmCurr.Detail.Height
+        frmCurr.Detail.Height = 1
+        frmCurr.Section(acFooter).Height = 1
+        frmCurr.Section(acHeader).Height = 1
+   If blnReQuery Then frmCurr.Requery
+   '   End If
+   ' End If
+
+End Function
+
+Public Function frm_makeSureNotTooBig(ctlCurr As Control, lngNewHt As Long, lngNewTop As Long, _
+  Optional lngNewWidth As Long, Optional lngNewLeft As Long)
+  'function makes sure that a form or section of form is not too small for a control which is being enlarged
+  'MTL 19-Jan-2004
+  Dim frmCurr As Form, lngRoundErr As Long
+  lngRoundErr = 50 'small measure of error
+  Set frmCurr = Screen.ActiveControl.Parent
+  
+  '----------------------check width:
+    If lngNewWidth + lngNewLeft > frmCurr.Width Then
+      frmCurr.Width = lngNewWidth + lngNewLeft + lngRoundErr
+    End If
+  Dim lngSec As Long
+  lngSec = ctlCurr.Section
+  If lngNewHt + lngNewTop > frmCurr.Section(lngSec).Height Then
+    frmCurr.Section(lngSec).Height = lngNewHt + lngNewTop + lngRoundErr
+  End If
+  
+End Function
+
+Public Function ThinkAboutChange(blnShow As Integer, strVar As String) As Boolean
+  ''function checks to see if showing an item should be done
+  ''i.e. if blnShow = true, but strVar = 0 or false (no ht, 0 top, invisible), then don't do it
+  Dim blnVar As Boolean
+  'figure out if this is a show or hide string
+  If strVar = "0" Or strVar = "False" Then
+    blnVar = False ' is a HIDE type change
+  Else ' is a SHOW type change
+    blnVar = True
+  End If
+  If blnVar <> blnShow And blnShow <> -2 Then
+    'blnvar disagrees with blnShow, don't make change
+    ThinkAboutChange = False
+  Else
+    'strvar agrees with blnShow, do change
+    ThinkAboutChange = True
+  End If
+End Function
+
+
+Public Function rereshCurrForm()
+  'refreshes current form
+  On Error Resume Next
+  Dim frmCurr As Form
+  Set frmCurr = Screen.ActiveForm
+    frmCurr.Refresh
+End Function
+
+
+Public Function recalcCurrForm(Optional blnReq As Boolean, Optional blnDontRecalc As Boolean, _
+   Optional blnRefilter As Boolean)
+  On Error GoTo ErrRecalc
+  
+  Dim frmCurr As Form
+  Set frmCurr = Screen.ActiveForm
+  If blnReq Then
+    frmCurr.Requery
+    frmCurr.Repaint
+  End If
+  If Not blnDontRecalc Then
+    frmCurr.Recalc
+  End If
+  If blnRefilter Then
+    frmCurr.FilterOn = False
+    frmCurr.FilterOn = True
+  End If
+  Exit Function
+ErrRecalc:
+  Debug.Print "Recalc failed."
+  Resume ExitThisFCN
+ExitThisFCN:
+End Function
+
+Public Function recalcCurrCtl()
+  'recalcs current control
+  'On Error Resume Next
+  Screen.ActiveControl.Recalc
+End Function
+
+Public Function CloseMeAndOpen(strForm As String, Optional strWHERE As String)
+  DoCmd.Close acForm, Screen.ActiveForm.Name
+  DoCmd.OpenForm strForm, , , strWHERE
+End Function
+
+Public Function copyControl(ctlBase As Control) As Control
+  'funtion copies a control, since this dNE, why??
+
+  Dim ctlnew As New Control, prpCurr As Property, strCurrPrp As String, strCurrval As String, strCurrtyp As String
+
+  Set ctlnew = CreateControl(ctlBase.Parent.Name, ctlBase.ControlType, ctlBase.Section, , , ctlBase.Left, ctlBase.Top, ctlBase.Width, ctlBase.Height)
+
+  On Error GoTo copyCtlErr
+  For Each prpCurr In ctlBase.Properties
+    Select Case prpCurr.Name
+     Case "EventProcPrefix", "Name", "ControlType", "Section"
+     Case Else
+    strCurrPrp = prpCurr.Name
+    strCurrval = prpCurr.Value
+    strCurrtyp = prpCurr.Type
+    
+     On Error GoTo copyCtlErr
+    ' Debug.Print "setting: " & prpCurr.Name & " val: " & prpCurr.Value & " atts: " & strcurratts & " typ:" & prpCurr.Type
+     'Debug.Print prpCurr.Attributes
+     ctlnew.Properties(prpCurr.Name) = prpCurr.Value
+    End Select
+  Next
+ ' Debug.Print ctlNEw.Name
+  Set copyControl = ctlnew
+  Exit Function
+copyCtlErr:
+  Debug.Print "copyControl>> ERROR: " & strCurrPrp & ":" & strCurrval & "  typ:" & strCurrtyp & "---" & Err.Description
+  Resume Next
+End Function
+
+Public Function Frm_makeEditable(dblEditable As Double, Optional frmName As String, Optional blnWarn As Boolean)
+  'function makes current form (or form name passed, optional) editable, according to:
+ '-1: data entry
+  '1: edit, 1.1 edit+additions, 1.2 edit+add+del
+  '2: readonly
+  'MTL JAN-14-2004
+  If blnWarn And dblEditable >= 1 And dblEditable < 2 Then
+    'make sure they understand what they are up to
+    If Not (AreYouSure("You are about to allow editing of this form.  You should not edit records to change " _
+      & "the nature of the record completely (i.e. change one method to a new method; instead, add a new one)." _
+      & " You should only use this to correct data that you added previously.  " & Chr(13) _
+      & Chr(13) & " Do you want to continue?")) Then
+      Exit Function
+    End If
+  End If
+  Dim frmCurr As Object
+  If frmName = "" Then
+    'get active form
+    Set frmCurr = Screen.ActiveForm
+  Else
+    'get form name passed here
+    If Not IsFormOpen(frmName) Then
+      'open form
+      DoCmd.OpenForm frmName
+    End If
+    Set frmCurr = Forms(frmName)
+  End If
+  Dim lngCurrRec As Long, blnFilterOn As Boolean
+  lngCurrRec = frmCurr.Form.CurrentRecord
+  blnFilterOn = frmCurr.Form.FilterOn
+  Call frm_makeEditable_passFrm(dblEditable, frmCurr)
+On Error Resume Next
+frmCurr.Form.FilterOn = blnFilterOn
+DoCmd.GoToRecord acDataForm, frmCurr.Name, acGoTo, lngCurrRec
+End Function
+
+Public Function frm_makeEditable_passFrm(dblEditable As Double, frmCurr As Object)
+ 'makes the form passed editable according to lngEditable
+ '-1: data entry
+  '1: edit, 1.1 edit+additions, 1.2 edit+add+del
+  '2: readonly
+ With frmCurr
+ ' Debug.Print .Name
+  If dblEditable = -1 Then
+    .Form.DataEntry = True
+    .Form.AllowEdits = True
+    .Form.AllowAdditions = True
+    .Form.AllowDeletions = True
+    
+  Else
+    
+   .Form.DataEntry = False
+    If dblEditable >= 1 And dblEditable < 2 Then
+      .Form.AllowEdits = True
+      .Form.AllowAdditions = (dblEditable >= 1.1)
+      .Form.AllowDeletions = (dblEditable >= 1.2)
+    Else
+      If dblEditable = 2 Then
+        .Form.AllowAdditions = False
+        .Form.AllowEdits = False
+        .Form.AllowDeletions = False
+      End If
+    End If
+    
+  End If
+  If .Form.AllowDeletions Then
+    'make sure record selectors are on
+    .Form.RecordSelectors = True
+  End If
+  Dim ctlCurr As Object
+ For Each ctlCurr In .Controls
+   If ctlCurr.ControlType = 112 Then 'is subform recurse!
+   '  Debug.Print "recursing to get: " & ctlCurr.Name
+     frm_makeEditable_passFrm dblEditable, ctlCurr
+   End If
+ Next ctlCurr
+ End With
+ 
+End Function
+Public Function frm_browserOnMoveRec(Optional ByVal frmNm As String)
+  ''function takes care of several functions which are necessary when form moves to new record
+    Dim pkNm As String, frmCurr As Form
+    If frmNm = "" Then
+      frmNm = Screen.ActiveForm.Name
+    End If
+    Set frmCurr = Forms(frmNm)
+
+    'get rest of info from table: formsPrevViewSelect
+    pkNm = getvalFrmSQL("select PKNAME from formsPrevViewSelect WHERE formNAme=""" & frmNm & """")
+    
+    ''write new value to history table
+    Call frm_historyWrite(frmNm)
+    ''update buttons' enablement
+      'is there is a future in history
+      frmCurr.Controls!cmd_brwsr_next.Enabled = (frm_getHistorySeq(frmNm, 1) <> -1)
+      'is there a past in history
+      frmCurr.Controls!cmd_brwsr_previous.Enabled = (frm_getHistorySeq(frmNm, -1) <> -1)
+      frmCurr.Controls!cmbo_brwsr_previous.RowSource = "select * from history_form_" & frmNm & " WHERE prevView_ID<" _
+       & frm_getHistorySeq(frmNm, 0) & " ORDER BY prevView_ID desc"
+      frmCurr.Controls!cmbo_brwsr_next.RowSource = "select * from history_form_" & frmNm & " WHERE prevView_ID>" _
+       & frm_getHistorySeq(frmNm, 0) & " ORDER BY prevView_ID "
+      
+      frmCurr.Recalc
+End Function
+
+
+Public Function frm_moveInHistory(intWhich As Integer, Optional ByVal lngSeq As Long, Optional ByVal frmNm As String, _
+  Optional ByVal pkNm As String)
+  'function moves us to someplace in history, intWhich =-1 mean prev, 1, mean next, 0 means use Seq#
+  If frmNm = "" Then
+    'get form name of current form
+    frmNm = Screen.ActiveForm.Name
+    'get rest of info from table: formsPrevViewSelect
+    pkNm = getvalFrmSQL("select PKNAME from formsPrevViewSelect WHERE formNAme=""" & frmNm & """")
+  End If
+  
+  If intWhich = -1 Or intWhich = 1 Then
+    'get sequence # to move to
+    lngSeq = frm_getHistorySeq(frmNm, intWhich)
+  End If
+  
+  If lngSeq = -1 Then
+    'cant do that
+    msgBox "Sorry, cannot move to the record you requested."
+  Else
+    Call frm_eraseCurrPos(frmNm)
+    DoCmd.RunSQL "update formsPrevView SET currentRec=true where prevView_ID=" & lngSeq
+    'now move there
+    Call frm_findVal(frmNm, pkNm, frm_getHistoryPKValfrmSeq(lngSeq))
+  End If 'invalid seq or not
+End Function
+
+Public Function frm_eraseCurrPos(frmNm As String)
+  'erases current posistion from history list
+  DoCmd.RunSQL "update formsPrevView SET currentRec=false where formName=""" & frmNm & """;"
+End Function
+
+Public Function frm_historyWrite(Optional ByVal frmNm As String, Optional ByVal pkNm As String, _
+Optional ByVal pkVal As Variant, Optional blnNoDel As Boolean)
+  'function writes to a table (formsPrevView) the form name and record information to allow "back" button
+  '2004-JAN-15 MTL
+  'does not write if the current record matches the record we are on: avoids duplicates as well as allows back to not overwrite future
+  'blnNoDel is true for back and forward requests, this prevents deletes of history in these cases
+  If frmNm = "" Then frmNm = Screen.ActiveForm.Name 'get form name of current form
+    
+  If pkNm = "" Then 'get rest of info from table: formsPrevViewSelect
+    pkNm = getvalFrmSQL("select PKNAME from formsPrevViewSelect WHERE formNAme=""" & frmNm & """")
+    pkVal = Forms(frmNm).Controls(pkNm)
+  End If
+  
+  If frm_getHistorySeq(frmNm, 0, True) = pkVal Then
+    'this is the same value as current record, do nothing
+    Exit Function
+  End If
+  
+  If Not IsNull(pkVal) Then
+    'only do if not a new (null PK) record
+  If Not blnNoDel Then
+    'delete any record past "current" current record
+    Dim strCurrRec As String
+    strCurrRec = getvalFrmSQL("select max(prevview_ID) from formsPrevView WHERE formName=""" & frmNm & """ AND currentRec=true")
+    If strCurrRec <> "" And IsNumeric(strCurrRec) Then
+      DoCmd.RunSQL "delete * from formsPrevView WHERE formName=""" & frmNm & """ AND prevview_ID> " & strCurrRec
+    End If
+  End If
+  'erase current record check
+  Call frm_eraseCurrPos(frmNm)
+  'write new current record
+   DoCmd.RunSQL "insert into formsPrevView(formName,pkname,pkval,currentRec) SELECT """ & frmNm & """,""" & pkNm _
+     & """," & pkVal & ", true"
+  End If
+  
+End Function
+
+Public Function frm_removeHistory(Optional frmNm As String)
+  'function deletes the history for a form
+  'JAN-16-2004 MTL
+    If frmNm = "" Then
+    'get form name of current form
+    frmNm = Screen.ActiveForm.Name
+    End If
+    DoCmd.RunSQL "delete * from formsPrevView WHERE formNAme=""" & frmNm & """;"
+End Function
+
+Public Function frm_getHistorySeq(frmNm As String, Optional intWhich As Integer, Optional blnRetPK As Boolean, Optional blnGOTO As Long) As Long
+  'function gets what PK a form is on currently (dep intWhich)
+  'intWhich:
+  '-1 : previous record
+  '0: current
+  '1: next (if avail)
+  'returns -1 if not found
+  'MTL 2004-JAN-15
+  Dim strTemp As String, lngRet As Long
+  If blnGOTO Then
+    Select Case intWhich
+     Case -1
+       Debug.Print "prev record requested"
+     Case 1
+       Debug.Print "next rec req"
+     Case Else
+       Debug.Print "err!"
+    End Select
+  End If
+  lngRet = -1
+  strTemp = getvalFrmSQL("select min(prevView_ID) from formsPrevView where formName=""" & frmNm & """ and currentRec=true")
+  If IsNumeric(strTemp) Then
+    'got seq value
+    lngRet = strTemp
+    Select Case intWhich
+      Case 0
+          'is ok
+      Case -1 'prev
+        strTemp = getvalFrmSQL("select max(prevView_ID) from formsPrevView where formName=""" & frmNm & """ and prevView_ID<" & lngRet)
+      Case 1 'next
+        strTemp = getvalFrmSQL("select min(prevView_ID) from formsPrevView where formName=""" & frmNm & """ and prevView_ID>" & lngRet)
+    End Select
+    If IsNumeric(strTemp) Then
+      lngRet = strTemp
+    Else
+      lngRet = -1
+    End If
+  End If
+  Dim strFldName As String
+  strFldName = getvalFrmSQL("select pkname from formsPrevView where prevView_ID=" & lngRet)
+  If blnGOTO And lngRet <> -1 Then
+    Call frm_findVal(frmNm, strFldName, frm_getHistoryPKValfrmSeq(lngRet))
+  End If
+  
+  If blnRetPK Then
+    'get PK instead of sequence value
+    lngRet = frm_getHistoryPKValfrmSeq(lngRet)
+  End If
+
+  frm_getHistorySeq = lngRet
+End Function
+
+Public Function frm_getHistoryPKValfrmSeq(lngSeq As Long) As Long
+  'function gets PKval from history, given sequence # (Pk of table that stores that info)
+  Dim strTemp As String
+  strTemp = getvalFrmSQL("select pkval from formsPrevView where prevview_ID=" & lngSeq)
+  If IsNumeric(strTemp) Then
+    frm_getHistoryPKValfrmSeq = strTemp
+  Else
+    frm_getHistoryPKValfrmSeq = -1
+  End If
+End Function
+
+
+Public Function frm_findVal(frmNm As String, FldName As String, fldVal As Variant, Optional blnFailOnNeg1 As Boolean)
+  'function makes sure that form is visible with value in question found.
+  'first tries to just find the record
+  'if that fails, opens form with where set to fldName=fldVal
+  'MTL 15-Jan-2004
+  If blnFailOnNeg1 And fldVal = -1 Then
+    msgBox "Cannot move to the record requested.  Make sure the value requested exists."
+    Exit Function
+  End If
+  If frm_findValOnCntl(frmNm, FldName, fldVal, True) Then
+    'is ok, stop
+   ' Debug.Print "found by finding"
+  Else 'above didn't work, try reopening with where statement
+    Debug.Print "try to find by opening"
+    DoCmd.OpenForm frmNm, , , FldName & " & """" = """ & fldVal & """"
+  End If
+End Function
+
+Public Function frm_findValOnCntl(frmNm As String, ctlName As String, ctlVal As Variant, Optional blnOpen As Boolean) As Boolean
+  'function finds value on form, needing form name and control name to search.  returns false if not found, true if so
+  On Error GoTo errNotFixVis
+  frm_findValOnCntl = True 'assume true until made false
+  Dim frmCurr As Object, ctlCurr As Control
+  'open form if it isn't open and is requested
+  If blnOpen And Not IsFormOpen(frmNm) Then DoCmd.OpenForm frmNm
+  Set frmCurr = Forms(frmNm)
+  Set ctlCurr = frmCurr.Controls(ctlName)
+  If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> found ctl"
+  Dim blnVis As Boolean, strctlBackTo As String
+  'remember what control to move focus back to
+  strctlBackTo = frmCurr.ActiveControl.Name
+  If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> found current ctl"
+  blnVis = ctlCurr.Visible 'make visible if need to
+     ctlCurr.Visible = True
+  If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> is vis"
+  On Error GoTo errFixVis
+      ctlCurr.SetFocus
+  If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> have focus"
+  DoCmd.FindRecord ctlVal
+  If ctlCurr.Value <> ctlVal Then
+    'not found
+    If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> value not found, no errs, try unfilter and find"
+    frmCurr.FilterOn = False
+    ctlCurr.SetFocus
+    DoCmd.FindRecord ctlVal
+    If ctlCurr.Value <> ctlVal Then
+      frm_findValOnCntl = False
+      If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> value not found, unfilter didn't work"
+    Else
+      If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> value not found, filter did work"
+    End If
+  End If
+  If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> found your rec: setting focus to " & strctlBackTo
+  On Error Resume Next 'skip this step if causing errors
+  If strctlBackTo <> ctlName Then frmCurr(strctlBackTo).SetFocus
+    'pick somewhere safe to set focus
+  On Error GoTo errFixVis
+  'still on bad control if name is still ctlName
+  If Screen.ActiveControl.Name = ctlName Then Call frm_setSafeFocus(frmCurr.Name, ctlName)
+  If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> returned focus : " & Screen.ActiveControl.Name
+  
+extFixVis:
+On Error GoTo errNotFixVis
+  ctlCurr.Visible = blnVis
+    If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> vis back"
+exitFcn:
+    If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> exit"
+  Exit Function
+errNotFixVis:
+  frm_findValOnCntl = False
+    If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> err w/o visible issue"
+  Resume exitFcn
+errFixVis:
+  frm_findValOnCntl = False
+    If debugVal > 0 Then Debug.Print "frm_findValOnCntl>> err will fix vis"
+  Resume extFixVis
+End Function
+
+Public Function frm_setSafeFocus(frmName As String, strExclName As String)
+  'function sets focus to a safe control, excluding name passed, since this may be made invisible/disabled
+  Dim frmCurr As Form
+  Set frmCurr = Forms(frmName)
+  Dim ctlCurr As Control
+  For Each ctlCurr In frmCurr.Controls
+  '  Debug.Print "trying control: " & ctlCurr.Name
+    If ctlCurr.Name <> strExclName And ctlCurr.ControlType <> acLabel Then
+     If frm_setCtlFocus(frmCurr, ctlCurr.Name) Then
+     ' Debug.Print ctlCurr.Name & " succeeded in setting focus"
+      GoTo exitthis
+     End If
+    End If
+  Next ctlCurr
+exitthis:
+End Function
+
+Public Function frm_setCtlFocus(frmForm As Form, ctlName As String) As Boolean
+ ' 'function tries to set focus to control, false if fails
+ On Error GoTo failed
+ 
+ frmForm.Controls(ctlName).SetFocus
+ frm_setCtlFocus = True
+exitthis:
+ Exit Function
+failed:
+ frm_setCtlFocus = False
+ Resume exitthis
+End Function
+
+Public Function frm_chngCtlSrc(ctlName As String, strNewSrc As String, Optional frmName As String)
+  'function changes a control source to the string passed here
+  'takes parent of active control unless form name passed
+  'MTL 19-Jan-2004
+  Dim frmCurr As Object
+  If frmName = "" Then
+Set frmCurr = Screen.ActiveControl.Parent
+  Else
+   Set frmCurr = Forms(frmName)
+  End If
+  'have form/object, change controls(ctlNamE)
+  frmCurr.Controls(ctlName).ControlSource = strNewSrc
+  
+End Function
+
+Public Function frm_chngRowSrc(ctlName As String, strNewSrc As String, Optional frmName As String)
+  'function changes a row source to the string passed here, if listbox or combobox
+  'takes parent of active control unless form name passed
+  'MTL 27-Jan-2004
+  Dim frmCurr As Object
+  If frmName = "" Then
+Set frmCurr = Screen.ActiveControl.Parent
+  Else
+   Set frmCurr = Forms(frmName)
+  End If
+  'have form/object, change controls(ctlNamE)
+  On Error Resume Next
+  frmCurr.Controls(ctlName).RowSource = strNewSrc
+  
+End Function
+
+''-------CUSTOM PROCS to get names of controls to show
+Public Function frm_getCtls_toShowHide(strForm As String) As String
+  Select Case strForm
+    Case "taxonInterpretation"
+     frm_getCtls_toShowHide = "Text45,Label46,referenceName,Label47,CollectorName,Label48,collectionnumber,Label49,collectiondate,Label50,MuseumName,Label51,museumaccessionnumber,Label52,TIrolecode,Label53,grouptype,Label54,TIplantName,Label59,prefPlantName,Label60,PCplantName,Label61,PCreference,Label62,stemlocation_id,Label69,Label70,Label71,Label72,notespublic,notesmgt,revisions,Label56,Label57,Label58,Box77,Box78,Box79,cmd_seeMorePlantConcept,cmd_seeMoreReference,cmd_seeMoreStemLoc,cmd_seeMoreTaxAlt,cmd_seeMoreCollector,cmd_seeMoreMuseum"
+  End Select
+End Function
+
+Public Function frm_textBoxesAllWhite(Optional ByVal strForm As String)
+   'function changes background color in current form's text boxes to white
+   If strForm = "" Then strForm = Screen.ActiveForm.Name
+   Dim frmCurr As Form, ctlCurr As Control
+   Set frmCurr = Forms(strForm)
+   For Each ctlCurr In frmCurr.Controls
+     Select Case ctlCurr.ControlType
+       Case acTextBox, acComboBox, acListBox
+         ctlCurr.BackColor = 16777215 'white
+     End Select
+   Next ctlCurr
+End Function
+
+Public Function frm_highlightErrFld(Optional strCtl As String, Optional strForm As String, Optional blnUnHighLight As Boolean)
+  'highlights error, currentCtl if control not passed, dito with form
+  Dim ctlCurr As Control
+  
+  If strCtl = "" Then
+    ctlCurr = Screen.ActiveControl
+  Else
+    If strForm = "" Then strForm = Screen.ActiveForm.Name
+    Dim frmCurr As Form
+    Set frmCurr = Forms(strForm)
+    Set ctlCurr = frmCurr.Controls(strCtl)
+  End If
+  'have control to highlight
+  If ctlCurr.ControlType = acCommandButton Then
+    ctlCurr.ForeColor = IIf(blnUnHighLight, 0, 255) 'blk or red
+  Else
+    ctlCurr.BackColor = IIf(blnUnHighLight, 16777215, 255) 'white or red
+  End If
+End Function
+
+Public Function ZipAFile(strFile As String)
+  DoCmd.OpenForm "zipFile", , , , , , strFile
+End Function
+
+Public Function filterSmartlyThisFrm(Optional blnNoDefault As Boolean, Optional frmName As String)
+  'function filters the current form to match only the contents of the current picklist
+  'then specifies default value for control name passed
+  'then disables the control name
+  'if current picklist value='--all--' then show all, enable, etc.
+  Dim frmCurr As Form, ctlCurr As Control, strFilt As String, strFld As String
+  strFilt = "TRUE" 'defulat
+  If frmName <> "" Then
+    Set frmCurr = Forms(frmName)
+  Else
+    Set frmCurr = Screen.ActiveForm
+  End If
+  For Each ctlCurr In frmCurr.Controls
+  
+    If ctlCurr.Section = 1 And Left(ctlCurr.Name, 5) = "top__" Then
+     strFld = Right(ctlCurr.Name, Len(ctlCurr.Name) - 5)
+     Dim ctlnew As Control
+      Set ctlnew = frmCurr.Controls(strFld)
+     If ctlCurr.Value = "--all--" Or IsNull(ctlCurr.Value) Then
+      'do not filter, make sure no default, enabled, etc.
+      ctlnew.DefaultValue = ""
+      ctlnew.Enabled = True
+     Else 'particular
+      'filter by this value, set defaults, etc.
+      If InStr(ctlCurr.Value, "*") Then
+        strFilt = strFilt & " AND ([" & strFld & "] LIKE " & SQLizeTxt(ctlCurr.Value) & ")"
+      Else
+        strFilt = strFilt & " AND ([" & strFld & "]=forms![" & frmCurr.Name & "]![" & ctlCurr.Name & "])"
+      End If
+      'get control to set default for
+      If Not blnNoDefault Then
+        'check to see if form is told not to do this:
+        If InStr(ctlnew.Tag, "@noDefaultValAllowed@") = 0 Then
+          ctlnew.DefaultValue = "forms![" & frmCurr.Name & "]![" & ctlCurr.Name & "]"
+          ctlnew.Enabled = False
+        End If
+        
+      End If
+      'Debug.Print ctlCurr.Name
+     End If
+    End If
+  Next ctlCurr
+  frmCurr.Filter = strFilt
+  frmCurr.FilterOn = True
+End Function
+
+Public Function frm_height2Zero(strCtls As String, blnShow As Boolean, Optional strFrmName As String)
+  'function shrinks all controls passed to 0 height and invisible, or if blnShow, back to origHt and Top
+  Dim colCtls As New Collection, inttemp As Integer, strHt As String, strTop As String, frmCurr As Form
+  If strFrmName = "" Then
+    Set frmCurr = Screen.ActiveForm
+  Else
+    Set frmCurr = Forms(strFrmName)
+  End If
+  Set colCtls = csv_parseCSVstring(strCtls)
+  For inttemp = 1 To colCtls.Count
+    With frmCurr.Controls(colCtls(inttemp))
+    strHt = getTagValue(Nz(.Tag), "Height", True)
+    strTop = getTagValue(Nz(.Tag), "Top", True)
+    If blnShow Then
+      .Visible = True
+      If strHt <> "" Then
+        .Height = strHt
+      End If
+      If strTop <> "" Then
+        .Top = strTop
+      End If
+    Else
+      'hide: top and ht to 0, visible to false, make sure tagged
+      If strHt = "" Then
+        .Tag = .Tag & IIf(Right(.Tag, 1) <> ",", ",", "") & "Height:" & .Height & ","
+      End If
+      If strTop = "" Then
+        .Tag = .Tag & IIf(Right(.Tag, 1) <> ",", ",", "") & "Top:" & .Top & ","
+      End If
+      .Height = 0
+      .Top = 0
+      .Visible = False
+    End If 'blnShow
+    End With
+  Next inttemp
+End Function
+
+Public Function frm_passFilterOpenArgs(strField As String, Optional ByVal strFormName As String, Optional blnNoFilt As Boolean)
+ 'get value and populate it into field
+ 
+ If strFormName = "" Then
+   strFormName = Screen.ActiveForm.Name
+ 
+ 
+ End If
+ 
+ Forms(strFormName).Controls(strField) = frm_openArgs(strFormName)
+ If Not blnNoFilt Then Call filterSmartlyThisFrm(True, strFormName)
+End Function
+
+Public Function frm_openArgs(Optional strFormName As String) As String
+  'returns openArgs for use from onOpen events without adding module
+  Dim frmCurr As Form
+ If strFormName = "" Then
+   Set frmCurr = Screen.ActiveForm
+ Else
+   Set frmCurr = Forms(strFormName)
+ End If
+ Dim strOpenArgs As String
+ strOpenArgs = Nz(frmCurr.OpenArgs)
+ 
+ frm_openArgs = strOpenArgs
+ 
+End Function
+
+Public Function frm_dev_printControlNames()
+  Dim frmCurr As Form, ctlCurr As Control
+  Set frmCurr = Screen.ActiveForm
+  Debug.Print "Form:" & frmCurr.Name
+  Debug.Print "-- header:"
+  For Each ctlCurr In frmCurr
+    If ctlCurr.Section = acHeader Then
+      Debug.Print ctlCurr.Name
+    End If
+  Next ctlCurr
+  Debug.Print "-- detail:"
+  For Each ctlCurr In frmCurr
+    If ctlCurr.Section = acDetail Then
+      Debug.Print ctlCurr.Name
+    End If
+  Next ctlCurr
+  Debug.Print "-- footer:"
+  For Each ctlCurr In frmCurr
+    If ctlCurr.Section = acFooter Then
+      Debug.Print ctlCurr.Name
+    End If
+  Next ctlCurr
+  
+End Function
+
+Public Function frm_fillInStatusBarTxt(strTable As String, Optional strFormName As String)
+  'adds statusBarText for controls on current form, or form specified, given a table name, to controls with controlSource matching fieldNames
+  Dim frmCurr As Form
+  If strFormName = "" Then
+    Set frmCurr = Screen.ActiveForm
+  Else
+    Set frmCurr = Forms(strFormName)
+  End If
+  'have form, get controls and then check for definitions
+  Dim ctlCurr As Control
+  For Each ctlCurr In frmCurr.Controls
+    'see if has control source
+    Dim strCtlSrc As String
+    strCtlSrc = frm_getCtlProp(ctlCurr, "ControlSource")
+    If strCtlSrc <> "" Then
+      'has control source, see if explanation of this control src exists:
+      Dim strExpl As String
+      strExpl = getvalFrmSQL("select fieldDefinition from Z_FieldDEscription where tableName=" & SQLizeTxt(strTable) _
+        & " and fieldName=" & SQLizeTxt(strCtlSrc))
+      If strExpl <> "" Then
+        'has explanation
+        'see what is getting overwritten
+        Dim strOld As String
+        strOld = frm_getCtlProp(ctlCurr, "statusBarText")
+        If strOld <> Left(strExpl, 255) And strOld <> "" Then
+          Debug.Print "frm_fillInStatusBarTxt>> [" & strCtlSrc & "] overwriting old text (" & strOld & ") with new: (" & strExpl
+        End If
+        ctlCurr.Properties("statusBarText") = Left(strExpl, 255)
+        
+      End If
+    
+    End If
+  Next ctlCurr
+End Function
+
+Public Function frm_toggleRecSrc(strRecSrc1 As String, strCap1 As String, strRecSrc2 As String, strCap2 As String, _
+  Optional strCtlofCap As String, Optional strForm As String)
+  'function changes record source of a form
+  'back and forth between strRecSrc1 and strRecSrc2
+  'making the caption of the label/control match with strCap1 and strCap2
+  'strCtlCap is name of label/control, if blank, current is used
+  'curr form is used unless strFormNAme specified
+  Dim frmCurr As Form
+  Dim ctlCurr As Control
+  'get right form
+  If strForm = "" Then
+    Set frmCurr = Screen.ActiveForm
+  Else
+    Set frmCurr = Forms(strForm)
+  End If
+  'get right control
+  If strCtlofCap = "" Then
+    Set ctlCurr = Screen.ActiveControl
+  Else
+    Set ctlCurr = frmCurr.Controls(strCtlofCap)
+  End If
+  'see which toggle we are on
+  If frmCurr.RecordSource = strRecSrc2 Then
+    'set to 1
+    frmCurr.RecordSource = strRecSrc1
+    ctlCurr.Caption = strCap1
+  Else
+    'set to 2
+    frmCurr.RecordSource = strRecSrc2
+    ctlCurr.Caption = strCap2
+  End If
+End Function

@@ -1,0 +1,343 @@
+Option Compare Database
+Option Explicit
+
+Public Function GetPartyFromEmail(strEmail As String) As Long
+''gets a party ID based on an email address, as looked up in address table
+If strEmail = "" Then
+  'no email passed, exit having not found the party
+  GetPartyFromEmail = -1
+  Exit Function
+End If
+
+Dim rstCurr As New ADODB.Recordset
+rstCurr.Open "SELECT party_ID FROM address WHERE email = """ & strEmail & """;", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+If rstCurr.EOF Then
+   'email not found
+   GetPartyFromEmail = -1
+   Exit Function
+End If
+   Dim lngParty As Long
+   lngParty = rstCurr!PARTY_ID
+   GetPartyFromEmail = lngParty
+   
+   rstCurr.MoveNext
+   Do Until (rstCurr.EOF)
+     If rstCurr!PARTY_ID <> lngParty Then
+       ''ambiguous email
+       GetPartyFromEmail = -2
+     End If
+     rstCurr.MoveNext
+   Loop
+End Function
+
+Public Function getPartyFromNames(Optional strFirst As String, Optional strMid As String, _
+      Optional strLast As String, Optional strOrg As String, Optional lngWhat As Long) As Long
+      ''gets Party_ID based on first, middle, last, and/or organization name
+      ''lngWhat is optional.  If not passed, function checks all 4 items
+      ''' lngWhat is an integer between 1 and 1111 that tells the function which names to check
+      ' thousands digit is for first name, hundreds for middle, 10s for last and 1s for org
+      ''example: 1010 would check first name and last name
+      ''    10 would check last name only
+''If lngWhat not passed, then check all
+      If lngWhat = 0 Then lngWhat = 1111
+      ''if no names passed, return -1 and exit
+      If strFirst = "" And strMid = "" And strLast = "" And strOrg = "" Then
+        getPartyFromNames = -1
+        Exit Function
+      End If
+      
+      ''separate lngWhat into 4 component boolean fields:
+      Dim blnLast As Boolean, blnMid As Boolean, blnFirst As Boolean, blnOrg As Boolean
+      If lngWhat >= 1000 Then
+         blnFirst = True
+         lngWhat = lngWhat - 1000
+      End If
+      If lngWhat >= 100 Then
+         blnMid = True
+         lngWhat = lngWhat - 100
+      End If
+      If lngWhat >= 10 Then
+         blnLast = True
+         lngWhat = lngWhat - 10
+      End If
+      If lngWhat >= 1 Then
+         blnOrg = True
+         lngWhat = lngWhat - 1
+      End If
+ '     Debug.Print "First : " & blnFirst
+  '    Debug.Print "Middl : " & blnMid
+   '   Debug.Print "Last  : " & blnLast
+    '  Debug.Print "Organ : " & blnOrg
+       
+      Dim strWHERE As String
+      If blnFirst Then
+        ''create SQL string for blnFirst
+        If strFirst = "" Then
+          strWHERE = strWHERE & IIf(strWHERE = "", "", " AND ") & "((givenName) is null)"
+        Else
+          strWHERE = strWHERE & IIf(strWHERE = "", "", " AND ") & "((givenName) = """ & strFirst & """)"
+        End If
+      End If
+      If blnMid Then
+        ''create SQL string for blnMid
+        If strMid = "" Then
+          strWHERE = strWHERE & IIf(strWHERE = "", "", " AND ") & "((middleName) is null)"
+        Else
+          strWHERE = strWHERE & IIf(strWHERE = "", "", " AND ") & "((middleName) = """ & strMid & """)"
+        End If
+      End If
+      If blnLast Then
+        ''create SQL string for blnLast
+        If strLast = "" Then
+          strWHERE = strWHERE & IIf(strWHERE = "", "", " AND ") & "((surName) is null)"
+        Else
+          strWHERE = strWHERE & IIf(strWHERE = "", "", " AND ") & "((surName) = """ & strLast & """)"
+        End If
+      End If
+      If blnOrg Then
+        ''create SQL string for blnOrg
+        If strOrg = "" Then
+          strWHERE = strWHERE & IIf(strWHERE = "", "", " AND ") & "((organizationName) is null)"
+        Else
+          strWHERE = strWHERE & IIf(strWHERE = "", "", " AND ") & "((organizationName) = """ & strOrg & """)"
+        End If
+      End If
+       
+      Dim rstCurr As New ADODB.Recordset
+      rstCurr.Open "SELECT Party_ID FROM party WHERE " & strWHERE, CurrentProject.Connection _
+          , adOpenForwardOnly, adLockReadOnly, adCmdText
+       
+ If rstCurr.EOF Then
+   'email not found
+   getPartyFromNames = -1
+   Exit Function
+ End If
+   Dim lngParty As Long
+   lngParty = rstCurr!PARTY_ID
+   getPartyFromNames = lngParty
+   
+   rstCurr.MoveNext
+   If Not (rstCurr.EOF) Then
+       ''ambiguous Names
+       getPartyFromNames = -2
+   End If
+   
+End Function
+
+Public Function InterpretNameString(ByVal strName As String) As Collection
+  ''function interprets a name string and reports a collection with field names and values for Z_USER_A
+  strName = Trim(strName)
+  ''remove double spaces
+  strName = substTextForText(strName, "  ", " ")
+  Dim strNmRemain As String
+  Dim colTemp As New Collection
+  If InStr(strName, "@") > 0 Then
+    ''is an email address
+    colTemp.Add (strName), "email"
+  Else ' is not an email address
+    Dim intComm As Integer, intSpace As Integer, inttemp As Integer, strTemp As String
+    intComm = CountOccOf(strName, ",")
+    intSpace = CountOccOf(strName, " ")
+    If intComm > 0 Then
+      'last name first
+      strTemp = FindNextField(strName, ",")
+      colTemp.Add (strTemp), "surName"
+      strNmRemain = Trim(Right(strName, Len(strName) - Len(strTemp) - 1))
+      strTemp = FindNextField(strNmRemain, " ")
+      If strTemp <> "" Then
+        ' there is a first name here:
+        colTemp.Add (strTemp), "givenName"
+        If strNmRemain <> strTemp Then
+          'more name remains
+          strNmRemain = Trim(Right(strNmRemain, Len(strNmRemain) - Len(strTemp) - 1))
+          ' get any middle name:
+          
+          colTemp.Add (strNmRemain), "middleName"
+        End If ''more name remains
+      End If
+    Else ''no commas
+      
+        If intSpace = 0 Then
+          ''just one name, assume it's a last name:
+          colTemp.Add (strName), "surName"
+        Else
+          'one space, first name, then last
+          strTemp = (FindNextField(strName, " "))
+          colTemp.Add (strTemp), "givenName"
+          strNmRemain = Trim(Right(strName, Len(strName) - Len(strTemp) - 1))
+        ''  Debug.Print "rm:" & strNmRemain
+          ''find last space:
+          Dim intPlace As Integer
+          For intPlace = 1 To Len(strNmRemain) - 1
+            If Mid(strNmRemain, Len(strNmRemain) - intPlace, 1) = " " Then
+              Exit For
+            End If
+          Next intPlace
+          strTemp = Right(strNmRemain, intPlace)
+          colTemp.Add (strTemp), "surName"
+          If strTemp <> strNmRemain Then
+            strNmRemain = Trim(Left(strNmRemain, Len(strNmRemain) - Len(strTemp) - 1))
+            colTemp.Add (strNmRemain), "middleName"
+          End If
+         End If
+      
+    End If ''commas or not
+  
+  End If
+   
+ ' For inttemp = 1 To colTEmp.Count
+   ' Debug.Print "SurName:" & GetItemFromColl(colTEmp, "surName")
+    'Debug.Print "MiddleName:" & GetItemFromColl(colTEmp, "middleName")
+  '  Debug.Print "FirstName:" & GetItemFromColl(colTEmp, "givenName")
+   ' Debug.Print "email:" & GetItemFromColl(colTEmp, "email")
+ ' Next
+ Set InterpretNameString = colTemp
+End Function
+
+Public Function ADD_UserParties(Optional blnOpenFrm As Boolean)
+ ''function adds user parties to Z_USER_A from Z_USER_C and Z_USER_I fields that contain user party codes
+  ''open rst with all party strings
+  On Error GoTo cantAdd
+  Dim rstCurr As New ADODB.Recordset
+  rstCurr.Open "User_Parties_fromCI_notinA", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdTable
+  Dim rstDest As New ADODB.Recordset
+  rstDest.Open "Z_USER_A_Party", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+    
+  With rstCurr
+  Dim colFields As New Collection
+  Do Until .EOF
+   If Len(!UserPartyStr) > 0 And !UserPartyStr <> " " Then
+     Set colFields = InterpretNameString(!UserPartyStr)
+     rstDest.AddNew
+     Dim strCode As String
+     strCode = !UserPartyStr
+     rstDest!UserPartyCode = !UserPartyStr
+     Dim strTemp As String
+     ''set surname, if there is one
+     strTemp = GetItemFromColl(colFields, "surName")
+     If strTemp <> "" Then
+       rstDest!surName = strTemp
+     End If
+     
+     ''set givenname, if there is one
+     strTemp = GetItemFromColl(colFields, "givenname")
+     If strTemp <> "" Then
+       rstDest!givenName = strTemp
+     End If
+     
+          ''set middlename, if there is one
+     strTemp = GetItemFromColl(colFields, "middlename")
+     If strTemp <> "" Then
+       rstDest!middleName = strTemp
+     End If
+     
+          ''set email, if there is one
+     strTemp = GetItemFromColl(colFields, "email")
+     If strTemp <> "" Then
+       rstDest!email = strTemp
+     End If
+     
+     rstDest.Update
+   End If
+AfterUpdate:
+  .MoveNext
+  Loop
+  End With
+If blnOpenFrm Then
+  DoCmd.OpenForm "Z_USER_A_Party"
+  Forms!z_USER_A_Party.Requery
+End If
+Exit Function
+cantAdd:
+  Debug.Print "Can't add new code: " & strCode
+  rstDest.CancelUpdate
+  Resume AfterUpdate
+
+End Function
+
+Public Function InterpretPartiesToVegBank(Optional blnOpenForm As Boolean)
+  'this function no longer used
+  Debug.Print "InterpretPartiesToVegBank >> init. : remove!"
+  Exit Function
+  ''function interprets all parties in Z_USER_A to VegBank, as best it can
+  
+  '' VegBankParty_ID field filled in
+  '' First priority goes to Z_VB_Reconcile records with field = "UserPartyCode" then value matching
+  '' second priority goes to matching email in telephone table
+  '' third priority goes to matching first,middle,last,and org names
+  '' 4th to matching first, last, middle names
+  '' 5th to first and last names
+  '' 6th to just last name matching
+  ''7th --- DOES NOT MATCH
+  '' summary reported of how this was done.
+  ''----
+  Dim rstParty As New ADODB.Recordset
+  rstParty.Open "Z_USER_A_Party", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+  With rstParty
+  Do Until .EOF
+     Dim rstVBRec As New ADODB.Recordset
+     rstVBRec.Open "SELECT * FROM Z_VB_Reconcile WHERE  (((Z_VB_reconcile.LoadVarName)=""UserPartyCode"")" _
+& " AND ((Z_VB_reconcile.LoadVarValue)=""" & !UserPartyCode & """) AND ((Z_VB_reconcile.VBTableName)=""party"")" _
+& " AND ((Z_VB_reconcile.VBFieldName)=""party_ID""));", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+     If Not rstVBRec.EOF Then
+        ''a value exists, commit to case = 1
+        !VegBankParty_ID = rstVBRec!VBFieldValue
+  '      !VegBankMatchType = 1
+        .Update
+     Else 'not case 1
+        Dim lngTemp As Long
+        lngTemp = GetPartyFromEmail(Nz(!email, ""))
+        If lngTemp <> -1 Then 'case 2
+          !VegBankParty_ID = lngTemp
+'          !VegBankMatchType = 2
+          .Update
+        Else 'not case 2
+          lngTemp = getPartyFromNames(Nz(!givenName, ""), Nz(!middleName, ""), Nz(!surName, ""), _
+               Nz(!organizationName, ""), 1111)
+          If lngTemp <> -1 Then 'case 3
+            !VegBankParty_ID = lngTemp
+ '           !VegBankMatchType = 3
+            .Update
+          Else 'not case 3
+            lngTemp = getPartyFromNames(Nz(!givenName, ""), Nz(!middleName, ""), Nz(!surName, ""), _
+                 , 1110)
+            If lngTemp <> -1 Then 'case 4
+              !VegBankParty_ID = lngTemp
+              !VegBankMatchType = 4
+              .Update
+            Else 'not case 4
+               lngTemp = getPartyFromNames(Nz(!givenName, ""), , Nz(!surName, ""), _
+                   , 1010)
+               If lngTemp <> -1 Then 'case 5
+                  !VegBankParty_ID = lngTemp
+                  !VegBankMatchType = 5
+                  .Update
+               Else 'not case 5
+                   lngTemp = getPartyFromNames(, , Nz(!surName, ""), , 10)
+                   If lngTemp <> -1 Then 'case 6
+                      !VegBankParty_ID = lngTemp
+                      !VegBankMatchType = 6
+                      .Update
+                   Else 'not case 6
+                      !VegBankParty_ID = -1
+                      !VegBankMatchType = 7
+                      .Update
+                   End If 'case 6
+               End If 'case 5
+            End If 'case 4
+          End If 'case 3
+        End If 'case 2
+     End If 'case 1
+     rstVBRec.Close
+     
+DoneWithCode:
+  .MoveNext
+  Loop
+  End With
+  If blnOpenForm Then
+    ''open Z_USER_A_PArty form
+    DoCmd.OpenForm "Z_USER_A_Party"
+  
+  End If
+End Function

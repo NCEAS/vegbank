@@ -1,0 +1,20 @@
+Option Compare Database
+Option Explicit
+
+
+Private Sub Command12_Click()
+   'check for more information about field
+   If IsNull(Me.counts) Then
+     'get info afresh:
+     If Not IsNull(Me.tbl) And Not IsNull(Me.fld) Then
+       CheckClosedListForErrs False, Me.tbl & "." & Me.fld
+     Else
+       msgBox "Can't find out any more about this record-- there is no field associated with it."
+     End If
+   Else
+     If AreYouSure("VegBranch has already looked up information about this field. Should VegBranch try again?") Then
+        CheckClosedListForErrs False, Me.tbl & "." & Me.fld
+     End If
+   End If
+   Me.Requery
+End Sub

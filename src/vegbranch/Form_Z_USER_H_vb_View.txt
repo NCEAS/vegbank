@@ -1,0 +1,125 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command27_Click()
+  Call trans_CommPartyPersp
+  Call PreviewComms("concepts")
+End Sub
+
+Private Sub commMatchWizard_Click()
+
+  'get information about current line
+  
+   'get info about comm:
+   Dim strCommName As String, strLinkedThrough As String, lngPNID As Long, lngPCID As Long, _
+   plAsConc As Long, strNote As String, strNameNote As String
+   strCommName = [commName]
+   strLinkedThrough = [linkedThrough]
+   lngPNID = [commName_ID]
+   lngPCID = [commConcept_ID]
+   plAsConc = [commAsConc]
+   strNote = [note]
+   strNameNote = [plantNote]
+   Dim blnLinkedThrough As Boolean
+   If strLinkedThrough <> strCommName Then blnLinkedThrough = True
+   'first check to see if the name could be misspelled:
+   Dim intResp As Integer, intStep As Integer
+   intStep = 0
+   
+   'only do step one if name isn't found!
+If lngPNID <= 0 Then
+   intStep = intStep + 1
+   intResp = MsgBox_cust("Welcome to the Comm Matching wizard.  Step " & intStep & " - misspelling?", _
+   "look for different spelling,next option", "Your name: '" & strLinkedThrough & "' could be mispelled.  " _
+   & " If you think this is a possibility, you can search the VegBank Module for other spellings.", "Comm Matching Wizard (" & intStep & ")")
+   If intResp = 0 Then
+     'cancelled
+     GoTo cancelCommMatchWizard
+   End If
+   'ACTION 1
+   If intResp = 1 Then 'find new Comm name
+     If changeFormCommName() = True Then
+       'user has changed the name
+       msgBox "Comm Matching Wizard has finished.  You successfully chose a new Comm name.  If this name doesn't match a concept, you can start the wizard again."
+       Exit Sub
+     End If
+   End If
+End If
+   
+
+'still here, huh?  Well, maybe get a manual match
+
+ 'step 3 of wizard: manual match
+   intStep = intStep + 1
+   intResp = MsgBox_cust("Comm Matching wizard.  Step " & intStep & " - manually find a Comm concept?", _
+    "manually match Comm,next option", "Use this step to manually match the name: '" & strLinkedThrough & "' to a Comm concept in the VegBank Module   " _
+   , "Comm Matching Wizard (" & intStep & ")")
+   If intResp = 0 Then
+     'cancelled
+     GoTo cancelCommMatchWizard
+   End If
+   'ACTION 3
+   If intResp = 1 Then 'find new Comm concept
+     If manuallyMatchCommConcept() = True Then
+       'user has changed the name
+       msgBox "Comm Matching Wizard has finished.  You successfully manually matched to a Comm concept."
+       Exit Sub
+     End If
+   End If
+   
+ 'step 4: if matched, suggest that it is new
+If lngPCID > 0 Then
+ intStep = intStep + 1
+   intResp = MsgBox_cust("Comm Matching wizard.  Step " & intStep & " - unmatch Comm concept?", _
+    "unmatch this Comm,next option", "If the name: '" & strLinkedThrough & "' matches a Comm concept, but it is actually a Comm concept new to VegBank, you can prevent VegBranch from matching this name by pressing the button above.  You can reverse this by manually matching the Comm name.   " _
+   , "Comm Matching Wizard (" & intStep & ")")
+   If intResp = 0 Then
+     'cancelled
+     GoTo cancelCommMatchWizard
+   End If
+   'ACTION 4
+   If intResp = 1 Then
+     Command24_Click
+       If Not IsCommInCommConceptList(strCommName) Then
+         'add it
+         DoCmd.RunSQL "INSERT INTO Z_USER_H_CommConcept (CommCode, CommName) SELECT " & SQLizeTxt(strCommName) & "," & SQLizeTxt(strCommName)
+         [commAsConc] = 3
+         Me.Refresh
+       End If
+       
+      DoCmd.OpenForm "Z_USER_H_CommConcept", , , "CommCode=" & SQLizeTxt(strCommName)
+     msgBox "Comm Matching Wizard has finished.  You successfully unmatched your Comm concept.  Please fill in the details (like reference) of the new Comm concept in the next form."
+     Exit Sub
+   End If
+ 
+ 
+End If
+   
+exitthis:
+  Exit Sub
+cancelCommMatchWizard:
+  msgBox "Comm Matching Wizard cancelled."
+  GoTo exitthis
+End Sub
+
+Private Function manuallyMatchCommConcept() As Boolean
+  manuallyMatchCommConcept = ChangeCommConc([commName], cmtxa_BrowseForCommConcept(), True)
+End Function
+
+Private Sub Command23_Click()
+  Call manuallyMatchCommConcept
+End Sub
+
+Private Sub Command24_Click()
+  Call ChangeCommConc([commName], -1, False)
+End Sub
+
+
+Private Sub findPlName_Click()
+ Call changeFormCommName
+End Sub
+
+Private Function changeFormCommName() As Boolean
+  changeFormCommName = ChangeCommName([linkedThrough], cmtxa_BrowseForCommName())
+End Function
+

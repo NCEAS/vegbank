@@ -1,0 +1,122 @@
+Option Compare Database
+Option Explicit
+
+Private Sub cmd_ThisIsNewRec_Click()
+ ''makes current record a "new" record!
+  Dim intNews As Integer
+  intNews = NewRecsAllowed()
+  If intNews = 1 Then
+    ''can't add new rec
+      msgBox "Sorry, but no new records are permitted for this field.  Please choose one of the available options."
+  Else
+    If intNews = 2 Then
+       'set as new and leave alone
+      Me!VBFieldValue = -1
+    Else
+      If intNews = 3 Then
+        ''can add new value now
+        Dim inttemp As Long
+        ''add new record and get value of PK
+        inttemp = trans_addNewRecNow(Me!LoadVarName, Me!LoadVarValue)
+        If inttemp <> -1 Then ''successful in adding rec
+          Me!VBFieldValue = inttemp
+          Me.Recalc
+        Else 'not successful in adding rec
+          msgBox "Not successful in adding new record."
+        End If
+      Else
+        ''error!
+        msgBox "An error has occurred and VegBranch cannot find metadata about the current field, " & Me!LoadVarName, vbCritical
+      End If
+    End If
+  End If
+  
+End Sub
+
+Private Function NewRecsAllowed() As Integer
+  On Error GoTo cantGet
+  Dim intNews As Integer
+  intNews = trans_IsNewRecAllowed(Nz(Me!LoadVarName, ""))
+  NewRecsAllowed = intNews
+exitthis:
+  Exit Function
+cantGet:
+  'assume not!
+  NewRecsAllowed = 1
+  Resume exitthis
+End Function
+
+Private Sub Combo14_Change()
+  Me.RecordSource = "SELECT * FROM Z_VB_Reconcile_query WHERE LoadVarName= """ & Nz(Combo14.Value, "") & """"
+'  Me.Requery
+  Dim intNews As Integer, strToShowHide As String
+  strToShowHide = "SetToNew,lbl_SetToNew,cmd_ThisIsNewRec"
+  intNews = NewRecsAllowed()
+  If intNews = 1 Then 'no news allowed
+    Call ShowTheControls(strToShowHide, False, Me.Name)
+  Else 'new recs are allowed
+    Call ShowTheControls(strToShowHide, True, Me.Name)
+  End If
+  Dim strCtlsReplPick As String
+  strCtlsReplPick = "find,lbl_Find"
+  Call ShowTheControls(strCtlsReplPick, getFormReplacePicklist() <> "", Me.Name)
+  
+  On Error Resume Next
+  Me.VBFieldValue.RowSource = [VBFieldName] & "_transl"
+  Me.Recalc
+End Sub
+
+Private Function getFormReplacePicklist() As String
+  Dim strFormName As String
+  strFormName = getvalFrmSQL("select bigpicklistform from Z_VB_Reconcile_FldsChoose WHERE LoadVarName = " & SQLizeTxt(Nz(Combo14.Value, "")))
+  getFormReplacePicklist = strFormName
+End Function
+
+Private Sub Command18_Click()
+    'fill in or update any missing accCodes
+    Dim strMe As String
+    strMe = Me.Name
+  If trans_checkAccCodeToAdd(0) = True Then
+      'ok to close
+      DoCmd.Close acForm, strMe
+  Else
+    If AreYouSure("Errors were reported that should be resolved here.  Close this form anyway? (Press YES to close, No to deal with errors)") = True Then
+      DoCmd.Close acForm, strMe
+    End If
+  End If
+End Sub
+
+Private Sub Command22_Click()
+If msgBox("Are you sure you want to add all values for this field to this table?" & Chr(13) _
+  & "This is NOT recommended for the fields : plantName, commName, and UserPartyCode " _
+  & "as these can be matched automatically by VegBranch.", vbYesNo) = vbYes Then
+  trans_ManualMatchField Nz(Me!Combo14, ""), False
+  Me.Requery
+End If
+End Sub
+
+Private Sub find_Click()
+  'go get value for this
+  Dim strForm As String, lngVal As Long
+  strForm = getFormReplacePicklist()
+  If strForm <> "" Then
+  lngVal = BrowseForPK(strForm)
+  If lngVal > 0 Then
+    'add as value
+    Me!VBFieldValue = lngVal
+  End If
+  Else
+    msgBox "Sorry, there is not a form that currently can help you choose a record better than the current picklist.", , "VegBranch"
+  End If
+End Sub
+
+
+
+Private Sub Form_Load()
+  If Not (IsNull(Me.OpenArgs)) Then
+    ''filter to the openArgs field
+    Me!Combo14 = Me.OpenArgs
+  End If
+  Combo14_Change
+End Sub
+

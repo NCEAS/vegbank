@@ -1,0 +1,554 @@
+Option Compare Database
+Option Explicit
+Const debugCNCTmod = 0
+
+
+
+Public Function CNCT_DefaultConnect(strDBPath As String, strOptions As String)
+''function connects to another database.  This function may differ between databases, _
+   whereas the CNCT_connectToDBModule should (could) stay the same
+   'strOptions is module name
+  'check to see if path is really long:
+  If Len(strDBPath) > 112 Then
+    If Not AreYouSure("The database you are trying to link to has a very long path, " & Len(strDBPath) & " characters: " & Chr(13) _
+      & strDBPath & Chr(13) & "There have been problems with long paths like this.  Try to link anyway?") Then
+      'exit this
+      Exit Function
+    End If
+  End If
+   
+   'first drop current
+   chkLinkTbls "dropping", "", True, strOptions
+   'then add new
+   chkLinkTbls "Setting", strDBPath, False, strOptions
+
+End Function
+
+Public Function chkLinkTbls(TypeProc As String, strDBToSet As String, Optional blnSuppressReportAtEnd As Boolean, _
+ Optional ByVal strModuleToSet As String)
+ ''checks linked tables as valid (TypeProc = "Checking") _
+        OR Links to new db (TypeProc = "Setting") _
+        OR dislinks current db (TypeProc = "Dropping")
+    ''strDBtoSet is the database path to set, if TypeProc = "Setting"
+  On Error GoTo errChkLink
+  Dim strTableWHERESQL As String, blnVB As Boolean
+  If strModuleToSet = "" Or strModuleToSet = "VegBank" Then 'default is vegbank module
+    strTableWHERESQL = "WHERE (([mod]=""VegBank"") OR ([mod]=""VB_closed""))"
+    strModuleToSet = "VegBank Module"
+    blnVB = True
+  Else
+    'some other module
+    strTableWHERESQL = "WHERE [mod]=" & SQLizeTxt(strModuleToSet)
+    strModuleToSet = strModuleToSet & " Module"
+    blnVB = False
+  End If
+ 
+ ''--processing form:
+  openProcessingPos TypeProc & " your linkage to the " & strModuleToSet
+  
+  Dim cnnLoc As Connection, rstCurr As New ADODB.Recordset, blnFail As Boolean, _
+      strDB As String, intWhere As Integer, blnTblSuccess As Boolean, _
+      strFieldChkERR As String, strExtraTemp As String, strMissingTemp As String
+  Dim dbsCurr As Object, tdfCurr As Object
+  Set cnnLoc = CurrentProject.Connection
+  'look at foreign db
+  Dim dbForeign As Object, wrkDef As Object
+  Dim dbsFor As Object
+    ' Get default Workspace.
+If TypeProc = "setting" Then
+   Set wrkDef = DBEngine.Workspaces(0)
+    'open foreign db
+   Set dbForeign = wrkDef.OpenDatabase(strDBToSet)
+   Debug.Print "chkLinkTbls>> setting " & strModuleToSet & " to : " & strDBToSet
+End If
+  'get list of tables to connect to (or to check)
+  rstCurr.Open "SELECT * FROM Z_TableDescription " & strTableWHERESQL & ";", _
+  cnnLoc, adOpenStatic, adLockOptimistic, adCmdText
+  With rstCurr
+  Set dbsCurr = CurrentDb
+  'counter
+  Dim intLoop As Long, intRecs As Long
+  intLoop = 0
+  intRecs = .RecordCount
+  If intRecs = 0 Then
+    Debug.Print "can't get number of records"
+    ''approx 80
+    intRecs = 80
+  End If
+  Do Until .EOF
+    'update counter:
+    intLoop = intLoop + 1
+  'if dropping connection, then delete linked table and be done with it
+  If TypeProc = "dropping" Then
+   ''takes too long to check for tables existing that dont, oddly enough.  IF string is null, assume not connected:
+   If Not IsNull(!linkedTo) Then
+   If TableExist(!TableName) Then 'only del if table exists!
+    If Len(dbsCurr.tabledefs(!TableName).Connect) > 0 Then
+      'linked table, ok to delete
+      DoCmd.DeleteObject acTable, !TableName
+    Else 'not linked! double check
+      If AreYouSure("Do you really want to delete the table: " & !TableName & Chr(13) & "It is NOT a linked table.  Suggest pressing no.") Then
+        DoCmd.DeleteObject acTable, !TableName
+      End If 'are you sure
+    End If 'linked table or not
+   End If 'exists
+   !linkedTo = Null
+   End If 'linked to already null
+    
+  Else 'not dropping
+  
+  Dim strErrTbl As String, strErrConnect As String
+  strErrTbl = !TableName
+  strErrConnect = strDBToSet
+  On Error GoTo CantGetTbl
+    If Not TableExist(!TableName) And TypeProc = "setting" Then
+      'create table and go ahead and link
+    ' Debug.Print "linking new Tbl: " & !TableName
+      DoCmd.TransferDatabase acLink, "Microsoft Access", strDBToSet, acTable, !foreignName, !TableName, False
+    End If
+   dbsCurr.tabledefs.Refresh
+   Set tdfCurr = dbsCurr.tabledefs(LCase(!TableName))
+'    Debug.Print !tableName
+    'edit the connect property if we are to set the linked table
+   
+    If TypeProc = "Setting" Then
+      'set the connect property:
+      
+      Dim tdfTemp As Object
+      Set tdfTemp = dbForeign.tabledefs(LCase(!foreignName))
+  '    Debug.Print tdfCurr.Name & " : " & tdfTemp.Name
+      If Len(tdfTemp.Connect) > 0 Then
+        'grab connection string for foreign db
+        tdfCurr.Connect = tdfTemp.Connect
+        Debug.Print tdfTemp.Connect
+      Else
+        'create connection string to foreign db
+        tdfCurr.Connect = ";DATABASE=" & Trim(strDBToSet)
+      End If
+    End If 'setting/checking
+  
+  'get first connection string:
+    intWhere = InStr(tdfCurr.Connect, "DATABASE=")
+    If intWhere = 0 Then Debug.Print tdfCurr.Name & " is not a linked table!"
+    If intWhere = 2 Then
+      strDB = Right(tdfCurr.Connect, Len(tdfCurr.Connect) - intWhere - 8)
+    Else
+      strDB = tdfCurr.Connect
+    End If
+    
+    'assume record is successful (will be reversed upon error)
+    blnTblSuccess = True
+
+       tdfCurr.refreshLink
+      '' Debug.Print tblTable.connect
+    On Error GoTo 0
+    If blnTblSuccess And intWhere <> 0 Then
+       !linkedTo = strDB
+    Else
+       'table failed to link
+       !linkedTo = Null
+    End If
+    
+    Debug.Print "chkLinkTbls: checking fields on tbl: " & !TableName
+    If Not chk_FieldsAreOKOnTbl((!TableName), strExtraTemp, strMissingTemp) Then
+      'fields are not 100% ok: add reasons to report
+      
+      strFieldChkERR = strFieldChkERR & Chr(13) & Chr(10) & "-------table: " & !TableName _
+        & Chr(13) & Chr(10) & "ERROR, missing fields:   " & strMissingTemp _
+        & Chr(13) & Chr(10) & "extra fields, will be ignored:   " & strExtraTemp _
+        & Chr(13) & Chr(10) & "-----------------------------------------"
+     'not now, later:  msgBox "Fields found on your database were not exactly as expected.  Please review the following errors."
+        strMissingTemp = "" 'reset for next tbl
+        strExtraTemp = "" 'reset for next tbl
+    End If
+
+  End If 'dropping or not
+    .Update
+  .MoveNext
+  UpdateProcessingPosition Int(100 * intLoop / intRecs), 4
+  Loop
+  End With
+  
+  'close processing form
+  UpdateProcessingPosition 100, 0
+  If strFieldChkERR <> "" Then
+    'report field errors:
+    DoCmd.OpenForm "error_report", , , , , , strFieldChkERR
+    msgBox "Fields found on your database were not exactly as expected.  Please review the following errors."
+  End If
+If blnVB Then 'checks only for vegbank module:
+  
+  'check to make sure that the correct VegBank module is used for this version of VegBranch
+If TypeProc = "dropping" Then
+  If Not blnSuppressReportAtEnd Then _
+    msgBox "You are NOT linked to a VegBank module.  Very little will function properly until you link to a vegbank module."
+  'set options to not accept the vegbank module
+    Call GetSet_manual_option("VegBankModuleAccepted", True, "0")
+  
+Else 'not dropping
+  Dim strChkMod As String, blnModFail As Boolean
+  strChkMod = CheckCorrectVBModule(strDB)
+  If Left(strChkMod, 2) = "OK" Then
+    blnModFail = False
+  Else
+    blnModFail = True
+  End If
+
+  strDB = "'" & strDB & "'"
+  'let user know status of check or set
+  Dim strMsg As String
+  
+  If blnFail Or blnModFail Then
+    'open connection form:
+    DoCmd.OpenForm "W_ConnectToDb"
+    'set options to not accept the vegbank module
+    Call GetSet_manual_option("VegBankModuleAccepted", True, "0")
+  Else 'successful
+    'now must check for conflicts with accessionCodes
+    If checkAccCodes2VBMod(True) = 0 Then
+      'no conflicts with accession codes, assume accepted
+      Call GetSet_manual_option("VegBankModuleAccepted", True, "-1")
+    Else
+      'conflict form  is already visible.
+      msgBox "There are conflicts in Accession Codes in the new VegBank Module.  Please use the new form displayed to resolve the conflicts.  Currently, the vegbank module is not accepted.  You can alternately link to another vegbank module if this one is not suitable."
+    End If
+  End If
+End If 'dropping or not
+End If 'VB only stuff
+
+'tell user what happened
+If blnFail Then
+  strMsg = "The (supposedly) linked database, " & strDB & " is not successfully linked for the " & strModuleToSet
+Else
+  If Trim(strDB) = "" Then
+    strMsg = "You are not linked to any database for the " & strModuleToSet
+  Else
+    strMsg = "You are linked to " & strDB & " for the " & strModuleToSet
+    If IsFormOpen("NavForm") Then
+     Forms!NavForm.Requery
+    End If
+  End If
+End If
+If blnModFail Then strMsg = strMsg & Chr(13) & strChkMod
+If Not blnSuppressReportAtEnd Then msgBox strMsg, IIf(blnFail Or blnModFail, vbCritical, vbInformation)
+
+
+
+
+exitChkLink:
+  Exit Function
+CantGetTbl:
+  'print failed table
+  Debug.Print "ERROR!! : " & strErrTbl & " is not linked to : " & strErrConnect
+  'process has failed
+  blnFail = True
+  'this table is not sucecssful
+  blnTblSuccess = False
+  Resume Next
+  
+errChkLink:
+  msgBox "unable to check or link to database specified.  Please try a different database name."
+  'close processing form
+  UpdateProcessingPosition 100, 0
+  Resume exitChkLink
+End Function
+
+
+Public Function checkAccCodes2VBMod(Optional blnFormOpenOnConfl As Boolean, Optional blnOnlyFillinNulls As Boolean) As Long
+  'function checks Accession Codes in the Loading module and confirms that these are still valid for the connected vegbank module
+  'also fills in any null accession codes in both the vegbank module and in loading module where they are needed.
+  'if vegbank module is accepted (in options) then it updates according to whether PK is master field or accessionCode
+  'if vegbank module is not accepted, then it updates PK's according to accessionCodes.
+  
+  'MTL 10-Jan-2004
+  'uses x_accessionCode_maintain to know what code fields link with which PK fields
+    
+ If QuickLinkChk() Then
+   'add any null accessioncode in : otherwise why do this?
+   Call FillInMissingAccCodesInVBModl
+   If blnOnlyFillinNulls Then Exit Function
+ Else 'vegbank module invalid, stop this, it won't work
+   Exit Function
+ End If
+  
+  Dim rstCodesToCheck As New ADODB.Recordset, rstChkOne As New ADODB.Recordset, lngTotConfl As Long
+  rstCodesToCheck.Open "select * from x_accessionCode_maintain;", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  Dim lngStatusTotal As Long, lngStatusCurr As Long, strStatusFormName As String
+  lngStatusTotal = getvalFrmSQL("select count(1) from x_accessionCode_maintain")
+  lngStatusCurr = 0
+  strStatusFormName = UpdateProcessingPosX(0, 0, "", True, "Checking loading module Accession Codes", "This enables VegBranch to ensure that the newly connected VegBank module has the same referenced records as the previous one.")
+  With rstCodesToCheck
+  Do Until .EOF
+     
+     Dim strTbl As String, strCodeFld As String, strPKFld As String, strvbTbl As String, lngConflicts As Long
+     lngConflicts = 0 'default
+     strTbl = !Table
+     strCodeFld = !accField
+     strPKFld = !PKField
+     strvbTbl = !VegBankTable
+     'If debugCNCTmod > 1 Then Debug.Print "checkAccCodes2VBMod>> looking at table: " & strTbl & " accCodeFld : " & strCodeFld
+     If debugCNCTmod > 0 Then Debug.Print "checkAccCodes2VBMod>> Starting Check of: " & !Table & " accCodeFld : " & strCodeFld & " @ " & Now()
+     'it is not always the same vegbank table, determined in table there:
+     Dim blnVarVBTable As Boolean, strFldOfVBTbl As String
+     If Left(strvbTbl, 1) = "!" Then
+       blnVarVBTable = True
+       strvbTbl = Right(strvbTbl, Len(strvbTbl) - 1)
+     Else
+       'always same table
+       blnVarVBTable = False
+     End If
+     Dim blnPKMaster As Boolean
+     blnPKMaster = !PKMaster
+     If Eval(GetSet_manual_option("VegBankModuleAccepted") = False) Then blnPKMaster = False 'PK is never master field for new module
+     'open one set of values to check
+     rstChkOne.Open "Select * from [" & strTbl & "] WHERE ([" & strCodeFld & "] is not null) OR ([" & strPKFld & "] is not null)" _
+       , CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+     With rstChkOne
+       If debugCNCTmod > 0 Then Debug.Print "checkAccCodes2VBMod>> checking non-null Code Fields @ " & Now()
+     Do Until .EOF
+         
+       'get code and PK to variables to check them
+       Dim strCurrentcode As String, lngPK As Long, strVBRealTblName As String, strIdealCode As String, lngIdealPK As Long
+       'string that contains the name of the vegbank table for the accCode in this record
+       If blnVarVBTable Then
+          strVBRealTblName = .Fields(strvbTbl)
+       Else
+          strVBRealTblName = strvbTbl
+       End If
+       'current code & long int for this rec
+       strCurrentcode = Nz(.Fields(strCodeFld), "")
+       lngPK = Nz(.Fields(strPKFld), -1)
+       'get what these "should" be
+       strIdealCode = getAccessionCode(strVBRealTblName, lngPK)
+       lngIdealPK = getPKfromAccessionCode(strCurrentcode, strVBRealTblName)
+       
+       If debugCNCTmod > 1 Then Debug.Print "checkAccCodes2VBMod>> looking at code: " & strCurrentcode & " and PK:" & lngPK & " for vb table: " & strVBRealTblName
+         
+         If blnPKMaster Then
+           If strCurrentcode <> strIdealCode Then 'make accCode conform to PK, fill in accCode
+             .Fields(strCodeFld) = strIdealCode
+             'report what happened, if debugging
+             If debugCNCTmod > 0 Then Debug.Print "checkAccCodes2VBMod>> fixed code: " & strCurrentcode & " --> " & strIdealCode & "  for PK: " & lngPK
+           End If
+
+         Else 'accCode is master
+           If lngIdealPK <> lngPK Then
+             'make PK conform to accCode
+             .Fields(strPKFld) = lngIdealPK
+             If debugCNCTmod > 0 Then Debug.Print "checkAccCodes2VBMod>> fixed PK: " & lngPK & " --> " & lngIdealPK & " for accCode : " & strCurrentcode
+           End If
+
+         End If
+       'check for conflicts: has accessionCode but PK = -1 (no accCode and -1 is ok)
+       If Not (Len(.Fields(strCodeFld)) < 2) And (.Fields(strPKFld) <= 0) Then
+             'no code, this is conflict
+             lngConflicts = lngConflicts + 1
+             lngTotConfl = lngTotConfl + 1
+       End If
+       'also conflict if PK > 0 and accessionCode is null
+       If (Len(.Fields(strCodeFld)) < 2) And Not (.Fields(strPKFld) <= 0) Then
+             'no code, this is conflict
+             lngConflicts = lngConflicts + 1
+             lngTotConfl = lngTotConfl + 1
+       End If
+       
+     .MoveNext
+     Loop
+     End With 'chk one
+     rstChkOne.Close
+     
+     !conflicts = lngConflicts
+
+  .MoveNext 'codes to check
+
+  lngStatusCurr = lngStatusCurr + 1
+  Call UpdateProcessingPosX((lngStatusCurr) * 100 / lngStatusTotal, 0, strStatusFormName)
+  
+  Loop
+  End With
+  If blnFormOpenOnConfl And lngTotConfl > 0 Then
+    Call openF_accCodeMaintain
+  End If
+  checkAccCodes2VBMod = lngTotConfl
+  If debugCNCTmod > 0 Then Debug.Print "checkAccCodes2VBMod>> DONE:  @ " & Now()
+End Function
+
+Public Function acceptVegBankMOD()
+  'function confirms that user would like to accept vegbank module, if there are still conflicts, otherwise accepts
+  If checkAccCodes2VBMod() > 0 Then
+    If Not AreYouSure("You are about to accept the vegbank module, even though it has conflicting accession codes." _
+      & " If you accept the module with conflicts, the accession codes that linked to parties, methods, references, etc. will be lost. " _
+      & " Then you can relink any missing values." _
+      & Chr(13) & "Do you want to continue? (Press NO to stop this)") Then
+      Exit Function
+    End If
+  End If
+  'accept it
+  Call GetSet_manual_option("VegBankModuleAccepted", True, "-1")
+End Function
+
+Public Function GetVersion(strVegBankBranch As String, Optional blnSubVersionToo As Boolean) As String
+  'gets version of current VegBranch or Vegbank module attached, depending on what is passed
+  Dim rstGetVer As New ADODB.Recordset
+  rstGetVer.Open "select * from Y_version where thisDBVersion=true", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstGetVer.EOF Then
+    Debug.Print "Error: no version for this VegBranch!"
+    msgBox "Your VegBranch may have been corrupted, there is not a version number!"
+  Else
+    
+ 
+  Select Case strVegBankBranch
+    Case "vegbank"
+      GetVersion = rstGetVer!requiresVegBankModVer
+    Case "vegbranch"
+      GetVersion = rstGetVer!versionTxt & IIf(blnSubVersionToo, rstGetVer!versionSmallUpdate, "")
+  End Select
+End If
+  
+
+End Function
+
+
+Public Function CheckCorrectVBModule(strDBPath As String) As String
+  ''checks foreign vegbank module db and current vegbranch db to make sure versions match
+  Dim strVBR_ver As String, strvbank_ver As String
+  strVBR_ver = getvalFrmSQL("SELECT Y_Version.requiresVegBankModVer FROM Y_Version WHERE (((Y_Version.ThisDBVersion)=True)); ")
+  Debug.Print " vegBranch needs: " & strVBR_ver
+  Dim strTemp As String
+  On Error GoTo novbankVer
+  strvbank_ver = getvalFrmSQL("SELECT [versionNumber] from [zvegbank_version] in '" & strDBPath & "';")
+  Debug.Print " vegbank version is : " & strvbank_ver
+
+  If strVBR_ver = strvbank_ver Then
+    strTemp = "OK: vegbranch matches vegbank module versions : "
+  Else
+    strTemp = "VegBranch does not match the VegBank module version: "
+  End If
+exitCheck:
+  CheckCorrectVBModule = strTemp & " This VegBranch requires " & strVBR_ver & _
+       " and the vegbank module is " & strvbank_ver
+
+  Exit Function
+novbankVer:
+   'table doesn't exist on foreign vegbank module - not a good sign
+     Debug.Print "vegbank module not versioned!"
+     strTemp = "VegBranch does not match the VegBank module version:"
+     strvbank_ver = "NOT VERSIONED or INVALID"
+  Resume exitCheck
+End Function
+
+Public Function tblExistOnForDB(tdf As Object, dbs As Object) As String
+  'tests whether a table exists on a foreign table
+  On Error GoTo cantFind
+  Dim tdfNohting As Object
+  Set tdfNohting = dbs.tabledefs(tdf.Name)
+  tblExistOnForDB = True
+doExit:
+  Exit Function
+cantFind:
+  tblExistOnForDB = False
+  Resume doExit
+End Function
+
+
+Function odbc_qryMk()
+  Dim dbc As Object, tbl As Object
+  Set dbc = CurrentDb
+  For Each tbl In dbc.tabledefs
+    Dim strName As String
+'    strName = Right(tbl.Name, Len(tbl.Name) - 1)
+    If Left(tbl.Name, 4) <> "msys" Then
+     If Len(tbl.Connect) > 0 Then
+      ' If MsgBox(tbl.Name, vbYesNo) = vbYes Then
+         tbl.Name = LCase(tbl.Name)
+     '  End If
+     End If
+    End If
+ '   Dim qdf As Object
+  '  Set qdf = dbc.CreateQueryDef(strName, "select * from [" & tbl.Name & "];")
+  Next tbl
+End Function
+
+Public Function GetVBrModulePath() As String
+  'function gets current path of vegbank module, based on observation table's connection
+  GetVBrModulePath = getvalFrmSQL("SELECT first(LinkedTo) as expr1 FROM Z_tableDescription where tablename=""observation"";")
+End Function
+
+Public Function backupCurrentVBModl(Optional blnConfirm As Boolean, Optional blnReportSuccess As Boolean) As String
+  'function backsup the current VBModule and returns the string path for the new backup copy
+  '10-JAN-2004 MTL
+  'uses path + suffix below as name
+  On Error GoTo BackUpErr
+  If blnConfirm Then
+    If Not AreYouSure("You are about to copy the VegBank module database to a new file location.  Press Yes to continue.") Then
+      GoTo exitthis
+    End If
+  End If
+  
+  Dim strNewName As String, strDB As String, strSuffix As String, lngTemp As Long
+  strSuffix = "_VBrAutoBackup"
+  strDB = GetVBrModulePath()
+  'have name of db that is to be copied, now need new name to copy database to
+  strNewName = strDB & strSuffix & ".mdb"
+  Do Until Dir(strNewName) = ""
+    lngTemp = lngTemp + 1
+    strNewName = strDB & strSuffix & lngTemp & ".mdb"
+  Loop
+  Debug.Print "backupCurrentVBModl>> writing: " & strNewName
+  
+  Dim fs As Object
+  Set fs = CreateObject("Scripting.FileSystemObject")
+
+  fs.CopyFile strDB, strNewName
+  backupCurrentVBModl = strNewName
+  If blnReportSuccess Then
+    msgBox "Your vegbank module database was successfully backed up.  The new backed up database name is: " & strNewName, vbInformation
+  End If
+exitthis:
+  Exit Function
+BackUpErr:
+  msgBox "An error occurred in trying to backup your vegbank module database.  Database not copied!" & Chr(13) & Err.Description, vbCritical
+  Resume exitthis
+End Function
+
+Public Function chk_FieldsAreOKOnTbl(strTableName As String, _
+  ByRef strRetExtra As String, ByRef strRetMissing As String) As Boolean
+  'function checks table to see if fields match names listed in Z_FieldDescriptionTable
+  'errors are reported with strRetExtra and strRetMissing
+  'true is returned if fields are all ok
+  'first check for missing fields
+  Dim rstTemp As New ADODB.Recordset
+  rstTemp.Open "select * from z_FieldDescription where tableName=" & SQLizeTxt(strTableName), CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+  Do Until .EOF
+    'is field that is supposed to be there really there?
+    If Not fieldExistOnTbl(!FieldName, strTableName) Then
+       strRetMissing = strRetMissing & IIf(strRetMissing = "", "", ",") & !FieldName
+    Else
+       If debugCNCTmod > 0 Then Debug.Print "chk_FieldsAreOKOnTbl>> " & !FieldName & " is ok"
+    End If
+  .MoveNext
+  Loop
+  End With
+  rstTemp.Close
+  
+  'find extra fields
+  Dim dbsCurr As Object, tdfCurr As Object, fldCurr As Object
+  Set dbsCurr = CurrentDb
+  Set tdfCurr = dbsCurr.tabledefs(strTableName)
+  For Each fldCurr In tdfCurr.Fields
+    'is field that is there supposed to be
+    If fldCurr.Name <> getvalFrmSQL("select fieldName from Z_FieldDescription where tablename=" & SQLizeTxt(strTableName) & " AND " _
+      & " fieldName=" & SQLizeTxt(fldCurr.Name)) Then
+      'field not found, it is extra
+      strRetExtra = strRetExtra & IIf(strRetExtra = "", "", ",") & fldCurr.Name
+    Else
+      If debugCNCTmod > 0 Then Debug.Print "chk_FieldsAreOKOnTbl>> " & fldCurr.Name & " is ok"
+    End If
+  Next fldCurr
+  If strRetExtra = "" And strRetMissing = "" Then
+    chk_FieldsAreOKOnTbl = True
+  End If
+End Function
+

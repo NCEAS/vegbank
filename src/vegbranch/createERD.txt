@@ -1,0 +1,1517 @@
+Option Compare Database
+Option Explicit
+Const intXTwipRatio = 2100
+Const intYTwipRatio = 211
+Const YratioHtBoxes = 40
+Const lineWidth = 1
+
+Function GetAnErd()
+  createERDfromTblDefn 52, "ERD_VegBank_4", "VegBank", True
+End Function
+
+Function createERDfromTblDefn(dblScaleERD As Double, strFormNameSaveAs As String, _
+        strModuleName As String, blnOverWriteExtant As Boolean)
+  'strFormNameSaveAs is the name of the form to save
+  'add prefix to Form Name to save (and avoid Overwriting essential forms)
+  'check to see if form save as name is valid
+  If Left(strFormNameSaveAs, 4) <> "ERD_" Then
+    msgBox "Invalid Form Name for an ERD!  Must start with 'ERD_'", vbCritical, "VegBank in Access"
+    Exit Function
+  End If
+  'redundant check to see if form exists and get permission to overwrite
+  Dim intMsgBoxRet As Integer
+  If existForm(strFormNameSaveAs) Then   'form already exists
+    If Not blnOverWriteExtant Then  'not OK to delete current form
+      intMsgBoxRet = msgBox(strFormNameSaveAs & " already exists.  Do you want to Delete this form?", _
+       vbYesNo, "VegBank in Access")
+      If intMsgBoxRet = vbYes Then
+        blnOverWriteExtant = True
+      End If
+      If intMsgBoxRet = vbNo Then
+        msgBox "Please try again with a valid Form name", vbCritical, "VegBank in Access"
+        Exit Function
+      End If
+    End If  ' not OK to delete, now resolved
+    DoCmd.OpenForm strFormNameSaveAs
+    DoCmd.Close acForm, strFormNameSaveAs
+    
+    DoCmd.DeleteObject acForm, strFormNameSaveAs
+  Else 'form does not exist
+  End If
+  
+  Dim intReqdLineColor As Long
+  intReqdLineColor = 0  'required relationship line colour : 0 if no difference: now handled via dots
+  Dim intLineColor As Long
+  
+  'Draw a grid on ERD?
+  Dim blnGrid As Boolean
+  blnGrid = False
+  
+  Dim rstCurr As New ADODB.Recordset
+  Dim RstSpecRoute As New ADODB.Recordset
+
+  
+  Dim fldCurr As Field
+  Dim cnnLocal As Connection
+  Dim intCount As Long
+  Set cnnLocal = CurrentProject.Connection
+  intCount = 0
+'opens table
+
+    rstCurr.Open "select * from Z_TableDescription where ERDx is not null", cnnLocal, , 2, adCmdText
+    Dim frmNew As Form
+    Set frmNew = CreateForm
+   'frmNew.Detail.BackColor = 16777215 'white
+    frmNew.RecordSelectors = False
+    frmNew.NavigationButtons = False
+    Dim ctlText As Control
+    Dim intDataX As Long
+    Dim intDataY As Long
+    Dim intWidth As Long, intHeight As Long
+    intWidth = intXTwipRatio * (dblScaleERD / 100)
+    intHeight = intYTwipRatio * (dblScaleERD / 100)
+    
+  With rstCurr
+    Do Until .EOF
+      If !mod = strModuleName Then
+      'intCount = intCount + 1
+         intDataX = transFormX_ERD(!ERDX, intWidth, dblScaleERD)
+         intDataY = transFormY_ERD(!ERDY, intHeight, dblScaleERD)
+         
+         !calc_N = intDataY
+         !calc_E = intDataX + intWidth
+         !calc_S = intDataY + (intHeight * 100 / dblScaleERD)
+         !calc_W = intDataX
+         Set ctlText = CreateControl(frmNew.Name, acLabel, , "", "", _
+          intDataX, intDataY)
+            ctlText.Name = !TableName
+            ctlText.Caption = !TableName
+            ctlText.Height = intHeight * 100 / dblScaleERD
+            ctlText.Width = intWidth
+            ctlText.TextAlign = 2 'Center
+            If dblScaleERD < 81 Then
+              ctlText.FontSize = 7
+            End If
+            ctlText.BorderStyle = 1 'solid
+            ctlText.BackColor = 12632256 'grey
+            ctlText.BackStyle = 1 'normal
+      End If
+      
+      .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+  
+  'now add fields
+  rstCurr.Open "Z_FieldTbl_ERD", cnnLocal, , 2, adCmdTable
+      
+      
+  With rstCurr
+    Dim strCurrTbl As String
+    Dim strLastTbl As String
+    Dim strCwidths As String, strEvent As String
+    strLastTbl = " "
+    Do Until .EOF
+        'establishes a list box below last control of form
+          If !mod = strModuleName Then
+          strCurrTbl = !TableName
+          intDataX = !calc_W
+          intDataY = !calc_S
+          
+          If intDataX > 0 And intDataY > 0 Then '0
+          If strCurrTbl <> strLastTbl Then 'new table list box needed
+              Set ctlText = CreateControl(frmNew.Name, acListBox, , "", "", _
+                    intDataX, intDataY)
+            ctlText.Name = "Flds_" & !TableName
+            ctlText.Height = YratioHtBoxes * (dblScaleERD / 100)
+            !calc_S = !calc_S + (YratioHtBoxes * (dblScaleERD / 100))
+            ctlText.Width = intWidth
+            ctlText.BorderStyle = 1 'solid
+            ctlText.RowSourceType = "Table/Query"
+            ctlText.RowSource = "SELECT Z_FieldTbl_ERD.comment, Z_FieldTbl_ERD.FieldName" _
+& "  FROM Z_FieldTbl_ERD  " _
+& "  WHERE (((Z_FieldTbl_ERD.TableName)=""" & !TableName & """));"
+            strEvent = "=FindFieldInDD(""" & !TableName & "."" & [Flds_" & !TableName & "])"
+           ' MsgBox strEvent
+            ctlText.OnDblClick = strEvent
+            strEvent = "=findFieldinDescr(""" & !TableName & "."" & [Flds_" & !TableName & "])"
+            ctlText.OnClick = strEvent
+            ctlText.ColumnCount = 2
+            ctlText.BoundColumn = 2
+            ctlText.SpecialEffect = 0 'flat
+            ctlText.BackColor = !ERD_Color_Num
+
+            ctlText.FontSize = Int(8 * (dblScaleERD / 100))
+            strCwidths = 300 * (dblScaleERD / 100) & ";" & (intWidth) - (320 * (dblScaleERD / 100))
+            ctlText.ColumnWidths = strCwidths
+          End If  ' new tbl
+            If ctlText.Height < (1400 * 12) Then  'limit height to 12 inches (for large tables, ie Z_USER_C)
+              ctlText.Height = ctlText.Height + (intHeight)
+            End If
+            !calc_S = !calc_S + (intHeight) 'adjust spacing
+            strLastTbl = !TableName
+            Else '0
+              msgBox "error with " & !TableName & "." & !FieldName
+            End If
+            
+           End If
+        .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+  
+  
+
+  
+    'now add relationships
+  rstCurr.Open "select * from Z_Field_ERD_refFinal where calc_N is not null and homeN is not null", cnnLocal, , 2, adCmdText
+      
+      
+  With rstCurr
+    'case of relationship tables spacing on ERD
+    Dim intCase As Long, strDir As String
+
+    Dim intW1 As Long, intW2 As Long
+    Dim intN1 As Long, intN2 As Long
+    Dim intS1 As Long, intS2 As Long
+    Dim intE1 As Long, intE2 As Long
+        
+    Dim intTop As Long, intBot As Long
+    Dim intLt As Long, intRt As Long
+        
+    Dim intLnX1 As Long, intLnX2 As Long
+    Dim intLnY1 As Long, intLnY2 As Long
+        
+    Dim strArrow As String
+    strArrow = " "
+    
+    Do Until .EOF
+        intCase = 0
+    'define Line Color For all lines of the current rel to draw
+    Dim intLineDots As Integer
+    If !Nulls = "yes" Then
+      intLineDots = 4 'dots
+    Else
+      intLineDots = 1 'no dots
+    End If
+      intLineColor = 0 'default color
+      'hardcode in colors for party and reference
+      If !References = "party.party_ID" Then intLineColor = getvalFrmSQL("select ERD_Color_Num from z_table_ERd_color where VB_colorMeaning='party';")
+      If !References = "reference.reference_ID" Then intLineColor = getvalFrmSQL("select ERD_Color_Num from z_table_ERd_color where VB_colorMeaning='reference';")
+    If !Module = strModuleName Then
+       intN1 = !homeN
+       intS1 = !homeS
+       intW1 = !HomeW
+       intE1 = !homeE
+       intN2 = !calc_N
+       intS2 = !calc_S
+       intW2 = !calc_W
+       intE2 = !calc_E
+       
+     If IsNull(!specific) Then  'no specific route planned for this rel
+       
+       If intE1 < intW2 Or intW1 > intE2 Then 'case 1 or 2?
+          intTop = intN1
+          If intN2 > intTop Then intTop = intN2
+          
+          intBot = intS1
+          If intS2 < intBot Then intBot = intS2
+          
+          If intN1 < intBot And intN2 < intBot And intS1 > intTop And intS2 > intTop Then 'case 1
+            intCase = 1
+            intLnY1 = Round((intBot / 2 + intTop / 2), 0)
+            intLnY2 = intLnY1
+            If intE1 < intW2 Then 'right arrow
+              intLnX1 = intE1
+              intLnX2 = intW2
+              strArrow = "RT"
+            Else 'left arrow
+              intLnX1 = intW1
+              intLnX2 = intE2
+              strArrow = "LT"
+            End If 'right arrow
+            'check to make sure OK line
+            Dim strProblems As String
+            strProblems = CheckLine(intTop, intBot, intLnX1, intLnX2, intLnY1, "Y", strModuleName)
+            If strProblems <> "Err " Then
+               Debug.Print !TableName & "." & !FieldName & "  " & strProblems
+            End If
+            
+          End If 'case 1
+          
+       End If 'case 1 or 2
+       
+
+        If intS1 < intN2 Or intN1 > intS2 Then 'case 1 or 2?
+          intTop = intW1
+          If intW2 > intTop Then intTop = intW2
+  
+          intBot = intE1
+          If intE2 < intBot Then intBot = intE2
+          
+          If intW1 < intBot And intW2 < intBot And intE1 > intTop And intE2 > intTop Then 'case 1
+            intCase = 1
+            intLnX1 = Round((intBot / 2 + intTop / 2), 0)
+            intLnX2 = intLnX1
+            If intS1 < intN2 Then 'dn arrow
+              intLnY1 = intS1
+              intLnY2 = intN2
+              strArrow = "DN"
+            Else 'up arrow
+              intLnY1 = intN1
+              intLnY2 = intS2
+              strArrow = "UP"
+            End If 'up/dn arrow
+            strProblems = CheckLine(intTop, intBot, intLnY1, intLnY2, intLnX1, "X", strModuleName)
+            If strProblems <> "Err " Then
+               Debug.Print !TableName & "." & !FieldName & "  " & strProblems
+            End If
+
+          End If 'case 1
+          
+       End If 'case 1 or 2
+       
+    Else 'specific route planned
+    Dim strSQLselect As String
+    strSQLselect = "SELECT Z_Field_ERD_refFinal_segments.*  " _
+& "  FROM Z_Field_ERD_refFinal_segments " _
+& " WHERE (((Z_Field_ERD_refFinal_segments.Z_Field_ID)=  " & !Z_FieldDescr_Id & "));"
+      RstSpecRoute.Open strSQLselect, cnnLocal, , 1, adCmdText
+  'MsgBox "success in opening SQL statement!" & RstSpecRoute!Z_Field_ID
+    
+    With RstSpecRoute
+    Dim intFromX As Long
+    Dim intFromY As Long
+    Dim intLt_spRel As Long, intTp_spRel As Long
+    Dim intNotYet As Long
+    Dim strXY As String
+    intNotYet = 1
+    Dim intFinalN As Long, intFinalE As Long
+    Dim intFinalS As Long, intFinalW As Long
+    
+    intFinalN = !calc_N
+    intFinalE = !calc_E
+    intFinalS = !calc_S
+    intFinalW = !calc_W
+    Dim strFinalName As String
+    Do Until .EOF
+      If !Module = strModuleName Then 'correct module for this ERD
+         intDataX = transFormX_ERD(!Point_X, intWidth, dblScaleERD)
+         intDataY = transFormY_ERD(!Point_Y, intHeight, dblScaleERD)
+         
+         If intNotYet = 1 Then 'have not yet entered this loop for this relationship
+                               'need to add valid Fromx, Fromy
+           intNotYet = 0
+        'gets X,Y for "from" coordinates of line
+         strXY = GetX_YFromBox(intDataX, intDataY, !homeN, !homeE, !homeS, !HomeW)
+         If InStr(strXY, ",") <> 0 Then  'has a comma
+           intFromX = Left(strXY, InStr(strXY, ",") - 1)
+           intFromY = Right(strXY, Len(strXY) - InStr(strXY, ","))
+         Else
+           msgBox "Error, comma not passed back from function"
+         End If 'has a comma
+
+
+         End If 'adding FromX and FromY for first line of rel
+         
+         'Draw Line from FromX,FromY to DataX,DataY
+         DrawLine_ERD intFromX, intFromY, intDataX, intDataY, "Line_SpRel_" & !Z_rel_Seg_ord & !TableName & "." & !FieldName, intLineColor, frmNew.Name, intLineDots
+         
+         'store where we left off
+         intFromX = intDataX
+         intFromY = intDataY
+         strFinalName = "Line_SpRel_" & (!Z_rel_Seg_ord + 1) & !TableName & "." & !FieldName
+      End If 'correct module
+         
+      .MoveNext
+    Loop
+    'make final connexion
+        
+        'gets X,Y for "to" coordinates of line
+         strXY = GetX_YFromBox(intFromX, intFromY, intFinalN, intFinalE, intFinalS, intFinalW)
+         If InStr(strXY, ",") <> 0 Then  'has a comma
+           intDataX = Left(strXY, InStr(strXY, ",") - 1)
+           intDataY = Right(strXY, Len(strXY) - InStr(strXY, ","))
+         Else
+           msgBox "Error, comma not passed back from function"
+         End If 'has a comma
+           'Draw Line from FromX,FromY to DataX,DataY
+         DrawLine_ERD intFromX, intFromY, intDataX, intDataY, strFinalName, intLineColor, frmNew.Name, intLineDots
+  
+           'MATCH VARIABLES TO HOOK UP TO NEXT STEP, DRAWING ARROWS
+           
+           
+         If intFromX > intDataX Then strArrow = "LT"
+         If intFromX < intDataX Then strArrow = "RT"
+         If intFromY > intDataY Then strArrow = "UP"
+         If intFromY < intDataY Then strArrow = "DN"
+
+    
+         intLnX1 = intFromX
+         intLnX2 = intDataX
+         intLnY1 = intFromY
+         intLnY2 = intDataY
+         intCase = 2
+    
+  End With
+  RstSpecRoute.Close
+
+    End If  'specific route planned
+
+
+'DRAW ARROWS
+
+Dim intLeftLn As Long, intTopLn As Long
+Dim intHeightLn As Long, intWidthLn As Long
+
+If intLnX1 < intLnX2 Then
+  intLeftLn = intLnX1
+  intWidthLn = intLnX2 - intLnX1
+Else
+  intLeftLn = intLnX2
+  intWidthLn = intLnX1 - intLnX2
+End If
+
+If intLnY1 < intLnY2 Then
+  intTopLn = intLnY1
+  intHeightLn = intLnY2 - intLnY1
+Else
+  intTopLn = intLnY2
+  intHeightLn = intLnY1 - intLnY2
+End If
+
+  If intCase > 0 Then
+    
+    
+    Set ctlText = CreateControl(frmNew.Name, acLine, , "", "", _
+                    intLeftLn, intTopLn)
+    ctlText.Width = intWidthLn
+    ctlText.Height = intHeightLn
+    ctlText.Name = "Line_" & !TableName & "." & !FieldName
+    ctlText.BorderColor = intLineColor
+    ctlText.BorderWidth = lineWidth
+    ctlText.BorderStyle = intLineDots
+    Dim intArrX1 As Long, intArrX2 As Long
+    Dim intArrY1 As Long, intArrY2 As Long
+    Dim blnArrS1 As Boolean, blnArrS2 As Boolean
+    
+    Dim intArrLength As Long
+    intArrLength = dblScaleERD
+    Dim lngOLEWidth As Long, lngOLELeft As Long, lngOLETop As Long, blnCoverVert As Boolean
+    lngOLEWidth = 0.15 * 1440
+        
+    
+    
+    Select Case strArrow
+      Case "UP"
+        intArrX1 = intLeftLn - intArrLength
+        intArrX2 = intLeftLn
+        intArrY1 = intTopLn
+        intArrY2 = intTopLn
+        lngOLELeft = intLeftLn - (lngOLEWidth / 2)
+        lngOLETop = intTopLn
+        blnArrS1 = True
+        blnArrS2 = False
+        blnCoverVert = True
+      Case "DN"
+        blnCoverVert = True
+        intArrX1 = intLeftLn - intArrLength
+        intArrX2 = intLeftLn
+        intArrY1 = intTopLn + intHeightLn - intArrLength
+        intArrY2 = intTopLn + intHeightLn - intArrLength
+        lngOLELeft = intLeftLn - (lngOLEWidth / 2)
+        lngOLETop = intTopLn + intHeightLn - (lngOLEWidth)
+        blnArrS1 = False
+        blnArrS2 = True
+      Case "RT"
+      blnCoverVert = False
+        intArrX1 = intLeftLn + intWidthLn - intArrLength
+        intArrX2 = intLeftLn + intWidthLn - intArrLength
+        intArrY1 = intTopLn - intArrLength
+        intArrY2 = intTopLn
+        lngOLELeft = intLeftLn + intWidthLn - (lngOLEWidth)
+        lngOLETop = intTopLn - (lngOLEWidth / 2)
+        blnArrS1 = False
+        blnArrS2 = True
+      Case "LT"
+        blnCoverVert = False
+        intArrX1 = intLeftLn
+        intArrX2 = intLeftLn
+        intArrY1 = intTopLn - intArrLength
+        intArrY2 = intTopLn
+        lngOLELeft = intLeftLn
+        lngOLETop = intTopLn - (lngOLEWidth / 2)
+        blnArrS1 = True
+        blnArrS2 = False
+    End Select
+ '       Set ctlText = CreateControl(frmNew.Name, acLine, , "", "", _
+                    intArrX1, intArrY1)
+ '   ctlText.Width = intArrLength
+  '  ctlText.Height = intArrLength
+ '   ctlText.Name = "Arr1_" & !TableName & "." & !FieldName
+  '  ctlText.LineSlant = blnArrS1
+   ' ctlText.BorderColor = intLineColor
+    
+ '       Set ctlText = CreateControl(frmNew.Name, acLine, , "", "", _
+  '                  intArrX2, intArrY2)
+   ' ctlText.Width = intArrLength
+ '   ctlText.Height = intArrLength
+  '  ctlText.Name = "Arr2_" & !TableName & "." & !FieldName
+   ' ctlText.LineSlant = blnArrS2
+    'ctlText.BorderColor = intLineColor
+    
+ ''COULD MAKE COVERUP LINE HERE:
+    Set ctlText = CreateControl(frmNew.Name, acLine, , "", "", _
+                    lngOLELeft + IIf(blnCoverVert, lngOLEWidth / 2, 0), lngOLETop + IIf(blnCoverVert, 0, lngOLEWidth / 2), _
+                    IIf(blnCoverVert, 0, lngOLEWidth), IIf(blnCoverVert, lngOLEWidth, 0))
+    ctlText.Name = "cvrLine_" & !TableName & "." & !FieldName
+   ' ctlText.LineSlant = blnArrS2
+    ctlText.BorderColor = 0 'white for testing
+    ctlText.BorderWidth = lineWidth
+ 
+    Set ctlText = CreateControl(frmNew.Name, acBoundObjectFrame, acDetail, , , lngOLELeft, _
+            lngOLETop, lngOLEWidth, lngOLEWidth)
+      ctlText.ControlSource = "img" & strArrow
+      ctlText.Locked = True
+      ctlText.Enabled = False
+      ctlText.SizeMode = 3 'zoom
+      ctlText.SpecialEffect = 0 '"flat"
+      ctlText.BackColor = -2147483633
+      ctlText.BorderStyle = 0 'transparent
+      ctlText.Name = "ArrImg_" & !TableName & "_DOT_" & !FieldName
+      ctlText.InSelection = True
+      DoCmd.RunCommand acCmdSendToBack
+      ctlText.InSelection = False
+  End If 'case 0
+        If intCase = 0 Then Debug.Print "error with Rel for " & !TableName & "." & !FieldName
+    End If ' correct module
+        .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+  
+  'create the standard key:
+  
+  Select Case strModuleName
+    Case "VegBankNO"   'create VegBank key
+     CreateKeyInForm frmNew.Name, transFormX_ERD(6.2, intWidth, dblScaleERD) - 2820, _
+            transFormY_ERD(10.6, intHeight, dblScaleERD) - (1550 * (1 - dblScaleERD / 100))
+            
+     frmNew.TableColors.AfterUpdate = "=changeERDTblcolors(""" & strFormNameSaveAs & """,[TableColors])"
+  'Set correct colors for table key and captions:
+     changeERDTblcolors frmNew.Name, "VegBank"
+     frmNew.TableColors.RowSource = """VegBank"";""Standard Colors"";""Loading"";""Loading Table Destinations"""
+     frmNew.TableColors.DefaultValue = """VegBank"""
+    Case "LoadingNO" 'create Loading key
+     CreateKeyInForm frmNew.Name, transFormX_ERD(0.75, intWidth, dblScaleERD), _
+            transFormY_ERD(5.6, intHeight, dblScaleERD)
+  
+  'If Loading ERD is small, the color key must move to one column, and combo boxes to the left
+     Dim intLoopThruFrmNew As Integer
+     Dim strControlCheck As String
+     For intLoopThruFrmNew = 0 To frmNew.Controls.Count - 1
+       With frmNew.Controls(intLoopThruFrmNew)
+         If Left(.Name, 6) = "color_" And .Left > frmNew.Color_9.Left Then 'must move color key
+           .Left = frmNew.Color_9.Left  'same col as color_9 (party)
+           .Top = .Top + 8 * 240  'down by 8 rows
+           Debug.Print "      " & .Name & " DOWN"
+         End If
+         strControlCheck = Left(.Name, 10)
+         Select Case strControlCheck
+           Case "TableColor", "LineColors", "FieldDetai"
+             'tableColors, LineColors, FieldDetails labels or comboboxes
+             .Left = .Left - 2000
+             Debug.Print .Name & " moved left"
+         End Select
+       End With
+     Next intLoopThruFrmNew
+  
+  'Set correct colors for table key and captions:
+     changeERDTblcolors frmNew.Name, "Loading"
+  
+  'Change TableColors comboBox to TableNames combo-box
+     frmNew.TableColors.Name = "TableNames"
+     
+     frmNew.TableNames.RowSource = """Friendly"";""Friendly Names"";""DBnames"";""Database Names"""
+     frmNew.TableNames.DefaultValue = """Friendly"""
+     changeTableNames frmNew.Name, "Friendly"
+     frmNew.TableNames.AfterUpdate = "=changeTableNames(""" & strFormNameSaveAs & """,[TableNames])"
+     frmNew.TableColorsLabel.Caption = "See Tbl Names:"
+  'Warn users that relationships and closed lists are not enforced in Loading module
+     Set ctlText = CreateControl(frmNew.Name, acLabel, , "", "", _
+              transFormX_ERD(1, intWidth, dblScaleERD), frmNew.Key_Details5.Top + 350)
+     ctlText.Caption = "NOTE! Relationships and Closed Lists are not enforced in the Loading module.  " _
+                       & "Relationships are checked in the Data Check form.  Translate Values to match closed lists " _
+                       & "in the Translate Data form."
+     ctlText.Name = "LoadWarnLabel"
+     ctlText.Width = 2880
+     ctlText.Height = 1440
+     ctlText.FontWeight = 600
+  End Select
+  
+  With frmNew
+  
+  'more std key stuff
+'  .LineColors.RowSource = """Both"";""Standard Colors"";""Black"";""All Lines Black"""
+ ' .LineColors.DefaultValue = """both"""
+  
+ ' .FieldDetails.RowSource = """Details"";""Field Details and Names"";""Names"";""Field Names Only"""
+ ' .FieldDetails.DefaultValue = """Details"""
+  
+  
+  
+
+ ' .LineColors.AfterUpdate = "=changeERDLineColor(""" & strFormNameSaveAs & """,[LineColors])"
+ ' .FieldDetails.AfterUpdate = "=changeTableDetails(""" & strFormNameSaveAs & """,[FieldDetails])"
+  End With
+
+  
+  frmNew.Width = 5 'make as small as can be
+  frmNew.Detail.Height = 5
+  frmNew.Width = frmNew.Width + 150
+  frmNew.Detail.Height = frmNew.Detail.Height + 150
+  
+  ' draw a grid if requested:
+  If blnGrid Then
+    Dim intMaxX As Long, intGridX As Long
+    Dim intMaxY As Long, intGridY As Long
+    Dim intGridXReg As Long, intGridYReg As Long
+    intGridXReg = 1
+    'draw all vertical lines
+    While transFormX_ERD(intGridXReg + 0, intWidth, dblScaleERD) < frmNew.Width
+      Set ctlText = CreateControl(frmNew.Name, acLine, , "", "", _
+                    transFormX_ERD(intGridXReg + 0, intWidth, dblScaleERD), 1)
+      ctlText.Name = "Grid_Vert_X" & intGridXReg & "_Y" & intGridYReg
+      ctlText.Height = frmNew.Detail.Height - 1
+      ctlText.Width = 0
+      ctlText.BorderColor = 16777215
+      ctlText.BorderStyle = 4 'dots
+      Set ctlText = CreateControl(frmNew.Name, acLabel, , "", "", _
+                    transFormX_ERD(intGridXReg + 0, intWidth, dblScaleERD) + 50, 1)
+      ctlText.Height = 250
+      ctlText.Width = 250
+      ctlText.Caption = intGridXReg
+      
+      
+      intGridXReg = intGridXReg + 1
+    Wend
+    'draw all horizontal lines
+    intGridYReg = 1
+    While transFormY_ERD(intGridYReg + 0, intHeight, dblScaleERD) < frmNew.Detail.Height
+      Set ctlText = CreateControl(frmNew.Name, acLine, , "", "", _
+                    1, transFormY_ERD(intGridYReg + 0, intHeight, dblScaleERD))
+      ctlText.Name = "Grid_Hrz_X" & intGridXReg & "_Y" & intGridYReg
+      ctlText.Height = 0
+      ctlText.Width = frmNew.Width - 1
+      ctlText.BorderColor = 16777215
+      ctlText.BorderStyle = 4 'dots
+      Set ctlText = CreateControl(frmNew.Name, acLabel, , "", "", _
+                    1, transFormY_ERD(intGridYReg + 0, intHeight, dblScaleERD) + 50)
+      ctlText.Height = 250
+      ctlText.Width = 250
+      ctlText.Caption = intGridYReg
+      
+      intGridYReg = intGridYReg + 1
+    Wend
+    
+  End If
+  'Save form according to strFormNameSaveAs
+  frmNew.Tag = dblScaleERD
+  frmNew.RecordSource = "erdimg"
+  frmNew.AllowAdditions = False
+  frmNew.AllowDeletions = False
+  frmNew.Caption = strModuleName & " module ERD"
+  frmNew.SetFocus
+  DoCmd.Save , strFormNameSaveAs
+  DoCmd.OpenForm strFormNameSaveAs, acNormal
+ 
+  
+End Function
+
+Public Function transFormX_ERD(dblRegX As Double, intWidth As Long, dblScaleERD As Double) As Double
+   'rule to transform "regular" X to twipX
+   transFormX_ERD = ((intWidth + (8 * dblScaleERD)) * (dblRegX - 0.5)) - (6 * dblScaleERD)
+End Function
+
+Public Function transFormY_ERD(dblRegY As Double, intHeight As Long, dblScaleERD As Double) As Double
+   transFormY_ERD = (intHeight * 10 * (dblRegY - 0.5)) + (2 * (dblScaleERD))
+End Function
+
+Public Function INVtransFormX_ERD(dblTwipX As Double, dblScaleERD As Double) As Double
+   'rule to transform "regular" X to twipX
+   'rEG: transFormX_ERD = (intWidth + (8 * dblScaleERD)) * (dblRegX - 0.5) - (6 * dblScaleERD)
+   Dim intWidth As Long
+   intWidth = intXTwipRatio * (dblScaleERD / 100)
+   INVtransFormX_ERD = 0.5 + ((dblTwipX + (6 * dblScaleERD)) / ((intWidth + (8 * dblScaleERD))))
+    
+End Function
+
+Public Function INVtransFormY_ERD(dblTwipY As Double, dblScaleERD As Double) As Double
+   Dim intHeight As Long
+    intHeight = intYTwipRatio * (dblScaleERD / 100)
+   
+  ' transFormY_ERD = (intHeight * 10 * (dblRegY - 0.5)) + 2 * (dblScaleERD)
+   INVtransFormY_ERD = (dblTwipY - (2 * (dblScaleERD))) / (intHeight * 10) + 0.5
+End Function
+
+
+Public Function DrawLine_ERD(intFromX As Long, intFromY As Long, intDataX As Long, _
+               intDataY As Long, strName As String, intCol As Long, frmName As String, Optional ByVal intDots As Integer)
+        'draws a line, given X1,Y1, X2,Y2, NAme, and color
+               If (intFromX <> intDataX) And (intFromY <> intDataY) Then Debug.Print _
+                "diagonal with " & strName
+                
+        Dim intLt_spRel As Long
+        Dim intTp_spRel As Long
+         If intFromX < intDataX Then
+           intLt_spRel = intFromX
+         Else
+           intLt_spRel = intDataX
+         End If
+         
+         If intFromY < intDataY Then
+           intTp_spRel = intFromY
+         Else
+           intTp_spRel = intDataY
+         End If
+             Dim ctlText2 As Control
+         Set ctlText2 = CreateControl(frmName, acLine, , "", "", _
+                    intLt_spRel, intTp_spRel)
+    ctlText2.Width = Abs(intDataX - intFromX)
+    ctlText2.Height = Abs(intDataY - intFromY)
+    ctlText2.Name = strName
+    ctlText2.BorderColor = intCol
+ 
+    ctlText2.BorderStyle = intDots
+    ctlText2.BorderWidth = lineWidth
+End Function
+
+Public Function GetX_YFromBox(intDataX As Long, intDataY As Long, intHomeN As Long, _
+               intHomeE As Long, intHomeS As Long, intHomeW As Long) As String
+  'gets an X value from a point and Box for line connecting them
+            Dim intFromY As Long
+            Dim intFromX As Long
+            
+           If intHomeN < intDataY And intHomeS > intDataY Then 'is left or right of table
+             intFromY = intDataY
+             If Abs(intDataX - intHomeE) < Abs(intDataX - intHomeW) Then  'table is left
+               intFromX = intHomeE
+             Else  'table is right
+               intFromX = intHomeW
+             End If  'right or left
+           Else  'should be up or down from table
+             intFromX = intDataX
+             If (intFromX > intHomeE And intFromX > intHomeW) Or _
+                (intFromX < intHomeE And intFromX < intHomeW) Then
+                'scew from table, diagonal line must be drawn
+                Debug.Print 'diagonal!'
+                If Abs(intFromX - intHomeE) < Abs(intFromX - intHomeW) Then 'closer to E
+                  intFromX = intHomeE
+                Else 'closer to W
+                  intFromX = intHomeW
+                End If
+             End If 'diagonal
+             If Abs(intDataY - intHomeN) < Abs(intDataY - intHomeS) Then 'table is below
+               intFromY = intHomeN
+             Else 'table is above
+               intFromY = intHomeS
+             End If
+           End If 'up down or left right
+           GetX_YFromBox = intFromX & "," & intFromY
+
+End Function
+
+
+Function CheckLine(IntHigh As Long, intLow As Long, intFrom As Long, intTo As Long, _
+       intSugg As Long, strXY As String, strModuleName As String) As String
+       'function checks to make sure a line is not passing through another table, returns alt value
+    CheckLine = "ERR "
+    Dim RstchkLines As New ADODB.Recordset
+      Dim cnnLocal2 As Connection
+    Set cnnLocal2 = CurrentProject.Connection
+    RstchkLines.Open "select * from Z_TableDescription where calc_e is not null", cnnLocal2, , 1, adCmdText
+    Dim IntTblHigh As Long
+    Dim intTblLow As Long
+    Dim intSideH As Long 'high side
+    Dim intSideL As Long 'low side
+    
+    With RstchkLines
+      Do Until .EOF
+      If !mod = strModuleName Then
+       If strXY = "X" Then
+        IntTblHigh = !calc_E
+        intTblLow = !calc_W
+        intSideL = !calc_N
+        intSideH = !calc_S
+       Else
+        IntTblHigh = !calc_S
+        intTblLow = !calc_N
+        intSideH = !calc_E
+        intSideL = !calc_W
+       End If
+        If intSideL >= intTo And intSideL >= intFrom Then GoTo ThisTblOK
+        If intSideH <= intTo And intSideH <= intFrom Then GoTo ThisTblOK
+        If IntTblHigh <= intLow And IntTblHigh <= IntHigh Then GoTo ThisTblOK
+        If intTblLow >= IntHigh And intTblLow >= intLow Then GoTo ThisTblOK
+        If intSugg > intTblLow And intSugg < IntTblHigh Then
+        '   Debug.Print !tableName & " is a problem, rel drawn anyway"
+           CheckLine = CheckLine & !TableName & ", "
+        End If
+      End If 'module name
+ThisTblOK:
+      
+      .MoveNext
+    Loop
+  End With
+  RstchkLines.Close
+  
+End Function
+
+Function getKeyFromForm()
+  Dim frmCurr As Form, intLoop As Long, intLoop2 As Long
+  DoCmd.OpenForm "temp_Get_key", acDesign
+  Set frmCurr = Forms!temp_Get_key
+  
+For intLoop = 0 To 5 '(frmCurr.Controls.Count - 1)
+  With frmCurr.Controls(intLoop)
+     Debug.Print " '------- " & intLoop & " of " & frmCurr.Controls.Count - 1
+     Debug.Print "Set ctltext = CreateControl(frmNew.Name, " & .ControlType & ", , """", """", 1,1) "
+     
+    For intLoop2 = 0 To .Properties.Count - 1
+      
+     Select Case .Properties(intLoop2).Name
+       Case "listWidth", "columnCount", "ForeColor", "BorderColor", "BorderWidth", "BoundColumn", "LineWidth", "Left", "Top", "Width", "Height", "BackStyle", "BorderStyle", "FontWeight"
+     
+       Debug.Print "ctlText." & .Properties(intLoop2).Name & " = " & .Properties(intLoop2).Value & IIf(.Properties(intLoop2).Name = "Left", "  + intMoveLeft  ", IIf(.Properties(intLoop2).Name = "Top", "  + intMoveDown ", ""))
+       Case "caption", "name", "RowSource", "RowSourceType", "ColumnWidths"
+       Debug.Print "ctlText." & .Properties(intLoop2).Name & " = " & """" & .Properties(intLoop2).Value & """"
+       
+     End Select
+    Next intLoop2
+  End With
+Next intLoop
+End Function
+
+
+Function CreateKeyInForm(strFrmNm As String, intMoveLeft As Long, intMoveDown As Long)
+    Exit Function
+    Dim ctlText As Control
+    
+ '------- 0 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Key_Details1"
+ctlText.Caption = "PK = Primary Key"
+ctlText.Left = 0 + intMoveLeft
+ctlText.Top = 2100 + intMoveDown
+ctlText.Width = 1800
+ctlText.Height = 240
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 1 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Key_RelationshipHeader"
+ctlText.Caption = "Relationship Colors:"
+ctlText.Left = 2160 + intMoveLeft
+ctlText.Top = 1800 + intMoveDown
+ctlText.Width = 1920
+ctlText.Height = 300
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 700
+ctlText.FontUnderline = True
+ '------- 2 of 32
+Set ctlText = CreateControl(strFrmNm, 102, , "", "", 1, 1)
+ctlText.Name = "Key_RelLineReq"
+ctlText.Left = 2100 + intMoveLeft
+ctlText.Top = 2280 + intMoveDown
+ctlText.Width = 480
+ctlText.Height = 0
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 128
+ctlText.BorderWidth = 4
+ '------- 3 of 32
+Set ctlText = CreateControl(strFrmNm, 102, , "", "", 1, 1)
+ctlText.Name = "Key_RelLineNotReq"
+ctlText.Left = 2100 + intMoveLeft
+ctlText.Top = 2640 + intMoveDown
+ctlText.Width = 480
+ctlText.Height = 0
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 4
+ '------- 4 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Key_RelReqd"
+ctlText.Caption = "required FK"
+ctlText.Left = 2760 + intMoveLeft
+ctlText.Top = 2220 + intMoveDown
+ctlText.Width = 1260
+ctlText.Height = 300
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 5 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Key_RelNotReqd"
+ctlText.Caption = "non-reqd FK"
+ctlText.Left = 2760 + intMoveLeft
+ctlText.Top = 2640 + intMoveDown
+ctlText.Width = 1260
+ctlText.Height = 240
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 6 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Key_TableHeaders"
+ctlText.Caption = "Table Colors:"
+ctlText.Left = 4260 + intMoveLeft
+ctlText.Top = 1800 + intMoveDown
+ctlText.Width = 1800
+ctlText.Height = 300
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 700
+ctlText.FontUnderline = True
+ '------- 7 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Key_DetailsHeader"
+ctlText.Caption = "Field Details:"
+ctlText.Left = 0 + intMoveLeft
+ctlText.Top = 1800 + intMoveDown
+ctlText.Width = 1980
+ctlText.Height = 300
+ctlText.FontUnderline = True
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 700
+ '------- 8 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_0"
+
+ctlText.Left = 6360 + intMoveLeft
+ctlText.Top = 2880 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 9 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_1"
+
+ctlText.Left = 6360 + intMoveLeft
+ctlText.Top = 2400 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 10 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_2"
+
+ctlText.Left = 4260 + intMoveLeft
+ctlText.Top = 2400 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 11 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_3"
+
+ctlText.Left = 6360 + intMoveLeft
+ctlText.Top = 2160 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 12 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_4"
+
+ctlText.Left = 6360 + intMoveLeft
+ctlText.Top = 3120 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 13 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_5"
+
+ctlText.Left = 4260 + intMoveLeft
+ctlText.Top = 3120 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 14 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_6"
+
+ctlText.Left = 4260 + intMoveLeft
+ctlText.Top = 2640 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 15 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_8"
+
+ctlText.Left = 6360 + intMoveLeft
+ctlText.Top = 2640 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 16 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_9"
+
+ctlText.Left = 4260 + intMoveLeft
+ctlText.Top = 2160 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 17 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_10"
+
+ctlText.Left = 4260 + intMoveLeft
+ctlText.Top = 3360 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 18 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_11"
+
+ctlText.Left = 4260 + intMoveLeft
+ctlText.Top = 3600 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 19 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_12"
+
+ctlText.Left = 4260 + intMoveLeft
+ctlText.Top = 3840 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 20 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_13"
+
+ctlText.Left = 6360 + intMoveLeft
+ctlText.Top = 3600 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 21 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_15"
+
+ctlText.Left = 6360 + intMoveLeft
+ctlText.Top = 3360 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 22 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Color_7"
+
+ctlText.Left = 4260 + intMoveLeft
+ctlText.Top = 2880 + intMoveDown
+ctlText.Width = 2000
+ctlText.Height = 210
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 1
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 23 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Key_Details2"
+ctlText.Caption = "FK = Foreign Key"
+ctlText.Left = 0 + intMoveLeft
+ctlText.Top = 2340 + intMoveDown
+ctlText.Width = 1800
+ctlText.Height = 240
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 24 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Key_Details3"
+ctlText.Caption = "O  = Open List"
+ctlText.Left = 0 + intMoveLeft
+ctlText.Top = 2580 + intMoveDown
+ctlText.Width = 1800
+ctlText.Height = 240
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 25 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Key_Details4"
+ctlText.Caption = "X  = Closed List"
+ctlText.Left = 0 + intMoveLeft
+ctlText.Top = 2820 + intMoveDown
+ctlText.Width = 1800
+ctlText.Height = 240
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 26 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "Key_Details5"
+ctlText.Caption = "!   = Required Field"
+ctlText.Left = 0 + intMoveLeft
+ctlText.Top = 3060 + intMoveDown
+ctlText.Width = 1800
+ctlText.Height = 240
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 27 of 32
+Set ctlText = CreateControl(strFrmNm, 111, , "", "", 1, 1)
+ctlText.Name = "TableColors"
+ctlText.RowSourceType = "Value List"
+
+ctlText.ColumnCount = 2
+ctlText.ListWidth = 2640
+ctlText.ColumnWidths = "0;2640"
+ctlText.BoundColumn = 1
+ctlText.Left = 4080 + intMoveLeft
+ctlText.Top = 840 + intMoveDown
+ctlText.Width = 2640
+ctlText.Height = 240
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 28 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "TableColorsLabel"
+ctlText.Caption = "See Tbl Colors:"
+ctlText.Left = 2820 + intMoveLeft
+ctlText.Top = 840 + intMoveDown
+ctlText.Width = 1155
+ctlText.Height = 240
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 29 of 32
+Set ctlText = CreateControl(strFrmNm, 111, , "", "", 1, 1)
+ctlText.Name = "LineColors"
+
+ctlText.RowSourceType = "Value List"
+ctlText.ColumnWidths = "0;2640"
+ctlText.ColumnCount = 2
+ctlText.ListWidth = 2640
+ctlText.BoundColumn = 1
+ctlText.Left = 4080 + intMoveLeft
+ctlText.Top = 1140 + intMoveDown
+ctlText.Width = 2640
+ctlText.Height = 240
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 30 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "LineColorsLabel"
+ctlText.Caption = "See Line Colors:"
+ctlText.Left = 2820 + intMoveLeft
+ctlText.Top = 1140 + intMoveDown
+ctlText.Width = 1230
+ctlText.Height = 240
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 31 of 32
+Set ctlText = CreateControl(strFrmNm, 111, , "", "", 1, 1)
+ctlText.Name = "FieldDetails"
+ctlText.RowSourceType = "Value List"
+
+ctlText.ColumnWidths = "0;2640"
+ctlText.ColumnCount = 2
+ctlText.ListWidth = 2640
+ctlText.BoundColumn = 1
+ctlText.Left = 4080 + intMoveLeft
+ctlText.Top = 1440 + intMoveDown
+ctlText.Width = 2640
+ctlText.Height = 240
+ctlText.BackStyle = 1
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+ '------- 32 of 32
+Set ctlText = CreateControl(strFrmNm, 100, , "", "", 1, 1)
+ctlText.Name = "FieldDetailsLabel"
+ctlText.Caption = "See Fld Details:"
+ctlText.Left = 2820 + intMoveLeft
+ctlText.Top = 1440 + intMoveDown
+ctlText.Width = 1230
+ctlText.Height = 240
+ctlText.BackStyle = 0
+ctlText.BorderStyle = 0
+ctlText.BorderColor = 0
+ctlText.BorderWidth = 0
+ctlText.ForeColor = 0
+ctlText.FontWeight = 400
+
+End Function
+
+
+Function changeERDTblcolors(strFormName As String, strColorType As String)   'name of color schema, either VegBank or Loading
+'  On Error GoTo changeERDerr
+  If strFormName = "" Then strFormName = Screen.ActiveForm.Name
+  Dim frmCurr As Form
+  'opens form to change colors for
+  'DoCmd.OpenForm strFormName
+  
+  'sets frmCurr as form to change colors
+  Set frmCurr = Forms(strFormName)
+  Dim intLoop As Integer
+  Dim ctlCurrent As Control
+    
+  Dim rstCurr As New ADODB.Recordset
+  Dim fldCurr As Field
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+  
+'opens query to get new color values
+    If strColorType = "Loading" Then  'get Loading colors
+      rstCurr.Open "Z_FieldTbl_ERD_loadClr", cnnLocal, , , adCmdTable
+    Else  'get std VegBank colors for tables
+      rstCurr.Open "Z_FieldTbl_ERD_VBClr", cnnLocal, , , adCmdTable
+    End If
+        
+ 'then in the query that contains table names and colors, reassign list box colors for each
+ ' unless there is an error (table dnE on form)
+  With rstCurr
+    Do Until .EOF
+        If existCntl(frmCurr, "flds_" & !TableName) Then  'control does not exist
+           frmCurr.Controls("flds_" & !TableName).BackColor = !ERD_Color_Num
+        Else 'control does exist
+           Debug.Print !TableName & " not changed"
+        End If
+      .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+  DoCmd.OpenForm "ERDKey"
+  Set frmCurr = Forms!ERDKey
+  'change key to colors
+  rstCurr.Open "Z_Table_ERD_color", cnnLocal, , , adCmdTable
+  Dim strCaption As String
+    With rstCurr
+    Do Until .EOF
+      Set ctlCurrent = frmCurr.Controls("color_" & !ERD_Color_ID)
+      If strColorType = "Loading" Then
+        strCaption = !Load_colorMeaning
+      Else
+        strCaption = !VB_colorMeaning
+      End If
+        
+      ctlCurrent.Caption = strCaption
+      ctlCurrent.BackColor = !ERD_Color_Num
+      If strCaption = "n/a" Then 'don't show this color in key
+          ctlCurrent.Visible = False
+      Else
+          ctlCurrent.Visible = True
+      End If 'show color in key or no
+      
+      .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+  
+  
+exitColorChng:
+  Exit Function
+changeERDerr:
+  msgBox "error in changing colors on ERD"
+  Resume exitColorChng
+End Function
+
+Function existCntl(frm As Form, strControlName As String) As Boolean
+  'function evaluates if a control name exists on a form and returns a boolean TRUE if it is found
+  Dim ctlCurrent As Control, intLoop As Integer
+  For intLoop = 0 To frm.Controls.Count - 1
+    If frm.Controls(intLoop).Name = strControlName Then
+      'control name does exist
+      existCntl = True
+      Exit Function
+    End If
+  Next intLoop
+  'could not find control name
+  existCntl = False
+End Function
+
+
+Function changeERDLineColor(strFormName As String, strLineColors As String)
+    Dim frmCurr As Form
+  'opens form to change colors for
+  'DoCmd.OpenForm strFormName
+  Dim intNonBlackLine As Long
+  If strLineColors = "both" Then
+    intNonBlackLine = 128
+  Else
+    intNonBlackLine = 65536
+  End If
+  'sets frmCurr as form to change colors
+  Set frmCurr = Forms(strFormName)
+  Dim ctlCurrent As Control, intLoop As Integer
+  Dim strCntlPrefix As String
+   For intLoop = 0 To (frmCurr.Controls.Count - 1)
+  With frmCurr.Controls(intLoop)
+    strCntlPrefix = Left(.Name, 5)
+
+    Select Case strCntlPrefix
+      Case "Line_", "Arr1_", "Arr2_"  'this is a line to change, telling by control name
+
+        Select Case .BorderColor
+          Case 0
+            'no change
+          Case Else
+            'change to appropriate Non-Black color, either dark dark navy the eye cannot detect or reddish
+            .BorderColor = intNonBlackLine
+        End Select
+      Case "key_R"
+        If strLineColors = "both" Then
+          .Visible = True  'need Relationship color key
+        Else
+          .Visible = False 'do not need Relationship key visible
+        End If
+    End Select
+  End With
+   Next intLoop
+ End Function
+
+Function changeTableDetails(strFormName As String, strTblDtls As String)
+    Dim frmCurr As Form
+    If strFormName = "" Then strFormName = Screen.ActiveForm.Name
+  'opens form to change colors for
+  'DoCmd.OpenForm strFormName
+  'sets frmCurr as form to change colors
+  Set frmCurr = Forms(strFormName)
+  Dim strCwidths As String
+  Dim ctlCurrent As Control, intLoop As Integer
+  Dim strCntlPrefix As String
+   For intLoop = 0 To (frmCurr.Controls.Count - 1)
+  With frmCurr.Controls(intLoop)
+    strCntlPrefix = Left(.Name, 5)
+
+    Select Case strCntlPrefix
+      Case "flds_" 'this is a list box to change, telling by control name
+      Select Case strTblDtls
+        Case "Names"
+            strCwidths = " 0;" & .Width * (0.99)
+            .ColumnWidths = strCwidths
+        Case Else
+            strCwidths = (3 / 20) * .Width & ";" & .Width * (21 / 25)
+            .ColumnWidths = strCwidths
+      End Select
+      Case "key_D"
+        If strTblDtls = "Names" Then 'hide field details key if only names
+          .Visible = False
+        Else
+          .Visible = True ' show field details key
+        End If
+    End Select
+  End With
+   Next intLoop
+End Function
+
+Function changeTableNames(strFormName As String, strTblNms As String)
+    Dim frmCurr As Form, strCntlPrefix As String, strLoadLtr As String
+  'opens form to change table names for
+  'DoCmd.OpenForm strFormName
+  'sets frmCurr as form to change colors
+  Set frmCurr = Forms(strFormName)
+  Dim intLoop As Integer
+  For intLoop = 0 To (frmCurr.Controls.Count - 1)
+  With frmCurr.Controls(intLoop)
+    strCntlPrefix = Left(.Name, 7)
+    If strCntlPrefix = "Z_USER_" Then
+     If Len(.Name) > 7 Then
+      strLoadLtr = Mid(.Name, 8, 1)
+      If strTblNms = "DBnames" Then
+          .Caption = .Name  'sets caption to control name (ie table)
+      Else  'not db names, but "friendly Names"
+      Select Case strLoadLtr
+         Case "A"
+           .Caption = "Party Information"
+         Case "B"
+           .Caption = "Species List"
+         Case "C"
+           .Caption = "Plot Data"
+         Case "D"
+           .Caption = "Cover Data"
+         Case "E"
+           .Caption = "Stem Data"
+         Case "F"
+           .Caption = "Soil Data"
+         Case "G"
+           .Caption = "Disturbance"
+         Case "H"
+           .Caption = "Community Names"
+         Case "I"
+           .Caption = "Plot Communities"
+         Case "J"
+           .Caption = "User Defn Metadata"
+      End Select
+      End If 'dbnames
+     End If 'table name > 7 characters
+    End If 'Z_USER_
+  End With
+   Next intLoop
+End Function
+
+
+Public Function reverseEngineerERD(strForm As String)
+  'function takes ERD form and adjusts ERDX and ERDY in Z_TableDescription according to the values found on the form
+  'this allows design view to really alter where tables go
+  Dim frmCurr As Form
+  DoCmd.OpenForm strForm, acDesign
+  Set frmCurr = Forms(strForm)
+  ''get labels that are table names: fix X and Y of these
+  Dim rstTemp As New ADODB.Recordset
+  rstTemp.Open "select * from Z_tableDescription;", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstTemp
+  Do Until .EOF
+    If existCntl(frmCurr, !TableName) Then
+    'have control named same as table, get x and Y coords
+       !ERDX = INVtransFormX_ERD(frmCurr.Controls(!TableName).Left, frmCurr.Tag)
+       !ERDY = INVtransFormY_ERD(frmCurr.Controls(!TableName).Top, frmCurr.Tag)
+       .Update
+    End If
+  .MoveNext
+  Loop
+  End With
+  rstTemp.Close
+  DoCmd.Close acForm, strForm, acSavePrompt
+  
+End Function
+
+Function fjkdajkal()
+Dim prpTemp As Variant
+  For Each prpTemp In Forms!erd_new85Img!flds_plot.Properties
+    On Error Resume Next
+    Debug.Print prpTemp.Name & ":" & prpTemp.Value
+  
+  Next
+ ' Forms!erd_new85Img!OLEBound263.layerorder
+'  Toolbars.editing
+End Function

@@ -1,0 +1,184 @@
+Option Compare Database
+Option Explicit
+
+
+
+Private Sub Command16_Click()
+  Me.Recalc
+End Sub
+
+Private Sub Command7_Click()
+  Dim cnnLoc As Connection
+  Dim rstCurr As New ADODB.Recordset
+  Set cnnLoc = CurrentProject.Connection
+  rstCurr.Open "select * From Z_TableDescription where tableName = """ & _
+    [Table] & """;", cnnLoc, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstCurr.EOF Then
+    msgBox "Can't find a file name specified for the table " & [Table] & Chr(13) _
+       & "Try specifying file locations and restoring default file locaitons", vbCritical
+    Exit Sub
+  End If
+'create Destination File Name:
+Dim strDestFile As String, strFile As String
+strFile = Nz(rstCurr!FileLocation, "")
+
+'update any null VegBankFields to !skipField:
+DoCmd.RunSQL "UPDATE W_Convert_CSVColNames SET VegBankFieldName=""!SkipField:"" & [UserFieldName] WHERE formatName=""" _
+  & Me!Format & """ and tableName=""" & Me!Table & """ AND ((VegBankFieldName) is null);"
+
+If Right(strFile, 4) = ".mdb" Then
+  'import directly from mdb
+  importMDBtoTable_changeFlds Me!Format, Me!Table, rstCurr!FileLocation, rstCurr!ImportFromTable, True
+  DoCmd.Close acForm, Me.Name
+  Exit Sub
+End If
+
+GetDestFileName:
+If InStr(InStr(strFile, "\") + 1, strFile, ".") = 0 Then
+   'no . in filename after \
+   strDestFile = strFile & "_VgBrch.csv"
+Else
+   strDestFile = Left(strFile, InStr(InStr(strFile, "\") + 1, strFile, ".") - 1) & "_VgBrch.csv"
+End If
+Debug.Print strDestFile
+
+strDestFile = InputBox("VegBranch will now create a new file with VegBank field names." & Chr(13) _
+    & "What would you like to name this file?" & Chr(13) & "(Must end with '.csv')", _
+    "Name the destination file", strDestFile)
+If strDestFile = "" Then
+    msgBox "Conversion halted!", vbCritical
+    Exit Sub
+End If
+If Right(strDestFile, 4) <> ".csv" Then
+    msgBox "Invalid filename.  Must end in '.csv'!", vbCritical
+    GoTo GetDestFileName
+End If
+
+GetWriteCommaHeaders True, rstCurr!FileLocation, Me!FieldNameConversion!RowForFormatTbl, _
+    Me!Format, Me!Table, strDestFile, False
+  rstCurr.Close
+End Sub
+
+Private Sub FieldNameConversion_Enter()
+  Me!FieldNameConversion!VegBankFieldName.RowSource = _
+      "Select FieldName from Z_FieldDescription WHERE tableName = """ _
+      & Me!Table & """ AND key <> ""PK"" AND exporttoXLS > 0   ORDER BY fieldName;"
+  Me!FieldNameConversion!VegBankFieldName.Requery
+End Sub
+
+Private Sub fieldsNotUsed_DblClick(Cancel As Integer)
+  If Not IsNull(Me.fieldsNotUsed) Then
+   Call FindFieldInDD([Table] & "." & Me.fieldsNotUsed)
+  Else
+   msgBox "Please select a field to view in data dictionary first."
+  End If
+End Sub
+
+Private Sub Format_afterUpdate()
+  'ok, so user wants to pick a different format.  Check to see if their fields are contained within the new one
+  
+  'query to edit to put users fields in it:
+  'enable command7 if format matches original
+  If Me!Format = Me!OrigFormat Then
+    Me!Command7.Enabled = True
+    Me!Message.Caption = " "
+  End If
+  'W_convert_csv_usersnames_edit
+  Dim strBaseSQL As String
+  strBaseSQL = "SELECT *  FROM W_Convert_CSVColNames WHERE TableName=""" & Me!Table & """ AND FormatName="
+  
+  Call EditQrySql("W_convert_csv_usersnames_edit", strBaseSQL & SQLizeTxt(Me!OrigFormat), False)
+  'query to edit to put new formats fields in it:
+  'W_convert_csv_otherformatnames_edit
+  Call EditQrySql("W_convert_csv_otherformatnames_edit", strBaseSQL & SQLizeTxt(Me!Format), False)
+  'query that shows us what new set of fields lacks:
+  'W_convertcsv_missingFieldsInNewFormat
+  Dim rstGetValues As New ADODB.Recordset
+  rstGetValues.Open "Select * from W_convertcsv_missingFieldsInNewFormat", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstGetValues
+  If .EOF Then
+    'no values to add- is ok
+  Else
+    Dim strFieldsMissing As String
+    Do Until .EOF
+      strFieldsMissing = strFieldsMissing & IIf(strFieldsMissing = "", "", ",") & !UserFieldName
+    .MoveNext
+    Loop
+    'now we have list of fields that need to be added to this format.
+    'ask user if they want to use this format.
+    Dim intResp As Integer
+    intResp = MsgBox_cust("The format you picked doesn't have all the fields your data had.", "ADD your fields,CHOOSE another format,VIEW this format", _
+      "Your data has fields in it that aren't mapped in the format you've selected, specifically:  " & strFieldsMissing _
+      & Chr(13) & "You can ADD these fields to the new format, or CHOOSE a different format to use, or temporarily VIEW this format.")
+      Select Case intResp
+        Case 1
+          'add them
+          DoCmd.RunSQL "INSERT INTO W_Convert_CSVColNames (FormatName,TableName,UserFieldName,RowForFormatTbl,SortOrd) SELECT " & SQLizeTxt(Me!Format) & ",TableName,UserFieldName,1,ConvertFieldNamesID FROM W_convertcsv_missingFieldsInNewFormat;"
+          Me.Recalc
+        Case 3
+          'disable form selects
+          msgBox "You can view this format temporarily and then return to your original format: " & Me!OrigFormat & Chr(13) _
+            & "You cannot convert based on this format, without adding your field names that are missing."
+          Me!Message.Caption = "To continue, please choose the format: " & Me!OrigFormat
+          Me!Command7.Enabled = False
+        Case Else
+          'cancel
+'          Cancel = 1
+          Me!Format = Me!OrigFormat
+        
+      End Select
+  End If
+  End With
+End Sub
+
+
+
+Private Sub Format_Enter()
+  Me.Format.Requery
+End Sub
+
+Private Sub SaveFormatAs_Click()
+  'save this format as another name.
+  'make sure they provided as name
+  Me.Refresh 'update pending changes
+  If Len(Nz(Me!saveAsName)) = 0 Or Trim(Nz(Me!saveAsName)) = " " Then
+    'not ok
+    msgBox "please provide a name at least one character long in the picklist (you can write your own name or pick a value)"
+    Exit Sub
+  
+  End If
+  'make sure name isn't the same as what it was
+  If Me!saveAsName = Me!Format Then
+    msgBox "The current format IS already the name you supplied."
+    Exit Sub
+  End If
+  
+  'we have an ok name
+  Dim strNewName As String
+  strNewName = Me!saveAsName
+  'check to see if it's in use for this table already
+  If getvalFrmSQL("select 'ok' from W_Convert_CSVColNames where FormatName=" & SQLizeTxt(strNewName) & " AND tableName='" & Me!Table & "'") = "ok" Then
+    'already have a name like this, delete it first?
+    Dim intResp As Integer
+    intResp = MsgBox_cust("You already have that format name for this table.", "choose another name for this format,overwrite my other data", _
+       "You cannot have the same name for two different sets of criteria for the same table in VegBranch.  If you choose to overwrite the old format," _
+      & "it will be lost permanently.  You are encouraged to choose another name for this format.")
+    Select Case intResp
+      Case 2
+        'ok, remove old one
+        DoCmd.RunSQL "delete * from W_Convert_CSVColNames where FormatName=" & SQLizeTxt(strNewName) & " AND tableName='" & Me!Table & "'"
+      Case Else
+        'try again
+        msgBox "Please write a new name in the picklist and try to save the format again."
+        Exit Sub
+    End Select
+  End If
+  'now, update this format to new name
+  DoCmd.RunSQL "update W_Convert_CSVColNames set FormatName=" & SQLizeTxt(strNewName) & " WHERE tableName='" & Me!Table & "' AND formatName=" & SQLizeTxt(Me!Format)
+  Me!Format = strNewName
+  Me.Requery
+  Me!Format.Visible = True
+  Me!OrigFormat = strNewName
+  msgBox "Successfully saved your format as:" & strNewName
+  
+End Sub

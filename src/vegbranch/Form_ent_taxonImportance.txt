@@ -1,0 +1,313 @@
+Option Compare Database
+Option Explicit
+Const localDebugLevel = 0
+
+
+
+
+Private Sub Command100_Click()
+  'deletes this taxonInterpretation
+  If Me.chk_confirmDels Then
+    If Not AreYouSure("Do you want to delete this row?" & Chr(13) & "Uncheck the box above the 'del' button to prevent this message from displaying.") Then
+      Exit Sub
+    End If
+  End If
+  'delete this taxImp and if solo TaxonObs, then TaxonObs and TaxonInts, too
+  Me.Refresh 'complete pending updates
+  'delete any notCustomized stem records that apply:
+  If Me("isStemCustomized") < 1 Then
+   ' DoCmd.RunSQL "DELETE DISTINCTROW entStems.* from ent_stems WHERE taxonImportance_ID=" & Me.CurrTaxonImportance_ID
+  Else
+    Dim intResp As Integer
+    intResp = MsgBox_cust("There are customized stem data associated with this record. Delete them too?", "delete,see records first,don't delete")
+    If intResp = 2 Then
+      'show records and ask again
+      DoCmd.OpenForm "ent_stems", , , "taxonImportancE_ID=" & Me.CurrTaxonImportance_ID, , acDialog
+      intResp = MsgBox_cust("You've seen the stems, delete them?", "delete,don't delete")
+    End If
+    If intResp = 0 Or intResp = 2 Or intResp = 3 Then
+      GoTo exitthis
+    End If 'cancelled delete
+    If intResp = 1 Then
+      'delete stems: continue, if this is not so, we aren't here anymore
+    End If
+  End If 'stems need confirmation before deleting
+    DoCmd.RunSQL "delete * from stemLocation where stemCount_ID in (select stemCount_ID from stemCount where taxonImportance_ID=" & Me.CurrTaxonImportance_ID & ")"
+    DoCmd.RunSQL "delete * from stemCount  where taxonImportance_ID=" & Me.CurrTaxonImportance_ID
+  
+  DoCmd.RunSQL "delete * from taxonImportance WHERE taxonImportance_ID=" & Me.CurrTaxonImportance_ID
+  If getvalFrmSQL("select count(1) from taxonImportance WHERE taxonObservation_ID=" & Me.CurrTaxonObservation_ID) = 0 Then
+    'potentially delete this taxonObs and taxonInts that go with it
+    'not for custom changed taxInts
+    Dim blnDeleteTIs As Boolean
+    If Me("isTaxIntCustomized") < 2 Then
+      blnDeleteTIs = True
+    Else
+      'customized TaxonInts: ask user if to delete
+      Dim inttemp As Integer
+      inttemp = MsgBox_cust("You have entered Interpretation information about this record, delete this too?", _
+        "delete tax interp(s),see interp(s)first,leave alone")
+      If inttemp = 2 Then
+        'Call ent_getTaxInterp(Me.CurrTaxonObservation_ID, True)
+        DoCmd.OpenForm "ent_taxonInterpretation", , , "taxonObservation_ID=" & Me.CurrTaxonObservation_ID, , acDialog
+        inttemp = MsgBox_cust("You have entered Interpretation information about this record, delete this too?", _
+        "delete tax interp(s),leave alone")
+      End If
+      If inttemp = 1 Then
+        'delete these taxonInts
+        blnDeleteTIs = True
+      End If
+    End If 'non-customized TaxInt
+     
+    If blnDeleteTIs Then
+    'remove taxonInterpretation for this taxObs
+       DoCmd.RunSQL "delete * from taxonInterpretation WHERE taxonObservation_ID=" & Me.CurrTaxonObservation_ID
+    'rm tObs
+       DoCmd.RunSQL "delete * from taxonObservation WHERE taxonObservation_ID=" & Me.CurrTaxonObservation_ID
+    End If
+  End If 'more than one taxImport
+  'rm this temp table record:
+  DoCmd.RunSQL "delete * from ent_temp_taxonImp_Int_Obs WHERE ent_temp_taxImpID=" & Me("ent_temp_taxImpID")
+exitthis:
+Exit Sub
+End Sub
+
+Private Sub CoverClass_Enter()
+ update_coverClassPicklist
+End Sub
+
+Private Function update_coverClassPicklist()
+  Dim strBase As String, strTemp As String
+  Dim strMethod As String
+  strMethod = getvalFrmSQL("select coverMethod_ID from observation where observation_ID=" & Nz(Me.[OBSERVATION_ID], -1))
+  If strMethod = "" Then
+    msgBox "You need to specify an observation, and that observation needs to have a Cover Method to use this picklist."
+  Else
+    strBase = "SELECT coverIndex.coverPercent, coverIndex.coverCode AS code, coverIndex.lowerLimit & '-' & coverIndex.upperLimit, coverIndex.COVERMETHOD_ID FROM coverIndex " _
+    & " WHERE (((coverIndex.COVERMETHOD_ID)=" & strMethod & "));"
+    Me.CoverClass.RowSource = strBase
+  End If
+  
+End Function
+
+Private Sub Form_AfterUpdate()
+  'update to get correct TaxonObs: normalize them on the fly
+  'check for currentName there, meaning update only that one record to the new name
+  Dim strChange2Name As String, strWHERETHISREC As String
+    strWHERETHISREC = "ent_temp_taxImpID=" & Me.ent_temp_taxImpID
+ 
+  If Not IsNull(Me.CurrAuthorPlantName) Then
+    'need to update only this one row with new taxObs and taxInt
+    'copy the current taxonObservation and taxonInterpretation, then modify them
+   
+    strChange2Name = Me.CurrAuthorPlantName
+    DoCmd.RunSQL "UPDATE ent_temp_taxonImp_Int_Obs SET CurrAuthorPlantname = null WHERE " & strWHERETHISREC
+    Dim lngWriteNewTO As Long, lngWriteNewTI As Long
+    lngWriteNewTO = ent_ADODBcopyRec("taxonObservation", Me.CurrTaxonObservation_ID, "accessionCode")
+    lngWriteNewTI = ent_ADODBcopyRec("taxonInterpretation", Me.CurrtaxonInterpretation_ID)
+    'update TO to reflect changes
+    If lngWriteNewTO > 0 And lngWriteNewTI > 0 Then
+      'update plantName in taxonObs
+      If localDebugLevel > 0 Then Debug.Print "adding TO: " & lngWriteNewTO & " ,TInt:" & lngWriteNewTI
+      DoCmd.RunSQL "UPDATE taxonObservation SET authorPlantName=" & SQLizeTxt(strChange2Name) & " WHERE taxonObservation_ID=" & lngWriteNewTO
+      'taxonInt updates:
+      DoCmd.RunSQL "UPDATE taxonInterpretation SET plantConcept_ID=" & getConcIDForName(strChange2Name) & ", " _
+        & " TaxonObservation_ID = " & lngWriteNewTO & " WHERE taxonInterpretation_ID=" & lngWriteNewTI
+      'update TaxonImportance taxonObs value too
+      DoCmd.RunSQL "UPDATE taxonImportance SET taxonObservation_ID=" & lngWriteNewTO & " WHERE taxonImportance_ID=" _
+        & Me.CurrTaxonImportance_ID
+      'update ent_ table
+      DoCmd.RunSQL "UPDATE ent_temp_taxonImp_int_obs SET currTaxonObservation_ID=" & lngWriteNewTO _
+        & " , currTaxonInterpretation_ID=" & lngWriteNewTI & " WHERE " & strWHERETHISREC
+      
+    Else
+
+      msgBox "Sorry, there were errors in trying to change only this row.  Try adding a new record at the bottom and deleting this one."
+    End If
+  End If 'currAuthorPlantName
+  
+  ':change taxonObs to non-duplicated one, if exists
+ If Not Me.DoNotCompressTO Then
+  Dim lngCurrTO As Long, lngNewTO As Long
+  lngCurrTO = Me.TObsOID
+  lngNewTO = ent_chkDupl_taxonObs(Me.TObsOID, Me.OBSERVATION_ID, Me.authorPlantName)
+  If lngNewTO <> lngCurrTO Then
+    'note this in "metadata field"
+   'no more DoCmd.RunSQL "UPDATE ent_temp_taxonImp_Int_Obs SET hasMultTaxImpRecs=true WHERE ent_temp_taxImpID=" & Me.ent_temp_taxImpID
+    
+    'check to see if taxonInt is redundant
+    'how do I do that?
+    'ok: remove this taxonInt and just use the other one, unless this one is customized
+    Dim blnRmTaxInt As Boolean
+    If (Me("isTaxIntCustomized")) < 2 Then blnRmTaxInt = True 'if customized, then let user live with it
+    'perhaps could build more complex set of criteria to deal with these
+    If blnRmTaxInt Then
+      'not customized, then remove this one, use the other one
+      Dim lngNewTaxINT As Long, lngOldTaxINt As Long
+      lngOldTaxINt = Me.CurrtaxonInterpretation_ID
+      lngNewTaxINT = getvalFrmSQL("select currTaxonInterpretation_ID from ent_temp_taxonImp_Int_Obs WHERE " _
+        & " currTaxonObservation_ID=" & lngNewTO & " AND currTaxonInterpretation_ID <> " & lngOldTaxINt)
+      If ent_mergeTableRecs("taxonInterpretation", lngNewTaxINT, lngOldTaxINt, "collectionNumber,taxonFit,taxonConfidence") Then
+        If localDebugLevel > 0 Then Debug.Print "successfully compressed taxInt(" & lngOldTaxINt & ") to:" & lngNewTaxINT
+      End If
+      
+    Else
+      'not compressing, let user know there may be conflicts
+      Call ent_getTaxInterp(lngNewTO)
+      msgBox "There may be conflicts with TaxonInterpretation, where there are several records for this taxon observation." _
+        & Chr(13) & "A new form has just opened that will allow you to make sure these are correct."
+    End If 'compress TaxInts
+    
+  End If 'deal with taxInt compress
+ End If 'not compress
+ 'add any taxonAlts if needed
+ 'add them if ent_NextName is not null in Z_B_VB_lookupNms and taxonAlts dnE for this taxonInterpretation
+ 'see if taxAlts exist already, if so, skip
+ Dim lngTaxAlts As Long
+ lngTaxAlts = getvalFrmSQL("select count(taxonAlt_ID) FROM taxonAlt where Taxoninterpretation_ID=" & Me.CurrtaxonInterpretation_ID)
+ If lngTaxAlts = 0 Then 'no taxAlts, see if needed
+  Dim strAlts As String, rstGetAlts As New ADODB.Recordset, blnAltsAdded As Boolean
+  strAlts = getvalFrmSQL("select ent_altNames from Z_B_VB_LookupNms where plantName=" & SQLizeTxt(Me.authorPlantName))
+  If strAlts <> "" Then
+    rstGetAlts.Open "select * from Z_B_VB_LookupNms where plantName in (" & strAlts & ") AND plantConcept_ID>0;", CurrentProject.Connection, adOpenDynamic, adLockReadOnly, adCmdText
+    With rstGetAlts
+     Do Until .EOF
+       'add taxonAlts
+       DoCmd.RunSQL "INSERT INTO taxonAlt (taxonInterpretation_ID,plantConcept_ID) SELECT " & Me.CurrtaxonInterpretation_ID & "," & !PLANTCONCEPT_ID
+       blnAltsAdded = True
+     .MoveNext
+     Loop 'eof: none to add
+    End With
+    rstGetAlts.Close
+  End If 'strAlts exist
+  If blnAltsAdded Then
+    'make taxonInt group type the default value
+    'cant do this: we have already updated rec  Call ent_provideDefaultValues(Me, "default", "taxonInterpretation", "groupType")
+    Dim strGetDefaultGroupType As String
+    strGetDefaultGroupType = getvalFrmSQL("select fieldValue from ent_defaultValues where fieldName='groupType' and tableName='taxonInterpretation'" _
+      & " and framework=" & SQLizeTxt("default"))
+    If strGetDefaultGroupType <> "" Then
+      DoCmd.RunSQL "Update TaxonInterpretation SET groupType = " & SQLizeTxt(strGetDefaultGroupType) & " WHERE taxonInterpretation_ID=" & Me.CurrtaxonInterpretation_ID
+    End If
+  End If
+ End If 'there arent taxAlts
+ 'deal with migrating stems
+ If Me("dbh_migrated") = False And Not (IsNull(Me.dbh_list.Value)) Then
+  
+   Dim colCheckDBH As New Collection, intDChk As Long
+   Set colCheckDBH = csv_parseCSVstring(Me.dbh_list)
+    
+     For intDChk = 1 To colCheckDBH.Count
+       DoCmd.RunSQL "INSERT INTO stemCount (taxonImportance_ID, stemDiameter, stemCount) SELECT " _
+         & Me.CurrTaxonImportance_ID & "," & colCheckDBH(intDChk) & ",1;"
+     Next intDChk
+     
+     'check migrated box:
+     DoCmd.RunSQL "UPDATE ent_temp_taxonImp_Int_Obs SET dbh_migrated = true WHERE " & strWHERETHISREC
+  End If
+ 
+End Sub
+
+Private Function getConcIDForName(strName As String) As Long
+ Dim lngTemp As Long
+ lngTemp = getvalFrmSQL("select min(plantConcept_ID) from Z_B_VB_LookupNms where plantName=" & SQLizeTxt(strName))
+ If localDebugLevel > 0 Then Debug.Print strName & "=" & lngTemp
+ getConcIDForName = lngTemp
+End Function
+
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+    'for new records, must update TaxINt.taxObsID, and TaxImp.taxObs_ID
+  If localDebugLevel > 0 Then Debug.Print "form_beforeUpdate>" & Now()
+  'If IsNull(Me.TIntTOID) Then
+  
+  Me.TIntTOID = Me.TObsOID
+  'If IsNull(Me.TImpTOID) Then
+  Me.TImpTOID = Me.TObsOID
+  'get taxonInt defaults:
+  Call ent_provideDefaultValues(Me, "default", "taxonInterpretation", , "groupType")
+  Dim strOldValue As String
+    strOldValue = Nz(Me.authorPlantName.OldValue, "")
+      'check to see if only update one row, if this applies to mult taxObs
+  If strOldValue <> Me.authorPlantName.Value Then 'changed
+   If (getvalFrmSQL("select count(1) from ent_temp_taxonImp_Int_Obs where currTaxonObservation_ID=" & Me.CurrTaxonObservation_ID) > 1) Then 'also mult
+    'changing spp on this one
+    
+    If localDebugLevel > 0 Then Debug.Print "changing spp from: " & strOldValue & " to : " & Me.authorPlantName.Value
+    Dim intRet As Long
+    intRet = MsgBox_cust("You have changed a species name!", "change all,change only 1,undo change", _
+      "This row is linked to other rows that also have the plant name:'" & strOldValue _
+      & "'.  Do you want to change all these rows to:'" & Me.authorPlantName.Value & "', or only this one row?")
+    Select Case intRet
+      Case 0 'cancel
+        Cancel = 1
+      Case 1 'change all
+      Case 2 'change just this 1 : add new taxonObs, if none exists
+        'sets the currentAuthorPlantNAme for this record to something different, will be updated in AfterUpdate method
+        Me.CurrAuthorPlantName = Me.authorPlantName
+        Me.authorPlantName = strOldValue
+      Case 3 'undo
+        Me.authorPlantName = strOldValue
+    End Select
+   End If 'has mult
+  End If 'changed
+     'set plantConcept_ID to match that what was selected in authorPlantName
+  'if localDebugLevel>0 then debug.print  "HERE:" & Now()
+  Dim lngTemp As Long
+  lngTemp = getConcIDForName(Nz(Me.authorPlantName, ""))
+  If lngTemp > 0 Then
+    Me.PLANTCONCEPT_ID = lngTemp
+  Else
+    msgBox "Please choose a plantName that has been mapped to a valid plant concept."
+    Cancel = 1
+  End If
+
+  'check stem dbh list
+  Debug.Print Me.dbh_list.OldValue & "|NEW:" & Me.dbh_list.Value
+  If Nz(Me.dbh_list.OldValue, "") <> Nz(Me.dbh_list.Value, "") Then
+    'needs checking
+    'if stems are already customized, then can't edit dbh list
+    If Me("IsStemCustomized") = 1 Then
+      Me.dbh_list.Value = Me.dbh_list.OldValue
+      If msgBox("You can't edit the dbh list, because the stems for this record have been edited directly.  Would you like to see the stems and edit them?", vbYesNo) = vbYes Then
+        'show stems
+        Call ent_getStems(Me.CurrTaxonImportance_ID)
+      End If
+    Else 'not customized stems:
+     Dim colCheckDBH As New Collection, intDChk As Long
+     Set colCheckDBH = csv_parseCSVstring(Me.dbh_list)
+     For intDChk = 1 To colCheckDBH.Count
+      If Not (IsNumeric(Trim(colCheckDBH(intDChk)))) Then
+        msgBox "Your dbh list is not valid, contains a non-numeric dbh: " & Chr(13) & colCheckDBH(intDChk) & Chr(13) _
+          & "Please correct this before moving to a new record."
+        Cancel = 1
+        Exit Sub
+      End If
+     Next
+     'remove old stems and repopulate:
+     DoCmd.RunSQL "delete * from stemCount where taxonImportance_ID=" & Me.CurrTaxonImportance_ID & ";"
+     'uncheck migrated box:
+     Me("dbh_migrated") = False
+          
+    End If 'customized stems or no
+  End If 'dbh list changed
+
+End Sub
+
+Private Sub Form_Current()
+ ' If localDebugLevel > 0 Then Debug.Print "Form_Current>" & Now()
+  ent_getCurrScreenTObsID (Nz(Me.TObsOID, -1))
+'  If localDebugLevel > 0 Then Debug.Print "Form_Current @midd>" & Now()
+  Me.Refresh
+ ' If localDebugLevel > 0 Then Debug.Print "Form_Current @end>" & Now()
+End Sub
+
+
+Private Sub stratum_ID_Enter()
+  Dim strTemp As String
+  
+   strTemp = "SELECT stratum.STRATUM_ID, stratumType.stratumIndex AS Code, stratumType.stratumName AS name, " _
+   & " stratum.stratumBase & ' - ' & stratum.stratumHeight AS Ht, stratum.stratumCover AS perc FROM stratumType " _
+   & " INNER JOIN stratum ON stratumType.STRATUMTYPE_ID=stratum.STRATUMTYPE_ID WHERE stratum.observation_ID=" & Nz(Me.OBSERVATION_ID, -1)
+   If localDebugLevel > 0 Then Debug.Print strTemp
+   Me.stratum_ID.RowSource = strTemp
+End Sub

@@ -1,0 +1,796 @@
+Option Compare Database
+Option Explicit
+Const conPI = 3.14159265
+Const conFeetPerMetre = 3.2808399
+
+Public Function custNPS_start()
+  DoCmd.OpenForm "cust_NPS_mainMenu"
+End Function
+
+Public Function custNPS_setMetadata()
+  'sets metadata fields to NPS defaults
+  
+  Dim lngSM As Long, lngCM As Long
+  lngSM = getPKfromAccessionCode("VB.SM.61.NPSSTRATUMMETHO", "stratumMethod") '@HARDCODE@
+  lngCM = getPKfromAccessionCode("VB.CM.79.NPSCOVERMETHOD", "coveRMethod") '@HARDCODE@
+  Debug.Print lngSM & ":" & lngCM
+  Call openF_metadata
+  If lngSM > 0 Then Forms!metadataswitchboard!stratumMethodName = lngSM
+  If lngCM > 0 Then Forms!metadataswitchboard!covertype = lngCM
+End Function
+
+Public Function custNPS_send_toLoadingMod(Optional ByVal strToSend As String, Optional blnNoDel As Boolean, Optional blnOnlyInPlotSpp As Boolean, _
+  Optional blnOnlyStrataWithInfo As Boolean, Optional strClassifier As String, Optional blnIgnoreStemTextb4Colon As Boolean, Optional blnOtherMeas1IsTaxonCover As Boolean)
+  ''sends all data to loading module, deleting previous data there unless blnNoDEL
+  'strToSend specifies what data gets sent: comma list
+  strToSend = strToSend & ","
+ Debug.Print "custNPS_send_toLoadingMod>>" & strToSend & " DEL:" & blnNoDel
+  
+  'blnOnlyInPlotSpp sends only species with InPlot field=true
+  'blnOnlyStrataWithData sends only strata definitions with some info about them: ht,cover, spp in plot
+  'strClassifier is string used as classifier in I
+  'blnIgnoreStemTextB4Colon is true if parser should ignore things like "from this corner:" in stem DBH sizes
+  
+If InStr(strToSend, "C,") Then
+  '**********************send data to C:PLOT DATA ***************
+  If Not blnNoDel Then DoCmd.RunSQL "Delete * from Z_USER_C_plotData"
+  DoCmd.OpenQuery "cust_NPS_toC_run"
+End If
+
+If InStr(strToSend, "c2,") Then
+  If Not blnNoDel Then DoCmd.RunSQL "Delete * from Z_USER_C2_plotNorm"
+  'send parties to C2
+  Call custNPS_sendContribToC2
+  If blnOnlyStrataWithInfo Then
+    DoCmd.OpenQuery "cust_NPS_toc2_allstrataRun_whereInfo"
+  Else
+    'send strata to C2
+    DoCmd.OpenQuery "cust_NPS_toC2_allStrataRun"
+  End If
+End If
+  
+  Dim dbsCurr As Object
+  Set dbsCurr = CurrentDb
+  
+If InStr(strToSend, "d2,") Then
+  If Not blnNoDel Then DoCmd.RunSQL "Delete * from Z_USER_D2_strataCover"
+  '*****************send data to D2: stratumCover ****************
+  DoCmd.RunSQL substTextForText(dbsCurr.querydefs("cust_NPS_toD2_run").SQL, ";", "") & IIf(blnOnlyInPlotSpp, " where [Within plot]=true", "")
+  
+  If blnOtherMeas1IsTaxonCover Then
+    Debug.Print substTextForText(dbsCurr.querydefs("cust_NPS_toD2_run_totCvr").SQL, ";", "") & IIf(blnOnlyInPlotSpp, " where [Within plot]=true", "")
+   DoCmd.RunSQL substTextForText(dbsCurr.querydefs("cust_NPS_toD2_run_totCvr").SQL, ";", "") & IIf(blnOnlyInPlotSpp, " where [Within plot]=true", "")
+  End If
+  '*****add that data to D, where appropriate
+  If Not blnNoDel Then DoCmd.RunSQL "Delete * from Z_USER_D_coverData"
+  Call moveD2toD_runall
+End If
+  
+If InStr(strToSend, "f,") Then
+  '**********soils data : plots to F ************************
+  If Not blnNoDel Then DoCmd.RunSQL "Delete * from Z_USER_f_soilData"
+  DoCmd.OpenQuery "cust_NPS_toF_run"
+End If
+
+If InStr(strToSend, "g,") Then
+  '*********disturbance data to G***************
+  If Not blnNoDel Then DoCmd.RunSQL "Delete * from Z_USER_g_disturbance"
+  DoCmd.OpenQuery "cust_NPS_toG_run"
+End If
+
+If InStr(strToSend, "i,") Then
+  '********** data to communities***************
+  If Not blnNoDel Then DoCmd.RunSQL "Delete * from Z_USER_i_plotComm"
+  DoCmd.RunSQL "INSERT INTO Z_USER_I_PlotComm ( AuthorPlotCode, CommName1, NotesInterp1, RoleCode_PartyA, InterpParty_A )" _
+& " SELECT [Plot Code], IIf(IsNull([TNC Elcode]),[Classified Community Name],[TNC ELCode]), " _
+& " cust_NPS_Plots.[Provisional Community Name], " _
+& "'classifier'," & SQLizeTxt(strClassifier) _
+& " FROM cust_NPS_Plots  " _
+& " WHERE [TNC Elcode] is not null OR  [Classified Community Name] is not null ;"
+End If
+ 
+ 
+If InStr(strToSend, "C2,") Or InStr(strToSend, "I,") Then
+ 'send parties into A from contributor groups
+  If Not blnNoDel Then DoCmd.RunSQL "Delete * from Z_USER_A_party"
+  Call ADD_UserParties(False)
+End If
+
+If InStr(strToSend, "E,") Then
+  'last: as may have errors, which will need mending.
+  If Not blnNoDel Then DoCmd.RunSQL "Delete * from Z_USER_e_stemData"
+  '*****************send data to E: dbh's ************************
+  Call custNPS_sendDBHtoE(False, False, blnIgnoreStemTextb4Colon)
+End If
+End Function
+
+
+Public Function custNPS_intElev(dblElev As Double, intUnits As Integer) As Double
+  'function interprets NPS elevation with its units to meters, std for VegBranch
+  If intUnits = 2 Then 'translate from feet
+    custNPS_intElev = dblElev / conFeetPerMetre
+  Else ' ok as m ??
+   custNPS_intElev = dblElev
+  
+  End If
+End Function
+
+Public Function custNPS_interpLatLong(varTude As Variant) As Variant
+   'interpret Lat/Long, perhaps as string
+   If IsNull(varTude) Then
+     custNPS_interpLatLong = Null
+   Else 'nonnull
+     If IsNumeric(varTude) Then
+       custNPS_interpLatLong = varTude
+     Else ' nonnumeric
+       Dim colNew As New Collection, inttemp As Integer, dblDecTude As Double, intNeg As Integer, blnOK As Boolean
+       blnOK = True ' defulat
+       intNeg = 1 'dfeault
+       Set colNew = interp_multiUnitField(varTude)
+       For inttemp = 1 To colNew.Count
+         Dim dblNumeric As Double, strUnits As String
+         strUnits = "" ' defulat
+         dblNumeric = interpStrWithUnits(colNew(inttemp), strUnits)
+      '  Debug.Print dblNumeric & "|" & strUnits & "!"
+        'interpret units
+        If strUnits = " " Or strUnits = "" Then
+          'deal with this by position
+          Select Case inttemp
+            Case 1
+              strUnits = "deg"
+            Case 2
+              strUnits = "min"
+            Case 3
+              strUnits = "sec"
+            Case Else
+              Debug.Print "custNPS_interpLatLong>> too many non-units numbers: " & varTude
+              blnOK = False
+          End Select
+        End If
+        
+        Select Case strUnits
+          Case "deg", "deg.", "degree", "degrees", "°"
+            'take at face value, store sign separately
+            dblDecTude = dblDecTude + Abs(dblNumeric)
+            If Abs(dblNumeric) <> dblNumeric Then intNeg = -1
+          Case "min", "minutes", "'", "min.", "minute", "`"
+            'take at 1/60
+            dblDecTude = dblDecTude + Abs(dblNumeric / 60)
+          Case "sec", "seconds", """", "''", "``", "second", "sec."
+            'take at 1/3600
+            dblDecTude = dblDecTude + Abs(dblNumeric / 3600)
+          
+          Case Else
+            Debug.Print "custNPS_interpLatLong> didn't understand unit:" & strUnits
+            blnOK = False
+        End Select
+       Next inttemp
+       'composite answer
+       If blnOK Then
+         custNPS_interpLatLong = dblDecTude * intNeg
+       Else
+         custNPS_interpLatLong = Null
+       End If
+         
+     End If
+   End If
+   
+End Function
+
+Public Function interp_multiUnitField(varTude As Variant) As Collection
+  'interprets multi unit field and returns data parsed as collection, with units on each part
+  Dim colParts As New Collection
+  If IsNull(varTude) Then
+   ' custNPS_interpLatLongString = Null
+   'nothing in collection
+  Else
+    'nonnull
+    If IsNumeric(varTude) Then
+      colParts.Add (varTude)
+    Else
+      'non numeric aspects of this: break into pieces
+      Dim inttemp As Integer, strMap As String, strMapPiece As String, strTemp As String
+      
+      For inttemp = 1 To Len(varTude)
+        strTemp = Mid(varTude, inttemp, 1)
+        strMapPiece = "a" 'assume char unless not
+        If IsNumeric(strTemp) Then
+          strMapPiece = "#"
+        Else
+          'not numeric, but could be part of numeric list
+          If strTemp = "." Or strTemp = "-" Then
+            'potentially part of number, if next is numeric, if there is a next
+            If inttemp <> Len(varTude) Then
+              'see if next is numierc
+              If IsNumeric(Mid(varTude, inttemp + 1, 1)) Then
+                strMapPiece = "#"
+              End If
+            End If
+          End If
+        End If
+      'add piece to map
+      strMap = strMap & strMapPiece
+      Next inttemp
+      
+     Dim intLast As Integer 'last thing taken
+     
+     For inttemp = 1 To Len(strMap) - 1
+        'add pieces of real var to collection
+        If Mid(strMap, inttemp, 1) = "a" And Mid(strMap, inttemp + 1, 1) = "#" Then
+          colParts.Add (Mid(varTude, intLast + 1, inttemp - intLast))
+          intLast = inttemp
+        End If
+     Next
+     'get last thing:
+     colParts.Add (Mid(varTude, intLast + 1, Len(strMap) - intLast))
+     
+     
+    End If 'nuermic
+  End If 'null
+  
+  Set interp_multiUnitField = colParts
+End Function
+
+Public Function custNPS_intSoilDepth(varDepth As Variant, intUnits As Integer) As Variant
+  If IsNull(varDepth) Then
+    custNPS_intSoilDepth = Null
+  Else
+    'not null, figure out units
+    '1=meters, 2=cm, 3=feet, 4=inches
+    Select Case intUnits
+      Case 1 'target in M
+        custNPS_intSoilDepth = varDepth
+      Case 2
+        custNPS_intSoilDepth = varDepth / 100
+      Case 3
+        custNPS_intSoilDepth = varDepth / conFeetPerMetre
+      Case 4
+        custNPS_intSoilDepth = (varDepth / conFeetPerMetre) / 12
+      Case Else
+        custNPS_intSoilDepth = Null
+    End Select
+  End If
+End Function
+
+Public Function custNPS_intShapeXY_toArea(strShape As Variant, ByVal dblX As Variant, ByVal dblY As Variant) As Variant
+  'uses shape to determineArea
+  Select Case strShape
+    Case "Circular", "circle", "ellipse"
+      If IsNull(dblY) Then dblY = dblX
+      If IsNull(dblX) Then dblX = dblY
+      custNPS_intShapeXY_toArea = dblX * dblY * conPI
+    Case "Releve'", "Releve'", "Relevé", "Relevè"
+      custNPS_intShapeXY_toArea = Null
+    Case "Square", "Transect/strip", "Rectangular", "rectangle"
+      custNPS_intShapeXY_toArea = dblX * dblY
+    Case "triangle"
+      custNPS_intShapeXY_toArea = 0.5 * dblX * dblY
+    Case Else
+      custNPS_intShapeXY_toArea = Null
+  End Select
+End Function
+
+Public Function custNPS_intSlopeTxt(ByVal strSLOPE As Variant) As Variant
+  'interpret text string, such as phrase, to slope, or range, including percents
+  strSLOPE = Trim(strSLOPE)
+  
+  Dim dblReport As Double, blnWritten As Boolean
+  If IsNumeric(strSLOPE) Then
+    dblReport = Abs(strSLOPE) 'never negative
+    blnWritten = True
+  Else
+    'is text
+    If IsNull(strSLOPE) Then
+      custNPS_intSlopeTxt = Null
+      blnWritten = True
+      GoTo exitthis
+    End If
+    Dim blnPerc As Boolean
+    If InStr(strSLOPE, "%") Then blnPerc = True
+    strSLOPE = compressChar(strSLOPE, "%")
+    If InStr(strSLOPE, "-") > 1 Then
+      'slope is a range, get midpoint
+      Dim strTempLow As String, strTempHigh As String
+      strTempLow = Left(strSLOPE, InStr(strSLOPE, "-") - 1)
+      strTempHigh = Right(strSLOPE, Len(strSLOPE) - InStr(strSLOPE, "-"))
+      If IsNumeric(strTempLow) And IsNumeric(strTempHigh) Then
+        dblReport = Abs(strTempHigh - strTempLow) / 2
+        blnWritten = True
+      End If
+    End If
+    'if we have a percent, then convert to degrees
+    If blnPerc Then
+      dblReport = Atn(dblReport / 100)
+      blnWritten = True
+    End If
+    
+    Select Case strSLOPE
+       Case "<1"
+         dblReport = 0.5
+       Case "flat"
+         dblReport = 0
+         blnWritten = True
+       Case "gentle"
+         dblReport = (0 + 5) / 2
+       Case "Moderate"
+         dblReport = (6 + 14) / 2
+       Case "somewhat steep"
+         dblReport = (15 + 26) / 2
+       Case "steep"
+         dblReport = (27 + 45) / 2
+       Case "very steep"
+         dblReport = (46 + 69) / 2
+       Case "abrupt"
+         dblReport = (70 + 100) / 2
+       Case "overhanging", "sheltered", "overhanging/sheltered"
+         dblReport = 100
+       
+    End Select
+    If dblReport > 0 Then blnWritten = True
+    
+  End If
+  If blnWritten = True Then
+    custNPS_intSlopeTxt = dblReport
+  Else
+    'unknown
+    custNPS_intSlopeTxt = Null
+  End If
+exitthis:
+  Exit Function
+End Function
+
+Public Function custNPS_intAspect(ByVal varAsp As Variant) As Variant
+  'interprets text or number as aspect
+  'ignores "GN" at end of phrase
+  If Not IsNull(varAsp) Then
+    'is not null
+    varAsp = Trim(varAsp)
+    If Right(varAsp, 3) = " GN" Then
+      varAsp = (Left(varAsp, Len(varAsp) - 3))
+    End If
+    If Right(varAsp, 1) = "°" Then
+      'ok get rid of deg sign
+      varAsp = Left(varAsp, Len(varAsp) - 1)
+    End If
+    If varAsp = "variable" Then varAsp = -2
+    If varAsp = "flat" Or varAsp = "n/a" Or varAsp = "flat (n/a)" Then varAsp = -1
+    If Not IsNumeric(varAsp) Then
+      'check for certain values
+      Select Case varAsp
+Case "east", "E"
+    varAsp = 90
+Case "ENE", "E-NE", "east-northeast"
+    varAsp = 67.5
+Case "ESE", "E-SE", "east-southeast"
+    varAsp = 112.5
+Case "N", "north"
+    varAsp = 0
+Case "NE", "northeast"
+    varAsp = 45
+Case "NNE", "N-NE", "north-northeast"
+    varAsp = 22.5
+Case "NNW", "N-NW", "north-northwest"
+    varAsp = 337.5
+Case "NW", "Northwest"
+    varAsp = 315
+Case "S", "South"
+    varAsp = 180
+Case "SE", "Southeast"
+    varAsp = 135
+Case "SSE", "S-SE", "South-southeast"
+    varAsp = 157.5
+Case "SSW", "S-SW", "South-Southwest"
+    varAsp = 202.5
+Case "SW", "southwest"
+    varAsp = 225
+Case "W", "West"
+    varAsp = 270
+Case "WNW", "W-NW", "west-northwest"
+    varAsp = 292.5
+Case "WSW", "W-SW", "west-southwest"
+    varAsp = 247.5
+
+      End Select
+    End If
+      If IsNumeric(varAsp) Then
+        custNPS_intAspect = varAsp
+      Else
+        'dont know what it is
+        custNPS_intAspect = Null
+      End If
+  Else
+    custNPS_intAspect = Null
+  End If
+End Function
+
+Public Function custNPS_intGF12(PhysClass As Variant, LeafPhen As Variant, LeafType As Variant, intOneTwo As Integer) As Variant
+  'gets Physiognomic class, leaf phenology and leaftype to determine GF1 or 2, dep on intOneTwo
+  Dim GF1 As String, GF2 As String
+  Select Case PhysClass
+  Case "Forest, Woodland"
+    Select Case LeafPhen
+      Case "Evergreen"
+        Select Case LeafType
+          Case "Needle-leaved"
+            GF1 = "Needle-leaved tree"
+          Case "Broad-leaved"
+            GF1 = "Broad-leaved evergreen tree"
+        End Select 'type
+      Case "Cold Deciduous"
+        Select Case LeafType
+          Case "Broad-leaved"
+            GF1 = "Broad-leaved deciduous tree"
+          Case "Needle-leaved"
+            GF1 = "Needle-leaved tree"
+        End Select 'type
+      Case "Mixed Evergreen - Cold-deciduous"
+        GF1 = "Needle-leaved tree"
+        GF2 = "Broad-leaved deciduous tree"
+    End Select 'PHEN
+  Case "Shrubland"
+    Select Case LeafPhen
+      Case "Evergreen"
+         Select Case LeafType
+          Case "Needle-leaved"
+            GF1 = "Needle-leaved shrub"
+          Case "Broad-leaved"
+            GF1 = "Broad-leaved evergreen shrub"
+         End Select 'type
+      Case "Cold Deciduous"
+        Select Case LeafType
+           Case "Broad-leaved"
+             GF1 = "Broad-leaved deciduous shrub"
+        End Select 'type
+      Case "Mixed Evergreen - Cold-deciduous"
+        GF1 = "Needle-leaved shrub"
+        GF2 = "Broad-leaved deciduous shrub"
+    End Select 'phen
+    Select Case LeafType
+      Case "Microphyllous"
+        GF1 = "Evergreen sclerophyllous shrub"
+    End Select 'leafType: any LeafPhen
+  Case "Dwarf-shrubland"
+    GF1 = "Dwarf-shrub"
+  Case "Herbaceous"
+    Select Case LeafPhen
+      Case "Perennial"
+        Select Case LeafType
+          Case "Graminoid"
+            GF1 = "Graminoid"
+          Case "Broad leaf herbaceous"
+            GF1 = "Forb"
+          Case "Pteridophyte"
+            GF1 = "Fern"
+        End Select 'LeafType
+      Case "Annual"
+        Select Case LeafType
+          Case "Graminoid"
+            GF1 = "Graminoid"
+          Case "Broad leaf herbaceous"
+            GF1 = "Forb"
+        End Select 'leaftype
+     End Select 'PHEN
+  Case "Nonvascular"
+    GF1 = "Bryophyte"
+    GF2 = "Lichen"
+  Case "Sparse Vegetation"
+    GF1 = "Unknown"
+End Select 'physclass
+Select Case intOneTwo
+  Case 1
+    custNPS_intGF12 = IIf(GF1 = "", Null, GF1)
+  Case 2
+    custNPS_intGF12 = IIf(GF2 = "", Null, GF2)
+End Select
+End Function
+
+Public Function custNPS_sendContribToC2()
+  'function sends contributors, after parsing to C2 table
+  Dim rstTemp As New ADODB.Recordset
+  rstTemp.Open "select * from cust_NPS_plots where [surveyors] is not null;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+    Do Until .EOF
+      Dim colSurvs As New Collection, inttemp As Integer, strTemp As String
+      strTemp = !surveyors
+      'first break apart by ;
+      Set colSurvs = csv_parseCSVstring(strTemp, ";")
+      If colSurvs.Count = 1 Then
+        'reset by commas
+        strTemp = substTextForText(strTemp, " & ", ",")
+        strTemp = substTextForText(strTemp, " and ", ",")
+        strTemp = substTextForText(strTemp, "&", ",")
+        Set colSurvs = csv_parseCSVstring(strTemp, ",", False)
+      End If
+      
+      For inttemp = 1 To colSurvs.Count
+         If Trim(colSurvs(inttemp)) <> "" Then
+          DoCmd.RunSQL "INSERT INTO Z_USER_C2_plotNorm (authorPlotCode, contrib, role) SELECT " & SQLizeTxt(Nz(.Fields("plot code"))) _
+            & " , " & SQLizeTxt(Trim(colSurvs(inttemp))) & " , 'unknown' ;"
+         End If
+      Next inttemp
+    .MoveNext
+    Loop
+  End With
+  rstTemp.Close
+End Function
+
+Public Function custNPS_sendDBHtoE(Optional blnDeleteEData As Boolean, Optional blnConfirm As Boolean, Optional blnIgnoreStemTextb4Colon As Boolean)
+  'function sends DBH's, after parsing to E table
+  If blnConfirm Then
+    If Not AreYouSure("You are about to send information about DBHs from NPS datatables into VegBranch loading module." _
+    & Chr(13) & "You will delete all information about DBH errors." _
+    & IIf(blnDeleteEData, Chr(13) & "You are also about to erase all stem data in the VegBranch loading table.", "") _
+    & Chr(13) & Chr(13) & "Press YES to continue and NO to stop.") Then
+      'dont do this
+      Exit Function
+    
+    End If
+  End If
+  
+  
+  'ALWAYS delete current errors:
+  DoCmd.RunSQL "delete * from cust_NPS_stemerr; "
+  If blnDeleteEData = True Then
+    DoCmd.RunSQL "delete * from Z_USER_E_stemdata;"
+  End If
+  
+  Dim rstTemp As New ADODB.Recordset
+  rstTemp.Open "select * from [cust_NPS_toD2] where [DBH] is not null;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+    Do Until .EOF
+      Dim colSurvs As New Collection, inttemp As Integer, strTemp As String
+      strTemp = !DBH
+    '  strTEmp = substTextForText(strTEmp, " & ", ",")
+     ' strTEmp = substTextForText(strTEmp, " and ", ",")
+      Set colSurvs = csv_parseCSVstring(strTemp, ",", False, True, True)
+      For inttemp = 1 To colSurvs.Count
+         Dim strDBH As String, blnOKDBH As Boolean
+         strDBH = colSurvs(inttemp)
+         blnOKDBH = False
+         If blnIgnoreStemTextb4Colon And InStr(strDBH, ":") > 0 Then
+           'special case: ignore "text: ##" stuff before colon in strDBH
+           strDBH = Trim(Right(strDBH, Len(strDBH) - InStr(strDBH, ":")))
+         
+         End If
+         
+         
+         If IsNumeric(strDBH) Then blnOKDBH = True
+         'special case, deal with XX cm entries
+        ' If Len(strDBH) > 2 Then
+        '   If (IsNumeric(Trim(Left(strDBH, Len(strDBH) - 2))) And Right(strDBH, 2) = "cm") Then
+        '     strDBH = Trim(Left(strDBH, Len(strDBH) - 2))
+        '     blnOKDBH = True
+        '   End If
+           
+        ' End If
+         'try other units, too
+         If Not IsNumeric(strDBH) And Len(strDBH) > 0 Then
+            Dim strTryWithUnits As String, strUnits As String
+            strTryWithUnits = strDBH
+            strTryWithUnits = Nz(interpNumbWithUnitsToM(strTryWithUnits, strUnits), "")
+            If IsNumeric(strTryWithUnits) And Len(strTryWithUnits) > 0 Then
+              'was ok, found units and converted to M --> cm
+              Dim dblConvert As Double
+              dblConvert = strTryWithUnits * 100
+              Debug.Print "custNPS_sendDBHtoE>> converted " & strDBH & "  to " & dblConvert
+              strDBH = dblConvert
+              blnOKDBH = True
+            End If
+         End If
+         
+         If blnOKDBH Then
+          DoCmd.RunSQL "INSERT INTO Z_USER_E_stemData (authorPlotCode, plantCode, stratumIndex, stemDiameter, stemCount) SELECT " _
+            & SQLizeTxt(Nz(!authorplotcode)) & " , " & SQLizeTxt(Nz(!plantCode)) & " , " & SQLizeTxt(Nz(!stratumIndex, "--")) _
+            & " , " & SQLizeTxt(Trim(strDBH)) & " , 1 ;"
+         Else
+           'report errors
+           If Trim(strDBH) <> "" And Trim(strDBH) <> "." Then
+             'show errors in new table
+             DoCmd.RunSQL "INSERT INTO cust_NPS_stemerr (authorPlotCode, plantCode, stratumIndex, stemDiameter) SELECT " _
+            & SQLizeTxt(Nz(!authorplotcode)) & " , " & SQLizeTxt(Nz(!plantCode)) & " , " & SQLizeTxt(Nz(!stratumIndex, "--")) _
+            & " , " & SQLizeTxt(Trim(strDBH)) & " ;"
+           End If
+         End If
+      Next inttemp
+    .MoveNext
+    Loop
+  End With
+  rstTemp.Close
+  'check to see if errors occured in migration:
+  If getvalFrmSQL("select count(1) from cust_NPS_stemerr") <> "0" Then
+    'have errors
+    msgBox "Errors occurred in parsing the DBH's in your data to actual stem data in VegBranch.  A form will now appear which will help you resolve these errors."
+    DoCmd.OpenForm "cust_NPS_stemErrResolve"
+    Forms!cust_nps_stemErrResolve!ignoreColonText = blnIgnoreStemTextb4Colon
+  End If
+  
+End Function
+
+Public Function custNPS_ignoreDBH()
+  If AreYouSure("You will now set VegBranch to ignore DBH completely in NPS Plots load.  Press YES to ignore DBH info completely, no to stop this.") Then
+    DoCmd.RunSQL "delete * from Z_USER_E_StemData;"
+    On Error Resume Next
+    DoCmd.Close acForm, "cust_NPS_stemErrResolve"
+  End If
+End Function
+
+
+Public Function custNPS_intStratumRange(ByVal varRange As Variant, int12 As Integer) As Variant
+  'function interprets a hieght range and returns either base (if int12=1) or top (if int12=2)
+  'these come in several flavors, T=top, B=base, u=units (ft., ' ,m metres...):
+  '1) B [u] - T [u]
+  '2) <T [u]
+  '3) >B [u]
+  '4) to T [u]
+  '5) T [u]  'assume top if only one #
+  If IsNull(varRange) Or varRange = "" Then
+    custNPS_intStratumRange = Null
+  Else 'have something
+    varRange = Trim(varRange)
+    Dim strBase As String, strTop As String, intPos As Integer
+'check for < or >
+      intPos = InStr(varRange, "<")
+      If intPos > 0 Then
+         strBase = ""
+         strTop = Right(varRange, Len(varRange) - intPos)
+     '    Debug.Print "top:" & strTop
+      Else
+        intPos = InStr(varRange, ">")
+        If intPos > 0 Then
+         strBase = Right(varRange, Len(varRange) - intPos)
+         strTop = ""
+        ' Debug.Print "B:" & strBase
+        Else
+          If Left(varRange, 2) = "to" And (Mid(varRange, 3, 1) = " " Or IsNumeric(Mid(varRange, 3, 1))) Then
+            strTop = Right(varRange, Len(varRange) - 2)
+            strBase = ""
+          Else '
+             intPos = InStr(varRange, "-")
+             If intPos > 1 Then
+             'have a range
+             strBase = Left(varRange, intPos - 1)
+             strTop = Right(varRange, Len(varRange) - intPos)
+             Else
+               intPos = InStr(varRange, "+")
+               If intPos > 0 Then
+                 strBase = compressChar(varRange, "+")
+                 strTop = ""
+               Else
+               
+               'don't know what, assume top though
+               strTop = varRange
+               strBase = ""
+               End If '+
+             End If '-
+
+          End If 'to...
+        End If '>
+      End If '<
+    
+    
+  'strip and interpret units
+  'if only one of base or top has units, then use those units for both
+  Dim strUnitBase As String, strUnitTop As String
+  Dim newTop As Variant, newBase As Variant
+  newTop = interpNumbWithUnitsToM(Trim(strTop), strUnitTop)
+  newBase = interpNumbWithUnitsToM(Trim(strBase), strUnitBase)
+  If strUnitTop = "" And strUnitBase <> "" Then
+    'reset top, based on new unit
+    newTop = interpNumbWithUnitsToM(Trim(strTop & strUnitBase), "")
+  End If
+  If strUnitBase = "" And strUnitTop <> "" Then
+    'reset base, based on new unit
+    newBase = interpNumbWithUnitsToM(Trim(strBase & strUnitTop), "")
+  End If
+  Select Case int12
+    Case 1 'send base
+      custNPS_intStratumRange = newBase
+    Case 2 'send top
+      custNPS_intStratumRange = newTop
+    
+  End Select
+  End If
+  
+End Function
+
+Public Function interpNumbWithUnitsToM(ByVal strNumber As String, ByRef strUnitcheck As String) As Variant
+  'checks for following units, if found, converts to m
+  'm, metre, meter, cm, mm, centimeter, centimetre, millimetre, millimeter, in, in., ", inches, inch, ', ft., ft, feet, foot
+  'check to see if numeric followed by non-numeric
+  strNumber = Trim(strNumber)
+  Dim inttemp As Integer, intLastNum As Integer
+If IsNumeric(strNumber) Then
+  'dont need this assume units ok
+  interpNumbWithUnitsToM = strNumber
+ ' Debug.Print "numeric!"
+  Exit Function
+Else
+  For inttemp = 1 To Len(strNumber) - 1
+    If IsNumeric(Left(strNumber, Len(strNumber) - inttemp)) Then
+      intLastNum = Len(strNumber) - inttemp
+      Exit For
+    End If
+  Next inttemp
+End If
+  'so the first intLastNum are numeric, after that not so: get the last part
+If intLastNum = 0 Then
+  interpNumbWithUnitsToM = Null 'no numeric portion
+Else
+  
+  Dim dblLeftNum As Double
+  strUnitcheck = Trim(Right(strNumber, Len(strNumber) - intLastNum))
+  dblLeftNum = Left(strNumber, intLastNum)
+  Select Case strUnitcheck
+    Case "m", "meter", "metre"
+      interpNumbWithUnitsToM = dblLeftNum
+    Case "cm", "centimeter", "centimetre"
+      interpNumbWithUnitsToM = dblLeftNum / 100
+    Case "mm", "millimeter", "millimetre"
+      interpNumbWithUnitsToM = dblLeftNum / 1000
+    Case "in", "in.", "inch", "inches", """"
+      interpNumbWithUnitsToM = (dblLeftNum / conFeetPerMetre) / 12
+    Case "ft.", "ft", "feet", "foot", "'"
+      interpNumbWithUnitsToM = (dblLeftNum / conFeetPerMetre)
+    Case Else
+      interpNumbWithUnitsToM = Null
+  End Select
+End If 'no numeric
+End Function
+
+Public Function interpStrWithUnits(ByVal varNumber As Variant, ByRef strRetUnits As String) As Variant
+  'checks for number, followed by units, if found, converts to m
+  'check to see if numeric followed by non-numeric
+ strRetUnits = "" 'default
+ If Not IsNull(varNumber) Then
+  varNumber = Trim(varNumber)
+  Dim inttemp As Integer, intLastNum As Integer
+If IsNumeric(varNumber) Then
+  'dont need this assume units ok
+  interpStrWithUnits = varNumber
+ ' Debug.Print "numeric!"
+  Exit Function
+Else
+  For inttemp = 1 To Len(varNumber) - 1
+    If IsNumeric(Left(varNumber, Len(varNumber) - inttemp)) Then
+      intLastNum = Len(varNumber) - inttemp
+      Exit For
+    End If
+  Next inttemp
+End If
+  'so the first intLastNum are numeric, after that not so: get the last part
+If intLastNum = 0 Then
+  interpStrWithUnits = Null 'no numeric portion
+Else
+  
+  Dim dblLeftNum As Double, strUnitcheck As String
+  strUnitcheck = Trim(Right(varNumber, Len(varNumber) - intLastNum))
+  dblLeftNum = Left(varNumber, intLastNum)
+  strRetUnits = strUnitcheck
+  interpStrWithUnits = dblLeftNum
+End If 'no numeric
+Else 'null
+  interpStrWithUnits = Null
+End If
+End Function
+
+Public Function cust_NPS_showStemErrID(lngStemID As Long)
+  'shows a particular stem error in the main stem errors form
+  Dim strErrForm As String
+  strErrForm = "cust_NPS_stemErrREsolve"
+
+  'open the form, using openArgs to pass stemErrID
+  DoCmd.OpenForm strErrForm
+  Forms!cust_nps_stemErrResolve!errorID = lngStemID
+  Forms!cust_nps_stemErrResolve.Recalc
+End Function
+
+Public Function custNPS_openFconnectPLOTSdb()
+ If IsFormOpen("W_connectToDB") Then DoCmd.Close acForm, "W_connectToDB"
+  DoCmd.OpenForm "W_connectToDb", , , , , , "N"
+End Function
+
+Private Function testUnitParse()
+  Dim strGoo As String, strUni As String, dblNum As Double
+  dblNum = interpStrWithUnits("543  °  ", strUni)
+  Debug.Print dblNum & "|" & strUni
+End Function

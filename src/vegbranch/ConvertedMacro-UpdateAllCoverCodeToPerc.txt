@@ -1,0 +1,26 @@
+Option Compare Database
+Option Explicit
+
+'------------------------------------------------------------
+' UpdateAllCoverCodeToPerc
+'
+'------------------------------------------------------------
+Public Function UpdateAllCoverCodeToPerc()
+'On Error GoTo UpdateAllCoverCodeToPerc_Err
+
+     ' update taxon cover
+   DoCmd.OpenQuery "upd_coverCodes_D2"
+   
+    Call CheckFieldsForFields("z_USER_D2_StrataCover", "table")
+ 
+   
+UpdateAllCoverCodeToPerc_Exit:
+    Exit Function
+
+'UpdateAllCoverCodeToPerc_Err:
+ '   MsgBox Error$
+  '  Resume UpdateAllCoverCodeToPerc_Exit
+
+End Function
+
+

@@ -1,0 +1,628 @@
+Option Compare Database
+Option Explicit
+Const intDebugLEV = 0
+
+
+Public Function runSQLFile_old(strSource As String, Optional blnDrop As Boolean, Optional intFixLevel As Integer, Optional intCommentSens As Integer)
+  'runs a sql file of statements against this database
+  'intLevel=0 fixes common dataTypes, 1 fixes constraints, 2 fixes note-> [note] etc.  -1 does none
+  'intcommentSens as -1 does not look for --, 0 only looks at beginning on line, 1 looks anywhere in string
+  
+  On Error GoTo CreateTbl_error
+ 
+  Dim fs As Object
+  Dim a As Object
+  Dim strTxt As String
+  Dim strSQL As String
+  Dim intCount As Integer, intSqlCount As Integer
+  
+Set fs = CreateObject("Scripting.FileSystemObject")
+Set a = fs.openTextFile(strSource, 1, False, 0)
+With a
+  Do Until .atendofstream
+    intCount = intCount + 1
+  'gets one line of SQL file
+  strTxt = .readline
+  strTxt = FixSQLLine(strTxt, lngNum, intLevel, intCommentSens)
+  
+  If InStr(strTxt, "'") > 0 Or InStr(strTxt, """") > 0 Then
+    'have quotes in string, get more if necessary, depending on if quotes have been closed
+    Do Until IsStringEnded(strTxt)
+      'add next line
+      strTxt = strTxt & vbCr & .readline
+    Loop
+  End If
+      ''check for comments:
+      If InStr(strTxt, "--") > 0 Then
+      'check to see if -- is in middle of string
+      Dim lngLastChk As Long
+      lngLastChk = 1
+      Do Until IsStringEnded(Left(strTxt, InStr(lngLastChk, strTxt, "--"))) Or InStr(lngLastChk, strTxt, "--") = 0
+        'here because -- is in the middle of string, try to find another
+        lngLastChk = InStr(lngLastChk, strTxt, "--") + 2
+      Loop
+      Dim lngCutFrom As Long
+      lngCutFrom = InStr(lngLastChk, strTxt, "--")
+      If lngCutFrom > 0 Then
+        Select Case intCommentSens
+         Case -1
+           'do nothing
+         Case 0
+           'only do if at beginning of string
+           Dim strWhatB4 As String
+           strWhatB4 = Left(strTxt, lngCutFrom - 1)
+           strWhatB4 = substTextForText(strWhatB4, " ", "")
+           If strWhatB4 = "" Then
+             'whole thing is a comment
+             strTxt = ""
+           Else
+             'ignore, not really a comment
+           End If
+         Case 1
+          strTxt = Left(strTxt, InStr(strTxt, "--") - 1)
+        End Select
+      End If
+      End If 'finds --
+   
+      
+     'appends current line to building SQL string
+     strSQL = Trim(strSQL) & " " & Trim(strTxt)
+     If InStr(strTxt, ";") <> 0 Then   'has ";"
+       If Left(Trim(strSQL), 4) <> "drop" Or (blnDrop) Then
+       '   Debug.Print "b4:" & strSQL
+          strSQL = FixSQLStatements(strSQL, intSqlCount, intFixLevel)
+        '  Debug.Print strSQL
+          DoCmd.RunSQL (strSQL)
+          intSqlCount = intSqlCount + 1
+       End If
+       strSQL = ""
+     End If  'has ;
+  
+  Loop
+End With
+      msgBox ("done! records processed: " & intCount & " and SQL statements: " & intSqlCount)
+ Exit Function
+CreateTbl_error:
+      Dim intResp As Integer
+      intResp = msgBox("Error occurred !  " & strSQL & Chr(13) & Err.Description & Chr(13) & "continue?", vbYesNo)
+      If intResp = vbYes Then
+        Resume Next
+      Else
+        Exit Function
+      End If
+End Function
+
+Function testerrrrrrrrrrrrrr()
+  'Call runSQLFile("C:\Documents and Settings\mitchella\Desktop\testThat.sql", True, 2, 1)
+  Call runSQLFile("C:\vegbank\sandbox\vegbranch_dev\newModels\1.0.2_docs_more.sql", True, -1, 1)
+End Function
+
+Public Function runSQLFile(strSource As String, Optional blnDrop As Boolean, Optional intFixLevel As Integer, Optional intCommentSens As Integer)
+  'runs a sql file of statements against this database
+  'intLevel=0 fixes common dataTypes, 1 fixes constraints, 2 fixes values-> [values] etc.  -1 does none
+  'intcommentSens as -1 does not look for --, 0 only looks at beginning on line, 1 looks anywhere in string
+  
+  On Error GoTo CreateTbl_error
+ 
+  Dim fs As Object
+  Dim a As Object
+  Dim strTxt As String
+  Dim strSQL As String
+  Dim intCount As Long, intSqlCount As Long, strNew As String, strRun As String
+  
+Set fs = CreateObject("Scripting.FileSystemObject")
+Set a = fs.openTextFile(strSource, 1, False, 0)
+
+Dim strLastQuot As String
+strLastQuot = ""
+With a
+  Do Until .atendofstream
+    Dim strQuot As String
+    strQuot = ""
+   'Dim blnStringEnded As Boolean
+   ' blnStringEnded = False
+   ' Do Until blnStringEnded
+      intCount = intCount + 1
+      'gets one line of SQL file
+   '   If .atEndOfStream Then
+   '    strTxt = ""
+   '    MsgBox "past end of file"
+   '    blnStringEnded = True
+   '   Else
+       strTxt = strLastQuot & .readline
+    '  End If
+      strQuot = IsStringEnded(strTxt)
+      'check for comments in strTxt
+      strNew = FixSQLLineComments(strTxt, intCommentSens, strQuot)
+      'fix line with other fixes:
+      strNew = fixSQLLineWords(strNew, intCount, intFixLevel)
+      'add current batch to accreting SQL
+      strSQL = Trim(strSQL) & " " & Trim(strNew)
+      If IsStringEnded(strNew) <> "" Then
+        'need to deal with sring spanning multiple lines
+        ' blnStringEnded = False
+       ' strQuot = IsStringEnded(strQuot & strNew)
+        
+        strSQL = strSQL & strQuot & " & chr(13) & chr(10) &  "    'add carriage return after ending quote
+
+     ' Else
+        'end this
+        'blnStringEnded = True
+      End If
+      strLastQuot = strQuot
+   ' Loop
+ '' Debug.Print "out of getting one row loop" & " HAVE : " & strSQL
+     Do Until shouldRunSQL(strSQL) = ""   'LOOP so that multiple statements can be run  'has ";"
+      
+       strRun = shouldRunSQL(strSQL)
+       If Left(Trim(strRun), 4) <> "drop" Or (blnDrop) Then
+       '   Debug.Print "b4:" & strSQL
+        '  Debug.Print strSQL
+          If intDebugLEV > 0 Then Debug.Print "runSQLFile>> would now run SQL: " & strRun
+          
+          DoCmd.RunSQL (strRun)
+          intSqlCount = intSqlCount + 1
+       End If
+       strSQL = Right(strSQL, Len(strSQL) - Len(strRun))
+     Loop
+  
+  Loop
+End With
+      msgBox ("done! records processed: " & intCount & " and SQL statements: " & intSqlCount)
+ Exit Function
+CreateTbl_error:
+      Dim intResp As Integer
+      intResp = msgBox("Error occurred !  " & strSQL & Chr(13) & Err.Description & Chr(13) & "continue?", vbYesNo)
+      If intResp = vbYes Then
+        Resume Next
+      Else
+        Exit Function
+      End If
+End Function
+
+
+Public Function IsStringEnded(ByVal strTxt) As String
+  'function looks through string and sees if incomplete quotations
+  Dim inttemp As Long, strWhatOn As String
+  For inttemp = 1 To Len(strTxt)
+    Dim strTemp As String
+    strTemp = Mid(strTxt, inttemp, 1)
+    If strTemp = """" Or strTemp = "'" Then
+      'consider turning quotes on or off:
+      If strWhatOn = strTemp Then 'turn off quotes
+        strWhatOn = ""
+      Else
+        If strWhatOn = "" Then strWhatOn = strTemp
+      End If
+    End If
+  Next inttemp
+  
+    IsStringEnded = strWhatOn ' report " or '
+  
+End Function
+
+Public Function FixSQLLineComments(ByVal strTxt, ByVal intCommentSens As Integer, Optional ByRef strStillOn As String) As String
+  'takes a line of sql and removes comments, according to:
+   'intcommentSens as -1 does not look for --, 0 only looks at beginning on line, 1 looks anywhere in string
+   'only one line should be passed to this!
+  If InStr(strTxt, Chr(13)) Or InStr(strTxt, Chr(10)) Then
+    Debug.Print "FixSQLLineComments>> carriage return in the following, may produce weird comment handling: "
+    Debug.Print "----------start------"
+    Debug.Print strTxt
+    Debug.Print "----------end--------"
+  End If
+  
+  Dim colParsedTxt As New Collection
+  Set colParsedTxt = ParseMixedStrings(strTxt)
+  Dim lngTemp As Long, strRep As String ' string to report this fixed text
+  Dim strTemp As String, blnCommentOn As Boolean, lngWhere As Long
+  blnCommentOn = False
+  For lngTemp = 1 To colParsedTxt.Count
+     strTemp = colParsedTxt(lngTemp)
+     
+     If blnCommentOn Then ' dont write anything if we are in a comment now
+         strTemp = ""
+     End If ' comment on or not
+   
+   If Left(strTemp, 1) = """" Or Left(strTemp, 1) = "'" Then 'is a string, don't mess w/ it
+            strRep = strRep & strTemp
+   Else        'is not a string: check for comments
+     
+         If (intCommentSens = 0 And lngTemp = 1) Or intCommentSens = 1 Then 'first check if comments are to be looked for:
+         If (InStr(strTemp, "--") > 0 And intCommentSens = 1) Or (intCommentSens = 0 And InStr(Trim(strTemp), "--") = 1) Then
+           ''comment!
+           strTemp = Left(strTemp, InStr(strTemp, "--") - 1)
+           blnCommentOn = True
+           'turn off strStillOn, if applicable
+           strStillOn = ""
+         End If ' found comment
+         End If ' look for comments
+   
+         strRep = strRep & strTemp
+    
+   End If 'string or not
+  Next lngTemp
+exitFixSqlLine:
+'check for other issues:
+  
+  FixSQLLineComments = strRep
+  Exit Function
+End Function
+
+Public Function fixSQLLineWords(ByVal strTxt, ByVal lngNum As Long, ByVal intLevel As Integer) As String
+  'takes a line of sql and fixes words and such according to:
+ 'intLevel=0 fixes common dataTypes, 1 fixes constraints, 2 fixes values-> [values] etc.  -1 does none
+  Dim colParsedTxt As New Collection
+  Set colParsedTxt = ParseMixedStrings(strTxt)
+  Dim lngTemp As Long, strRep As String ' string to report this fixed text
+  Dim strTemp As String
+ 
+  For lngTemp = 1 To colParsedTxt.Count
+     strTemp = colParsedTxt(lngTemp)
+    If Left(strTemp, 1) = """" Or Left(strTemp, 1) = "'" Then 'is a string, don't mess w/ it
+         strRep = strRep & strTemp
+    Else        'is not a string, adjust to meet our access needs
+       
+          strTemp = fixVarChars(strTemp)
+          strTemp = FixSQLStatements(strTemp, lngNum, intLevel)
+          strRep = strRep & strTemp
+    End If 'string or not
+  Next lngTemp
+exitFixSqlLine:
+'check for other issues:
+  
+  fixSQLLineWords = strRep
+  Exit Function
+End Function
+
+Public Function shouldRunSQL(ByVal strTxt) As String
+  'takes a line of sql and determines if we must run the sql: ie ; in the midst of it, not in string
+  'if SQL to run, reports it
+ 
+  Dim colParsedTxt As New Collection
+  Set colParsedTxt = ParseMixedStrings(strTxt)
+  Dim lngTemp As Long, blnSend As Boolean
+  Dim strTemp As String, strRep As String
+ 
+  For lngTemp = 1 To colParsedTxt.Count
+     strTemp = colParsedTxt(lngTemp)
+    If Left(strTemp, 1) = """" Or Left(strTemp, 1) = "'" Then 'is a string, don't mess w/ it
+         strRep = strRep & strTemp
+    Else        'is not a string, is there a ;
+       If InStr(strTemp, ";") Then
+         'there is a ; - report SQL to run and exit
+         strRep = strRep & Left(strTemp, InStr(strTemp, ";"))
+         blnSend = True
+         Exit For
+       Else
+         'add to the rest
+         strRep = strRep & strTemp
+       End If
+          
+    End If 'string or not
+  Next lngTemp
+exitFixSqlLine:
+  'send string back if blnSend
+  If blnSend Then shouldRunSQL = strRep
+  Exit Function
+End Function
+
+Public Function ParseMixedStrings(ByVal strTxt) As Collection
+  'function parses mixed strings like : this 'is' my favourite part of "this book" and returns collection of strings and non-strings
+  Dim strRep As String, lngLastStart As Long
+  Dim colPArsed As New Collection
+  
+  Dim inttemp As Long, strWhatOn As String
+  For inttemp = 1 To Len(strTxt)
+    Dim strTemp As String
+    strTemp = Mid(strTxt, inttemp, 1)
+    If strTemp = """" Or strTemp = "'" Then
+      'consider turning quotes on or off:
+      If strWhatOn = strTemp Then 'turn off quotes
+        strWhatOn = ""
+        colPArsed.Add (strRep & strTemp)  'add string
+        strRep = "" 'string off, start with nothing
+      Else
+        If strWhatOn = "" Then 'not on
+          strWhatOn = strTemp
+          colPArsed.Add (strRep) 'add nonstring
+          strRep = strTemp 'start over with string
+        Else ' quotes already on, but other quote system, treat this as normal char
+          'add this character
+          strRep = strRep & strTemp
+        End If
+      End If
+    Else
+      'add this character
+      strRep = strRep & strTemp
+    End If
+  
+  Next inttemp
+  colPArsed.Add (strRep) 'add last part
+  If intDebugLEV > 0 Then
+  For inttemp = 1 To colPArsed.Count
+    Debug.Print "ParseMixedStrings>> " & IIf(Left(colPArsed(inttemp), 1) = """" Or Left(colPArsed(inttemp), 1) = "'", "STR:", "not:") & colPArsed(inttemp)
+  Next
+  End If
+  Set ParseMixedStrings = colPArsed
+End Function
+
+
+
+
+Public Function FixSQLStatements(ByVal strSQL As String, ByVal lngNum As Long, Optional intLevel As Integer) As String
+''function "fixes" SQL statements to match ACCESS names of stuff
+ 
+ If intLevel > -1 Then
+ strSQL = substTextForText_once(strSQL, "boolean", "bit", 2, True)
+ strSQL = substTextForText_once(strSQL, "oid", "OLEOBJECT", 2, True)
+ strSQL = substTextForText_once(strSQL, "serial", "autoincrement", 2, True)
+ strSQL = substTextForText_once(strSQL, "text", "longtext", 2, True)
+ strSQL = substTextForText_once(strSQL, "BLOB", "OLEOBJECT", 2, True)
+  
+ 
+ End If
+ If intLevel > 0 Then
+ strSQL = substTextForText(strSQL, " ADD CONSTRAINT  ", " ADD CONSTRAINT ")
+ strSQL = substTextForText_once(strSQL, " ADD CONSTRAINT ", " ADD CONSTRAINT R" & lngNum, 2, False)
+ strSQL = substTextForText_once(strSQL, "\'", "''")
+ End If
+ 
+ If intLevel > 1 Then
+' strSQL = substTextForText_once(strSQL, "value", "[value]", 2, True)
+' strSQL = substTextForText_once(strSQL, "values", "[values]", 2, True)
+ strSQL = substTextForText_once(strSQL, "note", "[note]", 2, True)
+ End If
+
+ FixSQLStatements = strSQL
+End Function
+
+Public Function fixVarChars(ByVal strSQL As String) As String
+ Dim strFirst As String, lngCount As Long
+ strFirst = strSQL
+ lngCount = CountOccOf(strSQL, "varchar")
+Dim lng_start As Long
+  Dim lng_end As Long
+  Dim colStrings As New Collection
+  Dim colFixed As New Collection
+  Dim colNums As New Collection
+  lng_start = 1
+If lngCount > 1 Then 'deal with separate strings and build together from result
+ colNums.Add (1)
+ Do Until colNums.Count = lngCount + 1
+  colNums.Add (InStr(lng_start, strSQL, "varchar")) 'add place where varchar starts to collection
+  lng_start = colNums(colNums.Count) + 1 ' update new starting place
+ Loop
+  colNums.Add (Len(strSQL) + 1) 'add end of word
+ For lng_end = 2 To colNums.Count
+   colStrings.Add (Mid(strSQL, colNums(lng_end - 1), colNums(lng_end) - colNums(lng_end - 1)))
+ Next
+ 'clear strSQL for report
+ strSQL = ""
+ For lng_end = 1 To colStrings.Count
+   strSQL = strSQL & fixVarChars(colStrings(lng_end))
+ Next
+ 
+Else 'only one, simple
+ 
+ If InStr(strSQL, "varchar") Then
+        'make sure it is not too long:
+        Dim lngStrt As Long, lngEnd As Long
+        lngStrt = InStr(strSQL, "varchar")
+        lngEnd = InStr(lngStrt, strSQL, ")")
+        Dim strTemp As String, strB4 As String, strAft As String
+        strB4 = Left(strSQL, lngStrt - 1)
+        If lngEnd < Len(strSQL) Then
+          strAft = Right(strSQL, Len(strSQL) - lngEnd)
+        Else
+          strAft = ""
+        End If
+        strTemp = Mid(strSQL, lngStrt, lngEnd - lngStrt + 1)
+
+        ''take strTemp, which now should look like : "varchar (xxx)" where xxx is string len
+        Dim strNum As String
+        strNum = Right(strTemp, Len(strTemp) - InStr(strTemp, "(") + 1)
+         '' strNum now like (xxx)
+         strNum = Right(strNum, Len(strNum) - 1)
+         strNum = Left(strNum, Len(strNum) - 1)
+         ''strNum now like xxx
+         strNum = Trim(strNum)
+       '  Debug.Print strTxt
+        ' Debug.Print strNum
+      '   Debug.Print IsNumeric(strNum)
+         Dim lngTemp As Long
+         If IsNumeric(strNum) Then
+          lngTemp = strNum
+          ''longer than 255, should be replaced with longtext
+          If lngTemp > 255 Then
+            If intDebugLEV > 0 Then Debug.Print "fixVarChars>> orig." & strSQL
+            strSQL = strB4 & " longtext " & strAft
+            If intDebugLEV > 0 Then Debug.Print "fixVarChars>> repl: " & strSQL
+          End If
+         End If 'numeric required
+      
+      End If
+   End If 'more than one varchar
+      fixVarChars = strSQL
+End Function
+
+Public Function changeAllRels(blnEnforce As Boolean, Optional blnDropAuxRels As Boolean) As Boolean
+  Dim dbsCurr As Object, colRelsToKill As New Collection
+  Dim relCurr As Object, relNew As Object, blnCurrEnforced As Boolean
+  Set dbsCurr = CurrentDb
+    Dim strName As String, strPrfx As String, lngTemp As Long
+    strPrfx = "chngd__"
+  'grab each rel name to alter
+  For Each relCurr In dbsCurr.relations
+    'schedule current rel to be deleted
+    colRelsToKill.Add (relCurr.Name)
+  Next relCurr
+  
+  For lngTemp = 1 To colRelsToKill.Count
+    'create new rel based on current rel
+    Set relCurr = dbsCurr.relations(colRelsToKill(lngTemp))
+    'get new name for new rel
+    strName = relCurr.Name
+    If Left(strName, Len(strPrfx)) = strPrfx Then
+       strName = Right(strName, Len(strName) - Len(strPrfx))
+    Else
+       strName = strPrfx & strName
+    End If
+    'get properties for new rel that may be different
+    Dim lngRelAtt As Long
+    lngRelAtt = relCurr.Attributes
+    blnCurrEnforced = Not ((lngRelAtt Mod 4) > 1)  ''enforced relationship
+ '   Debug.Print relCurr.Name & " is enforced : " & blnCurrEnforced & "   : " & lngRelAtt
+    If blnEnforce <> blnCurrEnforced Then
+      'need to change enforcement of relationship
+      If blnEnforce Then 'need to - 2
+        lngRelAtt = lngRelAtt - 2
+      Else ' need to subtract 2 from attributes
+        lngRelAtt = lngRelAtt + 2
+      End If
+    End If
+  '  Debug.Print "new att:" & lngRelAtt
+    Dim strOne As String, strForeign As String
+     strOne = relCurr.Table
+     strForeign = relCurr.foreigntable
+    
+    Set relNew = dbsCurr.createRelation(strName, strOne, strForeign, lngRelAtt)
+    
+    Dim fldOne As Object
+    For Each fldOne In relCurr.Fields
+     ' Debug.Print "---"
+    '  Debug.Print fldOne.Name
+   '   Debug.Print fldOne.ForeignName
+      relNew.Fields.Append relNew.CreateField(fldOne.Name)
+      relNew.Fields(fldOne.Name).foreignName = fldOne.foreignName
+     
+
+    Next fldOne
+    'add new relationship
+'If strOne <> "aux_namedPlace_placeName" Then
+
+If (Not blnDropAuxRels) Or (Left(strOne, 4) <> "aux_") Or (strOne = "aux_role") Then
+  dbsCurr.relations.Append relNew
+Else
+  'do not add relationship back
+  Debug.Print "Drop relationship to: " & strOne
+ ' dbsCurr.relations.Append relNew
+End If
+'end if
+  '  MsgBox "Done , continue?"
+    dbsCurr.relations.delete relCurr.Name
+   Next lngTemp
+
+End Function
+
+Public Function GetTblFromDB(strTbl As String, strDBPath As String) As Boolean
+  'function connects to a db and inserts the contents of a table into the same named table in this db
+  On Error GoTo gettblFail
+  Dim strSQL As String
+  strSQL = "INSERT INTO [" & strTbl & "] SELECT * FROM [" & strTbl & "] IN '" & strDBPath & "'; "
+  DoCmd.RunSQL strSQL, True
+  GetTblFromDB = True
+getTblExit:
+  Exit Function
+gettblFail:
+  GetTblFromDB = False
+  Debug.Print Err.Description
+  Resume getTblExit
+End Function
+
+
+Function getDataFromOtherVBankModule()
+  'function gets data from another vegbank module database. _
+     This database must be empty in the following tables for this to be sure to work.
+  Dim strPath As String
+  strPath = "c:\data\vegbank\vegbranch_dev\test_4_3_newBuildVegBankMod.mdb"
+'unhook relationships
+Call changeAllRels(False)
+Debug.Print GetTblFromDB("reference", strPath)
+Debug.Print GetTblFromDB("plantName", strPath)
+Debug.Print GetTblFromDB("plantConcept", strPath)
+Debug.Print GetTblFromDB("plantParty", strPath)
+Debug.Print GetTblFromDB("plantStatus", strPath)
+Debug.Print GetTblFromDB("plantCorrelation", strPath)
+Debug.Print GetTblFromDB("plantUsage", strPath)
+Debug.Print GetTblFromDB("aux_role", strPath)
+Debug.Print GetTblFromDB("soiltaxon", strPath)
+Debug.Print GetTblFromDB("namedPlace", strPath)
+Debug.Print GetTblFromDB("coverMethod", strPath)
+Debug.Print GetTblFromDB("coverIndex", strPath)
+Debug.Print GetTblFromDB("stratumMethod", strPath)
+Debug.Print GetTblFromDB("stratumType", strPath)
+
+'hook relationships back on
+Call changeAllRels(True)
+End Function
+
+
+Public Function FixWeirdAposInClosedLists()
+  ''fixes the ` that are used in SQL b/c XSL only allows changing one char into one char, so we can't get ' to ''
+  '' this function goes through these tables and replaces ` with '
+  Dim dbsCurr As Object
+  Dim tblCurr As Object
+  Set dbsCurr = CurrentDb
+  For Each tblCurr In dbsCurr.tabledefs
+    If tblCurr.Name = "fieldList" Or tblCurr.Name = "z_fieldDescription" Then
+      'this is a closed list table
+      'currently fields are named ListVALUE and ValueDesc - replace all ` with '
+      Dim rstTbl As New ADODB.Recordset
+      'open closed list table
+      rstTbl.Open tblCurr.Name, CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+      With rstTbl
+        Dim inttemp As Long, intChng As Integer
+        inttemp = 0
+        intChng = 0
+        Do Until .EOF
+          inttemp = inttemp + 1
+          Dim strTemp As String
+        If tblCurr.Name <> "z_fieldDescription" Then
+          strTemp = Nz(!listvalue, "")
+          If InStr(strTemp, "`") > 0 Then
+            'replace ` with '
+            strTemp = substTextForText(strTemp, "`", "'")
+            !listvalue = strTemp
+            intChng = intChng + 1
+          End If
+          strTemp = Nz(!valueDesc, "")
+          If InStr(strTemp, "`") > 0 Then
+            'replace ` with '
+            strTemp = substTextForText(strTemp, "`", "'")
+            !valueDesc = strTemp
+            intChng = intChng + 1
+          End If
+        Else
+          strTemp = Nz(!FieldDefinition, "")
+          If InStr(strTemp, "`") > 0 Then
+            'replace ` with '
+            strTemp = substTextForText(strTemp, "`", "'")
+            !FieldDefinition = strTemp
+            intChng = intChng + 1
+          End If
+        End If
+        .MoveNext
+        Loop
+      End With
+      If intChng <> 0 Then
+        Debug.Print tblCurr.Name & " , records : " & inttemp & " , changed: " & intChng
+      End If
+      rstTbl.Close
+    End If
+  Next tblCurr
+  
+End Function
+
+'Public Function getvalFrmSQL(strSQL As String) As Variant
+  'gets first record in the first field of a SQL string
+'  Dim rstSQL As New ADODB.Recordset
+ ' rstSQL.Open strSQL, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  'With rstSQL
+   ' If Not IsNull(.Fields(0).Value) Then
+ '     getvalFrmSQL = .Fields(0).Value
+  '  End If
+ ' E'nd With
+ ' rstSQL.Close
+'End Function
+

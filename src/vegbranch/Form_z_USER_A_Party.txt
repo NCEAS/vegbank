@@ -1,0 +1,55 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command34_Click()
+ Me.Refresh
+ InterpretPartiesToVegBank
+ Me.Requery
+End Sub
+
+Private Sub Command35_Click()
+  Dim strFields As String, strCaptRight As String
+  ''fields to show/hide
+  strFields = "orgPosition,Label21,contactInstructions,Label22,email,Label24,deliveryPoint,Label25,city,Label26,administrativeArea,Label27,postalCode,Label28,country,Label29,currentFlag,Label30,addressStartDate,Label31,TelephoneNumber,Label32,TelephoneType,Label33,Label49"
+  strCaptRight = Right(Me.Command35.Caption, Len(Me.Command35.Caption) - 6)
+  If Left(Me.Command35.Caption, 6) = ">>Show" Then
+'    Me.FormFooter.Height = 1440
+    ShowTheControls strFields, True, Me.Name, True
+    Me.Command35.Caption = "<<Hide" & strCaptRight
+ '   Me.Detail.Height = 2
+  Else
+    ShowTheControls strFields, False, Me.Name, True
+    Me.Command35.Caption = ">>Show" & strCaptRight
+  '  Me.Detail.Height = 2
+  End If
+  Me.Repaint
+End Sub
+
+Private Sub Command39_Click()
+  Me!VegBankMatchType = 1
+  Me!VegBankParty_ID = -1
+  Party_ChangeManualMatch
+End Sub
+
+Private Function Party_ChangeManualMatch()
+   DoCmd.RunSQL "INSERT INTO Z_VB_Reconcile (LoadVarName, LoadVarValue, VBTableName, VBFieldName, VBFieldValue) " _
+        & " SELECT ""UserPartyCode"",  """ & Me!UserPartyCode _
+        & """ , ""party"", ""party_ID"", " & Me!VegBankParty_ID
+    ''change value of matching type:
+    Me!VegBankMatchType = 1
+End Function
+
+Private Sub VegBankParty_ID_Change()
+    If msgBox("Are you sure you would like to change the matching party?", vbYesNoCancel) = vbYes Then
+    Else ''roll back
+      GoTo RollBack
+    End If
+  ''  Debug.Print "changed"
+    ''archive change so that it will always be made:
+    Party_ChangeManualMatch
+  Exit Sub
+RollBack:
+  ''  Debug.Print "rolled back"
+    Me!VegBankParty_ID = Me!VegBankParty_ID.OldValue
+End Sub
+

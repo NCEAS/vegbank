@@ -1,0 +1,1486 @@
+Option Compare Database
+Option Explicit
+Const debugVlue = 0
+Public Function trans_closedLists_withData()
+''function gets fields that have data and are constrained to a closed list and opens appropriate form
+   ''clear list of field that are to be translated:
+   Call trans_TranslNoFields
+   
+   'check all loading table fields for data
+   CheckFieldsForFields "Loading", "module"
+   
+   'open query to update appropriate fields (so that ConvertThisTime is true)
+   DoCmd.OpenQuery "transl_UpdateClosedFields1"
+   'open query to add records
+   DoCmd.OpenQuery "transl_AddClosedFields2"
+   
+   'open form to specify translation details / criteria
+   DoCmd.OpenForm "transall"
+
+End Function
+
+Public Function trans_booleanTxt(strText As String) As String
+  'returns 'true' or 'false' if string is recognized as boolean
+  'If isBoolean((strText)) Then
+  '  trans_booleanTxt = (strText = True)
+  'End If
+  Select Case strText
+    Case "yes", "Yes!", "true", "yeah", "correct", "affirmative", "ja", "-1", "1", "si", "oui", "uh huh"
+      trans_booleanTxt = "True"
+    Case "no", "no!", "false", "incorrect", "negative", "nein", "0", "non", "nope", "nada", "huh uh"
+      trans_booleanTxt = "False"
+  End Select
+End Function
+
+Public Function trans_TranslNoFields()
+  'function sets all fields to not translate for field translation form
+  DoCmd.RunSQL "UPDATE FieldsToConvertUsr SET FieldsToConvertUsr.ConvertThisTime = False;"
+End Function
+
+Public Function trans_oneField(lngFieldID As Long)
+'function sets one field to be translated
+Call trans_TranslNoFields
+AddFieldToConvert (lngFieldID)
+If IsFormOpen("TRANSALL") Then DoCmd.Close acForm, "TRANSALL", acSavePrompt
+DoCmd.OpenForm "TRANSALL"
+End Function
+
+Public Function trans_manyFields(strFieldIDs As String)
+  'function sets many fields to translate, by field ID
+  Call trans_TranslNoFields
+  Dim colIDs As New Collection, inttemp As Long
+  Set colIDs = csv_parseCSVstring(strFieldIDs, ",")
+  For inttemp = 1 To colIDs.Count
+    AddFieldToConvert (colIDs(inttemp))
+  Next
+  If IsFormOpen("TRANSALL") Then DoCmd.Close acForm, "TRANSALL", acSavePrompt
+  DoCmd.OpenForm "TRANSALL"
+End Function
+
+Public Function trans_openListsNeed(blnOpen As Boolean) As Boolean
+  'sets all opens lists with data to be translated: returns false if all are ok, true if some don't conform
+  'get list of open fields in Loading Module
+  Dim rstFlds As New ADODB.Recordset, strSQL As String
+  Dim strManyIDs As String
+  strSQL = "select * from transl_ClosedDestinationFields where destinationClosed=""open"";"
+  rstFlds.Open strSQL, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstFlds
+    Do Until .EOF
+      'have list of tables, send to checking function to see if we should add them
+      If Not chk_AllValueConformList(!TableName, !FieldName) Then
+        'not all values ok, add to list to translate
+        strManyIDs = strManyIDs & IIf(strManyIDs = "", "", ",") & !Z_FieldDescr_Id
+        If Not blnOpen Then GoTo exitFcnNoOpen
+      End If
+    
+    .MoveNext
+    Loop
+  
+  End With
+  If blnOpen Then Call trans_manyFields(strManyIDs)
+exitFcnNoOpen:
+  If strManyIDs <> "" Then
+    trans_openListsNeed = True 'need transl
+  Else
+    trans_openListsNeed = False  ' do not need transl
+  End If
+End Function
+
+Private Function test_mmmatchvcdsfadsa()
+  Debug.Print trans_SeeMMatchFor("plantName")
+End Function
+
+
+Public Function trans_SeeMMatchFor(strFld As String)
+  openF_ManualMatchForm (strFld)
+End Function
+
+Public Function trans_ManualMatchField(strFld As String, blnShowForm As Boolean, Optional blnSuppressOpenIfSucceed As Boolean, Optional blnTellSucceed As Boolean) As Boolean
+  ''takes a Loading field name and gets all values contained in the loading table fields that correspond to it
+  ''if blnShowForm then it shows the matching form at the end of the process
+  ''returns true if all automatched, else returns false
+  Dim blnOneDidntMatch As Boolean
+ 
+  Dim rstFlds As New ADODB.Recordset
+  rstFlds.Open "SELECT * FROM Z_VB_Reconcile_FldsChoose WHERE LoadVarName = """ & strFld & """;" _
+    , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstFlds
+    If Not .EOF Then
+      ''get variables to copy to next table when adding
+      Dim timNow As Date, strvbTbl As String, strVBFld As String
+      timNow = Now()
+      strvbTbl = !VBTableName
+      strVBFld = !VBFieldName
+      
+      ''found field -- now get source fields in loading module
+      Dim strFldsToGet As String
+      strFldsToGet = !ListOfLoadFlds
+      Dim colFlds As New Collection
+      Set colFlds = csv_parseCSVstring(strFldsToGet, ",")
+      Dim inttemp As Integer
+      For inttemp = 1 To colFlds.Count
+        Dim strT As String, strF As String
+        strT = Left(colFlds(inttemp), InStr(colFlds(inttemp), ".") - 1)
+        strF = Right(colFlds(inttemp), Len(colFlds(inttemp)) - InStr(colFlds(inttemp), "."))
+                
+        If Not fieldExistOnTbl(strF, strT) Then
+            Debug.Print "Fld DNE = " & colFlds(inttemp)
+        End If
+        ''open rst to get values for above field
+        Dim rstAddVals As New ADODB.Recordset
+        rstAddVals.Open "SELECT " & strF & " FROM " & strT & " GROUP BY " & strF _
+            , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText  '& " HAVING ((" & strF & ") is not null) ;"
+        With rstAddVals
+          Do Until .EOF
+            Dim strTempVal As String
+           If Not (IsNull(.Fields(0))) Then
+            strTempVal = .Fields(0)
+            If trans_ManualMatch_already(strFld, strTempVal) Then
+              'Debug.Print "Already matched = " & strTempVal
+              'if value not > 1 then still not ok
+              If trans_ManualMatch_getVBVal(strFld, strTempVal) <= 0 Then blnOneDidntMatch = True
+              
+            Else
+              'Debug.Print "Not matched = " & strTempVal
+              'find any automatch, if possible
+              Dim lngAutoMatchID As Long, strNoteForMatch As String
+              lngAutoMatchID = interp_thing(strvbTbl, strTempVal)
+              Select Case lngAutoMatchID
+                Case Is > 0
+                  strNoteForMatch = "automatched!"
+                Case -1
+                  strNoteForMatch = "could not find a match"
+                  blnOneDidntMatch = True
+                Case -2
+                  strNoteForMatch = "ambiguous/multiple matches"
+                  blnOneDidntMatch = True
+                Case Else
+                  strNoteForMatch = ""
+                  blnOneDidntMatch = True
+               End Select
+              ''add new value without a VegBank match:
+              trans_AddManualMatch strFld, strTempVal, strvbTbl, strVBFld, _
+                IIf(lngAutoMatchID < 0, 0, lngAutoMatchID), , timNow, , strNoteForMatch
+            End If
+           End If
+          .MoveNext
+          Loop
+        End With
+        rstAddVals.Close
+      Next inttemp
+    End If
+  End With
+  If blnShowForm Then
+    ''open form to view results:, but only if not suppressed
+    If (Not blnSuppressOpenIfSucceed) Or (blnOneDidntMatch) Then
+      trans_SeeMMatchFor strFld
+    Else
+      If blnTellSucceed Then
+        'successfully matched all values
+        msgBox "Successfully translated all values for this field.", , "VegBranch"
+      End If
+    End If
+  End If
+  'return if successful always or if some aren't
+  trans_ManualMatchField = Not blnOneDidntMatch
+End Function
+
+Public Function trans_ManualMatch_already(strFld As String, strVal As String, Optional strPrefx As String) As Boolean
+ ''function checks to see if a value has already been assigned in z_VB_Reconcile for a field = LoadingFldName
+  Dim rstChkVal As New ADODB.Recordset
+  'open rst with possible value for loading field and value
+  rstChkVal.Open "SELECT * FROM Z_VB_Reconcile WHERE  LoadVarName = """ & strFld _
+     & """ AND LoadVarVAlue = " & SQLizeTxt(IIf(strPrefx <> "", strPrefx & ":", "") & strVal) & ";" _
+    , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstChkVal.EOF Then
+    trans_ManualMatch_already = False
+  Else
+    trans_ManualMatch_already = True
+  End If
+  rstChkVal.Close
+End Function
+
+Public Function trans_ManualMatch_getVBVal(strFld As String, strVal As String, Optional strPrefx As String) As Long
+ ''function checks to see if a value has already been assigned in z_VB_Reconcile for a field = LoadingFldName
+ ''returns the VegBank PK value
+  Dim rstChkVal As New ADODB.Recordset
+  'open rst with possible value for loading field and value
+  rstChkVal.Open "SELECT * FROM Z_VB_Reconcile WHERE LoadVarName = " & SQLizeTxt(strFld) _
+     & " AND LoadVarVAlue = " & SQLizeTxt(IIf(strPrefx <> "", strPrefx & ":", "") & strVal) & ";" _
+    , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstChkVal.EOF Then
+    trans_ManualMatch_getVBVal = -1
+  Else
+    trans_ManualMatch_getVBVal = Nz(rstChkVal!VBFieldValue, -1)
+  End If
+  rstChkVal.Close
+End Function
+
+Public Function trans_AddManualMatch(strFld As String, strVal As String, strVBT As String, strVBF As String, _
+     Optional VBLong As Long, Optional VBTxt As String, Optional timNow As Date, Optional vbAccCode As String, _
+     Optional strNotes As String) As Boolean
+''function adds a translation value to Z_VB_Reconcile, optionally with values filled in.
+Dim rstChkVal As New ADODB.Recordset
+  'open rst with possible value for loading field and value
+  rstChkVal.Open "SELECT * FROM Z_VB_Reconcile WHERE LoadVarName = """ & strFld _
+     & """ AND LoadVarVAlue = """ & strVal & """;" _
+    , CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstChkVal
+  If .EOF Then
+    ''add the value -- fully
+    .AddNew
+    !LoadVarName = strFld
+  
+     !LoadVarValue = strVal
+  
+    !VBTableName = strVBT
+    !VBFieldName = strVBF
+    If VBLong <> 0 Then
+      !VBFieldValue = VBLong
+    End If
+    If VBTxt <> "" Then
+      !VBFieldTextVal = VBTxt
+    End If
+    If vbAccCode <> "" Then
+      !VBAccessionCode = vbAccCode
+    End If
+    If timNow <> 0 Then
+      !DateAdded = timNow
+    Else
+      !DateAdded = Now()
+    End If
+    If strNotes <> "" Then
+      !notes = strNotes
+    End If
+    .Update
+    trans_AddManualMatch = True
+  Else ''already exists
+    ''add only VegBank values if they are currently null
+    If IsNull(!VBFieldTextVal) And IsNull(!VBFieldValue) Then
+      ''VB value is blank
+      If VBLong <> 0 Then
+        !VBFieldValue = VBLong
+        trans_AddManualMatch = True
+      End If
+      If VBTxt <> "" Then
+        !VBFieldTextVal = VBTxt
+        trans_AddManualMatch = True
+      End If
+      If vbAccCode <> "" Then
+        !VBAccessionCode = vbAccCode
+        trans_AddManualMatch = True
+      End If
+      If timNow <> 0 Then
+        !DateAdded = timNow
+      Else
+        !DateAdded = Now()
+      End If
+    Else
+      Debug.Print "VB rec not added, as VB values already exist!"
+      trans_AddManualMatch = False
+    End If ' VB values null
+  End If
+  End With
+  rstChkVal.Close
+End Function
+
+Function geafdafafdwaerwavavfdgfdsgds()
+  Debug.Print trans_IsNewRecAllowed("role")
+End Function
+
+Public Function trans_IsNewRecAllowed(strFld As String) As Integer
+  ''function looks in Z_VB_Reconcile_fldschoose to see if we can add records, and if so, whether we must do it now
+  '' cannot add = 1
+  '' can add, but not now =2
+  '  can add, and do it now = 3
+  Dim rstNews As New ADODB.Recordset
+  rstNews.Open "SELECT * FROM Z_VB_Reconcile_FldsChoose WHERE LoadVarName = """ & strFld & """;", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstNews
+  If .EOF Then
+     ''hmm, field not found, error
+     trans_IsNewRecAllowed = 0
+  Else
+     ''found field
+     If !AllowNewRecs Then
+       ''can add new recs
+       '-- now see if we must add the new recs now:
+       If !AddNewNow Then
+         ''must add it now
+         trans_IsNewRecAllowed = 3
+       Else
+         trans_IsNewRecAllowed = 2
+       End If
+     Else  'cannot add new recs
+       trans_IsNewRecAllowed = 1
+     End If
+  End If
+  End With
+  rstNews.Close
+End Function
+
+Public Function trans_addNewRecNow(strFld As String, strVal As String) As Long
+  ''function adds a new value to the table indicated, using the value from the user,
+     ''which is inserted into the field specified by tbl: Z_VB_Reconcile
+     ''reports PK of new record
+  If trans_IsNewRecAllowed(strFld) <> 3 Then
+    ''can't add new rec
+    msgBox "Can't add a record for " & strFld, vbExclamation
+    Exit Function
+  End If
+  Dim rstNews As New ADODB.Recordset
+  rstNews.Open "SELECT * FROM Z_VB_Reconcile_FldsChoose WHERE LoadVarName = """ & strFld & """;", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstNews
+  If .EOF Then
+     'can't find record -- error
+     trans_addNewRecNow = -1
+  Else
+     ''found record in table and thus we will know what field to insert text value into:
+     If IsNull(!FieldToInsertTo) Then
+       ''no field to insert data to, fails
+       trans_addNewRecNow = -1
+     Else
+       ''get name of field to insert text value to:
+       Dim strFldToIns As String
+       strFldToIns = !FieldToInsertTo
+       ''open rst to add new record
+       Dim rstAdd As New ADODB.Recordset
+       rstAdd.Open "SELECT * FROM " & !VBTableName, CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+       ''add new record
+       rstAdd.AddNew
+       'insert value into field requested
+       rstAdd.Fields(strFldToIns) = strVal
+       rstAdd.Update
+       ''return PK of new record
+       trans_addNewRecNow = rstAdd.Fields("" & !VBFieldName & "")
+       ''open form to add new information
+       DoCmd.OpenForm !VBTableName, acNormal, , !VBFieldName & " = " & rstAdd.Fields((!VBFieldName)), acFormEdit
+     End If
+  End If
+  End With
+End Function
+
+Public Function trans_checkAccCodeToAdd(Optional lngID As Long) As Boolean
+  'checks and updates accessionCodes that are null in Z_VB_reconcile
+  'true returned if succeeds and no errors, else false
+  rereshCurrForm
+  Dim blnReportErrs As Boolean ' tell user that PK's reset and must match them again!
+  Dim strActualErrs As String 'for reporting errors
+  strActualErrs = "------------------------------" & ConstFormCarriageRet _
+    & "This shows any value you had previously matched to an VegBank table record, but that table cannot be found any longer. " _
+    & "Matches are accomplished with accessionCodes. " _
+    & "You'll have to rematch the following codes, or connect back to the original vegbank module you used when matching." _
+    & ConstFormCarriageRet & "----------------------------------------------"
+  Dim rstUpd As New ADODB.Recordset, strFixWhat As String
+  rstUpd.Open "select * from z_vb_reconcile " & IIf(lngID > 0, " WHERE z_reconcileID=" & lngID, ""), CurrentProject.Connection _
+    , adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstUpd
+  Do Until .EOF
+    'check to see if PK field
+   If get_fieldInfo(!VBTableName, !VBFieldName, "key") = "PK" Then
+      
+    'check for null AccessionCode and add it if null: or if asked to update this particular PK record (as indicated by lngID)
+    If IsNull(!VBAccessionCode) Or lngID > 0 Then
+        'is PK: has this table a field called AccessionCodE?
+        If get_fieldInfo(!VBTableName, "accessionCode", "dataType") = "text" Then
+          'have accessionCode on this table, get it
+          Dim strTemp As String
+          strTemp = getAccessionCode(!VBTableName, Nz(!VBFieldValue, -1), True)
+          If strTemp <> "" Then ' have non-null accessionCode
+            !VBAccessionCode = strTemp
+            '.Update
+          End If ' non null accCode
+        End If 'have accessionCode on table
+   
+    End If ' null Acc Code
+    
+    If lngID <= 0 Then
+      'updates PK's that are wrong for accessionCodes that are mismatched to PK or wrong- and alerts user: if lngID=0
+      Dim lngGoodPK As Long, lngCurrPK As Long
+      If Not IsNull(!VBAccessionCode) Then
+       lngGoodPK = getPKfromAccessionCode(!VBAccessionCode)
+       lngCurrPK = Nz(!VBFieldValue, -1)
+       If lngGoodPK <> lngCurrPK Then
+        'PK's dont match, must be fixed!
+        If lngGoodPK > 0 Then
+          'correct it and move on
+          !VBFieldValue = lngGoodPK
+        Else
+          'not a found accessionCode!
+          !VBFieldValue = Null
+          blnReportErrs = True
+           strActualErrs = strActualErrs & ConstFormCarriageRet & !LoadVarName & "> value of:" & !LoadVarValue
+          strFixWhat = !LoadVarName
+        End If
+       End If ' not equal PK
+      End If 'not null accessionCode
+    End If 'lngID<=0
+    
+   End If 'is PK
+  .MoveNext
+  Loop
+  End With
+
+If blnReportErrs = True Then
+  'tell user about errors
+  msgBox "There are some manual matches that you matched previously that no longer can be found, either due to changes in the vegbank module data," _
+    & " or because of connecting to a new vegbank module database." & Chr(13) & Chr(13) _
+    & "The manual match form will now be opened for you to match any missing values that were previously matched.  An error report will also show you exactly which values are no longer matched."
+  DoCmd.OpenForm "error_report", , , , , acWindowNormal, strActualErrs
+  Debug.Print strActualErrs
+  openF_ManualMatchForm (strFixWhat)
+    
+End If
+trans_checkAccCodeToAdd = Not blnReportErrs
+End Function
+
+'''D2 denormalization
+Public Function CheckAndDenorm_D2() 'OBSOLETE
+  Debug.Print "CheckAndDEnorm_D2>> is deprecated!"
+  Exit Function
+  'check for errors in D2 before translation
+ ' DoCmd.Hourglass True
+  'DoCmd.RepaintObject
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+  Dim rstCurr As New ADODB.Recordset
+  rstCurr.Open "check_D2_StrataMissingInC_COUNT", cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdTable
+  If rstCurr!D2Errs > 0 Then
+    Dim intResp As Integer
+    intResp = msgBox("There are inconsistencies between your alternate format " _
+      & Chr(10) & "stratum Cover data (D2) and your plot data (C)." & Chr(10) _
+      & "Do you still want to convert the data that do match?" & Chr(10) _
+      & "(It is suggested that you click 'no' and check errors in the next form, then return here.)", _
+      vbYesNo, "VegBranch")
+    If intResp = vbNo Then GoTo ExitChkDenorm
+  End If
+  
+  DeNormZ_D2
+  DoCmd.RunSQL "UPDATE LoadingStatus SET LoadingStatus.TransD2 = True;"
+  'Me.Requery
+ExitChkDenorm:
+ ' DoCmd.Hourglass False
+  Exit Function
+End Function
+
+
+Public Function DeNormZ_D2()
+''function denormalizes Z_USER_D2 table into Z_USER_D table, matching strata in Z_USER_C
+Debug.Print "DeNormZ_D2>> is deprecated!"
+  Exit Function
+Dim lngErrors As Long
+lngErrors = 0
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstD2 As New ADODB.Recordset
+Dim rstC As New ADODB.Recordset
+Dim rstD As New ADODB.Recordset
+
+rstD2.Open "Z_USER_D2_StrataCover", cnnLocal, adOpenStatic, adLockReadOnly, adCmdTable
+
+'show user that something is going on
+openProcessingPos "Converting to Cover Data"
+'total number of records
+Dim lngTot As Long, lngLoop As Long
+lngTot = rstD2.RecordCount
+lngLoop = 0
+With rstD2
+Do Until .EOF
+'------ REPEAT for each record of D2
+  lngLoop = lngLoop + 1
+  If Not IsNull(!stratumIndex) Then
+    rstD.Open "SELECT * FROM Z_USER_D_CoverData WHERE authorPlotCode = """ & !authorplotcode & """ AND plantCode = """ & !plantCode & """;", _
+      cnnLocal, adOpenDynamic, adLockOptimistic, adCmdText
+    If rstD.EOF And rstD.BOF Then
+      'need to add new record
+      rstD.AddNew
+      rstD!authorplotcode = !authorplotcode
+      rstD!plantCode = !plantCode
+      rstD!taxonCollection = !taxonCollection
+      rstD!taxonCover = !taxonCover
+      rstD!taxonBasalArea = !taxonBasalArea
+      rstD!taxonInferenceArea = !taxonInferenceArea
+      rstD!overrideFit = !overrideFit
+      rstD!overrideConfidence = !overrideConfidence
+      rstD.Update
+    End If
+    rstC.Open "SELECT * from Z_USER_C_PLotdata WHERE authorPlotCode = """ & !authorplotcode & """;", _
+       cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+    If rstC.EOF Or rstC.BOF Then
+      'cant find record in plotData (C)
+      Debug.Print "DENORM_D2> !!can't find plot record in Z_C: " & !authorplotcode
+      lngErrors = lngErrors + 1
+      GoTo endOfStratumRec
+    End If  ' cant find plot rec
+    Dim intLoop As Integer
+    Dim blnFoundStratum As Boolean
+    blnFoundStratum = False
+    For intLoop = 1 To 9
+      If rstC.Fields("StratumIndex" & intLoop).Value = !stratumIndex Then
+        rstD.Fields("stratumCover" & intLoop) = !stratumCover
+        blnFoundStratum = True
+        GoTo FoundStratum
+      End If
+    Next intLoop
+    If blnFoundStratum = False Then
+      'stratum not found in C
+      Debug.Print "DENORM_D2> can't find stratum record in Z_C, plot: " & !authorplotcode & ", plant:" & !plantCode
+      lngErrors = lngErrors + 1
+    End If
+FoundStratum:
+endOfStratumRec:
+    rstD.Update
+    rstD.Close
+    rstC.Close
+  End If 'stratumIndex is null
+  'update processing form window
+  UpdateProcessingPosition (lngLoop / lngTot) * 100, 4
+'-------END REPT of each record in D2
+.MoveNext
+Loop
+  'make sure processing window closes
+  UpdateProcessingPosition 100, 0
+End With
+rstD2.Close
+If lngErrors > 0 Then
+  'let user know that errors occurred
+  msgBox "Not all data could be transformed." & Chr(10) & lngErrors & " ERRORS occurred when transforming Strata Cover Data!" & Chr(10) & "See Data Check form for details and repeat this process after fixing errors.", vbCritical
+Else
+  msgBox "No errors in transforming stata cover data!"
+End If
+
+End Function
+
+
+Public Function ZeroLenStringsToNullForLoadTbl()
+'remove zero-length strings from all loading tables
+
+updateZeroLenStringToNull "z_USER_A_Party"
+updateZeroLenStringToNull "z_USER_C_plotData"
+updateZeroLenStringToNull "z_USER_D_CoverData"
+updateZeroLenStringToNull "z_USER_E_stemData"
+updateZeroLenStringToNull "Z_USER_F_SoilData"
+updateZeroLenStringToNull "Z_USER_G_Disturbance"
+updateZeroLenStringToNull "Z_USER_I_PlotComm"
+updateZeroLenStringToNull "Z_USER_J_UD"
+updateZeroLenStringToNull "z_USER_B_SpecList"
+updateZeroLenStringToNull "Z_USER_D2_StrataCover"
+updateZeroLenStringToNull "Z_USER_H_CommConcept"
+ 
+End Function
+
+Public Function transl_WhatNeedsTransl()
+'' function goes thru table Y_DataTranslate_src and checks what fields have data and thus need translation
+'tells user that we are working on it!
+ Call rereshCurrForm
+ Dim lngOrderNumber As Long
+ lngOrderNumber = 1
+Dim strProcForm As String, lngTotalREcs As Long, lngCurrRec As Long
+strProcForm = UpdateProcessingPosX(0, 0, "", True, "Analyzing your data", "VegBranch will try to determine what translation steps you need.")
+ lngTotalREcs = getvalFrmSQL("select count(1) from Y_DataTranslate_src") + 1
+ Call ZeroLenStringsToNullForLoadTbl
+ lngCurrRec = 1 'started to do something
+ Call UpdateProcessingPosX(100 * lngCurrRec / lngTotalREcs, 0, strProcForm)
+ 
+ ''first update the number of records per field in Z_FieldDescription
+' Call CheckFieldsForFields("loading", "module") not needed any more, fields checked directly
+ DoCmd.RunSQL "UPDATE Y_DataTranslate_src SET IsNEcessary = false;"
+ 
+ Dim rstTrans As New ADODB.Recordset
+ ''open rst with translation criteria
+ rstTrans.Open "Y_DataTranslate_src", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+ With rstTrans
+ Do Until .EOF
+   Debug.Print "transl_WhatNeedsTransl>> starting ID:" & !translateID & " -- " & Now()
+   'if preOp necessary, do it:
+   If Len(!runCodeBefore) > 1 Then
+     Call ManualHyperLink(!runCodeBefore)
+   End If
+   
+   Dim colTemp As New Collection
+   EmptyCollection colTemp
+   Set colTemp = csv_parseCSVstring(Nz(!FieldsMakeNec))
+   Dim inttemp As Integer
+   For inttemp = 1 To colTemp.Count
+     If colTemp(inttemp) <> "" Then
+      If debugVlue > 0 Then Debug.Print "transl_whatNeedsTransl>>   ID: " & !translateID & " --#" & get_NumbRecsNotNull(colTemp(inttemp))
+      
+      If get_NumbRecsNotNull(colTemp(inttemp)) > 0 Then
+        ''has records - exit! with true
+        !IsNecessary = True
+        rstTrans!IStranslated = False
+        rstTrans!AutoWasDone = " "
+        rstTrans!userOrderNumber = lngOrderNumber
+        lngOrderNumber = lngOrderNumber + 1
+        .Update
+        GoTo nextRec
+      End If
+     End If
+   Next
+   ''get list of fields defined by WHERE criteria
+   If Not IsNull(!FieldDescTblWHERE) Then
+     Dim rstSetFlds As New ADODB.Recordset
+     'open list of fields
+     rstSetFlds.Open "SELECT recordsNotNull FROM Z_FieldDescription WHERE " & !FieldDescTblWHERE _
+        , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+     With rstSetFlds
+       Do Until .EOF
+         'check each field for data
+         If !RecordsNotNull > 0 Then
+           ''has records - exit! with true
+           rstTrans!IsNecessary = True
+           rstTrans!IStranslated = False
+           rstTrans!AutoWasDone = " "
+           rstTrans!userOrderNumber = lngOrderNumber
+        lngOrderNumber = lngOrderNumber + 1
+           rstTrans.Update
+           'close rst
+           rstSetFlds.Close
+           GoTo nextRec
+         End If
+       .MoveNext
+       Loop
+     End With
+     rstSetFlds.Close
+   End If
+   
+nextRec:
+  On Error GoTo errAutoMatch
+  'check to see if we can try to automatch
+  If rstTrans!IsNecessary = True Then
+    'so we need to do this
+    If Not IsNull(rstTrans!autoRunIf) Then
+      'see if need to do something
+      If Eval(rstTrans!autoRunIf) Then
+        'yup need to do something
+        Call ManualHyperLink(rstTrans!autoRunWhat)
+        'see if successful
+        If Eval(rstTrans!autoRunSuccessfulIf) Then
+          'successful, check the done box
+          rstTrans!IStranslated = True
+          rstTrans!IsNecessary = False 'done already
+          rstTrans!AutoWasDone = "Automatically Done!"
+        Else
+          'not successful, let them push the button themselves
+        End If
+      End If
+    End If
+  End If
+postAutoMatch:
+  On Error GoTo 0
+  lngCurrRec = lngCurrRec + 1
+ Call UpdateProcessingPosX(100 * lngCurrRec / lngTotalREcs, 0, strProcForm)
+ 
+ .MoveNext
+ If .EOF Then Debug.Print "transl_WhatNeedsTransl>> end ID: last one -- " & Now()
+ Loop
+ End With
+ rstTrans.Close
+ 'make sure processing form is closed.
+ Call UpdateProcessingPosX(100, 0, strProcForm)
+ rereshCurrForm
+ ''filters form to only YES items
+ 'On Error Resume Next
+ Dim frmCurr As Form
+ Set frmCurr = Forms.TranslateYourDataForm
+ frmCurr.Filter = "IsNecessary=true"
+ frmCurr.FilterOn = True
+ frmCurr!Combo166 = "IsNecessary=true"
+exitthis:
+  Exit Function
+errAutoMatch:
+  msgBox "There was an error trying to automatically translate your data.  Please try manual translation (pushing each button)." & Chr(13) & Err.Description & Chr(13) & "VegBranch will keep trying to translate your other data."
+  Resume postAutoMatch
+End Function
+Public Function get_NumbRecsNotNull(strTblDotFld As String) As Long
+ ''function takes a table.field and returns the number of recs not null for that field
+ On Error GoTo fatalErr
+ If InStr(strTblDotFld, ".") > 0 Then
+   Dim strTbl As String, strFld As String
+   'parse table and field
+   strTbl = Left(strTblDotFld, InStr(strTblDotFld, ".") - 1)
+   strFld = Right(strTblDotFld, Len(strTblDotFld) - InStr(strTblDotFld, "."))
+'   Dim rstFld As New ADODB.Recordset
+   'open rst to find field and number of records there
+'   rstFld.Open "SELECT RecordsNotNull FROM Z_FieldDescription WHERE tableName = """ & strTbl _
+& """ AND fieldName = """ & strFld & """;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+'   get_NumbRecsNotNull = rstFld!RecordsNotNull
+ '  GoTo exitThisFcn
+'AttemptFindRegDB: 'try to find records in regular database
+  On Error GoTo fatalErr 'different error condition now
+  Dim lngTemp As Long
+  lngTemp = getvalFrmSQL("select count([" & strFld & "]) from [" & strTbl & "]")
+  get_NumbRecsNotNull = lngTemp
+ ' Debug.Print "recovered field: " & strTblDotFld
+ExitThisFCN:
+   Exit Function
+ End If
+   
+'cantFind:
+ '  Debug.Print "get_NumbRecsNotNull>> couldn't find:" & strTblDotFld
+ '  get_NumbRecsNotNull = -1
+ '  Resume AttemptFindRegDB
+   
+fatalErr:
+   Debug.Print "get_numbRecsNotNull>> really can't find:" & strTblDotFld
+   get_NumbRecsNotNull = -1
+   Resume ExitThisFCN
+   
+End Function
+
+Public Function trans_PlantPartyPersp()
+  ''function translates the Z_USER_B_SpecList.AddPartyPerspective field, also updates which plants are new
+   ''--according to values assigned in metadata form
+   Dim intNew As Integer
+   intNew = getMetaData2Value("plantNew")
+  ' Debug.Print intNew
+   Select Case intNew
+     Case 1 'all are new
+        DoCmd.RunSQL "UPDATE Z_USER_B_SpecList SET NewPLantConcept=true;"
+     Case 2 ' just with ref are new
+        DoCmd.RunSQL "UPDATE Z_USER_B_SpecList SET NewPLantConcept = (not(ISNull(reference)));"
+     Case 3 'none are new, unless matched to -1 in Z_VB
+         DoCmd.RunSQL "UPDATE Z_USER_B_SpecList SET Z_USER_B_SpecList.NewPlantConcept = false;"
+         DoCmd.RunSQL "UPDATE Z_USER_B_SpecList SET Z_USER_B_SpecList.NewPlantConcept = true WHERE (((Z_USER_B_SpecList.plantCode) In (select plantName from Z_B_VB_lookupNms where plantAsConc=3 and plantConcept_ID=-1)));"
+   End Select
+   
+   Dim intPP As Integer
+   intPP = getMetaData2Value("plantPP")
+  ' Debug.Print intPP
+   Select Case intPP
+     Case 1 'add to all plants
+       DoCmd.RunSQL "UPDATE Z_USER_B_SpecList SET AddPartyPerspective = True;"
+     Case 2 'add to just plants with status
+       DoCmd.RunSQL "UPDATE Z_USER_B_SpecList SET AddPartyPerspective = (not(ISNull(plantConceptStatus)));"
+     Case 3 'add to only new plants
+       DoCmd.RunSQL "UPDATE Z_USER_B_SpecList SET AddPartyPerspective = (Iif(NewPlantConcept=true,true,false))"
+   End Select
+End Function
+
+Public Function trans_CommPartyPersp()
+  ''function translates the Z_USER_H_CommConcept.AddPartyPerspective field
+   ''--according to values assigned in metadata form
+   Dim intNew As Integer
+   intNew = getMetaData2Value("commNew")
+  ' Debug.Print intNew
+   Select Case intNew
+     Case 1 'all are new
+        DoCmd.RunSQL "UPDATE Z_USER_H_CommConcept SET NewCommConcept=true;"
+     Case 2 ' just with ref are new
+        DoCmd.RunSQL "UPDATE Z_USER_H_CommConcept SET NewCommConcept = (not(ISNull(reference)));"
+     Case 3 'none are new unless not matching
+         DoCmd.RunSQL "UPDATE Z_USER_H_CommConcept SET NewCommConcept=false;"
+         DoCmd.RunSQL "UPDATE Z_USER_H_CommConcept SET NewCommConcept=true  WHERE (((Z_USER_H_CommConcept.commCode) In (select commName from Z_H_VB_lookupNms where commAsConc=3 and commConcept_ID=-1)));"
+   End Select
+   
+   
+   Dim intPP As Integer
+   intPP = getMetaData2Value("commPP")
+  ' Debug.Print intPP
+   Select Case intPP
+     Case 1 'add to all plants
+       DoCmd.RunSQL "UPDATE Z_USER_H_CommConcept SET AddPartyPerspective = True;"
+     Case 2 'add to just plants with status
+       DoCmd.RunSQL "UPDATE Z_USER_H_CommConcept SET AddPartyPerspective = (not(ISNull(commConceptStatus)));"
+     Case 3 'add to only new plants
+       DoCmd.RunSQL "UPDATE Z_USER_H_CommConcept SET AddPartyPerspective = (Iif(NewCommConcept=true,true,false))"
+   End Select
+End Function
+
+Public Function chkFieldToTransl(lngFieldID As Long) As Boolean
+   ''checks a field that the translation is OK
+   '''will ask confirmation for default values and setting values to null
+   ''returns false if values not confirmed
+   'get relevant data for checking:
+Dim cnnLoc As Connection, rstGetData As New ADODB.Recordset
+Set cnnLoc = CurrentProject.Connection
+rstGetData.Open "SELECT * FROM Y_TrAll_Fld WHERE FieldIdToConvert = " & lngFieldID & ";", cnnLoc _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+With rstGetData
+If .EOF Then
+  msgBox "ERROR!  Field not found! " & lngFieldID, vbCritical
+End If
+  Dim strCurrTbl As String
+  Dim strCurrFld As String
+  Dim strDestNulls As String
+  strCurrTbl = !tbl
+  strCurrFld = !fld
+  strDestNulls = Nz(!destNulls, "")
+  ''if loading module field is required, then require the value to translate, too
+  If !currNulls = "no" Then strDestNulls = "no"
+Dim strType As String
+strType = !dataType
+End With
+rstGetData.Close
+    
+If Forms!transall!subfrmValues.Visible = True Then
+    'has been enabled and user may have attempted to create default value
+     
+  Dim strDefVal As String
+  Dim intResponse As String
+
+  
+'if there are no values, then there is no default value
+'here, we query the appropriate table to see if there are default values for the current field
+''If there is a default value, then a msgBox appears to confirm that this value should be used.
+  Dim rstCurr As New ADODB.Recordset
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+
+  Dim strSQLselect As String
+    strSQLselect = "SELECT * FROM Y_Translate_anyField " _
+& " WHERE (((Y_Translate_anyField.FieldID)=" & lngFieldID & ") " _
+& " AND ((Y_Translate_anyField.DefaultForField)=True));"
+      rstCurr.Open strSQLselect, cnnLocal, , 1, adCmdText
+  If rstCurr.EOF Then GoTo NoDefault
+
+'gets default value
+
+strDefVal = rstCurr!VegBankValue
+
+intResponse = msgBox("Do you really want to use """ & strDefVal & """ to replace all null values in    " _
+          & strCurrTbl & "." & strCurrFld & "?", vbYesNo)
+If intResponse = vbYes Then    ' User chose Yes.
+    'Proceed with update when translation occurs
+Else    ' User chose No.
+    DoCmd.RunSQL "UPDATE Y_Translate_anyField SET Y_Translate_anyField.DefaultForField = 0" _
+         & "   WHERE (((Y_Translate_anyField.FieldID)= " & lngFieldID & " )); "
+    msgBox ("Default value erased, as per user request")
+End If
+
+NoDefault:
+rstCurr.Close
+'----- double check that user wants to set values to null, if that's applicable:
+    strSQLselect = "SELECT * FROM Y_Translate_anyField " _
+& " WHERE (((Y_Translate_anyField.FieldID)=" & lngFieldID & ") " _
+& " AND ((((Y_Translate_anyField.VegBankValue) is null)) OR " _
+& " (Y_Translate_anyField.VegBankValue=""@---TRANSLATE this value to NULL!---@"")));"
+      rstCurr.Open strSQLselect, cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If Not rstCurr.EOF Then 'if .EOF then there are no values set to null, contunue
+    If strDestNulls = "No" Then
+      ''Here, we have a field set to null, but nulls are not allowed.
+      msgBox "This field cannot be set to null, because null values are not allowed for it." & Chr(13) _
+         & "Please enter a VegBankValue for each of your data values.", vbExclamation
+        chkFieldToTransl = False
+        Exit Function
+    End If
+    intResponse = msgBox("You have set several values to null.  This will erase these values when translation occurs." _
+       & Chr(13) & "Do you want to erase the above values? (Press no to stop and fill in new values)", vbYesNo)
+    If intResponse = vbYes Then
+      ''continue on
+    Else
+      chkFieldToTransl = False
+      Exit Function
+    End If 'vbYes response
+  End If 'not .eof
+NoSet2Nulls:
+Else ' disabled
+    
+    Forms!transall!subfrmValues.SourceObject = "sub_TranslateValues"
+    Forms!transall!subfrmValues.Visible = True
+    
+End If  'enabled subform
+  ''successful check if still here:
+  chkFieldToTransl = True
+End Function
+
+Public Function translateClosedListVal(strTable As String, strValue As String) As Variant
+  'function looks through closed list tables to see if a value matches either values or valueDescription and returns Values' value if found
+  Dim rstClosed As New ADODB.Recordset
+  rstClosed.Open "select * from [" & strTable & "] WHERE trim(cstr([values])) = """ & strValue & """" _
+     , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstClosed.EOF Then
+    'no value, try VAlue description
+    rstClosed.Close
+    rstClosed.Open "select * FROM [" & strTable & "] WHERE trim(valueDescription)=""" & strValue & """;" _
+     , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+    If rstClosed.EOF Then
+      'no value at all, send back ""
+      translateClosedListVal = Null
+      Exit Function
+    End If
+  End If
+  translateClosedListVal = rstClosed!values
+  
+End Function
+
+Public Function ConvertClosedListsWithNotMatchingVals(Optional blnCheckFirst As Boolean)
+  'links use to translate form with just closed list fields that have values not matching
+  If blnCheckFirst Then
+    Call CheckClosedListForErrs
+  End If
+  
+  'dont translate anyfield except the ones to be added here:
+  DoCmd.RunSQL "UPDATE FieldsToConvertUsr SET FieldsToConvertUsr.ConvertThisTime = False;"
+  
+  'get list of fields TO translate:
+  Dim cnnLocal As Connection
+  Dim rstTrs As New ADODB.Recordset
+  Set cnnLocal = CurrentProject.Connection
+  rstTrs.Open "SELECT Y_ClosedListErr.tbl, Y_ClosedListErr.fld, Z_FieldDescription.Z_FieldDescr_Id " _
+& " FROM Z_FieldDescription INNER JOIN Y_ClosedListErr ON (Z_FieldDescription.FieldName = Y_ClosedListErr.fld) AND (Z_FieldDescription.TableName = Y_ClosedListErr.tbl) " _
+& " GROUP BY Y_ClosedListErr.tbl, Y_ClosedListErr.fld, Z_FieldDescription.Z_FieldDescr_Id;", _
+   cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+   With rstTrs
+     Do Until .EOF
+       'add field to list of conversion fields
+       AddFieldToConvert (!Z_FieldDescr_Id)
+     .MoveNext
+     Loop
+   End With
+   
+   DoCmd.OpenForm "TRANSALL"
+   DoCmd.Close acForm, "Y_closedListErr", acSavePrompt
+
+End Function
+
+ Public Function Load_getStratumIndexFrmPltAndNum(strPlot As String, intNum As Integer) As String
+ 'NOT USED
+   'get an index value for a plot and number: used in moving D to D2
+ If intNum < 1 Or intNum > 9 Then
+   'bad request, must be between 0 and 10
+   Debug.Print "Load_getStratumIndexFrmPltAndNum>> BAD REQUEST ERROR: must request stratum between 1 and 9, you requested: " & intNum & " for plot: " & strPlot
+ Else 'ok request
+   
+   Dim rstTemp As New ADODB.Recordset
+   rstTemp.Open "SELECT * from Z_USER_C_PlotData WHERE authorPlotCode=""" & strPlot & """;", CurrentProject.Connection _
+     , adOpenForwardOnly, adLockReadOnly, adCmdText
+   With rstTemp
+     If .EOF Then
+       'cant get value
+       Debug.Print "Load_getStratumIndexFrmPltAndNum>> Can't find plot : " & strPlot
+     Else
+       'can find plot
+       Load_getStratumIndexFrmPltAndNum = Nz(.Fields("StratumIndex" & intNum).Value, "")
+     End If
+   
+   End With
+ End If
+End Function
+
+Public Function moveCtoC2_runall()
+  'function takes C data and moves to C2, avoiding duplicates
+  DoCmd.OpenQuery "move_C_to_C2_NewPlacesRun"
+  DoCmd.OpenQuery "move_C_to_C2_NewContribRun"
+  DoCmd.OpenQuery "move_C_to_C2_NewStrataRun"
+End Function
+
+Public Function moveDtoD2_runall()
+  'function takes D data and moves to D2, where it applies
+  DoCmd.OpenQuery "move_D_to_D2_allStrata"
+  DoCmd.OpenQuery "move_D_to_D2_noStratum"
+End Function
+
+Public Function moveD2toD_runall()
+  'function takes D2 data and moves to D, where it applies
+  DoCmd.OpenQuery "move_D2_to_D_someFields"
+End Function
+
+Public Function moveEtoD2_runall()
+  'function takes E data and moves to D2, where it applies
+  DoCmd.OpenQuery "move_E_to_D2_inclStrata"
+End Function
+
+Public Function moveToB_runall()
+  'function takes all unmatched plants and moves them to species list, setting plantCode=plantName for those.
+  DoCmd.OpenQuery "move_unmatched_to_B"
+End Function
+
+Public Function moveToH_runall()
+  'function takes all unmatched comms and moves them to comm concept list, setting commCode=commName for those.
+  DoCmd.OpenQuery "move_unmatched_to_H"
+End Function
+
+Public Function moveVegBankToA_runall(Optional blnOpenUSERA As Boolean)
+  'function moves vegbank parties into USer's Party Table
+  DoCmd.OpenQuery "move_VB_to_A_run"
+  If blnOpenUSERA Then
+    DoCmd.OpenForm "Z_USER_A_Party"
+    Forms!z_USER_A_Party.Requery
+  End If
+End Function
+
+Public Function GetNewInfoForMoveForm(blnRefresh As Boolean)
+  ''function updates what should be shown on move data form
+  Call CheckTblForRecs("loading", "", blnRefresh)
+  DoCmd.RunSQL "UPDATE Y_MoveData SET Y_MoveData.PreviewNumRecs = getValFrmSQL(""select count(1) from "" & [previewQry]);"
+  'must check errors for each item if there are any
+  DoCmd.RunSQL "UPDATE Y_MoveData SET errorsFound = checkForMultErrors(nz([ListErrsB4]));"
+    
+
+End Function
+
+Public Function move_autoMoveTableData() As Boolean
+  'moves data around the Y_moveData form automatically if VegBranch is configured to do this
+  'updates what needs doing
+  Dim blnFailed As Boolean
+  Call GetNewInfoForMoveForm(False)
+  Dim rstTemp As New ADODB.Recordset
+  rstTemp.Open "Select * from Y_MoveData where AllowAuto=true", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+    Do Until .EOF
+      If !errorsFound = 0 Then
+        If !previewNumRecs > 0 Then
+          'can automove
+          Call ManualHyperLink(!MoveHLink)
+        End If
+      Else 'errors, failed
+       blnFailed = True
+      End If
+    .MoveNext
+    Loop
+  End With
+  move_autoMoveTableData = Not blnFailed
+End Function
+
+Public Function removeNeg1PartiesFromZA(blnConfirm As Boolean)
+  'function removes unrecognized (-1) party accessionCodes
+  If blnConfirm Then
+    If Not AreYouSure("You are about to remove references to vegbank module parties in your Party Loading Table.  Press Yes to continue.") Then
+      Exit Function
+    End If
+  End If
+  DoCmd.RunSQL "UPDATE z_USER_A_Party SET z_USER_A_Party.VegBankParty_ID = Null, z_USER_A_Party.VegBankAccCode = Null WHERE (((z_USER_A_Party.VegBankParty_ID)=-1)); "
+
+End Function
+
+Public Function removeNeg1UDFromZJ(blnConfirm As Boolean)
+  'function removes unrecognized (-1) userdefined accessionCodes
+  If blnConfirm Then
+    If Not AreYouSure("You are about to remove references to vegbank module user-defined variables in your User Defined Loading Table.  Press Yes to continue.") Then
+      Exit Function
+    End If
+  End If
+  DoCmd.RunSQL "UPDATE Z_USER_J_UD SET Z_USER_J_UD.VB_ID = Null, Z_USER_J_UD.UserDefAccCode = Null WHERE (((Z_USER_J_UD.VB_ID)=-1));"
+
+End Function
+
+Public Function interp_AuthorPlotObsCode(ByVal strCode As String, blnObs As Boolean, Optional blnRetOKOrNOT As Boolean) As Long
+ 'function looks up potential authorPlotCode PK values, for parentAuthPlotCode in Z_C or PrevObsAuthPlotCode in same
+ 'looks first in Z_C and takes values from query that calcs new plot_ID
+ 'then looks in the plot table itself/obs table
+ 'if blnRetOKOrNOT is true, then returns 1 if found and -1 if not, -2 if ambig
+ 'if blnRetOKOrNOT is false, returns plot_ID
+ 'blnRetOKOrNOT is useful in that error checking just needs found or not, not the PK value, which could be negative, dep on # recs in tables
+ 'blnObs = true makes it deal with observation table, not plot
+ 'MTL 09-JAN-2004
+ Dim strPKZC As String, strvbTbl As String, strMatchBYZC As String, strMatchByPlt As String
+ If blnObs Then 'look for obs
+   strPKZC = "NewObsID"
+   strvbTbl = "observation"
+   strMatchBYZC = "New_authObsCode"
+   strMatchByPlt = "authorObsCode" 'used as Z_VB_reconcile name, too
+ Else 'look for plot
+   strPKZC = "NewPlotID"
+   strvbTbl = "Plot"
+   strMatchBYZC = "authorPlotCode"
+   strMatchByPlt = "authorPlotCode" 'used as Z_VB_reconcile name, too
+ End If
+ 'first look for manual match
+ Dim lngRet As Long, lngChkRet As Long
+ lngRet = trans_ManualMatch_getVBVal(strMatchByPlt, strCode)
+ If lngRet > 0 Then
+   'have it manually matched! continue at end
+   lngChkRet = 1
+   GoTo exitInterpAuthPlotCode
+ Else
+   'no match, keep going
+ End If
+ 
+ 'second look in Z_C
+ Dim rstZC As New ADODB.Recordset
+ rstZC.Open "select " & strPKZC & " from append_C_getNewPKs where " & strMatchBYZC & "=" & SQLizeTxt(strCode), CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+ If rstZC.EOF Then
+   'not found, try plot
+   Dim rstPlt As New ADODB.Recordset
+   rstPlt.Open "select " & strvbTbl & "_ID from " & strvbTbl & " where " & strMatchByPlt & "=" & SQLizeTxt(strCode), CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+   If rstPlt.EOF Then
+     'not found, at all, report -1
+     lngChkRet = -1
+     lngRet = -1
+   Else 'found in plot
+     'found in plot, see if unambig
+     lngRet = rstPlt(0)
+     rstPlt.MoveNext
+     If rstPlt.EOF Then
+      'unambig
+       lngChkRet = 1
+      'lngRet already set
+     Else
+      'ambiguous, report -2
+      lngChkRet = -2
+      lngRet = -2
+     End If
+   
+   End If 'in plot or not
+   rstPlt.Close
+ Else 'in ZC
+   'found, great.  Now make sure not duplicate
+   lngRet = rstZC(0)
+   rstZC.MoveNext
+   If rstZC.EOF Then
+     'unambiguous, report value/OK
+     lngChkRet = 1
+     'lngRet already set
+   Else
+     'ambiguous, report -2
+     lngChkRet = -2
+     lngRet = -2
+   End If
+   
+ End If
+ rstZC.Close
+ 
+exitInterpAuthPlotCode:
+ If blnRetOKOrNOT Then ' ret lngChkRet
+   interp_AuthorPlotObsCode = lngChkRet
+ Else
+   interp_AuthorPlotObsCode = lngRet
+ End If
+ 
+End Function
+
+
+Public Function interp_placeName(ByVal strName As String, ByVal strSystem As String, Optional strMoreINFO As String, Optional blnIgnoreCache As Boolean) As Long
+  ''function attempts to match a place name (including system) to a namedplace.namedPlace_ID
+  'returns -1 if not successful
+  'returns -2 if ambiguous
+  'similar to interpreting plantNAme or commName:
+  'If strSystem = "" Then strSystem = "Geographic Places" 'default system that users may add to. '@HARDCODE@'
+  'no longer hardcoded here, but instead in append_C2_getNewPKs
+   'state, province, stateProvince -> correct system:
+   Select Case strSystem
+     Case "state", "stateProvince", "province", "state/province"
+       strSystem = "region|state|province"
+     Case "quadrangleName"
+       strSystem = "quadrangle"
+     Case "country"
+       strSystem = "area|country|territory"
+   End Select
+  
+  
+  'REALLY first, look in cache:
+  Dim strWHERE As String
+  strWHERE = " AND " & IIf(strSystem = "", "placeSystem is null", "placeSystem=" & SQLizeTxt(strSystem)) _
+    & "  AND " & IIf(strMoreINFO = "", "placeParentContext is null", "placeParentcontext=" & SQLizeTxt(strMoreINFO))
+  
+  Dim rstCache As New ADODB.Recordset, lngPK As Long
+  rstCache.Open "select * from Z_c2_placesCache where placeName=" & SQLizeTxt(strName) & strWHERE, CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  If Not rstCache.EOF Then
+     'found named place in cache
+     lngPK = rstCache!namedPLace_Id
+       rstCache.Close
+       'Debug.Print "interp_placeName>> got cache value for:" & strName
+       Set rstCache = Nothing
+     GoTo interpNMPLExt
+  End If
+  rstCache.Close
+  Set rstCache = Nothing
+  
+  'first, look for manual match, which would be listed as system:name in manual match table
+  'manual match needs quandrangleNAme not quadrangle
+  lngPK = trans_ManualMatch_getVBVal("namedPlace", IIf(strSystem = "quadrangle", "quadrangleName", strSystem) & ":" & strName)
+  
+  'next, look for manual match as accessionCode
+  If lngPK <= 0 Then lngPK = getPKfromAccessionCode(strName, "namedPlace")
+  
+If lngPK > 0 Then GoTo interpNMPLExt 'have manual match value
+   
+
+  'if here, then not found in manual match, try real named place table
+  Dim rstFindVB As New ADODB.Recordset
+  rstFindVB.Open "select * from namedPlace WHERE placeSystem=" & SQLizeTxt(strSystem, "'") & " AND placeName=" _
+    & SQLizeTxt(strName, "'") & IIf(strMoreINFO <> "", " AND left(placeDescription," & Len(strMoreINFO) & ")=" & SQLizeTxt(strMoreINFO), ""), CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  'opened recordset : either found, not found, or mult found [not good]
+  With rstFindVB
+  If .EOF Then
+    'not found: -1
+    lngPK = -1
+   
+  Else 'something found: one or mult
+    'record PK
+    lngPK = !namedPLace_Id
+    'test to see if multiple: ambigious
+    .MoveNext
+    If Not .EOF Then
+      'another record: make ambigous lngPK
+      lngPK = -2
+    End If
+  End If
+  
+  End With
+  Dim strNewName As String
+'attempt to search within state/province, using {}
+If lngPK < 0 And InStr(strName, "{") > 0 And InStr(strName, "}") > 0 Then
+  'for some systems where there are many names, such as quad and county, sometimes additional info (state) is passed in {} after name
+  'this may be so here
+  
+  Dim strState As String
+  strState = Right(strName, Len(strName) - InStr(strName, "{"))
+  strState = Trim(compressChar(strState, "}"))
+ ' Debug.Print "State:" & strState
+  strNewName = Trim(Left(strName, InStr(strName, "{") - 1))
+  'dont do this if strName still is the same as before, could lead to infinite recursion
+  If strName <> strNewName Then lngPK = interp_placeName(strNewName, strSystem, strState)    'open new rst, looking for name with state passed
+End If
+If Not blnIgnoreCache Then
+'here we have value, cache it, even if not ok value
+rstCache.Open "z_c2_placesCache", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+rstCache.AddNew
+  rstCache!placeName = strName
+  If strSystem <> "" Then
+    rstCache!placeSystem = strSystem
+  End If
+  If strMoreINFO <> "" Then
+    rstCache!placeparentContext = strMoreINFO
+  End If
+  rstCache!namedPLace_Id = lngPK
+rstCache.Update
+rstCache.Close
+Set rstCache = Nothing
+End If 'only if told to cache value
+interpNMPLExt:
+interp_placeName = lngPK
+
+  Exit Function
+End Function
+
+Public Function interp_placeName_clearCache(blnClearAll As Boolean)
+  'clears cache of namedplaces
+  'if blnClearAll then clears entire cache, else only undetermined places (ambig or not found)
+  DoCmd.RunSQL "delete * from Z_C2_placesCache " & IIf(blnClearAll, "", " WHERE namedPLace_ID<0")
+End Function
+
+Public Function interp_thing(strThing As String, ByVal strValue As String) As Long
+  ''function attempts to match a thing (vegbank table name) to a vegbank PK value
+  'returns -1 if not successful
+  'returns -2 if ambiguous
+  'similar to interpreting plantNAme or commName:
+  
+  'first, look for manual match, which would be listed as system:name in manual match table
+  
+  Dim rstManMat As New ADODB.Recordset, lngPK As Long
+  lngPK = trans_ManualMatch_getVBVal(strThing, strValue)
+   If lngPK <= 0 Then
+    'haven't got it, continue with this
+   Else
+    'have pk, goto end
+    GoTo interpNMPLExt
+   End If
+  
+  'rescurse over list of fields in which we will try to match on
+  'note that fields need not be fields, but can be expressions, so long as they have no commas, which messes with parser!
+  Dim colMatchOn As New Collection, inttemp As Integer
+  Set colMatchOn = csv_parseCSVstring(getvalFrmSQL("select MatchOnFlds from Z_VB_reconcile_FldsChoose where vbTableName=""" _
+      & strThing & """;"), ",")
+  
+For inttemp = 1 To colMatchOn.Count
+  lngPK = -3 'default: nothing known about this one
+  Dim strvarName As String
+  strvarName = colMatchOn(inttemp)
+  
+ If strvarName <> "" Then
+  'if here, then not found in manual match, try real vegbank table
+  Dim rstFindVB As New ADODB.Recordset
+  rstFindVB.Open "select * from " & strThing & " WHERE " & strvarName & "=" _
+    & SQLizeTxt(strValue, "'"), CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  'opened recordset : either found, not found, or mult found [not good]
+  With rstFindVB
+  If .EOF Then
+    'not found: -1
+    lngPK = -1 'keep trying, if more fields to match on
+   
+  Else 'something found: one or mult
+    'record PK
+    lngPK = .Fields(WhatIsPKOf(strThing))
+    'test to see if multiple: ambigious
+    .MoveNext
+    If Not .EOF Then
+      'another record: make ambigous lngPK
+      lngPK = -2
+    End If
+    GoTo interpNMPLExt
+  End If
+  
+  End With
+  rstFindVB.Close
+ End If ' non blank variable name
+Next inttemp
+  
+interpNMPLExt:
+interp_thing = lngPK
+  Exit Function
+End Function
+Public Function getManualMatchStats()
+  'function writes stats to Z_VB_reconcile_FldsChoose
+  '12/20/2003 MTL
+  '09-Jan-2004 MTL : this part not phased into use, yet: errors still checked with manual queries.
+  Dim rstWriteStatsMULT As New ADODB.Recordset
+  rstWriteStatsMULT.Open "SELECT * from Z_VB_reconcile_fldschoose", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  Dim strDestTbl As String
+  
+  With rstWriteStatsMULT
+   Do Until .EOF
+    Call getOneManualMatchStat(!LoadVarName)
+   
+   .MoveNext
+   Loop 'EOF rstwriteStats
+  End With
+End Function
+
+
+Public Function getOneManualMatchStat(strLoadName As String, Optional strWhatToRet As Long) As Long
+  'function writes one stat to Z_VB_reconcile_FldsChoose
+  '12/20/2003 MTL
+  Dim rstWriteStats As New ADODB.Recordset
+  rstWriteStats.Open "SELECT * from Z_VB_reconcile_fldschoose WHERE loadVarName = """ & strLoadName & """;", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  Dim strDestTbl As String
+  
+  With rstWriteStats
+    
+    strDestTbl = !VBTableName
+    'open temp rst to figure out number of recs, unique, matched, not matched
+    Dim rstTemp As New ADODB.Recordset, inttemp As Integer, colFlds As New Collection, strSQL As String ' strSQL is for SQL to calc number of recs
+    Dim strTbl As String, strFld As String, strTemp As String, strSQLU As String, strSQLm As String, strSQLnm As String
+    Set colFlds = csv_parseCSVstring(!ListOfLoadFlds)
+    strSQL = ""
+    strSQLU = ""
+    strSQLm = ""
+    strSQLnm = ""
+    For inttemp = 1 To colFlds.Count
+      strTemp = colFlds(inttemp) 'tbl.fld
+      strTbl = Left(strTemp, InStr(strTemp, ".") - 1) 'tbl
+      strFld = Right(strTemp, Len(strTemp) - InStr(strTemp, ".")) 'fld
+      'all recs
+      strSQL = strSQL & IIf(inttemp > 1, " union all ", "") & " SELECT [" & strFld & "] FROM [" & strTbl & "] " _
+      & " WHERE ([" & strFld & "] is not null)" & " group by [" & strFld & "];"
+'unique
+      strSQLU = strSQLU & IIf(inttemp > 1, " union ", "") & " SELECT [" & strFld & "] FROM [" & strTbl & "] " _
+      & " WHERE ([" & strFld & "] is not null)" & " group by [" & strFld & "];"
+'matching unique
+      strSQLm = strSQLm & IIf(inttemp > 1, " union ", "") & " SELECT [" & strFld & "] FROM [" & strTbl & "] " _
+      & " WHERE (" & " ([" & strFld & "] is not null) AND " _
+      & " interp_thing(""" & strDestTbl & """,nz([" & strFld & "]))>0" & ") group by [" & strFld & "];"
+'not matching unique
+      strSQLnm = strSQLnm & IIf(inttemp > 1, " union ", "") & " SELECT [" & strFld & "] FROM [" & strTbl & "] " _
+      & " WHERE (" & " ([" & strFld & "] is not null) AND " _
+      & " interp_thing(""" & strDestTbl & """,nz([" & strFld & "]))<=0" & ")  group by [" & strFld & "];"
+      
+    Next inttemp
+    
+    'open New qry with all values: count recs
+    'Debug.Print "ALL:"; strSQL
+    rstTemp.Open strSQL, CurrentProject.Connection, adOpenStatic, adLockReadOnly, adCmdText
+    !totalValues = rstTemp.RecordCount
+    rstTemp.Close
+    
+   ' Debug.Print "U:"; strSQLU
+    rstTemp.Open strSQLU, CurrentProject.Connection, adOpenStatic, adLockReadOnly, adCmdText
+    !uniqueValues = rstTemp.RecordCount
+    rstTemp.Close
+   ' Debug.Print "M:"; strSQLm
+    rstTemp.Open strSQLm, CurrentProject.Connection, adOpenStatic, adLockReadOnly, adCmdText
+    !uniqueValuesMatch = rstTemp.RecordCount
+    rstTemp.Close
+  '  Debug.Print "NM:"; strSQLnm
+    rstTemp.Open strSQLnm, CurrentProject.Connection, adOpenStatic, adLockReadOnly, adCmdText
+    !uniqueValuesNotMatch = rstTemp.RecordCount
+    rstTemp.Close
+    If Not (IsNull(!errorIDs)) Then
+      Dim lngErrsTemp As Long
+      lngErrsTemp = checkForMultErrors(!errorIDs)
+      Debug.Print "errors found: " & lngErrsTemp
+      !errorCount = lngErrsTemp
+    Else
+      !errorCount = Null
+    End If
+    .Update
+  End With
+End Function
+
+Public Function getCoverValueFromMethIndx(lngCoverMethodID As Long, strIndex As String) As Variant
+  'function gets a cover Value (percent) from a cover Index using a coverMethod passed to it
+  'MTL 08-JAN-2004
+  Dim rstGetVal As New ADODB.Recordset
+  rstGetVal.Open "Select * from coverIndex where coverMethod_ID=" & lngCoverMethodID & " AND coverCode=" & SQLizeTxt(strIndex), _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstGetVal.EOF Then
+    'can't get value: set to -100 in hopes to catch it
+    getCoverValueFromMethIndx = Null
+  Else
+    getCoverValueFromMethIndx = rstGetVal!coverPercent
+  End If
+End Function
+
+Public Function getCoverCodeFromMethodValue(lngCoverMethodID As Long, dblValue As Double) As Variant
+  'function does opposite of getCoverValueFromMethIndx
+  'gets cover code given method and value
+  'MTL 11-Aug-2004
+  Dim rstGetVal As New ADODB.Recordset
+  rstGetVal.Open "Select * from coverIndex where coverMethod_ID=" & lngCoverMethodID & " AND coverPercent=" & dblValue, _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstGetVal.EOF Then
+    'can't get value: set to -100 in hopes to catch it
+    getCoverCodeFromMethodValue = Null
+  Else
+    getCoverCodeFromMethodValue = Nz(rstGetVal!CoverCode, "")
+  End If
+End Function
+
+Public Function getCoverValueFromPlotIndx(strPlot As String, strIndex As String) As Variant
+  'function gets a cover Value (percent) from a cover Index using a plot name
+  'MTL 09-JAN-2004
+  'first attempt to find cover Method from plot data:
+  Dim lngMethod As Long
+  lngMethod = getvalFrmSQL("select M_CoverMethod from append_C_getNewPKs WHERE authorPlotCode=""" & strPlot & """;")
+  getCoverValueFromPlotIndx = getCoverValueFromMethIndx(lngMethod, strIndex)
+End Function
+
+Public Function getValidStratumIndexs(lngStratumMeth As Long) As String
+  'returns comma separated list of stratum indexes
+  Dim rstGetSt As New ADODB.Recordset
+  rstGetSt.Open "select stratumIndex from stratumType where stratumMethod_ID= " & lngStratumMeth, _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  Dim strRet As String
+  With rstGetSt
+  Do Until .EOF
+    strRet = strRet & IIf(strRet = "", "", ", ") & !stratumIndex
+  .MoveNext
+  Loop
+  End With
+  getValidStratumIndexs = strRet
+End Function
+
+Public Function getValidSIFrmPlot(strPlotCode As String) As String
+  'returns comma separated list of stratum indexes
+  Dim lngSM As Long
+  lngSM = getvalFrmSQL("select M_stratumMethod from append_C_getNewPKs where authorplotcode=" & SQLizeTxt(strPlotCode))
+  getValidSIFrmPlot = getValidStratumIndexs(lngSM)
+End Function
+
+
+Public Function getValidCoverCodes(lngCvrMeth As Long) As String
+  'returns comma separated list of stratum indexes
+  Dim rstGetSt As New ADODB.Recordset
+  rstGetSt.Open "select coverCode from coverIndex where coverMethod_ID= " & lngCvrMeth, _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  Dim strRet As String
+  With rstGetSt
+  Do Until .EOF
+    strRet = strRet & IIf(strRet = "", "", ", ") & !CoverCode
+  .MoveNext
+  Loop
+  End With
+  getValidCoverCodes = strRet
+End Function
+
+Public Function getValidCovCodesFrmPlot(strPlotCode As String) As String
+  'returns comma separated list of stratum indexes
+  Dim lngCM As Long
+  lngCM = getvalFrmSQL("select M_coverMethod from append_C_getNewPKs where authorplotcode=" & SQLizeTxt(strPlotCode))
+  getValidCovCodesFrmPlot = getValidCoverCodes(lngCM)
+End Function

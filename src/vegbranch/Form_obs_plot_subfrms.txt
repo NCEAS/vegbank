@@ -1,0 +1,81 @@
+Option Compare Database
+Option Explicit
+
+Private Sub CmdCreateNoteObs_Click()
+   On Error GoTo CmdCreateNoteObs_Err
+    If Nz(Forms!obs_plot!OBSERVATION_ID, 0) = 0 Then
+      msgBox "Must have a valid observation!"
+      Exit Sub
+    End If
+    DoCmd.OpenForm "noteLink", acNormal, "", "", acAdd, acNormal
+    ' sets table name to make the note about
+    
+    Forms!noteLink!TableName = "observation"
+    Forms!noteLink!AttributeName.Locked = False
+    Forms!noteLink!TableName.Locked = True
+    Forms!noteLink!tableRecord.Locked = True
+    ' sets PK of observation to notelink.tablerecord
+    Forms!noteLink!tableRecord = Forms!obs_plot!OBSERVATION_ID
+    'sets combo box list to select only from current table
+    Forms!noteLink!AttributeName.RowSource = "SELECT [Z_FieldDescription].[FieldName] FROM Z_FieldDescription WHERE " & _
+      "((TableName='observation')) " & _
+      " GROUP BY [Z_FieldDescription].[FieldName] ORDER BY [Z_FieldDescription].[FieldName];"
+
+CmdCreateNoteObs_Exit:
+    Exit Sub
+
+CmdCreateNoteObs_Err:
+    msgBox Error$
+    Resume CmdCreateNoteObs_Exit
+
+End Sub
+
+
+Private Sub cmdCreatePlotNote_Click()
+   On Error GoTo CmdCreateNoteplt_Err
+    DoCmd.OpenForm "noteLink", acNormal, "", "", acAdd, acNormal
+    ' sets table name to make the note about
+    
+    Forms!noteLink!TableName = "plot"
+    Forms!noteLink!AttributeName.Locked = False
+    Forms!noteLink!TableName.Locked = True
+    Forms!noteLink!tableRecord.Locked = True
+    ' sets PK of observation to notelink.tablerecord
+    Forms!noteLink!tableRecord = Forms!obs_plot!plot_id
+    'sets combo box list to select only from current table
+    Forms!noteLink!AttributeName.RowSource = "SELECT [Z_FieldDescription].[FieldName] FROM Z_FieldDescription WHERE " & _
+      "((TableName='plot')) " & _
+      " GROUP BY [Z_FieldDescription].[FieldName] ORDER BY [Z_FieldDescription].[FieldName];"
+
+CmdCreateNoteplt_Exit:
+    Exit Sub
+
+CmdCreateNoteplt_Err:
+    msgBox Error$
+    Resume CmdCreateNoteplt_Exit
+
+End Sub
+
+Private Sub ViewObsNotes_Click()
+On Error GoTo ViewObs_err
+DoCmd.OpenForm "noteLink", acNormal, "", "[tableName]=""observation"" And [tableRecord]=[Forms]![obs_plot]![observation_ID]", acReadOnly, acNormal
+ViewObs_Exit:
+    Exit Sub
+
+ViewObs_err:
+    msgBox Error$
+    Resume ViewObs_Exit
+End Sub
+
+Private Sub ViewPlotNotes_Click()
+On Error GoTo Viewplt_err
+DoCmd.OpenForm "noteLink", acNormal, "", "[tableName]=""plot"" And [tableRecord]=[Forms]![obs_plot]![plot_ID]", acReadOnly, acNormal
+Viewplt_Exit:
+    Exit Sub
+
+Viewplt_err:
+    msgBox Error$
+    Resume Viewplt_Exit
+End Sub
+
+

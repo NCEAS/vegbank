@@ -1,0 +1,53 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command15_Click()
+  Call cust_NPS_showStemErrID(Nz(Me.STEMID, 0))
+End Sub
+
+Private Sub Command2_Click()
+  On Error GoTo errDel
+  Me.errResolved = True
+  Me.Refresh
+  Me.Recalc
+exitthis:
+  Exit Sub
+errDel:
+  msgBox "Error trying to resolve this: " & Err.Description
+  Resume exitthis
+End Sub
+
+Private Sub Command5_Click()
+  On Error GoTo errDel
+  If IsNumeric(Me.sizeToAdd) Then
+  If Me.confirmNew Then
+   If Not AreYouSure("You are about to add a stem record in the loading table: Stem Data. " & Chr(13) _
+    & "Info-- plot: " & Me.authorplotcode & ", plant:" & Me.plantCode & ", stratum:" & Me.stratumIndex & ", dbh:" & Me.sizeToAdd _
+    & Chr(13) & "Continue?" _
+    & Chr(13) & "Press YES to add the record, NO to cancel.") Then
+    GoTo exitthis
+   End If
+  End If
+    Me.Refresh
+    DoCmd.RunSQL "insert into Z_USER_E_StemData (authorPlotCode, plantCode, stratumIndex, stemDiameter, stemCount)" _
+      & " SELECT " & SQLizeTxt(Me.authorplotcode) & "," & SQLizeTxt(Me.plantCode) & "," _
+      & IIf(IsNull(Me.stratumIndex), "null", SQLizeTxt(Nz(Me.stratumIndex))) & "," & _
+      SQLizeTxt(Me.sizeToAdd) & ",1"
+    Me.Refresh
+    On Error Resume Next
+    Me.Recalc
+    Forms!cust_nps_stemErrResolve.Recalc
+    
+    If Me.resolveOnAdd Then
+      Call Command2_Click
+    End If
+  Else
+    'non-numeric
+    msgBox "please enter a numeric value to add for stem size"
+  End If
+exitthis:
+  Exit Sub
+errDel:
+  msgBox "Error trying to delete the stem record: " & Err.Description
+  Resume exitthis
+End Sub

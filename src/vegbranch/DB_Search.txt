@@ -1,0 +1,1902 @@
+Option Compare Database
+Option Explicit
+Const debugVal = 0
+Const intMakeSmaller = 39  'number of chars that, if exceeded, results in smaller font for tbl cell
+'Const strStylesheetLoc = "file:///C:/vegbank/sandbox/vegbank/web/includes/default.css"
+Const strStylesheetLoc = "/vegbank/includes/default.css"
+Global Const constVegBranchAppTitle = "VegBranch"
+Global Const globaldebug = 1
+Global Const conEasyFormat = "__#easyImport@"
+'name of simpleImport format for W_Convert_CSVColNames
+
+Public Function getConEasyFormat() As String
+  getConEasyFormat = conEasyFormat
+End Function
+
+Public Function ConstFormCarriageRet() As String
+   ConstFormCarriageRet = Chr(13) & Chr(10)
+End Function
+
+
+Public Function GetSQLSearchStr(strFieldName As String, strCrit As String, strAndOr As String) As String
+''function is passed a string like "cat animal car"
+''--and parses this into words and returns a SQL WHERE statment that filters for only matches
+''-- ie " ((field1 is like "*cat*") and (field1 is like "*animal*") and (field1 is like "*car*"))
+On Error GoTo getSQLErr
+Dim strWHERE As String
+strCrit = Trim(strCrit)
+'if field name is not passed then exit
+If (strFieldName) = "" Then GoTo exitGetSQL
+'if strANDor is not 'and' and is not 'or' then exit
+If Trim(strAndOr) <> "and" And Trim(strAndOr) = "or" Then GoTo exitGetSQL
+'if criteria is blank then where statement is just  ""
+If Nz(Len(Trim(strCrit)), 0) < 1 Then GoTo exitGetSQL
+
+'check to see if passed in quotes, if so treat literally, not auto-adding wildcards
+If Left(strCrit, 1) = "'" And Right(strCrit, 1) = "'" Then
+  'literal string, completely
+  strWHERE = "([" & strFieldName & "]=" & strCrit & ")"
+  GoTo exitGetSQL
+End If
+If Left(strCrit, 1) = """" And Right(strCrit, 1) = """" Then
+  'literal string, unless wildcards within statement
+  If InStr(strCrit, "*") > 0 Then
+      strWHERE = "([" & strFieldName & "] like " & strCrit & ")"
+  Else
+    strWHERE = "([" & strFieldName & "]=" & strCrit & ")"
+  End If
+  GoTo exitGetSQL
+End If
+
+
+strWHERE = "("
+Dim lngInt As Long, lngCount As Long
+lngCount = 0
+For lngInt = 1 To Len(strCrit)
+  'count number of spaces
+  If Mid(strCrit, lngInt, 1) = " " Then lngCount = lngCount + 1
+Next lngInt
+'Debug.Print lngCount & " spaces = " & lngCount + 1 & " words"
+Dim lastSpace As Long, strOneWord As String, endPos As Long, intNew As Integer
+lastSpace = 0
+For intNew = 1 To lngCount + 1
+  'write SQL WHERE statment
+  endPos = InStr(lastSpace + 1, strCrit, " ", vbTextCompare)
+  If endPos = 0 Then endPos = Len(strCrit) + 1
+  strOneWord = Mid(strCrit, lastSpace + 1, (endPos - lastSpace) - 1)
+  lastSpace = endPos
+  'Debug.Print strOneWord & "(" & intNew & ")"
+  If Nz(Len(strOneWord), 0) > 0 Then
+    'if word is not empty or null then add criteria to SQL
+    If strWHERE <> "(" Then strWHERE = strWHERE & strAndOr
+    strWHERE = strWHERE & " ([" & strFieldName & "] Like ""*" & strOneWord & "*"") "
+  End If
+Next intNew
+strWHERE = strWHERE & ")"
+
+exitGetSQL:
+GetSQLSearchStr = strWHERE
+Exit Function
+getSQLErr:
+  msgBox "Error in writing filter criteria.  Enclose all in quotes or use no quotes.", Err.Description
+  GetSQLSearchStr = ""
+  Resume exitGetSQL
+End Function
+
+Public Function openProcessingPos(strProcWhat As String, Optional strTips As String)
+  'opens processing form and sets current position at 0 %
+  DoCmd.OpenForm "Processing"
+  DoCmd.Restore
+  Forms!Processing!ChangeWidthBox.Width = 1
+  Forms!Processing!ProcessingWhat = strProcWhat
+'  Forms!Processing!ProcessingWhat.SizeToFit
+  Forms!Processing!start = Now()
+  Forms!Processing!nowPerc = 0
+  Forms!Processing!tips = strTips
+'  Forms!Processing!tips.SizeToFit
+  Forms!Processing.Repaint
+  
+End Function
+
+
+Public Function UpdateProcessingPosition(lngVal As Long, lngGrain As Long)
+'updates processing form to allow user to see that progress is taking place
+'lngVal is a percent of the total work to be done
+'lngGrain is how often the form will update.  The smaller the grain, the more often the updates
+On Error GoTo ErrUpdateProcPos
+
+'adjust the grain depending on how quickly progress is going (update every 15 sec min)
+   If (Now() - IIf(IsNull(Forms!Processing!Now), Forms!Processing!start, Forms!Processing!Now)) * 24 * 60 * 60 > 15 Then
+      lngGrain = -1
+   End If
+   
+If (lngVal - Forms!Processing!nowPerc) < lngGrain Then
+  Exit Function
+End If
+If lngVal > 100 Then lngVal = 100
+If lngVal < 0 Then lngVal = 0
+  Dim lngInt As Long
+  With Forms!Processing
+    'change blue box length (blue = completed bar)
+    lngInt = Forms!Processing!BackBox.Width
+    !ChangeWidthBox.Width = lngInt * lngVal / 100
+    !Now = Now()
+    !nowPerc = lngVal
+    'calculate estimated end point
+    If lngVal > 0 Then
+       !End = !start + ((!Now - !start) / (lngVal / 100))
+       'calculate time left
+       Dim lngDaysLeft As Double
+       lngDaysLeft = !End - !Now
+       
+       Dim intHrs, intMin, intSec As Long
+       intHrs = Int(lngDaysLeft * 24)
+       intMin = Int((lngDaysLeft * 24 - intHrs) * 60)
+       intSec = Int((((lngDaysLeft * 24 - intHrs) * 60) - intMin) * 60)
+       If intMin = 0 And intSec = 0 Then intSec = 1
+       !TimeLeft = IIf(intHrs > 0, intHrs & ":", "") & _
+           IIf(intMin < 10, "0", "") & intMin & ":" & IIf(intSec < 10, "0", "") & intSec
+    End If
+    
+    .Repaint
+   End With
+    If lngVal = 100 Then
+      DoCmd.Close acForm, "Processing", acSaveYes
+    End If
+Exit Function
+ErrUpdateProcPos:
+If lngVal <> 100 Then Debug.Print "UpdateProcessingPosition > error at " & Now() & "  (" & lngVal & ")"
+End Function
+
+
+Private Function openProcessingPosX(strProcWhat As String, Optional strTips As String) As String
+  'opens processing form and sets current position at 0 % : returns name of new form to use
+  Dim frmNew As Form
+  Dim strName As String
+  strName = getNewFrmName(definePrefix("tempProcessingForms"), "")
+  DoCmd.CopyObject , strName, acForm, "processing"
+  DoCmd.OpenForm strName
+  DoCmd.Restore
+  Set frmNew = Forms(strName)
+  'DoCmd.Restore
+  With frmNew
+  !ChangeWidthBox.Width = 1
+  !ProcessingWhat = strProcWhat
+  !start = Now()
+  !nowPerc = 0
+  !tips = strTips
+
+  .Repaint
+  End With
+   openProcessingPosX = strName
+End Function
+
+
+
+Public Function UpdateProcessingPosX(lngVal As Long, lngGrain As Long, strName As String, _
+  Optional blnInit As Boolean, Optional strProcWhat As String, Optional strTips As String) As String
+'updates processing form to allow user to see that progress is taking place
+'lngVal is a percent of the total work to be done
+'lngGrain is how often the form will update.  The smaller the grain, the more often the updates
+'blnInit intializes a new form
+'strNAme is name of form, which is returned by this function if blnInit
+If blnInit Then 'call to open the form: ignore all parameters before blnInit!
+  UpdateProcessingPosX = openProcessingPosX(strProcWhat, strTips)
+  GoTo ExitThisFCN
+End If
+On Error GoTo ErrUpdateProcPos
+Dim frmCurr As Form
+Set frmCurr = Forms(strName)
+'adjust the grain depending on how quickly progress is going (update every 15 sec min)
+   If (Now() - IIf(IsNull(frmCurr!Now), frmCurr!start, frmCurr!Now)) * 24 * 60 * 60 > 15 Then
+      lngGrain = -1
+   End If
+   
+If (lngVal - frmCurr!nowPerc) < lngGrain Then
+  Exit Function
+End If
+If lngVal > 100 Then lngVal = 100
+If lngVal < 0 Then lngVal = 0
+  Dim lngInt As Long
+  With frmCurr
+    'change blue box length (blue = completed bar)
+    lngInt = !BackBox.Width
+    !ChangeWidthBox.Width = lngInt * lngVal / 100
+    !Now = Now()
+    !nowPerc = lngVal
+    'update tips or name if changed:
+    If strProcWhat <> "" Then !ProcessingWhat = strProcWhat
+    If strTips <> "" Then !tips = strTips
+    
+    'calculate estimated end point
+    If lngVal > 0 Then
+       !End = !start + ((!Now - !start) / (lngVal / 100))
+       'calculate time left
+       Dim lngDaysLeft As Double
+       lngDaysLeft = !End - !Now
+       
+       Dim intHrs, intMin, intSec As Long
+       intHrs = Int(lngDaysLeft * 24)
+       intMin = Int((lngDaysLeft * 24 - intHrs) * 60)
+       intSec = Int((((lngDaysLeft * 24 - intHrs) * 60) - intMin) * 60)
+       If intMin = 0 And intSec = 0 Then intSec = 1
+       !TimeLeft = IIf(intHrs > 0, intHrs & ":", "") & _
+           IIf(intMin < 10, "0", "") & intMin & ":" & IIf(intSec < 10, "0", "") & intSec
+    End If
+    
+    .Repaint
+   End With
+    If lngVal = 100 Then
+      DoCmd.Close acForm, strName, acSaveNo
+      'delete this form
+      If strName Like definePrefix("tempProcessingForms") & "*" Then
+       ' Debug.Print "deleting!: " & strName
+        DoCmd.DeleteObject acForm, strName
+      End If
+    End If
+ExitThisFCN:
+Exit Function
+ErrUpdateProcPos:
+If lngVal <> 100 Then Debug.Print "UpdateProcessingPosX > error at " & Now() & "  (" & lngVal & ")" & Err.Description
+End Function
+
+
+
+Public Function AreYouSure(strMessage As String)
+  'asks user to confirm something with a message box
+  Dim intResp As Integer
+  intResp = msgBox(strMessage, vbYesNo + vbQuestion, "Are you sure?")
+  If intResp = vbYes Then
+     AreYouSure = True
+  Else
+     AreYouSure = False
+  End If
+End Function
+
+
+
+Public Function GetSumValof(strTable As String, strPK As String, strWhat As String, dblValIfErr As Double) As Double
+'function is like a SAS Proc Means, analyzes some variable of a table on the current db and returns value
+'--strWhat can be max, min, count, sum, first*, last*
+'--* must be numeric field for first or last
+On Error GoTo errGetPK
+Dim cnnLocal As Connection
+Dim rstGetVal As New ADODB.Recordset
+Set cnnLocal = CurrentProject.Connection
+Debug.Print "Searching: " & "SELECT " & strWhat & "([" & strPK & "]) AS GotValue FROM [" & strTable & "];"
+rstGetVal.Open "SELECT " & strWhat & "([" & strPK & "]) AS GotValue FROM [" & strTable & "];", _
+  cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+
+If rstGetVal.EOF Then
+  GetSumValof = dblValIfErr
+Else
+  GetSumValof = Nz(rstGetVal!GotValue, dblValIfErr)
+End If
+Exit Function
+errGetPK:
+  GetSumValof = dblValIfErr
+
+End Function
+
+Public Function TableExist(strTblName As String) As Boolean
+  'checks to see if a tableDef name exists in current db
+ If debugVal > 0 Then Debug.Print "tableExist>> init. " & Now() & " for table:" & strTblName
+  On Error GoTo Terr
+  Dim tdfCheck As Object
+  Dim dbs As Object
+  Set dbs = CurrentDb
+  Set tdfCheck = dbs.tabledefs(strTblName)
+  
+  TableExist = True
+  'Debug.Print strTblName & " exists"
+exitthis:
+Set dbs = Nothing
+  Set tdfCheck = Nothing
+ If debugVal > 0 Then Debug.Print "tableExist>> end. " & Now() & " for table:" & strTblName
+   Exit Function
+Terr:
+  TableExist = False
+  Resume exitthis
+End Function
+
+Public Function QueryExist(strQryName As String) As Boolean
+  'checks to see if a queryDef name exists in current db
+  On Error GoTo Qerr
+  Dim qryCheck As Object
+  Dim dbs As Object
+  Set dbs = CurrentDb
+  Set qryCheck = dbs.querydefs(strQryName)
+    
+      QueryExist = True
+      'Debug.Print strTblName & " exists"
+exitthis:
+      Exit Function
+Qerr:
+  QueryExist = False
+  Resume exitthis
+End Function
+
+
+
+
+
+Public Function fieldExistOnTbl(strFld As String, strTbl As String, Optional strDBPath As String) As Boolean
+''returns true if field is found on table/qry def
+On Error GoTo failed
+Dim rstME As New ADODB.Recordset
+rstME.Open "SELECT [" & strFld & "] FROM [" & strTbl & "] " & IIf(strDBPath = "", "", " IN '" & strDBPath & "'") & ";", _
+  CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+rstME.Close
+'success!
+fieldExistOnTbl = True
+exitFcn:
+Exit Function
+failed:
+fieldExistOnTbl = False
+Resume exitFcn
+End Function
+
+
+Public Function fieldExistOnTbl_original(strFld As String, strTbl As String) As Boolean
+''returns true if field is found on table def
+  Dim tblDef As Object, dbs As Object
+  Set dbs = CurrentDb
+  'default is false
+  fieldExistOnTbl = False
+  If TableExist(strTbl) Then
+    Dim intLoop As Long
+    With dbs.tabledefs(strTbl)
+    For intLoop = 0 To .Fields.Count - 1
+     ' Debug.Print intLoop & " " & .Fields(intLoop).Name
+      If .Fields(intLoop).Name = strFld Then
+        'field name is found
+        fieldExistOnTbl = True
+        Exit Function
+      End If
+    Next intLoop
+    End With
+  Else
+    'table does not exist, is an error, but field dnE
+    Debug.Print "Table " & strTbl & " not found!"
+  End If
+  
+End Function
+
+
+
+
+Function SortColText(colFile As Collection) As Collection
+''returns sorted collection
+  Dim colOrdFile As New Collection
+  Dim intLoop As Long
+  For intLoop = 1 To colFile.Count
+      Dim strFile As String
+      strFile = colFile(intLoop)
+    If colOrdFile.Count >= 1 Then
+      'find where the current string belongs
+      Dim LngOrdCount As Long, int2 As Long
+      LngOrdCount = colOrdFile.Count
+      For int2 = 1 To LngOrdCount
+        If strFile < colOrdFile(int2) Then
+          ''add new string before current int2 Pos
+          colOrdFile.Add strFile, , int2
+          GoTo AnotherFile
+        End If
+      Next int2
+      If strFile > colOrdFile(LngOrdCount) Then
+        ''has not been added
+        colOrdFile.Add strFile
+      End If
+AnotherFile:
+    Else
+      colOrdFile.Add strFile
+    End If
+  Next intLoop
+  
+  'For intLoop = 1 To colOrdFile.Count
+   ' Debug.Print colOrdFile(intLoop)
+  'Next intLoop
+  Set SortColText = colOrdFile
+End Function
+
+
+
+
+Public Function dbMisc_GetPrevNext(strNextPrev As String, strTable As String, _
+       strFld As String, lngCurrVal As Double) As Double
+  'moveNext ("next") or movePrevious (not "next") on a table for a field, unfiltering if filtered
+  dbMisc_GetPrevNext = lngCurrVal 'default to current Val
+  On Error GoTo ErrGetPrevNExt
+  
+  Dim cnnLoc As Connection
+  Dim rstCurr As New ADODB.Recordset
+  Set cnnLoc = CurrentProject.Connection
+  Dim strMinMax As String, strGtLt As String
+  If strNextPrev = "Next" Then
+    ''for SQL to select the min of everything g.t. the current value
+    strMinMax = "min"
+    strGtLt = ">"
+  Else
+    ''for SQL to select the max of everything l.t. the current value
+    strMinMax = "max"
+    strGtLt = "<"
+  End If
+  'opens recordset to find next or previous record
+  rstCurr.Open "SELECT " & strMinMax & "([" & strFld & "]) as NewLine FROM [" & strTable & _
+     "] WHERE [" & strFld & "] " & strGtLt & lngCurrVal, _
+     cnnLoc, adOpenStatic, adLockReadOnly, adCmdText
+  If Not rstCurr.EOF Then
+    If Not IsNull(rstCurr!NewLine) Then
+      dbMisc_GetPrevNext = rstCurr!NewLine
+    End If
+  End If
+  Exit Function
+ErrGetPrevNExt:
+  'print that error has occurred, old value should be passed
+  Debug.Print "dbMisc_GetPrevNext>>  ERROR in getting Prev or NExt : " & strNextPrev & " : " & _
+     strTable & " . " & strFld & " =  " & lngCurrVal
+End Function
+
+
+
+Public Function substTextForText_once(ByVal s As Variant, ByVal a As String, ByVal n As String, _
+                Optional ByVal c As Integer, Optional ByVal blnWholeWrd As Boolean) As Variant
+         ' This function changes all substrings "a" in string "s"
+         ' to "n." The parameter "c" has the same function as in the
+         ' InStr() function.
+         'Debug.Print a
+         'Debug.Print n
+         Dim temp As String, pos As Integer
+         temp = ""
+         If IsNull(s) Then
+            substTextForText_once = Null
+            Exit Function
+         End If
+         If a = "" Or s = "" Then
+            substTextForText_once = s
+            Exit Function
+         End If
+         pos = InStr(1, s, a, c)
+         While pos > 0 And pos <= Len(s)
+            If blnWholeWrd Then ''make sure we are matching a word and not just part of a word
+              Dim strB4 As String, strAft As String
+              'check before string to replace
+              If pos = 1 Then
+                strB4 = " "
+              Else
+                strB4 = Mid$(s, pos - 1, 1)
+                If debugVal > 0 Then Debug.Print "substTextForText_once>> wholewrd b4:" & strB4
+                If IsStringLettNumb(strB4) Then
+                   strB4 = "N" ''is a letter or number - don't replace
+                Else
+                   strB4 = " " ''ok to replace
+                End If
+              End If
+              'check after string to replace
+              If pos + Len(a) - 1 = Len(s) Then
+                'the position plus the search string takes us to the end of the word
+                strAft = " "
+              Else
+                strAft = Mid$(s, pos + Len(a), 1)
+                If debugVal > 0 Then Debug.Print "substTextForText_once>> wholewrd aft<" & strAft
+                If IsStringLettNumb(strAft) Then
+                   strAft = "N" ''is a letter or number - don't replace
+                Else
+                   strAft = " " ''ok to replace
+                End If
+              End If
+              If strAft = " " And strB4 = " " Then
+                'replace
+                temp = temp & Mid$(s, 1, pos - 1) & n
+                s = Right$(s, Len(s) - pos - Len(a) + 1)
+                pos = InStr(1, s, a, c)
+              Else
+                temp = temp & Mid$(s, 1, pos)
+                s = Right$(s, Len(s) - pos)
+                pos = InStr(1, s, a, c)
+              End If
+            Else ''not just matching whole words, ok to replace
+              temp = temp & Mid$(s, 1, pos - 1) & n
+              s = Right$(s, Len(s) - pos - Len(a) + 1)
+              pos = InStr(1, s, a, c)
+            End If
+            
+         Wend
+         substTextForText_once = temp & s
+End Function
+
+
+Public Function IsStringLettNumb(strStr As String) As Boolean
+  Dim inttemp As Integer
+  'get ASCII value of string (first letter)
+  If strStr = "" Then
+    IsStringLettNumb = False
+    Debug.Print "YIKES!:"
+    Exit Function
+  End If
+  inttemp = Asc(strStr)
+  If (((inttemp >= 65) And (inttemp <= 90)) Or (inttemp = 95) Or (inttemp >= 97 And inttemp <= 122) _
+                   Or (inttemp >= 48 And inttemp <= 57)) Then ''is a number or letter or (_)
+     IsStringLettNumb = True
+     Else
+     IsStringLettNumb = False
+  End If
+End Function
+
+Public Function isAlpha(ByVal strTemp As String) As Boolean
+  'sees if string is all alpha (not numeric)
+  isAlpha = (compressChar(strTemp, "abcdefghijklmnopqrstuvwxyz")) = ""
+End Function
+Public Function isAlphaNumeric(ByVal strTemp As String) As Boolean
+  'sees if string is all alphanumeric
+  isAlphaNumeric = (compressChar(strTemp, "1234567890abcdefghijklmnopqrstuvwxyz")) = ""
+End Function
+
+Public Function compressChar(ByVal strMain As String, ByVal strRemoveChars As String) As String 'not case sens
+  'function removes characters from string
+  Dim inttemp As Long
+  For inttemp = 1 To Len(strRemoveChars)
+    strMain = substTextForText(strMain, Mid(strRemoveChars, inttemp, 1), "")
+  Next inttemp
+  compressChar = strMain
+End Function
+
+Public Function substTextForText(ByVal strSource As String, ByVal strFind As String, ByVal strReplace As String) As String
+'function takes a string (strSource), searches it for strFind
+ ' and replaces strFind with strReplace
+ If strFind = strReplace Then GoTo reportAndExit
+ Dim intLoop As Integer, intWhere As Integer, intLenWhole As Integer, intLenfind As Integer
+  If (Nz(Len(strSource), 0) = 0) Or (Nz(Len(strSource), 0) = 0) Then
+   'MsgBox "A search element is 0, error!"
+   Exit Function
+ End If
+ If InStr(strReplace, strFind) <> 0 Then
+   msgBox "error, your replace element contains the search element!"
+   Exit Function
+ End If
+ intLenfind = Len(strFind)
+ intLoop = 0 'counter
+ 'Debug.Print strSource
+ Do Until InStr(strSource, strFind) = 0
+   intLoop = intLoop + 1
+   'instr does not = 0
+   intWhere = InStr(strSource, strFind)
+   intLenWhole = Len(strSource)
+   If intLenWhole = 0 Then GoTo Err0
+   strSource = Left(strSource, intWhere - 1) & strReplace & _
+    Right(strSource, intLenWhole - (intWhere + intLenfind) + 1)
+   'Debug.Print strSource
+   If intLoop / 500 = Int(intLoop / 500) Then
+     'got out of control somehow
+     Dim intGetAnswer As Integer
+     intGetAnswer = msgBox(intLoop & " iterations, not done, probably infinited loop.  Stop?", vbYesNo)
+     If intGetAnswer = vbYes Then
+       Exit Function
+     End If
+   End If
+ Loop
+   '"succeeded.  " & intloop & " replaced.  Now is:" & Chr(13) & strSource
+reportAndExit:
+   substTextForText = strSource
+ Exit Function
+Err0:  msgBox "length is somehow 0"
+End Function
+
+Public Function CountOccOf(ByVal strTxt As String, ByVal strChar As String) As Integer
+  ''function counts the occurrences of strChar (can be multiple characters) in strTxt
+    ''NOT CASE SENSITIVE
+  If strChar = "" Or strTxt = "" Then
+    CountOccOf = 0
+    Exit Function
+  End If
+  Dim strTemp As String
+  strTemp = strTxt
+  Dim intStart As Integer, intCount As Integer
+  intStart = 1
+  intCount = 0
+  Do Until InStr(intStart, strTxt, strChar, vbTextCompare) = 0
+    ''is found at least once
+    intCount = intCount + 1
+    intStart = InStr(intStart, strTxt, strChar, vbTextCompare) + Len(strChar)
+  Loop
+CountOccOf = intCount
+End Function
+
+Public Function GetItemFromColl(colGet As Collection, strKey As String) As Variant
+''function gets a key named item from a collection and returns "" if not found
+''useful for avoiding error trapping conflicts in larger functions
+ On Error GoTo notfound
+ GetItemFromColl = colGet(strKey)
+ Exit Function
+notfound:
+ 'couldn't find it
+' GetItemFromColl = ""
+End Function
+
+Public Function ItemOnColl(colGet As Collection, strKey As String) As Boolean
+''function says whether or not an item is on a collection, returning true if it's there
+''useful for avoiding error trapping conflicts in larger functions
+ On Error GoTo notfound
+ Dim temp As Variant
+ temp = colGet(strKey)
+ 'true if made this far
+ ItemOnColl = True
+ Exit Function
+notfound:
+ 'couldn't find it
+' GetItemFromColl = ""
+'error , not found
+ItemOnColl = False
+End Function
+
+Public Function GetPutVar(strWhat As String, strGetPut As String, Optional dteWhen As Variant) As Variant
+  'stores different static variables over course of VegBranch operation - resets when VegBranch starts
+     '''-- check to see if user "recently" did something
+     'store plantName_ID's from form, etc.
+ 'On Error GoTo WhenDoneErr
+    Static colTimes As New Collection
+    If colTimes.Count = 0 Then
+      colTimes.Add "nothing!!", "nothing!!"
+    End If
+    If strGetPut = "put" Then 'write time of this item
+      If ItemOnColl(colTimes, strWhat) Then
+        ''item already on collection, remove it
+         colTimes.Remove (strWhat)
+      End If
+         colTimes.Add (dteWhen), strWhat
+    End If 'put
+      'retreive
+     If ItemOnColl(colTimes, strWhat) Then
+       GetPutVar = colTimes(strWhat)
+    End If
+  Exit Function
+WhenDoneErr:
+  Debug.Print "WhenItWasLastDone >> Error! : " & Err.Description
+End Function
+
+Public Function EmptyCollection(colToEmpty As Collection)
+  Dim inttemp As Integer
+  For inttemp = 1 To colToEmpty.Count
+    colToEmpty.Remove (1)
+  Next
+End Function
+
+
+Public Function csv_parseCSVstring(strTxt As String, Optional strDelim As String, _
+   Optional blnDeQuote As Boolean, Optional blnParens As Boolean, Optional blnAllQuots As Boolean) As Collection
+  'function takes a delimited string (" as text qualifier ) and parses it according to delimiter
+  ''returning parsed values as a collection
+  'blnParens means that will not split a parenthetical set (or [] or {})
+  If strDelim = "" Then  'no delimiter passed, use default of comma
+     strDelim = ","
+  End If
+  Dim colTemp As New Collection, strTemp As String
+  strTemp = strTxt
+  ''2 length variables to see when we are finished
+  Dim lngLEn As Long, lngCurr As Long
+  lngLEn = Len(strTemp)
+  lngCurr = 0
+  Dim strRemaining As String '(remaining to be parsed)
+  
+  While lngCurr <= lngLEn  'while the current length taken is less than the total length of the str
+    strRemaining = Right(strTemp, lngLEn - lngCurr)
+    Dim strNewItem As String
+    strNewItem = csv_FindNextField(strRemaining, strDelim, blnParens, blnAllQuots)
+    ''add length of new item and delimiter to "done" length
+    lngCurr = lngCurr + Len(strNewItem) + Len(strDelim)
+    
+    If blnDeQuote Then
+      'If strNewItem has quotes, get rid of them:
+         If Left(strNewItem, 1) = """" And Right(strNewItem, 1) = """" And Len(strNewItem) > 1 Then
+           strNewItem = Right(strNewItem, Len(strNewItem) - 1)
+           strNewItem = Left(strNewItem, Len(strNewItem) - 1)
+         End If
+         'remove the double quotes in a field value
+         strNewItem = substTextForText_once(strNewItem, """""", """")
+    End If
+    colTemp.Add (strNewItem)
+
+  Wend
+Set csv_parseCSVstring = colTemp
+End Function
+
+Public Function SQLValuesToCSV(strSQL As String, Optional ByVal strQuotType As String, Optional ByVal intFieldsIncl As Integer) As String
+  'does the reverse, sort of, of csv_parsecsvstring:
+  'takes a sQL statement and loops through the first field in the statement for all recs and puts together a single string
+  'containing details
+  'ie table:
+  'field1,field2,field3
+  '1     , 8    ,   4
+  'bob   , joe  ,    pere
+  'strSQL = select field1 from table
+  'returns: "1","bob"
+  'strQuotType is either double or  singleQuot
+  'if intFieldIncl > 1, then rows delimited by ;, fields by ,
+  'defaults
+  On Error GoTo reTnothing
+  If strQuotType = "" Then strQuotType = "'"
+  If intFieldsIncl < 1 Then intFieldsIncl = 1
+  Dim rstTemp As New ADODB.Recordset, strRep As String, inttemp As Integer, strColDiv As String, strRecDiv As String, lngRec As Long
+  strColDiv = ","
+  lngRec = 1
+  If intFieldsIncl > 1 Then
+    strRecDiv = ";" 'divide records with what?
+  Else
+    strRecDiv = "," 'divide records with what?
+  End If
+  
+
+  rstTemp.Open strSQL, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+  'loop over recs
+  Do Until .EOF
+    'loop over fields
+    For inttemp = 0 To intFieldsIncl - 1
+      If inttemp > 0 Then strRep = strRep & strColDiv  'add col separator
+      strRep = strRep & SQLizeTxt(Nz(.Fields(inttemp)), strQuotType)
+    Next inttemp
+    'next rec #
+    strRep = strRep & strRecDiv 'include ; at end
+    lngRec = lngRec + 1
+  .MoveNext
+  Loop
+  End With
+  'done, if last char is strRecDiv, then remove it
+  If Right(strRep, Len(strRecDiv)) = strRecDiv Then
+    strRep = Left(strRep, Len(strRep) - Len(strRecDiv))
+  End If
+exitthis:
+  SQLValuesToCSV = strRep
+  Exit Function
+reTnothing:
+  Debug.Print "SQLValuesToCSV>> ERROR! " & Err.Description
+  strRep = ""
+  Resume exitthis
+End Function
+Public Function csv_FindNextField(strTxt As String, strDelim As String, Optional blnParens As Boolean, _
+   Optional blnAllQuots As Boolean) As String
+'function takes a string and find next delimiter (not embedded in quotes)
+'and returns the next field value
+Dim lngInt As Long, strOne As String, blnQuote As Boolean
+Dim intPar As Long, intBrack As Long, intSquig As Long, strQuot As String, strApos As String
+If blnAllQuots Then
+  strApos = "'" 'consider single quotes
+Else
+  strApos = """" 'do not consider single quotes
+End If
+''currently not inside quotes
+blnQuote = False
+
+For lngInt = 1 To Len(strTxt) - Len(strDelim) + 1
+   strOne = Mid(strTxt, lngInt, Len(strDelim))
+   If strOne = """" Or strOne = strApos Then 'turn on or off quotes
+        If blnQuote Then 'currently in quote
+          If strOne = strQuot Then 'end current quote
+            blnQuote = False
+            strQuot = ""
+          Else
+            'quotes are now on, and this is not a quote we consider
+          End If
+        Else 'start new quote
+          blnQuote = True
+          strQuot = strOne
+        End If
+   End If
+   If Not blnQuote And blnParens Then
+     'deal with on and off parens
+     If strOne = "(" Then intPar = intPar + 1
+     If strOne = ")" Then intPar = intPar - 1
+     If strOne = "[" Then intBrack = intBrack + 1
+     If strOne = "]" Then intBrack = intBrack - 1
+     If strOne = "{" Then intSquig = intSquig + 1
+     If strOne = "}" Then intSquig = intSquig - 1
+   End If
+   If (strOne = strDelim) And Not (blnQuote) And (Abs(intSquig) + Abs(intBrack) + Abs(intPar) = 0) Then
+     ''have delimiter not inside quotes or parens
+     csv_FindNextField = Left(strTxt, lngInt - 1) '(without delim)
+     Exit Function
+   End If
+Next lngInt
+''if we reached here, then there are no delimiters
+csv_FindNextField = strTxt
+End Function
+
+Public Function ChangeOptionsConfirm(blnUser As Boolean)
+  Dim blnDocDel As Boolean, blnActQry As Boolean, blnRecChg As Boolean
+  Dim blnUsrDocDel As Boolean, blnUsrActQry As Boolean, blnUsrRecChg As Boolean
+  'get what's happening now
+  blnDocDel = GetOption("Confirm Document Deletions")
+  blnActQry = GetOption("Confirm Action Queries")
+  blnRecChg = GetOption("Confirm Record Changes")
+  'get what user currently wants
+  blnUsrDocDel = GetSet_manual_option("RestoreConfirm_docDel")
+  blnUsrActQry = GetSet_manual_option("RestoreConfirm_actionQry")
+  blnUsrRecChg = GetSet_manual_option("RestoreConfirm_recChng")
+    
+  ' Static blnHaveOpt As Boolean
+  Dim strChangeMessage As String
+  strChangeMessage = "You may change how VegBranch does this with the options button on the main menu."
+  
+  If Not blnUser Then
+  'store default values for when Access Starts
+    ''get options, b/c we have not yet read them in
+    Call GetSet_manual_option("RestoreConfirm_recChng", True, blnRecChg)
+   ' Debug.Print blnRecChg
+    Call GetSet_manual_option("RestoreConfirm_docDel", True, blnDocDel)
+ '   Debug.Print blnDocDel
+    Call GetSet_manual_option("RestoreConfirm_actionQry", True, blnActQry)
+  '  Debug.Print blnActQry
+    
+    
+    'store settings as false, as per VegBranch requirements
+    If GetSet_manual_option("TurnOffConfirmations") = True Then
+      If blnDocDel Or blnActQry Or blnRecChg Then
+        SetOption "Confirm Action Queries", False
+        SetOption "Confirm Document Deletions", False
+        SetOption "Confirm Record Changes", False
+        msgBox "VegBranch has turned all confirmation settings off." & Chr(13) & strChangeMessage, , "VegBranch"
+      End If
+    End If
+  Else
+    If GetSet_manual_option("TurnOffConfirmations") = True Then
+      ''return to user settings
+     If blnUsrDocDel Or blnUsrActQry Or blnUsrRecChg Then
+      SetOption "Confirm Action Queries", blnUsrActQry
+      SetOption "Confirm Document Deletions", blnUsrDocDel
+      SetOption "Confirm Record Changes", blnUsrRecChg
+      msgBox "VegBranch has restored your confirmation settings to" _
+       & Chr(13) & "Record-Change-Confirm:" & IIf(blnUsrRecChg, "ON", "off") _
+       & Chr(13) & "Document-Deletions-Confirm:" & IIf(blnUsrDocDel, "ON", "off") _
+       & Chr(13) & "Action-Queries-Confirm:" & IIf(blnUsrActQry, "ON", "off") _
+       & Chr(13) & Chr(13) & strChangeMessage, , "VegBranch"
+     End If
+    End If
+  End If
+End Function
+
+Public Function getQryDate()
+  Debug.Print GetSet_manual_option("DateQuery", True, "trude")
+End Function
+
+Public Function nblnk(ByVal strVal As String, ByVal strValIfBlank As String) As String
+  ''similar to function nz, but deals with empty length strings rather than nulls
+  If strVal = "" Then
+    nblnk = strValIfBlank
+  Else
+    nblnk = strVal
+  End If
+End Function
+
+Public Function isBoolean(varVar As Variant) As Boolean
+  'accepts nulls as false (dumb, but it's what will happen)
+  If IsNull(varVar) Or varVar = True Or varVar = False Then
+    isBoolean = True
+  Else
+    isBoolean = False
+  End If
+End Function
+
+Public Function isLongInt(varVar As Variant) As Boolean
+  'first check that is numeric
+  On Error GoTo notLong
+  If IsNull(varVar) Then
+    isLongInt = True
+    GoTo exitchkLong
+  End If
+  Dim lngTest As Long
+  lngTest = varVar
+  If lngTest = varVar Then
+    isLongInt = True
+  End If
+exitchkLong:
+  Exit Function
+notLong:
+  isLongInt = False
+  Resume exitchkLong
+End Function
+
+Public Function isDbl(varVar As Variant) As Boolean
+  'first check that is numeric
+  On Error GoTo notdbl
+  If IsNull(varVar) Then
+    isDbl = True
+    GoTo exitchkDBL
+  End If
+  Dim dblTest As Double
+  dblTest = varVar
+  If dblTest = varVar Then
+    isDbl = True
+  End If
+exitchkDBL:
+  Exit Function
+notdbl:
+  isDbl = False
+  Resume exitchkDBL
+End Function
+
+Public Function GetSet_manual_option(strOptName As String, Optional blnSet As Boolean, _
+       Optional ByVal strVal As String, Optional blnPromptForVal As Boolean) As String
+  ''gets or sets manual options, stored in table, Y_optionsStored
+  Dim rstOpt As New ADODB.Recordset
+  rstOpt.Open "SELECT * FROM Y_optionsStored WHERE optionName = """ & strOptName & """;", _
+     CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstOpt
+  If blnSet Then 'setting value
+    If blnPromptForVal Then
+      strVal = InputBox("Please enter a value for " & strOptName)
+    End If
+    If rstOpt.EOF Then
+      .AddNew
+      !OptionName = strOptName
+    End If 'EOF
+      If strVal <> "" Then
+        !OptionValue = strVal
+      Else ' set option value to "" (null)
+        !OptionValue = Null
+      End If
+      ''validate before update
+      Dim strVAlidate As String
+      strVAlidate = Nz(!optionValidate, "")
+      strVAlidate = substTextForText(strVAlidate, "[]", """" & Nz(!OptionValue, "") & """")
+   '  Debug.Print strVAlidate
+      
+      If Eval("(" & strVAlidate & ")") Then
+        .Update
+      Else
+        Debug.Print "Setting option failed!" & strOptName & ":" & strVal
+        Dim strTxtInstr As String
+        strTxtInstr = Nz(!txtInstr, "valid")
+        .CancelUpdate
+        Dim strNew As String
+        strNew = InputBox("VegBranch could not accept the value you gave for " & strOptName _
+          & Chr(13) & "Please enter a new value that is " & strTxtInstr, "VegBranch")
+        If strNew = "" Then
+          msgBox "Update cancelled!"
+        Else
+          'call new instance of function to update value
+          GetSet_manual_option strOptName, blnSet, strNew
+        End If
+      End If
+      
+      'see if function needs executing:
+      If Not IsNull(!functionOnUpdate) Then
+        'function exists:
+        Dim strFcn As String
+        strFcn = !functionOnUpdate
+        strFcn = substTextForText_once(strFcn, "@value@", Nz(!OptionValue))
+        Debug.Print "options setting: " & strOptName & " : evaluating:" & strFcn
+        Call Eval(strFcn)
+      End If
+  Else  'getting value
+    If Not .EOF Then
+     ''get value
+     GetSet_manual_option = Nz(!OptionValue, "")
+    End If 'eof
+  End If  'getting or setting value
+  End With
+  ''requery any form that may be open requesting this change
+  rereshCurrForm
+End Function
+
+Public Function ChngConfirmSettings(blnChange As Boolean, blnDontAsk As Boolean)
+  ''turns 2 settings on or off:
+  ''if blnChange is true, then turns on VegBranch turning confirmations on and off
+  '' if blndontask is true, then turns OFF the display of a form on load that asks about it
+  
+    ''set changes to on/off
+    GetSet_manual_option "TurnOffConfirmations", True, blnChange
+  
+    ''set form to display on load or not:
+    GetSet_manual_option "TellUserOptionsConfirm", True, (Not blnDontAsk)
+    
+    On Error Resume Next
+    DoCmd.Close acForm, "ConfirmOptions", acSaveYes
+End Function
+
+
+
+Public Function distFldNameToOp(strTxt As String, strField As String) As String
+  'distributes field name to just before each operator
+  Dim strTemp As String
+  strTemp = strTxt
+  strTemp = substTextForText_once(strTemp, "=", strField & "=")
+  strTemp = substTextForText_once(strTemp, "<", strField & "<")
+  strTemp = substTextForText_once(strTemp, ">", strField & ">")
+  distFldNameToOp = strTemp
+End Function
+
+
+
+Public Function UnHideAllFields(strNm As String, strQT As String)
+  ''attempts to unhide columns on a query or table
+  'strNm is the name of the table or query
+  'strQT is "query" for a query and "table" for a table
+  On Error GoTo unhideErr
+  Dim qdfTemp As Object
+  Dim dbsCurr As Object
+  Set dbsCurr = CurrentDb
+  If strQT = "query" Then 'is a qry
+    Set qdfTemp = dbsCurr.querydefs(strNm)
+  '  Debug.Print "is a qry"
+  Else ' is a tbl
+    Set qdfTemp = dbsCurr.tabledefs(strNm)
+ '   Debug.Print "is a tbl"
+  End If
+  
+  With qdfTemp
+    Dim fldCurr As Object
+    For Each fldCurr In qdfTemp.Fields
+      'unhides each column :
+    '  Debug.Print "accessing field:" & fldCurr.Name
+      On Error Resume Next  'if property not available, then all fields are visible
+    '  Debug.Print "  " & qdfTemp.Fields(fldCurr.Name).Properties("ColumnHidden")
+      If qdfTemp.Fields(fldCurr.Name).Properties("ColumnHidden") = -1 Then
+         qdfTemp.Fields(fldCurr.Name).Properties("ColumnHidden") = 0
+    '     Debug.Print "unhid: " & fldCurr.Name
+      End If
+      On Error GoTo unhideErr
+    Next
+  End With
+  dbsCurr.querydefs.Refresh
+  dbsCurr.tabledefs.Refresh
+  Exit Function
+unhideErr:
+  ''don't worry, we tried!
+  Debug.Print "Failed to unhide columns on : " & strNm
+  Resume ExitThisFCN
+ExitThisFCN:
+End Function
+
+
+Public Function HideSomeFields(strNm As String, strQT As String, strFieldsToHide As String, Optional blnUnhideAllFirst As Boolean)
+  
+  ''attempts to hide columns on a query or table
+  'MTL July3,2004: if something has nothing hidden, this doesn't work
+  'strNm is the name of the table or query
+  'strQT is "query" for a query and "table" for a table
+  'strFieldsToHide is a comma delimited list of fields to hide
+  If blnUnhideAllFirst Then Call UnHideAllFields(strNm, strQT)
+ ' On Error GoTo hideErr
+  Dim qdfTemp As Object
+  Dim dbsCurr As Object
+  Set dbsCurr = CurrentDb
+  If strQT = "query" Or strQT = "Q" Then 'is a qry
+    Set qdfTemp = dbsCurr.querydefs(strNm)
+  '  Debug.Print "is a qry"
+  Else ' is a tbl
+    Set qdfTemp = dbsCurr.tabledefs(strNm)
+ '   Debug.Print "is a tbl"
+  End If
+  
+  With qdfTemp
+    Dim fldCurr As Object
+    Dim colTohide As New Collection, inttemp As Integer
+    Set colTohide = csv_parseCSVstring(strFieldsToHide, ",", True)
+    For inttemp = 1 To colTohide.Count
+    'For Each fldCurr In qdfTemp.Fields
+      'unhides each column :
+    '  Debug.Print "accessing field:" & fldCurr.Name
+     ' On Error Resume Next  'if property not available, then all fields are visible
+    '  Debug.Print "  " & qdfTemp.Fields(fldCurr.Name).Properties("ColumnHidden")
+      'Debug.Print colTohide(inttemp)
+      If fieldExistOnTbl(colTohide(inttemp), strNm) Then
+      Set fldCurr = .Fields(colTohide(inttemp))
+      'If InStr("," & strFieldsToHide & ",", "," & fldCurr.Name & ",") > 0 Then 'hide
+      Call hideOneField(fldCurr)
+          'qdfTemp.Fields(fldCurr.Name).Properties("ColumnHidden") = -1
+         'Debug.Print "hid: " & fldCurr.Name
+      'End If
+      End If
+    Next
+  End With
+  dbsCurr.querydefs.Refresh
+  dbsCurr.tabledefs.Refresh
+  Exit Function
+hideErr:
+  ''don't worry, we tried!
+  Debug.Print "Failed to hide columns on : " & strNm
+  Resume ExitThisFCN
+ExitThisFCN:
+End Function
+
+
+Public Function hideOneField(fldCurr As Object)
+  'hides one field, if passed a field
+  'MTL July3,2004
+  On Error GoTo addProp
+  fldCurr.Properties("ColumnHidden") = True
+exitthis:
+  Exit Function
+addProp:
+  'failed above, add the prop
+  Dim prpCurr As Object
+  Set prpCurr = fldCurr.CreateProperty("ColumnHidden", DB_BOOLEAN, True)
+  fldCurr.Properties.Append prpCurr
+  
+'  qdfTemp.Fields(fldCurr.Name).Properties.Add -1, "ColumnHidden"
+  Resume exitthis
+End Function
+
+Public Function getVBVersion() As String
+''function gets the current VegBranch version number and reports it
+Dim rstVer As New ADODB.Recordset
+rstVer.Open "SELECT * FROM Y_Version WHERE ThisDBVersion = true ORDER BY version_ID DESC;" _
+  , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+If Not rstVer.EOF Then
+  getVBVersion = substTextForText(rstVer!versionTxt, " ", "_")
+End If
+End Function
+
+
+Public Function WriteLineToFile(strLine As String, strFile As String, Optional intFileType As Integer) As Boolean
+  'function opens a text file writes string message into it
+  'intFileType: 0 = ASCII, -1=Unicode, -2=systemDefault : this value defaults to 0
+  'On Error Resume Next
+      Dim fs2 As Object
+      Dim objErrFile As Object
+      Set fs2 = CreateObject("Scripting.FileSystemObject")
+  'opens err log and appends results
+  Select Case Right(strFile, 4)
+  Case ".txt", ".sql", ".xml", ".csv"
+    'ok
+  Case Else
+   If Right(strFile, 5) <> ".html" Then 'html also ok
+     WriteLineToFile = False
+     Debug.Print "WriteLineToFile>> invalid file name, cannot write to this file, must be txt, sql, xml, csv : " & strFile
+     Exit Function 'must be a .txt file
+   End If
+  End Select
+  
+ Set objErrFile = fs2.openTextFile(strFile, 8, True, intFileType)
+  objErrFile.writeLine strLine
+       WriteLineToFile = True
+End Function
+
+
+
+Public Function xmlize_txt(ByVal strTxt As String, Optional strType As String, Optional strHandleTimeZone As String) As String
+  'function updates text from regular text to text that is OK to put in an xml file
+  ''e.g. This & that are < or > than "these things"
+  ''-->  This &amp; that are &lt; or &gt; than &quot;these things&quot;
+  Dim strTemp As String
+  strTemp = strTxt
+  ''conform values to xml standards
+  Select Case strType
+    Case "date"
+      If IsDate(strTemp) Then
+        strTemp = Format(strTemp, "YYYY-MM-DD") & strHandleTimeZone
+      End If
+    Case "time"
+      If IsDate(strTemp) Then
+        strTemp = Format(strTemp, "HH:MM:SS") & strHandleTimeZone
+      End If
+    Case "datetime", "date/time"
+      If IsDate(strTemp) Then
+        strTemp = Format(strTemp, "YYYY-MM-DDTHH:MM:SS") & strHandleTimeZone
+      End If
+    Case "boolean", "yes/no"
+      If isBoolean(strTemp) Then
+        If (strTemp) = True Then
+          strTemp = "true"
+        Else
+          strTemp = "false"
+        End If
+      End If
+    Case "double"
+      'make sure not in scinotation : Nov 6, 2004 fixed
+      If InStr(strTemp, "E") > 0 Then strTemp = Format(strTemp, "0.000000000000000")
+  End Select
+  
+  
+  strTemp = substTextForText_once(strTemp, "&", "&amp;", 2, False)
+  strTemp = substTextForText_once(strTemp, "<", "&lt;", 2, False)
+  strTemp = substTextForText_once(strTemp, ">", "&gt;", 2, False)
+  strTemp = substTextForText_once(strTemp, """", "&quot;", 2, False)
+  xmlize_txt = strTemp
+End Function
+
+Public Function HTMLize_txt(ByVal strTxt As String) As String
+  'function updates text from regular text to text that is OK to put in an html file
+  ''e.g. This & that are < or > than "these things"
+  ''-->  This &amp; that are &lt; or &gt; than &quot;these things&quot;
+  Dim strTemp As String
+  strTemp = strTxt
+    
+  strTemp = substTextForText_once(strTemp, "&", "&amp;", 2, False)
+  strTemp = substTextForText_once(strTemp, "<", "&lt;", 2, False)
+  strTemp = substTextForText_once(strTemp, ">", "&gt;", 2, False)
+  strTemp = substTextForText_once(strTemp, """", "&quot;", 2, False)
+  'add <br/> for breaks in text
+  strTemp = substTextForText_once(strTemp, Chr(13) & Chr(10), "<br />", 2, False)
+  strTemp = substTextForText_once(strTemp, Chr(10) & Chr(13), "<br />", 2, False)
+  strTemp = substTextForText_once(strTemp, Chr(13), "<br />", 2, False)
+  strTemp = substTextForText_once(strTemp, Chr(10), "<br />", 2, False)
+  HTMLize_txt = strTemp
+End Function
+
+Public Function SQLizeTxt(ByVal strText As String, Optional ByVal strEncl As String, Optional blnRetNullIfEmpty As Boolean) As String
+  'function takes info and makes it an OK sql string, enclosed in strEncl if passed
+  If strEncl = "" Then strEncl = "'"
+  Select Case strEncl
+    Case "'"
+      strText = substTextForText_once(strText, "'", "''")
+    Case """"
+      strText = substTextForText_once(strText, """", """""")
+  End Select
+  strText = strEncl & strText & strEncl
+  If blnRetNullIfEmpty Then
+    If strText = """""" Or strText = "''" Then
+      strText = "Null"
+    End If
+  End If
+  SQLizeTxt = strText
+End Function
+
+
+Public Function areFldsOnTbl(strFlds As String, strTbl As String, blnIgnoreSkips As Boolean) As String
+  ''checks multiple fields to see if they are on a tbl, if so, then passes "", if not, then passes fields not
+  Dim colFlds As New Collection
+  Set colFlds = csv_parseCSVstring(strFlds, ",", True)
+  Dim inttemp As Long, strRept As String
+  For inttemp = 1 To colFlds.Count
+    Dim strFldNm As String
+    strFldNm = colFlds(inttemp)
+    If strFldNm = "" Then strFldNm = "--null!--"
+    If Not fieldExistOnTbl(strFldNm, strTbl) Then
+      If (Left(strFldNm, 10) <> "!SkipField") Or blnIgnoreSkips Then
+        strRept = strRept & strFldNm & ","
+      End If
+    End If
+  Next inttemp
+  If strRept <> "" Then
+    'strip last ,
+    strRept = Left(strRept, Len(strRept) - 1)
+  End If
+  areFldsOnTbl = strRept
+End Function
+
+Public Function Interpret_FieldTypeInt(intType As Integer, intAttributes As Integer) As String
+  'takes a field type number and converts to access string
+              Dim strTemp As String
+              Select Case intType
+              Case 1
+                strTemp = "Yes/No"
+              Case 4
+                If intAttributes = 17 Then
+                  strTemp = "AutoNumber"
+                Else
+                  strTemp = "Long Integer"
+                End If
+              Case 7
+                strTemp = "Double"
+              Case 8
+                strTemp = "Date/Time"
+              Case 10
+                strTemp = "Text"
+              Case 11
+                strTemp = "OLE Object"
+              Case 12
+                strTemp = "Memo"
+              Case Else
+                strTemp = "unknown!"
+            End Select
+            Interpret_FieldTypeInt = strTemp
+End Function
+
+Public Function getFieldTypeSize(strTbl As String, strFld As String, lngSize As Long) As Integer
+  'gets type of field
+  'size returnsd to lngSize
+  Dim dbs As Object, tblqry As Object
+  Set dbs = CurrentDb
+  If TableExist(strTbl) Then
+    Set tblqry = dbs.tabledefs(strTbl)
+  Else
+    If QueryExist(strTbl) Then
+      Set tblqry = dbs.querydefs(strTbl)
+    Else
+      Debug.Print "getFieldTypeSize: cannot find " & strTbl
+      getFieldTypeSize = -1
+      GoTo ExitThisFCN
+    End If
+  End If
+  Dim fldTemp As Object
+  If fieldExistOnTbl(strFld, strTbl) Then
+    Set fldTemp = tblqry.Fields(strFld)
+    getFieldTypeSize = fldTemp.Type
+    
+    lngSize = fldTemp.size
+  
+  Else
+    Debug.Print "getFieldTypeSize: cannot find field: " & strFld; " & on table: " & strTbl
+     getFieldTypeSize = -1
+     GoTo ExitThisFCN
+  End If
+  
+
+
+ExitThisFCN:
+Exit Function
+End Function
+
+
+Public Function getvalFrmSQL(strSQL As String) As Variant
+  'gets first record in the first field of a SQL string
+ On Error GoTo noVal
+  Dim rstSQL As New ADODB.Recordset
+  rstSQL.Open strSQL, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstSQL
+  If Not rstSQL.EOF Then
+    If Not IsNull(.Fields(0).Value) Then
+      getvalFrmSQL = .Fields(0).Value
+    End If
+  Else
+    'no value for SQL
+    ''Debug.Print "getValFrmSQL:no val for SQL:" & strSQL
+  End If
+  End With
+  
+  rstSQL.Close
+  Set rstSQL = Nothing
+exitthis:
+  Exit Function
+noVal:
+  Debug.Print "getValFrmSQL:error: in SQL:" & strSQL
+  Resume exitthis
+End Function
+
+Function goooooootest()
+  Debug.Print "start:" & Now()
+  Dim inttemp As Long, intOther As Double
+  intOther = -3
+  For inttemp = 1 To 1000
+    intOther = intOther + getvalFrmSQL("select 1 from Z_USER_C_plotData")
+  Next inttemp
+  Debug.Print "done:" & Now()
+End Function
+
+Public Function addSuffFileNm(strFile As String, strExt As String) As String
+  ''takes a file name and adds a suffix to the filename, and copies extension
+  Dim lngTemp As Long, blnExt As Boolean
+  For lngTemp = 1 To Len(strFile)
+    If Mid(strFile, Len(strFile) - lngTemp + 1, 1) = "." Then
+      blnExt = True
+      Exit For
+    End If
+  Next lngTemp
+  If blnExt Then
+    'found extension, insert suffix after it
+    addSuffFileNm = Left(strFile, Len(strFile) - lngTemp) & strExt & Right(strFile, lngTemp)
+  Else
+    'simply add extension
+    addSuffFileNm = strFile & strExt
+  End If
+  
+End Function
+
+Public Function getStratumIndex(strAuthPlot As String, intStratumNum As Integer) As String
+  ''functions gets the stratum name of the stratum # for the plot, if found in Z_USER_C, otherwise (plot?)
+  Dim rstStratum As New ADODB.Recordset
+  rstStratum.Open "SELECT * FROM Z_USER_C_PlotData WHERE authorPlotCode=""" & strAuthPlot & """;" _
+    , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstStratum
+    If .EOF Then 'no can find!
+      getStratumIndex = "(plot?)"
+    Else 'found!
+      On Error GoTo stratumNumErr
+      getStratumIndex = Nz(.Fields("stratumIndex" & intStratumNum), "")
+    End If
+  End With
+getStratumExit:
+Exit Function
+stratumNumErr:
+  getStratumIndex = "(stratum?)"
+  Resume getStratumExit
+End Function
+
+Public Function getUserdefName(strTblLtr As String, lngNum As Integer) As String
+  ''function gets user defined name from Z_USER_J_UD, given letter and number
+  Dim rstUD As New ADODB.Recordset
+  rstUD.Open "SELECT * FROM Z_USER_J_UD WHERE [UTbl]=""" & strTblLtr & """ AND [UNum]=" & lngNum & ";", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstUD.EOF Then ' can't find
+    getUserdefName = "(notDefined)"
+  Else ' found if
+    getUserdefName = Nz(rstUD!UserDefinedName, "")
+  End If
+End Function
+
+Public Function getValsFromList(strForm As String, strControl As String) As String
+  'gets list of values, comma separated (no attempt to escape commas is made)
+  'form = "" for active form
+  'control = "" for active control
+  Dim frmCurr As Form, ctlCurr As Control, varItm As Variant, strRet As String
+  If strForm = "" Then
+    Set frmCurr = Screen.ActiveForm
+  Else
+    Set frmCurr = Forms(strForm)
+  End If
+  If strControl = "" Then
+    Set ctlCurr = Screen.ActiveControl
+  Else
+    Set ctlCurr = frmCurr.Controls(strControl)
+  End If
+  If ctlCurr.ControlType = acListBox Then
+    For Each varItm In ctlCurr.ItemsSelected
+        strRet = strRet & IIf(strRet = "", "", ",") & ctlCurr.ItemData(varItm)
+
+    Next varItm
+  End If
+  'Debug.Print strRet
+  getValsFromList = strRet
+End Function
+
+Public Function getTableQueryListFromDB(strPath As String, Optional ByVal strCrit As String) As String
+  'function gets list of tables and queries from a database, optionally limiting to a criteria:
+   
+ 'On Error GoTo errwithlIST
+ If strCrit = "" Then strCrit = "*"
+   Dim wrkDefault As Object, strList As String
+  ' Get default Workspace.
+    Set wrkDefault = DBEngine.Workspaces(0)
+If Right(strPath, 4) = ".mdb" Then
+  Dim dbs As Object
+  Set dbs = wrkDefault.OpenDatabase(strPath)
+ 
+  Dim tdfLoop As Object
+  Dim qryLoop As Object
+  For Each tdfLoop In dbs.tabledefs
+    If Left(tdfLoop.Name, 4) <> "MSys" Then 'exclude system tables
+      If tdfLoop.Name Like strCrit Then strList = strList & IIf(strList = "", "", ";") & tdfLoop.Name
+    End If
+  Next tdfLoop
+  For Each qryLoop In dbs.querydefs
+    If qryLoop.Name Like strCrit Then strList = strList & IIf(strList = "", "", ";") & qryLoop.Name
+  Next qryLoop
+Else 'not mdb
+  strList = ""
+End If
+getTableQueryListFromDB = strList
+exitthis:
+Exit Function
+errwithlIST:
+  strList = ""
+  msgBox "err with list"
+  Resume exitthis
+End Function
+
+Public Function getNewQryName(strPrefix As String, strSuffix As String) As String
+  'function checks queries in database and comes up with name that is not used
+  Dim inttemp As Integer
+  Do Until Not (QueryExist(strPrefix & IIf(inttemp > 0, inttemp, "") & strSuffix)) And Not (TableExist(strPrefix & IIf(inttemp > 0, inttemp, "") & strSuffix))
+    inttemp = inttemp + 1
+  Loop
+  getNewQryName = strPrefix & IIf(inttemp > 0, inttemp, "") & strSuffix
+
+End Function
+
+Public Function getNewFrmName(strPrefix As String, strSuffix As String) As String
+  'function checks queries in database and comes up with name that is not used
+  Dim inttemp As Integer
+  Do Until Not (FormExist(strPrefix & IIf(inttemp > 0, inttemp, "") & strSuffix))
+    inttemp = inttemp + 1
+  Loop
+  getNewFrmName = strPrefix & IIf(inttemp > 0, inttemp, "") & strSuffix
+
+End Function
+
+
+
+Public Function getTableNickName(strTbl As String) As String
+ ''gets table nickname from tableName
+ Dim rstTbl As New ADODB.Recordset
+ rstTbl.Open "SELECT * FROM Z_TAbleDescription WHERE tableName = """ & strTbl & """;" _
+   , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+ With rstTbl
+   If Not .EOF Then
+     getTableNickName = Nz(!tableNickName, "")
+   End If
+ End With
+End Function
+
+Public Function getTableOneFld(strTbl As String, strField As String) As String
+ ''gets table att from tableName
+ On Error GoTo errInfo
+ Dim rstTbl As New ADODB.Recordset
+ rstTbl.Open "SELECT * FROM Z_TAbleDescription WHERE tableName = """ & strTbl & """;" _
+   , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+ With rstTbl
+   If Not .EOF Then
+     getTableOneFld = Nz(.Fields(strField), "")
+   End If
+ End With
+exitInfo:
+ Exit Function
+errInfo:
+ getTableOneFld = "error!"
+ Resume exitInfo
+End Function
+
+Public Function getZfldInfo(strTbl As String, strField As String, strData As String) As String
+ ''gets field infot from Z_fieldDescription
+  On Error GoTo errInfo
+ Dim rstTbl As New ADODB.Recordset
+ rstTbl.Open "SELECT * FROM Z_FieldDescription WHERE tableName = """ & strTbl & """ and fieldNAme=""" & strField & """;" _
+   , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+ With rstTbl
+   If Not .EOF Then
+     getZfldInfo = Nz(.Fields(strData), "")
+   Else
+     getZfldInfo = "does not exist!"
+   End If
+ End With
+exitInfo:
+ Exit Function
+errInfo:
+ getZfldInfo = "error!"
+ Resume exitInfo
+End Function
+
+Public Function msgBoxFldInfo(strTbl As String, strField As String, strData As String)
+  ''reports info to user in msgBox
+  Call msgBox("Information about '" & nblnk(getTableNickName(strTbl), strTbl) & "' " & getTableOneFld(strTbl, "mod") & " Table, " & strField & ": " & Chr(13) _
+    & "--------------------------------------------------------------------------" & Chr(13) _
+    & getZfldInfo(strTbl, strField, strData), , "VegBranch Field Information")
+End Function
+
+
+
+
+Public Function FriendlyDate(dte1 As Date, dte2 As Date, Optional blnJustDiff As Boolean) As String
+  'shows a date in a friendly way:
+  ' xx seconds ago
+  'yy minutes ago
+  'zz hours, yy minutes...
+  'xxx time into the future
+  Dim dteOrig As Date, dteLater As Date
+  If dte1 > dte2 Then
+    dteOrig = dte2
+    dteLater = dte1
+  Else
+    dteOrig = dte1
+    dteLater = dte2
+  End If
+  Dim lngY As Long, lngMM As Long, lngW As Long, lngD As Long, lngH As Long, lngNN As Long, lngS As Long
+  Dim strRep As String
+  lngY = Abs(DateDiff("yyyy", dteLater, dteOrig))
+  ''lng Y is off if later date is before earlier date in year: adjust if so
+  If (Month(dteLater) < Month(dteOrig)) Or ((Month(dteLater) = Month(dteOrig)) And (Day(dteLater) < Day(dteOrig))) Then
+    lngY = lngY - 1
+  End If
+  lngMM = Abs(DateDiff("m", dteLater, dteOrig))
+  lngMM = lngMM - (lngY * 12)
+  
+  ''lngMM is off if later date is before earlier day in m: adjust if so
+  If (Day(dteLater) < Day(dteOrig)) Then
+    lngMM = lngMM - 1
+  End If
+  
+  
+  lngD = Abs(DateDiff("D", dteLater, dteOrig))
+  lngW = Int(lngD / 7)
+  'reduce days to that less than weeks
+  lngD = lngD - (lngW * 7)
+  lngH = Int(Abs(DateDiff("h", dteLater, dteOrig)))
+  If lngH < 24 Then lngD = 0 'force
+  lngH = lngH - (lngD * 24)
+ ' Debug.Print "H:" & lngD
+  lngNN = Int(Abs(DateDiff("n", dteLater, dteOrig)))
+  If lngNN < 60 Then lngH = 0 'force overlap of the hour not to cause something to last 1 hour (ie 12:56 to 1:14 is not one hour) : must be 60 min for it to be one hr
+  lngNN = lngNN - (lngH * 60)
+  
+  lngS = Int(Abs(DateDiff("s", dteLater, dteOrig)))
+  If lngS < 60 Then lngNN = 0 'must be 60 sec for minutes to be 1
+  lngS = lngS - (lngNN * 60)
+  
+  If lngY >= 1 Then strRep = lngY & " year" & IIf(lngY > 1, "s", "")
+  If lngY > 1 Then GoTo exitDt
+  
+  If lngMM >= 1 Then strRep = strRep & IIf(strRep = "", "", " and ") & lngMM & " month" & IIf(lngMM > 1, "s", "")
+  If lngMM > 0 Or lngY > 0 Then GoTo exitDt
+  
+  If lngW >= 1 Then strRep = strRep & IIf(strRep = "", "", " and ") & lngW & " week" & IIf(lngW > 1, "s", "")
+  If lngW > 1 Or lngMM > 0 Then GoTo exitDt
+  
+  If lngD >= 1 Then strRep = strRep & IIf(strRep = "", "", " and ") & lngD & " day" & IIf(lngD > 1, "s", "")
+  If lngD > 1 Or lngW > 0 Then GoTo exitDt
+  
+  If lngH >= 1 Then strRep = strRep & IIf(strRep = "", "", " and ") & lngH & " hour" & IIf(lngH > 1, "s", "")
+  If lngH > 1 Or lngD > 0 Then GoTo exitDt
+    
+  If lngNN >= 1 Then strRep = strRep & IIf(strRep = "", "", " and ") & lngNN & " minute" & IIf(lngNN > 1, "s", "")
+  If lngNN > 1 Or lngH > 0 Then GoTo exitDt
+    
+  If lngS >= 1 Then strRep = strRep & IIf(strRep = "", "", " and ") & lngS & " second" & IIf(lngS > 1, "s", "")
+  If lngS >= 1 Or lngNN > 0 Then GoTo exitDt
+  'still here? must be really short:
+  strRep = "a very short time"
+    
+exitDt:
+   'wrap this up
+ If Not blnJustDiff Then
+   If dte2 > dte1 Then
+     strRep = strRep & " ago"
+   Else
+     strRep = strRep & " in the future"
+   End If
+ End If 'not bln just diff
+   FriendlyDate = strRep
+End Function
+
+Public Function numsMatch(dblNum1 As Variant, dblNum2 As Variant, Optional blnVeryCloseOK As Boolean) As Boolean
+  'checks to see if numbers match
+  If IsNull(dblNum1) And IsNull(dblNum2) Then
+    'ok
+    numsMatch = True
+  Else
+    'not both null
+    'if one null then no good
+    If IsNull(dblNum1) Or IsNull(dblNum2) Then
+     numsMatch = False
+    Else
+     'both are non-null
+     'see if both are numeric
+     If IsNumeric(dblNum1) And IsNumeric(dblNum2) Then
+       Dim dbl1 As Double, dbl2 As Double
+       dbl1 = dblNum1
+       dbl2 = dblNum2
+       If dbl1 = dbl2 Then
+         numsMatch = True
+       Else
+         If blnVeryCloseOK Then
+           'check to see if numbers are real close
+           If Abs(dbl1 - dbl2) < 0.0000000000001 Then
+             numsMatch = True
+           End If
+         Else
+           numsMatch = False
+         End If
+       End If
+     
+     Else
+       'not good if both are not numeric
+       numsMatch = False
+     End If
+    End If
+  
+  End If
+End Function
+
+Public Function TableDHasImportanceVals() As Boolean
+  'check to see if D has any importance values in it
+  Dim rstGetDimport As New ADODB.Recordset
+  rstGetDimport.Open "select * from Z_USER_D_CoverData WHERE ( taxonCover is not null ) OR  ( taxonCoverCode is not null ) OR  ( taxonBasalArea is not null ) OR  ( biomass is not null ) OR  ( taxonInferenceArea is not null ) OR  ( StratumCover1code is not null ) OR  ( StratumCover2code is not null ) OR  ( StratumCover3code is not null ) OR  ( StratumCover4code is not null ) OR  ( StratumCover5code is not null ) OR  ( StratumCover6code is not null ) OR  ( StratumCover7code is not null ) OR  ( StratumCover8code is not null ) OR  ( StratumCover9code is not null ) OR  ( StratumCover1 is not null ) OR  ( StratumCover2 is not null ) OR  ( StratumCover3 is not null ) OR  ( StratumCover4 is not null ) OR  ( StratumCover5 is not null ) OR  ( StratumCover6 is not null ) OR  ( StratumCover7 is not null ) OR  ( StratumCover8 is not null ) OR  ( StratumCover9 is not null )  ", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstGetDimport.EOF Then
+    TableDHasImportanceVals = False
+  Else
+    TableDHasImportanceVals = True
+  End If
+End Function
+
+Public Function getPlotIDfromObsID(lngObsID As Long, Optional blnSearchLoadingMod As Boolean) As Long
+  'function gets a plot_ID corresponding to an observaiton_ID, for prevObs migration
+  Dim strTemp As String
+  strTemp = getvalFrmSQL("select plot_ID from observation where observation_ID=" & lngObsID)
+ 
+  If strTemp = "" And blnSearchLoadingMod Then
+    strTemp = getvalFrmSQL("select NewplotID from append_c_getNewPKs where newObsID=" & lngObsID)
+  End If
+   If IsNumeric(strTemp) Then getPlotIDfromObsID = strTemp
+End Function
+
+''the following used in creating html docs from VegBranch to document vegbranch on the web
+Public Function web_tabledd_prefix() As String
+  web_tabledd_prefix = "http://vegbank.org/vegdocs/dbdictionary/dd~table~"
+End Function
+Public Function web_tabledd_suffix() As String
+  web_tabledd_suffix = "~type~tableview.html"
+End Function
+Public Function web_markupVBtables(strText As String) As String
+  'function takes a string and marks it up, finding vegbank table names in it and linking them to datadictionary.
+  'first parse this by spaces: vegbank table names must either come after space or at beginning of string
+  Dim colWords As New Collection, lngTemp As Long, lngT2 As Long, strRep As String
+  Set colWords = csv_parseCSVstring(strText, " ")
+  For lngTemp = 1 To colWords.Count
+    ''have a word, see if it is a vegbank table name, and if so, link to vegbank table, else include in html stream
+    Dim strWord  As String, strAlphaWord As String, blnDone As Boolean
+    strWord = colWords(lngTemp)
+    blnDone = False
+    strAlphaWord = strWord 'default
+    For lngT2 = 1 To Len(strWord)
+      If isAlpha(Mid(strWord, lngT2, 1)) And Not blnDone Then
+        'is alpha, ok continue
+      Else
+        'is not alpha, get word to preceeding letter (unless 1)
+        blnDone = True
+        If lngT2 = 1 Then
+          strAlphaWord = ""
+        Else
+          strAlphaWord = Left(strWord, lngT2 - 1)
+        End If
+      End If
+    Next lngT2
+    'have strAlphaWord, which could be vegbank table name: check
+    If get_tableInfo(strAlphaWord, "mod") = "vegbank" Then
+      'have vegbank table -- link to dd
+      strRep = strRep & "<a href='" & web_tabledd_prefix() & LCase(strAlphaWord) & web_tabledd_suffix & "'>" & HTMLize_txt(strWord) & "</a> "
+    Else
+      'not vegbank table, add to html stream without links
+      strRep = strRep & HTMLize_txt(strWord) & " "
+    End If
+  Next lngTemp
+  web_markupVBtables = strRep
+End Function
+
+
+Public Function SQLtoHTML(strSQL As String) As String
+  'function gets sql table results as html table
+  Dim rstSQL As New ADODB.Recordset, strRep As String
+  rstSQL.Open strSQL, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstSQL
+  If .EOF Then
+    'empty: write null
+    strRep = "<p>(none)</p>"
+  Else 'not eof, write table
+    'get field hdrs:
+    
+    Dim fldCurr As Field
+    strRep = "<table class='leftrightborders' cellpadding='2'><tr>"
+    For Each fldCurr In rstSQL.Fields
+      strRep = strRep & "<th>" & HTMLize_txt(fldCurr.Name) & "</th>"
+    Next
+    strRep = strRep & "</tr>" & vbCr
+    Dim blnEven As Boolean
+  Do Until .EOF
+    'get data
+    blnEven = Not blnEven
+    strRep = strRep & "<tr class='" & IIf(blnEven, "evenrow", "oddrow") & "'>"
+     'loop thru fields
+     For Each fldCurr In rstSQL.Fields
+      If Len(Nz(fldCurr.Value, "")) = 0 Then
+        'empty
+        strRep = strRep & "<td>&nbsp;</td>"
+      Else
+        'not empty
+        strRep = strRep & "<td" & IIf(Len(Nz(fldCurr.Value)) > intMakeSmaller, " class='item'", "") & ">" & HTMLize_txt(Nz(fldCurr.Value, "&nbsp;")) & "</td>"
+      End If
+      
+    Next
+    strRep = strRep & "</tr>" & vbCr
+   
+  .MoveNext
+  Loop
+  End If 'eof from first or not: empty table or not
+  End With
+  rstSQL.Close
+  strRep = strRep & "</table>"
+  SQLtoHTML = strRep
+End Function
+
+Function file_searchForFile(strFile As String, strLookIn As String, blnSubFolders As Boolean) As String
+On Error GoTo errFindFile
+Dim strFullPath As String
+With Application.FileSearch
+    .NewSearch
+    .LookIn = strLookIn
+    .SearchSubFolders = blnSubFolders
+    .FileName = strFile
+    .MatchTextExactly = True
+    '.FileType = msoFileTypeAllFiles
+    If .Execute > 0 Then
+      'give first file found
+      strFullPath = .FoundFiles(1)
+    End If
+    
+End With
+file_searchForFile = strFullPath
+exitthis:
+Exit Function
+errFindFile:
+  msgBox "Sorry, there was an error trying to find the file: " & strFile & Chr(13) & Err.Description
+  Resume exitthis
+End Function
+
+Public Function interpXMLDate(strDate As Variant) As Variant
+  'funtion interprets an xml date into a regular date: IGNORES TIMEZONE AND DECIMAL PORTIONS OF SECONDS!
+  If Nz(strDate, "") = "" Then
+    interpXMLDate = Null
+  Else
+    'have a date
+    'formatted like this: CCYY-MM-DDThh:mm:ss ' 'not sure what to do about time zone
+    Dim strNew As String, strTime As String
+    strTime = Mid(strDate, 12, 8)
+    If strTime = "00:00:00" Then
+      strTime = ""
+    Else
+      'add space as buffer
+      strTime = " " & strTime
+    End If
+    strNew = "" & Mid(strDate, 6, 2) & "/" & Mid(strDate, 9, 2) & "/" & Left(strDate, 4) & strTime & ""
+    Debug.Print strDate & " == " & strNew
+    interpXMLDate = strNew
+  End If
+End Function
+
+Public Function PlotExistOnTbl(strPlot As String, strTblLtr As String) As Boolean
+  'looks to see if a plot exists on a table, C, C2, or D2
+  Dim strTbl As String
+  strTbl = getvalFrmSQL("select tableName from Z_tableDescription where tblLetter =" & SQLizeTxt(strTblLtr))
+  If strTbl = "" Or strPlot = "" Then
+      If strPlot = "" Then
+        Debug.Print "PlotExistOnTbl>> err: blank Plot code sent for letter: " & strTblLtr & ""
+      Else
+        Debug.Print "PlotExistOnTbl>> err: couldn't find table with letter:" & strTblLtr & ""
+      End If
+      PlotExistOnTbl = False
+      Exit Function
+  End If
+  If getvalFrmSQL("select authorPlotCode from " & strTbl & " where authorPlotCode=" & SQLizeTxt(strPlot)) = strPlot Then
+    'exists
+    PlotExistOnTbl = True
+  Else 'doesn't
+    PlotExistOnTbl = False
+  End If
+End Function
+
+Public Function findSrcTblOnSQL(ByVal strSQL As String, strFld As String) As String
+  'takes SQL and a field name and finds what table is the source table
+  'define query to use for SQL
+  If InStr(strSQL, "SELECT ") = 0 Then
+    strSQL = "SELECT * FROM [" & strSQL & "]"
+  End If
+  Call EditQrySql("qry_findSrcTbl", strSQL, False)
+  Dim qdfTemp As Object, dbs As Object
+  Set dbs = CurrentDb
+  Set qdfTemp = dbs.querydefs("qry_findSrcTbl")
+  Dim fldCurr As Object
+  Set fldCurr = qdfTemp.Fields(strFld)
+  findSrcTblOnSQL = fldCurr.sourceTablE
+End Function
+
+Public Function col_valuesAreUnique(colToCheck As Collection) As Long
+  'function checks a collection and reports the first value that isn't unique
+  'returns -1 if all are unique
+  On Error GoTo haveNonUnique
+  Dim colNew As New Collection
+  Dim inttemp As Long
+  For inttemp = 1 To colToCheck.Count
+    colNew.Add colToCheck(inttemp), "_" & colToCheck(inttemp)
+  Next inttemp
+  'if made it thru, then it's ok
+  col_valuesAreUnique = -1
+exitthis:
+  Exit Function
+haveNonUnique:
+  'have a non unique value, pass # back
+  col_valuesAreUnique = inttemp
+  GoTo exitthis
+End Function
+
+Public Function xxxx_testUnique()
+  Dim colChk As New Collection
+  colChk.Add "hello"
+  colChk.Add "hello1"
+  colChk.Add "he2llo"
+  colChk.Add "he2llo"
+  colChk.Add "hello"
+  Dim inttemp As Long
+  inttemp = col_valuesAreUnique(colChk)
+  If inttemp > 0 Then
+    Debug.Print colChk(inttemp) & " is duplicated!"
+  Else
+    Debug.Print "unique!"
+  End If
+End Function
+
+Public Function rememberLastFileLoc(Optional strFile As String, Optional blnPut As Boolean) As String
+  Static LastFileLocationSeen As String
+  If blnPut Then
+    LastFileLocationSeen = strFile
+  End If
+  rememberLastFileLoc = LastFileLocationSeen
+End Function

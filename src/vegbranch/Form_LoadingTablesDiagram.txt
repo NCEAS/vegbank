@@ -1,0 +1,163 @@
+Option Compare Database
+Option Explicit
+Const debuggerLEV = 0
+
+Private Function DblClickLinkage()
+  'function links a current control, when double clicked, to more info, based on contents of LinkOnDblClickTo
+  'get table that we're on
+  Dim strCurr As String
+  strCurr = Screen.ActiveControl.Name
+  If strCurr Like "hdr*" Or strCurr Like "dtl*" Then
+   'ok to get info
+   'find info to get
+   Dim strTableName As String
+   strTableName = Me.Controls("table" & Right(strCurr, Len(strCurr) - 3)).Value
+  
+   Select Case Nz([LinkOnDblClickTo], "DD") 'default to DD if null
+    Case "DD" 'data dic
+      Call FindFieldInDD(strTableName)
+    Case "LO" ' loading overview
+      Call openF_loaddataoverview(False, strTableName)
+    Case "LDF" ' load data form
+      Call openF_loaddata(False, strTableName)
+    Case "TF" ' table in form
+      Call ManualHyperLink("form " & strTableName)
+    Case "T" ' table itself
+      Call ManualHyperLink("query " & strTableName & "_qry")
+   End Select
+  End If
+End Function
+
+Private Sub Command94_Click()
+  Call frm_restoreFromTags
+  Call showCorrectTblsLines
+End Sub
+
+Private Sub ShowBigBox_Change()
+  If debuggerLEV > 0 Then Debug.Print "b4:" & Nz([ShowBigBox], "null!") & " : " & Nz([showLittleBox], "nuull;!")
+  If Not IsNull([ShowBigBox]) Then ChngCntrlSrc "dtl*", [ShowBigBox]
+  If debuggerLEV > 0 Then Debug.Print Nz([ShowBigBox], "null!") & " : " & Nz([showLittleBox], "nuull;!")
+End Sub
+
+Private Function ChngCntrlSrc(strPrefix As String, ByVal strNewSrc As String)
+  'function searches for all text boxes on this form
+  'finds those that match strPrefix as starting letters in name
+  'replaces in the controlSource "in quotes" with "strNewSrc" including the *double* quotes & updates tag to new value
+  Dim ctlCurr As Control
+  For Each ctlCurr In Me.Detail.Controls
+    If ctlCurr.ControlType = acTextBox Then
+      If ctlCurr.Name Like strPrefix Then
+      
+        Dim strTemp As String, strOld As String
+        strTemp = ctlCurr.ControlSource
+        If CountOccOf(strTemp, """") < 2 Then
+          Debug.Print "chngCntrlSrc>> invalid control source no 2 quotes: " & strTemp
+          GoTo exitcngctL
+        End If
+        strOld = Right(strTemp, Len(strTemp) - InStr(strTemp, """"))
+        'get to " in strOld
+        strOld = Left(strOld, InStr(strOld, """") - 1)
+        'now have old control source
+        If debuggerLEV > 0 Then Debug.Print "CnhgCntrlSrc>> old control source = " & strOld
+        If strOld <> strNewSrc Then
+          strTemp = substTextForText(strTemp, """" & strOld & """", """" & strNewSrc & """")
+        If debuggerLEV > 0 Then Debug.Print "CnhgCntrlSrc>> new control src=" & strTemp
+        End If
+        ctlCurr.ControlSource = strTemp
+      End If
+    End If
+  
+  Next ctlCurr
+exitcngctL:
+Exit Function
+End Function
+
+Private Function showCntls(strLike As String, blnShow As Boolean)
+  'shows or hides controls that match a name
+  Dim ctlCurr As Control
+  For Each ctlCurr In Me.Detail.Controls
+      If ctlCurr.Name Like strLike Then ' is it right control?
+         'set visibility
+         ctlCurr.Visible = blnShow
+      End If
+  Next ctlCurr
+End Function
+
+Private Function ShowLines(lngColor As Long, blnShow As Boolean)
+  'shows or hides lines of a certain color on this form
+   Dim ctlCurr As Control
+  For Each ctlCurr In Me.Detail.Controls
+    If ctlCurr.ControlType = acLine Then 'is it a line?
+      If ctlCurr.BorderColor = lngColor Then ' is it right color?
+         'have line of right color
+         ctlCurr.Visible = blnShow
+       
+      End If
+    End If
+  
+  Next ctlCurr
+End Function
+
+Private Sub showLittleBox_Change()
+  If debuggerLEV > 0 Then Debug.Print "b4:" & Nz([ShowBigBox], "null!") & " : " & Nz([showLittleBox], "nuull;!")
+  If Not IsNull([showLittleBox]) Then ChngCntrlSrc "hdr*", [showLittleBox]
+  If debuggerLEV > 0 Then Debug.Print Nz([ShowBigBox], "null!") & " : " & Nz([showLittleBox], "nuull;!")
+End Sub
+
+Private Function showCorrectTblsLines()
+  'show or hide certain tables, and lines that go with them
+ Dim strShowTbls As String
+ strShowTbls = Nz([showTables], "--all--")
+ 
+  
+  'we want to find the things to hide!
+  Dim strAllTables As String
+  Dim ctlCurr As Control
+  For Each ctlCurr In Me.Controls
+    If Left(ctlCurr.Name, 3) = "hdr" Then
+      strAllTables = strAllTables & Right(ctlCurr.Name, Len(ctlCurr.Name) - 3) & "_"
+    End If
+  Next
+ ' Debug.Print strAllTables
+  If strShowTbls = "--all--" Then strShowTbls = strAllTables 'show them all
+  
+  'strAllTables is the set of all tables on this form
+  Dim colAllTbls As New Collection
+  Set colAllTbls = csv_parseCSVstring(strAllTables, "_")
+    'first show all, sadly the easiest way to do this
+  Call showCntls("*", True)
+ 'get lines correct after that
+  Call getLinesRight
+  Dim inttemp As Integer
+  For inttemp = 1 To colAllTbls.Count
+    ''have a table: is it to be shown?
+    If InStr(strShowTbls, colAllTbls(inttemp) & "_") > 0 Then
+       'congrats, this table is to be shows, it should already be visible
+    Else
+       'oh, need to hide this table and all associated lines, etc.
+      
+      Me.Controls("hdr" & colAllTbls(inttemp)).Visible = False
+      Me.Controls("dtl" & colAllTbls(inttemp)).Visible = False
+      'hide all lines that contain LTR_
+      Call showCntls("line*" & colAllTbls(inttemp) & "_*", False)
+            
+    End If
+  Next inttemp
+  
+ 
+End Function
+
+Private Function getLinesRight()
+  If IsNull([showRedLine]) Then [showRedLine] = True
+  If IsNull([showBlueLine]) Then [showBlueLine] = True
+  If IsNull([ShowPurpleLine]) Then [ShowPurpleLine] = True
+  If IsNull([ShowGreenLine]) Then [ShowGreenLine] = True
+  If IsNull([ShowYellowLine]) Then [ShowYellowLine] = True
+  Call ShowLines(255, [showRedLine])
+  Call ShowLines(16711680, [showBlueLine])
+  Call ShowLines(8388736, [ShowPurpleLine])
+  Call ShowLines(32768, [ShowGreenLine])
+  Call ShowLines(65535, [ShowYellowLine])
+End Function
+
+

@@ -1,0 +1,54 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command5_Click()
+
+
+  If (Nz(Len(Me!table1), 0) = 0) Or (Nz(Len(Me!table2), 0) = 0) Then
+    msgBox "please choose 2 tables to compare!"
+    Exit Sub
+  End If
+  'clears table to compare schemas
+  DoCmd.RunSQL "DELETE * from misc_compare;"
+  'adds proper attribute names to define
+  DoCmd.RunSQL "INSERT INTO misc_compare ( AttributeName )  SELECT ""TableName"" as EXPR1;"
+  DoCmd.RunSQL "INSERT INTO misc_compare ( AttributeName )  SELECT ""FieldName"" as EXPR1;"
+  DoCmd.RunSQL "INSERT INTO misc_compare ( AttributeName )  SELECT ""Key"" as EXPR1;"
+  DoCmd.RunSQL "INSERT INTO misc_compare ( AttributeName )  SELECT ""Nulls"" as EXPR1;"
+  DoCmd.RunSQL "INSERT INTO misc_compare ( AttributeName )  SELECT ""DataType"" as EXPR1;"
+  DoCmd.RunSQL "INSERT INTO misc_compare ( AttributeName )  SELECT ""Size"" as EXPR1;"
+  DoCmd.RunSQL "INSERT INTO misc_compare ( AttributeName )  SELECT ""References"" as EXPR1;"
+  
+  
+  Dim strTable1Fields As String
+  Dim strTable2Fields As String
+  Dim dbs As Object
+  Dim fldLoop As Object
+  Set dbs = CurrentDb
+  
+  With dbs.tabledefs(Me!table1)
+    For Each fldLoop In .Fields
+      strTable1Fields = strTable1Fields & fldLoop.Name & ";"
+    Next fldLoop
+  End With
+  Debug.Print strTable1Fields
+  'get rid of final ;
+  strTable1Fields = Left(strTable1Fields, Len(strTable1Fields) - 1)
+  
+  With dbs.tabledefs(Me!table2)
+    For Each fldLoop In .Fields
+      strTable2Fields = strTable2Fields & fldLoop.Name & ";"
+    Next fldLoop
+  End With
+  Debug.Print strTable2Fields
+  'get rid of final ;
+  strTable2Fields = Left(strTable2Fields, Len(strTable2Fields) - 1)
+  
+  
+  'open form to specify which field is which
+  DoCmd.OpenForm "misc_compare"
+  Forms!misc_compare!Tbl1FieldName.RowSource = strTable1Fields
+  Forms!misc_compare!Tbl2FieldName.RowSource = strTable2Fields
+  Forms!misc_compare!table1 = Me!table1
+  Forms!misc_compare!table2 = Me!table2
+End Sub

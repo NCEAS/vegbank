@@ -1,0 +1,365 @@
+Option Compare Database
+Option Explicit
+
+'this function updates RecordsNotNull and PercentNotNull in Z_FieldDescription table to reflect
+'the actual number and percent of non-null records in each table
+'strUpdMod is the string expression to match for update, either a module, "all", or a table, or table.field
+
+Function checkALLFieldsNow()
+  Debug.Print "startChk:" & Now()
+  CheckFieldsForFields "all", "all"
+  Debug.Print "sTOPChk:" & Now()
+End Function
+
+Function checktabls()
+  Debug.Print "st:" & Now()
+  CheckTblForRecs "", ""
+  Debug.Print "end " & Now()
+End Function
+Function fjajfkdsajfsassssss()
+  deleteRecsInTbl ("Z_USER_B_SpecList"), True, True, "OtherPlantName", "table Z_USER_A_Party"
+End Function
+
+
+
+Public Function CheckTblForRecs(strTblMod As String, strWhat As String, Optional blnRequeryForm As Boolean)
+''checks each table for records, and records results into Z_TableDescription
+'strtblmod = "mod" or "tableName", strWhat is WHERE statement and strTblMod is then ignored
+' pass "","" to check all
+Dim strSQL As String, frmCurr As Form
+
+  'do all tables
+  strSQL = "SELECT tableName, numberOfRecs FROM Z_tableDescription"
+If strWhat <> "" Then
+   'limit to only module /table:
+     strSQL = strSQL & " WHERE [" & strTblMod & "] = """ _
+       & strWhat & """;"
+End If
+
+'open recordset to update number of records:
+Dim cnnLoc As Connection, rstCurr As New ADODB.Recordset
+Set cnnLoc = CurrentProject.Connection
+''Debug.Print strSQL
+rstCurr.Open strSQL, cnnLoc, adOpenForwardOnly, adLockOptimistic, adCmdText
+With rstCurr
+Do Until .EOF
+''loop thru dataset, updating number of records in each table
+
+  
+  Dim rstTemp As New ADODB.Recordset
+If TableExist(!TableName) Then
+  rstTemp.Open "SELECT count(1) as countOfRecs___here FROM [" & !TableName & "];", cnnLoc, _
+     adOpenStatic, adLockReadOnly, adCmdText
+  'record number of recs
+  !NumberOfRecs = rstTemp!countOfRecs___here
+  
+  'close recordset
+  rstTemp.Close
+Else
+   !NumberOfRecs = 0
+End If
+.Update
+.MoveNext
+Loop
+End With
+
+On Error Resume Next
+Set frmCurr = Screen.ActiveForm
+frmCurr.Refresh
+If blnRequeryForm Then frmCurr.Requery
+End Function
+
+Function CheckFieldsForFields_upd1(strUpdMod As String, strTypeToUpd As String)
+ 
+  On Error GoTo Error_ReportResumeNext
+  Dim rstCurr As New ADODB.Recordset
+  Dim fldCurr As Field
+  Dim cnnLocal As Connection
+  Dim intCount As Integer
+  Dim intRecs As Integer
+  Dim strTbl As String, strFld As String
+  Set cnnLocal = CurrentProject.Connection
+  intCount = 0
+'opens query to run through values check for data in tables
+  rstCurr.Open "Z_FieldDescription", cnnLocal, adOpenForwardOnly, adLockOptimistic, adCmdTable
+    openProcessingPos ("Checking data in fields")
+  Dim rstCheckNum As New ADODB.Recordset
+  rstCheckNum.Open "select Count(tableName) as COUNTRecs from Z_FieldDescription", _
+    cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+    Dim intCt As Long
+    intCt = rstCheckNum!COUNTRecs
+    
+  Dim intCurrFldNum As Long
+  intCurrFldNum = 0
+  With rstCurr
+    Do Until .EOF
+     intCurrFldNum = intCurrFldNum + 1
+    If ((strUpdMod = ![Module] And strTypeToUpd = "module") _
+          Or (strUpdMod = !TableName And strTypeToUpd = "table") _
+          Or (strUpdMod = "all") Or _
+          (strUpdMod = !TableName & "." & !FieldName And strTypeToUpd = "field")) _
+          And !Module <> "del" Then
+      intCount = intCount + 1
+      strTbl = !TableName
+      strFld = !FieldName
+      ''get current count of field recs
+      Dim rstGetNum As New ADODB.Recordset
+      rstGetNum.Open "SELECT Count([" & strTbl & "].[" & strFld & "]) AS tmpv FROM [" & strTbl & "]" _
+                 , cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+      'update the appropriate record in the current recordset
+      !RecordsNotNull = rstGetNum!tmpv
+      !CheckedAt = Now()
+      rstGetNum.Close
+      .Update
+    End If
+      'Debug.Print
+      UpdateProcessingPosition (intCurrFldNum / intCt * 100), 10
+      .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+  'let user know that processing is done:
+  UpdateProcessingPosition (100), 0
+  'update percents
+  DoCmd.OpenQuery "upd_percInZFieldDesc"
+  'MsgBox intCount & " fields updated", vbOKOnly, "VegBranch"
+  Call recalcCurrForm(True)
+  Exit Function
+
+Error_ReportResumeNext:
+  msgBox "Error with " & strTbl & "." & strFld & ".  Continuing with next...", vbCritical, "VegBranch"
+  Resume Next
+
+End Function
+
+
+Function CheckFieldsForFields_orig(strUpdMod As String, strTypeToUpd As String)
+ 
+  On Error GoTo Error_ReportResumeNext
+  Dim rstCurr As New ADODB.Recordset
+  Dim fldCurr As Field
+  Dim cnnLocal As Connection
+  Dim intCount As Integer
+  Dim intRecs As Integer
+  Dim strTbl As String, strFld As String
+  Set cnnLocal = CurrentProject.Connection
+  intCount = 0
+'opens query to run through values check for data in tables
+  rstCurr.Open "Z_FieldDescription", cnnLocal, , , adCmdTable
+    openProcessingPos ("Checking data in fields")
+  Dim rstCheckNum As New ADODB.Recordset
+  rstCheckNum.Open "select Count(tableName) as COUNTRecs from Z_FieldDescription", _
+    cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+    Dim intCt As Long
+    intCt = rstCheckNum!COUNTRecs
+    
+  Dim intCurrFldNum As Long
+  intCurrFldNum = 0
+  With rstCurr
+    Do Until .EOF
+     intCurrFldNum = intCurrFldNum + 1
+      
+     If ((strUpdMod = ![Module] And strTypeToUpd = "module") _
+        Or (strUpdMod = !TableName And strTypeToUpd = "table") _
+        Or (strUpdMod = "all") Or _
+        (strUpdMod = !TableName & "." & !FieldName And strTypeToUpd = "field")) _
+        And !Module <> "del" Then
+      intCount = intCount + 1
+      strTbl = !TableName
+      strFld = !FieldName
+       'clear up reserved keyword issues!
+       If strTbl = "note" Then
+         strTbl = "[note]"
+       End If
+       If strFld = "value" Then
+         strFld = "[value]"
+       End If
+      'deletes temp table so that new appended data can be appended (only one record allowed in tbl)
+      DoCmd.RunSQL "DELETE * FROM temp_countNonNullRecs;"
+      'If intCount < 3 Then MsgBox "deleted"
+      'append number of non-Null records and primary key to temp table called temp_countNonNullRecs
+      DoCmd.RunSQL "INSERT INTO temp_countNonNullRecs ( NumNonNulls, RecID ) " _
+& " SELECT Count(" & strTbl & "." & strFld & ") AS tmpv, " & !Z_FieldDescr_Id & " as pk  " _
+& "  FROM " & strTbl _
+& "  HAVING (((Count(" & strTbl & "." & strFld & ")) Is Not Null)) "
+      'If intCount < 3 Then MsgBox ("new recs appended for record " & !Z_FieldDescr_Id)
+      'update the appropriate record in the current recordset
+      DoCmd.RunSQL "UPDATE Z_FieldDescription INNER JOIN temp_countNonNullRecs ON " _
+& " Z_FieldDescription.Z_FieldDescr_Id = temp_countNonNullRecs.RecID " _
+& " SET Z_FieldDescription.RecordsNotNull = [NumNonNulls], Z_FieldDescription.CheckedAt = Now();"
+       'If intCount < 3 Then MsgBox ("updated!")
+
+            
+    End If
+      'Debug.Print
+      UpdateProcessingPosition (intCurrFldNum / intCt * 100), 10
+      .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+  'let user know that processing is done:
+ ' UpdateProcessingPosition (100)
+  
+  'update percents
+  DoCmd.OpenQuery "upd_percInZFieldDesc"
+  'MsgBox intCount & " fields updated", vbOKOnly, "VegBranch"
+  Exit Function
+
+Error_ReportResumeNext:
+  msgBox "Error with " & strTbl & "." & strFld & ".  Continuing with next...", vbCritical, "VegBranch"
+  Resume Next
+
+End Function
+
+Public Function deleteRecsInTbl(strTbl As String, Optional blnChkTbl As Boolean, Optional blnChkFlds As Boolean, _
+   Optional fldClr As String, Optional manHLink As String)
+'On Error GoTo delRecsErr
+ ''function deletes all data in a table
+ '' will set to null a fld = fldClr first
+ '' and follow a manualHyperline manHLink absolutely first
+If msgBox("Are you SURE you want to delete all records in the table: " & strTbl & "?", _
+    vbYesNoCancel + vbQuestion) = vbYes Then
+  ''follow any manual hyperlink first
+  If manHLink <> "" Then
+   ManualHyperLink (manHLink)
+  End If
+  'clear any fields as necessary
+  If fldClr <> "" Then
+   DoCmd.RunSQL "UPDATE [" & strTbl & "] SET [" & fldClr & "] = Null"
+  End If
+   DoCmd.RunSQL "DELETE [" & strTbl & "].* FROM [" & strTbl & "]"
+  If blnChkTbl Then
+    CheckTblForRecs "tableName", strTbl
+  End If
+  If blnChkFlds Then
+    CheckFieldsForFields strTbl, "table"
+  End If
+ Else
+   msgBox "Nothing deleted.", vbInformation
+ End If
+ Exit Function
+delRecsErr:
+ msgBox "There were errors in trying to delete records from the table : " & strTbl & Chr(13) _
+    & Err.Description
+End Function
+
+Function CheckFieldsForFields(strUpdMod As String, strTypeToUpd As String, Optional blnSkipRefresh As Boolean)
+ ''function checks fields for data
+ ' On Error GoTo Error_ReportResumeNext
+  Dim rstCurr As New ADODB.Recordset
+  'Dim fldCurr As Field
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+  Dim intCount As Integer
+  Dim intRecs As Integer
+  Dim strTbl As String, strFld As String
+  intCount = 0
+'opens query to run through values check for data in tables
+  Dim strWHERE As String
+  Select Case strTypeToUpd
+    Case "all"
+      strWHERE = ""
+    Case "module"
+      strWHERE = " WHERE [module] = """ & strUpdMod & """"
+    Case "field"
+      strWHERE = " WHERE (tableName & ""."" & fieldName) = """ & strUpdMod & """"
+    Case "table"
+      strWHERE = " WHERE tableName = """ & strUpdMod & """"
+  End Select
+  Dim strSQL As String
+  strSQL = "SELECT * FROM Z_FieldDescription " & strWHERE & " ORDER BY tableName "
+  'open rst to update
+  rstCurr.Open strSQL, cnnLocal, adOpenStatic, adLockOptimistic, adCmdText
+  openProcessingPos ("Checking data in fields")
+  'figure out how many fields to count -- for progress report
+  Dim intCt As Integer
+  intCt = rstCurr.RecordCount
+'  Debug.Print "getting " & intCt; " fields"
+  Dim intCurrFldNum As Long
+  intCurrFldNum = 0
+  Dim strLastTbl As String
+  strLastTbl = ""
+  Dim rstGetNum As New ADODB.Recordset
+  With rstCurr
+  
+    Do Until .EOF
+     intCurrFldNum = intCurrFldNum + 1
+      intCount = intCount + 1
+      strTbl = !TableName
+      strFld = !FieldName
+       
+      Dim blnSkipThisTable As Boolean
+      If strTbl <> strLastTbl Then
+         If strLastTbl <> "" Then
+           'close current "get" recordset
+        '   Debug.Print "closed table:" & strLastTbl
+           rstGetNum.Close
+         End If
+         ''open rst to get count of fields
+         Dim strGetSQL As String
+         strGetSQL = "SELECT " & getFieldsOfTbl(strTbl, "count([", "]) AS [countOf__", True, , "]") _
+            & " FROM [" & strTbl & "]"
+        ' Debug.Print strGetSQL
+      '   Debug.Print strGetSQL
+        If TableExist(strTbl) Then
+         rstGetNum.Open strGetSQL, cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+         blnSkipThisTable = False
+        Else
+          'open dummy rst
+         rstGetNum.Open "select 0 from OneNullRec;", cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+         blnSkipThisTable = True
+        End If
+      End If
+      strLastTbl = strTbl
+      ''END of strLastTbl
+        'update the appropriate record in the current recordset
+      If blnSkipThisTable Then
+        'not real
+        !RecordsNotNull = 0
+      Else 'real
+        !RecordsNotNull = rstGetNum.Fields("countOf__" & strFld)
+      End If
+      !CheckedAt = Now()
+      
+      .Update
+      'Debug.Print
+      UpdateProcessingPosition (intCurrFldNum / intCt * 100), 10
+      .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+  'let user know that processing is done:
+  UpdateProcessingPosition (100), 0
+  'update percents
+  DoCmd.OpenQuery "upd_percInZFieldDesc"
+  'MsgBox intCount & " fields updated", vbOKOnly, "VegBranch"
+  If Not blnSkipRefresh Then Call recalcCurrForm(True)
+  Exit Function
+
+Error_ReportResumeNext:
+  msgBox "Error with " & strTbl & "." & strFld & ".  Continuing with next...", vbCritical, "VegBranch"
+  Resume Next
+
+End Function
+Function tesajfkdljasfd()
+  Debug.Print getFieldsOfTbl("plot", "count(", ") AS countOf__", True)
+End Function
+
+Public Function getFieldsOfTbl(strTbl As String, Optional strPref As String, Optional strSuff As String _
+            , Optional blnReptFldNm As Boolean, Optional blnBrackets As Boolean, Optional strSuff2 As String) As String
+  ''function gets a list of fields for a table, reporting the fields in comma list
+  Dim rstFlds As New ADODB.Recordset
+  rstFlds.Open "SELECT * FROM Z_FieldDescription WHERE tableName = """ & strTbl & """;" _
+     , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstFlds
+  Dim strFlds As String
+  strFlds = ""
+
+  Do Until .EOF
+    strFlds = strFlds & strPref & !FieldName & strSuff & IIf(blnReptFldNm, !FieldName, "") & strSuff2 & ","
+  .MoveNext
+  Loop
+  'trim off final comma
+getFieldsOfTbl = Left(strFlds, Len(strFlds) - 1)
+End With
+End Function

@@ -1,0 +1,13 @@
+Option Compare Database
+Option Explicit
+
+'BUSINESS RULES CONTAINED (MOSTLY) HEREIN
+
+Public Function embargoDefaultDays() As Long
+  'number of days in default embargo
+  embargoDefaultDays = 365 * 3  '3 years
+End Function
+
+Public Function basicEntReqdColor() As Long
+   basicEntReqdColor = 396682
+End Function

@@ -1,0 +1,358 @@
+Option Compare Database
+Option Explicit
+
+
+Function FindFieldInDD(strTblFld As String)
+  ''finds field in the datadictionary, given table.field string
+  If strTblFld = "n/a" Then
+    Call msgBox("This is not a valid field.", vbExclamation)
+    Exit Function
+  End If
+  
+  Dim strFld As String, strTbl As String, blnFld As Boolean, blnJustDD As Boolean
+  If strTblFld = "" Or strTblFld = "." Then
+    Debug.Print "not finding table.field, just opening "
+    blnJustDD = True
+  Else 'get field and or table
+  
+   If InStr(strTblFld, ".") = 0 Then 'no .
+    ''just get table
+    strTbl = strTblFld
+    blnFld = False
+   Else 'is a dot
+    strTbl = Left(strTblFld, InStr(strTblFld, ".") - 1)
+    strFld = Right(strTblFld, Len(strTblFld) - InStr(strTblFld, "."))
+    blnFld = True
+   End If
+  End If
+    If IsFormOpen("Z_FieldDescription_countRecs") Then
+      DoCmd.Close acForm, "Z_fieldDesc_countRecs", acSaveNo
+    End If
+    DoCmd.OpenForm "Z_FieldDesc_countRecs"
+   If Not blnJustDD Then
+    
+    Forms!Z_FieldDesc_countRecs!tbl = strTbl
+    Forms!Z_FieldDesc_countRecs!allTbl2 = "NO"
+    Forms!Z_FieldDesc_countRecs!Empty = "neither"
+    Call dd_ChangeTable(strTbl)
+    Call UpdateZ_DescJoinedSubField
+     'go to control where we can find field
+     If blnFld Then ''find field
+       DoCmd.GoToControl ("Z_FieldDescription")
+       DoCmd.GoToControl ("FieldName")
+       DoCmd.FindRecord (strFld)
+     End If
+   
+   ''redefine query that holds actual table (rt side)
+   dd_ChangeTable strTbl
+  End If
+End Function
+
+Function findFieldinDescr(strTblFld As String)
+  On Error GoTo err_ff
+  Dim strFld As String, strTbl As String, blnFld As Boolean
+  If InStr(strTblFld, ".") = 0 Then 'not a tbl.fld .
+    ''MsgBox "not valid name for field"
+    ''just get table
+    strTbl = strTblFld
+    blnFld = False
+  Else 'is a dot
+    blnFld = True
+    strTbl = Left(strTblFld, InStr(strTblFld, ".") - 1)
+    strFld = Right(strTblFld, Len(strTblFld) - InStr(strTblFld, "."))
+  End If
+    DoCmd.OpenForm "sub_ERD_details"
+    
+    ''DoCmd.Restore
+    DoCmd.ShowAllRecords
+    
+    DoCmd.ApplyFilter , "[tableName] = """ & strTbl & """"
+  If blnFld Then  'find field, if a field name was passed
+     'go to control where we can find field
+     DoCmd.GoToControl ("FieldName")
+     DoCmd.FindRecord (strFld)
+  End If
+GoTo endoftheFindField
+err_ff:
+Debug.Print "couldn't find field: " & strTblFld
+Debug.Print Err.Description
+Resume endoftheFindField
+  
+endoftheFindField:
+End Function
+
+
+Public Function getFieldList(strTbl As String, strFld As String, Optional intCase As Integer)
+  On Error GoTo Error_ClosedList
+   ''gets closed list for data dictionary (pull-down combobox) and
+   'intCase 0 to update regular closed list in Data dictionary, 1 for just viewing values
+   'returns SQL for closed list values
+   Dim cnnLoc As Connection, rstCurr As New ADODB.Recordset
+   Set cnnLoc = CurrentProject.Connection
+   rstCurr.Open "SELECT * FROM Z_FIELDDESCRIPTION WHERE tableName = """ _
+       & strTbl & """ AND FieldName = """ & strFld & """;" _
+      , cnnLoc, adOpenForwardOnly, adLockReadOnly, adCmdText
+   With rstCurr
+   If .EOF Then GoTo Error_ClosedList 'field not found
+   
+   Select Case !ClosedList
+     Case "no"
+         GoTo NoClosedList
+     Case "Bool"
+         msgBox "This field is boolean.  Acceptable values are 'true' and 'false'"
+         If intCase = 0 Then
+           Forms!Z_FieldDesc_countRecs!Z_FieldDescription!ClosedList.RowSource = ""
+         End If
+         Exit Function
+    End Select
+   
+     ''either yes or open, get list:
+     
+      'is a closed list
+     If !Module = "Loading" Then   'Loading module or not
+          Dim strTdotF As String
+          Dim intWhereDot As Integer
+          'the destination field complete address (table.field)
+          strTdotF = !DestinationField
+          'the following variable stores where in the dest string the dot appears
+          intWhereDot = InStr(strTdotF, ".")
+          If intWhereDot = 0 Then
+             GoTo NoClosedList
+          Else   'there is a dot
+            'get tbl name
+             strTbl = Left(strTdotF, intWhereDot - 1)
+            'get field name
+            strFld = Right(strTdotF, Len(strTdotF) - intWhereDot)
+          End If 'there is a dot
+     End If 'Loading or not "IF"
+      ''define comboBox contents:
+      Dim strFlds As String, strClTbl As String
+      strFlds = "listValue, valueDesc"
+      strClTbl = "fieldList"
+      Dim strRet As String
+      strRet = "SELECT " & strFlds _
+         & " FROM " & strClTbl & " WHERE tableName=""" & strTbl & """ AND fieldName=""" & strFld & """ ORDER BY sortOrd, fieldList_ID"
+      If intCase = 0 Then
+        Forms!Z_FieldDesc_countRecs!Z_FieldDescription!ClosedList.RowSource = strRet
+      End If
+      If intCase = 1 Then
+        'open form to view list in detail
+        Call showClosedListDetails(strTbl, strFld)
+      End If
+      getFieldList = strRet
+      End With
+   Exit Function
+NoClosedList:
+   msgBox "There is no closed list associated with this field.", vbOKOnly, "VegBranch"
+   If intCase = 0 Then Forms!Z_FieldDesc_countRecs!Z_FieldDescription!ClosedList.RowSource = ""
+seeListExit:
+   Exit Function
+Error_ClosedList:
+   msgBox "The closed list associated with this field: " & strTbl & "." & strFld & " was not found!", vbCritical, "VegBranch"
+   If intCase = 0 Then Forms!Z_FieldDesc_countRecs!Z_FieldDescription!ClosedList.RowSource = ""
+   Resume seeListExit
+End Function
+
+Public Function DD_OpenUpdateRecForm(strTbl As String, strMod As String)
+  On Error Resume Next
+  DoCmd.OpenForm "UpdateNumNonNullRecs", acNormal, , , acFormEdit, acWindowNormal
+  Forms!UpdateNumNonNullRecs!CurrTable = strTbl
+  Forms!UpdateNumNonNullRecs!CurrModule = strMod
+End Function
+
+Public Function showClosedListDetails(strTbl As String, strFld As String)
+  'function shows a closed list, given table and field
+  DoCmd.OpenForm "fieldList", , , "FieldName=""" & strFld & """ AND tableNAme=""" & strTbl & """"
+  Forms!fieldList!FiltTable = strTbl
+  Forms!fieldList!FiltField = strFld
+End Function
+
+Public Function ManualHyperLinkReadOnly(strDtl As String, blnReadOnly As Boolean, _
+    Optional blnCloseFirst As Boolean)
+  'function interprets text as hyperlink, ie "macro gr4" will run the macro gr4
+  'Debug.Print strDtl
+  'down to one function which does this:
+  Call ManualHyperLink(strDtl, blnReadOnly, blnCloseFirst)
+End Function
+
+Public Function dd_ChangeTable(strTbl As String, Optional blnShowAllFlds As Boolean)
+''function alters which table is viewable in Data_dictionary
+ '' On Error GoTo ErrChange
+  Dim frmCurr As Form
+  Set frmCurr = Forms!Z_FieldDesc_countRecs
+  ''make sure form is visible
+  frmCurr!sub_tableView.Visible = True
+  frmCurr!Z_FieldDescription.Visible = True
+  frmCurr!Empty.Visible = True
+  frmCurr!allTbl2.Visible = True
+  frmCurr!Label48.Visible = True
+  frmCurr!lbl_allTbl2.Visible = True
+  frmCurr!lbl_sub_tableView.Visible = True
+  frmCurr!lbl_Z_FieldDescription.Visible = True
+  frmCurr!Label9.Visible = True
+  frmCurr!Line36.Visible = True
+  frmCurr!Line37.Visible = True
+  frmCurr!Line38.Visible = True
+  frmCurr!Line39.Visible = True
+  frmCurr!Line40.Visible = True
+  frmCurr!Line41.Visible = True
+  frmCurr!cmd_refrSubFrm.Visible = True
+  frmCurr!Command50.Visible = True
+  frmCurr!Command51.Visible = True
+  frmCurr!Command52.Visible = True
+  frmCurr!Command53.Visible = True
+  frmCurr!Command54.Visible = True
+  
+  frmCurr!Command57.Visible = True
+  frmCurr!Command58.Visible = True
+  frmCurr!searchFor.Visible = True
+  frmCurr!Command72.Visible = True
+   
+  frmCurr.Refresh
+  ''Lock table unless it is a loading table:
+  
+  ''get mod from Z_TableDescription
+  Dim cnnLoc As Connection, rstCurr As New ADODB.Recordset
+  Set cnnLoc = CurrentProject.Connection
+  rstCurr.Open "SELECT * FROM Z_TableDescription WHERE tableName = """ & strTbl & """;" _
+     , cnnLoc, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstCurr.EOF Then GoTo ErrChange
+  
+  'locked table unless it is the loading module, then edits are allowed
+  If rstCurr!mod = "Loading" Then
+    frmCurr!sub_tableView.Locked = False
+  Else
+    frmCurr!sub_tableView.Locked = True
+  End If
+  rstCurr.Close
+  
+  ''get fields that are to be shown:
+  rstCurr.Open "SELECT fieldName FROM Z_FieldDescription WHERE ((tableName = """ & strTbl & _
+      """) AND (FldInUse))  ORDER BY IIf(IsNull([OrderID]),[Z_FieldDescr_Id],[OrderID]);", _
+      cnnLoc, adOpenForwardOnly, adLockReadOnly, adCmdText
+  Dim strFieldsToGet As String
+  strFieldsToGet = ""
+  With rstCurr
+    Do Until .EOF
+      'add the new field, with comma if fields already exist in string
+      strFieldsToGet = strFieldsToGet & IIf(strFieldsToGet = "", "", ",") & " [" & !FieldName & "] "
+    .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+  
+  'redefine query that is displayed here to select source table
+  Dim qdfTemp As Object
+  Set qdfTemp = CurrentDb.querydefs!DD_TableToShow
+  qdfTemp.SQL = "SELECT " & nblnk(strFieldsToGet, "'' as [No Fields Shown]") & " FROM [" & strTbl & "];"
+  CurrentDb.querydefs.Refresh
+  'unhide any hidden columns
+  'dont do this, unless requested
+  If blnShowAllFlds Then Call UnHideAllFields("DD_TableToShow", "query")
+    
+  'refresh screen version
+  frmCurr!sub_tableView.SourceObject = "Query.DD_tabletoShow"
+  frmCurr!sub_tableView.Requery
+  Exit Function
+ErrChange:
+  msgBox "could not open all features with the table: " & strTbl, vbCritical
+End Function
+
+
+Public Function DD_restoreDefShownFlds()
+''restores default fields to be shown:
+msgBox "This is not yet implemented."
+End Function
+
+Public Function DD_InterpretComments(strComment As String)
+  ''function interprets comments like "PK!" to show you that nulls are no and this is a PK
+  Dim strREport As String
+  If strComment = "" Then
+    strREport = "NOT required, NOT a foreign key, NOT a primary key, NO list of constraining values"
+  Else
+    'required / not
+    If InStr(strComment, "!") > 0 Then
+      strREport = strREport & IIf(strREport = "", "", ", ") & "required"
+    Else
+      strREport = strREport & IIf(strREport = "", "", ", ") & "NOT required"
+    End If
+    'key
+    If InStr(strComment, "PK") > 0 Then
+      strREport = strREport & IIf(strREport = "", "", ", ") & "is a primary key"
+    End If
+    If InStr(strComment, "FK") > 0 Then
+      strREport = strREport & IIf(strREport = "", "", ", ") & "is a foreign key"
+    End If
+    'open or closed list
+    If InStr(strComment, "O") > 0 Then
+      strREport = strREport & IIf(strREport = "", "", ", ") & "has an open list"
+    End If
+    If InStr(strComment, "X") > 0 Then
+      strREport = strREport & IIf(strREport = "", "", ", ") & "constrained to closed list"
+    End If
+  End If
+  'report what the field comments mean:
+  msgBox ("The field you have selected is:" & Chr(13) & strREport), vbInformation, "VegBranch Data Dictionary"
+End Function
+
+Public Function DD_GetPutFieldID(lngID As Long, GetPut As String) As Long
+''function deals with browsed file location:
+    'On Error GoTo StoreFileErr:
+GoTo Past_err
+StoreFileErr:
+  msgBox "Error in storing/getting field name!" & Chr(13) & Err.Description, vbCritical
+  Resume ExitThisFCN
+ExitThisFCN:
+  Exit Function
+Past_err:
+
+Static lngDDInMemory As Long
+If GetPut = "put" Then
+  lngDDInMemory = lngID
+  On Error Resume Next
+    'close form
+    DoCmd.Close acForm, "Z_FieldDesc_countRecs"
+  On Error GoTo StoreFileErr
+End If
+  DD_GetPutFieldID = lngDDInMemory
+End Function
+
+Public Function DD_GetFieldInfo(lngID As Long, strWhat As String) As Variant
+ ''function gets field information from an ID, either ID, table.field or just field
+ Dim rstFlds As New ADODB.Recordset
+ rstFlds.Open "SELECT * FROM Z_FieldDescription WHERE Z_FieldDescr_Id = " & lngID, _
+   CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+ With rstFlds
+  If Not .EOF Then 'ID FOUND
+   'give user what they requested
+   Select Case strWhat
+     Case "ID"
+       DD_GetFieldInfo = !Z_FieldDescr_Id
+     Case "table.field"
+       DD_GetFieldInfo = !TableName & "." & !FieldName
+     Case "field"
+       DD_GetFieldInfo = !FieldName
+     Case "table"
+       DD_GetFieldInfo = !TableName
+   End Select
+  End If 'not EOF
+ End With
+ rstFlds.Close
+End Function
+
+Public Function DD_BrowseForFieldID(strStart As String) As String
+''function is enacted by user who wants to browse for a file
+    On Error GoTo StoreFileErr:
+GoTo Past_err
+StoreFileErr:
+  msgBox "Error in browsing for field!" & Chr(13) & Err.Description, vbCritical
+  Resume ExitThisFCN
+ExitThisFCN:
+  Exit Function
+Past_err:
+  
+''  Debug.Print strExt & " is extension to search for"
+  DoCmd.OpenForm "Z_FieldDesc_countRecs", acNormal, , , acFormEdit, acDialog, strStart
+  ''return result:
+  DD_BrowseForFieldID = DD_GetPutFieldID(-1, "get")
+End Function

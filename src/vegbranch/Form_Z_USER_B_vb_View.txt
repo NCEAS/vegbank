@@ -1,0 +1,156 @@
+Option Compare Database
+Option Explicit
+
+Private Function manuallyMatchPlantConcept() As Boolean
+  manuallyMatchPlantConcept = ChangePlantConc([plantName], pltxa_BrowseForPlantConcept(), True)
+End Function
+
+Private Sub Command23_Click()
+  Call manuallyMatchPlantConcept
+End Sub
+
+Private Sub Command24_Click()
+  Call ChangePlantConc([plantName], -1, False)
+End Sub
+
+Private Sub Command27_Click()
+  'first update plants via metadata: which ones are really new
+  Call trans_PlantPartyPersp
+  Call PreviewPlants("concepts")
+  
+End Sub
+
+Private Sub plantMatchWizard_Click()
+
+  'get information about current line
+  
+   'get info about plant:
+   Dim strPlantName As String, strLinkedThrough As String, lngPNID As Long, lngPCID As Long, _
+   plAsConc As Long, strNote As String, strNameNote As String
+   strPlantName = [plantName]
+   strLinkedThrough = [linkedThrough]
+   lngPNID = [PLANTNAME_ID]
+   lngPCID = [PLANTCONCEPT_ID]
+   plAsConc = [plantAsConc]
+   strNote = [note]
+   strNameNote = [plantNote]
+   Dim blnLinkedThrough As Boolean
+   If strLinkedThrough <> strPlantName Then blnLinkedThrough = True
+   'first check to see if the name could be misspelled:
+   Dim intResp As Integer, intStep As Integer
+   intStep = 0
+   
+   'only do step one if name isn't found!
+If lngPNID <= 0 Then
+   intStep = intStep + 1
+   intResp = MsgBox_cust("Welcome to the Plant Matching wizard.  Step " & intStep & " - misspelling?", _
+   "look for different spelling,next option", "Your name: '" & strLinkedThrough & "' could be mispelled.  " _
+   & " If you think this is a possibility, you can search the VegBank Module for other spellings.", "Plant Matching Wizard (" & intStep & ")")
+   If intResp = 0 Then
+     'cancelled
+     GoTo cancelPlantMatchWizard
+   End If
+   'ACTION 1
+   If intResp = 1 Then 'find new plant name
+     If changeFormPlantName() = True Then
+       'user has changed the name
+       msgBox "Plant Matching Wizard has finished.  You successfully chose a new plant name.  If this name doesn't match a concept, you can start the wizard again."
+       Exit Sub
+     End If
+   End If
+End If
+   
+If lngPCID <= 0 Then
+   'step 2 of wizard: group, if concept not found
+   intStep = intStep + 1
+   intResp = MsgBox_cust("Plant Matching wizard.  Step " & intStep & " - multiple plant concepts?", _
+   "this is 2 to 4 plants,next option", "Your name: '" & strLinkedThrough & "' could be more than one plant concept.  " _
+   , "Plant Matching Wizard (" & intStep & ")")
+   If intResp = 0 Then
+     'cancelled
+     GoTo cancelPlantMatchWizard
+   End If
+   'ACTION 2
+   If intResp = 1 Then 'create taxonAlt Syns
+     'add it to spp list if not there
+     Dim strSQLplantNm As String
+     strSQLplantNm = SQLizeTxt(strPlantName)
+     If Not IsPlantInSppList(strPlantName) Then
+       'add to sppList
+       DoCmd.RunSQL "INSERT INTO Z_USER_B_specList (plantCode, plantName, originalName, groupType) SELECT " _
+       & strSQLplantNm & "," & strSQLplantNm & "," & strSQLplantNm & ",'union'"
+     End If
+     msgBox "You can create an irregular plant group from this form by entering a 'Plant Group' value and 2-4 alternate Taxa"
+     'get user to plant that they want group for
+     DoCmd.OpenForm "Z_USER_B_specList", , , "plantCode=" & strSQLplantNm, , acDialog
+     'update this name
+     populate_Z_B_LkNms True, strPlantName
+     msgBox "Plant Matching Wizard has finished."
+     Exit Sub
+     
+   End If
+   
+End If
+
+'still here, huh?  Well, maybe get a manual match
+
+ 'step 3 of wizard: manual match
+   intStep = intStep + 1
+   intResp = MsgBox_cust("Plant Matching wizard.  Step " & intStep & " - manually find a plant concept?", _
+    "manually match plant,next option", "Use this step to manually match the name: '" & strLinkedThrough & "' to a plant concept in the VegBank Module   " _
+   , "Plant Matching Wizard (" & intStep & ")")
+   If intResp = 0 Then
+     'cancelled
+     GoTo cancelPlantMatchWizard
+   End If
+   'ACTION 3
+   If intResp = 1 Then 'find new plant concept
+     If manuallyMatchPlantConcept() = True Then
+       'user has changed the name
+       msgBox "Plant Matching Wizard has finished.  You successfully manually matched to a plant concept."
+       Exit Sub
+     End If
+   End If
+   
+ 'step 4: if matched, suggest that it is new
+If lngPCID > 0 Then
+ intStep = intStep + 1
+   intResp = MsgBox_cust("Plant Matching wizard.  Step " & intStep & " - unmatch plant concept?", _
+    "unmatch this plant,next option", "If the name: '" & strLinkedThrough & "' matches a plant concept, but it is actually a plant concept new to VegBank, you can prevent VegBranch from matching this name by pressing the button above.  You can reverse this by manually matching the plant name.   " _
+   , "Plant Matching Wizard (" & intStep & ")")
+   If intResp = 0 Then
+     'cancelled
+     GoTo cancelPlantMatchWizard
+   End If
+   'ACTION 4
+   If intResp = 1 Then
+     Command24_Click
+       If Not IsPlantInSppList(strPlantName) Then
+         'add it
+         DoCmd.RunSQL "INSERT INTO Z_USER_B_SpecList (plantCode, plantName) SELECT " & SQLizeTxt(strPlantName) & "," & SQLizeTxt(strPlantName)
+         [plantAsConc] = 3
+         Me.Refresh
+       End If
+       
+      DoCmd.OpenForm "Z_USER_B_specList_new", , , "plantCode=" & SQLizeTxt(strPlantName)
+     msgBox "Plant Matching Wizard has finished.  You successfully unmatched your plant concept.  Please fill in the details (like reference) of the new plant concept in the next form."
+     Exit Sub
+   End If
+ 
+ 
+End If
+   
+exitthis:
+  Exit Sub
+cancelPlantMatchWizard:
+  msgBox "Plant Matching Wizard cancelled."
+  GoTo exitthis
+End Sub
+
+Private Sub findPlName_Click()
+ Call changeFormPlantName
+End Sub
+
+Private Function changeFormPlantName() As Boolean
+  changeFormPlantName = ChangePlantName([linkedThrough], pltxa_BrowseForPlantName())
+End Function

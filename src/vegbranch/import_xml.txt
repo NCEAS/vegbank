@@ -1,0 +1,553 @@
+Option Compare Database
+Option Explicit
+
+Function importfromVegBankDotOrg(strSource As String)
+ 'function takes a file that is downloaded from vegbank.org (the xml file styled via vegbranch_csv xsl)
+ 'needs error trapping and UNDO added
+  If strSource = "" Then
+    msgBox "Please specify a file location from which to import data."
+    Exit Function
+  End If
+   
+   Dim fs As Object
+  Dim a As Object
+  
+Set fs = CreateObject("Scripting.FileSystemObject")
+
+'check src file
+If fs.FileExists(strSource) Then
+   Set a = fs.openTextFile(strSource, 1, False, 0)
+Else
+  msgBox "Sorry, could not find the file:" & strSource & ". Please try again. "
+  Exit Function
+End If
+ 
+ 'remove any old data
+ DoCmd.RunSQL "delete * from import_xml_data;"
+ 'import the file
+ If Not fastBlindIMport("import_xml_data", strSource, True) Then
+   Debug.Print "fastBlindImport failed:" & Now()
+   GoTo exitthis
+ End If
+ 'ok, now data imported into temp table, now send to real tables
+ If Not importAllTblsToVBMod() Then
+   msgBox "Press the 'undo import' button to try to delete the data added in this import attempt, which was unsuccessful"
+   GoTo exitthis
+ End If
+ 'do any denormalizations needed:
+ Call AllDenorms(False)
+ 
+ 'report being done
+ Dim inttemp As Integer
+ inttemp = MsgBox_cust("Done with moving data into VegBranch!  Would you like to see a summary of how the data were handled?", "show summary,show detail", , "VegBranch")
+ If inttemp = 1 Then
+   'show summary
+   DoCmd.OpenQuery "import_vb_showAddedOverview", , acReadOnly
+ Else
+   If inttemp = 2 Then
+     DoCmd.OpenQuery "import_vb_showAddedDetails", , acReadOnly
+   End If
+ End If
+exitthis:
+ Exit Function
+End Function
+      
+Public Function fastBlindIMport(strTable As String, strFile As String, Optional blnStatus As Boolean, Optional strTitle As String) As Boolean
+  'imports from a file to table, assuming SQL syntax ok in file itself
+ Debug.Print "fastBlindIMport>> start: " & Now()
+  Dim fs As Object, a As Object
+  Set fs = CreateObject("Scripting.FileSystemObject")
+  Dim inttemp As Long, strLine As String, strSQLINTO As String
+  inttemp = 1
+  Dim intlines As Long, strStatusName As String
+  If blnStatus Then
+    intlines = GetFileLines(strFile)
+    strStatusName = UpdateProcessingPosX(0, 0, "", True, IIf(strTitle <> "", strTitle, "Reading VegBranch import file"), "Your file is " & intlines & " lines long.")
+  End If
+  Set a = fs.openTextFile(strFile, 1, False, -1)
+  With a
+  Do Until .atendofstream
+    strLine = .readline
+    If inttemp = 1 Then
+      'validate on first line
+      Dim colFileHdr As New Collection
+      Set colFileHdr = csv_parseCSVstring(strLine, ",", False, False, True)
+      Dim intFldsOnHdr As Long
+      If colFileHdr.Count = 0 Then
+        'no header info
+        msgBox "Cannot import from the file:" & Chr(13) & strFile & Chr(13) & "It has no header information about fields."
+        fastBlindIMport = False
+           GoTo exitthis
+      End If
+      For intFldsOnHdr = 1 To colFileHdr.Count
+        Dim strTempFLD As String
+        strTempFLD = colFileHdr(intFldsOnHdr)
+        If fieldExistOnTbl(strTempFLD, strTable) = False Then
+          'error, can't insert into that field
+          msgBox "Cannot import from the file:" & Chr(13) & "The field name:[" & Left(strTempFLD, 50) & "] cannot be found on the table:[" & strTable & "]" _
+            & Chr(13) & "If this is all question marks, then there is an encoding issue with your file.  It should be UTF-16 Unicode."
+           fastBlindIMport = False
+           GoTo exitthis
+        End If
+      Next intFldsOnHdr
+      
+    End If
+   ' Debug.Print strLine
+    Dim strLineOK As String
+    strLineOK = strLine
+    strLineOK = substTextForText(strLineOK, Chr(9), "") 'tabs to nothing
+    strLineOK = substTextForText(strLineOK, " ", "")
+    If strLineOK <> "" Then
+    
+      If inttemp = 1 Then
+         'header row
+         strSQLINTO = "INSERT INTO [" & strTable & "] (" & strLine & ") SELECT "
+      Else 'not header row, insert
+         DoCmd.RunSQL strSQLINTO & strLine  '*** WONT WORK IF NOT SAME NUMBER OF ELEMENTS, certainly not with , at end of line
+      End If
+    End If
+      inttemp = inttemp + 1
+    If blnStatus Then Call UpdateProcessingPosX(Int(inttemp * 100 / intlines), 1, strStatusName)
+  Loop
+  End With
+  
+  fastBlindIMport = True
+exitthis:
+  'make sure closed
+  If blnStatus Then Call UpdateProcessingPosX(100, 0, strStatusName)
+  Debug.Print "fastBlindImport>> end:" & Now()
+  Exit Function
+End Function
+
+Public Function importAllTblsToVBMod() As Boolean
+  'takes all data in import_xml_PKht and adds to vb modl
+ 
+  DoCmd.RunSQL "delete * from imporT_xml_pkht;"
+ On Error GoTo errThis
+  Dim rstTbls As New ADODB.Recordset, intTotal As Long, intCount As Long, strWHERE As String
+  strWHERE = "WHERE [mod]='vegbank' "
+  'get total number of tables
+  intTotal = getvalFrmSQL("select count(1) from z_tableDescription " & strWHERE)
+  Dim strStatusNm  As String
+  'start status
+  strStatusNm = UpdateProcessingPosX(0, 0, "", True, "sending data to vegbank module")
+  rstTbls.Open "select * FROM Z_TableDescription " & strWHERE & " ORDER BY importOrder", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTbls
+  Do Until .EOF
+     intCount = intCount + 1
+     Call UpdateProcessingPosX(Int(intCount * 100 / intTotal), 1, strStatusNm, , , "starting " & !TableName)
+     Debug.Print !TableName & " started..."
+     If importTableToVBMod(!TableName) = False Then
+       If AreYouSure("Continue loading tables, even though last table didn't load?") = False Then
+          GoTo exitthis
+       End If
+     End If
+  .MoveNext
+  Loop
+  End With
+  rstTbls.Close
+  importAllTblsToVBMod = True
+exitthis:
+  Call UpdateProcessingPosX(100, 0, strStatusNm, , , "closing this status bar...")
+  Exit Function
+errThis:
+  importAllTblsToVBMod = False
+  msgBox "Sorry, there was an error in importing data to vegbank tables.  Make sure the file downloaded from VegBank has not changed."
+ ' MsgBox Err.Description
+  Resume exitthis
+End Function
+
+Public Function importTableToVBMod(strTableName As String) As Boolean
+  'function imports a table from import_vegbank_xml_data to regular tables
+  'checks to see if it already exists, if so just links to that
+  'checks to see if referenced entity wasn't added, in which case also doesn't add this one: downstream also not added (inverted relationship)
+  '---ie if obs already there, taxonObs not added for that obs, as they should already be there
+  On Error GoTo errThis
+  Dim strNewTableSQL As String, rstToTable As New ADODB.Recordset, rstGetTableDef As New ADODB.Recordset, strGrpBY As String
+  rstGetTableDef.Open "select * from import_xml_data WHERE HD='H' AND tableName=" & SQLizeTxt(strTableName), CurrentProject.Connection _
+     , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstGetTableDef
+    If Not .EOF Then
+      'have table defn info, get SQL string that represents table
+      Dim fldCurr As Field
+      For Each fldCurr In .Fields 'loop thru fields
+        'if starts with 'field' then defines a field
+        If Left(fldCurr.Name, 5) = "field" Then
+          'check current value
+          Dim strCurrVBFieldName As String
+          strCurrVBFieldName = Nz(fldCurr.Value, "")
+          If Len(strCurrVBFieldName) > 0 Then 'this field exist on table
+            'have a field here, set to SQL statment
+            strNewTableSQL = strNewTableSQL & IIf(strNewTableSQL = "", "", ",") & "[" & fldCurr.Name & "] AS [" & strCurrVBFieldName & "]"
+            strGrpBY = strGrpBY & IIf(strGrpBY = "", "", ",") & "[" & fldCurr.Name & "]"
+          End If
+        End If
+      Next fldCurr
+    
+    Else
+      'no info about this table!
+      msgBox "The table:" & strTableName & " cannot be found in your data.  Please make sure that the download file is from vegbank and hasn't been altered since the download."
+      importTableToVBMod = False
+      rstGetTableDef.Close
+      GoTo exitthis
+    End If
+  End With
+  'finish creating sql for this table
+  strNewTableSQL = "SELECT " & strNewTableSQL & " FROM import_xml_data WHERE tableName=" & SQLizeTxt(strTableName) & " AND HD='d' GROUP BY " & strGrpBY & ";"
+ ' Debug.Print strNewTableSQL
+  'now have rst to loop through and add.  Need some more info:
+  '1) recursive keys: don't add, but update later
+  '2) FK's inverted with parent not being added means that this one doesn't get added
+'  Dim colInvert As New Collection, colNormFK As New Collection, colRecurs As New Collection
+'  Dim strInverts As String, strRecurs As String, strNormFKs As String,
+Dim strPK As String
+'  Set colInvert = getKeysOnTbl(strTableName, "inverted")
+'  Set colRecurs = getKeysOnTbl(strTableName, "recursive")
+'  Set colNormFK = getKeysOnTbl(strTableName, "normal")
+'  'get references for this table
+'  Dim colRefs As New Collection
+'  Dim inttemp As Integer
+'  'have field with references, find out what it is, using field name as key
+'  For inttemp = 1 To colInvert.Count
+'    colRefs.Add (getZfldInfo(strTableName, colInvert(inttemp), "references")), colInvert(inttemp)
+'  Next inttemp
+'  For inttemp = 1 To colNormFK.Count'
+'    colRefs.Add (getZfldInfo(strTableName, colRefs(inttemp), "references")), colRefs(inttemp)
+'  Next inttemp
+  
+  strPK = WhatIsPKOf(strTableName)
+  'open src
+  rstToTable.Open strNewTableSQL, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstToTable
+  ''check fields to see what to do with them
+  ''several types of fields:
+  'PK : add to hashtable with new value, if adding new rec
+  'FKr : recursive : leave alone for now: reqd recursive FK's will cause to break (and are a BAD idea!)
+  'FKn : normal : get value from hashtable
+  'FKi : inverted : get value from hashtable, but make sure OK to add this rec (parent was added)
+  'ok  : add (that's easy)
+  Dim colFieldType As New Collection, blnHasRecKeys As Boolean
+  blnHasRecKeys = False 'default
+  Dim colRefs As New Collection, strKey As String, strRelType As String, strRefs As String
+  For Each fldCurr In .Fields
+    'add values to collections to reflect what type of field this is and other info
+    strKey = getZfldInfo(strTableName, fldCurr.Name, "key")
+    Select Case strKey
+      Case "PK"
+        colFieldType.Add "PK", fldCurr.Name
+      Case "FK"
+        'what kind?
+        strRefs = getZfldInfo(strTableName, fldCurr.Name, "references")
+'        Debug.Print strRefs & " = strRefs"
+        colRefs.Add (strRefs), fldCurr.Name
+        If InStr(strRefs, strTableName & ".") = 1 Then
+          'recursive
+          colFieldType.Add "FKr", fldCurr.Name
+          blnHasRecKeys = True
+        Else
+          'not recursive: normal FK or invert?
+          If getZfldInfo(strTableName, fldCurr.Name, "relType") = "inverted" Then
+            colFieldType.Add "FKi", fldCurr.Name
+          Else
+            colFieldType.Add "FKn", fldCurr.Name
+          End If
+        End If 'recursive key
+      Case Else 'not FK not PK
+        colFieldType.Add "ok", fldCurr.Name
+    End Select
+  Next fldCurr
+  'now have list of fields and what type each is, ready to add these to new table
+  Dim rstAdd As New ADODB.Recordset
+  rstAdd.Open "select * FROM [" & strTableName & "];", CurrentProject.Connection, adOpenDynamic, adLockOptimistic, adCmdText
+  Do Until .EOF
+    Dim blnUpdate As Boolean, lngNewVal As Long, lngNewPK As Long, blnParentAdded As Boolean, lngOldPK As Long, blnAccCode As Boolean
+    blnAccCode = fieldExistOnTbl("accessionCode", strTableName)
+    lngOldPK = 0
+    lngNewPK = 0
+    blnParentAdded = True
+    lngNewVal = 0
+    blnUpdate = True 'default unless overturned
+    rstAdd.AddNew
+    'check PK to make sure it's new
+   ''' On Error GoTo 0 ''@@CHECK THIS SHOULD BE COMMENTED OUT@@
+    Dim lngChkNewPK As Long, strPKAlreadyThere As String, strNewPK As String
+    lngChkNewPK = rstAdd.Fields(strPK).Value
+    strPKAlreadyThere = getvalFrmSQL("select 'true' from [" & strTableName & "] where [" & strPK & "]=" & lngChkNewPK)
+    If strPKAlreadyThere = "true" Then
+      Debug.Print "PK:" & lngChkNewPK & " is already there for:" & strPK & Chr(13) & "  attempting to override"
+      strNewPK = getvalFrmSQL("select max([" & strPK & "]) from [" & strTableName & "]")
+      If IsNumeric(strNewPK) Then
+        rstAdd.Fields(strPK).Value = Eval(strNewPK) + 1
+      Else
+        rstAdd.Fields(strPK).Value = 1
+      End If
+    End If
+    
+    For Each fldCurr In .Fields
+       'do what we need to with each field
+     If Not IsNull(fldCurr.Value) Then
+         'get info about references for this field
+         Dim strRefTbl As String, strRefFld As String, blnRetWasAdded As Boolean
+         If Left(colFieldType(fldCurr.Name), 2) = "FK" Then
+           strRefs = colRefs(fldCurr.Name)
+          If InStr(strRefs, ".") > 1 Then
+           strRefTbl = Left(strRefs, InStr(strRefs, ".") - 1)
+           strRefFld = Right(strRefs, Len(strRefs) - InStr(strRefs, "."))
+          Else
+           strRefTbl = ""
+           strRefFld = ""
+          End If
+         End If 'FK
+       Select Case colFieldType(fldCurr.Name)
+         Case "PK" 'check for accessionCode to match to extant value, if new, then get new PK value for this db
+           lngOldPK = fldCurr.Value
+           If blnAccCode Then
+            lngNewPK = import_RecAlreadyThere(Nz(.Fields("accessionCode"), ""))
+           Else
+             If strTableName = "plantName" Or strTableName = "commNAme" Then
+               lngNewPK = import_RecAlreadyThere("", .Fields(strTableName), Left(strTableName, Len(strTableName) - 4))
+             Else
+               'normal PK, add with no chk of previous
+               lngNewPK = 0
+             End If
+           End If
+           If lngNewPK > 0 Then
+             'dont add this as new
+             blnUpdate = False
+           Else
+             'adding new thing we are about to write
+             lngNewPK = rstAdd.Fields(fldCurr.Name)
+           End If
+         Case "FKi" 'check to see if this thing's parent was added, if not, cancel this one
+
+           lngNewVal = import_chngKeyVal(strRefTbl, strRefFld, fldCurr.Value)
+           blnRetWasAdded = import_chngKeyVal(strRefTbl, strRefFld, fldCurr.Value, True)
+           rstAdd.Fields(fldCurr.Name) = lngNewVal
+           'parent of this wasn't added
+           If Not blnRetWasAdded Then
+           '  Debug.Print "parent not added for: " & strTableName & ":" & lngOldPK
+             blnUpdate = False
+             blnParentAdded = False
+           Else
+            ' Debug.Print "parent was already added for:" & strTableName & ":" & lngOldPK
+           End If
+         Case "FKn" 'translate FK value in hashtable
+           lngNewVal = import_chngKeyVal(strRefTbl, strRefFld, fldCurr.Value)
+           rstAdd.Fields(fldCurr.Name) = lngNewVal
+         Case "FKr" 'ignore
+         Case "ok" 'add
+           If getZfldInfo(strTableName, fldCurr.Name, "dataType") = "date/time" Then
+             'special case:
+             rstAdd.Fields(fldCurr.Name) = interpXMLDate(fldCurr.Value)
+           Else
+             'replace \n if found:
+             If InStr(1, fldCurr.Value, "\n", 0) > 0 Then
+               'replace ' \n ' with CR,LF then \n\n with \n (case sens)
+               Dim strValLF As String
+               strValLF = fldCurr.Value
+               strValLF = substTextForText_once(strValLF, " \n ", Chr(13) & Chr(10), 0)
+               strValLF = substTextForText_once(strValLF, "\n\n", "\n", 0)
+               rstAdd.Fields(fldCurr.Name) = strValLF
+             Else 'no \n included
+               rstAdd.Fields(fldCurr.Name) = fldCurr.Value
+             End If
+           End If
+       End Select
+     End If
+    Next fldCurr
+    If blnUpdate Then
+        Debug.Print "--------adding:  " & strTableName & "---------"
+      For Each fldCurr In rstAdd.Fields
+        Debug.Print fldCurr.Name & "=" & fldCurr.Value
+        
+      Next fldCurr
+      rstAdd.Update
+    Else
+    
+      If blnParentAdded = False Then
+        lngNewPK = -1 'dont know what this is
+        'some special cases where we do need to recover this link, hardcode these into the system:
+        If strTableName = "stratumType" Then
+          'if have stratumType and parent already added, we must find out what the new ST ID is, so that ents can link to it
+          lngNewPK = getvalFrmSQL("select stratumType_ID from stratumType where stratumIndex=" & SQLizeTxt(!stratumIndex) _
+            & " AND stratumMethod_ID=" & rstAdd!stratummethod_id)
+          
+            Debug.Print "saving " & strTableName & "  " & !STRATUMTYPE_ID & " =->" & lngNewPK
+        End If
+      End If
+        rstAdd.CancelUpdate
+    End If
+    'add what happened to hash table
+    Call import_corrPK(strTableName, strPK, lngOldPK, lngNewPK, blnUpdate)
+    
+  .MoveNext
+  Loop
+  End With
+  rstToTable.Close
+  
+  If blnHasRecKeys Then 'deal with recursive keys
+    rstToTable.Open strNewTableSQL, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+   'here go through table again and update any recursive keys in real table, using hashtable
+    With rstToTable
+      Dim colRecKey As New Collection
+      'get each field
+      For Each fldCurr In .Fields
+        If colFieldType(fldCurr.Name) = "FKr" Then
+          colRecKey.Add (fldCurr.Name)
+        End If
+      Next fldCurr
+         
+         'loop through table and translate the keys based on values in hashtable
+    Do Until .EOF
+      Dim inttemp As Integer
+      For inttemp = 1 To colRecKey.Count
+        Dim strCurrFld As String
+        strCurrFld = colRecKey(inttemp)
+        If Not IsNull(.Fields(strCurrFld)) Then
+          'deal with value, else no value, ignore
+          'have the value, get new
+          Dim lngNewRecKey As Long, lngCurrRecPK As Long
+          lngCurrRecPK = import_chngKeyVal(strTableName, strPK, .Fields(strPK))
+          lngNewRecKey = import_chngKeyVal(strTableName, strPK, .Fields(strCurrFld))
+          'do the update, if not -1 for adding
+          If lngCurrRecPK > 0 Then
+            DoCmd.RunSQL "UPDATE [" & strTableName & "] SET [" & strCurrFld & "]=" & lngNewRecKey & " WHERE [" _
+              & strPK & "]=" & lngCurrRecPK & ";"
+            Debug.Print "updated recFK:" & strCurrFld & " from " & .Fields(strCurrFld) & " to " & lngNewRecKey
+          Else
+            Debug.Print "skipped recFK:" & strCurrFld & "(" _
+            & .Fields(strCurrFld) & ")"
+          End If
+        End If
+      Next inttemp
+    .MoveNext
+    Loop
+    End With
+    rstToTable.Close
+  End If 'has rec keys
+  
+  importTableToVBMod = True
+exitthis:
+ Exit Function
+errThis:
+ msgBox "Sorry, there was an error sending data to table:" & strTableName & Chr(13) & Err.Description & Chr(13) & "Make sure your file is directly loaded from vegbank."
+ importTableToVBMod = False
+ Resume exitthis
+End Function
+
+Public Function getKeysOnTbl(strTable As String, strWhatKeys As String) As Collection
+  'gets a set of keys on a table, dependings on strWhatKEys:
+  '  "FK" : gets all FKs
+  '  "inverted" : gets all inverted FKs
+  '  "normal"   : gets all normal FKs
+  '  "recursive": gets all recursive FKs
+  '  "PK"       : gets all primary keys
+  Dim strWHERE As String
+  Select Case strWhatKeys
+    Case "FK", "PK"
+      strWHERE = "[key]='" & strWhatKeys & "'"
+    Case "inverted", "normal"
+      strWHERE = "[key]='FK' AND relType='" & strWhatKeys & "'"
+    Case "recursive"
+      strWHERE = "instr([references],'.')>0 AND (instr([references],[tableName]&'.')=1)"
+  End Select
+ ' Debug.Print strWhere
+  Dim rstGet As New ADODB.Recordset, colRep As New Collection
+  rstGet.Open "select fieldName from Z_fieldDescription where tableName = " & SQLizeTxt(strTable) & " AND " & strWHERE, _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstGet
+  Do Until .EOF
+     colRep.Add (!FieldName)
+    ' Debug.Print !FieldName
+  .MoveNext
+  Loop
+  End With
+  rstGet.Close
+  Set getKeysOnTbl = colRep
+  
+End Function
+
+Public Function col2csv(colTemp As Collection, Optional blnOnlyDelimBetween, Optional blnQuote As Boolean) As String
+  'turns a collection into csv string, by default starting and ending with ,
+  Dim inttemp As Long, strRep As String
+  strRep = ","
+  For inttemp = 1 To colTemp.Count
+    strRep = strRep & IIf(blnQuote, """", "") & colTemp(inttemp) & IIf(blnQuote, """", "") & ","
+  Next inttemp
+  If blnOnlyDelimBetween Then
+    'clear intial , and last one
+    strRep = Right(strRep, Len(strRep) - 1)
+    If strRep <> "" Then
+      strRep = lef(strRep, Len(strRep) - 1)
+    End If
+  End If
+  col2csv = strRep
+End Function
+
+Public Function import_chngKeyVal(strTable As String, strField As String, lngVal As Long, Optional blnChkPar As Boolean) As Long
+  'function looks up PK value of table and field with value in hashtable:
+  Dim lngRet As Long, strFld As String
+  strFld = IIf(blnChkPar, "wasNew", "newValue")
+  lngRet = getvalFrmSQL("select (" & strFld & ") from import_xml_pkht where tablename=" & SQLizeTxt(strTable) & " and fieldname=" _
+    & SQLizeTxt(strField) & " AND oldValue=" & lngVal)
+  import_chngKeyVal = (lngRet)
+   If blnChkPar Then
+     Debug.Print strTable & "." & strField & ":" & lngVal & "is added?" & lngRet
+   End If
+  
+End Function
+
+
+
+
+Public Function import_RecAlreadyThere(strAccCode As String, Optional strPCName As String, Optional strPC As String) As Long
+  'function looks on a table and sees if the accessionCode is already there.  if so, returns PK, else 0 or -1
+  'for plantName and commName, the name is passed in strPCName
+  'strPC = plant or comm
+  Dim lngNewPK As String
+  If strPCName = "" Then
+    'std accessionCode
+    lngNewPK = getPKfromAccessionCode(strAccCode)
+  Else
+    'passes plantName or commName
+    lngNewPK = getvalFrmSQL("select " & strPC & "NAme_ID from " & strPC & "name WHERE strComp(" & strPC & "Name," & SQLizeTxt(strPCName) & ",0)=0")
+  End If
+   If IsNumeric(lngNewPK) Then
+    If (lngNewPK + 0) > 0 Then
+      import_RecAlreadyThere = lngNewPK
+    End If
+   Else
+      import_RecAlreadyThere = 0
+   End If
+End Function
+
+Public Function import_corrPK(strTbl As String, strFld As String, lngOld As Long, lngNew As Long, blnWasNew As Boolean)
+  DoCmd.RunSQL "insert into import_XML_pkHT(tableName,fieldName,oldValue,newValue,wasNew) SELECT " _
+     & SQLizeTxt(strTbl) & "," & SQLizeTxt(strFld) & "," & lngOld & "," & lngNew & "," & blnWasNew
+End Function
+
+Public Function import_askUserUndo()
+  ''function deletes information from last import from vegbank
+  
+  If AreYouSure("This will delete permanently all data added to the vegbank module during the last import." _
+  & " To see what will be deleted first, press no, then 'import overview' or 'import details' on the previous form.  Continue?") Then
+    Dim rstDel As New ADODB.Recordset
+    rstDel.Open "select * from import_xml_PKht where wasNew=true ORDER BY hashID DESC;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+    With rstDel
+    Do Until .EOF
+      'delete this entity
+      Debug.Print "deleting : " & !TableName & " # " & !newValue
+      DoCmd.RunSQL "delete * from [" & !TableName & "] WHERE [" & !FieldName & "]=" & !newValue
+    .MoveNext
+    Loop
+    End With
+    rstDel.Close
+    
+  End If
+exitthis:
+  Exit Function
+errThis:
+  msgBox "Error trying to delete data. " & Err.Description
+  Resume exitthis
+End Function

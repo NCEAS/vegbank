@@ -1,0 +1,1332 @@
+Option Compare Database
+Option Explicit
+Const commDebugVal = 0
+
+Public Function Get_CommName_ID(commName As String, Optional blnAddIfNotFound As Boolean) As Long
+  Dim rstCurr As New ADODB.Recordset
+  rstCurr.Open "SELECT CommName_ID FROM CommNAme WHERE CommName = " & SQLizeTxt(commName, "'") & ";", CurrentProject.Connection _
+     , adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstCurr.EOF Then
+    ''no CommName that matches
+    If blnAddIfNotFound Then 'add this name and try to find reference in Z_H
+      Dim lngRef As Long, strTempFind As String
+      lngRef = getCommReferenceOfNm(commName)
+      
+      Get_CommName_ID = add_CommName_to_VB(commName, lngRef)
+    Else
+      Get_CommName_ID = -1
+    End If
+  Else
+    Get_CommName_ID = rstCurr!commName_ID
+  End If
+  rstCurr.Close
+End Function
+
+Public Function get_CommName_fromID(lngPK As Long) As String
+  Dim rstCurr As New ADODB.Recordset
+  rstCurr.Open "SELECT CommName FROM CommNAme WHERE CommName_ID = " & lngPK & ";", CurrentProject.Connection _
+     , adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstCurr.EOF Then
+    ''no CommName that matches
+    get_CommName_fromID = ""
+  Else
+    get_CommName_fromID = rstCurr!commName
+  End If
+  rstCurr.Close
+End Function
+
+Public Function get_CommConcept_ID(lngCommNameID As Long, datDate As Date, strPlStatus As String, _
+      lngCommParty As Long, strClassSys As String, intReturnAlso As Integer, _
+      blnGetMult As Boolean, Optional colConcepts As Collection) As Long
+  '' function gets a CommConcept_ID, based on CommUsage table
+   ''strClassSystem is optional - pass "" to ignore
+'Debug.Print "get_CommConcept_ID >> name:" & lngCommNameID & " ; party:" & lngCommParty
+   Dim rstConc As New ADODB.Recordset
+   ''open recordset that matches above criteria
+   rstConc.Open "SELECT CommConcept_ID FROM CommUsage WHERE " _
+      & " CommName_ID = " & lngCommNameID & " AND " _
+      & " usageStart < #" & datDate & "# AND ((usageStop > #" & datDate & "#) or ((usageStop) is null)) " _
+      & IIf((strPlStatus = ""), "", " AND CommNameStatus = " & SQLizeTxt(strPlStatus, "'") & " ") _
+      & " AND party_ID = " & lngCommParty _
+      & IIf(strClassSys = "", "", " AND classSystem = " & SQLizeTxt(strClassSys, "'") & " "), _
+      CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+
+   If rstConc.EOF Then
+     intReturnAlso = 0 ''no concept matches above criteria
+     get_CommConcept_ID = -1 'don't return any concept
+   Else
+     ''return concept ID
+     get_CommConcept_ID = rstConc!commConcept_ID
+     ''add to collection, if to return a collection
+     If blnGetMult Then colConcepts.Add (rstConc!commConcept_ID)
+     rstConc.MoveNext
+     intReturnAlso = 1 ''concept returned, is the only one
+     Do Until rstConc.EOF
+       intReturnAlso = 2 '' ambiguous concept, ID returned, but other concepts exist that also match
+       If blnGetMult Then  'store list of concepts in collection to pass back
+         colConcepts.Add (rstConc!commConcept_ID)
+       Else  ''exit function, b/c list of concepts not wanted
+         Exit Function
+       End If
+       rstConc.MoveNext
+     Loop
+     
+   End If
+End Function
+
+Public Function InterpretCmName_CmConc(strCommName As String, Optional lngParty As Long, _
+  Optional strNameFound As String, Optional lngIteration As Long, Optional strReturn As String, Optional blnCacheOK As Boolean) As Long
+  ''function interprets a string expression, allegedly a Comm name to a Comm concept
+    ''--BASED ON: 1) names in Z_VB_reconcile table _
+                          (LoadvarName = CommName, VBTableName = CommConcept, VBFieldName = CommConcept_ID)
+    ''            2a) Commname + reference combination in Z_USER_H_CommConcept if found in CommConcept _
+                       (this is the way new Comms that are loaded are found again)
+    ''            2b) name listed in Z_USER_H_CommConcept as CommCode --> then get concept from its CommName, _
+                          which reruns this function with new strCommName:
+    ''            3) the priority order listed in Z_H_PriorityConceptLookup and criteria listed there _
+                          (party, class system, etc)
+    ''            ---If no unambiguous concept can be found, then user is prompted to decide, _
+                          this result is stored in Z_VB_reconcile table
+    ''-------------------------------------------------------------------------
+    '' lngParty is returned by this funtion, too.
+    ''-------------------------------------------
+'Debug.Print "InterpretCmName_CmConc >> " & strCommName
+ strNameFound = strCommName 'default found name unless recursed into new instance of this
+Dim rstCurr As New ADODB.Recordset, cnnLoc As Connection, inttemp As Long
+Set cnnLoc = CurrentProject.Connection
+Dim intReturn As Integer ''gets type of concept that returns, ambiguous or not
+If blnCacheOK Then
+  'get from cache
+  Dim strNumb As String
+  strNumb = getvalFrmSQL("select commConcept_ID from Z_H_VB_lookupNms where commName=" & SQLizeTxt(strCommName))
+  If IsNumeric(strNumb) And strNumb <> "-1" And strNumb <> "" And strNumb <> "0" Then
+    InterpretCmName_CmConc = strNumb
+    Exit Function
+  End If
+
+End If
+
+  
+  '--look now in Z_VB_reconcile, where tables and fields are correct, as well as LoadVAlue = string we're looking for:
+  rstCurr.Open "SELECT * FROM Z_VB_reconcile WHERE LoadVarName = ""CommName"" AND VBTableName = ""CommConcept""" _
+      & " AND VBFieldName = ""CommConcept_ID""" _
+      & " AND LoadVarValue = " & SQLizeTxt(strCommName, "'") & ";", cnnLoc, adOpenForwardOnly, adLockReadOnly, adCmdText
+    If Not (rstCurr.EOF) Then
+       Debug.Print "VB_Reconcile had a value"
+       ''got the concept from Z_VB_reconcile
+       InterpretCmName_CmConc = rstCurr!VBFieldValue
+       Exit Function
+    Else  ''can't find the code for this Comm name
+    End If
+  rstCurr.Close
+  ''haven't found the concept in Z_VB_reconcile
+  ''look in Z_USER_H_CommConcept : but ignore any codes = names
+  rstCurr.Open "SELECT * FROM Z_USER_H_CommConcept WHERE CommCode = " & SQLizeTxt(strCommName, "'") & " and CommNAme<>" & SQLizeTxt(strCommName, "'") & ";", cnnLoc, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If Not (rstCurr.EOF) Then
+     If commDebugVal > 0 Then Debug.Print "COMM LIST got a code"
+     ''FOUND CODE IN SPEC LIST -- look to see if it's a new user concept or not:
+     With rstCurr
+     If Not IsNull(!reference) Then  ''there is a reference, search for name + reference = concept
+       Dim rstConc As New ADODB.Recordset
+       ''check to see if concept is referred to explicitly:
+       rstConc.Open "SELECT CommConcept_ID FROM CommConcept WHERE Reference_ID = " _
+       & get_Ref(!reference) & " AND CommName_ID = " _
+       & Get_CommName_ID(!commName) & ";", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+       If rstConc.EOF Then
+         ''can't find it : continue with other attempts to figure this Comm concept out below.
+       Else
+         ''did find exact concept: use it!
+         If commDebugVal > 0 Then Debug.Print "InterpretCmName_CmConc>> found exact concept match, name + ref: " & strCommName
+         InterpretCmName_CmConc = rstConc!commConcept_ID
+         Exit Function
+       End If
+       rstConc.Close
+     End If 'checking for reference
+     
+     ''call another instance of this function to get new name based on CommNAme, not CommCode (pointer)
+       
+      If IsNull(!commName) Then
+        'not assigned to a name, error, look up code
+        inttemp = -1
+      Else
+         strReturn = strReturn & IIf(strReturn <> "", "   -->   ", "") & strCommName
+          If lngIteration > 9 Then
+            'too many iterations : reported as different error
+            inttemp = -3 'new code: invalid loop
+          Else
+            inttemp = InterpretCmName_CmConc(!commName, , strNameFound, lngIteration + 1, strReturn)
+          End If
+      '  Debug.Print strNameFound & " = namefound"
+        If strNameFound <> strCommName Then
+       If commDebugVal > 0 Then Debug.Print "InterpretCmName_cmConc>> found via new name: " & strNameFound & " | for : " & strCommName
+        End If
+      End If
+     ''End If ''new concept or not
+     End With
+     
+     If inttemp <> -1 Then
+       ''got the concept from Z_USER_B's PK --> in Z_H_VBLookup
+       InterpretCmName_CmConc = inttemp
+       Exit Function
+     End If
+  Else  ''can't find the code for this Comm name
+  End If ''looking for the CommName as a CommCode in Z_UESR_B
+  rstCurr.Close
+
+  ''didn't find in Z_USER_H_CommConcept
+    '--now look at it as accessionCode?
+   'check to see if name is valid accesionCode, if so, if matches extant plantConcept
+     If accessionCodeValid(strCommName) Then
+          'have name that is a valid accessionCode
+          'see if it matches commConcept record
+          inttemp = getPKfromAccessionCode(strCommName, "commConcept")
+          If inttemp > 0 Then
+            'great, we have the concept, as the name is an accessionCode!
+            strReturn = "Name was accessionCode"
+            InterpretCmName_CmConc = inttemp
+            Exit Function
+          End If
+     End If
+     
+  '--look now in CommUsage, using criteria from Z_H_PriorityConceptLookup
+  rstCurr.Open "SELECT * FROM Z_H_PriorityConceptLookup ORDER BY Priority;", _
+      cnnLoc, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstCurr
+  Do Until .EOF
+     'loop thru priority ordered list of Comm lookups
+
+     inttemp = get_CommConcept_ID(Get_CommName_ID(strCommName), Nz(!Date, Now()), Nz(!NameStatus, ""), _
+         !PARTY_ID, Nz(!classSystem, ""), intReturn, False)
+     If inttemp <> -1 Then
+   ''     Debug.Print !party_ID & " had a concept"
+        If intReturn = 2 Then
+         ''ambiguous, return -2
+         InterpretCmName_CmConc = -2
+         strReturn = "Ambiguous name: " & strCommName
+         lngParty = !PARTY_ID
+        Else
+         'not ambiguous, return value
+         InterpretCmName_CmConc = inttemp
+         lngParty = !PARTY_ID
+        End If
+        Exit Function
+     Else
+       ''could not find name according to above criteria, try next list
+       ''Debug.Print !party_ID & " had nothing matching"
+     End If
+  .MoveNext
+  Loop
+  End With
+  ''if you got thru to here, then we can't find a concept with the name at all, that fits list
+  InterpretCmName_CmConc = -1
+End Function
+
+''Public Function getCommConceptIDfromZB_ID(lngPK As Long) As Long
+  ''_DEFUNCT!--
+''gets CommConcept_ID from Z_USER_H_CommConcept's pk, looking in Z_H_VBLookup
+''Dim rstCurr As New ADODB.Recordset
+'rstCurr.Open "SELECT CommCONCEPT_ID FROM Z_H_VBLookup WHERE UserComm_ID = " & lngPK, _
+ '  CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+'If rstCurr.EOF Then
+ ' 'can't find it
+  'getCommConceptIDfromZB_ID = -1
+'Else
+  'got it, unless it's null
+ ' getCommConceptIDfromZB_ID = Nz(rstCurr!CommCONCEPT_ID, -1)
+'End If
+'End Function
+
+
+Public Function depopulate_Z_H_LkNms()
+  If AreYouSure("Do you really want to remove all matches of community names and start again with matching?") Then
+    DoCmd.RunSQL "delete * from Z_H_VB_lookupNms;"
+    recalcCurrForm True, True, True
+    msgBox "Community Matches erased.  Press the 'match comms' button to start matching again."
+  End If
+  
+End Function
+
+Public Function populate_Z_H_LkNms(Optional blnDontOpenForm As Boolean, Optional strOnlyOneName As String, Optional blnNoAdd As Boolean)
+  ''populates the Z_H_VBLookup_Nms table with names, then gets all concept_ID and name_ID's for those
+  rereshCurrForm
+  
+  
+  Debug.Print "populate_Z_H_LkNms >> init. " & Now() & "  only1?:" & strOnlyOneName
+If strOnlyOneName = "" Then
+   ''first runSQL to update all commNameID's and conceptID's to null
+  DoCmd.OpenQuery "commMatch_null_blankAccession"
+  'check any present accessionCodes
+  DoCmd.OpenQuery "commMatch_nullFalseAccessions"
+    'fix any invalid values:
+  Call removeInvalidCommMatches
+
+  'make sure partyAccessionCodes are same as party_ID in Priority Lookup
+  DoCmd.OpenQuery "Z_H_Lookup_updateP_IDFrmAcc"
+  
+  
+'update potential class 3 comms not currently class 3
+  DoCmd.RunSQL "UPDATE Z_H_VB_LookupNms SET Z_H_VB_LookupNms.commAsConc = 3 " _
+& " WHERE (((Z_H_VB_LookupNms.commAsConc)<3) AND ((Z_H_VB_LookupNms.commName) in (select commCode from Z_H_allNamesAsConc_cl3))); "
+
+  'add new class 3 commCodes
+  'txa_addNames "Z_USER_H_CommConcept", "Commcode", "Z_H_VB_LookupNms", "CommName", False, 3, "CommAsConc"
+  DoCmd.RunSQL "INSERT INTO Z_H_VB_LookupNms ( commName, commAsConc ) " _
+& " SELECT Z_H_allNamesAsConc_cl3.commcode, Z_H_allNamesAsConc_cl3.classType " _
+& " FROM Z_H_allNamesAsConc_cl3 LEFT JOIN Z_H_VB_LookupNms ON Z_H_allNamesAsConc_cl3.commcode = Z_H_VB_LookupNms.commName " _
+& " WHERE (((Z_H_VB_LookupNms.commName) Is Null) and (Z_H_allNamesAsConc_cl3.commcode is not null)); "
+  
+  'update potential class 2 comms less than currently class 2
+  DoCmd.RunSQL "UPDATE Z_H_VB_LookupNms SET Z_H_VB_LookupNms.commAsConc = 2 " _
+& " WHERE (((Z_H_VB_LookupNms.commAsConc)<2) AND ((Z_H_VB_LookupNms.commName) in (select commCode from Z_H_allNamesAsConc_cl2))); "
+
+  'add new class 2 commCodes
+  DoCmd.RunSQL "INSERT INTO Z_H_VB_LookupNms ( commName, commAsConc ) " _
+& " SELECT Z_H_allNamesAsConc_cl2.commcode, Z_H_allNamesAsConc_cl2.classType " _
+& " FROM Z_H_allNamesAsConc_cl2 LEFT JOIN Z_H_VB_LookupNms ON Z_H_allNamesAsConc_cl2.commcode = Z_H_VB_LookupNms.commName " _
+& " WHERE (((Z_H_VB_LookupNms.commName) Is Null) and (Z_H_allNamesAsConc_cl2.commcode is not null)); "
+    'add new class 1 commCodes
+  txa_addNames "Z_USER_H_CommConcept", "CommName", "Z_H_VB_LookupNms", "CommName", False, 1, "CommAsConc"
+ 
+  txa_addNames "Z_USER_H_CommConcept", "CommShortName", "Z_H_VB_LookupNms", "CommName", False, 1, "CommAsConc"
+  txa_addNames "Z_USER_H_CommConcept", "OtherCommName", "Z_H_VB_LookupNms", "CommName", False, 1, "CommAsConc"
+  txa_addNames "Z_USER_H_CommConcept", "CommCommonName", "Z_H_VB_LookupNms", "CommName", False, 1, "CommAsConc"
+  
+'  DoCmd.RunSQL "INSERT INTO Z_H_VB_LookupNms ( commName, commAsConc ) " _
+& " SELECT Z_H_allNamesAsConc_cl1.commcode, Z_H_allNamesAsConc_cl1.classType " _
+& " FROM Z_H_allNamesAsConc_cl1 LEFT JOIN Z_H_VB_LookupNms ON Z_H_allNamesAsConc_cl1.commcode = Z_H_VB_LookupNms.commName " _
+& " WHERE (((Z_H_VB_LookupNms.commName) Is Null) and (Z_H_allNamesAsConc_cl1.commcode is not null)); "
+  
+'  txa_addNames "Z_USER_H_CommConcept", "CommParent", "Z_H_VB_LookupNms", "CommName", False, 2, "CommAsConc"
+'  txa_addNames "Z_USER_H_CommConcept", "CommSyn1", "Z_H_VB_LookupNms", "CommName", False, 2, "CommAsConc"
+'  txa_addNames "Z_USER_H_CommConcept", "CommSyn2", "Z_H_VB_LookupNms", "CommName", False, 2, "CommAsConc"
+'  txa_addNames "Z_USER_H_CommConcept", "CommSyn3", "Z_H_VB_LookupNms", "CommName", False, 2, "CommAsConc"
+'  txa_addNames "Z_USER_H_CommConcept", "CommSyn4", "Z_H_VB_LookupNms", "CommName", False, 2, "CommAsConc"
+'  txa_addNames "Z_USER_I_PlotComm", "CommName1", "Z_H_VB_LookupNms", "CommName", False, 2, "CommAsConc"
+'  txa_addNames "Z_USER_I_PlotComm", "CommName2", "Z_H_VB_LookupNms", "CommName", False, 2, "CommAsConc"
+'  txa_addNames "Z_USER_I_PlotComm", "CommName3", "Z_H_VB_LookupNms", "CommName", False, 2, "CommAsConc"
+'  txa_addNames "Z_USER_I_PlotComm", "CommName4", "Z_H_VB_LookupNms", "CommName", False, 2, "CommAsConc"
+  
+
+  ''delete Comm names no longer in use:
+    DoCmd.RunSQL "DELETE Z_H_VB_LookupNms.* FROM Z_H_VB_LookupNms WHERE CommAsConc = -1;"
+Else 'just one name
+  'only doing one name, different handling, make sure it is in the list
+  If "yes" <> getvalFrmSQL("select 'yes' from Z_H_VB_lookupNms where commName=" & SQLizeTxt(strOnlyOneName)) And Not blnNoAdd Then
+     'need to add, but how?
+     ' first check to see if in commConc list
+     Dim intCommAs As Integer
+     If IsCommInCommConceptList(strOnlyOneName) Then
+       intCommAs = 3
+     Else 'not 3
+       If getvalFrmSQL("select 'yes' from Z_H_allNamesAsConc_cl2 where commCode=" & SQLizeTxt(strOnlyOneName)) = "yes" Then
+         intCommAs = 2
+       Else 'not 2
+         intCommAs = 1
+       End If
+     End If
+     DoCmd.RunSQL "INSERT INTO Z_H_VB_LookupNms ( commName, commAsConc ) SELECT " & SQLizeTxt(strOnlyOneName) & "," & intCommAs
+  End If
+   
+   
+End If 'only one
+
+
+  Dim rstNames As New ADODB.Recordset
+  rstNames.Open "select * from Z_H_VB_LookupNms where accessionCode is null" & IIf(strOnlyOneName = "", "", " AND (commNAme=" & SQLizeTxt(strOnlyOneName) & " OR linkedThrough=" & SQLizeTxt(strOnlyOneName) & ")"), CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  
+  ''update NewCommConcept field in Z_USER_H_CommConcept to make only new concepts be added (new concept = -1)
+'  DoCmd.RunSQL "UPDATE Z_USER_H_CommConcept SET NewCommConcept = false;"
+  
+  With rstNames
+    ''fill in name_ID's and concept_ID's
+    Do Until .EOF
+       
+       If Not IsNull(!accessionCode) Then
+         'confirm that it is still here and move on
+         Dim lngConfirmAcc As Long
+         lngConfirmAcc = getPKfromAccessionCode(!accessionCode, "commConcept")
+         If lngConfirmAcc = !commConcept_ID Then
+           'accession code still found and legit
+           'keep data and move on
+           GoTo AccessionCodeOK
+         Else
+           'remove accessionCode- not found on vegbank_module any longer
+           !accessionCode = Null
+           'then go through normal process again
+         End If
+       End If
+       
+       !commName_ID = Get_CommName_ID(!commName)
+       If !commAsConc > 1 Then
+        ' If !CommNAme_ID <> -1 Then  ''could not find name
+           Dim lngParty As Long, strNameFound As String, lngTempConc As Long
+           strNameFound = ""
+           Dim strNotes As String
+           strNotes = ""
+
+           lngTempConc = InterpretCmName_CmConc(!commName, , strNameFound, , strNotes)
+           !commConcept_ID = lngTempConc
+           'update name that was used to find concept
+           !linkedThrough = strNameFound
+           !notes = strNotes
+           If lngTempConc <> -1 Then
+             !accessionCode = getAccessionCode("commConcept", lngTempConc)
+           End If
+           If !commConcept_ID = -1 Then
+             'new Comm concept
+           '  DoCmd.RunSQL "UPDATE Z_USER_H_CommConcept SET NewCommConcept=true WHERE CommCode = """ & !commName & """;"
+           End If
+           !PARTY_ID = lngParty
+        ' Else
+         '  'could not find name, therefore could not find concept
+          ' !CommCONCEPT_ID = -1
+        ' End If
+       Else
+         'name not used as a concept, set to null
+           !commConcept_ID = Null
+           Dim lngTemp As Long
+           lngTemp = getCommReferenceOfNm(!commName)
+           If lngTemp <> -1 Then
+             !commreference_ID = lngTemp
+           End If
+       End If ' Comm as concpet
+       .Update
+AccessionCodeOK:
+    .MoveNext
+    Loop
+  End With
+    
+  Debug.Print "END:" & Now()
+  If Not blnDontOpenForm Then
+    DoCmd.OpenForm "Z_USER_H_vb_View"
+    recalcCurrForm (True)
+  End If
+End Function
+
+Public Function IsCommInCommConceptList(strName As String) As Boolean
+  IsCommInCommConceptList = getvalFrmSQL("select true from Z_USER_H_commConcept where commCode=" & SQLizeTxt(strName))
+End Function
+
+
+Public Function removeInvalidCommMatches()
+  'function removes any invalid plant matches from the matching table, such as those with "" as plant name or null
+  ' and any that have null values for plantConcept_ID
+  DoCmd.RunSQL "DELETE * FROM chk_H_invalid_lookup;"
+  '
+End Function
+
+Public Function getCommReferenceOfNm(strName As String) As Long
+''fill in Comm Name References, from Y_CommReferenceTranslation
+  Dim rstZB As New ADODB.Recordset
+  rstZB.Open "SELECT namesReference FROM z_USER_H_CommConcept WHERE CommCode = " & SQLizeTxt(strName, "'") _
+     & " OR CommName = " & SQLizeTxt(strName, "'") & " OR CommShortName = " & SQLizeTxt(strName, "'") _
+     & " OR OtherCommName = " & SQLizeTxt(strName, "'") & " OR CommCommonName = " & SQLizeTxt(strName) & ";" _
+      , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If Not rstZB.EOF Then
+    getCommReferenceOfNm = get_Ref(Nz(rstZB!NamesReference, ""))
+  Else
+    ''cant find name in Z_B where reference exists
+    getCommReferenceOfNm = -1
+  End If
+  rstZB.Close
+End Function
+
+''Public Function txa_addNames(strTbl As String, strFld As String, destTbl As String, destFld As String, _
+ '   blnNoNulls As Boolean, Optional intExtraVal As Integer, Optional strExtraFld As String)
+  ''adds all strings in strFld in strTbl to destFld in destTbl
+'  Dim rstSrc As New ADODB.Recordset
+ ' Dim rstDest As New ADODB.Recordset
+  'rstSrc.Open "SELECT [" & strFld & "] FROM [" & strTbl & "]", CurrentProject.Connection, _
+'      adOpenForwardOnly, adLockReadOnly, adCmdText
+ ' With rstSrc
+  'Do Until .EOF
+ '   If (blnNoNulls) Or Not (IsNull(.Fields(strFld))) Then
+      'open recordset with destination set, to add field value if not found there:
+  '    If IsNull(.Fields(strFld)) Then
+   '     rstDest.Open "SELECT * FROM [" & destTbl & "] WHERE [" & destFld & "] is null ;" _
+    '      , CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+     '' Else
+       ' rstDest.Open "SELECT * FROM [" & destTbl & "] WHERE [" & destFld & "] = """ & .Fields(strFld) & """;" _
+        ''  , CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+      'End If
+      'If rstDest.EOF Then
+        ''add new
+'        rstDest.AddNew
+ '       rstDest.Fields(destFld) = .Fields(strFld)
+  '      rstDest.Update
+   '   End If
+    '    ''if extra value is passed, make sure that it overwrites old value in extra field:
+      '  If (intExtraVal) <> 0 Then
+     '  ''   Debug.Print "EV:_" & strExtraVal & "_"
+     '     If rstDest.Fields(strExtraFld) < intExtraVal Or IsNull(rstDest.Fields(strExtraFld)) Then
+            'update to new value
+      '      rstDest.Fields(strExtraFld) = intExtraVal
+ '           rstDest.Update
+ '         End If
+  '      End If
+      ''close destination rst
+'      rstDest.Close
+ '   End If
+  '.MoveNext
+'  Loop
+ ' End With
+'End Function
+'Public Function Populate_Z_H_VBLookup()
+  ''defunct!--
+  ''populates the table Z_H_VBLookup with CommName_ID's and CommConcept_ID's and CommRef_ID's
+  ''clear current contents:
+'  DoCmd.RunSQL "DELETE * FROM Z_H_VBLookup;"
+ ' Dim rstSrc As New ADODB.Recordset
+  'Dim rstDest As New ADODB.Recordset
+'  rstSrc.Open "Z_USER_H_commConcept", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+ ' rstDest.Open "Z_H_VBLookup", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+  'With rstSrc
+'  Do Until .EOF
+ '     rstDest.AddNew
+  '    rstDest!UserComm_ID = !UserComm_ID
+   '   rstDest!CommREFERENCE_ID = get_Ref(Nz(!reference, ""))
+ ''add values as they apply : skip if the base value is null:
+'If Not IsNull(!CommCode) Then
+'rstDest!CommCode_ID = Get_CommName_ID(!CommCode)
+'End If
+'If Not IsNull(!CommName) Then
+'rstDest!CommNAme_ID = Get_CommName_ID(!CommName)
+'End If
+'If Not IsNull(!CommShortName) Then
+'rstDest!CommShortName_ID = Get_CommName_ID(!CommShortName)
+'End If
+'If Not IsNull(!CommCommonName) Then
+'rstDest!CommCommonName_ID = Get_CommName_ID(!CommCommonName)
+'End If
+'If Not IsNull(!otherCommName) Then
+'rstDest!OtherCommName_ID = Get_CommName_ID(!otherCommName)
+'End If
+'If Not IsNull(!CommName) Then
+'rstDest!CommCONCEPT_ID = InterpretCmName_CmConc(!CommName)
+'End If
+'If Not IsNull(!CommParent) Then
+'rstDest!CommParentConcept_ID = InterpretCmName_CmConc(!CommParent)
+'End If
+'If Not IsNull(!CommSyn1) Then
+'rstDest!syn1_Concept_ID = InterpretCmName_CmConc(!CommSyn1)
+'End If
+'If Not IsNull(!CommSyn2) Then
+'rstDest!syn2_Concept_ID = InterpretCmName_CmConc(!CommSyn2)
+'End If
+'If Not IsNull(!CommSyn3) Then
+'rstDest!syn3_Concept_ID = InterpretCmName_CmConc(!CommSyn3)
+'End If
+'If Not IsNull(!CommSyn4) Then
+'rstDest!syn4_Concept_ID = InterpretCmName_CmConc(!CommSyn4)
+'End If
+'      rstDest.Update
+'  .MoveNext
+'  Loop
+'  End With
+'
+'End Function
+
+''on plant side ONLY
+'Public Function get_Ref(strRef As String, Optional blnDblCheck As Boolean) As Long
+ ''translates reference string into an actual reference, based on table: y_Commreferencetranslation
+' Dim rstRef As New ADODB.Recordset
+ 'rstRef.Open "SELECT * FROM Z_VB_reconcile WHERE LoadVarName = ""CommReference"" and LoadVarValue = """ _
+  '  & strRef & """;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+' If rstRef.EOF Then
+ '  ''can't get reference, pass back -1
+ '  get_Ref = -1
+' E'lse
+   'got ref
+'   get_Ref = Nz(rstRef!VBFieldValue, -1)
+ '  If blnDblCheck Then
+  '   ''check to make sure that the Ref_ID makes sense:
+   '  Dim rstRef2 As New ADODB.Recordset '
+    ' rstRef2.Open "SELECT * FROM CommReference WHERE CommReference_ID = " & Nz(rstRef!VBFieldValue, -1), _
+     '   CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+'     If rstRef2.EOF Then
+ '      ''CommREference ID cannot be found
+  '     get_Ref = -1
+   '  End If
+    ' rstRef2.Close
+'   End If
+' End If
+'End Function
+
+Public Function add_CommName_to_VB(strCommName As String, lngRef As Long) As Long
+  'adds a Comm name to the CommName table in the vegbank module : returns CommNAme_ID
+Debug.Print "add_CommName_to_VB >> " & strCommName
+  If strCommName <> "" Then
+    Dim rstChkDupl As New ADODB.Recordset
+    rstChkDupl.Open "SELECT * FROM CommName WHERE CommName = " & SQLizeTxt(strCommName, "'") & ";", _
+       CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+    If rstChkDupl.EOF Then
+      rstChkDupl.AddNew
+      rstChkDupl!commName = strCommName
+      rstChkDupl!dateEntered = Now()
+      If lngRef <> -1 Then
+        rstChkDupl!REFERENCE_ID = lngRef
+      End If
+      rstChkDupl.Update
+      add_CommName_to_VB = rstChkDupl!commName_ID
+      rstChkDupl.Close
+    Else
+      'CommName already there
+      Debug.Print "Comm Name already in CommNAme:" & strCommName
+      add_CommName_to_VB = rstChkDupl!commName_ID
+    End If
+  End If
+End Function
+
+Public Function add_ALL_new_CommNAmesToVB()
+''function adds new Comm names (as signified by CommName_ID = -1 in Z_H_VB_lookupNms) to vegbank module
+Debug.Print "add_ALL_new_CommNAmesToVB >> init."
+Dim rstNewPl As New ADODB.Recordset
+  rstNewPl.Open "SELECT * FROM Z_H_VB_lookupNms WHERE CommNAme_ID = -1", _
+  CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstNewPl
+  Do Until .EOF
+     ''loop thru each record and add new CommNAme, updating CommName_ID
+     If Len(!linkedThrough) > 255 Then 'add linked through name
+      !commName_ID = add_CommName_to_VB(!linkedThrough, Nz(!commreference_ID, -1))
+     Else
+      !commName_ID = add_CommName_to_VB(!commName, Nz(!commreference_ID, -1))
+     End If
+     .Update
+  .MoveNext
+  Loop
+  End With
+End Function
+
+Public Function add_CommConc_to_VB(strCommName As String, lngRef As Long, Optional strDesc As String) As Long     ' Optional strLevl As String, Optional lngParentConc As Long) As Long
+  'adds a Comm concept to the CommConcept table in the vegbank module : returns CommConcept_ID
+Debug.Print "add_CommConc_to_VB >> Comm: " & strCommName & " ; REF: " & lngRef
+  ''check to make sure valid name and reference:
+  Dim lngCmNm As Long
+  lngCmNm = Get_CommName_ID(strCommName, True)
+  If lngCmNm = -1 Then
+     Debug.Print strCommName & " is not a valid Comm name: SHOULD NEVER HAPPEN"
+  End If
+  Dim rstRefChk As New ADODB.Recordset
+  rstRefChk.Open "SELECT * FROM reference WHERE reference_ID = " & lngRef, CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstRefChk.EOF Then
+    'not a valid reference:
+    msgBox "Your reference was not valid, ID = " & lngRef & Chr(13) & "Skipping concept."
+    Exit Function
+  End If
+   ''--reference and name have been checked, now add concept
+  If strCommName <> "" Then
+    Dim rstChkDupl2 As New ADODB.Recordset
+    rstChkDupl2.Open "SELECT * FROM CommConcept WHERE CommName_ID = " & lngCmNm & " AND reference_ID = " & lngRef & ";", _
+      CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+    With rstChkDupl2
+    If .EOF Then  'could not find concept, add a new one
+      .AddNew
+''      Debug.Print "adding new:" & !CommCONCEPT_ID
+      ''add new data for concept as applicable
+      !commName_ID = lngCmNm
+      !REFERENCE_ID = lngRef
+      If strDesc <> "" Then
+        !CommDescription = strDesc
+      End If
+   '   If strLevl <> "" Then
+    '    !commLevel = strLevl
+     ' End If
+   '   If lngParentConc <> 0 Then
+    '    !commParent = lngParentConc
+     ' End If
+''NOT DENORMALIZED!!    !CommName = strCommName  ''COMMDIFF''
+       'add accessionCode
+      !accessionCode = writeNewAccCode("commConcept", !commConcept_ID)
+      .Update
+      add_CommConc_to_VB = !commConcept_ID
+    Else
+      'CommConcept already exists!
+      Debug.Print "Comm Concept already in CommConcept:" & strCommName & " _ref_:" & lngRef
+      add_CommConc_to_VB = !commConcept_ID
+    End If
+    End With
+    rstChkDupl2.Close
+  End If
+End Function
+
+Function testPLCONCLOAD()
+  add_ALL_new_CommConcToVB False
+End Function
+
+Public Function add_ALL_new_CommConcToVB(blnAddEverything As Boolean)
+''function adds new concepts to VegBank module, given Z_USER_H_commConcept.NewCommConcept = true
+  ''if blnAddEverything then it adds new concepts with Status and Usage as well.
+Debug.Print "add_ALL_new_CommConcToVB >> init."
+ If blnAddEverything Then
+   'need Comm Party:
+   Dim lngparty_ID As Long
+   lngparty_ID = getPartyID()
+   If lngparty_ID = -1 Then
+     ''can't get party
+     Debug.Print "CAN't GET Comm PARTY!!"
+     Exit Function
+   End If
+ End If
+ Dim dtNow As Date
+ dtNow = Now()
+ 
+ Dim rstNewCnc As New ADODB.Recordset
+  rstNewCnc.Open "SELECT * FROM Z_USER_H_commConcept WHERE NewCommConcept = true AND archivedStatus = 0 ", _
+     CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstNewCnc
+  If .EOF Then Debug.Print "NO NEW CONCEPTS ADDED!" & Now()
+  Do Until .EOF
+     ''loop thru each record and add new CommNAme, updating CommName_ID
+     
+     Dim lngConc As Long
+     Debug.Print "Adding concept for : " & !commName & " ___ref___:" & !reference
+     
+     lngConc = add_CommConc_to_VB(!commName, get_Ref(Nz(!reference, "")), Nz(!CommDescription, ""))
+           ' ,           Nz(!commLevel, ""), lngParentConc)
+            Debug.Print " concept ID = " & lngConc
+     ''archive CommConcept ID in Z_H_VB_LookupNms
+     Dim strSQL As String
+     strSQL = "UPDATE Z_H_VB_LookupNms SET CommConcept_ID = " & lngConc & " WHERE CommName = " _
+           & SQLizeTxt(!commName) & " OR CommName = " & SQLizeTxt(!commCode) & ";"
+     'Debug.Print strSQL
+     DoCmd.RunSQL strSQL, True
+     
+     'undo concepts which have been specified as a NEW concept manually -- has been added and is no longer new
+     strSQL = "DELETE Z_VB_reconcile.* FROM Z_VB_reconcile " _
+& " WHERE (((Z_VB_reconcile.LoadVarName)=""CommName"") AND ((Z_VB_reconcile.LoadVarValue)=" _
+& SQLizeTxt(!commCode) & ") AND ((Z_VB_reconcile.VBTableName)=""CommConcept"") AND ((Z_VB_reconcile.VBFieldValue)=-1));"
+     'Debug.Print strSQL
+     DoCmd.RunSQL strSQL, True
+     
+     
+     ''!VB_ConceptID = lngConc
+     !ArchivedStatus = 1
+     ''ADD status, correlation and usage, if asked for:
+     If blnAddEverything Then
+       ''add usage(s)!  -- so as to get concept back out with interpret_concept function
+         ''addSetCommUsages lngConc, lngParty, dtNow, !CommName, Nz(!CommNameSystem, ""), _
+           Nz(!CommShortName, ""), Nz(CommShortNameSystem, ""), Nz(CommCommonName, ""), _
+           Nz(CommCommonNameSystem, ""), Nz(otherCommName, ""), Nz(otherCommNameSystem, "")
+addSetCommUsages lngConc, lngparty_ID, dtNow, !commName, Nz(!commNameSystem, ""), Nz(!CommNameStatus, "standard"), _
+Nz(!commShortName, ""), Nz(!commShortNameSystem, ""), Nz(!CommshortNameStatus, "standard"), _
+Nz(!commCommonName, ""), Nz(!commCommonNameSystem, ""), Nz(!CommCommonNameStatus, "standard"), _
+Nz(!otherCommName, ""), Nz(!otherCommNameSystem, ""), Nz(!OtherCommNameStatus, "standard"), !commCode
+         
+       ''add status
+   '    Dim lngStatus As Long
+    '   lngStatus = Add_CommStatus_toVB(lngConc, lngparty_ID, (!CommConceptStatus), Now(), _
+     '       False, False, , , Nz(!CommPartyComments, ""))
+       'add correlations:
+       !ArchivedStatus = 1.5
+     End If
+     .Update
+  .MoveNext
+  Loop
+  End With
+End Function
+
+'Public Function getPlConc_fromLookup(strName As String) As Long
+''function gets a Comm concept ID from the Z_H_VB_LookupNms table, returning -1 if not found!
+'Debug.Print "GETTING PL CONC FROM LOOKUP! defunct"
+'Dim rstCurr As New ADODB.Recordset
+'rstCurr.Open "SELECT * FROM Z_H_VB_LookupNms WHERE CommName = """ & strName & """;" _
+'   , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+'If rstCurr.EOF Then
+'  ''not concept found by that name!
+'  getPlConc_fromLookup = -1
+'Else
+'  getPlConc_fromLookup = Nz(rstCurr!CommCONCEPT_ID, -1)
+'End If
+'End Function
+
+Public Function Add_CommStatus_toVB(lngConc As Long, lngParty As Long, strStatus As String, dtStart As Date, _
+    blnStop As Boolean, blnOldStatus As Boolean, Optional dtStop As Date, Optional lngRef As Long, _
+   Optional strComments As String, Optional strLevel As String, Optional lngParent As Long) As Long
+   Debug.Print "Add_CommStatus_toVB >> Conc: " & lngConc & " ; Party: " & lngParty & " ; Status:" & strStatus
+  ''function adds a CommStatus and returns the PK of that new status.
+  ''---also sets old status record's stop date as the start date of this new record
+  ''-- If this is a concept to be added before a current concept, then blnOldStatus should be true and the stopdate _
+      for the new status will be the min of startDates for statuses with same concept and party
+  Dim rstStat As New ADODB.Recordset
+  rstStat.Open "SELECT * FROM CommStatus WHERE party_ID = " & lngParty & " AND CommConcept_ID = " & lngConc _
+    , CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstStat
+  Do Until .EOF
+     ''status(es) exist already for this party. Some changing of dates must be accomplished before adding new record
+     If IsNull(!stopDate) And !startDate < dtStart Then
+         ''stop this status, at the same date as the new status starts:
+         !stopDate = dtStart
+         .Update
+     Else
+        If !stopDate <= dtStart Then
+          ''status ends before this start date -- leave it alone
+        Else
+          If !startDate > dtStart And blnOldStatus Then
+            ''get date to turn off the new concept to add
+            If dtStop <> 0 Then
+              If !startDate < dtStop Then dtStop = !startDate
+            Else
+              dtStop = !startDate
+            End If
+            blnStop = True
+          Else
+            msgBox "The current Concept already has a status in effect for you for the same time " _
+              & "period that you are trying to add.  No status added - Concept = " & lngConc
+            Debug.Print "The current Concept already has a status in effect for you for the same time " _
+              & "period that you are trying to add.  No status added - Concept = " & lngConc
+              
+            Add_CommStatus_toVB = !COMMSTATUS_ID
+            GoTo NoStatusToAdd
+          End If
+        End If 'stop date before new record's start = OK
+     End If
+     .MoveNext
+  Loop
+  .AddNew
+    !commConcept_ID = lngConc
+    If lngRef <> 0 Then  '!0
+       !REFERENCE_ID = lngRef
+    End If
+    
+    !commConceptStatus = strStatus
+    !startDate = dtStart
+    If blnStop Then
+      !stopDate = dtStop
+    End If
+    If strComments <> "" Then
+      !commPartyComments = strComments
+    End If
+    If strLevel <> "" Then
+      !commLevel = strLevel
+    End If
+    If lngParent <> 0 Then
+      !commParent_ID = lngParent
+    End If
+    !PARTY_ID = lngParty
+    ''pass back status ID
+    Add_CommStatus_toVB = !COMMSTATUS_ID
+  .Update
+  End With
+NoStatusToAdd:
+End Function
+
+Public Function add_ALL_new_CommStatusCorrToVB() As Boolean
+''function adds new statuses (AND CORRELATIONS) to VegBank module, given Z_USER_H_commConcept.AddPartyPerspective = true
+Debug.Print "add_ALL_new_CommStatusCorrToVB >>  init. "
+ 'need Comm Party:
+Dim lngparty_ID As Long
+lngparty_ID = getPartyID()
+If lngparty_ID = -1 Then
+  ''can't get party
+  Debug.Print "CANT GET PARTY!"
+  Exit Function
+End If
+Dim dtNow As Date
+dtNow = Now()
+ 
+ Dim rstNewCnc As New ADODB.Recordset
+  rstNewCnc.Open "SELECT * FROM Z_USER_H_commConcept WHERE AddPartyPerspective = true AND archivedStatus < 2 ", _
+     CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstNewCnc
+  If .EOF Then Debug.Print "No Statuses to add!"
+  Do Until .EOF
+     ''loop thru each record and add new CommNAme, updating CommName_ID
+     Debug.Print "adding status : " & !commCode
+     ''consider parent concept:
+     Dim lngParentConc As Long
+     If IsNull(!commParent) Then
+       lngParentConc = 0
+     Else
+       lngParentConc = IIf(IsNull(!commParent), 0, InterpretCmName_CmConc(!commParent, , , , , True))
+       
+       ''if no concept was found, don't pass a concept (pass 0, unfortunately)
+       If lngParentConc = -1 Then
+        lngParentConc = 0
+        Debug.Print "not adding parent concept: " & !commParent
+       End If
+     End If
+     
+     Dim lngStatus As Long, lngConc As Long
+     lngConc = InterpretCmName_CmConc(!commCode, , , , , True)
+     ''**TEST
+     lngStatus = Add_CommStatus_toVB(lngConc, lngparty_ID, !commConceptStatus, _
+            dtNow, False, False, , , Nz(!commPartyComments), Nz(!commLevel), lngParentConc)
+     !ArchivedStatus = 2
+     ''add any Comm Correlations:
+     Dim inttemp As Integer
+     For inttemp = 1 To 4
+      If Not IsNull(.Fields("CommSyn" & inttemp)) And Not IsNull(.Fields("CommSynConverg" & inttemp)) Then
+        ''this set of convergence values exists!
+        If Add_CommCorr_toVB(lngStatus, InterpretCmName_CmConc(.Fields("CommSyn" & inttemp), , , , , True), _
+           .Fields("CommSynConverg" & inttemp), dtNow, False) Then
+           'successfully added Corr - update arc status:
+           !ArchivedStatus = 3
+        End If
+      End If
+     Next inttemp
+          'update any usages here, with status_ID, too (NOV 5,2004)
+     'rules: same party, same concept, null status_ID in usage, (endDate is null?)
+     DoCmd.RunSQL "update commUSage set commStatus_ID=" & lngStatus & " WHERE commConcept_ID=" & lngConc & " and party_ID=" _
+       & lngparty_ID & " AND usageStop IS NULL;"
+     
+     .Update
+  .MoveNext
+  Loop
+  End With
+  'function executes properly : CommPartyID is correctly found
+  add_ALL_new_CommStatusCorrToVB = True
+End Function
+
+Public Function Add_CommCorr_toVB(lngStatus As Long, lngConc As Long, strConverg As String, dtStart As Date, _
+    blnStop As Boolean, Optional dtStop As Date) As Boolean
+    ''function adds a CommCorrelation, given a CommStatus, CommConcept, convergence, startdate, and optionally a stop date
+    On Error GoTo Corr_Error
+Debug.Print "Add_CommCorr_toVB >> Conc: " & lngConc & " ;  Status:" & lngStatus & " Convg: " & strConverg
+   Dim rstCorr As New ADODB.Recordset
+   'open correlation
+   rstCorr.Open "CommCorrelation", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+   With rstCorr
+     'add new record
+     .AddNew
+     !COMMSTATUS_ID = lngStatus
+     !commConcept_ID = lngConc
+     !CommConvergence = strConverg
+     !CorrelationStart = dtStart
+     'add stop date if there is one
+     If blnStop Then
+       !CorrelationStop = dtStop
+     End If
+     'update changes
+     .Update
+   End With
+   Add_CommCorr_toVB = True
+   Exit Function
+Corr_Error:
+  'error in process, report it and exit
+   msgBox "There was an error in trying to add a CommCorrelation: Status = " & lngStatus & _
+      " ; Concept = " & lngConc & Chr(13) & Err.Description
+      Debug.Print "CommCorrelation Error: STatus " & lngStatus & " ; Concept: " & lngConc
+    Add_CommCorr_toVB = False
+End Function
+
+Public Function add_ALL_CommUsage_nonNew()
+ ''adds Comm Usages to VegBank that are not a new concept --
+ ''i.e. adds part of the party perspective to old concepts
+Debug.Print "add_ALL_CommUsage_nonNew >> init."
+ 'need Comm Party:
+Dim lngparty_ID As Long
+lngparty_ID = getPartyID()
+If lngparty_ID = -1 Then
+  ''can't get party
+  Exit Function
+End If
+'date
+Dim dtNow As Date
+dtNow = Now()
+Dim rstUsage As New ADODB.Recordset
+''open recordset of usages to add
+rstUsage.Open "SELECT * FROM Z_USER_H_commConcept WHERE archivedStatus <1.5 AND newCommConcept <> true and addPartyPErspective = true" _
+   , CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+With rstUsage
+Do Until .EOF
+  Debug.Print "ADDING USAGE for " & !commCode
+  ''get current concept ID
+  Dim lngConc As Long
+  lngConc = InterpretCmName_CmConc(!commCode, , , , , True)
+  ''append names to concept as usages for the curr party
+addSetCommUsages lngConc, lngparty_ID, dtNow, !commName, Nz(!commNameSystem, ""), Nz(!CommNameStatus, "standard"), _
+Nz(!commShortName, ""), Nz(!commShortNameSystem, ""), Nz(!CommshortNameStatus, "standard"), _
+Nz(!commCommonName, ""), Nz(!commCommonNameSystem, ""), Nz(!CommCommonNameStatus, "standard"), _
+Nz(!otherCommName, ""), Nz(!otherCommNameSystem, ""), Nz(!OtherCommNameStatus, "standard"), !commCode
+ !ArchivedStatus = 1.5
+ .Update
+.MoveNext
+Loop
+End With
+
+End Function
+
+Public Function Add_CommUsage_toVB(lngConc As Long, lngName As Long, strNameStatus As String, strClassSys As String, _
+    lngParty As Long, dtStart As Date, blnStop As Boolean, blnOldUsg As Boolean, Optional dtStop As Date) As Boolean
+''function adds a CommUsage, given a CommNAme, CommConcept,classSystem, nameStatus , startdate, and optionally a stop date
+ '   On Error GoTo USage_Error
+Debug.Print "Add_CommUsage_toVB >> Conc: " & lngConc & " ; Party: " & lngParty & " ; Name:" & lngName & " NStatus: " & strNameStatus
+  ''---also sets old usage record's stop date as the start date of this new record
+  ''-- If this is a concept to be added before a current concept, then blnOldUsg should be true and the stopdate _
+      for the new usage will be the min of startDates for startuses with same concept and party, and classSystem
+  'get classSystem SQL clause:
+  Dim strClassSQL As String
+  If strClassSys = "" Then
+    strClassSQL = " AND ((classSystem) is null)  "
+  Else
+    strClassSQL = " AND classSystem = " & SQLizeTxt(strClassSys)
+  End If
+  
+  Dim rstUSG As New ADODB.Recordset
+  rstUSG.Open "SELECT * FROM CommUsage WHERE party_ID = " & lngParty & " AND CommConcept_ID = " & lngConc _
+    & strClassSQL & " AND CommNameStatus = ""standard""", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstUSG
+  Do Until .EOF
+    If !CommNameStatus = "standard" And strNameStatus = "standard" Then
+      ''std Usg(es) exist already for this party. Some changing of dates must be accomplished before adding new std record
+     If IsNull(!usageStop) And !usageStart < dtStart Then
+         ''stop this status, at the same date as the new status starts:
+         !usageStop = dtStart
+         .Update
+     Else
+        If !usageStop <= dtStart Then
+          ''status ends before this start date -- leave it alone
+        Else
+          If !usageStart > dtStart And blnOldUsg Then
+            ''get date to turn off the new concept to add
+            If dtStop <> 0 Then
+              If !usageStart < dtStop Then dtStop = !usageStart
+            Else
+              dtStop = !usageStart
+            End If
+            blnStop = True
+          Else
+            msgBox "The current Concept - system already has a usage in effect for you for the same time " _
+              & "period that you are trying to add.  No usage added - Concept = " & lngConc
+            GoTo NoUsgToAdd
+          End If
+        End If
+     End If
+    End If
+     .MoveNext
+  Loop
+  
+  .AddNew
+    'add new usage:
+    ''lngConc As Long, lngName As Long, strNameStatus As String, strClassSys As String, _
+    lngParty As Long, dtStart As Date, blnStop As Boolean, blnOldUsg As Boolean, Optional dtStop
+    !commConcept_ID = lngConc
+    !commName_ID = lngName
+    !CommNameStatus = strNameStatus
+    If strClassSys <> "" Then
+      !classSystem = strClassSys
+    End If
+    !usageStart = dtStart
+    If blnStop Then
+      !usageStop = dtStop
+    End If
+    !PARTY_ID = lngParty
+    .Update
+  End With
+  Add_CommUsage_toVB = True
+NoUsgToAdd:
+Exit Function
+USage_Error:
+  'error in process, report it and exit
+   msgBox "There was an error in trying to add a CommUSage: Name = " & lngName & _
+      " ; Concept = " & lngConc & Chr(13) & Err.Description
+      Debug.Print "CommUSG Error: Name " & lngName & " ; Concept: " & lngConc
+    Add_CommUsage_toVB = False
+End Function
+
+Public Function addSetCommUsages(lngConc As Long, lngParty As Long, dtNow As Date, _
+strCommName As String, strCommNameSystem As String, strCommNameStatus As String, _
+strCommShortName As String, strCommShortNameSystem As String, strCommShortNameStatus As String, _
+strCommCommonName As String, strCommCommonNameSystem As String, strCommCommonNameStatus As String, _
+strOtherCommName As String, strOtherCommNameSystem As String, strOtherCommNameStatus As String, _
+  strCode As String)
+''adds a set of Comm Usages
+Debug.Print "addSetCommUsages >> " & lngConc & " : " & strCommName; " ; " & strCommShortName & " ; " _
+   & strCommCommonName & " ; " & strOtherCommName
+'CommName - primary name
+         Add_CommUsage_toVB lngConc, Get_CommName_ID(strCommName, True), (strCommNameStatus), _
+           (strCommNameSystem), lngParty, dtNow, False, False
+'CommShortName, if not null
+         If Not ("" = (strCommShortName)) Then
+           Add_CommUsage_toVB lngConc, Get_CommName_ID(strCommShortName, True), (strCommShortNameStatus), _
+           (strCommShortNameSystem), lngParty, dtNow, False, False
+         End If
+'CommCommonName, if not null
+         If Not ("" = (strCommCommonName)) Then
+           Add_CommUsage_toVB lngConc, Get_CommName_ID(strCommCommonName, True), (strCommCommonNameStatus), _
+           (strCommCommonNameSystem), lngParty, dtNow, False, False
+         End If
+'OtherCommName, if not null
+         If Not ("" = (strOtherCommName)) Then
+           Add_CommUsage_toVB lngConc, Get_CommName_ID(strOtherCommName, True), (strOtherCommNameStatus), _
+           (strOtherCommNameSystem), lngParty, dtNow, False, False
+         End If
+'code, if not null AND if codes are to be added:
+     If getMetaData2Value("MigrateCommCodes") Then
+         If Not ("" = (strCode)) Then
+           Add_CommUsage_toVB lngConc, Get_CommName_ID(strCode, True), ("standard"), _
+           ("CODE"), lngParty, dtNow, False, False
+         End If
+     End If
+End Function
+
+Public Function Comm_Txa_CompletePkgMigr()
+  Debug.Print "Comm_Txa_CompletePkgMigr >> init."
+  ''import
+ 'skip: populate_Z_H_LkNms (True)
+  ''check and verify, then:
+  '<!--  /*  // @comment@ */ -->
+  ''only add comms if there is something to add:
+  Dim rstPlants As New ADODB.Recordset
+  rstPlants.Open "SELECT count(UserComm_ID) as z__NumComms FROM Z_user_h_CommConcept " _
+    & " WHERE NewCommConcept=true or AddPartyPerspective=true;", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstPlants!Z__NumComms > 0 Then
+  
+'    add_ALL_new_CommNAmesToVB ' NAMES NOT ADDED NOW, BUT ADDED ON DEMAND!
+    add_ALL_new_CommConcToVB True ''includes usages
+    'now new usages:
+    add_ALL_CommUsage_nonNew
+    'now all statuses and correlations:
+    Debug.Print "It is " & add_ALL_new_CommStatusCorrToVB & " that statuses were successfully added"
+    ''  add_ALL_new_CommStatusCorrToVB
+    Call update_commName_ConcUsg
+  Else
+    Debug.Print "Comm_Txa_CompletePkgMigr >> no new communities to add."
+  End If
+End Function
+
+
+Public Function get_CommStatusTxt_fromID(lngStatus As Long) As String
+  ''function returns the string "accepted" or "not accepted" for a status_ID
+  Dim rstStatus As New ADODB.Recordset
+  rstStatus.Open "SELECT * FROM CommStatus WHERE CommStatus_ID = " _
+     & lngStatus, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If Not rstStatus.EOF Then
+    get_CommStatusTxt_fromID = rstStatus!commConceptStatus
+  End If
+End Function
+
+Public Function get_CommStatusID(lngConc, lngParty, dtDate As Date)
+  ''function gets a CommStatus ID, given a concept, PArty and date
+  Dim rstStatus As New ADODB.Recordset
+  rstStatus.Open "SELECT CommSTatus_ID FROM CommStatus WHERE CommConcept_ID = " _
+     & lngConc & " AND party_ID = " & lngParty & " AND startDate < #" _
+     & dtDate & "# AND ((stopDate > #" & dtDate & "#) OR ((stopDate) is null))", _
+       CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  Dim lngRet As Long
+  'default to not found
+  lngRet = -1
+  With rstStatus
+  Do Until .EOF
+    If lngRet = -1 Then
+      ''found status
+      lngRet = !COMMSTATUS_ID
+    Else
+      'found too many statuses (>1)
+      lngRet = -2
+      GoTo ExitGetStatus
+    End If
+  .MoveNext
+  Loop
+  End With
+ExitGetStatus:
+get_CommStatusID = lngRet
+End Function
+
+Public Function testewtajlfjlsafds()
+   Debug.Print cmtxa_ReturnCommName_ID(-71, "get")
+End Function
+
+Public Function cmtxa_ReturnCommConcept_ID(lngConc As Long, GetPut As String) As Long
+''function deals with browsing for Comm concept (from Browse for file model):
+    On Error GoTo StoreFileErr:
+GoTo Past_err
+StoreFileErr:
+  msgBox "Error in storing Comm concept ID!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+Static lngCommConceptInMem As Long
+If GetPut = "put" Then
+  lngCommConceptInMem = lngConc
+  'use other storing method, too
+  Call RememberPK("commUsage", lngConc, "put")
+  On Error Resume Next
+    'close form
+    DoCmd.Close acForm, "CommUsage"
+  On Error GoTo StoreFileErr
+End If
+  cmtxa_ReturnCommConcept_ID = lngCommConceptInMem
+End Function
+
+Public Function cmtxa_BrowseForCommConcept() As Long
+''function is enacted by user who wants to browse for a Comm concept
+    On Error GoTo StoreFileErr:
+GoTo Past_err
+StoreFileErr:
+  msgBox "Error in browsing for Comm concept!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+  ''make sure that anything currently stored is erased:
+  cmtxa_ReturnCommConcept_ID 0, "put"
+  ''open form to get new value
+  DoCmd.OpenForm "CommUsage", , , , , acDialog
+  ''return result:
+  cmtxa_BrowseForCommConcept = cmtxa_ReturnCommConcept_ID(-1, "get")
+End Function
+
+Public Function ChangeCommConc(strConcNm As String, lngConc As Long, Optional blnSkipNegative1 As Boolean) As Boolean
+  ''function add CommName data to the VB_Reconcile table --> CommConcept_ID's
+  '  Debug.Print strConc & " --> " & lngCocn
+  If lngConc <> 0 Or (lngConc = -1 And Not blnSkipNegative1) Then 'if it's 0 then the operation was cancelled
+    ChangeCommConc = True
+    addVBReconcile_Rec "CommName", strConcNm, "CommConcept", "CommConcept_ID", lngConc
+    'on error resume next
+    Forms!Z_USER_H_VB_View!commConcept_ID = lngConc
+    Forms!Z_USER_H_VB_View.Refresh
+    If lngConc = -1 Then
+      'make sure Comm is listed as new Comm in Z_USER_B
+  '    DoCmd.RunSQL "UPDATE Z_USER_H_commConcept SET NewCommConcept = true WHERE CommCode = """ & strConcNm & """;"
+    End If
+    
+  End If
+End Function
+'--in plant side = OK
+'Public Function addVBReconcile_Rec(strVariable As String, strVal As String, strTbl As String, _
+          strFld As String, lngPK As Long, Optional strTxtVal As String)
+'End Function
+
+Public Function cmtxa_ReturnCommName_ID(lngName As Long, GetPut As String) As Long
+''function deals with browsing for Comm concept (from Browse for file model):
+    On Error GoTo StoreFileErr:
+GoTo Past_err
+StoreFileErr:
+  msgBox "Error in storing Comm name ID!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+Static lngCommNameInMem As Long
+If GetPut = "put" Then
+  lngCommNameInMem = lngName
+  On Error Resume Next
+    'close form
+    DoCmd.Close acForm, "CommName"
+  On Error GoTo StoreFileErr
+End If
+  cmtxa_ReturnCommName_ID = lngCommNameInMem
+End Function
+
+Public Function cmtxa_BrowseForCommName() As Long
+''function is enacted by user who wants to browse for a Comm name
+    On Error GoTo StoreFileErr:
+GoTo Past_err
+StoreFileErr:
+  msgBox "Error in browsing for Comm name!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+  ''make sure that anything currently stored is erased:
+  cmtxa_ReturnCommName_ID 0, "put"
+  ''open form to get new value
+  DoCmd.OpenForm "CommName", , , , , acDialog
+  ''return result:
+  cmtxa_BrowseForCommName = cmtxa_ReturnCommName_ID(-1, "get")
+End Function
+
+Function testnfadfjdasfja()
+  ChangeCommName "Goofer", 215201
+End Function
+
+Public Function ChangeCommName(strNm As String, lngPK As Long) As Boolean
+  ''function changes CommNames to new CommName
+  Dim strNewName As String
+  strNewName = get_CommName_fromID(lngPK)
+  If lngPK <> 0 And strNewName <> "" Then 'operation was cancelled
+    Dim inttemp As Integer
+    inttemp = msgBox("Are you sure you want to update the current Comm name : " & strNm & Chr(13) _
+         & "With the new Comm name: " & strNewName, vbYesNoCancel)
+    If inttemp = vbYes Then
+        Dim rstChkPlCodes As New ADODB.Recordset
+        rstChkPlCodes.Open "SELECT * FROM Z_USER_H_commConcept WHERE CommCode = " & SQLizeTxt(strNewName) & " OR CommCode = " _
+          & SQLizeTxt(strNm) & ";", CurrentProject.Connection, adOpenStatic, adLockReadOnly, adCmdText
+       '' Debug.Print "cnt:" & rstChkPlCodes.RecordCount
+        If rstChkPlCodes.RecordCount = 2 Then
+          'both the old and new names are present - will not succeed for SpecList
+          msgBox "You already have the CommCode : """ & strNewName _
+            & """ in your community list.  You cannot change the name : """ & strNm & """ to """ _
+            & strNewName & """ as this would cause duplications!  First delete the former if you wish to replace it with the new name.", vbExclamation
+          ChangeCommName = False
+          Exit Function
+        End If
+        rstChkPlCodes.Close
+        'run several SQL queries to update the various fields
+        DoCmd.RunSQL "UPDATE Z_USER_H_commConcept SET CommNAme = " & SQLizeTxt(strNewName) _
+                              & " WHERE CommNAme = " & SQLizeTxt(strNm) & ";"
+        DoCmd.RunSQL "UPDATE Z_USER_H_commConcept SET Commcode = " & SQLizeTxt(strNewName) _
+                              & " WHERE Commcode = " & SQLizeTxt(strNm) & ";"
+        DoCmd.RunSQL "UPDATE Z_USER_H_commConcept SET CommShortNAme = " & SQLizeTxt(strNewName) _
+                              & " WHERE CommShortNAme = " & SQLizeTxt(strNm) & ";"
+        DoCmd.RunSQL "UPDATE Z_USER_H_commConcept SET CommCommonNAme = " & SQLizeTxt(strNewName) _
+                              & " WHERE CommCommonNAme = " & SQLizeTxt(strNm) & ";"
+        DoCmd.RunSQL "UPDATE Z_USER_H_commConcept SET OtherCommNAme = " & SQLizeTxt(strNewName) _
+                              & " WHERE OtherCommNAme = " & SQLizeTxt(strNm) & ";"
+        DoCmd.RunSQL "UPDATE Z_USER_H_commConcept SET CommSyn1 = " & SQLizeTxt(strNewName) _
+                              & " WHERE CommSyn1 = " & SQLizeTxt(strNm) & ";"
+        DoCmd.RunSQL "UPDATE Z_USER_H_commConcept SET CommSyn2 = " & SQLizeTxt(strNewName) _
+                              & " WHERE CommSyn2 = " & SQLizeTxt(strNm) & ";"
+        DoCmd.RunSQL "UPDATE Z_USER_H_commConcept SET CommSyn3 = " & SQLizeTxt(strNewName) _
+                              & " WHERE CommSyn3 = " & SQLizeTxt(strNm) & ";"
+DoCmd.RunSQL "UPDATE Z_USER_H_commConcept SET CommSyn4 = " & SQLizeTxt(strNewName) _
+                                  & " WHERE CommSyn4 = " & SQLizeTxt(strNm) & ";"
+DoCmd.RunSQL "UPDATE Z_USER_H_commConcept SET CommParent = " & SQLizeTxt(strNewName) _
+                                  & " WHERE CommParent = " & SQLizeTxt(strNm) & ";"
+        
+DoCmd.RunSQL "UPDATE Z_USER_I_PlotComm SET CommName1 = " & SQLizeTxt(strNewName) _
+                               & " WHERE CommName1 = " & SQLizeTxt(strNm) & ";"
+DoCmd.RunSQL "UPDATE Z_USER_I_PlotComm SET CommName2 = " & SQLizeTxt(strNewName) _
+                               & " WHERE CommName2 = " & SQLizeTxt(strNm) & ";"
+DoCmd.RunSQL "UPDATE Z_USER_I_PlotComm SET CommName3 = " & SQLizeTxt(strNewName) _
+                               & " WHERE CommName3 = " & SQLizeTxt(strNm) & ";"
+DoCmd.RunSQL "UPDATE Z_USER_I_PlotComm SET CommName4 = " & SQLizeTxt(strNewName) _
+                               & " WHERE CommName4 = " & SQLizeTxt(strNm) & ";"
+                              
+                             'see if plantNAme already in Z_B
+        If getvalFrmSQL("select commNAme from Z_H_vb_lookupNms where commName = " & SQLizeTxt(strNewName)) = strNewName Then
+          'name already there, just delete current entry
+          DoCmd.RunSQL "DELETE * FROM Z_H_VB_LookupNms WHERE commName = " & SQLizeTxt(strNm, "'") & ";"
+        Else
+          'name not already in Z_B, update it
+          DoCmd.RunSQL "UPDATE Z_H_VB_LookupNms SET CommName = " & SQLizeTxt(strNewName) _
+                              & " , CommName_ID = " & lngPK & " WHERE CommName = " & SQLizeTxt(strNm) & ";"
+        End If
+        
+        DoCmd.RunSQL "UPDATE Z_H_VB_lookupNms SET linkedThrough = " & SQLizeTxt(strNewName) & " WHERE linkedThrough=" & SQLizeTxt(strNm)
+        'update lookups for old and new names
+        populate_Z_H_LkNms True, strNewName
+        populate_Z_H_LkNms True, strNm, True
+        
+        On Error Resume Next
+        Forms!Z_USER_H_VB_View.Refresh
+        ChangeCommName = True
+    End If
+  End If
+End Function
+
+Public Function PreviewComms(strWhich As String)
+  If strWhich = "name" Then
+    DoCmd.OpenForm "Z_USER_H_NewNames"
+  Else
+    DoCmd.OpenForm "Z_USER_H_commConcept", , , "NewCommConcept = true"
+  End If
+End Function
+
+Public Function update_commName_ConcUsg(Optional blnForceUpdate As Boolean)
+  'updates the commName field in plantConcept and plantUsage (denormalized)
+'  DoCmd.RunSQL "UPDATE commName INNER JOIN commConcept ON commName.commNAME_ID = commConcept.commNAME_ID SET commConcept.commname = [commName].[commName] WHERE commConcept.commname is null;", false
+  DoCmd.RunSQL "UPDATE commName INNER JOIN commUsage ON commName.commNAME_ID = commUsage.commNAME_ID SET commUsage.commname = [commName].[commName] " & IIf(blnForceUpdate, ";", "WHERE commUsage.commNAme is null;"), False
+End Function
+
+Public Function cmtxa_FindInCommLT(strName As String) As Boolean
+  'function takes a string, for example from Z_Lookup_H and looks to see if it's in Z_USER_H (for new concepts)
+  Dim rstComm As New ADODB.Recordset
+  rstComm.Open "SELECT * FROM Z_USER_H_CommConcept WHERE commCode = " & SQLizeTxt(strName) & ";", CurrentProject.Connection _
+     , adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstComm.EOF Then
+    'can't find it
+    cmtxa_FindInCommLT = False
+  Else
+    'did find the name in Z_USER_B, will be added from there
+    cmtxa_FindInCommLT = True
+  End If
+End Function
+
+

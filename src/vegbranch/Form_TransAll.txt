@@ -1,0 +1,182 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Form_Load()
+  Me.subfrmValues.SourceObject = ""
+  Me.subfrmValues.Visible = False
+  
+End Sub
+
+Private Sub subfrmValues_Enter()
+  Dim strRowSrc As String
+  Dim strCurrTbl As String
+  Dim strCurrFld As String
+  strCurrTbl = Forms![transall]![tbl]
+  strCurrFld = Forms![transall]![fld]
+  strRowSrc = "SELECT " & strCurrFld & " FROM " _
+  & strCurrTbl & " GROUP BY " & strCurrFld & " HAVING (((" & strCurrFld & ") Is Not Null))" _
+  & " ORDER BY " & strCurrFld & ";"
+ ' Debug.Print "subfrmValues_enter>>" & [Forms]![transall]![subfrmValues].Enabled & " : " & [Forms]![transall]![subfrmValues].Visible
+'  [Forms]![transall]![subfrmValues]!FieldValue.RowSource = strRowSrc
+  
+   'set default column widths and count, only changed if value descriptions exist
+    '   Forms!transall!subfrmValues!VegBankValue.ColumnCount = 1
+    '   Forms!transall!subfrmValues!VegBankValue.ColumnWidths = 2 * Forms!transall!subfrmValues!VegBankValue.Width
+    '   Forms!transall!subfrmValues!VegBankValue.ListWidth = 2 * Forms!transall!subfrmValues!VegBankValue.Width
+       
+  If Me.destClosedList = "yes" Or Me.destClosedList = "open" Then
+     Forms!transall!subfrmValues!VegBankValue.RowSourceType = "Table/Query"
+     Forms!transall!subfrmValues!VegBankValue.RowSource = "SELECT Listvalue, ValueDesc FROM FieldList WHERE TableName=""" & [destTbl] _
+       & """ AND FieldNAme=""" & [destFld] & """ ORDER BY sortOrd, Listvalue "
+     
+     
+     
+     If Me.destClosedList = "open" Then
+       Forms!transall!subfrmValues!VegBankValue.LimitToList = False
+     
+       Forms!transall!subfrmValues!DontTranslateValue.Visible = True
+     Else
+     
+       Forms!transall!subfrmValues!DontTranslateValue.Visible = False
+       Forms!transall!subfrmValues!VegBankValue.LimitToList = True
+     End If
+  Else
+     Forms!transall!subfrmValues!DontTranslateValue.Visible = True
+    
+     Forms!transall!subfrmValues!VegBankValue.RowSourceType = "Value List"
+     Forms!transall!subfrmValues!VegBankValue.RowSource = ""
+     Forms!transall!subfrmValues!VegBankValue.LimitToList = False
+  End If
+  
+  If Me.ClosedList = "Bool" Then
+    'boolean field destination, convert to True and False
+     Forms!transall!subfrmValues!DontTranslateValue.Visible = False
+     Forms!transall!subfrmValues!VegBankValue.RowSourceType = "Value List"
+     Forms!transall!subfrmValues!VegBankValue.RowSource = "True;Yes!;False;No!"
+     Forms!transall!subfrmValues!VegBankValue.LimitToList = True
+     
+  End If
+  Me.[subfrmValues].Requery
+  
+End Sub
+
+Function translNow(intFieldID As Long)
+ ''', strTransTbl As String, strTransFld As String, strType As String)
+Dim cnnLoc As Connection, rstGetData As New ADODB.Recordset
+Set cnnLoc = CurrentProject.Connection
+rstGetData.Open "SELECT * FROM Z_FieldDescription WHERE Z_FieldDescr_Id = " & intFieldID & ";", cnnLoc _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+With rstGetData
+If .EOF Then
+  msgBox "ERROR!  Field not found! " & intFieldID, vbCritical
+End If
+Dim strTransTbl As String, strTransFld As String, strType As String
+strTransTbl = !TableName
+strTransFld = !FieldName
+strType = !dataType
+End With
+rstGetData.Close
+
+''create SQL string to update field with new values
+Dim strupdateSQL As String
+Dim strDefVal As String
+Dim strDefValSQL As String
+
+'This string collects the SQL statement to update User values to VegBank values
+strupdateSQL = "UPDATE " & strTransTbl & " INNER JOIN (Z_FieldDescription INNER JOIN Y_Translate_anyField ON Z_FieldDescription.Z_FieldDescr_Id = Y_Translate_anyField.FieldID) ON " _
+& strTransTbl & "." & strTransFld & "= Y_Translate_anyField.FieldValue SET " & strTransTbl & "." & strTransFld & "= [VegBankValue]" _
+& " WHERE (((Z_FieldDescription.Z_FieldDescr_Id)=" & intFieldID & "));"
+'MsgBox (strupdateSQL)
+If Trim(UCase(strType)) = "TEXT" Then
+    ' only run conversion when text field
+   DoCmd.RunSQL strupdateSQL
+End If
+'Updates successfullyUpdated field in FieldsToConvertUsr
+DoCmd.RunSQL "UPDATE Z_FieldDescription INNER JOIN FieldsToConvertUsr ON Z_FieldDescription.Z_FieldDescr_Id = FieldsToConvertUsr.FieldIdToConvert SET FieldsToConvertUsr.SuccessfullyTranslated = True " _
+& " WHERE (((Z_FieldDescription.Z_FieldDescr_Id)=" & intFieldID & "));"
+
+'From here down, converts null values to default value, if default value given
+
+On Error GoTo errdefault
+  'Build query to get default value for field
+  Dim rstCurr As New ADODB.Recordset
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+
+
+  Dim strSQLselect As String
+    strSQLselect = "SELECT First(Y_Translate_anyField.VegBankValue) AS FirstOfVegBankValue" _
+& "  FROM Y_Translate_anyField  " _
+& "  WHERE (((Y_Translate_anyField.FieldID)=  " & intFieldID & _
+") AND ((Y_Translate_anyField.DefaultForField)=-1));"
+
+      rstCurr.Open strSQLselect, cnnLocal, , 1, adCmdText
+      'if no default value, get out of here
+  If IsNull(rstCurr!FirstOfVegBankValue) Then GoTo NoDefault
+
+'gets default value
+strDefVal = rstCurr!FirstOfVegBankValue
+rstCurr.Close
+    'MsgBox ("Then I will do it!")
+    If IsNumeric(strDefVal) Then
+      'SQL for non-numeric field to update default values:
+      strDefValSQL = "UPDATE " & strTransTbl & " SET " & strTransTbl & "." & strTransFld _
+        & " = " & strDefVal & " WHERE (((" & strTransTbl & "." & strTransFld & ") Is Null));"
+    Else
+      'SQL for numeric field to be added:
+      strDefValSQL = "UPDATE " & strTransTbl & " SET " & strTransTbl & "." & strTransFld _
+        & " = """ & strDefVal & """ WHERE (((" & strTransTbl & "." & strTransFld & ") Is Null));"
+    End If
+    DoCmd.RunSQL strDefValSQL
+
+NoDefault:
+  CheckFieldsForFields strTransTbl & "." & strTransFld, "field"
+  Exit Function
+errdefault:
+  msgBox ("Error in processing default value-  not completed")
+  Exit Function
+End Function
+
+Private Sub TransAllFlds_Click()
+''check current field:
+  If Not chkFieldToTransl([TransAllFieldID]) Then
+    ''not ok
+    Exit Sub
+  End If
+  On Error GoTo FieldsNotTransl
+  Dim intResp As Integer
+  intResp = msgBox("Are you sure you want to translate all fields listed to the left" & Chr(13) & _
+     " using criteria values on the right? ", vbYesNoCancel, "VegBranch")
+  If intResp = vbYes Then
+      ''translate values of "@---TRANSLATE this value to NULL!---@" back to null
+      Dim strSQL As String
+      strSQL = "UPDATE Y_Translate_anyField SET Y_Translate_anyField.VegBankValue = null" _
+      & " WHERE (((Y_Translate_anyField.VegBankValue) = ""@---TRANSLATE this value to NULL!---@""));"
+      DoCmd.RunSQL strSQL
+      
+      Dim rstCurr As New ADODB.Recordset
+      Dim cnnLocal As Connection
+      Set cnnLocal = CurrentProject.Connection
+      'open recordset of all translation fields to translate
+      rstCurr.Open "Y_TrAll_Fld", cnnLocal, , 1, adCmdTable
+      With rstCurr
+        Do Until .EOF
+           If !SuccessfullyTranslated = False Then
+             'run translation for this field
+             translNow !FieldIdToConvert
+           End If
+           Me.Repaint
+           .MoveNext
+        Loop
+      End With
+  msgBox "Translated all values"
+  DoCmd.Close acForm, Me.Name, acSaveYes
+  End If
+  'add new error statement so that if _
+  'fieldsToConvertUsr has already been closed, no error results
+  On Error Resume Next
+  DoCmd.Close acForm, "FieldsToConvertUsr", acSaveYes
+  Exit Sub
+FieldsNotTransl:
+  msgBox "Error in translation!", vbCritical
+End Sub

@@ -1,0 +1,13 @@
+Option Compare Database
+Option Explicit
+
+
+
+Private Sub Command4_Click()
+  Debug.Print Me!formName
+  DoCmd.OpenForm (Me!formName), acNormal
+End Sub
+
+
+
+

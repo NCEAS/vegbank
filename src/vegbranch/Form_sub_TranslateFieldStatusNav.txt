@@ -1,0 +1,125 @@
+Option Compare Database
+Option Explicit
+
+
+Private Sub cmdfindField_Click()
+'Debug.Print "finding field..."
+If chkFieldToTransl(Forms!transall!TransAllFieldID) Then
+  Trns_findFieldToTransl Me!FieldIdToConvert
+End If
+End Sub
+
+Public Function Trns_findFieldToTransl(intFieldToFind As Long)
+    ''---- go to new field ------
+    'intFieldToFind = Forms!transAll!subfrmValues!FieldIdToConvert
+    DoCmd.OpenForm "transAll", , , "FieldIdToConvert = " & intFieldToFind
+
+    DoCmd.GoToControl "TransAllFieldID"
+    DoCmd.FindRecord intFieldToFind, acStart, False, , False, , True
+    Forms!transall.Repaint
+    
+'add all values of the user's that are currently in the field
+Dim strSQL As String, strCurrTbl As String, strCurrFld As String
+  strCurrTbl = Forms![transall]![tbl]
+  strCurrFld = Forms![transall]![fld]
+
+Dim strDestTbl As String, strDestFld As String
+  strDestTbl = Nz(Forms![transall]![destTbl], "noTBL")
+  strDestFld = Nz(Forms![transall]![destFld], "noFLD")
+'will cause duplicated values, which will be disallowed and ignored by indexes
+DoCmd.SetWarnings False
+'calculate SQL to add all values of this field to translation table
+ 
+'3 SQL statements here: 1 for filling in closed list values (or open) that already match
+   ' 2nd to do the same for boolean fields
+   ' 3rd catches other situations and adds all values used (where not prohibited by index, ie already translated)
+  
+  'If closed list field, then add appropriate values if matching
+  If (Forms!transall!destClosedList = "yes") _
+      Or Forms!transall!destClosedList = "open" Then
+      
+  strSQL = "INSERT INTO Y_Translate_anyField ( FieldID, FieldValue, VegBankValue ) " _
+  & " SELECT forms!transAll!transAllFieldId, " & strCurrFld & ", nblnk(getValFrmSqL(""SELECT listValue FROM fieldList " _
+& " WHERE TableName='" & strDestTbl & "' AND FieldName='" & strDestFld & "' and listValue='"" & [" & strCurrFld & "] &  ""'"") ,'Null')" _
+  & " FROM " & strCurrTbl _
+  & " GROUP BY " & strCurrFld & "" _
+  & " HAVING (((" & strCurrFld & ") Is Not Null))" _
+  '& " ORDER BY " & strCurrFld & ";"
+   '   Debug.Print strSQL
+     DoCmd.RunSQL strSQL
+  Else '' possibly confidentiality Status
+   '  If strCurrFld = "confidentialityStatus" Then
+       'does the same this as above, except for the numeric field: confidentiality status
+    '   DoCmd.OpenQuery "aux_plot_confidentialityStatus_TranslQry"
+    ' End If
+  End If
+  
+  'IF boolean field, add "true" or "false" if values match
+  If Forms!transall!ClosedList = "bool" Then
+
+  strSQL = "INSERT INTO Y_Translate_anyField ( FieldID, FieldValue, VegBankValue ) " _
+  & " SELECT forms!transAll!transAllFieldId, " & strCurrFld & ", Iif(trans_booleanTxt(" & strCurrTbl & "." _
+  & strCurrFld & ")='',null,trans_booleanTxt(" & strCurrTbl & "." & strCurrFld & "))" _
+  & " FROM " _
+  & strCurrTbl & " GROUP BY " & strCurrFld & " HAVING (((" & strCurrFld & ") Is Not Null))" _
+  & " ORDER BY " & strCurrFld & ";"
+ '    Debug.Print strSQL
+     DoCmd.RunSQL strSQL
+  
+  End If
+  
+  
+  strSQL = "INSERT INTO Y_Translate_anyField ( FieldID, FieldValue ) SELECT forms!transAll!transAllFieldId, " & strCurrFld & " FROM " _
+  & strCurrTbl & " GROUP BY " & strCurrFld & " HAVING (((" & strCurrFld & ") Is Not Null))" _
+  & " ORDER BY " & strCurrFld & ";"
+  
+'Debug.Print strSQL
+
+DoCmd.RunSQL strSQL
+'turn warnings back on
+DoCmd.SetWarnings True
+'4th SQL statement.  All nulls converted to "@---TRANSLATE this value to NULL!---@" for this field
+strSQL = "UPDATE Y_Translate_anyField SET Y_Translate_anyField.VegBankValue = ""@---TRANSLATE this value to NULL!---@""" _
+& " WHERE (((Y_Translate_anyField.FieldID)=" & Forms!transall!TransAllFieldID & ") AND ((Y_Translate_anyField.VegBankValue) Is Null));"
+DoCmd.RunSQL strSQL
+
+
+Forms!transall!subfrmValues.Visible = False
+Forms!transall!subfrmValues.Requery
+Forms!transall!subfrmValues.Visible = True
+    DoCmd.GoToControl "subfrmValues"
+    DoCmd.GoToControl "VegBankValue"
+ 'default= no caption
+ Forms!transall!subfrmValues!warningLabel.Caption = ""
+ If Forms!transall!destClosedList = "open" Then
+    Forms!transall!subfrmValues!warningLabel.Caption = "Open List!  You can keep your own values if you want."
+ End If
+ If Forms!transall!destClosedList = "no" Then
+    Forms!transall!subfrmValues!warningLabel.Caption = "No List! You can keep your own values or supply new ones."
+ End If
+ 'handle booleans
+  If Forms!transall!ClosedList = "bool" Then
+    Forms!transall!subfrmValues!warningLabel.Caption = "Boolean Field! Select 'true' or 'false'."
+ End If
+ 
+ If Forms!transall!dataType <> "text" Then
+    'only allow default value
+    Forms!transall!subfrmValues!warningLabel.Caption = "Warning! Not a text field. Can specify default value only."
+    Forms!transall!subfrmValues!FieldValue.Enabled = False
+  Else
+    
+    Forms!transall!subfrmValues!FieldValue.Enabled = True
+  End If
+    Forms!transall!subfrmStatus.Requery
+    Exit Function
+Err_findField:
+    msgBox "An error occurred", , "VegBranch"
+End Function
+
+Private Sub Command9_Click()
+  If AreYouSure("Do you want to uncheck all the fields, making it possible to repeat translation for the checked (finished fields)?" _
+    & Chr(13) & "If you are not sure, press NO, then click the red question mark for help.") Then
+    DoCmd.RunSQL "UPDATE FieldsToConvertUsr SET SuccessFullyTranslated = false WHERE ConvertThisTime = true;"
+    Me.Refresh
+  End If
+End Sub

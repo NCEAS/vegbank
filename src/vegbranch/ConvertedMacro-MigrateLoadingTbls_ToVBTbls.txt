@@ -1,0 +1,377 @@
+Option Compare Database
+Option Explicit
+
+
+Public Function migrateParties()
+  'open form to show progress
+   DoCmd.OpenForm "LoadingStatus", acNormal, "", "", , acNormal
+    Forms!loadingStatus!currentTable = "Party"
+    
+    DoCmd.OpenQuery "Update_VBPartyID_DefMetaData2", acNormal, acEdit
+    ' A -> Party
+     
+    DoCmd.OpenQuery "append_A_to_Party"
+    Forms!loadingStatus!A2Party = True
+    ' table has finished migrating
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "address"
+    
+    ' A-> address
+    DoCmd.OpenQuery "append_A_to_address"
+    ' table has finished migrating
+
+    Forms!loadingStatus!A2Address = True
+    ' .
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "telephone"
+    
+    ' A -> telephone
+    DoCmd.OpenQuery "append_A_to_telephone"
+    ' table has finished migrating
+    Forms!loadingStatus!A2Telephone = True
+    ' .
+    ' Updates Z_A_Party to translate User Codes to VegBankIDs for future reference (only updates records that have no current VegBankID)
+
+    DoCmd.OpenQuery "Update_VegBankParty_ID_inA", acNormal, acEdit
+End Function
+
+
+Function MigrateLoadingTbls_ToVBTbls()
+ On Error GoTo MigrateLoadingTbls_ToVBTbls_Err
+    Dim dtestart As Date, dteWholeThingStart As Date
+    dteWholeThingStart = Now()
+    
+    
+    DoCmd.OpenForm "LoadingStatus", acNormal, "", "", , acNormal
+    
+    ' set Current Table
+    
+    Forms!loadingStatus!currentTable = "ProjectContributor"
+    
+    ' update VB_Party_ID in ProjectContributor source table
+    dtestart = Now()
+    DoCmd.OpenQuery "Y_ProjContrib_update_VBPartyIDs"
+    ' Y -> ProjectContributor (Metadata)
+    DoCmd.OpenQuery "Append_Y_to_ProjContrib_RUN", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!Y2ProjContrib = True
+    ' set Current Table
+    
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    
+    Forms!loadingStatus!currentTable = "plot"
+    'should run query: GetAuthPLOTCode_4ParentPlot_C ?? 8-dec-2003
+    
+    ''prepare plots and obs for previous ID's (plot and obs)
+    
+    ' C -> plot
+    dtestart = Now()
+    DoCmd.OpenQuery "append_C_to_plot", acNormal, acEdit
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' C-> embargo
+    dtestart = Now()
+    Forms!loadingStatus!currentTable = "embargo"
+    DoCmd.OpenQuery "append_C_to_embargo", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!c2Plot = True
+    ' .
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "observation"
+    rereshCurrForm
+    ' C-> Observation
+    dtestart = Now()
+    DoCmd.OpenQuery "append_C_to_obs", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!C2Obs = True
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' .
+    'clear cache of any negative placeNames in hopes of them being matched
+    dtestart = Now()
+    Call interp_placeName_clearCache(False)
+    Forms!loadingStatus!currentTable = "place"
+    
+    DoCmd.OpenQuery "append_c2_to_place", acViewNormal, acEdit
+    
+    'update plot denormalized fields to carry state and country, if available:
+    DoCmd.OpenQuery "denorm_fillIn_plot_stateProvince"
+    DoCmd.OpenQuery "denorm_fillIn_plot_country"
+    
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "observatationContributor"
+    rereshCurrForm
+    ' C-> ObservationContrib
+    dtestart = Now()
+    DoCmd.OpenQuery "append_C2_to_obsContrib", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!C2ObsContrib = True
+    ' .
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    
+    
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "stratum"
+    rereshCurrForm
+    ' C -> stratum
+    dtestart = Now()
+    DoCmd.OpenQuery "append_C2_to_stratum", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!C2Stratum = True
+    ' .
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "taxonObs"
+    rereshCurrForm
+    ' D -> TaxonObs
+    dtestart = Now()
+    DoCmd.OpenQuery "append_D_to_TaxonObs", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!D2TaxonObs = True
+    ' .
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "TaxonImportance"
+    rereshCurrForm
+    
+    
+    'reset cover codes to percent where works:
+    dtestart = Now()
+    Call UpdateAllCoverCodeToPerc
+    ' D -> Stratum Composition
+    Debug.Print "...updating cover codes" & " took " & DateDiff("s", dtestart, Now())
+    dtestart = Now()
+    DoCmd.OpenQuery "append_D2_to_TaxonImp", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!D2TaxonImp = True
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' .
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "TaxonInterp"
+    rereshCurrForm
+    ' D -> Taxonomic Interp (original)
+    dtestart = Now()
+    DoCmd.OpenQuery "append_D_to_TaxonInterp_orig", acNormal, acEdit
+    Debug.Print "..taxInt Orig" & " took " & DateDiff("s", dtestart, Now())
+    'any taxon Groups, too
+    dtestart = Now()
+    DoCmd.OpenQuery "append_D_to_TaxonGroup_Syn1"
+    Debug.Print "..taxGrp1" & " took " & DateDiff("s", dtestart, Now())
+    dtestart = Now()
+    DoCmd.OpenQuery "append_D_to_TaxonGroup_Syn2"
+    Debug.Print "..taxGrp2" & " took " & DateDiff("s", dtestart, Now())
+    dtestart = Now()
+    DoCmd.OpenQuery "append_D_to_TaxonGroup_Syn3"
+    Debug.Print "..taxGrp3" & " took " & DateDiff("s", dtestart, Now())
+    dtestart = Now()
+    DoCmd.OpenQuery "append_D_to_TaxonGroup_Syn4"
+    Debug.Print "..taxGrp4" & " took " & DateDiff("s", dtestart, Now())
+   
+    ' D -> Taxonomic Interp (current)
+    dtestart = Now()
+    DoCmd.OpenQuery "append_D_to_TaxonInterp_Curr", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!D2TaxonInterp = True
+    Debug.Print "...taxInt current" & " took " & DateDiff("s", dtestart, Now())
+    ' .
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "stemCount"
+    rereshCurrForm
+    ' E -> StemCount
+    dtestart = Now()
+    DoCmd.OpenQuery "append_E_to_stemcount", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!E2StemCount = True
+    ' .
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "StemLocation"
+    rereshCurrForm
+    ' E -> StemLocation
+    dtestart = Now()
+    DoCmd.OpenQuery "append_E_to_stemLoc", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!E2StemLoc = True
+    ' .
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "soilObs"
+    rereshCurrForm
+    ' F-> soilObs
+    dtestart = Now()
+    DoCmd.OpenQuery "append_F_to_SoilObs", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!F2SoilObs = True
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' .
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "DistObs"
+    rereshCurrForm
+    ' G -> DistObs
+    dtestart = Now()
+    DoCmd.OpenQuery "append_G_to_DistObs", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!G2DistObs = True
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' .
+   
+    ' .
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "CommClass"
+    
+    ' I -> CommClass
+    dtestart = Now()
+    DoCmd.OpenQuery "append_I_to_CommClass", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!I2CommClass = True
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+ '   ' .
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "CommInterp"
+    rereshCurrForm
+    ' I -> CommInterp
+    dtestart = Now()
+    DoCmd.OpenQuery "append_I_to_CommInterp", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!I2CommInterp = True
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' .
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "ClassContrib"
+    
+    ' I -> ClassContrib
+    dtestart = Now()
+    DoCmd.OpenQuery "append_I_to_ClassContrib", acNormal, acEdit
+    ' table has finished migrating
+    Forms!loadingStatus!I2ClassContrib = True
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' .
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "UserDefined"
+    rereshCurrForm
+    
+ 'dont do any of this if J has nothing in it
+ Dim lngJ As Long
+ lngJ = getvalFrmSQL("select count(1) from Z_USER_J_UD")
+ If lngJ > 0 Then
+    ' J -> UserDefined
+    dtestart = Now()
+    DoCmd.OpenQuery "append_J_to_UserDefined", acNormal, acEdit
+    ' updates VBID in Z_USER_J (this table can be reused, it won't be reappended, new records will be added)
+    
+    
+    DoCmd.OpenQuery "Update_VBID_inJ", acNormal, acEdit
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' table has finished migrating
+    Forms!loadingStatus!J2UserDefn = True
+    ' .
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "DefinedValue"
+    rereshCurrForm
+    ''add all records to definedValue from CDEF
+    dtestart = Now()
+    
+    userDefn_RunALL_CDEF
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' .
+    ' table has finished migrating
+    Forms!loadingStatus!CDEF2DefVal = True
+ End If ' J records exist
+    ' .
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "Recording number of non-null fields"
+    ' updates number of non-null records in all VegBank tables in Z_FieldDescription
+    dtestart = Now()
+    Call CheckFieldsForFields("vegBank", "module")
+    Debug.Print Forms!loadingStatus!currentTable & " took " & DateDiff("s", dtestart, Now())
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "Done with plots"
+    rereshCurrForm
+   Debug.Print "MigrateLoadingTbls_toVBTbls>> Total time for migration of plots: " & DateDiff("S", dteWholeThingStart, Now())
+   ' Beep
+  '  MsgBox "Done with migration of plots", vbInformation, "VegBranch"
+   ' DoCmd.Close acForm, "LoadingStatus"
+
+
+MigrateLoadingTbls_ToVBTbls_Exit:
+    Exit Function
+
+MigrateLoadingTbls_ToVBTbls_Err:
+    msgBox "Migration cannot continue, as an error was encountered. " & Error$
+    
+    Resume Next
+    Resume MigrateLoadingTbls_ToVBTbls_Exit
+
+End Function
+
+Public Function migratePlantTaxonomyModule()
+  On Error GoTo migratePlantErr
+  
+ ' DoCmd.OpenQuery "LoadingStatus_MigratefieldsFalse", acNormal, acEdit
+    DoCmd.OpenForm "LoadingStatus", acNormal, "", "", , acNormal
+    ' initializes DefaultMetaData, which only now starts to get used.
+  'handled earlier:
+    'Call InitZTblPKsForMigration
+   
+ ' set Current Table
+    Forms!loadingStatus!currentTable = "plant Taxonomy Module"
+    
+    ' B -> plant Taxonomy Module
+    Call plant_Txa_CompletePkgMigr
+    ' table has finished migrating
+    Forms!loadingStatus!B2PlantConcept = True
+    
+       Forms!loadingStatus!currentTable = "Recording number of non-null fields"
+    ' updates number of non-null records in all VegBank tables in Z_FieldDescription
+    Call CheckFieldsForFields("vegBank", "module")
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "Done"
+    rereshCurrForm
+   ' Beep
+    'MsgBox "migration", vbInformation, "VegBranch"
+    'DoCmd.Close acForm, "LoadingStatus"
+exitthis:
+Exit Function
+
+migratePlantErr:
+msgBox "Migration cannot continue, as an error was encountered. " & Error$
+    Resume exitthis
+End Function
+
+
+
+Public Function migrateCommTaxonomyModule()
+  On Error GoTo migrateCommErr
+  
+ ' DoCmd.OpenQuery "LoadingStatus_MigratefieldsFalse", acNormal, acEdit
+    DoCmd.OpenForm "LoadingStatus", acNormal, "", "", , acNormal
+    ' initializes DefaultMetaData, which only now starts to get used.
+    Call InitZTblPKsForMigration
+   
+ ' set Current Table
+    
+    Forms!loadingStatus!currentTable = "CommConcept"
+    rereshCurrForm
+  ' H -> comm Taxonomy Module
+    Call Comm_Txa_CompletePkgMigr
+    ' table has finished migrating
+    Forms!loadingStatus!I2CommConc = True
+    ' .
+       Forms!loadingStatus!currentTable = "Recording number of non-null fields"
+    ' updates number of non-null records in all VegBank tables in Z_FieldDescription
+    Call CheckFieldsForFields("vegBank", "module")
+    ' set Current Table
+    Forms!loadingStatus!currentTable = "Done"
+    rereshCurrForm
+   ' Beep
+  '  MsgBox "Done with migration", vbInformation, "VegBranch"
+   ' DoCmd.Close acForm, "LoadingStatus"
+exitthis:
+Exit Function
+
+migrateCommErr:
+msgBox "Migration cannot continue, as an error was encountered. " & Error$
+    Resume Next
+End Function
+

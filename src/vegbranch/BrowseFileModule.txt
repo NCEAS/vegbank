@@ -1,0 +1,375 @@
+Option Compare Database
+Option Explicit
+
+Public Function BRWS_ReturnBrowsedFileLoc(strGetFile As String, GetPut As String) As String
+''function deals with browsed file location:
+    'On Error GoTo StoreFileErr:
+GoTo Past_err
+StoreFileErr:
+  msgBox "Error in storing browsed file name!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+
+Static strFileInMemory
+If GetPut = "put" Then
+  strFileInMemory = strGetFile
+  'On Error Resume Next
+    'close form
+    DoCmd.Close acForm, "BrowseForFile"
+  'On Error GoTo StoreFileErr
+End If
+  BRWS_ReturnBrowsedFileLoc = strFileInMemory
+End Function
+
+Public Function BrowseForFile(strExt As String) As String
+''function is enacted by user who wants to browse for a file
+    On Error GoTo StoreFileErr:
+GoTo Past_err
+StoreFileErr:
+  msgBox "Error in browsing for file name!" & Chr(13) & Err.Description, vbCritical
+  Resume ExitThisFCN
+ExitThisFCN:
+  Exit Function
+Past_err:
+
+  ''strExt set to ".*" if not specified
+  If Len(strExt) < 1 Then strExt = "*.*"
+  
+''  Debug.Print strExt & " is extension to search for"
+  DoCmd.OpenForm "BrowseForFile", acNormal, , , acFormEdit, acDialog, strExt
+  ''return result:
+  BrowseForFile = BRWS_ReturnBrowsedFileLoc("", "get")
+End Function
+
+Private Function testBRWSSSRRR()
+  Debug.Print BrowseForFile("*.m*")
+ ''  SetBrowseProp "fileThis", "file"
+End Function
+
+
+Private Function SetBrowseProp(strWhich As String, strVal As String)
+  ''sets properties on browser page
+  Dim frmBrws As Form
+  Set frmBrws = Forms!BrowseForFile
+  Select Case strWhich
+    Case "File", "List1", "CurrLoc"
+      If strWhich = "List1" And strVal = "" Then
+        frmBrws.Controls(strWhich).Value = Null
+      Else
+        frmBrws.Controls(strWhich).Value = strVal
+      End If
+    Case "List1_requery"
+      frmBrws.Controls("List1").Requery
+    Case "lookingFor"
+      frmBrws.Controls("lookingFor").Value = strVal
+    Case Else
+      Debug.Print "ERROR, requested bad control to set!"
+      DoCmd.Beep
+  End Select
+End Function
+
+Private Function getBrowseProp(strWhich As String) As String
+  ''gets properties on browser page
+  Dim frmBrws As Form
+  Set frmBrws = Forms!BrowseForFile
+  Select Case strWhich
+    Case "File", "List1", "CurrLoc"
+      getBrowseProp = Nz(frmBrws.Controls(strWhich).Value, "")
+    Case "OpenArgs"
+      getBrowseProp = Nz(frmBrws.OpenArgs, "")
+    Case Else
+      Debug.Print "ERROR, requested bad control to get!"
+      DoCmd.Beep
+  End Select
+End Function
+
+Public Function BRWS_GetNewFileOrDir()
+   'gets new file or directory - if file then return, else get available subfolder, files:
+   'On Error GoTo dClickErr
+GoTo Past_err
+dClickErr:
+  msgBox "Error in following this file/folder!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+  Dim strList1 As String, strFile As String, strCurrLoc As String
+  strList1 = getBrowseProp("List1")
+  strFile = getBrowseProp("File")
+  strCurrLoc = getBrowseProp("CurrLoc")
+  ''selects a file and returns it if file, _
+     otherwise gets new files (case of DIR or DRV selected)
+  If (strList1) = "" Then
+    msgBox "Please Select a File!"
+    Exit Function
+  End If
+  'if length < 5 ,then it can't start with <DIR> or <DRV>
+  If Len(strList1) < 5 Then GoTo MustBeFile
+  If Left(strList1, 5) = "<DRV>" Then  'drive is selected
+     
+    Dim strDrv As String
+    strDrv = Right(strList1, Len(strList1) - 5)
+    
+    Dim fsDRV, dcDRV, dDRV As Variant
+    Set fsDRV = CreateObject("Scripting.FileSystemObject")
+    Set dcDRV = fsDRV.Drives
+    For Each dDRV In dcDRV
+        If dDRV.DriveLetter & ":" = strDrv Then
+        'check to make sure drive is ready
+          If dDRV.Isready Then
+            SetBrowseProp "CurrLoc", strDrv & "\"
+     ''       Debug.Print "Successfully selected drive " & strDRV
+          Else ''the correct drive is not ready
+            msgBox "Error, the drive : " & strDrv & Chr(13) & "is not ready."
+            Exit Function
+          End If ' is ready
+          
+        End If 'correct drive letter
+    Next
+    
+  End If  'drv
+  
+  If Left(Forms!BrowseForFile![List1], 5) = "<DIR>" Then  'is a dir
+   
+    Dim strNewDir As String
+    strNewDir = Right(strList1, Len(strList1) - 5)
+    If strNewDir = ".." Then  'get parent dir:
+      'change dir
+      Dim fs, f As Object, s As String
+      Set fs = CreateObject("Scripting.FileSystemObject")
+      'could be a root folder:
+      Set f = fs.GetFolder(strCurrLoc)
+      If f.IsRootFolder Then
+        'is a root folder, get drives
+        SetBrowseProp "CurrLoc", "<root>"
+      Else
+        'is not a root folder
+        s = f.ParentFolder
+      ''  Debug.Print "PARFOLD:" & s
+        SetBrowseProp "CurrLoc", s
+      End If 'root folder or not
+    Else 'not ".." selected, but is another subfolder
+      'select new path, making sure "\" is there and not repeated
+      If Right(strCurrLoc, 1) = "\" Then
+        SetBrowseProp "CurrLoc", strCurrLoc & strNewDir
+      Else
+        SetBrowseProp "CurrLoc", strCurrLoc & "\" & strNewDir
+      End If
+    End If '".." or not
+  End If 'DIR or Not
+  
+MustBeFile:
+  If Left(strList1, 1) <> "<" Then ''must be file
+    ''add filename to current path:
+    SetBrowseProp "File", strCurrLoc & "\" & strList1
+    ''return file value:
+     BRWS_ReturnBrowsedFileLoc (strCurrLoc & _
+         IIf(Right(strCurrLoc, 1) = "\", "", "\") & strList1), "put"
+    ''stop this subrountine
+    Exit Function
+  End If 'Must be file
+   
+   ''get new files for this new folder/drive
+   strCurrLoc = getBrowseProp("CurrLoc")
+   Dim strOpenArgs As String
+   strOpenArgs = getBrowseProp("OpenArgs")
+ '' Debug.Print "OPENARGS: " & strOpenArgs
+  BRWS_GetFileList (strCurrLoc), IIf((strOpenArgs) = "", "*.*", strOpenArgs)
+
+End Function
+
+Public Function BRWS_ClickOnceOnFile()
+   On Error GoTo ClickErr
+GoTo Past_err
+ClickErr:
+  msgBox "Error in selecting file!" & Chr(13) & Err.Description, vbCritical
+  Resume ExitThisFCN
+ExitThisFCN:
+  Exit Function
+Past_err:
+
+  'display name of selection in File box:
+  Dim strList1 As String
+  strList1 = getBrowseProp("List1")
+  
+ If Left(strList1, 1) = "<" Then
+   SetBrowseProp "File", Right(strList1, Len(strList1) - 5)
+ Else
+   SetBrowseProp "File", strList1
+ End If
+End Function
+
+'Function test()
+ ' Dim col1 As New Collection
+  'Set col1 = ShowFileList("C:\vegbank\sandbox\taxonomy", "*.mdb,*.txt,*.doc")
+ ' Dim inttemp As Integer
+  'For inttemp = 1 To col1.Count
+   ' Debug.Print col1(inttemp)
+'  Next
+'End Function
+
+Private Function ShowFileList(strDir As String, strExt As String) As Collection
+    On Error GoTo ErrGetFiles:
+GoTo Past_err
+ErrGetFiles:
+  msgBox "Error in getting files in this folder!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+    Dim colExts As New Collection
+    Set colExts = csv_parseCSVstring(strExt, ",")
+    
+    ''fuction adds the files of a directory (strDir) _
+       and returns them as a collection of strings , if they are like strExt
+    ''FROM help directory, slightly modified
+    Dim fs, f, f1, fc, s, colTemp As New Collection
+    Set fs = CreateObject("Scripting.FileSystemObject")
+    Set f = fs.GetFolder(strDir)
+    Set fc = f.Files
+    For Each f1 In fc
+        Dim blnKeep As Boolean, inttemp As Integer
+        blnKeep = False
+        For inttemp = 1 To colExts.Count
+          If f1.Name Like colExts(inttemp) Then blnKeep = True
+        Next inttemp
+        If blnKeep Then colTemp.Add (f1.Name)
+    Next
+    Set ShowFileList = colTemp
+   ' MsgBox s
+End Function
+
+Private Function ShowFolderList(strDir As String) As Collection
+    'On Error GoTo ErrGetFold:
+GoTo Past_err
+ErrGetFold:
+  msgBox "Error in getting subfolders in this folder!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+    'takes a directory (strDir) and returns all subdirectories as strings in a collection
+    ''FROM help directory, slightly modified
+    Dim fs, f, f1, s, sf, colTemp As New Collection
+    Set fs = CreateObject("Scripting.FileSystemObject")
+    Set f = fs.GetFolder(strDir)
+    Set sf = f.SubFolders
+    ''add link to parent directory
+    colTemp.Add ".."
+    For Each f1 In sf
+        colTemp.Add ("" & f1.Name & "")
+    Next
+   ' MsgBox s
+   Set ShowFolderList = colTemp
+End Function
+
+Private Function ShowDrivesList() As Collection
+    'On Error GoTo ErrGetDRV:
+GoTo Past_err
+ErrGetDRV:
+  msgBox "Error in getting drives!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+
+    'returns all drives as strings in a collection
+    ''FROM help directory, slightly modified
+    Dim fs, d, dc, s, n, colTemp As New Collection
+    Set fs = CreateObject("Scripting.FileSystemObject")
+    Set dc = fs.Drives
+    For Each d In dc
+        s = d.DriveLetter & ":"
+        colTemp.Add s
+    Next
+'    Debug.Print s
+    Set ShowDrivesList = colTemp
+End Function
+
+
+Private Function BRWS_GetFileList(strRoot As String, strExt As String)
+ ''function gets all files and subdirectories on a directory, strRoot, and enters them
+ '' into the W_Browsedfiles table, so that the user can view them
+ 'On Error GoTo CouldNotGetFiles
+ ''clear current list of files:
+ DoCmd.RunSQL "DELETE * FROM W_BrowsedFiles ;"
+'  Debug.Print "deleting file loc"
+ 
+If strRoot = "<root>" Then
+     'don't get folders, just root drives
+     Dim colDrives As New Collection
+     Set colDrives = ShowDrivesList()
+     AppColToBrwsFiles colDrives, "<DRV>"
+Else 'not on root of machine:
+   Dim colFold As New Collection, colFile As New Collection
+   'get folders
+   Set colFold = ShowFolderList(strRoot)
+   'get files that match criteria
+   Set colFile = ShowFileList(strRoot, strExt)
+''add Folders
+AppColToBrwsFiles colFold, "<DIR>"
+''add files
+AppColToBrwsFiles colFile, ""
+ 
+End If 'root / not
+  
+  SetBrowseProp "List1", ""
+  SetBrowseProp "File", ""
+  SetBrowseProp "List1_requery", ""
+  SetBrowseProp "lookingFor", strExt
+  Exit Function
+CouldNotGetFiles:
+  msgBox "Error!  Could not retrieve the files for this directory!" & Chr(13) & Err.Description, vbCritical
+End Function
+
+Private Function AppColToBrwsFiles(colCurr As Collection, strPrf As String)
+'On Error GoTo CouldNotAddFiles
+GoTo Past_err
+CouldNotAddFiles:
+  msgBox "Error!  Could not retrieve the files for this directory!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+''function appends a collection to the W_BrowsedFiles table
+Dim rstCurr As New ADODB.Recordset
+  Dim cnnLoca As Connection, intLoop As Long, strFile As String
+  Set cnnLoca = CurrentProject.Connection
+  'open rst of destination table
+  rstCurr.Open "W_BrowsedFiles", cnnLoca, adOpenForwardOnly, adLockOptimistic, adCmdTable
+  With rstCurr
+  For intLoop = 1 To colCurr.Count
+     .AddNew  'add new rec
+     strFile = colCurr(intLoop)
+     !internal_path = strPrf & strFile
+     !Name = strFile
+     If strPrf <> "" Then
+       If strPrf = "<DIR>" And colCurr(intLoop) = ".." Then
+         'make it clearer to users how to go up one directory
+         !Type = "<PARENT DIR>"
+       Else
+         !Type = strPrf
+       End If
+     End If
+     
+     'commit new record
+     .Update
+  Next intLoop
+  End With
+  rstCurr.Close
+End Function
+
+Public Function BRWS_Initialize_browseForm()
+  'formerly On Load
+   'On Error GoTo LoadErr
+GoTo Past_err
+LoadErr:
+  msgBox "Error!  Could not load this form!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+  ''Debug.Print strOpenArgs
+  
+  'start at currentProjects path:
+  SetBrowseProp "CurrLoc", CurrentProject.Path
+  'delete current files
+  DoCmd.RunSQL "DELETE * FROM W_BrowsedFiles ;"
+  ''get files at the current directory:, *.* if opening argument not specified
+  Dim strOpenArgs As String
+  strOpenArgs = getBrowseProp("OpenArgs")
+  
+  BRWS_GetFileList (getBrowseProp("CurrLoc")), _
+     IIf(strOpenArgs = "", "*.*", strOpenArgs)
+     'Debug.Print "LOAD OPEN ARGS: " & strOpenArgs
+End Function
+
+

@@ -1,0 +1,98 @@
+Option Compare Database
+Option Explicit
+
+Function dddd()
+  ReconcileFieldsToVB "Z_USER_C_PlotData.SoilTaxon"
+End Function
+
+Public Function ReconcileFieldsToVB(strTblFld As String)
+''this function reconciles a field's values from user's data to VegBank's pre-existing data
+'--necessary for soilTaxon_ID to be registered, and other fields
+'--used in Migration process
+
+
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+Dim rstPreMatch As New ADODB.Recordset
+'first, match user specified values:
+rstPreMatch.Open "SELECT * FROM Y_Reconcile_FieldNames WHERE tblDotFld = """ & strTblFld & """;", _
+      cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+With rstPreMatch
+If .EOF And .BOF Then
+  'no matching table.field
+  Exit Function
+End If
+End With
+User_matched_values:
+Dim rstUserMatch As New ADODB.Recordset
+''open recordset to match all values where user specifies value always translated to certain value
+rstUserMatch.Open "SELECT * FROM Y_reconcile WHERE ((tableDotField = """ & strTblFld _
+    & """) AND (((UserFieldValue) is not null)))", _
+    cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+With rstUserMatch
+  Do Until .EOF
+    Dim strSQLVal As String
+    strSQLVal = "UPDATE " & rstPreMatch!Table & " SET " & rstPreMatch!Field & " = """ _
+    & !VegBankPK _
+    & """ WHERE (((" & rstPreMatch!Field & ")=""" & !UserFieldValue & """));"
+    DoCmd.RunSQL strSQLVal
+    .MoveNext
+  Loop
+End With
+rstUserMatch.Close
+
+User_Matched_PKs:
+Dim rstUserMatchPK As New ADODB.Recordset
+''open recordset to match all values where user specifies PK reconciles to VegBank PK
+rstUserMatchPK.Open "SELECT * FROM Y_reconcile WHERE ((tableDotField = """ & strTblFld _
+    & """) AND (((UserTablePK) is not null)))", _
+    cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+With rstUserMatchPK
+  Do Until .EOF
+    strSQLVal = "UPDATE " & rstPreMatch!Table & " SET " & rstPreMatch!Field & " = """ _
+    & !VegBankPK _
+    & """ WHERE (((" & rstPreMatch!TablePK & ")=" & !UserTablePK & "));"
+    DoCmd.RunSQL strSQLVal
+    .MoveNext
+  Loop
+End With
+rstUserMatchPK.Close
+
+
+
+
+
+
+
+Auto_Matched_values:
+''Next, get values that match already:
+'with recordset to find SQL to update prematched values
+
+With rstPreMatch
+
+Dim rstUpdPreMatch As New ADODB.Recordset
+
+''opens a SQL recordset with values to update loading table to
+Dim strSourceNewQ As String
+strSourceNewQ = !UpdateSinglesSQL
+rstUpdPreMatch.Open strSourceNewQ, cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdTable
+'rstUpdPreMatch.Open !UpdateSinglesSQL, cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdTable
+   With rstUpdPreMatch
+  Do Until .EOF
+   'with the recordset that matches Loading Table PKs to VegBank PK's:
+   Dim strSQLUpdate As String, strUserPK As String, strVBPK As String
+   strUserPK = rstPreMatch!TablePK
+   strVBPK = rstPreMatch!VBTblPK
+   strSQLUpdate = " UPDATE " & rstPreMatch!Table & " SET " & rstPreMatch!Field & " = """ _
+    & .Fields(strVBPK) _
+    & """ WHERE (((" & rstPreMatch!TablePK & ")=" & .Fields(strUserPK) & "));"
+    DoCmd.RunSQL strSQLUpdate
+
+  .MoveNext
+  Loop
+   End With 'rstUpdPreMatch
+   rstUpdPreMatch.Close
+End With 'rstPreMatch
+rstPreMatch.Close
+
+End Function

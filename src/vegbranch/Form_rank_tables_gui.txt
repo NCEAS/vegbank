@@ -1,0 +1,257 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command10_Click()
+  'restore default for this table
+  Dim strTbl As String
+  strTbl = Me.rankQuery
+  If strTbl <> "" Then
+    'confirm:
+    If AreYouSure("Do you want to delete current criteria (if any) and replace with default?") Then
+      'delete current items
+      Me.Refresh 'commit any pending changes
+      DoCmd.RunSQL "delete * from rank_tables_gui where tableName=""" & strTbl & """ and defaultSet=false;"
+      DoCmd.RunSQL "insert into rank_tables_gui (tableName,fieldName,operator,fieldValue,rankValue,continueToNext) " _
+       & " SELECT tableName,fieldName,operator,fieldValue,rankValue,continueToNext from rank_tables_gui " _
+       & " WHERE tableName=""" & strTbl & """ and defaultSet=true;"
+      Me.Requery
+    End If
+  Else
+    msgBox "Please select a table first."
+  End If
+End Sub
+
+Private Sub Command11_Click()
+  'makes sql statement for above items: select * from table, xxx as score;
+  'get current table:
+  Debug.Print "Command11_Click>> init"
+  Me.Refresh ' commit any pending updates
+  Dim strTbl As String, strRep As String
+  strTbl = Me.rankQuery
+  Dim rstTemp As Object, strSQL As String, blnContFromLast As Boolean, strSuffix As String
+  Set rstTemp = Form.Recordset
+  rstTemp.MoveFirst
+  With rstTemp
+  Do Until .EOF
+    Dim inttemp As Integer
+    inttemp = 1 + inttemp
+    'if this is a string case, use " to delimit string
+    'check that all fields are filled in, else report error
+    If IsNull(!FieldName) Or IsNull(!operator) Then
+      Call msgBox("Error in row # " & inttemp & " -- You must provide field names and operators for all rows on this screen.  Please fill these in and try again." _
+        & Chr(13) & Chr(13) & "If there are extra rows, delete them by selecting the grey bar to the left of the row " _
+        & " and pressing delete on your keyboard.", vbCritical, "VegBranch")
+      Exit Sub
+    End If 'logical checks
+      
+      
+      Dim strType As String, strDelim As String
+      strType = getZfldInfo(strTbl, !FieldName, "dataType")
+      Select Case strType
+        Case "Memo", "text"
+          strDelim = """"
+        Case "date", "date/time"
+          strDelim = "#"
+        Case Else
+          strDelim = ""
+      End Select
+    
+    
+    If blnContFromLast Then
+      'add to current iif statement
+      strSQL = strSQL & " AND " & constructCriterion(!FieldName, !operator, Nz(!FieldValue), strDelim)
+    Else
+      'normal case: start IIf
+      strSQL = strSQL & " Iif( " & constructCriterion(!FieldName, !operator, Nz(!FieldValue), strDelim) ' need: ,TRUEpart,FalsePart
+      strSuffix = ")" & strSuffix
+    End If
+      If !continueToNext Then
+        blnContFromLast = True
+      Else
+        blnContFromLast = False
+        'close out statement
+        strSQL = strSQL & "," & !rankValue & ","
+      End If
+    
+  .MoveNext
+  Loop
+  End With
+  'at end, put it all together:
+   strRep = strSQL & " 0 " & strSuffix '0 in middle if matches nothing
+  ' MsgBox strREp
+  'edit query sql to update changes
+  Call EditQrySql("rank_" & strTbl, "SELECT *, " & strRep & " as score FROM " & strTbl, False)
+  'check that query is OK
+    
+  On Error GoTo queryNotOK
+  Dim rstOK As New ADODB.Recordset
+  rstOK.Open "select max([score]) from rank_" & strTbl, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  msgBox "Query successfully written", , "VegBranch"
+  rstOK.Close
+  'now update any tables that need updating
+  rstOK.Open "select * from rank_tables where vbtable=""" & strTbl & """ and currentlyTable=true;", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  Dim blnRebuiltTables As Boolean
+  With rstOK
+    Do Until .EOF
+     'rebuild tables
+     blnRebuiltTables = True
+     Call rnk_writeRankTable(!querySwitch, True, True)
+    .MoveNext
+    Loop
+  End With
+  If blnRebuiltTables Then
+    msgBox "Some tables were based on these criteria. They have been rebuilt to reflect the changes here.", vbInformation, "VegBranch"
+  End If
+  rstOK.Close
+exitWriteThis:
+  Exit Sub
+queryNotOK:
+  msgBox "Your new query is invalid!  Please try to fix any errors in datatypes and try again.  " & Err.Description, vbCritical, "VegBranch"
+  Resume exitWriteThis
+  
+End Sub
+
+Function constructCriterion(strName As String, strOp As String, ByVal strValue As String, strDelim As String) As String
+  ''function makes a criteria string, using name [] and op and strValue
+ Debug.Print "constructCriterion>> init"
+  Dim strRep As String
+  strRep = "[" & strName & "] " & strOp
+  Select Case strOp
+    Case "is null", "is not null"
+      'that's all
+    Case Else
+      If strDelim = "" And strValue = "" Then strValue = "null"
+      strRep = strRep & strDelim & strValue & strDelim
+  End Select
+constructCriterion = "(" & strRep & ")"
+End Function
+
+Private Sub fieldName_AfterUpdate()
+  Debug.Print "fieldName_AfterUpdate>> init"
+  'field is selected: give user picklist options to help guide choice, if closed or open list, or if FK:
+  'if is open or closed list, or pk, then make combo box visible and non-combobox invisible
+  'MTL 27-JAN-2004
+' Debug.Print "updating field, now:" & Now() & " T:" & [TableName] & "F:" & [FieldName]
+  Dim strList As String, strKey As String
+  
+  strList = getZfldInfo(Nz([TableName]), Nz([FieldName]), "closedlist")
+ ' Debug.Print "strList: " & strList
+  strKey = getZfldInfo(Nz([TableName]), Nz([FieldName]), "key")
+ ' Debug.Print "strKey:" & strKey
+  Dim ctlCurr As Control
+  Dim strRef As String, strNewTbl As String, strNewFld As String
+       strRef = getZfldInfo(Nz([TableName]), Nz([FieldName]), "references")
+     If Len(strRef) > 3 And strRef <> "n/a" And InStr(strRef, ".") Then
+       strNewTbl = Left(strRef, InStr(strRef, ".") - 1)
+       strNewFld = Right(strRef, Len(strRef) - InStr(strRef, "."))
+      ' Debug.Print strNewFld
+     End If
+  If strList = "yes" Or strList = "open" Or (strKey = "FK" And QueryExist(strNewFld & "_transl")) Then
+     'Debug.Print "combo!"
+     'make combo box visible only if ctls enabled
+  If Me.operator.Enabled = True Then
+     Me.fieldValueCmb.Visible = True
+     'worry about moving focus:
+     
+     Set ctlCurr = Screen.PreviousControl
+     If ctlCurr.Name = "fieldValue" Then Me.fieldValueCmb.SetFocus
+     
+     'make fieldvalue invisible
+     Me.FieldValue.Visible = False
+  End If
+     'now set recordset combo
+     If strList = "yes" Or strList = "open" Then
+       Me.fieldValueCmb.RowSource = "select listvalue from fieldlist WHERE tablename='" & Nz([TableName]) _
+          & "' AND fieldname='" & Nz([FieldName]) & "'"
+         'one column only from picklist
+         Me.fieldValueCmb.ColumnWidths = "5760"
+         Me.fieldValueCmb.ColumnCount = 1
+       If strList = "open" Then
+         Me.fieldValueCmb.FontItalic = True
+         Me.fieldValueCmb.LimitToList = False
+
+       Else
+         Me.fieldValueCmb.FontItalic = False
+         Me.fieldValueCmb.LimitToList = True
+       End If
+     Else
+       'FK: get translation that makes sense
+       Me.fieldValueCmb.RowSource = "select [" & strNewFld & "], [transl] FROM [" & strNewFld & "_transl];"
+       Me.fieldValueCmb.FontItalic = False
+       Me.fieldValueCmb.LimitToList = True
+       'two column picklist
+         Me.fieldValueCmb.ColumnWidths = "0;5760"
+         Me.fieldValueCmb.ColumnCount = 2
+     End If 'open list or FK field
+       
+  Else
+    'Debug.Print "no combo!"
+    'don't use combo box
+    'make combo box invisible: only if ctls enabled
+  If Me.operator.Enabled = True Then
+     Me.FieldValue.Visible = True
+     'worry about moving focus:
+     
+     Set ctlCurr = Screen.PreviousControl
+     If ctlCurr.Name = "fieldValueCmb" Then Me.FieldValue.SetFocus
+     'make fieldvalue visible
+     Me.fieldValueCmb.Visible = False
+  End If 'op enabled
+  
+  End If 'use combo or not
+  
+End Sub
+
+Private Sub Form_BeforeInsert(Cancel As Integer)
+  Debug.Print "Form_BeforeInsert>> init"
+  Me.TableName = Me.rankQuery
+End Sub
+
+Private Sub Form_Current()
+  'when go to current record, update combo box status
+  Debug.Print "Form_Current>> init"
+  Call fieldName_AfterUpdate
+End Sub
+
+Private Sub Form_Load()
+Debug.Print "Form_Load>> init"
+  'make controls invisible until table is selected:
+  Call disableSomeCtls(False)
+  'if openArgs passed, then try and make this table to work with
+  If Not IsNull(Me.OpenArgs) Then
+    Me.rankQuery = Me.OpenArgs
+    Call rankQuery_AfterUpdate
+  End If
+End Sub
+
+Private Function disableSomeCtls(blnEnable As Boolean)
+Debug.Print "disableSomeCtls>> init"
+  Me.FieldName.Enabled = blnEnable
+  Me.operator.Enabled = blnEnable
+  Me.FieldValue.Enabled = blnEnable
+  Me.fieldValueCmb.Enabled = blnEnable
+  Me.continueToNext.Enabled = blnEnable
+  Me.rankValue.Enabled = blnEnable
+End Function
+
+Private Sub rankQuery_AfterUpdate()
+Debug.Print "rankQuery_AfterUpdate>> init"
+  'check that user picked something
+  If IsNull(Me.rankQuery) Then
+    msgBox "Please choose a name from the top picklist to start"
+   Exit Sub
+  End If
+  
+  'change source of combo box for fieldnames
+  Me.FieldName.RowSource = "SELECT fieldname FROM z_fieldDescription WHERE tablename='" & Nz(Me.rankQuery) & "' ORDER BY iif(isnull(orderID),Z_FieldDescr_Id,orderID);"
+  Me.Recalc
+  Debug.Print "updated fieldName to: " & [rankQuery]
+  
+  'filter for correct rows
+  Call applyFilterToCurrForm("tableName='" & Nz(Me.rankQuery) & "'", Me.Name)
+  
+  'make visible:
+  Call disableSomeCtls(True)
+  
+End Sub

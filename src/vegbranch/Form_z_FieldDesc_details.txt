@@ -1,0 +1,88 @@
+Option Compare Database
+Option Explicit
+
+Private Sub cmdFindDest_Click()
+   On Error GoTo Error_FindDest
+   Dim strTbl As String
+   Dim strFld As String
+   Dim strTdotF As String
+   Dim intWhereDot As Integer
+   'the destination field complete address (table.field)
+   strTdotF = Me!DestinationField
+   'the following variable stores where in the dest string the dot appears
+   intWhereDot = InStr(strTdotF, ".")
+   If intWhereDot = 0 Then
+     GoTo Error_FindDest
+   Else
+     'there is a dot
+     'get tbl name
+     strTbl = Left(strTdotF, intWhereDot - 1)
+     'get field name
+     strFld = Right(strTdotF, Len(strTdotF) - intWhereDot)
+     
+     'go to referenced table
+     Forms!Z_FieldDesc_countRecs!tbl = strTbl
+     'show all records in subform
+     Forms!Z_FieldDesc_countRecs!Empty = "neither"
+     'show only fields associated with one table (otherwise wrong record gets found)
+     Forms!Z_FieldDesc_countRecs!allTbl2 = "NO"
+     'update joined fields
+     UpdateZ_DescJoinedSubField
+     'go to control where we can find field
+     DoCmd.GoToControl ("Z_FieldDescription")
+     DoCmd.GoToControl ("FieldName")
+     DoCmd.FindRecord (strFld)
+     
+   End If  'end dot
+   Exit Sub
+Error_FindDest:
+   msgBox "Unable to find destination field", vbOKOnly, "VegBranch"
+   
+End Sub
+
+Private Sub cmdFindRef_Click()
+   On Error GoTo Error_FindRef
+   Dim strTbl As String
+   Dim strFld As String
+   Dim strTdotF As String
+   Dim intWhereDot As Integer
+   'the referenced field complete address (table.field)
+   strTdotF = Me!References
+   'the following variable stores where in the reference string the dot appears
+   intWhereDot = InStr(strTdotF, ".")
+   If intWhereDot = 0 Then
+     GoTo Error_FindRef
+   Else
+     'there is a dot
+     'get tbl name
+     strTbl = Left(strTdotF, intWhereDot - 1)
+     'get field name
+     strFld = Right(strTdotF, Len(strTdotF) - intWhereDot)
+     
+     'go to referenced table
+     Forms!Z_FieldDesc_countRecs!tbl = strTbl
+     'show all records in subform
+     Forms!Z_FieldDesc_countRecs!Empty = "neither"
+     'show only fields associated with one table (otherwise wrong record gets found)
+     Forms!Z_FieldDesc_countRecs!allTbl2 = "NO"
+     'update joined fields
+     UpdateZ_DescJoinedSubField
+     'go to control where we can find field
+     DoCmd.GoToControl ("Z_FieldDescription")
+     DoCmd.GoToControl ("FieldName")
+     DoCmd.FindRecord (strFld)
+     
+   End If  'end dot
+   Exit Sub
+Error_FindRef:
+   msgBox "Unable to find reference", vbOKOnly, "VegBranch"
+   
+End Sub
+
+Private Sub cmdSeeList_Click()
+   Call getFieldList(Nz(TableName), Nz(FieldName), 1)
+   Exit Sub
+
+End Sub
+
+

@@ -1,0 +1,158 @@
+Option Compare Database
+Option Explicit
+
+Public Function ImportTblFld_toZ(strTblFile As String, strFldFile As String, strVBmodPath As String)
+  ''import from csv to temp_Zfld and temp_Ztbl
+  'erase current tables
+  DoCmd.RunSQL "delete * from temp_Zfld;"
+  DoCmd.RunSQL "delete * from temp_Ztbl;"
+  'create collections of characters to search and replace for
+  Dim colReplace As New Collection, colSearch As New Collection
+  colSearch.Add """"
+  colReplace.Add """"""
+  colSearch.Add "'"
+  colReplace.Add """"
+  colSearch.Add "`"
+  colReplace.Add "'"
+  'get new table names
+  Dim strNewTblFile As String, strNewFldFile As String
+  strNewTblFile = addSuffFileNm(strTblFile, "_quoteFix")
+  strNewFldFile = addSuffFileNm(strFldFile, "_quoteFix")
+  
+  'update to new files with replaced quotation handling
+  strNewTblFile = updateFileChars(strTblFile, strNewTblFile, colSearch, colReplace)
+  strNewFldFile = updateFileChars(strFldFile, strNewFldFile, colSearch, colReplace)
+  'import files
+  Call importCSV2table_new("temp_Zfld", strNewFldFile, False, True)
+  Call importCSV2table_new("temp_Ztbl", strNewTblFile, False, True)
+  'parse data type field
+  Call parsetemp_ZFLD
+  Call clearThenAddVegBAnkTbls_fromZTbl_ZFld
+  
+  Call hookUpNewVBMod(strVBmodPath)
+End Function
+
+Function hookUpNewVBMod(strPath As String)
+  ''deletes all linked tables then links to all tables in strPath db
+  Dim dbsCurr As Object, tblCurr As Object, colTblToDel As New Collection
+  Set dbsCurr = CurrentDb
+  'get list of tables to delete
+  For Each tblCurr In dbsCurr.tabledefs
+    Dim lngNum As Long, lngRem As Long
+    lngNum = tblCurr.Attributes
+    If lngNum >= 1073741824 Then
+    '  Debug.Print "linked: " & tblCurr.Name
+      colTblToDel.Add (tblCurr.Name)
+    End If
+  Next tblCurr
+  Dim inttemp As Integer
+  'delete 'em
+  For inttemp = 1 To colTblToDel.Count
+    dbsCurr.tabledefs.delete colTblToDel(inttemp)
+  Next inttemp
+  'connect to new database and link all tables there
+  
+  Dim dbsNew As Object, wrkDefault As Object
+    ' Get default Workspace.
+    Set wrkDefault = DBEngine.Workspaces(0)
+    ' open a new  database
+    Set dbsNew = wrkDefault.OpenDatabase(strPath)
+   For Each tblCurr In dbsNew.tabledefs
+     If tblCurr.Attributes >= 0 And tblCurr.Name <> "MSysAccessObjects" Then 'not system object
+       DoCmd.TransferDatabase acLink, "Microsoft Access", strPath, acTable, tblCurr.Name, tblCurr.Name, False
+     ' Debug.Print tblCurr.Name & " : " & tblCurr.Attributes
+    End If
+   Next tblCurr
+'remind vegbranch functions who we're connected to
+Call CNCT_ConnectToDB(strPath, "")
+End Function
+
+'' THE FOLLOWING HAVE TO DO WITH UPDATING THE VEGBANK DATA MODEL
+Private Function parsetemp_ZFLD()
+  DoCmd.RunSQL "UPDATE temp_ZFld SET temp_ZFld.dataType = ""varchar"", temp_ZFld.FieldSize = Trim(substTextforText(substTextForText(Right([dataType],Len([datatype])-7),""("",""""),"")"","""")) WHERE ((((Left([dataType],7))=""varchar"")) AND ([dataType] <> ""varchar""));"
+End Function
+
+Private Function clearThenAddVegBAnkTbls_fromZTbl_ZFld()
+  DoCmd.RunSQL "UPDATE z_Field_relseg_ERD SET z_Field_relseg_ERD.Z_Field_ID = Null;"
+  DoCmd.RunSQL "DELETE FieldsToConvertUsr.* FROM FieldsToConvertUsr;"
+  DoCmd.RunSQL "DELETE Y_Translate_anyField.FieldID, Y_Translate_anyField.* FROM Y_Translate_anyField;"
+  DoCmd.RunSQL "UPDATE Z_FieldDescription INNER JOIN Z_FieldDescription AS Z_FieldDescription_1 ON Z_FieldDescription.DestFieldID = Z_FieldDescription_1.Z_FieldDescr_Id SET Z_FieldDescription.DestFieldID = Null  WHERE (((Z_FieldDescription_1.Module) in ('vegbank','vb_impl')));"
+  DoCmd.RunSQL "DELETE * FROM Z_FieldDescription WHERE module=""vegbank"" or module=""VB_impl"" or module=""vb_closed"" ; "
+  DoCmd.RunSQL "DELETE * FROM Z_TableDescription WHERE [mod] = ""Vegbank"" or [mod]=""vb_closed"";"
+  ''add values back
+
+  DoCmd.RunSQL "INSERT INTO z_tableDescription ( TableName, TableSummary, TableDescription, submodule, mod )" _
+  & " SELECT temp_Ztbl.tableName, temp_Ztbl.tableSummary, temp_Ztbl.tableDescription, IIf([mod]='plant','planttaxa',IIf([mod]='community','commtaxa',IIf([mod]='plot','vegplot',IIf([mod]='closed','x')))) AS Expr2, IIf([mod]<>'closed','vegbank','VB_closed') AS Expr1 " _
+  & " FROM temp_Ztbl; "
+  
+  DoCmd.RunSQL "INSERT INTO z_fieldDescription ( OrderID, TableName, FieldName, model, Nulls, dataType, FieldSize, [key], [References], ClosedList, FieldNotes, FieldDefinition, module, fldInUse ) SELECT temp_ZFld.ID, temp_ZFld.tableName, temp_ZFld.fieldName, temp_ZFld.model, temp_ZFld.Nulls, Iif(temp_ZFld.dataType='BLOB','oid',Iif([dataType]='date','timestamp',[datatype])), temp_ZFld.FieldSize, temp_ZFld.key, temp_ZFld.References, Iif([ClosedList]='closed','yes',[closedList]), temp_ZFld.FieldNotes, temp_ZFld.FieldDefinition, Iif([model]='implementation','VB_impl','VegBank'),true   FROM temp_ZFld;"
+  'update data types
+  DoCmd.RunSQL "UPDATE misc_SQL_2AccTypes RIGHT JOIN Z_FieldDescription ON misc_SQL_2AccTypes.SQLType = Z_FieldDescription.dataType SET Z_FieldDescription.dataType = [AccessType]" _
+& " WHERE (((Z_FieldDescription.Module)='vegbank' Or (Z_FieldDescription.Module)='vb_impl'));"
+  'add destinationID's to Z_fieldDescription
+  Call FindDestFieldsGetIDs
+  DoCmd.RunSQL "UPDATE z_Field_relseg_ERD SET z_Field_relseg_ERD.Z_Field_ID = getFieldID([FieldTbl]);"
+
+End Function
+
+Public Function updateFileChars(strFile As String, strFileOut As String, _
+   colFindWhat As Collection, colReplWhat As Collection) As String
+  'function opens a file, searches for each item in the colFindWhat collection and replaces with colREplWhat corresponding item
+  ''outputs to new file, strFileOut - checks with user if strFileOut already exists
+  Dim fs As Object, a As Object, awrite As Object ', colFindWhat As New Collection, colReplWhat As New Collection
+ On Error GoTo fileErr
+ Set fs = CreateObject("Scripting.FileSystemObject")
+checkFileOK:
+  If Right(strFileOut, 4) = ".csv" Or Right(strFileOut, 4) = ".txt" Or Right(strFileOut, 4) = ".sql" Then
+    'file ok
+  Else
+    msgBox "please use a .csv , .txt, or .sql file and try again"
+    Exit Function
+  End If
+  
+  If fs.FileExists(strFileOut) Then
+   'need to check to see if we can overwrite cvs destination file
+   Dim intResp As Integer
+   intResp = msgBox("The file, " & strFileOut & " already exists.  Overwrite it?", vbYesNo, "VegBranch")
+   If intResp = vbNo Then
+     strFileOut = InputBox("Please enter a new filename for the new .csv file", , strFileOut)
+     If strFileOut = "" Then
+       'operation cancelled
+       msgBox "File NOT written.  No new filename was supplied.", vbCritical
+       Exit Function
+     End If
+     GoTo checkFileOK
+   End If
+ End If
+ 
+ Set awrite = fs.CreateTextFile(strFileOut, True)
+ Set a = fs.openTextFile(strFile, 1, False, 0)
+ 'Set colFindWhat = csv_parseCSVstring(strFindWhat, ",", True)
+ 'Set colReplWhat = csv_parseCSVstring(strReplWhat, ",", True)
+ 
+ If colFindWhat.Count <> colReplWhat.Count Then
+   msgBox "INvalid search and replace options for file writing! - differing numbers of attributes to search and replace!"
+   GoTo updateExit
+ End If
+' Debug.Print "C_" & colFindWhat.Count
+ With a
+   Do Until .atendofstream
+     Dim strTemp As String, inttemp As Integer
+     strTemp = .readline
+     For inttemp = 1 To colFindWhat.Count
+        strTemp = substTextForText_once(strTemp, colFindWhat(inttemp), colReplWhat(inttemp))
+     Next inttemp
+     awrite.writeLine strTemp
+   Loop
+ End With
+updateExit:
+'return name of file written (in case user has selected new file)
+updateFileChars = strFileOut
+ Exit Function
+fileErr:
+  msgBox "There was an error in trying to work with your file : " & strFile & Chr(13) & Err.Description
+   Resume updateExit
+      
+End Function
+
+

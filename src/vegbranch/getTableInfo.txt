@@ -1,0 +1,385 @@
+Option Compare Database
+Option Explicit
+
+Function getTableInfoAccess()
+''function analyzes the access db and stores all field data in Z_Actualfields
+ Dim wrkDefault As Object
+  ' Get default Workspace.
+    Set wrkDefault = DBEngine.Workspaces(0)
+
+Dim dbs As Object
+Set dbs = wrkDefault.OpenDatabase(GetVBrModulePath())
+    Dim tdfLoop As Object
+    Dim indLoop As Object
+    Dim indfldLoop As Object
+    Dim fldLoop As Object
+    Dim strTableName As String
+    
+  Dim rstCurr As New ADODB.Recordset
+  Dim rstCurrPK As New ADODB.Recordset
+  
+  Dim cnnLocal As Connection
+  Dim intCount As Long
+  
+  Set cnnLocal = CurrentProject.Connection
+    'clear Z_acutalFields table
+    DoCmd.RunSQL "DELETE * from Z_ActualFields;"
+
+
+            rstCurr.Open "Z_ActualFields", cnnLocal, , 2, adCmdTable
+        For Each tdfLoop In dbs.tabledefs
+
+            'skip this table if it is a system table, prefixed by MSys
+            If Left(tdfLoop.Name, 4) = "MSys" Then GoTo skiptbl
+            
+            strTableName = tdfLoop.Name
+            With rstCurr
+          For Each fldLoop In tdfLoop.Fields
+                .AddNew
+            !TableName = strTableName
+            !FieldName = fldLoop.Name
+            Select Case fldLoop.Required
+              Case True
+                !Nulls = "no"
+              Case False
+                !Nulls = "yes"
+            End Select
+!dataType = Interpret_FieldTypeInt(fldLoop.Type, fldLoop.Attributes)
+  '          Select Case fldLoop.Type
+   '           Case 1
+    '            !dataType = "Yes/No"
+     '         Case 4
+      '          If fldLoop.Attributes = 17 Then
+       '           !dataType = "AutoNumber"
+        '        Else
+         '         !dataType = "Long Integer"
+          '      End If
+           '   Case 7
+            '    !dataType = "Double"
+  '            Case 8
+   '             !dataType = "Date/Time"
+    '          Case 10
+     '           !dataType = "Text"
+      '        Case 11
+       '         !dataType = "OLE Object"
+        '      Case 12
+         '       !dataType = "Memo"
+               
+         '   End Select
+
+            !FieldSize = fldLoop.size
+            !OrderID = fldLoop.Ordinalposition
+               .Update
+            Next fldLoop
+
+             For Each indLoop In tdfLoop.indexes
+                   'get primary key
+                   If indLoop.primary = True Then
+                     For Each indfldLoop In indLoop.Fields
+                     
+                        rstCurrPK.Open "SELECT TableName, FieldName,key,nulls FROM Z_ActualFields WHERE " _
+                        & " (tableName = """ & strTableName & """) And (FieldName = """ _
+                        & indfldLoop.Name & """);", cnnLocal, , 2, adCmdText
+                          If rstCurrPK.EOF And rstCurrPK.BOF Then
+                            'no record exists for PK
+                            Debug.Print "Can't find PK: " & strTableName & "." & indfldLoop.Name
+                          Else 'record exists
+                            rstCurrPK!key = "PK"
+                            rstCurrPK!Nulls = "no"
+                            rstCurrPK.Update
+                            
+                          End If
+                          rstCurrPK.Close
+                     Next indfldLoop
+                   End If
+             Next indLoop
+         
+skiptbl:
+
+        
+End With
+        Next tdfLoop
+               rstCurr.Close
+        Dim rstCurr2 As New ADODB.Recordset, intRels As Long
+        intRels = 0
+             rstCurr2.Open "SELECT * FROM MSysRelationships IN '" & GetVBrModulePath() & "';", cnnLocal, , , adCmdText
+             
+             With rstCurr2
+             Do Until .EOF
+                   'get foreign Keys
+                 intRels = intRels + 1
+                     rstCurrPK.Open "SELECT TableName, FieldName,key, [References] FROM Z_ActualFields WHERE " _
+                        & " (tableName = """ & !szObject & """) And (FieldName = """ _
+                        & !szColumn & """);", cnnLocal, , 2, adCmdText
+                          If rstCurrPK.EOF And rstCurrPK.BOF Then
+                            'no record exists for PK
+                            Debug.Print "Can't find FK: " & !szObject & "." & !szColumn
+                          Else 'record exists
+                            rstCurrPK!key = "FK"
+                            rstCurrPK![References] = !szReferencedObject & "." & !szReferencedColumn
+                            rstCurrPK.Update
+                            
+                          End If
+                         rstCurrPK.Close
+               .MoveNext
+             Loop
+             End With
+            ' Debug.Print "Relationships found:" & intRels
+             DoCmd.RunSQL "UPDATE Z_ActualFields SET Z_ActualFields.[key] = ""n/a""" _
+                    & "  WHERE (((Z_ActualFields.key) Is Null));"
+             DoCmd.RunSQL "UPDATE Z_ActualFields SET Z_ActualFields.[references] = ""n/a""" _
+                    & "  WHERE (((Z_ActualFields.references) Is Null));"
+    
+DoCmd.OpenQuery "misc_ZTbl_diffDT"
+DoCmd.OpenQuery "misc_ZTbl_diffKey"
+DoCmd.OpenQuery "misc_ZTbl_diffNulls"
+DoCmd.OpenQuery "misc_ZTbl_diffrefrnc"
+DoCmd.OpenQuery "misc_ZTbl_diffSize"
+DoCmd.OpenQuery "misc_Ztbl_extraFldsInZ"
+DoCmd.OpenQuery "misc_ztbl_extrafldsNotinZ"
+DoCmd.OpenQuery "misc_Ztbl_ExtraTblsInZ"
+DoCmd.OpenQuery "misc_Ztbl_ExtraTblsNotInZ"
+
+
+msgBox "completed!"
+End Function
+
+Function makeZActual()
+  DoCmd.RunSQL "  create table z_actualFields (" _
+& " Z_FieldDescr_Id autoincrement, OrderID integer , TableName varchar (80), FieldName varchar (80), Nulls varchar(10), dataType varchar(50), FieldSize integer , [key] varchar (50), [References] varchar (100), ClosedList varchar (50), " _
+& " primary key(Z_FieldDescr_Id) );"
+  
+End Function
+
+Function getTableInfoAccess_LoadingModl()
+''function analyzes the access db and stores all field data in Z_Actualfields
+' Dim wrkDefault As Object
+  ' Get default Workspace.
+ '   Set wrkDefault = DBEngine.Workspaces(0)
+
+Dim dbs As Object
+Set dbs = CurrentDb
+    Dim tdfLoop As Object
+    Dim indLoop As Object
+    Dim indfldLoop As Object
+    Dim fldLoop As Object
+    Dim strTableName As String
+    
+  Dim rstCurr As New ADODB.Recordset
+  Dim rstCurrPK As New ADODB.Recordset
+  
+  Dim cnnLocal As Connection
+  Dim intCount As Integer
+  
+  Set cnnLocal = CurrentProject.Connection
+    'clear Z_acutalFields table
+  
+    
+    DoCmd.RunSQL "DELETE * from Z_ActualFields;"
+
+
+            rstCurr.Open "Z_ActualFields", cnnLocal, , 2, adCmdTable
+        For Each tdfLoop In dbs.tabledefs
+
+            'skip this table if it is a system table, prefixed by MSys
+            If Left(tdfLoop.Name, 4) = "MSys" Then GoTo skiptbl
+            
+            strTableName = tdfLoop.Name
+            With rstCurr
+          For Each fldLoop In tdfLoop.Fields
+                .AddNew
+            !TableName = strTableName
+            !FieldName = fldLoop.Name
+            Select Case fldLoop.Required
+              Case True
+                !Nulls = "no"
+              Case False
+                !Nulls = "yes"
+            End Select
+!dataType = Interpret_FieldTypeInt(fldLoop.Type, fldLoop.Attributes)
+  '          Select Case fldLoop.Type
+   '           Case 1
+    '            !dataType = "Yes/No"
+     '         Case 4
+      '          If fldLoop.Attributes = 17 Then
+       '           !dataType = "AutoNumber"
+        '        Else
+         '         !dataType = "Long Integer"
+          '      End If
+           '   Case 7
+            '    !dataType = "Double"
+  '            Case 8
+   '             !dataType = "Date/Time"
+    '          Case 10
+     '           !dataType = "Text"
+      '        Case 11
+       '         !dataType = "OLE Object"
+        '      Case 12
+         '       !dataType = "Memo"
+               
+         '   End Select
+
+            !FieldSize = fldLoop.size
+            !OrderID = fldLoop.Ordinalposition
+               .Update
+            Next fldLoop
+
+             For Each indLoop In tdfLoop.indexes
+                   'get primary key
+                   If indLoop.primary = True Then
+                     For Each indfldLoop In indLoop.Fields
+                     
+                        rstCurrPK.Open "SELECT TableName, FieldName,key,nulls FROM Z_ActualFields WHERE " _
+                        & " (tableName = """ & strTableName & """) And (FieldName = """ _
+                        & indfldLoop.Name & """);", cnnLocal, , 2, adCmdText
+                          If rstCurrPK.EOF And rstCurrPK.BOF Then
+                            'no record exists for PK
+                            Debug.Print "Can't find PK: " & strTableName & "." & indfldLoop.Name
+                          Else 'record exists
+                            rstCurrPK!key = "PK"
+                            rstCurrPK!Nulls = "no"
+                            rstCurrPK.Update
+                            
+                          End If
+                          rstCurrPK.Close
+                     Next indfldLoop
+                   End If
+             Next indLoop
+         
+skiptbl:
+
+        
+End With
+        Next tdfLoop
+               rstCurr.Close
+        Dim rstCurr2 As New ADODB.Recordset, intRels As Long
+        intRels = 0
+             rstCurr2.Open "SELECT * FROM MSysRelationships ;", cnnLocal, , , adCmdText
+             
+             With rstCurr2
+             Do Until .EOF
+                   'get foreign Keys
+                 intRels = intRels + 1
+                     rstCurrPK.Open "SELECT TableName, FieldName,key, [References] FROM Z_ActualFields WHERE " _
+                        & " (tableName = """ & !szObject & """) And (FieldName = """ _
+                        & !szColumn & """);", cnnLocal, , 2, adCmdText
+                          If rstCurrPK.EOF And rstCurrPK.BOF Then
+                            'no record exists for PK
+                            Debug.Print "Can't find FK: " & !szObject & "." & !szColumn
+                          Else 'record exists
+                            rstCurrPK!key = "FK"
+                            rstCurrPK![References] = !szReferencedObject & "." & !szReferencedColumn
+                            rstCurrPK.Update
+                            
+                          End If
+                         rstCurrPK.Close
+               .MoveNext
+             Loop
+             End With
+             Debug.Print "Relationships found:" & intRels
+             DoCmd.RunSQL "UPDATE Z_ActualFields SET Z_ActualFields.[key] = ""n/a""" _
+                    & "  WHERE (((Z_ActualFields.key) Is Null));"
+             DoCmd.RunSQL "UPDATE Z_ActualFields SET Z_ActualFields.[references] = ""n/a""" _
+                    & "  WHERE (((Z_ActualFields.references) Is Null));"
+    
+DoCmd.OpenQuery "misc_ZTbl_diffDT"
+DoCmd.OpenQuery "misc_ZTbl_diffKey"
+DoCmd.OpenQuery "misc_ZTbl_diffNulls"
+DoCmd.OpenQuery "misc_ZTbl_diffrefrnc"
+DoCmd.OpenQuery "misc_ZTbl_diffSize"
+DoCmd.OpenQuery "misc_Ztbl_extraFldsInZ"
+DoCmd.OpenQuery "misc_ztbl_extrafldsNotinZ"
+DoCmd.OpenQuery "misc_Ztbl_ExtraTblsInZ"
+DoCmd.OpenQuery "misc_Ztbl_ExtraTblsNotInZ"
+
+
+msgBox "completed!"
+End Function
+
+
+Function combineXML()
+  Dim strRootDir As String, strCurrentFile As String
+  'this is the source directory where commtaxa, vegplot and planttaxa folders are with xml inside
+  strRootDir = "C:\data\VegBank\CVS1\vegclass\docs\xml"
+  Dim intTables As Integer
+  Dim intFileLines As Integer
+  intTables = 0
+  intFileLines = 0
+  'On Error GoTo CreateTbl_error
+  
+  Dim rstCurr As New ADODB.Recordset
+  Dim fldCurr As Field
+  Dim cnnLocal As Connection
+  
+  Set cnnLocal = CurrentProject.Connection
+
+'opens query to run through values and change type sizes, for varchars only
+    rstCurr.Open "Z_TableDescription", cnnLocal, , , adCmdTable
+    Dim intKeepLine As Integer
+      Dim fs As Object
+      Dim a As Object
+      Set fs = CreateObject("Scripting.FileSystemObject")
+      Dim fs2 As Object
+      Dim objWritefile As Object
+      Set fs2 = CreateObject("Scripting.FileSystemObject")
+
+      'creates new file for writing XML, overwriting any old file
+      Set objWritefile = fs2.CreateTextFile(strRootDir & "\CombinedVegBank.xml", _
+              True)
+      
+      objWritefile.writeLine "<!-- edited with MS ACCESS VBA by Michael Lee " & Now() & "-->"
+      objWritefile.writeLine "<dataModel>"
+      Dim strTxt As String 'single line of file
+  With rstCurr   'gets list of tables
+    Do Until .EOF
+      If !mod <> "VegBank" Then GoTo NotXMLTABLE
+      intTables = intTables + 1
+      'creates name of XML file to read for appropriate table
+      strCurrentFile = strRootDir & "\" & !submodule & "\" & !submodule & !TableName & ".xml"
+      If fs.FileExists(strCurrentFile) = False Then
+        GoTo NotXMLTABLE
+        'skip table
+      End If
+      'opens file for reading XML
+      Set a = fs.openTextFile(strCurrentFile, 1, False, 0)
+      
+      
+      intKeepLine = 0  'dont keep lines read (until <entity> is found)
+      
+      Do Until a.atendofstream
+        'gets one line of file
+        strTxt = a.readline
+        If InStr(strTxt, "<entity>") Then intKeepLine = 1
+
+        If intKeepLine = 1 Then
+           objWritefile.writeLine strTxt
+           intFileLines = intFileLines + 1
+        End If
+        'if just appended </entity> to file, then stop after
+        If InStr(strTxt, "</entity>") Then intKeepLine = 0
+        
+
+      Loop  'from until a.endofstream
+       
+       a.Close
+       
+NotXMLTABLE:
+      .MoveNext
+    Loop  'until EOF rst
+  End With
+  rstCurr.Close
+  objWritefile.writeLine "</dataModel>"
+  objWritefile.Close
+  msgBox ("no errors, file lines produced: " & intFileLines & " and tables: " & intTables & Chr(13) _
+      & "Delete records in foreign database and repopulate with XMLSpy")
+      
+  
+  
+      
+      
+ Exit Function
+CreateTbl_error:
+      msgBox ("Error occurred ! " & strCurrentFile)
+      Exit Function
+         
+End Function

@@ -1,0 +1,39 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command10_Click()
+  If Me.options.Height = 0 Then
+    'show
+    Me.options.Height = 1440 * 3 'inches
+    Me.options.Visible = True
+    Me.lbl_options.Visible = True
+  Else
+    'hide
+    Me.options.Height = 0
+    Me.Detail.Height = 0 'small as it will go
+    Me.options.Visible = False
+    Me.lbl_options.Visible = False
+  End If
+End Sub
+
+Private Sub Command12_Click()
+  Dim blnTemp As Boolean
+  'remember
+  blnTemp = Me.options.Visible
+  
+  'set to vis so we can access values
+  Me.options.Visible = True
+  Dim strWhatToSend As String
+  If Me.options!c Then strWhatToSend = strWhatToSend & "C,"
+  If Me.options!d2 Then strWhatToSend = strWhatToSend & "d2,"
+  If Me.options!c2 Then strWhatToSend = strWhatToSend & "C2,"
+  If Me.options!e Then strWhatToSend = strWhatToSend & "e,"
+  If Me.options!fg Then strWhatToSend = strWhatToSend & "f,g,"
+  If Me.options!i Then strWhatToSend = strWhatToSend & "i,"
+  
+  Call custNPS_send_toLoadingMod(strWhatToSend, Not (Me.options!delete), Me.options!withinPlot, Me.options!onlyStrata, _
+    Nz(Me.options!classifier, "NPS"), Me.options!ignoreb4Colon, Me.options!OtherMeasure1AsTaxonCover)
+  
+  Me.options.Visible = blnTemp 'reset
+  msgBox "Finished copying data from NPS-PLOTS db to the loading module of VegBranch.", , "VegBranch"
+End Sub

@@ -1,0 +1,59 @@
+Option Compare Database
+Option Explicit
+
+'------------------------------------------------------------
+' Delete_Z_USER_ALL
+'
+'------------------------------------------------------------
+Public Function Delete_Z_USER_ALL()
+On Error GoTo Delete_Z_USER_ALL_Err
+    Dim intResp As Integer
+    intResp = msgBox("Are you certain you want to delete all data from the loading tables?", vbYesNoCancel)
+    If intResp <> vbYes Then Exit Function
+
+    ' delete all rows in Z_USER_I
+    DoCmd.OpenQuery "Delete_I", acNormal, acEdit
+    ' delete all rows in Z_USER_g
+    DoCmd.OpenQuery "Delete_G", acNormal, acEdit
+    ' delete all rows in Z_USER_f
+    DoCmd.OpenQuery "Delete_F", acNormal, acEdit
+    ' delete all rows in Z_USER_e
+    DoCmd.OpenQuery "Delete_E", acNormal, acEdit
+    ' delete all rows in Z_USER_d
+    DoCmd.OpenQuery "delete_D", acNormal, acEdit
+    ' delete all rows in Z_USER_d2
+    DoCmd.RunSQL "DELETE * FROM Z_USER_D2_StrataCover;", -1
+    ' delete all rows in Z_USER_c
+    DoCmd.OpenQuery "delete_C", acNormal, acEdit
+    'delete C2
+    DoCmd.RunSQL "delete * from Z_USER_C2_plotNorm;"
+    
+    'delete B
+    DoCmd.RunSQL "DELETE * FROM Z_USER_B_SpecList;"
+    'delete H
+    DoCmd.RunSQL "DELETE * FROM Z_USER_H_CommConcept;"
+    'delete A
+    DoCmd.RunSQL "DELETE * FROM Z_USER_A_party;"
+    'delete J
+    DoCmd.RunSQL "DELETE * FROM Z_USER_J_UD;"
+    ' delete Loading Status
+    DoCmd.OpenQuery "Delete_loading_status", acNormal, acEdit
+    ' updates number of non-null records in all Loading tables in Z_FieldDescription
+    Call CheckFieldsForFields("Loading", "module")
+    ' Updates FieldsToConvertUser so that fields are no longer successfully translated.
+    DoCmd.RunSQL "UPDATE FieldsToConvertUsr SET FieldsToConvertUsr.SuccessfullyTranslated = False;  ", -1
+    ' Appends to Loading Status so that Tbls Clr is true
+    DoCmd.RunSQL "INSERT INTO LoadingStatus ( ClearNecTbl )  SELECT -1 AS Expr1;      ", -1
+
+    CheckTblForRecs "mod", "loading"
+
+Delete_Z_USER_ALL_Exit:
+    Exit Function
+
+Delete_Z_USER_ALL_Err:
+    msgBox Error$
+    Resume Delete_Z_USER_ALL_Exit
+
+End Function
+
+

@@ -1,0 +1,63 @@
+Option Compare Database
+Option Explicit
+
+Public Function rnk_writeRankTable(strTable As String, blnTable As Boolean, Optional blnSuppressMsg As Boolean)
+  'function writes the strTable as a table, using source info in rank_Tables
+  'get info from rank_Tables
+  rereshCurrForm
+  Dim rstTemp As New ADODB.Recordset
+  rstTemp.Open "select * from rank_tables where querySwitch=""" & strTable & """;", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockOptimistic, adCmdText
+    
+  With rstTemp
+  If Not .EOF Then
+    ''have info about this table, now write table or query, depending on what is requested
+    If Left(strTable, 5) = "rank_" And InStr(strTable, "_selMaxScore") Then
+      'erase current object
+      If TableExist(strTable) Then
+       ' AreYouSure ("Delete " & strTable)
+        DoCmd.DeleteObject acTable, strTable
+      End If
+      If QueryExist(strTable) Then
+        '  AreYouSure ("Delete " & strTable)
+        DoCmd.DeleteObject acQuery, strTable
+      End If
+      'now object dnE: write
+      If blnTable Then
+        'write as table
+        DoCmd.RunSQL "SELECT * INTO [" & strTable & "] FROM [" & !lookupQuery & "]"
+         Dim tdfCurr As Object, idxNew As Object, dbCurr As Object
+          Set dbCurr = CurrentDb
+          dbCurr.tabledefs.Refresh
+          Set tdfCurr = dbCurr.tabledefs(strTable)
+        If Not IsNull(!indexField) Then
+        'make unique index on table:
+           Set idxNew = tdfCurr.CreateIndex("cust_" & !indexField)
+           idxNew.Fields.Append idxNew.CreateField(!indexField)
+          idxNew.unique = True
+          tdfCurr.indexes.Append idxNew
+        End If 'unique index
+        If Not IsNull(!nonuniqueIndexField) Then
+        'make nonunique index on table:
+            Set idxNew = tdfCurr.CreateIndex("cust_" & !nonuniqueIndexField)
+            idxNew.Fields.Append idxNew.CreateField(!nonuniqueIndexField)
+            idxNew.unique = False
+            tdfCurr.indexes.Append idxNew
+        End If 'nonunique index
+        
+      Else  'qry
+        Call EditQrySql(strTable, "select * FROM [" & !lookupQuery & "]", False)
+      End If 'table or query write
+    
+    End If 'valid name
+    !currentlyTable = blnTable
+    .Update
+    rereshCurrForm
+  End If 'not eof
+  End With
+  
+  If Not (blnSuppressMsg) Then
+    msgBox "Now looked up from " & IIf(blnTable, "a table.  Recreate table if data is updated", " a query."), , "vegBranch"
+  End If
+  
+End Function

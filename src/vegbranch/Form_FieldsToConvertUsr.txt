@@ -1,0 +1,6 @@
+Option Compare Database
+
+
+Private Sub Form_Load()
+
+End Sub

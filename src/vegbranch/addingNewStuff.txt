@@ -1,0 +1,189 @@
+Option Compare Database
+Option Explicit
+
+Public Function writeCodeToFiles()
+      Dim obj As AccessObject, dbs As Object, strDir As String
+      strDir = "C:\temp\vegbranchCode\"
+    Set dbs = Application.CodeProject
+    ' Search for open AccessObject objects in AllModules collection.
+    For Each obj In dbs.AllForms
+      '  If obj.IsLoaded = True Then
+           Dim mdl As Object, strForm As String
+  strForm = obj.Name
+  DoCmd.OpenForm strForm, acDesign
+  If Forms(strForm).HasModule Then
+    Dim strContents As String
+     strContents = Forms(strForm).Module.Lines(1, Forms(strForm).Module.CountOfLines)
+    'Debug.Print Forms(strForm).Module.Name
+    Dim strFile As String
+    strFile = strDir & Forms(strForm).Module.Name
+    Call prepareFileToWrite(strFile, True, ".txt")
+    WriteLineToFile strContents, strFile
+  End If
+  DoCmd.Close acForm, strForm
+     '   End If
+    Next obj
+    
+      For Each obj In dbs.AllModules
+   '   DoCmd.OpenModule "addingnewStuff", "junk"
+      '  If obj.IsLoaded = True Then
+      'Dim mdl As Module
+    DoCmd.OpenModule obj.Name
+    Set mdl = Modules(obj.Name)
+          Debug.Print obj.Name
+  '  Dim strContents As String
+     strContents = mdl.Lines(1, mdl.CountOfLines)
+    'Debug.Print Forms(strForm).Module.Name
+   ' Dim strFile As String
+    strFile = strDir & mdl.Name
+    Call prepareFileToWrite(strFile, True, ".txt")
+    WriteLineToFile strContents, strFile
+
+  DoCmd.Close acForm, strForm
+     '   End If
+    Next obj
+End Function
+
+
+Public Function showPlotsForParty(strParty As String)
+  Dim strForm As String
+  strForm = "UserParties_fromCI_withPlotNames"
+  If IsFormOpen("strform") Then DoCmd.Close acForm, strForm
+  DoCmd.OpenForm strForm, , , "UserPartyStr=" & SQLizeTxt(strParty)
+End Function
+
+Public Function combinePartyWith(strOldParty As String)
+  'function combines a name with another, which this prompts you for:
+  Dim strNEwParty As String
+  strNEwParty = InputBox("Combine this name with what party? (useful to copy (Ctrl-C) the new name before combining)" & Chr(13) & "enter '!DELETE!' to remove a party", "combine party with another")
+  If strNEwParty = "" Then
+    msgBox "cancelled."
+  Else
+    If strNEwParty = "!DELETE!" Or strNEwParty = "'!DELETE!'" Then
+        strNEwParty = ""
+    End If
+    replacePartyWithNewName strOldParty, strNEwParty
+  End If
+  
+End Function
+
+Public Function replacePartyWithNewName(strOld As String, strNew As String)
+  '10/18/04: function replaces one party name with another
+  Dim blnRemove As Boolean
+  If strNew = "" Then
+    blnRemove = True
+  End If
+  
+  If AreYouSure("Do you REALLY want to replace this name: " & Chr(13) & strOld & Chr(13) & " with the new name:" & nblnk(strNew, "--remove the name--")) Then
+    'replace contribs where needed
+    Dim strSQLOld As String
+    Dim strSQLNew As String
+    strSQLOld = SQLizeTxt(strOld)
+    strSQLNew = SQLizeTxt(strNew)
+    If blnRemove Then strNew = " Null "
+    'get fields that "are contribs"
+    Dim rstGetAref As New ADODB.Recordset
+    rstGetAref.Open "select * from Z_FieldDEscription where [references]=""z_USER_A_Party.UserPartyCode""", _
+      CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+    With rstGetAref
+    Do Until .EOF
+     'update one field
+      DoCmd.RunSQL "UPDATE [" & !TableName & "] SET [" & !FieldName & "]=" & strSQLNew _
+         & " WHERE [" & !FieldName & "]=" & strSQLOld & ";"
+           
+    .MoveNext
+    Loop
+    End With
+    rstGetAref.Close
+    Set rstGetAref = Nothing
+    
+    'is old name in Z_USER_A ?  if so, update to new name, unless it's there already
+    If getvalFrmSQL("select 'yes' from z_USER_A_party where userpartyCode=" & strSQLOld) = "yes" Then
+     
+      If blnRemove Then 'if removing it, just remove it from A
+        DoCmd.RunSQL "DELETE * FROM Z_USER_A_party where userPartyCode=" & strSQLOld
+      Else 'not removing it, check for new
+        If getvalFrmSQL("select 'yes' from z_USER_A_party where userpartyCode=" & strSQLNew) = "yes" Then 'new name is in A
+          'remove old name
+          DoCmd.RunSQL "DELETE * FROM Z_USER_A_party where userPartyCode=" & strSQLOld
+        Else 'new name isn't there
+          'ok, so new name is not in A, update old value
+           DoCmd.RunSQL "UPDATE [Z_USER_A_party] SET [userPartyCode]=" & strSQLNew _
+         & " WHERE [userPartyCode]=" & strSQLOld & ";"
+        End If 'whether new name is in A or not
+      End If 'removing new one or not
+    End If 'not in A at all, leave alone
+    
+  Else 'AreYouSure
+    msgBox "cancelled."
+  End If
+End Function
+
+Private Function consolodateLists()
+  'consolodate all closed lists to one table
+  Dim dbsCurr As Object
+  Dim tdfCurr As Object
+  Set dbsCurr = CurrentDb
+  For Each tdfCurr In dbsCurr.tabledefs
+    If tdfCurr.Name Like "aux_*_*" Then
+      
+      Dim strTbl As String, strFld As String, colNames As New Collection
+      Set colNames = csv_parseCSVstring(tdfCurr.Name, "_", False)
+      strTbl = colNames(2)
+      strFld = colNames(3)
+      Debug.Print tdfCurr.Name & " -> " & strTbl; "."; strFld
+      DoCmd.RunSQL "INSERT INTO fieldList (TableName, FieldName, ListValue, ValueDesc, sortOrd) SELECT """ & strTbl & """,""" & strFld & """, [values],[valueDescription],[sortOrd] FROM [" & tdfCurr.Name & "];"
+    End If
+  
+  Next tdfCurr
+  
+
+
+End Function
+
+Public Function CommunizePlantForm()
+On Error Resume Next
+
+Dim frmCurr As Form
+Set frmCurr = Screen.ActiveForm
+Dim ctlCurr As Control
+For Each ctlCurr In frmCurr.Controls
+  Select Case ctlCurr.ControlType
+    Case acComboBox, acListBox
+      ctlCurr.ControlSource = substTextForText(ctlCurr.ControlSource, "plant", "comm")
+      ctlCurr.RowSource = substTextForText(ctlCurr.RowSource, "plant", "comm")
+    Case acTextBox
+      ctlCurr.ControlSource = substTextForText(ctlCurr.ControlSource, "plant", "comm")
+    Case acLabel
+      ctlCurr.Caption = substTextForText(ctlCurr.Caption, "plant", "comm")
+     
+      If Len(ctlCurr.HyperlinkSubAddress) > 1 Then
+        ctlCurr.HyperlinkSubAddress = substTextForText(ctlCurr.HyperlinkSubAddress, "plant", "comm")
+      End If
+  End Select
+
+Next ctlCurr
+
+End Function
+
+Public Function getInfo()
+  Dim frmCurr As Form
+  Set frmCurr = Screen.ActiveForm
+  Dim ctlCurr As Control
+  For Each ctlCurr In frmCurr.Detail.Controls
+    Debug.Print "<tr>"
+    Select Case ctlCurr.ControlType
+      Case acLabel
+        Debug.Print "<click>" & ctlCurr.OnClick & "</click>"
+        Debug.Print "<h>" & ctlCurr.HyperlinkSubAddress & "</h>"
+        Debug.Print "<cap>" & ctlCurr.Caption & "</cap>"
+        Debug.Print "<ctt>" & ctlCurr.ControlTipText & "</ctt>"
+      Case acImage
+        Debug.Print "<click>" & ctlCurr.OnClick & "</click>"
+        Debug.Print "<h>" & ctlCurr.HyperlinkSubAddress & "</h>"
+        Debug.Print "<pic>" & ctlCurr.Picture & "</pic>"
+        Debug.Print "<ctt>" & ctlCurr.ControlTipText & "</ctt>"
+    End Select
+    Debug.Print "</tr>"
+  Next
+End Function

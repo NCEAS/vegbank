@@ -1,0 +1,20 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Form_Load()
+ ' Debug.Print "help>> openArgs=" & Me.OpenArgs
+  Dim ctlHelp As New Collection, inttemp As Integer
+  Set ctlHelp = csv_parseCSVstring(Nz(Me.OpenArgs), ",", True)
+  If ctlHelp.Count >= 4 Then 'valid
+    Me!formHelp = nblnk(ctlHelp(3), "--sorry no help at this time for this form--")
+    Me!controlhelp = nblnk(ctlHelp(5), "--sorry, no help at this time for this control--")
+    Me!HelpOnFormName = ctlHelp(2)
+    If ctlHelp(1) = "dialog" Then
+      Me!dialogExplanation = "The form you've requested help for is waiting for your response.  This means this help form must be closed before returning to the previous form."
+    Else
+      Me!dialogExplanation = " "
+    End If
+  Else
+    Me!formHelp = "Sorry, no help is yet available."
+  End If
+End Sub

@@ -1,0 +1,152 @@
+Option Compare Database
+Option Explicit
+
+
+
+Private Sub Command28_Click()
+  DoCmd.OpenForm "MetaDataSwitchboard", , , , , acDialog
+  Me.Recalc
+End Sub
+
+Private Sub Command35_Click()
+    Dim strFields As String, strCaptRight As String
+  ''fields to show/hide
+  strFields = "showPlantCtls,showCvrCtls,select_authorPlotCode_Label,select_authorPlotCode,Label17,Option20,Label21,Option18,Label19,Option30,Label31,Label23,Option24,Label25,Option26,Label27,showPlantCtls,showCvrCtls,showPlantCtls,showCvrCtls"
+
+  strCaptRight = Right(Me.Command35.Caption, Len(Me.Command35.Caption) - 6)
+  If Left(Me.Command35.Caption, 6) = ">>Show" Then
+'    Me.FormFooter.Height = 1440
+    ShowTheControls strFields, True, Me.Name, True, False, False, True
+    Me.Command35.Caption = "<<Hide" & strCaptRight
+ '   Me.Detail.Height = 2
+  Else
+ '   ShowTheControls strFields, False, Me.Name, True
+ ' GoTo tempskip
+    Dim ctlCurr As Control, colFlds As New Collection, inttemp As Integer
+    Set colFlds = csv_parseCSVstring(strFields, ",")
+    For inttemp = 1 To colFlds.Count
+      Set ctlCurr = Controls(colFlds(inttemp))
+      ctlCurr.Top = 0
+      ctlCurr.Height = 0
+      ctlCurr.Visible = False
+      
+    Next inttemp
+tempskip:
+    Me.Command35.Caption = ">>Show" & strCaptRight
+    
+    Me.FormFooter.Height = 2
+  End If
+  Me.Repaint
+End Sub
+
+Private Sub Command36_Click()
+  frm_restoreObjFromTag (Me.FormHeader)
+End Sub
+
+Private Sub Command41_Click()
+  If IsNull(Me.authorplotcode) Then
+    Call CloseMeAndOpen("basicEnt_Z_USER_C_plotData")
+  Else
+    Dim strPlot As String
+    strPlot = Me.authorplotcode
+    'close current
+    DoCmd.Close acForm, Me.Name
+    'open plot data form
+    DoCmd.OpenForm "basicEnt_Z_USER_C_plotData", , , "authorPlotCode=" & SQLizeTxt(strPlot)
+    
+  End If
+End Sub
+
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+ If basicEnt_ChkReqdFieldsAreNotNull() = False Then
+   Cancel = True
+  End If
+End Sub
+
+Private Sub Form_Close()
+  'hide toolbar
+  Call showHideBasicEntMenu(False)
+End Sub
+
+Private Sub Form_Load()
+  Me.authorplotcode.DefaultValue = ""
+  Me.select_authorPlotCode = Me.OpenArgs
+  select_authorPlotCode_AfterUpdate
+  ''handle methods picklists
+  Me.Recalc
+End Sub
+
+Private Sub Form_Open(Cancel As Integer)
+  'show toolbar for this:
+  Call showHideBasicEntMenu(True)
+End Sub
+
+Private Sub PLANTCode4_Exit(Cancel As Integer)
+  If Len(Me.Controls("plantCode4")) = 4 And Nz(Me.PLANTCode4.OldValue) <> Nz(Me.PLANTCode4) Then
+     Dim lngPC As Long, strFilt As String
+     
+     strFilt = Left([PLANTCode4], 2) & "* " & Right([PLANTCode4], 2) & "*"
+     
+    lngPC = -1
+    lngPC = BrowseForPK("select_plantUsage_SN", strFilt, True)
+    If lngPC <> -1 Then
+      'use the concept selected: what name to use??  USDA code should work
+      Dim strCode As String
+      Dim rstGet As New ADODB.Recordset
+      Dim rstAdd As New ADODB.Recordset
+      strCode = getvalFrmSQL("select plantName from basicEnt_plants_USDA_code where plantConcept_ID=" & lngPC)
+      rstGet.Open "select * from plantConcept where plantConcept_ID=" & lngPC, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+      rstAdd.Open "select * from Z_B_VB_LookupNms where plantName=" & SQLizeTxt(strCode), CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
+      
+      If rstAdd.EOF Then
+        'add to Z_B
+        rstAdd.AddNew
+        rstAdd!plantName = strCode
+        rstAdd!linkedThrough = rstGet!plantName
+        rstAdd!PLANTCONCEPT_ID = lngPC
+        rstAdd!PLANTNAME_ID = rstGet!PLANTNAME_ID
+        rstAdd!plantAsConc = 2
+        rstAdd!accessionCode = rstGet!accessionCode
+        rstAdd.Update
+      End If
+      rstAdd.Close
+      rstGet.Close
+      Debug.Print "got: " & lngPC
+      [plantCode] = strCode
+    Else 'cancelled
+    
+    End If
+  Else
+    'do nothing: not 4 letters
+  
+  End If
+End Sub
+
+
+
+Private Sub select_authorPlotCode_AfterUpdate()
+  Me.authorplotcode.DefaultValue = SQLizeTxt(Nz(Me.select_authorPlotCode.Value))
+  If IsNull(Me.select_authorPlotCode) Then
+    Me.Filter = "TRUE"
+  Else
+    Me.Filter = "authorPlotCode=" & SQLizeTxt(Nz(Me.select_authorPlotCode.Value))
+  End If
+  Me.FilterOn = True
+  Me.Caption = "Enter Species found on plot: " & Me.select_authorPlotCode
+End Sub
+
+
+
+Private Sub showCvrCtls_AfterUpdate()
+  'if 1 then show codes, else %
+    Call ShowTheControls("coverCode,coverCode_label", -1 * (Me.showCvrCtls = 1), Me.Name)
+    Call ShowTheControls("cover,cover_label", -1 * (((Me.showCvrCtls = 2))), Me.Name)
+   
+End Sub
+
+Private Sub showPlantCtls_AfterUpdate()
+  'if 1 then show plantCode4, else plantCode
+    Call ShowTheControls("plantCode,plantCode_label", -1 * (Me.showPlantCtls = 3), Me.Name)
+    Call ShowTheControls("plantCode4,plantCode4_label", -1 * (((Me.showPlantCtls = 1))), Me.Name)
+     Call ShowTheControls("plantCode_allUSDA,plantCode_allUSDA_label", -1 * (Me.showPlantCtls = 2), Me.Name)
+End Sub

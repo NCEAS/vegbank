@@ -1,0 +1,19 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command2_Click()
+  On Error GoTo errDel
+  If AreYouSure("You are about to delete this stem record in the loading table: Stem Data. " & Chr(13) _
+    & "Info-- plot: " & Me.authorplotcode & ", plant:" & Me.plantCode & ", stratum:" & Me.stratumIndex & ", dbh:" & Me.stemDiameter _
+    & Chr(13) & "Continue?" _
+    & Chr(13) & "Press YES to delete, NO to keep the record.") Then
+    Me.Refresh
+    DoCmd.RunSQL "delete * from Z_USER_E_StemData where stemID=" & Me.STEMID
+    Me.Refresh
+  End If
+exitthis:
+  Exit Sub
+errDel:
+  msgBox "Error trying to delete the stem record: " & Err.Description
+  Resume exitthis
+End Sub

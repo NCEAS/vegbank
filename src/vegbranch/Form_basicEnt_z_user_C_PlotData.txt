@@ -1,0 +1,250 @@
+Option Compare Database
+Option Explicit
+
+
+Private Sub authorPlotCode_Exit(Cancel As Integer)
+  ''see if changed, if so update this record, and others if other records are affected
+  Debug.Print "exit AUTHOPLOTCode: " & Now()
+  Dim strLastAPC As String
+  strLastAPC = remembLastAuthorPlotCode(False)
+  If Nz(Me.authorplotcode.Value) <> strLastAPC Then
+    Dim strPlotChange As String
+    strPlotChange = "You are about to change the plotCode:" & strLastAPC & Chr(13) & "to : " & Me.authorplotcode & Chr(13)
+    
+    Debug.Print Now() & strPlotChange
+    'check to see if this value exists already on Z_USER_C
+    If PlotExistOnTbl(Me.authorplotcode, "C") Then
+      'report duplication and cancel update
+      msgBox strPlotChange & "You already have a plot with that name.  Please choose another name.", , "VegBranch"
+      Me.authorplotcode = strLastAPC
+      Exit Sub
+    End If
+    'check to see if other records will be affected
+    If PlotExistOnTbl(strLastAPC, "C2") Or PlotExistOnTbl(strLastAPC, "D2") Then
+      'comfirm with user that they want to update
+      Dim inttemp As Integer
+      inttemp = msgBox(strPlotChange & "If you change this plot code, records in other tables that link to this plot will be affected.  Do you want VegBranch to change the plot names in the other tables?" _
+        & Chr(13) & "Press YES for VegBranch to change the codes." _
+        & Chr(13) & "Press NO for VegBranch to not change the codes." _
+        & Chr(13) & "Press Cancel to not change anything", vbYesNoCancel, "VegBranch")
+      Dim strUPDATE As String
+      strUPDATE = " SET authorPlotCode = " & SQLizeTxt(Me.authorplotcode.Value) & " WHERE authorPlotCode=" & SQLizeTxt(strLastAPC)
+      If inttemp = vbYes Then
+            '' UPDATE OTHER TABLE RECORDS
+            DoCmd.RunSQL "update  Z_USER_d2_strataCover " & strUPDATE
+            DoCmd.RunSQL "update Z_USER_C2_PlotNorm " & strUPDATE
+            
+          'later:  Me.Refresh
+            
+      End If
+      If inttemp = vbNo Then
+        'nothing: just let change happen
+       ' later: Me.Refresh 'update current record
+        
+      End If
+      If inttemp = vbCancel Then
+        'undo change
+        Me.authorplotcode = strLastAPC
+        GoTo exitNoUpdate
+      End If
+    Else
+      'plot doesn't exist elsewhere
+        
+    End If 'plot exists elsewhere or not
+    
+    'make sure strata exist on this plot, but prevent dupl from being added
+    Dim rstGetSt As New ADODB.Recordset
+    rstGetSt.Open "select * from current_stratumTypes", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+    With rstGetSt
+      Do Until .EOF
+        'check to see if this exists on C2
+        If getvalFrmSQL("select 'y' from Z_USER_C2_plotNorm where authorPlotCode=" & SQLizeTxt(Me.authorplotcode) _
+          & " AND stratumIndex=" & SQLizeTxt(!code)) = "y" Then
+          'value exists, skip
+        Else
+          'value doesn't exist, add
+          DoCmd.RunSQL "INSERT INTO Z_USER_C2_plotNorm (authorPlotCode,stratumIndex) SELECT " & SQLizeTxt(Me.authorplotcode) _
+            & " , " & SQLizeTxt(!code)
+            Debug.Print "adding:" & !code & " to " & Me.authorplotcode
+        End If
+      .MoveNext
+      Loop
+    End With
+    rstGetSt.Close
+  '   On Error Resume Next ' : can't update if already in process of updating
+  '  Me.Refresh
+  Call remembLastAuthorPlotCode(True, Me.authorplotcode)
+  End If 'plotCode changed
+exitNoUpdate:
+  Exit Sub
+End Sub
+
+Private Function remembLastAuthorPlotCode(blnPut As Boolean, Optional strValToPut As String) As String
+  'function remembers what was last in authorPlotCode
+  'fix for the .oldValue not serving our purposes
+  Static AuthPlotCode As String
+  If blnPut Then
+    AuthPlotCode = strValToPut
+  End If
+  remembLastAuthorPlotCode = AuthPlotCode
+End Function
+
+Private Sub Command242_Click()
+  If IsNull(Me.authorplotcode) Then
+    msgBox "Please enter an AuthorPlotCode first, so that VegBranch knows for which plot you want to enter species"
+  Else
+    Dim strCurrPlot As String
+    strCurrPlot = Me.authorplotcode
+    DoCmd.Close acForm, Me.Name
+    'ok, start
+    DoCmd.OpenForm "basicEnt_Z_USER_D2_strataCover", , , , , , strCurrPlot
+   
+  End If
+  
+End Sub
+
+Private Sub Command247_Click()
+  Me.find_authorPlotCode = Null
+  Me.FilterOn = False
+End Sub
+
+Private Sub confidentialityStatus_AfterUpdate()
+  If Me.confidentialitystatus <> "0" Then
+    Me.confidentialityreason.BackColor = Me.confidentialitystatus.BackColor
+    Me.confidentialityreason.BackStyle = 1
+  Else
+    Me.confidentialityreason.BackColor = 0
+    Me.confidentialityreason.BackStyle = 0
+  End If
+End Sub
+
+Private Sub County_Enter()
+  'get appropriate county list if state/province is filled in
+  If IsNull(Me.stateprovince) Then
+    Me.County.RowSource = "basicEnt_np_county"
+    msgBox "Choose a state/province first to see a more limited list of counties."
+  Else
+    'have one
+     Dim lngPK As Long, strName As String
+    lngPK = getPKfromAccessionCode(Me.stateprovince, "namedPlace")
+    If lngPK > 0 Then
+       strName = getvalFrmSQL("select placeName from namedPlace where namedPlacE_ID=" & lngPK)
+    Else
+      strName = Me.stateprovince
+    End If
+   Me.County.RowSource = "select * from basicEnt_np_county where placeDescription=" & SQLizeTxt(strName)
+      
+  End If
+End Sub
+
+Private Sub find_authorPlotCode_AfterUpdate()
+  If Not IsNull(Me.find_authorPlotCode) Then
+    Me.Filter = "authorPlotCode=" & SQLizeTxt(Me.find_authorPlotCode)
+    Me.FilterOn = True
+  End If
+End Sub
+
+
+
+
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+'make sure plotCode updates apply if move to new record without moving out of authorPlotCode
+  Call authorPlotCode_Exit(-1)
+  'make sure values on this record are OK
+  If basicEnt_ChkReqdFieldsAreNotNull() = False Then
+   Cancel = 1
+  End If
+End Sub
+
+Private Sub Form_Close()
+  'tidy up things
+  'fix dominant stratum numebrs to text
+  Call basicEnt_updatedomStratum
+  'hide toolbar which may not be needed anymore
+  Call showHideBasicEntMenu(False)
+End Sub
+
+Private Sub Form_Current()
+  Call remembLastAuthorPlotCode(True, Nz(Me.authorplotcode))
+  'handle conditionally reqd confid reason:
+  Call confidentialityStatus_AfterUpdate
+End Sub
+
+Private Sub Form_Open(Cancel As Integer)
+ 'show menu
+ Call showHideBasicEntMenu(True)
+ 'sets default values from metadata, but doesn't save (faster than saving each time)
+  
+ Dim rstDefs As New ADODB.Recordset
+ 'get default values
+ rstDefs.Open "select * from Default_Metadata2", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+ With rstDefs
+  If Not .EOF Then
+    'have values to set as defaults
+    Me.confidentialitystatus.DefaultValue = SQLizeTxt(Nz(!defConfid), , True)
+    Me.confidentialityreason.DefaultValue = SQLizeTxt(Nz(!defReason), , True)
+    Me.area.DefaultValue = Nz(!defPlotSize)
+    Me.taxonObservationArea.DefaultValue = Nz(!defPlotSize, "NULL")
+    If Nz(!defPermanence) = "true" Or Nz(!defPermanence) = "false" Then
+      Me.permanence.DefaultValue = !defPermanence
+    Else
+      If IsNull(!defPermanence) Then
+        Me.permanence.DefaultValue = "NULL"
+      End If
+    End If
+    If Nz(!defAutoTaxCvr) = "true" Or Nz(!defAutoTaxCvr) = "false" Then
+      Me.autoTaxonCover.DefaultValue = !defAutoTaxCvr
+    Else
+      If IsNull(!defAutoTaxCvr) Then
+        Me.autoTaxonCover.DefaultValue = "NULL"
+      End If
+    End If
+    Me.coverDispersion.DefaultValue = SQLizeTxt(Nz(!defCoverDisp), , True)
+   'not part of the metadata form: Me.stemSampleMethod.DefaultValue = SQLizeTxt(!defStemSamplMeth)
+    Me.originalData.DefaultValue = SQLizeTxt(Nz(!deforigDataLoc), , True)
+    Me.methodNarrative.DefaultValue = SQLizeTxt(Nz(!defMethodNarr), , True)
+    Me.layoutnarrative.DefaultValue = SQLizeTxt(Nz(!DefLayoutNarr), , True)
+    ''set observation contributor
+    Me.Contrib1.DefaultValue = SQLizeTxt(Nz(!DefaultParty), , True)
+  End If
+ End With
+ rstDefs.Close
+End Sub
+
+Private Sub QuadrangleName_Enter()
+  'get appropriate quad list if state/province is filled in
+  If IsNull(Me.stateprovince) Then
+    Me.QuadrangleName.RowSource = "basicEnt_np_quadrangle"
+    msgBox "Choose a state/province first to see a more limited list of quadrangles."
+  Else
+    'have one
+     Dim lngPK As Long, strName As String
+    lngPK = getPKfromAccessionCode(Me.stateprovince, "namedPlace")
+    If lngPK > 0 Then
+       strName = getvalFrmSQL("select placeName from namedPlace where namedPlacE_ID=" & lngPK)
+    Else
+      strName = Me.stateprovince
+    End If
+   Me.QuadrangleName.RowSource = "select * from basicEnt_np_quadrangle where left(placeDescription," & Len(strName) & ")=" & SQLizeTxt(strName)
+      
+  End If
+End Sub
+
+Private Sub StateProvince_Enter()
+  'get appropriate state list if country is specified
+  If IsNull(Me.country) Then
+    Me.stateprovince.RowSource = "basicEnt_np_stateProvince"
+    msgBox "Choose a country first to see a more limited list of state/provinces."
+  Else
+   'have country, filter this to meet reqs
+    Dim lngPK As Long, strCountryName As String
+    lngPK = getPKfromAccessionCode(Me.country, "namedPlace")
+    If lngPK > 0 Then
+       strCountryName = getvalFrmSQL("select placeName from namedPlace where namedPlacE_ID=" & lngPK)
+    Else
+      strCountryName = Me.country
+    End If
+   Me.stateprovince.RowSource = "select * from basicEnt_np_stateProvince where placeDescription=" & SQLizeTxt(strCountryName)
+  
+  End If
+End Sub

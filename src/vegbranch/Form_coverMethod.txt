@@ -1,0 +1,6 @@
+Option Compare Database
+Option Explicit
+
+Private Sub CITATION_ID_Enter()
+  Citation_ID.Requery
+End Sub

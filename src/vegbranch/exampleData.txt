@@ -1,0 +1,57 @@
+Option Compare Database
+Option Explicit
+
+'NOTE: to add data to the example table, put the data into a .csv file with Record 1,2,3,4 column to left of data
+'Normalize using the normalizer  (1+1 no labels)
+'Then add example name to each record, and add tableName, trueExample, etc. to first record
+
+Public Function writeSQLForTableExample(strName As String, Optional blnNoOpen As Boolean)
+ 
+
+'get all fields used:
+Dim colFlds As New Collection
+Set colFlds = getVals("xampleData", "FieldName", " WHERE  exampleName=""" & strName & """", " ORDER BY first(xample_ID)")
+ 
+Dim strSQL As String
+ 
+Dim inttemp As Integer
+'Debug.Print "-----fields ---"
+For inttemp = 1 To colFlds.Count
+  strSQL = strSQL & IIf(strSQL = "", "", ",") & " FindExampleVal(""" & strName & """,""" & colFlds(inttemp) & """,[record]) as [" & colFlds(inttemp) & "]"
+Next inttemp
+
+strSQL = "SELECT " & strSQL & " FROM xampleData WHERE exampleName=""" & strName & """ GROUP BY [record];"
+ 
+EditQrySql "Xample_shown", strSQL, Not blnNoOpen
+
+
+End Function
+
+Public Function getVals(strTbl As String, strFld As String, strWHERE As String, strORDER As String) As Collection
+  'gets all values from a table for a field
+  Dim rstGet As New ADODB.Recordset
+ rstGet.Open "Select [" & strFld & "] from [" & strTbl & "]  " & strWHERE & " group by [" & strFld & "] " & strORDER, CurrentProject.Connection _
+   , adOpenForwardOnly, adLockReadOnly, adCmdText
+ Dim colGet As New Collection
+ With rstGet
+   Do Until .EOF
+     colGet.Add rstGet.Fields(strFld).Value
+   .MoveNext
+   Loop
+ End With
+ rstGet.Close
+ Set getVals = colGet
+End Function
+
+Public Function FindExampleVal(strName As String, strField As String, lngRecord As Long) As String
+  'gets value in example dataset, given table, field and record
+  Dim rstGetVal As New ADODB.Recordset
+  rstGetVal.Open "SElect recordValue from xampleData where exampleName=""" & strName & """ AND fieldName = """ & strField _
+     & """ AND record=" & lngRecord, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstGetVal.EOF Then
+    FindExampleVal = ""
+  Else
+    FindExampleVal = Nz(rstGetVal!recordValue, "")
+  End If
+  rstGetVal.Close
+End Function

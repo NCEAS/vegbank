@@ -1,0 +1,703 @@
+Option Compare Database
+Option Explicit
+
+'Function ddafjdksjfakl()
+ ' Dim dbs As Object
+  'Set dbs = CurrentDb
+  
+  'dbs.Relations.Delete ("auxRel_55userDefined_userDefinedName")
+
+'End Function
+
+
+Private Function completeVBreinstall()
+  KillVBRels
+  killVegBankTables
+  create_VegBank_in_Access ("C:\data\VegBank\6_18_VegBankSQL_mdfd.sql")
+
+
+End Function
+
+Private Function daaa()
+  create_VegBank_in_Access "C:\data\VegBank\closedLists\closedRelSQL_delete.sql"
+End Function
+
+Private Function KillVBRels()
+  'deletes current VegBank relationships so that we can then delete VegBank tables
+  Dim rstCurr As New ADODB.Recordset
+  Dim cnnLocal As Connection
+  Dim intCount As Integer
+  
+  Dim dbs As Object
+  Set dbs = CurrentDb
+  
+  Set cnnLocal = CurrentProject.Connection
+  intCount = 0
+'opens query to run through values and change type sizes, for varchars only
+  rstCurr.Open "misc_GetRelNames", cnnLocal, , , adCmdTable
+    
+  With rstCurr
+    Do Until .EOF
+      intCount = intCount + 1
+      'Debug.Print (!szRelationship)
+      dbs.relations.delete (!szRelationship)
+      If !mastMod <> "VegBank" Or !childMod <> "VegBank" Then
+        Debug.Print !mastMod & " __  " & !childMod & " __  " & !szColumn _
+            & " __  " & !szObject & " __  " & !szReferencedColumn & " __  " _
+            & !szReferencedObject & " __  " & !szRelationship
+      End If
+      .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+End Function
+
+Private Function killVegBankTables()
+  'function deletes all Vegbank tables so as to allow new ones to be imported
+  Dim rstCurr As New ADODB.Recordset
+  Dim fldCurr As Field
+  Dim cnnLocal As Connection
+  Dim intCount As Integer
+  
+  Set cnnLocal = CurrentProject.Connection
+  intCount = 0
+'opens query to run through values and change type sizes, for varchars only
+    rstCurr.Open "Z_TableDescription", cnnLocal, , , adCmdTable
+    
+  With rstCurr
+    Do Until .EOF
+      
+        If !mod = "Vegbank" Then 'vegbank module
+          If Nz(Len(!TableName), 0) <> 0 Then  'not blank record
+           If checkForTables(!TableName) Then 'table exists (if not, then no need to delete)
+            intCount = intCount + 1
+            DoCmd.DeleteObject acTable, !TableName
+            End If 'table exist
+          End If 'not blank
+        End If 'mod VegBank
+      .MoveNext
+    Loop
+  End With
+  rstCurr.Close
+  msgBox intCount & " tables deleted"
+End Function
+
+Function checkForTables(strTableName As String) As Boolean
+Dim dbs As Object
+Set dbs = CurrentDb
+Dim intLoop As Integer
+
+  For intLoop = 0 To dbs.tabledefs.Count - 1
+    If dbs.tabledefs(intLoop).Name = strTableName Then
+      checkForTables = True
+      Exit Function
+    End If
+  
+  Next intLoop
+checkForTables = False
+
+End Function
+
+Private Function create_VegBank_in_Access(strSource As String)
+  On Error GoTo CreateTbl_error
+  Dim fs As Object
+  Dim a As Object
+  Dim strTxt As String
+  Dim strSQL As String
+  Dim intCount As Integer, intSqlCount As Integer
+  
+Set fs = CreateObject("Scripting.FileSystemObject")
+Set a = fs.openTextFile(strSource, 1, False, 0)
+With a
+  Do Until .atendofstream
+    intCount = intCount + 1
+  'gets one line of SQL file
+  strTxt = .readline
+  If Left(strTxt, 2) = "--" Then  'comment'
+     'is a comment
+  Else
+     'is not a comment
+     'appends current line to building SQL string
+     strSQL = Trim(strSQL) & " " & Trim(strTxt)
+     If InStr(strTxt, ";") <> 0 Then   'has ";"
+       DoCmd.RunSQL (strSQL)
+       strSQL = ""
+       intSqlCount = intSqlCount + 1
+     End If  'has ;
+  End If 'comment or not
+  Loop
+End With
+      msgBox ("no errors, records processed: " & intCount & " and SQL statements: " & intSqlCount)
+ Exit Function
+CreateTbl_error:
+      msgBox "Error occurred -- continuing --  " & strSQL
+      Resume Next
+End Function
+
+Private Function analyzeSQLFile()
+Dim strSQLFileLoc As String
+strSQLFileLoc = "C:\data\VegBank\6_18_VegBankSQL.txt"
+'SQL file location to be analyzed
+'kills SQL table if extant
+If TableExist("Z_Flds_SQL") Then
+  DoCmd.DeleteObject acTable, "Z_Flds_SQL"
+End If
+  Dim dbs As Object
+  Set dbs = CurrentDb
+  Dim tblDef As Object
+  'create New SQL table to store SQL analysis
+  Set tblDef = dbs.CreateTableDef("Z_Flds_SQL")
+  'create appropriate fields to store data
+With tblDef
+  .Fields.Append .CreateField("TableName", DB_TEXT, 60)
+  .Fields.Append .CreateField("FieldName", DB_TEXT, 75)
+  .Fields.Append .CreateField("OrderID", DB_LONG)
+  .Fields.Append .CreateField("ky", DB_TEXT, 5)
+  .Fields.Append .CreateField("Nulls", DB_TEXT, 3)
+  .Fields.Append .CreateField("DataType", DB_TEXT, 55)
+  .Fields.Append .CreateField("FieldSize", DB_LONG)
+  .Fields.Append .CreateField("Refs", DB_TEXT, 255)
+  Debug.Print "CREATING TABLE to write SQL results to"
+End With
+'write table to DB permanently
+dbs.tabledefs.Append tblDef
+  'open same SQL table to edit
+Dim rstDest As New ADODB.Recordset
+Dim cnnLocal As Connection
+Set cnnLocal = CurrentProject.Connection
+  rstDest.Open "Z_Flds_SQL", cnnLocal, , adLockPessimistic, adCmdTable
+
+'read in SQL file
+  Dim fs As Object
+  Dim a As Object
+  Dim strTxt As String
+  Dim strSQL As String
+  Dim intCount As Integer, intSqlCount As Integer
+  
+Set fs = CreateObject("Scripting.FileSystemObject")
+Set a = fs.openTextFile(strSQLFileLoc, 1, False, 0)
+Dim strTable As String 'tableName
+With a
+  Do Until .atendofstream 'loop until entire file read
+    intCount = intCount + 1  'counter
+  'gets one line of SQL file
+  strTxt = .readline
+  'replace tabs with " "
+  strTxt = substTextForText(strTxt, Chr(9), " ")
+  If Left(Trim(strTxt), 2) = "--" Or Nz(Len(Trim(strTxt)), 0) = 0 _
+        Or Trim(strTxt) = "(" Or Trim(strTxt) = ");" Or Left(Trim(strTxt), 5) = "drop " _
+        Then 'comment or unimportant line'
+     'is a comment
+  Else
+     'is not a comment
+     Dim strMode As String
+     Dim lngOrder As Long
+     If Left(Trim(strTxt), 13) = "CREATE TABLE " Then
+       'new table
+       strMode = "CREATE"
+       strTable = Right(Trim(strTxt), Len(strTxt) - 13)
+       'initialize new orderID sequence
+       lngOrder = 0
+       'remove sqaure brackets
+       strTable = substTextForText(strTable, "[", "")
+       strTable = substTextForText(strTable, "]", "")
+       Debug.Print "-writing TABLE " & strTable
+       GoTo endofLine 'pass the field creation step
+     End If 'create table
+     If Left(Trim(strTxt), 12) = "ALTER TABLE " Then
+       strMode = "ALTER"
+       strTable = Right(Trim(strTxt), Len(strTxt) - 12)
+       strTable = substTextForText(strTable, "[", "")
+       strTable = substTextForText(strTable, "]", "")
+       Debug.Print "--altering TABLE " & strTable
+       GoTo endofLine
+     End If
+     
+   If strMode = "CREATE" Then 'in a create table statement, add fields with attributes
+     If Left(Trim(strTxt), 11) = "PRIMARY KEY" Then
+       'not a new field, just a primary key indicator
+         'get what's between ( and )
+         Dim strPK As String
+         
+         strPK = Mid(strTxt, InStr(strTxt, "(") + 1, InStr(strTxt, ")") - InStr(strTxt, "(") - 1)
+         'close current rst and reopen later
+         rstDest.Close
+         'reopen with just field we want
+         rstDest.Open "SELECT * FROM Z_Flds_SQL WHERE tableName = """ _
+           & strTable & """ AND fieldName = """ & strPK & """;", _
+           cnnLocal, , adLockPessimistic, adCmdText
+         If rstDest.EOF And rstDest.BOF Then
+           'error
+           msgBox "Can't find PK " & strTable & "." & strPK
+           Exit Function
+         Else
+           'this is the PK
+           rstDest!ky = "PK"
+           rstDest!Nulls = "No"
+           'commit changes to dataset
+           rstDest.Update
+         End If 'eof bof
+         'close this dataset with only OK
+         rstDest.Close
+         'open original dataset again
+         rstDest.Open "Z_Flds_SQL", cnnLocal, , adLockPessimistic, adCmdTable
+       GoTo endofLine
+     End If  'primary key
+     'is a new field add new record
+     rstDest.AddNew
+     rstDest!TableName = strTable  'strTable inherited from last record
+     strTxt = Trim(strTxt)
+     Dim strFldName As String
+     strFldName = Left(strTxt, InStr(strTxt, " "))
+     If InStr(strFldName, "[") <> 0 Then
+       'remove square brackets from field names
+       strFldName = substTextForText(strFldName, "[", "")
+       strFldName = substTextForText(strFldName, "]", "")
+     End If
+     rstDest!FieldName = strFldName
+     'strTxt loses FieldName
+     strTxt = Trim(Right(strTxt, Len(strTxt) - InStr(strTxt, " ")))
+     Dim strDT As String
+     Dim blnFldDone As Boolean
+     Dim LngFldSz As Long
+     Dim strnull As String
+     'unless nulls are no, they are yes
+     strnull = "yes"
+     blnFldDone = False
+     strDT = Left(strTxt, InStr(strTxt, " "))
+     If Nz(Len(strDT), 0) = 0 Then
+       'no space in strTxt
+       strDT = Left(strTxt, InStr(strTxt, ","))
+       blnFldDone = True
+     End If
+     If InStr(strDT, ",") <> 0 Then
+       'DT has a comma, field is done
+       strDT = substTextForText(strDT, ",", "")
+       blnFldDone = True
+     End If
+     'write datatype
+     rstDest!dataType = strDT
+     If Not blnFldDone Then 'if more data in strTxt, get it
+       'strText loses datatype
+       strTxt = Trim(Right(strTxt, Len(strTxt) - InStr(strTxt, " ")))
+       If InStr(strTxt, "(") <> 0 Then
+         'contains field size
+         'get number between ( and )
+         LngFldSz = Mid(strTxt, InStr(strTxt, "(") + 1, InStr(strTxt, ")") - InStr(strTxt, "(") - 1)
+         rstDest!FieldSize = LngFldSz
+       End If
+       If InStr(strTxt, "NOT NULL") <> 0 Then
+         strnull = "no"
+       End If
+     End If ' not done
+     rstDest!Nulls = strnull
+     rstDest!OrderID = lngOrder
+     'default values of "n/a" for key and references, these updated later if needed
+     rstDest!ky = "n/a"
+     rstDest!refs = "n/a"
+     lngOrder = lngOrder + 1
+     'commit changes
+     rstDest.Update
+endofLine:
+  End If 'strMode is CREATE
+  
+  If strMode = "ALTER" Then 'in an "ALTER table " statement
+    If InStr(strTxt, "FOREIGN KEY") <> 0 Then
+      'FK line
+      'ingore all until FOREIGN KEY
+      strTxt = Right(strTxt, Len(strTxt) - InStr(strTxt, "FOREIGN KEY"))
+      'get what is between ( and )
+      strFldName = Mid(strTxt, InStr(strTxt, "(") + 1, InStr(strTxt, ")") - InStr(strTxt, "(") - 1)
+
+         'reopen new recordset with just field to alter, referenced in next pass
+         Dim rstFK As New ADODB.Recordset
+         rstFK.Open "SELECT * FROM Z_Flds_SQL WHERE tableName = """ _
+           & strTable & """ AND fieldName = """ & strFldName & """;", _
+           cnnLocal, , adLockPessimistic, adCmdText
+         If rstFK.EOF And rstFK.BOF Then
+           'error
+           msgBox "Can't find field " & strTable & "." & strPK
+           Exit Function
+         End If 'eof bof
+    End If 'FK line
+    If InStr(strTxt, "REFERENCES") <> 0 Then
+      'has name of fk
+      'should have rstFK open
+     
+      'ingore all text until after REFERENCES
+      strTxt = Right(strTxt, Len(strTxt) - InStr(strTxt, "REFERENCES") - Len("REFERENCES"))
+      
+      Dim strRefFld As String
+      strRefFld = Trim(strTxt)
+      'get to right format
+      strRefFld = substTextForText(strRefFld, " ", "")
+      strRefFld = substTextForText(strRefFld, ");", "")
+      strRefFld = substTextForText(strRefFld, "(", ".")
+      rstFK!refs = strRefFld
+      rstFK!ky = "FK"
+      'commit changes
+      rstFK.Update
+      'close dataset
+      rstFK.Close
+    End If
+  End If 'ALTEr
+  End If 'comment or not
+  Loop
+
+End With
+      msgBox ("no errors, records processed: " & intCount & " and SQL statements: " & intSqlCount)
+ Exit Function
+CreateTbl_error:
+      msgBox "Error occurred !  " & strSQL
+End Function
+
+Private Function docdb_writeSQLTables()  'strFile as string, strWHERE as string)
+  'function reads tables and writes SQL commands to create the tables
+  Dim strFile As String
+  strFile = "C:\temp\VegBankCreateTblsSql.txt"
+  
+
+End Function
+
+Private Function writeSQLData()  'strFile as String, strWHERE as string, blnCreate as boolean, blnPop as boolean)
+  'function reads tables and writes SQL commands to populate the tables and/or create tables
+  Dim strFile As String, strWHERE As String, strWhat As String, blnCreate As Boolean, blnPop As Boolean
+  Dim blnOnlyAFew As Boolean
+  blnOnlyAFew = False
+  strFile = "C:\temp\MJVegBankPopulate_all_Sep23_04_full_minusJunk.sql"
+  strWHERE = "WHERE [mod]='vegbank' ORDER BY  importOrder "
+  strWhat = "populate"
+  Dim blnOnlySinceMigr As Boolean
+  blnOnlySinceMigr = False
+  blnCreate = True
+  blnPop = True
+  'open list of all vegbank tables
+  Dim rstTbls As New ADODB.Recordset, dbsCurr As Object
+       Set dbsCurr = CurrentDb
+  rstTbls.Open "SELECT * FROM Z_TableDescription " & strWHERE, CurrentProject.Connection _
+     , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTbls
+    Do Until .EOF
+      
+       'grab field names for this table
+       Dim strFieldNames As String, inttemp As Integer
+       strFieldNames = ""
+       ''write table header
+       Call WriteLineToFile("---------------------------------------------------" & Chr(13) & "---- " & !TableName & Chr(13) _
+                      & "---------------------------------------------------", strFile)
+       Debug.Print (!TableName)
+       'string to hold create statement
+       Dim strCreate As String
+       strCreate = "CREATE TABLE " & !TableName & Chr(13) & "(" & Chr(13)
+       Dim tdfCurr As Object
+       'get all fields
+       Set tdfCurr = dbsCurr.tabledefs(!TableName)
+       'loop thru fields and build list of fields for table
+       For inttemp = 0 To tdfCurr.Fields.Count - 1
+          With tdfCurr.Fields(inttemp)
+          'could add [] here for field names, not doing so now for universality's sake of sql
+            strFieldNames = strFieldNames & IIf(strFieldNames = "", "", " , ") & "" & .Name & ""
+            Dim strTemp2 As String
+            strTemp2 = transl_DataType(.Type)
+        '    Debug.Print .Name & "::" & .Type
+            Select Case strTemp2
+              Case "INTEGER"
+                If .Attributes = 17 Then
+                   strTemp2 = "serial"
+                End If
+              Case "varchar"
+                strTemp2 = strTemp2 & " (" & (.size) & ")"
+            End Select
+            strCreate = strCreate & "  " & .Name & " " & strTemp2 & IIf(.Required, " NOT NULL", "") & "," & Chr(13)
+          End With
+       Next inttemp
+       strCreate = strCreate & "  PRIMARY KEY(" & WhatIsPKOf(!TableName) & ")" & Chr(13) & ");"
+       If blnCreate Then Call WriteLineToFile(strCreate, strFile)
+     ' Debug.Print strCreate
+     '  MsgBox ""
+       If blnPop Then
+       'open table
+       Dim rstOne As New ADODB.Recordset
+       rstOne.Open "SELECT " & IIf(blnOnlyAFew, " TOP 5 ", "") & " * FROM [" & !TableName & "] " & IIf(blnOnlySinceMigr, " WHERE " & WhatIsPKOf(!TableName) & " > " & !MaxPKb4Migr, ""), CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+       With rstOne
+          Dim intRecs As Long
+          intRecs = 0
+          Do Until .EOF
+            'write lines for inserting values into SQL statement
+               Dim strValues As String
+               strValues = ""
+               For inttemp = 0 To tdfCurr.Fields.Count - 1
+                 Dim strTemp As String
+                 strTemp = Nz(.Fields(inttemp), "")
+                 If strTemp = "" Then
+                   strTemp = "Null"
+                 Else 'not null
+                   ''enclose field value in quotes and replace all " with ""
+                   strTemp = "'" & substTextForText_once(strTemp, "'", "''", 2, False) & "'"
+                 End If
+                 strValues = strValues & IIf(strValues = "", "", " , ") & strTemp
+               Next inttemp
+               If WriteLineToFile("INSERT INTO " & rstTbls!TableName & " ( " & strFieldNames & " ) VALUES (" & strValues & " ); ", _
+                   strFile) = False Then
+                  msgBox "Couldn't write to file!"
+               End If
+               intRecs = intRecs + 1
+    '           Debug.Print intRecs
+          .MoveNext
+          Loop
+       End With
+       rstOne.Close
+       End If 'blnPop
+    .MoveNext
+    Loop
+  End With
+End Function
+
+Private Function writeXMLData()  'strFile as String, strWHERE as string, blnCreate as boolean, blnPop as boolean)
+  'function reads tables and writes SQL commands to populate the tables and/or create tables
+  Dim strFile As String, strWHERE As String, strWhat As String, blnCreate As Boolean, blnPop As Boolean
+  strFile = "C:\temp\VegBank_XML33.xml"
+  strWHERE = "WHERE [mod]='vegbank' ORDER BY [submodule], tableName"
+  strWhat = ""
+  blnCreate = True
+  blnPop = False
+  'open list of all vegbank tables
+  Dim rstTbls As New ADODB.Recordset, dbsCurr As Object
+       Set dbsCurr = CurrentDb
+  rstTbls.Open "SELECT * FROM Z_TableDescription " & strWHERE, CurrentProject.Connection _
+     , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTbls
+  'xml header
+  Call WriteLineToFile("<?xml version=""1.0""?>", strFile)
+  Call WriteLineToFile("<dataModel>" & Chr(13) _
+  & "  <title>Vegetation Database Component Description: --all modules--</title>" & Chr(13) _
+  & "  <author>M. Lee</author>" & Chr(13) _
+  & "  <institution>NCEAS</institution>" & Chr(13) _
+  & "  <contributor>M. Lee</contributor>" & Chr(13) _
+  & " <description/>" & Chr(13) _
+  & " <date>" & Now() & "</date>", strFile)
+  'end of XML header
+    Do Until .EOF
+      
+       'grab field names for this table
+       Dim strFieldNames As String, inttemp As Integer
+       strFieldNames = ""
+       ''write table header
+     '  Call WriteLineToFile("---------------------------------------------------" & Chr(13) & "---- " & !TableName & Chr(13) _
+                      & "---------------------------------------------------", strFile)
+       
+       Dim strTbl As String
+       strTbl = !TableName
+       Debug.Print (strTbl)
+       'string to hold table writing statement
+       Dim strWrite As String
+       'write table description stuff
+       strWrite = "<entity>" & Chr(13) & "<entityName>" & strTbl & "</entityName>" & Chr(13) & "<entitySummary>" & get_tableInfo(strTbl, "tableSummary") & "</entitySummary>"
+       strWrite = strWrite & Chr(13) & "<entityDescription>" & get_tableInfo(strTbl, "tableDescription") & "</entityDescription>"
+       Call WriteLineToFile(strWrite, strFile)
+       
+       Dim tdfCurr As Object
+       'get all fields
+       Set tdfCurr = dbsCurr.tabledefs(strTbl)
+       'loop thru fields and build list of fields for table
+       For inttemp = 0 To tdfCurr.Fields.Count - 1
+          With tdfCurr.Fields(inttemp)
+          'could add [] here for field names, not doing so now for universality's sake of sql
+            Dim strFld As String
+            strFld = .Name
+            strWrite = "<attribute>" & Chr(13) & "<attName>" & strFld & "</attName>" & Chr(13)
+            Dim strTypeLen As String
+            strTypeLen = transl_DataType(.Type)
+        '    Debug.Print .Name & "::" & .Type
+            Select Case strTypeLen
+              Case "INTEGER"
+                If .Attributes = 17 Then
+                   strTypeLen = "serial"
+                End If
+              Case "varchar"
+                strTypeLen = strTypeLen & " (" & (.size) & ")"
+            End Select
+            Dim strNulls As String, strKey As String, strRefs As String, strList As String, _
+               strNotes As String, strDefn As String, strListVals As String, strModel As String
+            strNulls = IIf(.Required, "no", "yes")
+            strKey = get_fieldRel(strTbl, strFld, True)
+            strRefs = get_fieldRel(strTbl, strFld, False)
+            strList = get_fieldInfo(strTbl, strFld, "closedList")
+            'modify strList
+            If strList = "yes" Then strList = "closed"
+            If strList = "closed" Or strList = "open" Then
+              'overwrite Key and Refs, as these are not FK's
+              strKey = "n/a"
+              strRefs = "n/a"
+            End If 'strlist
+            strNotes = get_fieldInfo(strTbl, strFld, "fieldNotes")
+            strDefn = get_fieldInfo(strTbl, strFld, "fieldDefinition")
+            strListVals = get_FieldListValues_XML(strTbl, strFld)
+            strModel = get_fieldInfo(strTbl, strFld, "model")
+            strWrite = strWrite & "<attModel>" & strModel & "</attModel>" & Chr(13) _
+              & "<attNulls>" & strNulls & "</attNulls>" & Chr(13) & "<attType>" & strTypeLen & "</attType>" & Chr(13) _
+              & "<attKey>" & strKey & "</attKey>" & Chr(13) & "<attReferences>" & strRefs & "</attReferences>" & Chr(13) _
+              & "<attList><attListType>" & strList & "</attListType>" & strListVals & "</attList>" & Chr(13) _
+              & "<attNotes>" & strNotes & "</attNotes>" & Chr(13) & "<attDefinition>" & strDefn & "</attDefinition>" & Chr(13)
+              strWrite = strWrite & "</attribute>"
+              'write this attr
+              Call WriteLineToFile(strWrite, strFile)
+          End With
+       Next inttemp
+       'end up table
+       Call WriteLineToFile("</entity>", strFile)
+     
+     '  MsgBox ""
+    .MoveNext 'next table
+    Loop
+  End With
+  'end XML file
+  Call WriteLineToFile("</dataModel>", strFile)
+End Function
+Public Function get_FieldListValues_XML(strTbl As String, strFld As String) As String
+  ''gets the fieldListValues as an XML string like this: (without root element)
+  ' <attListValue><attListValueText>high level</attListValueText><attListValueDesc>blah blah blah</attListValueDesc><attListSortOrd>3</attListSortOrd></attListValue>
+  ' <attListValue><attListValueText>low level</attListValueText><attListValueDesc> fdafdsa blah blah blah</attListValueDesc><attListSortOrd>4</attListSortOrd></attListValue>
+  ' FIRST, CHECK to see if this is a closed list, as per Z_FieldDesc
+  Dim strListType As String
+  strListType = get_fieldInfo(strTbl, strFld, "closedList")
+  
+  If strListType <> "no" And strListType <> "" Then
+    Dim rstVals As New ADODB.Recordset, strReturn As String
+    Dim strClosedListTbl As String
+    strClosedListTbl = "fieldList"
+    rstVals.Open "SELECT * FROM " & strClosedListTbl & " WHERE tableName=""" & strTbl & """ AND FIELDNAME=""" & strFld & """;", CurrentProject.Connection _
+       , adOpenForwardOnly, adLockReadOnly, adCmdText
+    With rstVals
+      Do Until .EOF
+         'get a set of values
+         Dim strDesc As String, dblOrd As Double, strVal As String
+         strVal = !listvalue
+         strVal = xmlize_txt(strVal)
+         
+           strDesc = Nz(!valueDesc, "")
+         
+         strDesc = xmlize_txt(strDesc)
+         
+           dblOrd = Nz(!SortOrd, -2)
+         
+         strReturn = strReturn & "<attListValue><attListValueText>" & _
+         strVal _
+         & "</attListValueText><attListValueDesc>" & _
+         strDesc _
+         & "</attListValueDesc><attListSortOrd>" & _
+         dblOrd _
+         & "</attListSortOrd></attListValue>" & Chr(13)
+      .MoveNext
+      Loop
+    End With
+    rstVals.Close
+    get_FieldListValues_XML = strReturn
+  Else
+    'not a closed list: return nothing
+    get_FieldListValues_XML = ""
+  End If
+End Function
+
+Public Function get_tableInfo(strTbl As String, strWhat As String) As String
+ ''gets info about a table in the Z_tableDescription table
+ Dim rstTbl As New ADODB.Recordset
+  rstTbl.Open "SELECT * FROM Z_TableDescription WHERE TableName=  """ & strTbl & """;", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+ If Not rstTbl.EOF Then
+   get_tableInfo = Nz(rstTbl.Fields(strWhat), "")
+ End If
+End Function
+
+Public Function get_fieldInfo(strTbl As String, strFld As String, strWhat As String) As String
+ ''gets info about a field in the Z_fieldDescription table
+ Dim rstTbl As New ADODB.Recordset
+ rstTbl.Open "SELECT * FROM Z_FieldDescription WHERE TableName=  """ & strTbl & """ and FieldName = """ & strFld & """;", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+ If Not rstTbl.EOF Then
+   get_fieldInfo = Nz(rstTbl.Fields(strWhat), "")
+ End If
+End Function
+
+Public Function get_fieldRel(strTbl As String, strFld As String, blnOutKey As Boolean)
+''gets the field Key, either PK or FK or "n/a", if blnOutKey is true, else outputs the referenced field
+''--probably could be improved in performance!
+Dim dbsCurr As Object, relCurr As Object, idxCurr As Object, fldCurr As Object
+Set dbsCurr = CurrentDb
+'check for primary key
+For Each idxCurr In dbsCurr.tabledefs(strTbl).indexes
+  If idxCurr.primary = True Then
+   For Each fldCurr In idxCurr.Fields
+    If fldCurr.Name = strFld Then
+       ''have PK
+       If blnOutKey Then
+         get_fieldRel = "PK"
+       Else
+         get_fieldRel = "n/a"
+       End If
+       Exit Function
+    End If
+   Next fldCurr
+  End If
+Next idxCurr
+''not a pk, perhaps is an FK
+For Each relCurr In dbsCurr.relations
+  If relCurr.foreigntable = strTbl Then
+    For Each fldCurr In relCurr.Fields
+      If fldCurr.foreignName = strFld Then
+        'have a fk
+       If blnOutKey Then
+         get_fieldRel = "FK"
+       Else
+         get_fieldRel = relCurr.Table & "." & fldCurr.Name
+       End If
+       Exit Function
+      End If
+    Next fldCurr
+  End If
+Next relCurr
+''not FK or PK
+get_fieldRel = "n/a"
+End Function
+
+Public Function transl_DataType(intType As Integer) As String
+  'function translates a numeric dataType into a string, in standard PostGreSQL types:
+  Dim strTemp As String
+  Select Case intType
+
+              Case 1
+                strTemp = "Boolean"
+              Case 3, 4
+                  strTemp = "Integer"
+              Case 7
+                strTemp = "Float"
+              Case 8
+                strTemp = "timestamp"
+              Case 10
+                strTemp = "varchar"
+              Case 11
+                strTemp = "GUID"
+              Case 12
+                strTemp = "text"
+              Case Else
+                Debug.Print "Did not find type for number = " & intType
+            End Select
+
+  transl_DataType = strTemp
+'  Debug.Print "adBinary =" & adBinary
+'Debug.Print "adBoolean =" & adBoolean
+'Debug.Print "adUnsignedTinyInt =" & adUnsignedTinyInt
+'Debug.Print "adInteger =" & adInteger
+'Debug.Print "adCurrency =" & adCurrency
+'Debug.Print "adDate =" & adDate
+'Debug.Print "adDouble =" & adDouble
+'Debug.Print "adGUID =" & adGUID
+'Debug.Print "adInteger =" & adInteger
+'Debug.Print "adLongVarBinary =" & adLongVarBinary
+'Debug.Print "adLongVarWChar =" & adLongVarWChar
+'Debug.Print "adSingle =" & adSingle
+'Debug.Print "adSmallInt =" & adSmallInt
+'Debug.Print "adVarWChar =" & adVarWChar
+'Debug.Print "adLongVarWChar =" & adLongVarWChar
+'Debug.Print "adVariant =" & adVariant
+End Function

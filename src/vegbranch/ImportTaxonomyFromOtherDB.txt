@@ -1,0 +1,282 @@
+Option Compare Database
+Option Explicit
+
+Function GetSampleDB()
+  GetPlantTaxonModuleFromDB "c:\data\vegbank\VB_taxonmy_src.mdb"
+End Function
+
+Function GetPlantTaxonModuleFromDB(strDB As String)
+''this function connects to another database and reads in its planttaxonomy module
+'along with the User archive to allow users to reference preloaded codes
+Debug.Print "START plantTaxonMod load " & Now()
+Dim strTable As String, strPrfx As String
+
+'prefix for new linked tables
+strPrfx = "WW_link_"
+  
+  Dim cnnLocal As Connection
+  Dim rstTables As New ADODB.Recordset
+  Dim rstCounter As New ADODB.Recordset
+  
+  Set cnnLocal = CurrentProject.Connection
+
+  rstTables.Open "SELECT * " _
+    & " FROM Z_TableDescription WHERE (((Z_TableDescription.submodule)=""planttaxa"")); ", _
+    cnnLocal, adOpenStatic, adLockPessimistic, adCmdText
+  Dim colAdjustVal As New Collection
+  With rstTables
+  Do Until .EOF
+    strTable = !TableName
+    
+    !MaxPK = GetSumValof2(cnnLocal, strTable, strTable & "_ID", "max", 1)
+        
+    If TableExist(strPrfx & strTable) Then
+      'delete previously linked table
+      DoCmd.DeleteObject acTable, strPrfx & strTable
+    End If
+    'link target plantTaxonomy table from destination db
+    DoCmd.TransferDatabase acLink, "Microsoft Access", strDB, acTable, _
+       strTable, strPrfx & strTable
+    !MinImportPK = GetSumValof2(cnnLocal, strPrfx & strTable, strTable & "_ID", "min", 1)
+    
+    'get adjustment values for all PKs : with PK name in format tableName.fieldName
+    colAdjustVal.Add !MaxPK - !MinImportPK + 1, strTable & "." & strTable & "_ID"
+    
+    .Update
+    
+  .MoveNext
+  Loop
+  End With
+  
+  rstTables.Close
+AfterLinks:
+  'now, the source tables are linked.  Must also link User plant archive to reference preloaded codes
+  strTable = "Y_USER_arc_plConc"
+  If TableExist(strPrfx & strTable) Then
+      'delete previously linked table
+      DoCmd.DeleteObject acTable, strPrfx & strTable
+  End If
+  DoCmd.TransferDatabase acLink, "Microsoft Access", strDB, acTable, _
+       strTable, strPrfx & strTable
+  Dim rstFlds As New ADODB.Recordset
+  'opens a recordset with each field, in order of table import order
+  rstFlds.Open "SELECT Z_TableDescription.submodule, Z_FieldDescription.TableName, Z_FieldDescription.FieldName, Z_FieldDescription.key, Z_FieldDescription.References, [importOrder] AS Expr1, IIf(IsNull([OrderID]),[Z_FieldDescr_Id],[OrderID]) AS Expr2 " _
+& " FROM Z_TableDescription INNER JOIN Z_FieldDescription ON Z_TableDescription.TableName = Z_FieldDescription.TableName " _
+& " WHERE (((Z_TableDescription.submodule) = ""plantTaxa"")) ORDER BY [importOrder], IIf(IsNull([OrderID]),[Z_FieldDescr_Id],[OrderID]); ", _
+    cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+  
+  
+  Dim strLastTbl, strSQL, strSQLBot, strSQLTop, strSQLBotAdd As String
+  ''if a field relates recursively to the same table, then treated differently
+  Dim blnRecursive As Boolean, strSQLRecSel As String, strRecRel As String
+  blnRecursive = False
+  strLastTbl = ""
+  With rstFlds
+  If Not .EOF Then strSQLTop = "INSERT INTO " & !TableName & " ("
+  strSQLBot = "SELECT "
+  strSQLRecSel = "SELECT "
+  
+  Do Until .EOF
+  
+    Select Case !key
+      Case "PK"
+         strSQLBotAdd = "([" & !FieldName & "] + (" & colAdjustVal(!TableName & "." & !FieldName) & "))"
+      Case "FK"
+         strSQLBotAdd = "([" & !FieldName & "] + (" & colAdjustVal(!References) & "))"
+         If Left(!References, InStr(!References, ".") - 1) = !TableName Then
+           'recursive FK
+           blnRecursive = True
+           Dim strRecFld As String
+           strRecFld = !FieldName
+           strRecRel = !References
+           'dont treat differently if a party table
+           If Len(!TableName) >= 5 Then
+             If Right(!TableName, 5) = "party" Then blnRecursive = False
+           End If
+         End If
+      Case Else
+         strSQLBotAdd = "([" & !FieldName & "])"
+         If !TableName = "plantName" And !FieldName = "plantName" Then
+           'consider unique index by adding @updatePlNm~@ to each plantName
+           'will consolidate in a later step
+           strSQLBotAdd = "(""@updatePlNm!@"" & [" & !FieldName & "])"
+         End If
+    End Select
+    
+    strSQLTop = strSQLTop & " [" & !FieldName & "] ,"
+    strSQLBot = strSQLBot & strSQLBotAdd & " AS " & strPrfx & !FieldName & " ,"
+    'select statement for recursive relationship query
+    strSQLRecSel = strSQLRecSel & strPrfx & !FieldName & " ,"
+    strLastTbl = !TableName
+  .MoveNext
+    Dim strNewTbl As String
+    If .EOF Then
+      strNewTbl = ""
+    Else
+      strNewTbl = !TableName
+    End If 'step around in case of .eof
+    'if this is a new table, run the old sql, if an old table exists
+    If strLastTbl <> strNewTbl Then
+      If strLastTbl <> "" Then
+        'old table exists, run append sql
+        If Right(strSQLTop, 1) = "," Then strSQLTop = Left(strSQLTop, Len(strSQLTop) - 1)
+        strSQLTop = strSQLTop & ")"
+        If Right(strSQLBot, 1) = "," Then strSQLBot = Left(strSQLBot, Len(strSQLBot) - 1)
+        If Right(strSQLRecSel, 1) = "," Then strSQLRecSel = Left(strSQLRecSel, Len(strSQLRecSel) - 1)
+        
+           strSQL = strSQLTop & "  " & strSQLBot & "  FROM " & strPrfx & strLastTbl & ";"
+        If blnRecursive Then
+           'take ; out of strSQL
+           strSQL = Left(strSQL, Len(strSQL) - 1)
+           'add where constraint
+           strSQL = strSQL & " WHERE (((" & strRecFld & ") is Null));"
+        End If 'blnRecursive
+        Debug.Print "RUN: " & strSQL
+        DoCmd.RunSQL strSQL
+        'more stuff must be done if recursive table, like plantConcept
+        If blnRecursive Then
+           'execute a make-table query for table :  strPrfx & "_temp_" & strLastTbl
+           If TableExist(strPrfx & "_temp_" & strLastTbl) Then DoCmd.DeleteObject acTable, strPrfx & "_temp_" & strLastTbl
+           Dim strSQLRecMk As String
+           strSQLRecMk = strSQLBot & " INTO " & strPrfx & "_temp_" & strLastTbl & "  FROM " & strPrfx & strLastTbl & " WHERE (((" & strRecFld & ") is Not Null));"
+           Debug.Print "RECURSE_mk: " & strSQLRecMk
+           DoCmd.RunSQL strSQLRecMk
+           'SQL to repeat until it's not adding any more records
+           Dim strSQLRecAdd1 As String
+           Dim strPKName As String
+           strPKName = Right(strRecRel, Len(strRecRel) - InStr(strRecRel, "."))
+           strSQLRecAdd1 = strSQLTop & " " & strSQLRecSel & " FROM (" & strPrfx & "_temp_" & strLastTbl _
+             & " INNER JOIN " & strLastTbl & " ON " & strPrfx & "_temp_" & strLastTbl & "." & strPrfx & strRecFld & " = " _
+             & strRecRel & ") LEFT JOIN " & strLastTbl & " AS " & strLastTbl & "_1" _
+             & " ON " & strPrfx & "_temp_" & strLastTbl & "." & strPrfx & strPKName & " = " _
+             & strLastTbl & "_1." & strPKName _
+             & " WHERE (((" & strLastTbl & "_1." & strPKName & ") Is Null));"
+
+           Debug.Print "recurse_x times: " & strSQLRecAdd1
+           Dim lngTotRec, lngLastTotRec As Double
+           lngTotRec = -1
+           Do Until lngTotRec = lngLastTotRec
+             DoCmd.RunSQL strSQLRecAdd1
+             lngLastTotRec = lngTotRec
+             lngTotRec = Round(GetSumValof2(cnnLocal, "plantConcept", strPKName, "count", -1), 0)
+           Loop
+        End If 'blnRecursive stuff
+      End If
+      'reset sql
+      If Not .EOF Then
+        strSQLTop = "INSERT INTO " & !TableName & " ("
+        strSQLBot = "SELECT "
+        strSQLRecSel = "SELECT "
+        blnRecursive = False
+      End If
+    End If  'strLastTbl <> !tableName
+
+Loop
+End With
+'lastly, update the user archive:
+
+'delete plantCodes that would otherwise be duplicated
+DoCmd.RunSQL "DELETE DISTINCTROW Y_User_arc_PlConc.* " _
+& " FROM " & strPrfx & "Y_USER_arc_plConc INNER JOIN Y_User_arc_PlConc ON " _
+& strPrfx & "Y_USER_arc_plConc.plantCode = Y_User_arc_PlConc.plantCode;"
+  'preloaded codes
+DoCmd.RunSQL "DELETE DISTINCTROW Y_User_arc_PlConc.* " _
+& " FROM " & strPrfx & "Y_USER_arc_plConc INNER JOIN Y_User_arc_PlConc ON " _
+& strPrfx & "Y_USER_arc_plConc.preloadedCode = Y_User_arc_PlConc.preloadedCode;"
+  'add New codes
+Dim strArcUpd As String, strArcSelTbl As String
+strArcSelTbl = strPrfx & "Y_User_arc_plConc"
+strArcUpd = "INSERT INTO Y_User_arc_PlConc ( VBPlConc, VBPlName, vbPlRef, VBPlStatus, plantCode, preloadedCode, vb_synConc_ID ) " _
+& " SELECT (" & strArcSelTbl & ".VBPlConc + (" & colAdjustVal("plantConcept.plantConcept_ID") _
+& ")), (" & strArcSelTbl & ".VBPlName + (" & colAdjustVal("plantNAme.plantNAme_ID") _
+& ")), (" & strArcSelTbl & ".vbPlRef + (" & colAdjustVal("plantReference.plantReference_ID") _
+& ")), (" & strArcSelTbl & ".VBPlStatus + (" & colAdjustVal("plantStatus.plantStatus_ID") _
+& ")), " & strArcSelTbl & ".plantCode, " & strArcSelTbl & ".preloadedCode, " _
+& "(" & strArcSelTbl & ".vb_synConc_ID + (" & colAdjustVal("plantConcept.plantConcept_ID") _
+& ")) FROM " & strArcSelTbl & ";"
+
+Debug.Print strArcUpd
+DoCmd.RunSQL strArcUpd
+
+Debug.Print "Reconcile @@ " & Now()
+ReconcileAmpersandPlantNames
+Debug.Print "DONE with plantTaxonomy import" & Now()
+
+End Function
+
+Function ReconcileAmpersandPlantNames()
+'reconciles tokenized plantNames by either referencing extant real plantName (without token)
+'or by removing tokens for plantNames that are really new to plantName
+'--this must be done in such a manner because plantName.plantName has a unique index on it
+
+'clear hash table:
+DoCmd.RunSQL "DELETE temp_plantNameConvert.* FROM temp_plantNameConvert;"
+
+'store all tokenized plantNames in hash table
+Dim strSQL1, strSQL2, strSQL3, strSQL4, strSQL5 As String
+strSQL1 = " INSERT INTO temp_plantNameConvert ( plantName_IDOld, plantNameAmpersand, plantName ) " _
+& " SELECT plantName.PLANTNAME_ID, plantName.plantName, Right([plantName].[plantName],Len([plantName].[plantName])-13) AS Expr1 " _
+& " FROM plantName " _
+& " WHERE (((plantName.plantName) Like ""@updatePlNm!@*"")); "
+DoCmd.RunSQL strSQL1
+
+'get plantName_ID's : either plantName_ID of correct non-tokenized record or of itself if other plantName dnE
+strSQL2 = "UPDATE temp_plantNameConvert LEFT JOIN plantName ON temp_plantNameConvert.plantName = plantName.plantName " _
+& " SET temp_plantNameConvert.plantName_IDNew = IIf(IsNull([plantName].[PLANTNAME_ID]),[plantName_IDOld],[plantName].[PLANTNAME_ID]);"
+DoCmd.RunSQL strSQL2
+'where plantNames are new (without Tokens), change plantName to delete token
+strSQL3 = "UPDATE temp_plantNameConvert INNER JOIN plantName ON temp_plantNameConvert.plantName_IDOld = plantName.PLANTNAME_ID SET plantName.plantName = [temp_plantNameConvert].[plantName] " _
+& " WHERE (((temp_plantNameConvert.plantName_IDOld)=[plantName_IDNew]));"
+DoCmd.RunSQL strSQL3
+'update tbl1-4 records with plantName_ID that need changing
+Dim colTables As New Collection
+colTables.Add "plantConcept"
+colTables.Add "plantUsage"
+colTables.Add "taxonObservation"
+colTables.Add "taxonInterpretation"
+Dim intLoop As Integer
+For intLoop = 1 To colTables.Count
+
+strSQL4 = "UPDATE temp_plantNameConvert INNER JOIN " & _
+colTables(intLoop) & " ON temp_plantNameConvert.plantName_IDOld = " _
+& colTables(intLoop) & ".PLANTNAME_ID SET " & colTables(intLoop) & ".PLANTNAME_ID = " _
+& " [plantName_IDNew] " _
+& " WHERE ((([plantName_IDOld]<>[plantName_IDNew])=True));"
+DoCmd.RunSQL strSQL4
+
+Next intLoop
+
+'delete tokenized plantNames, as they are no longer in use
+strSQL5 = "DELETE plantName.plantName, plantName.* FROM plantName " _
+& " WHERE (((plantName.plantName) Like ""@updatePlNm!@*""));"
+DoCmd.RunSQL strSQL5
+
+'clear hash table:
+DoCmd.RunSQL "DELETE temp_plantNameConvert.* FROM temp_plantNameConvert;"
+
+End Function
+
+Private Function GetSumValof2(cnnLocal As Connection, strTable As String, strPK As String, strWhat As String, dblValIfErr As Double) As Double
+'function is like a SAS Proc Means, analyzes some variable of a table on the current db and returns value
+'--strWhat can be max, min, count, sum, first*, last*
+'--* must be numeric field for first or last
+On Error GoTo errGetPK
+
+Dim rstGetVal As New ADODB.Recordset
+
+'Debug.Print "Searching: " & "SELECT " & strWhat & "([" & strPK & "]) AS GotValue FROM [" & strTable & "];"
+rstGetVal.Open "SELECT " & strWhat & "([" & strPK & "]) AS GotValue FROM [" & strTable & "];", _
+  cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
+
+If rstGetVal.EOF Then
+  GetSumValof2 = dblValIfErr
+Else
+  GetSumValof2 = Nz(rstGetVal!GotValue, dblValIfErr)
+End If
+Exit Function
+errGetPK:
+  GetSumValof2 = dblValIfErr
+
+End Function
+
+

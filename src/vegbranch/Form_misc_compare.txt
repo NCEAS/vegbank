@@ -1,0 +1,267 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command3_Click()
+  Me.Refresh
+  Dim rstCurr As New ADODB.Recordset
+  Dim cnnLocal As Connection
+  Set cnnLocal = CurrentProject.Connection
+  Dim tbl1 As String
+  Dim tbl2 As String
+  'get table names to compare(where data stored)
+  tbl1 = Me!table1
+  tbl2 = Me!table2
+  
+  'get tableNames (in table)
+  Dim strTbl1 As String, strTbl2 As String
+  rstCurr.Open "select * from misc_compare where attributeName = ""TableName"";", _
+         cnnLocal, , adLockReadOnly, adCmdText
+  strTbl1 = rstCurr!Tbl1FieldName
+  strTbl2 = rstCurr!Tbl2FieldName
+  rstCurr.Close
+  
+  'get fieldNames
+  Dim strFld1 As String, strFld2 As String
+  rstCurr.Open "select * from misc_compare where attributeName = ""FieldName"";", _
+         cnnLocal, , adLockReadOnly, adCmdText
+  strFld1 = rstCurr!Tbl1FieldName
+  strFld2 = rstCurr!Tbl2FieldName
+  rstCurr.Close
+  
+  'get dataType Names
+  Dim strDT1 As String, strDT2 As String
+  rstCurr.Open "select * from misc_compare where attributeName = ""DataType"";", _
+         cnnLocal, , adLockReadOnly, adCmdText
+  strDT1 = rstCurr!Tbl1FieldName
+  strDT2 = rstCurr!Tbl2FieldName
+  rstCurr.Close
+  
+  'get key Names
+  Dim strKey1 As String, strKey2 As String
+  rstCurr.Open "select * from misc_compare where attributeName = ""Key"";", _
+         cnnLocal, , adLockReadOnly, adCmdText
+  strKey1 = rstCurr!Tbl1FieldName
+  strKey2 = rstCurr!Tbl2FieldName
+  rstCurr.Close
+  
+  'get nulls Names
+  Dim strNulls1 As String, strNulls2 As String
+  rstCurr.Open "select * from misc_compare where attributeName = ""Nulls"";", _
+         cnnLocal, , adLockReadOnly, adCmdText
+  strNulls1 = rstCurr!Tbl1FieldName
+  strNulls2 = rstCurr!Tbl2FieldName
+  rstCurr.Close
+    
+    'get refs Names
+  Dim strRef1 As String, strRef2 As String
+  rstCurr.Open "select * from misc_compare where attributeName = ""References"";", _
+         cnnLocal, , adLockReadOnly, adCmdText
+  strRef1 = rstCurr!Tbl1FieldName
+  strRef2 = rstCurr!Tbl2FieldName
+  rstCurr.Close
+  
+  'get size Names
+  Dim strSize1 As String, strSize2 As String
+  rstCurr.Open "select * from misc_compare where attributeName = ""Size"";", _
+         cnnLocal, , adLockReadOnly, adCmdText
+  strSize1 = rstCurr!Tbl1FieldName
+  strSize2 = rstCurr!Tbl2FieldName
+  rstCurr.Close
+  
+  
+'-------------------write SQL to see what tableNames are in 1 and not in 2
+  Dim strSQLExtraTbl1 As String
+  strSQLExtraTbl1 = "SELECT " & tbl1 & "." & strTbl1 & "  AS extraTbl " & _
+"  FROM " & tbl1 & " LEFT JOIN " & tbl2 & " ON " & tbl1 & "." & strTbl1 _
+& " = " & tbl2 & "." & strTbl2 _
+& "  WHERE ((( " & tbl2 & "." & strTbl2 & ") Is Null)) " _
+& "  GROUP BY " & tbl1 & "." & strTbl1 & ";"
+
+  ' success!
+  Debug.Print strSQLExtraTbl1
+  
+'--------------------write SQL to see what tableNames are in 2 and not in 1
+Dim strSQLExtraTbl2 As String
+  strSQLExtraTbl2 = "SELECT " & tbl2 & "." & strTbl2 & "  AS extraTbl " & _
+"  FROM " & tbl2 & " LEFT JOIN " & tbl1 & " ON " & tbl2 & "." & strTbl2 _
+& " = " & tbl1 & "." & strTbl1 _
+& "  WHERE ((( " & tbl1 & "." & strTbl1 & ") Is Null)) " _
+& "  GROUP BY " & tbl2 & "." & strTbl2 & ";"
+ ' success!
+'Debug.Print strSQLExtraTbl2
+
+
+'------------------write SQL to see what fieldNames are in 1 and not in 2
+Dim strSQLExtraFld1 As String
+'need to add exclusion of above table's fields here, as they are obviously not here either
+strSQLExtraFld1 = " SELECT " & tbl1 & "." & strTbl1 & " AS tbl, " & tbl1 & "." & strFld1 & " AS ExtraFld " _
+& " FROM (" & tbl1 & " LEFT JOIN " & tbl2 & " ON (" & tbl1 & "." & strFld1 & " = " _
+& tbl2 & "." & strFld2 & ") AND (" & tbl1 & "." & strTbl1 & " = " & tbl2 & "." & strTbl2 _
+& ")) LEFT JOIN misc_auto_11 ON " & tbl1 & "." & strTbl1 & " = misc_auto_11.extraTbl" _
+& " WHERE (((" & tbl2 & "." & strTbl2 & ") Is Null) AND ((" & tbl2 & "." & strFld2 & ") Is Null)" _
+& " AND ((misc_auto_11.extraTbl) Is Null));"
+'old FROM
+'& " FROM " & tbl1 & " LEFT JOIN " & tbl2 & " ON (" & tbl1 & "." & strTbl1 & " = " _
+'& tbl2 & "." & strTbl2 & ") AND (" & tbl1 & "." & strFld1 & " = " & tbl2 & "." & strFld2 & ")" _
+
+'success!
+'Debug.Print strSQLExtraFld1
+
+'--------------write SQL to see what fieldNames are in 2 and not in 1
+
+Dim strSQLExtraFld2 As String
+'need to add exclusion of above table's fields here, as they are obviously not here either
+strSQLExtraFld2 = " SELECT " & tbl2 & "." & strTbl2 & " AS tbl, " & tbl2 & "." & strFld2 & " AS ExtraFld " _
+& " FROM (" & tbl2 & " LEFT JOIN " & tbl1 & " ON (" & tbl2 & "." & strFld2 & " = " _
+& tbl1 & "." & strFld1 & ") AND (" & tbl2 & "." & strTbl2 & " = " & tbl1 & "." & strTbl1 _
+& ")) LEFT JOIN misc_auto_10 ON " & tbl2 & "." & strTbl2 & " = misc_auto_10.extraTbl" _
+& " WHERE (((" & tbl1 & "." & strTbl1 & ") Is Null) AND ((" & tbl1 & "." & strFld1 & ") Is Null)" _
+& " AND ((misc_auto_10.extraTbl) Is Null));"
+
+'& " FROM " & tbl2 & " LEFT JOIN " & tbl1 & " ON (" & tbl2 & "." & strTbl2 & " = " _
+'& tbl1 & "." & strTbl1 & ") AND (" & tbl2 & "." & strFld2 & " = " & tbl1 & "." & strFld1 & ")" _
+
+
+'success!
+'Debug.Print strSQLExtraFld2
+
+'--------------write SQL to see what dataTypes are wrong in 1
+'get kind of data types (SQL, access , XML, etc.)
+Dim strtbl1DTKind As String
+strtbl1DTKind = Me!table1DT
+Dim strSQL_DTwrong1 As String
+
+strSQL_DTwrong1 = "SELECT " & tbl1 & "." & strDT1 & " AS BadDT, Count(" & tbl1 & "." & strDT1 & ") AS Num " _
+& " FROM " & tbl1 & " LEFT JOIN misc_SQL_2AccTypes ON " & tbl1 & "." & strDT1 & _
+          " = misc_SQL_2AccTypes." & strtbl1DTKind _
+& " WHERE (((misc_SQL_2AccTypes." & strtbl1DTKind & ") Is Null))" _
+& " GROUP BY " & tbl1 & "." & strDT1 & ";"
+'success!
+'Debug.Print strSQL_DTwrong1
+
+'---------------write SQL to see what dataTypes are wrong in 2
+'get kind of data types (SQL, access , XML, etc.)
+Dim strtbl2DTKind As String
+strtbl2DTKind = Me!table2DT
+Dim strSQL_DTwrong2 As String
+
+strSQL_DTwrong2 = "SELECT " & tbl2 & "." & strDT2 & " AS BadDT, Count(" & tbl2 & "." & strDT2 & ") AS Num " _
+& " FROM " & tbl2 & " LEFT JOIN misc_SQL_2AccTypes ON " & tbl2 & "." & strDT2 & _
+          " = misc_SQL_2AccTypes." & strtbl2DTKind _
+& " WHERE (((misc_SQL_2AccTypes." & strtbl2DTKind & ") Is Null))" _
+& " GROUP BY " & tbl2 & "." & strDT2 & ";"
+'success!
+'Debug.Print strSQL_DTwrong2
+
+
+'----------------------write SQL to see differences in DataType
+Dim strDTDiff As String
+
+strDTDiff = "SELECT " & tbl2 & "." & strTbl2 & " AS Tbl, " & tbl2 & "." & strFld2 & " AS Fld," _
+          & " misc_SQL_2AccTypes.AccessType AS Tbl1Type, misc_SQL_2AccTypes_1.AccessType AS Tbl2Type, " _
+          & tbl1 & "." & strSize1 & " AS Tbl1Size, " & tbl2 & "." & strSize2 & " AS tbl2Size" _
+& " FROM misc_SQL_2AccTypes AS misc_SQL_2AccTypes_1 INNER JOIN ((" & tbl2 & " INNER JOIN " & tbl1 _
+          & " ON (" & tbl2 & "." & strTbl2 & " = " & tbl1 & "." & strTbl1 & ") AND (" _
+          & tbl2 & "." & strFld2 & " = " & tbl1 & "." & strFld1 & ")) INNER JOIN " _
+          & " misc_SQL_2AccTypes ON " & tbl1 & "." & strDT1 & " = misc_SQL_2AccTypes." _
+            & strtbl1DTKind & ") ON misc_SQL_2AccTypes_1." & strtbl2DTKind & " = " _
+            & tbl2 & "." & strDT2 _
+& " WHERE ((([misc_SQL_2AccTypes].[AccessType]<>[misc_SQL_2AccTypes_1].[AccessType])=True) AND " _
+          & " ((" & tbl1 & "." & strKey1 & ")<>""PK"") AND ((" & tbl2 & "." & strKey2 & ")<>""PK""));"
+'success!
+'Debug.Print strDTDiff
+
+'----------------------write SQL to see differences in Field Size
+Dim strSizeDiff As String
+strSizeDiff = "SELECT " & tbl2 & "." & strTbl2 & " AS Tbl, " & tbl2 & "." & strFld2 & " AS Fld, " _
+      & tbl1 & "." & strSize1 & " AS Tbl1Size, " & tbl2 & "." & strSize2 & " AS tbl2Size " _
+& " FROM misc_SQL_2AccTypes AS misc_SQL_2AccTypes_1 INNER JOIN ((" & tbl2 & " INNER JOIN " _
+      & tbl1 & " ON (" & tbl2 & "." & strFld2 & " = " & tbl1 & "." & strFld1 & ") AND (" _
+      & tbl2 & "." & strTbl2 & " = " & tbl1 & "." & strTbl1 & ")) INNER JOIN misc_SQL_2AccTypes ON " _
+      & tbl1 & "." & strDT1 & " = misc_SQL_2AccTypes." & strtbl1DTKind & ") ON misc_SQL_2AccTypes_1." _
+      & strtbl2DTKind & " = " & tbl2 & "." & strDT2 _
+& " WHERE (((misc_SQL_2AccTypes.AccessType)=""text"") AND ((misc_SQL_2AccTypes_1.AccessType)=""text"") " _
+    & " AND ((" & tbl2 & "." & strSize2 & "<>" & tbl1 & "." & strSize1 & ")=True));"
+'sucess!
+'Debug.Print strSizeDiff
+
+'----------------------write SQL to see differences in key
+Dim strKeyDiff As String
+strKeyDiff = "SELECT " & tbl2 & "." & strTbl2 & " AS Tbl, " & tbl2 & "." & strFld2 & " AS Fld, " _
+      & tbl1 & "." & strKey1 & " AS Tbl1Key, " & tbl2 & "." & strKey2 & " AS Tbl2Key" _
+& " FROM " & tbl2 & " INNER JOIN " & tbl1 & " ON (" & tbl2 & "." & strFld2 & " = " _
+      & tbl1 & "." & strFld1 & ") AND (" & tbl2 & "." & strTbl2 & " = " & tbl1 & "." & strTbl1 & ")" _
+& " WHERE (((" & tbl2 & "." & strKey2 & "=" & tbl1 & "." & strKey1 & ")=0));"
+'success!
+'Debug.Print strKeyDiff
+
+'----------------------write SQL to see differences in References
+
+Dim strRefDiff As String
+strRefDiff = "SELECT " & tbl2 & "." & strTbl2 & " AS Tbl, " & tbl2 & "." & strFld2 & " AS Fld, " _
+      & tbl1 & "." & strRef1 & " AS Tbl1Ref, " & tbl2 & "." & strRef2 & " AS Tbl2Ref" _
+& " FROM " & tbl2 & " INNER JOIN " & tbl1 & " ON (" & tbl2 & "." & strFld2 & " = " _
+      & tbl1 & "." & strFld1 & ") AND (" & tbl2 & "." & strTbl2 & " = " & tbl1 & "." & strTbl1 & ")" _
+& " WHERE (((" & tbl2 & "." & strRef2 & "=" & tbl1 & "." & strRef1 & ")=0));"
+'success!
+'Debug.Print strRefDiff
+'----------------------write SQL to see differences in nulls
+
+Dim strNullsDiff As String
+strNullsDiff = "SELECT " & tbl2 & "." & strTbl2 & " AS Tbl, " & tbl2 & "." & strFld2 & " AS Fld, " _
+      & tbl1 & "." & strNulls1 & " AS Tbl1Nulls, " & tbl2 & "." & strNulls2 & " AS Tbl2Nulls" _
+& " FROM " & tbl2 & " INNER JOIN " & tbl1 & " ON (" & tbl2 & "." & strFld2 & " = " _
+      & tbl1 & "." & strFld1 & ") AND (" & tbl2 & "." & strTbl2 & " = " & tbl1 & "." & strTbl1 & ")" _
+& " WHERE (((" & tbl2 & "." & strNulls2 & "=" & tbl1 & "." & strNulls1 & ")=0));"
+'success!
+'Debug.Print strNullsDiff
+
+'---------SQL strings built, now put them together in a report:
+
+Dim dbs As Object
+Set dbs = CurrentDb
+Dim qdfCurr As Object
+
+Dim colNames As New Collection
+
+colNames.Add strDTDiff, "DT"
+colNames.Add strKeyDiff, "Key"
+colNames.Add strNullsDiff, "Nulls"
+colNames.Add strRefDiff, "Ref"
+colNames.Add strSizeDiff, "Size"
+colNames.Add strSQL_DTwrong1, "DTwrong1"
+colNames.Add strSQL_DTwrong2, "DTwrong2"
+colNames.Add strSQLExtraFld2, "ExtraFld2"
+colNames.Add strSQLExtraFld1, "ExtraFld1"
+colNames.Add strSQLExtraTbl2, "ExtraTbl2"
+colNames.Add strSQLExtraTbl1, "ExtraTbl1"
+
+Dim strName As Object
+Dim intCount As Integer
+
+
+
+With dbs
+  For intCount = 1 To colNames.Count
+      'Debug.Print colNames(intCount)
+      If QueryExist("misc_auto_" & intCount) Then
+         'query already exists, delete
+         DoCmd.DeleteObject acQuery, "misc_auto_" & intCount
+      End If
+      Set qdfCurr = .CreateQueryDef("misc_auto_" & intCount, colNames(intCount))
+  Next intCount
+End With
+
+'define where query came from
+DoCmd.RunSQL "Delete * FROM misc_autoTemp;"
+DoCmd.RunSQL "INSERT INTO misc_autoTemp ( error, source1, source2, kind1, kind2 ) SELECT "" Sources (dataTypeKinds) "", """ _
+   & tbl1 & """,""" & tbl2 & """,""" & strtbl1DTKind & """,""" & strtbl2DTKind & """"
+
+'open report to show results:
+DoCmd.OpenReport "misc_autoReport", acViewPreview
+
+
+
+End Sub
+
+

@@ -1,0 +1,26 @@
+Option Compare Database
+Option Explicit
+
+
+
+Private Sub ChkAllDB_Click()
+'
+  CheckFieldsForFields "all", "all"
+  DoCmd.Close acForm, "UpdateNumNonNullRecs", acSavePrompt
+  On Error Resume Next
+  Forms!Z_FieldDesc_countRecs!Z_FieldDescription.Requery
+End Sub
+
+Private Sub ChkModOnly_Click()
+  On Error Resume Next
+  CheckFieldsForFields Me!CurrModule, "module"
+  DoCmd.Close acForm, "UpdateNumNonNullRecs", acSavePrompt
+  Forms!Z_FieldDesc_countRecs!Z_FieldDescription.Requery
+End Sub
+
+Private Sub ChkTblOnly_Click()
+  On Error Resume Next
+  CheckFieldsForFields Me!CurrTable, "table"
+  DoCmd.Close acForm, "UpdateNumNonNullRecs", acSavePrompt
+  Forms!Z_FieldDesc_countRecs!Z_FieldDescription.Requery
+End Sub

@@ -1,0 +1,458 @@
+Option Compare Database
+Option Explicit
+
+Public Function ent_getPlotObsForm(Optional lngObsID As Long)
+  Dim strCrit As String
+  If lngObsID > 0 Then
+    strCrit = lngObsID
+  Else
+    strCrit = "observation_ID"
+  End If
+  DoCmd.OpenForm "ent_plot_observation", , , "observation_ID=" & strCrit
+End Function
+
+Public Function ent_getTaxAltForm(lngTaxIntID As Long)
+  DoCmd.OpenForm "ent_taxonAlt"
+  Debug.Print "opening: ent_taxAlt " & lngTaxIntID & " @" & Now()
+  If lngTaxIntID > 0 Then
+   Forms!ent_taxonAlt!top__taxonInterpretation_ID = lngTaxIntID
+   Call filterSmartlyThisFrm
+  End If
+End Function
+
+Public Function ent_getTaxInterp(lngTaxObsID As Long, Optional blnRefreshMEFirst As Boolean) 'opens form to interp taxon
+ If blnRefreshMEFirst Then Screen.ActiveForm.Refresh
+  
+  DoCmd.OpenForm "ent_taxonInterpretation"
+  Debug.Print "opening: ent_taxInt " & lngTaxObsID & " @" & Now()
+  If lngTaxObsID > 0 Then
+    Forms!ent_taxonInterpretation!top__taxonObservation_ID = lngTaxObsID
+    Call filterSmartlyThisFrm
+  End If
+ 
+End Function
+
+Public Function ent_getStems(lngTaxImp As Long, Optional blnRefreshMEFirst As Boolean)
+  If blnRefreshMEFirst Then Screen.ActiveForm.Refresh
+  DoCmd.OpenForm "ent_stems"
+  Debug.Print "opening: ent_stems " & lngTaxImp & " @" & Now()
+  If lngTaxImp > 0 Then
+    Forms!ent_stems!top__taxonImportance_ID = lngTaxImp
+    Call filterSmartlyThisFrm
+  End If
+End Function
+
+Public Function ent_stemsAreCustomized(lngTaxImp As Long)
+  DoCmd.RunSQL "UPDATE ent_temp_taxonImp_Int_Obs SET isStemCustomized=1 WHERE CurrtaxonImportancE_ID=" & lngTaxImp
+End Function
+
+Public Function ent_getTaxImp(lngObsID As Long, Optional blnRefreshMEFirst As Boolean) 'opens tax Importance for for observation for new entry
+  If blnRefreshMEFirst Then Screen.ActiveForm.Refresh
+  DoCmd.OpenForm "ent_taxonImportance"
+  Debug.Print "opening: ent_taxIMP " & lngObsID & " @" & Now()
+  If lngObsID > 0 Then
+    Forms!ent_taxonImportance!top__OBSERVATION_ID = lngObsID
+    Call filterSmartlyThisFrm
+  End If
+End Function
+
+Public Function ent_ADODBcopyRec(strTable As String, lngPK As Long, Optional ByVal strFieldsExclude As String) As Long
+  'function copies a table record and returns the pk of the new record added
+  Dim strPKName As String
+  strPKName = WhatIsPKOf(strTable)
+  strFieldsExclude = "," & strFieldsExclude & "," & strPKName & ","
+  Dim rstFrm As New ADODB.Recordset, rstTo As New ADODB.Recordset
+  rstFrm.Open "select * from [" & strTable & "] where [" & strPKName & "]=" & lngPK, _
+   CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstFrm.EOF Then
+    'cant copy
+    ent_ADODBcopyRec = -1
+  Else
+    rstTo.Open strTable, CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+    rstTo.AddNew
+    Dim fldCurr As Field, blnUpd As Boolean
+    For Each fldCurr In rstFrm.Fields
+      If InStr(strFieldsExclude, "," & fldCurr.Name & ",") = 0 Then
+        'add this field
+        rstTo.Fields(fldCurr.Name) = rstFrm.Fields(fldCurr.Name)
+        blnUpd = True
+      End If
+    Next fldCurr
+    If blnUpd = True Then
+      ent_ADODBcopyRec = rstTo.Fields(strPKName)
+      rstTo.Update
+    Else
+      rstTo.CancelUpdate
+      ent_ADODBcopyRec = -2 'no fields
+    End If
+    rstTo.Close
+  End If
+  rstFrm.Close
+End Function
+
+Public Function ent_provideDefaultValues(frmCurr As Form, strFramework As String, strTable As String, Optional strOnlyFields As String, _
+  Optional strExcludeFields As String)
+  'pass form + framework + tableName to supply default values for it
+  'only updates certain field if strOnlyFields is passsed
+  
+  Dim rstTemp As New ADODB.Recordset
+  rstTemp.Open "select * from ent_DefaultValues WHERE framework =" & SQLizeTxt(strFramework) & " AND tableName=" & SQLizeTxt(strTable), _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+  Do Until .EOF
+    'find defualt values and set them
+   If (strOnlyFields = "" And strExcludeFields = "") Or InStr("," & strOnlyFields & ",", "," & !FieldName & ",") > 0 Or _
+     InStr("," & strExcludeFields & ",", "," & !FieldName & ",") = 0 Then 'field ok?
+    Dim strVal As String
+    If IsNull(!expression) Then
+      strVal = Nz(!FieldValue, "")
+    Else
+      strVal = Eval(substTextForText((!expression), "@fieldValue@", (Nz(!FieldValue, ""))))
+    End If
+    If strVal <> "" Then
+      frmCurr(!FieldName) = strVal
+    End If
+   End If 'field ok
+  .MoveNext
+  Loop
+  End With
+  rstTemp.Close
+  
+
+End Function
+
+Public Function ent_addFullSetStrata_forObs(lngObs As Long, Optional ctlToReCalc As Control)
+  'function adds the full set of strata for the obs given: using strautmMethod for that obs (obs.strautmmMethod_ID)
+  DoCmd.RunSQL "INSERT INTO stratum (observation_ID, stratumType_ID, stratumMethod_ID) SELECT observation_ID, stratumType_ID, stratumMethod_ID " _
+    & " FROM ent_stratumTypes_Missing_ForObs WHERE observation_ID = " & lngObs
+ ' On Error Resume Next
+  ctlToReCalc.Requery
+End Function
+
+Public Function ent_compressTaxObs(lngObs As Long, Optional blnConfirm As Boolean)
+  'function looks at taxonObservations and compresses identical ones together
+  'taxonImportance records are stacked (update to_ID)
+  'taxonInterpretations are compressed, if identical, stacked elsewise
+  Dim rstTo As New ADODB.Recordset
+  rstTo.Open "select * from taxonObservation where observation_ID=" & lngObs & " ORDER BY taxonObservation_ID desc;" _
+     , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTo
+  Do Until .EOF
+      'check first taxonObservation
+      'see if this taxonObs is same as another
+      
+      
+  .MoveNext
+  Loop
+  End With
+     
+  rstTo.Close
+End Function
+
+Private Function chkSameTaxObsAsBefore()
+  'checks to see if the current record has a taxonObs that is the same as the current one, if so, removes the new and replaces with old
+  'get info on current taxonObs, if there is one:
+  If IsNull(Me.TObsOID) Or IsNull(Me.OBSERVATION_ID) Then
+    'can't try this
+    Exit Function
+  Else
+    'try to match: this done by function
+    Dim lngOldPK As Long, lngNewPK As Long
+    lngOldPK = Me.TObsOID
+    lngNewPK = ent_chkDupl_RecsByFields("taxonObservation", lngOldPK, "accessionCode")
+    If lngNewPK > 0 And lngNewPK <> lngOldPK Then
+      'update the old taxObs to the new: first refresh form
+      Me.Refresh
+      ** NOT SURE ABOUT THIS **
+    End If
+  End If
+End Function
+
+Public Function ent_mergeTaxObs(lngOldPK As Long, lngNewPK As Long, lngOldRef_ID As Long, dblOldInfArea As Double) As Boolean
+  'merges taxonObservations, confirming with user if conflicts exist in Ref or InfArea
+  'there are several places we have to do this:
+  'taxonInterpretation : though delete old one if not customized
+  'taxonImportance: blinding add
+  'temp entry table: ent_temp_taxonImp_Int_Obs
+  'check to see what data is in the new TaxonObs, add if that is null
+  Debug.Print "ent_mergeTaxObs>> Merging :" & lngOldPK & " into " & lngNewPK & " taking with it Ref:" & lngOldRef_ID & " infAr:" & dblOldInfArea
+  Dim rstNewTaxObs As New ADODB.Recordset
+  rstNewTaxObs.Open "select * from taxonObservation where taxonObservation_ID=" & lngNewPK, CurrentProject.Connection _
+     , adOpenForwardOnly, adLockOptimistic, adCmdText
+  With rstNewTaxObs
+    If lngOldRef_ID > 0 Then
+      'check to see if can update Reference
+      If IsNull(!REFERENCE_ID) Then
+        'update will happen
+      Else 'need to confirm with user
+        If AreYouSure("The TaxonObservation already exists in the database, but with a reference :" _
+        & getvalFrmSQL("select transl from reference where reference_ID=" & !REFERENCE_ID) & Chr(13) _
+        & "Update to new reference, just specified (" & getvalFrmSQL("select transl from reference where reference_ID=" _
+        & lngOldRef_ID) & ")?") Then
+        'update will happen once, below
+        
+        Else
+          'cancelled
+          ent_mergeTaxObs = False
+          .CancelUpdate
+          GoTo exitthis
+        End If 'user is sure
+      End If 'update confirmation needed?
+      'update!
+      
+      !REFERENCE_ID = lngOldRef_ID
+      Debug.Print "reference updated to: " & lngOldRef_ID
+    End If 'have update for reference_ID
+    
+    If dblOldInfArea <> -1 Then
+      'check to see if we can update area
+      If IsNull(!taxonInferenceArea) Then
+        'update: below
+      Else 'need to confirm with user
+        If AreYouSure("The TaxonObservation already exists in the database, but with a taxon Inference Area :" _
+        & !taxonInferenceArea & Chr(13) _
+        & "Update to new inference area, just specified (" & dblOldInfArea & ")?") Then
+          'update: below
+        Else
+          'cancelled
+          ent_mergeTaxObs = False
+          .CancelUpdate
+          GoTo exitthis
+        End If 'user is sure
+      End If 'update confirmation needed?
+      'update
+      !taxonInferenceArea = dblOldInfArea
+      Debug.Print "tyaxon Inf Area updated to:" & dblOldInfArea
+    End If 'have inf area
+   .Update
+  End With
+    rstNewTaxObs.Close
+  'TAX OBS is taken care of: really match, update other tables:
+  DoCmd.RunSQL "UPDATE taxonImportance SET taxonObservation_ID = " & lngNewPK & " WHERE taxonObservation_ID=" & lngOldPK
+  DoCmd.RunSQL "UPDATE taxonInterpretation SET taxonObservation_ID = " & lngNewPK & " WHERE taxonObservation_ID=" & lngOldPK
+  DoCmd.RunSQL "UPDATE ent_temp_taxonImp_Int_Obs SET currTaxonObservation_ID = " & lngNewPK & " WHERE currTaxonObservation_ID=" & lngOldPK
+  DoCmd.RunSQL "DELETE * FROM taxonObservation WHERE taxonObservation_ID = " & lngOldPK
+  'if here, OK
+  '
+  ent_mergeTaxObs = True
+exitthis:
+  Exit Function
+End Function
+
+Public Function ent_getCurrScreenTObsID(Optional lngTOSet As Long) As Long
+  'gets screen current taxonObservation_ID
+ Static lngTO_ID As Long
+ If lngTOSet <> 0 Then
+   lngTO_ID = lngTOSet
+ End If
+ ent_getCurrScreenTObsID = lngTO_ID
+End Function
+
+Public Function ent_chkDupl_taxonObs(lngPK As Long, lngObs As Long, strPlantName As String) As Long
+  'returns new PK if same taxonObs exists, based on obs_ID and authorPlantNAme
+  Dim rstFindOther As New ADODB.Recordset
+  rstFindOther.Open "select * from taxonObservation where taxonObservation_ID<>" & lngPK & " AND observation_ID=" _
+    & lngObs & " AND authorPlantNAme=" & SQLizeTxt(strPlantName), CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstFindOther
+  If .EOF Then
+    'none found
+    'return lngPK
+    ent_chkDupl_taxonObs = lngPK
+  Else
+    'if set to merge, then do so
+    If ent_mergeTableRecs("taxonObservation", !TAXONOBSERVATION_ID, lngPK, "reference_ID,taxonInferenceArea") = True Then
+        ent_chkDupl_taxonObs = !TAXONOBSERVATION_ID
+    Else 'cancelled, unsuccessful
+       ent_chkDupl_taxonObs = lngPK
+    End If
+  End If
+  End With
+  rstFindOther.Close
+  
+End Function
+
+Public Function ent_mergeTableRecs(strTable As String, lngKeepPK As Long, lngRMPK As Long, strManyFields As String) As Boolean
+  'function takes  fields (strManyFields) from a record of one pk (lngRMPK) on a table (strTable) and sends values to new record (lngKeepPK) if the new record has no info for that field, else asks
+  'returns true is all this is done, else false
+   Dim rstNewRec As New ADODB.Recordset, rstOld As New ADODB.Recordset, colFields As New Collection, _
+     inttemp As Integer, strField As String, varVal As Variant
+   Set colFields = csv_parseCSVstring(strManyFields, ",")
+   'new record, to potentially update
+   rstNewRec.Open "select * from [" & strTable & "] where [" & WhatIsPKOf(strTable) & "]=" & lngKeepPK, CurrentProject.Connection _
+     , adOpenForwardOnly, adLockOptimistic, adCmdText
+   'old record from which we will get data to check and perhaps update the other table with
+   rstOld.Open "select * from [" & strTable & "] where [" & WhatIsPKOf(strTable) & "]=" & lngRMPK, CurrentProject.Connection _
+     , adOpenForwardOnly, adLockReadOnly, adCmdText
+   If rstOld.EOF Or rstNewRec.EOF Then
+     ent_mergeTableRecs = False
+     GoTo exitthis
+   End If
+   With rstNewRec
+For inttemp = 1 To colFields.Count
+  strField = colFields(inttemp)
+  varVal = rstOld.Fields(strField)
+  If Nz(varVal) <> Nz(.Fields(strField)) Then 'same, dont do anything
+    If Not IsNull(varVal) Then 'must update?
+      'check to see if can update Reference
+      If IsNull(.Fields(strField)) Then
+        'update will happen
+      Else 'need to confirm with user
+        Dim strOld As String, strNew As String
+        
+        If Right(strField, 3) = "_ID" Then 'wont always work, admittedly
+          'get translation string
+          strOld = getvalFrmSQL("select transl from [" & Left(strField, Len(strField) - 3) & "] where [" & strField & "]=" & .Fields(strField))
+          strNew = getvalFrmSQL("select transl from [" & Left(strField, Len(strField) - 3) & "] where [" & strField & "]=" & varVal)
+        End If
+        If strOld = "" Then strOld = .Fields(strField)
+        If strNew = "" Then strNew = varVal
+        
+        If AreYouSure("A record in " & strTable & " already exists in the database, but with a " & strField & " :" _
+        & strOld & Chr(13) _
+        & "Update to new " & strField & ", just specified (" & strNew & ")?") Then
+        'update will happen once, below
+        
+        Else
+          'cancelled
+          .CancelUpdate
+          ent_mergeTableRecs = False
+          GoTo exitthis
+        End If 'user is sure
+      End If 'update confirmation needed?
+      'update!
+      
+      .Fields(strField) = varVal
+
+      Debug.Print strTable & "." & strField & "(" & lngKeepPK & ") updated to: " & varVal
+    End If 'have update for field
+  End If 'same field values, do nothing
+Next inttemp
+   .Update
+   End With
+   Select Case strTable
+     Case "taxonObservation"
+       DoCmd.RunSQL "UPDATE taxonImportance SET taxonObservation_ID = " & lngKeepPK & " WHERE taxonObservation_ID=" & lngRMPK
+       DoCmd.RunSQL "UPDATE taxonInterpretation SET taxonObservation_ID = " & lngKeepPK & " WHERE taxonObservation_ID=" & lngRMPK
+       DoCmd.RunSQL "UPDATE ent_temp_taxonImp_Int_Obs SET currTaxonObservation_ID = " & lngKeepPK & " WHERE currTaxonObservation_ID=" & lngRMPK
+     Case "taxonInterpretation"
+       'rule: delete taxonAlts from dupl TaxInts
+       DoCmd.RunSQL "DELETE * FROM taxonAlt WHERE taxonInterpretation_ID=" & lngRMPK
+       DoCmd.RunSQL "UPDATE ent_temp_taxonImp_Int_Obs SET currtaxonInterpretation_ID = " & lngKeepPK & " WHERE currtaxonInterpretation_ID=" & lngRMPK
+   End Select
+   
+  DoCmd.RunSQL "DELETE * FROM [" & strTable & "] WHERE [" & WhatIsPKOf(strTable) & "] = " & lngRMPK
+   
+   ent_mergeTableRecs = True
+exitthis:
+  rstNewRec.Close
+  rstOld.Close
+  Exit Function
+End Function
+
+Public Function ent_chkDupl_RecsByFields(strTable As String, lngPK As Long, Optional ByVal strFldsIgnore As String) As Long
+  'function checks for duplicate records in a table, based on a starting record and returns the PK of another rec that is same
+  'if it exists, else 0
+  'strFldsIgnore is comma-separated list of fields to ignore
+  Dim strErrs As String, strPKName As String
+  strPKName = WhatIsPKOf(strTable)
+  strFldsIgnore = "," & strFldsIgnore & ","
+  Dim rstGetFlds As New ADODB.Recordset, colBaseVals As New Collection, colFldsComp As New Collection
+  Dim rstGetVals As New ADODB.Recordset, strWHERE As String
+  'get values to compare
+  rstGetVals.Open "select * from [" & strTable & "] where [" & strPKName & "]=" & lngPK, CurrentProject.Connection _
+   , adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstGetVals.EOF Then
+    'nothing to compare!
+    'return -1
+    ent_chkDupl_RecsByFields = -1
+    Exit Function
+    
+  End If
+  'get fields to compare
+  rstGetFlds.Open "select * from Z_FieldDescription where tableName=" & SQLizeTxt(strTable) _
+    & " AND key<>'PK'", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstGetFlds
+  Do Until .EOF
+     'make SQL statement to see if duplicate record Exist : ignoring OID errors
+   If InStr(strFldsIgnore, "," & !FieldName & ",") = 0 Then
+     Dim intChk As Integer, strTemp As String, varTemp As Variant
+     varTemp = rstGetVals.Fields((!FieldName))
+     strTemp = getWhereStatementFrmFieldVal(!FieldName, !dataType, varTemp, intChk)
+     If intChk < 2 Then
+       strWHERE = strWHERE & IIf(strWHERE = "", "", " AND ") & strTemp
+     Else
+       'errors here
+       strErrs = strErrs & "error with field:" & !FieldName & " (" & !dataType & ")" & Chr(13)
+     End If 'intChk OK
+   Else
+     Debug.Print "skipping: " & !FieldName
+   End If 'field not to ignore
+  .MoveNext
+  Loop
+  End With
+  'close rsts
+  rstGetFlds.Close
+  rstGetVals.Close
+  'have strWHERE, presumably
+  If strWHERE = "" Then
+    'no fields compared: error
+    strErrs = strErrs & "error: no fields compared on table: " & strTable & Chr(13)
+  Else
+    'fields are compared, proceed with looking for dupl
+    Dim rstGetDupl As New ADODB.Recordset, strSQL As String
+    strSQL = "select * from [" & strTable & "] WHERE ([" & strPKName & "] <>" & lngPK & ") AND " & strWHERE
+    Debug.Print strSQL
+    rstGetDupl.Open strSQL, _
+      CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+    With rstGetDupl
+      If Not .EOF Then
+        'some other PK matches, send it back:
+         ent_chkDupl_RecsByFields = .Fields(strPKName)
+      Else
+        'EOF: none match, pass back orig PK
+         ent_chkDupl_RecsByFields = lngPK
+      End If
+    
+    End With
+    rstGetDupl.Close
+  End If
+  
+End Function
+
+Public Function getWhereStatementFrmFieldVal(strField As String, strType As String, varVal As Variant, ByRef intRetStatus As Integer) As String
+  'function returns a where clause (without the "where") given a field name, data type and value to make as criteria
+  'defalut to ok:
+  intRetStatus = 0
+  Dim strRep As String ' string to report
+If IsNull(varVal) Then
+    strRep = "[" & strField & "] is null"
+Else
+  
+  
+  Select Case strType
+    Case "boolean", "yes/no", "bit", "BOOLEAN", "Boolean"
+      If varVal = True Then
+        strRep = "[" & strField & "]=true"
+      Else
+        strRep = "[" & strField & "]=false"
+      End If
+    Case "float", "Double", "float", "NUMERIC", "Float", "integer", "Long Integer", "integer", "INT", "Integer", "serial", "autoNumber", "autoincrement"
+        strRep = "[" & strField & "] = " & Nz(varVal, -1)
+    Case "oid", "OLE Object", "LongBinary", "BLOB", "oid"
+      'cannot compare
+      strRep = ""
+      intRetStatus = 1
+    Case "text", "Memo", "longtext", "TEXT", "text", "varchar"
+        strRep = "[" & strField & "] = " & SQLizeTxt(Nz(varVal, "null"))
+    Case "timestamp", "date/time", "Date"
+        strRep = "[" & strField & "] = #" & SQLizeTxt(Nz(varVal, "null")) & "#"
+    Case Else
+      strRep = ""
+      intRetStatus = 2 'unknown type
+  End Select
+End If 'not null
+  If strRep <> "" Then
+    getWhereStatementFrmFieldVal = "(" & strRep & ")"
+  End If
+End Function

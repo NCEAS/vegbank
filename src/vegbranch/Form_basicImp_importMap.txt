@@ -1,0 +1,612 @@
+Option Compare Database
+Option Explicit
+Const strImpTbl = "basicImp_temp_data"
+
+
+
+Private Function conMatchedSQLFROM() As String
+  conMatchedSQLFROM = "FROM W_Convert_CSVColNames WHERE tableName=" & SQLizeTxt(Me.vbr_tableName) & " AND formatName=" & SQLizeTxt(conEasyFormat)
+End Function
+
+Private Sub browseForFileLoc_Click()
+  Dim strTemp As String
+  strTemp = BrowseForFile("*.csv,*.mdb")
+  If strTemp <> "" Then
+    Me!FileLocation = strTemp
+    highlightPortion 15
+  End If
+End Sub
+
+Private Sub Combo45_Change()
+  highlightPortion Combo45.Value
+End Sub
+
+Private Sub delAMapping_Click()
+  'delete selected mapping
+  'find it via the user's field name (is unique)
+  Dim strUsrFld As String
+  strUsrFld = Nz(Me.matchedFields)
+  If strUsrFld = "" Then
+    msgBox "There is no mapping selected. Please select a mapping above.", , "VegBranch"
+    Exit Sub
+  End If
+  DoCmd.RunSQL "DELETE * " & conMatchedSQLFROM() & "  AND userFieldName=" & SQLizeTxt(strUsrFld)
+  Me.matchedFields.Requery
+  Call HideMatchedFields_AfterUpdate
+End Sub
+
+Private Sub fileLocation_AfterUpdate()
+  If Len(Me.FileLocation) > 3 Then highlightPortion 15
+End Sub
+
+Private Sub firstLineFieldNames_Click()
+  'make the minimum _temp__ID the fieldnames for strImpTbl
+  'make sure table exists
+  Dim strErr1 As String
+  strErr1 = "No data.  Please import or paste data into the table first."
+  If Not TableExist(strImpTbl) Then
+    msgBox strErr1
+    Exit Sub
+  End If
+  'get field names in col
+  Dim colFieldNames As New Collection, colOldNames As New Collection 'keep old names to rename
+  Dim rstTemp As New ADODB.Recordset
+  rstTemp.Open "select * from [" & strImpTbl & "] WHERE [_temp__ID] = (select min(e.[_temp__ID]) from [" & strImpTbl & "] as e)", CurrentProject.Connection _
+    , adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+  If .EOF Then
+    'error, no records
+    msgBox strErr1
+    Exit Sub
+  Else
+    'have data, get fields
+    Dim fldCurr As Object
+    Dim strTellUserFields As String
+    
+    For Each fldCurr In .Fields
+      If fldCurr.Name = "_temp__ID" Then
+        'dont change this one
+        colFieldNames.Add fldCurr.Name
+      Else
+        colFieldNames.Add fldCurr.Value
+        strTellUserFields = strTellUserFields & fldCurr.Value & " | "
+      End If
+      colOldNames.Add fldCurr.Name
+    Next fldCurr
+  End If
+  
+  End With
+  rstTemp.Close
+  If AreYouSure("Do you want to use the following values as FIELD NAMES for matching?" & Chr(13) & strTellUserFields) Then
+    'ok, continue
+  Else
+    'exit
+    msgBox "cancelled."
+    Exit Sub
+  End If
+  
+  Dim strCountMapped As String
+  strCountMapped = getvalFrmSQL(substTextForText_once((Me.matchedFields.RowSource), "SELECT ", "SELECT 'true',"))
+  If strCountMapped = "true" Then
+    'you already have mapped fields: these will be lost if you change hdrs
+    msgBox "You have already mapped fields- changing field names will cause you to lose these mappings.  First delete mappings if you really want to change field names." & Chr(13) _
+      & "You can also continue to map using VegBranch's default field names (temp1,temp2) and when finished mapping, delete the first row of your data, which is field names."
+      Exit Sub
+  End If
+  'check validity of names
+  Dim strCurrFld As String, inttemp As Integer, strTryAgain As String
+  strTryAgain = Chr(13) & "  Please edit these field names on this form and try again."
+  For inttemp = 1 To colFieldNames.Count
+     strCurrFld = Trim(Nz(colFieldNames(inttemp)))
+     Dim strFldOK As String
+     strFldOK = compressChar(strCurrFld, ".!`[]""")
+     If strCurrFld <> strFldOK Or strCurrFld = "" Then
+        msgBox "The field [" & strCurrFld & "]" & Chr(13) & " has invalid characters.  Each field must have at least one letter or number." & Chr(13) _
+           & "**Also, Please avoid the following characters: .!`[]""" & strTryAgain
+        GoTo exitthis
+     End If
+     If Len(strCurrFld) > 64 Then
+       msgBox "The field:[" & strCurrFld & "]" & Chr(13) & " is too long.  You may only use up to 64 characters." & strTryAgain
+       GoTo exitthis
+     End If
+     If strCurrFld = "_temp__ID" And colOldNames(inttemp) <> "_temp__ID" Then
+       msgBox "The field:[" & strCurrFld & "] is not allowed.  This field name is reserved for VegBranch." & strTryAgain
+       GoTo exitthis
+     End If
+  Next inttemp
+  'check for uniqueNessofNAmes
+  inttemp = col_valuesAreUnique(colFieldNames)
+  If inttemp <> -1 Then
+    'have duplicate
+    msgBox "The field:[" & colFieldNames((inttemp)) & "]" & Chr(13) & " is duplicated.  Please rename one of the duplicate fields with that name." & strTryAgain
+    GoTo exitthis
+  End If
+  'if here, then are successful, field names are ok.
+  'drop the query from source so that locking doesn't interfere
+  Call SetYourDataViewSource(False)
+  'rename fields to new table:
+  Dim strRename As String
+  strRename = strImpTbl & "_rename"
+  If TableExist(strRename) Then
+    DoCmd.DeleteObject acTable, strRename
+  End If
+  'create SQL to make new table:
+  Dim strNewTblSQL As String
+  For inttemp = 1 To colFieldNames.Count
+    strNewTblSQL = strNewTblSQL & IIf(strNewTblSQL = "", "", ",") & "[" & colOldNames(inttemp) & "] " _
+      & IIf(colOldNames(inttemp) <> colFieldNames(inttemp), " AS [" & colFieldNames(inttemp) & "]", "") 'only rename if different
+  Next inttemp
+  strNewTblSQL = "SELECT " & strNewTblSQL & " INTO [" & strRename & "] FROM [" & strImpTbl & "];"
+ ' Debug.Print "MAKE:" & strNewTblSQL
+  DoCmd.RunSQL strNewTblSQL
+  'new table created, delete the old one
+  DoCmd.DeleteObject acTable, strImpTbl
+  CurrentDb.tabledefs.Refresh
+  DoCmd.Rename strImpTbl, acTable, strRename
+  'delete minimum PK row
+  DoCmd.RunSQL "DELETE * from [" & strImpTbl & "] WHERE [_temp__ID] = (select min(e.[_temp__ID]) from [" & strImpTbl & "] as e)"
+  Call redefineImpQry
+  Call SetYourDataViewSource(True)
+  highlightPortion 30
+  'if this succeeded to here, try to get automatches:
+  Call attemptAutoMatchFieldsToTbl(conEasyFormat, Me!vbr_tableName, colFieldNames, True)
+  Me.Recalc 'make changes visible
+  Call HideMatchedFields_AfterUpdate 'hide fields that were matched
+  
+exitthis:
+  Exit Sub
+
+End Sub
+
+
+Private Sub Form_Close()
+  Call rememberLastFileLoc(Nz(Me.FileLocation), True)
+End Sub
+
+Private Sub Form_Load()
+  Call SetYourDataViewSource(True)
+  ''set VegBranch list of ifelds
+  Call redefineVegBranchFieldList
+  Me.matchedFields.RowSource = "SELECT userFieldName AS [(your field name:)], vegbankFieldName as [(vegbranch field name:)] " & conMatchedSQLFROM() & " ORDER BY sortOrd, ConvertFieldNamesID;"
+End Sub
+
+Private Sub Form_Open(Cancel As Integer)
+  SetYourDataViewSource False
+  Me.vbr_tableName = Nz(Me.OpenArgs, "")
+  Me.FileLocation = rememberLastFileLoc()
+  'clear table of translations for this table and __easyImport format
+  DoCmd.RunSQL "delete * " & conMatchedSQLFROM()
+  'create default table if it doesn't exist
+  If Not TableExist(strImpTbl) Then
+     makeNewTblSpecifyCount 15
+  End If
+  SetYourDataViewSource True
+  Me!FormatName = conEasyFormat
+  highlightPortion 10
+End Sub
+
+Private Function basicImp_delTemptbl(Optional blnDontConfirm As Boolean) As Boolean
+  'deletes the current table for importing : true if successful
+ If TableExist(strImpTbl) Then
+  Dim lngTemp As Long
+  lngTemp = getvalFrmSQL("select count(1) from [" & strImpTbl & "];")
+  If lngTemp > 0 And (blnDontConfirm = False) Then
+    'have records and blnDontConfirm is false : make user confirm that they want to del data
+    If Not AreYouSure("You have " & lngTemp & " records of data stored in the temporary import table.  Delete these to import/paste new data?") Then
+      'cancel
+      basicImp_delTemptbl = False
+      Exit Function
+    End If
+  End If
+  'ok to delete this table
+  'remove query from preview pane so that can be deleted
+  Call SetYourDataViewSource(False)
+  
+  DoCmd.DeleteObject acTable, strImpTbl
+ End If
+  basicImp_delTemptbl = True
+End Function
+
+Private Sub HideMatchedFields_AfterUpdate()
+  ''reset things to be shown or hidden
+  Call redefineVegBranchFieldList 'determines by itself  what should be shown or hidden
+  SetYourDataViewSource False
+  If Me.HideMatchedFields Then
+    'do want to hide fields that are found
+    'figure out what needs to be hidden
+    Dim strToHide As String
+    strToHide = SQLValuesToCSV("SELECT userFieldName " & conMatchedSQLFROM(), """")
+    Call HideSomeFields(strImpTbl & "q", "query", strToHide, True)
+  Else
+    'show all fields in src qury
+    Call UnHideAllFields(strImpTbl & "q", "query")
+  End If
+  SetYourDataViewSource True
+End Sub
+
+Private Sub ImportFromFileLoc_Click()
+  ''start import process
+  Dim strSource As String
+  strSource = Nz(Me.FileLocation)
+    If strSource = "" Then
+    msgBox "Please specify a file location from which to import data."
+    Exit Sub
+  End If
+   
+   Dim fs As Object
+  Dim a As Object
+  
+Set fs = CreateObject("Scripting.FileSystemObject")
+
+'check src file
+If fs.FileExists(strSource) Then
+   Set a = fs.openTextFile(strSource, 1, False, 0)
+Else
+  msgBox "Sorry, could not find the file:" & strSource & ". Please try again. "
+  Exit Sub
+End If
+'could be .mdb
+If Right(strSource, 4) = ".mdb" Then
+  'present list of tables and queries to user to import
+  Dim strTOrQ As String
+  strTOrQ = BrowseForString("selectTableOrQuery", strSource, True)
+  If strTOrQ <> "" Then
+    'delete current table, if there is one
+    If basicImp_delTemptbl() Then 'ok to import
+      'so, import table
+      On Error GoTo errThis
+      DoCmd.RunSQL "SELECT * INTO [" & strImpTbl & "] FROM [" & strTOrQ & "]  in '" & strSource & "';"
+      Call redefineImpQry(True)
+      
+      GoTo successFulEnd
+    Else 'cancel
+      msgBox "Cancelled: the current temporary import table not deleted."
+    End If
+  Else
+    'cancelled
+    msgBox "Cancelled, no table or query was chosed from the other database (from which data are being imported)."
+  End If
+Else 'not .mdb
+
+'get count of fields
+Dim colFirstRow As New Collection, inttemp As Integer, strFieldNames As String
+Set colFirstRow = getColHdrs(strSource)
+For inttemp = 1 To colFirstRow.Count
+  strFieldNames = strFieldNames & IIf(strFieldNames = "", "", ",") & "temp" & inttemp
+Next inttemp
+'make new table for this to go into
+If Not makeNewTblSpecifyCount(colFirstRow.Count) Then
+  'cancelled
+  Exit Sub
+End If
+'have field names, import into correct table:
+If importCSV2table_new(strImpTbl, strSource, False, True, strFieldNames) = False Then
+'is ok, no errors
+GoTo successFulEnd
+ 
+Else
+  msgBox "errors is import, please try again after dealing with errors mentioned before."
+End If
+End If 'mdb or csv
+exitthis:
+Exit Sub
+successFulEnd:
+  Me.yourDataView.Requery
+  highlightPortion 20
+  msgBox "imported your data successfully!"
+  GoTo exitthis
+errThis:
+  msgBox "Error in trying to import data from another database." & Chr(13) & Err.Description, , "VegBranch"
+  Resume exitthis
+End Sub
+
+Private Function makeNewTblSpecifyCount(Optional lngOverrideCount As Long, Optional blnNoConfirm As Boolean) As Boolean
+  'calls to make a new table, but allows to pass number
+  If lngOverrideCount > 0 Then Me.CountOfFieldsInPasteTable = lngOverrideCount
+  'makes a new table (strImpTbl) with X fields, all of type memo
+  If basicImp_delTemptbl(blnNoConfirm) Then
+    'create SQL to make this table
+    Dim strSQL As String
+    strSQL = "CREATE TABLE [" & strImpTbl & "] (" _
+      & "_temp__ID autoincrement, " & Chr(13)
+      'get number of fields to write
+      Dim lngHowMany As Long, inttemp As Integer
+      lngHowMany = Nz(Me.CountOfFieldsInPasteTable, Me.CountOfFieldsInPasteTable.DefaultValue)
+      'prevent too many
+      If lngHowMany > 254 Then lngHowMany = 254
+      For inttemp = 1 To lngHowMany
+        strSQL = strSQL & " temp" & inttemp & " longtext, " & Chr(13)
+      Next inttemp
+      
+    strSQL = strSQL & " Primary Key (_temp__ID) );"
+    'run sql to make table
+   ' Debug.Print strSQL
+    DoCmd.RunSQL strSQL
+    'redefine query
+    Call redefineImpQry(True)
+    ''already done: Call SetYourDataViewSource(True)
+    makeNewTblSpecifyCount = True
+  Else
+    msgBox "Cancelled."
+    makeNewTblSpecifyCount = False
+  End If
+
+End Function
+
+Private Sub SetYourDataViewSource(blnShow As Boolean)
+  'shows or hides srouceObject of yourDataView
+  Me.yourDataView.SourceObject = IIf(blnShow, "query." & strImpTbl & "Q", "")
+End Sub
+
+Private Sub ImportToVegBranch_Click()
+  'import to Z_USER table
+  'check to see if any data is coming from strImpTbl
+  Dim lngCount1 As Long
+  lngCount1 = getvalFrmSQL("select count(1) from [" & strImpTbl & "Q]")
+  If lngCount1 = 0 Then
+    msgBox "There are no data records in the above box to import into VegBranch table! Please add some data (paste or import from file), then try again.", , "VegBranch"
+    Exit Sub
+  End If
+  'check to see if data is already there
+  Dim lngTemp As Long, intResp As Integer
+  lngTemp = getvalFrmSQL("select count(1) from [" & Me.vbr_tableName & "]")
+  If lngTemp > 0 Then
+    intResp = MsgBox_cust("There are already " & lngTemp & " records in the VegBranch table you are importing to: " & getTableNickName(Me.vbr_tableName) _
+      , "ADD to table,OVERWRITE data", "You can either ADD your data to the data already in the table, or you can erase the data currently in the table and then import your data.", "VegBranch")
+    Select Case intResp
+      Case 1 'normal
+      Case 2 'overwrite: delete curr recs
+        DoCmd.RunSQL "delete * from " & Me.vbr_tableName
+      Case Else
+       'cancel
+       msgBox "Cancelled."
+       Exit Sub
+    End Select
+  End If
+  
+  
+  Dim blnTemp As Boolean
+  blnTemp = importMDBtoTable_changeFlds(conEasyFormat, Me.vbr_tableName, Application.CurrentProject.FullName, strImpTbl & "Q", True, True)
+  If blnTemp Then
+    'succeeded, remove old data and close this
+    intResp = MsgBox_cust("Your data have been successfully imported!  VegBranch normally erases the temporary data in the top box. OK?", "OK:erase temp data,no:keep data", "The data that were intially imported have been moved into a VegBranch loading table and isn't needed.", "VegBranch")
+    If intResp = 1 Then
+      'recreate the temp table afresh
+      Call makeNewTblSpecifyCount(, True)
+    End If
+    
+    
+    'close this form
+    DoCmd.Close acForm, Me.Name
+    'refresh previous form
+    On Error Resume Next
+    Forms("basicImp_menu").Recalc
+  End If
+End Sub
+
+Private Sub lbl_10_Click()
+  highlightPortion 10
+End Sub
+
+Private Sub lbl_20_Click()
+  highlightPortion 20
+End Sub
+
+Private Sub lbl_30_Click()
+  highlightPortion 30
+End Sub
+
+Private Sub lbl_50_Click()
+  highlightPortion 50
+End Sub
+
+Private Sub lbl_60_Click()
+  highlightPortion 60
+End Sub
+
+Private Sub lbl_noHighlight_Click()
+  highlightPortion -10
+End Sub
+
+Private Sub makeNewTbl_Click()
+  Call makeNewTblSpecifyCount
+End Sub
+
+Private Function redefineVegBranchFieldList()
+   Dim strSrcStart As String, strMiddle As String
+   strSrcStart = "select '!SkipField:','!' from oneNullRec ; union all SELECT  fieldname,iif(fieldUseGroup=1,""*"","""")  FROM Z_fieldDescriptionORD WHERE fieldUseGroup >0 and fieldUseGroup<=2 AND tablename=" & SQLizeTxt(Me.vbr_tableName)
+   
+   If Me.HideMatchedFields Then
+     'write sql that doesn't include fields already matched
+     strMiddle = " AND fieldName not in (SELECT vegbankFieldNAME " & conMatchedSQLFROM() & ")"
+   End If
+   Me.vegBranchFields.RowSource = strSrcStart & strMiddle
+End Function
+
+Private Function redefineImpQry(Optional blnResetFormQ As Boolean)
+  'sets strImpTbl & "Q" query as all fields except _temp__ID
+  Dim dbsCurr As Object, tblCurr As Object, fldCurr As Object, strSQL As String
+  
+  Set dbsCurr = CurrentDb
+  Set tblCurr = dbsCurr.tabledefs(strImpTbl)
+  For Each fldCurr In tblCurr.Fields
+    If fldCurr.Name <> "_temp__ID" Then strSQL = strSQL & IIf(strSQL = "", "", ",") & "[" & fldCurr.Name & "]"
+  Next fldCurr
+  strSQL = "SELECT " & strSQL & " FROM [" & strImpTbl & "];"
+  Call EditQrySql(strImpTbl & "Q", strSQL, False)
+  If blnResetFormQ Then
+    Call SetYourDataViewSource(True)
+  End If
+End Function
+
+Private Sub MapFields_Click()
+  'attempt to map user field to vegbranch field
+  Dim strUserFld As String, strVegBranchFld As String
+  strUserFld = rememberFieldLastOn(False)
+  strVegBranchFld = (Nz(Me.vegBranchFields))
+  If strVegBranchFld = "!SkipField:" Then strVegBranchFld = strVegBranchFld & strUserFld
+  If strVegBranchFld = "" Then
+    msgBox "Please select a VegBranch field in the list of fields."
+    Exit Sub
+  End If
+  If strUserFld = "" Then
+    msgBox "Please select one of your fields by clicking on a column, then press this button again (the field will not stay highlighted, that's OK)."
+    Exit Sub
+  End If
+  'make sure it's ok to do this
+  If Not Me.stopConfirmMap Then
+    If Not AreYouSure("Do you want to map your field:" & strUserFld & Chr(13) & "to the VegBranch field:" & strVegBranchFld) Then
+      msgBox "Cancelled."
+      Exit Sub
+    End If
+  End If
+  Debug.Print "mapping:" & strUserFld & " to " & strVegBranchFld
+  
+  'check to see if there already
+  Dim strChkThere As String, strChkThere2 As String
+  strChkThere = getvalFrmSQL("select 'true' " & conMatchedSQLFROM & " AND userFieldName=" & SQLizeTxt(strUserFld))
+  strChkThere2 = getvalFrmSQL("select 'true' " & conMatchedSQLFROM & " AND vegbankFieldName=" & SQLizeTxt(strVegBranchFld))
+  If strChkThere = "true" Then
+    'already matched
+    msgBox "You have already mapped your field name:" & strUserFld & Chr(13) & "Please choose a different field or delete this mapping in the list of mapped fields.", , "VegBranch"
+    GoTo exitthis
+  End If
+  If strChkThere2 = "true" Then
+    msgBox "You have already mapped to the VegBranch field name:" & strVegBranchFld & Chr(13) & "Please choose a different field or delete this mapping in the list of mapped fields.", , "VegBranch"
+    GoTo exitthis
+  End If
+  'add to table
+  On Error GoTo cantAdd
+  DoCmd.RunSQL "INSERT INTO W_Convert_CSVColNames(UserFieldName,FormatName,TableName,VegBankFieldName,RowForFormatTbl) SELECT " _
+    & SQLizeTxt(strUserFld) & "," & SQLizeTxt(conEasyFormat) & "," & SQLizeTxt(Me.vbr_tableName) & "," _
+    & SQLizeTxt(strVegBranchFld) & ",'1';"
+  'refresh lists
+  If Me.HideMatchedFields Then
+    'hide query
+    Call SetYourDataViewSource(False)
+    'hide field
+    Call HideSomeFields(strImpTbl & "Q", "Q", strUserFld, False)
+    'show qry again
+    Call SetYourDataViewSource(True)
+  End If
+  'check to see if all fields have been mapped
+  Dim lngFldCount As Long, lngUsrFlds As Long
+  lngFldCount = getvalFrmSQL("select count(1) " & conMatchedSQLFROM)
+  Dim dbsCurr As Object, qdfTemp As Object
+  Set dbsCurr = CurrentDb
+  Set qdfTemp = dbsCurr.querydefs(strImpTbl & "Q")
+  lngUsrFlds = qdfTemp.Fields.Count
+  If lngUsrFlds = lngFldCount Then
+    msgBox "Congrats!  You have mapped all your fields.  Please confirm these and continue to move data into VegBranch table."
+    highlightPortion 50
+  End If
+  Me.Recalc
+exitthis:
+  Exit Sub
+cantAdd:
+  'msg that can't add this
+  msgBox "Sorry, can't map these 2 fields, one of the two fields is probably already mapped and can't be remapped."
+  Resume exitthis
+End Sub
+
+Private Sub pasteData_Click()
+  'check to see how many fields they'd like to have
+  Dim strTemp As String, strerr As String, strLast As String
+  strLast = Me.CountOfFieldsInPasteTable.DefaultValue
+  'intial value so that we get an input
+  strTemp = "--"
+ strerr = ""
+  Do Until IsNumeric(strTemp) Or strTemp = ""
+    'get user input on # of fields to paste
+    strTemp = InputBox(strerr & "How many fields do you have in your data to paste? " & Chr(13) & " (If you aren't sure guess a little higher rather than lower, extra fields can be ignored.)" & Chr(13) & "Please enter a number from 1 to 254", "VegBranch", strLast)
+    strLast = strTemp
+    strerr = ">> The last input (" & strLast & ") was invalid, please try again or press cancel to stop this. <<" & Chr(13) & Chr(13)
+  Loop
+    If strTemp = "" Then
+    'cancel
+    msgBox "cancelled."
+    Exit Sub
+  End If
+  'ok, is now numeric
+  Dim inttemp As Integer
+  inttemp = strTemp
+  If inttemp < 1 Then inttemp = 1
+  If inttemp > 254 Then inttemp = 254
+  'make the new table
+  Call makeNewTblSpecifyCount((inttemp))
+  highlightPortion 20
+End Sub
+
+
+
+Private Sub vegBranchFields_Click()
+  ''get definition for this field
+  'fyi : source of this field defined by redefineVegBranchFieldList
+  Dim strDef As String
+  If Not IsNull(Me.vegBranchFields) Then
+  strDef = getvalFrmSQL("select fieldDefinition from Z_FieldDescription WHERE tableName = " & SQLizeTxt(Me.vbr_tableName) _
+    & " AND fieldName=" & compressChar(SQLizeTxt(Me.vegBranchFields), "*"))
+  Else 'set to null
+    strDef = ""
+  End If
+ ' Debug.Print "set field:" & Nz(Me.vegBranchFields, "--") & "   to:" & strDef
+  Me.selectedFieldDefn = strDef
+End Sub
+
+Private Sub yourDataView_Exit(Cancel As Integer)
+   Me.lastUserFld = rememberFieldLastOn(True)
+   highlightPortion 30
+End Sub
+
+Private Function rememberFieldLastOn(blnSet As Boolean) As String
+  'checks field that was last visited in yourDataView
+  Static basicImpfieldName As String
+  
+  On Error Resume Next 'errors when closing the app
+  If blnSet Then basicImpfieldName = Screen.ActiveControl.Name
+  rememberFieldLastOn = basicImpfieldName
+End Function
+
+Private Function highlightPortion(lngNum As Long)
+  'function highlights a portion of the screen, by disabling some portions of the screen and/or changing font color
+  Dim ctlCurr As Control, lngNotHigh As Long
+  lngNotHigh = 8421504 ' color for non-highlighted lables
+  For Each ctlCurr In Me.Controls
+    'only consider controls where the first char in tag is numeric
+    If IsNumeric(Left(ctlCurr.Tag, 1)) Then
+      'have control to highlight or not
+      Dim blnHigh As Boolean
+      If InStr("," & ctlCurr.Tag & ",", "," & lngNum & ",") > 0 Then
+        blnHigh = True
+      Else 'do not highlight
+        blnHigh = False
+      End If
+      Select Case ctlCurr.ControlType
+        Case acLabel
+         If blnHigh Then
+           ctlCurr.ForeColor = 255
+         Else
+           ctlCurr.ForeColor = 10485759
+         End If
+        Case acTextBox, acListBox, acComboBox, acCommandButton
+         'ctlCurr.Enabled = blnHigh
+         If blnHigh Then
+           ctlCurr.ForeColor = 255
+         Else
+           ctlCurr.ForeColor = 0
+         End If
+      End Select
+      Select Case ctlCurr.ControlType
+       Case acTextBox, acListBox, acComboBox, acCheckBox, acSubform, acLine, acRectangle
+         If blnHigh Then
+           ctlCurr.BorderColor = 255
+           ctlCurr.BorderWidth = 2
+           ctlCurr.BorderStyle = 1
+         Else
+           ctlCurr.BorderColor = 0
+           ctlCurr.BorderWidth = 0
+         End If
+      End Select
+    End If
+  Next ctlCurr
+End Function

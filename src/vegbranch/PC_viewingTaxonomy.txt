@@ -1,0 +1,945 @@
+Option Compare Database
+Option Explicit
+Const intDebgLvl = 0
+
+Public Function EditRecs(strWhat As String)
+  ''function opens form to add a new record, dependent on the strWhat
+  ''makes the form a Dialog box that returns the PK value if blnDialog
+  If Left(strWhat, 1) = "-" Or strWhat = "" Then
+    msgBox "Please select a valid item to edit!"
+    Exit Function
+  End If
+  On Error GoTo AddNewERr
+  DoCmd.OpenForm strWhat, acNormal
+  
+  Exit Function
+AddNewERr:
+  msgBox "error in attempting to open the form to edit " & strWhat & Chr(13) & Err.Description
+  
+End Function
+
+Public Function AddANew(strWhat As String, blnDialog As Boolean) As Long
+  ''function opens form to add a new record, dependent on the strWhat
+  ''makes the form a Dialog box that returns the PK value if blnDialog
+  If Left(strWhat, 1) = "-" Or strWhat = "" Then
+    msgBox "Please select a valid item to add!"
+    Exit Function
+  End If
+  On Error GoTo AddNewERr
+  DoCmd.OpenForm strWhat, acNormal, , , acFormAdd, IIf(blnDialog, acDialog, acWindowNormal)
+  AddANew = RememberPK(strWhat, -1, "get")
+  Exit Function
+AddNewERr:
+  msgBox "error in attempting to open the form to add new " & strWhat & Chr(13) & Err.Description
+  
+End Function
+
+Public Function SupplyLastPlantNameAndRef()
+  ''function grabs the plantName and reference for the "Viewed" concept in TaxMap form
+  'and updates the plantConcept form accordingly -- only if values are both null = new rec
+  On Error GoTo SuppErr
+  Dim lngConc As Long
+  lngConc = Nz(Forms!TaxConcMapTool!mast_concept, -1)
+  If lngConc <> -1 Then
+    'only proceed if concept is filled in on left
+    Dim rstConc As New ADODB.Recordset
+    rstConc.Open "SELECT * FROM PCConcept WHERE plantConcept_ID = " & lngConc, _
+      CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+    With rstConc
+    If .EOF Then
+      'no concept, forget it
+      Debug.Print "concept dnE"
+    Else
+      ''found a concept
+      If IsNull(Forms!PCConcept!PLANTNAME_ID) And IsNull(Forms!PCConcept!REFERENCE_ID) Then
+        'fill in defaults
+        Forms!PCConcept!PLANTNAME_ID = !PLANTNAME_ID
+        Forms!PCConcept!REFERENCE_ID = !REFERENCE_ID
+        
+      Else
+        Debug.Print "something non-null"
+      End If
+    End If
+    End With
+    rstConc.Close
+  Else
+    Debug.Print "no concept found"
+  End If
+Exit Function
+SuppErr:
+ Debug.Print "SupplyLastPlantNameAndRef --> ERROR:" & Err.Description
+End Function
+
+Function tsatelajdfjakfdlsa()
+   DoCmd.OpenForm "get_pcConcept", , , , , acDialog, 6
+End Function
+
+
+Public Function getLeftRight() As Integer
+  ''gets current pref on TaxConcMapTool form
+  getLeftRight = Nz(Forms!TaxConcMapTool!LRPref, 0)
+
+End Function
+
+Public Function showConceptID(lngConc As Long, intLeftRight As Integer)
+  'function shows concept in left or right side of main form - latter param =1 left, 2 right, 0 ask
+  'check to make sure valid conc
+  If lngConc > 0 Then
+  
+  Select Case intLeftRight
+    Case 1
+      Forms!TaxConcMapTool!mast_concept = lngConc
+    Case 2
+      Forms!TaxConcMapTool!MyConcept = lngConc
+    Case Else
+      Select Case msgBox("Do you want the concept displayed on the right (press YES)?" & Chr(13) & "Press NO to display concept on left or CANCEL to do nothing", vbQuestion + vbYesNoCancel)
+        Case vbNo
+          Call showConceptID(lngConc, 1)
+        Case vbYes
+          Call showConceptID(lngConc, 2)
+        Case Else
+          'nothing
+      End Select
+  End Select
+  Else
+    msgBox "Sorry, can't lookup that concept. Please select a valid (non-null) concept."
+  End If
+End Function
+
+'-----------------------code 3:----
+
+Public Function CancelThenRememberPK(strTbl As String, lngPK As Long, GetPut As String) As Long
+  ''function sends keys ESC twice then remember PK
+  ''-- this is not supposed to be the way you go about these things, but I can't find a differnt way to do it -- cancel pending updates
+  SendKeys "{ESC}", True
+  SendKeys "{ESC}", True
+  ''MsgBox "changes undone!"
+   CancelThenRememberPK = RememberPK(strTbl, lngPK, GetPut)
+End Function
+
+Public Function RememberPK(strTbl As String, lngPK As Long, GetPut As String, Optional blnCloseNoSave As Boolean) As Long
+''function deals with remembering PK's passed to and from forms
+  On Error GoTo RememberErr
+GoTo Past_err
+RememberErr:
+  msgBox "Error in getting / storing PK!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+
+Static lngRememberPK As Long
+Static varName As String
+If GetPut = "put" Then
+  lngRememberPK = lngPK
+  varName = strTbl
+  'On Error Resume Next
+    'close form
+    If blnCloseNoSave Then
+      DoCmd.Close acForm, strTbl, acSaveNo
+    Else
+      DoCmd.Close acForm, strTbl
+    End If
+    
+  On Error GoTo RememberErr
+End If
+  ' if variable name if the same as that which was requested
+  If strTbl = varName Then
+    RememberPK = lngRememberPK
+  Else
+    'not the right variable stored, report -1
+    RememberPK = -1
+  End If
+
+End Function
+
+Public Function RememberString(strTbl As String, lngPK As String, GetPut As String, Optional blnCloseNoSave As Boolean) As String
+''function deals with remembering strings passed to and from forms
+  On Error GoTo RememberErr
+GoTo Past_err
+RememberErr:
+  msgBox "Error in getting / storing string!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+
+Static strRememberPK As String
+Static strvarName As String
+If GetPut = "put" Then
+  strRememberPK = lngPK
+  strvarName = strTbl
+  'On Error Resume Next
+    'close form
+    If blnCloseNoSave Then
+      DoCmd.Close acForm, strTbl, acSaveNo
+    Else
+      DoCmd.Close acForm, strTbl
+    End If
+    
+  On Error GoTo RememberErr
+End If
+  ' if variable name if the same as that which was requested
+  If strTbl = strvarName Then
+    RememberString = strRememberPK
+  Else
+    'not the right variable stored, report ""
+    RememberString = ""
+  End If
+
+End Function
+
+Private Function test_brwoser()
+  Debug.Print BrowseForPK("get_PCConcept", "plantConcept_ID=558")
+End Function
+
+Public Function BrowseForPK(strTbl As String, Optional strOpenArgs As String, Optional blnNotFilter As Boolean) As Long
+''function is enacted by user who wants to browse for record in a table
+    On Error GoTo BrwsErr:
+GoTo Past_err
+BrwsErr:
+  msgBox "Error in browsing for " & strTbl & "!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+  'put nothing into mem in case strangely closed
+ Call RememberPK(strTbl, -1, "put")
+''  Debug.Print strExt & " is extension to search for"
+  If blnNotFilter Then
+    DoCmd.OpenForm strTbl, , , , , acDialog, strOpenArgs
+  Else 'filter
+    DoCmd.OpenForm strTbl, , , strOpenArgs, , acDialog
+  End If
+  ''return result:
+  BrowseForPK = RememberPK(strTbl, -1, "get")
+End Function
+
+Public Function BrowseForString(strTbl As String, Optional strOpenArgs As String, Optional blnNotFilter As Boolean) As String
+''function is enacted by user who wants to browse for record in a table
+    On Error GoTo BrwsErr:
+GoTo Past_err
+BrwsErr:
+  msgBox "Error in browsing for " & strTbl & "!" & Chr(13) & Err.Description, vbCritical
+  Exit Function
+Past_err:
+  'put nothing into mem in case strangely closed
+ Call RememberString(strTbl, "", "put")
+''  Debug.Print strExt & " is extension to search for"
+  If blnNotFilter Then
+    DoCmd.OpenForm strTbl, , , , , acDialog, strOpenArgs
+  Else 'filter
+    DoCmd.OpenForm strTbl, , , strOpenArgs, , acDialog
+  End If
+  ''return result:
+  BrowseForString = RememberString(strTbl, "", "get")
+End Function
+
+Public Function MsgBox_cust(strMessage1 As String, strOptionsUpTo10 As String, Optional strMessage2 As String, Optional strCaption As String) As Integer
+  'returns integer, which corresponds to index on collection, or -1, meaning cancel
+  Dim colOptionsUpTo10 As New Collection
+  Set colOptionsUpTo10 = csv_parseCSVstring(strOptionsUpTo10, ",")
+  DoCmd.OpenForm "msgBox_cust", acDesign, , , , acHidden
+  
+  With Forms!MsgBox_cust
+    If strCaption <> "" Then
+      .Caption = strCaption
+    Else
+      .Caption = constVegBranchAppTitle
+    End If
+    !message2.Caption = strMessage2
+    !message2.SizeToFit
+    !message1.Caption = strMessage1
+    !message1.SizeToFit
+    .FormFooter.Height = 50
+    .FormHeader.Height = 50
+    Dim inttemp As Integer
+    For inttemp = 1 To 10
+      If colOptionsUpTo10.Count < inttemp Then
+        'no option for this button
+        .Controls("command" & inttemp).Visible = False
+      Else
+        .Controls("command" & inttemp).Caption = colOptionsUpTo10(inttemp)
+        .Controls("command" & inttemp).Visible = True
+      End If
+    Next inttemp
+  End With
+  DoCmd.Close acForm, "msgBox_cust", acSaveYes
+  'set default to -1 in case of cancel
+  Call RememberPK("msgBox_cust", -1, "put")
+  'open msgBox form dialogishly
+  DoCmd.OpenForm "msgBox_cust", acNormal, , , , acDialog
+  'return answer
+  MsgBox_cust = RememberPK("msgBox_cust", -2, "get")
+End Function
+
+Public Function msgBox_cust_click() As Integer
+  'see what button got pressed
+  Dim lngRet As Long
+  On Error GoTo cancelThis
+  If Left(Screen.ActiveControl.Name, 7) = "command" Then
+  '  Debug.Print Screen.ActiveControl.Name & " found as control"
+    lngRet = Right(Screen.ActiveControl.Name, Len(Screen.ActiveControl.Name) - 7)
+  Else
+    'assume 0
+     lngRet = 0
+  End If
+exitthis:
+  On Error GoTo err2
+  
+  msgBox_cust_click = RememberPK("msgBox_cust", lngRet, "put", True)
+ ' Debug.Print "remembered:" & lngRet
+exit2:
+  Exit Function
+cancelThis:
+  Debug.Print "msgBox_cust_click> err!: " & Err.Description
+  lngRet = 0
+  Resume exitthis
+err2:
+  Debug.Print "msgBox_cust_click: form closing err:" & Err.Description
+  Resume exit2
+End Function
+
+Public Function WhatIsStatus(lngParty As Long, lngConc As Long) As String
+ ''function looks up what the status is of the different concepts, based on parties right now
+ Dim rstStatus As New ADODB.Recordset
+ 'grab current status
+ rstStatus.Open "SELECT * FROM PCStatus WHERE Party_ID = " & lngParty & " AND plantConcept_ID = " _
+   & lngConc & " AND ((stopDate) is null)", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+ If Not rstStatus.EOF Then
+   WhatIsStatus = rstStatus!plantConceptStatus
+ Else
+   WhatIsStatus = "--??--"
+ End If
+End Function
+
+Public Function ExploreMe(Optional blnNoRet As Boolean, Optional strCtlRetTo As String)
+  ''function allows ctl to be double clicked and explored -- value details are shown and new value can be selected
+  'strCtlRetTo indicates a control to return the info to, if not the same as the control clicked
+  On Error GoTo exploreMeERr
+  Dim ctlCurr As Control
+  If strCtlRetTo = "" Then
+    Set ctlCurr = Screen.ActiveControl
+  Else
+    Set ctlCurr = Screen.ActiveControl.Parent.Controls(strCtlRetTo)
+  End If
+  Dim strNm As String ' name of control, used to figure out what info we should be dealing with
+  strNm = ctlCurr.Name
+  Debug.Print strNm
+  Dim blnFilt As Boolean
+  If IsNull(ctlCurr.Value) Then
+    'no filter
+    blnFilt = False
+    'Debug.Print "NULLs"
+  Else 'filter for current value
+    blnFilt = True
+   ' Debug.Print "not null -- filter: _" & ctlCurr.Value & "_"
+  End If
+  Dim lngRet As Long, strNewNm As String
+  lngRet = -1
+  Select Case strNm
+    Case "plantName_ID"
+      strNewNm = "plantName_ID"
+      If blnFilt Then
+        lngRet = BrowseForPK("PCName", strNewNm & "=" & ctlCurr.Value)
+      Else
+        lngRet = BrowseForPK("PCName")
+      End If
+    Case "plantConcept_ID", "myconcept", "plantParent_ID"
+      strNewNm = "plantConcept_ID"
+      If blnFilt Then
+        lngRet = BrowseForPK("get_PCConcept", strNewNm & "=" & ctlCurr.Value)
+      Else
+        lngRet = BrowseForPK("get_PCConcept")
+      End If
+    Case "ShowFull_plantConcept"
+      strNewNm = "plantConcept_ID"
+      If blnFilt Then
+        lngRet = BrowseForPK("PCConcept", strNewNm & "=" & ctlCurr.Value)
+      Else
+        lngRet = BrowseForPK("PCConcept")
+      End If
+      
+    Case "youare_party", "viewed_Party", "plantParty_ID", "party_ID"
+      strNewNm = "Party_ID"
+      If blnFilt Then
+        lngRet = BrowseForPK("Party", strNewNm & "=" & ctlCurr.Value)
+      Else
+        lngRet = BrowseForPK("Party")
+      End If
+'    Case "reference_ID"
+ '     strNewNm = "reference_ID"
+  '    If blnFilt Then
+   '     lngRet = BrowseForPK("reference", strNewNm & "=" & ctlCurr.Value)
+    '  Else
+     '   lngRet = BrowseForPK("reference")
+    '  End If
+    Case Else 'generic Tbl_ID situation: PK of Tbl
+      If InStr(strNm, "_ID") Then
+       strNewNm = strNm
+       Dim strTbl As String
+       strTbl = Left(strNm, InStr(strNm, "_ID") - 1)
+       If blnFilt Then
+         lngRet = BrowseForPK(strTbl, strNewNm & "=" & ctlCurr.Value)
+       Else
+         lngRet = BrowseForPK(strTbl)
+       End If
+      End If
+  End Select
+'  Debug.Print ctlCurr.Parent.Name & " is ctlCurr.form"
+  If lngRet <> -1 Then
+    ''MsgBox "about to"
+    If ctlCurr.Locked = False And Not blnNoRet Then
+      ctlCurr.Value = lngRet
+    Else
+      If Not blnNoRet Then Debug.Print ctlCurr.Name & " is locked!"
+    End If
+  End If
+Exit Function
+exploreMeERr:
+  msgBox "error in exploring this control. @ " & Now()
+End Function
+
+
+'--------code 4:------------------
+
+Public Function switchViewCommPlant(strWhich As String, Optional frmToOpen As String)
+  ''function switches queries to make view of comm or plant
+    ''perhaps also adjusts labels on forms?
+  
+  Dim colQrys As New Collection, dbsCurr As Object, colForms As New Collection
+  ''add forms to change labels on
+  
+  With colForms 'forms to change from one to another
+    .Add "get_PCConcept"
+.Add "sub_PCConcept"
+.Add "PCStatus"
+.Add "PCUsage"
+.Add "PCCorrelation"
+.Add "PCConcept"
+.Add "PCName"
+
+
+  End With
+  
+  
+  Set dbsCurr = CurrentDb
+  With colQrys 'queries to change from one to another
+    .Add "aux_PCCorrelation_PCConvergence"
+    .Add "aux_PCStatus_PCConceptStatus"
+    .Add "aux_PCStatus_PCLevel"
+    .Add "aux_PCUsage_classSystem"
+    .Add "aux_PCUsage_PCNameStatus"
+    .Add "PCConcept"
+    .Add "PCCorrelation"
+    ' ignored for now! .Add "PCLineage" ignored!!
+    .Add "PCName"
+    
+    .Add "PCStatus"
+    .Add "PCUsage"
+    .Add "PCConcept_summ"
+    .Add "PCName_summ"
+  
+  Dim strSEL As String, strFrom As String, strQryToChng As String
+  Dim inttemp As Integer
+  For inttemp = 1 To .Count
+    ''FROM
+    strFrom = ""
+     
+      strQryToChng = .Item(inttemp)
+       
+       'get what we are changing from
+       Dim strSrcTbl As String
+       If InStr(CurrentDb.querydefs(strQryToChng).SQL, "'comm' as NowShowing") Then
+         strSrcTbl = "comm"
+       Else
+         strSrcTbl = "plant"
+       End If
+      'name of base of query to change
+      strFrom = qryGetSrcTbl(strQryToChng)
+      'new name to get from
+      strFrom = substTextForText(strFrom, strSrcTbl, strWhich)
+  '    strPlantTbl = substTextForText_once(.Item(intTemp), "PC", "plant", 0)
+   '     Debug.Print strFrom
+    'create SQL SELECT AND SQL FROM STATEMENTS
+    strSEL = ""
+    
+    'get names and expressions that define this query
+    Dim colFldExpr As New Collection, colNames As New Collection
+    Call QryParseFldExpName(strQryToChng, colFldExpr, colNames)
+    'now have collection of names and expressions for the current qry
+    
+
+       
+If strSrcTbl <> strWhich Then 'need to change
+       'grab each field
+       Dim intNamesTemp As Integer
+       For intNamesTemp = 1 To colFldExpr.Count
+      
+       Dim strOld As String, strNew As String, strName As String
+         strName = colNames(intNamesTemp)
+         strOld = colFldExpr(intNamesTemp)
+         strNew = substTextForText_once(strOld, strSrcTbl, strWhich, 1)
+         'undo erroneous replacement of "comments" to "plantents"
+         strNew = substTextForText_once(strNew, "plantents", "comments", 1)
+         'add field source, and if name is diff, then as [name], then comma
+         'If fieldExistOnTblQry_dupl(strNew, strFrom) Then
+           strSEL = strSEL & strNew & IIf(strName = strNew, "", " AS " & strName) & ","
+         'End If
+       Next intNamesTemp
+    'change SQL
+    'perhaps add NOwShowingField:
+    If Not fieldExistOnTblQry_dupl("NowShowing", strQryToChng) Then
+      'add a nowShowing field
+      strSEL = strSEL & " '" & strWhich & "' as NowShowing" & "," 'need to keep comma, b/c stripped in next few lines
+    End If
+    Dim strSQL As String
+    strSQL = "SELECT " & Left(strSEL, Len(strSEL) - 1) & " FROM " & strFrom
+   If intDebgLvl > 1 Then Debug.Print "------" & Chr(13) & strSQL & Chr(13) & "--------------"
+    dbsCurr.querydefs(strQryToChng).SQL = strSQL
+  
+End If 'need to change
+      
+    
+  Next inttemp
+  End With ' col
+  
+nextPart:
+  'remember current form name before closing forms
+  If frmToOpen = "" Then frmToOpen = Screen.ActiveForm.Name
+  Dim intForm As Integer
+  For inttemp = 1 To colForms.Count
+    'close all form before changing labels : subforms are tricky in this respect, must close all first
+      If IsFormOpen(colForms(inttemp)) Then
+        DoCmd.Close acForm, colForms(inttemp)
+      End If
+  Next inttemp
+  
+  'change labels on a form.
+  For inttemp = 1 To colForms.Count
+    Debug.Print "changing labels for: " & colForms(inttemp)
+    Call changeLabelsForm(colForms(inttemp), strSrcTbl, strWhich)
+  Next inttemp
+  
+  DoCmd.OpenForm "TaxConcMapTool", acDesign, , , , acHidden
+  With Forms!TaxConcMapTool
+    .Controls("cmd_showPlants").Caption = IIf(strWhich = "comm", "show plants", "NOW SHOWING PLANTS")
+    .Controls("cmd_showComms").Caption = IIf(strWhich = "comm", "NOW SHOWING COMMS", "show comms")
+    .Caption = "Taxonomic Concept Mapping Tool --" & strWhich & IIf(strWhich = "comm", "unitities", "s") & " module"
+  End With
+  DoCmd.Close acForm, "TaxConcMapTool", acSaveYes
+  
+  'open up last form
+  If frmToOpen <> "" Then
+    On Error Resume Next
+    DoCmd.Close acForm, frmToOpen, acSavePrompt
+    DoCmd.OpenForm frmToOpen
+  End If
+
+  
+End Function
+Public Function changeLabelsForm(strFormName As String, strFrom As String, strTo As String)
+  'function opens a form and changes all labels and caption that start with strFrom and replaces with strTo (case included in replace)
+  Dim frmCurr As Object, dbCurr As Object
+ ' Set dbCurr = Application.CurrentProject
+  'Set frmCurr = dbCurr.AllForms(strFormName)
+  'open form
+  DoCmd.OpenForm strFormName, acDesign, , , , acHidden
+  Set frmCurr = Forms(strFormName)
+  Dim ctlLoop As Control, strOld As String, strNew As String
+  For Each ctlLoop In frmCurr.Controls
+    If ctlLoop.ControlType = acLabel Then
+     If Left(ctlLoop.Caption, Len(strFrom)) = strFrom Then
+       strOld = ctlLoop.Caption
+       strNew = caseString(strTo, caseChk(Left(strOld, Len(strFrom)))) & Right(strOld, Len(strOld) - Len(strFrom))
+      Debug.Print "replacing: " & strOld & "  :: to :: " & strNew
+      ctlLoop.Caption = strNew
+     End If
+    End If
+  Next ctlLoop
+  'replace form caption, too, if matches
+  With frmCurr
+  If Left(.Caption, Len(strFrom)) = strFrom Then
+      strOld = .Caption
+       strNew = caseString(strTo, caseChk(Left(strOld, Len(strFrom)))) & Right(strOld, Len(strOld) - Len(strFrom))
+      Debug.Print "replacing: " & strOld & "  :: to :: " & strNew
+      .Caption = strNew
+  End If
+  End With
+  DoCmd.Close acForm, strFormName, acSaveYes
+End Function
+
+
+Public Function fieldExistOnTblQry_dupl(strFld As String, strTbl As String) As Boolean
+  'sees if field is on tbl or qry
+  On Error GoTo nope
+    Dim fldCurr As Object
+    Dim rstTemp As New ADODB.Recordset
+    rstTemp.Open "select * from [" & strTbl & "];", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+    Set fldCurr = rstTemp.Fields(strFld)
+    'success!
+    fieldExistOnTblQry_dupl = True
+exitChk:
+  Exit Function
+nope:
+  fieldExistOnTblQry_dupl = False
+  If intDebgLvl > 0 Then Debug.Print "fieldExistOnTblQry_dupl>>" & strFld & "<< not found, error was: " & Err.Description
+  Resume exitChk
+End Function
+
+Public Function caseChk(strTxt As String) As Integer
+  'function looks at a string and determines its case.  Opposite of function caseString
+  '0= mixed/unknown, 1= all lowercase 2= ALL UPPERCASE, 3= Sentence (first upper, rest lower)
+  If StrComp(strTxt, LCase(strTxt), vbBinaryCompare) = 0 Then
+    'all lower
+    caseChk = 1
+  Else
+    If StrComp(strTxt, UCase(strTxt), vbBinaryCompare) = 0 Then
+    'all upper
+    caseChk = 2
+    Else
+      If caseChk(Left(strTxt, 1)) = 2 And caseChk(Right(strTxt, Len(strTxt) - 1)) = 1 Then
+        caseChk = 3 'sentence Case
+      Else
+        caseChk = 0
+      End If
+    End If
+  End If
+  
+End Function
+
+Public Function caseString(strTxt As String, intCase As Integer) As String
+  'function takes a string, and given as case integer, cases the string and returns it cased appropriately
+  '0= mixed/unknown, 1= all lowercase 2= ALL UPPERCASE, 3= Sentence Case
+  Select Case intCase
+    Case 1
+      caseString = LCase(strTxt)
+    Case 2
+      caseString = UCase(strTxt)
+    Case 3
+      caseString = UCase(Left(strTxt, 1)) & LCase(Right(strTxt, Len(strTxt) - 1))
+    Case Else
+      caseString = strTxt
+  End Select
+End Function
+
+'------ new mod ------need QA---
+
+Public Function CopyStatus(lngParty1 As Long, lngConc1 As Long, lngParty2 As Long, lngConc2 As Long)
+  'function takes one party's view on a concept and adds this as a new status for the second party on the second concept
+  'validate for all values on form:
+  If Not validateForm(False, False) Then
+    'not all values are filled in!, already reported
+    Exit Function
+  End If
+  Dim dteNow As Date
+  dteNow = Now()
+  
+  'update all current statuses as stopped
+  Dim strSQL As String
+  strSQL = "UPDATE PCStatus SET stopDate = #" & dteNow & "#" _
+  & " WHERE (((PCStatus.PLANTCONCEPT_ID)=" & lngConc2 _
+  & ") AND ((PCStatus.PARTY_ID)=" & lngParty2 & ")); "
+  DoCmd.RunSQL strSQL
+  
+  'add new status
+  strSQL = "SELECT * FROM PCStatus " _
+& " WHERE (((PCStatus.PLANTCONCEPT_ID)=" & lngConc1 & ") AND ((PCStatus.PARTY_ID)=" & lngParty1 & ")); "
+ ' Debug.Print strSQL
+ 'INSERT INTO PCStatus ( reference_ID, plantConceptStatus, plantPartyComments, plantLevel, plantParent, startDate, PLANTCONCEPT_ID, PLANTPARTY_ID )
+  'open rst to read records
+  Dim rstStatus As New ADODB.Recordset
+  rstStatus.Open strSQL, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  
+  With rstStatus
+  Do Until .EOF
+    
+    Dim lngNewStatus As Long, lngCurrStatus As Long
+    ''add a new status
+    lngNewStatus = PlTx_AddStatus(lngConc2, lngParty2, !plantConceptStatus, dteNow, _
+      Nz(!REFERENCE_ID, 0), Nz(!plantPArent_ID, 0), Nz(!plantLevel, ""), Nz(!plantPartyComments, ""))
+    ''add correlations, too, for this status
+
+    lngCurrStatus = !PLANTSTATUS_ID
+    Dim strSQLCorr As String
+    strSQLCorr = "INSERT INTO PCCorrelation (plantStatus_ID, plantConcept_ID, plantConvergence, correlationStart)" _
+      & " SELECT " & lngNewStatus & ", plantConcept_ID, plantConvergence, #" & dteNow & "#" _
+      & " FROM PCCorrelation " _
+      & " WHERE PCCorrelation.plantStatus_ID = " & lngCurrStatus
+''    Debug.Print strSQLCorr
+    DoCmd.RunSQL strSQLCorr
+  .MoveNext
+  Loop
+  End With
+    
+'refresh any current form
+recalcCurrForm True
+
+End Function
+
+'Function testerreerreearea()
+ ' Debug.Print PlTx_AddStatus(558, 6, "not accepted", Now(), 2, 558, "genus", "delete this one")
+'End Function
+
+Public Function PlTx_AddStatus(lngConc As Long, lngParty As Long, _
+        strStatus As String, dteNow As Date, Optional lngRef As Long, Optional lngParent As Long, _
+        Optional strLevel As String, Optional strComments As String) As Long
+  ''function adds a status to a concept from a party as strStatus
+  Dim rstAddStatus As New ADODB.Recordset
+  rstAddStatus.Open "PCStatus", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+  
+  With rstAddStatus
+    ''add a new status
+    .AddNew
+    !PARTY_ID = lngParty
+    !PLANTCONCEPT_ID = lngConc
+    If lngRef <> 0 Then
+      !REFERENCE_ID = lngRef
+    End If
+    If lngParent <> 0 Then
+      !plantPArent_ID = lngParent
+    End If
+    !plantConceptStatus = strStatus
+    If strComments <> "" Then
+      !plantPartyComments = strComments
+    End If
+    If strLevel <> "" Then
+      !plantLevel = strLevel
+    End If
+    !startDate = dteNow
+    .Update
+  PlTx_AddStatus = !PLANTSTATUS_ID
+  End With
+  rstAddStatus.Close
+End Function
+
+Function testingGG()
+  plTx_addRejStatusAndCorr 558, 6, 558, True, 5
+End Function
+
+Public Function plTx_addRejStatusAndCorr(lngConc As Long, lngParty As Long, lngCorrConc As Long, blnUsages As Boolean, lngPartyOrig As Long)
+  ''functions adds a new status and sets it as "not accepted" by the party.
+  ''then adds correlation of "undertermined" to the correlated concept lngCorrConc
+  'validate for all values on form:
+  If Not validateForm(False, False) Then
+    'not all values are filled in!, already reported
+    Exit Function
+  End If
+  Dim lngStatus As Long, dteNow As Date
+  dteNow = Now()
+  If lngConc <> -1 Then ''valid concept, at least as far as we know
+    lngStatus = PlTx_AddStatus(lngConc, lngParty, "not accepted", dteNow)
+    If lngCorrConc <> -1 Then
+      ''add correlation:
+      Dim strSQL As String
+      strSQL = "INSERT INTO PCCorrelation (plantStatus_ID, plantConcept_ID, plantConvergence, correlationStart) " _
+        & " SELECT " & lngStatus & " , " & lngCorrConc & " , ""undetermined"", #" & dteNow & "#"
+      DoCmd.RunSQL strSQL
+    End If
+    If blnUsages Then
+      ''add the usages, but all as non standard
+      PlTx_CopyUsage lngPartyOrig, lngConc, lngParty, lngConc, True
+    End If
+  End If
+  'recalc form
+  RequeryFormFully
+  msgBox "Your party perspective has been added to the left hand concept, correlating it to the right hand concept." _
+     & Chr(13) & "Click the button ""Show same concept -->"" to see the results.", vbInformation
+End Function
+
+Public Function PlTx_CopyUsage(lngParty1 As Long, lngConc1 As Long, lngParty2 As Long, lngConc2 As Long, _
+   Optional blnNotStd As Boolean)
+  'function takes one party's view on a concept and adds this as a new usages for the second party on the second concept
+  'validate for all values on form:
+  If Not validateForm(False, False) Then
+    'not all values are filled in!, already reported
+    Exit Function
+  End If
+  ''blnNotStd is true if all usages are to be set as not standard
+  Dim strSQLStatus As String
+  If blnNotStd Then
+    ''always not standard
+    strSQLStatus = """not standard"""
+  Else
+    'use the field plantNAmeStatus
+    strSQLStatus = "PCUsage.plantNAmeStatus"
+  End If
+  Dim dteNow As Date
+  dteNow = Now()
+  Dim strSQL As String
+  strSQL = " INSERT INTO PCUsage ( usageStart, PLANTCONCEPT_ID, PARTY_ID, PLANTNAME_ID, plantNameStatus, plantName, classSystem ) " _
+& " SELECT #" & dteNow & "# AS Expr1, " & lngConc2 & " AS Expr2, " & lngParty2 & " AS Expr3, PCUsage.PLANTNAME_ID, " & strSQLStatus & ", " _
+& " PCUsage.plantName, PCUsage.classSystem     FROM PCUsage " _
+& " WHERE (((PCUsage.PLANTCONCEPT_ID)=" & lngConc1 & ") AND ((PCUsage.PARTY_ID)=" & lngParty1 & ")); "
+   Debug.Print strSQL
+   DoCmd.RunSQL strSQL
+'refresh any current form
+recalcCurrForm True
+End Function
+
+Function tetsifdjsadfjaklfjda()
+  Debug.Print validateForm(False, False)
+End Function
+
+Public Function validateForm(blnSkipPartyChk As Boolean, blnSkipRight As Boolean) As Boolean
+  ''functions checks the taxonomic mapping form vital fields to make sure that they
+    ''are non-null before proceeding with other functions
+    ''If blnSkipPartyChk is true, then only check concepts
+    ''If blnSkipRight is true, then only checks left hand side stuff
+    ''returns true if all values are OK
+    ''returns false if not all values are OK
+    On Error GoTo notGOod
+    Dim frmCurr As Form
+    Set frmCurr = Forms!TaxConcMapTool
+    
+    'there are 4 items to check:
+    '2 parties and 2 concepts:
+    Dim blnOK As Boolean
+    blnOK = Not IsNull(frmCurr.Controls("mast_concept"))
+    If Not blnSkipPartyChk Then
+      blnOK = blnOK And Not IsNull(frmCurr.Controls("viewed_party"))
+    End If
+    If Not blnSkipRight Then
+      blnOK = blnOK And Not IsNull(frmCurr.Controls("MyConcept"))
+    End If
+    If Not blnSkipRight And Not blnSkipPartyChk Then
+      blnOK = blnOK And Not IsNull(frmCurr.Controls("youare_party"))
+    End If
+    
+    validateForm = blnOK
+    If blnOK = False Then
+      msgBox "Please fill in the appropriate concepts and parties on the form before pressing this button!", vbExclamation
+    End If
+    Exit Function
+notGOod:
+    validateForm = False
+    msgBox "There was an error in accessing the taxonomic mapping form -- perhaps it is not open.", vbCritical
+    Debug.Print "validateForm >> ERROR : " & Err.Description
+End Function
+
+Public Function RequeryFormFully()
+  Dim frmCurr As Form
+  Set frmCurr = Forms!TaxConcMapTool
+  frmCurr.Controls("sub_LeftConcept").Controls("plantName").Requery
+  frmCurr.Controls("sub_RightConcept").Controls("plantName").Requery
+  frmCurr.Controls("sub_LeftConcept").Controls("reference_ID").Requery
+  frmCurr.Controls("sub_RightConcept").Controls("reference_ID").Requery
+  
+  frmCurr.Controls("sub_LeftStatus").Controls("plantparent_ID").Requery
+  frmCurr.Controls("sub_RightStatus").Controls("plantparent_ID").Requery
+  frmCurr.Controls("sub_LeftStatus").Controls("reference_ID").Requery
+  frmCurr.Controls("sub_RightStatus").Controls("reference_ID").Requery
+  
+  frmCurr.Controls("sub_LeftStatus").Controls("sub_corr").Controls("plantConcept_ID").Requery
+  frmCurr.Controls("sub_RightStatus").Controls("sub_corr").Controls("plantConcept_ID").Requery
+
+  frmCurr.Controls("sub_LeftUsage").Controls("plantName_ID").Requery
+  frmCurr.Controls("sub_RightUsage").Controls("plantName_ID").Requery
+  
+  frmCurr.Requery
+  frmCurr.Recalc
+'  frmCurr.Controls("sub_RightStatus").Recalc
+End Function
+'---------next
+Public Function setFormControlVal(strFrm As String, ctlNm As String, _
+            blnLong As Boolean, lngVal As Long, Optional strVal As String)
+''sets a function control value of long type if blnLong or str if not blnLong
+
+'see if we should NOT set value
+Dim blnNull As Boolean
+If blnLong Then
+  If lngVal = -1 Then blnNull = True
+Else
+  If strVal = "" Then blnNull = True
+End If
+If blnNull Then ' nothing done
+  'Forms(strFrm).Controls(ctlNm).Value = Null
+Else
+  Forms(strFrm).Controls(ctlNm).Value = IIf(blnLong, lngVal, strVal)
+End If
+End Function
+
+
+'----------new:
+Function QryParseFldExpName(strQryName As String, colGetExpr As Collection, colGetNames As Collection)
+  'takes a query and makes the 2 collections passed to this function express the expressions and names of the fields in the qry
+  'MTL 2004-Jan-31
+  'ought to be a way to do this with queryDefs(name).fields(field).PROPERTY
+  'but can't find it
+  'only works w/ SELECT queries
+  EmptyCollection colGetExpr
+  EmptyCollection colGetNames
+  Dim colNew As New Collection
+  'split the SQL into divisions based on commas, ignoring those inside quotes or parens
+  Set colNew = csv_parseCSVstring(CurrentDb.querydefs(strQryName).SQL, ",", False, True, True)
+  Dim inttemp As Integer, strItem As String
+  'go through each item
+  For inttemp = 1 To colNew.Count
+   ' Debug.Print colNew(inttemp)
+    strItem = colNew(inttemp)
+    'erase carriage returns
+    strItem = substTextForText(strItem, Chr(13), " ")
+    strItem = substTextForText(strItem, Chr(10), " ")
+    'ignore first select
+    If Left(strItem, 7) = "SELECT " Then strItem = Right(strItem, Len(strItem) - 7)
+    'temp collection to parse further to parse AS and remove FROM statement
+    Dim colTemp As New Collection
+    'remove FROM statement
+    EmptyCollection colTemp
+    Set colTemp = csv_parseCSVstring(strItem, " FROM ", False, True, True)
+    strItem = colTemp(1)
+    'split into name and expr, if different
+    EmptyCollection colTemp
+    Set colTemp = csv_parseCSVstring(strItem, " AS ", False, True, True)
+    Dim strName As String
+    Dim strExpr As String
+    'expression is first part
+    strExpr = Trim(colTemp(1))
+    'name is second part, if AS is there, else name is same as first part
+    If colTemp.Count > 1 Then
+      strName = Trim(colTemp(2))
+    Else
+      strName = Trim(colTemp(1))
+      'here we could have full name like :table.field or just field, figure out which:
+      If fieldExistOnTblQry_dupl(strName, strQryName) Then
+         'strName is OK
+        ' Debug.Print "(" & strName; " is ok"
+      Else
+         'just need after the period
+        ' Debug.Print "XX " & strName; " : is not found!"
+         If InStr(strName, ".") <> 0 Then
+           strName = Right(strName, Len(strName) - InStr(strName, "."))
+          ' Debug.Print "--> used just fieldName : " & strName
+         End If
+      End If
+    End If
+    
+    colGetExpr.Add Trim(strExpr)
+    colGetNames.Add Trim(strName)
+    
+   Next inttemp
+
+End Function
+
+Private Function doqParsetest()
+Dim colnms As New Collection
+Dim colexs As New Collection
+QryParseFldExpName "temp_delMePls", colexs, colnms
+Dim inttemp As Integer
+Debug.Print colexs.Count & "##"
+For inttemp = 1 To colexs.Count
+  Debug.Print colexs(inttemp)
+  Debug.Print ":" & colnms(inttemp)
+Next inttemp
+ 
+End Function
+
+Public Function qryGetSrcTbl(strQueryName As String) As String
+  'function gets the first table that is after 'FROM' in the query sql
+  Dim colNew As New Collection, strSQL As String
+  strSQL = CurrentDb.querydefs(strQueryName).SQL
+  strSQL = substTextForText(strSQL, Chr(13), " ")
+  strSQL = substTextForText(strSQL, Chr(10), " ")
+  Set colNew = csv_parseCSVstring(strSQL, "FROM ", False, True, True)
+  Dim strNameAft As String
+  strNameAft = Trim(colNew(2)) '2nd bit, after FROM '
+  'ignore after space
+  strNameAft = csv_FindNextField(strNameAft, " ")
+  'ignore after ;
+  strNameAft = csv_FindNextField(strNameAft, ";")
+  qryGetSrcTbl = strNameAft
+End Function
