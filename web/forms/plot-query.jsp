@@ -3,13 +3,13 @@
   @webpage_head_html@
 
 <title>
-VegBank - Advanced Plot Query
+VegBank - Advanced Plot Search
 </title>
 @webpage_masthead_html@
   
   <html:form action="/PlotQuery" method="get">
  
-	      <h2>Plot Query Form</h2>
+	      <h1>Advanced Plot Search</h1>
 	   
     <!-- Instructions Row -->
    <p class="instructions">

@@ -2,7 +2,7 @@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
 
-  <title>PLANT CONCEPT LOOKUP</title>
+  <title>VegBank Plant Search</title>
   
   <style type="text/css">
   xxtd.c4 {color: #000000; font-family: Helvetica,Arial,Verdana}
@@ -55,7 +55,7 @@ function setNameMatchType() {
 
   @webpage_masthead_html@ 
 
-  <h1>Plant Concept Query</h1>
+  <h1>Plant Search</h1>
 
 
         <form action="@views_link@plantconcept_detail.jsp" method="get" name="queryform" onsubmit="prepareForm()">

@@ -2,7 +2,7 @@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
 
-  <title>VegBank Community Type Query</title>
+  <title>VegBank Community Type Search</title>
  
 <script language="javascript">
 function prepareForm() {
@@ -50,7 +50,7 @@ function setNameMatchType() {
 
   @webpage_masthead_html@ 
   
- <h1>VegBank Community Type Query</h1>
+ <h1>Community Type Search</h1>
 			
     
          <form action="@web_context@views/commconcept_detail.jsp" method="get" name="queryform" onsubmit="prepareForm()">
