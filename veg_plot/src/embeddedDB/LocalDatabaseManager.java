@@ -5,10 +5,18 @@ import java.util.*;
 import java.math.*; 
 import java.net.URL;
 
-//import org.enhydra.instantdb.jdbc.*;
                                
 public class LocalDatabaseManager { 
 
+/**
+ * this class is to be used to manage the local embedded database and will
+ * perform such tasks as creating the database tables, updateing the summary
+ * tables ad dropping, restarting the database
+ *
+ * @author John Harris
+ * @version March 28, 2001
+ *
+ */
 
 
 
@@ -18,21 +26,42 @@ public static void main(String args[]) {
 if (args.length < 1) {
 System.out.println("Wrong number of arguments passed to LocalDatabaseManager\n");
 System.out.println("USAGE: java LocalDatabaseManager <action>");
-System.out.println(	"where action may be create, replicate, drop \n"
-	+" create: creates vegetation database locally (using instantDB) \n"
-	+" replicate: replicates, locally, all the data that is stored on the central server \n"
-	+" drop: drops the loacal datbase tables");
+System.out.println(	"where action may be createBaseTables, createSummaryTables, updateSummary \n"
+	+" \n"
+	+" createBaseTables: creates the base tables which consist of the normalized \n"
+	+" database structure \n \n"
+	+" createSummaryTables: creates the summary tables which are often used by \n"
+	+" the database access module for querying \n \n"
+	+" updateSummary: updates the summary tables from the base tables -- this \n"
+	+" must be run before querying the embedded database b/c the query modules \n"
+	+" relies heavily on the summary tables \n \n"
+	+" drop: to drop the database just recreate the base tables");
 	System.exit(0);}
 
 String action=args[0];
 
 
 
-if (action.trim().equals("create"))
+if (action.trim().equals("createBaseTables"))
 {
 	LocalDatabaseManager cld = new LocalDatabaseManager();
-	cld.createLocalDatabase("someVarible1");	
+	cld.createLocalDatabase("embeddedSQL.txt");	
 }
+
+else if (action.trim().equals("createSummaryIndexes"))
+{
+//	LocalDatabaseManager cld = new LocalDatabaseManager();
+//	cld.indexSummaryTables("");	
+}
+
+
+
+else if (action.trim().equals("createSummaryTables"))
+{
+	LocalDatabaseManager cld = new LocalDatabaseManager();
+	cld.createLocalDatabase("buildSummary.txt");	
+}
+
 
 else if (action.trim().equals("updateSummary")) 
 {
@@ -40,32 +69,11 @@ else if (action.trim().equals("updateSummary"))
 	us.updateSummary("someVarible1");	
 }
 
-else if (action.trim().equals("replicate")) 
-{
- LocalDatabaseManager cld = new LocalDatabaseManager();
-	cld.replicateCentralDatabase("someVarible1");	
-}
+
 else {System.out.println("unrecognized command");}
 
 }	
 
-
-
-
-
-/**
- *
- * This method will replicate the data stored on the central database to the
- * local database
- *
- */
-
-
-public void replicateCentralDatabase (String someVariable)
-{
-	
-	
-}
 
 
 
@@ -96,7 +104,6 @@ if( conn == null)
 
 	//assume that the idb database is alwas in the following relative directory
 	conn = DriverManager.getConnection("jdbc:idb:../../lib/idb/Examples/sample.prp");
-	
 	query = conn.createStatement ();
 	System.out.println("Connected."); 
 } 
@@ -123,7 +130,7 @@ String statement = " select plot.plot_id, plot.project_id, plot.plotType, "
 +" plotObservation.soiltype, plot.authorplotcode, plot.surfGeo, plot.state, " 
 +" plotObservation.parentplot, plotObservation.authorobscode, "
 +" plotObservation.soilDepth, plotObservation.leaftype "
-+" from plot, plotObservation where plot_id > 0 "
++" from plot, plotObservation where plot_id >= 0 "
 +" and plotObservation.parentplot = plot.plot_id ";
 
 	int returnFieldLength=27;
@@ -203,41 +210,41 @@ String leafType  =(String)summaryResultHash.get("leafType."+i);
 //check that not nulls
 if (plotId == null  )  {
 	plotId = "999";
-project_id = "999";
-plotType = "999";
-samplingMethod = "999";
- coverScale = "999";
-plotOriginLat = "999";
-plotOriginLong = "999";
-plotShape = "999";
-altValue = "999";
- slopeAspect= "999";
-slopeGradient= "999";
-slopePosition = "999";
- xCoord = "999";
- yCoord = "999";
-coordType= "999";
- obsStartDate = "999";
- obsStopDate = "999";
-effortLevel = "999";
- hardCopyLocation = "999";
- soilType = "999";
- authorPlotCode= "999";
- surfGeo = "999";
-state = "999";
- parentPlot=  "999";
- authorObsCode= "999";
-soilDepth = "999";
-leafType  = "999";
-	
+	project_id = "999";
+	plotType = "999";
+	samplingMethod = "999";
+	coverScale = "999";
+	plotOriginLat = "999";
+	plotOriginLong = "999";
+	plotShape = "999";
+	altValue = "999";
+	slopeAspect= "999";
+	slopeGradient= "999";
+	slopePosition = "999";
+	xCoord = "999";
+	yCoord = "999";
+	coordType= "999";
+	obsStartDate = "999";
+	obsStopDate = "999";
+	effortLevel = "999";
+	hardCopyLocation = "999";
+	soilType = "999";
+	authorPlotCode= "999";
+	surfGeo = "999";
+	state = "999";
+	parentPlot=  "999";
+	authorObsCode= "999";
+	soilDepth = "999";
+	leafType  = "999";
 }
+
 
 //fix this later
 obsStartDate= "2000";
 obsStopDate = "2000";
 authorObsCode = authorObsCode.replace('.', 'A').replace('#', 'C');
 authorPlotCode = authorPlotCode.replace('.', 'A').replace('#', 'C');
-surfGeo = surfGeo.replace(':', '_').replace(' ', '_').trim();
+surfGeo = surfGeo.replace(':', '_').replace(' ', '_').replace('\\', '_').trim();
 slopeAspect = slopeAspect.replace(':', '_').replace(' ', '_').trim();
 slopeGradient = slopeGradient.replace(':', '_').replace(' ', '_').trim();
 slopePosition = slopePosition.replace(':', '_').replace(' ', '_').trim();
@@ -249,20 +256,23 @@ String insertString = "INSERT INTO plotsitesummary (PLOT_ID, project_id, "
 +" yCoord, coordType,  obsStartDate,  obsStopDate, effortLevel, hardCopyLocation, "
 +" soilType, authorPlotCode, surfGeo, state, parentPlot, authorObsCode, soilDepth, "
 +" leafType ) VALUES ("+plotId+","+ project_id +","+plotType+","+ samplingMethod+","
-+coverScale+","+plotOriginLat+","+plotOriginLong+","+plotShape+","+altValue+","
-+slopeAspect+","+slopeGradient+","+ slopePosition+","+ xCoord +","+yCoord+","
-+coordType+","+obsStartDate+","+ obsStopDate+","+effortLevel+","+ hardCopyLocation+","
-+soilType+","+authorPlotCode+"," +surfGeo+"," +state+"," + parentPlot+","
-+ authorObsCode+","+ soilDepth+","+ leafType  +")";
++coverScale+","+plotOriginLat+","+plotOriginLong+",'"+plotShape+"',"+altValue+",'"
++slopeAspect+"','"+slopeGradient+"','"+ slopePosition+"',"+ xCoord +","+yCoord+",'"
++coordType+"',"+obsStartDate+","+ obsStopDate+","+effortLevel+",'"+ hardCopyLocation+"',"
++soilType+",'"+authorPlotCode+"','" +surfGeo+"'," +state+"," + parentPlot+",'"
++authorObsCode+"',"+ soilDepth+","+ leafType  +")";
 
-s.executeUpdate(insertString);
-
-
+//added this to get rid of the nulls that I am not sure where they are comming
+// from
+if (!plotId.equals("999")) {
+	s.executeUpdate(insertString);
+}
 
 }
 
-	
 
+
+	
 //now get the species summary information
 Hashtable speciesSummaryResultHash = new Hashtable();
 action="select";
@@ -308,7 +318,12 @@ if (OBS_ID == null ) {
 String insertString = "INSERT INTO PLOTSPECIESSUM (OBS_ID, AUTHORNAMEID, PERCENTCOVER, "
 +") values ("+OBS_ID+",'"+ AUTHORNAMEID +"',"+PERCENTCOVER+")";
 
-s.executeUpdate(insertString);
+//added this if statement to get rid of  the nulls that I'm not sure about the
+// origin of
+
+if (!OBS_ID.equals("999")) {
+	s.executeUpdate(insertString);
+}
 }
 
 
@@ -342,18 +357,22 @@ String PARENTPLOT = (String)parentPlotResultHash.get("PARENTPLOT."+i);
 String AUTHORPLOTCODE = (String)parentPlotResultHash.get("AUTHORPLOTCODE."+i);
 String OBS_ID = (String)parentPlotResultHash.get("OBS_ID."+i);
 
-if (OBS_ID == null) {OBS_ID = "999"; PARENTPLOT = "999";}
+if (OBS_ID == null  || PARENTPLOT==null || AUTHORPLOTCODE==null ) {OBS_ID = "999"; PARENTPLOT = "999";}
 
 //badly cheated here with the parent plot plot id to save time
 
 String insertString = "UPDATE plotSpeciesSum "
 +"	set PARENTPLOT  = "+PARENTPLOT+","
-+" AUTHORPLOTCODE = "+AUTHORPLOTCODE+","
++"  AUTHORPLOTCODE = "+AUTHORPLOTCODE+","
 +"  PLOT_ID = "+PARENTPLOT 
 +" WHERE PLOTSPECIESSUM.OBS_ID = "+OBS_ID;
 
-s.executeUpdate(insertString);
+//added this if statement to get rid of  the nulls that I'm not sure about the
+// origin of
 
+if (!OBS_ID.equals("999")) {
+	s.executeUpdate(insertString);
+}
 
 
 }
@@ -389,7 +408,7 @@ System.exit(1);
  */
 
 
-public void createLocalDatabase (String someVariable)
+public void createLocalDatabase (String sqlFile)
 {
 ResourceBundle rb = ResourceBundle.getBundle("LocalDatabaseManager");
 System.out.println("testing");
@@ -424,8 +443,8 @@ String resultString = null;
 //read the sql to create the local database into a vector
 String s = null;
 StringBuffer sb = new StringBuffer();
-//BufferedReader inSql = new BufferedReader(new FileReader("embeddedSQL.txt"));
-BufferedReader inSql = new BufferedReader(new FileReader("buildSummary.txt"));
+BufferedReader inSql = new BufferedReader(new FileReader(sqlFile));
+//BufferedReader inSql = new BufferedReader(new FileReader("buildSummary.txt"));
 
 
 while((s = inSql.readLine()) != null) {
