@@ -13,6 +13,8 @@ import java.rmi.server.UnicastRemoteObject;
 import PlotDataSource;
 //the plot loader
 import databaseAccess.DBinsertPlotSource;
+// the utility to test the system 
+import databaseAccess.utility;
 
 /** 
  *  Class that handles the upload of a plots data set to the VegBank database
@@ -31,8 +33,8 @@ import databaseAccess.DBinsertPlotSource;
  *	
  * <br> <br>
  *  '$Author: harris $'
- *  '$Date: 2002-07-25 16:47:20 $'
- * 	'$Revision: 1.16 $'
+ *  '$Date: 2003-01-03 18:34:20 $'
+ * 	'$Revision: 1.17 $'
  *
  *
  */
@@ -59,16 +61,23 @@ public class DataSourceImpl extends UnicastRemoteObject
 		 super();
 		 try
 		 {
+				
+				
 				System.out.println("DataSourceImpl >  starting the rmi server:  " );
+				// test the vegbank systrem
+				System.out.println("DataSourceImpl >  testing the VegBank services:  " );
+				utility util = new utility();
+				boolean success = util.testVegBankConnections();
+				System.out.println("DataSourceImpl >  VegBank services passed:  " + success );
+				
 				rb = ResourceBundle.getBundle("rmidatasource");
 				mdbFile = rb.getString("access_file");
 				System.out.println("DataSourceImpl > ms database file:  " + mdbFile );
 				xmlFile = rb.getString("xml_file");
 				System.out.println("DataSourceImpl > xml file:  " + xmlFile );
-				
-			 System.out.println("DataSourceImpl > plugin to be used: " + sourcePluginClass);
-			 source = new PlotDataSource(sourcePluginClass);
-			 System.out.println("DataSourceImpl > number of plots:  " + source.getPlotNames().size() );
+				System.out.println("DataSourceImpl > plugin to be used: " + sourcePluginClass);
+				source = new PlotDataSource(sourcePluginClass);
+				System.out.println("DataSourceImpl > number of plots:  " + source.getPlotNames().size() );
 			
 		 }
 		 catch (Exception e)
@@ -238,7 +247,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	 /**
 	  * 	method that examines the mdbFile stored in the location described by 
 		* 	'mdbFile' instance variable to verify that it is indeed an ms access 
-		* 	file
+		* 	file.
 		*/
 	 public boolean isMDBFileValid()
 	 {
