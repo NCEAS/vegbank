@@ -60,7 +60,7 @@ You may wish to reference the exact view of some data in VegBank, so that others
 To cite VegBank, copy the Accession Code for the data in question. </manualHTML>
     </manualItem>
     <manualHTML>
-    This section of the tutorial is devoted to Information about VegBank.  You can visit our <a href="@general_link@info.html">Information Page</a> to find out more about VegBank.  If you can't find what you're looking for, you can use the <a href="@general_link@contact.html">contact link</a> on the footer to either email the help desk: help@vegbank.org or to search the <a href="http://hyperion.nceas.ucsb.edu/vegbank/pipermail/users/">VegBank Users Listserv</a> for past questions and answers.
+    This section of the tutorial is devoted to Information about VegBank.  You can visit our <a href="@general_link@info.html">Information Page</a> to find out more about VegBank.  If you can't find what you're looking for, you can use the <a href="@general_link@contact.html">contact link</a> on the footer to either email the help desk: help@vegbank.org or to search the <a href="http://mercury.nceas.ucsb.edu/vegbank/pipermail/users/">VegBank Users Listserv</a> for past questions and answers.
     </manualHTML>
   </manualItem>
   <manualItem refURL="@forms_link@RegisterNewUser.jsp" name="register-as-new-user" topic="Register as New User">
