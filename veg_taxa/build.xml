@@ -23,27 +23,33 @@
 	<tstamp/>
 	
 	<property name="current" value="./" />
-	<property name="db_prop_file" value="./database.properties" />
+	<property name="db_prop_file" value="./lib/database.properties" />
 	<property name="build" value="build" />
 	<property name="build_bin" value="${build}/bin" />
+	<property name="build_sql" value="${build}/sql" />
 	<property name="build_lib" value="${build}/lib" />
 	<property name="build_src" value="${build}/src" />
 	<property name="build_data" value="${build}/data" />
 	<property name="release" value="development"/>
-	<filter token="version" value="development"/>
+	
 	<property name="data" value="./taxaData"/>
 	<property name="src" value="./src"/>
 	<property name="bin" value="./bin"/>
 	<property name="sql" value="./sql"/>
+	<property name="lib" value="./lib"/>
 	<property name="xmlFiles" value="./xmlfiles"/>
-	<filter token="dist" value="dist"/>
+	
 	<property name="toolsdir" value="/usr/local/devtools" />
-	<property name="localToolsDir" value="/home/computer/harris/tools" />	
-	<property name="xmlp" value="${localToolsDir}/xmlTools/xalan.jar:${localToolsDir}/xmlTools/xerces.jar:" />
+	<property name="localToolsDir" value="./lib/" />	
+	<property name="xmlp" value="${localToolsDir}xalan_1_2_2.jar:${localToolsDir}xerces_1_3_1.jar:" />
 	<property name="jdbc" value="${oracle_home}/jdbc/lib/classes111.zip" />
 	<property name="multipart" value="./servlet/multipart" />
 	<property name="cpath" value="${xmlp}:${jdbc}:${build}:${localToolsDir}:./"/>			
 
+	<filter token="version" value="development"/>
+	<filter token="dist" value="dist"/>
+		
+	
 </target>
 
 
@@ -52,17 +58,44 @@
 <target name="prepare" depends="init">
 	<mkdir dir="${build}" />
 	<mkdir dir="${build_bin}" />
+	<mkdir dir="${build_sql}" />
 	<mkdir dir="${build_src}" />
 	<mkdir dir="${build_lib}" />
 	<mkdir dir="${build_data}" />
 
-
+	
+	
+	<!-- copy the libraries that are needed
+		-->
+	<copydir src="${lib}" 
+		dest="${build_lib}" 
+		filtering="no"
+		includes="** "
+		excludes="**/CVS*"
+	/>
+	
+	
+	<!-- copy the sql scripts required to
+			run the software 
+		-->
+	<copydir src="${sql}" 
+		dest="${build_sql}" 
+		filtering="yes"
+		includes="**.sql "
+		excludes="**/CVS*"
+	/>
+	
+	<!-- copy the java src code 
+	-->
+		
 	<copydir src="${src}" 
 		dest="${build_src}" 
 		filtering="yes"
 		includes="**.java "
 		excludes="**/CVS*"
 	/>
+	
+	
 	<copydir src="${xmlFiles}"
 	  dest="${build_src}"
 		filtering="yes"
@@ -79,6 +112,7 @@
 		filtering="yes"
 		includes="**"	
 	/>
+	
 	<chmod dir="${build_bin}"
 		perm="a+x"
 		includes="**/*.sh"
@@ -117,7 +151,7 @@
 <target name="compile" depends="prepare">
 	<javac srcdir="${build_src}" 
 		classpath="${cpath}"
-		includes="USDAPlantsToXml.java USDAPlantsLoader.java USDAPlantsLoader2000.java" 
+		includes="PlantTaxaLoader.java USDAPlantsToXml.java USDAPlantsLoader.java USDAPlantsLoader2000.java" 
 		destdir="${build_src}"
 	/>
 </target>	
