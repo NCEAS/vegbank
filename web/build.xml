@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2004-04-21 18:00:56 $'
-* '$Revision: 1.99 $'
+* '$Author: mlee $'
+* '$Date: 2004-04-29 17:11:50 $'
+* '$Revision: 1.100 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -32,38 +32,33 @@
 		* Below are the basic propoerties and tokens for
 		* building the vegbank web site
 	-->
-
-
     <condition property="webapp" value="vegbank">
       <not>
         <isset property="webapp"/>
       </not>
     </condition>
     <echo>init webapp '${webapp}'</echo>
-
-
-	<!-- Get the main build.properties -->
+    <!-- Get the main build.properties -->
     <condition property="build.props.name" value="">
-		<!-- If webapp is 'vegbank', use blank -->
-		<or>
-        	<equals arg1="${webapp}" arg2="vegbank"/>
-			<not>
-        		<isset property="webapp"/>
-			</not>
-		</or>
+      <!-- If webapp is 'vegbank', use blank -->
+      <or>
+        <equals arg1="${webapp}" arg2="vegbank"/>
+        <not>
+          <isset property="webapp"/>
+        </not>
+      </or>
     </condition>
     <condition property="build.props.name" value=".${webapp}">
-		<!-- If webapp is not 'vegbank' -->
-		<and>
-			<isset property="webapp"/>
-			<not>
-        		<equals arg1="${webapp}" arg2="vegbank"/>
-			</not>
-		</and>
+      <!-- If webapp is not 'vegbank' -->
+      <and>
+        <isset property="webapp"/>
+        <not>
+          <equals arg1="${webapp}" arg2="vegbank"/>
+        </not>
+      </and>
     </condition>
     <echo>(web/) Loading main props file: ../build${build.props.name}.properties</echo>
     <property file="../build${build.props.name}.properties"/>
-
     <!-- The webapp that contains copy, images and other
 		resources is defined by web.context_uri and
 		makes the first part of the URI. -->
@@ -91,7 +86,7 @@
     <property name="hostname" value="vegbank"/>
     <property name="sharedhtml_src" value="./sharedhtml"/>
     <property name="workshop_src" value="./workshop"/>
-	<property name="apache.document.root" value="/usr/www/${webapp}/htdocs"/>
+    <property name="apache.document.root" value="/usr/www/${webapp}/htdocs"/>
     <property name="vegdocs.dir" value="/vegdocs"/>
     <property name="vegdocs_server" value="${apache.document.root}${vegdocs.dir}"/>
     <!-- large binary files location:   targets that read from large binaries separate -->
@@ -412,14 +407,13 @@
   </target>
   <target name="vbsummary" depends="email_templates" description="=&gt; dist a summary of data in vegbank to the appropriate page">
     <!-- create summary based on current VegBank database status -->
-	<echo>Creating vbsummary with databaseUser = ${databaseUser}</echo>
+    <echo>Creating vbsummary with databaseUser = ${databaseUser}</echo>
     <exec dir="./general" executable="psql">
       <arg line="-U ${databaseUser} ${databaseName} -f get_vb_stats_cmds.txt"/>
     </exec>
     <!-- copy summary file with filtering to general dir -->
     <copy overwrite="true" tofile="${general_server}/vbsummary.html" filtering="yes" file="./general/get_vb_stats_temp.html"/>
   </target>
-
   <target name="email_templates" depends="design" description="=&gt; dist email templates">
     <copy overwrite="true" todir="${email_templates_server}" filtering="yes">
       <fileset dir="${email_templates_src}"/>
@@ -529,7 +523,6 @@
 		tokenfiles
 		hdrftr
 		includes
-		manual
 		help
 		index
 		images
@@ -550,10 +543,7 @@
 MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
 	-->
   </target>
-  <target name="deploy-all" depends="deploy" description="=&gt; all in deploy plus slow rarely updated stuff">
-    <antcall target="manual"/>
-    <antcall target="vegbranch-dist-all"/>
-  </target>
+  <target name="deploy-all" depends="deploy, dictionary, dist-bins, manual, vegbranch-dist-all" description="=&gt; all in deploy plus slow rarely updated stuff"/>
   <target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
     <property name="webapp" value="vegtest"/>
     <antcall target="deploy"/>
@@ -563,7 +553,6 @@ MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
     <antcall target="dist"/>
   </target>
   <target name="dist-bins" depends="init, panel-big-bin , workshop-big-bin" description="=&gt; dist. all targets that require access to big binary storage "/>
-  <target name="dist" depends="deploy, help, manual, design, news, panel, vbsummary, history, pubs, workshop, dictionary, dist-bins" description="=&gt; dist all targets : DIST EVERYTHING! "/>
   <!-- FIXME [Fixed:(MTL)dictionary], images target expects files not in cvs -->
   <target name="getContextName">
     <!-- prompt -->
