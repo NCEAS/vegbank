@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: anderson $'
- *   '$Date: 2003-11-10 19:18:56 $'
- *   '$Revision: 1.13 $'
+ *   '$Date: 2003-11-10 19:35:53 $'
+ *   '$Revision: 1.14 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -551,11 +551,12 @@ public class UserManagementServlet extends HttpServlet
 						
 						// send email message to the user 
 						String mailHost = "hyperion.nceas.ucsb.edu";
-						String from = "vegbank";
+						String from = "help@vegbank.org";
 						String to = emailAddress;
-						String cc = "vegbank@nceas.ucsb.edu";
-						String subject = "VEGBANK CERTIFICATION RECEIPT";
-						String body = emailAddress + ": Please consider this as your receipt for VegBank certification request";
+						//String cc = "vegbank@vegbank.org";
+						String cc = "";
+						String subject = "Your VegBank Certification Request";
+						String body = emailAddress + ": Your VegBank certification request has been received.";
 						util.sendHTMLEmail(mailHost, from, to, cc, subject, body);
 						
 						// send the data to the vegbank administrator 
@@ -715,7 +716,7 @@ public class UserManagementServlet extends HttpServlet
 			 System.out.println( messageBody.toString() );
 			 //email this to the vegbank admin
 			 // send email message to the user 
-			 String mailHost = "nceas.ucsb.edu";
+			 String mailHost = "vegbank.org";
 			 String from = "vegbank";
 			 String to = vegBankAdmin;
 			 String cc = "panel@vegbank.org";
