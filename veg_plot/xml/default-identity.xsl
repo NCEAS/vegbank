@@ -126,17 +126,17 @@ PREV || NEXT
   			<xsl:value-of select="longitude"/>
 			</xsl:variable>
 			<!-- THE LINK TO THE SUMMARY REPORT-->
-			<a href="http://beta.nceas.ucsb.edu:8080/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude={$LONGITUDE}&amp;latitude={$LATITUDE}"> 
+			<a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude={$LONGITUDE}&amp;latitude={$LATITUDE}"> 
 				<img align="center" border="0" src="/vegbank/images/small_globe.gif" alt="Location"> </img> 
 			</a>
 			&#160;
 			<!-- THE LINK TO THE COMPREHENSIVE REPORT-->
-			<a href="http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId={$PLOTID}"> 
+			<a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId={$PLOTID}"> 
 				<img align="center" border="0" src="/vegbank/images/comprehensive_sm.gif" alt="Comprehensive view"> </img> 
 			</a>
 			&#160;
 			<!-- THE LINK TO THE SUMMARY-->
-			<a href="http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId={$PLOTID}"> 
+			<a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId={$PLOTID}"> 
 				<img align="center" border="0" src="/vegbank/images/report_sm.gif" alt="Comprehensive view"> </img> 
 			</a>
 			<br> </br>
@@ -183,17 +183,17 @@ PREV || NEXT
   			<xsl:value-of select="longitude"/>
 			</xsl:variable>
 			<!-- THE LINK TO THE SUMMARY REPORT-->
-			<a href="http://beta.nceas.ucsb.edu:8080/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude={$LONGITUDE}&amp;latitude={$LATITUDE}"> 
+			<a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude={$LONGITUDE}&amp;latitude={$LATITUDE}"> 
 				<img align="center" border="0" src="/vegbank/images/small_globe.gif" alt="Location"> </img> 
 			</a>
 			&#160;
 			<!-- THE LINK TO THE COMPREHENSIVE REPORT-->
-			<a href="http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId={$PLOTID}"> 
+			<a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId={$PLOTID}"> 
 				<img align="center" border="0" src="/vegbank/images/comprehensive_sm.gif" alt="Comprehensive view"> </img> 
 			</a>
 			&#160;
 			<!-- THE LINK TO THE SUMMARY-->
-			<a href="http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId={$PLOTID}"> 
+			<a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId={$PLOTID}"> 
 				<img align="center" border="0" src="/vegbank/images/report_sm.gif" alt="Comprehensive view"> </img> 
 			</a>
 			<br> </br>
