@@ -144,6 +144,7 @@ CREATE TABLE plantParty
     givenName varchar (50),
     middleName varchar (50),
     surName varchar (50),
+    email varchar (50), --jhh added 20020628
     organizationName varchar (100),
     currentName integer,
     contactInstructions varchar (1000),
