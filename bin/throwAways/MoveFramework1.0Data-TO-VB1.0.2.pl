@@ -48,7 +48,7 @@ print `psql  -U $username $dbname < readyForImport.sql`;
 print "\n######################################################################\n";
 print "# Need to fix the party_id on usr table\n"; 
 
-print `psql  -U $username $dbname --command "UPDATE usr SET party_id = (SELECT party_id FROM party WHERE usr.email_address = party.email);"`;
+print `psql  -U $username $dbname --command "UPDATE usr SET party_id = (SELECT min(party_id) FROM party WHERE usr.email_address = party.email);"`;
 
 print "\n######################################################################\n";
 print "#CLEAN UP\n";
