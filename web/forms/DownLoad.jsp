@@ -10,9 +10,9 @@
  *               National Center for Ecological Analysis and Synthesis
  *   Authors: @author@
  *
- *  '$Author: mlee $'
- *  '$Date: 2004-04-08 05:44:28 $'
- *  '$Revision: 1.5 $'
+ *  '$Author: anderson $'
+ *  '$Date: 2004-06-04 17:00:31 $'
+ *  '$Revision: 1.6 $'
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -139,6 +139,7 @@
             <td align="Left" valign="Top" width="229"> 
               <html:radio value="xml" property="formatType"/>xml<br/>
               <html:radio value="flat" property="formatType"/>flat-ascii<br/>
+              <html:radio value="vegbranch" property="formatType"/>VegBranch import-ready<br/>
               <br/>
             </td>
          </tr>

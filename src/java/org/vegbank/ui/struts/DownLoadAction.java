@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,12 +18,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.DynaActionForm;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.model.Observation;
-import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.XMLUtil;
 import org.vegbank.plots.datasink.ASCIIReportsHelper;
 import org.vegbank.plots.datasource.DBModelBeanReader;
+import org.vegbank.xmlresource.transformXML;
 
 import com.Ostermiller.util.LineEnds;
 
@@ -31,9 +34,9 @@ import com.Ostermiller.util.LineEnds;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-02-27 21:39:57 $'
- *	'$Revision: 1.8 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-06-04 17:00:31 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,9 +59,12 @@ import com.Ostermiller.util.LineEnds;
  */
 public class DownLoadAction extends Action
 {
+	private static Log log = LogFactory.getLog(DownLoadAction.class);
+
 	// Supported FormatTypes
 	private static final String XML_FORMAT_TYPE = "xml";
 	private static final String FLAT_FORMAT_TYPE = "flat";
+	private static final String VEGBRANCH_FORMAT_TYPE = "vegbranch";
 	
 	// Supported dataTypes
 	private static final String ALL_DATA_TYPE = "all";
@@ -68,6 +74,11 @@ public class DownLoadAction extends Action
 	// Response content Types
 	private static final String ZIP_CONTENT_TYPE = "application/x-zip";
 	private static final String DOWNLOAD_CONTENT_TYPE = "application/x-zip";
+
+	// Resource paths
+	private static ResourceBundle res = ResourceBundle.getBundle("vegbank");
+	private static final String VEGBRANCH_XSL_PATH = res.getString("vegbank2vegbranch_xsl");
+
 	
 	public ActionForward execute(
 		ActionMapping mapping,
@@ -75,7 +86,7 @@ public class DownLoadAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		LogUtility.log(" In DownLoadAction ");
+		log.debug(" In DownLoadAction ");
 		ActionErrors errors = new ActionErrors();
 		String fwd = null; // Do not go forward if successfull, download file
 		
@@ -86,7 +97,7 @@ public class DownLoadAction extends Action
 		String formatType = (String) thisForm.get("formatType");
 		String[] plotsToDownLoad = (String[]) thisForm.get("plotsToDownLoad");
 		
-		LogUtility.log("dataType = " + dataType + ", formatType = " + formatType +", plotsToDownLoad = " + plotsToDownLoad);
+		log.debug("dataType = " + dataType + ", formatType = " + formatType +", plotsToDownLoad = " + plotsToDownLoad);
 		
 		try
 		{
@@ -116,10 +127,7 @@ public class DownLoadAction extends Action
 					OutputStream responseOutputStream = response.getOutputStream();
 					responseOutputStream.flush();
 					
-					// TODO: Get the OS of user if possible and return a native file	
-					// For now use DOS style, cause those idiots would freak with anything else ;)					
 					ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS );
-					/////////////////
 						
 				}
 				else
@@ -206,6 +214,59 @@ public class DownLoadAction extends Action
 					}
 				}
 			}
+			else if ( formatType.equalsIgnoreCase( VEGBRANCH_FORMAT_TYPE ) )
+			{
+				// Check that all data is requested
+				if ( dataType.equalsIgnoreCase( ALL_DATA_TYPE ) )
+				{
+					// Store the returned ModelBean Trees
+					Collection plotObservations = this.getPlotObservations(plotsToDownLoad);
+			
+					// wrap in XML
+					String xml = XMLUtil.getVBXML(plotObservations);
+
+					java.io.File f = new java.io.File(VEGBRANCH_XSL_PATH);
+					log.debug("XSL file: " + f.getAbsolutePath());
+					if (f.exists()) {
+						log.debug("XSL file exists");
+					}
+					
+					// Use XSLT to transform the XML
+					transformXML transformer = new transformXML();
+					String xmlToImport = transformer.getTransformedFromString(xml, VEGBRANCH_XSL_PATH);
+
+					log.debug("Transformed XML; VegBranch CSV:\n" + xmlToImport);
+
+					/////////////////
+					// ZIP the CSV doc
+					/////////////////
+					this.initResponseForFileDownLoad(response, "VegBranchImport.zip", ZIP_CONTENT_TYPE);
+					
+					Hashtable nameContent = new Hashtable();
+					nameContent.put("VegBranchImport.csv", xmlToImport);
+					OutputStream responseOutputStream = response.getOutputStream();
+					responseOutputStream.flush();
+					
+					ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS );
+					/////////////////
+						
+				}
+				else
+				{
+					// Invalid Request --- xml formatType only supports dataType all
+					errors.add(
+						Globals.ERROR_KEY,
+						new ActionMessage(
+							"errors.action.failed",
+							"Download '"
+								+ VEGBRANCH_FORMAT_TYPE
+								+ "' formatType only supports - dataType = '"
+								+ ALL_DATA_TYPE
+								+ "', '"
+								+ dataType
+								+ "' not supported"));
+				}
+			}
 			else
 			{
 				// Invalid Request
@@ -216,7 +277,7 @@ public class DownLoadAction extends Action
 		}
 		catch (Exception e)
 		{
-			LogUtility.log("DownLoadAction: " + e.getMessage(), e);
+			log.debug("DownLoadAction: " + e.getMessage(), e);
 			e.printStackTrace();
 			errors.add(
 				Globals.ERROR_KEY,
@@ -247,7 +308,7 @@ public class DownLoadAction extends Action
 		// Get the plots
 		for ( int i = 0; i < plotsToDownLoad.length ; i++ )
 		{
-			LogUtility.log("DownLoadAction : DownLoading " + plotsToDownLoad[i]);
+			log.debug("DownLoadAction : DownLoading " + plotsToDownLoad[i]);
 			Observation observation = (Observation) dbmbReader.getVBModelBean( plotsToDownLoad[i]  );
 			plotObsersevations.add(observation);
 		}
@@ -263,7 +324,7 @@ public class DownLoadAction extends Action
 	
 	private void sendFileToBrowser( String fileContents, HttpServletResponse response ) throws IOException
 	{
-		//LogUtility.log(fileContents);
+		//log.debug(fileContents);
 		response.getWriter().write(fileContents);
 	}
 }

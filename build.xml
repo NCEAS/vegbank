@@ -8,8 +8,8 @@
   *  % echo "[build.context]" | ant [target]
   *
   *     '$Author: anderson $'
-  *     '$Date: 2004-05-08 01:10:16 $'
-  *     '$Revision: 1.44 $'
+  *     '$Date: 2004-06-04 17:00:31 $'
+  *     '$Revision: 1.45 $'
 --> 
 <project name="Vegbank" default="jar" basedir=".">
 
@@ -108,6 +108,7 @@
     <filter token="rmiserver"  value="${rmiserver}"/>
     <filter token="uploadDir" value="${web.lib.dir}"/>
     <filter token="servlet_lib_dir" value="${web.lib.dir}/" />
+    <filter token="servlet_context" value="${web.context}/" />
 
     <!--
       * Make all the build directories
@@ -235,6 +236,11 @@
 	<copy todir="${web.context}">
 		<fileset dir="${build.java.src.dir}" includes="velocity.properties"/>
 	</copy> 
+
+	<copy todir="${web.context}/xsl">
+		<fileset dir="${xsl.src.dir}" includes="**/*.xsl"/>
+	</copy> 
+
   </target>
 
 
