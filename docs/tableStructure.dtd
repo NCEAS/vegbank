@@ -1,7 +1,7 @@
 <!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!ENTITY % Boolean "(true | false) 'false'">
 <!ELEMENT dataModel (title, author, institution, contributor, description, date, entity)>
-<!ELEMENT entity (entityName*, entitySummary*, entityDescription*, attribute*, children*, childrenRef*)>
+<!ELEMENT entity (entityName*, entitySummary*, entityDescription*, module, attribute*, children*, childrenRef*)>
 <!ELEMENT attribute (attName, attNulls, attType, attKey, attReferences, attNotes, attDefinition, defaultValue*, TVCompliant*, TVName*, businessRules*)>
 <!ELEMENT businessRules (constraintAttribute | required | (minCharacterLength | maxCharacterLength)* | (minNumericValue, maxNumericValue))>
 <!ELEMENT institution (#PCDATA)>
@@ -21,6 +21,7 @@
 <!ELEMENT attDefinition (#PCDATA)>
 <!ELEMENT TVCompliant (#PCDATA)>
 <!ELEMENT TVName (#PCDATA)>
+<!ELEMENT module (#PCDATA)>
 <!ELEMENT children (#PCDATA)>
 <!ELEMENT childrenRef (#PCDATA)>
 <!ELEMENT required (#PCDATA)>
