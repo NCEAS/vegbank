@@ -32,6 +32,7 @@ String searchString = xwhereParams;
 if (xwhereParams == null) {
 	xwhereParams = "vb";
 	searchString = "";
+	request.setAttribute("xwhereParams", xwhereParams);
 }
 
 String clearSearch = request.getParameter("clearSearch");
