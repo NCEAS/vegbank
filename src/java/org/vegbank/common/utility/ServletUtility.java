@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: anderson $'
- *  '$Date: 2004-04-15 02:04:11 $'
- *  '$Revision: 1.12 $'
+ *  '$Date: 2004-06-10 21:42:25 $'
+ *  '$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,18 +27,7 @@ package org.vegbank.common.utility;
  */
 
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.util.*;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
@@ -79,10 +68,15 @@ public class ServletUtility
 	 *
 	 * @param nameContent -- the Hashtable containing the filesContent (as String ) and the file names
 	 * @param outStream -- OutputStream to  take zipped up files
-	 * @param style line separator style.
+	 * @param style -- line separator style.
+	 * @param encoding -- charset (e.g. UTF-8, UTF-16)
 	 *
 	 */
-	public static void  zipFiles(Hashtable nameContent, OutputStream outStream, int style ) throws IOException
+	public static void zipFiles(Hashtable nameContent, OutputStream outStream, int style) throws IOException {
+		zipFiles(nameContent, outStream, style, null);
+	}
+
+	public static void zipFiles(Hashtable nameContent, OutputStream outStream, int style, String encoding) throws IOException
 	{
 		ZipOutputStream zipstream = new ZipOutputStream(outStream);
 		
@@ -95,14 +89,37 @@ public class ServletUtility
 			ZipEntry zipentry = new ZipEntry(fileName);
 			zipstream.putNextEntry(zipentry);
 			
-			int count;
-			byte data[] = new byte[BUFFER];
-			
-			ByteArrayInputStream origin = new ByteArrayInputStream(fileContent.getBytes());
-			OutputStream originToConvert = new ByteArrayOutputStream();
+			ByteArrayInputStream origin;
+			try {
+				// Set up an input stream with the given character encoding
+				if (Utility.isStringNullOrEmpty(encoding)) {
+					origin = new ByteArrayInputStream(fileContent.getBytes());
+				} else {
+					origin = new ByteArrayInputStream(fileContent.getBytes(encoding));
+				}
 
-			LineEnds.convert(origin, zipstream, LineEnds.STYLE_DOS);
-			
+			} catch(UnsupportedEncodingException uex) {
+				// Use the platform's default charset
+				origin = new ByteArrayInputStream(fileContent.getBytes());
+			}
+
+
+			// handle line endings, or not if binary data
+			// -- TODO: make better check for binary data
+			// -- other than whether encoding is set or not
+			if (Utility.isStringNullOrEmpty(encoding)) {
+				LineEnds.convert(origin, zipstream, LineEnds.STYLE_DOS);
+
+			} else {
+				
+				// handle as binary data
+				int c = origin.read();
+				while (c != -1) {
+					zipstream.write(c);
+					c = origin.read();
+				}
+			}
+
 			origin.close();	
 		}
 		zipstream.close();

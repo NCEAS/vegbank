@@ -32,8 +32,8 @@ import com.Ostermiller.util.LineEnds;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-09 22:40:23 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-06-10 21:42:25 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,6 +71,8 @@ public class DownLoadAction extends Action
 	// Response content Types
 	private static final String ZIP_CONTENT_TYPE = "application/x-zip";
 	private static final String DOWNLOAD_CONTENT_TYPE = "application/x-zip";
+	private static final String VEGBRANCH_CONTENT_TYPE = "text/text; charset=UTF-16";
+	private static final String VEGBRANCH_ZIP_CONTENT_TYPE = "application/x-zip; charset=UTF-16";
 
 	// Resource paths
 	private static ResourceBundle res = ResourceBundle.getBundle("vegbank");
@@ -204,38 +206,58 @@ public class DownLoadAction extends Action
 
 				// transform
 				String vegbranchCSV = null;
-				log.debug("finding XSL file: " + branchXSL);
-				File f = new File(branchXSL);
+				log.debug("finding XSL file: " + VEGBRANCH_XSL_PATH);
+				File f = new File(VEGBRANCH_XSL_PATH);
 				if (f.exists()) {
 					transformXML transformer = new transformXML();
-					vegbranchCSV = transformer.getTransformedFromString(xml, branchXSL);
+					//////// Get as string, not UTF-16
+					vegbranchCSV = transformer.getTransformedFromString(xml, VEGBRANCH_XSL_PATH);
+					
+					// use a writer
+					//Writer writer = new Writer();
+					//transformer.getTransformedFromString(xml, VEGBRANCH_XSL_PATH, writer);
+
 				} else {
 					errors.add(Globals.ERROR_KEY,
 						new ActionMessage("errors.action.failed",
 							"Problem creating VegBranch download file: no XSL"));
 				}
 
+				/*
 				if (Utility.isStringNullOrEmpty(vegbranchCSV)) {
 					errors.add(Globals.ERROR_KEY,
 						new ActionMessage("errors.action.failed",
 							"Problem creating VegBranch download file: empty file"));
 				}
+				*/
 
 				
-				/////////////////
-				// ZIP the XML doc
-				/////////////////
-				this.initResponseForFileDownLoad(response, "VegbranchImport.zip", ZIP_CONTENT_TYPE);
-				
-				Hashtable nameContent = new Hashtable();
-				nameContent.put("vegbranch_import.csv", vegbranchCSV);
-				OutputStream responseOutputStream = response.getOutputStream();
-				responseOutputStream.flush();
-				
-				// TODO: Get the OS of user if possible and return a native file	
-				// For now use DOS style, cause those idiots would freak with anything else ;)					
-				ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS );
-				/////////////////
+				boolean doZip = true;
+				if (doZip) {
+					/////////////////
+					// ZIP the XML doc
+					/////////////////
+					this.initResponseForFileDownLoad(response, "VegbranchImport.zip", VEGBRANCH_ZIP_CONTENT_TYPE);
+					
+					Hashtable nameContent = new Hashtable();
+					nameContent.put("vegbranch_import.csv", vegbranchCSV);
+					OutputStream responseOutputStream = response.getOutputStream();
+					responseOutputStream.flush();
+					
+					// TODO: Get the OS of user if possible and return a native file	
+					// For now use DOS style, cause those idiots would freak with anything else ;)					
+					log.debug("Zipping VegbranchImport.zip");
+					ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS, "UTF-16" );
+					/////////////////
+
+				} else {
+					this.initResponseForFileDownLoad( response, "VegbranchImport.csv", VEGBRANCH_CONTENT_TYPE);
+					//response.setCharacterEncoding("UTF-16");
+					this.sendFileToBrowser( vegbranchCSV , response);
+
+				}
+
+
 			}
 			else
 			{
