@@ -13,8 +13,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-08-26 18:06:08 $'
-*  '$Revision: 1.6 $'
+*  '$Date: 2004-08-27 17:39:55 $'
+*  '$Revision: 1.7 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -40,83 +40,152 @@
  
 <meta http-equiv="Content-Type" content="text/html; charset=">
 </HEAD>
-<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
+<BODY>
+<div align="center"> 
 @vegbank_header_html_normal@
  
-<blockquote> 
-  <h2 align="center"><br>
-    <span class="VegBank">Welcome to Vegbank</span></h2>
-  <h4 class="VegBank">Here are your options:</h4>
 
-  <ul>
-    <li> 
-      <h4 class="VegBank">Access or submit 
-	  <a href="@general_link@plots.html">Plot</a> data</h4>
-    </li>
 
-    <li> 
-      <h4 class="VegBank">Access or submit 
-	  <a href="@general_link@types.html">Community Type</a> data</h4>
-    </li>
+  <h1 align="center">
+    <span >Welcome to Vegbank</span></h1>
+  <h4 >Here are your options:</h4>	
+	         
+           
+	<TABLE  cellpadding="0" cellspacing="0" border="0">
+	
+  
+		  <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
+	<TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">View Data</span></TD><td/></TR>
+	   
+	<TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@magnglas.png" /> </TD><TD>	       
+  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+  
+     
+      <h2 >Search for <a href="@general_link@plots.html">Plots</a></h2>
+      </td><td>
+        <p >&raquo; <a href="@forms_link@plot-query-simple.jsp">Simple 3-in-1 query</a>  &raquo; 
+        <a href="@plotquery_page@">Advanced query</a> </p>
+      </td>
+	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+    
 
-    <li> 
-      <h4 class="VegBank"><span class="VegBank">Access or submit 
-	  <a href="@general_link@plants.html">Plant Taxon</a> data</span></h4>
-    </li>
+     
+      <h4 >Search for 
+	  <a href="@forms_link@community-query.html">Community Types</a></h4>
+      </td> </tr>
+	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
 
-    <li>
-      <h4 class="VegBank">
-        <span class="VegBank">Access or submit 
-		<a href="@general_link@metadata.html">Supplemental Data in VegBank</a>, 
-		e.g. Methods, People, Projects, References<br/>
-        </span>
+     
+      <h4 ><span >Search for  
+	  <a href="@forms_link@PlantQuery.jsp">Plants</a> </span></h4>
+    </td> </tr>
+	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+
+    
+      <h4 >
+        View  
+		<a href="@general_link@metadata.html">Supplemental Data</a> 
+		
+      
       </h4>
-    </li>
+    </td> <td><p>e.g. Methods, People, Projects, References</p></td></tr>
+	  </table>
+	  </TD></TR>
+	 <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
+		  	   <TR><TD colspan="1" bgcolor="#CCCCCC" align="center"><span class="greytext">My Preferences</span></TD><td/></TR>
+	 <TR valign="middle"><TD align="center"><img src="@images_link@users.png" /></TD><TD>
+	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
     
     
 	<!--li> 
-		<h4 class="VegBank">Access or submit <a href="@general_link@parties.html">Parties</a> data</h4>
-		<h4 class="VegBank">Access or Submit Parties data 
+		<h4 >Access or submit <a href="@general_link@parties.html">Parties</a> data</h4>
+		<h4 >Access or Submit Parties data 
 		<font color="#F90000"> <b> Coming soon! </b></font> </h4>
     </li-->
-
-    <li> 
-      <h4 class="VegBank">
+<!--
+     
+      <h4 >
           Edit your VegBank <html:link action="LoadUser.do">Profile</html:link>
         
-      </h4>
-			
-		<!--
-      <h4 class="VegBank">View your VegBank Account  
-		<font color="#F90000"> <b> Coming soon! </b></font> </h4>
-		-->
-    </li>
+      </h4> 
+-->			
+	
+      <h4 >View your <a href="@general_link@account.html">VegBank Account </a> 
+		 </h4>
+		</td> </tr>
+	  </table>
+	      </TD></TR>
+	        <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
+	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext" >Info</span></TD><td/></TR>
+	   
+		  	  
+	<TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@info.png" /></TD><TD>
+
+	  
+	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
     
-    <li>
-      <h4 class="VegBank">
+    
+  <!--  
+      <h4 >
         
           Apply to become a <html:link action="LoadCertification.do">Certified VegBank User</html:link>
 	<a href="@help-for-certification-href@"><img border="0" src="@image_server@question.gif"></a>
       </h4>
-    </li>
-    
-    <li> 
-      <h4 class="VegBank"><span class="VegBank">See our 
-	  	<a href="@general_link@sitemap.html">Site Map</a></span>
-		<font color="#F90000"><b> Newly updated! </b></font></h4>
-    </li>		
+     -->
+     
+      <h4 >See our 
+	  	<a href="@general_link@sitemap.html">Site Map</a> </h4></td><td>
+		<p><font color="#F90000"> Newly updated! </font></p>
+    		
 
-    <li> 
-      <h4 class="VegBank"><span class="VegBank">Annotate data</span>
-	  <font color="#F90000"><b> Coming soon! </b></font></h4>
-    </li>		
-		
+    </td> </tr>
+	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+      <h4 >See a <a href="@forms_link@vbsummary.jsp">Summary of data</a> 
+      </h4>
+      </td> </tr>
+	  </table>
+	  </TD></TR>
+	  	<TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
+		 <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Add Data</span></TD><td/></TR>
+ 
+	  <TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@upload.png" /></TD><TD>
+	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+    
+      <h4 >Load <a href="@DisplayUploadPlotAction@">Plot Data</a></h4>
+     </td><td>
+	  <p >
+      
+     &raquo; Download<a href="@vegbranch_link@vegbranch.html"> VegBranch</a></p>
+     </td> </tr>
+	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+
+     
+      <h4 >Annotate data</h4></td><td>
+	  <p><font color="#F90000"> Coming soon! </font></p>
+    		
+	
 	<!--li>
-      <h4 class="VegBank"><a href="@general_link@client.html">Download</a> 
+      <h4 ><a href="@general_link@client.html">Download</a> 
         the Desktop Client</h4>
 	</li-->
-  </ul>
-
+  </td></tr>
+</table>
+ 
+ <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+ 
+      
+       <h4><a href="@general_link@input.html">Input Data</a> In Forms</h4></td><td>
+ 	 
+     		
+ 	
+ 	<!--li>
+       <h4 ><a href="@general_link@client.html">Download</a> 
+         the Desktop Client</h4>
+ 	</li-->
+   </td></tr>
+</table>
+ 
+</TD></TR></TABLE>
 	<!-- Admin -->
 <% 
 	Boolean isAdmin = (Boolean)(request.getSession().getAttribute("isAdmin"));
@@ -124,19 +193,20 @@
 	if (isAdmin != null) {
 		if (isAdmin.booleanValue()) {
 %>
-    <hr noshade="true"/>
-      <h4 class="VegBank">ADMINISTRATION
-	  <ul>
-		<li><h4 class="VegBank">Go to the 
+    <hr true/>
+      <h4 >ADMINISTRATION</h4>
+	  
+		<h4 >Go to the 
 			<html:link action="AdminMenu.do">Admin Menu</html:link></h4>
-		</li>
-	  </ul>
+		
+	  
 <% 
 		}
 	} 
 %>
-</blockquote>
+
 <br/>
 @vegbank_footer_html_tworow@
+</div>
 </BODY>
 </HTML>
