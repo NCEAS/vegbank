@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-11-17 21:20:42 $'
-* '$Revision: 1.132 $'
+* '$Date: 2004-11-18 18:44:07 $'
+* '$Revision: 1.133 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -100,10 +100,9 @@
     <property name="history_src" value="./history"/>
     <property name="plot" value="./plot"/>
     <property name="pubs_src" value="./pubs"/>
-    <property name="style_src" value="./includes"/>
+    <property name="includes_src" value="./includes"/>
     <property name="image_src" value="./images"/>
     <property name="hostname" value="vegbank"/>
-    <property name="sharedhtml_src" value="./sharedhtml"/>
     <property name="workshop_src" value="./workshop"/>
     <property name="vegdocs.dir" value="${machine_url}/vegdocs"/>
     <property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
@@ -128,7 +127,7 @@
     <property name="panel_server" value="${vegdocs_server}/panel/"/>
     <property name="history_server" value="${vegdocs_server}/history/"/>
     <property name="pubs_server" value="${vegdocs_server}/pubs/"/>
-    <property name="style_server" value="${tomcat.home.dir}/webapps/${webapp}/includes/"/>
+    <property name="includes_server" value="${tomcat.home.dir}/webapps/${webapp}/includes/"/>
     <property name="vegbank_server" value="${tomcat.home.dir}/webapps/${webapp}/"/>
     <property name="workshop_server" value="${vegdocs_server}/workshop/"/>
     <property name="help_server" value="${vegdocs_server}/help/"/>
@@ -200,21 +199,21 @@
   <target name="hdrftr" depends="tokenfiles" description="=&gt; deprecated.">
     <!-- set the properties file that replaces tokens with closed list values in picklists -->
     <!--    
-	<filter filtersfile="${style_server}/closedlist-tokens.properties"/>
+	<filter filtersfile="${includes_server}/closedlist-tokens.properties"/>
 	-->
     <!-- set the properties file as a filtersfile to distribute headers and footers -->
     <!--    
-    <filter filtersfile="${style_server}/filters_detokened.properties"/>
-    <filter filtersfile="${style_server}/url2get_data.properties"/>
-    <filter filtersfile="${style_server}/manual_filters.properties"/>
+    <filter filtersfile="${includes_server}/filters_detokened.properties"/>
+    <filter filtersfile="${includes_server}/url2get_data.properties"/>
+    <filter filtersfile="${includes_server}/manual_filters.properties"/>
 	-->
   </target>
   <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
   <target name="includes" depends="hdrftr" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
-    <copy overwrite="true" todir="${style_server}" filtering="true">
-      <!-- <fileset dir="${style_src}" includes="**.css **/*jsp **.js"/> -->
+    <copy overwrite="true" todir="${includes_server}" filtering="true">
+      <!-- <fileset dir="${includes_src}" includes="**.css **/*jsp **.js"/> -->
       <!-- Why not just copy all? -->
-      <fileset dir="${style_src}" includes="**.* **/*jsp"/>
+      <fileset dir="${includes_src}" includes="**.* **/*jsp"/>
     </copy>
   </target>
   <target name="index" depends="help" description="=&gt; target to dist. the index.html file">
@@ -443,22 +442,23 @@
     <ant dir="../docs/xml" target="dist-dataxml"/>
   </target>
   <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
+    <!-- pattern for this target: (optional: style xml to get tokens), copy from includes to includes_server, set filtersfile on server copy, post filtering -->
     <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
-    <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
-    <filter filtersfile="${style_server}/filters_detokened.properties"/>
-    <copy file="${sharedhtml_src}/placeurl.properties" tofile="${style_server}/placeurl_detokened.properties" filtering="yes" overwrite="yes"/>
-    <filter filtersfile="${style_server}/placeurl_detokened.properties"/>
+    <copy file="${includes_src}/filters.properties" tofile="${includes_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
+    <filter filtersfile="${includes_server}/filters_detokened.properties"/>
+    <copy file="${includes_src}/placeurl.properties" tofile="${includes_server}/placeurl_detokened.properties" filtering="yes" overwrite="yes"/>
+    <filter filtersfile="${includes_server}/placeurl_detokened.properties"/>
     <style in="${vegbranch_src}/docs/demo/demomap.xml" out="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" style="${vegbranch_src}/docs/demo/maptofilters.xsl" force="true"/>
-    <copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${style_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="yes"/>
-    <filter filtersfile="${style_server}/vegbranchdemo_filters_detokened.properties"/>
+    <copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${includes_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="yes"/>
+    <filter filtersfile="${includes_server}/vegbranchdemo_filters_detokened.properties"/>
     <!-- set the properties file that replaces tokens with closed list values in picklists -->
-    <copy file="${sharedhtml_src}/url2get_data.properties" tofile="${style_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
-    <filter filtersfile="${style_server}/url2get_data.properties"/>
+    <copy file="${includes_src}/url2get_data.properties" tofile="${includes_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
+    <filter filtersfile="${includes_server}/url2get_data.properties"/>
     <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="true"/>
-    <copy file="${manual_src}/manual_filters.properties" tofile="${style_server}/manual_filters.properties" filtering="yes" overwrite="yes"/>
-    <filter filtersfile="${style_server}/manual_filters.properties"/>
+    <copy file="${manual_src}/manual_filters.properties" tofile="${includes_server}/manual_filters.properties" filtering="yes" overwrite="yes"/>
+    <filter filtersfile="${includes_server}/manual_filters.properties"/>
     <!--<ant dir="${basedir}/../docs/xml" target="dist-closedlist-tokenfile"/>
-    <filter filtersfile="${style_server}/closedlist-tokens.properties"/> -->
+    <filter filtersfile="${includes_server}/closedlist-tokens.properties"/> -->
   </target>
   <target name="vbsummary" depends="email_templates" description="=&gt; DEPRECATED : does nothing!">
     <!-- create summary based on current VegBank database status -->
