@@ -40,8 +40,8 @@
 
 <tr><td colspan="4"><span class="datalabelsmall">Plot-observations of this Community Concept:</span>
 <vegbank:get id="observation" select="observation_count" 
-  where="where_commconcept_observation_complex" beanName="map" 
-  wparam="concId" perPage="-1" pager="false" />
+  where="where_commconcept_observation_complex" 
+  wparam="concId" perPage="-1" pager="false" beanName="map"  />
 <logic:empty name="observation-BEAN">
 -none-
 </logic:empty>
@@ -61,29 +61,59 @@
 <logic:notEmpty name="commstatus-BEANLIST">
 <logic:iterate id="statusbean" name="commstatus-BEANLIST">
 <bean:define id="thispartyacccode" name="statusbean" property="party_accessioncode" /> <!-- get accCode of this party as bean -->
+<bean:define id="thispartyid" name="statusbean" property="party_id" />
 <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td class="grey" colspan="3">
 <!-- party perspective -->
 <span class="datalabelsmall">Party Perspective according to: </span>
-<bean:write name="statusbean" property="party_id_transl" />
+<a href='@get_link@std/party/<bean:write name="thispartyid" />'><bean:write name="statusbean" property="party_id_transl" /></a>
 </td></tr>
 <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
 <td valign="top" class="grey" >
-&nbsp;&nbsp;&nbsp;
-<span class="datalabelsmall">status: </span><strong><bean:write name="statusbean" property="commconceptstatus" /></strong>
-<logic:notEmpty name="statusbean" property="commlevel">
-<br/>
-&nbsp;&nbsp;&nbsp;
-<span class="datalabelsmall">Level:</span>
-<bean:write name="statusbean" property="commlevel" />
-</logic:notEmpty><!-- has level-->
-<logic:notEmpty name="statusbean" property="commparent_id">
-<br/>
-&nbsp;&nbsp;&nbsp;
-<span class="datalabelsmall">Parent: </span><a href='@get_link@std/commconcept/<bean:write name="statusbean" property="commparent_id" />'><bean:write name="statusbean" property="commparent_id_transl" /></a>
-</logic:notEmpty><!-- has parent-->
+<ul class="compact">
+ <li><span class="datalabelsmall">status: </span><strong><bean:write name="statusbean" property="commconceptstatus" /></strong>
+ 
+ </li>
+ <logic:notEmpty name="statusbean" property="commparent_id">
+ <li>
+   <img src="@images_link@uparr.gif" /><span class="datalabelsmall">Community's Parent: </span><a href='@get_link@std/commconcept/<bean:write name="statusbean" property="commparent_id" />'><bean:write name="statusbean" property="commparent_id_transl" /></a>
+ </li>
+ </logic:notEmpty><!-- has parent-->
 
+ <logic:notEmpty name="statusbean" property="commlevel">
+ <li>
+  <span class="datalabelsmall">This Community's Level:</span>
+  <bean:write name="statusbean" property="commlevel" />
+ </li></logic:notEmpty><!-- has level-->
 
+ <li>
+    
+    <!-- now show any children, which is inverted lookup -->
+    <img src="@images_link@downarr.gif" /><span class="datalabelsmall">This Community's Children: </span>
+    
+    <!-- create complex wparam, using concept_ID ; party_id -->
+    
+    <vegbank:get id="commchildren" select="commchildren" where="where_commchildren" 
+      wparam="<%= concId + Utility.PARAM_DELIM + thispartyid %>" 
+      perPage="-1" pager="false" beanName="map" />
+    <logic:notEmpty name="commchildren-BEANLIST">  
+      
+     <span class="datalabelsmall"> <a href="javascript:showorhidediv('commchildren-for-<bean:write name="statusbean" property="commstatus_id" />')">Show/Hide</a> </span> </br>
+   <div id='commchildren-for-<bean:write name="statusbean" property="commstatus_id" />'>
+    <logic:iterate id="onerowofcommchildren" name="commchildren-BEANLIST">
+      <ul class="compact">
+      <li>&nbsp;&nbsp;<a href='@get_link@std/commconcept/<bean:write name="onerowofcommchildren" property="commconcept_id" />'><bean:write name="onerowofcommchildren" property="commconcept_id_transl" /></a></li>
+      </ul>
+    </logic:iterate>
+
+   </div>
+   </logic:notEmpty>
+   <logic:empty name="commchildren-BEANLIST">
+    [none]
+   </logic:empty>
+  </li>
+  </ul>
 <!-- end status -->
 </td>
 <!-- spacer grey -->
