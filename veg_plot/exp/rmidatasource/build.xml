@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-05-16 14:34:26 $'
- 	*     '$Revision: 1.11 $'
+ 	*     '$Date: 2002-05-16 16:07:39 $'
+ 	*     '$Revision: 1.12 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -114,13 +114,10 @@
   	</copy>
 
 		<!-- tar the server software -->
-		<tar tarfile="${bin}/rmiserver.tar"
+		<tar tarfile="${lib}/rmiserver.tar"
        basedir="${rmiregistry}"
        excludes=""
 		/>
-
-
-		
 	</target>
 	
 	
