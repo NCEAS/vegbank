@@ -1,4 +1,3 @@
-
 <!-- 
   *   '$RCSfile: plot-upload.html,v $'
   *     Purpose: web form tosubmit community data to vegbank system
@@ -7,8 +6,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-05-28 18:01:05 $'
-  *  '$Revision: 1.11 $'
+  *      '$Date: 2002-07-18 04:00:18 $'
+  *  '$Revision: 1.12 $'
   *
   *
   -->
@@ -21,20 +20,38 @@
 			VEGBANK VEGETATION PLOT DATA SUBMITTAL WIZARD
 		</title>
 		<link REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css">
+<script language="JavaScript">
+<!--
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+// -->
+</script>
 	</head>
 
 
-<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
+<body BGCOLOR="#FFFFFF" text="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
+
+<form action= "http://128.111.220.69/framework/servlet/dataexchange" enctype="multipart/form-data" method="post">
+<input type="hidden" name="submitDataType" value="vegPlot">
+<input type="hidden" name="action" value="upload">		
+<input type="hidden" name="referPage" value="continue with the plot upload wizard">
+<input type="hidden" name="referUrl" value="@datasubmitservlet@/?action=upload&submitDataType=vegPlot">
+
+
 <table cellspacing="0" cellpadding="0" border="0" width="800">
   <tr> 
     <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
     <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
-      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
+      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="6" color="#FFFFFF"><b>VegBank</b></font></div>
     </td>
     <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
   </tr>
   <tr> 
-    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
+    <td width="97" height="26" valign="top" bgcolor="#336633">&nbsp;</td>
     <td width="119" height="26" valign="top" bgcolor="#336633"> 
       <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
         <a href="@general_link@login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
@@ -50,49 +67,32 @@
 </table>
 
 
-
 <!-- SECOND TABLE -->
-<table align=left border="0" width=90% cellspacing=0 cellpadding=0>
+<table  border="0" width="800" >
 	<tr>
 		<td bgcolor="white">
-			<img align=center border=0 height=144 src="/vegbank/images/owlogoBev.jpg" alt = "Veg plots logo		">
-			<td align=left valign=middle>
-    			<table border=0 cellpadding=5>
-    				<tr>
-    					<td align=left valign=bottom>
-    					<font face="Helvetica,Arial,Verdana" size=6 color=23238E>
-							Vegetation Plots Submittal Wizard
-    					</font><br>
-    					</td>
-   				</tr>
-			</table>
-			</td>
+			<img align="center" border="0" height="100" src="/vegbank/images/owlogoBev.jpg" alt = "Veg plots logo">
 		</td>
-	</tr>
-	<tr>
-		<!-- LEFT MARGIN -->
-		<td width="15%"  bgcolor="white" align="left" valign="top">
-		</td>
-	
-		<td align="left">
-			<table border="0" cellspacing=5 cellpadding=5>
-<!--			<form action="@datasubmitservlet@" method="get"> -->
-			
-			<form action= "http://128.111.220.69/framework/servlet/dataexchange" enctype="multipart/form-data" method="post">
-			<input type="hidden" name="submitDataType" value="vegPlot">
-			<input type="hidden" name="action" value="upload">		
-			<input type="hidden" name="referPage" value="continue with the plot upload wizard">
-			<input type="hidden" name="referUrl" value="@datasubmitservlet@/?action=upload&submitDataType=vegPlot">
-			
-			<tr valign=top>
-			<td  align=left valign=middle colspan=2>
+		<td align="left" valign="middle">
+    	<font face="Helvetica,Arial,Verdana" size="6" color="23238E">
+				Vegetation Plots Submittal Wizard
+    	</font>
+  	</td>
+  </tr>
+</table>
+
+		
+<table border="0">
+	<tr valign=top>
+		<td  align=left valign=middle colspan=2>
 			<font face="Helvetica,Arial,Verdana" size="2" color="209020">
 				<b>Use this form to access a plot archive on your machine for submittal to VegBank. <br>
 					Currently this one may load either: <br>
 					1.) TNC Plots MS Access File,<br>
 					2.) VegBank MS Access File, or <br>
-					3.) XML document corresponding to the VegBank Native Standard.</b> <br>
-					</font>
+					3.) XML document corresponding to the VegBank Native Standard.</b> 
+				<br>
+			</font>
 				<small>
         <a href="/data/vegPlot2001cv.dtd">VegBank Native XML Standard&nbsp;&#134;</a> 
 					<br>
@@ -105,7 +105,7 @@
 			</tr>
 		</td>
 	</tr>
-	</table>
+</table>
 	
 	
 	
@@ -205,7 +205,7 @@
     </td>
   </tr>
 </table>
-
+</form>
 
 </body>
 </html>
