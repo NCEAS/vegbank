@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!-- 
+  * build_client.xml
+  *
+  *	Authors: John Harris
+  *	Copyright: 2000 Regents of the University of California and the
+  *           National Center for Ecological Analysis and Synthesis
+  *  Build file for the Ant cross-platform build system for VegBank
+  *  See http://jakarta.apache.org for details on Ant  
+  *  
+	* this build file builds the client software for the 
+	* national plots database including: the interfaces, the
+	* embedded database(s) etc.  Before building this check the 
+	* dependencies
+	*
+	* 		'$Author: harris $'
+ 	*     '$Date: 2003-01-04 02:16:26 $'
+ 	*     '$Revision: 1.1 $'
+--> 
+<project name="plot-validation" default="compile" basedir=".">
+	
+	<!-- INITIATION -->
+	<target name="init">
+ 
+    <echo message="############ ${ant.project.name} ##############"/>
+		<!-- RELEVANT DIRECTORIES -->
+		<property name="current_dir" value="./" />
+		<property name="src" value="./src" />
+		<property name="build" value="./build" />
+		<property name="lib" value="./lib" />
+		<property name="bin" value="./bin" />
+		<property name="dist" value="./dist" />
+		<property name="doc" value="./docs" />
+		<property name="data" value="./data" />
+		<property name="xerces" value="./lib/xerces_1_4.jar" />
+		<property name="xalan" value="./lib/xalan_1_2_2.jar" />
+		<property name="xmlresource" value="./exp/xml-resource/lib/xmlresource.jar" />
+		<property name="datatranslator" value="./exp/data-translators/lib/datatranslator.jar" />
+		<property name="cpath" value="${datatranslator}:${xerces}:${xalan}:${xmlresource}:${build}"/>
+		<filter token="release" value="alpha-20011020"/>
+		<filter token="authors" value="HARRIS"/>
+	</target>
+
+	
+	<!-- PREPARE -->
+	<target name="prepare" depends="init">
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${bin}" />
+	</target>	
+	
+		<!-- COPY -->
+<target name="copy" depends="init">
+		
+		<!-- properties files -->
+		<copy todir="${build}" filtering="yes" >
+			<fileset dir="${lib}" >
+  	    <include name="plotvalidation.properties"/>
+  	  </fileset>
+  	</copy>
+		
+</target>	
+	
+	
+	<!-- COMPILE -->
+	<target name="compile" depends="copy" description=">> compiles the java source
+  code">
+
+		<echo message="Compiling plot-validation code"/>
+		
+		<javac srcdir="${src}/edu" 
+			classpath="${cpath}"
+			debug="on"
+			includes="**/*.java"
+			destdir="${build}"
+		/>
+	</target>	
+	
+	
+	<!-- JAR -->
+	<target name="jar" depends="compile" description=">> creates a java archive
+  (jar) file -- required by the database acceess module">
+		<jar jarfile ="${lib}/plotvalidator.jar"
+			basedir="${build}"
+			includes="plotvalidation.properties edu/** "
+		/>
+	</target>
+	
+	
+	<!-- CLEAN UP -->
+	<target name="clean" description=">> Delete Generated Files" depends="init">
+		<delete dir="${build}" />
+	</target>
+	
+	
+
+</project>
