@@ -1,0 +1,45 @@
+#  README file for the ESA vegetation database client installer
+#
+#   Authors: @author@
+#   Release: @release@
+#	
+# '$Author: harris $'
+# '$Date: 2001-10-12 17:38:40 $'
+#	'$Revision: 1.1 $'
+
+
+
+WINDOWS NT/2000/9x
+------------------
+1] make sure that the java runtime environment is installed before 
+		running the installer
+		
+2] extract the contents of the setup.zip file using your favorite
+		zip file extractor -- mind where you extract the contents to.
+		
+2] click on the start_installer.exe and follow the instructions
+
+
+UNIX (Linux/IRIX)
+----
+1] make sure that the java runtime environment is installed before 
+    running the installer
+		
+2] goto the directory where the setup.zip file was downloaded to
+
+3] extract the contents of the setup.zip file using your favorite
+    zip file extractor -- I use the 'unzip' command.
+
+4] type the following: chmod a+x start_installer.sh
+
+5] run the installer by typing: ./start_installer.sh
+
+6] follow the instructions
+
+
+
+TIPS:
+----
+
+1] don't mess around with the cygwin install unles you are interested in 
+		developing the software
