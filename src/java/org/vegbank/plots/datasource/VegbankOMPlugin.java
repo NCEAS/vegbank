@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-22 19:35:33 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-10-24 05:27:22 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,23 +54,23 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	private HashMap placeNames = new HashMap();	
 	
 	
-  public VegbankOMPlugin()
-  {
-  }
-
-  public VegbankOMPlugin(int plotId)
+	
+	public VegbankOMPlugin()
 	{
-	  init(plotId);	
 	}
 
-  private void  init(int observation_id)
-  {
-  	// Get All Observations related to this plot
+	public VegbankOMPlugin(int plotId)
+	{
+	 	init(plotId);	
+	}
+
+	private void  init(int observation_id)
+  	{
+		// Get All Observations related to this plot
   	
-  			
-    DBObservationReader ob = new DBObservationReader();
 		try
 		{
+			DBObservationReader ob = new DBObservationReader();
 			// TODO:  Get a single observation_id for this plot
 			observation = ob.getObservation("observation_id", observation_id);
 		}
@@ -86,7 +86,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		soilTaxon = observation.getSoiltaxonobject();
 		
 		// Just get the first one as thats all the interface supports
-		Iterator commClasses = observation.getobservationcommclasss().iterator();
+		Iterator commClasses = observation.getobservation_commclasss().iterator();
 		if ( commClasses.hasNext() )
 		{
 			commClass = (Commclass)commClasses.next();
@@ -97,7 +97,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 			commClass = new Commclass();
 		}
 
-  }
+  	}
 
 	/* (non-Javadoc)
 	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getAccessionValue(java.lang.String)
@@ -887,7 +887,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public Vector getPlaceNames(String plotName)
 	{
 		Vector placeNameList = new Vector();
-		Iterator places = plot.getplotplaces().iterator();
+		Iterator places = plot.getplot_places().iterator();
 		while ( places.hasNext() )
 		{
 			Place place = (Place) places.next();
@@ -926,14 +926,14 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	{
 		Vector nameList = new Vector();
 		// TODO: Need to go through the plantusage, plantconcept and plantusage to get the Sci name
-		Iterator taxonObservations = observation.getobservationtaxonobservations().iterator();
+		Iterator taxonObservations = observation.getobservation_taxonobservations().iterator();
 		while ( taxonObservations.hasNext() )
 		{
 			Taxonobservation to = (Taxonobservation) taxonObservations.next();
 
 			// Get the current interpritation ... if none then return the author name for the plant
 			String key = "";
-			Iterator taxonInterpritations = to.gettaxonobservationtaxoninterpretations().iterator();
+			Iterator taxonInterpritations = to.gettaxonobservation_taxoninterpretations().iterator();
 			while( taxonInterpritations.hasNext() )
 			{
 				Taxoninterpretation ti =  (Taxoninterpretation) taxonInterpritations.next();
@@ -943,7 +943,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 				{
 					key = ti.getPlantconceptobject().getPlantname();
 				}
-				if ( key.equals(""))
+				if ( key == null || key.equals(""))
 				{
 					// No valid taxonInterpritation found use the authors name for the plant
 					// *** to indicate on the ui that this is not accepted yet .
@@ -1043,7 +1043,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			addressStartDate = ( (Address) party.getpartyaddresss().get(0)).getAddressstartdate();
+			addressStartDate = ( (Address) party.getparty_addresss().get(0)).getAddressstartdate();
 		}
 		catch (RuntimeException e)
 		{
@@ -1062,7 +1062,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			administrativeArea = ( (Address) party.getpartyaddresss().get(0)).getAdministrativearea();
+			administrativeArea = ( (Address) party.getparty_addresss().get(0)).getAdministrativearea();
 		}
 		catch (RuntimeException e)
 		{
@@ -1089,7 +1089,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			city = ( (Address) party.getpartyaddresss().get(0)).getCity();
+			city = ( (Address) party.getparty_addresss().get(0)).getCity();
 		}
 		catch (RuntimeException e)
 		{
@@ -1116,7 +1116,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			country = ( (Address) party.getpartyaddresss().get(0)).getCountry();
+			country = ( (Address) party.getparty_addresss().get(0)).getCountry();
 		}
 		catch (RuntimeException e)
 		{
@@ -1134,7 +1134,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			currentFlag = ( (Address) party.getpartyaddresss().get(0)).getCurrentflag();
+			currentFlag = ( (Address) party.getparty_addresss().get(0)).getCurrentflag();
 		}
 		catch (RuntimeException e)
 		{
@@ -1152,7 +1152,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			deliveryPoint = ( (Address) party.getpartyaddresss().get(0)).getDeliverypoint();
+			deliveryPoint = ( (Address) party.getparty_addresss().get(0)).getDeliverypoint();
 		}
 		catch (RuntimeException e)
 		{
@@ -1176,7 +1176,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getProjectContributorFaxPhoneNumber(String contributorWholeName)
 	{
 		Party party = (Party) projectContibs.get(contributorWholeName);
-		List telephones = party.getpartytelephones();
+		List telephones = party.getparty_telephones();
 		Iterator telIter = telephones.iterator();
 		while ( telIter.hasNext() )
 		{
@@ -1232,7 +1232,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getProjectContributorPhoneNumber(String contributorWholeName)
 	{
 		Party party = (Party) projectContibs.get(contributorWholeName);
-		List telephones = party.getpartytelephones();
+		List telephones = party.getparty_telephones();
 		Iterator telIter = telephones.iterator();
 		while ( telIter.hasNext() )
 		{
@@ -1254,7 +1254,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			postalCode = ( (Address) party.getpartyaddresss().get(0)).getPostalcode();
+			postalCode = ( (Address) party.getparty_addresss().get(0)).getPostalcode();
 		}
 		catch (RuntimeException e)
 		{
@@ -1269,7 +1269,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public Vector getProjectContributors(String plotName)
 	{
 		Vector nameList = new Vector();
-		List projectContributors = project.getprojectprojectcontributors();
+		List projectContributors = project.getproject_projectcontributors();
 		Iterator pcIterator = projectContributors.iterator();
 		while ( pcIterator.hasNext() )
 		{
@@ -1430,6 +1430,10 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getSoilTaxon(String plotName)
 	{
+		if ( soilTaxon == null )
+		{
+			return "";
+		}
 		return soilTaxon.getSoilname();
 	}
 
@@ -1582,12 +1586,16 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		String stratumName)
 	{
 		String taxaStrataCover = "";
+		if (stratumName == null )
+		{
+			return taxaStrataCover;
+		}
 		Stratumcomposition sc = (Stratumcomposition)  stratumComposition.get(stratumName);
 		if (sc == null )
 		{
-			taxaStrataCover = sc.getTaxonstratumcover();
+			return taxaStrataCover;
 		}
-		return taxaStrataCover;
+		return sc.getTaxonstratumcover();
 	}
 
 	/* (non-Javadoc)
@@ -1597,7 +1605,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	{
 		Vector strataList = new Vector();
 		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
-		List scList = to.gettaxonobservationstratumcompositions();
+		List scList = to.gettaxonobservation_stratumcompositions();
 		Iterator startumCompsitions = scList.iterator();
 		while ( startumCompsitions.hasNext() )
 		{
@@ -1647,7 +1655,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public Vector getUniqueStrataNames(String plotName)
 	{
 		Vector uniqueStrataNames = new Vector();
-		Iterator strata = observation.getobservationstratums().iterator();
+		Iterator strata = observation.getobservation_stratums().iterator();
 		while ( strata.hasNext())
 		{
 			Stratum stratum = (Stratum) strata.next();

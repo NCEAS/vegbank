@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-10-24 05:27:21 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ public class AddCoverMethodAction extends Action
 				ci.setLowerlimit(lowerLimit[i]);
 				ci.setUpperlimit(upperLimit[i]);
 				ci.setIndexdescription(indexDescription[i]);
-			  cm.addcovermethodcoverindex(ci);
+			  	cm.addcovermethod_coverindex(ci);
 			}
       else
       {

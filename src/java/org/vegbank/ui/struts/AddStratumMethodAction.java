@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $' 
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-10-24 05:27:21 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ public class AddStratumMethodAction extends Action
 				st.setStratumindex(stratumIndex[i]);
 				st.setStratumname(stratumName[i]);
 				
-				sm.addstratummethodstratumtype(st);
+				sm.addstratummethod_stratumtype(st);
 			}
       else 
       {

@@ -6,8 +6,8 @@ package org.vegbank.plots.datasource;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-22 19:31:06 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-10-24 05:27:21 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -704,7 +704,6 @@ public class VegbankXMLUpload
 			commit = true;
 			this.initDB();
 
-			//TODO:  CommConcept
 			// insert commConcepts
 			Enumeration commConcepts =  getChildTables(vegbankPackage, "commConcept");
 			while ( commConcepts.hasMoreElements() )

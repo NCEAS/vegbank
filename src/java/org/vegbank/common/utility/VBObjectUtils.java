@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-10-24 05:27:21 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,6 +79,15 @@ public class VBObjectUtils
 		
 		// lowerCase the first Character 
 		result = result.substring(0,1).toLowerCase() + result.substring(1);
+		
+		// TODO: Have the caller pass a vector of unwanted suffixes in
+		// some methods have getXobject, the object is superfluous
+		String unwantedSuffix = "object";
+		if ( result.endsWith(unwantedSuffix))
+		{
+			// this just truncates of the unwantedSuffix
+			result = result.substring(0, result.length() - unwantedSuffix.length() );
+		}
 		
 		if ( suffixToAdd != null)
 		{

@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-10-24 05:27:21 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ public class AddPartyAction extends Action
 				Telephone tel = new Telephone();
 				tel.setPhonenumber(phoneNumber);
 				tel.setPhonetype(phoneType);
-				party.addpartytelephone(tel);
+				party.addparty_telephone(tel);
 			}
 			else
 			{
@@ -98,7 +98,7 @@ public class AddPartyAction extends Action
 		// Get the Address and add it to the party
 		Address address = partyForm.getAddress();
 		address.setCurrentflag("" + partyForm.isCurrentFlag());
-		party.addpartyaddress(address);
+		party.addparty_address(address);
 
 		// Write to the db if all clear
 		if (errors.isEmpty())

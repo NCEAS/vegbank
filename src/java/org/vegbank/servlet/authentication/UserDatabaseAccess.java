@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-23 18:05:06 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-10-24 05:27:22 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.servlet.authentication;
  *    Authors: John Harris
  * 		
  *		 '$Author: farrell $'
- *     '$Date: 2003-07-23 18:05:06 $'
- *     '$Revision: 1.5 $'
+ *     '$Date: 2003-10-24 05:27:22 $'
+ *     '$Revision: 1.6 $'
  */
 
 
@@ -387,8 +387,8 @@ public class UserDatabaseAccess
 				party.setGivenname(givenName);
 				party.setSurname(surName);
 				party.setOrganizationname(inst);
-				party.addpartytelephone(telephone);
-				party.addpartyaddress( partyAddress );
+				party.addparty_telephone(telephone);
+				party.addparty_address( partyAddress );
 
 				// Write to database
 				ObjectToDB party2db = new ObjectToDB(party);

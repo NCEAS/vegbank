@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-10-22 21:47:10 $'
- *	'$Revision: 1.3 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-10-24 05:27:21 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,11 +73,11 @@ public class DBObservationReaderTest extends TestCase
 		Plot plot = obs.getPlotobject();
 		Project project = obs.getProjectobject();
 		Covermethod coverMethod = obs.getCovermethodobject();
-		List commClasses = obs.getobservationcommclasss();
+		List commClasses = obs.getobservation_commclasss();
 		Commclass commclass 	=	(Commclass) commClasses.get(0);
-		List projectContributors = project.getprojectprojectcontributors();
+		List projectContributors = project.getproject_projectcontributors();
 		Party projectContributorParty = (Party)( (Projectcontributor) projectContributors.get(0)).getPartyobject();
-		Taxonobservation to = (Taxonobservation) obs.getobservationtaxonobservations().get(0);
+		Taxonobservation to = (Taxonobservation) obs.getobservation_taxonobservations().get(0);
 		
 		//Address projectContributorAddress = (Address) projectContributorParty.getpartyAddresss().get(0);
 		

@@ -13,8 +13,8 @@ import java.util.*;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: farrell $' <br>
- *  '$Date: 2003-08-21 21:16:45 $' <br>
- *  '$Revision: 1.4 $' <br>
+ *  '$Date: 2003-10-24 05:27:22 $' <br>
+ *  '$Revision: 1.5 $' <br>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -718,7 +718,12 @@ public class PlotXmlWriterV2
 				Vector strataExistence = datasrc.getTaxaStrataExistence(plantName, plotCode);
 				for (int i=0; i< strataExistence.size(); i++)
 				{	
-					String strataName = strataExistence.elementAt(i).toString();
+					String strataName = "";
+					Object strata = strataExistence.elementAt(i);
+					if ( strata != null )
+					{
+						strataName = strata.toString();
+					}
 					//get the strata composition -- the cover of an individual plant
 					// within a given strata
 					sb.append( getStrataCompositionContent(plotCode, plantName, strataName));
@@ -742,18 +747,25 @@ public class PlotXmlWriterV2
 		 * desired
 		 * @param stratumName -- the name of the corresponding stratum
 		 */
-		 private String getStrataCompositionContent(String plotCode, String plantName, 
-		 String stratumName)
-		 {
-			 StringBuffer sb = new StringBuffer();
-			 sb.append("    <stratumComposition> \n");
-			 //get the cover value for that plant in that strata
-			 String cover = datasrc.getTaxaStrataCover(plantName, plotCode, stratumName);
-			 sb.append("      <taxonStratumCover>"+cover+"</taxonStratumCover> \n");
-			 sb.append("      <stratumName>"+stratumName+"</stratumName> \n");
-			 sb.append("    </stratumComposition> \n");
-			 return(sb.toString());
-		 }
+		private String getStrataCompositionContent(
+			String plotCode,
+			String plantName,
+			String stratumName)
+		{
+			StringBuffer sb = new StringBuffer();
+			sb.append("    <stratumComposition> \n");
+			//get the cover value for that plant in that strata
+			String cover =
+				datasrc.getTaxaStrataCover(plantName, plotCode, stratumName);
+			sb.append(
+				"      <taxonStratumCover>"
+					+ cover
+					+ "</taxonStratumCover> \n");
+			sb.append(
+				"      <stratumName>" + stratumName + "</stratumName> \n");
+			sb.append("    </stratumComposition> \n");
+			return (sb.toString());
+		}
 		 
 		 
 		/**

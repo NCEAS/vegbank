@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-10-22 21:42:34 $'
- *	'$Revision: 1.3 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-10-24 05:27:21 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ package org.vegbank.plots.datasource;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,15 +42,17 @@ import org.vegbank.common.model.Project;
 import org.vegbank.common.model.Projectcontributor;
 import org.vegbank.common.model.Stratum;
 import org.vegbank.common.model.Taxonobservation;
+import org.vegbank.common.utility.DBConnection;
+import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.VBObjectUtils;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
 
 /**
- * Reads an Observation from the Vegbank Database.
+ * Reads an Observation from the Vegbank Database and populates
+ * a tree of beans with the data. The root of the tree is observation.
  * 
  * @author farrell
  */
@@ -59,12 +63,14 @@ public class DBObservationReader
 	/**
 	 * Uses to run SQL statements agains db
 	 */
-	private DatabaseAccess da;
-	Vector ignoreObjects = new Vector();
+	//private DatabaseAccess da;
+	private DBConnection con = null;
+	private Vector ignoreObjects = new Vector();
 	
-	DBObservationReader()
+	public DBObservationReader() throws SQLException
 	{
-		da = new DatabaseAccess();
+		//da = new DatabaseAccess();
+		con = DBConnectionPool.getDBConnection("Needed for reading observation");
 	}
 	
 	public Observation getObservation(String key, int keyValue) throws Exception
@@ -80,7 +86,7 @@ public class DBObservationReader
 		getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Project"), project.getProject_id(), project, ignoreObjects );
 		
 		// ProjectContributors
-		Iterator projectContributors =project.getprojectprojectcontributors().iterator();
+		Iterator projectContributors =project.getproject_projectcontributors().iterator();
 		while ( projectContributors.hasNext() )
 		{
 			Projectcontributor projectContributor = (Projectcontributor)  projectContributors.next();
@@ -91,11 +97,13 @@ public class DBObservationReader
 		}
 		
 		// TaxonObservations
-		Iterator taxonObservations = obs.getobservationtaxonobservations().iterator();
+		Iterator taxonObservations = obs.getobservation_taxonobservations().iterator();
 		while ( taxonObservations.hasNext() )
 		{
 			Taxonobservation taxonObservation = (Taxonobservation)  taxonObservations.next();
 			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("TaxonObservation"), taxonObservation.getTaxonobservation_id(), taxonObservation, ignoreObjects );
+			
+			System.out.println("]]]]] " + taxonObservation.toXML());
 			
 			Plantname plantName = taxonObservation.getPlantnameobject();
 //			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("PlantName"), plantName.getPLANTNAME_ID(), plantName, ignoreObjects );
@@ -111,23 +119,21 @@ public class DBObservationReader
 		}
 		
 		// Strata
-		Iterator strata = obs.getobservationstratums().iterator();
+		Iterator strata = obs.getobservation_stratums().iterator();
 		while ( strata.hasNext())
 		{
 			Stratum stratum = (Stratum) strata.next();
+			System.out.println("Ignore when searching through Stratum " + ignoreObjects);
 			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Stratum"), stratum.getStratum_id(), stratum, ignoreObjects );
 
 		}
 		
 		// Plot
 		Plot plot = obs.getPlotobject();
+		System.out.println("Ignore when searching through Plot " + ignoreObjects);
 		getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Plot"), plot.getPlot_id(), plot, ignoreObjects );
 		
-		
-		//Project project = obs.getPROJECTobject();
-		//ignoreObjects.add("Observation");
-		//getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Project"), project.getPROJECT_ID(), project, ignoreObjects );
-		
+		System.out.println(">>>> " + obs.toXML());
 		
 		return obs;
 	}
@@ -173,8 +179,8 @@ public class DBObservationReader
 	/**
 	 * Handle the messy logic for getting the table name from the methodName
 	 * e.g.
-	 * 	setpartyAddresss ==> Address
-	 * 	setORGANIZATIONAddresss ==> Address
+	 * 	setparty_addresss ==> Address
+	 * 	setorganization_addresss ==> Address
 	 * @param object
 	 * @param method
 	 * @return
@@ -182,25 +188,19 @@ public class DBObservationReader
 	private String getTableName(Object object, Method method)
 	{
 		String tableName = VBObjectUtils.getFieldName( method.getName(), null );
-		//System.out.println(">>>>>>>>>>>" + tableName);
+		System.out.println(">>>>>>>>>>>" + tableName);
 		
 		// Reconstitute the name of the table from the mess that is the methodName
 		tableName = tableName.substring(0, tableName.length()-1); // remove the trailing 's'
 		
-		// Start count at 1 to avoid potential problems with first character and remove
-		for ( int i=1; i < tableName.length(); i++)
-		{
-			if (  Character.getType(tableName.charAt(i)) == Character.LOWERCASE_LETTER )
-			{
-				//System.out.println(" ### " + tableName.charAt(i) + " from " + tableName);
-				tableName = tableName.substring(i-1);
-				break;
-			}
-		}
+		// Remove text before '_'
+		tableName = 
+			tableName.substring( tableName.indexOf('_')+1, tableName.length() );
+		
 		// Reconstitute the name of the table from the mess that is the methodName
 		
 		System.out.println(VBObjectUtils.getUnQualifiedName( object.getClass().getName().toLowerCase()));
-		tableName = StringUtils.replaceOnce(tableName,VBObjectUtils.getUnQualifiedName( object.getClass().getName()).toLowerCase(), "");
+		//tableName = StringUtils.replaceOnce(tableName,VBObjectUtils.getUnQualifiedName( object.getClass().getName()).toLowerCase(), "");
 		
 		return tableName;
 	}
@@ -209,14 +209,17 @@ public class DBObservationReader
 	{
 		Vector retrivedObjects = new Vector();
 		
+		FKName = this.getFKNameInTable(FKName, table);
+		
 		// Get all the PK associated with this object
 		Vector keys = new Vector();
 		
 		String PKName = table + "_ID";
 		String SQLQuery = 
 			"SELECT " + PKName + " FROM " + table + " WHERE " + FKName + " = " + FKValue;
-			
-		ResultSet rs = da.issueSelect(SQLQuery);
+		
+		Statement selectStatement = con.createStatement();
+		ResultSet rs = selectStatement.executeQuery(SQLQuery);
 		
 		while ( rs.next() )
 		{
@@ -235,6 +238,24 @@ public class DBObservationReader
 		return retrivedObjects;
 	}
 
+	/**
+	 * This is a complete hack to get around some errors I came accross.
+	 * Sometimes the ForiegnKey Name is different from the Primary Key name
+	 * in the table it refers to, this fixes this on a case by case basis.
+	 * 
+	 * @param FKName
+	 * @param table
+	 * @return
+	 */
+	private String getFKNameInTable(String FKName, String tableName)
+	{
+		if ( tableName.equalsIgnoreCase("observationsynonym") && FKName.equalsIgnoreCase("observation_id") )
+		{
+			FKName = "primaryobservation_id";
+		}
+		return FKName;
+	}
+
 	private void getObjectFromDB(Object object, String PKName, int PKValue)
 	{
 		// Place to store name values for populating object
@@ -243,6 +264,7 @@ public class DBObservationReader
 		
 		Method[] methods = object.getClass().getMethods();
 		String className = VBObjectUtils.getUnQualifiedName(object.getClass().getName());
+		System.out.println(">>>> " + className + "," + object+ "," + object.getClass().getName());
 		
 		Vector fieldNames = new Vector();
 		
@@ -273,6 +295,11 @@ public class DBObservationReader
 				methodAndType.add( parameterTypes[0].getName() );
 				methodAndType.add( method );
 				objectSetMethods.put( VBObjectUtils.getKeyName(fieldName), methodAndType);
+				//System.out.println("Processing: " + methodAndType );
+			}
+			else
+			{
+				//System.out.println("Not processing: " + method.toString() );
 			}
 		}
 		
@@ -280,7 +307,8 @@ public class DBObservationReader
 		
 		try
 		{
-			ResultSet rs = da.issueSelect(sqlStatement);
+			Statement selectStatement = con.createStatement();
+			ResultSet rs = selectStatement.executeQuery(sqlStatement);
 			int columnNumber = rs.getMetaData().getColumnCount();
 			
 			// Is there an observation?
@@ -401,6 +429,8 @@ public class DBObservationReader
 			}
 		}
 		sb.append( " FROM " + className + " WHERE " + key + " = " + keyValue);
+		
+		//System.out.println(">>>>> " + className +" :::: " + sb.toString());
 		return sb.toString();
 	}
 	

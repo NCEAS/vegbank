@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-10-24 05:27:21 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,7 +112,7 @@ public class AddReferenceAction extends Action
 				rc.setReferenceparty_id(partyId);
 
 				// Add to the reference Object
-				ref.addreferencereferencecontributor(rc);
+				ref.addreference_referencecontributor(rc);
 			}
 		}
 
@@ -213,7 +213,7 @@ public class AddReferenceAction extends Action
 				refAlt.setIdentifier(identifier);
 				refAlt.setSystem(system);
 		
-				ref.addreferencereferencealtident(refAlt);
+				ref.addreference_referencealtident(refAlt);
 			}
 			else // enforce validation
 				{

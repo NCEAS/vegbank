@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-10-22 19:32:32 $'
- *  '$Revision: 1.7 $'
+ *  '$Date: 2003-10-24 05:27:21 $'
+ *  '$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -117,7 +117,7 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
       <xsl:variable name="variableName">
         <xsl:call-template name="to-lower">
           <xsl:with-param name="text">
-            <xsl:value-of select="substring-before(attName, '_ID')"/><xsl:value-of select="$javaType"/>
+            <xsl:value-of select="substring-before(attName, '_ID')"/>_<xsl:value-of select="$javaType"/>
           </xsl:with-param>
         </xsl:call-template>
       </xsl:variable>
@@ -143,13 +143,21 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
     </xsl:for-each>
 
  <!-- ***************************************************************************** -->
- <!-- Generate getXML() method  -->
+ <!-- Generate toXML() method  -->
  <!-- ***************************************************************************** -->
-    public String getXML()
+    public String toXML(int indent)
+    {
+      this.indent = indent; 
+      return this.toXML();
+    }   
+ 
+    private int indent = 0;
+    
+    public String toXML()
     {
       StringBuffer xml = new StringBuffer();
-      xml.append("&lt;<xsl:value-of select="$entityName"/>&gt;");
-
+      xml.append(getIdent( indent ) + "&lt;<xsl:value-of select="$entityName"/>&gt;\n");
+      indent = indent +1 ;
     <xsl:for-each select="attribute">
 
       <xsl:variable name="javaType">
@@ -160,15 +168,9 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
         </xsl:call-template>     
       </xsl:variable>
       
-<!--
-      <xsl:variable name="variableName">
-        <xsl:call-template name="to-lower">
-          <xsl:with-param name="text">
-            <xsl:value-of select="substring-before(attName, '_ID')"/><xsl:value-of select="$javaType"/>
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:variable>
--->
+
+      <xsl:variable name="XMLElementName" select="concat($entityName, '.', ./attName )"/>
+      
       <xsl:variable name="cappedVariableName">
         <xsl:choose>
           <xsl:when test="attKey='FK'">
@@ -188,26 +190,26 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
         <xsl:when test="./attRelType/@type ='n/a' and attKey!='PK'">
       if ( this.get<xsl:value-of select="$cappedVariableName"/>() != null)
       {
-        xml.append("&lt;<xsl:value-of select="./attName"/>&gt;");
-        xml.append(this.get<xsl:value-of select="$cappedVariableName"/>() );
-        xml.append("&lt;/<xsl:value-of select="./attName"/>&gt;");
+        xml.append(getIdent( indent ) + "&lt;<xsl:value-of select="$XMLElementName"/>&gt;");
+        xml.append(escapeXML(this.get<xsl:value-of select="$cappedVariableName"/>()) );
+        xml.append("&lt;/<xsl:value-of select="$XMLElementName"/>&gt;\n");
       }
         </xsl:when>
         <xsl:when test="./attRelType/@type ='n/a' and attKey='PK'">
       if ( this.get<xsl:value-of select="$cappedVariableName"/>() != 0)
       {
-        xml.append("&lt;<xsl:value-of select="./attName"/>&gt;");
+        xml.append(getIdent( indent ) + "&lt;<xsl:value-of select="$XMLElementName"/>&gt;");
         xml.append(this.get<xsl:value-of select="$cappedVariableName"/>() );
-        xml.append("&lt;/<xsl:value-of select="./attName"/>&gt;");
+        xml.append("&lt;/<xsl:value-of select="$XMLElementName"/>&gt;\n");
       }
         </xsl:when>
         <xsl:when test="./attRelType/@type ='normal'">
       if ( this.get<xsl:value-of select="$cappedVariableName"/>() != null)
       {
-        xml.append("&lt;<xsl:value-of select="./attName"/>&gt;");
+        xml.append(getIdent( indent ) + "&lt;<xsl:value-of select="$XMLElementName"/>&gt;\n");
         <xsl:value-of select="$javaType"/> object = this.get<xsl:value-of select="$cappedVariableName"/>();
-        xml.append( object.getXML() );
-        xml.append("&lt;/<xsl:value-of select="./attName"/>&gt;");
+        xml.append( object.toXML(indent + 1) );
+        xml.append(getIdent( indent ) + "&lt;/<xsl:value-of select="$XMLElementName"/>&gt;\n");
       }
         </xsl:when>
         <xsl:otherwise>
@@ -235,7 +237,7 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
       <xsl:variable name="variableName">
         <xsl:call-template name="to-lower">
           <xsl:with-param name="text">
-            <xsl:value-of select="substring-before(attName, '_ID')"/><xsl:value-of select="$javaType"/>
+            <xsl:value-of select="substring-before(attName, '_ID')"/>_<xsl:value-of select="$javaType"/>
           </xsl:with-param>
         </xsl:call-template>
       </xsl:variable>
@@ -247,13 +249,40 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
         while ( iterator.hasNext() )
         {
           <xsl:value-of select="$javaType"/> object = (<xsl:value-of select="$javaType"/>) iterator.next();
-          xml.append( object.getXML() );
+          xml.append( object.toXML( indent + 1) );
         };
       }
     </xsl:for-each>
 
-      xml.append("&lt;/<xsl:value-of select="$entityName"/>&gt;");
+      xml.append(getIdent( indent -1 ) +"&lt;/<xsl:value-of select="$entityName"/>&gt;\n");
       return xml.toString();
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    // These should  be of in a Utility class, need to sort out build order first
+    ////////////////////////////////////////////////////////////////////////////////
+        
+    // this should only exist once, but need to set classpath of compile to do that
+    // org.vegbank.commom.utility.Utility has this method also
+    private static String getIdent(int indent)
+    {
+      StringBuffer sb = new StringBuffer();
+      for ( int i=0; i&lt;indent; i++)
+      {
+        sb.append("\t");
+      }
+      return sb.toString();
+    }
+    
+    // The insanity ... having to escape the escapes .. see above
+    private static String escapeXML(String str)
+    {
+      str = str.replaceAll("&amp;","&amp;amp;");
+      str = str.replaceAll("&lt;","&amp;lt;");
+      str = str.replaceAll("&gt;","&amp;gt;");
+      str = str.replaceAll("\&quot;","&amp;quot;");
+      str = str.replaceAll("&apos;","&amp;apos;");
+      return str;
     }
 }
     </redirect:write>
