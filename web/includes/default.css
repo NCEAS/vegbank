@@ -9,7 +9,7 @@ A.brightyellow { color:#FFFF80 }
 
 TH	{
 	font-family:  Arial, Helvetica, sans-serif;
-	color: #ffff80;
+	color: #FFFF80;
 	font-size: 10pt;
 	background-color : #336633;
 	}
@@ -67,8 +67,15 @@ UL, OL, DL, LI, .list	{
 							font: .9em/1.5em Verdana, Arial, Helvetica, Geneva, sans-serif;
 						}
 
-.category		{
+.thsmall		{
 					color: #ffff80;
+					font-family: Verdana, Arial, Helvetica, sans-serif;
+					font-size: 1em;
+					font-weight: bold;
+				}
+
+.category		{
+					color: #000000;
 					font-family: Verdana, Arial, Helvetica, sans-serif;
 					font-size: 1em;
 					font-weight: bold;

@@ -14,9 +14,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: mlee $'
-*      '$Date: 2003-10-30 20:41:43 $'
-*  '$Revision: 1.13 $'
+*    '$Author: anderson $'
+*      '$Date: 2003-11-03 23:23:31 $'
+*  '$Revision: 1.14 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -353,12 +353,11 @@ return "@manualFrameFor-search-for-plots@"
 	</table>
 	<table border="0">
 	  <tr bgcolor="#DDDDDD">
-	    <th><p><span class="category">Field</span></p></th>
-
-	    <th><p><span class="category">Minimum</span></p></th>
-	    <th><p><span class="category">Maximum</span></p></th>
-	    <th><p><span class="category">Units</span></p></th>
-	    <th><p><span class="category">Include Nulls?</span></p></th>
+	    <th><p><span class="thsmall">Field</span></p></th>
+	    <th><p><span class="thsmall">Minimum</span></p></th>
+	    <th><p><span class="thsmall">Maximum</span></p></th>
+	    <th><p><span class="thsmall">Units</span></p></th>
+	    <th><p><span class="thsmall">Include Nulls?</span></p></th>
 	  </tr>
 	  <tr><!-- ELEVATION --> 
 	    <td>&nbsp;</td>
@@ -549,11 +548,11 @@ return "@manualFrameFor-search-for-plots@"
 
 	<table border="0">
 	  <tr bgcolor="#DDDDDD">
-	    <th><p><span class="category">Field</span></p></th>
-	    <th><p><span class="category">Minimum</span></p></th>
-	    <th><p><span class="category">Maximum</span></p></th>
-	    <th><p><span class="category">Units</span></p></th>
-	    <th><p><span class="category">Include Nulls?</span></p></th>
+	    <th><p><span class="thsmall">Field</span></p></th>
+	    <th><p><span class="thsmall">Minimum</span></p></th>
+	    <th><p><span class="thsmall">Maximum</span></p></th>
+	    <th><p><span class="thsmall">Units</span></p></th>
+	    <th><p><span class="thsmall">Include Nulls?</span></p></th>
 	  </tr>
 	  <tr><!-- date --> 
 	    <td>&nbsp;</td>
@@ -773,15 +772,15 @@ return "@manualFrameFor-search-for-plots@"
 <table border="0" cellspacing="1" cellpadding="1">
   <tr bgcolor="#DDDDDD">
 
-    <th rowspan="2"><p><span class="item">Row</span></p></th>
-    <th rowspan="2"><p><span  class="category">Plant Name <a class="brightyellow" target="_blank" href="/vegbank/forms/plant-query.html">search</a></span></p></th>
-    <th colspan="2"><p><span class="category">Cover (%)</span></p></th>
+    <th rowspan="2"><p><span class="thsmall">Row</span></p></th>
+    <th rowspan="2"><p><span  class="thsmall">Plant Name <a class="brightyellow" target="_blank" href="/vegbank/forms/plant-query.html">search</a></span></p></th>
+    <th colspan="2"><p><span class="thsmall">Cover (%)</span></p></th>
 
-    <!-- no basal area <th colspan="2"><p><span class="category">Basal Area (m2/ha)</span></p></th> -->
+    <!-- no basal area <th colspan="2"><p><span class="thsmall">Basal Area (m2/ha)</span></p></th> -->
     <!-- stems not wired in yet
-    <th colspan="2"><p><span class="category">Stem DBH (cm)</span></p></th>
+    <th colspan="2"><p><span class="thsmall">Stem DBH (cm)</span></p></th>
 
-    <th colspan="2"><p><span class="category">Stem Count</span></p></th>
+    <th colspan="2"><p><span class="thsmall">Stem Count</span></p></th>
     -->
 
   </tr>
@@ -789,15 +788,15 @@ return "@manualFrameFor-search-for-plots@"
   <tr bgcolor="#DDDDDD">
 
 
-    <th><p><span class="category">Min</span></p></th>
-    <th><p><span class="category">Max</span></p></th>
-    <!-- no basal area <th><p><span class="category">Min</span></p></th>
-    <th><p><span class="category">Max</span></p></th> -->
+    <th><p><span class="thsmall">Min</span></p></th>
+    <th><p><span class="thsmall">Max</span></p></th>
+    <!-- no basal area <th><p><span class="thsmall">Min</span></p></th>
+    <th><p><span class="thsmall">Max</span></p></th> -->
     <!-- stems not wired in yet
-    <th><p><span class="category">Min</span></p></th>
-    <th><p><span class="category">Max</span></p></th>
-    <th><p><span class="category">Min</span></p></th>
-    <th><p><span class="category">Max</span></p></th>
+    <th><p><span class="thsmall">Min</span></p></th>
+    <th><p><span class="thsmall">Max</span></p></th>
+    <th><p><span class="thsmall">Min</span></p></th>
+    <th><p><span class="thsmall">Max</span></p></th>
     -->
   </tr>
 
@@ -1091,20 +1090,20 @@ return "@manualFrameFor-search-for-plots@"
 	  </table>
 	  <table border="0" cellspacing="1" cellpadding="1">
 	    <tr bgcolor="#DDDDDD">
-	      <th rowspan="2"><p><span class="item">Row</span></p></th>
-	      <th rowspan="2"><p><span class="category">Community Name <a class="brightyellow" target="_blank" href="/vegbank/forms/community-query.html">search</a></span></p></th>
+	      <th rowspan="2"><p><span class="thsmall">Row</span></p></th>
+	      <th rowspan="2"><p><span class="thsmall">Community Name <a class="brightyellow" target="_blank" href="/vegbank/forms/community-query.html">search</a></span></p></th>
 	      <!-- TODO:
-	      <th rowspan="2"><p><span class="category">Fit</span></p></th>
-	      <th rowspan="2"><p><span class="category">Confidence</span></p></th>
+	      <th rowspan="2"><p><span class="thsmall">Fit</span></p></th>
+	      <th rowspan="2"><p><span class="thsmall">Confidence</span></p></th>
 	      -->
-	      <th colspan="2"><p><span class="category">Date Classified</span></p></th>
+	      <th colspan="2"><p><span class="thsmall">Date Classified</span></p></th>
 	      <!--
-	      <th rowspan="2"><p><span class="category">Name of Person Classifying</span></p></th>
+	      <th rowspan="2"><p><span class="thsmall">Name of Person Classifying</span></p></th>
 	      -->
 	    </tr>
 	    <tr bgcolor="#DDDDDD">
-	      <th><p><span class="category">Min</span></p></th>
-	      <th><p><span class="category">Max</span></p></th>
+	      <th><p><span class="thsmall">Min</span></p></th>
+	      <th><p><span class="thsmall">Max</span></p></th>
 	    </tr>
 	    <tr>
 
