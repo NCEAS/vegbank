@@ -104,7 +104,7 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 </table>
   <!-- Search box -->
 	<br>
-	<table align="center" cellpadding="0" cellspacing="0" border="0" bgcolor="#EEEEEE">
+	<table align="center" cellpadding="0" cellspacing="0" border="0" bgcolor="#DDDDDD">
 	<tr>
     	<td><img src="@image_server@uplt3.gif"/></td>
 		<td></td>
@@ -118,17 +118,17 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 		 <!-- <html:select property="state" size="1" multiple="true">
 						<%@ include file="../includes/StatesList.jsp" %>
 			  </html:select> -->
-			  
+			<span class="greytext">
+			&nbsp; Find <b>plots</b> by <b>plant name</b>:
+			
+			<!--  <br/>
+			&nbsp; (% is wildcard) example: Acer spic% --><br /></span>  
 			 <input type="text" name="plantName" size="30" value=""/>
 			 <html:submit value="search"/>
 			
-			<br />
-			<span class="greytext">
-			&nbsp; Find <b>plots</b> by <b>plant name</b>.
-			<br/>
-			<!--
-			&nbsp; (% is wildcard) example: Acer spic%</span>
-			-->
+			
+			
+			
 		</td>
 		<td></td>
 	</tr>
@@ -143,27 +143,14 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 	<p class="vegbank"> 
 	
 	<table align="center" cellpadding="7" cellspacing="0" border="0" bgcolor="#FFFFFF">
-	<tr class="vegbank_tiny">
-	<td>
-		  <select onChange="MM_jumpMenu('parent',this,0)" name="vegbankNav">
-			<option value="#" selected>---Common Pages---</option>
-			<option value="/vegbank/DisplayMainMenu.do">Main Menu</option>
-			<option value="/vegbank/LoadPlotQuery.do">Search for Plots</option>
-			<option value="/vegbank/forms/PlantQuery.jsp">Search for Plants</option>
-			<option value="/vegbank/forms/community-query.html">Search Communities</option>
-			<option value="/vegbank/forms/plot-query-simple.jsp">3-in-1 Query</option>
-			<option value="/vegdocs/vegbranch/vegbranch.html">VegBranch</option>
-			<option value="/vegbank/general/info.html">Information</option>
-			<option value="/vegbank/design/erd/vegbank_erd.pdf">--ERD</option>
-			<option value="/vegbank/dbdictionary/dd-index.html">--Data Dictionary</option>
-			<option value="/vegbank/general/sitemap.html">VegBank Sitemap</option>
-		  </select>
+	<tr class="vegbank_small">
+	<td align="center">
+		&raquo; <a href="@forms_link@PlantQuery.jsp">Explore Plant Taxa</a> 
 	</td>
-	<td>
-		&raquo; <a href="@forms_link@PlantQuery.jsp">Explore Plant Taxa</a>
-		<br>
-		&raquo; <a href="@forms_link@community-query.html">View Community Types</a>
-		<br>
+	<td align="center">&raquo; <a href="@forms_link@community-query.html">View Community Types</a>
+	</td>	
+	<td align="center">	
+
 		&raquo; <a href="@web_context@DisplayUploadPlotAction.do">Share your data</a>
 	</td>
 
@@ -196,12 +183,12 @@ href="@panel_link@standards.html">Guidelines for Describing
 	      <td valign="top" > 
             <!--   
 	-->
-            <span class="vegbank_tiny"> VegBank is operated by the Ecological 
+            <span class="vegbank_tiny"> <!--VegBank is operated by the Ecological 
             Society of America's <a 
 href="@panel_link@panel.html">Vegetation Panel</a> in cooperation with the <a 
 href="http://www.nceas.ucsb.edu/">National 
             Center for Ecological Analysis and Synthesis</a>.  <br>
-            <br>
+            <br> -->
             This material is based upon work
 			supported by the National Science Foundation under Grant Nos. DBI-9905838
 			and DBI-0213794. Any opinions, findings, and conclusions or
