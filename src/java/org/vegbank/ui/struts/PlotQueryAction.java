@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-09 18:11:47 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-07-11 01:41:14 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ public class PlotQueryAction extends Action
 
 	private static final String ANYVALUE = "ANY";
 	private static final String ANDVALUE = " AND ";
+	private static final String ORVALUE = " OR ";
 	private static final String 	selectClause =	
 		" SELECT DISTINCT(observation.obsaccessionnumber), observation.authorobscode, " +	"plot.latitude, plot.longitude, observation.observation_id";
 
@@ -81,6 +82,9 @@ public class PlotQueryAction extends Action
 		query.append(" AND ( ");
 
 		StringBuffer dynamicQuery = new StringBuffer();
+		
+		// Countries
+		dynamicQuery.append(this.handleValueList(pqForm.getCountries(), "plot.country", conjunction));
 		
 		// States
 		dynamicQuery.append(this.handleValueList(pqForm.getState(), "plot.state", conjunction));
@@ -165,30 +169,41 @@ public class PlotQueryAction extends Action
 
 		// METHODS and PEOPLE
 		dynamicQuery.append(
-			this.handleSimpleCompare(
+			this.handleValueList(
 				pqForm.getCoverMethodType(),
 				"covermethod.covertype",
-				pqForm.isAllowNullCoverMethodType(),
-				" like ", 
-				conjunction));
+				conjunction)); 
+				
+//		dynamicQuery.append(
+//			this.handleSimpleCompare(
+//				pqForm.getCoverMethodType(),
+//				"covermethod.covertype",
+//				pqForm.isAllowNullCoverMethodType(),
+//				" like ", 
+//				conjunction));
+				
 		dynamicQuery.append(
-			this.handleSimpleCompare(
+			this.handleValueList(
 				pqForm.getStratumMethodName(),
 				"stratummethod.stratummethodname",
-				pqForm.isAllowNullStratumMethodName(),
-			" like ", 
-			conjunction));
+				conjunction)); 
+				
+//		dynamicQuery.append(
+//			this.handleSimpleCompare(
+//				pqForm.getStratumMethodName(),
+//				"stratummethod.stratummethodname",
+//				pqForm.isAllowNullStratumMethodName(),
+//			" like ", 
+//			conjunction));
 
 		// Need to traverse observation <- observationcontributor -> party ( multifield :O... )
 		//query.apppend( this.handleSimpleEquals( pqForm.getObservationContributorName() 
 		//					"") );
 		dynamicQuery.append(
-			this.handleSimpleCompare(
+			this.handleValueList(
 				pqForm.getProjectName(),
 				"project.projectname",
-				false,
-				" like ", 
-				conjunction));
+				conjunction)); 
 		// name is multifield
 		//query.append( this.handleSimpleEquals( pqForm.getPlotSubmitterName(),
 		//					) );
@@ -230,7 +245,7 @@ public class PlotQueryAction extends Action
 	private Collection getPlotSummaries(String conjunction, Vector resultSets)
 		throws SQLException
 	{
-		System.out.println("Conjuction is '" + conjunction + "'");
+		System.out.println("Conjunction is '" + conjunction + "'");
 		
 		// Collection for adding valid object created from current resultset
 		Hashtable workspace = new Hashtable();
@@ -351,8 +366,6 @@ public class PlotQueryAction extends Action
 		String[] plantNames = pqForm.getPlantName();
 		String[] minTaxonCover = pqForm.getMinTaxonCover();
 		String[] maxTaxonCover = pqForm.getMaxTaxonCover();
-		String[] minTaxonBasalArea = pqForm.getMinTaxonBasalArea();
-		String[] maxTaxonBasalArea = pqForm.getMaxTaxonBasalArea();
 		
 		// Loop over all the plantnames entered
 		for (int i=0; i<plantNames.length; i++)
@@ -380,9 +393,6 @@ public class PlotQueryAction extends Action
 				
 				plantQueryConditions.append(
 					this.handleMaxMinNull(maxTaxonCover[i], minTaxonCover[i], true, "taxonobservation.taxoncover", " AND")
-				);
-				plantQueryConditions.append(
-					this.handleMaxMinNull(maxTaxonBasalArea[i], minTaxonBasalArea[i], true, "taxonobservation.taxonbasalarea", " AND")
 				);
 				
 				appendWhereClause(plantQuery, "", plantQueryConditions );
@@ -505,7 +515,7 @@ public class PlotQueryAction extends Action
 	{
 		StringBuffer sb = new StringBuffer();
 
-		if (values != null && values.length > 0 && !isAnyValueAllowed(values))
+		if (values != null && values.length == 0 && !isAnyValueAllowed(values))
 		{
 			sb.append(
 				conjunction + " ( " + fieldName + " = '" + values[0] + "'");

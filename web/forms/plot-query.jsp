@@ -13,9 +13,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: mlee $'
-*      '$Date: 2003-07-10 21:54:20 $'
-*  '$Revision: 1.4 $'
+*    '$Author: farrell $'
+*      '$Date: 2003-07-11 01:41:14 $'
+*  '$Revision: 1.5 $'
 *
 *
 -->
@@ -114,7 +114,7 @@ VEGBANK - Simple Plots Query
 	<table border="0" width="100%" bgcolor="#DFE5FA">
 	  <tr>
 	    <td align="left" valign="top" width="5%" colspan="2">
-	      <font face="Helvetica,Arial,Verdana" size="3" color="#23238E"><b>State:</b></font> 
+	      <font face="Helvetica,Arial,Verdana" size="3" color="#23238E"><b>Country, State:</b></font> 
 	    </td>
 	  </tr>
 	  <tr>
@@ -122,8 +122,8 @@ VEGBANK - Simple Plots Query
 	      <img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15"> 
 	    </td>
 	    <td class="item">
-	      <p>Please select the state or province in which the plot was sampled. <br />
-	      Note that you may select more than more state or province at a time.  To select multiple choices, hold down the ctrl key and then select each state or province you want to query.</p>
+	      <p>Please select the state/province and/or country in which the plot was sampled. <br />
+	      Note that you may select more than one value at a time.  To select multiple choices, hold down the ctrl key and then select each state/province/country you want to query.</p>
 	    </td>
 	  </tr>
 	</table>
@@ -132,7 +132,20 @@ VEGBANK - Simple Plots Query
 	<table>
 	  <tr>
 	    <td width="12%">&nbsp;</td>
+		<td>
+	      <span class="itemsmall"><b>Country</b></span><br/>
+	      <html:select property="countries" size="6" multiple="true">
+		      <option value="ANY">--ANY--</option>
+      		<option value="Canada">Canada</option>
+      		<option value="Mexico">Mexico</option>
+      		<option value="USA">United States</option>
+      		<option value="IS NOT NULL">--NOT NULL--</option>
+		      <option value="IS NULL">--NULL--</option>
+	      </html:select>
+	    </td>	 
+
 	    <td>
+	      <span class="itemsmall"><b>State</b></span><br/>
 	      <html:select property="state" size="6" multiple="true">
 		<option value="ANY">--ANY--</option>
 <option value="AG">Aguascalientes</option>
@@ -242,6 +255,7 @@ VEGBANK - Simple Plots Query
 		<option value="IS NULL">--NULL--</option>
 	      </html:select>
 	    </td>
+     
 	  </tr>
 	</table>
 	<hr/>
@@ -570,24 +584,25 @@ VEGBANK - Simple Plots Query
 	  <tr>
 	    <td><span class="itemsmall"><b>Cover Method Name:</b></span></td>
 	    <td>
-	      <html:text property="coverMethodType" size="40"/>
-	    </td>
-	    <td>
-	      <span class="itemsmall">Include plots without a Cover Method:</span>
-	      <html:checkbox property="allowNullCoverMethodType"/>
+	      	<html:select property="coverMethodType" size="6" multiple="true">
+		        <option value="ANY" selected>--ANY--</option>
+		        <html:options property="coverMethodNames"/>
+		        <option value="IS NOT NULL">--NOT NULL--</option>
+		        <option value="IS NULL">--NULL--</option>
+	        </html:select>
 	    </td>
 	    </tr>
 	    <tr>
 
 	      <td><span class="itemsmall"><b>Stratum Method Name:</b></span></td>
 	      <td>
-		<html:text property="stratumMethodName" size="40"/>
+	      	<html:select property="stratumMethodName" size="6" multiple="true">
+		        <option value="ANY" selected>--ANY--</option>
+		        <html:options property="stratumMethodNames"/>
+		        <option value="IS NOT NULL">--NOT NULL--</option>
+		        <option value="IS NULL">--NULL--</option>
+	        </html:select>
 	      </td>
-	      <td>
-		<span class="itemsmall">Include plots without a Stratum Method:</span>
-		<html:checkbox property="allowNullStratumMethodName" />
-	      </td>
-
 	    </tr>
 	    
 	    <!-- TODO:
@@ -611,8 +626,14 @@ VEGBANK - Simple Plots Query
 	    <tr>
 	      <td><span class="itemsmall"><b>Project Name:</b></span></td>
 	      <td>
-		<html:text property="projectName" size="40"/>
-	      </td>
+	      	<html:select property="projectName" size="6" multiple="true">
+		        <option value="ANY" selected>--ANY--</option>
+		        <html:options property="projectNames"/>
+		        <option value="IS NOT NULL">--NOT NULL--</option>
+		        <option value="IS NULL">--NULL--</option>
+	        </html:select>
+	
+        </td>
 	    </tr>
 
 	  </table>
@@ -694,7 +715,7 @@ VEGBANK - Simple Plots Query
     <th rowspan="2"><p><span  class="category">Plant Name</span></p></th>
     <th colspan="2"><p><span class="category">Cover (%)</span></p></th>
 
-    <th colspan="2"><p><span class="category">Basal Area (m2/ha)</span></p></th>
+    <!-- no basal area <th colspan="2"><p><span class="category">Basal Area (m2/ha)</span></p></th> -->
     <!-- stems not wired in yet
     <th colspan="2"><p><span class="category">Stem DBH (cm)</span></p></th>
 
@@ -708,8 +729,8 @@ VEGBANK - Simple Plots Query
 
     <th><p><span class="category">Min</span></p></th>
     <th><p><span class="category">Max</span></p></th>
-    <th><p><span class="category">Min</span></p></th>
-    <th><p><span class="category">Max</span></p></th>
+    <!-- no basal area <th><p><span class="category">Min</span></p></th>
+    <th><p><span class="category">Max</span></p></th> -->
     <!-- stems not wired in yet
     <th><p><span class="category">Min</span></p></th>
     <th><p><span class="category">Max</span></p></th>
@@ -728,8 +749,6 @@ VEGBANK - Simple Plots Query
     <td><html:text property='<%= "plantName[" + i + "]" %>' size="30"/></td>
     <td><html:text property='<%= "minTaxonCover[" + i + "]" %>' size="5"/></td>
     <td><html:text property='<%= "maxTaxonCover[" + i + "]" %>' size="5"/></td>
-    <td><html:text property='<%= "minTaxonBasalArea[" + i + "]" %>' size="5"/></td>
-    <td><html:text property='<%= "maxTaxonBasalArea[" + i + "]" %>' size="5"/></td>
     <!-- stems not wired in yet
     <td><input name="min__stemcount.stemdiameter-1" size="5"></td>
     <td><input name="max__stemcount.stemdiameter-1" size="5"></td>
@@ -1011,7 +1030,7 @@ VEGBANK - Simple Plots Query
 	  <table border="0" cellspacing="1" cellpadding="1">
 	    <tr bgcolor="#DDDDDD">
 	      <th rowspan="2"><p><span class="item">Row</span></p></th>
-	      <th rowspan="2"><p><span class="category">Community Name</span></p></th>
+	      <th rowspan="2"><p><span class="category">Community Name <a target="_blank" href="/vegbank/forms/community-query.html">search</a></span></p></th>
 	      <!-- TODO:
 	      <th rowspan="2"><p><span class="category">Fit</span></p></th>
 	      <th rowspan="2"><p><span class="category">Confidence</span></p></th>

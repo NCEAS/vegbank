@@ -21,4 +21,8 @@ ALLOW TCP/IP CONNECTIONS
 
   #tcpip_socket = false -> tcpip_socket = true
   
-                                             
+
+BACKUP DATABASE
+
+1) 
+

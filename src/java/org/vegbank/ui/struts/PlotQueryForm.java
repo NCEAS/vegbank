@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 00:24:54 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-11 01:41:14 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,10 +25,16 @@
 package org.vegbank.ui.struts;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Vector;
 
 import org.apache.struts.action.ActionForm;
+import org.vegbank.common.command.GenericCommand;
+import org.vegbank.common.model.CoverMethod;
 import org.vegbank.common.model.Observation;
 import org.vegbank.common.model.Plot;
+import org.vegbank.common.model.Project;
+import org.vegbank.common.model.StratumMethod;
 
 /**
  * @author farrell
@@ -41,9 +47,17 @@ public class PlotQueryForm extends ActionForm
   private Collection surficialDeposits;
   private Collection hydrologicRegimes;
   private Collection topoPositions;
-	
-  // State(s)
+  
+  // DB constructed picklists
+	private Collection projectNames;
+	private Collection coverMethodNames;
+	private Collection stratumMethodNames;
+
+  // State and Country
+	private String[] countries = new String[20];
   private String[] state = new String[20];
+  
+
 	
   // Lat Long
   private String nlat;
@@ -78,21 +92,20 @@ public class PlotQueryForm extends ActionForm
   private String maxPlotArea;
   private boolean allowNullPlotArea;
 
-  private String coverMethodType;
-  private boolean allowNullCoverMethodType;
-  private String stratumMethodName;
-  private boolean allowNullStratumMethodName;
+  private String[] coverMethodType = new String[20];;
+  //private boolean allowNullCoverMethodType;
+  private String[] stratumMethodName = new String[20];
+ 	// private boolean allowNullStratumMethodName;
+	private String[] projectName = new String[20];
   private String observationContributorName;
   private boolean allowNullObservationContributorName;
-  private String projectName;
   private String plotSubmitterName;
 	
   // Vegatation
   private String[] plantName = new String[5];
   private String[] minTaxonCover = new String[5];
   private String[] maxTaxonCover = new String[5];
-  private String[] minTaxonBasalArea = new String[5];	
-  private String[] maxTaxonBasalArea = new String[5];	
+
 	
   // Richness
   private String minCountTaxonObservation;
@@ -408,10 +421,9 @@ public class PlotQueryForm extends ActionForm
   {
     if ( rockTypes == null )
       {
-	// Need to create this object
-	Plot plot = new Plot();
-	rockTypes = plot.getRockTypePickList();
-	plot.getSurficialDepositsPickList();
+				// Need to create this object
+				Plot plot = new Plot();
+				rockTypes = plot.getRockTypePickList();
       }
     return rockTypes;
   }
@@ -437,9 +449,9 @@ public class PlotQueryForm extends ActionForm
   {
     if ( surficialDeposits == null )
       {
-	// Need to create this object
-	Plot plot = new Plot();
-	surficialDeposits = plot.getSurficialDepositsPickList();
+				// Need to create this object
+				Plot plot = new Plot();
+				surficialDeposits = plot.getSurficialDepositsPickList();
       }
     return surficialDeposits;
   }
@@ -451,9 +463,9 @@ public class PlotQueryForm extends ActionForm
   {
     if ( topoPositions == null )
       {
-	// Need to create this object
-	Plot plot = new Plot();
-	topoPositions = plot.getTopoPositionPickList();
+				// Need to create this object
+				Plot plot = new Plot();
+				topoPositions = plot.getTopoPositionPickList();
       }
     return topoPositions;
   }
@@ -591,7 +603,7 @@ public class PlotQueryForm extends ActionForm
 		 *
 		 * @return the value of coverMethodType
 		 */
-		public String getCoverMethodType() {
+		public String[] getCoverMethodType() {
 			return this.coverMethodType;
 		}
 
@@ -600,34 +612,34 @@ public class PlotQueryForm extends ActionForm
 		 *
 		 * @param argCoverMethodType Value to assign to this.coverMethodType
 		 */
-		public void setCoverMethodType(String argCoverMethodType){
+		public void setCoverMethodType(String[] argCoverMethodType){
 			this.coverMethodType = argCoverMethodType;
 		}
 
-		/**
-		 * Gets the value of allowNullCoverMethodType
-		 *
-		 * @return the value of allowNullCoverMethodType
-		 */
-		public boolean isAllowNullCoverMethodType() {
-			return this.allowNullCoverMethodType;
-		}
+//		/**
+//		 * Gets the value of allowNullCoverMethodType
+//		 *
+//		 * @return the value of allowNullCoverMethodType
+//		 */
+//		public boolean isAllowNullCoverMethodType() {
+//			return this.allowNullCoverMethodType;
+//		}
 
-		/**
-		 * Sets the value of allowNullCoverMethodType
-		 *
-		 * @param argAllowNullCoverMethodType Value to assign to this.allowNullCoverMethodType
-		 */
-		public void setAllowNullCoverMethodType(boolean argAllowNullCoverMethodType){
-			this.allowNullCoverMethodType = argAllowNullCoverMethodType;
-		}
+//		/**
+//		 * Sets the value of allowNullCoverMethodType
+//		 *
+//		 * @param argAllowNullCoverMethodType Value to assign to this.allowNullCoverMethodType
+//		 */
+//		public void setAllowNullCoverMethodType(boolean argAllowNullCoverMethodType){
+//			this.allowNullCoverMethodType = argAllowNullCoverMethodType;
+//		}
 
 		/**
 		 * Gets the value of stratumMethodName
 		 *
 		 * @return the value of stratumMethodName
 		 */
-		public String getStratumMethodName() {
+		public String[] getStratumMethodName() {
 			return this.stratumMethodName;
 		}
 
@@ -636,27 +648,27 @@ public class PlotQueryForm extends ActionForm
 		 *
 		 * @param argStratumMethodName Value to assign to this.stratumMethodName
 		 */
-		public void setStratumMethodName(String argStratumMethodName){
+		public void setStratumMethodName(String[] argStratumMethodName){
 			this.stratumMethodName = argStratumMethodName;
 		}
 
-		/**
-		 * Gets the value of allowNullStratumMethodName
-		 *
-		 * @return the value of allowNullStratumMethodName
-		 */
-		public boolean isAllowNullStratumMethodName() {
-			return this.allowNullStratumMethodName;
-		}
-
-		/**
-		 * Sets the value of allowNullStratumMethodName
-		 *
-		 * @param argAllowNullStratumMethodName Value to assign to this.allowNullStratumMethodName
-		 */
-		public void setAllowNullStratumMethodName(boolean argAllowNullStratumMethodName){
-			this.allowNullStratumMethodName = argAllowNullStratumMethodName;
-		}
+//		/**
+//		 * Gets the value of allowNullStratumMethodName
+//		 *
+//		 * @return the value of allowNullStratumMethodName
+//		 */
+//		public boolean isAllowNullStratumMethodName() {
+//			return this.allowNullStratumMethodName;
+//		}
+//
+//		/**
+//		 * Sets the value of allowNullStratumMethodName
+//		 *
+//		 * @param argAllowNullStratumMethodName Value to assign to this.allowNullStratumMethodName
+//		 */
+//		public void setAllowNullStratumMethodName(boolean argAllowNullStratumMethodName){
+//			this.allowNullStratumMethodName = argAllowNullStratumMethodName;
+//		}
 
 		/**
 		 * Gets the value of observationContributorName
@@ -699,7 +711,7 @@ public class PlotQueryForm extends ActionForm
 		 *
 		 * @return the value of projectName
 		 */
-		public String getProjectName() {
+		public String[] getProjectName() {
 			return this.projectName;
 		}
 
@@ -708,8 +720,8 @@ public class PlotQueryForm extends ActionForm
 		 *
 		 * @param argProjectName Value to assign to this.projectName
 		 */
-		public void setProjectName(String argProjectName){
-			this.projectName = argProjectName;
+		public void setProjectName(String[] strings){
+			this.projectName = strings;
 		}
 
 		/**
@@ -725,26 +737,11 @@ public class PlotQueryForm extends ActionForm
 	/**
 	 * @return
 	 */
-	public String[] getMaxTaxonBasalArea()
-	{
-		return maxTaxonBasalArea;
-	}
-
-	/**
-	 * @return
-	 */
 	public String[] getMaxTaxonCover()
 	{
 		return maxTaxonCover;
 	}
 
-	/**
-	 * @return
-	 */
-	public String[] getMinTaxonBasalArea()
-	{
-		return minTaxonBasalArea;
-	}
 
 	/**
 	 * @return
@@ -762,13 +759,7 @@ public class PlotQueryForm extends ActionForm
 		return plantName;
 	}
 
-	/**
-	 * @param strings
-	 */
-	public void setMaxTaxonBasalArea(String[] strings)
-	{
-		maxTaxonBasalArea = strings;
-	}
+
 
 	/**
 	 * @param strings
@@ -778,13 +769,6 @@ public class PlotQueryForm extends ActionForm
 		maxTaxonCover = strings;
 	}
 
-	/**
-	 * @param strings
-	 */
-	public void setMinTaxonBasalArea(String[] strings)
-	{
-		minTaxonBasalArea = strings;
-	}
 
 	/**
 	 * @param strings
@@ -881,5 +865,124 @@ public class PlotQueryForm extends ActionForm
 	{
 		conjunction = string;
 	}
+
+	/**
+	 * @return
+	 */
+	public String[] getCountries()
+	{
+		return countries;
+	}
+
+	/**
+	 * @param strings
+	 */
+	public void setCountries(String[] strings)
+	{
+		countries = strings;
+	}
+
+ 	// Add the picklists here......
+ 	
+ 	
+	/**
+	 * @return
+	 */
+	public Collection getProjectNames()
+	{
+		if ( projectNames == null )
+		{
+			projectNames = new Vector();
+			String selectClauseKey = "project";
+			String whereClauseKey = null;
+			String beanName = "Project";
+			String[] whereParams = null;
+			// Need to create this object
+			GenericCommand  gc = new GenericCommand();
+			try
+			{
+				Collection projects = gc.execute(selectClauseKey, whereClauseKey, beanName, whereParams );
+				Iterator projectsIter = projects.iterator();
+				while ( projectsIter.hasNext() )
+				{
+					Project project = (Project) projectsIter.next();
+					projectNames.add( project.getProjectName() );
+				}
+			}
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return projectNames;
+	}
+
+	/**
+	 * @return
+	 */
+	public Collection getCoverMethodNames()
+	{
+		if ( projectNames == null )
+		{
+			coverMethodNames = new Vector();
+			String selectClauseKey = "covermethod";
+			String whereClauseKey = null;
+			String beanName = "CoverMethod";
+			String[] whereParams = null;
+			// Need to create this object
+			GenericCommand  gc = new GenericCommand();
+			try
+			{
+				Collection cms = gc.execute(selectClauseKey, whereClauseKey, beanName, whereParams );
+				Iterator cmIter = cms.iterator();
+				while ( cmIter.hasNext() )
+				{
+					CoverMethod cm = (CoverMethod) cmIter.next();
+					coverMethodNames.add( cm.getCoverType() );
+				}
+			}
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return coverMethodNames;
+	}
+
+	/**
+	 * @return
+	 */
+	public Collection getStratumMethodNames()
+	{
+		if ( projectNames == null )
+		{
+			stratumMethodNames = new Vector();
+			String selectClauseKey = "stratummethod";
+			String whereClauseKey = null;
+			String beanName = "StratumMethod";
+			String[] whereParams = null;
+			// Need to create this object
+			GenericCommand  gc = new GenericCommand();
+			try
+			{
+				Collection stratummethods = gc.execute(selectClauseKey, whereClauseKey, beanName, whereParams );
+				Iterator stratummethodsIter = stratummethods.iterator();
+				while ( stratummethodsIter.hasNext() )
+				{
+					StratumMethod sm = (StratumMethod) stratummethodsIter.next();
+					stratumMethodNames.add( sm.getStratumMethodName() );
+				}
+			}
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return stratumMethodNames;
+	}
+
 
 }

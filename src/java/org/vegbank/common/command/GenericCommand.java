@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-09 18:26:36 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-07-11 01:41:14 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,10 @@ public class GenericCommand implements VegbankCommand
 		throws Exception
 	{
 		// Run the query and stick the generated object into the request
-		String SQLStatement = getSQLStatement(request);
+		String selectClauseKey = request.getParameter("SQL");
+		String whereClauseKey = request.getParameter("WHERE");
+		String[] whereParams = request.getParameterValues("wparam");
+		String SQLStatement = getSQLStatement(selectClauseKey, whereClauseKey, whereParams);
 		
 		DatabaseAccess da = new DatabaseAccess();
 		ResultSet rs = da.issueSelect( SQLStatement );
@@ -107,12 +110,9 @@ public class GenericCommand implements VegbankCommand
 	 * @param request
 	 * @return
 	 */
-	private String getSQLStatement(HttpServletRequest request)
+	private String getSQLStatement(String selectClauseKey, String whereClauseKey, String[] whereParams)
 	{
 		ResourceBundle SQLResources =  ResourceBundle.getBundle("org.vegbank.common.SQLStore");
-		String selectClauseKey = request.getParameter("SQL");
-		String whereClauseKey = request.getParameter("WHERE");
-		
 		String selectClause = "";
 		String whereClause = "";
 		
@@ -121,7 +121,7 @@ public class GenericCommand implements VegbankCommand
 		{
 			selectClause = SQLResources.getString(selectClauseKey);
 		}		
-		if (! whereClauseKey.equals(""))
+		if (whereClauseKey != null && ! whereClauseKey.equals(""))
 		{
 			whereClause = SQLResources.getString(whereClauseKey);
 		}
@@ -131,7 +131,6 @@ public class GenericCommand implements VegbankCommand
 		// Message format allows the substitution of '{x}' with Strings from 
 		// a String[] where x is the array index
 		MessageFormat format = new MessageFormat(whereClause);
-		String[] whereParams = request.getParameterValues("wparam");
 
 		StringBuffer SQLStatement = new StringBuffer();
 		SQLStatement.append(selectClause);
@@ -139,7 +138,7 @@ public class GenericCommand implements VegbankCommand
 		// Sometimes the SELECT statement must have a WHERE, e.g for privacy 
 		// reasons for eample i.e. some records are not public
 		// if so the where clause is appended using an AND
-		if ( ! whereClause.equals("") && whereClause != null )
+		if ( whereClause != null  && ! whereClause.equals("") )
 		{
 			if ( selectClause.indexOf("WHERE") > 0 )
 			{
@@ -173,15 +172,16 @@ public class GenericCommand implements VegbankCommand
 		while ( rs.next() )
 		{
 			Object bean = Utility.createObject( VBObjectUtils.DATA_MODEL_PACKAGE +  className);
-			for ( int i=0; i <  propNames.size(); i++)
+			for ( int i=0; i<propNames.size(); i++)
 			{
 				String propName = (String) propNames.get(i);
 				String value = rs.getString(i+1);
 				//System.out.println("####" + bean + " " + propName + " " + value);
-				BeanUtils.copyProperty(bean, propName, value);
-				col.add(bean);
+				BeanUtils.copyProperty(bean, propName, value);	
 			}
+		  col.add(bean);
 		}
+		//System.out.println("Got " + col.size() + " " + className);
 		return col;
 	}
 	
@@ -232,6 +232,18 @@ public class GenericCommand implements VegbankCommand
 			}
 		}	
 		return results;
+	}
+	
+	public Collection execute ( String selectClauseKey, String whereClauseKey, String beanName,  String[] whereParams ) 
+		throws Exception
+	{
+		String SQLStatement = getSQLStatement(selectClauseKey, whereClauseKey,  whereParams);
+		DatabaseAccess da = new DatabaseAccess();
+		ResultSet rs = da.issueSelect( SQLStatement );
+		
+		Vector propNames = this.getPropertyNames(SQLStatement);
+		Collection collection = this.getBeanCollection(beanName, rs, propNames);
+		return collection;
 	}
 
 	/**
