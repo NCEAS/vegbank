@@ -5,9 +5,9 @@
   * Global build script for veg_plot. This simply allows running all the sub 
   * scripts from one place 
   *
-  *     '$Author: farrell $'
-  *     '$Date: 2003-10-11 21:20:09 $'
-  *     '$Revision: 1.30 $'
+  *     '$Author: anderson $'
+  *     '$Date: 2003-10-17 01:29:08 $'
+  *     '$Revision: 1.31 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -15,6 +15,7 @@
   <property file="${basedir}/build.properties"/>
   
   <target name="init" description="=> Initialize global variables">
+
     <property environment="env" />
     <property name="top.dir" location="${basedir}/.."/>
     <property name="top.lib.dir" location="${top.dir}/lib"/>
@@ -129,7 +130,7 @@
   </target>
   
   
-  <target name="compile" depends="prepare"
+  <target name="compile" depends="cleanprops,prepare"
           description="=> Compiles all code in veg_plot module">
 		<echo message="Compiling all of ${ant.project.name}"/>
 
@@ -369,6 +370,12 @@
   
 		<ant dir="exp/rmidatasource" target="clean"/> 
 		<ant dir="exp/services" target="clean"/>
+	</target>
+  
+	<target name="cleanprops" depends="init" 
+          description="=> Remove generated properties files">
+    	<delete dir="${build.classes.dir}/*.properties"/>
+  
 	</target>
   
   <!-- ================================================================ -->
