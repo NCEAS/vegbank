@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-11-16 06:34:20 $'
-  *  '$Revision: 1.18 $'
+  *      '$Date: 2004-11-16 07:41:14 $'
+  *  '$Revision: 1.19 $'
   *
   *
   -->
@@ -28,7 +28,7 @@
 
 
 </HEAD>
-<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005660" alink="#0066FF">
+<body>
 
 @vegbank_header_html_normal@
 

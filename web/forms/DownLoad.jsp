@@ -10,9 +10,9 @@
  *               National Center for Ecological Analysis and Synthesis
  *   Authors: @author@
  *
- *  '$Author: anderson $'
- *  '$Date: 2004-06-14 22:16:51 $'
- *  '$Revision: 1.8 $'
+ *  '$Author: mlee $'
+ *  '$Date: 2004-11-16 07:41:14 $'
+ *  '$Revision: 1.9 $'
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -61,7 +61,7 @@
 </style>
  </head>
  <!--access to the fileDownload servlet-->
- <body bgcolor="#ffffff">
+ <body>
 <!-- VegBank Header -->
   @vegbank_header_html_normal@
 

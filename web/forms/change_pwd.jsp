@@ -5,15 +5,15 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!--
-  * '$Id: change_pwd.jsp,v 1.4 2004-11-16 06:19:24 mlee Exp $'
+  * '$Id: change_pwd.jsp,v 1.5 2004-11-16 07:41:14 mlee Exp $'
   * Purpose: Display change user password form.
   * Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   * Authors: @author@
   *
   * '$Author: mlee $'
-  * '$Date: 2004-11-16 06:19:24 $'
-  * '$Revision: 1.4 $'
+  * '$Date: 2004-11-16 07:41:14 $'
+  * '$Revision: 1.5 $'
   *
   *
   -->
@@ -25,7 +25,7 @@
 <!-- #EndEditable -->
 <meta http-equiv="Content-Type" content="text/html; charset=">
 </HEAD>
-<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
+<body>
 @vegbank_header_html_normal@
 
 <br>

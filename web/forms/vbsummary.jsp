@@ -14,7 +14,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=" />
 </HEAD>
-<BODY >@vegbank_header_html_normal@
+<body>@vegbank_header_html_normal@
 
 <h1>Data Currently in VegBank </h1>
 <div align="center">
