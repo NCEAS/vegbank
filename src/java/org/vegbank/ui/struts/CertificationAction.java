@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-11-26 00:46:40 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-12-02 02:10:40 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,6 +64,7 @@ public class CertificationAction extends Action {
 	 */
 	 private void handleCertification(HttpServletRequest req, HttpServletResponse res) {
 
+		 /*
 		 try {
 			 LogUtility.log("UserManagementServlet > performing certification action");
 			 
@@ -169,6 +170,7 @@ public class CertificationAction extends Action {
 
 		 	LogUtility.log("CertificationAction: ", e);
 		 }
+	 */
 	 }
 	 
 	/**
@@ -178,6 +180,7 @@ public class CertificationAction extends Action {
 	 */
 	private void sendAdminCertRequest(Hashtable params) {
 
+		/*
 		try {
 			StringBuffer messageBody = new StringBuffer();
 
@@ -237,6 +240,7 @@ public class CertificationAction extends Action {
 		} catch(Exception e) {
 			LogUtility.log("CertificationAction: ", e);
 		}
+		*/
 	}
 
 }
