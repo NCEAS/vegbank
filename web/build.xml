@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2003-10-24 01:52:43 $'
-* '$Revision: 1.53 $'
+* '$Author: mlee $'
+* '$Date: 2003-10-24 12:33:51 $'
+* '$Revision: 1.54 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -297,6 +297,8 @@
 -->
 	<target name="dist" description="=&gt; Distribute all web files">
 		<antcall target="tokenfiles" />
+		<antcall target="includes" />
+		<antcall target="help" />
 		<antcall target="index" />
 		<antcall target="design" />
 		<antcall target="forms" />
@@ -304,7 +306,7 @@
 		<antcall target="images" />
 		<antcall target="vbsummary" />
 		<antcall target="history" />
-		<antcall target="includes" />
+
 		<antcall target="init" />
 		<antcall target="news" />
 		<antcall target="panel" />
