@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: mlee $'
- *  '$Date: 2005-03-15 04:16:51 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2005-03-15 05:17:31 $'
+ *  '$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,11 +42,11 @@
     <hr/>
     <redirect:write file="{$directory}{$menu_url}">
       
-@webpage_top_html@
-  @stdvegbankget_jspdeclarations@
-  @webpage_head_html@
+<html><head>
+  @stylesheets_declaration@
+
   <title>VegBank  -- tutorial</title>
-  @webpage_masthead_html@
+</head><body>
             <table width="100%" height="100%">
             <tr>
               <td valign="top" align="center">
@@ -70,7 +70,7 @@
 </td></tr>
 </table>          
           
-      
+      </body></html>
     </redirect:write>
     <xsl:for-each select="manualItem">
       <xsl:call-template name="runManualItem"/>
