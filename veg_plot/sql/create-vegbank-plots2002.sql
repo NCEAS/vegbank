@@ -985,9 +985,9 @@ ALTER TABLE plot
     ADD CONSTRAINT SAMPLEMETHOD_ID FOREIGN KEY (SAMPLEMETHOD_ID)
     REFERENCES sampleMethod (SAMPLEMETHOD_ID);
 
-ALTER TABLE plot
-    ADD CONSTRAINT soilTaxon FOREIGN KEY (soilTaxon)
-    REFERENCES n/a (null);
+--ALTER TABLE plot
+--    ADD CONSTRAINT soilTaxon FOREIGN KEY (soilTaxon)
+--    REFERENCES n/a (null);
 
 ----------------------------------------------------------------------------
 -- plot
