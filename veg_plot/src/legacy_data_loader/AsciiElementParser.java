@@ -665,22 +665,27 @@ private Hashtable parseSiteAttributes(String authorPlotCode)
 	Hashtable siteAttributesHash = new Hashtable();
 
 	//if the authorPlotCode is null then warn user
-	if (authorPlotCode == null) {
+	if (authorPlotCode == null) 
+	{
 		System.out.println("warning null plot code");
 	}
-	else {
+	else 
+	{
 		//add the plot - site related elements
 		siteAttributesHash.put("authorPlotCode", authorPlotCode);
 		
 		//cycle thru the plot site elements
 		PlotElements pe = new PlotElements();
 		pe.buildElementLists();
-		for (int i=0; i <= pe.elementListSize("site") ; i++) {
+		for (int i=0; i <= pe.elementListSize("site") ; i++) 
+		{
 			//get the next element in the stack
 			String currentElement=pe.getSiteElement();
+			System.out.println("current site element: "+currentElement);
 			//if the element exits in then continue
 			if ( elementExists(currentElement+".constrained")  == true ) 
 			{
+				System.out.println( "ELEMENT IS THERE" );
 				//if the element is in the same file
 //				System.out.println("SITE FILE: "+plotCodeFileName);
 				if (elementExistsInFile(currentElement+".constrained",plotCodeFileName ) 
@@ -691,14 +696,18 @@ private Hashtable parseSiteAttributes(String authorPlotCode)
 						extractConstrainedElement(currentElement, 
 						plotCodeFileName, "authorPlotCode", authorPlotCode) 
 						);
+						System.out.println("value: " +extractConstrainedElement(currentElement, 
+						 plotCodeFileName, "authorPlotCode", authorPlotCode) 
+						);
 				}
 			}
 			else
 			{
-			//	System.out.println( "ELEMENT IS NOT THERE" );
+				System.out.println( "ELEMENT IS NOT THERE" );
 			}
 		}
 	}
+	System.out.println(siteAttributesHash.toString() );
 	return(siteAttributesHash);
 }
 

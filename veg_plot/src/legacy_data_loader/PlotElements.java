@@ -186,6 +186,10 @@ public void siteElements()
 	siteElementVec.add(5, "namedPlace");
 	siteElementVec.add(6, "plotShape");
 	siteElementVec.add(7, "surveyDate");
+	siteElementVec.add(8, "slopeAspect");
+	siteElementVec.add(9, "slopeGradient");
+	siteElementVec.add(10, "elevationValue");
+	siteElementVec.add(10, "coordType");
 }
 
 
