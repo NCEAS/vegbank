@@ -27,7 +27,7 @@ import issueStatement.*;
 
 public class USDAPlantsLoader2000 {
 
-public String styleSheet="plantsToNVC.xsl";
+public String styleSheet="../lib/plantsToNVC.xsl";
 public String attributeFile="attFile.txt";
 public Vector fileVector = new Vector();
 public Hashtable attributeHash = new Hashtable();
