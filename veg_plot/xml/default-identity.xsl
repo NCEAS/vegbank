@@ -15,16 +15,16 @@
 
 <!--Style sheet for transforming plot xml files, specifically
 	for the servlet transformation to show summary results
-	to the web browser-->
+	to the web browser
+-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
  <xsl:output method="html"/>
   <xsl:template match="/vegPlotPackage">
 
 <html>
-      <head>
-      
-  <link rel="stylesheet" type="text/css" href="http://numericsolutions.com/includes/default.css" />
+	<head>
+  	<link rel="stylesheet" type="text/css" href="http://numericsolutions.com/includes/default.css" />
 	
 	<script LANGUAGE="JavaScript">
 <!-- Modified By:  Steve Robison, Jr. (stevejr@ce.net) -->
@@ -49,22 +49,26 @@ return "Check All"; }
 </xsl:text>
 </script>
 
-  
-<script language="javascript" alt="JavaScript not enabled!">
- <xsl:text disable-output-escaping="yes">
-   &lt;!-- 
-    today = new Date()
-    document.write("(Accessed: " + today +" to: ")
-    document.write(location.host.toLowerCase()+") \n")
-   //--&gt;
-   </xsl:text>
- </script>
 </head>
 
 <body bgcolor="FFFFFF">
 
-<br></br>
-<xsl:number value="count(plot)" /> documents found.
+
+<span class="copyright">
+	<xsl:number value="count(plot)" /> documents found.
+</span>
+
+<!--NAVIGATION TO THE NEXT AND PREVIOUS-->
+<span class="navigation">
+PREV || NEXT 
+</span>
+<br> </br>
+<!-- SOME NOTES ABOUT THE USE OF ICONS-->
+<br> </br>
+<span class="intro" >Available Reports: 
+<img src="/vegbank/images/report_sm.gif"></img>=Summary
+<img src="/vegbank/images/small_globe.gif"></img>=Location 
+<img src="/vegbank/images/comprehensive_sm.gif"></img>=Comprehensive </span>
 
 <!-- set up the form which is required by netscape 4.x browsers -->
 <form name="myform" action="viewData" method="post">
@@ -74,9 +78,9 @@ return "Check All"; }
 <table width="85%">
 
 
-           <tr colspan="1" bgcolor="CCCCFF" align="left" valign="top">
-             <th class="tablehead">Identification</th>
-           </tr>
+<tr colspan="1" bgcolor="CCCCFF" align="left" valign="top">
+   <th class="tablehead">Identification</th>
+</tr>
 
 	<!-- Header and row colors -->
         <xsl:variable name="evenRowColor">#C0D3E7</xsl:variable>
