@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-14 16:09:22 $'
- * '$Revision: 1.8 $'
+ *     '$Date: 2002-08-01 15:34:54 $'
+ * '$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,15 +44,38 @@ import databaseAccess.*;
  */
 
 public class  CommunityQueryStore
- {
+{
 
 	public Vector communitySummaryOutput = new Vector();
 	private String communityName = null;
 	private String communityLevel = null;
 	private String action = null; //sql action (select, insert)
 	private StringBuffer statement = new StringBuffer(); //sql statement
+	private String dbConnectString = ""; // the db connect string
+	private ResourceBundle rb = ResourceBundle.getBundle("database");
 
-
+	/**
+	 * method that will return a database connection for use with the database
+	 */
+	private Connection getConnection()
+	{
+		Connection c = null;
+		try 
+ 		{
+			Class.forName("org.postgresql.Driver");
+			//String s = "jdbc:postgresql://vegbank.nceas.ucsb.edu/communities_dev";
+			String s = rb.getString("communitydbconnectstring");
+			this.dbConnectString = s;
+			System.out.println("CommunityQueryStore > db connect string: " + s);
+			c = DriverManager.getConnection(s, "datauser", "");
+		}
+		catch ( Exception e )
+		{
+			System.out.println("CommunityQueryStore > exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return(c);
+	}
  
 	/**
  	* Method that takes as input queryelements such as communityLevel (the level in
@@ -327,28 +350,6 @@ public class  CommunityQueryStore
 			e.printStackTrace();
 		}
 		return(names);
-	}
-	
-	/**
-	 * method that will return a database connection for use with the database
-	*/
-	private Connection getConnection()
-	{
-		Connection c = null;
-		try 
- 		{
-			Class.forName("org.postgresql.Driver");
-			//the community database
-			System.out.println("CommunityQueryStore > connecting to db on: vegbank ");
-			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/communities_dev", "datauser", "");
-		}
-		catch ( Exception e )
-		{
-			System.out.println("CommunityQueryStore > exception: "
-			+"dbConnect.makeConnection: "+e.getMessage());
-			e.printStackTrace();
-		}
-			return(c);
 	}
 	
 	

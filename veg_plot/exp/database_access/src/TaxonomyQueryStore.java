@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-07-30 15:58:52 $'
- * '$Revision: 1.19 $'
+ *     '$Date: 2002-08-01 15:34:54 $'
+ * '$Revision: 1.20 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,9 @@ import databaseAccess.*;
 	public class  TaxonomyQueryStore
 	{
 		LocalDbConnectionBroker lb = new LocalDbConnectionBroker();
-		Connection c = null;
+		private Connection c = null;
+		private String dbConnectString = ""; // the db connect string
+		private ResourceBundle rb = ResourceBundle.getBundle("database");
 	
 	
 	/**
@@ -58,8 +60,11 @@ import databaseAccess.*;
 		try 
  		{
 			Class.forName("org.postgresql.Driver");
+			String s = rb.getString("plantdbconnectstring");
+			this.dbConnectString = s;
+			System.out.println("CommunityQueryStore > db connect string: " + s);
 			//c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
-			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/tmp2", "datauser", "");
+			c = DriverManager.getConnection(s, "datauser", "");
 		}
 		catch ( Exception e )
 		{
