@@ -418,7 +418,7 @@ StringTokenizer tok = new StringTokenizer(statusArray[i], ",");
         buf=tok.nextToken();  //there is more
 
 System.out.println(party_circum_id+" "+status+" "+party+" "+startDate+" "+stopDate);
-
+if (party.equals("FNA")) {party_id=001;}
 if (party.equals("NFA")) {party_id=001;}
 if (party.equals("PLANTS")) {party_id=002;}
 if (stopDate.equals("24-AUG--999")) {stopDate="24-AUG-2000";}
@@ -468,7 +468,7 @@ StringTokenizer tok = new StringTokenizer(correlationArray[i], ",");
 
 System.out.println(correlation_id+" "+startDate+" "+stopDate);
 
-if (stopDate.equals("24-AUG--999")) {stopDate="24-AUG-2000";}
+if (stopDate.equals("24-AUG--999")) {stopDate="24-AUG-2005";}
 
 stmt.executeUpdate("INSERT into correlation (correlation_id, party_circum1, party_circum2, convergence, startDate, stopDate) values ("+correlation_id+", "+party_circum1+","+party_circum2+",'"+convergence+"','"+startDate+"','"+stopDate+"')");
 
