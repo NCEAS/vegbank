@@ -181,12 +181,10 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 					<a href="@web_context@forms/plot-query-simple.jsp">3-in-1 Query</a>
 					to find plots, plants and communities.
                 </li>
-                <li class="constsize"> VegBank workshop coming soon at a Portland 
-                  ESA meeting <a href="@workshop_link@">workshop.</a> 
-                </li>
-                <li class="constsize"><font color="red">NEW!</font> Take the VegBank <a href="@general_link@instructions.html"> 
+               
+                <li class="constsize">Take the VegBank <a href="@general_link@instructions.html"> 
                   tutorial.</a> </li>
-                <li class="constsize">Version 2 of the ESA <i><a 
+                <li class="constsize"><font color="red">NEW!</font> July 2004: Version 4 of the ESA <i><a 
 href="@panel_link@standards.html">Guidelines for Describing 
                   Associations and Alliances of the U.S. National Vegetation 
                   Classification</a></i> has been completed.</li>
