@@ -30,8 +30,8 @@ import org.vegbank.common.utility.mail.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2005-02-11 00:34:05 $'
- * '$Revision: 1.42 $'
+ * '$Date: 2005-02-11 00:51:43 $'
+ * '$Revision: 1.43 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,6 +76,7 @@ public class Utility
 	public static String VEGBANK_XML_SCHEM;
 	public static String VB_HOME_DIR;
 	public static String VB_DATA_DIR;
+	public static String VB_EXPORT_DIR;
 	public static String WEBAPP_DIR;
 	public static String MODELBEAN_CACHING;
 	public static String VB_EMAIL_FROM;
@@ -104,7 +105,7 @@ public class Utility
 		VEGBANK_XML_SCHEMA = VEGBANK_SCHEMA_LOCATION + VEGBANK_SCHEMA_NAME;
 
 		VB_HOME_DIR = vegbankPropFile.getString("vegbank.home.dir");
-		VB_DATA_DIR = vegbankPropFile.getString("vegbank.data.dir");
+		VB_EXPORT_DIR = vegbankPropFile.getString("vegbank.export.dir");
 		WEBAPP_DIR = vegbankPropFile.getString("vegbank.webapp.dir");
 		MODELBEAN_CACHING = vegbankPropFile.getString("modelbean.caching");
 		

@@ -22,6 +22,7 @@ machine_url
 mail_host
 vegbank.home.dir
 vegbank.data.dir
+vegbank.export.dir
 apache.document.root
 vegbank.schema.data
 vegbank.schema.model
