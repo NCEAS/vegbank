@@ -219,6 +219,7 @@ class ProxySocket extends Thread {
 
             soInbound = soServer.accept() ;
 
+						System.out.println("Proxy > connecting host: " + soInbound.getInetAddress()+":" +soInbound.getPort());
             if(iLogging > 0) 
 						{
                Log.It("Accepted a connection from " +

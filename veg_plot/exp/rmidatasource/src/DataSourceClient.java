@@ -12,21 +12,26 @@ import xmlresource.utils.transformXML;
 //import javax.xml.*;
 
 /** 
- * class that mimics the functionality of the PlotDataSource class except that 
+ * Class that mimics the functionality of the PlotDataSource class except that 
  * this class actually makes an RMI connection to the PlotDataSource class
  * server running on a different machine.  This class is needed because there
  * are certain types of plot data sources (e.g., MS ACCESS) that run from a 
  * specific computing platform that we want to integrate with software running
  * elsewhere, also there is a need for the clients to access data stored on a
- * serever running the vegbank databases and this tool will allow for an
- * alternative to HTTP for accessing that data
- *
+ * server running the vegbank databases and this tool will allow for an
+ * alternative to HTTP for accessing that data.  This RMI client is used by the 
+ * VegBank java servlet system in order to pass an access file to the server that
+ * runs on a wintel box and then to insert a plot(s) to the VegBank database vi 
+ * the RMI Server
+ * 	
+ *	<br> <br>
  *  Authors: @author@
  *  Release: @release@
  *	
+ *  <br> <br>
  *  '$Author: harris $'
- *  '$Date: 2002-04-08 20:28:01 $'
- * 	'$Revision: 1.17 $'
+ *  '$Date: 2002-05-15 20:53:28 $'
+ * 	'$Revision: 1.18 $'
  *
  *
  */
@@ -827,7 +832,8 @@ public class DataSourceClient
 	 * method that will insert a plot on the windows machine based on the name
 	 * of that plot
 	 * THIS METHOD SHOULD NOT BE USED
-	 * @param plot -- the plot that should be loaded 
+	 * @deprecated
+	 * @param plot -- the plot that should be loaded
 	 */
 	 public String insertPlot(String plot)
 	 {
@@ -848,9 +854,12 @@ public class DataSourceClient
 	
 	/**
 	 * method that will insert a plot on the windows machine based on the name
-	 * of that plot
+	 * of that plot -- this assumes that the plot is a tnc plot data set, which 
+	 * is a bad assumption and thus THIS METHOD SHOULD NOT BE USED
+	 * 
 	 * @param plot -- the plot that should be loaded 
 	 * @param emailAddress -- the emailAddress of the person submitting the plots
+	 * @deprecated bad assumption made by the method about the type of plot data set
 	 */
 	 public String insertPlot(String plot, String emailAddress)
 	 {
@@ -868,43 +877,58 @@ public class DataSourceClient
 	 }
 
 	
-	
-	 
 	/**
-	 * main method for testing
+	 * method that will insert a plot on the windows machine based on the name
+	 * of that plot -- this assumes that the plot is a tnc plot data set, which 
+	 * is a bad assumption and thus THIS METHOD SHOULD NOT BE USED
+	 * 
+	 * @param plot -- the plot that should be loaded 
+	 * @param fileType -- the type of plot data set that the file, cached at the 
+	 * 	server, represents the possible types may include 'tnc', 'vbaccess', 'nativexml'
+	 * @param emailAddress -- the emailAddress of the person submitting the plots
 	 */
-	public static void main(String argv[]) 
-	{
-		//get a file from the server
-		System.out.println("DataSourceCleint > argument length: " + argv.length );
-		if(argv.length == 1) 
-		{
-			try
+	 public String insertPlot(String plot, String fileType, String emailAddress)
+	 {
+		 String s = null;
+		 try
 			{
-				String hostServer =  argv[0];
-				DataSourceClient client = new DataSourceClient(hostServer, "1099");
-				System.out.println("DataSourceCleint > " + client.getPlotNames() );
-				String plot ="VOYA.01";
-				//call the method that prints the salient attributes
-				client.printDBVariables(plot);
-				client.closeConnection();
-				
+				s= source.insertPlot(plot, fileType, emailAddress);
 			}
 			catch(Exception e) 
 			{
 				System.err.println("Exception: "+ e.getMessage());
 				e.printStackTrace();
-			}		
-		}
-		else if (argv.length >= 2)
+			}
+			return(s);
+	 }
+
+	 
+	/**
+	 *	main method for testing.  The arguments that can be passed into this are 
+	 *	the following:
+	 *  1] host server name like: raptor.nceas.ucsb.edu
+	 *	2] file -- the file to be uploaded to the server for loading to the DB
+	 *	3] filetype -- the type of file which dicatates the plot data source plugin
+	 *		used by the server.  Options are 'tnc', 'vbaccess' and 'nativexml'
+	 *	4] plotname -- the name of the plot to be loaded by the server.  If the 
+	 *		argument is equal to '-all' then all will be loaded
+	 *
+	 */
+	public static void main(String argv[]) 
+	{
+		//get a file from the server
+		System.out.println("DataSourceCleint > argument length: " + argv.length );
+		if (argv.length >= 2)
 		{
-			System.out.println("DataSourceCleint >  posting a file " );
+			System.out.println("DataSourceCleint >  posting a file to the server " );
 			try 
 			{
-				//START
 				String hostServer =  argv[0];
-				String file =  argv[1];
-				String fileType = "tncplots";
+				String file = argv[1];
+				//this is the type of file and can be like: TNC, VBAccess, NativeXML etc...
+				String fileType = argv[2];
+				System.out.println("DataSourceCleint > file type: " + fileType );
+				
 				DataSourceClient client = new DataSourceClient(hostServer, "1099");
 				System.out.println("DataSourceCleint > sending file: " + file );
 				boolean sendResults = client.putMDBFile(file, fileType);
@@ -914,10 +938,13 @@ public class DataSourceClient
 				Vector v = client.getPlotNames();
 				System.out.println("DataSourceCleint > found : " + v.size() +" plots in archive " );
 				String testPlot = "";
+				
+				//this is the email address of the user who is responsible for laoding the data 
 				String email = "jim_drake@natureserve.org";
-				if (argv.length == 3)
+				
+				if (argv.length == 4)
 				{
-					testPlot =  argv[2];
+					testPlot = argv[3];
 					//if the all flag is passed
 					if ( testPlot.equals("-all") )
 					{
@@ -927,8 +954,9 @@ public class DataSourceClient
 						System.out.println("DataSourceCleint > inserting all the plots in the archive " );
 						for (int c = 0; c < v.size(); c++)
 						{
-							 insertResults = client.insertPlot( v.elementAt(c).toString(), email );
-							 sb.append(insertResults);
+							String curPlot = v.elementAt(c).toString();
+							insertResults = client.insertPlot( curPlot, fileType, email );
+							sb.append(insertResults);
 						}
 						sb.append("</archiveInsertion>");
 						
@@ -940,25 +968,13 @@ public class DataSourceClient
 					//just load the single plot identified on the command line
 					else
 					{
-						System.out.println("DataSourceCleint > inserting the first plot in the archive: " + testPlot );
-						//String insertResults =  "<?xml version=\"1.0\"?> \n"+client.insertPlot(testPlot);
-						
-						String insertResults =   client.insertPlot(testPlot, email);
-						
-						//System.out.println("DataSourceCleint > insertion results: \n" + insertResults );
-						//transform the xml using a generic xslt sheet
+						System.out.println("DataSourceCleint > inserting the plot: " + testPlot );
+						String insertResults = client.insertPlot(testPlot, fileType, email);
+						//transform and display the results to the user
 						transformXML trans  = new transformXML(); 
 						String tr = trans.getTransformedFromString(insertResults, "./lib/ascii-treeview.xsl");
 						System.out.println("DataSourceCleint > insertion results html: \n" + tr );
 					}
-				}
-				//else load the first plot only
-				else
-				{
-					testPlot =  v.elementAt(0).toString();
-					System.out.println("DataSourceCleint > inserting the first plot in the archive: " + testPlot );
-					String insertResults = client.insertPlot(testPlot, email);
-					System.out.println("DataSourceCleint > insertion results: \n" + insertResults );	
 				}
 			} 
 			catch(Exception e) 

@@ -14,6 +14,29 @@ import PlotDataSource;
 //the plot loader
 import databaseAccess.DBinsertPlotSource;
 
+/** 
+ *  Class that handles the upload of a plots data set to the VegBank database
+ * 	The functionality related to this task includes <br>
+ * 	1] allowing the client to upload a data file (via and RMI connection)
+ * 	to the server so that it is cached on the server file system. <br> <br>
+ *  2] allowing for the client to request that one or many of the plots
+ *	stored in the uploaded file to be loaded to the database.  The file 
+ *  types that are supported here are: 1. tnc ms access file, vegbank ms 
+ *	access file, and the vegbank native xml document <br> <br>
+ *	3] utilities allowing the client to request plot attributes associated 
+ *	with a give plot <br> <br>
+ *	The class was written so that ms access files could be accessed and loaded 
+ * 	from a wintel box, and the class is connected to via an rmi client that 
+ *	runs an any hardware/software that will jun java.
+ *	
+ * <br> <br>
+ *  '$Author: harris $'
+ *  '$Date: 2002-05-15 20:53:28 $'
+ * 	'$Revision: 1.13 $'
+ *
+ *
+ */
+
 public class DataSourceImpl extends UnicastRemoteObject
   implements DataSourceServerInterface 
 	{
@@ -52,7 +75,14 @@ public class DataSourceImpl extends UnicastRemoteObject
 	
 	
 	/**
- 	 * this method handles the loading of a plot into the database
+ 	 *
+	 * this method handles the loading of a plot into the database <br>
+	 * <br>
+	 * @deprecated -- use the other method with the same name for this 
+	 * 	method assumes that the plots data set 'fileType' corresponds
+	 * 	to the 'tnc' plots data type which is a relect of the early 
+	 * design of this server/cleint system
+	 *
 	 */	
 	 public String insertPlot(String plot, String emailAddress)
 	 {
@@ -62,7 +92,9 @@ public class DataSourceImpl extends UnicastRemoteObject
 		 		//set the debugging level to 2 -- the highest on the loader
 				int debugLevel = 2;
 			 	//the plugin and the source are the same in this case
-				 String plugin = "";
+				String plugin = "";
+				loaderPlugin = "TNCPlotsDB";
+				 
 			 	//construct an instance of the plot loader
 				dbinsert = new DBinsertPlotSource(loaderPlugin, plot);
 				s = dbinsert.insertPlot(plot, debugLevel, emailAddress);
@@ -74,6 +106,72 @@ public class DataSourceImpl extends UnicastRemoteObject
      }
 		 return(s);
 	 }
+	
+	
+		
+	/**
+	 * This method handles the loading of a plot into the VegBank database.
+	 * Currently the type of plots database files that can be used to load to the 
+	 * database are the: <br>
+	 * TNC plots MDB File <br>
+	 * VegBank MDB File <br>
+	 * VegBank Native XML Document <br> <br>
+	 * But there is the ongoing suspicion that other data sources may be used 
+	 * in the future like the TurboVeg 
+	 * <br>
+	 * @param plot -- the name of the plot which is to be loaded 
+	 * @param fileType -- the type of the file that is cached on the server
+	 * this may inclued: 'tnc', 'vbaccess', and 'nativexml' only
+	 * @param emailAddress -- the email address of the person responsible 
+	 * for the loading of the plot data.
+	 *
+	 */	
+	 public String insertPlot(String plot, String fileType, String emailAddress)
+	 {
+		 String s = null;
+		 try
+		 {
+		 		//set the debugging level to 2 -- the highest on the loader
+				int debugLevel = 2;
+				//set the plugin to null 
+				loaderPlugin = null;
+				System.out.println("DataSourceImpl > plot file type: " + fileType);
+				if ( fileType.toUpperCase().equals("TNC") )
+				{
+					System.out.println("DataSourceImpl > using datasource plugin: TNCPlotsDB");
+					loaderPlugin = "TNCPlotsDB";
+				}
+				else if (fileType.toUpperCase().equals("VBACCESS") )
+				{
+					System.out.println("DataSourceImpl > using datasource plugin: VBAccessDataSourcePlugin");
+					loaderPlugin = "VBAccessDataSourcePlugin";
+				}
+				else if (fileType.toUpperCase().equals("NATIVEXML") )
+				{
+					System.out.println("DataSourceImpl > using datasource plugin: NativeXmlPlugin");
+					loaderPlugin = "NativeXmlPlugin";
+				}
+				else
+				{
+					System.out.println("DataSourceImpl > cannot determine datasrc plugin type");
+				}
+				//if the plugin is not null then try loading the data
+				if ( loaderPlugin != null )
+				{
+					//construct an instance of the plot loader
+					dbinsert = new DBinsertPlotSource(loaderPlugin, plot);
+					s = dbinsert.insertPlot(plot, debugLevel, emailAddress);
+				}
+		 }
+		 catch (Exception e)
+		 {
+		 	System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+     }
+		 return(s);
+	 }
+	
+	
 	
 	/**
 	 * method used for uploading the access mdb file of a given type

@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class DataSourceClientApplet extends javax.swing.JApplet {
     private String server = "vegbank.nceas.ucsb.edu";
-		private String port = "1100";
+		private String port = "1099";
     private DataSourceClient source = new DataSourceClient(server, port);
     
     private String targetPlot = null; //the plot of interest
@@ -65,7 +65,7 @@ public class DataSourceClientApplet extends javax.swing.JApplet {
                 jButton2 = new javax.swing.JButton();
                 jButton1 = new javax.swing.JButton();
                 jScrollPane2 = new javax.swing.JScrollPane();
-                jTextArea1 = new javax.swing.JTextArea();
+                messageTextArea = new javax.swing.JTextArea();
                 jPanel13 = new javax.swing.JPanel();
                 jPanel4 = new javax.swing.JPanel();
                 jPanel7 = new javax.swing.JPanel();
@@ -259,7 +259,7 @@ public class DataSourceClientApplet extends javax.swing.JApplet {
                   
                   jPanel58.add(jPanel12);
                 
-                jScrollPane2.setViewportView(jTextArea1);
+                jScrollPane2.setViewportView(messageTextArea);
                   
                   jPanel58.add(jScrollPane2);
                 
@@ -616,6 +616,9 @@ public class DataSourceClientApplet extends javax.swing.JApplet {
         Vector plotList = source.getPlotNames();
         choosablePlotsJlist.setListData(plotList);
         
+        String name = this.loginNameTextArea.getText();
+        this.messageTextArea.setText("login: " + name);
+        
     }//GEN-LAST:event_loginButtonActionPerformed
 
 
@@ -648,7 +651,7 @@ public class DataSourceClientApplet extends javax.swing.JApplet {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea messageTextArea;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel7;
@@ -735,3 +738,4 @@ public class DataSourceClientApplet extends javax.swing.JApplet {
     // End of variables declaration//GEN-END:variables
 
 }
+
