@@ -1,8 +1,8 @@
 <!--
   *   '$RCSfile: multiple_file_upload.jsp,v $'
-  *   '$Author: anderson $'
-  *   '$Date: 2004-11-02 00:53:29 $'
-  *   '$Revision: 1.2 $'
+  *   '$Author: mlee $'
+  *   '$Date: 2004-11-17 21:28:44 $'
+  *   '$Revision: 1.3 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -71,13 +71,13 @@
 </script>
 
 
-<title>:: Upload Files ::</title>
-<link rel="stylesheet" type="text/css" href="default.css">
+<title>Upload Files to VegBank.org</title>
+<link rel="stylesheet" type="text/css" href="@stylesheet@">
 </head>
 <body>
 
 
-<form action="@web_context@forms/multiple_file_upload.jsp"
+<form action="@forms_link@multiple_file_upload.jsp"
 	name="countform" method="post" onchange="return doSubmit(this)">
 <input type="hidden" name="action" value="generateForm"/>
 <table>

@@ -1,32 +1,24 @@
-<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+
 <html>
   <head>
     <title>
-      Upload a File to VegBank.org
+      Upload File(s) to VegBank.org
+<link rel="stylesheet" href="@stylesheet@" type="text/css">
     </title>
 		
   </head>
-  <body bgcolor="#FFFFFF">
+  <body>
     <!-- colors: silver=#E6E8FA navyblu=#23238E ltblue=DFE5FA  -->
     <table border="0" cellspacing="0" cellpadding="0" width="60%">
-      <tr>
-				<td bgcolor="#DFE5FA" width="165" height="50" align="center">
-		 			<h1 ALIGN="LEFT" CLASS="mono">&nbsp; Upload File to VegBank.org</h1>
+      <tr class="grey">
+				<td align="center">
+		 			<h1>Upload File to VegBank.org</h1>
 <p>This upload function can be used to place a file for the VegBank staff to look at. <br/>  This does NOT load plot data into the vegbank database.</p>
 		 		</td>
        
-				
-        <td align="LEFT" valign="BOTTOM">
-          <table border="0" cellpadding="5">
-           
-            <tr>
-						
-            </tr>
-          </table>
-        </td>
       </tr>
 			
-			<tr> &nbsp; </tr>
+			
       <tr>
         
         <!-- Input parameters here-->
@@ -36,35 +28,34 @@
 
           <table border="0" cellspacing="5" cellpadding="5" width="100%">
             <tr>
-              <td align="LEFT" valign="TOP">
-                <b><font face="Helvetica,Arial,Verdana"><font color=
-                "#23238E"><font size="+0">Browse, choose, upload.<font></font></font></b> 
+              <td class="category">
+                Browse, choose, upload.
                 <!--get the file name -->
               </td>
 						</tr>
 						<tr>
-              <td align="LEFT" valign="TOP">
-			  <p>
+              <td>
+			  
                 STEP 1:  <input name="file" type="file"> 
               </td>
             </tr>
             
-						<tr> &nbsp; </tr>
 						
-            <tr valign="TOP">
-              <td align="LEFT" valign="CENTER" colspan="2">
-                <!-- <font face="Helvetica,Arial,Verdana" size=2 color=2F4F2F> -->
-                <p>
+						
+            <tr>
+              <td colspan="2">
+               
+               
                   STEP 2:  <input type="submit" value="upload file">
-                </p>
+               
               </td>
             </tr>
 
 </form>
-            <tr valign="TOP">
-              <td colspan="2" align="LEFT" valign="CENTER" colspan="2">
+            <tr>
+              <td colspan="2">
                 <p>
-				Do you need to <a href="@web_context@forms/multiple_file_upload.jsp">upload multiple files</a>?
+				Do you need to <a href="@forms_link@multiple_file_upload.jsp">upload multiple files</a>?
                 </p>
               </td>
             </tr>
