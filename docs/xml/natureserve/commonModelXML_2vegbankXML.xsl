@@ -83,7 +83,7 @@
             </plantCorrelation.correlationStart>
           </plantCorrelation>
         </xsl:for-each>
-      </plantStatus>
+   
       <!-- ready!!-->
       <xsl:for-each select="entity_usage">
         <plantUsage>
@@ -113,12 +113,13 @@
               <xsl:value-of select="entity_usage.entity_name_id/entity_name/entity_name.name_system"/>
             </plantUsage.classSystem>
           </xsl:if>
-          <plantUsage.PARTY_ID>
+         <!-- <plantUsage.PARTY_ID>
             <xsl:call-template name="writeParty"/>
-          </plantUsage.PARTY_ID>
+          </plantUsage.PARTY_ID> -->
         </plantUsage>
         <!-- ready -->
       </xsl:for-each>
+         </plantStatus>
     </plantConcept>
     <!-- ready -->
   </xsl:template>
@@ -241,7 +242,7 @@ doc-comments	"/>
             </commCorrelation.correlationStart>
           </commCorrelation>
         </xsl:for-each>
-      </commStatus>
+  
       <!-- ready!!-->
       <xsl:for-each select="entity_usage">
         <commUsage>
@@ -271,12 +272,13 @@ doc-comments	"/>
               <xsl:value-of select="entity_usage.entity_name_id/entity_name/entity_name.name_system"/>
             </commUsage.classSystem>
           </xsl:if>
-          <commUsage.PARTY_ID>
+      <!--    <commUsage.PARTY_ID>
             <xsl:call-template name="writeParty"/>
-          </commUsage.PARTY_ID>
+          </commUsage.PARTY_ID> -->
         </commUsage>
         <!-- ready -->
       </xsl:for-each>
+          </commStatus>
     </commConcept>
     <!-- ready -->
   </xsl:template>
