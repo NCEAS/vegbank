@@ -240,7 +240,7 @@
         name="DownLoadManagerForm"
         scope="request"
         validate="true"
-	input="DisplayResults">
+		input="DisplayResults">
       <forward name="success" path="/forms/DownLoad.jsp"/>
     </action>
 
@@ -250,17 +250,26 @@
         name="DownLoadForm"
         scope="request"
         validate="true"
-	input="DownLoad">
+		input="DownLoad">
     </action>
 
 
 
     <action path="/EntityName"
-    	  type="org.vegbank.ui.struts.EntityNameAction"
-     	  name="EntityNameForm"
+    	type="org.vegbank.ui.struts.EntityNameAction"
+     	name="EntityNameForm"
       	scope="request"
       	validate="true"
       	input="EntityName">
+    </action>
+
+    <action path="/Cert"
+    	type="org.vegbank.ui.struts.CertificationAction"
+     	name="CertificationForm"
+      	scope="request"
+      	validate="true"
+      <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+      <set-property property="minCertLevel" value="1" />
     </action>
 
     <action path="/GenericDispatcher"
