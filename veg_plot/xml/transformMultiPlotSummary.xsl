@@ -96,6 +96,7 @@ return "Check All"; }
 
 <!-- set up the form which is required by netscape 4.x browsers -->
 <form name="myform" action="viewData" method="post">
+<input type="submit" name="downLoadAction" value="Continue to Download Wizard" /> 
 
 <!-- set up a table -->
 <table width="100%">
@@ -338,7 +339,7 @@ return "Check All"; }
 </input>
 -->
 </table>
-<input type="submit" name="downLoadAction" value="start downLoad" /> 
+<input type="submit" name="downLoadAction" value="Continue to Download Wizard" /> 
 </form>
 	
 
