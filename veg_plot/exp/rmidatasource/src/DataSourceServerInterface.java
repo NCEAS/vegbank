@@ -11,7 +11,7 @@ public interface DataSourceServerInterface extends Remote
 {
 	
 		//method for inserting a plot into the database
-		public String insertPlot(String plot)
+		public String insertPlot(String plot, String emailAddress)
 	 	throws Exception;
 			
 		//method for validating that the uploaded file is indeed an mdb file

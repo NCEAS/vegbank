@@ -52,7 +52,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	/**
  	 * this method handles the loading of a plot into the database
 	 */	
-	 public String insertPlot(String plot)
+	 public String insertPlot(String plot, String emailAddress)
 	 {
 		 String s = null;
 		 try
@@ -63,8 +63,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 				 String plugin = "";
 			 	//construct an instance of the plot loader
 				dbinsert = new DBinsertPlotSource(loaderPlugin, plot);
-				s = dbinsert.insertPlot(plot, debugLevel);
-				//dbinsert.insertPlot(plot);
+				s = dbinsert.insertPlot(plot, debugLevel, emailAddress);
 		 }
 		 catch (Exception e)
 		 {
