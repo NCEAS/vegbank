@@ -8950,17 +8950,17 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>1</attListValue>
-          <attListValueDesc>1 km radius</attListValueDesc>
+          <attListValueDesc>1 km radius (nearest 0.01 degree)</attListValueDesc>
           <attListSortOrd>2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>2</attListValue>
-          <attListValueDesc>10 km radius</attListValueDesc>
+          <attListValueDesc>10 km radius (nearest 0.1 degree)</attListValueDesc>
           <attListSortOrd>3</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>3</attListValue>
-          <attListValueDesc>100 km radius</attListValueDesc>
+          <attListValueDesc>100 km radius (nearest degree)</attListValueDesc>
           <attListSortOrd>4</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11447,7 +11447,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>State or Province where the plot is located.</attDefinition>
+      <attDefinition>2 letter State or Province Code where the plot is located (US and Canada only).</attDefinition>
       <attForms>
         <formShow name="Austere">1019</formShow>
         <formShow name="Summary">1020</formShow>
