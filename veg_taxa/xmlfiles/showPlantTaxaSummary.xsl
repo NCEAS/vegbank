@@ -24,9 +24,8 @@
 
 <html>
 <head>
-  	
+		<title> VegBank -- Plant concept query results </title>
 		<link rel="stylesheet" type="text/css" href="http://numericsolutions.com/includes/default.css" />
-	
 	<script LANGUAGE="JavaScript">
 <!-- Modified By:  Steve Robison, Jr. (stevejr@ce.net) -->
 <!-- This script and many more are available free online at -->
@@ -54,109 +53,135 @@ return "Check All"; }
 <body bgcolor="FFFFFF">
 
 <br></br>
-<xsl:number value="count(taxon)" /> matches found.
+
+<table cellSpacing="0" cellPadding="0" width="799" border="0">
+<tbody> <tr> <td vAlign="top" width="40" bgColor="#336633" height="54" rowSpan="2">&#160;</td>
+<td vAlign="top" width="429" bgColor="#336633" height="54" rowSpan="2"> <div align="left"><font face="Georgia, Times New Roman, Times, serif" 
+      size="6" color="#ffffff"><b>VegBank </b></font> </div>
+</td>
+<td vAlign="top" bgColor="#336633" colSpan="3" height="28">&#160;</td>
+</tr>
+<tr> <td vAlign="top" width="86" bgColor="#336633" height="31"> <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a style="COLOR: #ffff80; TEXT-DECORATION: none" 
+      href="http://vegbank.nceas.ucsb.edu/vegbank/index.html">Home</a></b></font> </div>
+</td>
+<td vAlign="top" width="152" bgColor="#336633" height="31"> <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a style="COLOR: #ffff80; TEXT-DECORATION: none" 
+      href="http://vegbank.nceas.ucsb.edu/vegbank/general/logout.html">&#160;Logout</a></b></font> </div>
+</td>
+<td vAlign="top" width="92" bgColor="#336633" height="31"> <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a style="COLOR: #ffff80; TEXT-DECORATION: none" 
+      href="http://vegbank.nceas.ucsb.edu/vegbank/general/help.html">Help</a></b></font> </div>
+</td>
+</tr>
+</tbody> </table>
+
+<blockquote> 
+<p><font face="Arial, Helvetica, sans-serif" size="5"> Results of Plant Concept Lookup</font></p>
+</blockquote>
+<table width="799" cellpadding="0" cellspacing="0" border="1">
+<tr vAlign="top" align="left" colspan="1"> 
+<th class="tablehead" colspan="3" height="87">
+<font face="Arial, Helvetica, sans-serif"> 
+Search Name:<br></br>
+Search Party:<br></br>
+Search Date:<br></br>
+Matches found: <xsl:number value="count(taxon)" /> </font></th>
+</tr>
+</table>
+<!-- TABLE HEADER -->
+
+<table>
+<tr valign="center" align="left" colspan="1"> <th class="tablehead" width="34%" bgcolor="#336633">
+<font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1">PLANT CONCEPT</font></th>
+<th class="tablehead" width="34%" bgcolor="#336633">
+<font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1">STANDARD NAMES</font></th>
+<th class="tablehead" width="32%" bgcolor="#336633">
+<font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1">NONSTANDARD NAMES</font></th>
+</tr>
+
 
 <!-- set up the form which is required by netscape 4.x browsers -->
 <form name="myform" action="viewData" method="post">
 
-<!-- set up a table -->
-<table width="100%">
-
-	<tr colspan="1" bgcolor="CCCCFF" align="left" valign="top">
-             <th class="tablehead">Name Attributes</th>
-             <th class="tablehead">Concept Attributes</th>
-	     <th class="tablehead">Usage Attributes</th>
-        </tr>
-
 	<!-- Header and row colors -->
-        <xsl:variable name="evenRowColor">#C0D3E7</xsl:variable>
-        <xsl:variable name="oddRowColor">#FFFFFF</xsl:variable>
+<xsl:variable name="evenRowColor">#ffffcc</xsl:variable>
+<xsl:variable name="oddRowColor">#FFFFFF</xsl:variable> 
+<xsl:for-each select="taxon">
+<xsl:sort select="name"/>	
 	
-	   
-	<xsl:for-each select="taxon">
-	<xsl:sort select="name"/>	
-	<tr valign="top">
+<!-- ATTRIBUTES TABLE --> 
 
-<!--if even row -->
+
 <xsl:if test="position() mod 2 = 1">			
-	<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="middle">
-  	<a><span class="category">Plant Name: </span> 
-		<span class="item"><xsl:value-of select="name/plantName"/> </span> </a> <br></br>
-  	<a><span class="category">Alias: </span> 
-		<span class="itemsmall"> <xsl:value-of select="name/plantNameAlias"/> </span> </a> <br></br>
-<!--
-		<a><span class="category">Name ID: </span> <xsl:value-of select="name/plantNameId"/></a> <br></br>
--->		
-		<a><span class="category">Name Status: </span> 
-		<span class="item"> <xsl:value-of select="name/status"/> </span> </a> <br></br>
-		<a><span class="category">Parent Name:</span>  
-		<span class="item"> <xsl:value-of select="name/parentName"/> </span> </a> <br></br>
-	</td>
-	<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="top">
-		<a> <span class="category">Class System:</span>  
-		<span class="item"> <xsl:value-of select="name/classSystem"/>; </span> </a> <br></br>
-		<a> <span class="category">Plant Level:</span>  
-		<span class="item"> <xsl:value-of select="name/plantLevel"/>; </span> </a> <br></br>
-<!--		
-		<a> <span class="category">Concept ID:</span>  <xsl:value-of select="name/plantConceptId"/>;</span>  </a> <br></br>
--->		
-		<a> <span class="category">Concept Desc:</span> 
-	     <span class="item">	<xsl:value-of select="name/plantDescription"/>; </span> </a> <br></br>
-		
-	</td>
-	<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="middle">
-		<a> <span class="category">Start Date: </span> 
-		<span class="item"><xsl:value-of select="name/startDate"/>;</span>  </a> <br></br>
-		<a> <span class="category"> Stop Date: </span> 
-		<span class="item"><xsl:value-of select="name/stopDate"/>;</span>  </a> <br></br>
-		<a> <span class="category"> Synonym: </span> 
-		<span class="item"><xsl:value-of select="name/acceptedSynonym"/>;</span>  </a> <br></br>
-	</td>
+<tr vAlign="top"> 
+<td vAlign="top" align="left" width="34%" bgcolor="{$evenRowColor}"  height="106"> 
+<p>
+<font size="-1" face="Arial, Helvetica, sans-serif"><b><a><span class="category">
+Ref. author: <span class="item"> <xsl:value-of select="name/plantConceptRefAuthor"/> </span> <br> </br>
+Ref. date:  <span class="item"> <xsl:value-of select="name/plantConceptRefDate"/> </span> <br> </br>
+Level: <span class="item"> <xsl:value-of select="name/plantLevel"/> </span> <br></br>
+Description: <span class="item"> <xsl:value-of select="name/plantDescription"/> </span> <br></br>
+Party: <span class="item"> <xsl:value-of select="name/plantUsagePartyOrgName"/> </span><br></br>
+Start date: <span class="item"> <xsl:value-of select="name/startDate"/> </span> 
+</span></a></b></font></p>
+</td>
+
+<td vAlign="top" align="left" width="32%" bgcolor="{$evenRowColor}"  height="106"> 
+<p><b><font face="Arial, Helvetica, sans-serif" size="-1">
+Scientific: <span class="item"><xsl:value-of select="name/plantName"/> </span>  <br></br>
+Scientific + authors: <span class="item"><xsl:value-of select="name/plantNameAlias"/> </span> <br> </br>
+Common: <span class="item"> <xsl:value-of select="name/commonName"/> </span>  <br> </br>
+Code: <span class="item"> <xsl:value-of select="name/plantCode"/> </span>  <br> </br>
+Parent: <span class="item"> <xsl:value-of select="name/parentName"/> </span> </font></b><b>
+<font face="Arial, Helvetica, sans-serif" size="-1"><br> </br>
+</font></b></p>
+</td>
+
+<td vAlign="top" align="left" width="34%" bgcolor="{$evenRowColor}"  height="106">
+<b><font face="Arial, Helvetica, sans-serif" size="-1">
+Synonym:  <span class="item"> <xsl:value-of select="name/acceptedSynonym"/> </span> <br> </br>
+</font></b></td>
+</tr>
 </xsl:if>
-	 
-	 
-<!--if odd row-->
-<xsl:if test="position() mod 2 = 0">
-	
-	<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="middle">
-  	<a> <span class="category">Plant Name:</span> 
-		<span class="item"><xsl:value-of select="name/plantName"/> </span>  </a> <br></br>
-  	<a> <span class="category">Alias:</span> 
-		<span class="itemsmall"><xsl:value-of select="name/plantNameAlias"/> </span> </a> <br></br>
-<!--		
-		<a><span class="category"> Name ID:</span>  <xsl:value-of select="name/plantNameId"/></a> <br></br>
--->
-		<a> <span class="category">Name Status:</span>  
-		<span class="item"><xsl:value-of select="name/status"/> </span> </a> <br></br>
-		<a><span class="category"> Parent Name:</span> 
-		<span class="item"><xsl:value-of select="name/parentName"/> </span> </a> <br></br>
-	</td>
-	<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
-		<a><span class="category"> Class System:</span> 
-		<span class="item"><xsl:value-of select="name/classSystem"/>;</span>  </a> <br></br>
-		<a> <span class="category">Plant Level:</span> 
-		<span class="item"><xsl:value-of select="name/plantLevel"/>;</span>  </a> <br></br>
-<!--
-		<a><span class="category"> Concept ID:</span>  <xsl:value-of select="name/plantConceptId"/>;</span>  </a> <br></br>
--->		
-		<a><span class="category"> Concept Desc:</span> <span class="item">   <xsl:value-of select="name/plantDescription"/>;</span>  </a> <br></br>
-		
-	</td>
-	<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="middle">
-		<a><span class="category"> Start Date:</span> 
-		<span class="item"><xsl:value-of select="name/startDate"/>;</span>  </a> <br></br>
-		<a><span class="category"> Stop Date:</span> 
-		<span class="item"><xsl:value-of select="name/stopDate"/>;</span>  </a> <br></br>
-		<a><span class="category"> Synonym:</span> 
-		<span class="item"><xsl:value-of select="name/acceptedSynonym"/>;</span>   </a> <br></br>
-	</td>
+
+<xsl:if test="position() mod 2 = 0">			
+<tr vAlign="top"> 
+<td vAlign="top" align="left" width="34%" bgcolor="{$oddRowColor}"  height="106"> 
+<p>
+<font size="-1" face="Arial, Helvetica, sans-serif"><b><a><span class="category">
+Ref. author: <span class="item"> <xsl:value-of select="name/plantConceptRefAuthor"/> </span> <br> </br>
+Ref. date:  <span class="item"> <xsl:value-of select="name/plantConceptRefDate"/> </span> <br> </br>
+Level: <span class="item"> <xsl:value-of select="name/plantLevel"/> </span> <br></br>
+Description: <span class="item"> <xsl:value-of select="name/plantDescription"/> </span> <br></br>
+Party: <span class="item"> <xsl:value-of select="name/plantUsagePartyOrgName"/> </span><br></br>
+Start date: <span class="item"> <xsl:value-of select="name/startDate"/> </span> 
+</span></a></b></font></p>
+</td>
+
+<td vAlign="top" align="left" width="32%" bgcolor="{$oddRowColor}"  height="106"> 
+<p><b><font face="Arial, Helvetica, sans-serif" size="-1">
+Scientific: <span class="item"><xsl:value-of select="name/plantName"/> </span>  <br></br>
+Scientific + authors: <span class="item"><xsl:value-of select="name/plantNameAlias"/> </span> <br> </br>
+Common: <span class="item"> <xsl:value-of select="name/commonName"/> </span>  <br> </br>
+Code: <span class="item"> <xsl:value-of select="name/plantCode"/> </span>  <br> </br>
+Parent: <span class="item"> <xsl:value-of select="name/parentName"/> </span> </font></b><b>
+<font face="Arial, Helvetica, sans-serif" size="-1"><br> </br>
+</font></b></p>
+</td>
+
+<td vAlign="top" align="left" width="34%" bgcolor="{$oddRowColor}"  height="106">
+<b><font face="Arial, Helvetica, sans-serif" size="-1">
+Synonym:  <span class="item"> <xsl:value-of select="name/acceptedSynonym"/> </span> <br> </br>
+</font></b></td>
+</tr>
+</xsl:if>
 
 
-</xsl:if>
-</tr>    
+
+
 </xsl:for-each>
-</table>
 </form>
+</table>
+
+
 </body>
 </html> 
 </xsl:template>
