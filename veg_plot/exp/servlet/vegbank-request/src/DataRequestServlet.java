@@ -342,7 +342,7 @@ public class DataRequestServlet extends HttpServlet
 				else //assume that client wants html 
 				{
 					//pass back the summary of parameters passed to the servlet
-					returnQueryElemenySummary (out, params, response);
+					returnQueryElemenySummary(out, params, response);
 					//the number of plots in the result set\
 					out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 					//send to the client the html summary page
@@ -523,8 +523,8 @@ public class DataRequestServlet extends HttpServlet
 				else 
 				{ 
 					out.println("<br> <b> Please try another query </b> <br>"); 
-					out.println("<a href = \"/harris/servlet/pageDirector?pageType=plantQuery\">"
-					+"return to query page</a><b>&#183;</b>"); //put in rb
+					out.println("<a href = \"/forms/plant-query.html\">"
+					+"return to query page</a>"); 
 				}
 			}
 		}
@@ -702,6 +702,9 @@ public class DataRequestServlet extends HttpServlet
 	{
  		try 
 		{
+			System.out.println("DataRequstServlet > printing from composePlantTaxonomyQuery: "+
+			" hash: " + params.toString() );
+			
  			PrintStream queryOutFile = new PrintStream(
  			new FileOutputStream(servletDir+"taxonQuery.xml", false)); 
 			
@@ -711,7 +714,7 @@ public class DataRequestServlet extends HttpServlet
 			String taxonLevel = (String)params.get("taxonLevel");
 		
 
-			System.out.println("DataRequstServlet > printing from DataRequestServlet.composePlantTaxonomyQuery: "+
+			System.out.println("DataRequstServlet > printing from composePlantTaxonomyQuery: "+
 			"taxonName: "+taxonName);
 
  			//print the query instructions in the xml document
@@ -789,7 +792,6 @@ private void updateClientLog (String clientLog, String remoteHost)
 	{
 		try 
 		{
-	
 			//this utility class is to store reused html code
 			ServletUtility k =new ServletUtility();  
  			k.htmlStore();
