@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 01:08:23 $'
- * 	'$Revision: 1.5 $'
+ *  '$Date: 2002-03-27 18:09:07 $'
+ * 	'$Revision: 1.6 $'
  */
 package databaseAccess;
 
@@ -313,27 +313,34 @@ public class DBinsertPlotSource
 			{		
 				insertProject(source.projectName, source.projectDescription);
 				projectId = getProjectId(projectName);
-				//insert the project contributor infor here
+				//insert the project contributor information here
+				Vector projContributors = source.projectContributors;
+				for (int ii =0; ii < projContributors.size(); ii++)
+				{
+					String contributor = (String)projContributors.elementAt(ii);
+					String salutation=source.getProjectContributorSalutation(contributor);
+					String surName = source.getProjectContributorSurName( contributor );
+					String givenName = source.getProjectContributorGivenName(contributor);
+					String email = source.getProjectContributorEmailAddress(contributor);
+					String role = "project manager";
+					insertProjectContributor(salutation, givenName, surName, email, role, 
+					projectId);
+				}
 			}
-			
 //			insertNamedPlace();
 				if (insertStaticPlotData(projectId) == false ) 
 				{	
 					System.out.println("static data: "+commit);
 					commit = false;
 				}
-	
 				else
 				{
 					if ( insertCoverMethod() == false )
-					//if( insertPlotObservation() == false )
 					{
 						System.out.println("covermethod>: "+commit);
 						commit = false;
 					}
-					
 					if ( insertStratumMethod() == false )
-					//if( insertPlotObservation() == false )
 					{
 						System.out.println("stratummethod>: "+commit);
 						commit = false;
@@ -350,7 +357,6 @@ public class DBinsertPlotSource
 						System.out.println("observation>: "+commit);
 						commit = false;
 					}
-					
 					//both the taxon observation tables
 					//and the strata composition are uypdated here
 					if( insertTaxonObservations() == false )
@@ -359,36 +365,213 @@ public class DBinsertPlotSource
 						commit = false;
 					}
 				}
-			
-		
-		
-			System.out.println("DBinsertPlotSource > insertion success: "+ commit);
-			
-			//close the connections
-			//conn.close();
+				System.out.println("DBinsertPlotSource > insertion success: "+ commit);
 			if ( commit == true) 
 			{
 				conn.commit();
-				//conn.close();
 				debug.append( "INSERTION SUCCESS: \n" );
 			}
 			else
 			{
 				conn.rollback();
 				debug.append( "INSERTION FAILURE: \n" );
-				//conn.close();
 			}
-			
-			
-			
 			connectionBroker.manageLocalDbConnectionBroker("destroy");
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage() ); 
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * method that handles the loading of the project contributor information
+	 *
+	 * @param salutation 
+	 * @param surName
+	 * @param givenName
+	 * @param email
+	 * @param role
+	 * @param projectId 
+	 *
+	 */
+	 private void insertProjectContributor(String salutation, String givenName,
+	 String surName, String email, String role, int projectId )
+	 {
+		 try
+		 {
+			 int partyId = 0;
+			 //insert into the party table first
+			 boolean pExists = partyExists(salutation, givenName, surName, email);
+			 System.out.println("DBinsertPlotSource > party exists: " + pExists);
+			 if ( pExists == false )
+			 {
+				 partyId = insertParty(salutation, givenName, surName, email );
+			 }
+			 //else get the party id for this contributor
+			 else
+			 {
+				 partyId = getPartyId(salutation, givenName, surName, email );
+			 }
+			 // insert the role table
+			 
+			 //insert into the project contributor table
+			 StringBuffer sb = new StringBuffer();
+				sb.append("INSERT into PROJECTCONTRIBUTOR ");
+				sb.append("( party_id, project_id, surName, role) ");
+				sb.append(" values ("+partyId+", "+projectId+", '"+surName+"', '"+role+"')" );
+			
+				//System.out.println("query > " + sb.toString() );
+				Statement insertStatement = conn.createStatement();
+				insertStatement.executeUpdate(sb.toString());	
+			 
+		 }
+		 catch( Exception e)
+		 {
+			 	System.out.println("Exception: "+e.getMessage() ); 
+				e.printStackTrace();
+				System.exit(1);
+		 }
+	 }
+	 
+	 
+	/**
+	 * method that the party id for an individual
+	 * otherwise false is returned
+	 * @param salutation 
+	 * @param surName
+	 * @param givenName
+	 * @param email
+	 */
+	private int getPartyId (String salutation, String givenName,
+	 String surName, String email)
+	{
+		int i = 0;
+		try 
+		{
+			StringBuffer sb = new StringBuffer();
+			sb.append("SELECT party_id from PARTY where ");
+			sb.append(" upper(salutation) ");
+			sb.append(" like '"+salutation.toUpperCase()+"'" );
+			sb.append(" and ");
+			sb.append(" upper(givenName) ");
+			sb.append(" like '"+givenName.toUpperCase()+"'" );
+			sb.append(" and ");
+			sb.append(" upper(surName) ");
+			sb.append(" like '"+surName.toUpperCase()+"'" );
+			System.out.println("DBinsertPlotSource > query: " + sb.toString());
+			Statement query = conn.createStatement();
+			ResultSet rs = query.executeQuery( sb.toString() );
+			while ( rs.next() ) 
+			{
+				i = rs.getInt(1);
+			}
 		}
 		catch (Exception e)
 		{
 			System.out.println("Caught Exception: "+e.getMessage() ); 
 			e.printStackTrace();
 		}
+		return(i);
 	}
+	
+	
+	
+		
+	/**
+	 * method that returns true if the party already exists in the database
+	 * otherwise false is returned
+	 * @param salutation 
+	 * @param surName
+	 * @param givenName
+	 * @param email
+	 */
+	 private int insertParty(String salutation, String givenName, String surName, 
+	 String email)
+	 {
+		 int partyId = 0;
+		try
+		{
+			StringBuffer sb = new StringBuffer();
+			sb.append("INSERT into PARTY ");
+			sb.append("( salutation, givenName, surName, email) ");
+			sb.append(" values ('"+salutation+"', '"+givenName+"', '"+surName+"', '"+email+"')" );
+			
+			//System.out.println("query > " + sb.toString() );
+			Statement insertStatement = conn.createStatement();
+			insertStatement.executeUpdate(sb.toString());	
+			
+			//get the partyid associated with this entry
+			sb = new StringBuffer();
+			sb.append("select max(party_id) from party");
+			insertStatement = conn.createStatement();	
+			ResultSet rs = insertStatement.executeQuery( sb.toString() );
+			while ( rs.next() ) 
+			{
+				partyId = rs.getInt(1);
+			}
+		}
+		 catch( Exception e)
+		 {
+			 	System.out.println("Exception: "+e.getMessage() ); 
+				e.printStackTrace();
+				//System.exit(1);
+		 }
+		 return(partyId);
+	 }
+	
+	
+	
+	/**
+	 * method that returns true if the party already exists in the database
+	 * otherwise false is returned
+	 * @param salutation 
+	 * @param surName
+	 * @param givenName
+	 * @param email
+	 */
+	private boolean partyExists(String salutation, String givenName,
+	 String surName, String email)
+	{
+		int rows = 0;
+		try 
+		{
+			StringBuffer sb = new StringBuffer();
+			sb.append("SELECT count(*) from PARTY where ");
+			sb.append(" upper(salutation) ");
+			sb.append(" like '"+projectName.toUpperCase()+"'" );
+			sb.append(" and ");
+			sb.append(" upper(givenName) ");
+			sb.append(" like '"+givenName.toUpperCase()+"'" );
+			sb.append(" and ");
+			sb.append(" upper(surName) ");
+			sb.append(" like '"+surName.toUpperCase()+"'" );
+			System.out.println("DBinsertPlotSource > query: " + sb.toString());
+			Statement query = conn.createStatement();
+			ResultSet rs = query.executeQuery( sb.toString() );
+			while ( rs.next() ) 
+			{
+				rows = rs.getInt(1);
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("Caught Exception: "+e.getMessage() ); 
+			e.printStackTrace();
+		}
+		if (rows == 0)
+		{
+			System.out.println("DBinsertPlotSource > project does not exist");
+			return(false);
+		}
+		else
+		{
+			System.out.println("DBinsertPlotSource > project does exist");
+			return(true);
+		}
+	}
+	
 	
 	
 	//method to update the strata composition tables --should only be called
