@@ -19,7 +19,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		private String name;
 	 	private PlotDataSource source;
-		private String mdbFile = "E:\\cygwin\\tmp\\rmi_exp.mdb";
+		private String mdbFile = "";
 	 
 	 	//loader stuff
 	 	private DBinsertPlotSource dbinsert;
@@ -40,6 +40,8 @@ public class DataSourceImpl extends UnicastRemoteObject
 		 	System.out.println("DataSourceImpl > number of plots:  " + source.getPlotNames().size() );
 			
 			rb = ResourceBundle.getBundle("rmidatasource");
+			mdbFile = rb.getString("access_file");
+			
 		 }
 		 catch (Exception e)
 		 {
