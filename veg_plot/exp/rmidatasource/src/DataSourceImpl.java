@@ -25,6 +25,8 @@ public class DataSourceImpl extends UnicastRemoteObject
 	 	private DBinsertPlotSource dbinsert;
 	 	private String loaderPlugin = "TNCPlotsDB";
 	 
+	 // properties file
+	 	private ResourceBundle rb;
 	 
 	 //constructor
    public DataSourceImpl(String sourcePluginClass) 
@@ -36,7 +38,8 @@ public class DataSourceImpl extends UnicastRemoteObject
 		 	System.out.println("DataSourceImpl > plugin to be used: " + sourcePluginClass);
 		 	source = new PlotDataSource(sourcePluginClass);
 		 	System.out.println("DataSourceImpl > number of plots:  " + source.getPlotNames().size() );
-     //source.getPlot("VOYA.03");
+			
+			rb = ResourceBundle.getBundle("rmidatasource");
 		 }
 		 catch (Exception e)
 		 {
