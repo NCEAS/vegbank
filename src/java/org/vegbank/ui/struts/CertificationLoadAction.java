@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-30 13:03:53 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2004-06-10 02:34:49 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,12 +25,16 @@
 package org.vegbank.ui.struts;
 
 import java.sql.*;
+import java.io.*;
 import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.struts.action.*;
+import org.apache.struts.util.LabelValueBean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.beanutils.BasicDynaBean;
+import org.apache.commons.beanutils.BasicDynaClass;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.PermComparison;
 import org.vegbank.common.utility.UserDatabaseAccess;
@@ -100,8 +104,50 @@ public class CertificationLoadAction extends VegbankAction {
 		// using <bean:write> requires this
 		request.setAttribute("reqAttribBean", certForm);
 
+		//request.setAttribute("zeroToFiveOptionBean", bean);
+		//request.setAttribute("zeroToFiveOptionBean", new OptionBean());
+
+		/////////////////////////////////////////
+		/*
+		Collection options = new ArrayList();
+
+		options.add(new LabelValueBean("0", "0"));
+		options.add(new LabelValueBean("1", "1"));
+		options.add(new LabelValueBean("2", "2"));
+		options.add(new LabelValueBean("3", "3"));
+		options.add(new LabelValueBean("4", "4"));
+		options.add(new LabelValueBean("5", "5"));
+
+		BasicDynaBean optionBean = new BasicDynaBean( new BasicDynaClass() );
+		optionBean.set("options", options);
+		request.setAttribute("optionBean", optionBean);
+		*/
+
 		log.debug("Leaving CertificationLoadAction");
 		return mapping.findForward("success");
 	}
 
+
+
+
+	class OptionBean implements Serializable {
+		Collection options = new ArrayList();
+
+		{
+			options.add(new LabelValueBean("0", "0"));
+			options.add(new LabelValueBean("1", "1"));
+			options.add(new LabelValueBean("2", "2"));
+			options.add(new LabelValueBean("3", "3"));
+			options.add(new LabelValueBean("4", "4"));
+			options.add(new LabelValueBean("5", "5"));
+		}
+
+		public Collection getOptions() {
+			return options;
+		}
+
+		public void setOptions(Collection ol) {
+			options = ol;
+		}
+	}
 }
