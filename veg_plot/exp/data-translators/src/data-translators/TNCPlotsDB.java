@@ -15,8 +15,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2002-12-02 22:59:06 $' <br>
- * 	'$Revision: 1.26 $' <br>
+ *  '$Date: 2002-12-05 23:42:38 $' <br>
+ * 	'$Revision: 1.27 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -1297,6 +1297,166 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		return(depth);
 	}
+
+	public Vector getObservationContributors(String plotName)
+	{
+		Vector v = new Vector();
+		Statement stmt = null;
+		
+		try {
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select ([Surveyors]) "
+				+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+		
+			System.out.println("Trying to get surveyors for " + plotName);
+			
+			while (rs.next()) 
+			{
+				String s = rs.getString(1);
+				System.out.println("GOTTT " + s);
+				// split into contributors 
+				StringTokenizer st = new StringTokenizer( s, ",");
+				while ( st.hasMoreTokens() ) {
+					String contributorFullName = st.nextToken();
+					v.addElement( contributorFullName );
+					System.out.println("TNCPlotsDB > Found Contributor " + contributorFullName );
+				}
+				//v.addElement("Jim Drake");
+				//v.addElement("Dennis Grossman");
+			}
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(v);	
+	}
+
+	public String getObservationContributorSalutation(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorGivenName(String contributorWholeName) 
+	{
+			String givenName = null;
+			try
+			{
+				StringTokenizer t = new StringTokenizer(contributorWholeName, " ");
+			 	String buf = t.nextToken();
+				givenName = buf;
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+			return(givenName);
+	}
+	
+	public String getObservationContributorMiddleName(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorSurName(String contributorWholeName)
+	{
+			String surName = null;
+			StringBuffer surNameSb = new StringBuffer("");
+			try
+			{
+				// Rule: Surname is all Text after first space
+				StringTokenizer t = new StringTokenizer(contributorWholeName, " ");
+				String firstName = t.nextToken();
+	
+				while ( t.hasMoreTokens() ) 
+				{
+					surNameSb.append( t.nextToken() + " " );
+				}
+				
+				surName = surNameSb.toString().trim();
+				
+			 	//String buf = t.nextToken();
+			 	//buf = t.nextToken().trim();
+				//surName = buf;
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+			return(surName);
+	}
+	
+	public String getObservationContributorOrganizationName(String contributorWholeName){
+		return null;
+	}
+	
+	public String getObservationContributorContactInstructions(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorPhoneNumber(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorCellPhoneNumber(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorFaxPhoneNumber(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorOrgPosition(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorEmailAddress(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorDeliveryPoint(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorCity(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorAdministrativeArea(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorPostalCode(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorCountry(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorCurrentFlag(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorAddressStartDate(String contributorWholeName)
+	{
+		return null;
+	}
 	
 	/**
 	 * returns the author's observation code
@@ -2384,7 +2544,7 @@ public boolean  getRevisions(String plotName)
 					}
 					else 
 					{
-						trueHeight = getDefaultStrataHeight(strataName, "top");
+						trueHeight = getDefaultStrataBaseHeight(strataName);
 						//trueHeight = "";
 					}
 				}
@@ -2482,7 +2642,7 @@ public boolean  getRevisions(String plotName)
 					else 
 					{
 						//trueHeight = "";
-						trueHeight = getDefaultStrataHeight(strataName, "top");
+						trueHeight = getDefaultStrataHeight(strataName);
 					}
 				}
 				rs.close();
@@ -2502,18 +2662,89 @@ public boolean  getRevisions(String plotName)
 		* inputs are the strata name and the term top or bottom so that the 
 		* the correct elevation is returned
 		* @param strataName --  the name of the stratum
-		* @param desiredElevation == 'top' or 'bottom'
 		*/
-		private String getDefaultStrataHeight(String strataName, String desiredElevation)
+		private String getDefaultStrataHeight(String strataName)
 		{
-			if ( strataName.equals("N") )
+			if ( strataName.equals("N") ) {
+				return ("0.5");
+			} 
+			else if ( strataName.equals("H") ) 
 			{
-				return("1");
-			}
-			else
+				return ("2");
+			} 
+			else if ( strataName.equals("S3") ) 
 			{
-				return("100");
+				return ("1");
+			} 
+			else if ( strataName.equals("S2") ) 
+			{
+				return ("2");
+			} 
+			else if ( strataName.equals("S1") ) 
+			{
+				return ("5");
 			}
+			 else if ( strataName.equals("T3") ) 
+			 {
+				return ("10");
+			} 
+			else if ( strataName.equals("T2") ) 
+			{
+				return ("30");
+			} 
+			else if ( strataName.equals("T1") ) 
+			{
+				return ("100");
+			}
+			else 
+			{
+				return ("Invalid Strata Name");
+			} 
+		}
+		
+		/**
+		 *  Return the default StrataBase Height
+		 * @param strataName -- the name of the strata
+		 */
+		private String getDefaultStrataBaseHeight ( String strataName) 
+		{
+			if ( strataName.equals("N") ) 
+			{
+				return ("0");
+			} 
+			else if ( strataName.equals("H") ) 
+			{
+				return ("0");
+			} 
+			else if ( strataName.equals("S3") )
+			{
+				return ("0.5");
+			} 
+			else if ( strataName.equals("S2") ) 
+			{
+				return ("1");
+			} 
+			else if ( strataName.equals("S1") ) 
+			{
+				return ("2");
+			} 
+			else if ( strataName.equals("T3") ) 
+			{
+				return ("5");
+			} 
+			else if ( strataName.equals("T2") ) 
+			{
+				return ("10");
+			} 
+			else if ( strataName.equals("T1") ) 
+			{
+				return ("30");
+			} 
+			else 
+			{
+				return ("Invalid Strata Name");
+			} 		
+		
 		}
 	 
 	
