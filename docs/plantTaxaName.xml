@@ -25,7 +25,7 @@ be more flexible and will hold a much broader range of taxonomic data.
 		<attName>NAME_ID</attName>
 		<attNulls>No</attNulls>	
 		<attType>INT</attType>
-		<attKey>P</attKey>
+		<attKey>PK</attKey>
 		<attReferences>n/a</attReferences>
 		<attNotes>G</attNotes>
 		<attDefinition>Database assigned value corresponding to a unique taxon name.</attDefinition>
@@ -37,9 +37,9 @@ be more flexible and will hold a much broader range of taxonomic data.
                 <attName>SYMBOL</attName>
                 <attNulls>Yes</attNulls>
                 <attType>TEXT(8)</attType>
-                <attKey></attKey>
+                <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes></attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>Symbol for the plant name.</attDefinition>
         </attribute>
 
@@ -48,9 +48,9 @@ be more flexible and will hold a much broader range of taxonomic data.
                 <attName>NAME</attName>
                 <attNulls>No</attNulls>
                 <attType>TEXT(200)</attType>
-                <attKey></attKey>
+                <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes></attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>Stores the name string - which currently is just the genus and species name</attDefinition>
         </attribute>
 
@@ -58,7 +58,7 @@ be more flexible and will hold a much broader range of taxonomic data.
                 <attName>REF_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>INT</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>REFERENCE</attReferences>
                 <attNotes>There must be one reference for each name</attNotes>
                 <attDefinition>This is the foreign key into the REFERENCE table.</attDefinition>
@@ -68,9 +68,9 @@ be more flexible and will hold a much broader range of taxonomic data.
                 <attName>DATE_ENTERED</attName>
                 <attNulls>Yes</attNulls>
                 <attType>DATE</attType>
-                <attKey></attKey>
+                <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes></attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>This is the date that the name was entered into the database</attDefinition>
         </attribute>
 
@@ -78,9 +78,9 @@ be more flexible and will hold a much broader range of taxonomic data.
                 <attName>COMMONNAME</attName>
                 <attNulls>Yes</attNulls>
                 <attType>TEXT(100)</attType>
-                <attKey></attKey>
+                <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes></attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>The common name for more scientific name stored in the NAME attribute.</attDefinition>
         </attribute>
 
@@ -88,9 +88,9 @@ be more flexible and will hold a much broader range of taxonomic data.
                 <attName>FAMILY</attName>
                 <attNulls>Yes</attNulls>
                 <attType>TEXT(100)</attType>
-                <attKey></attKey>
+                <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes></attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>The family in which the plant stored in NAME belongs. </attDefinition>
         </attribute>
 
@@ -98,7 +98,7 @@ be more flexible and will hold a much broader range of taxonomic data.
                 <attName>AUTHORNAME</attName>
                 <attNulls>Yes</attNulls>
                 <attType>TEXT(100)</attType>
-                <attKey></attKey>
+                <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
                 <attNotes>this field is denormalized from the REFERENCE table.</attNotes>
                 <attDefinition>Stores the name of the author of the plant Name </attDefinition>

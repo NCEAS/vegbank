@@ -13,13 +13,17 @@
 <entity>
 	<entityName>plantTaxa.CORRELATION</entityName>
 	<entitySummary>This relates how different parties use circumscriptions or how a single party may use a circumscription differently over time.</entitySummary>
-	<entityDescription> </entityDescription>
+	<entityDescription>This table stores 'links' to correlative uses of circumscriptions by parties.  For example:
+	The standard circumscription accepted by plants from 1994-2000 for Carya ovalis (Wangenh.) Sarg. var. hirsuta (Ashe) Sarg. 
+	correlates with the standard accepted usage of Carya glabra (P. Mill.) Sweet var. hirsuta (Ashe) Ashe by Plants - 
+	actually it is a subset of Carya glabra (P. Mill.) Sweet var. hirsuta (Ashe) Ashe. </entityDescription>
 	<attribute> 
 		<attName>CORRELATION_ID</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
-		<attKey>P</attKey>
-		<attNotes></attNotes>
+		<attKey>PK</attKey>
+		<attReferences>n/a</attReferences>
+		<attNotes>n/a</attNotes>
 		<attDefinition>Database assigned value corresponding to a unique relationship between two uses of a circumscription</attDefinition>
 	</attribute>
 
@@ -29,9 +33,9 @@
                 <attName>PARTY_CIRCUM1</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>STATUS</attReferences>
-                <attNotes></attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>This key is related to the key PARTY_CIRCUM2, both of which are pointing to usages of circumscriptions in the STATUS table.</attDefinition>
         </attribute>
 
@@ -41,9 +45,9 @@
                 <attName>PARTY_CIRCUM2</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
 		<attReferences>STATUS</attReferences>
-                <attNotes></attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>This key is related to the key PARTY_CIRCUM2, both of which are pointing to usages of circumscriptions in the STATUS table.</attDefinition>
         </attribute>
 
@@ -55,7 +59,7 @@
                 <attType>VARCHAR2</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes></attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>This attribute is used to describe the relationship between two party-circumscriptions.</attDefinition>
         </attribute>
 <attribute>
@@ -64,6 +68,7 @@
                 <attType>DATE</attType>
                 <attKey>n/a</attKey>
                 <attNotes>n/a</attNotes>
+		<attReferences>n/a</attReferences>
                 <attDefinition>This attribute is the date on which two party-circumscriptions began to relate to one another.</attDefinition>
         </attribute>
 
@@ -75,7 +80,7 @@
                 <attType>DATE</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes> </attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>This attribute is the date on which two party-circumscriptions stopped relating to aone another.</attDefinition>
         </attribute>
 

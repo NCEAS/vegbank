@@ -12,13 +12,27 @@
 <entity>
 	<entityName>plntTaxa.PLANTTAXANAMEUSAGE</entityName>
 	<entitySummary>Stores information linking a party to a name-circumscription relationship.</entitySummary>
-	<entityDescription></entityDescription>
+	<entityDescription>The nameUsage table is a 3 way intersection between party, name and circumscription, which
+	basically tracks how a party applies a circumscription to a name over time.  The acceptence attribute
+	is a relatively new addition and is domain locked to the values 'standard' and 'accepted'.  Name_Usage.acceptance refers to acceptance of a name by a party.  Both "A" 
+(accepted) and "S" (standard) mean that according to the party, the name 
+points to the circumscription indicated. In addition if the value is "S", 
+then this is the name that the party assigns to the referenced circumscription.  
+At one time in the perspective of a party here can be many names with an 
+"A" relative to a single circumscription, but there can be only one "S".
+
+Status.status refers to acceptance of a circumscription by a party. 
+The taxonomy of a party at a given time should be devised so that a given
+organism can belong to only one standard ("S") circumscription; any others 
+that include the organisms must be indicated to be nponstandard ("N"), or 
+can be absent from the status table altogether. </entityDescription>
 	<attribute> 
 		<attName>NAME_USAGE_ID</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
-		<attKey>P</attKey>
-		<attNotes> </attNotes>
+		<attKey>PK</attKey>
+		<attNotes>n/a </attNotes>
+		<attReferences>n/a</attReferences>
 		<attDefinition>Database assigned value corresponding to a unique usage of a name-circumscription usage by a particular party.</attDefinition>
 	</attribute>
 
@@ -27,7 +41,7 @@
                 <attName>CIRCUM_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>CIRCUMSCRIPTION</attReferences>
                 <attNotes>Foreign key into the CIRCUMSCRIPTION table.</attNotes>
                 <attDefinition>This attribute is the key pointing to a specific circumscription.</attDefinition>        </attribute>
@@ -38,7 +52,7 @@
                 <attName>NAME_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
 		<attReferences>NAME</attReferences>
                 <attNotes>Foreign key into the NAME table.</attNotes>
                 <attDefinition>This attribute is the key pointing to a taxon name.</attDefinition>
@@ -50,9 +64,9 @@
                 <attName>PARTY_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>PARTY</attReferences>
-                <attNotes> </attNotes>
+                <attNotes>n/a </attNotes>
                 <attDefinition>This attribute is the key pointing to a specific party.</attDefinition>
         </attribute>
 
@@ -63,6 +77,7 @@
                 <attNulls>Yes</attNulls>
                 <attType>DATE</attType>
                 <attKey>n/a</attKey>
+		<attReferences>n/a</attReferences>
                 <attNotes>n/a</attNotes>
                 <attDefinition>This is the date on which a party stated using a specific circumscription.</attDefinition>
         </attribute>
@@ -75,7 +90,7 @@
                 <attType>DATE</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes> </attNotes>
+                <attNotes>n/a </attNotes>
                 <attDefinition>This is the date on which a party stops using a specific circumscription.</attDefinition>
         </attribute>
 

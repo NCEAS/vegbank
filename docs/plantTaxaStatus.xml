@@ -18,8 +18,9 @@ and the party entity.</entityDescription>
 		<attName>STATUS_CIRCUM_ID</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
-		<attKey>P</attKey>
-		<attNotes> </attNotes>
+		<attKey>PK</attKey>
+		<attReferences>n/a</attReferences>
+		<attNotes>n/a</attNotes>
 		<attDefinition>Database assigned value corresponding to a unique usage of a circumscription by a given party.</attDefinition>
 	</attribute>
 
@@ -29,7 +30,7 @@ and the party entity.</entityDescription>
                 <attName>CIRCUM_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>CIRCUMSCRIPTION</attReferences>
                 <attNotes>Foreign key into the CIRCUMSCRIPTION table.</attNotes>
                 <attDefinition>This attribute stores the key pointing to a specific circumscription.</attDefinition>
@@ -41,7 +42,8 @@ and the party entity.</entityDescription>
                 <attName>PARTY_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
+		<attReferences>PARTY</attReferences>
                 <attNotes>Foreign key into the PARTY tbale.</attNotes>
                 <attDefinition>This attribute stores the key pointing to a specific party.</attDefinition>
         </attribute>
@@ -54,7 +56,7 @@ and the party entity.</entityDescription>
                 <attType>VARCHAR2</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes> </attNotes>
+                <attNotes>n/a </attNotes>
                 <attDefinition>This attribute stores the status of a circumscription as it is used by a specific party.  At this time, the status may be standard or non-standard.</attDefinition>
         </attribute>
 
@@ -64,6 +66,7 @@ and the party entity.</entityDescription>
                 <attType>DATE</attType>
                 <attKey>n/a</attKey>
                 <attNotes>n/a</attNotes>
+		<attReferences>n/a</attReferences>
                 <attDefinition>This is the date on which a party stated using a specific circumscription.</attDefinition>
         </attribute>
 
@@ -75,7 +78,7 @@ and the party entity.</entityDescription>
                 <attType>DATE</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes> </attNotes>
+                <attNotes>n/a </attNotes>
                 <attDefinition>This is the date on which a party stops using a specific circumscription.</attDefinition>
         </attribute>
 

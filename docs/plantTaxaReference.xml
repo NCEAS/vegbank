@@ -12,13 +12,14 @@
 <entity>
 	<entityName>plantTaxa.REFERENCE </entityName>
 	<entitySummary>Stores reference information about plant names and circumscriptions.</entitySummary>
-	<entityDescription> </entityDescription>
+	<entityDescription>This table stores reference information about names and circumscriptions. </entityDescription>
 	<attribute> 
 		<attName>REF_ID </attName>
 		<attNulls>No </attNulls>	
 		<attType>NUMBER </attType>
-		<attKey>P </attKey>
+		<attKey>PK</attKey>
 		<attNotes>Internal database value </attNotes>
+		<attReferences>n/a</attReferences>
 		<attDefinition>Database assigned value corresponding to a unique reference</attDefinition>
 	</attribute>
 
@@ -41,7 +42,7 @@
                 <attType>DATE</attType>
                 <attKey>n/a </attKey>
                 <attReferences>n/a </attReferences>
-                <attNotes> </attNotes>
+                <attNotes>n/a </attNotes>
                 <attDefinition>This is the date that a reference was added to the database. </attDefinition>
         </attribute>
 <attribute>
@@ -55,18 +56,18 @@
 		for the first time description for a given plant taxon.</attDefinition>
         </attribute>
 <attribute>
-                <attName>PAGE/SPECIESNAME</attName>
+                <attName>PAGE</attName>
                 <attNulls>No</attNulls>
                 <attType>TEXT</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes>This attribute stores either the page number of the reference or the taxon name the reference is describing.</attNotes>
-                <attDefinition> </attDefinition>
+                <attNotes>This attribute stores either the page number on which the the reference occurs.</attNotes>
+                <attDefinition>n/a </attDefinition>
         </attribute>
 <attribute>
-                <attName>CIRCUMTYPE</attName>
-                <attNulls>TEXT</attNulls>
-                <attType>n/a</attType>
+                <attName>REFERENCETYPE</attName>
+                <attNulls>Yes</attNulls>
+                <attType>TEXT</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
                 <attNotes>This value will become obsolete in future versions of the data model because it can be infered from other entities.  It was included for database quality checking.</attNotes>
@@ -75,7 +76,17 @@
 		ues or a taxon name.</attDefinition>
         </attribute>
 
-
+<attribute>
+                <attName>SPECIESNAME</attName>
+                <attNulls>Yes</attNulls>
+                <attType>TEXT</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>This attribute stores either the taxon name used in the reference.</attNotes>
+                <attDefinition> </attDefinition>
+</attribute>
+	
+	
 	<children> </children>
 </entity>
 </dataModel>	

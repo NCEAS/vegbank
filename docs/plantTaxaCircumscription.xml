@@ -12,13 +12,17 @@
 <entity>
 	<entityName>plantTaxa.CIRCUMSCRIPTION </entityName>
 	<entitySummary>This entity stores links to references which represent circumscriptions.</entitySummary>
-	<entityDescription> </entityDescription>
+	<entityDescription>The circumscription table stores a key referring to a unique circumscription and to a 
+	reference.  Also there is a field for notes.  It is understood that there is a tangible circumscription
+	which is basically a paragraph describing an object - in the future this may be stored in its own
+	field.</entityDescription>
 	<attribute> 
 		<attName>CIRCUM_ID</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
-		<attKey>n/a</attKey>
-		<attNotes></attNotes>
+		<attKey>PK</attKey>
+		<attReferences>n/a</attReferences>
+		<attNotes>n/a</attNotes>
 		<attDefinition>Database assigned value corresponding to a unique circumscription.</attDefinition>
 	</attribute>
 
@@ -28,13 +32,23 @@
                 <attName>REF_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>INT</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>REFERENCE</attReferences>
                 <attNotes>Foreign key into the REFERENCE table.</attNotes>
                 <attDefinition>This stores the ID number of a reference to a circumscription.</attDefinition>
         </attribute>
 
 
+	<attribute>
+                <attName>NOTES</attName>
+                <attNulls>Yes</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is a field for notes about a given circumscription</attDefinition>
+        </attribute>	
+	
 	<children> </children>
 </entity>
 </dataModel>	
