@@ -22,8 +22,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:22:18 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-11-25 19:35:44 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ public class LogonAction  extends Action
 			{
 				errors.add(
 				ActionErrors.GLOBAL_ERROR,
-				new ActionError("errors.user.not.found"));
+				new ActionError("errors.user.not.found", username));
 			}
 			else if  ( ! user.getPassword().equals(password) )
 			{
