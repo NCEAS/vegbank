@@ -25,8 +25,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-04-05 22:10:22 $'
- *  '$Revision: 1.23 $'
+ *  '$Date: 2002-04-09 21:54:33 $'
+ *  '$Revision: 1.24 $'
  */
 
 
@@ -46,7 +46,7 @@ public class DataSubmitServlet extends HttpServlet
 	private VegCommunityLoader commLoader = new VegCommunityLoader();
 	private XMLparse parser;
 	
-	private String rmiServer = "guest06.nceas.ucsb.edu";
+	private String rmiServer = "raptor.nceas.ucsb.edu";
 	private int rmiServerPort = 1099;
 	private DataSourceClient rmiClient;
 	
