@@ -6,9 +6,9 @@
 #*  Authors: @author@
 #*  Release: @release@
 #*	
-#*  '$Author: harris $'
-#*  '$Date: 2002-07-25 16:47:19 $'
-#* 	'$Revision: 1.5 $'
+#*  '$Author: farrell $'
+#*  '$Date: 2003-02-03 18:59:11 $'
+#* 	'$Revision: 1.6 $'
 ##
 
 
@@ -28,6 +28,8 @@ FILE=$2
 TYPE=$3
 PLOT=$4
 
-java -Xmx700M  -classpath ./lib/xml-apis.jar:./lib/xerces_1_4.jar:./lib/xalan_1_2_2.jar:./lib/xmlresource.jar:./lib/datatranslator.jar:./:./lib/rmidatasource.jar  \
+java -Xmx700M  -classpath ./lib/xml-apis.jar:./lib/xerces_1_4.jar:\
+./lib/xalan_1_2_2.jar:./lib/xmlresource.jar:./lib/datatranslator.jar:./:\
+./lib/rmidatasource.jar ./lib/vegclass_common.jar \
 -Djava.security.policy=./lib/policy.txt DataSourceClient $1 $2 $3 $4 
 

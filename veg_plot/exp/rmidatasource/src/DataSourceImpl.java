@@ -15,7 +15,7 @@ import PlotDataSource;
 //the plot loader
 import databaseAccess.DBinsertPlotSource;
 // the utility to test the system 
-import databaseAccess.utility;
+import databaseAccess.Utility;
 
 /** 
  *  Class that handles the upload of a plots data set to the VegBank database
@@ -33,9 +33,9 @@ import databaseAccess.utility;
  *	runs an any hardware/software that will jun java.
  *	
  * <br> <br>
- *  '$Author: harris $'
- *  '$Date: 2003-01-17 22:31:28 $'
- * 	'$Revision: 1.21 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2003-02-03 18:59:12 $'
+ * 	'$Revision: 1.22 $'
  *
  */
 
@@ -68,7 +68,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 				
 				// test the vegbank systrem
 				System.out.println("DataSourceImpl >  testing the VegBank services:  " );
-				utility util = new utility();
+				Utility util = new Utility();
 				boolean success = util.testVegBankConnections();
 				System.out.println("DataSourceImpl >  VegBank services passed:  " + success );
 				
@@ -78,6 +78,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 				xmlFile = rb.getString("xml_file");
 				System.out.println("DataSourceImpl > xml file:  " + xmlFile );
 				System.out.println("DataSourceImpl > plugin to be used: " + sourcePluginClass);
+				// This is the dataSource to use just for initialization test!!
 				source = new PlotDataSource(sourcePluginClass);
 				System.out.println("DataSourceImpl > number of plots:  " + source.getPlotNames().size() );
         // instantiate the plot validator 
@@ -144,50 +145,30 @@ public class DataSourceImpl extends UnicastRemoteObject
 	 * for the loading of the plot data.
 	 *
 	 */	
-	 public String insertPlot(String plot, String fileType, String emailAddress)
-	 {
-		 String s = null;
-		 try
-		 {
-		 		//set the debugging level to 2 -- the highest on the loader
-				int debugLevel = 2;
-				//set the plugin to null 
-				loaderPlugin = null;
-				System.out.println("DataSourceImpl > plot file type: " + fileType);
-				if ( fileType.toUpperCase().equals("TNC") )
-				{
-					System.out.println("DataSourceImpl > using datasource plugin: TNCPlotsDB");
-					loaderPlugin = "TNCPlotsDB";
-				}
-				else if (fileType.toUpperCase().equals("VBACCESS") )
-				{
-					System.out.println("DataSourceImpl > using datasource plugin: VBAccessDataSourcePlugin");
-					loaderPlugin = "VBAccessDataSourcePlugin";
-				}
-				else if (fileType.toUpperCase().equals("NATIVEXML") )
-				{
-					System.out.println("DataSourceImpl > using datasource plugin: NativeXmlPlugin");
-					loaderPlugin = "NativeXmlPlugin";
-				}
-				else
-				{
-					System.out.println("DataSourceImpl > cannot determine datasrc plugin type");
-				}
-				//if the plugin is not null then try loading the data
-				if ( loaderPlugin != null )
-				{
-					//construct an instance of the plot loader
-					dbinsert = new DBinsertPlotSource(loaderPlugin, plot);
-					s = dbinsert.insertPlot(plot, debugLevel, emailAddress);
-				}
-		 }
-		 catch (Exception e)
-		 {
-		 	System.out.println("Exception: "+e.getMessage());
-      e.printStackTrace();
-     }
-		 return(s);
-	 }
+    public String insertPlot(String plot, String fileType, String emailAddress)
+	  {
+		  String s = null;
+		  try
+		  {
+		    //set the debugging level to 2 -- the highest on the loader
+        int debugLevel = 2;
+		 	  setPluginClassName(fileType);	
+
+      	//if the plugin is not null then try loading the data
+		    if ( loaderPlugin != null )
+		    {
+			    //construct an instance of the plot loader
+			    dbinsert = new DBinsertPlotSource(loaderPlugin, plot);
+			    s = dbinsert.insertPlot(plot, debugLevel, emailAddress);
+		    }
+		  }
+		  catch (Exception e)
+		  {
+		  	System.out.println("Exception: "+e.getMessage());
+        e.printStackTrace();
+      }
+		  return(s);
+	  }
 	
 	
 	
@@ -593,28 +574,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 		Vector v = new Vector();
 		try
 		{
-			loaderPlugin = null;
-			System.out.println("DataSourceImpl > plot file type: " + fileType);
-			if ( fileType.toUpperCase().equals("TNC") )
-			{
-				System.out.println("DataSourceImpl > using datasource plugin: TNCPlotsDB");
-				loaderPlugin = "TNCPlotsDB";
-			}
-			else if (fileType.toUpperCase().equals("VBACCESS") )
-			{
-				System.out.println("DataSourceImpl > using datasource plugin: VBAccessDataSourcePlugin");
-				loaderPlugin = "VBAccessDataSourcePlugin";
-			}
-			else if (fileType.toUpperCase().equals("NATIVEXML") )
-			{
-				System.out.println("DataSourceImpl > using datasource plugin: NativeXmlPlugin");
-				loaderPlugin = "NativeXmlPlugin";
-			}
-			else
-			{
-				System.out.println("DataSourceImpl > cannot determine datasrc plugin type");
-			}
-			
+			this.setPluginClassName(fileType);			
 			if ( loaderPlugin != null )
 			{
 				// re-instantiate this class
@@ -976,6 +936,34 @@ public class DataSourceImpl extends UnicastRemoteObject
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
+	}
+	
+	public void setPluginClassName (String fileType) 
+	{
+    //set the plugin to null 
+		loaderPlugin = null;
+		System.out.println("DataSourceImpl > plot file type: " + fileType);
+		if ( fileType.toUpperCase().equals("TNC") )
+		{
+			System.out.println("DataSourceImpl > using datasource plugin: TNCPlotsDB");
+			loaderPlugin = "TNCPlotsDB";
+		}
+		else if (fileType.toUpperCase().equals("VBACCESS") )
+		{
+			System.out.println("DataSourceImpl > using datasource plugin: VBAccessDataSourcePlugin");
+			loaderPlugin = "VBAccessDataSourcePlugin";
+		}
+		else if (fileType.toUpperCase().equals("NATIVEXML") )
+		{
+			System.out.println("DataSourceImpl > using datasource plugin: NativeXmlPlugin");
+			loaderPlugin = "NativeXmlPlugin";
+		}
+		else
+		{
+			System.out.println("DataSourceImpl > cannot determine datasrc plugin type");
+		}
+    this.loaderPlugin = loaderPlugin;
+  	this.source = new PlotDataSource(loaderPlugin);
 	}
 		
 	//returns the project name 

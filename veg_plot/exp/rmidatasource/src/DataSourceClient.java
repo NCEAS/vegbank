@@ -29,9 +29,9 @@ import xmlresource.utils.transformXML;
  *  Release: @release@
  *	
  *  <br> <br>
- *  '$Author: harris $'
- *  '$Date: 2003-01-08 19:21:50 $'
- * 	'$Revision: 1.23 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2003-02-03 18:59:12 $'
+ * 	'$Revision: 1.24 $'
  *
  *
  */
@@ -979,6 +979,19 @@ public class DataSourceClient
 			}
 			return(s);
 	 }
+	 
+	 public void setPluginClassName (String pluginClassName) 
+	 {
+	 		try
+	 		{
+	 			source.setPluginClassName(pluginClassName);
+	 		}
+	 		catch (Exception e)
+	 		{
+	 			System.out.println("DataSourceClient > Exception " + e.getMessage() );
+	 			e.printStackTrace();
+	 		}
+	 }
 
 	 
 	/**
@@ -1046,8 +1059,12 @@ public class DataSourceClient
 					//just load the single plot identified on the command line
 					else
 					{
+						// set the plugin to use 
+						client.setPluginClassName(fileType);
+						
             // validate the plot -- get the xml doc that contains the validation
             // info
+            
 						System.out.println("DataSourceClient > validating plot: " + testPlot );
             boolean validation = client.isPlotValid(testPlot);
             System.out.println("DataSourceClient > plot is valid: " +validation);

@@ -207,6 +207,8 @@ public interface DataSourceServerInterface extends Remote
 	public Vector getPlantNames(String plotName)
 	throws Exception;
 	
+	public void setPluginClassName(String pluginClassName)
+	throws Exception;
 	
 //#STOP EDDITIONS
 	
