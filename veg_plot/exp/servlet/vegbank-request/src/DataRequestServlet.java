@@ -405,11 +405,11 @@ public class DataRequestServlet extends HttpServlet
 		//attempt to recognize the request as a query for communities 
 		if (requestDataType.trim().equals("community")) 
 		{  
-			out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
-			+ "community information - not requesting plot info");
+		//	out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
+		//	+ "community information - not requesting plot info");
 			composeCommunityQuery(params);
 			issueQuery("simpleCommunityQuery");
-			out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
+		//	out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
 		}
 		// Cheat here - to recognise the single plot query to return entire plot
 		//20020117 testing the new plot writer and data translation 
@@ -557,11 +557,11 @@ public class DataRequestServlet extends HttpServlet
 			String requestDataFormatType  = params.get("requestDataFormatType").toString();
 			if (requestDataType.trim().equals("vegCommunity")) 
 			{  
-				out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
+				System.out.println("DataRequestServlet > DataRequestServlet.handleSimpleQuery - requesting "
 				+ "community information - not requesting plot info");
 				composeCommunityQuery(params);
 				issueQuery("simpleCommunityQuery");
-				out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
+				System.out.println("DataRequestServlet > Number of communities returned: "+queryOutputNum+"<br><br>");
 	
 
 		
