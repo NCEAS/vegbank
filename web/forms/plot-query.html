@@ -5,9 +5,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: harris $'
-  *      '$Date: 2002-08-02 14:26:53 $'
-  *  '$Revision: 1.15 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2002-09-17 00:29:38 $'
+  *  '$Revision: 1.16 $'
   *
   *
   -->
@@ -17,7 +17,7 @@
   <head>
     <meta name="generator" content="HTML Tidy, see www.w3.org">
     <link rel="STYLESHEET" href=
-    "http://numericsolutions.com/includes/default.css" type="text/css">
+    "http://vegbank.nceas.ucsb.edu/vegbank/includes/default.css" type="text/css">
     <title>
       VEGBANK - Plots Database Query
     </title>
@@ -197,6 +197,9 @@
                 </td>
                 <td width="80%">
                   <input name="taxon" size="45"> 
+                  <br/>
+                  <font class="itemsmall" color="red"><b>Use 
+                  % for the wildcard.</b></font>
                 </td>
               </tr>
               <tr>
@@ -652,10 +655,14 @@
             </table>
 						<table border="0">
               <tr>
-                <td width="80%">
-                  <span class="itemsmall"> <b> vegetation community </b> </span> 
-									<input size="60" name="community" type="text">
-                  <br>
+                <td> <!--width="80%"-->
+                  <span class="itemsmall"> <b> vegetation community </b> <br/>&nbsp;</span> 
+                </td>
+                <td>
+                  <input size="60" name="community" type="text"><br/>
+				  
+                  <font class="itemsmall" color="red"><b>Use 
+                  % for the wildcard.</b></font>
                 </td>
               </tr>
             </table>
