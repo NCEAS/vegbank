@@ -194,9 +194,21 @@ public class Installer
 					}
 					else
 					{
-						listener = Runtime.getRuntime().exec("jar.exe -xvf vegClient.jar", envp, path);
+						//there is a problem on windows machines where the extractor process
+						//does not work when tried in the current directory
+						String currentDir = System.getProperty("user.dir");
+						System.out.println("non-unix path: '"+ path +"' user dir: '" + currentDir+"'");
+						if ( directory.trim().equals(currentDir.trim()) )
+						{
+							System.out.println("user chose the current directory for install - creating subdir");
+							File newpath = new File( directory+"\\"+"vegclient");
+							listener = Runtime.getRuntime().exec("jar.exe -xvf vegClient.jar", envp, newpath);
+						}
+						else
+						{
+							listener = Runtime.getRuntime().exec("jar.exe -xvf vegClient.jar", envp, path);
+						}
 					}
-			
 				//listener = Runtime.getRuntime().load("cygwin1.dll").exec("cp test bad");
 				System.out.println(" issued ");
 				listenerStream = new DataInputStream(new BufferedInputStream(listener.getInputStream()));
