@@ -30,8 +30,8 @@ import xmlresource.utils.transformXML;
  *	
  *  <br> <br>
  *  '$Author: harris $'
- *  '$Date: 2003-01-08 02:47:16 $'
- * 	'$Revision: 1.22 $'
+ *  '$Date: 2003-01-08 19:21:50 $'
+ * 	'$Revision: 1.23 $'
  *
  *
  */
@@ -872,9 +872,9 @@ public class DataSourceClient
     * @param plotName -- the name of the plot to test for validity 
     * @return receipt -- the xml recipt containing the terms of validitity 
     */
-	  public String isPlotValid(String plot)
+	  public boolean isPlotValid(String plot)
     {
-     String result = null;
+     boolean result = true;
 		 try
 		 {
       result = source.isPlotValid(plot);
@@ -886,6 +886,25 @@ public class DataSourceClient
      }
 		 return(result);
     }
+		
+	/**
+	  * this method returns the validation report for the plot
+		* @return -- returns the xml receipt for the plot validation report 
+		*/
+		public String getValidationReport()
+		{
+			String report = null;
+			try
+			{
+				report = source.getValidationReport();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			return(report);
+		}
+		
   
 	/**
 	 * method that will insert a plot on the windows machine based on the name
@@ -1030,8 +1049,10 @@ public class DataSourceClient
             // validate the plot -- get the xml doc that contains the validation
             // info
 						System.out.println("DataSourceClient > validating plot: " + testPlot );
-            String validation = client.isPlotValid(testPlot);
-            System.out.println("DataSourceClient > validation info: " +validation);
+            boolean validation = client.isPlotValid(testPlot);
+            System.out.println("DataSourceClient > plot is valid: " +validation);
+						String rept = client.getValidationReport();
+						System.out.println("DataSourceClient > validation report: " + rept);
 
 						System.out.println("DataSourceClient > inserting the plot: " + testPlot );
 						String insertResults = client.insertPlot(testPlot, fileType, email);

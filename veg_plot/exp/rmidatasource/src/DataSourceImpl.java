@@ -34,8 +34,8 @@ import databaseAccess.utility;
  *	
  * <br> <br>
  *  '$Author: harris $'
- *  '$Date: 2003-01-08 02:47:16 $'
- * 	'$Revision: 1.19 $'
+ *  '$Date: 2003-01-08 19:21:50 $'
+ * 	'$Revision: 1.20 $'
  *
  */
 
@@ -251,15 +251,15 @@ public class DataSourceImpl extends UnicastRemoteObject
   /**
    * this metod uses the  plotvalidator to test that the input plot is valid.
    * @param plotName -- the name of the plot to test for validity 
-   * @return receipt -- the xml recipt containing the terms of validitity 
+   * @return valid  -- true if the plot is valid, else false 
    */
-   public String isPlotValid(String plot)
+   public boolean isPlotValid(String plot)
    {
-    String result = null;
+    boolean result = true;
     try
     {
-      boolean b  = validator.isPlotValid(plot);
-      result = validator.getValidationReport();
+      result  = validator.isPlotValid(plot);
+      //result = validator.getValidationReport();
     }
     catch (Exception e)
     {
@@ -267,6 +267,25 @@ public class DataSourceImpl extends UnicastRemoteObject
     }
     return(result);
    }
+	 
+	 /**
+	  * this method returns the validation report for the plot
+		* @return -- returns the xml receipt for the plot validation report 
+		*/
+		public String getValidationReport()
+		{
+			String report = null;
+			try
+			{
+				//result  = validator.isPlotValid(plot);
+				report = validator.getValidationReport();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			return(report);
+		}
   
 	 /**
 	  * 	method that examines the mdbFile stored in the location described by 
