@@ -14,8 +14,8 @@
  * 		@version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2001-11-01 17:44:42 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2001-11-02 19:13:52 $'
+ *     '$Revision: 1.2 $'
  *
  *
  */
@@ -140,6 +140,11 @@ public class PlotDataMapper
 		}
 		else if (elementName.equals("stratumHeight")) 
 		{
+			//make sure that this is not a null value
+			if ( elementValue == null)
+			{
+				elementValue = "null";
+			}
 			elementValue=elementValue.replace('<','l');
 			stratumHeightElements.addElement(elementValue);
 //		System.out.println(elementValue);
@@ -147,12 +152,21 @@ public class PlotDataMapper
 		}
 		else if (elementName.equals("stratumCover")) 
 		{
+			//make sure that this is not a null value
+			if ( elementValue == null)
+			{
+				elementValue = "null";
+			}
 			elementValue=elementValue.replace('<','l');
 			stratumCoverElements.addElement(elementValue);
+			System.out.println( "coverVal <> ("+elementName+"): " + elementValue);
 			plotObservationParams.put("stratumCover",stratumCoverElements);
 		}
 		else 
 		{
+			System.out.println( "other name:" + elementName );
+			System.out.println( "other val:" + elementValue );
+			if (elementValue != null )
 			plotObservationParams.put(elementName,elementValue);
  		}
 	}
@@ -160,7 +174,9 @@ public class PlotDataMapper
 	//store community related data
 	else if ( elementCategory.equals("community") ) 
 	 {
-		plotCommunityParams.put(elementName,elementValue);
+		 //System.out.println( "bad val:" + elementValue );
+		 if (elementValue != null )
+			plotCommunityParams.put(elementName,elementValue);
 	 }
 
 	//store species related data 
@@ -204,6 +220,8 @@ public class PlotDataMapper
 	catch(Exception e)
 	{
 		System.out.println( "Exception: "+ e.getMessage() );
+		e.printStackTrace();
+		System.exit(0);
 	}
 	
 }
