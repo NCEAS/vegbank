@@ -5453,7 +5453,7 @@ change through time.</entitySummary>
       <attLabel>Graphic Data</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
-      <attType>BLOB</attType>
+      <attType>oid</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>

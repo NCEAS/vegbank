@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: QueryBuilderServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-07 01:37:27 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-10-11 21:20:10 $'
+ *  '$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.vegbank.servlet.util.GetURL;
-import org.vegbank.servlet.util.ServletUtility;
+import org.vegbank.common.utility.GetURL;
+import org.vegbank.common.utility.ServletUtility;
 
 
 /**
@@ -60,8 +60,8 @@ import org.vegbank.servlet.util.ServletUtility;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-07 01:37:27 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-10-11 21:20:10 $'
+ *  '$Revision: 1.4 $'
  * 
  */
 

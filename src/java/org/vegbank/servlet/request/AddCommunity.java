@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-11 23:14:05 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-10-11 21:20:10 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,10 +34,10 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.vegbank.common.utility.HTMLUtil;
+import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.communities.datasource.VegCommunityLoader;
 import org.vegbank.databaseAccess.CommunityQueryStore;
-import org.vegbank.servlet.util.HTMLUtil;
-import org.vegbank.servlet.util.ServletUtility;
 
 /**
  * @author farrell

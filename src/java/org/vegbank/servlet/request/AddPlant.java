@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-10-11 21:20:10 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,10 +43,10 @@ import org.vegbank.common.model.Plant;
 import org.vegbank.common.model.Plantparty;
 import org.vegbank.common.model.Reference;
 import org.vegbank.common.model.ReferenceSummary;
+import org.vegbank.common.utility.HTMLUtil;
+import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.databaseAccess.TaxonomyQueryStore;
 import org.vegbank.plants.datasink.DBPlantWriter;
-import org.vegbank.servlet.util.HTMLUtil;
-import org.vegbank.servlet.util.ServletUtility;
 
 /**
  * @author farrell

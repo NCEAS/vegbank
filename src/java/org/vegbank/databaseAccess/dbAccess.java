@@ -37,9 +37,9 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
  * allow the user to update the database, based on a plot xml 
  * document containing only partial data from a plot 
  *
- *  '$Author: anderson $'
- *  '$Date: 2003-08-28 20:05:03 $'
- *  '$Revision: 1.5 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2003-10-11 21:20:10 $'
+ *  '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.vegbank.servlet.util.ServletUtility;
+import org.vegbank.common.utility.ServletUtility;
 
 
 
@@ -33,8 +33,8 @@ import org.vegbank.servlet.util.ServletUtility;
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-08-21 21:16:45 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2003-10-11 21:20:10 $'
+ *  '$Revision: 1.9 $'
  *
  *  @version
  *  @author

@@ -5,9 +5,9 @@
   * Global build script for vegclass. This simply allows running all the sub 
   * scripts from one place.
   *
-  *     '$Author: anderson $'
-  *     '$Date: 2003-10-10 23:35:15 $'
-  *     '$Revision: 1.17 $'
+  *     '$Author: farrell $'
+  *     '$Date: 2003-10-11 21:20:09 $'
+  *     '$Revision: 1.18 $'
 --> 
 <project name="vegclass" default="jar" basedir=".">
 
@@ -145,7 +145,8 @@
           description="Install the application">
     <mkdir dir="${vegbank.home.dir}/lib"/>
     <mkdir dir="${vegbank.home.dir}/bin"/>
-
+    <mkdir dir="${vegbank.home.dir}/originalDataStore"/>
+    
     <copy todir="${vegbank.home.dir}/lib">
       <fileset dir="${lib.dir}">
          <include name="**/*.jar"/>

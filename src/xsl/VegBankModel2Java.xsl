@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-07-21 17:52:13 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-10-11 21:20:09 $'
+ *  '$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0"
   xmlns:redirect="http://xml.apache.org/xalan/redirect"
-  xmlns:str="http://xsltsl.org/string"
   extension-element-prefixes="redirect">
 
   <!-- ***************************************************************************** -->
@@ -177,18 +176,6 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
   private <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> <xsl:value-of select="attName"/>; 
  </xsl:template>
 
-
-
- <xsl:template match="attribute" mode="declareComplexAttrib">
-   <xsl:variable name="javaType">
-     <xsl:call-template name="str:capitalise">
-       <xsl:with-param name="text">
-         <xsl:value-of select="substring-before(attReferences, '.')"/>
-       </xsl:with-param>
-     </xsl:call-template>
-   </xsl:variable>   
-  private List <xsl:text> </xsl:text> <xsl:value-of select="concat(attName,'s')"/>; 
- </xsl:template>
 
  <!-- ***************************************************************************** -->
  <!-- Generate get and set methods -->

@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *   '$Date: 2003-07-23 18:05:06 $'
- *   '$Revision: 1.9 $'
+ *   '$Date: 2003-10-11 21:20:10 $'
+ *   '$Revision: 1.10 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,14 +41,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.vegbank.common.utility.GetURL;
+import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.servlet.authentication.UserDatabaseAccess;
-import org.vegbank.servlet.util.GetURL;
-import org.vegbank.servlet.util.ServletUtility;
 
 
 public class UserManagementServlet extends HttpServlet 
 {
-	private static final  String vegBankAdmin="peet@unc.edu";
+	private static final  String vegBankAdmin="help@vegbank.org";
 	//private UserDatabaseAccess userdb;
 	private ServletUtility util = new ServletUtility();
   private GetURL gurl = new GetURL();
@@ -550,7 +550,7 @@ public class UserManagementServlet extends HttpServlet
 						out.print( output.toString() );
 						
 						// send email message to the user 
-						String mailHost = "nceas.ucsb.edu";
+						String mailHost = "hyperion.nceas.ucsb.edu";
 						String from = "vegbank";
 						String to = emailAddress;
 						String cc = "vegbank@nceas.ucsb.edu";
@@ -842,25 +842,8 @@ public class UserManagementServlet extends HttpServlet
 		 try
 		 {
 		 	System.out.println("UserManagementServlet > performing logout");
-			String cookieVal = new ServletUtility().getCookieValue(req);
-			String cookieName = this.getCookieName(req);
-			System.out.println("UserManagementServlet > cookie value: " + cookieVal);
-			System.out.println("UserManagementServlet > cookie name: " + cookieName);
-			
-			if ( cookieVal == null || cookieName == null )
-			{
-				//the cookie is not valid
-				System.out.println("UserManagementServlet > not setting cookie");
-			}
-			else
-			{
-				Cookie cookie = new Cookie(cookieName, cookieVal);
-				cookie.setMaxAge(0);  //set cookie to end
-				res.addCookie(cookie);
-			}
-			
-			res.sendRedirect("/vegbank/general/login.html");
-			
+			new ServletUtility().removeCookie(req, res);
+			res.sendRedirect("/vegbank/general/login.html");		
 		 }
 		 catch(Exception e)
 		 {

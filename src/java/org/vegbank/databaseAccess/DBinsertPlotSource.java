@@ -7,8 +7,8 @@
 * Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-08-21 21:16:44 $'
-*   '$Revision: 1.3 $'
+*   '$Date: 2003-10-11 21:20:10 $'
+*   '$Revision: 1.4 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -45,10 +45,11 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.vegbank.common.utility.GetURL;
 import org.vegbank.common.utility.LocalDbConnectionBroker;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.plots.datasource.PlotDataSource;
-import org.vegbank.servlet.util.GetURL;
+import org.vegbank.plots.datasource.RectificationUtility;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -74,7 +75,7 @@ public class DBinsertPlotSource {
 	private String logFile = "loadlog.txt";
 
 
-	public VegProject project;
+	//public VegProject project;
 	private XMLparse parser;
 
 	// variables that are quite general to the class
@@ -1722,12 +1723,12 @@ public class DBinsertPlotSource {
 			if (code != null && code.length() > 1)
 			{
 				// Get the plantName_ID from the code
-				nameId = getPlantNameId(code);
+				nameId = RectificationUtility.getForiegnKey(conn, RectificationUtility.GETPLANTNAMEID, code);
 			}
 			else
 			{
 				// Get the plantName_ID from the scientific name
-				nameId = getPlantNameId(authorNameOfPlant);
+				nameId = RectificationUtility.getForiegnKey(conn, RectificationUtility.GETPLANTNAMEID, authorNameOfPlant);
 			}
 			
 			if (nameId == 0)
@@ -1831,7 +1832,7 @@ public class DBinsertPlotSource {
 		
 		// Need to get the PK, the conceptId, partyId and date
 		int taxonInterpretationId = getNextId("taxonInterpretation");
-		int conceptId = this.getPlantConceptId(nameId);
+		int conceptId = RectificationUtility.getForiegnKey(conn, RectificationUtility.GETPLANTCONCEPTID, new Integer(nameId) );
 		int partyId = this.getPartyId("NPS");   // FIXME: get from loader
 		int roleId = this.getRoleId("Not specified");
 		
@@ -1890,70 +1891,6 @@ public class DBinsertPlotSource {
 		return result;
 	}
 
-	/**
-	 * @param nameId
-	 * @return
-	 */
-	private int getPlantConceptId(int nameId)
-	{
-		int result = 0;
-		String sql = "select plantconcept_id from plantusage where plantname_id = "+  nameId;
-		try
-		{
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			// Just get the first match --- TODO: Check for > 1 .. this is an error
-			rs.next();
-			result = rs.getInt(1);
-		}
-		catch (Exception e)
-		{ 
-			System.out.println("DBinsertPlotSource > Could not find plantConceptId for " + nameId );
-			System.out.println("DBinsertPlotSource > error was: " + e.getMessage() );
-		}
-		return result;
-	}
-
-	private int getPlantNameId(String searchName)
-	{
-		int result = 0;
-		String sql = "select plantname_id from plantname where plantname = '"+ searchName + "'";
-		try
-		{
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			// Just get the first match --- TODO: Check for > 1 .. this is an error
-			rs.next();
-			result = rs.getInt(1);
-		}
-		catch (Exception e)
-		{ 
-			System.out.println("DBinsertPlotSource > Could not find plantNameId for " + searchName );
-			System.out.println("DBinsertPlotSource > error was: " + e.getMessage() );
-		}
-		return result;
-	}
-	
-	private int getCommConceptId(String searchName)
-	{
-		int result = 0;
-		String sql = "select commconcept_id from commusage where commname = '"+ searchName + "'";
-		try
-		{
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			// Just get the first match --- TODO: Check for > 1 .. this is an error
-			while ( rs.next() )
-			{
-				result = rs.getInt(1);
-			}
-		}
-		catch (Exception e)
-		{ 
-			e.printStackTrace();
-		}
-		return result;
-	}
 
 	/**
 	 * method that returns false if the community cannot be stored in the 
@@ -2050,7 +1987,7 @@ public class DBinsertPlotSource {
 		// Also insert the community interpretation data if we can correllate
 		
 		//Need to get the conceptId
-		int commConceptId = getCommConceptId(name);
+		int commConceptId = RectificationUtility.getCommConceptId(name, conn);
 		
 		if (commConceptId == 0)
 		{

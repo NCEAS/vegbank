@@ -6,8 +6,8 @@ package org.vegbank.servlet.stylesheet;
  * Purpose: 
  *
  * '$Author: farrell $'
- * '$Date: 2003-08-21 21:16:45 $'
- * '$Revision: 1.5 $'
+ * '$Date: 2003-10-11 21:20:10 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,8 +37,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.vegbank.servlet.util.GetURL;
-import org.vegbank.servlet.util.ServletUtility;
+import org.vegbank.common.utility.GetURL;
+import org.vegbank.common.utility.ServletUtility;
 
 import org.vegbank.xmlresource.transformXML;
 

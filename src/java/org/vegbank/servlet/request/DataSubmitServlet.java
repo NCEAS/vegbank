@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-07-15 20:19:27 $'
- *  '$Revision: 1.15 $'
+ *  '$Date: 2003-10-11 21:20:10 $'
+ *  '$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,13 +38,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.vegbank.common.Constants;
 import org.vegbank.common.command.Query;
+import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.communities.datasource.VegCommunityLoader;
 import org.vegbank.databaseAccess.CommunityQueryStore;
 import org.vegbank.plots.datasource.PlotDataSource;
 import org.vegbank.plots.rmi.DataSourceClient;
 import org.vegbank.servlet.authentication.UserDatabaseAccess;
-import org.vegbank.servlet.datafileexchange.DataFileExchange;
-import org.vegbank.servlet.util.ServletUtility;
+import org.vegbank.common.utility.datafileexchange.DataFileExchange;
 import org.w3c.dom.Document;
 
 import org.vegbank.xmlresource.XMLparse;
@@ -95,10 +95,22 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		try
 		{
 			System.out.println("init: DataSubmitServlet");
-			System.out.println("DataSumbitServlet > init rmiserver: " + rmiServer);
-			//construct a new instance of the rmi client
-			DataSourceClient rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 			
+			// If the name of the RMI Server is false then don't try to connect ...
+			if ( rmiServer.equals("false") )
+			{
+				System.out.println("DataSumbitServlet >This System is configured"
+					+" to run without an RMIServer, any functions dependant on"
+					+ " RMI will fail. The \"vegbank/build.properties file can be"
+					+ " used to set an RMIServer\"");
+				
+			}
+			else
+			{
+				System.out.println("DataSumbitServlet > init rmiserver: " + rmiServer);
+				//construct a new instance of the rmi client
+				DataSourceClient rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
+			}
 		}
 		catch (Exception e)
 		{

@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-07-23 21:51:19 $'
- *  '$Revision: 1.12 $'
+ *  '$Date: 2003-10-11 21:20:10 $'
+ *  '$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,8 +43,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.vegbank.common.utility.DBConnectionPool;
+import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.databaseAccess.dbAccess;
-import org.vegbank.servlet.util.ServletUtility;
 
 import org.vegbank.xmlresource.transformXML;
 
@@ -80,8 +80,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-07-23 21:51:19 $'
- *  '$Revision: 1.12 $'
+ *  '$Date: 2003-10-11 21:20:10 $'
+ *  '$Revision: 1.13 $'
  * 
  */
 
@@ -140,7 +140,7 @@ public class DataRequestServlet extends HttpServlet
 		} catch ( ServletException ex ) {
 			throw ex;
 		} catch (SQLException e) {
-			System.out.println("Error in MetacatServlet.init: "+e.getMessage());
+			System.out.println("Error in DataRequestServlet.init: "+e.getMessage());
 		}
 	}
 
@@ -149,7 +149,7 @@ public class DataRequestServlet extends HttpServlet
 	 */
 	public void destroy() {
 			// Close all db connection
-			System.out.println("Destroying MetacatServlet");
+			System.out.println("Destroying DataRequestServlet");
 			DBConnectionPool.release();
 	}
 
@@ -215,27 +215,10 @@ public class DataRequestServlet extends HttpServlet
 				{
 					handleSimpleQuery(params, out, response, resultType, userName);
 				}
-				else if ( determineQueryType(params).equals("compound") )
-				{
-					handleCompoundQuery(params, out, response, requestDataType, userName, resultType);
-				}
 				else if ( determineQueryType(params).equals("extended") )
 				{
 					handleExtendedQuery(enum, params, out, response, request, resultType, userName);
 				}
-			}
-			// PLANT TAXONOMY QUERY
-			else if ( requestDataType.trim().equals("plantTaxon") )
-			{
-				System.out.println( "DataRequstServlet > query on the plant taxonomy database \n");
-				handlePlantTaxonQuery( params, out, requestDataType, response, resultType, userName);
-			}
-			// VEG COMMUNITY QUERY
-			else if ( requestDataType.trim().equals("vegCommunity") )
-			{
-				System.out.println("DataRequstServlet > query on the vegetation community database \n"
-					+" not yet implemented ");
-				handleVegCommunityQuery( params, out, requestDataType, response, resultType, userName);
 			}
 			//UNKNOWN QUERY
 			else 
@@ -336,29 +319,6 @@ public class DataRequestServlet extends HttpServlet
 						}
 						extendedParamsHash.put( name, extendedValsVector );
 					}
-				}
-				//compose the query
-				String query = composeExtendedQuery( extendedParamsHash ) ;
-				//issue the extended query
-				QueryResult qr = issueQuery("extendedQuery", clientType, userName, query );
-				
-				
-				//if the query had results respond accordingly to various clients
-				if (qr.getResultsTotal() >=1)
-				{
-					handleQueryResultsResponse(
-						clientType,
-						requestDataType,
-						out,
-						response,
-						param,
-						resultType,
-						qr );
-				}
-				else 
-				{ 
-					String results = this.getEmptyResultSetMessage(param);
-					out.println( results );
 				}
 			}
 		}
@@ -766,63 +726,6 @@ public class DataRequestServlet extends HttpServlet
 				System.out.println("About to run plot query");
 				new FullPlotQuery().execute(qr, plotId);
 			}
-			// this is where the query element checking is done for the vegetation plots
-			// the way that this is structured currently the user is not forced to choose a
-			//single query element
-			//look for a taxonName
-			else if (taxonName != null && taxonName.length() > 0)
-			{
-				//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
-				//+"containing plots with taxonName: "+taxonName+" <br>");
-				String query = composeQuery("taxonName", taxonName, resultType);
-				qr = issueQuery("simpleQuery", clientType, userName, query);
-				out.println(
-					"Number of results returned: " + qr.getResultsTotal() + "<br><br>");
-			}
-			//look for elevation
-			else if (minElevation != null && minElevation.length() > 0)
-			{
-				//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
-				//+"containing plots with a minElevation of: "+minElevation+" <br>");
-				String query =
-					composeQuery(
-						"elevationMin",
-						minElevation,
-						"elevationMax",
-						maxElevation,
-						resultType);
-				qr = issueQuery("simpleQuery", clientType, userName, query);
-				out.println(
-					"Number of results returned: " + qr.getResultsTotal()  + "<br><br> --  " );
-			}
-			//look for state
-			else if (state != null && state.length() > 0)
-			{
-				//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
-				//+"containing plots with a state equal to: "+state+" <br>");
-				String query = composeQuery("state", state, resultType);
-				qr = issueQuery("simpleQuery", clientType, userName, query);
-				out.println(
-					"Number of results returned: " + qr.getResultsTotal() + "<br><br>");
-			}
-			//look for the community name
-			else if (communityName != null && communityName.length() > 0)
-			{
-				//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
-				//+"containing plots with a communityName equal to: "+communityName+" <br>");
-				String query = composeQuery("communityName", communityName, resultType);
-				qr = issueQuery("simpleQuery", clientType, userName, query);
-				out.println(
-					"Number of results returned: " + qr.getResultsTotal() + "<br><br>");
-			}
-			//look for the surface geology option
-			else if (surfGeo != null && surfGeo.length() > 0)
-			{
-				//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
-				//+"containing plots with a surface geology like: "+surfGeo+" <br>");
-				String query = composeQuery("surfGeo", surfGeo, resultType);
-				qr = issueQuery("simpleQuery", clientType, userName, query);
-			}
 			else
 			{
 				System.out.println("DataRequestServlet > This request is not understood");
@@ -847,68 +750,6 @@ public class DataRequestServlet extends HttpServlet
 			}
 		}
 		catch (Exception e)
-		{
-			System.out.println("DataRequestServlet Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
-	
-	/**
-	 * method to handle queries that are meant to be issued against 
-	 * the plantTaxonomy database
-	 *
-	 * @param params -- the prameters that are passed to the method
-	 * @param out -- the printwriter back to the client
-	 * @param requestDataType -- the data type requested by the client
-	 *  	used to check that the query was diercted to the correct method
-	 *		{plantTaxon}
-	 * @param response - the response object linked to the client 
-	 * 
-	 */
-	private void handlePlantTaxonQuery(
-		Hashtable params, 
-		PrintWriter out, 
-		String requestDataType, 
-		HttpServletResponse response,
-		String resultType,
-		String userName)
-	{
-		try
-		{
-			//get the parameters needed for retuning the results
-			String clientType = params.get("clientType").toString();
-			String requestDataFormatType  = params.get("requestDataFormatType").toString();
-			if (requestDataType.trim().equals("plantTaxon")) 
-			{  
-			//	out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
-			//	+ "plant taxonomy information - not requesting plot info");
-				String query = composePlantTaxonomyQuery(params, resultType, requestDataType);
-				QueryResult qr = issueQuery("simplePlantTaxonomyQuery", clientType, userName, query);
-				//out.println("Number of taxa returned: "+queryOutputNum+"<br><br>");
-				//use the method that handles the response	
-				if (qr.getResultsTotal() >=1) 
-				{
-					handleQueryResultsResponse(
-						clientType,
-						requestDataType,
-						out,
-						response,
-						params,
-						resultType,
-						qr);
-				}
-				else 
-				{ 
-					if ( ! clientType.equals("clientApplication") )
-					{
-						String results = this.getEmptyResultSetMessage(params);
-						out.println( results );
-					}
-				}
-			}
-		}
-		catch( Exception e ) 
 		{
 			System.out.println("DataRequestServlet Exception: " + e.getMessage());
 			e.printStackTrace();
@@ -959,148 +800,7 @@ public class DataRequestServlet extends HttpServlet
 		 }
 		 return( output.toString() );
 	 }
-	
-	
-	/**
-	 * method to handle queries that are meant to be issued against 
-	 * the vegetation community database
-	 *
-	 *	@param params -- the prameters that are passed to the method
-	 * 	@param out -- the printwriter back to the client
-	 * 	@param requestDataType -- the data type requested by the client
-	 *  	used to check that the query was diercted to the correct method
-	 *		{plantTaxon}
-	 * 	@param response - the response object linked to the client 
-	 */
-	private void handleVegCommunityQuery( 
-		Hashtable params, 
-		PrintWriter out, 
-		String requestDataType, 
-		HttpServletResponse response,
-		String resultType,
-		String userName)
-	{
-		try
-		{
-			// get the parameters needed for retuning the results
-			String clientType = params.get("clientType").toString();
-			String requestDataFormatType  = params.get("requestDataFormatType").toString();
-			if (requestDataType.trim().equals("vegCommunity")) 
-			{  
-				System.out.println(
-					"DataRequestServlet > DataRequestServlet.handleSimpleQuery - requesting "
-					+ "community information - not requesting plot info"
-				);
-				String query = composeCommunityQuery(params, resultType, requestDataType);
-				QueryResult qr = issueQuery("simpleCommunityQuery", clientType, userName, query);
-				System.out.println("DataRequestServlet > Number of communities returned: "+qr.getResultsTotal()+"<br><br>");
-				
-				// use the method that handles the response if there are any results 
-				// from the DB otherwise just return either a request for another
-				// query or nothing
-				if (qr.getResultsTotal() >= 1) 
-				{
-					handleQueryResultsResponse(
-						clientType, 
-						requestDataType, 
-						out, 
-						response, 
-						params, 
-						resultType,
-						qr
-					);
-				}
-				else 
-				{ 
-					if ( ! clientType.equals("clientApplication") )
-					{
-						String results = this.getEmptyResultSetMessage(params);
-						out.println( results );
-					}
-				}
-			}
-		}
-		catch( Exception e ) 
-		{
-			System.out.println("DataRequestServlet Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
-	
-
-/**
- * Handles compound queries where there are more than one query elements
- *
- * @param params - the Hashtable of parameters that should be included in the
- * 	query
- * @param out - the output stream to the client
- * @param response - the response object linked to the client 
- */
-	private void handleCompoundQuery(
-		Hashtable params,
-		PrintWriter out,
-		HttpServletResponse response,
-		String requestDataType,
-		String userName,
-		String resultType)
-	{
-		// Get all possible parameters from the hash
-		String taxonName = (String)params.get("taxon");
-		String communityName = (String)params.get("community");
-		String taxonOperation = (String)params.get("taxonOperation");
-		String commOperation = (String)params.get("commOperation");
-		String minElevation = (String)params.get("minElevation");
-		String maxElevation = (String)params.get("maxElevation");
-		String state = (String)params.get("state");
-		String surfGeo = (String)params.get("surfGeo");
-		String multipleObs = (String)params.get("multipleObs");
-		String compoundQuery = (String)params.get("compoundQuery");
-		String plotId = (String)params.get("plotId");
-		//String resultType = (String)params.get("resultType");
-		String clientType = (String)params.get("clientType");
-		
-		// COMPOSE THE QUERY
-		String query = this.composeQuery(
-			taxonName,
-			communityName,
-			taxonOperation,
-			commOperation,
-			minElevation,
-			maxElevation,
-			state,
-			surfGeo,
-			multipleObs,
-			compoundQuery,
-			resultType);
- 		
-		// ISSUE THE QUERY
-		QueryResult qr =  this.issueQuery("compoundQuery", clientType, userName, query);
-		
-		// if there are results returned to the servlet from the database in the form 
-		// of a file returned then grab the summary viewer then let the user know
-		if (qr.getResultsTotal() >= 1) 
-		{
-			handleQueryResultsResponse(
-				clientType,
-				requestDataType,
-				out,
-				response,
-				params,
-				resultType,
-				qr);
-		}
- 		// IF NO RESULTS THEN PROMPT THE USER FOR ANOTHER QUERY	
-		else 
-		{ 
-			String results = this.getEmptyResultSetMessage(params);
-			out.println( results );
-		}
-		
-	}
-
-
-
-
+	 
 /**
  * This method takes the hashtable that stores the input parameters passed to
  * the servlet -- which in this case refer to the community that the user wants
@@ -1616,44 +1316,6 @@ private void updateClientLog (String clientLog, String remoteHost)
 	}
 
 
-
-/**
- *  Method to use dbAccess to issue the query to the database from the xml file
- *  created in the DataRequestServlet 
- *
- * @param queryType - the type of query to be sent through the dataAccess module
- * including simpleQuery (one attribute) and compoundQuery (multiple attributes) 
- */
-	private QueryResult issueQuery(String queryType, String clientType, String userName, String xmlString) 
-	{
-		System.out.println("DataRequestServlet > QUERY TYPE  " + queryType);
-
-		// IF IT IS A BROWSER QUERY THEN REGISTER THE DOCUMENT -- IF 
-		// CACHING IS TURNED ON
-		if (clientType.equals("browser") )
-		{
-			if (QUERYCACHING.booleanValue() )
-			{
-				System.out.println("DataRequestServlet > Caching the query doc");
-				// FIXME: Don't know if this used or not ???
-				//registerQueryDocument();
-			}
-			else
-			{
-				System.out.println("DataRequestServlet > Not caching the query doc");
-			}
-		}
-
-		//call the plot access module
-		dbAccess dba = new dbAccess();
-		String xmlResult = dba.accessDatabase(xmlString, SERVLET_DIR+"querySpec.xsl", queryType);
-		
-		QueryResult qr = new QueryResult();
-		qr.setResultsTotal(dba.queryOutputNum);
-		qr.setXMLString(xmlResult);
-		
-		return qr;
-	}
 		
 	/**
 	 * method that registers a query document with the datafile database

@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-07-25 23:05:10 $'
-  *     '$Revision: 1.29 $'
+  *     '$Date: 2003-10-11 21:20:09 $'
+  *     '$Revision: 1.30 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -211,15 +211,6 @@
       </fileset>
       <fileset dir="${build.java.src.dir}" casesensitive="yes">
         <include name="org/vegbank/servlet/usermanagement/**/*java"/>
-      </fileset>
-    </jar>
-    <!-- utilities.jar -->
-    <jar  destfile ="${build.lib.dir}/utilities.jar">
-      <fileset dir="${build.classes.dir}" casesensitive="yes">
-        <include name="org/vegbank/servlet/util/**/*class"/>
-      </fileset>
-      <fileset dir="${build.java.src.dir}" casesensitive="yes">
-        <include name="org/vegbank/servlet/util/**/*java"/>
       </fileset>
     </jar>
     <!-- framework.jar -->
