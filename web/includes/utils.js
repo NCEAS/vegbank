@@ -348,3 +348,11 @@ function MM_reloadPage(init) {  //reloads the window if Nav4 resized
 MM_reloadPage(true);
 
 
+function defaultOnLoad() {
+    try { 
+        // this function must be defined somewhere else
+        customOnLoad(); 
+    } catch (e) { 
+        // forget about it
+    }
+}
