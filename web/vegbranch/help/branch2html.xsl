@@ -68,7 +68,7 @@ WRITING TO:<xsl:value-of select="concat(../versionNumber,'/form.',name,$htmlsuff
      <xsl:when test="string-length(screenshotVersion)&gt;0"><xsl:value-of select="screenshotVersion" /></xsl:when>
      <xsl:otherwise><xsl:value-of select="../versionNumber" /></xsl:otherwise>
    </xsl:choose></xsl:variable>
-   <a href="../screenshots/{name}_{$imgVersion}.png" target="vegbranch_fullsize_img"><img src="../screenshots/smaller/{name}_{$imgVersion}.png" alt="screen shot of '{caption}'" border="0"/></a>
+   <a href="../screenshots/{name}_{$imgVersion}.png" target="vegbranch_fullsize_img"><img src="../screenshots/smaller/{name}_{$imgVersion}.png" alt="in progress: (screen shot of '{caption}')" border="0"/></a>
   
   <!--<img src="screenshots/{name}.png" alt="screen shot of '{caption}'" /> -->
   <p><xsl:copy-of select="help" />
