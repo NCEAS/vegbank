@@ -7,8 +7,8 @@
  *  Release: @@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-05-29 20:57:46 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-08-21 21:15:54 $'
+ *  '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -148,4 +148,13 @@ public class UtilityTest extends TestCase
 		assertEquals("full,of,strings", Utility.arrayToCommaSeparatedString(fullOfStrings));
 		assertEquals("here,is,that,null,damit", Utility.arrayToCommaSeparatedString(onlyOneNull));
 	}
+
+  public void testIsTrue()
+  {
+    assertEquals(false, Utility.isTrue(null) );
+    assertEquals(false, Utility.isTrue(""));
+    assertEquals(false, Utility.isTrue("This is not true"));
+    assertEquals(true, Utility.isTrue("true"));
+    assertEquals(true, Utility.isTrue("t"));
+  }
 }

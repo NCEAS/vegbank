@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-08-21 21:15:54 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import org.vegbank.common.model.*;
+import org.vegbank.common.utility.Utility;
 
 /**
  * @author farrell
@@ -924,13 +925,26 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		while ( taxonObservations.hasNext() )
 		{
 			Taxonobservation to = (Taxonobservation) taxonObservations.next();
+
+			// Get the current interpritation ... if none then return the author name for the plant
 			String key = "";
-			//PlantName plantName = (PlantName) to.getPLANTNAME();
 			Iterator taxonInterpritations = to.gettaxonobservationtaxoninterpretations().iterator();
-			if ( taxonInterpritations.hasNext() )
+			while( taxonInterpritations.hasNext() )
 			{
 				Taxoninterpretation ti =  (Taxoninterpretation) taxonInterpritations.next();
-				key = ti.getPlantconcept().getPlantname();
+				// Converting a String to boolean ... risky
+        System.out.println("Is this the current interpritation ?" + ti.getCurrentinterpretation() );
+				if ( Utility.isTrue(ti.getCurrentinterpretation()) )
+				{
+					key = ti.getPlantconcept().getPlantname();
+				}
+				if ( key.equals(""))
+				{
+					// No valid taxonInterpritation found use the authors name for the plant
+					// *** to indicate on the ui that this is not accepted yet .
+					key = "*** " + to.getCheatplantname() + " ***";
+				}
+
 			}
 			taxonObs.put(key, to);
 			nameList.add(key);

@@ -9,25 +9,13 @@ import java.sql.SQLException;
 import org.vegbank.common.dbAdapter.*;
 
 /**
- * @author farrell
- *
- * To change this generated comment go to 
- * Window>Preferences>Java>Code Generation>Code Template
- */
-/**
- * @author farrell
- *
- * To change this generated comment go to 
- * Window>Preferences>Java>Code Generation>Code Template
- */
-/**
  * '$RCSfile: Utility.java,v $'
  * 
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-06-30 20:02:59 $'
- * '$Revision: 1.13 $'
+ * '$Date: 2003-08-21 21:15:54 $'
+ * '$Revision: 1.14 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -127,7 +115,30 @@ public class Utility
 		
 		return(c);
 	}
-	
+
+  /**
+   * Convert a string to a boolean.
+   * Vegbank sometimes stores booleans in Strings for ease of use ( laziness )
+   * This attemps to right that wrong by converting certain String patterns into 
+   * boolean values
+   */
+   public static boolean isTrue( String string)
+   {
+    boolean result = false;
+
+    // Check for braindead stuff first
+    if ( string == null || string.equals("") )
+      return false;
+      
+    if ( string.equals("true") )
+      return true;
+    if ( string.equals("t") )
+      return true;
+      
+    return result;
+    
+   }
+
 	/**
 	 * Thin wrapper around setting a date field in a PreparedStatement to handle
 	 * adding nulls when needed, e.g. empty string.
@@ -149,6 +160,30 @@ public class Utility
 		{
 			// this maybe should be setDate
 			psmnt.setString(i, date);
+		}
+	}	
+	
+	/**
+	 * Thin wrapper around setting a double field in a PreparedStatement to handle
+	 * adding nulls when needed, e.g. empty string.
+	 * 
+	 * @param number
+	 * @param psmnt
+	 * @param i
+	 * @throws SQLException
+	 */
+	public static void insertDoubleField ( String number, PreparedStatement psmnt, int i)
+		throws SQLException
+	{
+		int sqlDoubleType = java.sql.Types.DOUBLE;
+		if ( number == null  ||  number.equals("") )
+		{
+			psmnt.setNull(i, sqlDoubleType);
+		}
+		else
+		{
+			// this maybe should be setDate
+			psmnt.setString(i, number);
 		}
 	}	
 	
