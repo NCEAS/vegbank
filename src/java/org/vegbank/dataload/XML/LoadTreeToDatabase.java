@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-05-06 22:40:01 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2004-07-01 22:33:51 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -389,6 +389,7 @@ import org.vegbank.common.utility.Utility;
 			// TODO: Make configurable and add user perms. 
 			if ( ! this.isAllowedToLoad(fieldValueHash) )
 			{
+				log.debug("*** User is not allowed to load " + fieldValueHash.get(TABLENAME));
 				return PK; // Even if empty
 			}
 			
@@ -397,6 +398,7 @@ import org.vegbank.common.utility.Utility;
 			Hashtable reference = getFKChildTable(fieldValueHash, "reference_ID", "reference");
 			if ( reference != null)
 			{
+				log.debug("Inserting extant reference");
 				referenceId = insertReference(reference);
 			}
 			addForeignKey(fieldValueHash, "reference_ID", referenceId);
@@ -581,11 +583,11 @@ import org.vegbank.common.utility.Utility;
 							+ accessionCode
 							+ "' in the database.";
 							
-					log.error(": " + errorMessage);
-					commit = false;
-					errors.AddError(
-						LoadingErrors.DATABASELOADINGERROR,
-						errorMessage);
+					log.debug(": " + errorMessage);
+					//commit = false;
+					//errors.AddError(
+					//	LoadingErrors.DATABASELOADINGERROR,
+					//	errorMessage);
 				}
 			}
 //			else
