@@ -29,8 +29,8 @@ import servlet.authentication.UserDatabaseAccess;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-06-20 22:07:00 $'
- *  '$Revision: 1.35 $'
+ *  '$Date: 2002-06-25 23:11:48 $'
+ *  '$Revision: 1.36 $'
  */
 
 
@@ -73,6 +73,7 @@ public class DataSubmitServlet extends HttpServlet
 	private String plantNameReferenceTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-reference.html";
 	private String plantConceptTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantconcept.html";
 	private String plantStatusUsageTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantstatususage.html";
+	private String plantSubmittalReceiptTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantsubmittal-receipt.html";
 	//this is the file that has the updated tokens and should be shown to the client
 	private String plantValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-valid.html";
 	
@@ -253,7 +254,7 @@ public class DataSubmitServlet extends HttpServlet
 			//THIS WHERE THE ACTUAL SUBMITTAL OF THE NEW COMMUNITY TAKES PLACE
 			else if ( action.equals("namerectification") )
 			{
-				System.out.println("DataSubmitServlet > getting the name rectification ");
+				System.out.println("DataSubmitServlet > performing the name rectification ");
 				// GET THE NAME REFERENCES FOR THE INPUT NAMES OR GIVE THE 
 				// USER THE FORM TO FILL OUT
 				String longNameMatch = (String)params.get("longNameMatches");
@@ -288,8 +289,15 @@ public class DataSubmitServlet extends HttpServlet
 			{
 				System.out.println("DataSubmitServlet > getting the name reference ");
 				// send the user the attributes related to the plant status/usage
-				
 				updatePlantStatusUsagePage(emailAddress, longName, shortName, code);
+				response.sendRedirect("/forms/plant-valid.html");
+			}
+			// STEP WHEREBY THE USER SUBMITS THE STATUS USAGE DATA AND 
+			// THE RECIPT IS RETURNED
+			else if ( action.equals("plantstatususage") )
+			{
+				System.out.println("DataSubmitServlet > getting the status-usage data, returnig recipt");
+				updatePlantSubmittalRecipt(emailAddress);
 				response.sendRedirect("/forms/plant-valid.html");
 			}
 			else
@@ -304,6 +312,24 @@ public class DataSubmitServlet extends HttpServlet
 		}
 		return(sb);
 	}
+	/**
+	 * method that updates the plant submittal receipt page --
+	 * this is the last sub-step in the plant submittal process
+	 */
+	 private void updatePlantSubmittalRecipt(String emailAddress)
+	 {
+		 try
+		 {
+			 Hashtable replaceHash = new Hashtable();
+			 replaceHash.put("emailAddress", ""+emailAddress);
+			 su.filterTokenFile(plantSubmittalReceiptTemplate, plantValidationForm, replaceHash);
+		 }
+		 catch( Exception e ) 
+		 {
+			 System.out.println("Exception:  " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+	 }
 	
 	/**
 	 * method that updates the plant usage / status page 
@@ -441,7 +467,6 @@ public class DataSubmitServlet extends HttpServlet
 			System.out.println("Exception:  " + e.getMessage() );
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/** 
@@ -469,7 +494,9 @@ public class DataSubmitServlet extends HttpServlet
 	private String getReferenceForm(String plantNameType)
 	{
 		StringBuffer sb = new StringBuffer();
+		
 		sb.append("Author: <input type=text size=25 name="+plantNameType+"RefAuthor> <br> \n");
+		
 		sb.append("Title: <input type=text size=25 name="+plantNameType+"RefTitle> <br> \n");
 		sb.append("Date: <input type=text size=25 name="+plantNameType+"RefDate> <br> \n");
 		sb.append("Edition: <input type=text size=25 name="+plantNameType+"RefEdition> <br> \n");
