@@ -1,5 +1,29 @@
 package databaseAccess;
 
+/**
+ *  '$RCSfile: xmlWriter.java,v $'
+ *    Authors: @authors@
+ *    Release: @release@
+ *
+ *   '$Author: harris $'
+ *     '$Date: 2002-02-28 15:21:16 $'
+ * '$Revision: 1.3 $'
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 import java.lang.*;
 import java.io.*;
 import java.text.*;
@@ -14,7 +38,7 @@ import databaseAccess.*;
  * database queries.  These xml files will be consistent with either 
  * vegPlot.dtd, or the community dtd file or the plant taxonomy dtd file
  *
- * @author John Harris
+ * @author @author@
  *
  */
 
@@ -42,7 +66,7 @@ public class  xmlWriter
 
 
 			//get the number of plots stored in hash
-			System.out.println("hash size: "+cumulativeSummaryResultHash.size());
+			System.out.println("xmlWriter > hash size: "+cumulativeSummaryResultHash.size());
 
 			//write one plot at a time
 			for (int i=0; i< cumulativeSummaryResultHash.size(); i++) 
@@ -276,32 +300,63 @@ public class  xmlWriter
 			//set up the output query file called query.xml	using append mode 
 			PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
 			StringBuffer sb = new StringBuffer();
-			
+			System.out.println("xmlWriter > number of plant instances: " + taxaResults.size() ); 
+			/**
+			 * the attributes that are in this hashtable: 
+			 		returnHash.put("plantNameId", ""+plantNameId);
+					returnHash.put("plantConceptId", ""+plantConceptId);
+			 		returnHash.put("plantName", plantName);
+					returnHash.put("status", status);
+					returnHash.put("classSystem", classSystem);
+			 		returnHash.put("plantLevel", plantLevel);
+					returnHash.put("parentName", parentName);
+					returnHash.put("acceptedSynonym", acceptedSynonym);
+					returnHash.put("startDate", startDate);
+					returnHash.put("stopDate", stopDate);
+			 */
 			//the header stuff
 			sb.append("<plantTaxa> \n");
 			//iterate thru the results
 			for (int i=0;i<taxaResults.size(); i++) 
 			{
-				//the current hashtable
+				//the current hashtable used to store the plant instance attributes
 				Hashtable currentTaxonHash = (Hashtable)taxaResults.elementAt(i);
+				
+				String plantNameId = (String)currentTaxonHash.get("plantNameId");
+				String plantConceptId = (String)currentTaxonHash.get("plantConceptId");
+			 	String plantName = (String)currentTaxonHash.get("plantName");
+				String status = (String)currentTaxonHash.get("status");
+			 	String classSystem = (String)currentTaxonHash.get("classSystem");
+			 	String plantLevel = (String)currentTaxonHash.get("plantLevel");
+			 	String parentName = (String)currentTaxonHash.get("parentName");
+			 	String acceptedSynonym = (String)currentTaxonHash.get("acceptedSynonym");
+			 	String startDate = (String)currentTaxonHash.get("startDate");
+			 	String stopDate = (String)currentTaxonHash.get("stopDate");
+				String plantDescription = (String)currentTaxonHash.get("plantDescription");
+				
 				sb.append("<taxon> \n");
 				sb.append("	<name> \n");
-				sb.append("		<concatenatedName>"+currentTaxonHash.get("concatenatedName")+"</concatenatedName> \n");
-				sb.append("		<status>"+currentTaxonHash.get("status")+"</status> \n");
-				sb.append("		<acceptedSynonym>"+currentTaxonHash.get("acceptedSynonym")+"</acceptedSynonym> \n");
-				sb.append("		<commonName>"+currentTaxonHash.get("commonName")+"</commonName> \n");
-				sb.append("		<startDate>"+currentTaxonHash.get("startDate")+"</startDate> \n");
-				sb.append("		<stopDate>"+currentTaxonHash.get("stopDate")+"</stopDate> \n");
+				sb.append("		<plantNameId>"+plantNameId+"</plantNameId> \n");
+				sb.append("		<plantConceptId>"+plantConceptId+"</plantConceptId> \n");
+				sb.append("		<plantName>"+plantName+"</plantName> \n");
+				sb.append("		<status>"+status+"</status> \n");
+				sb.append("		<classSystem>"+classSystem+"</classSystem> \n");
+				sb.append("		<plantLevel>"+plantLevel+"</plantLevel> \n");
+				sb.append("		<parentName>"+parentName+"</parentName> \n");
+				sb.append("		<acceptedSynonym>"+acceptedSynonym+"</acceptedSynonym> \n");
+				sb.append("		<startDate>"+startDate+"</startDate> \n");
+				sb.append("		<stopDate>"+stopDate+"</stopDate> \n");
+				sb.append("		<plantDescription>"+plantDescription+"</plantDescription> \n");
 				sb.append("	</name> \n");
 				sb.append("</taxon> \n");
-				//System.out.println( taxaResults.elementAt(i) );
+
 			}
 			sb.append("</plantTaxa> \n");
 			out.println(sb.toString() );
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed: " + 
+			System.out.println("Exception " + 
 			e.getMessage());
 			e.printStackTrace();
 		}

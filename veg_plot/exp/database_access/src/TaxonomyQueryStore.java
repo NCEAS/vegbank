@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-27 00:56:59 $'
- * '$Revision: 1.6 $'
+ *     '$Date: 2002-02-28 15:21:15 $'
+ * '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,13 +137,9 @@ import databaseAccess.*;
 					String concatenatedName = plantName;
 					
 					//bunch all of these data attributes into the return vector
-					returnVector.addElement( consolidateTaxaSummaryInstance( 
-						acceptedSynonym, 
-						status, 
-						concatenatedName, 
-						commonName, 
-						startDate, 
-						stopDate) );
+					//returnVector.addElement( consolidateTaxaSummaryInstance( 
+					//	acceptedSynonym, status, concatenatedName, 	commonName, 
+					//	startDate, stopDate) );
 					
 					Hashtable h = consolidateTaxaSummaryInstance( 
 						plantNameId,
@@ -158,7 +154,7 @@ import databaseAccess.*;
 						startDate,
 						stopDate);	
 						
-					
+					returnVector.addElement(h);
 					System.out.println("TaxonomyQueryStore > hash: " + h.toString()   );
 				}
 			
@@ -238,6 +234,7 @@ import databaseAccess.*;
 					returnHash.put("acceptedSynonym", acceptedSynonym);
 					returnHash.put("startDate", startDate);
 					returnHash.put("stopDate", stopDate);
+					returnHash.put("plantDescription", plantDescription);
 					
 			 }
 			 catch(Exception e)
