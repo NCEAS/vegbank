@@ -1,20 +1,20 @@
 BODY			{ background-color: #FFFFFF;}
 
 /*thin lines for your table gets you a grid of thin lines */
-table.thinlines {border-style: solid; 
-                 border-width:1px; 
-                 border-collapse: collapse; 
+table.thinlines {border-style: solid;
+                 border-width:1px;
+                 border-collapse: collapse;
                  border-color:#333333 }
-table.thinlines td {border-style:solid; border-width:1px; border-color:#333333}                 
+table.thinlines td {border-style:solid; border-width:1px; border-color:#333333}
 table.thinlines th {border-style:solid; border-width:1px; border-color:#333333}
 /* left right class for table gets you vertical lines for your tables only (and surrounding thin line) */
 table.leftrightborders {border-style:solid; border-color:#333333; border-collapse:collapse; border-width:1px }
 table.leftrightborders td {border-style:solid; border-bottom-width:0px ; border-left-width:1px ; border-right-width:1px ; border-top-width:0px}
 table.leftrightborders th {border-style:solid; border-width:1px ; border-color:#333333;}
 
-table.outsideborder {border-style: solid; 
-                 border-width:1px; 
-                 border-collapse: collapse; 
+table.outsideborder {border-style: solid;
+                 border-width:1px;
+                 border-collapse: collapse;
                  border-color:#333333 }
 
 A:Link			{ color: #005680; text-decoration: underline }
@@ -26,7 +26,7 @@ A:hover			{ color: #3399FF;}
   A:Link.headlink    {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt} /* same as prev */
   A:Visited.headlink {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt} /* same as prev */
   A:hover.headlink   {font-variant: small-caps ; background-color: #FFFFCC ; color: #336633; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt}
-  
+
 
 A.blk { color:#000000 }
 A.brightyellow { color:#FFFF80 }
@@ -51,11 +51,11 @@ TH	{
 	color: #FFFF80;
 	font-size: 12pt;
 	background-color : #333333;
-	}	
+	}
 
-.description { 
-	color: #000000; 
-	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; 
+.description {
+	color: #000000;
+	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 	font-size: 10pt;
 	font-weight: bold;
 	background-color: #DDDDDD;
@@ -68,9 +68,9 @@ TH	{
 		background-color : #DFE5FA;
 }
 
-.on_page_help_text { 
-	color: #000000; 
-	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; 
+.on_page_help_text {
+	color: #000000;
+	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 	font-size: 10pt;
 	font-weight: normal;
 }
@@ -89,25 +89,25 @@ a.headerLink:hover {
 	text-decoration: underline;
 }
 
-.featureLink { 
+.featureLink {
 	font-family:  sans-serif;
-	color: #3399FF; 
+	color: #3399FF;
 	text-decoration: none;
 	font-size: 14pt;
 }
-.featureLink2 { 
+.featureLink2 {
 	font-family:  sans-serif;
-	color: #3399FF; 
+	color: #3399FF;
 	text-decoration: none;
 	font-size: 14pt;
 }
 a.featureLink:visited,
-a.featureLink:link { 
-	color: #336633; 
+a.featureLink:link {
+	color: #336633;
 	text-decoration: none;
 }
-a.featureLink2:link { 
-	color: #3399FF; 
+a.featureLink2:link {
+	color: #3399FF;
 	text-decoration: none;
 }
 a.featureLink:hover {
@@ -138,22 +138,22 @@ H1, H2, H3, H4, H5, H6	{
 .subheader { font-size: 18pt ; text-align: left; }
 
 th.grey, td.grey, tr.grey {background-color : #DDDDDD; }
-.listRowA {background-color : #FFFFCC; }						
-.listRowB {background-color : #FFFFFF }						
-.listRowA-Hi {background-color : #FF9933 }						
-.listRowB-Hi {background-color : #FF9933 }						
+.listRowA {background-color : #FFFFCC; }
+.listRowB {background-color : #FFFFFF }
+.listRowA-Hi {background-color : #FF9933 }
+.listRowB-Hi {background-color : #FF9933 }
 th.listRowA {background-color : #CCCCCC }
 th.listRowB {background-color : #EEEEEE }
 
-.whitetext 		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; 
-				color: #FFFFFF; 
+.whitetext 		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+				color: #FFFFFF;
 			 	font-size: 8pt}
 a.whitetext:link	{ color: #FFFFFF; text-decoration: none}
 a.whitetext:visited	{ color: #FFFFFF; text-decoration: none}
 a.whitetext:hover	{ color: #3399FF; text-decoration: none}
 
-.greytext 		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; 
-				color: #666666; 
+.greytext 		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+				color: #666666;
 			 	font-size: 8pt}
 
 .vegbank		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; }
@@ -163,10 +163,10 @@ a.whitetext:hover	{ color: #3399FF; text-decoration: none}
 .vegbank_large	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 14pt}
 .sansserif		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif ; color : #531100}
 
-UL.constsize,LI.constsize {  font: 10pt Arial, Tahoma, Helvetica, Geneva, sans-serif; }						
+UL.constsize,LI.constsize {  font: 10pt Arial, Tahoma, Helvetica, Geneva, sans-serif; }
 
 .external		{
-					cursor: n-resize; 
+					cursor: n-resize;
 				}
 
 .header			{
@@ -184,7 +184,7 @@ UL.constsize,LI.constsize {  font: 10pt Arial, Tahoma, Helvetica, Geneva, sans-s
 					font-style: italic;
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 				}
-				
+
 P, .normal, TD	{
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 					font-size: 10pt;
@@ -197,7 +197,7 @@ P, .normal, TD	{
 					color: #000000
 				}
 
-UL, OL, DL, LI, .list	{	
+UL, OL, DL, LI, .list	{
 							font: .9em/1.5em Arial, Tahoma, Helvetica, Geneva, sans-serif;
 						}
 
@@ -260,8 +260,8 @@ UL, OL, DL, LI, .list	{
 					font-weight: normal;
 					text-align: right;
 				}
-				
-				
+
+
 .review			{
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 					font-size: .83em;
@@ -271,7 +271,7 @@ UL, OL, DL, LI, .list	{
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 					font-size: .83em;
 					text-align: left;
-				}	
+				}
 
 .copyright		{
 					font-size: .67em;
@@ -306,7 +306,7 @@ UL, OL, DL, LI, .list	{
 				padding-right: 1.5em;
 				padding-left: 1.5em;
 			}
-		
+
 
 .sidebarTitle	{
 					font-size: 1.17em;
@@ -314,7 +314,7 @@ UL, OL, DL, LI, .list	{
 					font-weight: bold;
 					text-align: center;
 				}
-				
+
 .videoTitle		{
 					margin-right: 15%;
 					margin-left: 15%;
@@ -341,6 +341,10 @@ TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 .irform { color: #000000; background: #cccc99; font-weight: normal; font-size: 8pt; }
 
 .error { font-weight: bold; color: red;}
+.useraction  {font-weight: bold; color: #FF0000 }
+.useraction A:Link {color: #FF0000}
+.useraction A:Visited {color: #BB0000 }
+.useraction A:hover {color: #FF9999 }
 
 .verticaltext { layout-flow: vertical-ideographic }
 
@@ -352,9 +356,9 @@ TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 .oddrow { background-color : #FFFFFF }
 .evenrow {background-color : #DDDDDD }
 
-.listhead { 
-	color: #000000; 
-	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; 
+.listhead {
+	color: #000000;
+	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 	font-size: 10pt;
 	font-weight: bold;
 	background-color: #DDDDDD;
