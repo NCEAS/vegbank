@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-10-22 21:42:34 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ public class DBObservationReader
 		
 		// Need to fill out some more Objects 
 		// Project 
-		Project project = obs.getProject();
+		Project project = obs.getProjectobject();
 		ignoreObjects.add("Observation");
 		getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Project"), project.getProject_id(), project, ignoreObjects );
 		
@@ -84,7 +84,7 @@ public class DBObservationReader
 		while ( projectContributors.hasNext() )
 		{
 			Projectcontributor projectContributor = (Projectcontributor)  projectContributors.next();
-			Party party = (Party) projectContributor.getParty();
+			Party party = (Party) projectContributor.getPartyobject();
 			//System.out.println("###########################################################");
 			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Party"), party.getParty_id(), party, ignoreObjects );
 			//System.out.println("###########################################################");
@@ -97,7 +97,7 @@ public class DBObservationReader
 			Taxonobservation taxonObservation = (Taxonobservation)  taxonObservations.next();
 			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("TaxonObservation"), taxonObservation.getTaxonobservation_id(), taxonObservation, ignoreObjects );
 			
-			Plantname plantName = taxonObservation.getPlantname();
+			Plantname plantName = taxonObservation.getPlantnameobject();
 //			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("PlantName"), plantName.getPLANTNAME_ID(), plantName, ignoreObjects );
 //			Iterator plantNames = plantName.getPLANTNAMEPlantUsages().iterator();
 //			while ( plantNames.hasNext())
@@ -120,11 +120,11 @@ public class DBObservationReader
 		}
 		
 		// Plot
-		Plot plot = obs.getPlot();
+		Plot plot = obs.getPlotobject();
 		getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Plot"), plot.getPlot_id(), plot, ignoreObjects );
 		
 		
-		//Project project = obs.getPROJECT();
+		//Project project = obs.getPROJECTobject();
 		//ignoreObjects.add("Observation");
 		//getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Project"), project.getPROJECT_ID(), project, ignoreObjects );
 		
