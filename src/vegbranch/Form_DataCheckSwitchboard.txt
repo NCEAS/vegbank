@@ -22,6 +22,7 @@ Private Sub CheckAllErrors_Click()
   checkSomeError -1
   Me.dataCheckTime = getvalFrmSQL("select dcTimeTaken from optimize_dataChk_totTime")
  Call filterThisForm
+ Call SumErrorsFlash(True)   'get number of errors, and is OK to tell user to continue
  Call Form_Activate
  ' Me.Repaint
  ' Me.Refresh
@@ -30,6 +31,7 @@ End Sub
 
 Private Sub chkAgainOneField_Click()
   checkSomeError Me!errorID
+  Call SumErrorsFlash(False)   'get number of errors, and is NOT OK to tell user to continue
   Call Form_Activate
 End Sub
 
@@ -44,25 +46,25 @@ End Sub
 
 Private Sub cmd_showMore_Click()
 '  Me.cmd_showLess.Visible = True
-  Dim inttemp As Integer, lngStHt2 As Long
+  Dim intTemp As Integer, lngStHt2 As Long
   If cmd_showMore.Caption = "more >>" Then
     ''show more
-     For inttemp = 1 To 20
+     For intTemp = 1 To 20
       ' Me.cmd_showLess.Height = 1440 * (3 / 8) * inttemp / 20
-        Me.LongExplanation.Height = 1440 * 0.75 * inttemp / 20
+        Me.LongExplanation.Height = 1440 * 0.75 * intTemp / 20
         Me.Repaint
-      Next inttemp
+      Next intTemp
       Me.LongExplanation.SetFocus
       cmd_showMore.Caption = "Less <<"
   Else
     'show less
     lngStHt2 = Me.LongExplanation.Height
-    For inttemp = 1 To 20
+    For intTemp = 1 To 20
     '  Me.cmd_showLess.Height = (lngStartHt) * (20 - inttemp) / 20
-      Me.LongExplanation.Height = (lngStHt2) * (20 - inttemp) / 20
+      Me.LongExplanation.Height = (lngStHt2) * (20 - intTemp) / 20
       Me.Detail.Height = 50
       Me.Repaint
-    Next inttemp
+    Next intTemp
     cmd_showMore.Caption = "More >>"
   End If
 End Sub
@@ -90,11 +92,9 @@ Private Function filterThisForm()
     & " AND " & IIf(IsNull(Me.cmb_filtSeverity), "TRUE", "errorSeverity=""" & Me.cmb_filtSeverity & """"), Me.Name)
 End Function
 
-
-
 Private Sub Form_Activate()
  If Me!checkingStatus = "(checked)" Then
-   Me.TotErrMsg.Caption = SumErrorsFlash()
+ ' this handled in checking step now:  Me.TotErrMsg.Caption = SumErrorsFlash()
    Me.TotErrMsg.FontSize = 16
    Call flashMsg
 '   Me.Requery
@@ -104,15 +104,21 @@ Private Sub Form_Activate()
  End If
 End Sub
 
-  Public Function SumErrorsFlash() As String
+  Public Function SumErrorsFlash(Optional blnOKToContinue As Boolean) As String
   'count total number of errors, even if none
   Dim strErrs As String
   strErrs = chk_GetNumErrs()
+ ' Me.Label338.FontWeight = 3
       Select Case strErrs
         Case "-1"
           strErrs = "UNKNOWN ERROR IN COUNTING ERRORS!"
         Case "0"
-          strErrs = "No Errors, continue!"
+          If blnOKToContinue Then
+            strErrs = "No Errors, continue!"
+          Else
+            strErrs = "Check all again, please>>"
+           ' Me.Label338.FontWeight = 6
+          End If
         Case "1"
           strErrs = "1 Error!"
         Case Else
@@ -120,6 +126,7 @@ End Sub
       End Select
  On Error Resume Next
       SumErrorsFlash = strErrs
+      Me.TotErrMsg.Caption = strErrs
   End Function
   
   Private Function flashMsg()
