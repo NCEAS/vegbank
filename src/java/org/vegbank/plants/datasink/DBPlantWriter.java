@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-22 18:52:09 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2003-05-10 00:26:14 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.AbstractList;
+import java.util.Hashtable;
 import java.util.Iterator;
 
 import org.vegbank.common.model.DBPartyWriter;
@@ -83,19 +84,35 @@ public class DBPlantWriter
 				new DBPartyWriter(party, conn, "plantparty", "plantparty_id");
 			int partyId = dbpw.getPartyId();
 	
-			// Insert the Scientific Name
-			int plantNameId =
-				this.insertPlantName(
-					refId,
-					plant.getScientificName(),
-					Utility.dbAdapter.getDateTimeFunction() );
-	
-			// Insert Other Names ???
+
+			Hashtable plantNameIds = new Hashtable();
+			AbstractList plantUsages = plant.getPlantUsages();
+			
+			Iterator i = plantUsages.iterator();
+			while(i.hasNext())
+			{
+				PlantUsage pu = (PlantUsage) i.next();
+				
+				if (pu.getPlantName() == null || pu.getPlantName().trim().equals(""))
+				{
+					// No need to load this
+				}
+				else
+				{
+					int plantNameId =
+						this.insertPlantName(
+							refId,
+							pu.getPlantName(),
+							Utility.dbAdapter.getDateTimeFunction() );
+						
+					plantNameIds.put(pu.getClassSystem(), new Integer(plantNameId) );
+				}
+			}
 	
 			// Insert the Concept
 			int conceptId =
 				this.insertPlantConcept(
-					plantNameId,
+					( (Integer) plantNameIds.get("Scientific")).intValue(),
 					refId,
 					plant.getScientificNameNoAuthors(),
 					plant.getDescription(),
@@ -117,24 +134,33 @@ public class DBPlantWriter
 			// Insert all the usages
 			// Usage may need to be a separate class,  for now this
 				
-			AbstractList plantUsages = plant.getPlantUsages();
+			//AbstractList plantUsages = plant.getPlantUsages();
 				
-			Iterator i = plantUsages.iterator();
-			while( i.hasNext()) 
+			Iterator it = plantUsages.iterator();
+			while( it.hasNext()) 
 			{
-				PlantUsage pu = (PlantUsage) i.next();
-				int usageId = 
-					this.insertPlantUsage(
-						plantNameId,
-						conceptId,
-						pu.getPlantName(),
-						partyId,				
-						plant.getStatusStartDate(),
-						plant.getSynonymName(),
-						pu.getPlantNameStatus(),
-						pu.getClassSystem()
-				);
-				
+				PlantUsage pu = (PlantUsage) it.next();
+				//System.out.println("'" + pu.getPlantName() + "'" + "  is a " + pu.getClassSystem());
+				if ( pu.getPlantName().trim().equals("") || pu.getPlantName() == null )
+				{
+					//System.out.println("NOT LOADING");
+				}
+				else
+				{
+					//System.out.println("LOADING");
+					int usageId = 
+						this.insertPlantUsage(
+							( (Integer) plantNameIds.get(pu.getClassSystem())).intValue(),
+							conceptId,
+							pu.getPlantName(),
+							partyId,				
+							plant.getStatusStartDate(),
+							plant.getSynonymName(),
+							pu.getPlantNameStatus(),
+							pu.getClassSystem()
+					);
+
+				}
 			}
 		}
 		catch (SQLException e)
