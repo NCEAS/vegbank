@@ -5,9 +5,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2003-01-10 21:43:12 $'
- * '$Revision: 1.2 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2003-02-26 19:16:26 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,9 +25,7 @@
  */
 
 package edu.ucsb.nceas.vegbank.plotvalidation;
-import java.io.*;
-import java.lang.*;
-import java.util.*;
+import java.util.Vector;
 
 
 public class PlotValidationReport

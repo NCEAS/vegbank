@@ -5,9 +5,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2003-01-07 18:24:54 $'
- * '$Revision: 1.2 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2003-02-26 19:16:27 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,21 +25,15 @@
  */
 
 package edu.ucsb.nceas.vegbank.plotvalidation;
-import java.io.*;
-import java.lang.*;
-import java.util.*;
+import java.io.File;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import org.w3c.dom.Element;
 import org.w3c.dom.Document;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
-import org.w3c.dom.*;                         // DOM interface
-import org.apache.xerces.parsers.DOMParser;   // Parser (to DOM)
-import org.xml.sax.InputSource;
+import org.w3c.dom.NodeList;
 
 import xmlresource.utils.XMLparse;
-import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidationException;
 
 
 

@@ -5,7 +5,7 @@
 # SHELLSCRIPT HAS TO 'CAT THE LATLONG FILE'
 
 if [ $# != 3 ] ; then
-    echo 'Usage: coord_transform.sh infile outfilei zone '
+    echo 'Usage: coord_transform.sh infile outfile zone '
     echo ''
     echo 'coordinate transformation from utm to ll'
     exit 1

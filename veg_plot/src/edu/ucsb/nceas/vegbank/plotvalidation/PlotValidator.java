@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-02-18 22:49:09 $'
- * '$Revision: 1.6 $'
+ *     '$Date: 2003-02-26 19:16:27 $'
+ * '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,18 +25,14 @@
  */
 
 package edu.ucsb.nceas.vegbank.plotvalidation;
-import java.io.*;
-import java.lang.*;
-import java.util.*;
-import java.lang.reflect.*;
-
-
 
 import PlotDataSource;
-import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidationReport;
-import edu.ucsb.nceas.vegbank.plotvalidation.ValidationConstraint;
-import edu.ucsb.nceas.vegbank.plotvalidation.ConstraintMap;
-import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidationException;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Hashtable;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
 
 public class PlotValidator implements PlotValidationInterface
@@ -331,9 +327,6 @@ public class PlotValidator implements PlotValidationInterface
 	    */
 	  public String getValidationReport()
 	  {
-		return(report.getReport());
+			return(report.getReport());
 	  }
-	  
-	  
-	
 }
