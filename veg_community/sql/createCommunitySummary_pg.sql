@@ -9,6 +9,7 @@ drop SEQUENCE commSummary_id_seq;
 CREATE SEQUENCE commSummary_id_seq;
 CREATE TABLE commSummary (
 	COMMSUMMARY_ID  NUMERIC(20) default nextval('commSummary_id_seq'),
+	usage_id integer, -- the usage id
 	commName VARCHAR(500),
 	commName_id integer,
 	dateEntered date,
@@ -30,12 +31,14 @@ CREATE TABLE commSummary (
 
 -- LOAD THE SUMMARY TABLE WITH APPROXIMATES
 insert into commSummary (
+	usage_id,
 	commName,
 	commName_id,
 	classCode, 
 	commConcept_id
 	)
 		select 
+		commUsage.commusage_id,
 		commUsage.commName,
 		commUsage.commName_id,
 		commUsage.ceglCode, 
