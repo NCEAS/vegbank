@@ -1,0 +1,205 @@
+<?xml version="1.0"?>       
+<!DOCTYPE vegPlot SYSTEM "vegPlot.dtd">     
+<vegPlot>
+<project>
+	<projectName>Artificial Data</projectName>
+	<projectDescription>To make up fake data to reside in the National Plots Database.  </projectDescription>
+	<projectContributor>
+		<role>project leader</role>
+		<party>
+			<salutation>Mr</salutation>
+			<givenName>John </givenName>
+			<surName>Harris </surName>
+			<organizationName>National Center for Ecological Synthesis and Analysis</organizationName>
+			<positionName>hacker </positionName>
+			<hoursOfService>7:00-4:00 </hoursOfService>
+			<contactInstructions>email</contactInstructions>
+			<onlineResource>        
+				<linkage>www.nceas.ucsb.edu/~harris</linkage>       
+				<protocol>http</protocol>       
+				<name>huh</name>       
+				<applicationProfile>browser is the application which should be used</applicationProfile>       
+				<description>personal web site</description>       
+			</onlineResource>        
+			<telephone>        
+				<phoneNumber>805 892-2531</phoneNumber>        
+				<phoneType>office phone</phoneType>       
+			</telephone>        
+			<email>        
+				<emailAddress>harris@nceas.ucsb.edu</emailAddress>       
+			</email>        
+			<address>        
+				<deliveryPoint>735 State Street</deliveryPoint>       
+				<city>Santa Barabara</city>       
+				<administrativeArea>CA</administrativeArea>       
+				<postalCode>93101</postalCode>       
+				<country>USA</country>       
+				<currentFlag>Yes</currentFlag>       
+			</address>        
+		</party>
+	</projectContributor>        
+	<plot>        
+		<authorPlotCode>Artificial 1</authorPlotCode>       
+		<parentPlot>n/a</parentPlot>       
+		<plotType>vegetation</plotType>       
+		<samplingMethod>Zurich-Montpellier</samplingMethod>       
+		<coverScale>Braun-Blanquet scale</coverScale>       
+		<plotOriginLat>34.33</plotOriginLat>       
+		<plotOriginLong>119</plotOriginLong>       
+		<plotShape>Square </plotShape>       
+		<plotSize>20x20</plotSize>
+		
+		<plotSizeAcc>2</plotSizeAcc>       
+		<altValue>121</altValue>       
+		<altPosAcc>20</altPosAcc>       
+		<slopeAspect>200</slopeAspect>       
+		<slopeGradient>12</slopeGradient>       
+		<slopePosition>Midslope</slopePosition>       
+		<hydrologicRegime>Upland</hydrologicRegime>       
+		<soilDrainage>Well drained</soilDrainage>       
+		<surfGeo>Petroliferous Sandstone </surfGeo>       
+		<plotObservation>        
+			<previousPlot>n/a</previousPlot>       
+			<plotStartDate>24-AUG-2000 </plotStartDate>       
+			<plotStopDate>24-AUG-2000</plotStopDate>       
+			<dateAccuracy>0</dateAccuracy>       
+			<effortLevel>medium</effortLevel>       
+			
+			<!-- make multiple strata -->
+			<strata>        
+				<stratumType>grass</stratumType>       
+				<stratumCover>10</stratumCover>       
+				<stratumHeight>0.01</stratumHeight>
+			</strata> 
+			<strata>        
+				<stratumType>shrub</stratumType>       
+				<stratumCover>12</stratumCover>       
+				<stratumHeight>1</stratumHeight>
+			</strata> 
+			<strata>        
+				<stratumType>subcanopy</stratumType>       
+				<stratumCover>20</stratumCover>       
+				<stratumHeight>3</stratumHeight>
+			</strata> 
+			<strata>        
+				<stratumType>tree</stratumType>       
+				<stratumCover>23</stratumCover>       
+				<stratumHeight>11</stratumHeight>
+			</strata> 
+			
+			
+			
+                   <taxonObservations>        
+                           <authNameId>Abies balsamea (L.) P. Mill.</authNameId>       
+                           <originalAuthority>FNA</originalAuthority>       
+                           <strataComposition>        
+                                   <strataType>tree</strataType>       
+                                   <percentCover>20</percentCover>       
+                           </strataComposition>        
+                           <interpretation>        
+                                   <circum_id>-999.25</circum_id>       
+                                   <role>-999.25</role>       
+                                   <date>-999.25</date>       
+                                   <notes>-999.25</notes>       
+                           </interpretation>        
+                   </taxonObservations>
+		   
+                   <taxonObservations>        
+                           <authNameId>Picea mariana (P. Mill.) B.S.P.</authNameId>       
+                           <originalAuthority>Plants</originalAuthority>       
+                           <strataComposition>        
+                                   <strataType>tree</strataType>       
+                                   <percentCover>11</percentCover>       
+                           </strataComposition>        
+                           <interpretation>        
+                                   <circum_id>-999.25</circum_id>       
+                                   <role>-999.25</role>       
+                                   <date>-999.25</date>       
+                                   <notes>-999.25</notes>       
+                           </interpretation>        
+                   </taxonObservations>        
+                   
+		   <taxonObservations>        
+                           <authNameId>Abies balsamea (L.) P. Mill.</authNameId>       
+                           <originalAuthority>USDA</originalAuthority>       
+                           <strataComposition>        
+                                   <strataType>shrub</strataType>       
+                                   <percentCover>7</percentCover>       
+                           </strataComposition>        
+                           <interpretation>        
+                                   <circum_id>-999.25</circum_id>       
+                                   <role>-999.25</role>       
+                                   <date>-999.25</date>       
+                                   <notes>-999.25</notes>       
+                           </interpretation>        
+                   </taxonObservations>        
+                   
+		  
+		  <taxonObservations>        
+                           <authNameId>Carya cordiformis (Wangenh.) K. Koch var. latifolia Sarg.</authNameId>       
+                           <originalAuthority>Plants</originalAuthority>       
+                           <strataComposition>        
+                                   <strataType>tree</strataType>       
+                                   <percentCover>14</percentCover>       
+                           </strataComposition>        
+                           <interpretation> 
+			   		<party>NCEAS</party>
+			   		<taxonName>Carya cordiformis (Wangenh.) K. Koch</taxonName>
+					<authority>Plants</authority>
+					<usageStartDate>1999</usageStartDate>
+					<usageStopDate>2000</usageStopDate>
+                                   <circum_id>-999.25</circum_id>       
+                                   <role>-999.25</role>       
+                                   <date>-999.25</date>       
+                                   <notes>-999.25</notes>       
+                           </interpretation>        
+                   </taxonObservations>        
+		  
+		  
+      
+			<communityType>        
+				<classAssociation>Pinus strobus / Acer spicatum Forest</classAssociation>       
+				<classQuality>medium</classQuality>       
+				<startDate>1985</startDate>       
+				<stopDate>2000</stopDate>       
+			</communityType>       
+			
+			<citation>        
+				<title>American Plants</title>       
+				<altTitle>AmPlants</altTitle>       
+				<pubDate>2000</pubDate>       
+				<edition>12</edition>       
+				<editionDate>03-JAN-2000</editionDate>       
+				<seriesName>American Volume</seriesName>       
+				<issueIdentification>Big blue book</issueIdentification>       
+				<otherCredentials>-999.25</otherCredentials>       
+				<page>11</page>       
+				<isbn>2221111</isbn>       
+				<issn>121212</issn>       
+				<citationContributor>        
+				</citationContributor>        
+			</citation>        
+		</plotObservation>        
+		<namedPlace>        
+			<placeName>Coastal Southern California</placeName>       
+			<placeDescription>dunes just onshore Ventura California about a quarter mile south of the pier</placeDescription>       
+			<gazeteerRef>-999.25</gazeteerRef>       
+		</namedPlace>        
+		<stand>        
+			<standSize>400</standSize>  <!--in square meters-->       
+			<standDescription>Big green area</standDescription>       
+			<standName>can't name it</standName>       
+		</stand>        
+		<graphic>        
+			<browseName>owlogo.jpg</browseName>       
+			<browseDescription>jpeg file of most common plant leaf</browseDescription>       
+			<browseType>jpeg</browseType>       
+			<browseData>./images/owlogo.jpg</browseData>       
+		</graphic>        
+		<plotContributor>        
+			<role>-999.25</role>       
+			<party>-999.25</party>       
+		</plotContributor>        
+	</plot>
+</project>
+</vegPlot>
