@@ -1,40 +1,49 @@
-'$Author: farrell $'
-'$Date: 2003-08-22 19:45:25 $'
-'$Revision: 1.14 $'
-THIS FILE DESCRIBES THE SETUP AND MAINTAINENCE OF A VEGBANK SYSTEM
+#
+# '$RCSfile: README,v $'
+# '$Author: farrell $'
+# '$Date: 2003-08-22 23:46:35 $'
+# '$Revision: 1.15 $'
+# '$Date: 2003-08-22 23:46:35 $'
+#
 
+VEGBANK: Vegatation Plots Database and Archival System
+------------------------------
+
+Version: @version@
+
+Send feedback and bugs to: vegbank-dev@ecoinformatics.org
+                           http://bugzilla.ecoinformatics.org
+
+Contributors: Mark Anderson (anderson@nceas.ucsb.edu) 
+              Gabriel Farrell (farrell@nceas.ucsb.edu)
+              John Harris (harris@nceas.ucsb.edu)
+              Micheal Lee (mikelee@email.unc.edu)
+              
+VegBank is the vegetation plot database of the Ecological Society of America's 
+Panel on Vegetation Classification. VegBank consists of three modules that 
+contain (1) the actual plot records, (2) vegetation types recognized in the U.S. 
+National Vegetation Classification and other vegetation types submitted by users, 
+and (3) all plant taxa recognized by ITIS/USDA as well as all other plant taxa 
+recorded in plot records. Vegetation records, community types and plant taxa may 
+be submitted to VegBank and may be subsequently searched, viewed, annotated, revised, interpreted, downloaded, and cited.
+
+Installation
+------------
 Vegbank requires
 Jakarta-tomcat 4.1, 
 PostrgreSQL 7.2, 
 Java 1.3
 Apache 1.3
 Grass
+Apache Ant 
 
-REQUIRED JAR FILES
+VEGBANK JAR FILES
 -----------------
-the following jar files are required in the servlet container
+The build script creates the vegbank jars and distributes them into the servlet container.
+> ant deploy
 
-vegcommunity.jar
-planttaxonomy.jar
-jdbc7.0-1.2.jar
-utilities.jar
-servlet.jar
-multipart.jar
-frameworkservlet-config.xml
-datatranslator.jar
-database_access.jar
-ant.jar
-vegbankquery.jar
-usermanagement.jar
-stylesheet-generator.jar
-frameworkservletmodule.jar
-datafile-exchange.jar
-authservletmodule.jar
-xmlresource.jar
-vegclass_common.jar
-vegbank_datamodel.jar
+In addition a number of third party jars are required, these are in the lib directory.
 
-and all the third party jars in the vegbank/lib directory.
 
 OTHER REQUIRED SERVLET FILES
 ----------------------------
@@ -64,6 +73,14 @@ initdb databasefile
 # Start database ( with debuging output )
 postmaster -d2 -i -D databasefile 
 
+<<<<<<< README
+# Create the database users as follows:
+In an account that has rights to the database ( e.g. postgres )
+> createuser  datauser
+> createuser [ your unix username ]
+> createuser qa
+
+=======
 # Create the database user as follows:
 Log into an account that is allowed to create users
 > createuser  datauser 
@@ -73,6 +90,7 @@ Log into an account that is allowed to create users
 # Create the databases
 > creatdb vegbank
 > createdb framework
+>>>>>>> 1.14
 
 # Build the databases
 Some of the sql is auto generated using an ant task.
@@ -100,4 +118,30 @@ just for that.
 
 The programs homepage is "http://www3.baylor.edu/grass/"
 
-EOF 
+Documentation
+-------------
+
+
+Major Known Bugs or Feature Requests (see http://bugzilla.ecoinformatics.org)
+-----------------------------------------------------------------------------
+If you discover a bug
+please report it, either by email (above) or by using our bug tracking
+system (http://bugzilla.ecoinformatics.org). There is a list of currently
+unimplemented features in Bugzilla that we are working on for the next
+release.
+
+Legalese
+--------
+This software is copyrighted by The Regents of the University of California
+and the National Center for Ecological Analysis and Synthesis
+and licensed under the GNU GPL; see the 'LICENSE' file for
+details.
+
+This material is based upon work supported by the National Science Foundation.
+Any opinions, findings and conclusions or recomendations expressed in this
+material are those of the author(s) and do not necessarily reflect
+the views of the National Science Foundation (NSF).
+
+This product includes software developed by the Apache Software
+Foundation (http://www.apache.org/). See the LICENSE file in lib/apache
+for details.
