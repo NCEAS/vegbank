@@ -61,15 +61,21 @@ public class StyleSheetGenerator extends HttpServlet
 			PrintWriter out = response.getWriter();
 			try 
 			{
+				//enumeration is needed for the attributes
+				Enumeration enum =request.getParameterNames();
+				Hashtable params = this.parameterHash( request );
+				
+				
+				//THE INPUT PARAMETERS
+				System.out.println("StyleSheetGenerator > INPUT PARAMS: "
+				+  params.toString() );
 				
 				//first get the cookie value etc
 				this.userEmail = this.getCookieValue(request);
 				System.out.println("StyleSheetGenerator > user: " + this.userEmail );
 				
 				
-			//enumeration is needed for the attributes
-				Enumeration enum =request.getParameterNames();
-				Hashtable params = this.parameterHash( request );
+			
 				
 				//the temp file name
 				StringBuffer fileContents = new StringBuffer();
@@ -77,7 +83,13 @@ public class StyleSheetGenerator extends HttpServlet
 				//print the xslt file in order from left to right
 				fileContents.append( getHeader().toString() );
 				fileContents.append( this.getIdentificationAttributes(params).toString()  );
-				fileContents.append( getBody(params).toString() );
+				//fileContents.append( getBody(params).toString() );
+				fileContents.append( this.getSiteAttributes(params).toString() );
+				
+				fileContents.append( this.getObservationAttributes(params).toString() );
+				
+				fileContents.append( this.getTaxaAttributes(params).toString() );
+				
 				fileContents.append( getFooter().toString() );
 				printFile( fileContents );
 				
@@ -85,7 +97,7 @@ public class StyleSheetGenerator extends HttpServlet
 ///#				this.registerDocument(this.fileName, this.userEmail, "stylesheet");
 				
 				
-				//SHOE THE USER THE STYLE SHEET THAT THE GENERATED 
+				//SHOW THE USER THE STYLE SHEET THAT THE GENERATED 
 				out.println( this.showTransformedDataSet() );
 
 			}
@@ -310,21 +322,22 @@ public class StyleSheetGenerator extends HttpServlet
 	}
 	
 	
+	
 	/**
 	 * this method generated the site attributes collumn of the stylesheet
 	 */
-	private StringBuffer getIdentificationAttributes( Hashtable params )
+	private StringBuffer getObservationAttributes( Hashtable params )
 	{
 		StringBuffer sb = new StringBuffer();
 		
-		System.out.println("StyleSheetGenerator > site params: "+params.toString() );
+		//System.out.println("StyleSheetGenerator > site params: "+params.toString() );
 		//get all the keys
 	 	Enumeration paramlist = params.keys();
  
 		//START THE COLUMN
 		sb.append("<!--if even row --> \n");
 		sb.append("<xsl:if test=\"position() mod 2 = 1\"> \n");
-		sb.append("<td colspan=\"1\" bgcolor=\"{$evenRowColor}\" align=\"left\" valign=\"top\"> \n ");
+		sb.append("<td width=\"20%\" colspan=\"1\" bgcolor=\"{$evenRowColor}\" align=\"left\" valign=\"top\"> \n ");
 		sb.append(" Plot Code: ");
 		sb.append(" <xsl:value-of select=\"authorPlotCode\"/> <br> </br> \n");
 		sb.append(" Project Name: ");
@@ -334,7 +347,12 @@ public class StyleSheetGenerator extends HttpServlet
  		{
 			String element = (String)paramlist.nextElement();
    		String value  = (String)params.get(element);
-			sb.append(" <a><b>"+element+":</b> <br></br> <font color=\"FF0066\"> <xsl:value-of select=\""+value+"\"/> </font> <br></br> </a> \n");
+			if ( value.trim().startsWith("observation") )
+			{
+				
+				sb.append(" "+element+": ");
+				sb.append("<xsl:value-of select=\"observation/"+element+"\"/> <br> </br> \n");
+			}
 		}
 		
 		
@@ -346,6 +364,108 @@ public class StyleSheetGenerator extends HttpServlet
 	
 	
 	
+	/**
+	 * this method generated the site attributes collumn of the stylesheet
+	 */
+	private StringBuffer getIdentificationAttributes( Hashtable params )
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		//System.out.println("StyleSheetGenerator > site params: "+params.toString() );
+		//get all the keys
+	 	Enumeration paramlist = params.keys();
+		
+		//SET UP THE VARIABLE THAT WILL BE SUED IN THIS FORM
+		sb.append("	<xsl:variable name=\"PLOT\"> \n ");
+  	sb.append("		<xsl:value-of select=\"authorPlotCode\"/> \n");
+		sb.append("	</xsl:variable> \n");
+		
+		sb.append("	<xsl:variable name=\"PLOTID\"> \n");
+  	sb.append("		<xsl:value-of select=\"plotId\"/> \n");
+		sb.append("	</xsl:variable> \n");
+		
+		
+ 
+		//START THE COLUMN
+		sb.append("<!--if even row --> \n");
+		sb.append("<xsl:if test=\"position() mod 2 = 1\"> \n");
+		sb.append("<td width=\"20%\" colspan=\"1\" bgcolor=\"{$evenRowColor}\" align=\"left\" valign=\"top\"> \n ");
+		
+		//PUT IN THE VARAIBLES USED TO BE PASSED TO THE DOWNLOAD SERVLET
+		sb.append("<input name=\"plotName\" type=\"checkbox\" value=\"{$PLOTID}\" checked=\"yes\">download</input> ");
+		sb.append("	<xsl:number value=\"position()\"/> ");
+		
+		sb.append(" Plot Code: ");
+		sb.append(" <xsl:value-of select=\"authorPlotCode\"/> <br> </br> \n");
+		sb.append(" Project Name: ");
+		sb.append("<xsl:value-of select=\"../projectName\"/> <br> </br>  \n");
+		
+		
+		
+		
+ 		while (paramlist.hasMoreElements()) 
+ 		{
+			String element = (String)paramlist.nextElement();
+   		String value  = (String)params.get(element);
+			if ( value.trim().startsWith("identification") )
+			{
+				
+				sb.append(" "+element+": ");
+				sb.append("<xsl:value-of select=\"../"+element+"\"/> <br> </br> \n");
+			}
+		}
+		
+		
+		//END THE COLUMN
+		sb.append("	</td> \n");
+		sb.append("	</xsl:if> \n");
+		return(sb);
+	}
+	
+	
+		
+	/**
+	 * this method generated the site attributes collumn of the stylesheet
+	 */
+	private StringBuffer getTaxaAttributes( Hashtable params )
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		//System.out.println("StyleSheetGenerator > site params: "+params.toString() );
+		//get all the keys
+	 	Enumeration paramlist = params.keys();
+ 
+		//START THE COLUMN
+		sb.append("<!--if even row --> \n");
+		sb.append("<xsl:if test=\"position() mod 2 = 1\"> \n");
+		sb.append("<td width=\"20%\" colspan=\"1\" bgcolor=\"{$evenRowColor}\" align=\"left\" valign=\"top\"> \n ");
+		sb.append(" Plot Code: ");
+		sb.append(" <xsl:value-of select=\"authorPlotCode\"/> <br> </br> \n");
+		sb.append(" Project Name: ");
+		sb.append("<xsl:value-of select=\"../projectName\"/> <br> </br>  \n");
+		
+ 		while (paramlist.hasMoreElements()) 
+ 		{
+			String element = (String)paramlist.nextElement();
+   		String value  = (String)params.get(element);
+			if ( value.trim().startsWith("taxonomy") )
+			{
+				
+				sb.append(" "+element+": ");
+				//sb.append("<xsl:for-each select=\"observation/taxonObservation/"+element+"\"/> <br> </br> \n");
+				
+				sb.append("	 <xsl:for-each select=\"observation/taxonObservation\"> \n");
+	 			sb.append("  <xsl:value-of select=\""+element+"\"/>; </xsl:for-each> \n");
+			}
+		}
+		
+		
+		//END THE COLUMN
+		sb.append("	</td> \n");
+		sb.append("	</xsl:if> \n");
+		return(sb);
+	}
+	
 	
 	
 	/**
@@ -355,34 +475,50 @@ public class StyleSheetGenerator extends HttpServlet
 	{
 		StringBuffer sb = new StringBuffer();
 		
-		System.out.println("StyleSheetGenerator > site params: "+params.toString() );
+		//System.out.println("StyleSheetGenerator > site params: "+params.toString() );
 		//get all the keys
 	 	Enumeration paramlist = params.keys();
  
- 		//everyone needs a plot -- so return the plot code
-		sb.append("	<a><br></br> <b>plot code: </b> <br></br> ");
-		sb.append("<font color = \"red\"> <xsl:value-of select=\"authorPlotCode\"/> </font><br> </br></a> \n");
-
+		//START THE COLUMN
+		sb.append("<!--if even row --> \n");
+		sb.append("<xsl:if test=\"position() mod 2 = 1\"> \n");
+		sb.append("<td width=\"20%\" colspan=\"1\" bgcolor=\"{$evenRowColor}\" align=\"left\" valign=\"top\"> \n ");
+		sb.append(" Plot Code: ");
+		sb.append(" <xsl:value-of select=\"authorPlotCode\"/> <br> </br> \n");
+		sb.append(" Project Name: ");
+		sb.append("<xsl:value-of select=\"../projectName\"/> <br> </br>  \n");
+		
  		while (paramlist.hasMoreElements()) 
  		{
 			String element = (String)paramlist.nextElement();
    		String value  = (String)params.get(element);
-			sb.append(" <a><b>"+element+":</b> <br></br> <font color=\"FF0066\"> <xsl:value-of select=\""+value+"\"/> </font> <br></br> </a> \n");
+			if ( value.trim().startsWith("site") )
+			{
+				
+				sb.append(" "+element+": ");
+				sb.append("<xsl:value-of select=\" "+element+"\"/> <br> </br> \n");
+			}
 		}
 		
+		
+		//END THE COLUMN
 		sb.append("	</td> \n");
-
+		sb.append("	</xsl:if> \n");
 		return(sb);
 	}
 	
-	
-	
+	/**
+	* the method that returns the footer to the style sheet
+	*/
 	private StringBuffer getFooter()
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append("	</tr>  \n "); 
 		sb.append("</xsl:for-each> \n ");  
 		sb.append("</table> \n");
+		
+		//THE BUTTON TO DOWNLOAD THE DATA
+		sb.append(" <input type=\"submit\" name=\"downLoadAction\" value=\"start downLoad\" /> "); 
 		sb.append("</form> \n"); 
 		sb.append("</body> \n"); 
 		sb.append("</html> \n"); 
