@@ -161,6 +161,7 @@
         <xs:element ref="attKey"/>
         <xs:element ref="attRelType"/>
         <xs:element ref="attReferences"/>
+        <xs:element ref="attFKTranslationSQL" minOccurs="0"/>
         <xs:element ref="attListType"/>
         <xs:element ref="attList"/>
         <xs:element ref="attNotes"/>
@@ -168,9 +169,13 @@
         <xs:element ref="archive" minOccurs="0"/>
         <xs:element ref="attForms" minOccurs="0"/>
         <xs:element ref="update"/>
+        <xs:any minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="NS_column" type="xs:string"/>
+  <xs:element name="VB_column" type="xs:string"/>
+  <xs:element name="attFKTranslationSQL" type="xs:string"/>
   <!-- document author  -->
   <xs:element name="entity">
     <xs:complexType>
@@ -179,12 +184,11 @@
         <xs:element ref="entityLabel" minOccurs="0"/>
         <xs:element ref="entitySummary"/>
         <xs:element ref="entityDescription"/>
-        <xs:element ref="module"/>
-        <!-- may have to do with gabe's work on archiving to the revisions table? -->
+        <xs:element ref="module" minOccurs="0"/>
         <xs:element ref="archive" minOccurs="0"/>
         <xs:element ref="entityNeedParentToAdd" minOccurs="0"/>
         <xs:element ref="attribute" maxOccurs="unbounded"/>
-
+        <!-- may have to do with gabe's work on archiving to the revisions table? -->
         <!-- fields on the table -->
       </xs:sequence>
     </xs:complexType>

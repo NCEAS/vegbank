@@ -2,8 +2,9 @@
 <!--
 
 <?xml-stylesheet type="text/xsl" href="dbmodel_2AccessZTbl.xsl"?>
-<?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
-<?xml-stylesheet type="text/xsl" href="dbmodel-to-csv.xsl"?>
+<?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?> -->
+<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp.xsl"?>
+<!--
 -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
   <title>Vegetation Database Component Description: --all modules--</title>
@@ -5525,7 +5526,6 @@ conditions may change between resampling events.
       <attNotes>Primary key for the observation table</attNotes>
       <attDefinition>Database generated identifier assigned to each unique plot observation.</attDefinition>
       <attForms>
-        <formShow name="Summary">627</formShow>
         <formShow name="Detail">628</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -5539,12 +5539,12 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>observation.OBSERVATION_ID</attReferences>
+      <attFKTranslationSQL>(SELECT authorObsCode from observation as oPrev where oPrev.observation_ID=observation.previousObs_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Recursive foreign key</attNotes>
       <attDefinition>Link to data from the previous observation of this plot.</attDefinition>
       <attForms>
-        <formShow name="Summary">629</formShow>
         <formShow name="Detail">630</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -5562,10 +5562,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>Foreign key into the plot table.</attNotes>
       <attDefinition>Link to data and metadata that do not change between observations and which are stored in the plot table.</attDefinition>
-      <attForms>
-        <formShow name="Summary">631</formShow>
-        <formShow name="Detail">632</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -5577,6 +5574,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>project.PROJECT_ID</attReferences>
+      <attFKTranslationSQL>(SELECT projectName from project where project.projecT_ID = observation.project_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the project table.</attNotes>
@@ -5601,9 +5599,9 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>This is the code or name that the author uses to identify this plot observation event. Where a plot has only one observation, this will often equal plot.authorPlotCode.</attDefinition>
       <attForms>
-        <formShow name="Austere">638</formShow>
-        <formShow name="Summary">639</formShow>
-        <formShow name="Detail">640</formShow>
+        <formShow name="Austere">1</formShow>
+        <formShow name="Summary">1</formShow>
+        <formShow name="Detail">1</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -5642,7 +5640,6 @@ conditions may change between resampling events.
       <attDefinition>If the observation event spanned more than a single day, this is the last day on which observations were made.</attDefinition>
       <attForms>
         <formShow name="Austere">644</formShow>
-        <formShow name="Summary">645</formShow>
         <formShow name="Detail">646</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -5703,7 +5700,6 @@ conditions may change between resampling events.
       <attDefinition>Estimated accuracy of the observation date.</attDefinition>
       <attForms>
         <formShow name="Austere">647</formShow>
-        <formShow name="Summary">648</formShow>
         <formShow name="Detail">649</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -5722,9 +5718,9 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Date that the observation was added to VegBank</attDefinition>
       <attForms>
-        <formShow name="Austere">635.5</formShow>
-        <formShow name="Summary">636.5</formShow>
-        <formShow name="Detail">637.5</formShow>
+        <formShow name="Austere">935.5</formShow>
+        <formShow name="Summary">936.5</formShow>
+        <formShow name="Detail">937.5</formShow>
       </attForms>
       <update>1.0.1</update>
     </attribute>
@@ -5737,6 +5733,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>coverMethod.COVERMETHOD_ID</attReferences>
+      <attFKTranslationSQL>(SELECT coverType from CoverMethod where observation.coverMethod_ID=coverMethod.coverMethod_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the coverMethod table.</attNotes>
@@ -5832,6 +5829,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>stratumMethod.STRATUMMETHOD_ID</attReferences>
+      <attFKTranslationSQL>(SELECT stratumMethodName from stratumMethod where observation.stratumMethod_ID=stratumMethod.stratumMethod_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the stratumMethod table</attNotes>
@@ -5968,7 +5966,6 @@ conditions may change between resampling events.
       <attDefinition>The method used to obtain basal area or tree stem data (e.g., full census, point quarter, random pairs, Bitterlich, other).</attDefinition>
       <attForms>
         <formShow name="Austere">672</formShow>
-        <formShow name="Summary">673</formShow>
         <formShow name="Detail">674</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -5988,7 +5985,6 @@ conditions may change between resampling events.
       <attDefinition>Location where the hard data reside and any access instructions.</attDefinition>
       <attForms>
         <formShow name="Austere">675</formShow>
-        <formShow name="Summary">676</formShow>
         <formShow name="Detail">677</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6319,7 +6315,6 @@ conditions may change between resampling events.
       <attDefinition>How homogeneous was the community (e.g., homogeneous, compositional trend across plot, conspicuous inclusions, irregular mosaic or pattern).</attDefinition>
       <attForms>
         <formShow name="Austere">699</formShow>
-        <formShow name="Summary">700</formShow>
         <formShow name="Detail">701</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6390,7 +6385,6 @@ conditions may change between resampling events.
       <attDefinition>Season expression of the community (e.g., typical growing season, vernal, aestival, wet, autumnal, winter, dry, irregular ephemerals present).</attDefinition>
       <attForms>
         <formShow name="Austere">702</formShow>
-        <formShow name="Summary">703</formShow>
         <formShow name="Detail">704</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6410,7 +6404,6 @@ conditions may change between resampling events.
       <attDefinition>How representative was the plot of the stand?</attDefinition>
       <attForms>
         <formShow name="Austere">705</formShow>
-        <formShow name="Summary">706</formShow>
         <formShow name="Detail">707</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6461,7 +6454,6 @@ conditions may change between resampling events.
       <attDefinition>How mature is the stand.  Could be young, mature but even-aged, old-growth, etc.</attDefinition>
       <attForms>
         <formShow name="Austere">759</formShow>
-        <formShow name="Summary">760</formShow>
         <formShow name="Detail">761</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6481,7 +6473,6 @@ conditions may change between resampling events.
       <attDefinition>Description of the assumed successional status of the plot. This description is of necessity highly subjective.</attDefinition>
       <attForms>
         <formShow name="Austere">762</formShow>
-        <formShow name="Summary">763</formShow>
         <formShow name="Detail">764</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6658,7 +6649,6 @@ conditions may change between resampling events.
       <attDefinition>How moist was the soil at the sampling event?</attDefinition>
       <attForms>
         <formShow name="Austere">714</formShow>
-        <formShow name="Summary">715</formShow>
         <formShow name="Detail">716</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6714,7 +6704,6 @@ conditions may change between resampling events.
       <attDefinition>Identifies the natural drainage conditions of the soil and refers to the frequency and duration of wet periods. The soil drainage classes are defined in terms of (1) actual moisture content (in excess of field moisture capacity) and (2) the extent of the period during which excess water is present in the plant-root zone. Soil drainage class categories conform to the FGDC Soil Geographic Data Standards, September 1997. (http://www.fgdc.gov/standards/documents/standards/soils/soil997.PDF.) Definitions are derived from Grossman et al. (1998) and Sims et al. (1997). </attDefinition>
       <attForms>
         <formShow name="Austere">717</formShow>
-        <formShow name="Summary">718</formShow>
         <formShow name="Detail">719</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6750,7 +6739,6 @@ conditions may change between resampling events.
       <attDefinition>How saline is the water, if a flooded community?</attDefinition>
       <attForms>
         <formShow name="Austere">720</formShow>
-        <formShow name="Summary">721</formShow>
         <formShow name="Detail">722</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6770,7 +6758,6 @@ conditions may change between resampling events.
       <attDefinition>For aquatic or marine vegetation, what was the water depth in m.</attDefinition>
       <attForms>
         <formShow name="Austere">723</formShow>
-        <formShow name="Summary">724</formShow>
         <formShow name="Detail">725</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6790,7 +6777,6 @@ conditions may change between resampling events.
       <attDefinition>For aquatic or marine vegetation, what was the closest distance to shore in m.</attDefinition>
       <attForms>
         <formShow name="Austere">726</formShow>
-        <formShow name="Summary">727</formShow>
         <formShow name="Detail">728</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6830,7 +6816,6 @@ conditions may change between resampling events.
       <attDefinition>Depth of the surficial organic layer, where present, in centimeters.</attDefinition>
       <attForms>
         <formShow name="Austere">732</formShow>
-        <formShow name="Summary">733</formShow>
         <formShow name="Detail">734</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6844,12 +6829,12 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>soilTaxon.SOILTAXON_ID</attReferences>
+      <attFKTranslationSQL>(SELECT soilName from soilTaxon where observation.soilTaxon_ID=soilTaxon.soilTaxon_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>hierarchy</attNotes>
       <attDefinition>Foreign key into table of soil taxa within the USDA classification hierarchy, including Order, Suborder, Greatgroup, Subgroup, Family and Series.</attDefinition>
       <attForms>
-        <formShow name="Summary">819</formShow>
         <formShow name="Detail">820</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6885,7 +6870,6 @@ conditions may change between resampling events.
       <attDefinition>How was the soil taxon determined (e.g., field observation, map,  other sources)?</attDefinition>
       <attForms>
         <formShow name="Austere">821</formShow>
-        <formShow name="Summary">822</formShow>
         <formShow name="Detail">823</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6905,7 +6889,6 @@ conditions may change between resampling events.
       <attDefinition>Percent of surface that is exposed bedrock.</attDefinition>
       <attForms>
         <formShow name="Austere">735</formShow>
-        <formShow name="Summary">736</formShow>
         <formShow name="Detail">737</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6925,7 +6908,6 @@ conditions may change between resampling events.
       <attDefinition>Percent of surface that is exposed rock and gravel.</attDefinition>
       <attForms>
         <formShow name="Austere">738</formShow>
-        <formShow name="Summary">739</formShow>
         <formShow name="Detail">740</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6945,7 +6927,6 @@ conditions may change between resampling events.
       <attDefinition>Percent of surface that is wood.</attDefinition>
       <attForms>
         <formShow name="Austere">741</formShow>
-        <formShow name="Summary">742</formShow>
         <formShow name="Detail">743</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6965,7 +6946,6 @@ conditions may change between resampling events.
       <attDefinition>Percent of surface that is litter.</attDefinition>
       <attForms>
         <formShow name="Austere">744</formShow>
-        <formShow name="Summary">745</formShow>
         <formShow name="Detail">746</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6985,7 +6965,6 @@ conditions may change between resampling events.
       <attDefinition>Percent of surface that is bare soil.</attDefinition>
       <attForms>
         <formShow name="Austere">747</formShow>
-        <formShow name="Summary">748</formShow>
         <formShow name="Detail">749</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7005,7 +6984,6 @@ conditions may change between resampling events.
       <attDefinition>Percent of surface that is water.</attDefinition>
       <attForms>
         <formShow name="Austere">750</formShow>
-        <formShow name="Summary">751</formShow>
         <formShow name="Detail">752</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7025,7 +7003,6 @@ conditions may change between resampling events.
       <attDefinition>Percent of surface that belong to an additional itemized category</attDefinition>
       <attForms>
         <formShow name="Austere">753</formShow>
-        <formShow name="Summary">754</formShow>
         <formShow name="Detail">755</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7045,7 +7022,6 @@ conditions may change between resampling events.
       <attDefinition>Name of additional itemized ground cover category (e.g., beer cans).</attDefinition>
       <attForms>
         <formShow name="Austere">756</formShow>
-        <formShow name="Summary">757</formShow>
         <formShow name="Detail">758</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7065,7 +7041,6 @@ conditions may change between resampling events.
       <attDefinition>Height of the tree layer in m.</attDefinition>
       <attForms>
         <formShow name="Austere">765</formShow>
-        <formShow name="Summary">766</formShow>
         <formShow name="Detail">767</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7085,7 +7060,6 @@ conditions may change between resampling events.
       <attDefinition>Height of the shrub layer in m.</attDefinition>
       <attForms>
         <formShow name="Austere">768</formShow>
-        <formShow name="Summary">769</formShow>
         <formShow name="Detail">770</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7105,7 +7079,6 @@ conditions may change between resampling events.
       <attDefinition>Height of the field layer in m.</attDefinition>
       <attForms>
         <formShow name="Austere">771</formShow>
-        <formShow name="Summary">772</formShow>
         <formShow name="Detail">773</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7125,7 +7098,6 @@ conditions may change between resampling events.
       <attDefinition>Height of the nonvascular layer in m.</attDefinition>
       <attForms>
         <formShow name="Austere">774</formShow>
-        <formShow name="Summary">775</formShow>
         <formShow name="Detail">776</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7145,7 +7117,6 @@ conditions may change between resampling events.
       <attDefinition>Height of the submerged layer in m.</attDefinition>
       <attForms>
         <formShow name="Austere">777</formShow>
-        <formShow name="Summary">778</formShow>
         <formShow name="Detail">779</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7165,7 +7136,6 @@ conditions may change between resampling events.
       <attDefinition>Total cover of the tree layer in percent.</attDefinition>
       <attForms>
         <formShow name="Austere">780</formShow>
-        <formShow name="Summary">781</formShow>
         <formShow name="Detail">782</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7185,7 +7155,6 @@ conditions may change between resampling events.
       <attDefinition>Total cover of the shrub layer in percent.</attDefinition>
       <attForms>
         <formShow name="Austere">783</formShow>
-        <formShow name="Summary">784</formShow>
         <formShow name="Detail">785</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7205,7 +7174,6 @@ conditions may change between resampling events.
       <attDefinition>Total cover of the field layer in percent.</attDefinition>
       <attForms>
         <formShow name="Austere">786</formShow>
-        <formShow name="Summary">787</formShow>
         <formShow name="Detail">788</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7225,7 +7193,6 @@ conditions may change between resampling events.
       <attDefinition>Total cover of the nonvascular layer in percent.</attDefinition>
       <attForms>
         <formShow name="Austere">789</formShow>
-        <formShow name="Summary">790</formShow>
         <formShow name="Detail">791</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7245,7 +7212,6 @@ conditions may change between resampling events.
       <attDefinition>Total cover of the floating layer in percent.</attDefinition>
       <attForms>
         <formShow name="Austere">792</formShow>
-        <formShow name="Summary">793</formShow>
         <formShow name="Detail">794</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7265,7 +7231,6 @@ conditions may change between resampling events.
       <attDefinition>Total cover of the submerged layer in percent.</attDefinition>
       <attForms>
         <formShow name="Austere">795</formShow>
-        <formShow name="Summary">796</formShow>
         <formShow name="Detail">797</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7316,7 +7281,6 @@ conditions may change between resampling events.
       <attDefinition>Which of the six standard strata is dominant?</attDefinition>
       <attForms>
         <formShow name="Austere">798</formShow>
-        <formShow name="Summary">799</formShow>
         <formShow name="Detail">800</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7522,7 +7486,6 @@ conditions may change between resampling events.
       <attDefinition>The predominant growth form?</attDefinition>
       <attForms>
         <formShow name="Austere">801</formShow>
-        <formShow name="Summary">802</formShow>
         <formShow name="Detail">803</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7728,7 +7691,6 @@ conditions may change between resampling events.
       <attDefinition>The second-most predominant growthform?</attDefinition>
       <attForms>
         <formShow name="Austere">804</formShow>
-        <formShow name="Summary">805</formShow>
         <formShow name="Detail">806</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7934,7 +7896,6 @@ conditions may change between resampling events.
       <attDefinition>The third-most predominant growthform</attDefinition>
       <attForms>
         <formShow name="Austere">807</formShow>
-        <formShow name="Summary">808</formShow>
         <formShow name="Detail">809</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7954,7 +7915,6 @@ conditions may change between resampling events.
       <attDefinition>Total cover of the predominant growthform?</attDefinition>
       <attForms>
         <formShow name="Austere">810</formShow>
-        <formShow name="Summary">811</formShow>
         <formShow name="Detail">812</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7974,7 +7934,6 @@ conditions may change between resampling events.
       <attDefinition>Total cover of the second-most predominant growthform?</attDefinition>
       <attForms>
         <formShow name="Austere">813</formShow>
-        <formShow name="Summary">814</formShow>
         <formShow name="Detail">815</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -7994,7 +7953,6 @@ conditions may change between resampling events.
       <attDefinition>Total cover of the third-most predominant growthform?</attDefinition>
       <attForms>
         <formShow name="Austere">816</formShow>
-        <formShow name="Summary">817</formShow>
         <formShow name="Detail">818</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -8011,11 +7969,15 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>The total cover, in percent, of all vegetation on the plot.</attDefinition>
+      <attForms>
+        <formShow name="Austere">817</formShow>
+        <formShow name="Detail">819</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
       <attName>accessionCode</attName>
-      <attLabel>Accession Code</attLabel>
+      <attLabel>Observation Accession Code</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
@@ -8026,6 +7988,12 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+      <attForms>
+        <formShow name="Austere">819</formShow>
+        <formShow name="Summary">820</formShow>
+
+        <formShow name="Detail">821</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -8043,7 +8011,6 @@ conditions may change between resampling events.
       <attDefinition>TRUE indicates that public notes pertaining to this plot exist in "vegPlot.note"</attDefinition>
       <attForms>
         <formShow name="Austere">824</formShow>
-        <formShow name="Summary">825</formShow>
         <formShow name="Detail">826</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -8063,7 +8030,6 @@ conditions may change between resampling events.
       <attDefinition>TRUE indicates that nonpublic management notes pertaining to this plot exist in "vegPlot.note"</attDefinition>
       <attForms>
         <formShow name="Austere">827</formShow>
-        <formShow name="Summary">828</formShow>
         <formShow name="Detail">829</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -8083,7 +8049,6 @@ conditions may change between resampling events.
       <attDefinition>TRUE indicates that revisions exist in vegPlot.Revision</attDefinition>
       <attForms>
         <formShow name="Austere">830</formShow>
-        <formShow name="Summary">831</formShow>
         <formShow name="Detail">832</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -8809,7 +8774,6 @@ conditions may change between resampling events.
       <attNotes>Primary key for plot</attNotes>
       <attDefinition>Database generated identifier assigned to each unique plot.</attDefinition>
       <attForms>
-        <formShow name="Summary">899</formShow>
         <formShow name="Detail">900</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -8843,12 +8807,12 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
+      <attFKTranslationSQL>(SELECT reference.shortName from reference where reference.reference_ID = plot.reference_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the reference table</attNotes>
       <attDefinition>Link to the source reference from which this plot record was taken</attDefinition>
       <attForms>
-        <formShow name="Summary">904</formShow>
         <formShow name="Detail">905</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -8862,12 +8826,12 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>plot.PLOT_ID</attReferences>
+      <attFKTranslationSQL>(SELECT authorPlotCode from plot as plParent where plParent.plot_ID = plot.parent_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Recursive foreign key</attNotes>
       <attDefinition>Link to the parent plot when plot is nested within another plot.</attDefinition>
       <attForms>
-        <formShow name="Summary">906</formShow>
         <formShow name="Detail">907</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -8885,11 +8849,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Latitude of the plot origin in degrees and decimals, datum =WGS84</attDefinition>
-      <attForms>
-        <formShow name="Austere">908</formShow>
-        <formShow name="Summary">909</formShow>
-        <formShow name="Detail">910</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -8905,11 +8865,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Longitude of the plot origin in degrees and decimals, datum = WGS84</attDefinition>
-      <attForms>
-        <formShow name="Austere">911</formShow>
-        <formShow name="Summary">912</formShow>
-        <formShow name="Detail">913</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -8927,7 +8883,6 @@ conditions may change between resampling events.
       <attDefinition>Estimated accuracy of the location of the plot. Plot origin has a 95% or greater probability of being within this many meters of the reported location.</attDefinition>
       <attForms>
         <formShow name="Austere">914</formShow>
-        <formShow name="Summary">915</formShow>
         <formShow name="Detail">916</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9001,11 +8956,6 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>The reason for confidentiality.  This field should not be open to public view.  Reasons might include specific rare species, ownership, prepublication embargo, or many other reason</attDefinition>
-      <attForms>
-        <formShow name="Austere">920</formShow>
-        <formShow name="Summary">921</formShow>
-        <formShow name="Detail">922</formShow>
-      </attForms>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -9061,11 +9011,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Original E-W coordinate as recorded by the author</attDefinition>
-      <attForms>
-        <formShow name="Austere">929</formShow>
-        <formShow name="Summary">930</formShow>
-        <formShow name="Detail">931</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -9081,11 +9027,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Original N-S coordinate as recorded by the author</attDefinition>
-      <attForms>
-        <formShow name="Austere">932</formShow>
-        <formShow name="Summary">933</formShow>
-        <formShow name="Detail">934</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -9101,11 +9043,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Original UTM zone reported by the author</attDefinition>
-      <attForms>
-        <formShow name="Austere">935</formShow>
-        <formShow name="Summary">936</formShow>
-        <formShow name="Detail">937</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -9121,11 +9059,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Original datum reported by the author</attDefinition>
-      <attForms>
-        <formShow name="Austere">938</formShow>
-        <formShow name="Summary">939</formShow>
-        <formShow name="Detail">940</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -9183,7 +9117,6 @@ conditions may change between resampling events.
       <attDefinition>This element stores the azimuth of the x-axis used to describe the relative coordinate system for plot shape (dsgpoly) and other spatial information about the plot. Typically the azimuth is parallel to the long axis of the plot (in the case of a rectangle).</attDefinition>
       <attForms>
         <formShow name="Austere">947</formShow>
-        <formShow name="Summary">948</formShow>
         <formShow name="Detail">949</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9203,7 +9136,6 @@ conditions may change between resampling events.
       <attDefinition>This field is a text string containing the points circumscribing a plot area.  These points are anticipated to have been collected using tapes, GPS, or calculated from the plot shape and area. Points are X-Y coordinates in m relative to plot origin.</attDefinition>
       <attForms>
         <formShow name="Austere">950</formShow>
-        <formShow name="Summary">951</formShow>
         <formShow name="Detail">952</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9330,7 +9262,6 @@ conditions may change between resampling events.
       <attDefinition>The extent of this community occurrence in relation to the plot size: very extensive (&gt;1000x plot), extensive (&gt;100x plot), large (10-100x plot), small (3-10x plot), very small (1-3x plot).</attDefinition>
       <attForms>
         <formShow name="Austere">959</formShow>
-        <formShow name="Summary">960</formShow>
         <formShow name="Detail">961</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9381,7 +9312,6 @@ conditions may change between resampling events.
       <attDefinition>Brief description of strategy for determining plot placement within the stand.</attDefinition>
       <attForms>
         <formShow name="Austere">962</formShow>
-        <formShow name="Summary">963</formShow>
         <formShow name="Detail">964</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9401,7 +9331,6 @@ conditions may change between resampling events.
       <attDefinition>Is the plot monumented so as to assure permanence?  If so, this should be described in the layoutNarrative</attDefinition>
       <attForms>
         <formShow name="Austere">965</formShow>
-        <formShow name="Summary">966</formShow>
         <formShow name="Detail">967</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9421,7 +9350,6 @@ conditions may change between resampling events.
       <attDefinition>Text description of and the rationale for the layout of the plot.</attDefinition>
       <attForms>
         <formShow name="Austere">968</formShow>
-        <formShow name="Summary">969</formShow>
         <formShow name="Detail">970</formShow>
       </attForms>
       <update>1.0.2</update>
@@ -9461,7 +9389,6 @@ conditions may change between resampling events.
       <attDefinition>The accuracy of the elevation in percentage of the elevation reported.</attDefinition>
       <attForms>
         <formShow name="Austere">974</formShow>
-        <formShow name="Summary">975</formShow>
         <formShow name="Detail">976</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9481,7 +9408,6 @@ conditions may change between resampling events.
       <attDefinition>Meters of difference in elevations of the high and low points in the plot.</attDefinition>
       <attForms>
         <formShow name="Austere">977</formShow>
-        <formShow name="Summary">978</formShow>
         <formShow name="Detail">979</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9521,7 +9447,6 @@ conditions may change between resampling events.
       <attDefinition>Minimum azimuth of slope gradient (0-360 degrees), counterclockwise from representative azimuth.</attDefinition>
       <attForms>
         <formShow name="Austere">983</formShow>
-        <formShow name="Summary">984</formShow>
         <formShow name="Detail">985</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9541,7 +9466,6 @@ conditions may change between resampling events.
       <attDefinition>Maximum azimuth of slope gradient (0-360 degrees), clockwise from representative azimuth</attDefinition>
       <attForms>
         <formShow name="Austere">986</formShow>
-        <formShow name="Summary">987</formShow>
         <formShow name="Detail">988</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9581,7 +9505,6 @@ conditions may change between resampling events.
       <attDefinition>Minimum inclination of slope in degrees.</attDefinition>
       <attForms>
         <formShow name="Austere">992</formShow>
-        <formShow name="Summary">993</formShow>
         <formShow name="Detail">994</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9601,7 +9524,6 @@ conditions may change between resampling events.
       <attDefinition>Maximum inclination of slope in degrees.</attDefinition>
       <attForms>
         <formShow name="Austere">995</formShow>
-        <formShow name="Summary">996</formShow>
         <formShow name="Detail">997</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -11448,11 +11370,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>2 letter State or Province Code where the plot is located (US and Canada only).</attDefinition>
-      <attForms>
-        <formShow name="Austere">1019</formShow>
-        <formShow name="Summary">1020</formShow>
-        <formShow name="Detail">1021</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -11468,11 +11386,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Country where the plot is located.</attDefinition>
-      <attForms>
-        <formShow name="Austere">1022</formShow>
-        <formShow name="Summary">1023</formShow>
-        <formShow name="Detail">1024</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -11508,11 +11422,6 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition/>
-      <attForms>
-        <formShow name="Austere">1031</formShow>
-        <formShow name="Summary">1032</formShow>
-        <formShow name="Detail">1033</formShow>
-      </attForms>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -11528,11 +11437,6 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition/>
-      <attForms>
-        <formShow name="Austere">1034</formShow>
-        <formShow name="Summary">1035</formShow>
-        <formShow name="Detail">1036</formShow>
-      </attForms>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -11548,11 +11452,6 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition/>
-      <attForms>
-        <formShow name="Austere">1037</formShow>
-        <formShow name="Summary">1038</formShow>
-        <formShow name="Detail">1039</formShow>
-      </attForms>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -11568,6 +11467,11 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+      <attForms>
+        <formShow name="Austere">1009</formShow>
+        <formShow name="Summary">1010</formShow>
+        <formShow name="Detail">1011</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -11585,7 +11489,6 @@ conditions may change between resampling events.
       <attDefinition>TRUE indicates that public notes pertaining to this plot exist in "vegPlot.note"</attDefinition>
       <attForms>
         <formShow name="Austere">1010</formShow>
-        <formShow name="Summary">1011</formShow>
         <formShow name="Detail">1012</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -11605,7 +11508,6 @@ conditions may change between resampling events.
       <attDefinition>TRUE indicates that nonpublic management notes pertaining to this plot exist in "vegPlot.note"</attDefinition>
       <attForms>
         <formShow name="Austere">1013</formShow>
-        <formShow name="Summary">1014</formShow>
         <formShow name="Detail">1015</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -11625,7 +11527,6 @@ conditions may change between resampling events.
       <attDefinition>TRUE indicates that revisions exist in vegPlot.Revision</attDefinition>
       <attForms>
         <formShow name="Austere">1016</formShow>
-        <formShow name="Summary">1017</formShow>
         <formShow name="Detail">1018</formShow>
       </attForms>
       <update>1.0.0</update>
