@@ -33,12 +33,12 @@ and the address table. </entityDescription>
 
 
 	<attribute>
-                <attName>PLOT_ID</attName>
+                <attName>OBS_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>F</attKey>
                 <attReferences>PLOT</attReferences>
-                <attNotes>This is the foreign key into the plot table. </attNotes>
+                <attNotes>This is the foreign key into the plotObservation table. </attNotes>
                 <attDefinition>Database assigned value for a given plot 
 this is a link to the project entity. </attDefinition>
         </attribute>
