@@ -1,13 +1,13 @@
 <!--
-*  '$Id: admin_menu.jsp,v 1.5 2005-03-15 12:36:18 mlee Exp $'
+*  '$Id: admin_menu.jsp,v 1.6 2005-03-16 20:35:44 mlee Exp $'
 *   Purpose: Home for admins
 *   Copyright: 2000 Regents of the University of California and the
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-03-15 12:36:18 $'
-*  '$Revision: 1.5 $'
+*  '$Date: 2005-03-16 20:35:44 $'
+*  '$Revision: 1.6 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@
  
 
 
-<body bgcolor="#ffffff" text="#531100" link="#0033cc" vlink="#005680" alink="#0066ff">
 @webpage_masthead_html@
  
 <blockquote> 

@@ -13,8 +13,9 @@
 	  document.theform.submit();
   }
   </script>
-  <body onLoad="refreshHighlight('selectedPlots')">
+  
   @webpage_masthead_html@
+  <body onLoad="refreshHighlight('selectedPlots')">
   <br/>
   <logic:messagesPresent message="false">
     <ul>
