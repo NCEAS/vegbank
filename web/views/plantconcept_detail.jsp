@@ -100,7 +100,10 @@
         <!-- only link if party is USDA -->
         <logic:equal name="usagebean" property="classsystem" value="Code">
            <!-- and this is a code -->  
-           <a target="_new" href="http://plants.usda.gov/cgi_bin/plant_search.cgi?mode=Symbol&go=go&keywordquery=<bean:write name='usagebean' property='plantname_id_transl' />">USDA PLANTS Profile <img border="0" src="@image_server@leaficon.gif" alt="USDA PLANTS logo" /></a>
+           <a target="_new" 
+      href="http://plants.usda.gov/cgi_bin/plant_search.cgi?mode=Symbol&go=go&keywordquery=<bean:write name='usagebean' property='plantname_id_transl' />"
+      title="See this plant in the online USDA PLANTS database in a new window">USDA 
+      PLANTS Profile<img border="0" src="@image_server@leaficon.gif" alt="USDA PLANTS logo" /></a>
            
         </logic:equal>  
       </logic:equal>
