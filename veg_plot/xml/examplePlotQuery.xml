@@ -1,0 +1,9 @@
+<?xml version="1.0"?>       
+<!DOCTYPE vegPlot SYSTEM "plotQuery.dtd">     
+<dbQuery>
+<query>
+<queryElement>taxonName</queryElement>
+<elementString>Pinus</elementString>
+</query>
+</dbQuery>			
+			

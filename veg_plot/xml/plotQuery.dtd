@@ -1,0 +1,16 @@
+<!ENTITY % Boolean "(true | false) 'false'">
+
+<!-- This dtd defines the structure of a plotQuery xml
+file which when passed to the query module will trigger
+a query based on the elements stored in the xml document 
+-->
+
+<!ELEMENT dbQuery (query)>
+
+
+<!ELEMENT query (queryElement, queryString)>
+<!ELEMENT queryElement (#PCDATA)>  <!--query Element name like taxonName, namedPlace, PlotId-->
+<!ELEMENT elementString (#PCDATA)>
+<!ELEMENT projectDescription (#PCDATA)>
+
+
