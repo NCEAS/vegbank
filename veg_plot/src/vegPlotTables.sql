@@ -95,7 +95,7 @@ percentCover NUMBER(8)
 CREATE TABLE taxonObservation (
 taxonObservation_id INT NOT NULL PRIMARY KEY,
 obs_id INT NOT NULL,
-authorNameId VARCHAR(32),
+authorNameId VARCHAR(300),
 originalAuthority VARCHAR(32),
 cumStrataCoverage NUMBER(8)
 );

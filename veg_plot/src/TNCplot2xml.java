@@ -27,9 +27,9 @@ String speciesFile=args[1];
 String s=null;
 int lineNum=0;
 int speciesLineNum=0;
-String infileArray[]=new String[1000];
-String speciesArray[]=new String[1000];
-String speciesInfoArray[]=new String[1000];
+String infileArray[]=new String[100000];
+String speciesArray[]=new String[100000];
+String speciesInfoArray[]=new String[100000];
 int speciesCount=0;
 
 /*Below are all the variables that are going to be required for writing out teh xml file*/
@@ -384,20 +384,34 @@ out.println("				<stratumCover>"+nullValue+"</stratumCover>       ");
 out.println("				<stratumHeight>"+nullValue+"</stratumHeight>       ");
 out.println("			</strata>        ");
 
-out.println("			<taxonObservations>        ");
-out.println("				<authNameId>"+nullValue+"</authNameId>       ");
-out.println("				<originalAuthority>"+nullValue+"</originalAuthority>       ");
-out.println("				<strataComposition>        ");
-out.println("					<strataType>"+nullValue+"</strataType>       ");
-out.println("					<percentCover>"+nullValue+"</percentCover>       ");
-out.println("				</strataComposition>        ");
-out.println("				<interptretation>        ");
-out.println("					<circum_id>"+nullValue+"</circum_id>       ");
-out.println("					<role>"+nullValue+"</role>       ");
-out.println("					<date>"+nullValue+"</date>       ");
-out.println("					<notes>"+nullValue+"</notes>       ");
-out.println("				</interptretation>        ");
-out.println("			</taxonObservations>        ");
+
+
+/*this is where to print out the species list*/
+ for (int i=0; i<lineNum; i++) { 
+//	out.println(speciesInfoArray[i]);
+
+out.println("                   <taxonObservations>        ");
+out.println("                           <authNameId>"+speciesInfoArray[i]+"</authNameId>       ");
+out.println("                           <originalAuthority>"+nullValue+"</originalAuthority>       ");
+out.println("                           <strataComposition>        ");
+out.println("                                   <strataType>"+nullValue+"</strataType>       ");
+out.println("                                   <percentCover>"+nullValue+"</percentCover>       ");
+out.println("                           </strataComposition>        ");
+out.println("                           <interptretation>        ");
+out.println("                                   <circum_id>"+nullValue+"</circum_id>       ");
+out.println("                                   <role>"+nullValue+"</role>       ");
+out.println("                                   <date>"+nullValue+"</date>       ");
+out.println("                                   <notes>"+nullValue+"</notes>       ");
+out.println("                           </interptretation>        ");
+out.println("                   </taxonObservations>        ");
+
+
+
+
+
+	}
+
+
 
 out.println("			<communityType>        ");
 out.println("				<classAssociation>"+classCommName+"</classAssociation>       ");
