@@ -6,9 +6,9 @@
  *    Authors: John Jarris
  *    Release: @release@
  *
- *   '$Author: farrell $'
- *     '$Date: 2002-12-28 00:30:40 $'
- * '$Revision: 1.3 $'
+ *   '$Author: harris $'
+ *     '$Date: 2003-01-03 18:17:09 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.*;
 import java.util.*;
 import java.sql.*;
+import java.net.*;
 import databaseAccess.*;
 
 /**
@@ -62,7 +63,100 @@ public class utility
 	public int outStringNum;
 	
 	private Connection conn = null;
-
+	private ResourceBundle defaultPropFile = ResourceBundle.getBundle("database");
+	
+	/**
+	 * due to problems connecting to the various vegbank databases and vegbank 
+	 * url-based services at runtime  'test' connection methods have been 
+	 * implemented to connect to all these sources upon startup of the system.
+	 * This method will make connections to:
+	 * 1] the vegbank plots database
+	 * 2] the vegbank plants database
+	 * 3] the vegbank community database
+	 * 4] the vegbank community data-retrieval servlet
+	 * 5] the vegbank plant data-retriveal servlet
+	 * 6] the vegbank user-authentication servlet
+	 * 7] the vegbank coordinate transform servlet
+	 * This method will print to stdout the results of each of these connections 
+	 * and will return true if all attempts are successful
+	 */
+	 public boolean testVegBankConnections()
+	 {
+		 System.out.println("utility > testing the VegBank network connections");
+		 boolean result = true;
+		 
+		 try
+		 {
+			 // fisrt test the database connections
+			 Class.forName("org.postgresql.Driver");
+			 DriverManager.setLoginTimeout(2);
+			 int timeout = DriverManager.getLoginTimeout();
+			 System.out.println("utility > database connection timeout: " + timeout);
+			 String plotConnectString = defaultPropFile.getString("connectString");
+			 System.out.println("utility > plotConnectString: " + plotConnectString);
+			 String plantConnectString = defaultPropFile.getString("plantdbconnectstring");
+			 System.out.println("utility > plantConnectString: " + plantConnectString);
+			 String communityConnectString = defaultPropFile.getString("communitydbconnectstring");
+			 System.out.println("utility > communityConnectString: " + communityConnectString);
+			 System.out.println("utility > testing the plots database connection");
+			 
+			 try { Connection testC = DriverManager.getConnection(plotConnectString, "datauser", ""); }
+			 catch(Exception e) { e.printStackTrace(); result = false;}
+			 System.out.println("utility > testing the plants database connection");
+			 try { Connection testC = DriverManager.getConnection(plantConnectString, "datauser", ""); }
+			 catch(Exception e) { e.printStackTrace(); result = false;}
+			 System.out.println("utility > testing the community database connection");
+			 try{Connection testC = DriverManager.getConnection(communityConnectString, "datauser", ""); }
+			 catch(Exception e) { e.printStackTrace(); result = false;}
+			 
+			 // next test the servlet connections
+			 // create a vector to store the urls for testing
+			 Vector testUrls = new Vector();
+			 String authenticationServletHost = defaultPropFile.getString("authenticationServletHost");
+			 testUrls.addElement("http://"+authenticationServletHost+"/framework/servlet/usermanagement");
+			 
+			 String plantRequestServletHost = defaultPropFile.getString("plantRequestServletHost");
+			 testUrls.addElement("http://"+plantRequestServletHost+"/framework/servlet/DataRequestServlet");
+			 String communityRequestServletHost = defaultPropFile.getString("communityRequestServletHost");
+			 testUrls.addElement("http://"+communityRequestServletHost+"/framework/servlet/DataRequestServlet");
+			 String geoCoordRequestServletHost = defaultPropFile.getString("geoCoordRequestServletHost");
+			 testUrls.addElement("http://"+geoCoordRequestServletHost+"/framework/servlet/framework");
+			 
+			 for (int ii = 0; ii < testUrls.size(); ii++) 
+			 {
+				 String url = (String)testUrls.elementAt(ii);
+				 System.out.println("utility > testing url: " + url);
+				 URL u;
+				 URLConnection uc;
+				 u = new URL(url);
+				 uc = u.openConnection();
+				 String header = uc.getHeaderField("date");
+				 System.out.println("utility date: > " + header);
+				 HttpURLConnection hcon = (HttpURLConnection) u.openConnection();
+				 int resCode = 0;
+				 String resMessage = null;
+				 try
+				 {
+					 resCode = hcon.getResponseCode();
+					 resMessage = hcon.getResponseMessage();
+				 }
+				 catch(Exception e) { e.printStackTrace(); result = false;}
+				 System.out.println("utility http status code: > " + resCode);
+				 System.out.println("utility http status message : > " + resMessage);
+			 }
+			 
+	
+			 
+			 
+		 }
+		 catch(Exception e)
+		 {
+			 e.printStackTrace();
+			 result = false;
+		 }
+		 
+		 return (result);
+	 }
 
 
 	 /**
@@ -581,6 +675,9 @@ public class utility
 	 */
 	public static void main(String[] args)
 	{
+		utility u = new utility();
+		u.testVegBankConnections();
+/*		
 		if (args.length >= 1)
 		{
 			//get the plugin named
@@ -628,6 +725,7 @@ public class utility
 			System.out.println(" levels: {1=registered 2=certified 3=professional 4=senior 5=manager}");
 			System.out.println("3] changepassword email host newpassword ");
 		}
+*/		
 	}
 	
 

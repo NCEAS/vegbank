@@ -7,8 +7,8 @@
 * Release: @release@
 *
 *   '$Author: harris $'
-*   '$Date: 2003-01-02 21:38:18 $'
-*   '$Revision: 1.8 $'
+*   '$Date: 2003-01-03 18:17:09 $'
+*   '$Revision: 1.9 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -1876,8 +1876,7 @@ public class DBinsertPlotSource {
 
 			// update the debugging stringbuffer
 			debug.append("<plotId>" + plotId + "</plotId> \n");
-			debug.append(
-				"<observationCode>" + observationCode + "</observationCode>\n");
+			debug.append("<observationCode>" + observationCode + "</observationCode>\n");
 			debug.append("<obsStartDate>" + startDate + "</obsStartDate>\n");
 			debug.append("<obsStopDate>" + stopDate + "</obsStopDate> \n");
 
