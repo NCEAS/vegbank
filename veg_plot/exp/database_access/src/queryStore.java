@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-07-26 01:26:22 $'
- * 	'$Revision: 1.10 $'
+ *  '$Date: 2002-07-26 15:13:50 $'
+ * 	'$Revision: 1.11 $'
  *
  *
  */
@@ -415,12 +415,49 @@ public void getPlotId(String queryElement, String queryElementType)
 	// most of the database attributes are denormalized to two tables:
 	// 'plotSiteSummary' and 'plotSpeciesSum'
 	String action="select";
-	// HANDLE THE PLOTID'S A LITTLE DIFFERENTLY BECAUSE THEY ARE INTEGERS
 	StringBuffer sb = new StringBuffer();
+	// HANDLE THE PLOTID'S A LITTLE DIFFERENTLY BECAUSE THEY ARE INTEGERS
 	if (queryElementType.equals("PLOTID") )
 	{
 		sb.append("select DISTINCT PLOT_ID from "+queryTableName+" where ");
 		sb.append("PLOT_ID = " + queryElement);
+	}
+	// ALSO HANDLE THE PLANT TAXA QUERY DIFFERENTLY -- THERE MAY BE MULTIPLE 
+	else if ( queryElementType.equalsIgnoreCase("AUTHORNAMEID") )
+	{
+		String taxonName = queryElement;
+		//sb.append("select  distinct(PLOTSITESUMMARY.PLOT_ID)  in ");
+			// DEPENDING ON THE NUMBER OF TAXA COMPOSE A DIFFERENT SUB-QUERY
+			if ( taxonName.indexOf(",") >0 )
+			{
+				StringTokenizer st = new StringTokenizer(taxonName, ",");
+				int num = st.countTokens();
+				sb.append(" (SELECT DISTINCT PLOT_ID from PLOTSPECIESSUM where  PLOT_ID in ( ");
+				for (int i=0;i<num; i++) 
+				{
+					String buf = st.nextToken().trim();
+					if ( i == (num-1) )
+					{
+						sb.append(" select PLOT_ID from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+buf.toUpperCase()+"%' ) )");
+					}
+					else
+					{
+						sb.append(" select PLOT_ID from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+buf.toUpperCase()+"%' ");
+						sb.append(" intersect ");
+					}
+				}
+			}
+	}
+	// ALSO HANDLE THE COMMUNITIES A LITTLE DIFFERENTLY BECAUSE THEY CAN 
+	// BE EITHER A CODE OR A NAME
+	else if ( queryElementType.equalsIgnoreCase("CURRENTCOMMUNITY") )
+	{
+		sb.append("select DISTINCT PLOT_ID from  PLOTSITESUMMARY  where  PLOT_ID in ");
+		sb.append( "(select PLOT_ID from  PLOTSITESUMMARY where upper(CURRENTCOMMUNITY) like '%");
+		sb.append(queryElement.toUpperCase()+"%'  ");
+		sb.append(" union ");
+		sb.append( " select PLOT_ID from  PLOTSITESUMMARY where upper(CURRENTCOMMUNITYCODE) like '%");
+		sb.append(queryElement.toUpperCase()+"%' ) ");
 	}
 	else
 	{

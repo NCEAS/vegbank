@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-07-26 01:26:21 $'
- * '$Revision: 1.14 $'
+ *    '$Date: 2002-07-26 15:13:49 $'
+ * 	'$Revision: 1.15 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -717,8 +717,7 @@ public class  sqlMapper
  * @param transformedSringNum integer defining number of query elements
  */
 
-	public void developPlotQuery(String[] transformedString, 
-		int transformedStringNum)
+	public void developPlotQuery(String[] transformedString, int transformedStringNum)
 	{
 		try 
 		{
