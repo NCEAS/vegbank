@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-30 13:11:48 $'
- *	'$Revision: 1.16 $'
+ *	'$Date: 2004-06-09 22:41:28 $'
+ *	'$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-04-30 13:11:48 $'
- *     '$Revision: 1.16 $'
+ *     '$Date: 2004-06-09 22:41:28 $'
+ *     '$Revision: 1.17 $'
  */
 
 import java.sql.PreparedStatement;
@@ -170,7 +170,7 @@ public class UserDatabaseAccess
 			.append(" exp_region_c, exp_region_c_veg, exp_region_c_flor, exp_region_c_nvc, ")
 			.append(" esa_sponsor_name_a,  esa_sponsor_email_a, ")
 			.append(" esa_sponsor_name_b,  esa_sponsor_email_b, ")
-			.append(" peer_review, addl_stmt, usr_id) ")
+			.append(" peer_review, addl_stmt, usr_id, certificationstatus) ")
 			.append(" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
 		
 		// create the statement
@@ -211,6 +211,7 @@ public class UserDatabaseAccess
 		pstmt.setString(33, form.getPeerReview());
 		pstmt.setString(34, form.getAddlStmt());
 		pstmt.setLong(35, form.getUsrId());
+		pstmt.setString(36, form.getCertificationstatus());
 		
 		// execute the insert
 		
