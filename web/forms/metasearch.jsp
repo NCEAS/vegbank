@@ -5,9 +5,18 @@
 <%@ taglib uri="/WEB-INF/vegbank.tld" prefix="vegbank" %>
 <html>
 <script language="javascript">
-function clearAndSubmit() {
-	document.metasearch_form.xwhereParams.value="";
+function viewAllMetadata() {
+	document.metasearch_form.xwhereParams.value="vb";
+	document.metasearch_form.clearSearch.value="1";
 	document.metasearch_form.submit();
+}
+
+function preSubmit() {
+	if (document.metasearch_form.xwhereParams.value == null ||
+		document.metasearch_form.xwhereParams.value == "") {
+		document.metasearch_form.xwhereParams.value="vb";
+		document.metasearch_form.clearSearch.value="1";
+	}
 }
 </script>
 <head>@defaultHeadToken@
@@ -19,12 +28,19 @@ if (xwhereGlue == null) {
 }
 
 String xwhereParams = request.getParameter("xwhereParams");
+String searchString = xwhereParams;
 if (xwhereParams == null) {
 	xwhereParams = "";
+	searchString = "";
+}
+
+String clearSearch = request.getParameter("clearSearch");
+if (clearSearch != null && clearSearch.equals("1")) {
+	searchString = "";
 }
 %>
 
-<title>VegBank Metasearch: <%= xwhereParams %></title>
+<title>VegBank Metasearch: <%= searchString %></title>
 
 <link type="text/css" href="@stylesheet@" rel="stylesheet">
 
@@ -36,17 +52,19 @@ if (xwhereParams == null) {
 <blockquote>
 
 
+<bean:define id="search" value="<%= searchString %>"/>
 <bean:define id="regexOp" value="<%= xwhereGlue %>"/>
-<bean:define id="search" value="<%= xwhereParams %>"/>
 <vegbank:get id="meta" select="keywords_count" where="where_keywords_grouped"
 		xwhereKey="xwhere_kw_match" xwhereEnable="true" xwhereSearch="true" perPage="-1"/>
 
 
 <logic:empty name="meta-BEANLIST">
+<logic:notEmpty name="search">
 <blockquote>
 	Nothing in the database matches your keywords.<br>
 	Please try again.
 </blockquote>
+</logic:notEmpty>
 </logic:empty>
 
 	<table align="center" cellpadding="0" cellspacing="0" border="0" bgcolor="#DDDDDD">
@@ -60,13 +78,14 @@ if (xwhereParams == null) {
 		<td></td>
 		<td>
 		<form action="@web_context@forms/metasearch.jsp" method="get" name="metasearch_form">
+			<input type="hidden" name="clearSearch" value="">
 			<span class="greytext">
 			&nbsp; Find anything in VegBank:
 			</span>  
 
 			<br>
-			 <input type="text" name="xwhereParams" size="30" value="<%= xwhereParams %>"/>
-		 	 <html:submit value="search"/>
+			 <input type="text" name="xwhereParams" size="30" value="<%= searchString %>"/>
+		 	 <html:submit value="search" onclick="javascript:preSubmit()"/>
 		</td>
 		</tr>
 		<tr><td></td><td align="right">
@@ -159,7 +178,7 @@ You searched for
 <logic:equal name="regexOp" value="or">any word in</logic:equal>
 '<i><%= xwhereParams %></i>'
 <br>
-Click here to <a href="javascript:clearAndSubmit()">view all metadata</a>
+Click here to <a href="javascript:viewAllMetadata()">view all metadata</a>
 </span>
 </center>
 </logic:notEmpty>
