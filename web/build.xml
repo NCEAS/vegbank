@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2005-03-15 17:45:56 $'
-* '$Revision: 1.151 $'
+* '$Author: mlee $'
+* '$Date: 2005-03-15 23:48:29 $'
+* '$Revision: 1.152 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -114,6 +114,7 @@
     <property name="workshop_src" value="./workshop"/>
     <property name="vegdocs.dir" value="${machine_url}/vegdocs"/>
     <property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
+    <property name="static_xmlserver" value="${vegdocs_server}/dataxml"/>
     <property name="vegbranch_src" value="./vegbranch"/>
     <!-- large binary files location:   targets that read from large binaries separate -->
     <property name="lrg_binary_src" value="${apache.document.root}/noncvs"/>
@@ -178,8 +179,8 @@
     <filter token="vegbranch_link" value="${vegdocs.dir}/vegbranch/"/>
     <filter token="vegbranch_demo_link" value="${vegdocs.dir}/vegbranch/docs/demo/"/>
     <filter token="searchplugins_link" value="${vegdocs.dir}/searchplugins/"/>
-    <filter token="xml_link" value="${vegdocs.dir}/xml/"/>
-    <filter token="NativeXMLIndexPage" value="${vegdocs.dir}/xml/vegbank-xml-index.html"/>
+    <filter token="xml_link" value="${vegdocs.dir}/dataxml/"/>
+    <filter token="NativeXMLIndexPage" value="${vegdocs.dir}/dataxml/vegbank-xml-index.html"/>
     <filter token="help_link" value="${vegdocs.dir}/help/"/>
     <filter token="help" value="${vegdocs.dir}/help/"/>
     <filter token="manual_link" value="${vegdocs.dir}/help/manual/"/>
@@ -459,10 +460,19 @@
   <!--
 	* TARGET TO PUT THE DICTIONARY HTML DOCS INTO THE CORRECT PLACE
 -->
-  <target name="dictionary" depends="init,getContextName" description="=&gt; Dist. the new data dictionary to server (calls other ant target) ">
+  <target name="dictionary" depends="tokenfiles,getContextName" description="=&gt; Dist. the new data dictionary to server (calls other ant target) ">
     <!-- calls ant to run a different ant target which creates the vegbank dictionary based on logical fields only -->
     <echo>calling ../docs/xml with webapp '${webapp}'</echo>
     <ant dir="../docs/xml" target="logical"/>
+    
+  </target>
+  <target name="dataxml" depends="tokenfiles" description="=&gt; Dist. the documentation files and xml files in ../docs/xml/dataxml to server ">
+     <copy todir="${static_xmlserver}" flatten="true" filtering="yes">
+      <fileset dir="./dataxml">
+        <include name="*.html"/>
+      </fileset>
+    </copy>
+    <!-- copy xml files too -->
     <ant dir="../docs/xml" target="dist-dataxml"/>
   </target>
   <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
@@ -727,7 +737,7 @@
 MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
 	-->
   </target>
-  <target name="deploy-all" depends="views-autogen, deploy, dictionary, manual, vegbranch-dist-all" description="=&gt; all in deploy plus slow rarely updated stuff"/>
+  <target name="deploy-all" depends="views-autogen, deploy, dictionary, manual, vegbranch-dist-all, dataxml" description="=&gt; all in deploy plus slow rarely updated stuff"/>
   <target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
     <property name="webapp" value="vegtest"/>
     <antcall target="deploy"/>
