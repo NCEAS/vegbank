@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-24 01:24:59 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-02-27 19:13:52 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -132,7 +132,7 @@ public class LogUtility
 				}
 				//System.out.println("LU--"+message.toString());
 
-				log.debug(tmp);
+				log.error(tmp);
 			}
 			//System.out.println(tmp);
 		}

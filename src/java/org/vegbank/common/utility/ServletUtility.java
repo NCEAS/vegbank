@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-11-25 19:28:20 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2004-02-27 19:13:52 $'
+ *  '$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ package org.vegbank.common.utility;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -33,10 +34,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -44,10 +47,12 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.upload.FormFile;
 import org.apache.tools.ant.filters.ReplaceTokens;
 
 import com.Ostermiller.util.LineEnds;
@@ -511,6 +516,35 @@ public class ServletUtility
 		 }
 		
 		return sb.toString();
+	}
+
+	/**
+	 * Takes a File and  unzips it 
+	 * 
+	 */
+	public static Collection unZip(FormFile inFile) throws Exception 
+	{
+		Vector fileList = new Vector();
+		InputStream in = inFile.getInputStream();
+		ZipInputStream zis = new ZipInputStream(in);
+		ZipEntry e;
+		// Loop over every ZipEntry in ZIP file
+		while( ( e = zis.getNextEntry()) != null)
+		{
+			File outFile = new File(e.getName());
+			FileOutputStream out = new FileOutputStream(outFile);
+			
+			byte[] b = new byte[512];
+			int len = 0;
+			while ( ( len=zis.read(b) ) != -1)
+			{
+				out.write(b,0,len);
+			}
+			fileList.add( new FileWrapper(outFile) );
+		}
+		zis.close();
+		
+		return fileList;
 	}
 }	
 

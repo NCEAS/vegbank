@@ -5,8 +5,8 @@
  *             National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-18 00:55:22 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-02-27 19:13:52 $'
+ *	'$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,16 +41,6 @@ public class DatabaseUtility
 
 	public Vector outVector;
 	public int vecElementCnt;
-	public String driverClass;
-	public String connectionString;
-	public String login;
-	public String passwd;
-	public String logFile;
-	public int minConnections;
-	public int maxConnections;
-	public String maxConnectionTime;
-	public int maxConnectionUses;
-
 	public String outArray[]=new String[100000];
 	public int outArrayNum;
 
@@ -62,152 +52,6 @@ public class DatabaseUtility
 
 	private ResourceBundle defaultPropFile = ResourceBundle.getBundle("database");
 	private Connection conn = null;
-	
-	
-	/**
-	 * due to problems connecting to the various vegbank databases and vegbank 
-	 * url-based services at runtime  'test' connection methods have been 
-	 * implemented to connect to all these sources upon startup of the system.
-	 * This method will make connections to:
-	 * 1] the vegbank plots database
-	 * 2] the vegbank plants database
-	 * 3] the vegbank community database
-	 * 4] the vegbank community data-retrieval servlet
-	 * 5] the vegbank plant data-retriveal servlet
-	 * 6] the vegbank user-authentication servlet
-	 * 7] the vegbank coordinate transform servlet
-	 * This method will print to stdout the results of each of these connections 
-	 * and will return true if all attempts are successful
-	 */
-	 public boolean testVegBankConnections()
-	 {
-		 System.out.println("DatabaseUtility > testing the VegBank network connections");
-		 boolean result = true;
-		 
-		 try
-		 {
-			 // fisrt test the database connections
-			 Class.forName("org.postgresql.Driver");
-			 DriverManager.setLoginTimeout(2);
-			 int timeout = DriverManager.getLoginTimeout();
-			 System.out.println("DatabaseUtility > database connection timeout: " + timeout);
-			 String plotConnectString = defaultPropFile.getString("connectString");
-			 System.out.println("DatabaseUtility > plotConnectString: " + plotConnectString);
-			 String plantConnectString = defaultPropFile.getString("plantdbconnectstring");
-			 System.out.println("DatabaseUtility > plantConnectString: " + plantConnectString);
-			 String communityConnectString = defaultPropFile.getString("communitydbconnectstring");
-			 System.out.println("DatabaseUtility > communityConnectString: " + communityConnectString);
-			 System.out.println("DatabaseUtility > testing the plots database connection");
-			 
-			 try { Connection testC = DriverManager.getConnection(plotConnectString, "datauser", ""); }
-			 catch(Exception e) { e.printStackTrace(); result = false;}
-			 System.out.println("DatabaseUtility > testing the plants database connection");
-			 try { Connection testC = DriverManager.getConnection(plantConnectString, "datauser", ""); }
-			 catch(Exception e) { e.printStackTrace(); result = false;}
-			 System.out.println("DatabaseUtility > testing the community database connection");
-			 try{Connection testC = DriverManager.getConnection(communityConnectString, "datauser", ""); }
-			 catch(Exception e) { e.printStackTrace(); result = false;}
-			 
-			 // next test the servlet connections
-			 // create a vector to store the urls for testing
-			 Vector testUrls = new Vector();
-			 String authenticationServletHost = defaultPropFile.getString("authenticationServletHost");
-			 testUrls.addElement("http://"+authenticationServletHost+"/vegbank/servlet/usermanagement");
-			 
-			 String plantRequestServletHost = defaultPropFile.getString("plantRequestServletHost");
-			 testUrls.addElement("http://"+plantRequestServletHost+"/vegbank/servlet/DataRequestServlet");
-			 String communityRequestServletHost = defaultPropFile.getString("communityRequestServletHost");
-			 testUrls.addElement("http://"+communityRequestServletHost+"/vegbank/servlet/DataRequestServlet");
-			 String geoCoordRequestServletHost = defaultPropFile.getString("geoCoordRequestServletHost");
-			 testUrls.addElement("http://"+geoCoordRequestServletHost+"/vegbank/servlet/framework");
-			 
-			 for (int ii = 0; ii < testUrls.size(); ii++) 
-			 {
-				 String url = (String)testUrls.elementAt(ii);
-				 System.out.println("DatabaseUtility > testing url: " + url);
-				 URL u;
-				 URLConnection uc;
-				 u = new URL(url);
-				 uc = u.openConnection();
-				 String header = uc.getHeaderField("date");
-				 System.out.println("DatabaseUtility date: > " + header);
-				 HttpURLConnection hcon = (HttpURLConnection) u.openConnection();
-				 int resCode = 0;
-				 String resMessage = null;
-				 try
-				 {
-					 resCode = hcon.getResponseCode();
-					 resMessage = hcon.getResponseMessage();
-				 }
-				 catch(Exception e) { e.printStackTrace(); result = false;}
-				 System.out.println("DatabaseUtility http status code: > " + resCode);
-				 System.out.println("DatabaseUtility http status message : > " + resMessage);
-			 }
-			 
-	
-			 
-			 
-		 }
-		 catch(Exception e)
-		 {
-			 e.printStackTrace();
-			 result = false;
-		 }
-		 
-		 return (result);
-	 }
-
-
-	 /**
-	 * Method to read a database properties file and return the salient attributes 
-	 * to be passed to the connection pooling class   including:
-	 *
-	 * dbDriver:        JDBC driver. e.g. 'oracle.jdbc.driver.OracleDriver'<br>
-	 * dbServer:        JDBC connect string. e.g. 'jdbc:oracle:thin:@203.92.21.109:1526:orcl'<br>
-	 * dbLogin:         Database login name.  e.g. 'Scott'<br>
-	 * dbPassword:      Database password.    e.g. 'Tiger'<br>
-	 * minConns:        Minimum number of connections to start with.<br>
-	 * maxConns:        Maximum number of connections in dynamic pool.<br>
-	 * logFileString:   Absolute path name for log file. e.g. 'c:/temp/mylog.log' <br>
-	 * maxConnTime:     Time in days between connection resets. (Reset does a basic cleanup)<br>
-	 *
-	 *  @param	propFile  the database properties file
-	 *  @param	accessType - can include insert or query - min/max conns will vary.
-	 *  @exception   MissingResourceException
-	 */
-	 public void getDatabaseParameters(String propFile, String accessType)
-	 {
-		 String s = null;
-		 try 
-		 {
-			 ResourceBundle rb = ResourceBundle.getBundle(propFile);
-			 driverClass=rb.getString("driverClass");
-			 connectionString=rb.getString("connectString");
-			 login=rb.getString("user");
-			 passwd=rb.getString("password");
-			 logFile=rb.getString("logFile");
-			 maxConnectionUses = (new Double(rb.getString("maxConnectionUses"))).intValue();
-			 
-			 if (accessType.equals("query")) 
-			 {	
-				minConnections = (new Double(rb.getString("query.minConnections"))).intValue();
-				maxConnections = (new Double(rb.getString("query.maxConnections"))).intValue();
-			 } //end if
-			 
-			 if (accessType.equals("insert")) 
-			 {
-				minConnections = (new Double(rb.getString("insert.minConnections"))).intValue();
-				maxConnections = (new Double(rb.getString("insert.maxConnections"))).intValue();
-			 } //end if
-		 }
-		 catch (MissingResourceException e) 
-		 {
-			 System.out.println("DatabaseUtility > failed in getDatabaseParameters " +e.getMessage());
-       e.printStackTrace();
-		 }
-	}
-
-
 
 	/**
 	*  this method will take, as input a StringWriter object and return a String Array 
@@ -927,6 +771,191 @@ public class DatabaseUtility
 			}
 			String value = (String)options.handleGetObject(optionName);
 			return value;
+	}
+
+
+	/**
+	 * Generate the sql for max, min date range comparisons 
+	 * 
+	 * @param maxDate
+	 * @param minDate
+	 * @param endDateFieldName
+	 * @param endDateFieldName
+	 * @param allowNulls
+	 * @param conjunctionToUse
+	 * @return String -- SQL fragment
+	 */
+	public static String handleMaxMinNullDateRange(
+		String minDate,
+		String maxDate,
+		String startDateFieldName,
+		String endDateFieldName,
+		boolean allowNulls,
+		String conjunctionToUse)
+	{
+		StringBuffer sb = new StringBuffer(256);
+	
+		if (Utility.isStringNullOrEmpty(maxDate) && Utility.isStringNullOrEmpty(minDate))
+		{
+			// Both empty nothing to be done
+		}
+		else
+		{
+	
+			sb.append(conjunctionToUse);
+			sb.append(" ( ");
+	
+			if (!Utility.isStringNullOrEmpty(minDate))
+			{
+				sb.append(" ( ").append(startDateFieldName).append(" >= '").append(minDate).append("' ");
+				if ( allowNulls)
+				{
+					sb.append("  OR ").append(startDateFieldName).append(" IS NULL ");
+				}
+				sb.append(" ) ");
+			}
+	
+			if (!Utility.isStringNullOrEmpty(maxDate))
+			{
+				sb.append(" AND ( ").append(endDateFieldName).append(" <= '").append(maxDate).append("' ");
+				if ( allowNulls)
+				{
+					sb.append("  OR ").append(startDateFieldName).append(" IS NULL ");
+				}
+				sb.append(" ) ");
+			}
+			
+			sb.append(" ) ");
+		}
+		return sb.toString();
+	}
+
+
+	/**
+	 * Generate the sql for max, min comparisons 
+	 * 
+	 * @param max
+	 * @param min
+	 * @param nullsAllowed
+	 * @param fieldName
+	 * @return
+	 */
+	public static String handleMaxMinNull(
+		String max,
+		String min,
+		boolean nullsAllowed,
+		String fieldName,
+		String conjunctionToUse)
+	{
+		StringBuffer sb = new StringBuffer(256);
+	
+		if (Utility.isStringNullOrEmpty(max) && Utility.isStringNullOrEmpty(min))
+		{
+			// Both empty nothing to be done
+		}
+		else
+		{
+	
+			sb.append(conjunctionToUse);
+	
+			if (nullsAllowed)
+			{
+				sb.append(" ( ");
+			}
+	
+			sb.append(" ( ");
+			if (!Utility.isStringNullOrEmpty(max))
+			{
+				sb.append(" ").append(fieldName).append(" <= ").append(max).append(" ");
+	
+				if (!Utility.isStringNullOrEmpty(min))
+				{
+					sb.append(" AND ");
+				}
+			}
+	
+			if (!Utility.isStringNullOrEmpty(min))
+			{
+				sb.append(" ").append(fieldName).append(" >= ").append(min).append(" ");
+			}
+			sb.append(" ) ");
+	
+			if (nullsAllowed)
+			{
+				sb.append("  OR (").append(fieldName).append(" IS NULL )  )");
+			}
+		}
+		return sb.toString();
+	}
+
+
+	/**
+	 * Is the ANYVALUE present or is this a list of nulls
+	 * which is functionally the same.
+	 * 
+	 * @param values
+	 * @return
+	 */
+	public static boolean isAnyValueAllowed(String[] values, String ANYVALUE)
+	{
+		boolean allNulls = true;
+	
+		for (int i = 0; i < values.length; i++)
+		{
+			if ( values[i] != null )
+			{
+				allNulls = false;
+				// Is ANYVALUE present
+				if ( values[i].equals(ANYVALUE))
+				{
+					return true;
+				}
+			}
+		}
+		return allNulls;
+	}
+
+
+	/**
+	 * Generated SQL for option boxs where many options can be selected
+	 * 
+	 * Special handling for values ANY, IS NULL and IS NOT NULL 
+	 * Needs to handle a list of nulls 
+	 * 
+	 * @param values
+	 * @param fieldName
+	 * @return
+	 */
+	public static String handleValueList(String[] values, String fieldName, String conjunction)
+	{
+		StringBuffer sb = new StringBuffer(1024);
+		String ANYVALUE = "ANY";
+	
+		// Are there any constraints
+		if (values != null && values.length != 0 && !isAnyValueAllowed(values, ANYVALUE) )
+		{
+			sb.append(conjunction)
+				.append(" ( ").append(fieldName).append(" = '").append(values[0]).append("'");
+	
+			for (int i = 0; i < values.length; i++)
+			{
+				if ( values[i] == null)
+				{
+					// Do nothing
+				}
+				else if (values[i].trim().equals("IS NOT NULL")
+					|| values[i].trim().equals("IS NULL"))
+				{
+					sb.append(" OR ").append(fieldName).append(" ").append(values[i]).append(" ");
+				}
+				else
+				{
+					sb.append(" OR ").append(fieldName).append(" ='").append(values[i]).append("'");
+				}
+			}
+			sb.append(" ) ");
+		}
+		return sb.toString();
 	}
 	
 

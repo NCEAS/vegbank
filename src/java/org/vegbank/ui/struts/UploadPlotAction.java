@@ -1,9 +1,9 @@
 package org.vegbank.ui.struts;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -17,11 +17,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.vegbank.common.utility.FileWrapper;
+import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.datafileexchange.DataFileDB;
 import org.vegbank.plots.datasource.VegbankXMLUpload;
 import org.vegbank.plots.datasource.VegbankXMLUpload.LoadingErrors;
-//import org.vegbank.plots.rmi.DataSourceClient;
+
 
 /*
  * '$RCSfile: UploadPlotAction.java,v $'
@@ -29,8 +31,8 @@ import org.vegbank.plots.datasource.VegbankXMLUpload.LoadingErrors;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-19 17:49:50 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-02-27 19:13:52 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,7 +69,7 @@ public class UploadPlotAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		System.out.println(" In UploadPlotAction ");
+		LogUtility.log(" In UploadPlotAction ", LogUtility.TRACE);
 		ActionErrors errors = new ActionErrors();
 		LoadingErrors loadingErrors = null;
 
@@ -81,58 +83,113 @@ public class UploadPlotAction extends Action
 		boolean upload = theForm.isUpload();
 		
 		FormFile file = theForm.getPlotFile();
+		String usersFileName = file.getFileName();
+		// Check if has zip extension
 		String savedFileName = null;
 		
-		try 
+		Collection files = new Vector();
+		
+		String extension = this.getFileExtension(  file.getFileName());
+		if ( extension.equalsIgnoreCase("ZIP") )
 		{
-			savedFileName = this.saveAndRegisterFile(file);
+				try
+				{
+					// Need to Unzip
+					 files = ServletUtility.unZip(file);
+				} 
+				catch (Exception e)
+				{
+					errors.add(
+							ActionErrors.GLOBAL_ERROR,
+							new ActionError(
+								"errors.action.failed",
+								e.getMessage()));
+					LogUtility.log("Added error: " + e.getMessage(), LogUtility.ERROR);
+				}
 		}
-		catch (Exception e) {
-			errors.add(
-				ActionErrors.GLOBAL_ERROR,
-				new ActionError(
-					"errors.database",
-					e.getMessage()));
+		else
+		{
+			try
+			{
+				files.add( new FileWrapper(file) );
+			} 
+			catch (Exception e) 
+			{
+				errors.add(
+					ActionErrors.GLOBAL_ERROR,
+						new ActionError(
+							"errors.action.failed",
+								e.getMessage()));
+				LogUtility.log("Added error: " + e.getMessage(), LogUtility.ERROR);
+			}
+		}
+
+		LogUtility.log("Got " + files.size() + " files ");
+		if ( files.size() > 1 )
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+				"errors.action.failed", "Vegbank can only handle one file at a time ( even if zipped archive )"));
+			LogUtility.log("Added error: " + files.size() + " where uploaded at once by user");	
+		}
+		else
+		{
+			FileWrapper thisFile = (FileWrapper) files.iterator().next();
+			
+			String thisExtension = this.getFileExtension(  thisFile.getFileName());
+			if ( thisExtension.equalsIgnoreCase("XML") )
+			{
+				try 
+				{
+					savedFileName = this.saveAndRegisterFile(thisFile);
+				}
+				catch (Exception e) {
+					errors.add(
+						ActionErrors.GLOBAL_ERROR,
+						new ActionError(
+							"errors.action.failed",
+							e.getMessage()));
+				}
+				
+				try
+				{	
+					// Each format is handled differently
+					switch (archiveType)
+					{
+						case UploadPlotForm.NATURESERVE_FORMAT :
+							LogUtility.log("UploadPlotAction: NATURESERVE_FORMAT format uploaded", LogUtility.INFO);
+							break;
+				
+						case UploadPlotForm.VEGBANK_ACCESS_FORMAT :
+							LogUtility.log("UploadPlotAction: VEGBANK_ACCESS_FORMAT format uploaded", LogUtility.INFO);
+							break;
+				
+						case UploadPlotForm.VEGBANK_XML_FORMAT :
+							LogUtility.log("UploadPlotAction: VEGBANK_XML_FORMAT format uploaded", LogUtility.INFO);
+							loadingErrors = this.uploadVegbankXML(savedFileName, validate,
+									upload, rectify);
+							break;
+				
+						default :
+							LogUtility.log("UploadPlotAction: Unknown format uploaded", LogUtility.WARN);
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+									"Unknown format type uploaded"));
+					}
+				} catch (Exception e)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"errors.action.failed", e.getMessage()));
+					LogUtility.log("Added error: " + e.getMessage(), e);
+				}
+			}
+			else 
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					"errors.action.failed", "Vegbank can only upload a *.xml file or a zipped *.xml file" ));
+				LogUtility.log("Added error: Attempt to load a file with extension  " + thisExtension + " failed", LogUtility.WARN);
+			}
 		}
 		//destroy the temporary file created
 		file.destroy();
-		
-		try
-		{	
-			// Each format is handled differently
-			switch ( archiveType )
-			{
-				case UploadPlotForm.NATURESERVE_FORMAT:
-					System.out.println("UploadPlotAction: NATURESERVE_FORMAT format uploaded");
-					this.getPlotNamesFromPlotFile(savedFileName, true, "tnc", request);
-					break;
-					
-				case UploadPlotForm.VEGBANK_ACCESS_FORMAT:
-					System.out.println("UploadPlotAction: VEGBANK_ACCESS_FORMAT format uploaded");
-					break;
-					
-				case UploadPlotForm.VEGBANK_XML_FORMAT:
-					System.out.println("UploadPlotAction: VEGBANK_XML_FORMAT format uploaded");
-					loadingErrors = this.uploadVegbankXML(savedFileName, validate, upload, rectify);
-					break;
-					
-				default:
-					System.out.println("UploadPlotAction: Unknown format uploaded");
-					errors.add( ActionErrors.GLOBAL_ERROR,
-						new ActionError("Unkown format type uploaded"));
-			}
-		} 
-		catch ( Exception e )
-		{
-			errors.add(
-				ActionErrors.GLOBAL_ERROR,
-				new ActionError(
-				"errors.action.failed",
-				e.getMessage())
-			);
-			System.out.println("Added error: " + e.getMessage());
-			e.printStackTrace();
-		}
 
 
 		// Report any errors we have discovered back to the original form
@@ -146,6 +203,17 @@ public class UploadPlotAction extends Action
 		return mapping.findForward("DisplayLoadReport");
 	}
 	
+	/**
+	 * @param string
+	 * @return
+	 */
+	private String getFileExtension(String string)
+	{
+		String extension = string.substring(string.lastIndexOf('.') + 1);
+		LogUtility.log("Got extension: " + extension + " from: " + string, LogUtility.INFO);
+		return extension;
+	}
+
 	/**
 	 * @param savedFileName
 	 */
@@ -164,15 +232,15 @@ public class UploadPlotAction extends Action
 	 * @param FormFile -- the uploaded file
 	 * @return String -- the fileName used for saving
 	 */
-	private String saveAndRegisterFile(FormFile file)
+	private String saveAndRegisterFile(FileWrapper file)
 		throws Exception
 	{
+		// Need to get a InputStream
+		InputStream stream = file.getInputStream();
+		
 		DataFileDB filedb = new DataFileDB();
 		int fileName = filedb.getNewAccessionId();
 		String fileNameAndPath = originalDataStore + "/" + new Integer(fileName).toString();
-		//retrieve the file data
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		InputStream stream = file.getInputStream();
 
 		//write the file to the file specified
 		OutputStream bos = new FileOutputStream(fileNameAndPath);
@@ -183,8 +251,8 @@ public class UploadPlotAction extends Action
 			bos.write(buffer, 0, bytesRead);
 		}
 		bos.close();
-		System.out.println(
-			"UploadPlotAction: The file has been written to \"" + fileNameAndPath + "\"");
+		LogUtility.log(
+			"UploadPlotAction: The file has been written to \"" + fileNameAndPath + "\"", LogUtility.INFO);
 
 		//close the stream
 		stream.close();
@@ -192,80 +260,10 @@ public class UploadPlotAction extends Action
 		//register the document with the database
 		filedb.registerDocument(
 			fileName,
-			file.getFileSize(),
+			file.getFileSize(),  
 			file.getFileName(),
 			originalDataStore);
 			
 		return fileNameAndPath;
 	}
-	
-	private Vector getPlotNamesFromPlotFile(
-		String fileName,
-		boolean useRMI,
-		String format,
-		HttpServletRequest request) throws RMIServerBusyException
-	{
-		Vector plots = new Vector();
-
-//		if (useRMI)
-//		{
-			// Need to use the RMIServer to read a mdb file 
-//			DataSourceClient rmiClient =
-//				new DataSourceClient(rmiServer, "" + rmiServerPort);
-
-			// Is the RMI Server free 
-//			String location = rmiClient.getFileUploadLocation();
-
-//			if (location == null)
-//			{
-//				throw new RMIServerBusyException();
-//			}
-//			else
-//			{
-//				boolean sendResults =
-//					rmiClient.putMDBFile(
-//						fileName,
-//						format,
-//						location);
-
-//				System.out.println(
-//					"PlotUploadAction > RMI file send results: "
-//						+ sendResults);
-
-				//validate that the plot archive is real
-//				boolean fileValidityResults =
-//					rmiClient.isMDBFileValid(location);
-//				System.out.println(
-//					"PlotUploadAction > file validity at RMI server: "
-//						+ fileValidityResults);
-
-				// get the name of the plots
-//				System.out.println(
-//					"PlotUploadAction > instantiating an rmi client on: "
-//						+ rmiServer);
-//				rmiClient = new DataSourceClient(rmiServer, "" + rmiServerPort);
-//				plots = rmiClient.getPlotNames(format);
-
-//				request.getSession().setAttribute(
-//					"rmiFileUploadLocation",
-//					location);
-//			}
-//		}
-		//		  else 
-		//		  {
-		//			  // TODO: Remove hard coding                    
-		//			  PlotDataSource pds = new PlotDataSource("VegbankXMLPlugin");
-		//			  plots = pds.getPlotNames();
-		//		  }
-		//			
-		System.out.println(
-			"DataSubmitServlet > number of plots in archive: " + plots.size());
-		return plots;
-	}
-	
-	public class RMIServerBusyException extends Exception
-	{
-		
-	}
-
 }
