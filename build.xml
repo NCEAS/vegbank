@@ -5,9 +5,9 @@
   * Global build script for vegclass. This simply allows running all the sub 
   * scripts from one place.
   *
-  *     '$Author: farrell $'
-  *     '$Date: 2003-10-22 19:32:32 $'
-  *     '$Revision: 1.22 $'
+  *     '$Author: anderson $'
+  *     '$Date: 2003-10-23 23:33:01 $'
+  *     '$Revision: 1.23 $'
 --> 
 <project name="vegclass" default="jar" basedir=".">
 
@@ -32,6 +32,8 @@
     <property name="sql.src.dir" value="${src.dir}/sql"/>
     <property name="ant.style.dir" location="${env.ANT_HOME}/etc" />
     <property name="web.docroot" location="${env.TOMCAT_HOME}/webapps" />
+    <property name="web.inf" location="${web.docroot}/WEB-INF" /> 
+    <property name="web.lib.dir" location="${web.inf}/lib" /> 
 
     <property name="vegbank.home.dir" location="/usr/vegbank"/>
     
@@ -79,7 +81,7 @@
     <ant dir="veg_taxa" target="test" inheritAll="false"/>
   </target>
   
-  <target name="deploy" depends="jar"
+  <target name="deploy" depends="jar,deploy-prepare"
           description="==> deploys vegclass module jars, html and other resources">
     
     <ant dir="common" target="deploy" inheritAll="false"/>
@@ -87,6 +89,12 @@
     <ant dir="veg_taxa" target="deploy" inheritAll="false"/>
     <ant dir="veg_plot" target="deploy" inheritAll="false"/>
   
+  </target>
+
+  <target name="deploy-prepare">
+    <mkdir dir="${web.docroot}"/>
+    <mkdir dir="${web.inf}"/>
+    <mkdir dir="${web.lib.dir}"/>
   </target>
 
   <target name="clean" depends="prepare" description="==> Remove all generated files">
