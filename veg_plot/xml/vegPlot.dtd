@@ -76,20 +76,25 @@
 			<!ELEMENT stratumCover (#PCDATA)>
 			<!ELEMENT stratumHeight (#PCDATA)>
 
-		<!ELEMENT taxonObservations (authNameId, originalAuthority,  strataComposition, interptretation)>
+		<!ELEMENT taxonObservations (authNameId, originalAuthority, strataComposition, interptretation)>
 			<!ELEMENT authNameId (#PCDATA)>
 			<!ELEMENT originalAuthority (#PCDATA)>
 			<!ELEMENT strataComposition (strataType, percentCover)>
 				<!ELEMENT strataType (#PCDATA)>
 				<!ELEMENT percentCover (#PCDATA)>	
 
-			<!ELEMENT interptretation (party, circum_id, role, date, notes)>
+			<!ELEMENT interpretation (party, taxonName, authority, usageStartDate, usageStopDate, circum_id, role, date, notes)>
+				<!ELEMENT party (#PCDATA)>
+				<!ELEMENT taxonName (#PCDATA)>
+				<!ELEMENT authority (#PCDATA)>
+				<!ELEMENT usageStartDate (#PCDATA)>
+				<!ELEMENT usageStopDate (#PCDATA)>
 				<!ELEMENT circum_id (#PCDATA)> 
 				<!ELEMENT role (#PCDATA)> 
 				<!ELEMENT date (#PCDATA)> 
 				<!ELEMENT notes (#PCDATA)> 
 	
-		<!ELEMENT communityType (classAssociation, classQuality, strartDate, stopDate)>
+		<!ELEMENT communityType (classAssociation, classQuality, startDate, stopDate)>
 			<!ELEMENT classAssociation (#PCDATA)>
 			<!ELEMENT classQuality (#PCDATA)>
 			<!ELEMENT strartDate (#PCDATA)>
