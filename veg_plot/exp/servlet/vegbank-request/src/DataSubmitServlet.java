@@ -15,6 +15,8 @@ import xmlresource.utils.XMLparse;
 
 import databaseAccess.dbAccess;
 import databaseAccess.CommunityQueryStore;
+import VegCommunityLoader;
+import databaseAccess.TaxonomyQueryStore;
 import databaseAccess.SqlFile;
 import servlet.util.ServletUtility;
 import DataSourceClient; //this is the rmi client for loading mdb files
@@ -25,8 +27,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-05-22 20:41:17 $'
- *  '$Revision: 1.28 $'
+ *  '$Date: 2002-05-30 23:02:09 $'
+ *  '$Revision: 1.29 $'
  */
 
 
@@ -38,11 +40,14 @@ public class DataSubmitServlet extends HttpServlet
 	private String communityValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
 	private String commUpdateScript = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/update_community_summary.sql";
 	
+	private String plantValidationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-submit_valid.html";
+	private String plantValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-valid.html";
 	
 	ResourceBundle rb = ResourceBundle.getBundle("vegbank");
 	private SqlFile sqlFile = new SqlFile(); 
 	private ServletUtility su = new ServletUtility();
 	private CommunityQueryStore qs;
+	private TaxonomyQueryStore tqs;
 	private VegCommunityLoader commLoader = new VegCommunityLoader();
 	private XMLparse parser;
 	
@@ -128,6 +133,11 @@ public class DataSubmitServlet extends HttpServlet
 				StringBuffer sb = handleVegPlotSubmittal(enum, params, request, response);
 				out.println( sb.toString() );
 			}
+			else if ( submitDataType.trim().toUpperCase().equals("PLANTTAXA")  )
+			{
+				StringBuffer sb = handlePlantTaxaSubmittal(params, response);
+				out.println( sb.toString() );
+			}
 			else
 			{
 				out.println("DataSubmitServlet > action unknown!");
@@ -139,7 +149,175 @@ public class DataSubmitServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	}
+		
+	/**
+	 * method to handle the submittal of a new plant into the plant taxonomy 
+	 * database.  The proccesses here very closely mimic those in the submittal
+	 * of a community
+	 */
+	private StringBuffer handlePlantTaxaSubmittal(Hashtable params, HttpServletResponse response)
+	{
+		StringBuffer sb = new StringBuffer();
+		try
+		{
+			String action = (String)params.get("action");
+			if ( action.equals("init") )
+			{
+				System.out.println("DataSubmitServlet > init plantTaxa");
+				String salutation = (String)params.get("salutation");;
+				String firstName =  (String)params.get("firstName");
+				String lastName =  (String)params.get("lastName");
+				String emailAddress =  (String)params.get("emailAddress");
+				String orgName =  (String)params.get("orgName");
+				//String plantName = (String)params.get("plantName");
+				
+				// the next 3 attributes refer to the plant name that the 
+				// user is trying to insert into the database
+				String longName = (String)params.get("longName");
+				String shortName = (String)params.get("shortName");
+				String code = (String)params.get("code");
+				String taxonDescription = (String)params.get("taxonDescription");
+		
+				System.out.println("DataSubmitServlet > longName: " + longName);
+				System.out.println("DataSubmitServlet > shortName: " + shortName);
+				System.out.println("DataSubmitServlet > code: " + code);
+				System.out.println("DataSubmitServlet > description: " + taxonDescription);
+				
+				// get the data already stored in the database with corresponding to the names
+				String longNameMessage = "";
+				String shortNameMessage = "";
+				String codeMessage = "";
+				tqs = new TaxonomyQueryStore();
+				Vector lv = tqs.getPlantTaxonSummary(longName, "%" );
+				Vector sv = tqs.getPlantTaxonSummary(shortName, "%" );
+				Vector cv = tqs.getPlantTaxonSummary(code, "%" );
+				if ( lv.size() > 0)
+					{	longNameMessage = "Currently Exists in VegBank"; }
+				else 
+					{ longNameMessage = "Not Currently in VegBank"; }
+				if ( sv.size() > 0)
+					{	shortNameMessage = "Currently Exists in VegBank"; }
+				else 
+					{ shortNameMessage = "Not Currently in VegBank"; }
+				if ( cv.size() > 0)
+					{ codeMessage = "Currently Exists in VegBank"; }
+				else 
+					{ codeMessage = "Not Currently in VegBank"; }
+				
+				System.out.println("DataSubmitServlet > longName match: " + lv.toString() );
+				
+				//update the validation page that is returned to the user
+				updatePlantValidationPage(salutation, firstName, lastName, emailAddress, orgName, 
+				longName, shortName, code, taxonDescription, longNameMessage, shortNameMessage, codeMessage);
+				
+				//redirect the browser
+				response.sendRedirect("/forms/plant-valid.html");
+			}
+			//THIS WHERE THE ACTUAL SUBMITTAL OF THE NEW COMMUNITY TAKES PLACE
+			else if ( action.equals("submit") )
+			{
+/*				
+				String salutation = (String)params.get("salutation");
+				String givenName = (String)params.get("firstName");
+				String surName = (String)params.get("lastName");
+				String middleName = "";
+				String orgName = (String)params.get("orgName");
+				String contactInstructions = (String)params.get("emailAddress");
+				
+				String conceptReferenceTitle = (String)params.get("conceptRefTitle");
+				String conceptReferenceAuthor = (String)params.get("conceptRefAuthors");
+				String conceptReferenceDate = "12-MAR-2002";
+
+				String nameReferenceTitle = (String)params.get("nameRefTitle");
+				String nameReferenceAuthor = (String)params.get("nameRefAuthors");
+				String nameReferenceDate = "12-MAR-2002";
+				
+				String communityCode = (String)params.get("communityCode");
+				String communityLevel = (String)params.get("communityLevel");
+				String communityName = (String)params.get("communityName");
+				String dateEntered = "12-MAR-2002";
+				String parentCommunity = "";
+				String partyName = "vegbank";
+				String otherName = "";
+				System.out.println("DataSubmitServlet > submit vegCommunity");
+				
+				//SUBMIT THE DATA TO THE DATABASE
+				StringBuffer sbr = commLoader.insertGenericCommunity( salutation,  givenName, surName,
+				middleName, orgName, contactInstructions,conceptReferenceTitle, 
+				conceptReferenceAuthor, conceptReferenceDate, nameReferenceTitle,
+				nameReferenceAuthor, nameReferenceDate, communityCode,communityLevel,
+				communityName,  dateEntered, parentCommunity,  otherName  );
+				
+				String resultString = sbr.toString();
+				
+				System.out.println("DataSubmitServlet > submittal result: " + resultString);
+				//IF SUCCESS THEN PREPARE AND RETURN A PAGE TO THE USER
+				if ( resultString.toUpperCase().indexOf("TRUE") > 0 )
+				{
+					System.out.println("DataSubmitServlet > preparing results page");
+					String resultPage = getSubmittalResultsPage(true, communityName, givenName, 
+					surName, nameReferenceAuthor, conceptReferenceAuthor );
+					sb.append( resultPage );
+				}
+				//UPDATE THE DATABASE SUMMARY TABLE
+				sqlFile.issueSqlFile(commUpdateScript);
+*/
+			}
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("Exception:  " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(sb);
+	}
 	
+	/**
+	 * method that handles the updating of the plant submittal form with 
+	 * a combination of the input attributes and the input.
+	 *
+	 * @return -- retuns false if there are any exceptions thrown while
+	 * 	genetaing the html form
+	 */
+	 private boolean updatePlantValidationPage(String salutation, String firstName, String lastName, 
+	 String emailAddress, String orgName, String longName, String shortName, String code, 
+	 String taxonDescription, String longNameMessage, String shortNameMessage, String codeMessage)
+	 {
+		 try
+		 {
+			 Hashtable replaceHash = new Hashtable();
+			 // party-related attributes
+			 replaceHash.put("level", "unknown");
+			 replaceHash.put("salutation", ""+salutation);
+			 replaceHash.put("firstName", ""+firstName);
+			 replaceHash.put("lastName", ""+lastName);
+			 replaceHash.put("emailAddress", ""+emailAddress);
+			 replaceHash.put("orgName" , ""+orgName);
+			 
+			 //plant name-related attributes
+			 replaceHash.put("longName", longName );
+			 replaceHash.put("shortName", shortName );
+			 replaceHash.put("code", code);
+			 replaceHash.put("longNameMessage", longNameMessage );
+			 replaceHash.put("shortNameMessage", shortNameMessage );
+			 replaceHash.put("codeMessage", codeMessage);
+			 
+			 //plant concept-related attributes
+			 replaceHash.put("taxonDescription", taxonDescription );
+			 
+			 su.filterTokenFile(plantValidationTemplate, plantValidationForm, replaceHash);
+		 }
+		 catch( Exception e ) 
+		 {
+			System.out.println("Exception:  " + e.getMessage() );
+			e.printStackTrace();
+			return(false);
+		 }
+		 return(true);
+	 }
+	 
+	 
+		
 		
 	/**
 	 * this method is used to handle the submittal of a vegplot into the 
@@ -648,14 +826,15 @@ public class DataSubmitServlet extends HttpServlet
 	 
 	/**
 	 * this method handles the submital of community data to the 
-	 * vegbank database.  The return from this method is a StrinBuffer 
-	 * containg the response from the application and / or database in
+	 * vegbank database.  The return from this method is a StringBuffer 
+	 * containing the response from the application and / or database in
 	 * relation to the submittal proccess of a new community.  Here the 
 	 * action may be either init ( which is the first stage in a two step 
 	 * proccess), or submit ( which is the second stage ) where the data 
 	 * are submitted to the database
 	 * 
-	 * @param params -- a hashtable storing the inpt parameters
+	 * @param params -- a hashtable storing the input parameters
+	 * @param resposnse -- the http response object
 	 * @return sb -- A string buffer with the response by the database
 	 * and application about the success of the submittal to the database
 	 */
@@ -854,8 +1033,10 @@ public class DataSubmitServlet extends HttpServlet
 	 }
 	
 	
+	
 	/**
-	 * method that handles updating the validation form for the community
+	 * method that handles updating the validation form for the community 
+	 * submittal process
 	 */
 	 private boolean updateCommunityValidationPage(String salutation, 
 	 String firstName, String lastName, String emailAddress, String orgName, 
