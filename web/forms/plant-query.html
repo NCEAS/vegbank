@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-08-08 16:23:58 $'
-  *  '$Revision: 1.9 $'
+  *      '$Date: 2002-08-13 15:42:23 $'
+  *  '$Revision: 1.10 $'
   *
   *
   -->
@@ -17,7 +17,7 @@
 
 <html>
 	<head>
-		<title> PLANT CONCEPT LOOKUP		</title>
+		<title> PLANT CONCEPT LOOKUP</title>
 		<link rel="stylesheet" href="http://vegbank.nceas.ucsb.edu/vegbank/includes/default.css" type="text/css">
 	</head>
 
@@ -53,10 +53,11 @@
 <table align=left border="0" width=90% cellspacing=0 cellpadding=0>
 	<tr>
 		<td bgcolor="white">
-			<img align=center border=0 height=144 src="/vegbank/images/owlogoBev.jpg" alt = "Veg plots logo		">
+			<img align=center border=0 height=100 src="/vegbank/images/owlogoBev.jpg" alt = "Veg plots logo		">
 			<td align=left valign=middle>
-    			<table border=0 cellpadding=5>
-    				<tr>
+    			
+    <table border=0 cellpadding=5 width="366" height="55">
+      <tr>
     					<td align=left valign=bottom>
     					<font face="Helvetica,Arial,Verdana" size=6 color=23238E> Plant Taxonomy Lookup
     					</font><br>
@@ -72,153 +73,130 @@
 		</td>
 	
 		<td align="left">
-			<table border="0" cellspacing=5 cellpadding=5>
-			<form action="@datarequestservlet@" method="get">
-			<input type="hidden" name="requestDataType" value="plantTaxon">
-			<input type="hidden" name="requestDataFormatType" value="html">
-			<input type="hidden" name="clientType" value="browser">
-			<tr valign=top>
-			<td  align=left valign=middle colspan=2>
-			<font face="Helvetica,Arial,Verdana" size="2" color="209020">
-				<b>Enter the taxon name below and toggle the correct type and level of the taxon. </b>
-			</font>
-			<p>
-			<small>
-			<INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
-			</small>
-			</td>
-			</tr>
-		</td>
-	</tr>
-	
-	<!--TAXON NAME -->
-	<tr align="left">
-		<td width="25%" align=left valign=top>
-			<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
-			<b>Taxon name:</b>
-		</td>
-		<!-- 	PLANT TAXON INPUT-->
-		<td  align="left" valign="middle">
-			<input size="35" name="taxonName">
-			<b>
-			<font face="Helvetica,Arial,Verdana" size=1>
-			</font>
 			
-			<!-- hint -->
-			<font face="Helvetica,Arial,Verdana" size=1 color="black">
-			<b> &nbsp; (wildcard = '%')</b>
-		</td>
-	</tr>
-	<!-- IGNORE CASE -->
-	<tr align="left">
-		<td width="25%" align=left valign=top>
-		</td>
-		<td  align="left" valign="middle">
-			<font face="Helvetica,Arial,Verdana" size=1 color="black">
-			All Queries are Case-Insensitive
-			</font>
-   			<!-- <input type = "checkbox" name="ignoreCase" value = "true"> Ignore Case<br> -->
-		</td>
-	</tr>
-
-		
-	<!-- HORIZONTAL LINE -->
-	<tr>
-		<td  colspan=2 rowspan=1 align=left valign=middle>
-		<hr size=.5>
-	</tr>
-		
-	<!-- TAXON TYPE -->
-	<tr>
-		<td width="25%" align=left valign=top>
-			<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
-			<b>Taxon type:</b>
-		</td>
-		<td align=left valign=top>
-  			<font face="Helvetica,Arial,Verdana" color=000000>
-   			<input type = "radio" name="taxonNameType" value = "%" checked > Any <br>
-				<input type = "radio" name="taxonNameType" value = "scientificName"> Scientific name<br>
-   			<input type = "radio" name="taxonNameType" value = "commonName"> Common name<br>
-   			<input type = "radio" name="taxonNameType" value = "Code"> Code <br>
-				
-  			</font>
-		</td>
-	</tr>
-		
-		
-			
-	<!-- HORIZONTAL LINE -->
-	<tr>
-		<td  colspan=2 rowspan=1 align=left valign=middle>
-		<hr size=.5>
-	</tr>
-		
-	<!-- TAXON LEVEL -->
-	<tr>
-		<td width="25%" align=left valign=top>
-			<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
-			<b>Taxon level:</b>
-		</td>
-		<td align=left valign=top>
-  			<font face="Helvetica,Arial,Verdana" color=000000>
-				<input type = "radio" checked name="taxonLevel" value = "%"> Any <br>
-   			<input type = "radio" name="taxonLevel" value = "family"> Family<br>
-   			<input type = "radio" name="taxonLevel" value = "genus"> Genus <br>
-   			<input type = "radio" name="taxonLevel" value = "species"> Species <br>
-				<input type = "radio" name="taxonLevel" value = "variety"> Variety 
-				<span class="itemsmall"> -- Names with variety are of form "Genus species var. variety"</span><br>
-  			</font>
-		</td>
-	</tr>
-	
-		<!-- HORIZONTAL LINE -->
-	<tr>
-		<td  colspan=2 rowspan=1 align=left valign=middle>
-		<hr size=.5>
-	</tr>
-	
-	<!-- PARTY -->
-	<tr>
-		<td width="25%" align=left valign=top>
-			<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
-			<b>Party:</b>
-		</td>
-		<td align=left valign=top>
-  			<font face="Helvetica,Arial,Verdana" color=000000>
-				<select name="party" size="1" value="" onchange="setParty(this);">
-				 	<option value="%">All</option>
-					<option value="usda">USDA</option>
-				 </select>
-
-				
-  			</font>
-		</td>
-	</tr>
-	
-	<br>
-	<br>
-	
-	<tr>
-		<td  align=left valign=middle colspan=2>
-			<small>
-			<INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;
-			<INPUT TYPE="reset" VALUE="reset">
-			</small>
-		</td>
-  	</tr>
-	</form>
+<table border="0" cellspacing=5 cellpadding=5><form action="@datarequestservlet@" method="get">
+  <input type="hidden" name="requestDataType" value="plantTaxon">
+  <input type="hidden" name="requestDataFormatType" value="html">
+  <input type="hidden" name="clientType" value="browser">
+  <tr valign=top> 
+    <td  align=left valign=middle colspan=2> <font face="Helvetica,Arial,Verdana" size="2" color="209020"> 
+      <b>Enter the taxon name below and toggle the correct type and level of the 
+      taxon. </b> </font> 
+      <p> <small> 
+        <INPUT TYPE="submit" VALUE="search for plants">
+        &nbsp;&nbsp; 
+        <INPUT TYPE="reset" VALUE=reset>
+        </small> 
+    </td>
+  </tr>
 </table>
 	
-	<table border="0" >
-		<tr align="left">
-			<td>
-			<span class="item">
-				Query example:
-				Taxon Name=poison%, Ignore case=false, Taxon type=Common Name, Taxon Level=Any 
-			</span>
-			</td>
-		</tr>
-	</table>
+	
+<p>&nbsp;</p>
+    <table border="0" width="722">
+      <!--TAXON NAME -->
+      <tr align="left"> 
+        <td width="156"> <b>Taxon name:</b> </td>
+    <!-- 	PLANT TAXON INPUT-->
+        <td width="556"> 
+          <input size="35" name="taxonName">
+      <font face="Helvetica,Arial,Verdana" size=1> </font> 
+      <b> &nbsp; </b> </td>
+  </tr>
+  <!-- IGNORE CASE -->
+  <tr align="left"> 
+        <td width="156"></td>
+        <td width="556"> <font face="Helvetica,Arial,Verdana" size=1 color="black"> 
+          (wildcard = '%') <br>
+	  All Queries are Case-Insensitive </font> 
+      <!-- <input type = "checkbox" name="ignoreCase" value = "true"> Ignore Case<br> -->
+    </td>
+  </tr>
+  
+  <!-- HORIZONTAL LINE -->
+  <tr> 
+    <td  colspan=2 rowspan=1 align=left valign=middle> 
+      <hr size=.5>
+  </tr>
+  <!-- TAXON TYPE -->
+  <tr> 
+        <td width="156" align=left valign=top> <b>Taxon type:</b> </td>
+        <td align=left valign=top width="556"> <font face="Helvetica,Arial,Verdana" color=000000> 
+          <input type = "radio" name="taxonNameType" value = "%" checked >
+      Any <br>
+      <input type = "radio" name="taxonNameType" value = "scientificName">
+      Scientific name<br>
+      <input type = "radio" name="taxonNameType" value = "commonName">
+      Common name<br>
+      <input type = "radio" name="taxonNameType" value = "Code">
+      Code <br>
+      </font> </td>
+  </tr>
+  <!-- HORIZONTAL LINE -->
+  <tr> 
+    <td  colspan=2 rowspan=1 align=left valign=middle> 
+      <hr size=.5>
+  </tr>
+  <!-- TAXON LEVEL -->
+  <tr> 
+        <td width="156" align=left valign=top> <b>Taxon level:</b> </td>
+        <td align=left valign=top width="556"> <font face="Helvetica,Arial,Verdana" color=000000> 
+          <input type = "radio" checked name="taxonLevel" value = "%">
+      Any <br>
+      <input type = "radio" name="taxonLevel" value = "family">
+      Family<br>
+      <input type = "radio" name="taxonLevel" value = "genus">
+      Genus <br>
+      <input type = "radio" name="taxonLevel" value = "species">
+      Species <br>
+      <input type = "radio" name="taxonLevel" value = "variety">
+      Variety <span class="itemsmall"> -- Names with variety are of form "Genus 
+      species var. variety"</span><br>
+      </font> </td>
+  </tr>
+  <!-- HORIZONTAL LINE -->
+  <tr> 
+    <td  colspan=2 rowspan=1 align=left valign=middle> 
+      <hr size=.5>
+	</td>
+  </tr>
+  <tr>
+        <td width="156" align=left valign=top height="70"> <b>Date:</b> </td>
+        <td align=left valign=top height="70" width="556"> <font face="Helvetica,Arial,Verdana" color=000000> 
+          <input type="text" name="startDate">
+            Start <br>
+            <input type="text" name="stopDate">
+            Stop 
+			</font>
+          </td>
+  </tr>
+  <tr>
+     <td  colspan=2 rowspan=1 align=left valign=middle> 
+      <hr size=.5>
+	</td>
+  </tr>
+  <!-- PARTY -->
+  <tr> 
+        <td width="156" align=left valign=top height="54"> <b>Party:</b> </td>
+        <td align=left valign=top height="54" width="556"> <font face="Helvetica,Arial,Verdana" color=000000> 
+          <select name="party" size="1" value="" onchange="setParty(this);">
+        <option value="%">All</option>
+        <option value="usda">USDA</option>
+      </select>
+      </font> </td>
+  </tr>
+  <br>
+  <br>
+  <tr> 
+    <td  align=left valign=middle colspan=2> <small> 
+      <INPUT TYPE="submit" VALUE="search for plants">
+      &nbsp;&nbsp; 
+      <INPUT TYPE="reset" VALUE="reset">
+      </small> </td>
+  </tr>
+        <td width="156"></form> 
+      </table>
+	
 
 <!-- VEGBANK FOOTER -->
 <table cellspacing="0" cellpadding="0" border="0">
