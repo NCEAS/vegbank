@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+
+<dataModel>	
+
+
+<title> Prototype Veg Plots Database Component Description: cover indices </title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
+<contributor> </contributor>
+<description>This table stores information related to the indices used in various cover scales.</description>
+<date></date>
+
+<entity>
+	<entityName>vegPlot.CoverIndices</entityName>
+	<entitySummary>This table stores data related to various cover scales</entitySummary>
+	<entityDescription> </entityDescription>
+
+        <attribute>
+                <attName>coverIndexId</attName>
+                <attNulls>No </attNulls>
+                <attType>NUMBER </attType>
+                <attKey>PK </attKey>
+		<attReferences>n/a</attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Primary Key for the coverIndices table.</attDefinition>
+        </attribute>
+
+
+	<attribute> 
+		<attName>coverMethodId </attName>
+		<attNulls>No </attNulls>	
+		<attType>NUMBER </attType>
+		<attKey>FK </attKey>
+		<attReferences>coverMethod</attReferences>
+		<attNotes>Foreign key into the coverMethod table.</attNotes>
+		<attDefinition>This key links an index with a specific cover scale. </attDefinition>
+	</attribute>
+
+
+
+	<attribute>
+                <attName>indexCode </attName>
+                <attNulls>No </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>The name of the index which is used in the respective cover scale.</attDefinition>
+        </attribute>
+
+	<attribute>
+                <attName>upperLimit</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>This is the upper limit, in percent, associated with the specific indexCode.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>lowerLimit</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>This is the lower limit, in percent, associated with a specific indexCode</attDefinition>
+        </attribute>
+
+	
+	<children> </children>
+</entity>
+</dataModel>	
