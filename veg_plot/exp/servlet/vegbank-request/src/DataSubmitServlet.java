@@ -71,6 +71,12 @@ public class DataSubmitServlet extends HttpServlet
 				StringBuffer sb = handleVegCommunitySubmittal(params, response);
 				out.println( sb.toString() );
 			}
+			else if ( submitDataType.trim().equals("vegCommunityCorrelation")  )
+			{
+				submitDataType.trim().equals("vegCommunityCorrelation");
+				StringBuffer sb = handleVegCommunityCorrelation(params, response);
+				out.println( sb.toString() );
+			}
 			
 		}
 		catch( Exception e ) 
@@ -78,6 +84,70 @@ public class DataSubmitServlet extends HttpServlet
 			System.out.println("Exception:  " + e.getMessage() );
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * this method is used to handle the coorelation of communoities
+	 */
+	 private StringBuffer handleVegCommunityCorrelation(Hashtable params, 
+	 HttpServletResponse response)
+	{
+		StringBuffer sb = new StringBuffer();
+		try
+		{
+			String action = (String)params.get("action");
+			if ( action.equals("init") )
+			{
+				sb.append("<html>");
+				System.out.println("DataSubmitServlet > init vegCommunityCorrelation");
+				String salutation = (String)params.get("salutation");;
+				String firstName =  (String)params.get("firstName");
+				String lastName =  (String)params.get("lastName");
+				String emailAddress =  (String)params.get("emailAddress");
+				String orgName =  (String)params.get("orgName");
+				String commName = (String)params.get("communityName");
+				String correlationTaxon = (String)params.get("correlationTaxon");
+				
+				sb.append("communityName: " + commName + " <br>" );
+				
+				System.out.println("DataSubmitServlet > correlation taxon:" + correlationTaxon);
+				qs = new CommunityQueryStore();
+				Vector v = qs.getCommunityNames(correlationTaxon);
+				if ( v.size() > 0)
+				{
+					
+					for (int i=0; i<v.size(); i++) 
+					{
+						String correlationName = v.elementAt(i).toString() ;
+						System.out.println( correlationName );
+						sb.append( "<br> correlationName: "+ correlationName +"<br>");
+						
+						qs = new CommunityQueryStore();
+						//get a vector that contains hashtables with all the possible 
+						//correlation ( name, recognizing party, system, status, level)
+						Vector correlationTagets = qs.getCorrelationTargets(correlationTaxon);
+						//get the hashtables form the vector
+						Hashtable hash = (Hashtable)correlationTagets.elementAt(i);
+						sb.append(hash.toString() + "<br> ");
+						
+					}
+					
+				}
+				
+				sb.append("</html>");
+			}
+			else if ( action.equals("submit") )
+			{
+				
+			}
+			
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("Exception:  " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(sb);
 	}
 	
 	
@@ -203,7 +273,7 @@ public class DataSubmitServlet extends HttpServlet
 			}
 			else if ( action.equals("submit") )
 			{
-				sb.append("starting the correlation: "-);
+				sb.append("starting the correlation: ");
 				System.out.println("DataSubmitServlet > submit vegCommunity");
 				//sb = commLoader.insertGenericCommunity( conceptCode, conceptLevel, commName,
 				//dateEntered, parentCommunity, allianceTransName, partyName );
