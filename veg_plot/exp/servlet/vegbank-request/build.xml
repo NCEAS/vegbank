@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: harris $'
-  *     '$Date: 2002-06-20 20:58:06 $'
-  * '$Revision: 1.5 $'
+  *     '$Date: 2002-07-19 00:18:03 $'
+  * '$Revision: 1.6 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -63,6 +63,7 @@
 <!-- PREPARE -->
 <target name="prepare" depends="init">
 	<mkdir dir="${build}" />
+
 	
 	<copydir src="${src}" 
 		dest="${build}" 

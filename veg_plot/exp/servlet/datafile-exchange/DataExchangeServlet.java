@@ -62,7 +62,7 @@ public class DataExchangeServlet extends HttpServlet
 	//if false then no authentication done
 	private boolean authenticate = false;
 	//if false then dont store the file in a database
-	private boolean databaseStorage = true;
+	private boolean databaseStorage = false;
 	//the database class
 	private DataFileDB filedb;
 	//if the string below is null then store the uploaded file as the name it is given
@@ -201,7 +201,7 @@ public class DataExchangeServlet extends HttpServlet
 						//this is for an application to upload a file to the servlet
 						else if (action.equals("uploadFile") && ( req.getParameter("username") != null) )
 						{
-							System.out.println("DataExchangeServlet >  handleing a file upload from an application");
+							System.out.println("DataExchangeServlet >  handeling a file upload from an application");
 							String s = handleRawDataExchange(req, res) ;
 							System.out.println("DataExchangeServlet >  the response to the client: " + s);
 							out.println(s); 
