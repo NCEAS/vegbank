@@ -4508,33 +4508,33 @@ change through time.</entitySummary>
       <attListType>closed</attListType>
       <attList>
         <attListItem>
-          <attListValue>Absolutely right</attListValue>
-          <attListValueDesc>No doubt about the match. Perfect fit.</attListValueDesc>
+          <attListValue>Absolutely correct</attListValue>
+          <attListValueDesc>(Fits well)  No doubt about the match. Perfect fit.</attListValueDesc>
           <attListSortOrd>5</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Absolutely wrong</attListValue>
-          <attListValueDesc>This answer is absolutely unacceptable. Unambiguously incorrect.</attListValueDesc>
+          <attListValueDesc>(Absolutely doesn't fit)  This answer is absolutely unacceptable. Unambiguously incorrect.</attListValueDesc>
           <attListSortOrd>1</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Good answer</attListValue>
-          <attListValueDesc>Good match with the concept.  Unambiguously correct.</attListValueDesc>
+          <attListValueDesc>(Fits reasonably well)  Good match with the concept.  Unambiguously correct.</attListValueDesc>
           <attListSortOrd>4</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Reasonable or acceptable answer</attListValue>
-          <attListValueDesc>Maybe not the best possible answer but it is acceptable; this answer does not pose a problem to the user. Correct.</attListValueDesc>
+          <attListValueDesc>(Possibly fits)  Maybe not the best possible answer but it is acceptable; this answer does not pose a problem to the user. Correct.</attListValueDesc>
           <attListSortOrd>3</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Understandable but wrong</attListValue>
-          <attListValueDesc>Not a good answer. There is something about the plot that makes the answer understandable, but there is clearly a better answer. This answer would pose a problem for users.  Incorrect.</attListValueDesc>
+          <attListValueDesc>(Doesn't fit but is close)  Not a good answer. There is something about the plot that makes the answer understandable, but there is clearly a better answer. This answer would pose a problem for users.  Incorrect.</attListValueDesc>
           <attListSortOrd>2</attListSortOrd>
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
-      <attDefinition>Indicates the degree of fit with the community concept being assigned (e.g., fits concept well, fits but not typal, possible fit, just outside concept).</attDefinition>
+      <attDefinition>Indicates the degree of fit with the community concept being assigned. Values derive from Gopal, S., and Woodcock, C. (1994), Theory and methods for accuracy assessment of thematic maps using fuzzy sets. Photogrammetric Engineering and Remote Sensing 60(2):181-188.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>486</formAustere>
