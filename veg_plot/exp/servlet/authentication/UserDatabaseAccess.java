@@ -8,8 +8,8 @@ package servlet.authentication;
  *    Authors: John Harris
  * 		
  *		 '$Author: harris $'
- *     '$Date: 2002-06-24 17:01:26 $'
- *     '$Revision: 1.7 $'
+ *     '$Date: 2002-08-29 05:32:41 $'
+ *     '$Revision: 1.8 $'
  */
 
 
@@ -26,6 +26,33 @@ import java.util.Date;
 public class UserDatabaseAccess 
 {
 	
+	/**
+	 * method that, for an email address, will get the user's priveledge level
+	 * @param email -- the user's email address
+	 */
+	 public int getUserPermissionLevel(String email)
+	 {
+		 int level = 0;
+		 try
+		 {
+			 Hashtable h = this.getUserInfo(email);
+			 String buf = (String)h.get("permissionType");
+			 try
+			 {
+				 level = Integer.parseInt(buf);
+			 }
+			 catch (Exception e1) 
+			 {
+				 System.out.println("Exception parsing permission level: " + e1.getMessage());
+			 }
+		 }
+		 catch (Exception e) 
+		 {
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		 }
+		 return(level);
+	 }
 	
 	/**
 	 * method to get the password from the database based on an email address
@@ -52,6 +79,7 @@ public class UserDatabaseAccess
 			{
      		s = rs.getString(1);
     	}
+			conn.close();
 		}
 		catch (Exception e) 
 		{
@@ -310,9 +338,9 @@ public class UserDatabaseAccess
 				Connection conn = getConnection();
 				Statement query = conn.createStatement();
 				sb.append("INSERT into USER_INFO (EMAIL_ADDRESS, PASSWORD, GIVEN_NAME, SUR_NAME, REMOTE_ADDRESS, TICKET_COUNT, ");
-				sb.append("INSTITUTION, ADDRESS, CITY, STATE, COUNTRY, PHONE_NUMBER, ZIP_CODE) ");
+				sb.append("INSTITUTION, ADDRESS, CITY, STATE, COUNTRY, PHONE_NUMBER, ZIP_CODE, permission_type) ");
 				sb.append("VALUES ('"+emailAddress+"', '"+passWord+"', '"+givenName+"', '"+surName+"', '"+remoteAddress+"', "+"1");
-				sb.append(", '"+inst+"', '"+address+"', '"+city+"', '"+state+"','"+country+"','"+phone+"','"+zip+"')" );
+				sb.append(", '"+inst+"', '"+address+"', '"+city+"', '"+state+"','"+country+"','"+phone+"','"+zip+"',1)" );
 				//issue the query
 				query.executeUpdate(sb.toString());
 			}
