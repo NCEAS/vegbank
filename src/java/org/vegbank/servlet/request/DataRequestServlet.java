@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: anderson $'
- *  '$Date: 2004-06-12 00:30:20 $'
- *  '$Revision: 1.27 $'
+ *  '$Date: 2004-07-20 22:26:02 $'
+ *  '$Revision: 1.28 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,8 +85,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: anderson $'
- *  '$Date: 2004-06-12 00:30:20 $'
- *  '$Revision: 1.27 $'
+ *  '$Date: 2004-07-20 22:26:02 $'
+ *  '$Revision: 1.28 $'
  * 
  */
 
@@ -118,12 +118,12 @@ public class DataRequestServlet extends HttpServlet
 	{
 		try
 		{
-			log.debug("init: DataRequestServlet");
+			log.debug("init");
 			//show some of the instance variablies
-			log.debug("init: DataRequestServlet > user query caching: " + QUERYCACHING);
-			log.debug("init: DataRequestServlet > servlet dir: " + SERVLET_DIR);
-			log.debug("init: DataRequestServlet > default style sheet: " + DEFAULT_PLOT_STYLESHEET);
-			log.debug("init: DataRequestServlet > generic html form: " + GENERICFORM);
+			log.debug("init> user query caching: " + QUERYCACHING);
+			log.debug("init> servlet dir: " + SERVLET_DIR);
+			log.debug("init> default style sheet: " + DEFAULT_PLOT_STYLESHEET);
+			log.debug("init> generic html form: " + GENERICFORM);
 		}
 		catch (Exception e)
 		{
@@ -138,7 +138,7 @@ public class DataRequestServlet extends HttpServlet
 	public void init( ServletConfig config ) throws ServletException {
 		try {
 			super.init( config );
-			log.debug("DataRequestServlet Initialize");
+			log.debug("Initialize");
 
 			//initial DBConnection pool
 			DBConnectionPool.getInstance();
@@ -146,7 +146,7 @@ public class DataRequestServlet extends HttpServlet
 		} catch ( ServletException ex ) {
 			throw ex;
 		} catch (SQLException e) {
-			log.debug("Error in DataRequestServlet.init: "+e.getMessage());
+			log.debug("Error in init: "+e.getMessage());
 		}
 	}
 
@@ -163,7 +163,7 @@ public class DataRequestServlet extends HttpServlet
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
  	 throws IOException, ServletException 	
 		{
-			log.debug("DataRequestServlet > GET");
+			log.debug(" GET");
 			doPost(request, response);
 		}
 
@@ -174,7 +174,7 @@ public class DataRequestServlet extends HttpServlet
 		HttpServletResponse response)
 		throws IOException, ServletException
 	{
-		log.debug("DataRequestServlet > POST");
+		log.debug(" POST");
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		try
@@ -232,6 +232,7 @@ public class DataRequestServlet extends HttpServlet
 					"DataRequstServlet > query on the vegetation community database \n"
 						+ " not yet implemented ");
 				handleVegCommunityQuery(
+					request,
 					out,
 					requestDataType,
 					response,
@@ -345,9 +346,9 @@ public class DataRequestServlet extends HttpServlet
 		 {
 			 String styleSheet=SERVLET_DIR+"showCommunitySummary.xsl";
 
-			 //log.debug("DataRequestServlet > xml document: '" + xmlResult +"'" );
-			 log.debug("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
-		         log.debug("DataRequestServlet > XML input: '" + xmlResult+ "'");
+			 //log.debug(" xml document: '" + xmlResult +"'" );
+			 log.debug(" stylesheet name: '" + styleSheet +"'" );
+		         log.debug(" XML input: '" + xmlResult+ "'");
 	
 			sb.append( transformer.getTransformedFromString( xmlResult, styleSheet ) );
 		 }
@@ -371,9 +372,9 @@ public class DataRequestServlet extends HttpServlet
 		StringBuffer sb = new StringBuffer();
 		try
 		{
-			log.debug("DataRequestServlet > getPlotView ");
-			//log.debug("DataRequestServlet > xml document: '" + xmlResult +"'" );
-			log.debug("DataRequestServlet > stylesheet name: '"+styleSheet +"'");
+			log.debug(" getPlotView ");
+			//log.debug("xml document: '" + xmlResult +"'" );
+			log.debug("stylesheet name: '"+styleSheet +"'");
 
 			sb.append(transformer.getTransformedFromString(xmlResult, styleSheet));
 		}
@@ -397,8 +398,8 @@ public class DataRequestServlet extends HttpServlet
 		 {
 
 			 String styleSheet = DEFAULT_PLOT_STYLESHEET;
-			 //log.debug("DataRequestServlet > xml document: '" + xmlResult +"'" );
-			 log.debug("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
+			 //log.debug("xml document: '" + xmlResult +"'" );
+			 log.debug("stylesheet name: '" + styleSheet +"'" );
 			 
 			sb.append( transformer.getTransformedFromString( xmlResult, styleSheet ) );
 		 }
@@ -784,7 +785,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 			else 
 			{
 				//print the error found
-				log.debug("DataRequstServlet > cannot compose extended query");
+				log.debug("cannot compose extended query");
 			}
 			sb.append("</extendedQuery>"+"\n");
 			sb.append("<requestDataType>identity</requestDataType> \n");
@@ -989,6 +990,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 	 *         @param response - the response object linked to the client 	 
 	 */	 
 	private void handleVegCommunityQuery(
+		HttpServletRequest request,
 		PrintWriter out,
 		String requestDataType,
 		HttpServletResponse response,
@@ -1003,8 +1005,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 			if (requestDataType.trim().equals("vegCommunity"))
 			{
 				log.debug(
-					"DataRequestServlet > DataRequestServlet.handleSimpleQuery - requesting "
-						+ "community information - not requesting plot info");
+					"handleSimpleQuery - requesting community information - not requesting plot info");
 				String query =
 					composeCommunityQuery(resultType, requestDataType, communityName, communityLevel);
 				QueryResult qr =
@@ -1013,7 +1014,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 						userName,
 						query);
 				log.debug(
-					"DataRequestServlet > Number of communities returned: "
+					"Number of communities returned: "
 						+ qr.getResultsTotal()
 						+ "<br><br>");
 
@@ -1028,6 +1029,9 @@ private void updateClientLog (String clientLog, String remoteHost)
 						response,
 						resultType,
 						qr);
+				} else {
+					String results = this.getEmptyResultSetMessage(request);
+					out.println(results);
 				}
 			}
 		}
@@ -1051,19 +1055,19 @@ private void updateClientLog (String clientLog, String remoteHost)
 		String userName,
 		String xmlString)
 	{
-		log.debug("DataRequestServlet > QUERY TYPE  " + queryType);
+		log.debug("QUERY TYPE  " + queryType);
 
 		// IF IT IS A BROWSER QUERY THEN REGISTER THE DOCUMENT -- IF 	 
 		// CACHING IS TURNED ON	 
 		if (QUERYCACHING.booleanValue())
 		{
 			log.debug(
-				"DataRequestServlet > Caching the query doc");
+				"Caching the query doc");
 		}
 		else
 		{
 			log.debug(
-				"DataRequestServlet > Not caching the query doc");
+				"Not caching the query doc");
 		}
 
 		//call the plot access module	 
