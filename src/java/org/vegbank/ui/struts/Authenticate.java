@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-02-28 11:20:37 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-03-02 22:31:50 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,6 +99,7 @@ public class Authenticate implements  Authentication
 			reqRoles = "reg";
 		}
 		
+		LogUtility.log("::: ACTION! :::::::::::::::::::::::::::::");
 		return PermComparison.matchesAll(reqRoles, userPerms);
 	}
 
