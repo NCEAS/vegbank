@@ -9,246 +9,171 @@
 
  
   <plot> 
-    <plotId>148</plotId> 
-    <plotAccessionNumber>VB.046-01-0667.148.test@test.com.20010720</plotAccessionNumber> 
     <authorPlotCode>046-01-0667</authorPlotCode> 
     <latitude>36.016175128</latitude> 
     <longitude>-81.699576684</longitude> 
     <authorE>436944</authorE> 
     <authorN>3985754</authorN> 
     <authorZone>17</authorZone> 
-    <authorDatum></authorDatum> 
+    <authorDatum>NAD27</authorDatum> 
     <authorLocation>John's River Gorge</authorLocation> 
-    <locationNarrative>null</locationNarrative> 
-    <layoutNarrative>null</layoutNarrative> 
+    <locationNarrative></locationNarrative> 
+    <layoutNarrative></layoutNarrative> 
     <confidentialityStatus>0</confidentialityStatus> 
     <confidentialityReason>normal</confidentialityReason> 
     <azimuth>198</azimuth> 
     <dsgPoly>(0,0);(0,10);(50,10);(50,-10);(0,-10);(0,0)</dsgPoly> 
     <shape>Rectangular</shape> 
     <area>1000</area> 
-    <standSize>extensive</standSize> 
+    <standSize></standSize>
     <placementMethod></placementMethod> 
-    <permanence>true</permanence> 
-    <layoutNarative>null</layoutNarative> 
-    <elevation>null</elevation> 
-    <elevationAccuracy>null</elevationAccuracy> 
-    <slopeAspect>240 </slopeAspect> 
+    <permanence>-1</permanence> 
+    <layoutNarative></layoutNarative> 
+    <elevation>3050</elevation> 
+    <elevationAccuracy>305</elevationAccuracy> 
+    <slopeAspect>240</slopeAspect> 
     <slopeGradient>30</slopeGradient> 
     <topoPosition>Channel bed (narrow valley bottom, gully arroyo)</topoPosition> 
-    <landform>aluvial fan</landform> 
+    <landform>spit</landform> 
     <geology>Igneous Rocks: Gabbroic</geology> 
     <soilTaxon></soilTaxon> 
-    <soilTaxonSource>null</soilTaxonSource> 
+    <soilTaxonSource></soilTaxonSource> 
     <notesPublic>false</notesPublic> 
     <notesMgt>false</notesMgt> 
-    <revisions>false</revisions> 
-    <state>NC</state> 
-    <country>null</country> 
+    <revisions></revisions> 
+    <state></state> 
+    <country></country> 
  
     <observation> 
-      <authorObsCode></authorObsCode> 
-      <obsStartDate>2001-07-20 00:00:00-07</obsStartDate> 
-      <obsEndDate>2001-07-20 00:00:00-07</obsEndDate> 
-      <dateAccuracy>null</dateAccuracy> 
-      <observationSequence>VB.148.20030114104819.517594-08</observationSequence> 
+      <authorObsCode>046-01-0668</authorObsCode> 
+      <obsStartDate>7/20/2001</obsStartDate> 
+      <obsEndDate>7/20/2001</obsEndDate> 
+      <dateAccuracy></dateAccuracy> 
       <stemSizeLimit>0</stemSizeLimit> 
       <methodNarrative>null</methodNarrative> 
       <taxonObservationArea>1000</taxonObservationArea> 
       <coverDispersion>Contiguous</coverDispersion> 
-      <autotaxonCover>true</autotaxonCover> 
+      <autotaxonCover>false</autotaxonCover> 
       <stemObservationArea>1000</stemObservationArea> 
-      <stemSampleMethod></stemSampleMethod> 
+      <stemSampleMethod>Full census</stemSampleMethod> 
       <originalData>UNC-CH, Peet</originalData> 
-      <effortLevel>null</effortLevel> 
-      <plotValidationLevel>null</plotValidationLevel> 
-      <floristicQuality>null</floristicQuality> 
+      <effortLevel></effortLevel> 
+      <plotValidationLevel></plotValidationLevel> 
+      <floristicQuality></floristicQuality> 
       <bryophyteQuality>Low</bryophyteQuality> 
       <lichenQuality>Low</lichenQuality> 
-      <observationNarrative>null</observationNarrative> 
-      <landscapeNarrative>null</landscapeNarrative> 
-      <homogeneity>null</homogeneity> 
-      <phenologicalAspect>null</phenologicalAspect> 
-      <representativeness>null</representativeness> 
-      <basalArea>null</basalArea> 
+      <observationNarrative></observationNarrative> 
+      <landscapeNarrative></landscapeNarrative> 
+      <homogeneity></homogeneity> 
+      <phenologicalAspect></phenologicalAspect> 
+      <representativeness></representativeness> 
+      <basalArea></basalArea> 
       <hydrologicRegime>Unknown</hydrologicRegime> 
-      <soilMoistureRegime>null</soilMoistureRegime> 
-      <soilDrainage></soilDrainage> 
-      <waterSalinity>null</waterSalinity> 
-      <waterDepth>null</waterDepth> 
-      <shoreDistance>null</shoreDistance> 
-      <soilDepth>null</soilDepth> 
-      <organicDepth>null</organicDepth> 
+      <soilMoistureRegime></soilMoistureRegime> 
+      <soilDrainage>Well drained</soilDrainage> 
+      <waterSalinity>Freshwater (0.5 ppt)</waterSalinity> 
+      <waterDepth></waterDepth> 
+      <shoreDistance></shoreDistance> 
+      <soilDepth>42.2666666666667</soilDepth> 
+      <organicDepth></organicDepth> 
       <percentBedrock>2</percentBedrock>  
       <percentRockGravel>1</percentRockGravel>  
       <percentWood>4</percentWood> 
       <percentLitter>90</percentLitter> 
       <percentBareSoil>1</percentBareSoil> 
-      <percentWater>null</percentWater> 
+      <percentWater></percentWater> 
       <percentOther>1</percentOther> 
       <nameOther>Bryo/Lichen</nameOther> 
-      <standMaturity>null</standMaturity> 
-      <successionalStatus>null</successionalStatus> 
-      <treeHt>null</treeHt> 
-      <shrubHt>null</shrubHt> 
-      <fieldHt>null</fieldHt> 
-      <nonvascularHt>null</nonvascularHt> 
-      <submergedHt>null</submergedHt> 
-      <treeCover>null</treeCover> 
-      <shrubCover>null</shrubCover> 
-      <fieldCover>null</fieldCover> 
-      <nonvascularCover>null</nonvascularCover> 
-      <floatingCover>null</floatingCover> 
-      <submergedCover>null</submergedCover> 
-      <dominantStratum>null</dominantStratum> 
-      <growthform1type>null</growthform1type> 
-      <growthform2type>null</growthform2type>  
-      <growthform3type>null</growthform3type> 
-      <growthform1cover>null</growthform1cover>  
-      <growthform2cover>null</growthform2cover> 
-      <growthform3cover>null</growthform3cover>  
+      <standMaturity></standMaturity> 
+      <successionalStatus></successionalStatus> 
+      <treeHt></treeHt> 
+      <shrubHt></shrubHt> 
+      <fieldHt></fieldHt> 
+      <nonvascularHt></nonvascularHt> 
+      <submergedHt></submergedHt> 
+      <treeCover></treeCover> 
+      <shrubCover></shrubCover> 
+      <fieldCover></fieldCover> 
+      <nonvascularCover></nonvascularCover> 
+      <floatingCover></floatingCover> 
+      <submergedCover></submergedCover> 
+      <dominantStratum></dominantStratum> 
+      <growthform1type></growthform1type> 
+      <growthform2type></growthform2type>  
+      <growthform3type></growthform3type> 
+      <growthform1cover></growthform1cover>  
+      <growthform2cover></growthform2cover> 
+      <growthform3cover></growthform3cover>  
       <notesPublic>false</notesPublic> 
       <notesMgt>false</notesMgt>  
       <revisions>false</revisions>  
 
 <communityClassification> 
-	<className>ice-plant community</className> 
+	<className></className> 
 	<classCode></classCode> 
-	<classStartDate></classStartDate> 
-	<classStopDate></classStopDate> 
-	<classInspection></classInspection> 
-	<classInspection></classInspection> 
-	<tableAnalysis></tableAnalysis> 
-	<multivariateAnalysis></multivariateAnalysis> 
-	<expertSystem></expertSystem> 
-	<classNotes>null</classNotes> 
+	<classStartDate>7/24/2002</classStartDate> 
+	<classStopDate>7/24/2002</classStopDate> 
+	<classInspection>true</classInspection> 
+	<classInspection>true</classInspection> 
+	<tableAnalysis>true</tableAnalysis> 
+	<multivariateAnalysis>true</multivariateAnalysis> 
+	<expertSystem>true</expertSystem> 
+	<classNotes></classNotes> 
 	<classPublication></classPublication> 
 </communityClassification> 
  
 <stratum> 
 	<stratumName>Canopy</stratumName> 
-	<stratumHeight>0</stratumHeight> 
-	<stratumBase>0</stratumBase> 
-	<stratumCover>null</stratumCover> 
+	<stratumHeight></stratumHeight> 
+	<stratumBase></stratumBase> 
+	<stratumCover></stratumCover> 
 </stratum> 
  
 <stratum> 
 	<stratumName>Emergent</stratumName> 
-	<stratumHeight>0</stratumHeight> 
-	<stratumBase>0</stratumBase> 
-	<stratumCover>null</stratumCover> 
+	<stratumHeight></stratumHeight> 
+	<stratumBase></stratumBase> 
+	<stratumCover></stratumCover> 
 </stratum> 
  
 <stratum> 
 	<stratumName>Herb</stratumName> 
-	<stratumHeight>0</stratumHeight> 
-	<stratumBase>0</stratumBase> 
-	<stratumCover>null</stratumCover> 
+	<stratumHeight></stratumHeight> 
+	<stratumBase></stratumBase> 
+	<stratumCover></stratumCover> 
 </stratum> 
  
 <stratum> 
 	<stratumName>Shrub</stratumName> 
-	<stratumHeight>0</stratumHeight> 
-	<stratumBase>0</stratumBase> 
-	<stratumCover>null</stratumCover> 
+	<stratumHeight></stratumHeight> 
+	<stratumBase></stratumBase> 
+	<stratumCover></stratumCover> 
 </stratum> 
  
 <stratum> 
 	<stratumName>SubCanopy</stratumName> 
-	<stratumHeight>0</stratumHeight> 
-	<stratumBase>0</stratumBase> 
-	<stratumCover>null</stratumCover> 
+	<stratumHeight></stratumHeight> 
+	<stratumBase></stratumBase> 
+	<stratumCover></stratumCover> 
 </stratum> 
  
 <stratum> 
 	<stratumName>Understory</stratumName> 
-	<stratumHeight>0</stratumHeight> 
-	<stratumBase>0</stratumBase> 
-	<stratumCover>null</stratumCover> 
+	<stratumHeight></stratumHeight> 
+	<stratumBase></stratumBase> 
+	<stratumCover></stratumCover> 
 </stratum> 
- 
-<taxonObservation> 
-  <authorNameId>Acer rubrum L.</authorNameId> 
-  <authorCodeId>337</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Canopy</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>8</taxonStratumCover> 
-      <stratumName>Understory</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Amelanchier arborea (Michx. f.) Fern.</authorNameId> 
-  <authorCodeId>883</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>0</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Castanea dentata (Marsh.) Borkh.</authorNameId> 
-  <authorCodeId>3146</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>0</taxonStratumCover> 
-      <stratumName>Canopy</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>0</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Galax urceolata (Poir.) Brummitt</authorNameId> 
-  <authorCodeId>6257</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>0</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Ilex opaca Ait. var. opaca</authorNameId> 
-  <authorCodeId>7469</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>0</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
  
 <taxonObservation> 
   <authorNameId>Kalmia latifolia L.</authorNameId> 
   <authorCodeId>7857</authorCodeId> 
-   <taxonCover>0</taxonCover> 
+   <taxonCover>37.5</taxonCover> 
     <stratumComposition> 
-      <taxonStratumCover>38</taxonStratumCover> 
+      <taxonStratumCover>37.5</taxonStratumCover> 
       <stratumName>Canopy</stratumName> 
     </stratumComposition> 
     <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Magnolia fraseri Walt.</authorNameId> 
-  <authorCodeId>8956</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>0</taxonStratumCover> 
+      <taxonStratumCover>0.5025</taxonStratumCover> 
       <stratumName>Emergent</stratumName> 
     </stratumComposition> 
 </taxonObservation> 
@@ -256,7 +181,7 @@
 <taxonObservation> 
   <authorNameId>Nyssa sylvatica Marsh.</authorNameId> 
   <authorCodeId>9678</authorCodeId> 
-   <taxonCover>0</taxonCover> 
+   <taxonCover>37.5</taxonCover> 
     <stratumComposition> 
       <taxonStratumCover>18</taxonStratumCover> 
       <stratumName>Canopy</stratumName> 
@@ -271,50 +196,6 @@
     </stratumComposition> 
     <stratumComposition> 
       <taxonStratumCover>38</taxonStratumCover> 
-      <stratumName>Understory</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Oxydendrum arboreum (L.) DC.</authorNameId> 
-  <authorCodeId>9999</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>4</taxonStratumCover> 
-      <stratumName>Canopy</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>4</taxonStratumCover> 
-      <stratumName>Shrub</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>38</taxonStratumCover> 
-      <stratumName>Understory</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Pinus pungens Lamb.</authorNameId> 
-  <authorCodeId>10980</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>0</taxonStratumCover> 
-      <stratumName>Canopy</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>0</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>2</taxonStratumCover> 
-      <stratumName>Shrub</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
       <stratumName>Understory</stratumName> 
     </stratumComposition> 
 </taxonObservation> 
@@ -322,7 +203,7 @@
 <taxonObservation> 
   <authorNameId>Pinus rigida P. Mill.</authorNameId> 
   <authorCodeId>10983</authorCodeId> 
-   <taxonCover>0</taxonCover> 
+   <taxonCover>7.5</taxonCover> 
     <stratumComposition> 
       <taxonStratumCover>0</taxonStratumCover> 
       <stratumName>Canopy</stratumName> 
@@ -338,165 +219,19 @@
     <stratumComposition> 
       <taxonStratumCover>1</taxonStratumCover> 
       <stratumName>Understory</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Quercus coccinea Muenchh. var. coccinea</authorNameId> 
-  <authorCodeId>11927</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Canopy</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>18</taxonStratumCover> 
-      <stratumName>Shrub</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>8</taxonStratumCover> 
-      <stratumName>Understory</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Quercus montana Willd.</authorNameId> 
-  <authorCodeId>11975</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Canopy</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>38</taxonStratumCover> 
-      <stratumName>Shrub</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>8</taxonStratumCover> 
-      <stratumName>Understory</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Quercus rubra L.</authorNameId> 
-  <authorCodeId>11999</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Canopy</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>4</taxonStratumCover> 
-      <stratumName>Shrub</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Understory</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Quercus velutina Lam.</authorNameId> 
-  <authorCodeId>12028</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Canopy</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>18</taxonStratumCover> 
-      <stratumName>Shrub</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>8</taxonStratumCover> 
-      <stratumName>Understory</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Robinia pseudoacacia L.</authorNameId> 
-  <authorCodeId>12461</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Canopy</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>0</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Sassafras albidum (Nutt.) Nees</authorNameId> 
-  <authorCodeId>13326</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>0</taxonStratumCover> 
-      <stratumName>Canopy</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-    <stratumComposition> 
-      <taxonStratumCover>2</taxonStratumCover> 
-      <stratumName>Understory</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Smilax glauca Walt.</authorNameId> 
-  <authorCodeId>13967</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
     </stratumComposition> 
 </taxonObservation> 
  
 <taxonObservation> 
   <authorNameId>Smilax rotundifolia L.</authorNameId> 
   <authorCodeId>13986</authorCodeId> 
-   <taxonCover>0</taxonCover> 
+   <taxonCover>0.5025</taxonCover> 
     <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
+      <taxonStratumCover>0.5052</taxonStratumCover> 
       <stratumName>Canopy</stratumName> 
     </stratumComposition> 
     <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
-      <stratumName>Emergent</stratumName> 
-    </stratumComposition> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Symplocos tinctoria (L.) L'Hér.</authorNameId> 
-  <authorCodeId></authorCodeId> 
-   <taxonCover>null</taxonCover> 
-</taxonObservation> 
- 
-<taxonObservation> 
-  <authorNameId>Vaccinium pallidum Ait.</authorNameId> 
-  <authorCodeId>15500</authorCodeId> 
-   <taxonCover>0</taxonCover> 
-    <stratumComposition> 
-      <taxonStratumCover>1</taxonStratumCover> 
+     <taxonStratumCover>0.5025</taxonStratumCover> 
       <stratumName>Emergent</stratumName> 
     </stratumComposition> 
 </taxonObservation> 
@@ -504,7 +239,7 @@
 <taxonObservation> 
   <authorNameId>Vitis aestivalis Michx.</authorNameId> 
   <authorCodeId>15976</authorCodeId> 
-   <taxonCover>0</taxonCover> 
+   <taxonCover>0.025</taxonCover> 
     <stratumComposition> 
       <taxonStratumCover>0</taxonStratumCover> 
       <stratumName>Emergent</stratumName> 
