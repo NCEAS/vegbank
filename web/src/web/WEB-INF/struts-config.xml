@@ -132,7 +132,7 @@
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="cert" />
 		</action>
-		<!--action path="/CommQuery" type="org.vegbank.ui.struts.DummyAction" name="CommQueryForm" scope="request" validate="true" input="CommQuery"-->
+		<action path="/CommQuery" type="org.vegbank.ui.struts.DummyAction" name="CommQueryForm" scope="request" validate="true" input="CommQuery">
 			<forward name="default" path="/views/commconcept_detail.jsp" />
 		</action>
 		<action path="/DownLoad" type="org.vegbank.ui.struts.DownLoadAction" name="DownLoadForm" scope="request" validate="true" input="DownLoad" />
@@ -150,14 +150,14 @@
 		<action path="/GenericDispatcher" type="org.vegbank.ui.struts.GenericDispatcherAction" name="GenericDispatcherForm" scope="request" />
 		<action path="/GenericDispatcherFwd" type="org.vegbank.ui.struts.GenericDispatcherFwdAction" />
 		<action path="/InterpretTaxonObservation" parameter="edit" type="org.vegbank.ui.struts.InterpretPlantAction" scope="request" name="InterpretPlantForm" input="InterpretTaxonObservation" validate="false">
-			<forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" redirect="false" />
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="pro" />
+			<forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" redirect="false" />
 		</action>
 		<action path="/InterpretCommObservation" parameter="edit" type="org.vegbank.ui.struts.InterpretCommAction" scope="request" name="InterpretCommForm" input="InterpretCommObservation" validate="false">
-			<forward name="edit" path="/forms/CommInterpretation.jsp" redirect="false" />
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="pro" />
+			<forward name="edit" path="/forms/CommInterpretation.jsp" redirect="false" />
 		</action>
 		<action path="/ListCertifications" type="org.vegbank.ui.struts.admin.CertificationListAction" name="CertificationForm" scope="request" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />

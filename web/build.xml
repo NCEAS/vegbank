@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2004-12-15 00:25:25 $'
-* '$Revision: 1.138 $'
+* '$Author: anderson $'
+* '$Date: 2004-12-15 19:30:48 $'
+* '$Revision: 1.139 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -432,6 +432,7 @@
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
 -->
   <target name="web" depends="xsl" description="==> Distribute Web Files ">
+    <xmlvalidate file="${web.src.dir}/WEB-INF/struts-config.xml" failonerror="true"/>
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes">
       <fileset dir="${web.src.dir}"/>
     </copy>
@@ -455,9 +456,9 @@
     <filter filtersfile="${includes_server}/filters_detokened.properties"/>
     <copy file="${includes_src}/placeurl.properties" tofile="${includes_server}/placeurl_detokened.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${includes_server}/placeurl_detokened.properties"/>
-    <style in="${vegbranch_src}/docs/demo/demomap.xml" out="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" style="${vegbranch_src}/docs/demo/maptofilters.xsl" force="true"/>
-    <copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${includes_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="yes"/>
-    <filter filtersfile="${includes_server}/vegbranchdemo_filters_detokened.properties"/>
+    <!--style in="${vegbranch_src}/docs/demo/demomap.xml" out="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" style="${vegbranch_src}/docs/demo/maptofilters.xsl" force="true"/-->
+    <!--copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${includes_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="yes"/-->
+    <!--filter filtersfile="${includes_server}/vegbranchdemo_filters_detokened.properties"/-->
     <!-- set the properties file that replaces tokens with closed list values in picklists -->
     <copy file="${includes_src}/url2get_data.properties" tofile="${includes_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${includes_server}/url2get_data.properties"/>
