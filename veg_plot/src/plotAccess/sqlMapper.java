@@ -4,7 +4,8 @@ import java.text.*;
 import java.util.*;
 import java.sql.*;
 
-import queryStore.*;  //class that stores all the queries
+ //import the class that stores all the queries
+import queryStore.*; 
 
 
 /**
@@ -58,26 +59,8 @@ private Hashtable metaQueryHash = new Hashtable();
 public void developPlotQuery(String[] transformedString, int transformedStringNum)
 {
 
-// First set up a pool of connections that can be passed to the queryStore class
-//get the database parameters from the database.parameters file
- utility g =new utility(); 
- g.getDatabaseParameters("database", "query");
- Connection pconn=null; 
- DbConnectionBroker myBroker;
 
 try {
- myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
-	g.login,g.passwd,g.minConnections,g.maxConnections, g.logFile,1.0);
-				  
-// Get a DB connection from the Broker
- int thisConnection;
- pconn= myBroker.getConnection(); //grab one connection from pool
- thisConnection = myBroker.idOfConnection(pconn);
-
-//This is a scheme to see how many times a database connection is used if 
-//more than like 50 times check it back into the pool and grab a new one - the 
-//exception thrown otherwise is exeeded max cursors
- int connectionUses=1;
 
 //get the query elements into a hash table
 getQueryElementHash(transformedString, transformedStringNum);
@@ -98,7 +81,7 @@ getQueryElementHash(transformedString, transformedStringNum);
 		System.out.println("sqlMapper.developPlotQuery - "
 		+" calling queryStore.getEntireSinglePlot");
 		queryStore b = new queryStore();
-		b.getEntireSinglePlot(plotId, pconn);
+		b.getEntireSinglePlot(plotId);
 		
 		xmlWriter l = new xmlWriter();
 		l.writePlotSummary(b.entireSinglePlotOutput, 
@@ -122,7 +105,7 @@ getQueryElementHash(transformedString, transformedStringNum);
 		System.out.println("sqlMapper.developPlotQuery - "
 		+" calling queryStore.getPlotId (single query element)");
 		queryStore j = new queryStore();
-		j.getPlotId(queryElementValue, queryElementType, pconn);
+		j.getPlotId(queryElementValue, queryElementType);
 		queryOutput=j.outPlotId;
 		queryOutputNum=j.outPlotIdNum;
 	}
@@ -134,7 +117,7 @@ getQueryElementHash(transformedString, transformedStringNum);
 	else if ( resultType.equals("summary") && (queryElementHash.size() == 2) ) {
 
 		//assume for now that the query elements being targetd here are
-		// elevation and grab the results
+		//elevation and grab the results
 		String elevationMin = (String)queryElementHash.get("elevationMin");
 		String elevationMax = (String)queryElementHash.get("elevationMax");
 		
@@ -142,42 +125,24 @@ getQueryElementHash(transformedString, transformedStringNum);
 		System.out.println("sqlMapper.developPlotQuery - "
 		+" calling queryStore.getPlotId (elevation option)");
 		queryStore j = new queryStore();
-		j.getPlotId(elevationMin, elevationMax, "elevation", pconn);
+		j.getPlotId(elevationMin, elevationMax, "elevation");
 
 		queryOutput=j.outPlotId;
 		queryOutputNum=j.outPlotIdNum;
 	}
 
-// manage the database connections -- this doesn't really work here but keep it
-// for later
-///connectionUses=connectionUses+k.outConnectionUses;
-System.out.println("number of uses of this connection: "+connectionUses);
-if (connectionUses>12) {
-	System.out.println("reseting the current connection");
-
-	try {
-		pconn.close(); 
-		myBroker.freeConnection(pconn); 
-		pconn=myBroker.getConnection();
-		connectionUses=0;
-	} catch (Exception e) {System.out.println("failed calling "
-		+" dbConnect.makeConnection call" + e.getMessage());}
-}
 
 //retrieve the plot summary information, using as input the plotId numbers 
 //retrieved in the provios query 
 queryStore k1 = new queryStore();
-k1.getPlotSummaryNew(queryOutput, queryOutputNum, pconn);
+k1.getPlotSummaryNew(queryOutput, queryOutputNum);
 
 //write to a summary information to the file that can be used by the application
 xmlWriter xw = new xmlWriter();
 xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
 
 
-// The connection is returned to the Broker
-myBroker.freeConnection(pconn);
-myBroker.destroy();
-} //end try - for conn pooler
+} //end try 
 catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery  "
 	+e.getMessage());e.printStackTrace();}
 
@@ -200,28 +165,7 @@ catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery 
 
 public void developCompoundPlotQuery(String[] transformedString, int transformedStringNum)
 {
-
-// First set up a pool of connections that can be passed to the queryStore class
-//get the database parameters from the database.parameters file
- utility g =new utility(); 
- g.getDatabaseParameters("database", "query");
- Connection pconn=null; 
- DbConnectionBroker myBroker;
-
 try {
- myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
-	g.login,g.passwd,g.minConnections,g.maxConnections, g.logFile,1.0);
-				  
-// Get a DB connection from the Broker
- int thisConnection;
- pconn= myBroker.getConnection(); //grab one connectionfrom pool
- thisConnection = myBroker.idOfConnection(pconn);
-
-//This is a scheme to see how many times a database connection is used if 
-//more than like 50 times check it back into the pool and grab a new one - the 
-//exception thrown otherwise is exeeded max cursors
- int connectionUses=1;
-
 
 //get the query elements into a hash table
 getQueryElementHash(transformedString, transformedStringNum);
@@ -252,13 +196,13 @@ getQueryElementHash(transformedString, transformedStringNum);
 
 if (taxonName != null && resultType != null && outFile != null) {
 	
-	if ( resultType.equals("summary") ) { //retrieve the plotId's w taxon
+	if ( resultType.equals("summary") ) {
 
 		System.out.println("sqlMapper.developCompoundPlotQuery - "
 		+" calling queryStore.getPlotId (compound)");
 		queryStore j = new queryStore();
 		j.getPlotId(taxonName, state, elevationMin, elevationMax,
-		surfGeo, multipleObs, community, pconn);
+		surfGeo, community);
 		queryOutput=j.outPlotId;
 		queryOutputNum=j.outPlotIdNum;
 
@@ -269,35 +213,16 @@ if (taxonName != null && resultType != null && outFile != null) {
 
 //retrieve the summary info
 queryStore k = new queryStore();
-k.getPlotSummary(queryOutput, queryOutputNum, pconn);
-
-// manage the database connections -- this doesn't really work here but keep it
-// for later
-connectionUses=connectionUses+k.outConnectionUses;
-System.out.println("number of uses of this connection: "+connectionUses);
-if (connectionUses>12) {
-	System.out.println("reseting the current connection");
-
-	try {
-		pconn.close(); 
-		myBroker.freeConnection(pconn); 
-		pconn=myBroker.getConnection();
-		connectionUses=0;
-	} catch (Exception e) {System.out.println("failed calling "
-		+" dbConnect.makeConnection call" + e.getMessage());}
-
-}
+k.getPlotSummaryNew(queryOutput, queryOutputNum);
 
 
-//write to a summary file
-xmlWriter l = new xmlWriter();
-l.writePlotSummary(k.summaryOutput, k.summaryOutputNum, outFile);
+//write to a summary file - that will be read by the requestor
+xmlWriter xw = new xmlWriter();
+xw.writePlotSummary(k.cumulativeSummaryResultHash, outFile);
 
 
-// The connection is returned to the Broker
-myBroker.freeConnection(pconn);
-myBroker.destroy();
-} //end try - for conn pooler
+
+} //end try 
 catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery  "
 	+e.getMessage());e.printStackTrace();}
 
@@ -323,23 +248,9 @@ public void developSimpleCommunityQuery(String[] transformedString,
 {
 
 
-// First set up a pool of connections that can be passed to the queryStore class
-//get the database parameters from the database.parameters file
- utility g =new utility(); 
- g.getDatabaseParameters("database", "query");
- Connection pconn=null; 
- DbConnectionBroker myBroker;
 
 try {
 
-myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
-	g.login,g.passwd,g.minConnections,g.maxConnections, g.logFile,1.0);
-				  
-// Get a DB connection from the Broker
-int thisConnection;
-pconn=myBroker.getConnection(); //grab one connectionfrom pool
-
-//add the connection counting stuff later
 
 //get the query elements into a hash table
 getQueryElementHash(transformedString, transformedStringNum);
@@ -361,7 +272,7 @@ Integer queryElementNum = (Integer)metaQueryHash.get("elementTokenNum");
 	
 //call the method in the CommunityQueryStore class to develop the query
 CommunityQueryStore j = new CommunityQueryStore();
-j.getCommunitySummary(communityName, communityLevel, pconn);
+j.getCommunitySummary(communityName, communityLevel);
 queryOutputNum=j.communitySummaryOutput.size(); //assign the number of returned values
 
 
@@ -370,11 +281,8 @@ xmlWriter l = new xmlWriter();
 l.writeCommunitySummary(j.communitySummaryOutput, outFile);
 
 
-//return the connection to the Broker
-myBroker.freeConnection(pconn);
-myBroker.destroy();
 
-} //end try - for conn pooler
+} //end try
 catch ( Exception e ){System.out.println("failed at: sqlMapper.developSimpleCommunityQuery  "
 	+e.getMessage());e.printStackTrace();}
 
