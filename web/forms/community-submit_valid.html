@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-03-11 22:39:05 $'
-  *  '$Revision: 1.1 $'
+  *      '$Date: 2002-03-12 00:25:22 $'
+  *  '$Revision: 1.2 $'
   *
   *
   -->
@@ -77,7 +77,7 @@
 			<table border="0" cellspacing=5 cellpadding=5>
 			<form action="@datasubmitservlet@" method="get">
 			<input type="hidden" name="submitDataType" value="vegCommunity">
-			<input type="hidden" name="action" value="init">		
+			<input type="hidden" name="action" value="submit">		
 	
 			
 			<tr valign=top>
@@ -98,36 +98,53 @@
 Party <br>
 Salutation:  <input name="salutation"   size="25" value="@salutation@"  > <br>
 First Name:  <input name="firstName"   size="25" value="@firstName@"  > <br>
-Last Name:  <input name="lastName"   size="25" value="@lastname@"  > <br>
+Last Name:  <input name="lastName"   size="25" value="@lastName@"  > <br>
 Email Address:  <input name="emailAddress"   size="25" value="@emailAddress@"  > <br>
 Organization Name:  <input name="orgName"   size="25" value="@orgName@"  > <br>
 
 <br>
 Community Name <br>
-Community Name:  <input name="communityName"   size="25" value="@communityName@"  > <br>
-Community Level:  <input name="communityLevel"   size="25" value="@communityLevel@"  > <br>
-Community Code:  <input name="communityCode"   size="25" value="@communityCode@"  > <br>
+Community Name:  <input name="communityName"   size="70" value="@communityName@"  > <br>
+Community Level:  <input name="communityLevel"   size="25" value="@communityLevel@"   > <br>
+Community Code:  <input name="communityCode"   size="25"   value="@communityCode@"> <br>
+Concept Status:  <input name="conceptStatus"   size="25"   value="@conceptStatus@"> <br>
+Name Status:  <input name="nameStatus"   size="25"   value="@nameStatus@"> <br>
 
 <br>
+<table>
+<tr>
+<td>
 Name Reference <br>
 Authors: <input name="authors"   size="25" value="@authors@"  > <br>
 Title: <input name="title"   size="25" value="@title@"  > <br>
 Publised Date: <input name="pubDate"   size="25" value="@pubDate@"  > <br>
 Edition: <input name="edition"   size="25" value="@edition@"  > <br>
-Series Name <input name="series"   size="25" value="@series@"  > <br>
+Series Name <input name="series"   size="25" value="@seriesName@"  > <br>
 Issue Id: <input name="issueId"   size="25" value="@issueId@"  > <br>
 Other Citatin Details <input name="otherCitationDetails"   size="25" value="@otherCitationDetails@"  > <br>
 Page Number: <input name="pageNumber"   size="25" value="@pageNumber@"  > <br>
 ISBN: <input name="isbn"   size="25" value="@isbn@"  > <br>
 ISSN: <input name="issn"   size="25" value="@issn@"  > <br>
+</td>
+<td>
+Concept Reference <br>
+Authors: <input name="authors"   size="25" value="@authors@"  > <br>
+Title: <input name="title"   size="25" value="@title@"  > <br>
+Publised Date: <input name="pubDate"   size="25" value="@pubDate@"  > <br>
+Edition: <input name="edition"   size="25" value="@edition@"  > <br>
+Series Name <input name="series"   size="25" value="@seriesName@"  > <br>
+Issue Id: <input name="issueId"   size="25" value="@issueId@"  > <br>
+Other Citatin Details <input name="otherCitationDetails"   size="25" value="@otherCitationDetails@"  > <br>
+Page Number: <input name="pageNumber"   size="25" value="@pageNumber@"  > <br>
+ISBN: <input name="isbn"   size="25" value="@isbn@"  > <br>
+ISSN: <input name="issn"   size="25" value="@issn@"  > <br>
+</td>
+</tr>
+</table>
 
 <br>
-Usage <br>
-Class System: <input name="classSystem"   size="25" value="scientificName"  > <br>
 
 <br>
-Framework Level <br>
-Class System: <input name="level"   size="25" value="level"  > <br>
 
 
 </body>
