@@ -54,9 +54,9 @@ if (searchString ==  null || searchString.equals("")) {
 
 <body>
 @vegbank_header_html_normal@
-<h2>VegBank Metasearch</h2>
-<blockquote>
+<h2 class='center'>VegBank Metasearch</h2>
 
+<center>
 
 <bean:define id="search" value="<%= searchString %>"/>
 <bean:define id="regexOp" value="<%= xwhereGlue %>"/>
@@ -66,10 +66,10 @@ if (searchString ==  null || searchString.equals("")) {
 
 <logic:empty name="meta-BEANLIST">
 <logic:notEmpty name="search">
-<blockquote>
+<p>
 	Nothing in the database matches your keywords.<br>
 	Please try again.
-</blockquote>
+</p>
 </logic:notEmpty>
 </logic:empty>
 
@@ -111,7 +111,7 @@ if (searchString ==  null || searchString.equals("")) {
 
 <logic:notEmpty name="meta-BEANLIST">
 <% String rowClass = "evenrow"; %>
-<blockquote>
+
 	<table bgcolor="#333333" cellspacing="0" cellpadding="1" border="0" align="center">
 	<tr><td><table bgcolor="#FFFFFF" border="0" cellspacing="0" cellpadding="10" width="250">
 	<tr align="center">
@@ -176,8 +176,8 @@ String getURL = "@get_link@" + getView + "/" + getName + "/" + params +
 	</logic:iterate>
 
 	</table></td></tr></table>
-</blockquote>
-	<center>
+
+
 <span class="sizesmall" align="center">
 <% if (searchString !=  null && !searchString.equals("")) { %>
 You searched for 
@@ -191,25 +191,21 @@ Click here to <a href="javascript:viewAllMetadata()">view all metadata</a>
 Showing all metadata</a>
 <% } %>
 </span>
-</center>
+
 </logic:notEmpty>
 
 
 
-<p><span class="category">Want more search options?<br>
-&nbsp; &nbsp; &raquo; <a href="@web_context@forms/plot-query-simple.jsp">3-in-1 plot query</a>
-<br>
-&nbsp; &nbsp; &raquo; <a href="/vegbank/LoadPlotQuery.do">Advanced plot query</a>
-</span>
-</blockquote>
+<p>@newPlotQueryLink@</p>
 
-<br/>
-<p>&nbsp;
+
+
+
 
 <script language="javascript">
 document.metasearch_form.xwhereParams.focus();
 </script>
-
+</center>
 @vegbank_footer_html_tworow@
 </body>
 </html>
