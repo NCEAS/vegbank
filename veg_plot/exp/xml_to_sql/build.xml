@@ -33,7 +33,7 @@
 		<filter token="authors" value="HARRIS"/>
 	
 	
-	<property name="cpath" value="${xerces}:${xalan}:${xml_editor}:${db_access_module}:./"/>
+	<property name="cpath" value="${xalan}:${xerces}:${xml_editor}:${db_access_module}:./"/>
 	</target>
 
 	<!-- PREPARE -->
