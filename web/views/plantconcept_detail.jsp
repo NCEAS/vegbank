@@ -73,6 +73,8 @@
 <logic:notEmpty name="plantstatus-BEANLIST">
 <logic:iterate id="statusbean" name="plantstatus-BEANLIST">
 <bean:define id="thispartyacccode" name="statusbean" property="party_accessioncode" />
+<bean:define id="thispartyid" name="statusbean" property="party_id" />
+
 <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td class="grey" colspan="3">
 <!-- party perspective -->
@@ -82,19 +84,54 @@
 </td></tr>
 <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td valign="top" class="grey" >
-&nbsp;&nbsp;&nbsp;
+<ul class="compact">
+<li><span class="datalabelsmall">Status:</span>
 <b><bean:write name="statusbean" property="plantconceptstatus" /></b>
-<logic:notEmpty name="statusbean" property="plantlevel">
-<br/>
-&nbsp;&nbsp;&nbsp;
-<span class="datalabelsmall">Level:</span>
-<bean:write name="statusbean" property="plantlevel" />
-</logic:notEmpty><!-- has level-->
+</li>
 <logic:notEmpty name="statusbean" property="plantparent_id">
-<br/>
-&nbsp;&nbsp;&nbsp;
-<span class="datalabelsmall">Parent:</span><a href='@get_link@std/plantconcept/<bean:write name="statusbean" property="plantparent_id" />'><bean:write name="statusbean" property="plantparent_id_transl" /></a>
+<li>
+
+<img src="@images_link@uparr.gif" /><span class="datalabelsmall">Plant's Parent:</span><a href='@get_link@std/plantconcept/<bean:write name="statusbean" property="plantparent_id" />'><bean:write name="statusbean" property="plantparent_id_transl" /></a>
+</li>
 </logic:notEmpty><!-- has parent-->
+
+
+<logic:notEmpty name="statusbean" property="plantlevel">
+<li>
+
+<span class="datalabelsmall">This Plant's Level:</span>
+<bean:write name="statusbean" property="plantlevel" />
+</li>
+</logic:notEmpty><!-- has level-->
+
+<li>
+<!-- now show any children, which is inverted lookup -->
+ 	     <img src="@images_link@downarr.gif" /><span class="datalabelsmall">This Plant's Children: </span>
+ 	     
+ 	     <!-- create complex wparam, using concept_ID ; party_id -->
+ 	     
+ 	     <vegbank:get id="plantchildren" select="plantchildren" where="where_plantchildren"
+ 	       wparam="<%= concId + Utility.PARAM_DELIM + thispartyid %>"
+ 	       perPage="-1" pager="false" beanName="map" />
+ 	     <logic:notEmpty name="plantchildren-BEANLIST">  
+ 	       
+ 	      <span class="datalabelsmall"> <a href="javascript:showorhidediv('plantchildren-for-<bean:write name="statusbean" property="plantstatus_id" />')">Show/Hide</a> </span> </br>
+ 	    <div id='plantchildren-for-<bean:write name="statusbean" property="plantstatus_id" />'>
+ 	     <logic:iterate id="onerowofplantchildren" name="plantchildren-BEANLIST">
+ 	       <ul class="compact">
+ 	       <li>&nbsp;&nbsp;<a href='@get_link@std/plantconcept/<bean:write name="onerowofplantchildren" property="plantconcept_id" />'><bean:write name="onerowofplantchildren" property="plantconcept_id_transl" /></a></li>
+ 	       </ul>
+ 	     </logic:iterate>
+ 	 
+ 	    </div>
+ 	    </logic:notEmpty>
+ 	    <logic:empty name="plantchildren-BEANLIST">
+ 	     [none]
+ 	    </logic:empty>
+</li>
+</ul>
+
+
 
 <!-- end status -->
 </td>
