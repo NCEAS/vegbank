@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-11-06 00:53:22 $'
-* '$Revision: 1.129 $'
+* '$Date: 2004-11-08 21:17:45 $'
+* '$Revision: 1.130 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -107,6 +107,7 @@
     <property name="workshop_src" value="./workshop"/>
     <property name="vegdocs.dir" value="${machine_url}/vegdocs"/>
     <property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
+    <property name="vegbranch_src" value="./vegbranch"/>
     <!-- large binary files location:   targets that read from large binaries separate -->
     <property name="lrg_binary_src" value="${apache.document.root}/noncvs"/>
     <filter token="dist" value="dist"/>
@@ -167,6 +168,7 @@
     <filter token="panel_link" value="${vegdocs.dir}/panel/"/>
     <filter token="workshop_link" value="${vegdocs.dir}/workshop/"/>
     <filter token="vegbranch_link" value="${vegdocs.dir}/vegbranch/"/>
+    <filter token="vegbranch_demo_link" value="${vegdocs.dir}/vegbranch/docs/demo/"/>
     <filter token="xml_link" value="${vegdocs.dir}/xml/"/>
     <filter token="NativeXMLIndexPage" value="${vegdocs.dir}/xml/vegbank-xml-index.html"/>
     <filter token="help_link" value="${vegdocs.dir}/help/"/>
@@ -195,7 +197,7 @@
   </target>
   <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
-  <target name="hdrftr" depends="tokenfiles" description="=&gt; sets tokens to be replaced by those in hdrfooter file and other files">
+  <target name="hdrftr" depends="tokenfiles" description="=&gt; deprecated.">
     <!-- set the properties file that replaces tokens with closed list values in picklists -->
     <!--    
 	<filter filtersfile="${style_server}/closedlist-tokens.properties"/>
@@ -441,10 +443,13 @@
   <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
     <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
     <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
-    <copy file="${sharedhtml_src}/placeurl.properties" tofile="${style_server}/placeurl_detokened.properties" filtering="yes" overwrite="yes"/>
-    <!-- set the properties file that replaces tokens with closed list values in picklists -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
+    <copy file="${sharedhtml_src}/placeurl.properties" tofile="${style_server}/placeurl_detokened.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${style_server}/placeurl_detokened.properties"/>
+    <style in="${vegbranch_src}/docs/demo/demomap.xml" out="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" style="${vegbranch_src}/docs/demo/maptofilters.xsl" force="true"/>
+    <copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${style_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="yes"/>
+    <filter filtersfile="${style_server}/vegbranchdemo_filters_detokened.properties"/>
+    <!-- set the properties file that replaces tokens with closed list values in picklists -->
     <copy file="${sharedhtml_src}/url2get_data.properties" tofile="${style_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${style_server}/url2get_data.properties"/>
     <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="true"/>
@@ -466,7 +471,7 @@
     <echo>Targets:  {init} vegbranch-clean-all | vegbranch-dist-all | vegbranch-dist-client | vegbranch-dist-examples | 
       vegbranch-dist-docs | vegbranch-dist-images | vegbranch-dist-docs-loadtbls (before vegbranch-dist-docs)</echo>
     <!-- RELEVANT DIRECTORIES -->
-    <property name="vegbr_dir" value="./vegbranch"/>
+    <property name="vegbr_dir" value="${vegbranch_src}"/>
     <filter filtersfile="${vegbr_dir}/vegbranch.properties"/>
     <!-- get version  -->
     <!-- RELEVANT FILES TO COPY / DELETE -->
@@ -559,6 +564,12 @@
         <exclude name="BOGUS*"/>
         <exclude name="*.xsl"/>
         <exclude name="*.xml"/>
+        <exclude name="*/custom/*" />
+      </fileset>
+    </copy>
+    <copy todir="${vegbranch_server}/help" filtering="yes" overwrite="yes">
+      <fileset dir="${vegbr_dir}/help/custom">
+        <include name="**/*.html" />
       </fileset>
     </copy>
     <!-- copy screenshots -->
