@@ -6210,7 +6210,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>3</attListValue>
-          <attListValueDesc>fully compliant with recommendations</attListValueDesc>
+          <attListValueDesc>sufficient for classification and meets best practices</attListValueDesc>
           <attListSortOrd>3</attListSortOrd>
         </attListItem>
       </attList>
