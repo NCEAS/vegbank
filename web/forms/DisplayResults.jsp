@@ -8,14 +8,19 @@
   
   <script src="/vegbank/includes/utils.js"></script>
   <script language="javascript">
-  function postAction(actionName) {
-	  document.theform.action = actionName;
-	  document.theform.submit();
-  }
+    function postAction(actionName) {
+        document.theform.action = actionName;
+        document.theform.submit();
+    }
+
+    function customOnLoad() {
+        refreshHighlight('selectedPlots');
+    }
+
   </script>
-  
+  <!--body onLoad="refreshHighlight('selectedPlots')"-->
   @webpage_masthead_html@
-  <body onLoad="refreshHighlight('selectedPlots')">
+  
   <br/>
   <logic:messagesPresent message="false">
     <ul>
