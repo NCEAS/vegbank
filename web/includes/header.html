@@ -42,10 +42,10 @@ function preSubmit() {
 	</div>
 
     <div id="permanav">
-        <a href="#" class="nobg"><img src="@images_link@cart1.jpg" border="0" /></a><a 
-            href="#">Datacart</a> &middot;
-	<a href="#">My Account</a> &middot;
-	<a href="#">Help</a>
+        <a href="@web_context@DisplayDatasets.do" class="nobg"><img src="@images_link@cart1.jpg" border="0" /></a><a 
+            href="@web_context@DisplayDatasets.do">Datacart</a> &middot;
+	<a href="@general_link@account.html">My Account</a> &middot;
+	<a href="@general_link@instructions.html">Help</a>
 
     <br>
     <select class="input-box" name="vegbankNav" onChange="window.location=this.value"><option value="#">Jump to...</option>
@@ -76,9 +76,8 @@ function preSubmit() {
         <a href="#">Login</a> to your account
         -->
 
-            <form action="@forms_link@quicksearch.jsp"
+            <form action="@forms_link@metasearch.jsp"
                 method="get" name="quicksearch_form">
-
                 find 
             <select class="input-box" name="xwhereParams_entity_0" value="entity" />
                 <option value="anything">anything</option>
@@ -98,9 +97,9 @@ function preSubmit() {
             </form>
 
                 <div id="header-data-links">
-                    <a href="#">advanced search</a> 
+                    <a href="@web_context@LoadPlotQuery.do">advanced search</a> 
                     &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <a href="#">browse data</a>
+                    <a href="@general_link@browse.jsp">browse data</a>
                 </div>
 
             <!-- end header-left -->
@@ -108,9 +107,16 @@ function preSubmit() {
 
             <div id="header-right">
 
-                <ul id="navmenu-left"><li><a href="#">HOME</a></li><li><a href="#">FIND PLOTS</a></li><li><a href="#">OTHER DATA</a></li><li><a href="#">SUBMIT DATA</a></li></ul>
+                <ul id="navmenu-left"><li><a href="@web_context@">HOME</a></li>
+                <li><a href="@web_context@LoadPlotQuery.do">FIND PLOTS</a></li>
+                <li><a href="@general_link@metadata.html">OTHER DATA</a>
+                </li><li><a href="@DisplayUploadPlotAction@">SUBMIT DATA</a></li></ul>
 
-                <ul id="navmenu-right"><li><a href="#">FAQ</a></li><li><a href="#">HELP</a></li><li><a href="#">SITE MAP</a></li><li><a href="#">CONTACT</a></li></ul>
+                <ul id="navmenu-right">
+                 <li><a href="@general_link@faq.html">FAQ</a></li>
+                 <li><a href="@general_link@instructions.html">HELP</a></li>
+                 <li><a href="@general_link@sitemap.html">SITE MAP</a></li>
+                 <li><a href="@general_link@contact.html">CONTACT</a></li></ul>
 
               <!-- end header-right -->
             </div>
