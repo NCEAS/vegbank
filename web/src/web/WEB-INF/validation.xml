@@ -1,301 +1,359 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE form-validation PUBLIC
           "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN"
           "http://jakarta.apache.org/commons/dtds/validator_1_0.dtd">
 
-<!--
-    Validation Rules for the Vegbank application 
-
-    $Id: validation.xml,v 1.14 2004-02-07 06:43:19 anderson Exp $
--->
-
 <form-validation>
-
-
-    <!-- ========== Default Language Form Definitions ===================== -->
-    <formset>
-
-        <form name="AddReferenceForm">
-            <field property="reference.shortname"
-                   depends="required">
-              <arg0   key="reference.shortname" resource="false"/>
-            </field>
-            <field property="reference.title"
-                   depends="required">
-              <arg0   key="reference.title" resource="false"/>
-            </field>
-            <field property="reference.pubdate"
-                    depends="date">
-              <arg0   key="reference.pubDate"
-                      resource="false"/>
-              <var>
-                <var-name>datePattern</var-name>
-                <var-value>MM/dd/yyyy</var-value>
-              </var>
-            </field>
-        </form>
-
-        <form name="AddJournalForm">
-            <field property="referenceJournal.journal"
-                   depends="required">
-              <arg0   key="referenceJournal.journal" resource="false"/>
-            </field>
-        </form>
-
-        <form name="AddCoverMethodForm">
-            <field property="coverMethod.covertype"
-                   depends="required">
-              <arg0   key="coverMethod.coverType" resource="false"/>
-            </field>
-        </form>
-
-        <form name="AddStratumMethodForm">
-            <field property="stratumMethod.stratummethodname"
-                   depends="required">
-              <arg0   key="stratumMethod.stratumMethodName" resource="false"/>
-            </field>
-            <field property="stratumMethod.stratummethoddescription"
-                   depends="required">
-              <arg0   key="stratumMethod.stratumMethodDescription" resource="false"/>
-            </field>
-        </form>
-
-        <form name="AddPartyForm">
-            <field property="party.surname"
-                   depends="required">
-              <arg0   key="party.surName" resource="false"/>
-            </field>
-            <!--
-            <field property="organization_id"
-                   depends="integer">
-              <arg0   key="organization" resource="false"/>
-            </field>
-            -->
-	</form>
-
-        <form name="UploadPlotForm">
-            <field property="archiveType"
-                   depends="required">
-              <arg0   key="Archive type" resource="false"/>
-            </field>
-            <field property="plotFile"
-                   depends="required">
-              <arg0   key="Plot data file" resource="false"/>
-            </field>
-            <field property="updateArchivedPlot"
-                   depends="required">
-              <arg0   key="Is plot already archived" resource="false"/>
-            </field>
-        </form>
-
-
-	<form name="DisplayEntityForm">
-	    <field property="resultType"
-		depends="required">
-              <arg0   key="The type of result requested" resource="false"/>
-            </field>
-	    <field property="accessionCode"
-		depends="required">
-              <arg0   key="The accessionCode of the entity" resource="false"/>
-            </field>
-	</form>
-
-	<form name="DownLoadForm">
-	    <field property="dataType" depends="required">
-              <arg0   key="The desired type" resource="false"/>
-            </field>
-	    <field property="formatType" depends="required">
-              <arg0   key="The desired data format" resource="false"/>
-            </field>
-	</form>
-
-	<!-- Rules for the LogonForm -->
-        <form name="LogonForm">
-            <field property="username"
-                    depends="required,email">
-                <arg0   key="Username"
-			resource="false"/>
-            </field>                                                                                                                    
-            <field property="password"
-                    depends="required, minlength,maxlength">
-                <arg0   key="Password" resource="false"/>
-                <arg1   key="${var:minlength}" name="minlength"
-                   resource="false"/>
-                <arg2   key="${var:maxlength}" name="maxlength"
-                   resource="false"/>
-                <var>
-                    <var-name>maxlength</var-name>
-                    <var-value>16</var-value>
-                </var>
-                <var>
-                    <var-name>minlength</var-name>
-                    <var-value>3</var-value>
-                </var>
-            </field>
-        </form>
-
-        <!-- Rules for emailing password to user form -->
-        <form name="EmailPasswordForm">
-            <field property="email" depends="required,email">
-                <arg0   key="Email address" resource="false"/>
-            </field>
-        </form>
-
-        <!-- Rules for registering a new user -->
-        <form name="RegisterNewUserForm">
-            <field property="usr.email_address" depends="required,email">
-                <arg0   key="Email address" resource="false"/>
-            </field>
-            <field property="password1" depends="required,minlength,maxlength">
-                <arg0   key="Password" resource="false"/>
-                <arg1   key="${var:minlength}" name="minlength"
-                   resource="false"/>
-                <arg2   key="${var:maxlength}" name="maxlength"
-                   resource="false"/>
-                <var>
-                    <var-name>maxlength</var-name>
-                    <var-value>16</var-value>
-                </var>
-                <var>
-                    <var-name>minlength</var-name>
-                    <var-value>3</var-value>
-                </var>
-            </field>
-            <field property="password2" depends="required,minlength,maxlength">
-                <arg0   key="Password confirmation" resource="false"/>
-                <arg1   key="${var:minlength}" name="minlength"
-                   resource="false"/>
-                <arg2   key="${var:maxlength}" name="maxlength"
-                   resource="false"/>
-                <var>
-                    <var-name>maxlength</var-name>
-                    <var-value>16</var-value>
-                </var>
-                <var>
-                    <var-name>minlength</var-name>
-                    <var-value>3</var-value>
-                </var>
-            </field>
-            <field property="termsaccept" depends="required,mask">
-                <arg0 key="Acceptance of terms" resource="false"/>
-                <var>
-                  <var-name>mask</var-name>
-                  <var-value>accept</var-value>
-                </var>
-            </field>
-            <field property="party.givenname" depends="required">
-				<arg0 key="First name" resource="false"/>
+	<formset>
+		<form name="AddCoverMethodForm">
+			<field property="coverMethod.covertype"
+			       depends="required">
+				<arg0 key="coverMethod.coverType"
+				      resource="false"/>
 			</field>
-            <field property="party.surname" depends="required">
-				<arg0 key="Last name" resource="false"/>
+		</form>
+		<form name="AddJournalForm">
+			<field property="referenceJournal.journal"
+			       depends="required">
+				<arg0 key="referenceJournal.journal"
+				      resource="false"/>
 			</field>
-        </form>
-
-        <!-- Rules for certification form -->
-        <form name="CertificationForm">
-            <field property="requestedCert" depends="required">
+		</form>
+		<form name="AddPartyForm">
+			<field property="party.surname"
+			       depends="required">
+				<arg0 key="party.surName"
+				      resource="false"/>
+			</field>
+		</form>
+		<form name="AddReferenceForm">
+			<field property="reference.shortname"
+			       depends="required">
+				<arg0 key="reference.shortname"
+				      resource="false"/>
+			</field>
+			<field property="reference.title"
+			       depends="required">
+				<arg0 key="reference.title"
+				      resource="false"/>
+			</field>
+			<field property="reference.pubdate"
+			       depends="date">
+				<arg0 key="reference.pubDate"
+				      resource="false"/>
+				<var>
+					<var-name>datePattern</var-name>
+					<var-value>MM/dd/yyyy</var-value>
+				</var>
+			</field>
+		</form>
+		<form name="AddStratumMethodForm">
+			<field property="stratumMethod.stratummethodname"
+			       depends="required">
+				<arg0 key="stratumMethod.stratumMethodName"
+				      resource="false"/>
+			</field>
+			<field property="stratumMethod.stratummethoddescription"
+			       depends="required">
+				<arg0 key="stratumMethod.stratumMethodDescription"
+				      resource="false"/>
+			</field>
+		</form>
+		<form name="CertificationForm">
+			<field property="requestedCert"
+			       depends="required">
 				<arg0 key="cert.req.requestedCert"/>
 			</field>
-            <field property="highestDegree" depends="required">
+			<field property="highestDegree"
+			       depends="required">
 				<arg0 key="cert.req.highestDegree"/>
 			</field>
-            <field property="currentOrg" depends="required">
+			<field property="currentOrg"
+			       depends="required">
 				<arg0 key="cert.req.currentOrg"/>
 			</field>
-            <field property="currentPos" depends="required">
+			<field property="currentPos"
+			       depends="required">
 				<arg0 key="cert.req.currentPos"/>
 			</field>
-            <field property="esaMember" depends="required">
+			<field property="esaMember"
+			       depends="required">
 				<arg0 key="cert.req.esaMember"/>
 			</field>
-
-            <field property="profExp" depends="maxlength">
+			<field property="profExp"
+			       depends="maxlength">
 				<arg0 key="cert.req.profExp"/>
-				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<arg1 name="maxlength"
+				      key="${var:maxlength}"
+				      resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
 					<var-value>2000</var-value>
 				</var>
 			</field>
-            <field property="relevantPubs" depends="maxlength">
+			<field property="relevantPubs"
+			       depends="maxlength">
 				<arg0 key="cert.req.relevantPubs"/>
-				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<arg1 name="maxlength"
+				      key="${var:maxlength}"
+				      resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
 					<var-value>2000</var-value>
 				</var>
 			</field>
-            <field property="vegSamplingExp" depends="required,maxlength">
+			<field property="vegSamplingExp"
+			       depends="required,maxlength">
 				<arg0 key="cert.req.vegSamplingExp"/>
-				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<arg1 name="maxlength"
+				      key="${var:maxlength}"
+				      resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
 					<var-value>2000</var-value>
 				</var>
 			</field>
-            <field property="vegAnalysisExp" depends="required,maxlength">
+			<field property="vegAnalysisExp"
+			       depends="required,maxlength">
 				<arg0 key="cert.req.vegAnalysisExp"/>
-				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<arg1 name="maxlength"
+				      key="${var:maxlength}"
+				      resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
 					<var-value>2000</var-value>
 				</var>
 			</field>
-            <field property="usnvcExp" depends="required,maxlength">
+			<field property="usnvcExp"
+			       depends="required,maxlength">
 				<arg0 key="cert.req.usnvcExp"/>
-				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<arg1 name="maxlength"
+				      key="${var:maxlength}"
+				      resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
 					<var-value>2000</var-value>
 				</var>
 			</field>
-            <field property="vbExp" depends="maxlength">
+			<field property="vbExp"
+			       depends="maxlength">
 				<arg0 key="cert.req.vbExp"/>
-				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<arg1 name="maxlength"
+				      key="${var:maxlength}"
+				      resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
 					<var-value>2000</var-value>
 				</var>
 			</field>
-            <field property="vbIntention" depends="required,maxlength">
+			<field property="vbIntention"
+			       depends="required,maxlength">
 				<arg0 key="cert.req.vbIntention"/>
-				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<arg1 name="maxlength"
+				      key="${var:maxlength}"
+				      resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
 					<var-value>2000</var-value>
 				</var>
 			</field>
-            <field property="toolsExp" depends="maxlength">
+			<field property="toolsExp"
+			       depends="maxlength">
 				<arg0 key="cert.req.toolsExp"/>
-				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<arg1 name="maxlength"
+				      key="${var:maxlength}"
+				      resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
 					<var-value>2000</var-value>
 				</var>
 			</field>
-
-            <field property="expRegionA" depends="required">
+			<field property="expRegionA"
+			       depends="required">
 				<arg0 key="cert.req.expRegionA"/>
 			</field>
-			
-            <field property="esaSponsorEmailA" depends="email">
+			<field property="esaSponsorEmailA"
+			       depends="email">
 				<arg0 key="cert.req.esaSponsorEmailA"/>
 			</field>
-            <field property="esaSponsorEmailB" depends="email">
+			<field property="esaSponsorEmailB"
+			       depends="email">
 				<arg0 key="cert.req.esaSponsorEmailB"/>
 			</field>
-
-            <field property="addlStmt" depends="maxlength">
+			<field property="addlStmt"
+			       depends="maxlength">
 				<arg0 key="cert.req.addlStmt"/>
-				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
-                <var>
-                    <var-name>maxlength</var-name>
-                    <var-value>2000</var-value>
-                </var>
+				<arg1 name="maxlength"
+				      key="${var:maxlength}"
+				      resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2000</var-value>
+				</var>
 			</field>
-        </form>
-    </formset>
-
-
+		</form>
+		<form name="ChangePasswordForm">
+			<field property="password"
+			       depends="required">
+				<arg0 key="Current password"
+				      resource="false"/>
+			</field>
+			<field property="newpassword1"
+			       depends="required">
+				<arg0 key="New password"
+				      resource="false"/>
+			</field>
+			<field property="newpassword2"
+			       depends="required">
+				<arg0 key="Retyped password"
+				      resource="false"/>
+			</field>
+		</form>
+		<form name="DisplayEntityForm">
+			<field property="resultType"
+			       depends="required">
+				<arg0 key="The type of result requested"
+				      resource="false"/>
+			</field>
+			<field property="accessionCode"
+			       depends="required">
+				<arg0 key="The accessionCode of the entity"
+				      resource="false"/>
+			</field>
+		</form>
+		<form name="DownLoadForm">
+			<field property="dataType"
+			       depends="required">
+				<arg0 key="The desired type"
+				      resource="false"/>
+			</field>
+			<field property="formatType"
+			       depends="required">
+				<arg0 key="The desired data format"
+				      resource="false"/>
+			</field>
+		</form>
+		<form name="EmailPasswordForm">
+			<field property="email"
+			       depends="required,email">
+				<arg0 key="Email address"
+				      resource="false"/>
+			</field>
+		</form>
+		<form name="LogonForm">
+			<field property="username"
+			       depends="required,email">
+				<arg0 key="Username"
+				      resource="false"/>
+			</field>
+			<field property="password"
+			       depends="required, minlength,maxlength">
+				<arg0 key="Password"
+				      resource="false"/>
+				<arg1 key="${var:minlength}"
+				      name="minlength"
+				      resource="false"/>
+				<arg2 key="${var:maxlength}"
+				      name="maxlength"
+				      resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>16</var-value>
+				</var>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>3</var-value>
+				</var>
+			</field>
+		</form>
+		<form name="RegisterNewUserForm">
+			<field property="usr.email_address"
+			       depends="required,email">
+				<arg0 key="Email address"
+				      resource="false"/>
+			</field>
+			<field property="password1"
+			       depends="required,minlength,maxlength">
+				<arg0 key="Password"
+				      resource="false"/>
+				<arg1 key="${var:minlength}"
+				      name="minlength"
+				      resource="false"/>
+				<arg2 key="${var:maxlength}"
+				      name="maxlength"
+				      resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>16</var-value>
+				</var>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>3</var-value>
+				</var>
+			</field>
+			<field property="password2"
+			       depends="required,minlength,maxlength">
+				<arg0 key="Password confirmation"
+				      resource="false"/>
+				<arg1 key="${var:minlength}"
+				      name="minlength"
+				      resource="false"/>
+				<arg2 key="${var:maxlength}"
+				      name="maxlength"
+				      resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>16</var-value>
+				</var>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>3</var-value>
+				</var>
+			</field>
+			<field property="termsaccept"
+			       depends="required,mask">
+				<arg0 key="Acceptance of terms"
+				      resource="false"/>
+				<var>
+					<var-name>mask</var-name>
+					<var-value>accept</var-value>
+				</var>
+			</field>
+			<field property="party.givenname"
+			       depends="required">
+				<arg0 key="First name"
+				      resource="false"/>
+			</field>
+			<field property="party.surname"
+			       depends="required">
+				<arg0 key="Last name"
+				      resource="false"/>
+			</field>
+		</form>
+		<form name="UploadPlotForm">
+			<field property="archiveType"
+			       depends="required">
+				<arg0 key="Archive type"
+				      resource="false"/>
+			</field>
+			<field property="plotFile"
+			       depends="required">
+				<arg0 key="Plot data file"
+				      resource="false"/>
+			</field>
+			<field property="updateArchivedPlot"
+			       depends="required">
+				<arg0 key="Is plot already archived"
+				      resource="false"/>
+			</field>
+		</form>
+		<form name="UserProfileForm">
+			<field property="webuser.email"
+			       depends="required,email">
+				<arg0 key="Email address"
+				      resource="false"/>
+			</field>
+		</form>
+	</formset>
 </form-validation>

@@ -1,7 +1,7 @@
 BODY			{ background-color: #FFFFFF; }
 
-A:Link			{ color: #005680; }
-A:Visited		{ color: #005680; }
+A:Link			{ color: #005680; text-decoration: underline }
+A:Visited		{ color: #005680; text-decoration: underline }
 /* A:Visited		{ color: #6699CC; } */
 A:hover			{ color: #3399FF;}
 

@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: anderson $'
-*  '$Date: 2004-02-07 06:43:19 $'
-*  '$Revision: 1.6 $'
+*  '$Date: 2004-02-28 11:18:16 $'
+*  '$Revision: 1.7 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -150,7 +150,7 @@
       <td>
           <font color="red">*</font> 
           <html:radio value="accept" property="termsaccept"/> 
-          <span class="vegbank_small">I accept the terms of use</span>
+          <span class="vegbank_small">I accept these terms</span>
       </td>
       <td>
            <html:radio value="decline" property="termsaccept"/> 

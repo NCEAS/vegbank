@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-02-07 06:43:19 $'
-  *  '$Revision: 1.6 $'
+  *      '$Date: 2004-02-28 11:18:16 $'
+  *  '$Revision: 1.7 $'
   *
   *
   -->
@@ -45,7 +45,7 @@
 	
 	<!-- main table -->
 	<table width="700" border="0" cellspacing="5" cellpadding="2">
-<html:form method="get" action="/SaveCertification.do">
+<html:form method="post" action="SaveCertification.do">
 	<html:hidden property="usrId"/>
 
     <tr> 
@@ -74,7 +74,7 @@
 					<bean:write name="reqAttribBean" property="phoneNumber"/>
 				</logic:notEqual>
 				<br/>
-				&nbsp;&raquo; <a href="/UserProfileAction.do">update info</a>
+				&nbsp;&raquo; <html:link action="/LoadUser.do">update info</html:link>
 			  </td>
 			</tr>
 			</table>
@@ -84,7 +84,7 @@
     <tr> 
       <td colspan="3"> 
           <font color="red">*</font> 
-		  <span class="vegbank_small"> Required fields</span>
+		  <span class="vegbank_small"> Required field</span>
 		  <br/>
           <font color="blue" size=-1>#</font>
 		  <span class="vegbank_small"> Field listed in the public registry of certified users</span>

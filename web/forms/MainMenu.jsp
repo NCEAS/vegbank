@@ -13,8 +13,8 @@
 *   Authors: @author@
 *
 *  '$Author: anderson $'
-*  '$Date: 2004-02-07 06:43:19 $'
-*  '$Revision: 1.2 $'
+*  '$Date: 2004-02-28 11:18:16 $'
+*  '$Revision: 1.3 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 
 <HEAD>
  
-<TITLE>VegBank Actions</TITLE>
+<TITLE>VegBank Main Menu</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
  
 <meta http-equiv="Content-Type" content="text/html; charset=">
@@ -83,9 +83,8 @@
     <li> 
       <h4 class="VegBank">
         <font face="Georgia, Times New Roman, Times, serif">
-          Edit your VegBank <a href="@usermanagement_servlet@?action=changeusersettings"> Profile</a>
+          Edit your VegBank <html:link action="LoadUser.do">Profile</html:link>
         </font>
-        <font color="#F90000"> <b> New! </b></font> 
       </h4>
 			
 		<!--
@@ -97,7 +96,7 @@
     <li>
       <h4 class="VegBank">
         <font face="Georgia, Times New Roman, Times, serif">
-          Apply to become a Certified<a href="@forms_link@certification.html"> VegBank User</a>
+          Apply to become a <html:link action="LoadCertification.do">Certified VegBank User</html:link>
         </font> 
         <font color="#F90000"> <b> New! </b></font>
 	<a href="@help-for-certification-href@"><img border="0" src="@image_server@question.gif"></a>
