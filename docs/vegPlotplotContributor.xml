@@ -2,39 +2,68 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
+<title>Prototype Veg Plots Database Component Description: 
+    plotContributor</title>
+<author>John Harris </author>
+<institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date> </date>
+<date>Wed Sep 27 10:28:24 PDT 2000</date>
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
-	<entityDescription> </entityDescription>
+	<entityName>vegPlot.PLOTCONTRIBUTOR</entityName>
+	<entitySummary>This table stores information about a party contributing to
+ a vegetation plot.</entitySummary>
+	<entityDescription>This table serves as an interesection entity used to 
+'link' a party with a specific vegetation plot. </entityDescription>
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
-		<attKey> </attKey>
+		<attName>plotContributor_id </attName>
+		<attNulls>No </attNulls>	
+		<attType>NUMBER </attType>
+		<attKey>P </attKey>
 		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attDefinition>Database assigned value for a party contributing to a 
+            vegetation plot. </attDefinition>
 	</attribute>
 
 
 
 	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
+                <attName>plot_id </attName>
+                <attNulls>No </attNulls>
+                <attType>NUMBER </attType>
+                <attKey>F </attKey>
+                <attReferences>PROJECT</attReferences>
+                <attNotes>This is the foreign key into the plot table. </attNotes>
+                <attDefinition>Database assigned value for a given plot 
+this is a link to the project entity. </attDefinition>
+        </attribute>
+
+	<attribute>
+                <attName> party_id</attName>
+                <attNulls>No </attNulls>
+                <attType>NUMBER </attType>
+                <attKey>F </attKey>
+                <attReferences>PARTY </attReferences>
+                <attNotes> </attNotes>
+                <attDefinition>Database assigned value for a given party this is a link to 
+            the party entity. </attDefinition>
+        </attribute>
+
+	<attribute>
+                <attName>roleCode </attName>
+                <attNulls>No </attNulls>
+                <attType>VARCHAR2 </attType>
                 <attKey> </attKey>
                 <attReferences> </attReferences>
                 <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attDefinition>The role that a specific party (party_id) had in the 
+            plot collection - this can include such roles as 
+            PI, contact, author, etc.  This will be linked to an 
+            entity named: </attDefinition>
         </attribute>
 
 
-	<children> </children>
+	<children> PARTY </children>
 </entity>
 </dataModel>	

@@ -2,39 +2,63 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
+<title> Prototype Veg Plots Database Component Description: namedPlace</title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date> </date>
+<date>Wed Sep 27 09:06:55 PDT 2000 </date>
+
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
+	<entityName> vegPlot.NAMEDPLACE</entityName>
+	<entitySummary>This tables stores information about the various 'named places' that a plot may have been 
+	sample within.</entitySummary>
 	<entityDescription> </entityDescription>
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
-		<attKey> </attKey>
+		<attName>namedPlaceId</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>P</attKey>
 		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attDefinition>Internal database unique value assigned to every named place 
+		entered in the database.</attDefinition>
 	</attribute>
 
 
 
 	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
+                <attName>placeName </attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2</attType>
                 <attKey> </attKey>
                 <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attNotes>Name of a place like: Yosemitie National Park. </attNotes>
+                <attDefinition>The name of the place at which a plot was sampled. </attDefinition>
         </attribute>
 
+	
+	<attribute>
+                <attName>placeDescription </attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey> </attKey>
+                <attReferences> </attReferences>
+                <attNotes></attNotes>
+                <attDefinition>This is the description of a named place. </attDefinition>
+        </attribute>
 
+	
+	<attribute>
+                <attName>gazetterRef </attName>
+                <attNulls>Yes</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey> </attKey>
+                <attReferences> </attReferences>
+                <attNotes></attNotes>
+                <attDefinition>This is a reference to a gazeteer containing the named place.</attDefinition>
+        </attribute>
+	
 	<children> </children>
 </entity>
 </dataModel>	

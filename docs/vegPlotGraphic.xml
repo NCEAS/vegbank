@@ -2,38 +2,83 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
+<title> Prototype Veg Plots Database Component Description: graphic</title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date> </date>
+<date>Wed Sep 27 09:06:55 PDT 2000 </date>
+
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
-	<entityDescription> </entityDescription>
+	<entityName>vegPlot.GRAPHIC  </entityName>
+	<entitySummary>This table stores information about a graphical files related to vegetation plots.</entitySummary>
+	<entityDescription>Graphical files currently can include: gif, jpeg, and tiff file formats.  It is
+	recognized that many graphical files, especially remote sensing digital photographs may be
+	gigabytes in size and for this reason the database developers are considering limiting the 
+	size of the files stored in the plots database.</entityDescription>
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
+		<attName>graphic_id</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
 		<attKey> </attKey>
 		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attDefinition>This is an internal database identifier assigned to each unique grapical file.</attDefinition>
 	</attribute>
 
 
 
 	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attName>plot_id</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>F</attKey>
+                <attReferences>PLOT</attReferences>
+                <attNotes>Foregin key into the plot table.</attNotes>
+                <attDefinition>This represents the link between a graphical file and a specific plot.</attDefinition>
         </attribute>
 
+	<attribute>
+                <attName>graphicName</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR</attType>
+                <attKey></attKey>
+                <attReferences></attReferences>
+                <attNotes></attNotes>
+                <attDefinition>Name of the grapical file.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>graphicDescription</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR</attType>
+                <attKey></attKey>
+                <attReferences></attReferences>
+                <attNotes></attNotes>
+                <attDefinition>Description of the graphical file.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>graphicType</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR</attType>
+                <attKey></attKey>
+                <attReferences></attReferences>
+                <attNotes>This may, in later versions, become domain locked to a few specif types of 
+		graphical files.  Currently any file type can be stored.</attNotes>
+                <attDefinition>The type of the graphical file format.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>graphicData</attName>
+                <attNulls>No</attNulls>
+                <attType>BLOB</attType>
+                <attKey></attKey>
+                <attReferences></attReferences>
+                <attNotes></attNotes>
+                <attDefinition>The graphical file data.</attDefinition>
+        </attribute>
+	
 
 	<children> </children>
 </entity>

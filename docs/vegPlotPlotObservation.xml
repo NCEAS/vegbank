@@ -2,30 +2,91 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
+<title> Prototype Veg Plots Database Component Description: plotObservation</title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date> </date>
+<date>Wed Sep 27 09:06:55 PDT 2000 </date>
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
-	<entityDescription> </entityDescription>
+	<entityName>vegPlot.PLOTOBSERVATION</entityName>
+	<entitySummary>This table stores plot information that may vary between sampling events.</entitySummary>
+	<entityDescription>Recognizing that a plot may be resampled and that some of the environmental
+	conditions may change between resampling events the database design has changed to accomodate this.  
+	Now all attributes that are percieved to potentially change on the order of a decade are stored in the 
+	plotObservation table whereas those attributes deemed to be regular in time/space are stored in the plot 
+	table.
+	</entityDescription>
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
-		<attKey> </attKey>
+		<attName>obs_id </attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>P</attKey>
 		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attDefinition>This is an internal database identifier assigned to each unique observation. </attDefinition>
 	</attribute>
 
 
 
 	<attribute>
-                <attName> </attName>
+                <attName>parentPlot</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>F</attKey>
+                <attReferences>PLOT</attReferences>
+                <attNotes>Foreign key into the plot table.</attNotes>
+                <attDefinition>This represents the link between an observation plot location. </attDefinition>
+        </attribute>
+
+
+	<attribute>
+                <attName>previousObs</attName>
+                <attNulls> </attNulls>
+                <attType> </attType>
+                <attKey> </attKey>
+                <attReferences> </attReferences>
+                <attNotes> </attNotes>
+                <attDefinition> </attDefinition>
+        </attribute>
+<attribute>
+                <attName>authorObsCode</attName>
+                <attNulls> </attNulls>
+                <attType> </attType>
+                <attKey> </attKey>
+                <attReferences> </attReferences>
+                <attNotes> </attNotes>
+                <attDefinition> </attDefinition>
+        </attribute>
+<attribute>
+                <attName>plotStartDate</attName>
+                <attNulls></attNulls>
+                <attType> </attType>
+                <attKey> </attKey>
+                <attReferences> </attReferences>
+                <attNotes> </attNotes>
+                <attDefinition> </attDefinition>
+        </attribute>
+<attribute>
+                <attName>plotEndDate</attName>
+                <attNulls> </attNulls>
+                <attType> </attType>
+                <attKey> </attKey>
+                <attReferences> </attReferences>
+                <attNotes> </attNotes>
+                <attDefinition> </attDefinition>
+        </attribute>
+<attribute>
+                <attName>dateAcc</attName>
+                <attNulls> </attNulls>
+                <attType> </attType>
+                <attKey> </attKey>
+                <attReferences> </attReferences>
+                <attNotes> </attNotes>
+                <attDefinition>Date accuracy</attDefinition>
+        </attribute>
+<attribute>
+                <attName>effortLevel</attName>
                 <attNulls> </attNulls>
                 <attType> </attType>
                 <attKey> </attKey>
@@ -34,7 +95,7 @@
                 <attDefinition> </attDefinition>
         </attribute>
 
-
-	<children> </children>
+	
+	<children>taxonObservations, communityType</children>
 </entity>
 </dataModel>	
