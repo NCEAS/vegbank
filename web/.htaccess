@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.4 2004-09-28 18:02:22 anderson Exp $
+# $Id: .htaccess,v 1.5 2004-11-19 20:17:15 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -21,6 +21,7 @@ RewriteRule ^plotsearch$      /vegbank/LoadPlotQuery.do   [NC,QSA,L]
 ## But this direct link to workshop does
 RewriteRule ^workshop$      /vegdocs/workshop   [NC,QSA,L]
 
+RewriteRule ^forgotpassword$  /vegbank/forms/EmailPassword.jsp [NC,QSA,L]
 
 # Rewrite Example
 #RewriteCond %{REQUEST_URI}  ^.+\.html
