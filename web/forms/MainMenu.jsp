@@ -13,8 +13,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-11-16 01:16:51 $'
-*  '$Revision: 1.10 $'
+*  '$Date: 2004-11-19 19:00:34 $'
+*  '$Revision: 1.11 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@
 	<TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@magnglas.png" /> </TD><TD>	       
   <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
 
-      <span class="headequiv sizelarger">Search for <a href="@general_link@plots.html">Plots</a></span>
+      <span class=" sizelarger">Search for <a href="@general_link@plots.html">Plots</a></span>
         <br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 		&raquo; <a href="@forms_link@metasearch.jsp">Metasearch</a>
         <br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -69,19 +69,19 @@
     
 
      
-      <span class="headequiv sizelarge">Search for 
+      <span class=" sizelarge">Search for 
 	  <a href="@forms_link@community-query.html">Community Types</a></span>
       </td> </tr>
 	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
 
      
-      <span class="headequiv sizelarge"><span>Search for  
+      <span class=" sizelarge"><span>Search for  
 	  <a href="@forms_link@PlantQuery.jsp">Plants</a> </span></span>
     </td> </tr>
 	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
 
     
-      <span class="headequiv sizelarge">
+      <span class=" sizelarge">
         View  
 		<a href="@general_link@metadata.html">Supplemental Data</a> 
 		
@@ -99,19 +99,19 @@
     
     
 	<!--li> 
-		<span class="headequiv sizelarge">Access or submit <a href="@general_link@parties.html">Parties</a> data</span>
-		<span class="headequiv sizelarge">Access or Submit Parties data 
+		<span class=" sizelarge">Access or submit <a href="@general_link@parties.html">Parties</a> data</span>
+		<span class=" sizelarge">Access or Submit Parties data 
 		<font color="#F90000"> <b> Coming soon! </b></font> </span>
     </li-->
 <!--
      
-      <span class="headequiv sizelarge">
+      <span class=" sizelarge">
           Edit your VegBank <html:link action="LoadUser.do">Profile</html:link>
         
       </span> 
 -->			
 	
-      <span class="headequiv sizelarge">View your <a href="@general_link@account.html">VegBank Account </a> 
+      <span class=" sizelarge">View your <a href="@general_link@account.html">VegBank Account </a> 
 		 </span>
 		</td> </tr>
 	  </table>
@@ -125,19 +125,19 @@
 	<TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@info.png" /></TD><TD>
 
 <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
-      <span class="headequiv sizelarge">See <a href="@forms_link@vbsummary.jsp">an overview of VegBank Data</a> 
+      <span class=" sizelarge">See <a href="@forms_link@vbsummary.jsp">an overview of VegBank Data</a> 
       </span> 
       </td> </tr>
 	  </table>
 
 <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
-      <span class="headequiv sizelarge">VegBank <a href="@general_link@info.html">Information</a> 
+      <span class=" sizelarge">VegBank <a href="@general_link@info.html">Information</a> 
       </span> 
       </td> </tr>
 	  </table>
 	
 	<table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
-      <span class="headequiv sizelarge">ESA Vegetation <a href="@panel_link@panel.html">Panel</a> 
+      <span class=" sizelarge">ESA Vegetation <a href="@panel_link@panel.html">Panel</a> 
       </span> 
       </td> </tr>
 	  </table>
@@ -146,14 +146,14 @@
     
     
   <!--  
-      <span class="headequiv sizelarge">
+      <span class=" sizelarge">
         
           Apply to become a <html:link action="LoadCertification.do">Certified VegBank User</html:link>
 	<a href="@help-for-certification-href@"><img border="0" src="@image_server@question.gif"></a>
       </span>
      -->
      
-      <span class="headequiv sizelarge">See our 
+      <span class=" sizelarge">See our 
 	  	<a href="@general_link@sitemap.html">Site Map</a> </span></td><td valign="middle"> 
 		<p><font color="#F90000"> Newly updated! </font></p>
     		
@@ -169,7 +169,7 @@
 	  <TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@upload.png" /></TD><TD>
 	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
     
-      <span class="headequiv sizelarge">Load <a href="@DisplayUploadPlotAction@">Plot Data</a></span>
+      <span class=" sizelarge">Load <a href="@DisplayUploadPlotAction@">Plot Data</a></span>
      </td><td valign="middle"> 
 	  <p>
       
@@ -178,12 +178,12 @@
 	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
 
      
-      <span class="headequiv sizelarge">Annotate data</span></td><td valign="middle"> 
+      <span class=" sizelarge">Annotate data</span></td><td valign="middle"> 
 	  <p><font color="#F90000"> Coming soon! </font></p>
     		
 	
 	<!--li>
-      <span class="headequiv sizelarge"><a href="@general_link@client.html">Download</a> 
+      <span class=" sizelarge"><a href="@general_link@client.html">Download</a> 
         the Desktop Client</span>
 	</li-->
   </td></tr>
@@ -192,12 +192,12 @@
  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
  
       
-       <span class="headequiv sizelarge"><a href="@general_link@input.html">Input Data</a> In Forms</span></td><td valign="middle"> 
+       <span class=" sizelarge"><a href="@general_link@input.html">Input Data</a> In Forms</span></td><td valign="middle"> 
  	 
      		
  	
  	<!--li>
-       <span class="headequiv sizelarge"><a href="@general_link@client.html">Download</a> 
+       <span class=" sizelarge"><a href="@general_link@client.html">Download</a> 
          the Desktop Client</span>
  	</li-->
    </td></tr>
@@ -212,9 +212,9 @@
 		if (isAdmin.booleanValue()) {
 %>
     <hr true/>
-      <span class="headequiv sizelarge">ADMINISTRATION</span>
+      <span class=" sizelarge">ADMINISTRATION</span>
 	  
-		<span class="headequiv sizelarge">Go to the 
+		<span class=" sizelarge">Go to the 
 			<html:link action="AdminMenu.do">Admin Menu</html:link></span>
 		
 	  
