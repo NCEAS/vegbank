@@ -51,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-01-28 19:27:57 $'
- *  '$Revision: 1.28 $'
+ *  '$Date: 2003-01-28 19:45:01 $'
+ *  '$Revision: 1.29 $'
  * 
  */
 
@@ -96,7 +96,7 @@ public class DataRequestServlet extends HttpServlet
 	
 	// TODO: This need to taken out of here !!
 	private static final String servletLib = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/";
-	private static final String summaryViewStyleSheet = servletLib + "TransformPlot_Summary.xsl";
+	private static final String summaryViewStyleSheet = servletLib + "transformPlotSummary.xsl";
 	private static final String comprehensiveViewStyleSheet = servletLib + "transformFullPlot.xsl";
 	private String defaultPlotIdentityStyleSheet = "";
 	private static final String communityQueryPage = "/forms/community-query.html";
