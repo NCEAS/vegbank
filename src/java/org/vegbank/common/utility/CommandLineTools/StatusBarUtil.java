@@ -4,9 +4,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-03-07 17:55:28 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-10-27 03:45:39 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ public class StatusBarUtil {
 		if (smallCount) {
 			int num = (int) (100 * scalar) - (int) pct1 * (int) l;
 			for (int i = 0; i < num; i++) {
-				System.out.print("-");
+				System.out.print(" ");
 			}
 		} else {
 			int num = (int) ((100 * scalar) - ((int) count / (int) pct1));
