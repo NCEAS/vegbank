@@ -387,6 +387,8 @@ out.println("		<slopePosition>"+topoPos+" </slopePosition>       ");
 out.println("		<hydrologicRegime>"+cowardinSys+" </hydrologicRegime>       ");
 out.println("		<soilDrainage>"+soilDrain+" </soilDrainage>       ");
 out.println("		<surfGeo>"+surfGeo+" </surfGeo>       ");
+out.println("		<state>Minnesota </state>       ");
+out.println("		<currentCommunity>"+provCommName+" </currentCommunity>       ");
 out.println("		<plotObservation>        ");
 out.println("			<previousPlot>"+nullValue+"</previousPlot>       ");
 out.println("			<plotStartDate>"+surDate+" </plotStartDate>       ");

@@ -172,7 +172,8 @@ public void transformTNCData (String siteFile, String speciesFile)
 //read the data files into memory -- vectors
 readTNCData(siteFile, speciesFile);
 
-//parse the data into their repective elements - one line at a time
+//parse the data into their repective elements - one line at a time (meaning one
+//plot at a time
 for (int i=0; i<siteFileVector.size(); i++) {
 //for (int i=0; i<1; i++) {
 	parseTNCData(i);
@@ -237,6 +238,13 @@ private void parseTNCData (int i)
 //tokenize the elements into their respective hash tables -- this is done one
 // row at a time where the calling class dictates what level of the vector
 // should be parsed
+
+
+//remove all the species elements already stored in the rpecies-related vectors
+taxonNameVector.removeAllElements(); 
+taxonStrataVector.removeAllElements(); 
+taxonCoverVector.removeAllElements(); 
+
 
 try {
 
@@ -341,47 +349,55 @@ StringTokenizer t = new StringTokenizer(siteFileVector.elementAt(i).toString(), 
 		
 		//grab and parse the related species information
 		for (int ii=0; ii<speciesFileVector.size(); ii++) {
-			if (  ((speciesFileVector.elementAt(ii).toString().indexOf(authorPlotCode)) >0 ) ||
-				(speciesFileVector.elementAt(ii).toString().startsWith(authorPlotCode) ) ) {
+			if ( (speciesFileVector.elementAt(ii).toString().startsWith(authorPlotCode) ) ) {
 				
 				//System.out.println( speciesFileVector.elementAt(ii).toString() );
 				StringTokenizer speciesTok = new StringTokenizer(speciesFileVector.elementAt(ii).toString(), "|");
 				
 				String speciesBuf= speciesTok.nextToken();
-				String strataBuf= null;
-				String coverBuf=null;
-				speciesBuf= speciesTok.nextToken();
-				int bufCount=0;
-		
-				//this counts out to the position where the species is stored
-				while (speciesTok.hasMoreTokens() && bufCount<4 ) {
-					speciesBuf= speciesTok.nextToken();
-					bufCount++;
-//					taxonNameVector.addElement(speciesBuf); //species name
-				} 
-		
-		
-				//count out to the strata name and capture
-				while (speciesTok.hasMoreTokens() && bufCount<12 ) {
-					strataBuf= speciesTok.nextToken();
-					bufCount++;
-//					taxonNameVector.addElement(speciesBuf); //species name
-				} 
-		
-				//count out to the strata real cover
-				while (speciesTok.hasMoreTokens() && bufCount<15 ) {
-					coverBuf= speciesTok.nextToken();
-					bufCount++;
-//					taxonNameVector.addElement(speciesBuf); //species name
-				} 
+				String speciesPlotCodeIndex = speciesBuf.trim();
 				
-				//add these values to the respective vector
-				taxonNameVector.addElement(speciesBuf); //species name
-				taxonStrataVector.addElement(strataBuf); //strata position
-				taxonCoverVector.addElement(coverBuf); //coverage for taxon in that strata
-			
-		}
+				//this is there to make sure that we are looking at the correct
+				// plot in the species list
+				if (speciesPlotCodeIndex.equals(authorPlotCode.trim()) ) {
+				
+					System.out.println(speciesBuf);
+				//}
+				
+					String strataBuf= null;
+					String coverBuf=null;
+					speciesBuf= speciesTok.nextToken();
+					int bufCount=0;
 		
+					//this counts out to the position where the species is stored
+					while (speciesTok.hasMoreTokens() && bufCount<4 ) {
+						speciesBuf= speciesTok.nextToken();
+						bufCount++;
+//						taxonNameVector.addElement(speciesBuf); //species name
+					} 
+		
+		
+					//count out to the strata name and capture
+					while (speciesTok.hasMoreTokens() && bufCount<12 ) {
+						strataBuf= speciesTok.nextToken();
+						bufCount++;
+//						taxonNameVector.addElement(speciesBuf); //species name
+					} 
+		
+					//count out to the strata real cover
+					while (speciesTok.hasMoreTokens() && bufCount<15 ) {
+						coverBuf= speciesTok.nextToken();
+						bufCount++;
+//						taxonNameVector.addElement(speciesBuf); //species name
+					} 
+				
+					//add these values to the respective vector
+					taxonNameVector.addElement(speciesBuf); //species name
+					taxonStrataVector.addElement(strataBuf); //strata position
+					taxonCoverVector.addElement(coverBuf); //coverage for taxon in that strata
+			
+			}
+		}
 
 }
 	
@@ -408,7 +424,7 @@ namedPlace=(rb.getString("requestparams.namedPlace"));
 
 
 
-//pass these defaults to the element mapper
+//pass these defaults to the element mapper -- project specific elements
 PlotDataMapper pdm = new PlotDataMapper();
 pdm.plotElementMapper(projectName, "projectName", "project");
 pdm.plotElementMapper(projectDescription, "projectDescription", "project");

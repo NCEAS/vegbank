@@ -70,6 +70,7 @@ String nullValue = "-999.25";
 public void writePlot (Hashtable comprehensivePlot, String outFile)
 {
 
+try {
 //decompose the comprehensive plot data hastable
 dataDecomposer(comprehensivePlot);
 
@@ -82,6 +83,12 @@ writeProjectData(plotProjectParams);
 
 //write the footer
 writeFooter();
+}
+catch (Exception ex) {System.out.println("PlotXmlWriter.writePlot "
+	+"Error passing arguments "+ex+" "+ex.getMessage());
+}
+
+
 
 try {
 
@@ -99,6 +106,64 @@ catch (Exception ex) {System.out.println("Error printing the xml file "+ex);
 
 
 /**
+ * This method will write a comprensive plot data file, which means a data file 
+ * contains all of the data required for an an upload of a 'new' plot to the 
+ * database that 
+ *
+ * @param multiPlotComprehensive - a hash table that stores moultiple
+ * comprehensive plots
+ *
+ */
+public void writeMultiplePlot (Hashtable multiPlotComprehensive, String outFile)
+{
+try {
+
+
+//prepare the header
+writeHeader();
+
+//figure out how many plots
+System.out.println("PlotXmlWriter.writeMultiplePlot: hash size: "
+	+multiPlotComprehensive.size());
+
+//write all the plots
+for (int i=0; i< multiPlotComprehensive.size(); i++) {
+	
+	String plotRecord = "plot"+i;
+	Hashtable singlePlotSummary = (Hashtable)multiPlotComprehensive.get(plotRecord);
+	
+	//decompose the comprehensive plot data hastable
+	dataDecomposer(singlePlotSummary);
+
+	//write the project related data -- the remaining children nodes will be
+	// automatically written
+	writeProjectData(singlePlotSummary);
+
+}
+
+//write the footer
+writeFooter();
+}
+catch (Exception ex) {System.out.println("PlotXmlWriter.writeMultiplePlot "
+	+"Error passing arguments "+ex+" "+ex.getMessage() ); ex.printStackTrace();
+}
+
+try {
+
+	PrintStream out = new PrintStream(new FileOutputStream(outFile));
+	out.println(output.toString());
+
+}
+catch (Exception ex) {System.out.println("Error printing the xml file "+ex);
+	System.exit(1);}
+}
+
+
+
+
+
+
+/**
  * Method to decompose the 'comprehensivePlot' into data to be written to
  * specific nodes of the xml document
  *
@@ -106,6 +171,7 @@ catch (Exception ex) {System.out.println("Error printing the xml file "+ex);
 private void dataDecomposer (Hashtable comprehensivePlot)
 {
 
+try {
 //grab from the hash the project data
 plotProjectParams =(Hashtable)comprehensivePlot.get("projectParameters");
 
@@ -134,6 +200,9 @@ plotCommunityParams = (Hashtable)comprehensivePlot.get("communityParameters");
 
 //System.out.println("observation data: "+plotObservationParams.toString());
 //System.out.println("project data: "+plotProjectParams.toString());
+}
+catch (Exception e) {System.out.println("failed in PlotXmlWriter.dataDecomposer "
+	+" " + e.getMessage() );}
 
 
 }
@@ -256,7 +325,7 @@ writeStrataData ();
 //write the community information
 writeCommunityData ();
 
-//print the species info
+//print the species info -- this is where they may be null values
 writeSpeciesData (taxonNameElements,  strataTypeElements,  coverAmountElements);
 
 output.append(
@@ -299,10 +368,12 @@ catch ( Exception e ) {System.out.println("failed in: "
 private void writeSpeciesData (Vector taxonNameElements, Vector strataTypeElements, 
 	Vector coverAmountElements)
 {
+//This is set up this way to rectify the failures that was having
 
-//for (int i=0; i<taxonNameElements.size(); i++) {
-for (int i=0; i<9; i++) {
-	
+try {
+for (int i=0; i<taxonNameElements.size(); i++) {
+//for (int i=0; i<9; i++) {
+	 
 output.append(" \n"
 +"			<taxonObservation> \n"
 +"				<authNameId>"+taxonNameElements.elementAt(i)+"</authNameId> \n"
@@ -315,6 +386,10 @@ output.append(" \n"
 );
 
 }
+
+}
+catch  ( Exception e ) {System.out.println(" PlotXmlWriter.writeSpeciesData "
++" "+e.getMessage());}
 
 }
 
