@@ -4,10 +4,10 @@
 ## database tables into a few summary tables that 
 ## are used for querying by the database access module
 
-DATABASE_TYPE=oracle
-DATABASE_NAME=
-USERNAME=
-PASSWORD=
+DATABASE_TYPE=@databaseType@
+DATABASE_NAME=@databaseName@
+USERNAME=@user@
+PASSWORD=@password@
 
 CREATE_ORACLE=../sql/vegPlot20001DBTables.sql
 CREATE_POSTGRES=../sql/vegPlot20001DBTables_postgres.sql
@@ -74,11 +74,11 @@ if test  $DATABASE_TYPE = oracle
 	echo "sql client: "
 	echo $SQL_CLIENT
 	echo $SQLSCRIPT
-	$SQL_CLIENT nvc/jhhtpass  < $SQLSCRIPT
+	$SQL_CLIENT $USERNAME/$PASSWORD  < $SQLSCRIPT
 fi
 
 if test $DATABASE_TYPE = postgresql
 	then
-	$SQL_CLIENT nvc  < $SQLSCRIPT
+	$SQL_CLIENT $DATABASE_NAME  < $SQLSCRIPT
 fi
 
