@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<vegClient>
+	<OSType>Win NT</OSType>
+	<RDBMSType>postgres</RDBMSType>
+	<DBManagerPlugin>vegclient.framework.PostgresNTPlugin</DBManagerPlugin>
+	<workingDirectory>/</workingDirectory>
+	<servletLocation>beta.nceas.ucsb.edu</servletLocation>
+</vegClient>
