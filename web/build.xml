@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-08-24 19:15:46 $'
-* '$Revision: 1.110 $'
+* '$Date: 2004-08-24 19:17:56 $'
+* '$Revision: 1.111 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -254,7 +254,7 @@
   <!-- keep these targets (that read from large binaries separate -->
   <target name="panel-big-bin" depends="init" description="=&gt; dist the panel large binary files to server">
     <copy overwrite="true" todir="${panel_server}" filtering="no">
-      <fileset dir="${lrg_binary_src}" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip  NVC_guidelines_v3.pdf TDWG2003_Peet.pdf TDWG2003_Peet.ppt"/>
+      <fileset dir="${lrg_binary_src}" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip  NVC_guidelines_v3.pdf  NVC_guidelines_v4.pdf  TDWG2003_Peet.pdf TDWG2003_Peet.ppt"/>
     </copy>
   </target>
   <target name="help" depends="includes" description="=&gt; dist the help pages to server">
