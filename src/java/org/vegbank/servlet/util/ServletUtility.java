@@ -8,8 +8,8 @@ package org.vegbank.servlet.util;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-16 03:33:34 $'
- *  '$Revision: 1.6 $'
+ *  '$Date: 2003-05-30 18:01:59 $'
+ *  '$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ package org.vegbank.servlet.util;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -613,31 +614,48 @@ public void fileCopy (String inFile, String outFile)
  * @param  outFile a string representing the output, compressed, file
  */
 
-public void gzipCompress (String inFile, String outFile) 
+public void gzipCompress(String inFile, String outFile)
 {
 	try
 	{
 		BufferedReader in = new BufferedReader(new FileReader(inFile));
-		BufferedOutputStream out = new BufferedOutputStream(new GZIPOutputStream(
-		new FileOutputStream(outFile)));
-		
+		BufferedOutputStream out =
+			new BufferedOutputStream(
+				new GZIPOutputStream(new FileOutputStream(outFile)));
+
 		System.out.println("ServletUtility > gzipCompress");
 		System.out.println("ServletUtility > inFile: " + inFile);
-		System.out.println("ServletUtility > outFile: "  + outFile );
-		
+		System.out.println("ServletUtility > outFile: " + outFile);
+
 		//System.out.println("servletUtility.gzipCompress Writing a compressed file");
 		int c;
-		while((c = in.read()) != -1)
-		out.write(c);
+		while ((c = in.read()) != -1)
+			out.write(c);
 		in.close();
 		out.close();
-	} 
-catch(Exception e) 
-{
-	e.printStackTrace();
-}
+	}
+	catch (Exception e)
+	{
+		e.printStackTrace();
+	}
 }
 
+/**
+ *  Method to compress an inputstream using GZIP compression
+ *
+ * @param  inFile  a string representing the input file
+ * @param  outFile a string representing the output, compressed, file
+ */
+
+public static byte[] gzipCompress(byte[]  ba) throws IOException
+{
+	ByteArrayOutputStream compressed = new ByteArrayOutputStream();
+	GZIPOutputStream gzout = new GZIPOutputStream(compressed);
+	gzout.write( ba );
+	gzout.flush();
+	gzout.close();
+	return compressed.toByteArray();
+}
 
 
 /**

@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-29 00:14:08 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-05-30 18:01:59 $'
+ *  '$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.ResourceBundle;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -77,8 +76,8 @@ import databaseAccess.dbAccess;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-05-29 00:14:08 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-05-30 18:01:59 $'
+ *  '$Revision: 1.6 $'
  * 
  */
 
@@ -727,36 +726,7 @@ public class DataRequestServlet extends HttpServlet
 				plotId != null
 					&& (resultType.equals("full") || resultType.equals("summary")))
 			{
-				System.out.println(
-					"DataRequestServlet > requesting full data set for plot: " + plotId);
-					
-				dbAccess dba = new dbAccess();
-				
-				//check to see how many plots are being requested -- if there are 
-				//commas then there are multiple
-				if (plotId.indexOf(",") > 0)
-				{
-					System.out.println("DataRequestServlet plot collection: " + plotId);
-					Vector vec = new Vector();
-					StringTokenizer tok = new StringTokenizer(plotId, ",");
-					while (tok.hasMoreTokens())
-					{
-						String buf = tok.nextToken();
-						vec.addElement(buf);
-					}
-					qr.setResultsTotal(vec.size());
-					qr.setXMLString( dba.getMultipleVegBankPlotXMLString(vec) );
-					
-					System.out.println(
-						"DataRequestServlet > done writing "+ vec.size()+ " plots. ");
-				}
-				else
-				{
-					String xmlString = dba.getSingleVegBankPlotXMLString(plotId);
-					//System.out.println(" The plot string " + xmlString);
-					qr.setXMLString( xmlString );
-					qr.setResultsTotal(1);
-				}
+				new FullPlotQuery().execute(qr, plotId);
 			}
 			// this is where the query element checking is done for the vegetation plots
 			// the way that this is structured currently the user is not forced to choose a
@@ -1653,50 +1623,4 @@ private void updateClientLog (String clientLog, String remoteHost)
 	 {		 System.out.println("DataRequestServlet > registering the query document ###");
 		 su.uploadFileDataExcahgeServlet(SERVLET_DIR+"query.xml", userName);
 	 }
-	 
-	 
-	 /**
-	  *	Object of convience to store the results of a query
-	  * 
-	  */
-	 private class QueryResult
-	 {
-			int resultsTotal;
-			String xmlString;
-	 	
-			/**
-			 * @return
-			 */
-			public int getResultsTotal()
-			{
-				return resultsTotal;
-			}
-
-			/**
-			 * @return
-			 */
-			public String getXMLString()
-			{
-				return xmlString;
-			}
-
-			/**
-			 * @param i
-			 */
-			public void setResultsTotal(int i)
-			{
-				resultsTotal = i;
-			}
-
-			/**
-			 * @param string
-			 */
-			public void setXMLString(String string)
-			{
-				xmlString = string;
-			}
-
-	 }
-	 
-	 
 }

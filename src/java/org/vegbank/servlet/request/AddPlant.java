@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 18:42:18 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-05-30 18:01:59 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -276,19 +276,21 @@ public class AddPlant implements Constants
 				System.out.println(
 					"DataSubmitServlet > getting the status-usage data, returning recipt");
 				String conceptStatus = request.getParameter("conceptStatus");
-				String statusStartDate = request.getParameter("statusStartDate");
-				String statusStopDate = request.getParameter("statusStopDate");
-				// ASSUME THAT THE ABOVE DATES ARE THE SAME FOR THE USAGE
-				String usageStartDate = request.getParameter("statusStartDate");
-				String usageStopDate = request.getParameter("statusStopDate");
+				
+				// Dates automatically allocated
+				//String statusStartDate = request.getParameter("statusStartDate");
+				//String statusStopDate = request.getParameter("statusStopDate");
+				//String usageStartDate = request.getParameter("statusStartDate");
+				//String usageStopDate = request.getParameter("statusStopDate");
+				// UPDATE THE DATES B/C THEY ARE REQUIRED BY THE LOADER
+				
 				String statusDescription = request.getParameter("statusDescription");
 				String taxonLevel = request.getParameter("taxonLevel");
 				String plantParentName = request.getParameter("plantParentName");
 
 				plant.setParentName(plantParentName);
 				plant.setStatus(conceptStatus);
-				plant.setStatusStartDate(statusStartDate);
-				plant.setStatusStopDate(statusStopDate);
+				plant.setStatusStartDate( su.getCurrentDate() );
 				plant.setStatusPartyComments(statusDescription);
 				plant.setClassLevel(taxonLevel);
 				
@@ -521,8 +523,6 @@ public class AddPlant implements Constants
 
 			// STATUS AND USAGE
 			replaceHash.put("conceptStatus", "" + plant.getStatus());
-			replaceHash.put("statusStartDate", "" + plant.getStatusStartDate());
-			replaceHash.put("statusStopDate", "" + plant.getStatusStopDate());
 			replaceHash.put("statusDescription", "" + plant.getStatusPartyComments());
 			replaceHash.put("taxonLevel",  plant.getClassLevel());
 			
@@ -650,11 +650,6 @@ public class AddPlant implements Constants
 				"plantPartyInstitution",
 				"" + userAtts.get("institution"));
 			replaceHash.put("plantPartyEmailAddress", "" + emailAddress);
-
-			// UPDATE THE DATES B/C THEY ARE REQUIRED BY THE LOADER
-			String curDate = su.getCurrentDate();
-			replaceHash.put("statusStartDate", curDate);
-			replaceHash.put("statusStopDate", "");
 
 			su.filterTokenFile(plantStatusUsageTemplate, out, replaceHash);
 			// the calling method will redirect the browser

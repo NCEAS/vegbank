@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: viewData.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-29 00:14:08 $'
- *  '$Revision: 1.4 $'
+ *  '$Date: 2003-05-30 18:01:59 $'
+ *  '$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,23 +23,23 @@ package org.vegbank.servlet.request;
  */
 
 import java.io.BufferedReader;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.vegbank.common.utility.Utility;
 import org.vegbank.servlet.util.GetURL;
+
 import xmlresource.utils.transformXML;
 
 
@@ -128,7 +128,9 @@ public class viewData extends HttpServlet
 		if (downLoadAction != null)
 		{
 			this.initPlotDownload(request);
- 			response.sendRedirect("/vegbank/forms/resultset-download.html");	
+			RequestDispatcher rd = 
+				getServletContext().getRequestDispatcher("/forms/resultset-download.jsp");	
+			rd.forward(request, response);
 		}
 		
 		else if (resultType.equals("identity") )
@@ -148,38 +150,13 @@ public class viewData extends HttpServlet
 	 */
 	 private void initPlotDownload(HttpServletRequest request)
 	 {
-		 try
-		 {
-			 PrintStream outFile  = new PrintStream(
-			 new FileOutputStream(servletDir+"plotDownloadList", false));
+			//	Put the list of plots  into the request so a jsp can access it
+		String[] plots = request.getParameterValues("plotName");
+		String plotList = Utility.arrayToCommaSeparatedString(plots);
 		
-				//use this function to figure out the type and number of inputs
-				//it is a temporary function - comment out later
-				Enumeration enum =request.getParameterNames();
-				while (enum.hasMoreElements()) 
-				{
-					String name = (String) enum.nextElement();
-					String values[] = request.getParameterValues(name);
-					if (values != null) 
-					{
-						for (int i=0; i<values.length; i++) 
-						{
-							if (name.equals("plotName")) 
-							{
-								System.out.println("viewData > name: " + values[i]);
-								outFile.println(values[i]);	
-							}
-						}
-					}
-				}
-				outFile.close();
-		 }
-			catch( Exception e ) 
-			{
-				System.out.println("Exception: " + e.getMessage());
-			}
+		System.out.println("viewData: Storing in to request plots: " + plotList );
+		request.setAttribute("plots", plotList);
 	 }
-	
 	
 	/**
 	 * method that returns the cookie value associated with the 
