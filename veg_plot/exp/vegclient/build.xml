@@ -12,6 +12,10 @@
 	* national plots database including: the interfaces, the
 	* embedded database(s) etc.  Before building this check the 
 	* dependencies
+	*
+	* 		'$Author: harris $'
+ 	*     '$Date: 2001-10-11 10:33:42 $'
+ 	*     '$Revision: 1.2 $'
 --> 
 <project name="VegClient" default="compile" basedir=".">
 	
@@ -25,12 +29,14 @@
 		<property name="lib" value="./lib" />
 		<property name="bin" value="./bin" />
 		<property name="dist" value="./dist" />
+		<property name="data" value="./data" />
 	  <property name="xerces" value="./lib/xerces_1_3_1.jar" />
 		<property name="xalan" value="./lib/xalan_1_2_2.jar" />
 		<property name="xml_editor" value="./lib/xmloperator.jar" />
+		<property name="hsqldb" value="./lib/hsqldb.jar" />
 		<property name="db_access_module" value="./lib/database_access.jar" />
-		<property name="cpath" value="${xerces}:${xalan}:${xml_editor}:${db_access_module}:${build}"/>
-		<filter token="release" value="alpha-20011009"/>
+		<property name="cpath" value="${hsqldb}:${xerces}:${xalan}:${xml_editor}:${db_access_module}:${build}"/>
+		<filter token="release" value="alpha-20011010"/>
 		<filter token="authors" value="HARRIS"/>
 	</target>
 
@@ -115,6 +121,7 @@
 			DatabaseManager.java
 			PostgresNTPlugin.java
 			PostgresLinuxPlugin.java
+			HypersonicSQLPlugin.java
 			
 			StructuredDataFile.java
 			StructuredDataPackage.java
@@ -171,20 +178,23 @@
 	
 	  <zip zipfile="${dist}/vegclient_dist_20011003.zip">
 	  	<zipfileset dir="${lib}" prefix="lib"/>
-			<!--
+			<zipfileset dir="${data}/turboveg" prefix="data"/>
 			<zipfileset dir="${bin}" prefix="bin"/>
-			-->
+			
 			<fileset dir="${bin}" includes="vegclient.exe"/>
+			<fileset dir="${bin}" includes="vegclient.sh"/>
 			<fileset dir="${bin}" includes="PostgresManager.exe"/>
 			<fileset dir="${bin}" includes="ipc-daemon.exe"/>
 			<fileset dir="." includes="README"/>
 			<fileset dir="${lib}" includes="vegPlot2001DBTables_postgres.sql"/>
 			<fileset dir="${lib}" includes="create_indexes.sql"/>
-			<fileset dir="${lib}" includes="makePlotSummaryTables_postgres.sql"/>
-			
+			<fileset dir="${lib}" includes="makePlotSummaryTables_postgres.sql"/>		
 		</zip>
- 
 	</target>
+	
+	<!-- INSTALL installs the software to a web accessible directory-->
+	
+	
 	
 	<!-- MAIL -->
 	<target name="mail" depends="dist">
