@@ -7,9 +7,9 @@
  *    Authors: Jing Tao
  *    Release: @release@
  *
- *   '$Author: farrell $'
- *   '$Date: 2003-11-25 19:24:01 $'
- *   '$Revision: 1.2 $'
+ *   '$Author: anderson $'
+ *   '$Date: 2004-02-25 17:03:36 $'
+ *   '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,10 +76,10 @@ public class DBConnectionPool implements Runnable
 
 	//the number for trying to check out a connection in the pool in 
 	//getDBConnection method
-	final static int LIMIT = 2;
+	final static int LIMIT = 5;
 
-	final static int FREE = 0; //status of a connection
-	final static int BUSY = 1; //statis of a connection
+	final public static int FREE = 0; //status of a connection
+	final public static int BUSY = 1; //status of a connection
 
 	/**
 	 * Returns the single instance, creating one if it's the
@@ -184,18 +184,18 @@ public class DBConnectionPool implements Runnable
 		LogUtility.log("DBConnectionPool: size of connection pool: " + size);
 
 		//try every DBConnection in the pool
-		//every DBConnection will be try LIMITE times
+		//every DBConnection will be tried LIMIT times
 		for (int j = 0; j < LIMIT; j++)
 		{
 			//create a random number as the started index for connection pool
-			//So that the connection ofindex of 0 wouldn't be a the heaviest user
+			//so that the connection of index of 0 won't get bombed
 			random = (new Double(Math.random() * 100)).intValue();
 			for (int i = 0; i < size; i++)
 			{
 				index = (i + random) % size;
 				db = (DBConnection) connectionPool.elementAt(index);
 				LogUtility.log("DBConnectionPool: Index: " + index);
-				LogUtility.log("DBConnectionPool: Tag: " + db.getTag());
+				//LogUtility.log("DBConnectionPool: Tag: " + db.getTag());
 				LogUtility.log("DBConnectionPool: Status: " + db.getStatus());
 				//check if the connection is free
 				if (db.getStatus() == FREE)
@@ -324,6 +324,12 @@ public class DBConnectionPool implements Runnable
 				"DBConnectionPool: Connection is too old: " + dbConn.getAge());
 			return false;
 		}
+		
+		if (dbConn.getTag() == null) {
+			LogUtility.log(
+				"DBConnectionPool: Connection tag is null");
+			return false;
+		}
 
 		//Try to run a simple query
 		try
@@ -331,11 +337,14 @@ public class DBConnectionPool implements Runnable
 			long startTime = System.currentTimeMillis();
 			DatabaseMetaData metaData = dbConn.getMetaData();
 			long stopTime = System.currentTimeMillis();
-			//increase one usagecount
-			dbConn.increaseUsageCount(1);
+			
+			// PMA - this gets increased in getDBConnection
+			//dbConn.increaseUsageCount(1);
+			
 			//increase connection time
 			dbConn.setConnectionTime(stopTime - startTime);
-
+			LogUtility.log(
+				"DBConnectionPool.validateDBConnection:  conn. appears valid");
 		}
 		catch (Exception e)
 		{
