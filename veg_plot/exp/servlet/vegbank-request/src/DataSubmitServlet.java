@@ -28,8 +28,8 @@ import PlantTaxaLoader;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-06-19 14:59:28 $'
- *  '$Revision: 1.32 $'
+ *  '$Date: 2002-06-20 18:57:20 $'
+ *  '$Revision: 1.33 $'
  */
 
 
@@ -40,11 +40,6 @@ public class DataSubmitServlet extends HttpServlet
 	private String communityValidationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/community-submit_valid.html";
 	private String communityValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
 	private String commUpdateScript = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/update_community_summary.sql";
-	
-	// this is the pre-transformed init template 
-	private String plantValidationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-submit-template.html";
-	//this is the file that has the updated tokens and should be shown to the client
-	private String plantValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-valid.html";
 	
 	ResourceBundle rb = ResourceBundle.getBundle("vegbank");
 	private SqlFile sqlFile = new SqlFile(); 
@@ -66,6 +61,18 @@ public class DataSubmitServlet extends HttpServlet
 	
 	private String browserType = "";
 	private String user = ""; //the email addy of the user as stored in the framwork cookie
+	
+	// THESE VARIABLES ARE USED BY THE PLANT SUBMITTAL 
+	private String longName = "";
+	private String shortName = "";
+	private	String code = "";
+	// this is the pre-transformed init template 
+	private String plantNameRectificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-rectification.html";
+	private String plantNameReferenceTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-reference.html";
+	private String plantConceptTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantconcept.html";
+	private String plantStatusUsageTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantstatususage.html";
+	//this is the file that has the updated tokens and should be shown to the client
+	private String plantValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-valid.html";
 	
 	/**
 	 * constructor method
@@ -163,8 +170,290 @@ public class DataSubmitServlet extends HttpServlet
 	 * @param params -- a hashtable with all the parameter name, value pairs
 	 * @param response -- the http response object
 	 * @return sb -- stringbuffer with any errors or warnings etc.
+	 *
 	 */
 	private StringBuffer handlePlantTaxaSubmittal(Hashtable params, HttpServletResponse response)
+	{
+		StringBuffer sb = new StringBuffer();
+		try
+		{
+			//String longName = "";
+			//String shortName = "";
+			//String code = "";
+			String taxonDescription= "";
+			String salutation= "";
+			String firstName = "";
+			String lastName = "";
+			String emailAddress = this.user;
+			String orgName = "";
+			
+			String action = (String)params.get("action");
+			// if the wizard is initiated the plant names will be checked against the 
+			// vegbank database for near matches and a form with these matches will be 
+			// sent to the client
+			if ( action.equals("init") )
+			{
+				System.out.println("DataSubmitServlet > init plantTaxa");
+			//	salutation = (String)params.get("salutation");;
+			//	firstName =  (String)params.get("firstName");
+			//	lastName =  (String)params.get("lastName");
+			//	emailAddress =  (String)params.get("emailAddress");
+			//	orgName =  (String)params.get("orgName");
+				
+				// the next 3 attributes refer to the plant name that the 
+				// user is trying to insert into the database
+				longName = (String)params.get("longName");
+				shortName = (String)params.get("shortName");
+				code = (String)params.get("code");
+		//		taxonDescription = (String)params.get("taxonDescription");
+		
+				System.out.println("DataSubmitServlet > longName: " + longName);
+				System.out.println("DataSubmitServlet > shortName: " + shortName);
+				System.out.println("DataSubmitServlet > code: " + code);
+			//	System.out.println("DataSubmitServlet > description: " + taxonDescription);
+				
+				// get the data already stored in the database with corresponding to the names
+				String longNameMessage = "";
+				String shortNameMessage = "";
+				String codeMessage = "";
+				tqs = new TaxonomyQueryStore();
+				Vector lv = tqs.getPlantTaxonSummary(longName, "%" );
+				Vector sv = tqs.getPlantTaxonSummary(shortName, "%" );
+				Vector cv = tqs.getPlantTaxonSummary(code, "%" );
+				if ( lv.size() > 0)
+					{	longNameMessage = "Currently Exists in VegBank"; }
+				else 
+					{ longNameMessage = "Not Currently in VegBank"; }
+				if ( sv.size() > 0)
+					{	shortNameMessage = "Currently Exists in VegBank"; }
+				else 
+					{ shortNameMessage = "Not Currently in VegBank"; }
+				if ( cv.size() > 0)
+					{ codeMessage = "Currently Exists in VegBank"; }
+				else 
+					{ codeMessage = "Not Currently in VegBank"; }
+				
+				Vector longNameNearMatches = tqs.getNameNearMatches(longName);
+				Vector shortNameNearMatches = tqs.getNameNearMatches(shortName);
+				Vector codeNearMatches = tqs.getNameNearMatches(code);
+				//System.out.println("DataSubmitServlet > longName match: " + lv.toString() );
+				
+				
+				//update the validation page that is returned to the user
+				updatePlantRectificationPage(emailAddress,  longName, shortName,  code, 
+				longNameMessage,  shortNameMessage, codeMessage, longNameNearMatches, 
+				shortNameNearMatches, codeNearMatches);
+				
+				//redirect the browser
+				response.sendRedirect("/forms/plant-valid.html");
+				
+			}
+			//THIS WHERE THE ACTUAL SUBMITTAL OF THE NEW COMMUNITY TAKES PLACE
+			else if ( action.equals("namerectification") )
+			{
+				System.out.println("DataSubmitServlet > getting the name rectification ");
+				// GET THE NAME REFERENCES FOR THE INPUT NAMES OR GIVE THE 
+				// USER THE FORM TO FILL OUT
+				String longNameMatch = (String)params.get("longNameMatches");
+				String shortNameMatch = (String)params.get("shortNameMatches");
+				String codeMatch = (String)params.get("codeMatches");
+				// UPDATE THE INSTANCE VARIABLES
+				this.longName = longNameMatch;
+				this.shortName = shortNameMatch;
+				this.code = codeMatch;
+				
+				System.out.println("longName: " + longName + " match: " +  longNameMatch );
+				Hashtable longNameRef = tqs.getPlantNameReference(longNameMatch);
+				System.out.println("longNameRef: " + longNameRef.toString() );
+				System.out.println("shortName: " + shortName + " match: " +  shortNameMatch);
+				Hashtable shortNameRef = tqs.getPlantNameReference(shortNameMatch);
+				System.out.println("code: " + code + " match: " + codeMatch );
+				Hashtable codeNameRef = tqs.getPlantNameReference(codeMatch);
+				
+				updatePlantNameReferencePage(emailAddress, longNameRef, shortNameRef,  codeNameRef);
+				//redirect the browser
+				response.sendRedirect("/forms/plant-valid.html");
+			}
+			else if ( action.equals("namereference") )
+			{
+				System.out.println("DataSubmitServlet > getting the name reference ");
+				// send the user the attributes related to the plant concept
+				
+				updatePlantConceptPage(emailAddress, longName, shortName, code);
+				response.sendRedirect("/forms/plant-valid.html");
+			}
+			else if ( action.equals("plantconcept") )
+			{
+				System.out.println("DataSubmitServlet > getting the name reference ");
+				// send the user the attributes related to the plant status/usage
+				
+				updatePlantStatusUsagePage(emailAddress);
+				response.sendRedirect("/forms/plant-valid.html");
+			}
+			else
+			{
+				System.out.println("DataSubmitServlet > unknown step in the plant taxa process " + action);
+			}
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("Exception:  " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(sb);
+	}
+	
+	/**
+	 * method that updates the plant usage / status page 
+	 */
+	 private void updatePlantStatusUsagePage(String emailAddress)
+	 {
+		try
+		{		
+			// set up the filter tokens
+			Hashtable replaceHash = new Hashtable();
+			// to this form add the names and the concept description and the 
+			// party names for perspectives
+			
+			replaceHash.put("emailAddress", ""+emailAddress);
+			su.filterTokenFile(plantStatusUsageTemplate, plantValidationForm, replaceHash);
+			// the calling method will redirect the browser
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("Exception:  " + e.getMessage() );
+			e.printStackTrace();
+		}
+	 }
+	
+	/**
+	 * method that handles the updating of the plant concept page
+	 */
+	private void updatePlantConceptPage(String emailAddress, String longName, 
+	String shortName, String code)
+	{
+		try
+		{		
+			// set up the filter tokens
+			Hashtable replaceHash = new Hashtable();
+			replaceHash.put("longName", ""+longName);
+			replaceHash.put("shortName", ""+shortName);
+			replaceHash.put("code", ""+code);
+			
+			replaceHash.put("emailAddress", ""+emailAddress);
+			su.filterTokenFile(plantConceptTemplate, plantValidationForm, replaceHash);
+			// the calling method will redirect the browser
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("Exception:  " + e.getMessage() );
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * method that handles the plant name reference page
+	 */
+	private void updatePlantNameReferencePage(String emailAddress, Hashtable longNameRef, 
+	Hashtable shortNameRef,  Hashtable codeNameRef)
+	{
+		try
+		{
+			// get the paramters from the hashtables
+			String longName = (String)longNameRef.get("plantName");
+			String shortName = (String)shortNameRef.get("plantName");
+			String code = (String)codeNameRef.get("plantName");
+			
+			String longNameReferenceId = (String)longNameRef.get("plantReferenceId");
+			String shortNameReferenceId = (String)shortNameRef.get("plantReferenceId");
+			String codeNameReferenceId = (String)codeNameRef.get("plantReferenceId");
+			
+			System.out.println("ref id: " + longNameReferenceId);
+			
+			// set up the filter tokens
+			Hashtable replaceHash = new Hashtable();
+			replaceHash.put("emailAddress", ""+emailAddress);
+			replaceHash.put("longName", ""+longName);
+			replaceHash.put("shortName", ""+shortName);
+			replaceHash.put("code", ""+code);
+			
+			// long name
+			if ( longNameReferenceId != null && ! longNameReferenceId.trim().equals("null") )
+			{
+				replaceHash.put("longNameReference", ""+longNameRef.toString() );
+			}
+			else
+			{
+				replaceHash.put("longNameReference", ""+ this.getReferenceForm("longName") );
+			}
+			// short name 
+			if ( shortNameReferenceId != null && ! shortNameReferenceId.trim().equals("null") )
+			{
+				replaceHash.put("shortNameReference", ""+shortNameRef.toString() );
+			}
+			else
+			{
+				replaceHash.put("shortNameReference", ""+ this.getReferenceForm("shortName") );
+			}
+			// code
+			if ( codeNameReferenceId != null && ! codeNameReferenceId.trim().equals("null") )
+			{
+				replaceHash.put("codeNameReference", ""+codeNameRef.toString() );
+			}
+			else
+			{
+				replaceHash.put("codeNameReference", ""+ this.getReferenceForm("codeName") );
+			}
+			
+			su.filterTokenFile(plantNameReferenceTemplate, plantValidationForm, replaceHash);
+			// the calling method will redirect the browser
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("Exception:  " + e.getMessage() );
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/** 
+	 * this method stores the html code for collecting reference data 
+	 * and is intended to be used to add to a template to create the 
+	 * from that is sent to the browser
+	 *
+	 * @param plantNameType -- the type of plantName and may contain: <br>
+	 * longName <br>
+	 * shortName <br>
+	 * codeName <br>
+	 * @return s - the string with the fields top fill out for submitting 
+	 * 	an entry in the plantReference table that looks like:
+	 * 
+	 */
+	private String getReferenceForm(String plantNameType)
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("author: <input type=text size=25 name="+plantNameType+"RefAuthor> <br>");
+		sb.append("title: <input type=text size=25 name="+plantNameType+"RefTitle> <br>");
+		sb.append("publication date: <input type=text size=25 name="+plantNameType+"RefPubDate> <br>");
+		sb.append("series name: <input type=text size=25 name="+plantNameType+"RefSeriesName> <br>");
+		return( sb.toString() );
+	}
+		
+		
+	/**
+	 * method to handle the submittal of a new plant into the plant taxonomy 
+	 * database.  The proccesses here very closely mimic those in the submittal
+	 * of a community.  This method represents the wizard for loading new plant taxa
+	 * and the steps included in the wizard are:
+	 * 1] init -- submit the new plant name(s)
+	 *
+	 * @param params -- a hashtable with all the parameter name, value pairs
+	 * @param response -- the http response object
+	 * @return sb -- stringbuffer with any errors or warnings etc.
+	 * @deprecated
+	 */
+/*
+private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletResponse response)
 	{
 		StringBuffer sb = new StringBuffer();
 		try
@@ -230,7 +519,7 @@ public class DataSubmitServlet extends HttpServlet
 				
 				
 				//update the validation page that is returned to the user
-				updatePlantValidationPage(emailAddress,  longName, shortName,  code, 
+				updatePlantRectificationPage(emailAddress,  longName, shortName,  code, 
 				longNameMessage,  shortNameMessage, codeMessage, longNameNearMatches);
 				
 				//redirect the browser
@@ -282,7 +571,8 @@ public class DataSubmitServlet extends HttpServlet
 		}
 		return(sb);
 	}
-	
+*/	
+
 	/**
 	 * method that handles the updating of the plant submittal form with 
 	 * a combination of the input attributes and the input.
@@ -290,9 +580,9 @@ public class DataSubmitServlet extends HttpServlet
 	 * @return -- retuns false if there are any exceptions thrown while
 	 * 	genetaing the html form
 	 */
-	 private boolean updatePlantValidationPage(String emailAddress, String longName, 
+	 private boolean updatePlantRectificationPage(String emailAddress, String longName, 
 	 String shortName, String code, String longNameMessage, String shortNameMessage, 
-	 String codeMessage, Vector longNameMatches)
+	 String codeMessage, Vector longNameMatches, Vector shortNameMatches, Vector codeMatches)
 	 {
 		 try
 		 {
@@ -308,9 +598,10 @@ public class DataSubmitServlet extends HttpServlet
 			 replaceHash.put("shortNameMessage", shortNameMessage );
 			 replaceHash.put("codeMessage", codeMessage);
 			 
-			 // test of the drop down with near matches
+			 // drop down with near matches
 			 StringBuffer sb = new StringBuffer();
-			 sb.append("<select name=\"nearMatches\">");
+			 sb.append("<select name=\"longNameMatches\">");
+			 sb.append("<option selected>  "+ longName +" </option>");
 			 for (int i=0; i < longNameMatches.size(); i++) 
 			 {
 				 sb.append("<option> "+(String)longNameMatches.elementAt(i)+" </option>");
@@ -318,10 +609,32 @@ public class DataSubmitServlet extends HttpServlet
 			 sb.append("</select>");
 			 replaceHash.put("longNameNearMatches", sb.toString() );
 			 
+			 sb = new StringBuffer();
+			 sb.append("<select name=\"shortNameMatches\">");
+			 sb.append("<option selected>  "+ shortName +" </option>");
+			 for (int i=0; i < shortNameMatches.size(); i++) 
+			 {
+				 sb.append("<option> "+(String)shortNameMatches.elementAt(i)+" </option>");
+			 }
+			 sb.append("</select>");
+			 replaceHash.put("shortNameNearMatches", sb.toString() );
+			 
+			 sb = new StringBuffer();
+			 sb.append("<select name=\"codeMatches\">");
+			 sb.append("<option selected>  "+ code +" </option>");
+			 for (int i=0; i < codeMatches.size(); i++) 
+			 {
+				 sb.append("<option> "+(String)codeMatches.elementAt(i)+" </option>");
+			 }
+			 sb.append("</select>");
+			 replaceHash.put("codeNearMatches", sb.toString() );
+			 
 			 //the message telling the client that there are near matches
 			 replaceHash.put("longNameNearMatchMessages", "VegBank has " +longNameMatches.size()+ " near matches" );
+			 replaceHash.put("shortNameNearMatchMessages", "VegBank has " +shortNameMatches.size()+ " near matches" );
+			 replaceHash.put("codeNearMatchMessages", "VegBank has " +codeMatches.size()+ " near matches" );
 				
-			 su.filterTokenFile(plantValidationTemplate, plantValidationForm, replaceHash);
+			 su.filterTokenFile(plantNameRectificationTemplate, plantValidationForm, replaceHash);
 		 }
 		 catch( Exception e ) 
 		 {
