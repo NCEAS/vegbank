@@ -573,15 +573,20 @@ public void issueInsert(String insertString , String attributeString,
 /**
 * establish the database connection and statement
 */
-try {
-dbConnect m = new dbConnect();
-m.makeConnection(conn, query);
-	System.out.println("Opening db connection by calling dbConnect from \n"
-	+"issueStatement.issueInsert");
+try 
+{
+	dbConnect m = new dbConnect();
+	m.makeConnection(conn, query);
+//	System.out.println("Opening db connection by calling dbConnect from \n"
+//	+"issueStatement.issueInsert");
 	conn=m.outConn;
 	query=m.outStmt;	
-} catch (Exception e) {System.out.println("failed in the  dbConnect.makeConnection call" 
-+e.getMessage());}
+} 
+catch (Exception e) 
+{
+	System.out.println("failed in the  dbConnect.makeConnection call" 
+	+e.getMessage());
+}
 	
 try {
 
@@ -599,7 +604,7 @@ PreparedStatement pstmt=null;
 			
 			//bind the values to the statement	
 			for (int i=0; i<inputValueNum; i++) {			
-				//System.out.println(i+1+" "+inputValue[i]);
+//				System.out.println(i+1+" "+inputValue[i]);
 				pstmt.setString(i+1, inputValue[i]);
 			}
 			
