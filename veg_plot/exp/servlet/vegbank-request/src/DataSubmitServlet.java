@@ -120,7 +120,16 @@ public class DataSubmitServlet extends HttpServlet
 	
 		
 	/**
-	 * this method is used to handle the submittal of a vegplot
+	 * this method is used to handle the submittal of a vegplot into the 
+	 * VegBank database using for the insertion of an access file the 
+	 * rmi datasource client / server system to access the data on a 
+	 * win nt machine
+	 *
+	 * @see DataSourceClient
+	 * @param enum -- the input parameters to the parent servlet
+	 * @param params -- a hashtable with the unique parameters sent to the servlet
+	 * @param request -- http request
+	 * @param response -- http reponse
 	 * 
 	 */
 	 private StringBuffer handleVegPlotSubmittal(Enumeration enum,
@@ -186,7 +195,23 @@ public class DataSubmitServlet extends HttpServlet
 						{
 							for (int i=0; i<values.length; i++) 
 							{
+								String thisPlot = values[i];
+								
+								
 								System.out.println("DataSubmitServlet > requesting an rmi plot insert: " + values[i] );
+								//insert the plot over the rmi system
+								String result = rmiClient.insertPlot(thisPlot);
+								System.out.println("DataSubmitServlet > results: " + result );
+								
+								
+								// make a table with the salient info associated with this plots 
+								// to return to the browser so that the user can see which plots 
+								// were loaded to the database
+								String table = getPlotSalientStatistics( thisPlot, result);
+								
+								//this is a temp hack to append all these tables to the stringbuffer
+								//so that it is returned to the browser
+								sb.append( table );
 							}
 						}
 					}
@@ -209,6 +234,79 @@ public class DataSubmitServlet extends HttpServlet
 	}
 		
 		
+	
+	/**
+	 * method that for a given plot will grab some of the salient stats for that 
+	 * plot into an html table that can be used elsehere.  Also the loading results
+	 * from the rmi client are passed into this method so that they can elso be 
+	 * embedded into the table the table will look somethink like what is below for each 
+	 * plot:
+	 *
+	 *  <table>
+	 * 		<tr> <td> plot name </td> <td> $plotname </td>
+	 * 		<tr> <td> state </td> <td> $state </td>
+	 * 		<tr> <td> named place </td> <td> $named place </td>
+	 * 		<tr> <td> community  </td> <td> $community </td>
+	 *	</table> 
+	 *
+	 * @see DataSourceClient
+	 * @param plot  -- the string name of the plot as it used in the users archive
+	 * @param results -- the string results that have been returnd by the loader
+	 *
+	 */
+	 private String getPlotSalientStatistics(String plot, String results)
+	 {
+	 	StringBuffer sb = new StringBuffer();
+	 		try
+			{
+				String plotName = rmiClient.getAuthorPlotCode(plot);
+				String state = rmiClient.getState(plot);
+				String community= rmiClient.getCommunityName(plot);
+				String x = rmiClient.getXCoord(plot);
+				String y = rmiClient.getYCoord(plot);
+				
+				sb.append("<table> \n");
+				sb.append(" <tr bgcolor=\"blue\"> \n");	
+				sb.append(" 	<td> Plot Name: </td> \n");	
+				sb.append(" 	<td> "+plotName+" </td> \n");	
+				sb.append(" </tr> \n");
+				
+				//the state
+				sb.append(" <tr> \n");	
+				sb.append(" 	<td> State </td> \n");	
+				sb.append(" 	<td> "+state+" </td> \n");	
+				sb.append(" 	<td> X Coordinate:  </td> \n");	
+				sb.append(" 	<td> "+x+" </td> \n");	
+				sb.append(" 	<td> Y Coordinate:  </td> \n");	
+				sb.append(" 	<td> "+y+" </td> \n");	
+				sb.append(" </tr> \n");	
+				
+				//the community
+				sb.append(" <tr> \n");	
+				sb.append(" 	<td> Commmunity: </td> \n");	
+				sb.append(" 	<td> "+community+" </td> \n");	
+				sb.append(" </tr> \n");	
+
+				//the loading results 
+				sb.append(" <tr> \n");	
+				sb.append(" 	<td> Loading Results </td> \n");	
+				sb.append(" 	<td> "+results+" </td> \n");	
+				sb.append(" </tr> \n");	
+
+				
+				sb.append("</table> \n");
+				// a new line
+				sb.append("<br>");
+				
+			}
+			catch( Exception e ) 
+			{
+				System.out.println("Exception:  " + e.getMessage() );
+				e.printStackTrace();
+			}
+			return( sb.toString() );
+	 }
+	 
 	
 	
 	/**
