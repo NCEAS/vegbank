@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-30 13:03:53 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-06-30 17:08:33 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ import java.sql.*;
 import org.apache.struts.validator.ValidatorForm;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vegbank.common.command.GenericCommand;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.PermComparison;
 

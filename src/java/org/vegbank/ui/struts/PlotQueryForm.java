@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-25 06:46:46 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-06-30 17:08:33 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1120,10 +1120,10 @@ public class PlotQueryForm extends ValidatorForm
 			String beanName = "Project";
 			String[] whereParams = null;
 			// Need to create this object
-			GenericCommand  gc = new GenericCommand();
 			try
 			{
-				Collection projects = gc.execute(selectClauseKey, whereClauseKey, beanName, whereParams );
+				Collection projects = GenericCommand.execute(
+						selectClauseKey, whereClauseKey, beanName, whereParams );
 				Iterator projectsIter = projects.iterator();
 				while ( projectsIter.hasNext() )
 				{
@@ -1153,10 +1153,10 @@ public class PlotQueryForm extends ValidatorForm
 			String beanName = "Covermethod";
 			String[] whereParams = null;
 			// Need to create this object
-			GenericCommand  gc = new GenericCommand();
 			try
 			{
-				Collection cms = gc.execute(selectClauseKey, whereClauseKey, beanName, whereParams );
+				Collection cms = GenericCommand.execute(
+						selectClauseKey, whereClauseKey, beanName, whereParams );
 				Iterator cmIter = cms.iterator();
 				while ( cmIter.hasNext() )
 				{
@@ -1186,10 +1186,10 @@ public class PlotQueryForm extends ValidatorForm
 			String beanName = "Stratummethod";
 			String[] whereParams = null;
 			// Need to create this object
-			GenericCommand  gc = new GenericCommand();
 			try
 			{
-				Collection stratummethods = gc.execute(selectClauseKey, whereClauseKey, beanName, whereParams );
+				Collection stratummethods = GenericCommand.execute(
+						selectClauseKey, whereClauseKey, beanName, whereParams );
 				Iterator stratummethodsIter = stratummethods.iterator();
 				while ( stratummethodsIter.hasNext() )
 				{

@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-06-30 20:02:59 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-06-30 17:08:33 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ package org.vegbank.common.command;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 
 /**
@@ -34,7 +35,5 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface VegbankCommand
 {
-	
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception;
-
+	public List execute(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

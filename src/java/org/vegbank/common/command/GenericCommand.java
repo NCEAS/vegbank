@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-29 06:56:22 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-06-30 17:08:33 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ import org.vegbank.common.utility.VBObjectUtils;
  * @author farrell
  */
 
-public class GenericCommand implements VegbankCommand
+public class GenericCommand 
 {
 	private static Log log = LogFactory.getLog(GenericCommand.class);
 
@@ -58,7 +58,7 @@ public class GenericCommand implements VegbankCommand
 	/* (non-Javadoc)
 	 * @see org.vegbank.common.command.VegbankCommand#execute(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-	public void execute(HttpServletRequest request, HttpServletResponse response)
+	public static List execute(HttpServletRequest request, HttpServletResponse response)
 		throws Exception
 	{
 		// Run the query and stick the generated object into the request
@@ -67,7 +67,7 @@ public class GenericCommand implements VegbankCommand
 		String beanName = request.getParameter("BeanName");
 		String[] whereParams = request.getParameterValues("wparam");
 
-		execute(request, selectClauseKey, whereClauseKey, beanName, whereParams);
+		return execute(request, selectClauseKey, whereClauseKey, beanName, whereParams);
 	}
 
 	/**

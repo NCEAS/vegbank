@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-29 06:56:22 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-06-30 17:08:33 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ public class GenericDispatcherAction extends Action
 			if ( command.equals(genericCommandName)) 
 			{
 				log.debug( "GD: executing new gen cmd" );
-				new GenericCommand().execute(request, response);
+				GenericCommand.execute(request, response);
 				log.debug( "GD: done executing GC" );
 			}
 			else if ( command.equals("RetrieveVBModelBean")) 
