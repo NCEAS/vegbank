@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-19 22:14:31 $'
- * '$Revision: 1.6 $'
+ *     '$Date: 2002-02-19 23:40:25 $'
+ * '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,13 +65,9 @@ public class USDAPlantsLoader
 	private String partyContractInstructions = "http://plants.usda.gov";
 	public String reference = "PLANTS96";
 	public String otherCitationDetails = "PLANTS1996";
-
-	//constructor -- define as static the LocalDbConnectionBroker 
-	//so that methods called by this class can access the 'local' 
-	//pool of database connections
-	//static LocalDbConnectionBroker lb;
-
 	private Connection conn = null;
+	
+	
 	
 	//constructor method
 	public USDAPlantsLoader()
@@ -79,10 +75,29 @@ public class USDAPlantsLoader
 		conn = this.getConnection();
 	}
 	
+	/**
+	 * this is the main method to be called by other classes for loading 
+	 * a package of plant data stored in an xml document
+	 *
+	 */
+	public void loadPlantDataSet()
+	{
+		try 
+ 		{
+			
+		}
+		catch ( Exception e )
+		{
+			System.out.println("Exception: " +e.getMessage());
+			e.printStackTrace();
+		}
+	}
 	
 	
 	/**
 	* method that will return a database connection for use with the database
+	*
+	* @return conn -- an active connection
 	*/
 	private Connection getConnection()
 	{
@@ -94,11 +109,10 @@ public class USDAPlantsLoader
 		}
 		catch ( Exception e )
 		{
-			System.out.println("failed making db connection: "
-			+"dbConnect.makeConnection: "+e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-			return(c);
+		return(c);
 	}
 	
 
@@ -417,18 +431,30 @@ private int plantUsageKey(String plantName)
 
 
 
-/**
- * method to load the plant instances, stored in a 
- * hashtable, to the database 
- */	
-private void loadPlantInstances(Hashtable plantsData)
-{
-//System.out.println(plantsData.toString() );
-	for (int i=0; i<plantsData.size(); i++) 
+ /**
+ 	* method to load the plant instances, stored in a 
+ 	* hashtable, to the database 
+ 	*/	
+	private void loadPlantInstances(Hashtable plantsData)
 	{
-		loadSinglePlantInstance(extractSinglePlantInstance(plantsData, i));
+		//System.out.println("USDAPlantsLoader >  " + plantsData.toString() );
+
+		for (int i=0; i<plantsData.size(); i++) 
+		{
+			//the hashtable containing the plant iformation for each plant
+			Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
+			
+			//first load the family associated with each of the plants, this
+			//was written after most of the code was written and may need to be cahnged
+			//or the location may need to be changed
+			loadSingleFamilyInstance(plantInstanceHash);
+			
+			
+			//this method loads the plant instance stored on each line of the 
+			//plants data set
+			loadSinglePlantInstance(plantInstanceHash);
+		}
 	}
-}
 
 
 
@@ -459,12 +485,16 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 		String familyName=singlePlantInstance.get("familyName").toString();
 		String plantCode=singlePlantInstance.get("plantCode").toString();
 		
+		System.out.println("USDAPlantsLoader > family : " + familyName);
+		System.out.println("USDAPlantsLoader > code : " + plantCode );
+		System.out.println("USDAPlantsLoader > rank : " +  rank +" \n" );
+		
 		//first load the reference table
 		int refId = this.insertPlantReference(this.otherCitationDetails);
 		
 		//load the party table
 		int partyId = this.insertPlantPartyInstance(this.partyName, this.partyContractInstructions);
-		System.out.println("USDAPlantsLoader > party id: " + partyId);
+		//System.out.println("USDAPlantsLoader > party id: " + partyId);
 
 		//if the plantname is not there then load it
 		if (plantNameExists(concatenatedName)==false)
@@ -485,7 +515,7 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 			{
 				//upadte the concept
 				conceptId = loadPlantConceptInstance(nameId, refId, concatenatedName, 
-				plantCode );
+				plantCode, rank );
 				//update the status
 				statusId = loadPlantStatusInstance(conceptId, itisUsage, "01-JAN-96", 
 				"01-JAN-01", "PLANTS96", partyId);
@@ -512,6 +542,99 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 		*/
 	}
 }
+
+
+
+/**
+ * method to extract a single plant instance
+ * from the aggregate hashtable - returning a 
+ * hashtable with keys like name, author orignDate
+ * etc
+ */	
+private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
+{
+	int nameId = 0;
+	int conceptId = 0;
+	int statusId = 0;
+	if ( singlePlantInstance.toString() != null )
+	{
+///		String concatenatedName=singlePlantInstance.get("concatenatedName").toString();
+			String tsnValue=singlePlantInstance.get("tsnValue").toString();
+///		String rank=singlePlantInstance.get("rank").toString();
+///		String initialDate=singlePlantInstance.get("initialDate").toString();
+///		String updateDate=singlePlantInstance.get("updateDate").toString();
+///		String parentName=singlePlantInstance.get("parentName").toString();
+///		String authorName=singlePlantInstance.get("authorName").toString();
+		String itisUsage=singlePlantInstance.get("itisUsage").toString();
+///		String synonymousName=singlePlantInstance.get("synonymousName").toString();
+///		String publicationName=singlePlantInstance.get("publicationName").toString();
+///		String commonName=singlePlantInstance.get("commonName").toString();
+		String familyName=singlePlantInstance.get("familyName").toString();
+		String rank = "family";
+		String plantCode = "";
+		String commonName = "";
+///		String plantCode=singlePlantInstance.get("plantCode").toString();
+		
+		System.out.println("USDAPlantsLoader > LOADING A FAMILY" );
+		System.out.println("USDAPlantsLoader > family : " + familyName);
+	//	System.out.println("USDAPlantsLoader > code : " + plantCode );
+		System.out.println("USDAPlantsLoader > rank : " +  rank +" \n" );
+		
+		//first load the reference table
+		int refId = this.insertPlantReference(this.otherCitationDetails);
+		
+		//load the party table
+		int partyId = this.insertPlantPartyInstance(this.partyName, this.partyContractInstructions);
+		//System.out.println("USDAPlantsLoader > party id: " + partyId);
+
+		//if the plantname is not there then load it
+		if (plantNameExists(familyName)==false)
+		{
+			//System.out.println("USDAPlantsLoader > first instance of plant name: "
+			//	+ concatenatedName );
+			nameId = loadPlantNameInstance(refId, familyName, commonName, plantCode);
+		}
+
+	
+		//if the plant concept does not exist create an entry 
+		// and create a status entry for that plant instance - if 
+		//it is not a synonomy b/c if there is a synonomy then the 
+		//concatenated value does not have a concept
+		if (plantConceptExists(familyName, tsnValue)==false)
+		{
+///			if ( synonymousName.equals("nullToken") )
+///			{
+				//upadte the concept
+				conceptId = loadPlantConceptInstance(nameId, refId, familyName, 
+				plantCode, rank);
+				//update the status
+				statusId = loadPlantStatusInstance(conceptId, itisUsage, "01-JAN-96", 
+				"01-JAN-01", "PLANTS96", partyId);
+///			}
+		}
+/*	
+		//if no synonomies then add the accepted 
+		//usage to the usage table
+		if ( synonymousName.equals("nullToken") )
+		{
+			System.out.println("USDAPlantsLoader > loading usage instance plantNameId: " + nameId);
+			System.out.println("USDAPlantsLoader > for plant name: "+ concatenatedName);
+			if (nameId > 0)
+			{
+			loadPlantUsageInstance(concatenatedName, nameId, conceptId, "PLANTS", itisUsage, 
+					startDate, stopDate, reference);
+			}
+			else 
+			{
+				System.out.println("USDAPlantsLaoder > FAILURE LOADING THE USAGE INSTANCE FOR A PLANT");
+			}
+		}
+		
+		*/
+	}
+}
+
+	
 
 	
 	/**
@@ -570,6 +693,9 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 
 	/** 
 	 * method that returns the party nameId for an organization name
+	 *
+	 * @param partyName -- the name of the party
+	 * @return plantpartyId -- the plantPartyId
 	 * 
 	 */
 		private int getPlantPartyId(String partyName)
@@ -886,19 +1012,20 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
  	* method the primary key for that concept
  	*/	
 	private int loadPlantConceptInstance(int plantNameId, int plantReferenceId, 
-	String plantName, String plantCode)
+	String plantName, String plantCode, String rank)
 	{
 		int plantConceptId = -999;
 		try
 		{
 			String s = "insert into PLANTCONCEPT (plantname_id, plantName, "
-			+" plantreference_id, plantCode ) values(?,?,?,?) ";
+			+" plantreference_id, plantCode, plantLevel ) values(?,?,?,?,?) ";
 			PreparedStatement pstmt = conn.prepareStatement(s);
 			//bind the values
 			pstmt.setInt(1, plantNameId);
 			pstmt.setString(2, plantName);
 			pstmt.setInt(3, plantReferenceId);
 			pstmt.setString(4, plantCode);
+			pstmt.setString(5, rank);
 			pstmt.execute();
 			pstmt.close();	
 		
@@ -925,7 +1052,7 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 			e.printStackTrace();
 		}
 		return(plantConceptId);
-}
+	}
 
 
 
@@ -1073,23 +1200,30 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 
 
 
-/**
- * method to extract a single plant instance
- * from the aggregate hashtable - returning a 
- * hashtable with keys like name, author orignDate
- * etc
- */	
-private Hashtable extractSinglePlantInstance(Hashtable plantsData, 
+	/**
+ 	* method to extract a single plant instance from the 
+ 	* aggregate hashtable - returning a hashtable with keys 
+ 	* like name, author orignDate etc
+ 	*/	
+	private Hashtable extractSinglePlantInstance(Hashtable plantsData, 
 	int hashKeyNum)
-{
-	Hashtable singlePlantInstance = new Hashtable();
-	if ( plantsData.get(""+hashKeyNum).toString() != null )
 	{
-		singlePlantInstance=(Hashtable)plantsData.get(""+hashKeyNum);
-		//System.out.println(singlePlantInstance.toString() );
+		Hashtable singlePlantInstance = new Hashtable();
+		try
+		{
+			if ( plantsData.get(""+hashKeyNum).toString() != null )
+			{
+				singlePlantInstance=(Hashtable)plantsData.get(""+hashKeyNum);
+				//System.out.println(singlePlantInstance.toString() );
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(singlePlantInstance);
 	}
-	return(singlePlantInstance);
-}
 
 
 /**
