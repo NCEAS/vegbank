@@ -38,12 +38,12 @@ import multipart.*;
 
 public class DataExchangeServlet extends HttpServlet 
 {
-	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
+	ResourceBundle rb = ResourceBundle.getBundle("veg_servlet");
 
 	private String exchangeType = null;
 	private String submitter = null;
 	private String password = null;
-	private String uploadDir =(rb.getString("requestparams.uploadDir"));
+	private String uploadDir = rb.getString("uploadDir");
 
 	
 	/** Handle "GET" method requests from HTTP clients */
@@ -176,8 +176,6 @@ public class DataExchangeServlet extends HttpServlet
   * @param response - the response object linked to the client 
   *
   */
-
-
 	private void handleRawDataExchange (HttpServletRequest request,  
 	HttpServletResponse response, PrintWriter out) 
 	{
@@ -242,7 +240,6 @@ public class DataExchangeServlet extends HttpServlet
  	 * @param response - the response object linked to the client 
  	 *
  	 */
-
  private void handleRawDataUpload (HttpServletRequest request,  
 	HttpServletResponse response, PrintWriter out) 
 	{
