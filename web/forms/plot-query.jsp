@@ -14,9 +14,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: mlee $'
-*      '$Date: 2004-04-08 05:44:28 $'
-*  '$Revision: 1.20 $'
+*    '$Author: anderson $'
+*      '$Date: 2004-05-07 23:21:53 $'
+*  '$Revision: 1.21 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -660,7 +660,7 @@ VEGBANK - Simple Plots Query
   <tr bgcolor="#DDDDDD">
 
     <th rowspan="2"><p><span class="thsmall">Row</span></p></th>
-    <th rowspan="2"><p><span  class="thsmall">Plant Name <a class="brightyellow" target="_blank" href="@forms_link@plant-query.html">search</a></span></p></th>
+    <th rowspan="2"><p><span  class="thsmall">Plant Name <a class="brightyellow" target="_blank" href="@forms_link@PlantQuery.jsp">search</a></span></p></th>
     <th colspan="2"><p><span class="thsmall">Cover (%)</span></p></th>
 
     <!-- no basal area <th colspan="2"><p><span class="thsmall">Basal Area (m2/ha)</span></p></th> -->
