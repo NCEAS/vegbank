@@ -3986,6 +3986,164 @@ format</caption>
   <version>
     <versionNumber>1.4</versionNumber>
     <form>
+      <name>basicent_metadata</name>
+      <caption>Basic Metadata</caption>
+      <formType>basicEnt</formType>
+      <subfrm>0</subfrm>
+      <ctlType>-1</ctlType>
+      <help>This form allows you to enter the basic data that applies to all your plots. You can supply default values for fields, as well as state your methodology for the plots you are about to enter.</help>
+      <control>
+        <name>setcvrmethod</name>
+        <caption>View</caption>
+        <ctlType>104</ctlType>
+        <help>Click to view current cover methods (not editable)</help>
+      </control>
+      <control>
+        <name>covertype</name>
+        <caption>Cover Method:</caption>
+        <ctlType>111</ctlType>
+        <help>Select the cover method which defines the cover classes you use.  If the method isn't listed, you can add it with the &quot;Add&quot; button.</help>
+      </control>
+      <control>
+        <name>stratummethodname</name>
+        <caption>Stratum Method:</caption>
+        <ctlType>111</ctlType>
+        <help>Select the stratum method that you used for all your plots.  This defines the different valid strata that you used (such as T [tree], H [herb], S1 [tall shrubs], etc.).  If the method you used isn't in the list, you can add your method - press &quot;Add&quot;</help>
+      </control>
+      <control>
+        <name>projectname</name>
+        <caption>Project:</caption>
+        <ctlType>111</ctlType>
+        <help>Select the project that the plots you did will belong to.  A project is a grouping of plots for organizational purposes.  Your project is not likely to be in the list- press &quot;Add&quot; to add your project.</help>
+      </control>
+      <control>
+        <name>defaultparty</name>
+        <caption>You are:</caption>
+        <ctlType>111</ctlType>
+        <help>Your name should go here.  If no names appear in the list, click the &quot;Add&quot; button to add your name.</help>
+      </control>
+      <control>
+        <name>command176</name>
+        <caption>Add</caption>
+        <ctlType>104</ctlType>
+        <help>Click to add a new cover method</help>
+      </control>
+      <control>
+        <name>command177</name>
+        <caption>View</caption>
+        <ctlType>104</ctlType>
+        <help>Click to view current stratum methods (not editable)</help>
+      </control>
+      <control>
+        <name>command178</name>
+        <caption>Add</caption>
+        <ctlType>104</ctlType>
+        <help>Click to add a new stratum method</help>
+      </control>
+      <control>
+        <name>command179</name>
+        <caption>View</caption>
+        <ctlType>104</ctlType>
+        <help>View the current projects with this button (not editable).</help>
+      </control>
+      <control>
+        <name>command180</name>
+        <caption>Add</caption>
+        <ctlType>104</ctlType>
+        <help>Click this button to add a new Project to VegBranch.</help>
+      </control>
+      <control>
+        <name>command181</name>
+        <caption>View</caption>
+        <ctlType>104</ctlType>
+        <help>Click here to view the current parties, of which you may be one.</help>
+      </control>
+      <control>
+        <name>command182</name>
+        <caption>Add</caption>
+        <ctlType>104</ctlType>
+        <help>Click here to add a new party.</help>
+      </control>
+      <control>
+        <name>defconfid</name>
+        <caption>Confidentiality:</caption>
+        <ctlType>111</ctlType>
+        <help>Are the data to be considered confidential? If so, location coordinates can be &quot;fuzzed&quot; so that the exact location of the plot is not public knowledge; plot can also be completely embargoed.</help>
+      </control>
+      <control>
+        <name>defreason</name>
+        <caption>Confid. Reason:</caption>
+        <ctlType>109</ctlType>
+        <help>The reason for confidentiality.  This field is not be open to public view once plots are in VegBank.  Reasons might include specific rare species, ownership, prepublication embargo, or many other reasons.</help>
+      </control>
+      <control>
+        <name>defpermanence</name>
+        <caption>Permanence:</caption>
+        <ctlType>111</ctlType>
+        <help>Is the plot monumented so as to assure permanence?  If so, this should be described in the layoutNarrative</help>
+      </control>
+      <control>
+        <name>defplotsize</name>
+        <caption>Plot Size (sq. m):</caption>
+        <ctlType>109</ctlType>
+        <help>Total area of the plot in m2.  If many subplots, this area includes the subplots and the intersticial space.</help>
+      </control>
+      <control>
+        <name>defcoverdisp</name>
+        <caption>CoverDispersion:</caption>
+        <ctlType>111</ctlType>
+        <help>Were cover values for the total taxon list collected from one contiguous area or dispersed subplots (e.g., continguous, dispersed-regular, dispered-random)?</help>
+      </control>
+      <control>
+        <name>defautotaxcvr</name>
+        <caption>AutoTaxonCover:</caption>
+        <ctlType>111</ctlType>
+        <help>TRUE indicates that the overall cover value for a taxon was not observed, but rather calculated from the cover values in one or more strata.</help>
+      </control>
+      <control>
+        <name>deforigdataloc</name>
+        <caption>Physical location of original data:</caption>
+        <ctlType>109</ctlType>
+        <help>Location where the hard data reside and any access instructions.</help>
+      </control>
+      <control>
+        <name>defmethodnarr</name>
+        <caption>Method Narrative</caption>
+        <ctlType>109</ctlType>
+        <help>Additional metadata helpful for understanding how the data were collected during the observation event.</help>
+      </control>
+      <control>
+        <name>deflayoutnarr</name>
+        <caption>Layout Narrative:</caption>
+        <ctlType>109</ctlType>
+        <help>Text description of and the rationale for the layout of the plot.</help>
+      </control>
+      <control>
+        <name>command41</name>
+        <caption>&gt;Step 2: Enter Plot-level data</caption>
+        <ctlType>104</ctlType>
+        <help>Click here once the data in this form have been entered and you are ready to enter information on a plot-by-plot basis, i.e. plot name, location &amp; environment.</help>
+      </control>
+      <control>
+        <name>command10</name>
+        <caption>cancel</caption>
+        <ctlType>104</ctlType>
+        <help>press this button to close this form.</help>
+      </control>
+      <control>
+        <name>command242</name>
+        <caption>&gt;&gt;Step 3: Enter species+cover occurring on plot</caption>
+        <ctlType>104</ctlType>
+        <help>Once you have entered data on a plot-by-plot basis, you can enter the species that occurred on plots, but not directly from this form.</help>
+      </control>
+      <control>
+        <name>command34</name>
+        <caption>&gt;&gt;Step 4: Preview and Migrate</caption>
+        <ctlType>104</ctlType>
+        <help>Press this button when you are done with Simple Entry.  You can preview your data you will add to the VegBank module.</help>
+      </control>
+    </form>
+    <form>
       <name>basicent_preview_migrate</name>
       <caption>Preview your data, then proceed to migration form.</caption>
       <formType>basicEnt</formType>
@@ -7569,7 +7727,8 @@ Tables</caption>
       <name>migratedata_final</name>
       <caption>Migrate Data</caption>
       <formType>load</formType>
-      <confirmed>probably</confirmed>
+      <screenshotVersion>1.2</screenshotVersion>
+      <confirmed>yes</confirmed>
       <subfrm/>
       <ctlType>-1</ctlType>
       <help>This form takes the data in the loading module and migrates (copies) it to the vegbank module, which is the connected database that mimics the vegbank.org database.  You should only use this form after you have used the data check form to determine that there are no errors in your data that will prevent migration from occurring smoothly.  Also, it is recommended that you use the &quot;backup vegbank module&quot; button to make a backup copy of that database in the event of errors.</help>
