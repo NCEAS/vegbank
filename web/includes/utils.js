@@ -1,3 +1,14 @@
+var loadFrom = false;
+function include(aFile)
+{
+    if (loadFrom && loadFrom.parent) {
+        loadFrom.parent.removeChild(loadFrom);
+    }
+    loadFrom=document.createElement("script");
+    loadFrom.setAttribute("src",aFile);
+    document.getElementsByTagName('head').item(0).appendChild(loadFrom);
+}
+
 function toggle(e) {
 	if (e.checked) {
 		highlight(e);
@@ -218,7 +229,7 @@ function ts_resortTable(lnk) {
     
     // Delete any other arrows there may be showing
     var allspans = document.getElementsByTagName("span");
-    for (var ci=0;ci<allspans.length;ci++) {
+    for (ci=0;ci<allspans.length;ci++) {
         if (allspans[ci].className == 'sortarrow') {
             if (getParent(allspans[ci],"table") == getParent(lnk,"table")) { // in the same table as us?
                 allspans[ci].innerHTML = '&nbsp;&nbsp;&nbsp;';
@@ -304,6 +315,7 @@ function addEvent(elm, evType, fn, useCapture)
   } else {
     alert("Handler could not be removed");
   }
+  return false;
 }
 
 
@@ -335,13 +347,6 @@ function showorhidediv(theid)
 /****************************************************************************/
 /*  the preceding from http://johnkerry.com/js/kerry.js  on 2004-DEC-03     */
 /****************************************************************************/
-
-function MM_reloadPage(init) {  //reloads the window if Nav4 resized
-  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
-    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
-  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
-}
-MM_reloadPage(true);
 
 
 function defaultOnLoad() {

@@ -1,9 +1,10 @@
+/* $Id: header_search.js,v 1.5 2005-03-18 18:18:19 anderson Exp $ */
 
 function doSubmit() {
-    ent = document.quicksearch_form.selEntity.value;
-    xwhereParams = document.quicksearch_form.xwhereParams.value;
-    qsent = "qsent=" + document.quicksearch_form.selEntity.selectedIndex;
-    xwp = "xwhereParams=" + xwhereParams;
+    var ent = document.quicksearch_form.selEntity.value;
+    var xwhereParams = document.quicksearch_form.xwhereParams.value;
+    var qsent = "qsent=" + document.quicksearch_form.selEntity.selectedIndex;
+    var xwp = "xwhereParams=" + urlEncode(xwhereParams);
 
     if (xwhereParams == null || xwhereParams == "") {
         // submit to metasearch
@@ -17,10 +18,10 @@ function doSubmit() {
         document.quicksearch_form.submit();
 
     } else {
-        getView = "std";
-        getName = ent;
-        getPk = ent;
-        getExtra = "&xwhereMatchAny=true";
+        var getView = "std";
+        var getName = ent;
+        var getPk = ent;
+        var getExtra = "&xwhereMatchAny=true";
 
 
         // choose the right view
@@ -48,8 +49,8 @@ function doSubmit() {
                 break;
         }
 
-        params = getPk + ";" + ent;
-        getURL = "@get_link@" + getView + "/" + getName + "/" + params + 
+        var params = getPk + ";" + ent;
+        var getURL = "@get_link@" + getView + "/" + getName + "/" + params + 
                 "?where=where_keywords_pk_in&xwhereKey=xwhere_kw_match&xwhereSearch=true&" +
                 xwp + getExtra + "&" + qsent;
 
@@ -59,12 +60,12 @@ function doSubmit() {
 }
 
 function updateQuicksearch() {
-    ent = getURLParam("qsent");
-    xwp = getURLParam("xwhereParams");
+    var ent = getURLParam("qsent");
+    var xwp = getURLParam("xwhereParams");
 
     if (ent != null && ent != '') {
         //document.getElementById("selEntity").selectedIndex = ent;
         document.quicksearch_form.selEntity.selectedIndex = ent;
-        document.quicksearch_form.xwhereParams.value = xwp;
+        document.quicksearch_form.xwhereParams.value = urlDecode(xwp);
     }
 }
