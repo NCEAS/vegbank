@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-21 18:41:50 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2002-07-01 20:52:59 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -276,16 +276,84 @@ private String xmlAtomicName(String  concatenatedName, String rank)
 			//System.out.println("VARIETY");
 			atomicElements.append( xmlAtomicVarietyName(concatenatedName) );
 		}
+		// ELSE IF IT IS A SUBSPECIES
+		else if ( concatenatedName.indexOf("ssp.") > 0 )
+		{
+			//System.out.println("SUBSPECIES: " + concatenatedName);
+			atomicElements.append( xmlAtomicSubspeciesName(concatenatedName) );
+		}
 	}
 	return(atomicElements.toString() );
 }
+
+/**
+ * method that returns the atomic name properties etc for a
+ * plant instance that is a variety
+ * @param concatenatedName -- the name to parse into the sci name w/o the
+ *	author bit
+ */
+private String xmlAtomicSubspeciesName(String  concatenatedName )
+{
+	StringBuffer atomicElements = new StringBuffer(0);
+	if (concatenatedName != null)
+	{
+		String sspToken = null;
+		StringBuffer authorToken=new StringBuffer();
+		
+		//grab the variety token
+		for (int i=3; i<30; i++)
+		{
+			if ( spaceStringTokenizer(concatenatedName, i).equals("ssp.") )
+			{
+				sspToken =spaceStringTokenizer(concatenatedName, i+1);
+			}
+		}
+		
+		//varietyName name
+		atomicElements.append("    <Unit_Name4>"+
+			sspToken
+		+"</Unit_Name4> \n");
+		
+		//make a concatenated for the variety name
+		atomicElements.append("    <concatenatedName>"+
+			spaceStringTokenizer(concatenatedName, 1)+" "+
+			spaceStringTokenizer(concatenatedName, 2)+" "+
+			"ssp. "+sspToken+
+		"</concatenatedName> \n");
+			
+		//add the parent name
+		atomicElements.append("    <parentName>"+
+			spaceStringTokenizer(concatenatedName, 1)+" "+
+			spaceStringTokenizer(concatenatedName, 2)
+		+"</parentName> \n");
+			
+			//grab the author info
+			for (int i=3; i<30; i++)
+			{
+			if ( spaceStringTokenizer(concatenatedName, i).equals("ssp.") )
+			{
+				break;
+			}
+			else 
+			{
+				authorToken.append(spaceStringTokenizer(concatenatedName, i) );
+			}
+		}
+		atomicElements.append("    <authorName>"+
+			authorToken.toString()
+		+"</authorName> \n");		
+	}
+	return(atomicElements.toString() );
+}
+ 
 
 
 /**
  * method that returns the atomic name properties etc for a
  * plant instance that is a variety
+ * @param concatenatedName -- the name to parse into the sci name w/o the
+ *	author bit
  */
-
 private String xmlAtomicVarietyName(String  concatenatedName )
 {
 	StringBuffer atomicElements = new StringBuffer(0);
