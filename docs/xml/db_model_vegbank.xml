@@ -2289,6 +2289,7 @@ change through time.</entitySummary>
     <entitySummary>This table stores valid role codes for use in contributor tables</entitySummary>
     <entityDescription/>
     <module>plot</module>
+    <entityNeedParentToAdd>Never Add</entityNeedParentToAdd>
     <attribute>
       <attName>ROLE_ID</attName>
       <attLabel>ID</attLabel>
@@ -12961,6 +12962,7 @@ conditions may change between resampling events.
     <entitySummary>This table stores collective information about strata defined within a plot observation.</entitySummary>
     <entityDescription>This table is used to record non-species-specific information about a stratum. Examples include total cover of the stratum and maximum height of the stratum.</entityDescription>
     <module>plot</module>
+    <entityNeedParentToAdd>observation</entityNeedParentToAdd>
     <attribute>
       <attName>STRATUM_ID</attName>
       <attLabel>ID</attLabel>
@@ -13270,6 +13272,7 @@ conditions may change between resampling events.
     <entitySummary>This table stores collective information about strata defined within a plot observation.</entitySummary>
     <entityDescription>This table is used to record non-species-specific information about a stratum. Examples include total cover of the stratum and maximum height of the stratum.</entityDescription>
     <module>plot</module>
+    <entityNeedParentToAdd>stratumMethod</entityNeedParentToAdd>
     <attribute>
       <attName>STRATUMTYPE_ID</attName>
       <attLabel>ID</attLabel>
@@ -14830,6 +14833,7 @@ conditions may change between resampling events.
     <entitySummary>Information about VegBank users.</entitySummary>
     <entityDescription/>
     <module>user</module>
+    <entityNeedParentToAdd>NEVER ADD</entityNeedParentToAdd>
     <attribute>
       <attName>usr_ID</attName>
       <attLabel>User ID</attLabel>
@@ -14987,6 +14991,7 @@ conditions may change between resampling events.
     <entitySummary>Info about user certification.</entitySummary>
     <entityDescription/>
     <module>user</module>
+    <entityNeedParentToAdd>NEVER ADD</entityNeedParentToAdd>
     <attribute>
       <attName>userCertification_ID</attName>
       <attLabel>User Certification ID</attLabel>
@@ -15600,6 +15605,7 @@ conditions may change between resampling events.
     <entitySummary>Self assessment of regional experience for certified users.</entitySummary>
     <entityDescription/>
     <module>user</module>
+    <entityNeedParentToAdd>NEVER ADD</entityNeedParentToAdd>
     <attribute>
       <attName>userRegionalExp_ID</attName>
       <attLabel>User Regional Experience ID</attLabel>
@@ -16187,6 +16193,7 @@ conditions may change between resampling events.
     <entitySummary>Permission for user to see embargoed plot.</entitySummary>
     <entityDescription/>
     <module>user</module>
+    <entityNeedParentToAdd>NEVER ADD</entityNeedParentToAdd>
     <attribute>
       <attName>userPermission_ID</attName>
       <attLabel>User Permission ID</attLabel>
