@@ -37,8 +37,8 @@ import org.vegbank.plots.datasource.DBModelBeanReader;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-03 05:06:37 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-11-03 05:28:24 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -292,7 +292,7 @@ public class DownLoadAction extends Action
 										stratumCover = stratumComposition.getTaxonstratumcover();
 									
 										// FIXME: Null pointer City
-										String statumName = stratumComposition.getStratumobject().getStratumtypeobject().getStratumname();
+										stratumName = stratumComposition.getStratumobject().getStratumtypeobject().getStratumname();
 
 										// Put them in the String
 										speciesData.append(
