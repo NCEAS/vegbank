@@ -15,6 +15,15 @@ import databaseAccess.SqlFile;
 import servlet.util.ServletUtility;
 import DataSourceClient; //this is the rmi client for loading mdb files
 
+/**
+ * REQUIRED PARAMETERS
+ * @param submitDataType -- 
+ * 
+ *
+ *	'$Author: harris $'
+ *  '$Date: 2002-03-26 17:45:55 $'
+ *  '$Revision: 1.17 $'
+ */
 
 
 public class DataSubmitServlet extends HttpServlet 
@@ -182,8 +191,11 @@ public class DataSubmitServlet extends HttpServlet
 				}
 				//create the form
 				su.filterTokenFile(plotSelectTemplate, plotSelectForm, "plots", sb2.toString() );
-				//send the user there
-				response.sendRedirect("/forms/plot_select.html");
+				// send the user there -- this is getting cached so print it to the user 
+				// instead
+				//response.sendRedirect("/forms/plot_select.html");
+				String s = su.fileToString(plotSelectForm);
+				sb.append( s );
 				
 			}
 			else if ( action.equals("submit") )
