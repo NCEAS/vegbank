@@ -13,14 +13,32 @@
     %>
 
 
-<title>Plot Observation Summary View</title>
+<title>VegBank Plots</title>
 
 
 
 @webpage_masthead_html@
  @possibly_center@  
-  <h2>View Plot-Observations</h2>
-  <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
+  <h2>VegBank Plots</h2>
+  
+<logic:equal parameter="where" value="where_observation_nsuid">
+  <p>Welcome to VegBank.  You've clicked a link from <a href="http://natureserve.org/explorer">NatureServe Explorer</a>
+  requesting to see the plots in VegBank that our users have linked to a particular community, which is: <br/>
+    <vegbank:get id="commconcept" select="commconcept" where="where_commconcept_nsuid" beanName="map" pager="false" xwhereEnable="false" perPage="-1" />
+    <logic:notEmpty name="commconcept-BEANLIST">
+      <logic:iterate id="onerowofcommconcept" name="commconcept-BEANLIST">
+        <a href='@get_link@std/commconcept/<bean:write name="onerowofcommconcept" property="commconcept_id" />'><bean:write name="onerowofcommconcept" property="commname" /></a>
+      </logic:iterate>
+    </logic:notEmpty>
+    <logic:empty name="commconcept-BEANLIST">
+      Sorry, VegBank has no record of the NatureServe community requested: 
+      <bean:parameter id="beanwparam" name="wparam" />
+      <bean:write name="beanwparam" />
+    </logic:empty>
+  </p>
+</logic:equal>
+
+<vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
     whereNonNumeric="where_observation_ac" beanName="map" pager="true" xwhereEnable="true"/>
 
 <vegbank:pager />
@@ -32,7 +50,7 @@
 
 <TABLE width="100%" class="leftrightborders" cellpadding="2">
 <tr><th>More</th><th>Location</th><th>Author Code</th><th>Size</th><th>Elev</th>
-<th>Year</th><th>Community</th><th colspan="3">Plants</th></tr>
+<th>Year</th><th>Community</th><th colspan="3">Some Plants</th></tr>
 <logic:iterate id="onerowofobservation" name="BEANLIST"><!-- iterate over all records in set : new table for each -->
 <bean:define id="onerowofplot" name="onerowofobservation" />
 <bean:define id="obsId" name="onerowofplot" property="observation_id"/>
@@ -111,7 +129,7 @@
 </tr>
 </logic:iterate><!-- plot -->
 </TABLE>
-<vegbank:pager/>
+<vegbank:pager />
 
 </logic:notEmpty>
 
