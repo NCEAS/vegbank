@@ -200,12 +200,21 @@ private void handleSimpleQuery (Hashtable params, PrintWriter out,
 	composeQuery("taxonName", taxonName);
  	issueQuery("simpleQuery");
 	
-	out.println("Number of results returned: "+queryOutputNum);
+	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 
+if (queryOutputNum>0) {
 	//allow the user to access the results
  	servletUtility l =new servletUtility();  
  	l.getViewOption();
  	out.println(l.outString);
+}
+
+else { 
+	out.println("<b> Please try another query </b> <br>"); 
+	out.println("<a href = \"/examples/servlet/pageDirector?pageType=plotQuery\">"
+		+"return to query page</a><b>&#183;</b>"); //put in rb
+
+}
 
  }
 }
@@ -287,10 +296,10 @@ catch (Exception e) {System.out.println("** failed in plotQuery.updateClientLog 
  * as the some other information like the last date the user accessed the servlet 
  * the authentication status of the user
  * 
- * @param - out the output stream to the client
- * @param - params the Hashtable of parameters that should be included in the
+ * @param out - the output stream to the client
+ * @param params - the Hashtable of parameters that should be included in the
  * 	response
- * @param - response the response object linked to the client 
+ * @param response - the response object linked to the client 
  */
 private void returnQueryElemenySummary (PrintWriter out, Hashtable params, 
                  HttpServletResponse response) {

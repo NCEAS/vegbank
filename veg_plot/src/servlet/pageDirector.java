@@ -4,17 +4,48 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 /**
-*
-* This servlet handles all the requests for html pages and has been implemented
-* in conjunction with the authenticate servlet.  This class will check to see
-* if the browser has a valid cookie and if so will provide the user with the 
-* requested page, otherwise the login page is displayed  
-*/
+ *
+ * This servlet handles all the requests for html pages and has been implemented
+ * in conjunction with the authenticate servlet.  This class will check to see
+ * if the browser has a valid cookie and if so will provide the user with the 
+ * requested page, otherwise the login page is displayed and redisplayed
+ *
+ * <p>Valid parameters are:<br><br>
+ * 
+ * pageType - type of page requested by the user, may include plotQuery, login
+ * 	download etc <br>
+ */
 public class pageDirector extends HttpServlet {
 
-  public void doGet(HttpServletRequest req, HttpServletResponse res) 
-                               throws ServletException, IOException {
-				       
+ResourceBundle rb = ResourceBundle.getBundle("pageDirector");
+
+private String plotQueryPage = null;
+private String loginPage = null;
+private String loggedinPage = null;
+private String plantQueryPage = null;
+private String communityQueryPage = null;
+private String downloadPage = null;
+
+
+
+public void doGet(HttpServletRequest req, HttpServletResponse res) 
+	throws ServletException, IOException {
+
+/** Read the parameters from the properties file*/
+try {
+ plotQueryPage=(rb.getString("requestparams.plotQueryPage"));
+ loginPage=(rb.getString("requestparams.loginPage"));
+ loggedinPage=(rb.getString("requestparams.loggedinPage"));
+ plantQueryPage=(rb.getString("requestparams.plantQueryPage"));
+ communityQueryPage=(rb.getString("requestparams.communityQueryPage"));
+ downloadPage=(rb.getString("requestparams.downloadPage"));
+ 
+}
+catch( Exception e ) {System.out.println("servlet failed in: pageDirector.main "
+	+" first try - reading parameters "+e.getMessage()); }
+
+
+
 // Use a ServletOutputStream since we may pass binary information
 ServletOutputStream out = res.getOutputStream();
 
@@ -56,10 +87,10 @@ if (cookieName != null && cookieValue != null) {
 	
 	//if valid cookie then forward to page
 	if (m.cookieValidFlag==1) {
-		pageDirector n =new pageDirector();  
-		n.pageTranslator(pageType);
-		ViewFile.returnFile(n.pageFileName, out);
-	
+
+		pageTranslator(pageType);
+		returnFile(pageFileName, out);
+
 	}
 	
 	else {
@@ -76,8 +107,12 @@ else {
 }
   
 /**
-* Method to send the contents of a file to the outputStream
-*/  
+ * Method to send the contents of a file to the outputStream
+ *
+ * @param fileName - the name of the file that should be sent to the browser.
+ * @param out the output stream to the client
+ *
+ */  
   public static void returnFile(String fileName, OutputStream out)
   throws FileNotFoundException, IOException {
 	  //A FileInputStream is for Bytes
@@ -97,24 +132,25 @@ else {
   }
   
 /**
-*  Method to match the requested page type with the file to be returned to the 
-*  browser
-*
-*  @param pageType String - the type of page requsted 
-*/
+ *  Method to match the requested page type with the file to be returned to the 
+ *  browser
+ *
+ *  @param pageType - the type of page requsted 
+ */
 public void pageTranslator (String pageType) 
 	{
-	if (pageType.equals("plotQuery")) pageFileName="C:\\\\jakarta-tomcat\\webapps\\examples\\WEB-INF\\lib\\plotQuery.html";
 	
-	if (pageType.equals("communityQuery")) pageFileName="C:\\\\jakarta-tomcat\\webapps\\examples\\WEB-INF\\lib\\communityQuery.html";
+	if (pageType.equals("plotQuery")) pageFileName=plotQueryPage;
 	
-	if (pageType.equals("plantQuery")) pageFileName="C:\\\\jakarta-tomcat\\webapps\\examples\\WEB-INF\\lib\\plantQuery.html";
+	if (pageType.equals("communityQuery")) pageFileName=communityQueryPage;
 	
-	if (pageType.equals("login")) pageFileName="C:\\\\jakarta-tomcat\\webapps\\examples\\WEB-INF\\lib\\login.html";
+	if (pageType.equals("plantQuery")) pageFileName=plantQueryPage;
 	
-	if (pageType.equals("loggedin")) pageFileName="C:\\\\jakarta-tomcat\\webapps\\examples\\WEB-INF\\lib\\loggedin.html";
-
-	if (pageType.equals("download")) pageFileName="C:\\\\jakarta-tomcat\\webapps\\examples\\WEB-INF\\lib\\download.html";
+	if (pageType.equals("login")) pageFileName=loginPage;
+	
+	if (pageType.equals("loggedin")) pageFileName=loggedinPage;
+	
+	if (pageType.equals("download")) pageFileName=downloadPage;
 	
 	}
 public String pageFileName; 

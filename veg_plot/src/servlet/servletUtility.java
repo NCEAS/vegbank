@@ -6,19 +6,23 @@ import java.util.zip.*;
 
 
 /**
-* Class that acts as a utility to the plotQuery servlet
-*/
+ * Class that acts as a utility to the plotQuery servlet
+ *
+ * @version 11 Jan 2001
+ * @author John Harris
+ *
+ */
 
 
 public class servletUtility {
 
 
 /**
-*  Method to copy a file
-*
-* @param  inFile  a string representing the input file
-* @param  outFile a string representing the output, compressed, file
-*/
+ *  Method to copy a file
+ *
+ * @param  inFile  a string representing the input file
+ * @param  outFile a string representing the output, compressed, file
+ */
 
 public void flushFile (String inFile) {
 try {
@@ -34,11 +38,11 @@ catch(Exception e) {System.out.println("failed: servletUtility.flushFile");
 
 
 /**
-*  Method to copy a file
-*
-* @param  inFile  a string representing the input file
-* @param  outFile a string representing the output, compressed, file
-*/
+ *  Method to copy a file
+ *
+ * @param  inFile  a string representing the input file
+ * @param  outFile a string representing the output, compressed, file
+ */
 
 public void fileCopy (String inFile, String outFile, String appendFlag) {
 try {
@@ -72,9 +76,9 @@ catch(Exception e) {System.out.println("failed: servletUtility.fileCopy");
 
 
 /**
-*  Method to store html code that can be accessed based on the requests
-* made by the user 
-*/
+ *  Method to store html code that can be accessed based on the requests
+ * made by the user 
+ */
 
 public void htmlStore () {
 ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
@@ -116,9 +120,9 @@ outString = mainPage;
 
 	
 /**
-*  Method to store html code that can be accessed based on the requests
-*  made by the user 
-*/
+ *  Method to store html code that can be accessed based on the requests
+ *  made by the user 
+ */
 
 public void getViewOption () {
 ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
@@ -139,9 +143,9 @@ outString=response;
 
 	
 /**
-*  Method to store html code showing the end user the options for interacting
-*  with the data that was in the result set
-*/
+ *  Method to store html code showing the end user the options for interacting
+ *  with the data that was in the result set
+ */
 
 public void getViewMethod () {
 ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
@@ -166,12 +170,12 @@ public String outString = null;
 
 
 /**
-*  Method to compress a file using GZIP compression using as input both the
-*  input file name and the output file name
-*
-* @param  inFile  a string representing the input file
-* @param  outFile a string representing the output, compressed, file
-*/
+ *  Method to compress a file using GZIP compression using as input both the
+ *  input file name and the output file name
+ *
+ * @param  inFile  a string representing the input file
+ * @param  outFile a string representing the output, compressed, file
+ */
 
 public void gzipCompress (String inFile, String outFile) {
 try {

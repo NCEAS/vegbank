@@ -9,10 +9,9 @@ import java.io.*;
  *              "Java Servlet Programming" by Hunter & crawford and
  * 		8/96 Marty Hall, hall@apl.jhu.edu  
  *		http://www.apl.jhu.edu/~hall/java/ 
- *     Authors: John Harris
+ *     @author John Harris
  *
- *  Fix:
- * port numbers, ending forward slash, cookies
+ *  Fix:  port numbers, ending forward slash, cookies
  *
  */
 
@@ -61,12 +60,17 @@ String protocol = tok.nextToken(":");
 String host = tok.nextToken(":/"); 
 //Hashtable responseVec = new Hashtable();
 
-if (tok.hasMoreTokens()) { 
-	uri = "/" + tok.nextToken(" ") + "/"; 
+System.out.println("uri originally passed: "+uri);
+
+if (tok.hasMoreTokens()) {  
+	uri =  tok.nextToken(" ") + "/";
 }
 
-else 
+else {
 	uri = "/"; 
+}
+
+//System.out.println("original uri passed: "+uri);
 
 
 /** 
@@ -79,9 +83,9 @@ if ( (uri.indexOf("?")>0) && (uri.endsWith("/")) ) {
 	int newLength=uriLength-1;
 	String correctedUri=uri.substring(0, newLength);
 	uri=correctedUri;
-	System.out.println("abnormal forward slash at the end of the uri - trimmed");
+	System.out.println("GetURL.getPOST: abnormal forward slash at "
+		+"the end of the uri - trimmed");
 }
-
 
 System.out.println("Protocol=" + protocol + ", host=" + host + ", uri=" + uri); 
 
