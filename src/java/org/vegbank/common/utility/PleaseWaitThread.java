@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-05-06 22:41:32 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-07-24 00:55:15 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,13 +25,23 @@
 package org.vegbank.common.utility;
 
 import org.apache.struts.action.ActionMessages;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import javax.servlet.http.HttpServletRequest;
 
 
 /**
  * @author anderson
  */
-public abstract class PleaseWaitThread extends Thread {
+public abstract class PleaseWaitThread extends Thread 
+		implements ConditionalContentHandlerController 
+{
+
+	private static Log log = LogFactory.getLog(PleaseWaitThread.class);
+
+	private boolean keepRunning = true;
+	private String status = "";
+
 	public abstract ActionMessages getStatusMessages();
 	public abstract boolean isDone();
 	public abstract String getForward();
@@ -40,6 +50,27 @@ public abstract class PleaseWaitThread extends Thread {
 	public String getThreadId() {
 		return "pw-" + this.hashCode();
 	}
+
+	public void destroy() {
+		keepRunning = false;
+		log.debug("Destroying a PleaseWaitThread of type: " + 
+				this.getClass().getName());
+	}
+
+
+	/* ========================================================== */
+	// ConditionalContentHandlerController implementation
+	/* ========================================================== */
+	public boolean keepRunning() {
+		return keepRunning;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String s) {
+		status = s;
+	}
+
 }
-
-

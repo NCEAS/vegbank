@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-05-06 22:40:02 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-07-24 00:55:15 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.ConditionalContentHandlerController;
 import org.vegbank.plots.datasource.NativeXMLReader;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -58,6 +59,9 @@ public class VegbankXMLUpload
 	private XMLReader xr = null;
 	private NativeXMLReader nr = null;
 	
+	private SAXValidationErrorHandler errorHandler = null;
+	private SAX2DBContentHandler contentHandler = null;
+	private File xmlFile = null;
 	
 	private boolean validate = true;
 	// TODO: use this variable as expected
@@ -111,22 +115,26 @@ public class VegbankXMLUpload
 
 
 	/**
-	 * <p>Process this XML file</p>
+	 * <p>Set the XML file</p>
 	 * 
 	 * @param xmlFileName
 	 * @throws IOException
 	 * @throws SAXException
 	 */
-	public void processXMLFile( String xmlFileName ) throws IOException, SAXException
+	public void processXMLFile( String xmlFileName, 
+			ConditionalContentHandlerController controller) throws IOException, SAXException
 	{
-		log.info( "VegbankXMLUpload: Validation on: " + this.validate);
-		log.info( "VegbankXMLUpload: Rectification on: " + this.rectify);
-		log.info( "VegbankXMLUpload: Database Loading on: " + this.load);
+		log.info("processing XML file");
+		log.info("Validation on: " + this.validate);
+		log.info("Rectification on: " + this.rectify);
+		log.info("Database Loading on: " + this.load);
 		
-		SAXValidationErrorHandler errorHandler = new SAXValidationErrorHandler(errors);
-		SAX2DBContentHandler contentHandler = new SAX2DBContentHandler(errors, accessionCodes, load);
-		
-		File xmlFile = new File(xmlFileName);
+		errorHandler = new SAXValidationErrorHandler(errors);
+		contentHandler = new SAX2DBContentHandler(errors, accessionCodes, load);
+		contentHandler.setController(controller);
+		log.debug("Set ConditionalContentHandlerController");
+
+		xmlFile = new File(xmlFileName);
 		
 		if ( validate )
 		{	
@@ -139,6 +147,7 @@ public class VegbankXMLUpload
 		{
 			if ( load ) // Only load if told to
 			{
+				log.debug("Loading XML to DB");
 				xr.setContentHandler( contentHandler );
 				xr.parse( this.getInputSource(xmlFile));	
 			}
@@ -216,7 +225,7 @@ public class VegbankXMLUpload
 		}
 		else
 		{
-			vbUpload.processXMLFile(fileName);
+			vbUpload.processXMLFile(fileName, null);
 			
 			vbUpload.getErrors().getTextReport(null);
 		

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-05-06 22:40:02 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-07-24 00:55:15 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,13 +32,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.VBObjectUtils;
+import org.vegbank.common.utility.ConditionalContentHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 
-public class SAX2DBContentHandler implements ContentHandler
+public class SAX2DBContentHandler extends ConditionalContentHandler 
+		implements ContentHandler
 {
 	private static Log log = LogFactory.getLog(SAX2DBContentHandler.class);
 		
@@ -63,7 +65,10 @@ public class SAX2DBContentHandler implements ContentHandler
 		LoadTreeToDatabase ltdb = new LoadTreeToDatabase(errors, accessionCodes, load);
 		try
 		{
-			 ltdb.insertVegbankPackage( (Hashtable) ( (Vector) tmpStore.get("VegBankPackage")).firstElement());
+			if (keepRunning()) {
+				log.debug("inserting vegbank package...");
+				ltdb.insertVegbankPackage( (Hashtable) ( (Vector) tmpStore.get("VegBankPackage")).firstElement());
+			}
 		}
 		catch (SQLException e)
 		{
@@ -90,6 +95,11 @@ public class SAX2DBContentHandler implements ContentHandler
 		Attributes atts)
 			throws SAXException 
 	{
+
+		if (!keepRunning()) {
+			return;
+		}
+
 		// Document representation that points to the root document node
 		if (atFirstPlot) 
 		{

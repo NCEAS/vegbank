@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-05-07 19:08:34 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-07-24 00:55:15 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,8 +51,7 @@ import org.xml.sax.XMLReader;
  * Runs the XML uploader in its own thread.
  * 
  */
-public class VegbankXMLUploadThread 
-		extends PleaseWaitThread 
+public class VegbankXMLUploadThread extends PleaseWaitThread 
 {
 	private static Log log = LogFactory.getLog(VegbankXMLUploadThread.class);
 	
@@ -99,7 +98,8 @@ public class VegbankXMLUploadThread
 					"Loading XML..."));
 
 		try {
-			xmlUpload.processXMLFile(this.xmlFileName);
+			xmlUpload.processXMLFile(this.xmlFileName, this);
+
 		} catch (Exception ex) {
 			messages.add(ActionMessages.GLOBAL_MESSAGE,
 					new ActionMessage("errors.general",
@@ -141,7 +141,5 @@ public class VegbankXMLUploadThread
 	public void prepareRequest(HttpServletRequest request) {
 		request.getSession().setAttribute("ErrorsReport",  xmlUpload.getErrors());
 	}
-
-	/* ========================================================== */
 
 }
