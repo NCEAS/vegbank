@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2004-08-25 00:40:11 $'
-* '$Revision: 1.114 $'
+* '$Author: anderson $'
+* '$Date: 2004-08-25 01:02:00 $'
+* '$Revision: 1.115 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -107,7 +107,7 @@
     <property name="vegdocs.dir" value="${machine_url}/vegdocs"/>
     <property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
     <!-- large binary files location:   targets that read from large binaries separate -->
-    <property name="lrg_binary_src" value="/usr/www/vegbank/htdocs/noncvs"/>
+	<property name="lrg_binary_src" value="${apache.document.root}/noncvs"/>
     <filter token="dist" value="dist"/>
     <filter token="hostname" value="${hostname}"/>
     <filter token="version" value="development"/>
