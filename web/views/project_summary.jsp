@@ -6,8 +6,6 @@
 
 @defaultHeadToken@
  
-<vegbank:where/>
-
 <TITLE>View Data in VegBank : project(s) : Summary</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

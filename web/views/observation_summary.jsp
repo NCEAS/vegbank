@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: anderson $'
-*  '$Date: 2004-09-24 01:38:21 $'
-*  '$Revision: 1.11 $'
+*  '$Date: 2004-10-01 00:20:21 $'
+*  '$Revision: 1.12 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -50,10 +50,9 @@
 
 @vegbank_header_html_normal@
 
-<vegbank:where numeric="where_observation_pk" nonNumeric="where_observation_ac"/>
-
   <h2>View Plot Observation(s)</h2>
-  <vegbank:get select="plotandobservation" beanName="map" pager="true"/>
+  <vegbank:get select="plotandobservation" whereNumeric="where_observation_pk" whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
+
 
 
 <logic:empty name="BEANLIST">
