@@ -5,8 +5,8 @@
  * the two tables include site data and species information
  *
  * '$Author: harris $'
- * '$Date: 2002-07-22 19:24:59 $'
- * '$Revision: 1.8 $'
+ * '$Date: 2002-07-23 23:05:08 $'
+ * '$Revision: 1.9 $'
  *
  */
 
@@ -36,6 +36,7 @@ CREATE SEQUENCE PLOTSITESUMMARY_ID_seq;
 CREATE TABLE plotSiteSummary (
 PLOTSITESUMMARY_ID NUMERIC(20) default nextval('PLOTSITESUMMARY_ID_seq'),
 PLOT_ID integer,
+OBSERVATION_ID integer,
 PROJECT_ID integer,
 PLOTTYPE VARCHAR(30),
 SAMPLINGMETHOD VARCHAR(45),
@@ -101,6 +102,15 @@ plot.authorplotcode, plot.geology, plot.state,
 plot.country, null, observation.authorobscode, 
 observation.soilDepth, null, plot.accession_number
 from plot, observation where observation.plot_id = plot.plot_id;
+
+-- UPDATE THE OBSERVATION ID'S BASED ON THE PLOTS, THESE PROCESSES
+-- SHOULD BE REVERSED AT SOME POINT
+update PLOTSITESUMMARY set OBSERVATION_ID = 
+	(select OBSERVATION_ID from OBSERVATION where OBSERVATION.PLOT_ID = PLOTSITESUMMARY.PLOT_ID);
+
+-- UPDATE THE COMMUNITY INFORMATION IN THE PLOT SITE SUMMARY TABLE
+update PLOTSITESUMMARY set  CURRENTCOMMUNITY = 
+	(select COMMNAME from COMMCLASS where COMMCLASS.OBSERVATION_ID = PLOTSITESUMMARY.OBSERVATION_ID);
 
 
 
