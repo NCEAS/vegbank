@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-17 05:35:52 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2005-02-11 00:54:08 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.vegbank.common.utility.ServletUtility;
  * Tag that builds a page selector in HTML.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.5 $ $Date: 2004-09-17 05:35:52 $
+ * @version $Revision: 1.6 $ $Date: 2005-02-11 00:54:08 $
  */
 
 public class VegbankPagerTag extends VegbankTag {
@@ -120,7 +120,8 @@ public class VegbankPagerTag extends VegbankTag {
 			numTotalPages = (int)Math.ceil((float)iNumItems / (float)iPerPage);
 			numTotalBatches = (int)Math.ceil((float)numTotalPages / (float)iPerBatch);
 			if (numTotalPages % iPerBatch != 0) {
-				numTotalBatches++;
+                // PMA: why is this needed?  I think it's breaking it.
+				//numTotalBatches++;
 			}
 
 
