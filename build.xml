@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-10-11 21:20:09 $'
-  *     '$Revision: 1.18 $'
+  *     '$Date: 2003-10-14 18:49:00 $'
+  *     '$Revision: 1.19 $'
 --> 
 <project name="vegclass" default="jar" basedir=".">
 
@@ -124,7 +124,7 @@
           
 	    <xslt in="${docs.dir}/xml/db_model_vegbank.xml" 
 	          style="${xsl.src.dir}/VegBankModel2Java.xsl"
-	          out="${build.java.src.dir}/BOGUS">
+	          out="${build.java.src.dir}/generate_java_datamodel-HAS_BEEN_RUN_FLAG">
 	   		<param name="outdir"  
 	   					expression="${build.javadatamodel.src.dir}/"/>
 	    </xslt>
