@@ -5735,7 +5735,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
-      <attReferences>coverMethod.coverMethod_ID</attReferences>
+      <attReferences>coverMethod.COVERMETHOD_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the coverMethod table.</attNotes>
@@ -5830,7 +5830,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
-      <attReferences>stratumMethod.stratumMethod_ID</attReferences>
+      <attReferences>stratumMethod.STRATUMMETHOD_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the stratumMethod table</attNotes>
@@ -6842,7 +6842,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
-      <attReferences>soilTaxon.soilTaxon_ID</attReferences>
+      <attReferences>soilTaxon.SOILTAXON_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>hierarchy</attNotes>
@@ -8666,7 +8666,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
-      <attReferences>aux_Role.role_ID</attReferences>
+      <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -12073,7 +12073,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
-      <attReferences>observation.observation_ID</attReferences>
+      <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key to parent plot</attNotes>
@@ -12699,7 +12699,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
-      <attReferences>taxonImportance.TAXONIMPORTANCE_ID</attReferences>
+      <attReferences>taxonImportance.taxonImportance_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the taxonImportance table</attNotes>
@@ -13006,7 +13006,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
-      <attReferences>observation.observation_ID</attReferences>
+      <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the observation table.</attNotes>
@@ -13417,7 +13417,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
-      <attReferences>taxonObservation.taxonObservation_ID</attReferences>
+      <attReferences>taxonObservation.TAXONOBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -13572,7 +13572,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
-      <attReferences>stemLocation.stemLocation_ID</attReferences>
+      <attReferences>stemLocation.STEMLOCATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the StemLocation table.</attNotes>
@@ -13869,7 +13869,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
-      <attReferences>party.party_ID</attReferences>
+      <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>foreign key into the Party table</attNotes>
@@ -13929,7 +13929,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
-      <attReferences>party.party_ID</attReferences>
+      <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>foreign key into the Party table</attNotes>
@@ -14111,7 +14111,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
-      <attReferences>observation.observation_ID</attReferences>
+      <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the Observation table.</attNotes>
@@ -14230,7 +14230,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
-      <attReferences>taxonInterpretation.taxonInterpretation_ID</attReferences>
+      <attReferences>taxonInterpretation.TAXONINTERPRETATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -14250,7 +14250,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
-      <attReferences>plantConcept.plantConcept_ID</attReferences>
+      <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>

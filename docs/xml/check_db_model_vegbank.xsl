@@ -121,7 +121,7 @@
   <xsl:template name="checkExist">
     <xsl:param name="tbl"/>
     <xsl:param name="fld"/>
-    <xsl:value-of select="count(//entity[translate(entityName,$alphalow,$alphahigh)=translate($tbl,$alphalow,$alphahigh)]/attribute[translate(attName,$alphalow,$alphahigh)=translate($fld,$alphalow,$alphahigh)])"/>
+    <xsl:value-of select="count(//entity[entityName=$tbl]/attribute[attName=$fld])"/>
   </xsl:template>
   <xsl:template name="checkSpelling">
     <!-- if all caps, then assume ok, what else can I do? -->
