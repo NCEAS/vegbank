@@ -6,8 +6,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-06-18 15:04:56 $'
-  *  '$Revision: 1.1 $'
+  *      '$Date: 2002-06-24 16:59:18 $'
+  *  '$Revision: 1.2 $'
   *
   *
   -->
@@ -50,7 +50,7 @@
 <form  method="get" action="/framework/servlet/usermanagement" >
  	<input type="hidden" name="action" value="changeusersettings">
 	
-	<table width="800" border="1" cellspacing="0" cellpadding="1">
+	<table width="800" border="0" cellspacing="0" cellpadding="1">
     <tr> 
       <td width="9%"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
       <td colspan="4"> 
@@ -69,7 +69,7 @@
 		<tr> 
       <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">Password: </font></span></td>
       <td colspan="3"><font face="Georgia, Times New Roman, Times, serif" size="2">  
-        <input type="password" name="password" size="20" maxlength="20" value="@password@">
+        <input type="password" disabled  name="password" size="20" maxlength="20" value="@password@">
         re-type: 
         <input type="password" name="password2" size="25" maxlength="25"  >
         </font>
@@ -90,7 +90,7 @@
 		<tr> 
       <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">Institutuion: </font></span></td>
       <td colspan="3"><font face="Georgia, Times New Roman, Times, serif" size="2">  
-        <input type="text" name="institution" size="20" maxlength="20" value="@institution@">
+        <input type="text" name="institution" size="60" maxlength="200" value="@institution@">
         </font>
 			</td>
     </tr>
@@ -98,7 +98,7 @@
 		<tr> 
       <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">Address: </font></span></td>
       <td colspan="3"><font face="Georgia, Times New Roman, Times, serif" size="2">  
-        <input type="text" name="address" size="20" maxlength="20" value="@address@">
+        <input type="text" name="address" size="60" maxlength="100" value="@address@">
         </font>
 			</td>
     </tr>
