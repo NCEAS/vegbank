@@ -206,6 +206,36 @@ public class DataFileDB  {
 	
 	
 	/**
+	 * method to delete an a specific type of file for a given user
+	 */
+	 public boolean deleteFileType(String user, String fileType)
+	 {
+		 boolean validDelet = false;
+		 
+		 try
+	 		{
+				PreparedStatement pstmt;
+				pstmt = conn.prepareStatement
+				("DELETE from datafile where user_surname ='"
+				+user+"' and file_type like'"+fileType+"'");
+				
+				
+				int i = pstmt.executeUpdate();
+				pstmt.close();
+				System.out.println("DataFileDB > row count: " + i);
+				return(true);
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				return(false);
+			}
+		 
+	 }
+	 
+	 
+	
+	/**
 	 * method to delete an instance of a file owned by a specific user
 	 */
 	 public boolean deleteFile(String user, String fileAccessionNumber)

@@ -173,6 +173,17 @@ public class DataExchangeServlet extends HttpServlet
 							System.out.println("DataExchangeServlet > the response to the client: " + s);
 							out.println(s ); 
 						}
+						
+						//this is to delete a specific file type from the data file database
+						//based on a user name and an file type -- like 'stylesheet'
+						else if (action.equals("deletefiletype") && ( req.getParameter("username") != null) )
+						{
+							System.out.println("DataExchangeServlet > deleting a filetype from the database");
+							String s = handleFileTypeDeletion(req, res) ;
+							System.out.println("DataExchangeServlet > the response to the client: " + s);
+							out.println(s ); 
+						}
+						
 						//if the requestor asks for a style sheet
 						else if (action.equals("userdefaultstyle") && ( req.getParameter("username") != null) )
 						{
@@ -226,40 +237,122 @@ public class DataExchangeServlet extends HttpServlet
 	 private String handleFileDeletion(HttpServletRequest req, 
 	 	HttpServletResponse res)
 	 {
-			StringBuffer s = new StringBuffer();
-			
-		 //start the html -- do not do this in the post method bc
-		 // it screws up the upload
-		 s.append("<html>");
-		 Hashtable params = util.parameterHash(req);
-		 String user = params.get("username").toString();
-		 String fileAccession = params.get("filenumber").toString() ;
-		 //make sure they are not null
-		 if (user == null || fileAccession == null)
+		 StringBuffer s = new StringBuffer();
+		 String fileAccession = null;
+		 try
 		 {
-			 s.append("failed because the fileAccessionNumber of username is null");
-			 return( s.toString() );
-		 }
-		 else
-		 {
-			 boolean deletion = filedb.deleteFile(user, fileAccession);
+		 		//start the html -- do not do this in the post method bc
+		 		// it screws up the upload
+		 		s.append("<html>");
+		 		Hashtable params = util.parameterHash(req);
+		 		String user = params.get("username").toString();
+		 		if ( params.containsKey("filenumber") )
+				{
+					fileAccession = params.get("filenumber").toString() ;
+					System.out.println("DataExchangeServlet > fileNumber: " + fileAccession );
+				}
+				
+				else
+				{
+					System.out.println("DataExchangeServlet > no file number passed" );
+				}
+				
+		 		//make sure they are not null
+		 		if (user == null || fileAccession == null)
+		 		{
+					 s.append("failed because the fileAccessionNumber of username is null");
+			 		return( s.toString() );
+		 		}
+		 		else
+		 		{
+			 		boolean deletion = filedb.deleteFile(user, fileAccession);
 			 
-			 //determin if the deletion succedded at the 
-			 //database and if so copy the file to delete
-			 //to be cleaned up by the DBA
-			 if (deletion == false)
-			 {
-				 s.append("database deletion failed");
-			 }
-			 else
-			 {
-				 s.append("<br> database deletion succeeded <br>");
-				 util.fileCopy(uploadDir+fileAccession, uploadDir+fileAccession+".delete");
-			 	 s.append("<br> set the file for deletion by DBA <br>");
-				 s.append("<a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement\"> profile home </a>" );
-			 }
-		 }
-
+			 		//determin if the deletion succedded at the 
+			 		//database and if so copy the file to delete
+			 		//to be cleaned up by the DBA
+			 		if (deletion == false)
+			 		{
+				 		s.append("database deletion failed");
+			 		}
+			 		else
+			 		{
+				 		s.append("<br> database deletion succeeded <br>");
+				 		util.fileCopy(uploadDir+fileAccession, uploadDir+fileAccession+".delete");
+			 	 		s.append("<br> set the file for deletion by DBA <br>");
+				 		s.append("<a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement\"> profile home </a>" );
+			 		}
+		 		}
+			}
+		catch(Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+			s.append("</html>");
+		 return(s.toString());
+		 
+		 
+	 }
+	 
+	 
+	 /**
+	 * method to delete a specific file type from the database -- 
+	 * uses the username and the file type attributes
+	 */
+	 private String handleFileTypeDeletion(HttpServletRequest req, 
+	 	HttpServletResponse res)
+	 {
+		 StringBuffer s = new StringBuffer();
+		 String fileType = null;
+		 try
+		 {
+		 		//start the html -- do not do this in the post method bc
+		 		// it screws up the upload
+		 		s.append("<html>");
+		 		Hashtable params = util.parameterHash(req);
+		 		String user = params.get("username").toString();
+		 		if ( params.containsKey("filetype") )
+				{
+					fileType = params.get("filetype").toString() ;
+					System.out.println("DataExchangeServlet > deleting fileType: " + fileType );
+				}
+				
+				else
+				{
+					System.out.println("DataExchangeServlet > no file type passed" );
+				}
+				
+		 		//make sure they are not null
+		 		if (user == null || fileType == null)
+		 		{
+					 s.append("failed because the fileAccessionNumber of username is null");
+			 		return( s.toString() );
+		 		}
+		 		else
+		 		{
+			 		boolean deletion = filedb.deleteFileType(user, fileType);
+			 
+			 		//determin if the deletion succedded at the 
+			 		//database and if so copy the file to delete
+			 		//to be cleaned up by the DBA
+			 		if (deletion == false)
+			 		{
+				 		s.append("database deletion failed");
+			 		}
+			 		else
+			 		{
+				 		s.append("<br> database deletion succeeded <br>");
+				 		//util.fileCopy(uploadDir+fileAccession, uploadDir+fileAccession+".delete");
+			 	 		//s.append("<br> set the file for deletion by DBA <br>");
+				 		//s.append("<a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement\"> profile home </a>" );
+			 		}
+		 		}
+			}
+		catch(Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
 			s.append("</html>");
 		 return(s.toString());
 		 
