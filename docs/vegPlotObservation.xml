@@ -1,0 +1,644 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title> Vegetation Plots Database Component Description:observation</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>23 Sep 2001</date>
+	<entity>
+		<entityName>vegPlot.observation</entityName>
+		<entitySummary>This table stores plot observation results that might vary between official observation events.</entitySummary>
+		<entityDescription>Observation is a child of plot in recognition of the fact that a plot may be resampled and that some of the environmental
+conditions may change between resampling events.
+	</entityDescription>
+		<attribute>
+			<attName>OBSERVATION_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary key for the observation table</attNotes>
+			<attDefinition>Database generated identifier assigned to each unique plot observation. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PLOT_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>plot.PLOT_ID</attReferences>
+			<attNotes>Foreign key into the plot table. </attNotes>
+			<attDefinition>Link to data and metadata that do not change between observations and which are stored in the plot table.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PREVIOUSOBS_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>observation.OBSERVATION_ID</attReferences>
+			<attNotes>Recursive foreign key</attNotes>
+			<attDefinition>Link to data from the previous observation of this plot.
+		</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>authorObsCode</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This is the code or name that the author uses to identify this plot observation event. Where a plot has only one observation, this will often equal plot.authorPlotCode.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>obsStartDate</attName>
+			<attNulls>Yes</attNulls>
+			<attType>DATE</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>default = current year</attNotes>
+			<attDefinition>The date of the observation, or the first day if the observation spanned more than one day.
+		</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>obsEndDate</attName>
+			<attNulls>Yes</attNulls>
+			<attType>DATE</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>If the observation event spanned more than a single day, this is the last day on which observations were made. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>dateAccuracy</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Estimated accuracy of the observation date.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>SAMPLEMETHOD_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>sampleMethod.SAMPLEMETHOD_ID</attReferences>
+			<attNotes>Foreign key into sampleMethod</attNotes>
+			<attDefinition>Link to a specific methodology which provides a general name and description, plus many default values for use in the plot and observation tables.
+</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>COVERMETHOD_ID</attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>coverMethod.COVERMETHOD_ID</attReferences>
+			<attNotes>Foreign key into the coverMethod table.</attNotes>
+			<attDefinition>Link to the scale used to estimate taxon cover. The database stores estimated cover to the nearest percent, but the conversion details are recovered by reference to the specific scale employed.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>STRATUMMETHOD_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>stratumMethod.STRATUMMETHOD_ID</attReferences>
+			<attNotes>Foreign key into the stratumMethod table</attNotes>
+			<attDefinition>Link to the definitions of strata used in recording taxon-specific values of cover.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>methodNarrative</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Additional metadata helpful for understanding how the data were collected during the observation event.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>taxonInferenceArea</attName>
+			<attNulls>No</attNulls>
+			<attType>NUMERIC(5,3)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>default = plot.area</attNotes>
+			<attDefinition>the total surface area (in m2) used for cover estimates and for which a complete species list is provided.  If subplots were used, this would be the total area of the subplots without intersticial space.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>coverDispersion</attName>
+			<attNulls>No</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list; default = contiguous</attNotes>
+			<attDefinition>Were cover values for the total taxon list collected from one contiguous area or dispersed subplots (e.g., continguous, dispersed-regular, dispered-random)?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>coverAreaAccuracy</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,0)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The accuracy of the coverInference Area in percentage of that "area". </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>autoTaxonCover</attName>
+			<attNulls>No</attNulls>
+			<attType>BOOLEAN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>default = FALSE</attNotes>
+			<attDefinition>TRUE indicates that taxonObservation.taxonCover was automatically calculated from the values of all stratumObservation.taxonStratumCover</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>stemInferenceArea</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(5,0)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>default = plot.area</attNotes>
+			<attDefinition> the total suface area (in m2) observed for woody stem data</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>stemSampleMethod</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list; default = full census</attNotes>
+			<attDefinition>The method used to obtain basal area or tree stem data (e.g., full census, point quarter, random pairs, Bitterlich, other).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>hardCopyLocation</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Location where the hard data reside and any access instructions.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>effortLevel</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list
+</attNotes>
+			<attDefinition>This is the effort spent making the observations as estimated by the party that submitted the data (e.g., Very thorough, Average, Hurried description).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>plotQuality</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Quality of plot as determined by an automated filter system (e.g., High, Moderate, Low) </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>floristicQuality</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Subjective assessment of floristic quality by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>bryophyteQuality</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Subjective assessment of the taxonmic quality of the bryophye data by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low, Very incomplete,absent).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>lichenQuality</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Subjective assessment of the taxonmic quality of the lichen data by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low, Very incomplete,absent).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>observationNarrative</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Additional unstructured observations useful for understanding the ecological attributes and significance of the plot observations.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>landscapeNarrative</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Unstructured observations on the landscape context of the observed plot.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>homogeneity</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>How homogeneous was the community (e.g., homogeneous, compositionial trend across plot, conspicuous inclusions, irregular mosaic or pattern).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>phenologicAspect</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Season expression of the community (e.g., typical growing season, vernal, aestival, autumnal, winter, irregular ephemerals present).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>representativeness</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>How representative was the plot of the typical vegetation of such sites in this area?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>basalArea</attName>
+			<attNulls>Yes</attNulls>
+			<attType> NUMERIC(3,5)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Total basal area of woody stems (in m2/ha).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>hydrologicRegime</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30) </attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list </attNotes>
+			<attDefinition>What is the hydrologic regime, which is a refelction of frequency and duration of flooding)?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>soilMoistureRegime</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>How moist was the soil at the sampling event?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>soilDrainage</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>How well drained is the site (generally consistent with USDA classes)?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>soilSalinity</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>How salline is the substrate?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>waterDepth</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,2)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>For aquatic vegetation, what was the water depth in m.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>shoreDistance</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(4,1)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>For aquatic vegetation, what was the distnace to shore in m.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>soilDepth</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(2,2)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Median depth to bedrock in m (usually from averaging multiple probe readings).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>soilDepthRange</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(2,2)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Limits of inner quartile of the soil depth observations.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>organicDepth</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,1)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Depth of the curficial organic layer, where present, in centimeters.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>humusType</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>What type of humus is on the surface.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>percentBedRock</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,1)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Percent of surface that is exposed bedrock.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>percentRockGravel</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,1)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Percent of surface that is exposed rock and gravel.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>percentWood</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,1)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Percent of surface that is wood.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>percentLitter</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,1)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Percent of surface that is litter.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>percentBareSoil</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,1)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Percent of surface that is bare soil.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>percentWater</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,1)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Percent of surface that is water.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>percentOther</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,1)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Percent of surface that belong to an additional itemized category</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>nameOther</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Name of additional itemized groundcover category (e.g., beer cans).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>standAge</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(4,2)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Age of stand, if trees are moderately even-aged.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>successionalStatus</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Description of the assumed successional status of the plot.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>vegetationOrigin</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Origin of the vegetation (e.g., original, clearcut, fire, grazing).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>fireReturnInterval</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(4,2)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Estimated current average interval between fires in years. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>treeHt</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Height of the tree layer in m.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>shrubHt</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Height of the shrub layer in m.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>herbHt</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Height of the herb layer in m.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>nonvascularHt</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Height of the nonvascular layer in m.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>submergedHt</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Height of the submerged layer in m.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>treeCover</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Total cover of the tree layer in percent.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>shrubCover</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Total cover of the shrub layer in percent.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>herbCover</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Total cover of the herb layer in percent.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>nonvascularCover</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Total cover of the nonvascular layer in percent.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>floatingCover</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Total cover of the floating layer in percent.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>submergedCover</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Total cover of the submerged layer in percent.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>dominantStratum</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Which of the six standard strata is dominant?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>growthform1Type</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>The predominant growth form?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>growthform2Type</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>The second-most predominant growthform?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>growthform3Type</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>The third-most predominant growthform</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>growthform1Cover</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Total cover of the predominant growthform?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>growthform2Cover</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Total cover of the second-most predominant growthform?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>growthform3Cover</attName>
+			<attNulls>Yes</attNulls>
+			<attType/>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Total cover of the third-most predominent growthform?</attDefinition>
+		</attribute>
+		<children>taxonObservation, commClass, stratum, disturbanceObs, soilObs, physiognomy</children>
+	</entity>
+</dataModel>

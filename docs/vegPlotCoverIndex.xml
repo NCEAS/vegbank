@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: coverIndex</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>22 Sept 2001</date>
+	<entity>
+		<entityName>vegPlot.coverIndex</entityName>
+		<entitySummary>This table stores the definitions of each coverclass unit associated with each coverclass method.</entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>COVERINDEX_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary key for the converIndex table</attNotes>
+			<attDefinition>Database generated identifier assigned to each unique coverclass associated index value. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>COVERMETHOD_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK </attKey>
+			<attReferences>coverMethod.COVERMETHOD_ID</attReferences>
+			<attNotes>Foreign key into the coverMethod table.</attNotes>
+			<attDefinition>Links to a specific cover scale. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>coverCode </attName>
+			<attNulls>No </attNulls>
+			<attType>VARCHAR(10) </attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>The name or label used in the coverclass scale for this specific specific coverclass.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>upperLimit</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,2)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Upper limit, in percent, associated with the specific coverCode.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>lowerLimit</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,2)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>This is the lower limit, in percent, associated with a specific coverCode. Where a cover scale has a non-quantitative lower or upper value, as in the "+" of the Braun-Blanquet scale, it is necessary to provide an approximation with "0" being the lower limit of tbe bottom most class.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>coverPercent</attName>
+			<attNulls>No</attNulls>
+			<attType>NUMERIC(3,2)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>A middle value (usually mean or geometric mean) between the upperLimit and lowerLimt stored by the database for each taxon observation and used for all  coverclass conversions and interpretations.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>indexDescription</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Description of the specific coverclass. This is particularly helpful in the case that there is no numeric value that can be applied.</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

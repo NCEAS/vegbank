@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: commCitation</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date/>
+	<entity>
+		<entityName>comm.commCitation</entityName>
+		<entitySummary>This table stores references which are linked to community concepts.</entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>CITATION_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Database assigned value to each unique record in 	the commReference table.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>citation</attName>
+			<attNulls>No</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Field stores the citation.</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

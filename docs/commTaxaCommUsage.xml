@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: commUsage</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date/>
+	<entity>
+		<entityName>comm.commUsage</entityName>
+		<entitySummary>This table links a community name with a concept.</entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>COMMUSAGE_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Database assigned value to each unique record in 	the communityUsage table.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>COMMNAME_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>commName</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This field is the foreign key into the commName table.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>COMMCONCEPT_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>commConcept</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This field is the foreign key into the commConcept table.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>usageStart</attName>
+			<attNulls>NO</attNulls>
+			<attType>DATE</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This is the date on which a name was first applied to a concept.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>usageStop</attName>
+			<attNulls>NO</attNulls>
+			<attType>DATE</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This is the date on which a name no longer was being applied to a concept.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>commNameStatus</attName>
+			<attNulls>No</attNulls>
+			<attType>VARCHAR</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This field stores an indicator of whether a community name is of standard status or not per the party designated in the next field.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>party</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This is the name of the party that uses the class concept with the name.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>classSystem</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Like FGDC of Forest Cover Class.</attNotes>
+			<attDefinition>This is the name of the system that the class (from the commConcept) falls into.</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: commConcept</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date/>
+	<entity>
+		<entityName>commTaxa.commConcept</entityName>
+		<entitySummary>This table store the concepts that are linked to community names through the commUsage table.</entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>COMMCONCEPT_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Database assigned value to each unique record in the commConcept table.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>startDate</attName>
+			<attNulls>NO</attNulls>
+			<attType>DATE</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This is the date for which a concept started being standard status.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>stopDate</attName>
+			<attNulls>NO</attNulls>
+			<attType>DATE</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This is the date for which a concept stoped being standard status.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>CEGLcode</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The CEGLcode is a code, used by TNC/ABI, that is a unique identifier for a specific vegetation community.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>classCode</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The classCode is a code that represents a unique concept used to describe a vegetation community.  The level in the class hierarcy that this class code belongs is denoted by the next 	field - classLevel.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>classLevel</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The classLevel attribute specifies a level in the taxonomic hierarcy that a class belongs.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>parentClass</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMBER</attType>
+			<attKey>FK</attKey>
+			<attReferences>communityConcept</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The parentClass is the classCode of the parent level in the classification hierarchy.  For example if this classCode were in the association level then the parentClass would be the concept that is the alliance level.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>party</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR2</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This is the name of the party that has devised the concept.</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>
