@@ -9005,7 +9005,8 @@ conditions may change between resampling events.
     <module>user</module>
     <attribute>
       <attName>partyMember_ID</attName>
-      <attModel>implementation</attModel>
+      <attLabel>Party Member ID</attLabel>
+      <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
@@ -9019,7 +9020,8 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>parentParty_ID</attName>
-      <attModel>implementation</attModel>
+      <attLabel>Main Party</attLabel>
+      <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
@@ -9033,7 +9035,8 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>childParty_ID</attName>
-      <attModel>implementation</attModel>
+      <attLabel>Sub-Party</attLabel>
+      <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
@@ -9047,7 +9050,8 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>role_ID</attName>
-      <attModel>implementation</attModel>
+      <attLabel>Role</attLabel>
+      <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
@@ -9062,7 +9066,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>memberStart</attName>
       <attLabel>Member Start</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Date</attType>
       <attKey>n/a</attKey>
@@ -9077,7 +9081,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>memberStop</attName>
       <attLabel>Member Stop</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
       <attKey>n/a</attKey>
@@ -11871,7 +11875,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>stateProvince</attName>
       <attLabel>State or Province</attLabel>
-      <attModel>logical</attModel>
+      <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (55)</attType>
       <attKey>n/a</attKey>
@@ -11892,7 +11896,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>country</attName>
       <attLabel>Country</attLabel>
-      <attModel>logical</attModel>
+      <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
       <attKey>n/a</attKey>
