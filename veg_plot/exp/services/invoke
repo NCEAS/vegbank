@@ -1,6 +1,0 @@
-#!/bin/sh
-
-. setclasspath
-echo $CP
-
-java -cp ${CP} electric.glue.tools.Invoke $@

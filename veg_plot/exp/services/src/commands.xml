@@ -1,3 +1,0 @@
-<commands>
-  <invoke> electric.registry.Registry.publishInstance( "exchange", "examples.publish.Exchange" ) </invoke>
-</commands>

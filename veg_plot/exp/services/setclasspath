@@ -1,3 +1,0 @@
-ELECTRIC_HOME=.
-CP=${ELECTRIC_HOME}/lib/GLUE-STD.jar:${ELECTRIC_HOME}/lib/dom.jar:${ELECTRIC_HOME}/lib/servlet.jar:${ELECTRIC_HOME}/lib/jnet.jar:${ELECTRIC_HOME}/lib/GLUE-EXAMPLES.jar
-
