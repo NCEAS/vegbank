@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 <dataModel>
 	<title>Vegetation Plots Database Component Description: plantConcept</title>
@@ -56,6 +56,15 @@
 			<attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
 			<attNotes>n/a</attNotes>
 			<attDefinition>The plantParent is a recursive key to the concept of the parent level in the classification hierarchy.  For example if this plantConcept were at the genus level the plantParent would be the plantConcept that is the family level (or subfamily level).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>plantDescription</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(600)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The plantDescription is a description of the plantConcept by the party contributing the plantConcept.</attDefinition>
 		</attribute>
 		<children/>
 	</entity>
