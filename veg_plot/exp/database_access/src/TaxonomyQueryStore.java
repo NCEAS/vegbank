@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-27 00:15:54 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2002-02-27 00:23:02 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,22 +96,22 @@ import databaseAccess.*;
 				
 				//create and issue the query --
 				StringBuffer sqlBuf = new StringBuffer();
-				if (taxonNameType.trim().equals("scientificName") )
-				{
+				///if (taxonNameType.trim().equals("scientificName") )
+				///{
 					sqlBuf.append("SELECT acceptedsynonym, plantnamestatus, ");
 					sqlBuf.append(" plantName, parentName, startDate, stopDate");
 					sqlBuf.append(" from VEG_TAXA_SUMMARY where plantName like '%"+taxonName+"%'");
-				}
-				else if ( taxonNameType.trim().equals("commonName")  ) 
-				{
-					sqlBuf.append("SELECT acceptedsynonym, plantnamestatus, ");
-					sqlBuf.append(" plantName, parentName, startDate, stopDate");
-					sqlBuf.append(" from VEG_TAXA_SUMMARY where plantName like '%"+taxonName+"%'");
-				}
-				else 
-				{
-					System.out.println("TaxonomyQueryStore > unrecognized taxonNameType: "+taxonNameType);
-				}
+				///}
+				///else if ( taxonNameType.trim().equals("commonName")  ) 
+				///{
+				///	sqlBuf.append("SELECT acceptedsynonym, plantnamestatus, ");
+				///	sqlBuf.append(" plantName, parentName, startDate, stopDate");
+				///	sqlBuf.append(" from VEG_TAXA_SUMMARY where plantName like '%"+taxonName+"%'");
+				///}
+				///else 
+				///{
+				///	System.out.println("TaxonomyQueryStore > unrecognized taxonNameType: "+taxonNameType);
+				///}
 				//issue the query
 				results = query.executeQuery( sqlBuf.toString() );
 			
