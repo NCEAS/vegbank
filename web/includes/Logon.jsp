@@ -2,7 +2,7 @@
 <!-- start logon form Include -->
 
 <html:form action="/Logon" focus="username">
-<table border="0" width="100%" height="135">
+<table border="0">
 
   <!-- Title -->
   <tr>
@@ -49,8 +49,7 @@
         <br/>
         &raquo; <a href="@forms_link@EmailPassword.jsp">Lost your password?</a>
          <br/>
-        &raquo; Note that you need not login for most VegBank functions.  <br/>To use VegBank without logging in, 
-        click <a href="@web_context@DisplayMainMenu.do">here for the Main Menu</a>.
+        &raquo; <a href="@web_context@">Go home</a>
       </p>
     </td>
   </tr>
