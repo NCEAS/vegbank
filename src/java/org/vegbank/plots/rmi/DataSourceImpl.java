@@ -38,8 +38,8 @@ import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidator;
  *	
  * <br> <br>
  *  '$Author: farrell $'
- *  '$Date: 2003-05-16 03:33:34 $'
- * 	'$Revision: 1.4 $'
+ *  '$Date: 2003-06-04 19:11:42 $'
+ * 	'$Revision: 1.5 $'
  *
  */
 
@@ -67,7 +67,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	 
 	 //constructor
    public DataSourceImpl(String sourcePluginClass) 
-	 throws RemoteException
+	 	throws RemoteException
 	 {
 		 super();
 		 try
@@ -103,42 +103,6 @@ public class DataSourceImpl extends UnicastRemoteObject
       e.printStackTrace();
      }
    }
-	
-	
-	/**
- 	 *
-	 * this method handles the loading of a plot into the database <br>
-	 * <br>
-	 * @deprecated -- use the other method with the same name for this 
-	 * 	method assumes that the plots data set 'fileType' corresponds
-	 * 	to the 'tnc' plots data type which is a relect of the early 
-	 * design of this server/cleint system
-	 *
-	 */	
-	 public String insertPlot(String plot, String emailAddress)
-	 {
-		 String s = null;
-		 try
-		 {
-		 		//set the debugging level to 2 -- the highest on the loader
-				int debugLevel = 2;
-			 	//the plugin and the source are the same in this case
-				String plugin = "";
-				loaderPlugin = "TNCPlotsDB";
-				 
-			 	//construct an instance of the plot loader
-				dbinsert = new DBinsertPlotSource(loaderPlugin, plot);
-				s = dbinsert.insertPlot(plot, debugLevel, emailAddress);
-		 }
-		 catch (Exception e)
-		 {
-		 	System.out.println("Exception: "+e.getMessage());
-      e.printStackTrace();
-     }
-		 return(s);
-	 }
-	
-	
 		
 	/**
 	 * This method handles the loading of a plot into the VegBank database.

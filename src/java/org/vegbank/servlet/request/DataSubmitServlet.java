@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-06-03 17:37:44 $'
- *  '$Revision: 1.10 $'
+ *  '$Date: 2003-06-04 19:11:42 $'
+ *  '$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,8 +62,8 @@ import databaseAccess.CommunityQueryStore;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-06-03 17:37:44 $'
- *  '$Revision: 1.10 $'
+ *  '$Date: 2003-06-04 19:11:42 $'
+ *  '$Revision: 1.11 $'
  */
 
 
@@ -827,6 +827,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			{
 				Document doc = parser.getDocumentFromString(results);
 				Vector accessionNumber = parser.getValuesForPath(doc, "/plotInsertion/accessionNumber");
+				Vector authorPlotCode = parser.getValuesForPath(doc, "/plotInsertion/authorPlotCode");
 				Vector latitude = parser.getValuesForPath(doc, "/plotInsertion/latitude");
 				Vector longitude = parser.getValuesForPath(doc, "/plotInsertion/longitude");
 				Vector state =  parser.getValuesForPath(doc, "/plotInsertion/state");
@@ -850,6 +851,12 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				sb.append(" 	<td> "+accessionNumber.toString()+" </td> \n");
 				sb.append(" </tr> \n");
 				
+				//Authors Identifier
+				sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");	
+				sb.append(" 	<td> Author Identifier: </td> \n");	
+				sb.append(" 	<td> "+authorPlotCode.toString()+" </td> \n");
+				sb.append(" </tr> \n");				
+
 				//the state
 				sb.append(" <tr> \n");	
 				sb.append(" 	<td> State </td> \n");	

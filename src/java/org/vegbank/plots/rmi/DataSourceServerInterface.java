@@ -22,10 +22,6 @@ public interface DataSourceServerInterface extends Remote
 	 */
    public boolean isPlotValid(String plot)
    throws Exception;
-
-  //method for inserting a plot into the database
-	public String insertPlot(String plot, String emailAddress)
-	throws Exception;
 	
 	//method for inserting a plot into the database
 	public String insertPlot(String plot, String fileType, String emailAddress)

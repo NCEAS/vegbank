@@ -8,8 +8,8 @@ package org.vegbank.servlet.util;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-30 18:01:59 $'
- *  '$Revision: 1.7 $'
+ *  '$Date: 2003-06-04 19:11:42 $'
+ *  '$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -217,10 +217,6 @@ public class ServletUtility
 
 			// -- Set some other header information --
 			msg.setSentDate(new Date());
-
-
-			
-
 
 			// -- Send the message --
 			Transport.send(msg);

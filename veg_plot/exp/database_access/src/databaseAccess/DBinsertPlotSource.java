@@ -7,8 +7,8 @@
 * Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-06-04 00:33:36 $'
-*   '$Revision: 1.21 $'
+*   '$Date: 2003-06-04 19:11:41 $'
+*   '$Revision: 1.22 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -516,7 +516,8 @@ public class DBinsertPlotSource {
 	 *
 	 * @param plotNames -- a vector that holds all the plotNames
 	 */
-	public void insertPlotPackage(String pluginClass) {
+	public void insertPlotPackage(String pluginClass, String emailAddress) 
+	{
 		try {
 			//initialize the data source 
 			source = new PlotDataSource(pluginClass);
@@ -528,7 +529,6 @@ public class DBinsertPlotSource {
 			for (int i = 0; i < plotNames.size(); i++) {
 
 				String pName = plotNames.elementAt(i).toString();
-				String emailAddress = "";
 				source = new PlotDataSource(pluginClass);
 				DBinsertPlotSource db =
 					new DBinsertPlotSource(pluginClass, pName);
@@ -553,31 +553,40 @@ public class DBinsertPlotSource {
 	public String insertPlot(
 		String plotName,
 		int debugLevel,
-		String emailAddress) {
-		try {
-			if (debugLevel == 0) {
+		String emailAddress)
+	{
+		try
+		{
+			if (debugLevel == 0)
+			{
 				debug.append("<plotInsertion> \n");
 				this.insertPlot(plotName, emailAddress);
 				debug.append("</plotInsertion> \n");
-			} else if (debugLevel == 1) {
+			}
+			else if (debugLevel == 1)
+			{
 				debug.append("<plotInsertion> \n");
 				this.insertPlot(plotName, emailAddress);
 				debug.append("</plotInsertion> \n");
-			} else if (debugLevel == 2) {
+			}
+			else if (debugLevel == 2)
+			{
 				debug.append("<plotInsertion> \n");
 				this.insertPlot(plotName, emailAddress);
 				debug.append("</plotInsertion> \n");
-			} else {
+			}
+			else
+			{
 				System.out.println(
 					"DbinsertPlotSource > invalid debug level: " + debugLevel);
 				this.insertPlot(plotName, emailAddress);
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			System.out.println("Caught Exception: " + e.getMessage());
 			debug.append(
-				"<exceptionMessage>"
-					+ e.getMessage()
-					+ "</exceptionMessage>\n");
+				"<exceptionMessage>" + e.getMessage() + "</exceptionMessage>\n");
 			e.printStackTrace();
 		}
 		return (debug.toString());
@@ -2028,7 +2037,7 @@ public class DBinsertPlotSource {
 			return (false);
 		}
 		
-		// Also insert the community interpretation data
+		// Also insert the community interpretation data if we can correllate
 		
 		//Need to get the conceptId
 		int commConceptId = getCommConceptId(name);
@@ -2037,31 +2046,32 @@ public class DBinsertPlotSource {
 		{
 			// Could not find a matching concept in the database
 			debug.append(
-				"<exceptionMessage>Could not find community '"+ name + "'</exceptionMessage>\n"
+				"<exceptionMessage>Could not find an existing community concept for '"+ name + "'</exceptionMessage>\n"
 			);
-			return (false);
 		}
-		
-		StringBuffer statement = new StringBuffer();
-		statement.append(
-			"INSERT INTO comminterpretation ( commclass_id, commconcept_id )"
-			+ " values (?,?)"
-		);
-		
-		try
+		else
 		{
-			PreparedStatement insertCommInt = conn.prepareStatement(statement.toString());
+			StringBuffer statement = new StringBuffer();
+			statement.append(
+				"INSERT INTO comminterpretation ( commclass_id, commconcept_id )"
+				+ " values (?,?)"
+			);
 			
-			insertCommInt.setInt(1, commClassId);
-			insertCommInt.setInt(2, commConceptId);
-			
-			insertCommInt.execute();
-		}
-		catch (SQLException e1)
-		{
-			System.out.println("Caught Exception: " + e1.getMessage());
-			e1.printStackTrace();
-			return( false);
+			try
+			{
+				PreparedStatement insertCommInt = conn.prepareStatement(statement.toString());
+				
+				insertCommInt.setInt(1, commClassId);
+				insertCommInt.setInt(2, commConceptId);
+				
+				insertCommInt.execute();
+			}
+			catch (SQLException e1)
+			{
+				System.out.println("Caught Exception: " + e1.getMessage());
+				e1.printStackTrace();
+				return( false);
+			}
 		}
 			
 		return (true);
@@ -2532,11 +2542,9 @@ public class DBinsertPlotSource {
 
 			//the variables from the plot file
 
-			//plotName = source.plotCode;
 			String authorPlotCode = Utility.escapeCharacters( source.getPlotCode(plotName) );
 			String rockType = Utility.escapeCharacters( source.getRockType(plotName) );
 			String surficialDeposits = Utility.escapeCharacters( source.getSurficialDeposits(plotName) ); 	
-			String parentPlot = "9";
 			String plotArea = Utility.escapeCharacters( source.getPlotArea(plotName) );
 			String elevation = Utility.escapeCharacters( source.getElevation(plotName) );
 			String datumType = Utility.escapeCharacters( source.getDatumType(plotName) );

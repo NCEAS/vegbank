@@ -29,8 +29,8 @@ import xmlresource.utils.transformXML;
  *	
  *  <br> <br>
  *  '$Author: farrell $'
- *  '$Date: 2003-05-06 23:27:44 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2003-06-04 19:11:42 $'
+ * 	'$Revision: 1.3 $'
  *
  *
  */
@@ -911,61 +911,11 @@ public class DataSourceClient
 			}
 			return(report);
 		}
-		
-  
-	/**
-	 * method that will insert a plot on the windows machine based on the name
-	 * of that plot
-	 * THIS METHOD SHOULD NOT BE USED
-	 * @deprecated
-	 * @param plot -- the plot that should be loaded
-	 */
-	 public String insertPlot(String plot)
-	 {
-		 String s = null;
-		 String email = "test";
-		 try
-			{
-				s= this.insertPlot(plot, email);
-			}
-			catch(Exception e) 
-			{
-				System.err.println("Exception: "+ e.getMessage());
-				e.printStackTrace();
-			}
-			return(s);
-	 }
 
 	
 	/**
 	 * method that will insert a plot on the windows machine based on the name
-	 * of that plot -- this assumes that the plot is a tnc plot data set, which 
-	 * is a bad assumption and thus THIS METHOD SHOULD NOT BE USED
-	 * 
-	 * @param plot -- the plot that should be loaded 
-	 * @param emailAddress -- the emailAddress of the person submitting the plots
-	 * @deprecated bad assumption made by the method about the type of plot data set
-	 */
-	 public String insertPlot(String plot, String emailAddress)
-	 {
-		 String s = null;
-		 try
-			{
-				s= source.insertPlot(plot, emailAddress);
-			}
-			catch(Exception e) 
-			{
-				System.err.println("Exception: "+ e.getMessage());
-				e.printStackTrace();
-			}
-			return(s);
-	 }
-
-	
-	/**
-	 * method that will insert a plot on the windows machine based on the name
-	 * of that plot -- this assumes that the plot is a tnc plot data set, which 
-	 * is a bad assumption and thus THIS METHOD SHOULD NOT BE USED
+	 * of that plot 
 	 * 
 	 * @param plot -- the plot that should be loaded 
 	 * @param fileType -- the type of plot data set that the file, cached at the 
