@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   * '$Author: harris $'
-  * '$Date: 2002-03-08 22:28:00 $'
-  * '$Revision: 1.12 $'
+  * '$Date: 2002-03-21 00:57:52 $'
+  * '$Revision: 1.13 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -84,6 +84,7 @@
 <target name="includes" depends="init">
         <copy todir="${style_server}" filtering="no" >
                 <fileset dir="${style_src}" >    
+								<include name="**.css"/>    
         </fileset>
         </copy>
 </target>
@@ -173,7 +174,12 @@
 			utilities.html
 			stylesheet-generator.html
 			community-submit.html
-			community-query.html"
+			community-submit_valid.html
+			community-correlate.html
+			plant-submit.html
+			community-query.html
+			plot-submit.html
+			plot-upload.html"
 		excludes="**/CVS* "
 	/>
 
