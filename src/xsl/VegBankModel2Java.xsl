@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-05-16 02:54:22 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-07-01 23:11:24 $'
+ *  '$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,17 +86,18 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
      </xsl:otherwise>
    </xsl:choose>
    
-   <xsl:variable name="primativeAttribs" select="attribute[javaType/@type = 'String' or javaType/@type = 'int']"/>
-    <xsl:variable name="simpleRelationalAttribs" select="attribute[javaType/@type='Object' and javaType/@relation='one']"/>
+   <xsl:variable name="primativeAttribs" select="attribute"/>
+   <xsl:variable name="simpleRelationalAttribs" select="attribute[javaType/@type='Object' and javaType/@relation='one']"/>
+   <!--   <xsl:variable name="simpleRelationalAttribs" select="attribute[javaType/@type='int' and javaType/@relation='one']"/>-->
     <!--    <xsl:variable name="complexRelationalAttribs" select="../entity/attribute/attReferences[starts-with(text(),$entityName)]"/> -->
 
     <xsl:apply-templates mode="declareAttrib" select="$primativeAttribs"/>
-    <xsl:apply-templates mode="declareAttrib" select="$simpleRelationalAttribs"/>
+    <xsl:apply-templates mode="declareObjectAttrib" select="$simpleRelationalAttribs"/>
     
     <!--<xsl:apply-templates mode="declareComplexAttrib" select="$complexRelationalAttribs"/>-->
 
     <xsl:apply-templates mode="get-setSimpleAttrib" select="$primativeAttribs"/>
-    <xsl:apply-templates mode="get-setSimpleAttrib" select="$simpleRelationalAttribs"/>
+    <xsl:apply-templates mode="get-setObjectAttrib" select="$simpleRelationalAttribs"/>
     <!--<xsl:apply-templates mode="get-setComplexAttrib" select="$complexRelationalAttribs"/>-->
 
     <xsl:for-each select="../entity/attribute[starts-with(attReferences, concat(current()/entityName,'.') )]">
@@ -158,8 +159,14 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
 
  <xsl:template match="attribute" mode="declareAttrib">
    <xsl:variable name="javaType">
-     <xsl:value-of select="javaType/@type"/>
+     <xsl:choose>
+       <xsl:when test="attKey='FK' or attKey='PK'">int</xsl:when>
+       <xsl:otherwise>
+         <xsl:value-of select="javaType/@type"/>
+       </xsl:otherwise>
+     </xsl:choose>
    </xsl:variable>
+
   private <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> <xsl:value-of select="attName"/>; 
  </xsl:template>
 
@@ -182,9 +189,16 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
 
  <!-- simple attributes -->
  <xsl:template match="attribute" mode="get-setSimpleAttrib">
+
    <xsl:variable name="javaType">
-     <xsl:value-of select="javaType/@type"/>
-   </xsl:variable> 
+     <xsl:choose>
+       <xsl:when test="attKey='FK' or attKey='PK'">int</xsl:when>
+       <xsl:otherwise>
+         <xsl:value-of select="javaType/@type"/>
+       </xsl:otherwise>
+     </xsl:choose>
+   </xsl:variable>
+
    <xsl:variable name="cappedVariableName">
      <xsl:call-template name="UpperFirstLetter">
        <xsl:with-param name="text" select="attName"/>

@@ -13,8 +13,8 @@ import java.util.*;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: farrell $' <br>
- *  '$Date: 2003-05-06 23:25:31 $' <br>
- *  '$Revision: 1.2 $' <br>
+ *  '$Date: 2003-07-01 23:11:24 $' <br>
+ *  '$Revision: 1.3 $' <br>
  */
 
  
@@ -373,7 +373,7 @@ public class PlotXmlWriterV2
 					+"    <contactInstructions>"+datasrc.getProjectContributorContactInstructions(contributorName)+"</contactInstructions> \n"
 					+"    <telephone> \n"
 					+"      <phoneNumber>"+datasrc.getProjectContributorPhoneNumber(contributorName)+"</phoneNumber> \n"
-					+"      <phoneType></phoneType> \n"
+					+"      <phoneType>Work</phoneType> \n"
 					+"    </telephone> \n"
 					+"    <address> \n"
 					+"      <orgPosition>"+datasrc.getProjectContributorOrgPosition(contributorName)+"</orgPosition> \n"

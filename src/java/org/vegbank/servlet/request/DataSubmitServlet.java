@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2000-11-20 15:45:44 $'
- *  '$Revision: 1.12 $'
+ *  '$Date: 2003-07-01 23:11:24 $'
+ *  '$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ package org.vegbank.servlet.request;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-import VegCommunityLoader;
+import org.vegbank.communities.datasource.VegCommunityLoader;
 
 import org.vegbank.plots.datasource.PlotDataSource;
 import org.vegbank.plots.rmi.DataSourceClient;
@@ -62,8 +62,8 @@ import databaseAccess.CommunityQueryStore;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2000-11-20 15:45:44 $'
- *  '$Revision: 1.12 $'
+ *  '$Date: 2003-07-01 23:11:24 $'
+ *  '$Revision: 1.13 $'
  */
 
 

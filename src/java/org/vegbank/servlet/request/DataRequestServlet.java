@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-06-09 22:06:48 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2003-07-01 23:11:24 $'
+ *  '$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,8 +76,8 @@ import databaseAccess.dbAccess;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-06-09 22:06:48 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2003-07-01 23:11:24 $'
+ *  '$Revision: 1.9 $'
  * 
  */
 
@@ -532,7 +532,7 @@ public class DataRequestServlet extends HttpServlet
 		{
 			System.out.println("DataRequestServlet > getPlotView ");
 
-			System.out.println("DataRequestServlet > xml document: '" + xmlResult +"'" );
+			//System.out.println("DataRequestServlet > xml document: '" + xmlResult +"'" );
 			//System.out.println("DataRequestServlet > stylesheet name: '"+styleSheet +"'");
 
 			sb.append(transformer.getTransformedFromString(xmlResult, styleSheet));

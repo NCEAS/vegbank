@@ -1640,7 +1640,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
@@ -3293,6 +3293,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="boolean" relation="one"/>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -3428,7 +3429,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="object" class="Reference" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
@@ -4269,7 +4270,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" class="Observation" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>observation.OBSERVATION_ID</attReferences>
@@ -4284,7 +4285,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" class="Plot" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
       <attReferences>plot.PLOT_ID</attReferences>
@@ -4298,7 +4299,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" class="Project" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>project.PROJECT_ID</attReferences>
@@ -4424,7 +4425,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" class="CoverMethod" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>coverMethod.coverMethod_ID</attReferences>
@@ -4438,7 +4439,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" class="StratumMethod"  relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>stratumMethod.stratumMethod_ID</attReferences>
@@ -6285,7 +6286,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" class="SoilTaxon" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>soilTaxon.soilTaxon_ID</attReferences>
@@ -6404,7 +6405,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" class="Party" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
@@ -6718,7 +6719,7 @@ conditions may change between resampling events.
     <entityDescription/>
     <module>plot</module>
     <attribute>
-      <attName>PLOTPLACE_ID</attName>
+      <attName>PLACE_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
@@ -6763,7 +6764,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>namedPlace.NAMEDPLACE_ID</attReferences>
@@ -9450,7 +9451,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" class="Party" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
@@ -10455,7 +10456,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>stratum.STRATUM_ID</attReferences>
@@ -10680,7 +10681,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
@@ -10926,7 +10927,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
-      <javaType type="int" relation="one"/>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>plantName.plantName_ID</attReferences>
@@ -10961,7 +10962,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Specifics about the accession number and location of a collection made of the taxon</attDefinition>
+      <attDefinition>pecifics about the accession number and location of a collection made of the taxon</attDefinition>
     </attribute>
     <attribute>
       <attName>taxonCover</attName>

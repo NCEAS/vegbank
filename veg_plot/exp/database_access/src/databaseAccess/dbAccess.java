@@ -1,5 +1,8 @@
 package databaseAccess;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Vector;
 
@@ -33,8 +36,8 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-05-29 00:02:38 $'
- * 	'$Revision: 1.10 $'
+ *  '$Date: 2003-07-01 23:11:24 $'
+ * 	'$Revision: 1.11 $'
  */
 
 public class dbAccess 
@@ -53,32 +56,6 @@ public class dbAccess
 	public dbAccess() {
 		System.out.println("dbAccess > init");
 	}
-
-	/**
-	 * this method will take a plot id number used in vegbank and a
-		* filename to write all the plot data associated with that plot 
-		* into an xml document -- this method is much newer than the
-		* databaseAccess method, and should be used when the explicit 
-		* desire is to write a single plot to an xml doc
-		*
-		* @param plotId -- the VegBank plotId
-		* @param outFile -- the fileName to which to write the data
-		*/
-	public boolean writeSingleVegBankPlot(String plotId, String outFile) {
-		try {
-			System.out.println("dbAccess > printing single plot");
-			//this class allows access to the vegbank databases
-			//so the plugin will always be the same 
-			String pluginClass = "VegBankDataSourcePlugin";
-			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
-			writer.writeSinglePlot(plotId, outFile);
-		} catch (Exception e) {
-			System.out.println("dbAccess > Exception: " + e.getMessage());
-			e.printStackTrace();
-			return (false);
-		}
-		return (true);
-	}
 	
 	/**
 	 * Take a plot id number used in vegbank and a
@@ -93,7 +70,7 @@ public class dbAccess
 			System.out.println("dbAccess > printing single plot");
 			//this class allows access to the vegbank databases
 			//so the plugin will always be the same 
-			String pluginClass = "VegBankDataSourcePlugin";
+			String pluginClass = "VegbankOMPlugin";
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
 			xmlResult = writer.getSinglePlotXMLString(plotId);
 		} catch (Exception e) {
@@ -119,7 +96,7 @@ public class dbAccess
 			System.out.println("dbAccess > printing multiple plots");
 			//this class allows access to the vegbank databases
 			//so the plugin will always be the same 
-			String pluginClass = "VegBankDataSourcePlugin";
+			String pluginClass = "VegbankOMPlugin";
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
 			writer.writeMultiplePlot(plotIdVec, outFile);
 		} catch (Exception e) {
@@ -143,7 +120,7 @@ public class dbAccess
 			System.out.println("dbAccess > return multiple plots");
 			//this class allows access to the vegbank databases
 			//so the plugin will always be the same 
-			String pluginClass = "VegBankDataSourcePlugin";
+			String pluginClass = "VegbankOMPlugin";
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
 			xmlResult = writer.getMultiplePlotXMLString(plotIdVec);
 		} catch (Exception e) {
@@ -171,7 +148,7 @@ public class dbAccess
 			System.out.println("dbAccess > printing multiple plots");
 			//this class allows access to the vegbank databases
 			//so the plugin will always be the same 
-			String pluginClass = "VegBankDataSourcePlugin";
+			String pluginClass = "VegbankOMPlugin";
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
 			xmlResult = writer.getMultiplePlotIdentificationXMLString(plotIdVec);
 		} catch (Exception e) {
@@ -198,7 +175,7 @@ public class dbAccess
 			System.out.println("dbAccess > printing multiple plots");
 			//this class allows access to the vegbank databases
 			//so the plugin will always be the same 
-			String pluginClass = "VegBankDataSourcePlugin";
+			String pluginClass = "VegbankOMPlugin";
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
 			writer.writeMultiplePlotIdentifcation(plotIdVec, outFile);
 		} catch (Exception e) {
@@ -390,7 +367,17 @@ public class dbAccess
 		if (action.equals("writeSingleVegBankPlot")) {
 			String plotId = args[0];
 			String outFile = args[1];
-			g.writeSingleVegBankPlot(plotId, outFile);
+			String outXML = g.getSingleVegBankPlotXMLString(plotId);
+			try
+			{
+				FileWriter outputFileWriter = new FileWriter(new File(outFile));
+				outputFileWriter.write(outXML);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+
 		} else {
 			//input xml file for loading to the database
 			String inputXml = args[0];

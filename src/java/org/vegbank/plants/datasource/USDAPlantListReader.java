@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 18:42:18 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-07-01 23:11:25 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -486,7 +486,7 @@ public class USDAPlantListReader implements Constants, PlantListReader
 				StringTokenizer t = new StringTokenizer(nameField);
 				int tokensCount = t.countTokens();
 
-				if (tokensCount == 2) // String has two word 
+				if (tokensCount <= 2) // String has two words or less
 				{
 					//System.out.println("c -->" + tokensCount );
 					classification = PLANT_CLASS_GENUS;

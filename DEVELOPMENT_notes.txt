@@ -75,4 +75,18 @@ This doc describes issues, problems, and workarounds that we encounter that may 
 
   
 ------------------------------------------------------------------------------------------------------------------------
+
+  Xalan to use
+
+  Vegbank uses a newer version of xalan that the one that comes with TOMCAT.
+  I put the vegbank/lib/xalan.jar, xerces.jar and xml-apis.jar into
+  $TOMCAT_HOME/common/endorsed to make it work.
+
+  I also put the jars into the $JAVA_HOME/lib/endorsed ( i had to manually create
+  the endorsed directory) as per
+  http://xml.apache.org/xalan-j/faq.html#faq-N100CB. 
+
+  I'm not sure if the last step is needed.
+
+------------------------------------------------------------------------------------------------------------------------
   
