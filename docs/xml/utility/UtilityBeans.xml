@@ -1518,4 +1518,82 @@
       </attList>
     </attribute>
   </entity>
+
+
+  <entity>
+    <entityName>regionList</entityName>
+    <entityLabel>Region List</entityLabel>
+    <entitySummary>A utility for storing lists of regions</entitySummary>
+    <entityDescription />
+    <attribute>
+      <attName>regions</attName>
+      <attList>
+        <attListItem>
+          <attListValue>uscan-ne</attListValue>
+          <attListName>US/CAN - NE</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>us-se</attListValue>
+          <attListName>US - SE</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>uscan-nw</attListValue>
+          <attListName>US/CAN - NW</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>usmex-sw</attListValue>
+          <attListName>US/Mex - SW</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>uscan-midwest</attListValue>
+          <attListName>US/CAN - Midwest</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>uscan-grtplains</attListValue>
+          <attListName>US/CAN - Great Plains</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>uscan-rockies</attListValue>
+          <attListName>US/CAN - Rocky Mts</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>us-ak_n-can</attListValue>
+          <attListName>Alaska / Northern Canada</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>us-ca</attListValue>
+          <attListName>California</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>s_mid-amer</attListValue>
+          <attListName>South &amp; Middle America</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>pacific</attListValue>
+          <attListName>Pacific</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>carrib</attListValue>
+          <attListName>Carribean</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>euro</attListValue>
+          <attListName>Europe</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>asia</attListValue>
+          <attListName>Asia</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>africa</attListValue>
+          <attListName>Africa</attListName>
+        </attListItem>
+        <attListItem>
+          <attListValue>au_nz</attListValue>
+          <attListName>Australia / New Zealand</attListName>
+        </attListItem>
+      </attList>
+    </attribute>
+  </entity>
+
 </VegbankUtitiltyBeans>
