@@ -8,11 +8,12 @@ package vegclient.framework;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-09 21:43:34 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-10-10 18:05:23 $'
+ * 	'$Revision: 1.2 $'
  */
 
 import vegclient.framework.*;
+import vegclient.databasemanager.*;
 
 /**
  *
