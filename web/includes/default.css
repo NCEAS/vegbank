@@ -53,6 +53,10 @@ TH	{
 	background-color : #333333;
 	}
 
+TH A:Link {color: #FFFF80; text-docoration:underline}
+TH A:hover {color: #FFFF80; text-docoration:underline}
+TH A:visited {color: #FFFF80; text-docoration:underline}
+
 .description {
 	color: #000000;
 	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
