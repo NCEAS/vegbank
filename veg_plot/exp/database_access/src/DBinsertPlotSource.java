@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-15 01:13:36 $'
- * 	'$Revision: 1.4 $'
+ *  '$Date: 2002-03-27 01:08:23 $'
+ * 	'$Revision: 1.5 $'
  */
 package databaseAccess;
 
@@ -51,6 +51,10 @@ public class DBinsertPlotSource
 	String projectDescription = null;
 	String plotName = null;
 	Vector plotNameList = new Vector();
+	// instance variables describing the person that is loading 
+	private String submitterSurName = "";
+	private String submitterGivenName = "";
+	private String submitterEmail = "";
 	
 	//these variables are returned from the database and are used throughout the
 	// class
@@ -74,8 +78,11 @@ public class DBinsertPlotSource
 	public PlotDataSource source;
 	private GetURL gurl = new GetURL();
 
-	//filename is the xml file that contains the project data and the plots
-	public DBinsertPlotSource(String plugin, String plot) throws FileNotFoundException
+ /**
+	* constructor -- input the name if the plugin and plot
+	*/
+	public DBinsertPlotSource(String plugin, String plot) 
+	throws FileNotFoundException
   {
 		try
     {
@@ -99,7 +106,7 @@ public class DBinsertPlotSource
 			System.out.println("Caught Exception: "+e.getMessage() ); 
 			e.printStackTrace();
 			System.out.println("Exiting at DBinsertPlotSource constructor");
-			System.exit(0);
+			//System.exit(0);
 		}
 	}
 	
@@ -113,7 +120,6 @@ public class DBinsertPlotSource
   {
 		try
     {
-			
 			//initialize the data source 
 			source = new PlotDataSource(plugin);
 			
@@ -131,6 +137,7 @@ public class DBinsertPlotSource
 			System.exit(0);
 		}
 	}
+	
 	
 	
 	/**
@@ -277,74 +284,44 @@ public class DBinsertPlotSource
 	{
 		try 
 		{
-			//System.out.println(source.plotCode);
 			//this boolean determines if the plot should be commited or rolled-back
 			boolean commit = true;
-			
-			
+			int projectId = 0;
 			
 			//set the auto commit option on the connection to false after getting a
 			// new connection from the pool
 			conn = connectionBroker.manageLocalDbConnectionBroker("getConn");
 			conn.setAutoCommit(false);
 			
-/** comment out for the time being			
+			this.projectName = source.projectName;
+			this.projectDescription = source.projectDescription;
+			
+			
+			System.out.println("DBinsertPlotSource > projectName: " + this.projectName);
+			System.out.println("DBinsertPlotSource > projectDesc: " + this.projectDescription);
+			System.out.println("DBinsertPlotSource > projectContrib: " + source.projectContributors.toString() );
+				
+		
 			//see if the project in which this plot is a member exists in the database
 			if (projectExists(projectName) == true )
 			{
-				//get the project id value
-				int projectId = getProjectId(projectName);
-				insertNamedPlace();
-				if (	insertStaticPlotData() == false ) 
-				{	
-					System.out.println("static data: "+commit);
-					commit = false;
-				}
-				else
-				{
-					if ( insertPlotObservation() ==false )
-					{
-						System.out.println("obs data: "+commit);
-						commit = false;
-					}
-					else
-					{
-						if ( insertStrata() == false )
-						{	
-							System.out.println("strata data: "+commit);
-							commit = false;
-						}
-						else
-						{
-							if ( insertTaxonObservations() == false )
-							{
-								System.out.println("taxonObse data: "+commit);
-								commit = false;
-							}
-						}
-					}
-				}
-				
+				projectId = getProjectId(projectName);
 			}
-*/			
-			
-			
-			//else insert a new project and then the plot information
-			
-			{
-				//insert the basis for the project, the project id is auto updated in 
-				//the insert project method 			
+			// if the project is not there then load it and the project contributor
+			//info
+			else
+			{		
 				insertProject(source.projectName, source.projectDescription);
-				int projectId = getProjectId(projectName);
-				
-//				insertNamedPlace();
-				if (insertStaticPlotData() == false ) 
+				projectId = getProjectId(projectName);
+				//insert the project contributor infor here
+			}
+			
+//			insertNamedPlace();
+				if (insertStaticPlotData(projectId) == false ) 
 				{	
 					System.out.println("static data: "+commit);
 					commit = false;
 				}
-
-				
 	
 				else
 				{
@@ -361,7 +338,6 @@ public class DBinsertPlotSource
 						System.out.println("stratummethod>: "+commit);
 						commit = false;
 					}
-					
 					
 					if( insertPlotObservation() == false )
 					{
@@ -383,31 +359,10 @@ public class DBinsertPlotSource
 						commit = false;
 					}
 				}
-			}
+			
 		
 		
-		
-				/*
-					else
-					{
-						if ( insertStrata() == false )
-						{
-							System.out.println("strata data: "+commit);
-							commit = false;
-						}
-						else
-						{
-							if ( insertTaxonObservations() == false )
-							{
-								System.out.println("taxon obs data: "+commit);
-								commit = false;
-							}
-						}
-					}
-					
-					*/
-					
-			System.out.println("success?: "+ commit);
+			System.out.println("DBinsertPlotSource > insertion success: "+ commit);
 			
 			//close the connections
 			//conn.close();
@@ -857,12 +812,12 @@ public class DBinsertPlotSource
 	
 	
 	/**
-	 *	method to insert the static plot data like names and locations
+	 * method to insert the static plot data like names and locations
 	 * and if it catches an exception then false is returned to the calling 
 	 * class so that a roll-back can be issued
 	 *
 	 */
-	private boolean insertStaticPlotData()
+	private boolean insertStaticPlotData(int projectId)
 	{
 	//	int plotId = -999;
 		StringBuffer sb = new StringBuffer();
@@ -870,7 +825,6 @@ public class DBinsertPlotSource
 		{
 			//get the plotid number
 			plotId = getNextId("plot");
-			int projectId = getProjectId(projectName);
 			
 			//the variables from the plot file
 			plotName = source.plotCode;
@@ -886,7 +840,6 @@ public class DBinsertPlotSource
 			String plotShape = source.plotShape;
 			String confidentialityStatus = source.confidentialityStatus; //not null
 			String confidentialityReason = source.confidentialityReason; //not null
-			
 			String xCoord = source.xCoord;
 			String yCoord = source.yCoord;
 			String zone = source.utmZone;
@@ -894,27 +847,29 @@ public class DBinsertPlotSource
 			Hashtable geoCoords=getGeoCoords(xCoord, yCoord, zone);
 			String latitude = (String)geoCoords.get("latitude");
 			String longitude = (String)geoCoords.get("longitude");
-			
-			//String latitude = source.latitude; //not null
-			//String longitude = source.longitude; //not null
-			
-			
 			String state = source.state;
 			String country = source.country;
 			String authorLocation = source.authorLocation;
+			
+			//make a temporary accession number for each unique plot
+			String accessionNumber = "VB."+authorPlotCode.replace('.', '_')+"."+plotId;
+			System.out.println("DBinsertPlotSource > accession number: " + accessionNumber);
 			
 			//print the variables to the screen for debugging
 			//StringBuffer debug = new StringBuffer();
 			debug.append("authorPlotCode: "+ plotName+"\n");
 			
+			//this is the postgresql date function
+			String sysdate = "now()";
 
 			sb.append("INSERT into PLOT (project_id, authorPlotCode, plot_id, "
 				+"geology, "
 				+"latitude, longitude, area, elevation,"
 				+"slopeAspect, slopeGradient, topoPosition, "
 				+"shape, confidentialityStatus, confidentialityReason, "
-				+"authore, authorn, state, country, authorLocation) "
-				+"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				+"authore, authorn, state, country, authorLocation, accession_number, "
+				+"dateEntered, submitter_surname, submitter_givenname, submitter_email) "
+				+"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				
 			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
 			
@@ -938,6 +893,12 @@ public class DBinsertPlotSource
 			pstmt.setString(17, state);
 			pstmt.setString(18, country);
 			pstmt.setString(19, authorLocation);
+			pstmt.setString(20, accessionNumber);
+			pstmt.setString(21, sysdate);
+			pstmt.setString(22, this.submitterSurName);
+			pstmt.setString(23, this.submitterGivenName);
+			pstmt.setString(24, this.submitterEmail);
+			
 
 			pstmt.getWarnings();
   	  pstmt.execute();
@@ -1012,6 +973,7 @@ public class DBinsertPlotSource
 		{
 			StringBuffer sb = new StringBuffer();
 			sb.append("SELECT count(*) from PROJECT where projectName like '"+projectName+"'" );
+			//System.out.println("DBinsertPlotSource > query: " + sb.toString());
 			Statement query = conn.createStatement();
 			ResultSet rs = query.executeQuery( sb.toString() );
 			while ( rs.next() ) 
@@ -1026,20 +988,24 @@ public class DBinsertPlotSource
 		}
 		if (rows == 0)
 		{
+			System.out.println("DBinsertPlotSource > project does not exist");
 			return(false);
 		}
 		else
 		{
+			System.out.println("DBinsertPlotSource > project does exist");
 			return(true);
 		}
 	}
 	
 	
 	
-	//method to return the projectId given as input the 
-	//name of a project -- before this method is to be 
-	//called make sure that the project does actually exist
-	//using the method 'projectExists'
+	/**
+	 * method to return the projectId given as input the 
+	 * name of a project -- before this method is to be 
+	 * called make sure that the project does actually exist
+	 * using the method 'projectExists'
+	 */
 	private int getProjectId(String projectName)
 	{
 		int projectId = 0;
@@ -1093,19 +1059,21 @@ public class DBinsertPlotSource
 		return(rows);
 	}
 	
-	//method that inserts a new project into the database
+	/**
+	 * method that will insert the project data
+	 */
 	public void insertProject(String projectName, String projectDescription)
 	{
 		try 
 		{
-			System.out.println("Project Primary Key: "+getNextId("project"));
+			System.out.println("DBinsertPlotSource > project primary Key: "+getNextId("project") );
 			StringBuffer sb = new StringBuffer();
 			int projectId = getNextId("project");
 			sb.append("INSERT into PROJECT (project_id, projectName, projectdescription) "
 			 +"values("+projectId+", '"+projectName+"', '"+projectDescription+"')" );
 			Statement insertStatement = conn.createStatement();
 			insertStatement.executeUpdate(sb.toString());
-			System.out.println("inserted PROJECT");
+			System.out.println("DBinsertPlotSource > inserted PROJECT");
 			
 		}
 		catch (Exception e)
