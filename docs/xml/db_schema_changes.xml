@@ -1545,7 +1545,39 @@ observation.COVERMETHOD_ID</modelChangeComments>
     <modelChangeBugID>1014</modelChangeBugID>
     <change type="create field">
       <entity>
-        <entityName>observation</entityName>
+        <entityName>stratumMethod</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>stratumAssignment</attName>
+          <attModel>logical</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (50)</attType>
+          <javaType type="String" relation="one"/>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>closed</attListType>
+          <attList>
+            <attListItem>
+              <attListValue>predominant stratum</attListValue>
+              <attListValueDesc>Each individual is assigned to one and only one stratum in which it most significantly occurs.  Generally, this is the tallest stratum that the individual occupies.</attListValueDesc>
+              <attListSortOrd>1</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>soley height determined</attListValue>
+              <attListValueDesc>Individuals are included in each stratum they occupy, allowing one individual to be assigned to multiple strata, if it crosses the height boundary between strata.</attListValueDesc>
+              <attListSortOrd>2</attListSortOrd>
+            </attListItem>
+          </attList>
+          <attNotes>n/a</attNotes>
+          <attDefinition>The way that an individual's cover is assigned to the different stratum.  Some methodologies allow an individul to span multiple strata and have stratumCover values in each stratum. Other methodologies require that all cover from an individual be assigned to the upper-most stratum.  Further information about the specifics of stratum Methodologies that deviate from the standard practice of the stratumMethod referened in the field stratumMethod_ID should be described in methodNarrative.</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>coverMethod</entityName>
         <entitySummary/>
         <entityDescription/>
         <module>plot</module>
@@ -1573,32 +1605,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           </attList>
           <attNotes>n/a</attNotes>
           <attDefinition>The way that cover is estimated on the observation.</attDefinition>
-          <update>1.0.2</update>
-        </attribute>
-        <attribute>
-          <attName>stratumIndividualDivision</attName>
-          <attModel>logical</attModel>
-          <attNulls>yes</attNulls>
-          <attType>varchar (50)</attType>
-          <javaType type="String" relation="one"/>
-          <attKey>n/a</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>n/a</attReferences>
-          <attListType>closed</attListType>
-          <attList>
-            <attListItem>
-              <attListValue>individual division</attListValue>
-              <attListValueDesc>An individual's cover is divided into separate strata if the individual spans multiple strata, as defined by the strata's heights.  For example, a tall tree would have its cover in a Canopy stratum, but its low branches would be in an Understory stratum.</attListValueDesc>
-              <attListSortOrd>1</attListSortOrd>
-            </attListItem>
-            <attListItem>
-              <attListValue>No individual division</attListValue>
-              <attListValueDesc>An individual's cover is completely assigned to one stratum (and one stratum only), regardless of where on the individual the cover occurs.  For example, a tall tree would have all of its cover assigned to the Canopy stratum, including any cover that was contributed by lower branches that do not, by themselves, occupy space in the Canopy stratum.</attListValueDesc>
-              <attListSortOrd>2</attListSortOrd>
-            </attListItem>
-          </attList>
-          <attNotes>n/a</attNotes>
-          <attDefinition>The way that an individual's cover is assigned to the different stratum.  Some methodologies allow an individul to span multiple strata and have stratumCover values in each stratum. Other methodologies require that all cover from an individual be assigned to the upper-most stratum.  Further information about the specifics of stratum Methodologies that deviate from the standard practice of the stratumMethod referened in the field stratumMethod_ID should be described in methodNarrative.</attDefinition>
           <update>1.0.2</update>
         </attribute>
       </entity>
