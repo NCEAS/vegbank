@@ -3117,4 +3117,31 @@ observation.COVERMETHOD_ID</modelChangeComments>
       </attribute>
     </entity>
   </modelChange>
+  <modelChange>
+    <modelChangeID>17</modelChangeID>
+    <modelChangeName>add observation.dateEntered</modelChangeName>
+    <modelChangeStatus>FALSE</modelChangeStatus>
+    <modelChangeComments>need field to track when observations are added</modelChangeComments>
+    <modelChangeBugID>780, in part</modelChangeBugID>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>observation</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>dateEntered</attName>
+        <attModel>logical</attModel>
+        <attNulls>no</attNulls>
+        <attType>Date</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes/>
+        <attDefinition>Date that the observation was added to VegBank</attDefinition>
+        <attListType>n/a</attListType>
+        <attList/>
+      </attribute>
+    </entity>
+  </modelChange>
 </modelChangeDocument>
