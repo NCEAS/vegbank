@@ -7,8 +7,8 @@
  *	
  *
  * '$Author: harris $'
- * '$Date: 2002-06-11 23:32:34 $'
- * '$Revision: 1.2 $'
+ * '$Date: 2002-06-13 13:02:24 $'
+ * '$Revision: 1.3 $'
  *
  */
 
@@ -49,6 +49,7 @@ CREATE SEQUENCE user_downloads_seq;
 CREATE table user_downloads (
 download_id  int primary key  default nextval('user_downloads_seq'),
 user_id     int,
+email_address varchar(50),
 download_type varchar(50),
 last_download date,
 download_count int,
@@ -59,6 +60,8 @@ FOREIGN KEY (user_id) REFERENCES user_info
 CREATE SEQUENCE user_cert_seq;
 CREATE table user_certification (
 certification_id int primary key  default nextval('user_cert_seq'),
+user_id     int,
+email_address varchar(50),
 sur_name varchar(50),
 given_name varchar(50),
 phone_number varchar(20),
@@ -85,7 +88,7 @@ nvc_exp_usnvc_a varchar(12),
 esa_sponsor_name_a varchar(120),
 esa_sponsor_email_a varchar(120),
 peer_review varchar(10),
-additiona_statements varchar(500)
+additional_statements varchar(500)
 )
 
 
