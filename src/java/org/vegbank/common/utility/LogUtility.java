@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-27 19:13:52 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-03-05 22:34:17 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ public class LogUtility
      */
     protected static Log log = LogFactory.getLog(LogUtility.class);
 
-	public static final int TRACE = 1;
+	//public static final int TRACE = 1;
 	public static final int DEBUG = 2;
 	public static final int INFO = 3;
 	public static final int WARN = 4;
@@ -69,16 +69,22 @@ public class LogUtility
 		}
 	}
 	
+	/**
+	 * @param message
+	 * @param severity
+	 */
 	public static void log( Object message, int severity )
 	{
 		switch (severity) 
 		{
-			case TRACE:
-				if ( log.isTraceEnabled() )
-				{
-					log.trace( message.toString() );
-				} 
-				break;
+			// If commons-logging gets sending a trace to log4j 
+			// turn back on
+//			case TRACE:
+//				if ( log.isTraceEnabled() )
+//				{
+//					log.trace( message.toString() );
+//				} 
+//				break;
 			case DEBUG:
 				if ( log.isDebugEnabled() )
 				{
