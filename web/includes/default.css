@@ -99,8 +99,10 @@ a.featureLink:hover {
 -----------------------------------------------------------------------------------------------------
 */
 
-
-
+/* header and footer in filters.properties : */
+.headerTable {background-color:#336633}
+.footerTable {background-color:#eed85b}
+.clearTable {background-color:#FFFFFF} /* same as BODY background */
 
 /*thin lines for your table gets you a grid of thin lines:
 ___
