@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-12-04 02:11:59 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-12-10 19:40:14 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,6 @@ public class AccessionGen {
 	 * @param db - database code
 	 * @param table - full name of the table to be abbreviated  
 	 * @param pk - primary key
-	 * @param decoded - common name to be encoded
 	 */
 	public String getAccession(String db, String table, String pk) throws SQLException {
 

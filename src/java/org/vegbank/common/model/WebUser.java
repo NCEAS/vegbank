@@ -7,9 +7,9 @@ import org.vegbank.common.utility.LogUtility;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-12-02 19:53:13 $'
- *	'$Revision: 1.3 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-12-10 19:40:14 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class WebUser
 	private String organizationname = "";
 	private String email = "";
 	private String password = "";
-	private String permissiontype = "";
+	private String permissions = "";
 	private String institution = "";
 	private String salutation = "";
 	private String ticketcount = "";
@@ -166,21 +166,6 @@ public class WebUser
 	/**
 	 * @return
 	 */
-	public String getPermissiontype()
-	{
-		return permissiontype;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setPermissiontype(String string)
-	{
-		permissiontype = string;
-	}
-	/**
-	 * @return
-	 */
 	public String getInstitution()
 	{
 		return institution;
@@ -211,26 +196,20 @@ public class WebUser
 	}
 	
 	/**
-	 * @return certificationLevel
+	 * @return
 	 */
-	public int getCertificationLevel()
+	public String getPermissions()
 	{
-		int result = 0;
-		try
-		{
-			result =  new Integer( this.getPermissiontype() ).intValue();
-		}
-		catch ( Exception e)
-		{
-			LogUtility.log(
-				"WebUser: Error thrown getting certification level from '"
-					+ this.getPermissiontype()
-					+ "'",
-				e);
-		}
-		return result;
+		return permissions;
 	}
 
+	/**
+	 * @param string
+	 */
+	public void setPermissions(String string)
+	{
+		permissions = string;
+	}
 
 	/**
 	 * @return
