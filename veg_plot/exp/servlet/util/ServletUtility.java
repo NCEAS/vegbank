@@ -22,8 +22,8 @@ import servlet.util.GetURL;
  *    etc.. 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-07-30 22:18:29 $'
- *  '$Revision: 1.14 $'
+ *  '$Date: 2002-07-31 22:47:44 $'
+ *  '$Revision: 1.15 $'
  *
  */
 
@@ -327,12 +327,25 @@ public void fileCopy (String inFile, String outFile, String appendFlag)
 		System.out.println("ServletUtility > fileCopy");
 		System.out.println("ServletUtility > inFile: " + inFile);
 		System.out.println("ServletUtility > outFile: " + outFile);
-		
+		System.out.println("ServletUtility > appendFlag: " + appendFlag);
+		// CHECK THE FILE 
+		File inf = new File(inFile);
+		File outf = new File(outFile);
+		boolean readable =  inf.canRead();
+		boolean writeable =  outf.canWrite();
+		System.out.println("ServletUtility > in readable " + inf.canRead() );
+		System.out.println("ServletUtility > out writeable " + outf.canWrite() );
+
 		int c;
 		while((c = in.read()) != -1)
-    out.write(c);
+		{
+    	//System.out.println("## " + c );
+			out.write(c);
+		}
+
 		in.close();
 		out.close();
+		System.out.println("ServletUtility > file size: " + c);	
 	}
 	catch(Exception e) 
 	{
@@ -367,6 +380,7 @@ public void fileCopy (String inFile, String outFile)
         out.write(c);
 		}
 		
+		System.out.println("ServletUtility > file size: " + c);	
 		in.close();
 		out.close();
 	}
