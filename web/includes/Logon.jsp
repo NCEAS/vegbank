@@ -1,8 +1,7 @@
 <!-- This is only a jsp snipit -->
 <!-- start logon form Include -->
 
-<html:form action="/Logon" focus="username"
-         onsubmit="return validateLogonForm(this);">
+<html:form action="/Logon" focus="username">
 <table border="0" width="100%" height="135">
 
   <!-- Title -->
@@ -65,9 +64,11 @@
 
 </html:form>
 
-<html:javascript formName="LogonForm"
+<!--html:javascript formName="LogonForm"
         dynamicJavascript="true"
          staticJavascript="false"/>
-<script language="Javascript1.1" src="staticJavascript.jsp"></script>
+
+<script language="Javascript1.1" src="staticJavascript.jsp">
+</script-->
 
 <!-- End logon form Include -->
