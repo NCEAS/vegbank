@@ -47,13 +47,150 @@ public class LocalDbConnectionBroker
 	/**
 	 * method that handles requests that are made 
 	 * related to connection pooling -- this method 
+	 * should be broken up into many smaller methods 
+	 * this method takes as input the name of the database properties file
+	 * as opposed to the other method having the same name which defaults to
+	 * the properties file that uses the file: 'database.properties'
+	 *
+	 * @param propertiesFile -- database properties file
+	 * @param action -- the action which the user intends to run
+	 */
+	public static Connection manageLocalDbConnectionBroker(String propertiesFile,
+		String action) 
+	{
+		classUses++;
+		//define the connection
+		///Connection pconn=null; 
+
+		if (action.equals("initiate") ) 
+		{	
+			try 
+			{
+				//get the database management parameter settings
+				g.getDatabaseParameters(propertiesFile, "query");
+	
+				myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
+				g.login,g.passwd,g.minConnections,g.maxConnections, 
+				g.logFile,1.0);
+		
+				pconn=myBroker.getConnection(); //get a connection that will be closed
+		
+				//pool stats -- number of connections in the pool
+				///System.out.println(myBroker.getSize()+" \n");
+		
+			}
+			catch( Exception e )
+			{
+				System.out.println(" failed in: manageLocalDbConnectionBroker "
+				+e.getMessage() );
+				e.printStackTrace();
+			}
+		}
+
+		else if (action.equals("getConn") ) 
+		{
+	
+			//increment the use of teh current cooneection
+			currentConnectionUses++;
+	
+			///	System.out.println("LocalDbConnectionBroker.currentConnectionUses: "+currentConnectionUses);
+			///	System.out.println("LocalDbConnectionBroker.poolSize: "+myBroker.getSize() );
+			///	System.out.println("LocalDbConnectionBroker.currentConnectionUses: "+currentConnectionUses);
+			///	System.out.println("LocalDbConnectionBroker.currentConnectionNum: "+curentConnectionNum);
+	
+	
+			//use the current connection about 100 times
+			if (currentConnectionUses < g.maxConnectionUses ) 
+			{
+				return pconn;
+			}
+	
+			//if the current number of connections has reachd the max limit get another
+			// from the DBConnectionBroker
+			if (currentConnectionUses == g.maxConnectionUses ) 
+			{
+				System.out.println("LocalDbConnectionBroker: grabbing a new connection from pool");
+		
+				//the next logic is to determine if the max number of connections has been
+				// exceeded the pool numbber and if so then create a new pool
+				if ( myBroker.getSize() == g.maxConnections ) 
+				{
+					try 
+					{
+						System.out.println("LocalDbConnectionBroker: re-starting the connection pooling");
+						myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
+						g.login,g.passwd,g.minConnections,g.maxConnections, 
+						g.logFile,1.0);
+					} 
+					catch( Exception e ) 
+					{
+						System.out.println(e.getMessage() );
+					}
+				}
+		
+				//grab the new connection from the pool
+				pconn=myBroker.getConnection();
+				currentConnectionUses=0;
+				return pconn;
+			}
+	}
+
+	else if (action.equals("releaseConn") ) 
+	{
+		try 
+		{
+			//System.out.println("releasing the connection: "+myBroker.idOfConnection(pconn));
+			//System.out.println("age of this connection "+myBroker.getAge(pconn) );
+			//pconn.close();
+			myBroker.freeConnection(pconn);
+		} 
+		catch( Exception e ) 
+		{
+			System.out.println("failed in: manageLocalDbConnectionBroker realease "
+			+e.getMessage() ); e.printStackTrace();
+		}
+	}
+
+	else if (action.equals("destroy") ) 
+	{
+		System.out.println("closing the database connection pool");
+		try 
+		{
+			//close the open connection 
+			myBroker.freeConnection(pconn);
+			pconn.close();
+			//destroy the pool
+			myBroker.destroy();
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("failed in: manageLocalDbConnectionBroker destroy"
+			+e.getMessage() ); 
+			e.printStackTrace();
+		}
+
+	}
+	else 
+	{ 
+		System.out.println("LocalDbConnectionBroker.manageLocalDbConnectionBroker: "
+		+" unrecognized action: " + action);
+	}
+	return pconn;
+}
+
+	
+	/**
+	 * method that handles requests that are made 
+	 * related to connection pooling -- this method 
 	 * should be broken up into many smaller methods
+	 * this method assumes that the properties file containing the 
+	 * database properties are in a file called 'database'
+	 *
+	 * @param action -- the action that is to be run
 	 */
 	public static Connection manageLocalDbConnectionBroker(String action) 
 	{
-
 		classUses++;
-	
 		//define the connection
 		///Connection pconn=null; 
 
@@ -167,8 +304,8 @@ public class LocalDbConnectionBroker
 	}
 	else 
 	{ 
-		System.out.println("LocalDbConnectionBroker.manageLocalDbConnectionBroker: unrecognized action"
-		+action);
+		System.out.println("LocalDbConnectionBroker.manageLocalDbConnectionBroker: "
+		+" unrecognized action: " + action);
 	}
 	return pconn;
 }

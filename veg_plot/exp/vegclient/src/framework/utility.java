@@ -8,8 +8,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2001-10-10 18:12:43 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2001-10-30 22:29:44 $'
+ * '$Revision: 1.2 $'
  */
 package vegclient.framework;
 
@@ -21,7 +21,8 @@ import vegclient.framework.*;
 
 
 
-public class utility {
+public class utility 
+{
 
 public String driverClass;
 public String connectionString;
@@ -45,21 +46,23 @@ public int maxConnectionUses;
 public static void main(String args[])
 {
 	
-if (args.length != 2) {
-        System.out.println("Usage: java utility  [propertiesFile ..minus '.properties'] [accessType]");
-	System.exit(0);
-}
+	if (args.length != 2) 
+	{
+    System.out.println("Usage: java utility  "
+		 +"[propertiesFile ..minus '.properties'] [accessType]");
+		System.exit(0);
+	}
 
-utility g =new utility(); 
-g.getDatabaseParameters(args[0], args[1]);		
-System.out.println(g.driverClass+" "
-	+"driverClass: "+g.driverClass+" \n"
-	+"connectionString: "+g.connectionString+" \n"
-	+"login: "+g.login+" \n"
-	+"password: "+g.passwd+" \n"
-	+"minConnection: "+g.minConnections+" \n"
-	+"maxConnections: "+g.maxConnections+" \n"
-	+"pooling logFile: "+g.logFile);
+	utility g =new utility(); 
+	g.getDatabaseParameters(args[0], args[1]);		
+	System.out.println(g.driverClass+" "
+		+"driverClass: "+g.driverClass+" \n"
+		+"connectionString: "+g.connectionString+" \n"
+		+"login: "+g.login+" \n"
+		+"password: "+g.passwd+" \n"
+		+"minConnection: "+g.minConnections+" \n"
+		+"maxConnections: "+g.maxConnections+" \n"
+		+"pooling logFile: "+g.logFile);
 }
 
 
@@ -119,7 +122,7 @@ public void getDatabaseParameters(String propFile, String accessType)
 {
 String s = null;
 	try {
-//		System.out.println("reading property file; base: "+propFile);
+    System.out.println("Utility reading property file; base: " + propFile);
 		ResourceBundle rb = ResourceBundle.getBundle(propFile);
 		driverClass=rb.getString("driverClass");
 		connectionString=rb.getString("connectString");

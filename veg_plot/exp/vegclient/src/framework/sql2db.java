@@ -10,8 +10,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-11 12:37:24 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2001-10-30 22:29:44 $'
+ * 	'$Revision: 1.3 $'
  */
 package vegclient.framework;
 
@@ -33,14 +33,15 @@ public class sql2db
 
 	//the database connection pooling class
 	static LocalDbConnectionBroker connectionBroker = new LocalDbConnectionBroker(); 	
-		Connection conn=null;
-		Statement query = null;
-		Statement stmt = null;
-		ResultSet results = null;
-		private String sqlFileName = null;
+	Connection conn=null;
+	Statement query = null;
+	Statement stmt = null;
+	ResultSet results = null;
+	private String sqlFileName = null;
 			
 	/**
-	 * a cunstructor
+	 * a constructor that will return the name of an input file name 
+	 * (fileName), and update the global variable with that name
 	 */
 	public sql2db(String fileName)
 	{
@@ -54,40 +55,33 @@ public class sql2db
 	 */
 	public sql2db()
 	{
-		
+	
 	}
 	
 	
-	//main method for testing
-	public static void main(String args[]) 
+
+	/**
+	 * method that will issue a sql file against the database
+	 */
+	public void insertStatement() 
 	{
-		try 
-		{
-			String fileName = args[0];
-			sql2db sql = new sql2db(fileName);
-			sql.insertStatement( );
-		} 
-		catch (Exception e) 
-		{
-			System.out.println("Exception: " 
-			+ e.getMessage());
-		}
-
+		//which prop file -- assume a file called 'database.properties'
+		insertStatement("database", sqlFileName);
 	}
 
-
-public void insertStatement() 
-{
-	insertStatement(sqlFileName);
-}
-
-public void insertStatement(String fileName) 
-{
+	
+	/**
+	 * method that will take a sql file and issue it against the database
+	 * @param fileName -- the sql file that should be issued against the db
+	 */
+	public void insertStatement(String propertiesFile, String fileName) 
+	{
 		try
 		{
-			
-			//initialize the database connection manager
-			connectionBroker.manageLocalDbConnectionBroker("initiate");
+			System.out.println( "SQLFile DB prop file: " + propertiesFile);
+			//initialize the database connection manager -- using the input properties
+			//file
+			connectionBroker.manageLocalDbConnectionBroker(propertiesFile, "initiate");
 			conn = connectionBroker.manageLocalDbConnectionBroker("getConn");
 			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
@@ -178,5 +172,22 @@ public void insertStatement(String fileName)
 		//close down the connection pooling
 		conn = connectionBroker.manageLocalDbConnectionBroker("destroy");
 
+	}
+	
+	
+	//main method for testing
+	public static void main(String args[]) 
+	{
+		try 
+		{
+			String fileName = args[0];
+			sql2db sql = new sql2db(fileName);
+			sql.insertStatement( );
+		} 
+		catch (Exception e) 
+		{
+			System.out.println("Exception: " 
+			+ e.getMessage());
+		}
 	}
 }
