@@ -37,6 +37,16 @@ public class  TNCPlotsDB
 	public String authorObsCode = "null";
 	public String soilDepth = "null";
 	
+	
+	public String t1Height = "n/a";
+	public String t1Cover = "n/a";
+	public String t2Height = "n/a";
+	public String t2Cover= "n/a";
+	public String t3Height= "n/a";
+	public String t3Cover = "n/a";
+	public String s1Height = "n/a";
+	public String	s1Cover = "n/a";
+	
 	//this is used by the get location method
 	private String locationCode = null;
 	
@@ -100,6 +110,8 @@ public class  TNCPlotsDB
 		 getSpeciesInfo( plotName );
 		 //get all the data from the location info
 		 getLocationInfo( locationCode );
+		 //get the cover-class values etc..
+		 getCoverInfo( plotName );
 	 }
 	 
 	 /**
@@ -197,8 +209,7 @@ public class  TNCPlotsDB
 			+" ([Plot Code]), "
 			+" ([Scientific Name]) "
 			+" from ([Plots-Species]) where ([Plot Code]) like '"+plotName+"'");
-			
-			System.out.println("OK");
+			//System.out.println("OK");
 			//there should only be one
 			while (rs.next()) 
 			{
@@ -348,6 +359,110 @@ public class  TNCPlotsDB
 		return(v);
 }
 
+
+	 /**
+	  * method that updates the publicly accessible variables with the 
+		* site specific data
+		* 
+		* @param plotName -- string representation of the plotCode
+		*/
+		private void getCoverInfo(String plotName)
+		{
+			 	Statement stmt = null;
+		try 
+		{
+			System.out.println( " plotName " + plotName);
+			// Create a Statement so we can submit SQL statements to the driver
+			stmt = con.createStatement();
+			//create the result set
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([T1 Hgt]), "
+			+" ([T1 Cover]), "
+			+" ([T2 Hgt]), "
+			+" ([T1 Cover]), "
+			+" ([T2 Hgt]), "
+			+" ([T3 Cover]), "
+			+" ([T3 Hgt]), "
+			+" ([S1 Cover]), "
+			+" ([S1 Hgt]) "
+			+" from plots where ([Plot Code]) like '"+plotName+"'");
+			
+			//there should only be one
+			while (rs.next()) 
+			{
+	//			if ( rs.getString(1) != null && rs.getString(1).length() > 1) 
+	//			{
+					t1Height = rs.getString(1);
+	//				System.out.println("tih: " +  t1Height);
+	//			}
+	//			if ( rs.getString(2) != null)
+	//			{
+					t1Cover = rs.getString(2);
+	//				System.out.println("tih: " + t1Cover);
+	//			}
+	//			if ( rs.getString(3) != null)
+	//			{
+					t2Height = rs.getString(3);
+	//				System.out.println("tih: " + t2Height);
+	//			}
+	//			if ( rs.getString(4) != null)
+	//			{
+					t2Cover= rs.getString(4);
+	//				System.out.println("tih: " + t2Cover);
+	//			}
+	//			if ( rs.getString(5) != null)
+	//			{
+					t3Height= rs.getString(5);
+	//				System.out.println("tih: " + t3Height);
+	//			}
+	//			if ( rs.getString(6) != null)
+	//			{
+					t3Cover = rs.getString(6);
+	//				System.out.println("tih: " + t3Cover);
+	//			}
+	//			if ( rs.getString(7) != null)
+	//			{
+					s1Height = rs.getString(7);
+	//				System.out.println("tih: " + s1Height);
+	//			}
+	//			if ( rs.getString(8) != null)
+	//			{
+					s1Cover = rs.getString(8);
+	//				System.out.println("tih: " + s1Cover);
+	//			}
+			}
+			//make sure that the strata codes do not have null values
+			//create the obscode by combining the plot with the date
+			this.authorObsCode = plotCode+date.replace(' ','_');
+		}
+		catch (SQLException ex) 
+		{
+			// Error, a SQLException was generated. Display the error information
+			System.out.println (" SQLException caught ");
+			try 
+			{  
+				System.out.println("Warning =   " + stmt.getWarnings() ); 
+			}
+			catch (Exception x) {}
+			// get all sql error messages in a loop
+			while (ex != null)
+			{
+				System.out.println ("ErrorCode: " + ex.getErrorCode () + "<BR>");
+				System.out.println ("SQLState:  " + ex.getSQLState () + "<BR>");
+				System.out.println ("Message:   " + ex.getMessage () + "<BR>");
+				System.out.println ("&nbsp;<BR>");
+				ex.printStackTrace();
+				ex = ex.getNextException();
+				
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   // All other types of exceptions
+			System.out.println("Exception: " + ex + "<BR>");
+		}	
+		}
+		
+		
 
 /**
  * main method for testing --

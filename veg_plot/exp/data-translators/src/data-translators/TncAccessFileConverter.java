@@ -10,8 +10,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-11-01 17:39:00 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-11-02 19:10:59 $'
+ * 	'$Revision: 1.2 $'
  *
  */
 
@@ -84,34 +84,37 @@ public class TncAccessFileConverter
 		pdm.plotElementMapper(db.soilDepth, "soilDepth", "observation");
 		pdm.plotElementMapper(db.authorObsCode, "authorObsCode", "observation");
 		
-		//strata info
+		
+		System.out.println("cover vals: " + db.t1Height + " " + db.t1Cover);
+		//strata info -- these cannot be null
 		pdm.plotElementMapper("t1", "stratumName", "observation");
-		pdm.plotElementMapper("t1Ht", "stratumHeight", "observation");
-		pdm.plotElementMapper("t1Cover", "stratumCover", "observation");
-		pdm.plotElementMapper("t2", "stratumName", "observation");
-		pdm.plotElementMapper("t2Ht", "stratumHeight", "observation");
-		pdm.plotElementMapper("t2Cover", "stratumCover", "observation");
-		pdm.plotElementMapper("t3", "stratumName", "observation");
-		pdm.plotElementMapper("t3Ht", "stratumHeight", "observation");
-		pdm.plotElementMapper("t3Cover", "stratumCover", "observation");
-		pdm.plotElementMapper("s1", "stratumName", "observation");
-		pdm.plotElementMapper("s1Ht", "stratumHeight", "observation");
-		pdm.plotElementMapper("s1Cover", "stratumCover", "observation");
-		pdm.plotElementMapper("s2", "stratumName", "observation");
-		pdm.plotElementMapper("s2Ht", "stratumHeight", "observation");
-		pdm.plotElementMapper("s2Cover", "stratumCover", "observation");
-		pdm.plotElementMapper("h", "stratumName", "observation");
-		pdm.plotElementMapper("hHt", "stratumHeight", "observation");
-		pdm.plotElementMapper("hCover", "stratumCover", "observation");
-		pdm.plotElementMapper("n", "stratumName", "observation");
-		pdm.plotElementMapper("nHt", "stratumHeight", "observation");
-		pdm.plotElementMapper("nCover", "stratumCover", "observation");
-		pdm.plotElementMapper("v", "stratumName", "observation");
-		pdm.plotElementMapper("vHt", "stratumHeight", "observation");
-		pdm.plotElementMapper("vCover", "stratumCover", "observation");
-		pdm.plotElementMapper("e", "stratumName", "observation");
-		pdm.plotElementMapper("eHt", "stratumHeight", "observation");
-		pdm.plotElementMapper("eCover", "stratumCover", "observation");
+		pdm.plotElementMapper( db.t1Height , "stratumHeight", "observation");
+		pdm.plotElementMapper( db.t1Cover , "stratumCover", "observation");
+		System.out.println( "t1 cover: "+ db.t1Cover);
+		pdm.plotElementMapper( "t2" , "stratumName", "observation");
+		pdm.plotElementMapper( db.t2Height, "stratumHeight", "observation");
+		pdm.plotElementMapper( db.t2Cover, "stratumCover", "observation");
+		pdm.plotElementMapper( "t3", "stratumName", "observation");
+		pdm.plotElementMapper( db.t3Height, "stratumHeight", "observation");
+		pdm.plotElementMapper( db.t3Cover , "stratumCover", "observation");
+//		pdm.plotElementMapper("s1", "stratumName", "observation");
+//		pdm.plotElementMapper("s1Ht", "stratumHeight", "observation");
+//		pdm.plotElementMapper("s1Cover", "stratumCover", "observation");
+//		pdm.plotElementMapper("s2", "stratumName", "observation");
+//		pdm.plotElementMapper("s2Ht", "stratumHeight", "observation");
+//		pdm.plotElementMapper("s2Cover", "stratumCover", "observation");
+//		pdm.plotElementMapper("h", "stratumName", "observation");
+//		pdm.plotElementMapper("hHt", "stratumHeight", "observation");
+//		pdm.plotElementMapper("hCover", "stratumCover", "observation");
+//		pdm.plotElementMapper("n", "stratumName", "observation");
+//		pdm.plotElementMapper("nHt", "stratumHeight", "observation");
+//		pdm.plotElementMapper("nCover", "stratumCover", "observation");
+//		pdm.plotElementMapper("v", "stratumName", "observation");
+//		pdm.plotElementMapper("vHt", "stratumHeight", "observation");
+//		pdm.plotElementMapper("vCover", "stratumCover", "observation");
+//		pdm.plotElementMapper("e", "stratumName", "observation");
+//		pdm.plotElementMapper("eHt", "stratumHeight", "observation");
+//		pdm.plotElementMapper("eCover", "stratumCover", "observation");
 
 		//community mappings
 		pdm.plotElementMapper(db.communityName, "communityName", "community");
