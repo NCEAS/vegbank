@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2003-11-26 21:31:47 $'
-* '$Revision: 1.77 $'
+* '$Date: 2003-11-26 22:54:39 $'
+* '$Revision: 1.78 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -182,6 +182,13 @@
       </fileset>
     </copy>
   </target>
+  <!-- keep these targets (that read from large binaries separate -->
+  <target name="panel-big-bin" depends="init" description="=&gt; dist the panel large binary files to server">
+    <copy overwrite="true" todir="${panel_server}" filtering="no">
+      <fileset dir="${lrg_binary_src}" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip  NVC_guidelines_v3.pdf "/>
+    </copy>
+  </target>
+
   <target name="help" depends="hdrftr" description="=&gt; dist the help pages to server">
     <copy overwrite="true" todir="${help_server}" filtering="yes">
       <fileset dir="${help_src}">
@@ -216,12 +223,7 @@
       </fileset>
     </copy>
   </target>
-  <!-- keep these targets (that read from large binaries separate -->
-  <target name="panel-big-bin" depends="init" description="=&gt; dist the panel large binary files to server">
-    <copy overwrite="true" todir="${panel_server}" filtering="no">
-      <fileset dir="${lrg_binary_src}" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip   "/>
-    </copy>
-  </target>
+
   <!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
