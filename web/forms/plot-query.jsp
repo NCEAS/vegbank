@@ -13,9 +13,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2004-08-06 23:55:32 $'
-*  '$Revision: 1.23 $'
+*    '$Author: mlee $'
+*      '$Date: 2004-11-15 23:56:59 $'
+*  '$Revision: 1.24 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -658,7 +658,7 @@ VEGBANK - Simple Plots Query
   <tr bgcolor="#DDDDDD">
 
     <th rowspan="2"><p><span class="thsmall">Row</span></p></th>
-    <th rowspan="2"><p><span  class="thsmall">Plant Name <a class="brightyellow" target="_blank" href="@forms_link@PlantQuery.jsp">search</a></span></p></th>
+    <th rowspan="2"><p><span  class="thsmall">Plant Name <a target="_blank" href="@forms_link@PlantQuery.jsp">search</a></span></p></th>
     <th colspan="2"><p><span class="thsmall">Cover (%)</span></p></th>
 
     <!-- no basal area <th colspan="2"><p><span class="thsmall">Basal Area (m2/ha)</span></p></th> -->
@@ -976,7 +976,7 @@ VEGBANK - Simple Plots Query
 	  <table border="0" cellspacing="1" cellpadding="1">
 	    <tr bgcolor="#DDDDDD">
 	      <th rowspan="2"><p><span class="thsmall">Row</span></p></th>
-	      <th rowspan="2"><p><span class="thsmall">Community Name <a class="brightyellow" target="_blank" href="@forms_link@community-query.html">search</a></span></p></th>
+	      <th rowspan="2"><p><span class="thsmall">Community Name <a target="_blank" href="@forms_link@community-query.html">search</a></span></p></th>
 	      <!-- TODO:
 	      <th rowspan="2"><p><span class="thsmall">Fit</span></p></th>
 	      <th rowspan="2"><p><span class="thsmall">Confidence</span></p></th>
