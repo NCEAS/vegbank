@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2003-01-08 02:47:16 $'
- 	*     '$Revision: 1.18 $'
+ 	*     '$Date: 2003-01-08 17:24:25 $'
+ 	*     '$Revision: 1.19 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -34,7 +34,11 @@
 		<property name="dbaccess" value="./lib/database_access.jar" />
 		<property name="xmlresource" value="./lib/xmlresource.jar" />
 		<property name="plotvalidation" value="../../lib/plotvalidator.jar" />
-
+    <!-- THESE ARE THE PLOTVALIDATION FILES TAHT ARE NEEDED  -->
+    <property name="constraintlist" value="../../xml/constraints.xml"/>
+    <property name="constraintmap" value="../../xml/constraint-map.xml"/>
+    <!-- A NATIVE XML DOC TO BE USED AT STARTUP OF THE RMI SERVER --> 
+    <property name="nativexmltestfile" value="../database_access/data/native-xml-test.xml"/>
 		
 		<filter token="release" value=" "/>
 		<filter token="authors" value="HARRIS"/>
@@ -46,13 +50,13 @@
 	<target name="prepare" depends="init">
 		<mkdir dir="${build}" />
 
-
 		<copy todir="${build}" filtering="no" >
 			<fileset dir="${lib}" >
-  	    			<include name="rmidatasource.properties"/>
-  	  		</fileset>
-  		</copy>
-	</target>	
+  	    <include name="rmidatasource.properties"/>
+  	  </fileset>
+  	</copy>
+
+  </target>	
 	
 	
 	
@@ -96,16 +100,26 @@
 	<!-- DIST  - this will put the package into the db access lib -->
 	<target name="dist" depends="jar" description=">> creates the rmi 'server'
   directory and tars it into the file ./lib/rmiserver.tar">
-		<copy todir="${rmiregistry}" filtering="no" >
+	  <copy todir="${rmiregistry}" filtering="no" >
 			<fileset dir="${build}" >
-  	    			<include name="DataSourceImpl_Skel.class"/>
-  	    			<include name="DataSourceImpl_Stub.class"/>
-  	    			<include name="DataSourceImpl.class"/>
-  	    			<include name="DataSourceServer.class"/>
-  	    			<include name="DataSourceServerInterface.class"/>
-  	  		</fileset>
-  		</copy>
-		
+  	    <include name="DataSourceImpl_Skel.class"/>
+  	    <include name="DataSourceImpl_Stub.class"/>
+  	    <include name="DataSourceImpl.class"/>
+  	    <include name="DataSourceServer.class"/>
+  	    <include name="DataSourceServerInterface.class"/>
+  	  </fileset>
+  	</copy>
+    
+	  <!-- copy the test native xml file so that the RMI server will start -->
+    <copy file="${nativexmltestfile}" tofile="${rmiregistry}/input.xml"/>
+    
+    <!-- copy the plot validation xml files  -->
+    <copy file="${constraintmap}" todir="${rmiregistry}"/>
+    <copy file="${constraintlist}" todir="${rmiregistry}"/>
+    
+    <!-- copy the plot validation -->
+    <copy file="${plotvalidation}" todir="${rmiregistry}/lib"/>
+  
 		<!-- get the jar files -->
 		<copy todir="${rmiregistry}/lib" filtering="no" >
        <fileset dir="${lib}" >
@@ -134,6 +148,7 @@
 	<target name="clean" depends="init" description=">> removes the build
   directory and the compiled archive(s)">
 		<delete dir="${build}" />
+		<delete dir="${server}" />
     <delete file="lib/rmiserver.tar" />
     <delete file="lib/rmidatasource.jar" />
 	</target>
@@ -142,7 +157,6 @@
 <!-- JAVA DOC -->
 <target name="jdoc" description=">> creates the javadoc documentation">                                                                                                                                
  <javadoc 
- 	
 	sourcefiles="src/DataSourceImpl.java,src/DataSourceClient.java,src/DataSourceServerInterface.java,src/Proxy.java,src/DataSourceServer.java"
 	sourcepath="src"				
 	destdir="doc/api"
@@ -151,11 +165,7 @@
 	private="true"
   use="true"
   windowtitle="VEGBANK RMI SERVER / CLIENT API">
-
-
 </javadoc>
-
-
 </target>      
 	
 	
