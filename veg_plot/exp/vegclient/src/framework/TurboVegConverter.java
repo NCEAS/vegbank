@@ -2,8 +2,8 @@
  * 
  *
  *		 '$Author: harris $'
- *     '$Date: 2001-10-10 18:12:43 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2001-10-11 17:54:14 $'
+ *     '$Revision: 1.2 $'
  *
  */
 package vegclient.framework;
@@ -134,10 +134,14 @@ public class TurboVegConverter
 
 			//fix one plot at a time
 			Node fixedPlot = null;
+			System.out.println("number of plots: "+ plotNames.size());
 			for (int i =0; i < plotNames.size() ; i++)
 			{
+				System.out.println("processing plot: " + plotNames.elementAt(i).toString() );
 				Node curPlot = getPlot( plotNames.elementAt(i).toString() );
-				//System.out.println(curPlot.toString() );
+				
+				//System.out.println( curPlot.toString() );
+				
 				fixedPlot = convertDate(curPlot);
 				
 				//this is mearly a test
@@ -242,14 +246,14 @@ public class TurboVegConverter
 	{
 		
 		NodeList nl = node.getChildNodes();
-		//System.out.println( "nodelListLength: "+ nl.getLength() );
+		System.out.println( "nodelListLength: "+ nl.getLength() );
 		
 		for (int i =0; i < nl.getLength(); i++)
 		{
 		//	System.out.println( "node Names: "+ nl.item(i).getNodeName());
 			Node checker = nl.item(i);
 		//	System.out.println("val: "+ checker.getNodeValue());
-			if ( checker.getNodeName().equals("date") &&  checker.getNodeName() != null)
+			if ( checker.getNodeName().equals("date") &&  checker.getNodeValue() != null)
 			{
 				System.out.println("raw val: "+ checker.getFirstChild().getNodeValue().trim() );
 				if ((checker.hasChildNodes()) ) 
@@ -273,7 +277,8 @@ public class TurboVegConverter
 						{
 							year = badDate.substring(0, 4);
 							month = badDate.substring(4, 6);
-							month = adjustMonth( month );
+							//this is hypersonicsql - specific code
+							month = adjustMonthHsql( month );
 							//this is the ideal situation for dates
 							if ( badDate.length() == 8)
 							{
@@ -305,7 +310,7 @@ public class TurboVegConverter
 				}
 			}		
 		}		
-		return( node) ;
+		return(node) ;
 	}
 	
 	
@@ -334,6 +339,27 @@ public class TurboVegConverter
 		 
 	 }
 	
+		/**
+	 * method to adjust the month -- this method is specifically for the 
+	 * 'hypersonic' sql database
+	 */
+	 private String adjustMonthHsql(String m)
+	 {
+		 String month = "01";
+		 if (m.trim().equals("02") ) month="02";
+		 if (m.trim().equals("03") ) month="03";
+		 if (m.trim().equals("04") ) month="04";
+		 if (m.trim().equals("05") ) month="05";
+		 if (m.trim().equals("06") ) month="06";
+		 if (m.trim().equals("07") ) month="07";
+		 if (m.trim().equals("08") ) month="08";
+		 if (m.trim().equals("09") ) month="09";
+		 if (m.trim().equals("10") ) month="10";
+		 if (m.trim().equals("11") ) month="11";
+		 if (m.trim().equals("12") ) month="12";
+		 return(month);
+		 
+	 }
 	
 		
 	/**
@@ -423,9 +449,12 @@ public class TurboVegConverter
 		Vector plotNames = getPlotNames();
 		try
 		{
+			System.out.println("getPlot.plotnames number: " + plotNames.size());
 			for (int i =0; i < plotNames.size(); i++)
 			{
-				if ( plotNames.elementAt(i).toString().trim().equals(releve_nr) )
+				String currentPlot = plotNames.elementAt(i).toString().trim();
+				//System.out.println("currentPlot: " + currentPlot +" > "+ releve_nr);
+				if ( currentPlot.equals(releve_nr) )
 				{
 					//assign the index
 					index = i;
