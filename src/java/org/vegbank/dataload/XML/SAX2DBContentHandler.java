@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-05 22:24:57 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-04-19 14:53:06 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ package org.vegbank.dataload.XML;
 
 import java.sql.SQLException;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 
 import org.vegbank.common.utility.LogUtility;
@@ -37,16 +38,18 @@ import org.xml.sax.SAXException;
 
 
 public class SAX2DBContentHandler implements ContentHandler
-	{
+{
 		
 		public static final String TABLENAME = "TableName";
 		private LoadingErrors errors = null;
 		private boolean load = true;
+		private List accessionCodes = null;
 		
-		public SAX2DBContentHandler(LoadingErrors errors, boolean load)
+		public SAX2DBContentHandler(LoadingErrors errors, List accessionCodes, boolean load)
 		{
 			this.errors = errors;
 			this.load = load;
+			this.accessionCodes = accessionCodes;
 			tables.add(tmpStore);
 		}
 		
@@ -55,10 +58,10 @@ public class SAX2DBContentHandler implements ContentHandler
 		 */
 		public void endDocument() throws SAXException
 		{
-			LoadTreeToDatabase ltdb = new LoadTreeToDatabase(errors, load);
+			LoadTreeToDatabase ltdb = new LoadTreeToDatabase(errors, accessionCodes, load);
 			try
 			{
-				ltdb.insertVegbankPackage( (Hashtable) ( (Vector) tmpStore.get("VegBankPackage")).firstElement());
+				 ltdb.insertVegbankPackage( (Hashtable) ( (Vector) tmpStore.get("VegBankPackage")).firstElement());
 			}
 			catch (SQLException e)
 			{
@@ -202,7 +205,7 @@ public class SAX2DBContentHandler implements ContentHandler
 				throws SAXException
 		{
 			// Add the value to this field
-			this.addValue(currentValue);
+			this.addValue(currentValue.trim());
 			// Reset CurrentValue
 			currentValue = "";
 			
@@ -362,8 +365,8 @@ public class SAX2DBContentHandler implements ContentHandler
 		public void characters(char[] cbuf, int start, int len)
 			throws SAXException
 		{
-			String value = new String(cbuf, start,len).trim();
-			if ( fieldName != null || ! value.equals("") )
+			String value = new String(cbuf, start,len);
+			if ( fieldName != null )
 			{
 				currentValue = currentValue + value;
 				//LogUtility.log(fieldName + ": " + value);
@@ -434,5 +437,4 @@ public class SAX2DBContentHandler implements ContentHandler
 			// Do Nothing
 
 		}
-
 	}

@@ -1,27 +1,26 @@
 /*
- *	'$RCSfile: VBModelBeanToDB.java,v $'
- *	Authors: @author@
- *	Release: @release@
- *
- *	'$Author: anderson $'
- *	'$Date: 2004-02-07 06:44:13 $'
- *	'$Revision: 1.2 $'
+ * '$RCSfile: VBModelBeanToDB.java,v $' 
+ * Authors: @author@ Release: @release@
  * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * '$Author: farrell $' 
+ * '$Date: 2004-04-19 14:53:06 $' 
+ * '$Revision: 1.3 $'
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
  */
- 
+
 package org.vegbank.common.utility;
 
 import java.lang.reflect.Method;
@@ -37,246 +36,176 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.vegbank.common.Constants;
+import org.vegbank.common.model.Stratum;
+import org.vegbank.common.model.Stratumtype;
 import org.vegbank.common.model.VBModelBean;
+import org.vegbank.dataload.XML.InputPKTracker;
+
 
 /**
- * <p>Writes a <code>VBModelBean<code> to the database.</p>
+ * <p>
+ * Writes a <code>VBModelBean<code> to the database.
+ * </p>
  * 
- * <p>Currently only handles many to one children not one to one's, believe it
- * or not ;) . This will be fixed but currently clients of this need to 
- * consider this.</p>
- * 
- * <todo>Handle one to one children also<todo>
+ * <p>
+ * This class is handed a root VBModelBean to insert into the database. It examines
+ * the bean for child beans and inserts these also.<br> 
+ * Two checks are enforced to prevent the adding duplicate elements to the database.
+ * <ul>
+ * 	<li>
+ * 		<b>AccessionCode</b> if set on a bean is checked for existence in the database.
+ * 		If found that PK is used.
+ * 	</li>
+ *  <li>
+ * 		The bean PK is checked and if a bean with the same PK has already been added in 
+ * 		the <b>same</b> transaction, the database assigned PK for this bean is used.
+ *    <i>
+ * 			There is a difference between the bean PK, XML PK and database PK, these are poorly 
+ * 			right now. Think of bean PK and XML PK as local keys for the beanTree or the XML.
+ * 		</i>
+ *  </li>
+ * </ul>
+ * </p>
  * 
  * @author farrell
  */
 
 public class VBModelBeanToDB
 {
-	private boolean existsInDatabase = false;
-	private DBConnection conn;	
-	//protected AbstractList fieldNames = new Vector();
-	//private AbstractList fieldValues = new Vector();
-	//private Hashtable attributeNameValues = new Hashtable();
-	//private long primaryKey;
-	//private Hashtable foreignKeyHash = new Hashtable();
-	
-	//private VBModelBean bean = null;
-	//private Class theCurrentClass = null;	
-	//private Method[] currentMethods = null;
-	
+
+	/**
+	 * Handle for logging
+	 */
+	private static Log log = LogFactory.getLog(VBModelBeanToDB.class);
+
+	private DBConnection conn;
+
+	private List accessionCodesAdded = new Vector();
+
 	private Vector beans = new Vector();
-	//private Vector classes = new Vector();
-	private Vector methodsList =  new Vector();
-	private Vector classNameList =  new Vector();
-			
+
+	private Vector classNameList = new Vector();
+
+	private HashMap tableKeys = new HashMap();
+
+	private HashMap allTableKeys = new HashMap();
+	
+	private InputPKTracker inputUniqueIdTracker = new InputPKTracker();
+
 	public VBModelBeanToDB() throws Exception
 	{
 		//super(object);
-		System.out.println("VBModelBeanToDB > New Instance");
+		log.debug("New Instance");
 		this.initDB();
-		
-/*
-		if (conn == null )
-		{
-			this.initDB();
-		}
-		else
-		{
-			this.conn = conn;
-		}
-		
-		long pk = this.isObjectInDatabase(null);
-		if ( pk == 0 )
-		{
-			// Does not exist in database ( reseve a pk )
-			this.generatePrimaryKey();
-			LogUtility.log("VBModelBeanToDB : ----------------------------------------------");
-			LogUtility.log("VBModelBeanToDB : Created NEW Object for " + className);
-			LogUtility.log("VBModelBeanToDB : PK is " + this.primaryKey);
-			LogUtility.log("VBModelBeanToDB : ----------------------------------------------");
-		}
-		else 
-		{
-			this.primaryKey = pk;
-			this.existsInDatabase = true;
-			LogUtility.log("VBModelBeanToDB : ----------------------------------------------");
-			LogUtility.log("VBModelBeanToDB : Object " + className + " exists in Database");
-			LogUtility.log("VBModelBeanToDB : PK is " + this.primaryKey);
-			LogUtility.log("VBModelBeanToDB : ----------------------------------------------");
-		}
-*/
 	}
-	
+
 	private void initDB() throws SQLException
 	{
-		conn= DBConnectionPool.getInstance().getDBConnection("Need connection for inserting object");
+		conn = DBConnectionPool.getInstance().getDBConnection(
+				"Need connection for inserting object");
 		conn.setAutoCommit(false);
 	}
-		
-	
-//	private void setForeignKey( String fieldName, long foreignKey)
-//	{	
-//		LogUtility.log("VBModelBeanToDB : Allocating a FK " + fieldName + " " + foreignKey);		
-//		foreignKeyHash.put( fieldName.toUpperCase() , new Long(foreignKey).toString()  );
-//	}
-	  
-//	public void setForeignKeys( Hashtable foreignKeys)
-//	{	
-//		Enumeration e = foreignKeys.keys();
-//		while ( e.hasMoreElements() )
-//		{
-//			String key = (String) e.nextElement();
-//			foreignKeyHash.put( key.toUpperCase() ,  foreignKeys.get(key) ); 
-//		}
-//	}
-	
-	public String getPrimaryKeyFieldName() 
-	{
-			return classNameList.lastElement() + "_id";
-	}
-        
-//	private void prepareObjectForWriting() throws IllegalArgumentException, ClassNotFoundException, IllegalAccessException, InvocationTargetException
-//	{
-//		// Get current declared methods array
-//		Method[] methods = ( Method[] ) methodsList.lastElement();
-//		for (int i=0; i < methods.length ; i++)
-//		{
-//			Method method = methods[i];
-//			String methodName = method.getName();
-//			// empty parameter list for a get method
-//			Object[] parameters = {};
-//			
-//			// Search this object for get methods 
-//			if ( VBObjectUtils.isGetMethod(method) )
-//			{
-//				if ( VBObjectUtils.isGetMethod(method, "java.lang.String") )
-//				{					
-//					// get the name and value of the field 
-//					String fieldName = VBObjectUtils.getFieldName(methodName, null, null);
-//					String fieldValue = (String) method.invoke(beans.lastElement(), parameters);
-//					
-//					storeNameAndValue(fieldName, fieldValue);
-//				}
-//				else if ( VBObjectUtils.isGetMethod(method, "long") )
-//				{
-//					// I have a referenced Object  -- I want to get its foriegn key
-//					String fieldName = VBObjectUtils.getFieldName(methodName, null , null);
-//					String fieldValue = (String) foreignKeyHash.get(fieldName.toUpperCase() );
-//					if (Utility.isStringNullOrEmpty(fieldValue))
-//					{			
-//						//System.out.println("VBModelBeanToDB > No stored FK for " + fieldName + " " + foreignKeyHash);	
-//						// Check the Object
-//						Long fieldValueLong = (Long) method.invoke(beans.lastElement(), parameters);
-//						fieldValue = fieldValueLong.toString();	
-//					}
-//					
-//					// -1 and 0 are not real FK ignore
-//					if (! fieldValue.equals("-1") && !  fieldValue.equals("0") )
-//					{				
-//						storeNameAndValue(fieldName, fieldValue);
-//					}
-//					//System.out.println("VBModelBeanToDB > " + fieldName + " v. " + fieldValue);
-//				}
-//			}
-//			else 
-//			{
-//				//System.out.println("I am a " + method.getReturnType().getName());
-//				// Not of interest
-//			}
-//		}
-//	}
 
-//	private PreparedStatement getPopulatedPreparedStatement(String statement)
-//		throws SQLException
-//	{
-//		PreparedStatement pstmt = conn.prepareStatement(statement);
-//		
-//		VBModelBean currentBean = (VBModelBean) beans.lastElement();
-//		LinkedHashMap nameValues = currentBean.toOrderedHashMap();
-//		Collection values = nameValues.values();
-//		Iterator it = values.iterator();
-//		
-//		
-//		//Iterator it = fieldValues.iterator();
-//		//System.out.println("----> " + fieldValues.size() + " " +  fieldNames.size());
-//		for (int i=1; it.hasNext() ; i++)
-//		{
-//			// JDBC starts counting from 1 not 0
-//			Object value = it.next();
-//			LogUtility.log("VBModelBeanToDB : setting '" + value +  "' for: " + );
-//			if ( Utility.isStringNullOrEmpty(value) )
-//			{
-//				pstmt.setNull(modInt, java.sql.Types.VARCHAR );
-//			}
-//			else
-//			{
-//				pstmt.setString(modInt,  Utility.encodeForDB(value) );
-//			}
-//		}	
-//		return pstmt;
-//	}
+	private String getPrimaryKeyFieldName()
+	{
+		return classNameList.lastElement() + "_id";
+	}
 
 	/**
 	 * Inserts a <code>VBModelBean</code> into the database.
 	 * 
-	 * 
-	 * @param bean the bean to write to the db.
+	 * @param bean
+	 *          the bean to write to the db.
 	 * @return the Primary Key allocated
-	 * @throws Exception any errors encounter get thrown up.
+	 * @throws Exception
+	 *           any errors encounter get thrown up.
 	 */
 	public long insert(VBModelBean bean) throws Exception
 	{
+		long PK = 0;
+		
 		// Add to variable lists ( as a convience )
 		beans.add(bean);
-		methodsList.add(bean.getClass().getDeclaredMethods());
-		// Get unqualified name
-		classNameList.add(
-			VBObjectUtils.getUnQualifiedName(bean.getClass().getName()));
 
-		long PK = this.isObjectInDatabase(bean);
+		String entityName = getEntityName(bean);
+		classNameList.add(entityName);
+
+		//String entityName = VBObjectUtils.getUnQualifiedName( bean.getClass().getName() );
+		//String xmlPK = this.getXMLPK(bean, entityName);
+		long inputUniqueId = this.getInputUniqueId(bean);
+		String inputUniqueIdAsString  = new Long(inputUniqueId).toString();
+
+		// Handle dups prevention
+
+		// Check if this has already been added to db
+		long assignedPK = inputUniqueIdTracker.getAssignedPK(entityName, inputUniqueIdAsString);
+		if (assignedPK != 0) 
+		{
+			log.info(
+					"Already entered record for  inputUniqueId " + inputUniqueId + " into " + entityName + " using PK of " + assignedPK);
+			PK = assignedPK;
+		}
+		else
+		{
+			PK = this.isObjectInDatabase(bean);
+		}
+
+		
 		if (PK == 0)
 		{
 			PK = this.reservePrimaryKey();
+			// Keep track of pks and table names do I can add AccessionCodes later
+			this.storeTableNameAndPK((String) classNameList.lastElement(), PK);
+			allTableKeys.put(classNameList.lastElement(), new Long(PK));
+			
+			// Need to add this to the datastruture that prevents
+			// the adding duplicate fields
+			inputUniqueIdTracker.setAssignedPK(entityName, inputUniqueIdAsString, PK);
+			log.debug("No record added for xmlPK :" + inputUniqueId
+							+ " for table " + entityName + " adding PK now: " + PK);
 
 			// Need add the PK to the object
 			bean.putPrimaryKey(PK);
 
 			//TODO: Need to recurse into childObjects for the PKs
-			Hashtable getBeanMethods = this.getBeanGetFKSetPairs();
+			Hashtable getBeanMethods = this.getBeanGetFKSetPairs(bean);
 			Enumeration pairs = getBeanMethods.elements();
 			while (pairs.hasMoreElements())
 			{
-				Vector getBeanSetFKPair = (Vector) pairs.nextElement();
-				Object tempGetBeanMethod = getBeanSetFKPair.get(0);
-				Object tempSetFKMethod = getBeanSetFKPair.get(1);
+				MemberGetterSetters getBeanSetFKPair = (MemberGetterSetters) pairs
+						.nextElement();
+				Method getBeanMethod = getBeanSetFKPair.getGetterMethod();
+				Method setFKMethod = getBeanSetFKPair.getSetterMethod();
+
+				log.debug("Processing: " + getBeanMethod + " and " + setFKMethod);
+
 				// Handle nulls
-				if (tempGetBeanMethod != null && tempSetFKMethod != null)
+				if (getBeanMethod != null && setFKMethod != null)
 				{
-					Method getBeanMethod = (Method) tempGetBeanMethod;
-					VBModelBean newBean =
-						(VBModelBean) getBeanMethod.invoke(bean, null);
+					VBModelBean newBean = (VBModelBean) getBeanMethod.invoke(bean, null);
 
 					// Handle null
 					if (newBean != null)
 					{
 						// TODO: write into db and get PK -- RECURSIVE
 						//VBModelBeanToDB bean2db = new VBModelBeanToDB(bean, conn);
+
+						// Need to add FKs to the bean in some cases
+						this.handleSpecialCases(newBean);
+
 						long FKtoUse = this.insert(newBean);
 
 						// TODO: Fill in the FK on the current bean
-						Method setFKMethod = (Method) tempSetFKMethod;
-						LogUtility.log(
-							">>> Setting " + setFKMethod + " to " + FKtoUse);
-						setFKMethod.invoke(
-							bean,
-							new Object[] { new Long(FKtoUse)});
+						log.debug(">>> Setting " + setFKMethod + " to " + FKtoUse);
+						setFKMethod.invoke(bean, new Object[] {new Long(FKtoUse)});
 					}
 				}
 			}
 
-
-			// Get the  Statement and run
+			// Get the Statement and run
 			String SQL = this.getStatement(bean);
 			Statement stmt = conn.createStatement();
 			stmt.execute(SQL);
@@ -284,7 +213,7 @@ public class VBModelBeanToDB
 			HashMap foreignKeys = new HashMap();
 
 			// TODO: Need to get the FK name?
-			// FIXME: Need a lookup here as the FKName is a function of 
+			// FIXME: Need a lookup here as the FKName is a function of
 			// FKtable name, tablename and ??? ... hack for now
 
 			String foreignKeyName = this.getPrimaryKeyFieldName();
@@ -292,38 +221,81 @@ public class VBModelBeanToDB
 
 			// Write Objects that depend on this PK to database
 			handleChildren(foreignKeys, bean);
-			
-		}
+
+		} 
 		else
 		{
-			LogUtility.log("Found an identical record in the Database");
+			allTableKeys.put(classNameList.lastElement(), new Long(PK));
+			log.info("Found an identical record in the Database");
 		}
 
 		// About to drop out of recursion CLEAN UP
 		beans.removeElement(bean);
-		methodsList.removeElement(methodsList.lastElement());
+		//methodsList.removeElement(methodsList.lastElement());
 		classNameList.removeElement(classNameList.lastElement());
 
-		LogUtility.log(
-			"VBModelBeanToDB: Have "
-				+ beans.size()
+		log.info("VBModelBeanToDB: Have " + beans.size()
 				+ " to work on before commiting.");
 
 		// Commit the transaction if no more work
 		if (beans.size() == 0)
 		{
 			conn.commit();
-			LogUtility.log("VBModelBeanToDB: Commited Transaction");
+			log.info("Commited Transaction");
+
+			// Need to add accessioncodes
+			log.debug("Adding AccessionCodes to loaded data");
+			accessionCodesAdded.addAll(this.addAllAccessionCodes());
+			conn.commit();
+			log.info("Commited AcessionCode updates: " + accessionCodesAdded);
+
+			// All finished with the database connection
+			DBConnectionPool.returnDBConnection(conn);
 		}
 
-		// if we get here 
+		// if we get here
 		return PK;
 	}
-	
+
 	/**
-	 * Much messiness lives here<br/>
+	 * @param bean
+	 * @return
+	 */
+	private String getEntityName(VBModelBean bean)
+	{
+		return VBObjectUtils.getUnQualifiedName(bean.getClass().getName());
+	}
+
+	/**
+	 * @param newBean
+	 */
+	private void handleSpecialCases(VBModelBean newBean)
+	{
+		// if this is a stratumtype bean it needs a stratummethod_id
+		if (newBean instanceof Stratumtype)
+		{
+			Stratumtype stratumType = (Stratumtype) newBean;
+			log.debug(">>>" + allTableKeys);
+			Long smPK = (Long) allTableKeys.get("Stratummethod");
+			stratumType.setStratummethod_id(smPK.longValue());
+		} else if (newBean instanceof Stratum)
+		{
+			Stratum stratum = (Stratum) newBean;
+			log.debug(">>>" + allTableKeys);
+			Long obPK = (Long) allTableKeys.get("Observation");
+			stratum.setObservation_id(obPK.longValue());
+		} else
+		{
+			// Do nothing
+		}
+
+	}
+
+	/**
+	 * Much messiness lives here <br/>
 	 * 
-	 * I am using reflection to get all the methods related to getting FK <code>VBModelBean<code> 
+	 * I am using reflection to get all the methods related to getting FK
+	 * <code>VBModelBean<code> 
 	 * and setting the FKs that the bean has.<br/>
 	 * 
 	 * Each get method that returns a VBModelBean has a corresponding setFK(long) method. 
@@ -333,50 +305,54 @@ public class VBModelBeanToDB
 	 * the first element is the get method and the second is the setFK method.
 	 * <br/>
 	 * 
-	 * @return
+	 * @return Hashtable that stores the get and set methods for the current bean
 	 */
-	private Hashtable getBeanGetFKSetPairs()
+	public Hashtable getBeanGetFKSetPairs(VBModelBean bean)
 	{
 		// The key is the attribute name, contains a Vector with the two methods
 		Hashtable beanGetFKSetHash = new Hashtable();
-		// TODO Searches current Bean for its getBean, setFK pairs
-		// Get current declared methods array
-		Method[] methods = ( Method[] ) methodsList.lastElement();
-		for (int i=0; i < methods.length ; i++)
+		String entityName = getEntityName(bean);
+
+		Method[] methods = bean.getClass().getDeclaredMethods();
+
+		for (int i = 0; i < methods.length; i++)
 		{
 			Method method = methods[i];
-			String methodName = method.getName();
-
-			// TODO: Make a method for this check
-			if ( VBObjectUtils.isGetMethod(method) && VBObjectUtils.existsInVegbankObjectModel( method.getReturnType().getName()) )
+			// Is this a relevant getMethod
+			if (VBObjectUtils.isGetMethod(method)
+					&& VBObjectUtils.existsInVegbankObjectModel(method.getReturnType()
+							.getName()))
 			{
-				// Of interest
-				// Get the attribute name
-				String key =  VBObjectUtils.getFieldName(method.getName(), null, null);
-				
-				Vector beanGetFKSet = (Vector) beanGetFKSetHash.get(key);
-				if ( beanGetFKSet == null )
+				String key = VBObjectUtils.getFieldName(method.getName(), null, null);
+
+				MemberGetterSetters beanGetFKSet = (MemberGetterSetters) beanGetFKSetHash
+						.get(key);
+				if (beanGetFKSet == null)
 				{
 					// Create an entry with this Key
-					beanGetFKSet = new Vector();
+					beanGetFKSet = new MemberGetterSetters(entityName);
 				}
-				// Add to this Vector 
-				beanGetFKSet.add(0, method);
+				// Add to this Vector
+				beanGetFKSet.setGetterMethod(method);
 				beanGetFKSetHash.put(key, beanGetFKSet);
-				
-				LogUtility.log("After adding a get for : " + key + " >>> " + beanGetFKSetHash);
-			}	
-			else if ( VBObjectUtils.isSetMethod(method) )
+
+				log.debug("After adding a get for : " + key + " >>> "
+						+ beanGetFKSetHash);
+			}
+			// Is this a set method
+			else if (VBObjectUtils.isSetMethod(method))
 			{
-				Class[] parameters  = method.getParameterTypes();
-				if ( parameters[0].toString().equalsIgnoreCase("long") )
+				Class[] parameters = method.getParameterTypes();
+				// has the right type?
+				if (parameters[0].toString().equalsIgnoreCase("long"))
 				{
 					// Has it the right name?
-					String fieldName = VBObjectUtils.getFieldName(method.getName(), null,  null);
-				
-					LogUtility.log(">>>> " +fieldName+ " vs. " +this.getPrimaryKeyFieldName() );
+					String fieldName = VBObjectUtils.getFieldName(method.getName(), null,
+							null);
+
+					log.debug(">>>> " + fieldName + " vs. " + entityName + "_ID");
 					// Make sure not the PK
-					if ( fieldName.equalsIgnoreCase( this.getPrimaryKeyFieldName() ) )
+					if (Utility.getPKNameFromTableName(entityName).equalsIgnoreCase(fieldName))
 					{
 						// Not interested
 					}
@@ -387,69 +363,63 @@ public class VBModelBeanToDB
 					//}
 					else
 					{
-					
+
 						// Save into Hash
 						// Strip off the trailing 'id' to get the key
 						String key = fieldName.replaceFirst("_id$", "");
-						Vector beanGetFKSet = (Vector) beanGetFKSetHash.get(key);
-						if ( beanGetFKSet == null )
+						MemberGetterSetters beanGetFKSet = (MemberGetterSetters) beanGetFKSetHash
+								.get(key);
+						if (beanGetFKSet == null)
 						{
 							// Create an entry with this Key
-							beanGetFKSet = new Vector();
+							beanGetFKSet = new MemberGetterSetters(entityName);
 						}
-						// Add to this Vector 
-						if ( beanGetFKSet.isEmpty() )
-						{
-							//	To avoid ArrayIndexOutOfBoundsException put placeholder
-							beanGetFKSet.add(0, null); 
-						}
-						beanGetFKSet.add(1, method);
+						beanGetFKSet.setSetterMethod(method);
 						beanGetFKSetHash.put(key, beanGetFKSet);
-						LogUtility.log("After adding a set for : " + key + " >>> " + beanGetFKSetHash);
+						log.debug("After adding a set for : " + key + " >>> "
+								+ beanGetFKSetHash);
 					}
-				}					
-			}
-			else
+				}
+			} else
 			{
 				// Not of interest
 			}
+
 		}
-		
-		Utility.prettyPrintHash(beanGetFKSetHash);
+
 		return beanGetFKSetHash;
 	}
 
 	/**
-	 * 
+	 *  
 	 */
-	private void handleChildren(HashMap foreignKeys, VBModelBean currentBean) throws Exception
+	private void handleChildren(HashMap foreignKeys, VBModelBean currentBean)
+			throws Exception
 	{
 		// Get current declared methods array
-		Method[] methods = ( Method[] ) methodsList.lastElement();
-		for (int i=0; i < methods.length ; i++)
+		Vector methodsList = new Vector();
+		methodsList.add(currentBean.getClass().getDeclaredMethods());
+		Method[] methods = (Method[]) methodsList.lastElement();
+		for (int i = 0; i < methods.length; i++)
 		{
 			Method method = methods[i];
-			String methodName = method.getName();
 
-			if ( VBObjectUtils.isGetMethod(method, "java.util.List") )
+			if (VBObjectUtils.isGetMethod(method, "java.util.List"))
 			{
-				//LogUtility.log("VBModelBeanToDB : Handling a list");
+				log.debug("Handling a list");
 				// Need to Loop throught all elements and insert them into the DB
-				List objList = (List) method.invoke( currentBean, null);
+				List objList = (List) method.invoke(currentBean, null);
 				Iterator it = objList.iterator();
-				while ( it.hasNext() )
+				while (it.hasNext())
 				{
 					VBModelBean bean = (VBModelBean) it.next();
-					
+
 					setForeignKeys(foreignKeys, bean);
-					// Insert the Object into the Database
-					//o2d.setForeignKey( this.getPrimaryKeyFieldName() , this.primaryKey );
 					this.insert(bean);
 				}
-			}
-			else
+			} else
 			{
-				// I don't care	
+				// I don't care
 			}
 		}
 	}
@@ -461,7 +431,7 @@ public class VBModelBeanToDB
 	 */
 	private void setForeignKeys(HashMap foreignKeys, VBModelBean bean)
 	{
-		if ( foreignKeys != null )
+		if (foreignKeys != null)
 		{
 			Set keys = foreignKeys.keySet();
 			Iterator iter = keys.iterator();
@@ -469,15 +439,15 @@ public class VBModelBeanToDB
 			{
 				Object key = iter.next();
 				Object foreignKeyValue = foreignKeys.get(key);
-				
-				if ( key != null && foreignKeyValue != null )
+
+				if (key != null && foreignKeyValue != null)
 				{
 					// Do casts
 					String keyName = (String) key;
 					Long keyValue = (Long) foreignKeyValue;
-				
-					LogUtility.log("Set FK name " + keyName + " to " +  foreignKeyValue);
-					bean.putForeignKey(keyName,keyValue.longValue() );
+
+					log.debug("Set FK name " + keyName + " to " + foreignKeyValue);
+					bean.putForeignKey(keyName, keyValue.longValue());
 				}
 			}
 		}
@@ -486,15 +456,13 @@ public class VBModelBeanToDB
 	/**
 	 * @return String - sql for creating prepared statement
 	 */
-	public String getStatement( VBModelBean currentBean ) throws Exception
+	private String getStatement(VBModelBean currentBean) throws Exception
 	{
 		StringBuffer sb = new StringBuffer();
 		StringBuffer parameters = new StringBuffer();
-		sb.append(
-			"insert into \""
-				+ ((String) classNameList.lastElement()).toLowerCase()
-				+ "\" ( ");
-		
+		sb.append("insert into \""
+				+ ((String) classNameList.lastElement()).toLowerCase() + "\" ( ");
+
 		// Get the current bean
 		//VBModelBean currentBean = (VBModelBean) beans.lastElement();
 		LinkedHashMap nameValues = currentBean.toOrderedHashMap();
@@ -506,45 +474,40 @@ public class VBModelBeanToDB
 		{
 			Object key = it.next();
 			Object value = nameValues.get(key);
-			
-			if ( value instanceof String )
+
+			if (value instanceof String)
 			{
 				// Cast to String for now
 				String stringValue = value.toString();
-				if ( Utility.isStringNullOrEmpty(stringValue) )
+				if (Utility.isStringNullOrEmpty(stringValue))
 				{
 					// Do nothing
-				}
-				else
+				} else
 				{
 					firstPass = this.handleCommas(sb, parameters, firstPass);
-					
+
 					sb.append(key);
-					parameters.append("'" +  Utility.encodeForDB(stringValue) + "'");
+					parameters.append("'" + Utility.encodeForDB(stringValue) + "'");
 				}
-			}
-			else if ( value instanceof Long)
+			} else if (value instanceof Long)
 			{
 				long longValue = ((Long) value).longValue();
-				if ( longValue == 0 || longValue == -1 )
+				if (longValue == 0 || longValue == -1)
 				{
 					// Do nothing
 					//pstmt.setNull( jdbcCounter, java.sql.Types.INTEGER );
-				}
-				else 
+				} else
 				{
 					firstPass = this.handleCommas(sb, parameters, firstPass);
 					sb.append(key);
-					parameters.append(value );
+					parameters.append(value);
 				}
 				//LogUtility.log(" found a Long " );
-			}
-			else if ( value instanceof VBModelBean )
+			} else if (value instanceof VBModelBean)
 			{
 				// Nothing for now
 				//LogUtility.log(" found a ???? " );
-			}
-			else
+			} else
 			{
 				// ????
 				//LogUtility.log(" found a ???? " );
@@ -552,42 +515,11 @@ public class VBModelBeanToDB
 		}
 
 		sb.append(" ) VALUES ( " + parameters.toString() + " )");
-			
-		LogUtility.log("VBModelBeanToDB: SQL >" + sb.toString());
+
+		log.debug("VBModelBeanToDB: SQL >" + sb.toString());
 		return sb.toString();
 	}
-	
-	/**
-	 * @return String - sql for creating prepared update statement
-	 */
-//	private String getPreparedUpdateStatementString() throws Exception
-//	{
-//		this.prepareObjectForWriting();
-//		
-//		//PreparedStatement pstmt = conn.prepareStatement();
-//		StringBuffer sb = new StringBuffer();
-//
-//		sb.append("update " + classNameList.lastElement() + " set ");
-//		
-//		if (fieldNames != null)
-//		{
-//			Iterator iter = this.fieldNames.iterator();
-//			while ( iter.hasNext() )
-//			{
-//				sb.append( iter.next() +"=?");
-//				
-//				// If there are more elements use a comma
-//				if (iter.hasNext())
-//				{
-//					sb.append(", ");
-//				}
-//			}
-//		}
-//		sb.append(" where " + classNameList.lastElement() + "_id = " + primaryKey);
-//		
-//		return sb.toString();
-//	}
-	
+
 	/**
 	 * Add a comma if not the first pass
 	 * 
@@ -597,14 +529,14 @@ public class VBModelBeanToDB
 	 * 
 	 * @return boolean -- is this the first pass ( always false )
 	 */
-	private boolean handleCommas(StringBuffer sb, StringBuffer parameters, boolean firstPass)
+	private boolean handleCommas(StringBuffer sb, StringBuffer parameters,
+			boolean firstPass)
 	{
 		//LogUtility.log("About to try and add comma if not " + firstPass);
-		if ( firstPass )
+		if (firstPass)
 		{
 			firstPass = false;
-		}
-		else
+		} else
 		{
 			sb.append(",");
 			parameters.append(",");
@@ -613,221 +545,356 @@ public class VBModelBeanToDB
 	}
 
 	/**
-	 * Searches for an identical record in the db.
+	 * <p>Searches for an identical record in the db.</p>
 	 * 
-	 * @param uniqueFields -- 
+	 * <p>
+	 * Searchs for identity using:
+	 * 	<ul>
+	 *  	<li>an exact match on AccessionCode in the database</li>
+	 * 		<li>has the same unique identifier been handled already in this transaction<li>
+	 * 	<ul>
+	 * </p> 
+	 * 
+	 * @param currentBean Bean to check 
 	 * @return long - primaryKey ( returns 0 if no record )
 	 */
-	public long isObjectInDatabase( VBModelBean currentBean ) throws Exception
+	public long isObjectInDatabase(VBModelBean currentBean) throws Exception
 	{
 		long primaryKey = 0;
-		Statement stmt = conn.createStatement();
-		Hashtable nameValue = new Hashtable();
-		
-		StringBuffer sql = new StringBuffer();
-		
-		// Get the current bean
-		//VBModelBean currentBean = (VBModelBean) beans.lastElement();
+
+		// Need to find the accessionCode in the bean
 		LinkedHashMap nameValues = currentBean.toOrderedHashMap();
+		log.debug("Bean values: " + nameValues);
 		Set keys = nameValues.keySet();
 		Iterator it = keys.iterator();
 
-		boolean firstPass = true;
-		boolean foundACField = false;
 		while (it.hasNext())
 		{
 			// looking for an accession code
-			// that's the only field we use to check for a duplicate
-			String key = (String)it.next();
-			if (key.equalsIgnoreCase("accessioncode")) {
+			// that's the only field we use to check the db for a duplicate
+			String key = (String) it.next();
+			if (key.equalsIgnoreCase(Constants.ACCESSIONCODENAME))
+			{
 				// found an accession code field in this table (entity/object)
-				foundACField = true;
+				//foundACField = true;
 
-				String value = (String)nameValues.get(key);
+				String value = (String) nameValues.get(key);
 
-				if (value == null || !value.equals("")) {
+				if (Utility.isStringNullOrEmpty(value))
+				{
 					// there is no AC to check
-					LogUtility.log("VBMBTDB.isObjectInDatabase(): no AC value");
+					log.debug("isObjectInDatabase(): no AC value");
 					return 0;
 				}
 
-				LogUtility.log("VBMBTDB.isObjectInDatabase(): got AC: " + value);
-				String table = ((String)classNameList.lastElement()).toLowerCase();
-				sql.append("SELECT ")
-					.append(table)
-					.append("_id FROM ")
-					.append(table)
-					.append(" WHERE ")
-					.append(key)
-					.append(" = '")
-					.append(Utility.encodeForDB(value))
-					.append("'");
-
-				// b-b-break!!
-				break;
+				primaryKey = this.getExtantPK(currentBean);
 			}
-			
-			/*
-			if ( value instanceof String )
-			{
-				// Cast to String for now
-				String stringValue = value.toString();
-				if ( Utility.isStringNullOrEmpty(stringValue) )
-				{
-					if (firstPass) 
-						firstPass = false;
-					else
-						sql.append(" AND ");
-						
-					sql.append(key + " IS NULL");
-				}
-				else
-				{
-					if (firstPass) 
-						firstPass = false;
-					else
-						sql.append(" AND ");
-						
-					sql.append(key + " = '" + Utility.encodeForDB(stringValue) + "'");
-				}
-			}
-			else if ( value instanceof Long)
-			{
-				// FIXME: Ignoring longs for now, need to filter out PK
-//				long longValue = ((Long) value).longValue();
-//				if ( longValue == 0 || longValue == -1 )
-//				{
-//					if (firstPass) 
-//						firstPass = false;
-//					else
-//						sql.append(" AND ");
-//						
-//					sql.append(key + " = NULL");
-//				}
-//				else 
-//				{
-//					if (firstPass)
-//						firstPass = false;
-//					else
-//						sql.append(" AND ");
-//
-//					sql.append(key + " = " + longValue);
-//				}
-				LogUtility.log(" found a Long " );
-			}
-			else if ( value instanceof VBModelBean )
-			{
-				// Nothing for now
-				//LogUtility.log(" found a ???? " );
-			}
-			else
-			{
-				// ????
-				LogUtility.log(" found a ???? " );
-			}
-			*/
-		}
-
-		if (!foundACField) {
-			// there is no AC field in this table
-			LogUtility.log("VBMBTDB.isObjectInDatabase(): no AC field");
-			return 0;
-		}
-		///////////////////////////////////////////
-		
-//		// Construct Query using Reflection of Strings and ints only
-//		// Get current declared methods array
-//		Method[] methods = ( Method[] ) methodsList.lastElement();
-//		for (int i=0; i < methods.length ; i++)
-//		{
-//			Method method = methods[i];
-//			String methodName = method.getName();
-//			// empty parameter list for a get method
-//			Object[] parameters = {};
-//				
-//			// Search this object for get methods 
-//			if ( VBObjectUtils.isGetMethod(method) )
-//			{
-//				String fieldName = VBObjectUtils.getFieldName(methodName, null, null);
-//				// If null or matches a field that is unique
-//				if (uniqueFields == null
-//					|| uniqueFields.contains(VBObjectUtils.getFieldName(methodName, null, null)) )
-//				{
-//				
-//					if ( VBObjectUtils.isGetMethod(method, "java.lang.String") )
-//					{					
-//						// get the name and value of the field 
-//						String fieldValue = (String) method.invoke(beans.lastElement(), parameters);
-//						
-//						if ( ! Utility.isStringNullOrEmpty(fieldName) && ! Utility.isStringNullOrEmpty(fieldValue))
-//						{
-//							nameValue.put(fieldName, fieldValue);
-//						}
-//					}
-//					else if ( VBObjectUtils.isGetMethod(method, "long") )
-//					{
-//						// I have a referenced Object  -- I want to get its foriegn key
-//						String fieldValue = (String) foreignKeyHash.get(fieldName.toUpperCase() );
-//						if (Utility.isStringNullOrEmpty(fieldValue))
-//						{			
-//							//System.out.println("VBModelBeanToDB > No stored FK for " + fieldName + " " + foreignKeyHash);	
-//							// Check the Object
-//							Long fieldValueLong = (Long) method.invoke(beans.lastElement(), parameters);
-//							fieldValue = fieldValueLong.toString();	
-//						}
-//						
-//						// -1 and 0 are not real FK ignore
-//						if (! fieldValue.equals("-1") && !  fieldValue.equals("0") )
-//						{				
-//							nameValue.put(fieldName, fieldValue);
-//						}
-//					}
-//				}
-//			}
-//			else 
-//			{
-//				//System.out.println("I am a " + method.getReturnType().getName());
-//				// Not of interest
-//			}
-//		}		
-//		
-//		StringBuffer sql = new StringBuffer();
-//		sql.append("select " + classNameList.lastElement() + "_id from " + ( (String) classNameList.lastElement()).toLowerCase() +" where ");
-//		Enumeration columnNames = nameValue.keys();
-//		while (columnNames.hasMoreElements() )
-//		{
-//			String columnName = (String) columnNames.nextElement();
-//			String columnValue = (String) nameValue.get(columnName);
-//			sql.append(columnName + " = '" + columnValue +"'");
-//			
-//			if (columnNames.hasMoreElements() )
-//			{
-//				sql.append(" and ");
-//			}
-//		}
-		
-		System.out.println(" --->" + sql);
-		
-		ResultSet rs = stmt.executeQuery( sql.toString() );
-		
-		if (rs.next() )
-		{
-			primaryKey  = rs.getLong(1);
 		}
 		return primaryKey;
 	}
-	
+
 	/**
-	 * Generate  primarykey  this object will use when stored with in the database
+	 * Generate primarykey this object will use when stored with in the database
 	 * The value is available as the class variable primaryKey
 	 */
-	public long reservePrimaryKey() throws SQLException 
+	private long reservePrimaryKey() throws SQLException
 	{
-		LogUtility.log("VBModelBeanToDB : Generating key for class: " + classNameList.lastElement());
-		long PK  = 
-			Utility.dbAdapter.getNextUniqueID(conn, (String) classNameList.lastElement(), classNameList.lastElement() + "_id");
+		log.debug("VBModelBeanToDB : Generating key for class: "
+				+ classNameList.lastElement());
+		String tableName = (String) classNameList.lastElement();
+		String primaryKeyName = Utility.getPKNameFromTableName(tableName);
+		long PK = Utility.dbAdapter
+				.getNextUniqueID(conn, tableName, primaryKeyName);
+		return PK;
+	}
+
+	/**
+	 * Store the tableName and the Pk so an accessionCode can be generated later
+	 * 
+	 * @param tableName
+	 * @param PK
+	 */
+	private void storeTableNameAndPK(String tableName, long PK)
+	{
+		Vector keys = (Vector) tableKeys.get(tableName);
+		if (keys == null)
+		{
+			keys = new Vector();
+			tableKeys.put(tableName, keys);
+		}
+		keys.add(new Long(PK));
+	}
+
+	/**
+	 * Add accessionCodes to all the rows added by this loading.
+	 */
+	private List addAllAccessionCodes() throws SQLException
+	{
+		List accessionCodes = null;
+		// Initialize the AccessionGen
+		AccessionGen ag = new AccessionGen(this.conn.getConnections(), Utility
+				.getAccessionPrefix());
+
+		if (Utility.isLoadAccessionCodeOn())
+		{
+			accessionCodes = ag.updateSpecificRows(tableKeys);
+		}
+		return accessionCodes;
+	}
+
+	/**
+	 * @return AccessionCodes of the root entities loaded into the database
+	 */
+	public List getRootAccessionCodesLoaded()
+	{
+		List topLevelAccessionCodes = new Vector();
+		// Need to filter out non top level elements
+		Iterator iter = accessionCodesAdded.iterator();
+		while (iter.hasNext())
+		{
+			String ac = (String) iter.next();
+			HashMap parsedAC = Utility.parseAccessionCode(ac);
+			String entityCode = (String) parsedAC.get("ENTITYCODE");
+			if (Utility.isRootEntity(entityCode))
+			{
+				topLevelAccessionCodes.add(ac);
+			}
+
+		}
+		log.debug("Returning root accessionCodes " + topLevelAccessionCodes);
+		return topLevelAccessionCodes;
+	}
+	
+	/**
+	 * Search db for extant  entry
+	 * 
+	 * @param Hashtable of the entry
+	 * @return long of found PK or 0 otherwise
+	 */
+	private long getExtantPK(VBModelBean bean)
+	{
+
+		String entityName = getEntityName(bean);
+		long pKey = 0;
+		pKey = this.getPKFromAccessionCode(getAccessionCode(bean), entityName);
+		
+		return pKey;
+	}
+	
+	
+	/**
+	 * @param bean The VBModelBean to query
+	 * @return The AccessionCode for this bean or null if none found
+	 */
+	public String getAccessionCode( VBModelBean bean )
+	{
+		String accessionCode = null;
+		
+		// Need to find the accessionCode in the bean
+		LinkedHashMap nameValues = bean.toOrderedHashMap();
+		log.debug("Bean values: " + nameValues);
+		Set keys = nameValues.keySet();
+		Iterator it = keys.iterator();
+
+		while (it.hasNext())
+		{
+			// looking for an accession code
+			// that's the only field we use to check the db for a duplicate
+			String key = (String) it.next();
+			if (key.equalsIgnoreCase(Constants.ACCESSIONCODENAME))
+			{
+				accessionCode = (String) nameValues.get(key);
+			}
+		}
+		return accessionCode;
+	}
+	/**
+	 * Searches a bean for its uniqueId
+	 * 
+	 * @param bean
+	 * @param entityName
+	 * @return
+	 */
+	public long getInputUniqueId( VBModelBean bean )
+	{
+		long inputUniqueId = 0;
+		String entityName = getEntityName(bean);
+		
+		// Need to find the accessionCode in the bean
+		LinkedHashMap nameValues = bean.toOrderedHashMap();
+		log.debug("Bean values: " + nameValues);
+		Set keys = nameValues.keySet();
+		Iterator it = keys.iterator();
+
+		// Loop all the values in this bean to find Unique Identifier
+		while (it.hasNext())
+		{
+			String key = (String) it.next();
+			// For now the Unique Identifier is defined as the PK field
+			if (key.equalsIgnoreCase( Utility.getPKNameFromTableName(entityName)))
+			{
+				log.debug(nameValues.get(key));
+				inputUniqueId = ((Long) nameValues.get(key)).longValue();
+			}
+		}
+		return inputUniqueId;
+	}
+	
+	/**
+	 * Find PK or this accessionCode in the database.
+	 * 
+	 * @param entityName
+	 * @param accessionCode
+	 * @return The PrimaryKey for this accessionCode in the database or 0 if none found
+	 */
+	private long getPKFromAccessionCode(String accessionCode, String entityName)
+	{		
+		long PK = 0;
+
+		if ( Utility.isStringNullOrEmpty( accessionCode ))
+		{
+			log.debug("Found no accessionCode for " + entityName);
+			// do nothing
+		}
+		else 
+		{
+			// Need to get the pK of the table
+			PK = this.getTablePK(entityName, accessionCode);
+			
+			if ( PK != 0 )
+			{
+				// great got a real PK
+				log.info("Found PK ("+ PK+ ") for "+ entityName+ " accessionCode: "+ accessionCode);
+			}
+			else
+			{
+				// Problem no accessionCode like that in database -- fail load
+				String errorMessage =
+					"There is no "
+						+ entityName
+						+ " with a accessionCode of value '"
+						+ accessionCode
+						+ "' in the database.";
+						
+				log.error(errorMessage);
+				//commit = false;
+				//errors.AddError(
+				//	LoadingErrors.DATABASELOADINGERROR,
+				//	errorMessage);
+			}
+		}
+		
+		log.debug(
+				"Using accessionCode " + accessionCode + " in table "
+					+ entityName + " got DB PK of " + PK);
+		return PK;
+	}
+
+	/**
+	 * Get the PK of the row in the database that has the same values as record
+	 * 
+	 * @param tableName
+	 * @param AccessionCode
+	 * @return long -- PK of the table
+	 */
+	private long getTablePK( String tableName, String accessionCode )
+	{
+		StringBuffer sb = new StringBuffer();
+		long PK = 0;
+		try 
+		{
+			sb.append(
+				"SELECT " + Utility.getPKNameFromTableName(tableName) +" from "+tableName+" where " 
+				+ Constants.ACCESSIONCODENAME + " = '" + accessionCode + "'"
+			);
+
+			Statement query = conn.createStatement();
+			ResultSet rs = query.executeQuery(sb.toString());
+			while (rs.next()) 
+			{
+				PK = rs.getInt(1);
+			}
+			rs.close();
+		}
+		catch ( SQLException se ) 
+		{ 
+			//this.filterSQLException(se, sb.toString());
+			log.error(se);
+			se.printStackTrace();
+		}
+		LogUtility.log("Find PK from AC Query: '" + sb.toString() + "' got PK = " + PK);
 		return PK;
 	}
 	
 	
+	/**
+	 * Class to store get/set method pairs for Child VBModelBeans.
+	 */
+	public class MemberGetterSetters
+	{
+
+		private String memberName;
+
+		private Method setterMethod;
+
+		private Method getterMethod;
+
+		public MemberGetterSetters(
+				String memberName)
+		{
+			this.memberName = memberName;
+		}
+
+		/**
+		 * @return Returns the getterMethod.
+		 */
+		public Method getGetterMethod()
+		{
+			return getterMethod;
+		}
+
+		/**
+		 * @param getterMethod
+		 *          The getterMethod to set.
+		 */
+		public void setGetterMethod(Method getterMethod)
+		{
+			this.getterMethod = getterMethod;
+		}
+
+		/**
+		 * @return Returns the memberName.
+		 */
+		public String getMemberName()
+		{
+			return memberName;
+		}
+
+		/**
+		 * @param memberName
+		 *          The memberName to set.
+		 */
+		public void setMemberName(String memberName)
+		{
+			this.memberName = memberName;
+		}
+
+		/**
+		 * @return Returns the setterMethod.
+		 */
+		public Method getSetterMethod()
+		{
+			return setterMethod;
+		}
+
+		/**
+		 * @param setterMethod
+		 *          The setterMethod to set.
+		 */
+		public void setSetterMethod(Method setterMethod)
+		{
+			this.setterMethod = setterMethod;
+		}
+	}
+
 }

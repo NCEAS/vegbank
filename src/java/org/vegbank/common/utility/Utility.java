@@ -1,8 +1,11 @@
 package org.vegbank.common.utility;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.sql.PreparedStatement;
@@ -19,8 +22,13 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.vegbank.common.dbAdapter.*;
-import org.vegbank.common.model.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.vegbank.common.dbAdapter.AbstractDatabase;
+import org.vegbank.common.model.Aux_role;
+import org.vegbank.common.model.Place;
+import org.vegbank.common.model.Plantconcept;
+import org.vegbank.common.model.Plantstatus;
 
 /*
  * '$RCSfile: Utility.java,v $'
@@ -28,8 +36,8 @@ import org.vegbank.common.model.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2004-03-05 22:35:46 $'
- * '$Revision: 1.30 $'
+ * '$Date: 2004-04-19 14:53:06 $'
+ * '$Revision: 1.31 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +56,10 @@ import org.vegbank.common.model.*;
 
 public class Utility
 {
+	/**
+	 * Handle for logging
+	 */
+	private static Log log = LogFactory.getLog(Utility.class); 
 	
 	public static AbstractDatabase dbAdapter;
 	// FIXME: Read from properties
@@ -77,7 +89,7 @@ public class Utility
 		} 
 		catch (Exception e) 
 		{
-			LogUtility.log("Error in Vegbank Util static block:" + e.getMessage());
+			log.error("Error in Vegbank Util static block:" + e.getMessage());
 		}
 	}
 	
@@ -85,8 +97,8 @@ public class Utility
 	 * There are some characters that need to be escaped before they are being
 	 * written to the database, this escaping needs to be removed before usage.
 	 * 
-	 * @param String s -- String to escape chars on
-	 * @return String -- ready for db write
+	 * @param  s -- String to escape chars on
+	 * @return ready for db write
 	 */
 	public static String decodeFromDB(String s)
 	{
@@ -94,7 +106,7 @@ public class Utility
 		if ( s == null)
 			return null;
 			
-		String origString = s;
+		//String origString = s;
 
 		// TODO: Implement this method 
 		// '' -> ', '$ -> $, '^ -> ^ ( perhaps removing all ' will work?)
@@ -108,7 +120,7 @@ public class Utility
 	 * There are some characters that need to be escaped before they are being
 	 * written to the database
 	 * 
-	 * @param String s -- String to escape chars on
+	 * @param s -- String to escape chars on
 	 * @return String -- ready for db write
 	 */
 	public static String encodeForDB(String s)
@@ -117,7 +129,6 @@ public class Utility
 		if ( s == null)
 			return null;
 			
-		String origString = s;
 		// List of characters to escape
 		char[] specialChar = {'\'', '$', '^'};
 		
@@ -149,6 +160,9 @@ public class Utility
    * Vegbank sometimes stores booleans in Strings for ease of use ( laziness )
    * This attemps to right that wrong by converting certain String patterns into 
    * boolean values
+   * 
+   * @param string String to test for true/t equality
+   * @return is this a Stringified true?
    */
    public static boolean isTrue( String string)
    {
@@ -239,30 +253,45 @@ public class Utility
 		}
 
 	
-	/**
-	 * Instantiate a class using the name of the class at runtime
-	 *
-	 * @param className the fully qualified name of the class to instantiate
-	 */
-	public static Object createObject(String className) throws Exception {
- 
+/**
+ * <p>
+ * Instantiate a class using the name of the class at runtime
+ * </p>
+ * 
+ * @param className
+ *          the fully qualified name of the class to instantiate
+ * @return Instance of the requested class
+ * @throws Exception
+ *           the class finding/creation exceptions
+ */
+	public static Object createObject(String className) throws Exception
+	{
+
 		Object object = null;
-		try {
+		try
+		{
 			Class classDefinition = Class.forName(className);
 			object = classDefinition.newInstance();
-		} catch (InstantiationException e) {
+		} catch (InstantiationException e)
+		{
 			throw e;
-		} catch (IllegalAccessException e) {
+		} catch (IllegalAccessException e)
+		{
 			throw e;
-		} catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e)
+		{
 			throw e;
 		}
 		return object;
 	}
 	
 	/**
+	 * <p>
 	 * Utility Method to check for nulls and empty String
-	 *
+	 * </p>
+	 * 
+	 * @param stringToCheck 
+	 * @return Is this Empty or null?
 	 */
 	public static boolean isStringNullOrEmpty(String stringToCheck)
 	{
@@ -279,11 +308,12 @@ public class Utility
 	}
 	
 	/**
+	 * <p>
 	 * Convience method to check several string for nullness or emtyness
-	 * @author farrell
+	 * </p>
 	 *
-	 * @param String[] -- Strings to check
-	 * @return boolean -- 
+	 * @param stringsToCheck -- Array of Strings to check
+	 * @return Are any of these Strings empty or null?
 	 */
 	public static boolean isAnyStringNullorEmpty( String[] stringsToCheck)
 	{
@@ -300,11 +330,12 @@ public class Utility
 	}
 	
 	/**
+	 * <p>
 	 * Convience method to check several string for non nullness or non emtyness
-	 * @author farrell
+	 * </p>
 	 *
-	 * @param String[] -- Strings to check
-	 * @return boolean -- 
+	 * @param stringsToCheck Array of <code>String</code>s to check
+	 * @return Are any of these <code>Strings</code> NOT empty or null?
 	 */
 	public static boolean isAnyStringNotNullorEmpty( String[] stringsToCheck)
 	{
@@ -321,10 +352,12 @@ public class Utility
 	}
 	
 	/**
-	 * Convience method to create a simple comma separted string from a 
-	 * string array.
+	 * <p>
+	 * Convience method to create a simple comma separted string from an <code>Object[]</code>.
+	 * </p>
 	 *
-	 * @param String[] -- Strings to convert to comma separate string
+	 * @param objects 
+	 * 		Array of <code>Object</code>s to convert to comma separate <code>String</code>
 	 * @return String 
 	 */
 	public static String arrayToCommaSeparatedString(Object[] objects)
@@ -333,11 +366,15 @@ public class Utility
 	}
 	
 	/**
-	 * Convience method to create a simple comma separted string from a 
-	 * string array.
+	 * <p>
+	 * Convience method to create a simple delimetted <code>String</code> from 
+	 * an <code>Object[]</code>.
+	 * </p>
 	 *
-	 * @param String[] -- Strings to convert to comma separate string
-	 * @return String 
+	 * @param objects
+	 * @param delimiter 
+	 * 		The delimeter to use when constructing the <code>String</code>
+	 * @return The delimited List as <code>String</code>
 	 */
 	public static String joinArray(Object[] objects, String delimiter)
 	{
@@ -368,7 +405,7 @@ public class Utility
 	/**
 	 * Prints out a hashtable in an easy to read fashion
 	 * 
-	 * @param hashtable -- hashtable to pretty print
+	 * @param hash -- hashtable to pretty print
 	 */
 	public static void prettyPrintHash( Hashtable hash )
 	{
@@ -426,8 +463,10 @@ public class Utility
 	}
 	
 	/**
-	 * method that retuns the date in a format that can be accepted 
+	 * Gets current date in a format that can be accepted 
 	 * by the RDBMS and that is like: Aug 9, 2002
+	 * 
+	 * @return the date in a RDBMS format 
 	 */
 	 public static String getCurrentDate()
 	 {
@@ -454,8 +493,13 @@ public class Utility
 	}
 
 	/**
-	 * @param String The name of this table
-	 * @return String the PKName for this table
+	 * <p>
+	 * Convience method to get the VB Primary Key Name, basically 
+	 * handles expections to the naming conviention.
+	 * </p>
+	 * 
+	 * @param table The name of this table
+	 * @return the PKName for this table
 	 */
 	public static String getPKNameFromTableName(String table)
 	{
@@ -476,13 +520,16 @@ public class Utility
 	}
 
 	/**
+	 * <p>
 	 * Foreign Key don't always have the same name as the primary key of the
-	 * the the primary table, this is a utility to allow this lookup to happen.</br>
+	 * the the primary table, this is a utility to allow this lookup to happen.
+	 * </br>
 	 * 
 	 * <b>Not</b> a comprehensive lookup!
+	 * </p>
 	 * 
-	 * @param String The name of this table
-	 * @return String the PKName for this table
+	 * @param FKName The Foriegn Key name
+	 * @return The Primary Key name that corresponds to the inputed FK name.
 	 */
 	public static String getPKNameFromFKName(String FKName)
 	{
@@ -500,7 +547,6 @@ public class Utility
 		return PKname;
 	}
 
-
 	/**
 	 * Only certain database names need to have accessionCodes loaded
 	 * 
@@ -509,7 +555,7 @@ public class Utility
 	public static boolean isLoadAccessionCodeOn()
 	{
 		boolean result = false;
-		LogUtility.log("Utility: databaseName = " + DATABASE_NAME);
+		log.debug("Utility: databaseName = " + DATABASE_NAME);
 		
 		if ( DATABASE_NAME.equalsIgnoreCase("vegbank") || DATABASE_NAME.equalsIgnoreCase("vegtest"))
 		{
@@ -588,14 +634,19 @@ public class Utility
 	/** 
 	 * Parse up an Accessioncode into its parts
 	 * 
-	 * @param accessioncode
-	 * @return String[] - code, entityname, key
+	 * @param accessionCode Vegbank AC to be parsed.
+	 * @return code, entityname, key in a <code>String[]</code>
 	 */
 	public static HashMap parseAccessionCode(String accessionCode)
 	{
+		String DBCODE = "DBCODE";
+		String ENTITYCODE = "ENTITYCODE";
+		String KEYVALUE = "KEYVALUE";
+		String CONFIMATIONCODE = "CONFIMATIONCODE";
+		
 		HashMap parsedAC = new HashMap();
 		// method
-		LogUtility.log("Utility: accessionCode = " + accessionCode, LogUtility.DEBUG);
+		log.debug("Utility: accessionCode = " + accessionCode);
 		Pattern pattern = Pattern.compile("([^\\.]*)\\.([^\\.]*)\\.([^\\.]*)\\.{0,1}([^\\.]*)");
 		Matcher m = pattern.matcher(accessionCode);
 		if ( m.find() )
@@ -605,6 +656,50 @@ public class Utility
 			parsedAC.put("KEYVALUE", m.group(3) );
 			parsedAC.put("CONFIMATIONCODE", m.group(4) );
 		}
+		log.debug("Parsed an AccessionCode: DBCode > '" + parsedAC.get(DBCODE) + "' ENTITYCODE > '" + parsedAC.get(ENTITYCODE) + "' KEYVALUE > '" + parsedAC.get(KEYVALUE) + "' CONFIMATIONCODE > '" + parsedAC.get(CONFIMATIONCODE) + "'"  );
 		return parsedAC;
 	}
+	
+	/**
+	 * Ugly hack to test if an entityCode is a root entity or not.
+	 * 
+	 * @param entityCode
+ 	 * @return Is root entity?
+	 */
+	public static boolean isRootEntity(String entityCode)
+	{
+		boolean result = false;
+
+		if (entityCode.equalsIgnoreCase("OB") || entityCode.equalsIgnoreCase("PC")
+				|| entityCode.equalsIgnoreCase("CC"))
+		{
+			result = true;
+		}
+
+		return result;
+	}
+	
+	/**
+	 * Tool to save a file to the filesystem.
+	 * 
+	 * @param in
+	 *          Reader to write out to filesystem
+	 * @param filename
+	 *          The name of the file to write to
+	 * @throws IOException
+	 */
+	public static void saveFile( Reader in, String filename) throws IOException
+	{
+		File outputFile = new File(filename);
+
+    FileWriter out = new FileWriter(outputFile);
+    int c;
+
+    while ((c = in.read()) != -1)
+    	out.write(c);
+
+    out.close();
+    in.close();
+	}
+	
 }

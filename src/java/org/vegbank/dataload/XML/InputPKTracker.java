@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-05 22:24:57 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-04-19 14:53:06 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,11 +28,11 @@ import java.util.Hashtable;
 import org.vegbank.common.utility.LogUtility;
 
 
-class InputPKTracker
+public class InputPKTracker
 {
 	private Hashtable store = new Hashtable();
 	
-	public void setTablesPKs(String tableName, String xmlPK, long dbPK)
+	public void setAssignedPK(String tableName, String xmlPK, long dbPK)
 	{
 		Hashtable xmlPKdbPKLookup = (Hashtable)store.get(tableName);
 		if ( xmlPKdbPKLookup == null )
@@ -43,7 +43,7 @@ class InputPKTracker
 		xmlPKdbPKLookup.put(xmlPK, new Long(dbPK));
 	}
 	
-	public long getTablesPK( String tableName, String xmlPK)
+	public long getAssignedPK( String tableName, String xmlPK)
 	{
 		LogUtility.log("InputPKTracker is checking for xmlPK: " + xmlPK + " for table: " + tableName, LogUtility.DEBUG);
 		long dbPK = 0;

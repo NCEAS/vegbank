@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-05 22:24:57 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-04-19 14:53:06 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,11 +29,11 @@ import java.sql.Statement;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 
 import org.vegbank.common.Constants;
 import org.vegbank.common.model.Address;
-import org.vegbank.common.model.Aux_role;
 import org.vegbank.common.model.Commclass;
 import org.vegbank.common.model.Commconcept;
 import org.vegbank.common.model.Commcorrelation;
@@ -87,24 +87,29 @@ import org.vegbank.common.utility.Utility;
 	{
 		public static final String TABLENAME = "TableName";
 		public InputPKTracker inputPKTracker = new InputPKTracker();
-		private DBConnection dbConn = null; 
+		
+		// A connection for transactions to be rollback if error and not  
+		private DBConnection readConn = null;
+		private DBConnection writeConn = null;
+		
 		private Hashtable revisionsHash = null;
 		private Hashtable noteLinksHash = null;
 		private Hashtable vegbankPackage = null;
 		private LoadingErrors errors = null;
+		private List accessionCodesAdded = null;
 		private boolean commit = false;
 		// Allow no commit for testing
 		private boolean doCommit = true;
-		private AccessionGen ag  = null;
 		private HashMap tableKeys = new HashMap();
 		
 		// This holds the name of the current concept
 		private String currentConceptName = null;
 		
-		public LoadTreeToDatabase(LoadingErrors errors, boolean doCommit)
+		public LoadTreeToDatabase(LoadingErrors errors, List accessionCodes, boolean doCommit)
 		{
 			this.doCommit = doCommit;
 			this.errors = errors;
+			this.accessionCodesAdded = accessionCodes;
 		}
 
 		public LoadTreeToDatabase(LoadingErrors errors)
@@ -117,10 +122,10 @@ import org.vegbank.common.utility.Utility;
 		 * 
 		 * @param vegbankPackage -- the root of the dataset 
 		 */
-		public void insertVegbankPackage(Hashtable vegbankPackage)
+		public void insertVegbankPackage(Hashtable vegbankpackage)
 			throws SQLException
 		{
-			this.vegbankPackage = vegbankPackage;
+			this.vegbankPackage = vegbankpackage;
 			//Utility.prettyPrintHash(vegbankPackage);
 
 			//this boolean determines if the dataset should be commited or rolled-back
@@ -173,73 +178,31 @@ import org.vegbank.common.utility.Utility;
 
 			if (commit == true && doCommit == true)
 			{				
-				dbConn.commit();
+				writeConn.commit();
 				LogUtility.log("LoadTreeToDatabase: Adding AccessionCodes to loaded data");
-				this.addAllAccessionCodes();
-				dbConn.commit();
+				accessionCodesAdded.addAll(this.addAllAccessionCodes());
+				writeConn.commit();
 			}
 			else
 			{
-				dbConn.rollback();
+				writeConn.rollback();
 			}
 			
 			LogUtility.log("LoadTreeToDatabase: Returning the DBConnection to the pool");
 			//Return dbconnection to pool
-			DBConnectionPool.returnDBConnection(dbConn);
+			DBConnectionPool.returnDBConnection(writeConn);
+			readConn.setReadOnly(false);
+			DBConnectionPool.returnDBConnection(readConn);
 		}
 
 		private void initDB() throws SQLException
 		{
-			//	Get DBConnection
-			dbConn=DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");
-			dbConn.setAutoCommit(false);
-		}
-		
-		/**
-		 * Get the PK of the row in the database that has the same values as record
-		 * 
-		 * @param tableName
-		 * @param fieldValueHash
-		 * @return long -- PK of the table
-		 */
-		private long getTablePK( String tableName, Hashtable fieldValueHash )
-		{
-			Vector fieldEqualsValue = new Vector();
-			StringBuffer sb = new StringBuffer();
-			long PK = 0;
-			try 
-			{
-				Enumeration fields = fieldValueHash.keys();
-				while ( fields.hasMoreElements())
-				{
-					String field = (String) fields.nextElement();
-					Object value = fieldValueHash.get(field);
-					if ( this.isDatabaseReadyField(field, value, tableName) )
-					{				
-						fieldEqualsValue.add(field + "=" +"'" + Utility.encodeForDB(value.toString()) + "'");
-					}
-				}
-				
-				sb.append(
-					"SELECT " + Utility.getPKNameFromTableName(tableName) +" from "+tableName+" where " 
-					+ Utility.joinArray(fieldEqualsValue.toArray(), " and ")
-				);
-				
-				sb.append(this.getSQLNullValues(tableName, fieldValueHash));
-				
-				Statement query = dbConn.createStatement();
-				ResultSet rs = query.executeQuery(sb.toString());
-				while (rs.next()) 
-				{
-					PK = rs.getInt(1);
-				}
-			}
-			catch ( SQLException se ) 
-			{ 
-				this.filterSQLException(se, sb.toString());     
-			}
-			LogUtility.log("LoadTreeToDatabase:  Query: " + sb.toString());
-			return PK;
+			//	Get DBConnections
+			writeConn=DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");
+			writeConn.setAutoCommit(false);
+			
+			readConn=DBConnectionPool.getInstance().getDBConnection("Need read connection to support inserting dataset");
+			readConn.setReadOnly(true);
 		}
 		
 		/**
@@ -251,7 +214,6 @@ import org.vegbank.common.utility.Utility;
 		 */
 		private long getTablePK( String tableName, String accessionCode )
 		{
-			Vector fieldEqualsValue = new Vector();
 			StringBuffer sb = new StringBuffer();
 			long PK = 0;
 			try 
@@ -261,18 +223,19 @@ import org.vegbank.common.utility.Utility;
 					+ Constants.ACCESSIONCODENAME + " = '" + accessionCode + "'"
 				);
 
-				Statement query = dbConn.createStatement();
+				Statement query = readConn.createStatement();
 				ResultSet rs = query.executeQuery(sb.toString());
 				while (rs.next()) 
 				{
 					PK = rs.getInt(1);
 				}
+				rs.close();
 			}
 			catch ( SQLException se ) 
 			{ 
 				this.filterSQLException(se, sb.toString());     
 			}
-			LogUtility.log("LoadTreeToDatabase:  Query: " + sb.toString());
+			LogUtility.log("LoadTreeToDatabase:  Query: '" + sb.toString() + "' got PK = " + PK);
 			return PK;
 		}
 		
@@ -291,9 +254,9 @@ import org.vegbank.common.utility.Utility;
 				}
 				else
 				{
-					LogUtility.log("LoadTreeToDatabase: Caught SQL Exception: " + se.getMessage());
-					LogUtility.log("LoadTreeToDatabase: problematic sql: '" + sql + "'");
-					se.printStackTrace();
+
+					LogUtility.log("LoadTreeToDatabase: problematic sql: '" + sql + "'", LogUtility.ERROR);
+					LogUtility.log(se, LogUtility.ERROR);
 					commit = false;
 					errors.AddError(LoadingErrors.DATABASELOADINGERROR, se.getMessage());
 				}
@@ -348,7 +311,7 @@ import org.vegbank.common.utility.Utility;
 			sb.append("SELECT nextval('" + tableName + "_" + Utility.getPKNameFromTableName(tableName) + "_seq')");
 			try 
 			{
-			   Statement query = dbConn.createStatement();
+			   Statement query = writeConn.createStatement();
 			   ResultSet rs = query.executeQuery(sb.toString());
 			   while (rs.next()) 
 			   {
@@ -477,7 +440,7 @@ import org.vegbank.common.utility.Utility;
 						if ( this.isPKName(field, tableName))
 						{
 							// Check if this has already been added to db
-							long storedPK = inputPKTracker.getTablesPK(tableName, stringValue.toString());
+							long storedPK = inputPKTracker.getAssignedPK(tableName, stringValue.toString());
 							if (storedPK != 0) 
 							{
 								LogUtility.log("Already entered record xmlPK "
@@ -487,7 +450,7 @@ import org.vegbank.common.utility.Utility;
 							}
 							// Need to add this to the datastruture that prevents
 							// the adding duplicate fields
-							inputPKTracker.setTablesPKs(tableName, stringValue.toString(), PK);
+							inputPKTracker.setAssignedPK(tableName, stringValue.toString(), PK);
 							LogUtility.log("No record added for xmlPK :" + stringValue.toString()
 									+ " for table " + tableName + " adding PK now: " + PK, LogUtility.DEBUG);
 						}
@@ -504,7 +467,7 @@ import org.vegbank.common.utility.Utility;
 				LogUtility.log("Running SQL: " + sb.toString(), LogUtility.DEBUG );
 				LogUtility.log("Loaded Table : " +tableName + " with PK of " + PK, LogUtility.INFO );
 				
-				Statement query = dbConn.createStatement();
+				Statement query = writeConn.createStatement();
 				int rowCount = query.executeUpdate(sb.toString());
 			}
 			catch ( SQLException se ) 
@@ -541,7 +504,7 @@ import org.vegbank.common.utility.Utility;
 		 * @param tableName
 		 * @param PK
 		 */
-		private void storeTableNameAndPK(String tableName, long PK) throws SQLException
+		private void storeTableNameAndPK(String tableName, long PK)
 		{	
 				Vector keys = (Vector) tableKeys.get(tableName);
 				if ( keys == null )
@@ -555,20 +518,17 @@ import org.vegbank.common.utility.Utility;
 		/**
 		 * Add accessionCodes to all the rows added by this loading.
 		 */
-		private void addAllAccessionCodes() throws SQLException
+		private List addAllAccessionCodes() throws SQLException
 		{
-			String accessionCode = "";
-			
-			if ( ag == null )
-			{
-				// Initialize the AccessionGen
-				ag = new AccessionGen(this.dbConn.getConnections(), Utility.getAccessionPrefix() );
-			}
+			List accessionCodes = null;
+			// Initialize the AccessionGen
+			AccessionGen ag = new AccessionGen(this.writeConn.getConnections(), Utility.getAccessionPrefix() );
 			
 			if ( Utility.isLoadAccessionCodeOn() )
 			{
-				ag.updateSpecificRows(tableKeys);
+				accessionCodes = ag.updateSpecificRows(tableKeys);
 			}
+			return accessionCodes;
 		}
 		
 		
@@ -884,7 +844,7 @@ import org.vegbank.common.utility.Utility;
 
 				sb.append(this.getSQLNullValues(tableName, fieldValueHash));
 				
-				Statement query = dbConn.createStatement();
+				Statement query = readConn.createStatement();
 				ResultSet rs = query.executeQuery(sb.toString());
 				while (rs.next()) 
 				{
@@ -913,7 +873,7 @@ import org.vegbank.common.utility.Utility;
 		{
 			StringBuffer sb = new StringBuffer();
 			
-			ResultSet rs = dbConn.getMetaData().getColumns(null, null, tableName.toLowerCase(), "%" );
+			ResultSet rs = readConn.getMetaData().getColumns(null, null, tableName.toLowerCase(), "%" );
 			
 			//LogUtility.log("LoadTreeToDatabase : Got a Result Set");
 			while ( rs.next() )
@@ -1126,7 +1086,7 @@ import org.vegbank.common.utility.Utility;
 			long partyId = insertParty(party);
 							
 			// Get the Role  ( not required )
-			Hashtable roleIDHash = (Hashtable) this.getChildTable(contribHash, "ROLE_ID");
+			Hashtable roleIDHash = this.getChildTable(contribHash, "ROLE_ID");
 			if ( roleIDHash != null )
 			{
 				Hashtable role = this.getChildTable( roleIDHash, "aux_Role" );
@@ -1970,6 +1930,8 @@ import org.vegbank.common.utility.Utility;
 			
 			return pKey;
 		}
+		
+		
 		
 		/**
 		 * Check rules to see if user is allowed to load this.

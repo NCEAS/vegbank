@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-07 17:55:28 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-04-19 14:53:06 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,22 @@
 
 package org.vegbank.common.utility;
 
-import java.io.*;
-import java.sql.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
 import org.vegbank.common.utility.CommandLineTools.StatusBarUtil;
 
@@ -163,7 +176,7 @@ public class AccessionGen {
 			while (it.hasNext()) {
 				key = (String)it.next();
 				value = (String)tableCodes.get(key);
-				if (value == code) {
+				if (value.equalsIgnoreCase(code)) {
 					return key;
 				}
 			}
@@ -327,11 +340,13 @@ public class AccessionGen {
 	 * specific rows to be updated with newly generated AccessionCodes.
 	 * 
 	 * @param tablesAndKeys
+	 * @return List of AccessionCodes for root entities
 	 * @throws SQLException
 	 */
-	public void updateSpecificRows(HashMap tablesAndKeys) throws SQLException
+	public List updateSpecificRows(HashMap tablesAndKeys) throws SQLException
 	{
 		String tableName;
+		List accessionCodeList = new Vector();
 
 		Iterator it = tablesAndKeys.keySet().iterator();
 		while (it.hasNext()) {
@@ -360,16 +375,18 @@ public class AccessionGen {
 							String baseAC = this.getBaseAccessionCode(tableName);
 							String confirmCode = getConfirmation(tableName, key.toString());
 					
-							this.updateRowAC(key.longValue(), baseAC, confirmCode, pstmt);
+							String accessionCode = this.updateRowAC(key.longValue(), baseAC, confirmCode, pstmt);
 							LogUtility.log("AccessionGen > Set accessionCode for PK: " + key + " on " + tableName);
+							accessionCodeList.add(accessionCode);
 						}
 					}
 				}
 			}
 		}
+		return accessionCodeList;
 	}
 
-	private void updateRowAC(long tmpId, String baseAC, String tmpConfirm, PreparedStatement pstmt) throws SQLException
+	private String updateRowAC(long tmpId, String baseAC, String tmpConfirm, PreparedStatement pstmt) throws SQLException
 	{
 		StringBuffer tmpAC;
 		// build the accession code
@@ -381,6 +398,7 @@ public class AccessionGen {
 		pstmt.setString(1, tmpAC.toString());
 		pstmt.setLong(2, tmpId);
 		pstmt.executeUpdate();
+		return tmpAC.toString();
 	}
 
 	private PreparedStatement getUpdatePreparedStatement(String tableName) throws SQLException

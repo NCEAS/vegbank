@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-01 01:54:42 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-04-19 14:53:06 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ public class LoadingErrors
 		StringBuffer sb = new StringBuffer();
 		sb.append("<table size=\"100%\">");
 		// Title
-		sb.append( "<tr><td>" + getSummaryMessage() + "</td></tr>");
+		sb.append( "<tr><td>" + getSummaryMessage(null) + "</td></tr>");
 		
 		// some formating
 		//sb.append();
@@ -95,28 +95,41 @@ public class LoadingErrors
 		return sb;
 	}
 
-	public String getSummaryMessage()
+	public String getSummaryMessage( String identifier)
 	{
 		String message = null; 
+		String defaultIdentifier = "Dataset";
+		
+		if ( identifier != null )
+			defaultIdentifier = identifier;
+		
+		
 		// general message  -- loaded or not
-		if ( this.validationErrors.isEmpty() && this.databaseLoadingErrors.isEmpty() )
+		if ( hasErrors )
 		{
-			// no problem
-			if ( this.retificationErrors.isEmpty() )
+			if ( this.validationErrors.isEmpty() && this.databaseLoadingErrors.isEmpty() )
 			{
-				// no problem at all
-				message = "Dataset Loaded into the database with no problems";
+				// no problem
+				if ( this.retificationErrors.isEmpty() )
+				{
+					// no problem at all
+					message = defaultIdentifier + " Loaded into the database with no problems";
+				}
+				else
+				{
+					// Retification error
+					message = defaultIdentifier + " Loaded into the database with rectification issues, this dataset will not become visible to all users until you fix these issues.";
+				}
 			}
-			else
+			else 
 			{
-				// Retification error
-				message = "Dataset Loaded into the database with rectification issues, this dataset will not become visible to all users until you fix these issues.";
+				// Plot failed to load
+				message = defaultIdentifier + " failed to load, see errors below";
 			}
 		}
-		else 
+		else
 		{
-			// Plot failed to load
-			message = "Dataset failed to load, see errors below";
+			message = "No problems encountered with " + defaultIdentifier;
 		}
 		return message;
 	}
@@ -127,7 +140,8 @@ public class LoadingErrors
 	}
 	
 	/**
-	 * @return
+	 * @param separtor separator to use between errors, e.g. "/n", &gt;br&lt;
+	 * @return All the loading errors found
 	 */
 	public StringBuffer getLoadReport(String separtor)
 	{
@@ -139,17 +153,18 @@ public class LoadingErrors
 		}
 		else
 		{
-			Enumeration databaseLoadingErrors = this.databaseLoadingErrors.elements();
-			while ( databaseLoadingErrors.hasMoreElements() )
+			Enumeration enum = this.databaseLoadingErrors.elements();
+			while ( enum.hasMoreElements() )
 			{
-				sb.append( databaseLoadingErrors.nextElement() +separtor);
+				sb.append( enum.nextElement() +separtor);
 			}
 		}
 		return sb;
 	}
 
 	/**
-	 * @return
+	 * @param separtor separator to use between errors, e.g. "/n", &gt;br&lt;
+	 * @return All the rectification errors found
 	 */
 	public StringBuffer getRectificationReport(String separtor)
 	{
@@ -171,7 +186,8 @@ public class LoadingErrors
 	}
 
 	/**
-	 * @return
+	 * @param separtor separator to use between errors, e.g. "/n", &gt;br&lt;
+	 * @return All the validation errors found
 	 */
 	public StringBuffer getValidationReport(String separtor)
 	{
@@ -183,12 +199,64 @@ public class LoadingErrors
 		}
 		else
 		{
-			Enumeration validationErrors = this.validationErrors.elements();
-			while ( validationErrors.hasMoreElements() )
+			Enumeration enum = this.validationErrors.elements();
+			while ( enum.hasMoreElements() )
 			{
-				sb.append( validationErrors.nextElement() +separtor);
+				sb.append( enum.nextElement() +separtor);
 			}
 		}
 		return sb;
+	}
+	
+	/**
+	 * 
+	 * @param identifier
+	 * @return A textual report of the processing
+	 */
+	public String getTextReport( String identifier )
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("-----------------------------------------------------------------------\n");
+		sb.append("REPORT:\n");
+		sb.append(this.getSummaryMessage(identifier) + "\n");
+		
+		if ( ! validationErrors.isEmpty() )
+		{
+			sb.append("-----------------------------------------------------------------------\n");
+			sb.append("\tVALIDATION\n");
+			sb.append("-----------------------------------------------------------------------\n");
+			sb.append(this.getValidationReport("\n"));
+		}
+
+		if ( ! retificationErrors.isEmpty() )
+		{
+			sb.append("-----------------------------------------------------------------------\n");
+			sb.append("\tRECTIFICATION\n");
+			sb.append("-----------------------------------------------------------------------\n");
+			sb.append(this.getRectificationReport("\n"));
+		}
+		
+		if ( ! databaseLoadingErrors.isEmpty() )
+		{
+			sb.append("-----------------------------------------------------------------------\n");	
+			sb.append("\tDATABASE LOADING\n");
+			sb.append("-----------------------------------------------------------------------\n");
+			sb.append(this.getLoadReport("\n"));
+		}
+		
+		sb.append("-----------------------------------------------------------------------\n");
+		sb.append("-----------------------------------------------------------------------");
+	
+		return sb.toString();
+	}
+	
+	
+	/**
+	 * @return Did processing encounter any errors?
+	 */
+	public boolean hasErrors()
+	{
+		return hasErrors;
 	}
 }

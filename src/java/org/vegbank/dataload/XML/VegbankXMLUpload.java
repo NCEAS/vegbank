@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-01 01:54:42 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-04-19 14:53:06 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,24 +23,33 @@ package org.vegbank.dataload.XML;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
  */
-/**
- * @author farrell
- *
- * Read a Vegbank format XML file, generate a report, and 
- * create a SQL insert statements.
- */
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 import org.vegbank.common.utility.LogUtility;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.plots.datasource.NativeXMLReader;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+
+/**
+ * @author farrell
+ *
+ * Reads a Vegbank format XML file and
+ * Validate and/or Retify and/or Load into the database. 
+ * 
+ * A report is generated capturing the results of each action called for.
+ * 
+ */
 public class VegbankXMLUpload 
 {
 	private XMLReader xr = null;
@@ -54,12 +63,28 @@ public class VegbankXMLUpload
 	
 	// Errors reported
 	private LoadingErrors errors = null;
-		
+	
+	// AccessionCodes of loaded root entities
+	private List accessionCodes = null;
+
+	
+ 	/**
+ 	 * <p>Use the defaults when contructing this object</p>
+ 	 * @throws Exception
+ 	 */
  	public VegbankXMLUpload() throws Exception
   {
 		xr = this.getXMLReader();
   }
 
+	/**
+	 * <p>Set all the availible options using this constructor</code>
+	 * 
+	 * @param validate
+	 * @param rectify
+	 * @param load
+	 * @throws Exception
+	 */
 	public VegbankXMLUpload(boolean validate, boolean rectify, boolean load) throws Exception
 	{
 		this.setLoad(load);
@@ -68,15 +93,27 @@ public class VegbankXMLUpload
 		xr = this.getXMLReader();
 	} 
 	
+	/**
+	 * @return
+	 * @throws Exception
+	 */
 	public XMLReader getXMLReader() throws Exception
 	{
 		this.errors = new LoadingErrors();
+		this.accessionCodes = new Vector();
 		nr = new NativeXMLReader(validate);
-		XMLReader xr = nr.getXMLReader();
+		xr = nr.getXMLReader();
 		return xr;
 	}
 
 
+	/**
+	 * <p>Process this XML file</p>
+	 * 
+	 * @param xmlFileName
+	 * @throws IOException
+	 * @throws SAXException
+	 */
 	public void processXMLFile( String xmlFileName ) throws IOException, SAXException
 	{
 		LogUtility.log( "VegbankXMLUpload: Validation on: " + this.validate, LogUtility.INFO);
@@ -84,7 +121,7 @@ public class VegbankXMLUpload
 		LogUtility.log( "VegbankXMLUpload: Database Loading on: " + this.load, LogUtility.INFO);
 		
 		SAXValidationErrorHandler errorHandler = new SAXValidationErrorHandler(errors);
-		SAX2DBContentHandler contentHandler = new SAX2DBContentHandler(errors, load);
+		SAX2DBContentHandler contentHandler = new SAX2DBContentHandler(errors, accessionCodes, load);
 		
 		File xmlFile = new File(xmlFileName);
 		
@@ -97,14 +134,16 @@ public class VegbankXMLUpload
 		
 		if ( errorHandler.isValid() )
 		{
-			xr.setContentHandler( contentHandler );
-			xr.parse( this.getInputSource(xmlFile));
+			if ( load ) // Only load if told to
+			{
+				xr.setContentHandler( contentHandler );
+				xr.parse( this.getInputSource(xmlFile));	
+			}
+
 		}
 		else 
 		{
 			LogUtility.log( "No attempt was made to rectify or load this dataset", LogUtility.ERROR);
-			errors.AddError(LoadingErrors.DATABASELOADINGERROR, "No attempt was made to load this dataset into the database");
-			errors.AddError(LoadingErrors.RECTIFICATIONERROR, "No attempt was made to rectify this dataset with the database");
 		}
 	}
 	
@@ -126,6 +165,9 @@ public class VegbankXMLUpload
 	
 	/**
 	 * Provide a command line interface 
+	 * 
+	 * @param args
+	 * @throws Exception
 	 */
 	public static void  main (String[] args) throws Exception
 	{
@@ -173,28 +215,17 @@ public class VegbankXMLUpload
 		{
 			vbUpload.processXMLFile(fileName);
 			
-			System.out.println("REPORT:\n");
-			System.out.println(vbUpload.getErrors().getSummaryMessage());
-			System.out.println("-----------------------------------------------------------------------");
-			System.out.println("\tVALIDATION");
-			System.out.println("-----------------------------------------------------------------------");
-			System.out.println(vbUpload.getErrors().getValidationReport("\n"));
-			System.out.println("-----------------------------------------------------------------------");
-			System.out.println("\tRECTIFICATION");
-			System.out.println("-----------------------------------------------------------------------");
-			System.out.println(vbUpload.getErrors().getRectificationReport("\n"));
-			System.out.println("-----------------------------------------------------------------------");			
-			System.out.println("\tDATABASE LOADING");
-			System.out.println("-----------------------------------------------------------------------");
-			System.out.println(vbUpload.getErrors().getLoadReport("\n"));
-			System.out.println("-----------------------------------------------------------------------");
-			System.out.println("-----------------------------------------------------------------------");
+			vbUpload.getErrors().getTextReport(null);
 		
 			System.exit(0);
 		}
 	}
 
 	/**
+	 * <p>
+	 * Sets Loading into database on and off
+	 * </p>
+	 * 
 	 * @param b
 	 */
 	public void setLoad(boolean b)
@@ -203,6 +234,10 @@ public class VegbankXMLUpload
 	}
 
 	/**
+	 * <p>
+	 * Sets Rectification on and off
+	 * </p>
+	 * 
 	 * @param b
 	 */
 	public void setRectify(boolean b)
@@ -211,10 +246,38 @@ public class VegbankXMLUpload
 	}
 
 	/**
+	 * <p>
+	 * Sets validation on and off
+	 * </p>
+	 * 
 	 * @param b
+	 * @throws Exception
 	 */
 	public void setValidate(boolean b) throws Exception
 	{
 		validate = b;
+	}
+	
+	/**
+	 * @return AccessionCodes of the root entities loaded into the database
+	 */
+	public List getAccessionCodesLoaded()
+	{
+		List topLevelAccessionCodes = new Vector();
+		// Need to filter out non top level elements		
+		Iterator iter = accessionCodes.iterator();
+		while (iter.hasNext())
+		{
+			String ac = (String) iter.next();
+			HashMap parsedAC = Utility.parseAccessionCode(ac);
+			String entityCode = (String) parsedAC.get("ENTITYCODE");
+			if ( Utility.isRootEntity(entityCode))
+			{
+				topLevelAccessionCodes.add(ac);
+			}
+
+		}
+		
+		return topLevelAccessionCodes;
 	}
 }
