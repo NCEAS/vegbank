@@ -8,7 +8,7 @@
 <TITLE>View VegBank Data: projects - Detail</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css" />
 </HEAD>
-<body>@vegbank_header_html_normal@  <br />
+<body>@vegbank_header_html_normal@  
 <h2>View VegBank Projects</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
