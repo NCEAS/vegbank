@@ -15,8 +15,8 @@ import org.vegbank.common.model.Taxonobservation;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-01 23:33:27 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-03-02 19:04:37 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -134,7 +134,7 @@ public class MBReadHelper
 			if (stratum != null)
 			{
 				Stratumtype st = stratum.getStratumtypeobject();
-				String currentStratumName = "";
+				String currentStratumName = null;
 				if ( st != null )
 				{
 					currentStratumName = st.getStratumname();
@@ -143,7 +143,7 @@ public class MBReadHelper
 				// Return the cover of matching record
 				if ( strata != null && currentStratumName != null )
 				{
-					if ( strata.equalsIgnoreCase( stratum.getStratumname()) )
+					if ( strata.equalsIgnoreCase( currentStratumName ) )
 					{
 						taxonCover = ti.getCover();
 					}
@@ -159,6 +159,7 @@ public class MBReadHelper
 				
 			}
 		}
+		LogUtility.log("Searched " + to.getAccessioncode() + " for cover of stratumName " + strata + " : " + taxonCover  , LogUtility.TRACE);
 		return taxonCover;
 	}
 }
