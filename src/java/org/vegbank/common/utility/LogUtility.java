@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:19:18 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-11-25 19:25:57 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,12 +63,12 @@ public class LogUtility
 	private static String appendStackTrace(java.lang.Throwable t, String tmp)
 	{
 		StackTraceElement[] stElements = t.getStackTrace();
-		tmp += "---------------Start StackTrace-------------------------";
+		tmp += "\n---------------Start StackTrace-------------------------";
 		for ( int i=0; i<stElements.length ; i++)
 		{
-			tmp += "\n" + stElements[i];
+			tmp += "\n\t" + stElements[i];
 		}
-		tmp += "---------------Start StackTrace-------------------------";
+		tmp += "\n---------------End StackTrace-------------------------\n";
 		return tmp;
 	}
 	
