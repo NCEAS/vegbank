@@ -1,9 +1,22 @@
 <!ENTITY % Boolean "(true | false) 'false'">
+<!--
+  * vegPlot20001cv.dtd
+  *
+  *      Authors: John Harris
+  * Organization: National Center for Ecological Analysis and Synthesis
+  *    Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *  For Details: http://www.nceas.ucsb.edu/
+  *      Created: April 2001
+  *
+  * This DTD describes the structure and content of XML documents used
+  * to represent, store, and exchange a single vegetation plot or a subset 
+	* of the vegetation plot
+  *
+-->
 
-<!-- JHH 2000  DTD which will be parsed into the vegplot database -->
 
 <!ELEMENT vegPlot (project)>
-
 
 <!ELEMENT project (projectName, projectDescription, plot, projectContributor)>
 <!ELEMENT projectName (#PCDATA)> 
@@ -13,7 +26,10 @@
 	coverScale, plotOriginLat, plotOriginLong, plotShape, plotSize, 
 	plotSizeAcc, altValue, altPosAcc, slopeAspect, slopeGradient,
 	slopePosition, hydrologicRegime, soilDrainage, surfGeo, plotObservation, 
-	namedPlace, stand, graphic, plotContributor)>
+	namedPlace, stand, graphic, plotContributor, topoPosition, elevationValue*,
+	origLat, origLong, xCoord, yCoord, coordType, soilDepth, soilType, 
+	percentRockGravel, perSmallRx, perSand, perLitter, perWood, perBareSoil,
+	leafPhenology)>
 	
 	<!ELEMENT plotId (#PCDATA)>
  	<!ELEMENT authorPlotCode (#PCDATA)>
@@ -36,9 +52,35 @@
 	<!ELEMENT surfGeo (#PCDATA)>
 	<!ELEMENT state (#PCDATA)>
 	<!ELEMENT currentCommunity  (#PCDATA)>
-
-	<!ELEMENT plotObservation (parentPlot, previousObs, authorObsCode, plotStartDate, plotStopDate, 
-		dateAccuracy, effortLevel,  strata, taxonObservations, communityType, citation)>
+	<!ELEMENT topoPosition  (#PCDATA)>
+	<!ELEMENT elevationValue  (#PCDATA)>
+	<!ELEMENT origLat  (#PCDATA)>
+	<!ELEMENT origLong  (#PCDATA)>
+	<!ELEMENT xCoord  (#PCDATA)>
+	<!ELEMENT yCoord  (#PCDATA)>
+	<!ELEMENT coordType  (#PCDATA)>
+	<!ELEMENT soilDepth  (#PCDATA)>
+	<!ELEMENT soilType  (#PCDATA)>
+	<!ELEMENT percentRockGravel  (#PCDATA)>
+	<!ELEMENT  perSmallRx (#PCDATA)>
+	<!ELEMENT perSand  (#PCDATA)>
+	<!ELEMENT perLitter (#PCDATA)>
+	<!ELEMENT perWood  (#PCDATA)>
+	<!ELEMENT perBareSoil  (#PCDATA)>
+	<!ELEMENT leafPhenology  (#PCDATA)>
+	<!ELEMENT leafType  (#PCDATA)>
+	<!ELEMENT physioClass  (#PCDATA)>
+	
+	
+	<!-- 
+		* observational data that may change over the timescale
+		* reflective of the typical time period that various 
+		* observations of plots are collected
+	-->
+	<!ELEMENT plotObservation (parentPlot, previousObs, authorObsCode, 
+		plotStartDate, plotStopDate, dateAccuracy, effortLevel,  strata, 
+		taxonObservations, communityType, citation)>
+		
 		<!ELEMENT parentPlot (#PCDATA)>
 		<!ELEMENT previousObs (#PCDATA)>
 		<!ELEMENT authorObsCode (#PCDATA)>
@@ -46,21 +88,32 @@
 		<!ELEMENT plotStopDate (#PCDATA)>
 		<!ELEMENT dateAccuracy (#PCDATA)>
 		<!ELEMENT effortLevel (#PCDATA)>
-		<!ELEMENT strata (stratumCover, stratumHeight)>
-			<!ELEMENT stratumCover (#PCDATA)>
-			<!ELEMENT stratumHeight (#PCDATA)>
+		
+		<!--
+			* define the strata here including height and 
+			* percent coverage of vegetation
+		-->
+		<!ELEMENT strata (strataName, strataHeight, strataCover)>
+		<!ELEMENT strataName (#PCDATA)>
+		<!ELEMENT strataCover (#PCDATA)>
+		<!ELEMENT strataHeight (#PCDATA)>
 
-		<!--Because it was the attempt to keep the database normalized I have set up this dtd so that the same
-		 taxon can be represented more than once - it should be replicated every time there it occurs in a new stratum
+		<!--
+			*	Because it was the attempt to keep the database normalized 
+			* I have set up this dtd so that the same
+		 	* taxon can be represented more than once - 
+			*	it should be replicated every time there it occurs in a new stratum
 		-->	
-		<!ELEMENT taxonObservation (authNameId, originalAuthority, strataComposition, interptretation)>
+		<!ELEMENT taxonObservation (authNameId, originalAuthority, 
+			strataComposition, interptretation*)>
 			<!ELEMENT authNameId (#PCDATA)>
 			<!ELEMENT originalAuthority (#PCDATA)>
 			<!ELEMENT strataComposition (strataType, percentCover)>
 				<!ELEMENT strataType (#PCDATA)>
 				<!ELEMENT percentCover (#PCDATA)>	
 
-			<!ELEMENT interpretation (party, taxonName, authority, usageStartDate, usageStopDate, circum_id, role, date, notes)>
+			<!ELEMENT interpretation (party, taxonName, authority, usageStartDate, 
+				usageStopDate, circum_id, role, date, notes)>
 				<!ELEMENT party (#PCDATA)>
 				<!ELEMENT taxonName (#PCDATA)>
 				<!ELEMENT authority (#PCDATA)>
