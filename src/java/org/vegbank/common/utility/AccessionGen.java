@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-01-24 23:05:37 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2005-02-11 00:29:49 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,6 +62,13 @@ public class AccessionGen {
 
 	public AccessionGen() {
 		init();
+        setDbCode(null);
+	}
+	
+	public AccessionGen(Connection dbconn) {
+		init();
+		this.conn = dbconn;
+        dbCode = Utility.getAccessionPrefix();
 	}
 	
 	/**
@@ -98,8 +105,17 @@ public class AccessionGen {
 	 * @param table - full name of the table to be abbreviated  
 	 * @param pk - primary key
 	 */
+	public String getAccession(String table, long pk) throws SQLException {
+	    return getAccession(null, table, Long.toString(pk));
+    }
+	public String getAccession(String table, String pk) throws SQLException {
+	    return getAccession(null, table, pk);
+    }
 	public String getAccession(String db, String table, String pk) throws SQLException {
 
+        return buildAccession(table, pk, getConfirmation(table, pk));
+
+        /*
 		StringBuffer accCode = new StringBuffer(32);
 
 		// Lay down the base AC e.g. VB.PL.
@@ -110,6 +126,24 @@ public class AccessionGen {
 
 		// confirmation code is different for each table
 		accCode.append(getConfirmation(table, pk));
+		return accCode.toString();
+        */
+
+	}
+
+
+    /**
+     * Simply pastes together the values of an AC but doesn't touch the DB.
+     * Useful if confirmation code is known before record is in DB.
+     */
+	public String buildAccession(String table, String pk, String unformattedConf) {
+
+		StringBuffer accCode = new StringBuffer(32);
+
+		// Lay down the base AC e.g. VB.PL.
+		accCode.append(this.getBaseAccessionCode(table))
+		    .append(pk).append(".")
+            .append(formatConfirmCode(unformattedConf));
 
 		return accCode.toString();
 	}
@@ -141,7 +175,7 @@ public class AccessionGen {
 		}
 				
 		query += conjunction + Utility.getPKNameFromTableName(table) + " =" + pk;
-		log.debug("confirmation query ===> " + query);
+		//log.debug("confirmation query ===> " + query);
 		ResultSet rs = conn.createStatement().executeQuery(query);
 
 		if (rs.next()) {
@@ -150,7 +184,7 @@ public class AccessionGen {
 			if (tmpConfirm == null) {
 				tmpConfirm = rs.getString(3);
 			}
-			//log.debug("Resulting AC > " + formatConfirmCode(tmpConfirm));
+			log.debug("generated accession code: " + formatConfirmCode(tmpConfirm));
 			return formatConfirmCode(tmpConfirm);
 		}
 
@@ -196,7 +230,7 @@ public class AccessionGen {
 	 * Allows only alpha numeric (other chars deleted), not longer than 15 chars total.
 	 */
 	public static String formatConfirmCode(String code) {
-		code = code.replaceAll("[\\W]", "");
+		code = code.replaceAll("[^a-zA-Z0-9]", "");
 		if (code.length() > 15) {
 			code = code.substring(0, 15);
 		}
@@ -361,7 +395,7 @@ public class AccessionGen {
 
 		Iterator it = tablesAndKeys.keySet().iterator();
 		while (it.hasNext()) {
-			tableName = (String)it.next();
+			tableName = ((String)it.next()).toLowerCase();
 	
 			// Only deal with tableNames that are defined in the property file
 			// i.e. filter junk and tables without accessionCode rules
@@ -375,8 +409,8 @@ public class AccessionGen {
 				{
 					Vector keys = (Vector) tablesAndKeys.get(tableName);
 			
-					if (  keys != null && ! keys.isEmpty() )
-					{	
+					if ( keys != null && !keys.isEmpty() )
+					{
 						// Add an AccessionCode for each Key
 						PreparedStatement pstmt = this.getUpdatePreparedStatement(tableName);
 				
@@ -390,7 +424,9 @@ public class AccessionGen {
 							log.debug("Set accessionCode for PK: " + key + " on " + tableName);
 							accessionCodeList.add(accessionCode);
 						}
-					}
+					} else {
+                        log.debug("but there are no PKs given to update " + tableName);
+                    }
 				}
 			}
 		}
@@ -437,6 +473,10 @@ public class AccessionGen {
 		if (tableCode == null) {
 			tableCode = "??";
 		}
+
+        if (Utility.isStringNullOrEmpty(dbCode)) {
+            setDbCode(null);
+        }
 
 		baseAC = dbCode + "." + tableCode + ".";
 		return baseAC;
@@ -506,6 +546,23 @@ public class AccessionGen {
 	private void showSQL(String sql) {
 		System.out.println("SQL: " + sql);
 	}
+
+    public void setDbConnection(Connection conn) {
+        this.conn = conn;
+    }
+
+    public void setDbCode(String c) {
+        if (Utility.isStringNullOrEmpty(c)) {
+            dbCode = Utility.getAccessionPrefix();
+        } else {
+            dbCode = c;
+        }
+    }
+
+
+    public String getDbCode() {
+        return dbCode;
+    }
 
 
 	//////////////////////////////////////////////////////////
