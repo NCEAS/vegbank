@@ -89,7 +89,7 @@ return "Check All"; }
 		</xsl:variable>
   	<a>Community Name:<b> <xsl:value-of select="commName"/> </b> </a> <br></br>
 		<a>Parent Name: <xsl:value-of select="parentComm/commName"/>;  </a><br></br>
-		<a>Date Entered: <xsl:value-of select="dateEntered"/>; </a><br></br>
+		<a>Date Entered: <xsl:value-of select="conceptOriginDate"/>; </a><br></br>
 	</td>
 		
 	<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="top">
@@ -111,7 +111,7 @@ return "Check All"; }
 		</xsl:variable>
   	<a>Community Name:<b> <xsl:value-of select="commName"/> </b> </a> <br></br>
 		<a>Parent Name: <xsl:value-of select="parentComm/commName"/>;  </a><br></br>
-		<a>Date Entered: <xsl:value-of select="dateEntered"/>; </a><br></br>
+		<a>Date Entered: <xsl:value-of select="conceptOriginDate"/>; </a><br></br>
 	</td>
 		
 	<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
