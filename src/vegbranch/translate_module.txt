@@ -1,6 +1,6 @@
 Option Compare Database
 Option Explicit
-Const debugVlue = 2
+Const debugVlue = 0
 Public Function trans_closedLists_withData()
 ''function gets fields that have data and are constrained to a closed list and opens appropriate form
    ''clear list of field that are to be translated:
@@ -37,10 +37,10 @@ Public Function trans_TranslNoFields()
   DoCmd.RunSQL "UPDATE FieldsToConvertUsr SET FieldsToConvertUsr.ConvertThisTime = False;"
 End Function
 
-Public Function trans_oneField(lngFieldID As Long)
+Public Function trans_oneField(lngFieldId As Long)
 'function sets one field to be translated
 Call trans_TranslNoFields
-AddFieldToConvert (lngFieldID)
+AddFieldToConvert (lngFieldId)
 If IsFormOpen("TRANSALL") Then DoCmd.Close acForm, "TRANSALL", acSavePrompt
 DoCmd.OpenForm "TRANSALL"
 End Function
@@ -48,13 +48,21 @@ End Function
 Public Function trans_manyFields(strFieldIDs As String)
   'function sets many fields to translate, by field ID
   Call trans_TranslNoFields
-  Dim colIDs As New Collection, inttemp As Long
-  Set colIDs = csv_parseCSVstring(strFieldIDs, ",")
-  For inttemp = 1 To colIDs.Count
-    AddFieldToConvert (colIDs(inttemp))
-  Next
+  Dim colIDs As New Collection, intTemp As Long
+  If strFieldIDs <> "" Then 'don't look for empty string of IDs
+    Set colIDs = csv_parseCSVstring(strFieldIDs, ",")
+    For intTemp = 1 To colIDs.Count
+      AddFieldToConvert (colIDs(intTemp))
+    Next intTemp
+  
   If IsFormOpen("TRANSALL") Then DoCmd.Close acForm, "TRANSALL", acSavePrompt
   DoCmd.OpenForm "TRANSALL"
+  Else
+    'no fields to transl
+    If msgBox("There are no fields that need translation.  Would you like to choose some fields to translate anyway?", vbYesNo) = vbYes Then
+      DoCmd.OpenForm "FieldsToConvertUsr"
+    End If
+  End If
 End Function
 
 Public Function trans_openListsNeed(blnOpen As Boolean) As Boolean
@@ -127,14 +135,14 @@ Public Function trans_ManualMatchField(strFld As String, blnShowForm As Boolean,
       strFldsToGet = !ListOfLoadFlds
       Dim colFlds As New Collection
       Set colFlds = csv_parseCSVstring(strFldsToGet, ",")
-      Dim inttemp As Integer
-      For inttemp = 1 To colFlds.Count
+      Dim intTemp As Integer
+      For intTemp = 1 To colFlds.Count
         Dim strT As String, strF As String
-        strT = Left(colFlds(inttemp), InStr(colFlds(inttemp), ".") - 1)
-        strF = Right(colFlds(inttemp), Len(colFlds(inttemp)) - InStr(colFlds(inttemp), "."))
+        strT = Left(colFlds(intTemp), InStr(colFlds(intTemp), ".") - 1)
+        strF = Right(colFlds(intTemp), Len(colFlds(intTemp)) - InStr(colFlds(intTemp), "."))
                 
         If Not fieldExistOnTbl(strF, strT) Then
-            Debug.Print "Fld DNE = " & colFlds(inttemp)
+            Debug.Print "Fld DNE = " & colFlds(intTemp)
         End If
         ''open rst to get values for above field
         Dim rstAddVals As New ADODB.Recordset
@@ -182,7 +190,7 @@ Public Function trans_ManualMatchField(strFld As String, blnShowForm As Boolean,
           Loop
         End With
         rstAddVals.Close
-      Next inttemp
+      Next intTemp
     End If
   End With
 openFormMaybe:
@@ -674,12 +682,12 @@ strProcForm = UpdateProcessingPosX(0, 0, "", True, "Analyzing your data", "VegBr
    Dim colTemp As New Collection
    EmptyCollection colTemp
    Set colTemp = csv_parseCSVstring(Nz(!FieldsMakeNec))
-   Dim inttemp As Integer
-   For inttemp = 1 To colTemp.Count
-     If colTemp(inttemp) <> "" Then
-      If debugVlue > 0 Then Debug.Print "transl_whatNeedsTransl>>   ID: " & !translateID & " --#" & get_NumbRecsNotNull(colTemp(inttemp))
+   Dim intTemp As Integer
+   For intTemp = 1 To colTemp.Count
+     If colTemp(intTemp) <> "" Then
+      If debugVlue > 0 Then Debug.Print "transl_whatNeedsTransl>>   ID: " & !translateID & " --#" & get_NumbRecsNotNull(colTemp(intTemp))
       
-      If get_NumbRecsNotNull(colTemp(inttemp)) > 0 Then
+      If get_NumbRecsNotNull(colTemp(intTemp)) > 0 Then
         ''has records - exit! with true
         !IsNecessary = True
         rstTrans!IStranslated = False
@@ -861,18 +869,18 @@ Public Function trans_CommPartyPersp()
    End Select
 End Function
 
-Public Function chkFieldToTransl(lngFieldID As Long) As Boolean
+Public Function chkFieldToTransl(lngFieldId As Long) As Boolean
    ''checks a field that the translation is OK
    '''will ask confirmation for default values and setting values to null
    ''returns false if values not confirmed
    'get relevant data for checking:
 Dim cnnLoc As Connection, rstGetData As New ADODB.Recordset
 Set cnnLoc = CurrentProject.Connection
-rstGetData.Open "SELECT * FROM Y_TrAll_Fld WHERE FieldIdToConvert = " & lngFieldID & ";", cnnLoc _
+rstGetData.Open "SELECT * FROM Y_TrAll_Fld WHERE FieldIdToConvert = " & lngFieldId & ";", cnnLoc _
     , adOpenForwardOnly, adLockReadOnly, adCmdText
 With rstGetData
 If .EOF Then
-  msgBox "ERROR!  Field not found! " & lngFieldID, vbCritical
+  msgBox "ERROR!  Field not found! " & lngFieldId, vbCritical
 End If
   Dim strCurrTbl As String
   Dim strCurrFld As String
@@ -903,7 +911,7 @@ If Forms!transall!subfrmValues.Visible = True Then
 
   Dim strSQLselect As String
     strSQLselect = "SELECT * FROM Y_Translate_anyField " _
-& " WHERE (((Y_Translate_anyField.FieldID)=" & lngFieldID & ") " _
+& " WHERE (((Y_Translate_anyField.FieldID)=" & lngFieldId & ") " _
 & " AND ((Y_Translate_anyField.DefaultForField)=True));"
       rstCurr.Open strSQLselect, cnnLocal, , 1, adCmdText
   If rstCurr.EOF Then GoTo NoDefault
@@ -918,7 +926,7 @@ If intResponse = vbYes Then    ' User chose Yes.
     'Proceed with update when translation occurs
 Else    ' User chose No.
     DoCmd.RunSQL "UPDATE Y_Translate_anyField SET Y_Translate_anyField.DefaultForField = 0" _
-         & "   WHERE (((Y_Translate_anyField.FieldID)= " & lngFieldID & " )); "
+         & "   WHERE (((Y_Translate_anyField.FieldID)= " & lngFieldId & " )); "
     msgBox ("Default value erased, as per user request")
 End If
 
@@ -926,7 +934,7 @@ NoDefault:
 rstCurr.Close
 '----- double check that user wants to set values to null, if that's applicable:
     strSQLselect = "SELECT * FROM Y_Translate_anyField " _
-& " WHERE (((Y_Translate_anyField.FieldID)=" & lngFieldID & ") " _
+& " WHERE (((Y_Translate_anyField.FieldID)=" & lngFieldId & ") " _
 & " AND ((((Y_Translate_anyField.VegBankValue) is null)) OR " _
 & " (Y_Translate_anyField.VegBankValue=""@---TRANSLATE this value to NULL!---@"")));"
       rstCurr.Open strSQLselect, cnnLocal, adOpenForwardOnly, adLockReadOnly, adCmdText
@@ -1053,6 +1061,53 @@ End Function
 Public Function moveEtoD2_runall()
   'function takes E data and moves to D2, where it applies
   DoCmd.OpenQuery "move_E_to_D2_inclStrata"
+End Function
+
+Public Function moveE2toE_runall()
+  'function takes E2 and sends to E
+  'first send regular records
+  DoCmd.OpenQuery "move_E2_to_E_tallies"
+  'now deal with lists of stems
+  Dim intList As Integer
+
+    Dim rstTemp As New ADODB.Recordset, colList As New Collection
+    rstTemp.Open "select * from Z_USER_E2_stemClasses_listdataonly;", CurrentProject.Connection _
+      , adOpenForwardOnly, adLockReadOnly, adCmdText
+    Dim rstAdd As New ADODB.Recordset
+    rstAdd.Open "Z_USER_E_StemData", CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdTable
+    With rstTemp
+      'get list of values
+     Do Until .EOF
+     
+      Call EmptyCollection(colList)
+      If csv_listIsNumeric(!list, True, colList) Then
+        For intList = 1 To colList.Count
+           'run some SQL to insert values:
+           rstAdd.AddNew
+           rstAdd!authorplotcode = !authorplotcode
+           rstAdd!plantCode = !plantCode
+           rstAdd!stratumIndex = !stratumIndex
+           rstAdd!stemTaxonArea = !stemTaxonArea
+           rstAdd!stemHealth = !stemHealth
+           rstAdd!stemDiameter = colList(intList)
+           rstAdd!stemCount = 1
+           rstAdd.Update
+         '  Dim strSQL As String
+        '  strSQL = "INSERT INTO Z_USER_E_stemData ( AuthorPlotCode, PLANTCode, stratumIndex, stemTaxonArea, stemHealth, stemDiameter,  stemCount )" _
+& " SELECT " & SQLizeTxt(!authorplotcode, , True) & "," & SQLizeTxt(!plantCode, , True) & "," & SQLizeTxt(!stratumIndex, , True) & "," & SQLizeTxt(!stemTaxonArea, , True) & "," & SQLizeTxt(!stemHealth, , True) & "," & colList(intList) & ", 1"
+         ' DoCmd.RunSQL strSQL
+        Next intList
+      Else 'not numeric in list
+        msgBox "error.  Non-numeric value in list:" & !list & " skipping this list (plot:" & !authorplotcode & " spec:" & !plantCode & " stratum:" & !stratumIndex & ")"
+      End If
+      .MoveNext
+     Loop
+    
+    End With
+rstTemp.Close
+Set rstTemp = Nothing
+rstAdd.Close
+Set rstAdd = Nothing
 End Function
 
 Public Function moveToB_runall()
@@ -1330,6 +1385,19 @@ End If
 rstTemp.Close
 End Function
 
+Public Function getPlaceNameFromID_noSQL(lngID As Long) As String
+  'reverses interp_placeName: gets name from ID: doens't use SQL
+  On Error GoTo retNegOne
+  Dim rstNew As New ADODB.Recordset
+  rstNew.Open "select placeName from namedPlace where namedPlace_ID=" & lngID, CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  getPlaceNameFromID_noSQL = rstNew!placeName
+exitthis:
+  Exit Function
+retNegOne:
+  getPlaceNameFromID_noSQL = -1
+  Resume exitthis
+End Function
+
 Public Function interp_placeName(ByVal strName As String, ByVal strSystem As String, Optional ByVal strMoreINFO As String, Optional blnIgnoreCache As Boolean) As Long
   ''function attempts to match a place name (including system) to a namedplace.namedPlace_ID
   'returns -1 if not successful
@@ -1337,7 +1405,13 @@ Public Function interp_placeName(ByVal strName As String, ByVal strSystem As Str
   'similar to interpreting plantNAme or commName:
   'If strSystem = "" Then strSystem = "Geographic Places" 'default system that users may add to. '@HARDCODE@'
   'no longer hardcoded here, but instead in append_C2_getNewPKs
-   'state, province, stateProvince -> correct system:
+   
+  'first, preserve original values to later check manual match:
+  Dim strOrigName As String, strOrigSystem As String
+  strOrigName = strName
+  strOrigSystem = strSystem
+  
+     'state, province, stateProvince -> correct system:
 strSystem = interp_placeSystem(strSystem)
   
   'if more info is passed, see if its an abbrev
@@ -1354,9 +1428,15 @@ strSystem = interp_placeSystem(strSystem)
    End Select
    If strParentSystem <> "" Then
      'look for abbrev for this name
-     Dim strParentFullName As String
-     strParentFullName = checkPlaceAbbrev(strMoreINFO, strParentSystem, True)
-     If strParentFullName <> "" Then strMoreINFO = strParentFullName
+     Dim lngParentID As Long, strParentFullName As String
+     lngParentID = interp_placeName(strMoreINFO, strParentSystem)
+     If lngParentID > 0 Then
+       'value makes sense
+       strParentFullName = getPlaceNameFromID_noSQL(lngParentID)
+       If debugVlue > 1 Then Debug.Print "interp_placeName>> for:" & strName & "  changed strMoreInfo from:" & strMoreINFO & " to:" & strParentFullName
+       strMoreINFO = strParentFullName
+       
+     End If
    End If
   End If 'has moreInfo
   
@@ -1378,6 +1458,15 @@ strSystem = interp_placeSystem(strSystem)
   End If
   rstCache.Close
   Set rstCache = Nothing
+  
+  'first and a half: check for this in manual match:
+  lngPK = trans_ManualMatch_getVBVal("namedPlace", strSystem & ":" & strName)
+  If lngPK > 0 Then GoTo interpNMPLExt 'have via manual match
+  
+  'try original values, too
+  lngPK = trans_ManualMatch_getVBVal("namedPlace", strOrigSystem & ":" & strOrigName)
+  If lngPK > 0 Then GoTo interpNMPLExt 'have via manual match
+  
   'SECOND, look in Abbreviations table:
   Dim strAbbrevCode As String
   strAbbrevCode = checkPlaceAbbrev(strName, strSystem)
@@ -1388,14 +1477,10 @@ strSystem = interp_placeSystem(strSystem)
   End If
   
   
-  'first, look for manual match, which would be listed as system:name in manual match table
-  'manual match needs quandrangleNAme not quadrangle
-  lngPK = trans_ManualMatch_getVBVal("namedPlace", strSystem & ":" & strName)
-  
+ 
   'next, look for manual match as accessionCode
   If lngPK <= 0 Then lngPK = getPKfromAccessionCode(strName, "namedPlace")
-  
-If lngPK > 0 Then GoTo interpNMPLExt 'have manual match value
+  If lngPK > 0 Then GoTo interpNMPLExt 'have accCode
    
 
   'if here, then not found in manual match, try real named place table
@@ -1433,7 +1518,15 @@ If lngPK < 0 And InStr(strName, "{") > 0 And InStr(strName, "}") > 0 Then
   strNewName = Trim(Left(strName, InStr(strName, "{") - 1))
   
   'dont do this if strName still is the same as before, could lead to infinite recursion
-  If strName <> strNewName Then lngPK = interp_placeName(strNewName, strSystem, strState)    'open new rst, looking for name with state passed
+  If strName <> strNewName Then
+    lngPK = interp_placeName(strNewName, strSystem, strState)    'open new rst, looking for name with state passed
+    'report what happened
+    If debugVlue > 0 Then
+       Debug.Print "interp_placeName>" & strName & " looking now for:" & strNewName & " in sys:" & strSystem & " for state:" & strState & "  found:" & lngPK
+       
+    End If
+  End If
+  
 End If
 If Not blnIgnoreCache Then
 'here we have value, cache it, even if not ok value
@@ -1484,14 +1577,14 @@ Public Function interp_thing(strThing As String, ByVal strValue As String) As Lo
   
   'rescurse over list of fields in which we will try to match on
   'note that fields need not be fields, but can be expressions, so long as they have no commas, which messes with parser!
-  Dim colMatchOn As New Collection, inttemp As Integer
+  Dim colMatchOn As New Collection, intTemp As Integer
   Set colMatchOn = csv_parseCSVstring(getvalFrmSQL("select MatchOnFlds from Z_VB_reconcile_FldsChoose where vbTableName=""" _
       & strThing & """;"), ",")
   
-For inttemp = 1 To colMatchOn.Count
+For intTemp = 1 To colMatchOn.Count
   lngPK = -3 'default: nothing known about this one
   Dim strvarName As String
-  strvarName = colMatchOn(inttemp)
+  strvarName = colMatchOn(intTemp)
   
  If strvarName <> "" Then
   'if here, then not found in manual match, try real vegbank table
@@ -1519,7 +1612,7 @@ For inttemp = 1 To colMatchOn.Count
   End With
   rstFindVB.Close
  End If ' non blank variable name
-Next inttemp
+Next intTemp
   
 interpNMPLExt:
 interp_thing = lngPK
@@ -1555,33 +1648,33 @@ Public Function getOneManualMatchStat(strLoadName As String, Optional strWhatToR
     
     strDestTbl = !VBTableName
     'open temp rst to figure out number of recs, unique, matched, not matched
-    Dim rstTemp As New ADODB.Recordset, inttemp As Integer, colFlds As New Collection, strSQL As String ' strSQL is for SQL to calc number of recs
+    Dim rstTemp As New ADODB.Recordset, intTemp As Integer, colFlds As New Collection, strSQL As String ' strSQL is for SQL to calc number of recs
     Dim strTbl As String, strFld As String, strTemp As String, strSQLU As String, strSQLm As String, strSQLnm As String
     Set colFlds = csv_parseCSVstring(!ListOfLoadFlds)
     strSQL = ""
     strSQLU = ""
     strSQLm = ""
     strSQLnm = ""
-    For inttemp = 1 To colFlds.Count
-      strTemp = colFlds(inttemp) 'tbl.fld
+    For intTemp = 1 To colFlds.Count
+      strTemp = colFlds(intTemp) 'tbl.fld
       strTbl = Left(strTemp, InStr(strTemp, ".") - 1) 'tbl
       strFld = Right(strTemp, Len(strTemp) - InStr(strTemp, ".")) 'fld
       'all recs
-      strSQL = strSQL & IIf(inttemp > 1, " union all ", "") & " SELECT [" & strFld & "] FROM [" & strTbl & "] " _
+      strSQL = strSQL & IIf(intTemp > 1, " union all ", "") & " SELECT [" & strFld & "] FROM [" & strTbl & "] " _
       & " WHERE ([" & strFld & "] is not null)" & " group by [" & strFld & "];"
 'unique
-      strSQLU = strSQLU & IIf(inttemp > 1, " union ", "") & " SELECT [" & strFld & "] FROM [" & strTbl & "] " _
+      strSQLU = strSQLU & IIf(intTemp > 1, " union ", "") & " SELECT [" & strFld & "] FROM [" & strTbl & "] " _
       & " WHERE ([" & strFld & "] is not null)" & " group by [" & strFld & "];"
 'matching unique
-      strSQLm = strSQLm & IIf(inttemp > 1, " union ", "") & " SELECT [" & strFld & "] FROM [" & strTbl & "] " _
+      strSQLm = strSQLm & IIf(intTemp > 1, " union ", "") & " SELECT [" & strFld & "] FROM [" & strTbl & "] " _
       & " WHERE (" & " ([" & strFld & "] is not null) AND " _
       & " interp_thing(""" & strDestTbl & """,nz([" & strFld & "]))>0" & ") group by [" & strFld & "];"
 'not matching unique
-      strSQLnm = strSQLnm & IIf(inttemp > 1, " union ", "") & " SELECT [" & strFld & "] FROM [" & strTbl & "] " _
+      strSQLnm = strSQLnm & IIf(intTemp > 1, " union ", "") & " SELECT [" & strFld & "] FROM [" & strTbl & "] " _
       & " WHERE (" & " ([" & strFld & "] is not null) AND " _
       & " interp_thing(""" & strDestTbl & """,nz([" & strFld & "]))<=0" & ")  group by [" & strFld & "];"
       
-    Next inttemp
+    Next intTemp
     
     'open New qry with all values: count recs
     'Debug.Print "ALL:"; strSQL
@@ -1699,5 +1792,128 @@ End Function
 Public Function removeSoilTaxonFromLoadingTbl(strSoilTaxon As String)
   'function removes the string passed here from the plot data loading table
   DoCmd.RunSQL "update Z_USER_C_plotDAta set soilTaxon=null where soilTaxon=" & SQLizeTxt(strSoilTaxon) & ";"
+End Function
+
+Public Function StemClasses_addDefnsIfMissing() As Boolean
+  'checks to see if stem class definition records exist, and adds them (blank) if not
+  Dim blnRep As Boolean
+  If getvalFrmSQL("select 'yes' from Z_USER_E2_stemClasses WHERE tallyDefn='minDBH';") <> "yes" Then
+    DoCmd.RunSQL "insert into Z_USER_E2_stemClasses (tallyDefn) SELECT 'minDBH';"
+    blnRep = True
+  End If
+  If getvalFrmSQL("select 'yes' from Z_USER_E2_stemClasses WHERE tallyDefn='maxDBH';") <> "yes" Then
+    DoCmd.RunSQL "insert into Z_USER_E2_stemClasses (tallyDefn) SELECT 'maxDBH';"
+    blnRep = True
+  End If
+    If getvalFrmSQL("select 'yes' from Z_USER_E2_stemClasses WHERE tallyDefn='minHt';") <> "yes" Then
+    DoCmd.RunSQL "insert into Z_USER_E2_stemClasses (tallyDefn) SELECT 'minHt';"
+    blnRep = True
+  End If
+    If getvalFrmSQL("select 'yes' from Z_USER_E2_stemClasses WHERE tallyDefn='maxHt';") <> "yes" Then
+    DoCmd.RunSQL "insert into Z_USER_E2_stemClasses (tallyDefn) SELECT 'maxHt';"
+    blnRep = True
+  End If
+  StemClasses_addDefnsIfMissing = blnRep
+End Function
+
+Public Function trans_simpleDefaultValue(lngFieldId As Long, Optional strDefault As String)
+  'function provides a default value for a field, prompting if strDefault = ""
+  Dim strTbl As String, strFld As String, strType As String, lngSize As Long, strSize As String
+  On Error GoTo errorTranslFld
+  strTbl = getvalFrmSQL("select TableName from Z_fieldDescription where Z_FieldDescr_Id=" & lngFieldId)
+  strFld = getvalFrmSQL("select fieldName from Z_fieldDescription where Z_FieldDescr_Id=" & lngFieldId)
+  strType = getZfldInfo(strTbl, strFld, "dataType")
+  strSize = getZfldInfo(strTbl, strFld, "fieldSize")
+  If IsNumeric(strSize) Then lngSize = strSize
+  If strTbl = "" Or strFld = "" Then
+    msgBox "Sorry, this is not a valid field, and thus it cannot be translated.", , "VegBranch"
+    GoTo exitthis
+  End If
+  'the field is ok, let's translate it
+  'if strDefault is blank, prompt for value
+  If strDefault = "" Then
+    strDefault = InputBox("What value would you like to use as a default for " & strFld & "?", "Providing a default value")
+    If strDefault = "" Then
+      'was cancelled
+      msgBox "cancelled. No default value provided", , "VegBranch"
+      GoTo exitthis
+    End If
+  End If
+  'have value, make sure it's legit for field type
+  Dim strErr As String
+  If validateValueForType(strDefault, strType, strErr, lngSize) Then
+    'ok, do translation
+    'confirm with user:
+    If AreYouSure("Do you REALLY want to use: " & strDefault & " to replace all null values for the field: " & strFld & " ( in table: " & strTbl & ")") Then
+      DoCmd.RunSQL "UPDATE [" & strTbl & "] SET [" & strFld & "]=" & SQLizeTxt(strDefault) & " WHERE [" & strFld & "] is null;"
+      CheckFieldsForFields strTbl, "table"
+      msgBox "Default Value written successfully.", , "VegBranch"
+    Else
+      msgBox "Cancelled- no default value written.", , "VegBranch"
+      GoTo exitthis
+    End If
+  Else
+    'not ok, report error
+    msgBox "The value you supplied (" & strDefault & ") is not valid for this field (" & strFld & "). Details:" & Chr(13) & strErr & Chr(13) & "Please try another value", , "VegBranch Default Field Value"
+    GoTo exitthis
+  End If
+exitthis:
+  Exit Function
+errorTranslFld:
+  msgBox "Sorry, there was an error translating the field: " & strFld & Chr(13) & Err.Description
+  Resume exitthis
+End Function
+
+Public Function validateValueForType(strValue As Variant, strType As String, Optional ByRef strErrRet, Optional lngSize As Long) As Boolean
+  'validates a value given a data type, returning true if it's ok and false if not
+  'types are passed according to AccessTypes, like "Yes/No" in Z_fieldDescription
+  Dim dblNumeric As Double, blnOK As Boolean
+  blnOK = True 'default
+  Select Case strType
+              Case "Yes/No", "boolean"
+                'check to make sure true or false
+                blnOK = isBoolean(strValue)
+                strErrRet = "Boolean fields should be 'true' or 'false', '-1' (true), or '0' (false)"
+              Case "Long Integer"
+                If IsNumeric(strValue) Then
+                  'check to make sure not fractional, nor too big or small
+                  dblNumeric = strValue
+                  If dblNumeric < (-2147483648#) Or dblNumeric > 2147483647 Or Int(dblNumeric) <> dblNumeric Then
+                    'not ok
+                    blnOK = False
+                  Else
+                    blnOK = True
+                  End If
+                Else 'not numeric, not ok
+                  blnOK = False
+                End If
+                strErrRet = "Long Integer fields should be numeric, but not fractional and between -2,147,483,648 and 2,147,483,647.  Fractional values will be rounded if you continue."
+              Case "Double"
+                If IsNumeric(strValue) Then
+                  'check to make sure not fractional, nor too big or small
+                  dblNumeric = strValue
+                  If dblNumeric < (-1.79769313486231E+308) Or dblNumeric > 1.79769313486231E+308 Then
+                    'not ok
+                    blnOK = False
+                  Else
+                    blnOK = True
+                  End If
+                Else 'not numeric, not ok
+                  blnOK = False
+                End If
+                strErrRet = "Double (type) fields should be numeric and : from -1.79769313486231E308 to -4.94065645841247E-324 for negative values and from 4.94065645841247E-324 to 1.79769313486232E308 for positive values. "
+              Case "Date/Time", "date"
+                blnOK = IsDate(strValue)
+                strErrRet = "Date/Time fields should have month, day, and year.  If only day is omitted, 1 is assumed.  If only year is omitted, this year is assumed.  Settings depend on your system settings.  Generally DD-MMM-YYYY will work, ie 30-MAR-1981.  Time is also allowed, like this: 18-OCT-2003 14:31:03"
+              Case "Text"
+                If lngSize > 0 Then
+                  blnOK = (Len(strValue) <= lngSize)
+                Else
+                  'is ok
+                  blnOK = True
+                End If
+                strErrRet = "Text fields have limits on the length of the string allowed.  This field is limited to : " & lngSize & " characters.  The values here are longer than that.  The values will be truncated if you continue to import."
+  End Select
+  validateValueForType = blnOK
 End Function
 
