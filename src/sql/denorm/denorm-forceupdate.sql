@@ -90,3 +90,49 @@ update party set partypublic=true where party_ID in (select party_ID from view_p
 
 update taxonImportance set stratumHeight=(select stratumHeight from stratum where taxonImportance.stratum_ID=stratum.stratum_ID) where taxonImportance.stratum_ID is not null ;
 update taxonImportance set stratumBase=(select stratumBase from stratum where taxonImportance.stratum_ID=stratum.stratum_ID) where taxonImportance.stratum_ID is not null;
+
+
+-- update embargo denorm fields for full embargo
+
+-- ORDER OF THESE STATEMENTS MATTERS! the latter read from the former.
+
+--plot
+update plot set emb_plot = (select currentEmb from view_emb_embargo_complete where plot.plot_id = view_emb_embargo_complete.plot_ID);
+
+--observation
+update observation set emb_observation = (select emb_plot from plot where plot.plot_ID=observation.plot_id);
+
+--disturbanceObs
+update disturbanceObs set emb_disturbanceObs = (select emb_observation from observation where observation.observation_ID=disturbanceObs.observation_ID);
+
+--soilObs
+update soilObs set emb_soilObs = (select emb_observation from observation where observation.observation_ID=soilObs.observation_ID);
+
+--commClass
+UPDATE commClass set emb_commClass = (select emb_observation from observation where observation.observation_ID=commClass.observation_ID);
+
+---classContributor
+UPDATE classContributor SET emb_classContributor= (select emb_commClass from commClass where commClass.commClass_ID=classContributor.commClass_ID);
+
+---commInterpretation
+UPDATE commInterpretation SET emb_commInterpretation= (select emb_commClass from commClass where commClass.commClass_ID=commInterpretation.commClass_ID);
+
+--taxonObservation
+
+update taxonObservation set emb_taxonObservation = (select emb_observation from observation where observation.observation_ID=taxonObservation.observation_ID);
+
+---taxonImportance
+update taxonImportance set emb_taxonImportance = (select emb_taxonObservation FROM taxonObservation   where taxonImportance.taxonObservation_id =taxonObservation.taxonObservation_ID);
+
+----stemCount
+update stemCount set emb_stemCount = (select emb_taxonImportance FROM taxonImportance   where stemCount.taxonImportance_id =taxonImportance.taxonImportance_ID);
+
+-----stemLocation
+update stemLocation set emb_stemLocation = (select emb_stemCount FROM stemCount   where stemLocation.stemCount_id =stemCount.stemCount_ID);
+
+---taxonInterpretation
+update taxonInterpretation set emb_taxonInterpretation = (select emb_taxonObservation FROM taxonObservation   where taxonInterpretation.taxonObservation_id =taxonObservation.taxonObservation_ID);
+
+----taxonAlt
+update taxonAlt set emb_taxonAlt = (select emb_taxonInterpretation FROM taxonInterpretation   where taxonAlt.taxonInterpretation_id =taxonInterpretation.taxonInterpretation_ID);
+
