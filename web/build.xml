@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-11-02 18:15:38 $'
-* '$Revision: 1.128 $'
+* '$Date: 2004-11-06 00:53:22 $'
+* '$Revision: 1.129 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -535,9 +535,9 @@
     </copy>
   </target>
   <!-- dist the loading table documentation, similar to data dictionary -->
-  <target name="vegbranch-dist-docs-loadtbls" depends="vegbranch-init" description="styles vegbranch loading table documentation: before dist docs">
+  <target name="vegbranch-dist-docs-loadtbls" depends="vegbranch-init" description="not needed any longer">
     <!-- <ant antfile="loadbuild.xml" dir="./vegbranch/docs/loadtbls/" target="dist-loaddoc"/> -->
-    <style in="${vegbr_dir}/docs/loadtbls/loadmodule_doc.xml" out="${vegbr_dir}/docs/loadtbls/BOGUS.txt" style="${vegbr_dir}/docs/loadtbls/loadmod_docAll.xsl" force="true"/>
+    <!--<style in="${vegbr_dir}/docs/loadtbls/loadmodule_doc.xml" out="${vegbr_dir}/docs/loadtbls/BOGUS.txt" style="${vegbr_dir}/docs/loadtbls/loadmod_docAll.xsl" force="true"/> -->
   </target>
   <target name="vegbranch-clean-locfiles" depends="vegbranch-init" description="clean local html files from vegbranch dir">
     <delete>
