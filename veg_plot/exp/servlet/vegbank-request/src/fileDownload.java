@@ -74,10 +74,20 @@ public class fileDownload extends HttpServlet
 	 */
 	 public fileDownload()
 	 {
+	 	try
+		{
 		 System.out.println("init: fileDownload");
+		 this.DataRequestServletURL= (rb.getString("requestparams.DataRequestServletURL"));
+		 System.out.println("fileDownload init > datarequest url: " +  this.DataRequestServletURL);
 		 sutil = new ServletUtility();
 		 gurl = new GetURL();
 		 transformer = new transformXML();
+		}
+		 catch (Exception e )
+		 {
+		 	System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		 }
 	 }
 
 	/** Handle "POST" method requests from HTTP clients */
@@ -113,7 +123,7 @@ public class fileDownload extends HttpServlet
 			plotRequestList=(rb.getString("requestparams.plotRequestList"));
 			atomicResultSet = (rb.getString("requestparams.atomicResultSet"));
 			cummulativeResultSet= (rb.getString("requestparams.cummulativeResultSet"));
-			DataRequestServletURL= (rb.getString("requestparams.DataRequestServletURL"));
+			//DataRequestServletURL= (rb.getString("requestparams.DataRequestServletURL"));
 		
 			//this is the path and filename of the download file
 			//and should be passed to the file copy method the downLoad
@@ -238,19 +248,20 @@ public class fileDownload extends HttpServlet
 				}
 			}
 				//THIS USES THE REQUESTURL METHOD
-			String protocol = "http://";
-	  	String host = "vegbank.nceas.ucsb.edu";
-			String s = null;		
-			String servlet = "/framework/servlet/DataRequestServlet";
-			//try a different method
-			 StringBuffer urlBuf = new StringBuffer();
-			 urlBuf.append(protocol+host+servlet+"/?");
-			 urlBuf.append("requestDataType=vegPlot&");
-			 urlBuf.append("resultType=full&");
-			 urlBuf.append("queryType=simple&");
-			 urlBuf.append("requestDataFormatType=xml&");
-			 urlBuf.append("clientType=app&");
-			 urlBuf.append("plotId="+plotBuf.toString());
+	//			String protocol = "http://";
+	 // 		String host = "vegbank.nceas.ucsb.edu";
+				String s = null;		
+		//		String servlet = "/framework/servlet/DataRequestServlet";
+				//try a different method
+			 	StringBuffer urlBuf = new StringBuffer();
+			// 	urlBuf.append(protocol+host+servlet+"/?");
+			 	urlBuf.append(DataRequestServletURL+"/?");
+				urlBuf.append("requestDataType=vegPlot&");
+			 	urlBuf.append("resultType=full&");
+			 	urlBuf.append("queryType=simple&");
+			 	urlBuf.append("requestDataFormatType=xml&");
+			 	urlBuf.append("clientType=app&");
+			 	urlBuf.append("plotId="+plotBuf.toString());
 			 
 			 String  u1str = urlBuf.toString();
        System.out.println("fileDownload > server string: " + u1str);
