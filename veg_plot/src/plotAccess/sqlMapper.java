@@ -64,6 +64,14 @@ public class  sqlMapper
 				transformedStringNum);
 			int queryInstanceNum = getExtendedQueryInstanceNumber( extendedQueryHash );
 			String outFile = extendedQueryHash.get("outFile").toString().trim();
+			//determine if there is a taxonomic component to the 
+			//query and if create that query to be used as a sub-select
+			int taxonComponentNum = taxonomicComponentExists(extendedQueryHash);
+			if ( taxonComponentNum > 0)
+			{
+				System.out.println("TAXONOMIC LOOKUP! "+ taxonComponentNum);
+			}
+			
 			//start the sql statement
 			sb.append("select PLOT_ID from PLOTSITESUMMARY where ");
 			
@@ -111,7 +119,28 @@ public class  sqlMapper
 		}
 	}
 	
-	
+	/**
+		* method that returns the number of taxa related componets
+		* if there is a taxonomic component in the nested query
+		*
+		*/
+	private int taxonomicComponentExists(Hashtable extendedQueryHash)
+	{	
+		int taxonElementCount = 0;
+		
+		//int queryInstanceNum = getExtendedQueryInstanceNumber( extendedQueryHash );
+		Vector criteriaVec = (Vector)extendedQueryHash.get("criteria");
+		
+		for (int i=0;i<criteriaVec.size(); i++) 
+		{
+			if (criteriaVec.elementAt(i).toString().trim().equals("plantTaxon") )
+			{
+				taxonElementCount++;
+			}
+			System.out.println("Scanning criteria: "+ criteriaVec.elementAt(i).toString() );
+		}
+		return(taxonElementCount);
+	}
 	
 	
 	/**
@@ -161,6 +190,10 @@ public class  sqlMapper
 			if ( criteria.trim().equals("elevation") )
 			{
 				return("altValue");
+			}
+			else if (criteria.trim().equals("plantTaxon"))
+			{
+				return("authorNameId");
 			}
 			else 
 			{
