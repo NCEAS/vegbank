@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.2 2005-03-15 12:19:12 anderson Exp $
+ * $Id: vegbank2005.css,v 1.3 2005-03-15 13:55:42 anderson Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -430,6 +430,7 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit
 .tl {background: url(@images_link@tl.gif) 0 0 no-repeat}
 .tr {background: url(@images_link@tr.gif) 100% 0 no-repeat #ff0; padding:10px}
 .clear {clear: both; font-size: 1px; height: 1px}
+.spacer {clear: both; font-size: 20px; height: 20px}
 /* ---------- */
 
 

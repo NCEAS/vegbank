@@ -8,7 +8,7 @@
   <div id="ceiling">
    <div id="logo">
         <img src="@images_link@vegbank_logo69x100trans.gif" id="logo-icon" />
-        <a href="http://vegbank.org/" class="nobg"><img id="logo-word" alt="vegbank" border="0"
+        <a href="@web_context@" class="nobg"><img id="logo-word" alt="vegbank" border="0"
         src="@images_link@vegbank_caps170x40outline.jpg" /></a>
    </div>
 
@@ -45,11 +45,11 @@
  <div id="header">
   <div id="header-left">
 
-   <form action="http://aldo.vegbank.org/vegbank/forms/quicksearch.jsp"
+   <form action="@forms_link@metasearch.jsp"
         method="get" name="quicksearch_form">
 
    find 
-   <select class="input-box" name="xwhereParams_entity_0" value="entity" />
+   <select class="input-box" name="selEntity" value="entity" />
     <option value="anything">anything</option>
     <option value="plot" selected="selected">plots</option>
     <option value="plant">plants</option>
@@ -63,7 +63,7 @@
    <input class="input-box" type="text" name="xwhereParams" size="15" value="" 
    style="width: 115px" />
    <input class="input-button" type="submit" value="go" 
-   onclick="javascript:preSubmit()" style="width: 35px" />
+   onclick="javascript:doSubmit()" style="width: 35px" />
    </form>
 
     <div id="header-data-links">

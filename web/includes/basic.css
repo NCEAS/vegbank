@@ -1,5 +1,5 @@
 /*
- * $Id: basic.css,v 1.2 2005-03-15 12:19:12 anderson Exp $
+ * $Id: basic.css,v 1.3 2005-03-15 13:55:42 anderson Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -203,6 +203,12 @@ code, pre       {
 /*  Work around IE/Win code size bug - courtesy Jesper, waffle.wootest.net  */
 * html code     {
   font-size : 105%; 
+}
+
+table tr td{
+  padding: 0;
+  margin: 0;
+  border: 0;
 }
 
 /*-------------------------------------------------

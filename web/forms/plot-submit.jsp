@@ -2,7 +2,7 @@
 
 
 @webpage_top_html@
-  @stdvegbankget_jspdeclarations@
+  
   @webpage_head_html@
 	
 <!-- 
@@ -12,9 +12,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2005-03-15 12:35:28 $'
-*  '$Revision: 1.17 $'
+*  '$Author: anderson $'
+*  '$Date: 2005-03-15 13:55:41 $'
+*  '$Revision: 1.18 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
