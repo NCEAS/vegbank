@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--    * build_client.xml   *   *  Authors: John Harris, Michael Lee   * Copyright: 2000 Regents of the University of California and the   *           National Center for Ecological Analysis and Synthesis   *  Build file for the Ant cross-platform build system for metacat   *  See http://jakarta.apache.org for details on Ant     *     * this build file copies VegBranch files from the vegbank machine (home/lee/VegBranchReleases) to vegbank webspace.  They are separated into two classes: docs and client
-      '$Author: mlee $'    *     '$Date: 2002-08-30 00:26:52 $'   *     '$Revision: 1.3 $' -->
+      '$Author: mlee $'    *     '$Date: 2002-08-30 00:32:36 $'   *     '$Revision: 1.4 $' -->
 <project name="vegbranch" default="init" basedir=".">
   <!-- INITIATION -->
   <target name="init">
@@ -12,9 +12,9 @@
     <!-- RELEVANT FILES TO COPY / DELETE -->
     <!-- client files: -->
     <property name="vegbranch" value="vegbranch-ver-b.3.0.1.zip"/>
-    <property name="vegbranchLite" value="vegbranch-ver-b.3.0-fewertaxa.zip"/>
+    <property name="vegbranchLite" value="vegbranch-ver-b.3.0.1-fewertaxa.zip"/>
     <!-- docs files: -->
-    <property name="helpfile" value="vegbranch-help-ver-b.3.0.1.zip"/>
+    <property name="helpfile" value="vegbranch-help-ver-b.3.0.zip"/>
     <property name="samplecsv" value="vegbranch-sample-csv-ver-b.3.0.zip"/>
     <property name="htmlfile" value="vegbranch.html"/>
   </target>
