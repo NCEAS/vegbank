@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:vegbank="http://vegbank.org" xmlns:logic="http://vegbank.org" xmlns:bean="http://vegbank.org" xmlns:redirect="http://xml.apache.org/xalan/redirect" extension-element-prefixes="redirect">
-<!--  <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/> -->
+  <!--  <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/> -->
   <!-- comment out extenstion-elemtn ... though this comment to run locally without xalan -->
   <xsl:param name="pathToWrite"/>
   <xsl:output method="html"/>
@@ -30,7 +30,8 @@
       <xsl:comment>
         <xsl:value-of select="entityName"/> has <xsl:value-of select="$countAttsInView"/> fields in view: <xsl:value-of select="$view"/>
       </xsl:comment>
-      <xsl:if test="$countAttsInView&gt;0 or ((entityName='plot' or entityName='observation') and (substring($view,1,4)='plot'))"><!-- write those where there is a view for this ent, and  write plot and obs for all views starting with 'plot' -->
+      <xsl:if test="$countAttsInView&gt;0 or ((entityName='plot' or entityName='observation') and (substring($view,1,4)='plot'))">
+        <!-- write those where there is a view for this ent, and  write plot and obs for all views starting with 'plot' -->
         <xsl:variable name="currEnt" select="translate(entityName,$alphahigh,$alphalow)"/>
         <!-- begin writing data here -->
         <xsl:choose>
@@ -106,15 +107,15 @@
     <xsl:param name="currEnt"/>
     <xsl:param name="currFld"/>
     <xsl:param name="currentAtt"/>
-<!--    <xsl:comment>WRITE FIELD: <xsl:value-of select="$currFld"/> and att is: <xsl:value-of select="$currentAtt/attName"/>
+    <!--    <xsl:comment>WRITE FIELD: <xsl:value-of select="$currFld"/> and att is: <xsl:value-of select="$currentAtt/attName"/>
     </xsl:comment>-->
     <td>
       <logic:notEmpty name="onerowof{$currEnt}" property="{$currFld}">
-          <!-- extra stuff before something : -->
-         <xsl:if test="string-length($currentAtt/attFormsHTMLpre)&gt;0">
+        <!-- extra stuff before something : -->
+        <xsl:if test="string-length($currentAtt/attFormsHTMLpre)&gt;0">
           <!-- insert extra stuff -->
-          <xsl:value-of select="$currentAtt/attFormsHTMLpre" />
-          </xsl:if>
+          <xsl:value-of select="$currentAtt/attFormsHTMLpre"/>
+        </xsl:if>
         <xsl:element name="span">
           <xsl:choose>
             <xsl:when test="string-length(@useClass)=0">
@@ -128,7 +129,6 @@
               <xsl:attribute name="class"><xsl:value-of select="@useClass"/></xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
-
           <!-- this is what gets written on cell -->
           <xsl:variable name="currFldMaybeTransl">
             <xsl:value-of select="$currFld"/>
@@ -157,24 +157,22 @@
           </xsl:choose>
         </xsl:element>
         <!--</span>-->
-
-          <!-- units -->
-          <xsl:if test="string-length($currentAtt/attUnits)&gt;0">
-            <xsl:comment>only write units if there is something here:</xsl:comment>
-            <logic:notEmpty name="onerowof{$currEnt}" property="{$currFld}">
-              <span class="units">
-                <xsl:value-of select="$currentAtt/attUnits"/>
-              </span>
-            </logic:notEmpty>
-          </xsl:if>
-          <!-- extra -->
-          <xsl:if test="string-length($currentAtt/attFormsHTMLpost)&gt;0">
+        <!-- units -->
+        <xsl:if test="string-length($currentAtt/attUnits)&gt;0">
+          <xsl:comment>only write units if there is something here:</xsl:comment>
+          <span class="units">
+            <xsl:value-of select="$currentAtt/attUnits"/>
+          </span>
+        </xsl:if>
+        <!-- extra -->
+        <xsl:if test="string-length($currentAtt/attFormsHTMLpost)&gt;0">
           <!-- insert extra stuff -->
-          <xsl:value-of select="$currentAtt/attFormsHTMLpost" />
-          </xsl:if>
+          <xsl:value-of select="$currentAtt/attFormsHTMLpost"/>
+        </xsl:if>
       </logic:notEmpty>
-      <logic:empty name="onerowof{$currEnt}" property="{$currFld}"><!-- only extra bit if empty -->
-      <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+      <logic:empty name="onerowof{$currEnt}" property="{$currFld}">
+        <!-- only extra bit if empty -->
+        <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
       </logic:empty>
     </td>
   </xsl:template>

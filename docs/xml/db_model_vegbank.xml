@@ -13073,9 +13073,8 @@ conditions may change between resampling events.
       </attForms>
       <attFormsHTMLpre> @subst_lt@table class="noborder" cellpadding="0" cellspacing="0"@subst_gt@@subst_lt@tr@subst_gt@@subst_lt@td@subst_gt@</attFormsHTMLpre>
       <attFormsHTMLpost> @subst_lt@/td@subst_gt@@subst_lt@/tr@subst_gt@@subst_lt@tr@subst_gt@@subst_lt@td@subst_gt@
- @subst_lt@logic:notEmpty name="onerowoftaxonimportance" property="cover"@subst_gt@
         @subst_lt@img src="@images_link@bluedot.png" height="4px" width='@subst_lt@bean:write name="onerowoftaxonimportance" property="cover"/@subst_gt@px' /@subst_gt@
-         @subst_lt@/logic:notEmpty@subst_gt@@subst_lt@/td@subst_gt@@subst_lt@/tr@subst_gt@@subst_lt@/table@subst_gt@</attFormsHTMLpost>
+       @subst_lt@/td@subst_gt@@subst_lt@/tr@subst_gt@@subst_lt@/table@subst_gt@</attFormsHTMLpost>
       <update>1.0.2</update>
     </attribute>
     <attribute>
