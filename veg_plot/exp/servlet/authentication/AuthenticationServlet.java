@@ -22,9 +22,9 @@ import servlet.authentication.UserDatabaseAccess;
  * @param authType -- the authentication type {loginUser, uploadFile}
  *
  *
- *  '$Author: harris $'
- *  '$Date: 2002-11-26 22:34:10 $'
- *  '$Revision: 1.12 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2002-12-27 19:52:16 $'
+ *  '$Revision: 1.13 $'
  *
  *  @version
  *  @author
@@ -42,10 +42,11 @@ public class AuthenticationServlet extends HttpServlet
 	// THE RESOURCE BUNDLE AND THE ASSOCIATED PARAMETERS
 	private ResourceBundle rb = ResourceBundle.getBundle("authentication");
 	private String serverUrl = "";
-
+	private String mailHost = "";
+	private String cc = "";
 	//public String clientLogFile = null; //the file to log the client usage
-	private String genericForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
-	private String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/tmp.html";
+	private String genericForm = "";
+	private String genericTemplate = "";
 
 	//constructor
 	public AuthenticationServlet()
@@ -53,7 +54,11 @@ public class AuthenticationServlet extends HttpServlet
 		try
 		{
 				System.out.println("AuthenticationServlet > init");
-				this.serverUrl = rb.getString("serverurl");
+				this.serverUrl = rb.getString("serverUrl");
+				this.mailHost = rb.getString("mailHost");
+				this.cc = rb.getString("systemEmail");		
+				this.genericForm =  rb.getString("genericForm");
+				this.genericTemplate = 	 rb.getString("genericTemplate");
 				System.out.println("AuthenticationServlet > init serverUrl: " + serverUrl  );
 		}
 		catch (Exception e)
@@ -76,8 +81,7 @@ public class AuthenticationServlet extends HttpServlet
 	/**
 	 * Handle "POST" method requests from HTTP clients
 	 */
-	public void doGet(HttpServletRequest request,
-	HttpServletResponse response)
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws IOException, ServletException
 	{
 
@@ -173,7 +177,7 @@ public class AuthenticationServlet extends HttpServlet
 						//this response was throwing an exception b/c the user did not yet
 						//have a cookie associated with the browser, so as a fix create a
 						//small statement and allow the oportunity to login
-						//response.sendRedirect("http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement?action=options");
+						//response.sendRedirect("/framework/servlet/usermanagement?action=options");
 						String cresponse = getUserCreationResponse(true);
 						out.println( cresponse );
 					}
@@ -217,10 +221,8 @@ public class AuthenticationServlet extends HttpServlet
 				String givenName = "";
 				String surName = "";
 				String body = "";
-				String mailHost = "nceas.ucsb.edu";
 				String from = "vegbank";
 				String to = email;
-				String cc = "dba@vegbank.org";
 				String subject = "Recovered VegBank Password";
 
 
@@ -289,7 +291,7 @@ public class AuthenticationServlet extends HttpServlet
 			 sb.append("Your VegBank account has been created. <br>");
              /* The following 3 lines added by MTL Tuesday, September 10, 2002 */
 			 sb.append("<br>To apply for certification, click ");
-			 sb.append("<a href=\"http://vegbank.nceas.ucsb.edu/forms/certification.html\">here.</a><br>");
+			 sb.append("<a href=\"/forms/certification.html\">here.</a><br>");
 		   sb.append("<br>To begin using VegBank, click \"Login\" above. <br>");
 		 }
 		 else
@@ -314,7 +316,7 @@ public class AuthenticationServlet extends HttpServlet
 		 sb.append("<body> \n");
 			sb.append(" <p>  Thank you for using VegBank, your user account has successfully created! </p>");
 			sb.append(" <br> To Login Please Click <br> \n");
-		 	sb.append(" <a href=\"http://vegbank.nceas.ucsb.edu/vegbank/general/login.html\">here</a> \n");
+		 	sb.append(" <a href=\"/vegbank/general/login.html\">here</a> \n");
 			sb.append("");
 			sb.append("");
 			sb.append("");
@@ -564,10 +566,6 @@ public class AuthenticationServlet extends HttpServlet
 
 	}
 
-
-
-
-
 /**
  *  Method to check and see if a cookie is valid using as inputs the name of the
  * cookie, the value of the cookie and the remote host information
@@ -587,8 +585,8 @@ public class AuthenticationServlet extends HttpServlet
  		}
 
  		else
-	 {
-		cookieValidFlag=0;
+		{
+			cookieValidFlag=0;
  		}
 	}
 
