@@ -6,12 +6,12 @@
   * scripts from one place.
   *
   *     '$Author: anderson $'
-  *     '$Date: 2003-10-06 20:37:15 $'
-  *     '$Revision: 1.15 $'
+  *     '$Date: 2003-10-10 16:13:09 $'
+  *     '$Revision: 1.16 $'
 --> 
-<project name="vegclass" default="compile" basedir=".">
+<project name="vegclass" default="jar" basedir=".">
 
-
+	
   <target name="prepare">
     <property environment="env" />
     <property name="build.dir" value="${basedir}/build"/>
