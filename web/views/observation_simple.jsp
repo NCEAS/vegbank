@@ -41,7 +41,7 @@
 <bean:write name="onerowofobservation" property="authorobscode" />
   -<a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>more details</a>
 </TH></TR>
-  <TR><TD colspan="2"><table class="leftrightborders">
+  <TR><TD colspan="2" valign="top"><table class="leftrightborders">
   <%@ include file="autogen/observation_plotshowmany_data.jsp" %>
         <%@ include file="autogen/plot_plotshowmany_data.jsp" %>
         
@@ -86,10 +86,10 @@
 
 
 </table>
-</TD><TD COLSPAN="2">
+</TD><TD COLSPAN="2" valign="top">
 <table class="thinlines">
 <bean:define id="smallheader" value="yes" />
-<bean:define id="plantRecs2Show" value="8" />
+<bean:define id="limitPlantRecs2Show" value="yes" />
 <bean:define id="showStrataDefn" value="no" />
 <%@ include file="includeviews/sub_taxonobservation.jsp" %>
 
