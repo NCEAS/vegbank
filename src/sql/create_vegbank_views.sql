@@ -111,3 +111,20 @@ DROP VIEW view_notemb_taxonAlt;
                ELSE shortName 
                END 
              AS reference_id_transl, reference_id from reference;
+             
+             
+ DROP VIEW view_party_transl ;
+ CREATE VIEW view_party_transl AS 
+   SELECT CASE WHEN surname is null 
+               THEN CASE WHEN organizationname IS NULL
+                    THEN '[poorly documented party]'
+                    ELSE organizationname || ' (organization)'
+                    END
+               ELSE surname || CASE WHEN givenname IS NULL
+                                    THEN ''
+                                    ELSE ', ' || COALESCE(givenname,'') 
+                                    END
+               END 
+             AS party_id_transl, party_id  
+         FROM party ;
+  
