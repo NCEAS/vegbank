@@ -2,9 +2,9 @@
 <!-- 
   * build.xml
   *
-  *      Authors: John Harris
-  *    Copyright: 2000 Regents of the University of California and the
-  *               National Center for Ecological Analysis and Synthesis
+  *	Authors: John Harris
+  *	Copyright: 	2000 Regents of the University of California and the
+  *							National Center for Ecological Analysis and Synthesis
   *  Build file for the Ant cross-platform build system for metacat
   *  See http://jakarta.apache.org for details on Ant  
   *  
@@ -18,98 +18,116 @@
 <project name="plotLoader" default="dist" basedir=".">
 	<target name="init">
 	<tstamp/>
-        <property name="current" value="./" />
+	
+	<property name="current" value="./" />
 	<property name="build" value="build" />
+	<property name="build_lib" value="${build}/lib" />
+	<property name="build_xml" value="${build}/xml" />
+	<property name="build_src" value="${build}/src" />
+	<property name="build_bin" value="${build}/bin" />
+	<property name="build_sql" value="${build}/sql" />
+	
 	<property name="dist" value="dist" />
 	<property name="release" value="development"/>
 	<property name="src" value="./plotAccess"/>
-	<property name="xmlFiles" value="../xml"/>
+	<property name="src_lib" value="../lib"/>
+	<property name="src_xml" value="../xml"/>
+	<property name="src_bin" value="../bin"/>
+	
 	<property name="utilities" value="./utilities"/>
 	<filter token="dist" value="dist"/>
 	<filter token="version" value="development"/>
 	
-	<property name="oracle_home" 
-                value="/oracle01/app/oracle/product/8.1.6" />
-	<property name="toolsdir" 
-                value="/usr/local/devtools" />
-	<property name="localToolsDir" 
-                value="/home/computer/harris/tools" />	
-	<property name="xmlp" 
-                value="${localToolsDir}/xmlTools/xalan.jar:${localToolsDir}/xmlTools/xerces.jar:" />
-	<property name="jdbc" 
-                value="${oracle_home}/jdbc/lib/classes111.zip" />
-	<property name="cpath" 
-                value="${xmlp}:${jdbc}:${jserv}:${jsdk}:${build}:${localToolsDir}:./"/>
+	<property name="toolsdir"   value="/usr/local/devtools" />
+	<property name="localToolsDir"  value="/home/computer/harris/tools" />	
+	<property name="xmlp" value="${src_lib}/xalan.jar:${src_lib}/xerces.jar:" />
+	<property name="jdbc" value="" />
+	<property name="cpath" value="${xmlp}:${jdbc}:${jserv}:${jsdk}:${build}:${localToolsDir}:./"/>
 </target>
 
 <target name="prepare" depends="init">
 	<mkdir dir="${build}" />
-	<mkdir dir="${dist}" />
+	<mkdir dir="${build_lib}" />
+	<mkdir dir="${build_src}" />
+	<mkdir dir="${build_sql}" />
+	<mkdir dir="${build_xml}" />
+	<mkdir dir="${build_bin}" />
 	
 	<copydir src="${src}" 
-               dest="${build}" 
-               filtering="yes"
-               includes=" LocalDbConnectionBroker.java CommunityQueryStore.java  xmlWriter.java queryStore.java 
-			   	PlotDBWriter.java dbConnect.java plotWriter.java 
-	       		dbAccess.java utility.java transformXML.java sqlMapper.java 
-	       		issueStatement.java DbConnectionBroker.java "
-               excludes="**/CVS* "/>
-
-        <copydir src="${xmlFiles}" 
-               dest="${build}" 
-               filtering="yes"
-               includes="artificialPlotExample.xml plot2DBaddress.xsl vegPlot.dtd 
-	       plotQuery.dtd querySpec.xsl examplePlotQuery.xml examplePlotQuery2.xml"
-               excludes="**/CVS* "/>
-	 
-        <copydir src="${current}" 
-               dest="${build}" 
-               filtering="yes"
-               includes="database.properties"
-               excludes="**/CVS* "/> 
-			   
-	<!-- grab the utility classes that will be needed for such things as data
-	 	formatting-->
-	  <copydir src="${utilities}" 
-               dest="${build}" 
-               filtering="yes"
-               includes="PlotDataMapper.java  PlotXmlWriter.java"
-               excludes="**/CVS* "/>
-	 
-	
-        </target>	
-	
-<target name="compile" depends="prepare">
-	<javac srcdir="${build}" 
-	classpath="${cpath}"
-	includes="**.java  " 
-	destdir="${build}"
+		dest="${build_src}" 
+		filtering="yes"
+		includes=" LocalDbConnectionBroker.java CommunityQueryStore.java  xmlWriter.java queryStore.java 
+		PlotDBWriter.java dbConnect.java plotWriter.java 
+		dbAccess.java utility.java transformXML.java sqlMapper.java 
+		issueStatement.java DbConnectionBroker.java "
+		excludes="**/CVS* "
 	/>
-	</target>	
+
+	<copydir src="${src_xml}" 
+		dest="${build_xml}" 
+    filtering="yes"
+    includes="artificialPlotExample.xml plot2DBaddress.xsl vegPlot.dtd 
+	  plotQuery.dtd querySpec.xsl examplePlotQuery.xml examplePlotQuery2.xml"
+    excludes="**/CVS* "
+	/>
+	 
+	<copydir src="${src_lib}" 
+		dest="${build_lib}" 
+    filtering="no"
+    includes="database.properties **.jar "
+    excludes="**/CVS* "
+	/> 
 	
+	
+	<copydir src="${src_lib}"
+		dest="${build_src}"
+		filtering="yes"
+		includes="database.properties"
+		excludes="**/CVS* "
+	/>
+	
+	
+	<copydir src="${src_bin}"
+		dest="${build_bin}"
+		filtering="yes"
+		includes="**.sh"
+		excludes="**/CVS* "
+	/>
+								
+	
+	<!-- grab the utility classes that will be needed for such things as data
+	formatting-->  
+	<copydir src="${utilities}" 
+		dest="${build_src}" 
+    filtering="yes"
+    includes="PlotDataMapper.java  PlotXmlWriter.java"
+    excludes="**/CVS* "
+	/>
+	 
+	
+</target>	
+	
+
+<target name="compile" depends="prepare">
+	
+	<javac srcdir="${build_src}" 
+		classpath="${cpath}"
+		includes="**.java  " 
+		destdir="${build_src}"
+	/>
+</target>	
+
+
 <target name="dist" depends="compile">
-	<mkdir dir="${dist}/lib" />
-	<deltree dir="${dist}" />
 
-<!-- make a jar file that one can run anywhere w/o worrying about oracle drivers 
+	<!-- make a jar file that one can run anywhere w/o worrying about oracle drivers 
 	or XML resources -->
-<jar jarfile ="${build}/dbAccess.jar"
-		basedir="${build}"
-		manifest="${build}/manifest"
-		includes="${build}/ **"
-/>
-
-
-<!--Query for all plots with a taxon containing the string: "Carya" -->
-<!--
-<java classname="dbAccess"
-args="${build}/exampleCompoundQuery.xml ${build}/querySpec.xsl compoundQuery"
-classpath="${cpath}"
-fork="yes"
-/>
--->
+	
+	<jar jarfile ="${build_lib}/dbAccess.jar"
+		basedir="${build_src}"
+		manifest="${src_lib}/manifest"
+		includes="${build_src}/ **"
+	/>
 </target>		
-
-
 
 </project>
