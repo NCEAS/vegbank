@@ -20,6 +20,31 @@ import databaseAccess.*;
 	public class  TaxonomyQueryStore
 	{
 		LocalDbConnectionBroker lb = new LocalDbConnectionBroker();
+		Connection c = null;
+	
+	
+	/**
+	* method that will return a database connection for use with the database
+	*
+	* @return conn -- an active connection
+	*/
+	private Connection getConnection()
+	{
+		Connection c = null;
+		try 
+ 		{
+			Class.forName("org.postgresql.Driver");
+			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
+		}
+		catch ( Exception e )
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return(c);
+	}
+	
+	
 	
 	/**
  	 * method to query the plant taxonomy database using as input a 
@@ -36,7 +61,11 @@ import databaseAccess.*;
 			Vector returnVector = new Vector();
 			try 
 			{
-				Connection conn = lb.manageLocalDbConnectionBroker("getConn");
+				
+				//get rid of the dependence on the connection broker
+				//Connection conn = lb.manageLocalDbConnectionBroker("getConn");
+				
+				Connection conn = this.getConnection();
 				Statement query = conn.createStatement();
 				ResultSet results = null;
 
