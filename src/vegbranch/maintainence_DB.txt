@@ -59,7 +59,11 @@ Public Function prepareVBranchForRelease()
   Debug.Print "getTableInfoAccess()"
   Debug.Print "getTableInfoAccess_LoadingModl()"
   Debug.Print "docmd.runsql ""delete * from Z_actualFields;"""
+  If globaldebug > 0 Then
+    msgBox "set globaldebug to 0!!!"
+  End If
   msgBox "Check constants in fields: see log!"
+  
   Debug.Print "export_xml | Const overwriteDebug = False"
   Call openF_howPlantsAreMatched
   Call openF_howCommsAreMatched
@@ -73,11 +77,13 @@ Public Function prepareVBranchForRelease()
   DoCmd.RunSQL "UPDATE Z_TableDescription SET ImportFromTable=null;"
   'disconnect NPS:
   Call chkLinkTbls("dropping", "", True, "NPS-PLOTS db")
-  DoCmd.RunSQL "delete * from cust_NPS_stemErr;"
+'  DoCmd.RunSQL "delete * from cust_NPS_stemErr;"
 '  If AreYouSure("Do you want to delete information about controls: this has been exported to XML?") Then
 '    DoCmd.RunSQL "DELETE * from doc_control"
 '  End If
-  msgBox "last thing - disconnect vegbank module & compact & delete ThrowAway Module code"
+  DoCmd.RunSQL "delete * from fieldList_tempimport;" 'delete any closed lists downloaded
+  DoCmd.RunSQL "delete * from x_accessionCode_receipt;" 'delete any receipts
+  Debug.Print "last thing - disconnect vegbank module & compact & delete ThrowAway Module code"
 End Function
 
 Public Function testVegBranchWriteable() As Boolean
@@ -206,11 +212,11 @@ Public Function WriteQrysForLoadTblsView_levels()
   ''this function writes new query definitions based on which fields are to be exported to xls
   ''this hides database fields from users while "viewing" loading tables
   ''shows only certain levels and below, based on fieldUseGroup (1,1.5,2,3,4)
-  Dim colLevelsToGet As New Collection, strLevs As String, inttemp As Integer, strLevel As String
+  Dim colLevelsToGet As New Collection, strLevs As String, intTemp As Integer, strLevel As String
   strLevs = SQLValuesToCSV("select fieldUseGroup from z_fieldDescription where fieldUseGroup > 0 group by fieldUseGroup", """")
   Set colLevelsToGet = csv_parseCSVstring(strLevs, ",", True)
-For inttemp = 1 To colLevelsToGet.Count
-strLevel = colLevelsToGet(inttemp)
+For intTemp = 1 To colLevelsToGet.Count
+strLevel = colLevelsToGet(intTemp)
   Dim cnnLocal As Connection
   Dim rstCurr As New ADODB.Recordset
   Set cnnLocal = CurrentProject.Connection
@@ -252,7 +258,7 @@ strLevel = colLevelsToGet(inttemp)
   Loop
   End With
   rstCurr.Close
-Next inttemp
+Next intTemp
 End Function
 
 Public Function writeViewVBQrys()
@@ -885,13 +891,13 @@ Public Function replaceTokens_dataChk_src()
   
   'now have collection of all loading table names
   'convert this into loading table letters
-  Dim colLetters As New Collection, colTemp As New Collection, inttemp As Integer, colNicks As New Collection
-  For inttemp = 1 To colLoadTbls.Count
+  Dim colLetters As New Collection, colTemp As New Collection, intTemp As Integer, colNicks As New Collection
+  For intTemp = 1 To colLoadTbls.Count
     EmptyCollection colTemp
-    Set colTemp = csv_parseCSVstring(colLoadTbls(inttemp), "_")
+    Set colTemp = csv_parseCSVstring(colLoadTbls(intTemp), "_")
     'add letter to collection
     colLetters.Add (colTemp(3))
-    colNicks.Add get_tableInfo(colLoadTbls(inttemp), "TablenickName") & " (" & colTemp(3) & ")", (colTemp(3))
+    colNicks.Add get_tableInfo(colLoadTbls(intTemp), "TablenickName") & " (" & colTemp(3) & ")", (colTemp(3))
   Next
   'now have letters and nicknames to use
   'For inttemp = 1 To colLetters.Count
@@ -904,18 +910,18 @@ Public Function replaceTokens_dataChk_src()
   Do Until .EOF
      Dim strRemoveToks As String
      strRemoveToks = Nz(!Expl_src, "")
-     For inttemp = 1 To colLetters.Count
-       strRemoveToks = substTextForText(strRemoveToks, "@" & colLetters(inttemp) & "@", colNicks(colLetters(inttemp)))
-     Next inttemp
+     For intTemp = 1 To colLetters.Count
+       strRemoveToks = substTextForText(strRemoveToks, "@" & colLetters(intTemp) & "@", colNicks(colLetters(intTemp)))
+     Next intTemp
      If strRemoveToks <> "" Then
        !Explanation = strRemoveToks
      Else
        !Explanation = Null
      End If
      strRemoveToks = Nz(!longExpl_src, "")
-     For inttemp = 1 To colLetters.Count
-       strRemoveToks = substTextForText(strRemoveToks, "@" & colLetters(inttemp) & "@", colNicks(colLetters(inttemp)))
-     Next inttemp
+     For intTemp = 1 To colLetters.Count
+       strRemoveToks = substTextForText(strRemoveToks, "@" & colLetters(intTemp) & "@", colNicks(colLetters(intTemp)))
+     Next intTemp
      If strRemoveToks <> "" Then
        !LongExplanation = strRemoveToks
      Else
@@ -1020,10 +1026,11 @@ Public Function writeAllLoadingTableInfoToHTML()
   Do Until .EOF
     strTblLtr = !tblLetter
   Dim strFile As String
-  strFile = CurrentProject.Path & "\" & html_loadTblFilePref() & LCase(strTblLtr) & ".html"
+  'strFile = CurrentProject.Path & "\" & html_loadTblFilePref() & LCase(strTblLtr) & ".html"
+  strFile = "C:\temp\vegbranch" & "\" & html_loadTblFilePref() & LCase(strTblLtr) & ".html"
 'Debug.Print strFile
 Call prepareFileToWrite(strFile, True, ".html")
-strRep = html_fileHeader("VegBranch- loading table information - " & !tableNickName) & vbCr _
+strRep = "<!-- created by VegBranch, writeAllLoadingTableInfoToHTML() -->" & vbCr & html_fileHeader("VegBranch- loading table information - " & !tableNickName) & vbCr _
   & "<a name='top'></a>" & html_LoadTblInfo(strTblLtr) & vbCr _
   & "<hr /><a name='fields'></a><h3 class='left'>Fields (Columns) in this table:</h3>" & vbCr _
   & html_LoadTblFields(strTblLtr) & vbCr _
@@ -1195,10 +1202,10 @@ Private Function deleteAllButSampleNamedPlaces()
 End Function
 
 Private Function deleteAllButSampleSoilTaxa()
-  Dim intGetLevel As Integer, inttemp As Integer
+  Dim intGetLevel As Integer, intTemp As Integer
   intGetLevel = getvalFrmSQL("select max(soilLevel) from soilTaxon;")
-  For inttemp = 0 To intGetLevel
-  DoCmd.RunSQL "delete * from soilTaxon  where soiltaxon_ID > 52 and soilLevel=" & intGetLevel - inttemp
+  For intTemp = 0 To intGetLevel
+  DoCmd.RunSQL "delete * from soilTaxon  where soiltaxon_ID > 52 and soilLevel=" & intGetLevel - intTemp
   Next
 End Function
 
