@@ -21,8 +21,8 @@ import org.w3c.dom.Document;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-08-21 07:12:14 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-08-21 22:59:27 $'
+ * 	'$Revision: 1.2 $'
  */
  
 public class Project extends JFrame 
@@ -38,7 +38,7 @@ public class Project extends JFrame
 	public  JPanel projectSummaryPanel = new JPanel();
 	public  JPanel projectContributorPanel = new JPanel();
 	public  JPanel projectDatePanel = new JPanel();
-	public  JPanel projectPlacePanel = new JPanel();
+	public  JPanel projectLocationPanel = new JPanel();
 	
 	
 	//the labels for the main catagory panels
@@ -50,21 +50,45 @@ public class Project extends JFrame
 	
 	
 	//test status stuff
-	public static JTextField projectNameText = new JTextField();
-	public static JTextField projectDescriptionText = new JTextField();
-	public static JTextField contributorSurNameText = new JTextField();
-	public static JTextField contributorGivenNameText  = new JTextField();
-	public static JTextField contributorInstitutionText = new JTextField();
+	public  JTextField projectNameText = new JTextField();
+	public  JTextField projectDescriptionText = new JTextField();
+	public  JTextField contributorSurNameText = new JTextField();
+	public  JTextField contributorGivenNameText  = new JTextField();
+	public  JTextField contributorInstitutionText = new JTextField();
+	public JTextField projectStartDateText = new JTextField();
+	public JTextField projectStopDateText = new JTextField();
+	public JTextField projectStateNameText = new JTextField();
+	public JTextField projectPlaceNameText = new JTextField();
+	
 	
 	//selectors
-	public static JButton continueSelector = new JButton();
-	public static JButton addContributorSelector = new JButton();
+	public  JButton continueSelector = new JButton();
+	public  JButton addContributorSelector = new JButton();
 	
 	
 	XMLparse xp = new XMLparse();
 	ProjectManager manager = new ProjectManager();
  
-  /** Creates new form ProjectInitialize */
+ 	/**
+	 * method to initiate the Project class and GUI 
+	 * and is an overloaded method of the other 'Project' 
+	 * method, calling this method assumes that all the 
+	 * panels are to be loaded
+	 *
+	 *
+	 */
+	public Project()
+	{
+		Hashtable componentHash = projectPanelHash();
+		setTitle(" Project Identification");
+			 initComponents(componentHash);
+       pack ();
+				//for linux increase size by 50
+        //setSize(375, 370);
+			setSize(425, 450);
+	}
+	 
+  /** Creates new form Project */
 	public Project(Hashtable componentHash)
 	{
 				//do nothing on close so that other interfaces are not stopped
@@ -74,7 +98,7 @@ public class Project extends JFrame
        pack ();
 				//for linux increase size by 50
         //setSize(375, 370);
-			setSize(425, 420);
+			setSize(425, 450);
 	}
 	
 	
@@ -100,17 +124,36 @@ public class Project extends JFrame
 			{
 				if (componentHash.get("projectSummaryPanel").toString().equals("true") )
 				{
-						projectSummaryPanel = projectSummary();
+					projectSummaryPanel = new JPanel();
+					projectSummaryPanel = projectSummary();
 				}
 			}
 			if (componentHash.containsKey("projectContributorPanel") == true )
 			{
 				if (componentHash.get("projectContributorPanel").toString().equals("true") )
 				{
-						projectContributorPanel = projectContributor();
+					projectContributorPanel = new JPanel();
+					projectContributorPanel = projectContributor();
 				}
 			}
-		
+			//the date panel
+			if (componentHash.containsKey("projectDatePanel") == true )
+			{
+				if (componentHash.get("projectDatePanel").toString().equals("true") )
+				{
+					projectDatePanel = new JPanel();
+					projectDatePanel = projectDate();
+				}
+			}
+			//location panel
+			if (componentHash.containsKey("projectLocationPanel") == true )
+			{
+				if (componentHash.get("projectLocationPanel").toString().equals("true") )
+				{
+					projectLocationPanel = new JPanel();
+					projectLocationPanel = projectLocation();
+				}
+			}
 			
 			//this is the main panel for the interface
 			mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
@@ -119,8 +162,12 @@ public class Project extends JFrame
 			mainPane.add(Box.createRigidArea(new Dimension(2,15)));		
 			mainPane.add( projectContributorPanel );
 			mainPane.add(Box.createRigidArea(new Dimension(2,30)));
+			mainPane.add( projectDatePanel);
+			mainPane.add(Box.createRigidArea(new Dimension(2,15)));		
+				mainPane.add( projectLocationPanel);
+			mainPane.add(Box.createRigidArea(new Dimension(2,15)));		
 			mainPane.add( updateProject() );
-			mainPane.add(Box.createRigidArea(new Dimension(2,100)));
+			mainPane.add(Box.createRigidArea(new Dimension(2,20)));
 		
 			//show the panes
 		  setContentPane(mainPane);
@@ -131,13 +178,109 @@ public class Project extends JFrame
 		{
       public void actionPerformed(ActionEvent evt) 
 			{
-				handleAddContributorActivator(evt);
         handleUpdateAcivator(evt);
        }
     });
 		
+			addContributorSelector.addActionListener(new java.awt.event.ActionListener() 
+		{
+      public void actionPerformed(ActionEvent evt) 
+			{
+				handleAddContributorActivator(evt);
+       }
+    });
+		
+		
 		}
 		
+		/**
+		 * method to set-up the form panel for the collection 
+		 * of project dates
+		 */
+		public JPanel projectDate()
+		{
+			JPanel panel = new JPanel(); //main panel
+			JPanel labelPanel = new JPanel();
+			JPanel startDatePanel = new JPanel();
+			JPanel stopDatePanel = new JPanel();
+			
+			labelPanel.setLayout(new FlowLayout(0,5,1));
+			labelPanel.add( new JLabel("Project Date") );
+			
+			//setup the start date panel
+			startDatePanel.setLayout(new FlowLayout(0,5,1));
+			startDatePanel.add(new JLabel("Start Date:") );
+			projectStartDateText.setColumns(15);
+			projectStartDateText.setBackground(Color.pink);
+			projectStartDateText.setText("");
+			startDatePanel.add(projectStartDateText);
+			
+			//setup the start date panel
+			stopDatePanel.setLayout(new FlowLayout(0,5,1));
+			stopDatePanel.add(new JLabel("Stop Date:") );
+			projectStopDateText.setColumns(15);
+			projectStopDateText.setBackground(Color.pink);
+			projectStopDateText.setText("");
+			stopDatePanel.add(projectStopDateText);
+			
+			
+			// add the components to the main panel
+			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+			panel.setPreferredSize(new Dimension(220, 23));			
+			panel.add(labelPanel);
+			panel.add(startDatePanel);
+			panel.add(stopDatePanel);
+			
+			return(panel);
+		}
+		
+		
+			
+		/**
+		 * method that provides a JPanel containing components that 
+		 * may be used to define the loactation of a project
+		 *
+		 * @return panel -- panel containing text fields for the state and placeName
+		 *
+		 */
+		public JPanel projectLocation()
+		{
+			JPanel panel = new JPanel(); //nain panel
+			JPanel labelPanel = new JPanel();
+			JPanel stateNamePanel = new JPanel();
+			JPanel placeNamePanel = new JPanel();
+			
+			
+			//setup the label panel
+			labelPanel.setLayout(new FlowLayout(0,5,1));
+			labelPanel.add( new JLabel("Project Location") );
+			
+			//setup the state name panel
+			stateNamePanel.setLayout(new FlowLayout(0,5,1));
+			stateNamePanel.add(new JLabel("State: ") );
+			projectStateNameText.setColumns(15);
+			projectStateNameText.setBackground(Color.pink);
+			projectStateNameText.setText( "CA");
+			stateNamePanel.add(projectStateNameText);
+			
+			
+			//setup the place name panel
+			placeNamePanel.setLayout(new FlowLayout(0,5,1));
+			placeNamePanel.add(new JLabel("Place: ") );
+			projectPlaceNameText.setColumns(15);
+			projectPlaceNameText.setBackground(Color.pink);
+			projectPlaceNameText.setText( "Yosemite");
+			placeNamePanel.add(projectPlaceNameText);
+			
+			
+			//add the components to the main panel
+			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+			panel.setPreferredSize(new Dimension(220, 23));
+			panel.add( labelPanel );
+			panel.add(stateNamePanel);
+			panel.add( placeNamePanel);
+			return(panel);
+		}
 		
 		
 		/**
@@ -156,9 +299,7 @@ public class Project extends JFrame
 			JPanel descriptionPanel = new JPanel();
 			
 			
-			//setup the label panel
-			labelPanel.setLayout(new FlowLayout(0,5,1));
-			labelPanel.add( new JLabel("Project Summary") );
+			
 			
 			//setup the name panel
 			namePanel.setLayout(new FlowLayout(0,5,1));
@@ -185,6 +326,8 @@ public class Project extends JFrame
 			return(panel);
 		}
 		
+		
+		
 		public JPanel  projectContributor()
 		{
 			JPanel panel = new JPanel(); //nain panel
@@ -192,6 +335,7 @@ public class Project extends JFrame
 			JPanel givenNamePanel = new JPanel(); //sub panel for name
 			JPanel surNamePanel = new JPanel();
 			JPanel institutionPanel = new JPanel();
+			JPanel selectorPanel = new JPanel();
 			
 			//setup the label panel
 			labelPanel.setLayout(new FlowLayout(0,5,1));
@@ -222,7 +366,11 @@ public class Project extends JFrame
 			contributorInstitutionText.setText("");
 			institutionPanel.add( contributorInstitutionText );
 			 addContributorSelector.setText("Add Contributor");
-			institutionPanel.add( addContributorSelector );
+			//institutionPanel.add( addContributorSelector );
+			
+			//setup the selector panel
+			selectorPanel.setLayout(new FlowLayout(0,5,1));
+			selectorPanel.add(addContributorSelector);
 			
 			//add the components to the main panel
 			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -232,6 +380,7 @@ public class Project extends JFrame
 			panel.add( givenNamePanel );
 			panel.add( surNamePanel );
 			panel.add( institutionPanel );
+			panel.add( selectorPanel);
 			return(panel);
 		}
 	
@@ -266,7 +415,7 @@ public class Project extends JFrame
 			
 		}
 		
-			/**
+		/**
 		 * this method gets all the parameters chosen on the interface
 		 * and returns their status in a hashtable
 		 */
@@ -276,6 +425,18 @@ public class Project extends JFrame
 			//put the elements into the hashtable
 			chosenParameters.put("projectName", projectNameText.getText().toString()  );
 			chosenParameters.put("projectDescription", projectDescriptionText.getText().toString().trim());
+			chosenParameters.put("surName", contributorSurNameText.getText().toString().trim());
+			chosenParameters.put("givenName", contributorGivenNameText.getText().toString().trim());
+			chosenParameters.put("institution", contributorInstitutionText.getText().toString().trim());
+			
+			//dates
+			chosenParameters.put("startDate", projectStartDateText.getText().toString().trim());
+			chosenParameters.put("stopDate", projectStopDateText.getText().toString().trim());
+			
+			//place
+			chosenParameters.put("stateName", projectStateNameText.getText().toString().trim());
+			chosenParameters.put("placeName", projectPlaceNameText.getText().toString().trim());
+			
 			return(chosenParameters); 
 		}
 		
@@ -296,15 +457,17 @@ public class Project extends JFrame
 	//		setSize(425, 820);
 	
 		setTitle("Progress ...");
+		//remove the single contributorPane
+	//	getContentPane().remove( projectContributorPanel );
 //			Container contentPane = getContentPane();
 //			contentPane.remove(button);
-		JPanel newElement = new JPanel();
-			newElement.setBackground(Color.white);
-			JButton button = new JButton();
-			newElement.add(button);
+//		JPanel newElement = new JPanel();
+//			newElement.setBackground(Color.white);
+//			JButton button = new JButton();
+//			newElement.add(button);
 //		//	Container contentPane =	getContentPane();
 //	//		frame.getContentPane().add(newElement);
-			 getContentPane().add(newElement);
+//			 getContentPane().add(newElement);
 //			 //  pack();
 //      //  setSize(375, 370);
 //		contentPane.validate();
@@ -379,6 +542,25 @@ public class Project extends JFrame
 			return(returnString);
 		}
 		
+		
+	/**
+	 * method that returns a Hashtable containing keys corresponding to
+	 * the panels that may be called in this class, and a value equal
+	 * to true.  The hashtable may be edited and then passed to the 
+	 * initiation method of this class
+	 *
+	 *
+	 */
+		public Hashtable projectPanelHash()
+		{
+			Hashtable componentHash = new Hashtable();
+		 	componentHash.put("projectSummaryPanel", "true");
+		 	componentHash.put("projectContributorPanel", "true");
+		 	componentHash.put("projectDatePanel", "true");
+		 	componentHash.put("projectLocationPanel", "true");
+			return(componentHash);
+		}
+		 
 	
 	 public static void main (String args[]) 
 	{
@@ -386,7 +568,7 @@ public class Project extends JFrame
 		 componentHash.put("projectSummaryPanel", "true");
 		 componentHash.put("projectContributorPanel", "true");
 		 componentHash.put("projectDatePanel", "true");
-		 componentHash.put("projectPlacePanel", "true");
+		 componentHash.put("projectLocationPanel", "true");
 		System.out.println("Starting Project");
 		new Project(componentHash).show();
    }
