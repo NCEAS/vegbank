@@ -8,8 +8,8 @@
  * @version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2001-10-11 12:37:23 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2001-10-12 18:34:58 $'
+ *     '$Revision: 1.3 $'
  */
 package vegclient.framework;
 
@@ -29,6 +29,7 @@ public class NestedQueryBuilder extends JFrame
 {
 	
 		ResourceBundle rb = ResourceBundle.getBundle("vegclient");
+		
 		private HtmlViewer hv = new HtmlViewer();
 	 	private JTextField queryValue = new JTextField();
 	 	private JList queryCriteriaList = new JList();
@@ -488,8 +489,10 @@ public class NestedQueryBuilder extends JFrame
 					drc.writeURLResponseToFile(servlet, protocol, host, parameters, "summary.xml");
 					
 					//	String returnedData=( drc.requestURL(servlet, protocol, host, parameters) );
-      		hv.show();
-      		hv.showData("summary.xml",  "transformMultiPlotSummary.xsl", "text/html");  
+      		///hv.show();
+      		///hv.showData("summary.xml",  "transformMultiPlotSummary.xsl", "text/html");  
+					StyleSheetInterface stylesheet = new StyleSheetInterface();
+					stylesheet.show();
 					
 				}
 				//if the local database
