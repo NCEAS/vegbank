@@ -29,13 +29,20 @@
 <!-- iterate over all records in set : new table for each -->
 <table class="leftrightborders" cellpadding="2">
 <bean:define id="onerowofplot" name="onerowofobservation" />
+<!-- get both PKs -->
+        <bean:define id="observation_pk" name="onerowofobservation" property="observation_id" />
+        <bean:define id="plot_pk" name="onerowofobservation" property="plot_id" />
+
+
 <% rowClass = "evenrow"; %> <!-- reset colors -->
 <tr><th colspan="2"><bean:write name="onerowofobservation" property="authorobscode" />
   -<a href='@get_link@detail/observation/<bean:write name="onerowofobservation" property="observation_id" />'>more details</a>
 </th></tr>
         <%@ include file="autogen/observation_plotshowmany_data.jsp" %>
         <%@ include file="autogen/plot_plotshowmany_data.jsp" %>
-        <bean:define id="observation_pk" name="onerowofobservation" property="observation_id" />
+        
+      <%@ include file="includeviews/sub_place.jsp" %>
+      
 <!--Insert a nested get statement here:
    example:   
 
