@@ -112,6 +112,7 @@ if (searchString ==  null || searchString.equals("")) {
 
 <br/>
 <logic:notEmpty name="meta-BEANLIST">
+<!-- start metasearch results --> <!-- this tag needed for Mozilla Search Plugin -->
 <% String rowClass = "evenrow"; %>
 
 	<table bgcolor="#333333" cellspacing="0" cellpadding="1" border="0" align="center">
@@ -126,6 +127,7 @@ if (searchString ==  null || searchString.equals("")) {
 
 
 	<logic:iterate id="onerow" name="meta-BEANLIST">
+	<!-- start metasearch item --><!-- this tag needed for Mozilla Search Plugin -->
 		<tr class="@nextcolorclass@" align="center">
 			<td>
 
@@ -175,9 +177,11 @@ String getURL = "@get_link@" + getView + "/" + getName + "/" + params +
 				<bean:write name="onerow" property="count"/>
 			</td>
 		</tr>
+		<!-- end metasearch item --><!-- this tag needed for Mozilla Search Plugin -->
 	</logic:iterate>
 
 	</table></td></tr></table>
+	<!-- end metasearch results --> <!-- this tag needed for Mozilla Search Plugin -->
 <br/>
 
 <span class="sizesmall" align="center">
