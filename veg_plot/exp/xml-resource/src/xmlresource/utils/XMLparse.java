@@ -5,8 +5,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-11-01 17:44:42 $'
- * 	'$Revision: 1.1 $' 
+ *  '$Date: 2002-03-28 23:03:04 $'
+ * 	'$Revision: 1.2 $' 
  */
 
 package xmlresource.utils; 
@@ -30,6 +30,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.*;                         // DOM interface
 import org.apache.xerces.parsers.DOMParser;   // Parser (to DOM)
+import org.xml.sax.InputSource;
 
 import xmlresource.utils.*;
 
@@ -644,6 +645,7 @@ public class XMLparse
     Vector val = new Vector();
     if (!pathstring.startsWith("/")) {
       pathstring = "//*/"+pathstring;
+			System.out.println("XMLparse > pathstring: "+pathstring);
     }
     try{
       NodeList nl = null;
@@ -659,6 +661,7 @@ public class XMLparse
         }
       }
     } catch (Exception e) {
+		System.out.println("Excpetion: " + e.getMessage() );
    //   ClientFramework.debug(4, "Error in getValueForPath method");
     }
     return val;    
@@ -673,7 +676,7 @@ public class XMLparse
 	 * @param filename -- the xml file to parse
 	 *
 	 */
-	public Document getDocument (String filename) 
+	public Document getDocument(String filename) 
 	{
 		//Document doc;
 		try 
@@ -692,6 +695,33 @@ public class XMLparse
 		return(doc);
 	}
 	
+	
+	/**
+	 * this method is used for parsing an xml string
+	 * into a dom document
+	 *
+	 * @param s -- the string containing the xml doc
+	 *
+	 */
+	public Document getDocumentFromString(String s) 
+	{
+		//Document doc;
+		try 
+		{
+			System.out.println("XMLparse > creating a document from a string");
+			DOMParser dp = new DOMParser();
+			StringReader sr = new StringReader(s);
+			InputSource in = new InputSource(sr);
+			dp.parse(in);
+			doc = dp.getDocument();
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return(doc);
+	}
 	
 	
 	
