@@ -6,8 +6,8 @@ package org.vegbank.plots.datasource;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-17 20:31:40 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-10-17 22:09:14 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -631,7 +631,6 @@ public class VegbankXMLUpload
 	{
 
 		private DBConnection dbConn = null; 
-		int serialNumber = -1;//DBConnection serial number
 		private Hashtable revisionsHash = null;
 		private Hashtable noteLinksHash = null;
 		private Hashtable vegbankPackage = null;
@@ -673,14 +672,13 @@ public class VegbankXMLUpload
 			
 			System.out.println("Returning the DBConnection to the pool");
 			//Return dbconnection too pool
-			DBConnectionPool.returnDBConnection(dbConn, serialNumber);			
+			DBConnectionPool.returnDBConnection(dbConn, dbConn.getCheckOutSerialNumber());			
 		}
 
 		private void initDB() throws SQLException
 		{
 			//	Get DBConnection
-			dbConn=DBConnectionPool.getDBConnection("This is an empty string");
-			serialNumber=dbConn.getCheckOutSerialNumber();
+			dbConn=DBConnectionPool.getDBConnection("Need connection for inserting dataset");
 			dbConn.setAutoCommit(false);
 		}
 		

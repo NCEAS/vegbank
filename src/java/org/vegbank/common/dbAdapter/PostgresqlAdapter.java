@@ -3,8 +3,8 @@
  * Purpose: An adapter class for PostgreSQL RDBMS.
  *
  * '$Author: farrell $'     
- * '$Date: 2003-04-16 00:19:51 $' 
- * '$Revision: 1.5 $'
+ * '$Date: 2003-10-17 22:09:14 $' 
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,10 +23,11 @@
 
 package org.vegbank.common.dbAdapter;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.vegbank.common.utility.DBConnection;
 
 /**
  * The PostgreSQL db adapter implementation.
@@ -54,7 +55,7 @@ public class PostgresqlAdapter extends AbstractDatabase
 	 * @return return the generated unique id as a long type
 	 */
 	public int getNextUniqueID(
-		Connection conn,
+		DBConnection conn,
 		String tableName,
 		String primaryKeyName)
 		throws SQLException

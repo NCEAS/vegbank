@@ -8,8 +8,8 @@ package org.vegbank.common.dbAdapter;
  * 
  *
  * '$Author: farrell $'     
- * '$Date: 2003-04-16 00:19:51 $' 
- * '$Revision: 1.2 $'
+ * '$Date: 2003-10-17 22:09:14 $' 
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@ package org.vegbank.common.dbAdapter;
  */
 
 import java.sql.*;
+
+import org.vegbank.common.utility.DBConnection;
 
 /**
  * Java offers uniform database access through the use of JDBC.
@@ -58,7 +60,7 @@ public abstract class AbstractDatabase
 	 * @return return the generated unique id as a long type
 	 */
 	public abstract int getNextUniqueID(
-		Connection conn, 
+		DBConnection conn, 
 		String tableName, 
 		String primarykeyName)
 			throws SQLException;

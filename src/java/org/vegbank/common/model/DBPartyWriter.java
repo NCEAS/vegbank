@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:12 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-10-17 22:09:14 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,12 +25,12 @@
 package org.vegbank.common.model;
 
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.Utility;
 
 /**
@@ -42,7 +42,7 @@ public class DBPartyWriter
 
  
 	
-		private Connection conn = null;
+		private DBConnection conn = null;
 		boolean commit = true;
 		public int partyId = 0;
 		private String pKName = null;
@@ -51,7 +51,7 @@ public class DBPartyWriter
 	 
 		public DBPartyWriter(
 			Party party, 
-			Connection conn,
+			DBConnection conn,
 			String tableName,	// quick hack to handle plants and communities
 			String pKName
 		)

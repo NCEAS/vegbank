@@ -7,8 +7,8 @@
  *    Authors: John Harris
  * 		
  *		'$Author: farrell $' 
- *     '$Date: 2003-08-21 21:16:44 $'
- *     '$Revision: 1.3 $'
+ *     '$Date: 2003-10-17 22:09:14 $'
+ *     '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@
 
 package org.vegbank.databaseAccess;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -59,10 +58,9 @@ public class UserDatabaseAccess
 	{
 		try 
 		{
-			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate");
 			System.out.println("Grabbing a DB connection from the local pool");
 			//get the connections etc
-			Connection conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
+			DBConnection conn = DBConnectionPool.getDBConnection("Need connection for inserting user");
 			Statement query = conn.createStatement ();
 			StringBuffer sb = new StringBuffer();
 			sb.append("INSERT into USER_INFO (EMAIL_ADDRESS, PASSWORD, GIVEN_NAME, SUR_NAME, REMOTE_ADDRESS, TICKET_COUNT) ");
@@ -70,7 +68,7 @@ public class UserDatabaseAccess
 			
 			//issue the query
 			query.executeUpdate(sb.toString());
-			LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
+			DBConnectionPool.returnDBConnection(conn, conn.getCheckOutSerialNumber());
 		}
 		catch (Exception e) 
 		{
@@ -95,7 +93,7 @@ public class UserDatabaseAccess
 	//		lb.manageLocalDbConnectionBroker("initiate");
 	//		System.out.println("Grabbing a DB connection from the local pool");
 			//get the connections etc
-			Connection conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
+			DBConnection conn = DBConnectionPool.getDBConnection("Need connection for updating ticket count");
 			Statement query = conn.createStatement ();
 			StringBuffer sb = new StringBuffer();
 			
@@ -135,10 +133,9 @@ public class UserDatabaseAccess
 	{
 		try 
 		{
-			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate");
 			System.out.println("Grabbing a DB connection from the local pool");
 			//get the connections etc
-			Connection conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
+			DBConnection conn = DBConnectionPool.getDBConnection("Need connection for authenticating user");
 			Statement query = conn.createStatement ();
 			ResultSet results= null;
 			StringBuffer sb = new StringBuffer();
@@ -176,8 +173,7 @@ public class UserDatabaseAccess
 					System.out.println("User not known in database");
 				}
 			}
-			conn.close();
-			LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
+			DBConnectionPool.returnDBConnection(conn, conn.getCheckOutSerialNumber());
 		}
 		catch (Exception e) 
 		{

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:12 $'p
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-10-17 22:09:14 $'p
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,11 +24,12 @@
  
 package org.vegbank.common.model;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.vegbank.common.utility.DBConnection;
 
 /**
  * @author farrell
@@ -37,7 +38,7 @@ import java.sql.Statement;
 public class DBReferenceWriter
 {
 	
-	private Connection conn = null;
+	private DBConnection conn = null;
 	boolean commit = true;
 	public int referenceId = 0;
 	private String pKName = null;
@@ -45,7 +46,7 @@ public class DBReferenceWriter
 	 
 	public DBReferenceWriter(
 		Reference ref, 
-		Connection conn,
+	    DBConnection conn,
 		String tableName,	// quick hack to handle plants and communities
 		String pKName
 	)

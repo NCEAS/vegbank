@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-11 21:24:39 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2003-10-17 22:09:14 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 package org.vegbank.plants.datasource;
 
 import java.io.FileReader;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.AbstractList;
 import java.util.Collections;
@@ -33,6 +32,8 @@ import java.util.Iterator;
 
 import org.vegbank.common.command.AddCorrelation;
 import org.vegbank.common.model.*;
+import org.vegbank.common.utility.DBConnection;
+import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.plants.datasink.*;
 
@@ -57,23 +58,24 @@ public class LoadPlantList
 		}
 		else 
 		{
-			LoadPlantList pl = new LoadPlantList();
-			
-			Connection conn = pl.getConnection();
-			
-			String inputPlantList=null;
-			inputPlantList=args[0];
-			
-			String startLoadingAfterPlantCode = null;
-			if ( args.length > 1 ) 
-			{
-				startLoadingAfterPlantCode = args[1];
-			}
-			boolean startLoading = ( startLoadingAfterPlantCode == null || startLoadingAfterPlantCode.equals("any") );
-			
-			USDAPlantListReader plr;
 			try
 			{
+				LoadPlantList pl = new LoadPlantList();
+				
+				DBConnection conn = pl.getConnection();
+				
+				String inputPlantList=null;
+				inputPlantList=args[0];
+				
+				String startLoadingAfterPlantCode = null;
+				if ( args.length > 1 ) 
+				{
+					startLoadingAfterPlantCode = args[1];
+				}
+				boolean startLoading = ( startLoadingAfterPlantCode == null || startLoadingAfterPlantCode.equals("any") );
+				
+				USDAPlantListReader plr;
+
 				plr = new USDAPlantListReader(new FileReader(inputPlantList));
 				AbstractList plantList = plr.getAllPlants();
 				
@@ -117,7 +119,7 @@ public class LoadPlantList
 
 	private static void loadPlants(
 		LoadPlantList pl,
-		Connection conn,
+		DBConnection conn,
 		String startLoadingAfterPlantCode,
 		boolean startLoading,
 		Iterator i,
@@ -188,12 +190,9 @@ public class LoadPlantList
 	 *
 	 * @return conn -- an active connection
 	 */
-	private Connection getConnection()
+	private DBConnection getConnection() throws SQLException
 	{
-		System.out.println("Getting a new connection");
-		Utility u = new Utility();
-		Connection c = u.getConnection("vegbank", "localhost");
-		return c;
+		return DBConnectionPool.getDBConnection("Need connection for inserting plant");
 	}
 	
 }

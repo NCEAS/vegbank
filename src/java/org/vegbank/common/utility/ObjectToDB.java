@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-10 23:37:13 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2003-10-17 22:09:14 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ package org.vegbank.common.utility;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -51,7 +50,7 @@ import java.util.Vector;
 public class ObjectToDB extends VegBankObjectWriter
 {
 	private boolean existsInDatabase = false;
-	Connection conn;	
+	DBConnection conn;	
 	protected AbstractList fieldNames = new Vector();
 	private AbstractList fieldValues = new Vector();
 	//private Hashtable attributeNameValues = new Hashtable();
@@ -63,9 +62,10 @@ public class ObjectToDB extends VegBankObjectWriter
 	{
 		super(object);
 		System.out.println("ObjectToDB > New Instance");
-		conn= new Utility().getConnection("vegbank");
+		
 		try
 		{
+			conn= DBConnectionPool.getDBConnection("Need connection for inserting object");
 			int pk = this.isObjectInDatabase(null);
 			if ( pk == 0 )
 			{

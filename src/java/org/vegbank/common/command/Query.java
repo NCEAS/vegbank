@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-16 02:46:58 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-17 22:09:14 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,11 +24,12 @@
  
 package org.vegbank.common.command;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.vegbank.common.utility.DBConnection;
+import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.Utility;
 
@@ -185,7 +186,7 @@ public class Query
 		String stopDate)
 		throws SQLException
 	{
-		Connection conn = da.getConnection();
+		DBConnection conn =DBConnectionPool.getDBConnection("Need connection for inserting dataset");
 		
 		int correlationId =
 			(int) Utility.dbAdapter.getNextUniqueID(

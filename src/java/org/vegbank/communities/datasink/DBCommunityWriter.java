@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-06 17:32:49 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-10-17 22:09:14 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
  
 package org.vegbank.communities.datasink;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,6 +38,7 @@ import org.vegbank.common.model.DBPartyWriter;
 import org.vegbank.common.model.DBReferenceWriter;
 import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Reference;
+import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.Utility;
 
 
@@ -51,11 +51,11 @@ import org.vegbank.common.utility.Utility;
 public class DBCommunityWriter implements Constants
 {
 
-		private Connection conn = null;
+		private DBConnection conn = null;
 		private boolean commit = true;
 		private boolean writeSuccess = false;
 
-	public DBCommunityWriter(Community comm, Connection conn) 
+	public DBCommunityWriter(Community comm, DBConnection conn) 
 	{
 		System.out.println("DBCommunityWriter > inserting '" + comm.getName() + "'");
 		// This is going to know about the Data Model the database has 

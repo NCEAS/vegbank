@@ -1,6 +1,5 @@
 package org.vegbank.plots.datasource;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,8 +12,8 @@ import org.vegbank.common.utility.DBConnection;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-17 20:31:40 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-10-17 22:09:14 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

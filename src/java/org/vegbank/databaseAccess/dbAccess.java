@@ -38,8 +38,8 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-10-11 21:20:10 $'
- *  '$Revision: 1.6 $'
+ *  '$Date: 2003-10-17 22:09:14 $'
+ *  '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,10 +58,6 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
 
 public class dbAccess 
 {
-
-	//constructor -- define as static the LocalDbConnectionBroker so that methods
-	// called by this class can access the 'local' pool of database connections
-	static LocalDbConnectionBroker lb;
 
 	public String queryOutput[] = new String[10000]; //the output from query
 	public int queryOutputNum; //the number of output rows from the query
@@ -217,11 +213,6 @@ public class dbAccess
 		String xmlResult = null;
 		try 
 		{
-
-			//first initiate the local database pooling class so that connections may be
-			// used by the classes that are going to be subsequently called
-			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate");
-
 			//the stringwriter containg all the transformed data
 			StringWriter transformedData = new StringWriter();
 			
@@ -237,9 +228,6 @@ public class dbAccess
 			int transformedStringNum = u.outStringNum;
 
 			xmlResult = constructQuery(action, transformedString, transformedStringNum);
-
-			//shut down the connection pooling
-			LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
 		} //end try
 		catch (Exception e) {
 			System.out.println(
@@ -265,7 +253,7 @@ public class dbAccess
 				System.out.println(transformedString[ii]);
 			}
 			//pass the array to the sql mapping class - single attribute query
-			sqlMapper w = new sqlMapper();
+			sqlMapper w = new sqlMapper(); 
 			xmlResult = w.developExtendedPlotQuery(
 				transformedString,
 				transformedStringNum);
@@ -285,25 +273,6 @@ public class dbAccess
 			queryOutput = w.queryOutput;
 			queryOutputNum = w.queryOutputNum;
 		}
-		//insert action -- to insert a plot to the last database
-		else if (action.equals("insert")) 
-		{
-			//pass the array to the plot writer to be inserted into the database
-			plotWriter w = new plotWriter();
-			w.insertPlot(transformedString, transformedStringNum);
-		}
-		
-		//insertPlot action -- this is to insert a plot to the most recent DB
-		else if (action.equals("insertPlot")) 
-		{
-			//pass the array to the plot writer to be inserted into the database
-			PlotDBWriter w = new PlotDBWriter();
-			w.insertPlot(
-				transformedString,
-				transformedStringNum,
-				"entirePlot");
-		}
-		
 		//verify action
 		else if (action.equals("verify")) 
 		{

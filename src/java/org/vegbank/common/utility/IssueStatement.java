@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  * Purpose: 
  *
  * '$Author: farrell $'
- * '$Date: 2003-10-10 23:37:13 $'
- * '$Revision: 1.4 $'
+ * '$Date: 2003-10-17 22:09:14 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ public class IssueStatement
 {
 
 	//Global variables for the database connection
-	Connection conn = null;
+	DBConnection conn = null;
 	Statement query = null;
 	ResultSet results = null;
 
@@ -141,7 +141,7 @@ public class IssueStatement
 			System.out.println(
 				"issueStatement > Grabbing a DB connection from the local pool");
 			//get the connections etc
-			conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
+			conn = DBConnectionPool.getDBConnection("Need connection for inserting dataset");;
 			query = conn.createStatement();
 			//issue the query
 			results = query.executeQuery(sqlStatement.toString());
@@ -192,7 +192,7 @@ public class IssueStatement
 			System.out.println(
 				"issueStatement > Grabbing a DB connection from the local pool");
 
-			conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
+			conn = DBConnectionPool.getDBConnection("Need connection for inserting ");;
 			query = conn.createStatement();
 
 			////	conn=m.outConn;
@@ -287,7 +287,7 @@ public class IssueStatement
 		String inputStatement,
 		String[] inputReturnFields,
 		int inputReturnFieldLength,
-		Connection pconn)
+		DBConnection pconn)
 	{
 
 		/**
@@ -415,7 +415,7 @@ public class IssueStatement
 	{
 
 		//define a connection
-		Connection conn = null;
+		DBConnection conn = null;
 
 		//grab a connection from the local connection pooling manager
 		try
@@ -423,7 +423,7 @@ public class IssueStatement
 
 			//this class should have been initialized by the an interface class before this
 			// method was called , allowing this method to obtain a connection
-			conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
+			conn = DBConnectionPool.getDBConnection("Need connection for inserting dataset");;
 
 			query = conn.createStatement();
 		}
@@ -551,12 +551,7 @@ public class IssueStatement
 		*/
 		try
 		{
-			DBConnect m = new DBConnect();
-			m.makeConnection(conn, query);
-			//	System.out.println("Opening db connection by calling dbConnect from \n"
-			//	+"issueStatement.issueInsert");
-			conn = m.outConn;
-			query = m.outStmt;
+			conn = DBConnectionPool.getDBConnection("Need connection for inserting dataset");;
 		}
 		catch (Exception e)
 		{

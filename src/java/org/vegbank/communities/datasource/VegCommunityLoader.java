@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-01 23:14:36 $'  
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-17 22:09:14 $'  
+ *	'$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,11 +24,13 @@
 
 //package edu.ucsb.nceas.vegcommunity;
 package org.vegbank.communities.datasource;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.vegbank.common.utility.DBConnection;
+import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.Utility;
 
 	
@@ -40,7 +42,7 @@ import org.vegbank.common.utility.Utility;
  */
 public class VegCommunityLoader
 {
-		Connection conn = null;
+		DBConnection conn = null;
 		boolean commit = true;
 		
 		//class variables needed for loading the community databases
@@ -74,20 +76,9 @@ public class VegCommunityLoader
 /**
 	* method that will return a database connection for use with the database
 	*/
-	private Connection getConnection()
+	private DBConnection getConnection() throws SQLException
 	{
-		Connection c = null;
-		try 
- 		{
-			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection("jdbc:postgresql://"+host+"/vegbank", "datauser", "");
-		}
-		catch ( Exception e )
-		{
-			System.out.println("Exception:  " + e.getMessage());
-			e.printStackTrace();
-		}
-			return(c);
+		return DBConnectionPool.getDBConnection("Need connection for inserting dataset");
 	}
 	
 	/**

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-10 23:37:13 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-10-17 22:09:14 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,6 @@
 
 package org.vegbank.common.utility;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.AbstractList;
 import java.util.Hashtable;
@@ -44,12 +41,9 @@ public class DataLoader
 	 *
 	 * @return conn -- an active connection
 	 */
-	private static Connection getDBConnection(
-		String databaseName,
-		String databaseHost)
+	private static DBConnection getDBConnection() throws SQLException
 	{
-		Utility u = new Utility();
-		Connection c = u.getConnection(databaseName, databaseHost);
+		DBConnection c = DBConnectionPool.getDBConnection("Need connection for inserting dataset");
 		return c;
 	}
 
@@ -59,7 +53,7 @@ public class DataLoader
 		String databaseHost = "localhost";
 		String databaseName = "";
 		String fileName = "";
-		Connection conn = null;
+		DBConnection conn = null;
 
 		if (args.length < 4)
 		{
@@ -76,7 +70,7 @@ public class DataLoader
 		}
 		try
 		{
-			conn = DataLoader.getDBConnection(databaseHost, databaseName);
+			conn = DataLoader.getDBConnection();
 
 			DataLoader dl = new DataLoader();
 			XMLToObject x2o = new XMLToObject(fileName);

@@ -7,8 +7,8 @@
 * Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-10-14 17:35:26 $'
-*   '$Revision: 1.5 $'
+*   '$Date: 2003-10-17 22:09:14 $'
+*   '$Revision: 1.6 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ package org.vegbank.databaseAccess;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,8 +44,9 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.vegbank.common.utility.DBConnection;
+import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.GetURL;
-import org.vegbank.common.utility.LocalDbConnectionBroker;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.plots.datasource.PlotDataSource;
 import org.vegbank.plots.datasource.RectificationUtility;
@@ -63,14 +63,8 @@ import org.vegbank.xmlresource.*;
  */
 public class DBinsertPlotSource {
 
-	// constructor -- define as static the LocalDbConnectionBroker
-	// so that methods called by this class can access the 'local' 
-	// pool of database connections
-	static LocalDbConnectionBroker connectionBroker =
-		new LocalDbConnectionBroker();
-
 	public Node plotNode;
-	public Connection conn;
+	public DBConnection conn;
 	private PrintWriter out;
 	private String logFile = "loadlog.txt";
 
@@ -149,9 +143,7 @@ public class DBinsertPlotSource {
 			source.getPlot(plot);
 
 			System.out.println("DBinsertPlotSource > pooling database connections");
-			//initialize the database connection manager
-			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate"); 
-			conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
+			conn=DBConnectionPool.getDBConnection("Need connection for inserting dataset");
 
 			//System.out.println("opening log file");
 			// make a new output log file
@@ -186,8 +178,8 @@ public class DBinsertPlotSource {
 			System.out.println("DBinsertPlotSource > geoCoordRequestServletHost: " + geoCoordRequestServletHost );
 			
 			//initialize the database connection manager
-			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate");
-			conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
+			System.out.println("DBinsertPlotSource > pooling database connections");
+			conn=DBConnectionPool.getDBConnection("Need connection for inserting dataset");
 
 			out = new PrintWriter(new FileWriter(logFile));
 		} catch (Exception e) {
@@ -218,8 +210,9 @@ public class DBinsertPlotSource {
 			System.out.println("DBinsertPlotSource > geoCoordRequestServletHost: " + geoCoordRequestServletHost );
 			
 			//initialize the database connection manager
-			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate"); 
-			conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
+			System.out.println("DBinsertPlotSource > pooling database connections");
+			conn=DBConnectionPool.getDBConnection("Need connection for inserting dataset");
+
 		} catch (Exception e) {
 			System.out.println("Caught Exception: " + e.getMessage());
 			e.printStackTrace();
@@ -615,7 +608,9 @@ public class DBinsertPlotSource {
 		{
 			debug.append("<permissionLevel>invalid</permissionLevel> \n");
 			// close the connections 
-			LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
+			System.out.println("Returning the DBConnection to the pool");
+			//Return dbconnection too pool
+			DBConnectionPool.returnDBConnection(conn, conn.getCheckOutSerialNumber());
 		}
 		else
 		{
@@ -632,9 +627,7 @@ public class DBinsertPlotSource {
 				//this boolean determines if the plot should be commited or rolled-back
 				boolean commit = true;
 
-				//set the auto commit option on the connection to false after getting a
-				// new connection from the pool
-				conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
+				//set the auto commit option on the connection to false after getting a				
 				conn.setAutoCommit(false);
 
 				this.projectName =
@@ -793,7 +786,9 @@ public class DBinsertPlotSource {
 					debug.append("<insert>false</insert>\n");
 				}
 				//this.testSimpleQuery("about to finish");
-				LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
+				System.out.println("Returning the DBConnection to the pool");
+				//Return dbconnection too pool
+				DBConnectionPool.returnDBConnection(conn, conn.getCheckOutSerialNumber());;
 			}
 			catch (Exception e)
 			{

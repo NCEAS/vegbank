@@ -2,8 +2,6 @@ package org.vegbank.common.utility;
 
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Enumeration;
@@ -18,8 +16,8 @@ import org.vegbank.common.dbAdapter.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-10-10 23:37:13 $'
- * '$Revision: 1.15 $'
+ * '$Date: 2003-10-17 22:09:14 $'
+ * '$Revision: 1.16 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,39 +83,6 @@ public class Utility
 		}
 		//System.out.println("---->" + origString + " VS. " + s );
 		return s;
-	}
-  
-  /**
-	* return a database connection for use with the database
-	*/
-	public Connection getConnection(String databaseName)
-	{
-		String host = "127.0.0.1";  // Default
-		return getConnection(databaseName, host);
-	}
-	
-	public Connection getConnection(String databaseName, String host)
-	{
-		String driverClassName = "org.postgresql.Driver";
-		String databaseUserName = "datauser";
-		String databasePassword = "";
-		String connectionString = "jdbc:postgresql://" + host + "/" + databaseName;
-		Connection c = null;
-    
-		try 
-		{
-			Class.forName(driverClassName);
-			c = DriverManager.getConnection(connectionString, "datauser", "");
-		}
-		catch ( Exception e )
-		{
-			System.out.println("Exception:  " + e.getMessage());
-			e.printStackTrace();
-		}
-		
-		System.out.println("Connection is :" + c);
-		
-		return(c);
 	}
 
   /**

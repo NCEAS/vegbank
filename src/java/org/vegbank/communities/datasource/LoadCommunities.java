@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-06 17:32:49 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-10-17 22:09:14 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,9 @@ import java.util.AbstractList;
 import java.util.Iterator;
 
 import org.vegbank.common.model.Community;
+import org.vegbank.common.utility.DBConnection;
+import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.ObjectToXML;
-import org.vegbank.common.utility.Utility;
 import org.vegbank.communities.datasink.DBCommunityWriter;
 
 /**
@@ -47,7 +48,7 @@ public class LoadCommunities
 	{
 		String mode = "";
 		String databaseHost = "localhost"; 
-		Connection conn = null;
+		DBConnection conn = null;
 		
 		if (args.length < 2)
 		{
@@ -62,7 +63,7 @@ public class LoadCommunities
 		try
 		{
 			System.out.println("Get connection to database on " + databaseHost);
-			conn = LoadCommunities.getDBConnection(databaseHost);
+			conn = LoadCommunities.getDBConnection();
 			
 			LoadCommunities lc = new LoadCommunities();
 			EcoArtCommunityReader cr = new EcoArtCommunityReader(lc.getConnection());
@@ -94,12 +95,9 @@ public class LoadCommunities
 	 *
 	 * @return conn -- an active connection
 	 */
-	private static Connection getDBConnection(String databaseHost)
+	private static DBConnection getDBConnection() throws SQLException
 	{
-		Utility u = new Utility();
-		// FIXME: Hard Coded references
-		Connection c = u.getConnection("vegbank", databaseHost);
-		return c;
+		return DBConnectionPool.getDBConnection("Need connection for inserting community");
 	}
 	
 	private Connection getConnection() throws ClassNotFoundException, SQLException

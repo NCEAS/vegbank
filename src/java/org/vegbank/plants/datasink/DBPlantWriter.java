@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:14 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2003-10-17 22:09:14 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
 
 package org.vegbank.plants.datasink;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.AbstractList;
@@ -36,6 +35,8 @@ import org.vegbank.common.command.Query;
 import org.vegbank.common.model.Plant;
 import org.vegbank.common.model.Plantparty;
 import org.vegbank.common.model.Plantusage;
+import org.vegbank.common.utility.DBConnection;
+import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.ObjectToDB;
 import org.vegbank.common.utility.Utility;
 
@@ -47,11 +48,11 @@ public class DBPlantWriter implements Constants
 {
 
 	private Query query = new Query();
-	private Connection conn = null;
+	private DBConnection conn = null;
 	private boolean commit = true;
 	private boolean writeSuccess = false;
 	
-	public DBPlantWriter(Plant plant, Connection conn)
+	public DBPlantWriter(Plant plant, DBConnection conn)
 	{
 		if ( plant.getScientificName() != null )
 		{
@@ -470,11 +471,9 @@ public class DBPlantWriter implements Constants
 	 *
 	 * @return conn -- an active connection
 	 */
-	private Connection getConnection()
+	private DBConnection getConnection() throws SQLException
 	{
-		Utility u = new Utility();
-		Connection c = u.getConnection("vegbank");
-		return c;
+		return DBConnectionPool.getDBConnection("Need connection for inserting plants");
 	}
 	
 	private int insertPlantConcept(
