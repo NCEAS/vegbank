@@ -35,7 +35,12 @@ public class AuthenticationServlet extends HttpServlet
 	
 	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 	//public String clientLogFile = null; //the file to log the client usage
-
+	
+	//constructor
+	public AuthenticationServlet()
+	{
+		System.out.println("init: AuthenticationServlet");
+	}
 
 	/** Handle "POST" method requests from HTTP clients */
 	public void doPost(HttpServletRequest request,
@@ -65,11 +70,11 @@ public class AuthenticationServlet extends HttpServlet
 			//get the request - parameters using the 
 			//servlet Utility class 
 			Hashtable requestParams = su.parameterHash(request);
-			System.out.println( requestParams.toString() );
+			System.out.println("AuthenticationServlet > " + requestParams.toString() );
 			//grab the remote host information
 			String remoteHost=request.getRemoteHost();
 			String remoteAddress = request.getRemoteAddr();
-			System.out.println("remoteHost: "+remoteHost+" Address: "+remoteAddress);
+			System.out.println("AuthenticationServlet > remoteHost: "+remoteHost+" Address: "+remoteAddress);
 			
 			
 			//determine what the client wants to do
@@ -83,7 +88,7 @@ public class AuthenticationServlet extends HttpServlet
 				//LOGIN THE USER
 				if ( requestParams.get("authType").toString().equals("loginUser")  )
 				{
-					System.out.println("user login attempt");
+					System.out.println("AuthenticationServlet > user login attempt");
 					if ( authenticateUser(requestParams, remoteAddress) == true)
 					{
 						//log the login in the clientLogger
@@ -102,15 +107,16 @@ public class AuthenticationServlet extends HttpServlet
 					else 
 					{
 						//send the user to the correct page
-						Thread.currentThread().sleep(100);
-						response.sendRedirect(servletPath+"pageDirector?pageType=login");
+						out.println("<html> Authentication failed - redirecting </html>" );
+						Thread.currentThread().sleep(4000);
+						response.sendRedirect("http://www.vegbank.org/general/login.html");
 						//response.sendRedirect("/harris/servlet/pageDirector?pageType=login");
 					}
 				}
 				//AUTHENTICATE THE USER TO UPLOAD A FILE
 				else if ( requestParams.get("authType").toString().equals("uploadfile")  )
 				{
-					System.out.println("authenticating for file upload");
+					System.out.println("AuthenticationServlet > authenticating for file upload");
 					if ( authenticateUser(requestParams, remoteAddress) == true)
 					{
 						out.println("<authentication>true</authentication>");
@@ -139,7 +145,7 @@ public class AuthenticationServlet extends HttpServlet
 				// CREATE A NEW USER
 				else if ( requestParams.get("authType").toString().equals("createUser")  )
 				{
-					System.out.println("creating a new user");
+					System.out.println("AuthenticationServlet > creating a new user");
 					if (createNewUser(requestParams, remoteAddress) == true )
 					{
 						Thread.currentThread().sleep(100);
@@ -154,7 +160,7 @@ public class AuthenticationServlet extends HttpServlet
 				
 				else
 				{
-					System.out.println("incorect input paramaters to authenticate");
+					System.out.println("AuthenticationServlet > incorect input paramaters to authenticate");
 				}
 			}
 			
@@ -162,7 +168,7 @@ public class AuthenticationServlet extends HttpServlet
 		}	  //end try
 		catch( Exception e ) 
 		{
-			System.out.println("failed in: "
+			System.out.println("Exception: "
 			+e.getMessage());
 			e.printStackTrace();
 		}
@@ -207,7 +213,7 @@ public class AuthenticationServlet extends HttpServlet
 		 	//grab thee user name and password
 			String userName=requestParams.get("userName").toString();
 			String passWord=requestParams.get("password").toString();
-			System.out.println("name password/pair: "+userName+" "+passWord);
+			System.out.println("AuthenticationServlet > name password/pair: "+userName+" "+passWord);
 		
 			//access the class in the dbAccess class to validate the 
 			//login and password with that stored in the database
@@ -226,7 +232,7 @@ public class AuthenticationServlet extends HttpServlet
 		 String emailAddress = requestParams.get("emailAddress").toString();
 		 String passWord =  requestParams.get("password").toString();
 		 String retypePassWord =  requestParams.get("password2").toString();
-		 System.out.println("REQUEST PARAMS: "+requestParams.toString() );
+		 System.out.println("AuthenticationServlet > REQUEST PARAMS: "+requestParams.toString() );
 		 
 		 //try to get the other variables
 		 String givenName = null;
@@ -239,20 +245,20 @@ public class AuthenticationServlet extends HttpServlet
 		 {
 			surName =  requestParams.get("surname").toString();
 		 } 
-		 System.out.println("given name: "+givenName);
-		 System.out.println("sur name: "+surName);
+		 System.out.println("AuthenticationServlet > given name: "+givenName);
+		 System.out.println("AuthenticationServlet > sur name: "+surName);
 		 
 		 
-		 System.out.println("password comparison: '"+passWord+"' '"+retypePassWord+"'");
+		 System.out.println("AuthenticationServlet > password comparison: '"+passWord+"' '"+retypePassWord+"'");
 		 if ( passWord.equals(retypePassWord) &&  passWord.length() > 2 )
 		 {
-			 System.out.println("equals");
+			 System.out.println("AuthenticationServlet > equals");
 			 uda.createUser(emailAddress, passWord, givenName, surName, remoteAddress);
 			 return(true);
 		 }
 		 else
 		 {
-			 System.out.println("not equals");
+			 System.out.println("AuthenticationServlet > not equals");
 			 return(false);
 		 }
 	 }
@@ -282,7 +288,7 @@ public class AuthenticationServlet extends HttpServlet
 		//String clientLogFile = rbun.getString("requestparams.clientLog");
 		
 		//get the cookie value form the user database class
-		System.out.println(">>>>USER NAME: " + userName );
+		System.out.println("AuthenticationServlet > USER NAME: " + userName );
 		String cookieValue = uda.getUserCookieValue(userName);
 		String cookieName = "framework";
 		if (cookieName != null)
@@ -294,7 +300,7 @@ public class AuthenticationServlet extends HttpServlet
 		}
 		else
 		{
-			System.out.println("ERROR null user name");
+			System.out.println("AuthenticationServlet > ERROR null user name");
 		}
 		
 	}
