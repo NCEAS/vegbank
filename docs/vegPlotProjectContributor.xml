@@ -16,7 +16,7 @@
 	<entityDescription>This table serves as an interesection entity used to 'link' a party with
 a specific project where vegetation plots are described. </entityDescription>
 	<attribute> 
-		<attName>projectContributor_id </attName>
+		<attName>PROJECTCONTRIBUTOR_ID </attName>
 		<attNulls>No </attNulls>	
 		<attType>NUMBER </attType>
 		<attKey>PK </attKey>
@@ -29,7 +29,7 @@ a specific project where vegetation plots are described. </entityDescription>
 
 
 	<attribute>
-                <attName>project_id </attName>
+                <attName>PROJECT_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>FK </attKey>
@@ -40,12 +40,12 @@ a specific project where vegetation plots are described. </entityDescription>
         </attribute>
 
 	<attribute>
-                <attName> party_id</attName>
+                <attName>PARTY_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>FK </attKey>
                 <attReferences>PARTY </attReferences>
-                <attNotes> </attNotes>
+                <attNotes>n/a </attNotes>
                 <attDefinition>Database assigned value for a given party this is a link to 
             the party entity. </attDefinition>
         </attribute>

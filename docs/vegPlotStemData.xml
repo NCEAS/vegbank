@@ -4,40 +4,105 @@
 <dataModel>	
 
 
-<title> Prototype Veg Plots Database Component Description: cover method</title>
+<title> Prototype Veg Plots Database Component Description: stem data</title>
 <author>J. Harris </author>
 <institution>NCEAS </institution>
 <contributor> </contributor>
-<description>This table specifies the cover scale recognized by the plot data collectors.</description>
+<description>This table stores stem data collected from a plot.</description>
 <date></date>
 
 <entity>
-	<entityName>vegPlot.CoverMethod </entityName>
-	<entitySummary>This table links the cover scale recognized by the plot data collectors
-	to a cover scale specified in the coverIndicies table. </entitySummary>
-	<entityDescription> </entityDescription>
+	<entityName>vegPlot.stemData</entityName>
+	<entitySummary>This table is intended to store information about the tree stem data collected while 
+	sampling a plot.</entitySummary>
+	<entityDescription>This table was added after the September meeting at NCEAS 
+	because of the recognization that there were often attributes related 
+	to plant stems that are commonly measured while sampling a plot.  There was 
+	broad interest in being able to include some of these measurements in the 
+	plots database.</entityDescription>
 
         <attribute>
-                <attName>coverMethodId</attName>
+                <attName>STEM_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>PK </attKey>
 		<attReferences>n/a</attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>Primary Key for the coverMethod table.</attDefinition>
+                <attDefinition>Primary Key for the stemData table.</attDefinition>
         </attribute>
 
 
 	<attribute> 
-		<attName>coverType</attName>
-		<attNulls>No </attNulls>	
-		<attType>NUMBER </attType>
+		<attName>TAXONOBSERVATION_ID</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>FK</attKey>
+		<attReferences>taxonObservation</attReferences>
+		<attNotes>Through this foreign key the stem data are linked to a specific taxon observation.</attNotes>
+		<attDefinition>Foreign key into the taxonObservation table.</attDefinition>
+	</attribute>
+
+	<attribute> 
+		<attName>stemCode</attName>
+		<attNulls>Yes</attNulls>	
+		<attType>VARCHAR2</attType>
+		<attKey>n/a </attKey>
+		<attReferences>n/a </attReferences>
+		<attNotes>Name applied to a specific stem by the plot author.</attNotes>
+		<attDefinition>This column stores the name or code applied to a specific stem in the plot.</attDefinition>
+</attribute>
+
+<attribute> 
+		<attName>stemDiameter</attName>
+		<attNulls>Yes</attNulls>	
+		<attType>NUMBER</attType>
 		<attKey>n/a </attKey>
 		<attReferences>n/a </attReferences>
 		<attNotes>n/a</attNotes>
-		<attDefinition>Cover scale type (examples may include: Braun-Blanquet scale, the Barkman et al., Franklin et al., Pfister-Arnold etc..</attDefinition>
-	</attribute>
+		<attDefinition>This column stores the measured diameter of the stem in meters.</attDefinition>
+</attribute>
 
+<attribute> 
+		<attName>stemDiameterAccuracy</attName>
+		<attNulls>Yes</attNulls>	
+		<attType>NUMNBER</attType>
+		<attKey>n/a </attKey>
+		<attReferences>n/a </attReferences>
+		<attNotes>Diameter accuracy in meteres.</attNotes>
+		<attDefinition>This column stores the accuracy of the stem diameter measurements.</attDefinition>
+</attribute>
+
+<attribute> 
+		<attName>stemPosition</attName>
+		<attNulls>Yes</attNulls>	
+		<attType>TEXT</attType>
+		<attKey>n/a</attKey>
+		<attReferences>n/a </attReferences>
+		<attNotes>see the dsgpoly attribute in the plot table - the format is the same.</attNotes>
+		<attDefinition>This column stores the position (lat., long.) of the stem.</attDefinition>
+</attribute>
+
+
+<attribute> 
+		<attName>stemHeight</attName>
+		<attNulls>Yes</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>n/a </attKey>
+		<attReferences>n/a </attReferences>
+		<attNotes>Height in meters</attNotes>
+		<attDefinition>This column stores the measured height of the stem in meters..</attDefinition>
+</attribute>
+
+
+<attribute> 
+		<attName>stemHeightAccuracy</attName>
+		<attNulls>Yes</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>n/a </attKey>
+		<attReferences>n/a </attReferences>
+		<attNotes>Stem height accuracy in meters.</attNotes>
+		<attDefinition>This column stores the measured height of a stem.</attDefinition>
+</attribute>
 
 
 	<children> </children>

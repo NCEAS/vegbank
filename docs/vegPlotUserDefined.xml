@@ -20,12 +20,12 @@
 	Moreover, the user can designate a catagory for each of their user defined attribites in order to associate the data 
 	with a specific type including: environmental, vegetation, reference related and party oriented.</entityDescription>
         <attribute>
-                <attName>userDefinedId </attName>
+                <attName>USERDEFINED_ID</attName>
                 <attNulls>No </attNulls>
-                <attType>NUMBER </attType>
-                <attKey>PK </attKey>
+                <attType>NUMBER</attType>
+                <attKey>PK</attKey>
 		<attReferences>n/a</attReferences>
-                <attNotes>n/a </attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>Primary key for the userDefined table.</attDefinition>
         </attribute>
 
@@ -43,7 +43,7 @@
 
 
 	<attribute>
-                <attName>definedValueId </attName>
+                <attName>DEFINEDVALUE_ID </attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>FK</attKey>
@@ -54,7 +54,7 @@
 
 	
 	<attribute>
-                <attName>catagory</attName>
+                <attName>category</attName>
                 <attNulls>Yes</attNulls>
                 <attType>VARCHAR2</attType>
                 <attKey>n/a</attKey>

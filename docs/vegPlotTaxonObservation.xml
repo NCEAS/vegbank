@@ -19,20 +19,22 @@
 
 
 <attribute>
-                <attName>taxonObservationId</attName>
+                <attName>TAXONOBSERVATION_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>P</attKey>
+                <attKey>PK</attKey>
+		<attReferences>n/a</attReferences>
                 <attNotes>Primary key of the table.</attNotes>
                 <attDefinition>Database assigned value for a unique taxa within a given plot observation.</attDefinition>
         </attribute>
 
 
 	<attribute> 
-		<attName>obs_id</attName>
+		<attName>OBS_ID</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
-		<attKey>F</attKey>
+		<attKey>FK</attKey>
+		<attReferences>n/a</attReferences>
 		<attNotes>Foreign key into the plotObservation table.</attNotes>
 		<attDefinition>Database assigned value for a unique plot observation.</attDefinition>
 	</attribute>
@@ -40,12 +42,12 @@
 
 
 	<attribute>
-                <attName>authorName</attName>
+                <attName>authorNameId</attName>
                 <attNulls>No</attNulls>
                 <attType>VARCHAR2</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes>n/a</attNotes>
+                <attNotes>original taxon name used by the plot author</attNotes>
                 <attDefinition>This is the taxon name that the author of the plot used to refer to a plant observed within the plot.</attDefinition>
         </attribute>
 
@@ -55,19 +57,17 @@
                 <attNulls>No</attNulls>
                 <attType>VARCHAR2</attType>
                 <attKey>n/a</attKey>
-                <attNotes>The authority coupled with
-                              the original taxon name
-                              from that authority is all
-                              that is needed to define a
-                              taxon.  This is like
-                              Berendsohn's potential
-                              species concept.  Both the
-                              originalTaxonName and the
-                              authority might best viewed
-                              as foreign keys to tables in
+		<attReferences>n/a</attReferences>
+                <attNotes>The authority coupled with the original taxon name
+                              from that authority is all that is needed to define a
+                              taxon.  This is like Berendsohn's potential
+                              species concept.  Both the originalTaxonName and the
+                              authority might best viewed as foreign keys to tables in
                               the plants database.
 		</attNotes>
-                <attDefinition>This is the authority for the taxon that was used by the plot author to describe a population.</attDefinition>
+                <attDefinition>This is the authority for the taxon that was used by the plot 
+		author to describe a population.  If the originalAuthority is unknown then the 
+		author if the plot is the originalAuthority</attDefinition>
         </attribute>
 
 
@@ -82,7 +82,18 @@
                 <attDefinition>Percent coverage of a species in all recorded strata combined. </attDefinition>
         </attribute>
 
-
+	<attribute>
+                <attName>inferenceArea</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>The are used to infer the coverage of the taxon, if not the same as the plot area.</attNotes>
+                <attDefinition>This is the measured/predicted area for the space used to infer the 
+		coverage of a given taxon.  Generally this should be equal to the plot area but it was 
+		recognized that, at times, this area may be larger or smaller than the plot area.</attDefinition>
+        </attribute>
+	
 	<children> </children>
 </entity>
 </dataModel>	

@@ -19,7 +19,7 @@
 	database tables in a stand alone table.</entityDescription>
 
         <attribute>
-                <attName>revisionId</attName>
+                <attName>REVISION_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER </attType>
                 <attKey>PK </attKey>
@@ -106,7 +106,7 @@
 	<children> </children>
 	
 	<attribute>
-                <attName>previousRevisionId</attName>
+                <attName>previousREVISION_ID</attName>
                 <attNulls>Yes</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>n/a </attKey>

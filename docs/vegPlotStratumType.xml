@@ -8,38 +8,56 @@
 <author>J. Harris </author>
 <institution>NCEAS </institution>
 <contributor> </contributor>
-<description>This table specifies the cover scale recognized by the plot data collectors.</description>
+<description>This table stores information about the types of strata included in the plot collection process.</description>
 <date></date>
 
 <entity>
-	<entityName>vegPlot.CoverMethod </entityName>
-	<entitySummary>This table links the cover scale recognized by the plot data collectors
-	to a cover scale specified in the coverIndicies table. </entitySummary>
+	<entityName>vegPlot.stratumType </entityName>
+	<entitySummary>This table stores data about the types of strata included in a plot.  
+	It is anticipated that authors will apply different meanings to the common strata types 
+	and this entity will allow the database user to determine exactly what the plot author meant 
+	by each stratum included in his/her plot.  Moreover, if the author chooses to use a formerly 
+	unused name he/she will be able to define the stratum in this table.</entitySummary>
 	<entityDescription> </entityDescription>
 
         <attribute>
-                <attName>coverMethodId</attName>
-                <attNulls>No </attNulls>
-                <attType>NUMBER </attType>
+                <attName>STRATUMTYPE_ID</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
                 <attKey>PK </attKey>
 		<attReferences>n/a</attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>Primary Key for the coverMethod table.</attDefinition>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Primary Key for the stratumType table.</attDefinition>
         </attribute>
 
 
 	<attribute> 
-		<attName>coverType</attName>
-		<attNulls>No </attNulls>	
-		<attType>NUMBER </attType>
+		<attName>stratumName</attName>
+		<attNulls>No</attNulls>	
+		<attType>VARCHAR2</attType>
 		<attKey>n/a </attKey>
 		<attReferences>n/a </attReferences>
 		<attNotes>n/a</attNotes>
-		<attDefinition>Cover scale type (examples may include: Braun-Blanquet scale, the Barkman et al., Franklin et al., Pfister-Arnold etc..</attDefinition>
+		<attDefinition>This is the name of the stratum.  Notice that the structure of this table allows 
+		for multiple meanings to be applied to a specific stratum name but that each plot will be 
+		linked to a unique name/meaning pair.</attDefinition>
 	</attribute>
 
+<attribute> 
+		<attName>stratumDescription</attName>
+		<attNulls>No</attNulls>	
+		<attType>VARCHAR2</attType>
+		<attKey>n/a </attKey>
+		<attReferences>n/a </attReferences>
+		<attNotes>n/a</attNotes>
+		<attDefinition>This column stores a text string describing what is meant by the stratum name.</attDefinition>
+</attribute>
 
 
+	
+	
+	
+	
 	<children> </children>
 </entity>
 </dataModel>	
