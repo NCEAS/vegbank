@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-05 02:13:01 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2004-11-01 20:37:52 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,6 +95,8 @@ public class UploadPlotAction extends VegbankAction
 		FileWrapper file = null;
 		String fileURL = null;
 
+		setSaveDir( getUser(request.getSession()).getUseridLong().toString() );
+
 		if (upload) {
 			try {
 				file = new FileWrapper(theForm.getPlotFile());
@@ -115,7 +117,6 @@ public class UploadPlotAction extends VegbankAction
 			try {
 				WebFileFetch fetcher = new WebFileFetch();
 
-				setSaveDir( getUser(request.getSession()).getUseridLong().toString() );
 				String saveDir = getSaveDir();
 
 				log.debug("user's save dir: " + saveDir);
