@@ -567,15 +567,16 @@ public class DataExchangeServlet extends HttpServlet
 			}
 
 			// Show which files we received
-			//out.println("<H3>Files:</H3>");
-			//out.println("<PRE>");
 			Enumeration files = multi.getFileNames();
 			while (files.hasMoreElements()) 
 			{
 				String name = (String)files.nextElement();
+        System.out.println("DataExchangeServlet > name from multipart: " + name );
 				String filename = multi.getFilesystemName(name);
+        System.out.println("DataExchangeServlet > filesystem name from multipart: " + filename);
 				String type = multi.getContentType(name);
-				
+        System.out.println("DataExchangeServlet > content type: " + type );
+
 				//try to substitue the name
 				File f = multi.getFile(name);
 				
@@ -598,13 +599,7 @@ public class DataExchangeServlet extends HttpServlet
 					//register and make sure that we get back an
 					//accession number 
 					String accessionNumber = filedb.registerDocument(username, 
-						"givenname",
-	 					 currentDate, 
-						 fileSize, 
-						 uploadDir, 
-						 filename, 
-						 fileType
-					);
+					"givenname", currentDate, fileSize, uploadDir, filename, fileType);
 					
 					//copy the file to a file with the name of the accesion number
 					util.fileCopy(uploadDir+filename, uploadDir+accessionNumber);
@@ -620,10 +615,10 @@ public class DataExchangeServlet extends HttpServlet
 					//current name
 					if ( uploadFileName != null )
 					{
-						//copy the file to a file with the name of the accesion number
-						util.fileCopy(uploadDir+filename, uploadDir+uploadFileName);
-						//delete the file
-						util.flushFile(uploadDir+filename);
+						// rename the file to the appropriate name -- the name of the file
+            // that wil be sent to the rmi server
+            File dest = new File(uploadDir+uploadFileName);
+            f.renameTo(dest);
 					}	
 				}
 				else
