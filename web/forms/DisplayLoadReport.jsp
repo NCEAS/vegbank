@@ -13,9 +13,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: mlee $'
-*      '$Date: 2004-04-08 05:44:28 $'
-*  '$Revision: 1.4 $'
+*    '$Author: anderson $'
+*      '$Date: 2004-05-06 22:39:07 $'
+*  '$Revision: 1.5 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -42,6 +42,10 @@
   <body>
   @vegbank_header_html_normal@
   <bean:write name="ErrorsReport" property="HTMLReport" filter="false"/>
+
+  <p>
+  <html:link action="MainMenu.do">Go to main menu</a>
+
   <!-- VEGBANK FOOTER -->
   @vegbank_footer_html_tworow@
   </body>

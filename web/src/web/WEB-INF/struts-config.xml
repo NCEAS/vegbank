@@ -149,7 +149,8 @@
 		<forward name="DownLoadManager"
 		         path="/DownLoadManager.do"/>
 		<forward name="DisplayLoadReport"
-		         path="/forms/DisplayLoadReport.jsp"/>
+		         path="/forms/DisplayLoadReport.jsp"
+		         redirect="true"/>
 		<forward name="DisplayResults"
 		         path="/forms/DisplayResults.jsp"/>
 		<forward name="DisplayUploadPlotAction"
@@ -173,6 +174,8 @@
 		         path="/forms/PlantQuery.jsp"/>
 		<forward name="CommQuery"
 		         path="/forms/CommQuery.jsp"/>
+		<forward name="PleaseWait"
+		         path="/PleaseWait.do"/>
 		<forward name="PlotQuery"
 		         path="/PlotQuery.do"
 		         redirect="false"
@@ -375,6 +378,13 @@
 			<forward name="success"
 			         path="/forms/DisplayQueryResults.jsp"/>
 		</action>
+		<action path="/PleaseWait"
+		        type="org.vegbank.ui.struts.PleaseWaitAction"
+		        scope="request"
+		        validate="false">
+			<forward name="self"
+			         path="/general/wait.jsp"/>
+		</action>
 		<action path="/PlotQuery"
 		        type="org.vegbank.ui.struts.PlotQueryAction"
 		        name="PlotQueryForm"
@@ -427,7 +437,7 @@
 		<action path="/UploadPlot"
 		        type="org.vegbank.ui.struts.UploadPlotAction"
 		        name="UploadPlotForm"
-		        scope="request"
+		        scope="session"
 		        validate="true"
 		        input="DisplayUploadPlotAction">
 			<set-property property="authClass"
