@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-17 01:01:56 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-09-17 05:35:52 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.vegbank.common.utility.ServletUtility;
  * Tag that builds a page selector in HTML.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.4 $ $Date: 2004-09-17 01:01:56 $
+ * @version $Revision: 1.5 $ $Date: 2004-09-17 05:35:52 $
  */
 
 public class VegbankPagerTag extends VegbankTag {
@@ -106,13 +106,6 @@ public class VegbankPagerTag extends VegbankTag {
 				return SKIP_BODY; 	// no deal if there are no more pages
 			}
 
-
-			iPageNumber = convStringToInt(getPageNumber(), 1);
-			if (iPageNumber < 1) {
-				iPageNumber = 1;
-			}
-			log.debug("pageNumber: " + iPageNumber);
-
 			iPerBatch = convStringToInt(getPerBatch(), DEF_PER_BATCH);
 			if (iPerBatch < 1) {
 				iPerBatch = DEF_PER_BATCH;
@@ -124,14 +117,21 @@ public class VegbankPagerTag extends VegbankTag {
 
 		
 			// calculate shit
-			numTotalPages = (int)Math.round(Math.ceil(iNumItems / iPerPage));
-			numTotalBatches = (int)Math.round(Math.ceil(numTotalPages / iPerBatch));
-
-			if (numTotalPages % iPerBatch == 0) {
-				numTotalBatches = numTotalPages / iPerBatch;
-			} else {
-				numTotalBatches = (int)(numTotalPages / iPerBatch) + 1;
+			numTotalPages = (int)Math.ceil((float)iNumItems / (float)iPerPage);
+			numTotalBatches = (int)Math.ceil((float)numTotalPages / (float)iPerBatch);
+			if (numTotalPages % iPerBatch != 0) {
+				numTotalBatches++;
 			}
+
+
+			iPageNumber = convStringToInt(getPageNumber(), 1);
+			if (iPageNumber < 1) {
+				iPageNumber = 1;
+			} else if (iPageNumber * iPerPage > iNumItems) {
+				iPageNumber = numTotalPages;
+			}
+			log.debug("pageNumber: " + iPageNumber);
+
 
 			if (iPageNumber % iPerBatch == 0) {
 				iCurBatch = iPageNumber / iPerBatch;
@@ -183,7 +183,7 @@ public class VegbankPagerTag extends VegbankTag {
 
 			// set up the next page request
 			urlParams.put("perBatch", Integer.toString(iPerBatch));
-			urlParams.put("perPage", Integer.toString(iPerPage));
+			urlParams.put("perPage", Integer.toString((int)iPerPage));
 			///////urlParams.put("numItems", Integer.toString(iNumItems));
 
 
@@ -248,9 +248,17 @@ public class VegbankPagerTag extends VegbankTag {
 				pagerHTML += " <font color='#AAAAAA'>|</font> <span class='greytext'>&nbsp; next&raquo;</span>";
 			}
 
-			int firstItemNumber = iPerPage * (iPageNumber - 1) + 1;
+			int firstItemNumber = (int)(iPerPage * (iPageNumber - 1) + 1);
+			int lastItemNumber;
+			if (iPageNumber == numTotalPages) {
+				// last page
+				lastItemNumber = iNumItems;
+			} else {
+				lastItemNumber = firstItemNumber + iPerPage - 1;
+			}
+
 			pagerHTML += "</strong><br/><span class='greytext'>records " + firstItemNumber + " through " 
-					+ (firstItemNumber+iPerPage-1) + " of " + iNumItems + "</span></p></td>";
+					+ lastItemNumber + " of " + iNumItems + "</span></p></td>";
 
 
 			////////////////

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-15 03:29:08 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-09-17 05:35:52 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.vegbank.common.utility.Utility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.4 $ $Date: 2004-09-15 03:29:08 $
+ * @version $Revision: 1.5 $ $Date: 2004-09-17 05:35:52 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -89,8 +89,28 @@ public class VegbankGetTag extends VegbankTag {
 
 			log.debug("Setting GC's id, numItems, pageNumber, perPage and pager");
 			gc.setId(getId());
-			gc.setNumItems(findAttribute("numItems"));
+
+			/*
+			int iNumItems = convStringToInt(findAttribute("numItems"), 0);
+			int iPerPage = convStringToInt(getPerPage(), 0);
+
+			int numTotalPages = (int)Math.ceil((float)iNumItems / (float)iPerPage);
+			int iPageNumber = convStringToInt(getPageNumber(), 1);
+			if (iPageNumber < 1) { 
+				iPageNumber = 1; 
+			} else if (iPageNumber * iPerPage > iNumItems) { 
+				iPageNumber = numTotalPages; 
+			} 
+			log.debug(":GET pageNumber: " + iPageNumber);
+			log.debug(":GET numTotalPages: " + numTotalPages);
+
+			gc.setPageNumber(Integer.toString(iPageNumber));
+			gc.setNumItems(Integer.toString(iNumItems));
+			gc.setPerPage(Integer.toString(iPerPage));
+			*/
+
 			gc.setPageNumber(getPageNumber());
+			gc.setNumItems(findAttribute("numItems"));
 			gc.setPerPage(getPerPage());
 
 			try { gc.setPager(Boolean.valueOf(getPager()).booleanValue()); 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-17 01:01:56 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2004-09-17 05:35:52 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ public class GenericCommand
 	private static ResourceBundle sqlResources = 
 			ResourceBundle.getBundle("org.vegbank.common.SQLStore");
 
-	public static final int DEFAULT_PER_PAGE = 15;   // -1 is all results
+	public static final int DEFAULT_PER_PAGE = 10;   // -1 is all results
 	private static final String BEANLIST_KEY = "BEANLIST";
 	private static final String BEAN_KEY = "BEAN";
 	private static final String MAP_KEY = "MAP";
@@ -188,6 +188,7 @@ public class GenericCommand
 		// Set up the pager
 		////////////////////////////////////////////////////
 		tmp = getPerPage();
+		float pp = 0;
 		if (Utility.isStringNullOrEmpty(tmp) && numItems > 1) {
 			// set default items per page
 			setPerPage(null);
@@ -195,7 +196,27 @@ public class GenericCommand
 		} else if (numItems == 1) {
 			//setPerPage("1");
 			setPageNumber("0");
+			pp = Float.parseFloat(tmp);
 		} 
+
+		// page number
+		tmp = getPageNumber();
+		int pn;
+		if (Utility.isStringNullOrEmpty(tmp)) {
+			pn = 1;
+		} else {
+			pn = Integer.parseInt(tmp);
+		}
+
+		int numTotalPages = (int)Math.ceil((float)numItems / pp);
+		if (pn < 1) { 
+			pn = 1; 
+		} else if (pn * pp > numItems) { 
+			pn = numTotalPages; 
+		} 
+		setPageNumber(Integer.toString(pn));
+		log.debug(":GC pageNumber: " + pn);
+		log.debug(":GC numTotalPages: " + numTotalPages);
 
 
 
@@ -326,6 +347,7 @@ public class GenericCommand
 		// set up pagination
 		String pn = getPageNumber();
 		String pp = getPerPage();
+
 
 		int ipp;
 		if (Utility.isStringNullOrEmpty(pp)) {
