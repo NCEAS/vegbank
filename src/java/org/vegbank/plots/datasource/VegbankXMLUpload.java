@@ -6,8 +6,8 @@ package org.vegbank.plots.datasource;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-31 01:48:41 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2003-11-03 18:45:55 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -686,8 +686,6 @@ public class VegbankXMLUpload
 		private Hashtable vegbankPackage = null;
 		private LoadingErrors errors = null;
 		private boolean commit = false;
-		// TODO: This may need to be a configurable property
-		private static final String VegbankAccessionPrefix = "VB";
 		private AccessionGen ag  = new AccessionGen();
 		
 		// This holds the name of the current concept
@@ -1037,7 +1035,7 @@ public class VegbankXMLUpload
 					LogUtility.log("LoadTreeToDatabase: Calling AccessionGen"); 
 					accessionCode =
 						ag.getCode(
-							VegbankAccessionPrefix,
+							Utility.getAccessionPrefix(),
 							tableName,
 							new Integer(PK).toString(),
 							this.currentConceptName);
@@ -1046,7 +1044,7 @@ public class VegbankXMLUpload
 				}
 				else
 				{
-					accessionCode = VegbankAccessionPrefix + "." + PK;
+					accessionCode = Utility.getAccessionPrefix() + "." + PK;
 					fieldValueHash.put(fieldName, accessionCode);
 				}
 
@@ -1090,7 +1088,7 @@ public class VegbankXMLUpload
 				LogUtility.log("LoadTreeToDatabase: Found no accessionCode for " + tableName);
 				// do nothing
 			}
-			else if ( accessionCode.startsWith(VegbankAccessionPrefix + ".") )
+			else if ( accessionCode.startsWith(Utility.getAccessionPrefix() + ".") )
 			{
 				// Need to get the pK of the table
 				Hashtable simpleHash = new Hashtable();

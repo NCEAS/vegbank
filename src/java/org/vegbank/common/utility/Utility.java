@@ -25,8 +25,8 @@ import org.vegbank.common.model.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-11-03 03:49:47 $'
- * '$Revision: 1.20 $'
+ * '$Date: 2003-11-03 18:45:54 $'
+ * '$Revision: 1.21 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -501,7 +501,7 @@ public class Utility
 		boolean result = false;
 		LogUtility.log("Utility: databaseName = " + databaseName);
 		
-		if ( databaseName.equalsIgnoreCase("vegbank"))
+		if ( databaseName.equalsIgnoreCase("vegbank") || databaseName.equalsIgnoreCase("vegtest"))
 		{
 			result = true;
 		}
