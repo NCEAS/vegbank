@@ -9,8 +9,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-12-13 06:46:26 $'
-  *  '$Revision: 1.6 $'
+  *      '$Date: 2004-12-14 01:55:30 $'
+  *  '$Revision: 1.7 $'
   *
   *
   -->
@@ -28,7 +28,12 @@
   </style>
 
 <script language="javascript">
-function setCommDate() {
+function prepareForm() {
+	setDate();
+	setNameMatchType();
+}
+
+function setDate() {
 	month = document.queryform.ebMonth.value;
 	date = document.queryform.ebDate.value;
 	year = document.queryform.ebYear.value;
@@ -44,6 +49,23 @@ function setCommDate() {
 
 }
 
+function setNameMatchType() {
+	matchType = document.queryform.matchType;
+
+	if (matchType[1].checked) {
+		document.queryform.xwhereKey_commname.value = "xwhere_match";
+		document.queryform.xwhereSearch_commname.value = "true";
+		document.queryform.xwhereMatchAny_commname.value = "true";
+	} else if (matchType[2].checked) {
+		document.queryform.xwhereKey_commname.value = "xwhere_ilike";
+		document.queryform.xwhereSearch_commname.value = "false";
+		document.queryform.xwhereMatchAny_commname.value = "false";
+	} else {
+		document.queryform.xwhereKey_commname.value = "xwhere_match";
+		document.queryform.xwhereSearch_commname.value = "true";
+		document.queryform.xwhereMatchAny_commname.value = "false";
+	}
+}
 </script>
 
 </head>
@@ -74,7 +96,7 @@ function setCommDate() {
       <td width="15%" bgcolor="white" align="left" valign="top">
 
       <td align="left">
-        <form action="@web_context@views/commconcept_detail.jsp" method="get" name="queryform" onsubmit="setCommDate()">
+        <form action="@web_context@views/commconcept_detail.jsp" method="get" name="queryform" onsubmit="prepareForm()">
         <!--html:form action="/CommQuery"-->
 			<input type="hidden" name="where" value="where_commconcept_mpq" size="40"/>
 
@@ -83,6 +105,8 @@ function setCommDate() {
               <td align="left" valign="middle" colspan="2">
                 <span class="c2">
 				<b>All search criteria are optional.</b>
+				<br>
+				Try the <a href="@web_context@forms/PlantQuery.jsp">plant query</a> too.
 				</span>
               </td>
             </tr>
@@ -100,14 +124,20 @@ function setCommDate() {
               <td width="556">
 		<input type="text" size="35" name="xwhereParams_commname_0"/>
 		<input type="hidden" name="xwhereParams_commname_1" value="cu.commname"/>
-		<input type="hidden" name="xwhereKey_commname" value="xwhere_match"/>
 				&nbsp; <span class="normal">e.g. tidal, brackish
-				</span>
 				<br>
+		<input type="radio" name="matchType" value="all" checked="checked"/>contains ALL words
+				<br>
+		<input type="radio" name="matchType" value="any"/>contains ANY word
+				<br>
+		<input type="radio" name="matchType" value="is"/>is exactly 
+			<span class="sizetiny">
+			(use % as a wildcard to match anything)
+			</span>
+				<br>
+		<input type="hidden" name="xwhereKey_commname" value="xwhere_match"/>
 		<input type="hidden" name="xwhereSearch_commname" value="true"/>
-		<input type="checkbox" name="xwhereMatchAny_commname" value="true" checked="true"/>
-			  <span class="sizetiny">
-				Match ANY word (uncheck to match ALL words)
+		<input type="hidden" name="xwhereMatchAny_commname" value="false"/>
 				</span>
 
 	      </td>

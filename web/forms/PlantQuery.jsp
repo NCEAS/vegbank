@@ -10,8 +10,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-12-13 06:46:26 $'
-  *  '$Revision: 1.7 $'
+  *      '$Date: 2004-12-14 01:55:30 $'
+  *  '$Revision: 1.8 $'
   *
   *
   -->
@@ -36,7 +36,12 @@
   </style>
 
 <script language="javascript">
-function setPlantDate() {
+function prepareForm() {
+	setDate();
+	setNameMatchType();
+}
+
+function setDate() {
 	month = document.queryform.ebMonth.value;
 	date = document.queryform.ebDate.value;
 	year = document.queryform.ebYear.value;
@@ -49,7 +54,25 @@ function setPlantDate() {
 		document.queryform.xwhereParams_date_0.value = 
 			date + "-" + month + "-" + year;
 	}
+}
 
+
+function setNameMatchType() {
+	matchType = document.queryform.matchType;
+
+	if (matchType[1].checked) {
+		document.queryform.xwhereKey_plantname.value = "xwhere_match";
+		document.queryform.xwhereSearch_plantname.value = "true";
+		document.queryform.xwhereMatchAny_plantname.value = "true";
+	} else if (matchType[2].checked) {
+		document.queryform.xwhereKey_plantname.value = "xwhere_ilike";
+		document.queryform.xwhereSearch_plantname.value = "false";
+		document.queryform.xwhereMatchAny_plantname.value = "false";
+	} else {
+		document.queryform.xwhereKey_plantname.value = "xwhere_match";
+		document.queryform.xwhereSearch_plantname.value = "true";
+		document.queryform.xwhereMatchAny_plantname.value = "false";
+	}
 }
 
 </script>
@@ -79,7 +102,7 @@ function setPlantDate() {
 
       <td align="left">
 
-        <form action="@web_context@views/plantconcept_detail.jsp" method="get" name="queryform" onsubmit="setPlantDate()">
+        <form action="@web_context@views/plantconcept_detail.jsp" method="get" name="queryform" onsubmit="prepareForm()">
 			<input type="hidden" name="where" value="where_plantconcept_mpq"/>
 
           <table>
@@ -88,9 +111,7 @@ function setPlantDate() {
                 <span class="c2">
 				<b>All search criteria are optional.</b>
 				<br>
-				There are many plants to search, so please 
-				<br>
-				have patience if your query seems slow.
+				Try the <a href="@web_context@forms/CommQuery.jsp">community query</a> too.
 				</span>
               </td>
             </tr>
@@ -107,14 +128,20 @@ function setPlantDate() {
               <td width="556">
 		<input type="text" size="35" name="xwhereParams_plantname_0"/>
 		<input type="hidden" name="xwhereParams_plantname_1" value="pu.plantname"/>
-		<input type="hidden" name="xwhereKey_plantname" value="xwhere_match"/>
 				&nbsp; <span class="normal">e.g. maple, acer rubrum
-				</span>
 				<br>
+		<input type="radio" name="matchType" value="all" checked="checked"/>contains ALL words
+				<br>
+		<input type="radio" name="matchType" value="any"/>contains ANY word
+				<br>
+		<input type="radio" name="matchType" value="is"/>is exactly
+			<span class="sizetiny">
+			(use % as a wildcard to match anything)
+			</span>
+				<br>
+		<input type="hidden" name="xwhereKey_plantname" value="xwhere_match"/>
 		<input type="hidden" name="xwhereSearch_plantname" value="true"/>
-		<input type="checkbox" name="xwhereMatchAny_plantname" value="true" checked="true"/>
-			  <span class="sizetiny">
-				Match ANY word (uncheck to match ALL words)
+		<input type="hidden" name="xwhereMatchAny_plantname" value="false"/>
 				</span>
 
 	      </td>
