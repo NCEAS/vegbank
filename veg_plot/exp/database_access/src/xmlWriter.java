@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-07-05 17:38:12 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2002-08-09 14:48:19 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -292,8 +292,12 @@ public class  xmlWriter
 	 * 	@param taxaResults -- a vector that contains the taxonomy results from the 
 	 *		query
 	 *	@param outfile -- the path and file that the results will be printed to
+	 *	@param taxonName -- the name used for the query
+	 *	@param taxonNameType -- the type of name used for the query (eg. code, commonname, scientificname)
+	 *	@param taxonNameLevel -- the level of the concept (eg, variety, species)
  	 */
-	public void writePlantTaxonomySummary(Vector taxaResults, String outFile)
+	public void writePlantTaxonomySummary(Vector taxaResults, String outFile, String taxonName, 
+	String taxonNameType, String taxonNameLevel)
 	{
 		try 
 		{
@@ -301,21 +305,23 @@ public class  xmlWriter
 			PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
 			StringBuffer sb = new StringBuffer();
 			System.out.println("xmlWriter > number of plant instances: " + taxaResults.size() ); 
-			/**
-			 * the attributes that are in this hashtable: 
-			 		returnHash.put("plantNameId", ""+plantNameId);
-					returnHash.put("plantConceptId", ""+plantConceptId);
-			 		returnHash.put("plantName", plantName);
-					returnHash.put("status", status);
-					returnHash.put("classSystem", classSystem);
-			 		returnHash.put("plantLevel", plantLevel);
-					returnHash.put("parentName", parentName);
-					returnHash.put("acceptedSynonym", acceptedSynonym);
-					returnHash.put("startDate", startDate);
-					returnHash.put("stopDate", stopDate);
-			 */
-			//the header stuff
+			
+			// REPLACE THE WILDCARDS WITH THE APPROPRIATE TEXT IN THE QUERY TOKENS
+			if ( taxonNameType.trim().equals("%") )
+				taxonNameType = "ANY";
+			if ( taxonNameLevel.trim().equals("%") )
+				taxonNameLevel = "ALL";
+				
+			// WRITE THE HEADER
 			sb.append("<plantTaxa> \n");
+			// ADD THE QUERY ELEMENTS TO THE OUTPUT SO THAT THEY CAN BE USED 
+			// BY THE STYLESHEET
+			sb.append("<query> \n");
+			sb.append("	<taxonName>"+taxonName+"</taxonName> \n");
+			sb.append(" <taxonNameType>"+taxonNameType+"</taxonNameType> \n");
+			sb.append("	<taxonNameLevel>"+taxonNameLevel+"</taxonNameLevel> \n");
+			sb.append("</query>");
+			
 			//iterate thru the results
 			for (int i=0;i<taxaResults.size(); i++) 
 			{
@@ -334,6 +340,12 @@ public class  xmlWriter
 			 	String stopDate = (String)currentTaxonHash.get("stopDate");
 				String plantDescription = (String)currentTaxonHash.get("plantDescription");
 				String plantNameAlias = (String)currentTaxonHash.get("plantNameAlias");
+				String plantCode = (String)currentTaxonHash.get("code");
+				String commonName = (String)currentTaxonHash.get("commonName");
+				String plantConceptRefAuthor = (String)currentTaxonHash.get("plantConceptRefAuthor");
+				String plantConceptRefDate = (String)currentTaxonHash.get("plantConceptRefDate");
+				String plantUsagePartyOrgName = (String)currentTaxonHash.get("plantUsagePartyOrgName");
+				String scientificName = (String)currentTaxonHash.get("scientificName");
 				
 				sb.append("<taxon> \n");
 				sb.append("	<name> \n");
@@ -349,6 +361,13 @@ public class  xmlWriter
 				sb.append("		<startDate>"+startDate+"</startDate> \n");
 				sb.append("		<stopDate>"+stopDate+"</stopDate> \n");
 				sb.append("		<plantDescription>"+plantDescription+"</plantDescription> \n");
+				sb.append("		<plantCode>"+plantCode+"</plantCode> \n");
+				sb.append("		<commonName>"+commonName+"</commonName> \n");
+				sb.append("		<plantConceptRefAuthor>"+plantConceptRefAuthor+"</plantConceptRefAuthor> \n");
+				sb.append("		<plantConceptRefDate>"+plantConceptRefDate+"</plantConceptRefDate> \n");
+				sb.append("		<plantUsagePartyOrgName>"+plantUsagePartyOrgName+"</plantUsagePartyOrgName> \n");
+				sb.append("		<scientificName>"+scientificName+"</scientificName> \n");
+				
 				sb.append("	</name> \n");
 				sb.append("</taxon> \n");
 

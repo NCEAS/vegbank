@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *    '$Date: 2002-07-30 17:52:09 $'
- * 	'$Revision: 1.18 $'
+ *    '$Date: 2002-08-09 14:48:20 $'
+ * 	'$Revision: 1.19 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1047,12 +1047,11 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 			//print the results by passing the summary vector to the xml writer class
 			System.out.println("sqlMapper > writing the plant results as xml ");
 			xmlWriter l = new xmlWriter();
-			l.writePlantTaxonomySummary(taxaResults, outFile);
+			l.writePlantTaxonomySummary(taxaResults, outFile, taxonName, taxonNameType, taxonLevel);
 		}
 		catch ( Exception e )
 		{	
-			System.out.println("Exception :  "
-			+e.getMessage());
+			System.out.println("Exception :  " + e.getMessage());
 			e.printStackTrace();
 		}
 	}

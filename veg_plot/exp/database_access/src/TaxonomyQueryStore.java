@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-08-01 15:34:54 $'
- * '$Revision: 1.20 $'
+ *     '$Date: 2002-08-09 14:48:20 $'
+ * '$Revision: 1.21 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ import databaseAccess.*;
 			Class.forName("org.postgresql.Driver");
 			String s = rb.getString("plantdbconnectstring");
 			this.dbConnectString = s;
-			System.out.println("CommunityQueryStore > db connect string: " + s);
+			System.out.println("TaxonomyQueryStore > db connect string: " + s);
 			//c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
 			c = DriverManager.getConnection(s, "datauser", "");
 		}
@@ -138,7 +138,7 @@ import databaseAccess.*;
 				///{
 					sqlBuf.append("SELECT plantname_id, plantconcept_id, plantName, ");
 					sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
-					sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
+					sqlBuf.append(" plantlevel, parentName, acceptedsynonym, plantConceptRefAuthor, plantConceptRefDate, plantUsagePartyOrgName");
 					sqlBuf.append(" startDate, stopDate, plantNameAlias ");
 					sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"+taxonName.toUpperCase()+"'");
 				///}
@@ -170,15 +170,19 @@ import databaseAccess.*;
 					String startDate = results.getString(10);
 					String stopDate = results.getString(11);
 					String plantNameAlias = results.getString(12);
+					String plantConceptRefAuthor = results.getString(13);
+					String plantConceptRefDate = results.getString(14);
+					String plantUsagePartyOrgName = results.getString(15);
 					
 					//little trick to keep from breaking the code
 					String commonName = plantName;
 					String concatenatedName = plantName;
 					
-					//bunch all of these data attributes into the return vector
-					//returnVector.addElement( consolidateTaxaSummaryInstance( 
-					//	acceptedSynonym, status, concatenatedName, 	commonName, 
-					//	startDate, stopDate) );
+						// GET THE OTHER ATTRIBUTES 
+					String code = this.getTaxonCode(plantConceptId);
+					String comName = this.getCommonName(plantConceptId);
+					String scientificName = this.getScientificName(plantConceptId);
+					
 					
 					Hashtable h = consolidateTaxaSummaryInstance( 
 						plantNameId,
@@ -192,7 +196,9 @@ import databaseAccess.*;
 						acceptedSynonym,
 						startDate,
 						stopDate, 
-						plantNameAlias);
+						plantNameAlias, code, comName,
+						plantConceptRefAuthor,	plantConceptRefDate,plantUsagePartyOrgName,
+						scientificName);
 						
 					returnVector.addElement(h);
 					//System.out.println("TaxonomyQueryStore > hash: " + h.toString()   );
@@ -225,6 +231,8 @@ import databaseAccess.*;
 	 * @param taxonNameType -- the type of taxon name input by the client, may
 	 * include: scientificName, commonName, symbolCode (the usda code)
 	 * @param taxonLevel -- the level in the heirarchy (eg, species, genus)
+	 * @see xmlWriter.writePlantTaxonSummary -- the xml writer used to write the 
+	 * contents of the Vector returned by this method
 	 * 
  	 */
 		public Vector getPlantTaxonSummary(String taxonName, String taxonNameType,
@@ -244,7 +252,7 @@ import databaseAccess.*;
 				sqlBuf.append("SELECT plantname_id, plantconcept_id, plantName, ");
 				sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
 				sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
-				sqlBuf.append(" startDate, stopDate, plantNameAlias  ");
+				sqlBuf.append(" startDate, stopDate, plantNameAlias, plantConceptRefAuthor, plantConceptRefDate, plantUsagePartyOrgName  ");
 				sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"+taxonName.toUpperCase()+"'");
 			
 				System.out.println("TaxonQueryStore > taxonLevel: '"+taxonLevel+"' ");
@@ -284,10 +292,18 @@ import databaseAccess.*;
 					String startDate = results.getString(10);
 					String stopDate = results.getString(11);
 					String plantNameAlias = results.getString(12);
+					String plantConceptRefAuthor = results.getString(13);
+					String plantConceptRefDate = results.getString(14);
+					String plantUsagePartyOrgName = results.getString(15);
 					
 					//little trick to keep from breaking the code
 					String commonName = plantName;
 					String concatenatedName = plantName;
+					
+					// GET THE OTHER ATTRIBUTES 
+					String code = this.getTaxonCode(plantConceptId);
+					String comName = this.getCommonName(plantConceptId);
+					String scientificName = this.getScientificName(plantConceptId);
 					
 					
 					Hashtable h = consolidateTaxaSummaryInstance( 
@@ -302,7 +318,11 @@ import databaseAccess.*;
 						acceptedSynonym,
 						startDate,
 						stopDate,
-						plantNameAlias);	
+						plantNameAlias,
+						code,
+						comName, 
+						plantConceptRefAuthor, plantConceptRefDate, plantUsagePartyOrgName, 
+						scientificName);	
 						
 					returnVector.addElement(h);
 					//System.out.println("TaxonomyQueryStore > hash: " + h.toString()   );
@@ -315,16 +335,119 @@ import databaseAccess.*;
 			}
 			catch (Exception e) 
 			{
-				System.out.println("failed " 
-				+e.getMessage());
+				System.out.println("Exception " + e.getMessage());
 				e.printStackTrace();
 			}
 			System.out.println("TaxonomyQueryStore > returning results: " + returnVector.size()  );
 			return( returnVector );
 		}
 		
+		/**
+		 * method to lookup a commonname 
+		 */
+		 private String getCommonName(int conceptId )
+		 {
+			 String commonName = "";
+			 StringBuffer sb = new StringBuffer();
+			 try
+			 {
+				 Connection conn = this.getConnection();
+				 Statement query = conn.createStatement();
+				 ResultSet results = null;
+				 sb.append("select plantname from plantusage where plantconcept_id = "+conceptId+" and ");
+				 sb.append(" classsystem like 'COMMONNAME'");
+				 results = query.executeQuery( sb.toString() );
+				 while (results.next()) 
+				 {
+					 String plantName = results.getString(1);
+					 System.out.println("## > " + plantName);
+					 commonName = plantName;
+				 }
+				 query.close();
+				 results.close();
+				 conn.close();
+			 }
+			 catch (Exception e) 
+			 {
+				System.out.println("Exception " + e.getMessage());
+				e.printStackTrace();
+			 }
+			 return( commonName );
+		 }
 		
 		
+		/**
+		 * method to lookup a scientificName
+		 */
+		 private String getScientificName(int conceptId )
+		 {
+			 String sciName = "";
+			 StringBuffer sb = new StringBuffer();
+			 try
+			 {
+				 Connection conn = this.getConnection();
+				 Statement query = conn.createStatement();
+				 ResultSet results = null;
+				 sb.append("select plantname from plantusage where plantconcept_id = "+conceptId+" and ");
+				 sb.append(" classsystem like 'SCI%'");
+				 results = query.executeQuery( sb.toString() );
+				 while (results.next()) 
+				 {
+					 String plantName = results.getString(1);
+					 System.out.println("## > " + plantName);
+					 sciName = plantName;
+				 }
+				 query.close();
+				 results.close();
+				 conn.close();
+			 }
+			 catch (Exception e) 
+			 {
+				System.out.println("Exception " + e.getMessage());
+				e.printStackTrace();
+			 }
+			 return( sciName );
+		 }
+		
+		
+		
+		/**
+		 * method to lookup a taxon code
+		 */
+		 private String getTaxonCode(int conceptId )
+		 {
+			 String code = "";
+			 StringBuffer sb = new StringBuffer();
+			 try
+			 {
+				 Connection conn = this.getConnection();
+				 Statement query = conn.createStatement();
+				 ResultSet results = null;
+				 sb.append("select plantname from plantusage where plantconcept_id = "+conceptId+" and ");
+				 sb.append(" classsystem like 'CODE'");
+				 results = query.executeQuery( sb.toString() );
+				 while (results.next()) 
+				 {
+					 String plantName = results.getString(1);
+					 System.out.println("## > " + plantName);
+					 code = plantName;
+				 }
+				 query.close();
+				 results.close();
+				 conn.close();
+			 }
+			 catch (Exception e) 
+			 {
+				System.out.println("Exception " + e.getMessage());
+				e.printStackTrace();
+			 }
+			 return( code );
+		 }
+		
+	
+
+
+	
 		/**
 		 * method that consolidates the summary data from the database into 
 		 * a hashtable, with appropriate key names and passes back the hashtable
@@ -337,7 +460,9 @@ import databaseAccess.*;
 		private Hashtable consolidateTaxaSummaryInstance( int plantNameId,
 		int plantConceptId, String plantName, String plantDescription,
 		String status, String	classSystem, String	plantLevel, String parentName,
-		String acceptedSynonym, String startDate, String stopDate, String plantNameAlias)
+		String acceptedSynonym, String startDate, String stopDate, String plantNameAlias,
+		String code, String commonName, String plantConceptRefAuthor, String 	plantConceptRefDate,
+		String plantUsagePartyOrgName, String scientificName)
 		{
 			Hashtable returnHash = new Hashtable();
 			 try
@@ -383,6 +508,10 @@ import databaseAccess.*;
 					{
 						 plantNameAlias="";
 					}
+					if ( commonName == null || commonName.trim().startsWith("null") )
+					{
+						commonName = "";
+					}
 					
 					returnHash.put("plantNameId", ""+plantNameId);
 					returnHash.put("plantConceptId", ""+plantConceptId);
@@ -396,6 +525,13 @@ import databaseAccess.*;
 					returnHash.put("stopDate", stopDate);
 					returnHash.put("plantDescription", plantDescription);
 					returnHash.put("plantNameAlias", plantNameAlias);
+					returnHash.put("code", code);
+					System.out.println("putting common name > " + commonName);
+					returnHash.put("commonName", commonName);
+					returnHash.put("plantConceptRefAuthor",	plantConceptRefAuthor);
+					returnHash.put("plantConceptRefDate", plantConceptRefDate);
+					returnHash.put("plantUsagePartyOrgName", plantUsagePartyOrgName);
+					returnHash.put("scientificName", scientificName);
 					
 			 }
 			 catch(Exception e)
