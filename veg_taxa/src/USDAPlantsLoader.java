@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-07-01 20:58:19 $'
- * '$Revision: 1.18 $'
+ *     '$Date: 2002-07-02 16:59:33 $'
+ * '$Revision: 1.19 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,7 @@ public class USDAPlantsLoader
 	public String reference = "PLANTS96";
 	public String otherCitationDetails = "PLANTS1996";
 	private Connection conn = null;
+	private int connectionUses = 0;
 	
 	//this is the cache that stores all the previously
 	//stored codes
@@ -128,7 +129,10 @@ public class USDAPlantsLoader
  		{
 			Class.forName("org.postgresql.Driver");
 		//	c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
-			c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/plants_dev", "datauser", "");
+	//		c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/plants_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/tmp", "datauser", "");
+			System.out.println("USDAPlantsLoader > connecting to: 127.0.0.1, tmp");
+			//System.exit(0);
 		}
 		catch ( Exception e )
 		{
@@ -190,6 +194,7 @@ public static void main(String[] args)
 		{
 			fileVector.addElement(s);
 		}
+		in.close();
 		return(fileVector);
 	}
 
@@ -430,6 +435,7 @@ private int plantUsageKey(String plantName)
 	{
 		try
 		{
+			
 			int plantNumber = plantsData.size();
 			
 			//for performance testing
@@ -449,37 +455,65 @@ private int plantUsageKey(String plantName)
 			}
 			
 			//load the genus second
+			plantNumber = plantsData.size();
 			for (int i=0; i<plantNumber; i++) 
 			{
-				//the hashtable containing the plant iformation for each plant
 				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
-				this.loadSinglePlantInstance(plantInstanceHash, "Genus");
+				if ( plantInstanceHash != null )
+				{
+					String rank=plantInstanceHash.get("rank").toString();
+					if ( rank.equalsIgnoreCase("genus") )
+					{
+						this.loadSinglePlantInstance(plantInstanceHash, "Genus");
+						//System.out.println("removing the genus from the hash");
+						this.removeSinglePlantInstance(plantsData, i);
+					}
+				}
 			}
 			
-			//load the species second
+			//load the species third
+			plantNumber = plantsData.size();
 			for (int i=0; i<plantNumber; i++) 
 			{
-				//the hashtable containing the plant iformation for each plant
 				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
-				this.loadSinglePlantInstance(plantInstanceHash, "species");
+				if ( plantInstanceHash != null )
+				{
+					String rank=plantInstanceHash.get("rank").toString();
+					if ( rank.equalsIgnoreCase("species") )
+					{
+						this.loadSinglePlantInstance(plantInstanceHash, "species");
+						//System.out.println("removing the species from the hash");
+						this.removeSinglePlantInstance(plantsData, i);
+					}
+				}
 			}
 			
 			//load the subspecies third
+			plantNumber = plantsData.size();
 			for (int i=0; i<plantNumber; i++) 
 			{
-				//the hashtable containing the plant iformation for each plant
 				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
-				//String s = (String)plantInstanceHash.get("concatenatedName");
-				//String s1 = (String)plantInstanceHash.get("concatenatedLongName");
-				//System.out.println("USDAPlantsLoader > subspecies: " + s1 );
-				this.loadSinglePlantInstance(plantInstanceHash, "subspecies");
+				if ( plantInstanceHash != null )
+				{
+					String rank=plantInstanceHash.get("rank").toString();
+					if ( rank.equalsIgnoreCase("subspecies") )
+					{
+						this.loadSinglePlantInstance(plantInstanceHash, "subspecies");
+						//System.out.println("removing the subspecies from the hash");
+						this.removeSinglePlantInstance(plantsData, i);
+					}
+				}
 			}
+			
 			//load the varieties fourth
+			plantNumber = plantsData.size();
 			for (int i=0; i<plantNumber; i++) 
 			{
-				//the hashtable containing the plant iformation for each plant
 				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
-				this.loadSinglePlantInstance(plantInstanceHash, "variety");
+				if ( plantInstanceHash != null )
+				{
+					this.loadSinglePlantInstance(plantInstanceHash, "variety");
+				}
 			}
 		}
 		catch (Exception e)
@@ -513,6 +547,16 @@ private int plantUsageKey(String plantName)
 		int codeNameId = 0;
 		int conceptId = 0;
 		int statusId = 0;
+		// IF THE CONNECTION HAS BEEN USED TOO MANY TIMES THEN CLOSE AND REOPEN
+		this.connectionUses++;
+		if ( this.connectionUses > 200 )
+		{
+			System.out.println("connection use: " + this.connectionUses);
+			conn.close();
+			conn = getConnection();
+			this.connectionUses = 0;
+		}
+		
 		if ( singlePlantInstance.toString() != null )
 		{
 			String concatenatedName=singlePlantInstance.get("concatenatedName").toString();
@@ -1598,7 +1642,24 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 		}
 		return(result);
 	}
-	
+
+ /**
+ 	* method to remove an element from the hashtable that contains the plants
+	* 
+ 	*/	
+	private void removeSinglePlantInstance(Hashtable plantsData, int hashKeyNum)
+	{
+		try
+		{
+			plantsData.remove(""+hashKeyNum);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception " + e.getMessage() );
+			e.printStackTrace();
+		}
+	}
+
 
 
 
@@ -1608,21 +1669,26 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
  	* aggregate hashtable - returning a hashtable with keys 
  	* like name, author orignDate etc
  	*/	
-	private Hashtable extractSinglePlantInstance(Hashtable plantsData, 
-	int hashKeyNum)
+	private Hashtable extractSinglePlantInstance(Hashtable plantsData, int hashKeyNum)
 	{
 		Hashtable singlePlantInstance = new Hashtable();
 		try
 		{
-			if ( plantsData.get(""+hashKeyNum).toString() != null )
+			if ( plantsData.containsKey(""+hashKeyNum) )
 			{
 				singlePlantInstance=(Hashtable)plantsData.get(""+hashKeyNum);
 				//System.out.println(singlePlantInstance.toString() );
+			}
+			// if it is not there then return a null
+			else
+			{
+				singlePlantInstance = null;
 			}
 		}
 		catch (Exception e)
 		{
 			System.out.println("Exception " + e.getMessage() );
+			System.out.println("on key: " + hashKeyNum);
 			e.printStackTrace();
 		}
 		return(singlePlantInstance);
