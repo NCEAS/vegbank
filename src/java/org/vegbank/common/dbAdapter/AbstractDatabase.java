@@ -8,8 +8,8 @@ package org.vegbank.common.dbAdapter;
  * 
  *
  * '$Author: farrell $'     
- * '$Date: 2003-10-17 22:09:14 $' 
- * '$Revision: 1.3 $'
+ * '$Date: 2003-11-25 19:21:06 $' 
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ public abstract class AbstractDatabase
 	 *            during the db operation
 	 * @return return the generated unique id as a long type
 	 */
-	public abstract int getNextUniqueID(
+	public abstract long getNextUniqueID(
 		DBConnection conn, 
 		String tableName, 
 		String primarykeyName)

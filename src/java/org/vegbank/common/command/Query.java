@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:24:15 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-11-25 19:21:06 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -185,7 +185,7 @@ public class Query
 		String stopDate)
 		throws SQLException
 	{
-		DBConnection conn =DBConnectionPool.getDBConnection("Need connection for inserting PlantCorrelation");
+		DBConnection conn =DBConnectionPool.getInstance().getDBConnection("Need connection for inserting PlantCorrelation");
 		
 		int correlationId =
 			(int) Utility.dbAdapter.getNextUniqueID(
