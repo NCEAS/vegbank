@@ -20,6 +20,7 @@ import databaseAccess.TaxonomyQueryStore;
 import databaseAccess.SqlFile;
 import servlet.util.ServletUtility;
 import DataSourceClient; //this is the rmi client for loading mdb files
+import PlantTaxaLoader;
 
 /**
  * REQUIRED PARAMETERS
@@ -27,8 +28,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-05-30 23:02:09 $'
- *  '$Revision: 1.29 $'
+ *  '$Date: 2002-05-30 23:52:00 $'
+ *  '$Revision: 1.30 $'
  */
 
 
@@ -160,23 +161,32 @@ public class DataSubmitServlet extends HttpServlet
 		StringBuffer sb = new StringBuffer();
 		try
 		{
+			String longName = "";
+			String shortName = "";
+			String code = "";
+			String taxonDescription= "";
+			String salutation= "";
+			String firstName = "";
+			String lastName = "";
+			String emailAddress = "";
+			String orgName = "";
+			
 			String action = (String)params.get("action");
 			if ( action.equals("init") )
 			{
 				System.out.println("DataSubmitServlet > init plantTaxa");
-				String salutation = (String)params.get("salutation");;
-				String firstName =  (String)params.get("firstName");
-				String lastName =  (String)params.get("lastName");
-				String emailAddress =  (String)params.get("emailAddress");
-				String orgName =  (String)params.get("orgName");
-				//String plantName = (String)params.get("plantName");
+				salutation = (String)params.get("salutation");;
+				firstName =  (String)params.get("firstName");
+				lastName =  (String)params.get("lastName");
+				emailAddress =  (String)params.get("emailAddress");
+				orgName =  (String)params.get("orgName");
 				
 				// the next 3 attributes refer to the plant name that the 
 				// user is trying to insert into the database
-				String longName = (String)params.get("longName");
-				String shortName = (String)params.get("shortName");
-				String code = (String)params.get("code");
-				String taxonDescription = (String)params.get("taxonDescription");
+				longName = (String)params.get("longName");
+				shortName = (String)params.get("shortName");
+				code = (String)params.get("code");
+				taxonDescription = (String)params.get("taxonDescription");
 		
 				System.out.println("DataSubmitServlet > longName: " + longName);
 				System.out.println("DataSubmitServlet > shortName: " + shortName);
@@ -216,52 +226,39 @@ public class DataSubmitServlet extends HttpServlet
 			//THIS WHERE THE ACTUAL SUBMITTAL OF THE NEW COMMUNITY TAKES PLACE
 			else if ( action.equals("submit") )
 			{
-/*				
-				String salutation = (String)params.get("salutation");
-				String givenName = (String)params.get("firstName");
-				String surName = (String)params.get("lastName");
-				String middleName = "";
-				String orgName = (String)params.get("orgName");
-				String contactInstructions = (String)params.get("emailAddress");
+				//edithere
+				System.out.println("submittal to the database taking place ");
+				//init the plant loader
+				PlantTaxaLoader plantLoader = new PlantTaxaLoader();
 				
-				String conceptReferenceTitle = (String)params.get("conceptRefTitle");
-				String conceptReferenceAuthor = (String)params.get("conceptRefAuthors");
-				String conceptReferenceDate = "12-MAR-2002";
-
-				String nameReferenceTitle = (String)params.get("nameRefTitle");
-				String nameReferenceAuthor = (String)params.get("nameRefAuthors");
-				String nameReferenceDate = "12-MAR-2002";
+				salutation = (String)params.get("salutation");;
+				firstName =  (String)params.get("firstName");
+				lastName =  (String)params.get("lastName");
+				emailAddress =  (String)params.get("emailAddress");
+				orgName =  (String)params.get("orgName");
+				longName = (String)params.get("longName");
+				shortName = (String)params.get("shortName");
+				code = (String)params.get("code");
+				taxonDescription = (String)params.get("taxonDescription");
 				
-				String communityCode = (String)params.get("communityCode");
-				String communityLevel = (String)params.get("communityLevel");
-				String communityName = (String)params.get("communityName");
-				String dateEntered = "12-MAR-2002";
-				String parentCommunity = "";
-				String partyName = "vegbank";
-				String otherName = "";
-				System.out.println("DataSubmitServlet > submit vegCommunity");
+				Hashtable h = new Hashtable();
+				h.put("longName", longName);
+				h.put("shortName", shortName);
+				h.put("code", code);
+				h.put("taxonDescription", taxonDescription);
+				h.put("salutation", salutation);
+				h.put("givenName", firstName);
+				h.put("surName", lastName);
+				h.put("orgName", orgName);
+				h.put("email", emailAddress);
+				h.put("citationDetails", "VB2002");
+				h.put("dateEntered", "2005-MAY-30" );
+				h.put("usageStopDate", "2005-MAY-30" );
+				h.put("rank", "UNKNOWN");
 				
-				//SUBMIT THE DATA TO THE DATABASE
-				StringBuffer sbr = commLoader.insertGenericCommunity( salutation,  givenName, surName,
-				middleName, orgName, contactInstructions,conceptReferenceTitle, 
-				conceptReferenceAuthor, conceptReferenceDate, nameReferenceTitle,
-				nameReferenceAuthor, nameReferenceDate, communityCode,communityLevel,
-				communityName,  dateEntered, parentCommunity,  otherName  );
-				
-				String resultString = sbr.toString();
-				
-				System.out.println("DataSubmitServlet > submittal result: " + resultString);
-				//IF SUCCESS THEN PREPARE AND RETURN A PAGE TO THE USER
-				if ( resultString.toUpperCase().indexOf("TRUE") > 0 )
-				{
-					System.out.println("DataSubmitServlet > preparing results page");
-					String resultPage = getSubmittalResultsPage(true, communityName, givenName, 
-					surName, nameReferenceAuthor, conceptReferenceAuthor );
-					sb.append( resultPage );
-				}
-				//UPDATE THE DATABASE SUMMARY TABLE
-				sqlFile.issueSqlFile(commUpdateScript);
-*/
+				boolean results = plantLoader.loadGenericPlantTaxa(h);
+				PrintWriter out = response.getWriter();
+				out.println( "loading results: " + results);
 			}
 		}
 		catch( Exception e ) 

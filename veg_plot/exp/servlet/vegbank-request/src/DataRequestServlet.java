@@ -44,8 +44,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-04-17 17:10:35 $'
- *  '$Revision: 1.15 $'
+ *  '$Date: 2002-05-30 23:52:00 $'
+ *  '$Revision: 1.16 $'
  * 
  */
 
@@ -163,11 +163,11 @@ public class DataRequestServlet extends HttpServlet
 				System.out.println("DataRequstServlet > determining query type: " + determineQueryType(params) );
 				if ( determineQueryType(params).equals("simple") )
 				{
-					handleSimpleQuery (params, out, response);
+					handleSimpleQuery(params, out, response);
 				}
 				else if ( determineQueryType(params).equals("compound") )
 				{
-					handleCompoundQuery (params, out, response);
+					handleCompoundQuery(params, out, response);
 				}
 				else if ( determineQueryType(params).equals("extended") )
 				{
