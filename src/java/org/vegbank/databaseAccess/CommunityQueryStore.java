@@ -6,8 +6,8 @@ package org.vegbank.databaseAccess;
  *    Release: @release@
  *
  * '$Author: farrell $'
- * '$Date: 2003-07-11 23:14:04 $'
- * '$Revision: 1.1 $'
+ * '$Date: 2003-11-03 00:34:02 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ public class  CommunityQueryStore
 			action = "select";	
 			StringBuffer sqlStatement = new StringBuffer(
 				"select commusage.commname, commname.dateentered, commstatus.commlevel, "
-				+ "commconcept.conceptdescription, commstatus.startdate, commusage.classsystem, "
+				+ "commconcept.commdescription, commstatus.startdate, commusage.classsystem, "
 				+ "commconcept.commconcept_id, commstatus.commconceptstatus from commusage, "
 				+ "commstatus, commconcept, commname " 
 				+ "where commconcept.commname_id = commname.commname_id and "
@@ -103,7 +103,7 @@ public class  CommunityQueryStore
 			sqlStatement.append(" and upper(commusage.commname) like " + "'" + communityName.toUpperCase()+"'");
 			sqlStatement.append(" and commstatus.commlevel like '"+communityLevel+"'");
 			
-			System.out.println("CommunityQueryStore > "+ statement.toString()  );
+			System.out.println("CommunityQueryStore > "+ sqlStatement.toString()  );
 			PreparedStatement pstmt;
     	pstmt = conn.prepareStatement( sqlStatement.toString()  );
                 
