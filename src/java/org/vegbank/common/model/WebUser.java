@@ -1,17 +1,11 @@
-package org.vegbank.common.model;
-
-import org.vegbank.common.utility.LogUtility;
-import org.vegbank.common.utility.Utility;
-import org.vegbank.common.utility.PermComparison;
-
 /*
  * '$RCSfile: WebUser.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-30 13:05:25 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2005-02-11 00:40:05 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +21,16 @@ import org.vegbank.common.utility.PermComparison;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
  */
+
+package org.vegbank.common.model;
+
+import org.vegbank.common.utility.LogUtility;
+import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.DateUtility;
+import org.vegbank.common.utility.PermComparison;
+import java.io.*;
+
+
 /**
  * Hold details about the current users as a convenience for web code.
  * 
@@ -472,4 +476,52 @@ public class WebUser
 		return this.sqlSafe;
 	}	
 	
+
+	/**
+     * Can append a timestamp to the upload dir, but doesn't mkdir.
+     * @param appendTstamp boolean FORMAT:  /basePath/userId/timestamp/
+	 * @return path to directory in file system where this user's file go
+	 */
+	public String getUploadDir(boolean appendTstamp)
+	{
+		String dir = Utility.VB_DATA_DIR;
+
+		if (!dir.endsWith(File.separator)) {
+			 dir += File.separator;
+		}
+
+		dir += getUserid();
+
+		if (!dir.endsWith(File.separator)) {
+			 dir += File.separator;
+		}
+
+        if (appendTstamp) {
+		    dir += DateUtility.getTimestamp() + File.separator;
+        }
+        return dir;
+	}
+
+
+	/**
+     * Get path to this user's files on the server.
+	 * @return path to directory in file system where this user's export files are
+	 */
+	public String getDownloadDir()
+	{
+		String dir = Utility.VB_EXPORT_DIR;
+
+		if (!dir.endsWith(File.separator)) {
+			 dir += File.separator;
+		}
+
+		dir += getUserid();
+
+		if (!dir.endsWith(File.separator)) {
+			 dir += File.separator;
+		}
+
+        return dir;
+	}
+
 }
