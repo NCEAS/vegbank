@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<!--
+     This is the Struts configuration file for the example application,
+     using the proposed new syntax.
+-->
+
+
+<struts-config>
+
+
+  <!-- ========== Data Source Configuration =============================== -->
+
+  <!-- ========== Form Bean Definitions =================================== -->
+  <form-beans>
+
+    <!-- Vegbank AddReferenceForm form bean -->
+    <form-bean  name="AddReferenceForm"
+                     type="org.vegbank.ui.struts.AddReferenceForm"/>
+
+    <form-bean  name="AddJournalForm"
+                type="org.vegbank.ui.struts.AddJournalForm"/>
+
+    <form-bean  name="AddCoverMethodForm"
+                type="org.vegbank.ui.struts.AddCoverMethodForm"/>
+  
+    <form-bean  name="AddStratumMethodForm"
+                type="org.vegbank.ui.struts.AddStratumMethodForm"/>
+
+    <form-bean  name="AddPartyForm"
+                type="org.vegbank.ui.struts.AddPartyForm"/>
+
+  </form-beans>
+
+
+  <!-- ========== Global Forward Definitions ============================== -->
+  <global-forwards>
+    <forward   name="logoff"	path="/logoff.do"/>
+    <forward   name="logon"	path="/logon.jsp"/>
+    <forward   name="success"	path="/servlet/usermanagement?action=options"/>
+    <forward   name="AddReference"	path="/forms/AddReference.jsp"/>
+    <forward   name="AddJournal"	path="/forms/AddJournal.jsp"/>
+    <forward   name="AddCoverMethod"	path="/forms/AddCoverMethod.jsp"/>
+    <forward   name="AddStratumMethod"	path="/forms/AddStratumMethod.jsp"/>
+    <forward   name="AddParty"	path="/forms/AddParty.jsp"/>
+  </global-forwards>
+
+
+  <!-- ========== Action Mapping Definitions ============================== -->
+  <action-mappings>
+
+	<!-- Add a reference to vegbank -->
+    <action    path="/AddReference"
+    	  type="org.vegbank.ui.struts.AddReferenceAction"
+     	  name="AddReferenceForm"
+      	scope="request"
+      	validate="true"
+      	input="AddReference">
+    </action>
+
+    <action    path="/AddCoverMethod"
+    	  type="org.vegbank.ui.struts.AddCoverMethodAction"
+     	  name="AddCoverMethodForm"
+      	scope="request"
+      	validate="true"
+      	input="AddCoverMethod">
+    </action>
+
+    <action    path="/AddStratumMethod"
+    	  type="org.vegbank.ui.struts.AddStratumMethodAction"
+     	  name="AddStratumMethodForm"
+      	scope="request"
+      	validate="true"
+      	input="AddStratumMethod">
+    </action>
+
+
+    <action    path="/AddJournal"
+    	  type="org.vegbank.ui.struts.AddJournalAction"
+     	  name="AddJournalForm"
+      	scope="request"
+      	validate="true"
+      	input="AddJournal">
+    </action>
+
+    <action    path="/AddParty"
+    	  type="org.vegbank.ui.struts.AddPartyAction"
+     	  name="AddPartyForm"
+      	scope="request"
+      	validate="true"
+      	input="AddParty">
+    </action>
+
+  </action-mappings>
+
+
+  <!-- ========== Controller Configuration ================================ -->
+
+  <controller>
+    <!-- The "input" parameter on "action" elements is the name of a
+         local or global "forward" rather than a module-relative path -->
+    <set-property property="inputForward" value="true"/>
+  </controller>
+
+
+  <!-- ========== Message Resources Definitions =========================== -->
+
+  <message-resources
+    parameter="org.apache.struts.webapp.example.ApplicationResources"/>
+
+  <message-resources
+    parameter="org.apache.struts.webapp.example.AlternateApplicationResources"
+    key="alternate">
+  </message-resources>
+
+
+  <!-- ========== Plug Ins Configuration ================================== -->
+
+  <plug-in className="org.apache.struts.plugins.ModuleConfigVerifier"/>
+<!--
+  <plug-in className="org.apache.struts.webapp.example.memory.MemoryDatabasePlugIn">
+    <set-property property="pathname" value="/WEB-INF/database.xml"/>
+  </plug-in>
+-->
+  <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+    <set-property property="pathnames"
+                     value="/WEB-INF/validator-rules.xml,
+                            /WEB-INF/validation.xml"/>
+  </plug-in>
+
+</struts-config>

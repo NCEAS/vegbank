@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE form-validation PUBLIC
+          "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN"
+          "http://jakarta.apache.org/commons/dtds/validator_1_0.dtd">
+
+<!--
+    Validation Rules for the Vegbank application 
+
+    $Id: validation.xml,v 1.1 2003-05-12 23:07:48 farrell Exp $
+-->
+
+<form-validation>
+
+
+    <!-- ========== Default Language Form Definitions ===================== -->
+    <formset>
+
+        <form name="AddReferenceForm">
+            <field property="reference.shortName"
+                   depends="required">
+              <arg0   key="reference.shortname" resource="false"/>
+            </field>
+            <field property="reference.title"
+                   depends="required">
+              <arg0   key="reference.title" resource="false"/>
+            </field>
+            <field property="reference.pubDate"
+                    depends="date">
+              <arg0   key="reference.pubDate"
+                      resource="false"/>
+              <var>
+                <var-name>datePattern</var-name>
+                <var-value>MM/dd/yyyy</var-value>
+              </var>
+            </field>
+        </form>
+
+        <form name="AddJournalForm">
+            <field property="referenceJournal.journal"
+                   depends="required">
+              <arg0   key="referenceJournal.journal" resource="false"/>
+            </field>
+        </form>
+
+        <form name="AddCoverMethodForm">
+            <field property="coverMethod.coverType"
+                   depends="required">
+              <arg0   key="coverMethod.coverType" resource="false"/>
+            </field>
+        </form>
+
+        <form name="AddStratumMethodForm">
+            <field property="stratumMethod.stratumMethodName"
+                   depends="required">
+              <arg0   key="stratumMethod.stratumMethodName" resource="false"/>
+            </field>
+            <field property="stratumMethod.stratumMethodDescription"
+                   depends="required">
+              <arg0   key="stratumMethod.stratumMethodDescription" resource="false"/>
+            </field>
+        </form>
+
+        <form name="AddPartyForm">
+            <field property="party.surName"
+                   depends="required">
+              <arg0   key="party.surName" resource="false"/>
+            </field>
+            <!--
+            <field property="organization_ID"
+                   depends="integer">
+              <arg0   key="organization" resource="false"/>
+            </field>
+            -->
+
+        </form>
+
+    </formset>
+
+
+</form-validation>
