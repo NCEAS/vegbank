@@ -5,10 +5,11 @@
  *    Copyright: 2000 Regents of the University of California and the
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
- * 		
+ *
  *		 '$Author: harris $'
- *     '$Date: 2001-06-11 23:28:01 $'
- *     '$Revision: 1.4 $'
+ *     '$Date: 2001-06-12 22:47:29 $'
+ *     '$Revision: 1.5 $'
+ *
  */
 
 import java.sql.*;
@@ -30,12 +31,14 @@ Hashtable plotSpeciesParams = new Hashtable();
 //initialize the vector to store the multitude of taxon names, starta, and covers
 // that may be passed to this method -- used in the plotElementMapper method
 Vector taxonNameElements= new Vector();
+
 Vector strataTypeElements = new Vector();
 Vector coverAmountElements = new Vector();
 
 //plot observation specific information
 Hashtable plotObservationParams = new Hashtable();
 Vector stratumNameElements = new Vector();  //recognized strata names
+Vector cumStrataCoverElements = new Vector();
 Vector stratumHeightElements = new Vector(); //recognized strata heights
 Vector stratumCoverElements = new Vector(); //recognized strata cover vals
 
@@ -73,36 +76,36 @@ String nullValue = "-999.25";
 public void writePlot (Hashtable comprehensivePlot, String outFile)
 {
 
-try {
-//decompose the comprehensive plot data hastable
-dataDecomposer(comprehensivePlot);
+	try {
+		//decompose the comprehensive plot data hastable
+	
+		dataDecomposer(comprehensivePlot);
+		
+		
+		//prepare the header
+		writeHeader();
 
-//prepare the header
-writeHeader();
+		//write the project related data -- the remaining children nodes will be
+		// automatically written
+		writeProjectData(plotProjectParams);
 
-//write the project related data -- the remaining children nodes will be
-// automatically written
-writeProjectData(plotProjectParams);
-
-//write the footer
-writeFooter();
-}
-catch (Exception ex) {System.out.println("PlotXmlWriter.writePlot "
+		//write the footer
+		writeFooter();
+	}
+	catch (Exception ex) {System.out.println("PlotXmlWriter.writePlot "
 	+"Error passing arguments "+ex+" "+ex.getMessage() ); 
-	//ex.printStackTrace();
-}
-
-
-
-try {
-
-	PrintStream out = new PrintStream(new FileOutputStream(outFile));
-	out.println(output.toString());
-
-}
-catch (Exception ex) {System.out.println("Error printing the xml file "+ex);
-	System.exit(1);}
-
+	//	ex.printStackTrace();
+	}
+	
+	try {
+		PrintStream out = new PrintStream(new FileOutputStream(outFile));
+		out.println(output.toString());
+	}
+	catch (Exception ex) 
+	{
+		System.out.println("Error printing the xml file "+ex);
+		System.exit(1);
+	}
 }
 
 
@@ -174,42 +177,62 @@ catch (Exception ex) {System.out.println("Error printing the xml file "+ex);
  */
 private void dataDecomposer (Hashtable comprehensivePlot)
 {
-
 try {
-//grab from the hash the project data
-plotProjectParams =(Hashtable)comprehensivePlot.get("projectParameters");
+	//grab from the hash the project data
+	plotProjectParams =(Hashtable)comprehensivePlot.get("projectParameters");
 
+	//grab the hash that has all the plot site specific parameters
+	plotSiteParams = (Hashtable)comprehensivePlot.get("siteParameters");
+//	System.out.println("plotSiteParameters -- being decomposed "+plotSiteParams.toString());
 
+	//grab the hash that has all the observational data
+	plotObservationParams = (Hashtable)comprehensivePlot.get("observationParameters");
+	if ( plotObservationParams.get("stratumName") != null)
+	{
+		stratumNameElements = (Vector)plotObservationParams.get("stratumName"); 
+	}
+	if ( plotObservationParams.get("stratumHeight") != null)
+	{
+		stratumHeightElements=(Vector)plotObservationParams.get("stratumHeight"); 
+	}
+	if ( plotObservationParams.get("stratumName") != null)
+	{
+		stratumCoverElements=(Vector)plotObservationParams.get("stratumName"); 
+	}
 
-//grab the hash that has all the plot site specific parameters
-plotSiteParams = (Hashtable)comprehensivePlot.get("siteParameters");
-//System.out.println(plotSiteParams.toString() );
-
-//grab the hash that has all the observational data
-plotObservationParams = (Hashtable)comprehensivePlot.get("observationParameters");
-stratumNameElements = (Vector)plotObservationParams.get("stratumName"); //names-->vector
-stratumHeightElements=(Vector)plotObservationParams.get("stratumHeight"); //height-->vector
-stratumCoverElements=(Vector)plotObservationParams.get("stratumCover"); //covers-->vector
-
-
-//the species specific attributes -- into vectors
-plotSpeciesParams = (Hashtable)comprehensivePlot.get("speciesParameters");
-taxonNameElements = (Vector)plotSpeciesParams.get("taxonName"); //names-->vector
-strataTypeElements=(Vector)plotSpeciesParams.get("stratum"); //strata-->vector
-coverAmountElements=(Vector)plotSpeciesParams.get("cover"); //covers-->vector
-
-
-
-//the community specific attributes
-plotCommunityParams = (Hashtable)comprehensivePlot.get("communityParameters");
-
-//System.out.println("observation data: "+plotObservationParams.toString());
-//System.out.println("project data: "+plotProjectParams.toString());
+	//the species specific attributes -- into vectors
+	if ( comprehensivePlot.get("speciesParameters") != null )
+	{
+		plotSpeciesParams = (Hashtable)comprehensivePlot.get("speciesParameters");
+		if ( plotSpeciesParams.get("taxonName") != null )
+		{
+			taxonNameElements = (Vector)plotSpeciesParams.get("taxonName");
+		}
+		if  ( plotSpeciesParams.get("cumStrataCover") != null )
+		{
+			cumStrataCoverElements=(Vector)plotSpeciesParams.get("cumStrataCover");
+		}
+		if  ( plotSpeciesParams.get("stratum") != null )
+		{
+			strataTypeElements=(Vector)plotSpeciesParams.get("stratum");
+		}
+		if  ( plotSpeciesParams.get("cover") != null )
+		{
+			coverAmountElements=(Vector)plotSpeciesParams.get("cover");
+		}
+	}
+	
+	
+	if  ( plotSpeciesParams.get("communityParameters") != null )
+	{
+		plotCommunityParams = (Hashtable)comprehensivePlot.get("communityParameters");
+	}
 }
-catch (Exception e) {System.out.println("failed in PlotXmlWriter.dataDecomposer "
-	+" " + e.getMessage() );}
-
-
+	catch (Exception e) 
+	{
+		System.out.println("failed in PlotXmlWriter.dataDecomposer "
+		+" " + e.getMessage() );
+	}
 }
 
 
@@ -269,8 +292,8 @@ output.append("	</project> \n"
  * Method to write a plot site data
  */
 private void writeSiteData (Hashtable plotSiteParams)
-{
-
+{	
+	
 	//because at times data commining into this method
 	//will not be from the database, but instead will 
 	//beform legacy data there will not always be a 
@@ -284,25 +307,25 @@ private void writeSiteData (Hashtable plotSiteParams)
 	{
 		output.append(" <plot> \n");
 	}
-
-output.append("		<authorPlotCode>"+plotSiteParams.get("authorCode")+"</authorPlotCode> \n"
-+"		<plotShape>"+plotSiteParams.get("topoShape")+"</plotShape> \n"
-+"		<slopeGradient>"+plotSiteParams.get("slopeGradient")+" </slopeGradient> \n"
-+"		<slopeAspect>"+plotSiteParams.get("slopeAspect")+" </slopeAspect> \n"
-+"		<surfGeo>"+plotSiteParams.get("surfGeo")+" </surfGeo> \n"
-+"		<hydrologicRegime>"+plotSiteParams.get("hydrologicRegime")+" </hydrologicRegime> \n"
-+"		<topoPosition>"+plotSiteParams.get("topoPosition")+"</topoPosition> \n"
-+"		<soilDrainage>"+plotSiteParams.get("soilDrainage")+" </soilDrainage> \n"
-+"		<elevationValue>"+plotSiteParams.get("elevationValue")+" </elevationValue> \n"
-+"		<origLat>"+plotSiteParams.get("origLat")+"</origLat> \n"
-+"		<origLong>"+plotSiteParams.get("origLong")+"</origLong> \n"
-+"		<plotSize>"+plotSiteParams.get("plotSize")+"</plotSize> \n"
-+"		<state>"+plotSiteParams.get("state")+"</state> \n"
-+"		<xCoord>"+plotSiteParams.get("xCoord")+"</xCoord> \n"
-+"		<yCoord>"+plotSiteParams.get("yCoord")+"</yCoord> \n"
-+"		<coordType>"+plotSiteParams.get("coordType")+"</coordType> \n"
-+"\n"
-);
+	
+	output.append("		<authorPlotCode>"+plotSiteParams.get("authorPlotCode")+"</authorPlotCode> \n"
+		+"		<plotShape>"+plotSiteParams.get("topoShape")+"</plotShape> \n"
+		+"		<slopeGradient>"+plotSiteParams.get("slopeGradient")+" </slopeGradient> \n"
+		+"		<slopeAspect>"+plotSiteParams.get("slopeAspect")+" </slopeAspect> \n"
+		+"		<surfGeo>"+plotSiteParams.get("surfGeo")+" </surfGeo> \n"
+		+"		<hydrologicRegime>"+plotSiteParams.get("hydrologicRegime")+" </hydrologicRegime> \n"
+		+"		<topoPosition>"+plotSiteParams.get("topoPosition")+"</topoPosition> \n"
+		+"		<soilDrainage>"+plotSiteParams.get("soilDrainage")+" </soilDrainage> \n"
+		+"		<elevationValue>"+plotSiteParams.get("elevationValue")+" </elevationValue> \n"
+		+"		<origLat>"+plotSiteParams.get("origLat")+"</origLat> \n"
+		+"		<origLong>"+plotSiteParams.get("origLong")+"</origLong> \n"
+		+"		<plotSize>"+plotSiteParams.get("plotSize")+"</plotSize> \n"
+		+"		<state>"+plotSiteParams.get("state")+"</state> \n"
+		+"		<xCoord>"+plotSiteParams.get("xCoord")+"</xCoord> \n"
+		+"		<yCoord>"+plotSiteParams.get("yCoord")+"</yCoord> \n"
+		+"		<coordType>"+plotSiteParams.get("coordType")+"</coordType> \n"
+		+"\n"
+	);
 
 //print the observation data here
 writeObservationData(plotObservationParams);
@@ -311,7 +334,6 @@ writeObservationData(plotObservationParams);
 output.append("	</plot> \n"
 +"\n"
 );
-
 }
 
 /**
@@ -319,37 +341,47 @@ output.append("	</plot> \n"
  */
 private void writeObservationData (Hashtable plotObservationParams)
 {
-output.append("		<plotObservation> \n"
-+"			<soilDepth>"+plotObservationParams.get("soilDepth")+"</soilDepth> \n"
-+"			<soilType>"+plotObservationParams.get("soilType")+"</soilType> \n"
-+"			<percentRockGravel>"+plotObservationParams.get("percentRockGravel")+" </percentRockGravel> \n"
-+"			<authorObsCode>"+plotObservationParams.get("authorObsCode")+"</authorObsCode> \n"
+try 
+	{
+	output.append("		<plotObservation> \n"
+	+"			<soilDepth>"+plotObservationParams.get("soilDepth")+"</soilDepth> \n"
+	+"			<soilType>"+plotObservationParams.get("soilType")+"</soilType> \n"
+	+"			<percentRockGravel>"+plotObservationParams.get("percentRockGravel")+" </percentRockGravel> \n"
+	+"			<authorObsCode>"+plotObservationParams.get("authorObsCode")+"</authorObsCode> \n"
 
-+"			<perSmallRx>"+plotObservationParams.get("perSmallRx")+"</perSmallRx> \n"
-+"			<perSand>"+plotObservationParams.get("perSand")+"</perSand> \n"
-+"			<perLitter>"+plotObservationParams.get("perLitter")+"</perLitter> \n"
-+"			<perWood>"+plotObservationParams.get("perWood")+"</perWood> \n"
-+"			<perBareSoil>"+plotObservationParams.get("perBareSoil")+"</perBareSoil> \n"
-+"			<leafPhenology>"+plotObservationParams.get("leafPhenology")+"</leafPhenology> \n"
-+"			<leafType>"+plotObservationParams.get("leafType")+"</leafType> \n"
-+"			<physioClass>"+plotObservationParams.get("physioClass")+"</physioClass> \n"
-+"\n"
-
-
+	+"			<perSmallRx>"+plotObservationParams.get("perSmallRx")+"</perSmallRx> \n"
+	+"			<perSand>"+plotObservationParams.get("perSand")+"</perSand> \n"
+	+"			<perLitter>"+plotObservationParams.get("perLitter")+"</perLitter> \n"
+	+"			<perWood>"+plotObservationParams.get("perWood")+"</perWood> \n"
+	+"			<perBareSoil>"+plotObservationParams.get("perBareSoil")+"</perBareSoil> \n"
+	+"			<leafPhenology>"+plotObservationParams.get("leafPhenology")+"</leafPhenology> \n"
+	+"			<leafType>"+plotObservationParams.get("leafType")+"</leafType> \n"
+	+"			<physioClass>"+plotObservationParams.get("physioClass")+"</physioClass> \n"
+	+"\n"
+	+"<!-- strata data next-->"
 );
-//write the strata info
-writeStrataData ();
 
-//write the community information
-writeCommunityData ();
+	//write the strata info
+	System.out.println("writing strata objects: number of elements: "+stratumNameElements.size() );
+	writeStrataData();
 
-//print the species info -- this is where they may be null values
-writeSpeciesData (taxonNameElements,  strataTypeElements,  coverAmountElements);
+	//write the community information
+	writeCommunityData();
 
-output.append(
-"		</plotObservation> \n"
-+"\n"
-);
+	//print the species info -- this is where they may be null values
+	writeSpeciesData(taxonNameElements,  strataTypeElements,  coverAmountElements);
+
+	output.append(
+		"		</plotObservation> \n"
+		+"\n"
+	);
+	}
+	catch (Exception e) 
+	{
+		System.out.println("failed in PlotXmlWriter.writeObservationData "
+		+" " + e.getMessage()   );
+		e.printStackTrace();
+	}
 }
 
 
@@ -357,59 +389,67 @@ output.append(
 /**
  * Method to write strata related data
  */
-private void writeStrataData ()
+private void writeStrataData()
 {
-
-for (int i=0; i<stratumNameElements.size(); i++) {
-
-try {
- output.append(" \n"
- +"			<strata> \n"
- +"				<strataName>"+(String)stratumNameElements.elementAt(i)+"</strataName> \n"
- +"				<strataHeight>"+stratumHeightElements.elementAt(i)+"</strataHeight> \n"
- +"				<strataCover>"+stratumCoverElements.elementAt(i)+"</strataCover> \n"
- +"			</strata> \n"
- );
- }
-catch ( Exception e ) {System.out.println("failed in: "
-	+e.getMessage());  e.printStackTrace();}
-
- 
+	
+	output.append(" \n <!-- stratum elements should go here --> ");
+	
+	if (stratumNameElements.size() > 0)
+	{
+		for (int i=0; i<stratumNameElements.size(); i++) 
+		{
+ 				output.append(" \n"
+ 					+"			<strata> \n"
+ 					+"				<strataName>"+(String)stratumNameElements.elementAt(i)+"</strataName> \n"
+ 					+"				<strataHeight>"+stratumHeightElements.elementAt(i)+"</strataHeight> \n"
+ 					+"				<strataCover>"+stratumCoverElements.elementAt(i)+"</strataCover> \n"
+ 					+"			</strata> \n"
+				);
+		}
+	}
+	else 
+	{
+		output.append(" \n <!-- stratum elements should go here; but none--> \n");
+	}
 }
-}
-
 
 
 /**
  * Method to write species related data
  */
-private void writeSpeciesData (Vector taxonNameElements, Vector strataTypeElements, 
+private void writeSpeciesData (
+	Vector taxonNameElements, 
+	Vector strataTypeElements, 
 	Vector coverAmountElements)
 {
-//This is set up this way to rectify the failures that was having
-
-try {
-for (int i=0; i<taxonNameElements.size(); i++) {
-//for (int i=0; i<9; i++) {
-	 
-output.append(" \n"
-+"			<taxonObservation> \n"
-+"				<authNameId>"+taxonNameElements.elementAt(i)+"</authNameId> \n"
-+"				<originalAuthority>"+nullValue+"</originalAuthority> \n"
-+"				<strataComposition> \n"
-+"					<strataType>"+strataTypeElements.elementAt(i)+"</strataType> \n"
-+"					<percentCover>"+coverAmountElements.elementAt(i)+"</percentCover> \n"
-+"				</strataComposition> \n"
-+"			</taxonObservation> \n"
-);
-
+	if (taxonNameElements.isEmpty() == true )
+	{
+		output.append(" \n <!-- species should go here -->");
+	}
+	else 
+	{
+	//This is set up this way to rectify the failures that was having
+		for (int i=0; i<taxonNameElements.size(); i++)
+		{
+			//clean the taxon string which is prone to having
+			//sensetive characters.
+			String taxon = (taxonNameElements.elementAt(i).toString()).replace('\'', ' ');
+			output.append(" \n"
+			+"			<taxonObservation> \n"
+			+"				<authNameId>"+taxon+"</authNameId> \n"
+			//+"				<originalAuthority>"+nullValue+"</originalAuthority> \n"
+			//+"				<cumStrataCoverage>"+cumStrataCoverElements.elementAt(i)+"</cumStrataCoverage> \n"
+			+"				<strataComposition> \n"
+			//think about how the rest of these attributes shoul be handled
+			+"					<strataType>"+strataTypeElements.elementAt(i)+"</strataType> \n"
+			+"					<percentCover>"+coverAmountElements.elementAt(i)+"</percentCover> \n"
+			+"				</strataComposition> \n"
+			+"			</taxonObservation> \n"
+			);
+		}
+	}
 }
 
-}
-catch  ( Exception e ) {System.out.println(" PlotXmlWriter.writeSpeciesData "
-+" "+e.getMessage());}
-
-}
 
 
 /**
