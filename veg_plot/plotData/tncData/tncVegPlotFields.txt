@@ -102,3 +102,31 @@
 99 Opt3
 100 Opt4
 101 Opt5
+  
+
+# Plots-Species - unfortunately this table appears to have different formats
+# from time to time:
+# optional fields include 'Combined Stratumspp' and 'Stratumspp' which can be
+# found after the 'Plot Species Counter'.
+
+
+1 Plot Code
+2 Plot Species Counter
+3 Plant Symbol
+4 Scientific Name
+5 Common Name
+6 Family
+7 Specimen Number
+8 Used PLANTS
+9 Source
+10 Within Plot
+11 Stratum Sort
+12 Stratum
+13 Diagnostic
+14 Range Cover
+15 Real Cover
+16 Other Measure1
+17 Other Measure2
+18 DBH
+19 Update
+20 User
