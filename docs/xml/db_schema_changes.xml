@@ -2957,6 +2957,7 @@
   <modelChange>
     <modelChangeID>11</modelChangeID>
     <modelChangeName>geology will be split into two fields, rockType and surficialDeposit</modelChangeName>
+    <modelChangeStatus>TRUE beta.2</modelChangeStatus>
     <modelChangeComments>details still on the way...</modelChangeComments>
   </modelChange>
   <modelChange>
@@ -2968,5 +2969,17 @@
     <modelChangeID>13</modelChangeID>
     <modelChangeName>commStatus.level adds values to list</modelChangeName>
     <modelChangeComments>level will probably be an open list -- values will be added to include Braun-Blanquet values. May need to mimic coverMethod / coverIndex table structure.</modelChangeComments>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>14</modelChangeID>
+    <modelChangeName>fewer reqd fields</modelChangeName>
+    <modelChangeStatus>TRUE beta.2</modelChangeStatus>
+    <modelChangeComments>the following fields are no longer required (nulls=no) :   plot.confidentialityReason
+observation.taxonObservationArea
+plot.area
+observation.STRATUMMETHOD_ID
+observation.autoTaxonCover
+observation.coverDispersion
+observation.COVERMETHOD_ID</modelChangeComments>
   </modelChange>
 </modelChangeDocument>
