@@ -1,0 +1,178 @@
+<html>
+<head>@defaultHeadToken@
+<title>VegBank Styles to use.  Guide for developers using @stylesheet@</title>
+
+<link type="text/css" href="@stylesheet@" rel="stylesheet">
+</head>
+<body>
+
+
+This is a test page for the stylesheet.
+<hr/>
+<h2>HEADERS:</h2>
+
+<h1>This <a href="nowhere">is</a> H1</h1>
+<h2>This <a href="nowhere">is</a> H2</h2>
+<h3>This <a href="nowhere">is</a> H3</h3>
+<h4>This <a href="nowhere">is</a> H4</h4>
+<h5>This <a href="nowhere">is</a> H5</h5>
+<h6>This <a href="nowhere">is</a> H6</h6>
+
+<p>Can force headers left (class="left"):</p>
+<h1 class="left">This <a href="nowhere">is</a> H1</h1>
+<h2 class="left">This <a href="nowhere">is</a> H2</h2>
+<h3 class="left">This <a href="nowhere">is</a> H3</h3>
+<h4 class="left">This <a href="nowhere">is</a> H4</h4>
+<h5 class="left">This <a href="nowhere">is</a> H5</h5>
+<h6 class="left">This <a href="nowhere">is</a> H6</h6>
+
+<p>or center (class="center"):</p>
+<h1 class="center">This <a href="nowhere">is</a> H1</h1>
+<h2 class="center">This <a href="nowhere">is</a> H2</h2>
+<h3 class="center">This <a href="nowhere">is</a> H3</h3>
+<h4 class="center">This <a href="nowhere">is</a> H4</h4>
+<h5 class="center">This <a href="nowhere">is</a> H5</h5>
+<h6 class="center">This <a href="nowhere">is</a> H6</h6>
+
+<p><span class="headequiv sizelarger">This is LIKE a header (class="headequiv sizelarger"), </span>but it is line ,not block level</p>
+
+front page header:
+@vegbank_header_html_front@
+normal header:
+@vegbank_header_html_normal@
+help headeR:
+@vegbank_header_html_help@
+
+"headlinks" in header:
+<table bgcolor="#336633"><tr><td><font color="#FFFFFF">hello there, just some text</font></td>
+</tr>
+<tr><td><a class="headlink">Here is the head Link It SHOULD have small caps Now</a></td></tr></table>
+footers:
+two row (standard) :
+@vegbank_footer_html_tworow@
+help footer:
+@vegbank_footer_html_help@
+<hr/>
+<h2>Text:</h2>
+<p>This <a href="nowhere">is</a> p</p>
+<p class="psmall">This is small P (class="psmall")</p>
+<span class="instructions">These are instructions</span>
+
+<h4>"VegBank" Styles (brown & size: do we need the brown?, do we need the styles?):</h4>
+<p class="vegbank">Text of class=vegbank</p>
+<p class="vegbank_tiny">Text of class=vegbank_tiny</p>
+<p class="vegbank_small">Text of class=vegbank_small</p>
+<p class="vegbank_normal">Text of class=vegbank_normal</p>
+<p class="vegbank_large">Text of class=vegbank_large</p>
+<p class="sansserif">sansserif : NOT NEEDED, just use P!?!?</p>	
+
+<h4>Different standard sizes:</h4>
+<p class="sizetiny">text of class='sizetiny'</p>
+<p class="sizesmall">text of class='sizesmall'</p>
+<p class="sizenormal">text of class='sizenormal'</p>
+<p class="sizelarge">text of class='sizelarge'</p>
+<p class="sizelarger">text of class='sizelarger'</p>
+<p class="sizehuge">text of class='sizehuge'</p>
+
+<h4>EM based views from JH</h4>
+<p class="category">class='category'</p>
+<p class="item">class='item'</p>
+<p class="itemlabel">class='itemlabel' Not used!</p>
+<p class="itemsmall">class='itemsmall'</p>
+<p class="itemsmaller">class='itemsmaller'</p>
+
+
+<h4>Views:</h4>
+<table border="1">
+<tr><td class="datalabel">class="datalabel":</td><td>value <span class="units">class=units</span></td></tr>
+<tr><td class="datalabelsmall">class="datalabelsmall":</td><td class="largefield">class="largefield" : Very lengthy text for just one field, made smaller so that it doesn't stretch the table more than it has to... this is useful as we have a lot of long fields in vegbank tables.</td></tr>
+<tr><td class="useraction">class='useraction' : Take some <a href="nothing">ACTION on this</a> by clicking that link!</a>
+</table>
+
+
+
+<h4>More 'normal' ways of writing things:</h4>
+<ul><li>This <a href="nowhere">is</a> li in a ul </li></ul>
+<ul><li>This <a href="nowhere">is</a> li in a ul </li></ul>
+
+<blockquote>
+
+inside <a href="nowhere">is</a> a block quote-- no specific style currently exists with this, should be added to "normal" set.
+
+<p>  <a href="nowhere">is</a> inside a p in a block quotes </p>
+
+</blockquote>
+
+<h4>Misc styles:</h4>
+<p class='description'>class='description'</p>
+<p class='on_page_help'>class='on_page_help'</p>
+<p class='on_page_help_text'>class='on_page_help_text'</p>
+<p class='label_small'>class='label_small'</p>
+
+<table border="1">
+ <tr class="oddrow"><td>This is an odd row (class="oddrow")</td></tr>
+ <tr class="evenrow"><td>This is an even row (class="evenrow")</td></tr>
+ <tr><td>you can alternate between these two with the token: &lt;tr class='(at)nextcolorclass(at)'&gt;</td></tr>
+
+ <tr bgcolor="#336633"><td class="whitetext">class is whitetext and covers <a href="nothing">links too!</a></td></tr>
+
+ <tr class="greytext"><td>greytext</td></tr>
+ <tr><th class="grey">grey th</th><td class="grey">grey td</td></tr>
+ 
+ <tr class="listRowA"><td>listRowA</td></tr>
+ <tr class="listRowB"><td>listRowB</td></tr>
+ <tr class="listRowA-Hi"><td>listRowA-Hi</td><td>used by javascript</tD></tr>
+ <tr class="listRowB-Hi"><td>listRowB-Hi</td><td>used by javascript</tD></tr>
+ <tr><th class="listRowA">TH listRowA</th></tr>
+ <tr><th class="listRowB">TH listRowB</th></tr>
+<tr class="listhead"><td>Listhead</td><td>unknown use</td></tr>
+</table>
+
+<hr/>
+<h1>TABLE LAND: </h1>
+<h3>Normal table:</h3>
+<table>
+<tr ><th class="major">th.major!!</th><th>a <a href="nowhere">link </a></th></tr>
+<tr ><th class="major_smaller">th.major_smaller!</th><th>a <a href="nowhere">link </a></th></tr>
+<tr><th>header</th><th>a <a href="nowhere">link </a></th></tr>
+<tr><td>data1</td><td>data3</td></tr>
+<tr><td>data2</td><td>data4</td></tr>
+</table>
+
+<h3>tables with varying amounts of lines:</h3>
+<h4>no custom style, just border="1"</h4>
+
+<table border="1" cellspacing="0"><tr><th>header</th><th>a <a href="nowhere">link </a></th></tr>
+<tr><td>data1</td><td>data3</td></tr>
+<tr><td>data2</td><td>data4</td></tr>
+</table>
+
+<h4>all lines (grid), "thinlines" table:</h4>
+
+<table class="thinlines"><tr><th>header</th><th>a <a href="nowhere">link </a></th></tr>
+<tr><td>data1</td><td>data3</td></tr>
+<tr><td>data2</td><td>data4</td></tr>
+</table>
+<h4>fewer lines, "leftrightborders" table:</h4>
+
+<table class="leftrightborders"><tr><th>header</th><th>a <a href="nowhere">link </a></th></tr>
+<tr><td>data1</td><td>data3</td></tr>
+<tr><td>data2</td><td>data4</td></tr>
+</table>
+<h4>yet fewer lines , "outsideborder" table:</h4>
+
+<table class="outsideborder"><tr><th>header</th><th>a <a href="nowhere">link </a></th></tr>
+<tr><td>data1</td><td>data3</td></tr>
+<tr><td>data2</td><td>data4</td></tr>
+</table>
+
+<h4>no lines, "noborder" table:</h4>
+
+<table class="noborder"><tr><th>header</th><th>a <a href="nowhere">link </a></th></tr>
+<tr><td>data1</td><td>data3</td></tr>
+<tr><td>data2</td><td>data4</td></tr>
+</table>
+
+
+</body>
+</html>

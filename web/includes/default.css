@@ -1,42 +1,148 @@
+
+/* body element, present in all pages */
 BODY			{ background-color: #FFFFFF;}
 
-/*thin lines for your table gets you a grid of thin lines */
-table.thinlines {border-style: solid;
-                 border-width:1px;
-                 border-collapse: collapse;
-                 border-color:#333333 }
-table.thinlines td {border-style:solid; border-width:1px; border-color:#333333}
-table.thinlines th {border-style:solid; border-width:1px; border-color:#333333}
-/* left right class for table gets you vertical lines for your tables only (and surrounding thin line) */
-table.leftrightborders {border-style:solid; border-color:#333333; border-collapse:collapse; border-width:1px }
-table.leftrightborders td {border-style:solid; border-bottom-width:0px ; border-left-width:1px ; border-right-width:1px ; border-top-width:0px}
-table.leftrightborders th {border-style:solid; border-width:1px ; border-color:#333333;}
-
-table.outsideborder {border-style: solid;
-                 border-width:1px;
-                 border-collapse: collapse;
-                 border-color:#333333 }
-
-table.noborder {border-style: none; border-width:0px ; border-collapse: collapse}
-table.noborder th {border-style: none; border-width:0px }
-table.noborder td {border-style: none; border-width:0px }
 
 
+
+/*
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+
+                                      LINKS
+
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+*/
+
+
+/* typical links: */
 A:Link			{ color: #005680; text-decoration: underline }
 A:Visited		{ color: #003366; text-decoration: underline }
 /* A:Visited		{ color: #6699CC; } */
 A:hover			{ color: #3399FF;}
 
+/* links in green backgroun header they are currently white, no underline, and background highlights on hover: */
   A.headlink         {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt}
   A:Link.headlink    {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt} /* same as prev */
   A:Visited.headlink {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt} /* same as prev */
   A:hover.headlink   {font-variant: small-caps ; background-color: #FFFFCC ; color: #336633; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt}
 
 
-A.blk { color:#000000 }
-A.brightyellow { color:#FFFF80 }
+/* style removed by MTL 11/15/04:  A.blk { color:#000000 }
+A.brightyellow { color:#FFFF80 }  */
 
-  .units {color: #333333 ; font-size: 8pt;}
+
+/* yellow colored links... doubtful this exists anywhere */
+/* .headerLink,
+a.headerLink:link,
+a.headerLink:visited,
+a.headerLink:hover {
+	color: #FFFF80;
+	text-decoration: underline;
+} */
+
+
+
+TH A:Link {color: #FFFF80; text-decoration:underline}
+TH A:hover {color: #FFFF80; text-decoration:underline}
+TH A:visited {color: #FFFF80; text-decoration:underline}
+
+/* actions user can take from this form: ie interpret plant.*/
+td.useraction  {font-weight: bold; color: #FF0000 ; background: #ffffcc }
+td.useraction A:Link {color: #FF0000}
+td.useraction A:Visited {color: #BB0000 }
+td.useraction A:hover {color: #FF9999 }
+
+
+/* the following were for the new homepage, but images that swapped on rollover were used instead :
+.featureLink {
+	font-family:  sans-serif;
+	color: #3399FF;
+	text-decoration: none;
+	font-size: 14pt;
+}
+.featureLink2 {
+	font-family:  sans-serif;
+	color: #3399FF;
+	text-decoration: none;
+	font-size: 14pt;
+}
+a.featureLink:visited,
+a.featureLink:link {
+	color: #336633;
+	text-decoration: none;
+}
+a.featureLink2:link {
+	color: #3399FF;
+	text-decoration: none;
+}
+a.featureLink:hover {
+	color: #003366;
+	text-decoration: none;
+}
+
+*/
+
+
+/*
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+
+                                      TABLE STYLES HERE
+
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+*/
+
+
+
+
+/*thin lines for your table gets you a grid of thin lines:
+___
+| |
+---
+| |
+___
+*/
+table.thinlines {border-style: solid;
+                 border-width:1px;
+                 border-collapse: collapse;
+                 border-color:#333333 }
+table.thinlines td {border-style:solid; border-width:1px; border-color:#333333}
+table.thinlines th {border-style:solid; border-width:1px; border-color:#333333}
+/* left right class for table gets you vertical lines for your tables only (and surrounding thin line) :
+
+| |
+| |
+| |
+
+rows can be differentiated by different colors, typically in jsps using : <tr class="@nextcolorclass@">
+
+*/
+
+
+table.leftrightborders {border-style:solid; border-color:#333333; border-collapse:collapse; border-width:1px }
+table.leftrightborders td {border-style:solid; border-bottom-width:0px ; border-left-width:1px ; border-right-width:1px ; border-top-width:0px}
+table.leftrightborders th {border-style:solid; border-width:1px ; border-color:#333333;}
+
+
+/* only an outside border around table:
+___
+| |
+| |
+| |
+--- */
+
+table.outsideborder {border-style: solid;
+                 border-width:1px;
+                 border-collapse: collapse;
+                 border-color:#333333 }
+
+/* no border at all, that's hard to draw here */
+table.noborder {border-style: none; border-width:0px ; border-collapse: collapse}
+table.noborder th {border-style: none; border-width:0px }
+table.noborder td {border-style: none; border-width:0px }
 
 TH	{
 	font-family:  Arial, Tahoma, Helvetica, Geneva, sans-serif;
@@ -58,9 +164,150 @@ TH	{
 	background-color : #333333;
 	}
 
-TH A:Link {color: #FFFF80; text-decoration:underline}
-TH A:hover {color: #FFFF80; text-decoration:underline}
-TH A:visited {color: #FFFF80; text-decoration:underline}
+
+
+/*
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+
+                                      HEADER STYLES HERE
+
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+*/
+
+
+
+H1, H2 {
+							font-family: Georgia, Times New Roman, Times, serif;
+							color: #333333;
+							text-align: center;
+						}
+
+H3, H4, H5, H6	{
+							font-family: Georgia, Times New Roman, Times, serif;
+							color: #333333;
+							text-align: left;
+						}
+/* allow to manually style left and right */
+H1.left, H2.left, H3.left, H4.left, H5.left, H6.left { 					font-family: Georgia, Times New Roman, Times, serif;
+							color: #333333;
+                        	 text-align: left; }
+
+H1.center, H2.center, H3.center, H4.center, H5.center, H6.center { 					font-family: Georgia, Times New Roman, Times, serif;
+							color: #333333;
+                        	 text-align: center; }
+
+/* text that is equivalent to headers in color and font.  used in main menu and anywhere where headers can't be block level.
+should be combined with a size style as space delimited, ie class="headequiv sizelarge"
+*/
+.headequiv	{
+							font-family: Georgia, Times New Roman, Times, serif;
+							color: #333333;
+							font-weight: bold;
+						}
+
+
+/*
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+
+                                      normal text STYLES HERE
+
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+*/
+
+
+
+P, .normal, TD, UL, OL, DL, LI	{
+					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+					font-size: 10pt;
+					color: #000000
+				}
+
+.psmall	        {
+					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+					font-size: 8pt;
+					color: #000000
+				}
+
+
+
+/* standard sizes for normal text */
+.sizetiny   { font-size: 8pt }
+.sizesmall  { font-size: 10pt }
+.sizenormal { font-size: 12pt } /* note that normal is currently a bit larger than regular <p> */
+.sizelarge  { font-size: 14pt }
+.sizelarger { font-size: 18pt }
+.sizehuge   { font-size: 24pt }
+
+.vegbank		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; }
+.vegbank_tiny	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 8pt}
+.vegbank_small	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 10pt}
+.vegbank_normal	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 12pt}
+.vegbank_large	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 14pt}
+.sansserif		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif ; color : #531100}
+
+
+
+/*   SIZES OF TEXT */
+
+/* the following 3 are used in views */
+.datalabel { font-size: 10pt ; font-weight: bold;} /* data label in autogenerated and other views */
+.datalabelsmall {font-size:8pt ; font-style:italic; } /* smaller data label that can make views more compressed */
+.largefield  { font-size: 8pt } /* for DATA fields that are larger, thus font is smaller so they are more compressed */
+/* instructions on forms */
+.instructions {
+	        				font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+								font-size: 9pt;
+	                            font-style: italic ;
+
+		  }
+/* units on forms, etc. all m, ft, degrees, etc. */
+
+  .units {color: #333333 ; font-size: 8pt;}
+
+
+
+/*  WEIGHTS of text */
+
+/* bolder */
+.category		{
+					color: #000000;
+					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+					font-size: 1em;
+					font-weight: bold;
+				}
+
+/* std item, but smaller than higher element - can recurse to quite small */
+.item			{
+					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+					font-size: .83em;
+					font-weight: normal;
+				}
+
+.itemlabel		{
+					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+					font-size: .83em;
+					font-weight: normal;
+					color: #3366FF;
+				}
+/* smaller than item */
+.itemsmall		{
+					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+					font-size: .67em;
+					font-weight: normal;
+				}
+
+/* yet smaller */
+.itemsmaller	{
+					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+					font-size: .67em;
+					font-weight: normal;
+					color: #666666;
+				}
+
 
 .description {
 	color: #000000;
@@ -90,67 +337,47 @@ TH A:visited {color: #FFFF80; text-decoration:underline}
 		color: #000000
 	}
 
-.headerLink,
-a.headerLink:link,
-a.headerLink:visited,
-a.headerLink:hover {
-	color: #FFFF80;
-	text-decoration: underline;
-}
 
-.featureLink {
-	font-family:  sans-serif;
-	color: #3399FF;
-	text-decoration: none;
-	font-size: 14pt;
-}
-.featureLink2 {
-	font-family:  sans-serif;
-	color: #3399FF;
-	text-decoration: none;
-	font-size: 14pt;
-}
-a.featureLink:visited,
-a.featureLink:link {
-	color: #336633;
-	text-decoration: none;
-}
-a.featureLink2:link {
-	color: #3399FF;
-	text-decoration: none;
-}
-a.featureLink:hover {
-	color: #003366;
-	text-decoration: none;
-}
 
-H1, H2, H3, H4, H5, H6	{
-							font-family: Georgia, Times New Roman, Times, serif;
-							color: #333333;
-							text-align: center;
-						}
-H1.left, H2.left, H3.left, H4.left, H5.left, H6.left { 					font-family: Georgia, Times New Roman, Times, serif;
-							color: #333333;
-                        	 text-align: left; }
+/*
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
 
-.headequiv	{
-							font-family: Georgia, Times New Roman, Times, serif;
-							color: #333333;
-						}
+                                      background shading STYLES HERE
 
-.datalabel { font-size: 10pt ; font-weight: bold;}
-.datalabelsmall {font-size:8pt ; font-style:italic; }
-.largefield  { font-size: 8pt }
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+*/
 
-.sizetiny { font-size: 8pt }
-.sizesmall { font-size: 10pt }
-.sizenormal { font-size: 12pt }
-.sizelarge  { font-size: 14pt }
-.sizelarger { font-size: 18pt }
-.sizehuge { font-size: 24pt }
 
-.subheader { font-size: 18pt ; text-align: left; }
+/* standard alternating colors on tables: */
+.oddrow { background-color : #FFFFFF }
+.evenrow {background-color : #DDDDDD }
 
+
+
+/* used in forms/DisplayResults.jsp
+forms/TaxonInterpretationAnnotateData.jsp
+white text with links that work with it:
+*/
+.whitetext 		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+				color: #FFFFFF;
+			 	font-size: 8pt}
+.whitetext a:link     { color: #FFFFFF; text-decoration: none}
+.whitetext a:visited  { color: #FFFFFF; text-decoration: none}
+.whitetext a:hover	  { color: #3399FF; text-decoration: none}
+
+a.whitetext:link	{ color: #FFFFFF; text-decoration: none}
+a.whitetext:visited	{ color: #FFFFFF; text-decoration: none}
+a.whitetext:hover	{ color: #3399FF; text-decoration: none}
+
+/* main menu, metasearch, index.jsp :*/
+.greytext 		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+				color: #666666;
+			 	font-size: 8pt}
+
+
+/* some less frequently used table styles.  More common is evenrow and oddrow: */
 th.grey, td.grey, tr.grey {background-color : #DDDDDD; }
 .listRowA {background-color : #FFFFCC; }
 .listRowB {background-color : #FFFFFF }
@@ -159,25 +386,30 @@ th.grey, td.grey, tr.grey {background-color : #DDDDDD; }
 th.listRowA {background-color : #CCCCCC }
 th.listRowB {background-color : #EEEEEE }
 
-.whitetext 		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-				color: #FFFFFF;
-			 	font-size: 8pt}
-a.whitetext:link	{ color: #FFFFFF; text-decoration: none}
-a.whitetext:visited	{ color: #FFFFFF; text-decoration: none}
-a.whitetext:hover	{ color: #3399FF; text-decoration: none}
 
-.greytext 		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-				color: #666666;
-			 	font-size: 8pt}
+/*
+forms/TaxonInterpretationAnnotateData.jsp
+forms/TaxonObservationAnnotateData.jsp
+*/
 
-.vegbank		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; }
-.vegbank_tiny	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 8pt}
-.vegbank_small	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 10pt}
-.vegbank_normal	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 12pt}
-.vegbank_large	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 14pt}
-.sansserif		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif ; color : #531100}
+.listhead {
+	color: #000000;
+	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	background-color: #DDDDDD;
+}
 
-UL.constsize,LI.constsize {  font: 10pt Arial, Tahoma, Helvetica, Geneva, sans-serif; }
+/*
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+
+                 ORIGINAL STYLES-- unknown if they are still needed  STYLES HERE
+
+-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+*/
+
 
 .external		{
 					cursor: n-resize;
@@ -199,21 +431,6 @@ UL.constsize,LI.constsize {  font: 10pt Arial, Tahoma, Helvetica, Geneva, sans-s
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 				}
 
-P, .normal, TD, UL, OL, DL, LI	{
-					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-					font-size: 10pt;
-					color: #000000
-				}
-
-.psmall	        {
-					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-					font-size: 8pt;
-					color: #000000
-				}
-
-/*  UL, OL, DL, LI, .list	{
-							font: .9em/1.5em Arial, Tahoma, Helvetica, Geneva, sans-serif;
-						} */
 
 .thsmall		{
 					color: #ffff80;
@@ -222,12 +439,7 @@ P, .normal, TD, UL, OL, DL, LI	{
 					font-weight: bold;
 				}
 
-.category		{
-					color: #000000;
-					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-					font-size: 1em;
-					font-weight: bold;
-				}
+
 
 .intro			{
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
@@ -235,31 +447,8 @@ P, .normal, TD, UL, OL, DL, LI	{
 					font-weight: bold;
 				}
 
-.item			{
-					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-					font-size: .83em;
-					font-weight: normal;
-				}
 
-.itemlabel		{
-					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-					font-size: .83em;
-					font-weight: normal;
-					color: #3366FF;
-				}
 
-.itemsmall		{
-					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-					font-size: .67em;
-					font-weight: normal;
-				}
-
-.itemsmaller	{
-					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-					font-size: .67em;
-					font-weight: normal;
-					color: #666666;
-				}
 
 .byline			{
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
@@ -355,10 +544,7 @@ TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 .irform { color: #000000; background: #cccc99; font-weight: normal; font-size: 8pt; }
 
 .error { font-weight: bold; color: red;}
-td.useraction  {font-weight: bold; color: #FF0000 ; background: #ffffcc }
-td.useraction A:Link {color: #FF0000}
-td.useraction A:Visited {color: #BB0000 }
-td.useraction A:hover {color: #FF9999 }
+
 
 .verticaltext { layout-flow: vertical-ideographic }
 
@@ -367,13 +553,4 @@ td.useraction A:hover {color: #FF9999 }
 .gdRowLabel { color: Bisque; }
 .gdAttName { background-color : #686868; color: LightSalmon; }
 
-.oddrow { background-color : #FFFFFF }
-.evenrow {background-color : #DDDDDD }
 
-.listhead {
-	color: #000000;
-	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-	font-size: 10pt;
-	font-weight: bold;
-	background-color: #DDDDDD;
-}
