@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-06-05 03:03:59 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2000-11-20 15:46:40 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,32 +63,52 @@ public class PlotQueryAction extends Action
 		query.append(
 			" SELECT DISTINCT(observation.obsaccessionnumber), observation.authorobscode, "
 				+ "plot.latitude, plot.longitude, plot.plot_id"
-				+ " FROM plot, project, observation, taxonobservation, covermethod, stratummethod, "
-				
-				// Allow searching for Commusage for commname
-				+ " (commConcept RIGHT OUTER JOIN (commClass LEFT OUTER JOIN commInterpretation ON"
+				//+ " FROM plot, project, observation, taxonobservation, covermethod, stratummethod, "
+				+ " FROM plot, project, covermethod, stratummethod, "
+		
+				// Allow searching of Commusage for commname
+				+ " ( ( (commConcept RIGHT OUTER JOIN (commClass LEFT OUTER JOIN commInterpretation ON"
 				+ " commClass.COMMCLASS_ID = commInterpretation.COMMCLASS_ID) ON "
 				+ " commConcept.COMMCONCEPT_ID = commInterpretation.COMMCONCEPT_ID) " 
-				+	" LEFT OUTER JOIN commUsage ON commConcept.COMMCONCEPT_ID = commUsage.COMMCONCEPT_ID "
-				// End Joining Observation to commUsage
+				+	" INNER JOIN commUsage ON commConcept.COMMCONCEPT_ID = commUsage.COMMCONCEPT_ID )   "
+				+ " RIGHT OUTER JOIN observation ON observation.observation_id = commclass.observation_id )"
+				// End Joining commclass to commUsage
 				
-				+ " WHERE plot.plot_id = observation.plot_id AND taxonobservation.observation_id = observation.observation_id "
+				+ " LEFT OUTER JOIN ( "
+				
+				// Allow searching of plantnames
+				+ " plantname  INNER JOIN ( plantusage INNER JOIN ( plantconcept "
+				+ " INNER JOIN ( taxoninterpretation INNER JOIN taxonobservation "
+				+ " ON taxonobservation.taxonobservation_id = taxoninterpretation.taxonobservation_id) "
+				+ " ON taxoninterpretation.plantconcept_id = plantconcept.plantconcept_id ) "
+				+ " ON plantusage.plantconcept_id = plantconcept.plantconcept_id ) "
+				+ " ON plantname.plantname_id = plantusage.plantname_id "
+				// End joining taxonObservation to plantName
+				
+				+ " ) ON observation.observation_id = taxonobservation.observation_id  "
+				
+				+ " WHERE plot.plot_id = observation.plot_id "
 				+ " AND project.project_id = observation.project_id AND observation.covermethod_id = covermethod.covermethod_id"
 				+ " AND observation.stratummethod_id = stratummethod.stratummethod_id"
-				+ " AND taxonobservation.observation_id = observation.observation_id"
-				+ " AND commclass.observation_id = observation.observation_id"
+				//+ " AND taxonobservation.observation_id = observation.observation_id"
+				//+ " AND taxonobservation.observation_id = observation.observation_id"
+				//+ " AND commclass.observation_id = observation.observation_id"
 		);
 
 		// Get the form
 		PlotQueryForm pqForm = (PlotQueryForm) form;
 		String conjunction = pqForm.getConjunction();
+		
+		query.append(" AND ( ");
 
+		StringBuffer dynamicQuery = new StringBuffer();
+		
 		// States
-		query.append(this.handleValueList(pqForm.getState(), "plot.state", conjunction));
+		dynamicQuery.append(this.handleValueList(pqForm.getState(), "plot.state", conjunction));
 
 		// Elevation
 		//System.out.println(  pqForm.getMaxElevation() + " " + pqForm.getMinElevation() + " " +  pqForm.isAllowNullElevation() + " elevation" );
-		query.append(
+		dynamicQuery.append(
 			this.handleMaxMinNull(
 				pqForm.getMaxElevation(),
 				pqForm.getMinElevation(),
@@ -97,7 +117,7 @@ public class PlotQueryAction extends Action
 				conjunction));
 
 		// SlopeAspect
-		query.append(
+		dynamicQuery.append(
 			this.handleMaxMinNull(
 				pqForm.getMaxSlopeAspect(),
 				pqForm.getMinSlopeAspect(),
@@ -115,28 +135,28 @@ public class PlotQueryAction extends Action
 				conjunction));
 
 		// rockType
-		query.append(this.handleValueList(pqForm.getRockType(), "plot.rockType", conjunction));
+		dynamicQuery.append(this.handleValueList(pqForm.getRockType(), "plot.rockType", conjunction));
 		// surficalDeposits
-		query.append(
+		dynamicQuery.append(
 			this.handleValueList(
 				pqForm.getSurficialDeposit(),
 				"plot.surficialdeposits",
 				conjunction));
 		// hydrologicregime
-		query.append(
+		dynamicQuery.append(
 			this.handleValueList(
 				pqForm.getSurficialDeposit(),
 				"observation.hydrologicregime",
-		conjunction));
+				conjunction));
 		// topoposition
-		query.append(
+		dynamicQuery.append(
 			this.handleValueList(pqForm.getTopoPosition(), "plot.topoposition", conjunction));
 		// landForm
-		query.append(this.handleValueList(pqForm.getLandForm(), "plot.landform", conjunction));
+		dynamicQuery.append(this.handleValueList(pqForm.getLandForm(), "plot.landform", conjunction));
 
 		// Date Observed
 		// This need special handling because of the start/end points....
-		query.append(
+		dynamicQuery.append(
 			this.handleMaxMinNullDateRange(
 				pqForm.getMinObsStartDate(),
 				pqForm.getMaxObsEndDate(),
@@ -147,7 +167,7 @@ public class PlotQueryAction extends Action
 		);
 
 		// Date Entered
-		query.append(
+		dynamicQuery.append(
 			this.handleMaxMinNull(
 				pqForm.getMaxDateEntered(),
 				pqForm.getMinDateEntered(),
@@ -165,14 +185,14 @@ public class PlotQueryAction extends Action
 				conjunction));
 
 		// METHODS and PEOPLE
-		query.append(
+		dynamicQuery.append(
 			this.handleSimpleCompare(
 				pqForm.getCoverMethodType(),
 				"covermethod.covertype",
 				pqForm.isAllowNullCoverMethodType(),
 				" like ", 
 				conjunction));
-		query.append(
+		dynamicQuery.append(
 			this.handleSimpleCompare(
 				pqForm.getStratumMethodName(),
 				"stratummethod.stratummethodname",
@@ -183,7 +203,7 @@ public class PlotQueryAction extends Action
 		// Need to traverse observation <- observationcontributor -> party ( multifield :O... )
 		//query.apppend( this.handleSimpleEquals( pqForm.getObservationContributorName() 
 		//					"") );
-		query.append(
+		dynamicQuery.append(
 			this.handleSimpleCompare(
 				pqForm.getProjectName(),
 				"project.projectname",
@@ -206,18 +226,18 @@ public class PlotQueryAction extends Action
 			// If no plantname given then forget it...
 			if ( ! Utility.isStringNullOrEmpty(plantNames[i]))
 			{
-				query.append(conjunction + " ( ");
-				query.append( " plantname.plantname like '" + plantNames[i] + "'"
+				dynamicQuery.append(conjunction + " ( ");
+				dynamicQuery.append( " plantname.plantname like '" + plantNames[i] + "'"
 				+ " and plantname.plantname_id = taxonobservation.plantname_id");
 				
-				query.append(
+				dynamicQuery.append(
 					this.handleMaxMinNull(maxTaxonCover[i], minTaxonCover[i], true, "taxonobservation.taxoncover", " AND")
 				);
-				query.append(
+				dynamicQuery.append(
 					this.handleMaxMinNull(maxTaxonBasalArea[i], minTaxonBasalArea[i], true, "taxonobservation.taxonbasalarea", " AND")
 				);
 
-				query.append(" ) ");
+				dynamicQuery.append(" ) ");
 			}
 		}
 		
@@ -232,10 +252,10 @@ public class PlotQueryAction extends Action
 			if ( ! Utility.isStringNullOrEmpty(commNames[i]))
 			{
 				
-				query.append(conjunction + " ( ");
-				query.append( " commusage.commname like '" + commNames[i] + "'");
+				dynamicQuery.append(conjunction + " ( ");
+				dynamicQuery.append( " commusage.commname like '" + commNames[i] + "'");
 				
-				query.append(
+				dynamicQuery.append(
 					this.handleMaxMinNullDateRange(
 						minCommStopDates[i],
 						maxCommStartDates[i],
@@ -245,10 +265,26 @@ public class PlotQueryAction extends Action
 						" AND ")
 				);
 				
-				query.append(" ) ");
+				dynamicQuery.append(" ) ");
 			}
 		}
+		
+		// User added nothing to query
+		if ( dynamicQuery.toString().trim().equals("") )
+		{
+			query.append(" true ");
+		}
+		else if ( conjunction.trim().equals("AND") )
+		{
+			query.append(" true ");
+		} 
+		else if ( conjunction.trim().equals("OR")  )
+		{
+			query.append(" false ");
+		}
 
+		query.append(dynamicQuery.toString());
+		query.append(" ) ");
 		// FINISHED CONSTRUCTING QUERY
 
 		// try to run this (potentially) monster query
