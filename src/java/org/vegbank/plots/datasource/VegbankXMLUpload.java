@@ -6,8 +6,8 @@ package org.vegbank.plots.datasource;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-29 18:26:33 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2003-10-29 22:08:45 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -441,8 +441,8 @@ public class VegbankXMLUpload
 			}
 			catch (RuntimeException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LogUtility.log("SAX2DBContentHandler: Misread on Hashtable constructed from XML", e);
+				throw e;
 			}
 			return previousTable;
 		}
@@ -865,6 +865,8 @@ public class VegbankXMLUpload
 					LogUtility.log("LoadTreeToDatabase: sql: " + sb.toString());
 					se.printStackTrace();
 				}
+				commit = false;
+				errors.AddError(LoadingErrors.DATABASELOADINGERROR, se.getMessage());
 			}
 			 return (PK);
 		}
