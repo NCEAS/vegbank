@@ -52,42 +52,42 @@ VegBr=VegBranch database, non-unique code as VegBranch exists locally on a user'
 
 Additionally, table abbreviations must be registered and monitored to ensure uniqueness and they are as follows (case desired, but not sensitive):
 
-plot			Pl
-observation		Ob
-plantConcept		PC
-commConcept		CC
-party			Py
-reference		Rf
-referenceJournal	RJ
-stratumMethod		SM
-coverMethod		CM
-namedPlace		NP
-project			Pj
-soilTaxon		ST
-userDefined		UD
-taxonObservation	TO
-commClass		Cl
-referenceParty		RP
+plot                  Pl
+observation           Ob
+plantConcept          PC
+commConcept           CC
+party                 Py
+reference             Rf
+referenceJournal      RJ
+stratumMethod         SM
+coverMethod           CM
+namedPlace            NP
+project               Pj
+soilTaxon             ST
+userDefined           UD
+taxonObservation      TO
+commClass             Cl
+referenceParty        RP
 
 PK# is self-explanatory, ranging from 1 to 2147483647
 
 Confirm is derived from data in tables, as follows [ALWAYS RULES: only alpha numeric (other chars deleted) shouldn't be too long, not longer than 15 chars initially]:
-plot			authorPlotCode
-observation		authorObsCode
-plantConcept    plantName.plantName corresponding to plantConcept.plantName_ID
-commConcept	    commName.commName corresponding to commConcept.commName_ID	
-party			surname, unless null, then organizationname
-reference		shortName, unless null, then title
-referenceJournal	abbreviation, unless null, then journal
-stratumMethod		stratumMethodName
-coverMethod		coverType
-namedPlace		placeName
-project			projectName
-soilTaxon		soilName
-userDefined		userDefinedName
-taxonObservation	authorPlantName
-commClass		obsevation_ID
-referenceParty		surname, unless null, then organizationname
+plot                  authorPlotCode
+observation           authorObsCode
+plantConcept          plantName.plantName corresponding to plantConcept.plantName_ID
+commConcept           commName.commName corresponding to commConcept.commName_ID  
+party                 surname, unless null, then organizationname
+reference             shortName, unless null, then title
+referenceJournal      abbreviation, unless null, then journal
+stratumMethod         stratumMethodName
+coverMethod           coverType
+namedPlace            placeName
+project               projectName
+soilTaxon             soilName
+userDefined           userDefinedName
+taxonObservation      authorPlantName
+commClass             observation_ID
+referenceParty        surname, unless null, then organizationname
 
 Date may be added to any accesionCode at time of download, but need not be added when time isn't critical for entity.
 Rule: observation should always have date added to it when viewed (perhaps we should make a view of observation which automatically appends date to accessionCode so we don't have to worry about this - similarly we could hide sensitive fields (plot.reallatitude))
