@@ -8,6 +8,12 @@ import java.io.*;
 import java.util.*;
 import java.math.*;
 import java.net.URL;
+import org.w3c.dom.Node;
+import org.w3c.dom.Document;
+import xmlresource.utils.transformXML;
+
+
+
 
 import databaseAccess.dbAccess;
 import databaseAccess.CommunityQueryStore;
@@ -21,8 +27,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-03-26 17:45:55 $'
- *  '$Revision: 1.17 $'
+ *  '$Date: 2002-03-29 23:53:43 $'
+ *  '$Revision: 1.18 $'
  */
 
 
@@ -267,6 +273,7 @@ public class DataSubmitServlet extends HttpServlet
 	 * @see DataSourceClient
 	 * @param plot  -- the string name of the plot as it used in the users archive
 	 * @param results -- the string results that have been returnd by the loader
+	 *		which is the rmi client
 	 *
 	 */
 	 private String getPlotSalientStatistics(String plot, String results)
@@ -310,13 +317,20 @@ public class DataSubmitServlet extends HttpServlet
 				sb.append(" </tr> \n");	
 
 				//the loading results 
+				// first transform the xml that is returned as the results string
+				// into an html body
+				transformXML trans  = new transformXML();
+				String tr = trans.getTransformedFromString(results, "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl");
+				
 				sb.append(" <tr> \n");	
 				sb.append(" 	<td> Loading Results </td> \n");	
-				sb.append(" 	<td> "+results+" </td> \n");	
+				//sb.append(" 	<td> "++" </td> \n");	
 				sb.append(" </tr> \n");	
 
 				
 				sb.append("</table> \n");
+				
+				sb.append(tr);
 				// a new line
 				sb.append("<br>");
 				
