@@ -1,0 +1,11 @@
+DATATRANSLATOR=/usr/vegbank/lib/datatranslator.jar
+XMLRESOURCE=/usr/vegbank/lib/xmlresource.jar
+PG_JDBC=/usr/vegbank/lib/jdbc7.0-1.2.jar
+XERCES=/usr/vegbank/lib/xerces_1_4.jar
+ACCESSRESOURCE=/usr/vegbank/lib/database_access.jar
+UTILS=/usr/vegbank/lib/utilities.jar
+PLANTTAXON=/usr/vegbank/lib/planttaxonomy.jar
+COMMON=/usr/vegbank/lib/vegclass_common.jar
+CLASSPATH=$XMLRESOURCE:$DATATRANSLATOR:$PG_JDBC:$XALAN:$XERCES:$ACCESSRESOURCE:$UTILS:$PLANTTAXON:$COMMON
+
+export CLASSPATH=$CLASSPATH
