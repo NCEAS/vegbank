@@ -4392,13 +4392,8 @@ conditions may change between resampling events.
       <attName>plotValidationLevel</attName>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
-<<<<<<< db_model_vegbank.xml
       <javaType type="String" relation="one"/>
       <attType>Integer</attType>
-=======
-      <attType>Integer</attType>
-      <javaType type="primative" relation="one"/>
->>>>>>> 1.14
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
