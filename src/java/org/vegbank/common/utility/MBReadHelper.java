@@ -1,7 +1,9 @@
 package org.vegbank.common.utility;
 
 import java.util.Iterator;
+import java.util.List;
 
+import org.vegbank.common.model.Taxonimportance;
 import org.vegbank.common.model.Taxoninterpretation;
 import org.vegbank.common.model.Taxonobservation;
 
@@ -11,8 +13,8 @@ import org.vegbank.common.model.Taxonobservation;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-05 18:43:29 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-11-25 19:27:01 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,10 +70,6 @@ public class MBReadHelper
 			if (  Utility.isStringNullOrEmpty(plantName) )
 			{
 				String authorName = to.getAuthorplantname();
-				if (  Utility.isStringNullOrEmpty(authorName) )
-				{
-					authorName =  to.getCheatplantname() ;
-				}
 				// No valid taxonInterpritation found use the authors name for the plant
 				// *** to indicate on the ui that this is not accepted yet .
 				plantName = "*** " + authorName + " ***";
@@ -80,5 +78,33 @@ public class MBReadHelper
 		}
 		return plantName;
 	}
+	
+	/**
+	 * Convience method for looking up the total  cover from a 
+	 * taxonobservation bean.
+	 * 
+	 * @param to
+	 * @return String -- plantName
+	 */
+	public static String getTotalTaxonCover(Taxonobservation to)
+	{
+		String taxonCover = "";
+		List taxonImportanceList = to.gettaxonobservation_taxonimportances();
+		Iterator it = taxonImportanceList.iterator();
+		while (it.hasNext())
+		{
+			Taxonimportance ti = (Taxonimportance) it.next();
+
+			Object object = ti.getStratumobject();
+			if (object == null)
+			{
+				// FIXME: Bussiness rule/ Usage Rule
+				// This is the one we want, otherwise its just for a strata
+				taxonCover = ti.getCover();
+			}
+		}
+		return taxonCover;
+	}
+
 
 }
