@@ -66,7 +66,17 @@
       &nbsp;&nbsp;<span class="datalabelsmall"><bean:write name="usagebean" property="classsystem" />:</span> <bean:write name="usagebean" property="commname_id_transl" /><br/>
     </logic:iterate>
   </logic:notEmpty>
-  
+   <!-- nested :get #4 -->
+    <!-- current status already defined -->
+    <vegbank:get id="commcorrelation" select="commcorrelation" where="where_commstatus_pk" beanName="map" wparam="statId" perPage="-1" pager="false"/>
+    <logic:notEmpty name="commcorrelation-BEANLIST">
+        <strong>(convergence) and Synonyms: </strong><br/>
+        <logic:iterate id="corrbean" name="commcorrelation-BEANLIST">
+          <span class="datalabelsmall">(<bean:write name="corrbean" property="commconvergence" />)</span> 
+          <a href='@get_link@std/commconcept/<bean:write name="corrbean" property="commconcept_id" />'>
+          <bean:write name="corrbean" property="commconcept_id_transl" /></a><br/>
+        </logic:iterate>
+  </logic:notEmpty>
   
 </td>
 </tr>
