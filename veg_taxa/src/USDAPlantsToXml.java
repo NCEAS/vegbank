@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-20 01:50:52 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2002-02-20 20:29:21 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -195,7 +195,8 @@ private void outputXml(Hashtable plantInstances)
 			outData.append(xmlFooter()).toString()
 		);
 	}
-	catch( Exception e ) {
+	catch( Exception e ) 
+	{
 		System.out.println(" failed in: USDAPlantsToXml.outputXml "
 		+e.getMessage() );
 		e.printStackTrace();
@@ -335,7 +336,7 @@ private String xmlAtomicVarietyName(String  concatenatedName )
  * information about a plant taxon in xml format
  * for an non-accepted plant taxon instance
  */
-private String xmlRank(String  concatenatedName )
+private String xmlRank(String  concatenatedName, String plantCode )
 {
 	StringBuffer rank = new StringBuffer(0);
 	if (concatenatedName != null)
@@ -352,14 +353,14 @@ private String xmlRank(String  concatenatedName )
 		{
 			//if the second token has a period at the end then it is a Genus
 			//System.out.println("ESCOND TOKEN: "+spaceStringTokenizer(concatenatedName, 2) );
-			if (spaceStringTokenizer(concatenatedName, 2).endsWith("."))
+			//if (spaceStringTokenizer(concatenatedName, 2).endsWith("."))
+			if ( rankIsGenus(concatenatedName, plantCode) == true )
 			{
 				rank.append("<classLevel>genus</classLevel> \n");
 			}
 			//serach for hybrids
 			else if (spaceStringTokenizer(concatenatedName, 2).startsWith("x"))
 			{
-				//System.out.println("SECOND TOKEN: "+spaceStringTokenizer(concatenatedName, 2) );
 				rank.append("<classLevel>Hybrid</classLevel> \n");
 			}
 			//else must be a species
@@ -376,6 +377,121 @@ private String xmlRank(String  concatenatedName )
 	}
 }
 
+	/**
+	 * method that returns true if the rank of the concatenated name 
+	 * is type genus based on the rules outlined by R. Peet on 20020220
+	 *
+	 * @param concatenatedName -- the long usda name
+	 * @return boolean -- true if it is a genus
+	 *
+	 */
+ private boolean rankIsGenus(String concatenatedName, String plantCode)
+ {
+		
+		//if there are only two tokens then it is a genus
+		if( getNumberOfNameTokens(concatenatedName) == 2 )
+		{
+			System.out.println("USDAPlantsToXml > two tokens: " + concatenatedName);
+			return(true);
+		}
+
+		//the following is a genus: ZYGOP2
+		else if (plantCode.length() >= 5)
+		{
+			System.out.println("USDAPlantsToXml > genus code: " + plantCode );
+			//String s = plantCode.substring(4,5);
+			//System.out.println("USDAPlantsToXml > 5th char: " + s );
+			char c = plantCode.charAt(4);
+			System.out.println("USDAPlantsToXml > 5th char: " + c );
+			if ( java.lang.Character.isDigit(c) == false )
+			{
+				System.out.println("USDAPlantsToXml > is alpha: ");
+				return(true);
+			}
+			else
+			{
+				return(false);
+			}
+		}	
+		
+		//if the second token starts with a capital then a genus
+		else if (secondTokenStartsWithCapital(concatenatedName) == true )
+	 	{
+			System.out.println("USDAPlantsToXml > second token cap: " + concatenatedName );
+			return(true);
+	 	}
+		
+	 	else
+	 	{
+			return(false);
+	 	}
+	}
+	
+	/**
+	 * utility method that returns true if the second token of 
+	 * a string, in this case the concatenated name starts
+	 * with a capital letter -- meaning that the plant is type 
+	 * genus
+	 *
+	 * @param string --  the character string
+	 * @return boolean 
+	 */
+	 private boolean secondTokenStartsWithCapital(String string)
+	 {
+		boolean result = false;
+		try
+		{
+			//make sure that the first char does not start with a 
+			// 'X'
+			if ( ! string.startsWith("X") )
+			{
+				String s = spaceStringTokenizer(string, 2);
+				char c = s.charAt(0);
+				if ( java.lang.Character.isLowerCase(c) == false )
+				{
+					result = true;
+				}
+				else
+				{
+					result = false;
+				}
+			}
+		}
+		catch( Exception e ) 
+		{
+			System.out.println(" Exception:  " + e.getMessage() );
+			e.printStackTrace();
+		}
+		
+		return(result);
+	 }
+ 
+	/**
+	 * method that returns the number of tokens (char strings separated by 
+	 * a space, it is intended to segregate the genus becase there are 
+	 * only two tokens
+	 *
+	 * @param string --  the character string
+	 * @return tokens -- the number of tokens in the string (follow the above
+	 * 	def.)
+	 */
+	 private int getNumberOfNameTokens(String s)
+	 {
+		int tokens = 0;
+		
+		try
+		{
+			StringTokenizer t = new StringTokenizer(s.trim(), " ");
+			tokens = t.countTokens();
+		}
+		catch( Exception e ) 
+		{
+			System.out.println(" Exception:  " + e.getMessage() );
+			e.printStackTrace();
+		}
+		
+		return(tokens);
+	 }
 
 /**
  * method that returns the main components of
@@ -385,6 +501,14 @@ private String xmlRank(String  concatenatedName )
 private String xmlNotAcceptedInstance(Hashtable singlePlantInstance, int instanceValue )
 {
 	StringBuffer plantInstance = new StringBuffer();
+	String concatenatedName = (String)singlePlantInstance.get("concatenatedName");
+	String plantCode = (String)singlePlantInstance.get("plantCode");
+	String commonName = (String)singlePlantInstance.get("commonName");
+	String familyName = (String)singlePlantInstance.get("familyName");
+	String status = (String)singlePlantInstance.get("acceptence");
+	String rank = xmlRank(concatenatedName, plantCode);
+	String atomicNames = xmlAtomicName(concatenatedName);
+	
 	
 	//parent node open
 	plantInstance.append("  <taxon> \n");
@@ -425,9 +549,7 @@ private String xmlNotAcceptedInstance(Hashtable singlePlantInstance, int instanc
 	+"</status> \n");
 	
 	//append the rank
-	plantInstance.append("    "+xmlRank(
-		singlePlantInstance.get("concatenatedName").toString()
-	));
+	plantInstance.append("    "+rank);
 	
 	//close the parent
 	plantInstance.append("  </taxon> \n");
@@ -444,51 +566,48 @@ private String xmlNotAcceptedInstance(Hashtable singlePlantInstance, int instanc
 private String xmlAcceptedInstance(Hashtable singlePlantInstance, int instanceValue )
 {
 	StringBuffer plantInstance = new StringBuffer();
+	String concatenatedName = (String)singlePlantInstance.get("concatenatedName");
+	String plantCode = (String)singlePlantInstance.get("plantCode");
+	String commonName = (String)singlePlantInstance.get("commonName");
+	String familyName = (String)singlePlantInstance.get("familyName");
+	String status = (String)singlePlantInstance.get("acceptence");
+	String rank = xmlRank(concatenatedName, plantCode);
+	String atomicNames = xmlAtomicName(concatenatedName);
+	
+	if( rank.indexOf("genus") > 0)
+	{
+		//System.out.println("USDAPlantsToXml > concatName: " + concatenatedName );
+		//System.out.println("USDAPlantsToXml > rank: " + rank );
+		//System.out.println("USDAPlantsToXml > atomicNames: " + atomicNames +" \n");
+	}
 	
 	//parent node open
 	plantInstance.append("  <taxon> \n");
 	
-		//a unique value -- that is basically the year and 
+	//a unique value -- that is basically the year and 
 	//the row number of the plants list
 	plantInstance.append("  <taxonUnit>plants"+instanceValue+"</taxonUnit> \n");
 	
-	
 	//append the concatenated name 
-	plantInstance.append("    <concatenatedLongName>"+
-		singlePlantInstance.get("concatenatedName")
-	+"</concatenatedLongName> \n");
+	plantInstance.append("    <concatenatedLongName>"+concatenatedName+"</concatenatedLongName> \n");
 	
 	//append the atomic names
-	plantInstance.append("    "+xmlAtomicName(
-		singlePlantInstance.get("concatenatedName").toString()
-	));
-	
+	plantInstance.append("    "+atomicNames);
 	
 	//append the symbol
-	plantInstance.append("    <plantCode>"+
-		singlePlantInstance.get("plantCode")
-	+"</plantCode> \n");
+	plantInstance.append("    <plantCode>"+plantCode+"</plantCode> \n");
 	
 	//append the commonName
-	plantInstance.append("    <commonName>"+
-		singlePlantInstance.get("commonName")
-	+"</commonName> \n");
+	plantInstance.append("    <commonName>"+commonName+"</commonName> \n");
 	
 	//append the family
-	plantInstance.append("    <familyName>"+
-		singlePlantInstance.get("familyName")
-	+"</familyName> \n");
+	plantInstance.append("    <familyName>"+familyName+"</familyName> \n");
 	
 	//append the status
-	plantInstance.append("    <status>"+
-		singlePlantInstance.get("acceptence")
-	+"</status> \n");
+	plantInstance.append("    <status>"+status+"</status> \n");
 	
 	//append the rank
-	plantInstance.append("    "+xmlRank(
-		singlePlantInstance.get("concatenatedName").toString()
-	));
-	
+	plantInstance.append("    "+rank);
 	
 	//close the parent
 	plantInstance.append("  </taxon> \n");
@@ -571,6 +690,13 @@ private String plantFamilyName(String fileVectorLine)
 	if (fileVectorLine != null)
 	{
 		familyName = commaStringTokenizer(fileVectorLine, 4);
+		
+		//if there is an equals sign in this token then get the fifth token
+		if( familyName.trim().startsWith("=") )
+		{
+			familyName = commaStringTokenizer(fileVectorLine, 5);
+		}
+			
 		return(familyName);
 	}
 	else 
@@ -681,8 +807,9 @@ private Vector fileToVector(String inputPlantList)
 public String commaStringTokenizer(String pipeString, int tokenPosition)
 {
 	String token="nullToken";
-	if (pipeString != null) {
-		StringTokenizer t = new StringTokenizer(pipeString.trim(), ",");
+	if (pipeString != null) 
+	{
+		StringTokenizer t = new StringTokenizer(pipeString.trim(), "\",\"");
 		int i=1;
 		while (i<=tokenPosition) 
 		{
@@ -714,7 +841,8 @@ public String commaStringTokenizer(String pipeString, int tokenPosition)
 public String spaceStringTokenizer(String pipeString, int tokenPosition)
 {
 	String token="nullToken";
-	if (pipeString != null) {
+	if (pipeString != null) 
+	{
 		StringTokenizer t = new StringTokenizer(pipeString.trim(), " ");
 		int i=1;
 		while (i<=tokenPosition) 
