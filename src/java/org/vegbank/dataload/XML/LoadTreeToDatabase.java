@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-03-17 22:16:32 $'
- *	'$Revision: 1.20 $'
+ *	'$Date: 2005-03-17 23:24:06 $'
+ *	'$Revision: 1.21 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -299,21 +299,23 @@ public class LoadTreeToDatabase
             }
 
             // send message to user, assuming email has been preset
-            dlog.send(subject, null, 
-                    Utility.VB_EMAIL_ADMIN_FROM, receiptTpl);
+            log.debug("sending message to user");
+            dlog.send(subject, null, Utility.VB_EMAIL_ADMIN_FROM, receiptTpl);
 
             // send log to admin
+            log.debug("sending message to admin");
             dlog.send(vbResources.getString("dataload.subject.admin"), Utility.VB_EMAIL_ADMIN_TO, 
                     Utility.VB_EMAIL_ADMIN_FROM, receiptTpl);
+        } catch (Exception ex) {
+            log.error("problem sending dataload receipt via email: ", ex);
+        }
 
+        try {
             // write log to disk
             log.debug("writing dataload.log...");
             dlog.saveFormatted("dataload.log", DataloadLog.TPL_LOG);
-
         } catch (IOException ioex) {
-            log.error("problem writing dataload log to dataload.log: " + ioex.getMessage());
-        } catch (Exception ex) {
-            log.error("problem sending dataload receipt via email: " + ex.getMessage());
+            log.error("problem writing dataload log to dataload.log: ", ioex);
         }
 
 
