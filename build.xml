@@ -7,9 +7,9 @@
   * can call ant like this:
   *  % echo "[build.context]" | ant [target]
   *
-  *     '$Author: mlee $'
-  *     '$Date: 2004-12-02 23:47:33 $'
-  *     '$Revision: 1.52 $'
+  *     '$Author: anderson $'
+  *     '$Date: 2004-12-03 18:58:27 $'
+  *     '$Revision: 1.53 $'
 -->
 <project name="Vegbank" default="jar" basedir=".">
   <!-- ================================================================= -->
@@ -605,6 +605,12 @@
     </exec>
     <echo>Diff results: ${diffResult}</echo>
   </target>
+
+  <target name="props_verify" description="==> checks build.properties to make sure all the properties are there " depends="init">
+    <echo>Checking build.properties for missing properties...</echo>
+	<exec dir="." executable="bin/test_props.sh" failonerror="true"/>
+  </target>
+
   <target name="db_generate_archive_triggersql" description="==> Generate the archive trigger sql scripts" depends="prepare">
     <xslt in="${docs.dir}/xml/db_model_vegbank.xml" out="${build.sql.src.dir}/trigger.sql" style="${xsl.src.dir}/VegbankModel2RevisionTriggersSQL.xsl"/>
   </target>
