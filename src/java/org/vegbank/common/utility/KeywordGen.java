@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-25 23:45:46 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-10-26 23:44:51 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,10 @@ public class KeywordGen {
 
 	private static Log log = LogFactory.getLog(KeywordGen.class);
 	private static final String KW_DELIM = " ";
+
+	private static final int SINGLE = 1;
+	private static final int MULTI = 2;
+	private static final int BUILD_MODE = SINGLE;
 
 	private Connection conn = null;
 	private static ResourceBundle res = null;
@@ -96,7 +100,7 @@ public class KeywordGen {
 					map = new HashMap();
 				}
 
-				//System.out.println("Adding extra: " + entityName + ", " + extraName);
+				System.out.println("Adding extra for " + entityName + ": " + extraName);
 				map.put(extraName, res.getString(key));
 				extraQueries.put(entityName, map);
 			}
@@ -162,11 +166,11 @@ public class KeywordGen {
 					throw new SQLException("Problem inserting extras for " + entityName);
 				}
 
-				/*
-				if (!appendExtraKeywords(entityName)) {
-					throw new SQLException("Problem inserting extras for " + entityName);
+				if (BUILD_MODE == SINGLE) {
+					if (!appendExtraKeywords(entityName)) {
+						throw new SQLException("Problem inserting extras for " + entityName);
+					}
 				}
-				*/
 			}
 		}
 	}
@@ -187,7 +191,7 @@ public class KeywordGen {
 			return false;
 		}
 
-		return buildKeywordTable("keywords", entityQuery, entityName, false);
+		return buildKeywordTable("keywords", entityQuery, entityName, false, true);
 	}
 
 
@@ -202,9 +206,11 @@ public class KeywordGen {
 		HashMap extraMap = (HashMap)extraQueries.get(entityName);
 		if (extraMap == null) { return true; }
 
-		System.out.println("\n\n##### Inserting extra keywords for entity " + entityName);
+		System.out.println("\n##### Inserting extra keywords for entity " + entityName);
 
 		// each entity can have many extra queries
+		boolean first = true;
+		boolean doDelete = true;
 		boolean success = true, temporarySuccess;
 		Iterator it = extraMap.keySet().iterator();
 		while (it.hasNext()) {
@@ -215,14 +221,24 @@ public class KeywordGen {
 				return false; 
 			}
 
-			System.out.println("\n\n## Inserting extras: " + extraName);
-			temporarySuccess = buildKeywordTable("keywords", entityQuery, entityName, true);
-			//temporarySuccess = buildKeywordTable("keywords_extra", entityQuery, entityName, false);
+			System.out.println("## Inserting extras: " + extraName);
+			if (BUILD_MODE == MULTI) {
+				//////// MULTI
+				temporarySuccess = buildKeywordTable("keywords", entityQuery, entityName, false, false);
+			} else {
+				/////// SINGLE
+				temporarySuccess = buildKeywordTable("keywords_extra", entityQuery, entityName, false, doDelete);
+			}
 
 			if (!temporarySuccess) {
 				// if any failed, success = false
 				success = false;
 				System.err.println("\nERROR while inserting extra's with: " + entityQuery);
+			}
+
+			if (first) {
+				first = false;
+				doDelete = false;
 			}
 		}
 
@@ -239,7 +255,7 @@ public class KeywordGen {
 		String entityQuery = "SELECT table_id,keywords FROM keywords_extra " +
 			"WHERE entity='" + entityName + "'";
 
-		return buildKeywordTable("keywords", entityQuery, entityName, true);
+		return buildKeywordTable("keywords", entityQuery, entityName, true, false);
 	}
 
 
@@ -248,7 +264,7 @@ public class KeywordGen {
 	 * given keyword table (main or extra).
 	 */
 	private boolean buildKeywordTable(String kwTable, String entityQuery, 
-			String entityName, boolean isUpdate) throws SQLException {
+			String entityName, boolean isUpdate, boolean doDelete) throws SQLException {
 
 
 		StringBuffer sbTmpKw = null;
@@ -281,7 +297,11 @@ public class KeywordGen {
 		 	pstmt = getUpdatePreparedStatement();
 		} else {
 		 	pstmt = getInsertPreparedStatement(kwTable, entityName);
-			//System.out.println("Deleting entity's current keywords");
+		}
+		System.out.println("Got modification SQL: " + pstmt.toString());
+
+		if (doDelete) {
+			System.out.println("deleting entity's current keywords");
 			stmt.executeUpdate("DELETE FROM " + kwTable + " WHERE entity='" + entityName + "'");
 		}
 
@@ -300,14 +320,16 @@ public class KeywordGen {
 
 		// set up the progress meter
 		StatusBarUtil sb = new StatusBarUtil();
-		sb.setupStatusBar(count);
+		if (!isUpdate) {
+			sb.setupStatusBar(count);
+		}
 
 		while (rs.next()) {
 
 			try {
 				// first column MUST be PK for parent entity table
-				tmpId = rs.getString(1);
 				lTmpId = rs.getLong(1);
+				tmpId = Long.toString(lTmpId);
 			} catch (Exception ex) {
 				System.err.println("ERROR: PK field is not valid");
 				conn.rollback();
@@ -320,17 +342,24 @@ public class KeywordGen {
 				tmpValue = rs.getString(i);
 
 				if (tmpValue != null && !tmpValue.equals("null")) {
-					//sbKeywords.append(KW_DELIM).append(tmpValue);
-					try {
-						insertRow(pstmt, lTmpId, entityName, tmpValue);
-					} catch (SQLException sex) {
-						// oh well.  we tried
+
+					
+					if (BUILD_MODE == MULTI) {
+						// insert a new row for each keyword
+						try {
+							insertRow(pstmt, lTmpId, entityName, tmpValue);
+						} catch (SQLException sex) {
+							// oh well.  we tried
+						}
+					} else {
+						// compile all keywords into one value
+						sbKeywords.append(KW_DELIM).append(tmpValue);
 					}
+
 				}
 
 			}
 		
-			/*
 			if (isUpdate) {
 				// collect all keywords for same tmpId
 				sbTmpKw = (StringBuffer)kwIdMap.get(tmpId);
@@ -342,31 +371,25 @@ public class KeywordGen {
 				sbTmpKw.append(sbKeywords);
 				kwIdMap.put(tmpId, sbTmpKw);
 			} else {
-				insertRow(pstmt, Long.parseLong(tmpId), entityName, sbKeywords.toString());
+				insertRow(pstmt, lTmpId, entityName, sbKeywords.toString());
 				sb.updateStatusBar();
 			}
-			*/
 
 
 		} // end while all results 
 
-		/*
 		if (isUpdate) {
+			sb.setupStatusBar(kwIdMap.size());
 			// update each record en masse
 			long l=0;
 			Iterator uit = kwIdMap.keySet().iterator();
 			while (uit.hasNext()) {
 				tmpId = (String)uit.next();
-				updateRow(pstmt, Long.parseLong(tmpId), 
+				updateRow(pstmt, Long.parseLong(tmpId), entityName,
 						((StringBuffer)kwIdMap.get(tmpId)).toString());
 				sb.updateStatusBar();
-				if (l++ % 200 == 0) {
-					conn.commit();
-					System.out.print(".");
-				}
 			}
 		}
-		*/
 
 
 		// tidy up the end of the status bar
@@ -397,11 +420,12 @@ public class KeywordGen {
 	/**
 	 *
 	 */
-	private void updateRow(PreparedStatement pstmt, long tableId, String keywords) 
+	private void updateRow(PreparedStatement pstmt, long tableId, String entityName, String keywords) 
 			throws SQLException {
 		pstmt.setString(1, keywords);
 		pstmt.setLong(2, tableId);
-		pstmt.toString();
+		pstmt.setString(3, entityName);
+		//System.out.println(pstmt.toString());
 		pstmt.executeUpdate();
 	}
 
@@ -422,7 +446,7 @@ public class KeywordGen {
 	private PreparedStatement getUpdatePreparedStatement() throws SQLException {
 		// the extra keywords should begin with a ' ' space char
 		return conn.prepareStatement(
-			"UPDATE keywords SET keywords = keywords || ? WHERE table_id=?");
+			"UPDATE keywords SET keywords = keywords || ' ' || ? WHERE table_id=? AND entity=?");
 	}
 
 

@@ -109,6 +109,10 @@ if (xwhereParams == null) {
 				<bean:define id="getPk" value="commconcept"/>
 				<bean:define id="getName" value="commconcept"/>
 			</logic:equal>
+			<logic:equal name="onerow" property="entity" value="place">
+				<bean:define id="getPk" value="namedplace"/>
+				<bean:define id="getName" value="namedplace"/>
+			</logic:equal>
 			<logic:equal name="onerow" property="entity" value="plant">
 				<bean:define id="getPk" value="plantconcept"/>
 				<bean:define id="getName" value="plantconcept"/>
