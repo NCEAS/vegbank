@@ -77,7 +77,8 @@ m.getParameters("database.properties"); //assume that the parameters file is loc
 			outConn=conn;
 			outStmt=query;
 	} //end try
-	catch ( Exception e ){System.out.println("did not connect to the database: dbConnect  "+e.getMessage());}
+	catch ( Exception e ){System.out.println("failed making db connection: "
+		+"dbConnect.makeConnection: "+e.getMessage());e.printStackTrace();}
 }
 
 

@@ -72,35 +72,40 @@ for (int ii=0;ii<i.outReturnFieldsNum; ii++) {System.out.println(i.outReturnFiel
 
 if (action.trim().equals("insert")) {
 
-System.out.println("sending a test insert statement to database");
+	System.out.println("sending a test insert statement to database");
 
-String insertString="INSERT INTO NAMEDPLACE";
-String attributeString="namedplace_id, placeName";
-String valueString="VALUES (?, ?)";
-int inputValueNum=2;
-String inputValue[]=new String[2];	
-inputValue[0]="30";
-inputValue[1]="VENTURA";
+	String insertString="INSERT INTO NAMEDPLACE";
+	String attributeString="namedplace_id, placeName";
+	String valueString="VALUES (?, ?)";
+	int inputValueNum=2;
+	String inputValue[]=new String[2];	
+	inputValue[0]="30";
+	inputValue[1]="VENTURA";
 
-//String insertString , String attributeString, String valueString int inputValueNum, String[] inputValue)
 
-issueStatement j = new issueStatement();
-j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+	//String insertString , String attributeString, String valueString int inputValueNum, String[] inputValue)
+	issueStatement j = new issueStatement();
+	j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
 	
 } //end if	
-
 }  //end main method
 
 
 
 
+
+
 /**
-* This method will take the action, target table, number of satatements and 
+* This method will take a database action, target table, number of satatements and 
 * the variable name/data as input and compose statements to be passed to 
-* the database.
+* the database.  This method is nearly identical to the next which is an
+* overloaded version of this one that also uses as input a connection.  Thus
+* care should be taken when using this one - for if a connection cannot be made
+* the method fails
 */
 
-public void issueSelect(String inputStatement, String inputAction, String[] inputReturnFields, int inputReturnFieldLength)
+public void issueSelect(String inputStatement, String inputAction, 
+	String[] inputReturnFields, int inputReturnFieldLength)
 {
 
 /**
@@ -109,17 +114,17 @@ public void issueSelect(String inputStatement, String inputAction, String[] inpu
 try {
 dbConnect m = new dbConnect();
 m.makeConnection(conn, query);
+	System.out.println("Opening db connection by calling dbConnect from \n"
+	+"issueStatement.issueSelect");
 	conn=m.outConn;
 	query=m.outStmt;	
 } catch (Exception e) {System.out.println("failed in the  dbConnect.makeConnection call" + e.getMessage());}
 
-	
 try {
+
 /**
 * compose and issue a prepared statement for loading a table
 */	
-
-
 if (inputAction.equals("select")) {
 
 //execute the query
@@ -168,24 +173,119 @@ while (results.next()) {
 	
 }  //end while
 
+/*assume that b/c a database connection was made here that it needs to be closed*/
 query.close();
 conn.close();
 
 } //end if			
+} //end try 
+catch ( Exception e ){System.out.println("failed at issueStatement.issueSelect: "
++e.getMessage());e.printStackTrace();}
+} //end method
+
+
+
+/**
+* This method is the same as above except that it needs a db connection passed 
+* to it and it will not close the connection - it should be closed by the calling 
+* class where connection management should be accomplished.
+*/
+
+public void issueSelect(String inputStatement, String inputAction, 
+	String[] inputReturnFields, int inputReturnFieldLength, Connection pconn)
+{
+
+/**
+* transfer the database connection
+*/
+try {
+	conn=pconn;
+	query = conn.createStatement ();;	
+} catch (Exception e) 
+{System.out.println("failed at issueStatement.issueselect transfering db connections" 
+	+ e.getMessage());}
+
+
+try {
+
+/**
+* compose and issue a prepared statement for loading a table
+*/	
+if (inputAction.equals("select")) {
+
+//execute the query
+results = query.executeQuery(inputStatement);
+
+outReturnFieldsNum=0;
+//make a matrix to store the returned values because storing them directly
+//in a string was giving a jdbc error that couldn't be fixed
+String verticalStore[] = new String[inputReturnFieldLength];
+
+//get all the levels returned
+while (results.next()) {
+	
+	StringBuffer resultLine = new StringBuffer();
+	//match return elements with correct column name
+	for (int i=0;i<inputReturnFieldLength; i++) {
+		
+		//if the results is null then handle it below
+		if (results.getString(inputReturnFields[i])==null) {
+			resultLine=resultLine.append(" nullValue");
+			verticalStore[i]="nullValue"; //populate the vertical storage array
+		}
+
+		else {			
+			String buf =(results.getString(inputReturnFields[i]));
+			resultLine.append(" ").append(buf.trim());
+			verticalStore[i]=buf;	//populate the vertical storage array
+		}
+	
+	}
+
+	//grab the values out of the vertical store and stick them into a string
+	//that is separated by pipes, this way all the data associated with a 
+	//plot is on a sigle line which can be tokenized later and positioned
+	//into an xml structure
+	
+	String returnedRow="";
+	for (int ii=0;ii<verticalStore.length; ii++) {
+			returnedRow=returnedRow+"|"+verticalStore[ii];
+	}
+		
+	//System.out.println("Printed from issueStatement.issueSelect: "+returnedRow);
+	//outReturnFields[outReturnFieldsNum]=resultLine.toString();
+	outReturnFields[outReturnFieldsNum]=returnedRow;
+	outReturnFieldsNum++;
+	
+}  //end while
+
+/*don't close b/c connection was passed into the method*/
+//query.close();
+//conn.close();
+
+} //end if			
 } // end try 
-catch ( Exception e ){System.out.println("failed at issueStatement.issueSelect "+e.getMessage());e.printStackTrace();}
+catch ( Exception e ){System.out.println("failed at issueStatement.issueSelect: "
++e.getMessage());e.printStackTrace();}
+} //end method
 
-
-}	
 	
 
+	
+	
 	
 /**
 *  This method will take an insert statement and related attributes
-*  and will issue an insert statement
+*  and will issue an insert statement to the database after making a database
+*  connection using the dbConnect class.  This method is overloaded - see the next
+*  method.  Use of this method should be considered carefully because the db
+*  connection is made directly from the method and often the connection cannot
+*  be made  the next method uses a connection that is passed to it allowing for
+*  connection pooling and reuse - a good thing
 */	
 
-public void issueInsert(String insertString , String attributeString, String valueString, int inputValueNum, String[] inputValue)
+public void issueInsert(String insertString , String attributeString, 
+	String valueString, int inputValueNum, String[] inputValue)
 {
 
 /**
@@ -194,15 +294,16 @@ public void issueInsert(String insertString , String attributeString, String val
 try {
 dbConnect m = new dbConnect();
 m.makeConnection(conn, query);
+	System.out.println("Opening db connection by calling dbConnect from \n"
+	+"issueStatement.issueInsert");
 	conn=m.outConn;
 	query=m.outStmt;	
-} catch (Exception e) {System.out.println("failed in the  dbConnect.makeConnection call" + e.getMessage());}
+} catch (Exception e) {System.out.println("failed in the  dbConnect.makeConnection call" 
++e.getMessage());}
 	
-		
 try {
 
 PreparedStatement pstmt=null;
-
 
 //assume there to be only one statement to begin with
 			pstmt=conn.prepareStatement(
@@ -210,7 +311,6 @@ PreparedStatement pstmt=null;
 			""+insertString+" "+
 			" ("+attributeString+") " +
 			""+valueString+"");
-			
 			
 			//bind the values to the statement
 			//pstmt.setString(1, "005");
@@ -223,15 +323,58 @@ PreparedStatement pstmt=null;
 			
 			//do the insertion
 			pstmt.execute();			
-	
-	
+	/*assume that because made the connection above that it should be closed*/
 	query.close();
 	conn.close();
-	
 	} // end try 
 	catch ( Exception e ){System.out.println("Query failed issueStatement.insert method "+e.getMessage());e.printStackTrace();}
 	//catch ( Exception e ){System.out.println("Query failed issueStatement.insert method "+e.getMessage());}
-}
+} //end method
+
+
+	
+/**
+*  This method is the same as above except that it needs as input a database
+*  connection - typically passed from a pool/cache and for this reason it is 
+*  anticipated that the connection will be used again by the calling class and
+*  thus the connection will not be clused in this method.
+*/	
+
+public void issueInsert(String insertString , String attributeString, 
+	String valueString, int inputValueNum, String[] inputValue, Connection conn)
+{
+	
+try {
+
+PreparedStatement pstmt=null;
+
+//assume there to be only one statement to begin with
+			pstmt=conn.prepareStatement(
+			
+			""+insertString+" "+
+			" ("+attributeString+") " +
+			""+valueString+"");
+			
+			//bind the values to the statement
+			//pstmt.setString(1, "005");
+			
+			//bind the values to the statement	
+			for (int i=0; i<inputValueNum; i++) {			
+				//System.out.println(i+1+" "+inputValue[i]);
+				pstmt.setString(i+1, inputValue[i]);
+			}
+			
+			//do the insertion
+			pstmt.execute();			
+	//query.close();
+	//conn.close();
+	} // end try 
+	catch ( Exception e ){System.out.println("Query failed issueStatement.insert method "+e.getMessage());e.printStackTrace();}
+	//catch ( Exception e ){System.out.println("Query failed issueStatement.insert method "+e.getMessage());}
+} //end method
+
+
+
 
 
 /**
