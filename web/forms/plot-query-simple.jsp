@@ -115,7 +115,7 @@ function validateName(value, label) {
     <td bgcolor="#FFFFCC"></td>
     <td bgcolor="#FFFFCC"><img src="@image_server@uprt3.gif" /></td>
   </tr>
-  <tr><form name="commform" action="@views_link@commconcept_query.jsp" method="get">
+  <tr><form name="commform" action="@views_link@commconcept_summary.jsp" method="get">
     <td  bgcolor="#FFFFCC"></td>
     <td bgcolor="#CCCC99"></td>
     <td bgcolor="#CCCC99" class="label_small">Community name<br/>
