@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *   '$Date: 2003-02-04 21:41:25 $'
-  *   '$Revision: 1.14 $'
+  *   '$Date: 2003-02-18 22:49:00 $'
+  *   '$Revision: 1.15 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -34,32 +34,33 @@
     	<property name="tomcat_root" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/" />
     	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib//" />
     
-    	<property name="current" value="./" />
-    	<property name="build" value="build" />
+    	<property name="build.dir" value="${basedir}/build" />
     	<property name="src" value="src" />
     	<property name="lib" value="../lib" />
     	<property name="javadocs" value="../doc/api" />
     	
-    	<property name="vegcommunity" value="../lib/vegcommunity.jar" />
-    	<property name="planttaxonomy" value="../lib/planttaxonomy.jar" />
-    	<property name="jdbc" value="../lib/jdbc7.0-1.2.jar" />
-    	<property name="multipart" value="../lib/multipart.jar" />
-    	<property name="servlet-api" value="../lib/servlet.jar" />
-    	<property name="database_access" value="../lib/database_access.jar" />
-    	<property name="xml_resource" value="../lib/xmlresource.jar" />
-    	<property name="xalan" value="../lib/xalan_1_2_2.jar" />
-    	<property name="xerces" value="../lib/xerces_1_4.jar" />
-    	<property name="framework" value="../lib/frameworkservletmodule.jar" />
-    	<property name="rmisystem" value="../lib/rmidatasource.jar" />
-    	<property name="authentication" value="../lib/authservletmodule.jar" />
-    	<property name="utilities" value="../lib/utilities.jar" />
-    	<property name="cpath" value="${utilities}:${authentication}:${planttaxonomy}:${rmisystem}:${vegcommunity}:${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
-     	<property name="rmiserver" value="192.168.0.2"/>	
-           
+  <!--    
+      <property name="servlet.lib.dir" value="${basedir}/../lib" />
+      <property name="vegcommunity" value="${servlet.lib.dir}/vegcommunity.jar" />
+    	<property name="planttaxonomy" value="${servlet.lib.dir}/planttaxonomy.jar" />
+    	<property name="jdbc" value="${servlet.lib.dir}/jdbc7.0-1.2.jar" />
+    	<property name="multipart" value="${servlet.lib.dir}/multipart.jar" />
+    	<property name="servlet-api" value="${servlet.lib.dir}/servlet.jar" />
+    	<property name="database_access" value="${servlet.lib.dir}/database_access.jar" />
+    	<property name="xml_resource" value="${servlet.lib.dir}/xmlresource.jar" />
+    	<property name="xalan" value="${servlet.lib.dir}/xalan_1_2_2.jar" />
+    	<property name="xerces" value="${servlet.lib.dir}/xerces_1_4.jar" />
+    	<property name="framework" value="${servlet.lib.dir}/frameworkservletmodule.jar" />
+    	<property name="rmisystem" value="${servlet.lib.dir}/rmidatasource.jar" />
+    	<property name="authentication" value="${servlet.lib.dir}/authservletmodule.jar" />
+    	<property name="utilities" value="${servlet.lib.dir}/utilities.jar" />
+    	<property name="vegbank.request.cpath" value="${utilities}:${authentication}:${planttaxonomy}:${rmisystem}:${vegcommunity}:${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build.dir}:./"/>
+      -->
+      
 		<!-- Filters -->  	
-    	<filter token="servlet-path" value="${servlet-path}" />
-     	<filter token="servlet_lib_dir" value="${installDir}" />
-      	<filter token="rmiserver" value="${rmiserver}"/>
+    <filter token="servlet-path" value="${servlet-path}" />
+    <filter token="servlet_lib_dir" value="${installDir}" />
+    <filter token="rmiserver" value="${rmiserver}"/>
 		<filter token="mailHost" value="nceas.ucsb.edu"/>
 		<filter token="systemEmail" value="dba@vegbank.org"/>
 		<!-- Filters End -->
@@ -68,9 +69,9 @@
 
     <!-- PREPARE -->
     <target name="prepare" depends="init">
-    	<mkdir dir="${build}" />
+    	<mkdir dir="${build.dir}" />
     	
-    	<copy todir="${build}" filtering="true">
+    	<copy todir="${build.dir}" filtering="true">
     		<fileset dir="${src}"/>
     	</copy>
     		
@@ -78,19 +79,31 @@
 	
 	<!-- COMPILE -->
 <target name="compile" depends="prepare">
-	<javac srcdir="${build}" 
-		classpath="${cpath}"
+	
+  <echo>  ${build.lib.dir}  </echo>
+  <javac srcdir="${build.dir}" 
 		debug="on"
 		includes="PlantTaxon.java DataSubmitServlet.java fileDownload.java  QueryBuilderServlet.java DataRequestServlet.java viewData.java " 
-		destdir="${build}"
-	/>
+		destdir="${build.dir}"
+	>
+    <classpath> 
+      <path refid="classpath.compilation"/>
+      <fileset dir="${build.lib.dir}">
+        <include name="**/*.jar"/>
+      </fileset>
+      <!-- FIXME: Very Ugly HACK -->
+      <pathelement location="../../../../veg_taxa/build/lib/planttaxonomy.jar"/>
+      <pathelement location="../../../../veg_community/build/lib/vegcommunity.jar"/>
+    </classpath>
+  </javac>
+    
 	
 </target>	
 
 <!-- JAR -->	
 <target name="jar" depends="compile">
 	<jar jarfile ="${lib}/vegbankquery.jar"
-		basedir="${build}"
+		basedir="${build.dir}"
 		includes="**"
 	/>
 </target>		
@@ -98,16 +111,6 @@
 
 <!-- DIST -->	
 <target name="dist" depends="jar">
-	<!-- JAR LIBRARIES INCL: xml parsers/xformers, jdbc drivers, db access, servlet-->
-<!-- this and the next target are redundant
-	<copydir src="${lib}" 
-  	dest="${installDir}" 
-    filtering="no"
-    includes=" vegbankquery.jar"
-		excludes="**/CVS* "
-	/>
--->
-	
 </target>
 
 <!-- DISTWEB  -->	
@@ -136,8 +139,8 @@
     </javadoc>
 </target>      
 
-<target name="clean" description="Remove generated files" depends="init">
-	<delete dir="${build}" />
+<target name="clean" description="==> Remove generated files" depends="init">
+	<delete dir="${build.dir}" />
 </target>
 
 </project>

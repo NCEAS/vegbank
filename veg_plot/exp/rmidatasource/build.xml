@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: farrell $'
- 	*     '$Date: 2003-02-03 18:59:11 $'
- 	*     '$Revision: 1.21 $'
+ 	*     '$Date: 2003-02-18 22:48:54 $'
+ 	*     '$Revision: 1.22 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -29,10 +29,13 @@
 		<property name="build" value="./build" />
 		<property name="lib" value="./lib" />
 		<property name="bin" value="./" />
-		<property name="rmiregistry" value="./server" />
+    <property name="rmiregistry" value="./server" />
+<!--
 		<property name="translators" value="./lib/datatranslator.jar" />
 		<property name="dbaccess" value="./lib/database_access.jar" />
 		<property name="xmlresource" value="./lib/xmlresource.jar" />
+		<property name="cpath" value="${plotvalidation}:${dbaccess}:${translators}:${xmlresource}:${xalan}:${build}"/>
+-->
 		<property name="plotvalidation" value="../../lib/plotvalidator.jar" />
     <!-- THESE ARE THE PLOTVALIDATION FILES THAT ARE NEEDED  -->
     <property name="constraintlist" value="../../xml/constraints.xml"/>
@@ -42,7 +45,6 @@
 		
 		<filter token="release" value=" "/>
 		<filter token="authors" value="HARRIS"/>
-		<property name="cpath" value="${plotvalidation}:${dbaccess}:${translators}:${xmlresource}:${xalan}:${build}"/>
 </target>
 
 	
@@ -66,7 +68,7 @@
 
 		<echo message="Compiling the RMI Code"/>
 		
-		<javac srcdir="${src}"  classpath="${cpath}"
+		<javac srcdir="${src}" 
 			debug="on"
       includes="
 			 DataSourceClient.java
@@ -76,7 +78,9 @@
 			 DataSourceClientApplet.java
 			"
 			destdir="${build}"
-		/>
+		>
+          <classpath refid="classpath.compilation"/>
+    </javac>
 	</target>	
 	
 	<!-- RMI COMPILE -->

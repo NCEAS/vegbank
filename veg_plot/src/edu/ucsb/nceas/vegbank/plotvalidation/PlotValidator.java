@@ -5,9 +5,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2003-01-10 21:43:12 $'
- * '$Revision: 1.5 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2003-02-18 22:49:09 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ public class PlotValidator implements PlotValidationInterface
 			*/
 	  public boolean isPlotValid(String plot)
 	  {
-			boolean validFlag = false;
+			boolean validFlag = true;
 			System.out.println("PlotValidator > isPlotValid() called for: " + plot );
 			// make a new instance of the report class
 			report = new PlotValidationReport();

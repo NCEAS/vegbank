@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-02-05 22:37:35 $'
-  *     '$Revision: 1.15 $'
+  *     '$Date: 2003-02-18 22:48:52 $'
+  *     '$Revision: 1.16 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -16,35 +16,35 @@
   
   <target name="init" description="=> Initialize global variables">
     <property environment="env" />
-    <property name="build.dir" value="${basedir}/build" />
-    <property name="java.src.dir" value="${basedir}/src" />
-    <property name="lib.dir" value="${basedir}/lib" />
-    <property name="doc.dir" value="${basedir}/doc"/>
-    <property name="build.src.dir" value="${build.dir}/src"/>
-    <property name="build.java.src.dir" value="${build.src.dir}/java"/>
-    <property name="build.classes.dir" value="${build.dir}/classes"/>
-    <property name="build.test.dir" value="${build.dir}/test"/>
+    <property name="top.lib.dir" location="${basedir}/../lib"/>
+    <property name="build.dir" location="${basedir}/build" />
+    <property name="java.src.dir" location="${basedir}/src" />
+    <property name="lib.dir" location="${basedir}/lib" />
+    <property name="doc.dir" location="${basedir}/doc"/>
+    <property name="build.src.dir" location="${build.dir}/src"/>
+    <property name="build.java.src.dir" location="${build.src.dir}/java"/>
+    <property name="build.classes.dir" location="${build.dir}/classes"/>
+    <property name="build.test.dir" location="${build.dir}/test"/>
     <property name="build.test.integration.dir"
-      value="${build.test.dir}/integration"/>
-    <property name="build.lib.dir" value="${build.dir}/lib"/>
-    <property name="reports.dir" value="${build.dir}/reports"/>
-    <property name="reports.test.dir" value="${reports.dir}/testreports"/>
-    <property name="src.dir" value="${basedir}/src" />
-    <property name="dist.dir" value="${basedir}/dist" />
-    <property name="test.dir" value="${basedir}/test" />
-    <property name="test.unit.src.dir" value="${test.dir}/Unit"/>
-    <property name="test.integration.dir" value="${test.dir}/Integration"/>
-    <property name="ant.style.dir" value="${env.ANT_HOME}/etc" /> 
-    <property name="web.docroot" value="${env.TOMCAT_HOME}/webapps" /> 
+      location="${build.test.dir}/integration"/>
+    <property name="build.lib.dir" location="${build.dir}/lib"/>
+    <property name="reports.dir" location="${build.dir}/reports"/>
+    <property name="reports.test.dir" location="${reports.dir}/testreports"/>
+    <property name="dist.dir" location="${basedir}/dist" />
+    <property name="test.dir" location="${basedir}/test" />
+    <property name="test.unit.src.dir" location="${test.dir}/Unit"/>
+    <property name="test.integration.dir" location="${test.dir}/Integration"/>
+    <property name="ant.style.dir" location="${env.ANT_HOME}/etc" /> 
+    <property name="web.docroot" location="${env.TOMCAT_HOME}/webapps" /> 
     <property name="web.servlet.lib.dir"
-      value="${web.docroot}/framework/WEB-INF/lib" /> 
-    <property name="rmiserver.lib.dir" value="${rmiserver.home.dir}/lib" /> 
+      location="${web.docroot}/framework/WEB-INF/lib" /> 
+    <property name="rmiserver.lib.dir" location="${rmiserver.home.dir}/lib" /> 
         
-    <!-- Location of jar files -->
-    <property name="xmlp" value="${lib.dir}/xalan_1_2_2.jar:${lib.dir}/xerces_1_3_1.jar:${lib.dir}/xml-apis.jar" />
-    <property name="jdbc" value="${lib.dir}/jdbc7.0-1.2.jar" />
-    <property name="vegclass_common" value="${lib.dir}/vegclass_common.jar" />
-    <property name="servlet" value="${lib.dir}/servlet.jar" />
+    <!-- Location of jar files 
+    <property name="xmlp" value="${top.lib.dir}/xalan_1_2_2.jar:${top.lib.dir}/xerces_1_3_1.jar:${top.lib.dir}/xml-apis.jar" />
+    <property name="jdbc" value="${top.lib.dir}/jdbc7.0-1.2.jar" />
+    <property name="vegclass_common" value="${top.lib.dir}/vegclass_common.jar" />
+    <property name="servlet" value="${top.lib.dir}/servlet.jar:${top.lib.dir}/multipart.jar" />
     <property name="xmlresource" value="${build.lib.dir}/xmlresource.jar" />
     <property name="datatranslator" value="${build.lib.dir}/datatranslator.jar" />
     <property name="rmidatasource" value="${build.lib.dir}/rmidatasource.jar" />
@@ -52,18 +52,7 @@
       value="${rmidatasource}:${servlet}:${xmlp}:${jdbc}:${build.classes.dir}:${vegclass_common}"/>
     <property name="cpath2" 
       value="${rmidatasource}:${servlet}:${xmlp}:${jdbc}:${xmlresource}:${datatranslator}:${build.classes.dir}:${vegclass_common}"/>
-    <!-- Classpaths 
-    <path id="classpath.compilation">
-      <pathelement location="${build.classes.dir}"/>
-      <fileset dir="${build.lib.dir}">
-        <include name="**/*jar"/>
-      </fileset>
-      <fileset dir="${lib.dir}">
-        <include name="**/*jar"/>
-      </fileset>
-    </path>
     -->
-
     <filter token="reports.test.dir" value="${reports.test.dir}"/>
     <!-- This is no longer used ?? -->
     <filter token="outputXML" value="${web.servlet.lib.dir}/atomicResult"/>
@@ -105,7 +94,18 @@
     <mkdir dir="${build.src.dir}"/>
     <mkdir dir="${build.java.src.dir}"/>
     <mkdir dir="${build.classes.dir}"/>
+    <!-- Classpaths -->
+    <path id="classpath.compilation">
+      <fileset dir="${top.lib.dir}">
+        <include name="**/*jar"/>
+      </fileset>
+      <fileset dir="${build.lib.dir}">
+        <include name="**/*jar"/>
+      </fileset>
+    </path>
+
   </target>
+  
   
   <target name="compile" depends="prepare"
           description="=> Compiles all code in veg_plot module">
@@ -136,24 +136,23 @@
           filtering="true"/>
     
     <javac  srcdir="${build.java.src.dir}"
-            classpath="${cpath}"
             includes="**/*.java  "
             destdir="${build.classes.dir}"
             debug="on"
-    />
-
+    >
+      <classpath refid="classpath.compilation"/>
+    </javac>
 
     <!-- Call sub-project ant build files -->
     <!--<ant dir="exp/client_installer" target="compile"/>-->
     <!--<ant dir="exp/database_access" target="compile"/>-->
     <!--<ant dir="exp/data-translators" target="compile"/>-->
-    <ant dir="exp/rmidatasource" target="compile"/> 
+    <!--<ant dir="exp/rmidatasource" target="compile"/> 
     <ant dir="exp/services" target="compile" inheritAll="false"/>
-    <ant dir="exp/servlet" target="compile" inheritAll="false"/>
+    <ant dir="exp/servlet" target="compile" inheritAll="false"/> -->
     <!--<ant dir="exp/vegclient" target="compile" inheritAll="false"/>-->
-    <ant dir="exp/xml-resource" target="compile" inheritAll="false"/>
-    <ant dir="exp/xml_to_sql" target="compile" inheritAll="false"/>
-    <ant antfile="./build-plotvalidation.xml" target="compile"/>
+    <!--<ant dir="exp/xml-resource" target="compile" inheritAll="false"/>
+    <ant dir="exp/xml_to_sql" target="compile" inheritAll="false"/>-->
   </target>
 	
 	<target name="jar" depends="compile"
@@ -172,13 +171,22 @@
 
   
     <!--<ant dir="exp/database_access" target="jar"/>-->
-		<ant dir="exp/data-translators" target="jar"/>
-		<ant dir="exp/rmidatasource" target="jar"/> 
+    <ant antfile="./build-plotvalidation.xml" target="jar"/>
+		<ant dir="exp/data-translators" target="jar">
+      <property name="hostname" value="${hostname}"/>
+    </ant>
+		<ant dir="exp/xml-resource" target="jar"/>
+		<ant dir="exp/rmidatasource" target="jar"> 
+      <reference refid="classpath.compilation"/>
+    </ant>
 		<ant dir="exp/services" target="jar" inheritAll="false"/>
-		<ant dir="exp/servlet" target="jar" inheritAll="false"/>
+		<ant dir="exp/servlet" target="jar" inheritAll="false">
+      <reference refid="classpath.compilation"/>
+      <property name="serverUrl" value="${serverUrl}"/>
+      <property name="rmiserver" value="${rmiserver}"/>
+    </ant>
 		<!--<ant dir="exp/vegbank_web" target="jar"/>-->
 		<!--<ant dir="exp/vegclient" target="jar"/>-->
-		<ant dir="exp/xml-resource" target="jar"/>
 		<ant dir="exp/xml_to_sql" target="jar"/>
 	</target>
 	
@@ -269,6 +277,8 @@
         <include name="*mdb"/>
       </fileset>
     </copy>
+
+    <property name="classpath.compilation" refid="classpath.compilation"/>
     
   </target>
  
@@ -284,8 +294,10 @@
     
     <javac srcdir="${test.unit.src.dir}"
            destdir="${build.test.classes.dir}"
-           classpath="${cpath2}:${lib}/database_access.jar"
-           includes="**/*.java" />
+           includes="**/*.java">
+      <classpath refid="classpath.compilation"/>
+    </javac>
+
 
     <jar jarfile="${build.lib.dir}/${ant.project.name}-junittests.jar"
          basedir="${build.test.classes.dir}"
@@ -294,13 +306,7 @@
     <!-- use the ant "junit" task to run JUnit tests. -->
     <junit printsummary="yes" haltonfailure="no" fork="no"
            haltonerror="no">
-      <classpath>
-        <pathelement path="${cpath2}"/>
-        <fileset dir="${build.lib.dir}">
-          <include name="**/*.jar"/>
-        </fileset>
-      </classpath>
-      
+      <classpath refid="classpath.compilation"/>
       <formatter type="xml" />
 
       <batchtest fork="yes" todir="${reports.test.dir}">
@@ -320,8 +326,8 @@
       <fileset dir="${reports.test.dir}">
         <include name="TEST-*.xml"/>
       </fileset>
-      <report format="noframes" 
-              todir="${web.docroot}/vegbank/" 
+      <report format="frames" 
+              todir="${web.docroot}/vegbank/dev/reports/junit/" 
               styledir="${ant.style.dir}"/> 
     </junitreport>
 
@@ -353,53 +359,55 @@
 
     <!-- Test Loading a vbaccess plot
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
-      <env key="CLASSPATH" value="${cpath2}"/>
+      <env key="CLASSPATH" value="${classpath.compilation}"/>
       <arg value="../testdata/vbaccess-example.mdb"/>
       <arg value="157"/>
       <arg value="vbaccessout.xml"/>
       <arg value="vbaccess"/>
       <arg value="VegBankAccessPlotInsert"/>
-      <arg value="${rmiserver.hostname}"/>
+      <arg value="${rmiserver}"/>
       <arg value="../testdata/vbaccess-output.xml"/>
     </exec>
     --> 
     <!-- Test Loading a second vbaccess plot  -->
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
-      <env key="CLASSPATH" value="${cpath2}"/>
+      <env key="CLASSPATH" value="${classpath.compilation}"/>
       <arg value="../testdata/vbaccess-example2.mdb"/>
       <arg value="1"/>
       <arg value="vbaccessout.xml"/>
       <arg value="vbaccess"/>
       <arg value="VegBankAccessPlotInsert2"/>
-      <arg value="${rmiserver.hostname}"/>
+      <arg value="${rmiserver}"/>
       <arg value="../testdata/vbaccess-example2.xml"/>
     </exec>
     
     <!-- Test Loading a tnc plot 
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
-      <env key="CLASSPATH" value="${cpath2}"/>
+      <env key="CLASSPATH" value="${classpath.compilation}"/>
       <arg value="../testdata/tncplots-example.mdb"/>
       <arg value="BADL.102"/>
       <arg value="tncout.xml"/>
       <arg value="tnc"/>
       <arg value="TNCPlotInsert"/>
-      <arg value="${rmiserver.hostname}"/>
+      <arg value="${rmiserver}"/>
       <arg value="../testdata/tnc-output.xml"/>
     </exec>
     -->
     
     <!-- Test Loading a native plot -->
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
-      <env key="CLASSPATH" value="${cpath2}"/>
+      <env key="CLASSPATH" value="${classpath.compilation}"/>
       <arg value="../testdata/nativeDataSource.xml"/>
       <arg value="Fern-1"/>
       <arg value="nativeout.xml"/>
       <arg value="NativeXmlPlugin"/>
       <arg value="NativePlotInsert"/>
-      <arg value="${rmiserver.hostname}"/>
+      <arg value="${rmiserver}"/>
       <arg value="../testdata/nativeDataSource.xml"/>
     </exec>
   
   </target>
+
+  <target name="run-tests" depends="test, test-integration, dist-testreport" description="==> Run all availible tests"/>
 </project>
 

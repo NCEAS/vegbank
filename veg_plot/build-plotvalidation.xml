@@ -13,9 +13,9 @@
 	* embedded database(s) etc.  Before building this check the 
 	* dependencies
 	*
-	* 		'$Author: harris $'
- 	*     '$Date: 2003-01-07 18:22:41 $'
- 	*     '$Revision: 1.2 $'
+	* 		'$Author: farrell $'
+ 	*     '$Date: 2003-02-18 22:48:52 $'
+ 	*     '$Revision: 1.3 $'
 --> 
 <project name="plot-validation" default="compile" basedir=".">
 	
@@ -82,7 +82,7 @@
 	<!-- JAR -->
 	<target name="jar" depends="compile" description=">> creates a java archive
   (jar) file -- required by the database acceess module">
-		<jar jarfile ="${lib}/plotvalidator.jar"
+		<jar jarfile ="${build}/lib/plotvalidator.jar"
 			basedir="${build}"
 			includes="plotvalidation.properties edu/** "
 		/>

@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: farrell $'
- 	*     '$Date: 2003-01-16 01:03:51 $'
- 	*     '$Revision: 1.16 $'
+ 	*     '$Date: 2003-02-18 22:48:53 $'
+ 	*     '$Revision: 1.17 $'
 --> 
 <project name="data-translators" default="compile" basedir=".">
 	
@@ -37,7 +37,7 @@
 		<property name="xmlresource" value="./lib/xmlresource.jar" />
 		<property name="cpath" value="${hsqldb}:${xerces}:${xalan}:${xmlresource}:${build}"/>
 		<filter token="release" value="alpha-20011020"/>
-		<filter token="authors" value="HARRIS"/>
+		<filter token="hostname" value="${hostname}"/>
 	</target>
 
 	

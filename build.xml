@@ -6,28 +6,16 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-02-04 00:39:40 $'
-  *     '$Revision: 1.3 $'
+  *     '$Date: 2003-02-18 22:48:51 $'
+  *     '$Revision: 1.4 $'
 --> 
 <project name="vegclass" default="compile" basedir=".">
 
 
   <target name="prepare">
-    <mkdir dir="lib"/>
   </target>
     
-  <target name="compile" depends="prepare"
-          description=" => Compiles all code in vegclass module">
-		<echo message="Compiling all of ${ant.project.name}"/>
-    
-    <ant dir="common" target="compile" inheritAll="false"/>
-    <ant dir="veg_plot" target="compile" inheritAll="false"/>
-    <ant dir="veg_community" target="compile" inheritAll="false"/>
-    <ant dir="veg_taxa" target="compile" inheritAll="false"/>
-  
-  </target>
-
-  <target name="jar" depends="compile"
+  <target name="jar" depends="prepare"
           description=" => Generates all jars in vegclass module">
     
     <ant dir="common" target="jar" inheritAll="false"/>
@@ -37,6 +25,11 @@
     
   </target>
 
+  <target name="run-tests" description="==> Run all the tests availible">
+    <!-- <ant dir="common" target="test" inheritAll="false"/> FIXME: unit tests not in cvs -->
+    <ant dir="veg_plot" target="run-tests" inheritAll="false"/>
+  </target>
+  
   <target name="deploy" depends="jar"
           description=" => deploys vegclass module jars, html and other resources">
     

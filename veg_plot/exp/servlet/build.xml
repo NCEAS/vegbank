@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *   '$Date: 2003-02-04 00:39:45 $'
-  *   '$Revision: 1.14 $'
+  *   '$Date: 2003-02-18 22:48:55 $'
+  *   '$Revision: 1.15 $'
   *
   *  Authors: John Harris
   *  Copyright: 2000 Regents of the University of California and the
@@ -29,11 +29,9 @@
     	<tstamp/>
     
         <echo message="############ ${ant.project.name} ##############"/> 
-        <property name="current" value="./" />
-        <property name="build" value="./build" />
-        <property name="lib" value="lib" />
-        <property name="servlet_api" value="lib/servlet.jar" />
-    
+        <property name="build" value="${basedir}/build" />
+        <property name="lib.dir" value="${basedir}/lib" />
+        <property name="build.lib.dir" value="${build}/lib" />
     
         <!--NOTICE THE SETTINGS FOR THE PRODUCTION VS THE DEVELOPMENT SERVLET LOCATIONS -->
         <!-- PRODUCTION	 -->
@@ -48,36 +46,41 @@
     	  <property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat_dev/bin" />
         -->
 
-	  <property name="xmlresource" value="lib/xmlresource.jar" />
-	  <property name="dbaccess" value="lib/database_access.jar" />
-	  <property name="data-source" value="lib/datatranslator.jar" />
 	  <property name="release" value="development"/>
-	  <property name="frameworksrc" value="frameworkservlet/src"/>
-	  <property name="authenticationsrc" value="authentication"/>
-	  <property name="utilsrc" value="util"/>
-	  <property name="datafileexchg_src" value="datafile-exchange"/>
-	  <property name="usermanagementsrc" value="usermanagement-servlet"/>
-	  <property name="stylesheet_src" value="stylesheet_servlet/src"/>
+	  <property name="frameworksrc" value="${basedir}/frameworkservlet/src"/>
+	  <property name="authenticationsrc" value="${basedir}/authentication"/>
+	  <property name="utilsrc" value="${basedir}/util"/>
+	  <property name="datafileexchg_src" value="${basedir}/datafile-exchange"/>
+	  <property name="usermanagementsrc" value="${basedir}/usermanagement-servlet"/>
+	  <property name="stylesheet_src" value="${basedir}/stylesheet_servlet/src"/>
 	
-	  <property name="multipart_src" value="multipart"/>
-	  <property name="multipart" value="lib/multipart.jar"/>
+	  <property name="multipart_src" value="${basedir}/multipart"/>
 	  <property name="ant" value="ant.jar"/>
 
 	
-	  <property name="cpath" value="${multipart}:${ant}:${build}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
-	
+	  <!--
+	  <property name="multipart" value="${lib.dir}/multipart.jar"/>
+    <property name="xmlresource" value="lib/xmlresource.jar" />
+    <property name="servlet_api" value="${lib.dir}/servlet.jar" />
+	  <property name="dbaccess" value="lib/database_access.jar" />
+	  <property name="data-source" value="lib/datatranslator.jar" />
+
+    <property name="cpath" value="${multipart}:${ant}:${build}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
+	-->
  
     <property name="vegbank.home.dir" value="/usr/vegbank"/>
     <property name="originalDataStore" value="${vegbank.home.dir}/originalDataStore"/>
-        
+    <property name="serverUrl" value="tekka.nceas.ucsb.edu" />
+    <property name="rmiserver"  value="192.168.0.2"/>  
+    
     <!-- Filters -->
-    <filter token="serverUrl" value="tekka.nceas.ucsb.edu" />
+    <filter token="serverUrl" value="${serverUrl}" />
     <filter token="servlet-path" value="${servlet-path}" />
     <filter token="mailHost" value="nceas.ucsb.edu"/>
     <filter token="systemEmail" value="dba@vegbank.org"/>
     <filter token="genericForm" value="${servlet.webapp.dir}/forms/generic_form.html"/>
     <filter token="genericTemplate" value="${servlet.webapp.dir}/forms/tmp.html"/>
-    <filter token="rmiserver"  value="192.168.0.2"/>  
+    <filter token="rmiserver"  value="${rmiserver}"/>  
     <filter token="uploadDir" value="${servlet_location}"/>
     <filter token="originalDataStore" value="${originalDataStore}"/>
     <!-- End Filters -->
@@ -90,148 +93,111 @@
 <!-- PREPARE TARGET -->
 <target name="prepare" depends="init">
 	<mkdir dir="${build}" />
+  <mkdir dir="${build.lib.dir}"/>
 </target>
 
 
 <!-- COPY TARGET -->
 <target name="copy" depends="prepare">
 
-	<!-- the utilities -->
-	<copydir src="${utilsrc}" 
-		dest="${build}" 
-		filtering="yes"
-		includes="**.* "
-		excludes="**/CVS* "
-	/>
-	
-	<!-- the stylesheet generator package -->
-	<copydir src="${stylesheet_src}" 
-		dest="${build}" 
-		filtering="yes"
-		includes="**.java "
-		excludes="**/CVS* "
-	/>
-	
-	<!-- the datafile excahnge package -->
-	<copydir src="${datafileexchg_src}" 
-		dest="${build}" 
-		filtering="yes"
-		includes="**.* "
-		excludes="**/CVS* "
-	/>
-	
-	<!-- the framework -->
-	<copydir src="${frameworksrc}" 
-		dest="${build}" 
-		filtering="yes"
-		includes="**.java "
-		excludes="**/CVS* "
-	/>
-	
-	<copy file="${lib}/frameworkservlet-config.xml" todir="${build}"/>
-	
-	<!-- the authentication -->
-	<copydir src="${authenticationsrc}" 
-		dest="${build}" 
-		filtering="yes"
-		includes="**.java "
-		excludes="**/CVS* "
-	/>
-	
-	<!-- UserManagement Servlet-->
-	<copydir src="${usermanagementsrc}" 
-		dest="${build}" 
-		filtering="yes"
-		includes="**.java "
-		excludes="**/CVS* "
-	/>
-	 
-	 <!-- The Property files -->
-	 <copy todir="${build}" filtering="yes">
-		<fileset dir="${lib}">
-			<include name="*properties"/>
-		</fileset>
-	 </copy>
-	 
+<echo>${rmiserver} and ${serverUrl} </echo>
+
+  <copy todir="${build}"
+        filtering="true">
+	  <!-- the utilities -->
+    <fileset dir="${utilsrc}" casesensitive="yes">
+      <include name="**/*java"/>
+    </fileset>
+    <fileset dir="${stylesheet_src}" casesensitive="yes">
+      <include name="**/*java"/>
+    </fileset>
+    <fileset dir="${datafileexchg_src}" casesensitive="yes">
+      <include name="**/*java"/>
+    </fileset>    
+	  <!-- the authentication -->
+    <fileset dir="${authenticationsrc}" casesensitive="yes">
+      <include name="**/*java"/>
+    </fileset>
+    <fileset dir="${frameworksrc}" casesensitive="yes">
+      <include name="**/*java"/>
+    </fileset>
+	  <!-- UserManagement Servlet-->
+    <fileset dir="${usermanagementsrc}" casesensitive="yes">
+      <include name="**/*java"/>
+    </fileset>
+	  <!-- The Property files -->
+    <fileset dir="${lib.dir}" casesensitive="yes">
+      <include name="**/*properties"/>
+    </fileset>
+  </copy>
+ 
+  <copy file="${lib.dir}/frameworkservlet-config.xml" todir="${build}"/>
 </target>	
 
 
 
 
 <!-- COMPILE TARGET -->	
-<target name="compile" depends="copy" description="-- the main compile target that compiles all the servlet code">
+<target name="compile" depends="copy" description="==> the main compile target that compiles all the servlet code">
 
-	
-	<echo message="compiling utility classes" />
-	<javac srcdir="${build}"
-    debug="on"
-		classpath="${cpath}"
-		includes="GetURL.java ServletUtility.java HttpMessage.java DataExchangeClient.java" 
-		destdir="${build}"
-	/>
-
-	<!--
-	includes="GetURL.java ServletUtility.java HttpMessage.java DataExchangeClient.java"
-	-->
-	
-	
-	<echo message="compiling other classes" />
+	<echo message="compiling vegbank servlet classes" />
 	<javac srcdir="${build}" 
     debug="on"
-		classpath="${cpath}"
 		includes="**.java  " 
 		destdir="${build}"
-	/>
+  >
+    <classpath>
+      <pathelement location="${build}"/>
+      <path refid="classpath.compilation"/>
+    </classpath>
+  </javac>
 
-	<echo message="compiling other vegbank-request" />
-	<!--<ant dir="vegbank-request" inheritAll="false" target="compile"/>	-->
 </target>	
 
 
 <!-- JAR TARGET -->
 <target name="jar" depends="compile" description="-- main jar target put the servlets into jar files.">
 	
-	<jar jarfile ="${lib}/utilities.jar"
+	<jar jarfile ="${build.lib.dir}/utilities.jar"
 		basedir="${build}"
-		includes="servlet/util/** "
+		includes="servlet/util/**"
 	/>
+  <!-- This jar is needed elsewhere -->
+  <copy todir="../../build/lib/" file="${build.lib.dir}/utilities.jar"/>
+  
 
-  <copy file="${lib}/utilities.jar"
-        filtering="no"
-        todir="../../build/lib/"/>
-	
-	<jar jarfile ="${lib}/stylesheet-generator.jar"
+	<jar jarfile ="${build.lib.dir}/stylesheet-generator.jar"
 		basedir="${build}"
 		includes="servlet/stylesheet/** "
 	/>
 	
 	
-	<jar jarfile ="${lib}/frameworkservletmodule.jar"
+	<jar jarfile ="${build.lib.dir}/frameworkservletmodule.jar"
 		basedir="${build}"
 		includes="servlet/framework/**  servlet/plugin/**"
 		excludes="${build}/servlet/authentication"
 	/>
 
-	<jar jarfile ="${lib}/authservletmodule.jar"
+	<jar jarfile ="${build.lib.dir}/authservletmodule.jar"
 		basedir="${build}"
 		includes="servlet/authentication/** authentication.properties  "
 		excludes="${build}/servlet/authentication"
 	/>
 	
-	<jar jarfile ="${lib}/datafile-exchange.jar"
+	<jar jarfile ="${build.lib.dir}/datafile-exchange.jar"
 		basedir="${build}"
 		includes="servlet/datafile_exchange/** dataexchange.properties"
 		excludes="${build}/servlet/authentication"
 	/>
 	
-	<jar jarfile ="${lib}/usermanagement.jar"
+	<jar jarfile ="${build.lib.dir}/usermanagement.jar"
 		basedir="${build}"
 		includes="servlet/usermanagement/** "
 		excludes="${build}/servlet/authentication"
 	/>
 	
 	<echo message="Generating jar for vegbank-request" />
-	<ant dir="vegbank-request" inheritAll="false" target="jar"/>	
+	<ant dir="vegbank-request" inheritRefs="true" inheritAll="true" target="jar"/>	
 	
 </target>
 
@@ -241,75 +207,28 @@
 <target name="dist" depends="jar" description="--copies the jar files to the servlet container">
 
 	<copy todir="${servlet_location}" filtering="no" >
-		<fileset dir="${lib}" >
-  	    <include name="stylesheet-generator.jar"/>
+		<fileset dir="${build.lib.dir}" >
+      <include name="*jar"/>
   	</fileset>
 	</copy>
 
 	<copy todir="${servlet_location}" filtering="no" >
-			<fileset dir="${lib}" >
-  	    <include name="frameworkservletmodule.jar"/>
-  	</fileset>
-	</copy>
-	
-	<copy todir="${servlet_location}" filtering="no" >
-		<fileset dir="${lib}" >
-  	    <include name="xmlresource.jar"/>
-  	</fileset>
-	</copy>
-	
-	
-	<copy todir="${servlet_location}" filtering="no" >
-		<fileset dir="${lib}" >
-  	    <include name="authservletmodule.jar"/>
-  	</fileset>
-	</copy>
-	
-	
-	<copy todir="${servlet_location}" filtering="no" >
-		<fileset dir="${lib}" >
-  	    <include name="datafile-exchange.jar"/>
-  	</fileset>
-	</copy>
-	
-	
-	<copy todir="${servlet_location}" filtering="no" >
-		<fileset dir="${lib}" >
-  	    <include name="multipart.jar"/>
-  	</fileset>
-	</copy>
-	
-
-	<copy todir="${servlet_location}" filtering="no" >
-		<fileset dir="${lib}" >
-  	    <include name="usermanagement.jar"/>
-  	</fileset>
+		<fileset dir="${lib.dir}" >
+  	  <include name="utilities.jar"/>
+      <include name="planttaxonomy.jar"/>      		
+      <include name="vegcommunity.jar"/>
+    </fileset>
 	</copy>
 
 	<copy todir="${servlet_location}" filtering="no" >
-		<fileset dir="${lib}" >
-  	    		<include name="utilities.jar"/>
-            		<include name="database_access.jar"/>
-            		<include name="datafile-exchange.jar"/>
-            		<include name="planttaxonomy.jar"/>
-            		<include name="rmidatasource.jar"/>
-            		<include name="vegcommunity.jar"/>
-	      		<include name="jdbc7.0-1.2.jar"/>	
-             	</fileset>
-	</copy>
-
-	<copy todir="${servlet_location}" filtering="no" >
-            <fileset dir="${lib}" >
-  	        <include name="xml-apis.jar"/>
-  	        <include name="xalan_1_2_2.jar"/>
-  	        <include name="xerces_1_4.jar"/>
-  	        <include name="ant.jar"/>
-  	    </fileset>
+    <fileset dir="${lib.dir}" >
+  	  <include name="ant.jar"/>
+    </fileset>
 	</copy>
 
 	<copy todir="${servlet_WEB_INF}" filtering="no" >
-		<fileset dir="${lib}" >
-  	    <include name="web.xml"/>
+		<fileset dir="${lib.dir}" >
+  	  <include name="web.xml"/>
   	</fileset>
 	</copy>
 	
