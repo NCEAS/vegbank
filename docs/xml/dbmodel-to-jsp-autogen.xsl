@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:vegbank="http://vegbank.org" xmlns:logic="http://vegbank.org" xmlns:bean="http://vegbank.org" xmlns:redirect="http://xml.apache.org/xalan/redirect" extension-element-prefixes="redirect">
-  <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/>  
+<!--  <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/> -->
   <!-- comment out extenstion-elemtn ... though this comment to run locally without xalan -->
   <xsl:param name="pathToWrite"/>
   <xsl:output method="html"/>
@@ -130,7 +130,7 @@
             <xsl:if test="string-length($currentAtt/attFKTranslationSQL)&gt;0">_transl</xsl:if>
           </xsl:variable>
           <xsl:choose>
-            <xsl:when test="string-length($currentAtt/attFKTranslationSQL)&gt;0 and $currentAtt/attKey='FK'">
+            <xsl:when test="string-length($currentAtt/attFKTranslationSQL)&gt;0 and $currentAtt/attKey='FK' and ($currentAtt/attFKTranslationSQL/@addLink='true' or string-length($currentAtt/attFKTranslationSQL/@addLink)=0)">
               <!-- only do this if translation criteria AND FK! -->
               <xsl:element name="a">
                 <xsl:attribute name="href">@get_link@std/<xsl:value-of select="translate(substring-before($currentAtt/attReferences,'.'),$alphahigh,$alphalow)"/>/<xsl:text disable-output-escaping="yes">&lt;</xsl:text>bean:write name='onerowof<xsl:value-of select="$currEnt"/>' property='<xsl:value-of select="$currFld"/>' /<xsl:text disable-output-escaping="yes">&gt;</xsl:text></xsl:attribute>
