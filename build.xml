@@ -8,8 +8,8 @@
   *  % echo "[build.context]" | ant [target]
   *
   *     '$Author: anderson $'
-  *     '$Date: 2004-07-23 01:05:11 $'
-  *     '$Revision: 1.48 $'
+  *     '$Date: 2004-10-14 09:41:35 $'
+  *     '$Revision: 1.49 $'
 --> 
 <project name="Vegbank" default="jar" basedir=".">
 
@@ -105,8 +105,8 @@
     <filter token="databaseConnectString" value="${databaseConnectString}"/>
     <filter token="databaseName" value="${databaseName}" />
     <filter token="vegbankVersion" value="${vegbankVersion}" />
+    <filter token="vegbank.data.dir" value="${vegbank.data.dir}/" />
     <filter token="vegbank.home.dir" value="${vegbank.home.dir}/" />
-    <filter token="originalDataStore" value="${vegbank.home.dir}/originalDataStore"/>
 	<filter token="schemaLocation" value="${apache.document.root}/vegdocs/xml/"/>
     <filter token="vegbankSchemaName" value="${vegbankSchemaName}" />
     <!-- End filters created from build.${context}.properties -->
@@ -552,7 +552,7 @@
     <mkdir dir="${vegbank.home.dir}"/>
     <mkdir dir="${vegbank.home.dir}/lib"/>
     <mkdir dir="${vegbank.home.dir}/bin"/>
-    <mkdir dir="${vegbank.home.dir}/originalDataStore"/>
+    <mkdir dir="${vegbank.data.dir}"/>
     <mkdir dir="${vegbank.home.dir}/cache"/>
     <mkdir dir="${vegbank.home.dir}/logs"/>
     
