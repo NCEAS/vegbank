@@ -3,8 +3,9 @@
   <xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes" />
 
   <xsl:param name="view">Detail</xsl:param>
-  <xsl:param name="oneTbl">soilObs</xsl:param>
-  <xsl:param name="detailAdd"></xsl:param>
+  <xsl:param name="oneTbl">taxonImportance</xsl:param>
+  <xsl:param name="detailAdd">stemCount</xsl:param>
+  
   <xsl:param name="more">no</xsl:param><!-- yes if you want a link to details for each summary row -->
   <xsl:param name="alphalow">abcdefghijklmnopqrstuvwxyz</xsl:param>
   <xsl:param name="alphahigh">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:param>
@@ -81,7 +82,7 @@ where_<xsl:value-of select="$currEnt"/>_pk=<xsl:value-of select="$currPK" /> IN 
                 <logic:iterate id="onerowof{$currEnt}" name="{$currEnt}-BEANLIST">
                   <tr class="@nextcolorclass@">
                     <xsl:if test="$more='yes'">
-                    <td class="sizetiny">
+                    <td class="largefield">
                       <xsl:element name="a">
                         <xsl:attribute name="href">@get_link@detail/<xsl:value-of select="$currEnt"/>/@subst_lt@bean:write name='onerowof<xsl:value-of select="$currEnt"/>' property='<xsl:value-of select="translate($currPK,$alphahigh,$alphalow)"/>' /@subst_gt@</xsl:attribute>
                             Details

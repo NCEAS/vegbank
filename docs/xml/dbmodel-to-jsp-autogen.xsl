@@ -146,7 +146,7 @@
               <!-- no specific class for this data -->
               <!-- fill in different class for long text fields: -->
               <xsl:if test="$currentAtt/attType='text' or (contains($currentAtt/attType,'varchar (') and string-length($currentAtt/attType)&gt;12)">
-                <xsl:attribute name="class">sizetiny</xsl:attribute>
+                <xsl:attribute name="class">largefield</xsl:attribute>
               </xsl:if>
             </xsl:when>
             <xsl:otherwise>
