@@ -9,16 +9,21 @@ import javax.servlet.http.*;
 
 import org.apache.tools.ant.taskdefs.Copy;
 import org.apache.tools.ant.*;
-
+import org.apache.tools.mail.MailMessage;
 
 import servlet.util.*;
 import servlet.util.GetURL;
 
 /**
- * Class that acts as a utility to the plotQuery servlet
+ * Utility class for java servltes for doing a range of utility 
+ * type functions including:
+ * 		emailing
+ * 		figuring the the type of client browser
+ *    etc.. 
  *
- * @version 
- * @author 
+ *	'$Author: harris $'
+ *  '$Date: 2002-04-04 02:08:14 $'
+ *  '$Revision: 1.8 $'
  *
  */
 
@@ -62,6 +67,44 @@ public class ServletUtility
     return object;
   }
 	
+	
+		/**
+		 * method to mail the a message to an email address
+		 *
+		 * @param mailhost -- like nceas.ucsb.edu
+		 * @param from -- like harris
+		 * @param to -- like harris02@hotmail.com
+		 * @param cc -- like vegbank@nceas.ucsb.edu
+		 * @param subject -- like 'hi'
+		 * @param body -- the main body
+		 */
+		 public void sendEmail( String mailHost, String from, String to, String cc,
+		 String subject, String body)
+		 {
+			 try
+			 {
+			 	//String mailhost = "nceas.ucsb.edu";  // or another mail host
+ 				//String from = "vegbank";
+ 				//String to = this.emailAddress;
+ 				//String cc1 = "vegbank@nceas.ucsb.edu";
+ 				//String cc2 = "lori@esa.org";
+ 				//String bcc = "bcc@you.com";
+  
+ 				MailMessage msg = new MailMessage(mailHost);
+ 				msg.from(from);
+ 				msg.to(to);
+ 				msg.cc(cc);
+ 				msg.setSubject(subject);
+ 				PrintStream out = msg.getPrintStream();
+  			out.println(body);
+			 	msg.sendAndClose();
+ 			}
+			 catch (Exception e)
+		 	 {
+				 System.out.println("Exception: " + e.getMessage());
+				 e.printStackTrace();
+			 }
+		 }
 	
 	/**
    * method that will retrive the authentication results
@@ -321,10 +364,10 @@ public void getViewOption(String summaryViewType)
 }
 
 /**
- *
  * utility method to return the name of the browser type that 
  * a client is using given as input an http request
  * @param request -- the http request
+ *
  */
  public String getBrowserType(HttpServletRequest request)
  {
@@ -340,7 +383,7 @@ public void getViewOption(String summaryViewType)
       if ( headerName.toUpperCase().startsWith("USER") )
 			{
 				String ua = headerName.toUpperCase();
-				System.out.println("ServletUtility > UA: "+ value );
+				//System.out.println("ServletUtility > UA: "+ value );
 				if ( value.toUpperCase().indexOf("MSIE") >= 1 )
 				{
 					s = "msie";
@@ -362,10 +405,49 @@ public void getViewOption(String summaryViewType)
 		System.out.println("Exception: " + e.getMessage() );
 		e.printStackTrace();
 	}
-	
 	 return(s);
  }
 
+ /**
+	 * method that returns the name and value of a valid cookie
+	 * assocaited with the servlet that the request is made to
+	 * @param req -- the servlet request
+	 */
+	 public String getCookieValue( HttpServletRequest req)
+	 {
+		String s = null;
+		 //get the cookies - if there are any
+		String cookieName = null;
+		String cookieValue = null;
+
+		Cookie[] cookies = req.getCookies();
+		//	System.out.println("cookie dump: " + cookies.toString() );
+		//	Cookie cook = cookies[0];
+		//	String name =cook.getName();
+		//	System.out.println("cookie name > : " + name );
+		
+		//determine if the requested page should be shown
+    if (cookies.length >= 0) 
+		{
+			for (int i = 0; i < cookies.length; i++) 
+			{
+      	Cookie cookie = cookies[i];
+				//out.print("Cookie Name: " +cookie.getName()  + "<br>");
+        cookieName=cookie.getName();
+				//System.out.println("DataRequestServlet > cookie name: " + cookieName);
+				//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
+				cookieValue=cookie.getValue();
+				s = cookieValue.trim(); 
+			}
+  	} 
+		else 
+		{
+			System.out.println("DataRequestServlet > No valid cookies found");
+		}
+		return(s);
+	}
+ 
+ 
 	
 /**
  * Method to store html code showing the end user the
