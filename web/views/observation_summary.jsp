@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-09-17 19:23:46 $'
-*  '$Revision: 1.6 $'
+*  '$Date: 2004-09-18 22:37:28 $'
+*  '$Revision: 1.7 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,12 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 -->
   
-
+   <%
+		       //**************************************************************************************
+		       //  Set up alternating row colors
+		       //**************************************************************************************
+		       String rowClass = "evenrow";
+    %>
 
 <head>@defaultHeadToken@
 <title>Plot Observation Summary View</title>
@@ -60,206 +65,283 @@
 <TR><TD width="55%" valign="top"><!-- plot level info -->
 
 
-<table class="thinlines" border="1" ><!--each field, only write when HAS contents-->
+<table class="leftright" cellpadding="1"><!--each field, only write when HAS contents-->
 <tr><th colspan="2">Plot Level Data: <bean:write name="onerow" property="authorplotcode"/></th></tr>
 
-
+<tr><th class="subheader">Plot ID Fields:</th><th class="subheader">&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
 <logic:notEmpty name="onerow" property="authorplotcode">
-<tr><td width="35%" nowrap="true"><!--label:--><p><span class="category">Author Plot Code</span></p></td>
-<td><p><span class="category"><bean:write name="onerow" property="authorplotcode"/>&nbsp;</span></p></td>
+<tr class='@nextcolorclass@'><td width="35%" nowrap="true" class="datalabel">Author Plot Code</td>
+<td><strong><bean:write name="onerow" property="authorplotcode"/></strong>&nbsp;</td>
 </tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="confidentialitystatus">
-<tr><td><!--label:--><p><span class="category">Confidentiality Status</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="confidentialitystatus"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="latitude">
-<tr><td><!--label:--><p><span class="category">Latitude</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="latitude"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="longitude">
-<tr><td><!--label:--><p><span class="category">Longitude</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="longitude"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="authorlocation">
-<tr><td><!--label:--><p><span class="category">Author Location</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="authorlocation"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="locationnarrative">
-<tr><td><!--label:--><p><span class="category">Location Narrative</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="locationnarrative"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="shape">
-<tr><td><!--label:--><p><span class="category">Shape</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="shape"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="area">
-<tr><td><!--label:--><p><span class="category">Area</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="area"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="elevation">
-<tr><td><!--label:--><p><span class="category">Elevation</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="elevation"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="slopeaspect">
-<tr><td><!--label:--><p><span class="category">Slope Aspect</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="slopeaspect"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="slopegradient">
-<tr><td><!--label:--><p><span class="category">Slope Gradient</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="slopegradient"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="topoposition">
-<tr><td><!--label:--><p><span class="category">Topographic Position</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="topoposition"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="landform">
-<tr><td><!--label:--><p><span class="category">Landform</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="landform"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="surficialdeposits">
-<tr><td><!--label:--><p><span class="category">Surficial Deposits</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="surficialdeposits"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="rocktype">
-<tr><td><!--label:--><p><span class="category">Rock Type</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="rocktype"/>&nbsp;</span></p></td>
-</tr>
+<bean:define id="hadData" value="true" />
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="plotaccessioncode">
-<tr><td><!--label:--><p><span class="category">Accession Code</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="accessioncode"/>&nbsp;</span></p></td>
+<tr class='@nextcolorclass@'><td class="datalabel">Plot Accession Code</td>
+<td class="sizetiny"><bean:write name="onerow" property="plotaccessioncode"/>&nbsp;</td>
 </tr>
+<bean:define id="hadData" value="true" />
 </logic:notEmpty>
 
 <logic:notEmpty name="onerow" property="authorobscode">
-<tr><td><!--label:--><p><span class="category">Author Observation Code</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="authorobscode"/>&nbsp;</span></p></td>
+<tr class='@nextcolorclass@'><td class="datalabel">Author Observation Code</td>
+<td><bean:write name="onerow" property="authorobscode"/>&nbsp;</td>
 </tr>
+<bean:define id="hadData" value="true" />
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="project_id">
-<tr><td><!--label:--><p><span class="category">Project</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="project_id_transl"/>&nbsp;</span></p></td>
+<tr class='@nextcolorclass@'><td class="datalabel">Project</td>
+<td><a href='@web_context@get/project/<bean:write name="onerow" property="project_id"/>'><bean:write name="onerow" property="project_id_transl"/></a>&nbsp;</td>
 </tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="obsstartdate">
-<tr><td><!--label:--><p><span class="category">Observation Start Date</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="obsstartdate"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="covermethod_id">
-<tr><td><!--label:--><p><span class="category">Cover Method</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="covermethod_id_transl"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="stratummethod_id">
-<tr><td><!--label:--><p><span class="category">Stratum Method</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="stratummethod_id_transl"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="stemsizelimit">
-<tr><td><!--label:--><p><span class="category">Stem Size Limit</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="stemsizelimit"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="methodnarrative">
-<tr><td><!--label:--><p><span class="category">Method Narrative</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="methodnarrative"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="taxonobservationarea">
-<tr><td><!--label:--><p><span class="category">Taxon Observation Area</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="taxonobservationarea"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="coverdispersion">
-<tr><td><!--label:--><p><span class="category">Cover Dispersion</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="coverdispersion"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="autotaxoncover">
-<tr><td><!--label:--><p><span class="category">Taxon Cover Automatically Calculated?</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="autotaxoncover_transl"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="stemobservationarea">
-<tr><td><!--label:--><p><span class="category">Stem Observation Area</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="stemobservationarea"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="effortlevel">
-<tr><td><!--label:--><p><span class="category">Effort Level</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="effortlevel"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="plotvalidationlevel">
-<tr><td><!--label:--><p><span class="category">Plot Validation Level</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="plotvalidationlevel"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="floristicquality">
-<tr><td><!--label:--><p><span class="category">Floristic Quality</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="floristicquality"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="bryophytequality">
-<tr><td><!--label:--><p><span class="category">Bryophyte Quality</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="bryophytequality"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="lichenquality">
-<tr><td><!--label:--><p><span class="category">Lichen Quality</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="lichenquality"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="observationnarrative">
-<tr><td><!--label:--><p><span class="category">Observation Narrative</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="observationnarrative"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="landscapenarrative">
-<tr><td><!--label:--><p><span class="category">Landscape Narrative</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="landscapenarrative"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="basalarea">
-<tr><td><!--label:--><p><span class="category">Basal Area</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="basalarea"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="hydrologicregime">
-<tr><td><!--label:--><p><span class="category">Hydrologic Regime</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="hydrologicregime"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="soildepth">
-<tr><td><!--label:--><p><span class="category">Soil Depth</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="soildepth"/>&nbsp;</span></p></td>
-</tr>
+<bean:define id="hadData" value="true" />
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="observationaccessioncode">
-<tr><td><!--label:--><p><span class="category">Observation Accession Code</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="observationaccessioncode"/>&nbsp;</span></p></td>
+<tr class='@nextcolorclass@'><td class="datalabel">Observation Accession Code</td>
+<td class="sizetiny"><bean:write name="onerow" property="observationaccessioncode"/>&nbsp;</td>
 </tr>
+<bean:define id="hadData" value="true" />
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="observationdateentered">
-<tr><td><!--label:--><p><span class="category">Date Entered into VegBank</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="dateentered"/>&nbsp;</span></p></td>
+<tr class='@nextcolorclass@'><td class="datalabel">Date Entered into VegBank</td>
+<td class="sizetiny"><bean:write name="onerow" property="dateentered"/>&nbsp;</td>
 </tr>
+<bean:define id="hadData" value="true" />
 </logic:notEmpty>
+<logic:equal value="false" name="hadData">
+<tr><td colspan="2">--no data--</td></tr>
+</logic:equal>
+<tr><th class="subheader">Location Fields:</th><th class="subheader">&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+<logic:notEmpty name="onerow" property="confidentialitystatus">
+<tr class='@nextcolorclass@'><td class="datalabel">Confidentiality Status</td>
+<td><bean:write name="onerow" property="confidentialitystatus"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="latitude">
+<tr class='@nextcolorclass@'><td class="datalabel">Latitude</td>
+<td><bean:write name="onerow" property="latitude"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="longitude">
+<tr class='@nextcolorclass@'><td class="datalabel">Longitude</td>
+<td><bean:write name="onerow" property="longitude"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="authorlocation">
+<tr class='@nextcolorclass@'><td class="datalabel">Author Location</td>
+<td><bean:write name="onerow" property="authorlocation"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="locationnarrative">
+<tr class='@nextcolorclass@'><td class="datalabel">Location Narrative</td>
+<td class="sizetiny"><bean:write name="onerow" property="locationnarrative"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:equal value="false" name="hadData">
+<tr><td colspan="2">--no data--</td></tr>
+</logic:equal>
+<tr><th class="subheader">Layout Fields:</th><th class="subheader">&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+<logic:notEmpty name="onerow" property="shape">
+<tr class='@nextcolorclass@'><td class="datalabel">Shape</td>
+<td><bean:write name="onerow" property="shape"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="area">
+<tr class='@nextcolorclass@'><td class="datalabel">Area</td>
+<td><bean:write name="onerow" property="area"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+
+<logic:notEmpty name="onerow" property="observationnarrative">
+<tr class='@nextcolorclass@'><td class="datalabel">Observation Narrative</td>
+<td class="sizetiny"><bean:write name="onerow" property="observationnarrative"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:equal value="false" name="hadData">
+<tr><td colspan="2">--no data--</td></tr>
+</logic:equal>
+<tr><th class="subheader">Environment Fields:</th><th class="subheader">&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+<logic:notEmpty name="onerow" property="elevation">
+<tr class='@nextcolorclass@'><td class="datalabel">Elevation</td>
+<td><bean:write name="onerow" property="elevation"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="slopeaspect">
+<tr class='@nextcolorclass@'><td class="datalabel">Slope Aspect</td>
+<td><bean:write name="onerow" property="slopeaspect"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="slopegradient">
+<tr class='@nextcolorclass@'><td class="datalabel">Slope Gradient</td>
+<td><bean:write name="onerow" property="slopegradient"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="topoposition">
+<tr class='@nextcolorclass@'><td class="datalabel">Topographic Position</td>
+<td><bean:write name="onerow" property="topoposition"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="landform">
+<tr class='@nextcolorclass@'><td class="datalabel">Landform</td>
+<td><bean:write name="onerow" property="landform"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="surficialdeposits">
+<tr class='@nextcolorclass@'><td class="datalabel">Surficial Deposits</td>
+<td><bean:write name="onerow" property="surficialdeposits"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="rocktype">
+<tr class='@nextcolorclass@'><td class="datalabel">Rock Type</td>
+<td><bean:write name="onerow" property="rocktype"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="landscapenarrative">
+<tr class='@nextcolorclass@'><td class="datalabel">Landscape Narrative</td>
+<td class="sizetiny"><bean:write name="onerow" property="landscapenarrative"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="hydrologicregime">
+<tr class='@nextcolorclass@'><td class="datalabel">Hydrologic Regime</td>
+<td><bean:write name="onerow" property="hydrologicregime"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="soildepth">
+<tr class='@nextcolorclass@'><td class="datalabel">Soil Depth</td>
+<td><bean:write name="onerow" property="soildepth"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:equal value="false" name="hadData">
+<tr><td colspan="2">--no data--</td></tr>
+</logic:equal>
+<tr><th class="subheader">Methods Fields:</th><th class="subheader">&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+<logic:notEmpty name="onerow" property="obsstartdate">
+<tr class='@nextcolorclass@'><td class="datalabel">Observation Start Date</td>
+<td><bean:write name="onerow" property="obsstartdate"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="covermethod_id">
+<tr class='@nextcolorclass@'><td class="datalabel">Cover Method</td>
+<td><a href='@web_context@get/covermethod/<bean:write name="onerow" property="covermethod_id"/>'><bean:write 
+name="onerow" property="covermethod_id_transl"/></a>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="stratummethod_id">
+<tr class='@nextcolorclass@'><td class="datalabel">Stratum Method</td>
+<td><a href='@web_context@get/stratummethod/<bean:write name="onerow" property="stratummethod_id"/>'><bean:write 
+  name="onerow" property="stratummethod_id_transl"/></a>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="stemsizelimit">
+<tr class='@nextcolorclass@'><td class="datalabel">Stem Size Limit</td>
+<td><bean:write name="onerow" property="stemsizelimit"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="methodnarrative">
+<tr class='@nextcolorclass@'><td class="datalabel">Method Narrative</td>
+<td class="sizetiny"><bean:write name="onerow" property="methodnarrative"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="taxonobservationarea">
+<tr class='@nextcolorclass@'><td class="datalabel">Taxon Observation Area</td>
+<td><bean:write name="onerow" property="taxonobservationarea"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="coverdispersion">
+<tr class='@nextcolorclass@'><td class="datalabel">Cover Dispersion</td>
+<td><bean:write name="onerow" property="coverdispersion"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="autotaxoncover">
+<tr class='@nextcolorclass@'><td class="datalabel">Taxon Cover Automatically Calculated?</td>
+<td><bean:write name="onerow" property="autotaxoncover_transl"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="stemobservationarea">
+<tr class='@nextcolorclass@'><td class="datalabel">Stem Observation Area</td>
+<td><bean:write name="onerow" property="stemobservationarea"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:equal value="false" name="hadData">
+<tr><td colspan="2">--no data--</td></tr>
+</logic:equal>
+<tr><th class="subheader">Plot quality Fields:</th><th class="subheader">&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+<logic:notEmpty name="onerow" property="effortlevel">
+<tr class='@nextcolorclass@'><td class="datalabel">Effort Level</td>
+<td><bean:write name="onerow" property="effortlevel"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="plotvalidationlevel">
+<tr class='@nextcolorclass@'><td class="datalabel">Plot Validation Level</td>
+<td><bean:write name="onerow" property="plotvalidationlevel"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="floristicquality">
+<tr class='@nextcolorclass@'><td class="datalabel">Floristic Quality</td>
+<td><bean:write name="onerow" property="floristicquality"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="bryophytequality">
+<tr class='@nextcolorclass@'><td class="datalabel">Bryophyte Quality</td>
+<td><bean:write name="onerow" property="bryophytequality"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="lichenquality">
+<tr class='@nextcolorclass@'><td class="datalabel">Lichen Quality</td>
+<td><bean:write name="onerow" property="lichenquality"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:equal value="false" name="hadData">
+<tr><td colspan="2">--no data--</td></tr>
+</logic:equal>
+<tr><th class="subheader">Overall Plot Vegetation Fields:</th><th class="subheader">&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+<logic:notEmpty name="onerow" property="basalarea">
+<tr class='@nextcolorclass@'><td class="datalabel">Basal Area</td>
+<td><bean:write name="onerow" property="basalarea"/>&nbsp;</td>
+</tr>
+<bean:define id="hadData" value="true" />
+</logic:notEmpty>
+<logic:equal value="false" name="hadData">
+<tr><td colspan="2">--no data--</td></tr>
+</logic:equal>
+
 
 
 </table>
@@ -272,33 +354,37 @@
 
 <vegbank:get select="taxonimportance" where="where_observation_pk" beanName="map" wparam="obsId" perPage="-1"/>
 
-     <table border="1" cellpadding="0" cellspacing="0" class="thinlines">
+     <table cellpadding="1" class="leftright">
      <tr><th colspan="2"><strong>Taxa occurring on <bean:write name="onerow" property="authorplotcode"/></strong></th></tr>
   <logic:empty name="BEANLIST">
-                <tr><td colspan="2">(no plants recorded on this plot: error!)</td></tr>
+                <tr class='@nextcolorclass@'><td colspan="2">(no plants recorded on this plot: error!)</td></tr>
   </logic:empty>
   <logic:notEmpty name="BEANLIST">
 
      <tr><th width="75%">Author's Plant Name</th><th>overall cover</th></tr>
 
      <logic:iterate id="oneobsplants" name="BEANLIST">
-     <tr>
-       <td><p><span class="item"><bean:write name="oneobsplants" property="authorplantname" />&nbsp;</span></p></td>
-       <td><p><span class="item">&nbsp;
+ 
+     <tr class='@nextcolorclass@'>
+       <td><bean:write name="oneobsplants" property="authorplantname" />&nbsp;</td>
+       <td>&nbsp;
        <logic:notEmpty name="oneobsplants" property="cover">
        <bean:write name="oneobsplants" property="cover" /> %
-       </logic:notEmpty>
-       </span></p></td>
+       <bean:define id="hadData" value="true" />
+</logic:notEmpty>
+       </td>
      </tr>
      </logic:iterate>
-     <logic:notEmpty name="onerow" property="autotaxoncover">
-	 <tr><td><!--label:--><p><span class="category">Cover Values Calculated?</span></p></td>
-	 <td><p><span class="item"><bean:write name="onerow" property="autotaxoncover_transl"/>&nbsp;</span></p></td>
+   <!--  <logic:notEmpty name="onerow" property="autotaxoncover">
+	 <tr class='@nextcolorclass@'><td/><td class="datalabel">Cover Values Calculated?</td>
+	 <td><bean:write name="onerow" property="autotaxoncover_transl"/>&nbsp;</td>
 	 </tr>
-	 </logic:notEmpty>
+	 <bean:define id="hadData" value="true" />
+</logic:notEmpty> -->
 
 
-  </logic:notEmpty>
+  <bean:define id="hadData" value="true" />
+</logic:notEmpty>
      </table>
 </TD>
 </TR>
@@ -310,6 +396,7 @@
 
 <vegbank:pager/>
 
+<bean:define id="hadData" value="true" />
 </logic:notEmpty>
 
 <br>
