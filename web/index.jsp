@@ -71,7 +71,7 @@ MM_reloadPage(true);
         <LI class="constsize">
           <font size=3 face="Georgia, Times New Roman, Times, serif" color="#531100"> 
           New? Get <a href="@general_link@info.html">info</a> about us or a <a href="@general_link@vbsummary.html">summary 
-          of data</a> in Vegbank.  Try VegBank out by <a href="@general_link@register.html">registering</a> (it's free).
+          of data</a> in Vegbank.  Try VegBank out by <a href="@forms_link@RegisterNewUser.jsp">registering</a> (it's free).
           </font>
         </LI>
       </UL>
@@ -83,7 +83,7 @@ MM_reloadPage(true);
     <TD vAlign=top width=336 colSpan=6 height=149 rowSpan=2> 
 
     <!-- Pull in Logon widget -->
-    <jsp:include page="/includes/Logon.jsp" flush="true"/>
+    <%@ include file="../includes/Logon.jsp" %>
 
     </TD>
     <TD vAlign=top height=149 rowSpan=2></TD>
@@ -121,35 +121,6 @@ MM_reloadPage(true);
 		do not necessarily reflect the views of the National Science Foundation.</font></P></TD>
 
 
-  </TR>
-  <TR> 
-    <TD vAlign=top colSpan=22 height=9></TD>
-    <TD vAlign=top width=4 height=9></TD>
-  </TR>
-  <TR> 
-    <TD vAlign=top width=14 height=1><IMG height=1 src="" width=14></TD>
-    <TD vAlign=top width=11 height=1><IMG height=1 src="" width=11></TD>
-    <TD vAlign=top width=22 height=1><IMG height=1 src="" width=22></TD>
-    <TD vAlign=top width=202 height=1><IMG height=1 src="" width=202></TD>
-    <TD vAlign=top width=6 height=1><IMG height=1 src="" width=6></TD>
-    <TD vAlign=top width=43 height=1><IMG height=1 src="" width=43></TD>
-    <TD vAlign=top width=13 height=1><IMG height=1 src="" width=13></TD>
-    <TD vAlign=top width=10 height=1><IMG height=1 src="" width=10></TD>
-    <TD vAlign=top width=62 height=1><IMG height=1 src="" width=62></TD>
-    <TD vAlign=top width=59 height=1><IMG height=1 src="" width=59></TD>
-    <TD vAlign=top width=7 height=1><IMG height=1 src="" width=7></TD>
-    <TD vAlign=top width=4 height=1><IMG height=1 src="" width=4></TD>
-    <TD vAlign=top width=17 height=1><IMG height=1 src="" width=17></TD>
-    <TD vAlign=top width=8 height=1><IMG height=1 src="" width=8></TD>
-    <TD vAlign=top width=14 height=1><IMG height=1 src="" width=14></TD>
-    <TD vAlign=top width=15 height=1><IMG height=1 src="" width=15></TD>
-    <TD vAlign=top width=13 height=1><IMG height=1 src="" width=13></TD>
-    <TD vAlign=top width=9 height=1><IMG height=1 src="" width=9></TD>
-    <TD vAlign=top width=27 height=1><IMG height=1 src="" width=27></TD>
-    <TD vAlign=top width=25 height=1><IMG height=1 src="" width=25></TD>
-    <TD vAlign=top width=92 height=1><IMG height=1 src="" width=92></TD>
-    <TD vAlign=top width=136 height=1><IMG height=1 src="" width=136></TD>
-    <TD vAlign=top width=4 height=1><IMG height=1 src="" width=4></TD>
   </TR>
   </TBODY> 
 </TABLE>

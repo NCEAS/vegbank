@@ -25,9 +25,8 @@
   </tr>
   <tr> 
     <td align="center" bgcolor="#FFFFCC">
-
       <!-- Pull in Logon widget -->
-      <jsp:include page="/includes/Logon.jsp" flush="true"/>
+      <%@ include file="../includes/Logon.jsp" %>
 
     </td>
   </tr>

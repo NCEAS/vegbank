@@ -1,7 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-
+<!-- This is only a jsp snipit -->
 <!-- start logon form Include -->
 
 <html:form action="/Logon" focus="username"
@@ -57,9 +54,9 @@
     <!-- Some usefull links -->
     <td>
       <font face="Georgia, Times New Roman, Times, serif" color="red" size="1">
-        <a href="@forms_link@fetch-password.html">Lost your password?</a>
+        <a href="@forms_link@EmailPassword.jsp">Lost your password?</a>
         <br/>
-        <a href="@general_link@register.html">Not yet a user? Register here.</a>
+        <a href="@forms_link@RegisterNewUser.jsp">Not yet a user? Register here.</a>
       </font>
     </td>
   </tr>
