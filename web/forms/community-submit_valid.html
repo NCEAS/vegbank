@@ -1,0 +1,137 @@
+
+<!-- 
+  *   '$RCSfile: community-submit_valid.html,v $'
+  *     Purpose: web form tosubmit community data to vegbank system
+  *   Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *     Authors: @author@
+  *
+  *    '$Author: harris $'
+  *      '$Date: 2002-03-11 22:39:05 $'
+  *  '$Revision: 1.1 $'
+  *
+  *
+  -->
+  
+
+
+<html>
+	<head>
+		<title>
+			VEGBANK VEGETATION COMMUNITY DATA SUBMITTAL FORM
+		</title>
+	</head>
+
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
+<table cellspacing="0" cellpadding="0" border="0" width="800">
+  <tr> 
+    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
+    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
+      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
+    </td>
+    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
+    <td width="119" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="@general_link@login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="@general_link@info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="@general_link@help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
+    </td>
+  </tr>
+</table>
+
+
+
+<!-- SECOND TABLE -->
+<table align=left border="0" width=90% cellspacing=0 cellpadding=0>
+	<tr>
+		<td bgcolor="white">
+			<img align=center border=0 height=144 src="/vegbank/images/owlogoBev.jpg" alt = "Veg plots logo		">
+			<td align=left valign=middle>
+    			<table border=0 cellpadding=5>
+    				<tr>
+    					<td align=left valign=bottom>
+    					<font face="Helvetica,Arial,Verdana" size=6 color=23238E>
+							Vegetation Community Submittal Form
+    					</font><br>
+    					</td>
+   				</tr>
+			</table>
+			</td>
+		</td>
+	</tr>
+	<tr>
+		<!-- LEFT MARGIN -->
+		<td width="15%"  bgcolor="white" align="left" valign="top">
+		</td>
+	
+		<td align="left">
+			<table border="0" cellspacing=5 cellpadding=5>
+			<form action="@datasubmitservlet@" method="get">
+			<input type="hidden" name="submitDataType" value="vegCommunity">
+			<input type="hidden" name="action" value="init">		
+	
+			
+			<tr valign=top>
+			<td  align=left valign=middle colspan=2>
+			<font face="Helvetica,Arial,Verdana" size="2" color="209020">
+				<b>Enter the new community data in the field provided below. </b>
+			</font>
+			<p>
+			<small>
+			<INPUT TYPE="submit" VALUE="submit data">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
+			</small>
+			</td>
+			</tr>
+		</td>
+	</tr>
+	</table>
+
+Party <br>
+Salutation:  <input name="salutation"   size="25" value="@salutation@"  > <br>
+First Name:  <input name="firstName"   size="25" value="@firstName@"  > <br>
+Last Name:  <input name="lastName"   size="25" value="@lastname@"  > <br>
+Email Address:  <input name="emailAddress"   size="25" value="@emailAddress@"  > <br>
+Organization Name:  <input name="orgName"   size="25" value="@orgName@"  > <br>
+
+<br>
+Community Name <br>
+Community Name:  <input name="communityName"   size="25" value="@communityName@"  > <br>
+Community Level:  <input name="communityLevel"   size="25" value="@communityLevel@"  > <br>
+Community Code:  <input name="communityCode"   size="25" value="@communityCode@"  > <br>
+
+<br>
+Name Reference <br>
+Authors: <input name="authors"   size="25" value="@authors@"  > <br>
+Title: <input name="title"   size="25" value="@title@"  > <br>
+Publised Date: <input name="pubDate"   size="25" value="@pubDate@"  > <br>
+Edition: <input name="edition"   size="25" value="@edition@"  > <br>
+Series Name <input name="series"   size="25" value="@series@"  > <br>
+Issue Id: <input name="issueId"   size="25" value="@issueId@"  > <br>
+Other Citatin Details <input name="otherCitationDetails"   size="25" value="@otherCitationDetails@"  > <br>
+Page Number: <input name="pageNumber"   size="25" value="@pageNumber@"  > <br>
+ISBN: <input name="isbn"   size="25" value="@isbn@"  > <br>
+ISSN: <input name="issn"   size="25" value="@issn@"  > <br>
+
+<br>
+Usage <br>
+Class System: <input name="classSystem"   size="25" value="scientificName"  > <br>
+
+<br>
+Framework Level <br>
+Class System: <input name="level"   size="25" value="level"  > <br>
+
+
+</body>
+</html>
+
+
+
