@@ -65,17 +65,18 @@ private String communityLevel = null;
 
 /** Handle "POST" method requests from HTTP clients */
 public void doPost(HttpServletRequest request,
-                      HttpServletResponse response)
-        throws IOException, ServletException 	
-{
-        doGet(request, response);
-}
+	HttpServletResponse response)
+  throws IOException, ServletException 	
+	{
+		doGet(request, response);
+	}
 
 
 /** Handle "GET" method requests from HTTP clients */ 
-public void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws IOException, ServletException  {
-
+public void doGet(HttpServletRequest request, 
+	HttpServletResponse response)
+	throws IOException, ServletException  
+	{
 Enumeration enum =request.getParameterNames();
 Hashtable params = new Hashtable();
 

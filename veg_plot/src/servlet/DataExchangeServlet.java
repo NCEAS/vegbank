@@ -70,27 +70,26 @@ System.out.println("***"+req.getContentType());
 // then check to see if the user wants to upload or download the file and handle
 // it from there
 
-if (req.getContentType().startsWith("multipart")) {
-	
+if (req.getContentType().startsWith("multipart")) 
+{
 	System.out.println("request type: multipart");
 	uploadMultipartDataFile(req, res, out);
-
 }
-
-else if ( req.getContentType().startsWith("application") ) { 
-
+else if ( req.getContentType().startsWith("application") ) 
+{ 
 	System.out.println("request type: not encoded");
 	
 	//determine the file exchange type (up or down - load)
-	if (req.getParameter("exchangeType") != null ) {
+	if (req.getParameter("exchangeType") != null ) 
+	{
 		exchangeType=req.getParameter("exchangeType");
 		handleRawDataExchange(req, res, out);
 	}
-
-	else {out.println("unrecognized parameters");}
-	
+	else 
+	{
+		out.println("unrecognized parameters");
+	}
 }
-
 }
 catch ( Exception e ) {System.out.println("** failed in: DataExchangeServlet.main "
 	+e.getMessage());}

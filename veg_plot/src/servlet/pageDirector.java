@@ -32,7 +32,8 @@ public void doGet(HttpServletRequest req, HttpServletResponse res)
 	throws ServletException, IOException {
 
 /** Read the parameters from the properties file*/
-try {
+try 
+{
  plotQueryPage=(rb.getString("requestparams.plotQueryPage"));
  loginPage=(rb.getString("requestparams.loginPage"));
  loggedinPage=(rb.getString("requestparams.loggedinPage"));
@@ -40,10 +41,12 @@ try {
  communityQueryPage=(rb.getString("requestparams.communityQueryPage"));
  downloadPage=(rb.getString("requestparams.downloadPage"));
  uploadPage=(rb.getString("requestparams.uploadPage"));
- 
 }
-catch( Exception e ) {System.out.println("servlet failed in: pageDirector.main "
-	+" first try - reading parameters "+e.getMessage()); }
+catch( Exception e ) 
+{
+	System.out.println("servlet failed in: pageDirector.main "
+	+" first try - reading parameters "+e.getMessage()); 
+}
 
 
 
