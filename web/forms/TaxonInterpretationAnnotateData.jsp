@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2004-07-26 16:48:29 $'
-*  '$Revision: 1.4 $'
+*  '$Author: anderson $'
+*  '$Date: 2004-08-24 00:42:14 $'
+*  '$Revision: 1.5 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -92,7 +92,7 @@ function popupPlantQuery() {
 //   3: the SQL where key in SQLStore.properties
 //   4: the name of the model bean to generate
 //   5: any SQL where parameters; can be an array too
-org.vegbank.common.command.GenericCommand.execute(
+org.vegbank.common.command.GenericCommandStatic.execute(
 		request, "taxonobservation", "where_accessioncode", 
 		"Taxonobservation", tobsAC);
 %>
@@ -254,7 +254,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
   <!-- OTHER TAXON INTERPRETATIONS -->
 
 <%
-org.vegbank.common.command.GenericCommand.execute(
+org.vegbank.common.command.GenericCommandStatic.execute(
 		request, "taxoninterpretation_summary", "where_taxonobservation_pk", 
 		"Taxoninterpretation", tobsId);
 %>
@@ -292,7 +292,7 @@ String bgColor = "#FFFFF";
 	bgColor = bgColor.equals("#FFFFF")? "#FFFFC" : "#FFFFF";
 
 	// get the plant concept for this T-int
-	org.vegbank.common.command.GenericCommand.execute(
+	org.vegbank.common.command.GenericCommandStatic.execute(
 			request, "plantconcept", "where_plantconcept_pk", 
 			"Plantconcept", new Long(tint.getPlantconcept_id()));
 %>
@@ -303,7 +303,7 @@ String bgColor = "#FFFFF";
 <bean:define id="refId" name="Plantconcept" property="reference_id"/>
 <%
 // Set up genericVariable in the request scope
-org.vegbank.common.command.GenericCommand.execute(request, "reference", "where_reference_pk", "Reference", refId);
+org.vegbank.common.command.GenericCommandStatic.execute(request, "reference", "where_reference_pk", "Reference", refId);
 %>
 
 <logic:notEmpty name="genericVariable">
@@ -333,7 +333,7 @@ org.vegbank.common.command.GenericCommand.execute(request, "reference", "where_r
 
 <%
 // Set up genericVariable in the request scope
-org.vegbank.common.command.GenericCommand.execute(request, "party_simple", "where_party_pk", "Party", partyId);
+org.vegbank.common.command.GenericCommandStatic.execute(request, "party_simple", "where_party_pk", "Party", partyId);
 %>
 
 <logic:notEmpty name="Party">

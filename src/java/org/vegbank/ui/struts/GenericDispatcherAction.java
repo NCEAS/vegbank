@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-30 17:08:33 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-08-24 00:42:14 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 
 import org.vegbank.common.Constants;
-import org.vegbank.common.command.GenericCommand;
+import org.vegbank.common.command.GenericCommandStatic;
 import org.vegbank.common.command.RetrieveVBModelBean;
 import org.vegbank.common.model.VBModelBean;
 import org.apache.commons.logging.Log;
@@ -87,7 +87,7 @@ public class GenericDispatcherAction extends Action
 			if ( command.equals(genericCommandName)) 
 			{
 				log.debug( "GD: executing new gen cmd" );
-				GenericCommand.execute(request, response);
+				GenericCommandStatic.execute(request, response);
 				log.debug( "GD: done executing GC" );
 			}
 			else if ( command.equals("RetrieveVBModelBean")) 

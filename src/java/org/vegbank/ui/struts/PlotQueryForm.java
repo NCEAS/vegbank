@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-30 17:08:33 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2004-08-24 00:42:14 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.struts.validator.ValidatorForm;
-import org.vegbank.common.command.GenericCommand;
+import org.vegbank.common.command.GenericCommandStatic;
 import org.vegbank.common.model.Covermethod;
 import org.vegbank.common.model.Observation;
 import org.vegbank.common.model.Plot;
@@ -1122,7 +1122,7 @@ public class PlotQueryForm extends ValidatorForm
 			// Need to create this object
 			try
 			{
-				Collection projects = GenericCommand.execute(
+				Collection projects = GenericCommandStatic.execute(
 						selectClauseKey, whereClauseKey, beanName, whereParams );
 				Iterator projectsIter = projects.iterator();
 				while ( projectsIter.hasNext() )
@@ -1155,7 +1155,7 @@ public class PlotQueryForm extends ValidatorForm
 			// Need to create this object
 			try
 			{
-				Collection cms = GenericCommand.execute(
+				Collection cms = GenericCommandStatic.execute(
 						selectClauseKey, whereClauseKey, beanName, whereParams );
 				Iterator cmIter = cms.iterator();
 				while ( cmIter.hasNext() )
@@ -1188,7 +1188,7 @@ public class PlotQueryForm extends ValidatorForm
 			// Need to create this object
 			try
 			{
-				Collection stratummethods = GenericCommand.execute(
+				Collection stratummethods = GenericCommandStatic.execute(
 						selectClauseKey, whereClauseKey, beanName, whereParams );
 				Iterator stratummethodsIter = stratummethods.iterator();
 				while ( stratummethodsIter.hasNext() )
