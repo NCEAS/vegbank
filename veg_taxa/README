@@ -34,3 +34,24 @@ PERFORMANCE --
 
 on postgresql increase the wall_files attribute in the postgresql.conf 
 file to large number like = 60
+
+
+The targets in the buildfile are:
+
+Buildfile: build.xml
+Default target:
+
+ dist      ==> creates a jar file and sticks it in the lib directory
+
+Main targets:
+
+ compile   ==> compiles the data loaders 
+ dist      ==> creates a jar file and sticks it in the lib directory
+ dist-xml  ==> copies the xml resources (dtd'd and stylesheets to the webdirectory
+ prepare   ==> prepares the build system
+
+Subtargets:
+
+ init
+BUILD SUCCESSFUL
+

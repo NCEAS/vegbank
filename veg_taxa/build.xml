@@ -38,6 +38,8 @@
 	<property name="sql" value="./sql"/>
 	<property name="lib" value="./lib"/>
 	<property name="xmlFiles" value="./xmlfiles"/>
+	<property name="xml_dir" value="./xmlfiles"/>
+	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/"/>
 	
 	<property name="toolsdir" value="/usr/local/devtools" />
 	<property name="localToolsDir" value="./lib/" />	
@@ -55,7 +57,7 @@
 
 
 
-<target name="prepare" depends="init">
+<target name="prepare" depends="init" description="==> prepares the build system">
 	<mkdir dir="${build}" />
 	<mkdir dir="${build_bin}" />
 	<mkdir dir="${build_sql}" />
@@ -148,16 +150,17 @@
 
 
 	
-<target name="compile" depends="prepare">
+<target name="compile" depends="prepare" description="==> compiles the data loaders ">
 	<javac srcdir="${build_src}" 
 		classpath="${cpath}"
 		includes="PlantTaxaLoader.java USDAPlantsToXml.java USDAPlantsLoader.java USDAPlantsLoader2000.java" 
 		destdir="${build_src}"
+		debug="on"
 	/>
 </target>	
 
 	
-<target name="dist" depends="compile">
+<target name="dist" depends="compile" description="==> creates a jar file and sticks it in the lib directory">
 
 	<jar jarfile ="${build_lib}/planttaxonomy.jar"
 		basedir="${build_src}"
@@ -171,6 +174,18 @@
 		includes="planttaxonomy.jar"
 	/>
 	
+</target>		
+
+
+<!-- DISTXML  -->	
+<target name="dist-xml" depends="init" description="==> copies the xml resources (dtd'd and stylesheets to the webdirectory" >
+	<echo>
+			copying xml resources from ${xml_dir} to web server: ${servlet_lib}
+	</echo>
+	<copyfile src="${xml_dir}/showPlantTaxaSummary.xsl" 
+			filtering="no" 
+			dest="${servlet_lib}/showPlantTaxaSummary.xsl" 
+	/>
 </target>		
 
 
