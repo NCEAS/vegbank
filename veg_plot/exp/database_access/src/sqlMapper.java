@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-04-08 20:17:10 $'
- * '$Revision: 1.8 $'
+ *     '$Date: 2002-04-09 23:14:42 $'
+ * '$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,15 +71,16 @@ public class  sqlMapper
 	
 /**
  *
- * method to develope the sql query string required for the 
- * extended query -- using nested queries
+ * method to develop the sql query string required for the 
+ * extended query -- using nested query html form.  
  *
  * @param transformedString string containg the query element type and 
  *		value (| delimeted )
  * @param transformedSringNum integer defining number of query elements
  */
 
-	public void developExtendedPlotQuery(String[] transformedString, int transformedStringNum)
+	public void developExtendedPlotQuery(String[] transformedString, 
+	int transformedStringNum)
 	{
 		StringBuffer sb = new StringBuffer();
 		try 
@@ -93,7 +94,8 @@ public class  sqlMapper
 			Hashtable extendedTaxonQueryHash = getQueryTripleHash(transformedString, 
 				transformedStringNum);
 			
-			System.out.println("MAIN INPUT : "+extendedQueryHash.toString() );
+			System.out.println("sqlMapper > developExtendedPlotQuery");
+			System.out.println("sqlMapper > query elements: " + extendedQueryHash.toString() );
 			String outFile = extendedQueryHash.get("outFile").toString().trim();
 			String taxonSql = null;
 			String nonTaxonSql = null;
@@ -104,7 +106,7 @@ public class  sqlMapper
 			int taxonComponentNum = taxonomicComponentExists(extendedTaxonQueryHash);
 			if ( taxonComponentNum > 0)
 			{
-				System.out.println("TAXONOMIC LOOKUP! "+ taxonComponentNum);
+				System.out.println("sqlMapper > performing taxonomic query ");
 				//create the taxonomic sql query 
 				taxonSql = getExtendedTaxonomicQuery(extendedTaxonQueryHash) ;
 				
@@ -114,7 +116,7 @@ public class  sqlMapper
 				//issue the statement to the database - to return the 
 				//plot id's of those plots which have the taxon
 				Vector taxonPlotIdVec = is.issuePureSQL(sqlBuf);
-				System.out.println("number of plots found with taxon: "+ taxonPlotIdVec.size() );
+				System.out.println("sqlMapper > number of plots with taxon: "+ taxonPlotIdVec.size() );
 				
 				//get the sql query for the attributes 
 				//that are not related to the taxonomy
@@ -133,12 +135,12 @@ public class  sqlMapper
 			StringBuffer sqlBuf = new StringBuffer();
 			sqlBuf.append(nonTaxonSql);
 			
-			System.out.println("NEW SQL QUERY: \n" + sqlBuf.toString() );
+			System.out.println("sqlMapper > new sql query: " + sqlBuf.toString() );
 			
 			//issue the statement to the database
 			Vector plotIdVec = new Vector();
 			plotIdVec = is.issuePureSQL(sqlBuf);
-			System.out.println("number of plots found: "+ plotIdVec.size() );
+			System.out.println("sqlMapper > number of plots found: "+ plotIdVec.size() );
 			//update this public variable for 
 			//the calling method
 			queryOutputNum=plotIdVec.size();
@@ -147,6 +149,13 @@ public class  sqlMapper
 			//retrieved in the provios query 
 			queryStore k1 = new queryStore();
 			k1.getPlotSummaryNew(  plotIdVec  );
+			
+			//instantiate a new instance of the dbAccess class -- probably
+			//should be done above
+			String testFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml";
+			System.out.println("sqlMapper > writing the plots using new class - test file: "+testFile );
+			dbAccess dbaccess = new dbAccess();
+			dbaccess.writeMultipleVegBankPlot(plotIdVec, testFile);
 
 			//write to a summary information to the file 
 			//that can be used by the application
@@ -178,10 +187,10 @@ public class  sqlMapper
 			int taxonComponentNum = taxonomicComponentExists(extendedTaxonQueryHash);
 			if ( taxonComponentNum > 0)
 			{
-				System.out.println("doing the TAXONOMIC LOOKUP! "+ taxonComponentNum);
+				System.out.println("sqlMapper > doing "+ taxonComponentNum +" taxonomic queries");
 				Hashtable isolatedTaxonQueryHash = isolateTaxonQuery(extendedTaxonQueryHash);
 				//start the sql statement
-				sb.append("select PLOT_ID from PLOTSPECIESSUM where ");
+				sb.append("select DISTINCT(PLOT_ID) from PLOTSPECIESSUM where ");
 			
 				for (int i=0;i<taxonComponentNum; i++) 
 				{
@@ -198,7 +207,7 @@ public class  sqlMapper
 						sb.append(";");
 					}
 				}
-				System.out.println("Taxomomic SQL query: "+sb.toString() );
+				System.out.println("sqlMapper > full taxonomic SQL query: "+sb.toString() );
 			}
 		}
 		catch ( Exception e )
@@ -246,7 +255,7 @@ public class  sqlMapper
 				if (plotIdVec.size() > 0)
 				{
 					sb.append("AND PLOT_ID IN ( " );
-					System.out.println("FUTHER CONSTRAINING THE SQL");
+					System.out.println("sqlMapper > futher constraining the site-related sql");
 					for (int j=0;j<plotIdVec.size(); j++)
 					{
 						sb.append(plotIdVec.elementAt(j) );
@@ -335,8 +344,8 @@ public class  sqlMapper
 		Vector  operatorVecBuf = new Vector();
 		Vector  valueVecBuf = new Vector();
 		
-		
-		System.out.println("INPUT HASH: "+extendedTaxonomicQueryHash.toString() );
+		System.out.println("sqlMapper > creating a plant-taxonomic-only hashtable " );
+		System.out.println("sqlMapper > orig hash: "+extendedTaxonomicQueryHash.toString() );
 		
 		int origVectorSize = criteriaVector.size();
 		for (int i=0;i<origVectorSize; i++) 
@@ -347,10 +356,6 @@ public class  sqlMapper
 				criteriaVecBuf.addElement( criteriaVector.elementAt(i).toString().trim() );
 				operatorVecBuf.addElement( operatorVector.elementAt(i).toString().trim() );
 				valueVecBuf.addElement( valueVector.elementAt(i).toString().trim() );
-//				System.out.println("REMOVING: "+criteriaVector.elementAt(i) );
-//				criteriaVector.remove(i);
-//				operatorVector.remove(i);
-//				valueVector.remove(i);
 			}
 		}
 		//add the vectors back to the hashtable
@@ -358,7 +363,7 @@ public class  sqlMapper
 		extendedTaxonomicQueryHash.put("operator", operatorVecBuf);
 		extendedTaxonomicQueryHash.put("value", valueVecBuf);
 			
-		System.out.println("ISOATED HASH: "+extendedTaxonomicQueryHash.toString() );
+		System.out.println("sqlMapper > output hash: "+extendedTaxonomicQueryHash.toString() );
 		return(extendedTaxonomicQueryHash);
 	}
 	
@@ -368,7 +373,8 @@ public class  sqlMapper
 	
 	/**
 		* method that returns the number of taxa related componets
-		* if there is a taxonomic component in the nested query
+		* if there is a taxonomic component in the nested query 
+		* @param extendedQueryHash -- the hashtable containg the query elements
 		*
 		*/
 	private int taxonomicComponentExists(Hashtable extendedQueryHash)
@@ -384,7 +390,7 @@ public class  sqlMapper
 			{
 				taxonElementCount++;
 			}
-			System.out.println("Scanning criteria: "+ criteriaVec.elementAt(i).toString() );
+			//System.out.println("Scanning criteria: "+ criteriaVec.elementAt(i).toString() );
 		}
 		return(taxonElementCount);
 	}
@@ -394,6 +400,11 @@ public class  sqlMapper
 	 * method to return the sql statement for a single
 	 * instance of the extended query containing the 
 	 * criteria, operator, and value
+	 * @param extendedQueryHash -- the hashtable with the critira, values and 
+	 * 		operators related to the queries
+	 * @param instanceNum -- the query number for which to compose the sql query
+	 *		for
+	 * @return a part sql query for this instance -- like 'authorNameId like Abies bifolia'
 	 */
 	private String getSingleExtendedQueryInstanceSQL(Hashtable extendedQueryHash, 
 		int instanceNum)
@@ -405,11 +416,11 @@ public class  sqlMapper
 				
 		//make sure that the request is not for a instance number
 		//not contained within the hashtabable
-		System.out.println("queryInstanceNumber: "+instanceNum
+		System.out.println("sqlMapper > queryInstanceNumber: "+instanceNum
 		+"  criteriaVectorSize: "+ criteriaVec.size() );
 		if (instanceNum > criteriaVec.size() )
 		{
-			System.out.println("THIS REQUEST SHOULD NEVER HAPPEN!");
+			System.out.println("sqlMapper > THIS REQUEST SHOULD NEVER HAPPEN!");
 		}
 		else
 		{
@@ -422,17 +433,16 @@ public class  sqlMapper
 				sb.append(" "+getDBAttribute(criteria)+" ");
 				sb.append(" "+getSQLOperator(operator, getDBAttribute(criteria) )+" " );
 				sb.append( getStringDelimeter( getSQLOperator(operator, getDBAttribute(criteria)), getDBAttribute(criteria) ) );
-				//sb.append(value);
 				sb.append( getSQLValue(value, getSQLOperator(operator, getDBAttribute(criteria) ) ) );
 				sb.append(getStringDelimeter( getSQLOperator(operator, getDBAttribute(criteria)),  getDBAttribute(criteria) ) );
 			}
 			catch ( Exception e )
 			{
-				System.out.println("failed at:   "
-				+e.getMessage());
+				System.out.println("Exception " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
+		System.out.println("sqlMapper > composed query component: " + sb.toString() );
 		return(sb.toString());
 	}
 	
@@ -460,8 +470,7 @@ public class  sqlMapper
 		}
 			catch ( Exception e )
 		{
-			System.out.println("failed at:   "
-			+e.getMessage());
+			System.out.println("Exception: " +e.getMessage());
 			e.printStackTrace();
 		}
 		return(valueString);
@@ -471,9 +480,9 @@ public class  sqlMapper
 	
 	
 	/**
-	 * method to translate the criteria 
-	 * to the correct database attribute name
-	 *
+	 * method to translate the criteria to the correct database attribute name
+	 * for instance the term plantTaxon would become authorNameId
+	 * @param the criteria -- like plantTaxon, elevation etc..
 	 */
 	private String getDBAttribute(String criteria)
 	{
@@ -494,8 +503,7 @@ public class  sqlMapper
 		}
 			catch ( Exception e )
 		{
-			System.out.println("failed at:   "
-			+e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(criteria);
@@ -876,68 +884,73 @@ public class  sqlMapper
 
 public void developCompoundPlotQuery(String[] transformedString, int transformedStringNum)
 {
-try {
+	try 
+	{
+		//get the query elements into a hash table
+		getQueryElementHash(transformedString, transformedStringNum);
 
-//get the query elements into a hash table
-getQueryElementHash(transformedString, transformedStringNum);
+		// Grab the meta elements - like filename & number of query elements 
+		String resultType = (String)metaQueryHash.get("resultType");
+ 		String outFile = (String)metaQueryHash.get("outFile");
 
-/** Grab the meta elements - like filename & number of query elements */
- String resultType = (String)metaQueryHash.get("resultType");
- String outFile = (String)metaQueryHash.get("outFile");
-
-/** Look for commonly used queries elements */
- String plotId = (String)queryElementHash.get("plotId");
- String taxonName = (String)queryElementHash.get("taxonName");
- String elevationMin = (String)queryElementHash.get("elevationMin");
- String elevationMax = (String)queryElementHash.get("elevationMax");
- String state = (String)queryElementHash.get("state");
- String surfGeo = (String)queryElementHash.get("surfGeo");
- String multipleObs = (String)queryElementHash.get("multipleObs");
- String community = (String)queryElementHash.get("community");
+		// Look for commonly used queries elements
+ 		String plotId = (String)queryElementHash.get("plotId");
+	 	String taxonName = (String)queryElementHash.get("taxonName");
+ 		String elevationMin = (String)queryElementHash.get("elevationMin");
+ 		String elevationMax = (String)queryElementHash.get("elevationMax");
+ 		String state = (String)queryElementHash.get("state");
+ 		String surfGeo = (String)queryElementHash.get("surfGeo");
+ 		String multipleObs = (String)queryElementHash.get("multipleObs");
+ 		String community = (String)queryElementHash.get("community");
  
  
-/** This is for debugging - and can be commented out later**/
- System.out.println("sqlMapper.developCompoundPlotQuery > \n resultType: "+ resultType +"\n "
-	+"outFile: "+outFile+"\n plotId: "+plotId +"\n taxonName: "+taxonName 
-	+"\n elevationMin: "+elevationMin+"\n elavationMax: "+elevationMax
-	+"\n state: "+state+"\n multipleObs: "+multipleObs+"\n community: "+community);
+		// This is for debugging - and can be commented out later
+ 		System.out.println("sqlMapper > developCompoundPlotQuery");
+		System.out.println("sqlMapper > plotId: " + plotId);
+		System.out.println("sqlMapper > taxonName: " + taxonName);
+		System.out.println("sqlMapper > elevationMin: " + elevationMin);
+		System.out.println("sqlMapper > elavationMax: " + elevationMax);
+		System.out.println("sqlMapper > state: " + state);
+		System.out.println("sqlMapper > multipleObs: " + multipleObs);
+		System.out.println("sqlMapper > community: " + community);
 
+		// Check that all the appropriate query elements are there
+		if (taxonName != null && resultType != null && outFile != null) 
+		{
+			if ( resultType.equals("summary") ) 
+			{
+				System.out.println("sqlMapper.developCompoundPlotQuery - "
+				+" calling queryStore.getPlotId (compound)");
+				queryStore j = new queryStore();
+				j.getPlotId(taxonName, state, elevationMin, elevationMax,
+				surfGeo, community);
+				queryOutput=j.outPlotId;
+				queryOutputNum=j.outPlotIdNum;
+			}
+		}
 
-// Check that all the appropriate query elements are there
+		//retrieve the summary info
+		queryStore k = new queryStore();
+		k.getPlotSummaryNew(queryOutput, queryOutputNum);
 
-if (taxonName != null && resultType != null && outFile != null) {
-	
-	if ( resultType.equals("summary") ) {
-
-		System.out.println("sqlMapper.developCompoundPlotQuery - "
-		+" calling queryStore.getPlotId (compound)");
-		queryStore j = new queryStore();
-		j.getPlotId(taxonName, state, elevationMin, elevationMax,
-		surfGeo, community);
-		queryOutput=j.outPlotId;
-		queryOutputNum=j.outPlotIdNum;
-
+		//write to a summary file - that will be read by the requestor
+		xmlWriter xw = new xmlWriter();
+		xw.writePlotSummary(k.cumulativeSummaryResultHash, outFile);
+		
+		//instantiate a new instance of the dbAccess class -- probably
+		//should be done above
+		Vector plotIdVec = getVector(queryOutput);
+		String testFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml";
+		System.out.println("sqlMapper > writing the plots using new class - test file: "+testFile );
+		dbAccess dbaccess = new dbAccess();
+		dbaccess.writeMultipleVegBankPlot(plotIdVec, testFile);
 	}
-
-}
-
-
-//retrieve the summary info
-queryStore k = new queryStore();
-k.getPlotSummaryNew(queryOutput, queryOutputNum);
-
-
-//write to a summary file - that will be read by the requestor
-xmlWriter xw = new xmlWriter();
-xw.writePlotSummary(k.cumulativeSummaryResultHash, outFile);
-
-
-
-} //end try 
-catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery  "
-	+e.getMessage());e.printStackTrace();}
-
-} //end method
+	catch ( Exception e )
+	{
+		System.out.println("Exception: sqlMapper.developPlotQuery " +e.getMessage());
+		e.printStackTrace();
+	}
+} 
 
 
 	/**
@@ -1058,98 +1071,97 @@ catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery 
  * @param combinedStringNum - number of levels in the string
  *
  */
-	
-private void setAttributeAddress (String[] combinedString, int combinedStringNum) 
-{	
-	try 
-	{
-		int count=0;
-		for (int ii=0; ii<combinedStringNum; ii++) 
-		{ 
-			//System.out.println(" set attribute address : "+ combinedString[ii] +" "+ ii);
-			if ( combinedString[ii] != null )
-			{
-				if ( combinedString[ii].indexOf("|") >0   ) 
+	private void setAttributeAddress (String[] combinedString, int combinedStringNum) 
+	{	
+		try 
+		{
+			int count=0;
+			for (int ii=0; ii<combinedStringNum; ii++) 
+			{ 
+				//System.out.println(" set attribute address : "+ combinedString[ii] +" "+ ii);
+				if ( combinedString[ii] != null )
 				{
-					//System.out.println(combinedString[ii]);
-					StringTokenizer t = new StringTokenizer(combinedString[ii].trim(), "|");  //tokenize the string to get the requyired address
+					if ( combinedString[ii].indexOf("|") >0   ) 
+					{
+						//System.out.println(combinedString[ii]);
+						StringTokenizer t = new StringTokenizer(combinedString[ii].trim(), "|");  //tokenize the string to get the requyired address
 		
-					if ( t.hasMoreTokens() )	
-					{	//make sure that there are more tokens or else replace with the null value 
-						element[count]=t.nextToken();
-					}			
-					//capture the required element
-					else 
-					{
-						element[count]="-999.25";
-					}
+						if ( t.hasMoreTokens() )	
+						{	//make sure that there are more tokens or else replace with the null value 
+							element[count]=t.nextToken();
+						}			
+						//capture the required element
+						else 
+						{
+							element[count]=" ";
+						}
 				
-					if (t.hasMoreTokens() )	
-					{	
-						//make sure that there are more tokens or else replace with the null value (-999)
-						value[count]=t.nextToken();
-					} 				
-					//capture the attributeString
-					else 
-					{
-						value[count]="-999.25";
-					}  //do the replacement
+						if (t.hasMoreTokens() )	
+						{	
+							//make sure that there are more tokens or else replace with the null value (-999)
+							value[count]=t.nextToken();
+						} 				
+						//capture the attributeString
+						else 
+						{
+							value[count]=" ";
+						}  //do the replacement
+					}
+				count++;
+				elementNum=count;
 				}
-			count++;
-			elementNum=count;
-			}
-		}//end for
+			}//end for
 			
-	} //end try
-	catch ( Exception e )
-	{
-		System.out.println("failed at: sqlMapper.setAttributeAddress  "
-		+e.getMessage());
-		e.printStackTrace();
-	}
+		} //end try
+		catch ( Exception e )
+		{
+			System.out.println("Exception: sqlMapper.setAttributeAddress  "
+			+e.getMessage());
+			e.printStackTrace();
+		}
 } 
 
 
 
-/**
- * Method to make two hastables: 1] contains the query elements and respective 
- * values 2] contains metadata related to the query elements such as output file
- * names and data resultType -- uses as input an array of containing a pipe
- * separted query element and string
- *
- * @param  pipeDelimitString - the input pipe delimited string
- * @param  pipeDelimitStringNum - the number of elements in the array
- *
- */
+	/**
+ 	 * Method to make two hastables: 1] contains the query elements and respective 
+ 	 * values 2] contains metadata related to the query elements such as output file
+ 	 * names and data resultType -- uses as input an array of containing a pipe
+ 	 * separted query element and string
+ 	 *
+ 	 * @param  pipeDelimitString - the input pipe delimited string
+ 	 * @param  pipeDelimitStringNum - the number of elements in the array
+ 	 *
+ 	 */
 
-public void getQueryElementHash(String[] pipeDelimitString, 
+	public void getQueryElementHash(String[] pipeDelimitString, 
 	int pipeDelimitStringNum)
-{
-//System.out.println("test from getQueryElementHash");
-//pass the inputString to the tokenizer method below
-sqlMapper a =new sqlMapper();
-a.setAttributeAddress(pipeDelimitString, pipeDelimitStringNum);	
-String element[]=a.element;  // the returned array of query elements
-String value[]=a.value;  // the returned array of query element values
-int elementNum=a.elementNum; //the number of elements returned
+	{
+		//System.out.println("test from getQueryElementHash");
+		//pass the inputString to the tokenizer method below
+		sqlMapper a =new sqlMapper();
+		a.setAttributeAddress(pipeDelimitString, pipeDelimitStringNum);	
+		String element[]=a.element;  // the returned array of query elements
+		String value[]=a.value;  // the returned array of query element values
+		int elementNum=a.elementNum; //the number of elements returned
 
-int elementTokenNum = 0; //number of query elements
-for (int i=0;i<pipeDelimitStringNum; i++) 
-{	
-	if (value[i] != null) 
-	{	
-		if (element[i].equals("queryElement")) 
-		{
-			//System.out.println("*"+value[i]+" "+value[i+1]);
-			queryElementHash.put(value[i],value[i+1]);
-			elementTokenNum++;
-		}
-		metaQueryHash.put(element[i], value[i]);
+		int elementTokenNum = 0; //number of query elements
+		for (int i=0;i<pipeDelimitStringNum; i++) 
+		{	
+			if (value[i] != null) 
+			{	
+				if (element[i].equals("queryElement")) 
+				{
+					//System.out.println("*"+value[i]+" "+value[i+1]);
+					queryElementHash.put(value[i],value[i+1]);
+					elementTokenNum++;
+				}
+				metaQueryHash.put(element[i], value[i]);
+			}
+ 		}
+ 		//embed the number of query elements stored in the hastable
+ 		metaQueryHash.put("elementTokenNum", new Integer(elementTokenNum) );
 	}
- }
- //embed the number of query elements stored in the hastable
- metaQueryHash.put("elementTokenNum", new Integer(elementTokenNum) );
-} //end method
 
 
 

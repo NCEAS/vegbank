@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-04-05 19:17:38 $'
- * 	'$Revision: 1.5 $'
+ *  '$Date: 2002-04-09 23:14:42 $'
+ * 	'$Revision: 1.6 $'
  *
  *
  */
@@ -471,7 +471,8 @@ public void getPlotId(String queryElement, String queryElementType)
 			String returnFields[]=new String[1];	
 			returnFields[0]="PLOT_ID";
 			int returnFieldLength=1;
-
+			
+			System.out.println("queryStore > " + statement );
 
 			issueStatement j = new issueStatement();
 			j.issueSelect(statement, action, returnFields, returnFieldLength);	
@@ -492,8 +493,8 @@ public void getPlotId(String queryElement, String queryElementType)
 
 /**
  * Method to query the database to get all the plotId's using as input the 
- * following query elements -- this query is pretty much reserved for compond
- * queries
+ * following query elements this method is intended for the 'multiple element
+ * queries' 
  * 
  * @param taxonName
  * @param state
@@ -504,38 +505,58 @@ public void getPlotId(String queryElement, String queryElementType)
  * @param community
  *
  */
-
-public void getPlotId(String taxonName, String state, String elevationMin, 
+	public void getPlotId(String taxonName, String state, String elevationMin, 
 	String elevationMax, String surfGeo, String community)
-{
+	{
+		try
+		{
+			StringBuffer sb = new StringBuffer();
+			
+			System.out.println("queryStore >  taxonName: "+ taxonName);
+			System.out.println("queryStore >  state: "+ state );
+			System.out.println("queryStore >  elevationMin: "+ elevationMin );
+			System.out.println("queryStore >  elevationMax: "+ elevationMax );
+			System.out.println("queryStore >  surfGeo: "+ surfGeo );
+			System.out.println("queryStore >  community: "+ community);
 
-	System.out.println("queryStore.getPlotId - queryElements > \n"
-		+" taxonName: "+taxonName+" \n state: "+state+" \n elevationMin: "
-		+elevationMin+" \n elevationMax: "+elevationMax+" \n surfGeo: "+surfGeo
-		+" \n community: "+community);
+			String action="select";
+			
+			sb.append(" select DISTINCT PLOTSITESUMMARY.PLOT_ID from PLOTSITESUMMARY ");
+			sb.append(" WHERE ");
+			sb.append(" ALTVALUE <="+elevationMax );
+			sb.append(" and ");
+			sb.append(" ALTVALUE >="+elevationMin );
+			sb.append(" and ");
+			sb.append(" SURFGEO like '%" + surfGeo + "%' ");
+			sb.append(" and ");
+			sb.append(" STATE like '%"+state+"%' ");
+			sb.append(" and ");
+			sb.append(" PLOTSITESUMMARY.PLOT_ID in ");
+			sb.append(" (SELECT DISTINCT PLOT_ID from PLOTSPECIESSUM where AUTHORNAMEID like '%"+taxonName+"%') ");
+			String statement = sb.toString();
 
+			String returnFields[]=new String[1];	
+			returnFields[0]="PLOT_ID";
+			int returnFieldLength=1;
+		
+			System.out.println("queryStore statement: > " + statement );
+		
+			issueStatement j = new issueStatement();
+			j.issueSelect(statement, action, returnFields, returnFieldLength);	
 
-	String action="select";
-
-	String statement="select DISTINCT PLOTSITESUMMARY.PLOT_ID from PLOTSITESUMMARY "
-	+" WHERE ALTVALUE <="+elevationMax+" and ALTVALUE >="+elevationMin+" and SURFGEO like '%"
-	+surfGeo+"%' and STATE like '%"+state+"%' and PLOTSITESUMMARY.PLOT_ID in"
-	+"(SELECT DISTINCT PLOT_ID from PLOTSPECIESSUM where AUTHORNAMEID like '%"+taxonName+"%')";
-
-
-	String returnFields[]=new String[1];	
-	returnFields[0]="PLOT_ID";
-	int returnFieldLength=1;
-
-	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);	
-
-
-	//grab the returned result set and transfer to a public array
-	//ultimately these results are passed to the calling class
-	outPlotId=j.outReturnFields;
-	outPlotIdNum=j.outReturnFieldsNum;
-} //end method
+			//grab the returned result set and transfer to a public array
+			//ultimately these results are passed to the calling class
+			outPlotId=j.outReturnFields;
+			outPlotIdNum=j.outReturnFieldsNum;
+			System.out.println("queryStore resultset size: > " + outPlotIdNum  );
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+	}
 
 
 }

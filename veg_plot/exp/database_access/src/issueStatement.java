@@ -102,17 +102,16 @@ if (action.trim().equals("insert")) {
 	{
 		try 
 		{
-			System.out.println("Grabbing a DB connection from the local pool");
+			System.out.println("issueStatement > Grabbing a DB connection from the local pool");
 			//get the connections etc
 			LocalDbConnectionBroker lb = new LocalDbConnectionBroker();
 			conn = lb.manageLocalDbConnectionBroker("getConn");
-			query = conn.createStatement ();
+			query = conn.createStatement();
 			//issue the query
 			results = query.executeQuery(sqlStatement.toString());
 			
 			while (results.next()) 
 			{
-				//System.out.println("wow "+results.getString(1) );
 				if (results.getString(1) != null) 
 				{
 					returnedValues.addElement( results.getString(1) );
