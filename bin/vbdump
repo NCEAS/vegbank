@@ -9,5 +9,6 @@ REMOTE_DEST=$SCP_USER@aldo.vegbank.org:vbdumps
 $PG_DUMP -U datauser --no-owner --no-privileges vegbank > $BACKUP_FILE_PATH
 
 bzip2 -f --best $BACKUP_FILE_PATH
+rm $LATEST_DUMP
 ln -s $BACKUP_FILE_PATH.bz2 $LATEST_DUMP
 su -c "scp $LATEST_DUMP $REMOTE_DEST" $SCP_USER
