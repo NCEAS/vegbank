@@ -6,9 +6,9 @@
 *    Authors: John Harris
 *    Release: @release@
 *
-*   '$Author: harris $'
-*   '$Date: 2002-12-03 22:28:16 $'
-*    '$Revision: 1.2 $'
+*   '$Author: farrell $'
+*   '$Date: 2002-12-03 22:43:16 $'
+*    '$Revision: 1.3 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -417,7 +417,7 @@ public class DBinsertPlotSource {
 				//if there is only one plot then handle that differently than multiple
 				if (args.length == 2) {
 					String plot = args[1];
-					String emailAddress = "harris02@hotmail.com";
+					String emailAddress = "test@test.com";
 					System.out.println("loading single plot: " + plot + "\n");
 					DBinsertPlotSource db =
 						new DBinsertPlotSource(plugin, plot);
@@ -434,7 +434,7 @@ public class DBinsertPlotSource {
 				Vector v = db.getPlotNames();
 				//System.out.println("DBinsertPlotSource > plots: " + v.toString() );
 				for (int i = 0; i < v.size(); i++) {
-					String emailAddress = "harris02@hotmail.com";
+					String emailAddress = "test@test.com";
 					String plot = (String) v.elementAt(i);
 					plot = plot.trim();
 					System.out.println(
