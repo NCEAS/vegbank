@@ -24,8 +24,8 @@ import servlet.authentication.UserDatabaseAccess;
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-04-05 21:11:16 $'
- *  '$Revision: 1.6 $'
+ *  '$Date: 2002-04-05 21:42:37 $'
+ *  '$Revision: 1.7 $'
  *		 
  *  @version 
  *  @author 
@@ -375,7 +375,6 @@ public class AuthenticationServlet extends HttpServlet
 			{
 				return(false);
 			}
-		 	
 			else
 			{
 		 		//try to get the other variables
@@ -389,7 +388,8 @@ public class AuthenticationServlet extends HttpServlet
 		 		{
 					surName =  requestParams.get("surname").toString();
 		 		} 
-		 		System.out.println("AuthenticationServlet > given name: "+givenName);
+		 		
+				System.out.println("AuthenticationServlet > given name: "+givenName);
 		 		System.out.println("AuthenticationServlet > sur name: "+surName);
 		 
 		 
@@ -398,9 +398,28 @@ public class AuthenticationServlet extends HttpServlet
 		 	
 				if ( passWord.equals(retypePassWord) &&  passWord.length() > 2 )
 		 		{
-					 System.out.println("AuthenticationServlet > equals");
-					 uda.createUser(emailAddress, passWord, givenName, surName, remoteAddress);
-				 	 return(true);
+					System.out.println("AuthenticationServlet > equals");
+					uda.createUser(emailAddress, passWord, givenName, surName, remoteAddress);
+				 	//make sure that there in an @ in the email address
+					if ( emailAddress.indexOf("@") > 0 )
+					{
+						//make sure that the surname and given name were passed
+						if ( surName.length() >= 2 )
+						{
+					 		return(true);
+						}
+						else
+						{
+							System.out.println("AuthenticationServlet > surname is not real");
+							return(false);
+						}
+							
+					}
+					else
+					{
+						System.out.println("AuthenticationServlet > no @ in email address");
+						return(false);
+					}
 		 		}
 		 		else
 		 		{
