@@ -1,8 +1,8 @@
 <!--
   *   '$RCSfile: multiple_file_upload.jsp,v $'
   *   '$Author: anderson $'
-  *   '$Date: 2004-11-01 23:51:19 $'
-  *   '$Revision: 1.1 $'
+  *   '$Date: 2004-11-02 00:53:29 $'
+  *   '$Revision: 1.2 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -77,7 +77,7 @@
 <body>
 
 
-<form action="../nsupload/multiple_file_upload.jsp"
+<form action="@web_context@forms/multiple_file_upload.jsp"
 	name="countform" method="post" onchange="return doSubmit(this)">
 <input type="hidden" name="action" value="generateForm"/>
 <table>
@@ -106,7 +106,7 @@
 
 <br>2. Choose the files you want to upload:
   
-<form action="/nsupload/servlet/upload" enctype="multipart/form-data" name="fileform" method="post"  onsubmit="return doSubmit(this)">
+<form action="@web_context@servlet/upload" enctype="multipart/form-data" name="fileform" method="post"  onsubmit="return doSubmit(this)">
  <input type="hidden" name="action" value="upload"/>
   <table border="0">
   <%

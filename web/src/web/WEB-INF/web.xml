@@ -53,6 +53,13 @@
   </servlet>
 
 
+			<servlet>
+				<servlet-name>DataUploadServlet</servlet-name>
+				<description>John's famous upload servlet</description>
+				<servlet-class>org.vegbank.servlet.DataUploadServlet</servlet-class>
+			</servlet>
+
+
             <servlet>
               <servlet-name>DataSubmitServlet</servlet-name>
               <description>as it zounds</description>
@@ -100,6 +107,11 @@
               <url-pattern>*.do</url-pattern>
             </servlet-mapping>
 
+
+            <servlet-mapping>
+			  <servlet-name>DataUploadServlet</servlet-name>
+				<url-pattern>/servlet/upload</url-pattern>
+			</servlet-mapping>
 
             <servlet-mapping>
               <servlet-name>DataSubmitServlet</servlet-name>

@@ -4,8 +4,8 @@
  * Purpose: Upload and save any file.
  * 
  * '$Author: anderson $'
- * '$Date: 2004-11-01 23:51:01 $'
- * '$Revision: 1.1 $'
+ * '$Date: 2004-11-02 00:53:29 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,10 +48,14 @@ import java.math.*;
 import java.net.URL;
 import servlet.multipart.*;
 import servlet.util.ServletUtility;
+import org.vegbank.common.utility.Utility;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 public class DataUploadServlet extends HttpServlet 
 {
+	private static Log log = LogFactory.getLog(DataUploadServlet.class);
 	private static ResourceBundle vegbankPropFile;
 
 	private String uploadDir;
@@ -70,7 +74,7 @@ public class DataUploadServlet extends HttpServlet
 	 */
 	public DataUploadServlet()
 	{
-		System.out.println("init: DataUploadServlet");
+		log.debug("init: DataUploadServlet");
 		vegbankPropFile = ResourceBundle.getBundle("vegbank");
 		uploadDir = vegbankPropFile.getString("vegbank.data.dir");
 		if (Utility.isStringNullOrEmpty(uploadDir)) {
@@ -80,6 +84,15 @@ public class DataUploadServlet extends HttpServlet
 				uploadDir += "/";
 			}
 			uploadDir += "tmp";
+		}
+
+		try {
+			File udir = new File(uploadDir);
+			if (!udir.exists()) {
+				udir.mkdirs();
+			}
+		} catch (Exception ex) {
+			log.error("problem making upload dirs", ex);
 		}
 	}
 	
@@ -103,7 +116,7 @@ public class DataUploadServlet extends HttpServlet
 				{
 					try 
 					{
-						System.out.println("DataUploadServlet > client connected using multipart encoding");
+						log.debug("DataUploadServlet > client connected using multipart encoding");
 						//then get the user name and password -- this is where the upload 
 						//file is defined
 						multi=new MultipartRequest(req, uploadDir, fileMaxSize);
@@ -119,15 +132,14 @@ public class DataUploadServlet extends HttpServlet
 					}
 					catch(Exception e)
 					{
-						System.out.println("Exception: " + e.getMessage() );
+						log.error("Exception: " , e);
 					}
 				}
 				//no encoding
 			}
 			catch (Exception e)
 			{
-				System.out.println("Exception: "+ e.getMessage() );
-				e.printStackTrace();
+				log.error("Exception: ", e);
 			}
 		}
 		
@@ -160,7 +172,7 @@ public class DataUploadServlet extends HttpServlet
 			 String s = null;
 			 try
 			 {
-				 System.out.println("DataUploadServlet > content type: " + req.getContentType() );
+				 log.debug("DataUploadServlet > content type: " + req.getContentType() );
 				 if ( req.getContentType() != null )
 				 {
 						 s = req.getContentType();
@@ -172,7 +184,7 @@ public class DataUploadServlet extends HttpServlet
 			 }
 			 catch (Exception e) 
 			 {
-				 System.out.println("Exception: " + e.getMessage() );
+				 log.error("Exception: " , e);
 			 }
 			 return(s);
 		 }
@@ -194,7 +206,7 @@ public class DataUploadServlet extends HttpServlet
 			{
 				Enumeration enum =req.getParameterNames();
 				Hashtable params = new Hashtable();
-				System.out.println("DataUploadServlet > Request Content Type: "+req.getContentType());
+				log.debug("DataUploadServlet > Request Content Type: "+req.getContentType());
 
 				// determine if the request is encoded and if so pass to the MultipartRequest
 				// assuming that the user wants to upload a file and if not multipart encoded
@@ -203,15 +215,15 @@ public class DataUploadServlet extends HttpServlet
 
 				if (req.getContentType().startsWith("multipart")) 
 				{
-					System.out.println("DataUploadServlet > request type: multipart encoded");
+					log.debug("DataUploadServlet > request type: multipart encoded");
 					String s = uploadMultipartDataFile(req, res);
 					sb.append(" \n" + s + " \n" );
-					System.out.println("DataUploadServlet > handleExchangeRequest: " + s);
+					log.debug("DataUploadServlet > handleExchangeRequest: " + s);
 				}
 			}
 			catch ( Exception e ) 
 			{
-				System.out.println("Exception: " + e.getMessage());
+				log.error("Exception: " , e);
 			}
 			 return( sb.toString() );
 		 }
@@ -294,7 +306,7 @@ public class DataUploadServlet extends HttpServlet
 				}
 				else
 				{
-					System.out.println("DataUploadServlet > don't know what to do w/ request" );
+					log.debug("DataUploadServlet > don't know what to do w/ request" );
 				}
 				
 				//get the referURL and referPage which can be passed as a parameter 
@@ -309,11 +321,11 @@ public class DataUploadServlet extends HttpServlet
  		catch (Exception e) 
 		{ 
 			sb.append("<PRE> \n"); 
-			e.printStackTrace();
 			sb.append( e.getMessage() );
-      sb.append("</PRE> \n");  
-      sb.append("</body> \n");  
-      sb.append("</html> \n");  
+			sb.append("</PRE> \n");  
+			sb.append("</body> \n");  
+			sb.append("</html> \n");  
+			log.error(e.getMessage(), e);
 		}
 		return(sb.toString());
 	}
@@ -329,27 +341,27 @@ public class DataUploadServlet extends HttpServlet
 	 */
 	 private Hashtable getURLRefereral(Enumeration params )
 	 {
-		 System.out.println("DataUploadServlet > looking for a referal");
+		 log.debug("DataUploadServlet > looking for a referal");
 		 Hashtable h = new Hashtable();
 		 try
 		 {
 				String page = null;
 				String url = null;
-				System.out.println("DataUploadServlet > parameterd dump: " + params.toString() );
+				log.debug("DataUploadServlet > parameterd dump: " + params.toString() );
 				while (params.hasMoreElements()) 
 				{
-					//System.out.println("test");
+					//log.debug("test");
       	  String name = (String)params.nextElement();
     	   	String value = multi.getParameter(name);
-					System.out.println("DataUploadServlet > parameter: "+name+" "+value);
+					log.debug("DataUploadServlet > parameter: "+name+" "+value);
 					if ( name.equals("referPage") )
 					{
-						System.out.println("DataUploadServlet > refePage: "+ value);
+						log.debug("DataUploadServlet > refePage: "+ value);
 						page = value;
 					}
 					if ( name.equals("referUrl") )
 					{	
-						System.out.println("DataUploadServlet > referUrl: "+ value);
+						log.debug("DataUploadServlet > referUrl: "+ value);
 						url = value;
 					}
 				}
@@ -369,8 +381,7 @@ public class DataUploadServlet extends HttpServlet
 			}
 			catch ( Exception e ) 
 			{
-				System.out.println("Exception: " + e.getMessage());
-				e.printStackTrace();
+				log.error("Exception: " , e);
 			}
 			return(h);
 	 }
