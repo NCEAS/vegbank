@@ -13,6 +13,7 @@ create table veg_taxa_summary (
 	plantname_id integer,
 	plantconcept_id integer,
 	plantName varchar(230),
+	plantNameAlias varchar(230),
 	plantDescription varchar(230),
 	plantnamestatus varchar(23),
 	classsystem varchar(23),
@@ -41,6 +42,9 @@ INSERT INTO veg_taxa_summary
 --create index plantlevel_idx on veg_taxa_summary (plantlevel);
 --create index parentname_idx on veg_taxa_summary (parentname);
 
+-- UPDATE THE PLANT NAME WITH AUTHOR
+update  veg_taxa_summary 
+ set plantNameAlias = (select plantnamewithauthor from plantname where veg_taxa_summary.plantname_id = plantname.plantname_id );
 -- UPDATE THE DESCRIPTION OF THE PLANT WHICH WILL BE THE NAME OF THE 
 -- CORESPONDING SCI NAME
 update  veg_taxa_summary 
@@ -51,3 +55,4 @@ update  veg_taxa_summary
 --UPDATE THE PARENT NAME
 update  veg_taxa_summary 
  set parentName = (select plantparentname from plantstatus where veg_taxa_summary.plantconcept_id = plantstatus.plantconcept_id );
+
