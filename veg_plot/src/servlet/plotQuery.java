@@ -184,7 +184,7 @@ private void handleSimpleQuery (Hashtable params, PrintWriter out,
  resultType = (String)params.get("resultType");
 
 
-/** Cheat here - to recognise the single well/curve query */
+/** Cheat here - to recognise the single plot query to return entire plot */
  if (plotId != null && resultType.equals("full") ) {
 	String outFile="/jakarta-tomcat/webapps/examples/WEB-INF/lib/atomicResult";
 	out.println("<br>plotQuery.handleSimpleQuery - returning a full data set "
@@ -194,15 +194,27 @@ private void handleSimpleQuery (Hashtable params, PrintWriter out,
  }
 
  
- if (taxonName != null) {  
+ if ( taxonName != null  && taxonName.length()>0 ) {  
 	 out.println("<br>plotQuery.handleSimpleQuery - returning a summary data set "
 		+"containing plots with taxonName: "+taxonName+" <br>");
 	composeQuery("taxonName", taxonName);
  	issueQuery("simpleQuery");
 	
 	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
-
-if (queryOutputNum>0) {
+ }
+ 
+ if ( minElevation != null  && minElevation.length()>0 ) {  
+	 out.println("<br>plotQuery.handleSimpleQuery - returning a summary data set "
+		+"containing plots with a minElevation of: "+minElevation+" <br>");
+	composeQuery("elevationMin", minElevation, "elevationMax", maxElevation);
+ 	issueQuery("simpleQuery");
+	
+	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+ }
+ 
+ 
+ 
+if (queryOutputNum>=1) {
 	//allow the user to access the results
  	servletUtility l =new servletUtility();  
  	l.getViewOption();
@@ -210,13 +222,13 @@ if (queryOutputNum>0) {
 }
 
 else { 
-	out.println("<b> Please try another query </b> <br>"); 
+	out.println("<br> <b> Please try another query </b> <br>"); 
 	out.println("<a href = \"/examples/servlet/pageDirector?pageType=plotQuery\">"
 		+"return to query page</a><b>&#183;</b>"); //put in rb
 
 }
 
- }
+//}
 }
 
 
@@ -403,39 +415,40 @@ catch (Exception e) {System.out.println("failed in plotQuery.composeQuery" +
 
 
 /**
- *  Method to compose and print to a file an xml document that can be passed to
- *  the dbAccess class to perform the query and print the results to a file
- *  that is currently hard-wired as summary.xml  - an overloaded version of the 
- *  above.
+ * Method to compose and print to a file an xml document that can be passed to
+ * the dbAccess class to perform the query and print the results to a file
+ * that is currently hard-wired as summary.xml.  Thinking of queries where
+ * there a minimum and maximum value like elevation or tree stem diamtere
  *
- * @param queryElement - name of the element being used to query the database, 
- *	such as taxonName, plotId etc.
- * @param elementString - value of the queryElement
+ * @param minElement
+ * @param minValue - value of the queryElement
+ * @param maxElement
+ * @param maxValue - value of the queryElement
  */
 
-private void composeQuery (String queryElement, String[] elementString) {
+private void composeQuery (String minElement, String minValue, String maxElement, String maxValue) {
 try {
 //set up the output query file called query.xml	using append mode to build  
 PrintStream outFile  = new PrintStream(new FileOutputStream("/jakarta-tomcat/webapps/examples/WEB-INF/lib/query.xml", false)); 
 
-if (queryElement.equals("elevation")) {
+
 //print the query instructions in the xml document
 outFile.println("<?xml version=\"1.0\"?> \n"+       
 	"<!DOCTYPE vegPlot SYSTEM \"plotQuery.dtd\"> \n"+     
 	"<dbQuery> \n"+
 	"<query> \n"+
-	"<queryElement>elevationMin</queryElement> \n"+
-	"<elementString>"+elementString[0]+"</elementString> \n"+
+	"<queryElement>"+minElement+"</queryElement> \n"+
+	"<elementString>"+minValue+"</elementString> \n"+
 	"</query> \n"+
 	"<query> \n"+
-	"<queryElement>elevationMax</queryElement> \n"+
-	"<elementString>"+elementString[1]+"</elementString> \n"+
+	"<queryElement>"+maxElement+"</queryElement> \n"+
+	"<elementString>"+maxValue+"</elementString> \n"+
 	"</query> \n"+
 	"<resultType>summary</resultType> \n"+
 	"<outFile>/jakarta-tomcat/webapps/examples/WEB-INF/lib/summary.xml</outFile> \n"+
 	"</dbQuery>"
 );
-}
+
 	
 }
 catch (Exception e) {System.out.println("failed in plotQuery.composeQuery" + 
