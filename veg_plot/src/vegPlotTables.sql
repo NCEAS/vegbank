@@ -1,0 +1,92 @@
+/*
+ * vegPlotDB.sql -- Creates the veg plots database 
+ */
+
+CREATE TABLE project (
+project_id INT NOT NULL PRIMARY KEY,
+projectName varchar(20),
+purpose varchar(20),
+samplingMethod varchar(20),
+coverScale INT);
+
+
+CREATE TABLE plotMaster (
+plot_id INT NOT NULL PRIMARY KEY,
+project_id INT NOT NULL,
+authorPlotNum VARCHAR(30),
+previousPlotRecord INT,
+plotDate DATE,
+dateAccuracy INT,
+landOwner VARCHAR(10),
+effortLevel VARCHAR(8),
+standSize INT,
+treePlotSize INT,
+plotType VARCHAR(15),
+plotOriginLat NUMBER(22,6),
+plotOriginLong NUMBER(22,6),
+plotShape VARCHAR(12),
+plotSize VARCHAR(20),
+horizPosAcc NUMBER(3),
+altValue NUMBER(8),
+vertPosAcc NUMBER(3),
+town VARCHAR(12),
+county VARCHAR(12),
+state VARCHAR(12),
+country VARCHAR(12),
+slopeAspect NUMBER(22,6),
+slopeGradient NUMBER(22,6),
+slopePosition VARCHAR(12),
+hydrologicRegime VARCHAR(32),
+soilDrainage VARCHAR(22),
+surfGeo VARCHAR(32),
+FOREIGN KEY (project_id) REFERENCES project
+);
+
+CREATE TABLE party (
+party_id INT,
+salutation varchar(20),
+givenName varchar(20),
+surname varchar(20),
+orginaizationName varchar(20),
+positionName varchar(20),
+hoursOfService INT,
+contactInstructions varchar(20));
+
+CREATE VIEW salientPlotMaster 
+AS SELECT plot_id, 
+project_id, 
+authorPlotNum, 
+plotDate, 
+plotOriginLat, 
+plotOriginLong,
+plotShape,
+plotSize,
+altValue,
+slopeAspect,
+slopeGradient,
+slopePosition,
+hydrologicRegime,
+soilDrainage,
+surfGeo
+FROM plotMaster;
+
+/* Section below is artificial data intended to test the integrity of the 
+ * database.  In furture versions this will be broken-out into its own
+ * file 
+*/
+
+INSERT into project (project_id, projectName) VALUES (001, 'testProjectOne');
+INSERT into project (project_id, projectName) VALUES (002, 'testProjectTwo');
+INSERT into project (project_id, projectName) VALUES (003, 'tncTestData');
+
+INSERT into plotMaster (plot_id, project_id, authorPlotNum, plotDate) VALUES (001, 001, 999.25, '12-Feb-00');
+INSERT into plotMaster (plot_id, project_id, authorPlotNum) VALUES (002, 001, 999.25);
+INSERT into plotMaster (plot_id, project_id, authorPlotNum) VALUES (003, 001, 999.25);
+INSERT into plotMaster (plot_id, project_id, authorPlotNum) VALUES (004, 001, 999.25);
+INSERT into plotMaster (plot_id, project_id, authorPlotNum) VALUES (005, 001, 999.25);
+
+INSERT into plotMaster (plot_id, project_id, authorPlotNum) VALUES (006, 002, 999.25);
+INSERT into plotMaster (plot_id, project_id, authorPlotNum) VALUES (007, 002, 999.25);
+INSERT into plotMaster (plot_id, project_id, authorPlotNum) VALUES (008, 002, 999.25);
+INSERT into plotMaster (plot_id, project_id, authorPlotNum) VALUES (009, 002, 999.25);
+INSERT into plotMaster (plot_id, project_id, authorPlotNum) VALUES (010, 002, 999.25);
