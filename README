@@ -1,6 +1,6 @@
 '$Author: farrell $'
-'$Date: 2003-02-03 19:37:20 $'
-'$Revision: 1.9 $'
+'$Date: 2003-03-20 20:12:21 $'
+'$Revision: 1.10 $'
 THIS FILE DESCRIBES THE SETUP AND MAINTAINENCE OF A VEGBANK SYSTEM
 
 REQUIRED JAR FILES
@@ -62,19 +62,22 @@ createdb "name of database" #repeat for each
 # Create the database user 'datauser' as follows:
 > createuser  datauser
 
-# Run create table scripts for each database ( in each modules sql directory)
-> psql plots_dev < veg_plot/sql/create-vegbank-plots2002.sql  
+
+# Build the databases
+Some of the sql is auto generated using an ant task.
+In the vegclass directory run:
+> ant db_rebuild_all
+
+There are finer grained tasks also see ant -projecthelp
+
+# Create framework database
+> psql framework < ./veg_plot/sql/create_veguser_tables.sql
+> psql framework < ./veg_plot/sql/create_file_accesssion_tables.sql
+
+# Denormalization of the databases
 > psql plots_dev < veg_plot/sql/makePlotSummaryTables_postgres.sql
-
-> psql plants_dev < veg_taxa/sql/createPlantTaxonDb_pg.sql  
-
-> psql communities_dev < veg_community/sql/community_implementation.sql  
 > psql communities_dev < veg_community/sql/createCommunitySummary_pg.sql  
 > psql communities_dev < veg_community/sql/createEcoartTables_pg.sql   
-
-> psql framework < ./veg_plot/sql/create_veguser_tables.sql
-
-# Run the deNormalization scripts
 > psql plants_dev < veg_taxa/sql/denormPlantTaxonDb_pg.sql
 
 # Edit the pg_hba.conf file so that connections may be made to the database 

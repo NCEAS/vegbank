@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-03-08 00:24:23 $'
-  *     '$Revision: 1.5 $'
+  *     '$Date: 2003-03-20 20:12:22 $'
+  *     '$Revision: 1.6 $'
 --> 
 <project name="vegclass" default="compile" basedir=".">
 
@@ -15,15 +15,29 @@
   <target name="prepare">
     <property environment="env" />
     <property name="build.dir" value="${basedir}/build"/>
-    <property name="reports.dir" value="${build.dir}/reports"/>
-    <property name="reports.test.dir" value="${reports.dir}/testreports"/>
+    <property name="build.src.dir" value="${build.dir}/src"/>
+    <property name="build.sql.dir" value="${build.src.dir}/sql"/>
+    <property name="build.reports.dir" value="${build.dir}/reports"/>
+    <property name="build.reports.test.dir" value="${build.reports.dir}/testreports"/>
+    <property name="docs.dir" value="${basedir}/docs"/>
+    <property name="bin.dir" value="${basedir}/bin"/>
+    <property name="src.dir" value="${basedir}/src"/>
+    <property name="xsl.src.dir" value="${src.dir}/xsl"/>
     <property name="ant.style.dir" location="${env.ANT_HOME}/etc" />
     <property name="web.docroot" location="${env.TOMCAT_HOME}/webapps" />
-        
+       
+    <property name="plants.db.name" value="plants_dev" />
+    <property name="plots.db.name" value="plots_dev" />
+    <property name="communities.db.name" value="communities_dev" />
+    
+    <mkdir dir="${build.src.dir}"/>
+    <mkdir dir="${build.sql.dir}"/>
+    <mkdir dir="${build.reports.dir}"/>
+    <mkdir dir="${build.reports.test.dir}"/>
   </target>
     
   <target name="jar" depends="prepare"
-          description=" => Generates all jars in vegclass module">
+          description="==> Generates all jars in vegclass module">
     
     <ant dir="common" target="jar" inheritAll="false"/>
     <ant dir="veg_plot" target="jar" inheritAll="false"/>
@@ -39,7 +53,7 @@
   </target>
   
   <target name="deploy" depends="jar"
-          description=" => deploys vegclass module jars, html and other resources">
+          description="==> deploys vegclass module jars, html and other resources">
     
     <ant dir="common" target="deploy" inheritAll="false"/>
     <ant dir="veg_plot" target="deploy" inheritAll="false"/>
@@ -48,7 +62,7 @@
   
   </target>
 
-	<target name="clean" description="=> Remove all generated files">
+	<target name="clean" description="==> Remove all generated files">
     <ant dir="common" target="clean" inheritAll="false"/>
     <ant dir="veg_plot" target="clean" inheritAll="false"/>
     <ant dir="veg_community" target="clean" inheritAll="false"/>
@@ -57,11 +71,11 @@
 
   <target name="dist-reports" 
           depends="prepare"
-          description="=> Generate htmls from generated reports and distributes to web">
+          description="==> Generate htmls from generated reports and distributes to web">
 
 		<!-- Create a report from the junit output -->
-		<junitreport todir="${reports.test.dir}">
-	  		<fileset dir="${reports.test.dir}">
+		<junitreport todir="${build.reports.test.dir}">
+	  		<fileset dir="${build.reports.test.dir}">
 	  			<include name="TEST-*.xml"/>
 			</fileset>
 	  		<report format="frames"
@@ -71,4 +85,66 @@
 	
 	</target>
 
+  <!-- ================================================================= -->
+  <!-- Database related targets                                          -->
+  <!-- ================================================================= -->
+
+  <target name="db_generate_sql"
+          description="==> Generate the sql build scripts"
+          depends="prepare">
+          
+    <xslt in="${docs.dir}/xml/db_model_vegbank.xml" out="${build.sql.dir}/plot.sql" 
+          style="${xsl.src.dir}/VegBankModel2SQL.xsl">
+      <param name="module" expression="plot"/>
+    </xslt>
+    
+    <xslt in="${docs.dir}/xml/db_model_vegbank.xml" out="${build.sql.dir}/plant.sql" 
+          style="${xsl.src.dir}/VegBankModel2SQL.xsl">
+      <param name="module" expression="plant"/>
+    </xslt>
+    
+    <xslt in="${docs.dir}/xml/db_model_vegbank.xml" out="${build.sql.dir}/community.sql" 
+          style="${xsl.src.dir}/VegBankModel2SQL.xsl">
+      <param name="module" expression="community"/>
+    </xslt>
+    
+  </target>
+
+
+  <target name="db_rebuild_plants"
+          description="==> Rebuild the plants Database"
+          depends="db_generate_sql">
+    <!-- DROP and CREATE Database -->
+    <exec executable="${bin.dir}/rebuilddb.sh">
+      <arg value="${plants.db.name}"/>
+      <arg value="${build.sql.dir}/plant.sql"/>
+    </exec>
+    
+    
+  </target>
+  
+  <target name="db_rebuild_plots"
+          description="==> Rebuild the plots Database"
+          depends="db_generate_sql">
+    <exec executable="${bin.dir}/rebuilddb.sh">
+      <arg value="${plots.db.name}"/>
+      <arg value="${build.sql.dir}/plot.sql"/>
+    </exec>
+  </target>
+  
+  <target name="db_rebuild_communities"
+          description="==> Rebuild the communities Database"
+          depends="db_generate_sql">
+    <exec executable="${bin.dir}/rebuilddb.sh">
+      <arg value="${communities.db.name}"/>
+      <arg value="${build.sql.dir}/community.sql"/>
+    </exec>
+  </target>
+  
+  <target name="db_rebuild_all"
+          description="==> Rebuild all the Databases"
+          depends="db_rebuild_plots, db_rebuild_plants, db_rebuild_communities">
+  </target>
+
+  
 </project>
