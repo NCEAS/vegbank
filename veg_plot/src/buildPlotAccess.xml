@@ -26,6 +26,7 @@
 		*
 		* the default settings are for:
 	-->
+	<filter token="databaseType" value="postgresql" />
 	<filter token="user" value="datauser" />
   <filter token="password" value="pass" />
 	<filter token="port" value="1521" />
@@ -44,6 +45,7 @@
 
 
 <!--
+	<filter token="databaseType" value="postgresql"/>
 	<filter token="user" value="nvc" />
 	<filter token="password" value="jhhtpass" />
 	<filter token="port" value="1521" />
@@ -74,6 +76,7 @@
 	<property name="src_lib" value="../lib"/>
 	<property name="src_xml" value="../xml"/>
 	<property name="src_bin" value="../bin"/>
+	<property name="src_sql" value="../sql"/>
 	
 	<property name="utilities" value="./utilities"/>
 	<filter token="dist" value="dist"/>
@@ -111,7 +114,15 @@
     includes="**.dtd **.xml **.xsl"
     excludes="**/CVS* "
 	/>
-	 
+	
+	<copydir src="${src_sql}"
+	  dest="${build_sql}"
+		filtering="no"
+		includes="**.sql"
+		excludes="**/CVS* "
+	/>
+										
+	
 	<copydir src="${src_lib}" 
 		dest="${build_lib}" 
     filtering="no"
