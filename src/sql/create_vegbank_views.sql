@@ -27,3 +27,11 @@ CREATE VIEW view_busRule_plotsizeshape AS
    where ((area is null) and (shape is null or (((shape)<>'Plotless') and (upper(shape) not like 'RELEV%')))) group by project_ID;
    
    
+   drop view view_busRule_duplStratumType;
+   CREATE VIEW view_busRule_duplStratumType AS 
+    SELECT count(1), stratummethod_id, stratumindex FROM stratumType GROUP BY stratummethod_id, stratumindex HAVING count(1) > 1;
+    
+    drop view view_busRule_duplcovercode;
+   CREATE VIEW view_busRule_duplcovercode AS 
+    SELECT count(1), covermethod_id, covercode FROM coverIndex GROUP BY covermethod_id, covercode HAVING count(1) > 1;
+    
