@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-21 23:11:43 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2002-02-22 03:07:51 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,7 +90,7 @@ public class VegCommunityLoader
 	 */
 	 private void insertCommunity(String conceptCode, String conceptLevel, 
 	 String commName, String otherCitationDetails, String dateEntered, 
-	 String parentCommunity )
+	 String parentCommunity, String allianceTransName )
 	 {
 		 try
 		 {
@@ -103,6 +103,12 @@ public class VegCommunityLoader
 			//System.out.println("VegCommunityLoader > refId: " + refId);
 			int commNameId = insertCommunityName(commName, refId, dateEntered);
 			int commCodeId = insertCommunityName(conceptCode, refId, dateEntered);
+			//load the alliance trans if this is that value
+			if (conceptLevel.equals("alliance") )
+			{
+				int commTransId = insertCommunityName(allianceTransName, refId, dateEntered);
+			}
+			
 			//System.out.println("VegCommunityLoader > commNameId: " + commNameId);
 			int commConceptId = insertCommunityConcept(conceptCode, commNameId, 
 			conceptLevel, parentCommunity, commName, refId );
@@ -656,13 +662,15 @@ public class VegCommunityLoader
 					}
 					String communityCode = v.elementAt(i).toString();
 					String commName = source.getCommunityName(communityCode);
+					//this variable should be moved from here
+					String allianceTransName = "";
 					String level = "association";
 					String dateEntered = "11-FEB-2002";
 					String parentCommunity = source.getParentCode(communityCode);
 					if (commName != null)
 					{
 						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
-						dateEntered, parentCommunity);
+						dateEntered, parentCommunity, allianceTransName );
 					}
 				}
 				//close the connections 
@@ -706,13 +714,14 @@ public class VegCommunityLoader
 					}
 					String communityCode = v.elementAt(i).toString();
 					String commName = source.getCommunityName(communityCode);
+					String allianceTransName = source.getAllianceNameTrans(communityCode);
 					String level = "alliance";
 					String dateEntered = "11-FEB-2002";
 					String parentCommunity = null; //this means top level
 					if (commName != null)
 					{
 						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
-						dateEntered, parentCommunity);
+						dateEntered, parentCommunity, allianceTransName);
 					}
 				}
 				//close the connections 
