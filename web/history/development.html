@@ -1,0 +1,1183 @@
+<HTML><!-- #BeginTemplate "/Templates/VegBank_Master.dwt" -->
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>Development Process</TITLE>
+<!-- #EndEditable --> 
+<meta http-equiv="Content-Type" content="text/html; charset=">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#005680" vlink="6699CC" alink="0033FF">
+<table cellspacing="0" cellpadding="0" border="0" width="800">
+  <tr> 
+    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
+    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
+      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
+    </td>
+    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
+    <td width="119" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="../general/login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="../general/info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="../general/help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
+    </td>
+  </tr>
+</table>
+<!-- #BeginEditable "Body" --> 
+<p align="center"><font face="Georgia, Times New Roman, Times, serif"><br>
+  <b><font size="5">The Vegetation Plot Archive Project</font><br>
+  </b></font><b><font face="Georgia, Times New Roman, Times, serif" size="4"><i>Design 
+  and Development Process </i></font></b><font face="Georgia, Times New Roman, Times, serif"><br>
+  </font></p>
+<hr>
+<ul>
+  <li> 
+    <h4><font face="Georgia, Times New Roman, Times, serif"><a href="#abstract">Abstract 
+      and overview</a></font></h4>
+  </li>
+  <li> 
+    <h4><font face="Georgia, Times New Roman, Times, serif"><a href="#flow">Information 
+      flow in vegetation classification</a></font></h4>
+  </li>
+  <li> 
+    <h4><font face="Georgia, Times New Roman, Times, serif"><a href="#process">The 
+      development process </a></font></h4>
+  </li>
+  <li> 
+    <h4><font face="Georgia, Times New Roman, Times, serif"><a href="#meetings">Meetings</a></font></h4>
+  </li>
+  <li> 
+    <h4><font face="Georgia, Times New Roman, Times, serif"><a href="#participants">Participants</a></font></h4>
+  </li>
+  <li> 
+    <h4><font face="Georgia, Times New Roman, Times, serif"><a href="nsf.html">The 
+      Original NSF proposal</a></font></h4>
+  </li>
+</ul>
+<hr>
+<h3><font face="Georgia, Times New Roman, Times, serif"><b><a name="abstract"></a>Abstract 
+  and overview</b></font> </h3>
+<p><font face="Georgia, Times New Roman, Times, serif" size="3">Vegetation classification 
+  is of central importance to biological conservation for planning and inventory, 
+  to resource management for monitoring and planning, and to basic scientific 
+  research as a tool for organizing and interpreting ecological information. All 
+  of these activities require that ecological units be defined and that their 
+  distributions on the landscape be known and understood. Vegetation classification 
+  contributes significantly to analysis of ecological problems that vary in scale 
+  from persistence of tiny populations of endangered species to global projections 
+  of the impact of climate change. Technological advances have made practical 
+  large-scale analyses that cross agency jurisdictions or geographic regions and 
+  address applied ecological issues as diverse as global change, ecosystem management, 
+  and conservation planning. However, all such efforts depend on having available 
+  a common set of well defined and broadly accepted classification units.</font></p>
+<p><font face="Georgia, Times New Roman, Times, serif" size="3">Through the combined 
+  efforts of The Association of Biological Information (<a 
+href="http://www.abi.org/">ABI</a>, an offshoot of The Nature Conservancy), the 
+  Ecological Society of America Vegetation Panel (ESA-VP), and the Federal Geographic 
+  Data Committee (<a href="http://www.fgdc.gov/">FGDC</a>), the United States 
+  is on the verge of having its first fully functional, widely-applied vegetation 
+  classification system. The federal government has declared the need for a single 
+  standard, and on October 22, 1997, the Secretary of Interior, acting as Chair 
+  of the Federal Geographic Data Committee, approved the <u><font 
+color=blue><a href="http://biology.usgs.gov/fgdc.veg/">Vegetation Information 
+  and Classification Standard</a></font></u>, which is now the standard vegetation 
+  classification for U.S. federal agencies and their cooperators. Yet, there are 
+  still major obstacles to overcome to make such a system operational and broadly 
+  accepted. ESA-VP is working in close collaboration with ABI and FGDC to draft 
+  standards for field data acquisition, type&nbsp; definition, and peer review 
+  of proposed additions and changes. The current <u><font color=blue><a 
+href="http://esa.sdsc.edu/initv60.htm">draft standards</a></font></u> are available 
+  for public comment.&nbsp; A core component is an information infrastructure 
+  to manage the anticipated 10<sup>7</sup> plots and 10<sup>4</sup> plant associations 
+  required for a national system, and to distribute this information across the 
+  web in a continually revised but perfectly archived format.&nbsp; The major 
+  goal of this NCEAS-based project is to create a working prototype of the requisite 
+  information system for potential adoption by federal agencies and partner organizations. 
+  </font></p>
+<hr>
+<h3><font face="Georgia, Times New Roman, Times, serif"><b><br>
+  <a name="flow"></a>Information flow in vegetation classification</b></font> 
+</h3>
+<p><font face="Georgia, Times New Roman, Times, serif" size="3">To understand 
+  the functions of the required information infrastructure for vegetation science, 
+  it is necessary to understand the flow of information through the system.&nbsp; 
+  </font></p>
+<ul>
+  <li><font face="Georgia, Times New Roman, Times, serif" size="3">Vegetation 
+    scientists observe and record vegetation in the field.&nbsp; The fundamental 
+    unit of vegetation observation is the <i>plot. </i>At a minimum, a plot contains 
+    information on location, spatial extent, and the species present with cover 
+    values as a measure of importance.&nbsp; A Vegetation Plots Database is needed 
+    to store, preserve and distribute plot data that meet recognized minimum standards.</font> 
+  </li>
+</ul>
+<ul>
+  <li><font face="Georgia, Times New Roman, Times, serif" size="3">Plots are used 
+    to classify vegetation.&nbsp; Eventually, each vegetation type will be documented 
+    in a Vegetation Classification Database, which will refer to the plots used 
+    to develop the types.&nbsp; Proposals to change the classification will be 
+    required to be based on plots.&nbsp; All of these plots will be referenced 
+    in the Vegetation Classification Database and will be available from the Vegetation 
+    Plots Database.<br>
+    <br>
+    </font> 
+  <li><font face="Georgia, Times New Roman, Times, serif" size="3">The resultant 
+    Vegetation Classification Database will be viewable over the web, will be 
+    continuously updated, and will be constructed so that the content on any given 
+    date will be viewable so as to allow citation in literature and legal contracts. 
+    <br>
+    <br>
+    </font> 
+  <li><font face="Georgia, Times New Roman, Times, serif" size="3">All stages 
+    in this information flow contain references to plant names, but use of different 
+    standards for different plots weakens our ability to compare and synthesize 
+    plot data. A concept-based Taxon Database (embedding some of the principles 
+    espoused in <a 
+  href="http://www.bgbm.fu-berlin.de/biodivinf/docs/IOPI_Model/">Berendsohn 1995</a>) 
+    is needed to avoid these problems.</font> </li>
+</ul>
+<p><font face="Georgia, Times New Roman, Times, serif" size="3">This database 
+  system consists of prototypes of the three core components of the information 
+  infrastructure necessary to support the <a href="http://biology.usgs.gov/fgdc.veg/">U.S. 
+  National Vegetation Classification</a> (US-NVC).&nbsp; The first component is 
+  a Vegetation Plots Database with internet access tools. A Windows based desktop 
+  version for private/institutional use is available for data preparation and 
+  submission. The second componenet is a concept-based Taxon Database compliant 
+  with anticipated <a 
+href="http://www.fgdc.gov/">FGDC</a>, <a 
+href="http://www.itis.usda.gov/plantproj/itis/">ITIS</a>, and <a 
+href="http://iopi.csu.edu.au/iopi/">IOPI</a> standards and populated with data 
+  drawn from the ITIS database. The third componene is a concept-based Vegetation 
+  Classification Database compliant with anticipated FGDC standards and populated 
+  with data from ABI.&nbsp;&nbsp; The databases have been designed so as to allow 
+  continual revision while simultaneously being perfectly archived so as to allow 
+  citation in literature and legal documents. </font></p>
+<hr>
+<h3><font face="Georgia, Times New Roman, Times, serif"><br>
+  <a name="process"></a>The development process</font></h3>
+<p><font face="Georgia, Times New Roman, Times, serif">We have engaged in a four-stage 
+  process for database development. The first stage (July 1999-June 2000) largely 
+  consisted of a period of scoping and organizing. This included a major meeting 
+  held at NCEAS in October 1999 for the purpose introducing the major participants 
+  to the project's background and goals, and for refining the major objectives 
+  of the project, the lists of participants, the budget, and the schedule. The 
+  kickoff meeting was followed by a search for a staff programmer, which successfully 
+  concluded with John Harris starting employment at NCEAS in early July 2000.</font></p>
+<p><font face="Georgia, Times New Roman, Times, serif"> The second stage of the 
+  project (July 2000-January 2001) focused on design and construction of the core 
+  plots database. Toward this end back-to-back meetings were held at NCEAS in 
+  September 2000. The first, attended primarily by active field ecologists, focused 
+  on refinement of the database requirements first articulated in Chapter 3 of 
+  the Vegetation Panel draft standards document. The second meeting was attended 
+  primarily by data modelers and overlapped the first meeting for a day, thereby 
+  facilitating communication between the two groups. The plots data model, initially 
+  developed in September and subsequently revised through an iterative process 
+  involving various participants from the September meetings, is summarized in 
+  section 6 of this document.</font></p>
+<p><font face="Georgia, Times New Roman, Times, serif"> Simultaneous with stage 
+  two, we conducted a parallel design study for a concept-based taxonomic database. 
+  Although it is not our plan for the NCEAS working group to fully develop and 
+  implement a national taxonomic database, we consider creation of such a database 
+  essential for our planned vegetation information infrastructure, and especially 
+  for the process of incorporating legacy plot data collected at different times 
+  by different parties using different taxonomic standards. Accordingly, we are 
+  collaborating with partner organizations, aiding in the design and implementation 
+  of this key database. Toward this end potential database architecture was discussed 
+  at the September NCEAS meetings, and Steve Taswell and Robert Peet subsequently 
+  collaborated to design a data architecture for possible implementation by both 
+  ABI and ITIS. Peet and Taswell then joined Janet Gomon (representing ITIS and 
+  the FGDC subcommittee on Biological Nomenclature) to host a meeting at the Smithsonian 
+  (November 2000) to review the Taswell-Peet model as a candidate for adoption 
+  by ITIS and FDGC as a federal standard. (The <a href="http://biology.usgs.gov/fgdc.bio/FGDC_TaxNom.doc">summary 
+  of findings from the November 2000 meeting</a> is available at the <a href="http://biology.usgs.gov/fgdc.bio/">FGDC 
+  Biological Data Working Group</a> website.) The Working group is continuing 
+  to collaborate with the FGDC Biological Data Working Group to develop draft 
+  national standards for taxnomix databases. We will include a prototype national 
+  plants database employing the proposed FGDC standard as a module of the plot 
+  database. ABI is also drawing on this modeling effort to build a nation-wide, 
+  concept-based database for organisms as a component of their new HDMS database 
+  system (Heritage Data Management System).</font></p>
+<p><font face="Georgia, Times New Roman, Times, serif"> Stage three (February 
+  - October 2001) has focused on design and development of the database and associated 
+  interface tools (including the internet-based toolbox and the desk-top resident 
+  tools) for both loading data into and retrieving data from the Vegetation Plots 
+  Database. Preliminary interface requirements were developed at the January 2001 
+  meeting and were finalized at the October 2001 meeting. </font></p>
+<p><font face="Georgia, Times New Roman, Times, serif"> The fourth stage of the 
+  project (October 2001 - June 2002) consists of testing and refinement of the 
+  database and iterative development of tools for data preparation, data loading, 
+  database querying, and manipulation/analysis of extracted data.</font></p>
+<hr>
+<h3><font face="Georgia, Times New Roman, Times, serif"><br>
+  <a name="meetings"></a>Working Group Meetings<br>
+  </font></h3>
+<ul>
+  <li><font face="Georgia, Times New Roman, Times, serif">April 7, 1999. ABI, 
+    Washington DC. Project definition.</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif">May 1, 1999. ABI, Washington 
+    DC. Data model design.</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif">October 12, 1999. NCEAS, 
+    Santa Barbara CA. Working Group kick-off meeting. [<a href="agenda_oct99.html"><b>Agenda</b></a>]</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif">July 26, 2000. NCEAS, 
+    Santa Barbara CA. Orientation for John Harris</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif">September 11, 2000. 
+    NCEAS, Santa Barbara CA. Working Group - user needs assessment. [<a href="agenda_sep00.html"><b>Agenda</b></a>]</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif">September 13, 2000. 
+    NCEAS, Santa Barbara CA. Working Group - data model development. [<a href="agenda_sep00.html"><b>Agenda</b></a>]</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif">October 12, 2000. ABI, 
+    Washington DC. Data model design for plant taxonomy module. </font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif">November 2, 2000. Smithsonian 
+    Institution., Washington DC. Working Group - plant taxonomy [<a href="agenda_nov00.html"><b>Agenda</b></a>]</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif">January 29, 2001. NCEAS, 
+    Santa Barbara CA. Working Group - user interface design [<a href="agenda_jan01.html"><b>Agenda</b></a>]</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif">April 26, 2001. NCEAS, 
+    Santa Barbara CA. Implementation planning. [<a href="agenda_apr01.html"><b>Agenda</b></a>]</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif">July 25, 2001. Smithsonian 
+    Institution. &amp; FGDC, Washington DC. Plant taxonomy model development. 
+    </font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif">October 24, 2001. NCEAS, 
+    Santa Barbara CA. Working Group - model finalization &amp; interface development. 
+    [<a href="agenda_oct01.html"><b>Agenda</b></a>]</font></li>
+</ul>
+<hr>
+<p><font face="Georgia, Times New Roman, Times, serif" size="3"><b><font 
+size=4><br>
+  <a name="participants"></a>Participants</font></b></font></p>
+<h4><font face="Georgia, Times New Roman, Times, serif">Project Leadership </font></h4>
+<ul>
+  <li><font face="Georgia, Times New Roman, Times, serif" size="3"><a href="mailto:peet@unc.edu">Robert 
+    K. Peet</a>, University of North Carolina at Chapel Hill</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif" size="3"><a 
+href="mailto:harris@nceas.sdsc.edu">John Harris</a>, National Center for Ecological 
+    Analysis and Synthesis</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif" size="3"><a 
+href="mailto:denny_grossman@abi.org">Dennis Grossman</a>, Association of Biological 
+    Information</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif" size="3"><a href="mailto:jennings@uidaho.edu">Michael 
+    Jennings</a>, USGS Gap Analysis Program, Univ. California Santa Barbara</font></li>
+  <li><font face="Georgia, Times New Roman, Times, serif" size="3"><a 
+href="mailto:ffmdw@uaf.edu">Marilyn D. Walker</a>, USDA Forest Service, University 
+    of Alaska</font> </li>
+</ul>
+<h4><font face="Georgia, Times New Roman, Times, serif"><br>
+  Meeting participants</font></h4>
+<table x:str border=0 cellpadding=0 cellspacing=0 width=1027>
+  <col width=160 style='width:120pt'> <col width=212 style='width:159pt'> <col width=129 style='width:97pt'> 
+  <col class=xl24 width=56 style=' width:42pt'> <col class=xl24 width=55 style=' width:41pt'> 
+  <col class=xl24 width=60 span=2 style='width:45pt'> <col class=xl24 width=57 style=' width:43pt'> 
+  <col class=xl24 width=53 style=' width:40pt'> <col class=xl24 width=52 style=' width:39pt'> 
+  <col class=xl24 width=53 style=' width:40pt'> <col class=xl24 width=49 style=' width:37pt'> 
+  <col class=xl24 width=51 style=' width:38pt'> 
+  <tr class=xl26 height=17> 
+    <td height=17 class=xl26 width=190><font face="Arial, Helvetica, sans-serif">Participant</font></td>
+    <td class=xl26 width=250><font face="Arial, Helvetica, sans-serif">Email</font></td>
+    <td class=xl26 width=158><font face="Arial, Helvetica, sans-serif">Phone</font></td>
+    <td class=xl31 width=43> 
+      <p align="center"><font face="Arial, Helvetica, sans-serif">1999<br>
+        Oct<br>
+        </font><font face="Arial, Helvetica, sans-serif">12</font></p>
+    </td>
+    <td class=xl31 width=42> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">2000<br>
+        July<br>
+        26</font></div>
+    </td>
+    <td class=xl30 width=47> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">2000<br>
+        Sept<br>
+        11</font></div>
+    </td>
+    <td class=xl30 width=47> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">2000<br>
+        Sept<br>
+        13</font></div>
+    </td>
+    <td class=xl30 width=44> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">2000<br>
+        Oct<br>
+        12</font></div>
+    </td>
+    <td class=xl30 width=43> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">2000<br>
+        Nov<br>
+        2</font></div>
+    </td>
+    <td class=xl32 width=42 x:num="47119"> 
+      <p align="center"><font face="Arial, Helvetica, sans-serif">2001</font><font face="Arial, Helvetica, sans-serif"><br>
+        Jan<br>
+        </font><font face="Arial, Helvetica, sans-serif">29</font></p>
+    </td>
+    <td class=xl32 width=43 x:num="46113"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">2001<br>
+        Apr<br>
+        26</font></div>
+    </td>
+    <td class=xl32 width=39 x:num="45839"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">2001<br>
+        July<br>
+        25</font></div>
+    </td>
+    <td class=xl32 width=39 x:num="45566"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">2001<br>
+        Oct<br>
+        24</font></div>
+    </td>
+  </tr>
+  <tr class=xl26 height=17> 
+    <td height=17 colspan=3 class=xl26></td>
+    <td colspan=2 class=xl31> 
+      <div align="center"></div>
+    </td>
+    <td colspan=4 class=xl30> 
+      <div align="center"></div>
+    </td>
+    <td colspan=4 class=xl32> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr class=xl27 height=17> 
+    <td height=17 class=xl27 width="190"><font face="Arial, Helvetica, sans-serif">Barbour, 
+      Michael</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:mgbarbour@ucdavis.edu">mgbarbour@ucdavis.edu</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">916-752-2956</font></td>
+    <td colspan=2 class=xl29> 
+      <div align="center"></div>
+    </td>
+    <td colspan=5 class=xl28> 
+      <div align="center"></div>
+    </td>
+    <td class=xl28 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl28> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Beach, 
+      James H.</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:jbeach@ukans.edu">jbeach@ukans.edu</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">785-864-4645</font></td>
+    <td colspan=10 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Berendsohn, 
+      Walter</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:wgb@zedat.fu-berlin.de">wgb@zedat.fu-berlin.de</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">011-49-30-838-50143</font></td>
+    <td colspan=5 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Blum, 
+      Stan</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:sblum@calacademy.org">sblum@calacademy.org</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">415-750-7032</font></td>
+    <td colspan=5 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 x:str="Damman, Antoni W.H. " width="190"><font face="Arial, Helvetica, sans-serif">Damman, 
+      Antoni W.H. </font></td>
+    <td class=xl25 width="250"></td>
+    <td width="158"></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">p</font></div>
+    </td>
+    <td colspan=6 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Davidson, 
+      Rod</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:rdavidson@fs.fed.us">rdavidson@fs.fed.us</a></font></td>
+    <td width="158"></td>
+    <td colspan=3 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=6 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=19> 
+    <td height=19 width="190"><font face="Arial, Helvetica, sans-serif">Drake, 
+      James F.<font class=font7>              </font></font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:jim_drake@abi.org">jim_drake@abi.org</a></font></td>
+    <td width="158"></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=9 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Faber-Langendoen, 
+      Don</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:dfaber-lang@tnc.org">don_faber-langendoen@abi.org</a></font></td>
+    <td x:str="315-673-0921  " width="158"><font face="Arial, Helvetica, sans-serif">315-673-0921  
+      </font></td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="44"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Farstad, 
+      Amy</font></td>
+    <td class=xl25 width="250"></td>
+    <td width="158"></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=9 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Fogelsong, 
+      Carol</font></td>
+    <td class=xl25 width="250"></td>
+    <td width="158"></td>
+    <td colspan=5 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Gomon, 
+      Janet</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:gomon.janet@nmnh.si.edu">gomon.janet@nmnh.si.edu</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">202-357-2015</font></td>
+    <td colspan=5 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=19> 
+    <td height=19 width="190"><font face="Arial, Helvetica, sans-serif">Goodin, 
+      Kathy<font class=font7>         </font></font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:kathy_goodin@abi.org">kathy_goodin@abi.org</a></font></td>
+    <td width="158"></td>
+    <td colspan=10 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Goodkind, 
+      Ben</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:ben_goodkind@abi.org">ben_goodkind@abi.org</a></font></td>
+    <td width="158"></td>
+    <td colspan=3 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">p</font></div>
+    </td>
+    <td colspan=6 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Grossman, 
+      Dennis</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:denny_grossman@abi.org">denny_grossman@abi.org</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">703-908-1880</font></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">p</font></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Haglund, 
+      John</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:jhaglund@fs.fed.us">jhaglund@fs.fed.us</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">503-668-1660</font></td>
+    <td colspan=10 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=19 width="190"><font face="Arial, Helvetica, sans-serif">Harris, 
+      John</font></td>
+    <td class=xl25 width="250" height="19"><font face="Arial, Helvetica, sans-serif"><a href="mailto:harris@nceas.ucsb.edu">harris@nceas.ucsb.edu</a></font></td>
+    <td x:str="805-892-2531                            " width="158" height="19"><font face="Arial, Helvetica, sans-serif">805-892-2531</font></td>
+    <td class=xl24 width="43" height="19"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="42" height="19"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47" height="19"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47" height="19"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="44" height="19"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43" height="19"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="42" height="19"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Hennekens, 
+      Stephan</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:s.m.hennekens@ibn.dlo.nl">s.m.hennekens@ibn.dlo.nl</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">011-31-317-477908</font></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=6 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Huddleston, 
+      Paula Ross</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:phuddleston@tasc.usda.gov">phuddleston@tasc.usda.gov</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">970-295-5171</font></td>
+    <td colspan=3 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="44"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Jennings, 
+      Mike</font></td>
+    <td class=xl25 x:str="jennings@uidaho.edu " width="250"><font face="Arial, Helvetica, sans-serif"><a
+  href="mailto:jennings@ulysses.nceas.ucsb.edu">jennings@uidaho.edu </a></font></td>
+    <td x:str="208-885-3901  " width="158"><font face="Arial, Helvetica, sans-serif">208-885-3901  
+      </font></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=3 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Jones, 
+      Matthew B.</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:jones@nceas.ucsb.edu">jones@nceas.ucsb.edu</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">907-789-0496</font></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="44"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">McDiarmid, 
+      Roy</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:mcdiarmid.roy@nmnh.si.edu">mcdiarmid.roy@nmnh.si.edu</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">202-357-2780</font></td>
+    <td colspan=5 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Meacham, 
+      Christopher A.</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:meacham@socrates.berkeley.edu">meacham@socrates.berkeley.edu</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">510-237-7959</font></td>
+    <td colspan=5 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 x:str="Morse, Larry " width="190"><font face="Arial, Helvetica, sans-serif">Morse, 
+      Larry </font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:larry_morris@abi.org">larry_morris@abi.org</a></font></td>
+    <td width="158"></td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="44"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Munro, 
+      Derek</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:munrodb@em.agr.ca">munrodb@em.agr.ca</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">613-759-6636</font></td>
+    <td colspan=5 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Nicholson, 
+      David</font></td>
+    <td class=xl25 width="250"></td>
+    <td width="158"></td>
+    <td colspan=5 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Palmer, 
+      Michael</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:carex@osuunx.ucc.okstate.edu">carex@osuunx.ucc.okstate.edu</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">405-744-7717</font></td>
+    <td colspan=6 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Patterson, 
+      Karen</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:kpatterson@dcr.state.va.us">kpatterson@dcr.state.va.us</a></font></td>
+    <td x:str="804-786-5990  " width="158"><font face="Arial, Helvetica, sans-serif">804-786-5990  
+      </font></td>
+    <td colspan=6 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Peet, 
+      Robert K.</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:peet@unc.edu">peet@unc.edu</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">919-962-6942</font></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="44"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Peterson, 
+      J. Scott</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:speterson@npdc.usda.gov">speterson@npdc.usda.gov</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">225-775-6280-11</font></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Philippi, 
+      Tom</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:tomp@srel.edu">philippi@fiu.edu</a></font></td>
+    <td x:str="305-348-1876  " width="158"><font face="Arial, Helvetica, sans-serif">305-348-1876  
+      </font></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=6 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Porter, 
+      John H.</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:Jhp7e@virginia.edu">Jhp7e@virginia.edu</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">804-924-8999</font></td>
+    <td colspan=10 class=xl24> 
+      <div align="center">x</div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Pyle, 
+      Richard L.</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:deepreef@bishopmuseum.org">deepreef@bishopmuseum.org</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">808-384-6065</font></td>
+    <td colspan=5 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Roberts, 
+      Dave</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:dvrbts@nr.usu.edu">dvrbts@nr.usu.edu</a></font></td>
+    <td width="158"></td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">p</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Schaefer, 
+      Mark</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:mschaefer@tnc.org">mschaefer@tnc.org</a></font></td>
+    <td width="158"></td>
+    <td colspan=3 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">p</font></div>
+    </td>
+    <td colspan=6 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Schildhauer, 
+      Mark</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:schild@nceas.ucsb.edu">schild@nceas.ucsb.edu</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">805-892-2509</font></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">p</font></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">p</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">p</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">p</font></div>
+    </td>
+    <td colspan=6 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Skinner, 
+      Mark</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:mskinner@npdc.usda.gov">mskinner@npdc.usda.gov</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">225-775-6280</font></td>
+    <td colspan=5 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Taswell, 
+      Steve</font></td>
+    <td class=xl25 x:str="steve_taswell@sra.com  " width="250"><font face="Arial, Helvetica, sans-serif"><a
+  href="mailto:staswell@tnc.org">steve_taswell@sra.com  </a></font></td>
+    <td x:str="301-320-9191 " width="158"><font face="Arial, Helvetica, sans-serif">301-320-9191 
+      </font></td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="44"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Waggoner, 
+      Gary</font></td>
+    <td class=xl25 width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:Gary_Waggoner@usgs.gov">Gary_Waggoner@usgs.gov</a></font></td>
+    <td width="158"><font face="Arial, Helvetica, sans-serif">303-202-4222</font></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">p</font></div>
+    </td>
+    <td colspan=4 class=xl24> 
+      <div align="center"></div>
+    </td>
+  </tr>
+  <tr height=17> 
+    <td height=17 width="190"><font face="Arial, Helvetica, sans-serif">Walker, 
+      Marilyn</font></td>
+    <td class=xl25 x:str="ffmdw@uaf.edu   " width="250"><font face="Arial, Helvetica, sans-serif"><a href="mailto:mwalker@lter.uaf.edu">ffmdw@uaf.edu   
+      </a></font></td>
+    <td x:str="907-474-2424       " width="158"><font face="Arial, Helvetica, sans-serif">907-474-2424       
+      </font></td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="47"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td colspan=2 class=xl24> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif"> </font></div>
+    </td>
+    <td class=xl24 width="42"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="43"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"></div>
+    </td>
+    <td class=xl24 width="39"> 
+      <div align="center"><font face="Arial, Helvetica, sans-serif">x</font></div>
+    </td>
+  </tr>
+  <tr height=0> 
+    <td width=190></td>
+    <td width=250></td>
+    <td width=158></td>
+    <td width=43></td>
+    <td width=42></td>
+    <td width=47></td>
+    <td width=47></td>
+    <td width=44></td>
+    <td width=43></td>
+    <td width=42></td>
+    <td width=43></td>
+    <td width=39></td>
+    <td width=39></td>
+  </tr>
+</table>
+<!-- #EndEditable --><br>
+<table cellspacing="0" cellpadding="0" border="0">
+  <tr bgcolor="#EED85B"> 
+    <td colspan="6" height="8" valign="top"><font face="Georgia, Times New Roman, Times, serif" size="-7">&nbsp;</font></td>
+  </tr>
+  <TR> 
+    <td width="43" height="8" valign="top"></td>
+    <td width="326" height="8" valign="top"></td>
+    <td width="47" height="8" valign="top"></td>
+    <td width="154" height="8" valign="top"></td>
+    <td width="91" height="8" valign="top"></td>
+    <td width="131" height="8" valign="top"></td>
+  </tr>
+  <tr> 
+    <td width="800" height="38" colspan="6" valign="top"> 
+      <p align="center"><font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../index.html">VegBank 
+        Home</a> | <a href="../general/info.html">About VegBank</a> |<a href="../general/instructions.html">Instructions</a> 
+        | <a href="../panel/panel.html">ESA Vegetation Panel</a> |<a href="../general/contact.html"> 
+        Contact</a> | <a href="../general/help.html">Help</a></font><font size="2" face="Georgia, Times New Roman, Times, serif"><br>
+        <font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../general/register.html">Register</a> 
+        | <a href="../general/login.html">Login</a> | <a href="../general/logout.html">Logout</a> 
+        |<a href="../general/profile.html"> Profile</a></font></font></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="800" height="24" colspan="6" valign="top"> 
+      <p align="center"><font size="1" face="Georgia, Times New Roman, Times, serif" color="#808000">&copy; 
+        2002 Ecological Society of America<br>
+        <a href="../general/terms.html">Terms of use</a> |<a href="../general/privacy.html"> 
+        Privacy policy</a></font></p>
+    </td>
+  </tr>
+</table>
+</BODY>
+<!-- #EndTemplate --></HTML>
