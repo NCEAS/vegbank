@@ -44,8 +44,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-04-03 00:03:10 $'
- *  '$Revision: 1.11 $'
+ *  '$Date: 2002-04-04 00:06:32 $'
+ *  '$Revision: 1.12 $'
  * 
  */
 
@@ -115,19 +115,17 @@ public class DataRequestServlet extends HttpServlet
 		{
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
-			
-			
 			try 
 			{
-			//handle the cookies -- the cookies should start with the user name
-			//which will be used to register the query and results documents 
-			//with the dataexcahnge servlet
-			userName = getCookieValue(request);
-			System.out.println("DataRequstServlet > current user: " +  userName   );
+				//handle the cookies -- the cookies should start with the user name
+				//which will be used to register the query and results documents 
+				//with the dataexcahnge servlet
+				userName = getCookieValue(request);
+				System.out.println("DataRequstServlet > current user: " +  userName   );
 				
-			//enumeration is needed for those
-			//cases where there are multiple values 
-			// for a given parameter
+				//enumeration is needed for those
+				//cases where there are multiple values 
+				// for a given parameter
 				Enumeration enum =request.getParameterNames();
 				Hashtable params = new Hashtable();
 				params = su.parameterHash(request);
