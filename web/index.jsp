@@ -126,7 +126,9 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 			<span class="greytext">
 			&nbsp; Find <b>plots</b> by <b>plant name</b>.
 			<br/>
+			<!--
 			&nbsp; (% is wildcard) example: Acer spic%</span>
+			-->
 		</td>
 		<td></td>
 	</tr>
