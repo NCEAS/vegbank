@@ -1,36 +1,43 @@
 package org.vegbank.servlet.request;
 
+import org.vegbank.plots.rmi.DataSourceClient;
+import VegCommunityLoader;
+
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.text.DateFormat;
+import java.util.AbstractList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.io.FileReader;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.w3c.dom.Document;
-
+import org.vegbank.common.Constants;
+import org.vegbank.common.model.Party;
+import org.vegbank.common.model.Plant;
+import org.vegbank.common.model.PlantUsage;
+import org.vegbank.common.model.Reference;
+import org.vegbank.plants.datasink.DBPlantWriter;
 import org.vegbank.servlet.authentication.UserDatabaseAccess;
 import org.vegbank.servlet.util.ServletUtility;
+import org.w3c.dom.Document;
+
 import xmlresource.utils.XMLparse;
 import xmlresource.utils.transformXML;
 import databaseAccess.CommunityQueryStore;
 import databaseAccess.SqlFile;
 import databaseAccess.TaxonomyQueryStore;
-import DataSourceClient;
-import PlantTaxaLoader;
-import VegCommunityLoader;
-;
 
 /**
  * REQUIRED PARAMETERS
@@ -38,42 +45,42 @@ import VegCommunityLoader;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-02-26 19:16:32 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2003-03-07 22:49:22 $'
+ *  '$Revision: 1.2 $'
  */
 
 
-public class DataSubmitServlet extends HttpServlet 
+public class DataSubmitServlet extends HttpServlet implements Constants
 {
 
 	private String submitDataType = null;
 	// FIXME: Should be in properties
-	private String communityValidationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/community-submit_valid.html";
-	private String communityValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
-	private String commUpdateScript = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/update_community_summary.sql";
+	private static String communityValidationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/community-submit_valid.html";
+	private static String communityValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
+	private static String commUpdateScript = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/update_community_summary.sql";
 	//this is the name/loaction of the uploaded file and must be consistent with 
 	//the name in the DataExchangeServlet
-	private String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/input.data";
-	private String plotsArchiveType = "tnc";
-	private String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit-select.html";
-	private String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot_select.html";
-	private String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
+	private static String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/input.data";
+	private static String plotsArchiveType = "tnc";
+	private static String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit-select.html";
+	private static String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot_select.html";
+	private static String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
 	// this is the pre-transformed init template 
-	private String plantNameRectificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-rectification.html";
-	private String plantNameReferenceTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-reference.html";
-	private String plantConceptTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantconcept.html";
-	private String plantStatusUsageTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantstatususage.html";
-	private String plantSubmittalReceiptTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantsubmittal-receipt.html";
+	private static String plantNameRectificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-rectification.html";
+	private static String plantNameReferenceTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-reference.html";
+	private static String plantConceptTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantconcept.html";
+	private static String plantStatusUsageTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantstatususage.html";
+	private static String plantSubmittalReceiptTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantsubmittal-receipt.html";
 	//this is the file that has the updated tokens and should be shown to the client
-	private String plantValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-valid.html";
-	private String plotSubmittalInitTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit.html";
+	private static String plantValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-valid.html";
+	private static String plotSubmittalInitTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit.html";
 	//this is the file that has the updated tokens and should be shown to the client
-	private String plotSubmittalInitForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-valid.html";
+	private static String plotSubmittalInitForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-valid.html";
 	// END FIXME: Should be in properties
 				
 	// ResourceBundle properties
 	private ResourceBundle rb = ResourceBundle.getBundle("vegbank");
-	private String serverUrl = "";
+	//private String serverUrl = "";
 	private String mailHost = "";
 	private String cc = "";
 	
@@ -100,68 +107,68 @@ public class DataSubmitServlet extends HttpServlet
 	private String institution ="";
 	private String permissionType ="";
 	
-	private String longName = "";
-	private String shortName = "";
-	private	String code = "";
+	//private String longName = "";
+	//private String shortName = "";
+	//private	String code = "";
 
-	private String longNameRefAuthors = "";
-	private String longNameRefTitle = "";
-	private String longNameRefDate = "";
-	private String longNameRefEdition = "";
-	private String longNameRefSeriesName = "";
-	private String longNameRefVolume = "";
-	private String longNameRefPage = "";
-	private String longNameRefISSN = "";
-	private String longNameRefISBN = "";
-	private String longNameRefOtherCitDetails = "";
+	//private String longNameRefAuthors = "";
+	//private String longNameRefTitle = "";
+	//private String longNameRefDate = "";
+	//private String longNameRefEdition = "";
+	//private String longNameRefSeriesName = "";
+	//private String longNameRefVolume = "";
+	//private String longNameRefPage = "";
+	//private String longNameRefISSN = "";
+	//private String longNameRefISBN = "";
+	//private String longNameRefOtherCitDetails = "";
 	
-	private String shortNameRefAuthors = "";
-	private String shortNameRefTitle = "";
-	private String shortNameRefDate = "";
-	private String shortNameRefEdition = "";
-	private String shortNameRefSeriesName = "";
-	private String shortNameRefVolume = "";
-	private String shortNameRefPage = "";
-	private String shortNameRefISSN = "";
-	private String shortNameRefISBN = "";
-	private String shortNameRefOtherCitDetails = "";
+	//private String shortNameRefAuthors = "";
+	//private String shortNameRefTitle = "";
+	//private String shortNameRefDate = "";
+	//private String shortNameRefEdition = "";
+	//private String shortNameRefSeriesName = "";
+	//private String shortNameRefVolume = "";
+	//private String shortNameRefPage = "";
+	//private String shortNameRefISSN = "";
+	//private String shortNameRefISBN = "";
+	//private String shortNameRefOtherCitDetails = "";
 	
-	private String codeRefAuthors = "";
-	private String codeRefTitle = "";
-	private String codeRefDate = "";
-	private String codeRefEdition = "";
-	private String codeRefSeriesName = "";
-	private String codeRefVolume = "";
-	private String codeRefPage = "";
-	private String codeRefISSN = "";
-	private String codeRefISBN = "";
-	private String codeRefOtherCitDetails = "";
+	//private String codeRefAuthors = "";
+	//private String codeRefTitle = "";
+	//private String codeRefDate = "";
+	//private String codeRefEdition = "";
+	//private String codeRefSeriesName = "";
+	//private String codeRefVolume = "";
+	//private String codeRefPage = "";
+	//private String codeRefISSN = "";
+	//private String codeRefISBN = "";
+	//private String codeRefOtherCitDetails = "";
 	
-	private String conceptDescription = "";
-	private String conceptRefAuthors = "";
-	private String conceptRefTitle = "";
-	private String conceptRefDate = "";
-	private String conceptRefEdition = "";
-	private String conceptRefSeriesName = "";
-	private String conceptRefVolume = "";
-	private String conceptRefPage = "";
-	private String conceptRefISSN = "";
-	private String conceptRefISBN = "";
-	private String conceptRefOtherCitDetails = "";
+//	private String conceptDescription = "";
+//	private String conceptRefAuthors = "";
+//	private String conceptRefTitle = "";
+//	private String conceptRefDate = "";
+//	private String conceptRefEdition = "";
+//	private String conceptRefSeriesName = "";
+//	private String conceptRefVolume = "";
+//	private String conceptRefPage = "";
+//	private String conceptRefISSN = "";
+//	private String conceptRefISBN = "";
+//	private String conceptRefOtherCitDetails = "";
+//	
+//	private String conceptStatus = "";
+//	private String statusStartDate = "";
+//	private String statusStopDate = "";
+//	private String usageStartDate = "";
+//	private String usageStopDate = "";
+//	
+//	private String statusDescription = "";
+//	private String taxonLevel = "";
+//	private String plantParentName = "";
+//	private String plantParentRefTitle ="";
+//	private String plantParentRefAuthors ="";
 	
-	private String conceptStatus = "";
-	private String statusStartDate = "";
-	private String statusStopDate = "";
-	private String usageStartDate = "";
-	private String usageStopDate = "";
-	
-	private String statusDescription = "";
-	private String taxonLevel = "";
-	private String plantParentName = "";
-	private String plantParentRefTitle ="";
-	private String plantParentRefAuthors ="";
-	
-	private PlantTaxon plantTaxon;
+	//private PlantTaxon plantTaxon;
 	
 	/**
 	 * constructor method
@@ -254,8 +261,7 @@ public class DataSubmitServlet extends HttpServlet
 			
 				System.out.println("DataSubmitServlet > IN PARAMETERS: "+params.toString() );
 				submitDataType = (String)params.get("submitDataType");
-				System.out.println("DataSubmitServlet > submit data type: "
-				+ submitDataType);
+				System.out.println("DataSubmitServlet > submit data type: " + submitDataType);
 			
 			
 				// FIGURE OUT WHAT TO DO WITH THE REQUEST
@@ -278,7 +284,7 @@ public class DataSubmitServlet extends HttpServlet
 				}
 				else if ( submitDataType.trim().toUpperCase().equals("PLANTTAXA")  )
 				{
-					StringBuffer sb = handlePlantTaxaSubmittal(params, response);
+					StringBuffer sb = handlePlantTaxaSubmittal(params, response, request);
 					out.println( sb.toString() );
 				}
 				else
@@ -333,7 +339,7 @@ public class DataSubmitServlet extends HttpServlet
 	 }
 	
 	/**
-	 * method to handle the submittal of a new plant into the plant taxonomy 
+	 * Handles the submittal of a new plant into the plant taxonomy 
 	 * database.  The proccesses here very closely mimic those in the submittal
 	 * of a community.  This method represents the wizard for loading new plant taxa
 	 * and the steps included in the wizard are:
@@ -344,17 +350,30 @@ public class DataSubmitServlet extends HttpServlet
 	 * @return sb -- stringbuffer with any errors or warnings etc.
 	 *
 	 */
-	private StringBuffer handlePlantTaxaSubmittal(Hashtable params, HttpServletResponse response)
+	private StringBuffer handlePlantTaxaSubmittal(
+		Hashtable params, 
+		HttpServletResponse response,
+		HttpServletRequest request)
 	{
 		StringBuffer sb = new StringBuffer();
 		PrintWriter out = null;
+		//getSession
+		HttpSession session = request.getSession();
+		Plant plant = (Plant) session.getAttribute("Plant");
+		
+		if (plant == null)
+		{
+			// CONSTRUCT A NEW INSTANCE OF A PLANT
+			plant = new Plant();
+			session.setAttribute("Plant", plant);			
+		}
+		
 		try
 		{
 			out = response.getWriter();
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try
@@ -363,7 +382,7 @@ public class DataSubmitServlet extends HttpServlet
 			String salutation= "";
 			String firstName = "";
 			String lastName = "";
-			String emailAddress = this.user;
+			String emailAddress = "";
 			String orgName = "";
 			
 			String action = (String)params.get("action");
@@ -374,20 +393,23 @@ public class DataSubmitServlet extends HttpServlet
 			{
 				
 				System.out.println("DataSubmitServlet > init plantTaxa for " );
-				// CONSTRUCT A NEW INSTANCE OF A PLANTAXON 
-				this.plantTaxon = new PlantTaxon();
-				plantTaxon.setEmailAddress(emailAddress);
-				plantTaxon.setInserterGivenName(givenName);
-				plantTaxon.setInserterSurName(surName);
-				plantTaxon.setInserterInstitution(institution);
+
+				Party party = new Party();
+				
+				party.setEmail(emailAddress);
+				party.setGivenName(givenName);
+				party.setSurname(surName);
+				party.setOrganizationName(institution);
+				
+				plant.setParty(party);
 				
 				
 				
 				// the next 3 attributes refer to the plant name that the 
 				// user is trying to insert into the database
-				longName = (String)params.get("longName");
-				shortName = (String)params.get("shortName");
-				code = (String)params.get("code");
+				String longName = (String)params.get("longName");
+				String shortName = (String)params.get("shortName");
+				String code = (String)params.get("code");
 		
 				System.out.println("DataSubmitServlet > longName: " + longName);
 				System.out.println("DataSubmitServlet > shortName: " + shortName);
@@ -397,6 +419,7 @@ public class DataSubmitServlet extends HttpServlet
 				String longNameMessage = "";
 				String shortNameMessage = "";
 				String codeMessage = "";
+				
 				tqs = new TaxonomyQueryStore();
 				Vector lv = tqs.getPlantTaxonSummary(longName, "%" );
 				Vector sv = tqs.getPlantTaxonSummary(shortName, "%" );
@@ -443,25 +466,19 @@ public class DataSubmitServlet extends HttpServlet
 				String longNameMatch = (String)params.get("longNameMatches");
 				String shortNameMatch = (String)params.get("shortNameMatches");
 				String codeMatch = (String)params.get("codeMatches");
-				// UPDATE THE INSTANCE VARIABLES
-				this.longName = longNameMatch;
-				this.shortName = shortNameMatch;
-				this.code = codeMatch;
 				
 				
 				// UPDATE THE DATA CLASS
-				plantTaxon.setScientificName(longNameMatch);
-				plantTaxon.setCommonName(shortNameMatch);
-				plantTaxon.setCode(codeMatch);
-				plantTaxon.isValid();
+				plant.setScientificNameNoAuthors(longNameMatch);
+				plant.setCommonName(shortNameMatch);
+				plant.setCode(codeMatch);
 				
-				
-				System.out.println("longName: " + longName + " match: " +  longNameMatch );
+				System.out.println("longName: " +  " match: " +  longNameMatch );
 				Hashtable longNameRef = tqs.getPlantNameReference(longNameMatch);
 				System.out.println("longNameRef: " + longNameRef.toString() );
-				System.out.println("shortName: " + shortName + " match: " +  shortNameMatch);
+				System.out.println("shortName: " + " match: " +  shortNameMatch);
 				Hashtable shortNameRef = tqs.getPlantNameReference(shortNameMatch);
-				System.out.println("code: " + code + " match: " + codeMatch );
+				System.out.println("code: " + " match: " + codeMatch );
 				Hashtable codeNameRef = tqs.getPlantNameReference(codeMatch);
 				
 				updatePlantNameReferencePage(
@@ -477,245 +494,196 @@ public class DataSubmitServlet extends HttpServlet
 			// AND WHERE THOSE ATTRIBUTES SHOULD BE STORED
 			else if ( action.equals("namereference") )
 			{
-				plantTaxon.isValid();
 				System.out.println("DataSubmitServlet > getting the name reference ");
 				
 				// LOAD THE NAME REFERENCE ATTRIBUTES 
-				this.longNameRefAuthors = (String)params.get("longNameRefAuthors");
-				this.longNameRefTitle = (String)params.get("longNameRefTitle");
-				this.longNameRefDate = (String)params.get("longNameRefDate");
-				this.longNameRefEdition = (String)params.get("longNameRefEdition");
-				this.longNameRefSeriesName = (String)params.get("longNameRefSeriesName");
-				this.longNameRefVolume = (String)params.get("longNameRefVolume");
-				this.longNameRefPage = (String)params.get("longNameRefPage");
-				this.longNameRefISSN = (String)params.get("longNameRefISSN");
-				this.longNameRefISBN = (String)params.get("longNameRefISBN");
-				this.longNameRefOtherCitDetails = (String)params.get("longNameRefOtherCitDetails");
+				String longNameRefAuthors = (String)params.get("longNameRefAuthors");
+				String longNameRefTitle = (String)params.get("longNameRefTitle");
+				String longNameRefDate = (String)params.get("longNameRefDate");
+				String longNameRefEdition = (String)params.get("longNameRefEdition");
+				String longNameRefSeriesName = (String)params.get("longNameRefSeriesName");
+				String longNameRefVolume = (String)params.get("longNameRefVolume");
+				String longNameRefPage = (String)params.get("longNameRefPage");
+				String longNameRefISSN = (String)params.get("longNameRefISSN");
+				String longNameRefISBN = (String)params.get("longNameRefISBN");
+				String longNameRefOtherCitDetails = (String)params.get("longNameRefOtherCitDetails");
 				
-				this.shortNameRefAuthors = (String)params.get("shortNameRefAuthors");
-				this.shortNameRefTitle = (String)params.get("shortNameRefTitle");
-				this.shortNameRefDate = (String)params.get("shortNameRefDate");
-				this.shortNameRefEdition = (String)params.get("shortNameRefEdition");
-				this.shortNameRefSeriesName = (String)params.get("shortNameRefSeriesName");
-				this.shortNameRefVolume = (String)params.get("shortNameRefVolume");
-				this.shortNameRefPage = (String)params.get("shortNameRefPage");
-				this.shortNameRefISSN = (String)params.get("shortNameRefISSN");
-				this.shortNameRefISBN = (String)params.get("shortNameRefISBN");
-				this.shortNameRefOtherCitDetails = (String)params.get("shortNameRefOtherCitDetails");
+				String shortNameRefAuthors = (String)params.get("shortNameRefAuthors");
+				String shortNameRefTitle = (String)params.get("shortNameRefTitle");
+				String shortNameRefDate = (String)params.get("shortNameRefDate");
+				String shortNameRefEdition = (String)params.get("shortNameRefEdition");
+				String shortNameRefSeriesName = (String)params.get("shortNameRefSeriesName");
+				String shortNameRefVolume = (String)params.get("shortNameRefVolume");
+				String shortNameRefPage = (String)params.get("shortNameRefPage");
+				String shortNameRefISSN = (String)params.get("shortNameRefISSN");
+				String shortNameRefISBN = (String)params.get("shortNameRefISBN");
+				String shortNameRefOtherCitDetails = (String)params.get("shortNameRefOtherCitDetails");
 				
-				this.codeRefAuthors = (String)params.get("codeRefAuthors");
-				this.codeRefTitle = (String)params.get("codeRefTitle");
-				this.codeRefDate = (String)params.get("codeRefDate");
-				this.codeRefEdition = (String)params.get("codeRefEdition");
-				this.codeRefSeriesName = (String)params.get("codeRefSeriesName");
-				this.codeRefVolume = (String)params.get("codeRefVolume");
-				this.codeRefPage = (String)params.get("codeRefPage");
-				this.codeRefISSN = (String)params.get("codeRefISSN");
-				this.codeRefISBN = (String)params.get("codeRefISBN");
-				this.codeRefOtherCitDetails = (String)params.get("codeRefOtherCitDetails");
+				String codeRefAuthors = (String)params.get("codeRefAuthors");
+				String codeRefTitle = (String)params.get("codeRefTitle");
+				String codeRefDate = (String)params.get("codeRefDate");
+				String codeRefEdition = (String)params.get("codeRefEdition");
+				String codeRefSeriesName = (String)params.get("codeRefSeriesName");
+				String codeRefVolume = (String)params.get("codeRefVolume");
+				String codeRefPage = (String)params.get("codeRefPage");
+				String codeRefISSN = (String)params.get("codeRefISSN");
+				String codeRefISBN = (String)params.get("codeRefISBN");
+				String codeRefOtherCitDetails = (String)params.get("codeRefOtherCitDetails");
 				
-				plantTaxon.setScientificNameRefAuthors(longNameRefAuthors);
-				plantTaxon.setScientificNameRefTitle(longNameRefTitle);
-				plantTaxon.setScientificNameRefDate(longNameRefDate);
-				plantTaxon.setScientificNameRefEdition(longNameRefEdition);
-				plantTaxon.setScientificNameRefSeriesName(longNameRefSeriesName);
-				plantTaxon.setScientificNameRefVolume(longNameRefVolume);
-				plantTaxon.setScientificNameRefPage(longNameRefPage);
-				plantTaxon.setScientificNameRefISSN(longNameRefISBN);
-				plantTaxon.setScientificNameRefISBN(longNameRefISSN);
-				plantTaxon.setScientificNameRefOtherCitDetails(longNameRefOtherCitDetails);
+				Reference scientificNameNoAuthorsRef = new Reference();
+				Reference codeNameRef = new Reference(); 
+				Reference commonNameRef = new Reference(); 
+				 // assign these references to plant
+				plant.setScientificNameNoAuthorsReference(scientificNameNoAuthorsRef);
+				plant.setCommonNameReference(commonNameRef);
+				plant.setCodeNameReference(codeNameRef);
 				
-				plantTaxon.setCommonNameRefAuthors(shortNameRefAuthors);
-				plantTaxon.setCommonNameRefTitle(shortNameRefTitle);
-				plantTaxon.setCommonNameRefDate(shortNameRefDate);
-				plantTaxon.setCommonNameRefEdition(shortNameRefEdition);
-				plantTaxon.setCommonNameRefSeriesName(shortNameRefSeriesName);
-				plantTaxon.setCommonNameRefVolume(shortNameRefVolume);
-				plantTaxon.setCommonNameRefPage(shortNameRefPage);
-				plantTaxon.setCommonNameRefISSN(shortNameRefISBN);
-				plantTaxon.setCommonNameRefISBN(shortNameRefISSN);
-				plantTaxon.setCommonNameRefOtherCitDetails(shortNameRefOtherCitDetails);
+				scientificNameNoAuthorsRef.setAuthors(longNameRefAuthors);
+				scientificNameNoAuthorsRef.setTitle(longNameRefTitle);
+				scientificNameNoAuthorsRef.setPubdate(longNameRefDate);
+				scientificNameNoAuthorsRef.setEdition(longNameRefEdition);
+				scientificNameNoAuthorsRef.setSeriesName(longNameRefSeriesName);
+				scientificNameNoAuthorsRef.setVolume(longNameRefVolume);
+				scientificNameNoAuthorsRef.setPage(longNameRefPage);
+				scientificNameNoAuthorsRef.setISSN(longNameRefISBN);
+				scientificNameNoAuthorsRef.setISBN(longNameRefISSN);
+				scientificNameNoAuthorsRef.setOtherCitationDetails(longNameRefOtherCitDetails);
 				
-				plantTaxon.setCodeRefAuthors(codeRefAuthors);
-				plantTaxon.setCodeRefTitle(codeRefTitle);
-				plantTaxon.setCodeRefDate(codeRefDate);
-				plantTaxon.setCodeRefEdition(codeRefEdition);
-				plantTaxon.setCodeRefSeriesName(codeRefSeriesName);
-				plantTaxon.setCodeRefVolume(codeRefVolume);
-				plantTaxon.setCodeRefPage(codeRefPage);
-				plantTaxon.setCodeRefISSN(codeRefISBN);
-				plantTaxon.setCodeRefISBN(codeRefISSN);
-				plantTaxon.setCodeRefOtherCitDetails(codeRefOtherCitDetails);
+				commonNameRef.setAuthors(shortNameRefAuthors);
+				commonNameRef.setTitle(shortNameRefTitle);
+				commonNameRef.setPubdate(shortNameRefDate);
+				commonNameRef.setEdition(shortNameRefEdition);
+				commonNameRef.setSeriesName(shortNameRefSeriesName);
+				commonNameRef.setVolume(shortNameRefVolume);
+				commonNameRef.setPage(shortNameRefPage);
+				commonNameRef.setISSN(shortNameRefISBN);
+				commonNameRef.setISBN(shortNameRefISSN);
+				commonNameRef.setOtherCitationDetails(shortNameRefOtherCitDetails);
 				
-				plantTaxon.isValid();
-				System.out.println("## long name auth: " + longNameRefAuthors);
-				updatePlantConceptPage(emailAddress, longName, shortName, code, out);
+				codeNameRef.setAuthors(codeRefAuthors);
+				codeNameRef.setTitle(codeRefTitle);
+				codeNameRef.setPubdate(codeRefDate);
+				codeNameRef.setEdition(codeRefEdition);
+				codeNameRef.setSeriesName(codeRefSeriesName);
+				codeNameRef.setVolume(codeRefVolume);
+				codeNameRef.setPage(codeRefPage);
+				codeNameRef.setISSN(codeRefISBN);
+				codeNameRef.setISBN(codeRefISSN);
+				codeNameRef.setOtherCitationDetails(codeRefOtherCitDetails);
+				
+				updatePlantConceptPage(
+					emailAddress,
+					plant.getScientificNameNoAuthors(),
+					plant.getCommonName(),
+					plant.getCode(),
+					out);
 			}
 			else if ( action.equals("plantconcept") )
 			{
 				System.out.println("DataSubmitServlet > getting the name reference ");
-				conceptDescription = ""+(String)params.get("conceptDescription");
-				conceptRefAuthors = ""+(String)params.get("conceptRefAuthors");
-				conceptRefTitle  = ""+(String)params.get("conceptRefTitle");
-				conceptRefDate  = ""+(String)params.get("conceptRefDate");
-				conceptRefEdition  = ""+(String)params.get("conceptRefEdition");
-				conceptRefSeriesName  = ""+(String)params.get("conceptRefSeriesName");
-				conceptRefVolume  = ""+(String)params.get("conceptRefVolume");
-				conceptRefPage  = ""+(String)params.get("conceptRefPage");
-				conceptRefISSN  = ""+(String)params.get("conceptRefISSN");
-				conceptRefISBN  = ""+(String)params.get("conceptRefISBN");
-				conceptRefOtherCitDetails = ""+(String)params.get("conceptRefOtherCitDetails");
+				String conceptDescription = ""+(String)params.get("conceptDescription");
+				String conceptRefAuthors = ""+(String)params.get("conceptRefAuthors");
+				String conceptRefTitle  = ""+(String)params.get("conceptRefTitle");
+				String conceptRefDate  = ""+(String)params.get("conceptRefDate");
+				String conceptRefEdition  = ""+(String)params.get("conceptRefEdition");
+				String conceptRefSeriesName  = ""+(String)params.get("conceptRefSeriesName");
+				String conceptRefVolume  = ""+(String)params.get("conceptRefVolume");
+				String conceptRefPage  = ""+(String)params.get("conceptRefPage");
+				String conceptRefISSN  = ""+(String)params.get("conceptRefISSN");
+				String conceptRefISBN  = ""+(String)params.get("conceptRefISBN");
+				String conceptRefOtherCitDetails = ""+(String)params.get("conceptRefOtherCitDetails");
 				
-				plantParentName = (String)params.get("plantParentName");
-				plantParentRefTitle =(String)params.get("plantParentRefTitle");
-				plantParentRefAuthors = (String)params.get("plantParentRefAuthors");
+//				plantParentName = (String)params.get("plantParentName");
+//				plantParentRefTitle =(String)params.get("plantParentRefTitle");
+//				plantParentRefAuthors = (String)params.get("plantParentRefAuthors");
 				
-				plantTaxon.setConceptDescription(conceptDescription);
-				plantTaxon.setConceptRefAuthors(conceptRefAuthors);
-				plantTaxon.setConceptRefTitle(conceptRefTitle);
-				plantTaxon.setConceptRefDate(conceptRefDate);
-				plantTaxon.setConceptRefEdition(conceptRefEdition);
-				plantTaxon.setConceptRefSeriesName(conceptRefSeriesName);
-				plantTaxon.setConceptRefVolume(conceptRefVolume);
-				plantTaxon.setConceptRefPage(conceptRefPage);
-				plantTaxon.setConceptRefISSN(conceptRefISSN);
-				plantTaxon.setConceptRefISBN(conceptRefISBN);
-				plantTaxon.setConceptRefOtherCitDetails(conceptRefOtherCitDetails);
+
+				Reference conceptReference = new Reference();
+				plant.setConceptReference(conceptReference);
 				
-				plantTaxon.isValid();
+				plant.setDescription(conceptDescription);
+				conceptReference.setAuthors(conceptRefAuthors);
+				conceptReference.setTitle(conceptRefTitle);
+				conceptReference.setPubdate(conceptRefDate);
+				conceptReference.setEdition(conceptRefEdition);
+				conceptReference.setSeriesName(conceptRefSeriesName);
+				conceptReference.setVolume(conceptRefVolume);
+				conceptReference.setPage(conceptRefPage);
+				conceptReference.setISSN(conceptRefISSN);
+				conceptReference.setISBN(conceptRefISBN);
+				conceptReference.setOtherCitationDetails(conceptRefOtherCitDetails);
 				
 				// send the user the attributes related to the plant status/usage
 				// this is where the instance variables (surName,givenName etc..) are updated
-				updatePlantStatusUsagePage(emailAddress, longName, shortName, code, out);
+				updatePlantStatusUsagePage(  
+					emailAddress,
+					plant.getScientificNameNoAuthors(),
+					plant.getCommonName(),
+					plant.getCode(),
+					out);
 			}
 			// STEP WHEREBY THE USER SUBMITS THE STATUS USAGE DATA AND 
 			// THE RECIPT IS RETURNED
 			else if ( action.equals("plantstatususage") )
 			{
 				System.out.println("DataSubmitServlet > getting the status-usage data, returnig recipt");
-				conceptStatus = (String)params.get("conceptStatus");
-				statusStartDate = (String)params.get("statusStartDate");
-				statusStopDate = (String)params.get("statusStopDate");
+				String conceptStatus = (String)params.get("conceptStatus");
+				String  statusStartDate = (String)params.get("statusStartDate");
+				String  statusStopDate = (String)params.get("statusStopDate");
 				// ASSUME THAT THE ABOVE DATES ARE THE SAME FOR THE USAGE
-				usageStartDate = (String)params.get("statusStartDate");
-				usageStopDate = (String)params.get("statusStopDate");
-				statusDescription = (String)params.get("statusDescription");
-				taxonLevel = (String)params.get("taxonLevel");
-				plantParentName = (String)params.get("plantParentName");
-				plantParentRefAuthors = (String)params.get("plantParentRefAuthors");
-				plantParentRefTitle = (String)params.get("plantParentRefTitle");
+				String  usageStartDate = (String)params.get("statusStartDate");
+				String  usageStopDate = (String)params.get("statusStopDate");
+				String statusDescription = (String)params.get("statusDescription");
+				String taxonLevel = (String)params.get("taxonLevel");
+				String plantParentName = (String)params.get("plantParentName");
+				String plantParentRefAuthors = (String)params.get("plantParentRefAuthors");
+				String plantParentRefTitle = (String)params.get("plantParentRefTitle");
 				
+				// TODO: Need to handle setting a reference for the parent
+				// Need to set a reference for the parent ????
+				//plantTaxon.setPlantParentName(plantParentName);
+				//plantTaxon.setPlantParentRefTitle(plantParentRefTitle);
+				//plantTaxon.setPlantParentRefAuthors(plantParentRefAuthors);
 				
-				plantTaxon.setConceptStatus(conceptStatus);
-				plantTaxon.setStatusStartDate(statusStartDate);
-				plantTaxon.setStatusStopDate(statusStopDate);
-				plantTaxon.setUsageStartDate(usageStartDate);
-				plantTaxon.setUsageStopDate(usageStopDate);
-				plantTaxon.setStatusDescription(statusDescription);
-				plantTaxon.setTaxonLevel(taxonLevel);
-				plantTaxon.setPlantParentName(plantParentName);
-				plantTaxon.setPlantParentRefTitle(plantParentRefTitle);
-				plantTaxon.setPlantParentRefAuthors(plantParentRefAuthors);
-				plantTaxon.isValid();
+				plant.setStatus(conceptStatus);
+				plant.setStatusStartDate(statusStartDate);
+				plant.setStatusStopDate(statusStopDate);
+				plant.setDescription(statusDescription);    // FIXME: This may be the party comments field ???
+				plant.setClassLevel(taxonLevel);
 				
-
-				updatePlantSubmittalRecipt(emailAddress, out);
+				// Create New Usage Objects
+				PlantUsage commonUsage = new PlantUsage();
+				PlantUsage scientificNameNoAuthorsUsage = new PlantUsage();
+				PlantUsage codeNameUsage = new PlantUsage();
+				
+				// Set up Common Usage
+				commonUsage.setClassSystem(PLANT_NAME_COMMON);
+				commonUsage.setPlantName( plant.getCommonName() );
+				commonUsage.setStartDate(statusStartDate);
+				commonUsage.setStopDate(statusStopDate);				
+				// Set up scientificNameNoAuthorsUsage Usage
+				commonUsage.setClassSystem(PLANT_NAME_SCIENTIFIC_NOAUTHORS);
+				commonUsage.setPlantName( plant.getScientificNameNoAuthors() );
+				commonUsage.setStartDate(statusStartDate);
+				commonUsage.setStopDate(statusStopDate);						
+				// Set up codeName Usage
+				commonUsage.setClassSystem(PLANT_NAME_CODE);
+				commonUsage.setPlantName( plant.getCode() );
+				commonUsage.setStartDate(statusStartDate);
+				commonUsage.setStopDate(statusStopDate);		
+				
+				updatePlantSubmittalRecipt(emailAddress, plant, out);
 			}
 			// STEP WHERE THE PLANT ACTUALLY GETS LOADED TO THE DATABASE
 			else if ( action.equals("plantsubmittalreceipt") )
 			{
 				System.out.println("submittal to the database taking place ");
-				//init the plant loader
-				
-				PlantTaxaLoader plantLoader = new PlantTaxaLoader();
-				Hashtable h = new Hashtable();
-				//new elements
-				h.put("longNameRefAuthors", longNameRefAuthors);
-				h.put("longNameRefTitle",longNameRefTitle );
-				h.put("longNameRefDate", longNameRefDate );
-				h.put("longNameRefEdition", longNameRefEdition );
-				h.put("longNameRefSeriesName", longNameRefSeriesName );
-				h.put("longNameRefVolume", longNameRefVolume );
-				h.put("longNameRefPage", longNameRefPage );
-				h.put("longNameRefISSN", longNameRefISSN );
-				h.put("longNameRefISBN", longNameRefISBN );
-				h.put("longNameRefOtherCitDetails", longNameRefOtherCitDetails );
-				
-				h.put("shortNameRefAuthors", shortNameRefAuthors );
-				h.put("shortNameRefTitle", shortNameRefTitle );
-				h.put("shortNameRefDate", shortNameRefDate );
-				h.put("shortNameRefEdition", shortNameRefEdition );
-				h.put("shortNameRefSeriesName", shortNameRefSeriesName );
-				h.put("shortNameRefVolume", shortNameRefVolume );
-				h.put("shortNameRefPage", shortNameRefPage );
-				h.put("shortNameRefISSN", shortNameRefISSN );
-				h.put("shortNameRefISBN", shortNameRefISBN );
-				h.put("shortNameRefOtherCitDetails", shortNameRefOtherCitDetails );
-			
-				h.put("codeRefAuthors", codeRefAuthors);
-				h.put("codeRefTitle", codeRefTitle );
-				h.put("codeRefDate", codeRefDate );
-				h.put("codeRefEdition", codeRefEdition );
-				h.put("codeRefSeriesName", codeRefSeriesName );
-				h.put("codeRefVolume", codeRefVolume);
-				h.put("codeRefPage", codeRefPage );
-				h.put("codeRefISSN", codeRefISSN );
-				h.put("codeRefISBN", codeRefISBN );
-				h.put("codeRefOtherCitDetails",codeRefOtherCitDetails );
-				System.out.println("3");
-				
-				//System.out.println("test: " + conceptDescription);
-				h.put("conceptDescription", conceptDescription );
-				//System.out.println(conceptDescription);
-				h.put("conceptRefAuthors", conceptRefAuthors );
-				//System.out.println(conceptRefAuthors);
-				h.put("conceptRefTitle", conceptRefTitle );
-				//System.out.println(conceptRefTitle);
-				h.put("conceptRefDate", conceptRefDate);
-				//System.out.println(conceptRefDate);
-				h.put("conceptRefEdition", conceptRefEdition);
-				//System.out.println(conceptRefEdition);
-				h.put("conceptRefSeriesName", conceptRefSeriesName );
-				//System.out.println(conceptRefSeriesName);
-				h.put("conceptRefVolume", conceptRefVolume );
-				//System.out.println(conceptRefVolume);
-				h.put("conceptRefPage", conceptRefPage );
-				//System.out.println(conceptRefPage);
-				h.put("conceptRefISSN",conceptRefISSN );
-				//System.out.println(conceptRefISSN);
-				h.put("conceptRefISBN", conceptRefISBN );
-				//System.out.println(conceptRefISBN);
-				h.put("conceptRefOtherCitDetails", conceptRefOtherCitDetails );
-				//System.out.println(conceptRefOtherCitDetails);
-				
-				System.out.println("4");
-				h.put("conceptStatus", conceptStatus );
-				h.put("statusStartDate", statusStartDate);
-				h.put("statusStopDate", statusStopDate );
-				h.put("usageStartDate", usageStartDate);
-				h.put("usageStopDate", usageStopDate );
-				h.put("statusDescription",statusDescription );
-				h.put("taxonLevel", taxonLevel );
-				h.put("plantParentName", plantParentName );
-				h.put("plantParentRefTitle", plantParentRefTitle);
-				h.put("plantParentRefAuthors",plantParentRefAuthors );
-				System.out.println("5");
-				
-				h.put("longName", ""+longName);
-				h.put("shortName", ""+shortName);
-				h.put("code", ""+code);
-				h.put("salutation", ""+salutation);
-				h.put("givenName", ""+givenName);
-				h.put("surName", ""+surName);
-				h.put("orgName", ""+institution);
-				h.put("email", ""+emailAddress);
 
-				// get the planttaxon hash from the plant taxon class
-				Hashtable plantHash = plantTaxon.getPlantTaxonHash();				
-				boolean results = plantLoader.loadGenericPlantTaxa(h);
-///					boolean results = true;
+				DBPlantWriter dbw = new DBPlantWriter( plant );		
+				boolean results = dbw.isWriteSuccess();
+
 				// WRITE THE RESULTS BACK TO THE BROWSER
-				String receipt = this.getPlantInsertionReceipt(plantHash, results);
+				String receipt = this.getPlantInsertionReceipt(results, plant);
 				out.println(receipt);
 				
 			}
@@ -732,7 +700,6 @@ public class DataSubmitServlet extends HttpServlet
 		return(sb);
 	}
 	
-	
 	/**
 	 * method that composes the plant-insert receipt from the hashtable 
 	 * which is passed to the plant taxonomy loader
@@ -744,7 +711,8 @@ public class DataSubmitServlet extends HttpServlet
 	 * @return s -- an html-encoded string containing the receipt 
 	 *
 	 */
-	 private String getPlantInsertionReceipt(Hashtable plantAtts, boolean results)
+	
+	 private String getPlantInsertionReceipt( boolean results, Plant plant)
 	 {
 		 StringWriter output = new StringWriter();
 		 StringBuffer sb = new StringBuffer();
@@ -752,17 +720,23 @@ public class DataSubmitServlet extends HttpServlet
 		 {
 			 
 			 //get the required elements from the planttaxonobject
-			 String email = plantTaxon.getEmailAddress();
-			 String name = plantTaxon.getInserterGivenName() + " "+ plantTaxon.getInserterSurName();
-			 institution = plantTaxon.getInserterInstitution();
-			 String sciName  = plantTaxon.getScientificName();
-			 String commonName = plantTaxon.getCommonName();
-			 String codeName = plantTaxon.getCode();
-			 conceptDescription = plantTaxon.getConceptDescription();
-			 usageStartDate = plantTaxon.getUsageStartDate();
-			 usageStopDate = plantTaxon.getUsageStopDate();
-			 String status = plantTaxon.getConceptStatus();
-			 String level = plantTaxon.getTaxonLevel();
+			 String email = "";
+			 String name = "";
+			 institution = "";
+			 String sciName  = plant.getScientificName();
+			 String commonName = plant.getCommonName();
+			 String code = plant.getCode();
+			 String conceptDescription = plant.getDescription();
+			 
+			 AbstractList plantUsageList = plant.getPlantUsages();
+				// Just use the first element -- they all have same dates
+			 PlantUsage pu = (PlantUsage) plantUsageList.get(0);
+			 String usageStartDate = pu.getStartDate();
+			 String usageStopDate = pu.getStopDate();
+			 
+			 String status = plant.getStatus();
+			 String level = plant.getClassLevel();
+
 			 
 			 // create a table to be put into the generic form 
 			 sb.append("<span class=\"itemsmall\">");
@@ -793,14 +767,20 @@ public class DataSubmitServlet extends HttpServlet
 		 }
 		 return( output.toString() );
 	 }
-	 
+
 	
 	/**
 	 * method that updates the plant submittal receipt page --
 	 * this is the last sub-step in the plant submittal process
 	 */
-	 private void updatePlantSubmittalRecipt(String emailAddress, Writer out)
+	 private void updatePlantSubmittalRecipt(String emailAddress, Plant plant, Writer out)
 	 {
+	 	Reference snRef = plant.getScientificNameNoAuthorsReference();
+		Reference codeRef = plant.getCodeNameReference();
+		Reference cnRef = plant.getCommonNameReference();
+		Reference conceptRef = plant.getConceptReference();
+	 	
+	 	Reference ref = new Reference();
 		 try
 		 {
 			 Hashtable replaceHash = new Hashtable();
@@ -811,65 +791,69 @@ public class DataSubmitServlet extends HttpServlet
 			 replaceHash.put("surName", ""+surName);
 			 
 			 // THE NAMES OF THE PLANT
-			  replaceHash.put("longName", ""+longName);
-				replaceHash.put("shortName", ""+shortName);
-				replaceHash.put("code", ""+code);
+			  replaceHash.put("longName", ""+ plant.getScientificNameNoAuthors());
+				replaceHash.put("shortName", ""+plant.getCommonName());
+				replaceHash.put("code", ""+ plant.getCode());
 				
 			 
-			 // THE NAME REFERENCE 
-			 replaceHash.put("longNameRefAuthors", ""+longNameRefAuthors);
-			 replaceHash.put("longNameRefTitle", ""+ longNameRefTitle);
-			 replaceHash.put("longNameRefDate", ""+ longNameRefDate);
-			 replaceHash.put("longNameRefEdition", ""+ longNameRefEdition);
-			 replaceHash.put("longNameRefSeriesName", ""+ longNameRefSeriesName);
-			 replaceHash.put("longNameRefVolume", ""+ longNameRefVolume);
-			 replaceHash.put("longNameRefPage", ""+ longNameRefPage);
-			 replaceHash.put("longNameRefISSN", ""+longNameRefISSN );
-			 replaceHash.put("longNameRefISBN", ""+ longNameRefISBN);
-			 replaceHash.put("longNameRefOtherCitDetails", ""+longNameRefOtherCitDetails );
-			 replaceHash.put("shortNameRefAuthors", ""+shortNameRefAuthors );
-			 replaceHash.put("shortNameRefTitle", ""+shortNameRefTitle );
-			 replaceHash.put("shortNameRefDate", ""+shortNameRefDate );
-			 replaceHash.put("shortNameRefEdition", ""+shortNameRefEdition );
-			 replaceHash.put("shortNameRefSeriesName", ""+shortNameRefSeriesName );
-			 replaceHash.put("shortNameRefVolume", ""+ shortNameRefVolume);
-			 replaceHash.put("shortNameRefPage", ""+shortNameRefPage );
-			 replaceHash.put("shortNameRefISSN", ""+shortNameRefISSN );
-			 replaceHash.put("shortNameRefISBN", ""+shortNameRefISBN );
-			 replaceHash.put("shortNameRefOtherCitDetails", ""+shortNameRefOtherCitDetails );
-			 replaceHash.put("codeRefAuthors", ""+codeRefAuthors );
-			 replaceHash.put("codeRefTitle", ""+ codeRefTitle);
-			 replaceHash.put("codeRefDate", ""+codeRefDate);
-			 replaceHash.put("codeRefEdition", ""+codeRefEdition );
-			 replaceHash.put("codeRefSeriesName", ""+codeRefSeriesName );
-			 replaceHash.put("codeRefVolume", ""+codeRefVolume );
-			 replaceHash.put("codeRefPage", ""+codeRefPage );
-			 replaceHash.put("codeRefISSN", ""+ codeRefISSN);
-			 replaceHash.put("codeRefISBN", ""+codeRefISBN );
-			 replaceHash.put("codeRefOtherCitDetails", ""+codeRefOtherCitDetails );
+			 // THE NAME REFERENCES
+			 replaceHash.put("longNameRefAuthors", ""+snRef.getAuthors() );
+			 replaceHash.put("longNameRefTitle", ""+ snRef.getTitle() );
+			 replaceHash.put("longNameRefDate", ""+ snRef.getPubdate() );
+			 replaceHash.put("longNameRefEdition", ""+ snRef.getEdition() );
+			 replaceHash.put("longNameRefSeriesName", ""+ snRef.getSeriesName() );
+			 replaceHash.put("longNameRefVolume", ""+ snRef.getVolume() );
+			 replaceHash.put("longNameRefPage", ""+ snRef.getPage() );
+			 replaceHash.put("longNameRefISSN", ""+ snRef.getISSN() );
+			 replaceHash.put("longNameRefISBN", ""+ snRef.getISBN());
+			 replaceHash.put("longNameRefOtherCitDetails", ""+ snRef.getOtherCitationDetails() );
+			 
+			 replaceHash.put("shortNameRefAuthors", ""+cnRef.getAuthors() );
+			 replaceHash.put("shortNameRefTitle", ""+cnRef.getTitle()  );
+			 replaceHash.put("shortNameRefDate", ""+ cnRef.getPubdate() );
+			 replaceHash.put("shortNameRefEdition", ""+ cnRef.getEdition() );
+			 replaceHash.put("shortNameRefSeriesName", ""+ cnRef.getSeriesName() );
+			 replaceHash.put("shortNameRefVolume", ""+ cnRef.getVolume());
+			 replaceHash.put("shortNameRefPage", ""+cnRef.getPage() );
+			 replaceHash.put("shortNameRefISSN", ""+cnRef.getISSN() );
+			 replaceHash.put("shortNameRefISBN", ""+ cnRef.getISBN() );
+			 replaceHash.put("shortNameRefOtherCitDetails", ""+cnRef.getOtherCitationDetails() );
+			 
+			 replaceHash.put("codeRefAuthors", ""+codeRef.getAuthors() );
+			 replaceHash.put("codeRefTitle", ""+ codeRef.getTitle() );
+			 replaceHash.put("codeRefDate", ""+ codeRef.getPubdate() );
+			 replaceHash.put("codeRefEdition", ""+ codeRef.getEdition() );
+			 replaceHash.put("codeRefSeriesName", ""+ codeRef.getSeriesName() );
+			 replaceHash.put("codeRefVolume", ""+codeRef.getVolume() );
+			 replaceHash.put("codeRefPage", ""+codeRef.getPage() );
+			 replaceHash.put("codeRefISSN", ""+ codeRef.getISSN());
+			 replaceHash.put("codeRefISBN", ""+codeRef.getISBN() );
+			 replaceHash.put("codeRefOtherCitDetails", ""+codeRef.getOtherCitationDetails() );
 			 
 			 // CONCEPT REFERENCE
-			 replaceHash.put("conceptDescription", ""+conceptDescription );
-			 replaceHash.put("conceptRefAuthors", ""+conceptRefAuthors );
-			 replaceHash.put("conceptRefTitle", ""+conceptRefTitle );
-			 replaceHash.put("conceptRefDate", ""+conceptRefDate );
-			 replaceHash.put("conceptRefEdition", ""+conceptRefEdition );
-			 replaceHash.put("conceptRefSeriesName", ""+conceptRefSeriesName );
-			 replaceHash.put("conceptRefVolume", ""+conceptRefVolume );
-			 replaceHash.put("conceptRefPage", ""+conceptRefPage );
-			 replaceHash.put("conceptRefISSN", ""+conceptRefISSN );
-			 replaceHash.put("conceptRefISBN", ""+conceptRefISBN );
-			 replaceHash.put("conceptRefOtherCitDetails", ""+conceptRefOtherCitDetails );
+			 replaceHash.put("conceptDescription", ""+plant.getDescription() );
+			 replaceHash.put("conceptRefAuthors", ""+conceptRef.getAuthors()  );
+			 replaceHash.put("conceptRefTitle", ""+ conceptRef.getTitle()  );
+			 replaceHash.put("conceptRefDate", ""+conceptRef.getPubdate() );
+			 replaceHash.put("conceptRefEdition", ""+conceptRef.getEdition() );
+			 replaceHash.put("conceptRefSeriesName", ""+ conceptRef.getSeriesName() );
+			 replaceHash.put("conceptRefVolume", ""+conceptRef.getVolume() );
+			 replaceHash.put("conceptRefPage", ""+conceptRef.getPage() );
+			 replaceHash.put("conceptRefISSN", ""+conceptRef.getISSN() );
+			 replaceHash.put("conceptRefISBN", ""+conceptRef.getISBN() );
+			 replaceHash.put("conceptRefOtherCitDetails", ""+conceptRef.getOtherCitationDetails() );
 			 
 			 // STATUS AND USAGE
-			 replaceHash.put("conceptStatus", ""+conceptStatus);
-			 replaceHash.put("statusStartDate", ""+statusStartDate);
-			 replaceHash.put("statusStopDate", ""+statusStopDate);
-			 replaceHash.put("statusDescription", ""+statusDescription);
-			 replaceHash.put("taxonLevel", ""+taxonLevel);
-			 replaceHash.put("plantParentName", ""+plantParentName);
-			 replaceHash.put("plantParentRefTitle", ""+plantParentRefTitle);
-			 replaceHash.put("plantParentRefAuthors", ""+plantParentRefAuthors);
+			 replaceHash.put("conceptStatus", ""+plant.getStatus() );
+			 replaceHash.put("statusStartDate", ""+plant.getStatusStartDate());
+			 replaceHash.put("statusStopDate", ""+plant.getStatusStopDate());
+			 replaceHash.put("statusDescription", ""+plant.getDescription()); // FIXME: I think this is wrong
+			 replaceHash.put("taxonLevel", ""+plant.getClassLevel());
+			
+				//	FIXME: Ignoring plantparent  for now
+//			 replaceHash.put("plantParentName", ""+plantParentName);
+//			 replaceHash.put("plantParentRefTitle", ""+plantParentRefTitle);
+//			 replaceHash.put("plantParentRefAuthors", ""+plantParentRefAuthors);
 			 
 			 
 			 su.filterTokenFile(plantSubmittalReceiptTemplate, out, replaceHash);
@@ -880,6 +864,8 @@ public class DataSubmitServlet extends HttpServlet
 			 e.printStackTrace();
 		 }
 	 }
+
+	 
 	 /**
 	  * Method that uses the user database class to access the parameters 
 		* for a given user so that those attributes can be used in the 
@@ -1419,7 +1405,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 				String plotFileType = (String)params.get("plotFileType");
 				
 				//quick hack to cahnge the type of plots archive
-				this.plotsArchiveType = plotFileType;
+				plotsArchiveType = plotFileType;
 				System.out.println("DataSubmitServlet > plotsArchiveType: " + plotsArchiveType);
 				
 				// check that the uer has valid priveleges to load a data 
@@ -1504,7 +1490,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 				//String plotFileType = (String)params.get("plotFileType");
 				
 				System.out.println("DataSubmitServlet > requesting a receipt type: "+receiptType );
-				System.out.println("DataSubmitServlet > plot file type: "+ this.plotsArchiveType);
+				System.out.println("DataSubmitServlet > plot file type: "+ plotsArchiveType);
 				//sleep so that admin can see the debugging
 				Thread.sleep(2000);
 				
@@ -1538,7 +1524,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 								// if the plot is valid then load it
 								else
 								{
-									String result = rmiClient.insertPlot(thisPlot, this.plotsArchiveType, user);
+									String result = rmiClient.insertPlot(thisPlot, plotsArchiveType, user);
 									String receipt = getPlotInsertionReceipt(thisPlot, result, receiptType, i, values.length);
 									sb.append( receipt );
 									System.out.println("DataSubmitServlet > requesting a receipt: '"+i+"' out of: " + values.length );

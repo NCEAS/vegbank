@@ -35,8 +35,8 @@ import org.apache.tools.mail.MailMessage;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-02-26 19:16:36 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2003-03-07 22:49:22 $'
+ *  '$Revision: 1.2 $'
  *
  */
 
@@ -541,12 +541,10 @@ public void getViewOption(String summaryViewType)
 		 //get the cookies - if there are any
 		String cookieName = null;
 		String cookieValue = null;
+		// TODO: Move this into config options
+		String defaultCookieName = "framework";
 
 		Cookie[] cookies = req.getCookies();
-		//	System.out.println("cookie dump: " + cookies.toString() );
-		//	Cookie cook = cookies[0];
-		//	String name =cook.getName();
-		//	System.out.println("cookie name > : " + name );
 		
 		//determine if the requested page should be shown
     if (cookies.length >= 0) 
@@ -554,17 +552,19 @@ public void getViewOption(String summaryViewType)
 			for (int i = 0; i < cookies.length; i++) 
 			{
       	Cookie cookie = cookies[i];
-				//out.print("Cookie Name: " +cookie.getName()  + "<br>");
+				System.out.println("Cookie Name: " +cookie.getName());
         cookieName=cookie.getName();
-				//System.out.println("DataRequestServlet > cookie name: " + cookieName);
-				//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
-				cookieValue=cookie.getValue();
-				s = cookieValue.trim(); 
+
+				if ( cookieName.equals(defaultCookieName) )
+				{
+						cookieValue=cookie.getValue(); 
+						s = cookieValue.trim();
+				} 
 			}
   	} 
 		else 
 		{
-			System.out.println("DataRequestServlet > No valid cookies found");
+			System.out.println("ServletUtility > No valid cookies found");
 		}
 		return(s);
 	}

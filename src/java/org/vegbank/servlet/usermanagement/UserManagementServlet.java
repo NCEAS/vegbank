@@ -6,8 +6,8 @@ package org.vegbank.servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-02-26 19:16:34 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2003-03-07 22:49:22 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 				System.out.println("UserManagementServlet > in params: " + params  );
 				
 				//the cookie value is the same as the user name and email addy
-				cookieValue = this.getCookieValue(req);
+				cookieValue = new ServletUtility().getCookieValue(req);
 				String action = getAction( params );
 				if (action == null)
 				{
@@ -670,7 +670,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 			try
 			{
 				System.out.println("UserManagementServlet > performing download action");
-				String cookieVal = this.getCookieValue(req);
+				String cookieVal = new ServletUtility().getCookieValue(req);
 				String cookieName = this.getCookieName(req);
 				System.out.println("UserManagementServlet > cookie value: " + cookieVal);
 				System.out.println("UserManagementServlet > cookie name: " + cookieName);
@@ -758,7 +758,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 		 try
 		 {
 		 	System.out.println("UserManagementServlet > performing logout");
-			String cookieVal = this.getCookieValue(req);
+			String cookieVal = new ServletUtility().getCookieValue(req);
 			String cookieName = this.getCookieName(req);
 			System.out.println("UserManagementServlet > cookie value: " + cookieVal);
 			System.out.println("UserManagementServlet > cookie name: " + cookieName);
@@ -1187,7 +1187,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 	 * current browser
    * @param req - the servlet request object 
    * @return cookieValue -- the value of the cookie 
-	 */
+
 	private String getCookieValue(HttpServletRequest req)
 	{
 		System.out.println("UserManagementServlet > getCookieValue called ");
@@ -1213,6 +1213,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
   	}
 		return(cookieValue);
 	}
+	*/
 	
 	/**
 	 * method that returns the cookie value associated with the 
