@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-04 17:55:12 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2002-03-26 18:31:09 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -763,10 +763,10 @@ public class  sqlMapper
 					//grab the queryElementValue from the hash
 					String queryElementValue = (String)queryElementHash.get(queryElementType);
 		
-					System.out.println("> the query element key: "+queryElementType);
-					System.out.println("> the query element value: "+queryElementValue);
+					System.out.println("sqlMapper > the query element key: "+queryElementType);
+					System.out.println("sqlMapper > the query element value: "+queryElementValue);
 		
-					System.out.println("sqlMapper.developPlotQuery - "
+					System.out.println("sqlMapper > developPlotQuery  "
 					+" calling queryStore.getPlotId (single query element)");
 					queryStore j = new queryStore();
 					j.getPlotId(queryElementValue, queryElementType);

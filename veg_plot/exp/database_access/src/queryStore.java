@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-01-22 16:30:19 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2002-03-26 18:31:09 $'
+ * 	'$Revision: 1.3 $'
  *
  *
  */
@@ -407,52 +407,59 @@ catch (Exception e) {System.out.println("failed in querySrore.getPlotSummary"
 public void getPlotId(String queryElement, String queryElementType)
 {
 
-String queryTableName = null;  //name of the table for which the query to be made
+	String queryTableName = null;  //name of the table for which the query to be made
 
-//translate the query attributeName into the table name and determine the table
-if ( queryElementType.equals("taxonName") ) {
-	queryElementType = "AUTHORNAMEID";
-	queryTableName = "PLOTSPECIESSUM";
-}
+	//translate the query attributeName into the table name and determine the table
+	if ( queryElementType.equals("taxonName") ) 
+	{
+		queryElementType = "AUTHORNAMEID";
+		queryTableName = "PLOTSPECIESSUM";
+	}
 
-else if ( queryElementType.equals("state") ) {
-	queryElementType = "STATE";
-	queryTableName = "PLOTSITESUMMARY";
-}
+	else if ( queryElementType.equals("state") ) 
+	{
+		queryElementType = "STATE";
+		queryTableName = "PLOTSITESUMMARY";
+	}
 
-else if ( queryElementType.equals("surfGeo") ) {
-	queryElementType = "SURFGEO";
-	queryTableName = "PLOTSITESUMMARY";
-}
+	else if ( queryElementType.equals("surfGeo") ) 
+	{
+		queryElementType = "SURFGEO";
+		queryTableName = "PLOTSITESUMMARY";
+	}
 
-else if ( queryElementType.equals("communityName") ) {
-	queryElementType = "CURRENTCOMMUNITY";
-	queryTableName = "PLOTSITESUMMARY";
-} 
+	else if ( queryElementType.equals("communityName") ) 
+	{
+		queryElementType = "CURRENTCOMMUNITY";
+		queryTableName = "PLOTSITESUMMARY";
+	} 
 
-else {System.out.println("plotQuery.getPlotId: unrecognized queryElementType: "
-	+queryElementType); }
+	else 
+	{	
+		System.out.println("plotQuery.getPlotId: unrecognized queryElementType: "
+		+queryElementType); 
+	}
 
-//this select statement will use the summary tables for the plots database where
-//most of the database attributes are denormalized to two tables:
-// 'plotSiteSummary' and 'plotSpeciesSum'
-String action="select";
-String statement="select DISTINCT PLOT_ID from "+queryTableName+" where "+queryElementType
-+" like '%"+queryElement+"%'";
+	//this select statement will use the summary tables for the plots database where
+	//most of the database attributes are denormalized to two tables:
+	// 'plotSiteSummary' and 'plotSpeciesSum'
+	String action="select";
+	String statement="select DISTINCT PLOT_ID from "+queryTableName+" where "+queryElementType
+	+" like '%"+queryElement+"%'";
 
 
-String returnFields[]=new String[1];	
-returnFields[0]="PLOT_ID";
-int returnFieldLength=1;
+	String returnFields[]=new String[1];	
+	returnFields[0]="PLOT_ID";
+	int returnFieldLength=1;
 
-issueStatement j = new issueStatement();
-j.issueSelect(statement, action, returnFields, returnFieldLength);	
+	issueStatement j = new issueStatement();
+	j.issueSelect(statement, action, returnFields, returnFieldLength);	
 
-//grab the returned result set and transfer to a public array
-//ultimately these results are passed to the calling class -- if for some reason
-//the value was null then a string: 'nullValue' is returned
-outPlotId=j.outReturnFields;
-outPlotIdNum=j.outReturnFieldsNum;
+	//grab the returned result set and transfer to a public array
+	//ultimately these results are passed to the calling class -- if for some reason
+	//the value was null then a string: 'nullValue' is returned
+	outPlotId=j.outReturnFields;
+	outPlotIdNum=j.outReturnFieldsNum;
 	
 } //end method
 
