@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<frameworkservlet>
-<baseURL>http://beta.nceas.ucsb.edu/vegclass/servlet/</baseURL>
- <plugin>
-  <pluginName>spatialView</pluginName>
-  <pluginClass>SpatialViewerServlet</pluginClass>
-  <pluginType>local</pluginType>
- </plugin>
-</frameworkservlet>
