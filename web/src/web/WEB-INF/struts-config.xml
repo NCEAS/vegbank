@@ -45,6 +45,7 @@
     <forward   name="logoff"	path="/logoff.do"/>
     <forward   name="logon"	path="/logon.jsp"/>
     <forward   name="success"	path="/servlet/usermanagement?action=options"/>
+    <forward   name="failure"	path="/forms/failure.jsp"/>
     <forward   name="AddReference"	path="/forms/AddReference.jsp"/>
     <forward   name="AddJournal"	path="/forms/AddJournal.jsp"/>
     <forward   name="AddCoverMethod"	path="/forms/AddCoverMethod.jsp"/>
@@ -109,6 +110,10 @@
       	input="PlotQuery">
     </action>
 
+    <action path="/GenericDispatcher"
+    	  type="org.vegbank.ui.struts.GenericDispatcherAction"
+          scope="request">
+    </action>
 
   </action-mappings>
 
@@ -136,11 +141,7 @@
   <!-- ========== Plug Ins Configuration ================================== -->
 
   <plug-in className="org.apache.struts.plugins.ModuleConfigVerifier"/>
-<!--
-  <plug-in className="org.apache.struts.webapp.example.memory.MemoryDatabasePlugIn">
-    <set-property property="pathname" value="/WEB-INF/database.xml"/>
-  </plug-in>
--->
+
   <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
     <set-property property="pathnames"
                      value="/WEB-INF/validator-rules.xml,
