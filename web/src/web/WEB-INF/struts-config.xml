@@ -84,6 +84,11 @@
 			<form-property name="password"
 			               type="java.lang.String"/>
 		</form-bean>
+    		<form-bean  name="GenericDispatcherForm"
+                            type="org.apache.struts.action.DynaActionForm">
+			<form-property name="accessionCode" type="java.lang.String"/>
+    		</form-bean>
+
 		<form-bean name="PlantQueryForm"
 		           type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="plantname"
@@ -113,6 +118,7 @@
 			<form-property name="password2"
 			               type="java.lang.String"/>
 		</form-bean>
+
 		<form-bean name="UploadPlotForm"
 		           type="org.vegbank.ui.struts.UploadPlotForm"/>
 		<form-bean name="UserProfileForm"
@@ -120,7 +126,8 @@
 	</form-beans>
 	<global-forwards>
 		<forward name="failure"
-		         path="/forms/failure.jsp"/>
+		         path="/forms/failure.jsp" 
+                         redirect="false"/>
 		<forward name="success"
 		         path="/forms/success.html"/>
 		<forward name="vberror"
@@ -276,6 +283,7 @@
 		        input="EntityName"/>
 		<action path="/GenericDispatcher"
 		        type="org.vegbank.ui.struts.GenericDispatcherAction"
+                        name="GenericDispatcherForm"
 		        scope="request"/>
 		<action path="/Logoff"
 		        type="org.vegbank.ui.struts.LogoffAction">
