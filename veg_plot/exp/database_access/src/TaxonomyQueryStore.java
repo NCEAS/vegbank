@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-06-08 18:47:00 $'
- * '$Revision: 1.13 $'
+ *     '$Date: 2002-07-02 20:47:56 $'
+ * '$Revision: 1.14 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,6 +104,7 @@ import databaseAccess.*;
 		System.out.println("TaxonomyQueryStore > returning near matches: " + returnVector.size()  );
 		return( returnVector );
 	 }
+	 
 	 
 	
 	/**
@@ -440,6 +441,85 @@ import databaseAccess.*;
 				 e.printStackTrace();
 			 }
 			 return( returnHash );
+		 }
+		 
+		 /** 
+		  * method that retuns the name reference for a plant name
+			*/
+			public Hashtable getPlantNameReference(String name)
+			{
+				Hashtable h = new Hashtable();
+				h.put("plantName", ""+name);
+				StringBuffer sqlBuf = new StringBuffer();
+				try 
+				{
+					// connection stuff
+					Connection conn = this.getConnection();
+					Statement query = conn.createStatement();
+					ResultSet results = null;
+
+					// create and issue the query --
+					sqlBuf.append("select  PLANTREFERENCE_ID, AUTHORS, OTHERCITATIONDETAILS, ");
+					sqlBuf.append("TITLE, PUBDATE, EDITION, SERIESNAME, ISSUEIDENTIFICATION, ");
+					sqlBuf.append(" PAGE, TABLECITED, ISBN, ISSN, PLANTDESCRIPTION ");
+					sqlBuf.append(" from PLANTREFERENCE where PLANTREFERENCE_ID = ( ");
+					sqlBuf.append(" select PLANTREFERENCE_ID from PLANTNAME where PLANTNAME like ");
+					sqlBuf.append( "'" +name+"' )");
+					results = query.executeQuery( sqlBuf.toString() );
+					
+					//retrieve the results
+					while (results.next()) 
+					{
+						int plantReferenceId = results.getInt(1);
+						String authors = results.getString(2);
+						String otherCitationDetails = results.getString(3);
+						String title = results.getString(4);
+						String pubDate = results.getString(5);
+						String edition = results.getString(6);
+						String seriesName = results.getString(7);
+						String issueIdentification = results.getString(8);
+						String page = results.getString(9);
+						String tableCited = results.getString(10);
+						String isbn = results.getString(11);
+						String issn = results.getString(12);
+						String plantDescription= results.getString(13);
+						
+						h.put("plantReferenceId", ""+plantReferenceId);
+						h.put("authors", ""+authors);
+						h.put("otherCitationDetails", ""+otherCitationDetails);
+						h.put("title", ""+title);
+						h.put("pubDate", ""+pubDate);
+						h.put("edition", ""+edition);
+						h.put("seriesName", ""+seriesName);
+						h.put("issueIdentification", ""+issueIdentification );
+						h.put("page", ""+page);
+						h.put("tableCited", ""+tableCited );
+						h.put("isbn", ""+isbn);
+						h.put("issn", ""+issn);
+						
+					}
+					//remember to close the connections etc..
+				}
+				catch (Exception e) 
+				{
+					System.out.println("failed " + e.getMessage() );
+					System.out.println("sql: " + sqlBuf.toString() );
+					e.printStackTrace();
+				}
+				return( h );
+			}
+		 
+		 
+		 
+		/**
+		 * Main method for testing
+		 */  
+		 public static void main(String[] args)
+		 {
+			 //test the get plant name reference method
+			 TaxonomyQueryStore qs = new TaxonomyQueryStore();
+			 Hashtable h = qs.getPlantNameReference("Big Bush");
+			 System.out.println("TaxonomyQueryStore > plantname reference" + h.toString()  );
 		 }
 		
 	}

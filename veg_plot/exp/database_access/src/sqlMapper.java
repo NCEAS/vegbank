@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-04-19 03:55:35 $'
- * '$Revision: 1.11 $'
+ *     '$Date: 2002-07-02 20:47:56 $'
+ * '$Revision: 1.12 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,7 @@ import java.text.*;
 import java.util.*;
 import java.sql.*;
 
- //import the class that stores all the queries
-
+ //import the databaseAccess package
 import databaseAccess.*;
 
 
@@ -733,20 +732,17 @@ public class  sqlMapper
 			// there are two over-arching criteria for
 			// developing the queries -- either the user
 			// wants to develop a query to get the entire
-			// plot record or a 'summary' of the plot(s)
-			
+			// plot record a 'summary', or a 'identity' of the plot(s)
 			if ( resultType.equals("full") )
 			{
 				if ( (String)queryElementHash.get("plotId") != null ) 
 				{
 		
-					//assume that the user has passed the plotId
-					//so retrieve the entire plot corresponding 
+					// assume that the user has passed the plotId
+					// so retrieve the entire plot corresponding 
 					// to that plot id
 					String plotId = (String)queryElementHash.get("plotId");
-					
-					System.out.println("sqlMapper > issueing a query through the query store");
-				
+					System.out.println("sqlMapper > issuing a query through the query store");
 					qs.getEntireSinglePlot(plotId);
 
 					//write to a summary information to the file that can be used by the application
@@ -759,21 +755,20 @@ public class  sqlMapper
 				}
 			}
 			
+			//ELSE IF THE SUMMARIES ARE DESIRED
 			else if ( resultType.equals("summary") )
 			{
+				System.out.println("sqlMapper > compiling a summary results file");
 				// this if targets those queries requesting summary information for plots using
 				// a specific query element lime taxonName, communityName, state etc
 				if ( resultType.equals("summary") && (queryElementHash.size() == 1) ) 
 				{
-		
-					//grab the queryElementType from the hash
+					// grab the queryElementType from the hash
 					String queryElementType	= (String)queryElementHash.keys().nextElement().toString();
-					//grab the queryElementValue from the hash
+					// grab the queryElementValue from the hash
 					String queryElementValue = (String)queryElementHash.get(queryElementType);
-		
 					System.out.println("sqlMapper > the query element key: "+queryElementType);
 					System.out.println("sqlMapper > the query element value: "+queryElementValue);
-		
 					System.out.println("sqlMapper > developPlotQuery calling queryStore.getPlotId(single query element)");
 					queryStore j = new queryStore();
 					j.getPlotId(queryElementValue, queryElementType);
@@ -784,7 +779,6 @@ public class  sqlMapper
 				// this block targets the queries that use an elevation range
 				else if ( resultType.equals("summary") && (queryElementHash.size() == 2) ) 
 				{
-
 					//assume for now that the query elements being targetd here are
 					//elevation and grab the results
 					String elevationMin = (String)queryElementHash.get("elevationMin");
@@ -797,12 +791,56 @@ public class  sqlMapper
 					queryOutputNum=j.outPlotIdNum;
 				}
 
-				// JHH REMOVE THIS METHOD SHOULD NO LONGER BE USED
-				//retrieve the plot summary information, using as input 
-				//the plotId numbers retrieved in the provios query 
+				//write the summary information to the file 
+				//that can be used by the application -- write two
+				//xml files using the two xml writers for testing the 
+				//performance
+				System.out.println("sqlMapper > writing the plots to xml file");
+				Vector plotIdVec = getVector(queryOutput);
+				System.out.println("sqlMapper > number of plots: " + plotIdVec.size() );
+				
+				// instantiate a new instance of the dbAccess class 
+				// -- probably should be done above
+				String testFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml";
+				System.out.println("sqlMapper > writing the plots using new class - test file: " + testFile );
+				dbAccess dbaccess = new dbAccess();
+				dbaccess.writeMultipleVegBankPlot(plotIdVec, testFile);
+			}
+			// ELSE GET THE IDENTITIES FOR THE GIVEN PLOT(S)
+			else if ( resultType.equalsIgnoreCase("identity") )
+			{
+				System.out.println("sqlMapper > compiling an identity results file");
+				// this if targets those queries requesting summary information for plots using
+				// a specific query element lime taxonName, communityName, state etc
+				if ( resultType.equals("identity") && (queryElementHash.size() == 1) ) 
+				{
+					// grab the queryElementType from the hash
+					String queryElementType	= (String)queryElementHash.keys().nextElement().toString();
+					// grab the queryElementValue from the hash
+					String queryElementValue = (String)queryElementHash.get(queryElementType);
+					System.out.println("sqlMapper > the query element key: "+queryElementType);
+					System.out.println("sqlMapper > the query element value: "+queryElementValue);
+					System.out.println("sqlMapper > developPlotQuery calling queryStore.getPlotId(single query element)");
+					queryStore j = new queryStore();
+					j.getPlotId(queryElementValue, queryElementType);
+					queryOutput=j.outPlotId;
+					queryOutputNum=j.outPlotIdNum;
+				}
+
+				// this block targets the queries that use an elevation range
+				else if ( resultType.equals("identity") && (queryElementHash.size() == 2) ) 
+				{
+					//assume for now that the query elements being targetd here are
+					//elevation and grab the results
+					String elevationMin = (String)queryElementHash.get("elevationMin");
+					String elevationMax = (String)queryElementHash.get("elevationMax");
 		
-		///		queryStore k1 = new queryStore();
-		///		k1.getPlotSummaryNew(queryOutput, queryOutputNum);
+					System.out.println("sqlMapper > developPlotQuery issuing an elevation query");
+					queryStore j = new queryStore();
+					j.getPlotId(elevationMin, elevationMax, "elevation");
+					queryOutput=j.outPlotId;
+					queryOutputNum=j.outPlotIdNum;
+				}
 
 				//write the summary information to the file 
 				//that can be used by the application -- write two
@@ -812,23 +850,18 @@ public class  sqlMapper
 				Vector plotIdVec = getVector(queryOutput);
 				System.out.println("sqlMapper > number of plots: " + plotIdVec.size() );
 				
-				//instantiate a new instance of the dbAccess class -- probably
-				//should be done above
+				// instantiate a new instance of the dbAccess class 
+				// -- probably should be done above
 				String testFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml";
-				System.out.println("sqlMapper > writing the plots using new class - test file: "+testFile );
+				System.out.println("sqlMapper > writing the plots using new class - test file: " + testFile );
 				dbAccess dbaccess = new dbAccess();
-				dbaccess.writeMultipleVegBankPlot(plotIdVec, testFile);
-				
-				// JHH REMOVE BLOCK 20020411 - this class is to be removed
-		///		System.out.println("sqlMapper > writing the plots using old class - file " + outFile);
-		///		xmlWriter xw = new xmlWriter();
-		///		xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
+				dbaccess.writeMultipleVegBankPlotIdentifcation(plotIdVec, "identity.xml");
 			}
+			// ELSE DONT RECOGNIZE WHAT TO DO
 			else
 			{
 				System.out.println("sqlMapper > didn't recognize the desired query");
 			}
-
 		} 
 		catch ( Exception e )
 		{

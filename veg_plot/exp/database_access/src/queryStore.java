@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-04-11 17:42:03 $'
- * 	'$Revision: 1.7 $'
+ *  '$Date: 2002-07-02 20:47:56 $'
+ * 	'$Revision: 1.8 $'
  *
  *
  */
@@ -28,15 +28,10 @@ import databaseAccess.*;
 
 public class queryStore
 {
-
-
 	public String summaryOutput[] = new String[10000]; 
 	public int summaryOutputNum; 
-
-
 	//hash table to store the cummulative summary results for all the plots
 	public Hashtable cumulativeSummaryResultHash = new Hashtable();
-
 	public String entireSinglePlotOutput[] = new String[10000];  //should always = 1
 	public int entireSinglePlotOutputNum; 
 	public String outPlotId[] = new String[30000];  //the output plotIds
@@ -276,101 +271,91 @@ public class queryStore
  * @param plotIdNum - the number of elements in the above array
  * @param conn - a database connection -- get rid of this and put the conn
  * management here in this class
+ * @deprecated
  */
 public void getPlotSummary(String plotId[], int plotIdNum)
 {
+	try 
+	{
+		//this array will hold all the results before passing it back to the 
+		//calling class
+		String summaryResult[] = new String[10000];
+		int summaryResultNum=0;
 
+		//iterate through the plot id numbers
+		for (int i=0;i<plotIdNum; i++) 
+		{
 
-try {
+			//Because often the output of issueStatement is used as input here,
+			//and the output values are tokenized by pipes replace all the pipes below
+			String currentPlotId=plotId[i].replace('|',' ').trim();
 
-//this array will hold all the results before passing it back to the 
-//calling class
-String summaryResult[] = new String[10000];
-int summaryResultNum=0;
+			String action="select";
+			String statement="select PLOT_ID, AUTHORPLOTCODE, project_id, "+
+			"surfGeo,  PLOTTYPE, PLOTORIGINLAT, PLOTORIGINLONG, PLOTSHAPE, "
+			+" PLOTSIZE, PLOTSIZEACC, ALTVALUE, ALTPOSACC, SLOPEASPECT, SLOPEGRADIENT, "
+			+" SLOPEPOSITION, HYDROLOGICREGIME, SOILDRAINAGE, STATE, CURRENTCOMMUNITY "
+			+" from PLOT where PLOT_ID = "+currentPlotId;
+			String returnFields[]=new String[19];	
+			returnFields[0]="PLOT_ID";	
+			returnFields[1]="AUTHORPLOTCODE";
+			returnFields[2]="project_id";
+			returnFields[3]="surfGeo";
+			returnFields[4]="PLOTTYPE";
+			returnFields[5]="PLOTORIGINLAT";
+			returnFields[6]="PLOTORIGINLONG";
+			returnFields[7]="PLOTSHAPE";
+			returnFields[8]="PLOTSIZE";
+			returnFields[9]="PLOTSIZEACC";
+			returnFields[10]="ALTVALUE";
+			returnFields[11]="ALTPOSACC";
+			returnFields[12]="SLOPEASPECT";
+			returnFields[13]="SLOPEGRADIENT";
+			returnFields[14]="SLOPEPOSITION";
+			returnFields[15]="HYDROLOGICREGIME";
+			returnFields[16]="SOILDRAINAGE";
+			returnFields[17]="STATE";
+			returnFields[18]="CURRENTCOMMUNITY";
+			int returnFieldLength=19;
+			issueStatement j = new issueStatement();
+			j.issueSelect(statement, action, returnFields, returnFieldLength);	
+			
+			for (int ii=0;ii<j.outReturnFieldsNum; ii++) 
+			{
+				summaryResult[i]=j.outReturnFields[ii];
+			}
+			// make a second query here to get the species specific information which will
+			// be appended onto the summary results line and ultimately tokenized in the 
+			// xmlWrter class - at some point this function may become its own method
 
-//iterate through the plot id numbers
-for (int i=0;i<plotIdNum; i++) {
-
-//Because often the output of issueStatement is used as input here,
-//and the output values are tokenized by pipes replace all the pipes below
-String currentPlotId=plotId[i].replace('|',' ').trim();
-
-	String action="select";
-	String statement="select PLOT_ID, AUTHORPLOTCODE, project_id, "+
-		"surfGeo,  PLOTTYPE, PLOTORIGINLAT, PLOTORIGINLONG, PLOTSHAPE, "
-		+" PLOTSIZE, PLOTSIZEACC, ALTVALUE, ALTPOSACC, SLOPEASPECT, SLOPEGRADIENT, "
-		+" SLOPEPOSITION, HYDROLOGICREGIME, SOILDRAINAGE, STATE, CURRENTCOMMUNITY "
-		+" from PLOT where PLOT_ID = "+currentPlotId;
-		
-	String returnFields[]=new String[19];	
-	returnFields[0]="PLOT_ID";	
-	returnFields[1]="AUTHORPLOTCODE";
-	returnFields[2]="project_id";
-	returnFields[3]="surfGeo";
-	returnFields[4]="PLOTTYPE";
-	returnFields[5]="PLOTORIGINLAT";
-	returnFields[6]="PLOTORIGINLONG";
+			action="select";
+			statement="select AUTHORNAMEID from taxonObservation where OBS_ID in"+
+			"(select OBS_ID from PLOTOBSERVATION where PARENTPLOT in"+
+			"(select plot_ID from plot where PLOT_ID ="+currentPlotId+"))";
+			String returnFieldsB[]=new String[1];	
+			returnFieldsB[0]="AUTHORNAMEID";
+			int returnFieldLengthB=1;
 	
-	returnFields[7]="PLOTSHAPE";
-	returnFields[8]="PLOTSIZE";
-	returnFields[9]="PLOTSIZEACC";
-	returnFields[10]="ALTVALUE";
-	returnFields[11]="ALTPOSACC";
-	returnFields[12]="SLOPEASPECT";
-	returnFields[13]="SLOPEGRADIENT";
-	returnFields[14]="SLOPEPOSITION";
-	returnFields[15]="HYDROLOGICREGIME";
-	returnFields[16]="SOILDRAINAGE";
-	returnFields[17]="STATE";
-	returnFields[18]="CURRENTCOMMUNITY";
+			//issue the select statement
+			issueStatement k = new issueStatement();
+			k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB);	
 	
-	int returnFieldLength=19;
-
-
-	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);	
-	
-
-	for (int ii=0;ii<j.outReturnFieldsNum; ii++) {
-		summaryResult[i]=j.outReturnFields[ii];
+			//take the results from this query and append to the summary line
+			//which will ultimately be passed back to the xmlWriter to be tokenized
+			//and writen to xml - againd there should only be one line returned 
+			for (int ii=0;ii<k.outReturnFieldsNum; ii++) 
+			{
+				summaryResult[i]=summaryResult[i]+k.outReturnFields[ii];
+			}
+			summaryResultNum=i;
+		}
+		summaryOutput=summaryResult;
+		summaryOutputNum=summaryResultNum;
+	} //end try
+	catch (Exception e) 
+	{
+		System.out.println("failed in queryStore.getPlotSummary"+" " + e.getMessage());
 	}
-	
-	
-// make a second query here to get the species specific information which will
-// be appended onto the summary results line and ultimately tokenized in the 
-// xmlWrter class - at some point this function may become its own method
-
-	action="select";
-	statement="select AUTHORNAMEID from taxonObservation where OBS_ID in"+
-		"(select OBS_ID from PLOTOBSERVATION where PARENTPLOT in"+
-		"(select plot_ID from plot where PLOT_ID ="+currentPlotId+"))";
-
-		
-	String returnFieldsB[]=new String[1];	
-	returnFieldsB[0]="AUTHORNAMEID";
-	int returnFieldLengthB=1;
-	
-	//issue the select statement
-	issueStatement k = new issueStatement();
-	k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB);	
-	
-	//take the results from this query and append to the summary line
-	//which will ultimately be passed back to the xmlWriter to be tokenized
-	//and writen to xml - againd there should only be one line returned 
-	for (int ii=0;ii<k.outReturnFieldsNum; ii++) {
-		summaryResult[i]=summaryResult[i]+k.outReturnFields[ii];
-	}
-	
-summaryResultNum=i;
-} //end for
-
-summaryOutput=summaryResult;
-summaryOutputNum=summaryResultNum;
-////outConnectionUses=connectionUses;
-
-} //end try
-catch (Exception e) {System.out.println("failed in querySrore.getPlotSummary"
-		+" " + e.getMessage());}
 		
 }//end method
 
@@ -387,64 +372,77 @@ catch (Exception e) {System.out.println("failed in querySrore.getPlotSummary"
  * linked to the 'handleSimpleQuery' method in the DataRequestServlet
  * @param     queryElement  the value of the attribute used to query
  * @param     queryElementType  the type of element used for querying the DB
- * @param     conn  a database connection that was presumedly taken from the pool 
  */
 public void getPlotId(String queryElement, String queryElementType)
 {
 	String queryTableName = null;  //name of the table for which the query to be made
 	//translate the query attributeName into the table name and determine the table
-	if ( queryElementType.equals("taxonName") ) 
+	if ( queryElementType.equalsIgnoreCase("taxonName") ) 
 	{
 		queryElementType = "AUTHORNAMEID";
 		queryTableName = "PLOTSPECIESSUM";
 	}
 
-	else if ( queryElementType.equals("state") ) 
+	else if ( queryElementType.equalsIgnoreCase("state") ) 
 	{
 		queryElementType = "STATE";
 		queryTableName = "PLOTSITESUMMARY";
 	}
 
-	else if ( queryElementType.equals("surfGeo") ) 
+	else if ( queryElementType.equalsIgnoreCase("surfGeo") ) 
 	{
 		queryElementType = "SURFGEO";
 		queryTableName = "PLOTSITESUMMARY";
 	}
 
-	else if ( queryElementType.equals("communityName") ) 
+	else if ( queryElementType.equalsIgnoreCase("communityName") ) 
 	{
 		queryElementType = "CURRENTCOMMUNITY";
 		queryTableName = "PLOTSITESUMMARY";
-	} 
-
+	}
+	// PLOTID ( THE PK VALUE )
+	else if (queryElementType.equalsIgnoreCase("plotid"))
+	{
+		queryElementType = "PLOTID";
+		queryTableName = "PLOTSITESUMMARY";
+	}
+	
+	// ELSE DONT RECOGNIZE THE ELEMENT
 	else 
 	{	
 		System.out.println("plotQuery.getPlotId: unrecognized queryElementType: "
 		+queryElementType); 
 	}
 
-	//this select statement will use the summary tables for the plots database where
-	//most of the database attributes are denormalized to two tables:
+	// this select statement will use the summary tables for the plots database where
+	// most of the database attributes are denormalized to two tables:
 	// 'plotSiteSummary' and 'plotSpeciesSum'
 	String action="select";
-	String statement="select DISTINCT PLOT_ID from "+queryTableName+" where UPPER("+queryElementType
-	+") like '%"+queryElement.toUpperCase()+"%'";
-
-	System.out.println("queryStore > select statement: " + statement);
-	
+	// HANDLE THE PLOTID'S A LITTLE DIFFERENTLY BECAUSE THEY ARE INTEGERS
+	StringBuffer sb = new StringBuffer();
+	if (queryElementType.equals("PLOTID") )
+	{
+		sb.append("select DISTINCT PLOT_ID from "+queryTableName+" where ");
+		sb.append("PLOT_ID = " + queryElement);
+	}
+	else
+	{
+		sb.append("select DISTINCT PLOT_ID from "+queryTableName+" where ");
+		sb.append(" UPPER("+queryElementType +") like '%"+queryElement.toUpperCase()+"%'" );
+	}
+	System.out.println("queryStore > select statement: " + sb.toString() );
 	String returnFields[]=new String[1];	
 	returnFields[0]="PLOT_ID";
 	int returnFieldLength=1;
-
+	// ISSUE THE STATEMENT TO THE DATABASE
 	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);	
+	j.issueSelect(sb.toString(), action, returnFields, returnFieldLength);	
 
 	//grab the returned result set and transfer to a public array
 	//ultimately these results are passed to the calling class -- if for some reason
 	//the value was null then a string: 'nullValue' is returned
 	outPlotId=j.outReturnFields;
 	outPlotIdNum=j.outReturnFieldsNum;
-	
 	System.out.println("queryStore > result set size: " + outPlotIdNum );
 }
 

@@ -43,8 +43,8 @@ import PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: harris $'
- *  '$Date: 2002-04-19 03:55:35 $'
- * 	'$Revision: 1.5 $'
+ *  '$Date: 2002-07-02 20:47:56 $'
+ * 	'$Revision: 1.6 $'
  */
 
 
@@ -64,7 +64,7 @@ public class dbAccess
 	*/
 	public dbAccess()
 	{
-		System.out.println("init: databaseAccess.dbAccess ");
+		System.out.println("dbAccess > init");
 	}
 
 
@@ -128,6 +128,34 @@ public class dbAccess
 		return(true);
 	}
 	
+	/**
+	 * method to write the identification file for a collection of plots
+	 * this is different than the similar summary-writer method that writes
+	 * a summary of the plots, and also takes a bit longer
+	 *
+	 *	@param plotIdVec -- a vector contaning a number of the VegBank plotId's
+	 * 	@param outFile -- the fileName to which to write the data
+	 *
+	 */
+	public boolean writeMultipleVegBankPlotIdentifcation(Vector plotIdVec, String outFile)
+	{
+		try
+		{
+			System.out.println("dbAccess > printing multiple plots");
+			//this class allows access to the vegbank databases
+			//so the plugin will always be the same 
+			String pluginClass = "VegBankDataSourcePlugin";
+			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
+			writer.writeMultiplePlotIdentifcation(plotIdVec, outFile);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+			return(false);
+		}
+		return(true);
+	}
 	
 	
 
@@ -162,15 +190,15 @@ public void accessDatabase(String inputXml, String inputXSL, String action)
 		String transformedString[]=u.outString; 
 		int transformedStringNum=u.outStringNum;
 		
-		//query action
+		// extended query action
 		if (action.equals("extendedQuery")) 
 		{
+			System.out.println("dbAccess > extended query action");
 			for (int ii=0; ii<transformedStringNum; ii++) 
 			{
 				System.out.println(transformedString[ii]);	
 			}
-			
-			 //pass the array to the sql mapping class - single attribute query
+			//pass the array to the sql mapping class - single attribute query
 			sqlMapper w =new sqlMapper();
 			w.developExtendedPlotQuery(transformedString, transformedStringNum);
 			//grab the results from the sqlMapper class
@@ -178,9 +206,10 @@ public void accessDatabase(String inputXml, String inputXSL, String action)
 			queryOutputNum=w.queryOutputNum;
 		}
 		
-		//query action
+		// regular query action
 		else if (action.equals("query")) 
 		{
+			System.out.println("dbAccess > simple query action");
 			// pass the array to the sql mapping class - single attribute query
 			sqlMapper w =new sqlMapper();
 			w.developPlotQuery(transformedString, transformedStringNum);
@@ -250,8 +279,7 @@ public void accessDatabase(String inputXml, String inputXSL, String action)
 		
 		else 
 		{
-			System.out.println("dbAccess.accessDatabase: unrecognized action: "
-			+action);
+			System.out.println("dbAccess > accessDatabase: unrecognized action: " + action);
 		}
 
 		//shut down the connection pooling
@@ -267,32 +295,31 @@ public void accessDatabase(String inputXml, String inputXSL, String action)
 
 
 
-/**
- * main method -- really for testing the db
- * access module
- *
- */
-public static void main(String[] args) 
-{
-	if (args.length != 3) 
-	{
-		System.out.println("Usage: java dbAccess  [XML] [XSL] [action] \n"
-			+"version: Feb 2001 \n \n"
-			+"actions:  query, compoundQuery, extendedQuery, insert, insertPlot "
-			+"verify, simpleCommunityQuery");
-			System.out.println("descriptions of input parameters to come soon!");
-			System.exit(0);
-	}
-	//input xml file for loading to the database
-	String inputXml=args[0];
-	String inputXSL=args[1];
-	String action=args[2];
+	/**
+	 * main method -- really for testing the db
+	 * access module
+	 *
+	 */
+	 public static void main(String[] args) 
+	 {
+		 if (args.length != 3) 
+		 {
+			 System.out.println("Usage: java dbAccess  [XML] [XSL] [action] \n"
+			 +"version: Feb 2001 \n \n"
+			 +"actions:  query, compoundQuery, extendedQuery, insert, insertPlot "
+			 +"verify, simpleCommunityQuery");
+			 System.out.println("descriptions of input parameters to come soon!");
+			 System.exit(0);
+		 }
+		 //input xml file for loading to the database
+		 String inputXml=args[0];
+		 String inputXSL=args[1];
+		 String action=args[2];
 
-	//call the public method
-
-	dbAccess g =new dbAccess();  
-	g.accessDatabase(inputXml, inputXSL, action);
-}
+		 //call the public method
+		 dbAccess g =new dbAccess();  
+		 g.accessDatabase(inputXml, inputXSL, action);
+	 }
 
 
 
