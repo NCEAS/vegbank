@@ -15,6 +15,7 @@
         <xsl:call-template name="checkFK"/>
         <xsl:call-template name="checkName"/>
         <xsl:call-template name="checkList"/>
+        <xsl:call-template name="checkVersion" />
       </xsl:when>
       <xsl:otherwise>
         <!-- generate spellCheck document to sort and spell check -->
@@ -77,6 +78,14 @@
       <xsl:if test="translate(substring(attName,1,1),$alphahigh,$alphalow)!=substring(attName,1,1)">
 50 <xsl:value-of select="../entityName"/>.<xsl:value-of select="attName"/> is not all capitalized, but starts with a capital letter! against common rules.</xsl:if>
     </xsl:if>
+    <!-- check if name is reserved -->
+   <xsl:variable name="currAttNameReserved"><xsl:call-template name="checkSQLreserved"><xsl:with-param name="word" select="attName" /></xsl:call-template></xsl:variable>
+    <xsl:if test="string-length($currAttNameReserved)&gt;0">
+51 <xsl:value-of select="../entityName"/>.<xsl:value-of select="attName"/> has att name as reserved SQL keyword, consider renaming! details : <xsl:value-of select="$currAttNameReserved" />   </xsl:if>
+    <xsl:variable name="currEntNameReserved"><xsl:call-template name="checkSQLreserved"><xsl:with-param name="word" select="../entityName" /></xsl:call-template></xsl:variable>
+    <xsl:if test="string-length($currEntNameReserved)&gt;0">
+52 <xsl:value-of select="../entityName"/>.<xsl:value-of select="attName"/> has entity name as reserved SQL keyword, consider renaming! details : <xsl:value-of select="$currEntNameReserved" />   </xsl:if>
+
     
   </xsl:template>
   <xsl:template name="checkList">
@@ -101,6 +110,13 @@
       <!-- is varchar -->
     </xsl:if>
     <!-- list items exist -->
+  </xsl:template>
+  <xsl:template name="checkVersion">
+    <xsl:if test="string-length(../../../modelChangeVersion)&gt;0">
+      <xsl:if test="../../../modelChangeVersion!=update and update!='0.0.0'">
+     <xsl:if test="not(contains(../../@type,'drop'))"><!-- ignore if a drop -->
+79 <xsl:value-of select="../entityName"/>.<xsl:value-of select="attName"/>  : version (<xsl:value-of select="../../../modelChangeVersion" />) and update (<xsl:value-of select="update" />)do not match! </xsl:if>
+    </xsl:if></xsl:if>
   </xsl:template>
   <xsl:template name="checkExist">
     <xsl:param name="tbl"/>
@@ -164,4 +180,9 @@
     </xsl:choose>
   </xsl:template>
   <xsl:template match="*"/>
+  <xsl:template name="checkSQLreserved"><!-- returns statements about reservation if found to be reserved -->
+    <xsl:param name="word" />
+    <!-- compare upper case of word to list of words reserved, and print if found =-->
+    <xsl:for-each  select="document('sql_reserved_words.xml')/table/tr[word=translate($word,$alphalow,$alphahigh)]">the name: <xsl:value-of select="$word" /> is reserved for SQL definitions : <xsl:value-of select="concat('pg: ',pg_reserved,' | sql99: ',sql99,' | sql92 :',sql92)" /> </xsl:for-each>
+  </xsl:template>
 </xsl:stylesheet>
