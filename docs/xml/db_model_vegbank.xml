@@ -2784,7 +2784,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a </attNotes>
-      <attDefinition>This is the lower limit, in percent, associated with a specific coverCode. Where a cover scale has a non-quantitative lower or upper value, as in the "+" of the Braun-Blanquet scale, it is necessary to provide an approximation with "0" being the lower lim</attDefinition>
+      <attDefinition>This is the lower limit, in percent, associated with a specific coverCode. Where a cover scale has a non-quantitative lower or upper value, as in the "+" of the Braun-Blanquet scale, it is necessary to provide an approximation with "0" being the lower limit of the bottom most class.</attDefinition>
     </attribute>
     <attribute>
       <attName>coverPercent</attName>
@@ -3321,7 +3321,7 @@ change through time.</entitySummary>
       <attListType>closed</attListType>
       <attList/>
       <attNotes>open or closed list, depending on the system</attNotes>
-      <attDefinition>The name of a place in or at which a plot is located. The system "placenames" is an open list defined within this table.  The other systems are generally closed lists constrained by aux_tables.  These include at least USGSQuad, Continent, Country, State, </attDefinition>
+      <attDefinition>The name of a place in or at which a plot is located. The system "placenames" is an open list defined within this table. The other systems are generally closed lists constrained by aux_tables. These include at least USGSQuad, Continent, Country, State, County, HUC, and Ecoregion.</attDefinition>
     </attribute>
     <attribute>
       <attName>placeDescription</attName>
@@ -3468,7 +3468,7 @@ change through time.</entitySummary>
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
-      <attDefinition>The type of note:  Database Management, Observation Author, Database User and Internal.  "Database Managment" notes are those added by the management team and may be queried and viewed by the public. "Database Use" notes are those entered by the users of </attDefinition>
+      <attDefinition>The type of note: Database Management, Observation Author, Database User and Internal. "Database Managment" notes are those added by the management team and may be queried and viewed by the public. "Database Use" notes are those entered by the users of the database and are publicly viewable. "Internal" notes are for management to use internally and will not be broadcast.</attDefinition>
     </attribute>
     <attribute>
       <attName>noteText</attName>
@@ -5942,7 +5942,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This element stores the azimuth of the x-axis used to describe the relative coordinate system for plot shape (dsgpoly) and other spatial information about the plot. Typically the azimuth is parallel to the long axis of the plot (in the case of a rectangle</attDefinition>
+      <attDefinition>This element stores the azimuth of the x-axis used to describe the relative coordinate system for plot shape (dsgpoly) and other spatial information about the plot. Typically the azimuth is parallel to the long axis of the plot (in the case of a rectangle).</attDefinition>
     </attribute>
     <attribute>
       <attName>dsgpoly</attName>
@@ -8672,7 +8672,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This field describes the general methods used for strata. For example, this field should distinguish as to whether strata are defined as including all foliage on plants that predominantly occupy the stratum regardless of the height of that foliage, or onl</attDefinition>
+      <attDefinition>This field describes the general methods used for strata. For example, this field should distinguish as to whether strata are defined as including all foliage on plants that predominantly occupy the stratum regardless of the height of that foliage, or only the foliage that actually occurs within a specified vertical slice of the community.</attDefinition>
     </attribute>
   </entity>
   <entity>
@@ -8780,7 +8780,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the plantConcept table.</attNotes>
-      <attDefinition>Link to a taxon in the plantConcept table. The entry in the plantConcept table will in turn point to a reference and a name used in the reference, thereby defining the taxon concept.  The name that should be applied to the plantConcept will be party speci</attDefinition>
+      <attDefinition>Link to a taxon in the plantConcept table. The entry in the plantConcept table will in turn point to a reference and a name used in the reference, thereby defining the taxon concept. The name that should be applied to the plantConcept will be party specific and will be found in the plantUsage table. For other than legacy data, the first interpretation recorded for a taxon observation should be redundant with the information contained in taxonObservation.PLANTNAME_ID + PLANTREFERENCE_ID.</attDefinition>
     </attribute>
     <attribute>
       <attName>interpretationDate</attName>
@@ -9009,7 +9009,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the reference table.</attNotes>
-      <attDefinition>The authority for the taxon that was used by the plot author.  If the authority is unknown  the author of the plot is the authority. For other than legacy data, this field plus plantName_ID will be sufficient to determine taxonInterpretation.plantConcept_</attDefinition>
+      <attDefinition>The authority for the taxon that was used by the plot author. If the authority is unknown the author of the plot is the authority. For other than legacy data, this field plus plantName_ID will be sufficient to determine taxonInterpretation.plantConcept_ID.</attDefinition>
     </attribute>
     <attribute>
       <attName>taxonCollection</attName>
