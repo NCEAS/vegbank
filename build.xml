@@ -7,9 +7,9 @@
   * can call ant like this:
   *  % echo "[build.context]" | ant [target]
   *
-  *     '$Author: anderson $'
-  *     '$Date: 2004-03-11 00:01:22 $'
-  *     '$Revision: 1.41 $'
+  *     '$Author: farrell $'
+  *     '$Date: 2004-04-28 22:17:11 $'
+  *     '$Revision: 1.42 $'
 --> 
 <project name="Vegbank" default="jar" basedir=".">
 
@@ -130,6 +130,7 @@
     <!-- Classpaths -->
     <path id="classpath.compilation">
       <pathelement path="${build.classes.dir}"/>
+      <pathelement path="${build.java.src.dir}"/> <!-- Pick up non java resources -->
       <fileset dir="${lib.dir}">
         <include name="**/*jar"/>
       </fileset>
@@ -144,6 +145,9 @@
 
   </target>
     
+  <!-- ================================================================= -->
+  <!-- Make the jars                                                     -->
+  <!-- ================================================================= -->
   <target name="jar" depends="compile"
           description="==> Generates all jars in vegbank">
    		
@@ -154,10 +158,12 @@
 		<jar destfile="${build.lib.dir}/vegbank.jar">
 			<fileset dir="${build.classes.dir}" casesensitive="yes">
 				<include name="**/*.class"/>
-				<include name="**/*.properties"/>
       			</fileset>
 			<fileset dir="${build.java.src.dir}" casesensitive="yes">
 				<include name="**/*.java"/>
+				<include name="**/*.properties"/>
+				<include name="**/*.xml"/>
+				<include name="**/*.xsl"/>
       			</fileset>
     	</jar> 
 
@@ -171,6 +177,9 @@
 	
   </target>
 
+  <!-- ================================================================= -->
+  <!-- Run the unit tests                                                -->
+  <!-- ================================================================= -->
   <target name="run-tests" depends="compile" description="==> Run all the tests availible">
 
     <!-- use the ant "junit" task to run JUnit tests. -->
@@ -186,8 +195,6 @@
         </fileset>
       </batchtest>
     </junit>
-
-
   </target>
 
 
@@ -208,23 +215,15 @@
   </target>
 
   
+
+  <!-- ================================================================= -->
+  <!-- Deploy files to webserver                                         -->
+  <!-- ================================================================= -->
   <target name="deploy" depends="jar,deploy-prepare"
-          description="==> deploys vegclass module jars, html and other resources">
+          description="==> deploys vegbank module jars, html and other resources">
     
-	<echo>---------DEPLOYING common---------------</echo>
-	<!-- Not need for regular source, need to do something for tests -->
-	<echo>---------DEPLOYING veg_community---------------</echo>
-	<!-- Not needed anymore ? -->
-	<echo>---------DEPLOYING veg_taxa---------------</echo>
-	<!-- Not needed anymore ? -->
-	<echo>---------DEPLOYING veg_plot---------------</echo>
-	<!-- Not needed for java code, need to do something for tests -->
-		
 	<echo message="Distr all of jars in ${ant.project.name}"/>
-
-
 	<ant target="deploy-web" inheritAll="true"/>
-
 	<echo>deploying jars to ${web.lib.dir}</echo>
 	<echo>db connect: ${databaseConnectString}</echo>
 	<copy todir="${web.lib.dir}">
@@ -235,6 +234,31 @@
 	<copy todir="${web.context}/GenJSP">
 		<fileset dir="${build.jsp.src.dir}" includes="*jsp"/>
  	</copy>
+
+  </target>
+
+
+  <!-- ================================================================= -->
+  <!-- Development deploy files to webserver (subset of total deploy)    -->
+  <!-- ================================================================= -->
+  <target name="dev-deploy" depends="compile,deploy-prepare"
+	description="==> Deploys subset of resources need in dev cycle">
+
+	<!-- Remove vegbank jar if existsi, to avoid conflicts -->
+	<delete file="${web.lib.dir}/vegbank.jar"/>
+	<!-- Copy files into the classes dir -->
+	<mkdir dir="${web.context}/WEB-INF/classes"/>
+	<copy todir="${web.context}/WEB-INF/classes">
+		<fileset dir="${build.classes.dir}"/>
+ 	</copy>
+
+	<copy todir="${web.context}/WEB-INF/classes">
+		<fileset dir="${build.java.src.dir}" casesensitive="yes">
+			<include name="**/*.properties"/>
+			<include name="**/*.xml"/>
+      		</fileset>
+ 	</copy>
+	<!-- insert actions here like deploy forms, WEB-INF etc. -->
   </target>
 
   
@@ -310,22 +334,22 @@
 
 
   <!-- ================================================================= -->
-  <!-- Generate model beans from the datamodel XML and generate utility  -->
+  <!-- Generate model beans, XML Digester rules, XML schema and JSP from -->
+  <!-- the datamodel XML and generate utility                            -->
   <!-- javabeans                                                         -->
   <!-- ================================================================= -->
   <target name="generate_java_datamodel"
-          description="==> Generate the java datamodel -- beans, utility classes and schema"
+          description="==> Generate the java datamodel -- beans, utility classes, schema, Generic display JSP and Digester rules"
           depends="prepare"
           unless="modelBeanGenerate.notRequired">
          
-	<!-- DOES NOT PICKUP CORRECT XSLT PROCCESOR FOR ME 
+	<!-- DOES NOT PICKUP CORRECT XSLT PROCCESOR FOR ME -->
 	<xslt in="${docs.dir}/xml/db_model_vegbank.xml" style="${xsl.src.dir}/VegBankModel2Java.xsl" 
 		out="${build.java.src.dir}/generate_java_datamodel-HAS_BEEN_RUN_FLAG">
-		<param name="outdir" expression="${build.javadatamodel.src.dir}"/>
+		<param name="outdir" expression="${build.javadatamodel.src.dir}/"/>
 		<classpath refid="classpath.compilation"/>
 	</xslt>
 
-	-->
 	<echo>Generating the regular VBModelBeans into ... ${build.javadatamodel.src.dir}/</echo> 
 	<java classname="org.apache.xalan.xslt.Process"
 		fork="true">
@@ -352,6 +376,7 @@
 	Ugly solution for ugly problem, XSL transform insists on putting xmlns:name="name"
 	attribute in its output of tags like <bean:define ... />, this strips em out.
 	-->
+
 	<replaceregexp match='xmlns:[^=]*="dummy"' replace="" flags="gs" byline="true">
     		<fileset dir="${build.jsp.src.dir}" includes="**/*.jsp" />
 	</replaceregexp>
@@ -362,9 +387,32 @@
 		<arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${docs.dir}/xml/dbmodel-to-schema.xsl -OUT ${build.lib.dir}/${vegbankSchemaName}"/>
 		<jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
 	</java>
-
+	
+	<!-- NOT USED YET, ALLOWS USE OF THE BEANLOADER CODE FOR UPLOADING XML
+		generate a digester rules.xml so xml can be read into a VBModelBean Tree 
+	<echo>Generate the Digester Rules ( for reading XML into Beans ) ... ${build.java.src.dir}/</echo>
+	<java classname="org.apache.xalan.xslt.Process"
+		fork="true">
+		<arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/GenDigesterRules.xsl -OUT ${build.java.src.dir}/DigesterRules.xml "/>
+		<jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
+	</java>
+	-->
+	<!-- generate the ForeignTables property  file   
+		THIS FILE MUST BE HAND EDITED AS I CANNOT FIGURE OUT GENERATION LOGIC ( order in which to visit child tables )
+		This is useful for creating the properties file initially, and then hand edit  
+	<echo>Generate the ForeignTables.properties into ${build.java.src.dir}</echo>
+	<java classname="org.apache.xalan.xslt.Process"
+		fork="true">
+		<arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/GenForeignTableProps.xsl -OUT ${build.java.src.dir}/ForeignTables.properties "/>
+		<jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
+	</java>
+	-->
   </target>
-  
+ 
+ 
+  <!-- ================================================================= -->
+  <!-- Compile the java code                                             -->
+  <!-- ================================================================= -->
   <target name="compile"
           depends="generate_java_datamodel, cleanprops, prepare"
           description="==> Compile the java code">
@@ -373,15 +421,17 @@
     <copy todir="${build.java.src.dir}">
       <fileset dir="${java.src.dir}">
         <include name="**/*java"/>
+	<include name="**/*xml"/>
+	<include name="**/*xsl"/>
+      </fileset>
+    </copy>
+    <!-- Copy files that need filtering -->
+    <copy todir="${build.java.src.dir}" filtering="true">
+      <fileset dir="${java.src.dir}">
+	<include name="**/*properties"/>
       </fileset>
     </copy>
 
-    <!-- Copy property files -->
-    <copy todir="${build.classes.dir}" filtering="true">
-      <fileset dir="${java.src.dir}">
-        <include name="**/*properties"/>
-      </fileset>
-    </copy>
 
     <javac srcdir="${build.java.src.dir}"
       includes="**/*.java"
@@ -404,6 +454,9 @@
     </delete>
   </target>
  
+  <!-- ================================================================= -->
+  <!-- Install Vegbank on the local system                               -->
+  <!-- ================================================================= -->
   <target name="install"
           depends="deploy"
           description="==> Install the application">
@@ -495,11 +548,15 @@
       author="true"
       version="true"
       use="true"
+      private="false"
+      additionalparam="-quiet"
       source="1.4"
       nodeprecated="false"
-      
       windowtitle="${ant.project.name} API">
 
+	<!--
+      	ant 1.6 supports breakiterator="yes", which reduces the volume of messages from javadoc 
+	-->
       <classpath refid="classpath.compilation"/>
 
       <packageset dir="src" defaultexcludes="yes">
@@ -625,6 +682,4 @@ ERROR: An invalid context name entered: '${build.context}'
 *******************************************************************************
     </fail>
   </target>
-
-
 </project> 
