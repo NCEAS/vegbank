@@ -4599,149 +4599,165 @@ change through time.</entitySummary>
       <attListType>closed</attListType>
       <attList>
         <attListItem>
-          <attListValue>Avalanche and snow</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Cryoturbation</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Cultivation</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Erosion</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Fire suppression</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Fire, canopy</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Fire, ground</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Fire, general</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Floods</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListValue>Animal, general</attListValue>
+          <attListSortOrd>1</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Grazing, domestic stock</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Grazing, native ungulates</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Herbicide or chemical</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>3</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Herbivory, invertebrate</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>4</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Herbivory, vertebrates</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>5</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Hydrologic alteration</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListValue>Human, general</attListValue>
+          <attListSortOrd>6</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Ice</attListValue>
+          <attListValue>Cultivation</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>7</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Mass movements (landslides)</attListValue>
+          <attListValue>Fire suppression</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>8</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Herbicide or chemical</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>9</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Mowing</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Other disturbances</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Plant disease</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>10</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Roads and vehicular traffic</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Salt spray</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Tides</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>11</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Timber harvest, general</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>12</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Timber harvest, clearcut</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>13</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Timber harvest, selective</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>14</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Trampling and trails</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>15</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Natural, general</attListValue>
+          <attListSortOrd>16</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Avalanche and snow</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>17</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Cryoturbation</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>18</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Erosion</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>19</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Floods</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>23</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Hydrologic alteration</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>24</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Ice</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>25</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Mass movements (landslides)</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>26</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Plant disease</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>27</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Salt spray</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>28</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Tides</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>29</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Wind, chronic</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>30</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Wind event</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>0</attListSortOrd>
+          <attListSortOrd>31</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Fire, general</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>35</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Fire, canopy</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>36</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Fire, ground</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>37</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Other disturbances</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>40</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>unknown</attListValue>
+          <attListSortOrd>50</attListSortOrd>
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
