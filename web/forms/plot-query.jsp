@@ -14,8 +14,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2004-06-14 15:14:54 $'
-*  '$Revision: 1.22 $'
+*      '$Date: 2004-08-06 23:55:32 $'
+*  '$Revision: 1.23 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -75,27 +75,26 @@ VEGBANK - Simple Plots Query
       <td width="5%"  bgcolor="white" align="left" valign="top"></td>
       
       <td align="left">
-	<table border="0" align="center">
-	  <!--variables that are used by the servlet to figure out which query(s) to issue -->
+	<table border="0" width="550">
 	  <tbody>
 	  <tr valign="top">
-	    <td align="left" colspan="2" valign="center">
-	      <font color="#23238E" face="Helvetica,Arial,Verdana" size="2">
-	      <b>This form can be used to specify criteria for simple
-	      queries for VegBank plot-observations. Here, the term "plot" is
-	      used synonymously with "observation."  <br />
+	    <td align="left" colspan="2" valign="center" >
+		  <b>This form can be used to find plots in VegBank.</b> 
 
+		  <p>
 	      Each section allows querying of different types of attributes.  Leave
 	      fields blank to ignore these fields in the query.  Make sure you select whether the query
-	      should match ALL or ANY criteria you specify at the <a href="#typeOfQuery">end of this form</a>. <br />
-	      For more instructions for this form, find <a href="@help-for-plot-query-href@">help here</a>.
-	      </b>
+	      should match ALL or ANY criteria you specify at the <a href="#typeOfQuery">end of this form</a>.
 
-	      </font> 
+		  <p>
+	      For more information about this form, see the <a href="@help-for-plot-query-href@">help section</a>.
+		  <br/> &nbsp;
+
 	    </td>
 	  </tr>
 	  </tbody>
 	</table>
+
       </td>
     </tr>
 

@@ -15,11 +15,27 @@ TH	{
 	background-color : #336633;
 	}
 
-.description	{
-		font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-		font-size: 10pt;
-		color: #000000
-	}
+.description { 
+	color: #000000; 
+	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; 
+	font-size: 10pt;
+	font-weight: bold;
+	background-color: #DDDDDD;
+}
+
+.on_page_help	{
+		font-family: Helvetica,Arial,Verdana;
+		font-size: 13pt;
+		color: #23238E;
+		background-color : #DFE5FA;
+}
+
+.on_page_help_text { 
+	color: #000000; 
+	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; 
+	font-size: 10pt;
+	font-weight: normal;
+}
 
 .label_small	{
 		font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;

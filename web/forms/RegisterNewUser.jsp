@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2004-04-08 05:44:28 $'
-*  '$Revision: 1.8 $'
+*  '$Author: anderson $'
+*  '$Date: 2004-08-06 23:55:32 $'
+*  '$Revision: 1.9 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -177,7 +177,7 @@
 
 <!-- TEXT -->
 <td valign="top">
-<span class="vegbank_large">Learn more here.</h3>
+<h3>Learn more here.</h3>
   <br/>
 <p>Although you may 
 <html:link action="Logon.do?username=GUESTUSER@VEGBANK.ORG&password=nopassword">login as a guest</html:link>
