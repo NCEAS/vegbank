@@ -19,8 +19,8 @@ import PlotDataSource;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: harris $' <br>
- *  '$Date: 2002-05-24 20:22:25 $' <br>
- *  '$Revision: 1.5 $' <br>
+ *  '$Date: 2002-07-18 03:59:19 $' <br>
+ *  '$Revision: 1.6 $' <br>
  */
 
  
@@ -630,7 +630,6 @@ public class PlotXmlWriterV2
 		 StringBuffer sb = new StringBuffer();
 		 try 
 		 {
-			
 			 //get the data for each of the unique strata
 			 for (int i=0; i< datasrc.uniqueStrataNames.size() ; i++)
 			 {
@@ -695,7 +694,12 @@ public class PlotXmlWriterV2
 		
 		/**
 		 * method that returns the strata composition for a given plot, plant taxa
-		 * and strata 
+		 * and strata
+		 * @param plotCode -- the plotCode, which is the PK value for a 'PLOT'
+		 * table in vegbank
+		 * @param plantName -- the name of the plant for which the coverage is 
+		 * desired
+		 * @param stratumName -- the name of the corresponding stratum
 		 */
 		 private String getStrataCompositionContent(String plotCode, String plantName, 
 		 String stratumName)
@@ -734,7 +738,6 @@ public class PlotXmlWriterV2
  	 */
 	public static void main(String[] args)
 	{
-		
 		//allow the user to access a specific plugin and a specific plot
 		if (args.length == 2) 
 		{
@@ -753,10 +756,10 @@ public class PlotXmlWriterV2
 			String plugin = "VegBankDataSourcePlugin";
 			//test the multiple plot writer
 			Vector plotIdVec = new Vector();
-			plotIdVec.addElement("0");
-			plotIdVec.addElement("1");
-			plotIdVec.addElement("2");
-			plotIdVec.addElement("3");
+		//	plotIdVec.addElement("0");
+		//	plotIdVec.addElement("1");
+			plotIdVec.addElement("200");
+		//	plotIdVec.addElement("3");
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(plugin);
 			//writer.writeSinglePlot("test-plot");
 			writer.writeMultiplePlot(plotIdVec, "test.xml");
