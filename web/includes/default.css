@@ -87,6 +87,18 @@ H1, H2, H3, H4, H5, H6	{
 							font-family: Georgia, Times New Roman, Times, serif;
 							color: #333333;
 						}
+.headequiv	{
+							font-family: Georgia, Times New Roman, Times, serif;
+							color: #333333;
+						}
+
+.sizetiny { font-size: 8pt }
+.sizesmall { font-size: 10pt }
+.sizenormal { font-size: 12pt }
+.sizelarge  { font-size: 14pt }
+.sizelarger { font-size: 18pt }
+.sizehuge { font-size: 24pt }
+
 th.grey, td.grey, tr.grey {background-color : #DDDDDD; }
 .listRowA {background-color : #FFFFCC; }						
 .listRowB {background-color : #FFFFFF }						
