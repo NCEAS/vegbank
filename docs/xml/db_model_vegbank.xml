@@ -4,8 +4,8 @@
 <?xml-stylesheet type="text/xsl" href="dbmodel_2AccessZTbl.xsl"?>
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
   -->
-<!--<?xml-stylesheet type="text/xsl" href="check_attForms.xsl"?>
-<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp.xsl"?> -->
+<!--<?xml-stylesheet type="text/xsl" href="check_attForms.xsl"?>-->
+<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp.xsl"?>
 <!--
 -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
@@ -3492,6 +3492,7 @@ change through time.</entitySummary>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
+      <attFKTranslationSQL>(SELECT CASE WHEN surname is null THEN 'org:' || organizationname ELSE surname || ', ' || givenname END  FROM party WHERE party.party_id=classcontributor.party_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the party table.</attNotes>
@@ -3511,12 +3512,12 @@ change through time.</entitySummary>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
+      <attFKTranslationSQL>(SELECT rolecode from aux_role where aux_role.role_id=classcontributor.role_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the aux_Role table</attNotes>
       <attDefinition>Foreign key that identifies the role that the party had in the classification event (e.g., classifier, consultant, research advisor).</attDefinition>
       <attForms>
-        <formShow name="Summary">433</formShow>
         <formShow name="Detail">434</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3593,7 +3594,6 @@ change through time.</entitySummary>
       <attDefinition>Stop date for the application of a vegetation class to a plot observation by one or more parties.</attDefinition>
       <attForms>
         <formShow name="Austere">442</formShow>
-        <formShow name="Summary">443</formShow>
         <formShow name="Detail">444</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3607,13 +3607,13 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN inspection THEN 'Yes' ELSE 'No' END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Classification informed by simple inspection of data.</attDefinition>
       <attForms>
         <formShow name="Austere">445</formShow>
-        <formShow name="Summary">446</formShow>
         <formShow name="Detail">447</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3627,13 +3627,13 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN tableAnalysis THEN 'Yes' ELSE 'No' END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Classification informed by inspection of floristic composition tables.</attDefinition>
       <attForms>
         <formShow name="Austere">448</formShow>
-        <formShow name="Summary">449</formShow>
         <formShow name="Detail">450</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3647,13 +3647,13 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN multivariateAnalysis THEN 'Yes' ELSE 'No' END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Classification informed by use of multivariate numerical tools.</attDefinition>
       <attForms>
         <formShow name="Austere">451</formShow>
-        <formShow name="Summary">452</formShow>
         <formShow name="Detail">453</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3667,13 +3667,13 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN expertSystem THEN 'Yes' ELSE 'No' END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Classification informed by use of automated expert system.</attDefinition>
       <attForms>
         <formShow name="Austere">454</formShow>
-        <formShow name="Summary">455</formShow>
         <formShow name="Detail">456</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3692,7 +3692,6 @@ change through time.</entitySummary>
       <attNotes>Foreign key into the reference table</attNotes>
       <attDefinition>Link to a publication wherein the observation was classified.</attDefinition>
       <attForms>
-        <formShow name="Summary">457</formShow>
         <formShow name="Detail">458</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3841,6 +3840,7 @@ change through time.</entitySummary>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>commConcept.COMMCONCEPT_ID</attReferences>
+      <attFKTranslationSQL>(SELECT commname.commname from commConcept, commname WHERE commname.commname_id=commconcept.commname_id and commconcept.commconcept_id=comminterpretation.commconcept_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the commConcept table.</attNotes>
@@ -3977,7 +3977,6 @@ change through time.</entitySummary>
       <attNotes>Foreign key into the reference table</attNotes>
       <attDefinition>Link to the reference from which information on the community concept was obtained during the classification event. (A case could be made for this being moved to reference.)</attDefinition>
       <attForms>
-        <formShow name="Summary">492</formShow>
         <formShow name="Detail">493</formShow>
       </attForms>
       <update>1.0.0</update>
