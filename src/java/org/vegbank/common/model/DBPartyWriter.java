@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-17 22:09:14 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2003-11-13 22:35:17 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,10 +72,10 @@ public class DBPartyWriter
 							party.getSurname(),
 							party.getSalutation(),
 							party.getMiddlename(),
-							new Integer(party.getCurrentname_id() ).toString(),
+							new Long(party.getCurrentname_id() ).toString(),
 							party.getOrganizationname(),
 							party.getContactinstructions(),
-							new Integer(party.getOwner_id()).toString() );
+							new Long(party.getOwner_id()).toString() );
 				}
 				else
 				{

@@ -14,8 +14,8 @@ import org.vegbank.common.utility.MBReadHelper;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-05 19:06:03 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-11-13 22:36:35 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ public class ASCIIReportsHelper
 			Plot plot = (Plot) pos.next();
 
 		// Get the values of interest
-		int plotObservationId = 0;
+		long plotObservationId = 0;
 		String commName = null;
 		String accNumber = null;
 		String collectionDate = null;
@@ -168,7 +168,7 @@ public class ASCIIReportsHelper
 			Plot plot = (Plot) pos.next();
 
 			// Get the values of interest
-			int plotObservationId = 0;
+			long plotObservationId = 0;
 			String plantName = null;
 			String stratumCover = null;
 			String stratumName = null;

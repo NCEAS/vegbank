@@ -5,8 +5,8 @@ package org.vegbank.ui.struts;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-05 18:45:30 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-11-13 22:35:17 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@ package org.vegbank.ui.struts;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
  */
  
-import java.io.PrintWriter;
 import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;

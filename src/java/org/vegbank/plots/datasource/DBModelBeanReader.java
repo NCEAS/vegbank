@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:18:38 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2003-11-13 22:35:17 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,92 +78,22 @@ public class DBModelBeanReader
 	}
 	
 	/**
-	 * 
-	 * @param key
-	 * @param keyValue
-	 * @return
-	 * @throws Exception
-	 * 
-	 * @deprecated
-	 */
-	public Observation LgetObservation(String key, int keyValue) throws Exception
-	{
-		Observation obs = new Observation();
-		getObjectFromDB(obs, key, keyValue);
-		getRelatedObjectsFromDB(key, keyValue, obs);
-		
-		// Need to fill out some more Objects 
-		// Project 
-		Project project = obs.getProjectobject();
-		ignoreObjects.add("Observation");
-		getRelatedObjectsFromDB(Project.PKNAME, project.getProject_id(), project );
-		
-		// ProjectContributors
-		Iterator projectContributors =project.getproject_projectcontributors().iterator();
-		while ( projectContributors.hasNext() )
-		{
-			Projectcontributor projectContributor = (Projectcontributor)  projectContributors.next();
-			Party party = (Party) projectContributor.getPartyobject();
-			//System.out.println("###########################################################");
-			getRelatedObjectsFromDB(Party.PKNAME, party.getParty_id(), party );
-			//System.out.println("###########################################################");
-		}
-		
-		// TaxonObservations
-		Iterator taxonObservations = obs.getobservation_taxonobservations().iterator();
-		while ( taxonObservations.hasNext() )
-		{
-			Taxonobservation taxonObservation = (Taxonobservation)  taxonObservations.next();
-			getRelatedObjectsFromDB(Taxonobservation.PKNAME, taxonObservation.getTaxonobservation_id(), taxonObservation );
-			
-			Plantname plantName = taxonObservation.getPlantnameobject();
-//			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("PlantName"), plantName.getPLANTNAME_ID(), plantName, ignoreObjects );
-//			Iterator plantNames = plantName.getPLANTNAMEPlantUsages().iterator();
-//			while ( plantNames.hasNext())
-//			{
-//				PlantUsage pu = (PlantUsage) plantNames.next();
-//				PlantConcept pc = pu.getPLANTCONCEPT();
-//				ignoreObjects.add("PlantConcept");
-//				getRelatedObjectsFromDB(VBObjectUtils.getKeyName("PlantConcept"), pc.getPLANTCONCEPT_ID(), pc, ignoreObjects );	
-//				ignoreObjects.remove("PlantConcept");
-//			}
-		}
-		
-		// Strata
-		Iterator strata = obs.getobservation_stratums().iterator();
-		while ( strata.hasNext())
-		{
-			Stratum stratum = (Stratum) strata.next();
-			//System.out.println(">> Ignore when searching through Stratum " + ignoreObjects);
-			getRelatedObjectsFromDB(Stratum.PKNAME, stratum.getStratum_id(), stratum );
-
-		}
-		
-		// Plot
-		//Plot plot = obs.getPlotobject();
-		//System.out.println("Ignore when searching through Plot " + ignoreObjects);
-		//getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Plot"), plot.getPlot_id(), plot, ignoreObjects );
-		
-		return obs;
-	}
-	
-	/**
 	 * convienice method for looking up a tables PK from its accessionCode 
 	 * field
 	 * 
 	 * @param entityName
 	 * @param accessionCode
 	 * @param pKName
-	 * @return int -- PK of the row found
+	 * @return long -- PK of the row found
 	 * @throws Exception
 	 */
-	private int getPKFromAccessionCode(
+	private long getPKFromAccessionCode(
 		String entityName,
 		String accessionCode,
 		String pKName)
 		throws Exception
 	{
-		int pk = 0;
+		long pk = 0;
 
 		// Get the PK name for this table
 		String fieldName = Utility.getPKNameFromTableName(entityName);
@@ -194,7 +124,7 @@ public class DBModelBeanReader
 
 		if (rs.next())
 		{
-			pk = rs.getInt(1);
+			pk = rs.getLong(1);
 		}
 		else
 		{
@@ -212,12 +142,12 @@ public class DBModelBeanReader
 	
 	public Plantconcept getPlantconceptBeanTree(String accessionCode) throws Exception
 	{	
-		int pK = 0; 
+		long pK = 0; 
 		this.getPKFromAccessionCode( "plantConcept", accessionCode, Plantconcept.PKNAME );
 		return this.getPlantconceptBeanTree(pK);	
 	}
 	
-	public Plantconcept getPlantconceptBeanTree(int pkValue) throws Exception
+	public Plantconcept getPlantconceptBeanTree(long pkValue) throws Exception
 	{
 		Plantconcept pc = new Plantconcept();
 		getObjectFromDB(pc, Plantconcept.PKNAME, pkValue);
@@ -237,7 +167,7 @@ public class DBModelBeanReader
 			return plot;
 		}
 		
-		int pK = this.getPKFromAccessionCode( "observation", observationAccessionCode, Observation.PKNAME );
+		long pK = this.getPKFromAccessionCode( "observation", observationAccessionCode, Observation.PKNAME );
 		plot = this.getPlotObservationBeanTree(pK);	
 		
 		// Add to cache
@@ -246,7 +176,7 @@ public class DBModelBeanReader
 		return plot;
 	}
 	
-	public Plot getPlotObservationBeanTree(int observationId) throws Exception
+	public Plot getPlotObservationBeanTree(long observationId) throws Exception
 	{
 		// Get the observation
 		Observation obs = new Observation();
@@ -308,7 +238,7 @@ public class DBModelBeanReader
 		}
 		
 		// Plot
-		int plotId  = obs.getPlot_id();
+		long plotId  = obs.getPlot_id();
 		Plot plot = new Plot();
 		getObjectFromDB(plot, Plot.PKNAME, plotId);
 		getRelatedObjectsFromDB(Plot.PKNAME, plotId, plot);
@@ -321,7 +251,7 @@ public class DBModelBeanReader
 	// TODO: Reference, Party, Commconcept
 	
 		
-	public VBModelBean getVBModelBean(String BeanName, int pkValue) throws Exception
+	public VBModelBean getVBModelBean(String BeanName, long pkValue) throws Exception
 	{
 		Observation obs = new Observation();
 		getObjectFromDB(obs, Observation.PKNAME, pkValue);
@@ -370,7 +300,7 @@ public class DBModelBeanReader
 		return obs;
 	}
 
-	private void getRelatedObjectsFromDB(String key, int keyValue, VBModelBean bean)
+	private void getRelatedObjectsFromDB(String key, long keyValue, VBModelBean bean)
 	{
 		// Get the one to many relationships
 		Collection ListMethods = VBObjectUtils.getSetMethods(bean, "java.util.List");
@@ -439,7 +369,7 @@ public class DBModelBeanReader
 		return tableName;
 	}
 	
-	private List getObjectsFromDataBase(String table, String FKName, int FKValue) throws Exception
+	private List getObjectsFromDataBase(String table, String FKName, long FKValue) throws Exception
 	{
 		Vector retrivedObjects = new Vector();
 		
@@ -465,7 +395,7 @@ public class DBModelBeanReader
 		Iterator keysIterator = keys.iterator();
 		while ( keysIterator.hasNext() )
 		{
-			int key = ( (Integer) keysIterator.next() ).intValue();
+			long key = ( (Integer) keysIterator.next() ).intValue();
 			VBModelBean newObject = (VBModelBean) Utility.createObject( VBObjectUtils.getFullyQualifiedName(table) );	
 			this.getObjectFromDB(newObject, PKName, key);
 			retrivedObjects.add(newObject);
@@ -500,7 +430,7 @@ public class DBModelBeanReader
 		return result;
 	}
 
-	private void getObjectFromDB(VBModelBean bean, String PKName, int PKValue)
+	private void getObjectFromDB(VBModelBean bean, String PKName, long PKValue)
 	{
 		HashMap objectSetMethods = new HashMap();
 		
@@ -723,7 +653,7 @@ public class DBModelBeanReader
 		Vector fieldNames,
 		String className,
 		String key,
-		int keyValue)
+		long keyValue)
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT ");
