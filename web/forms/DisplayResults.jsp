@@ -12,9 +12,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: farrell $'
-*      '$Date: 2003-10-27 19:58:18 $'
-*  '$Revision: 1.9 $'
+*    '$Author: anderson $'
+*      '$Date: 2003-10-28 01:05:35 $'
+*  '$Revision: 1.10 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -92,9 +92,9 @@
 
 	 <tr bgcolor="#333333" align="center">
 	   <td class="whitetext" nowrap>
-	   	select +<a class="whitetext" href="#" onclick="checkAll('plotName')">all</a>
+	   	select +<a class="whitetext" href="javascript:checkAll('plotName')">all</a>
 		&nbsp; 
-		-<a class="whitetext" href="#" onclick="clearAll('plotName')">none</a>
+		-<a class="whitetext" href="javascript:clearAll('plotName')">none</a>
 	   </td>
 	   <td colspan="20"> &nbsp; </td>
 	 </tr>
@@ -187,9 +187,9 @@
 
 	 <tr bgcolor="#333333" align="center">
 	   <td class="whitetext" nowrap>
-	   	select +<a class="whitetext" href="#bottom" onclick="checkAll('plotName')">all</a>
+	   	select +<a class="whitetext" href="javascript:checkAll('plotName')">all</a>
 		&nbsp; 
-		-<a class="whitetext" href="#bottom" onclick="clearAll('plotName')">none</a><a name="bottom"></a>
+		-<a class="whitetext" href="javascript:clearAll('plotName')">none</a><a name="bottom"></a>
 	   </td>
 	   <td colspan="20"> &nbsp; </td>
 	 </tr>
