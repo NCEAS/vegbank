@@ -11,6 +11,7 @@ import java.net.URL;
 
 import databaseAccess.dbAccess;
 import databaseAccess.CommunityQueryStore;
+import databaseAccess.SqlFile;
 import servlet.util.ServletUtility;
 
 
@@ -21,9 +22,11 @@ public class DataSubmitServlet extends HttpServlet
 	private String submitDataType = null;
 	private String communityValidationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/community-submit_valid.html";
 	private String communityValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
+	private String commUpdateScript = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/update_community_summary.sql";
 	
 	
 	ResourceBundle rb = ResourceBundle.getBundle("vegbank");
+	private SqlFile sqlFile = new SqlFile(); 
 	private ServletUtility su = new ServletUtility();
 	private CommunityQueryStore qs;
 	private VegCommunityLoader commLoader = new VegCommunityLoader();
@@ -173,7 +176,8 @@ public class DataSubmitServlet extends HttpServlet
 				commLoader.insertCommunityCorrelation(status, concept, correlation
 				, startDate, stopDate);
 				
-				
+				//UPDATE THE DATABASE SUMMARY TABLE
+				sqlFile.issueSqlFile(commUpdateScript);
 				
 			}
 			
@@ -350,7 +354,9 @@ public class DataSubmitServlet extends HttpServlet
 					String resultPage = getSubmittalResultsPage(true, communityName, givenName, 
 					surName, nameReferenceAuthor, conceptReferenceAuthor );
 					sb.append( resultPage );
-				}			
+				}
+				//UPDATE THE DATABASE SUMMARY TABLE
+				sqlFile.issueSqlFile(commUpdateScript);
 			}
 		}
 		catch( Exception e ) 
