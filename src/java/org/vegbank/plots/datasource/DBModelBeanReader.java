@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-17 22:22:14 $'
- *	'$Revision: 1.21 $'
+ *	'$Date: 2005-03-22 00:42:21 $'
+ *	'$Revision: 1.22 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -790,7 +790,7 @@ public class DBModelBeanReader
 		 * can be made really large as a large bean is 200k,
 		 * Keep an eye on typical size as data is loaded, however!
 		 */
-		private static final int MAX_DISK_CACHE_SIZE = 3000;
+		private static final int MAX_DISK_CACHE_SIZE = 10000;
 
 		/**
 		 * A handle to the unique ModelBeanCache instance.
