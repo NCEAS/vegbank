@@ -5,6 +5,12 @@ A:Visited		{ color: #003366; text-decoration: underline }
 /* A:Visited		{ color: #6699CC; } */
 A:hover			{ color: #3399FF;}
 
+  A.headlink         {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; }
+  A:Link.headlink    {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; } /* same as prev */
+  A:Visited.headlink {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; } /* same as prev */
+  A:hover.headlink   {font-variant: small-caps ; background-color: #FFFFCC ; color: #336633; font-family: Georgia, Times New Roman, Times, serif; }
+  
+
 A.blk { color:#000000 }
 A.brightyellow { color:#FFFF80 }
 
