@@ -60,6 +60,7 @@
                   <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                   <xsl:with-param name="currentAtt" select="ancestor::attribute"/>
                   <xsl:with-param name="container">td</xsl:with-param>
+                  <xsl:with-param name="view" select="$view" />
                 </xsl:call-template>
               </xsl:for-each>
             </redirect:write>
@@ -81,6 +82,7 @@
                   <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                   <xsl:with-param name="currentAtt" select="ancestor::attribute"/>
                   <xsl:with-param name="container">span</xsl:with-param>
+                  <xsl:with-param name="view" select="$view" />
                 </xsl:call-template><br/>
               </xsl:for-each>
             </redirect:write>
@@ -106,6 +108,7 @@
                       <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                       <xsl:with-param name="currentAtt" select="ancestor::attribute"/>
                      <xsl:with-param name="container">td</xsl:with-param>
+                     <xsl:with-param name="view" select="$view" />
                     </xsl:call-template>
                   </tr>
                   <bean:define id="hadData" value="true"/>
@@ -131,13 +134,10 @@
     <xsl:param name="currFld"/>
     <xsl:param name="currentAtt"/>
     <xsl:param name="container" /><!-- p or td -->
+    <xsl:param name="view" /><!-- name of this view -->
     <!--    <xsl:comment>WRITE FIELD: <xsl:value-of select="$currFld"/> and att is: <xsl:value-of select="$currentAtt/attName"/>
     </xsl:comment>-->
-    <xsl:element name="{$container}">
-      <logic:notEmpty name="onerowof{$currEnt}" property="{$currFld}">
-
-        <xsl:element name="span">
-          <xsl:choose>
+    <xsl:element name="{$container}"><logic:notEmpty name="onerowof{$currEnt}" property="{$currFld}"><xsl:element name="span"><xsl:choose>
             <xsl:when test="string-length(@useClass)=0">
               <!-- no specific class for this data -->
               <!-- fill in different class for long text fields: -->
@@ -162,9 +162,7 @@
           <xsl:choose>
             <xsl:when test="string-length($currentAtt/attFKTranslationSQL)&gt;0 and $currentAtt/attKey='FK' and ($currentAtt/attFKTranslationSQL/@addLink='true' or string-length($currentAtt/attFKTranslationSQL/@addLink)=0)">
               <!-- only do this if translation criteria AND FK! -->
-              <xsl:element name="a">
-                <xsl:attribute name="href">@get_link@std/<xsl:value-of select="translate(substring-before($currentAtt/attReferences,'.'),$alphahigh,$alphalow)"/>/<xsl:text disable-output-escaping="yes">&lt;</xsl:text>bean:write name='onerowof<xsl:value-of select="$currEnt"/>' property='<xsl:value-of select="$currFld"/>' /<xsl:text disable-output-escaping="yes">&gt;</xsl:text></xsl:attribute>
-                <xsl:call-template name="writeOneFieldValue">
+              <xsl:element name="a"><xsl:attribute name="href">@get_link@std/<xsl:value-of select="translate(substring-before($currentAtt/attReferences,'.'),$alphahigh,$alphalow)"/>/<xsl:text disable-output-escaping="yes">&lt;</xsl:text>bean:write name='onerowof<xsl:value-of select="$currEnt"/>' property='<xsl:value-of select="$currFld"/>' /<xsl:text disable-output-escaping="yes">&gt;</xsl:text></xsl:attribute><!-- no space between elements here! --><xsl:call-template name="writeOneFieldValue">
                   <xsl:with-param name="beanPropName" select="$currFldMaybeTransl"/>
                   <xsl:with-param name="currEnt" select="$currEnt"/>
                 </xsl:call-template>
@@ -181,12 +179,10 @@
             </xsl:otherwise>
           </xsl:choose>
           <!-- units -->
-        <xsl:if test="string-length($currentAtt/attUnits)&gt;0">
+        <xsl:if test="string-length($currentAtt/attUnits)&gt;0"><xsl:if test="contains($view,'csv')=false"><!-- do not write units to csv data views -->
           <xsl:comment>only write units if there is something here:</xsl:comment>
-          <span class="units">
-            <xsl:value-of select="$currentAtt/attUnits"/>
-          </span>
-        </xsl:if>
+          <span class="units"><xsl:value-of select="$currentAtt/attUnits"/></span>
+        </xsl:if></xsl:if>
         <!-- extra -->
         <xsl:if test="string-length($currentAtt/attFormsHTMLpost)&gt;0">
           <!-- insert extra stuff -->
@@ -200,7 +196,7 @@
         <xsl:if test="$container!='span'">
       <logic:empty name="onerowof{$currEnt}" property="{$currFld}">
         <!-- only extra bit if empty and container is not p-->
-        <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+        <xsl:if test="contains($view,'csv')=false"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></xsl:if>
       </logic:empty>
         </xsl:if>
     </xsl:element><!-- td or p -->
