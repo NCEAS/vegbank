@@ -7,8 +7,8 @@
  *  Release: @@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-08-21 21:15:54 $'
- *  '$Revision: 1.4 $'
+ *  '$Date: 2003-10-27 20:04:29 $'
+ *  '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,22 +85,22 @@ public class UtilityTest extends TestCase
   	
   	String inputA = "this and ' $that";
 		String expectedResultA = "this and \\' \\$that";
-		String resultA = Utility.escapeCharacters(inputA); 
+		String resultA = Utility.encodeForDB(inputA); 
 		assertEquals(expectedResultA, resultA);
 				
 		String inputB = "aa'aa^^";
 		String expectedResultB = "aa\\'aa\\^\\^";
-		String resultB = Utility.escapeCharacters(inputB);
+		String resultB = Utility.encodeForDB(inputB);
 		assertEquals(expectedResultB, resultB);   
 				
 		String inputC = "$aaa'aa'aa''a^";
 		String expectedResultC = "\\$aaa\\'aa\\'aa\\'\\'a\\^";
-		String resultC = Utility.escapeCharacters(inputC);
+		String resultC = Utility.encodeForDB(inputC);
 		assertEquals(expectedResultC, resultC);  
 		
 		String inputD = null;
 		String expectedResultD = null;
-		String resultD = Utility.escapeCharacters(inputD);
+		String resultD = Utility.encodeForDB(inputD);
 		assertEquals(expectedResultD, resultD);  
 
   }

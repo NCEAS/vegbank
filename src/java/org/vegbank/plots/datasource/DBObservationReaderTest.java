@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-24 05:27:21 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-10-27 20:04:29 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ import junit.framework.TestCase;
 
 public class DBObservationReaderTest extends TestCase
 {
-	private DBObservationReader obsReader;
+	private DBModelBeanReader obsReader;
 	
 	/**
 	 * Constructor for DBObservationReaderTest.
@@ -60,17 +60,17 @@ public class DBObservationReaderTest extends TestCase
 	
 	public void testGetObservation()
 	{
-		Observation obs = null;
+		Plot plot = null;
 		try
 		{
-			obs = obsReader.getObservation("observation_id", 93);
+			plot = obsReader.getPlotObservationBeanTree( 93);
 		}
 		catch (Exception e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Plot plot = obs.getPlotobject();
+		Observation obs = (Observation) plot.getplot_observations().get(0);
 		Project project = obs.getProjectobject();
 		Covermethod coverMethod = obs.getCovermethodobject();
 		List commClasses = obs.getobservation_commclasss();
@@ -97,7 +97,7 @@ public class DBObservationReaderTest extends TestCase
 	 */
 	protected void setUp() throws Exception
 	{
-		obsReader = new DBObservationReader();
+		obsReader = new DBModelBeanReader();
 		super.setUp();
 	}
 

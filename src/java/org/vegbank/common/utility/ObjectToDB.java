@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-17 22:09:14 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2003-10-27 20:04:29 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -192,7 +192,7 @@ public class ObjectToDB extends VegBankObjectWriter
 			}
 			else
 			{
-				pstmt.setString(modInt,  Utility.escapeCharacters(value) );
+				pstmt.setString(modInt,  Utility.encodeForDB(value) );
 			}
 		}	
 		return pstmt;

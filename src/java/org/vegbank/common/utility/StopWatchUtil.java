@@ -5,8 +5,8 @@ package org.vegbank.common.utility;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-25 01:51:21 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-27 20:04:29 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,11 +99,26 @@ public class StopWatchUtil
 		
 		if ( days != 0 )
 		{
-			sb.append(days + " day(s) ");
+			if ( days == 1)
+			{
+				sb.append(days + " day ");
+			}
+			else
+			{
+				sb.append(days + " days ");
+			}
+
 		}
 		if ( hours != 0 )
 		{
-			sb.append(hours + " hour(s) ");
+			if ( hours == 1)
+			{
+				sb.append(hours + " hour ");
+			}
+			else
+			{
+				sb.append(hours + " hours ");
+			}
 		}
 		
 		if ( minutes != 0 )
@@ -118,7 +133,7 @@ public class StopWatchUtil
 		
 		if ( millis != 0 )
 		{
-			sb.append(millis + "ms");
+			sb.append(millis + "ms ");
 		}
 		
 		sb.append("to complete.");
