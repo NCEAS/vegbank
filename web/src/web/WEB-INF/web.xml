@@ -29,7 +29,7 @@
               <servlet-name>DataSubmitServlet</servlet-name>
               <description>as it zounds</description>
               <servlet-class>org.vegbank.servlet.request.DataSubmitServlet</servlet-class>
-              <load-on-startup>5</load-on-startup>
+              <!-- <load-on-startup>5</load-on-startup> -->
             </servlet>
             
 
