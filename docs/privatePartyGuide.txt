@@ -1,0 +1,12 @@
+Private Party Guide:
+
+Some parties will be private in vegbank, meaning that their info shouldn't be displayed or exported.
+
+Parties which are created should be, by default, private parties.  Right now, we'd like to use the 
+party.PartyType field as "user" to indicate that the party is private.
+
+Once a party has become certified, then their info becomes public and their partyType changes to "person."
+
+Anyone who can make changes or add data to the db should be public.  In cases of plants and comms, the
+party may well be "organization" but this isn't a user.  ALL parties that ARE NOT users (has record in usr, logs into vegbank) 
+should be public.
