@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-01-16 07:07:27 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2004-01-16 20:56:44 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
@@ -280,7 +280,7 @@
 
 		<tr bgcolor="#FFFFFF"> 
 		  <td align="center"> 
-			<html:select property="nvcExpRegionA">
+			<html:select property="expRegionA">
 			  <option>US/CAN - NE </option>
 			  <option>US - SE</option>
 			  <option>US/CAN - Midwest </option>
@@ -300,7 +300,7 @@
 			</html:select>
 		  </td>
 		  <td bgcolor="#FFFFFF" align="center"> 
-			<html:select property="nvcExpVegA">
+			<html:select property="expRegionAVeg">
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -309,7 +309,7 @@
 			</html:select>
 		  </td>
 		  <td align="center"> 
-			<html:select property="nvcExpFloristicsA">
+			<html:select property="expRegionAFlor">
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -318,7 +318,7 @@
 			</html:select>
 		  </td>
 		  <td align="center"> 
-			<html:select property="nvcExpNVCA">
+			<html:select property="expRegionANVC">
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -329,7 +329,7 @@
 		</tr>
 		<tr bgcolor="#EEEEEE"> 
 		  <td align="center">
-			<html:select property="nvcExpRegionB">
+			<html:select property="expRegionB">
 			  <option>--no other regions--</option>
 			  <option>US/CAN - NE </option>
 			  <option>US - SE</option>
@@ -350,7 +350,7 @@
 			</html:select>
 		  </td>
 		  <td align="center"> 
-			<html:select property="nvcExpVegB">
+			<html:select property="expRegionBVeg">
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -359,7 +359,7 @@
 			</html:select>
 		  </td>
 		  <td align="center"> 
-			<html:select property="nvcExpFloristicsB">
+			<html:select property="expRegionBFlor">
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -368,7 +368,7 @@
 			</html:select>
 		  </td>
 		  <td align="center"> 
-			<html:select property="nvcExpNVCB">
+			<html:select property="expRegionBNVC">
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -379,7 +379,7 @@
 		</tr>
 		<tr bgcolor="#FFFFFF"> 
 		  <td align="center">
-			<html:select property="nvcExpRegionC">
+			<html:select property="expRegionC">
 			  <option>--no other regions--</option>
 			  <option>US/CAN - NE </option>
 			  <option>US - SE</option>
@@ -400,7 +400,7 @@
 			</html:select>
 			</td>
 		  <td bgcolor="#FFFFFF" align="center"> 
-			<html:select property="nvcExpVegC">
+			<html:select property="expRegionCVeg">
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -409,7 +409,7 @@
 			</html:select>
 		  </td>
 		  <td align="center"> 
-			<html:select property="nvcExpFloristicsC">
+			<html:select property="expRegionCFlor">
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -418,7 +418,7 @@
 			</html:select>
 		  </td>
 		  <td bgcolor="#FFFFFF" align="center"> 
-			<html:select property="nvcExpNVCC">
+			<html:select property="expRegionCNVC">
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
