@@ -7,8 +7,8 @@
 * Release: @release@
 *
 *   '$Author: harris $'
-*   '$Date: 2003-01-02 21:31:48 $'
-*   '$Revision: 1.7 $'
+*   '$Date: 2003-01-02 21:38:18 $'
+*   '$Revision: 1.8 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -2066,13 +2066,11 @@ public class DBinsertPlotSource {
 			String hydrologicRegime = source.hydrologicRegime;
 			String plotShape = source.plotShape;
 			String confidentialityStatus = source.confidentialityStatus;
-			//not null
 			String confidentialityReason = source.confidentialityReason;
-			//not null
 			String azimuth = source.azimuth;
 			String dsgPoly = source.dsgPoly;
-			String xCoord = source.xCoord;
-			String yCoord = source.yCoord;
+			String xCoord = source.getXCoord(plotName);
+			String yCoord = source.getYCoord(plotName);
 			String zone = source.getUTMZone(plotName);
 			// if the plot data source has geocoordinates (latitude, logitude )
 			// use them otherwise lookup the information from the web service
