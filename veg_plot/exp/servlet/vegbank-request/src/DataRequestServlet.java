@@ -8,7 +8,14 @@ import java.io.*;
 import java.util.*;
 import java.math.*;
 import java.net.URL;
-
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import xmlresource.utils.transformXML;
 import databaseAccess.dbAccess;
 import servlet.util.ServletUtility;
 
@@ -44,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-05-30 23:52:00 $'
- *  '$Revision: 1.16 $'
+ *  '$Date: 2002-07-02 23:35:23 $'
+ *  '$Revision: 1.17 $'
  * 
  */
 
@@ -84,7 +91,7 @@ public class DataRequestServlet extends HttpServlet
 	public dbAccess dba =new dbAccess();
 	
 	private String communityQueryPage = "http://vegbank.nceas.ucsb.edu/forms/community-query.html";
-	
+	private transformXML transformer = new transformXML();
 	
 	/**
 	 * constructor method
@@ -149,15 +156,8 @@ public class DataRequestServlet extends HttpServlet
 			servletDir = rb.getString("requestparams.servletDir");
  			remoteHost=request.getRemoteHost();
 			System.out.println("DataRequstServlet > accessed by: "+remoteHost);
-			//log the use of the servlet by the client
 			
-////			updateClientLog(clientLog, remoteHost);
-		
-			//return to the browser a summary of the request being made of the servlet this
-			//method also adds some tags that are required many browsers
-//			returnQueryElemenySummary (out, params, response);
-			
-			//figure out what of data request type the client is requesting?
+			// PLOT QUERY
 			if ( requestDataType.trim().equals("vegPlot") )
 			{
 				System.out.println("DataRequstServlet > determining query type: " + determineQueryType(params) );
@@ -171,34 +171,34 @@ public class DataRequestServlet extends HttpServlet
 				}
 				else if ( determineQueryType(params).equals("extended") )
 				{
-				handleExtendedQuery(enum, params, out, response, request);
+					handleExtendedQuery(enum, params, out, response, request);
 				}
 			}
+			// PLANT TAXONOMY QUERY
 			else if ( requestDataType.trim().equals("plantTaxon") )
 			{
 				System.out.println( "DataRequstServlet > query on the plant taxonomy database \n");
 				handlePlantTaxonQuery( params, out, requestDataType, response );
 			}
+			// VEG COMMUNITY QUERY
 			else if ( requestDataType.trim().equals("vegCommunity") )
 			{
 				System.out.println("DataRequstServlet > query on the vegetation community database \n"
 					+" not yet implemented ");
 				handleVegCommunityQuery( params, out, requestDataType, response);
 			}
+			//UNKNOWN QUERY
 			else 
 			{
 				System.out.println("DataRequstServlet > unknown 'requestDataType' parameter "
 					+" must be: vegPlot or plantTaxon or vegCommunity ");
 			}
-			
-			
-		}//end try
+		}
 		catch( Exception e ) 
 		{
 			System.out.println("Exception :  "+ e.getMessage());
 			e.printStackTrace();
 		}
-		
 	}
 
 
@@ -288,7 +288,7 @@ public class DataRequestServlet extends HttpServlet
 				if (queryOutputNum>=1)
 				{
 					handleQueryResultsResponse(clientType, requestDataFormatType, out, 
-						response, param);
+						response, param, resultType);
 				}
 				else 
 				{ 
@@ -321,7 +321,7 @@ public class DataRequestServlet extends HttpServlet
 	 */
 	private void handleQueryResultsResponse(String clientType, 
 		String requestDataFormatType, PrintWriter out, 
-		HttpServletResponse response, Hashtable params)
+		HttpServletResponse response, Hashtable params, String resultType)
 	{
 		try 
 		{
@@ -339,7 +339,8 @@ public class DataRequestServlet extends HttpServlet
 						out.println( resultsVector.elementAt(i) );
 					}
 				}
-				else //assume that client wants html 
+				//assume that client wants html 
+				else
 				{
 					//pass back the summary of parameters passed to the servlet
 					returnQueryElemenySummary(out, params, response);
@@ -357,13 +358,30 @@ public class DataRequestServlet extends HttpServlet
 					}
 				}
 			}
-			else  //the browser
+			// the browser
+			else
 			{
 				//pass back the summary of parameters passed to the servlet
 				//returnQueryElemenySummary(out, params, response);
 				if (this.requestDataType.equals("vegPlot") )
 				{
-					out.println( this.getResultsSetOptions() );
+					// IF THE USER WANTS THE IDENTITY PASS THIS TO THEM
+					// FROM HERE THEY SHOULD BE ABLE TO SEE MORE
+					if ( resultType.equalsIgnoreCase("identity") )
+					{
+						Thread.sleep(1000);
+						out.println( this.getPlotIdentityResults() );
+					}
+					// THE USER WANTS TO SEE THE COMPREHENSIVE VIEW 
+					// OF A PLOT
+					else if ( resultType.equalsIgnoreCase("full") )
+					{
+						out.println( this.getPlotFullView() );
+					}
+					else
+					{
+						out.println( this.getResultsSetOptions() );
+					}
 				}
 				else
 				{
@@ -382,7 +400,105 @@ public class DataRequestServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/**
+	 * method for showing a full view of a plot
+	 */
+	 private String getPlotFullView()
+	 {
+		 StringBuffer sb = new StringBuffer();
+		 try
+		 {
+			 String xmlDoc = servletDir + "atomicResult";
+			 String styleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/transformFullPlot.xsl";
+			 System.out.println("DataRequestServlet > xml document: '" + xmlDoc +"'" );
+			 System.out.println("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
+			 transformer.getTransformed(xmlDoc, styleSheet);
+			 StringWriter transformedData = transformer.outTransformedData;
+			 Vector contents = this.convertStringWriter(transformedData);
+			 for (int ii=0;ii< contents.size() ; ii++) 
+			 {
+					String buf =  (String)contents.elementAt(ii) ;
+					sb.append( buf + "\n");
+			 }
+		 }
+		 catch( Exception e ) 
+		 {
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		 }
+		return( sb.toString() );
+	 }
+	/**
+	 * method that returns the identity page containing all the plots that 
+	 * were in the result set ( or a range of plots )
+	 */
+	 private String getPlotIdentityResults()
+	 {
+		 StringBuffer sb = new StringBuffer();
+		 try
+		 {
+			 String xmlDoc = servletDir + "identity.xml";
+			 String styleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
+			 System.out.println("DataRequestServlet > xml document: '" + xmlDoc +"'" );
+			 System.out.println("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
+			 transformer.getTransformed(xmlDoc, styleSheet);
+			 StringWriter transformedData = transformer.outTransformedData;
+			 Vector contents = this.convertStringWriter(transformedData);
+			 for (int ii=0;ii< contents.size() ; ii++) 
+			 {
+					String buf =  (String)contents.elementAt(ii) ;
+					sb.append( buf + "\n");
+			 }
+		 }
+		 catch( Exception e ) 
+		 {
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		 }
+		return( sb.toString() );
+	 }
 
+	 	
+	/**
+	 *  this method will take, as input a StringWriter object and 
+	 *  return a Vector containing the contents of the StringWriter
+	 * @param inputStringWriter -- the input StringWriter (in this cas probably
+	 * from an xslt transform
+	 * @return v -- a vector with each line segment as an element
+	 */
+	public Vector convertStringWriter(StringWriter inputStringWriter)
+	{
+		Vector v = new Vector();
+		try 
+		{
+			// a string inwhich to convert the String Writer to
+			String transformedString=null;  
+			//do the conversion to the string
+			transformedString  = inputStringWriter.toString().trim();  
+			//the buffered reader
+			BufferedReader br = new BufferedReader(new StringReader(transformedString)); //speed up the string parsing with a buffered reader
+
+			//read each line
+			String line; // temporary string to contain the lines from the transformedData 
+			int lineCnt=0; //running line counter
+			while ((line = br.readLine()) !=null ) 
+			{
+				v.addElement( line.trim() );
+				lineCnt++;  //increment the line
+			}
+
+		} 
+		catch( Exception e ) 
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return(v);
+	}
+
+	
 	/**
 	 * method that presents the number of results returned from the VegBank 
 	 * application layer and the options that the user has to interact 
@@ -464,7 +580,7 @@ public class DataRequestServlet extends HttpServlet
  * @param out - the output stream to the client
  * @param response - the response object linked to the client 
  */
-	private void handleSimpleQuery (Hashtable params, PrintWriter out, 
+	private void handleSimpleQuery(Hashtable params, PrintWriter out, 
 	HttpServletResponse response) 
 	{
 		try
@@ -481,6 +597,7 @@ public class DataRequestServlet extends HttpServlet
  		multipleObs = (String)params.get("multipleObs");
  		compoundQuery = (String)params.get("compoundQuery");
  		plotId = (String)params.get("plotId");
+		// may be 'full', 'summary', or 'identity'
  		resultType = (String)params.get("resultType");
  		requestDataType = (String)params.get("requestDataType");
 		//the servlet directory
@@ -497,15 +614,14 @@ public class DataRequestServlet extends HttpServlet
 			issueQuery("simpleCommunityQuery");
 		//	out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
 		}
-		// Cheat here - to recognise the single plot query to return entire plot
+		// Cheat here - to recognize the single plot query to return entire plot
 		//20020117 testing the new plot writer and data translation 
 		//modules so cheating here first
 		else if (plotId != null && resultType.equals("full") ) 
 		{
 			System.out.println("DataRequestServlet > requesting full data set for plot: " + plotId );
 			String outFile=servletDir+"atomicResult";
-			out.println("<br>DataRequestServlet.handleSimpleQuery returning a full data set "
-			+"for plot: "+plotId+" <br>");
+			
 			//check to see how many plots are being requested -- if there are 
 			//commas then there are multiple
 			if ( plotId.indexOf(",") > 0 )
@@ -519,10 +635,12 @@ public class DataRequestServlet extends HttpServlet
 					vec.addElement(buf);
 				}
 				dba.writeMultipleVegBankPlot(vec, outFile);
+				queryOutputNum = vec.size();
 			}
 			else
 			{
 				dba.writeSingleVegBankPlot(plotId, outFile);
+				queryOutputNum = 1;
 			}
 		}
 		// this is where the query element checking is done for the vegetation plots
@@ -533,16 +651,16 @@ public class DataRequestServlet extends HttpServlet
 		{
 			//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
 			//+"containing plots with taxonName: "+taxonName+" <br>");
-			composeQuery("taxonName", taxonName);
+			composeQuery("taxonName", taxonName, resultType);
 			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 		}
  		//look for elevation
-		else if ( minElevation != null  && minElevation.length()>0 ) 
+		else if ( minElevation != null  && minElevation.length() >0 ) 
 		{  
 			//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
 			//+"containing plots with a minElevation of: "+minElevation+" <br>");
-			composeQuery("elevationMin", minElevation, "elevationMax", maxElevation);
+			composeQuery("elevationMin", minElevation, "elevationMax", maxElevation, resultType);
  			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 		}
@@ -551,7 +669,7 @@ public class DataRequestServlet extends HttpServlet
 		{  
 			//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
 			//+"containing plots with a state equal to: "+state+" <br>");
-			composeQuery("state", state);
+			composeQuery("state", state, resultType);
 			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 		}
@@ -560,7 +678,7 @@ public class DataRequestServlet extends HttpServlet
 		{  
 			//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
 			//+"containing plots with a communityName equal to: "+communityName+" <br>");
-			composeQuery("communityName", communityName);
+			composeQuery("communityName", communityName, resultType);
  			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 		}
@@ -569,16 +687,16 @@ public class DataRequestServlet extends HttpServlet
 		{  
 			//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
 			//+"containing plots with a surface geology like: "+surfGeo+" <br>");
-			composeQuery("surfGeo", surfGeo);
+			composeQuery("surfGeo", surfGeo, resultType);
 			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 		}
-		//if there are results returned to the servlet from the database in the form 
-		//of a file returned then grab the summary viewer then let the user know
+		// if there are results returned to the servlet from the database in the form 
+		// of a file returned then grab the summary viewer then let the user know
 		if (queryOutputNum>=1) 
 		{
 			handleQueryResultsResponse(clientType, requestDataFormatType, out, 
-			response, params);
+			response, params, resultType);
 		}
 		else 
 		{ 
@@ -625,7 +743,7 @@ public class DataRequestServlet extends HttpServlet
 				if (queryOutputNum>=1) 
 				{
 					handleQueryResultsResponse(clientType, requestDataFormatType, out, 
-					response, params);
+					response, params, resultType);
 				}
 				else 
 				{ 
@@ -679,7 +797,7 @@ public class DataRequestServlet extends HttpServlet
 				if (queryOutputNum>=1) 
 				{
 					handleQueryResultsResponse(clientType, requestDataFormatType, out, 
-					response, params);
+					response, params, resultType);
 				}
 				else 
 				{ 
@@ -1043,8 +1161,9 @@ private void updateClientLog (String clientLog, String remoteHost)
  * @param queryElement - name of the element being used to query the database, 
  *	such as taxonName, plotId etc.
  * @param elementString - value of the queryElement
+ * @param resultType -- the result type of desired may be: full, identity, or summary
  */
-	private void composeQuery (String queryElement, String elementString) 
+	private void composeQuery(String queryElement, String elementString, String resultType) 
 	{
 		try 
 		{
@@ -1060,7 +1179,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 				"<queryElement>"+queryElement+"</queryElement> \n"+
 				"<elementString>"+elementString+"</elementString> \n"+
 				"</query> \n"+
-				"<resultType>summary</resultType> \n"+
+				"<resultType>"+resultType+"</resultType> \n"+
 				"<outFile>"+servletDir+"summary.xml</outFile> \n"+
 				"</dbQuery>"
 			);
@@ -1085,10 +1204,10 @@ private void updateClientLog (String clientLog, String remoteHost)
  * @param minValue - value of the queryElement
  * @param maxElement
  * @param maxValue - value of the queryElement
+ * @param resultType -- the result type of desired may be: full, identity, or summary
  */
-
 	private void composeQuery (String minElement, String minValue, 
-		String maxElement, String maxValue) 
+		String maxElement, String maxValue, String resultType) 
 	{
 		try 
 		{
@@ -1109,7 +1228,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 				"<queryElement>"+maxElement+"</queryElement> \n"+
 				"<elementString>"+maxValue+"</elementString> \n"+
 				"</query> \n"+
-				"<resultType>summary</resultType> \n"+
+				"<resultType>"+resultType+"</resultType> \n"+
 				"<outFile>"+servletDir+"summary.xml</outFile> \n"+
 				"</dbQuery>"
 			);

@@ -374,7 +374,6 @@ public class viewData extends HttpServlet
 	 * from an xslt transform
 	 * @return v -- a vector with each line segment as an element
 	 */
-
 	public Vector convertStringWriter(StringWriter inputStringWriter)
 	{
 		Vector v = new Vector();
