@@ -27,7 +27,8 @@ private StringBuffer printString = new StringBuffer(); //this is the print strin
  *
  */
 
-public void writePlotSummary(Hashtable cumulativeSummaryResultHash, String outFile)
+public void writePlotSummary(Hashtable cumulativeSummaryResultHash, 
+	String outFile)
 {
 try {
 	
@@ -242,8 +243,6 @@ for (int i=0; i<900; i++) {
 	}
 
 }
-
-
 
 
 
