@@ -12,9 +12,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: mlee $'
-*      '$Date: 2004-04-08 05:44:28 $'
-*  '$Revision: 1.19 $'
+*    '$Author: anderson $'
+*      '$Date: 2004-04-20 21:46:28 $'
+*  '$Revision: 1.20 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -72,14 +72,16 @@
   
       <!-- SOME NOTES ABOUT THE USE OF ICONS-->
       <br/>
-      <span class="intro">Available Reports:<br/>
-        <img src="@image_server@report_sm.gif"></img>=Summary
-        <img src="@image_server@comprehensive_sm.gif"></img>=Comprehensive
-        <img src="@image_server@small_globe.gif"></img>=Location 
-        <img src="@image_server@xml_icon.gif"></img>=Raw XML
-        <img src="@image_server@environmental_text.gif"></img>=Environment ASCII
+      <span class="intro">Available Reports:</span><br/>
+      <span class="item">
+        <img src="@image_server@report_sm.gif"></img>=Summary,
+        <img src="@image_server@comprehensive_sm.gif"></img>=Comprehensive,
+        <img src="@image_server@small_globe.gif"></img>=Location,
+        <img src="@image_server@xml_icon.gif"></img>=Raw XML,
+        <img src="@image_server@environmental_text.gif"></img>=Environment ASCII,
         <img src="@image_server@species_text.gif"></img>=Species ASCII
       </span>
+	  <br/> &nbsp;
 
       <html:form action="/DownLoadManager">
 
@@ -92,13 +94,13 @@
 	     <tr><td>&nbsp; &nbsp; &nbsp; &nbsp; </td>
 	       <td bgcolor="#000000">
 
-       <table width="650" cellspacing="0" cellpadding="0">
+       <table width="700" cellspacing="0" cellpadding="0">
 
 
-	 <tr bgcolor="#336633" align="left" valign="top">
+	 <tr bgcolor="#336633" align="left" valign="middle">
 	   <th align="center" nowrap> SEARCH<br>RESULTS </th>
 	   <th align="center" valign="center" nowrap> Accession Code </th>
-	   <th align="center" valign="center" nowrap> Author's Plot Name </th>
+	   <th align="center" valign="center" nowrap> Author's<br>Plot Name </th>
 	   <th align="center" valign="center" nowrap> Latitude  </th>
 	   <th align="center" valign="center" nowrap> Longitude  </th>
 	 </tr>
@@ -208,12 +210,12 @@
          </td>		 
 	    <td align="center" valign="middle">
 	        <span class="item">
-	          <bean:write name="row" property="latitude"/>   
+	          <bean:write name="row" property="latitude" format="#.0"/>   
 	        </span>
          </td>		 
 	    <td align="center" valign="middle">
 	        <span class="item">
-	          <bean:write name="row" property="longitude"/>   
+	          <bean:write name="row" property="longitude" format="#.0"/>   
 	        </span>
          </td>		 
 	  </tr>
