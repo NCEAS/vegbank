@@ -13,9 +13,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2004-11-16 01:17:27 $'
-*  '$Revision: 1.26 $'
+*    '$Author: mlee $'
+*      '$Date: 2004-11-17 00:19:47 $'
+*  '$Revision: 1.27 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -1017,7 +1017,7 @@ VegBank - Advanced Plot Query
 		      Plots can be selected that <b>match all</b> the above criteria (AND)
 		      or that <b>match any</b> of the above criteria (OR). <br />
 
-		      <!-- For more complicated queries that allow a combination of AND and OR queries, see our <a href="nested-plot-query.html">nested query page</a>.-->
+		      
 		    </td>
 		  </tr>
 		</table>
