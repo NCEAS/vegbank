@@ -7,8 +7,8 @@
 * Release: @release@
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-02-24 20:01:44 $'
-*   '$Revision: 1.13 $'
+*   '$Date: 2003-02-28 16:50:50 $'
+*   '$Revision: 1.14 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ import java.util.Vector;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import servlet.util.GetURL;
+import org.vegbank.servlet.util.GetURL;
 import xmlresource.datatype.Plot;
 import xmlresource.datatype.VegProject;
 import xmlresource.utils.XMLparse;
