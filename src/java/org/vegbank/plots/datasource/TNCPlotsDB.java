@@ -20,8 +20,8 @@ import java.util.Vector;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2003-06-03 22:50:07 $' <br>
- * 	'$Revision: 1.5 $' <br>
+ *  '$Date: 2003-06-03 22:58:49 $' <br>
+ * 	'$Revision: 1.6 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -230,19 +230,17 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			
 			if ( s == null || s.equals("") )
 			{
+				Statement stmt2 = con.createStatement();
 				// Try the sublocation table
 				ResultSet rs2 =
-					stmt.executeQuery(
-						"select  ([Location Code]) from plots where ([Plot Code]) like '"+plotName+"'"
+					stmt2.executeQuery(
+						"select  ([sublocation]) from plots where ([Plot Code]) like '"+plotName+"'"
 					);
-					while ( rs.next() )
+					while ( rs2.next() )
 					{
-						s = rs.getString(1);
+						s = rs2.getString(1);
 					}
 			}
-			
-			rs.close();
-			stmt.close();
 		}
 		catch (Exception x)
 		{
