@@ -55,6 +55,12 @@
 		<form-property name="resultType" type="java.lang.String"/>
     </form-bean>
 
+    <form-bean  name="DisplayPlotForm"
+                type="org.apache.struts.validator.DynaValidatorForm">
+		<form-property name="accessionCode" type="java.lang.String"/>
+		<form-property name="resultType" type="java.lang.String"/>
+    </form-bean>
+
     <form-bean  name="DownLoadForm"
                 type="org.apache.struts.validator.DynaValidatorForm">
 		<form-property name="dataType" type="java.lang.String" initial="all"/>
@@ -165,7 +171,7 @@
     <!-- Display the Plot Upload screen --> 
     <action path="/DisplayUploadPlotAction" forward="/forms/plot-submit.jsp">
       <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
-      <set-property property="reqRoles" value="registered" />
+      <set-property property="reqRoles" value="reg" />
     </action>
 
     <!-- Upload Plot Action -->
@@ -175,6 +181,7 @@
         scope="request"
         validate="true"
         input="DisplayUploadPlotAction">
+      <set-property property="reqRoles" value="cert" />
     </action>		 
 
     <!-- Drop Plot Action -->
@@ -184,6 +191,7 @@
         scope="request"
         validate="true"
         input="DropPlotAction">
+      <set-property property="reqRoles" value="dba" />
     </action>		 
 
     <!-- Add a reference to vegbank -->
@@ -193,6 +201,7 @@
       	scope="request"
       	validate="true"
       	input="AddReference">
+      <set-property property="reqRoles" value="pro" />
     </action>
 
     <action    path="/AddCoverMethod"
@@ -256,6 +265,14 @@
       <forward name="success" path="/forms/DisplayPlantQueryResults.jsp"/>
     </action>
 
+    <!-- Display a plot -->
+    <action path="/DisplayPlot"
+        type="org.vegbank.ui.struts.DisplayPlotAction"
+        name="DisplayPlotForm"
+        scope="request"
+        validate="true"
+        input="failure">
+    </action>
 
     <!-- Manage file download -->
     <action path="/DownLoadManager"
