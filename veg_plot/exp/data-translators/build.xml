@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-03-28 05:11:38 $'
- 	*     '$Revision: 1.6 $'
+ 	*     '$Date: 2002-04-17 02:03:43 $'
+ 	*     '$Revision: 1.7 $'
 --> 
 <project name="data-translators" default="compile" basedir=".">
 	
@@ -90,7 +90,7 @@
 			 TestPlotSourcePlugin.java
 			 NativeXmlPlugin.java
 			 VegBankDataSourcePlugin.java
-			 
+			 VBAccessDataSourcePlugin.java
 			 TNCPlotsDB.java
 			 
 			 PlotXmlWriterV2.java
