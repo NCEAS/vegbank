@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-02-04 23:24:12 $'
-* '$Revision: 1.85 $'
+* '$Date: 2004-02-06 03:16:10 $'
+* '$Revision: 1.86 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -63,6 +63,7 @@
     <property name="sharedhtml_src" value="./sharedhtml"/>
     <property name="workshop_src" value="./workshop"/>
     <property name="apache.document.root" value="/usr/www/${webapp}/htdocs"/>
+    <property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
     <!-- large binary files location:   targets that read from large binaries separate -->
     <property name="lrg_binary_src" value="/home/lee/VegBranchReleases"/>
     <filter token="dist" value="dist"/>
@@ -82,11 +83,11 @@
     <property name="style_server" value="${tomcat.home.dir}/webapps/${webapp}/includes/"/>
     <property name="vegbank_server" value="${tomcat.home.dir}/webapps/${webapp}/"/>
     <property name="workshop_server" value="${tomcat.home.dir}/webapps/${webapp}/workshop/"/>
-    <property name="help_server" value="${apache.document.root}/help/"/>
-    <property name="manual_server" value="${apache.document.root}/help/manual/"/>
+    <property name="help_server" value="${vegdocs_server}/help/"/>
+    <property name="manual_server" value="${vegdocs_server}/help/manual/"/>
     <property name="server_root" value="${tomcat.home.dir}/webapps/ROOT/"/>
     <property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/${webapp}/WEB-INF/lib"/>
-    <property name="vegbranch_server" value="${apache.document.root}/vegbranch/"/>
+    <property name="vegbranch_server" value="${vegdocs_server}/vegbranch/"/>
     <!-- WEB SERVER LOCATIONS -->
     <filter token="base_url" value=""/>
     <filter token="web_context" value="/${web.context_uri}/"/>
@@ -112,12 +113,12 @@
     <filter token="design_link" value="/${web.context_uri}/design/"/>
     <filter token="panel_link" value="/${web.context_uri}/panel/"/>
     <filter token="workshop_link" value="/${web.context_uri}/workshop/"/>
-    <filter token="vegbranch_link" value="/vegbranch/"/>
-    <filter token="xml_link" value="/xml/"/>
-    <filter token="NativeXMLIndexPage" value="/xml/vegbank-xml-index.html"/>
-    <filter token="help_link" value="/help/"/>
-    <filter token="help" value="/help/"/>
-    <filter token="manual_link" value="/help/manual/"/>
+    <filter token="vegbranch_link" value="${vegdocs_server}/vegbranch/"/>
+    <filter token="xml_link" value="${vegdocs_server}/xml/"/>
+    <filter token="NativeXMLIndexPage" value="${vegdocs_server}/xml/vegbank-xml-index.html"/>
+    <filter token="help_link" value="${vegdocs_server}/help/"/>
+    <filter token="help" value="${vegdocs_server}/help/"/>
+    <filter token="manual_link" value="${vegdocs_server}/help/manual/"/>
     <!-- SERVLETS -->
     <filter token="framework_servlet" value="/${web.context_uri}/servlet/framework"/>
     <filter token="usermanagement_servlet" value="/${web.context_uri}/servlet/usermanagement"/>
@@ -131,6 +132,8 @@
     <mkdir dir="${tomcat.home.dir}/webapps/${webapp}/"/>
     <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
     <mkdir dir="${apache.document.root}/plot/"/>
+    <!-- what is this for, the cache?? -mtl -->
+    <mkdir dir="${vegdocs_server}"/>
     <mkdir dir="${help_server}"/>
     <mkdir dir="${manual_server}"/>
     <mkdir dir="${vegbranch_server}"/>
@@ -212,7 +215,7 @@
     <antcall target="manual-sub-clean"/>
     <antcall target="manual-sub-build"/>
     <antcall target="manual-sub-dist"/>
-  <!--  <antcall target="tokenfiles"/>
+    <!--  <antcall target="tokenfiles"/>
     <antcall target="hdrftr"/> -->
   </target>
   <target name="manual-sub-build" depends="hdrftr">
@@ -346,7 +349,7 @@
 -->
   <target name="dictionary" depends="init" description="=&gt; Dist. the new data dictionary to server (calls other ant target) ">
     <!-- calls ant to run a different ant target which creates the vegbank dictionary based on logical fields only -->
-    <ant dir="../../../docs/xml" target="logical"/>
+    <ant dir="../docs/xml" target="logical"/>
   </target>
   <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
     <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
@@ -373,6 +376,100 @@
       </fileset>
     </copy>
   </target>
+  <!-- ________________________ VEGBRANCH TARGETS _____________________________________ -->
+  <target name="vegbranch-init" depends="hdrftr">
+    <echo>Targets:  {init} vegbranch-clean-all | vegbranch-dist-all | vegbranch-dist-client | vegbranch-dist-examples | 
+      vegbranch-dist-docs | vegbranch-dist-images | vegbranch-dist-docs-loadtbls (before vegbranch-dist-docs)</echo>
+    <!-- RELEVANT DIRECTORIES -->
+    <property name="vegbr_dir" value="./vegbranch"/>
+    <!-- RELEVANT FILES TO COPY / DELETE -->
+    <!-- client files: -->
+    <property name="vegbr_client_include" value="vegbranch1.0.0.zip      vegbank_module-full-1.0.1.zip   vegbranch_normalizer.zip "/>
+    <!-- docs files: -->
+    <property name="vegbr_docs_include" value=" **/*.html "/>
+    <!-- images files: -->
+    <property name="vegbr_img_include" value="confirmation-dialog.jpg connect-dialog.jpg rtarrow.gif "/>
+    <property name="vegbr_examples_include" value=" vegbranch-samplecsv1-b.4.0.zip  vegbranch-samplecsv2-b.4.0.zip normalizer_examples.zip"/>
+    <property name="vegbr_htmlfile" value="vegbranch.html"/>
+    <!--tokens particular to vegbranch html files.-->
+    <filter token="vbr_imageserver" value="/vegbranch/images/"/>
+    <filter token="vbr_examplesserver" value="/vegbranch/examples/"/>
+    <filter token="vbr_clientserver" value="/vegbranch/client/"/>
+    <!-- make certain that dir structure is there -->
+    <mkdir dir="${vegbranch_server}"/>
+    <mkdir dir="${vegbranch_server}/images"/>
+    <mkdir dir="${vegbranch_server}/docs"/>
+    <mkdir dir="${vegbranch_server}/client"/>
+    <mkdir dir="${vegbranch_server}/examples"/>
+  </target>
+  <target name="vegbranch-clean-all" depends="vegbranch-init" description="remove all vegbranch files from SERVER">
+    <delete>
+      <!-- del client -->
+      <fileset dir="${vegbranch_server}/client" includes="*.*"/>
+    </delete>
+    <delete>
+      <!-- del images  -->
+      <fileset dir="${vegbranch_server}/images" includes="*.*"/>
+    </delete>
+    <delete>
+      <!-- del docs -->
+      <fileset dir="${vegbranch_server}/docs" includes="*.*"/>
+    </delete>
+    <delete>
+      <!-- del examples  -->
+      <fileset dir="${vegbranch_server}/examples" includes="*.*"/>
+    </delete>
+    <delete>
+      <!-- del index  -->
+      <fileset dir="${vegbranch_server}" includes="*.*"/>
+    </delete>
+  </target>
+  <target name="vegbranch-dist-client" depends="vegbranch-init" description="dist vegbranch client to server">
+    <!-- <copy file vegbranch database tofile="${vegbranch_server}/file" /> -->
+    <copy todir="${vegbranch_server}/client" filtering="no">
+      <fileset dir="${lrg_binary_src}" includes="${vegbr_client_include}"/>
+    </copy>
+  </target>
+  <!-- images -->
+  <target name="vegbranch-dist-images" depends="vegbranch-init" description="dist vegbranch images to server">
+    <copy todir="${vegbranch_server}/images" filtering="no">
+      <fileset dir="${vegbr_dir}/images" includes="${vegbr_img_include}"/>
+    </copy>
+  </target>
+  <!-- docs -->
+  <target name="vegbranch-dist-docs" depends="vegbranch-init" description="dist vegbranch docs to server">
+    <copy todir="${vegbranch_server}/docs" filtering="yes" overwrite="yes">
+      <fileset dir="${vegbr_dir}/docs" includes="${vegbr_docs_include}"/>
+    </copy>
+    <copy todir="${vegbranch_server}" filtering="yes" overwrite="yes">
+      <fileset dir="${vegbr_dir}" includes="${vegbr_htmlfile}"/>
+    </copy>
+  </target>
+  <!-- dist the loading table documentation, similar to data dictionary -->
+  <target name="vegbranch-dist-docs-loadtbls" depends="vegbranch-init" description="styles vegbranch loading table documentation: before dist docs">
+    <!-- <ant antfile="loadbuild.xml" dir="./vegbranch/docs/loadtbls/" target="dist-loaddoc"/> -->
+    <style in="${vegbr_dir}/docs/loadtbls/loadmodule_doc.xml" out="${vegbr_dir}/docs/loadtbls/BOGUS.txt" style="${vegbr_dir}/docs/loadtbls/loadmod_docAll.xsl" force="true"/>
+  </target>
+  <target name="vegbranch-clean-locfiles" depends="vegbranch-init" description="clean local html files from vegbranch dir">
+    <delete>
+      <!-- deletes files like Z_USER_D_CoverData~1_noframes.html (these files temporarily live here, and are copied over to server by the main vegbranch ant function -->
+      <fileset dir="${vegbr_dir}/docs/loadtbls" includes="*_*_*_*~*.html"/>
+    </delete>
+  </target>
+  <!-- examples -->
+  <target name="vegbranch-dist-examples" depends="vegbranch-init" description="dist vegbranch binary examples to server ">
+    <copy todir="${vegbranch_server}/examples" filtering="no">
+      <fileset dir="${lrg_binary_src}" includes="${vegbr_examples_include}"/>
+    </copy>
+  </target>
+  <target name="vegbranch-dist-all" depends="vegbranch-init" description="dist all vegbranch files to server">
+    <antcall target="vegbranch-dist-client"/>
+    <antcall target="vegbranch-dist-images"/>
+    <antcall target="vegbranch-dist-examples"/>
+    <antcall target="vegbranch-dist-docs-loadtbls"/>
+    <antcall target="vegbranch-dist-docs"/>
+  </target>
+  <!-- ________________________ end of VEGBRANCH TARGETS _____________________________________ -->
   <!--
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
@@ -403,8 +500,9 @@ MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
 	-->
   </target>
   <target name="deploy-all" depends="deploy" description="=&gt; all in deploy plus slow rarely updated stuff">
-     <antcall target="manual" />
-   </target>
+    <antcall target="manual"/>
+    <antcall target="vegbranch-dist-all"/>
+  </target>
   <target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
     <property name="webapp" value="vegtest"/>
     <antcall target="deploy"/>
