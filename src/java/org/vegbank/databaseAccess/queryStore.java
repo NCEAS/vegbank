@@ -9,9 +9,9 @@
  *
  *
  *
- *  '$Author: farrell $'
- *  '$Date: 2003-08-21 21:16:44 $'
- *  '$Revision: 1.3 $'
+ *  '$Author: anderson $'
+ *  '$Date: 2004-10-27 22:58:13 $'
+ *  '$Revision: 1.4 $'
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -127,7 +127,7 @@ public class queryStore
 		//get the database management parameter settings
 		////g.getDatabaseParameters("database", "query");
 		java.util.Date startDate = new java.util.Date();
-		int startSeconds = startDate.getSeconds();
+		//int startSeconds = startDate.getSeconds();
 		System.out.println("queryStore > StartQuery: "+startDate );
 		try 
 		{
@@ -257,9 +257,9 @@ public class queryStore
 
 		//print the end date
 		java.util.Date stopDate = new java.util.Date();
-		int stopSeconds = stopDate.getSeconds();
+		//int stopSeconds = stopDate.getSeconds();
 		System.out.println("queryStore > Stop Query: "+stopDate );
-		System.out.println("queryStore > elapsed time (secs) : "+ (stopSeconds - startSeconds) );
+		//System.out.println("queryStore > elapsed time (secs) : "+ (stopSeconds - startSeconds) );
 		
 	}
 	catch (Exception e) 
