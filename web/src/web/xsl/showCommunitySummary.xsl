@@ -23,32 +23,6 @@
 			<head>
 				<title> VegBank -- Community concept query results </title>
 				<link rel="stylesheet" type="text/css" href="http://vegbank.nceas.ucsb.edu/vegbank/includes/default.css"/>
-				<!--
-             <link rel="stylesheet" type="text/css" 
-              href="@web-base-url@/default.css" />
-        -->
-				<script LANGUAGE="JavaScript">
-					<!-- Modified By:  Steve Robison, Jr. (stevejr@ce.net) -->
-					<!-- This script and many more are available free online at -->
-					<!-- The JavaScript Source!! http://javascript.internet.com -->
-					<xsl:text disable-output-escaping="yes">
-&lt;!-- Begin
-var checkflag = "false";
-function check(field) {
-if (checkflag == "false") {
-for (i = 0; i &lt; field.length; i++) {
-field[i].checked = true;}
-checkflag = "true";
-return "Uncheck All"; }
-else {
-for (i = 0; i &lt; field.length; i++) {
-field[i].checked = false; }
-checkflag = "false";
-return "Check All"; }
-}
-//  End -->
-</xsl:text>
-				</script>
 			</head>
 			<body bgcolor="FFFFFF">
 				<!--VEGBANK HEADER -->
@@ -200,7 +174,7 @@ Recognizing Party: <span class="item">
 					</form>
 				</table>
 				<!-- VEGBANK FOOTER -->
-				@vegbank_footer_html_tworow@
+				@vegbank_footer_html_tworow_nojs@
 				<!-- END OF FOOTER -->
 			</body>
 		</html>

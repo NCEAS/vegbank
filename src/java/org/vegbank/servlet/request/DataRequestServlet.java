@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-11-02 23:35:54 $'
- *  '$Revision: 1.17 $'
+ *  '$Date: 2003-11-03 00:52:20 $'
+ *  '$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,8 +81,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-11-02 23:35:54 $'
- *  '$Revision: 1.17 $'
+ *  '$Date: 2003-11-03 00:52:20 $'
+ *  '$Revision: 1.18 $'
  * 
  */
 
@@ -488,6 +488,8 @@ public class DataRequestServlet extends HttpServlet
 
 			LogUtility.log(
 				"DataRequestServlet > stylesheet name: '" + styleSheet + "'");
+			LogUtility.log(
+				"DataRequestServlet > XML input: '" + xmlString + "'");
 
 			sb.append( transformer.getTransformedFromString(xmlString, styleSheet) );
 		}
@@ -515,8 +517,9 @@ public class DataRequestServlet extends HttpServlet
 
 			 //LogUtility.log("DataRequestServlet > xml document: '" + xmlResult +"'" );
 			 LogUtility.log("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
-			
-				sb.append( transformer.getTransformedFromString( xmlResult, styleSheet ) );
+		         LogUtility.log("DataRequestServlet > XML input: '" + xmlResult+ "'");
+	
+			sb.append( transformer.getTransformedFromString( xmlResult, styleSheet ) );
 		 }
 		 catch( Exception e ) 
 		 {
