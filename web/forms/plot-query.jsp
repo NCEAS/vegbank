@@ -14,8 +14,8 @@
 *     Authors: @author@
 *
 *    '$Author: mlee $'
-*      '$Date: 2004-11-15 23:56:59 $'
-*  '$Revision: 1.24 $'
+*      '$Date: 2004-11-16 01:16:22 $'
+*  '$Revision: 1.25 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -38,7 +38,7 @@
 <link rel="STYLESHEET" href="@stylesheet@" type="text/css" />
 
 <title>
-VEGBANK - Simple Plots Query
+VegBank - Advanced Plot Query
 </title>
 
 </head>
@@ -54,14 +54,12 @@ VEGBANK - Simple Plots Query
 
     <tr>
       <td colspan="2" bgcolor="white">
-	<img align="center" border="0" height="144" src="@image_server@owlogoBev.jpg" alt="Veg plots logo "> 
-      </td>
+	  </td>
       <td align="left" valign="middle">
 	<table border="0" cellpadding="5">
 	  <tr>
 	    <td align="left" valign="bottom">
-	      <font face="Helvetica,Arial,Verdana" size="6" color="#23238E">Plot Query Form</font>
-	      <br/>
+	      <h2>Plot Query Form</h2>
 	    </td>
 	  </tr>
 	</table>
@@ -78,18 +76,17 @@ VEGBANK - Simple Plots Query
 	<table border="0" width="550">
 	  <tbody>
 	  <tr valign="top">
-	    <td align="left" colspan="2" valign="center" >
-		  <b>This form can be used to find plots in VegBank.</b> 
+	    <td align="left" colspan="2" valign="center" class="instructions">
+		   This form can be used to find plots in VegBank. 
 
-		  <p>
+		 
 	      Each section allows querying of different types of attributes.  Leave
 	      fields blank to ignore these fields in the query.  Make sure you select whether the query
 	      should match ALL or ANY criteria you specify at the <a href="#typeOfQuery">end of this form</a>.
 
-		  <p>
+		
 	      For more information about this form, see the <a href="@help-for-plot-query-href@">help section</a>.
-		  <br/> &nbsp;
-
+		 
 	    </td>
 	  </tr>
 	  </tbody>
@@ -109,7 +106,7 @@ VEGBANK - Simple Plots Query
     <tr bgcolor="#FFFFCC">
       <td width="10%"></td>
       <td colspan="2">
-	<p><font face="Helvetica,Arial,Verdana" size="3"><b>Find Plots based on Location</b></font></p>
+	<h3>Find Plots based on Location</h3>
       </td>
     </tr>
 
@@ -122,16 +119,16 @@ VEGBANK - Simple Plots Query
 	<table border="0" width="100%" bgcolor="#DFE5FA">
 	  <tr>
 	    <td align="left" valign="top" width="5%" colspan="2">
-	      <font face="Helvetica,Arial,Verdana" size="3" color="#23238E"><b>Country, State:</b></font> 
+	      <h4>Country, State:</h4>
 	    </td>
 	  </tr>
 	  <tr>
 	    <td align="center" width="5%">
 	      <img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15"> 
 	    </td>
-	    <td class="item">
-	      <p>Please select the state/province and/or country in which the plot was sampled. <br />
-	      Note that you may select more than one value at a time.  To select multiple choices, hold down the ctrl key and then select each state/province/country you want to query.</p>
+	    <td class="instructions">
+	      Please select the state/province and/or country in which the plot was sampled. <br />
+	      Note that you may select more than one value at a time.  To select multiple choices, hold down the ctrl key and then select each state/province/country you want to query.
 	    </td>
 	  </tr>
 	</table>
@@ -140,8 +137,8 @@ VEGBANK - Simple Plots Query
 	<table>
 	  <tr>
 	    <td width="12%">&nbsp;</td>
-		<td>
-	      <span class="itemsmall"><b>Country</b></span><br/>
+		<td class="itemsmall">
+	      Country<br/>
 	      <html:select property="countries" size="6" multiple="true">
 		      <option value="ANY">--ANY--</option>
       		<option value="Canada">Canada</option>
@@ -152,8 +149,8 @@ VEGBANK - Simple Plots Query
 	      </html:select>
 	    </td>	 
 
-	    <td>
-	      <span class="itemsmall"><b>State</b></span><br/>
+	    <td class="itemsmall">
+	      State<br/>
 	      <html:select property="state" size="6" multiple="true">
 		<option value="ANY">--ANY--</option>
 
@@ -214,15 +211,14 @@ VEGBANK - Simple Plots Query
 
     <!-- Find Based on Plot Attributes -->
     <tr bgcolor="#FFFFCC" ><td width="10%"></td><td colspan="2">
-      <p><font face="Helvetica,Arial,Verdana" size="3"><b>Find Plots based on Plot Attributes</b></font></p></td>
+      <h3>Find Plots based on Plot Attributes</h3></td>
       <tr><td colspan="2"></td><td>
 	<!-- ELEVATION, slope, aspect -->
 	<table border="0" width="100%" bgcolor="#DFE5FA">
 
 	  <tr>
 	    <td align="left" valign="top" width="5%" colspan="2">
-	      <font face="Helvetica,Arial,Verdana" size="3" color="
-	      #23238E"><b>Ranges for Fields:</b></font> 
+	      <h4>Ranges for Fields:</h4> 
 	    </td>
 	  </tr>
 	  <tr>
@@ -230,9 +226,8 @@ VEGBANK - Simple Plots Query
 	      <img src="@image_server@icon_cat31.gif" alt="exclamation"
 	      width="15" height="15"> 
 	    </td>
-
-	    <td class="item"><p>
-	      Please enter the upper and/or lower limits for each field of interest.  Note that you may enter just an upper value or a lower value.  You also do not need to enter values for all fields.</p>
+	    <td class="instructions">
+	      Please enter the upper and/or lower limits for each field of interest.  Note that you may enter just an upper value or a lower value.  You also do not need to enter values for all fields.
 	    </td>
 	  </tr>
 	</table>
@@ -251,14 +246,14 @@ VEGBANK - Simple Plots Query
 	    <td>&nbsp;</td>
 	  </tr>
 	  <tr>
-	    <td><span class="itemsmall"><b>Elevation</b></span></td>
+	    <td>Elevation</td>
 	    <td>
 	      <html:text property="minElevation" size="20"/>
 	    </td>
 	    <td>
 	      <html:text property="maxElevation" size="20"/>
 	    </td>
-	    <td><span class="itemsmall">meters</span></td>
+	    <td class="units">meters</td>
 	    <td>
 	      <html:checkbox property="allowNullElevation" value="false"/>
 	    </td>
@@ -270,14 +265,14 @@ VEGBANK - Simple Plots Query
 	    <td>&nbsp;</td>
 	  </tr>
 	  <tr>
-	    <td><span class="itemsmall"><b>Slope Aspect</b></span></td>
+	    <td>Slope Aspect</td>
 	    <td>
 	      <html:text property="minSlopeAspect" size="20"/>
 	    </td>
 	    <td>
 	      <html:text property="maxSlopeAspect" size="20"/>
 	    </td>
-	    <td><span class="itemsmall">degrees</span></td>
+	    <td  class="units">degrees</td>
 	    <td>
 	      <input name="allowNullSlopeAspect" type="checkbox">
 	    </td>
@@ -289,14 +284,14 @@ VEGBANK - Simple Plots Query
 	    <td>&nbsp;</td>
 	  </tr>
 	  <tr>
-	    <td><span class="itemsmall"><b>Slope Gradient</b></span></td>
+	    <td>Slope Gradient</td>
 	    <td>
 	      <html:text property="minSlopeGradient" size="20"/>
 	    </td>
 	    <td>
 	      <html:text property="maxSlopeGradient" size="20"/>
 	    </td>
-	    <td><span class="itemsmall">degrees</span></td>
+	    <td  class="units">degrees</td>
 	    <td>
 	      <input name="allowNullSlopeGradient" type="checkbox">
 	    </td>
@@ -316,8 +311,7 @@ VEGBANK - Simple Plots Query
 	<table border="0" width="100%" bgcolor="#DFE5FA">
 	  <tr>
 	    <td align="left" valign="top" width="5%" colspan="2">
-	      <font face="Helvetica,Arial,Verdana" size="3" color="
-	      #23238E"><b>Picklist fields:</b></font> 
+	      <h4>Picklist fields:</h4> 
 	    </td>
 
 	  </tr>
@@ -326,8 +320,8 @@ VEGBANK - Simple Plots Query
 	      <img src="@image_server@icon_cat31.gif" alt="exclamation"
 	      width="15" height="15"> 
 	    </td>
-	    <td class="item"><p>
-	      Please select values for VegBank fields that are constrained to limited vocabulary.  You do not need to select values for all fields.  Select "--ANY--" to ignore the field in the query.</p>
+	    <td class="instructions">
+	      Please select values for VegBank fields that are constrained to limited vocabulary.  You do not need to select values for all fields.  Select "--ANY--" to ignore the field in the query.
 	    </td>
 	  </tr>
 
@@ -337,7 +331,7 @@ VEGBANK - Simple Plots Query
 	  <tr>
 	    <!-- picklist values to select -->               
 	    <td align="left" valign="top">
-	      <span class="itemsmall"><b>Rock Type</b></span><br/>
+	      Rock Type<br/>
 	      <html:select property="rockType" size="6" multiple="true">
 		<option value="ANY" selected>--ANY--</option>
 		<html:options property="rockTypes"/>
@@ -347,7 +341,7 @@ VEGBANK - Simple Plots Query
 	    </td>
 	    
 	    <td align="left" valign="top">
-	      <span class="itemsmall"><b>Surficial Deposits</b></span><br/>
+	      Surficial Deposits<br/>
 	      <html:select property="surficialDeposit" size="6" multiple="true">
 	        <option value="ANY" selected>--ANY--</option>
 		 <html:options property="surficialDeposits"/>
@@ -357,7 +351,7 @@ VEGBANK - Simple Plots Query
 	    </td>
 
 	    <td align="left" valign="top">
-	      <span class="itemsmall"><b>Hydrologic Regime</b></span><br />
+	      Hydrologic Regime<br />
 	      <html:select property="hydrologicRegime" size="6" multiple="true">
 	        <option value="ANY" selected>--ANY--</option>
 		<html:options property="hydrologicRegimes"/>
@@ -374,7 +368,7 @@ VEGBANK - Simple Plots Query
 
 	  <tr>
 	    <!-- picklist values to select -->               
-	    <td align="left" valign="top"><span class="itemsmall"><b>Topo Position</b></span><br />
+	    <td align="left" valign="top">Topo Position<br />
 	      <html:select property="topoPosition" size="6" multiple="true">
 		<option value="ANY" selected>--ANY--</option>                    
 		<html:options property="topoPositions"/>
@@ -383,7 +377,7 @@ VEGBANK - Simple Plots Query
 	      </html:select> 
 	    </td>
 	    <!-- This is an open list i.e. not supported yet -->
-	    <td align="left" valign="top"><span class="itemsmall"><b>Landform</b></span><br />
+	    <td align="left" valign="top">Landform<br />
 	      <html:select property="landForm" size="6" multiple="true">
 		<option value="ANY" selected>--ANY--</option>                    
 
@@ -405,7 +399,7 @@ VEGBANK - Simple Plots Query
     <tr bgcolor="#FFFFCC" >
       <td width="10%"></td>
       <td colspan="2">
-	<p><font face="Helvetica,Arial,Verdana" size="3"><b>Find Plots based on Sampling Methods</b></font></p>
+	<h3>Find Plots based on Sampling Methods</h3>
       </td>
       <tr>
 	<td colspan="2"></td>
@@ -415,8 +409,7 @@ VEGBANK - Simple Plots Query
 	<table border="0" width="100%" bgcolor="#DFE5FA">
 	  <tr>
 	    <td align="left" valign="top" width="5%" colspan="2">
-	      <font face="Helvetica,Arial,Verdana" size="3" color="
-	      #23238E"><b>Plot Date / Size:</b></font> 
+	      <h4>Plot Date / Size:</h4> 
 	    </td>
 	  </tr>
 
@@ -425,19 +418,19 @@ VEGBANK - Simple Plots Query
 	      <img src="@image_server@icon_cat31.gif" alt="exclamation"
 	      width="15" height="15"> 
 	    </td>
-	    <td class="item"><p>
-	      Enter date ranges or plot size ranges that apply to plots of interest.</p>
+	    <td class="instructions">
+	      Enter date ranges or plot size ranges that apply to plots of interest.
 	    </td>
 	  </tr>
 	</table>
 
 	<table border="0">
 	  <tr bgcolor="#DDDDDD">
-	    <th><p><span class="thsmall">Field</span></p></th>
-	    <th><p><span class="thsmall">Minimum</span></p></th>
-	    <th><p><span class="thsmall">Maximum</span></p></th>
-	    <th><p><span class="thsmall">Units</span></p></th>
-	    <th><p><span class="thsmall">Include Nulls?</span></p></th>
+	    <th>Field</th>
+	    <th>Minimum</th>
+	    <th>Maximum</th>
+	    <th>Units</th>
+	    <th>Include Nulls?</th>
 	  </tr>
 	  <tr><!-- date --> 
 	    <td>&nbsp;</td>
@@ -447,7 +440,7 @@ VEGBANK - Simple Plots Query
 	    <td>&nbsp;</td>
 	  </tr>
 	  <tr>
-	    <td><span class="itemsmall"><b>Date Sampled</b></span></td>
+	    <td>Date Sampled</td>
 
 	    <td>
 	      <html:text property="minObsStartDate" size="20"/>
@@ -455,7 +448,7 @@ VEGBANK - Simple Plots Query
 	    <td>
 	      <html:text property="maxObsEndDate" size="20"/>
 	    </td>
-	    <td><span class="itemsmall">date</span></td>
+	    <td class="units">date</td>
 	    <td>
 	      <html:checkbox property="allowNullObsDate"/>
 	    </td>
@@ -468,7 +461,7 @@ VEGBANK - Simple Plots Query
 	    <td>&nbsp;</td>
 	  </tr>
 	  <tr>
-	    <td><span class="itemsmall"><b>Date Entered into VegBank</b></span></td>
+	    <td>Date Entered into VegBank</td>
 	    <td>
 	      <html:text property="minDateEntered" size="20"/>
 	    </td>
@@ -476,7 +469,7 @@ VEGBANK - Simple Plots Query
 	      <html:text property="maxDateEntered" size="20"/>
 	    </td>
 
-	    <td><span class="itemsmall">date</span></td>
+	    <td class="units">date</td>
 	    <td><span class="itemsmall">(required)</span>
 	  </tr>
 	  <tr><!-- plot size -->
@@ -487,14 +480,14 @@ VEGBANK - Simple Plots Query
 	    <td>&nbsp;</td>
 	  </tr>
 	  <tr>
-	    <td><span class="itemsmall"><b>Plot Size</b></span></td>
+	    <td>Plot Size</td>
 	    <td>
 	      <html:text property="minPlotArea" size="20"/>
 	    </td>
 	    <td>
 	      <html:text property="maxPlotArea" size="20"/>
 	    </td>
-	    <td><span class="itemsmall">square meters</span></td>
+	    <td class="units">square meters</td>
 
 	    <td>
 	      <html:checkbox property="allowNullPlotArea"/>
@@ -508,7 +501,7 @@ VEGBANK - Simple Plots Query
 	<table border="0" width="100%" bgcolor="#DFE5FA">
 	  <tr>
 	    <td align="left" valign="top" width="5%" colspan="2">
-	      <font face="Helvetica,Arial,Verdana" size="3" color="#23238E"><b>Methods<!-- and People-->:</b></font> 
+	      <h4>Methods<!-- and People-->:</h4> 
 	    </td>
 
 	  </tr>
@@ -517,10 +510,10 @@ VEGBANK - Simple Plots Query
 	      <img src="@image_server@icon_cat31.gif" alt="exclamation"
 	      width="15" height="15"> 
 	    </td>
-	    <td class="item"><p>
+	    <td class="instructions">
 	      Enter method(s) <!--or people--> that apply to plots of interest.
 	      <!--Please enter a person's name in the format: "SurName, GivenName(s)".  Example: "Jones, Pat" <br />-->
-	      <font class="item" color="red"><b>Use % for the wildcard.</b></font></p>
+	      <font color="red"><b>Use % for the wildcard.</b>
 	    </td>
 
 	  </tr>
@@ -528,7 +521,7 @@ VEGBANK - Simple Plots Query
 
 	<table>
 	  <tr>
-	    <td><span class="itemsmall"><b>Cover Method Name:</b></span></td>
+	    <td>Cover Method Name:</td>
 	    <td>
 	      	<html:select property="coverMethodType" size="6" multiple="true">
 		        <option value="ANY" selected>--ANY--</option>
@@ -540,7 +533,7 @@ VEGBANK - Simple Plots Query
 	    </tr>
 	    <tr>
 
-	      <td><span class="itemsmall"><b>Stratum Method Name:</b></span></td>
+	      <td>Stratum Method Name:</td>
 	      <td>
 	      	<html:select property="stratumMethodName" size="6" multiple="true">
 		        <option value="ANY" selected>--ANY--</option>
@@ -570,7 +563,7 @@ VEGBANK - Simple Plots Query
 	    </tr>
 	    -->
 	    <tr>
-	      <td><span class="itemsmall"><b>Project Name:</b></span></td>
+	      <td>Project Name:</td>
 	      <td>
 	      	<html:select property="projectName" size="6" multiple="true">
 		        <option value="ANY" selected>--ANY--</option>
@@ -593,15 +586,14 @@ VEGBANK - Simple Plots Query
       
 
       <tr bgcolor="#FFFFCC" ><td width="10%"></td><td colspan="2">
-	<p><font face="Helvetica,Arial,Verdana" size="3"><b>Find Plots based on Vegetation</b></font></p></td>
+	<h3>Find Plots based on Vegetation</h3></td>
 
 	<tr><td colspan="2"></td><td>
 	  <!-- PLANT TAXON -->
 	  <table border="0" width="100%" bgcolor="#DFE5FA">
 	    <tr>
 	      <td align="left" valign="top" width="5%" colspan="2">
-		<font face="Helvetica,Arial,Verdana" size="3" color="
-		#23238E"><b>Plant Taxa:</b></font> 
+		<h4>Plant Taxa:</h4> 
 	      </td>
 	    </tr>
 	    <tr>
@@ -610,56 +602,27 @@ VEGBANK - Simple Plots Query
 		<img src="@image_server@icon_cat31.gif" alt="exclamation"
 		width="15" height="15"> 
 	      </td>
-	      <td class="item"><p>
+	      <td class="instructions">
 		Please enter names for plants that you wish to query.  You may also include
 		criteria about other attributes that apply to that plant.  Plots will be returned that match ALL criteria for a row. 
 		Plots will be returned that match all rows, or any row, based on the settings
 		for <a href="#typeOfQuery">"Type of Query" setting at the end of this form.</a>
-		<br />                <font class="item" color="red"><b>Use % for the wildcard.</b></font></p>
+		<br />                <font color="red"><b>Use % for the wildcard.</b>
 	      </td>
 	    </tr>
 
 	    <tr>
 	      <td>
 	      </td>
-	      <td class="itemsmall">
-		<!--      <b>index of taxon names currently in the DB - by scientific	name:</b> <br>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=A%25">A</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=B%25">B</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=C%25">C</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=D%25">D</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=E%25">E</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=F%25">F</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=G%25">G</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=H%25">H</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=I%25">I</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=J%25">J</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=K%25">K</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=L%25">L</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=M%25">M</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=N%25">N</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=O%25">O</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=P%25">P</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=Q%25">Q</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=R%25">R</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=S%25">S</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=T%25">T</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=U%25">U</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=V%25">V</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=W%25">W</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=X%25">X</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=Y%25">Y</a><b>&middot;</b>
-      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=Z%25">Z</a><b>&middot;</b>-->
-      </td>
     </tr>
   </table>
 
 <table border="0" cellspacing="1" cellpadding="1">
   <tr bgcolor="#DDDDDD">
 
-    <th rowspan="2"><p><span class="thsmall">Row</span></p></th>
-    <th rowspan="2"><p><span  class="thsmall">Plant Name <a target="_blank" href="@forms_link@PlantQuery.jsp">search</a></span></p></th>
-    <th colspan="2"><p><span class="thsmall">Cover (%)</span></p></th>
+    <th rowspan="2">Row</th>
+    <th rowspan="2">Plant Name <a target="_blank" href="@forms_link@PlantQuery.jsp">search</a></th>
+    <th colspan="2">Cover (%)</th>
 
     <!-- no basal area <th colspan="2"><p><span class="thsmall">Basal Area (m2/ha)</span></p></th> -->
     <!-- stems not wired in yet
@@ -673,8 +636,8 @@ VEGBANK - Simple Plots Query
   <tr bgcolor="#DDDDDD">
 
 
-    <th><p><span class="thsmall">Min</span></p></th>
-    <th><p><span class="thsmall">Max</span></p></th>
+    <th>Min</th>
+    <th>Max</th>
     <!-- no basal area <th><p><span class="thsmall">Min</span></p></th>
     <th><p><span class="thsmall">Max</span></p></th> -->
     <!-- stems not wired in yet
@@ -708,7 +671,7 @@ VEGBANK - Simple Plots Query
   %>
 
 </table>
-<hr size=".5"> 
+<hr /> 
 <!-- richness-->
 <!-- TODO:
 <table border="0" width="100%" bgcolor="#DFE5FA">
@@ -945,15 +908,14 @@ VEGBANK - Simple Plots Query
 
       <!-- FIND USING COMMUNITIES -->
       <tr bgcolor="#FFFFCC" ><td width="10%"></td><td colspan="2">
-	<p><font face="Helvetica,Arial,Verdana" size="3"><b>Find Plots based on Community Classfication</b></font></p></td>
+	<h3>Find Plots based on Community Classfication</h3></td>
 	<tr><td colspan="2"></td><td>
     
 	  <!-- VEG COMMUNITY -->
 	  <table border="0" width="100%" bgcolor="#DFE5FA">
 	    <tr>
 	      <td align="left" valign="top" width="5%" colspan="2">
-		<font face="Helvetica,Arial,Verdana" size="3" color="
-		#23238E"><b>Veg Community:</b></font> 
+		<h4>Vegetation Community:</h4> 
 	      </td>
 
 	    </tr>
@@ -962,33 +924,32 @@ VEGBANK - Simple Plots Query
 		<img src="@image_server@icon_cat31.gif" alt="exclamation"
 		width="15" height="15"> 
 	      </td>
-	      <td class="item"><p>
+	      <td class="instructions">
 		Use this section to query for plots that have been assigned to a community based on the criteria you specify here.  
 		This section functions much like the plant section above.
 		Plots will be returned that match ALL criteria for a row.  Plots will be returned that match all rows, or any row, based on the settings
 		for <a href="#typeOfQuery">"Type of Query" setting at the end of this form.</a>
-		<br /><font class="item" color="red"><b>Use % for the wildcard.</b></font>
+		<br /><font color="red"><b>Use % for the wildcard.</b></font>
 
-		</p>
 	      </td>
 	    </tr>
 	  </table>
 	  <table border="0" cellspacing="1" cellpadding="1">
 	    <tr bgcolor="#DDDDDD">
-	      <th rowspan="2"><p><span class="thsmall">Row</span></p></th>
-	      <th rowspan="2"><p><span class="thsmall">Community Name <a target="_blank" href="@forms_link@community-query.html">search</a></span></p></th>
+	      <th rowspan="2">Row</th>
+	      <th rowspan="2">Community Name <a target="_blank" href="@forms_link@community-query.html">search</a></th>
 	      <!-- TODO:
 	      <th rowspan="2"><p><span class="thsmall">Fit</span></p></th>
 	      <th rowspan="2"><p><span class="thsmall">Confidence</span></p></th>
 	      -->
-	      <th colspan="2"><p><span class="thsmall">Date Classified</span></p></th>
+	      <th colspan="2">Date Classified</th>
 	      <!--
 	      <th rowspan="2"><p><span class="thsmall">Name of Person Classifying</span></p></th>
 	      -->
 	    </tr>
 	    <tr bgcolor="#DDDDDD">
-	      <th><p><span class="thsmall">Min</span></p></th>
-	      <th><p><span class="thsmall">Max</span></p></th>
+	      <th>Min</th>
+	      <th>Max</th>
 	    </tr>
 	    <tr>
 
@@ -1036,13 +997,12 @@ VEGBANK - Simple Plots Query
 
 	    <!-- SUBMIT THE FORM -->
 	    <tr bgcolor="#FFFFCC" ><td width="10%"></td><td colspan="2">
-	      <p><font face="Helvetica,Arial,Verdana" size="3"><b><a name="typeOfQuery" > </a>Submit Query to VegBank</b></font></p></td>
+	      <h3><a name="typeOfQuery" > </a>Submit Query to VegBank</h3></td>
 	      <tr><td colspan="2"></td><td>
 		<table border="0" width="100%" bgcolor="#DFE5FA">
 		  <tr>
 		    <td align="left" valign="top" width="5%" colspan="2">
-		      <font face="Helvetica,Arial,Verdana" size="3" color="
-		      #23238E"><b>Type of Query:</b></font> 
+		      <h4>Type of Query:</h4> 
 		    </td>
 		  </tr>
 		  
@@ -1051,11 +1011,11 @@ VEGBANK - Simple Plots Query
 		      <img src="@image_server@icon_cat31.gif" alt="exclamation"
 		      width="15" height="15"> 
 		    </td>
-		    <td class="item"><p>
+		    <td class="instructions">
 		      Plots can be selected that <b>match all</b> the above criteria (AND)
 		      or that <b>match any</b> of the above criteria (OR). <br />
 
-		      <!-- For more complicated queries that allow a combination of AND and OR queries, see our <a href="nested-plot-query.html">nested query page</a>.--></p>
+		      <!-- For more complicated queries that allow a combination of AND and OR queries, see our <a href="nested-plot-query.html">nested query page</a>.-->
 		    </td>
 		  </tr>
 		</table>
