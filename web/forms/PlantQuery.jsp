@@ -22,7 +22,7 @@ function setDate() {
 	date = document.queryform.ebDate.value;
 	year = document.queryform.ebYear.value;
 
-	document.queryform.xwhereParams_date_0.value = null;
+	document.queryform.xwhereParams_date_0.value = "";
 
 	if (month != null && date != null && year != null &&
 			month != "" && date != "" && year != "") {
