@@ -1,0 +1,35 @@
+rmiserver = false # ip address if have rmiserver 
+# I am mounting my home dir on the rmiserver so it easy to make updates 
+# Great for development -- production probably not
+rmiserver.home.dir = /home/farrell/muse/rmiserver/beta
+java1.4.home.dir = /usr/java/j2sdk1.4.1
+servlet_lib = /usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/
+
+
+# Database Connection Settings
+authenticationServletHost = localhost
+communityRequestServletHost = localhost
+plantRequestServletHost = localhost
+geoCoordRequestServletHost = localhost
+databaseType = postgresql
+databaseUser = [The database user name] 
+databaseUserPassword = [ the database user's password ]
+databasePort = 1521
+hostname = localhost
+databaseDriverType = thin
+databaseDriverClass = org.postgresql.Driver
+databaseConnectString = jdbc:postgresql://localhost/vegbank
+databaseName = vegbank
+insert.minConnections = 1
+insert.maxConnections = 3
+query.minConnections = 1
+query.maxConnections = 3
+maxConnectionUsers = 100
+resetTime = 0.01
+logFile = connectionPool.log
+
+# Vegbank Directories
+vegbank.home.dir=/usr/vegbank
+
+# XML Schema
+vegbankSchemaName=vegbank-data-ver1.0.1.xsd
