@@ -9,7 +9,9 @@ CREATE TABLE commUsage
 (
     COMMUSAGE_ID serial,
     COMMNAME_ID integer NOT NULL,
+    commName varchar (500) ,
     COMMCONCEPT_ID integer NOT NULL,
+    ceglCode varchar (22),
     usageStart timestamp ,
     usageStop timestamp,
     commNameStatus varchar (22) ,
@@ -30,6 +32,7 @@ CREATE TABLE commStatus
     COMMCONCEPT_ID integer NOT NULL,
     COMMREFERENCE_ID integer,
     commConceptStatus varchar (22) NOT NULL,
+    commParent integer, -- the concept id for the parent
     startDate timestamp NOT NULL,
     stopDate timestamp,
     partyComments varchar (500),
@@ -121,7 +124,7 @@ CREATE TABLE commConcept
     ceglCode varchar (22),
     commLevel varchar (22),
     commParent integer,
-		conceptDescription varchar (200),
+		conceptDescription varchar (500),
     PRIMARY KEY(COMMCONCEPT_ID)
 );
 

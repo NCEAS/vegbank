@@ -29,26 +29,14 @@ CREATE TABLE commSummary (
 -- LOAD THE SUMMARY TABLE WITH APPROXIMATES
 insert into commSummary (
 	commName, 
-	dateEntered, 
 	classCode, 
-	classLevel,
-	commDescription, 
-	conceptOriginDate, 
-	conceptUpdateDate, 
-	commConcept_id,
-	parentCommConceptId)
-	select 
-	commName.commName, 
-	commName.dateEntered, 
-	commConcept.ceglCode, 
-	commConcept.commLevel, 
-	commConcept.conceptDescription,
-	'01-JAN-2001', 
-	'01-JAN-2001',
-	commConcept.commConcept_id,
-	commConcept.commParent
-	from commName, commConcept
-	where commName.commname_id = commConcept.commname_id;
+	commConcept_id
+	)
+		select 
+		commUsage.commName, 
+		commUsage.ceglCode, 
+		commUsage.commConcept_id
+		from commUsage where commUsage.commusage_id > 0;
 
 
 --CREATE INDEXES
@@ -56,6 +44,24 @@ create index commSummary_commconcept_id on commSummary  (commconcept_id);
 --create index commPartyConcept_commconcept_id on commSummary  (commconcept_id);
 create index commStatus_commConcept_id on commStatus  (commConcept_id);
 --create index commStatus_commConceptStatus_id on commStatus  (commConceptStatus);
+
+--UPDATE THE LEVEL IN THE HEIRACRCY
+update commSummary
+set classlevel =
+(select commlevel from commconcept
+where  commsummary.commconcept_id = commconcept.commconcept_id  );
+
+--UPDATE THE DESCRIPTIONS
+update commSummary
+set commdescription =
+(select conceptdescription from commconcept
+where  commsummary.commconcept_id = commconcept.commconcept_id  );
+
+--UPDATE THE ORIGIN DATES
+update commSummary
+set conceptOriginDate  =
+(select startdate from commstatus
+where  commsummary.commconcept_id = commstatus.commconcept_id  );
 
 
 --UPDATE THE STATUS FOR THE CONCEPT
@@ -66,6 +72,13 @@ where  commsummary.commconcept_id = commStatus.commconcept_id  );
 
 
 --UPDATE THE PARENT CONCEPT NAME, CODE and DESCRIPTION
+-- get the parent concept id's from status table
+update commSummary 
+set parentcommconceptid  = 
+(select commparent from commstatus 
+where commstatus.commconcept_id = commsummary.commconcept_id );
+
+-- get the name etc
 update commSummary 
 set  parentCommName = 
 (select conceptdescription from commconcept 
