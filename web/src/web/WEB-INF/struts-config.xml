@@ -29,6 +29,10 @@
 			<form-property name="action"
 			               type="java.lang.String"/>
 		</form-bean>
+		<form-bean name="CommQueryForm"
+		           type="org.vegbank.ui.struts.CommQueryForm">
+		</form-bean>
+
 		<form-bean name="DisplayEntityForm"
 		           type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="accessionCode"
@@ -92,7 +96,8 @@
 		           type="org.vegbank.ui.struts.PlantQueryForm">
 		</form-bean>
 		<form-bean name="PlotQueryForm"
-		           type="org.vegbank.ui.struts.PlotQueryForm"/>
+		           type="org.vegbank.ui.struts.PlotQueryForm">
+    		</form-bean>
 		<form-bean name="RegisterNewUserForm"
 		           type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="usr"
@@ -168,6 +173,8 @@
 		         path="/forms/MainMenu.jsp"/>
 		<forward name="PlantQuery"
 		         path="/forms/PlantQuery.jsp"/>
+		<forward name="CommQuery"
+		         path="/forms/CommQuery.jsp"/>
 		<forward name="PlotQuery"
 		         path="/forms/plot-query.jsp"/>
 		<forward name="RegisterNewUser"
@@ -232,6 +239,15 @@
 			              value="org.vegbank.ui.struts.Authenticate"/>
 			<set-property property="reqRoles"
 			              value="reg"/>
+		</action>
+		<action path="/CommQuery"
+		        type="org.vegbank.ui.struts.QueryAction"
+		        name="CommQueryForm"
+		        scope="request"
+		        validate="true"
+		        input="CommQuery">
+			<forward name="success"
+			         path="/forms/DisplayQueryResults.jsp"/>
 		</action>
 		<action path="/DownLoad"
 		        type="org.vegbank.ui.struts.DownLoadAction"
@@ -303,13 +319,13 @@
 			         redirect="true"/>
 		</action>
 		<action path="/PlantQuery"
-		        type="org.vegbank.ui.struts.PlantQueryAction"
+		        type="org.vegbank.ui.struts.QueryAction"
 		        name="PlantQueryForm"
 		        scope="request"
 		        validate="true"
 		        input="PlantQuery">
 			<forward name="success"
-			         path="/forms/DisplayPlantQueryResults.jsp"/>
+			         path="/forms/DisplayQueryResults.jsp"/>
 		</action>
 		<action path="/PlotQuery"
 		        type="org.vegbank.ui.struts.PlotQueryAction"

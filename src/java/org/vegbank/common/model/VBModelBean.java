@@ -8,8 +8,8 @@ import java.util.LinkedHashMap;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:39:58 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-03-07 17:55:28 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
  */
 
+import org.apache.commons.betwixt.XMLUtils;
  
 /**
  * @author farrell
@@ -101,12 +102,15 @@ public abstract class VBModelBean
 	 */
 	public static String escapeXML(String str)
 	{
-	  str = str.replaceAll("&","&amp;");
-	  str = str.replaceAll(">","&lt;");
-	  str = str.replaceAll(">","&gt;");
-	  str = str.replaceAll("\"","&quot;");
-	  str = str.replaceAll("'","&apos;");
-	  return str;
+		return XMLUtils.escapeBodyValue(str);
+		// The above method may be a more efficient way
+		// of doing this ( loops over chars not Regex )
+//	  str = str.replaceAll("&","&amp;");
+//	  str = str.replaceAll(">","&lt;");
+//	  str = str.replaceAll(">","&gt;");
+//	  str = str.replaceAll("\"","&quot;");
+//	  str = str.replaceAll("'","&apos;");
+//	  return str;
 	}
 
 }

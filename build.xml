@@ -8,8 +8,8 @@
   *  % echo "[build.context]" | ant [target]
   *
   *     '$Author: farrell $'
-  *     '$Date: 2004-03-05 22:20:58 $'
-  *     '$Revision: 1.38 $'
+  *     '$Date: 2004-03-07 17:55:27 $'
+  *     '$Revision: 1.39 $'
 --> 
 <project name="Vegbank" default="jar" basedir=".">
 
@@ -153,11 +153,11 @@
 		--> 
 		<jar destfile="${build.lib.dir}/vegbank.jar">
 			<fileset dir="${build.classes.dir}" casesensitive="yes">
-				<include name="org/vegbank/**/*.class"/>
+				<include name="**/*.class"/>
 				<include name="**/*.properties"/>
       			</fileset>
 			<fileset dir="${build.java.src.dir}" casesensitive="yes">
-				<include name="org/vegbank/**/*.java"/>
+				<include name="**/*.java"/>
       			</fileset>
     	</jar> 
 
@@ -359,7 +359,7 @@
     <echo>${java.src.dir} to ${build.java.src.dir}</echo>
     <copy todir="${build.java.src.dir}">
       <fileset dir="${java.src.dir}">
-        <include name="org/**/*java"/>
+        <include name="**/*java"/>
       </fileset>
     </copy>
 
@@ -431,12 +431,41 @@
       </fileset>
     </copy>
 
-
+    <!-- Make the scripts executable -->
     <chmod perm="a+x">
       <fileset dir="${vegbank.home.dir}/bin">
          <include name="**/*"/>
       </fileset>
     </chmod>
+
+   <!-- For sanity preservation -->
+   <exec executable="chmod" >
+     <arg line="-R g+wr ${vegbank.home.dir} ${env.TOMCAT_HOME}/"/>
+   </exec>
+   <exec executable="chown" >
+     <arg line="-R :vegbank ${vegbank.home.dir} ${env.TOMCAT_HOME}/"/>
+   </exec>
+     <!-- Need to do the apache dir too -->
+   <!-- The following are only supported by apache ant 1.6.0 and higher, comment out for now
+   <chgrp group="vegbank"> 
+     <fileset dir="${vegbank.home.dir}">
+        <include name="**/*"/>
+     </fileset>
+     <fileset dir="${env.TOMCAT_HOME}/">
+        <include name="**/*"/>
+     </fileset>
+   </chgrp>
+
+  <chmod perm="g+rw">
+     <fileset dir="${vegbank.home.dir}">
+        <include name="**/*"/>
+     </fileset>
+     <fileset dir="${env.TOMCAT_HOME}/">
+        <include name="**/*"/>
+     </fileset>
+   </chmod>
+   -->
+
   </target> 
 
   <!-- ================================================================= -->

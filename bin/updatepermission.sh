@@ -3,8 +3,8 @@
 # This script will update the permissions of a user from the 
 # vegbank user profile database 
 #	 '$Author: farrell $'
-#  '$Date: 2003-07-15 20:29:00 $'
-#  '$Revision: 1.2 $'
+#  '$Date: 2004-03-07 17:55:27 $'
+#  '$Revision: 1.3 $'
 
 
 if [ "$#" -ne 3 ]
@@ -21,7 +21,7 @@ EMAIL=$1
 HOST=$2
 LEVEL=$3
 
-source /usr/vegbank/bin/includes/setupCLASSPATH
+source @vegbank.home.dir@/bin/includes/setupCLASSPATH
 
 java  -cp $CLASSPATH org.vegbank.common.utility.DatabaseUtility $ACTION $EMAIL $HOST $LEVEL
  

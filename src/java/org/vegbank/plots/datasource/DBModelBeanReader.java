@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-05 22:26:12 $'
- *	'$Revision: 1.17 $'
+ *	'$Date: 2004-03-07 17:55:28 $'
+ *	'$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,16 +43,29 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.Constants;
-import org.vegbank.common.model.*;
+import org.vegbank.common.model.Covermethod;
+import org.vegbank.common.model.Observation;
+import org.vegbank.common.model.Observationsynonym;
+import org.vegbank.common.model.Party;
+import org.vegbank.common.model.Partymember;
+import org.vegbank.common.model.Plantconcept;
+import org.vegbank.common.model.Plot;
+import org.vegbank.common.model.Project;
+import org.vegbank.common.model.Projectcontributor;
+import org.vegbank.common.model.Stratum;
+import org.vegbank.common.model.Stratummethod;
+import org.vegbank.common.model.Taxoninterpretation;
+import org.vegbank.common.model.Taxonobservation;
+import org.vegbank.common.model.VBModelBean;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
-import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.VBObjectUtils;
 import org.vegbank.common.utility.XMLUtil;
-
-import org.apache.commons.beanutils.BeanUtils;
 
 /**
  * Reads an <code>VBModelBean</code> from the Vegbank Database and populates
@@ -63,6 +76,12 @@ import org.apache.commons.beanutils.BeanUtils;
 
 public class DBModelBeanReader
 {
+	
+	/**
+	 * Commons Logging instance.
+	 */
+	protected static Log log = LogFactory.getLog(DBModelBeanReader.class);
+
 	private DBConnection con = null;
 	private boolean connectionCheckedOut = false;
 	private Vector ignoreObjects = new Vector();
@@ -173,7 +192,7 @@ public class DBModelBeanReader
 	 */ 
 	public VBModelBean getVBModelBean(String accessionCode) throws Exception
 	{
-		LogUtility.log("DBModelBeanReader: Got request for: '" + accessionCode + "'");
+		log.debug("Got request for: '" + accessionCode + "'");
 		//TODO: Am I allowed to search cache --- revisions !!!
 		// Search cache first
 		VBModelBean bean = 
@@ -187,7 +206,7 @@ public class DBModelBeanReader
 		HashMap parsedAC = Utility.parseAccessionCode(accessionCode);
 		String entityCode = (String) parsedAC.get("ENTITYCODE");
 		
-		LogUtility.log("Got an entity code of " + entityCode + " from " + accessionCode, LogUtility.DEBUG);
+		log.debug("Got an entity code of " + entityCode + " from " + accessionCode);
 		
 		// TODO: Get the entity name from AccessionGen & co when stable
 		//AccessionGen ag = new AccessionGen();
@@ -347,7 +366,7 @@ public class DBModelBeanReader
 			}
 			catch (Exception e)
 			{
-				LogUtility.log("BDModelBeanReader: Error > " + e.getMessage(), e);
+				log.error("Error > " + e.getMessage(), e);
 			}
 		}
 	}
@@ -405,7 +424,7 @@ public class DBModelBeanReader
 		} 
 		catch (SQLException e)
 		{
-			LogUtility.log("SQL causing error: '" + SQLQuery + "'", LogUtility.ERROR);
+			log.error("SQL causing error: '" + SQLQuery + "'");
 			throw e;
 		}
 		
@@ -502,7 +521,7 @@ public class DBModelBeanReader
 		}
 		
 		String sqlStatement = this.getSQLSelectStatement(fieldNames, className, PKName, PKValue);
-		LogUtility.log("BDModelBeanReader: " + sqlStatement, LogUtility.DEBUG);
+		log.debug("SQL: " + sqlStatement);
 		
 		try
 		{
@@ -545,7 +564,7 @@ public class DBModelBeanReader
 						VBModelBean newObject = (VBModelBean) Utility.createObject(fullyQualifiedClassName);
 						try
 						{
-							LogUtility.log("DBModelBeanReader: Getting "  + propertyName + " for " + className, LogUtility.DEBUG);
+							log.debug("DBModelBeanReader: Getting "  + propertyName + " for " + className);
 							
 							fieldName = Utility.getPKNameFromFKName(fieldName);
 							
@@ -562,7 +581,7 @@ public class DBModelBeanReader
 							// Not a real integer, assumming its a null.
 							if (value != null)
 							{
-								LogUtility.log("DBModelBeanReader: Not an Integer: " + value, e1 );
+								log.error("Not an Integer: " + value, e1 );
 							}
 						}
 					}
@@ -585,14 +604,14 @@ public class DBModelBeanReader
 			else
 			{
 				// No observation found
-				LogUtility.log("DBModelBeanReader: Did not find any results for " + PKName  + " = " + PKValue, LogUtility.DEBUG);
+				log.info("DBModelBeanReader: Did not find any results for " + PKName  + " = " + PKValue);
 			}
 			rs.close();
 	
 		}
 		catch (Exception e)
 		{
-			LogUtility.log("DBModelBeanReader: Error reading object from DB: " + e.getMessage(), e);
+			log.error("Error reading object from DB: " + e.getMessage(), e);
 		}
 	}
 	
@@ -710,7 +729,7 @@ public class DBModelBeanReader
 	 *
 	 */
 	public static class ModelBeanCache
-	{
+	{	
 		/**
 		 * Vector of vectors to cache Objects into memory, each element of the memoryCache
 		 * has a vector that contains an accessionCode (elementAt(0)) and the Object (elementAt(1))
@@ -731,7 +750,7 @@ public class DBModelBeanReader
 		 * The directory to  cache into.
 		 * FIXME: Make a configurable property
 		 */
-		private static final File CACHE_DIR = new File("/usr/vegbank/cache");
+		private static final File CACHE_DIR = new File(Utility.VB_HOME_DIR + "/cache");
 		
 		/**
 		 * The maximum number of entries in the disk cache,
@@ -759,7 +778,7 @@ public class DBModelBeanReader
 		{
 			if (null == instance)
 			{
-				LogUtility.log("ModelBeanCache: Creating Instance" , LogUtility.DEBUG);
+				log.info("Creating Instance");
 				instance = new ModelBeanCache();
 			}
 			return instance;
@@ -771,9 +790,9 @@ public class DBModelBeanReader
 		 */
 		private void registerDiskCachedBeans()
 		{	
-			if ( CACHE_DIR == null )
+			if ( CACHE_DIR == null || ! CACHE_DIR.canRead())
 			{
-				LogUtility.log("ModelBeanCache: Disk cache dir is absent, " + CACHE_DIR, LogUtility.ERROR);
+				log.error("Disk cache dir is absent, " + CACHE_DIR);
 			}
 			else
 			{
@@ -786,16 +805,16 @@ public class DBModelBeanReader
 				{
 					for ( int i=0; i<cachedFiles.length ; i++ )
 					{
+						log.info("Reading all disk cached bean: " + cachedFiles.length+" files"); 
 						String  fileName = cachedFiles[i].getName();
 						if ( fileName.startsWith( Utility.getAccessionPrefix() + ".") )
 						{
-							LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName, LogUtility.DEBUG);
 							// Add all the names to diskCacheKeys
 							diskCacheKeys.add( fileName );
 						}
 						else 
 						{
-							LogUtility.log("ModelBeanCache: Not adding to Disk Cache: " + fileName, LogUtility.DEBUG);
+							log.warn("ModelBeanCache: Not adding to Disk Cache: " + fileName);
 						}
 					}
 				}
@@ -812,20 +831,20 @@ public class DBModelBeanReader
 		{
 			if ( memoryCache.size() >= MAX_MEM_CACHE_SIZE )
 			{
-				LogUtility.log(
-					"ModelBeanCache: Memory Cache Full: "
+				log.info(
+					"Memory Cache Full: "
 						+ MAX_MEM_CACHE_SIZE
-						+ " files.", LogUtility.INFO);
+						+ " files.");
 				
 				// Remove item from memory cache
 				memoryCache.removeElementAt(0);
-				LogUtility.log("ModelBeanCache: Removed oldest bean from cache Memory Cache", LogUtility.DEBUG);
+				log.debug("ModelBeanCache: Removed oldest bean from cache Memory Cache");
 			}
 			Vector newElement = new Vector ();
 			newElement.add(accessionCode);
 			newElement.add(bean);
 			memoryCache.add( newElement );
-			LogUtility.log("ModelBeanCache: Added to Memory Cache: " + accessionCode, LogUtility.DEBUG);
+			log.info("ModelBeanCache: Added to Memory Cache: " + accessionCode);
 			
 			// Also add to diskCache
 			addToDiskCache(accessionCode, bean);
@@ -842,9 +861,9 @@ public class DBModelBeanReader
 		 */
 		private void addToDiskCache(String fileName, VBModelBean beanToSave)
 		{
-			if ( CACHE_DIR == null )
+			if ( CACHE_DIR == null || !CACHE_DIR.canWrite() || !CACHE_DIR.canRead() )
 			{
-				LogUtility.log("ModelBeanCache: Disk cache dir is absent, " + CACHE_DIR, LogUtility.ERROR);
+				log.error("Problem with Disk cache dir, not able to interact correctly with it, " + CACHE_DIR);
 			}
 			else
 			{
@@ -852,26 +871,23 @@ public class DBModelBeanReader
 				{
 					if ( diskCacheKeys.size() >=  MAX_DISK_CACHE_SIZE )
 					{
-						LogUtility.log(
-							"ModelBeanCache: Disk Cache Full: "
-								+ MAX_DISK_CACHE_SIZE
-								+ " files.", LogUtility.WARN);
+						log.warn("Disk Cache Full: "+MAX_DISK_CACHE_SIZE+" files.");
 							
 						// Need to remove first Object from disk
 						String fileNameToAxe = (String) diskCacheKeys.firstElement();
 						File fileToAxe = new File(CACHE_DIR, fileNameToAxe);
 						fileToAxe.delete();
-						LogUtility.log("ModelBeanCache: Deleted from Disk Cache: " + fileNameToAxe, LogUtility.DEBUG);
+						log.info("ModelBeanCache: Deleted from Disk Cache: " + fileNameToAxe);
 					}
 					saveToDisk(beanToSave, fileName);			
-					LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName, LogUtility.DEBUG);
+					log.debug("Added to Disk Cache: " + fileName);
 				
 					// Put the fileName is the diskCache
 					diskCacheKeys.add(fileName);
 				}
 				catch (IOException e)
 				{
-					LogUtility.log("ModelBeanCache: Failed to save Object to disk", e);
+					log.error("Failed to save Object to disk", e);
 				}
 			}
 		}
@@ -888,10 +904,10 @@ public class DBModelBeanReader
 			for ( int i=0 ; i < memoryCache.size() ; i++)
 			{
 				Vector currentElement = (Vector) memoryCache.elementAt(i);
-				LogUtility.log( "ModelBeanCache: accessionCode" + currentElement.elementAt(0) + " = " + currentElement.elementAt(1), LogUtility.DEBUG);
+				log.debug( "accessionCode" + currentElement.elementAt(0) + " = " + currentElement.elementAt(1));
 				if ( accessionCode.equalsIgnoreCase( (String) currentElement.elementAt(0) ) )
 				{
-					LogUtility.log("ModelBeanCache: Retrived from memory Cache: " + accessionCode, LogUtility.INFO);
+					log.info("Retrived from memory Cache: " + accessionCode);
 					return (VBModelBean) currentElement.elementAt(1);
 				}
 			}
@@ -906,12 +922,12 @@ public class DBModelBeanReader
 					try
 					{
 						bean = (VBModelBean) readBeanFromDisk(fileName);
-						LogUtility.log("ModelBeanCache: Retrived from disk Cache: " + fileName, LogUtility.INFO);
+						log.info("Retrived from disk Cache: " + fileName);
 						return bean;
 					}
 					catch (Exception e)
 					{
-						LogUtility.log("ModelBeanCache: Failed to retrieve Object from disk", e);
+						log.error("Failed to retrieve Object from disk", e);
 					}
 				}
 			}

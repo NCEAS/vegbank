@@ -3,10 +3,9 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
-
 <html>
 <!-- 
-  *   '$RCSfile: PlantQuery.jsp,v $'
+  *   '$RCSfile: CommQuery.jsp,v $'
   *     Purpose: web form to query the plant taxonomy portion of vegbank
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
@@ -14,7 +13,7 @@
   *
   *    '$Author: farrell $'
   *      '$Date: 2004-03-07 17:55:28 $'
-  *  '$Revision: 1.3 $'
+  *  '$Revision: 1.1 $'
   *
   *
   -->
@@ -23,7 +22,7 @@
   <meta name="generator" content=
   "HTML Tidy for Linux/x86 (vers 1st November 2003), see www.w3.org">
 
-  <title>PLANT CONCEPT LOOKUP</title>
+  <title>VEGBANK VEGETATION COMMUNITY LOOKUP</title>
   <link rel="stylesheet" href="@stylesheet@" type="text/css">
   <script type="text/javascript">
         <!--
@@ -53,56 +52,57 @@
   @vegbank_header_html_normal@ <!-- SECOND TABLE -->
 
   <html:errors/>
-
+  
   <table align="left" border="0" width="90%" cellspacing="0" cellpadding="0">
     <tr>
       <td bgcolor="white"><img align="center" border="0" height="100" src=
-      "@image_server@owlogoBev.jpg" alt="Veg plots logo"></td>
+      "@image_server@owlogoBev.jpg" alt="Comms logo"></td>
 
       <td align="left" valign="middle">
         <table border="0" cellpadding="5" width="366" height="55">
           <tr>
-            <td align="left" valign="bottom"><span class="c1">Plant Concept Lookup</span><br></td>
+            <td align="left" valign="bottom">
+	    <span class="c1">Vegetation Community Lookup</span><br>
+	    </td>
           </tr>
         </table>
       </td>
     </tr>
-
+    
     <tr>
       <!-- LEFT MARGIN -->
       <td width="15%" bgcolor="white" align="left" valign="top">
 
       <td align="left">
-        <html:form action="/PlantQuery">
+        <html:form action="/CommQuery">
           <table>
             <tr valign="top">
               <td align="left" valign="middle" colspan="2">
-                <span class="c2"><b>Enter the taxon name below and toggle the
-                correct type and level of the taxon.</b></span>
+                <span class="c2">
+		<b>Enter the community name below and toggle the
+                correct type and level of the community.</b>
+		</span>
 
                 <p>
 			<small>
-				<html:submit value="search for plants"/>
-                		&nbsp;&nbsp; 
-				<html:reset value="reset"/>
+				<html:submit value="search for communities"/>
 			</small>
 		</p>
               </td>
             </tr>
           </table>
 
-          <p>&nbsp;</p><br>
-          <br>
+          <br/>
 
           <table border="0" width="722">
             <!--TAXON NAME -->
 
             <tr align="left">
-              <td width="156"><b>Taxon name:</b></td>
-              <!--        PLANT TAXON INPUT-->
+              <td width="156"><b>Community name:</b></td>
+              <!-- COMM TAXON INPUT--> 
 
               <td width="556">
-		<html:text size="35" property="plantname"/>
+		<html:text size="35" property="commname"/>
               	&nbsp;
 	      </td>
             </tr><!-- IGNORE CASE -->
@@ -110,8 +110,10 @@
             <tr align="left">
               <td width="156"></td>
 
-              <td width="556"><span class="c3">(wildcard = '%')<br>
+              <td width="556">
+	      <span class="c3">(wildcard = '%')<br>
                 * All Queries are Case Insensitive
+	      </span>
                 <!--<input type = "checkbox" name="ignoreCase" value = "true"> Ignore Case<br>-->
 	      </td>
             </tr><!-- HORIZONTAL LINE -->
@@ -120,41 +122,38 @@
               <td colspan="2" rowspan="1" align="left" valign="middle">
                 <hr size=".5">
               </td>
-            </tr><!-- TAXON TYPE -->
-
+            </tr>
+	    
+	    <!-- Community Level -->	    
             <tr>
-              <td width="156" align="left" valign="top"><b>Taxon type:</b></td>
-              <td class="c4" align="left" valign="top" width="556">
-	        <html:select property="nameType" size="6" multiple="true">
-		   <option value="ANY" selected>--ANY--</option>
-		   <html:options property="plantClassSystems"/>
-	      	 </html:select>
-		<!-- 
-		<html:radio property="nameType" value=""/>Any<br/>
-                <html:radio property="nameType" value="Scientific"/>Scientific name<br/>
-                <html:radio property="nameType" value="English Common"/>Common name<br/>
-                <html:radio property="nameType" value="Code"/>Code<br/>
-		-->
+              <td width="156" align="left" valign="top"><b>Community Level:</b></td>
+
+		<td width="556" class="c4" align="left" valign="top" width="556">
+	      	<html:select property="taxonLevel" size="6" multiple="true">
+			<option value="ANY" selected>--ANY--</option>
+			<html:options property="commLevels"/>
+		</html:select>
               </td>
             </tr>
+	    
 	    <!-- HORIZONTAL LINE -->
             <tr>
               <td colspan="2" rowspan="1" align="left" valign="middle">
                 <hr size=".5">
               </td>
-            </tr><!-- TAXON LEVEL -->
-
+            </tr>
+		<!-- Name ClassSystem -->
             <tr>
-              <td width="156" align="left" valign="top"><b>Taxon level:</b></td>
-	    
-	      <!-- picklist values to select -->               
-	      <td class="c4" align="left" valign="top" width="556">
-	      	 <html:select property="taxonLevel" size="6" multiple="true">
+              <td width="156" align="left" valign="top"><b>Name type:</b></td>
+              <td class="c4" align="left" valign="top" width="556">
+	        <html:select property="nameType" size="6" multiple="true">
 		   <option value="ANY" selected>--ANY--</option>
-		   <html:options property="plantLevels"/>
+		   <html:options property="commClassSystems"/>
 	      	 </html:select>
 	      </td>
-
+	    </tr>
+		
+	    
             <!-- HORIZONTAL LINE -->
             <tr>
               <td colspan="2" rowspan="1" align="left" valign="middle">
@@ -193,7 +192,7 @@
             <tr>
               <td width="156" align="left" valign="top" height="54">
               <b>Party:</b></td>
-
+            
               <td class="c4" align="left" valign="top" height="54" width="556">
                 <html:select property="accordingToParty">
                   <option value="">All</option>
@@ -205,24 +204,33 @@
             <tr>
               <td align="left" valign="middle" colspan="2">
                 <small>
-                  <html:submit value="search for plants"/> &nbsp;&nbsp; 
-                  <html:reset value="reset"/>
+		<html:submit value="search for communities"/>
                 </small>
               </td>
             </tr>
+	    
+	    <tr align="left">
+		<td align="left" valign="middle" colspan="2">
+			<b> Query examples: </b>
+			<br>
+			Community Name=%tidal%,  Community Level=Alliance 
+			<br>
+			Community Name=%brackish%, Community Level=Association
+		</td>
+	    </tr>
 
             <tr>
               <td width="156"></td>
             </tr>
           </table>
         </html:form>
+	
 
-        <table border="0" cellspacing="5" cellpadding="5">
+
           <tr>
             <td colspan="2"><!-- VEGBANK FOOTER -->
             @vegbank_footer_html_tworow@</td>
           </tr>
-        </table>
       </td>
     </tr>
   </table>

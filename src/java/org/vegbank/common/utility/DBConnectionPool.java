@@ -9,8 +9,8 @@
  * Synthesis Authors: Jing Tao Release: @release@
  * 
  * '$Author: farrell $' 
- * '$Date: 2004-03-05 22:34:17 $'
- * '$Revision: 1.6 $'
+ * '$Date: 2004-03-07 17:55:28 $'
+ * '$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -382,7 +382,7 @@ public class DBConnectionPool implements Runnable
 				dbConn.setConnectionTime(System.currentTimeMillis()
 						- dbConn.getCheckOutTime());
 				//set check out time to 0
-				dbConn.setCheckOutTime(0);
+				dbConn.setCheckOutTime(0);  
 				log.debug("DBConnectionPool: Connection: " + dbConn.getTag()
 						+ " checked in.");
 			} //if

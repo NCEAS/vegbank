@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-01 01:50:57 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-03-07 17:55:28 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,8 @@ package org.vegbank.common.utility;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
-import org.vegbank.common.utility.LogUtility;
+
+import org.vegbank.common.utility.CommandLineTools.StatusBarUtil;
 
 /**
  * @author anderson
@@ -242,8 +243,9 @@ public class AccessionGen {
 	private boolean updateTable(String tableName) throws SQLException {
 		System.out.println("Updating accession codes in " + tableName);
 
-		double scalar = .6;  // width of screen
-		long pct1, l, count=0, tmpId;
+		long count=0, tmpId;
+		
+
 		String baseAC, tmpConfirm;
 		StringBuffer tmpAC = null;
 		Statement stmt = conn.createStatement();
@@ -274,47 +276,21 @@ public class AccessionGen {
 		showSQL(query);
 		rs = stmt.executeQuery(query);
 
-		// set up the progress meter
-		boolean smallCount = false;
-		pct1 = (long)((count / 100) / scalar);
-		if (pct1 < 1) {
-			pct1 = (long)((100 / count) * scalar);
-			smallCount = true;
-		} else {
-			// correction
-			pct1++;
-		}
 
-		System.out.print("0% |");
-		for (int i=0; i<100*scalar; i++) {
-			System.out.print("-");
-		}
-		System.out.println("| 100%  ");
+		// set up the progress meter
+		StatusBarUtil sb = new StatusBarUtil();
+		sb.setupStatusBar(count);
 
 		PreparedStatement pstmt = getUpdatePreparedStatement(tableName);
 		baseAC = getBaseAccessionCode(tableName);
 		
 		// update!
 		conn.setAutoCommit(false);
-		System.out.print("0% |");
-		l=0;
 		//try {
 			while (rs.next()) {
 
 				// update the status bar
-				l++;
-				if (smallCount) {
-					for (int i=0; i < pct1; i++) {
-						System.out.print("-");
-					}
-
-				} else {
-					if (l < pct1) {
-						// do nothing
-					} else if (l % pct1 == 0) {
-						System.out.print("-");
-					}
-				}
+				sb.updateStatusBar();
 
 				// get the selected data
 				tmpId = rs.getLong(1);
@@ -331,17 +307,7 @@ public class AccessionGen {
 			}
 
 			// tidy up the end of the status bar
-			if (smallCount) {
-				int num = (int)(100 * scalar) - (int)pct1 * (int)l;
-				for (int i=0; i < num; i++) {
-					System.out.print("-");
-				}
-			} else {
-				int num = (int)((100 * scalar) - ((int)count / (int)pct1));
-				for (int i=0; i < num; i++) {
-					System.out.print("-");
-				}
-			}
+			sb.completeStatusBar(count);
 		//} catch (SQLException sqlex) {
 		//	LogUtility.log("AccessionGen: Problem updating " + tableName +"'s accession code to " + tmpConfirm);
 		//}
@@ -349,10 +315,10 @@ public class AccessionGen {
 		rs.close();
 		conn.commit();
 
-		System.out.println("| 100%");
-		System.out.println("updated " + l + "\n");
 		return true;
 	}
+
+
 	
 	/**
 	 * Utility that updates a discrete set of rows with AccessionCodes.

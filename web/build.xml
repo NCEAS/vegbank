@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2004-03-03 20:39:10 $'
-* '$Revision: 1.94 $'
+* '$Author: farrell $'
+* '$Date: 2004-03-07 17:55:28 $'
+* '$Revision: 1.95 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -43,6 +43,7 @@
 		makes the first part of the URI. -->
     <property name="web.context_uri" value="vegbank"/>
     <property name="forms" value="./forms"/>
+    <property name="tiles" value="./tiles"/>
     <property name="admin_src" value="./admin"/>
     <property name="general_src" value="./general"/>
     <property name="design_src" value="./design"/>
@@ -74,6 +75,7 @@
     <!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
     <property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
     <property name="forms_server" value="${tomcat.home.dir}/webapps/${webapp}/forms"/>
+    <property name="tiles_server" value="${tomcat.home.dir}/webapps/${webapp}/tiles"/>
     <property name="admin_server" value="${tomcat.home.dir}/webapps/${webapp}/admin"/>
     <property name="image_server" value="${tomcat.home.dir}/webapps/${webapp}/images"/>
     <property name="general_server" value="${tomcat.home.dir}/webapps/${webapp}/general/"/>
@@ -311,6 +313,9 @@
   <target name="forms" depends="images" description="=&gt; dist the forms to server ">
     <copy overwrite="true" todir="${forms_server}" filtering="yes">
       <fileset dir="${forms}" includes="*jsp *html" excludes="**/CVS* "/>
+    </copy>
+    <copy overwrite="true" todir="${tiles_server}" filtering="yes">
+      <fileset dir="${tiles}" includes="**/*jsp **/*html" excludes="**/CVS* "/>
     </copy>
   </target>
   <!--

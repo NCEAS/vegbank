@@ -9,6 +9,18 @@
     <display-name>Vegbank Web Interface</display-name>
     <description>Vegbank servlets</description>
 
+	<filter>
+    		<filter-name>GZIPFilter</filter-name>
+    		<description>GZIPs the response before sending to browser</description>
+		<filter-class>org.vegbank.filter.GZIPFilter</filter-class>
+  	</filter>
+
+	<!-- When to apply this filter, now for everything --> 
+	<filter-mapping>
+		<filter-name>GZIPFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
   <!-- Action Servlet Configuration -->
   <servlet>
     <servlet-name>action</servlet-name>
@@ -75,6 +87,7 @@
               <servlet-class>org.vegbank.servlet.request.QueryBuilderServlet</servlet-class>
             </servlet>
 
+
             <!-- The Mappings -->
 
             <!-- Action Servlet Mapping -->
@@ -108,7 +121,8 @@
               <servlet-name>QueryBuilderServlet</servlet-name>
               <url-pattern>/servlet/QueryBuilderServlet</url-pattern>
             </servlet-mapping>  
-         
+        
+
           <!-- Struts Tag Library Descriptors -->
           <taglib>
             <taglib-uri>/WEB-INF/struts-bean.tld</taglib-uri>
