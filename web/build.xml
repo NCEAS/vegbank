@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: anderson $'
-* '$Date: 2003-10-28 04:38:20 $'
-* '$Revision: 1.59 $'
+* '$Date: 2003-10-29 05:30:16 $'
+* '$Revision: 1.60 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -36,6 +36,11 @@
     	<not><isset	property="webapp"/></not>
 	</condition>
 	<echo>init webapp '${webapp}'</echo>
+
+	<!-- The webapp that contains copy, images and other
+		resources is defined by web.app.resources and
+		makes the first part of the URI. -->
+    <property name="web.app.resources" value="vegbank"/>
 
     <property name="forms" value="./forms"/>
     <property name="general_src" value="./general"/>
@@ -80,30 +85,30 @@
     <property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/${webapp}/WEB-INF/lib"/>
     <!-- WEB SERVER LOCATIONS -->
     <filter token="base_url" value=""/>
-    <filter token="image_server" value="/${webapp}/images/"/>
-    <filter token="stylesheet" value="/${webapp}/includes/default.css"/>
-    <filter token="plotquery_page" value="/${webapp}/forms/plot-query.jsp"/>
-    <filter token="nestedplotquery_page" value="/${webapp}/forms/nested-plot-query.html"/>
-    <filter token="uploaddata_page" value="/${webapp}/forms/uploadFile.html"/>
-    <filter token="stylesheet_generator" value="/${webapp}/forms/stylesheet-generator.html"/>
-    <filter token="general_link" value="/${webapp}/general/"/>
-    <filter token="forms_url" value="/${webapp}/forms/"/>
+    <filter token="image_server" value="/${web.app.resources}/images/"/>
+    <filter token="stylesheet" value="/${web.app.resources}/includes/default.css"/>
+    <filter token="plotquery_page" value="/${web.app.resources}/forms/plot-query.jsp"/>
+    <filter token="nestedplotquery_page" value="/${web.app.resources}/forms/nested-plot-query.html"/>
+    <filter token="uploaddata_page" value="/${web.app.resources}/forms/uploadFile.html"/>
+    <filter token="stylesheet_generator" value="/${web.app.resources}/forms/stylesheet-generator.html"/>
+    <filter token="general_link" value="/${web.app.resources}/general/"/>
+    <filter token="forms_url" value="/${web.app.resources}/forms/"/>
     <!-- add second token for forms, which is similarly named as other links -->
-    <filter token="forms_link" value="/${webapp}/forms/"/>
-    <filter token="design_link" value="/${webapp}/design/"/>
-    <filter token="panel_link" value="/${webapp}/panel/"/>
+    <filter token="forms_link" value="/${web.app.resources}/forms/"/>
+    <filter token="design_link" value="/${web.app.resources}/design/"/>
+    <filter token="panel_link" value="/${web.app.resources}/panel/"/>
     <filter token="help_link" value="/help/"/>
     <filter token="manual_link" value="/help/manual/"/>
     <!-- SERVLETS -->
-    <filter token="framework_servlet" value="/${webapp}/servlet/framework"/>
-    <filter token="stylesheet_generator_servlet" value="/${webapp}/servlet/stylesheetgenerator"/>
-    <filter token="usermanagement_servlet" value="/${webapp}/servlet/usermanagement"/>
-    <filter token="datarequestservlet" value="/${webapp}/servlet/DataRequestServlet"/>
-    <filter token="datasubmitservlet" value="/${webapp}/servlet/DataSubmitServlet"/>
-    <filter token="nestedquerybuilder" value="/${webapp}/servlet/QueryBuilderServlet"/>
-    <filter token="authenticationservlet" value="/${webapp}/servlet/authenticate"/>
-    <filter token="viewdataservlet" value="/${webapp}/servlet/viewData"/>
-    <filter token="filedownloadservlet" value="/${webapp}/servlet/fileDownload"/>
+    <filter token="framework_servlet" value="/${web.app.resources}/servlet/framework"/>
+    <filter token="stylesheet_generator_servlet" value="/${web.app.resources}/servlet/stylesheetgenerator"/>
+    <filter token="usermanagement_servlet" value="/${web.app.resources}/servlet/usermanagement"/>
+    <filter token="datarequestservlet" value="/${web.app.resources}/servlet/DataRequestServlet"/>
+    <filter token="datasubmitservlet" value="/${web.app.resources}/servlet/DataSubmitServlet"/>
+    <filter token="nestedquerybuilder" value="/${web.app.resources}/servlet/QueryBuilderServlet"/>
+    <filter token="authenticationservlet" value="/${web.app.resources}/servlet/authenticate"/>
+    <filter token="viewdataservlet" value="/${web.app.resources}/servlet/viewData"/>
+    <filter token="filedownloadservlet" value="/${web.app.resources}/servlet/fileDownload"/>
     <!-- FIXME: Should be in a prepare target -->
     <mkdir dir="${tomcat.home.dir}/webapps/${webapp}/"/>
     <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
