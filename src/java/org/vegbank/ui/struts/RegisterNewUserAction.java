@@ -25,8 +25,8 @@ import org.vegbank.common.utility.Utility;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-25 20:04:16 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-12-02 19:59:36 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ public class RegisterNewUserAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		System.out.println(" In RegisterNewUserAction ");
+		LogUtility.log(" In RegisterNewUserAction ");
 		ActionErrors errors = new ActionErrors();
 
 		DynaActionForm thisForm = (DynaActionForm) form;

@@ -19,8 +19,8 @@ import org.vegbank.ui.struts.Authentication;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:22:18 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-12-02 19:59:36 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,10 +39,11 @@ import org.vegbank.ui.struts.Authentication;
  
  
 /**
- * @author farrell
- *
  * Extends the the struts <code>RequestProcessor</code> to Vegbank specific 
  * things, such as authentication and checking roles and certification level.
+ * 
+ * @author farrell
+ *
  */
 public class RequestProcessor extends org.apache.struts.action.RequestProcessor
 {
