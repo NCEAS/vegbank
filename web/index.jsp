@@ -78,14 +78,16 @@ the larger ecological community can then include in their research efforts.</fon
 <tr>
 <td>
 <!-- yellow box button -->
-<table cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFF99"><tbody>
+<!--<table cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFF99"><tbody>
 <tr height="6" align="left">
 <td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@uplt3.gif"></td>
 <td width="6" colspan="1"></td><td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@uprt3.gif"></td></tr>
-<tr><td valign="top"></td><td align="center" valign="top">
+<tr><td valign="top"></td><td align="center" valign="top">-->
 <!-- yellow box content: -->
-<b><a class="featureLink" href="/vegbank/LoadPlotQuery.do">Find Plots</a></b>
+<input type="button" onclick="window.location='/vegbank/LoadPlotQuery.do'" value="Find Plots"/>
+<!--<b><a class="featureLink" href="/vegbank/LoadPlotQuery.do">Find Plots</a></b> -->
 <!-- end yellow box content-->
+<!--
 </td>
 <td width="6"></td></tr>
 <tr><td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@lwlt3.gif"></td>
@@ -93,18 +95,21 @@ the larger ecological community can then include in their research efforts.</fon
 
 </td>
 <td>&nbsp;-&nbsp;</td>
-<td>
+<td> -->
+
 <!-- yellow box button -->
-<table cellspacing="0" 
+<!-- <table cellspacing="0" 
 cellpadding="0" border="0" bgcolor="#FFFF99"><tbody>
 <tr height="6" align="left">
 <td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@uplt3.gif"></td>
 <td width="6" colspan="1"></td><td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@uprt3.gif"></td></tr>
-<tr><td valign="top"></td><td align="center" valign="top">
+<tr><td valign="top"></td><td align="center" valign="top"> -->
 <!-- yellow box content: -->
-<b><a class="featureLink" href="@forms_link@PlantQuery.jsp">Explore Plant Taxa</a></b>
+<input type="button" onclick="window.location='@forms_link@PlantQuery.jsp'" value="Explore Plant Taxa"/>
+<!--
+<b><a class="featureLink" href="@forms_link@PlantQuery.jsp">Explore Plant Taxa</a></b> -->
 <!-- end yellow box content-->
-</td>
+<!-- </td>
 
 
 
@@ -113,24 +118,26 @@ cellpadding="0" border="0" bgcolor="#FFFF99"><tbody>
 <td align="right" valign="bottom" height="6" colspan="1"></td><td width="6"><img border="0" width="6" height="6" align="bottom" src="@image_server@lwrt3.gif"></td></tr></tbody></table>
 </td>
 <td>&nbsp;-&nbsp;</td>
-<td>
+<td> -->
 <!-- yellow box button -->
-<table cellspacing="0" 
+<!-- <table cellspacing="0" 
 cellpadding="0" border="0" bgcolor="#FFFF99"><tbody>
 <tr height="6" align="left">
 <td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@uplt3.gif"></td>
 <td width="6" colspan="1"></td><td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@uprt3.gif"></td></tr>
-<tr><td valign="top"></td><td align="center" valign="top">
+<tr><td valign="top"></td><td align="center" valign="top"> -->
 <!-- yellow box content: -->
-<b><a class="featureLink" href="@general_link@login.jsp">Login</a></b>
+<input type="button" onclick="window.location='@general_link@login.jsp'"  value="Login"/>
+<!-- <b><a class="featureLink" href="@general_link@login.jsp">Login</a></b>-->
 <!-- end yellow box content-->
+<!-- 
 </td>
 <td width="6"></td></tr>
 <tr><td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@lwlt3.gif"></td>
 <td align="right" valign="bottom" height="6" colspan="1"></td><td width="6"><img border="0" width="6" height="6" align="bottom" src="@image_server@lwrt3.gif"></td></tr></tbody></table>
 
 </td>
-
+-->
 <!-- main table -->
 </tr>
 </table>
