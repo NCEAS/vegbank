@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-04-05 19:14:52 $'
- * '$Revision: 1.7 $'
+ *     '$Date: 2002-04-08 20:17:10 $'
+ * '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -804,10 +804,10 @@ public class  sqlMapper
 				
 				//instantiate a new instance of the dbAccess class -- probably
 				//should be done above
-				System.out.println("sqlMapper > writing the plots using new class - file test-"+outFile);
+				String testFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml";
+				System.out.println("sqlMapper > writing the plots using new class - test file: "+testFile );
 				dbAccess dbaccess = new dbAccess();
-				dbaccess.writeMultipleVegBankPlot(plotIdVec, "test-"+outFile);
-			
+				dbaccess.writeMultipleVegBankPlot(plotIdVec, testFile);
 				
 				System.out.println("sqlMapper > writing the plots using old class - file " + outFile);
 				xmlWriter xw = new xmlWriter();
