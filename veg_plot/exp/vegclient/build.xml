@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2001-10-23 02:10:56 $'
- 	*     '$Revision: 1.5 $'
+ 	*     '$Date: 2001-10-30 23:20:28 $'
+ 	*     '$Revision: 1.6 $'
 --> 
 <project name="VegClient" default="compile" basedir=".">
 	
@@ -62,12 +62,23 @@
   	  </fileset>
   	</copy>
 		
+<!--
+		<echo message="Copying database properties files"/>
+-->
+		<!-- other properties files -->
+		<copy todir="${build}" filtering="yes" >
+			<fileset dir="${current_dir}/lib">
+  	    <include name="**.properties"/>
+  	  </fileset>
+  	</copy>
+		
 		<!-- framework java files -->
 		<copy todir="${build}" filtering="yes" >
 			<fileset dir="${src}/framework" >
   	    <include name="**.java"/>
   	  </fileset>
   	</copy>
+		
 		<!-- databasemanager java files -->
 		<copy todir="${build}" filtering="yes" >
 			<fileset dir="${src}/databasemanager" >
@@ -203,9 +214,7 @@
 			<zipfileset dir="${data}/native" prefix="data/native"/>
 			<zipfileset dir="${data}/tnc_data" prefix="data/tnc_data"/>
 			<zipfileset dir="${data}/structured_data" prefix="data/structured_data"/>
-<!--
 			<zipfileset dir="${data}/resources" prefix="data/resources"/>
--->			
 			<zipfileset dir="${bin}" prefix="bin"/>
 			
 			<fileset dir="${doc}" includes="README"/>
