@@ -6324,9 +6324,19 @@ conditions may change between resampling events.
           <attListValueDesc>Cover based on observation of a single contiguous area of land of less spatial extent than the entire plot.</attListValueDesc>
           <attListSortOrd>2</attListSortOrd>
         </attListItem>
+        <attListItem>
+          <attListValue>line-intercept</attListValue>
+          <attListValueDesc>Cover based on length of line touching each species present.</attListValueDesc>
+          <attListSortOrd>6</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>point-intercept</attListValue>
+          <attListValueDesc>Cover based on number of points for each species present.</attListValueDesc>
+          <attListSortOrd>7</attListSortOrd>
+        </attListItem>
       </attList>
-      <attNotes>closed list; default = contiguous</attNotes>
-      <attDefinition>Were cover values for the total taxon list collected from one contiguous area or dispersed subplots (e.g., contiguous, dispersed-regular, dispersed-random)?</attDefinition>
+      <attNotes>closed list; default = Entire</attNotes>
+      <attDefinition>Were cover values for the total taxon list collected from one contiguous area or dispersed subplots?</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>663</formAustere>
