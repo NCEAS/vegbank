@@ -1,11 +1,11 @@
 /*
- *	'$RCSfile: CertificationAction.java,v $'
+ *	'$RCSfile: CertificationSaveAction.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-12-02 02:10:40 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-01-16 02:14:04 $'
+ *	'$Revision: 1.1 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import javax.servlet.http.*;
 
 import org.apache.struts.action.*;
 import org.vegbank.common.utility.LogUtility;
+import org.vegbank.common.utility.UserDatabaseAccess;
 
 
 /**
@@ -50,7 +51,9 @@ public class CertificationAction extends Action {
 		ActionErrors errors = new ActionErrors();
 
 		// Get the form
-		CertificationForm enForm = (CertificationForm) form;
+		CertificationForm certForm = (CertificationForm) form;
+		
+		
 		LogUtility.log("Leaving CertificationAction");
 		return mapping.findForward("Certification");
 	}
@@ -76,9 +79,9 @@ public class CertificationAction extends Action {
 				// check that the required paramteres are upto snuff
 				if ( surName.length() > 0 && givenName.length() > 0 && phoneNumber.length() > 0  && currentCertLevel.length() > 0 
 					&& degreeInst.length() > 0  && currentInst.length() > 0  && esaPos.length() > 0  && vegSamplingDoc.length() > 0 
-					&&  vegAnalysisDoc.length() > 0  && submittedEmail.length() > 0 
+					&& vegAnalysisDoc.length() > 0 
 					&& vegSamplingDoc.length() > 0 && vegAnalysisDoc.length() > 0  && usnvcExpDoc.length() >0 
-					&&  vegbankExpDoc.length() > 0 &&  useVegbank.length() > 0 && plotdbDoc.length() > 0)
+					&& vegbankExpDoc.length() > 0 &&  useVegbank.length() > 0 && plotdbDoc.length() > 0)
 					{
 						LogUtility.log("surName: '"+surName+"'");
 						UserDatabaseAccess userdb = new UserDatabaseAccess();
@@ -133,7 +136,6 @@ public class CertificationAction extends Action {
 						replaceHash.put("messages", "You are missing a required attribute to submit this form");
 						replaceHash.put("surName", ""+surName);
 						replaceHash.put("givenName", ""+givenName);
-						//replaceHash.put("submittedEmail", submittedEmail);
 						replaceHash.put("registeredEmail",  ""+emailAddress);
 						replaceHash.put("phoneNumber",  ""+phoneNumber);
 						replaceHash.put("currentCertLevel",  ""+currentCertLevel);
@@ -186,11 +188,10 @@ public class CertificationAction extends Action {
 
 			messageBody.append("VegBank Administrator, <br>\n");
 			messageBody.append(" Please review the following certification information. <br><br>\n");
-			messageBody.append(" Email: "+submittedEmail+" <br>\n");
+			messageBody.append(" Email: "+emailAddress+" <br>\n");
 			messageBody.append(" Sur Name: "+surName +" <br>\n");
 			messageBody.append(" Given Name: "+givenName+" <br>\n");
 			messageBody.append(" Phone Number: "+phoneNumber+" <br>\n");
-			messageBody.append(" Phone Type: "+phoneType+" <br>\n");
 			messageBody.append(" Current Cert Level: "+currentCertLevel+" <br>\n");
 			messageBody.append(" Requested Cert Level: " + certReq +" <br>\n");
 			messageBody.append(" Highest Degree: "+highestDegree+" <br>\n");
