@@ -8,7 +8,7 @@ cd $VEGBANK_HOME/veg_plot/exp/database_access/bin
 # copy the infile to the target file
 cp $INFILE ./input.xml
 
-source ./setupCLASSPATH
+source /usr/vegbank/bin/includes/setupCLASSPATH
 
 java -classpath $CLASSPATH databaseAccess.DBinsertPlotSource NativeXmlPlugin $PLOT
 # remove the plot cache
