@@ -21,7 +21,23 @@
 		* building the vegbank web site
 	-->
 	<property name="forms" value="./forms" />
+	<property name="general_src" value="./general" />
+	<property name="design_src" value="./design" />
+	<property name="dictionary_src" value="./dbdictionary" />
+	
 	<property name="forms_server" value="/usr/local/devtools/jakarta-tomcat/webapps/forms"/>
+	<property name="general_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/"/>
+	<property name="design_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/design/"/>
+	<property name="dictionary_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/dbdictionary/"/>
+	
+	<filter token="plotquery_page" value="http://vegbank.nceas.ucsb.edu/forms/plot-query.html"/>
+	<filter token="nestedplotquery_page" value="http://vegbank.nceas.ucsb.edu/forms/nested-plot-query.html"/>
+	<filter token="uploaddata_page" value="http://vegbank.nceas.ucsb.edu/forms/uploadFile.html"/>
+	<filter token="stylesheet_generator" value="http://vegbank.nceas.ucsb.edu/forms/stylesheet-generator.html"/>
+	<filter token="stylesheet_generator_servlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/stylesheetgenerator"/>
+	
+	<filter token="usermanagement_servlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement"/>
+	<filter token="general_link" value="http://vegbank.nceas.ucsb.edu/vegbank/general/"/>
 	<filter token="dist" value="dist"/>
 	<filter token="version" value="development"/>
 	<filter token="image_server" value="http://vegbank.nceas.ucsb.edu/vegbank/images/"/>
@@ -55,6 +71,41 @@
 	/>
 </target>
 
+
+<!-- 
+	* TARGET TO PUT THE GENERAL HTML DOCS INTO THE CORRECT PLACE
+-->
+<target name="general" depends="init">
+	<copydir src="${general_src}" 
+		dest="${general_server}" 
+		filtering="yes"
+		includes="**.html"
+		excludes="**/CVS* "
+	/>
+</target>
+
+
+
+<!-- 
+	* TARGET TO PUT THE DESIGN HTML DOCS INTO THE CORRECT PLACE
+-->
+<target name="design" depends="init">
+	<copy todir="${design_server}" filtering="no" >
+		<fileset dir="${design_src}" >    
+  	</fileset>
+	</copy>
+</target>
+
+
+<!-- 
+	* TARGET TO PUT THE DICTIONARY HTML DOCS INTO THE CORRECT PLACE
+-->
+<target name="dictionary" depends="init">
+	<copy todir="${dictionary_server}" filtering="no" >
+		<fileset dir="${dictionary_src}" >    
+  	</fileset>
+	</copy>
+</target>
 
 
 
