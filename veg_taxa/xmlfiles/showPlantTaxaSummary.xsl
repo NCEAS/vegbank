@@ -80,7 +80,9 @@ return "Check All"; }
 <tr vAlign="top" align="left" colspan="1"> 
 <th class="tablehead" colspan="3" height="87">
 <font face="Arial, Helvetica, sans-serif"> 
-Search Name:<br></br>
+Search Name:  <xsl:value-of select="query/taxonName"/> <br></br>
+Search Name Type:  <xsl:value-of select="query/taxonNameType"/> <br></br>
+Search Level:  <xsl:value-of select="query/taxonNameLevel"/> <br></br>
 Search Party:<br></br>
 Search Date:<br></br>
 Matches found: <xsl:number value="count(taxon)" /> </font></th>
@@ -126,7 +128,7 @@ Start date: <span class="item"> <xsl:value-of select="name/startDate"/> </span>
 
 <td vAlign="top" align="left" width="32%" bgcolor="{$evenRowColor}"  height="106"> 
 <p><b><font face="Arial, Helvetica, sans-serif" size="-1">
-Scientific: <span class="item"><xsl:value-of select="name/plantName"/> </span>  <br></br>
+Scientific: <span class="item"><xsl:value-of select="name/scientificName"/> </span>  <br></br>
 Scientific + authors: <span class="item"><xsl:value-of select="name/plantNameAlias"/> </span> <br> </br>
 Common: <span class="item"> <xsl:value-of select="name/commonName"/> </span>  <br> </br>
 Code: <span class="item"> <xsl:value-of select="name/plantCode"/> </span>  <br> </br>
@@ -135,10 +137,19 @@ Parent: <span class="item"> <xsl:value-of select="name/parentName"/> </span> </f
 </font></b></p>
 </td>
 
+
+
+<!-- SETUP THE LINK TO THE SYNONYM -->
+<xsl:variable name="SYNONYM">
+	<xsl:value-of select="name/acceptedSynonym"/>
+</xsl:variable>																
 <td vAlign="top" align="left" width="34%" bgcolor="{$evenRowColor}"  height="106">
 <b><font face="Arial, Helvetica, sans-serif" size="-1">
-Synonym:  <span class="item"> <xsl:value-of select="name/acceptedSynonym"/> </span> <br> </br>
-</font></b></td>
+Synonym:  <span class="item"> 
+<a href="/framework/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonName={$SYNONYM}&amp;taxonNameType=%25&amp;taxonLevel=%25&amp;party=%25">  <xsl:value-of select="name/acceptedSynonym"/> </a> </span> <br> </br>
+</font></b>
+</td>
+
 </tr>
 </xsl:if>
 
@@ -158,7 +169,7 @@ Start date: <span class="item"> <xsl:value-of select="name/startDate"/> </span>
 
 <td vAlign="top" align="left" width="32%" bgcolor="{$oddRowColor}"  height="106"> 
 <p><b><font face="Arial, Helvetica, sans-serif" size="-1">
-Scientific: <span class="item"><xsl:value-of select="name/plantName"/> </span>  <br></br>
+Scientific: <span class="item"><xsl:value-of select="name/scientificName"/> </span>  <br></br>
 Scientific + authors: <span class="item"><xsl:value-of select="name/plantNameAlias"/> </span> <br> </br>
 Common: <span class="item"> <xsl:value-of select="name/commonName"/> </span>  <br> </br>
 Code: <span class="item"> <xsl:value-of select="name/plantCode"/> </span>  <br> </br>
@@ -167,10 +178,20 @@ Parent: <span class="item"> <xsl:value-of select="name/parentName"/> </span> </f
 </font></b></p>
 </td>
 
+
+
+<!-- SETUP THE LINK TO THE SYNONYM -->
+<xsl:variable name="SYNONYM">
+	<xsl:value-of select="name/acceptedSynonym"/>
+</xsl:variable>																
 <td vAlign="top" align="left" width="34%" bgcolor="{$oddRowColor}"  height="106">
 <b><font face="Arial, Helvetica, sans-serif" size="-1">
-Synonym:  <span class="item"> <xsl:value-of select="name/acceptedSynonym"/> </span> <br> </br>
-</font></b></td>
+Synonym:  <span class="item"> 
+<a href="/framework/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonName={$SYNONYM}&amp;taxonNameType=%25&amp;taxonLevel=%25&amp;party=%25">  <xsl:value-of select="name/acceptedSynonym"/> </a> </span> <br> </br>
+</font></b>
+</td>
+
+
 </tr>
 </xsl:if>
 
