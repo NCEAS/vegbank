@@ -1,0 +1,42 @@
+# $Id: veg_servlet.properties~,v 1.1 2001-12-03 17:49:12 harris Exp $
+
+# Default localized resources for example servlets
+# This locale is en_US
+
+
+server=@server@
+servlet-path=@servlet-path@
+requestinfo.title=Request Information Example
+requestinfo.label.method=Method:
+requestinfo.label.requesturi=Request URI:
+requestinfo.label.protocol=Protocol:
+requestinfo.label.pathinfo=Path Info:
+requestinfo.label.remoteaddr=Remote Address:
+
+requestheader.title=Request Header Example
+
+requestparams.title=Request Parameters Example
+requestparams.params-in-req=Query the Plots database.
+requestparams.no-params=No taxon name specified in this session.
+requestparams.protoDescription=This is the prototype version of the query engine.
+requestparams.servletPosition=http://dev.nceas.ucsb.edu/harris/servlet/DataRequestServlet
+requestparams.DataRequestServletURL=http://@server@@servlet-path@DataRequestServlet
+requestparams.servletAccessPosition=http://dev.nceas.ucsb.edu/harris/servlet/pageDirector?pageType=plotQuery
+requestparams.clientLog=@servlet_lib_dir@/clientLog.txt
+requestparams.servletDir=@servlet_lib_dir@
+queryBuilderHtml=@build_html_content@/plotQueryBuilder.html
+
+
+requestparams.minElevation=Minimum Elevation:
+requestparams.maxElevation=Maximum Elevation:
+requestparams.taxonName=Taxon name:
+requestparams.communityName=Community name:
+requestparams.state=State:
+requestparams.surfGeo=Surface Geology:
+requestparams.multipleObs=Multiple Observations:
+requestparams.compoundQuery=compoundQuery:
+requestparams.plotId=plotId:
+requestparams.resultType=resultType:
+requestparams.uploadDir=/opt/tomcat/webapps/harris/uploads
+
+

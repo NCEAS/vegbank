@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!-- 
+  * buildServlet.xml
+  *
+  *	Authors: John Harris
+  *	Copyright: 2000 Regents of the University of California and the
+  *           National Center for Ecological Analysis and Synthesis
+  *  Build file for the Ant cross-platform build system for metacat
+  *  See http://jakarta.apache.org for details on Ant  
+  *  
+  * This build file will build the plot database access 
+  * module and insert into a working version of the plots 
+  * database an xml plot record, then query that database
+  * for all plots containing a taxon containing the string
+  * "Carya".
+  * usage: ant [compile|jar|install|jdoc]
+--> 
+<project name="plotLoader" default="dist" basedir=".">
+	<target name="init">
+	<tstamp/>
+	
+	<property name="installDir" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/WEB-INF/lib/" />
+	
+	<property name="tomcat_root" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/" />
+
+	<property name="current" value="./" />
+	<property name="build" value="build" />
+	<property name="src" value="src" />
+	<property name="lib" value="../lib" />
+	
+	
+	
+	<property name="jdbc" value="../lib/jdbc7.0-1.2.jar" />
+	<property name="multipart" value="../lib/multipart.jar" />
+	<property name="servlet-api" value="../lib/servlet.jar" />
+	<property name="database_access" value="../lib/database_access.jar" />
+	<property name="xalan" value="../lib/xalan_1_2_2.jar" />
+	<property name="xerces" value="../lib/xerces_1_4.jar" />
+	<property name="framework" value="../lib/frameworkservletmodule.jar" />
+	<property name="cpath" value="${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
+	
+	
+	<filter token="servlet-path" value="${servlet-path}" />
+  	<filter token="servlet_lib_dir" value="${installDir}" />
+</target>
+
+<!-- PREPARE -->
+<target name="prepare" depends="init">
+	<mkdir dir="${build}" />
+	
+	<copydir src="${src}" 
+		dest="${build}" 
+		filtering="yes"
+		includes="**.java veg_servlet.properties  pageDirector.properties 
+		fileDownload.properties authenticate.properties plotQuery.properties"
+		excludes="**/CVS* MetaCatServlet.java"
+	/>
+</target>	
+	
+	<!-- COMPILE -->
+<target name="compile" depends="prepare">
+	<javac srcdir="${build}" 
+		classpath="${cpath}"
+		includes=" QueryBuilderServlet.java DataRequestServlet.java  " 
+		destdir="${build}"
+	/>
+	
+</target>	
+
+<!-- JAR -->	
+<target name="jar" depends="compile">
+	<jar jarfile ="${lib}/vegbankquery.jar"
+		basedir="${build}"
+		includes="**"
+	/>
+</target>		
+
+
+<!-- DIST -->	
+<target name="dist" depends="jar">
+	<!-- JAR LIBRARIES INCL: xml parsers/xformers, jdbc drivers, db access, servlet-->
+	<copydir src="${lib}" 
+  	dest="${installDir}" 
+    filtering="no"
+    includes=" vegbankquery.jar frameworkservletmodule.jar database_access.jar xerces** xalan** jdbc7.0-1.2.jar"
+		excludes="**/CVS* "
+	/>
+</target>
+
+
+</project>
