@@ -92,6 +92,8 @@ update taxonImportance set stratumHeight=(select stratumHeight from stratum wher
 update taxonImportance set stratumBase=(select stratumBase from stratum where taxonImportance.stratum_ID=stratum.stratum_ID) where taxonImportance.stratum_ID is not null;
 
 
+update commConcept set commName=(select commName from commName where commName.commName_id=commConcept.commName_ID);
+
 -- update embargo denorm fields for full embargo
 
 -- ORDER OF THESE STATEMENTS MATTERS! the latter read from the former.

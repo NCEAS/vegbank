@@ -92,6 +92,7 @@ update party set partypublic=true where party_ID in (select party_ID from view_p
 update taxonImportance set stratumHeight=(select stratumHeight from stratum where taxonImportance.stratum_ID=stratum.stratum_ID) where taxonImportance.stratum_ID is not null and stratumHeight is null;
 update taxonImportance set stratumBase=(select stratumBase from stratum where taxonImportance.stratum_ID=stratum.stratum_ID) where taxonImportance.stratum_ID is not null and stratumBase is null;
 
+update commConcept set commName=(select commName from commName where commName.commName_id=commConcept.commName_ID) where commName is null;
 
 -- update embargo denorm fields for full embargo
 
