@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-07-23 18:05:06 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.servlet.authentication;
  *    Authors: John Harris
  * 		
  *		 '$Author: farrell $'
- *     '$Date: 2003-07-21 17:52:13 $'
- *     '$Revision: 1.4 $'
+ *     '$Date: 2003-07-23 18:05:06 $'
+ *     '$Revision: 1.5 $'
  */
 
 
@@ -45,6 +45,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Hashtable;
+import java.util.Vector;
 
 import org.vegbank.common.model.Address;
 import org.vegbank.common.model.Party;
@@ -346,7 +347,8 @@ public class UserDatabaseAccess
 		String state,
 		String country,
 		String phone,
-		String zip)
+		String zip,
+		Vector errors)
 	{
 		StringBuffer sb = new StringBuffer();
 		boolean success = true;
@@ -394,7 +396,10 @@ public class UserDatabaseAccess
 			}
 			else
 			{
-				//System.out.println("success: " + false);
+				//User already exits
+				errors.add("The username '" + emailAddress + "' is already taken, choose another"
+				+ "<br/> If you have already registered using that email address, "
+				+ " you can request that the password be sent to your email address by <a href=\"/vegbank/forms/fetch-password.html\">clicking here</a>");
 				success = false;
 			}
 		}

@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -31,8 +33,8 @@ import org.vegbank.servlet.util.ServletUtility;
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-07-09 23:33:04 $'
- *  '$Revision: 1.6 $'
+ *  '$Date: 2003-07-23 18:05:06 $'
+ *  '$Revision: 1.7 $'
  *
  *  @version
  *  @author
@@ -175,7 +177,8 @@ public class AuthenticationServlet extends HttpServlet
 				{
 					System.out.println("AuthenticationServlet > creating a new user");
 					
-					if (createNewUser(requestParams, remoteAddress) == true )
+					Vector errors = new Vector();
+					if (createNewUser(requestParams, remoteAddress, errors) == true )
 					{
 						System.out.println("AuthenticationServlet > created a new user");
 						Thread.sleep(100);
@@ -184,12 +187,12 @@ public class AuthenticationServlet extends HttpServlet
 						//have a cookie associated with the browser, so as a fix create a
 						//small statement and allow the oportunity to login
 						//response.sendRedirect("/vegbank/servlet/usermanagement?action=options");
-						String cresponse = getUserCreationResponse(true, request, response);
+						String cresponse = getUserCreationResponse(true, request, response, errors);
 						out.println( cresponse );
 					}
 					else
 					{
-						String cresponse = getUserCreationResponse(false, request, response);
+						String cresponse = getUserCreationResponse(false, request, response, errors);
 						out.println( cresponse );
 					}
 				}
@@ -258,7 +261,7 @@ public class AuthenticationServlet extends HttpServlet
 				//if a password is retreived then send it to the user
 				if ( passwd != null && passwd.length() > 1 )
 				{
-					su.sendEmail( mailHost, from, to, cc, subject, body);
+					su.sendHTMLEmail( mailHost, from, to, cc, subject, body);
 					validUser = true;
 				}
 
@@ -287,7 +290,7 @@ public class AuthenticationServlet extends HttpServlet
 	 * response will be modified accordingly
 	 * @param createResult -- true or false
 	 */
-	 private String getUserCreationResponse(boolean createResult, HttpServletRequest request, HttpServletResponse response) throws IOException
+	 private String getUserCreationResponse(boolean createResult, HttpServletRequest request, HttpServletResponse response, Vector errors) throws IOException
 	 {
 		 StringBuffer sb = new StringBuffer();
 		 Hashtable replaceHash = new Hashtable();
@@ -306,8 +309,20 @@ public class AuthenticationServlet extends HttpServlet
 			 sb.append("Please review the user-related attributes that you submitted<br>");
 			 sb.append("and resubmit.  If you get this error again, please contact the <br>");
 
-			 sb.append("<a href=\"mailto:dba@vegbank.org\" > ");
-			 sb.append(" VegBank Administrator </a>");
+				sb.append("<a href=\"mailto:dba@vegbank.org\" > ");
+				sb.append(" VegBank Administrator </a><br/><br/>");
+			
+				sb.append("<font color=\"red\">Correct the following errors:</font>");
+				sb.append("<ul>");
+				Iterator errorsIt = errors.iterator();
+				while ( errorsIt.hasNext() )
+				{
+					String error = (String) errorsIt.next();
+					sb.append("<li>" + error + "</li>");
+				}
+				sb.append("</ul>");
+
+
 		 }
 		 replaceHash.put("messages",  sb.toString());
 		 //su.filterTokenFile(genericForm, genericTemplate, replaceHash);
@@ -424,12 +439,12 @@ public class AuthenticationServlet extends HttpServlet
 	 *
 	 *
 	 */
-	 private boolean createNewUser(Hashtable requestParams, String remoteAddress)
+	 private boolean createNewUser(Hashtable requestParams, String remoteAddress, Vector errors)
 	 {
 		 try
 		 {
 			System.out.println("AuthenticationServlet > REQUEST PARAMS: "+requestParams.toString() );
-		 	boolean b = validateNewUserAttributes(requestParams);
+		 	boolean b = validateNewUserAttributes(requestParams, errors);
 			System.out.println("AuthenticationServlet > valid new user attributes: "+ b );
 			if ( b == true )
 			{
@@ -474,12 +489,13 @@ public class AuthenticationServlet extends HttpServlet
 						state,
 						country,
 						phone,
-						zip);
+						zip,
+						errors);
 				return( b2 );
 			}
 			else
 			{
-				System.out.println("AuthenticationServlet > no @ in email address");
+				System.out.println("AuthenticationServlet > form invalid: " + errors);
 				return(false);
 			}
 		 }
@@ -491,56 +507,67 @@ public class AuthenticationServlet extends HttpServlet
 		 }
 	 }
 
-	/*
+	/**
 	 * method that returns true if the user attemting to create a new account
-	 * has passed the correct parmmeters
-	 */
-	 private boolean validateNewUserAttributes(Hashtable h)
+	 * has passed the correct parmeters.
+	 * 
+	 * Also populates a vector with Strings with error messages suitable for the user.
+	 **/
+	 private boolean validateNewUserAttributes(Hashtable h, Vector errors)
 	 {
 	 	boolean valid = true;
-		// CHECK THAT ALL THE PARAMTERS WERE SENT
-		if ( h.containsKey("emailAddress")  && h.containsKey("password") && h.containsKey("password2")
-		&& h.containsKey("surname") && h.containsKey("givenname"))
-		{
-			System.out.println("AuthenticationServlet > all required attributes passed");
-			// CHECK THAT THE PASSWORD STRINGS ARE EQUAL
-			String pw = (String)h.get("password");
-			String pw2 = (String)h.get("password2");
-			if ( pw.equals(pw2) )
-			{
-				System.out.println("AuthenticationServlet > password strings match" );
-				// CHECK THAT THERE IS A '@' IN THE EMAIL ADDRESS
-				String email = (String)h.get("emailAddress");
-				if ( email.indexOf("@") > 0 )
-				{
-					System.out.println("AuthenticationServlet > email contains '@'" );
-					// CHECK THAT THE SURNAME AND GIVEN NAME HAVE NOT NULL VALUES
-					String sname = (String)h.get("surname");
-					String gname = (String)h.get("givenname");
-					if ( sname.length() > 2 && gname.length() > 2 )
-					{
-						System.out.println("AuthenticationServlet > surname and given names valid" );
-					}
-					else
-					{
-						valid = false;
-					}
-				}
-				else
-				{
-					valid = false;
-				}
-			}
-			else
-			{
-				valid = false;
-			}
-		}
-		else
+	 	
+	 	System.out.println("Validating Form");
+	 	
+	 	// Check each required field
+	 	if ( ! h.containsKey("emailAddress") || h.get("emailAddress").equals("") )
+	 	{
+	 		valid = false;
+	 		errors.add("Please enter email address");
+	 	}
+	 	
+	 	if ( ! h.containsKey("password") ||  ! h.containsKey("password2") || h.get("password").equals(""))
 		{
 			valid = false;
+			errors.add("Please enter password");
+		}	 	
+	 	
+		if (! h.containsKey("surname")  || h.get("surname").equals("") )
+		{
+			valid = false;
+			errors.add("Please enter first name");
+		}	 		 	
+	 	
+		if (! h.containsKey("givenname") || h.get("givenname").equals("") )
+		{
+			valid = false;
+			errors.add("Please enter last name");
+		}
+		
+		// CHECK THAT THE PASSWORD STRINGS ARE EQUAL
+		String pw = (String)h.get("password");
+		String pw2 = (String)h.get("password2");
+		if ( ! pw.equals(pw2) )
+		{
+			valid = false;
+			errors.add("Passwords are not the same");
+		}
+		
+		String email = (String)h.get("emailAddress");
+		System.out.println(">>>> " + email  + " >>> " + email.indexOf("@"));
+		if ( email.indexOf("@") <= 0 )
+		{
+			valid = false;
+			errors.add("Enter a valid email address");
 		}
 
+		if ( ! h.containsKey("termsaccept") || ! h.get("termsaccept").equals("accept") )
+		{
+			valid = false;
+			errors.add("You must accept our conditions to become a user");
+		}		
+	 	
+	 	System.out.println("success: " + valid + " and errors: " + errors);
 		return(valid);
 	 }
 

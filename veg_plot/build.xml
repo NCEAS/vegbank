@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-07-15 22:51:28 $'
-  *     '$Revision: 1.26 $'
+  *     '$Date: 2003-07-23 18:05:05 $'
+  *     '$Revision: 1.27 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -92,7 +92,7 @@
     <filter token="logFile" value="${logFile}" />
 
     <!-- Servlet specific -->
-    <filter token="mailHost" value="nceas.ucsb.edu"/>
+    <filter token="mailHost" value="hyperion.nceas.ucsb.edu"/>
     <filter token="systemEmail" value="dba@vegbank.org"/>
     <filter token="genericForm" value="${web.docroot}/vegbank/forms/generic_form.html"/>
     <filter token="genericTemplate" value="${web.docroot}/vegbank/forms/tmp.html"/>

@@ -7,8 +7,8 @@
  *	
  *
  * '$Author: farrell $'
- * '$Date: 2002-12-23 22:50:56 $'
- * '$Revision: 1.8 $'
+ * '$Date: 2003-07-23 18:05:06 $'
+ * '$Revision: 1.9 $'
  *
  */
 
@@ -38,7 +38,7 @@ CREATE table user_info (
 	given_name  varchar(50),
 	sur_name  varchar(50),
 	remote_address  varchar(50),
-	address varchar(500),
+	address text,
 	city varchar(50),
 	phone_number varchar(20),
 	phone_type varchar(12),
@@ -75,30 +75,30 @@ email_address varchar(50),
 sur_name varchar(50),
 given_name varchar(50),
 phone_number varchar(20),
-phone_type varchar(12),
+phone_type varchar(50),
 current_cert_level varchar(50),
-cv_documentation varchar(500),
-highest_degree varchar(12),
-degree_year  varchar(12),
+cv_documentation text,
+highest_degree varchar(50),
+degree_year  varchar(50),
 degree_institution  varchar(50),
 current_institution  varchar(50),
 current_position varchar(200),
-esa_certified varchar(12),
-prof_experience_doc  varchar(500),
-relevant_pubs  varchar(500),
-veg_sampling_doc  varchar(500),
-veg_analysis_doc  varchar(500),
-usnvc_experience_doc  varchar(500),
-vegbank_experience_doc  varchar(500),
-plotdb_experience_doc  varchar(500),
-nvc_exp_region_a  varchar(12),
-nvc_exp_vegetation_a varchar(12),
-nvc_exp_floristics_a varchar(12),
-nvc_exp_usnvc_a varchar(12),
+esa_certified varchar(50),
+prof_experience_doc  text,
+relevant_pubs  text,
+veg_sampling_doc  text,
+veg_analysis_doc  text,
+usnvc_experience_doc  text,
+vegbank_experience_doc  text,
+plotdb_experience_doc  text,
+nvc_exp_region_a  varchar(50),
+nvc_exp_vegetation_a varchar(50),
+nvc_exp_floristics_a varchar(50),
+nvc_exp_usnvc_a varchar(50),
 esa_sponsor_name_a varchar(120),
 esa_sponsor_email_a varchar(120),
 peer_review varchar(10),
-additional_statements varchar(500)
+additional_statements text
 );
 
 -- This supports the file upload function
