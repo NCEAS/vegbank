@@ -272,3 +272,18 @@ CREATE INDEX plantcorrelation_plantconcept_id_x ON plantcorrelation (plantconcep
 
 -- keywords
 CREATE INDEX keywords_table_id_entity_key ON keywords (table_id,entity);
+
+--embargo denorm fields
+CREATE INDEX emb_classContributor_idx ON classContributor (emb_classContributor);
+CREATE INDEX emb_commClass_idx ON commClass (emb_commClass);
+CREATE INDEX emb_commInterpretation_idx ON commInterpretation (emb_commInterpretation);
+CREATE INDEX emb_disturbanceObs_idx ON disturbanceObs (emb_disturbanceObs);
+CREATE INDEX emb_observation_idx ON observation (emb_observation);
+CREATE INDEX emb_plot_idx ON plot (emb_plot);
+CREATE INDEX emb_soilObs_idx ON soilObs (emb_soilObs);
+CREATE INDEX emb_stemCount_idx ON stemCount (emb_stemCount);
+CREATE INDEX emb_stemLocation_idx ON stemLocation (emb_stemLocation);
+CREATE INDEX emb_taxonAlt_idx ON taxonAlt (emb_taxonAlt);
+CREATE INDEX emb_taxonImportance_idx ON taxonImportance (emb_taxonImportance);
+CREATE INDEX emb_taxonInterpretation_idx ON taxonInterpretation (emb_taxonInterpretation);
+CREATE INDEX emb_taxonObservation_idx ON taxonObservation (emb_taxonObservation);
