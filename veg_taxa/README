@@ -30,4 +30,7 @@ taxaData/plantlst2000.bin.gz -- these 2 files
 	single quote ''' that kept messing up the sql code embedded in the
 	java code  -- put both these files into filenames :
 
+PERFORMANCE --
 
+on postgresql increase the wall_files attribute in the postgresql.conf 
+file to large number like = 60

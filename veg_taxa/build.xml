@@ -102,10 +102,10 @@
 		includes="**.dtd **.xsl "
 		excludes="**/CVS*"
 	/>
-										
+<!--										
 	<copy file="${db_prop_file}" 
 		todir="${build_src}"/>
-	
+-->	
 	
 	<copydir src="${bin}"
 		dest="${build_bin}"

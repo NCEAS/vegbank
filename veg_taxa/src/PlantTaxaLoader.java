@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-05-31 03:55:55 $'
- * '$Revision: 1.6 $'
+ *     '$Date: 2002-05-31 22:23:13 $'
+ * '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,6 +55,20 @@ public class PlantTaxaLoader
 	 * return an xml receipt for the loading process.  This method is intended 
 	 * to be a 'generic' method that may be called by a number of loaders to 
 	 * be used for loading custom datasets
+	 * the incomming hashatbale should contain the following keys:
+	 * longName
+	 * shortName
+	 * code
+	 * taxonDescription
+	 * salutation
+	 * givenName
+	 * surName
+	 * orgName
+	 * email
+	 * citationDetails
+	 * dateEntered
+	 * usageStopDate
+	 * rank
 	 */
 	public boolean loadGenericPlantTaxa(Hashtable plantTaxon)
 	{
@@ -86,39 +100,69 @@ public class PlantTaxaLoader
 			int refId = this.insertPlantReference(email, citationDetails);
 			int partyId = this.insertPlantPartyInstance(salutation, givenName, surName, orgName, email);
 			
-			// check to see if the names exists 
-			boolean longNameExist = this.plantNameExists(longName);
-			boolean shortNameExist = this.plantNameExists(shortName);
-			boolean codeExist = this.plantNameExists(code);
+			// check to see if the names exists in the database after 
+			// checking that the attributes have valid names
+			boolean longNameExist;
+			boolean shortNameExist;
+			boolean codeExist;
 			
-			// if so then get the nameId 
-			if ( longNameExist == true )
+			if ( longName.length() < 1 )
 			{
-				longNameId = getPlantNameId(longName);
-				System.out.println("PlantTaxaLoader > longNameId: " + longNameId );
+				System.out.println("long name is short");
+				longNameExist = false;
 			}
 			else
 			{
-				longNameId = loadPlantNameInstance(refId, longName, "", dateEntered);
+				longNameExist = this.plantNameExists(longName);
+				if ( longNameExist == true )
+				{
+					longNameId = getPlantNameId(longName);
+					System.out.println("PlantTaxaLoader > longNameId: " + longNameId );
+				}
+				else
+				{
+					longNameId = loadPlantNameInstance(refId, longName, "", dateEntered);
+				}
 			}
-			if ( shortNameExist == true )
+			
+			if ( shortName.length() < 1 )
 			{
-				shortNameId = getPlantNameId(shortName);
-				System.out.println("PlantTaxaLoader > shortNameId: " + shortNameId );
+				System.out.println("short name is short");
+				 shortNameExist = false;
 			}
 			else
 			{
-				shortNameId = loadPlantNameInstance(refId, shortName, "", dateEntered);
+				shortNameExist = this.plantNameExists(shortName);
+				if ( shortNameExist == true )
+				{
+					shortNameId = getPlantNameId(shortName);
+					System.out.println("PlantTaxaLoader > shortNameId: " + shortNameId );
+				}
+				else
+				{
+					shortNameId = loadPlantNameInstance(refId, shortName, "", dateEntered);
+				}
 			}
-			if ( codeExist == true )
+			
+			if ( code.length() < 1 )
 			{
-				codeId = getPlantNameId(code);
-				System.out.println("PlantTaxaLoader > codeId: " + codeId );
+				System.out.println("code name is short");
+				 codeExist = false;
 			}
 			else
 			{
-				codeId = loadPlantNameInstance(refId, code, "", dateEntered);
+				codeExist = this.plantNameExists(code);
+				if ( codeExist == true )
+				{
+					codeId = getPlantNameId(code);
+					System.out.println("PlantTaxaLoader > codeId: " + codeId );
+				}
+				else
+				{
+					codeId = loadPlantNameInstance(refId, code, "", dateEntered);
+				}
 			}
+
 			
 			//update the concept table with the long name and then
 			int conceptId;
@@ -151,23 +195,32 @@ public class PlantTaxaLoader
 				System.out.println("PlantTaxonomyLoader > uid: " + uid);
 				usageVec.addElement(""+uid);
 			}
+				System.out.println("PlantTaxonomyLoader > codeNameId : " + codeId );
 			
-			if (plantUsageExists(shortName, shortNameId, conceptId, "STANDARD", 
-				dateEntered, usageStopDate,  "SHORTNAME", partyId) == false )
+			
+			// if the nameid are '0' then the names were not inserted and thus the 
+			// usage tables does not need to be updated
+			if ( shortNameId != 0 )
 			{
-				int uid = 	loadPlantUsageInstance(shortName, shortNameId, conceptId, "STANDARD", 
-				dateEntered, usageStopDate,  "SHORTNAME", partyId);
-				System.out.println("PlantTaxonomyLoader > uid: " + uid);
-				usageVec.addElement(""+uid);
+				if (plantUsageExists(shortName, shortNameId, conceptId, "STANDARD", 
+					dateEntered, usageStopDate,  "SHORTNAME", partyId) == false )
+				{
+					int uid = 	loadPlantUsageInstance(shortName, shortNameId, conceptId, "STANDARD", 
+					dateEntered, usageStopDate,  "SHORTNAME", partyId);
+					System.out.println("PlantTaxonomyLoader > uid: " + uid);
+					usageVec.addElement(""+uid);
+				}
 			}
-
-			if  (plantUsageExists(code, codeId, conceptId, "STANDARD", 
-				dateEntered, usageStopDate,  "CODE", partyId) == false )
+			if ( codeId != 0 )
 			{
-				int uid = loadPlantUsageInstance(code, codeId, conceptId, "STANDARD", 
-				dateEntered, usageStopDate,  "CODE", partyId);
-				System.out.println("PlantTaxonomyLoader > uid: " + uid);
-				usageVec.addElement(""+uid);
+				if  (plantUsageExists(code, codeId, conceptId, "STANDARD", 
+				dateEntered, usageStopDate,  "CODE", partyId) == false )
+				{
+					int uid = loadPlantUsageInstance(code, codeId, conceptId, "STANDARD", 
+					dateEntered, usageStopDate,  "CODE", partyId);
+					System.out.println("PlantTaxonomyLoader > uid: " + uid);
+					usageVec.addElement(""+uid);
+				}
 			}
 
 			// last thing to do is to denormalize the database for querying
@@ -749,7 +802,7 @@ public class PlantTaxaLoader
 				//System.out.println("USDAPlantsLoader >>> plantname_id: " + plantNameId);
 			}
 			if (cnt > 1)
-			throw new Exception("multiple plantnameID's found");
+			throw new Exception("multiple plantnameID's found for: '"+plantName+"'");
 			pstmt1.close();
 		}
 		catch(Exception e )
@@ -1062,6 +1115,7 @@ public class PlantTaxaLoader
  	* method that returns true if an instance of a plant
  	* name exists that is identical to the plantName 
  	* input into the method
+	* @param -- concatenatedName -- the plant name
  	*/	
 	private boolean plantNameExists(String concatenatedName)
 	{
