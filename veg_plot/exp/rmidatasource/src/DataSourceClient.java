@@ -57,7 +57,7 @@ public class DataSourceClient
 			this.source = (DataSourceServerInterface)Naming.lookup(url);
 			
 			//make a test
-			System.out.println("DataSourceCleint > plots:" + source.getPlotNames() );
+			//System.out.println("DataSourceCleint > plots:" + source.getPlotNames() );
 		}
 		catch(Exception e)
 		{
@@ -756,6 +756,7 @@ public class DataSourceClient
 		*/
 		private boolean putMDBFile(String fileName, String fileType)
 		{
+			boolean results = true;
 			try 
 			{
 				
@@ -766,17 +767,57 @@ public class DataSourceClient
          input.read(buffer,0,buffer.length);
          input.close();
 				
-				 String s = source.getMDBFile(fileName, fileType, buffer);
+				 results = source.getMDBFile(fileName, fileType, buffer);
       } 
 			catch(Exception e)
 			{
          System.out.println("FileImpl: "+e.getMessage());
          e.printStackTrace();
+				 return(false);
       }
 			return(true);
 		}
 		
-	 
+	  
+	 /**
+	  * 	method that examines the mdbFile stored in the location described by 
+		* 	'mdbFile' instance variable to verify that it is indeed an ms access 
+		* 	file
+		*/
+	 public boolean isMDBFileValid()
+	 {
+		 boolean results = true;
+		 try
+		 {
+		 		results = source.isMDBFileValid();
+		 }
+		 catch(Exception e)
+			{
+				System.out.println("FileImpl: "+e.getMessage());
+         e.printStackTrace();
+				 results = false;
+      }
+		 return(results);
+	 }
+	
+	/**
+	 * method that will insert a plot on the windows machine based on the name
+	 * of that plot
+	 */
+	 public String insertPlot()
+	 {
+		 try
+			{
+				
+				
+			}
+			catch(Exception e) 
+			{
+				System.err.println("Exception: "+ e.getMessage());
+				e.printStackTrace();
+			}		
+	 }
+	
 	 
 	/**
 	 * main method for testing
@@ -815,22 +856,19 @@ public class DataSourceClient
 				String file =  argv[1];
 				String fileType = "tncplots";
 				DataSourceClient client = new DataSourceClient(hostServer, "1099");
-				System.out.println("DataSourceCleint > " + client.getPlotNames() );
-				System.out.println("DataSourceCleint > " + client.putMDBFile(file, fileType) );
+				System.out.println("DataSourceCleint > sending file: " + file );
+				boolean sendResults = client.putMDBFile(file, fileType);
+				System.out.println("DataSourceCleint > transmittal results: " + sendResults );
+				boolean fileValidityResults = client.isMDBFileValid();
+				System.out.println("DataSourceCleint > access file validity: " + fileValidityResults );
+				Vector v = client.getPlotNames();
+				System.out.println("DataSourceCleint > found : " + v.size() +" plots in archive " );
 				
-				//END
-/*				
-				String name = "//" + argv[1] + "/DataSourceServer";
-				DataSourceServerInterface fi = (DataSourceServerInterface)Naming.lookup(name);
-				byte[] filedata = fi.downloadFile(argv[0]);
-				File file = new File(argv[0]);
-				BufferedOutputStream output = new
-				BufferedOutputStream(new FileOutputStream(file.getName()));
-				output.write(filedata,0,filedata.length);
-				output.flush();
-				output.close();
-*/
-} 
+				System.out.println("DataSourceCleint > inserting the first plot in the archive: " + v.elementAt(0).toString() );
+				
+			
+			
+			} 
 			catch(Exception e) 
 			{
 				System.err.println("FileServer exception: "+ e.getMessage());

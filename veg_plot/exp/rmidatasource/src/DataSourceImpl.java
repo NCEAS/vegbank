@@ -16,6 +16,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		private String name;
 	 	private PlotDataSource source;
+		private String mdbFile = "E:\\cygwin\\tmp\\rmi_exp.mdb";
 	 
 	 
 	 //constructor
@@ -32,49 +33,59 @@ public class DataSourceImpl extends UnicastRemoteObject
 	
 	
 	/**
-	 * method used for uploading the access mdb file
+	 * method used for uploading the access mdb file of a given type
+	 *
+	 * @param  fileName -- the name of the uploaded file
+	 * @param  fileType -- the type of the uploaded file
+	 * @param 	buffer -- the file contents
+	 *
 	 */
-	 public String getMDBFile(String fileName, String fileType, byte buffer[] )
+	 public boolean getMDBFile(String fileName, String fileType, byte buffer[] )
 	 {
 		 try
 		 {
 				System.out.println("DataSourceImpl > uploading: " + fileName);
 				byte[] filedata = buffer;
-				File file = new File("exp.mdb");
+				//make the file that is defined as the instance variable
+				System.out.println("DataSourceImpl > writing to: " + mdbFile);
+				File file = new File(mdbFile);
 				BufferedOutputStream output = new
-				BufferedOutputStream(new FileOutputStream(file.getName()));
+				BufferedOutputStream(new FileOutputStream(file ));
 				output.write(filedata,0,filedata.length);
 				output.flush();
 				output.close();
-				
-				/*
-					String name = "//" + argv[1] + "/DataSourceServer";
-				DataSourceServerInterface fi = (DataSourceServerInterface)Naming.lookup(name);
-				byte[] filedata = fi.downloadFile(argv[0]);
-				File file = new File(argv[0]);
-				BufferedOutputStream output = new
-				BufferedOutputStream(new FileOutputStream(file.getName()));
-				output.write(filedata,0,filedata.length);
-				output.flush();
-				output.close();
-				*/
-				
-				/*
-				 File file = new File(fileName);
-         byte buffer[] = new byte[(int)file.length()];
-         BufferedInputStream input = new
-      	 BufferedInputStream(new FileInputStream(fileName));
-         input.read(buffer,0,buffer.length);
-         input.close();
-				*/
-				
 		 }
 		 catch (Exception e)
 		 {
 		 	System.out.println("Exception: "+e.getMessage());
       e.printStackTrace();
+			return(false);
      }
-		 return("true");
+		 return(true);
+	 }
+	 
+	 
+	 /**
+	  * 	method that examines the mdbFile stored in the location described by 
+		* 	'mdbFile' instance variable to verify that it is indeed an ms access 
+		* 	file
+		*/
+	 public boolean isMDBFileValid()
+	 {
+		 System.out.println("DataSourceImpl > validating: " + mdbFile);
+		 
+		 //for now just check that there are vlid plot names in the file
+		 Vector v = getPlotNames();
+		 System.out.println("DataSourceImpl > found : " + v.size() + " plots");
+		 //if there are no plots then return false
+		 if (v.size() < 1 )
+		 {
+			 return(false);
+		 }
+		 else
+		 {
+		 	return(true);
+		 }
 	 }
 	
 	//#START EDITIONS
