@@ -201,7 +201,6 @@ public class fileDownload extends HttpServlet
 	private void dataRequester(String plotList, String atomicResultSet, 
 	String cummulativeResultSet, String dataType) 
 	{
-		
 		try
 		{		
 			//pass the filename to the fileVectorizer method to make the file a vector
@@ -255,7 +254,7 @@ public class fileDownload extends HttpServlet
        
 			 URL u1 = new URL(u1str);
        HttpMessage msg = new HttpMessage(u1);
- 			 InputStream in =   msg.sendPostMessage();
+ 			 InputStream in = msg.sendPostMessage();
 
        InputStreamReader isr = new InputStreamReader(in);
        char c;
@@ -267,7 +266,7 @@ public class fileDownload extends HttpServlet
          temp2 += c;
        	 i = isr.read();
        }
-			System.out.println("fileDownload > initial server output string: " + temp2 );
+			System.out.println("fileDownload > retreiving the DataRequestServlet response" );
 			// Concatenate the resulting file so that it isnt overwritten  
 			sutil.fileCopy(atomicResultSet, cummulativeResultSet, "concat");
 		}
