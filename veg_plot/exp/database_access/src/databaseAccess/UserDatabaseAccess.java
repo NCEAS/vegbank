@@ -6,9 +6,9 @@
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
  * 		
- *		 '$Author: harris $'
- *     '$Date: 2002-08-29 17:22:51 $'
- *     '$Revision: 1.2 $'
+ *		 '$Author: farrell $'
+ *     '$Date: 2002-11-27 22:11:27 $'
+ *     '$Revision: 1.1 $'
  * @deprecated -- this class is now part of the servlet.authentication package
  */
 

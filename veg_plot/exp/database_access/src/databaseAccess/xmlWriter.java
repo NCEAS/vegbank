@@ -5,9 +5,9 @@ package databaseAccess;
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2002-08-09 14:48:19 $'
- * '$Revision: 1.6 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2002-11-27 22:11:27 $'
+ * '$Revision: 1.1 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

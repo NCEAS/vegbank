@@ -42,9 +42,9 @@ import PlotXmlWriterV2;
  * allow the user to update the database, based on a plot xml 
  * document containing only partial data from a plot 
  *
- *  '$Author: harris $'
- *  '$Date: 2002-07-02 20:47:56 $'
- * 	'$Revision: 1.6 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2002-11-27 22:11:27 $'
+ * 	'$Revision: 1.1 $'
  */
 
 

@@ -6,9 +6,9 @@
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
  *
- *		 '$Author: harris $'
- *     '$Date: 2002-05-31 22:20:09 $'
- *     '$Revision: 1.3 $'
+ *		 '$Author: farrell $'
+ *     '$Date: 2002-11-27 22:11:27 $'
+ *     '$Revision: 1.1 $'
  *
  */
 package databaseAccess;

@@ -5,8 +5,8 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2001-11-01 17:00:43 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2002-11-27 22:11:27 $'
  * '$Revision: 1.1 $'
  *
  */
