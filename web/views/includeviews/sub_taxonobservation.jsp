@@ -10,6 +10,8 @@
        -->
 
 
+<%     int rowOrder = 0;  %>
+
      <TABLE cellpadding="0" class="thinlines">
   <logic:equal name="smallheader" value="yes">
      <TR><TH colspan="9">--Taxa--</TH></TR>
@@ -42,13 +44,14 @@
      <!-- sortable table: -->
      <table cellpadding="2" class="thinlines sortable" id="taxonObservationof<bean:write name='observation_pk' />">
 
-         <tr>
+         <tr><th>ord</th>
          <%@ include file="../autogen/taxonimportance_summary_head.jsp" %>
          </tr>
     
          <logic:iterate id="onerowoftaxonimportance" name="taxonimportanceall-BEANLIST">
      
          <tr class='@nextcolorclass@'>
+          <td class="sizetiny"><% rowOrder ++ ; %> <%= rowOrder %></td>
           <%@ include file="../autogen/taxonimportance_summary_data.jsp" %>
          </tr>
 
@@ -84,13 +87,13 @@
  
   
    
-     <tr>
+     <tr><th>ord</th>
      <%@ include file="../autogen/taxonimportance_summaryonlystrata_head.jsp" %>
      </tr>
 
      <logic:iterate id="onerowoftaxonimportance" name="taxonimportance-BEANLIST">
  
-     <tr class='@nextcolorclass@'>
+     <tr class='@nextcolorclass@'><td class="sizetiny"><% rowOrder ++ ; %> <%= rowOrder %></td>
       <%@ include file="../autogen/taxonimportance_summaryonlystrata_data.jsp" %>
      </tr>
             
@@ -133,13 +136,13 @@
      <table cellpadding="2" class="thinlines sortable" id="taxonObservationof<bean:write name='observation_pk' />">
  
     
-         <tr>
+         <tr><th>ord</th>
          <%@ include file="../autogen/taxonimportance_summarynostrata_head.jsp" %>
          </tr>
     
          <logic:iterate id="onerowoftaxonimportance" name="taxonimportancens-BEANLIST">
      
-         <tr class='@nextcolorclass@'>
+         <tr class='@nextcolorclass@'><td class="sizetiny"><% rowOrder ++ ; %> <%= rowOrder %></td>
           <%@ include file="../autogen/taxonimportance_summarynostrata_data.jsp" %>
          </tr>
                
