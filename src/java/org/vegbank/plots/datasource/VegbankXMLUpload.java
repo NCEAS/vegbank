@@ -6,8 +6,8 @@ package org.vegbank.plots.datasource;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-19 22:27:48 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-10-22 19:31:06 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -392,6 +392,8 @@ public class VegbankXMLUpload
 				
 				if ( this.getCurrentTable() != null )
 				{
+					//this.showMeTheTable(localName, this.getCurrentTable());
+					
 					tableNames.remove( tableNames.size() -1 );	
 					tables.remove( tables.size() -1 );	
 				}
@@ -412,6 +414,21 @@ public class VegbankXMLUpload
 		} 
 		
 		
+		/**
+		 *  Debugging method ...
+		 * 
+		 * @param localName
+		 * @param hashtable
+		 */
+		private void showMeTheTable(String tableName, Hashtable hashtable)
+		{
+			System.out.println("Finished storing table: " + tableName);
+			if ( tableName.equalsIgnoreCase("plantstatus"))
+			{
+				Utility.prettyPrintHash( hashtable );
+			}
+		}
+
 		private Hashtable getPreviousTable()
 		{
 			Hashtable previousTable = null;
@@ -687,21 +704,22 @@ public class VegbankXMLUpload
 			commit = true;
 			this.initDB();
 
+			//TODO:  CommConcept
 			// insert commConcepts
-			//			Enumeration plots =  getChildTables(vegbankPackage, "plot");
-			//			while ( plots.hasMoreElements() )
-			//			{
-			//				Hashtable plot = (Hashtable) plots.nextElement();
-			//				insertPlot(plot);
-			//			}			
+			Enumeration commConcepts =  getChildTables(vegbankPackage, "commConcept");
+			while ( commConcepts.hasMoreElements() )
+			{
+				Hashtable commConcept = (Hashtable) commConcepts.nextElement();
+				insertCommConcept(commConcept);
+			}			
 
 			// insert plantConcepts
-			//		Enumeration plots =  getChildTables(vegbankPackage, "plot");
-			////			while ( plots.hasMoreElements() )
-			////			{
-			////				Hashtable plot = (Hashtable) plots.nextElement();
-			////				insertPlot(plot);
-			////			}
+			Enumeration plantConcepts =  getChildTables(vegbankPackage, "plantConcept");
+			while ( plantConcepts.hasMoreElements() )
+			{
+				Hashtable plantConcept = (Hashtable) plantConcepts.nextElement();
+				insertPlantConcept(plantConcept);
+			}
 
 			// insert references
 			Enumeration references =
@@ -712,7 +730,6 @@ public class VegbankXMLUpload
 				this.insertReference(reference);
 			}
 
-			//TODO: PlantConcept, CommConcept, Reference
 			// insert Parties
 			Enumeration parties = getChildTables(vegbankPackage, "party");
 			while (parties.hasMoreElements())
@@ -918,21 +935,21 @@ public class VegbankXMLUpload
 				return PK;
 			}
 			
+			// Insert Reference if it exists
+			int referenceId = 0;
+			Hashtable reference = getFKChildTable(fieldValueHash, "reference_ID", "reference");
+			if ( reference != null)
+			{
+				referenceId = insertReference(reference);
+			}
+			AddForeignKey(fieldValueHash, "REFERENCE_ID", referenceId);
+			
 			// Check if this already exists in the database
 			// TODO: This is unlikely to be valid ... need per table rules for identicalness
 			if ( this.tableExists(tableName, fieldValueHash) )
 			{
 				return this.getTablePK(tableName, fieldValueHash);
 			}
-			
-			// Insert Reference if it exists
-			int referenceId = 0;
-			Hashtable reference = getChildTable(fieldValueHash, "reference_ID", "reference");
-			if ( reference != null)
-			{
-				referenceId = insertReference(reference);
-			}
-			AddForeignKey(fieldValueHash, "REFERENCE_ID", referenceId);
 			
 			System.out.println("INSERT: " + tableName);
 			PK = this.getNextId(tableName);
@@ -1213,16 +1230,21 @@ public class VegbankXMLUpload
 		 **/
 		private int insertReference( Hashtable reference)
 		{
-			System.out.println("Got a reference to add!!");
-			int referenceId = this.getPKFromAccessionCode(reference, "reference"); 
+			int referenceId = 0;
+			// Handle null
+			if ( reference == null )
+			{
+				return referenceId;
+			}
+			
+			referenceId = this.getPKFromAccessionCode(reference, "reference"); 
 			if ( referenceId != 0)
 			{
-				// As expected
 				return referenceId;
 			}
 			
 			// Insert Reference Journal
-			Hashtable referenceJournal = getChildTable(reference, "referenceJournal_ID", "referenceJournal");
+			Hashtable referenceJournal = getFKChildTable(reference, "referenceJournal_ID", "referenceJournal");
 			int referenceJournalId = insertTable("referenceJournal", referenceJournal);
 
 			AddForeignKey(reference, "REFERENCEJOURNAL_ID", referenceJournalId);
@@ -1243,7 +1265,7 @@ public class VegbankXMLUpload
 			{
 				Hashtable referenceContributor = (Hashtable) referenceContributors.nextElement();
 				
-				Hashtable referenceParty = getChildTable(referenceContributor, "referenceParty_ID", "referenceParty");
+				Hashtable referenceParty = getFKChildTable(referenceContributor, "referenceParty_ID", "referenceParty");
 				// Add  referenceParty
 				int referencePartyId = insertReferenceParty(referenceParty);
 				
@@ -1264,7 +1286,7 @@ public class VegbankXMLUpload
 			int referencePartyId = 0;
 			if (referenceParty != null)
 			{
-				Hashtable referencePartyParent = getChildTable(referenceParty, "currentParty_ID", "referenceParty");
+				Hashtable referencePartyParent = getFKChildTable(referenceParty, "currentParty_ID", "referenceParty");
 				int referencePartyParentId = insertReferenceParty(referencePartyParent);
 				
 				AddForeignKey(referenceParty, "CURRENTPARTY_ID", referencePartyParentId);
@@ -1356,10 +1378,10 @@ public class VegbankXMLUpload
 		
 		/**
 		 * Convience method to get the a child TableHash that has is a FK
-		 * 
+		 *  
 		 * @param tableName
 		 */
-		private Hashtable getChildTable( Hashtable parentHash, String keyName ,String tableName)
+		private Hashtable getFKChildTable( Hashtable parentHash, String keyName ,String tableName)
 		{
 			Hashtable childHash = null;
 			
@@ -1379,8 +1401,15 @@ public class VegbankXMLUpload
 		private Hashtable getChildTable( Hashtable parentHash, String tableName)
 		{
 			Hashtable childHash = null;
-			System.out.println("Get " + tableName + " From :");
-			//Utility.prettyPrintHash(parentHash);
+			if ( parentHash == null )
+			{
+				System.out.println("Got asked to find: '" + tableName+ "' from a null Hashtable. This shouldn't happen but hey, what do I know?");
+				return childHash;
+
+				//Utility.prettyPrintHash(parentHash);
+			}
+			
+
 			Object o = parentHash.get(tableName);
 			if ( o instanceof java.util.Vector )
 			{
@@ -1419,19 +1448,53 @@ public class VegbankXMLUpload
 			return enum;
 		}
 		
+		/**
+		 * Insert a party
+		 * 
+		 * @param party
+		 * @return
+		 */
 		private int insertParty( Hashtable party)
 		{
-			int pKey = this.getPKFromAccessionCode(party, "party"); 
+			int pKey = 0;
+			// Handle null
+			if ( party == null )
+			{
+				return pKey;			
+			}
+			// Is there an accessionCode
+			pKey = this.getPKFromAccessionCode(party, "party"); 
 			if ( pKey != 0)
 			{
-				// As expected
 				return pKey;
 			}
+			
+			pKey = insertPartyBase(party, "party");
+			
+			// Insert Tables that depend on this PK
+			Enumeration telephones =getChildTables( party, "telephone");
+			insertTables("telephone", telephones, getPKName("party") ,pKey );
+			Enumeration addresses =getChildTables( party, "address");
+			insertTables("address", addresses, getPKName("party") ,pKey );	
+			
+			return pKey;
+		}
+
+		/**
+		 * Party, PlantParty and CommParty are very similar.
+		 * This method does shared functions need for insertion.
+		 * 
+		 * @param party
+		 * @return
+		 */
+		private int insertPartyBase(Hashtable party, String tableName)
+		{
+			int pKey = 0;
 			
 			// recursivly deal with FK party's
 			Hashtable ownerParty = (Hashtable) party.get("owner_ID");
 			Hashtable currentNameParty = (Hashtable) party.get("currentName_ID");
-
+			
 			int ownerPartyPK = 0;
 			int currentNamePartyPK = 0;
 			
@@ -1444,28 +1507,26 @@ public class VegbankXMLUpload
 			{
 				currentNamePartyPK = insertParty( currentNameParty);
 			}
-
+			
 			AddForeignKey(party, "owner_ID", ownerPartyPK);
 			AddForeignKey(party, "currentName_ID", currentNamePartyPK);
 			
-			pKey = insertTable("party", party);
-			
-			// Insert Tables that depend on this PK
-			Enumeration telephones =getChildTables( party, "telephone");
-			insertTables("telephone", telephones, getPKName("party") ,pKey );
-			Enumeration addresses =getChildTables( party, "address");
-			insertTables("address", addresses, getPKName("party") ,pKey );			
-			
-			
+			pKey = insertTable(tableName, party);
+							
 			return pKey;
 		}
 		
 		private int insertContributor(String tableName, Hashtable contribHash, String keyName, int keyValue)
 		{
 			int pKey = 0;
-			
+			// Handle null
+			if ( contribHash == null )
+			{
+				return pKey;			
+			}
+					
 			// Get the party ( required )
-			Hashtable party = this.getChildTable( (Hashtable) this.getChildTable(contribHash, "PARTY_ID"), "party" );
+			Hashtable party = this.getFKChildTable(contribHash, "PARTY_ID", "party");
 			int partyId = insertParty(party);
 							
 			// Get the Role  ( not required )
@@ -1545,9 +1606,7 @@ public class VegbankXMLUpload
 					AddForeignKey(place, "plot_id", plotId);
 
 					// Insert NamedPlace
-					Hashtable namedPlace =  
-						getChildTable( (Hashtable) getChildTable(place, "NAMEDPLACE_ID"), "namedPlace");
-
+					Hashtable namedPlace =   this.getFKChildTable(place, "NAMEDPLACE_ID", "namedPlace");
 					int namedPlaceId = insertTable("namedPlace",namedPlace);
 					
 					AddForeignKey(place, "namedPlace_id", namedPlaceId);
@@ -1570,17 +1629,23 @@ public class VegbankXMLUpload
 		 */
 		private int insertObservation(int plotId, int projectId, Hashtable observationHash)
 		{
+			int observationId = 0;
+			// Handle null
+			if ( observationHash == null )
+			{
+				return observationId;			
+			}
 			// Check for the obsaccessionnumber
-			int observationId = this.getPKFromAccessionCode(observationHash, "observation"); 
+			observationId = this.getPKFromAccessionCode(observationHash, "observation"); 
 			if ( observationId != 0)
 			{
-				// As expected
 				return observationId;
 			}
 
+
 			// Continue loading as normal
 			
-			Hashtable previousObs = getChildTable(observationHash, "PREVIOUSOBS_ID", "observation");
+			Hashtable previousObs = getFKChildTable(observationHash, "PREVIOUSOBS_ID", "observation");
 			
 			int previousObsId = 0;
 			if (previousObs != null)
@@ -1593,18 +1658,18 @@ public class VegbankXMLUpload
 			AddForeignKey(observationHash, "PROJECT_ID", projectId);
 
 			// CoverMethod
-			Hashtable coverMethod = getChildTable(observationHash, "COVERMETHOD_ID", "coverMethod");
+			Hashtable coverMethod = getFKChildTable(observationHash, "COVERMETHOD_ID", "coverMethod");
 			int coverMethodId = insertTable("coverMethod", coverMethod);
 			this.insertTables("coverIndex",  getChildTables(coverMethod, "coverIndex"), "COVERMETHOD_ID", coverMethodId);
 			AddForeignKey(observationHash, "COVERMETHOD_ID", coverMethodId);
 
 			// StratumMethod			
-			Hashtable stratumMethod = getChildTable(observationHash, "STRATUMMETHOD_ID", "stratumMethod");
+			Hashtable stratumMethod = getFKChildTable(observationHash, "STRATUMMETHOD_ID", "stratumMethod");
 			int stratumMethodId = insertTable("stratumMethod", stratumMethod);
 			AddForeignKey(observationHash, "STRATUMMETHOD_ID", stratumMethodId);
 
 			// SoilTaxon
-			Hashtable soilTaxon = getChildTable(observationHash, "SOILTAXON_ID", "soilTaxon");
+			Hashtable soilTaxon = getFKChildTable(observationHash, "SOILTAXON_ID", "soilTaxon");
 			int soilTaxonId = insertTable("soilTaxon", soilTaxon);
 			AddForeignKey(observationHash, "SOILTAXON_ID", soilTaxonId);
 			
@@ -1676,14 +1741,14 @@ public class VegbankXMLUpload
 				Hashtable observationSynonym = (Hashtable) observationSynonyms.nextElement();
 				
 				// TODO: Get synonymobservation_id, party_id, role_id
-				Hashtable observation = getChildTable(observationSynonym, "synonymObservation_ID", "observation");
+				Hashtable observation = getFKChildTable(observationSynonym, "synonymObservation_ID", "observation");
 				int synonymObservationId = insertObservation(plotId, projectId, observation);
 				
-				int partyId = insertParty( getChildTable(observationSynonym, "PARTY_ID", "party") );
+				int partyId = insertParty( getFKChildTable(observationSynonym, "PARTY_ID", "party") );
 				int roleId = 
 					insertTable(
 						"aux_Role", 
-						this.getChildTable( observationSynonym, "ROLE_ID", "aux_Role" )
+						this.getFKChildTable( observationSynonym, "ROLE_ID", "aux_Role" )
 					);
 
 				AddForeignKey(observationSynonym, "PrimaryObservation_ID", observationId);
@@ -1702,12 +1767,18 @@ public class VegbankXMLUpload
 			Hashtable observationHash,
 			int observationId,
 			int stratumMethodId)
-		{
+		{	
 			// Insert the taxonObservations
 			Enumeration taxonObservations = getChildTables(observationHash, "taxonObservation");
 			while ( taxonObservations.hasMoreElements())
 			{
 				Hashtable taxonObservation = (Hashtable) taxonObservations.nextElement();
+				
+				// FIXME: This may be working correctly and just be strange ;)
+				// The stemcounts  load a stemlocation each, but taxoninterpretation needs this
+				// a single stemlocationId 
+				// assumming all the stemlocations identical and using the last one loaded
+				int stemLocationId = 0;
 				
 				String plantName = (String) taxonObservation.get("cheatplantname");
 				
@@ -1734,7 +1805,7 @@ public class VegbankXMLUpload
 					AddForeignKey(stratumComposition, "TAXONOBSERVATION_ID", taxonObservationId);
 					
 					// Get the stratum_id
-					Hashtable stratum = getChildTable(stratumComposition, "STRATUM_ID", "stratum");
+					Hashtable stratum = getFKChildTable(stratumComposition, "STRATUM_ID", "stratum");
 					int stratumId = insertStratum(stratum, stratumMethodId, observationId);
 					
 					AddForeignKey(stratumComposition, "STRATUM_ID", stratumId);
@@ -1757,7 +1828,7 @@ public class VegbankXMLUpload
 						Hashtable stemLocation = (Hashtable) stemLocations.nextElement();
 						AddForeignKey(stemLocation, "STEMCOUNT_ID", stemCountId);
 						
-						int stemLocationId = insertTable("stemLocation", stemLocation);
+						stemLocationId = insertTable("stemLocation", stemLocation);
 					}
 				}
 				
@@ -1768,45 +1839,337 @@ public class VegbankXMLUpload
 					Hashtable taxonInterpretation = (Hashtable) taxonInterpretations.nextElement();
 					
 					// Get the party
-					Hashtable party = this.getChildTable( (Hashtable) this.getChildTable(taxonInterpretation, "PARTY_ID"), "party" );
+					Hashtable party =  this.getFKChildTable(taxonInterpretation, "PARTY_ID", "party");
 					int partyId = insertParty(party);
 					
 					// Get the Role
-					Hashtable role = this.getChildTable( (Hashtable) this.getChildTable(taxonInterpretation, "ROLE_ID"), "aux_Role" );
+					Hashtable role =  this.getFKChildTable(taxonInterpretation, "ROLE_ID", "aux_Role");
 					int roleId = insertTable("aux_Role", role);
 					
-					int plantConceptId = 0;
-					if ( ! Utility.isStringNullOrEmpty(plantName) )
-					{ 
-						plantNameId = 
-							RectificationUtility.getForiegnKey(dbConn, RectificationUtility.GETPLANTCONCEPTID, plantName );
-					}
-				
+					// Get the PlantConcept
+					Hashtable plantConcept =  this.getFKChildTable(taxonInterpretation, "PLANTCONCEPT_ID", "plantConcept");
+					int plantConceptId = this.insertPlantConcept(plantConcept);
+				 
+				 	// Get the museum party
+					Hashtable museumParty =  this.getFKChildTable(taxonInterpretation, "museum_ID", "party");
+					int museumId = insertTable("party", museumParty);
+				 	
+				 	// Get the collector party
+					Hashtable collectorParty =  this.getFKChildTable(taxonInterpretation, "collector_ID", "party");
+					int collectorId = insertTable("party", collectorParty);
+				 
 					// Add FKs to taxonObservation
 					AddForeignKey(taxonInterpretation, "PLANTCONCEPT_ID", plantConceptId);
 					AddForeignKey(taxonInterpretation, "ROLE_ID", roleId);
 					AddForeignKey(taxonInterpretation, "PARTY_ID", partyId);
 					AddForeignKey(taxonInterpretation, "TAXONOBSERVATION_ID", taxonObservationId);
+					AddForeignKey(taxonInterpretation, "museum_ID", museumId);
+					AddForeignKey(taxonInterpretation, "collector_ID", collectorId);
+					AddForeignKey(taxonInterpretation, "stemLocation_ID", stemLocationId);
 					
-					// TODO: the PLANTCONCEPT_ID field is required ... so if not found we cannot add
-					// an interpretation, this may not be ideal
-					// we could make it not required with the needs rectification flag set perhaps
-					if ( plantConceptId != 0 )
+					int taxonInterpretationId = this.insertTable("taxonInterpretation", taxonInterpretation);
+					
+					// Add taxonAlt
+					Enumeration taxonAlts = getChildTables(taxonObservation, "taxonAlt");
+					while ( taxonAlts.hasMoreElements())
 					{
-						int taxonInterpretationId = insertTable("taxonInterpretation", taxonInterpretation);
-					}
-					else
-					{
-						errors.AddError(
-								LoadingErrors.RECTIFICATIONERROR,
-								"Cannot find a taxon that matches  '"
-									+ plantName
-									+ "' in the database");
+						Hashtable taxonAlt = (Hashtable) taxonAlts.nextElement();
+						AddForeignKey(taxonAlt, "TAXONINTERPRETATION_ID", taxonInterpretationId);
+						
+						Hashtable altPlantConcept = this.getFKChildTable(taxonAlt, "PLANTCONCEPT_ID", "plantConcept");
+						int altPlantConceptId = insertPlantConcept(altPlantConcept);
+						
+						int taxonAltId = this.insertTable("taxonAlt", taxonAlt);
 					}
 				}
 			}
 		}
 		
+		/**
+		 * Insert PlantConcept
+		 * 
+		 * @param plantConcept
+		 * @return int -- the PK of  this row
+		 */
+		private int insertPlantConcept(Hashtable plantConcept)
+		{
+			int pKey = 0;
+			// Handle null
+			if ( plantConcept == null )
+			{
+				return pKey;			
+			}
+			
+			pKey = this.getPKFromAccessionCode(plantConcept, "plantConcept"); 
+			if ( pKey != 0)
+			{
+				// As expected
+				return pKey;
+			}
+			
+			//Utility.prettyPrintHash(plantConcept);
+			
+			// TODO: depends on PlantName
+			Hashtable plantName = this.getFKChildTable(plantConcept, "PLANTNAME_ID", "plantName");
+			int plantNameId = insertTable("plantName", plantName);
+			
+			AddForeignKey(plantConcept, "PLANTNAME_ID", plantNameId);
+			pKey = this.insertTable("plantConcept", plantConcept);
+			
+			// Add PlantStatus 
+			Enumeration plantStatuses = getChildTables(plantConcept, "plantStatus");
+			while ( plantStatuses.hasMoreElements())
+			{
+				Hashtable plantStatus = (Hashtable) plantStatuses.nextElement();
+				AddForeignKey(plantStatus, "PLANTCONCEPT_ID", pKey);
+				insertPlantStatus(plantStatus);
+			}
+			
+			// Add plantUsage
+			Enumeration plantUsages = getChildTables(plantConcept, "plantUsage");
+			while ( plantUsages.hasMoreElements())
+			{
+				Hashtable plantUsage = (Hashtable) plantUsages.nextElement();
+				AddForeignKey(plantUsage, "PLANTCONCEPT_ID", pKey);
+				insertPlantUsage(plantUsage);
+			}
+			
+			return pKey;
+		}
+
+		/**
+		 * Insert CommConcept
+		 * 
+		 * @param commConcept
+		 * @return int -- the PK of  this row
+		 */
+		private int insertCommConcept(Hashtable commConcept)
+		{
+			int pKey = 0;
+			// Handle null
+			if ( commConcept == null )
+			{
+				return pKey;			
+			}
+			
+			//Utility.prettyPrintHash(commConcept);
+			
+			pKey = this.getPKFromAccessionCode(commConcept, "commConcept"); 
+			if ( pKey != 0)
+			{
+				// As expected
+				return pKey;
+			}
+			
+			//Utility.prettyPrintHash(commConcept);
+			
+			//  depends on commName
+			Hashtable commName = this.getFKChildTable(commConcept, "COMMNAME_ID", "commName");
+			int commNameId = insertTable("commName", commName);
+			
+			AddForeignKey(commConcept, "COMMNAME_ID", commNameId);
+			pKey = this.insertTable("commConcept", commConcept);
+			
+			// Add commStatus 
+			Enumeration commStatuses = getChildTables(commConcept, "commStatus");
+			while ( commStatuses.hasMoreElements())
+			{
+				Hashtable commStatus = (Hashtable) commStatuses.nextElement();
+				AddForeignKey(commStatus, "COMMCONCEPT_ID", pKey);
+				insertCommStatus(commStatus);
+			}
+			
+			// Add commUsage
+			Enumeration commUsages = getChildTables(commConcept, "commUsage");
+			while ( commUsages.hasMoreElements())
+			{
+				Hashtable commUsage = (Hashtable) commUsages.nextElement();
+				AddForeignKey(commUsage, "COMMCONCEPT_ID", pKey);
+				insertCommUsage(commUsage);
+			}
+			
+			return pKey;
+		}		
+		
+		/**
+		 * @param commStatus
+		 * @return int -- primary key assigned
+		 */
+		private int insertCommStatus(Hashtable commStatus)
+		{
+			int pKey =0;
+		
+			// Handle Nulls
+			if ( commStatus == null)
+			{
+				return pKey;
+			}
+
+			//Utility.prettyPrintHash(commStatus);
+		
+			// Add commParent
+			Hashtable commParent = this.getFKChildTable(commStatus, "commParent_ID", "commConcept");
+			int commParentId = insertCommConcept(commParent); // recursive
+		
+			// Add commParty
+			Hashtable commParty = this.getFKChildTable(commStatus, "COMMPARTY_ID", "commParty");
+			int commPartyId = insertCommParty(commParty);
+			
+			AddForeignKey(commStatus, "commParent_ID", commParentId);
+			AddForeignKey(commStatus, "COMMPARTY_ID", commPartyId);
+			
+			pKey = this.insertTable("commStatus", commStatus);
+			
+			// Add commLineage
+			Enumeration commLineages = getChildTables(commStatus, "commLineage");
+			while ( commLineages.hasMoreElements())
+			{
+				Hashtable commLineage = (Hashtable) commLineages.nextElement();
+				AddForeignKey(commLineage, "COMMSTATUS_ID", pKey);
+				insertTable( "commLineage", commLineage);
+			}
+		
+			// Add commCorrelation
+			Enumeration commCorrelations = getChildTables(commStatus, "commCorrelation");
+			while ( commCorrelations.hasMoreElements())
+			{
+				Hashtable commCorrelation = (Hashtable) commCorrelations.nextElement();
+
+				// TODO:  Add commConcept
+				Hashtable commConcept = this.getFKChildTable(commCorrelation, "PLANTCONCEPT_ID", "plantConcept");
+				int commConceptId = insertCommConcept(commConcept); 
+
+				AddForeignKey(commCorrelation, "COMMSTATUS_ID", pKey);
+				AddForeignKey(commCorrelation, "COMMCONCEPT_ID", commConceptId);
+							
+				insertTable( "commCorrelation", commCorrelation);
+			}
+			return pKey;
+		}
+		
+		private void insertCommUsage(Hashtable commUsage)
+		{
+			// Add commName 
+			Hashtable commName = this.getFKChildTable(commUsage, "COMMNAME_ID", "commName");
+			int commNameId = insertTable("commName", commName);
+			
+			// Add commParty
+			Hashtable commParty = this.getFKChildTable(commUsage, "PLANTPARTY_ID", "plantParty");
+			int commPartyId = insertCommParty(commParty);
+			
+			AddForeignKey(commUsage, "COMMNAME_ID", commNameId);
+			AddForeignKey(commUsage, "COMMPARTY_ID", commPartyId);
+			
+			insertTable( "commUsage", commUsage);
+		}
+		
+		/**
+		 * @param commParty
+		 * @return
+		 */
+		private int insertCommParty(Hashtable commParty)
+		{
+			int pKey = 0;
+			if ( commParty == null )
+			{
+				return pKey;
+			}
+			
+			pKey = this.insertPartyBase(commParty, "commParty");
+			
+			return pKey;
+		}
+
+		private void insertPlantUsage(Hashtable plantUsage)
+		{
+			// Add plantName 
+			Hashtable plantName = this.getFKChildTable(plantUsage, "PLANTNAME_ID", "plantName");
+			int plantNameId = insertTable("plantName", plantName);
+			
+			// Add PlantParty
+			Hashtable plantParty = this.getFKChildTable(plantUsage, "PLANTPARTY_ID", "plantParty");
+			int plantPartyId = insertPlantParty(plantParty);
+			
+			AddForeignKey(plantUsage, "PLANTNAME_ID", plantNameId);
+			AddForeignKey(plantUsage, "PLANTPARTY_ID", plantPartyId);
+			
+			insertTable( "plantUsage", plantUsage);
+		}
+		
+		/**
+		 * @param plantStatus
+		 * @return int -- primary key assigned
+		 */
+		private int insertPlantStatus(Hashtable plantStatus)
+		{
+			int pKey =0;
+			
+			// Handle Nulls
+			if ( plantStatus == null)
+			{
+				return pKey;
+			}
+
+			//Utility.prettyPrintHash(plantStatus);
+			
+			// Add plantParent
+			Hashtable plantParent = this.getFKChildTable(plantStatus, "plantParent_ID", "plantConcept");
+			int plantParentId = insertPlantConcept(plantParent); // recursive
+			
+			// Add PlantParty
+			Hashtable plantParty = this.getFKChildTable(plantStatus, "PLANTPARTY_ID", "plantParty");
+			int plantPartyId = insertPlantParty(plantParty);
+				
+			AddForeignKey(plantStatus, "plantParent_ID", plantParentId);
+			AddForeignKey(plantStatus, "PLANTPARTY_ID", plantPartyId);
+				
+			pKey = this.insertTable("plantStatus", plantStatus);
+				
+			// Add plantLineage
+			Enumeration plantLineages = getChildTables(plantStatus, "plantLineage");
+			while ( plantLineages.hasMoreElements())
+			{
+				Hashtable plantLineage = (Hashtable) plantLineages.nextElement();
+				AddForeignKey(plantLineage, "PLANTSTATUS_ID", pKey);
+				insertTable( "plantLineage", plantLineage);
+			}
+			
+			// Add plantCorrelation
+			Enumeration plantCorrelations = getChildTables(plantStatus, "plantCorrelation");
+			while ( plantCorrelations.hasMoreElements())
+			{
+				Hashtable plantCorrelation = (Hashtable) plantCorrelations.nextElement();
+
+				// TODO:  Add PlantConcept
+				Hashtable plantConcept = this.getFKChildTable(plantCorrelation, "PLANTCONCEPT_ID", "plantConcept");
+				int plantConceptId = insertPlantConcept(plantConcept); 
+
+				AddForeignKey(plantCorrelation, "PLANTSTATUS_ID", pKey);
+				AddForeignKey(plantCorrelation, "PLANTCONCEPT_ID", plantConceptId);
+								
+				insertTable( "plantCorrelation", plantCorrelation);
+			}
+			return pKey;
+		}
+		
+
+		/**
+		 * @param plantParty
+		 * @return
+		 */
+		private int insertPlantParty(Hashtable plantParty)
+		{
+			int pKey = 0;
+			if ( plantParty == null )
+			{
+				return pKey;
+			}
+			
+			pKey = this.insertPartyBase(plantParty, "plantParty");
+			
+			return pKey;
+		}
+
 		/**
 		 * Convience method to check keyValue for 0 before adding it
 		 * @param table
@@ -1829,7 +2192,7 @@ public class VegbankXMLUpload
 		 */
 		private int insertStratum(Hashtable stratum, int stratumMethodId, int observationId)
 		{
-			Hashtable stratumType = getChildTable(stratum, "STRATUMTYPE_ID", "stratumType");
+			Hashtable stratumType = getFKChildTable(stratum, "STRATUMTYPE_ID", "stratumType");
 			
 			AddForeignKey(stratumType, "STRATUMMETHOD_ID", stratumMethodId);
 			AddForeignKey(stratum, "OBSERVATION_ID", observationId);
@@ -1846,46 +2209,24 @@ public class VegbankXMLUpload
 		 * @param commIntepretation
 		 * @param commClassId
 		 */
-		private void insertCommInterpetation(Hashtable commIntepretation)
+		private int insertCommInterpetation(Hashtable commIntepretation)
 		{			
-			//TODO: We need to decide what to do here, the XML provides a 
-			// representation of the community that could be loaded or matched 
-			// with the database ... there are issues of the right to do this and what 
-			// reference and party to link the community too.
-			// I am not going to do that now to both avoid work and because the database 
-			// should already have the community in question. I am going to do a string search 
-			// instead to the find a currently loaded community.
-					
-					
-			//Need to get the conceptId from name
-			String commName = (String) commIntepretation.get("commName");
-		
-			// Handle no name
-			int commConceptId = 0;
-			if ( ! Utility.isStringNullOrEmpty(commName) )
-			{ 
-				commConceptId = 
-					RectificationUtility.getForiegnKey(dbConn, RectificationUtility.GETCOMMCONCEPTID, commName );
+			int pKey = 0;
+			// Handle null
+			if ( commIntepretation == null)
+			{
+				return pKey;
 			}
 
-			if ( commConceptId != 0 ) 
-			{
-				AddForeignKey(commIntepretation, "COMMCONCEPT_ID", commConceptId);
-			}
-			else
-			{
-				// Could not rectify with the database	
-				// TODO: Set not Rectified Flag in database
-				// Add an message to rectification report
-				errors.AddError(
-						LoadingErrors.RECTIFICATIONERROR,
-						"Cannot find a community that matches  '"
-							+ commName
-							+ "' in the database");
-
-			}
+			Hashtable commConcept = this.getFKChildTable(commIntepretation, "COMMCONCEPT_ID", "commConcept");
+			int commConceptId = this.insertCommConcept(commConcept);
+			AddForeignKey(commIntepretation, "COMMCONCEPT_ID", commConceptId);
 			
-			insertTable("commInterpretation", commIntepretation);
+			Hashtable reference = this.getFKChildTable(commIntepretation, "commAuthority_ID", "reference");
+			int commAuthorityId = this.insertReference(reference);
+			AddForeignKey(commIntepretation, "commAuthority_ID", commAuthorityId);
+			
+			return insertTable("commInterpretation", commIntepretation);
 		}
 	}
 
