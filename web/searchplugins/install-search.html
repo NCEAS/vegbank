@@ -1,0 +1,73 @@
+<HEAD>@defaultHeadToken@
+ 
+<TITLE>Install VegBank Search Engine for Mozilla Browsers</TITLE>
+<link rel="stylesheet" href="@stylesheet@" type="text/css">
+ 
+<script type="text/javascript">
+<!--
+function errorMsg()
+{
+  alert("Netscape 6 or Mozilla is needed to install a sherlock plugin");
+}
+function addEngine(name,ext,cat)
+{
+  if ((typeof window.sidebar == "object") && (typeof
+  window.sidebar.addSearchEngine == "function"))
+  {
+    //cat="Ecology";
+    //cat=prompt('In what category should this engine be installed?','Ecology')
+    window.sidebar.addSearchEngine(
+      "http://vegbank.org/vegdocs/searchplugins/"+name+".src",
+      "http://vegbank.org/vegdocs/searchplugins/"+name+"."+ext,
+      name,
+      cat );
+  }
+  else
+  {
+    errorMsg();
+  }
+}
+//-->
+</script>
+
+</HEAD>
+
+
+
+
+
+
+
+<body>
+@vegbank_header_html_normal@
+
+<h2>Would you like to be able to search VegBank as easily as this?</h2>
+
+<img src="examplevegbanksearch.jpg" alt="image of firefox search of VegBank"/>
+
+<h4>Then install VegBank's search engine sidebar</h4>
+
+<blockquote>This is only for <a href="http://www.mozilla.org/products/firefox/">Firefox</a> and 
+  <a href="http://mozilla.org">Mozilla</a> browsers.</blockquote>
+
+<p class="sizelarge bright">INSTALL BY CLICKING <a href="javascript:addEngine('vegbank','png','Ecology')">HERE</a></span>.</p>
+
+<h4>Confirm installation</h4>
+<blockquote>You will then be asked to confirm that you want to install the Sidebar Search Engine
+ in a dialog box that looks like this:
+<br/><img src="installconfirm.jpg" alt="image of confirmation dialog box" />. 
+<br/> Choose "OK" to install the sidebar.</blockquote>
+<h4>How to use the search tool</h4>
+<blockquote>To search vegbank, choose the VegBank search engine where the Google search generally appears.  <br/>
+  <img src="usevegbanksearch.jpg" alt="image of how to select the VegBank search engine"/> <br/>
+Enter search terms in the box (for example: acer) and press Enter on your keyboard.  You'll be taken to the VegBank website with
+the results of your query.</blockquote>
+<h4>Manual Installation</h4>
+<blockquote>If you'd prefer to install our search engine manually, see 
+ <a href="http://mycroft.mozdev.org/deepdocs/installing.html#manual">Instructions here</a> and download these files:
+ <a href="vegbank.src">vegbank.src</a> | <a href="vegbank.png">vegbank.png</a> and put them in the directory mentioned in the 
+ instructions, restart mozilla, and it should be installed.</blockquote>
+
+@vegbank_footer_html_tworow@
+</body>
+</html>

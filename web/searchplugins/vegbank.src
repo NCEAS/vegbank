@@ -1,0 +1,47 @@
+# Mycroft Search Plugin for Mozilla, Firebird, Netscape 6+, Beonix browsers 
+# Mycroft Homepage: http://mycroft.mozdev.org
+
+# SearchSite: VegBank  (www.vegbank.org)
+# Status: Complete 
+#
+# Original Author: mlee@nceas.ucsb.edu
+# Last Updated: 15 Dec, 2004 by Michael Lee
+#
+# Country: WW
+# Language: en
+# Category: General
+#
+# Known issues: None. 
+#
+
+<search 
+   version = "7.1"
+   name="VegBank"
+   description="VegBank Metasearch"
+   method="GET"
+   action="http://vegbank.org/vegbank/forms/metasearch.jsp"
+   searchform="http://vegbank.org"
+
+
+>
+<input name="sourceid" value="Mozilla-search">
+<input name="xwhereParams" user="" >
+<input name="xwhereGlue" value="and" >
+
+# Finds results
+<interpret 
+    
+    resultListStart="<!-- start metasearch results -->" 
+    resultListEnd="<!-- end metasearch results -->" 
+    resultItemStart="<!-- start metasearch item -->" 
+    resultItemEnd="<!-- end metasearch item -->"
+>
+
+
+</search>
+
+<browser
+ update="http://mycroft.mozdev.org/plugins/vegbank.src" 
+ updateIcon="http://mycroft.mozdev.org/plugins/vegbank.png" 
+ updateCheckDays="3" 
+>
