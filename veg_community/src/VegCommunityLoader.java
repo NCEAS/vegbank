@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-07 20:44:00 $'
- * '$Revision: 1.10 $'
+ *     '$Date: 2002-03-07 23:36:14 $'
+ * '$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,32 +97,43 @@ public class VegCommunityLoader
 			//turn off autocommit
 			conn.setAutoCommit(false);
 			int partyId = insertCommunityParty(this.partyOrgName);
-			//System.out.println("VegCommunityLoader > other citation: " + otherCitationDetails);
 			int refId = insertCommunityReference(this.refAuthors, this.refTitle, 
 			this.refPubDate, this.otherCitationDetails);
-			//System.out.println("VegCommunityLoader > refId: " + refId);
+			
+			// INSERT THE NAMES
 			int commNameId = insertCommunityName(commName, refId, dateEntered);
 			int commCodeId = insertCommunityName(conceptCode, refId, dateEntered);
+			
 			//load the alliance trans if this is an alliance that trans name is
 			//basically a common name used to describe the association 
-			if (conceptLevel.equals("alliance") )
-			{
-				int commTransId = insertCommunityName(allianceTransName, refId, dateEntered);
-			}
+			int commTransId = 0;
+			if (conceptLevel.equals("alliance") &&  allianceTransName != null )
+				commTransId = insertCommunityName(allianceTransName, refId, dateEntered);
 			
-			//System.out.println("VegCommunityLoader > commNameId: " + commNameId);
-			int commConceptId = insertCommunityConcept(conceptCode, commNameId, 
+			
+			// INSERT THE CONCEPT
+			int commConceptId = insertCommunityConcept(conceptCode, commCodeId, 
 			conceptLevel, parentCommunity, commName, refId );
 
-			//if the class variable 'commit' is still true then commit
-			//otherwise rollback the connection
+			// THE STATUS -- there may be a proble with the date entered
 			int commStatusId = insertCommunityStatus(commConceptId, "accepted", 
-			"01-JAN-1999", partyId, refId );
+			dateEntered, partyId, refId, parentCommunity );
 			
-			//insert the usage data
+			
+			//UPDATE THE USAGE FOR THE NAMES 
+			// - the code
+			insertCommunityUsage( commCodeId, commConceptId, partyId, "standard"
+			, dateEntered, "NVC", conceptCode, conceptCode);
+			// - the name
 			insertCommunityUsage( commNameId, commConceptId, partyId, "standard"
-			, "01-JAN-1999", "NVC");
+			, dateEntered, "NVC", commName, conceptCode);
+			//the trans name (alliance only)
+			if ( conceptLevel.equals("alliance") &&  allianceTransName != null )
+				insertCommunityUsage( commTransId, commConceptId, partyId, "standard"
+				, dateEntered, "NVC", allianceTransName ,conceptCode);
 			
+			
+			// DO THE TRANSACTION
 			if (this.commit == true)
 			{
 				conn.commit();
@@ -130,6 +141,9 @@ public class VegCommunityLoader
 			else
 			{
 				conn.rollback();
+				debugInstanceFailure( commName, conceptCode, allianceTransName);
+				//fail
+				System.exit(0);
 			}
 		 }
 			catch (Exception e)
@@ -139,11 +153,28 @@ public class VegCommunityLoader
 		 }
 	 }
 	 
+	 
+	 /**
+	  * method for printing to the system some of the debugging 
+		* information related to the community instance that failed 
+		* to load
+		*/
+		private void debugInstanceFailure(String commName, String conceptCode, 
+		String allianceTransName)
+		{
+			System.out.println("VegCommunityLoader > failed to load instance:");
+			System.out.println(" commName: " + commName);
+			System.out.println(" codeName: " + conceptCode);
+			System.out.println(" transName: " + allianceTransName );
+		}
+		
+		
 	   /**
 	  * method to insert data into the commname table
 		*/
 		private int insertCommunityUsage(int commNameId, int commConceptId, 
-		int commPartyId, String commNameStatus, String usageStart, String classSystem)
+		int commPartyId, String commNameStatus, String usageStart, 
+		String classSystem, String commName, String commCode)
 	  {
 		 int usageId = 0; 
 		 try
@@ -151,8 +182,8 @@ public class VegCommunityLoader
 				StringBuffer sb = new StringBuffer();
 				//insert the VALS
 				sb.append("INSERT into COMMUSAGE( commname_id, commconcept_id, "
-				+" commparty_id, commNameStatus, usageStart, classSystem) "
-				+" values(?,?,?,?,?,?)"); 
+				+" commparty_id, commNameStatus, usageStart, classSystem, commName, ceglcode) "
+				+" values(?,?,?,?,?,?, ?, ?)"); 
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
   			// Bind the values to the query and execute it
   			pstmt.setInt(1, commNameId);
@@ -161,6 +192,8 @@ public class VegCommunityLoader
 				pstmt.setString(4, commNameStatus);
 				pstmt.setString(5, usageStart);
 				pstmt.setString(6, classSystem);
+				pstmt.setString(7, commName);
+				pstmt.setString(8, commCode);
 				//execute the p statement
   			pstmt.execute();
   			pstmt.close();
@@ -179,7 +212,7 @@ public class VegCommunityLoader
 	  * method to insert data into the commname table
 		*/
 		private int insertCommunityStatus(int commConceptId, String status,  
-			String startDate, int partyId, int refId)
+			String startDate, int partyId, int refId, String parentCommunity)
 	  {
 		 int statusId = 0; 
 		 try
@@ -196,10 +229,23 @@ public class VegCommunityLoader
 				pstmt.setString(3, status);
 				pstmt.setString(4, startDate);
 				pstmt.setInt(5, partyId);
-				
 				//execute the p statement
   			pstmt.execute();
   			pstmt.close();
+				
+				//update the parentCommunity
+				if (parentCommunity != null)
+				{
+					System.out.println("VegCommunityLoader > updating parentCommunity" );
+					sb = new StringBuffer();
+					sb.append("UPDATE commstatus set commparent = ");
+					sb.append("(select commconcept_id from commconcept where ceglcode = '"+parentCommunity+"')");
+					sb.append(" where commconcept_id = "+commConceptId+"");
+					PreparedStatement pstmt2 = conn.prepareStatement( sb.toString() );
+					pstmt2.execute();
+					//pstmt2.close();
+				}
+				
 		 }
 			catch (Exception e)
 		 {
@@ -222,7 +268,7 @@ public class VegCommunityLoader
 		 {
 
 			 boolean partyExists = communityPartyExists(partyOrgName);
-			System.out.println("VegCommunityLoader > party Exists " ); 
+			//System.out.println("VegCommunityLoader > party Exists " ); 
 			
 			if (partyExists == true)
 			{
@@ -320,6 +366,7 @@ public class VegCommunityLoader
 		 {
 			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
 			 e.printStackTrace();
+			 commit = false;
 		 }
 		 return(commNameId);
 	 }
@@ -397,7 +444,7 @@ public class VegCommunityLoader
 		 	StringBuffer sb = new StringBuffer();
 			//first see if the reference already exists
 			boolean refExists = communityReferenceExists(otherCitationDetails);
-			System.out.println("VegCommunityLoader > refExists: " + refExists); 
+			//System.out.println("VegCommunityLoader > refExists: " + refExists); 
 			
 			if (refExists == true)
 			{
@@ -551,8 +598,10 @@ public class VegCommunityLoader
 			}
 			catch (Exception e)
 		 {
+			 System.out.println("VegCommunityLoader > comm desc: " +  conceptDescription );
 			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
 			 e.printStackTrace();
+			 
 		 }
 		 return(commConceptId);
 	 }

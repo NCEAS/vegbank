@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-07 18:25:38 $'
- * '$Revision: 1.10 $'
+ *     '$Date: 2002-03-07 23:36:14 $'
+ * '$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,7 +112,7 @@ import java.sql.*;
 		 {
 			 //first figure out the level in the heirarcy
 			 this.level = this.getCommunityLevel(community);
-			 System.out.println("EcoartVegCommunity > internal level: " + level); 
+			 //System.out.println("EcoartVegCommunity > internal level: " + level); 
 			// Create a Statement so we can submit SQL statements to the driver
 			Statement stmt = con.createStatement();
 			String query = null;
@@ -198,7 +198,7 @@ import java.sql.*;
 			 
 			//first figure out the level in the heirarcy
 			this.level = this.getCommunityLevel(community);
-			System.out.println("EcoartVegCommunity > internal level: " + level); 
+			//System.out.println("EcoartVegCommunity > internal level: " + level); 
 			// Create a Statement so we can submit SQL statements to the driver
 			Statement stmt = con.createStatement();
 			String query = null;
@@ -233,7 +233,7 @@ import java.sql.*;
 			String dateEntered = null;
 			try
 			{
-				System.out.println("EcoartVegCommunity > level: " + level);
+				//System.out.println("EcoartVegCommunity > level: " + level);
 				// Create a Statement so we can submit SQL statements to the driver
 				Statement stmt = con.createStatement();
 				String query = null;
@@ -258,7 +258,7 @@ import java.sql.*;
 			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
-		 System.out.println("EcoartVegCommunity > date: " + dateEntered);
+		 //System.out.println("EcoartVegCommunity > date: " + dateEntered);
 		 return(dateEntered);
 		}
 	 
