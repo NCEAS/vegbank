@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: anderson $'
- *   '$Date: 2004-01-16 19:28:56 $'
- *   '$Revision: 1.19 $'
+ *   '$Date: 2004-01-16 20:41:53 $'
+ *   '$Revision: 1.20 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -361,9 +361,7 @@ public class UserManagementServlet extends HttpServlet
 				replaceHash.put("phoneNumber", ""+userBean.getDayphone() );
 				replaceHash.put("institution", "" + userBean.getInstitution());
 				replaceHash.put("ticketCount", ""+userBean.getTicketcount() );
-				replaceHash.put(
-					"permissionType",
-					userBean.getPermissiontype());
+				replaceHash.put("permissionType", String.valueOf(userBean.getPermissiontype()));
 				replaceHash.put("emailAddress", emailAddress);
 				replaceHash.put("userId", ""+ userBean.getUserid() );
 				replaceHash.put("partyId", ""+userBean.getPartyid() );
@@ -427,6 +425,8 @@ public class UserManagementServlet extends HttpServlet
 	 */
 	 private void handleCertification(HttpServletRequest req, HttpServletResponse res)
 	 {
+		System.out.println("UserManagementServlet > NOT performing certification action: use Struts version instead");
+		/*
 		WebUser user = 
 			(WebUser) req.getSession().getAttribute(Constants.USER_KEY);
 			
@@ -571,6 +571,7 @@ public class UserManagementServlet extends HttpServlet
 			 System.out.println("Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
+		 */
 	 }
 	 
 	 /**
