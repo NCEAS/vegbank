@@ -30,7 +30,7 @@
       <xsl:comment>
         <xsl:value-of select="entityName"/> has <xsl:value-of select="$countAttsInView"/> fields in view: <xsl:value-of select="$view"/>
       </xsl:comment>
-      <xsl:if test="$countAttsInView&gt;-1">
+      <xsl:if test="$countAttsInView&gt;0 or ((entityName='plot' or entityName='observation') and (substring($view,1,4)='plot'))"><!-- write those where there is a view for this ent, and  write plot and obs for all views starting with 'plot' -->
         <xsl:variable name="currEnt" select="translate(entityName,$alphahigh,$alphalow)"/>
         <!-- begin writing data here -->
         <xsl:choose>
