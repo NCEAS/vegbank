@@ -25,8 +25,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-04-15 20:32:36 $'
- *  '$Revision: 1.25 $'
+ *  '$Date: 2002-05-16 15:52:46 $'
+ *  '$Revision: 1.26 $'
  */
 
 
@@ -51,7 +51,7 @@ public class DataSubmitServlet extends HttpServlet
 	private DataSourceClient rmiClient;
 	
 	private String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/input.data";
-	private String plotsArchiveType = "tncplots";
+	private String plotsArchiveType = "tnc";
 	
 	private String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit-select.html";
 	private String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot_select.html";
@@ -161,8 +161,16 @@ public class DataSubmitServlet extends HttpServlet
 		try
 		{
 			String action = (String)params.get("action");
+			System.out.println("DataSubmitServlet > action: " + action);
 			if ( action.equals("init") )
 			{
+				//get the paramter refering to the plot archive type (ie tnc, vbaccess, nativexml)
+				String plotFileType = (String)params.get("plotFileType");
+				
+				//quick hack to cahnge the type of plots archive
+				this.plotsArchiveType = plotFileType;
+				System.out.println("DataSubmitServlet > plotsArchiveType: " + plotsArchiveType);
+				
 				// check that the uer has valid priveleges to load a data 
 				// file to the database and if so give the use a window 
 				// to upload some data
@@ -192,10 +200,6 @@ public class DataSubmitServlet extends HttpServlet
 						}
 					}
 				}
-				
-				//redirect the user to the data selection form to either
-				//upload or choose from a previosly uploaded file
-				//response.sendRedirect("/forms/plot-upload.html");
 			}
 			
 			// if the action is upload that is basically ar referal 
@@ -205,8 +209,11 @@ public class DataSubmitServlet extends HttpServlet
 			{
 				//take the file that was just deposited via the data exchange servlet
 				//and pass it onto the winnt machine
+				System.out.println("DataSubmitServlet > using RMI client to pass file: " + plotsArchiveFile );
+				System.out.println("DataSubmitServlet > file type: " +  plotsArchiveType);
 				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 				boolean sendResults = rmiClient.putMDBFile(plotsArchiveFile, plotsArchiveType);
+				
 				System.out.println("DataSubmitServlet > RMI file send results: " + sendResults);
 				
 				//validate that the plot archive is real
@@ -217,7 +224,8 @@ public class DataSubmitServlet extends HttpServlet
 				// get the name of the plots and update the selection form and redircet
 				// the browser there
 				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
-				Vector plots = rmiClient.getPlotNames();
+				Vector plots = rmiClient.getPlotNames(plotsArchiveType);
+				System.out.println("DataSubmitServlet > number of plots in archive: " + plots.size() );
 				// prepare the plots element
 				StringBuffer sb2 = new StringBuffer();
 				for (int i=0; i<plots.size(); i++) 
@@ -239,7 +247,14 @@ public class DataSubmitServlet extends HttpServlet
 			else if ( action.equals("submit") )
 			{
 				String receiptType  = (String)params.get("receiptType");
+				//the plot file can only be tnc, vbaccess, nativexml
+				String plotFileType = (String)params.get("plotFileType");
+				
 				System.out.println("DataSubmitServlet > requesting a receipt type: "+receiptType );
+				System.out.println("DataSubmitServlet > plot file type: "+plotFileType );
+				//sleep so that admin can see the debugging
+				Thread.sleep(3000);
+				
 				while (enum.hasMoreElements()) 
 				{
 					String name = (String) enum.nextElement();
@@ -254,7 +269,7 @@ public class DataSubmitServlet extends HttpServlet
 								System.out.println("DataSubmitServlet > requesting an rmi plot insert: '"+values[i]+"'" );
 								//insert the plot over the rmi system
 								System.out.println("DataSubmitServlet > plot being loaded by: " + user );
-								String result = rmiClient.insertPlot(thisPlot, user);
+								String result = rmiClient.insertPlot(thisPlot, plotFileType, user);
 								String receipt = getPlotInsertionReceipt(thisPlot, result, receiptType, i, values.length);
 								sb.append( receipt );
 								System.out.println("DataSubmitServlet > requesting a receipt: '"+i+"' out of: " + values.length );
