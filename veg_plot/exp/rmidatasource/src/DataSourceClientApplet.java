@@ -12,7 +12,8 @@ import java.util.*;
  */
 public class DataSourceClientApplet extends javax.swing.JApplet {
     private String server = "vegbank.nceas.ucsb.edu";
-    private DataSourceClient source = new DataSourceClient(server);
+		private String port = "1100";
+    private DataSourceClient source = new DataSourceClient(server, port);
     
     private String targetPlot = null; //the plot of interest
 
@@ -572,7 +573,7 @@ public class DataSourceClientApplet extends javax.swing.JApplet {
         String percentWater = source.getPercentWater(plot);
         
         Vector strataNames = source.getUniqueStrataNames(plot);
-        Vector plantName =  source.getPlantNames(plot);
+        Vector plantNames =  source.getPlantNames(plot);
         
         
         System.out.println("DataSourceClientApplet > strata names: " + strataNames );
@@ -600,8 +601,10 @@ public class DataSourceClientApplet extends javax.swing.JApplet {
         this.percentRockTextArea.setText(percentRock);
         this.percentLitterTextArea.setText(percentLitter);
         this.percentWaterTextArea.setText(percentWater);
-        
+         
+				System.out.println("DataSourceClientApplet > plantNames: " + plantNames );
         this.strataNamesJList.setListData(strataNames);
+				this.plantNamesJList.setListData(plantNames);
     }
     
     
