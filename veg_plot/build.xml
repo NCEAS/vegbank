@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-01-17 00:51:53 $'
-  *     '$Revision: 1.10 $'
+  *     '$Date: 2003-01-28 17:45:12 $'
+  *     '$Revision: 1.11 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -189,8 +189,7 @@
 	<target name="deploy-resources" description="=> Deploy resources to servlet container">
 		<!-- Copy xml resources to servlet container -->
 		<copy todir="${servlet_lib}">
-			<fileset dir="xml" includes="querySpec.xsl, plotQuery.dtd,
-      ascii-treeview.xsl, showCommunitySummary.xsl"/>
+			<fileset dir="xml" includes="*xsl, *xml"/> 
 		</copy>
     
 		<copy file="src/utilities/coord_transform.sh" todir="${servlet_lib}"/>
@@ -319,6 +318,7 @@
         <include name="*sql"/>
       </fileset>
     </copy>
+    <chmod file="${build.test.integration.dir}/LoadPlotTest.sh" perm="ugo+rx"/>
     
     <chmod perm="ug+x">
       <fileset dir="${build.test.integration.dir}">
