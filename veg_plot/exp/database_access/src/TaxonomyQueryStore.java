@@ -1,5 +1,30 @@
 package databaseAccess;
 
+/**
+ *  '$RCSfile: TaxonomyQueryStore.java,v $'
+ *    Authors: @authors@
+ *    Release: @release@
+ *
+ *   '$Author: harris $'
+ *     '$Date: 2002-02-26 22:33:21 $'
+ * '$Revision: 1.3 $'
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+
 import java.lang.*;
 import java.io.*;
 import java.text.*;
@@ -74,13 +99,15 @@ import databaseAccess.*;
 				StringBuffer sqlBuf = new StringBuffer();
 				if (taxonNameType.trim().equals("scientificName") )
 				{
-					sqlBuf.append("SELECT acceptedsynonym, status, concatenatedName, commonName, startDate, stopDate");
-					sqlBuf.append(" from VEG_TAXA_SUMMARY where concatenatedName like '%"+taxonName+"%'");
+					sqlBuf.append("SELECT acceptedsynonym, plantnamestatus, ");
+					sqlBuf.append(" plantName, parentName, startDate, stopDate");
+					sqlBuf.append(" from VEG_TAXA_SUMMARY where plantName like '%"+taxonName+"%'");
 				}
 				else if ( taxonNameType.trim().equals("commonName")  ) 
 				{
-					sqlBuf.append("SELECT acceptedsynonym, status, concatenatedName, commonName, startDate, stopDate");
-					sqlBuf.append(" from VEG_TAXA_SUMMARY where commonName like '%"+taxonName+"%'");
+					sqlBuf.append("SELECT acceptedsynonym, plantnamestatus, ");
+					sqlBuf.append(" plantName, parentName, startDate, stopDate");
+					sqlBuf.append(" from VEG_TAXA_SUMMARY where plantName like '%"+taxonName+"%'");
 				}
 				else 
 				{
