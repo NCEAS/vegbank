@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-07-25 04:54:04 $'
-* '$Revision: 1.109 $'
+* '$Date: 2004-08-24 19:15:46 $'
+* '$Revision: 1.110 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -118,13 +118,13 @@
     <property name="admin_server" value="${tomcat.home.dir}/webapps/${webapp}/admin"/>
     <property name="image_server" value="${tomcat.home.dir}/webapps/${webapp}/images"/>
     <property name="general_server" value="${tomcat.home.dir}/webapps/${webapp}/general/"/>
-    <property name="design_server" value="${tomcat.home.dir}/webapps/${webapp}/design/"/>
-    <property name="dictionary_server" value="${tomcat.home.dir}/webapps/${webapp}/dbdictionary/"/>
-    <property name="news_server" value="${tomcat.home.dir}/webapps/${webapp}/news/"/>
+    <property name="design_server" value="${vegdocs_server}/design/"/>
+    <property name="dictionary_server" value="${vegdocs_server}/dbdictionary/"/>
+    <property name="news_server" value="${vegdocs_server}/news/"/>
     <property name="email_templates_server" value="${tomcat.home.dir}/webapps/${webapp}/email_templates/"/>
-    <property name="panel_server" value="${tomcat.home.dir}/webapps/${webapp}/panel/"/>
-    <property name="history_server" value="${tomcat.home.dir}/webapps/${webapp}/history/"/>
-    <property name="pubs_server" value="${tomcat.home.dir}/webapps/${webapp}/pubs/"/>
+    <property name="panel_server" value="${vegdocs_server}/panel/"/>
+    <property name="history_server" value="${vegdocs_server}/history/"/>
+    <property name="pubs_server" value="${vegdocs_server}/pubs/"/>
     <property name="style_server" value="${tomcat.home.dir}/webapps/${webapp}/includes/"/>
     <property name="vegbank_server" value="${tomcat.home.dir}/webapps/${webapp}/"/>
     <property name="workshop_server" value="${vegdocs_server}/workshop/"/>
@@ -148,16 +148,16 @@
     <filter token="admin_url" value="${machine_url}${eighty_eighty}/${web.context_uri}/admin/"/>
     <!-- add second token for forms, which is similarly named as other links -->
     <filter token="forms_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/"/>
-    <filter token="dbdictionary_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/dbdictionary/"/>
+    <filter token="dbdictionary_link" value="${vegdocs.dir}/dbdictionary/"/>
     <filter token="includes_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/includes/"/>
-    <filter token="pubs_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/pubs/"/>
-    <filter token="history_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/history/"/>
-    <filter token="news_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/news/"/>
+    <filter token="pubs_link" value="${vegdocs.dir}/pubs/"/>
+    <filter token="history_link" value="${vegdocs.dir}/history/"/>
+    <filter token="news_link" value="${vegdocs.dir}/news/"/>
     <!-- add link for page name that links to help frame jsp -->
     <filter token="jspHelpPage" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/getHelp.jsp"/>
     <!-- location and filename of xml index page -->
-    <filter token="design_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/design/"/>
-    <filter token="panel_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/panel/"/>
+    <filter token="design_link" value="${vegdocs.dir}/design/"/>
+    <filter token="panel_link" value="${vegdocs.dir}/panel/"/>
     <filter token="workshop_link" value="${vegdocs.dir}/workshop/"/>
     <filter token="vegbranch_link" value="${vegdocs.dir}/vegbranch/"/>
     <filter token="xml_link" value="${vegdocs.dir}/xml/"/>
