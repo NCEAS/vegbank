@@ -114,7 +114,7 @@ public class viewData extends HttpServlet
 		if (downLoadAction != null)
 		{
 			this.initPlotDownload(request);
- 			response.sendRedirect("http://vegbank.nceas.ucsb.edu/forms/resultset-download.html");	
+ 			response.sendRedirect("/forms/resultset-download.html");	
 		}
 		
 		else if (resultType.equals("identity") )
