@@ -11,11 +11,10 @@ import java.sql.*;
  *
  *	
  *	'$Author: farrell $' <br>
- *	'$Date: 2002-12-14 00:03:20 $' <br>
- *	'$Revision: 1.23 $' <br>
+ *	'$Date: 2002-12-17 20:51:44 $' <br>
+ *	'$Revision: 1.24 $' <br>
  */
  
-//public class VegBankDataSourcePlugin
 public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 {
 	
@@ -395,7 +394,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
  	 */
  	public String getAuthorObsCode(String plotName)
  	{
- 		return("");
+ 		return this.getObservationElement(plotName, "authorobscode");
  	}
  	
  	/**
@@ -495,6 +494,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	
 	
 	//START
+	
 	/**
 	 * utlility method for querying the observation table and returning 
 	 * each of the elements as a string
@@ -504,39 +504,81 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	 private String getObservationElement(String plotName, String elementName )
 	 {
-		String s = null;
-		Statement stmt = null;
-		StringBuffer sb = new StringBuffer();
-		try 
-		{
-			stmt = con.createStatement();
-			sb.append("select ");
-			sb.append(elementName);
-			sb.append(" from OBSERVATION where PLOT_ID = ");
-			sb.append(plotName);
-			
-			ResultSet rs = stmt.executeQuery(  sb.toString() );
-			while (rs.next()) 
-			{
-				 s = rs.getString(1);
-			}
-			rs.close();
-			stmt.close();
-		}
-		catch (SQLException ex) 
-		{
-			System.out.println("query > " + sb.toString() );
-			this.handleSQLException( ex );
-		}
-		catch (java.lang.Exception ex) 
-		{
-			System.out.println("Exception: " + ex );
-			ex.printStackTrace();
-		}
-		return(s);
+		return getElement(plotName,  "OBSERVATION" , elementName, null);
 	 }
 	 
+	/**
+	 * utlility method for querying the project table and returning 
+	 * each of the elements as a string
+	 * @param plotName -- the name of the plot 
+	 * @param elementname -- the attribute name of the desired attribute 
+	 */
+	 private String getProjectElement(String plotName, String elementName )
+	 {			
+		return getElement(plotName,  "PROJECT" , elementName, "select project_id from PLOT where PLOT_ID =");
+	 }	 
 	 
+	/**
+	 * utlility method for querying the plot table and returning 
+	 * each of the elements as a string
+	 * @param plotName -- the name of the plot 
+	 * @param elementname -- the attribute name of the desired attribute 
+	 */
+	 private String getPlotElement(String plotName, String elementName )
+	 {
+		return getElement(plotName,  "PLOT" , elementName, null);
+	 }
+	 
+	 /**
+	  *  Ruturns the results of a SQL query in a string
+	  * 
+		* @param plotName -- the name of the plot 
+	  * @param tableName -- the name of the table
+	 	* @param elementName -- the attribute name of the desired attribute 
+	  */
+	 private String getElement( String plotName, String tableName, String elementName, String subQuery )
+	 {
+			String retVal = null;
+			Statement stmt = null;
+			StringBuffer sb = new StringBuffer();
+			try 
+			{
+				stmt = con.createStatement();
+				sb.append("select ");
+				sb.append(elementName);
+				sb.append(" from " + tableName);
+				
+				if ( subQuery == null) 
+				{
+ 					sb.append(" where PLOT_ID = ");
+					sb.append(plotName);
+				} 
+				else 
+				{				
+					sb.append( " where PROJECT_ID = (" + subQuery + plotName + ")" );
+				}
+				
+				ResultSet rs = stmt.executeQuery(  sb.toString() );
+				while (rs.next()) 
+				{
+					 retVal = rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch (SQLException ex) 
+			{
+				System.out.println("VegBankDataSourcePlugin > query: " + sb.toString() );
+				this.handleSQLException( ex );
+			}
+			catch (java.lang.Exception ex) 
+			{
+				System.out.println("Exception: " + ex );
+				ex.printStackTrace();
+			}
+			return(retVal);	 	
+	 }
+	 	 
 	/**
 	*/
 	public String getObsDateAccuracy(String plotName)
@@ -565,24 +607,21 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getStemSizeLimit(String plotName)
 	{
-		String s = "";
-		return(s);
+		return this.getObservationElement(plotName, "stemsizelimit");
 	}
 
 	/**
 	 */
 	public String getMethodNarrative(String plotName)
 	{
-		String s = this.getObservationElement(plotName, "methodnarrative");
-		return(s);
+		return this.getObservationElement(plotName, "methodnarrative");
 	}
 	
 	/**
 	 */
 	public String getTaxonObservationArea(String plotName)
 	{
-		String s = this.getObservationElement(plotName, "taxonobservationarea");
-		return(s);
+		return this.getObservationElement(plotName, "taxonobservationarea");
 	}
 	
 	/**
@@ -597,6 +636,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public boolean getAutoTaxonCover(String plantName)
 	{
+		// FIXME -- not looking up the value
 		boolean s = true;
 		return(s);
 	}
@@ -613,8 +653,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getStemSampleMethod(String plotName)
 	{
-		String s = "";
-		return(s);
+		return this.getObservationElement(plotName, "stemsamplemethod");
 	}
 	
 	/**
@@ -673,6 +712,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
  	*/
  	public String getSoilTaxon(String plotName)
  	{
+ 		// FIXME: Not searching for real data
  		return("");
  	}
  	
@@ -841,7 +881,8 @@ public String  getLandscapeNarrative(String plotName)
 
 public String  getPhenologicalAspect(String plotName)
 {
-		String s = this.getObservationElement(plotName, "phenologicalAspect");
+	// FIXME: There is a different name for this attribute in the db vs. xml
+		String s = this.getObservationElement(plotName, "phenologicAspect");
 		return(s);
 }
 
@@ -967,18 +1008,21 @@ public String  getGrowthform3Cover(String plotName)
 
 public boolean  getNotesPublic(String plotName)
 {
+	// FIXME returns a default
 	String s = this.getObservationElement(plotName, "notespublic");
-		return(false);
+	return(false);
 }
 
 public boolean  getNotesMgt(String plotName)
 {
+	// FIXME returns a default
 	String s = this.getObservationElement(plotName, "notesmgt");
-		return(false);
+	return(false);
 }
 
 public boolean  getRevisions(String plotName)
 {
+	// FIXME returns a default
 	return(false);
 }
 //END
@@ -1099,6 +1143,7 @@ public boolean  getRevisions(String plotName)
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorMiddleName(String contributorWholeName)
 	{
+		// FIXME -- returning a default
 		return("");
 	}
 	
@@ -1220,6 +1265,7 @@ public boolean  getRevisions(String plotName)
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorCellPhoneNumber(String contributorWholeName)
 	{
+		// FIXME -- the following methods return a default --- 
 			return("");
 	}
 	//retuns the person's fax phone number based on their full name which is the
@@ -1547,24 +1593,7 @@ public boolean  getRevisions(String plotName)
 	//returns the project description
 	public String getProjectDescription(String plotName )
 	{
-		String s = null;
-		Statement stmt = null;
-		try 
-		{
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select  projectdescription  "
-			+" from PROJECT where PROJECT_ID = 0 "  );			
-			while (rs.next()) 
-			{
-				 s = rs.getString(1);
-			}
-		}
-		catch (java.lang.Exception ex) 
-		{   
-			System.out.println("Exception: " + ex );
-			ex.printStackTrace();
-		}
-		return(s);
+		return this.getProjectElement(plotName, "projectdescription");
 	}
 	
 	
@@ -1842,22 +1871,27 @@ public boolean  getRevisions(String plotName)
 	
 	public String getAzimuth(String plotName) 
 	{
-		return null;
+		String s = this.getPlotElement(plotName, "azimuth");
+		return(s);
 	}	
  
 	public String getDSGPoly(String plotName)
 	{
-		return null;
+		String s = this.getPlotElement(plotName, "dsgpoly");
+		return(s);
 	}
 	
 	public String getLocationNarrative(String plotName)
 	{
-		return null;
+		String s = this.getPlotElement(plotName, "locationnarrative");
+		return(s);
 	}
 	
 	public String getLayoutNarrative( String plotName )
 	{
-		return null;
+		// FIXME: layoutNarrative vs. layoutnarative in database
+		String s = this.getPlotElement(plotName, "layoutnarative");
+		return(s);
 	}	
 	
 	//returns the state for the current plot
@@ -2055,7 +2089,10 @@ public boolean  getRevisions(String plotName)
 	
 	//returns the country
 	public String getCountry(String plotName)
-	{ return("USA"); }
+	{ 
+		String s = this.getPlotElement(plotName, "country");
+		return(s);
+	}
 	
 	//returns the slope aspect
 	public String getSlopeAspect(String plotName)

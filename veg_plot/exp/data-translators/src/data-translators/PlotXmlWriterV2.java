@@ -19,8 +19,8 @@ import PlotDataSource;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: farrell $' <br>
- *  '$Date: 2002-12-14 00:03:20 $' <br>
- *  '$Revision: 1.12 $' <br>
+ *  '$Date: 2002-12-17 20:51:44 $' <br>
+ *  '$Revision: 1.13 $' <br>
  */
 
  
@@ -86,11 +86,11 @@ public class PlotXmlWriterV2
 			sb.append( getPlotHeader() );
 			sb.append( getPlotProjectContent() );
 			sb.append( getPlotSiteContent() );
-				//this is a child of the site content
-				sb.append( getPlotPlaceContent() );
-				sb.append( getPlotObservationContent() );
-				//end tags
-				sb.append( getPlotObservationEndTag() );
+			//this is a child of the site content
+			sb.append( getPlotPlaceContent() );
+			sb.append( getPlotObservationContent() );
+			//end tags
+			sb.append( getPlotObservationEndTag() );
 			sb.append( getPlotSiteEndTag() );
 			sb.append( getPlotProjectEndTag() );
 			sb.append( getPlotFooter() );
@@ -465,17 +465,18 @@ public class PlotXmlWriterV2
 				sb.append("    <authorZone>"+datasrc.utmZone+"</authorZone> \n");
 				sb.append("    <authorDatum></authorDatum> \n");
 				sb.append("    <authorLocation>"+datasrc.getAuthorLocation(plotCode)+"</authorLocation> \n");
-				sb.append("    <locationNarrative></locationNarrative> \n");
+				sb.append("    <locationNarrative>" + datasrc.locationNarrative +"</locationNarrative> \n");
+				sb.append("    <layoutNarrative>" + datasrc.layoutNarrative +"</layoutNarrative> \n");				
 				sb.append("    <confidentialityStatus>"+datasrc.confidentialityStatus+"</confidentialityStatus> \n");
 				sb.append("    <confidentialityReason>"+datasrc.confidentialityReason+"</confidentialityReason> \n");
-				sb.append("    <azimuth></azimuth> \n");
-				sb.append("    <dsgPoly></dsgPoly> \n");
+				sb.append("    <azimuth>" + datasrc.azimuth +"</azimuth> \n");
+				sb.append("    <dsgPoly>" + datasrc.dsgPoly + "</dsgPoly> \n");
 				sb.append("    <shape>"+datasrc.plotShape+"</shape> \n");
 				sb.append("    <area>"+datasrc.plotArea+"</area> \n");
 				sb.append("    <standSize>"+datasrc.getStandSize(plotCode)+"</standSize> \n");
 				sb.append("    <placementMethod></placementMethod> \n");
 				sb.append("    <permanence>"+datasrc.isPlotPermanent(plotCode)+"</permanence> \n");
-				sb.append("    <layoutNarative></layoutNarative> \n");
+				sb.append("    <layoutNarative>"+datasrc.getLayoutNarrative(plotCode)+"</layoutNarative> \n");
 				sb.append("    <elevation>"+datasrc.getElevation(plotCode)+"</elevation> \n");
 				sb.append("    <elevationAccuracy>"+datasrc.getElevationAccuracy(plotCode)+"</elevationAccuracy> \n");
 				sb.append("    <slopeAspect>"+datasrc.slopeAspect.trim()+" </slopeAspect> \n");
@@ -486,9 +487,9 @@ public class PlotXmlWriterV2
 				sb.append("    <soilTaxon>"+datasrc.getSoilTaxon(plotCode)+"</soilTaxon> \n");
 				// THIS ELEMENT HAS BEEN REMOVED FROM THE DATABASE 20020717
 				sb.append("    <soilTaxonSource>"+datasrc.getSoilTaxonSource(plotCode)+"</soilTaxonSource> \n");
-				sb.append("    <notesPublic></notesPublic> \n");
-				sb.append("    <notesMgt></notesMgt> \n");
-				sb.append("    <revisions></revisions> \n");
+				sb.append("    <notesPublic>"+datasrc.getNotesPublic(plotCode)+"</notesPublic> \n");
+				sb.append("    <notesMgt>"+datasrc.getNotesMgt(plotCode)+"</notesMgt> \n");
+				sb.append("    <revisions>"+datasrc.getRevisions(plotCode)+"</revisions> \n");
 				sb.append("    <state>"+datasrc.state+"</state> \n");
 				sb.append("    <country>"+datasrc.country+"</country> \n");
 				sb.append(" \n");
@@ -521,15 +522,15 @@ public class PlotXmlWriterV2
 		 {
 		 	sb.append("    <observation> \n");
 		 	
-			sb.append("      <authorObsCode>"+datasrc.getObsStartDate(plotCode)+"</authorObsCode> \n");
+			sb.append("      <authorObsCode>"+datasrc.getAuthorObsCode(plotCode)+"</authorObsCode> \n");
   		sb.append("      <obsStartDate>"+datasrc.getObsStartDate(plotCode)+"</obsStartDate> \n");
    		sb.append("      <obsEndDate>"+datasrc.getObsStopDate(plotCode)+"</obsEndDate> \n");
    		sb.append("      <dateAccuracy>"+datasrc.getObsDateAccuracy(plotCode)+"</dateAccuracy> \n");
    		sb.append("      <observationSequence>"+datasrc.getObservationAccessionNumber(plotCode)+"</observationSequence> \n");
-			sb.append("      <sampleMethodId></sampleMethodId>  \n");
-    	sb.append("      <coverMethodId></coverMethodId> \n");
-   		sb.append("      <stratumMethodId></stratumMethodId> \n");
-    	sb.append("      <stemSizeLimit></stemSizeLimit> \n");
+			//sb.append("      <sampleMethodId></sampleMethodId>  \n");
+    	//sb.append("      <coverMethodId></coverMethodId> \n");
+   		//sb.append("      <stratumMethodId></stratumMethodId> \n");
+    	sb.append("      <stemSizeLimit>"+datasrc.getStemSizeLimit(plotCode)+"</stemSizeLimit> \n");
     	sb.append("      <methodNarrative>"+datasrc.getMethodNarrative(plotCode)+"</methodNarrative> \n");
     	sb.append("      <taxonObservationArea>"+datasrc.getTaxonObservationArea(plotCode)+"</taxonObservationArea> \n");
     	sb.append("      <coverDispersion>"+datasrc.getCoverDispersion(plotCode)+"</coverDispersion> \n");
@@ -543,7 +544,7 @@ public class PlotXmlWriterV2
     	sb.append("      <bryophyteQuality>"+datasrc.getBryophyteQuality(plotCode)+"</bryophyteQuality> \n");
     	sb.append("      <lichenQuality>"+datasrc.getLichenQuality(plotCode)+"</lichenQuality> \n");
     	sb.append("      <observationNarrative>"+datasrc.getObservationNarrative(plotCode)+"</observationNarrative> \n");
-    	sb.append("      <landscapeNarrative></landscapeNarrative> \n");
+    	sb.append("      <landscapeNarrative>"+datasrc.getLandscapeNarrative(plotCode)+"</landscapeNarrative> \n");
     	sb.append("      <homogeneity>"+datasrc.getHomogeneity(plotCode)+"</homogeneity> \n");
     	sb.append("      <phenologicalAspect>"+datasrc.getPhenologicalAspect(plotCode)+"</phenologicalAspect> \n");
     	sb.append("      <representativeness>"+datasrc.getRepresentativeness(plotCode)+"</representativeness> \n");
@@ -552,7 +553,7 @@ public class PlotXmlWriterV2
     	sb.append("      <soilMoistureRegime>"+datasrc.getSoilMoistureRegime(plotCode)+"</soilMoistureRegime> \n");
     	sb.append("      <soilDrainage>"+datasrc.getSoilDrainage(plotCode)+"</soilDrainage> \n");
     	sb.append("      <waterSalinity>"+datasrc.getWaterSalinity(plotCode)+"</waterSalinity> \n");
-    	sb.append("      <waterDepth></waterDepth> \n");
+    	sb.append("      <waterDepth>"+datasrc.getWaterDepth(plotCode)+"</waterDepth> \n");
     	sb.append("      <shoreDistance>"+datasrc.getShoreDistance(plotCode)+"</shoreDistance> \n");
 			sb.append("      <soilDepth>"+datasrc.soilDepth+"</soilDepth> \n");
     	sb.append("      <organicDepth>"+datasrc.getOrganicDepth(plotCode)+"</organicDepth> \n");
@@ -568,13 +569,13 @@ public class PlotXmlWriterV2
     	sb.append("      <successionalStatus>"+datasrc.getSuccessionalStatus(plotCode)+"</successionalStatus> \n"); 
     	sb.append("      <treeHt>"+datasrc.getTreeHt(plotCode)+"</treeHt> \n");
     	sb.append("      <shrubHt>"+datasrc.getShrubHt(plotCode)+"</shrubHt> \n");
-    	sb.append("      <fieldHt></fieldHt> \n");
-    	sb.append("      <nonvascularHt></nonvascularHt> \n");
-    	sb.append("      <submergedHt></submergedHt> \n");
-    	sb.append("      <treeCover></treeCover> \n");
-    	sb.append("      <shrubCover></shrubCover> \n");
-    	sb.append("      <fieldCover></fieldCover> \n");
-    	sb.append("      <nonvascularCover></nonvascularCover> \n");
+    	sb.append("      <fieldHt>" + datasrc.getFieldHt(plotCode) + "</fieldHt> \n");
+    	sb.append("      <nonvascularHt>" + datasrc.getNonvascularHt(plotCode) + "</nonvascularHt> \n");
+    	sb.append("      <submergedHt>" + datasrc.getSubmergedHt(plotCode) + "</submergedHt> \n");
+    	sb.append("      <treeCover>" + datasrc.getTreeCover(plotCode) + "</treeCover> \n");
+    	sb.append("      <shrubCover>" + datasrc.getShrubCover(plotCode) + "</shrubCover> \n");
+    	sb.append("      <fieldCover>" + datasrc.getFieldCover(plotCode)+ "</fieldCover> \n");
+    	sb.append("      <nonvascularCover>" + datasrc.getNonvascularCover(plotCode) + "</nonvascularCover> \n");
     	sb.append("      <floatingCover>"+datasrc.getFloatingCover(plotCode)+"</floatingCover> \n");
     	sb.append("      <submergedCover>"+datasrc.getSubmergedCover(plotCode)+"</submergedCover> \n");
     	sb.append("      <dominantStratum>"+datasrc.getDominantStratum(plotCode)+"</dominantStratum> \n");

@@ -24,8 +24,8 @@ import  xmlresource.utils.XMLparse;
  * Access to the data stored in the native VegBank XML structure.
  * 
  *	'$Author: farrell $'
- *	'$Date: 2002-12-14 00:03:19 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2002-12-17 20:51:44 $'
+ *	'$Revision: 1.12 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -749,30 +749,8 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
   */
 	public boolean getAutoTaxonCover(String plotName)
 	{
-    // FIXME: This is logically flawed .... should be able to return nothing
-    // rather than forcing a boolean on us. Nothing should be returned when 
-    // nothing in datasource or a value we don't have a match for.
-
-    boolean retVal;
 		String value = this.getPlotAttribute(plotName, "autoTaxonCover");
-    // Need to turn this string into a boolean.
-    if (value == null) 
-    {
-      retVal = false;
-    }
-    else if ( value.equalsIgnoreCase("false") )
-    {
-      retVal = false;
-    }
-    else if ( value.equalsIgnoreCase("true") )
-    {
-      retVal = true;
-    }
-    else 
-    {
-      retVal = false;
-    }
-    return retVal;
+    return convertStringToBoolean(value);
 	}
 	
 	/**
@@ -1405,57 +1383,24 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	
 	public boolean  getNotesPublic(String plotName)
 	{
-		String elementValue = null;
-		boolean b = false;
-		this.init(plotName);
-		try
-		{
-			elementValue = parse.getNodeValue(doc, "notesPublic");
-			System.out.println("NativeXmlPlugin >  " + elementValue);
-			b = Boolean.getBoolean(elementValue);
-		}
-		catch(Exception e )
-		{
-			System.out.println("Exception parsing: notesPublic");
-		}
-		return(b);
+	  String elementValue = this.getPlotAttribute(plotName, "notesPublic");
+		System.out.println("NativeXmlPlugin >  notesPublic: " + elementValue);
+		return convertStringToBoolean(elementValue);
 	}
 	
 	public boolean  getNotesMgt(String plotName)
 	{
-		String elementValue = null;
-		boolean b = false;
-		this.init(plotName);
-		try
-		{
-			elementValue = parse.getNodeValue(doc, "notesMgt");
-			b = Boolean.getBoolean(elementValue);
-		}
-		catch(Exception e )
-		{
-			System.out.println("Exception parsing: notesMgt");
-		}
-		return(b);
+		String elementValue = this.getPlotAttribute(plotName, "notesMgt");
+		System.out.println("NativeXmlPlugin >  notesMgt: " + elementValue);
+    return convertStringToBoolean(elementValue);
 	}
 	
 	public boolean  getRevisions(String plotName)
 	{
-		String elementValue = null;
-		boolean b = false;
-		this.init(plotName);
-		try
-		{
-			elementValue = parse.getNodeValue(doc, "revisions");
-			b = Boolean.getBoolean(elementValue);
-		}
-		catch(Exception e )
-		{
-			System.out.println("Exception parsing: revisions");
-		}
-		return(b);
+		String elementValue = this.getPlotAttribute(plotName, "revisions");
+		System.out.println("NativeXmlPlugin >  revisions: " + elementValue);
+    return convertStringToBoolean(elementValue);
 	}
-	//END
-	//END
 
 
 	/**
@@ -1678,7 +1623,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		* @param stratumType -- a string representation of the stratum type
 		* 
 		*/
-		public Hashtable getStratum(Document doc, String stratumType)
+    public Hashtable getStratum(Document doc, String stratumType)
 		{
 			String cover = null;
 			String type = null;
@@ -1736,7 +1681,35 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 				e.printStackTrace();
 			}
 			return(returnHash);
-		}
-		
-	 }
+    }
+  }
+
+
+  private boolean convertStringToBoolean ( String s ) 
+  {
+    // FIXME: This is logically flawed .... should be able to return nothing
+    // rather than forcing a boolean on us. Nothing should be returned when 
+    // nothing in datasource or a value we don't have a match for.
+
+    boolean retVal;
+    // Need to turn this string into a boolean.
+    if (s == null) 
+    {
+      retVal = false;
+    }
+    else if ( s.equalsIgnoreCase("false") )
+    {
+      retVal = false;
+    }
+    else if ( s.equalsIgnoreCase("true") )
+    {
+      retVal = true;
+    }
+    else 
+    {
+      retVal = false;
+    }
+    return retVal;
+	}
+
 }
