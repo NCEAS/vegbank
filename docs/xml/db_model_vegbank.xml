@@ -3,13 +3,13 @@
 <?xml-stylesheet type="text/xsl" href="model2_url2getStrings.xsl"?>
 <dataModel>
   <title>Vegetation Database Component Description: --all modules--</title>
-  <version>beta.2</version>
+  <version>1.0.0</version>
   <versionDesc>This version of the VegBank database model includes changes to make reference one set of tables (no more commReference, plantReference, cititation).  level and parent have been moved to Status for plant and comm modules.</versionDesc>
   <author>M. Lee</author>
   <institution>NCEAS</institution>
   <contributor>M. Lee</contributor>
   <description/>
-  <date>4/03/2003 11:12 AM</date>
+  <date>2003-09-25T11:28:00-08:00</date>
   <entity>
     <entityName>commConcept</entityName>
     <entityLabel>Community Concept</entityLabel>
