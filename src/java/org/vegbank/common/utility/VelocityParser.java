@@ -2,8 +2,8 @@
  *	'$Id: '
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-15 02:03:31 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-06-10 02:35:56 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,8 @@ import org.apache.commons.logging.LogFactory;
 public class VelocityParser  {
 
 	private static Log log = LogFactory.getLog(VelocityParser.class); 
+	private static ResourceBundle res = ResourceBundle.getBundle("vegbank");
+	private static final String VELOCITY_PROPS_PATH = res.getString("velocity_props_path");
 
 	VelocityContext mainContext = null;
 	Template mainTemplate = null;
@@ -43,7 +45,7 @@ public class VelocityParser  {
 	public VelocityParser(String templateFile)  {
 		try {
 			VelocityEngine ve = new VelocityEngine();
-			ve.init("velocity.properties");
+			ve.init(VELOCITY_PROPS_PATH);
 			mainTemplate = ve.getTemplate(templateFile);
 		} catch( Exception ex ) {
 			log.error("Error loading template file: " + templateFile +
