@@ -8,9 +8,9 @@
  * National Center for Ecological Analysis and
  * Synthesis Authors: Jing Tao Release: @release@
  * 
- * '$Author: farrell $' 
- * '$Date: 2004-03-07 17:55:28 $'
- * '$Revision: 1.7 $'
+ * '$Author: anderson $' 
+ * '$Date: 2004-03-18 02:06:14 $'
+ * '$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -320,7 +320,7 @@ public class DBConnectionPool implements Runnable
 		{
 			if ( dbConn.isClosed() )
 			{
-				log.warn("DBConnectionPool: Connection is already closed");
+				log.debug("DBConnectionPool: Connection is already closed");
 				return false;
 			}
 			
@@ -357,7 +357,7 @@ public class DBConnectionPool implements Runnable
 		index = getIndexOfPoolForConnection(conn);
 		if (index == -1)
 		{
-			log.warn("DBConnectionPool: Couldn't find a DBConnection in the pool"
+			log.debug("DBConnectionPool: Couldn't find a DBConnection in the pool"
 				+ " which have same tag to the returned DBConnetion object");
 			return;
 		} //if
