@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: farrell $'
-* '$Date: 2003-05-01 18:33:14 $'
-* '$Revision: 1.40 $'
+* '$Author: mlee $'
+* '$Date: 2003-05-02 23:13:37 $'
+* '$Revision: 1.41 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -47,6 +47,9 @@
     <property name="image_src" value="./images"/>
     <property name="hostname" value="vegbank"/>
     <property name="sharedhtml_src" value="./sharedhtml"/>
+    <property name="workshop_src" value="./workshop"/>
+    <!-- large binary files location:   targets that read from large binaries separate -->
+    <property name="lrg_binary_src" value="/home/lee/VegBranchReleases"/>
     <filter token="dist" value="dist"/>
     <filter token="hostname" value="${hostname}"/>
     <filter token="version" value="development"/>
@@ -63,6 +66,7 @@
     <property name="pubs_server" value="${tomcat.home.dir}/webapps/vegbank/pubs/"/>
     <property name="style_server" value="${tomcat.home.dir}/webapps/vegbank/includes/"/>
     <property name="vegbank_server" value="${tomcat.home.dir}/webapps/vegbank/"/>
+    <property name="workshop_server" value="${tomcat.home.dir}/webapps/vegbank/workshop/"/>
     <property name="server_root" value="${tomcat.home.dir}/webapps/ROOT/"/>
     <property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/vegbank/WEB-INF/lib"/>
     <!-- WEB SERVER LOCATIONS -->
@@ -94,20 +98,17 @@
     <!-- set the properties file as a filtersfile to distribute headers and footers -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
   </target>
-  
   <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
   <target name="includes" depends="init" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
     <copy todir="${style_server}" filtering="no">
       <fileset dir="${style_src}" includes="**.css **/*jsp"/>
     </copy>
   </target>
-  
-  <target name="index" depends="hdrftr" description="target to dist. the index.html file">
+  <target name="index" depends="hdrftr" description="=&gt; target to dist. the index.html file">
     <copy tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
     <!-- add to second webpage at root/vegbank/index.html -->
     <copy todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
   </target>
-  
   <!-- DISTRIBUTE THE IMAGES -->
   <target name="images" depends="init" description="=&gt; dist. the images to server">
     <copy todir="${image_server}" filtering="no">
@@ -136,6 +137,12 @@
       </fileset>
     </copy>
   </target>
+  <!-- keep these targets (that read from large binaries separate -->
+  <target name="panel-big-bin" depends="init" description="=&gt; dist the panel large binary files to server">
+    <copy todir="${panel_server}" filtering="no">
+      <fileset dir="${lrg_binary_src}" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip   "/>
+    </copy>
+  </target>
   <!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
@@ -156,16 +163,39 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-  <target name="pubs" depends="init" description="=&gt; dist the pubs pages to server">
+  <!-- dist workshop files to server : NEW as of 02-MAY-2003, not sure how these files were dist to server before.  -->
+  <target name="workshop" depends="hdrftr" description="=&gt; dist the workshop pages to server ">
+    <copy todir="${workshop_server}" filtering="yes">
+      <fileset dir="${workshop_src}">
+        <include name="**/*.html"/>
+        <exclude name="**/CVS*"/>
+      </fileset>
+    </copy>
+    <copy todir="${workshop_server}" filtering="no">
+      <fileset dir="${workshop_src}">
+        <exclude name="**/*.html"/>
+        <exclude name="**/CVS*"/>
+      </fileset>
+    </copy>
+  </target>
+  <target name="pubs" depends="hdrftr" description="=&gt; dist the pubs pages to server">
     <copy todir="${pubs_server}" filtering="no">
-      <fileset dir="${pubs_src}"/>
+      <fileset dir="${pubs_src}">
+        <exclude name="**/*.htm*"/>
+      </fileset>
+    </copy>
+    <!-- dist html and htm too -->
+    <copy todir="${pubs_server}" filtering="yes">
+      <fileset dir="${pubs_src}">
+        <include name="**/*.htm*"/>
+      </fileset>
     </copy>
   </target>
   <!--
 	* TARGET TO PUT THE FORMS FOR INTERACTING WITH THE
 	* SERVLETS IN THE APPROPRIATE LOCATION
 -->
-  <target name="forms" depends="hdrftr" description="=&gt; dist the (specific list of) forms to server ">
+  <target name="forms" depends="hdrftr" description="=&gt; dist the forms to server ">
     <copy todir="${forms_server}" filtering="yes">
       <fileset dir="${forms}" includes="*jsp *html" excludes="**/CVS* "/>
     </copy>
@@ -195,7 +225,7 @@
   <!--
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
 -->
-  <target name="xsl" depends="hdrftr">
+  <target name="xsl" depends="hdrftr" description="=&gt; dist the xsl dir to server">
     <copy todir="${vegbank.lib.dir}" filtering="yes">
       <fileset dir="${xsl.src.dir}"/>
     </copy>
@@ -237,7 +267,7 @@
 	INTO THE CORRECT PLACE
 -->
   <target name="dist" depends="tokenfiles, 
-                                index, 
+                              index, 
                               design, 
                               forms, 
                               general, 
@@ -249,6 +279,10 @@
                               news, 
                               panel, 
                               pubs,
-                              xsl" description="=> Distribute all web files"/>
+                              xsl,
+                              workshop, 
+                              dictionary" description="=&gt; Distribute all web files"/>
+  <target name="dist-bins" depends="init, panel-big-bin " description="=&gt; dist. all targets that require access to big binary storage "/>
+  <target name="dist-everything" depends="dist, dist-bins" description="=&gt; dist all targets in the dist target and dist-bins target : DIST EVERYTHING! "/>
   <!-- FIXME [Fixed:(MTL)dictionary], images target expects files not in cvs -->
 </project>
