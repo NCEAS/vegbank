@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-07 20:48:32 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-12-08 22:34:44 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
  * servlet request parameters.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.3 $ $Date: 2004-12-07 20:48:32 $
+ * @version $Revision: 1.4 $ $Date: 2004-12-08 22:34:44 $
  */
 
 public class CompositeRequestParamUtil {
@@ -59,7 +59,7 @@ public class CompositeRequestParamUtil {
 	 * children and puts it in the request.
 	 */
 	public boolean parseParent(String parent) {
-		log.debug("parsing one parent into request: " + parent);
+		log.debug("parsing one parent from the top: " + parent);
 
 		boolean rv = false;
 		Enumeration theFields = request.getParameterNames();
@@ -70,11 +70,14 @@ public class CompositeRequestParamUtil {
 			if (fullPath.startsWith(parent)) {
 				try {
 					// run the parser on the children
-					Map m = parseFullPath(fullPath);
+					rv = parseFromTop(fullPath);
+					/*
+					Map m = parseFromTop(fullPath);
 					if (m != null) {
 						rv = true;
 						addTopLevelParent(fullPath, m);
 					}
+					*/
 
 				} catch (Exception ex) {
 					// oh well
@@ -132,34 +135,43 @@ public class CompositeRequestParamUtil {
 	 * This will return either another Map, a String or
 	 * a String[].  
 	 * 
-	 * Map m = parseFullPath("parent.child.grandchild");
+	 * Map m = parseFromTop("parent.child.grandchild");
 	 * m = (Map)m.get("PARENT");
 	 * m = (Map)m.get("CHILD");
 	 * String s = (String)m.get("grandchild");
 	 *
 	 */
-	private Map parseFullPath(String fullPath) {
+	private boolean parseFromTop(String fullPath) {
 		if (Utility.isStringNullOrEmpty(fullPath)) {
-			return null;
+			return false;
 		}
 
-		Map m = new HashMap();
+		Map m;
 		int firstDot = fullPath.indexOf(".");
 		if (firstDot == -1) {
 			// this param has no children
 			log.debug("non-composite param: " + fullPath);
-			m.put(fullPath, getRequestParameter(fullPath));
+			//m.put(fullPath, getRequestParameter(fullPath));
+			composParams.put(fullPath.toLowerCase(), getRequestParameter(fullPath));
+			return false;
 
 		} else {
 			// run the parser on the children
-			String thisKey = fullPath.substring(0, firstDot);
+			String thisKey = fullPath.substring(0, firstDot).toUpperCase();
 			String childKey = fullPath.substring(firstDot+1);
 
-			m.put(thisKey, parseChildren(fullPath, 
-						childKey, new HashMap()));
-		}
+			m = (Map)composParams.get(thisKey);
+			if (m == null) {
+				m = new HashMap();
+			}
 
-		return m;
+			//log.debug("putting (top-level) children with key: " + thisKey);
+			composParams.put(thisKey,
+					parseChildren(fullPath, childKey, m));
+			log.debug("CURRENT TOP LEVEL MAPPINGS: " + composParams.toString() + "\n");
+
+			return true;
+		}
 	}
 
 
@@ -177,22 +189,33 @@ public class CompositeRequestParamUtil {
 	 */
 	private Map parseChildren(String fullPath, String childKey, Map siblings) {
 
-		log.debug("PARSING " + childKey + " OF " + fullPath);
+		log.debug("parseChildren: " + childKey);
+
 		int firstDot = childKey.indexOf(".");
+		Map childMap;
 
 		if (firstDot != -1 && childKey.length() > firstDot+1) {
 			// there are more children
-			String thisKey = childKey.substring(0, firstDot);
+			String thisKey = childKey.substring(0, firstDot).toUpperCase();
 			childKey = childKey.substring(firstDot+1);
+			log.debug("parsing children of " + thisKey + " from " + fullPath);
 
-			// children always live in a Map at least
-			Map m = parseChildren(fullPath, childKey, new HashMap());
-			insertValue(siblings, thisKey.toUpperCase(), m);
+			childMap = (Map)siblings.get(thisKey);
+			if (childMap == null) {
+				// use the extant one if there
+				childMap = new HashMap();
+				//log.debug("This is the first parsed child");
+			}
+
+			log.debug("adding children to siblings of: " + thisKey);
+			insertValue(siblings, thisKey.toUpperCase(), 
+					parseChildren(fullPath, childKey, childMap));
 
 		} else {
 			// no more dots
 			// store the parameter value(s) with its siblings
-			insertValue(siblings, childKey, getRequestParameter(fullPath));
+			log.debug("NO MORE CHILDREN; adding one value to siblings of: " + childKey);
+			insertValue(siblings, childKey.toLowerCase(), getRequestParameter(fullPath));
 		}
 
 		return siblings;
@@ -221,7 +244,7 @@ public class CompositeRequestParamUtil {
 	 * adds a new IndexedValue instance at the end of the List.
 	 */
 	private	void insertValue(Map container, String key, Object value) {
-		log.debug("Inserting value with key: " + key);
+		//log.debug("Inserting value with key: " + key + " :: VALUE IS " + value.toString());
 		container.put(key, value);
 	}
 
@@ -231,7 +254,7 @@ public class CompositeRequestParamUtil {
 	 * an upper-case key.  Type of child is determined by first child key.
 	 * If child key is numeric, type is ArrayList, else HashMap.
 	 */
-	private void addTopLevelParent(String fullPath, Object child) {
+	private void addTopLevelParent(String fullPath, Map newParentMap) {
 		int dotPos = fullPath.indexOf(".");
 		if (dotPos == -1) {
 			log.debug("Not adding top level for: " + fullPath);
@@ -239,25 +262,29 @@ public class CompositeRequestParamUtil {
 		}
 
 		String parentKey = fullPath.substring(0, dotPos).toUpperCase();
-		String childKey = fullPath.substring(dotPos+1);
 
-		Map parent = (Map)composParams.get(parentKey);
-		if (parent == null) { 
-			parent = new HashMap();
+		Map oldParentMap = (Map)composParams.get(parentKey);
+		if (oldParentMap == null) { 
+			log.debug(parentKey + " did not exist in top level yet");
+			oldParentMap = new HashMap();
 		} 
 
+		/*
+		String childKey = fullPath.substring(dotPos+1);
 		dotPos = childKey.indexOf(".");
 		if (dotPos != -1) {
 			// this child is a parent, so make it upper case
 			childKey = childKey.substring(0, dotPos).toUpperCase();
 		}
+		//log.debug("Adding child: " + childKey);
+		//parentMap.put(childKey, child);
+		*/
 
-		log.debug("Adding child: " + childKey);
-		parent.put(childKey, child);
+		log.debug("^^^^^^ Adding top level parent: " + parentKey);
+		composParams.put(parentKey, newParentMap);
 
-		log.debug("Adding child to parent: " + parentKey);
-		composParams.put(parentKey, parent);
-		//request.setAttribute(parentKey, parent);
+		log.debug("CURRENT TOP LEVEL MAPPINGS: " + composParams.toString() + "\n");
+
 	}
 
 
@@ -266,26 +293,34 @@ public class CompositeRequestParamUtil {
 	 */
 	public String[] buildStringArray(Map m) {
 		if (m == null) { return null; }
+		log.debug("buildStringArray: " + m.toString());
 		ArrayList l = new ArrayList();
-
-		//SortedMap sorted = (SortedMap)m;
-		//Iterator keys = sorted.keySet().iterator();
 
 		Arrays.sort(m.keySet().toArray());
 		Iterator keys = m.keySet().iterator();
 
 		while (keys.hasNext()) {
 			String keyName = (String)keys.next();
-			log.debug("TEST ADD TO STRING ARRAY: " + keyName);
+			//log.debug("Testing numerocity of key: " + keyName);
 			if (Utility.isNumeric(keyName)) {
+				Object o = null;
 				try {
-					l.add((String)m.get(keyName));
+					o = m.get(keyName);
+					l.add((String)o);
+
 				} catch (Exception ex) {
 					// don't worry about non-string values
+					//log.debug("Could not use String value since type is: " +
+					//		o.getClass().getName());
 				}
 			}
 		}
 
+		if (l.size() == 0) {
+			return null;
+		}
+
+		//log.debug("about to return this array: " + l.toString());
 		return (String[])l.toArray(new String[1]);
 	}
 
@@ -339,44 +374,41 @@ public class CompositeRequestParamUtil {
 
 		int dotPos = canon.indexOf(".");
 		if (dotPos == -1 || canon.length() < dotPos+2) {
-			log.debug("getting top level map");
+			//log.debug("getting top level map");
 			return (Map)composParams.get(canon.toUpperCase());
 		}
 
 		String rhs, childKey, parentKey;
 		parentKey = canon.substring(0, dotPos).toUpperCase();
-		log.debug("attempting to get parent map named: " + parentKey);
+		//log.debug("attempting to get parent map named: " + parentKey);
 		Map m = (Map)composParams.get(parentKey);
 		if (m == null) {
 			// padre mapa no existe
-			log.debug("Could not find parent map named " + parentKey);
+			//log.debug("Could not find parent map named " + parentKey);
 			return null;
 		}
 
-		// canon = xwhereParams.0.0
-		rhs = canon.substring(dotPos+1);
+		// e.g. xwhereParams.commname.0
+		rhs = canon;
 
-		// rhs = 0.0
-		dotPos = rhs.indexOf(".");
-		// dotPos = 1
-		// length = 3
+		do {
+			rhs = rhs.substring(dotPos+1);
 
-		while (dotPos != -1 && rhs.length() > dotPos+1) {
-			// this child is not the last
-			childKey = rhs.substring(0, dotPos).toUpperCase();
+			dotPos = rhs.indexOf(".");
 
-			////////////////////////////////////////
-			// Assume that all keys use a Map
-			////////////////////////////////////////
-			log.debug("attempting to get child map named: " + childKey);
-			m = (Map)m.get(childKey);
-			if (m == null) {
-				return null;
+			if (dotPos == -1) {
+				childKey = rhs;
+			} else {
+				// this child is not the last
+				childKey = rhs.substring(0, dotPos).toUpperCase();
 			}
 
-			rhs = rhs.substring(dotPos+1);
-			dotPos = rhs.indexOf(".");
-		}
+			//log.debug("attempting to get child map named: " + 
+			//		childKey + " from Map: " + m.toString());
+			m = (Map)m.get(childKey);
+			if (m == null) { return null; }
+
+		} while (dotPos != -1 && rhs.length() > dotPos+1);
 
 		return m;
 	}

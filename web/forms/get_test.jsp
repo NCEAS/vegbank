@@ -9,8 +9,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-12-06 18:49:35 $'
-  *  '$Revision: 1.1 $'
+  *      '$Date: 2004-12-08 22:34:44 $'
+  *  '$Revision: 1.2 $'
   *
   *
   -->
@@ -54,29 +54,56 @@ out.println("<BR><BR>");
 		select: 
 		<input type="text" name="select" value="commconcept" size="40"/><br/>
 		where:
-		<input type="text" name="where" value="where_simple" size="40"/><br/>
+		<input type="text" name="where" value="where_commconcept_mpq" size="40"/><br/>
 		xwhereGlue: 
 		<input type="text" name="xwhereGlue" value="AND"/><br/>
 
+		<br>
 
 		<!-- FIRST PARAM -->
 		<b>FIRST PARAM</b>
 	<blockquote>
-		xwhereParams.a:
-		<input type="text" name="xwhereParams.commname.1" value="commname"/>
+		xwhereParams.commname.*:
+		<input type="text" name="xwhereParams.commname.1" value="cu.commname"/>
 		=
 		<input type="text" name="xwhereParams.commname.0" value="tidal"/>
 		<br>
-		xwhereKey: <input type="text" name="xwhereKey" value="xwhere_match"/>
-		xwhereSearch: 
-			<select name="xwhereSearch">
+		xwhereKey: <input type="text" name="xwhereKey.commname" value="xwhere_match"/>
+		<br>
+		xwhereSearch.commname: 
+			<select name="xwhereSearch.commname">
 				<option value="false" SELECTED>false</option>
 				<option value="true">true</option>
 			</select>
-		<!--
-		default: <input type="text" name="xwhereParams.entity.2" value=""/>
-		key: <input type="text" name="xwhereKey.entity" value="xwhere_match"/>
-		-->
+		<br>
+		xwhereMatchAny.commname: 
+			<select name="xwhereMatchAny.commname">
+				<option value="false" SELECTED>false</option>
+				<option value="true">true</option>
+			</select>
+	</blockquote>
+
+		<!-- SECOND PARAM -->
+		<b>SECOND PARAM</b>
+	<blockquote>
+		xwhereParams.party.*:
+		<input type="text" name="xwhereParams.party.1" value="cs.party_id"/>
+		=
+		<input type="text" name="xwhereParams.party.0" value="512"/>
+		<br>
+		xwhereKey: <input type="text" name="xwhereKey.party" value="xwhere_eq"/>
+		<br>
+		xwhereSearch.party: 
+			<select name="xwhereSearch.party">
+				<option value="false" SELECTED>false</option>
+				<option value="true">true</option>
+			</select>
+		<br>
+		xwhereMatchAny.party: 
+			<select name="xwhereMatchAny.party">
+				<option value="false" SELECTED>false</option>
+				<option value="true">true</option>
+			</select>
 	</blockquote>
 
 		<!-- TEXT FIELD -->

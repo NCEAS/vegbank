@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-07 20:48:32 $'
- *	'$Revision: 1.15 $'
+ *	'$Date: 2004-12-08 22:34:44 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ import org.vegbank.common.utility.CompositeRequestParamUtil;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.15 $ $Date: 2004-12-07 20:48:32 $
+ * @version $Revision: 1.16 $ $Date: 2004-12-08 22:34:44 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -400,6 +400,29 @@ public class VegbankGetTag extends VegbankTag {
 
     public void setXwhereSearch(boolean b) {
         this.xwhereSearch = b;
+    }
+
+    /**
+     * 
+     */
+	protected boolean xwhereMatchAny;
+
+    public boolean getXwhereMatchAny() {
+		log.debug("get xwhereMatchAny: " + xwhereMatchAny);
+		if (xwhereMatchAny) {
+			return true;
+		}
+
+        setXwhereMatchAny(findAttribute("xwhereMatchAny"));
+		return this.xwhereMatchAny;
+    }
+
+    public void setXwhereMatchAny(String s) {
+        this.xwhereMatchAny = Utility.isStringTrue(s);
+    }
+
+    public void setXwhereMatchAny(boolean b) {
+        this.xwhereMatchAny = b;
     }
 
     /**

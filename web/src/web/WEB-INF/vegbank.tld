@@ -69,6 +69,11 @@
 	<rtexprvalue>true</rtexprvalue>
 </attribute>
 <attribute>
+	<name>xwhereMatchAny</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
 	<name>xwhereEnable</name>
 	<required>false</required>
 	<rtexprvalue>true</rtexprvalue>
