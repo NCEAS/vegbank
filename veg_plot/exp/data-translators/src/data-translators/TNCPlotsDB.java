@@ -15,8 +15,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2002-12-05 23:42:38 $' <br>
- * 	'$Revision: 1.27 $' <br>
+ *  '$Date: 2002-12-11 18:04:10 $' <br>
+ * 	'$Revision: 1.28 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -2698,7 +2698,7 @@ public boolean  getRevisions(String plotName)
 			}
 			else 
 			{
-				return ("Invalid Strata Name");
+				return ("0");
 			} 
 		}
 		
@@ -2742,7 +2742,7 @@ public boolean  getRevisions(String plotName)
 			} 
 			else 
 			{
-				return ("Invalid Strata Name");
+				return ("0");
 			} 		
 		
 		}
