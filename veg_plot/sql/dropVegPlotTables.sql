@@ -14,10 +14,11 @@ drop table projectContributor;
 drop table vegplotparty;
 drop table project;
 drop table taxonObservation;
-drop table STAND;
 drop table STRATACOMPOSITION;
 drop table NAMEDPLACE;
 drop table PLOTOBSERVATION; 
-drop table STRATA;
 drop table plot;
 drop table interpretation;
+DROP TABLE STRATA;
+
+DROP SEQUENCE stratacomposition_id_seq;
