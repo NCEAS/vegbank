@@ -52,7 +52,7 @@ CREATE TABLE commReference
     edition varchar (22),
     seriesName varchar (22),
     issueIdentification varchar (22),
-    otherCitationDetails varchar (22),
+    otherCitationDetails varchar (300),
     page varchar (22),
     tableCited varchar (22),
     ISBN varchar (22),

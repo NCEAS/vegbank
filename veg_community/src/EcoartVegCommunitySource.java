@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-14 00:58:24 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2002-02-21 22:38:06 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,15 @@ import java.sql.*;
 	//the level in the heirarchy that that community is in
 	private String level = null;
 	
+	//below are public variables used to define the 'refererence'
+	//and 'party' attributes of ecoart
+	public String otherCitationDetails = "Natural Heritage Central Databases. "
+	+" NatureServe, Arlington, VA.";
+	public String refAuthors = "NatureServe";
+	public String refTitle = "International Classification of Ecological "
+	+" Communities: Terrestrial Vegetation. EcoArt version 2.55";
+	public String refPubDate = "13-FEB-2002";
+	public String partyOrgName = "NatureServe";
 	
 	
 	//constructor to create the database connections etc..
@@ -283,8 +292,6 @@ import java.sql.*;
 		 }
 		 return(parentCode);
 	 }
-	 
-	 
 	 
 	 /**
 	  * main method for testing this code
