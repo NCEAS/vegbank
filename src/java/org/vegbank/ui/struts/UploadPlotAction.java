@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-01-24 18:30:00 $'
- *	'$Revision: 1.18 $'
+ *	'$Date: 2005-01-26 01:45:43 $'
+ *	'$Revision: 1.19 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,7 +82,6 @@ public class UploadPlotAction extends VegbankAction
 		boolean validate = true;
 		boolean rectify = false;
 		boolean dbLoad = false;
-		boolean summarize = false;
 		String fileURL = null;
 		FileWrapper file = null;
 		String savedFileName = null;
@@ -91,157 +90,133 @@ public class UploadPlotAction extends VegbankAction
 		WebUser user = getUser(request.getSession());
 		String userId = user.getUseridLong().toString();
 
-        // use the userId as the save dir
+		// use the userId as the save dir
 		setSaveDir(userId);
 
-        // put the email address in context
-        request.setAttribute("email", user.getEmail());
+		// put the email address in context
+		request.setAttribute("email", user.getEmail());
 
 		VegbankActionMapping vbMapping = (VegbankActionMapping)mapping;
 		String param = vbMapping.getParameter();
 		if (param != null && param.equals("form")) { 
-            // just load the form
-            log.debug("forwarding to form...");
+		    // just load the form
+		    log.debug("forwarding to form...");
 		    return mapping.findForward("form");
-        }
-
-        log.debug("processing XML upload");
-
-		/////////////////////////////////////////////////
-		// GET THE ACTION
-		/////////////////////////////////////////////////
-		String action = request.getParameter("action");
-		if (Utility.isStringNullOrEmpty(action)) {
-			action = "load";
-		} 
-
-		action = action.toLowerCase();
-		if (action.equals("summarize")) {
-			log.debug("SUMMARIZING");
-			dbLoad = false;
-			summarize = true;
-
-		} else if (action.equals("load")) {
-			log.debug("LOADING");
-			dbLoad = true;
-			summarize = false;
 		}
-
-        archiveType = theForm.getArchiveType();
-        upload = theForm.isUpload();
+	
+		log.debug("processing XML upload");
+		dbLoad = true;
+		archiveType = theForm.getArchiveType();
+		upload = theForm.isUpload();
 
 		// Handle the uploaded file
-		if (summarize) {
-			if (upload) {
+		if (upload) {
+			/////////////////////////////////////////////////
+			// LOCAL UPLOAD
+			/////////////////////////////////////////////////
+			try {
+				file = new FileWrapper(theForm.getPlotFile());
 
-				/////////////////////////////////////////////////
-				// LOCAL UPLOAD
-				/////////////////////////////////////////////////
-				try {
-					file = new FileWrapper(theForm.getPlotFile());
-
-				} catch (Exception ex) {
-					errors.add(
-							ActionErrors.GLOBAL_ERROR,
-							new ActionError(
-								"errors.action.failed",
-								"error uploading local file. " + ex.getMessage()));
-					log.error("error uploading local file. " + ex.getMessage());
-					saveErrors(request, errors);
-					return (mapping.getInputForward());
-				}
-
-			} else {
-				/////////////////////////////////////////////////
-				// REMOTE DOWNLOAD
-				/////////////////////////////////////////////////
-				fileURL = theForm.getPlotFileURL();
-
-				// fetch the file
-				try {
-					WebFileFetch fetcher = new WebFileFetch();
-
-					log.debug("user's save dir: " + this.saveDir);
-					fetcher.setSaveDir(this.saveDir);
-
-					file = new FileWrapper( 
-							fetcher.saveRemoteFile(fileURL, null, "GET"));
-
-				} catch (Exception ex) {
-					errors.add(
-							ActionErrors.GLOBAL_ERROR,
-							new ActionError(
-								"errors.action.failed",
-								"error downloading remote file. " + ex.getMessage()));
-					log.error("error downloading remote file. " + ex.getMessage());
-					saveErrors(request, errors);
-					return (mapping.getInputForward());
-				}
+			} catch (Exception ex) {
+				errors.add(
+						ActionErrors.GLOBAL_ERROR,
+						new ActionError(
+							"errors.action.failed",
+							"error uploading local file. " + ex.getMessage()));
+				log.error("error uploading local file. " + ex.getMessage());
+				saveErrors(request, errors);
+				return (mapping.getInputForward());
 			}
-			
-			
-			/////////////////////////////////////////////////
-			// PREPARE THE FILE
-			/////////////////////////////////////////////////
-			String usersFileName = file.getFileName();
-			String extension = this.getFileExtension(file.getFileName());
-			if ( extension.equalsIgnoreCase("ZIP") ) {
-					try {
-						// Need to Unzip
-						 files = ServletUtility.unZip(file);
 
-					} catch (Exception e) {
-						errors.add(
-								ActionErrors.GLOBAL_ERROR,
-								new ActionError(
-									"errors.action.failed",
-									e.getMessage()));
-						log.error("error unzipping given file: " + e.getMessage());
-					}
-			} else {
+		} else {
+			/////////////////////////////////////////////////
+			// REMOTE DOWNLOAD
+			/////////////////////////////////////////////////
+			fileURL = theForm.getPlotFileURL();
+
+			// fetch the file
+			try {
+				WebFileFetch fetcher = new WebFileFetch();
+
+				log.debug("user's save dir: " + this.saveDir);
+				fetcher.setSaveDir(this.saveDir);
+
+				file = new FileWrapper( 
+						fetcher.saveRemoteFile(fileURL, null, "GET"));
+
+			} catch (Exception ex) {
+				errors.add(
+						ActionErrors.GLOBAL_ERROR,
+						new ActionError(
+							"errors.action.failed",
+							"error downloading remote file. " + ex.getMessage()));
+				log.error("error downloading remote file. " + ex.getMessage());
+				saveErrors(request, errors);
+				return (mapping.getInputForward());
+			}
+		}
+		
+		
+		/////////////////////////////////////////////////
+		// PREPARE THE FILE
+		/////////////////////////////////////////////////
+		String usersFileName = file.getFileName();
+		String extension = this.getFileExtension(file.getFileName());
+		if ( extension.equalsIgnoreCase("ZIP") ) {
 				try {
-					log.debug("Adding file: " + file.getFileName());
-					files.add( new FileWrapper(file) );
-					file.destroy();
+					// Need to Unzip
+					 files = ServletUtility.unZip(file);
 
 				} catch (Exception e) {
 					errors.add(
-						ActionErrors.GLOBAL_ERROR,
+							ActionErrors.GLOBAL_ERROR,
 							new ActionError(
 								"errors.action.failed",
-									e.getMessage()));
-					log.error("error adding given file: " + e.getMessage());
+								e.getMessage()));
+					log.error("error unzipping given file: " + e.getMessage());
 				}
+		} else {
+			try {
+				log.debug("Adding file: " + file.getFileName());
+				files.add( new FileWrapper(file) );
+				file.destroy();
+
+			} catch (Exception e) {
+				errors.add(
+					ActionErrors.GLOBAL_ERROR,
+						new ActionError(
+							"errors.action.failed",
+								e.getMessage()));
+				log.error("error adding given file: " + e.getMessage());
 			}
+		}
 
-			if (files.size() == 1) {
-				FileWrapper thisFile = (FileWrapper) files.iterator().next();
-				extension = this.getFileExtension(thisFile.getFileName());
-				
-				if ( extension.equalsIgnoreCase("XML") ) {
-					try {
-						savedFileName = this.saveFile(thisFile);
+		if (files.size() == 1) {
+			FileWrapper thisFile = (FileWrapper) files.iterator().next();
+			extension = this.getFileExtension(thisFile.getFileName());
+			
+			if ( extension.equalsIgnoreCase("XML") ) {
+				try {
+					savedFileName = this.saveFile(thisFile);
 
-					} catch (Exception e) {
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-								"errors.action.failed", e.getMessage()));
-						log.error("Problem saving uploaded file", e);
-					}
-
-				} else {
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.action.failed",
-								"Vegbank can only load an .xml file or a zipped .xml file" ));
-					log.info("Attempt to load a file with extension " + extension + " failed");
+				} catch (Exception e) {
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"errors.action.failed", e.getMessage()));
+					log.error("Problem saving uploaded file", e);
 				}
+
 			} else {
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.action.failed",
-						"Vegbank can only handle one file at a time (even if zipped archive)"));
-				log.debug(files.size() + " where uploaded at once by user");	
-			} // done with summarize-only steps
+							"Vegbank can only load an .xml file or a zipped .xml file" ));
+				log.info("Attempt to load a file with extension " + extension + " failed");
+			}
 		} else {
-			savedFileName = theForm.getPlotFilePath();
-			log.debug("Retrieved saved file path: " + savedFileName);
-		}
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.action.failed",
+					"Vegbank can only handle one file at a time (even if zipped archive)"));
+			log.debug(files.size() + " where uploaded at once by user");	
+		} 
+
+		log.debug("saved file path: " + savedFileName);
 
 	
 		/////////////////////////////////////////////////

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-11-18 22:39:22 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2005-01-26 01:45:43 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 		this.load = load;
 		this.accessionCodes = accessionCodes;
 		this.tableTally = new HashMap();
-		initTallyIgnoreList();
+		//initTallyIgnoreList();
 		tables.add(tmpStore);
 	}
 	
@@ -69,9 +69,11 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 			try
 			{
 				if (load && keepRunning()) {
-					log.info("!!!! WOULD BE !!!! inserting vegbank package...");
-					log.info("inserting vegbank package...");
+					log.info("Loading vegbank package into DB...");
 					ltdb.insertVegbankPackage( (Hashtable) ( (Vector) tmpStore.get("VegBankPackage")).firstElement());
+					log.info("XML has been loaded");
+
+					// finish the load by sending email to user and administration
 				}
 			}
 			catch (SQLException e)
