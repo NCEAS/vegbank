@@ -77,6 +77,13 @@ UL, OL, DL, LI, .list	{
 					font-weight: normal;
 				}
 
+.itemsmaller	{
+					font-family: Verdana, Arial, Helvetica, sans-serif;
+					font-size: .67em;
+					font-weight: normal;
+					color: #666666;
+				}
+
 .byline			{
 					font-family: Verdana, Arial, Helvetica, sans-serif;
 					font-size: .67em;
