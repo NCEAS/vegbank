@@ -31,8 +31,8 @@ import databaseAccess.DBinsertPlotSource;
  *	
  * <br> <br>
  *  '$Author: harris $'
- *  '$Date: 2002-05-16 15:57:03 $'
- * 	'$Revision: 1.14 $'
+ *  '$Date: 2002-05-21 17:09:22 $'
+ * 	'$Revision: 1.15 $'
  *
  *
  */
@@ -42,7 +42,8 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		private String name;
 	 	private PlotDataSource source;
-		private String mdbFile = "";
+		private String mdbFile = ""; //the file that the uploaded access files are written to
+	  private String xmlFile = ""; //the file that the uploaded xml files are written to
 	 
 	 	//loader stuff
 	 	private DBinsertPlotSource dbinsert;
@@ -64,6 +65,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 			
 			rb = ResourceBundle.getBundle("rmidatasource");
 			mdbFile = rb.getString("access_file");
+			xmlFile = rb.getString("xml_file");
 			
 		 }
 		 catch (Exception e)
@@ -174,10 +176,19 @@ public class DataSourceImpl extends UnicastRemoteObject
 	
 	
 	/**
-	 * method used for uploading the access mdb file of a given type
+	 * method to accept from the client a file containing 
+	 * that corresponds to a specific fileType that may 
+	 * include: <br> <br>
+	 * nativexml -- the VegBank native xml document <br>
+	 * tnc -- the tnc ms access plots file <br>
+	 * vbaccess -- the VegBank ms access file <br>
+	 * 
+	 * Eventhough the method name is put MDBFile this method is 
+	 * to be used to upload any / all data files <br>
 	 *
-	 * @param  fileName -- the name of the uploaded file
-	 * @param  fileType -- the type of the uploaded file
+	 * @param fileName -- the path and name of the file to 
+	 *		upload to the server 
+	 * @param fileType -- the type of file (see above description)
 	 * @param  buffer -- the file contents
 	 *
 	 */
@@ -185,11 +196,23 @@ public class DataSourceImpl extends UnicastRemoteObject
 	 {
 		 try
 		 {
-				System.out.println("DataSourceImpl > uploading file named: " + fileName);
+			 	String serverFile = null;
+				System.out.println("DataSourceImpl > uploading file named: " + fileName
+				+ " file type: " + fileType);
+				// figure out where to put the file based on its type. if it is
+				// an ms access file put it in a place so that it is accessed via odbc
+				if ( fileType.trim().equals("nativexml") )
+				{
+					serverFile = xmlFile;
+				}
+				else
+				{
+					serverFile = mdbFile;
+				}
 				byte[] filedata = buffer;
 				//make the file that is defined as the instance variable
-				System.out.println("DataSourceImpl > writing to: " + mdbFile);
-				File file = new File(mdbFile);
+				System.out.println("DataSourceImpl > writing to: " + serverFile);
+				File file = new File(serverFile);
 				BufferedOutputStream output = new
 				BufferedOutputStream(new FileOutputStream(file ));
 				output.write(filedata,0,filedata.length);
@@ -197,7 +220,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 				output.flush();
 				output.close();
 				//sleep for debug purposes
-				Thread.sleep(4000);
+				Thread.sleep(2000);
 		 }
 		 catch (Exception e)
 		 {
@@ -451,6 +474,8 @@ public class DataSourceImpl extends UnicastRemoteObject
 	/**
 	 * simple method for transfering files back and forth 
 	 * between the client and the server
+	 * @param fileName -- the name if the file that as used at the 
+	 *  client
    */
 	 public byte[] downloadFile(String fileName)
 	 {

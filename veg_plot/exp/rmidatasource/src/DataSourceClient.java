@@ -30,8 +30,8 @@ import xmlresource.utils.transformXML;
  *	
  *  <br> <br>
  *  '$Author: harris $'
- *  '$Date: 2002-05-16 15:57:03 $'
- * 	'$Revision: 1.19 $'
+ *  '$Date: 2002-05-21 17:09:22 $'
+ * 	'$Revision: 1.20 $'
  *
  *
  */
@@ -66,7 +66,7 @@ public class DataSourceClient
 			String[] remoteObjects = Naming.list(url);  
 			for (int c = 0; c < remoteObjects.length; c++) 
 			{    
-				System.out.println("DataSourceCleint > names bound to: "
+				System.out.println("DataSourceClient > names bound to: "
 				+ serverHost +" - " 
 				+ remoteObjects[c]  );
 			}
@@ -75,7 +75,7 @@ public class DataSourceClient
 			this.source = (DataSourceServerInterface)Naming.lookup(url);
 			
 			//make a test
-			//System.out.println("DataSourceCleint > plots:" + source.getPlotNames() );
+			//System.out.println("DataSourceClient > plots:" + source.getPlotNames() );
 		}
 		catch(Exception e)
 		{
@@ -751,31 +751,31 @@ public class DataSourceClient
 	 {
 		 try
 		 {
-			 	System.out.println("DataSourceCleint > x: " + this.getXCoord(plot) );
-				System.out.println("DataSourceCleint > y: " + this.getYCoord(plot) );
+			 	System.out.println("DataSourceClient > x: " + this.getXCoord(plot) );
+				System.out.println("DataSourceClient > y: " + this.getYCoord(plot) );
 				
-				System.out.println("DataSourceCleint > lat: " + this.getLatitude(plot) );
-				System.out.println("DataSourceCleint > long: " + this.getLongitude(plot) );
-				System.out.println("DataSourceCleint > authLoc: " + this.getAuthorLocation(plot) );
+				System.out.println("DataSourceClient > lat: " + this.getLatitude(plot) );
+				System.out.println("DataSourceClient > long: " + this.getLongitude(plot) );
+				System.out.println("DataSourceClient > authLoc: " + this.getAuthorLocation(plot) );
 				
 				//#START
-				System.out.println("DataSourceCleint > community name : " + this.getCommunityName(plot) );
-				System.out.println("DataSourceCleint > confidential reason: " + this.getConfidentialityReason(plot) );
-				System.out.println("DataSourceCleint > confidentail status: " + this.getConfidentialityStatus(plot) );
-				System.out.println("DataSourceCleint > country: " + this.getCountry(plot) );
-				System.out.println("DataSourceCleint > elevation: " + this.getElevation(plot) );
-				System.out.println("DataSourceCleint > elevation accuracy: " + this.getElevationAccuracy(plot) );
-				System.out.println("DataSourceCleint > hydro regime: " + this.getHydrologicRegime(plot) );
-				System.out.println("DataSourceCleint > land form: " + this.getLandForm(plot) );
-				System.out.println("DataSourceCleint > plot area: " + this.getPlotArea(plot) );
-				System.out.println("DataSourceCleint > plot shape: " + this.getPlotShape(plot) );
-				System.out.println("DataSourceCleint > slope aspect: " + this.getSlopeAspect(plot) );
-				System.out.println("DataSourceCleint > slope gradient: " + this.getSlopeGradient(plot) );
-				System.out.println("DataSourceCleint > stand size: " + this.getStandSize(plot) );
-				System.out.println("DataSourceCleint > state: " + this.getState(plot) );
-				System.out.println("DataSourceCleint > surf geo: " + this.getSurfGeo(plot) );
-				System.out.println("DataSourceCleint > topo position: " + this.getTopoPosition(plot) );
-				System.out.println("DataSourceCleint > utm zone: " + this.getUTMZone(plot) );
+				System.out.println("DataSourceClient > community name : " + this.getCommunityName(plot) );
+				System.out.println("DataSourceClient > confidential reason: " + this.getConfidentialityReason(plot) );
+				System.out.println("DataSourceClient > confidentail status: " + this.getConfidentialityStatus(plot) );
+				System.out.println("DataSourceClient > country: " + this.getCountry(plot) );
+				System.out.println("DataSourceClient > elevation: " + this.getElevation(plot) );
+				System.out.println("DataSourceClient > elevation accuracy: " + this.getElevationAccuracy(plot) );
+				System.out.println("DataSourceClient > hydro regime: " + this.getHydrologicRegime(plot) );
+				System.out.println("DataSourceClient > land form: " + this.getLandForm(plot) );
+				System.out.println("DataSourceClient > plot area: " + this.getPlotArea(plot) );
+				System.out.println("DataSourceClient > plot shape: " + this.getPlotShape(plot) );
+				System.out.println("DataSourceClient > slope aspect: " + this.getSlopeAspect(plot) );
+				System.out.println("DataSourceClient > slope gradient: " + this.getSlopeGradient(plot) );
+				System.out.println("DataSourceClient > stand size: " + this.getStandSize(plot) );
+				System.out.println("DataSourceClient > state: " + this.getState(plot) );
+				System.out.println("DataSourceClient > surf geo: " + this.getSurfGeo(plot) );
+				System.out.println("DataSourceClient > topo position: " + this.getTopoPosition(plot) );
+				System.out.println("DataSourceClient > utm zone: " + this.getUTMZone(plot) );
 		 		//#STOP
 		 }
 		 catch(Exception e)
@@ -806,15 +806,26 @@ public class DataSourceClient
 		}
 	 
 	 /**
-	  * method to load to the server class an ms access file containing 
-		* a specific configuration
+	  * method to load to the server a file containing 
+		* that corresponds to a specific fileType that may 
+		* include: <br> <br>
+		* nativexml -- the VegBank native xml document <br>
+		* tnc -- the tnc ms access plots file <br>
+		* vbaccess -- the VegBank ms access file <br>
+		* 
+		* Eventhough the method name is put MDBFile this method is 
+		* to be used to upload any / all data files <br>
+		*
+		* @param fileName -- the path and name of the file to 
+		*		upload to the server 
+		* @param fileType -- the type of file (see above description)
 		*/
 		public boolean putMDBFile(String fileName, String fileType)
 		{
 			boolean results = true;
 			try 
 			{
-				
+				System.out.println("DataSourceClient > loading file name: " + fileName +" file type: " + fileType);
          File file = new File(fileName);
          byte buffer[] = new byte[(int)file.length()];
          BufferedInputStream input = new
@@ -944,26 +955,26 @@ public class DataSourceClient
 	public static void main(String argv[]) 
 	{
 		//get a file from the server
-		System.out.println("DataSourceCleint > argument length: " + argv.length );
+		System.out.println("DataSourceClient > argument length: " + argv.length );
 		if (argv.length >= 2)
 		{
-			System.out.println("DataSourceCleint >  posting a file to the server " );
+			System.out.println("DataSourceClient >  posting a file to the server " );
 			try 
 			{
 				String hostServer =  argv[0];
 				String file = argv[1];
 				//this is the type of file and can be like: TNC, VBAccess, NativeXML etc...
 				String fileType = argv[2];
-				System.out.println("DataSourceCleint > file type: " + fileType );
+				System.out.println("DataSourceClient > file type: " + fileType );
 				
 				DataSourceClient client = new DataSourceClient(hostServer, "1099");
-				System.out.println("DataSourceCleint > sending file: " + file );
+				System.out.println("DataSourceClient > sending file: " + file );
 				boolean sendResults = client.putMDBFile(file, fileType);
-				System.out.println("DataSourceCleint > transmittal results: " + sendResults );
+				System.out.println("DataSourceClient > transmittal results: " + sendResults );
 				boolean fileValidityResults = client.isMDBFileValid();
-				System.out.println("DataSourceCleint > access file validity: " + fileValidityResults );
+				System.out.println("DataSourceClient > access file validity: " + fileValidityResults );
 				Vector v = client.getPlotNames(fileType);
-				System.out.println("DataSourceCleint > found : " + v.size() +" plots in archive " );
+				System.out.println("DataSourceClient > found : " + v.size() +" plots in archive " );
 				String testPlot = "";
 				
 				//this is the email address of the user who is responsible for laoding the data 
@@ -978,7 +989,7 @@ public class DataSourceClient
 						StringBuffer sb = new StringBuffer();
 						sb.append("<archiveInsertion>");
 						String insertResults = "";
-						System.out.println("DataSourceCleint > inserting all the plots in the archive " );
+						System.out.println("DataSourceClient > inserting all the plots in the archive " );
 						for (int c = 0; c < v.size(); c++)
 						{
 							String curPlot = v.elementAt(c).toString();
@@ -990,17 +1001,17 @@ public class DataSourceClient
 						//transform the xml using a generic xslt sheet
 						transformXML trans  = new transformXML(); 
 						String tr = trans.getTransformedFromString( sb.toString() , "./lib/ascii-treeview.xsl");
-						System.out.println("DataSourceCleint > insertion results html: \n" + tr );
+						System.out.println("DataSourceClient > insertion results html: \n" + tr );
 					}
 					//just load the single plot identified on the command line
 					else
 					{
-						System.out.println("DataSourceCleint > inserting the plot: " + testPlot );
+						System.out.println("DataSourceClient > inserting the plot: " + testPlot );
 						String insertResults = client.insertPlot(testPlot, fileType, email);
 						//transform and display the results to the user
 						transformXML trans  = new transformXML(); 
 						String tr = trans.getTransformedFromString(insertResults, "./lib/ascii-treeview.xsl");
-						System.out.println("DataSourceCleint > insertion results html: \n" + tr );
+						System.out.println("DataSourceClient > insertion results html: \n" + tr );
 					}
 				}
 				
