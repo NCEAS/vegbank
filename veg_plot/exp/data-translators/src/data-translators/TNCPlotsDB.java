@@ -15,8 +15,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: harris $' <br>
- *  '$Date: 2002-07-23 21:42:54 $' <br>
- * 	'$Revision: 1.22 $' <br>
+ *  '$Date: 2002-07-30 20:05:24 $' <br>
+ * 	'$Revision: 1.23 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -82,6 +82,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
 
 			// connect to the jdbc-odbc bridge driver
+			System.out.println("TNCPlotsDB > connecting to the ODBC datasource url: " + dbUrl );
 			con = DriverManager.getConnection(dbUrl, "user", "pass");
 
 			// Get the DatabaseMetaData object and display
@@ -1471,14 +1472,23 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				String s = rs.getString(1);
 				if (s.startsWith("Flat"))
 					this.slopeAspect = "0";
-				else if (s.startsWith("N"))
+				else if (s.toUpperCase().equals("N"))
 					this.slopeAspect = "0";
-				else if (s.startsWith("S"))
+				else if (s.toUpperCase().equals("S"))
 					this.slopeAspect = "180";
-				else if (s.startsWith("NE"))
+				else if (s.toUpperCase().equals("NE"))
 					this.slopeAspect = "45";
-				else if (s.startsWith("SE"))
-					this.slopeAspect = "230";
+				else if (s.toUpperCase().equals("SE"))
+					this.slopeAspect = "125";
+				else if (s.toUpperCase().equals("SW"))
+					this.slopeAspect = "225";
+				else if (s.toUpperCase().equals("NW"))
+					this.slopeAspect = "315";
+				else if (s.toUpperCase().equals("E"))
+					this.slopeAspect = "90";
+				else if (s.toUpperCase().equals("W"))
+					this.slopeAspect = "270";
+					
 				else
 					this.slopeAspect ="-1";
 			}
@@ -1508,12 +1518,22 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			while (rs.next()) 
 			{
 				String s = rs.getString(1);
-				if (s.startsWith("Gentle"))
+				if (s.toUpperCase().startsWith("GENTLE"))
 					this.slopeGradient = "3";
-				else if (s.startsWith("Flat"))
+				else if (s.toUpperCase().startsWith("FLAT"))
 					this.slopeGradient = "0";
-				else if (s.startsWith("Steep"))
-					this.slopeGradient = "20";
+				else if (s.toUpperCase().startsWith("STEEP"))
+					this.slopeGradient = "36";
+				else if (s.toUpperCase().startsWith("SOMEWHAT"))
+					this.slopeGradient = "20.5";
+				else if (s.toUpperCase().startsWith("VERY"))
+					this.slopeGradient = "57.5";
+				else if (s.toUpperCase().startsWith("MODERATE"))
+					this.slopeGradient = "10";
+				else if (s.toUpperCase().startsWith("ABRUPT"))
+					this.slopeGradient = "85";
+				else 
+					this.slopeGradient = "";
 			}
 			rs.close();
 			stmt.close();
@@ -1525,6 +1545,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		 return(this.slopeGradient );
 	}
+	
 	
 	// see the interface for method descriptions
 	public String getSurfGeo(String plotName)

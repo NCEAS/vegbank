@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-07-23 21:42:54 $'
- * 	'$Revision: 1.5 $'
+ *  '$Date: 2002-07-30 20:05:24 $'
+ * 	'$Revision: 1.6 $'
  */
  
 //public class VBAccessDataSourcePlugin
@@ -1070,12 +1070,9 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 					v.addElement(s);
 				}
 				System.out.println("VBAceessDataSource > result set size: " + cnt);
+				System.out.println("VBAceessDataSource > result set contents: " + v.toString());
 				rs.close();
 				stmt.close();
-			}
-			catch (SQLException ex) 
-			{
-				this.handleSQLException( ex );
 			}
 			catch (java.lang.Exception ex) 
 			{   
@@ -1136,6 +1133,11 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 				{
 					s = rs.getString(1);
 				}
+						// IF THERE IS A NULL PASS A NUMERIC VALUE, BC IT HAS TO BE ONE
+				if ( s == null )
+				{
+						s = "0.0";
+				}
 			}
 			catch (java.lang.Exception ex) 
 			{   
@@ -1166,6 +1168,11 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 				{
 					s = rs.getString(1);
 				}
+				// IF THERE IS A NULL PASS A NUMERIC VALUE, BC IT HAS TO BE ONE
+				if ( s == null )
+				{
+						s = "0.0";
+				}
 			}
 			catch (java.lang.Exception ex) 
 			{   
@@ -1187,12 +1194,12 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 	 */
 	 public String getTaxaStrataCover(String plantName, String plotName, String stratum)
 	 {
-		 	String s = null;
+		 	StringBuffer sb = new StringBuffer();
+			String s = null;
 			Statement stmt = null;
 			try 
 			{
 				stmt = con.createStatement();
-				StringBuffer sb = new StringBuffer();
 				System.out.println("VBAccessDataSourcePlugin > querying cover for: " + plantName+" "+plotName+" "+stratum );
 				
 				sb.append("select TAXONSTRATUMCOVER from STRATUMCOMPOSITION where TAXONOBSERVATION_ID in ( ");
@@ -1210,14 +1217,12 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 				}
 				rs.close();
 				stmt.close();
-			}
-			catch (SQLException ex) 
-			{
-				this.handleSQLException( ex );
+				System.out.println("VBAccessDataSourcePlugin > getTaxaStrataCover result: " + s);
 			}
 			catch (java.lang.Exception ex) 
 			{   
 				System.out.println("Exception: " + ex );
+				System.out.println("sql: " + sb.toString() );
 				ex.printStackTrace();
 			}
 			return(s);

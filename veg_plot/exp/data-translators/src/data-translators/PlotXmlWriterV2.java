@@ -19,8 +19,8 @@ import PlotDataSource;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: harris $' <br>
- *  '$Date: 2002-07-18 23:14:56 $' <br>
- *  '$Revision: 1.8 $' <br>
+ *  '$Date: 2002-07-30 20:05:24 $' <br>
+ *  '$Revision: 1.9 $' <br>
  */
 
  
@@ -258,10 +258,12 @@ public class PlotXmlWriterV2
 		private String getVegCommunityContent()
 		{
 			String name = datasrc.getCommunityName(plotCode);
+			String code = datasrc.getCommunityCode(plotCode);
 			StringBuffer sb = new StringBuffer();
 			sb.append("\n");
 			sb.append("<communityClassification> \n");
 			sb.append("	<className>"+name+"</className> \n");
+			sb.append("	<classCode>"+code+"</classCode> \n");
 			sb.append("	<classStartDate></classStartDate> \n");
 			sb.append("	<classStopDate></classStopDate> \n");
 			sb.append("	<classInspection></classInspection> \n");
@@ -476,8 +478,8 @@ public class PlotXmlWriterV2
 				sb.append("		<layoutNarative></layoutNarative> \n");
 				sb.append("		<elevation>"+datasrc.getElevation(plotCode)+"</elevation> \n");
 				sb.append("		<elevationAccuracy>"+datasrc.getElevationAccuracy(plotCode)+"</elevationAccuracy> \n");
-				sb.append("		<slopeAspect>"+datasrc.slopeAspect+" </slopeAspect> \n");
-				sb.append("		<slopeGradient>"+datasrc.slopeGradient+"</slopeGradient> \n");
+				sb.append("		<slopeAspect>"+datasrc.slopeAspect.trim()+" </slopeAspect> \n");
+				sb.append("		<slopeGradient>"+datasrc.slopeGradient.trim()+"</slopeGradient> \n");
 				sb.append("		<topoPosition>"+datasrc.topoPosition+"</topoPosition> \n");
 				sb.append("		<landform>"+datasrc.getLandForm(plotCode)+"</landform> \n");
 				sb.append("		<geology>"+datasrc.surfGeo+"</geology> \n");
