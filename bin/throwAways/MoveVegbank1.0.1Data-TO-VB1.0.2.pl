@@ -36,6 +36,10 @@ print "# Restore old 1.0.1 into ProductionTemp \n";
 print `psql -U $username  ProductionTemp < oldProduction_1.0.1-UTF-8.bak`;
 
 print "\n######################################################################\n";
+print "# ReSync keys and Pks ProductionTemp \n"; 
+print `./bin/ReSyncPKsWithSeqence.pl ProductionTemp`;
+
+print "\n######################################################################\n";
 print "# Modify ProductionTemp to fit new schema\n"; 
 print `psql  -U $username ProductionTemp < src/sql/vegbank-changes-1.0.1to1.0.2_pg.sql`;
 
@@ -61,7 +65,7 @@ print `echo vegbank | ant  db_generate_sql`;
 
 print "\n######################################################################\n";
 print "# Create empty $dbName using freshly generate SQL\n";
-print `psql -U $username $dbName < build/src/sql/vegbank-GF.sql`;
+print `psql -U $username $dbName < build/src/sql/vegbank-ML.sql`;
 
 print "\n######################################################################\n";
 print "# Create temp fields to drop latter\n"; 
@@ -69,7 +73,7 @@ print `psql -U $username $dbName < src/sql/vegbank-changes-1.0.1to1.0.2_pg_creat
 
 print "\n######################################################################\n";
 print "# Attempt to load modified (1.0.2) production (1.0.1)  dump into $dbName.\n"; 
-print `psql  -U $username $dbName < vegbank101_102-UTF-8.sql`;
+print `psql  -U $username $dbName < vegbank101_102.sql`;
 
 print "\n######################################################################\n";
 print "# Drop temp fields\n"; 

@@ -6,8 +6,18 @@
 # WARNING!!  The max PK is used currently.  Might need to use greater of
 # PK or current sequence value.
 
+$numberOfArgs = @ARGV;
+if ( $numberOfArgs == 0 )
+{
+	print "\n####################################################################\n";
+	print "\n Usage: \n";
+	print "\t ReSyncPKsWithSeqence.pl [databaseName]*\n";
+	print "\n####################################################################\n";
+	exit();	
+}
+
 #List of databases to visit
-@databases =  ('vegbank'); 
+@databases =  @ARGV; 
 
 foreach $database (@databases) {
 
