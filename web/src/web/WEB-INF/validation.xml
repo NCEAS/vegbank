@@ -194,11 +194,6 @@
 			</field>
 		</form>
 		<form name="ChangePasswordForm">
-			<field property="password"
-			       depends="required">
-				<arg0 key="Current password"
-				      resource="false"/>
-			</field>
 			<field property="newpassword1"
 			       depends="required">
 				<arg0 key="New password"

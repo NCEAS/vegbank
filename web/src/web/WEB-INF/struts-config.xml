@@ -360,7 +360,7 @@
 			<set-property property="reqRoles"
 			              value="reg"/>
 			<forward name="view_user"
-			         path="/forms/view_user.jsp"
+			         path="/forms/edit_user.jsp"
 			         redirect="false"/>
 			<forward name="edit_user"
 			         path="/forms/edit_user.jsp"
