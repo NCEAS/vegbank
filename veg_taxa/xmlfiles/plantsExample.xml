@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE plantTaxa SYSTEM "file:C:\plot_database\taxa.dtd">
+<!DOCTYPE plantTaxa SYSTEM "taxa.dtd">
 <plantTaxa>
 
 <!--
