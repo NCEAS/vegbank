@@ -5,9 +5,9 @@ package org.vegbank.plots.datasource;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:33:24 $'
- *	'$Revision: 1.16 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-12-02 02:10:12 $'
+ *	'$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1042,13 +1042,17 @@ public class VegbankXMLUpload
 					|| tableName.equalsIgnoreCase("Commconcept"))
 				{
 					// Use the AccessionGen for these tables
-					LogUtility.log("LoadTreeToDatabase: Calling AccessionGen"); 
+					LogUtility.log("LoadTreeToDatabase: Calling AccessionGen THIS IS INCOMPLETE!!"); 
 					accessionCode =
-						ag.getCode(
+						ag.getAccession(
 							Utility.getAccessionPrefix(),
 							tableName,
-							new Long(PK).toString(),
-							this.currentConceptName);
+							new Long(PK).toString());
+					//	ag.getCode(
+					//		Utility.getAccessionPrefix(),
+					//		tableName,
+					//		new Long(PK).toString(),
+					//		this.currentConceptName);
 							
 					fieldValueHash.put(fieldName, accessionCode);
 				}
