@@ -27,18 +27,36 @@ MM_reloadPage(true);
     <td width="543" height="48" colspan="13" valign="top" bgcolor="#336633">&nbsp;</td>
   </tr>
   <tr> 
-    <td width="231" height="24" colspan="6" valign="top" bgcolor="#336633">&nbsp;</td>
-    <td width="88" height="24" colspan="5" valign="top" bgcolor="#336633"> 
+ 		
+		<!-- THE QUICK SEARCH FOR NOT LOGGEN IN-->
+		<td width="231" height="24" colspan="6" valign="top" bgcolor="#336633"> 
+		<form action="http://vegbank.nceas.ucsb.edu/services/servlet/ExchangeServlet" method="get" target="_blank">
+		<font face="Georgia, Times New Roman, Times, serif" size="1" color="#FFFF80" ><b>
+			&nbsp; Quick Search
+		</b>
+		</font>
+			<a href="http://vegbank.nceas.ucsb.edu/forms/hints.html#quicksearch">
+			<img border="0" width="13" height="13" src="http://vegbank.nceas.ucsb.edu/vegbank/images/question.gif">
+			</a>
+			<input type="text" name="querytoken" size="11" > 
+			<input type="submit" value="Go">
+		</form>
+		</td>
+		
+		<td width="88" height="24" colspan="5" valign="center" bgcolor="#336633"> 
       <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="http://vegbank.nceas.ucsb.edu/vegbank/general/register.html" style="text-decoration:none; color:#FFFF80">Register</a></b></font></div>
     </td>
-    <td width="91" height="24" valign="top" bgcolor="#336633"> 
+    <td width="91" height="24" valign="center" bgcolor="#336633"> 
       <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="http://vegbank.nceas.ucsb.edu/vegbank/general/login.html" style="text-decoration:none; color:#FFFF80"> 
         &nbsp;&nbsp;Login</a></b></font></div>
     </td>
-    <td width="133" height="24" valign="top" bgcolor="#336633"> 
+    <td width="133" height="24" valign="center" bgcolor="#336633"> 
       <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="http://vegbank.nceas.ucsb.edu/vegbank/general/info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
     </td>
-  </tr>
+		
+		
+  
+	</tr>
   <tr> 
     <td width="14" height="9" valign="top"></td>
     <td width="14" height="9" valign="top"></td>
@@ -93,6 +111,8 @@ MM_reloadPage(true);
       </ul>
     </td>
   </tr>
+	
+	
   <tr> 
     <td width="14" height="19" valign="top"></td>
     <td width="14" height="19" valign="top"></td>
@@ -101,9 +121,10 @@ MM_reloadPage(true);
         <br>
         <input type="hidden" name="authType" value="loginUser">
 				
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> <b> Login to VegBank</b> </font> <a href="http://vegbank.nceas.ucsb.edu/forms/hints.html#loginname">
+        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> <b> Login to VegBank</b> </font> 
+				<a href="http://vegbank.nceas.ucsb.edu/forms/hints.html#loginname">
 				<img border="0" src="http://vegbank.nceas.ucsb.edu/vegbank/images/question.gif"></a><br>
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> Username </font><font face="Georgia, Times New Roman, Times, serif" size="+2"><b></b></font><font face="Georgia, Times New Roman, Times, serif" color="#531100"> 
+        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> Email &nbsp; &nbsp; &nbsp; </font><font face="Georgia, Times New Roman, Times, serif" size="+2"><b></b></font><font face="Georgia, Times New Roman, Times, serif" color="#531100"> 
         <font face="Georgia, Times New Roman, Times, serif" color="#531100">  </font>
         <input type="text" name="userName"> 
         <br>
