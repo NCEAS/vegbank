@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-16 20:16:39 $'
- *	'$Revision: 1.16 $'
+ *	'$Date: 2005-03-02 22:34:33 $'
+ *	'$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,6 +56,7 @@ public class AccessionGen {
 
 	private Map tableCodes;
 	private String dbCode;
+	private String CONFIRM_DEFAULT;
 	private boolean overwriteExtant;
 
 
@@ -94,6 +95,11 @@ public class AccessionGen {
 				tableCodes.put(key.substring(5).toLowerCase(), 
                         res.getString(key));
 			}
+		}
+
+		CONFIRM_DEFAULT = res.getString("confirm.default");
+		if (CONFIRM_DEFAULT == null || CONFIRM_DEFAULT.equals("")) {
+			CONFIRM_DEFAULT = "OK";
 		}
 
 		this.overwriteExtant = false;
@@ -156,6 +162,7 @@ public class AccessionGen {
 	public String getConfirmation(String table, String pk) throws SQLException {
 
 		table = table.toLowerCase();
+	    String tmpConfirm = null;
 		String query = getConfirmationQuery(table);
 		if (query == null) {
 			return null;
@@ -179,16 +186,22 @@ public class AccessionGen {
 		ResultSet rs = conn.createStatement().executeQuery(query);
 
 		if (rs.next()) {
-			String tmpConfirm = rs.getString(2);
+			tmpConfirm = rs.getString(2);
 
 			if (tmpConfirm == null) {
 				tmpConfirm = rs.getString(3);
 			}
-			//log.debug("generated accession code: " + formatConfirmCode(tmpConfirm));
-			return formatConfirmCode(tmpConfirm);
+
+			if (tmpConfirm == null) {
+                // use the default
+                tmpConfirm = CONFIRM_DEFAULT;
+            } else {
+                //log.debug("generated accession code: " + formatConfirmCode(tmpConfirm));
+                tmpConfirm = formatConfirmCode(tmpConfirm);
+            }
 		}
 
-		return null;
+		return tmpConfirm;
 	}
 
 	/**
