@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<!DOCTYPE vegPlot   SYSTEM "vegPlot.dtd">
+
+<vegPlot>	
+<project>
+	<projectName>Name of the project! </projectName>
+	<projectDescription> </projectDescription>	
+	<projectContributor>
+		<role> </role>
+		<party> </party>
+		<onlineResource>
+			<linkage> </linkage>
+			<protocol> </protocol>
+			<name> </name>
+			<applicationProfile> </applicationProfile>
+			<description> </description>
+		</onlineResource>
+
+		<telephone>
+			<phoneNumber></phoneNumber>
+			<phoneType> </phoneType>
+		</telephone>
+
+		<email>
+			<emailAddress> </emailAddress>
+		</email>
+
+		<address>
+			<deliveryPoint> </deliveryPoint>
+			<city> </city>
+			<administrativeArea> </administrativeArea>
+			<postalCode> </postalCode>
+			<country> </country>
+			<currentFlag> </currentFlag>
+		</address>
+	</projectContributor>
+
+	<plot>
+		<authorPlotCode> </authorPlotCode>
+		<parentPlot> </parentPlot>
+		<plotType> </plotType>
+		<samplingMethod> </samplingMethod>
+		<coverScale> </coverScale>
+		<plotOriginLat> </plotOriginLat>
+		<plotOriginLong> </plotOriginLong>
+		<plotShape> </plotShape>
+		<plotSize> </plotSize>
+		<plotSizeAcc> </plotSizeAcc>
+		<altValue> </altValue>
+		<altPosAcc> </altPosAcc>
+		<slopeAspect> </slopeAspect>
+		<slopeGradient> </slopeGradient>
+		<slopePosition> </slopePosition>
+		<hydrologicRegime> </hydrologicRegime>
+		<soilDrainage> </soilDrainage>
+		<surfGeo> </surfGeo>
+
+		<plotObservation>
+			<previousPlot> </previousPlot>
+			<plotStartDate> </plotStartDate>
+			<plotStopDate> </plotStopDate>
+			<dateAccuracy> </dateAccuracy>
+			<effortLevel> </effortLevel>
+			
+			<strata>
+				<stratumCover> </stratumCover>
+				<stratumHeight> </stratumHeight>
+			</strata>
+
+
+			<taxonObservations>
+				<authNameId> </authNameId>
+				<originalAuthority> </originalAuthority>
+				<strataComposition>
+					<strataType> </strataType>
+					<percentCover> </percentCover>
+				</strataComposition>
+				
+				<interptretation>
+					<circum_id> </circum_id>
+					<role> </role>
+					<date> </date>
+					<notes> </notes>	
+				</interptretation>
+			</taxonObservations>
+			
+			<communityType>
+				<classAssociation> </classAssociation>
+				<classQuality> </classQuality>
+				<startDate> </startDate>
+				<stopDate> </stopDate>
+			</communityType>
+
+
+			<citation>
+				<title> </title>
+				<altTitle> </altTitle>
+				<pubDate> </pubDate>
+				<edition> </edition>
+				<editionDate> </editionDate>
+				<seriesName> </seriesName>
+				<issueIdentification> </issueIdentification>
+				<otherCredentials> </otherCredentials>
+				<page> </page>
+				<isbn> </isbn>
+				<issn> </issn>
+
+				<citationContributor>
+					
+				</citationContributor>			
+
+			</citation>
+		</plotObservation>
+
+ 		<namedPlace>
+			<placeName> </placeName>
+			<placeDescription> </placeDescription>
+			<gazeteerRef> </gazeteerRef>
+		</namedPlace>
+
+		<stand>
+			<standSize> </standSize>
+			<standDescription> </standDescription>
+			<standName> </standName>	
+		</stand>
+
+
+		<graphic>
+			<browseName> </browseName>
+			<browseDescription> </browseDescription>
+			<browseType> </browseType>
+			<browseData> </browseData>
+		</graphic>
+
+		<plotContributor> 
+			<role> </role>
+			<party> </party>
+		</plotContributor>
+
+
+	</plot>
+
+
+</project>
+</vegPlot>	
