@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *   '$Date: 2003-10-11 21:20:10 $'
- *   '$Revision: 1.10 $'
+ *   '$Date: 2003-11-05 20:54:35 $'
+ *   '$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -731,103 +731,8 @@ public class UserManagementServlet extends HttpServlet
 			 System.out.println("Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
-		}
-		
-	/**
-	 * method that handles the download action.  The idea behind the addition
-	 * of this method is to provide download functionality for the vegbank 
-	 * client. The attributes that are proccessed by this method will be input
-	 * to the 'framework' database 'user management tables' specifically the 
-	 * 'downloads' table <br> <br>
-	 * 
-	 * The parameters that can / should be entered to this method: <br>
-	 *  downloadtype -- can be vegclient etc... <br>
-	 *	additionaldata -- is the additional data sets (comma separated that the user wants) <br>
-	 *	useremail -- the email address of the user <br>
-	 * 
-	 * @param req -- the http request object
-	 * @param res -- the http response object
-	 * 
-	 */
-		private void handleDownload(HttpServletRequest req, HttpServletResponse res)
-		{
-			try
-			{
-				System.out.println("UserManagementServlet > performing download action");
-				String cookieVal = new ServletUtility().getCookieValue(req);
-				String cookieName = this.getCookieName(req);
-				System.out.println("UserManagementServlet > cookie value: " + cookieVal);
-				System.out.println("UserManagementServlet > cookie name: " + cookieName);
-				
-				//if the user is not currently logged in then let tem know and send them 
-				if ( cookieVal == null || cookieName == null || cookieVal.length() < 2 )
-				{
-					//the cookie is not valid
-					System.out.println("UserManagementServlet > not logged in");
-					// redirect to the page that redirects to the login
-					res.sendRedirect("/vegbank/forms/redirection_template.html");
-				}
-				// else figure out what the client wants, update the database and let them 
-				// have it
-				else
-				{
-					Hashtable params = util.parameterHash(req);
-					String downloadType = (String)params.get("downloadtype");
-					String additionaldata = (String)params.get("additionaldata");
-					System.out.println("UserManagementServlet > downloads: " + downloadType+" "+additionaldata);
-					//make sure that the download request(s) are valid
-					if ( downloadType != null )
-					{
-						System.out.println("UserManagementServlet > proccessing download: ");
-						// update the database
-						UserDatabaseAccess userdb = new UserDatabaseAccess();
-						userdb.insertDownloadInfo(cookieVal, downloadType); // the users email addy
-						// create the archive
-						Vector fileVec = new Vector();
-						// add the client software
-						if ( downloadType.equals("vegclient") )
-						{
-							fileVec.addElement("/tmp/base.mdb");
-							// add the additional data
-							if ( additionaldata != null ) 
-							{
-								fileVec.addElement("/tmp/additional.mdb");
-							}
-						}
-						String outFile = "/tmp/test.zip";
-						// make the zip file
-						System.out.println("UserManagementServlet > attempting a zip creation");
-						util.setZippedFile(fileVec, outFile);
-						
-						// redirect the browser there
-						res.setContentType("application/zip");
-						res.setHeader("Content-Disposition","attachment; filename=download.zip;");
-						//ServletOutputStream out = res.getOutputStream();
-						ServletOutputStream out = res.getOutputStream();
-						BufferedInputStream in = new BufferedInputStream( new FileInputStream( outFile ));
-            byte[] buf = new byte[4 * 1024]; //4K buffer
-            int i = in.read(buf);
+	}
 
-            while(i != -1 )
-            {
-              out.write(buf, 0, i);
-              i = in.read(buf);
-						}
-					}
-					else
-					{
-						// let the user know that what they requested could not be found
-					}
-				}
-			}
-			catch(Exception e)
-			{
-				System.out.println("Exception: " + e.getMessage() );
-				e.printStackTrace();
-			}
-		}
-		
-	
 	/**
 	 * method that handles the user logout by making the cookie age equal to zero
 	 * 
@@ -881,94 +786,6 @@ public class UserManagementServlet extends HttpServlet
 		 }
 		  return(s);
 	 }
-
-	
-	
-	/**
-	 * method to show the user the files that they
-	 * have stored in the profile on the server file
-	 * system
-	 */
-//	 private void showUserFiles(
-//	 	HttpServletRequest req, 
-//	 	HttpServletResponse res,
-//	 	PrintWriter out)
-//	 {
-//		 try
-//		 {
-//				String cookieValue = su.getCookieValue(req);
-//				out.println("<html> \n");
-//				out.println("<head> \n");
-//				out.println("<body class=\"BODY\" >");
-//				out.println("<title> Database User Manager: "+ cookieValue+" </title> \n");
-//				out.println("<link rel=\"STYLESHEET\" href=\"http://numericsolutions.com/includes/default.css\" type=\"text/css\">");
-//				
-//				//get the java-script functions into the html here -- later remove this
-//				//and add a link to an external js file
-//				out.println( getJavaScriptFunctions() );
-//				out.println("</head> \n");
-//				
-//				//out.println("<br class=\"category\"> Welcome Vegbank User: " + cookieValue +"<br> \n");
-//				out.println( getNavigationHeader() );
-//				
-//				//this is the table that has all the registered queries
-//				out.println( getUserRegisteredQuerySummary(cookieValue) );
-//				
-//				//some space
-//				out.println("<br> <br>");
-//				
-//				//out.println("<br> you have uploaded "+getUserRegisteredFileNum(cookieValue)+"files registered on the server <br>");
-//				out.println( getUserRegisteredFileSummary(cookieValue) );
-//				out.println("</body>");
-//				out.println("</html>");
-//			 
-//		 }
-//		 catch (Exception e)
-//			{
-//				System.out.println("Exception: "+ e.getMessage() );
-//				e.printStackTrace();
-//			}
-//	 }
-	
-	
-	/** 
-	 * method that returns the navigation header -- which is the template that
-	 * is consistent with the content that we have been developing for vegbank
-	 */
-	private String getNavigationHeader()
-	{
-		StringBuffer sb = new StringBuffer();
-		sb.append("<table width=\"87%\" class=\"navigation\"> \n");
-		sb.append("<tr>");
-		sb.append("<td width=\"10%\"> <a href=\"/forms/uploadFile.html\"> UPLOAD FILE </a></td> \n");
-		sb.append("<td  width=\"10%\"> <a href=\"/forms/utilities.html\"> UTILITIES </a></td> \n");
-		sb.append("<td  width=\"10%\"> <a href=\"/forms/create_user.html\"> CREATE USER ACCOUNT </a></td> \n");
-		sb.append("<td  width=\"10%\"> <a href=\"/\"> VEGBANK DOCUMENTATION </a></td> \n");
-		//next image is an exclamation
-		sb.append("<td  width=\"14%\"> <img src=\"/vegbank/images/icon_cat31.gif\"> <a href=\"/vegbank/sampledata/\"> SAMPLE DATA</a></td> \n");
-		sb.append("</tr> \n");
-		sb.append("</table>");
-		
-		//this is the form that uses the java script for negotiation of the query
-		//forms
-		sb.append("<table  width=\"50%\" class=\"navigation\"> \n");
-		sb.append("<tr> \n");
-		sb.append("<td> Choose a Query Option </td> \n");
-		sb.append("<td>");
-		sb.append("<form name=\"form\"> \n");
-		sb.append("<select name=\"menu\" onChange=\"MM_jumpMenu('parent',this,0)\"> \n");
-		sb.append("<option value=\"/forms/plot-query.html\" selected>Simple Plot Query</option> \n");
-		sb.append("<option value=\"/forms/nested-plot-query.html\">Nested Plot Query</option> \n");
-		sb.append("<option value=\"/forms/community-query.html\">Vegtation Community Query</option> \n");
-		sb.append("<option value=\"/forms/plant-query.html\">Plant Taxonomy Query</option> \n");
-		sb.append("</select> \n");
-		sb.append("</form> \n");
-		sb.append("</td> \n");
-		sb.append("</tr> \n");
-		sb.append("</table>");
-		sb.append("<br> <br>");
-		return(sb.toString());
-	}
 	
 	/**
 	 * method to return the number of files the user has registered on the 
