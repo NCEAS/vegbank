@@ -7,12 +7,14 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-16">
 
 @defaultHeadToken@
- 
+
+<vegbank:where/>
+
 <TITLE>View Data in VegBank : project(s) : Detail</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </HEAD>
-<body   >@vegbank_header_html_normal@  <br><h2>View VegBank Projects</h2><% String rowClass = "evenrow"; %><vegbank:get id="project" select="project" beanName="map" where="where_project_pk" pager="true"/>
+<body   >@vegbank_header_html_normal@  <br><h2>View VegBank Projects</h2><% String rowClass = "evenrow"; %><vegbank:get id="project" select="project" beanName="map" pager="true"/>
 <logic:empty name="project-BEANLIST">
 <p>  Sorry, no projects found.</p>
 </logic:empty>

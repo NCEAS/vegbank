@@ -86,6 +86,95 @@
 </attribute>
 </tag>
 
+<tag>
+<name>where</name>
+<tagclass>org.vegbank.ui.struts.taglib.VegbankWhereTag</tagclass>
+<bodycontent>empty</bodycontent>
+<attribute>
+	<name>numeric</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>nonNumeric</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+</tag>
+
+<tag>
+<name>table</name>
+<tagclass>org.vegbank.ui.struts.taglib.VegbankTableTag</tagclass>
+<bodycontent>empty</bodycontent>
+<attribute>
+	<name>beanName</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>hideNulls</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>nullStyle</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>dataStyle</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>labelStyle</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>labelKey</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+</tag>
+
+
+<tag>
+<name>row</name>
+<tagclass>org.vegbank.ui.struts.taglib.VegbankRowTag</tagclass>
+<bodycontent>empty</bodycontent>
+<attribute>
+	<name>beanName</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>hideNulls</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>nullStyle</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>dataStyle</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>labelStyle</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>labelKey</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+</tag>
+
 </taglib>
 
 
