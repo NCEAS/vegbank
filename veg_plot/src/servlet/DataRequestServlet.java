@@ -128,8 +128,10 @@ try {
  remoteHost=request.getRemoteHost();
 
 }//end try
-catch( Exception e ) {System.out.println("** failed in: DataRequestServlet.main "
-	+" first try - reading parameters "+e.getMessage());}
+catch( Exception e ) {
+	System.out.println("** failed in: DataRequestServlet.main "
+	+" first try - reading parameters "+e.getMessage());
+}
 
 
 
@@ -196,9 +198,10 @@ catch( Exception e ) {System.out.println("** failed in: DataRequestServlet.main 
  */
  
 private void handleSimpleQuery (Hashtable params, PrintWriter out, 
-	HttpServletResponse response) {
-		
-/** Get all possible parameters from the hash */	
+	HttpServletResponse response) 
+{
+
+// Get all possible parameters from the hash 	
  taxonName = (String)params.get("taxon");
  communityName = (String)params.get("community");
  taxonOperation = (String)params.get("taxonOperation");
@@ -214,106 +217,93 @@ private void handleSimpleQuery (Hashtable params, PrintWriter out,
  requestDataType = (String)params.get("requestDataType");
  
 //attempt to recognize the request as a query for communities 
-if (requestDataType.trim().equals("community")) {  
-	
-	out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
-	+ "community information ");
-	composeCommunityQuery(params);
-	issueQuery("simpleCommunityQuery");
-	
-	out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
-
-}
+	if (requestDataType.trim().equals("community")) 
+	{  
+		out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
+		+ "community information - not requesting plot info");
+		composeCommunityQuery(params);
+		issueQuery("simpleCommunityQuery");
+		out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
+	}
 
 
-/** Cheat here - to recognise the single plot query to return entire plot */
- if (plotId != null && resultType.equals("full") ) {
-	String outFile="/jakarta-tomcat/webapps/examples/WEB-INF/lib/atomicResult";
-	out.println("<br>DataRequestServlet.handleSimpleQuery - returning a full data set "
-		+"for plot: "+plotId+" <br>");
-	composeSinglePlotQuery(plotId, resultType, outFile);
-	issueQuery("simpleQuery");
-	
- }
+	// Cheat here - to recognise the single plot query to return entire plot */
+	else if (plotId != null && resultType.equals("full") ) 
+	{
+		String outFile="/jakarta-tomcat/webapps/examples/WEB-INF/lib/atomicResult";
+		out.println("<br>DataRequestServlet.handleSimpleQuery - returning a full data set "
+			+"for plot: "+plotId+" <br>");
+		composeSinglePlotQuery(plotId, resultType, outFile);
+		issueQuery("simpleQuery");
+	}
 
  
- // this is where the query element checking is done for the vegetation plots
- // the way that this is structured currently the user is not forced to choose a
- //single query element
-
-//look for a taxonName
- if ( taxonName != null  && taxonName.length()>0 ) {  
-	 out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+	// this is where the query element checking is done for the vegetation plots
+	// the way that this is structured currently the user is not forced to choose a
+	//single query element
+	//look for a taxonName
+	else if ( taxonName != null  && taxonName.length()>0 ) 
+	{
+		out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
 		+"containing plots with taxonName: "+taxonName+" <br>");
-	composeQuery("taxonName", taxonName);
- 	issueQuery("simpleQuery");
-	
-	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
- }
+		composeQuery("taxonName", taxonName);
+		issueQuery("simpleQuery");
+		out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+	}
  
  //look for elevation
- if ( minElevation != null  && minElevation.length()>0 ) {  
-	 out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+	else if ( minElevation != null  && minElevation.length()>0 ) 
+	{  
+		out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
 		+"containing plots with a minElevation of: "+minElevation+" <br>");
-	composeQuery("elevationMin", minElevation, "elevationMax", maxElevation);
- 	issueQuery("simpleQuery");
-	
-	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
- }
+		composeQuery("elevationMin", minElevation, "elevationMax", maxElevation);
+ 		issueQuery("simpleQuery");
+		out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+	}
  
- //look for state
- if ( state != null  && state.length()>0 ) {  
-	 out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+	//look for state
+	else if ( state != null  && state.length()>0 ) {  
+		out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
 		+"containing plots with a state equal to: "+state+" <br>");
-	composeQuery("state", state);
- 	issueQuery("simpleQuery");
-	
-	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
- }
+		composeQuery("state", state);
+		issueQuery("simpleQuery");
+		out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+	}
 
-//look for the community name
-if ( communityName != null  && communityName.length()>0 ) {  
-	 out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+	//look for the community name
+	else if ( communityName != null  && communityName.length()>0 ) {  
+		out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
 		+"containing plots with a communityName equal to: "+communityName+" <br>");
-	composeQuery("communityName", communityName);
- 	issueQuery("simpleQuery");
-	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
- }
+		composeQuery("communityName", communityName);
+ 		issueQuery("simpleQuery");
+		out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+	}
 
-
-//look for the surface geology option
-if ( surfGeo != null  && surfGeo.length()>0 ) {  
-	 out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+	//look for the surface geology option
+	else if ( surfGeo != null  && surfGeo.length()>0 ) 
+	{  
+		out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
 		+"containing plots with a surface geology like: "+surfGeo+" <br>");
-	composeQuery("surfGeo", surfGeo);
- 	issueQuery("simpleQuery");
-	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
- }
+		composeQuery("surfGeo", surfGeo);
+		issueQuery("simpleQuery");
+		out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+	}
 
 
+	//if there are results returned to the servlet from the database in the form 
+	//of a file returned then grab the summary viewer then let the user know
 
-
-
-
-//if there are results returned to the servlet from the database in the form 
-//of a file returned then grab the summary viewer then let the user know
-
-if (queryOutputNum>=1) {
- 	servletUtility l =new servletUtility();  
- 	l.getViewOption(requestDataType);
- 	out.println(l.outString);
-}
-
-
-
-
-else { 
-	out.println("<br> <b> Please try another query </b> <br>"); 
-	out.println("<a href = \"/examples/servlet/pageDirector?pageType=DataRequestServlet\">"
+	if (queryOutputNum>=1) 
+	{
+ 		servletUtility l =new servletUtility();  
+ 		l.getViewOption(requestDataType);
+ 		out.println(l.outString);
+	}
+	else { 
+		out.println("<br> <b> Please try another query </b> <br>"); 
+		out.println("<a href = \"/examples/servlet/pageDirector?pageType=DataRequestServlet\">"
 		+"return to query page</a><b>&#183;</b>"); //put in rb
-
-}
-
+	}
 }
 
 
@@ -502,7 +492,8 @@ catch (Exception e) {System.out.println("failed in "
 private void composeSinglePlotQuery (String plotId, String resultType, String outFile) {
 try {
 
-PrintStream queryOutFile = new PrintStream(new FileOutputStream("/jakarta-tomcat/webapps/examples/WEB-INF/lib/query.xml", false)); 
+PrintStream queryOutFile = new PrintStream(new FileOutputStream(
+"/jakarta-tomcat/webapps/examples/WEB-INF/lib/query.xml", false)); 
 
 //print the query instructions in the xml document
 queryOutFile.println("<?xml version=\"1.0\"?> \n"+       
@@ -516,10 +507,12 @@ queryOutFile.println("<?xml version=\"1.0\"?> \n"+
 "<outFile>"+outFile+"</outFile> \n"+
 "</dbQuery>"
 );
-
 }
-catch (Exception e) {System.out.println("failed in DataRequestServlet.composeSinglePlotQuery" + 
-	e.getMessage());}
+catch (Exception e) 
+{
+	System.out.println("failed in DataRequestServlet.composeSinglePlotQuery" + 
+	e.getMessage());
+}
 }
 
 
@@ -535,7 +528,8 @@ catch (Exception e) {System.out.println("failed in DataRequestServlet.composeSin
 private void composeQuery (String queryElement, String elementString) {
 try {
 //set up the output query file called query.xml	using append mode to build  
-PrintStream outFile  = new PrintStream(new FileOutputStream("/jakarta-tomcat/webapps/examples/WEB-INF/lib/query.xml", false)); 
+PrintStream outFile  = new PrintStream(new FileOutputStream(
+"/jakarta-tomcat/webapps/examples/WEB-INF/lib/query.xml", false)); 
 
 //print the query instructions in the xml document
 outFile.println("<?xml version=\"1.0\"?> \n"+       
@@ -570,10 +564,13 @@ catch (Exception e) {System.out.println("failed in DataRequestServlet.composeQue
  * @param maxValue - value of the queryElement
  */
 
-private void composeQuery (String minElement, String minValue, String maxElement, String maxValue) {
+private void composeQuery (String minElement, String minValue, 
+	String maxElement, String maxValue) 
+{
 try {
 //set up the output query file called query.xml	using append mode to build  
-PrintStream outFile  = new PrintStream(new FileOutputStream("/jakarta-tomcat/webapps/examples/WEB-INF/lib/query.xml", false)); 
+PrintStream outFile  = new PrintStream(new FileOutputStream(
+	"/jakarta-tomcat/webapps/examples/WEB-INF/lib/query.xml", false)); 
 
 
 //print the query instructions in the xml document
@@ -593,7 +590,6 @@ outFile.println("<?xml version=\"1.0\"?> \n"+
 	"</dbQuery>"
 );
 
-	
 }
 catch (Exception e) {System.out.println("failed in DataRequestServlet.composeQuery" + 
 	e.getMessage());}
