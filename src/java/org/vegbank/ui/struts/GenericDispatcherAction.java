@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-09 18:11:47 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-07-09 18:26:36 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,7 +87,6 @@ public class GenericDispatcherAction extends Action
 			
 			// Forward to a jsp
 			RequestDispatcher dispatcher = request.getRequestDispatcher(jspLocation + jsp);
-			System.out.println(jspLocation + jsp + " ----- " + dispatcher);
 			dispatcher.forward(request, response);
 		}
 		catch (Exception e)

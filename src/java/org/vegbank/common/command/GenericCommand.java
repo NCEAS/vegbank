@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-09 18:11:46 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-09 18:26:36 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.BeanUtils;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.VBObjectUtils;
 
 /**
  * Uses parameters passed in via the request to construct the SQL query,
@@ -171,7 +172,7 @@ public class GenericCommand implements VegbankCommand
 		Collection col = new Vector();
 		while ( rs.next() )
 		{
-			Object bean = Utility.createObject(className);
+			Object bean = Utility.createObject( VBObjectUtils.DATA_MODEL_PACKAGE +  className);
 			for ( int i=0; i <  propNames.size(); i++)
 			{
 				String propName = (String) propNames.get(i);
