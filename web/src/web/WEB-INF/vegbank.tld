@@ -60,12 +60,22 @@
 <tagclass>org.vegbank.ui.struts.taglib.VegbankPagerTag</tagclass>
 <bodycontent>empty</bodycontent>
 <attribute>
+	<name>id</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
 	<name>pageNumber</name>
 	<required>false</required>
 	<rtexprvalue>true</rtexprvalue>
 </attribute>
 <attribute>
 	<name>perPage</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>perBatch</name>
 	<required>false</required>
 	<rtexprvalue>true</rtexprvalue>
 </attribute>
