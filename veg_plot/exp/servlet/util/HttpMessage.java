@@ -1,3 +1,4 @@
+package servlet.util;
 /**
  *        Name: HttpMessage.java
  *     Purpose: Used for Java applet/application communication
@@ -6,17 +7,19 @@
  *   Copyright: 2000 Regents of the University of California and the
  *              National Center for Ecological Analysis and Synthesis
  *     Authors: Dan Higgins modified for metacat by Chad Berkley
- *     Version: '$Id: HttpMessage.java,v 1.1 2001-12-03 17:47:15 harris Exp $'
+ *     Version: '$Id: HttpMessage.java,v 1.2 2002-01-24 00:24:19 harris Exp $'
  *
  *     '$Author: harris $'
- *     '$Date: 2001-12-03 17:47:15 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2002-01-24 00:24:19 $'
+ *     '$Revision: 1.2 $'
  */
 
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+import servlet.util.*;
 
 
 public class HttpMessage {

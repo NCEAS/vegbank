@@ -423,22 +423,59 @@ public int vecElementCnt;
 	/**
 	 * method that allows a class (in this case a servlet) to upload
 	 * a file to the dataexcahnge servlet and onto the data file database
+	 * 
+	 * @param fileName -- the name of the file
+	 * @param userName -- actually the email address of the user
+	 * 
 	 */
 	 public void uploadFileDataExcahgeServlet(String fileName, String userName)
 	 {
-		 String temp = null;
-     String servlet = "/framework/servlet/dataexchange";
-     String protocol = "http://";
-     String host = "vegbank.nceas.ucsb.edu";
-     String server = protocol + host + servlet;
-     String filename = fileName;
+		 try
+		 {
+		 	this.uploadFileDataExcahgeServlet(fileName, userName, "unknown");
+		 }
+		 catch(Exception e)
+		 {
+			 System.out.println("Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+	 }
+	 
+	 
+	 /**
+	 * method that allows a class (in this case a servlet) to upload
+	 * a file to the dataexcahnge servlet and onto the data file database
+	 * 
+	 * @param fileName -- the name of the file
+	 * @param userName -- actually the email address of the user
+	 * @param fileType -- the type of file as to be specified in the 
+	 * 	user profile database
+	 */
+	 public void uploadFileDataExcahgeServlet(String fileName, String userName, 
+	 String fileType)
+	 {
+		 try
+		 {
+		 	String temp = null;
+     	String servlet = "/framework/servlet/dataexchange";
+     	String protocol = "http://";
+     	String host = "vegbank.nceas.ucsb.edu";
+     	String server = protocol + host + servlet;
+     	String filename = fileName;
+			
 	 		// String parameterString = "?action=uploadFile&user=harris02@hotmail.com&exchangeType=upload&submitter=harris&"
 	  	//	+"password=jasmine&file=test.dat";
 	 
 			DataExchangeClient dec = new DataExchangeClient();
-			dec.uploadFile(servlet, protocol, host, server, filename, userName);
+			dec.uploadFile(servlet, protocol, host, server, filename, userName, fileType);
+		 }
+		 catch(Exception e)
+		 {
+			 System.out.println("Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
 	 }
 	
 
-} //end class	
+}	
 

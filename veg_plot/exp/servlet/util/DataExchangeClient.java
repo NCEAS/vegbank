@@ -9,8 +9,8 @@ package servlet.util;
  *	
  *
  *   '$Author: harris $'
- *     '$Date: 2001-12-04 16:42:41 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2002-01-24 00:24:18 $'
+ * '$Revision: 1.3 $'
  */
  
 
@@ -26,14 +26,16 @@ import servlet.util.*;
 
 
 
-public class DataExchangeClient{
+public class DataExchangeClient
+{
+ //constructor
  public DataExchangeClient()
   {
  
   }
   
   /**
-   * sends a file to the data file server socket
+   * sends a file to the data file server socket -- that should be opened
    */
   public static String SendFile(String filename, String host, int port, 
                                 String cookie) 
@@ -44,8 +46,11 @@ public class DataExchangeClient{
     
 		String res = "return";
     
-    System.out.println("host: " + host + " port: " + port + " filename: " +
-                       filename + " cookie: " + cookie);
+    System.out.println("DataExchangeClient.SendFile > host: " + host 
+					+ "\n port: " + port 
+					+ "\n filename: " + filename 
+					+ "\n cookie: " + cookie);
+					
     try 
     {
       //while(DataFileServer.portIsAvailable(port)) 
@@ -57,8 +62,8 @@ public class DataExchangeClient{
     } 
     catch (UnknownHostException e) 
     {
-      System.err.println("Don't know about host: " + host);
-      System.out.println("error: " + e.getMessage());
+      System.err.println("DataExchangeClient > Don't know about host: " + host);
+      System.out.println("DataExchangeClient > error: " + e.getMessage());
       e.printStackTrace(System.out);
       System.exit(1);
     } 
@@ -66,7 +71,7 @@ public class DataExchangeClient{
     {
       System.err.println("Couldn't get I/O for "
                          + "the connection to: "+host);
-      System.out.println("error: " + e.getMessage());
+      System.out.println("DataExchangeClient > error: " + e.getMessage());
       e.printStackTrace(System.out);
       System.exit(1);
     }
@@ -105,7 +110,7 @@ public class DataExchangeClient{
       while (cnt!=-1) 
       {
         cnt = fs.read(buf);
-        System.out.println("i = "+ i +" Bytes read = " + cnt);
+        //System.out.println("i = "+ i +" Bytes read = " + cnt);
         if (cnt!=-1) 
         {
           dsout.write(buf, 0, cnt);
@@ -118,7 +123,7 @@ public class DataExchangeClient{
 	  }
 	  catch (Exception w) 
     {
-      System.out.println("error in DataStreamTest: " + w.getMessage());
+      System.out.println("DataExchangeClient > error in DataStream: " + w.getMessage());
     }
 
 	  return res;
@@ -131,8 +136,7 @@ public class DataExchangeClient{
   * Main method for testing the application
   *
   */
-  
-public static void main(String[] args)
+	public static void main(String[] args)
   {
 	 String temp = null;
      String servlet = "/framework/servlet/dataexchange";
@@ -145,7 +149,7 @@ public static void main(String[] args)
 	  //	+"password=jasmine&file=test.dat";
 	 
 	DataExchangeClient dec = new DataExchangeClient();
-	dec.uploadFile(servlet, protocol, host, server, filename, userName);
+	dec.uploadFile(servlet, protocol, host, server, filename, userName, "testfile");
   }
 
 
@@ -153,72 +157,70 @@ public static void main(String[] args)
 
 
  /**
-  *  This is the method that negotiates the upload process and uploads the
-  * datfile
-  *
-  *
-  *
+  *  This is the method that negotiates the upload process which 
+	*  consistes of figuring out the port number to open for the 
+	* 'sendFile' method
+	*
+	* @param servlet -- the servlet name 
+	* @param protocol -- http
+  * @param host -- the name of the host or the ip address
+  * @param server
+  * @param fileName -- the name of the file to be sent
+	* @param userName -- the name of the user that owns the file
+	* @param fileType -- the type of file to be specified in the database
+	*
   */
 	  public static void uploadFile(String servlet, String protocol, String host, 
-		String server, String filename, String userName) 
+		String server, String filename, String userName, String fileType) 
 		{
-   	 System.out.println("Starting DataStreamTest" );
+   	 System.out.println("DataExchangeClient > Begining the DataExchangeClient.uploadFile negotiations" );
     	try
-   	 {
-      String temp = null;
-//      String servlet = ":8080/examples/servlet/DataExchangeServlet";
-//      String protocol = "http://";
-//      String host = "beta.nceas.ucsb.edu";
-//      String server = protocol + host + servlet;
-//      String filename = "../test.dat";
-      //login url
+   	  {
+       String temp = null;
       
-			String u1str = server + "?action=uploadFile&username="
-			+userName+"&exchangeType=upload&submitter="+userName+"&"
-	  	+"password=jasmine&file="+filename;
-      System.out.println("u1: " + u1str);
-      URL u1 = new URL(u1str);
-      HttpMessage msg = new HttpMessage(u1);
- 			InputStream in =   msg.sendPostMessage();
-//      String cookie = msg.getCookie();
-      ////get the port to send the data to
-//      System.out.println("u2: " + server + "?action=getdataport");
-//      URL u2 = new URL(server + "?action=getdataport");
-//      HttpMessage msg2 = new HttpMessage(u2);
-//      InputStream in = msg2.sendPostMessage();
+			 String u1str = server 
+			 + "?action=uploadFile&username="+userName
+			 +"&exchangeType=upload&submitter="+userName+"&"
+	  	 +"password=jasmine&file="+filename+"&"
+			 +"filetype="+fileType;
+			 
+       System.out.println("DataExchangeClient > server string: " + u1str);
+       
+			 URL u1 = new URL(u1str);
+       HttpMessage msg = new HttpMessage(u1);
+ 			 InputStream in =   msg.sendPostMessage();
 
-//	  InputStream in = msg.sendPostMessage();
-      InputStreamReader isr = new InputStreamReader(in);
-      char c;
-      int i = isr.read();
-      String temp2 = "";
-      while(i != -1)
-      { //get the server response to the getdataport request
-        c = (char)i;
-        temp2 += c;
-       i = isr.read();
-      }
-		System.out.println("initial servlet output: " + temp2 );
-	  //the input looks like 'port|xxxx|cookie|xxx' tokenize the interger on the pipe
-	  StringTokenizer t = new StringTokenizer(temp2, "|");
-	  String buf = t.nextToken();
-	  buf = t.nextToken().trim();
+       InputStreamReader isr = new InputStreamReader(in);
+       char c;
+       int i = isr.read();
+       String temp2 = "";
+       while(i != -1)
+       { 
+			 	 //get the server response to the getdataport request
+         c = (char)i;
+         temp2 += c;
+       	 i = isr.read();
+       }
+		
+			System.out.println("DataExchangeClient > initial server output string: " + temp2 );
+	  	//the input looks like 'port|xxxx|cookie|xxx' tokenize the interger on the pipe
+	  	StringTokenizer t = new StringTokenizer(temp2, "|");
+	  	String buf = t.nextToken();
+	  	buf = t.nextToken().trim();
       int port = (new Integer(buf)).intValue();
-	  //now pick up the cookie info
-	  buf = t.nextToken().trim();
-	  String cookie = t.nextToken().trim();
+	  	//now pick up the cookie info
+	  	buf = t.nextToken().trim();
+	  	String cookie = t.nextToken().trim();
 	  
-	  System.out.println("DataStreamTest.main connceting to server on port: "
-	  	+port);
+	  	System.out.println("DataExchangeClient > connecting to server on port: "	+port);
       //this is a hack to give the servlet enough time to start
       //the socket thread.  Sometimes it doesn't work
-      Thread.sleep(1000);
-      
+      Thread.sleep(500);
       SendFile(filename, host, port, cookie);
     }
     catch(Exception e)
     {
-      System.out.println("error in main: " + e.getMessage());
+      System.out.println("Exception: " + e.getMessage());
       e.printStackTrace(System.out);
     }
     
