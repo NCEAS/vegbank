@@ -8,21 +8,24 @@
   *  % echo "[build.context]" | ant [target]
   *
   *     '$Author: mlee $'
-  *     '$Date: 2004-11-18 18:36:47 $'
-  *     '$Revision: 1.51 $'
+  *     '$Date: 2004-12-02 23:47:33 $'
+  *     '$Revision: 1.52 $'
 -->
 <project name="Vegbank" default="jar" basedir=".">
   <!-- ================================================================= -->
   <!-- Initialize simple properties, no context handling                 -->
   <!-- ================================================================= -->
   <target name="init">
-    <tstamp/>
+    <tstamp>
+      <format property="currentTime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
+    </tstamp>
     <property environment="env"/>
-    <property name="failOnModelDiff" value="true"/>
+
     <!-- can set this to false in command line using -DfailOnModelDiff=false to override the failure of deploy-all when the model is different from db_model.xml -->
     <property name="build.dir" value="${basedir}/build"/>
     <property name="build.src.dir" value="${build.dir}/src"/>
-    <property name="build.verify.dir" value="${build.dir}/verify"/>
+    <property name="build.status.dir" value="${build.dir}/verify"/>
+    <property name="build.status.dir" value="${build.dir}/status"/>
     <property name="build.lib.dir" value="${build.dir}/lib"/>
     <property name="build.sql.src.dir" value="${build.src.dir}/sql"/>
     <property name="build.java.src.dir" value="${build.src.dir}/java"/>
@@ -47,6 +50,8 @@
     <property name="ant.style.dir" location="${env.ANT_HOME}/etc"/>
     <property name="model.generated.flag" value="${build.java.src.dir}/generate_java_datamodel-HAS_BEEN_RUN_FLAG"/>
     <property name="vegbankVersion" value="1.0.2"/>
+    <filter token="subst_lt" value="&lt;"/>
+    <filter token="subst_gt" value="&gt;"/>
   </target>
   <!-- ================================================================= -->
   <!-- Read properties file, Setup filters, etc.                         -->
@@ -83,6 +88,7 @@
         <isset property="apache.document.root"/>
       </not>
     </condition>
+    <property name="web.status.dir" value="${apache.document.root}/status"/>
     <!--
       * The following filters expect the database connection properties
       * be set in the user custom build.properties file. There is an example 
@@ -118,7 +124,7 @@
     -->
     <mkdir dir="${build.src.dir}"/>
     <mkdir dir="${build.lib.dir}"/>
-    <mkdir dir="${build.verify.dir}"/>
+
     <mkdir dir="${build.sql.src.dir}"/>
     <mkdir dir="${build.java.src.dir}"/>
     <mkdir dir="${build.jsp.src.dir}"/>
@@ -132,6 +138,7 @@
     <mkdir dir="${rmi.dist.dir}"/>
     <mkdir dir="${build.docs.dir}"/>
     <mkdir dir="${build.docs.api.dir}"/>
+    <mkdir dir="${build.status.dir}"/>
     <!-- Classpaths -->
     <path id="classpath.compilation">
       <pathelement path="${build.classes.dir}"/>
@@ -233,7 +240,7 @@
     <antcall target="db_verify" description="check to see that model is implemented correctly"/>
   </target>
   <target name="deploy-all" depends="deploy-jars" description="==> deploys vegbank module jars, html and other resources">
-    <antcall target="db_verify" description="check to see that model is implemented correctly"/>
+    <antcall target="db_verify_andfail" description="check to see that model is implemented correctly"/>
     <antcall target="deploy-web-all" inheritAll="true"/>
     <echo>db connect: ${databaseConnectString}</echo>
     <mkdir dir="${web.context}/GenJSP"/>
@@ -284,6 +291,22 @@
     <copy todir="${web.context}">
       <fileset dir="${build.java.src.dir}" includes="velocity.properties"/>
     </copy>
+    <echo file="${build.status.dir}/deploy-props.txt">
+      -----------------DEPLOY PROPS STATUS------------------------@subst_lt@br/@subst_gt@
+      Properties last deployed at time: ${currentTime} @subst_lt@br/@subst_gt@
+      Connection to database Name: ${databaseName} @subst_lt@br/@subst_gt@
+      Deployed from : ${basedir} @subst_lt@br/@subst_gt@
+      vegbank version: ${vegbankVersion} @subst_lt@br/@subst_gt@
+      ---------------------------------------------------------------------@subst_lt@br/@subst_gt@
+      </echo>
+
+    <!-- check the model, but don't fail on errors! -->
+    <antcall target="db_verify" />
+    <!-- copy status files to the file to server -->
+    <copy todir="${web.status.dir}"  filtering="yes" overwrite="yes">
+      <fileset dir="${build.status.dir}" includes="*.*" />
+    </copy>
+
   </target>
   <!-- ================================================================= -->
   <!-- Deploy only web resources                                         -->
@@ -542,18 +565,42 @@
   <target name="db_generate_verify_script" description="==> Generate the database verify script" depends="prepare">
     <xslt in="${docs.dir}/xml/db_model_vegbank.xml" out="${build.script.src.dir}/VerifyDatabase.pl" style="${xsl.src.dir}/VerifyDatabaseGen.xsl"/>
   </target>
+  <target name="db_verify_andfail" description="==> Michael's method of checking db to match model xml and fails build if diffs" >
+   <property name="failOnModelDiff" value="true"/>
+    <antcall target="db_verify" />
+<!-- just do the diff -->
+    <!--<exec dir="${build.status.dir}" executable="diff" output="${build.status.dir}/modeldiffs.txt" resultproperty="diffResult" failonerror="${failOnModelDiff}">
+      <arg line=" -ibwB ./logicalmodel.txt ./actualmodel.txt  "/>
+    </exec>-->  </target>
   <target name="db_verify" description="==> Michael's new method of checking the database to match model xml" depends="prepare">
-    <!-- get ideal model output -->
-    <xslt in="${docs.dir}/xml/db_model_vegbank.xml" out="${build.verify.dir}/logicalmodel.txt" style="${docs.dir}/xml/checkModelAgainstDB.xsl" force="true"/>
+ 
+    <!-- set to not fail unless already set -->
+ 
+    <condition property="failOnModelDiff" value="false">
+      <not>
+        <isset property="failOnModelDiff"/>
+      </not>
+    </condition>
+   
+    <!-- get ideal model output -->    
+    <xslt in="${docs.dir}/xml/db_model_vegbank.xml" out="${build.status.dir}/logicalmodel.txt" style="${docs.dir}/xml/checkModelAgainstDB.xsl" force="true"/>
     <!-- get acutal model output -->
     <echo>Checking model with databaseUser = ${databaseUser} for database = ${databaseName}</echo>
     <exec dir="${sql.src.dir}" executable="psql">
-      <arg line="-U ${databaseUser} ${databaseName} -f verifyActualModel.sql -o ${build.verify.dir}/actualmodel.txt -At "/>
+      <arg line="-U ${databaseUser} ${databaseName} -f verifyActualModel.sql -o ${build.status.dir}/actualmodel.txt -At "/>
     </exec>
     <!-- compare ideal logical model to acutal model -->
-    <echo>If the next line does not have 'Diff results: 0', and the build failed, this is because differences are detected between the actual database model and the model specified in docs/xml/db_model_vegbank.xml : see ${build.verify.dir}/modeldiffs.txt   for differences.</echo>
-    <echo>That file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.</echo>
-    <exec dir="${build.verify.dir}" executable="diff" output="${build.verify.dir}/modeldiffs.txt" resultproperty="diffResult" failonerror="${failOnModelDiff}">
+    <property name="verify_readme" value="
+   differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.
+     The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  " />
+<echo> If the next line does not have 'Diff results: 0', and the build failed, this is because ${verify_readme}  The diff file is located here:</echo>
+<echo file="${build.status.dir}/verify.readme" >${verify_readme}  The Diff file is displayed on screen unless there are no differences.</echo>
+
+ <echo>------</echo>
+ <echo>${build.status.dir}/modeldiffs.txt</echo>
+ <echo>------</echo>
+   
+    <exec dir="${build.status.dir}" executable="diff" output="${build.status.dir}/modeldiffs.txt" resultproperty="diffResult" failonerror="${failOnModelDiff}">
       <arg line=" -ibwB ./logicalmodel.txt ./actualmodel.txt  "/>
     </exec>
     <echo>Diff results: ${diffResult}</echo>
