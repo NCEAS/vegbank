@@ -78,7 +78,7 @@ Design
   and overview
       
     </h3>
-    <p class="sansserif">
+    <p>
       Vegetation classification 
 
   is of central importance to biological conservation for planning and inventory, 
@@ -105,7 +105,7 @@ Design
 
   a common set of well defined and broadly accepted classification units.
     </p>
-    <p class="sansserif">
+    <p>
       Through the combined 
 
   efforts of <a href="http://www.natureserve.org/">NatureServe</a> (formerly called The 
@@ -161,7 +161,7 @@ Design
       <a name="flow"/>Information flow in vegetation classification
       
     </h3>
-    <p class="sansserif">
+    <p>
      To understand 
 
   the functions of the required information infrastructure for vegetation science, 
@@ -226,7 +226,7 @@ Design
     is needed to avoid these problems.
       </li>
     </ul>
-    <p class="sansserif">
+    <p>
       This database 
 
   system consists of prototypes of the three core components of the information 
@@ -257,7 +257,7 @@ Design
     <h3>
       <a name="process"/>The development process
     </h3>
-    <p class="sansserif">
+    <p>
       We have engaged in a four-stage 
 
   process for database development. The first stage (July 1999-June 2000) largely 
@@ -274,7 +274,7 @@ Design
 
   concluded with John Harris starting employment at NCEAS in early July 2000.
     </p>
-    <p class="sansserif">
+    <p>
       The second stage of the 
 
   project (July 2000-January 2001) focused on design and construction of the core 
@@ -297,7 +297,7 @@ Design
 
   section 6 of this document.
     </p>
-    <p class="sansserif">
+    <p>
        Simultaneous with stage 
 
   two, we conducted a parallel design study for a concept-based taxonomic database. 
@@ -344,7 +344,7 @@ Design
 
   system (Heritage Data Management System).
     </p>
-    <p class="sansserif">
+    <p>
        Stage three (February 
 
   - October 2001) has focused on design and development of the database and associated 
@@ -357,7 +357,7 @@ Design
 
   meeting and were finalized at the October 2001 meeting.
     </p>
-    <p class="sansserif">
+    <p>
        The fourth stage of the 
 
   project (October 2001 - June 2002) consists of testing and refinement of the 
@@ -505,7 +505,7 @@ Design
     
       </li>
     </ul>
-    <p class="sansserif">Additionally, workshops have taken place to educate users about VegBank.  Information about these can be found on our <a href="@panel_link@training.html">Professional Training Page</a>.</p>
+    <p>Additionally, workshops have taken place to educate users about VegBank.  Information about these can be found on our <a href="@panel_link@training.html">Professional Training Page</a>.</p>
     <hr/>
     <h3>
       <a name="participants"/>Participants
@@ -546,7 +546,7 @@ Design
 
   Meeting participants
     </h4>
-    <tableToStyle class="smallertbl sansserif" border="1" cellspacing="0" bordercolor="#DDDDDD">
+    <tableToStyle class="smallertbl thinlines" cellpadding="2">
       <tr height="17">
         <td class="stayleft">Participant<br/>
       (Click to email)</td>
