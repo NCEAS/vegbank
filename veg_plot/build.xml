@@ -5,9 +5,9 @@
   * Global build script for veg_plot. This simply allows running all the sub 
   * scripts from one place 
   *
-  *     '$Author: farrell $'
-  *     '$Date: 2003-01-02 21:54:38 $'
-  *     '$Revision: 1.6 $'
+  *     '$Author: harris $'
+  *     '$Date: 2003-01-06 16:43:31 $'
+  *     '$Revision: 1.7 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -62,6 +62,7 @@
 		<ant dir="exp/vegclient" target="compile"/>
 		<ant dir="exp/xml-resource" target="compile"/>
 		<ant dir="exp/xml_to_sql" target="compile"/>
+    <ant antfile="./build-plotvalidation.xml" target="compile"/>
 	</target>
 	
 	<target name="jar" depends="compile"
