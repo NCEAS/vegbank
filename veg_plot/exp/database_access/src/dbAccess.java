@@ -43,8 +43,8 @@ import PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: harris $'
- *  '$Date: 2002-01-18 00:21:49 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2002-01-23 17:09:52 $'
+ * 	'$Revision: 1.3 $'
  */
 
 
@@ -73,6 +73,9 @@ public int queryOutputNum; //the number of output rows from the query
 	* into an xml document -- this method is much newer than the
 	* databaseAccess method, and should be used when the explicit 
 	* desire is to write a single plot to an xml doc
+	*
+	* @param plotId -- the VegBank plotId
+	* @param outFile -- the fileName to which to write the data
 	*/
 	public boolean writeSingleVegBankPlot(String plotId, String outFile)
 	{
@@ -96,6 +99,42 @@ public int queryOutputNum; //the number of output rows from the query
 		}
 		return(true);
 	}
+	
+	/**
+  * this method will take a plot id number used in vegbank and a
+	* filename to write all the plot data associated with that plot 
+	* into an xml document -- this method is much newer than the
+	* databaseAccess method, and should be used when the explicit 
+	* desire is to write a single plot to an xml doc
+	*
+	* @param plotIdVec -- a vector contaning a number of the VegBank plotId's
+	* @param outFile -- the fileName to which to write the data
+	*/
+	public boolean writeMultipleVegBankPlot(Vector plotIdVec, String outFile)
+	{
+		try
+		{
+			//convert the input integer to a string so that 
+			//it can be passed to the xml writer
+//			String plot = ""+plotId;
+			//this class allows access to the vegbank databases
+			//so the plugin will always be the same 
+			String pluginClass = "VegBankDataSourcePlugin";
+			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
+			//writer.writeSinglePlot(plotIdVec.elementAt(0).toString(), outFile);
+			writer.writeMultiplePlot(plotIdVec, outFile);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+			return(false);
+		}
+		return(true);
+	}
+	
+	
+	
 
 
 /**
@@ -154,6 +193,7 @@ public void accessDatabase(String inputXml, String inputXSL, String action)
 			queryOutput=w.queryOutput;
 			queryOutputNum=w.queryOutputNum;
 		}
+		
 		//compound query action
 		else if (action.equals("compoundQuery")) 
 		{
