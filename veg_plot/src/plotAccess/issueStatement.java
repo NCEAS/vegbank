@@ -94,6 +94,38 @@ if (action.trim().equals("insert")) {
 
 
 
+	public Vector issuePureSQL(StringBuffer sqlStatement)
+	{
+		try 
+		{
+			System.out.println("Grabbing a DB connection from the local pool");
+			//get the connections etc
+			LocalDbConnectionBroker lb = new LocalDbConnectionBroker();
+			conn = lb.manageLocalDbConnectionBroker("getConn");
+			query = conn.createStatement ();
+			//issue the query
+			results = query.executeQuery(sqlStatement.toString());
+			
+			while (results.next()) 
+			{
+				//System.out.println("wow "+results.getString(1) );
+				if (results.getString(1) != null) 
+				{
+					returnedValues.addElement( results.getString(1) );
+				}
+			}
+		} 
+		catch (Exception e) 
+		{
+		System.out.println("failed " 
+		+e.getMessage());
+		}
+		return(returnedValues);
+	}
+
+
+
+
 
 /**
  * This method will take a database action, target table, number of satatements and 
