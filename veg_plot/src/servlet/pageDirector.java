@@ -80,9 +80,10 @@ public class pageDirector extends HttpServlet
         cookieName=cookie.getName();
 				//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
 				cookieValue=cookie.getValue();
+				System.out.println("cleint passing the cookie name: "+cookieName+" value: "
+					+cookieValue);
 			}
   	} 
-				
 		else 
 		{
 			//if the request is made to become a new user - do it
@@ -94,6 +95,7 @@ public class pageDirector extends HttpServlet
 			}
 			else 
 			{
+				System.out.println("client attempting to connect without a cookie");
     		out.println("cookies.no-cookies");
 			}
 		}
@@ -101,6 +103,7 @@ public class pageDirector extends HttpServlet
 
 		//get the requested page type
 		String pageType = req.getParameter("pageType");
+		System.out.println("request page type: "+pageType);
 
 		//first determine if the browser has a valid cookie
 		//out.println("debug flag val "+cookieName+" "+cookieValue);
@@ -110,22 +113,24 @@ public class pageDirector extends HttpServlet
 			//check that the cookie is a valid one
 			authenticate m =new authenticate();  
 			m.cookieChecker(cookieName, cookieValue, "remoteHost");
-	
 			//if valid cookie then forward to page
 			if (m.cookieValidFlag==1) 
 			{
+				System.out.println("authentication SUCCESSFUL based on the cookie");
 				pageTranslator(pageType);
 				returnFile(pageFileName, out);
 			}
 			else 
 			{
+				System.out.println("authentication UNSUCCESSFUL based on the cookie");
 				ViewFile.returnFile(loginPage, out);
 			}
 		}
 
-		//if not then pass the login page to the browser	
+		//else if there was no cookie
 		else 
 		{	
+			System.out.println("Authentication not attempted -- no cookie passed");
 			ViewFile.returnFile(loginPage, out);
 		}				       
 	}
