@@ -5,7 +5,9 @@
   http://knb.ecoinformatics.org/software/eml/eml20docs/eml-resource.html
   http://knb.ecoinformatics.org/software/eml/eml-2.0.0/eml-literature.html
 -->
-<!-- This stylesheet is a rough beginning and not checked into cvs initially: <?xml-stylesheet type="text/xsl" href="viewFieldsDefn.xsl"?> -->
+<!-- This stylesheet is a rough beginning and not checked into cvs initially: -->
+<?xml-stylesheet type="text/xsl" href="viewFieldsDefn.xsl"?>
+<!-- empty comment -->
 <modelChangeDocument>
   <modelChange>
     <modelChangeName>New Permissions schema</modelChangeName>
@@ -51,10 +53,18 @@
         <fieldNotes>n/a</fieldNotes>
         <fieldDefinition>reason for embargo</fieldDefinition>
         <closedList>yes</closedList>
-        <closedListValue>Author stipulation</closedListValue>
-        <closedListValue>Rare species</closedListValue>
-        <closedListValue>Landownership</closedListValue>
-        <closedListValue>Bad data</closedListValue>
+        <closedListValue>
+          <values>Author stipulation</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Rare species</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Landownership</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Bad data</values>
+        </closedListValue>
       </field>
       <field>
         <type>add</type>
@@ -103,13 +113,27 @@
         <fieldNotes>default values for field: Public if no embargo, 10km radius for if landowner or rare species, Public embargo if reason=author</fieldNotes>
         <fieldDefinition>permission level for default user, who is not granted different permission in the permission table</fieldDefinition>
         <closedList>yes</closedList>
-        <closedListValue>0</closedListValue>
-        <closedListValue>1</closedListValue>
-        <closedListValue>2</closedListValue>
-        <closedListValue>3</closedListValue>
-        <closedListValue>4</closedListValue>
-        <closedListValue>5</closedListValue>
-        <closedListValue>6</closedListValue>
+        <closedListValue>
+          <values>0</values>
+        </closedListValue>
+        <closedListValue>
+          <values>1</values>
+        </closedListValue>
+        <closedListValue>
+          <values>2</values>
+        </closedListValue>
+        <closedListValue>
+          <values>3</values>
+        </closedListValue>
+        <closedListValue>
+          <values>4</values>
+        </closedListValue>
+        <closedListValue>
+          <values>5</values>
+        </closedListValue>
+        <closedListValue>
+          <values>6</values>
+        </closedListValue>
       </field>
     </table>
     <table>
@@ -163,13 +187,27 @@
         <fieldNotes>n/a</fieldNotes>
         <fieldDefinition>permission level for party of this record with regard to the embargo referenced here.</fieldDefinition>
         <closedList>yes</closedList>
-        <closedListValue>0</closedListValue>
-        <closedListValue>1</closedListValue>
-        <closedListValue>2</closedListValue>
-        <closedListValue>3</closedListValue>
-        <closedListValue>4</closedListValue>
-        <closedListValue>5</closedListValue>
-        <closedListValue>6</closedListValue>
+        <closedListValue>
+          <values>0</values>
+        </closedListValue>
+        <closedListValue>
+          <values>1</values>
+        </closedListValue>
+        <closedListValue>
+          <values>2</values>
+        </closedListValue>
+        <closedListValue>
+          <values>3</values>
+        </closedListValue>
+        <closedListValue>
+          <values>4</values>
+        </closedListValue>
+        <closedListValue>
+          <values>5</values>
+        </closedListValue>
+        <closedListValue>
+          <values>6</values>
+        </closedListValue>
       </field>
       <field>
         <type>add</type>
@@ -222,26 +260,66 @@
         <fieldNotes>closed list</fieldNotes>
         <fieldDefinition>Specifies a level in the taxonomic hierarcy that a class belongs.</fieldDefinition>
         <closedList>yes</closedList>
-        <closedListValue>Kingdom</closedListValue>
-        <closedListValue>Subkingdom</closedListValue>
-        <closedListValue>Superdivision</closedListValue>
-        <closedListValue>Division</closedListValue>
-        <closedListValue>Class</closedListValue>
-        <closedListValue>Subclass</closedListValue>
-        <closedListValue>Order</closedListValue>
-        <closedListValue>Suborder</closedListValue>
-        <closedListValue>Family</closedListValue>
-        <closedListValue>Subfamily</closedListValue>
-        <closedListValue>Tribe</closedListValue>
-        <closedListValue>Subtribe</closedListValue>
-        <closedListValue>Genus</closedListValue>
-        <closedListValue>Subgenus</closedListValue>
-        <closedListValue>Section</closedListValue>
-        <closedListValue>Species Aggregate</closedListValue>
-        <closedListValue>Species</closedListValue>
-        <closedListValue>Subspecies</closedListValue>
-        <closedListValue>Variety</closedListValue>
-        <closedListValue>Cultivar/Forma</closedListValue>
+        <closedListValue>
+          <values>Kingdom</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Subkingdom</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Superdivision</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Division</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Class</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Subclass</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Order</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Suborder</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Family</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Subfamily</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Tribe</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Subtribe</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Genus</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Subgenus</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Section</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Species Aggregate</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Species</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Subspecies</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Variety</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Cultivar/Forma</values>
+        </closedListValue>
       </field>
       <field>
         <type>delete</type>
@@ -271,26 +349,66 @@
         <fieldNotes>closed list</fieldNotes>
         <fieldDefinition>Specifies a level in the taxonomic hierarcy that a class belongs.</fieldDefinition>
         <closedList>yes</closedList>
-        <closedListValue>Kingdom</closedListValue>
-        <closedListValue>Subkingdom</closedListValue>
-        <closedListValue>Superdivision</closedListValue>
-        <closedListValue>Division</closedListValue>
-        <closedListValue>Class</closedListValue>
-        <closedListValue>Subclass</closedListValue>
-        <closedListValue>Order</closedListValue>
-        <closedListValue>Suborder</closedListValue>
-        <closedListValue>Family</closedListValue>
-        <closedListValue>Subfamily</closedListValue>
-        <closedListValue>Tribe</closedListValue>
-        <closedListValue>Subtribe</closedListValue>
-        <closedListValue>Genus</closedListValue>
-        <closedListValue>Subgenus</closedListValue>
-        <closedListValue>Section</closedListValue>
-        <closedListValue>Species Aggregate</closedListValue>
-        <closedListValue>Species</closedListValue>
-        <closedListValue>Subspecies</closedListValue>
-        <closedListValue>Variety</closedListValue>
-        <closedListValue>Cultivar/Forma</closedListValue>
+        <closedListValue>
+          <values>Kingdom</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Subkingdom</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Superdivision</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Division</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Class</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Subclass</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Order</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Suborder</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Family</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Subfamily</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Tribe</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Subtribe</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Genus</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Subgenus</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Section</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Species Aggregate</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Species</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Subspecies</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Variety</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Cultivar/Forma</values>
+        </closedListValue>
       </field>
       <field>
         <type>add</type>
@@ -320,15 +438,33 @@
         <fieldNotes>closed list</fieldNotes>
         <fieldDefinition>The commLevel attribute specifies a level in the taxonomic hierarcy to which  a class belongs.</fieldDefinition>
         <closedList>yes</closedList>
-        <closedListValue>class</closedListValue>
-        <closedListValue>subclass</closedListValue>
-        <closedListValue>group</closedListValue>
-        <closedListValue>subgroup</closedListValue>
-        <closedListValue>formation</closedListValue>
-        <closedListValue>alliance</closedListValue>
-        <closedListValue>association</closedListValue>
-        <closedListValue>phase</closedListValue>
-        <closedListValue>other</closedListValue>
+        <closedListValue>
+          <values>class</values>
+        </closedListValue>
+        <closedListValue>
+          <values>subclass</values>
+        </closedListValue>
+        <closedListValue>
+          <values>group</values>
+        </closedListValue>
+        <closedListValue>
+          <values>subgroup</values>
+        </closedListValue>
+        <closedListValue>
+          <values>formation</values>
+        </closedListValue>
+        <closedListValue>
+          <values>alliance</values>
+        </closedListValue>
+        <closedListValue>
+          <values>association</values>
+        </closedListValue>
+        <closedListValue>
+          <values>phase</values>
+        </closedListValue>
+        <closedListValue>
+          <values>other</values>
+        </closedListValue>
       </field>
       <field>
         <type>delete</type>
@@ -358,15 +494,33 @@
         <fieldNotes>closed list</fieldNotes>
         <fieldDefinition>The commLevel attribute specifies a level in the taxonomic hierarcy to which  a class belongs.</fieldDefinition>
         <closedList>yes</closedList>
-        <closedListValue>class</closedListValue>
-        <closedListValue>subclass</closedListValue>
-        <closedListValue>group</closedListValue>
-        <closedListValue>subgroup</closedListValue>
-        <closedListValue>formation</closedListValue>
-        <closedListValue>alliance</closedListValue>
-        <closedListValue>association</closedListValue>
-        <closedListValue>phase</closedListValue>
-        <closedListValue>other</closedListValue>
+        <closedListValue>
+          <values>class</values>
+        </closedListValue>
+        <closedListValue>
+          <values>subclass</values>
+        </closedListValue>
+        <closedListValue>
+          <values>group</values>
+        </closedListValue>
+        <closedListValue>
+          <values>subgroup</values>
+        </closedListValue>
+        <closedListValue>
+          <values>formation</values>
+        </closedListValue>
+        <closedListValue>
+          <values>alliance</values>
+        </closedListValue>
+        <closedListValue>
+          <values>association</values>
+        </closedListValue>
+        <closedListValue>
+          <values>phase</values>
+        </closedListValue>
+        <closedListValue>
+          <values>other</values>
+        </closedListValue>
       </field>
       <field>
         <type>add</type>
@@ -460,8 +614,12 @@
         <fieldNotes>Nulls set to yes, default should be "collective"</fieldNotes>
         <fieldDefinition>"Collective" if Taxon Observation applies to a collection of individuals (i.e. individuals of the same species) or just one individual "individual"</fieldDefinition>
         <closedList>yes</closedList>
-        <closedListValue>Collective</closedListValue>
-        <closedListValue>Individual</closedListValue>
+        <closedListValue>
+          <values>Collective</values>
+        </closedListValue>
+        <closedListValue>
+          <values>Individual</values>
+        </closedListValue>
       </field>
     </table>
   </modelChange>
@@ -486,13 +644,13 @@
         <fieldDefinition/>
         <closedList>yes</closedList>
         <closedListValue>
-          <values>placeholder1</values>
+            <values>placeholder1</values>
         </closedListValue>
         <closedListValue>
-          <values>placeholder2</values>
+            <values>placeholder2</values>
         </closedListValue>
         <closedListValue>
-          <values>placeholder3</values>
+            <values>placeholder3</values>
         </closedListValue>
       </field>
     </table>
@@ -542,29 +700,41 @@
         <fieldDefinition>Describes the type of reference this generic type is being used to represent.  Examples: book, journal article, webpage.</fieldDefinition>
         <closedList>yes</closedList>
         <closedListValue>
-        Article</closedListValue>
+          <values>Article</values>
+        </closedListValue>
         <closedListValue>
-        Book</closedListValue>
+          <values>Book</values>
+        </closedListValue>
         <closedListValue>
-        Chapter</closedListValue>
+          <values>Chapter</values>
+        </closedListValue>
         <closedListValue>
-        EditedBook</closedListValue>
+          <values>EditedBook</values>
+        </closedListValue>
         <closedListValue>
-        Manuscript</closedListValue>
+          <values>Manuscript</values>
+        </closedListValue>
         <closedListValue>
-        Report</closedListValue>
+          <values>Report</values>
+        </closedListValue>
         <closedListValue>
-        Thesis</closedListValue>
+          <values>Thesis</values>
+        </closedListValue>
         <closedListValue>
-        ConferenceProceedings</closedListValue>
+          <values>ConferenceProceedings</values>
+        </closedListValue>
         <closedListValue>
-        PersonalCommunication</closedListValue>
+          <values>PersonalCommunication</values>
+        </closedListValue>
         <closedListValue>
-        Presentation</closedListValue>
+          <values>Presentation</values>
+        </closedListValue>
         <closedListValue>
-        Website</closedListValue>
+          <values>Website</values>
+        </closedListValue>
         <closedListValue>
-        Generic</closedListValue>
+          <values>Generic</values>
+        </closedListValue>
       </field>
       <field>
         <type>add</type>
@@ -926,17 +1096,29 @@
         <fieldDefinition>Use this field to describe the role the party played with respect to the resource. Some potential roles include technician, reviewer, principal investigator, and many others.</fieldDefinition>
         <closedList>yes</closedList>
         <closedListValue>
-        Author</closedListValue>
+          <values>
+        Author</values>
+        </closedListValue>
         <closedListValue>
-        Editor</closedListValue>
+          <values>
+        Editor</values>
+        </closedListValue>
         <closedListValue>
-        Originator</closedListValue>
+          <values>
+        Originator</values>
+        </closedListValue>
         <closedListValue>
-        Performer</closedListValue>
+          <values>
+        Performer</values>
+        </closedListValue>
         <closedListValue>
-        Recipient</closedListValue>
+          <values>
+        Recipient</values>
+        </closedListValue>
         <closedListValue>
-        CustodianSteward</closedListValue>
+          <values>
+        CustodianSteward</values>
+        </closedListValue>
       </field>
       <field>
         <type>add</type>
@@ -1156,29 +1338,53 @@
         <fieldDefinition/>
         <closedList>yes</closedList>
         <closedListValue>
-        Article</closedListValue>
+          <values>
+        Article</values>
+        </closedListValue>
         <closedListValue>
-        Book</closedListValue>
+          <values>
+        Book</values>
+        </closedListValue>
         <closedListValue>
-        Chapter</closedListValue>
+          <values>
+        Chapter</values>
+        </closedListValue>
         <closedListValue>
-        EditedBook</closedListValue>
+          <values>
+        EditedBook</values>
+        </closedListValue>
         <closedListValue>
-        Manuscript</closedListValue>
+          <values>
+        Manuscript</values>
+        </closedListValue>
         <closedListValue>
-        Report</closedListValue>
+          <values>
+        Report</values>
+        </closedListValue>
         <closedListValue>
-        Thesis</closedListValue>
+          <values>
+        Thesis</values>
+        </closedListValue>
         <closedListValue>
-        ConferenceProceedings</closedListValue>
+          <values>
+        ConferenceProceedings</values>
+        </closedListValue>
         <closedListValue>
-        PersonalCommunication</closedListValue>
+          <values>
+        PersonalCommunication</values>
+        </closedListValue>
         <closedListValue>
-        Presentation</closedListValue>
+          <values>
+        Presentation</values>
+        </closedListValue>
         <closedListValue>
-        Website</closedListValue>
+          <values>
+        Website</values>
+        </closedListValue>
         <closedListValue>
-        Generic</closedListValue>
+          <values>
+        Generic</values>
+        </closedListValue>
       </field>
       <field>
         <type>add</type>
@@ -1552,17 +1758,29 @@
         <fieldDefinition/>
         <closedList>yes</closedList>
         <closedListValue>
-        Author</closedListValue>
+          <values>
+        Author</values>
+        </closedListValue>
         <closedListValue>
-        Editor</closedListValue>
+          <values>
+        Editor</values>
+        </closedListValue>
         <closedListValue>
-        Originator</closedListValue>
+          <values>
+        Originator</values>
+        </closedListValue>
         <closedListValue>
-        Performer</closedListValue>
+          <values>
+        Performer</values>
+        </closedListValue>
         <closedListValue>
-        Recipient</closedListValue>
+          <values>
+        Recipient</values>
+        </closedListValue>
         <closedListValue>
-        CustodianSteward</closedListValue>
+          <values>
+        CustodianSteward</values>
+        </closedListValue>
       </field>
       <field>
         <type>add</type>
@@ -1779,29 +1997,53 @@
         <fieldDefinition/>
         <closedList>yes</closedList>
         <closedListValue>
-        Article</closedListValue>
+          <values>
+        Article</values>
+        </closedListValue>
         <closedListValue>
-        Book</closedListValue>
+          <values>
+        Book</values>
+        </closedListValue>
         <closedListValue>
-        Chapter</closedListValue>
+          <values>
+        Chapter</values>
+        </closedListValue>
         <closedListValue>
-        EditedBook</closedListValue>
+          <values>
+        EditedBook</values>
+        </closedListValue>
         <closedListValue>
-        Manuscript</closedListValue>
+          <values>
+        Manuscript</values>
+        </closedListValue>
         <closedListValue>
-        Report</closedListValue>
+          <values>
+        Report</values>
+        </closedListValue>
         <closedListValue>
-        Thesis</closedListValue>
+          <values>
+        Thesis</values>
+        </closedListValue>
         <closedListValue>
-        ConferenceProceedings</closedListValue>
+          <values>
+        ConferenceProceedings</values>
+        </closedListValue>
         <closedListValue>
-        PersonalCommunication</closedListValue>
+          <values>
+        PersonalCommunication</values>
+        </closedListValue>
         <closedListValue>
-        Presentation</closedListValue>
+          <values>
+        Presentation</values>
+        </closedListValue>
         <closedListValue>
-        Website</closedListValue>
+          <values>
+        Website</values>
+        </closedListValue>
         <closedListValue>
-        Generic</closedListValue>
+          <values>
+        Generic</values>
+        </closedListValue>
       </field>
       <field>
         <type>add</type>
@@ -2175,17 +2417,29 @@
         <fieldDefinition/>
         <closedList>yes</closedList>
         <closedListValue>
-        Author</closedListValue>
+          <values>
+        Author</values>
+        </closedListValue>
         <closedListValue>
-        Editor</closedListValue>
+          <values>
+        Editor</values>
+        </closedListValue>
         <closedListValue>
-        Originator</closedListValue>
+          <values>
+        Originator</values>
+        </closedListValue>
         <closedListValue>
-        Performer</closedListValue>
+          <values>
+        Performer</values>
+        </closedListValue>
         <closedListValue>
-        Recipient</closedListValue>
+          <values>
+        Recipient</values>
+        </closedListValue>
         <closedListValue>
-        CustodianSteward</closedListValue>
+          <values>
+        CustodianSteward</values>
+        </closedListValue>
       </field>
       <field>
         <type>add</type>
@@ -2384,19 +2638,19 @@
         <fieldDefinition>Quality of plot as determined by an automated filter system</fieldDefinition>
         <closedList>yes</closedList>
         <closedListValue>
-          <values>1</values>
-          <valueDescription>sufficient for determining type occurrence</valueDescription>
-          <sordOrd>1</sordOrd>
+            <values>1</values>
+            <valueDescription>sufficient for determining type occurrence</valueDescription>
+            <sordOrd>1</sordOrd>
         </closedListValue>
         <closedListValue>
-          <values>2</values>
-          <valueDescription>sufficient for inclusion in a classification revision</valueDescription>
-          <sordOrd>2</sordOrd>
+            <values>2</values>
+            <valueDescription>sufficient for inclusion in a classification revision</valueDescription>
+            <sordOrd>2</sordOrd>
         </closedListValue>
         <closedListValue>
-          <values>3</values>
-          <valueDescription>fully compliant with recommendations</valueDescription>
-          <sordOrd>3</sordOrd>
+            <values>3</values>
+            <valueDescription>fully compliant with recommendations</valueDescription>
+            <sordOrd>3</sordOrd>
         </closedListValue>
       </field>
     </table>
