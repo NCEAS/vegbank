@@ -149,9 +149,7 @@ return "Check All"; }
 		</td>
         	
 		<td  width="20%" colspan="1" bgcolor="{$evenRowColor}" align="left" valign="middle">
-          <!--
 					<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a>
-					-->
 					<a><b>Country:</b> <xsl:value-of select="country"/>  <br></br> </a>
 					<a><b>Latitude:</b> <xsl:value-of select="latitude"/>  <br></br> </a>
 	     		<a><b>Longitude:</b> <xsl:value-of select="longitude"/>  <br></br> </a>
@@ -231,9 +229,7 @@ return "Check All"; }
 		</td>
         	
 		<td  width="20%" colspan="1" bgcolor="{$oddRowColor}" align="left" valign="middle">
-          <!--
 					<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a>
-					-->
 					<a><b>Country:</b> <xsl:value-of select="country"/>  <br></br> </a>
 					<a><b>Latitude:</b> <xsl:value-of select="latitude"/>  <br></br> </a>
 	     		<a><b>Longitude:</b> <xsl:value-of select="longitude"/>  <br></br> </a>
