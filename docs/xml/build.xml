@@ -128,8 +128,14 @@
   <target name="make-jsp">
     <property file="jsp-template.properties" />
     <echo>Read jsp-template.properties</echo>
-    <style in="db_model_vegbank.xml" out="jsp-temp.jsp" force="yes" style="dbmodel-to-jsp-template.xsl" />
-    <echo>wrote jsp-temp.jsp</echo>
+    <style in="${dbmodelfile}" out="${jsptemp}" force="yes" style="${dbmodel-to-jsp-template.xsl}" >
+       <param name="view" expression="${view}"/>
+       <param name="oneTbl" expression="${oneTbl}"/>
+       <param name="detailAdd" expression="${detailAdd}"/>
+       <param name="more" expression="${more}"/>
+
+    </style>
+    <echo>wrote ${jsptemp}</echo>
 
   </target>
 </project>
