@@ -43,6 +43,34 @@ ALTER TABLE usercertification DROP COLUMN phone_number;
 ALTER TABLE usercertification DROP COLUMN phone_type;
 ALTER TABLE usercertification DROP COLUMN cv_documentation;
 
+alter table usercertification rename column current_institution to current_org;
+alter table usercertification rename column current_position to current_pos;
+alter table usercertification rename column esa_certified to esa_member;
+alter table usercertification rename column prof_experience_doc to prof_exp;
+alter table usercertification rename column veg_sampling_doc to veg_sampling_exp;
+alter table usercertification rename column veg_analysis_doc to veg_analysis_exp;
+alter table usercertification rename column usnvc_experience_doc to usnvc_exp;
+alter table usercertification rename column vegbank_experience_doc to vb_exp;
+alter table usercertification rename column vegbank_expected_uses to vb_intention;
+alter table usercertification rename column plotdb_experience_doc to tools_exp;
+alter table usercertification rename column additional_statements to addl_stmt;
+
+alter table usercertification add column exp_region_a integer;
+alter table usercertification add column exp_region_a_veg integer;
+alter table usercertification add column exp_region_a_flor integer;
+alter table usercertification add column exp_region_a_nvc integer;
+
+alter table usercertification add column exp_region_b integer;
+alter table usercertification add column exp_region_b_veg integer;
+alter table usercertification add column exp_region_b_flor integer;
+alter table usercertification add column exp_region_b_nvc integer;
+
+alter table usercertification add column exp_region_c integer;
+alter table usercertification add column exp_region_c_veg integer;
+alter table usercertification add column exp_region_c_flor integer;
+alter table usercertification add column exp_region_c_nvc integer; 
+
+
 alter TABLE user_info rename to usr;
 alter TABLE usr RENAME user_id to usr_id;
 alter TABLE usr DROP COLUMN initial_ip_address;
@@ -74,7 +102,7 @@ ALTER TABLE usercertification DROP COLUMN nvc_exp_usnvc_a;
 -- Populate requested_cert_level to value of 3 
 ----------------------------------------------------------------------------
 ALTER TABLE usercertification ADD COLUMN requested_cert_level Integer ;
-UPDATE usercertification SET requested_cert_level=2; 
+UPDATE usercertification SET requested_cert_level=3; 
 
 
 ----------------------------------------------------------------------------
