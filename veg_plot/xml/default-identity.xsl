@@ -65,8 +65,10 @@ PREV || NEXT
 <br> </br>
 <!-- SOME NOTES ABOUT THE USE OF ICONS-->
 <br> </br>
-<span class="intro" >Available Reports: 
+<span class="intro" >Available Reports:
+<!--
 <img src="/vegbank/images/report_sm.gif"></img>=Summary
+-->
 <img src="/vegbank/images/small_globe.gif"></img>=Location 
 <img src="/vegbank/images/comprehensive_sm.gif"></img>=Comprehensive </span>
 
@@ -136,9 +138,11 @@ PREV || NEXT
 			</a>
 			&#160;
 			<!-- THE LINK TO THE SUMMARY-->
+			<!--
 			<a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId={$PLOTID}"> 
 				<img align="center" border="0" src="/vegbank/images/report_sm.gif" alt="Comprehensive view"> </img> 
 			</a>
+			-->
 			<br> </br>
 			<input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes"> 
 				<span class="item"> <font color="#333333"> download <xsl:number value="position()"/> </font> </span> 
@@ -193,9 +197,11 @@ PREV || NEXT
 			</a>
 			&#160;
 			<!-- THE LINK TO THE SUMMARY-->
+			<!--
 			<a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId={$PLOTID}"> 
 				<img align="center" border="0" src="/vegbank/images/report_sm.gif" alt="Comprehensive view"> </img> 
 			</a>
+			-->
 			<br> </br>
 			<input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes"> 
 				<span class="item"> <font color="#333333"> download <xsl:number value="position()"/> </font> </span> 
