@@ -5,8 +5,8 @@
  * the two tables include site data and species information
  *
  * '$Author: harris $'
- * '$Date: 2002-05-31 22:16:45 $'
- * '$Revision: 1.6 $'
+ * '$Date: 2002-07-16 22:45:31 $'
+ * '$Revision: 1.7 $'
  *
  */
 
@@ -183,9 +183,7 @@ update plotSpeciesSum
 /*
 * Send a test query
 */
-
-
-select plot_id, accession_number, authorplotcode, plotoriginlat, plotoriginlong from plotsitesummary;
+--select plot_id, accession_number, authorplotcode, plotoriginlat, plotoriginlong from plotsitesummary;
 --select PLOT_ID, AUTHORPLOTCODE, AUTHOROBSCODE,  
 --AUTHORNAMEID,  STRATUMTYPE, PERCENTCOVER 
 --from plotSpeciesSum where AUTHORPLOTCODE like '%';
