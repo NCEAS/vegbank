@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-18 02:05:29 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2004-04-15 02:03:31 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-03-18 02:05:29 $'
- *     '$Revision: 1.12 $'
+ *     '$Date: 2004-04-15 02:03:31 $'
+ *     '$Revision: 1.13 $'
  */
 
 import java.sql.PreparedStatement;
@@ -51,10 +51,16 @@ import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Telephone;
 import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.PermComparison;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.ui.struts.CertificationForm;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class UserDatabaseAccess 
 {	
+	private static Log log = LogFactory.getLog(UserDatabaseAccess.class);
+
+
 	/**
 	 * method that, for an email address, will get the user's priveledge level
 	 * @param email -- the user's email address
@@ -69,7 +75,7 @@ public class UserDatabaseAccess
 		 }
 		 catch (Exception e) 
 		 {
-			LogUtility.log("Exception: " + e.getMessage());
+			log.error("Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 		 return(level);
@@ -83,7 +89,7 @@ public class UserDatabaseAccess
 	 */
 	public String getPassword(String emailAddress)
 	{
-		LogUtility.log("UserDatabaseAccess > looking up the password for user: " + emailAddress);
+		log.debug("UserDatabaseAccess > looking up the password for user: " + emailAddress);
 		String s = null;
 		try 
 		{
@@ -105,7 +111,7 @@ public class UserDatabaseAccess
 		}
 		catch (Exception e) 
 		{
-			LogUtility.log("Exception: " + e.getMessage());
+			log.error("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(s);
@@ -142,17 +148,18 @@ public class UserDatabaseAccess
 	 }
 	 
 	/**
-	 * method that inserts the certification info to the user database
+	 * method that inserts the certification info to the user database.
 	 * 
 	 * @param form
+	 * @return new certId
 	 *
 	 */
-	public boolean insertUserCertificationInfo(CertificationForm form) 
+	public long insertUserCertificationInfo(CertificationForm form) 
 			throws SQLException {
 
 		StringBuffer sqlInsert = new StringBuffer();
 		
-		LogUtility.log("UserDatabaseAccess > inserting user cert info");
+		log.debug("UserDatabaseAccess > inserting user cert info");
 		DBConnection conn = getConnection();
 
 		sqlInsert.append("INSERT into usercertification ")
@@ -209,10 +216,28 @@ public class UserDatabaseAccess
 		
 		// execute the insert
 		
-		LogUtility.log("UserDatabaseAccess: saving cert. app");
+		log.debug("UserDatabaseAccess: saving cert. app");
+		Statement idStmt = conn.createStatement();
+
+		// insert
 		pstmt.execute();
+
+		// get new ID
+		idStmt.executeQuery("SELECT MAX(usercertification_id) FROM usercertification WHERE usr_id="+form.getUsrId());
+
+		ResultSet rs = idStmt.getResultSet();
+		long certId = 0;
+		if (rs.next()) {
+			certId = rs.getInt(1);
+		}
+
+		pstmt.close();
+		idStmt.close();
+
+		log.debug("UserDatabaseAccess: created new certification app #" + certId);
+
 		DBConnectionPool.returnDBConnection(conn);
-		return(true);
+		return certId;
 	 }
 	 
  /**
@@ -222,7 +247,7 @@ public class UserDatabaseAccess
 	*/
 	public int getUserId(String emailAddress)
 			throws SQLException {
-		LogUtility.log("UDA.getUserId(): getting usr_id for: " + emailAddress);
+		log.debug("UDA.getUserId(): getting usr_id for: " + emailAddress);
 		int usrId = 0;
 		
 		//get the connections etc
@@ -262,7 +287,7 @@ public class UserDatabaseAccess
 		}
 		catch (SQLException e)
 		{
-			LogUtility.log("Exception: " + e.getMessage());
+			log.debug("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -285,7 +310,7 @@ public class UserDatabaseAccess
 		java.util.Date localtime = new java.util.Date();
 //		String dateString = formatter.format(localtime);
 		
-		LogUtility.log("UserDatabaseAccess > Database date: "+localtime);
+		log.debug("UserDatabaseAccess > Database date: "+localtime);
 		
 		sb.append("UPDATE usr SET ticket_count = ticket_count + 1 ");
 		sb.append("WHERE email_address LIKE '"+emailAddress+"' ");
@@ -305,14 +330,14 @@ public class UserDatabaseAccess
 		DBConnectionPool dbCP = DBConnectionPool.getInstance();
 		DBConnection conn = dbCP.getDBConnection("UserDatabaseAccess");
 
-		//LogUtility.log("UDA.getConnection(): DB connection tag: " + conn.getTag() );
+		//log.debug("UDA.getConnection(): DB connection tag: " + conn.getTag() );
 /*  // This makes sure a connection is established
 		int loopCount = 0;
 		while (conn.getTag() == null) {
-			LogUtility.log("UDA.getConnection(): waiting for free DB conn");
+			log.debug("UDA.getConnection(): waiting for free DB conn");
 			try { Thread.sleep(1000); } catch (InterruptedException iex) { }
 			if (++loopCount > 4) {
-				LogUtility.log("UDA.getConnection(): couldn't get DB conn!");
+				log.debug("UDA.getConnection(): couldn't get DB conn!");
 				return null;
 			}
 			conn = dbCP.getDBConnection("UserDatabaseAccess");
@@ -352,7 +377,7 @@ public class UserDatabaseAccess
 		sb.append("' OR phonetype IS NULL ) AND " + uniqueClause);
 		*/
 	
-		//LogUtility.log("UDA.getAllUserData(): " + sb.toString() );
+		//log.debug("UDA.getAllUserData(): " + sb.toString() );
 		
 		 //issue the query
 		 ResultSet results = query.executeQuery(sb.toString());
@@ -389,6 +414,34 @@ public class UserDatabaseAccess
 	 
 
 	/**
+	 * Updates a certification application's status and comment.
+	 * 
+	 * @param usercertification_id
+	 * @param status
+	 * @param comment
+	 */
+	 public void updateCertificationStatus(int usercertification_id, String status, String comment) 
+		 	throws Exception
+	 {
+		DBConnection conn = getConnection();
+		Statement stmt = conn.createStatement();
+		StringBuffer sb = new StringBuffer(256)
+			.append("UPDATE usercertification SET ")
+			.append("certificationstatus='")
+			.append(Utility.encodeForDB(status))
+			.append("', certificationstatuscomments='")
+			.append(Utility.encodeForDB(comment))
+			.append("' WHERE usercertification_id='")
+			.append(usercertification_id)
+			.append("'");
+
+		log.debug("setting cert status: " + sb.toString());
+		stmt.executeUpdate(sb.toString());
+		conn.close();
+		DBConnectionPool.returnDBConnection(conn);
+	 }
+
+	/**
 	 * Private method to return the user info for a user in the user database.  The
 	 * user data will be returned as a WebUser bean.
 	 * 
@@ -417,7 +470,7 @@ public class UserDatabaseAccess
 			.append(" WHERE usercertification_id = ").append(usercertification_id);
 	
 		 //issue the query
-		LogUtility.log("UDA.getCert: QUERY: " + sb.toString());
+		log.debug("UDA.getCert: QUERY: " + sb.toString());
 		ResultSet results = query.executeQuery(sb.toString());
 		
 		//get the results -- assumming 0 or 1 rows returned
@@ -462,7 +515,7 @@ public class UserDatabaseAccess
 
 
 		} else {
-			LogUtility.log("UDA.getCert: NOT FOUND # " + usercertification_id);
+			log.debug("UDA.getCert: NOT FOUND # " + usercertification_id);
 			return null;
 		}
 
@@ -487,7 +540,7 @@ public class UserDatabaseAccess
 	 */
 	 public WebUser getUser(long usrId) throws Exception
 	 {
-		LogUtility.log("UserDatabaseAccess.getUser: usr_id= " + usrId);
+		log.debug("UserDatabaseAccess.getUser: usr_id= " + usrId);
 		return getAllUserData(" usr_id=" + usrId);
 	 }
 	 
@@ -512,7 +565,7 @@ public class UserDatabaseAccess
 	 */
 	 public WebUser getUser(String emailAddress ) throws Exception
 	 {
-		LogUtility.log("UDA.getUser: email_address= " + emailAddress);
+		log.debug("UDA.getUser: email_address= " + emailAddress);
 		return getAllUserData(" LOWER(email_address)='" + emailAddress.toLowerCase() + "'");
 	 }
 	 
@@ -525,7 +578,7 @@ public class UserDatabaseAccess
 		DBConnection conn = null;
 		try
 		{
-			LogUtility.log("Attempting to update Profile");
+			log.debug("Attempting to update Profile");
 			StringBuffer sb = new StringBuffer();
 
 			//get the connections etc
@@ -549,7 +602,7 @@ public class UserDatabaseAccess
 				if (rs.next()) {
 					// found a record, so there was a problem building the webuser
      				int extantAddressId = rs.getInt(1);
-					LogUtility.log("UDA.updateUserInfo: possible problem: address #" +
+					log.debug("UDA.updateUserInfo: possible problem: address #" +
 							+ extantAddressId + " extant in db but not webuser");
 					webuser.setAddressid(extantAddressId);
 					doAddressUpdate = true;
@@ -567,7 +620,7 @@ public class UserDatabaseAccess
 						.append("'" + webuser.getPostalcode() + "', ")
 						.append(webuser.getPartyid() + ", ")
 						.append("true)");
-						LogUtility.log("UDA.updateUserInfo: NEW address: " + sb.toString());
+						log.debug("UDA.updateUserInfo: NEW address: " + sb.toString());
 						stmt.executeUpdate(sb.toString());
 				}
 
@@ -584,7 +637,7 @@ public class UserDatabaseAccess
 				sb.append("postalcode='" + webuser.getPostalcode() + "' ");
 				sb.append(currentFlagSQL);
 				sb.append("WHERE address_id='" + webuser.getAddressid() + "' ");
-				LogUtility.log("UDA.updateUserInfo: address: " + sb.toString());
+				log.debug("UDA.updateUserInfo: address: " + sb.toString());
 				stmt.executeUpdate(sb.toString());
 			}
 
@@ -594,29 +647,29 @@ public class UserDatabaseAccess
 			sb.append("UPDATE usr SET preferred_name='" + webuser.getPreferredname() + "', ");
 			sb.append("email_address='" + webuser.getEmail() + "' ");
 			sb.append("WHERE usr_id='" + webuser.getUserid() + "' ");
-			LogUtility.log("UDA.updateUserInfo: usr: " + sb.toString());
+			log.debug("UDA.updateUserInfo: usr: " + sb.toString());
 			stmt.executeUpdate(sb.toString());
 
 			// party
 			sb = new StringBuffer();
 			sb.append("UPDATE party SET organizationname='" + webuser.getOrganizationname() + "' ");
 			sb.append("WHERE party_id='" + webuser.getPartyid() + "' ");
-			LogUtility.log("UDA.updateUserInfo: party: " + sb.toString());
+			log.debug("UDA.updateUserInfo: party: " + sb.toString());
 			stmt.executeUpdate(sb.toString());
 			
 			
 			stmt.close();
 			conn.commit();
 			
-			LogUtility.log("Updated Profile");
+			log.debug("Updated Profile");
 		}
 		catch (Exception e)
 		{
 			DBConnectionPool.returnDBConnection(conn);
-			LogUtility.log("Exception: " + e.getMessage());
+			log.error("Exception: " + e.getMessage());
 			e.printStackTrace();
 			try { if (conn != null)  conn.rollback(); }
-			catch (SQLException sex) { LogUtility.log("Exception: " + e.getMessage()); }
+			catch (SQLException sex) { log.error("Exception: " + e.getMessage()); }
 			
 			return false;
 		}
@@ -705,7 +758,7 @@ public class UserDatabaseAccess
 			e.printStackTrace();
 		}
 
-		LogUtility.log("UserDatabaseAccess > user info: " + user );
+		System.out.println("UserDatabaseAccess > user info: " + user );
 		//h.put("surName", "Harris");
 		//h.put("givenName", "John");
 		//udb.updateUserInfo(h);

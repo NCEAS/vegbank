@@ -2,8 +2,8 @@
  *	'$Id: '
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-18 02:13:50 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-04-15 02:03:31 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.Template;
 import java.io.StringWriter;
+import java.util.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,14 +51,33 @@ public class VelocityParser  {
 		}
 	}
 
+	/**
+	 * Put all values in main context using given Map keys.
+	 * @param tagTable
+	 */
+	public void putAll(Map tagTable) {
+		if (tagTable == null) {
+			return;
+		}
+
+		String key;
+		Iterator tit = tagTable.keySet().iterator();
+		while (tit.hasNext()) {
+			key = (String)tit.next();
+			put(key, tagTable.get(key));
+		}
+	}
+
 	public void put(String key, Object value) {
 		if (mainContext == null)
 			mainContext = new VelocityContext();
 		mainContext.put(key, value);
 	}
+
 	public void put(VelocityContext chainCtx) {
 		mainContext = new VelocityContext(chainCtx);
 	}
+
 	public VelocityContext getCurrentContext() {
 		return mainContext;   
 	}

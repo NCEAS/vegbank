@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-31 01:31:13 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-04-15 02:03:31 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 import org.vegbank.common.utility.LogUtility;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Utility class for comparing a user's permission
@@ -37,6 +39,7 @@ import org.vegbank.common.utility.LogUtility;
  */
 public class PermComparison {
 
+	private static Log log = LogFactory.getLog(PermComparison.class);
 	private static ResourceBundle res = ResourceBundle.getBundle("general");
 
 	/**
@@ -138,7 +141,7 @@ public class PermComparison {
 	 * required roles.
 	 */
 	public static boolean matchesAll(int required, int given) {
-		//LogUtility.log("PermComparison.matchesAll("+required+","+given+"): " + (required & given));
+		//log.debug("PermComparison.matchesAll("+required+","+given+"): " + (required & given));
 				
 		if ((required & given) != required) {
 			return false;
@@ -176,12 +179,12 @@ public class PermComparison {
 		while (st.hasMoreTokens()) {
 			tmpRole = st.nextToken();
 			try {
-				//LogUtility.log(tmpRole +"="+res.getString("perms.role." + tmpRole));
+				//log.debug(tmpRole +"="+res.getString("perms.role." + tmpRole));
 				roleSum += Integer.parseInt(
 						res.getString("perms.role." + tmpRole));
 
 			} catch (Exception ex) {
-				LogUtility.log("PermComparison: bad config value for role " +
+				log.debug("PermComparison: bad config value for role " +
 						tmpRole, ex);
 			}
 
