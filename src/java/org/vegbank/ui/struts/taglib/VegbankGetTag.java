@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-01 00:50:06 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2004-10-12 05:50:53 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.vegbank.common.utility.Utility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.8 $ $Date: 2004-10-01 00:50:06 $
+ * @version $Revision: 1.9 $ $Date: 2004-10-12 05:50:53 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -316,6 +316,19 @@ public class VegbankGetTag extends VegbankTag {
 
     public void setWhereNonNumeric(String s) {
         this.whereNonNumeric = s;
+    }
+
+    /**
+     * 
+     */
+	protected String whereSubquery;
+
+    public String getWhereSubquery() {
+        return findAttribute("whereSubquery", this.whereSubquery);
+    }
+
+    public void setWhereSubquery(String s) {
+        this.whereSubquery = s;
     }
 
 
