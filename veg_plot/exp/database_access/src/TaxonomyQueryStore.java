@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-08 15:43:48 $'
- * '$Revision: 1.12 $'
+ *     '$Date: 2002-06-08 18:47:00 $'
+ * '$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,42 @@ import databaseAccess.*;
 		return(c);
 	}
 	
-	
+	/**
+	 * this method will return near matches for a given taxon name using the 
+	 * logic the Mik Lee and J Harris came up with on June 8, 2002
+	 * @param name -- the plant name
+	 * @return v -- a vector with the near matches
+	 */
+	 public Vector getNameNearMatches(String name)
+	 {
+		Vector returnVector = new Vector();
+		try
+		{
+			Connection conn = this.getConnection();
+			Statement query = conn.createStatement();
+			ResultSet results = null;
+			//create and issue the query --
+			StringBuffer sqlBuf = new StringBuffer();
+			sqlBuf.append("SELECT plantname from PLANTNAME where upper(plantname) like '%" + name.toUpperCase()+ "%'  order by plantname");
+			
+			results = query.executeQuery( sqlBuf.toString() );
+			//retrieve the results
+			while (results.next()) 
+			{
+				String plantName = results.getString(1);
+				returnVector.addElement(plantName);
+			}
+			//remember to close the connections etc..
+	 	}
+		catch (Exception e) 
+		{
+			System.out.println("failed " +e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("TaxonomyQueryStore > returning near matches: " + returnVector.size()  );
+		return( returnVector );
+	 }
+	 
 	
 	/**
  	 * method to query the plant taxonomy database using as input a 
