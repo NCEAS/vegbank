@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2004-01-08 23:44:39 $'
- *	'$Revision: 1.15 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2004-02-27 21:39:57 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.vegbank.common.utility.DatabaseAccess;
+import org.vegbank.common.utility.DatabaseUtility;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.Utility;
 
@@ -51,8 +52,6 @@ import org.vegbank.common.utility.Utility;
 
 public class PlotQueryAction extends Action
 {
-
-	private static final String ANYVALUE = "ANY";
 	private static final String ANDVALUE = " AND ";
 	private static final String ORVALUE = " OR ";
 	private static final String 	selectClause =	
@@ -83,10 +82,10 @@ public class PlotQueryAction extends Action
 		StringBuffer dynamicQuery = new StringBuffer(1024);
 		
 		// Countries
-		dynamicQuery.append(this.handleValueList(pqForm.getCountries(), "plot.country", conjunction));
+		dynamicQuery.append(DatabaseUtility.handleValueList(pqForm.getCountries(), "plot.country", conjunction));
 		
 		// States
-		dynamicQuery.append(this.handleValueList(pqForm.getState(), "plot.state", conjunction));
+		dynamicQuery.append(DatabaseUtility.handleValueList(pqForm.getState(), "plot.state", conjunction));
 
 		// Elevation
 		//System.out.println(  pqForm.getMaxElevation())+ " " + pqForm.getMinElevation() + " " +  pqForm.isAllowNullElevation() + " elevation" );
@@ -117,24 +116,24 @@ public class PlotQueryAction extends Action
 				conjunction));
 
 		// rockType
-		dynamicQuery.append(this.handleValueList(pqForm.getRockType(), "plot.rockType", conjunction));
+		dynamicQuery.append(DatabaseUtility.handleValueList(pqForm.getRockType(), "plot.rockType", conjunction));
 		// surficalDeposits
 		dynamicQuery.append(
-			this.handleValueList(
+			DatabaseUtility.handleValueList(
 				pqForm.getSurficialDeposit(),
 				"plot.surficialdeposits",
 				conjunction));
 		// hydrologicregime
 		dynamicQuery.append(
-			this.handleValueList(
+				DatabaseUtility.handleValueList(
 				pqForm.getSurficialDeposit(),
 				"observation.hydrologicregime",
 				conjunction));
 		// topoposition
 		dynamicQuery.append(
-			this.handleValueList(pqForm.getTopoPosition(), "plot.topoposition", conjunction));
+				DatabaseUtility.handleValueList(pqForm.getTopoPosition(), "plot.topoposition", conjunction));
 		// landForm
-		dynamicQuery.append(this.handleValueList(pqForm.getLandForm(), "plot.landform", conjunction));
+		dynamicQuery.append(DatabaseUtility.handleValueList(pqForm.getLandForm(), "plot.landform", conjunction));
 
 		// Date Observed
 		// This need special handling because of the start/end points....
@@ -168,7 +167,7 @@ public class PlotQueryAction extends Action
 
 		// METHODS and PEOPLE
 		dynamicQuery.append(
-			this.handleValueList(
+			DatabaseUtility.handleValueList(
 				pqForm.getCoverMethodType(),
 				"covermethod.covertype",
 				conjunction)); 
@@ -182,7 +181,7 @@ public class PlotQueryAction extends Action
 //				conjunction));
 				
 		dynamicQuery.append(
-			this.handleValueList(
+			DatabaseUtility.handleValueList(
 				pqForm.getStratumMethodName(),
 				"stratummethod.stratummethodname",
 				conjunction)); 
@@ -199,7 +198,7 @@ public class PlotQueryAction extends Action
 		//query.apppend( this.handleSimpleEquals( pqForm.getObservationContributorName() 
 		//					"") );
 		dynamicQuery.append(
-			this.handleValueList(
+			DatabaseUtility.handleValueList(
 				pqForm.getProjectName(),
 				"project.projectname",
 				conjunction)); 
@@ -485,73 +484,6 @@ public class PlotQueryAction extends Action
 			if (allowNull)
 			{
 				sb.append(" OR ").append(fieldName).append(" IS NULL ");
-			}
-			sb.append(" ) ");
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Is the ANYVALUE present or is this a list of nulls
-	 * which is functionally the same.
-	 * 
-	 * @param values
-	 * @return
-	 */
-	private boolean isAnyValueAllowed(String[] values)
-	{
-		boolean allNulls = true;
-
-		for (int i = 0; i < values.length; i++)
-		{
-			if ( values[i] != null )
-			{
-				allNulls = false;
-				// Is ANYVALUE present
-				if ( values[i].equals(ANYVALUE))
-				{
-					return true;
-				}
-			}
-		}
-		return allNulls;
-	}
-
-	/**
-	 * Generated SQL for option boxs where many options can be selected
-	 * 
-	 * Special handling for values ANY, IS NULL and IS NOT NULL 
-	 * Needs to handle a list of nulls 
-	 * 
-	 * @param values
-	 * @param fieldName
-	 * @return
-	 */
-	private String handleValueList(String[] values, String fieldName, String conjunction)
-	{
-		StringBuffer sb = new StringBuffer(1024);
-
-		// Are there any constraints
-		if (values != null && values.length != 0 && !isAnyValueAllowed(values) )
-		{
-			sb.append(conjunction)
-				.append(" ( ").append(fieldName).append(" = '").append(values[0]).append("'");
-
-			for (int i = 0; i < values.length; i++)
-			{
-				if ( values[i] == null)
-				{
-					// Do nothing
-				}
-				else if (values[i].trim().equals("IS NOT NULL")
-					|| values[i].trim().equals("IS NULL"))
-				{
-					sb.append(" OR ").append(fieldName).append(" ").append(values[i]).append(" ");
-				}
-				else
-				{
-					sb.append(" OR ").append(fieldName).append(" ='").append(values[i]).append("'");
-				}
 			}
 			sb.append(" ) ");
 		}

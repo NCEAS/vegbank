@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-01-20 22:56:20 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-02-27 21:39:57 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,15 +29,15 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 /**
- * Describe class here.
+ * Stores the expand contract status for each entity.
+ * Also Stores the root entity being displayed
  * 
  * @author Gabriel Farrell
- * @version '$Revision: 1.1 $' '$Date: 2004-01-20 22:56:20 $'
+ * @version '$Revision: 1.2 $' '$Date: 2004-02-27 21:39:57 $'
  */
 public class ExpandStatusStore implements Serializable
 {
 	private HashMap expandStatusStoreMap = new HashMap();
-	
 	public int NODE_CONTRACTED = 0;
 	public int NODE_EXPANDED = 1;
 	
@@ -63,5 +63,4 @@ public class ExpandStatusStore implements Serializable
 	{
 		expandStatusStoreMap.put(nodeAddress, new Integer(NODE_EXPANDED) );
 	}
-	
 }

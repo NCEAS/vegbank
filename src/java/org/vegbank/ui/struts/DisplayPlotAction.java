@@ -5,8 +5,8 @@ package org.vegbank.ui.struts;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-19 17:45:52 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2004-02-27 21:39:57 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,8 +99,9 @@ public class DisplayPlotAction extends Action
 				
 				DBModelBeanReader mbReader = new DBModelBeanReader();
 				Observation observation =
-					mbReader.getObservationBeanTree(accessionCode);
-						
+					(Observation) mbReader.getVBModelBean(accessionCode);
+				mbReader.releaseConnection();
+				
 				sw.stopWatch();
 				sw.printTimeElapsed();
 

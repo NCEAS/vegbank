@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-18 01:07:40 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-02-27 21:39:57 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,9 +59,10 @@ public class DBObservationReaderTest extends TestCase
 	public void testGetObservation()
 	{
 		Observation obs = null;
+		String accessionCode = "VB.Ob.92.BADL.103001";
 		try
 		{
-			obs = obsReader.getObservationBeanTree( 93);
+			obs = (Observation) obsReader.getVBModelBean( accessionCode);
 		}
 		catch (Exception e)
 		{
@@ -81,10 +82,10 @@ public class DBObservationReaderTest extends TestCase
 		
 		//System.out.println( ( (ObservationContributor) obs.getOBSERVATIONObservationContributors().get(0)) + "<-----");
 		
-		assertEquals("VB.9", obs.getAccessioncode() );
+		assertEquals(accessionCode, obs.getAccessioncode() );
 		assertEquals("BADL.103", plot.getAuthorplotcode());
 		assertEquals("BADL Vegetation Mapping Project -- NATURESERVE", project.getProjectname());
-		assertEquals("replace this", coverMethod.getCovertype());
+		assertEquals("NPS CoverMethod", coverMethod.getCovertype());
 		assertEquals("Fraxinus pennsylvanica - Ulmus americana / Prunus virginiana Woodland", commclass.getCommname());
 		assertEquals("Drake", projectContributorParty.getSurname());
 	}
@@ -96,6 +97,16 @@ public class DBObservationReaderTest extends TestCase
 	{
 		obsReader = new DBModelBeanReader();
 		super.setUp();
+	}
+	
+
+	/* (non-Javadoc)
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	protected void tearDown() throws Exception
+	{
+		obsReader.releaseConnection();
+		super.tearDown();
 	}
 
 }

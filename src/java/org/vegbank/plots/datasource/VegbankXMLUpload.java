@@ -6,8 +6,8 @@ package org.vegbank.plots.datasource;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-19 17:43:44 $'
- *	'$Revision: 1.21 $'
+ *	'$Date: 2004-02-27 21:39:57 $'
+ *	'$Revision: 1.22 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,8 +30,10 @@ package org.vegbank.plots.datasource;
  * create a SQL insert statements.
  */
 
-import java.io.*;
-import java.sql.Connection;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -41,14 +43,56 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.vegbank.common.Constants;
-import org.vegbank.common.model.*;
+import org.vegbank.common.model.Aux_role;
+import org.vegbank.common.model.Commclass;
+import org.vegbank.common.model.Commconcept;
+import org.vegbank.common.model.Commcorrelation;
+import org.vegbank.common.model.Comminterpretation;
+import org.vegbank.common.model.Commlineage;
+import org.vegbank.common.model.Commname;
+import org.vegbank.common.model.Commstatus;
+import org.vegbank.common.model.Commusage;
+import org.vegbank.common.model.Disturbanceobs;
+import org.vegbank.common.model.Embargo;
+import org.vegbank.common.model.Observation;
+import org.vegbank.common.model.Observationcontributor;
+import org.vegbank.common.model.Observationsynonym;
+import org.vegbank.common.model.Party;
+import org.vegbank.common.model.Place;
+import org.vegbank.common.model.Plantconcept;
+import org.vegbank.common.model.Plantcorrelation;
+import org.vegbank.common.model.Plantlineage;
+import org.vegbank.common.model.Plantname;
+import org.vegbank.common.model.Plantstatus;
+import org.vegbank.common.model.Plantusage;
+import org.vegbank.common.model.Plot;
+import org.vegbank.common.model.Projectcontributor;
+import org.vegbank.common.model.Reference;
+import org.vegbank.common.model.Referencealtident;
+import org.vegbank.common.model.Referencecontributor;
+import org.vegbank.common.model.Referenceparty;
+import org.vegbank.common.model.Soilobs;
+import org.vegbank.common.model.Stemcount;
+import org.vegbank.common.model.Stratum;
+import org.vegbank.common.model.Stratumtype;
+import org.vegbank.common.model.Taxonalt;
+import org.vegbank.common.model.Taxonimportance;
+import org.vegbank.common.model.Taxoninterpretation;
+import org.vegbank.common.model.Taxonobservation;
 import org.vegbank.common.utility.AccessionGen;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.VBObjectUtils;
-import org.xml.sax.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 public class VegbankXMLUpload 
 {
@@ -231,6 +275,8 @@ public class VegbankXMLUpload
 	
 	public class SAX2DBContentHandler implements ContentHandler
 	{
+		
+		public static final String TABLENAME = "TableName";
 		private LoadingErrors errors = null;
 		private boolean load = true;
 		
@@ -543,7 +589,7 @@ public class VegbankXMLUpload
 			}
 			tables.add( table );
 			//LogUtility.log("===" + getCurrentTable() + " and " + table);
-			this.getCurrentTable().put("TableName", tableName );
+			this.getCurrentTable().put(TABLENAME, tableName );
 			//LogUtility.log(">>===> " + this.getPreviousTable().get("TableName") + " && " + this.getCurrentTable().get("TableName") );
 		}
 		
@@ -695,7 +741,7 @@ public class VegbankXMLUpload
 	 */
 	public class LoadTreeToDatabase
 	{
-
+		public static final String TABLENAME = "TableName";
 		private DBConnection dbConn = null; 
 		private Hashtable revisionsHash = null;
 		private Hashtable noteLinksHash = null;
@@ -793,10 +839,8 @@ public class VegbankXMLUpload
 			}
 			
 			LogUtility.log("LoadTreeToDatabase: Returning the DBConnection to the pool");
-			//Return dbconnection too pool
-			DBConnectionPool.returnDBConnection(
-				dbConn,
-				dbConn.getCheckOutSerialNumber());
+			//Return dbconnection to pool
+			DBConnectionPool.returnDBConnection(dbConn);
 		}
 
 		private void initDB() throws SQLException
@@ -838,6 +882,40 @@ public class VegbankXMLUpload
 				
 				sb.append(this.getSQLNullValues(tableName, fieldValueHash));
 				
+				Statement query = dbConn.createStatement();
+				ResultSet rs = query.executeQuery(sb.toString());
+				while (rs.next()) 
+				{
+					PK = rs.getInt(1);
+				}
+			}
+			catch ( SQLException se ) 
+			{ 
+				this.filterSQLException(se, sb.toString());     
+			}
+			LogUtility.log("LoadTreeToDatabase:  Query: " + sb.toString());
+			return PK;
+		}
+		
+		/**
+		 * Get the PK of the row in the database that has the same values as record
+		 * 
+		 * @param tableName
+		 * @param AccessionCode
+		 * @return long -- PK of the table
+		 */
+		private long getTablePK( String tableName, String accessionCode )
+		{
+			Vector fieldEqualsValue = new Vector();
+			StringBuffer sb = new StringBuffer();
+			long PK = 0;
+			try 
+			{
+				sb.append(
+					"SELECT " + getPKName(tableName) +" from "+tableName+" where " 
+					+ Constants.ACCESSIONCODENAME + " = '" + accessionCode + "'"
+				);
+
 				Statement query = dbConn.createStatement();
 				ResultSet rs = query.executeQuery(sb.toString());
 				while (rs.next()) 
@@ -988,6 +1066,13 @@ public class VegbankXMLUpload
 				return PK;
 			}
 			
+			PK = getExtantPK(fieldValueHash);
+			if ( PK != 0 )
+			{
+				return PK;
+			}
+			
+			
 			// Insert Reference if it exists
 			long referenceId = 0;
 			Hashtable reference = getFKChildTable(fieldValueHash, "reference_ID", "reference");
@@ -997,11 +1082,12 @@ public class VegbankXMLUpload
 			}
 			addForeignKey(fieldValueHash, "reference_ID", referenceId);
 			
+			// Maybe need a method like this to support update extant data
 			// Check if this already exists in the database
-			if ( this.tableExists( tableName, fieldValueHash) )
-			{
-				return this.getTablePK(tableName, fieldValueHash);
-			}
+//			if ( this.tableExists( tableName, fieldValueHash) )
+//			{
+//				return this.getTablePK(tableName, fieldValueHash);
+//			}
 			
 			//LogUtility.log("LoadTreeToDatabase: INSERT: " + tableName);
 			PK = this.getNextId(tableName);
@@ -1123,9 +1209,7 @@ public class VegbankXMLUpload
 			else if ( accessionCode.startsWith(Utility.getAccessionPrefix() + ".") )
 			{
 				// Need to get the pK of the table
-				Hashtable simpleHash = new Hashtable();
-				simpleHash.put(Constants.ACCESSIONCODENAME, accessionCode);
-				PK = this.getTablePK(tableName, simpleHash);
+				PK = this.getTablePK(tableName, accessionCode);
 				
 				if ( PK != 0 )
 				{
@@ -1293,8 +1377,8 @@ public class VegbankXMLUpload
 				return referenceId;
 			}
 			
-			referenceId = this.getPKFromAccessionCode(reference, "reference"); 
-			if ( referenceId != 0)
+			referenceId = getExtantPK(reference);
+			if ( referenceId != 0 )
 			{
 				return referenceId;
 			}
@@ -1342,6 +1426,12 @@ public class VegbankXMLUpload
 			long referencePartyId = 0;
 			if (referenceParty != null)
 			{
+				referencePartyId = getExtantPK(referenceParty);
+				if ( referencePartyId != 0 )
+				{
+					return referencePartyId;
+				}
+				
 				Hashtable referencePartyParent = getFKChildTable(referenceParty, Referenceparty.CURRENTPARTY_ID, "referenceParty");
 				long referencePartyParentId = insertReferenceParty(referencePartyParent);
 				
@@ -1566,9 +1656,8 @@ public class VegbankXMLUpload
 			{
 				return pKey;			
 			}
-			// Is there an accessionCode
-			pKey = this.getPKFromAccessionCode(party, "party"); 
-			if ( pKey != 0)
+			pKey = getExtantPK(party);
+			if ( pKey != 0 )
 			{
 				return pKey;
 			}
@@ -1594,6 +1683,12 @@ public class VegbankXMLUpload
 		private long insertPartyBase(Hashtable party, String tableName) throws SQLException
 		{
 			long pKey = 0;
+			
+			pKey = getExtantPK(party);
+			if ( pKey != 0 )
+			{
+				return pKey;
+			}
 			
 			// recursivly deal with FK party's
 			Hashtable ownerParty = getFKChildTable(party, "owner_ID", "party");
@@ -1627,6 +1722,11 @@ public class VegbankXMLUpload
 			if ( contribHash == null )
 			{
 				return pKey;			
+			}
+			pKey = getExtantPK(contribHash);
+			if ( pKey != 0 )
+			{
+				return pKey;
 			}
 			
 //			System.out.println("##############");
@@ -1662,6 +1762,12 @@ public class VegbankXMLUpload
 		{		
 			long plotId = 0;
 
+			plotId = getExtantPK(plotHash);
+			if ( plotId != 0 )
+			{
+				return plotId;
+			}
+			
 			// Insert the parent plot if it exists
 			Hashtable parentPlot =  this.getChildTable(plotHash, Plot.PARENT_ID);
 			
@@ -1716,27 +1822,20 @@ public class VegbankXMLUpload
 			{
 				return projectId;			
 			}
+			projectId = getExtantPK(projectFieldValueHash);
+			if ( projectId != 0 )
+			{
+				return projectId;
+			}
 
-			// SEE IF THE PROJECT IN WHICH THIS PLOT IS A MEMBER EXISTS IN THE DATABASE
-			if (projectFieldValueHash == null)
-			{
-				// This is  a hack allow loading of a plot without project info
-			}
-			else if (tableExists("project", projectFieldValueHash) == true)
-			{
-				projectId = getTablePK("project", projectFieldValueHash);
-			}
-			// IF THE PROJECT IS NOT THERE THEN LOAD IT AND THE PROJECT CONT. INFO
-			else
-			{
-				projectId = insertTable("project", projectFieldValueHash);
-				
-				Enumeration pcs = this.getChildTables( projectFieldValueHash, "projectContributor");
-				while (pcs.hasMoreElements())
-				{	
-					this.insertContributor( "projectContributor", (Hashtable) pcs.nextElement(), Projectcontributor.PROJECT_ID,  projectId);
-				}	
-			}
+			projectId = insertTable("project", projectFieldValueHash);
+			
+			Enumeration pcs = this.getChildTables( projectFieldValueHash, "projectContributor");
+			while (pcs.hasMoreElements())
+			{	
+				this.insertContributor( "projectContributor", (Hashtable) pcs.nextElement(), Projectcontributor.PROJECT_ID,  projectId);
+			}	
+
 			return projectId;
 		}
 
@@ -1756,20 +1855,18 @@ public class VegbankXMLUpload
 				return observationId;			
 			}
 			
+			observationId = getExtantPK(observationHash);
+			if ( observationId != 0 )
+			{
+				return observationId;
+			}
+			
 			//	Need to insert the plot and the project and get the FKs
 			Hashtable project = this.getFKChildTable(observationHash, Observation.PROJECT_ID, "project");
 			long projectId = this.insertProject(project);
 			
 			Hashtable plot = getFKChildTable(observationHash, Observation.PLOT_ID, "plot");
 			long plotId = insertPlot(plot);
-			
-			// Check for the obsaccessionnumber
-			observationId = this.getPKFromAccessionCode(observationHash, "observation"); 
-			if ( observationId != 0)
-			{
-				return observationId;
-			}
-
 
 			// Continue loading as normal
 			
@@ -1892,17 +1989,25 @@ public class VegbankXMLUpload
 
 		private long insertStratumMethod(Hashtable stratumMethod) throws SQLException
 		{
-			long stratumMethodId = insertTable("stratumMethod", stratumMethod);
+			long pKey = 0;
+			
+			pKey = getExtantPK(stratumMethod);
+			if ( pKey != 0 )
+			{
+				return pKey;
+			}
+			
+			pKey = insertTable("stratumMethod", stratumMethod);
 			// And the child stratumTypes
 			Enumeration stratumTypes =  getChildTables(stratumMethod, "stratumType");
 			while ( stratumTypes.hasMoreElements() )
 			{
 				Hashtable stratumType = (Hashtable) stratumTypes.nextElement();
-				addForeignKey(stratumType, Stratumtype.STRATUMMETHOD_ID, stratumMethodId);
+				addForeignKey(stratumType, Stratumtype.STRATUMMETHOD_ID, pKey);
 				long stratumTypeId = insertTable("stratumType", stratumType);
 			}
 			
-			return stratumMethodId;
+			return pKey;
 		}
 
 		/**
@@ -1921,7 +2026,14 @@ public class VegbankXMLUpload
 			Enumeration taxonObservations = getChildTables(observationHash, "taxonObservation");
 			while ( taxonObservations.hasMoreElements())
 			{
+				long taxonObservationId = 0;
 				Hashtable taxonObservation = (Hashtable) taxonObservations.nextElement();
+			
+				taxonObservationId = getExtantPK(taxonObservation);
+				if ( taxonObservationId != 0 )
+				{
+					continue;
+				}
 				
 				// Add PlantName 
 				Hashtable plantname = getChildTable(taxonObservation, "Plantname");
@@ -1931,14 +2043,21 @@ public class VegbankXMLUpload
 				addForeignKey(taxonObservation, Taxonobservation.OBSERVATION_ID, observationId);
 			
 				
-				long taxonObservationId = insertTable("taxonObservation", taxonObservation);
+				taxonObservationId = insertTable("taxonObservation", taxonObservation);
 				LogUtility.log("LoadTreeToDatabase: taxonObservationId: " + taxonObservationId );
 			
 				//  Add Taxonimportances
 				Enumeration taxonImportances = getChildTables(taxonObservation, "taxonImportance");
 				while ( taxonImportances.hasMoreElements())
 				{
+					long taxonImportanceId = 0;
 					Hashtable taxonImportance = (Hashtable) taxonImportances.nextElement();
+					
+					taxonImportanceId = getExtantPK(taxonImportance);
+					if ( taxonImportanceId != 0 )
+					{
+						continue;
+					}
 					
 					// Get the stratum_id if there is one
 					Hashtable stratum = getFKChildTable(taxonImportance, Taxonimportance.STRATUM_ID, "stratum");					
@@ -1949,31 +2068,46 @@ public class VegbankXMLUpload
 					}
 	
 					addForeignKey(taxonImportance, Taxonimportance.TAXONOBSERVATION_ID, taxonObservationId);
-					long taxonImportanceId = insertTable("taxonImportance", taxonImportance );
+					taxonImportanceId = insertTable("taxonImportance", taxonImportance );
 
 					// Add  StemCount
 					Enumeration stemCounts = getChildTables(taxonImportance, "stemCount");
 					while ( stemCounts.hasMoreElements())
 					{
+						long stemCountId = 0;
 						Hashtable stemCount = (Hashtable) stemCounts.nextElement();
 						
+						stemCountId = getExtantPK(stemCount);
+						if ( stemCountId != 0 )
+						{
+							continue;
+						}
+						
 						addForeignKey(stemCount, Stemcount.TAXONIMPORTANCE_ID, taxonImportanceId);
-						long stemCountId = insertTable("stemCount", stemCount);
+						stemCountId = insertTable("stemCount", stemCount);
 						
 						// Add StemLocation
 						Enumeration stemLocations = getChildTables(stemCount, "stemLocation");
 						while ( stemLocations.hasMoreElements())
 						{
+							long stemLocationId = 0;
 							Hashtable stemLocation = (Hashtable) stemLocations.nextElement();
+							stemLocationId = getExtantPK(stemLocation);
+							if ( stemLocationId != 0 )
+							{
+								continue;
+							}
+							
 							addForeignKey(stemLocation, "STEMCOUNT_ID", stemCountId);
 							
-							long stemLocationId = insertTable("stemLocation", stemLocation);
+							stemLocationId = insertTable("stemLocation", stemLocation);
 							
 							// Add TaxonInterpretation
 							Enumeration taxonInterpretations = getChildTables(taxonObservation, "taxonInterpretation");
 							while ( taxonInterpretations.hasMoreElements())
 							{
 								Hashtable taxonInterpretation = (Hashtable) taxonInterpretations.nextElement();
+								
 								insertTaxonInterpretation(
 									taxonObservationId,
 									stemLocationId, 
@@ -2001,6 +2135,13 @@ public class VegbankXMLUpload
 			long stemLocationId,
 			Hashtable taxonInterpretation) throws SQLException
 		{
+			long pKey = 0;
+			pKey = getExtantPK(taxonInterpretation);
+			if ( pKey != 0 )
+			{
+				return;
+			}
+			
 			// Get the party
 			Hashtable party =  this.getFKChildTable(taxonInterpretation, Taxoninterpretation.PARTY_ID, "party");
 			long partyId = insertParty(party);
@@ -2031,14 +2172,14 @@ public class VegbankXMLUpload
 			addForeignKey(taxonInterpretation, Taxoninterpretation.COLLECTOR_ID, collectorId);
 			//addForeignKey(taxonInterpretation, "stemLocation_ID", stemLocationId);
 			
-			long taxonInterpretationId = this.insertTable("taxonInterpretation", taxonInterpretation);
+			pKey = this.insertTable("taxonInterpretation", taxonInterpretation);
 			
 			// Add taxonAlt
 			Enumeration taxonAlts = getChildTables(taxonInterpretation, "taxonAlt");
 			while ( taxonAlts.hasMoreElements())
 			{
 				Hashtable taxonAlt = (Hashtable) taxonAlts.nextElement();
-				addForeignKey(taxonAlt, Taxonalt.TAXONINTERPRETATION_ID, taxonInterpretationId);
+				addForeignKey(taxonAlt, Taxonalt.TAXONINTERPRETATION_ID, pKey);
 				
 				Hashtable altPlantConcept = this.getFKChildTable(taxonAlt, Taxonalt.PLANTCONCEPT_ID, "plantConcept");
 				long altPlantConceptId = insertPlantConcept(altPlantConcept);
@@ -2063,10 +2204,9 @@ public class VegbankXMLUpload
 				return pKey;			
 			}
 			
-			pKey = this.getPKFromAccessionCode(plantConcept, "plantConcept"); 
-			if ( pKey != 0)
+			pKey = getExtantPK(plantConcept);
+			if ( pKey != 0 )
 			{
-				// As expected
 				return pKey;
 			}
 			
@@ -2117,11 +2257,9 @@ public class VegbankXMLUpload
 			}
 			
 			//Utility.prettyPrintHash(commConcept);
-			
-			pKey = this.getPKFromAccessionCode(commConcept, "commConcept"); 
-			if ( pKey != 0)
+			pKey = getExtantPK(commConcept);
+			if ( pKey != 0 )
 			{
-				// As expected
 				return pKey;
 			}
 			
@@ -2166,6 +2304,11 @@ public class VegbankXMLUpload
 		
 			// Handle Nulls
 			if ( commStatus == null)
+			{
+				return pKey;
+			}
+			pKey = getExtantPK(commStatus);
+			if ( pKey != 0 )
 			{
 				return pKey;
 			}
@@ -2214,6 +2357,12 @@ public class VegbankXMLUpload
 		
 		private void insertCommUsage(Hashtable commUsage) throws SQLException
 		{
+			long pKey = getExtantPK(commUsage);
+			if ( pKey != 0 )
+			{
+				return;
+			}
+			
 			// Add commName 
 			Hashtable commName = this.getFKChildTable(commUsage, Commusage.COMMNAME_ID, "commName");
 			long commNameId = insertTable("commName", commName);
@@ -2225,7 +2374,7 @@ public class VegbankXMLUpload
 			addForeignKey(commUsage,  Commusage.COMMNAME_ID, commNameId);
 			addForeignKey(commUsage, Commusage.PARTY_ID, commPartyId);
 			
-			insertTable( "commUsage", commUsage);
+			pKey =insertTable( "commUsage", commUsage);
 		}
 		
 		/**
@@ -2239,6 +2388,12 @@ public class VegbankXMLUpload
 			{
 				return pKey;
 			}
+			pKey = getExtantPK(commParty);
+			if ( pKey != 0 )
+			{
+				return pKey;
+			}
+			
 			
 			pKey = this.insertPartyBase(commParty, "commParty");
 			
@@ -2247,6 +2402,12 @@ public class VegbankXMLUpload
 
 		private void insertPlantUsage(Hashtable plantUsage) throws SQLException
 		{
+			long pKey = getExtantPK(plantUsage);
+			if ( pKey != 0 )
+			{
+				return;
+			}
+			
 			// Add plantName 
 			Hashtable plantName = this.getFKChildTable(plantUsage, Plantusage.PLANTNAME_ID, "plantName");
 			long plantNameId = insertTable("plantName", plantName);
@@ -2275,6 +2436,11 @@ public class VegbankXMLUpload
 				return pKey;
 			}
 
+			pKey = getExtantPK(plantStatus);
+			if ( pKey != 0 )
+			{
+				return pKey;
+			}
 			//Utility.prettyPrintHash(plantStatus);
 			
 			// Add plantParent
@@ -2340,6 +2506,13 @@ public class VegbankXMLUpload
 		 */
 		private long insertStratum(Hashtable stratum, long stratumMethodId, long observationId) throws SQLException
 		{
+			long pKey = 0;
+			pKey = getExtantPK(stratum);
+			if ( pKey != 0 )
+			{
+				return pKey;
+			}
+			
 			Hashtable stratumType = getFKChildTable(stratum, Stratum.STRATUMTYPE_ID, "stratumType");
 			
 			addForeignKey(stratumType, Stratumtype.STRATUMMETHOD_ID, stratumMethodId);
@@ -2348,9 +2521,9 @@ public class VegbankXMLUpload
 			
 			addForeignKey(stratum, Stratum.OBSERVATION_ID, observationId);
 			addForeignKey(stratum, Stratum.STRATUMTYPE_ID, stratumTypeId);
-			long stratumId = insertTable("stratum", stratum);
+			pKey = insertTable("stratum", stratum);
 			
-			return stratumId;
+			return pKey;
 		}
 
 		/**
@@ -2365,6 +2538,12 @@ public class VegbankXMLUpload
 			{
 				return pKey;
 			}
+			pKey = getExtantPK(commIntepretation);
+			if ( pKey != 0 )
+			{
+				return pKey;
+			}
+				
 
 			Hashtable commConcept = this.getFKChildTable(commIntepretation, Comminterpretation.COMMCONCEPT_ID, "commConcept");
 			long commConceptId = this.insertCommConcept(commConcept);
@@ -2375,6 +2554,24 @@ public class VegbankXMLUpload
 			addForeignKey(commIntepretation, Comminterpretation.COMMAUTHORITY_ID, commAuthorityId);
 			
 			return insertTable("commInterpretation", commIntepretation);
+		}
+
+		/**
+		 * @param commIntepretation
+		 * @return
+		 */
+		private long getExtantPK(Hashtable hashtable)
+		{
+			long pKey = 0;
+			String tableName = (String) hashtable.get(TABLENAME);
+			if ( tableName == null )
+			{
+				return pKey;
+			}
+			
+			pKey = this.getPKFromAccessionCode(hashtable, tableName);
+			
+			return pKey;
 		}
 	}
 

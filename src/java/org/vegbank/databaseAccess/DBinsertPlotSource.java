@@ -7,8 +7,8 @@
 * Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-11-25 19:43:35 $'
-*   '$Revision: 1.8 $'
+*   '$Date: 2004-02-27 21:39:57 $'
+*   '$Revision: 1.9 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -610,7 +610,7 @@ public class DBinsertPlotSource {
 			// close the connections 
 			System.out.println("Returning the DBConnection to the pool");
 			//Return dbconnection too pool
-			DBConnectionPool.returnDBConnection(conn, conn.getCheckOutSerialNumber());
+			DBConnectionPool.returnDBConnection(conn);
 		}
 		else
 		{
@@ -788,7 +788,7 @@ public class DBinsertPlotSource {
 				//this.testSimpleQuery("about to finish");
 				System.out.println("Returning the DBConnection to the pool");
 				//Return dbconnection too pool
-				DBConnectionPool.returnDBConnection(conn, conn.getCheckOutSerialNumber());;
+				DBConnectionPool.returnDBConnection(conn);
 			}
 			catch (Exception e)
 			{

@@ -1,10 +1,11 @@
-/* *	'$RCSfile: PlotQueryForm.java,v $'
+/*
+ * '$RCSfile: PlotQueryForm.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-12-05 23:14:22 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2004-02-27 21:39:57 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +28,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import org.apache.struts.action.ActionForm;
@@ -39,7 +39,6 @@ import org.vegbank.common.model.Project;
 import org.vegbank.common.model.Stratummethod;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.LogUtility;
-import org.vegbank.common.utility.Utility;
 
 /**
  * @author farrell
@@ -1281,6 +1280,5 @@ public class PlotQueryForm extends ActionForm
 			LogUtility.log("org.vegbank.ui.struts.PlotQueryForm:: " +
 				"loadDataConstraints() ERROR: " + e1.getMessage(), e1);
 		}
-	
 	}
 }

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-01-18 20:47:47 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-02-27 21:39:57 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,18 +45,23 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.DynaActionForm;
 
+import org.vegbank.common.Constants;
 import org.vegbank.common.command.GenericCommand;
 import org.vegbank.common.command.RetrieveVBModelBean;
+import org.vegbank.common.model.VBModelBean;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.VBObjectUtils;
 
 public class GenericDispatcherAction extends Action
 {
 	// TODO: Make these properties
 	private static final String genericCommandName = "GenericCommand";
 	private static final String commandLocation = "org.vegbank.common.command.";
-	private static final String jspLocation = "/forms/";  
+	private static final String jspLocation = "/forms/";
+	private static final String ROOT_ENTITY = "rootEntity";  
 	
 	public ActionForward execute(
 		ActionMapping mapping,
@@ -64,13 +69,15 @@ public class GenericDispatcherAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
+		LogUtility.log("GenericDispatcherAction: begin");
+		DynaActionForm dynaForm = (DynaActionForm) form; 
+		
 		ActionErrors errors = new ActionErrors();
 		String command = request.getParameter("command");
 		String jsp = request.getParameter("jsp");
-		String entityName = request.getParameter("entityName");
 		String expandEntity = request.getParameter("expandEntity");
 		String contractEntity = request.getParameter("contractEntity");
-		
+		String accessionCode = (String)dynaForm.get("accessionCode");
 		try
 		{
 			System.out.println( "GD: command == " + command );
@@ -83,7 +90,10 @@ public class GenericDispatcherAction extends Action
 			else if ( command.equals("RetrieveVBModelBean")) 
 			{
 				LogUtility.log( "GD: executing new RetriveVBModelBean cmd" );
-				new RetrieveVBModelBean().execute(request, response);
+				VBModelBean bean = new RetrieveVBModelBean().execute(accessionCode);
+				String rootEntity = VBObjectUtils.getUnQualifiedName( bean.getClass().getName() );
+				LogUtility.log("Putting genericBean in request " + bean);
+				request.setAttribute("genericBean",  bean);
 				LogUtility.log( "GD: done executing RetriveVBModelBean" );
 				
 				//Testing out
@@ -109,6 +119,9 @@ public class GenericDispatcherAction extends Action
 				
 				// put in  session
 				session.setAttribute("DisplayProps", ess);
+				LogUtility.log("Setting rootEntity = " + rootEntity);
+				request.setAttribute(ROOT_ENTITY,rootEntity);
+				request.setAttribute(Constants.ACCESSIONCODENAME,accessionCode);
 			}
 			else
 			{
@@ -128,6 +141,7 @@ public class GenericDispatcherAction extends Action
 			LogUtility.log( "GD: fwd to" + jspLocation + jsp );
 			RequestDispatcher dispatcher = request.getRequestDispatcher(jspLocation + jsp);
 			LogUtility.log( "GD: got dispatcher");
+			LogUtility.log( "rootEntity = " + request.getAttribute(ROOT_ENTITY) );
 			dispatcher.forward(request, response);
 		}
 		catch (Exception e)

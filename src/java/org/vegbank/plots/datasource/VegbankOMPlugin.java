@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-19 17:40:27 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2004-02-27 21:39:57 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,9 +73,12 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 			DBModelBeanReader mbReader = new DBModelBeanReader();
 			// TODO:  Get a single observation_id for this plot  
 			observation =
-				mbReader.getObservationBeanTree(accessionCode);
-				
+				(Observation) mbReader.getVBModelBean(accessionCode);
+			
+			mbReader.releaseConnection();
+			
 			plot = observation.getPlotobject();
+			
 		}
 		catch (Exception e)
 		{
@@ -1565,13 +1568,12 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		{
 			return taxaStrataCover;
 		}
-		// FIXME: Use taxonImportance instead
 		Taxonimportance ti = (Taxonimportance) taxonImportances.get(stratumName);
 		if ( ti != null )
 		{
-			return taxaStrataCover;
+			return ti.getCover();
 		}
-		return ti.getCover();
+		return taxaStrataCover;
 	}
 
 	/* (non-Javadoc)

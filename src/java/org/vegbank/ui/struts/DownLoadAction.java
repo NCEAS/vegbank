@@ -18,7 +18,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.DynaActionForm;
 import org.vegbank.common.model.Observation;
-import org.vegbank.common.model.Plot;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.XMLUtil;
@@ -32,9 +31,9 @@ import com.Ostermiller.util.LineEnds;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2004-02-24 01:33:45 $'
- *	'$Revision: 1.7 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2004-02-27 21:39:57 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -249,9 +248,10 @@ public class DownLoadAction extends Action
 		for ( int i = 0; i < plotsToDownLoad.length ; i++ )
 		{
 			LogUtility.log("DownLoadAction : DownLoading " + plotsToDownLoad[i]);
-			Observation observation = dbmbReader.getObservationBeanTree( plotsToDownLoad[i]  );
+			Observation observation = (Observation) dbmbReader.getVBModelBean( plotsToDownLoad[i]  );
 			plotObsersevations.add(observation);
 		}
+		dbmbReader.releaseConnection();
 		return plotObsersevations;
 	}
 	

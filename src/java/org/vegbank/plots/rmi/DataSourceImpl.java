@@ -37,8 +37,8 @@ import org.vegbank.databaseAccess.*;
  *	
  * <br> <br>
  *  '$Author: farrell $'
- *  '$Date: 2003-10-27 19:49:02 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2004-02-27 21:39:57 $'
+ *  '$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,8 +88,8 @@ public class DataSourceImpl extends UnicastRemoteObject
 				// test the vegbank systrem
 				System.out.println("DataSourceImpl >  testing the VegBank services:  " );
 				DatabaseUtility util = new DatabaseUtility();
-				boolean success = util.testVegBankConnections();
-				System.out.println("DataSourceImpl >  VegBank services passed:  " + success );
+				//boolean success = util.testVegBankConnections();
+				System.out.println("DataSourceImpl >  VegBank services passed:  " + " DID NOT RUN IT" );
 				
 				rb = ResourceBundle.getBundle("rmidatasource");
 				String mdbFile = rb.getString("access_file");
