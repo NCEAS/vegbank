@@ -5,13 +5,17 @@
 #   Release: @release@
 #	
 # '$Author: harris $'
-# '$Date: 2001-10-20 00:37:05 $'
-# '$Revision: 1.1 $'
+# '$Date: 2001-10-20 18:04:01 $'
+# '$Revision: 1.2 $'
 #
 
 
+-- THESE ARE SIMPLE INSTRUCTIONS FOR LOADING A SIMPLE
+-- DATA SET, IN THE FUTURE MORE COMPREHENSIVE DOCUMENTATION
+-- WILL BE DISTRIBUTED WITH THE SOFTWARE
 
-After installing the software:
+
+After installing the software using the vegclient installer:
 
 1] go to the installation directory and start the the application
    by clicking the vegclient.exe (or running the vegclient.sh on a 
@@ -33,4 +37,37 @@ After installing the software:
    the 'peet_project.xml' file.  The frame may hang for a sec while the file is loaded to memory
    but then will populate the left TextArea.
 
-7] choose the 
+7] choose the plots that should be loaded to the database by clicking on the plot names
+   or the whole project can be loaded by selecting the 'Select Entire Project' radio button
+	 at the bottom of the frame.  
+
+8] load the local database by mashing the 'Load Local DB' button
+
+9] the data may be uploaded to the central server too by hitting the 'Upload Central DB'
+   button -- at this point the data are stored on the central server and are not actually 
+	 loaded to the central database
+
+10] now that the data are loaded into the local database the database 'views' must be generated,
+    in the future this will be done automatically, but at this point the user must do this explicitly
+		by going to the 'Utilities' on the main frame and choose the 'database tools' and then go to the 
+		'Database Tables' sub-panel and hit the 'Create Summary Tables' button -- this may take a while
+		depending on the number of plots loaded to the database.
+
+11] now that there are data in the loacal database the data may be queried by going to the main window 
+   and choose 'Extended Veg Database Query' from the 'Data Query' menu.  Try a query where the
+
+	 Query Criteria='Plot Code'
+	 Query Operator='like'
+	 Query Token='%'
+
+	 make sure to have the 'Local Database' radio button selected at the top of the frame
+
+	 hit the 'Append Query' button once to register the query with the database (multiple 
+	 queries can be appended in order to develop a nested query) then issue the query by 
+	 hitting the 'Issue Query' button.  
+
+12] If there is a valid result set, a window should pop-up asking the user to select the attributes
+   that should be viewed in the summary viewer.  Choose the attributes that are desired and then hit 
+	 the view data and a summary of the selected data should be displayed.
+
+13] close the program by closing the main window.
