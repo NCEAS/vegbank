@@ -104,7 +104,7 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 </table>
   <!-- Search box -->
 	<br>
-	<table align="center" cellpadding="0" cellspacing="0" border="0" bgcolor="#EFEFEF">
+	<table align="center" cellpadding="0" cellspacing="0" border="0" bgcolor="#EEEEEE">
 	<tr>
     	<td><img src="@image_server@uplt3.gif"/></td>
 		<td></td>
