@@ -34,8 +34,8 @@ import servlet.util.*;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-01-16 22:19:13 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2002-04-09 21:57:38 $'
+ *  '$Revision: 1.3 $'
  * 
  */
 
@@ -92,7 +92,7 @@ public class QueryBuilderServlet extends HttpServlet
 				if ( parameterHash(request).get("queryParameterType").toString().equals("append") )
 				{
 					out.println( appendQueryAttributes( parameterHash(request)).toString() );
-					System.out.println("query vector: "+queryVector.toString() );
+					System.out.println("QueryBuilderServlet > query vector: "+queryVector.toString() );
 					//reprint the client html with the updated aggregate query
 					// in the text area
 					out.println( updateQueryClient(queryVector, requestDataFormatType, clientType ) );
@@ -100,7 +100,7 @@ public class QueryBuilderServlet extends HttpServlet
 				//else run the query
 				else if (parameterHash(request).get("queryParameterType").toString().equals("commit"))
 				{
-					System.out.println("issueing the query to the DataRequestServlet");
+					System.out.println("QueryBuilderServlet >  issueing the query to the DataRequestServlet");
 					//pass the query vector to the DataRequestServlet
 					out.println( submitExtendedQuery(queryVector, requestDataFormatType, clientType) );
 					//make a new occurence of the queryVector
@@ -109,24 +109,26 @@ public class QueryBuilderServlet extends HttpServlet
 			}
 			else
 			{
-				System.out.println("didn't pass the query parameter type");
+				System.out.println("QueryBuilderServlet > didn't pass the query parameter type");
 			}
-		//	out.println(parameterHash(request).toString());
+
 		}
 		catch( Exception e ) 
 		{
-			System.out.println("** failed in: DataRequestServlet.main "
-			+" first try - reading parameters "
-			+e.getMessage());
+			System.out.println("Exception QueryBuilderServlet > " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
 
 
-	 /**
-   * method to pass the extended query to the DataRequestServlet
-   */
-  private String submitExtendedQuery (Vector queryVector, 
+ /**
+  * method to pass the extended query to the DataRequestServlet
+	* and get the results which are to be passed back to the client
+	* browser
+	*
+  */
+  private String submitExtendedQuery(Vector queryVector, 
 		String requestDataFormatType, String clientType)
   {
     String htmlResults = "test";
@@ -145,81 +147,42 @@ public class QueryBuilderServlet extends HttpServlet
           String criteria = queryInstanceHash.get("criteria").toString();
           String operator = queryInstanceHash.get("operator").toString();
           String value = queryInstanceHash.get("value").toString();
+					
+					// fix the value if the user uses the sql wildcard use the 
+					// escape charaters for the percent sign
+					if ( value.startsWith("%") || value.indexOf("%") >= 1 )
+					{
+						value = value.replace('%', ' ').trim();
+						value = "%25"+value+"%25";
+					}
+					
           sb.append("operator="+operator+"&criteria="+criteria+"&value="+value);
       }
       //connect to the DataRequestServlet
 			//String uri = "http://dev.nceas.ucsb.edu/harris/servlet/DataRequestServlet"
 			String uri = DataRequestServletURL+"/"+sb.toString().trim();
-			System.out.println("OUT PARAMETERS: "+uri);
+			System.out.println("QueryBuilderServlet > sending http: " + uri);
       int port=80;
       String requestType="POST";
       htmlResults = gurl.requestURL(uri);
-    }
+    
+		
+		}
     catch( Exception e )
     {
-      System.out.println("** failed :  "
-      +e.getMessage());
+      System.out.println("Exception :  " + e.getMessage());
+			e.printStackTrace();
     }
     return(htmlResults);
   }
 
 
-	
-	
-	/**
-	 * method to pass the extended query to the DataRequestServlet
-	 * using the GetUrl Class 
-	 *
-	 */
-
-	 /*
-	 private String submitExtendedQuery (Vector queryVector) 
-	{
-		String htmlResults = "test";
-		try 
-		{
-			//put these into the properties file
-			String servlet = "/harris/servlet/DataRequestServlet";
-			String protocol = "http://";
-	  	String host = "dev.nceas.ucsb.edu";
-		
-			//set the query into the properties
-			Properties parameters = new Properties();
-			parameters.setProperty("requestDataType", "vegPlot");
-			parameters.setProperty("queryType", "extended");
-			parameters.setProperty("resultType", "summary");
-			for (int i=0; i<queryVector.size(); i++) 
-			{
-				Hashtable queryInstanceHash = (Hashtable)queryVector.elementAt(i);
-				parameters.setProperty("criteria", queryInstanceHash.get("criteria").toString() );
-				parameters.setProperty("operator", queryInstanceHash.get("operator").toString());
-				parameters.setProperty("value", queryInstanceHash.get("value").toString());
-			}
-		
-			
-			//request the data from the servlet and print the results to the system	
-			htmlResults = gurl.requestURL(servlet, protocol, host, parameters);
-			System.out.println("THE PARAMETERS BEING PASSED TO DATA REQUEST SERVLET: "
-			+parameters.toString() );
-			//System.out.println(htmlResults);
-		
-		}
-		catch( Exception e ) 
-		{
-			System.out.println("** failed :  "
-			+e.getMessage());
-		}
-		return(htmlResults);
-	}
-	
+ /**
+	* method to re-stream the client html
+	* with the textarea showing the aggregated
+	* query updated
 	*/
-	
-	/**
-	 * method to re-stream the client html
-	 * with the textarea showing the aggregated
-	 * query updated
-	 */
-	private String updateQueryClient (Vector aggregateQuery, 
+	private String updateQueryClient(Vector aggregateQuery, 
 	String requestDataFormatType,  String clientType) 
 	{
 		String clientHtml = null;
@@ -250,27 +213,26 @@ public class QueryBuilderServlet extends HttpServlet
 		}
 		catch( Exception e ) 
 		{
-			System.out.println("** failed :  "
-			+e.getMessage());
+			System.out.println("Exception :  " + e.getMessage());
+			e.printStackTrace();
 		}
 		return(sb.toString() );
 	}
-	
-	
 	
 	
 	/**
 	 * method to stick the parameters from the client 
 	 * into a hashtable and then pass it back to the 
 	 * calling method
+	 * @param request -- the http request
 	 */
-	private Hashtable parameterHash (HttpServletRequest request) 
+	private Hashtable parameterHash(HttpServletRequest request) 
 	{
 		Hashtable params = new Hashtable();
 		try 
 		{
 			Enumeration enum =request.getParameterNames();
-			System.out.println("QueryBuilderServlet contacted");
+			//System.out.println("QueryBuilderServlet > contacted");
  			while (enum.hasMoreElements()) 
 			{
 				String name = (String) enum.nextElement();
@@ -286,9 +248,8 @@ public class QueryBuilderServlet extends HttpServlet
 		}
 		catch( Exception e ) 
 		{
-			System.out.println("** failed in:  "
-			+" first try - reading parameters "
-			+e.getMessage());
+			System.out.println("Exception:  " + e.getMessage());
+			e.printStackTrace();
 		}
 		return(params);
 	}
@@ -324,13 +285,12 @@ public class QueryBuilderServlet extends HttpServlet
 			}
 			else 
 			{
-				System.out.println("did not find the correcte parameters");
+				System.out.println("QueryBuilderServlet > did not find the correct params");
 			}
 		}
 		catch( Exception e ) 
 		{
-			System.out.println("** failed in:  "
-			+e.getMessage());
+			System.out.println("Exception  " + e.getMessage());
 		}
 		return(queryVector);
 	}
