@@ -6,13 +6,20 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-02-18 22:48:51 $'
-  *     '$Revision: 1.4 $'
+  *     '$Date: 2003-03-08 00:24:23 $'
+  *     '$Revision: 1.5 $'
 --> 
 <project name="vegclass" default="compile" basedir=".">
 
 
   <target name="prepare">
+    <property environment="env" />
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="reports.dir" value="${build.dir}/reports"/>
+    <property name="reports.test.dir" value="${reports.dir}/testreports"/>
+    <property name="ant.style.dir" location="${env.ANT_HOME}/etc" />
+    <property name="web.docroot" location="${env.TOMCAT_HOME}/webapps" />
+        
   </target>
     
   <target name="jar" depends="prepare"
@@ -26,8 +33,9 @@
   </target>
 
   <target name="run-tests" description="==> Run all the tests availible">
-    <!-- <ant dir="common" target="test" inheritAll="false"/> FIXME: unit tests not in cvs -->
-    <ant dir="veg_plot" target="run-tests" inheritAll="false"/>
+    <ant dir="veg_plot" target="run-tests" inheritAll="false"/> 
+    <ant dir="common" target="test" inheritAll="false"/>
+    <ant dir="veg_taxa" target="test" inheritAll="false"/>
   </target>
   
   <target name="deploy" depends="jar"
@@ -46,5 +54,21 @@
     <ant dir="veg_community" target="clean" inheritAll="false"/>
     <ant dir="veg_taxa" target="clean" inheritAll="false"/>
   </target>
+
+  <target name="dist-reports" 
+          depends="prepare"
+          description="=> Generate htmls from generated reports and distributes to web">
+
+		<!-- Create a report from the junit output -->
+		<junitreport todir="${reports.test.dir}">
+	  		<fileset dir="${reports.test.dir}">
+	  			<include name="TEST-*.xml"/>
+			</fileset>
+	  		<report format="frames"
+				        todir="${web.docroot}/vegbank/dev/reports/junit"
+	              styledir="${ant.style.dir}"/>
+	  	</junitreport>
+	
+	</target>
 
 </project>
