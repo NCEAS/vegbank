@@ -67,6 +67,7 @@ private String servletDir = null; // the absolute path to the servlet
 // community related attributes
 // commmunity name already defined above
 private String communityLevel = null;
+public servletUtility su = new servletUtility();
 
 /** Handle "POST" method requests from HTTP clients */
 public void doPost(HttpServletRequest request,
@@ -82,40 +83,17 @@ public void doGet(HttpServletRequest request,
 	HttpServletResponse response)
 	throws IOException, ServletException  
 	{
-		Enumeration enum =request.getParameterNames();
-		Hashtable params = new Hashtable();
-
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 
-
-		/**
- 		 * The first try block is for reading the parameters into 
-		 * a hash table and then 
- 		 * assigning the parameters to their respective variables
- 		 */
 		try 
 		{
- 			while (enum.hasMoreElements()) 
-			{
-				String name = (String) enum.nextElement();
-				String values[] = request.getParameterValues(name);
-				if (values != null) 
-				{
-					for (int i=0; i<values.length; i++) 
-					{
-						//out.println(name +" ("+ i + "): " +values[i]+"; <br>");
-						params.put(name,values[i]);
-					}
-				}
- 			}
-
-			//is this request being made using multiple query elements
- 			if ( (String)params.get("compoundQuery") != null )
- 			{
- 				compoundQuery = (String)params.get("compoundQuery");
- 				compoundQuery.trim();
- 			}
+			//enumeration is needed for those
+			//cases where there are multiple values 
+			// for a given parameter
+			Enumeration enum =request.getParameterNames();
+			Hashtable params = new Hashtable();
+			params = su.parameterHash(request);
  
  			//how much data is being requested -- summary set, full data set etc
  			if ( (String)params.get("resultType") != null )
@@ -130,8 +108,9 @@ public void doGet(HttpServletRequest request,
  			//get the variables privately held in the properties file
  			clientLog=(rb.getString("requestparams.clientLog"));
 			servletDir = rb.getString("requestparams.servletDir");
-			
+
  			remoteHost=request.getRemoteHost();
+			System.out.println("accessed by: "+remoteHost);
 			
 			//log the use of the servlet by the client
 			updateClentLog (clientLog, remoteHost);
@@ -151,7 +130,7 @@ public void doGet(HttpServletRequest request,
 			}
 			else if ( determineQueryType(params).equals("extended") )
 			{
-				System.out.println("NOT YET IMPLEMENTED");
+				handleExtendedQuery(enum, params, out, response, request);
 			}
 		}//end try
 		catch( Exception e ) 
@@ -187,6 +166,60 @@ public void doGet(HttpServletRequest request,
 		return(queryType);
 	}
 
+	
+	/**
+	 * method to handle extended queries hich are those queries 
+	 * whose parameters are equal to criteria operator and value
+	 * and are being requested by a more complex client than
+	 * the simple html form known as plot query --
+	 * @param
+	 * @param
+	 */	 
+	private void handleExtendedQuery(Enumeration enum,
+	Hashtable param, PrintWriter out,	HttpServletResponse response, 
+	HttpServletRequest request) 
+	{
+		Hashtable extendedParamsHash = new Hashtable();
+		try
+		{
+			//validate that there are the correct type and number
+			//of parameters being passed to thie method
+			if ( (param.containsKey("criteria") == false ) || ( param.containsKey("operator")
+				== false )|| ( param.containsKey("value") == false ))
+			{
+				System.out.println("did not get the correct parameters to handleExtendedQuery");	
+			}
+			//else compose and issue the query to the database access module
+			else
+			{
+				while (enum.hasMoreElements()) 
+				{
+					//process the criteria data
+					String name = (String)enum.nextElement();
+					if ( name.equals("criteria")  || name.equals("operator") || name.equals("value"))
+					{
+						Vector  extendedValsVector = new Vector();
+						String values[] = request.getParameterValues(name);
+						for (int i=0; i<values.length; i++) 
+						{
+							extendedValsVector.addElement( ( values[i]) );
+						}
+						extendedParamsHash.put( name, extendedValsVector );
+					}
+				}
+				//compose the query
+				composeExtendedQuery ( extendedParamsHash ) ;
+				
+			}
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("** failed in: DataRequestServlet.main "
+			+" first try - reading parameters "
+			+e.getMessage());
+		}
+	}
+
 
 /**
  * Handles simple queries which are those queries where there is only one 
@@ -199,11 +232,9 @@ public void doGet(HttpServletRequest request,
  * @param out - the output stream to the client
  * @param response - the response object linked to the client 
  */
- 
 	private void handleSimpleQuery (Hashtable params, PrintWriter out, 
 	HttpServletResponse response) 
 	{
-
 		// Get all possible parameters from the hash 	
  		taxonName = (String)params.get("taxon");
  		communityName = (String)params.get("community");
@@ -218,7 +249,6 @@ public void doGet(HttpServletRequest request,
  		plotId = (String)params.get("plotId");
  		resultType = (String)params.get("resultType");
  		requestDataType = (String)params.get("requestDataType");
- 
 		//attempt to recognize the request as a query for communities 
 		if (requestDataType.trim().equals("community")) 
 		{  
@@ -228,8 +258,6 @@ public void doGet(HttpServletRequest request,
 			issueQuery("simpleCommunityQuery");
 			out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
 		}
-
-
 		// Cheat here - to recognise the single plot query to return entire plot */
 		else if (plotId != null && resultType.equals("full") ) 
 		{
@@ -239,8 +267,6 @@ public void doGet(HttpServletRequest request,
 			composeSinglePlotQuery(plotId, resultType, outFile);
 			issueQuery("simpleQuery");
 		}
-
- 
 		// this is where the query element checking is done for the vegetation plots
 		// the way that this is structured currently the user is not forced to choose a
 		//single query element
@@ -253,7 +279,6 @@ public void doGet(HttpServletRequest request,
 			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 		}
- 
  		//look for elevation
 		else if ( minElevation != null  && minElevation.length()>0 ) 
 		{  
@@ -263,7 +288,6 @@ public void doGet(HttpServletRequest request,
  			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 		}
- 
 		//look for state
 		else if ( state != null  && state.length()>0 ) 
 		{  
@@ -273,7 +297,6 @@ public void doGet(HttpServletRequest request,
 			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 		}
-
 		//look for the community name
 		else if ( communityName != null  && communityName.length()>0 ) 
 		{  
@@ -283,7 +306,6 @@ public void doGet(HttpServletRequest request,
  			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 		}
-
 		//look for the surface geology option
 		else if ( surfGeo != null  && surfGeo.length()>0 ) 
 		{  
@@ -293,10 +315,8 @@ public void doGet(HttpServletRequest request,
 			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 		}
-
 		//if there are results returned to the servlet from the database in the form 
 		//of a file returned then grab the summary viewer then let the user know
-
 		if (queryOutputNum>=1) 
 		{
 			System.out.println("result sets: "+queryOutputNum);
@@ -311,7 +331,6 @@ public void doGet(HttpServletRequest request,
 			+"return to query page</a><b>&#183;</b>"); //put in rb
 		}
 	}
-
 
 
 
@@ -420,8 +439,8 @@ public void doGet(HttpServletRequest request,
  * @param remoteHost - the name of the remote host using this client
  * 
  */
-private void updateClentLog (String clientLog, String remoteHost) {
- 
+private void updateClentLog (String clientLog, String remoteHost) 
+{ 
  try 
  {
  		PrintStream clientLogger = new PrintStream(new FileOutputStream(clientLog, true));
@@ -472,7 +491,7 @@ private void updateClentLog (String clientLog, String remoteHost) {
  			{
 				String queryElement = (String)paramlist.nextElement();
    			String elementValue  = (String)params.get(queryElement);
-		
+				//System.out.println("paramter passed to DataRequestServlet: "+queryElement);
 				//print the query elements to the browser
 				out.println("<tr bgcolor=dddddd> <td><b> " + queryElement +" </b></td> "
 				+" <td><i> "+ elementValue +" </i></td> </tr>");
@@ -531,6 +550,83 @@ private void updateClentLog (String clientLog, String remoteHost) {
 			e.getMessage());
 		}
 	}
+
+	
+/**
+ *  Method to compose and print to a file an xml document that can be passed to
+ *  the dbAccess class to perform a query on a vegetation database this 
+ * 	particular method is for extended queries, those queries comprised of
+ * 	a series of criteria, values and operators;
+ *
+ * @param
+ * @param
+ */
+	private String composeExtendedQuery ( Hashtable extendedParamsHash ) 
+	{
+		
+		try 
+		{
+			//set up the output query file called query.xml	using append mode to build  
+			PrintStream outFile  = new PrintStream(new FileOutputStream(
+			servletDir+"query.xml", false)); 
+			
+			StringBuffer sb = new StringBuffer();
+			sb.append("<?xml version=\"1.0\"?> \n");
+			sb.append("<dbQuery> \n");
+			sb.append(" <extendedQuery> \n");
+			//we know that the following is true
+			if (extendedParamsHash.containsKey("criteria")==true)
+			{
+				//then must have all these
+				Vector criteriaVec = (Vector)extendedParamsHash.get("criteria");
+				Vector operatorVec = (Vector)extendedParamsHash.get("operator");
+				Vector valueVec = (Vector)extendedParamsHash.get("value");
+				for (int i=0; i<criteriaVec.size(); i++) 
+				{
+					sb.append("  <queryCriteria>"+criteriaVec.elementAt(i)+"\n");
+					sb.append("  <queryOperator>"+operatorVec.elementAt(i)+"\n");
+					sb.append("  <queryValue>"+valueVec.elementAt(i)+"\n");
+				}
+			}
+			else 
+			{
+				//print the error found
+				System.out.println("cannot compose extended query");
+			}
+			sb.append("<extendedQuery>"+"\n");
+			sb.append("<dbQuery>"+"\n");
+			sb.append("<resultType>summary</resultType> \n");
+			sb.append("<outFile>"+servletDir+"summary.xml</outFile> \n");
+			
+			outFile.println( sb.toString() );
+			
+			
+			
+			
+/*
+			//print the query instructions in the xml document
+			outFile.println("<?xml version=\"1.0\"?> \n"+       
+				"<!DOCTYPE vegPlot SYSTEM \"plotQuery.dtd\"> \n"+     
+				"<dbQuery> \n"+
+				"<query> \n"+
+				"<queryElement>"+queryElement+"</queryElement> \n"+
+				"<elementString>"+elementString+"</elementString> \n"+
+				"</query> \n"+
+				"<resultType>summary</resultType> \n"+
+				"<outFile>"+servletDir+"summary.xml</outFile> \n"+
+				"</dbQuery>"
+			);
+*/		
+		}
+		
+		catch (Exception e) 
+		{
+			System.out.println("failed in DataRequestServlet.composeQuery: " + 
+			e.getMessage());
+		}
+		return("composed extended query");
+	}
+
 
 
 /**
@@ -739,4 +835,5 @@ private void updateClentLog (String clientLog, String remoteHost) {
 			System.out.println("DataRequestServlet could not handle query");
 		}
 	}
+	
 }
