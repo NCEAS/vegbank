@@ -102,7 +102,7 @@ else if ( elementCategory.equals("observation") )
 	else if (elementName.equals("stratumHeight")) {
 		elementValue=elementValue.replace('<','l');
 		stratumHeightElements.addElement(elementValue);
-		System.out.println(elementValue);
+//		System.out.println(elementValue);
 		plotObservationParams.put("stratumHeight",stratumHeightElements);
 	}
 	

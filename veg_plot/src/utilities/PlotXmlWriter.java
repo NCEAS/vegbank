@@ -85,7 +85,8 @@ writeProjectData(plotProjectParams);
 writeFooter();
 }
 catch (Exception ex) {System.out.println("PlotXmlWriter.writePlot "
-	+"Error passing arguments "+ex+" "+ex.getMessage());
+	+"Error passing arguments "+ex+" "+ex.getMessage() ); 
+	//ex.printStackTrace();
 }
 
 
