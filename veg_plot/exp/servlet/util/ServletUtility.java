@@ -36,9 +36,9 @@ public class ServletUtility
    * plugins.
    */
   public static Object createObject(String className) 
-                throws InstantiationException, 
-                       IllegalAccessException,
-                       ClassNotFoundException
+	throws InstantiationException, 
+	IllegalAccessException,
+	ClassNotFoundException
   {
     Object object = null;
     try 
@@ -224,7 +224,7 @@ public void fileCopy (String inFile, String outFile)
 	try
 	{
 		BufferedReader in = new BufferedReader(new FileReader(inFile));
-		PrintStream out  = new PrintStream(new FileOutputStream(outFile, true));
+		PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
 		
 		System.out.println("servletUtility.fileCopy copying a file");
 		
@@ -262,12 +262,12 @@ public void htmlStore()
 	String mainPage="<html> \n"
 	//+"<body> \n"
 	+"<head> \n"
-	+"	<title> plotServe - Query Engine for the National Plots Database </title> \n"
+	+"	<title> VEGBANK - QUERY ENGINE </title> \n"
 	+"</head>  \n"
 	+" 	<body bgcolor=\"white\"> \n"
 	+" 	<table border=\"0\" width=\"100%\"> \n"
 	+" 	<tr bgcolor=\"#9999CC\"><td>&nbsp;<B><FONT FACE=\"arial\" COLOR=\"FFFFFF\" SIZE=\"-1\"> "
-	+" 	plotServe - Query Engine for the National Plots Database "
+	+" 	VegBank - Query Engine  "
 	+" 	</FONT></B></td></tr> \n"
 	+"</table> \n"
 	+" \n"
@@ -285,9 +285,6 @@ public void htmlStore()
 	+"</FONT></B></td></tr> \n"
 	+"</table> \n"
 	+"<br><br> \n";
-	//don't close the html b/c more will be written by the servlet
-	//+"</body> \n"
-	//+"</html> \n";
 	outString = mainPage;
 }
 
@@ -302,9 +299,9 @@ public void htmlStore()
  * @param summaryViewType -- the type of summary to view, can include vegPlot, 
  *	vegCommunity, or plantTaxa 
  */
-public void getViewOption (String summaryViewType) 
+public void getViewOption(String summaryViewType) 
 {
-	System.out.println("accessing the getViewOptionMethod");
+	System.out.println("ServletUtility > accessing the getViewOptionMethod");
 	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 	StringBuffer responseBuf=null; //use this string buffer instead
 	String response=
@@ -312,7 +309,7 @@ public void getViewOption (String summaryViewType)
 	//+"<html> \n"
 	//+"<body> \n"
 	//+"<head> \n"
-	+"<form action=\"http://vegbank.nceas.ucsb.edu/framework/servlet/viewData\" method=\"GET\"> \n"
+	+"<form action=\"http://vegbank.nceas.ucsb.edu:8080/framework/servlet/viewData\" method=\"GET\"> \n"
 	+"<input type=\"hidden\" name=\"resultType\" value=\"summary\" > \n"
 	+"<input type=\"hidden\" name=\"summaryViewType\" value=\""+summaryViewType+"\"> \n"
 	+"<input type=\"submit\" name=\"submitButton\" value=\"view data\" > \n"
@@ -331,7 +328,7 @@ public void getViewOption (String summaryViewType)
  * the result set
  */
 
-public void getViewMethod () 
+public void getViewMethod() 
 {
 	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 	String response="<html> \n"
@@ -501,6 +498,98 @@ public String fileToString(String fileName)
 		 }
 	 }
 	 
+	 	 /**
+ 	 * method to copy a file and filter the tokens, this method uses the 
+ 	 * jakarta ant library 1.4.1 and above
+ 	 *
+	 * @param infile -- the file to be copied that contains the token
+	 * @param outfile -- the output file with the replaced token
+	 * @param  token -- the token to replace in the file
+	 * @param value -- the value to replace the token with
+	 */
+	public boolean filterTokenFile( String inFile, String outFile,  Hashtable values)
+	{
+		boolean result = true;
+		try
+		{
+			//get the keys 
+			Vector keyVec = new Vector();
+			Enumeration enum = values.keys();
+			//System.out.println("servletUtility 'parameterHash' contacted ");
+ 			while (enum.hasMoreElements()) 
+			{
+				String key = (String)enum.nextElement();
+				System.out.println("ServletUtility > filter key: " + key  );
+				keyVec.addElement(key);
+ 			}
+			
+			System.out.println("ServletUtility > in file: " + inFile );
+			System.out.println("ServletUtility > out file: " + outFile );
+
+			//SET UP THE PROJECT
+	  	Project proj = new Project();
+			System.out.println("ServletUtility > base directory:  " + proj.getBaseDir() );
+	
+	
+			//SET UP THE COPY TASK
+			Copy copy = new Copy();
+			copy.setVerbose(true);
+			File in = new File(inFile);
+			File outf = new File(outFile);
+			//File outf = new File("./out1");
+			File dir = new File("./");
+
+			boolean readable =  in.canRead();
+			boolean writeable =  outf.canWrite();
+			System.out.println("ServletUtility > in readable " + in.canRead() );
+			System.out.println("ServletUtility > out writeable " + outf.canWrite() );
+			if (readable == false )
+			{
+				System.out.println("ServletUtility > cannot perfor copy " );
+				result=false;
+			}
+
+			copy.setFiltering(true);
+			copy.setFile(in);
+			copy.setOverwrite(true);
+			copy.setTofile(outf);
+		
+			//SET THE COPY TASK AS A TASK IN THE PROJECT
+			copy.setProject(proj);
+		
+			//System.out.println("ServletUtility > owning target: " + copy.getOwningTarget() );
+			//System.out.println("ServletUtility > targets in proj: " + proj.getTargets().toString() );
+
+			org.apache.tools.ant.taskdefs.Filter filter = new org.apache.tools.ant.taskdefs.Filter();
+			//CREATE A FILTER SET
+			org.apache.tools.ant.types.FilterSet fset = copy.createFilterSet();
+			
+			//put all the filters in the set
+			for (int i=0; i<keyVec.size(); i++) 
+			{
+				String token = (String)keyVec.elementAt(i);
+				String val = (String)values.get(token);
+				System.out.println("ServletUtility > applying filter: " + token +" "+ val );
+				fset.addFilter(token, val);
+			}
+			fset.setProject(proj);
+			System.out.println("ServletUtility > task has filters: " + fset.hasFilters() );
+		
+			//EXECUTE THE COPY TASK
+			copy.execute();
+
+		}
+		catch (BuildException e )
+		{
+			System.out.println(e.getMessage() );
+			e.printStackTrace();
+			result=false;
+		}
+		return(result);
+	}		
+
+	 
+	 
 	 /**
  	 * method to copy a file and filter the tokens, this method uses the 
  	 * jakarta ant library 1.4.1 and above
@@ -549,8 +638,8 @@ public String fileToString(String fileName)
 			//SET THE COPY TASK AS A TASK IN THE PROJECT
 			copy.setProject(proj);
 		
-			System.out.println("ServletUtility > owning target: " + copy.getOwningTarget() );
-			System.out.println("ServletUtility > targets in proj: " + proj.getTargets().toString() );
+			//System.out.println("ServletUtility > owning target: " + copy.getOwningTarget() );
+			//System.out.println("ServletUtility > targets in proj: " + proj.getTargets().toString() );
 
 			org.apache.tools.ant.taskdefs.Filter filter = new org.apache.tools.ant.taskdefs.Filter();
 			//CREATE A FILTER SET
