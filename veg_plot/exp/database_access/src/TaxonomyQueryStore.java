@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-07-02 20:47:56 $'
- * '$Revision: 1.14 $'
+ *     '$Date: 2002-07-05 17:38:12 $'
+ * '$Revision: 1.15 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,7 +137,7 @@ import databaseAccess.*;
 					sqlBuf.append("SELECT plantname_id, plantconcept_id, plantName, ");
 					sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
 					sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
-					sqlBuf.append(" startDate, stopDate  ");
+					sqlBuf.append(" startDate, stopDate, plantNameAlias ");
 					sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"+taxonName.toUpperCase()+"'");
 				///}
 				///else if ( taxonNameType.trim().equals("commonName")  ) 
@@ -167,6 +167,7 @@ import databaseAccess.*;
 					String acceptedSynonym = results.getString(9);
 					String startDate = results.getString(10);
 					String stopDate = results.getString(11);
+					String plantNameAlias = results.getString(12);
 					
 					//little trick to keep from breaking the code
 					String commonName = plantName;
@@ -188,7 +189,8 @@ import databaseAccess.*;
 						parentName,
 						acceptedSynonym,
 						startDate,
-						stopDate);	
+						stopDate, 
+						plantNameAlias);
 						
 					returnVector.addElement(h);
 					//System.out.println("TaxonomyQueryStore > hash: " + h.toString()   );
@@ -228,8 +230,6 @@ import databaseAccess.*;
 			Vector returnVector = new Vector();
 			try 
 			{
-				
-				
 				//connection stuff
 				Connection conn = this.getConnection();
 				Statement query = conn.createStatement();
@@ -241,7 +241,7 @@ import databaseAccess.*;
 				sqlBuf.append("SELECT plantname_id, plantconcept_id, plantName, ");
 				sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
 				sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
-				sqlBuf.append(" startDate, stopDate  ");
+				sqlBuf.append(" startDate, stopDate, plantNameAlias  ");
 				sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"
 				+taxonName.toUpperCase()+"'");
 				//add the level in the heirachy
@@ -266,15 +266,12 @@ import databaseAccess.*;
 					String acceptedSynonym = results.getString(9);
 					String startDate = results.getString(10);
 					String stopDate = results.getString(11);
+					String plantNameAlias = results.getString(12);
 					
 					//little trick to keep from breaking the code
 					String commonName = plantName;
 					String concatenatedName = plantName;
 					
-					//bunch all of these data attributes into the return vector
-					//returnVector.addElement( consolidateTaxaSummaryInstance( 
-					//	acceptedSynonym, status, concatenatedName, 	commonName, 
-					//	startDate, stopDate) );
 					
 					Hashtable h = consolidateTaxaSummaryInstance( 
 						plantNameId,
@@ -287,7 +284,8 @@ import databaseAccess.*;
 						parentName,
 						acceptedSynonym,
 						startDate,
-						stopDate);	
+						stopDate,
+						plantNameAlias);	
 						
 					returnVector.addElement(h);
 					//System.out.println("TaxonomyQueryStore > hash: " + h.toString()   );
@@ -314,11 +312,12 @@ import databaseAccess.*;
 		 *
 		 * @param acceptedSynonym -- the accepted name if the taxon is, itself,
 		 *		not accepted
+		 * @param plantNameAlias -- this is the plantName with the author token too.
 		 */
 		private Hashtable consolidateTaxaSummaryInstance( int plantNameId,
 		int plantConceptId, String plantName, String plantDescription,
 		String status, String	classSystem, String	plantLevel, String parentName,
-		String acceptedSynonym, String startDate, String stopDate)
+		String acceptedSynonym, String startDate, String stopDate, String plantNameAlias)
 		{
 			Hashtable returnHash = new Hashtable();
 			 try
@@ -360,6 +359,10 @@ import databaseAccess.*;
 					{
 						 stopDate="";
 					}
+					if (plantNameAlias == null )
+					{
+						 plantNameAlias="";
+					}
 					
 					returnHash.put("plantNameId", ""+plantNameId);
 					returnHash.put("plantConceptId", ""+plantConceptId);
@@ -372,6 +375,7 @@ import databaseAccess.*;
 					returnHash.put("startDate", startDate);
 					returnHash.put("stopDate", stopDate);
 					returnHash.put("plantDescription", plantDescription);
+					returnHash.put("plantNameAlias", plantNameAlias);
 					
 			 }
 			 catch(Exception e)

@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-05 23:07:56 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2002-07-05 17:38:12 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -333,12 +333,14 @@ public class  xmlWriter
 			 	String startDate = (String)currentTaxonHash.get("startDate");
 			 	String stopDate = (String)currentTaxonHash.get("stopDate");
 				String plantDescription = (String)currentTaxonHash.get("plantDescription");
+				String plantNameAlias = (String)currentTaxonHash.get("plantNameAlias");
 				
 				sb.append("<taxon> \n");
 				sb.append("	<name> \n");
 				sb.append("		<plantNameId>"+plantNameId+"</plantNameId> \n");
 				sb.append("		<plantConceptId>"+plantConceptId+"</plantConceptId> \n");
 				sb.append("		<plantName>"+plantName+"</plantName> \n");
+				sb.append("		<plantNameAlias>"+plantNameAlias+"</plantNameAlias> \n");
 				sb.append("		<status>"+status+"</status> \n");
 				sb.append("		<classSystem>"+classSystem+"</classSystem> \n");
 				sb.append("		<plantLevel>"+plantLevel+"</plantLevel> \n");
