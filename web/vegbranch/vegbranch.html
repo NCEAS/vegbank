@@ -3,18 +3,9 @@
 <meta http-equiv=Content-Type content="text/html; charset=windows-1252">
 <title>VegBranch, the desktop database for VegBank</title>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
- <script type="text/javascript">
-<!--
-function getHelp()
-{
-return "@manualFrameFor-vegbranch@"
-}
-
--->
-</script>
-
+ 
 </head>
-<body lang=EN-US class="Normal" bgcolor="#FFFFFF">
+<body>
 @vegbank_header_html_normal@
 <table width = "800">
 <tr width="800">
@@ -28,34 +19,49 @@ return "@manualFrameFor-vegbranch@"
   describe each function of VegBranch in detail. VegBranch will eventually support
   downloading of data from VegBank so that one can easily manipulate and analyze
   data on their home computer.</p>
-<p><b>VegBranch, version 1.0.0<font color="red">*</font>:</b></p>
+<p><b>VegBranch, version 1.2<font color="red">*</font>:</b></p>
 <ul>
 <li class="VegBank">This is the interface of VegBranch, the database that you will open to start VegBranch.  It 
     contains all the forms, instructions, and tools for VegBranch. </li>
-<li class="VegBank"><a href="@vbr_clientserver@vegbranch1.0.0.zip">Download
+<li class="VegBank"><a href="@vbr_clientserver@vegbranch-v1.2.zip">Download
   VegBranch</a></li>
 <ul>  
-  <li class="VegBank">(~3.5 MB zip file that expands to 10 MB)</li>
+  <li class="VegBank">(~4.5 MB zip file that expands to 14 MB)</li>
 </ul>
 </ul>
 </p>
-<p><b>VegBank Module database<font color="red">*</font> (structure version: 1.0.1)</b> <!--(pick one) -->:
+<p><b>VegBank Module database<font color="red">*</font> (structure version: 1.0.2)</b> <!--(pick one) -->:
   <ul><li class="VegBank">This is an Access database that contains the VegBank data structure.  
-  <!-- The following databases contain varying amounts of data that are preloaded.-->  The VegBranch database 
-  connects to this database.</li>
-<li class="VegBank"><a href="@vbr_clientserver@vegbank_module-full-1.0.1.zip">Download VegBank module (full data)</a></li>
-  <ul><li class="VegBank">full USDA year 2000 plant taxonomy</li>
-      <li class="VegBank">full EcoArt year 2002 community taxonomy</li>
-      <li class="VegBank">full soil taxa and place names</li>
-      <li class="VegBank">(31 MB zip file that expands to 128 MB)</li>
+    VegBranch connects to a VegBank Module database, where the vegbank data are stored.  The following databases contain varying amounts of preloaded data. </li>
+
+<li class="VegBank"><a href="@vbr_clientserver@vegbank-module102-small-example.zip">Download VegBank module (small example data)</a></li>
+  <ul>
+  <li class="VegBank">Use this vegbank module for demonstration purposes or where bandwidth is quite limited.</li>
+  <li class="VegBank">very limited USDA plant taxonomy</li>
+      <li class="VegBank">very limited EcoArt community taxonomy</li>
+      <li class="VegBank">very limited soil taxa and place names</li>
+      <li class="VegBank">a few plots</li>
+      <li class="VegBank">(0.8 MB zip file that expands to 4.5 MB)</li>
   </ul>
-  <!--
-<li class="VegBank"><a href="@vbr_clientserver@vegbank-module-light-beta2.zip">Download VegBank module (light data)</a></li>
-  <ul><li class="VegBank">sample USDA year 2000 plant taxonomy</li>
-<li class="VegBank">sample EcoArt year 2002 community taxonomy</li>      
-<li class="VegBank">no soil taxa or place Names</li>
-      <li class="VegBank">(0.2 MB zip file that expands to 2.7 MB)</li>
-  </ul> -->
+<li class="VegBank"><a href="@vbr_clientserver@vegbank-module102-full-plots.zip">Download VegBank module (full set of data)</a></li>
+  <ul>
+  <li class="VegBank">Use this vegbank module to view all public data currently in VegBank.</li>
+  <li class="VegBank">full USDA plant taxonomy</li>
+      <li class="VegBank">full EcoArt community taxonomy</li>
+      <li class="VegBank">full soil taxa and place names</li>
+      <li class="VegBank">many plots</li>
+      <li class="VegBank">(33 MB zip file that expands to 164 MB)</li>
+  </ul>
+<li class="VegBank"><a href="@vbr_clientserver@vegbank-module102-full-noplots.zip">Download VegBank module (full set of data, no plots)</a></li>
+  <ul>
+  <li class="VegBank">Use this vegbank module for adding your own plots to VegBranch without preloaded plots in the way.</li>
+  <li class="VegBank">full USDA plant taxonomy</li>
+      <li class="VegBank">full EcoArt community taxonomy</li>
+      <li class="VegBank">full soil taxa and place names</li>
+      <li class="VegBank">no plots</li>
+      <li class="VegBank">(30 MB zip file that expands to 154 MB)</li>
+  </ul>  
+
 </ul>
 <p><b>VegBranch sample .csv files for import:</b></p>
 <ul><li class="VegBank">These files give you sample datasets to load into VegBranch to explore its functionality.</li>
