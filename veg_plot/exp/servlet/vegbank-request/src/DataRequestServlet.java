@@ -43,8 +43,9 @@ import servlet.util.ServletUtility;
  * @param plotId - database plot identification number <br> 
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
- * @version Feb. 09 2001
- * @author John Harris
+ *	'$Author: harris $'
+ *  '$Date: 2002-04-03 00:03:10 $'
+ *  '$Revision: 1.11 $'
  * 
  */
 
@@ -511,11 +512,11 @@ public class DataRequestServlet extends HttpServlet
 			String requestDataFormatType  = params.get("requestDataFormatType").toString();
 			if (requestDataType.trim().equals("plantTaxon")) 
 			{  
-				out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
-				+ "plant taxonomy information - not requesting plot info");
+			//	out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
+			//	+ "plant taxonomy information - not requesting plot info");
 				composePlantTaxonomyQuery(params);
 				issueQuery("simplePlantTaxonomyQuery");
-				out.println("Number of taxa returned: "+queryOutputNum+"<br><br>");
+				//out.println("Number of taxa returned: "+queryOutputNum+"<br><br>");
 				//use the method that handles the response	
 				if (queryOutputNum>=1) 
 				{
@@ -524,9 +525,12 @@ public class DataRequestServlet extends HttpServlet
 				}
 				else 
 				{ 
-					out.println("<br> <b> Please try another query </b> <br>"); 
-					out.println("<a href = \"/forms/plant-query.html\">"
-					+"return to query page</a>"); 
+					if ( ! clientType.equals("clientApplication") )
+					{
+						out.println("<br> <b> Please try another query </b> <br>"); 
+						out.println("<a href = \"/forms/plant-query.html\">"
+						+"return to query page</a>");
+					}
 				}
 			}
 		}
