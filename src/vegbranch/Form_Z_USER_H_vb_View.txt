@@ -16,7 +16,7 @@ Private Sub commMatchWizard_Click()
    strCommName = [commName]
    strLinkedThrough = [linkedThrough]
    lngPNID = [commName_ID]
-   lngPCID = [commConcept_ID]
+   lngPCID = [COMMCONCEPT_ID]
    plAsConc = [commAsConc]
    strNote = [note]
    strNameNote = [plantNote]
@@ -103,7 +103,42 @@ cancelCommMatchWizard:
 End Sub
 
 Private Function manuallyMatchCommConcept() As Boolean
-  manuallyMatchCommConcept = ChangeCommConc([commName], cmtxa_BrowseForCommConcept(), True)
+    'manually match this string to a concept
+    Static strLastCommAccCodeManualMatch As String
+    
+  If Not [chk_noMenus] Then
+    'simply browse for it, though may take a while to bring up the form
+browseAnyway:
+    manuallyMatchCommConcept = ChangeCommConc([commName], cmtxa_BrowseForCommConcept(), True)
+    GoTo exitthis
+  Else
+    'ask for accessionCode
+    Dim strAccCode As String
+    strAccCode = InputBox("Enter the Accession Code for the concept you would like to match to. " _
+    & " Enter ""browse"" to search for an accession code.  The last accession code you entered is listed as a default." _
+    & Chr(13) & "Tip: to browse for communities and not type information manually in this box anymore, uncheck the ""Let me type names..."" checkbox in the upper right of the form.", _
+      "VegBranch Manual Matching- with accession code", strLastCommAccCodeManualMatch)
+      If strAccCode = "browse" Or strAccCode = """browse""" Then
+        'browse for accessionCodes anyway
+        GoTo browseAnyway
+      End If
+      If strAccCode = "" Then
+        'cancelled:
+        msgBox "cancelled."
+        GoTo exitthis
+      End If
+      Dim lngPK As Long
+      lngPK = getPKfromAccessionCode(strAccCode, "commConcept")
+      Debug.Print "manually matching to AccCode:" & strAccCode & " concept:" & lngPK
+      If lngPK > 0 Then
+        'do the match!
+        manuallyMatchCommConcept = ChangeCommConc([commName], lngPK)
+      Else
+        msgBox "The accession code you entered was not valid, or was not found in the VegBank Module, please check the code and try again.", , "VegBranch"
+      End If
+      strLastCommAccCodeManualMatch = strAccCode
+  End If
+exitthis:
 End Function
 
 Private Sub Command23_Click()
@@ -111,7 +146,37 @@ Private Sub Command23_Click()
 End Sub
 
 Private Sub Command24_Click()
-  Call ChangeCommConc([commName], -1, False)
+  'this is new, add to Community Concept Loading Table
+  If [COMMCONCEPT_ID] <> -1 Then
+    If AreYouSure("This will set the current Community (" & [commName] _
+      & ") which IS matched to a VegBank comm, to a NEW comm, meaning it will be added through the " _
+      & "Community Concept Loading Table Loading table.  Continue?") Then
+      Call ChangeCommConc([commName], -1, False)
+    Else
+      GoTo exitthis
+    End If
+      
+  End If
+  
+  'now add to Community Concept Loading Table if not there
+  If [commAsConc] <> 3 Then
+       'add to Community Concept Loading Table
+       DoCmd.RunSQL "insert into Z_USER_H_CommConcept (commCode,commName) select " & SQLizeTxt([commName]) & "," & _
+         SQLizeTxt([commName])
+       populate_Z_H_LkNms True, [commName]
+       [commAsConc] = 3 'HARDCODE commAsConc
+       DoCmd.OpenForm "Z_USER_H_CommConcept", , , "commCode=" & SQLizeTxt([commName])
+       msgBox "This Community is in your Community Concept Loading Table to be added as a new comm.  " _
+        & "This form is now open for you to see how the new Community will be added.", , "VegBranch"
+  Else
+     If msgBox("This Community is already in your Community Concept Loading Table to be added. " _
+      & "Would you like to see this Community in your Community Concept Loading Table?", vbYesNo, "VegBranch") = vbYes Then
+       DoCmd.OpenForm "Z_USER_H_CommConcept", , , "commCode=" & SQLizeTxt([commName])
+     End If
+  End If
+  
+exitthis:
+Exit Sub
 End Sub
 
 
@@ -120,6 +185,23 @@ Private Sub findPlName_Click()
 End Sub
 
 Private Function changeFormCommName() As Boolean
-  changeFormCommName = ChangeCommName([linkedThrough], cmtxa_BrowseForCommName())
+  If Not [chk_noMenus] Then
+    'simple change of name, get big long menu and select
+    changeFormCommName = ChangeCommName([linkedThrough], cmtxa_BrowseForCommName())
+  Else
+    'prompt user for string name
+    Dim strName As String
+    strName = InputBox("What name would you like to use instead of the one now listed:?" _
+      & Chr(13) & "  [TIP#1: Copying the name before opening this and pasting is helpful. TIP#2: to browse for communities and not type information manually in this box anymore, uncheck the 'Let me type names...' checkbox in the upper right of the form.]" _
+          , "VegBranch", Nz([linkedThrough]))
+         
+    If strName = "" Then
+      'cancelled
+      changeFormCommName = False
+    Else
+      'replace one with another
+      changeFormCommName = ChangeCommName([linkedThrough], -1, strName)
+    End If
+  End If
 End Function
 

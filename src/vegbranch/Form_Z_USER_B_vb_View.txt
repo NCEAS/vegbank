@@ -2,15 +2,82 @@ Option Compare Database
 Option Explicit
 
 Private Function manuallyMatchPlantConcept() As Boolean
-  manuallyMatchPlantConcept = ChangePlantConc([plantName], pltxa_BrowseForPlantConcept(), True)
+   'manually match this string to a concept
+    Static strLastPlantAccCodeManualMatch As String
+  If Not [chk_noMenus] Then
+    'simply browse for it, though may take a while to bring up the form
+browseAnyway:
+    manuallyMatchPlantConcept = ChangePlantConc([plantName], pltxa_BrowseForPlantConcept(), True)
+       GoTo exitthis
+  Else
+     'ask for accessionCode
+    Dim strAccCode As String
+    strAccCode = InputBox("Enter the Accession Code for the concept you would like to match to. " _
+    & " Enter ""browse"" to search for an accession code.  The last accession code you entered is listed as a default." _
+    & Chr(13) & "Tip: to browse for plants and not type information manually in this box anymore, uncheck the ""Let me type names..."" checkbox in the upper right of the form.", _
+      "VegBranch Manual Matching- with accession code", strLastPlantAccCodeManualMatch)
+      If strAccCode = "browse" Or strAccCode = """browse""" Then
+        'browse for accessionCodes anyway
+        GoTo browseAnyway
+      End If
+      If strAccCode = "" Then
+        'cancelled:
+        msgBox "cancelled."
+        GoTo exitthis
+      End If
+      Dim lngPK As Long
+      lngPK = getPKfromAccessionCode(strAccCode, "PlantConcept")
+      Debug.Print "manually matching to AccCode:" & strAccCode & " concept:" & lngPK
+      If lngPK > 0 Then
+        'do the match!
+        manuallyMatchPlantConcept = ChangePlantConc([plantName], lngPK)
+      Else
+        msgBox "The accession code you entered was not valid, or was not found in the VegBank Module, please check the code and try again.", , "VegBranch"
+      End If
+      strLastPlantAccCodeManualMatch = strAccCode
+  End If
+exitthis:
+  
 End Function
+
+Private Sub Command2_Click()
+'check current plant again
+populate_Z_B_LkNms True, [plantName]
+recalcCurrForm (True)
+
+End Sub
 
 Private Sub Command23_Click()
   Call manuallyMatchPlantConcept
 End Sub
 
 Private Sub Command24_Click()
-  Call ChangePlantConc([plantName], -1, False)
+  'this is new, add to species list
+  If [PLANTCONCEPT_ID] <> -1 Then
+    If AreYouSure("This will set the current plant (" & [plantName] & ") which IS matched to a VegBank plant, to a NEW plant, meaning it will be added through the Species List Loading table.  Continue?") Then
+      Call ChangePlantConc([plantName], -1, False)
+    Else
+      GoTo exitthis
+    End If
+      
+  End If
+  
+  'now add to species list if not there
+  If [plantAsConc] <> 3 Then
+       'add to species list
+       DoCmd.RunSQL "insert into Z_USER_B_SpecList (plantCode,plantName) select " & SQLizeTxt([plantName]) & "," & SQLizeTxt([plantName])
+       populate_Z_B_LkNms True, [plantName]
+       [plantAsConc] = 3 'HARDCODE plantAsConc
+       DoCmd.OpenForm "Z_USER_B_specList_new", , , "plantCode=" & SQLizeTxt([plantName])
+       msgBox "This plant is in your species list to be added as a new plant.  This form is now open for you to see how the new plant will be added.", , "VegBranch"
+  Else
+     If msgBox("This plant is already in your species list to be added. Would you like to see this plant in your Species List?", vbYesNo, "VegBranch") = vbYes Then
+       DoCmd.OpenForm "Z_USER_B_specList_new", , , "plantCode=" & SQLizeTxt([plantName])
+     End If
+  End If
+  
+exitthis:
+Exit Sub
 End Sub
 
 Private Sub Command27_Click()
@@ -152,5 +219,22 @@ Private Sub findPlName_Click()
 End Sub
 
 Private Function changeFormPlantName() As Boolean
-  changeFormPlantName = ChangePlantName([linkedThrough], pltxa_BrowseForPlantName())
+  If Not [chk_noMenus] Then
+    'simple change of name, get big long menu and select
+     changeFormPlantName = ChangePlantName([linkedThrough], pltxa_BrowseForPlantName())
+  Else
+    'prompt user for string name
+    Dim strName As String
+    strName = InputBox("What name would you like to use instead of the one now listed:?" _
+      & Chr(13) & "  [TIP#1: Copying the name before opening this and pasting is helpful. TIP#2: to browse for plants and not type information manually in this box anymore, uncheck the 'Let me type names...' checkbox in the upper right of the form.]" _
+          , "VegBranch", Nz([linkedThrough]))
+         
+    If strName = "" Then
+      'cancelled
+      changeFormPlantName = False
+    Else
+      'replace one with another
+      changeFormPlantName = ChangePlantName([linkedThrough], -1, strName)
+    End If
+  End If
 End Function
