@@ -8,8 +8,8 @@
   *  % echo "[build.context]" | ant [target]
   *
   *     '$Author: mlee $'
-  *     '$Date: 2004-11-15 23:16:48 $'
-  *     '$Revision: 1.50 $'
+  *     '$Date: 2004-11-18 18:36:47 $'
+  *     '$Revision: 1.51 $'
 -->
 <project name="Vegbank" default="jar" basedir=".">
   <!-- ================================================================= -->
@@ -163,7 +163,7 @@
         <include name="**/*.java"/>
         <include name="**/*.properties"/>
       </fileset>
-      <fileset dir="web/sharedhtml" casesensitive="yes">
+      <fileset dir="web/includes" casesensitive="yes">
         <include name="*.properties"/>
       </fileset>
       <fileset dir="${src.dir}/xsl" casesensitive="yes">
@@ -229,13 +229,12 @@
       <fileset dir="${docs.dir}/xml" includes="csvtools.xsl"/>
     </copy>
   </target>
-    <target name="check-all" description="==> collection of tasks that check to see if everything is correct">
-      <ant target="db_verify" description="check to see that model is implemented correctly" />
-    </target>
-  
+  <target name="check-all" description="==> collection of tasks that check to see if everything is correct">
+    <antcall target="db_verify" description="check to see that model is implemented correctly"/>
+  </target>
   <target name="deploy-all" depends="deploy-jars" description="==> deploys vegbank module jars, html and other resources">
-    <ant target="db_verify" description="check to see that model is implemented correctly" />
-    <ant target="deploy-web-all" inheritAll="true"/>
+    <antcall target="db_verify" description="check to see that model is implemented correctly"/>
+    <antcall target="deploy-web-all" inheritAll="true"/>
     <echo>db connect: ${databaseConnectString}</echo>
     <mkdir dir="${web.context}/GenJSP"/>
     <copy todir="${web.context}/GenJSP">
