@@ -15,7 +15,7 @@ CREATE TABLE plantUsage
     plantNameStatus varchar (20) ,
     plantName varchar (220),
     PLANTPARTY_ID integer ,
-    classSystem varchar (20),
+    classSystem varchar (50),
     acceptedSynonym varchar (220),
     PRIMARY KEY(PLANTUSAGE_ID)
 );
