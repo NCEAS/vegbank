@@ -1,5 +1,5 @@
 BODY			{
-					bgcolor: #FFFFFF;
+					background-color: #FFFFFF;
 				}
 
 A:Link			{
@@ -47,6 +47,7 @@ UL.constsize,LI.constsize {  font: 10pt Verdana, Arial, Helvetica, Geneva, sans-
 P, .normal		{
 					font-family: Verdana, Arial, Helvetica, sans-serif;
 					font-size: .83em;
+					color: #000000
 				}
 
 UL, OL, DL, LI, .list	{	
