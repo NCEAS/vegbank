@@ -34,8 +34,8 @@ import databaseAccess.utility;
  *	
  * <br> <br>
  *  '$Author: harris $'
- *  '$Date: 2003-01-08 19:21:50 $'
- * 	'$Revision: 1.20 $'
+ *  '$Date: 2003-01-17 22:31:28 $'
+ * 	'$Revision: 1.21 $'
  *
  */
 
@@ -258,6 +258,7 @@ public class DataSourceImpl extends UnicastRemoteObject
     boolean result = true;
     try
     {
+			validator = new PlotValidator(this.source);
       result  = validator.isPlotValid(plot);
       //result = validator.getValidationReport();
     }
