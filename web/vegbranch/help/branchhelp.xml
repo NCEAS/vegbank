@@ -4895,7 +4895,7 @@ Narrative:</caption>
     </form>
     <form>
       <name>basicent_z_user_d2_stratacover</name>
-      <caption>Enter Species found on plot: gooogd</caption>
+      <caption>Enter Species found on plot: (plot name)</caption>
       <formType>basicEnt</formType>
       <subfrm>0</subfrm>
       <ctlType>-1</ctlType>
