@@ -18,15 +18,16 @@ import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.common.utility.VBModelBeanToDB;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.PermComparison;
 
 /*
  * '$RCSfile: RegisterNewUserAction.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-12-02 19:59:36 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-01-01 01:10:53 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,7 +65,7 @@ public class RegisterNewUserAction extends Action
 
 		// Get the properties of the form
 		Party party = (Party) thisForm.get("party");
-		Usr user = (Usr) thisForm.get("user");
+		Usr usr = (Usr) thisForm.get("user");
 		Address address = (Address) thisForm.get("address");
 		Telephone telephone = (Telephone) thisForm.get("telephone");
 		String termsaccept = (String) thisForm.get("termsaccept");
@@ -74,13 +75,13 @@ public class RegisterNewUserAction extends Action
 		try
 		{
 			UserDatabaseAccess udba = new UserDatabaseAccess();
-			if (! udba.isEmailUnique(user.getEmail_address()))
+			if (! udba.isEmailUnique(usr.getEmail_address()))
 			{
 				errors.add(
 					ActionErrors.GLOBAL_ERROR,
 					new ActionError(
 						"errors.user.already.created",
-						user.getEmail_address()));
+						usr.getEmail_address()));
 				LogUtility.log("RegisterNewUserAction: Username is taken.");
 			}
 			// Assert that the passwords match
@@ -105,20 +106,21 @@ public class RegisterNewUserAction extends Action
 			else
 			{
 				// Fill out defaut fields
-				// Start of as registered user TODO: Get these as Constants
-				user.setPermission_type("1");
+				// Start off as registered user TODO: Get these as Constants
+				usr.setPermission_type(String.valueOf(
+						PermComparison.getRoleConstant("registered")));
 				// FIXME: Should be set upon first logon?
-				user.setBegin_time(Utility.getCurrentDate());
+				usr.setBegin_time(Utility.getCurrentDate());
 
 				// Already check that they are identical
-				user.setPassword(password1);
+				usr.setPassword(password1);
 
 				// Get as a constant
 				telephone.setPhonetype(Telephone.PHONETYPE_WORK);
 
 				party.addparty_address(address);
 				party.addparty_telephone(telephone);
-				party.addparty_usr(user);
+				party.addparty_usr(usr);
 
 				// Put in the database
 
