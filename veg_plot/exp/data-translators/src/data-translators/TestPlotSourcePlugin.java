@@ -13,8 +13,8 @@ import java.sql.*;
  *  Release:
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-05 19:12:34 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2002-01-06 04:26:17 $'
+ * 	'$Revision: 1.3 $'
  */
 public class TestPlotSourcePlugin implements PlotDataSourceInterface
 {
@@ -229,6 +229,23 @@ public class TestPlotSourcePlugin implements PlotDataSourceInterface
 			return("Chapel Hill");
 		else
 			return("Santa Barbara");
+	}
+	
+	//returns the administrative area, or state that a party is from
+	public String getProjectContributorAdministrativeArea(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("NC");
+		else
+			return("CA");
+	}
+	//retuns the zip code for a party
+	public String getProjectContributorPostalCode(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("27599-3280");
+		else
+			return("93101");
 	}
 	//retuns the person's country based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'

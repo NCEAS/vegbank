@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-01-05 19:11:15 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2002-01-06 04:26:17 $'
+ * '$Revision: 1.3 $'
  *
  *
  */
@@ -49,6 +49,8 @@ public interface PlotDataSourceInterface
 	String getProjectContributorEmailAddress(String contributorWholeName);
 	String getProjectContributorDeliveryPoint(String contributorWholeName);
 	String getProjectContributorCity(String contributorWholeName);
+	String getProjectContributorAdministrativeArea(String contributorWholeName);
+	String getProjectContributorPostalCode(String contributorWholeName);
 	String getProjectContributorCountry(String contributorWholeName);
 	String getProjectContributorCurrentFlag(String contributorWholeName);
 	String getProjectContributorAddressStartDate(String contributorWholeName);

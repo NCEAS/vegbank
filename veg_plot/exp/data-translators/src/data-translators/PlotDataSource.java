@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-05 19:11:16 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2002-01-06 04:26:17 $'
+ * 	'$Revision: 1.3 $'
  */
 
 import java.sql.*;
@@ -263,6 +263,19 @@ public class PlotDataSource
 		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorCity(contributorWholeName);	
 		return(s);
 	}
+	
+	public String getProjectContributorAdministrativeArea(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorAdministrativeArea(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getProjectContributorPostalCode(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorPostalCode(contributorWholeName);	
+		return(s);
+	}
+	
 	//retuns the person's country based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorCountry(String contributorWholeName)
@@ -451,6 +464,47 @@ public class PlotDataSource
 			System.out.println("project contributors: " + source.projectContributors.toString() );
 			System.out.println("project start date: " + source.projectStartDate );
 			System.out.println("project stop date: " + source.projectStopDate );
+			//the project contributor info goes here
+			System.out.println("number of project contributors: " + source.projectContributors.size() );
+			for (int i=0; i<source.projectContributors.size(); i++)
+			{
+				String wholeName = source.projectContributors.elementAt(i).toString();
+				String salutation = source.getProjectContributorSalutation(wholeName);
+				String givenName = source.getProjectContributorGivenName(wholeName);
+				String middleName = source.getProjectContributorMiddleName(wholeName);
+				String surName = source.getProjectContributorSurName(wholeName);
+				String organizationName = source.getProjectContributorOrganizationName(wholeName);
+				String contactInstructions = source.getProjectContributorContactInstructions(wholeName);
+				String phoneNumber = source.getProjectContributorPhoneNumber(wholeName);
+				String orgPosition = source.getProjectContributorOrgPosition(wholeName);
+				String email = source.getProjectContributorEmailAddress(wholeName);
+				String deliveryPoint = source.getProjectContributorDeliveryPoint(wholeName);
+				String city = source.getProjectContributorCity(wholeName);
+				String administrativeArea = source.getProjectContributorAdministrativeArea(wholeName);
+				String postalCode = source.getProjectContributorPostalCode(wholeName);
+				String country = source.getProjectContributorCountry(wholeName);
+				String currentFlag = source.getProjectContributorCurrentFlag(wholeName);
+				String addressStartDate = source.getProjectContributorAddressStartDate(wholeName);
+				
+				System.out.println("project contributor whole name: "+ wholeName);
+				System.out.println("project contributor salutation: "+ salutation);
+				System.out.println("project contributor given name: "+ givenName );
+				System.out.println("project contributor middle name: "+ middleName);
+				System.out.println("project contributor sur name: "+ surName);
+				System.out.println("project contributor org name: "+ organizationName);
+				System.out.println("project contributor contactInstructions: "+ contactInstructions);
+				System.out.println("project contributor phoneNumber: "+ phoneNumber);
+				System.out.println("project contributor orgPosition: "+ orgPosition);
+				System.out.println("project contributor email: "+ email);
+				System.out.println("project contributor deliveryPoint: "+ deliveryPoint);
+				System.out.println("project contributor city: "+ city);
+				System.out.println("project contributor administrativeArea: "+ administrativeArea);
+				System.out.println("project contributor postalCode: "+ postalCode);
+				System.out.println("project contributor country: "+ country);
+				System.out.println("project contributor currentFlag: "+ currentFlag);
+				System.out.println("project contributor addressStartDate: "+ addressStartDate+"\n");
+			}
+			
 			
 			System.out.println(" \n ----------------------plot site info-----------------------------");
 			System.out.println("authorplotcode: " + source.plotCode );
@@ -501,7 +555,7 @@ public class PlotDataSource
 			
 			System.out.println(" \n ----------------------plant taxa info-----------------------------");
 			System.out.println("number of unique plant names: " + source.plantTaxaNames.size() );
-			System.out.println("unique plant names: " + source.plantTaxaNames.toString() );
+			//System.out.println("unique plant names: " + source.plantTaxaNames.toString() );
 			
 			//get the coverages for the plants for each strata
 			for (int i=0; i<source.plantTaxaNames.size(); i++)
