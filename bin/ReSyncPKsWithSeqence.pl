@@ -2,6 +2,9 @@
 
 # This is a utility to resync the sequence value to to the max pk value to 
 # prevent the duplicate Primary Key value being returned from the sequence.
+#
+# WARNING!!  The max PK is used currently.  Might need to use greater of
+# PK or current sequence value.
 
 #List of databases to visit
 @databases =  ('vegbank'); 
