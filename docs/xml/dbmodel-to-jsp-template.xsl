@@ -38,7 +38,7 @@ Copy from after the START: comment to the END: comment for contents of the file!
         <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
 
       </HEAD>
-      <body>@vegbank_header_html_normal@  <br/>
+      <body>@vegbank_header_html_normal@
         <h2>View VegBank <xsl:value-of select="entityLabel"/>s</h2>
         <xsl:comment>Get standard declaration of rowClass as string: </xsl:comment>
         
