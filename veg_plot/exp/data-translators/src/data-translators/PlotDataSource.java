@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-31 22:35:24 $'
- * 	'$Revision: 1.7 $'
+ *  '$Date: 2002-02-03 18:58:29 $'
+ * 	'$Revision: 1.8 $'
  */
 public class PlotDataSource 
 {
@@ -200,6 +200,14 @@ public class PlotDataSource
 			e.printStackTrace();
 		}
 		return(true);
+	}
+	
+	//method that returns the unique strata recognized in a given plot
+	public Vector getUniqueStrataNames(String plotName)
+	{
+		Vector v = new Vector();
+		v  = ((PlotDataSourceInterface)pluginObj).getUniqueStrataNames(plotName);
+		return(v);
 	}
 	
 	
