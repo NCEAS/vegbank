@@ -25,8 +25,8 @@ import org.vegbank.common.model.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-11-04 10:33:50 $'
- * '$Revision: 1.22 $'
+ * '$Date: 2003-11-05 19:49:53 $'
+ * '$Revision: 1.23 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -474,8 +474,8 @@ public class Utility
 	}
 
 	/**
-	 * @param table
-	 * @return
+	 * @param String The name of this table
+	 * @return String the PKName for this table
 	 */
 	public static String getPKNameFromTableName(String table)
 	{
@@ -490,6 +490,36 @@ public class Utility
 		}
 		return PKname;
 	}
+
+	/**
+	 * Foreign Key don't always have the same name as the primary key of the
+	 * the the primary table, this is a utility to allow this lookup to happen.</br>
+	 * 
+	 * <b>Not</b> a comprehensive lookup!
+	 * 
+	 * @param String The name of this table
+	 * @return String the PKName for this table
+	 */
+	public static String getPKNameFromFKName(String FKName)
+	{
+		// TODO: this is not comprehesive as this is only a problem
+		// for some lookups, should be comprehensive to avoid misuse
+		String PKname = "";	
+		if ( FKName.equalsIgnoreCase(Party.OWNER_ID))
+		{
+			PKname = Party.PKNAME;
+		}
+		else if ( FKName.equalsIgnoreCase(Plantstatus.PLANTPARENT_ID))
+		{
+			PKname = Plantconcept.PKNAME;
+		}
+		else
+		{
+			PKname = FKName;
+		}
+		return PKname;
+	}
+
 
 	/**
 	 * Only certain database names need to have accessionCodes loaded

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-05 18:45:30 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2003-11-05 19:49:53 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -595,14 +595,7 @@ public class DBModelBeanReader
 						{
 							LogUtility.log("DBModelBeanReader: Getting "  + propertyName + " for " + className);
 							
-							// new method -- maybe
-							// Don't know what i'm doing here -- tring to solve a bug
-							// maybe need special handling depending on PK search or FK search ?	
-							if ( fieldName.equalsIgnoreCase(Party.OWNER_ID))
-							{
-								fieldName = Party.PKNAME;
-							}
-							// New Method end -- maybe
+							fieldName = Utility.getPKNameFromFKName(fieldName);
 							
 							//LogUtility.log("]]]" + hmap);
 							//	Fill out this object  --- RECURSIVE carefull
