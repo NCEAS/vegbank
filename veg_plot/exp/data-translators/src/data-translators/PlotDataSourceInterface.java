@@ -17,8 +17,8 @@ import java.util.*;
  * 
  * Release: @release@ <br>
  * '$Author: farrell $' <br>
- * '$Date: 2002-12-11 21:13:52 $' <br>
- * '$Revision: 1.15 $' <br>
+ * '$Date: 2002-12-12 22:06:43 $' <br>
+ * '$Revision: 1.16 $' <br>
  */
 public interface PlotDataSourceInterface
 {
@@ -135,6 +135,18 @@ public interface PlotDataSourceInterface
 	 */
 	String getDatumType(String plotName);
 	
+	
+	//returns the azimuth? --> The horizontal angle of the observer's bearing in surveying
+	String getAzimuth(String plotName);
+	// returns the dsgploy? --> coordinates defining the outline of an area covered by a data set. 
+	String getDSGPoly(String plotName);
+	// returns the plot narrative
+	String getLocationNarrative(String plotName);
+	// returns the layout narative
+	String getLayoutNarrative( String plotName );
+
+	
+	
 	String getPlotShape(String plotName);
 	//returns the plot area
 	String getPlotArea(String plotName);	
@@ -196,6 +208,7 @@ public interface PlotDataSourceInterface
 	 * @param plotName -- the plot
 	 */
 	String getElevation(String plotName);
+	
 	/**
 	 * returns the elevation accuracy and must be either a numeric
 	 * value or an empty string and cannot be 'null'. The value
@@ -203,6 +216,7 @@ public interface PlotDataSourceInterface
 	 * @param plotName -- the plot
 	 */
 	String getElevationAccuracy(String plotName);
+	
  /**
 	* return the confidentiality reason -- not null
 	* @param plotName -- the plot
@@ -500,14 +514,25 @@ public interface PlotDataSourceInterface
 	String  getShrubHt(String plotName);
 	String  getNonvascularHt(String plotName);
 	String  getFloatingCover(String plotName);
-	String  getSubmergedCover(String plotName);
-	String  getDominantStratum(String plotName);
-	String  getGrowthform1Type(String plotName);
-	String  getGrowthform2Type(String plotName);
-	String  getGrowthform3Type(String plotName);
-	String  getGrowthform1Cover(String plotName);
-	String  getGrowthform2Cover(String plotName);
-	String  getGrowthform3Cover(String plotName);
+	
+	String getNonvascularCover(String plotName);
+	String getFieldCover(String plotName);
+	String getShrubCover(String plotName);
+	String getTreeCover(String plotName);
+	String getSubmergedHt(String plotName);
+	String getFieldHt(String plotName);
+	String getWaterDepth(String plotName);
+	String getLandscapeNarrative(String plotName);
+	String getPhenologicalAspect(String plotName);
+	
+	String getSubmergedCover(String plotName);
+	String getDominantStratum(String plotName);
+	String getGrowthform1Type(String plotName);
+	String getGrowthform2Type(String plotName);
+	String getGrowthform3Type(String plotName);
+	String getGrowthform1Cover(String plotName);
+	String getGrowthform2Cover(String plotName);
+	String getGrowthform3Cover(String plotName);
 	boolean  getNotesPublic(String plotName);
 	boolean  getNotesMgt(String plotName);
 	boolean  getRevisions(String plotName);
