@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-27 19:49:02 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2003-11-05 20:54:15 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,7 +86,8 @@ public class AddPlant implements Constants
 	public StringBuffer execute(
 		HttpServletRequest request,
 		HttpServletResponse response,
-		Hashtable userAtts) throws IOException
+		Hashtable userAtts)
+		throws IOException
 	{
 		StringBuffer sb = new StringBuffer();
 		PrintWriter out = response.getWriter();
@@ -136,7 +137,8 @@ public class AddPlant implements Constants
 				String code = request.getParameter("code");
 
 				System.out.println("DataSubmitServlet > longName: " + longName);
-				System.out.println("DataSubmitServlet > shortName: " + shortName);
+				System.out.println(
+					"DataSubmitServlet > shortName: " + shortName);
 				System.out.println("DataSubmitServlet > code: " + code);
 
 				// get the data already stored in the database with corresponding to the names
@@ -199,8 +201,10 @@ public class AddPlant implements Constants
 					"DataSubmitServlet > performing the name rectification ");
 				// GET THE NAME REFERENCES FOR THE INPUT NAMES OR GIVE THE 
 				// USER THE FORM TO FILL OUT
-				String longNameMatch = request.getParameter("longNameMatches");
-				String shortNameMatch = request.getParameter("shortNameMatches");
+				String longNameMatch =
+					request.getParameter("longNameMatches");
+				String shortNameMatch =
+					request.getParameter("shortNameMatches");
 				String codeMatch = request.getParameter("codeMatches");
 
 				// UPDATE THE DATA CLASS -- implicitly creates plantusages
@@ -208,13 +212,19 @@ public class AddPlant implements Constants
 				plant.setCommonName(shortNameMatch);
 				plant.setCode(codeMatch);
 
-				System.out.println("longName: " + " match: " + longNameMatch);
-				Hashtable longNameRef = tqs.getPlantNameReference(longNameMatch);
-				System.out.println("longNameRef: " + longNameRef.toString());
-				System.out.println("shortName: " + " match: " + shortNameMatch);
-				Hashtable shortNameRef = tqs.getPlantNameReference(shortNameMatch);
+				System.out.println(
+					"longName: " + " match: " + longNameMatch);
+				Hashtable longNameRef =
+					tqs.getPlantNameReference(longNameMatch);
+				System.out.println(
+					"longNameRef: " + longNameRef.toString());
+				System.out.println(
+					"shortName: " + " match: " + shortNameMatch);
+				Hashtable shortNameRef =
+					tqs.getPlantNameReference(shortNameMatch);
 				System.out.println("code: " + " match: " + codeMatch);
-				Hashtable codeNameRef = tqs.getPlantNameReference(codeMatch);
+				Hashtable codeNameRef =
+					tqs.getPlantNameReference(codeMatch);
 
 				updatePlantNameReferencePage(
 					emailAddress,
@@ -228,38 +238,43 @@ public class AddPlant implements Constants
 			// AND WHERE THOSE ATTRIBUTES SHOULD BE STORED
 			else if (action.equals("references"))
 			{
-				System.out.println("DataSubmitServlet > getting the  references ");
+				System.out.println(
+					"DataSubmitServlet > getting the  references ");
 
-				String commonReferenceId = request.getParameter("common.reference_id");
+				String commonReferenceId =
+					request.getParameter("common.reference_id");
 				String conceptReferenceId =
 					request.getParameter("concept.reference_id");
 				String scientificReferenceId =
 					request.getParameter("scientific.reference_id");
-				String codeReferenceId = request.getParameter("code.reference_id");
-				String conceptDescription = request.getParameter("conceptDescription");
+				String codeReferenceId =
+					request.getParameter("code.reference_id");
+				String conceptDescription =
+					request.getParameter("conceptDescription");
 
+				String NOREFERENCE = "none";
 
-			  String NOREFERENCE = "none";
-        
-        if (! commonReferenceId.equals(NOREFERENCE)) 
-        {
-          System.out.println("Accepting Reference: " + commonReferenceId);
-          plant.setCommonNameReferenceId(commonReferenceId);
-        }
-				
-        plant.setConceptReferenceId(conceptReferenceId);
+				if (!commonReferenceId.equals(NOREFERENCE))
+				{
+					System.out.println(
+						"Accepting Reference: " + commonReferenceId);
+					plant.setCommonNameReferenceId(commonReferenceId);
+				}
+
+				plant.setConceptReferenceId(conceptReferenceId);
 				plant.setPlantDescription(conceptDescription);
-	      
-        if (! scientificReferenceId.equals(NOREFERENCE)) 
-        {
-				  plant.setScientificNameReferenceId(scientificReferenceId);
-        }
-        
-        if (! codeReferenceId.equals(NOREFERENCE)) 
-        {
-          System.out.println("-->" + codeReferenceId);
-			    plant.setCodeNameReferenceId(codeReferenceId);
-        }
+
+				if (!scientificReferenceId.equals(NOREFERENCE))
+				{
+					plant.setScientificNameReferenceId(
+						scientificReferenceId);
+				}
+
+				if (!codeReferenceId.equals(NOREFERENCE))
+				{
+					System.out.println("-->" + codeReferenceId);
+					plant.setCodeNameReferenceId(codeReferenceId);
+				}
 
 				updatePlantStatusUsagePage(
 					emailAddress,
@@ -275,37 +290,46 @@ public class AddPlant implements Constants
 			{
 				System.out.println(
 					"DataSubmitServlet > getting the status-usage data, returning recipt");
-				String conceptStatus = request.getParameter("conceptStatus");
-				
+				String conceptStatus =
+					request.getParameter("conceptStatus");
+
 				// Dates automatically allocated
 				//String statusStartDate = request.getParameter("statusStartDate");
 				//String statusStopDate = request.getParameter("statusStopDate");
 				//String usageStartDate = request.getParameter("statusStartDate");
 				//String usageStopDate = request.getParameter("statusStopDate");
 				// UPDATE THE DATES B/C THEY ARE REQUIRED BY THE LOADER
-				
-				String statusDescription = request.getParameter("statusDescription");
+
+				String statusDescription =
+					request.getParameter("statusDescription");
 				String taxonLevel = request.getParameter("taxonLevel");
-				String plantParentName = request.getParameter("plantParentName");
+				String plantParentName =
+					request.getParameter("plantParentName");
 
 				plant.setParentName(plantParentName);
 				plant.setStatus(conceptStatus);
-				plant.setStatusStartDate( Utility.getCurrentDate() );
+				plant.setStatusStartDate(Utility.getCurrentDate());
 				plant.setStatusPartyComments(statusDescription);
 				plant.setClassLevel(taxonLevel);
-				
-				updatePlantSubmittalRecipt(emailAddress, plant, out, userAtts);
+
+				updatePlantSubmittalRecipt(
+					emailAddress,
+					plant,
+					out,
+					userAtts);
 			}
 			// STEP WHERE THE PLANT ACTUALLY GETS LOADED TO THE DATABASE
 			else if (action.equals("plantsubmittalreceipt"))
 			{
-				System.out.println("submittal to the database taking place ");
+				System.out.println(
+					"submittal to the database taking place ");
 
 				DBPlantWriter dbw = new DBPlantWriter(plant, null);
 				boolean results = dbw.isWriteSuccess();
 
 				// WRITE THE RESULTS BACK TO THE BROWSER
-				String receipt = this.getPlantInsertionReceipt(results, plant, userAtts);
+				String receipt =
+					this.getPlantInsertionReceipt(results, plant, userAtts);
 				out.println(receipt);
 			}
 			else
@@ -335,7 +359,10 @@ public class AddPlant implements Constants
 	 *
 	 */
 
-	private String getPlantInsertionReceipt(boolean results, Plant plant, Hashtable userAtts)
+	private String getPlantInsertionReceipt(
+		boolean results,
+		Plant plant,
+		Hashtable userAtts)
 	{
 		StringWriter output = new StringWriter();
 		StringBuffer sb = new StringBuffer();
@@ -363,7 +390,8 @@ public class AddPlant implements Constants
 			sb.append("Common Name: " + commonName + "<br> \n");
 			sb.append("Code: " + code + "<br> \n");
 			sb.append("Concept Description: " + conceptDescription + "<br> \n");
-			sb.append("Status Start: " + plant.getStatusStartDate() + "<br> \n");
+			sb.append(
+				"Status Start: " + plant.getStatusStartDate() + "<br> \n");
 			sb.append("Status Stop: " + plant.getStatusStopDate() + "<br> \n");
 			sb.append("Status: " + status + "<br> \n");
 			sb.append("Taxonomic Level: " + level + "<br> \n");
@@ -423,7 +451,9 @@ public class AddPlant implements Constants
 			for (int i = 0; i < longNameMatches.size(); i++)
 			{
 				sb.append(
-					"<option> " + (String) longNameMatches.elementAt(i) + " </option>");
+					"<option> "
+						+ (String) longNameMatches.elementAt(i)
+						+ " </option>");
 			}
 			sb.append("</select>");
 			replaceHash.put("longNameNearMatches", sb.toString());
@@ -434,7 +464,9 @@ public class AddPlant implements Constants
 			for (int i = 0; i < shortNameMatches.size(); i++)
 			{
 				sb.append(
-					"<option> " + (String) shortNameMatches.elementAt(i) + " </option>");
+					"<option> "
+						+ (String) shortNameMatches.elementAt(i)
+						+ " </option>");
 			}
 			sb.append("</select>");
 			replaceHash.put("shortNameNearMatches", sb.toString());
@@ -445,7 +477,9 @@ public class AddPlant implements Constants
 			for (int i = 0; i < codeMatches.size(); i++)
 			{
 				sb.append(
-					"<option> " + (String) codeMatches.elementAt(i) + " </option>");
+					"<option> "
+						+ (String) codeMatches.elementAt(i)
+						+ " </option>");
 			}
 			sb.append("</select>");
 			replaceHash.put("codeNearMatches", sb.toString());
@@ -461,7 +495,10 @@ public class AddPlant implements Constants
 				"codeNearMatchMessages",
 				"VegBank has " + codeMatches.size() + " near matches");
 
-			su.filterTokenFile(plantNameRectificationTemplate, out, replaceHash);
+			su.filterTokenFile(
+				plantNameRectificationTemplate,
+				out,
+				replaceHash);
 		}
 		catch (Exception e)
 		{
@@ -501,32 +538,38 @@ public class AddPlant implements Constants
 			replaceHash.put("conceptDescription", plant.getPlantDescription());
 
 			Collection references = getReferencesCollection();
-			
+
 			// THE REFERENCES
-			
+
 			replaceHash.put(
 				"conceptReferenceName",
-				this.getReferenceShortName( plant.getConceptReferenceId(), references )
-			);
+				this.getReferenceShortName(
+					plant.getConceptReferenceId(),
+					references));
 			replaceHash.put(
 				"scientificReferenceName",
-				this.getReferenceShortName( plant.getScientificNameReferenceId(), references )
-			);
+				this.getReferenceShortName(
+					plant.getScientificNameReferenceId(),
+					references));
 			replaceHash.put(
 				"codeReferenceName",
-				this.getReferenceShortName( plant.getCodeNameReferenceId(), references )
-			);
+				this.getReferenceShortName(
+					plant.getCodeNameReferenceId(),
+					references));
 			replaceHash.put(
 				"commonReferenceName",
-				this.getReferenceShortName( plant.getCommonNameReferenceId(), references )
-			);
+				this.getReferenceShortName(
+					plant.getCommonNameReferenceId(),
+					references));
 
 			// STATUS AND USAGE
 			replaceHash.put("conceptStatus", "" + plant.getStatus());
-			replaceHash.put("statusDescription", "" + plant.getStatusPartyComments());
-			replaceHash.put("taxonLevel",  plant.getClassLevel());
-			
-			replaceHash.put("plantParentName", ""+ plant.getParentName());
+			replaceHash.put(
+				"statusDescription",
+				"" + plant.getStatusPartyComments());
+			replaceHash.put("taxonLevel", plant.getClassLevel());
+
+			replaceHash.put("plantParentName", "" + plant.getParentName());
 			//	FIXME: Ignoring plantparent reference for now
 			//			 replaceHash.put("plantParentRefTitle", ""+plantParentRefTitle);
 			//			 replaceHash.put("plantParentRefAuthors", ""+plantParentRefAuthors);
@@ -557,10 +600,12 @@ public class AddPlant implements Constants
 			String shortName = (String) shortNameRef.get("plantName");
 			String code = (String) codeNameRef.get("plantName");
 
-			String longNameReferenceId = (String) longNameRef.get("plantReferenceId");
+			String longNameReferenceId =
+				(String) longNameRef.get("plantReferenceId");
 			String shortNameReferenceId =
 				(String) shortNameRef.get("plantReferenceId");
-			String codeNameReferenceId = (String) codeNameRef.get("plantReferenceId");
+			String codeNameReferenceId =
+				(String) codeNameRef.get("plantReferenceId");
 
 			System.out.println("ref id: " + longNameReferenceId);
 
@@ -575,17 +620,23 @@ public class AddPlant implements Constants
 			if (longNameReferenceId != null
 				&& !longNameReferenceId.trim().equals("null"))
 			{
-				replaceHash.put("longNameReference", "" + longNameRef.toString());
+				replaceHash.put(
+					"longNameReference",
+					"" + longNameRef.toString());
 			}
 			else
 			{
-				replaceHash.put("longNameReference", "" + HTMLUtil.getReferencesDropDown());
+				replaceHash.put(
+					"longNameReference",
+					"" + HTMLUtil.getReferencesDropDown());
 			}
 			// short name 
 			if (shortNameReferenceId != null
 				&& !shortNameReferenceId.trim().equals("null"))
 			{
-				replaceHash.put("shortNameReference", "" + shortNameRef.toString());
+				replaceHash.put(
+					"shortNameReference",
+					"" + shortNameRef.toString());
 			}
 			else
 			{
@@ -597,14 +648,20 @@ public class AddPlant implements Constants
 			if (codeNameReferenceId != null
 				&& !codeNameReferenceId.trim().equals("null"))
 			{
-				replaceHash.put("codeNameReference", "" + codeNameRef.toString());
+				replaceHash.put(
+					"codeNameReference",
+					"" + codeNameRef.toString());
 			}
 			else
 			{
-				replaceHash.put("codeNameReference", "" + HTMLUtil.getReferencesDropDown());
+				replaceHash.put(
+					"codeNameReference",
+					"" + HTMLUtil.getReferencesDropDown());
 			}
 
-			replaceHash.put("referencesDropDown", HTMLUtil.getReferencesDropDown());
+			replaceHash.put(
+				"referencesDropDown",
+				HTMLUtil.getReferencesDropDown());
 
 			su.filterTokenFile(plantReferenceTemplate, out, replaceHash);
 
@@ -615,7 +672,6 @@ public class AddPlant implements Constants
 			e.printStackTrace();
 		}
 	}
-
 
 	/**
 	 * method that updates the plant usage / status page 
@@ -644,7 +700,9 @@ public class AddPlant implements Constants
 			replaceHash.put("code", "" + code);
 
 			replaceHash.put("emailAddress", "" + emailAddress);
-			replaceHash.put("plantPartyGivenName", "" + userAtts.get("givenName"));
+			replaceHash.put(
+				"plantPartyGivenName",
+				"" + userAtts.get("givenName"));
 			replaceHash.put("plantPartySurName", "" + userAtts.get("surName"));
 			replaceHash.put(
 				"plantPartyInstitution",
@@ -660,27 +718,26 @@ public class AddPlant implements Constants
 			e.printStackTrace();
 		}
 	}
-	
-	private String getReferenceShortName( String pKey, Collection references )
+
+	private String getReferenceShortName(String pKey, Collection references)
 	{
 		String noReferenceMessage = "No Reference Selected";
 		// Check for obviously nonvalid pKey
-			try
-			{
-				int pK = new Integer(pKey).intValue();
-			}
-			catch (NumberFormatException e)
-			{
-				// This is not an int so return no reference
-				return noReferenceMessage;
-			}
+		try
+		{
+			int pK = new Integer(pKey).intValue();
+		}
+		catch (NumberFormatException e)
+		{
+			// This is not an int so return no reference
+			return noReferenceMessage;
+		}
 
-		
 		Iterator refIt = references.iterator();
 		while (refIt.hasNext())
 		{
 			ReferenceSummary refSumm = (ReferenceSummary) refIt.next();
-			if ( refSumm.getId().equals(pKey) )
+			if (refSumm.getId().equals(pKey))
 			{
 				return refSumm.getTitle();
 			}
@@ -691,7 +748,7 @@ public class AddPlant implements Constants
 	private Collection getReferencesCollection()
 	{
 		Collection references = null;
-		
+
 		QueryReferences qr = new QueryReferences();
 		try
 		{
