@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-15 02:03:31 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-04-26 20:42:46 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@ package org.vegbank.common.utility;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
-import org.vegbank.common.utility.LogUtility;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -39,21 +38,47 @@ import org.apache.commons.logging.LogFactory;
  */
 public class PermComparison {
 
+	public static final String PROP_KEY_BASE = "perms.role.";
+	
 	private static Log log = LogFactory.getLog(PermComparison.class);
 	private static ResourceBundle res = ResourceBundle.getBundle("general");
+	private static Map roleNameMap = null;
+	
+	static {
+		initRoleNames();
+	}
 
+	
 	/**
-	 *
+	 * Builds the mapping of role names to numerical value.
 	 */
-	public PermComparison() {
+	private static void initRoleNames() {
+		// initialize the role names and numerical values
+		roleNameMap = new HashMap();
+		String property, role, value;
+		Enumeration keys = res.getKeys();
+		
+		while (keys.hasMoreElements()) {
+			property = (String)keys.nextElement();
+			if (property.startsWith("perms.role.")) {
+				// found a role property; parse it
+				role = property.substring(PROP_KEY_BASE.length());
+				value = res.getString(property);
+				log.debug("Adding role " + role + "=" + value);
+				roleNameMap.put(role, new Long(value));
+				
+			}
+		}
 	}
 
 	/**
-	 *
+	 * Given a role name, returns its corresponding numerical value.
+	 * @param role name or abbreviation
+	 * @return numerical value of the given role
 	 */
-	public static int getRoleConstant(String role) {
+	public static long getRoleConstant(String role) {
 		
-		if (role == null) {
+		if (!Utility.isStringNullOrEmpty(role)) {
 			return 0;
 		}
 		
@@ -65,9 +90,27 @@ public class PermComparison {
 		if (value == null) {
 			return 0;
 		}
-		return Integer.parseInt(value);
+		return Long.parseLong(value);
 	}
 
+	/**
+	 * Given a numerical role sum, returns all corresponding
+	 * role names.
+	 * @param sum
+	 * @return List of Strings containing full role names (not abbrev.)
+	 */
+	 public List getRoleNames(long sum) {
+		 List list = new ArrayList();
+		 Iterator nit = roleNameMap.keySet().iterator();
+		 while (nit.hasNext()) {
+			 String role = (String)nit.next();
+			 if (matchesOne(role, sum)) {
+				 list.add(role);
+			 }
+		 }
+		 return list;
+	 }
+	
 	/* =============================================================== */
 	/**
 	 * @param required comma separated list of required role names
@@ -85,7 +128,7 @@ public class PermComparison {
 	 * @return true if given list of comma separated roles 
 	 * match ALL of the required roles.
 	 */
-	public static boolean matchesAll(int required, String given) {
+	public static boolean matchesAll(long required, String given) {
 		return matchesAll(required, parsePermissions(given));
 	}
 	
@@ -94,7 +137,7 @@ public class PermComparison {
 	 * @param given integer sum of given roles
 	 * @return true if given role sum matches ALL of the required roles.
 	 */
-	public static boolean matchesAll(String required, int given) {
+	public static boolean matchesAll(String required, long given) {
 		return matchesAll(parsePermissions(required), given);
 	}
 	
@@ -117,7 +160,7 @@ public class PermComparison {
 	 * @return true if given list of comma separated roles 
 	 * match at least ONE of the required roles.
 	 */
-	public static boolean matchesOne(int required, String given) {
+	public static boolean matchesOne(long required, String given) {
 		return matchesOne(required, parsePermissions(given));
 	}
 	
@@ -126,7 +169,7 @@ public class PermComparison {
 	 * @param given integer sum of given roles
 	 * @return true if given role sum matches at least ONE of the required roles.
 	 */
-	public static boolean matchesOne(String required, int given) {
+	public static boolean matchesOne(String required, long given) {
 		return matchesOne(parsePermissions(required), given);
 	}
 	
@@ -140,7 +183,7 @@ public class PermComparison {
 	 * @return true if given sum of roles match at least all of the 
 	 * required roles.
 	 */
-	public static boolean matchesAll(int required, int given) {
+	public static boolean matchesAll(long required, long given) {
 		//log.debug("PermComparison.matchesAll("+required+","+given+"): " + (required & given));
 				
 		if ((required & given) != required) {
@@ -154,7 +197,7 @@ public class PermComparison {
 	 * @return true if given sum of roles meet at least one of 
 	 * the required roles.
 	 */
-	public static boolean matchesOne(int required, int given) {
+	public static boolean matchesOne(long required, long given) {
 		if ((required & given) == 0) {
 			return false;
 		} else {
@@ -165,23 +208,21 @@ public class PermComparison {
 	/**
 	 * @param csv Comma separated list of role names found in the 
 	 * properties file.
-	 * @return int added all given roles' integer values
+	 * @return long added all given roles' integer values
 	 */
-	public static int parsePermissions(String csv) {
+	public static long parsePermissions(String csv) {
 		if (csv == null) {
 			return 0;
 		}
 		
 		StringTokenizer st = new StringTokenizer(csv, ", ");
 		String tmpRole;
-		int roleSum = 0;
+		long roleSum = 0;
 
 		while (st.hasMoreTokens()) {
 			tmpRole = st.nextToken();
 			try {
-				//log.debug(tmpRole +"="+res.getString("perms.role." + tmpRole));
-				roleSum += Integer.parseInt(
-						res.getString("perms.role." + tmpRole));
+				roleSum += Long.parseLong(res.getString("perms.role." + tmpRole));
 
 			} catch (Exception ex) {
 				log.debug("PermComparison: bad config value for role " +
@@ -200,7 +241,7 @@ public class PermComparison {
 	 *
 	 */
 	public static void main(String[] args) {
-		int sum;
+		long sum;
 		String required;
 		String user;
 		required = "guest, registered, certified, pro, dba";

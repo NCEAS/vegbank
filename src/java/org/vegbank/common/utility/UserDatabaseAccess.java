@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-17 02:53:20 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2004-04-26 20:42:46 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-04-17 02:53:20 $'
- *     '$Revision: 1.14 $'
+ *     '$Date: 2004-04-26 20:42:46 $'
+ *     '$Revision: 1.15 $'
  */
 
 import java.sql.PreparedStatement;
@@ -63,9 +63,9 @@ public class UserDatabaseAccess
 	 * method that, for an email address, will get the user's priveledge level
 	 * @param email -- the user's email address
 	 */
-	 public int getUserPermissionLevel(String email)
+	 public long getUserPermissionLevel(String email)
 	 {
-		 int level = 0;
+		 long level = 0;
 		 try
 		 {
 			 WebUser user = this.getUser(email);
@@ -76,7 +76,7 @@ public class UserDatabaseAccess
 			log.error("Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
-		 return(level);
+		 return level;
 	 }
 	
 	/**
@@ -120,9 +120,9 @@ public class UserDatabaseAccess
 	 * certification table
 	 * @param  usrId -- the usr_id of the user
 	 */
-	public boolean userCertificationExists(int usrId)
+	public boolean userCertificationExists(long usrId)
 			throws SQLException {
-		int s = 0;
+		long s = 0;
 		StringBuffer sb = new StringBuffer();
 		DBConnection conn = getConnection();
 		//get the connections etc
@@ -137,7 +137,7 @@ public class UserDatabaseAccess
 		int resultCnt = 0;
 		while (rs.next() ) 
 		{
-			s = rs.getInt(1);
+			s = rs.getLong(1);
 			return (s > 0);
 		}
 
@@ -176,8 +176,8 @@ public class UserDatabaseAccess
 		// create the statement
 		PreparedStatement pstmt = conn.prepareStatement( sqlInsert.toString() );
 		
-		pstmt.setInt(1, form.getCurrentCertLevel());
-		pstmt.setInt(2, PermComparison.getRoleConstant(form.getRequestedCert()));
+		pstmt.setLong(1, form.getCurrentCertLevel());
+		pstmt.setLong(2, form.getRequestedCert());
 		pstmt.setString(3, form.getHighestDegree());
 		pstmt.setString(4, form.getDegreeYear());
 		pstmt.setString(5, form.getDegreeInst());
@@ -391,7 +391,7 @@ public class UserDatabaseAccess
 			userBean.setSurname( results.getString(3) );
 			userBean.setGivenname( results.getString(4) );
 			userBean.setPreferredname( results.getString(5) );
-			userBean.setPermissiontype( results.getInt(6) );
+			userBean.setPermissiontype( results.getLong(6) );
 			userBean.setOrganizationname( results.getString(7) ); 
 			userBean.setTicketcount( results.getInt(8) ); 
 			userBean.setAddress( results.getString(9) ); 
@@ -418,20 +418,22 @@ public class UserDatabaseAccess
 	 * @param status
 	 * @param comment
 	 */
-	 public void updateCertificationStatus(int usercertification_id, String status, String comment) 
+	 public void updateCertificationStatus(long usercertification_id, String status, String comment) 
 		 	throws SQLException
 	 {
 		DBConnection conn = getConnection();
 		Statement stmt = conn.createStatement();
 		StringBuffer sb = new StringBuffer(256)
-			.append("UPDATE usercertification SET ")
-			.append("certificationstatus='")
-			.append(Utility.encodeForDB(status))
-			.append("', certificationstatuscomments='")
-			.append(Utility.encodeForDB(comment))
-			.append("' WHERE usercertification_id='")
-			.append(usercertification_id)
-			.append("'");
+			.append("UPDATE usercertification SET certificationstatus='")
+			.append(Utility.encodeForDB(status));
+
+		if (!Utility.isStringNullOrEmpty(comment)) {
+			sb.append("', certificationstatuscomments='")
+				.append(Utility.encodeForDB(comment));
+		}
+
+		sb.append("' WHERE usercertification_id='")
+			.append(usercertification_id).append("'");
 
 		log.debug("setting cert status: " + sb.toString());
 		stmt.executeUpdate(sb.toString());
@@ -501,7 +503,7 @@ public class UserDatabaseAccess
 	 * @param usercertification_id
 	 * @return CertificationForm or null if none found
 	 */
-	 public CertificationForm getCertificationApp(int usercertification_id) 
+	 public CertificationForm getCertificationApp(long usercertification_id) 
 		 	throws SQLException
 	 {
 		//get the connections etc
@@ -515,7 +517,7 @@ public class UserDatabaseAccess
 			.append(" WHERE usercertification_id = ").append(usercertification_id);
 	
 		 //issue the query
-		log.debug("UDA.getCert: QUERY: " + sb.toString());
+		//log.debug("UDA.getCert: QUERY: " + sb.toString());
 		ResultSet results = query.executeQuery(sb.toString());
 		
 		//get the results -- assumming 0 or 1 rows returned
@@ -728,7 +730,7 @@ public class UserDatabaseAccess
 	 * @param usrId -- the usr.usr_id of the user
 	 * @param sum -- the sum of roles
 	 */
-		public void setUserPermissionSum(long usrId, int sum) throws Exception
+		public void setUserPermissionSum(long usrId, long sum) throws Exception
 		{
 			if (usrId == 0) {
 				throw new Exception("Can't set permissions: null usr_id");
@@ -748,16 +750,16 @@ public class UserDatabaseAccess
 	 * @param usrId -- the usr.usr_id of the user
 	 * @return sum of permissions
 	 */
-	 public int getUserPermissionSum(long usrId) throws SQLException
+	 public long getUserPermissionSum(long usrId) throws SQLException
 	 {
 		DBConnection conn = getConnection();
 		Statement query = conn.createStatement();
 		query.executeQuery("SELECT permission_type FROM usr WHERE usr_id=" + usrId);
 		ResultSet rs = query.getResultSet();
 		
-		int sum = 0;
+		long sum = 0;
 		if (rs.next() ) {
-			sum = rs.getInt(1);
+			sum = rs.getLong(1);
 		}
 
 		rs.close();
