@@ -26,7 +26,6 @@
 
 <%@ include file="autogen/covermethod_detail_data.jsp" %>
 
-
   <TR><TD COLSPAN="2">
   <!-- remember coverMethod -->
   <bean:define id="cmId" name="onerowofcovermethod" property="covermethod_id"/>  
@@ -38,10 +37,11 @@
 
 <logic:notEmpty name="coverindex-BEANLIST">
   <table class="leftrightborders" cellpadding="2">
-    <%@ include file="autogen/coverindex_summary_head.jsp" %>
+<tr>    <%@ include file="autogen/coverindex_summary_head.jsp" %> </tr>
     <logic:iterate id="onerowofcoverindex" name="coverindex-BEANLIST">
-     
+ <tr class="@nextcolorclass@">
      <%@ include file="autogen/coverindex_summary_data.jsp" %>
+ </tr>        
     </logic:iterate>
   </table>
 </logic:notEmpty>
