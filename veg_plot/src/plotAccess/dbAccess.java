@@ -5,37 +5,51 @@ import java.util.*;
 
 
 /**
-* This class will take an xml file containg either query attributes
-* or plot data and depending on the document type, either
-* insert, update or query the database - see the diagram 
-* "plotAccessArchitecture.vsd" to better understand the 
-* relation of this class to database access module.
-*
-* 1] For database queries:
-* queryXML should be the xml document containing the query attributes
-* queryXSL is the XSLT sheet for transforming the queryXML into attributeType and 
-* attributeString action is, at this point, verify - to transform the document, 
-* and query which will formulate the query and pass it to the database
-* 
-* 2] for database insertion:
-* dataXML should be the xml document containing plot and/or plant
-* data.  dataXSL is the XSLT sheet for transforming the dataXML file into 
-* databaseAddress and dataValue and the current usable action is: verify
-* (same as above) and insert which will insert the plot data to the 
-* database
-*
-* 3] for database update:
-* at this point there is no update capabilities, although it will
-* allow the user to update the database, based on a plot xml 
-* document containing only partial data from a plot 
-*/
+ * This class will take an xml file containg either query attributes
+ * or plot data and depending on the document type, either
+ * insert, update or query the database - see the diagram 
+ * "plotAccessArchitecture.vsd" to better understand the 
+ * relation of this class to database access module.
+ *
+ * 1] For database queries:
+ * queryXML should be the xml document containing the query attributes
+ * queryXSL is the XSLT sheet for transforming the queryXML into attributeType and 
+ * attributeString action is, at this point, verify - to transform the document, 
+ * and query which will formulate the query and pass it to the database
+ * 
+ * 2] for database insertion:
+ * dataXML should be the xml document containing plot and/or plant
+ * data.  dataXSL is the XSLT sheet for transforming the dataXML file into 
+ * databaseAddress and dataValue and the current usable action is: verify
+ * (same as above) and insert which will insert the plot data to the 
+ * database
+ *
+ * 3] for database update:
+ * at this point there is no update capabilities, although it will
+ * allow the user to update the database, based on a plot xml 
+ * document containing only partial data from a plot 
+ */
+
+
 public class dbAccess {
+
+//constructor -- define as static the LocalDbConnectionBroker so that methods
+// called by this class can access the 'local' pool of database connections
+static LocalDbConnectionBroker lb;
+
+
+public String queryOutput[] = new String[10000];  //the output from query
+int queryOutputNum; //the number of output rows from the query
+
+
+
 
 public static void main(String[] args) {
 if (args.length != 3) {
 	System.out.println("Usage: java dbAccess  [XML] [XSL] [action] \n"
 		+"version: Feb 2001 \n \n"
-		+"actions:  query compoundQuery insert insertPlot verify simpleCommunityQuery");
+		+"actions:  query compoundQuery insert insertPlot "
+		+"verify simpleCommunityQuery");
 		System.exit(0);
 }  //end if
 
@@ -49,12 +63,6 @@ String action=args[2];
 
 dbAccess g =new dbAccess();  
 g.accessDatabase(inputXml, inputXSL, action);
-
-//print the results to the System out
-for (int ii=0; ii<g.queryOutputNum; ii++) {
-	System.out.println("printing this from dbAccess.main "+g.queryOutput[ii]);
-}
-
 } //end main method
 
 
@@ -72,6 +80,10 @@ for (int ii=0; ii<g.queryOutputNum; ii++) {
  */
 public void accessDatabase (String inputXml, String inputXSL, String action) {
 try {
+
+//first initiate the local database pooling class so that connections may be
+// used by the classes that are going to be subsequently called
+lb.manageLocalDbConnectionBroker("initiate");
 
 //call the method to transform the data xml document and pass back a string writer  
 transformXML m = new transformXML();
@@ -104,7 +116,7 @@ if (action.equals("query")) {
 }
 
 //compound query action
-if (action.equals("compoundQuery")) {
+else if (action.equals("compoundQuery")) {
 
 	
 	//pass the array to the sql mapping class - compound queries
@@ -121,7 +133,7 @@ if (action.equals("compoundQuery")) {
 
 
 //insert action -- to insert a plot to the last database
-if (action.equals("insert")) {
+else if (action.equals("insert")) {
 
 	//pass the array to the plot writer to be inserted into the database
 	plotWriter w =new plotWriter();
@@ -131,7 +143,7 @@ if (action.equals("insert")) {
 
 
 //insertPlot action -- this is to insert a plot to the most recent DB
-if (action.equals("insertPlot")) {
+else if (action.equals("insertPlot")) {
 
 	//pass the array to the plot writer to be inserted into the database
 	PlotDBWriter w =new PlotDBWriter();
@@ -141,7 +153,7 @@ if (action.equals("insertPlot")) {
 
 
 //verify action
-if (action.equals("verify")) {
+else if (action.equals("verify")) {
 
 	for (int ii=0; ii<transformedStringNum; ii++) 
 	{
@@ -151,7 +163,7 @@ if (action.equals("verify")) {
 }
 
 //simple community query action
-if (action.equals("simpleCommunityQuery")) {
+else if (action.equals("simpleCommunityQuery")) {
 
 	{
 		sqlMapper w =new sqlMapper();
@@ -170,7 +182,12 @@ if (action.equals("simpleCommunityQuery")) {
 //if unknown action
 else {System.out.println("dbAccess.accessDatabase: unrecognized action: "
 	+action);}
-	
+
+//shut down the connection pooling
+lb.manageLocalDbConnectionBroker("destroy");
+
+
+
 } //end try
 catch( Exception e ) {System.out.println(" failed in: dbAccess.accessDatabase "
 	+e.getMessage() );
@@ -178,9 +195,6 @@ catch( Exception e ) {System.out.println(" failed in: dbAccess.accessDatabase "
 	}
 }
 
-
-public String queryOutput[] = new String[10000];  //the output from query
-int queryOutputNum; //the number of output rows from the query
 
 }
 
