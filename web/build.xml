@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-11-08 21:17:45 $'
-* '$Revision: 1.130 $'
+* '$Date: 2004-11-09 02:28:06 $'
+* '$Revision: 1.131 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -230,6 +230,8 @@
     <copy overwrite="true" todir="${image_server}" filtering="no">
       <fileset dir="${image_src}">
         <include name="**"/>
+        <exclude name="*.psf" />
+        <exclude name="*.readme" />
       </fileset>
     </copy>
   </target>
@@ -564,12 +566,12 @@
         <exclude name="BOGUS*"/>
         <exclude name="*.xsl"/>
         <exclude name="*.xml"/>
-        <exclude name="*/custom/*" />
+        <exclude name="*/custom/*"/>
       </fileset>
     </copy>
     <copy todir="${vegbranch_server}/help" filtering="yes" overwrite="yes">
       <fileset dir="${vegbr_dir}/help/custom">
-        <include name="**/*.html" />
+        <include name="**/*.html"/>
       </fileset>
     </copy>
     <!-- copy screenshots -->
