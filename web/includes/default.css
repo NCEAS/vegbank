@@ -346,6 +346,11 @@ THESE are all just normal styles.  The sizes have been changed to size[thesize]
 	}
 
 
+/* VegBranch field/table names styles */
+
+  strong.vbrtbl {color: #336633 }
+  strong.vbrfld {color: #666666 ; font-style:italic}
+
 
 /*
 -----------------------------------------------------------------------------------------------------
