@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-21 15:12:43 $'
- *	'$Revision: 1.24 $'
+ *	'$Date: 2005-02-16 20:11:27 $'
+ *	'$Revision: 1.25 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.DatabaseUtility;
 import org.vegbank.common.utility.VBObjectUtils;
 
 /**
@@ -363,7 +364,7 @@ public class GenericCommand
 		log.debug("hasParams: " + hasParams);
 
 
-		/*
+        /*
 		if (!Utility.isStringNullOrEmpty(this.whereSubquery)) {
 			// swap whereSubquery into {0} of whereClause
 			String sqlWhereSubquery = sqlResources.getString(this.whereSubquery);
@@ -375,9 +376,8 @@ public class GenericCommand
 			whereClause = format.format(subquerySwap);
 			log.debug("new whereClause: " + whereClause);
 
-
 			log.debug("Expanding wparams");
-			StringTokenizer st = new StringTokenizer(whereParams[0], ";");
+			StringTokenizer st = new StringTokenizer(whereParams[0], Utility.PARAM_DELIM);
 			whereParams = new String[st.countTokens()];
 			int j=0;
 			while (st.hasMoreTokens()) {
@@ -385,15 +385,42 @@ public class GenericCommand
 			}
 			this.whereSubquery = null;
 		}
-		*/
+        */
+        //////////////////////////////////////////
+        List wpList = new ArrayList();
+        log.debug("checking for ; delimited wparams");
+        for (int i=0; i<whereParams.length; i++) {
+            StringTokenizer st = new StringTokenizer(whereParams[i], Utility.PARAM_DELIM);
+            //whereParams = new String[st.countTokens()];
+            //int j=0;
+            while (st.hasMoreTokens()) {
+                //whereParams[j++] = st.nextToken();
+                wpList.add(st.nextToken());
+            }
+        }
+
+        // get all of the params as an array
+        whereParams = (String[])wpList.toArray( new String[1] );
+        //////////////////////////////////////////
 
 		// format the where clause
 		if (hasWhereClause && hasParams) {
 
 			if (hasParams) {
+                /*
 				for (int i=0; i<whereParams.length; i++) {
+                    String tmpParam = DatabaseUtility.makeSQLSafe(whereParams[i], false);
+
+					if (!Utility.isNumeric(tmpParam)) {
+                        // THIS IS PROBABLY A BAD IDEA
+                        // SINCE QUERIES AND STUFF CAN BE WPARAMS
+					    tmpParam = "'" + tmpParam + "'";
+                    }
+
+					whereParams[i] = tmpParam;
 					log.debug("whereParams: " + whereParams[i]);
 				}
+                */
 
 				// MessageFormat allows the substitution of '{x}' with Strings from 
 				// a String[] where x is the array index
