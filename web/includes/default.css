@@ -1,9 +1,16 @@
 BODY			{ background-color: #FFFFFF;}
 
+/*thin lines for your table gets you a grid of thin lines */
 table.thinlines {border-style: solid; 
                  border-width:1px; 
                  border-collapse: collapse; 
-                 border-color:#666666}
+                 border-color:#333333}
+table.thinlines td {border-style:solid; border-width:1px; border-color:#333333}                 
+table.thinlines th {border-style:solid; border-width:1px; border-color:#333333}
+/* left right class for table gets you vertical lines for your tables only (and surrounding thin line) */
+table.leftright {border-style:solid; border-color:#333333; border-collapse:collapse; border-width:1px }
+table.leftright td {border-style:solid; border-bottom-width:0px ; border-left-width:1px ; border-right-width:1px ; border-top-width:0px}
+table.leftright th {border-style:solid; border-width:1px ; border-color:#333333;}
 
 A:Link			{ color: #005680; text-decoration: underline }
 A:Visited		{ color: #003366; text-decoration: underline }
