@@ -30,8 +30,8 @@
                             </a></td>
 <td class="sizetiny">
 <bean:write name="onerow" property="projectname"/>&nbsp;</td><td class="sizetiny">
-<bean:write name="onerow" property="projectdescription"/>&nbsp;</td><td>
-<bean:write name="onerow" property="startdate"/>&nbsp;</td><td>
+<bean:write name="onerow" property="projectdescription"/>&nbsp;</td><td nowrap="true">
+<bean:write name="onerow" property="startdate"/>&nbsp;</td><td nowrap="true">
 <bean:write name="onerow" property="stopdate"/>&nbsp;</td></tr>
 </logic:iterate>
 </table>
