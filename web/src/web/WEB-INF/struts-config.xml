@@ -22,10 +22,6 @@
 		           type="org.apache.struts.action.DynaActionForm">
 			<form-property name="certBean"
 			               type="org.vegbank.ui.struts.CertificationForm"/>
-			<form-property name="usrId"
-			               type="java.lang.String"/>
-			<form-property name="certId"
-			               type="java.lang.String"/>
 			<form-property name="action"
 			               type="java.lang.String"/>
 			<form-property name="statusComment"
@@ -148,12 +144,13 @@
 		         path="/admin/admin_menu.jsp"/>
 		<forward name="AuthenticationException"
 		         path="/forms/AuthenticationException.jsp"/>
-		<forward name="CertificationList"
-		         path="/admin/list_certifications.jsp"/>
 		<forward name="Certification"
 		         path="/LoadCertification.do"/>
 		<forward name="CertificationException"
 		         path="/forms/CertificationException.jsp"/>
+		<forward name="CertificationList"
+		         redirect="false"
+		         path="/admin/list_certifications.jsp"/>
 		<forward name="ChangePassword"
 		         path="/forms/change_pwd.jsp"
 		         redirect="false"/>
@@ -179,6 +176,9 @@
 		         path="/general/login.jsp"/>
 		<forward name="MainMenu"
 		         path="/forms/MainMenu.jsp"/>
+		<forward name="ManageUsers"
+		         path="/admin/manage_users.jsp"
+		         redirect="false"/>
 		<forward name="PlantQuery"
 		         path="/forms/PlantQuery.jsp"/>
 		<forward name="CommQuery"
@@ -194,6 +194,8 @@
 		         path="/forms/RegisterNewUser.jsp"/>
 	</global-forwards>
 	<action-mappings type="org.vegbank.ui.struts.VegbankActionMapping">
+		<action path="/AdminMenu"
+		        forward="AdminMenu"/>
 		<action path="/AddCoverMethod"
 		        type="org.vegbank.ui.struts.AddCoverMethodAction"
 		        name="AddCoverMethodForm"
@@ -307,11 +309,6 @@
 		        type="org.vegbank.ui.struts.GenericDispatcherAction"
 		        name="GenericDispatcherForm"
 		        scope="request"/>
-		<action path="/Logoff"
-		        type="org.vegbank.ui.struts.LogoffAction">
-			<forward name="success"
-			         path="/index.jsp"/>
-		</action>
 		<action path="/ListCertifications"
 		        type="org.vegbank.ui.struts.admin.CertificationListAction"
 		        forward="CertificationList"
@@ -321,6 +318,14 @@
 			              value="org.vegbank.ui.struts.Authenticate"/>
 			<set-property property="reqRoles"
 			              value="dba"/>
+			<forward name="view"
+			         path="CertificationList"
+			         redirect="false"/>
+		</action>
+		<action path="/Logoff"
+		        type="org.vegbank.ui.struts.LogoffAction">
+			<forward name="success"
+			         path="/index.jsp"/>
 		</action>
 		<action path="/Logon"
 		        type="org.vegbank.ui.struts.LogonAction"
@@ -330,25 +335,6 @@
 			<forward name="success"
 			         path="/forms/MainMenu.jsp"
 			         redirect="true"/>
-		</action>
-		<action path="/PlantQuery"
-		        type="org.vegbank.ui.struts.QueryAction"
-		        name="PlantQueryForm"
-		        scope="request"
-		        validate="true"
-		        input="PlantQuery">
-			<forward name="success"
-			         path="/forms/DisplayQueryResults.jsp"/>
-		</action>
-		<action path="/PlotQuery"
-		        type="org.vegbank.ui.struts.PlotQueryAction"
-		        name="PlotQueryForm"
-		        scope="request"
-		        validate="true"
-		        input="LoadPlotQuery">
-			<forward name="display_results"
-			         path="/forms/DisplayResults.jsp"
-			         redirect="false"/>
 		</action>
 		<action path="/LoadCertification"
 		        type="org.vegbank.ui.struts.CertificationLoadAction"
@@ -388,6 +374,25 @@
 			         redirect="false"/>
 			<forward name="edit_user"
 			         path="/forms/edit_user.jsp"
+			         redirect="false"/>
+		</action>
+		<action path="/PlantQuery"
+		        type="org.vegbank.ui.struts.QueryAction"
+		        name="PlantQueryForm"
+		        scope="request"
+		        validate="true"
+		        input="PlantQuery">
+			<forward name="success"
+			         path="/forms/DisplayQueryResults.jsp"/>
+		</action>
+		<action path="/PlotQuery"
+		        type="org.vegbank.ui.struts.PlotQueryAction"
+		        name="PlotQueryForm"
+		        scope="request"
+		        validate="true"
+		        input="LoadPlotQuery">
+			<forward name="display_results"
+			         path="/forms/DisplayResults.jsp"
 			         redirect="false"/>
 		</action>
 		<action path="/RegisterNewUser"
