@@ -1,11 +1,11 @@
 /*
- *	'$Id: UserProfileAction.java,v 1.2 2004-04-17 02:53:20 anderson Exp $'
+ *	'$Id: UserProfileAction.java,v 1.3 2004-04-26 20:48:29 anderson Exp $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-17 02:53:20 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-04-26 20:48:29 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.common.utility.ServletUtility;
-import org.vegbank.common.utility.PermComparison;
 import org.vegbank.common.Constants;
 import org.vegbank.common.model.WebUser;
 

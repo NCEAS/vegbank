@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-15 02:08:05 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-04-26 20:48:29 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,27 +60,26 @@ public class CertificationViewAction extends VegbankAction {
 			HttpServletRequest request,
 			HttpServletResponse response) {
 
-
-
 		log.debug("In action CertificationViewAction");
 		ActionErrors errors = new ActionErrors();
 
-		// get Cert from DB
-		DynaActionForm dform = (DynaActionForm)form;
-		CertificationForm certForm = null;
 
-		// get the certId
-		String certId = (String)dform.get("certId");
-		if (Utility.isStringNullOrEmpty(certId)) {
+		// get the certId from the form
+		CertificationForm certForm = (CertificationForm)form; 
+		long certId = certForm.getCertId();
+
+		if (certId == 0) {
 			// check the request next
-			log.debug("CertificationViewAction: certId not in form; checking request...");
-			if (certId == null || certId.equals("")) {
-				certId = request.getParameter("certId");
-				log.debug("CertificationViewAction: no given certId");
+			log.debug("certId not in form; checking request...");
+			String strCertId = request.getParameter("certId");
+			if (Utility.isStringNullOrEmpty(strCertId)) {
+				log.debug("no given certId");
 				errors.add(Globals.ERROR_KEY, new ActionMessage(
 							"errors.required", "certId=usercertification_id"));
 				saveErrors(request, errors);
 				return mapping.findForward("failure");
+			} else {
+				certId = Long.parseLong(strCertId);
 			}
 		}
 
@@ -89,25 +88,24 @@ public class CertificationViewAction extends VegbankAction {
 
 		// handle approval & declination
 		try {
-			log.debug("CertificationViewAction: getting certId: " + certId);
-			certForm = uda.getCertificationApp(Integer.parseInt(certId));
+			log.debug("getting certId: " + certId);
+			certForm = uda.getCertificationApp(certId);
 
 			// get action, if there is one
-			String action = (String)dform.get("action");
-			/////String action = request.getParameter("action");
-			if (Utility.isStringNullOrEmpty(action)) {
+			String cmd = getDispatchCommand(request);
+			if (Utility.isStringNullOrEmpty(cmd)) {
 				///// //////////////////////////
 				///// PRELOADING
 				///// //////////////////////////
 
 				usrId = certForm.getUsrId();
-				log.debug("CertificationViewAction: Preloading certId: " + 
+				log.debug("Preloading certId: " + 
 					certForm.getRequestedCert() + ", " +
 					certForm.getCurrentCertLevelName() + ", " +
 					certForm.getUsrId());
 
 				// set current certification level; use String for display ONLY
-				int userPerms = uda.getUserPermissionSum(usrId);
+				long userPerms = uda.getUserPermissionSum(usrId);
 
 				if (PermComparison.matchesOne("pro", userPerms)) {
 					certForm.setCurrentCertLevelName("professional");
@@ -117,15 +115,9 @@ public class CertificationViewAction extends VegbankAction {
 					certForm.setCurrentCertLevelName("registered");
 				}
 
-				log.debug("CertificationViewAction: setting usr: " + Long.toString(usrId));
-				// set the form et al. in dyna form
-				//dform.set("certBean", certForm);
-				dform.set("usrId", Long.toString(usrId));
-				dform.set("certId", certId);
-
-				// then set the form in the request
-				request.setAttribute("dform", dform);
-
+				log.debug("setting usr: " + usrId);
+				certForm.setUsrId(usrId);
+				certForm.setCertId(certId);
 
 				// using <bean:write> requires this
 				request.setAttribute("certBean", certForm);
@@ -137,76 +129,56 @@ public class CertificationViewAction extends VegbankAction {
 				request.setAttribute("hash", hash);
 				*/
 
-				log.debug("Leaving CertificationViewAction");
+				log.debug("Forwarding to 'view'");
 				return mapping.findForward("view");
 
-			} else {
+			} else if (cmd.equals("updateStatus")) {
 				///// //////////////////////////
 				///// ACTION
 				///// //////////////////////////
-				log.debug("CertificationViewAction: action = " + action);
-
-				log.debug("CertificationViewAction: getting usr from dform");
-				String tmp = (String)dform.get("usrId");
-				if (tmp == null || tmp.equals("")) {
-					log.debug("CertificationViewAction: usr is empty!");
-				}
-				usrId = Long.parseLong(tmp);
-				/////usr = request.getParameter("usrId");
-				log.debug("CertificationViewAction: usr = " + usrId);
+				log.debug("Taking action: " + cmd);
+				usrId = certForm.getUsrId();
+				log.debug("got usrId: " + usrId);
 
 				// get status comment
-				String statusComment = (String)dform.get("statusComment");
-				String certStatus;  // set this after getting action
+				String comment = certForm.getCertificationstatuscomments();
+				String newStatus = certForm.getCertificationstatus();
+				log.debug("Updating status: " + newStatus);
 
-				if (action.equals("APPROVE")) {
+				if (newStatus.equals("approved")) {
 					// handle approval
-					certStatus = "approved";
-					int curRoles = uda.getUserPermissionSum(usrId);
-					int reqRole = Integer.parseInt(certForm.getRequestedCert());
-					int sum = curRoles | reqRole;
+					long curRoles = uda.getUserPermissionSum(usrId);
+					long reqRole = certForm.getRequestedCert();
+					long sum = curRoles | reqRole;
 
+					// update applicant's permissions
 					log.debug("Adding roles: (sum = cur | req): "  +
 							sum + " = " + curRoles + " | " + reqRole);
-
 					uda.setUserPermissionSum(usrId, sum);
 					
+					// send email message to the applicant 
+					/*
+					notifyApplicant(certForm.getEmailAddress(), 
+							certForm.getGivenName() + " " + certForm.getSurName(),
+							certForm.getRequestedCertName(), comment);
+					*/
 
-					// send email message to the user 
-					Map tags = new HashMap();
-					tags.put("applicantName", certForm.getGivenName() + " " + certForm.getSurName());
-					tags.put("requestedRole", certForm.getRequestedCertName());
-					if (!Utility.isStringNullOrEmpty(statusComment)) {
-						tags.put("comment", statusComment);
-					}
-
-					String from = "panel@vegbank.org";
-					String to = certForm.getEmailAddress();
-					String cc = "";
-					String subject = "VegBank Certification Response";
-
-					ServletUtility.sendEmailTemplate("admin/certification-approval.vm", 
-							tags, from, to, cc, subject, true);
+					log.debug("updating status of #" + certId + " to " + newStatus);
+					ActionMessages messages = new ActionMessages();
+					messages.add("updated", new ActionMessage(
+								"messages.cert.updated", Long.toString(certId)));
+					saveMessages(request, messages);
 					
-				} else if (action.equals("REJECT")) {
-					certStatus = "rejected";
-
-				} else if (action.equals("DISCARD")) {
-					certStatus = "discarded";
-
-				} else {
-					certStatus = "ERROR";
-					log.error("unknown action");
+				} else if (newStatus.equals("rejected")) {
+					// might want to handle this in a special way, some day
+					log.debug("Reject!");
 				}
 
 				// update the application
-				log.debug("Updating status: " + certStatus);
-				uda.updateCertificationStatus(Integer.parseInt(certId), certStatus, statusComment);
+				uda.updateCertificationStatus(certId, newStatus, comment);
 
-
-				log.debug("Leaving CertificationViewAction");
-				return mapping.findForward("success");
-
+				log.debug("Forwarding to 'list'");
+				return mapping.findForward("list");
 			}
 
 		
@@ -217,7 +189,30 @@ public class CertificationViewAction extends VegbankAction {
 			saveErrors(request, errors);
 			return mapping.findForward("failure");
 		}
+		return mapping.findForward("failure");
+	}
 
+	/**
+	 * Send an email to the applicant.
+	 */
+	private void notifyApplicant(String emailAddress, String applicantName, 
+				String requestedRole, String comment) 
+				throws Exception {
+
+		Map tags = new HashMap();
+		tags.put("applicantName", applicantName);
+		tags.put("requestedRole", requestedRole);
+		if (!Utility.isStringNullOrEmpty(comment)) {
+			tags.put("comment", comment);
+		}
+
+		String from = "panel@vegbank.org";
+		String to = emailAddress;
+		String cc = "";
+		String subject = "VegBank Certification Response";
+
+		ServletUtility.sendEmailTemplate("admin/certification-approval.vm", 
+				tags, from, to, cc, subject, true);
 	}
 
 }

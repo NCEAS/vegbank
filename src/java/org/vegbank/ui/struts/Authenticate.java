@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-25 06:42:06 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2004-04-26 20:48:29 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ public class Authenticate implements  Authentication
 		}
 			
 		log.debug("Authenticate.checkReqRoles: getting user perms...");
-		int userPerms = user.getPermissiontype();
+		long userPerms = user.getPermissiontype();
 		log.debug("Authenticate.checkReqRoles: user's role sum = "
 				+ userPerms + ", required roles = " + reqRoles);
 			

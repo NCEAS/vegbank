@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-17 02:53:20 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-04-26 20:48:29 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@ package org.vegbank.ui.struts;
 import java.sql.*;
 
 import org.apache.struts.validator.ValidatorForm;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.command.GenericCommand;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.PermComparison;
@@ -38,13 +40,15 @@ import org.vegbank.common.utility.PermComparison;
 public class CertificationForm extends ValidatorForm 
 			implements java.io.Serializable
 {
+	private static Log log = LogFactory.getLog(CertificationForm.class);
+
 	// prepopulated fields
 	private long usrId;
 	private String emailAddress;
 	private String surName;
 	private String givenName;
 	private String phoneNumber;
-	private int currentCertLevel;
+	private long currentCertLevel;
 	private String currentCertLevelName;
 
 	// admin fields
@@ -53,7 +57,7 @@ public class CertificationForm extends ValidatorForm
 	private String certificationstatuscomments;
 	
 	// user enters these fields
-	private String requestedCert;
+	private long requestedCert;
 	private String highestDegree;
 	private String degreeYear;
 	private String degreeInst;
@@ -183,24 +187,27 @@ public class CertificationForm extends ValidatorForm
 	}
 
 	/**
-	 * @return abbreviated name of role
+	 * @return long sum of all roles
 	 */
-	public int getCurrentCertLevel() {
+	public long getCurrentCertLevel() {
 		return currentCertLevel;
 	}
 
 	/**
-	 * @param string must be either "cert" or "pro"
+	 * @param currentCertLevel 
 	 */
-	public void setCurrentCertLevel(int currentCertLevel) {
+	public void setCurrentCertLevel(long currentCertLevel) {
 		this.currentCertLevel = currentCertLevel;
 	}
 
 	/**
 	 * Get value of 'currentCertLevelName' property.
+	 * @return abbreviated name of role
 	 */
 	public String getCurrentCertLevelName() {
 		if (this.currentCertLevelName == null) {
+log.debug("perm comparing to " + this.currentCertLevel);
+
 			if (PermComparison.matchesOne("pro", this.currentCertLevel))
 				return "professional";
 			else if (PermComparison.matchesOne("cert", this.currentCertLevel))
@@ -234,14 +241,14 @@ public class CertificationForm extends ValidatorForm
 	/**
 	 * Get value of 'requestedCert' property.
 	 */
-	public String getRequestedCert() {
+	public long getRequestedCert() {
 		return this.requestedCert;
 	}
 
 	/**
 	 * Set the 'requestedCert' property.
 	 */
-	public void setRequestedCert(String requestedCert) {
+	public void setRequestedCert(long requestedCert) {
 		this.requestedCert = requestedCert;
 	}
 
@@ -792,16 +799,16 @@ public class CertificationForm extends ValidatorForm
 		}
 
 		if (headersOnly) {
-			this.setCurrentCertLevel( results.getInt(1) );
-			this.setRequestedCert( results.getString(2) );
+			this.setCurrentCertLevel( results.getLong(1) );
+			this.setRequestedCert( results.getLong(2) );
 			this.setUsrId( results.getInt(3) );
 			this.setCertificationstatus( results.getString(4) );
 			this.setCertificationstatuscomments( results.getString(5) );
-			this.setCertId( results.getInt(6) );
+			this.setCertId( results.getLong(6) );
 
 		} else {
-			this.setCurrentCertLevel( results.getInt(1) );
-			this.setRequestedCert( results.getString(2) );
+			this.setCurrentCertLevel( results.getLong(1) );
+			this.setRequestedCert( results.getLong(2) );
 			this.setHighestDegree( results.getString(3) );
 			this.setDegreeYear( results.getString(4) );
 			this.setDegreeInst( results.getString(5) );
@@ -837,7 +844,7 @@ public class CertificationForm extends ValidatorForm
 			this.setUsrId( results.getInt(35) );
 			this.setCertificationstatus( results.getString(36) );
 			this.setCertificationstatuscomments( results.getString(37) );
-			this.setCertId( results.getInt(38) );
+			this.setCertId( results.getLong(38) );
 		}
 	}
 }

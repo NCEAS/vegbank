@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-22 07:00:17 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-04-26 20:48:29 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,10 +65,11 @@ public class CertificationListAction extends VegbankAction {
 
 		UserDatabaseAccess uda = new UserDatabaseAccess(); 
 
-		// handle approval & declination
+
+		// List all applications
 		try {
 			log.debug("CertificationListAction: getting all certs");
-			List allApps = uda.getAllCertificationApps();
+			List allApps = uda.getAllCertificationAppHeaders();
 
 			// NOTE: Action must be configured scope=session
 			//   in order to pass List (of Beans) to JSP 
