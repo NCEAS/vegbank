@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: farrell $'
- *  '$Date: 2002-12-05 23:43:51 $'
- *  '$Revision: 1.26 $'
+ *  '$Date: 2002-12-12 23:02:08 $'
+ *  '$Revision: 1.27 $'
  */
 public class PlotDataSource 
 {
@@ -67,6 +67,10 @@ public class PlotDataSource
 	public Vector uniqueStrataNames = new Vector();
 	public int uniquePlantTaxaNumber = 0;
 	public Vector plantTaxaNames = new Vector();
+	public String azimuth = null;
+	public String dsgPoly = null;
+	public String locationNarrative = null;
+	public String layoutNarrative = null;
 	
 	
 	//constructor method
@@ -355,346 +359,346 @@ public class PlotDataSource
 
 	 //Observation Contributors
 	 public Vector getObservationContributors(String plotName)
-{
-	return null;
-}
-
-public String getObservationContributorSalutation(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorSalutation(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorGivenName(String contributorWholeName) 
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorGivenName(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorMiddleName(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorMiddleName(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorSurName(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorSurName(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorOrganizationName(String contributorWholeName){
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorOrganizationName(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorContactInstructions(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorContactInstructions(contributorWholeName);	
-	return(s);;
-}
-
-public String getObservationContributorPhoneNumber(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorPhoneNumber(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorCellPhoneNumber(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorCellPhoneNumber(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorFaxPhoneNumber(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorFaxPhoneNumber(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorOrgPosition(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorOrgPosition(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorEmailAddress(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorEmailAddress(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorDeliveryPoint(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorDeliveryPoint(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorCity(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorCity(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorAdministrativeArea(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorAdministrativeArea(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorPostalCode(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorPostalCode(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorCountry(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorCountry(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorCurrentFlag(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorCurrentFlag(contributorWholeName);	
-	return(s);
-}
-
-public String getObservationContributorAddressStartDate(String contributorWholeName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorAddressStartDate(contributorWholeName);	
-	return(s);
-}
-
-//START
-public String getPlotValidationLevel(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getPlotValidationLevel(plotName);	
-	return(s);
-}
-
-public String  getFloristicQuality(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getFloristicQuality(plotName);	
-		 return(s);
-}
-
-public String  getBryophyteQuality(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getBryophyteQuality(plotName);	
-		 return(s);
-}
-
-public String  getLichenQuality(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getLichenQuality(plotName);	
-		 return(s);
-}
-
-public String  getObservationNarrative(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getObservationNarrative(plotName);	
-		 return(s);
-}
-
-public String  getHomogeneity(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getHomogeneity(plotName);	
-		 return(s);
-}
-
-public String  getPhenologicAspect(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getPhenologicAspect(plotName);	
-		 return(s);
-}
-
-public String  getRepresentativeness(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getRepresentativeness(plotName);	
-		 return(s);
-}
-
-public String  getBasalArea(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getBasalArea(plotName);	
-		 return(s);
-}
-
-public String  getSoilMoistureRegime(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getSoilMoistureRegime(plotName);	
-		 return(s);
-}
-
-public String  getWaterSalinity(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getWaterSalinity(plotName);	
-		 return(s);
-}
-
-public String  getShoreDistance(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getShoreDistance(plotName);	
-		 return(s);
-}
-
-public String  getOrganicDepth(String plotName)
-{
- String s = ((PlotDataSourceInterface)pluginObj).getOrganicDepth(plotName);	
-		 return(s);
-}
-
-public String  getPercentBedRock(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getPercentBedRock(plotName);	
-		 return(s);
-}
-
-public String  getPercentRockGravel(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getPercentRockGravel(plotName);	
-		 return(s);
-}
-
-public String  getPercentWood(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getPercentWood(plotName);	
-		 return(s);
-}
-public String  getPercentLitter(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getPercentLitter(plotName);	
-		 return(s);
-}
-
-public String  getPercentBareSoil(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getPercentBareSoil(plotName);	
-		 return(s);
-}
-
-public String  getPercentWater(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getPercentWater(plotName);	
-		 return(s);
-}
-
-public String  getPercentOther(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getPercentOther(plotName);	
-		 return(s);
-}
-
-public String  getNameOther(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getNameOther(plotName);	
-		 return(s);
-}
-
-public String  getStandMaturity(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getStandMaturity(plotName);	
-		 return(s);
-}
-
-
-public String  getSuccessionalStatus(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getSuccessionalStatus(plotName);	
-		 return(s);
-}
-
-public String  getTreeHt(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getTreeHt(plotName);	
-		 return(s);
-}
-
-public String  getShrubHt(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getShrubHt(plotName);	
-		 return(s);
-}
-
-public String  getNonvascularHt(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getNonvascularHt(plotName);	
-		 return(s);
-}
-
-public String  getFloatingCover(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getFloatingCover(plotName);	
-		 return(s);
-}
-
-public String  getSubmergedCover(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getSubmergedCover(plotName);	
-		 return(s);
-}
-
-public String  getDominantStratum(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getDominantStratum(plotName);	
-		 return(s);
-}
-
-public String  getGrowthform1Type(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getGrowthform1Type(plotName);	
-		 return(s);
-}
-
-public String  getGrowthform2Type(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getGrowthform2Type(plotName);	
-		 return(s);
-}
-
-public String  getGrowthform3Type(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getGrowthform3Type(plotName);	
-		 return(s);
-}
-
-public String  getGrowthform1Cover(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getGrowthform1Cover(plotName);	
-		 return(s);
-}
-
-public String  getGrowthform2Cover(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getGrowthform2Cover(plotName);	
-		 return(s);
-}
-
-public String  getGrowthform3Cover(String plotName)
-{
-	String s = ((PlotDataSourceInterface)pluginObj).getGrowthform3Cover(plotName);	
-		 return(s);
-}
-
-public boolean  getNotesPublic(String plotName)
-{
-	boolean b = ((PlotDataSourceInterface)pluginObj).getNotesPublic(plotName);	
-		 return(b);
-}
-
-public boolean  getNotesMgt(String plotName)
-{
-	boolean b = ((PlotDataSourceInterface)pluginObj).getNotesMgt(plotName);	
-		 return(b);
-}
-
-public boolean  getRevisions(String plotName)
-{
-	boolean b = ((PlotDataSourceInterface)pluginObj).getRevisions(plotName);	
-		 return(b);
-}
-//END
+	{
+		return null;
+	}
+	
+	public String getObservationContributorSalutation(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorSalutation(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorGivenName(String contributorWholeName) 
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorGivenName(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorMiddleName(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorMiddleName(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorSurName(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorSurName(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorOrganizationName(String contributorWholeName){
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorOrganizationName(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorContactInstructions(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorContactInstructions(contributorWholeName);	
+		return(s);;
+	}
+	
+	public String getObservationContributorPhoneNumber(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorPhoneNumber(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorCellPhoneNumber(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorCellPhoneNumber(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorFaxPhoneNumber(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorFaxPhoneNumber(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorOrgPosition(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorOrgPosition(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorEmailAddress(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorEmailAddress(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorDeliveryPoint(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorDeliveryPoint(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorCity(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorCity(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorAdministrativeArea(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorAdministrativeArea(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorPostalCode(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorPostalCode(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorCountry(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorCountry(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorCurrentFlag(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorCurrentFlag(contributorWholeName);	
+		return(s);
+	}
+	
+	public String getObservationContributorAddressStartDate(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorAddressStartDate(contributorWholeName);	
+		return(s);
+	}
+	
+	//START
+	public String getPlotValidationLevel(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getPlotValidationLevel(plotName);	
+		return(s);
+	}
+	
+	public String  getFloristicQuality(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getFloristicQuality(plotName);	
+			 return(s);
+	}
+	
+	public String  getBryophyteQuality(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getBryophyteQuality(plotName);	
+			 return(s);
+	}
+	
+	public String  getLichenQuality(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getLichenQuality(plotName);	
+			 return(s);
+	}
+	
+	public String  getObservationNarrative(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObservationNarrative(plotName);	
+			 return(s);
+	}
+	
+	public String  getHomogeneity(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getHomogeneity(plotName);	
+			 return(s);
+	}
+	
+	public String  getPhenologicAspect(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getPhenologicAspect(plotName);	
+			 return(s);
+	}
+	
+	public String  getRepresentativeness(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getRepresentativeness(plotName);	
+			 return(s);
+	}
+	
+	public String  getBasalArea(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getBasalArea(plotName);	
+			 return(s);
+	}
+	
+	public String  getSoilMoistureRegime(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getSoilMoistureRegime(plotName);	
+			 return(s);
+	}
+	
+	public String  getWaterSalinity(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getWaterSalinity(plotName);	
+			 return(s);
+	}
+	
+	public String  getShoreDistance(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getShoreDistance(plotName);	
+			 return(s);
+	}
+	
+	public String  getOrganicDepth(String plotName)
+	{
+	 String s = ((PlotDataSourceInterface)pluginObj).getOrganicDepth(plotName);	
+			 return(s);
+	}
+	
+	public String  getPercentBedRock(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getPercentBedRock(plotName);	
+			 return(s);
+	}
+	
+	public String  getPercentRockGravel(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getPercentRockGravel(plotName);	
+			 return(s);
+	}
+	
+	public String  getPercentWood(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getPercentWood(plotName);	
+			 return(s);
+	}
+	public String  getPercentLitter(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getPercentLitter(plotName);	
+			 return(s);
+	}
+	
+	public String  getPercentBareSoil(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getPercentBareSoil(plotName);	
+			 return(s);
+	}
+	
+	public String  getPercentWater(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getPercentWater(plotName);	
+			 return(s);
+	}
+	
+	public String  getPercentOther(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getPercentOther(plotName);	
+			 return(s);
+	}
+	
+	public String  getNameOther(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getNameOther(plotName);	
+			 return(s);
+	}
+	
+	public String  getStandMaturity(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getStandMaturity(plotName);	
+			 return(s);
+	}
+	
+	
+	public String  getSuccessionalStatus(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getSuccessionalStatus(plotName);	
+			 return(s);
+	}
+	
+	public String  getTreeHt(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getTreeHt(plotName);	
+			 return(s);
+	}
+	
+	public String  getShrubHt(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getShrubHt(plotName);	
+			 return(s);
+	}
+	
+	public String  getNonvascularHt(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getNonvascularHt(plotName);	
+			 return(s);
+	}
+	
+	public String  getFloatingCover(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getFloatingCover(plotName);	
+			 return(s);
+	}
+	
+	public String  getSubmergedCover(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getSubmergedCover(plotName);	
+			 return(s);
+	}
+	
+	public String  getDominantStratum(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getDominantStratum(plotName);	
+			 return(s);
+	}
+	
+	public String  getGrowthform1Type(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getGrowthform1Type(plotName);	
+			 return(s);
+	}
+	
+	public String  getGrowthform2Type(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getGrowthform2Type(plotName);	
+			 return(s);
+	}
+	
+	public String  getGrowthform3Type(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getGrowthform3Type(plotName);	
+			 return(s);
+	}
+	
+	public String  getGrowthform1Cover(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getGrowthform1Cover(plotName);	
+			 return(s);
+	}
+	
+	public String  getGrowthform2Cover(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getGrowthform2Cover(plotName);	
+			 return(s);
+	}
+	
+	public String  getGrowthform3Cover(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getGrowthform3Cover(plotName);	
+			 return(s);
+	}
+	
+	public boolean  getNotesPublic(String plotName)
+	{
+		boolean b = ((PlotDataSourceInterface)pluginObj).getNotesPublic(plotName);	
+			 return(b);
+	}
+	
+	public boolean  getNotesMgt(String plotName)
+	{
+		boolean b = ((PlotDataSourceInterface)pluginObj).getNotesMgt(plotName);	
+			 return(b);
+	}
+	
+	public boolean  getRevisions(String plotName)
+	{
+		boolean b = ((PlotDataSourceInterface)pluginObj).getRevisions(plotName);	
+			 return(b);
+	}
+	//END
 
 
 	/**
@@ -731,12 +735,6 @@ public boolean  getRevisions(String plotName)
  	}
 
 
-	
-
-		
-
-
-
 	/**
 	 * method that returns the names of the plots stored in this data 
 	 * source 
@@ -763,10 +761,14 @@ public boolean  getRevisions(String plotName)
 		{
 			System.out.println("PlotDataSource >  getting plot based on name: " + plotName );
 			projectName = ((PlotDataSourceInterface)pluginObj).getProjectName(plotName);
-			projectDescription = ((PlotDataSourceInterface)pluginObj).getProjectDescription(plotName);
-			projectContributors = ((PlotDataSourceInterface)pluginObj).getProjectContributors(plotName);
-			observationContributors = ((PlotDataSourceInterface)pluginObj).getObservationContributors(plotName);
-			projectStartDate = ((PlotDataSourceInterface)pluginObj).getProjectStartDate(plotName);
+			projectDescription = 
+        ((PlotDataSourceInterface)pluginObj).getProjectDescription(plotName);
+			projectContributors = 
+        ((PlotDataSourceInterface)pluginObj).getProjectContributors(plotName);
+			observationContributors = 
+        ((PlotDataSourceInterface)pluginObj).getObservationContributors(plotName);
+			projectStartDate = 
+        ((PlotDataSourceInterface)pluginObj).getProjectStartDate(plotName);
 			projectStopDate = ((PlotDataSourceInterface)pluginObj).getProjectStopDate(plotName);
 			plotCode = ((PlotDataSourceInterface)pluginObj).getPlotCode(plotName);
 			namedPlaces = ((PlotDataSourceInterface)pluginObj).getPlaceNames(plotName); 
@@ -812,18 +814,28 @@ public boolean  getRevisions(String plotName)
 			System.out.println("PlotDataSource >   long: " + longitude );
 */			
 			
-			confidentialityReason = ((PlotDataSourceInterface)pluginObj).getConfidentialityReason(plotName);
-			confidentialityStatus = ((PlotDataSourceInterface)pluginObj).getConfidentialityStatus(plotName);
-			authorLocation
-			= ((PlotDataSourceInterface)pluginObj).getAuthorLocation(plotName);
+			confidentialityReason = 
+        ((PlotDataSourceInterface)pluginObj).getConfidentialityReason(plotName);
+			confidentialityStatus = 
+        ((PlotDataSourceInterface)pluginObj).getConfidentialityStatus(plotName);
+			authorLocation = ((PlotDataSourceInterface)pluginObj).getAuthorLocation(plotName);
 			landForm = ((PlotDataSourceInterface)pluginObj).getLandForm(plotName);
 			elevation = ((PlotDataSourceInterface)pluginObj).getElevation(plotName);
-			elevationAccuracy
-			= ((PlotDataSourceInterface)pluginObj).getElevationAccuracy(plotName);
-			
-			uniqueStrataNames = ((PlotDataSourceInterface)pluginObj).getUniqueStrataNames(plotName);
+			elevationAccuracy = 
+        ((PlotDataSourceInterface)pluginObj).getElevationAccuracy(plotName);
+			uniqueStrataNames = 
+        ((PlotDataSourceInterface)pluginObj).getUniqueStrataNames(plotName);
 			plantTaxaNames = ((PlotDataSourceInterface)pluginObj).getPlantTaxaNames(plotName);
 			uniquePlantTaxaNumber =  plantTaxaNames.size();
+      locationNarrative =  
+        ((PlotDataSourceInterface)pluginObj).getLocationNarrative(plotName);
+      layoutNarrative =
+        ((PlotDataSourceInterface)pluginObj).getLayoutNarrative(plotName);
+      azimuth =
+        ((PlotDataSourceInterface)pluginObj).getAzimuth(plotName);
+      dsgPoly =
+        ((PlotDataSourceInterface)pluginObj).getDSGPoly(plotName);
+      
 		}
 		catch (Exception e)
 		{
@@ -1143,13 +1155,13 @@ public boolean  getRevisions(String plotName)
 	}
 	
 	//returns the easting
-	String getXCoord(String plotName)
+	public String getXCoord(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getXCoord(plotName);
 		return(s);
 	}
 	//returns the northing
-	String getYCoord(String plotName)
+	public String getYCoord(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getYCoord(plotName);
 		return(s);
@@ -1183,14 +1195,14 @@ public boolean  getRevisions(String plotName)
 		return(s);
 	}
 	//returns the plot shape
-	String getPlotShape(String plotName)
+	public String getPlotShape(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getPlotShape(plotName);
 		return(s);
 	}
 	
 	//returns the plot area
-	String getPlotArea(String plotName)
+	public String getPlotArea(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getPlotArea(plotName);
 		return(s);
@@ -1204,7 +1216,7 @@ public boolean  getRevisions(String plotName)
 	}
 	
 	//returns the state in which the plot exists
-	String getState(String plotName)
+	public String getState(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getState(plotName);
 		return(s);
@@ -1218,49 +1230,49 @@ public boolean  getRevisions(String plotName)
 	}
 	
 	//returns the topo position
-	String getTopoPosition(String plotName)
+	public String getTopoPosition(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getTopoPosition(plotName);
 		return(s);
 	}
 	
 	//returns the slope aspect
-	String getSlopeAspect(String plotName)
+	public String getSlopeAspect(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getSlopeAspect(plotName);
 		return(s);
 	}
 	
 	//returns yje slope gradient
-	String getSlopeGradient(String plotName)
+	public String getSlopeGradient(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getSlopeGradient(plotName);
 		return(s);
 	}
 	
 	//returns the surficial geology
-	String getSurfGeo(String plotName)
+	public String getSurfGeo(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getSurfGeo(plotName);
 		return(s);
 	}
 	
 	//retuns the country
-	String getCountry(String plotName)
+	public String getCountry(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getCountry(plotName);
 		return(s);
 	}
 	
 	//returns the size of the stand -- extensive etc..
-	String getStandSize(String plotName)
+	public String getStandSize(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getStandSize(plotName);
 		return(s);
 	}
 	
 	//returns the location as described by the author
-	String getAuthorLocation(String plotName)
+	public String getAuthorLocation(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getAuthorLocation(plotName);
 		return(s);
@@ -1274,7 +1286,7 @@ public boolean  getRevisions(String plotName)
 	}
 	
 	//retuns the elevation
-	String getElevation(String plotName)
+	public String getElevation(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getElevation(plotName);
 		return(s);
@@ -1288,19 +1300,42 @@ public boolean  getRevisions(String plotName)
 	}
 	
 	//return the confidentiality reason -- not null
-	String	getConfidentialityReason(String plotName)
+	public String	getConfidentialityReason(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getConfidentialityReason(plotName);
 		return(s);
 	}
 	
 	//return the confidentiality status -- not null 0-6
-	String getConfidentialityStatus(String plotName)
+	public String getConfidentialityStatus(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getConfidentialityStatus(plotName);
 		return(s);
 	}
+
+	public String getAzimuth(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getAzimuth(plotName);
+		return(s);
+	}
 	
+	public String getLocationNarrative(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getLocationNarrative(plotName);
+		return(s);
+	}
+	
+	public String getLayoutNarrative(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getLayoutNarrative(plotName);
+		return(s);
+	}
+	
+	public String getDSGPoly(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getDSGPoly(plotName);
+		return(s);
+	}
 
 	
 	/**
@@ -1439,7 +1474,11 @@ public boolean  getRevisions(String plotName)
 			System.out.println("PlotDataSource > confidentialityReason: " + source.getConfidentialityReason(plotName) );
 			System.out.println("PlotDataSource > permanence: " + source.isPlotPermanent(plotName) );
 			System.out.println("PlotDataSource > soil taxon: " + source.getSoilTaxon(plotName) );
-			System.out.println("PlotDataSource > soil taxon source: " + source.getSoilTaxonSource(plotName) );
+			System.out.println("PlotDataSource > soil taxon source: " + source.getSoilTaxonSource(plotName) ); 
+			System.out.println("PlotDataSource > azimuth: " + source.getAzimuth(plotName) );
+			System.out.println("PlotDataSource > locationnarrative: " + source.getLocationNarrative(plotName) );
+			System.out.println("PlotDataSource > layoutnarrative: " + source.getLayoutNarrative(plotName) );
+			System.out.println("PlotDataSource > dsgpoly: " + source.getDSGPoly(plotName) );
 			
 			System.out.println(" \n ----------------------plot site-observational info-----------------------------");
 			System.out.println("PlotDataSource > soilDepth: " + source.getSoilDepth(plotName) );
@@ -1577,8 +1616,8 @@ public boolean  getRevisions(String plotName)
 			//should make sure that the plugin exists
 			PlotDataSource source = new PlotDataSource(pluginClass);
 			source.printDBVariables(pluginClass, plotName);
-//			System.out.println("slope: " + source.getSlopeAspect(plotName) );
-//			System.out.println("state: " + source.getState(plotName) );
+			//			System.out.println("slope: " + source.getSlopeAspect(plotName) );
+			//			System.out.println("state: " + source.getState(plotName) ); 
 		}
 		else
 		{
