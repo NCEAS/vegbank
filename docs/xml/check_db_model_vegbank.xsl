@@ -72,6 +72,12 @@
       <xsl:if test="substring(attName,string-length(attName)-2,3)!='_ID'">
 45<xsl:value-of select="../entityName"/>.<xsl:value-of select="attName"/> is PK/FK but doesn't end in _ID.</xsl:if>
     </xsl:if>
+    <xsl:if test="translate(attName,$alphalow,$alphahigh)!=attName">
+      <!-- field name not all caps -->
+      <xsl:if test="translate(substring(attName,1,1),$alphahigh,$alphalow)!=substring(attName,1,1)">
+50 <xsl:value-of select="../entityName"/>.<xsl:value-of select="attName"/> is not all capitalized, but starts with a capital letter! against common rules.</xsl:if>
+    </xsl:if>
+    
   </xsl:template>
   <xsl:template name="checkList">
     <xsl:if test="attListType!='no'">
