@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-23 18:06:06 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2003-10-16 20:09:07 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -237,7 +237,7 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		/* Examples:
 		 * code, name, common name, genus
 		*"ABMO3","Abama montana Small ","=Narthecium americanum","Liliaceae"
-		*"ABGR4","Abelia xgrandiflora (André) Rehd. ","glossy abelia","Caprifoliaceae"
+		*"ABGR4","Abelia xgrandiflora (AndrÃ©) Rehd. ","glossy abelia","Caprifoliaceae"
 		*/
 
 		// Fourth field is the family name .... 
@@ -294,10 +294,10 @@ public class USDAPlantListReader implements Constants, PlantListReader
 	private void parseNameField(Plant plant, String nameField, String familyName)
 	{
 		// A few rules here
-		// Abelia xgrandiflora (André) Rehd.
+		// Abelia xgrandiflora (AndrÃ©) Rehd.
 		// scientific without authors -> Abelia xgrandiflora  
-		// authors -> (André) Rehd.
-		// scientific -> Abelia xgrandiflora (André) Rehd.
+		// authors -> (AndrÃ©) Rehd.
+		// scientific -> Abelia xgrandiflora (AndrÃ©) Rehd.
 
 		// This all depends on if it is a species, variety or sub-species		
 
@@ -456,7 +456,7 @@ public class USDAPlantListReader implements Constants, PlantListReader
 	 * </ul>
 	 * <br/>
 	 * HYBRID is when either the first of second token of the name field begins 
-	 * with the '×' character (ASCII Code 215)
+	 * with the 'Ã—' character (ASCII Code 215)
 	 * <br/>
 	 * SPECIES is everything else.
 	 * 
@@ -530,8 +530,8 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		String nameFirst =  getToken(nameField, 1);
 		String nameSecond = getToken(nameField, 2);
 		
-		// first letter of either of the first two tokens is '×' ASCII Code 215 ( not the letter x) 
-		if (nameFirst.startsWith("×") || nameSecond.startsWith("×") )
+		// first letter of either of the first two tokens is 'Ã—' ASCII Code 215 ( not the letter x) 
+		if (nameFirst.startsWith("Ã—") || nameSecond.startsWith("Ã—") )
 		{
 			isHybrid = true;
 		}
