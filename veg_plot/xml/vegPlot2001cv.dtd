@@ -77,9 +77,9 @@
 		* reflective of the typical time period that various 
 		* observations of plots are collected
 	-->
-	<!ELEMENT plotObservation (parentPlot, previousObs, authorObsCode, 
-		plotStartDate, plotStopDate, dateAccuracy, effortLevel,  strata, 
-		taxonObservations, communityType, citation)>
+	<!ELEMENT plotObservation (parentPlot*, previousObs*, authorObsCode*, 
+		plotStartDate*, plotStopDate*, dateAccuracy*, effortLevel*,  strata*, 
+		taxonObservations*, communityType*, citation*)>
 		
 		<!ELEMENT parentPlot (#PCDATA)>
 		<!ELEMENT previousObs (#PCDATA)>
@@ -104,8 +104,8 @@
 		 	* taxon can be represented more than once - 
 			*	it should be replicated every time there it occurs in a new stratum
 		-->	
-		<!ELEMENT taxonObservation (authNameId, originalAuthority, 
-			strataComposition, interptretation*)>
+		<!ELEMENT taxonObservation (authNameId*, originalAuthority*, 
+			strataComposition*, interptretation*)>
 			<!ELEMENT authNameId (#PCDATA)>
 			<!ELEMENT originalAuthority (#PCDATA)>
 			<!ELEMENT strataComposition (strataType, percentCover)>
@@ -195,4 +195,18 @@
 			<!ELEMENT postalCode (#PCDATA)>
 			<!ELEMENT country (#PCDATA)>
 			<!ELEMENT currentFlag (#PCDATA)>
-
+			
+			
+			<!--
+				* added this for the veg plot update class
+				* so that update xml documents should conform
+				* to this
+			-->
+			<!ELEMENT dbUpdateInstance (constrainingAttribute, constrainingValue, 
+			updateTable,	updateAttribute, updateValue)>
+			
+			<!ELEMENT  constrainingAttribute (#PCDATA)>
+			<!ELEMENT  constrainingValue (#PCDATA)>
+			<!ELEMENT  updateTable (#PCDATA)>
+			<!ELEMENT  updateAttribute (#PCDATA)>
+			<!ELEMENT  updateValue (#PCDATA)>
