@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-03-16 01:39:29 $'
-* '$Revision: 1.154 $'
+* '$Date: 2005-03-16 07:04:14 $'
+* '$Revision: 1.155 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -114,7 +114,7 @@
     <property name="workshop_src" value="./workshop"/>
     <property name="vegdocs.dir" value="${machine_url}/vegdocs"/>
     <property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
-    <property name="static_xmlserver" value="${vegdocs_server}/dataxml"/>
+    <property name="static_xmlserver" value="${vegdocs_server}/xml"/>
     <property name="vegbranch_src" value="./vegbranch"/>
     <!-- large binary files location:   targets that read from large binaries separate -->
     <property name="lrg_binary_src" value="${apache.document.root}/noncvs"/>
