@@ -1,0 +1,89 @@
+INTRODUCTION:
+
+The Ecoart communities data is stored in an MS Access mdb  file that is in the Ecoart distribution. 
+In Ecoart version 2.65 this file was called "Ecoart data.mdb".
+
+The Vegbank system is looking to populate all levels of the communities hierarchy  into the database. 
+However each level is stored in a separate table in Ecoart, so specific mapping must occur for each level.
+
+Levels:
+The following levels exist "class",  "subclass", "group",  "subgroup",  "formation", "alliance", "association"  
+
+
+
+DEFAULT values for all EcoArt communities and levels.
+
+CommReference:
+  ->  otherCitationDetails = "Natural Heritage Central Databases. NatureServe, Arlington, VA."
+  ->  authors = "NatureServe"
+  ->  title = "International Classification of Ecological Communities: Terrestrial Vegetation. EcoArt version 2.65"
+  ->  pubdate = "13-FEB-2002"
+
+Party:
+  ->  commpartyname = "U.S. National Vegetation Classification System"
+  
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+  
+For each of these levels Vegbank needs to know:
+  
+Values read from data source.
+
+Ecoart                               Vegbank
+--------                            -----------
+
+COMMNAME
+------------------
+
+Alliance.AllianceKey        ->      commname.commname       \
+Alliance.AllianceOriginDate ->      commname.dateentered    /  row 1
+Alliance.AllianceName       ->      commname.commname       \
+Alliance.AllianceOriginDate ->      commname.dateentered    /  row 2
+Alliance.alliancenametrans  ->      commname.commname       \
+Alliance.AllianceOriginDate ->      commname.dateentered    /  row 3
+
+          Above all point to the global reference
+          
+COMMCONCEPT
+-------------------------
+
+Alliance.AllianceDesc     ->      commconcept.conceptdescription
+commname.row2.pk          ->      commconcept.commname_id
+Alliance.AllianceKey      ->      commconcept.ceglcode
+
+          Points to global reference
+          
+COMMSTATUS
+----------------------
+          
+commconcept.pk               ->      commstatus.commconcept_id
+"accepted"                   ->      commstatus.commconceptstatus
+Alliance.AllianceOriginDate  ->      commstatus.startDate
+Global Party pk              ->      commstatus.commparty_id
+"alliance"                   ->      commstatus.commlevel
+
+          Points to global reference
+          If parent is not null (it is always for alliance) 
+            ->  lookup the pk of commconcept  based on rules I don't get yet
+
+
+COMMUSAGE
+--------------------
+
+commname.pk                  ->      commusage.commname_id 
+commconcept.pk               ->      commusage.commconcept_id
+Global commparty_id          ->      commusage.commparty_id
+"standard"                   ->      commusage.commNameStatus
+Alliance.AllianceOriginDate  ->      commusage.usageStart
+"NVC"                        ->      commusage.classSystem
+Alliance.AllianceKey         ->      commusage.ceglcode
+                --- and one of --
+Alliance.AllianceKey         ->      commusage.commName    (row 1 - code )
+Alliance.AllianceName        ->      commusage.commName    (row 2 - name)
+Alliance.alliancenametrans   ->      commusage.commName    (row 2 - translated name)
+
+
+
+
+
+
