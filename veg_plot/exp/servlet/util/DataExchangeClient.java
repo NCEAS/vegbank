@@ -1,3 +1,4 @@
+package servlet.util;
 /**
  *  '$RCSfile: DataExchangeClient.java,v $'
  *    Purpose: A test driver for the DataFileServer class
@@ -8,8 +9,8 @@
  *	
  *
  *   '$Author: harris $'
- *     '$Date: 2001-12-03 17:47:15 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2001-12-04 16:42:41 $'
+ * '$Revision: 1.2 $'
  */
  
 
@@ -19,6 +20,8 @@ import java.lang.*;
 import java.util.*;
 import java.sql.*;
 import java.net.*;
+
+import servlet.util.*;
 
 
 
@@ -137,11 +140,12 @@ public static void main(String[] args)
      String host = "vegbank.nceas.ucsb.edu";
      String server = protocol + host + servlet;
      String filename = "test.dat";
+		 String userName = "user";
 	 	// String parameterString = "?action=uploadFile&user=harris02@hotmail.com&exchangeType=upload&submitter=harris&"
 	  //	+"password=jasmine&file=test.dat";
 	 
 	DataExchangeClient dec = new DataExchangeClient();
-	dec.uploadFile(servlet, protocol, host, server, filename);
+	dec.uploadFile(servlet, protocol, host, server, filename, userName);
   }
 
 
@@ -155,12 +159,12 @@ public static void main(String[] args)
   *
   *
   */
-	  
-public static void uploadFile (String servlet, String protocol, String host, 
-String server, String filename) {
-    System.out.println("Starting DataStreamTest");
-    try
-    {
+	  public static void uploadFile(String servlet, String protocol, String host, 
+		String server, String filename, String userName) 
+		{
+   	 System.out.println("Starting DataStreamTest" );
+    	try
+   	 {
       String temp = null;
 //      String servlet = ":8080/examples/servlet/DataExchangeServlet";
 //      String protocol = "http://";
@@ -168,8 +172,10 @@ String server, String filename) {
 //      String server = protocol + host + servlet;
 //      String filename = "../test.dat";
       //login url
-      String u1str = server + "?action=uploadFile&username=harris02@hotmail.com&exchangeType=upload&submitter=harris&"
-	  	+"password=jasmine&file=../test.dat";
+      
+			String u1str = server + "?action=uploadFile&username="
+			+userName+"&exchangeType=upload&submitter="+userName+"&"
+	  	+"password=jasmine&file="+filename;
       System.out.println("u1: " + u1str);
       URL u1 = new URL(u1str);
       HttpMessage msg = new HttpMessage(u1);
