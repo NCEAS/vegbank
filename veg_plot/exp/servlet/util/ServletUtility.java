@@ -22,8 +22,8 @@ import servlet.util.GetURL;
  *    etc.. 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-06-13 17:37:03 $'
- *  '$Revision: 1.12 $'
+ *  '$Date: 2002-06-14 18:28:21 $'
+ *  '$Revision: 1.13 $'
  *
  */
 
@@ -282,7 +282,7 @@ public class ServletUtility
  * @param  inFile  a string representing the input file
  * @param  outFile a string representing the output, compressed, file
  */
-public void flushFile (String inFile) 
+public void flushFile(String inFile) 
 {
 	try
 	{
