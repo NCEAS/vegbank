@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-03-21 00:51:25 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2002-03-21 17:12:51 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
@@ -18,7 +18,7 @@
 <html>
 	<head>
 		<title>
-			VEGBANK VEGETATION PLOT DATA SUBMITTAL FORM
+			VEGBANK VEGETATION PLOT DATA SUBMITTAL WIZARD
 		</title>
 		<link REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css">
 	</head>
@@ -61,7 +61,7 @@
     				<tr>
     					<td align=left valign=bottom>
     					<font face="Helvetica,Arial,Verdana" size=6 color=23238E>
-							Vegetation Plots Submittal Form
+							Vegetation Plots Submittal Wizard
     					</font><br>
     					</td>
    				</tr>
@@ -84,11 +84,11 @@
 			<tr valign=top>
 			<td  align=left valign=middle colspan=2>
 			<font face="Helvetica,Arial,Verdana" size="2" color="209020">
-				<b>Enter the new plot data in the fields provided below. </b>
+				<b>Use this form to initiate the plot loading process to VegBank. </b>
 			</font>
 			<p>
 			<small>
-			<INPUT TYPE="submit" VALUE="submit data">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
+			<INPUT TYPE="submit" VALUE="continue">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
 			</small>
 			</td>
 			</tr>
@@ -173,7 +173,7 @@
 		<tr>
 		<td align="left" width="32%">
 			<font  size="2">
-			Organization Name<font color="#F90000"><b>*</b></font>:</font>
+			Organization name<font color="#F90000"><b>*</b></font>:</font>
 		</td>
 		<td align="left">
 			<input type="text"  size="55" maxlength="50" required value="" name="orgName">
@@ -195,7 +195,7 @@
 	<tr>
 		<td  align=left valign=top width="5%" >
 			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
-			<b>PLOTS:</b>
+			<b>Plots Archive:</b>
 		</td>
 		</font>
 	</tr>
@@ -204,43 +204,39 @@
 			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
 		</td>
 		<td class="item">
-		Please upload the data from your hard-drive to the server here.  Currently VegBank is <br>
-		accepting data stored in the following Format(s): <br>
-		<br>
-		<b> TNC Plots MS Access Format </b>
-			&nbsp;	&nbsp; 
-		<a href="/data/tncplots-example.mdb">Example data file</a>
+		Please choose to either upload a new plot archive or use an archive that you <br>
+		have already uploaded to VegBank.
 		</td>
 	</tr>
 </table>
 &nbsp;
 
+<!-- CHOOSE A DATA SOURCE -->
 <table class="category">
-	
-	<!--TAXON NAME -->
-	<tr align="left">
-		<td width="30%" align=left valign=top>
-			<font size="2" >
-			<b>Plot Data: <font color="#F90000"><b>*</b></font>:</font></b>
-		</td>
-		<td  align="left" valign="middle">
-			<input type="file" name="file">
-			<b>
-			<font face="Helvetica,Arial,Verdana" size=1>
-			</font>
-		</td>
+	<tr>
+	<td>
+		<input checked name="dataSourceType" type="radio" value="upload">  Upload a Plot Archive <br>
+	</td>
 	</tr>
 	
-	
-		
+	<tr>
+	<td>
+		<input name="dataSourceType" type="radio" value="userdb"> Use a Plot Archive Previously Uploaded 
+		<font color="#F90000" size="1"><b> -- not yet implemented</b></font><br>
+	</td>
+	</tr>
 </table>		
 
 
 &nbsp;
 &nbsp;
-
+<small>
+			<INPUT TYPE="submit" VALUE="continue">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
+</small>
 <br>
-	
+
+&nbsp;
+&nbsp;	
 	
 
 <!-- VEGBANK FOOTER -->
