@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-24 01:41:55 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-08-27 23:27:27 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,8 +42,9 @@ import org.vegbank.common.utility.VBObjectUtils;
 /**
  * Uses parameters passed in via the request to construct the SQL query,
  * process the ResultSet and populate a List of Beans ( name passed in a parameter).
- * This List is saved into the request as an attribute called genericBean, where it is 
- * availible for use by a jsp.
+ * This List is saved into the request as an attribute called BEANLIST, where it is 
+ * availible for use by a JSP.  If the query returns only one result, an additional
+ * attribute called BEAN is stored in the request, containing the only BEANLIST item.
  * 
  * @author farrell
  */
@@ -51,23 +52,21 @@ import org.vegbank.common.utility.VBObjectUtils;
 public class GenericCommand 
 {
 
-/*
-
-select somefield from...
-
-select somefield as newname from...
-
-select (subquery stuff goes here as stuff) as somename from...
-
-*/
-
 	private static Log log = LogFactory.getLog(GenericCommand.class);
-	private static final String DEFAULT_PER_PAGE = "10";
+	private static ResourceBundle sqlResources = 
+			ResourceBundle.getBundle("org.vegbank.common.SQLStore");
 
+	private static final int DEFAULT_PER_PAGE = 15;   // -1 is all results
+	private static final String BEANLIST_KEY = "BEANLIST";
+	private static final String BEAN_KEY = "BEAN";
+	private static final String MAP_KEY = "MAP";
 
 	//// THIS WORKS 
 	// Caveat: Can't put (parens) in subqueries, or within other (parens)
-	private static Pattern subqueryPattern = Pattern.compile("\\(.*?\\) as ");
+	// \S matches non-whitespace characters
+	private static Pattern subqueryPattern = Pattern.compile("\\S*\\(.*?\\) as ");
+	private static Pattern attribAsPattern = Pattern.compile("\\S* as ");
+	private static Pattern afterFromPattern = Pattern.compile(".* from ");
 
 	//// OTHER ATTEMPTS
 	//private static Pattern selectParamPattern = Pattern.compile("\\(.*\\) as ?(.*))+ from.*");
@@ -105,68 +104,34 @@ select (subquery stuff goes here as stuff) as somename from...
 			String whereParam) 
 			throws Exception {
 
-		log.debug("execute(req, select, where, bean, (String)where): " + whereParam);
-		String[] arr;
-		arr = new String[1];
-		arr[0] = whereParam;
-
-		///////////////////////////////////////////////////////////////////
-		/*
-		// parse CSV
-		if (whereParam.indexOf(",") != -1) {
-			StringTokenizer st = new StringTokenizer(whereParam, ", ");
-			int i=0;
-			arr = new String[st.countTokens()];
-			while (st.hasMoreTokens()) {
-				arr[i] = st.nextToken();
-				log.debug("Adding param " + arr[i]);
-				i++;
-			}
-		} else {
+		//log.debug("execute(req, select, where, bean, (String)where): " + whereParam);
+		String[] arr = null;
+		if (!Utility.isStringNullOrEmpty(whereParam)) {
 			arr = new String[1];
 			arr[0] = whereParam;
 		}
-		*/
-		///////////////////////////////////////////////////////////////////
-		
 
 		return execute(request, selectClauseKey, whereClauseKey, beanName, arr);
 	}
 
 	/**
-	 * Another way to execute a command.  It's easier to call this
-	 * from a JSP page directly rather than going through the 
-	 * GenericDispatcherAction.
+	 *
 	 */
-	/*
-	public List execute(HttpServletRequest request, String selectClauseKey, 
-				String whereClauseKey, String beanName, Object whereParam)
-				throws Exception {
-
-		log.debug("execute(req, select, where, bean, (Object)where)");
-		log.debug("where param: " + whereParam.toString());
-		log.debug("where param's class: " + whereParam.getClass().toString());
-		String str = whereParam.toString();
-		String[] arr = new String[1];
-		arr[0] = str;
-
-		return execute(request, selectClauseKey, whereClauseKey, beanName, arr);
-	}
-	*/
-
-
 	public List execute(String selectClauseKey, String whereClauseKey, 
 				String beanName, String whereParam) throws Exception {
 
-		log.debug("execute(select, where, bean, (Object)where)");
+		//log.debug("execute(select, where, bean, (Object)where)");
 		return execute(null, selectClauseKey, whereClauseKey, beanName, whereParam);
 	}
 
 
+	/**
+	 *
+	 */
 	public List execute(String selectClauseKey, String whereClauseKey, 
 				String beanName, String[] whereParams ) throws Exception
 	{
-		log.debug("execute(select, where, bean, (String[])where)");
+		//log.debug("execute(select, where, bean, (String[])where)");
 		return execute(null, selectClauseKey, whereClauseKey, beanName, whereParams);
 	}
 
@@ -184,30 +149,102 @@ select (subquery stuff goes here as stuff) as somename from...
 			String[] whereParams)
 			throws Exception {
 
-		log.debug("execute(req, select, where, bean, (String[])where)");
+		//log.debug("execute(req, select, where, bean, (String[])where)");
 
-		String SQLStatement = getSQLStatement(selectClauseKey, whereClauseKey,  whereParams);
+		String tmp;
+		String sqlMainQuery = getMainQuery(selectClauseKey, whereClauseKey, whereParams);
+
+
+		////////////////////////////////////////////////////
+		// Count results
+		////////////////////////////////////////////////////
+		int numItems = 0;
+		tmp = getNumItems();
+		if (Utility.isStringNullOrEmpty(tmp)) {
+			// run a query
+			numItems = countResults(sqlMainQuery);
+
+		} else {
+			// use the preset numItems
+			numItems = Integer.parseInt(tmp);
+		}
+
+		if (request != null) {
+			log.debug("Setting numItems: " + numItems);
+			request.setAttribute("numItems", Integer.toString(numItems));
+		} 
+
+
+
+		////////////////////////////////////////////////////
+		// Set up the pager
+		////////////////////////////////////////////////////
+		tmp = getPerPage();
+		if (Utility.isStringNullOrEmpty(tmp) && numItems > 1) {
+			// set default items per page
+			setPerPage(null);
+
+		} else if (numItems == 1) {
+			setPerPage("1");
+			setPageNumber("0");
+		} 
+
+
+
+		////////////////////////////////////////////////////
+		// Run the query
+		////////////////////////////////////////////////////
+		sqlMainQuery += buildLimitClause();
+
 		DatabaseAccess da = new DatabaseAccess();
-		ResultSet rs = da.issueSelect( SQLStatement );
+		ResultSet rs = da.issueSelect( sqlMainQuery );
 		
-		Vector propNames = getPropertyNames(SQLStatement);
+		Vector propNames = getPropertyNames(sqlMainQuery);
 		List list = getBeanList(beanName, rs, propNames);
 
 		if (request != null) {
-			log.debug("Setting genericBean");
-			request.setAttribute("genericBean", list);
-			log.debug("Setting " + beanName);
-			request.setAttribute(beanName, list);
+			String id = getId();
+
+			log.debug("Setting " + BEANLIST_KEY + " and " + beanName.toUpperCase() + " as lists");
+			request.setAttribute(BEANLIST_KEY, list);
+			request.setAttribute(beanName.toUpperCase(), list);
+
+			if (!Utility.isStringNullOrEmpty(id)) {
+				request.setAttribute(id + "-" + BEANLIST_KEY, list);
+			}
 
 			if (list.size() == 1) {
-				log.debug("Setting genericVariable");
-				request.setAttribute("genericVariable", list.get(0));
-				log.debug("Setting " + beanName);
-				request.setAttribute(beanName, list.get(0));
+				log.debug("One item, so setting " + BEAN_KEY + " and " + beanName.toUpperCase() + " as beans");
+				request.setAttribute(BEAN_KEY, list.get(0));
+				request.setAttribute(beanName.toUpperCase(), list.get(0));
+
+				if (!Utility.isStringNullOrEmpty(id)) {
+					request.setAttribute(id + "-" + BEAN_KEY, list.get(0));
+				}
 			}
 		} 
 
 		return list;
+	}
+
+
+	/**
+	 * 
+	 */
+	private int countResults(String origQuery) throws Exception {
+
+		String sql = "SELECT count(1) FROM " + stripSQLAttribs(origQuery);
+
+		log.debug("COUNT QUERY:  " + sql);
+		DatabaseAccess da = new DatabaseAccess();
+		ResultSet rs = da.issueSelect( sql );
+		
+		String numItems = "";
+		if (rs.next()) {
+			numItems = rs.getString(1);
+		}
+
+		return Integer.parseInt(numItems);
 	}
 
 
@@ -219,63 +256,100 @@ select (subquery stuff goes here as stuff) as somename from...
 	 * @param request
 	 * @return
 	 */
-	private String getSQLStatement(String selectClauseKey, String whereClauseKey, String[] whereParams)
-{
-		ResourceBundle SQLResources =  ResourceBundle.getBundle("org.vegbank.common.SQLStore");
+	private String getMainQuery(String selectClauseKey, String whereClauseKey, String[] whereParams) {
 		String selectClause = "";
 		String whereClause = "";
+		StringBuffer sql = new StringBuffer(1024);
 		
-		// Don't bother with empty strings
-		if (! selectClauseKey.equals("")) 
-		{
-			selectClause = SQLResources.getString(selectClauseKey);
+		// SELECT
+		if (!Utility.isStringNullOrEmpty(selectClauseKey)) {
+			selectClause = sqlResources.getString(selectClauseKey);
+			sql.append(selectClause);
 		}		
-		if (whereClauseKey != null && ! whereClauseKey.equals(""))
-		{
-			whereClause = SQLResources.getString(whereClauseKey);
-		}
-		
-		//log.debug(">>>>>>>>>>" + selectClause + whereClause);
-		
-		// Message format allows the substitution of '{x}' with Strings from 
-		// a String[] where x is the array index
-		MessageFormat format = new MessageFormat(whereClause);
 
-		StringBuffer SQLStatement = new StringBuffer();
-		SQLStatement.append(selectClause);
-		
-		// Sometimes the SELECT statement must have a WHERE, e.g for privacy 
-		// reasons for eample i.e. some records are not public
-		// if so the where clause is appended using an AND
-		if ( whereClause != null  && ! whereClause.equals("") )
-		{
-			if ( selectClause.indexOf("WHERE") > 0 )
-			{
-				SQLStatement.append(" AND " +  format.format(whereParams));
+		// WHERE
+		if (!Utility.isStringNullOrEmpty(whereClauseKey)) {
+			whereClause = sqlResources.getString(whereClauseKey);
+		} 
+
+
+		boolean hasWhereClause = !Utility.isStringNullOrEmpty(whereClause);
+		boolean hasParams = (whereParams != null && whereParams.length > 0);
+
+		log.debug("hasWhereClause: " + hasWhereClause);
+		log.debug("hasParams: " + hasParams);
+
+		if (hasWhereClause && hasParams) {
+
+			if (hasParams) {
+				for (int i=0; i<whereParams.length; i++) {
+					log.debug("whereParams: " + whereParams[i]);
+				}
+
+				// MessageFormat allows the substitution of '{x}' with Strings from 
+				// a String[] where x is the array index
+				MessageFormat format = new MessageFormat(whereClause);
+				whereClause = format.format(whereParams);
 			}
-			else 
-			{
-				SQLStatement.append(" WHERE " +  format.format(whereParams));
+
+
+			log.debug("Adding where clause: " + whereClause);
+			if ( selectClause.indexOf("WHERE") > 0 ) {
+				sql.append(" AND " +  whereClause);
+
+			} else {
+				sql.append(" WHERE " +  whereClause);
 			}
 		}
 
-		// set up the pagination
+		return sql.toString();
+	}
+
+
+	/**
+	 *
+	 */
+	private String buildLimitClause() {
+
+		StringBuffer sqlLimitClause = new StringBuffer(512);
+
+		// set up pagination
 		String pn = getPageNumber();
 		String pp = getPerPage();
-		if (!Utility.isStringNullOrEmpty(pp)) {
 
-			String offset = String.valueOf(
-					Integer.parseInt(pn) * Integer.parseInt(pp));
+		int ipp;
+		if (Utility.isStringNullOrEmpty(pp)) {
+			// empty, so make it default
+			ipp = DEFAULT_PER_PAGE;
+		} else {
+			ipp = Integer.parseInt(pp);
+			if (ipp == 0) {
+				ipp = DEFAULT_PER_PAGE;
+			}
+		}
 
-			SQLStatement.append(" LIMIT ")
-				.append(pp)
+		if (ipp != -1) {
+
+			int ipn;
+			if (Utility.isStringNullOrEmpty(pn)) {
+				ipn = 0;
+			} else {
+				ipn = Integer.parseInt(pn) - 1;
+			}
+
+			if (ipn < 0) {
+				ipn = 0;
+			}
+
+			sqlLimitClause.append(" LIMIT ")
+				.append(ipp)
 				.append(" OFFSET ")
-				.append(offset);
+				.append(ipn * ipp);
 		}
 
 		
-		log.debug(">>>>>>>>>>" + SQLStatement);
-		return SQLStatement.toString();
+		//log.debug(">>>>>>>>>>" + sqlLimitClause.toString());
+		return sqlLimitClause.toString();
 	}
 	
 	/**
@@ -292,10 +366,10 @@ select (subquery stuff goes here as stuff) as somename from...
 	private List getBeanList( String className, ResultSet rs, Vector propNames) 
 		throws Exception
 	{
-		List col = new Vector();
+		List beanList = new ArrayList();
 		while ( rs.next() )
 		{
-			if (Utility.isStringNullOrEmpty(className) || className.equalsIgnoreCase("map")) {
+			if (Utility.isStringNullOrEmpty(className) || className.equalsIgnoreCase(MAP_KEY)) {
 				Map map = new HashMap();
 				for ( int i=0; i<propNames.size(); i++)
 				{
@@ -304,7 +378,7 @@ select (subquery stuff goes here as stuff) as somename from...
 					log.debug("Mapping property " + propName + " = " + value);
 					map.put(propName, value);	
 				}
-		  		col.add(map);
+		  		beanList.add(map);
 
 			} else {
 				Object bean = Utility.createObject( VBObjectUtils.DATA_MODEL_PACKAGE +  className);
@@ -315,10 +389,10 @@ select (subquery stuff goes here as stuff) as somename from...
 					log.debug("Setting bean property " + propName + " = " + value);
 					BeanUtils.copyProperty(bean, propName, value);	
 				}
-		  		col.add(bean);
+		  		beanList.add(bean);
 			}
 		}
-		return col;
+		return beanList;
 	}
 	
 	/**
@@ -342,31 +416,29 @@ select (subquery stuff goes here as stuff) as somename from...
 		// parse selectClause to get all the fieldNames
 		String attribList = null;
 		selectClause = selectClause.toLowerCase();
+		Matcher m;
 
-		log.debug("SOURCE: " + selectClause);
-		//log.debug("PATTERN: " + selectParamPattern.pattern());
-		log.debug("PATTERN: " + subqueryPattern.pattern());
-		Matcher m = subqueryPattern.matcher(selectClause);
-
+		//log.debug("============================");
+		//log.debug("ORIGINAL: " + selectClause);
+		m = subqueryPattern.matcher(selectClause);
 		selectClause = m.replaceAll("");
-		log.debug("New string is: " + selectClause);
+		//log.debug("REGEX: " + subqueryPattern.pattern());
+		//log.debug("MODIFIED 1: " + selectClause);
 
-		if (m.matches()) {
-			log.debug("MATCHED!");
-			//attribList = m.group(1);
-		} else {
-			log.debug("NO MATCH");
-		}
+		m = attribAsPattern.matcher(selectClause);
+		selectClause = m.replaceAll("");
+		//log.debug("REGEX: " + attribAsPattern.pattern());
+		//log.debug("--------------");
+		//log.debug("MODIFIED 2: " + selectClause);
+		//log.debug("============================");
 
-		/*
-		log.debug("attrib list: " + attribList);
-		log.debug("---------------------------------");
-		*/
-
+		log.debug("========== QUERY: " + selectClause);
 
 		StringTokenizer st = new StringTokenizer(selectClause);
 		int indexOfDot, indexOfComma, indexOfAs;
 		
+		// get the property names
+
 		while ( st.hasMoreTokens() )
 		{
 			String propertyName = st.nextToken();
@@ -383,9 +455,8 @@ select (subquery stuff goes here as stuff) as somename from...
 				// Add this token with any trailing ',' removed
 				
 				// Check for a named field
-				log.debug("property name:  " + propertyName);
+				//log.debug("property name:  " + propertyName);
 				indexOfAs = propertyName.indexOf(" as ");
-				log.debug("as?  " + indexOfAs);
 				if ( indexOfAs != -1 ) {
 					propertyName = propertyName.substring(indexOfAs + 4 );
 				}
@@ -409,8 +480,38 @@ select (subquery stuff goes here as stuff) as somename from...
 				}
 			}
 		}	
+
+		log.debug("---------------------------------");
+		log.debug("attrib list: " + results.toString());
+		log.debug("---------------------------------");
 		return results;
 	}
+
+
+    /**
+     * 
+     */
+	private String stripSQLAttribs(String selectClause) {
+
+		selectClause = selectClause.toLowerCase();
+		Matcher m;
+
+		m = subqueryPattern.matcher(selectClause);
+		selectClause = m.replaceAll("");
+
+		m = attribAsPattern.matcher(selectClause);
+		selectClause = m.replaceAll("");
+
+		m = afterFromPattern.matcher(selectClause);
+		//log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
+		//log.debug("REGEX: " + afterFromPattern.pattern());
+		//log.debug("BEFORE: " + selectClause);
+		selectClause = m.replaceAll("");
+		//log.debug("MODIFIED: " + selectClause);
+
+		return selectClause;
+	}
+
 
     /**
      * 
@@ -422,11 +523,14 @@ select (subquery stuff goes here as stuff) as somename from...
     }
 
     public void setPageNumber(String s) {
-		if (!Utility.isStringNullOrEmpty(s) || Integer.parseInt(s) < 0) {
+		try {
+			if (Utility.isStringNullOrEmpty(s) || Integer.parseInt(s) < 0) {
+				s = "0";
+			}
+		} catch (NumberFormatException nfe) {
 			s = "0";
 		}
 
-		log.debug("Setting pageNumber = " + s);
         this.pageNumber = s;
     }
 
@@ -440,13 +544,39 @@ select (subquery stuff goes here as stuff) as somename from...
     }
 
     public void setPerPage(String s) {
-		if (Utility.isStringNullOrEmpty(s)) {
-			s = null;
-		}
-
-		log.debug("Setting perPage = " + s);
         this.perPage = s;
     }
+
+
+    /**
+     * 
+     */
+	protected String id;
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String s) {
+		log.debug("GC: setId: " + s);
+        this.id = s;
+    }
+
+
+    /**
+     * 
+     */
+	protected String numItems;
+
+    public String getNumItems() {
+        return this.numItems;
+    }
+
+    public void setNumItems(String s) {
+		log.debug("GC: setNumItems: " + s);
+        this.numItems = s;
+    }
+
 
 	
 	/**
@@ -463,4 +593,5 @@ select (subquery stuff goes here as stuff) as somename from...
 			
 		log.debug(result);
 	}
+
 }
