@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-03-14 15:09:38 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2002-03-15 01:42:07 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
@@ -268,12 +268,21 @@ Correlation Taxon: 	<font color="#F90000"><b>*</b></font>:</font>
 </font>
 </span>
 <br>
-
+<!-- CORRELATION TAXON LEVEL -->
 <br >
 <span class="category" >
 <font size="2">
 Correlation Taxon Level: 	<font color="#F90000"><b>*</b></font>:</font> 
-<input size="55" name="correlationTaxonLevel">
+<select class="item" name="correlationTaxonLevel" multiple size=3>
+			<option selected value="%">all
+			<option>class
+			<option>subclass
+			<option>group
+			<option>subgroup
+			<option>formation
+			<option>alliance
+			<option>association
+			</select>
 </font>
 </span>
 <br>
