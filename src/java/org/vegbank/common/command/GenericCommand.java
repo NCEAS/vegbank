@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-30 17:08:33 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-07-13 18:54:19 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -234,7 +234,9 @@ public class GenericCommand
 	
 	/**
 	 * Use the SQL select query to get the names of the properties
-	 * of the bean we wish to populate with the values
+	 * of the bean we wish to populate with the values.  Removes
+	 * anything before the '.' if there is one, e.g. 'tobs.accessioncode'
+	 * becomes 'accessioncode'.
 	 * 
 	 * <pre>
 	 * 	SELECT thisField, thatField, thatTable.inthat FROM xxxxx
@@ -250,6 +252,7 @@ public class GenericCommand
 		
 		// parse selectClause to get all the fieldNames
 		StringTokenizer st = new StringTokenizer(selectClause);
+		int indexOfDot, indexOfComma;
 		
 		while ( st.hasMoreTokens() )
 		{
@@ -265,11 +268,17 @@ public class GenericCommand
 			else
 			{
 				// Add this token with any trailing ',' removed
-				int indexOfComma = propertyName.indexOf(',');
+				indexOfComma = propertyName.indexOf(',');
 				if ( indexOfComma == -1 )
 				{
 					// no comma so let in whole token
-					results.add(propertyName.toLowerCase());
+					indexOfDot = propertyName.indexOf('.');
+					if ( indexOfDot == -1 ) {
+						results.add(propertyName.toLowerCase());
+					} else {
+						// remove all before the dot
+						results.add(propertyName.substring(indexOfDot+1).toLowerCase());
+					}
 				}
 				else
 				{

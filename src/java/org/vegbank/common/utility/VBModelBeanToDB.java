@@ -3,8 +3,8 @@
  * Authors: @author@ Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2004-04-29 02:07:57 $' 
- * '$Revision: 1.4 $'
+ * '$Date: 2004-07-13 18:54:20 $' 
+ * '$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -517,7 +517,7 @@ public class VBModelBeanToDB
 
 		sb.append(" ) VALUES ( " + parameters.toString() + " )");
 
-		log.debug("VBModelBeanToDB: SQL >" + sb.toString());
+		log.info("VBModelBeanToDB: SQL >" + sb.toString());
 		return sb.toString();
 	}
 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-30 17:08:33 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-07-13 18:54:20 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,14 @@ public class InterpretPlantForm extends ValidatorForm
 
 	// prepopulated fields
 	private String tobsId;
+	private String tobsAC;
+	private String observation_id;
 	private String plantName;
+	private String taxonfit;
+	private String interpretationtype;
+	private String taxonconfidence;
+	private String notes;
+	private String pcAC;
 	private Taxoninterpretation tint;
 
 
@@ -60,6 +67,15 @@ public class InterpretPlantForm extends ValidatorForm
 	 * 
 	 */
 	public Taxoninterpretation getTaxonInterpretation() {
+		if (tint == null) {
+			log.debug("Creating new Taxoninterpretation");
+			tint = new Taxoninterpretation();
+		}
+
+		tint.setTaxonfit(getTaxonfit());
+		tint.setTaxonconfidence(getTaxonconfidence());
+		tint.setInterpretationtype(getInterpretationtype());
+		tint.setNotes(getNotes());
 		return tint;
 	}
 
@@ -87,8 +103,96 @@ public class InterpretPlantForm extends ValidatorForm
 	/**
 	 * 
 	 */
+	public String getTobsAC() {
+		return tobsAC;
+	}
+
+	/**
+	 *
+	 */
+	public void setTobsAC(String s) {
+		tobsAC = s;
+	}
+
+	/**
+	 * 
+	 */
+	public String getObservation_id() {
+		return observation_id;
+	}
+
+	/**
+	 *
+	 */
+	public void setObservation_id(String s) {
+		observation_id = s;
+	}
+
+	/**
+	 * 
+	 */
+	public String getInterpretationtype() {
+		return interpretationtype;
+	}
+
+	/**
+	 *
+	 */
+	public void setInterpretationtype(String v) {
+		interpretationtype = v;
+	}
+
+	/**
+	 * 
+	 */
+	public String getTaxonconfidence() {
+		return taxonconfidence;
+	}
+
+	/**
+	 *
+	 */
+	public void setTaxonconfidence(String v) {
+		taxonconfidence = v;
+	}
+
+	/**
+	 * 
+	 */
+	public String getNotes() {
+		return notes;
+	}
+
+	/**
+	 *
+	 */
+	public void setNotes(String v) {
+		notes = v;
+	}
+
+	/**
+	 * 
+	 */
+	public String getTaxonfit() {
+		return taxonfit;
+	}
+
+	/**
+	 *
+	 */
+	public void setTaxonfit(String v) {
+		taxonfit = v;
+	}
+
+	/**
+	 * 
+	 */
 	public String getPlantName() {
-		return plantName;
+		if (plantName == null) {
+			return null;
+		} else {
+			return plantName.toLowerCase();
+		}
 	}
 
 	/**
@@ -96,6 +200,20 @@ public class InterpretPlantForm extends ValidatorForm
 	 */
 	public void setPlantName(String v) {
 		plantName = v;
+	}
+
+	/**
+	 * 
+	 */
+	public String getPcAC() {
+		return pcAC;
+	}
+
+	/**
+	 *
+	 */
+	public void setPcAC(String v) {
+		pcAC = v;
 	}
 
 

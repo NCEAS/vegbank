@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-29 06:57:51 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-07-13 18:54:20 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vegbank.ui.struts.VegbankAction;
 import org.vegbank.plots.datasource.DBModelBeanReader;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.VBModelBeanToDB;
 import org.vegbank.common.model.Taxoninterpretation;
@@ -53,7 +54,7 @@ public class InterpretPlantAction extends VegbankAction {
 
 	private static Log log = LogFactory.getLog(InterpretPlantAction.class); 
 	private static final String TOBS_LIST_URL =
-			"/GenericDispatcherFwd.do?prop=taxonobservation_v_annotate_obs&param=";
+			"/GenericDispatcherFwd.do?prop=taxonobservation_v_annotate_obs_pk&param=";
 
 	public ActionForward execute(
 			ActionMapping mapping,
@@ -63,58 +64,52 @@ public class InterpretPlantAction extends VegbankAction {
 
 
 		String actionParam = mapping.getParameter();
+		if (actionParam == null) {
+			actionParam = "n/a";
+		}
+
 		log.debug("In action InterpretPlantAction as " + actionParam);
 		ActionErrors errors = new ActionErrors();
 		InterpretPlantForm ipForm = (InterpretPlantForm)form; 
+		String tobsAC = request.getParameter("tobsAC");
+
+		// for validation,
+		// store the tobsAC in the session
+		if (Utility.isStringNullOrEmpty(tobsAC)) {
+			log.debug("Getting tobsAC from session");
+			tobsAC = (String)request.getSession().getAttribute("tobsAC");
+		} else {
+			log.debug("Putting tobsAC in session");
+			request.getSession().setAttribute("tobsAC", tobsAC);
+		}
+
+
+		/*
+		String clear = request.getParameter("clear");
+		if (!Utility.isStringNullOrEmpty(clear)) {
+			log.debug("clearing out form");
+			ipForm = new InterpretPlantForm();
+		}
+		*/
 
 
 		try {
 			if (isCancelled(request)) {
 				log.debug("CANCELLING");
-				return new ActionForward(TOBS_LIST_URL + 
-						request.getParameter("observation_id"), true);
+				return new ActionForward(TOBS_LIST_URL + ipForm.getObservation_id(), true);
 			}
 
+			log.debug("Interpreting tobs " + tobsAC);
+
+			// these come in handy
+			request.setAttribute("tobsAC", tobsAC);
+			ipForm.setTaxonInterpretation(new Taxoninterpretation());
+			request.setAttribute("formBean", ipForm);
 
 			////////////////////////////////////////////////////
 			// ACTION
 			////////////////////////////////////////////////////
 			if (actionParam.equals("edit")) {
-
-				String tobsAC = request.getParameter("tobsAC");
-				log.debug("Interpreting tobs " + tobsAC);
-
-				/*
-				// get the taxonObservation in question
-				log.debug("getting all taxon interpretations for tobs=" + tobsAC);
-				DBModelBeanReader mbReader = new DBModelBeanReader();
-				Taxonobservation tobs = (Taxonobservation)mbReader.getVBModelBean(tobsAC);
-
-				if (tobs == null) {
-					log.error("Problem getting taxonObservation");
-				}
-
-				mbReader.releaseConnection();
-				*/
-
-				/*
-				// get the plantConcept AC
-				DatabaseAccess da = new DatabaseAccess();
-				log.debug("Getting plantConcept AC");
-				log.debug("plant code = " + tobs.getAuthorplantname());
-				ResultSet rs = da.issueSelect(
-						"SELECT accessioncode FROM plantconcept WHERE plantcode='" +
-						tobs.getAuthorplantname() + "'");
-				if (rs.next()) {
-					ipForm.setPlantConceptAC(rs.getString(1));
-				}
-				*/
-
-				/////ipForm.setTaxonObservation(tobs);
-				ipForm.setTaxonInterpretation(new Taxoninterpretation());
-
-				request.setAttribute("formBean", ipForm);
-				request.setAttribute("tobsAC", tobsAC);
 
 				log.debug("Leaving InterpretPlantAction (edit)");
 				return mapping.findForward("edit");
@@ -122,28 +117,118 @@ public class InterpretPlantAction extends VegbankAction {
 
 			} else if (actionParam.equals("save")) {
 
+				// get the taxonobservation_id
+				log.debug("Calling ipForm.getTaxonInterpretation()");
+				Taxoninterpretation tint = ipForm.getTaxonInterpretation();
+
+				ResultSet rs = null;
+				DatabaseAccess da = new DatabaseAccess();
+				
+				// set the tobsId (from the form) in the T-Int
+				tint.setTaxonobservation_id(Long.parseLong(ipForm.getTobsId()));
+
+				//
+				// Get plantname_id
+				//
+				log.debug("checking for plantName: " + 
+							Utility.encodeForDB(ipForm.getPlantName()));
+				rs = da.issueSelect(
+						"SELECT plantname_id FROM plantname WHERE lower(plantname)='" +
+							Utility.encodeForDB(ipForm.getPlantName()) + "'");
+
+				// can find plantName?
+				if (rs.next()) {
+					// use the extant plantName 
+					log.debug("using extant plantName");
+					tint.setPlantname_id(rs.getLong(1));
+
+				} else {
+					// plantName does not yet exist, so store it
+					String ins = "INSERT INTO plantname (plantname,dateentered) VALUES ('" + 
+							Utility.encodeForDB(ipForm.getPlantName()) + "', now())";
+					log.debug("adding new plantName: " + ins);
+					da.issueUpdate(ins);
+				}
+				
+				//
+				// Get plantconcept_id
+				// 
+				log.debug("getting plantconcept_id with: " + ipForm.getPcAC());
+				rs = da.issueSelect(
+						"SELECT plantconcept_id FROM plantconcept WHERE lower(accessioncode)='" +
+						ipForm.getPcAC().toLowerCase() + "'");
+
+
+				if (rs.next()) {
+					log.debug("setting plantconcept_id");
+					tint.setPlantconcept_id(rs.getLong(1));
+
+				} else {
+					log.error("Can't find plantconcept_id for given AC: " + ipForm.getPcAC());
+					errors.add(Globals.ERROR_KEY, new ActionMessage(
+								"errors.general", 
+								"The plant concept accession code you entered could not be found."));
+					saveErrors(request, errors);
+					return mapping.findForward("edit");
+				}
+				
+				// 
+				// Set the interpretationdate
+				//
+				tint.setInterpretationdate("now()");
+				
+				// 
+				// Set party_id
+				//
+				tint.setParty_id(new Long(getUser(request.getSession()).getPartyid()).longValue());
+				
+				// 
+				// Set role_id
+				//
+				rs = da.issueSelect("SELECT role_id FROM aux_role WHERE LOWER(rolecode)='not specified'");
+				if (rs.next()) {
+					tint.setRole_id(rs.getLong(1));
+				} else {
+					log.error("Can't find role_id for rolecode: 'Not specified'");
+					errors.add(Globals.ERROR_KEY, new ActionMessage(
+								"errors.general", 
+								"Bad rolecode, 'not specified'"));
+					saveErrors(request, errors);
+					return mapping.findForward("vberror");
+				}
+
+				
+				// 
+				// Set other tint fields
+				//
+				tint.setOriginalinterpretation("false");
+				tint.setCurrentinterpretation("false");
+				tint.setInterpretationtype("Other");
+
+				//log.debug("tint:\n" + tint.toXML());
+				rs.close();
+				
 				// save new taxonInterpretation record
 				log.debug("inserting new taxoninterpretation");
 				VBModelBeanToDB db = new VBModelBeanToDB();
-				db.insert(ipForm.getTaxonInterpretation());
+				db.insert(tint);
 				
-				// can find plantName?
-				DatabaseAccess da = new DatabaseAccess();
-				ResultSet rs = da.issueSelect("SELECT plantname_id FROM plantname WHERE lower(plantName)='" +
-						ipForm.getPlantName().toLowerCase() + "'");
-				if (!rs.next()) {
-					// plantName does not yet exist, so store it
-					/*
-					da.issueInsert("INSERT plantname SET plant ");
-						// maybe make a new Plantname bean instead?
-					Plantname plantname = new Plantname();
-					plantname.setPlantname(ipForm.getPlantName());
-					log.debug("inserting new plantName");
-					*/
-				}
+
+				ActionMessages messages = new ActionMessages();
+				messages.add("saved", new ActionMessage(
+							"errors.general", 
+							"Thank you.  Your interpretation has been saved."));
+				saveMessages(request, messages);
+
+				request.getSession().removeAttribute("tobsAC");
+
+				// tell the next action to clear out the form
+				log.debug("Newing up the form");
+				ipForm = new InterpretPlantForm();
+				request.setAttribute("formBean", ipForm);
 
 				log.debug("Leaving InterpretPlantAction (save)");
-				return mapping.findForward("list");
+				return mapping.findForward("edit");
 			}
 		
 		} catch (Exception ex) {
@@ -151,8 +236,9 @@ public class InterpretPlantAction extends VegbankAction {
 			errors.add(Globals.ERROR_KEY, new ActionMessage(
 						"errors.general", ex.toString()));
 			saveErrors(request, errors);
-			return mapping.findForward("failure");
+			return mapping.findForward("edit");
 		}
+
 
 		// error
 		log.error("Leaving InterpretPlantAction: no parameter set in struts-config!");
