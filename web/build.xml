@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2004-09-02 23:26:58 $'
-* '$Revision: 1.116 $'
+* '$Author: mlee $'
+* '$Date: 2004-09-14 18:43:24 $'
+* '$Revision: 1.117 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -82,6 +82,7 @@
 		makes the first part of the URI. -->
     <property name="web.context_uri" value="vegbank"/>
     <property name="forms" value="./forms"/>
+    <property name="views" value="./views"/>
     <property name="tiles" value="./tiles"/>
     <property name="admin_src" value="./admin"/>
     <property name="email_templates_src" value="./email_templates"/>
@@ -107,13 +108,14 @@
     <property name="vegdocs.dir" value="${machine_url}/vegdocs"/>
     <property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
     <!-- large binary files location:   targets that read from large binaries separate -->
-	<property name="lrg_binary_src" value="${apache.document.root}/noncvs"/>
+    <property name="lrg_binary_src" value="${apache.document.root}/noncvs"/>
     <filter token="dist" value="dist"/>
     <filter token="hostname" value="${hostname}"/>
     <filter token="version" value="development"/>
     <!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
     <property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
     <property name="forms_server" value="${tomcat.home.dir}/webapps/${webapp}/forms"/>
+    <property name="views_server" value="${tomcat.home.dir}/webapps/${webapp}/views"/>
     <property name="tiles_server" value="${tomcat.home.dir}/webapps/${webapp}/tiles"/>
     <property name="admin_server" value="${tomcat.home.dir}/webapps/${webapp}/admin"/>
     <property name="image_server" value="${tomcat.home.dir}/webapps/${webapp}/images"/>
@@ -145,6 +147,7 @@
     <filter token="uploaddata_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/uploadFile.html"/>
     <filter token="general_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/general/"/>
     <filter token="forms_url" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/"/>
+    <filter token="views_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/views/"/>
     <filter token="admin_url" value="${machine_url}${eighty_eighty}/${web.context_uri}/admin/"/>
     <!-- add second token for forms, which is similarly named as other links -->
     <filter token="forms_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/"/>
@@ -239,8 +242,7 @@
     <copy overwrite="true" todir="${news_server}" filtering="yes">
       <fileset dir="${news_src}"/>
     </copy>
-
-	<copy overwrite="true" todir="${apache.document.root}/upload" filtering="yes">
+    <copy overwrite="true" todir="${apache.document.root}/upload" filtering="yes">
       <fileset dir="upload"/>
     </copy>
   </target>
@@ -362,6 +364,13 @@
     <copy overwrite="true" todir="${tiles_server}" filtering="yes">
       <fileset dir="${tiles}" includes="**/*jsp **/*html" excludes="**/CVS* "/>
     </copy>
+    <antcall target="views" />
+  </target>
+  <target name="views" depends="tokenfiles" description="&gt; dist the views to server (outside chain, but included in forms)">
+    <copy overwrite="true" todir="${views_server}" filtering="yes">
+      <fileset dir="${views}" includes="*jsp *html" excludes="**/CVS* "/>
+    </copy>
+
   </target>
   <!--
 	* TARGET TO PUT THE GENERAL HTML DOCS INTO THE CORRECT PLACE
