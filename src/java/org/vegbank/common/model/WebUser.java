@@ -7,9 +7,9 @@ import org.vegbank.common.utility.LogUtility;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-12-01 19:25:00 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-12-02 19:53:13 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ public class WebUser
 	private String dayphone = "";
 	private int userid = 0;
 	private int partyid = 0;
+	private boolean guestUser = false;
 
 	/**
 	 * @return
@@ -373,6 +374,22 @@ public class WebUser
 	public void setZipcode(String string)
 	{
 		zipcode = string;
+	}
+
+	/**
+	 * @param b
+	 */
+	public void isGuest(boolean b)
+	{
+		this.guestUser = b;	
+	}
+	
+	/**
+	 * @return is this user a guest
+	 */
+	public boolean isGuest()
+	{
+		return this.guestUser;
 	}
 
 }
