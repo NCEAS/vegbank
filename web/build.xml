@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   * '$Author: harris $'
-  * '$Date: 2002-03-06 18:39:32 $'
-  * '$Revision: 1.11 $'
+  * '$Date: 2002-03-08 22:28:00 $'
+  * '$Revision: 1.12 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -73,6 +73,7 @@
 	<filter token="stylesheet_generator_servlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/stylesheetgenerator"/>
 	<filter token="usermanagement_servlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement"/>
 	<filter token="datarequestservlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet" />
+	<filter token="datasubmitservlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/DataSubmitServlet" />
 	<filter token="nestedquerybuilder" value="http://vegbank.nceas.ucsb.edu/framework/servlet/QueryBuilderServlet" />
 	<filter token="authenticationservlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/authenticate" />
 	
@@ -171,6 +172,7 @@
 			plant-name-lookup.html
 			utilities.html
 			stylesheet-generator.html
+			community-submit.html
 			community-query.html"
 		excludes="**/CVS* "
 	/>
