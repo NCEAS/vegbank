@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-02 22:31:50 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-03-25 06:42:06 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,10 @@ package org.vegbank.ui.struts;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.Constants;
 import org.vegbank.common.model.WebUser;
-import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.PermComparison;
 import org.vegbank.common.utility.UserDatabaseAccess;
 
@@ -42,6 +43,7 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  */
 public class Authenticate implements  Authentication
 {
+	private static Log log = LogFactory.getLog(Authenticate.class);
 
 	/* (non-Javadoc)
 	 * @see org.vegbank.ui.struts.Authentication#check(javax.servlet.http.HttpServletRequest)
@@ -58,7 +60,8 @@ public class Authenticate implements  Authentication
 		{
 			valid = true;
 		}
-		LogUtility.log("Authenticate: User logged on: "+ valid);
+		log.info("Authenticate: User " + session.getAttribute(Constants.USER_KEY) +
+				" is logged on: "+ valid);
 		return valid;
 	}
 
@@ -73,7 +76,7 @@ public class Authenticate implements  Authentication
 		WebUser user;
 		try {
 			Long usrId = (Long)request.getSession().getAttribute(Constants.USER_KEY);
-			LogUtility.log("Authenticate.checkReqRoles: getting user where usr_id=" + usrId);
+			log.debug("Authenticate.checkReqRoles: getting user where usr_id=" + usrId);
 			if (usrId.longValue() == 0) {
 				return false;
 			}
@@ -84,22 +87,22 @@ public class Authenticate implements  Authentication
 			}
 
 		} catch (Exception ex) {
-			LogUtility.log("Authenticate.checkReqRoles exception getting user: ", ex);
+			log.info("Authenticate.checkReqRoles exception getting user: ", ex);
 			return false;
 		}
 			
-		LogUtility.log("Authenticate.checkReqRoles: getting user perms...");
+		log.debug("Authenticate.checkReqRoles: getting user perms...");
 		int userPerms = user.getPermissiontype();
-		LogUtility.log("Authenticate.checkReqRoles: user's role sum = "
+		log.debug("Authenticate.checkReqRoles: user's role sum = "
 				+ userPerms + ", required roles = " + reqRoles);
 			
 		if (reqRoles == null) {
-			LogUtility.log("Authenticate: assuming Action should be " +
+			log.debug("Authenticate: assuming Action should be " +
 					"configured with min role (reg)");
 			reqRoles = "reg";
 		}
 		
-		LogUtility.log("::: ACTION! :::::::::::::::::::::::::::::");
+		log.debug("::: ACTION! :::::::::::::::::::::::::::::");
 		return PermComparison.matchesAll(reqRoles, userPerms);
 	}
 

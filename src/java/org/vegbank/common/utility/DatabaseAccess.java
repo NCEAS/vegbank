@@ -4,9 +4,9 @@
  *  Copyright: 2002 Regents of the University of California and the
  *             			National Center for Ecological Analysis and Synthesis
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-02-27 19:10:32 $'
- *	'$Revision: 1.12 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-03-25 06:42:06 $'
+ *	'$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -38,6 +40,7 @@ import java.sql.Statement;
  */
 public class DatabaseAccess
 {
+	private static Log log = LogFactory.getLog(DatabaseAccess.class);
 
 	//Global variables for the database connection
 	
@@ -59,7 +62,7 @@ public class DatabaseAccess
 			dbConn=DBConnectionPool.getInstance().getDBConnection("Select from database");
 			serialNumber=dbConn.getCheckOutSerialNumber();
 			
-			LogUtility.log("DatabaseAccess > Running query: " + inputStatement);
+			log.debug("DatabaseAccess > Running query: " + inputStatement);
 			
 			Statement query = dbConn.createStatement();
 			results = query.executeQuery(inputStatement);
@@ -91,7 +94,7 @@ public class DatabaseAccess
 			dbConn=DBConnectionPool.getInstance().getDBConnection("This is an empty string");
 			serialNumber=dbConn.getCheckOutSerialNumber();
 			
-			System.out.println("DatabaseAccess > Running query: " + inputStatement);
+			log.debug("DatabaseAccess > Running update query: " + inputStatement);
 			
 			Statement query = dbConn.createStatement();
 			results = query.executeUpdate(inputStatement);

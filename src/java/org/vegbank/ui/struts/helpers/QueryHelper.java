@@ -3,9 +3,9 @@
  *  Authors: @author@ 
  *  Release: @release@
  * 
- * '$Author: farrell $' 
- * '$Date: 2004-03-05 22:45:16 $' 
- * '$Revision: 1.1 $'
+ * '$Author: anderson $' 
+ * '$Date: 2004-03-25 06:42:07 $' 
+ * '$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -144,13 +144,12 @@ public class QueryHelper
 	public static StringBuffer getPlantQuerySQL(PlantQueryForm form)
 	{
 		// Get the properties of the form
-		String plantname = form.getPlantname();
-		String[] nameType = form.getNameType();
-		String[] taxonLevel = form.getTaxonLevel();
-		String nameExistsBeforeDate = form.getNameExistsBeforeDate();
-		String acordingToParty = form.getAccordingToParty();
-		return getPlantQuerySQL(plantname, taxonLevel, nameExistsBeforeDate,
-				acordingToParty, nameType);
+		return getPlantQuerySQL(
+				form.getPlantname(),
+				form.getTaxonLevel(),
+				form.getNameExistsBeforeDate(),
+				form.getAccordingToParty(),
+				form.getNameType() );
 	}
 
 	/**

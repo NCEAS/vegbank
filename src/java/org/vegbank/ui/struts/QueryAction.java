@@ -3,9 +3,9 @@
  * 
  *  Authors: @author@ Release: @release@
  * 
- * '$Author: farrell $' 
- * '$Date: 2004-03-05 22:45:16 $' 
- * '$Revision: 1.1 $'
+ * '$Author: anderson $' 
+ * '$Date: 2004-03-25 06:42:06 $' 
+ * '$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -28,6 +28,9 @@ import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.RowSetDynaClass;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -42,14 +45,15 @@ import org.vegbank.ui.struts.helpers.QueryHelper;
 /**
  * @author farrell
  */
-public class QueryAction
-		extends Action
+public class QueryAction extends Action
 {
+
+	private static Log log = LogFactory.getLog(QueryAction.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
-		LogUtility.log(" In QueryAction " + LogUtility.DEBUG);
+		log.debug(" In QueryAction");
 		ActionErrors errors = new ActionErrors();
 		
 		// Get SQL depend on queryType
@@ -72,23 +76,25 @@ public class QueryAction
 
 		if ( query != null )
 		{
-			LogUtility.log("SQL: "+ query.toString(), LogUtility.INFO);
+			log.debug("SQL: "+ query.toString());
 			try
 			{
 				DatabaseAccess da = new DatabaseAccess();
+				log.debug("Issuing query -------------------------------");
 				ResultSet rs = da.issueSelect(query.toString());
+				log.debug("Query complete ------------------------------");
 				RowSetDynaClass rsdc = new RowSetDynaClass(rs);
 				request.setAttribute("QueryResults", rsdc);
 				/*
-				 * // DEBUGGING while(rs.previous()) { LogUtility.log(rs.getString(1) +
+				 * // DEBUGGING while(rs.previous()) { log.debug(rs.getString(1) +
 				 * rs.getString(2) + rs.getString(3) + rs.getString(4) );
-				 * LogUtility.log("#############################################"); }
+				 * log.debug("#############################################"); }
 				 */
 			} catch (Exception e)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.database",
 						e.getMessage(), query.toString()));
-				LogUtility.log(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 			}
 		}
 		// Report any errors we have discovered back to the original form

@@ -4,9 +4,9 @@
  *  Copyright: 2002 Regents of the University of California and the
  *             National Center for Ecological Analysis and Synthesis
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-03-05 22:36:51 $'
- *	'$Revision: 1.9 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-03-25 06:42:06 $'
+ *	'$Revision: 1.10 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,9 @@ import java.sql.*;
 import java.util.*;
 
 import org.apache.struts.util.LabelValueBean;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * This class contains multi-purpose utilities for dealing with plot data, 
  * and the VegBank database at this point these may include utilities to 
@@ -40,6 +43,7 @@ import org.apache.struts.util.LabelValueBean;
 
 public class DatabaseUtility 
 {
+	private static Log log = LogFactory.getLog(DatabaseUtility.class);
 
 	public Vector outVector;
 	public int vecElementCnt;
@@ -83,12 +87,12 @@ public class DatabaseUtility
 			} //end while
 
 			stringContentsNum=lineCnt;  //number of elements in the array
-			//System.out.println("number of lines transformed: "+lineCnt);
+			//log.debug("number of lines transformed: "+lineCnt);
 			outStringNum=stringContentsNum;	
 		} //end try
 		catch( Exception e ) 
 		{
-			System.out.println(" failed in: DatabaseUtility "+e.getMessage());
+			log.error(" failed in: DatabaseUtility "+e.getMessage());
 		}
 	}//end method
 
@@ -100,7 +104,7 @@ public class DatabaseUtility
 	*/
 	public String positionStringTokenizer(String pipeString, int tokenPosition)
 	{
-		//System.out.println("%%%%% "+pipeString+" "+tokenPosition);
+		//log.debug("%%%%% "+pipeString+" "+tokenPosition);
 		String token="nullToken";
 		if (pipeString != null)
 		{
@@ -145,7 +149,7 @@ public class DatabaseUtility
 			String s;
 			while((s = in.readLine()) != null) 
 			{
-				//System.out.println(s);	
+				//log.debug(s);	
 				localVector.addElement(s);
 				vecElementCnt++;
 			}
@@ -153,7 +157,7 @@ public class DatabaseUtility
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed in DatabaseUtility" + 
+			log.error("failed in DatabaseUtility" + 
 			e.getMessage());
 		}
 	}
@@ -180,7 +184,7 @@ public class DatabaseUtility
 				 {
 					 uniqueArray[uniqueArrayNum]=inputArray[i];
 					 uniqueArrayNum++;
-					 //System.out.println("first value: "+inputArray[i]);
+					 //log.debug("first value: "+inputArray[i]);
 				 }
 	
 				//check for redundancies
@@ -215,7 +219,7 @@ public class DatabaseUtility
 		 } //end try
 		 catch( Exception e ) 
 		 {
-			 System.out.println(" failed in: DatabaseUtility.getUniqueArray: "+e.getMessage());
+			 log.error(" failed in: DatabaseUtility.getUniqueArray: "+e.getMessage());
 		 	e.printStackTrace();
 		 }
 	 } //end method
@@ -242,13 +246,13 @@ public class DatabaseUtility
 			String password = defaultPropFile.getString("password");
 			
 			Class.forName(driverClass);
-			System.out.println("CommunityQueryStore > db connect string: " + dbConnectString);
+			log.error("CommunityQueryStore > db connect string: " + dbConnectString);
 			c = DriverManager.getConnection(dbConnectString, user, password);			
 
 		}
 		catch ( Exception e )
 		{
-			System.out.println("DatabaseUtility > Exception: " + e.getMessage());
+			log.error("DatabaseUtility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(c);
@@ -306,7 +310,7 @@ public class DatabaseUtility
 	 */
 	private void dropSinglePlot(String plotId) throws java.sql.SQLException {
 
-		System.out.println("DatabaseUtility.dropSinglePlot > ID=" + plotId);
+		log.error("DatabaseUtility.dropSinglePlot > ID=" + plotId);
 		String obsIds;
 		boolean results = true;
 		StringBuffer sb = new StringBuffer(256)
@@ -322,7 +326,7 @@ public class DatabaseUtility
 		}
 
 		if ( res == 0 ) {
-			System.out.println("DatabaseUtility.dropSinglePlot > no plot");
+			log.error("DatabaseUtility.dropSinglePlot > no plot");
 			return; 
 		}
 
@@ -341,7 +345,7 @@ public class DatabaseUtility
 			"( SELECT ? from ? where observation_id IN (?) ) ) )";
 		
 		if (obsIds != null && !obsIds.equals("")) {
-			System.out.println("DatabaseUtility.dropSinglePlot > got obs IDs: " + obsIds);
+			log.debug("DatabaseUtility.dropSinglePlot > got obs IDs: " + obsIds);
 			
 			// TAXONALT
 			values = new ArrayList(8);
@@ -496,12 +500,12 @@ public class DatabaseUtility
 		values.add(plotId);
 		executeStatement(values, stmtSingle);
 
-		System.out.println("DatabaseUtility.dropSinglePlot: DONE");
+		log.debug("DatabaseUtility.dropSinglePlot: DONE");
 	}
 
 	private void executeStatement(List values, String sql) throws SQLException
 	{
-		//System.out.println( "DatabaseUtility.dropSinglePlot > SQL:\n" + constructQuery(sql, values) );
+		//log.debug( "DatabaseUtility.dropSinglePlot > SQL:\n" + constructQuery(sql, values) );
 		conn.createStatement().executeUpdate( constructQuery(sql, values) );
 	}
 
@@ -518,7 +522,7 @@ public class DatabaseUtility
 			}
 
 		} catch (java.util.regex.PatternSyntaxException pse) {
-			System.err.println("DatabaseUtility.constructQuery: bad syntax, " 
+			log.error("DatabaseUtility.constructQuery: bad syntax, " 
 					+ pse.getMessage());
 		}
 		return tmp;
@@ -569,7 +573,7 @@ public class DatabaseUtility
 			 sb = new StringBuffer(256);
 			 this.conn = this.getDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
-			 System.out.println("DatabaseUtility >>> dropping user profile for: " + email );
+			 log.debug("DatabaseUtility >>> dropping user profile for: " + email );
 			 
 			 long usrId = getUserId(email);
 			 
@@ -583,7 +587,7 @@ public class DatabaseUtility
 			 sb.append("delete from userquery where usr_id = '"+usrId+"';");
 			 sb.append("delete from userrecordowner where usr_id = '"+usrId+"';");
 			 
-			 //System.out.println(sb.toString());
+			 //log.debug(sb.toString());
 			 
 			 pstmt = conn.prepareStatement( sb.toString() );
 			 
@@ -594,7 +598,7 @@ public class DatabaseUtility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("DatabaseUtility > Exception: " + e.getMessage());
+			log.error("DatabaseUtility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 	 }
@@ -636,7 +640,7 @@ public class DatabaseUtility
 			 sb = new StringBuffer();
 			 this.conn = this.getDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
-			 System.out.println("DatabaseUtility > updating user: " + email +" to permission type: " + level );
+			 log.debug("DatabaseUtility > updating user: " + email +" to permission type: " + level );
 			 sb.append("update  usr set permission_type = '"+level+"' where email_address like '"+email+"';");
 			 pstmt = conn.prepareStatement( sb.toString() );
 			 
@@ -647,7 +651,7 @@ public class DatabaseUtility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("DatabaseUtility > Exception: " + e.getMessage());
+			log.error("DatabaseUtility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 	 }
@@ -738,7 +742,7 @@ public class DatabaseUtility
 			 sb = new StringBuffer();
 			 this.conn = this.getDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
-			 System.out.println("DatabaseUtility > updating user's : " + email +" password to  : " + password );
+			 log.debug("DatabaseUtility > updating user's : " + email +" password to  : " + password );
 			 sb.append("update usr set password = '"+password+"' where email_address like '"+email+"';");
 			 pstmt = conn.prepareStatement( sb.toString() );
 			 
@@ -749,7 +753,7 @@ public class DatabaseUtility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("DatabaseUtility > Exception: " + e.getMessage());
+			log.error("DatabaseUtility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 	 }
@@ -775,7 +779,7 @@ public class DatabaseUtility
 				try {
 					dplot.dropPlot(inPlot, host);
 				} catch (java.sql.SQLException sex) {
-					System.out.println(sex.getMessage());
+					log.error(sex.getMessage());
 					sex.printStackTrace();
 				}
 			}
@@ -783,7 +787,7 @@ public class DatabaseUtility
 			{
 				String email = args[1];
 				String host = args[2];
-				System.out.println("Dropuser > " + email + " on db " + host);
+				log.debug("Dropuser > " + email + " on db " + host);
 				dplot.dropUser(email, host);
 			}
 			else if ( action.equals("updatepermission") )
@@ -802,7 +806,7 @@ public class DatabaseUtility
 			}
 			else
 			{
-				System.out.println("unknown action: " + action);
+				log.debug("unknown action: " + action);
 			}
 		}
 		else if (args.length == 1) 
@@ -1008,7 +1012,7 @@ public class DatabaseUtility
 			sb.append(conjunction)
 				.append(" ( ").append(fieldName).append(" = '").append(values[0]).append("'");
 	
-			for (int i = 0; i < values.length; i++)
+			for (int i = 1; i < values.length; i++)
 			{
 				if ( values[i] == null)
 				{
