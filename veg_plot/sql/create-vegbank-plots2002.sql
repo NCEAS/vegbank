@@ -350,7 +350,7 @@ CREATE TABLE observation
     landscapeNarrative text,
     homogeneity varchar (50),
     phenologicAspect varchar (30),
-    representativeness varchar (100),
+    representativeness varchar (1000),
     basalArea float,
     hydrologicRegime varchar (30),
     soilMoistureRegime varchar (30),
