@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-10-27 20:16:42 $'
- *  '$Revision: 1.12 $'
+ *  '$Date: 2003-10-29 18:29:10 $'
+ *  '$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -267,7 +267,17 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
         while ( iterator.hasNext() )
         {
           <xsl:value-of select="$javaType"/> object = (<xsl:value-of select="$javaType"/>) iterator.next();
+        
+          <xsl:choose>
+            <xsl:when test="attRelType/@name != 'n/a'">
+          xml.append(getIndent( indent ) + "&lt;<xsl:value-of select="attRelType/@name"/>&gt;\n");
           xml.append( object.toXML( indent + 1) );
+          xml.append(getIndent( indent ) + "&lt;/<xsl:value-of select="attRelType/@name"/>&gt;\n");
+	    </xsl:when>
+            <xsl:otherwise>
+          xml.append( object.toXML( indent + 1) );
+            </xsl:otherwise>
+          </xsl:choose>
         };
       }
     </xsl:for-each>
