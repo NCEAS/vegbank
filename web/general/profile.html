@@ -5,7 +5,7 @@
 <!-- #EndEditable --> 
 <meta http-equiv="Content-Type" content="text/html; charset=">
 </HEAD>
-<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#005680" vlink="6699CC" alink="0033FF">
+<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
 <table cellspacing="0" cellpadding="0" border="0" width="800">
   <tr> 
     <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
@@ -18,14 +18,14 @@
     <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
     <td width="119" height="26" valign="top" bgcolor="#336633"> 
       <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
-        <a href="login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
+        <a href="@general_link@login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
     </td>
     <td width="114" height="26" valign="top" bgcolor="#336633"> 
       <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
-        <a href="info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
+        <a href="@general_link@info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
     </td>
     <td width="114" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="@general_link@help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
     </td>
   </tr>
 </table>
@@ -33,9 +33,11 @@
 <blockquote>
   <h2 align="center"><br>
     <font face="Georgia, Times New Roman, Times, serif">Edit your User Profile</font></h2>
-  <p><font face="Georgia, Times New Roman, Times, serif">Edit personal informal</font></p>
+  <p><font face="Georgia, Times New Roman, Times, serif">Edit personal information</font></p>
 	<p> <a href="@stylesheet_generator_servlet@?action=deletedefault"> Delete Curent Plot View Style Settings </a></p>
   <p> <a href="@stylesheet_generator@"> Create Preferred Plot View Style </a></p>
+	
+  <p><font face="Georgia, Times New Roman, Times, serif">Preferred plot view</font></p>
   <p><font face="Georgia, Times New Roman, Times, serif">Preferred methods</font></p>
   <p><font face="Georgia, Times New Roman, Times, serif">Preferred download format</font></p>
 </blockquote>
@@ -55,19 +57,20 @@
   <tr> 
     <td width="800" height="38" colspan="6" valign="top"> 
       <p align="center"><font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../index.html">VegBank 
-        Home</a> | <a href="info.html">About VegBank</a> |<a href="instructions.html">Instructions</a> 
-        | <a href="../panel/panel.html">ESA Vegetation Panel</a> |<a href="contact.html"> 
-        Contact</a> | <a href="help.html">Help</a></font><font size="2" face="Georgia, Times New Roman, Times, serif"><br>
+        Home</a> | <a href="@general_link@info.html">About VegBank</a> |<a href="@general_link@instructions.html">Instructions</a> 
+        | <a href="../panel/panel.html">ESA Vegetation Panel</a> |<a href="@general_link@contact.html"> 
+        Contact</a> | <a href="@general_link@help.html">Help</a></font><font size="2" face="Georgia, Times New Roman, Times, serif"><br>
         <font size="2" face="Georgia, Times New Roman, Times, serif"><a href="register.html">Register</a> 
-        | <a href="login.html">Login</a> | <a href="logout.html">Logout</a> 
-        |<a href="profile.html"> Profile</a></font></font></p>
+        | <a href="@general_link@login.html">Login</a> |<a href="@general_link@actions.html"> 
+        use VegBank</a>| <a href="@general_link@logout.html">Logout</a> |<a href="@general_link@account.html"> 
+        My VegBank Account</a></font></font></p>
     </td>
   </tr>
   <tr> 
     <td width="800" height="24" colspan="6" valign="top"> 
       <p align="center"><font size="1" face="Georgia, Times New Roman, Times, serif" color="#808000">&copy; 
         2002 Ecological Society of America<br>
-        <a href="terms.html">Terms of use</a> |<a href="privacy.html"> 
+        <a href="@general_link@terms.html">Terms of use</a> |<a href="@general_link@privacy.html"> 
         Privacy policy</a></font></p>
     </td>
   </tr>
