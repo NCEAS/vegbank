@@ -38,6 +38,12 @@ public interface DataSourceServerInterface extends Remote
 	public Vector getPlotNames()
 	throws Exception;
 	
+	//method that returns all the plot names, as a vector, stored in a given
+	//source
+	public Vector getPlotNames(String fileType)
+	throws Exception;
+	
+	
 	//returns the project name 
 	public String getProjectName(String plotName)
 	throws Exception;
