@@ -110,7 +110,7 @@
 	<copydir src="${bin}"
 		dest="${build_bin}"
 		filtering="yes"
-		includes="**"	
+		includes="**.sh **.bat"	
 	/>
 	
 	<chmod dir="${build_bin}"
