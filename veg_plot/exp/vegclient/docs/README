@@ -1,0 +1,36 @@
+# Readme file for describing the steps in running the vegclient
+# software
+#
+#   Authors: @author@
+#   Release: @release@
+#	
+# '$Author: harris $'
+# '$Date: 2001-10-20 00:37:05 $'
+# '$Revision: 1.1 $'
+#
+
+
+
+After installing the software:
+
+1] go to the installation directory and start the the application
+   by clicking the vegclient.exe (or running the vegclient.sh on a 
+   unix machine)
+
+2] once the main frame appears, select the 'utilities' tab and then the 
+   'Database tools' choice which will pop up a second window.
+
+3] on the second window called 'DatabaseManagerInterface' select the 'Database Startup'
+   tab and mash the 'start' button
+
+4] then choose the 'Database Tables' subpane and with the hit the 'run' button on the 
+   'Create Summary Tables' -- this creates the database
+
+5] go back to the main frame and and choose the 'Data Load' option and then the 'Upload Plot
+   Data - new' option.
+
+6] hit the 'Select Project' button and navigate to the 'data/native' sub-directory and choose 
+   the 'peet_project.xml' file.  The frame may hang for a sec while the file is loaded to memory
+   but then will populate the left TextArea.
+
+7] choose the 
