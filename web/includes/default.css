@@ -27,7 +27,7 @@ H1, H2, H3, H4, H5, H6	{
 							font-family: Georgia, Times New Roman, Times, serif;
 							color: #333333;
 						}
-th.grey, td.grey, tr.grey {background-color : #DDDDDD; color: LightSalmon}
+th.grey, td.grey, tr.grey {background-color : #DDDDDD; }
 .listRowA {background-color : #FFFFCC; }						
 .listRowB {background-color : #FFFFFF }						
 .listRowA-Hi {background-color : #FF9933 }						
