@@ -5,11 +5,113 @@
 <link href="@stylesheet@" type="text/css" rel="stylesheet">
 </head>
 <body>@vegbank_header_html_normal@
-<h2>Help for 'Species List Loading Form (one species/taxon per screen)<!-- [z_user_b_speclist_new]-->'</h2>
-<img border="0" alt="in progress: (screen shot of 'Species List Loading Form (one species/taxon per screen)')" src="../screenshots/smaller/z_user_b_speclist_new_1.4.png">
+<h2>Help for "Adding New Plants" Form<!-- [z_user_b_speclist_new]-->'</h2>
+<p class="instructions">Note: to open this form, click "View Loading Tables" on the VegBranch Toolbar.
+Then click "form" next to Species List.  This is the smaller Species List form, used for Species Lists that
+match a user's codes to real plant names.  Click the button in the upper left that says "add plants to VegBank"
+and the form for adding new plants will appear:
+</p>
+<a href="../screenshots/z_user_b_speclist_new_1.5.png" target="_new" border="0">
+<img  border="0" src="../screenshots/z_user_b_speclist_new_1.5.png" alt="screenshot of this form" /> </a> click on the image to open a copy in a new window.
 <p>
-<help>This form is for adding new plant concepts to the vegbank module.  It is not for irregular taxa, like Carex sp. which can be handled without adding new plant concepts to the database.  These new plant concepts should be valid taxonomic concepts that were not preloaded into VegBank.</help>
+To add a new plant to the VegBank module, you can either fill out this form, or import data into the Species List.  In either case, this is a good place
+to visualize and understand what the fields are in the Species List and how
+to use these fields to add a new plant.
+</p>
 
+<p>First, you need to enter a <b>Plant Code</b>.  This will be used in this
+table and other tables to reference this particular plant.  A Plant Code 
+does not need to be anything in particular, it could well be the scientific
+name.  You must use this to refer to the same plant each time you use this
+plant name in this table or any other loading table for a migration.  So far, we just have plantCode:</p>
+
+
+<table class="thinlines"><tr><th>plantCode</th></tr>
+       <tr><td>ACERRUB</td></tr></table>
+<p>
+
+Next, we need a name that is used to define the Plant Concept.
+This is generally the scientific name with authority.  Use the 
+primary name for the concept as used in the reference that defines the concept (more on this later).  This primary name goes in the <b>Plant Name</b> field.  Note that you might use the same name as Plant Code and Plant Name-- that's not a problem and is in fact a good Code if you have no other specific code you prefer to use.  Now, we have:
+
+
+</p>
+<table class="thinlines"><tr><th>plantCode</th><th>plantName</th></tr>
+       <tr><td>ACERRUB</td><td>Acer rubrum L.</td></tr></table>
+<p>The next thing to fill out in this form is any other names that apply to the concept.  VegBank calls these <b>usages</b>: a name that applies to a concept, according to a party.  
+The party in this case is you, the person defined as loading the data (or responsible for the data) in the Metadata form in VegBranch.  
+The plant name that you just entered is also the first usage.  
+You can enter up to four more names.  
+Note that in the Metadata form, you can select to have VegBranch use
+your plantCode value as a 5th usage record or not.  Here we define a scientific name without authority and a common name.  The fourth field we leave blank.
+</p>
+<table class="thinlines">
+<tr><th>plantCode</th><th>plantName</th><th>plantShortName</th><th>plantCommonName</th></tr>
+<tr><td>ACERRUB</td><td>Acer newspeciesii Lee</td><td>Acer newspeciesii</td><td>new maple</td></tr>
+       </table>
+
+<p>Also part of usages are the <b>Class System</b> and <b>Name Status</b>
+for each name, as it applies to the concept.  The Class System is what kind of
+name you are using for each name (i.e. scientific, common, code, etc.).  This is an <b>open list</b> in VegBank, meaning that we provide commonly used values, 
+but you can provide your own values too.  For example, if you had a Russian Common Name, you could write "Russian Common Name" in the class system for that name.
+<b>Name Status</b> is whether or not you use this name as a standard name for the new plant concept.  This is nearly always "standard".
+
+This form is organized into a small matrix, with each Class System and Name Status appearing to the right of each name.  In the table, each name has fields with "System" and "Status" after the field name.  
+For plantCommonName, the two fields: plantCommonNameSystem and plantCommonNameStatus define the system and status for the name found in plantCommonName.  
+This is a common way to group fields in VegBranch's loading tables.
+Now we have:
+</p>
+<table class="thinlines">
+<tr><th>plantCode</th><th>plantName</th><th>plantNameSystem</th><th>plantNameStatus</th><th>plantShortName</th><th>plantShortNameSystem</th><th>plantShortNameStatus</th><th>plantCommonName</th><th>plantCommonNameSystem</th><th>plantCommonNameStatus</th></tr>
+<tr><td>ACERRUB</td><td>Acer newspeciesii Lee</td><td>Scientific</td><td>standard</td><td>Acer newspeciesii</td><td>Scientific without authors</td><td>standard</td><td>new maple</td><td>English Common</td><td>standard</td></tr>
+</table>
+
+<p>Next in the form, we have a chance to provide a <b>Concept Status</b> and <b>Comments</b>.  The <b>Plant Concept Status</b> is whether or not you (the party) accept the concept as valid or not.  
+This is different from the name status, which only describes whether the name should apply to the concept.  
+One could easily have a "standard" name for a concept that you do not believe in ("not accepted".  Or, a non-standard name for an accepted concept.  
+This is also nearly always "accepted" for new concepts (people rarely add concepts they think are invalid).  Any comments about why you accept or do not accept the concept should be added in <b>Plant Party Comments</b>.
+
+</p>
+
+<table class="thinlines">
+<tr><th>plantCode</th><th>plantName</th><th>plantNameSystem</th><th>plantNameStatus</th><th>plantShortName</th><th>plantShortNameSystem</th><th>plantShortNameStatus</th><th>plantCommonName</th><th>plantCommonNameSystem</th><th>plantCommonNameStatus</th><th>plantConceptStatus</th><th>plantPartyComments</th></tr>
+<tr><td>ACERRUB</td><td>Acer newspeciesii Lee</td><td>Scientific</td><td>standard</td><td>Acer newspeciesii</td><td>Scientific without authors</td><td>standard</td><td>new maple</td><td>English Common</td><td>standard</td><td>accepted</td><td>This is a new species of Maple growing in my backyard.  Previously unrecognized, but I think it is a new species.</td></tr>
+</table>
+
+
+<p>Next, you can add up to 4 synonomy records.  Generally, this is added to records that are not accepted, and synonomy points to records that are accepted.  
+There are up to 4 synonomies allowed in the Species List.  You may enter a synonym and a convergence value.  
+The value you enter in the synonym field will be looked up, according to rules that you specify in VegBranch. 
+(The Default is USDA plants names.)  
+Each synonym has a convergence value, which is the relationship between your concept and the synonym you list (in that order).  
+For example, if I say "less than" convergence for the "Acer rubrum" synonym, that means my concept I'm adding is completely contained within the Acer rubrum concept that will be looked up later in VegBranch (presumably the USDA concept).  These fields are named plantSyn1-plantSyn4 and plantSynConverg1-plantSynConverg4, with the plantSyn1 having plantSynConverg1 as its convergence.
+Our example only uses one synonym:
+</p>
+<table class="thinlines">
+<tr><th>plantCode</th><th>plantName</th><th>plantNameSystem</th><th>plantNameStatus</th><th>plantShortName</th><th>plantShortNameSystem</th><th>plantShortNameStatus</th><th>plantCommonName</th><th>plantCommonNameSystem</th><th>plantCommonNameStatus</th><th>plantConceptStatus</th><th>plantPartyComments</th><th>plantSyn1</th><th>plantSynConverg1</th></tr>
+<tr><td>ACERRUB</td><td>Acer newspeciesii Lee</td><td>Scientific</td><td>standard</td><td>Acer newspeciesii</td><td>Scientific without authors</td><td>standard</td><td>new maple</td><td>English Common</td><td>standard</td><td>accepted</td><td>This is a new species of Maple growing in my backyard.  Previously unrecognized, but I think it is a new species.</td><td>Acer rubrum L.</td><td>less than</td></tr>
+</table>
+
+<p>Now, we are finished with the left hand side of the form, and nearly through.  Next, we have <b>reference</b> which is required and <b>Description</b>.  Reference is a word or words that you will later match to an existing VegBank Reference, or add it as a new reference.  Description is a description of what the concept represents.
+</p>
+
+<table class="thinlines">
+<tr><th>plantCode</th><th>plantName</th><th>plantNameSystem</th><th>plantNameStatus</th><th>plantShortName</th><th>plantShortNameSystem</th><th>plantShortNameStatus</th><th>plantCommonName</th><th>plantCommonNameSystem</th><th>plantCommonNameStatus</th><th>plantConceptStatus</th><th>plantPartyComments</th><th>plantSyn1</th><th>plantSynConverg1</th><th>reference</th><th>plantDescription</th></tr>
+<tr><td>ACERRUB</td><td>Acer newspeciesii Lee</td><td>Scientific</td><td>standard</td><td>Acer newspeciesii</td><td>Scientific without authors</td><td>standard</td><td>new maple</td><td>English Common</td><td>standard</td><td>accepted</td><td>This is a new species of Maple growing in my backyard.  Previously unrecognized, but I think it is a new species.</td><td>Acer rubrum L.</td><td>less than</td><td>Lee Flora 2004</td><td>Botanical description here</td></tr>
+</table>
+
+<p>Lastly, you can decide where you think this concept belongs in the hierarchy by selecting a <b>level</b> and <b>parent</b>.  Similar to the 
+synonyms, parent is a name that will be looked up later to match to an exact Plant Concept, not just a name.  The level is a closed picklist.
+
+</p>
+
+<table class="thinlines">
+<tr><th>plantCode</th><th>plantName</th><th>plantNameSystem</th><th>plantNameStatus</th><th>plantShortName</th><th>plantShortNameSystem</th><th>plantShortNameStatus</th><th>plantCommonName</th><th>plantCommonNameSystem</th><th>plantCommonNameStatus</th><th>plantConceptStatus</th><th>plantPartyComments</th><th>plantSyn1</th><th>plantSynConverg1</th><th>reference</th><th>plantDescription</th><th>plantLevel</th><th>plantParent</th></tr>
+<tr><td>ACERRUB</td><td>Acer newspeciesii Lee</td><td>Scientific</td><td>standard</td><td>Acer newspeciesii</td><td>Scientific without authors</td><td>standard</td><td>new maple</td><td>English Common</td><td>standard</td><td>accepted</td><td>This is a new species of Maple growing in my backyard.  Previously unrecognized, but I think it is a new species.</td><td>Acer rubrum L.</td><td>less than</td><td>Lee Flora 2004</td><td>Botanical description here</td><td>Species</td><td>Acer</td></tr>
+</table>
+
+
+<p>Now you know how to load new plant taxa to the VegBank Module.  After all the steps in the loading process are completed (through migration), your new plant concepts will be stored in the VegBank Module on your machine.  To load communities, you can use the analagous table: Community Concept Loading Table and form to load data the exact same way, but with communities, not plants.
 
 @vegbank_footer_html_tworow@
 </body>
