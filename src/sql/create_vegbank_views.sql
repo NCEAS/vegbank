@@ -47,3 +47,43 @@ CREATE VIEW view_emb_embargo_currentfullonly AS
 CREATE VIEW view_emb_embargo_complete AS
   SELECT Coalesce(emb.defaultStatus,0) AS currentEmb, plot.plot_id
   FROM plot LEFT JOIN view_emb_embargo_currentfullonly AS emb ON plot.PLOT_ID = emb.plot_ID;
+  
+  
+DROP VIEW view_notemb_plot;
+ CREATE VIEW view_notEmb_plot AS SELECT * FROM plot where emb_plot<6;
+
+DROP VIEW view_notemb_observation;
+ CREATE VIEW view_notEmb_observation AS SELECT * FROM observation where emb_observation<6;
+
+DROP VIEW view_notemb_disturbanceObs;
+ CREATE VIEW view_notEmb_disturbanceObs AS SELECT * FROM disturbanceObs where emb_disturbanceObs<6;
+
+DROP VIEW view_notemb_soilObs;
+ CREATE VIEW view_notEmb_soilObs AS SELECT * FROM soilObs where emb_soilObs<6;
+
+DROP VIEW view_notemb_commClass;
+ CREATE VIEW view_notEmb_commClass AS SELECT * FROM commClass where emb_commClass<6;
+
+DROP VIEW view_notemb_classContributor;
+ CREATE VIEW view_notEmb_classContributor AS SELECT * FROM classContributor where emb_classContributor<6;
+
+DROP VIEW view_notemb_commInterpretation;
+ CREATE VIEW view_notEmb_commInterpretation AS SELECT * FROM commInterpretation where emb_commInterpretation<6;
+
+DROP VIEW view_notemb_taxonObservation;
+ CREATE VIEW view_notEmb_taxonObservation AS SELECT * FROM taxonObservation where emb_taxonObservation<6;
+
+DROP VIEW view_notemb_taxonImportance;
+ CREATE VIEW view_notEmb_taxonImportance AS SELECT * FROM taxonImportance where emb_taxonImportance<6;
+
+DROP VIEW view_notemb_stemCount;
+ CREATE VIEW view_notEmb_stemCount AS SELECT * FROM stemCount where emb_stemCount<6;
+
+DROP VIEW view_notemb_stemLocation;
+ CREATE VIEW view_notEmb_stemLocation AS SELECT * FROM stemLocation where emb_stemLocation<6;
+
+DROP VIEW view_notemb_taxonInterpretation;
+ CREATE VIEW view_notEmb_taxonInterpretation AS SELECT * FROM taxonInterpretation where emb_taxonInterpretation<6;
+
+DROP VIEW view_notemb_taxonAlt;
+ CREATE VIEW view_notEmb_taxonAlt AS SELECT * FROM taxonAlt where emb_taxonAlt<6;
