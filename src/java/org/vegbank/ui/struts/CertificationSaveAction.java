@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-09 22:47:37 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-06-10 02:54:57 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -231,8 +231,7 @@ public class CertificationSaveAction extends VegbankAction {
 
 		String mailHost = "vegbank.org";
 		String from = "vegbank";
-		String to = "anderson@nceas.ucsb.edu";
-		//////String to = "panel@vegbank.org";
+		String to = "panel@vegbank.org";
 		String cc = null;
 		String subject = "VegBank certification for " + form.getGivenName() + " " + form.getSurName();
 		String body = messageBody.toString();
