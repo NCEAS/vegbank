@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2003-06-03 02:11:42 $'
-* '$Revision: 1.45 $'
+* '$Author: farrell $'
+* '$Date: 2003-06-04 22:44:59 $'
+* '$Revision: 1.46 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -73,7 +73,7 @@
     <filter token="base_url" value=""/>
     <filter token="image_server" value="/vegbank/images/"/>
     <filter token="stylesheet" value="/vegbank/includes/default.css"/>
-    <filter token="plotquery_page" value="/vegbank/forms/plot-query.html"/>
+    <filter token="plotquery_page" value="/vegbank/forms/plot-query.jsp"/>
     <filter token="nestedplotquery_page" value="/vegbank/forms/nested-plot-query.html"/>
     <filter token="uploaddata_page" value="/vegbank/forms/uploadFile.html"/>
     <filter token="stylesheet_generator" value="/vegbank/forms/stylesheet-generator.html"/>
