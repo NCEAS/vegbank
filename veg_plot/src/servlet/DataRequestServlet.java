@@ -145,13 +145,13 @@ public class DataRequestServlet extends HttpServlet
 			else if ( requestDataType.trim().equals("plantTaxon") )
 			{
 				System.out.println( " query on the plant taxonomy database \n");
-				handlePlantTaxonQuery( params, out, requestDataType );
+				handlePlantTaxonQuery( params, out, requestDataType, response );
 			}
 			else if ( requestDataType.trim().equals("vegCommunity") )
 			{
 				System.out.println( " query on the vegetation community database \n"
 					+" not yet implemented ");
-				handleVegCommunityQuery( params, out, requestDataType);
+				handleVegCommunityQuery( params, out, requestDataType, response);
 			}
 			else 
 			{
@@ -348,7 +348,7 @@ public class DataRequestServlet extends HttpServlet
  * 'handleCompoundQuery' method
  *
  * @param params - the Hashtable of parameters that should be included in the
- * 	query
+ * 		query
  * @param out - the output stream to the client
  * @param response - the response object linked to the client 
  */
@@ -371,6 +371,8 @@ public class DataRequestServlet extends HttpServlet
  		requestDataType = (String)params.get("requestDataType");
 		//the servlet directory
 		servletDir = rb.getString("requestparams.servletDir");
+		String clientType = params.get("clientType").toString();
+		String requestDataFormatType  = params.get("requestDataFormatType").toString();
 		
 		//attempt to recognize the request as a query for communities 
 		if (requestDataType.trim().equals("community")) 
@@ -442,10 +444,8 @@ public class DataRequestServlet extends HttpServlet
 		//of a file returned then grab the summary viewer then let the user know
 		if (queryOutputNum>=1) 
 		{
-			System.out.println("result sets: "+queryOutputNum);
- 			servletUtility l =new servletUtility();  
- 			l.getViewOption(requestDataType);
- 			out.println(l.outString);
+			handleQueryResultsResponse(clientType, requestDataFormatType, out, 
+			response, params);
 		}
 		else 
 		{ 
@@ -459,45 +459,107 @@ public class DataRequestServlet extends HttpServlet
 	/**
 	 * method to handle queries that are meant to be issued against 
 	 * the plantTaxonomy database
+	 *
+	 * @param params -- the prameters that are passed to the method
+	 * @param out -- the printwriter back to the client
+	 * @param requestDataType -- the data type requested by the client
+	 *  	used to check that the query was diercted to the correct method
+	 *		{plantTaxon}
+	 * @param response - the response object linked to the client 
+	 * 
 	 */
 	private void handlePlantTaxonQuery(Hashtable params, PrintWriter out, 
-	String requestDataType)
+	String requestDataType,  HttpServletResponse response)
 	{
-		if (requestDataType.trim().equals("plantTaxon")) 
-		{  
-			out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
-			+ "plant taxonomy information - not requesting plot info");
-			composePlantTaxonomyQuery(params);
-			issueQuery("simplePlantTaxonomyQuery");
-			out.println("Number of taxa returned: "+queryOutputNum+"<br><br>");
-			
-			servletUtility l =new servletUtility();  
- 			//the requestDataType 'plantTaxon' specifies the style sheet
-			l.getViewOption(requestDataType); 
- 			out.println(l.outString);
+		try
+		{
+			//get the parameters needed for retuning the results
+			String clientType = params.get("clientType").toString();
+			String requestDataFormatType  = params.get("requestDataFormatType").toString();
+			if (requestDataType.trim().equals("plantTaxon")) 
+			{  
+				out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
+				+ "plant taxonomy information - not requesting plot info");
+				composePlantTaxonomyQuery(params);
+				issueQuery("simplePlantTaxonomyQuery");
+				out.println("Number of taxa returned: "+queryOutputNum+"<br><br>");
+				//use the method that handles the response	
+				if (queryOutputNum>=1) 
+				{
+					handleQueryResultsResponse(clientType, requestDataFormatType, out, 
+					response, params);
+				}
+				else 
+				{ 
+					out.println("<br> <b> Please try another query </b> <br>"); 
+					out.println("<a href = \"/harris/servlet/pageDirector?pageType=plantQuery\">"
+					+"return to query page</a><b>&#183;</b>"); //put in rb
+				}
+			}
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("** failed: "
+			+e.getMessage());
+			e.printStackTrace();
 		}
 	}
+	
 	
 	/**
 	 * method to handle queries that are meant to be issued against 
 	 * the vegetation community database
+	 *
+	 *	@param params -- the prameters that are passed to the method
+	 * 	@param out -- the printwriter back to the client
+	 * 	@param requestDataType -- the data type requested by the client
+	 *  	used to check that the query was diercted to the correct method
+	 *		{plantTaxon}
+	 * 	@param response - the response object linked to the client 
 	 */
 	private void handleVegCommunityQuery( Hashtable params, PrintWriter out, 
-	String requestDataType)
+	String requestDataType, HttpServletResponse response)
 	{
-		if (requestDataType.trim().equals("vegCommunity")) 
-		{  
-			out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
-			+ "community information - not requesting plot info");
-			composeCommunityQuery(params);
-			issueQuery("simpleCommunityQuery");
-			out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
+		try
+		{
+			//get the parameters needed for retuning the results
+			String clientType = params.get("clientType").toString();
+			String requestDataFormatType  = params.get("requestDataFormatType").toString();
+			if (requestDataType.trim().equals("vegCommunity")) 
+			{  
+				out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
+				+ "community information - not requesting plot info");
+				composeCommunityQuery(params);
+				issueQuery("simpleCommunityQuery");
+				out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
+	
+
+		
+//				servletUtility l =new servletUtility();  
+ 				//the requestDataType 'plantTaxon' specifies the style sheet
+//				l.getViewOption(requestDataType); 
+// 				out.println(l.outString);
+				
+				//use the method that handles the response	
+				if (queryOutputNum>=1) 
+				{
+					handleQueryResultsResponse(clientType, requestDataFormatType, out, 
+					response, params);
+				}
+				else 
+				{ 
+					out.println("<br> <b> Please try another query </b> <br>"); 
+					out.println("<a href = \"/harris/servlet/pageDirector?pageType=communityQuery\">"
+					+"return to query page</a><b>&#183;</b>"); //put in rb
+				}
 			
-			servletUtility l =new servletUtility();  
- 			//the requestDataType 'plantTaxon' specifies the style sheet
-			l.getViewOption(requestDataType); 
- 			out.println(l.outString);
-			
+			}
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("** failed: "
+			+e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	
