@@ -131,8 +131,9 @@ Static varName As String
 If GetPut = "put" Then
   lngRememberPK = lngPK
   varName = strTbl
-  'On Error Resume Next
+  On Error Resume Next
     'close form
+    Forms(strTbl).Refresh 'save any pending changes
     If blnCloseNoSave Then
       DoCmd.Close acForm, strTbl, acSaveNo
     Else
@@ -247,16 +248,16 @@ Public Function MsgBox_cust(strMessage1 As String, strOptionsUpTo10 As String, O
     !message1.SizeToFit
     .FormFooter.Height = 50
     .FormHeader.Height = 50
-    Dim inttemp As Integer
-    For inttemp = 1 To 10
-      If colOptionsUpTo10.Count < inttemp Then
+    Dim intTemp As Integer
+    For intTemp = 1 To 10
+      If colOptionsUpTo10.Count < intTemp Then
         'no option for this button
-        .Controls("command" & inttemp).Visible = False
+        .Controls("command" & intTemp).Visible = False
       Else
-        .Controls("command" & inttemp).Caption = colOptionsUpTo10(inttemp)
-        .Controls("command" & inttemp).Visible = True
+        .Controls("command" & intTemp).Caption = colOptionsUpTo10(intTemp)
+        .Controls("command" & intTemp).Visible = True
       End If
-    Next inttemp
+    Next intTemp
   End With
   DoCmd.Close acForm, "msgBox_cust", acSaveYes
   'set default to -1 in case of cancel
@@ -435,12 +436,12 @@ Public Function switchViewCommPlant(strWhich As String, Optional frmToOpen As St
     .Add "PCName_summ"
   
   Dim strSEL As String, strFrom As String, strQryToChng As String
-  Dim inttemp As Integer
-  For inttemp = 1 To .Count
+  Dim intTemp As Integer
+  For intTemp = 1 To .Count
     ''FROM
     strFrom = ""
      
-      strQryToChng = .Item(inttemp)
+      strQryToChng = .Item(intTemp)
        
        'get what we are changing from
        Dim strSrcTbl As String
@@ -495,25 +496,25 @@ If strSrcTbl <> strWhich Then 'need to change
 End If 'need to change
       
     
-  Next inttemp
+  Next intTemp
   End With ' col
   
 nextPart:
   'remember current form name before closing forms
   If frmToOpen = "" Then frmToOpen = Screen.ActiveForm.Name
   Dim intForm As Integer
-  For inttemp = 1 To colForms.Count
+  For intTemp = 1 To colForms.Count
     'close all form before changing labels : subforms are tricky in this respect, must close all first
-      If IsFormOpen(colForms(inttemp)) Then
-        DoCmd.Close acForm, colForms(inttemp)
+      If IsFormOpen(colForms(intTemp)) Then
+        DoCmd.Close acForm, colForms(intTemp)
       End If
-  Next inttemp
+  Next intTemp
   
   'change labels on a form.
-  For inttemp = 1 To colForms.Count
-    Debug.Print "changing labels for: " & colForms(inttemp)
-    Call changeLabelsForm(colForms(inttemp), strSrcTbl, strWhich)
-  Next inttemp
+  For intTemp = 1 To colForms.Count
+    Debug.Print "changing labels for: " & colForms(intTemp)
+    Call changeLabelsForm(colForms(intTemp), strSrcTbl, strWhich)
+  Next intTemp
   
   DoCmd.OpenForm "TaxConcMapTool", acDesign, , , , acHidden
   With Forms!TaxConcMapTool
@@ -866,11 +867,11 @@ Function QryParseFldExpName(strQryName As String, colGetExpr As Collection, colG
   Dim colNew As New Collection
   'split the SQL into divisions based on commas, ignoring those inside quotes or parens
   Set colNew = csv_parseCSVstring(CurrentDb.querydefs(strQryName).sql, ",", False, True, True)
-  Dim inttemp As Integer, strItem As String
+  Dim intTemp As Integer, strItem As String
   'go through each item
-  For inttemp = 1 To colNew.Count
+  For intTemp = 1 To colNew.Count
    ' Debug.Print colNew(inttemp)
-    strItem = colNew(inttemp)
+    strItem = colNew(intTemp)
     'erase carriage returns
     strItem = substTextForText(strItem, Chr(13), " ")
     strItem = substTextForText(strItem, Chr(10), " ")
@@ -911,7 +912,7 @@ Function QryParseFldExpName(strQryName As String, colGetExpr As Collection, colG
     colGetExpr.Add Trim(strExpr)
     colGetNames.Add Trim(strName)
     
-   Next inttemp
+   Next intTemp
 
 End Function
 
@@ -919,12 +920,12 @@ Private Function doqParsetest()
 Dim colnms As New Collection
 Dim colexs As New Collection
 QryParseFldExpName "temp_delMePls", colexs, colnms
-Dim inttemp As Integer
+Dim intTemp As Integer
 Debug.Print colexs.Count & "##"
-For inttemp = 1 To colexs.Count
-  Debug.Print colexs(inttemp)
-  Debug.Print ":" & colnms(inttemp)
-Next inttemp
+For intTemp = 1 To colexs.Count
+  Debug.Print colexs(intTemp)
+  Debug.Print ":" & colnms(intTemp)
+Next intTemp
  
 End Function
 
