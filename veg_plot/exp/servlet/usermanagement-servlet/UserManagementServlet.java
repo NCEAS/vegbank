@@ -1,4 +1,29 @@
 package servlet.usermanagement;
+
+/**
+ *  '$RCSfile: UserManagementServlet.java,v $'
+ *    Authors: @authors@
+ *    Release: @release@
+ *
+ *   '$Author: harris $'
+ *     '$Date: 2002-02-26 18:15:59 $'
+ * '$Revision: 1.5 $'
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+ 
 import java.io.*;
 import java.text.*;
 import java.util.*;
@@ -26,6 +51,21 @@ public class UserManagementServlet extends HttpServlet
 	//the cookie value is the same as the user name
 	//which is the same as the user's email addy
 	private String cookieValue;
+	
+	//this is the html paget that will get edited by this servlet so that is
+	//appers to be a custom page for the correponding client
+	private String actionFile = "/usr/local/devtools/jakarta-tomcat_dev/webapps/vegbank/general/actions.html";
+	//this is the modified page that is to be sent back to the client
+	private String outFile ="/tmp/actions_dev.html";
+	
+	//constructor
+	public UserManagementServlet()
+	{
+		System.out.println("init: UserManagementServlet");
+		//print some info about the instance variables
+		System.out.println("UserManagementServlet > action file: " + actionFile );
+		System.out.println("UserManagementServlet > modified action file: " + outFile );
+	}
 	
 	/** Handle "GET" method requests from HTTP clients */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -59,11 +99,12 @@ public class UserManagementServlet extends HttpServlet
 					if ( action.equals("options") )
 					{
 						//copy the actions file and then displat to the browser
-						String actionFile = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/actions.html";
-						String outFile ="/tmp/actions.html";
+						//String actionFile = "/usr/local/devtools/jakarta-tomcat_dev/webapps/vegbank/general/actions.html";
+						//String outFile ="/tmp/actions_dev.html";
 						String token = "user";
 						String value = cookieValue;
 						util.filterTokenFile(actionFile, outFile, token, value);
+						//print the outfile to the browser
 						String s = util.fileToString(outFile);
 						out.println(s);
 					}
