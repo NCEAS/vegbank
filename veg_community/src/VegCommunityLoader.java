@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2002-12-19 00:52:53 $'
- * '$Revision: 1.20 $'
+ *     '$Date: 2002-12-31 00:16:50 $'
+ * '$Revision: 1.21 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,15 +73,13 @@ public class VegCommunityLoader
 		try 
  		{
 			Class.forName("org.postgresql.Driver");
-			//the framework database
 			//c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/communities_dev", "datauser", "");
-			c = DriverManager.getConnection("jdbc:postgresql://"+host+"/framework", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://"+host+"/communities_dev", "datauser", "");
 			//c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/communities_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
-			System.out.println("failed making db connection: "
-			+"dbConnect.makeConnection: "+e.getMessage());
+			System.out.println("Exception:  " + e.getMessage());
 			e.printStackTrace();
 		}
 			return(c);
