@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-07-30 17:52:09 $'
- * 	'$Revision: 1.29 $'
+ *  '$Date: 2002-07-30 20:03:09 $'
+ * 	'$Revision: 1.30 $'
  */
 package databaseAccess;
 
@@ -141,7 +141,7 @@ public class DBinsertPlotSource
 			System.out.println("Caught Exception: "+e.getMessage() ); 
 			e.printStackTrace();
 			System.out.println("Exiting at DBinsertPlotSource constructor");
-			System.exit(0);
+			//System.exit(0);
 		}
 	}
 	
@@ -510,7 +510,7 @@ public class DBinsertPlotSource
 		 {
 			 	System.out.println("Exception: "+e.getMessage() ); 
 				e.printStackTrace();
-				System.exit(1);
+				//System.exit(1);
 		 }
 	 }
 	 
@@ -664,15 +664,16 @@ public class DBinsertPlotSource
 	 */
 	private boolean insertStrataComposition(String plantName, String plantCode, int taxonObservationId)
 	{
+		StringBuffer sb = new StringBuffer();
 		try 
 		{
 			System.out.println("DBinsertPlotSource > getting the strata for plot: " + plotName + " "+ plotId);
 			Vector strataVec = source.getTaxaStrataExistence(plantName, plotName);
 			for (int ii =0; ii < strataVec.size(); ii++)
 			{
+				sb = new StringBuffer();
 				String curStrata = strataVec.elementAt(ii).toString();
-				StringBuffer sb = new StringBuffer();
-
+			
 				// get th cover of the plant within that strata -- if this comes back
 				// null then there was no observation of this plant in the strata
 				String cover = source.getTaxaStrataCover(plantName, plotName, curStrata);
@@ -691,7 +692,7 @@ public class DBinsertPlotSource
 					debug.append("</stratumComposition> \n");
 
 					//insert the strata composition values
-					sb.append("INSERT into STRATUMCOMPOSITION (stratumComposition_id, "
+					sb.append("INSERT into STRATUMCOMPOSITION ( stratumComposition_Id, "
 					+" cheatPlantName, cheatStratumName, taxonStratumCover, stratum_id, " 
 					+" taxonobservation_id, CHEATPLANTCODE) ");
 					sb.append("values(?,?,?,?,?,?,?)");
@@ -699,7 +700,7 @@ public class DBinsertPlotSource
 					PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
 				
 					// Bind the values to the query and execute it
-  	  		pstmt.setInt(1, stratumCompositionId);
+					pstmt.setInt(1, stratumCompositionId);
   	  		pstmt.setString(2, plantName);
 					pstmt.setString(3, curStrata);
 					pstmt.setString(4, cover);
@@ -712,7 +713,8 @@ public class DBinsertPlotSource
 		}
 		catch (SQLException sqle)
 		{
-			System.out.println("Caught SQL Exception: "+sqle.getMessage() ); 
+			System.out.println("Caught SQL Exception: "+sqle.getMessage() );
+			System.out.println("sql: " + sb.toString() );
 			debug.append("<exceptionMessage>"+sqle.getMessage()+" (sqle) loading strata Composition data</exceptionMessage>\n");
 			sqle.printStackTrace();
 			return(false);
@@ -816,33 +818,29 @@ public class DBinsertPlotSource
  * @param strataType - the type of strata in which the taxon is found
  *
  */
-	private int getStrataId (int plotObservationId, 
-		String stratumType ) 
+	private int getStrataId (int plotObservationId, String stratumType ) 
 	{
 		int strataId = -999;
 		try 
 		{		
-			
-			StringBuffer sb = new StringBuffer();
-			
-			sb.append("SELECT STRATUM_ID from STRATUM where OBSERVATION_ID = "
-			+plotObservationId+" and stratumName like '%"+stratumType+"%'");
-			
-			Statement query = conn.createStatement();
-			ResultSet rs = query.executeQuery( sb.toString() );
-			
-			int cnt = 0;
-			while ( rs.next() ) 
-			{
-				strataId = rs.getInt(1);
-				cnt++;
-			}
+				StringBuffer sb = new StringBuffer();
+				
+				sb.append("SELECT STRATUM_ID from STRATUM where OBSERVATION_ID = "
+				+plotObservationId+" and stratumName like '%"+stratumType+"%'");
+				
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					strataId = rs.getInt(1);
+					cnt++;
+				}
 			//send warnings
 			if ( cnt == 0)
 			{
 				System.out.println("warning: There were no strata matching: " + stratumType );
 			}
-			
 		}
 		catch (Exception e) 
 		{
@@ -1088,6 +1086,7 @@ public class DBinsertPlotSource
 			Vector strataTypes = source.uniqueStrataNames;
 			for (int i =0; i < strataTypes.size(); i++)
 			{
+				
 				// CREATE A NEW STRING BUFFER FOR EACH STRATUM
 				sb = new StringBuffer();
 				//get the strataId number
@@ -1097,6 +1096,8 @@ public class DBinsertPlotSource
 				String base =  source.getStrataBase(plotName, sName);
 				String height = source.getStrataHeight(plotName, sName);
 				String description = "";
+				System.out.println("DBinsertPlotSource > inserting stratum type: " + sName);
+				System.out.println("DBinsertPlotSource > stratum height: " + height+ " base: "+ base);
 				
 				if ( height != null && height.length() >= 1 )
 				{
