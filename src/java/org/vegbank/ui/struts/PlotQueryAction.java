@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-07-11 21:23:42 $'
- *	'$Revision: 1.7 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-08-28 00:17:31 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,14 +66,12 @@ public class PlotQueryAction extends Action
 		System.out.println(" In action PlotQueryAction");
 		ActionErrors errors = new ActionErrors();
 
-		StringBuffer query = new StringBuffer();
-		query.append(
-				selectClause
-				+ " FROM plot, project, observation, covermethod, stratummethod "			
-				+ " WHERE plot.plot_id = observation.plot_id "
-				+ " AND project.project_id = observation.project_id AND observation.covermethod_id = covermethod.covermethod_id"
-				+ " AND observation.stratummethod_id = stratummethod.stratummethod_id"
-		);
+		StringBuffer query = new StringBuffer(1024);
+		query.append(selectClause)
+				.append(" FROM plot, project, observation, covermethod, stratummethod ")	
+				.append(" WHERE plot.plot_id = observation.plot_id ")
+				.append(" AND project.project_id = observation.project_id AND observation.covermethod_id = covermethod.covermethod_id")
+				.append(" AND observation.stratummethod_id = stratummethod.stratummethod_id");
 
 		// Get the form
 		PlotQueryForm pqForm = (PlotQueryForm) form;
@@ -81,7 +79,7 @@ public class PlotQueryAction extends Action
 		
 		query.append(" AND ( ");
 
-		StringBuffer dynamicQuery = new StringBuffer();
+		StringBuffer dynamicQuery = new StringBuffer(1024);
 		
 		// Countries
 		dynamicQuery.append(this.handleValueList(pqForm.getCountries(), "plot.country", conjunction));
@@ -90,7 +88,7 @@ public class PlotQueryAction extends Action
 		dynamicQuery.append(this.handleValueList(pqForm.getState(), "plot.state", conjunction));
 
 		// Elevation
-		//System.out.println(  pqForm.getMaxElevation() + " " + pqForm.getMinElevation() + " " +  pqForm.isAllowNullElevation() + " elevation" );
+		//System.out.println(  pqForm.getMaxElevation())+ " " + pqForm.getMinElevation() + " " +  pqForm.isAllowNullElevation() + " elevation" );
 		dynamicQuery.append(
 			this.handleMaxMinNull(
 				pqForm.getMaxElevation(),
@@ -373,23 +371,24 @@ public class PlotQueryAction extends Action
 			// If no plantname given then forget it...
 			if ( ! Utility.isStringNullOrEmpty(plantNames[i]))
 			{
-				StringBuffer plantQuery = new StringBuffer();
-				plantQuery.append( selectClause 
-					+ " FROM plot JOIN " 
-					+ "	(observation JOIN  " 
-					+ "		(taxonobservation JOIN " 
-					+ "			( select codes.plantname_id from plantusage JOIN " 
-					+ "				(select plantconcept_id, plantname_id from plantusage where classsystem = 'Code' )" 
-					+ " 			AS codes ON plantusage.plantconcept_id = codes.plantconcept_id " 
-					+ " 				where plantusage.plantname like '" + plantNames[i] + "' ) " 
-					+ "			AS FOO ON taxonobservation.plantname_id = FOO.plantname_id) " 
-					+ "		ON observation.observation_id = taxonobservation.observation_id) " 
-					+ "	ON plot.plot_id = observation.plot_id "
-				);
-				
+				StringBuffer plantQuery = new StringBuffer(1024);
+				plantQuery.append( selectClause )
+					.append(" FROM plot JOIN " )
+					.append("	(observation JOIN  " )
+					.append("		(taxonobservation JOIN " )
+					.append("			( select codes.plantname_id from plantusage JOIN " )
+					.append("				(select plantconcept_id, plantname_id from plantusage where classsystem = 'Code' )" )
+					.append(" 			AS codes ON plantusage.plantconcept_id = codes.plantconcept_id " )
+					.append(" 				where plantusage.plantname like '")
+					.append( 					plantNames[i] )
+					.append("					' ) " )
+					.append("			AS FOO ON taxonobservation.plantname_id = FOO.plantname_id) " )
+					.append("		ON observation.observation_id = taxonobservation.observation_id) " )
+					.append("	ON plot.plot_id = observation.plot_id ");
+			
 				plantQuery.append(" WHERE ( true AND ");
 				
-				StringBuffer plantQueryConditions = new StringBuffer();
+				StringBuffer plantQueryConditions = new StringBuffer(1024);
 				
 				plantQueryConditions.append(
 					this.handleMaxMinNull(maxTaxonCover[i], minTaxonCover[i], true, "taxonobservation.taxoncover", " AND")
@@ -420,25 +419,26 @@ public class PlotQueryAction extends Action
 			// If no communityname given then forget it...
 			if ( ! Utility.isStringNullOrEmpty(commNames[i]))
 			{
-				StringBuffer communityQuery = new StringBuffer();
-				communityQuery.append( selectClause 
-					+ " FROM plot JOIN " 
-					+ "	(observation JOIN  " 
-					+ "		(commclass JOIN " 
-					+ " 		(comminterpretation JOIN"
-					+ "				(select codes.commconcept_id from commusage JOIN " 
-					+ "					(select commconcept_id, commname_id from commusage where classsystem = 'CEGL' )" 
-					+ " 				AS codes ON commusage.commconcept_id = codes.commconcept_id " 
-					+ " 					where commusage.commname like '" + commNames[i] + "' ) " 
-					+ " 			AS FOO ON comminterpretation.commconcept_id = FOO.commconcept_id) "	
-					+ "			ON commclass.commclass_id = comminterpretation.commclass_id) " 
-					+ "		ON observation.observation_id = commclass.observation_id) " 
-					+ "	ON plot.plot_id = observation.plot_id "
-				);
+				StringBuffer communityQuery = new StringBuffer(1024);
+				communityQuery.append( selectClause )
+					.append(" FROM plot JOIN " )
+					.append("	(observation JOIN  " )
+					.append("		(commclass JOIN " )
+					.append(" 		(comminterpretation JOIN")
+					.append("				(select codes.commconcept_id from commusage JOIN " )
+					.append("					(select commconcept_id, commname_id from commusage where classsystem = 'CEGL' )" )
+					.append(" 				AS codes ON commusage.commconcept_id = codes.commconcept_id " )
+					.append(" 					where commusage.commname like '")
+					.append(						commNames[i]) 
+					.append("							' ) " ) 
+					.append(" 			AS FOO ON comminterpretation.commconcept_id = FOO.commconcept_id) "	)
+					.append("			ON commclass.commclass_id = comminterpretation.commclass_id) " )
+					.append("		ON observation.observation_id = commclass.observation_id) " )
+					.append("	ON plot.plot_id = observation.plot_id ");
 				
 				communityQuery.append(" WHERE ( true AND ");
 				
-				StringBuffer communityQueryConditions = new StringBuffer();
+				StringBuffer communityQueryConditions = new StringBuffer(1024);
 				
 				communityQueryConditions.append(
 						this.handleMaxMinNullDateRange(
@@ -471,18 +471,19 @@ public class PlotQueryAction extends Action
 		String operator,
 		String conjunction)
 	{
-		StringBuffer sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer(128);
 		if (value == null || value.equals(""))
 		{
 			return "";
 		}
 		else
 		{
-			sb.append(conjunction + " ( ");
-			sb.append(fieldName + " " + operator +" '" + value + "' ");
+			sb.append(conjunction).append(" ( ");
+			sb.append(fieldName)
+				.append(" ").append(operator).append(" '").append(value).append("' ");
 			if (allowNull)
 			{
-				sb.append(" OR " + fieldName + " IS NULL ");
+				sb.append(" OR ").append(fieldName).append(" IS NULL ");
 			}
 			sb.append(" ) ");
 		}
@@ -527,13 +528,14 @@ public class PlotQueryAction extends Action
 	 */
 	private String handleValueList(String[] values, String fieldName, String conjunction)
 	{
-		StringBuffer sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer(1024);
 
 		// Are there any constraints
 		if (values != null && values.length != 0 && !isAnyValueAllowed(values) )
 		{
-			sb.append(
-				conjunction + " ( " + fieldName + " = '" + values[0] + "'");
+			sb.append(conjunction)
+				.append(" ( ").append(fieldName).append(" = '").append(values[0]).append("'");
+
 			for (int i = 0; i < values.length; i++)
 			{
 				if ( values[i] == null)
@@ -543,11 +545,11 @@ public class PlotQueryAction extends Action
 				else if (values[i].trim().equals("IS NOT NULL")
 					|| values[i].trim().equals("IS NULL"))
 				{
-					sb.append(" OR " + fieldName + " " + values[i] + " ");
+					sb.append(" OR ").append(fieldName).append(" ").append(values[i]).append(" ");
 				}
 				else
 				{
-					sb.append(" OR " + fieldName + " ='" + values[i] + "'");
+					sb.append(" OR ").append(fieldName).append(" ='").append(values[i]).append("'");
 				}
 			}
 			sb.append(" ) ");
@@ -571,7 +573,7 @@ public class PlotQueryAction extends Action
 		String fieldName,
 		String conjunctionToUse)
 	{
-		StringBuffer sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer(256);
 
 		if (Utility.isStringNullOrEmpty(max) && Utility.isStringNullOrEmpty(min))
 		{
@@ -590,7 +592,7 @@ public class PlotQueryAction extends Action
 			sb.append(" ( ");
 			if (!Utility.isStringNullOrEmpty(max))
 			{
-				sb.append(" " + fieldName + " < " + max + " ");
+				sb.append(" ").append(fieldName).append(" < ").append(max).append(" ");
 
 				if (!Utility.isStringNullOrEmpty(min))
 				{
@@ -600,13 +602,13 @@ public class PlotQueryAction extends Action
 
 			if (!Utility.isStringNullOrEmpty(min))
 			{
-				sb.append(" " + fieldName + " >" + min + " ");
+				sb.append(" ").append(fieldName).append(" >").append(min).append(" ");
 			}
 			sb.append(" ) ");
 
 			if (nullsAllowed)
 			{
-				sb.append("  OR (" + fieldName + " IS NULL )  )");
+				sb.append("  OR (").append(fieldName).append(" IS NULL )  )");
 			}
 		}
 		return sb.toString();
@@ -631,7 +633,7 @@ public class PlotQueryAction extends Action
 		boolean allowNulls,
 		String conjunctionToUse)
 	{
-		StringBuffer sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer(256);
 	
 		if (Utility.isStringNullOrEmpty(maxDate) && Utility.isStringNullOrEmpty(minDate))
 		{
@@ -646,10 +648,10 @@ public class PlotQueryAction extends Action
 			if (!Utility.isStringNullOrEmpty(minDate))
 			{
 				sb.append(" ( ");
-				sb.append(" " + startDateFieldName + " >= '" + minDate + "' ");
+				sb.append(" ").append(startDateFieldName).append(" >= '").append(minDate).append("' ");
 				if ( allowNulls)
 				{
-					sb.append("  OR " + startDateFieldName + " IS NULL ");
+					sb.append("  OR ").append(startDateFieldName).append(" IS NULL ");
 				}
 				sb.append(" ) ");
 			}
@@ -658,10 +660,10 @@ public class PlotQueryAction extends Action
 			{
 				sb.append(" AND ");
 				sb.append(" ( ");
-				sb.append(" " + endDateFieldName + " <= '" + maxDate + "' ");
+				sb.append(" ").append(endDateFieldName).append(" <= '").append(maxDate).append("' ");
 				if ( allowNulls)
 				{
-					sb.append("  OR " + startDateFieldName + " IS NULL ");
+					sb.append("  OR ").append(startDateFieldName).append(" IS NULL ");
 				}
 				sb.append(" ) ");
 			}
