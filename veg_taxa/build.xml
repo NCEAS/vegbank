@@ -83,11 +83,10 @@
 		perm="a+x"
 		includes="**/*.sh"
 	/>
-						
+
 	<copydir src="${data}"
 		dest="${build_data}"
-		filtering="yes"
-		includes="plantlst1996.bin plantlst2000.bin "
+		includes="plantlst1996.bin.gz plantlst2000.bin.gz "
 	/>
 
 <copydir src="${sql}"
