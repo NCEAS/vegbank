@@ -11,8 +11,8 @@
 *     Authors: @author@
 *
 *    '$Author: mlee $'
-*      '$Date: 2005-02-12 02:17:20 $'
-*  '$Revision: 1.32 $'
+*      '$Date: 2005-03-11 06:41:27 $'
+*  '$Revision: 1.33 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -631,7 +631,12 @@ VegBank - Advanced Plot Query
 	      <td>
 	      	<html:select property="projectName" size="6" multiple="true">
 		        <option value="ANY" selected>--ANY--</option>
-		        <html:options property="projectNames"/>
+		        <!--xx html:options property="projectNames"/-->
+		        <vegbank:get id="project" select="project" beanName="map" pager="false" perPage="-1" />
+		        <logic:iterate id="onerowofproject" name="project-BEANLIST">
+		          <option value='<bean:write name="onerowofproject" property="projectname" />'><bean:write name="onerowofproject" property="projectname" /> (<bean:write name="onerowofproject" property="countobs" />)</option>
+		        </logic:iterate>
+		        
 		        <option value="IS NOT NULL">--NOT NULL--</option>
 		        <option value="IS NULL">--NULL--</option>
 	        </html:select>
