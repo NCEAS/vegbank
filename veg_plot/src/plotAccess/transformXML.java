@@ -22,46 +22,49 @@ public class  transformXML
 {
 
 
+// these variables can be accessed from the calling program
+public StringWriter outTransformedData=null;
+
+/*variable to make available to the calling class -- the string containg the db location (table.attribute) and the data*/
+//outTransformedData = null;
+        
+
+
 public void transformXML()
 {
 
-/*variable to make available to the calling class -- the string containg the db location (table.attribute) and the data*/
-        
-outTransformedData = null;
-        
 }
 
 
+/**
+ *
+ * This is a method that will transform an xml document with an xsl style sheet
+ *
+ * @param inputXML -- the file name of the input xml file
+ * @param inputXSL -- the file name of the input xsl style sheet
+ *
+ */
 public void getTransformed (String inputXML, String inputXSL)
 	throws java.io.IOException,
         java.net.MalformedURLException,
         org.xml.sax.SAXException
-	
-	{
+{
 
 StringWriter out =new StringWriter();
 
 
-    // Have the XSLTProcessorFactory obtain a interface to a
-    // new XSLTProcessor object.
-    XSLTProcessor processor = XSLTProcessorFactory.getProcessor();
+// Have the XSLTProcessorFactory obtain a interface to a
+// new XSLTProcessor object.
+XSLTProcessor processor = XSLTProcessorFactory.getProcessor();
 
-    // Have the XSLTProcessor processor object transform inputXML  to
-    // StringWriter, using the XSLT instructions found in "*.xsl".
-    processor.process(new XSLTInputSource(inputXML),
-                      new XSLTInputSource(inputXSL),
-                     // new XSLTResultTarget(System.out)),
+// Have the XSLTProcessor processor object transform inputXML  to
+// StringWriter, using the XSLT instructions found in "*.xsl".
+processor.process(new XSLTInputSource(inputXML), new XSLTInputSource(inputXSL),
 			new XSLTResultTarget(out));
-
 
 out.toString();
 outTransformedData=out;
-
-	}
-
-
-// these variables can be accessed from the calling program
-public StringWriter outTransformedData=null;
+}
 
 
 

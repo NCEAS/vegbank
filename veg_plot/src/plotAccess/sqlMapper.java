@@ -15,7 +15,7 @@ import queryStore.*;  //class that stores all the queries
  * of the criteria are 'met' by the first document the SQL
  * will be passed to another class to be issued to the database
  *
- * @version 11 Jan 2001
+ * @version March 22, 2001
  * @author John Harris
  *
  */
@@ -23,6 +23,17 @@ import queryStore.*;  //class that stores all the queries
 public class  sqlMapper
 {
 
+//the output from the query or group of queries run in this class
+public String queryOutput[] = new String[10000];  
+//the number of output rows from the issue sql is mapped to this varable
+int queryOutputNum; 
+//store the element  - like "queryElement" and "elementString"
+public String element[] = new String[100];
+//store the values associated with the element like "taxonName" and "Pinus"
+public String value[] = new String[100]; 
+public int elementNum=0;
+		
+		
 private Hashtable queryElementHash = new Hashtable();
 private Hashtable metaQueryHash = new Hashtable();
 
@@ -153,13 +164,15 @@ if (connectionUses>12) {
 		+" dbConnect.makeConnection call" + e.getMessage());}
 }
 
-//just test the new method
+//retrieve the plot summary information, using as input the plotId numbers 
+//retrieved in the provios query 
 queryStore k1 = new queryStore();
 k1.getPlotSummaryNew(queryOutput, queryOutputNum, pconn);
 
-//write to a summary file - again this is a test
+//write to a summary information to the file that can be used by the application
 xmlWriter xw = new xmlWriter();
 xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
+
 
 // The connection is returned to the Broker
 myBroker.freeConnection(pconn);
@@ -472,12 +485,5 @@ for (int i=0;i<pipeDelimitStringNum; i++) {
 
 
 
-public String queryOutput[] = new String[10000];  //the output from the issue sql can be mapped to this varaiable
-int queryOutputNum; //the number of output rows from the issue sql is mapped to this varable
-
-public String element[] = new String[100];  //store the element  - like "queryElement" and "elementString"
-public String value[] = new String[100];  //store the values associated with the element like "taxonName" and "Pinus"
-public int elementNum=0;
-		
 
 } //end class

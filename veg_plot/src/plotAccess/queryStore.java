@@ -12,6 +12,7 @@ import java.sql.*;
  * these queries are issued to the database though the issue select method
  *
  * @author John Harris
+ * @version March 22, 2001
  *
  */
 

@@ -63,6 +63,7 @@ for (int i=0; i< cumulativeSummaryResultHash.size(); i++) {
 try {
 		PlotXmlWriter pxw = new PlotXmlWriter();
 		pxw.writeMultiplePlot(multiPlotComprehensive, outFile);
+	
 	}
 catch (Exception e) {System.out.println("failed in xmlWriter.writePlotSummary "
 	+"(using a hash table as input ) -- trying to write xml output" + 
