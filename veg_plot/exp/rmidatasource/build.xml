@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-02-01 04:44:51 $'
- 	*     '$Revision: 1.2 $'
+ 	*     '$Date: 2002-02-02 00:49:35 $'
+ 	*     '$Revision: 1.3 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -28,6 +28,7 @@
 		<property name="build" value="./build" />
 		<property name="lib" value="./lib" />
 		<property name="bin" value="./" />
+		<property name="rmiregistry" value="/home/harris/rmiregistry" />
 		<property name="translators" value="./lib/datatranslator.jar" />
 
 		
@@ -80,15 +81,34 @@
 		
 	<!-- DIST  - this will put the package into the db access lib -->
 	<target name="dist" depends="jar">
-		<copy todir="../database_access/lib/" filtering="no" >
-			<fileset dir="${lib}" >
-  	    <include name="datatranslator.jar"/>
-  	  </fileset>
-  	</copy>
+		<copy todir="${rmiregistry}" filtering="no" >
+			<fileset dir="${build}" >
+  	    			<include name="DataSourceImpl_Skel.class"/>
+  	    			<include name="DataSourceImpl_Stub.class"/>
+  	    			<include name="DataSourceImpl.class"/>
+  	    			<include name="DataSourceServer.class"/>
+  	    			<include name="DataSourceServerInterface.class"/>
+  	  		</fileset>
+  		</copy>
+		
+		<copy todir="${rmiregistry}/lib" filtering="no" >
+                        <fileset dir="${lib}" >
+                                <include name="**"/>
+                        </fileset>
+                </copy>
+	
+		<copy todir="${rmiregistry}" filtering="no" >
+			<fileset dir="${bin}" >
+  	    			<include name="**.sh"/>
+  	  		</fileset>
+  		</copy>
+
+		
 	</target>
 	
 	
-	<!-- TEST - this will test the package -->
+	
+<!-- TEST - this will test the package -->
 	<target name="test">
 		<exec dir="./" executable="write-VegBank-plot.sh" os="Linux" >
 		</exec>
