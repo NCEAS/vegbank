@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-01 15:11:22 $'
- *	'$Revision: 1.24 $'
+ *	'$Date: 2004-09-29 00:38:52 $'
+ *	'$Revision: 1.25 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -113,7 +113,7 @@ public class PlotQueryAction extends VegbankAction
 		// Elevation
 		//log.debug(  pqForm.getMaxElevation())+ " " + pqForm.getMinElevation() + " " +  pqForm.isAllowNullElevation() + " elevation" );
 		dynamicQuery.append(
-			this.handleMaxMinNull(
+			DatabaseUtility.handleMaxMinNull(
 				pqForm.getMaxElevation(),
 				pqForm.getMinElevation(),
 				pqForm.isAllowNullElevation(),
@@ -122,7 +122,7 @@ public class PlotQueryAction extends VegbankAction
 
 		// SlopeAspect
 		dynamicQuery.append(
-			this.handleMaxMinNull(
+			DatabaseUtility.handleMaxMinNull(
 				pqForm.getMaxSlopeAspect(),
 				pqForm.getMinSlopeAspect(),
 				pqForm.isAllowNullSlopeAspect(),
@@ -131,7 +131,7 @@ public class PlotQueryAction extends VegbankAction
 
 		// SlopeGradient
 		dynamicQuery.append(
-			this.handleMaxMinNull(
+			DatabaseUtility.handleMaxMinNull(
 				pqForm.getMaxSlopeGradient(),
 				pqForm.getMinSlopeGradient(),
 				pqForm.isAllowNullSlopeGradient(),
@@ -161,7 +161,7 @@ public class PlotQueryAction extends VegbankAction
 		// Date Observed
 		// This need special handling because of the start/end points....
 		dynamicQuery.append(
-			this.handleMaxMinNullDateRange(
+			DatabaseUtility.handleMaxMinNullDateRange(
 				pqForm.getMinObsStartDate(),
 				pqForm.getMaxObsEndDate(),
 				"observation." + Observation.OBSSTARTDATE,
@@ -172,7 +172,7 @@ public class PlotQueryAction extends VegbankAction
 
 		// Date Entered
 		dynamicQuery.append(
-			this.handleMaxMinNull(
+			DatabaseUtility.handleMaxMinNull(
 				pqForm.getMaxDateEntered(),
 				pqForm.getMinDateEntered(),
 				false,
@@ -181,7 +181,7 @@ public class PlotQueryAction extends VegbankAction
 
 		// Plot Area
 		dynamicQuery.append(
-			this.handleMaxMinNull(
+			DatabaseUtility.handleMaxMinNull(
 				pqForm.getMaxPlotArea(),
 				pqForm.getMinPlotArea(),
 				pqForm.isAllowNullPlotArea(),
@@ -438,7 +438,7 @@ public class PlotQueryAction extends VegbankAction
 					.append("     (taxoninterpretation JOIN ")
 					                  // Get any names that match input string
 					.append("			  ( SELECT " + Plantusage.PLANTCONCEPT_ID + " FROM plantusage WHERE" )
-					.append(" 				 UPPER(" + Plantusage.PLANTNAME + ") LIKE '" + plantNames[i].toUpperCase() + "'" )
+					.append(" 				 UPPER(" + Plantusage.PLANTNAME + ") LIKE '" + DatabaseUtility.makeSQLSafe(plantNames[i].toUpperCase()) + "'" )
 					.append("				 ) AS PU" )				
 					.append("			  ON taxoninterpretation." +  Taxoninterpretation.PLANTCONCEPT_ID + " = PU." + Plantusage.PLANTCONCEPT_ID + " ) " )
 					.append("			ON TOTI." + Taxonobservation.PKNAME + " = taxoninterpretation." + Taxoninterpretation.TAXONOBSERVATION_ID + " ) " )	
@@ -450,7 +450,7 @@ public class PlotQueryAction extends VegbankAction
 				StringBuffer plantQueryConditions = new StringBuffer(1024);
 				
 				plantQueryConditions.append(
-					this.handleMaxMinNull(maxTaxonCover[i], minTaxonCover[i], true, "TOTI." +  Taxonimportance.COVER, " AND ")
+					DatabaseUtility.handleMaxMinNull(maxTaxonCover[i], minTaxonCover[i], true, "TOTI." +  Taxonimportance.COVER, " AND ")
 				);
 				
 				// hack -- SQL need AND if  plantQueryConditions empty
@@ -496,7 +496,7 @@ public class PlotQueryAction extends VegbankAction
 					.append(" 		(comminterpretation JOIN")
           		// Get any names that match input string
 					.append("			  ( SELECT " + Commusage.COMMCONCEPT_ID + " FROM commusage WHERE" )
-					.append(" 				 UPPER(" + Commusage.COMMNAME + ") LIKE '" + commNames[i].toUpperCase() + "'" )
+					.append(" 				 UPPER(" + Commusage.COMMNAME + ") LIKE '" + DatabaseUtility.makeSQLSafe(commNames[i].toUpperCase()) + "'" )
 					.append("				 ) AS CU" )	 
 					.append(" 			ON comminterpretation." + Comminterpretation.COMMCONCEPT_ID + " = CU." + Commusage.COMMCONCEPT_ID + " ) "	)
 					.append("			ON commclass." + Commclass.PKNAME + " = comminterpretation. " + Comminterpretation.COMMCLASS_ID + " ) " )
@@ -508,7 +508,7 @@ public class PlotQueryAction extends VegbankAction
 				StringBuffer communityQueryConditions = new StringBuffer(1024);
 				
 				communityQueryConditions.append(
-						this.handleMaxMinNullDateRange(
+						DatabaseUtility.handleMaxMinNullDateRange(
 						minCommStopDates[i],
 						maxCommStartDates[i],
 						"commclass." + Commclass.CLASSSTARTDATE,
@@ -563,118 +563,6 @@ public class PlotQueryAction extends VegbankAction
 		return sb.toString();
 	}
 
-	/**
-	 * Generate the sql for max, min comparisons 
-	 * 
-	 * @param max
-	 * @param min
-	 * @param nullsAllowed
-	 * @param fieldName
-	 * @return
-	 */
-	private String handleMaxMinNull(
-		String max,
-		String min,
-		boolean nullsAllowed,
-		String fieldName,
-		String conjunctionToUse)
-	{
-		StringBuffer sb = new StringBuffer(256);
-
-		if (Utility.isStringNullOrEmpty(max) && Utility.isStringNullOrEmpty(min))
-		{
-			// Both empty nothing to be done
-		}
-		else
-		{
-
-			sb.append(conjunctionToUse);
-
-			if (nullsAllowed)
-			{
-				sb.append(" ( ");
-			}
-
-			sb.append(" ( ");
-			if (!Utility.isStringNullOrEmpty(max))
-			{
-				sb.append(" ").append(fieldName).append(" <= ").append(max).append(" ");
-
-				if (!Utility.isStringNullOrEmpty(min))
-				{
-					sb.append(" AND ");
-				}
-			}
-
-			if (!Utility.isStringNullOrEmpty(min))
-			{
-				sb.append(" ").append(fieldName).append(" >= ").append(min).append(" ");
-			}
-			sb.append(" ) ");
-
-			if (nullsAllowed)
-			{
-				sb.append("  OR (").append(fieldName).append(" IS NULL )  )");
-			}
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Generate the sql for max, min date range comparisons 
-	 * 
-	 * @param maxDate
-	 * @param minDate
-	 * @param endDateFieldName
-	 * @param endDateFieldName
-	 * @param allowNulls
-	 * @param conjunctionToUse
-	 * @return String -- SQL fragment
-	 */
-	private String handleMaxMinNullDateRange(
-		String minDate,
-		String maxDate,
-		String startDateFieldName,
-		String endDateFieldName,
-		boolean allowNulls,
-		String conjunctionToUse)
-	{
-		StringBuffer sb = new StringBuffer(256);
-	
-		if (Utility.isStringNullOrEmpty(maxDate) && Utility.isStringNullOrEmpty(minDate))
-		{
-			// Both empty nothing to be done
-		}
-		else
-		{
-	
-			sb.append(conjunctionToUse);
-			sb.append(" ( ");
-	
-			if (!Utility.isStringNullOrEmpty(minDate))
-			{
-				sb.append(" ( ").append(startDateFieldName).append(" >= '").append(minDate).append("' ");
-				if ( allowNulls)
-				{
-					sb.append("  OR ").append(startDateFieldName).append(" IS NULL ");
-				}
-				sb.append(" ) ");
-			}
-	
-			if (!Utility.isStringNullOrEmpty(maxDate))
-			{
-				sb.append(" AND ( ").append(endDateFieldName).append(" <= '").append(maxDate).append("' ");
-				if ( allowNulls)
-				{
-					sb.append("  OR ").append(startDateFieldName).append(" IS NULL ");
-				}
-				sb.append(" ) ");
-			}
-			
-			sb.append(" ) ");
-		}
-		return sb.toString();
-	}
 
 	/**
 	 * @author farrell

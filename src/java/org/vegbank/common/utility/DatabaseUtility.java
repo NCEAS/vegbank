@@ -5,8 +5,8 @@
  *             National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-25 06:42:06 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-09-29 00:38:52 $'
+ *	'$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -882,7 +882,7 @@ public class DatabaseUtility
 	
 			if (!Utility.isStringNullOrEmpty(minDate))
 			{
-				sb.append(" ( ").append(startDateFieldName).append(" >= '").append(minDate).append("' ");
+				sb.append(" ( ").append(startDateFieldName).append(" >= '").append(makeSQLSafe(minDate)).append("' ");
 				if ( allowNulls)
 				{
 					sb.append("  OR ").append(startDateFieldName).append(" IS NULL ");
@@ -892,7 +892,7 @@ public class DatabaseUtility
 	
 			if (!Utility.isStringNullOrEmpty(maxDate))
 			{
-				sb.append(" AND ( ").append(endDateFieldName).append(" <= '").append(maxDate).append("' ");
+				sb.append(" AND ( ").append(endDateFieldName).append(" <= '").append(makeSQLSafe(maxDate)).append("' ");
 				if ( allowNulls)
 				{
 					sb.append("  OR ").append(startDateFieldName).append(" IS NULL ");
@@ -941,7 +941,7 @@ public class DatabaseUtility
 			sb.append(" ( ");
 			if (!Utility.isStringNullOrEmpty(max))
 			{
-				sb.append(" ").append(fieldName).append(" <= ").append(max).append(" ");
+				sb.append(" ").append(fieldName).append(" <= ").append(makeSQLSafe(max)).append(" ");
 	
 				if (!Utility.isStringNullOrEmpty(min))
 				{
@@ -951,7 +951,7 @@ public class DatabaseUtility
 	
 			if (!Utility.isStringNullOrEmpty(min))
 			{
-				sb.append(" ").append(fieldName).append(" >= ").append(min).append(" ");
+				sb.append(" ").append(fieldName).append(" >= ").append(makeSQLSafe(min)).append(" ");
 			}
 			sb.append(" ) ");
 	
@@ -1025,7 +1025,7 @@ public class DatabaseUtility
 				}
 				else
 				{
-					sb.append(" OR ").append(fieldName).append(" ='").append(values[i]).append("'");
+					sb.append(" OR ").append(fieldName).append(" ='").append(makeSQLSafe(values[i])).append("'");
 				}
 			}
 			sb.append(" ) ");
@@ -1033,6 +1033,38 @@ public class DatabaseUtility
 		return sb.toString();
 	}
 	
+
+	/**
+	 * Duplicates apostophes, removes semicolons.
+	 */
+	public static String makeSQLSafe(String unsafe) {
+		if (unsafe == null) {
+			return null;
+		}
+
+		log.debug("making SQL safe: " + unsafe);
+		if (unsafe.indexOf(";") != -1) {
+			log.debug(";;;;;;;;;;;;;;;;;;;;;; removing ;");
+			unsafe = unsafe.replaceAll(";", "");
+		}
+
+		if (unsafe.indexOf("'") != -1) {
+			log.debug("fixing single quotes");
+			unsafe = unsafe.replaceAll("\'", "\'\'");
+		}
+		return unsafe;
+	}
+
+	/**
+	 * Singlates apostrophes.
+	 */
+	public static String makeSQLUnsafe(String safe) {
+		if (safe == null) {
+			return null;
+		}
+
+		return safe.replaceAll("\'\'", "\'");
+	}
 
 }
 
