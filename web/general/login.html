@@ -78,8 +78,7 @@
     <td width="115" height="12" valign="top" bgcolor="#FFFFCC"></td>
     <td height="61" colspan="8" rowspan="2" valign="top" bgcolor="#FFFFCC"> 
       <!-- access servlet here -->
-      <FORM action=http://vegbank.nceas.ucsb.edu/framework/servlet/authenticate 
-      method=post>
+      <FORM action="@authenticationservlet@" method="post">
         <!-- THIS PARAMETER IS ESENTIAL FOR THE SERVLET TO WORK -->
         <INPUT 
       type=hidden value=loginUser name=authType>

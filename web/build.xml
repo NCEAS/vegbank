@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   * '$Author: harris $'
-  * '$Date: 2002-02-26 18:56:31 $'
-  * '$Revision: 1.9 $'
+  * '$Date: 2002-02-26 19:26:19 $'
+  * '$Revision: 1.10 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -69,6 +69,7 @@
 	<filter token="stylesheet_generator_servlet" value="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/stylesheetgenerator"/>
 	<filter token="usermanagement_servlet" value="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/usermanagement"/>
 	<filter token="datarequestservlet" value="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/DataRequestServlet" />
+	<filter token="authenticationservlet" value="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/authenticate" />
 	
 </target>
 
