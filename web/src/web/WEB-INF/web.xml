@@ -63,13 +63,6 @@
             </servlet>
 
             <servlet>
-              <servlet-name>usermanagement</servlet-name>
-              <description>A standalone servlet used for authenticating a user</description>
-              <servlet-class>org.vegbank.servlet.usermanagement.UserManagementServlet</servlet-class>
-              <load-on-startup>5</load-on-startup>
-            </servlet>
-
-            <servlet>
               <servlet-name>DataRequestServlet</servlet-name>
               <description>A</description>
               <servlet-class>org.vegbank.servlet.request.DataRequestServlet</servlet-class>
@@ -105,11 +98,6 @@
               <servlet-name>framework</servlet-name>
               <url-pattern>/servlet/framework</url-pattern>
             </servlet-mapping>
-
-            <servlet-mapping>
-              <servlet-name>usermanagement</servlet-name>
-              <url-pattern>/servlet/usermanagement</url-pattern>
-            </servlet-mapping>  
             
             <servlet-mapping>
               <servlet-name>DataRequestServlet</servlet-name>
@@ -135,6 +123,11 @@
           <taglib>
             <taglib-uri>/WEB-INF/struts-logic.tld</taglib-uri>
             <taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+          </taglib>
+
+          <taglib>
+            <taglib-uri>/WEB-INF/struts-tiles.tld</taglib-uri>
+            <taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
           </taglib>
 
 </web-app>
