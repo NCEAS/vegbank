@@ -33,8 +33,8 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-05-16 03:33:34 $'
- * 	'$Revision: 1.9 $'
+ *  '$Date: 2003-05-29 00:02:38 $'
+ * 	'$Revision: 1.10 $'
  */
 
 public class dbAccess 
@@ -264,9 +264,11 @@ public class dbAccess
 		String xmlResult = null;
 		
 		// extended query action
-		if (action.equals("extendedQuery")) {
+		if (action.equals("extendedQuery")) 
+		{
 			System.out.println("dbAccess > extended query action");
-			for (int ii = 0; ii < transformedStringNum; ii++) {
+			for (int ii = 0; ii < transformedStringNum; ii++) 
+			{
 				System.out.println(transformedString[ii]);
 			}
 			//pass the array to the sql mapping class - single attribute query
@@ -280,7 +282,8 @@ public class dbAccess
 		}
 		
 		// regular query action
-		else if (action.equals("simpleQuery")) {
+		else if (action.equals("simpleQuery")) 
+		{
 			System.out.println("dbAccess > simple query action");
 			// pass the array to the sql mapping class - single attribute query
 			sqlMapper w = new sqlMapper();
@@ -291,7 +294,8 @@ public class dbAccess
 		}
 		
 		//compound query action
-		else if (action.equals("compoundQuery")) {
+		else if (action.equals("compoundQuery")) 
+		{
 			//pass the array to the sql mapping class - compound queries
 			sqlMapper w = new sqlMapper();
 			xmlResult = w.developCompoundPlotQuery(
@@ -303,14 +307,16 @@ public class dbAccess
 		}
 		
 		//insert action -- to insert a plot to the last database
-		else if (action.equals("insert")) {
+		else if (action.equals("insert")) 
+		{
 			//pass the array to the plot writer to be inserted into the database
 			plotWriter w = new plotWriter();
 			w.insertPlot(transformedString, transformedStringNum);
 		}
 		
 		//insertPlot action -- this is to insert a plot to the most recent DB
-		else if (action.equals("insertPlot")) {
+		else if (action.equals("insertPlot")) 
+		{
 			//pass the array to the plot writer to be inserted into the database
 			PlotDBWriter w = new PlotDBWriter();
 			w.insertPlot(
@@ -320,24 +326,26 @@ public class dbAccess
 		}
 		
 		//verify action
-		else if (action.equals("verify")) {
-			for (int ii = 0; ii < transformedStringNum; ii++) {
+		else if (action.equals("verify")) 
+		{
+			for (int ii = 0; ii < transformedStringNum; ii++) 
+			{
 				System.out.println(transformedString[ii]);
 			}
 		}
-		
 		//simple community query action
-		else if (action.equals("simpleCommunityQuery")) {
-			{
-				sqlMapper w = new sqlMapper();
-				xmlResult = w.developSimpleCommunityQuery(
-					transformedString,
-					transformedStringNum);
-				//grab the results from the sqlMapper class
-				queryOutput = w.queryOutput;
-				queryOutputNum = w.queryOutputNum;
-			}
-		} else if (action.equals("simplePlantTaxonomyQuery")) {
+		else if (action.equals("simpleCommunityQuery")) 
+		{
+			sqlMapper w = new sqlMapper();
+			xmlResult = w.developSimpleCommunityQuery(
+				transformedString,
+				transformedStringNum);
+			//grab the results from the sqlMapper class
+			queryOutput = w.queryOutput;
+			queryOutputNum = w.queryOutputNum;
+		}
+		 else if (action.equals("simplePlantTaxonomyQuery")) 
+		{
 			sqlMapper w = new sqlMapper();
 			xmlResult = w.developSimplePlantTaxonomyQuery(
 				transformedString,
@@ -345,7 +353,9 @@ public class dbAccess
 			//grab the results from the sqlMapper class
 			queryOutput = w.queryOutput;
 			queryOutputNum = w.queryOutputNum;
-		} else {
+		} 
+		else 
+		{
 			System.out.println(
 				"dbAccess > accessDatabase: unrecognized action: "
 					+ action);
