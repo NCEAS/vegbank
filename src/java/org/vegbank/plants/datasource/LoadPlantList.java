@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-07 22:17:54 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-03-21 22:26:39 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,11 +26,13 @@ package org.vegbank.plants.datasource;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.sql.Connection;
 import java.util.AbstractList;
 import java.util.Collections;
 import java.util.Iterator;
 
 import org.vegbank.common.model.*;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.plants.datasink.*;
 
 /**
@@ -49,6 +51,9 @@ public class LoadPlantList
 		}
 		else 
 		{
+			LoadPlantList pl = new LoadPlantList();
+			Connection conn = pl.getConnection();
+			
 			String inputPlantList=null;
 			inputPlantList=args[0];
 			USDAPlantListReader plr;
@@ -68,7 +73,7 @@ public class LoadPlantList
 					long startTime = System.currentTimeMillis();
 					System.out.println( "-------------------------------------------------------------" );
 					System.out.println( "Starting plant insertion ....... " + count );
-					DBPlantWriter dbw = new DBPlantWriter( (Plant) i.next() );
+					DBPlantWriter dbw = new DBPlantWriter( (Plant) i.next(), conn);
 					long stopTime = System.currentTimeMillis();
 					long totalMilliSeconds =  stopTime - startTime ;
 					System.out.println( "Finished took " + totalMilliSeconds +  " milliseconds  ");
@@ -89,6 +94,18 @@ public class LoadPlantList
 				e.printStackTrace();
 			}  
 		}
+	}
+	
+	/**
+	 * method that will return a database connection for use with the database
+	 *
+	 * @return conn -- an active connection
+	 */
+	private Connection getConnection()
+	{
+		Utility u = new Utility();
+		Connection c = u.getConnection("plants_dev");
+		return c;
 	}
 	
 }

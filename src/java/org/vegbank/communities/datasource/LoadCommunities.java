@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 19:57:38 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-03-21 22:26:38 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import java.util.Iterator;
 
 import org.vegbank.common.model.Community;
 import org.vegbank.common.utility.ObjectToXML;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.communities.datasink.DBCommunityWriter;
 
 /**
@@ -45,18 +46,23 @@ public class LoadCommunities
 	public static void main(String[] args)
 	{
 		String mode = "";
+		String databaseHost = "localhost"; 
+		Connection conn = null;
 		
-		if (args.length < 1)
+		if (args.length < 2)
 		{
-			System.out.println("USAGE: LoadCommunities [xml | db ]");
+			System.out.println("USAGE: LoadCommunities [xml | db ] [databaseHost]");
 			System.exit(0);
 		}
 		else
 		{
 			mode = args[0];
+			databaseHost = args[1];
 		}
 		try
 		{
+			conn = LoadCommunities.getDBConnection(databaseHost);
+			
 			LoadCommunities lc = new LoadCommunities();
 			EcoArtCommunityReader cr = new EcoArtCommunityReader(lc.getConnection());
 			AbstractList communityList = cr.getAllCommunities();
@@ -65,7 +71,7 @@ public class LoadCommunities
 			{ 
 				if ( mode.toUpperCase().equals("DB") )
 				{
-					DBCommunityWriter dbw = new DBCommunityWriter( (Community) i.next());
+					DBCommunityWriter dbw = new DBCommunityWriter( (Community) i.next(), conn);
 				}
 				else
 				{
@@ -79,6 +85,19 @@ public class LoadCommunities
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * method that will return a database connection for use with the database
+	 *
+	 * @return conn -- an active connection
+	 */
+	private static Connection getDBConnection(String databaseHost)
+	{
+		Utility u = new Utility();
+		// FIXME: Hard Coded references
+		Connection c = u.getConnection("communities_dev", databaseHost);
+		return c;
 	}
 	
 	private Connection getConnection() throws ClassNotFoundException, SQLException

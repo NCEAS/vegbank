@@ -48,8 +48,8 @@ import databaseAccess.TaxonomyQueryStore;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-03-20 20:50:17 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-03-21 22:26:39 $'
+ *  '$Revision: 1.4 $'
  */
 
 
@@ -681,7 +681,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				{
 					System.out.println("submittal to the database taking place ");
 	
-					DBPlantWriter dbw = new DBPlantWriter( plant );		
+					DBPlantWriter dbw = new DBPlantWriter( plant, null );		
 					boolean results = dbw.isWriteSuccess();
 	
 					// WRITE THE RESULTS BACK TO THE BROWSER

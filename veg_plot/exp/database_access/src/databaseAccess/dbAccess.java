@@ -4,7 +4,7 @@ import java.io.StringWriter;
 import java.util.Vector;
 
 import xmlresource.utils.transformXML;
-import PlotXmlWriterV2;
+import org.vegbank.plots.datasource.PlotXmlWriterV2;
 /**
  * Takes an xml file containg either query attributes
  * or plot data and depending on the document type, either
@@ -31,8 +31,8 @@ import PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-02-24 20:01:44 $'
- * 	'$Revision: 1.6 $'
+ *  '$Date: 2003-03-21 22:26:38 $'
+ * 	'$Revision: 1.7 $'
  */
 
 public class dbAccess {

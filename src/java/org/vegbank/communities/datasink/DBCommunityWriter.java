@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 19:57:38 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-03-21 22:26:37 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,13 +53,17 @@ public class DBCommunityWriter
 		private boolean commit = true;
 		private boolean writeSuccess = false;
 
-	public DBCommunityWriter(Community comm)
+	public DBCommunityWriter(Community comm, Connection conn)
 	{
 		System.out.println("DBCommunityWriter > inserting '" + comm.getName() + "'");
 		// This is going to know about the Data Model the database has 
 		try
 		{
-			conn = this.getConnection();
+			if (conn == null)
+			{
+				conn = this.getConnection();
+				this.conn = conn;
+			}
 			conn.setAutoCommit(false);
 
 			// Need to get the referenceId;

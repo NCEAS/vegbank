@@ -13,8 +13,8 @@ import PlotDataSource;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: farrell $' <br>
- *  '$Date: 2003-02-03 18:53:16 $' <br>
- *  '$Revision: 1.16 $' <br>
+ *  '$Date: 2003-03-21 22:26:38 $' <br>
+ *  '$Revision: 1.17 $' <br>
  */
 
  

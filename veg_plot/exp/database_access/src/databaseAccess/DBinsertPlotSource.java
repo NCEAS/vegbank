@@ -7,8 +7,8 @@
 * Release: @release@
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-02-28 16:50:50 $'
-*   '$Revision: 1.14 $'
+*   '$Date: 2003-03-21 22:26:38 $'
+*   '$Revision: 1.15 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 */
 package databaseAccess;
 
-import PlotDataSource;
+import org.vegbank.plots.datasource.PlotDataSource;
 
 import org.vegbank.common.utility.Utility;
 
@@ -1964,13 +1964,13 @@ public class DBinsertPlotSource {
 				" growthform3Cover, notesPublic, notesMgt, revisions, methodnarrative, ");
 			sb.append("stemsizelimit, landscapenarrative, ");
       sb.append("waterdepth, fieldht, submergedht, treecover, shrubcover, ");
-			sb.append(" fieldcover, nonvascularCover, accession_number, vbsequence )");
+			sb.append(" fieldcover, nonvascularCover, accession_number )");
 
 			//68 total
 			sb.append(" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,");  //15
 			sb.append("?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?"); //20
 			sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?");  //19
-      sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?,?)");         //14
+      sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?)");         //13
 			//68
 
 			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
@@ -2045,7 +2045,6 @@ public class DBinsertPlotSource {
 			pstmt.setString(65, fieldCover);
 			pstmt.setString(66, nonvascularCover);
 			pstmt.setString(67, obsAccession);
-			pstmt.setInt(68, plotObservationId);
 
 			pstmt.execute();
 			Thread.sleep(2000);

@@ -26,7 +26,7 @@ case $PLUGIN in
     java databaseAccess.DBinsertPlotSource $PLUGIN $PLOT
     ;;
   *)
-    java DataSourceClient $RMISERVER $INFILE $PLUGIN $PLOT
+    java org.vegbank.plots.rmi.DataSourceClient $RMISERVER $INFILE $PLUGIN $PLOT
 esac    
 
 # remove the plot cache
