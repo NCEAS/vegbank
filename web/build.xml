@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2004-12-15 19:30:48 $'
-* '$Revision: 1.139 $'
+* '$Author: mlee $'
+* '$Date: 2004-12-15 20:21:31 $'
+* '$Revision: 1.140 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -432,7 +432,9 @@
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
 -->
   <target name="web" depends="xsl" description="==> Distribute Web Files ">
-    <xmlvalidate file="${web.src.dir}/WEB-INF/struts-config.xml" failonerror="true"/>
+    <xmlvalidate file="${web.src.dir}/WEB-INF/struts-config.xml" failonerror="true">
+      <dtd publicId="-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" location="http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd" />
+    </xmlvalidate>
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes">
       <fileset dir="${web.src.dir}"/>
     </copy>
