@@ -9,7 +9,7 @@ import java.util.*;
 import java.math.*;
 import java.net.URL;
 
-import databaseAccess.*;
+import databaseAccess.dbAccess;
 import servlet.util.ServletUtility;
 
 
@@ -88,7 +88,7 @@ public class DataRequestServlet extends HttpServlet
 	 */
 	public DataRequestServlet()
 	{
-		System.out.println("DataRequestServlet Loaded...");
+		System.out.println("init: DataRequestServlet");
 	}
 	
 	
@@ -287,8 +287,8 @@ public class DataRequestServlet extends HttpServlet
 				else 
 				{ 
 					out.println("<br> <b> Please try another query </b> <br>"); 
-					out.println("<a href = \"/examples/servlet/pageDirector?pageType=DataRequestServlet\">"
-					+"return to query page</a><b>&#183;</b>"); //put in rb
+					out.println("<a href = \"/framework/servlet/usermanagement\">"
+					+"return to query page</a><b>&#183;</b>");
 				}
 			}
 		}
@@ -408,14 +408,17 @@ public class DataRequestServlet extends HttpServlet
 			issueQuery("simpleCommunityQuery");
 			out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
 		}
-		// Cheat here - to recognise the single plot query to return entire plot */
+		// Cheat here - to recognise the single plot query to return entire plot
+		//20020117 testing the new plot writer and data translation 
+		//modules so cheating here first
 		else if (plotId != null && resultType.equals("full") ) 
 		{
 			String outFile=servletDir+"atomicResult";
 			out.println("<br>DataRequestServlet.handleSimpleQuery - returning a full data set "
 				+"for plot: "+plotId+" <br>");
-			composeSinglePlotQuery(plotId, resultType, outFile);
-			issueQuery("simpleQuery");
+//			composeSinglePlotQuery(plotId, resultType, outFile);
+//			issueQuery("simpleQuery");
+			 dba.writeSingleVegBankPlot(plotId, outFile);
 		}
 		// this is where the query element checking is done for the vegetation plots
 		// the way that this is structured currently the user is not forced to choose a
@@ -475,7 +478,7 @@ public class DataRequestServlet extends HttpServlet
 		else 
 		{ 
 			out.println("<br> <b> Please try another query </b> <br>"); 
-			out.println("<a href = \"/examples/servlet/pageDirector?pageType=DataRequestServlet\">"
+			out.println("<a href = \"/framework/servlet/usermanagement\">"
 			+"return to query page</a><b>&#183;</b>"); //put in rb
 		}
 	}
@@ -1101,6 +1104,12 @@ private void updateClentLog (String clientLog, String remoteHost)
 			{
 				System.out.println("registering the doc. -- browser client");
 				registerQueryDocument();
+			}
+			//else if it is an application (i.e., another servlet ) test the
+			//new xml writer
+			else if ( this.clientType.equals("app") )
+			{
+				
 			}
 			//call the plot access module
 			dba.accessDatabase(servletDir+"query.xml", servletDir+"querySpec.xsl", "query");
