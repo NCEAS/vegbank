@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2005-03-15 08:51:13 $'
-* '$Revision: 1.149 $'
+* '$Author: mlee $'
+* '$Date: 2005-03-15 09:56:45 $'
+* '$Revision: 1.150 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -480,24 +480,7 @@
         ...page content...
         @webpage_footer_html@
     -->
-   <loadfile srcfile="${includes_src}/webpage_top.html" property="webpage_top_html" />
-   <filter token="webpage_top_html" value="${webpage_top_html}" />
- 
-   <loadfile srcfile="${includes_src}/webpage_head.html" property="webpage_head_html" />
-   <filter token="webpage_head_html" value="${webpage_head_html}" />
- 
-   <loadfile srcfile="${includes_src}/webpage_masthead.html" property="webpage_masthead_html" />
-   <filter token="webpage_masthead_html" value="${webpage_masthead_html}" />
 
-   <loadfile srcfile="${includes_src}/masthead_small.html" property="webpage_masthead_small_html" />
-   <filter token="webpage_masthead_small_html" value="${webpage_masthead_small_html}" />
-   
-   <loadfile srcfile="${includes_src}/webpage_footer.html" property="webpage_footer_html" />
-   <filter token="webpage_footer_html" value="${webpage_footer_html}" />
-   <loadfile srcfile="${includes_src}/stylesheets_declaration.html" property="stylesheets_declaration.html" />
-   <filter token="stylesheets_declaration.html" value="${stylesheets_declaration.html}" />
-   
-   
    <!-- =========== -->
    
 
@@ -514,11 +497,17 @@
    <loadfile srcfile="${includes_src}/footer.html" property="vegbank_footer_html_help" />
    <filter token="vegbank_footer_html_help" value="${vegbank_footer_html_help}" />
    -->
+   <!-- dist relavent includes to server and filter tokens while doing so -->
+   <copy todir="${includes_server}" filtering="yes" overwrite="yes">
+     <fileset dir="${includes_src}">
+       <include name="*.properties" />
+     </fileset>
+   </copy>
    
-    <copy file="${includes_src}/filters.properties" tofile="${includes_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
-    <filter filtersfile="${includes_server}/filters_detokened.properties"/>
-    <copy file="${includes_src}/placeurl.properties" tofile="${includes_server}/placeurl_detokened.properties" filtering="yes" overwrite="yes"/>
-    <filter filtersfile="${includes_server}/placeurl_detokened.properties"/>
+    <!--<copy file="${includes_src}/filters.properties" tofile="${includes_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>-->
+    <filter filtersfile="${includes_server}/filters.properties"/>
+    <!--<copy file="${includes_src}/placeurl.properties" tofile="${includes_server}/placeurl_detokened.properties" filtering="yes" overwrite="yes"/>-->
+    <filter filtersfile="${includes_server}/placeurl.properties"/>
     <style in="${vegbranch_src}/docs/demo/demomap.xml" out="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" style="${vegbranch_src}/docs/demo/maptofilters.xsl" force="true"/>
     <copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${includes_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${includes_server}/vegbranchdemo_filters_detokened.properties"/>
@@ -530,6 +519,33 @@
     <filter filtersfile="${includes_server}/manual_filters.properties"/>
     <!--<ant dir="${basedir}/../docs/xml" target="dist-closedlist-tokenfile"/>
     <filter filtersfile="${includes_server}/closedlist-tokens.properties"/> -->
+   <copy todir="${includes_server}" filtering="yes" overwrite="yes">
+     <fileset dir="${includes_src}">
+       <include name="webpage_*.html" />
+     </fileset>
+   </copy>
+   
+
+   
+   <loadfile srcfile="${includes_server}/webpage_top.html" property="webpage_top_html" />
+   <filter token="webpage_top_html" value="${webpage_top_html}" />
+ 
+   <loadfile srcfile="${includes_server}/webpage_head.html" property="webpage_head_html" />
+   <filter token="webpage_head_html" value="${webpage_head_html}" />
+ 
+   <loadfile srcfile="${includes_server}/webpage_masthead.html" property="webpage_masthead_html" />
+   <filter token="webpage_masthead_html" value="${webpage_masthead_html}" />
+
+   <loadfile srcfile="${includes_server}/webpage_masthead_small.html" property="webpage_masthead_small_html" />
+   <filter token="webpage_masthead_small_html" value="${webpage_masthead_small_html}" />
+   
+   <loadfile srcfile="${includes_server}/webpage_footer.html" property="webpage_footer_html" />
+   <filter token="webpage_footer_html" value="${webpage_footer_html}" />
+   <loadfile srcfile="${includes_server}/webpage_stylesheets_declaration.html" property="webpage_stylesheets_declaration.html" />
+   <filter token="webpage_stylesheets_declaration.html" value="${webpage_stylesheets_declaration.html}" />
+   
+   
+    
   </target>
   <target name="vbsummary" depends="email_templates" description="=&gt; DEPRECATED : does nothing!">
     <!-- create summary based on current VegBank database status -->
