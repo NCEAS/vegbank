@@ -7,8 +7,8 @@
  *  Release: @@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-10-27 20:04:29 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-11-12 22:40:42 $'
+ *  '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * A JUnit test for testing Step class processing
+ * A JUnit test for testing Utility Class
  */
 public class UtilityTest extends TestCase
 {
@@ -71,6 +71,7 @@ public class UtilityTest extends TestCase
     //suite.addTest(new DBinsertPlotSourceTest("initialize"));
     return new TestSuite(UtilityTest.class);
   }
+  
   /**
    * Run an initial test that always passes to check that the test
    * harness is working.
