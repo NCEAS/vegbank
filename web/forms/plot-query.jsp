@@ -13,9 +13,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: mlee $'
-*      '$Date: 2004-11-16 01:16:22 $'
-*  '$Revision: 1.25 $'
+*    '$Author: anderson $'
+*      '$Date: 2004-11-16 01:17:27 $'
+*  '$Revision: 1.26 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -241,7 +241,9 @@ VegBank - Advanced Plot Query
 	  </tr>
 	  <tr><!-- ELEVATION --> 
 	    <td>&nbsp;</td>
-	    <td colspan="2" class="itemsmaller" align="center">from <bean:write name="bean" property="curMinElevation"/> to <bean:write name="bean" property="curMaxElevation"/> meters</td>
+	    <td colspan="2" class="itemsmaller" align="center">from 
+			<bean:write name="bean" property="curMinElevation"/> to 
+			<bean:write name="bean" property="curMaxElevation"/> meters</td>
 	    <td>&nbsp;</td>
 	    <td>&nbsp;</td>
 	  </tr>
