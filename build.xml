@@ -5,9 +5,9 @@
   * Global build script for vegclass. This simply allows running all the sub 
   * scripts from one place.
   *
-  *     '$Author: farrell $'
-  *     '$Date: 2003-10-27 23:42:35 $'
-  *     '$Revision: 1.25 $'
+  *     '$Author: anderson $'
+  *     '$Date: 2003-10-28 04:38:19 $'
+  *     '$Revision: 1.26 $'
 --> 
 <project name="vegclass" default="jar" basedir=".">
 
@@ -32,8 +32,13 @@
     <property name="xsl.src.dir" value="${src.dir}/xsl"/>
     <property name="sql.src.dir" value="${src.dir}/sql"/>
     <property name="ant.style.dir" location="${env.ANT_HOME}/etc" />
-    <property name="web.docroot" location="${env.TOMCAT_HOME}/webapps" />
-    <property name="web.inf" location="${web.docroot}/WEB-INF" /> 
+
+    <condition property="webapp" value="vegbank">
+    	<not><isset	property="webapp"/></not>
+	</condition>
+	<echo>init webapp '${webapp}'</echo>
+    <property name="web.context" location="${env.TOMCAT_HOME}/webapps/${webapp}" />
+    <property name="web.inf" location="${web.context}/WEB-INF" /> 
     <property name="web.lib.dir" location="${web.inf}/lib" /> 
 
     <property name="vegbank.home.dir" location="/usr/vegbank"/>
@@ -85,15 +90,31 @@
   <target name="deploy" depends="jar,deploy-prepare"
           description="==> deploys vegclass module jars, html and other resources">
     
+	<echo>---------DEPLOYING common---------------</echo>
     <ant dir="common" target="deploy" inheritAll="false"/>
+	<echo>---------DEPLOYING veg_community---------------</echo>
     <ant dir="veg_community" target="deploy" inheritAll="false"/>
+	<echo>---------DEPLOYING veg_taxa---------------</echo>
     <ant dir="veg_taxa" target="deploy" inheritAll="false"/>
+	<echo>---------DEPLOYING veg_plot---------------</echo>
     <ant dir="veg_plot" target="deploy" inheritAll="false"/>
   
   </target>
 
+  <target name="deploy-vegtest"
+          description="==> deploys vegclass module jars, html and other resources to the vegtest instance">
+  	<property name="webapp" value="vegtest"/>
+	<antcall target="jar"/>
+	<antcall target="deploy-prepare"/>
+
+    <ant dir="common" target="deploy-vegtest" inheritAll="false"/>
+    <ant dir="veg_community" target="deploy" inheritAll="false"/>
+    <ant dir="veg_taxa" target="deploy" inheritAll="false"/>
+    <ant dir="veg_plot" target="deploy-vegtest" inheritAll="false"/>
+  </target>
+
   <target name="deploy-prepare">
-    <mkdir dir="${web.docroot}"/>
+    <mkdir dir="${web.context}"/>
     <mkdir dir="${web.inf}"/>
     <mkdir dir="${web.lib.dir}"/>
   </target>
@@ -111,6 +132,10 @@
     <ant dir="veg_plot/exp/vegbank_web" target="dist" inheritAll="false"/>
   </target>
   
+  <target name="dist-vegtest" depends="deploy-vegtest">
+    <ant dir="veg_plot/exp/vegbank_web" target="dist-vegtest" inheritAll="false"/>
+  </target>
+  
   <target name="dist-reports" 
           depends="prepare"
           description="==> Generate htmls from generated reports and distributes to web">
@@ -126,7 +151,7 @@
 	  			<include name="TEST-*.xml"/>
 			</fileset>
 	  		<report format="frames"
-				        todir="${web.docroot}/vegbank/dev/reports/junit"
+				        todir="${web.context}/dev/reports/junit"
 	              styledir="${ant.style.dir}"/>
 	  	</junitreport>
 	

@@ -5,17 +5,36 @@
   * Global build script for veg_plot. This simply allows running all the sub 
   * scripts from one place 
   *
-  *     '$Author: farrell $'
-  *     '$Date: 2003-10-27 23:42:35 $'
-  *     '$Revision: 1.39 $'
+  *     '$Author: anderson $'
+  *     '$Date: 2003-10-28 04:38:20 $'
+  *     '$Revision: 1.40 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
-  <!-- Load volatile properties from a file -->
-  <property file="${basedir}/build.properties"/>
-  
   <target name="init" description="=> Initialize global variables">
     <echo>veg_plot/build.xml:  init</echo>
+
+  	<!-- Set the proper webapp -->
+    <condition property="webapp" value="vegbank">
+    	<not><isset	property="webapp"/></not>
+	</condition>
+
+  	<!-- Load volatile properties from a file -->
+	<!-- Load vegbank properties -->
+    <condition property="build.props.file" value="${basedir}/build.properties">
+    	<equals arg1="${webapp}" arg2="vegbank"/>
+	</condition>
+
+	<!-- Else, load other webapp properties -->
+    <condition property="build.props.file" value="${basedir}/build.${webapp}.properties">
+    	<not><equals arg1="${webapp}" arg2="vegbank"/></not>
+	</condition>
+
+    <property file="${build.props.file}"/>
+    <echo>veg_plot/build.xml:  loading props file: ${build.props.file}</echo>
+
+
+	<echo>init webapp '${webapp}'</echo>
 
     <property environment="env" />
     <property name="top.dir" location="${basedir}/.."/>
@@ -25,14 +44,15 @@
     <property name="src.dir" location="${basedir}/src" />
     <property name="java.src.dir" location="${basedir}/src" />
     <property name="web.src.dir" location="${src.dir}/web" />
+    <property name="web.context" location="${env.TOMCAT_HOME}/webapps/${webapp}" /> 
+    <property name="web.servlet.lib.dir" location="${web.context}/WEB-INF/lib"/>
     <property name="lib.dir" location="${basedir}/lib" />
     <property name="doc.dir" location="${basedir}/doc"/>
     <property name="build.src.dir" location="${build.dir}/src"/>
     <property name="build.java.src.dir" location="${build.src.dir}/java"/>
     <property name="build.classes.dir" location="${build.dir}/classes"/>
     <property name="build.test.dir" location="${build.dir}/test"/>
-    <property name="build.test.integration.dir"
-      location="${build.test.dir}/integration"/>
+    <property name="build.test.integration.dir" location="${build.test.dir}/integration"/>
     <property name="build.lib.dir" location="${build.dir}/lib"/>
     <property name="reports.dir" location="${top.build.dir}/reports"/>
     <property name="reports.test.dir" location="${reports.dir}/testreports"/>
@@ -41,10 +61,7 @@
     <property name="test.unit.src.dir" location="${test.dir}/Unit"/>
     <property name="test.integration.dir" location="${test.dir}/Integration"/>
     <property name="ant.style.dir" location="${env.ANT_HOME}/etc" /> 
-    <property name="web.docroot" location="${env.TOMCAT_HOME}/webapps" /> 
-    <property name="web.context" location="${web.docroot}/vegbank" /> 
-    <property name="web.servlet.lib.dir"
-      location="${web.context}/WEB-INF/lib" /> 
+
     <property name="rmiserver.lib.dir" location="${rmiserver.home.dir}/lib" /> 
     <property name="planttaxonomy" location="${basedir}/../veg_taxa/build/lib/planttaxonomy.jar"/>
     <property name="vegcommunity" location="${basedir}/../veg_community/build/lib/vegcommunity.jar"/>
@@ -98,8 +115,8 @@
     <!-- Servlet specific -->
     <filter token="mailHost" value="hyperion.nceas.ucsb.edu"/>
     <filter token="systemEmail" value="dba@vegbank.org"/>
-    <filter token="genericForm" value="${web.docroot}/vegbank/forms/generic_form.html"/>
-    <filter token="genericTemplate" value="${web.docroot}/vegbank/forms/tmp.html"/>
+    <filter token="genericForm" value="${web.context}/forms/generic_form.html"/>
+    <filter token="genericTemplate" value="${web.context}/forms/tmp.html"/>
     <filter token="rmiserver"  value="${rmiserver}"/>
     <filter token="uploadDir" value="${web.servlet.lib.dir}"/>
     <filter token="servlet_lib_dir" value="${web.servlet.lib.dir}/" />
@@ -111,6 +128,8 @@
   </target>
   
   <target name="prepare" depends="init">
+
+  	<echo>veg_plot/build.xml PREPARE: build.lib.dir: ${build.lib.dir}</echo>
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.lib.dir}"/>
     <mkdir dir="${build.src.dir}"/>
@@ -166,7 +185,7 @@
 	
 	<target name="jar" depends="compile"
           description="=> Generates all jars in veg_plot module">
-		<echo message="Creating all of jars in ${ant.project.name}"/>
+		<echo message="Creating all jars in ${ant.project.name}"/>
 	    
     <!-- database_access.jar -->
     <jar  destfile ="${build.lib.dir}/database_access.jar">
@@ -307,18 +326,51 @@
   <!-- DEPLOYMENT RELATED TARGETS                                       -->
   <!-- ================================================================ -->
   
-  <target name="deploy" depends="jar, deploy-resources"
-          description="=> Deploys jars in veg_plot module to servlet container">
-	
-    <echo message="Distr all of jars in ${ant.project.name}"/>
-    
-		<ant dir="exp/vegbank_web" target="deploy" inheritAll="false">
-      <property name="hostname" value="${hostname}"/>
-    </ant>
+	<target name="deploy" depends="jar, deploy-resources"
+			description="=> Deploys jars in veg_plot module to servlet container">
+		<echo message="Distr all of jars in ${ant.project.name}"/>
 
-    <copy todir="${web.servlet.lib.dir}">
-      <fileset dir="${build.lib.dir}" includes="*jar"/>
-    </copy> 
+		<!-- set the proper deploy target -->
+		<condition property="deploy.target" value="deploy">
+			<or>
+				<not><isset property="${webapp}"/></not>
+				<equals arg1="${webapp}" arg2="vegbank"/>
+			</or>
+		</condition>
+
+		<!-- else, set other webapp deployment -->
+		<condition property="deploy.target" value="deploy-${webapp}">
+			<not><equals arg1="${webapp}" arg2="vegbank"/></not>
+		</condition>
+
+		<ant dir="exp/vegbank_web" target="${deploy.target}" inheritAll="false">
+			<property name="hostname" value="${hostname}"/>
+		</ant>
+
+		<echo>deploying veg_plot jars to vegtest</echo>
+		<echo>db connect: ${databaseConnectString}</echo>
+		<copy todir="${web.servlet.lib.dir}">
+			<fileset dir="${build.lib.dir}" includes="*jar"/>
+		</copy> 
+	</target>
+
+	<target name="deploy-vegtest"
+			description="=> Deploys jars in veg_plot module to vegtest instance">
+
+  		<property name="webapp" value="vegtest"/>
+  		<property name="deploy.target" value="deploy-vegtest"/>
+		<antcall target="deploy"/>
+
+		<!--
+		<ant dir="exp/vegbank_web" target="deploy-vegtest" inheritAll="false">
+			<property name="hostname" value="${hostname}"/>
+		</ant>
+
+  		<echo>veg_plot/build.xml DEPLOY-VEGTEST: build.lib.dir: ${build.lib.dir}</echo>
+		<copy todir="${web.servlet.lib.dir}">
+			<fileset dir="${build.lib.dir}" includes="*jar"/>
+		</copy> 
+		-->
 	</target>
 
   <target name="deploy-prepare">
@@ -458,7 +510,7 @@
         <include name="TEST-*.xml"/>
       </fileset>
       <report format="frames" 
-              todir="${web.docroot}/vegbank/dev/reports/junit/" 
+              todir="${web.context}/dev/reports/junit/" 
               styledir="${ant.style.dir}"/> 
     </junitreport>
 

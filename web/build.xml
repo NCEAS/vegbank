@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: farrell $'
-* '$Date: 2003-10-27 23:42:35 $'
-* '$Revision: 1.58 $'
+* '$Author: anderson $'
+* '$Date: 2003-10-28 04:38:20 $'
+* '$Revision: 1.59 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -32,6 +32,11 @@
 		* Below are the basic propoerties and tokens for
 		* building the vegbank web site
 	-->
+    <condition property="webapp" value="vegbank">
+    	<not><isset	property="webapp"/></not>
+	</condition>
+	<echo>init webapp '${webapp}'</echo>
+
     <property name="forms" value="./forms"/>
     <property name="general_src" value="./general"/>
     <property name="design_src" value="./design"/>
@@ -58,56 +63,55 @@
     <filter token="version" value="development"/>
     <!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
     <property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
-    <property name="forms_server" value="${tomcat.home.dir}/webapps/vegbank/forms"/>
-    <property name="image_server" value="${tomcat.home.dir}/webapps/vegbank/images"/>
-    <property name="general_server" value="${tomcat.home.dir}/webapps/vegbank/general/"/>
-    <property name="design_server" value="${tomcat.home.dir}/webapps/vegbank/design/"/>
-    <property name="dictionary_server" value="${tomcat.home.dir}/webapps/vegbank/dbdictionary/"/>
-    <property name="news_server" value="${tomcat.home.dir}/webapps/vegbank/news/"/>
-    <property name="panel_server" value="${tomcat.home.dir}/webapps/vegbank/panel/"/>
-    <property name="history_server" value="${tomcat.home.dir}/webapps/vegbank/history/"/>
-    <property name="pubs_server" value="${tomcat.home.dir}/webapps/vegbank/pubs/"/>
-    <property name="style_server" value="${tomcat.home.dir}/webapps/vegbank/includes/"/>
-    <property name="vegbank_server" value="${tomcat.home.dir}/webapps/vegbank/"/>
-    <property name="workshop_server" value="${tomcat.home.dir}/webapps/vegbank/workshop/"/>
+    <property name="forms_server" value="${tomcat.home.dir}/webapps/${webapp}/forms"/>
+    <property name="image_server" value="${tomcat.home.dir}/webapps/${webapp}/images"/>
+    <property name="general_server" value="${tomcat.home.dir}/webapps/${webapp}/general/"/>
+    <property name="design_server" value="${tomcat.home.dir}/webapps/${webapp}/design/"/>
+    <property name="dictionary_server" value="${tomcat.home.dir}/webapps/${webapp}/dbdictionary/"/>
+    <property name="news_server" value="${tomcat.home.dir}/webapps/${webapp}/news/"/>
+    <property name="panel_server" value="${tomcat.home.dir}/webapps/${webapp}/panel/"/>
+    <property name="history_server" value="${tomcat.home.dir}/webapps/${webapp}/history/"/>
+    <property name="pubs_server" value="${tomcat.home.dir}/webapps/${webapp}/pubs/"/>
+    <property name="style_server" value="${tomcat.home.dir}/webapps/${webapp}/includes/"/>
+    <property name="vegbank_server" value="${tomcat.home.dir}/webapps/${webapp}/"/>
+    <property name="workshop_server" value="${tomcat.home.dir}/webapps/${webapp}/workshop/"/>
     <property name="help_server" value="${apache.document.root}/help/"/>
     <property name="server_root" value="${tomcat.home.dir}/webapps/ROOT/"/>
-    <property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/vegbank/WEB-INF/lib"/>
+    <property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/${webapp}/WEB-INF/lib"/>
     <!-- WEB SERVER LOCATIONS -->
     <filter token="base_url" value=""/>
-    <filter token="image_server" value="/vegbank/images/"/>
-    <filter token="stylesheet" value="/vegbank/includes/default.css"/>
-    <filter token="plotquery_page" value="/vegbank/forms/plot-query.jsp"/>
-    <filter token="nestedplotquery_page" value="/vegbank/forms/nested-plot-query.html"/>
-    <filter token="uploaddata_page" value="/vegbank/forms/uploadFile.html"/>
-    <filter token="stylesheet_generator" value="/vegbank/forms/stylesheet-generator.html"/>
-    <filter token="general_link" value="/vegbank/general/"/>
-    <filter token="forms_url" value="/vegbank/forms/"/>
+    <filter token="image_server" value="/${webapp}/images/"/>
+    <filter token="stylesheet" value="/${webapp}/includes/default.css"/>
+    <filter token="plotquery_page" value="/${webapp}/forms/plot-query.jsp"/>
+    <filter token="nestedplotquery_page" value="/${webapp}/forms/nested-plot-query.html"/>
+    <filter token="uploaddata_page" value="/${webapp}/forms/uploadFile.html"/>
+    <filter token="stylesheet_generator" value="/${webapp}/forms/stylesheet-generator.html"/>
+    <filter token="general_link" value="/${webapp}/general/"/>
+    <filter token="forms_url" value="/${webapp}/forms/"/>
     <!-- add second token for forms, which is similarly named as other links -->
-    <filter token="forms_link" value="/vegbank/forms/"/>
-    <filter token="design_link" value="/vegbank/design/"/>
-    <filter token="panel_link" value="/vegbank/panel/"/>
+    <filter token="forms_link" value="/${webapp}/forms/"/>
+    <filter token="design_link" value="/${webapp}/design/"/>
+    <filter token="panel_link" value="/${webapp}/panel/"/>
     <filter token="help_link" value="/help/"/>
     <filter token="manual_link" value="/help/manual/"/>
     <!-- SERVLETS -->
-    <filter token="framework_servlet" value="/vegbank/servlet/framework"/>
-    <filter token="stylesheet_generator_servlet" value="/vegbank/servlet/stylesheetgenerator"/>
-    <filter token="usermanagement_servlet" value="/vegbank/servlet/usermanagement"/>
-    <filter token="datarequestservlet" value="/vegbank/servlet/DataRequestServlet"/>
-    <filter token="datasubmitservlet" value="/vegbank/servlet/DataSubmitServlet"/>
-    <filter token="nestedquerybuilder" value="/vegbank/servlet/QueryBuilderServlet"/>
-    <filter token="authenticationservlet" value="/vegbank/servlet/authenticate"/>
-    <filter token="viewdataservlet" value="/vegbank/servlet/viewData"/>
-    <filter token="filedownloadservlet" value="/vegbank/servlet/fileDownload"/>
-    <!-- Struts ... the refering pages should be jsp but anyheck -->
-    <filter token="DisplayUploadPlotAction" value="/vegbank/DisplayUploadPlotAction.do"/>
+    <filter token="framework_servlet" value="/${webapp}/servlet/framework"/>
+    <filter token="stylesheet_generator_servlet" value="/${webapp}/servlet/stylesheetgenerator"/>
+    <filter token="usermanagement_servlet" value="/${webapp}/servlet/usermanagement"/>
+    <filter token="datarequestservlet" value="/${webapp}/servlet/DataRequestServlet"/>
+    <filter token="datasubmitservlet" value="/${webapp}/servlet/DataSubmitServlet"/>
+    <filter token="nestedquerybuilder" value="/${webapp}/servlet/QueryBuilderServlet"/>
+    <filter token="authenticationservlet" value="/${webapp}/servlet/authenticate"/>
+    <filter token="viewdataservlet" value="/${webapp}/servlet/viewData"/>
+    <filter token="filedownloadservlet" value="/${webapp}/servlet/fileDownload"/>
     <!-- FIXME: Should be in a prepare target -->
-    <mkdir dir="${tomcat.home.dir}/webapps/vegbank/"/>
+    <mkdir dir="${tomcat.home.dir}/webapps/${webapp}/"/>
     <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
     <mkdir dir="${apache.document.root}/plot/"/>
     <mkdir dir="${help_server}"/>
     <mkdir dir="${help_server}manual/"/>
   </target>
+
   <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
   <target name="hdrftr" depends="init" description="=&gt; sets tokens to be replaced by those in hdrfooter file and other files">
@@ -127,7 +131,7 @@
   </target>
   <target name="index" depends="hdrftr" description="=&gt; target to dist. the index.html file">
     <copy overwrite="true" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
-    <!-- add to second webpage at root/vegbank/index.html -->
+    <!-- add to second webpage at root/${webapp}/index.html -->
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
     <copy todir="${apache.document.root}/plot/" file="${basedir}/plot/.htaccess"/>
   </target>
@@ -314,6 +318,17 @@
     <antcall target="web"/>
     <antcall target="robot"/>
   </target>
+
+  <target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
+  	<property name="webapp" value="vegtest"/>
+    <antcall target="deploy"/>
+  </target>
+
+  <target name="dist-vegtest" description="=&gt; (vegtest) Distribute all web files">
+  	<property name="webapp" value="vegtest"/>
+    <antcall target="dist"/>
+  </target>
+
   <target name="dist-bins" depends="init, panel-big-bin " description="=&gt; dist. all targets that require access to big binary storage "/>
   <target name="dist" depends="deploy, help, design, news, panel, vbsummary, history, pubs, workshop, dictionary, dist-bins" description="=&gt; dist all targets : DIST EVERYTHING! "/>
   <!-- FIXME [Fixed:(MTL)dictionary], images target expects files not in cvs -->
