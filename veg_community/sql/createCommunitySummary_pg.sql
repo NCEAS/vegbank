@@ -17,7 +17,6 @@ CREATE TABLE commSummary (
 	commDescription VARCHAR(2000), --truncated description
 	conceptOriginDate date,  --origin date of the concept
 	conceptUpdateDate date, --date that the concept was updated
-	parentAbiCode VARCHAR(50), --abicode of the parent
 	commconcept_id  integer,
 	recognizingParty VARCHAR(50),  -- the party that recognizes the concept
 	partyConceptStatus VARCHAR(50), -- status of the party recognition
@@ -38,7 +37,6 @@ insert into commSummary (
 	commDescription, 
 	conceptOriginDate, 
 	conceptUpdateDate, 
-	parentAbiCode, 
 	commConcept_id,
 	parentCommConceptId)
 	select 
@@ -50,7 +48,6 @@ insert into commSummary (
 	commConcept.conceptDescription,
 	'01-JAN-2001', 
 	'01-JAN-2001',
-	commConcept.commParent, 
 	commConcept.commConcept_id,
 	commConcept.commParent
 	from commName, commConcept
@@ -87,6 +84,14 @@ set  parentCommDescription =
 (select conceptdescription from commconcept 
 where commsummary.parentcommconceptid = commconcept.commconcept_id );
 
+
+--UPDATE THE RECOGNIZING PARTY
+update commSummary
+set recognizingparty =
+(select organizationname from commparty where commparty_id =
+	(select commparty_id from commstatus
+	where  commsummary.commconcept_id = commStatus.commconcept_id  )
+);
 
 
 
