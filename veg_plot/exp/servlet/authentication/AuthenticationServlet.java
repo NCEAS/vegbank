@@ -22,8 +22,13 @@ import servlet.authentication.UserDatabaseAccess;
  * @param password - the password of the user attempting to be authenticated <br> 
  * @param authType -- the authentication type {loginUser, uploadFile}
  *
- * @version 
- * @author 
+ *
+ *  '$Author: harris $'
+ *  '$Date: 2002-04-05 21:11:16 $'
+ *  '$Revision: 1.6 $'
+ *		 
+ *  @version 
+ *  @author 
  * 
  */
 
@@ -44,7 +49,9 @@ public class AuthenticationServlet extends HttpServlet
 		System.out.println("init: AuthenticationServlet");
 	}
 
-	/** Handle "POST" method requests from HTTP clients */
+	/** 
+	 * Handle "GET" method requests from HTTP clients 
+	 */
 	public void doPost(HttpServletRequest request,
 	HttpServletResponse response)
 	throws IOException, ServletException
@@ -52,7 +59,9 @@ public class AuthenticationServlet extends HttpServlet
 		doGet(request, response);
 	}
     
-	/** Handle "POST" method requests from HTTP clients */
+	/** 
+	 * Handle "POST" method requests from HTTP clients 
+	 */
 	public void doGet(HttpServletRequest request,
 	HttpServletResponse response)
 	throws IOException, ServletException
@@ -92,49 +101,6 @@ public class AuthenticationServlet extends HttpServlet
 				{
 					String s =  handlePasswordRetreival(requestParams);
 					out.println(s);
-/*					
-					String email = (String)requestParams.get("userLogin");
-					String passwd = uda.getPassword(email);
-					System.out.println("AuthenticationServlet > emailing password to: " + email );
-					
-					String givenName = "";
-					String surName = "";
-					String body = "";
-					String mailHost = "nceas.ucsb.edu";
-					String from = "vegbank";
-					String to = email;
-					String cc = "dba@vegbank.org";
-					String subject = "Recovered VegBank Password";
-					
-					// if there is a name use it
-					if ( (requestParams.containsKey("firstName") == true ) &&  
-						(requestParams.containsKey("lastName") == true  ))
-					{
-						givenName = (String)requestParams.get("firstName");
-						surName = (String)requestParams.get("lastName");
-						System.out.println("AuthenticationServlet > surName: " + surName 
-						+ " givenName: " + givenName );
-						if ( surName.length() > 1 )
-						{
-							String wholename = givenName+ " "+surName;
-							StringBuffer sb = new StringBuffer();
-							sb.append("Dear "+wholename+", \n");
-							sb.append("\t Your VegBank password is: "+passwd);
-							body = sb.toString();
-						}
-					}
-					// else a generic string
-					else
-					{
-						body = "\n  Your Vegbank Password is: " + passwd;
-					}
-					
-					//if a password is retreived then send it to the user
-					if ( passwd != null && passwd.length() > 1 )
-					{
-						su.sendEmail( mailHost, from, to, cc, subject, body);
-					}
- */
 				}		
 				//LOGIN THE USER
 				else if ( requestParams.get("authType").toString().equals("loginUser")  )
@@ -166,8 +132,6 @@ public class AuthenticationServlet extends HttpServlet
 					if ( authenticateUser(requestParams, remoteAddress) == true)
 					{
 						out.println("<authentication>true</authentication>");
-						
-						//log the login in the clientLogger
 						//set a cookie
 						String user = getUserName(requestParams );
 						Cookie cookie = new Cookie("null", "null");
