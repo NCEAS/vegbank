@@ -30,13 +30,13 @@ import org.vegbank.common.utility.PleaseWaitThread;
 import org.vegbank.dataload.XML.*;
 
 /*
- * '$Id: PleaseWaitAction.java,v 1.1 2004-05-06 22:42:54 anderson Exp $'
+ * '$Id: PleaseWaitAction.java,v 1.2 2004-07-24 00:50:46 anderson Exp $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-05-06 22:42:54 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-07-24 00:50:46 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ import org.vegbank.dataload.XML.*;
 public class PleaseWaitAction extends Action
 {
 	private static Log log = LogFactory.getLog(PleaseWaitAction.class);
-	public static final int MAX_LOOPS = 20;
+	public static final int MAX_LOOPS = -1;
 	
 
 	public ActionForward execute(
@@ -124,7 +124,7 @@ public class PleaseWaitAction extends Action
 
 				return mapping.findForward(worker.getForward());
 
-			} else if (numLoops < MAX_LOOPS) {
+			} else if (MAX_LOOPS < 1 || numLoops < MAX_LOOPS) {
 				if (numLoops > 0) {
 					log.debug("Sleeping...");
 					Thread.currentThread().sleep(4000);
