@@ -3,7 +3,7 @@
 <HEAD>
     <META NAME="Generator" CONTENT="Cosmo Create 1.0.3">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <TITLE>Prototype Veg Plots Database Component Description:  
+    <TITLE>Prototype Veg Plots Database Component Description: 
     speciesTaxon (Table)</TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
@@ -37,9 +37,11 @@
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>P</TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD>Will be &#145;invisible&#146; to the user, it is used to 
-            link to other entities and should not be confused with either the 
-            originalTaxonName or currentTaxonUnit.</TD>
+        <TD><P>
+            <B>G</B></P>
+            Will be invisible to the user, it is used to link to other entities and 
+            should not be confused with either the originalTaxonName or 
+            currentTaxonUnit.</TD>
         <TD>Database assigned value for a given species or taxon within 
             a plot.</TD>
     </TR>
@@ -49,9 +51,9 @@
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>F</TD>
         <TD><A HREF="plotMaster.html"><FONT SIZE="-1" FACE="arial">plotMaster</FONT></A></TD>
-        <TD></TD>
-        <TD>Database assigned value that is unique to each plot &#150; 
-            this is how the species name is related to a given plot.</TD>
+        <TD><B>G</B></TD>
+        <TD>Database assigned value that is unique to each plot this is 
+            how the species name is related to a given plot.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">originalTaxonName</FONT></TD>
@@ -59,7 +61,7 @@
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD></TD>
+        <TD><B>R</B></TD>
         <TD>Original name of species as collected by author.&nbsp;</TD>
     </TR>
     <TR>
@@ -68,11 +70,13 @@
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD>The authority coupled with the original taxon name from 
-            that authority is all that is needed to define a taxon.&nbsp;
-             This is like Berendsohn&#146;s potential species concept.&nbsp;
-             Both the originalTaxonName and the authority might best viewed as 
-            foreign keys to tables in the plants database.</TD>
+        <TD><P>
+            <B>R</B></P>
+            The authority coupled with the original taxon name from that authority 
+            is all that is needed to define a taxon.&nbsp; This is like 
+            Berendsohn's potential species concept.&nbsp; Both the 
+            originalTaxonName and the authority might best viewed as foreign keys 
+            to tables in the plants database.</TD>
         <TD>Authority for the species name.</TD>
     </TR>
     <TR>
@@ -81,8 +85,10 @@
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD>Species will be variously interpreted in the long-term life 
-            of a plot record.&nbsp; We need to record these evolving 
+        <TD><P>
+            <B>G</B></P>
+            Species will be variously interpreted in the long-term life of a plot 
+            record.&nbsp; We need to record these evolving 
             understandings, which I imagine doing with start and stop dates.&nbsp;
              This will allow the user to filter for the records with active dates.</TD>
         <TD>Similar to 'originalTaxonName' but names adjusted for 
@@ -107,6 +113,6 @@ following tables:</FONT> </P>
 <A HREF="strataComposition.html"><FONT SIZE="-1" FACE="arial">strataComposition</FONT></A>
  </P>
 <P>
-<FONT SIZE="-1">last updated: Thu Aug 31 13:32:36 PDT 2000</FONT> </P>
+<FONT SIZE="-1">last updated: </FONT>Wed Sep 6 20:26:17 PDT 2000</P>
 </BODY>
 </HTML>

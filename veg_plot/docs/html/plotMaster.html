@@ -3,7 +3,7 @@
 <HEAD>
     <META NAME="Generator" CONTENT="Cosmo Create 1.0.3">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <TITLE>Prototype Veg Plots Database Component Description:  
+    <TITLE>Prototype Veg Plots Database Component Description: 
     plotMaster (Table)</TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
@@ -37,7 +37,7 @@
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>P</TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD></TD>
+        <TD><B>G</B></TD>
         <TD>Database assigned value that is unique to each plot.</TD>
     </TR>
     <TR>
@@ -46,7 +46,7 @@
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>F</TD>
         <TD><A HREF="project.html"><FONT SIZE="-1" FACE="arial">project</FONT></A></TD>
-        <TD></TD>
+        <TD><B>G</B></TD>
         <TD>Database assigned value for a given project.</TD>
     </TR>
     <TR>
@@ -55,9 +55,11 @@
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD>In case of plot records taken from the literature, this 
-            field will link the plot record with a citation in a child entity.&nbsp;</TD>
-        <TD>Author&#146;s Plot No - original plot number.&nbsp;</TD>
+        <TD><P>
+            <B>R</B></P>
+            In case of plot records taken from the literature, this field will link 
+            the plot record with a citation in a child entity.&nbsp;</TD>
+        <TD>Author's Plot No - original plot number.&nbsp;</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">previousPlotRecord</FONT></TD>
@@ -66,7 +68,7 @@
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD><BR>
-            This may become an individual entity to store name/date information 
+             This may become an individual entity to store name/date information 
             about re-measurements and editions of original plots.</TD>
         <TD>If this plot record represents a re-measurement of a 
             (permanent) plot, this will store the plot_id of the original plot.</TD>
@@ -77,7 +79,9 @@
         <TD><FONT SIZE="-1" FACE="arial">DATE</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD>Allow field to contain only a year.</TD>
+        <TD><P>
+            <B>R</B></P>
+            Allow field to contain only a year.</TD>
         <TD>DD-MMM-YY</TD>
     </TR>
     <TR>
@@ -98,7 +102,7 @@
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD>Use following pick list: USFS, USPS, USBLM, TNC, State, 
             Private owner, Private industrial, Local Land Trust, Unknown. Do we 
-            need others?&nbsp; Owenership confidentiality might need to 
+            need others?&nbsp; Ownership confidentiality might need to 
             become a separate field here.</TD>
         <TD>Owner of the land on which the plot is located.</TD>
     </TR>
@@ -109,9 +113,9 @@
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD>Use pick list; <BR>
-            &nbsp;1) Very thorough <BR>
-            &nbsp;2) Average effort <BR>
-            &nbsp;3) Hurried description; some less common species may 
+             &nbsp;1) Very thorough <BR>
+             &nbsp;2) Average effort <BR>
+             &nbsp;3) Hurried description; some less common species may 
             have been missed.</TD>
         <TD>Effort spent describing the plot.</TD>
     </TR>
@@ -122,10 +126,10 @@
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD>&nbsp;Use pick list <BR>
-            &nbsp; 1)&nbsp; extensive, &gt;10x plot <BR>
-            &nbsp; 2)&nbsp; small, 3-10 x plot <BR>
-            &nbsp; 3)&nbsp; very small, 1-3x plot). <BR>
-            If possible, attach a note to the field, containing information on 
+             &nbsp; 1)&nbsp; extensive, &gt;10x plot <BR>
+             &nbsp; 2)&nbsp; small, 3-10 x plot <BR>
+             &nbsp; 3)&nbsp; very small, 1-3x plot). <BR>
+             If possible, attach a note to the field, containing information on 
             adjacent vegetation and position of plot within the stand.</TD>
         <TD>Extent of plant community in relation to plant size.</TD>
     </TR>
@@ -148,17 +152,17 @@
              This field will contain size in m2.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="-1" FACE="arial">treeSamleMethod</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">treeSampleMethod</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD>A pick list could be: <BR>
-            1) only percent cover estimated <BR>
-            2) Point Quarter method <BR>
-            3) Random Pairs method <BR>
-            4) Bitterlich method <BR>
-            5) Other</TD>
+             1) only percent cover estimated <BR>
+             2) Point Quarter method <BR>
+             3) Random Pairs method <BR>
+             4) Bitterlich method <BR>
+             5) Other</TD>
         <TD>Sampling method used to describe tree cover.</TD>
     </TR>
     <TR>
@@ -192,9 +196,11 @@
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD>I suggest we use Lat./Long. rather than the UTM grid 
-            reference, because the latter cannot be used in polar regions. Our 
-            input tools will need converters between UTM and Lat/Long.</TD>
+        <TD><P>
+            <B>R</B></P>
+            I suggest we use Lat./Long. rather than the UTM grid reference, because 
+            the latter cannot be used in polar regions. Our input tools will need 
+            converters between UTM and Lat/Long.</TD>
         <TD>Latitude of plot origin.</TD>
     </TR>
     <TR>
@@ -203,7 +209,9 @@
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD>See notes above.</TD>
+        <TD><P>
+            <B>R</B></P>
+            See notes above.</TD>
         <TD>Longitude of plot origin.</TD>
     </TR>
     <TR>
@@ -212,8 +220,10 @@
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD>This will be used to calculate the Lat/Long points stored 
-            within the attribute dsgpolyo.</TD>
+        <TD><P>
+            <B>R</B></P>
+            This will be used to calculate the Lat/Long points stored within the 
+            attribute dsgpolyo.</TD>
         <TD>Shape of the plot area</TD>
     </TR>
     <TR>
@@ -222,7 +232,9 @@
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD>If&nbsp; plot size is an aggregate of noncontiguous plots, 
+        <TD><P>
+            <B>R</B></P>
+            If&nbsp; plot size is an aggregate of noncontiguous plots, 
             we need to flag this in someway or we will get inflated estimates of 
             species density.</TD>
         <TD>Area over which all species were identified and their cover 
@@ -235,6 +247,8 @@
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD><P>
+            <B>RG</B></P>
+            <P>
             To calculate this information from a rectangle, will need to know an 
             azimuth, perhaps for the first side. </P>
             We do need to allow users to submit a series of points for cases of 
@@ -259,12 +273,13 @@
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD><FONT SIZE="-1">1 = GPS within 10-20 m&nbsp;</FONT> <BR>
-            <FONT SIZE="-1">2 = GPS within 25 50 m</FONT> <BR>
-            <FONT SIZE="-1">3 = Determined by map; within 200 m</FONT> <BR>
-            <FONT SIZE="-1">4 = Weak guess from map; within 1 km</FONT> <BR>
-            <FONT SIZE="-1">5 = General locality; within 10 km</FONT> <BR>
-            <FONT SIZE="-1">6 = Region only; within 100 km</FONT> <BR>
-            <FONT SIZE="-1">7=user entered numeric value</FONT></TD>
+             <FONT SIZE="-1">2 = GPS within 25 50 m</FONT> <BR>
+             <FONT SIZE="-1">3 = Determined by map; within 200 m</FONT> <BR>
+             <FONT SIZE="-1">4 = Weak guess from map; within 1 km</FONT>
+             <BR>
+             <FONT SIZE="-1">5 = General locality; within 10 km</FONT> <BR>
+             <FONT SIZE="-1">6 = Region only; within 100 km</FONT> <BR>
+             <FONT SIZE="-1">7=user entered numeric value</FONT></TD>
         <TD>Estimated horizontal location accuracy in meters.</TD>
     </TR>
     <TR>
@@ -273,7 +288,7 @@
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD></TD>
+        <TD><B>R</B></TD>
         <TD>Altitude in meters.</TD>
     </TR>
     <TR>
@@ -283,9 +298,9 @@
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD>1 = within 10 m <BR>
-            2 = within 50 m <BR>
-            3 = within 200 m <BR>
-            4 = user entered numeric value</TD>
+             2 = within 50 m <BR>
+             3 = within 200 m <BR>
+             4 = user entered numeric value</TD>
         <TD>Estimated accuracy of the altitude measurement in meters.</TD>
     </TR>
     <TR>
@@ -294,8 +309,8 @@
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD></TD>
-        <TD>Loaction: town.</TD>
+        <TD><B>R</B></TD>
+        <TD>Location: town.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">county</FONT></TD>
@@ -303,7 +318,7 @@
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD></TD>
+        <TD><B>R</B></TD>
         <TD>Location: county.</TD>
     </TR>
     <TR>
@@ -312,7 +327,7 @@
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD></TD>
+        <TD><B>R</B></TD>
         <TD>Location: state.</TD>
     </TR>
     <TR>
@@ -321,7 +336,7 @@
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD></TD>
+        <TD><B>R</B></TD>
         <TD>Location: country.</TD>
     </TR>
     <TR>
@@ -342,21 +357,31 @@
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD><P>
-            <FONT SIZE="-1">Provide user with catagories to choose from 
+            <FONT SIZE="-1">Provide user with categories to choose from 
             such as:</FONT> <BR>
-            <FONT SIZE="-1">Flat; slope &lt;1% (&lt;0deg&nbsp; 34&#146;)</FONT>
-             <BR>
-            <FONT SIZE="-1">Gentle; slope 1-10% (0deg 34&#146;-5deg 
+             <FONT SIZE="-1">Flat; slope &lt;1% (&lt;0deg&nbsp;
+             34&#146;)</FONT> <BR>
+             <FONT SIZE="-1">Gentle; slope 1-10% (0deg 34&#146;-5deg 
             43&#146;)</FONT> <BR>
-            <FONT SIZE="-1">Moderately sloping; slope 10-25% (5deg 
+             <FONT SIZE="-1">Moderately sloping; slope 10-25% (5deg 
             43&#146;-13deg 59&#146;)</FONT> <BR>
-            <FONT SIZE="-1">Steep; slope 25-50% (13deg 59&#146;-26deg 
+             <FONT SIZE="-1">Steep; slope 25-50% (13deg 59&#146;-26deg 
             34&#146;)</FONT> <BR>
-            <FONT SIZE="-1">Very steep; slope 50-100% (26deg 
+             <FONT SIZE="-1">Very steep; slope 50-100% (26deg 
             34&#146;-45deg&nbsp; 0&#146;)</FONT> <BR>
-            <FONT SIZE="-1">Cliff; slope &gt; 100% (&gt; 45 deg)</FONT> </P>
+             <FONT SIZE="-1">Cliff; slope &gt; 100% (&gt; 45 deg)</FONT>
+             </P>
             Also allow user to enter numeric value.</TD>
         <TD>Inclination of slope in degrees.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="-1" FACE="arial">slopeShape</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
+        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Categories may include: concave, convex, regular</TD>
+        <TD>Shape of the slope.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">slopePosition</FONT></TD>
@@ -364,8 +389,8 @@
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD>Catagories may include: <BR>
-            Summit, shoulder, upper slope, middle slope, lower slope, toeslope, no 
+        <TD>Categories may include: <BR>
+             Summit, shoulder, upper slope, middle slope, lower slope, toeslope, no 
             slope</TD>
         <TD>Position of the plot on slope.</TD>
     </TR>
@@ -375,12 +400,12 @@
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
-        <TD>Suggested catagories: <BR>
-            0 = normal;&nbsp; <BR>
-            1 = location within x, where x is the distance used for CFI data;&nbsp;
+        <TD>Suggested categories: <BR>
+             0 = normal;&nbsp; <BR>
+             1 = location within x, where x is the distance used for CFI data;&nbsp;
              <BR>
-            2 = complete confidentiality.&nbsp;</TD>
-        <TD>Indicator of location confidetiality.</TD>
+             2 = complete confidentiality.&nbsp;</TD>
+        <TD>Indicator of location confidentiality.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">specConfidentiaility</FONT></TD>
@@ -392,7 +417,7 @@
             based on a state-specific list of sensitive species.&nbsp;
              We have to allow this flag to be changed as our understanding of what 
             is sensitive evolves.</TD>
-        <TD>Indicator of specices confidentiality.</TD>
+        <TD>Indicator of species confidentiality.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">hydrologicRegime</FONT></TD>
@@ -401,21 +426,21 @@
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD><FONT SIZE="-1">Non-Tidal&nbsp;</FONT> <BR>
-            <FONT SIZE="-1">&nbsp;1) Permanently flooded</FONT> <BR>
-            <FONT SIZE="-1">2) Intermittently exposed</FONT> <BR>
-            <FONT SIZE="-1">3) Semi-permanently flooded</FONT> <BR>
-            <FONT SIZE="-1">4) Seasonally flooded</FONT> <BR>
-            <FONT SIZE="-1">5) Saturated</FONT> <BR>
-            <FONT SIZE="-1">6) Temporarily flooded</FONT> <BR>
-            <FONT SIZE="-1">7) Intermittently flooded</FONT> <BR>
-            <FONT SIZE="-1">8) Artificially flooded</FONT> <BR>
-            <FONT SIZE="-1">9) Unknown</FONT> <BR>
-            <FONT SIZE="-1">&nbsp;Tidal&nbsp;</FONT> <BR>
-            <FONT SIZE="-1">&nbsp;1)&nbsp; Subtidal</FONT> <BR>
-            <FONT SIZE="-1">&nbsp;2) Irregularly exposed</FONT> <BR>
-            <FONT SIZE="-1">1) Regularly exposed&nbsp;</FONT> <BR>
-            <FONT SIZE="-1">2) Irregularly flooded</FONT> <BR>
-            <FONT SIZE="-1">3) Unknown</FONT></TD>
+             <FONT SIZE="-1">&nbsp;1) Permanently flooded</FONT> <BR>
+             <FONT SIZE="-1">2) Intermittently exposed</FONT> <BR>
+             <FONT SIZE="-1">3) Semi-permanently flooded</FONT> <BR>
+             <FONT SIZE="-1">4) Seasonally flooded</FONT> <BR>
+             <FONT SIZE="-1">5) Saturated</FONT> <BR>
+             <FONT SIZE="-1">6) Temporarily flooded</FONT> <BR>
+             <FONT SIZE="-1">7) Intermittently flooded</FONT> <BR>
+             <FONT SIZE="-1">8) Artificially flooded</FONT> <BR>
+             <FONT SIZE="-1">9) Unknown</FONT> <BR>
+             <FONT SIZE="-1">&nbsp;Tidal&nbsp;</FONT> <BR>
+             <FONT SIZE="-1">&nbsp;1)&nbsp; Subtidal</FONT> <BR>
+             <FONT SIZE="-1">&nbsp;2) Irregularly exposed</FONT> <BR>
+             <FONT SIZE="-1">1) Regularly exposed&nbsp;</FONT> <BR>
+             <FONT SIZE="-1">2) Irregularly flooded</FONT> <BR>
+             <FONT SIZE="-1">3) Unknown</FONT></TD>
         <TD>FGDC hydrologic regime (follows Cowardin et al. 1979.)</TD>
     </TR>
     <TR>
@@ -445,7 +470,7 @@
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD>e.g., outwash sand, glacial till, etc.:&nbsp;</TD>
-        <TD>Surficial geology type.</TD>
+        <TD>Surface geology type.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">geoBedRx</FONT></TD>
@@ -464,7 +489,7 @@
         <TD></TD>
         <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD>Expand this to contain multiple fields</TD>
-        <TD>User derined field.</TD>
+        <TD>User defined field.</TD>
     </TR>
 </TABLE>
 <P>
@@ -478,6 +503,6 @@ tables:</FONT> </P>
  HREF="citation.html">citation</A>, <A HREF="graphic.html">graphic</A>, <A
  HREF="uniformity.html">uniformity</A></FONT> </P>
 <P>
-<FONT SIZE="-1">last updated: Thu Aug 31 13:32:36 PDT 2000</FONT> </P>
+<FONT SIZE="-1">last updated: </FONT>Wed Sep 6 20:26:17 PDT 2000</P>
 </BODY>
 </HTML>
