@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<!-- 
+  * build_client.xml
+  *
+  *	Authors: John Harris
+  *	Copyright: 2000 Regents of the University of California and the
+  *           National Center for Ecological Analysis and Synthesis
+  *  Build file for the Ant cross-platform build system for metacat
+  *  See http://jakarta.apache.org for details on Ant  
+  *  
+	* this build file builds the client software for the 
+	* national plots database including: the interfaces, the
+	* embedded database(s) etc.  Before building this check the 
+	* dependencies
+--> 
+<project name="plotLoader" default="dist" basedir=".">
+	<target name="init">
+	<tstamp/>
+  
+	<property name="current" value="./" />
+	<property name="build" value="./build" />
+	<property name="build_src" value="./build/src/client" />
+	<property name="build_lib" value="build/lib" />
+	<property name="build_html" value="build/html" />
+	<property name="build_bin" value="build/bin" />
+	
+	<property name="build_communication" value="./build/src/client/communication" />
+	<property name="build_interface" value="./build/src/client/interface" />
+	<property name="build_embedded_db" value="./build/src/client/embedded_db" />
+	<property name="src_communication" value="./client" />
+	<property name="src_interface" value="./interface" />
+	<property name="src_embedded_db" value="./embeddedDb" />
+	<property name="src_bin" value="../bin" />
+	
+	<property name="src_xml" value="../xml"/>
+	<property name="utility_src" value="./utilities" />
+	<property name="embeddedDB_src" value="./embeddedDB" /> 
+
+	<property name="release" value="development"/>
+	<property name="dbAccess_src" value="./plotAccess"/>
+	<property name="database_access_module" value="build/lib/dbAccess.jar" />
+	
+	<filter token="version" value="development"/>
+	
+	
+	<property name="cpath" 
+		value="${build_communication}:${build_interface}:${database_access_module}./"/>
+</target>
+
+<target name="prepare" depends="init">
+	<mkdir dir="${build_communication}" />
+	<mkdir dir="${build_interface}" />
+	<mkdir dir="${build_src}" />
+	<mkdir dir="${build_embedded_db}" />
+	
+<!-- 
+	* get the resources for the embedded database 
+	* including the java classes used to replicate 
+	* data between the central server and the local 
+	* database as well as to optomize the local database  
+	* and the database properties file(s)
+-->
+	<copydir src="${src_embedded_db}"
+		dest="${build_embedded_db}"
+    filtering="yes"
+		includes="LocalDatabaseManager.java database.properties"
+		excludes="**/CVS* "
+	/>
+
+	<copydir src="${src_bin}"
+		dest="${build_bin}"
+    filtering="yes"
+		includes="vegclient.sh vegclient.bat"
+		excludes="**/CVS* "
+	/>
+
+<!-- 
+	* client library src which contains the classes 
+	* to do such things as request data from the servlet  
+	-->
+	<copydir src="${src_communication}"
+		dest="${build_communication}"
+    filtering="yes"
+    includes="DataRequestClient.java 
+			DataExchangeClient.java HttpMessage.java 
+			DataRequestHandler.java **.properties"
+    excludes="**/CVS* "
+	/>
+
+
+<!-- 
+	* get the source code for the interface classes 
+	*	and the manifest file that is used to create 
+	*executable jar file 
+-->
+	<copydir src="${src_interface}" 
+		dest="${build_interface}" 
+    filtering="yes"
+    includes="HtmlViewer.java DataUpload.java QueryModule.java 
+		MenuTest.java interface.properties manifest"
+    excludes="**/CVS* "
+	/>
+	
+	<!--
+		* now get any binary files that should not be filtered
+		* -->
+		<copydir src="${src_interface}" 
+		dest="${build_interface}" 
+    filtering="no"
+    includes="**.gif **.jpeg"
+    excludes="**/CVS* "
+	/>
+
+</target>	
+	
+	
+<!-- compile all the java code -->
+<target name="compile" depends="prepare">
+
+<javac srcdir="${build_communication}" 
+		classpath="${cpath}"
+		includes="**.java  " 
+		destdir="${build_communication}"
+	/>
+	
+	<javac srcdir="${build_interface}" 
+		classpath="${cpath}"
+		includes="**.java  " 
+		destdir="${build_interface}"
+	/>
+	
+	<javac srcdir="${build_embedded_db}" 
+		classpath="${cpath}"
+		includes="**.java  " 
+		destdir="${build_embedded_db}"
+	/>
+</target>	
+	
+	
+	
+<target name="dist" depends="compile">
+	
+<!-- 
+	* archive the client communication classes
+	* into a single archive
+-->
+	<jar jarfile ="${build_lib}/clientcommunication.jar"
+		basedir="${build_communication}"
+		includes="${build_communication}/ ** "
+	/>
+	<!-- 
+		* copy this archive into the inteface dir
+		* so that is incorporated into the interface 
+		* main archive
+		-->
+	<copyfile src="${build_lib}/clientcommunication.jar" 
+		filtering="no" 
+		dest="${build_interface}/clientcommunication.jar" 
+	/>
+	<!-- now archive that jar file into the main interface-->
+	
+	<jar jarfile ="${build_lib}/interface.jar"
+		basedir="${build_interface}"
+		manifest="${build_interface}/manifest"
+		includes="${build_interface}/ ** ${src_interface}/test.gif"
+	/>
+	
+	
+</target>
+
+</project>
