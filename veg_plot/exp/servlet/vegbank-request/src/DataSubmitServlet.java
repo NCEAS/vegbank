@@ -28,8 +28,8 @@ import PlantTaxaLoader;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-05-30 23:52:00 $'
- *  '$Revision: 1.30 $'
+ *  '$Date: 2002-06-08 18:46:14 $'
+ *  '$Revision: 1.31 $'
  */
 
 
@@ -41,7 +41,9 @@ public class DataSubmitServlet extends HttpServlet
 	private String communityValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
 	private String commUpdateScript = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/update_community_summary.sql";
 	
-	private String plantValidationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-submit_valid.html";
+	// this is the pre-transformed init template 
+	private String plantValidationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-submit-template.html";
+	//this is the file that has the updated tokens and should be shown to the client
 	private String plantValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-valid.html";
 	
 	ResourceBundle rb = ResourceBundle.getBundle("vegbank");
@@ -154,7 +156,13 @@ public class DataSubmitServlet extends HttpServlet
 	/**
 	 * method to handle the submittal of a new plant into the plant taxonomy 
 	 * database.  The proccesses here very closely mimic those in the submittal
-	 * of a community
+	 * of a community.  This method represents the wizard for loading new plant taxa
+	 * and the steps included in the wizard are:
+	 * 1] init -- submit the new plant name(s)
+	 *
+	 * @param params -- a hashtable with all the parameter name, value pairs
+	 * @param response -- the http response object
+	 * @return sb -- stringbuffer with any errors or warnings etc.
 	 */
 	private StringBuffer handlePlantTaxaSubmittal(Hashtable params, HttpServletResponse response)
 	{
@@ -168,30 +176,33 @@ public class DataSubmitServlet extends HttpServlet
 			String salutation= "";
 			String firstName = "";
 			String lastName = "";
-			String emailAddress = "";
+			String emailAddress = this.user;
 			String orgName = "";
 			
 			String action = (String)params.get("action");
+			// if the wizard is initiated the plant names will be checked against the 
+			// vegbank database for near matches and a form with these matches will be 
+			// sent to the client
 			if ( action.equals("init") )
 			{
 				System.out.println("DataSubmitServlet > init plantTaxa");
-				salutation = (String)params.get("salutation");;
-				firstName =  (String)params.get("firstName");
-				lastName =  (String)params.get("lastName");
-				emailAddress =  (String)params.get("emailAddress");
-				orgName =  (String)params.get("orgName");
+			//	salutation = (String)params.get("salutation");;
+			//	firstName =  (String)params.get("firstName");
+			//	lastName =  (String)params.get("lastName");
+			//	emailAddress =  (String)params.get("emailAddress");
+			//	orgName =  (String)params.get("orgName");
 				
 				// the next 3 attributes refer to the plant name that the 
 				// user is trying to insert into the database
 				longName = (String)params.get("longName");
 				shortName = (String)params.get("shortName");
 				code = (String)params.get("code");
-				taxonDescription = (String)params.get("taxonDescription");
+		//		taxonDescription = (String)params.get("taxonDescription");
 		
 				System.out.println("DataSubmitServlet > longName: " + longName);
 				System.out.println("DataSubmitServlet > shortName: " + shortName);
 				System.out.println("DataSubmitServlet > code: " + code);
-				System.out.println("DataSubmitServlet > description: " + taxonDescription);
+			//	System.out.println("DataSubmitServlet > description: " + taxonDescription);
 				
 				// get the data already stored in the database with corresponding to the names
 				String longNameMessage = "";
@@ -214,14 +225,17 @@ public class DataSubmitServlet extends HttpServlet
 				else 
 					{ codeMessage = "Not Currently in VegBank"; }
 				
-				System.out.println("DataSubmitServlet > longName match: " + lv.toString() );
+				Vector longNameNearMatches = tqs.getNameNearMatches(longName);
+				//System.out.println("DataSubmitServlet > longName match: " + lv.toString() );
+				
 				
 				//update the validation page that is returned to the user
-				updatePlantValidationPage(salutation, firstName, lastName, emailAddress, orgName, 
-				longName, shortName, code, taxonDescription, longNameMessage, shortNameMessage, codeMessage);
+				updatePlantValidationPage(emailAddress,  longName, shortName,  code, 
+				longNameMessage,  shortNameMessage, codeMessage, longNameNearMatches);
 				
 				//redirect the browser
 				response.sendRedirect("/forms/plant-valid.html");
+				
 			}
 			//THIS WHERE THE ACTUAL SUBMITTAL OF THE NEW COMMUNITY TAKES PLACE
 			else if ( action.equals("submit") )
@@ -276,20 +290,15 @@ public class DataSubmitServlet extends HttpServlet
 	 * @return -- retuns false if there are any exceptions thrown while
 	 * 	genetaing the html form
 	 */
-	 private boolean updatePlantValidationPage(String salutation, String firstName, String lastName, 
-	 String emailAddress, String orgName, String longName, String shortName, String code, 
-	 String taxonDescription, String longNameMessage, String shortNameMessage, String codeMessage)
+	 private boolean updatePlantValidationPage(String emailAddress, String longName, 
+	 String shortName, String code, String longNameMessage, String shortNameMessage, 
+	 String codeMessage, Vector longNameMatches)
 	 {
 		 try
 		 {
 			 Hashtable replaceHash = new Hashtable();
 			 // party-related attributes
-			 replaceHash.put("level", "unknown");
-			 replaceHash.put("salutation", ""+salutation);
-			 replaceHash.put("firstName", ""+firstName);
-			 replaceHash.put("lastName", ""+lastName);
 			 replaceHash.put("emailAddress", ""+emailAddress);
-			 replaceHash.put("orgName" , ""+orgName);
 			 
 			 //plant name-related attributes
 			 replaceHash.put("longName", longName );
@@ -299,9 +308,19 @@ public class DataSubmitServlet extends HttpServlet
 			 replaceHash.put("shortNameMessage", shortNameMessage );
 			 replaceHash.put("codeMessage", codeMessage);
 			 
-			 //plant concept-related attributes
-			 replaceHash.put("taxonDescription", taxonDescription );
+			 // test of the drop down with near matches
+			 StringBuffer sb = new StringBuffer();
+			 sb.append("<select name=\"nearMatches\">");
+			 for (int i=0; i < longNameMatches.size(); i++) 
+			 {
+				 sb.append("<option> "+(String)longNameMatches.elementAt(i)+" </option>");
+			 }
+			 sb.append("</select>");
+			 replaceHash.put("longNameNearMatches", sb.toString() );
 			 
+			 //the message telling the client that there are near matches
+			 replaceHash.put("longNameNearMatchMessages", "VegBank has " +longNameMatches.size()+ " near matches" );
+				
 			 su.filterTokenFile(plantValidationTemplate, plantValidationForm, replaceHash);
 		 }
 		 catch( Exception e ) 
@@ -1050,8 +1069,6 @@ public class DataSubmitServlet extends HttpServlet
 			System.out.println("DataSubmitServlet > commName: " + commName);
 			System.out.println("DataSubmitServlet > commLevel: " + commCode);
 			System.out.println("DataSubmitServlet > commCode: " + commLevel);
-			
-			
 			System.out.println("DataSubmitServlet > salutation: " + salutation);
 			System.out.println("DataSubmitServlet > firstname: " + firstName);
 			System.out.println("DataSubmitServlet > lastName: " + lastName );
