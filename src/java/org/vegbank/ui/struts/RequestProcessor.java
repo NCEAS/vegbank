@@ -19,8 +19,8 @@ import org.vegbank.ui.struts.Authentication;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-12-10 19:42:08 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-01-16 02:11:44 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -164,7 +164,6 @@ public class RequestProcessor extends org.apache.struts.action.RequestProcessor
 	 * Return <code>true</code> to continue normal processing, or <code>false</code>
 	 * if the check failed.
 	 *
-	 * @param rp the request processor we are currently using
 	 * @param request The servlet request we are processing
 	 * @param response The servlet response we are creating
 	 * @param mapping The mapping we are using

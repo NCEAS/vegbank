@@ -8,8 +8,8 @@ import org.apache.struts.action.ActionMapping;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-12-10 19:42:08 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-01-16 02:11:44 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,13 +32,12 @@ import org.apache.struts.action.ActionMapping;
  * <ul>
  * <li><b>authClass</b> - The name of the authentication class which checks if the
  *     user is allowed to execute the action.</li>
- * <li><b>minCertLevel</b> - The minimum Certification Level is checked to see 
- *     if the user is allowed to execute the action.</li>
+ * <li><b>reqRoles</b> - A comma separated list of all required roles for an action</li>
  * </ul>
  * </p>
  * 
  * @author farrell
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class VegbankActionMapping extends ActionMapping
 {
