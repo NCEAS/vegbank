@@ -49,6 +49,7 @@ public class fileDownload extends HttpServlet
 	private String plotRequestList = null;
 	private String atomicResultSet = null;
 	private String cummulativeResultSet= null;
+	public String DataRequestServletURL=null;
 
 	int debugLevel=0;
 
@@ -107,7 +108,9 @@ public class fileDownload extends HttpServlet
 			debugLevel =  Integer.parseInt(buf);	
 		}	
 		fileName = (String)params.get("fileName");
-		fileNamePath = downloadPath+fileName.trim();
+		//fileNamePath = downloadPath+fileName.trim();
+		
+		
 		fileFormatType = (String)params.get("formatType");
 		aggregationType = (String)params.get("aggregationType");
 		userNotes = (String)params.get("userNotes");
@@ -118,6 +121,12 @@ public class fileDownload extends HttpServlet
 		plotRequestList=(rb.getString("requestparams.plotRequestList"));
 		atomicResultSet = (rb.getString("requestparams.atomicResultSet"));
 		cummulativeResultSet= (rb.getString("requestparams.cummulativeResultSet"));
+		DataRequestServletURL= (rb.getString("requestparams.DataRequestServletURL"));
+		//this is the path and filename of the download file
+		//and should be passed to the file copy method the downLoad
+		//path should be absolute
+		fileNamePath = downloadPath+"/"+fileName.trim();
+		System.out.println("download file will be copied to: "+fileNamePath);
 
 		}//end try
 		catch( Exception e ) 
@@ -138,7 +147,8 @@ try
 	if (debugLevel !=1) 
 	{
 		//request the plots from the database  
-		dataRequester(plotRequestList, atomicResultSet, cummulativeResultSet, "entirePlot");
+		dataRequester(plotRequestList, atomicResultSet, cummulativeResultSet, 
+			"entirePlot");
 
 		//transform the data to the appropriate data type 
 
@@ -146,6 +156,7 @@ try
 		dataCompressor(cummulativeResultSet, fileNamePath, "gzip"); 
 
 		//redirect the user to the appropriate file - if the debugger is off == 0
+		//this has to be fixed
 		response.sendRedirect("/harris/downloads/"+fileName);
 	}
 
@@ -220,9 +231,13 @@ catch( Exception e )
 				String plotId = a.outVector.elementAt(i).toString().trim();
 
 				//make the request directly to the DataRequestServlet
-				String uri = "http://dev.nceas.ucsb.edu/harris/servlet/"
-				+"DataRequestServlet?requestDataType=vegPlot&plotId="+plotId+"&"
-				+"resultType=full&queryType=simple";
+			//	String uri = "http://dev.nceas.ucsb.edu/harris/servlet/"
+			//	+"DataRequestServlet?requestDataType=vegPlot&plotId="+plotId+"&"
+			//	+"resultType=full&queryType=simple";
+			
+			String uri = DataRequestServletURL+"?requestDataType=vegPlot&plotId="
+			+plotId+"&"+"resultType=full&queryType=simple";
+			
 				int port=80;
 				String requestType="POST";
 
