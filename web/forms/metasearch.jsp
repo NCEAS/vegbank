@@ -116,7 +116,7 @@ if (xwhereParams == null) {
 			<logic:equal name="onerow" property="entity" value="plot">
 				<bean:define id="getPk" value="observation"/>
 				<bean:define id="getName" value="observation"/>
-				<bean:define id="getView" value="simple"/>
+				<bean:define id="getView" value="summary"/>
 				<% getExtra = getExtra + "&perPage=3"; %>
 			</logic:equal>
 			<logic:equal name="onerow" property="entity" value="covermethod">
