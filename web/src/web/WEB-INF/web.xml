@@ -51,14 +51,6 @@
             </servlet>
 
             <servlet>
-              <servlet-name>authenticate</servlet-name>
-               <description>A standalone servlet used for authenticating a user</description>
-              <servlet-class>org.vegbank.servlet.authentication.AuthenticationServlet</servlet-class>
-              <load-on-startup>5</load-on-startup>
-            </servlet>
-
-
-            <servlet>
               <servlet-name>usermanagement</servlet-name>
               <description>A standalone servlet used for authenticating a user</description>
               <servlet-class>org.vegbank.servlet.usermanagement.UserManagementServlet</servlet-class>
@@ -101,11 +93,6 @@
               <servlet-name>framework</servlet-name>
               <url-pattern>/servlet/framework</url-pattern>
             </servlet-mapping>
-
-            <servlet-mapping>
-              <servlet-name>authenticate</servlet-name>
-              <url-pattern>/servlet/authenticate</url-pattern>
-            </servlet-mapping> 
 
             <servlet-mapping>
               <servlet-name>usermanagement</servlet-name>
