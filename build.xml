@@ -1,16 +1,5 @@
 <?xml version="1.0"?>
-<!-- 
-  * build.xml
-  *
-  * Global build script for vegbank.
-  * The build.context must be entered for all task, to avoid this hassle you 
-  * can call ant like this:
-  *  % echo "[build.context]" | ant [target]
-  *
-  *     '$Author: anderson $'
-  *     '$Date: 2005-03-11 01:52:10 $'
-  *     '$Revision: 1.61 $'
--->
+<!--    * build.xml   *   * Global build script for vegbank.   * The build.context must be entered for all task, to avoid this hassle you    * can call ant like this:   *  % echo "[build.context]" | ant [target]   *   *     '$Author: mlee $'   *     '$Date: 2005-03-30 19:40:43 $'   *     '$Revision: 1.62 $' -->
 <project name="Vegbank" default="jar" basedir=".">
   <!-- ================================================================= -->
   <!-- Initialize simple properties, no context handling                 -->
@@ -88,11 +77,7 @@
       </not>
     </condition>
     <property name="web.status.dir" value="${apache.document.root}/status"/>
-    <!--
-      * The following filters expect the database connection properties
-      * be set in the user custom build.properties file. There is an example 
-      * of this file in cvs.
-    -->
+    <!--       * The following filters expect the database connection properties       * be set in the user custom build.properties file. There is an example        * of this file in cvs.     -->
     <filter token="databaseType" value="${databaseType}"/>
     <filter token="databaseUser" value="${databaseUser}"/>
     <filter token="databaseUserPassword" value="${databaseUserPassword}"/>
@@ -112,10 +97,10 @@
     <!-- End filters created from build.${context}.properties -->
     <!-- Copied these straight from the veg_plot build.xml, are they relevant ? -->
     <!-- Servlet specific -->
-	<filter token="mailHost" value="${mail_host}"/>
-	<filter token="mailPort" value="${mail_port}"/>
-	<filter token="machineURL" value="${machine_url}"/>
-	<filter token="serverAddress" value="${machine_url}${eighty_eighty}"/>
+    <filter token="mailHost" value="${mail_host}"/>
+    <filter token="mailPort" value="${mail_port}"/>
+    <filter token="machineURL" value="${machine_url}"/>
+    <filter token="serverAddress" value="${machine_url}${eighty_eighty}"/>
     <filter token="systemEmail" value="${system_email}"/>
     <filter token="genericForm" value="${web.context}/forms/generic_form.html"/>
     <filter token="genericTemplate" value="${web.context}/forms/tmp.html"/>
@@ -123,9 +108,7 @@
     <filter token="uploadDir" value="${web.lib.dir}"/>
     <filter token="servlet_lib_dir" value="${web.lib.dir}/"/>
     <filter token="servlet_context" value="${web.context}/"/>
-    <!--
-      * Make all the build directories
-    -->
+    <!--       * Make all the build directories     -->
     <mkdir dir="${build.src.dir}"/>
     <mkdir dir="${build.lib.dir}"/>
     <mkdir dir="${build.sql.src.dir}"/>
@@ -161,10 +144,7 @@
   <!-- Make the jars                                                     -->
   <!-- ================================================================= -->
   <target name="jar" depends="compile" description="==> Generates all jars in vegbank">
-    <!-- 
-			The whole project in a single jar, maybe a good idea to split it
-			up, but I cannot think of any advantages right now 
-		-->
+    <!--  			The whole project in a single jar, maybe a good idea to split it 			up, but I cannot think of any advantages right now  		-->
     <jar destfile="${build.lib.dir}/vegbank.jar">
       <fileset dir="${build.classes.dir}" casesensitive="yes">
         <include name="**/*.class"/>
@@ -183,10 +163,7 @@
         <include name="csvtools.xsl"/>
       </fileset>
     </jar>
-    <!--
-			Copy all support jars into the build dir
-			before being deployed 
-		-->
+    <!-- 			Copy all support jars into the build dir 			before being deployed  		-->
     <copy todir="${build.lib.dir}">
       <fileset dir="${lib.dir}" includes="*jar"/>
     </copy>
@@ -226,10 +203,7 @@
   <target name="deploy" depends="deploy-jars, deploy-sql" description="==> deploys vegbank module jars, html and other resources">
     <ant target="deploy-web" inheritAll="true"/>
     <echo>db connect: ${databaseConnectString}</echo>
-    <!-- disable generic display that Gabe made: <mkdir dir="${web.context}/GenJSP"/>
-    <copy todir="${web.context}/GenJSP">
-      <fileset dir="${build.jsp.src.dir}" includes="*jsp"/>
-    </copy> -->
+    <!-- disable generic display that Gabe made: <mkdir dir="${web.context}/GenJSP"/>     <copy todir="${web.context}/GenJSP">       <fileset dir="${build.jsp.src.dir}" includes="*jsp"/>     </copy> -->
     <echo>copying ${build.java.src.dir}/velocity.properties to web context base</echo>
     <copy todir="${web.context}">
       <fileset dir="${build.java.src.dir}" includes="velocity.properties"/>
@@ -247,10 +221,7 @@
     <antcall target="db_verify_andfail" description="check to see that model is implemented correctly"/>
     <antcall target="deploy-web-all" inheritAll="true"/>
     <echo>db connect: ${databaseConnectString}</echo>
-    <!-- disable Gabe's generic displayer  <mkdir dir="${web.context}/GenJSP"/>
-    <copy todir="${web.context}/GenJSP">
-      <fileset dir="${build.jsp.src.dir}" includes="*jsp"/>
-    </copy> -->
+    <!-- disable Gabe's generic displayer  <mkdir dir="${web.context}/GenJSP"/>     <copy todir="${web.context}/GenJSP">       <fileset dir="${build.jsp.src.dir}" includes="*jsp"/>     </copy> -->
     <echo>copying ${build.java.src.dir}/velocity.properties to web context base</echo>
     <copy todir="${web.context}">
       <fileset dir="${build.java.src.dir}" includes="velocity.properties"/>
@@ -280,29 +251,21 @@
     <copy todir="${web.lib.dir}">
       <fileset dir="${build.lib.dir}" includes="*jar" excludes="servlet.jar"/>
     </copy>
-    <!--echo>deleting ${web.classes.dir}</echo>
-    <delete dir="${web.classes.dir}"/-->
+    <!--echo>deleting ${web.classes.dir}</echo>     <delete dir="${web.classes.dir}"/-->
   </target>
   <target name="deploy-props" depends="jar,deploy-prepare" description="==> deploys properties files to WEB-INF/classes">
     <echo message="Distr all properties files in ${build.lib.dir}/vegbank.jar to ${web.classes.dir}"/>
     <echo>deploying properties files to ${web.classes.dir}</echo>
     <unjar src="${build.lib.dir}/vegbank.jar" dest="${web.classes.dir}">
       <patternset>
-		  <include name="**/*.properties"/>
+        <include name="**/*.properties"/>
       </patternset>
     </unjar>
     <echo>copying ${build.java.src.dir}/velocity.properties to web context base</echo>
     <copy todir="${web.context}">
       <fileset dir="${build.java.src.dir}" includes="velocity.properties"/>
     </copy>
-    <echo file="${build.status.dir}/deploy-props.txt">
-      -----------------DEPLOY PROPS STATUS------------------------@subst_lt@br/@subst_gt@
-      Properties last deployed at time: ${currentTime} @subst_lt@br/@subst_gt@
-      Connection to database Name: ${databaseName} @subst_lt@br/@subst_gt@
-      Deployed from : ${basedir} @subst_lt@br/@subst_gt@
-      vegbank version: ${vegbankVersion} @subst_lt@br/@subst_gt@
-      ---------------------------------------------------------------------@subst_lt@br/@subst_gt@
-      </echo>
+    <echo file="${build.status.dir}/deploy-props.txt">       -----------------DEPLOY PROPS STATUS------------------------@subst_lt@br/@subst_gt@       Properties last deployed at time: ${currentTime} @subst_lt@br/@subst_gt@       Connection to database Name: ${databaseName} @subst_lt@br/@subst_gt@       Deployed from : ${basedir} @subst_lt@br/@subst_gt@       vegbank version: ${vegbankVersion} @subst_lt@br/@subst_gt@       ---------------------------------------------------------------------@subst_lt@br/@subst_gt@       </echo>
     <!-- check the model, but don't fail on errors! -->
     <antcall target="db_verify"/>
     <!-- copy status files to the file to server -->
@@ -311,12 +274,11 @@
     </copy>
   </target>
   <target name="deploy-sql" depends="prepare">
-    <mkdir dir="${vegbank.home.dir}/sql" />
+    <mkdir dir="${vegbank.home.dir}/sql"/>
     <copy todir="${vegbank.home.dir}/sql" filtering="no" overwrite="yes">
-      <fileset dir="./src/sql/denorm" includes="*.sql" />
+      <fileset dir="./src/sql/denorm" includes="*.sql"/>
     </copy>
   </target>
-  
   <!-- ================================================================= -->
   <!-- Deploy only web resources                                         -->
   <!-- ================================================================= -->
@@ -361,11 +323,7 @@
       </fileset>
       <report format="frames" todir="${web.context}/dev/reports/junit" styledir="${ant.style.dir}"/>
     </junitreport>
-    <echo>
-	**************************************************
-	Reports distributed to ${build.context}/dev/reports on tomcat
-	**************************************************	
-    </echo>
+    <echo> 	************************************************** 	Reports distributed to ${build.context}/dev/reports on tomcat 	**************************************************	     </echo>
   </target>
   <!-- ================================================================= -->
   <!-- Generate model beans, XML Digester rules, XML schema and JSP from -->
@@ -388,42 +346,16 @@
       <arg line="-IN ${docs.dir}/xml/utility/UtilityBeans.xml -XSL ${xsl.src.dir}/UtilityXMLToJavaBeans.xsl -OUT ${model.generated.flag} -PARAM outdir ${build.javadatamodel.utility.src.dir}/"/>
       <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
     </java>
-    <!-- disable Gabe's generic dislay   <echo>Generate the jsp for displaying entities into ... ${build.jsp.src.dir}/ </echo>
-  <java classname="org.apache.xalan.xslt.Process" fork="true">
-      <arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/VegBankModel2JSP.xsl -OUT ${model.generated.flag} -PARAM outdir ${build.jsp.src.dir}/"/>
-      <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
-    </java> -->
-    <!-- 
-	Ugly solution for ugly problem, XSL transform insists on putting xmlns:name="name"
-	attribute in its output of tags like <bean:define ... />, this strips em out.
-	-->
-    <!-- disable Gabe's generic dislay    <replaceregexp match='xmlns:[^=]*="dummy"' replace="" flags="gs" byline="true">
-      <fileset dir="${build.jsp.src.dir}" includes="**/*.jsp"/>
-    </replaceregexp> -->
+    <!-- disable Gabe's generic dislay   <echo>Generate the jsp for displaying entities into ... ${build.jsp.src.dir}/ </echo>   <java classname="org.apache.xalan.xslt.Process" fork="true">       <arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/VegBankModel2JSP.xsl -OUT ${model.generated.flag} -PARAM outdir ${build.jsp.src.dir}/"/>       <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>     </java> -->
+    <!--  	Ugly solution for ugly problem, XSL transform insists on putting xmlns:name="name" 	attribute in its output of tags like <bean:define ... />, this strips em out. 	-->
+    <!-- disable Gabe's generic dislay    <replaceregexp match='xmlns:[^=]*="dummy"' replace="" flags="gs" byline="true">       <fileset dir="${build.jsp.src.dir}" includes="**/*.jsp"/>     </replaceregexp> -->
     <echo>Generate the vegbank schema xsd file ... ${build.lib.dir}/${vegbank.schema.data}</echo>
     <java classname="org.apache.xalan.xslt.Process" fork="true">
       <arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${docs.dir}/xml/dbmodel-to-schema.xsl -OUT ${build.lib.dir}/${vegbank.schema.data}"/>
       <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
     </java>
-    <!-- NOT USED YET, ALLOWS USE OF THE BEANLOADER CODE FOR UPLOADING XML
-		generate a digester rules.xml so xml can be read into a VBModelBean Tree 
-	<echo>Generate the Digester Rules ( for reading XML into Beans ) ... ${build.java.src.dir}/</echo>
-	<java classname="org.apache.xalan.xslt.Process"
-		fork="true">
-		<arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/GenDigesterRules.xsl -OUT ${build.java.src.dir}/DigesterRules.xml "/>
-		<jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
-	</java>
-	-->
-    <!-- generate the ForeignTables property  file   
-		THIS FILE MUST BE HAND EDITED AS I CANNOT FIGURE OUT GENERATION LOGIC ( order in which to visit child tables )
-		This is useful for creating the properties file initially, and then hand edit  
-	<echo>Generate the ForeignTables.properties into ${build.java.src.dir}</echo>
-	<java classname="org.apache.xalan.xslt.Process"
-		fork="true">
-		<arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/GenForeignTableProps.xsl -OUT ${build.java.src.dir}/ForeignTables.properties "/>
-		<jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
-	</java>
-	-->
+    <!-- NOT USED YET, ALLOWS USE OF THE BEANLOADER CODE FOR UPLOADING XML 		generate a digester rules.xml so xml can be read into a VBModelBean Tree  	<echo>Generate the Digester Rules ( for reading XML into Beans ) ... ${build.java.src.dir}/</echo> 	<java classname="org.apache.xalan.xslt.Process" 		fork="true"> 		<arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/GenDigesterRules.xsl -OUT ${build.java.src.dir}/DigesterRules.xml "/> 		<jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/> 	</java> 	-->
+    <!-- generate the ForeignTables property  file    		THIS FILE MUST BE HAND EDITED AS I CANNOT FIGURE OUT GENERATION LOGIC ( order in which to visit child tables ) 		This is useful for creating the properties file initially, and then hand edit   	<echo>Generate the ForeignTables.properties into ${build.java.src.dir}</echo> 	<java classname="org.apache.xalan.xslt.Process" 		fork="true"> 		<arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/GenForeignTableProps.xsl -OUT ${build.java.src.dir}/ForeignTables.properties "/> 		<jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/> 	</java> 	-->
   </target>
   <!-- ================================================================= -->
   <!-- Compile the java code                                             -->
@@ -454,10 +386,7 @@
       <classpath refid="classpath.compilation"/>
     </javac>
   </target>
-  <!--
-   * Some property files have values that are filtered by ant, delete these so 
-   * ant can filter them again.
-  -->
+  <!--    * Some property files have values that are filtered by ant, delete these so     * ant can filter them again.   -->
   <target name="cleanprops" depends="prepare" description="==> Remove generated properties files">
     <echo>cleanprops: removing old generated properties files</echo>
     <delete>
@@ -509,44 +438,16 @@
         <include name="**/*"/>
       </fileset>
     </chmod>
-    <!-- For sanity preservation 
-	#### NEED TO BE OWNER TO CHANGE THESE, NEED TO FIND OUT HOW TO GET ANT TO RUN AS TOMCAT USER!!
-   <exec executable="chmod" >
-     <arg line="-R g+wr ${vegbank.home.dir} ${env.TOMCAT_HOME}/webapps"/>
-   </exec>
-   <exec executable="chown" >
-     <arg line="-R :vegbank ${vegbank.home.dir} ${env.TOMCAT_HOME}/webapps"/>
-   </exec>
-   -->
+    <!-- For sanity preservation  	#### NEED TO BE OWNER TO CHANGE THESE, NEED TO FIND OUT HOW TO GET ANT TO RUN AS TOMCAT USER!!    <exec executable="chmod" >      <arg line="-R g+wr ${vegbank.home.dir} ${env.TOMCAT_HOME}/webapps"/>    </exec>    <exec executable="chown" >      <arg line="-R :vegbank ${vegbank.home.dir} ${env.TOMCAT_HOME}/webapps"/>    </exec>    -->
     <!-- Need to do the apache dir too -->
-    <!-- The following are only supported by apache ant 1.6.0 and higher, comment out for now
-   <chgrp group="vegbank"> 
-     <fileset dir="${vegbank.home.dir}">
-        <include name="**/*"/>
-     </fileset>
-     <fileset dir="${env.TOMCAT_HOME}/">
-        <include name="**/*"/>
-     </fileset>
-   </chgrp>
-
-  <chmod perm="g+rw">
-     <fileset dir="${vegbank.home.dir}">
-        <include name="**/*"/>
-     </fileset>
-     <fileset dir="${env.TOMCAT_HOME}/">
-        <include name="**/*"/>
-     </fileset>
-   </chmod>
-   -->
+    <!-- The following are only supported by apache ant 1.6.0 and higher, comment out for now    <chgrp group="vegbank">       <fileset dir="${vegbank.home.dir}">         <include name="**/*"/>      </fileset>      <fileset dir="${env.TOMCAT_HOME}/">         <include name="**/*"/>      </fileset>    </chgrp>    <chmod perm="g+rw">      <fileset dir="${vegbank.home.dir}">         <include name="**/*"/>      </fileset>      <fileset dir="${env.TOMCAT_HOME}/">         <include name="**/*"/>      </fileset>    </chmod>    -->
   </target>
   <!-- ================================================================= -->
   <!-- Generate Javadoc                                                  -->
   <!-- ================================================================= -->
   <target name="javadoc" depends="prepare" description="==> Generate projects javadoc">
     <javadoc destdir="${build.docs.api.dir}" author="true" version="true" use="true" private="false" additionalparam="-quiet" source="1.4" nodeprecated="false" windowtitle="${ant.project.name} API">
-      <!--
-      	ant 1.6 supports breakiterator="yes", which reduces the volume of messages from javadoc 
-	-->
+      <!--       	ant 1.6 supports breakiterator="yes", which reduces the volume of messages from javadoc  	-->
       <classpath refid="classpath.compilation"/>
       <packageset dir="src" defaultexcludes="yes">
         <include name="org/**"/>
@@ -579,9 +480,7 @@
     <property name="failOnModelDiff" value="true"/>
     <antcall target="db_verify"/>
     <!-- just do the diff -->
-    <!--<exec dir="${build.status.dir}" executable="diff" output="${build.status.dir}/modeldiffs.txt" resultproperty="diffResult" failonerror="${failOnModelDiff}">
-      <arg line=" -ibwB ./logicalmodel.txt ./actualmodel.txt  "/>
-    </exec>-->
+    <!--<exec dir="${build.status.dir}" executable="diff" output="${build.status.dir}/modeldiffs.txt" resultproperty="diffResult" failonerror="${failOnModelDiff}">       <arg line=" -ibwB ./logicalmodel.txt ./actualmodel.txt  "/>     </exec>-->
   </target>
   <target name="db_verify" description="==> Michael's new method of checking the database to match model xml" depends="prepare">
     <!-- set to not fail unless already set -->
@@ -590,19 +489,13 @@
         <isset property="failOnModelDiff"/>
       </not>
     </condition>
-
-	<!-- validate first -->
-
+    <!-- validate first -->
     <echo>Validating model XML against schema: at ${docs.dir}/xml/${vegbank.schema.model}</echo>
     <xmlvalidate file="${docs.dir}/xml/db_model_vegbank.xml" failonerror="true">
-		<attribute name="http://apache.org/xml/features/validation/schema" value="true"/>
-		<attribute name="http://xml.org/sax/features/namespaces" value="true"/>
-		<property name="http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation" 
-			value="${docs.dir}/xml/${vegbank.schema.model}"/>
+      <attribute name="http://apache.org/xml/features/validation/schema" value="true"/>
+      <attribute name="http://xml.org/sax/features/namespaces" value="true"/>
+      <property name="http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation" value="${docs.dir}/xml/${vegbank.schema.model}"/>
     </xmlvalidate>
-
-
-
     <!-- get ideal model output -->
     <xslt in="${docs.dir}/xml/db_model_vegbank.xml" out="${build.status.dir}/logicalmodel.txt" style="${docs.dir}/xml/checkModelAgainstDB.xsl" force="true"/>
     <!-- get acutal model output -->
@@ -611,9 +504,7 @@
       <arg line="-U ${databaseUser} ${databaseName} -f verifyActualModel.sql -o ${build.status.dir}/actualmodel.txt -At "/>
     </exec>
     <!-- compare ideal logical model to acutal model -->
-    <property name="verify_readme" value="
-   differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.
-     The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
+    <property name="verify_readme" value="    differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.      The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
     <echo> If the next line does not have 'Diff results: 0', and the build failed, this is because ${verify_readme}  The diff file is located here:</echo>
     <echo file="${build.status.dir}/verify.readme">${verify_readme}  The Diff file is displayed on screen unless there are no differences.</echo>
     <echo>------</echo>
@@ -667,16 +558,7 @@
         </not>
       </and>
     </condition>
-    <fail if="noContextName">
-*******************************************************************************
-ERROR: You did not enter a context name.
-*******************************************************************************
-    </fail>
-    <fail if="invalidContextName">
-*******************************************************************************
-ERROR: An invalid context name entered: '${build.context}' 
-	Only vegbank and vegtest contexts currently supported.
-*******************************************************************************
-    </fail>
+    <fail if="noContextName"> ******************************************************************************* ERROR: You did not enter a context name. *******************************************************************************     </fail>
+    <fail if="invalidContextName"> ******************************************************************************* ERROR: An invalid context name entered: '${build.context}'  	Only vegbank and vegtest contexts currently supported. *******************************************************************************     </fail>
   </target>
 </project>
