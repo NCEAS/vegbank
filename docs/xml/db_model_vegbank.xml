@@ -4392,8 +4392,8 @@ conditions may change between resampling events.
       <attName>plotValidationLevel</attName>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
-      <javaType type="String" relation="one"/>
       <attType>Integer</attType>
+      <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
