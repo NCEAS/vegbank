@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-07 04:26:31 $'
- *  '$Revision: 1.4 $'
+ *  '$Date: 2003-05-29 00:14:08 $'
+ *  '$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,8 +77,8 @@ import databaseAccess.dbAccess;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-05-07 04:26:31 $'
- *  '$Revision: 1.4 $'
+ *  '$Date: 2003-05-29 00:14:08 $'
+ *  '$Revision: 1.5 $'
  * 
  */
 
@@ -719,20 +719,11 @@ public class DataRequestServlet extends HttpServlet
 			String requestDataFormatType =
 				params.get("requestDataFormatType").toString();
 
-			//attempt to recognize the request as a query for communities 
-			if (requestDataType.trim().equals("community"))
-			{
-				//	out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
-				//	+ "community information - not requesting plot info");
-				String query =
-					composeCommunityQuery(params, resultType, requestDataType);
-				qr = issueQuery("simpleCommunityQuery", clientType, userName, query);
-				//	out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
-			}
+	
 			// Cheat here - to recognize the single plot query to return entire plot
 			//20020117 testing the new plot writer and data translation 
 			//modules so cheating here first
-			else if (
+			if (
 				plotId != null
 					&& (resultType.equals("full") || resultType.equals("summary")))
 			{

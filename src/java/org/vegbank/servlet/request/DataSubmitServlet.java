@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-16 03:33:34 $'
- *  '$Revision: 1.7 $'
+ *  '$Date: 2003-05-29 00:14:08 $'
+ *  '$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,8 +62,8 @@ import databaseAccess.CommunityQueryStore;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-16 03:33:34 $'
- *  '$Revision: 1.7 $'
+ *  '$Date: 2003-05-29 00:14:08 $'
+ *  '$Revision: 1.8 $'
  */
 
 
@@ -459,7 +459,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					{
 						//redirect the user to the data selection form to either                                            
 						//upload or choose from a previosly uploaded file                                                   
-						response.sendRedirect("/forms/plot-upload.html"); 
+						response.sendRedirect("/vegbank/forms/plot-upload.html"); 
 					}
 					// if not then send the user to a login
 					else
@@ -1032,7 +1032,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		 sb.append("Correlation Target Name: " + correlationTargetName +" <br> \n");
 		 sb.append("Correlation Target Level: " + correlationTargetLevel +" <br> \n");
 		 sb.append("Convergence: " + correlation +" <br> \n");
-		 sb.append("<a href=/forms/community-submit.html> Add a new community  </a> \n");
+		 sb.append("<a href=/vegbank/forms/community-submit.html> Add a new community  </a> \n");
 		 sb.append("");
 		 sb.append("");
 		 sb.append("");

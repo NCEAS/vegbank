@@ -23,7 +23,8 @@ cp $INFILE ./input.xml
  
 case $PLUGIN in
   NativeXmlPlugin)
-    java databaseAccess.DBinsertPlotSource $PLUGIN $PLOT
+    #java databaseAccess.DBinsertPlotSource $PLUGIN $PLOT
+    java org.vegbank.common.utility.DataLoader db vegbank localhost $INFILE 
     ;;
   *)
     java org.vegbank.plots.rmi.DataSourceClient $RMISERVER $INFILE $PLUGIN $PLOT
@@ -35,7 +36,7 @@ rm -rf plot_cache
 ###############################
 # Get the plotId 
 ###############################
-PLOTID=`psql plots_dev < getLastPlotId.sql | sed '3!d'`
+PLOTID=`psql vegbank < getLastPlotId.sql | sed '3!d'`
 echo PLOTID is $PLOTID
 
 

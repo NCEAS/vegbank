@@ -4,10 +4,10 @@
 # plots database on the postgresql RDBMS using the psql 
 # client
 #
-#*	'$Author: harris $'
-#*  '$Date: 2002-03-26 22:26:13 $'
-#*  '$Revision: 1.2 $'
+#*	'$Author: farrell $'
+#*  '$Date: 2003-05-29 00:14:08 $'
+#*  '$Revision: 1.3 $'
 
-dropdb plots_dev
-createdb plots_dev
-psql plots_dev < create-vegbank-plots2002.sql
+dropdb vegbank
+createdb vegbank
+psql vegbank < create-vegbank-plots2002.sql

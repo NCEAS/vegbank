@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #List of databases to visit
-@databases =  ('framework','communities_dev','plants_dev','plots_dev'); 
+@databases =  ('framework','vegbank'); 
 
 foreach $database (@databases) {
 

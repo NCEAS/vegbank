@@ -59,7 +59,7 @@
         <stemSampleMethod/>
         <originalData>Victoria, BC</originalData>
         <effortLevel>Very thorough</effortLevel>
-        <plotValidationLevel>(3) fully compliant with recommendations</plotValidationLevel>
+        <plotValidationLevel>3</plotValidationLevel>
         <floristicQuality>Moderate</floristicQuality>
         <bryophyteQuality>Moderate but incomplete</bryophyteQuality>
         <lichenQuality>Low</lichenQuality>

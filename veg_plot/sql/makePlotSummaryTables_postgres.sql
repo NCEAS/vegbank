@@ -4,9 +4,9 @@
  * VegBank servlets can access for querying denormalized data.  Basically 
  * the two tables include site data and species information
  *
- * '$Author: harris $'
- * '$Date: 2002-08-01 18:07:58 $'
- * '$Revision: 1.11 $'
+ * '$Author: farrell $'
+ * '$Date: 2003-05-29 00:14:08 $'
+ * '$Revision: 1.12 $'
  *
  */
 
@@ -93,7 +93,7 @@ slopegradient, slopeposition, hydrologicregime, soildrainage, currentcommunity,
 xcoord, ycoord, coordtype, obsstartdate, obsstopdate, effortlevel,  
 authorplotcode, surfGeo, state, country, parentplot, authorobscode,
 soilDepth, leaftype, accession_number )
-select plot.plot_id, plot.project_id,  
+select plot.plot_id, project.project_id,  
 plot.latitude, plot.longitude, plot.shape,  plot.elevation,
 plot.slopeaspect, plot.slopegradient, plot.topoposition, observation.hydrologicregime,
 observation.soildrainage, null, plot.authore, plot.authorn,
@@ -129,7 +129,6 @@ PLOT_ID integer,
 OBS_ID integer,
 PARENTPLOT integer,
 AUTHORNAMEID VARCHAR(300),
-AUTHORPLANTCODE VARCHAR(300),
 AUTHORPLOTCODE VARCHAR(100),
 AUTHOROBSCODE VARCHAR(100),
 TAXONOBSERVATION_ID NUMERIC(20),
@@ -144,13 +143,12 @@ CONSTRAINT plotSpeciesSum_pk PRIMARY KEY (PLOTSPECIESSUM_ID)
 * load the species summary table 
 */
 
-insert into plotSpeciesSum (OBS_ID, AUTHORNAMEID, STRATUMTYPE, PERCENTCOVER, AUTHORPLANTCODE )
+insert into plotSpeciesSum (OBS_ID, AUTHORNAMEID, STRATUMTYPE, PERCENTCOVER )
 select 
 	TAXONOBSERVATION.OBSERVATION_ID, 
 	TAXONOBSERVATION.cheatPlantName, 
 	STRATUMCOMPOSITION.CHEATSTRATUMNAME,
-	STRATUMCOMPOSITION.TAXONSTRATUMCOVER,
-	STRATUMCOMPOSITION.CHEATPLANTCODE
+	STRATUMCOMPOSITION.TAXONSTRATUMCOVER
 from 
 	TAXONOBSERVATION, STRATUMCOMPOSITION 
 where 

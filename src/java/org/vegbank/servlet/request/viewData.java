@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: viewData.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-07 01:37:27 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-05-29 00:14:08 $'
+ *  '$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,7 +128,7 @@ public class viewData extends HttpServlet
 		if (downLoadAction != null)
 		{
 			this.initPlotDownload(request);
- 			response.sendRedirect("/forms/resultset-download.html");	
+ 			response.sendRedirect("/vegbank/forms/resultset-download.html");	
 		}
 		
 		else if (resultType.equals("identity") )

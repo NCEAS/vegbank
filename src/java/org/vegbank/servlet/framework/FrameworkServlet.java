@@ -17,7 +17,7 @@ import org.vegbank.servlet.util.ServletUtility;
  * Servlet to
  *
  * <p>Valid parameters are:<br><br>
- * 
+ *  
  *
  * 
  * 
@@ -129,11 +129,6 @@ public class FrameworkServlet extends HttpServlet
 			 else if ( actionParameter.equals("loadTNCData") )
 		 	{
 		 		s="org.vegbank.servlet.plugin.PlotDBInsert";
-		 	}
-			//this will look up the names of the plants in the database
-			 else if ( actionParameter.equals("plantlookup") )
-		 	{
-		 		s="org.vegbank.servlet.plugin.PlantNameList";
 		 	}
 			else
 			{

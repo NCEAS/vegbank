@@ -4,8 +4,8 @@
 # plots database on the postgresql RDBMS using the psql 
 # client
 #
-#*	'$Author: harris $'
-#*  '$Date: 2002-03-26 18:57:40 $'
-#*  '$Revision: 1.1 $'
+#*	'$Author: farrell $'
+#*  '$Date: 2003-05-29 00:14:08 $'
+#*  '$Revision: 1.2 $'
 
-psql plots_dev < makePlotSummaryTables_postgres.sql
+psql vegbank < makePlotSummaryTables_postgres.sql

@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: fileDownload.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-04-16 00:12:48 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-05-29 00:14:08 $'
+ *  '$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -259,7 +259,7 @@ public class fileDownload extends HttpServlet
 				String s = null;		
 				//try a different method
 			 	StringBuffer urlBuf = new StringBuffer();
-			 	urlBuf.append(DataRequestServletURL+"/?");
+			 	urlBuf.append(DataRequestServletURL+"?");
 				urlBuf.append("requestDataType=vegPlot&");
 			 	urlBuf.append("resultType=full&");
 			 	urlBuf.append("queryType=simple&");
