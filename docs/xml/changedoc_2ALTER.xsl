@@ -11,6 +11,12 @@
   <xsl:template match="/ | modelChangeDocument">
     <xsl:apply-templates/>
   </xsl:template>
+  <xsl:template match="dataModel">
+    <!-- for regular xml doc -->
+    <xsl:for-each select="entity">
+      <xsl:call-template name="createfield" />
+    </xsl:for-each>
+  </xsl:template>
   <xsl:template match="modelChange">
      <xsl:if test="modelChangeID=$getID">
    <!--   <xsl:if test="modelChangeVersion='1.0.2'">  -->
