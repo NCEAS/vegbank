@@ -1,4 +1,5 @@
-<html> <head> <title>VegBranch- loading table information - Community Concept</title><link rel='stylesheet' href='http://vegbank.org/vegbank/includes/default.css' type='text/css' /><style type='text/css'>          td.color1 {background-color: FF6666} 
+<html> <head> <title>VegBranch- loading table information - Community Concept</title><link rel='stylesheet' href='@stylesheet@' type='text/css' /><style type='text/css'>          td.color1 {background-color: FF6666} 
+          td.color1_5 {background-color: FF9966} 
          td.color2 {background-color: FFCC99} 
         td.color3 {background-color: FFFF99} 
        td.color4 {background-color: 99FFCC} 
@@ -7,89 +8,94 @@
       </style> 
  </head>
  <body>
-<h2><img src='@vbr_imageserver@h_icon.jpg' />VegBranch Loading Tables Overview -- Community Concept (H)</h2>
-<p>Navigation between loading tables:<br /> <a href='overview-a.html'>Party Information</a>  |  <a href='overview-b.html'>Species List</a>  |  <a href='overview-c.html'>Plot Data</a>  |  <a href='overview-c2.html'>Plot Normalized</a>  |  <a href='overview-d.html'>Presence Data</a>  |  <a href='overview-d2.html'>Strata Cover Data</a>  |  <a href='overview-e.html'>Stem Data</a>  |  <a href='overview-f.html'>Soil Data</a>  |  <a href='overview-g.html'>Disturbance Data</a>  |  Community Concept  |  <a href='overview-i.html'>Plot Communities</a>  |  <a href='overview-j.html'>User Defined Metadata</a> </p><table><tr class='grey' ><td><span class='weight1 normal'>Summary: </span></td><td class='item'> This table is very similar to the Species List loading table.  You may match you community codes to real community names, or add new communities to the vegbank module.</td></tr>
+<a name='top'></a>@vegbank_header_html_normal@ <br/><h2><img src='@vbr_imageserver@h_icon.jpg' /><a href='@vegbranch_link@vegbranch.html'>VegBranch</a> Loading Tables Overview -- Community Concept (H)</h2>
+<p>Navigation between loading tables:<br /> <a href='overview-a.html'>Party Information</a>  |  <a href='overview-b.html'>Species List</a>  |  <a href='overview-c.html'>Plot Data</a>  |  <a href='overview-c2.html'>Plot Normalized</a>  |  <a href='overview-d.html'>Presence Data</a>  |  <a href='overview-d2.html'>Strata Cover Data</a>  |  <a href='overview-e.html'>Stem Data</a>  |  <a href='overview-f.html'>Soil Data</a>  |  <a href='overview-g.html'>Disturbance Data</a>  |  Community Concept  |  <a href='overview-i.html'>Plot Communities</a>  |  <a href='overview-j.html'>User Defined Metadata</a> </p><p>Jump to a different part of this page: <a href='#fields'>Field Descriptions</a> | <a href='#examples'>Example Data</a></p><table><tr class='grey' ><td><span class='weight1 normal'>Summary: </span></td><td class='item'> This table is very similar to the Species List loading table.  You may match you community codes to real community names, or add new communities to the vegbank module.</td></tr>
 <tr><td><span class='weight1 normal'>Description: </span></td><td class='item'> To match your community codes to real communities names that would be found in the vegbank module, use commCode for your code and commName for the name that you with to be looked up in the vegbank module.  To add new communities, you must fill in commConceptStatus and reference.  Use commName as the name that will be the basis for the new community.</td></tr>
 <tr class='grey' ><td><span class='weight1 normal'>Required in VegBranch: </span></td><td class='item'> This table is required only if you have new community concepts to add to VegBank.</td></tr>
-<tr><td><span class='weight1 normal'>Represents VegBank Tables: </span></td><td class='item'> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~commname~type~tableview.html'>commName,</a> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~commconcept~type~tableview.html'>commConcept,</a> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~commstatus~type~tableview.html'>commStatus</a> (1), <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~commusage~type~tableview.html'>commUsage</a> (4-5), and <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~commcorrelation~type~tableview.html'>commCorrelation</a> (4). </td></tr>
+<tr><td><span class='weight1 normal'>Represents VegBank Tables: </span></td><td class='item'> <a href='http://vegbank.org/vegdocs/dbdictionary/dd~table~commname~type~tableview.html'>commName,</a> <a href='http://vegbank.org/vegdocs/dbdictionary/dd~table~commconcept~type~tableview.html'>commConcept,</a> <a href='http://vegbank.org/vegdocs/dbdictionary/dd~table~commstatus~type~tableview.html'>commStatus</a> (1), <a href='http://vegbank.org/vegdocs/dbdictionary/dd~table~commusage~type~tableview.html'>commUsage</a> (4-5), and <a href='http://vegbank.org/vegdocs/dbdictionary/dd~table~commcorrelation~type~tableview.html'>commCorrelation</a> (4). </td></tr>
 <tr class='grey' ><td><span class='weight1 normal'>VegBranch can generate for you: </span></td><td class='item'> VegBranch can populate this table from community names in other tables that do not match records in the VegBank module.</td></tr>
 <tr><td><span class='weight1 normal'>Questions: </span></td><td class='item'> Do you have synonymized community concepts (for example, you call it X, but it is now called Y)?<br />Do you have new community concepts to add to VegBank?</td></tr>
 <tr class='grey' ><td><span class='weight1 normal'>Expertise Level: </span></td><td class='item'> medium/expert</td></tr>
 </table>
 
-<hr /><h3>Fields (Columns) in this table:</h3>
-<p>More information about fields available <a href='z_user_h_commconcept~3.html'>here</a>.</p>  <table width='90%'><tr><td class='color1' colspan='3'>
+<hr /><a name='fields'></a><h3 class='left'>Fields (Columns) in this table:</h3>
+<table width='90%'><tr><td class='color1' colspan='3'>
 <span class='normal'>&raquo; Required fields; you should always fill in values for these:</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commCode</span></td>
-<td ><span class='itemsmall'>A code that uniquely identifies a communitiy concept in your other loading tables (Plot Community).  This can be any combination of letters, numbers, spaces, and symbols.  It can be a real code, such as a CEGL code, or a temporary code, such as a number.  It could be the community name, too, so long as it does not exceed 255 characters.  For communities with names more than 255 characters, you must use this table and select a shorter (perhaps the first 255 characters) code for the commCode.  The commName (in Community Concept Loading Table) may be longer than 255 characters.  Note that the other tables need not reference communities in this table, but can reference those already in the vegbank module directly by name.  For more on how this works, see the Translate Data form.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commName</span></td>
-<td  class='grey' ><span class='itemsmall'>The Comm name for which VegBranch will look up the Community in your vegbank module.  If the Comm name is not found, then the current record will be added as a new Comm concept, based on the name in this field.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commCode</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>A code that uniquely identifies a communitiy concept in your other loading tables (Plot Community).  This can be any combination of letters, numbers, spaces, and symbols.  It can be a real code, such as a CEGL code, or a temporary code, such as a number.  It could be the community name, too, so long as it does not exceed 255 characters.  For communities with names more than 255 characters, you must use this table and select a shorter (perhaps the first 255 characters) code for the commCode.  The commName (in Community Concept Loading Table) may be longer than 255 characters.  Note that the other tables need not reference communities in this table, but can reference those already in the vegbank module directly by name.  For more on how this works, see the Translate Data form.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commName</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td  class='grey' ><span class='item'>The Comm name for which VegBranch will look up the Community in your vegbank module.  If the Comm name is not found, then the current record will be added as a new Comm concept, based on the name in this field.</span></td></tr>
 <tr><td class='color2' colspan='3'>
 <span class='normal'>&raquo; Commonly used fields:</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commShortName</span></td>
-<td ><span class='itemsmall'>A shorter, alternative Name that corresponds to the current Comm Concept record, perhaps lacking authority; an abbreviation.  This set of fields (starting with &quot;CommShortName&quot;) need not actually be a shorter Comm name, but can be any Comm name usage to be added to the VegBank module.  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commCommonName</span></td>
-<td  class='grey' ><span class='itemsmall'>Another set of fields to add another Comm name Usage, perhaps a common name, perhaps not.  This set of fields (starting with &quot;CommCommonName&quot;) need not actually be a common Comm name, but can be any Comm name usage to be added to the VegBank module.  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>reference</span></td>
-<td ><span class='itemsmall'>A string (text field) that identifies to you, the user, what reference this Comm Concept record will be based upon.  You will be prompted to translate this reference string to an actual reference in the VegBank module (or you can add a new reference).  Required for all new concepts to be added to VegBank.  Will be ignored for all concepts that are matched to VegBank module concepts.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>NamesReference</span></td>
-<td  class='grey' ><span class='itemsmall'>A string (text field) that identifies to you, the user, what reference the CommNames on this record (commName, commShortName, commCommonName, otherCommName) were originally cited in.  You will be prompted to translate this reference string to an actual reference in the VegBank module (or you can add a new reference).  Not required, and you can add references to individual names in VegBranch if different references are necessary for the different names on this record.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commDescription</span></td>
-<td ><span class='itemsmall'>A description of the Comm Concept by the party contributing the Comm Concept.  This is used to provide more information about the Comm Concept.  Ignored for concepts that are matched to extant VegBank concepts.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commLevel</span></td>
-<td  class='grey' ><span class='itemsmall'>A level in the taxonomic hierarchy to which the current Comm Concept belongs (i.e. alliance, association).  Part of the Party Perspective.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commConceptStatus</span></td>
-<td ><span class='itemsmall'>Status of the concept by the party (accepted, not accepted, undetermined).  Part of the Party Perspective.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commPartyComments</span></td>
-<td  class='grey' ><span class='itemsmall'>Comments by party providing rationale for status assignment in CommConceptStatus.  Part of the Party Perspective.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commShortName</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td ><span class='item'>A shorter, alternative Name that corresponds to the current Comm Concept record, perhaps lacking authority; an abbreviation.  This set of fields (starting with &quot;CommShortName&quot;) need not actually be a shorter Comm name, but can be any Comm name usage to be added to the VegBank module.  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commCommonName</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td  class='grey' ><span class='item'>Another set of fields to add another Comm name Usage, perhaps a common name, perhaps not.  This set of fields (starting with &quot;CommCommonName&quot;) need not actually be a common Comm name, but can be any Comm name usage to be added to the VegBank module.  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>reference</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td ><span class='item'>A string (text field) that identifies to you, the user, what reference this Comm Concept record will be based upon.  You will be prompted to translate this reference string to an actual reference in the VegBank module (or you can add a new reference).  Required for all new concepts to be added to VegBank.  Will be ignored for all concepts that are matched to VegBank module concepts.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>NamesReference</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td  class='grey' ><span class='item'>A string (text field) that identifies to you, the user, what reference the CommNames on this record (commName, commShortName, commCommonName, otherCommName) were originally cited in.  You will be prompted to translate this reference string to an actual reference in the VegBank module (or you can add a new reference).  Not required, and you can add references to individual names in VegBranch if different references are necessary for the different names on this record.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commDescription</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td ><span class='item'>A description of the Comm Concept by the party contributing the Comm Concept.  This is used to provide more information about the Comm Concept.  Ignored for concepts that are matched to extant VegBank concepts.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commLevel</span><br/><span class='normal'>&nbsp;&nbsp;Text (22)</span></td>
+<td  class='grey' ><span class='item'>A level in the taxonomic hierarchy to which the current Comm Concept belongs (i.e. alliance, association).  Part of the Party Perspective.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commConceptStatus</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td ><span class='item'>Status of the concept by the party (accepted, not accepted, undetermined).  Part of the Party Perspective.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commPartyComments</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td  class='grey' ><span class='item'>Comments by party providing rationale for status assignment in CommConceptStatus.  Part of the Party Perspective.</span></td></tr>
 <tr><td class='color3' colspan='3'>
 <span class='normal'>&raquo; Sometimes used fields:</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commNameSystem</span></td>
-<td ><span class='itemsmall'>The name of the classification system for the name in CommName (e.g., NVC-Scientific).  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commShortNameSystem</span></td>
-<td  class='grey' ><span class='itemsmall'>The name of the classification system for the name in CommShortName (e.g., NVC-Scientific).  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commCommonNameSystem</span></td>
-<td ><span class='itemsmall'>The name of the classification system for the name in CommCommonName (e.g., NVC-Scientific).  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>OtherCommName</span></td>
-<td  class='grey' ><span class='itemsmall'>Another set of fields to add another Comm name Usage.  This set of fields (starting with &quot;otherCommName&quot;) can be any type of CommName to be added to the VegBank module.  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>OtherCommNameSystem</span></td>
-<td ><span class='itemsmall'>The name of the classification system for the name in otherCommName (e.g., NVC-Scientific).  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commParent</span></td>
-<td  class='grey' ><span class='itemsmall'>The name of the Comm Parent for the current Comm Concept.  A Comm Parent is part of the Party Perspective and identifies which CommConcept the Current Concept should be nested under in the taxonomic hierarchy.  For example if this Comm Concept were at the alliance level the Comm Parent would be the Comm Concept that is the formation level.  The name used here will be looked up in the VegBank module or should reference a CommCode of a different record in this table.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commSyn1</span></td>
-<td ><span class='itemsmall'>2 uses for this field: 1) the updated name of a taxon in CommName; 2) if a new CommConcept being added to VegBank, the first of up to 4 synonyms to be correlated to standard VegBank concepts (then CommConceptStatus should then be not accepted).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commSynConverg1</span></td>
-<td  class='grey' ><span class='itemsmall'>If CommSyn1 is of the 2nd usage in its definition, this Convergence value indicates the relationship between the new concept of this record and the correlated concept in CommSyn1.  Otherwise, this can be left blank.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commSyn2</span></td>
-<td ><span class='itemsmall'>Another Comm Synonym, similar to CommSyn1, in use 2 of its definition.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commSynConverg2</span></td>
-<td  class='grey' ><span class='itemsmall'>Correlation for CommSyn2. (see CommSynConverg1 for definition)</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commSyn3</span></td>
-<td ><span class='itemsmall'>Another Comm Synonym, similar to CommSyn1, in use 2 of its definition.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commSynConverg3</span></td>
-<td  class='grey' ><span class='itemsmall'>Correlation for CommSyn3. (see CommSynConverg1 for definition)</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commSyn4</span></td>
-<td ><span class='itemsmall'>Another Comm Synonym, similar to CommSyn1, in use 2 of its definition.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commSynConverg4</span></td>
-<td  class='grey' ><span class='itemsmall'>Correlation for CommSyn4. (see CommSynConverg1 for definition)</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commNameSystem</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td ><span class='item'>The name of the classification system for the name in CommName (e.g., NVC-Scientific).  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commShortNameSystem</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td  class='grey' ><span class='item'>The name of the classification system for the name in CommShortName (e.g., NVC-Scientific).  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commCommonNameSystem</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td ><span class='item'>The name of the classification system for the name in CommCommonName (e.g., NVC-Scientific).  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>OtherCommName</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td  class='grey' ><span class='item'>Another set of fields to add another Comm name Usage.  This set of fields (starting with &quot;otherCommName&quot;) can be any type of CommName to be added to the VegBank module.  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>OtherCommNameSystem</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td ><span class='item'>The name of the classification system for the name in otherCommName (e.g., NVC-Scientific).  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commParent</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td  class='grey' ><span class='item'>The name of the Comm Parent for the current Comm Concept.  A Comm Parent is part of the Party Perspective and identifies which CommConcept the Current Concept should be nested under in the taxonomic hierarchy.  For example if this Comm Concept were at the alliance level the Comm Parent would be the Comm Concept that is the formation level.  The name used here will be looked up in the VegBank module or should reference a CommCode of a different record in this table.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commSyn1</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>2 uses for this field: 1) the updated name of a taxon in CommName; 2) if a new CommConcept being added to VegBank, the first of up to 4 synonyms to be correlated to standard VegBank concepts (then CommConceptStatus should then be not accepted).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commSynConverg1</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td  class='grey' ><span class='item'>If CommSyn1 is of the 2nd usage in its definition, this Convergence value indicates the relationship between the new concept of this record and the correlated concept in CommSyn1.  Otherwise, this can be left blank.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commSyn2</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>Another Comm Synonym, similar to CommSyn1, in use 2 of its definition.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commSynConverg2</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td  class='grey' ><span class='item'>Correlation for CommSyn2. (see CommSynConverg1 for definition)</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commSyn3</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>Another Comm Synonym, similar to CommSyn1, in use 2 of its definition.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commSynConverg3</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td  class='grey' ><span class='item'>Correlation for CommSyn3. (see CommSynConverg1 for definition)</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commSyn4</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>Another Comm Synonym, similar to CommSyn1, in use 2 of its definition.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commSynConverg4</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td  class='grey' ><span class='item'>Correlation for CommSyn4. (see CommSynConverg1 for definition)</span></td></tr>
 <tr><td class='color4' colspan='3'>
 <span class='normal'>&raquo; Fields for expert users:</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commNameStatus</span></td>
-<td ><span class='itemsmall'>Is the name in CommName standard according to the party adding party perspective?  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commShortNameStatus</span></td>
-<td  class='grey' ><span class='itemsmall'>Is the name in CommShortName standard according to the party adding party perspective?  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commCommonNameStatus</span></td>
-<td ><span class='itemsmall'>Is the name in CommCommonName standard according to the party adding party perspective?  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>otherCommNameStatus</span></td>
-<td  class='grey' ><span class='itemsmall'>Is the name in OtherCommName standard according to the party adding party perspective?  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commNameStatus</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td ><span class='item'>Is the name in CommName standard according to the party adding party perspective?  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>commShortNameStatus</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td  class='grey' ><span class='item'>Is the name in CommShortName standard according to the party adding party perspective?  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>commCommonNameStatus</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td ><span class='item'>Is the name in CommCommonName standard according to the party adding party perspective?  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>otherCommNameStatus</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td  class='grey' ><span class='item'>Is the name in OtherCommName standard according to the party adding party perspective?  This will be migrated to the CommUsage table for all records that have a party perspective added.</span></td></tr>
 <tr><td class='color0' colspan='3'>
 <span class='normal'>&raquo; Internal VegBranch fields, please do not edit directly:</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserComm_ID</span></td>
-<td ><span class='itemsmall'>Database assigned unique identifier for this table.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>NewCommConcept</span></td>
-<td  class='grey' ><span class='itemsmall'>True if this is a new concept to be added to VegBank.  You can set how VegBranch determines if a concept is new in the Metadata form.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>AddPartyPerspective</span></td>
-<td ><span class='itemsmall'>True if party perspective for this record will be added if new concepts are being added to vegbank. You can set how VegBranch determines if party perspective is added in the Metadata form.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>ArchivedStatus</span></td>
-<td  class='grey' ><span class='itemsmall'>internal field</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserComm_ID</span><br/><span class='normal'>&nbsp;&nbsp;AutoNumber</span></td>
+<td ><span class='item'>Database assigned unique identifier for this table.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>NewCommConcept</span><br/><span class='normal'>&nbsp;&nbsp;Text (12)</span></td>
+<td  class='grey' ><span class='item'>True if this is a new concept to be added to VegBank.  You can set how VegBranch determines if a concept is new in the Metadata form.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>AddPartyPerspective</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td ><span class='item'>True if party perspective for this record will be added if new concepts are being added to vegbank. You can set how VegBranch determines if party perspective is added in the Metadata form.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>ArchivedStatus</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>internal field</span></td></tr>
 </table>
+<p><a href='#top'>top</a></p><hr /><a name='examples'></a><h3 class='left'>Examples of this data table:</h3>
+<h4 class='left'>simple example with translated community codes into &quot;real&quot; names that can be looked up.:</h4><table class='leftrightborders' cellpadding='2'><tr><th>commCode</th><th>commName</th></tr>
+<tr class='evenrow'><td>465</td><td>CEGL000465</td></tr>
+<tr class='oddrow'><td>alliance121</td><td>A.121</td></tr>
+</table><p>Download this example as a <a href='example_z_user_h_commconcept_h_simple1.csv'>.csv file</a></p><p><a href='#top'>top</a></p>@vegbank_footer_html_onerow@ </body> </html>

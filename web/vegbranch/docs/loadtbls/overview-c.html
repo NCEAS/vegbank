@@ -1,4 +1,5 @@
-<html> <head> <title>VegBranch- loading table information - Plot Data</title><link rel='stylesheet' href='http://vegbank.org/vegbank/includes/default.css' type='text/css' /><style type='text/css'>          td.color1 {background-color: FF6666} 
+<html> <head> <title>VegBranch- loading table information - Plot Data</title><link rel='stylesheet' href='@stylesheet@' type='text/css' /><style type='text/css'>          td.color1 {background-color: FF6666} 
+          td.color1_5 {background-color: FF9966} 
          td.color2 {background-color: FFCC99} 
         td.color3 {background-color: FFFF99} 
        td.color4 {background-color: 99FFCC} 
@@ -7,399 +8,407 @@
       </style> 
  </head>
  <body>
-<h2><img src='@vbr_imageserver@c_icon.jpg' />VegBranch Loading Tables Overview -- Plot Data (C)</h2>
-<p>Navigation between loading tables:<br /> <a href='overview-a.html'>Party Information</a>  |  <a href='overview-b.html'>Species List</a>  |  Plot Data  |  <a href='overview-c2.html'>Plot Normalized</a>  |  <a href='overview-d.html'>Presence Data</a>  |  <a href='overview-d2.html'>Strata Cover Data</a>  |  <a href='overview-e.html'>Stem Data</a>  |  <a href='overview-f.html'>Soil Data</a>  |  <a href='overview-g.html'>Disturbance Data</a>  |  <a href='overview-h.html'>Community Concept</a>  |  <a href='overview-i.html'>Plot Communities</a>  |  <a href='overview-j.html'>User Defined Metadata</a> </p><table><tr class='grey' ><td><span class='weight1 normal'>Summary: </span></td><td class='item'> Data that are consistent across a plot.  For example, elevation, plot name, plot location, etc.</td></tr>
+<a name='top'></a>@vegbank_header_html_normal@ <br/><h2><img src='@vbr_imageserver@c_icon.jpg' /><a href='@vegbranch_link@vegbranch.html'>VegBranch</a> Loading Tables Overview -- Plot Data (C)</h2>
+<p>Navigation between loading tables:<br /> <a href='overview-a.html'>Party Information</a>  |  <a href='overview-b.html'>Species List</a>  |  Plot Data  |  <a href='overview-c2.html'>Plot Normalized</a>  |  <a href='overview-d.html'>Presence Data</a>  |  <a href='overview-d2.html'>Strata Cover Data</a>  |  <a href='overview-e.html'>Stem Data</a>  |  <a href='overview-f.html'>Soil Data</a>  |  <a href='overview-g.html'>Disturbance Data</a>  |  <a href='overview-h.html'>Community Concept</a>  |  <a href='overview-i.html'>Plot Communities</a>  |  <a href='overview-j.html'>User Defined Metadata</a> </p><p>Jump to a different part of this page: <a href='#fields'>Field Descriptions</a> | <a href='#examples'>Example Data</a></p><table><tr class='grey' ><td><span class='weight1 normal'>Summary: </span></td><td class='item'> Data that are consistent across a plot.  For example, elevation, plot name, plot location, etc.</td></tr>
 <tr><td><span class='weight1 normal'>Description: </span></td><td class='item'> Defines each plot, which are linked from other loading tables with the authorPlotCode.  Stratum Definitions may also be provided here, or in Normalized Plot Data.</td></tr>
 <tr class='grey' ><td><span class='weight1 normal'>Required in VegBranch: </span></td><td class='item'> REQUIRED.  You must have plot data to submit a plot.  If you don't have this data in digital format, you will need to enter your plot data manually in a form.</td></tr>
-<tr><td><span class='weight1 normal'>Represents VegBank Tables: </span></td><td class='item'> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~plot~type~tableview.html'>plot,</a> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~observation~type~tableview.html'>observation,</a> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~stratum~type~tableview.html'>stratum</a> (9), <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~observationcontributor~type~tableview.html'>observationContributor</a> (5), <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~place~type~tableview.html'>place</a> (5) </td></tr>
+<tr><td><span class='weight1 normal'>Represents VegBank Tables: </span></td><td class='item'> <a href='http://vegbank.org/vegdocs/dbdictionary/dd~table~plot~type~tableview.html'>plot,</a> <a href='http://vegbank.org/vegdocs/dbdictionary/dd~table~observation~type~tableview.html'>observation,</a> <a href='http://vegbank.org/vegdocs/dbdictionary/dd~table~stratum~type~tableview.html'>stratum</a> (9), <a href='http://vegbank.org/vegdocs/dbdictionary/dd~table~observationcontributor~type~tableview.html'>observationContributor</a> (5), <a href='http://vegbank.org/vegdocs/dbdictionary/dd~table~place~type~tableview.html'>place</a> (5) </td></tr>
 <tr class='grey' ><td><span class='weight1 normal'>VegBranch can generate for you: </span></td><td class='item'> no</td></tr>
 <tr><td><span class='weight1 normal'>Questions: </span></td><td class='item'> Where are the plots? <br />When were they observed? <br />What are their environments? <br />What was the methodology?</td></tr>
 <tr class='grey' ><td><span class='weight1 normal'>Expertise Level: </span></td><td class='item'> basic</td></tr>
 </table>
 
-<hr /><h3>Fields (Columns) in this table:</h3>
-<p>More information about fields available <a href='z_user_c_plotdata~3.html'>here</a>.</p>  <table width='90%'><tr><td class='color1' colspan='3'>
+<hr /><a name='fields'></a><h3 class='left'>Fields (Columns) in this table:</h3>
+<table width='90%'><tr><td class='color1' colspan='3'>
 <span class='normal'>&raquo; Required fields; you should always fill in values for these:</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>authorPlotCode</span></td>
-<td ><span class='itemsmall'>Author's Plot number/code, or the original plot number if taken from literature.  This number/code will be used to link other loading table records to this plot.  Each plot should have its own unique code.  If authorPlotCode fields in other tables have values not found in Plot Data, the Data Check form will report an error.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>realLatitude</span></td>
-<td  class='grey' ><span class='itemsmall'>Latitude of the plot origin in degrees and decimals, datum =WGS84</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>realLongitude</span></td>
-<td ><span class='itemsmall'>Longitude of the plot origin in degrees and decimals, datum = WGS84</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>confidentialityStatus</span></td>
-<td  class='grey' ><span class='itemsmall'>Are the data to be considered confidential? 0=no, 1= 1km radius, 2=10km radius, 3=100km radius, 4=location embargo, 5=public embargo on all plot data, 6=full embargo on all plot data. This applies also to region.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>confidentialityReason</span></td>
-<td ><span class='itemsmall'>The reason for confidentiality.  This field is not be open to public view once plots are in VegBank.  Reasons might include specific rare species, ownership, prepublication embargo, or many other reasons.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>authorPlotCode</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td ><span class='item'>Author's Plot number/code, or the original plot number if taken from literature.  This number/code will be used to link other loading table records to this plot.  Each plot should have its own unique code.  If authorPlotCode fields in other tables have values not found in Plot Data, the Data Check form will report an error.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>realLatitude</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Latitude of the plot origin in degrees and decimals, datum =WGS84</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>realLongitude</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Longitude of the plot origin in degrees and decimals, datum = WGS84</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>confidentialityStatus</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td  class='grey' ><span class='item'>Are the data to be considered confidential? If so, location coordinates can be &quot;fuzzed&quot; so that the exact location of the plot is not public knowledge, but approximate location is.  Location and the plot can also be completely embargoed.  See the closed list for details on valid values for this field.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>confidentialityReason</span><br/><span class='normal'>&nbsp;&nbsp;text (200)</span></td>
+<td ><span class='item'>The reason for confidentiality.  This field is not be open to public view once plots are in VegBank.  Reasons might include specific rare species, ownership, prepublication embargo, or many other reasons.</span></td></tr>
+<tr><td class='color1_5' colspan='3'>
+<span class='normal'>&raquo; Best Practice fields:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>area</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Total area of the plot in m2.  If many subplots, this area includes the subplots and the intersticial space.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>permanence</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td ><span class='item'>Is the plot monumented so as to assure permanence?  If so, this should be described in the layoutNarrative</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>obsStartDate</span><br/><span class='normal'>&nbsp;&nbsp;Date/Time</span></td>
+<td  class='grey' ><span class='item'>The date of the observation, or the first day if the observation spanned more than one day.<br />		</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>taxonObservationArea</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>The total surface area (in m2) used for cover estimates and for which a complete species list is provided.  If subplots were used, this would be the total area of the subplots without intersticial space.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Contrib1</span><br/><span class='normal'>&nbsp;&nbsp;text (150)</span></td>
+<td  class='grey' ><span class='item'>Contributor to the plot, in role indicated in Role1.  The field should match a party code in your party data.  VegBank can generate that table from values in this and similar fields.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Role1</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td ><span class='item'>Role code for the contributor to this observation that is listed in Contrib1.  Role Codes will be translated in the Translate Data Form. Examples: Plot Leader, Plot Assistant, Taxonomic Advisor</span></td></tr>
 <tr><td class='color2' colspan='3'>
 <span class='normal'>&raquo; Commonly used fields:</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>locationAccuracy</span></td>
-<td  class='grey' ><span class='itemsmall'>Estimated accuracy of the location of the plot. Plot origin has a 95% or greater probability of being within this many meters of the reported location.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>authorE</span></td>
-<td ><span class='itemsmall'>Original E-W coordinate as recorded by the author</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>authorN</span></td>
-<td  class='grey' ><span class='itemsmall'>Original N-S coordinate as recorded by the author</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>authorZone</span></td>
-<td ><span class='itemsmall'>Original UTM zone reported by the author</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>authorDatum</span></td>
-<td  class='grey' ><span class='itemsmall'>Original datum reported by the author</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>authorLocation</span></td>
-<td ><span class='itemsmall'>Original location as described by author (e.g. Town-Range-Section)</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>locationNarrative</span></td>
-<td  class='grey' ><span class='itemsmall'>Text description that provides information useful for plot relocation.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>azimuth</span></td>
-<td ><span class='itemsmall'>This element stores the azimuth of the x-axis used to describe the relative coordinate system for plot shape (dsgpoly) and other spatial information about the plot. Typically the azimuth is parallel to the long axis of the plot (in the case of a rectangle).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>shape</span></td>
-<td  class='grey' ><span class='itemsmall'>Shape of the plot area.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>area</span></td>
-<td ><span class='itemsmall'>Total area of the plot in m2.  If many subplots, this area includes the subplots and the intersticial space.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>standSize</span></td>
-<td  class='grey' ><span class='itemsmall'>The extent of this community occurrence in relation to the plot size: see list of values.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>placementMethod</span></td>
-<td ><span class='itemsmall'>Brief description of strategy for determining plot placement within the stand.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>permanence</span></td>
-<td  class='grey' ><span class='itemsmall'>Is the plot monumented so as to assure permanence?  If so, this should be described in the layoutNarrative</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>layoutNarrative</span></td>
-<td ><span class='itemsmall'>Text description of and the rationale for the layout of the plot.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>elevation</span></td>
-<td  class='grey' ><span class='itemsmall'>The elevation of the plot origin in meters above sea level.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>slopeAspect</span></td>
-<td ><span class='itemsmall'>Representative azimuth of slope gradient (0-360 degrees); if too flat to determine = -1; if too irregular to determine = -2.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>slopeGradient</span></td>
-<td  class='grey' ><span class='itemsmall'>Representative inclination of slope in degrees; if too irregular to determine, = -1.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>topoPosition</span></td>
-<td ><span class='itemsmall'>Position of the plot on land surface (e.g., Summit, shoulder, upper slope, middle slope, lower slope, toeslope, no slope, channel bed, dune swale, pond).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>landform</span></td>
-<td  class='grey' ><span class='itemsmall'>Landform type.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>rockType</span></td>
-<td ><span class='itemsmall'>RockType values conform to the lithic types in the FGDC Soil Geographic Data Standards, September 1997. http://www.fgdc.gov/standards/documents/standards/soils/soil997.PDF (pages 56-59).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>surficialDeposits</span></td>
-<td  class='grey' ><span class='itemsmall'>Surficial deposits represent the parent material that are the geologic or organic precursors to the soil.  They may either have been deposited by geologic (wind, ice, gravity or water) or biologic (organic) activity, or formed in place more-or-less directly from rocks and minerals below.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>obsStartDate</span></td>
-<td ><span class='itemsmall'>The date of the observation, or the first day if the observation spanned more than one day.<br />		</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>obsEndDate</span></td>
-<td  class='grey' ><span class='itemsmall'>If the observation event spanned more than a single day, this is the last day on which observations were made.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>stemSizeLimit</span></td>
-<td ><span class='itemsmall'>Lower diameter limit in centimeters for inclusion of a tree in the stem count (stemCount).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>methodNarrative</span></td>
-<td  class='grey' ><span class='itemsmall'>Additional metadata helpful for understanding how the data were collected during the observation event.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>taxonObservationArea</span></td>
-<td ><span class='itemsmall'>The total surface area (in m2) used for cover estimates and for which a complete species list is provided.  If subplots were used, this would be the total area of the subplots without intersticial space.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>coverDispersion</span></td>
-<td  class='grey' ><span class='itemsmall'>Were cover values for the total taxon list collected from one contiguous area or dispersed subplots (e.g., continguous, dispersed-regular, dispered-random)?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>autoTaxonCover</span></td>
-<td ><span class='itemsmall'>TRUE indicates that the overall cover value for a taxon was not observed, but rather calculated from the cover values in one or more strata.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>stemObservationArea</span></td>
-<td  class='grey' ><span class='itemsmall'>The total surface area (in m2) observed for recording woody stem data.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>stemSampleMethod</span></td>
-<td ><span class='itemsmall'>The method used to obtain basal area or tree stem data (e.g., full census, point quarter, random pairs, Bitterlich, other).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>originalData</span></td>
-<td  class='grey' ><span class='itemsmall'>Location where the hard data reside and any access instructions.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>effortLevel</span></td>
-<td ><span class='itemsmall'>This is the effort spent making the observations as estimated by the party that submitted the data (e.g., Very thorough, Average, Hurried description).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>floristicQuality</span></td>
-<td  class='grey' ><span class='itemsmall'>Subjective assessment of floristic quality by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>bryophyteQuality</span></td>
-<td ><span class='itemsmall'>Subjective assessment of the taxonmic quality of the bryophye data by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low, Very incomplete,absent).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>lichenQuality</span></td>
-<td  class='grey' ><span class='itemsmall'>Subjective assessment of the taxonmic quality of the lichen data by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low, Very incomplete,absent).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>observationNarrative</span></td>
-<td ><span class='itemsmall'>Additional unstructured observations useful for understanding the ecological attributes and significance of the plot observations.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>landscapeNarrative</span></td>
-<td  class='grey' ><span class='itemsmall'>Unstructured observations on the landscape context of the observed plot.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>homogeneity</span></td>
-<td ><span class='itemsmall'>How homogeneous was the community (e.g., homogeneous, compositionial trend across plot, conspicuous inclusions, irregular mosaic or pattern).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>phenologicAspect</span></td>
-<td  class='grey' ><span class='itemsmall'>Season expression of the community (e.g., typical growing season, vernal, aestival, wet, autumnal, winter, dry, irregular ephemerals present).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>representativeness</span></td>
-<td ><span class='itemsmall'>How representative was the plot of the stand?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>hydrologicRegime</span></td>
-<td  class='grey' ><span class='itemsmall'>What is the hydrologic regime, which is a refelction of frequency and duration of flooding)?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>soilMoistureRegime</span></td>
-<td ><span class='itemsmall'>How moist was the soil at the sampling event?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>soilDrainage</span></td>
-<td  class='grey' ><span class='itemsmall'>How well drained is the site (generally consistent with USDA classes)?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>waterSalinity</span></td>
-<td ><span class='itemsmall'>How saline is the water, if a flooded community?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>waterDepth</span></td>
-<td  class='grey' ><span class='itemsmall'>For aquatic or marine vegetation, what was the water depth in m.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>shoreDistance</span></td>
-<td ><span class='itemsmall'>For aquatic or marine vegetation, what was the closest distance to shore in m.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>soilDepth</span></td>
-<td  class='grey' ><span class='itemsmall'>Median depth to bedrockor permafrost in m (usually from averaging multiple probe readings).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>organicDepth</span></td>
-<td ><span class='itemsmall'>Depth of the curficial organic layer, where present, in centimeters.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>percentBedRock</span></td>
-<td  class='grey' ><span class='itemsmall'>Percent of surface that is exposed bedrock.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>percentRockGravel</span></td>
-<td ><span class='itemsmall'>Percent of surface that is exposed rock and gravel.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>percentWood</span></td>
-<td  class='grey' ><span class='itemsmall'>Percent of surface that is wood.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>percentLitter</span></td>
-<td ><span class='itemsmall'>Percent of surface that is litter.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>percentBareSoil</span></td>
-<td  class='grey' ><span class='itemsmall'>Percent of surface that is bare soil.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>percentWater</span></td>
-<td ><span class='itemsmall'>Percent of surface that is water.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>percentOther</span></td>
-<td  class='grey' ><span class='itemsmall'>Percent of surface that belong to an additional itemized category</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>nameOther</span></td>
-<td ><span class='itemsmall'>Name of additional itemized groundcover category (e.g., beer cans).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>growthform1Cover</span></td>
-<td  class='grey' ><span class='itemsmall'>Total cover of the predominant growthform?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>soilTaxon</span></td>
-<td ><span class='itemsmall'>Soil taxon within the USDA classification hierarchy, including Order, Suborder, Greatgroup, Subgroup, Family and Series.  If values do not match the list exactly, you will be prompted to translate to list values in the VegBranch translation step.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>soilTaxonSrc</span></td>
-<td  class='grey' ><span class='itemsmall'>How was the soil taxon determined (e.g., field observation, map,  other sources)?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Contrib1</span></td>
-<td ><span class='itemsmall'>Contributor to the plot, in role indicated in Role1.  The field should match a party code in your party data.  VegBank can generate that table from values in this and similar fields.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Role1</span></td>
-<td  class='grey' ><span class='itemsmall'>Role code for the contributor to this observation that is listed in Contrib1.  Role Codes will be translated in the Translate Data Form. Examples: Plot Leader, Plot Assistant, Taxonomic Advisor</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>QuadrangleName</span></td>
-<td ><span class='itemsmall'>Quadrangle in which the plot is located.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>County</span></td>
-<td  class='grey' ><span class='itemsmall'>County in which the plot is located.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StateProvince</span></td>
-<td ><span class='itemsmall'>State/Province in which the plot is located.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Country</span></td>
-<td  class='grey' ><span class='itemsmall'>Country in which the plot is located.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Continent</span></td>
-<td ><span class='itemsmall'>Continent in which the plot is located.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>locationAccuracy</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Estimated accuracy of the location of the plot. Plot origin has a 95% or greater probability of being within this many meters of the reported location.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>authorE</span><br/><span class='normal'>&nbsp;&nbsp;text (20)</span></td>
+<td ><span class='item'>Original E-W coordinate as recorded by the author</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>authorN</span><br/><span class='normal'>&nbsp;&nbsp;text (20)</span></td>
+<td  class='grey' ><span class='item'>Original N-S coordinate as recorded by the author</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>authorZone</span><br/><span class='normal'>&nbsp;&nbsp;text (20)</span></td>
+<td ><span class='item'>Original UTM zone reported by the author</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>authorDatum</span><br/><span class='normal'>&nbsp;&nbsp;text (20)</span></td>
+<td  class='grey' ><span class='item'>Original datum reported by the author</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>authorLocation</span><br/><span class='normal'>&nbsp;&nbsp;text (200)</span></td>
+<td ><span class='item'>Original location as described by author (e.g. Town-Range-Section)</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>locationNarrative</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td  class='grey' ><span class='item'>Text description that provides information useful for plot relocation.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>azimuth</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>This element stores the azimuth of the x-axis used to describe the relative coordinate system for plot shape (dsgpoly) and other spatial information about the plot. Typically the azimuth is parallel to the long axis of the plot (in the case of a rectangle).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>shape</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td  class='grey' ><span class='item'>Shape of the plot area.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>standSize</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td ><span class='item'>The extent of this community occurrence in relation to the plot size: see list of values.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>placementMethod</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td  class='grey' ><span class='item'>Brief description of strategy for determining plot placement within the stand.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>layoutNarrative</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td ><span class='item'>Text description of and the rationale for the layout of the plot.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>elevation</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>The elevation of the plot origin in meters above sea level.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>slopeAspect</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Representative azimuth of slope gradient (0-360 degrees); if too flat to determine = -1; if too irregular to determine = -2.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>slopeGradient</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Representative inclination of slope in degrees; if too irregular to determine, = -1.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>topoPosition</span><br/><span class='normal'>&nbsp;&nbsp;text (100)</span></td>
+<td ><span class='item'>Position of the plot on land surface (e.g., Summit, shoulder, upper slope, middle slope, lower slope, toeslope, no slope, channel bed, dune swale, pond).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>landform</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td  class='grey' ><span class='item'>Landform type.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>rockType</span><br/><span class='normal'>&nbsp;&nbsp;text (90)</span></td>
+<td ><span class='item'>RockType values conform to the lithic types in the FGDC Soil Geographic Data Standards, September 1997. http://www.fgdc.gov/standards/documents/standards/soils/soil997.PDF (pages 56-59).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>surficialDeposits</span><br/><span class='normal'>&nbsp;&nbsp;text (90)</span></td>
+<td  class='grey' ><span class='item'>Surficial deposits represent the parent material that are the geologic or organic precursors to the soil.  They may either have been deposited by geologic (wind, ice, gravity or water) or biologic (organic) activity, or formed in place more-or-less directly from rocks and minerals below.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>methodNarrative</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td ><span class='item'>Additional metadata helpful for understanding how the data were collected during the observation event.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>coverDispersion</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td  class='grey' ><span class='item'>Were cover values for the total taxon list collected from one contiguous area or dispersed subplots (e.g., continguous, dispersed-regular, dispered-random)?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>originalData</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td ><span class='item'>Location where the hard data reside and any access instructions.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>effortLevel</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td  class='grey' ><span class='item'>This is the effort spent making the observations as estimated by the party that submitted the data (e.g., Very thorough, Average, Hurried description).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>floristicQuality</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td ><span class='item'>Subjective assessment of floristic quality by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>bryophyteQuality</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td  class='grey' ><span class='item'>Subjective assessment of the taxonmic quality of the bryophye data by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low, Very incomplete,absent).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>lichenQuality</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td ><span class='item'>Subjective assessment of the taxonmic quality of the lichen data by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low, Very incomplete,absent).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>observationNarrative</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td  class='grey' ><span class='item'>Additional unstructured observations useful for understanding the ecological attributes and significance of the plot observations.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>landscapeNarrative</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td ><span class='item'>Unstructured observations on the landscape context of the observed plot.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>homogeneity</span><br/><span class='normal'>&nbsp;&nbsp;Text (50)</span></td>
+<td  class='grey' ><span class='item'>How homogeneous was the community (e.g., homogeneous, compositionial trend across plot, conspicuous inclusions, irregular mosaic or pattern).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>phenologicAspect</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td ><span class='item'>Season expression of the community (e.g., typical growing season, vernal, aestival, wet, autumnal, winter, dry, irregular ephemerals present).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>representativeness</span><br/><span class='normal'>&nbsp;&nbsp;text (100)</span></td>
+<td  class='grey' ><span class='item'>How representative was the plot of the stand?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>hydrologicRegime</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td ><span class='item'>What is the hydrologic regime, which is a refelction of frequency and duration of flooding)?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>soilMoistureRegime</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td  class='grey' ><span class='item'>How moist was the soil at the sampling event?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>soilDrainage</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td ><span class='item'>How well drained is the site (generally consistent with USDA classes)?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>waterSalinity</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td  class='grey' ><span class='item'>How saline is the water, if a flooded community?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>waterDepth</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>For aquatic or marine vegetation, what was the water depth in m.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>shoreDistance</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>For aquatic or marine vegetation, what was the closest distance to shore in m.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>soilDepth</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Median depth to bedrockor permafrost in m (usually from averaging multiple probe readings).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>organicDepth</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Depth of the curficial organic layer, where present, in centimeters.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>percentBedRock</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Percent of surface that is exposed bedrock.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>percentRockGravel</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Percent of surface that is exposed rock and gravel.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>percentWood</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Percent of surface that is wood.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>percentLitter</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Percent of surface that is litter.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>percentBareSoil</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Percent of surface that is bare soil.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>percentWater</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Percent of surface that is water.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>percentOther</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Percent of surface that belong to an additional itemized category</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>nameOther</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td  class='grey' ><span class='item'>Name of additional itemized groundcover category (e.g., beer cans).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>QuadrangleName</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td ><span class='item'>Quadrangle in which the plot is located.  For plots in the US, it is recommended that you also use the StateProvince field to indicate which state the plot is in.  This helps VegBranch match your quadrangle to the correct state.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>County</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td  class='grey' ><span class='item'>County in which the plot is located.  For plots in the US, it is recommended that you also use the StateProvince field to indicate which state the plot is in.  This helps VegBranch match your county to the correct state.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StateProvince</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td ><span class='item'>State/Province in which the plot is located.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Country</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td  class='grey' ><span class='item'>Country in which the plot is located.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Continent</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td ><span class='item'>Continent in which the plot is located.</span></td></tr>
 <tr><td class='color3' colspan='3'>
 <span class='normal'>&raquo; Sometimes used fields:</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>dsgpoly</span></td>
-<td  class='grey' ><span class='itemsmall'>This field is a text string containing the points circumscribing a plot area.  These points are anticipated to have been collected using tapes, GPS, or calculated from the plot shape and area. Points are x-y coordinates in m relative to plot origin.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>elevationAccuracy</span></td>
-<td ><span class='itemsmall'>The accuracy of the elevation in percentage of the elevation reported.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>elevationRange</span></td>
-<td  class='grey' ><span class='itemsmall'>Meters of difference in elevations of the high and low points in the plot.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>minSlopeAspect</span></td>
-<td ><span class='itemsmall'>Minimum azimuth of slope gradient (0-360 degrees), counterclockwise from representative azmuth.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>maxSlopeAspect</span></td>
-<td  class='grey' ><span class='itemsmall'>Maximum azimuth of slope gradient (0-360 degrees), clockwise from representative azmuth</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>minSlopeGradient</span></td>
-<td ><span class='itemsmall'>Minimum inclindation of slope in degrees.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>maxSlopeGradient</span></td>
-<td  class='grey' ><span class='itemsmall'>Maximum inclination of slope in degrees.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>authorObsCode</span></td>
-<td ><span class='itemsmall'>This is the code or name that the author uses to identify this plot observation event. Where a plot has only one observation, this will often equal plot.authorPlotCode.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>PrevObsAuthPlotCode</span></td>
-<td  class='grey' ><span class='itemsmall'>Code that refers to the AuthorObsCode of the previous observation, if there is one.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>dateAccuracy</span></td>
-<td ><span class='itemsmall'>Estimated accuracy of the observation date.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>basalArea</span></td>
-<td  class='grey' ><span class='itemsmall'>Total basal area of woody stems (in m2/ha).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>standMaturity</span></td>
-<td ><span class='itemsmall'>How mature is the stand.  Could be young, mature but even-aged, old-growth, etc.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>successionalStatus</span></td>
-<td  class='grey' ><span class='itemsmall'>Description of the assumed successional status of the plot. This descriptionis of necessity highly subjective.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>treeHt</span></td>
-<td ><span class='itemsmall'>Height of the tree layer in m.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>shrubHt</span></td>
-<td  class='grey' ><span class='itemsmall'>Height of the shrub layer in m.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>fieldHt</span></td>
-<td ><span class='itemsmall'>Height of the field layer in m.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>nonvascularHt</span></td>
-<td  class='grey' ><span class='itemsmall'>Height of the nonvascular layer in m.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>submergedHt</span></td>
-<td ><span class='itemsmall'>Height of the submerged layer in m.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>treeCover</span></td>
-<td  class='grey' ><span class='itemsmall'>Total cover of the tree layer in percent.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>shrubCover</span></td>
-<td ><span class='itemsmall'>Total cover of the shrub layer in percent.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>fieldCover</span></td>
-<td  class='grey' ><span class='itemsmall'>Total cover of the field layer in percent.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>nonvascularCover</span></td>
-<td ><span class='itemsmall'>Total cover of the nonvascular layer in percent.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>floatingCover</span></td>
-<td  class='grey' ><span class='itemsmall'>Total cover of the floating layer in percent.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>submergedCover</span></td>
-<td ><span class='itemsmall'>Total cover of the submerged layer in percent.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>dominantStratum</span></td>
-<td  class='grey' ><span class='itemsmall'>Which of the six standard strata is dominant?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>growthform1Type</span></td>
-<td ><span class='itemsmall'>The predominant growth form?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>growthform2Type</span></td>
-<td  class='grey' ><span class='itemsmall'>The second-most predominant growthform?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>growthform3Type</span></td>
-<td ><span class='itemsmall'>The third-most predominant growthform</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>growthform2Cover</span></td>
-<td  class='grey' ><span class='itemsmall'>Total cover of the second-most predominant growthform?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>growthform3Cover</span></td>
-<td ><span class='itemsmall'>Total cover of the third-most predominent growthform?</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>totalCover</span></td>
-<td  class='grey' ><span class='itemsmall'>The total cover, in percent, of all vegetation on the plot.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Contrib2</span></td>
-<td ><span class='itemsmall'>Contributor to the plot, in role indicated in Role2.  The field should match a party code in your party data.  VegBank can generate that table from values in this and similar fields.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Role2</span></td>
-<td  class='grey' ><span class='itemsmall'>Role code for the contributor to this observation that is listed in Contrib2.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Contrib3</span></td>
-<td ><span class='itemsmall'>Contributor to the plot, in role indicated in Role2.  The field should match a party code in your party data.  VegBank can generate that table from values in this and similar fields.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Role3</span></td>
-<td  class='grey' ><span class='itemsmall'>Role code for the contributor to this observation that is listed in Contrib3.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Contrib4</span></td>
-<td ><span class='itemsmall'>Contributor to the plot, in role indicated in Role4.  The field should match a party code in your party data.  VegBank can generate that table from values in this and similar fields.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Role4</span></td>
-<td  class='grey' ><span class='itemsmall'>Role code for the contributor to this observation that is listed in Contrib4.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Contrib5</span></td>
-<td ><span class='itemsmall'>Contributor to the plot, in role indicated in Role5.  The field should match a party code in your party data.  VegBank can generate that table from values in this and similar fields.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Role5</span></td>
-<td  class='grey' ><span class='itemsmall'>Role code for the contributor to this observation that is listed in Contrib5.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex1</span></td>
-<td ><span class='itemsmall'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]1) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).  All StratumIndexes in this table will be moved to Normalized Plot Data.  If you have more than 9 Strata per plot, you should use that table to store stratum information rather than this one.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight1</span></td>
-<td  class='grey' ><span class='itemsmall'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex1</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase1</span></td>
-<td ><span class='itemsmall'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex1</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover1</span></td>
-<td  class='grey' ><span class='itemsmall'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex1</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex2</span></td>
-<td ><span class='itemsmall'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]2) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight2</span></td>
-<td  class='grey' ><span class='itemsmall'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex2</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase2</span></td>
-<td ><span class='itemsmall'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex2</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover2</span></td>
-<td  class='grey' ><span class='itemsmall'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex2</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex3</span></td>
-<td ><span class='itemsmall'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]3) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight3</span></td>
-<td  class='grey' ><span class='itemsmall'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex3</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase3</span></td>
-<td ><span class='itemsmall'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex3</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover3</span></td>
-<td  class='grey' ><span class='itemsmall'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex3</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex4</span></td>
-<td ><span class='itemsmall'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]4) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight4</span></td>
-<td  class='grey' ><span class='itemsmall'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex4</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase4</span></td>
-<td ><span class='itemsmall'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex4</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover4</span></td>
-<td  class='grey' ><span class='itemsmall'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex4</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex5</span></td>
-<td ><span class='itemsmall'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]5) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight5</span></td>
-<td  class='grey' ><span class='itemsmall'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex5</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase5</span></td>
-<td ><span class='itemsmall'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex5</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover5</span></td>
-<td  class='grey' ><span class='itemsmall'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex5</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex6</span></td>
-<td ><span class='itemsmall'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]6) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight6</span></td>
-<td  class='grey' ><span class='itemsmall'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex6</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase6</span></td>
-<td ><span class='itemsmall'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex6</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover6</span></td>
-<td  class='grey' ><span class='itemsmall'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex6</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex7</span></td>
-<td ><span class='itemsmall'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]7) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight7</span></td>
-<td  class='grey' ><span class='itemsmall'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex7</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase7</span></td>
-<td ><span class='itemsmall'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex7</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover7</span></td>
-<td  class='grey' ><span class='itemsmall'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex7</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex8</span></td>
-<td ><span class='itemsmall'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]8) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight8</span></td>
-<td  class='grey' ><span class='itemsmall'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex8</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase8</span></td>
-<td ><span class='itemsmall'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex8</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover8</span></td>
-<td  class='grey' ><span class='itemsmall'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex8</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex9</span></td>
-<td ><span class='itemsmall'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]9) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field). All StratumIndexes in this table will be moved to Normalized Plot Data.  If you have more than 9 Strata per plot, you should use that table to store stratum information rather than this one.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight9</span></td>
-<td  class='grey' ><span class='itemsmall'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex9</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase9</span></td>
-<td ><span class='itemsmall'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex9</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover9</span></td>
-<td  class='grey' ><span class='itemsmall'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex9</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>dsgpoly</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td  class='grey' ><span class='item'>This field is a text string containing the points circumscribing a plot area.  These points are anticipated to have been collected using tapes, GPS, or calculated from the plot shape and area. Points are x-y coordinates in m relative to plot origin.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>elevationAccuracy</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>The accuracy of the elevation in percentage of the elevation reported.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>elevationRange</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Meters of difference in elevations of the high and low points in the plot.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>minSlopeAspect</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Minimum azimuth of slope gradient (0-360 degrees), counterclockwise from representative azmuth.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>maxSlopeAspect</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Maximum azimuth of slope gradient (0-360 degrees), clockwise from representative azmuth</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>minSlopeGradient</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Minimum inclindation of slope in degrees.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>maxSlopeGradient</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Maximum inclination of slope in degrees.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>authorObsCode</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td ><span class='item'>This is the code or name that the author uses to identify this plot observation event. Where a plot has only one observation, this will often equal plot.authorPlotCode.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>PrevObsAuthPlotCode</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td  class='grey' ><span class='item'>Code that refers to the AuthorObsCode of the previous observation, if there is one.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>obsEndDate</span><br/><span class='normal'>&nbsp;&nbsp;Date/Time</span></td>
+<td ><span class='item'>If the observation event spanned more than a single day, this is the last day on which observations were made.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>dateAccuracy</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td  class='grey' ><span class='item'>Estimated accuracy of the observation date.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>stemSizeLimit</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Lower diameter limit in centimeters for inclusion of a tree in the stem count (stemCount).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>autoTaxonCover</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td  class='grey' ><span class='item'>TRUE indicates that the overall cover value for a taxon was not observed, but rather calculated from the cover values in one or more strata.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>stemObservationArea</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>The total surface area (in m2) observed for recording woody stem data.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>stemSampleMethod</span><br/><span class='normal'>&nbsp;&nbsp;text (30)</span></td>
+<td  class='grey' ><span class='item'>The method used to obtain basal area or tree stem data (e.g., full census, point quarter, random pairs, Bitterlich, other).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>basalArea</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Total basal area of woody stems (in m2/ha).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>standMaturity</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>How mature is the stand.  Could be young, mature but even-aged, old-growth, etc.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>successionalStatus</span><br/><span class='normal'>&nbsp;&nbsp;Memo</span></td>
+<td ><span class='item'>Description of the assumed successional status of the plot. This descriptionis of necessity highly subjective.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>treeHt</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Height of the tree layer in m.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>shrubHt</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Height of the shrub layer in m.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>fieldHt</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Height of the field layer in m.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>nonvascularHt</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Height of the nonvascular layer in m.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>submergedHt</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Height of the submerged layer in m.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>treeCover</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Total cover of the tree layer in percent.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>shrubCover</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Total cover of the shrub layer in percent.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>fieldCover</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Total cover of the field layer in percent.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>nonvascularCover</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Total cover of the nonvascular layer in percent.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>floatingCover</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Total cover of the floating layer in percent.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>submergedCover</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Total cover of the submerged layer in percent.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>dominantStratum</span><br/><span class='normal'>&nbsp;&nbsp;text (40)</span></td>
+<td ><span class='item'>Which of the six standard strata is dominant?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>growthform1Type</span><br/><span class='normal'>&nbsp;&nbsp;text (40)</span></td>
+<td  class='grey' ><span class='item'>The predominant growth form?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>growthform2Type</span><br/><span class='normal'>&nbsp;&nbsp;text (40)</span></td>
+<td ><span class='item'>The second-most predominant growthform?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>growthform3Type</span><br/><span class='normal'>&nbsp;&nbsp;text (40)</span></td>
+<td  class='grey' ><span class='item'>The third-most predominant growthform</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>growthform1Cover</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Total cover of the predominant growthform?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>growthform2Cover</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Total cover of the second-most predominant growthform?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>growthform3Cover</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Total cover of the third-most predominent growthform?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>totalCover</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>The total cover, in percent, of all vegetation on the plot.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>soilTaxon</span><br/><span class='normal'>&nbsp;&nbsp;text (255)</span></td>
+<td ><span class='item'>Soil taxon within the USDA classification hierarchy, including Order, Suborder, Greatgroup, Subgroup, Family and Series.  If values do not match the list exactly, you will be prompted to translate to list values in the VegBranch translation step.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>soilTaxonSrc</span><br/><span class='normal'>&nbsp;&nbsp;text (200)</span></td>
+<td  class='grey' ><span class='item'>How was the soil taxon determined (e.g., field observation, map,  other sources)?</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Contrib2</span><br/><span class='normal'>&nbsp;&nbsp;text (150)</span></td>
+<td ><span class='item'>Contributor to the plot, in role indicated in Role2.  The field should match a party code in your party data.  VegBank can generate that table from values in this and similar fields.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Role2</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td  class='grey' ><span class='item'>Role code for the contributor to this observation that is listed in Contrib2.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Contrib3</span><br/><span class='normal'>&nbsp;&nbsp;text (150)</span></td>
+<td ><span class='item'>Contributor to the plot, in role indicated in Role2.  The field should match a party code in your party data.  VegBank can generate that table from values in this and similar fields.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Role3</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td  class='grey' ><span class='item'>Role code for the contributor to this observation that is listed in Contrib3.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Contrib4</span><br/><span class='normal'>&nbsp;&nbsp;text (150)</span></td>
+<td ><span class='item'>Contributor to the plot, in role indicated in Role4.  The field should match a party code in your party data.  VegBank can generate that table from values in this and similar fields.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Role4</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td  class='grey' ><span class='item'>Role code for the contributor to this observation that is listed in Contrib4.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Contrib5</span><br/><span class='normal'>&nbsp;&nbsp;text (150)</span></td>
+<td ><span class='item'>Contributor to the plot, in role indicated in Role5.  The field should match a party code in your party data.  VegBank can generate that table from values in this and similar fields.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Role5</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td  class='grey' ><span class='item'>Role code for the contributor to this observation that is listed in Contrib5.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex1</span><br/><span class='normal'>&nbsp;&nbsp;text (10)</span></td>
+<td ><span class='item'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]1) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).  All StratumIndexes in this table will be moved to Normalized Plot Data.  If you have more than 9 Strata per plot, you should use that table to store stratum information rather than this one.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight1</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex1</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase1</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex1</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover1</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex1</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex2</span><br/><span class='normal'>&nbsp;&nbsp;text (10)</span></td>
+<td ><span class='item'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]2) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight2</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex2</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase2</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex2</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover2</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex2</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex3</span><br/><span class='normal'>&nbsp;&nbsp;text (10)</span></td>
+<td ><span class='item'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]3) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight3</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex3</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase3</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex3</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover3</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex3</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex4</span><br/><span class='normal'>&nbsp;&nbsp;text (10)</span></td>
+<td ><span class='item'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]4) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight4</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex4</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase4</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex4</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover4</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex4</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex5</span><br/><span class='normal'>&nbsp;&nbsp;text (10)</span></td>
+<td ><span class='item'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]5) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight5</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex5</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase5</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex5</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover5</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex5</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex6</span><br/><span class='normal'>&nbsp;&nbsp;text (10)</span></td>
+<td ><span class='item'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]6) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight6</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex6</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase6</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex6</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover6</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex6</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex7</span><br/><span class='normal'>&nbsp;&nbsp;text (10)</span></td>
+<td ><span class='item'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]7) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight7</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex7</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase7</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex7</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover7</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex7</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex8</span><br/><span class='normal'>&nbsp;&nbsp;text (10)</span></td>
+<td ><span class='item'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]8) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight8</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex8</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase8</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex8</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover8</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex8</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex9</span><br/><span class='normal'>&nbsp;&nbsp;text (10)</span></td>
+<td ><span class='item'>One stratum index for this plot. This index will be referenced in Presence Data Table (by field:StratumCover[Code]9) or Strata Cover Table (by field:StratumIndex, with same value as listed in this field). All StratumIndexes in this table will be moved to Normalized Plot Data.  If you have more than 9 Strata per plot, you should use that table to store stratum information rather than this one.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumHeight9</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Average height to the top of the stratum in meters.  Applies to Stratum defined in StratumIndex9</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumBase9</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td ><span class='item'>Average height of the bottom of the stratum in meters.  Applies to Stratum defined in StratumIndex9</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover9</span><br/><span class='normal'>&nbsp;&nbsp;Double</span></td>
+<td  class='grey' ><span class='item'>Cover of the vegetation within the given stratum in percent. Applies to Stratum defined in StratumIndex9</span></td></tr>
 <tr><td class='color4' colspan='3'>
 <span class='normal'>&raquo; Fields for expert users:</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>ParentAuthPlotCode</span></td>
-<td ><span class='itemsmall'>Code that refers to the AuthorPlotCode of the parent plot (this record's plot is a subplot of this ParentAuthPlotCode).  If this plot is not a subplot, this field should be left blank.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>reference_ID</span></td>
-<td  class='grey' ><span class='itemsmall'>Link to the source citation from which this plot record was taken.  Advanced field, must refer to primary key in reference table.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>project</span></td>
-<td ><span class='itemsmall'>Name of the project that this observation belongs to.  Will be translated to an extant project in the VegBranch translation step.  If left blank, the project name specified in the metadata step will be used as the project for this plot.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>coverMethodName</span></td>
-<td  class='grey' ><span class='itemsmall'>Cover Method used for this observation.  If this field is not filled in, values from the metadata form will be used.  This field must be used if more than one method is used for one migration process.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>stratumMethodName</span></td>
-<td ><span class='itemsmall'>Stratum Method used for this observation.  If this field is not filled in, values from the metadata form will be used. This field must be used if more than one method is used for a batch to migrate.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef1</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable, as defined in User Defined Metadata Loading Table.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef2</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef3</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef4</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef5</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef6</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef7</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef8</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef9</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef10</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef11</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef12</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef13</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef14</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef15</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef16</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef17</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef18</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef19</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef20</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef21</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef22</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef23</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef24</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef25</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef26</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef27</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef28</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef29</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef30</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef31</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef32</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef33</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef34</span></td>
-<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef35</span></td>
-<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>ParentAuthPlotCode</span><br/><span class='normal'>&nbsp;&nbsp;text (50)</span></td>
+<td ><span class='item'>Code that refers to the AuthorPlotCode of the parent plot (this record's plot is a subplot of this ParentAuthPlotCode).  If this plot is not a subplot, this field should be left blank.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>reference_ID</span><br/><span class='normal'>&nbsp;&nbsp;Long Integer</span></td>
+<td  class='grey' ><span class='item'>Link to the source citation from which this plot record was taken.  Advanced field, must refer to primary key in reference table.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>project</span><br/><span class='normal'>&nbsp;&nbsp;text (80)</span></td>
+<td ><span class='item'>Name of the project that this observation belongs to.  Will be translated to an extant project in the VegBranch translation step.  If left blank, the project name specified in the metadata step will be used as the project for this plot.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>coverMethodName</span><br/><span class='normal'>&nbsp;&nbsp;text (80)</span></td>
+<td  class='grey' ><span class='item'>Cover Method used for this observation.  If this field is not filled in, values from the metadata form will be used.  This field must be used if more than one method is used for one migration process.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>stratumMethodName</span><br/><span class='normal'>&nbsp;&nbsp;text (80)</span></td>
+<td ><span class='item'>Stratum Method used for this observation.  If this field is not filled in, values from the metadata form will be used. This field must be used if more than one method is used for a batch to migrate.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef1</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable, as defined in User Defined Metadata Loading Table.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef2</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef3</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef4</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef5</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef6</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef7</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef8</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef9</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef10</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef11</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef12</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef13</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef14</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef15</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef16</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef17</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef18</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef19</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef20</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef21</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef22</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef23</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef24</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef25</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef26</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef27</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef28</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef29</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef30</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef31</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef32</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef33</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef34</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td ><span class='item'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef35</span><br/><span class='normal'>&nbsp;&nbsp;Text (255)</span></td>
+<td  class='grey' ><span class='item'>The value of the user-defined variable.</span></td></tr>
 <tr><td class='color0' colspan='3'>
 <span class='normal'>&raquo; Internal VegBranch fields, please do not edit directly:</span></td></tr>
-<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>PLOT_ID</span></td>
-<td ><span class='itemsmall'>Database generated identifier assigned to each unique plot/observation.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>PLOT_ID</span><br/><span class='normal'>&nbsp;&nbsp;autoNumber</span></td>
+<td ><span class='item'>Database generated identifier assigned to each unique plot/observation.</span></td></tr>
 </table>
+<p><a href='#top'>top</a></p><hr /><a name='examples'></a><h3 class='left'>Examples of this data table:</h3>
+<h4 class='left'>simple example showing a few fields populated:</h4><table class='leftrightborders' cellpadding='2'><tr><th>authorPlotCode</th><th>realLatitude</th><th>realLongitude</th><th>area</th><th>elevation</th><th>slopeAspect</th><th>slopeGradient</th><th>soilDepth</th><th>Contrib1</th><th>Role1</th><th>QuadrangleName</th><th>StratumIndex1</th><th>StratumHeight1</th><th>StratumBase1</th><th>StratumCover1</th><th>StratumIndex2</th><th>StratumHeight2</th><th>StratumBase2</th><th>StratumCover2</th></tr>
+<tr class='evenrow'><td>plt1</td><td>45.56</td><td>-135.67</td><td>100</td><td>43</td><td>43</td><td>15</td><td>12</td><td>Lee, Michael</td><td>primary investigator</td><td>&nbsp;</td><td>herb</td><td>0.5</td><td>0</td><td>42</td><td>tree</td><td>3.5</td><td>0.5</td><td>76</td></tr>
+<tr class='oddrow'><td>plt2</td><td>54.82</td><td>-145.82</td><td>200</td><td>79</td><td>-1</td><td>0</td><td>43</td><td>Lee Anne Jacobs</td><td>primary investigator</td><td>&nbsp;</td><td>herb</td><td>0.8</td><td>0</td><td>31</td><td>tree</td><td>7.5</td><td>0.8</td><td>25</td></tr>
+<tr class='evenrow'><td>plt3</td><td>33.21</td><td>-87.21</td><td>250</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>gramling@unc.edu</td><td>primary investigator</td><td>&nbsp;</td><td>herb</td><td>1</td><td>0</td><td>&nbsp;</td><td>tree</td><td>12</td><td>1</td><td>&nbsp;</td></tr>
+</table><p>Download this example as a <a href='example_z_user_c_plotdata_c_simple1.csv'>.csv file</a></p><p><a href='#top'>top</a></p>@vegbank_footer_html_onerow@ </body> </html>
