@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-01 23:11:24 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-07-09 18:11:47 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,9 @@ package org.vegbank.ui.struts;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,6 +52,9 @@ public class PlotQueryAction extends Action
 {
 
 	private static final String ANYVALUE = "ANY";
+	private static final String ANDVALUE = " AND ";
+	private static final String 	selectClause =	
+		" SELECT DISTINCT(observation.obsaccessionnumber), observation.authorobscode, " +	"plot.latitude, plot.longitude, observation.observation_id";
 
 	public ActionForward execute(
 		ActionMapping mapping,
@@ -61,38 +67,11 @@ public class PlotQueryAction extends Action
 
 		StringBuffer query = new StringBuffer();
 		query.append(
-			" SELECT DISTINCT(observation.obsaccessionnumber), observation.authorobscode, "
-				+ "plot.latitude, plot.longitude, observation.observation_id"
-				//+ " FROM plot, project, observation, taxonobservation, covermethod, stratummethod, "
-				+ " FROM plot, project, covermethod, stratummethod, "
-		
-				// Allow searching of Commusage for commname
-				+ " ( ( (commConcept RIGHT OUTER JOIN (commClass LEFT OUTER JOIN commInterpretation ON"
-				+ " commClass.COMMCLASS_ID = commInterpretation.COMMCLASS_ID) ON "
-				+ " commConcept.COMMCONCEPT_ID = commInterpretation.COMMCONCEPT_ID) " 
-				+	" INNER JOIN commUsage ON commConcept.COMMCONCEPT_ID = commUsage.COMMCONCEPT_ID )   "
-				+ " RIGHT OUTER JOIN observation ON observation.observation_id = commclass.observation_id )"
-				// End Joining commclass to commUsage
-				
-				+ " LEFT OUTER JOIN ( "
-				
-				// Allow searching of plantnames
-				+ " plantname  INNER JOIN ( plantusage INNER JOIN ( plantconcept "
-				+ " INNER JOIN ( taxoninterpretation INNER JOIN taxonobservation "
-				+ " ON taxonobservation.taxonobservation_id = taxoninterpretation.taxonobservation_id) "
-				+ " ON taxoninterpretation.plantconcept_id = plantconcept.plantconcept_id ) "
-				+ " ON plantusage.plantconcept_id = plantconcept.plantconcept_id ) "
-				+ " ON plantname.plantname_id = plantusage.plantname_id "
-				// End joining taxonObservation to plantName
-				
-				+ " ) ON observation.observation_id = taxonobservation.observation_id  "
-				
+				selectClause
+				+ " FROM plot, project, observation, covermethod, stratummethod "			
 				+ " WHERE plot.plot_id = observation.plot_id "
 				+ " AND project.project_id = observation.project_id AND observation.covermethod_id = covermethod.covermethod_id"
 				+ " AND observation.stratummethod_id = stratummethod.stratummethod_id"
-				//+ " AND taxonobservation.observation_id = observation.observation_id"
-				//+ " AND taxonobservation.observation_id = observation.observation_id"
-				//+ " AND commclass.observation_id = observation.observation_id"
 		);
 
 		// Get the form
@@ -213,62 +192,141 @@ public class PlotQueryAction extends Action
 		// name is multifield
 		//query.append( this.handleSimpleEquals( pqForm.getPlotSubmitterName(),
 		//					) );
-
-		// VEGATATION
-		String[] plantNames = pqForm.getPlantName();
-		String[] minTaxonCover = pqForm.getMinTaxonCover();
-		String[] maxTaxonCover = pqForm.getMaxTaxonCover();
-		String[] minTaxonBasalArea = pqForm.getMinTaxonBasalArea();
-		String[] maxTaxonBasalArea = pqForm.getMaxTaxonBasalArea();
-
-		for (int i=0; i<plantNames.length; i++)
-		{
-			// If no plantname given then forget it...
-			if ( ! Utility.isStringNullOrEmpty(plantNames[i]))
-			{
-				dynamicQuery.append(conjunction + " ( ");
-				dynamicQuery.append( " plantname.plantname like '" + plantNames[i] + "'"
-				+ " and plantname.plantname_id = taxonobservation.plantname_id");
-				
-				dynamicQuery.append(
-					this.handleMaxMinNull(maxTaxonCover[i], minTaxonCover[i], true, "taxonobservation.taxoncover", " AND")
-				);
-				dynamicQuery.append(
-					this.handleMaxMinNull(maxTaxonBasalArea[i], minTaxonBasalArea[i], true, "taxonobservation.taxonbasalarea", " AND")
-				);
-
-				dynamicQuery.append(" ) ");
-			}
-		}
 		
-		// COMMUNITIES
-		String[] commNames = pqForm.getCommName();
-		String[] maxCommStartDates = pqForm.getMaxCommStartDate();
-		String[] minCommStopDates = pqForm.getMinCommStopDate();
-
-		for (int i=0; i<commNames.length; i++)
-		{
-			// If no plantname given then forget it...
-			if ( ! Utility.isStringNullOrEmpty(commNames[i]))
-			{
-				
-				dynamicQuery.append(conjunction + " ( ");
-				dynamicQuery.append( " commusage.commname like '" + commNames[i] + "'");
-				
-				dynamicQuery.append(
-					this.handleMaxMinNullDateRange(
-						minCommStopDates[i],
-						maxCommStartDates[i],
-						"commclass.classstartdate",
-						"commclass.classstopdate",
-						true, 
-						" AND ")
-				);
-				
-				dynamicQuery.append(" ) ");
-			}
-		}
+		appendWhereClause(query, conjunction, dynamicQuery);
 		
+		// FINISHED CONSTRUCTING QUERY
+		
+		try
+		{
+			Vector resultSets = new Vector();
+			DatabaseAccess da = new DatabaseAccess();
+			
+			// Get all resultsets
+			resultSets.add( da.issueSelect(query.toString() ) );		
+			getPlantResultSets(pqForm, resultSets);
+			getCommunitiesResultSets(pqForm, resultSets);
+			
+			// Save the Collection of Summaries into the request
+			request.setAttribute("PlotsResults", getPlotSummaries(conjunction, resultSets));
+		}
+		catch (SQLException e1)
+		{
+			errors.add(
+				ActionErrors.GLOBAL_ERROR,
+				new ActionError("errors.database", e1.getMessage()));
+			System.out.println(query.toString());
+		}
+
+		if (!errors.isEmpty())
+		{
+			saveErrors(request, errors);
+			return (mapping.getInputForward());
+		}
+
+		return mapping.findForward("DisplayResults");
+	}
+
+	private Collection getPlotSummaries(String conjunction, Vector resultSets)
+		throws SQLException
+	{
+		System.out.println("Conjuction is '" + conjunction + "'");
+		
+		// Collection for adding valid object created from current resultset
+		Hashtable workspace = new Hashtable();
+		// Collection for storing keys that are still valid ( only needed for Intersection)
+		Vector validKeys = new Vector();
+		// Used in Union to capture all of first resultset.
+		boolean isFirstResultSet = true;
+		
+		//System.out.println(">>> " + resultSets);
+		Iterator results = resultSets.iterator();
+		while ( results.hasNext() )
+		{
+			ResultSet rs = (ResultSet) results.next();
+			//System.out.println("Processing " + rs.toString());
+			
+			// When doing a Intesection add to current collection all objects that existed
+			// in oldWorkspace and current resultset.
+			if ( conjunction.equals(ANDVALUE) ) 
+			{
+				validKeys.clear();
+				//System.out.println("111===> " + validKeys);
+				Enumeration keysEnum = workspace.keys();
+				while ( keysEnum.hasMoreElements() )
+				{
+					validKeys.add(keysEnum.nextElement());
+				}
+				//System.out.println("222===> " + validKeys );
+				workspace.clear();
+			}
+			
+			
+			while (rs.next())
+			{
+				PlotSummary plotsum = new PlotSummary();
+				populatePlotSummary(rs, plotsum);
+				if ( conjunction.equals(ANDVALUE) ) // Do a Intesection of all resultset
+				{
+					if ( isFirstResultSet )	// if empty dump all into collection
+					{
+						//System.out.println("#Adding " + plotsum.getVegbankAccessionNumber());
+						workspace.put(plotsum.getVegbankAccessionNumber(), plotsum);
+					}
+					else //Only add element if in oldWorkspace
+					{
+						
+						//System.out.println("3333===> " + validKeys);
+						
+						// Did this object exist in the previous results
+						if ( validKeys.contains(plotsum.getVegbankAccessionNumber()))
+						{
+							//System.out.println("Adding " + plotsum.getVegbankAccessionNumber());
+							workspace.put(plotsum.getVegbankAccessionNumber(), plotsum);
+						}
+						else
+						{
+							//System.out.println("Not Adding " + plotsum.getVegbankAccessionNumber());
+							// Don't add this object
+						}
+					}
+				}
+				else // Concatonate without duplicates
+				{
+					if ( workspace.contains(plotsum.getVegbankAccessionNumber()))
+					{
+						//System.out.println("No need to ADD " + plotsum.getVegbankAccessionNumber());
+						// No need to add
+					}
+					else
+					{
+						// Add this new object
+						workspace.put(plotsum.getVegbankAccessionNumber(), plotsum);
+						//System.out.println("ADD " + plotsum.getVegbankAccessionNumber());
+					}
+				}
+			}
+			isFirstResultSet = false;
+		}
+		Collection col = (Collection) workspace.values();
+		return col;
+	}
+
+	private void populatePlotSummary(ResultSet rs, PlotSummary plotsum)
+		throws SQLException
+	{
+		plotsum.setVegbankAccessionNumber(rs.getString(1));
+		plotsum.setAuthorObservationCode(rs.getString(2));
+		plotsum.setLatitude(rs.getString(3));
+		plotsum.setLongitude(rs.getString(4));
+		plotsum.setPlotId(rs.getString(5));
+	}
+
+	private void appendWhereClause(
+		StringBuffer query,
+		String conjunction,
+		StringBuffer dynamicQuery)
+	{
 		// User added nothing to query
 		if ( dynamicQuery.toString().trim().equals("") )
 		{
@@ -282,46 +340,119 @@ public class PlotQueryAction extends Action
 		{
 			query.append(" false ");
 		}
-
+		
 		query.append(dynamicQuery.toString());
 		query.append(" ) ");
-		// FINISHED CONSTRUCTING QUERY
-
-		// try to run this (potentially) monster query
-		try
-		{
-			DatabaseAccess da = new DatabaseAccess();
-			ResultSet rs = da.issueSelect(query.toString());
-
-			Collection col = new Vector();
-			while (rs.next())
-			{
-				PlotSummary plotsum = new PlotSummary();
-				plotsum.setVegbankAccessionNumber(rs.getString(1));
-				plotsum.setAuthorObservationCode(rs.getString(2));
-				plotsum.setLatitude(rs.getString(3));
-				plotsum.setLongitude(rs.getString(4));
-				plotsum.setPlotId(rs.getString(5));
-				col.add(plotsum);
-			}
-			request.setAttribute("PlotsResults", col);
-		}
-		catch (SQLException e1)
-		{
-			errors.add(
-				ActionErrors.GLOBAL_ERROR,
-				new ActionError("errors.database", e1.getMessage() ,query.toString()));
-			System.out.println(query.toString());
-		}
-
-		if (!errors.isEmpty())
-		{
-			saveErrors(request, errors);
-			return (mapping.getInputForward());
-		}
-
-		return mapping.findForward("DisplayResults");
 	}
+	
+	private void getPlantResultSets(PlotQueryForm pqForm, Vector plantResultSets) throws SQLException
+	{
+		// VEGATATION
+		String[] plantNames = pqForm.getPlantName();
+		String[] minTaxonCover = pqForm.getMinTaxonCover();
+		String[] maxTaxonCover = pqForm.getMaxTaxonCover();
+		String[] minTaxonBasalArea = pqForm.getMinTaxonBasalArea();
+		String[] maxTaxonBasalArea = pqForm.getMaxTaxonBasalArea();
+		
+		// Loop over all the plantnames entered
+		for (int i=0; i<plantNames.length; i++)
+		{
+			// If no plantname given then forget it...
+			if ( ! Utility.isStringNullOrEmpty(plantNames[i]))
+			{
+				StringBuffer plantQuery = new StringBuffer();
+				plantQuery.append( selectClause 
+					+ " FROM plot JOIN " 
+					+ "	(observation JOIN  " 
+					+ "		(taxonobservation JOIN " 
+					+ "			( select codes.plantname_id from plantusage JOIN " 
+					+ "				(select plantconcept_id, plantname_id from plantusage where classsystem = 'Code' )" 
+					+ " 			AS codes ON plantusage.plantconcept_id = codes.plantconcept_id " 
+					+ " 				where plantusage.plantname like '" + plantNames[i] + "' ) " 
+					+ "			AS FOO ON taxonobservation.plantname_id = FOO.plantname_id) " 
+					+ "		ON observation.observation_id = taxonobservation.observation_id) " 
+					+ "	ON plot.plot_id = observation.plot_id "
+				);
+				
+				plantQuery.append(" WHERE ( true AND ");
+				
+				StringBuffer plantQueryConditions = new StringBuffer();
+				
+				plantQueryConditions.append(
+					this.handleMaxMinNull(maxTaxonCover[i], minTaxonCover[i], true, "taxonobservation.taxoncover", " AND")
+				);
+				plantQueryConditions.append(
+					this.handleMaxMinNull(maxTaxonBasalArea[i], minTaxonBasalArea[i], true, "taxonobservation.taxonbasalarea", " AND")
+				);
+				
+				appendWhereClause(plantQuery, "", plantQueryConditions );
+				
+				// Have my query now run it!!
+				DatabaseAccess da = new DatabaseAccess();
+				ResultSet rs2 = da.issueSelect(plantQuery.toString());
+				plantResultSets.add(rs2);
+			}
+			// I've got all my resultSets
+		}
+		System.out.println("Number of records matching plants: " +  plantResultSets.size() );
+	}
+
+
+	private void getCommunitiesResultSets(PlotQueryForm pqForm, Vector resultSets) throws SQLException
+	{
+    // COMMUNITIES
+		String[] commNames = pqForm.getCommName();
+		String[] maxCommStartDates = pqForm.getMaxCommStartDate();
+		String[] minCommStopDates = pqForm.getMinCommStopDate();
+		
+		for (int i=0; i<commNames.length; i++)
+		{
+			// If no communityname given then forget it...
+			if ( ! Utility.isStringNullOrEmpty(commNames[i]))
+			{
+				StringBuffer communityQuery = new StringBuffer();
+				communityQuery.append( selectClause 
+					+ " FROM plot JOIN " 
+					+ "	(observation JOIN  " 
+					+ "		(commclass JOIN " 
+					+ " 		(comminterpretation JOIN"
+					+ "				(select codes.commconcept_id from commusage JOIN " 
+					+ "					(select commconcept_id, commname_id from commusage where classsystem = 'CEGL' )" 
+					+ " 				AS codes ON commusage.commconcept_id = codes.commconcept_id " 
+					+ " 					where commusage.commname like '" + commNames[i] + "' ) " 
+					+ " 			AS FOO ON comminterpretation.commconcept_id = FOO.commconcept_id) "	
+					+ "			ON commclass.commclass_id = comminterpretation.commclass_id) " 
+					+ "		ON observation.observation_id = commclass.observation_id) " 
+					+ "	ON plot.plot_id = observation.plot_id "
+				);
+				
+				communityQuery.append(" WHERE ( true AND ");
+				
+				StringBuffer communityQueryConditions = new StringBuffer();
+				
+				communityQueryConditions.append(
+						this.handleMaxMinNullDateRange(
+						minCommStopDates[i],
+						maxCommStartDates[i],
+						"commclass.classstartdate",
+						"commclass.classstopdate",
+						true, 
+						" AND ")
+				);
+ 			
+				appendWhereClause(communityQuery, "", communityQueryConditions );
+				
+				// Have my query now run it!!
+				DatabaseAccess da = new DatabaseAccess();
+				ResultSet rs2 = da.issueSelect(communityQuery.toString());
+				resultSets.add(rs2);
+			}
+			// I've got all my resultSets
+		}
+		System.out.println("Number of records matching communities: " +  resultSets.size() );
+	}
+
+
 
 	private String handleSimpleCompare(
 		String value,

@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: mlee $'
- *	'$Date: 2003-07-02 18:06:58 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-07-09 18:11:46 $'
+ *	'$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,8 +43,8 @@ public class PartySummary  implements Serializable
 	private String salutation;
 	private String id;
 	private String surname;
-	private String givenname;
-    private String middlename;
+	private String givenName;
+  private String middleName;
 	private String organization;
 	private String contactinstructions;
 
@@ -146,13 +146,13 @@ public class PartySummary  implements Serializable
 		 */
 		public String getContactInstructions()
 		{
-			return contactInstructions;
+			return contactinstructions;
 		}
 		/**
 		 * @param string
 		 */
 		public void setContactInstructions(String string)
 		{
-			contactInstructions = string;
-	}
+			contactinstructions = string;
+		}
 }

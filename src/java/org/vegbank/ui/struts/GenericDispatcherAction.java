@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-03 20:30:47 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-07-09 18:11:47 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,11 +45,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import org.vegbank.common.command.GenericCommand;
 import org.vegbank.common.utility.Utility;
 
 public class GenericDispatcherAction extends Action
 {
 	
+	private static final String genericCommandName = "GenericCommand";
 	private static final String commandLocation = "org.vegbank.common.command.";
 	private static final String jspLocation = "/forms/";  
 	
@@ -65,19 +67,27 @@ public class GenericDispatcherAction extends Action
 		
 		try
 		{
-			Object commandObject = Utility.createObject(commandLocation + command);
-			Class commandClass = commandObject.getClass();
-			Class[] parameterTypes = null;
-			//	{ Class.forName(" javax.servlet.http.HttpServletRequest"),  
-			//		Class.forName("javax.servlet.http.HttpServletResponse"), };
-			Method commandExecute = commandClass.getMethod("execute",parameterTypes);
-			Object[] arguments = null;//{ request, response };
-			Collection collection = (Collection) commandExecute.invoke(commandObject, arguments);
-			
-			request.setAttribute("genericBean",  collection);
+			if ( command.equals(genericCommandName)) 
+			{
+				new GenericCommand().execute(request, response);
+			}
+			else
+			{
+				Object commandObject = Utility.createObject(commandLocation + command);
+				Class commandClass = commandObject.getClass();
+				Class[] parameterTypes = null;
+				//	{ Class.forName(" javax.servlet.http.HttpServletRequest"),  
+				//		Class.forName("javax.servlet.http.HttpServletResponse"), };
+				Method commandExecute = commandClass.getMethod("execute",parameterTypes);
+				Object[] arguments = null;//{ request, response };
+				Collection collection = (Collection) commandExecute.invoke(commandObject, arguments);
+				
+				request.setAttribute("genericBean",  collection);
+			}
 			
 			// Forward to a jsp
 			RequestDispatcher dispatcher = request.getRequestDispatcher(jspLocation + jsp);
+			System.out.println(jspLocation + jsp + " ----- " + dispatcher);
 			dispatcher.forward(request, response);
 		}
 		catch (Exception e)
@@ -85,6 +95,7 @@ public class GenericDispatcherAction extends Action
 			errors.add(
 				ActionErrors.GLOBAL_ERROR,
 				new ActionError("errors.resource.not.found", e.getMessage()));
+			System.out.println( e.getMessage() );
 			e.printStackTrace();
 		}
 		
