@@ -1,0 +1,10 @@
+<email> 
+
+    <from>rafe@rafe.us</from> 
+    <to>someone@example.com</to> 
+    <cc>someoneelse@example.com</cc> 
+    <bcc>rafe@rafe.us</bcc> 
+    <subject>This is the subject</subject> 
+    <body>This is the body of an email message.</body> 
+
+</email>
