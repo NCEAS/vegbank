@@ -22,6 +22,7 @@ then diff case INSENsitive and ignoring spaces -->
   <xsl:when test="attType='Integer' or attType='serial'">int4</xsl:when>
   <xsl:when test="attType='Float'">float8</xsl:when>
   <xsl:when test="attType='Boolean'">bool</xsl:when>
+  <xsl:when test="attType='Date'">timestamptz</xsl:when>
   <xsl:otherwise><xsl:value-of select="attType" /></xsl:otherwise>
 </xsl:choose> |<xsl:choose>
   <xsl:when test="attKey='PK'">no</xsl:when><xsl:otherwise><xsl:value-of select="attNulls" /></xsl:otherwise>
