@@ -12,9 +12,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: mlee $'
-  *      '$Date: 2004-04-08 05:44:28 $'
-  *  '$Revision: 1.9 $'
+  *    '$Author: anderson $'
+  *      '$Date: 2004-04-15 02:56:29 $'
+  *  '$Revision: 1.10 $'
   *
   *
   -->
@@ -34,7 +34,13 @@
 
         <h2 align="center" class="vegbank">Certification Application</h2>
 
-		<html:errors/>
+<logic:messagesPresent message="false">
+	<ul>
+	<html:messages id="error" message="false">
+		<li><bean:write name="error"/></li>
+	</html:messages>
+	</ul>
+</logic:messagesPresent>
 
         <p class="vegbank_normal">
 			Become a certified or professional user to start contributing data to VegBank.

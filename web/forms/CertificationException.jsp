@@ -10,9 +10,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: mlee $'
-*      '$Date: 2004-04-08 05:44:28 $'
-*  '$Revision: 1.3 $'
+*    '$Author: anderson $'
+*      '$Date: 2004-04-15 02:56:29 $'
+*  '$Revision: 1.4 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -33,23 +33,30 @@
 <html:html locale="true">
 <head>@defaultHeadToken@
 <meta http-equiv="expires" content="0">
-<title>Certification Required</title>
+<title>You Need Permission</title>
+<link rel="stylesheet" href="@stylesheet@" type="text/css">
 </head>
 <body>
 @vegbank_header_html_normal@
 
 <blockquote>
-<p class="vegbank_large">
+<p>
 	<br/>
 	<span class="vegbank_small">The page you tried to access requires a higher level of certification.
+	</span>
 	<br/>
-	Please use the <html:link action="LoadCertification.do">certification form</html:link> 
-	to increase your ability to use VegBank more effectively.<br/>
+	<br/>
+	Please <html:link href="@forms_link@RegisterNewUser.jsp">REGISTER</html:link> or
+	<html:link href="@general_link@login.jsp">LOGIN</html:link> to your VegBank account.
+	</span>
+	<br/>
+	<span class="vegbank_small">
+	Certified and professional users increase their ability to use VegBank more effectively.<br/>
 	</span>
 	<br/>
 	<br/>
 	<span class="vegbank_normal">
-		Thank you<br/>
+		Thank you,<br/>
 		<a href="mailto:help@vegbank.org">help@vegbank.org</a>
 	</span>	
 </p>
