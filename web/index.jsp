@@ -47,30 +47,27 @@ MM_reloadPage(true);
 		</P>
     </TD>
     <TD vAlign=top colSpan=3 height=211></TD>
-    <TD vAlign=top width=343 colSpan=10 height=333 rowSpan=2> 
+    <TD vAlign=top width=343 colSpan=10  rowSpan=2> 
       <P><FONT size="+2"><B>News</B></FONT></P>
       <UL>
-      <LI class="constsize"><font color="red" size="2">NEW!</font> Users can now view VegBank <a href="@general_link@metadata.html"> metadata.</a> 
+      <LI class="constsize"><font color="red">NEW!</font> VegBank workshop coming soon at a Portland ESA meeting <a href="@workshop_link@">workshop.</a> 
         </LI>
-      <LI class="constsize">VegBank's <a href="@general_link@sitemap.html">Site Map</a> is<font size="2" color="red"> updated!</font> 
+      <LI class="constsize">Users can now view VegBank <a href="@general_link@metadata.html"> metadata.</a> 
         </LI>
-        
-        <LI class="constsize">Version 2 of the ESA <I><A 
+         <LI class="constsize">Version 2 of the ESA <I><A 
         href="@panel_link@standards.html">Guidelines for Describing Associations and Alliances of the U.S. National Vegetation Classification</A></I>
 		has been completed.</LI>
         <LI class="constsize"> 
           Users of VegBank are encouraged to report errors and suggestions to <a href="mailto:help@vegbank.org">help@vegbank.org</a>
           </LI>
         <LI class="constsize">
-          New to VegBank? Get <a href="@general_link@info.html">info</a> about us or a 
-		  <a href="@general_link@vbsummary.html">summary of data</a> in Vegbank.  
-		  Try VegBank out by <a href="@forms_link@RegisterNewUser.jsp">registering</a> (it's free).
+          <font color="red">NEW!</font> Users may <a href="@general_link@login.jsp">log in as guest</a>, so you can search through VegBank without registering.
         </LI>
       </UL>
     </TD>
   </TR>
   <TR> 
-    <TD vAlign=top colSpan=2 height=122></TD>
+    <TD vAlign=top colSpan=2 ></TD>
     <TD vAlign=top height=149 rowSpan=2></TD>
     <TD vAlign=top width=336 colSpan=6 height=149 rowSpan=2> 
 
@@ -79,8 +76,7 @@ MM_reloadPage(true);
 
     </TD>
     <TD vAlign=top height=149 rowSpan=2></TD>
-    <TD vAlign=top height=149 rowSpan=2>
-	</TD>
+    <TD vAlign=top height=149 rowSpan=2></TD><td/><td />
   </TR>
   <TR> 
     <TD vAlign=top colSpan=2 height=27></TD>
@@ -99,20 +95,19 @@ MM_reloadPage(true);
 	  <a href="http://www.nceas.ucsb.edu/">National Center for Ecological Analysis and Synthesis</a>.
 	  </span>
 	  <br/>
-
+     <span class="vegbank_tiny">This material is based upon work
+			supported by the National Science Foundation under Grant Nos. DBI-9905838
+			and DBI-0213794. Any opinions, findings, and conclusions or
+			recommendations expressed in this material are those of the author(s) and
+		do not necessarily reflect the views of the National Science Foundation.</span>
 	<br/>&nbsp;
     </TD>
   </TR>
   <TR> 
-    <TD vAlign=top colSpan=2 height=78></TD>
-    <TD vAlign=top width=417 colSpan=8 height=78></TD>
-    <TD vAlign=top colSpan=3 height=78></TD>
-    <TD vAlign=top width=343  colSpan=10 height=78>
-	<span class="vegbank_tiny">This material is based upon work
-			supported by the National Science Foundation under Grant Nos. DBI-9905838
-			and DBI-0213794. Any opinions, findings, and conclusions or
-			recommendations expressed in this material are those of the author(s) and
-		do not necessarily reflect the views of the National Science Foundation.</span><br/>&nbsp;</TD>
+    <TD vAlign=top colSpan=2 height=1></TD>
+    <TD vAlign=top width=417 colSpan=8 height=1></TD>
+    <TD vAlign=top colSpan=3 height=1></TD>
+    <TD vAlign=top width=343  colSpan=10 height=1></TD>
 
 
   </TR>
