@@ -5,15 +5,15 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!--
-  * '$Id: change_pwd.jsp,v 1.2 2004-04-08 05:44:28 mlee Exp $'
+  * '$Id: change_pwd.jsp,v 1.3 2004-04-30 13:09:01 anderson Exp $'
   * Purpose: Display change user password form.
   * Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   * Authors: @author@
   *
-  * '$Author: mlee $'
-  * '$Date: 2004-04-08 05:44:28 $'
-  * '$Revision: 1.2 $'
+  * '$Author: anderson $'
+  * '$Date: 2004-04-30 13:09:01 $'
+  * '$Revision: 1.3 $'
   *
   *
   -->
@@ -36,13 +36,24 @@
 
 <html:form method="post" action="/UpdatePassword.do" >
 <html:hidden property="action" value="update"/>
+ 	<input type="hidden" name="usrId" value="<%=request.getParameter("usrId")%>"/>
 
 	<table width="700" border="0" cellspacing="5" cellpadding="3">
+<% 
+	Boolean isAdmin = (Boolean)(request.getSession().getAttribute("isAdmin"));
+
+	if (isAdmin != null) {
+		if (!isAdmin.booleanValue()) {
+%>
 	<tr> 
       <td colspan="2"><span class="vegbank_small">Current Password: </span><br/>
           <input type="password" name="password" size="25" maxlength="100"/>
 	  </td>
     </tr>
+<% 
+		}
+	} 
+%>
 
 	
 	<tr> 
