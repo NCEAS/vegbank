@@ -15,6 +15,18 @@ TH	{
 	background-color : #336633;
 	}
 
+.description	{
+		font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+		font-size: 10pt;
+		color: #000000
+	}
+
+.label_small	{
+		font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+		font-size: 11pt;
+		color: #000000
+	}
+
 .headerLink,
 a.headerLink:link,
 a.headerLink:visited,
