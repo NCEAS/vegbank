@@ -16,6 +16,11 @@ function MM_reloadPage(init) {  //reloads the window if Nav4 resized
 }
 MM_reloadPage(true);
 
+MM_preloadImages(
+		'@image_server@btn_3in1_on.jpg',
+		'@image_server@btn_advplot_on.jpg',
+		'@image_server@btn_login_on.jpg');
+
 // -->
 </script></head>
 
@@ -42,7 +47,7 @@ MM_reloadPage(true);
                 plot data for the above plot</p> -->
             </td>
           </tr></table></td>
-    <!-- whole page --><td><table width="650" border="0" cellpadding="15" cellspacing="3">
+    <!-- whole page --><td><table width="650" border="0" cellpadding="10" cellspacing="3">
   <tbody> 
   <!-- vegbank std header as small as possible 
   <tr>
@@ -73,101 +78,66 @@ the larger ecological community can then include in their research efforts.</fon
           </td>
 		  </tr>
 		  <tr>
-          <td align="center" class="vegbank"  colspan="3"> 
+          <td align="center" class="vegbank" colspan="3"> 
            <table>
 <tr>
 <td>
-<!-- yellow box button -->
-<!--<table cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFF99"><tbody>
-<tr height="6" align="left">
-<td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@uplt3.gif"></td>
-<td width="6" colspan="1"></td><td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@uprt3.gif"></td></tr>
-<tr><td valign="top"></td><td align="center" valign="top">-->
-<!-- yellow box content: -->
-<input type="button" onclick="window.location='/vegbank/LoadPlotQuery.do'" value="Find Plots"/>
-<!--<b><a class="featureLink" href="/vegbank/LoadPlotQuery.do">Find Plots</a></b> -->
-<!-- end yellow box content-->
-<!--
-</td>
-<td width="6"></td></tr>
-<tr><td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@lwlt3.gif"></td>
-<td align="right" valign="bottom" height="6" colspan="1"></td><td width="6"><img border="0" width="6" height="6" align="bottom" src="@image_server@lwrt3.gif"></td></tr></tbody></table>
+<!-- Main Feature Links -->
+
+<a href="@forms_link@plot-query-simple.jsp"
+		onMouseOver="MM_swapImage('3in1','','@image_server@btn_3in1_on.jpg',1)" 
+		onMouseOut="MM_swapImgRestore()"><img src="@image_server@btn_3in1.jpg" 
+		border="0" name="3in1" id="3in1"></a><img 
+src="@image_server@dot_tall.jpg"><a href="@web_context@LoadPlotQuery.do"
+		onMouseOver="MM_swapImage('advplot','','@image_server@btn_advplot_on.jpg',1)" 
+		onMouseOut="MM_swapImgRestore()"><img src="@image_server@btn_advplot.jpg" 
+		border="0" name="advplot" id="advplot"></a><img 
+src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
+		onMouseOver="MM_swapImage('login','','@image_server@btn_login_on.jpg',1)" 
+		onMouseOut="MM_swapImgRestore()"><img src="@image_server@btn_login.jpg" 
+		border="0" name="login" id="login"></a>
 
 </td>
-<td>&nbsp;-&nbsp;</td>
-<td> -->
 
-<!-- yellow box button -->
-<!-- <table cellspacing="0" 
-cellpadding="0" border="0" bgcolor="#FFFF99"><tbody>
-<tr height="6" align="left">
-<td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@uplt3.gif"></td>
-<td width="6" colspan="1"></td><td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@uprt3.gif"></td></tr>
-<tr><td valign="top"></td><td align="center" valign="top"> -->
-<!-- yellow box content: -->
-<input type="button" onclick="window.location='@forms_link@PlantQuery.jsp'" value="Explore Plant Taxa"/>
-<!--
-<b><a class="featureLink" href="@forms_link@PlantQuery.jsp">Explore Plant Taxa</a></b> -->
-<!-- end yellow box content-->
-<!-- </td>
-
-
-
-<td width="6"></td></tr>
-<tr><td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@lwlt3.gif"></td>
-<td align="right" valign="bottom" height="6" colspan="1"></td><td width="6"><img border="0" width="6" height="6" align="bottom" src="@image_server@lwrt3.gif"></td></tr></tbody></table>
-</td>
-<td>&nbsp;-&nbsp;</td>
-<td> -->
-<!-- yellow box button -->
-<!-- <table cellspacing="0" 
-cellpadding="0" border="0" bgcolor="#FFFF99"><tbody>
-<tr height="6" align="left">
-<td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@uplt3.gif"></td>
-<td width="6" colspan="1"></td><td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@uprt3.gif"></td></tr>
-<tr><td valign="top"></td><td align="center" valign="top"> -->
-<!-- yellow box content: -->
-<input type="button" onclick="window.location='@general_link@login.jsp'"  value="Login"/>
-<!-- <b><a class="featureLink" href="@general_link@login.jsp">Login</a></b>-->
-<!-- end yellow box content-->
-<!-- 
-</td>
-<td width="6"></td></tr>
-<tr><td align="left" height="6" valign="top"><img border="0" width="6" height="6" align="top" src="@image_server@lwlt3.gif"></td>
-<td align="right" valign="bottom" height="6" colspan="1"></td><td width="6"><img border="0" width="6" height="6" align="bottom" src="@image_server@lwrt3.gif"></td></tr></tbody></table>
-
-</td>
--->
 <!-- main table -->
 </tr>
 </table>
   <!-- Search box -->
 	<br>
-	<table align="center" cellpadding="7" cellspacing="0" border="0" bgcolor="#EFEFEF">
-	<tr><td>
-	<html:form action="/PlotQuery" method="get">
-	 <!-- <html:select property="state" size="1" multiple="true">
-				
-	                
-	                <%@ include file="../includes/StatesList.jsp" %>
-	
-	      </html:select> -->
-	      
-    	<!--<input size="35"/> -->
-	<!-- <input type="button" value="Search"/> -->
-	 <html:text property="plantName[1]" size="30"/>
-	 <html:submit value="search"/>
-	    
-	<!--
-	<a href="noHelpSorry">
-	<img border="0" src="http://vegbank.org/vegbank/images/question.gif" /></a><br />
-	-->
-	<br />
-	<span class="greytext">&raquo;Find plots with a plant name (%=wildcard).<br/>Example: Acer spic%</span>
-	</html:form> 
-	</td></tr></table>
+	<table align="center" cellpadding="0" cellspacing="0" border="0" bgcolor="#EFEFEF">
+	<tr>
+    	<td><img src="@image_server@uplt3.gif"/></td>
+		<td></td>
+		<td><img src="@image_server@uprt3.gif"/></td>
+	</tr>
 
-	<br>
+	<tr>
+		<td></td>
+		<td>
+		<html:form action="/PlotQuery" method="get">
+		 <!-- <html:select property="state" size="1" multiple="true">
+						<%@ include file="../includes/StatesList.jsp" %>
+			  </html:select> -->
+			  
+			 <input type="text" name="plantName" size="30" value=""/>
+			 <html:submit value="search"/>
+			
+			<br />
+			<span class="greytext">
+			&nbsp; Find <b>plots</b> by <b>plant name</b>.
+			<br/>
+			&nbsp; (% is wildcard) example: Acer spic%</span>
+		</td>
+		<td></td>
+	</tr>
+	<tr>
+    	<td><img src="@image_server@lwlt3.gif"/></td>
+		<td></td>
+		<td><img src="@image_server@lwrt3.gif"/></td>
+	</tr>
+	</html:form> 
+	</table>
+
 	<p class="vegbank"> 
 	
 	<table align="center" cellpadding="7" cellspacing="0" border="0" bgcolor="#FFFFFF">
@@ -179,6 +149,7 @@ cellpadding="0" border="0" bgcolor="#FFFF99"><tbody>
 			<option value="/vegbank/LoadPlotQuery.do">Search for Plots</option>
 			<option value="/vegbank/forms/PlantQuery.jsp">Search for Plants</option>
 			<option value="/vegbank/forms/community-query.html">Search Communities</option>
+			<option value="/vegbank/forms/plot-query-simple.jsp">3-in-1 Query</option>
 			<option value="/vegdocs/vegbranch/vegbranch.html">VegBranch</option>
 			<option value="/vegbank/general/info.html">Information</option>
 			<option value="/vegbank/design/erd/vegbank_erd.pdf">--ERD</option>
@@ -189,7 +160,9 @@ cellpadding="0" border="0" bgcolor="#FFFF99"><tbody>
 	<td>
 		&raquo; <a href="@forms_link@community-query.html">View Community Types</a>
 		<br>
-		&raquo; <a href="/vegbank/DisplayUploadPlotAction.do">Share your data</a>
+		&raquo; <a href="@web_context@forms/plot-query-simple.jsp">3-in-1 Simple Query</a>
+		<br>
+		&raquo; <a href="@web_context@DisplayUploadPlotAction.do">Share your data</a>
 	</td>
 
 	</tr></table>
@@ -201,6 +174,11 @@ cellpadding="0" border="0" bgcolor="#FFFF99"><tbody>
           <td class="vegbank" valign="top" > 
               <p class="vegbank_large">News</p>
               <ul>
+                <li class="constsize">
+					Try the simple new 
+					<a href="@web_context@forms/plot-query-simple.jsp">3-in-1 Query</a>
+					to find plots, plants and communities.
+                </li>
                 <li class="constsize"> VegBank workshop coming soon at a Portland 
                   ESA meeting <a href="@workshop_link@">workshop.</a> 
                 </li>
