@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: anderson $'
- *  '$Date: 2004-07-20 22:26:02 $'
- *  '$Revision: 1.28 $'
+ *  '$Date: 2004-07-23 01:14:13 $'
+ *  '$Revision: 1.29 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.common.Constants;
 import org.vegbank.databaseAccess.dbAccess;
 
@@ -85,8 +86,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: anderson $'
- *  '$Date: 2004-07-20 22:26:02 $'
- *  '$Revision: 1.28 $'
+ *  '$Date: 2004-07-23 01:14:13 $'
+ *  '$Revision: 1.29 $'
  * 
  */
 
@@ -203,6 +204,12 @@ public class DataRequestServlet extends HttpServlet
 			String clientLog = (rb.getString("requestparams.clientLog"));
 			String remoteHost = request.getRemoteHost();
 			log.debug("DataRequstServlet > accessed by: " + remoteHost);
+
+			if (Utility.isStringNullOrEmpty(communityName)) {
+				communityName = "";
+			} else if (!communityName.endsWith("%")) {
+				communityName += "%";
+			}
 
 			// PLOT QUERY
 			if (requestDataType.trim().equals("vegPlot"))
