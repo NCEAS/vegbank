@@ -287,7 +287,7 @@ public class DataRequestServlet extends HttpServlet
 				else 
 				{ 
 					out.println("<br> <b> Please try another query </b> <br>"); 
-					out.println("<a href = \"/framework/servlet/usermanagement\">"
+					out.println("<a href = \"http://vegbank.nceas.ucsb.edu/forms/plot-query.html\">"
 					+"return to query page</a><b>&#183;</b>");
 				}
 			}
@@ -478,7 +478,7 @@ public class DataRequestServlet extends HttpServlet
 		else 
 		{ 
 			out.println("<br> <b> Please try another query </b> <br>"); 
-			out.println("<a href = \"/framework/servlet/usermanagement\">"
+			out.println("<a href = \"http://vegbank.nceas.ucsb.edu/forms/plot-query.html\">"
 			+"return to query page</a><b>&#183;</b>"); //put in rb
 		}
 	}
