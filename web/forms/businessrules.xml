@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <?xml-stylesheet type="text/xsl" href="businessrules.xsl"?> -->
+<businessRules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="businessrules.xsd">
+  <busRule>
+    <name>Confidentiality Reason Required?</name>
+    <notes>plot.confidentialityReason needs value if plot is not public</notes>
+    <sqlSrc>br_confidentialityreason</sqlSrc>
+    <detailFields>
+      <field>plot_id</field>
+      <field>authorplotcode</field>
+      <field>accessioncode</field>
+      <field>confidentialitystatus</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Area pseudo-required</name>
+    <notes>We require an area for each plot, unless the plot is stated to be 'Plotless' in the plot.shape field.  Since there are many offenders, detail report is grouped by project.</notes>
+    <sqlSrc>br_plotswithoutarea</sqlSrc>
+    <detailFields>
+      <field>project_id</field>
+      <field>projectname</field>
+      <field>plotcount</field>
+    </detailFields>
+  </busRule>
+</businessRules>
