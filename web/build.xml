@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2004-10-28 17:42:45 $'
-* '$Revision: 1.124 $'
+* '$Author: mlee $'
+* '$Date: 2004-10-28 22:58:23 $'
+* '$Revision: 1.125 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -192,7 +192,6 @@
     <mkdir dir="${vegbranch_server}"/>
     <mkdir dir="${manual_src_temp}"/>
     <mkdir dir="${lrg_binary_src}"/>
-
   </target>
   <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
@@ -373,7 +372,7 @@
     <antcall target="views"/>
   </target>
   <target name="views-autogen" depends="init" description="&gt; create files from db_model.xml, using another build.xml file">
-    <ant dir="${views}" target="writeviews" />
+    <ant dir="${views}" target="writeviews"/>
   </target>
   <target name="views" depends="tokenfiles" description="&gt; dist the views to server (outside chain, but included in forms)">
     <!-- first overwrite any autogen views with any custom ones-->
@@ -442,8 +441,11 @@
   <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
     <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
     <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
+    <copy file="${sharedhtml_src}/placeurl.properties" tofile="${style_server}/placeurl_detokened.properties" filtering="yes" overwrite="yes"/>
+
     <!-- set the properties file that replaces tokens with closed list values in picklists -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
+    <filter filtersfile="${style_server}/placeurl_detokened.properties"/>
     <copy file="${sharedhtml_src}/url2get_data.properties" tofile="${style_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${style_server}/url2get_data.properties"/>
     <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="true"/>
