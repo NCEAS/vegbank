@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2003-01-04 02:16:26 $'
- 	*     '$Revision: 1.1 $'
+ 	*     '$Date: 2003-01-07 18:22:41 $'
+ 	*     '$Revision: 1.2 $'
 --> 
 <project name="plot-validation" default="compile" basedir=".">
 	
@@ -39,6 +39,8 @@
 		<property name="cpath" value="${datatranslator}:${xerces}:${xalan}:${xmlresource}:${build}"/>
 		<filter token="release" value="alpha-20011020"/>
 		<filter token="authors" value="HARRIS"/>
+    <filter token="constraintlist" value="./constraints.xml"/>
+    <filter token="constraintmap" value="./constraint-map.xml"/>
 	</target>
 
 	
