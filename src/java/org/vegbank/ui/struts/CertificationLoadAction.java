@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-02-07 06:45:36 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-02-28 11:21:16 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ public class CertificationLoadAction extends VegbankAction {
 
 		if (certForm.getCurrentOrg() == null) {
 			if (user.getOrganizationname() == null) {
-				tmp = user.getInstitution();
+				tmp = user.getOrganizationname();
 				if (tmp != null)  certForm.setCurrentOrg(tmp);
 			} else {
 				certForm.setCurrentOrg(user.getOrganizationname());
