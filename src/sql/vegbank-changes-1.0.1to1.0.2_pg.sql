@@ -1,11 +1,4 @@
 
-
----creating fields ----------------------
-
-ALTER TABLE observation ADD COLUMN coverEstimationMethod varchar (80) ;
-
-ALTER TABLE observation ADD COLUMN stratumIndividualDivision varchar (50) ;
-
 ---creating fields ----------------------
 
 ALTER TABLE observation ADD COLUMN totalCover Float ;
