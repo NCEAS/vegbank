@@ -41,7 +41,7 @@ Copy from after the START: comment to the END: comment for contents of the file!
       <body>@vegbank_header_html_normal@  <br/>
         <h2>View VegBank <xsl:value-of select="entityLabel"/>s</h2>
         <xsl:comment>Get standard declaration of rowClass as string: </xsl:comment>
-        <xsl:call-template name="htmlbreak" />
+        
         <xsl:text disable-output-escaping="yes">
         &lt;% String rowClass = "evenrow"; %&gt;
         </xsl:text>
@@ -55,8 +55,8 @@ Copy from after the START: comment to the END: comment for contents of the file!
           <xsl:attribute name="beanName">map</xsl:attribute>
           <xsl:attribute name="pager">true</xsl:attribute>
         </xsl:element> <xsl:comment>Where statement removed from preceding: </xsl:comment>
-        <xsl:call-template name="htmlbreak" />
-<xsl:call-template name="htmlbreak" />
+        
+
 
 <vegbank:pager /><!-- top copy of pager -->
         <logic:empty name="{$currEnt}-BEANLIST">
@@ -164,22 +164,13 @@ Copy from after the START: comment to the END: comment for contents of the file!
  <xsl:template name="storePK">
    <xsl:param name="currEnt"/>
    <xsl:param name="currPK" />
-   <xsl:call-template name="htmlbreak" />
+   
    <bean:define id="{$currEnt}_pk" name="onerowof{$currEnt}" property="{$currPK}"/>  
    <xsl:comment>Insert a nested get statement here:
    example:   
 <xsl:text disable-output-escaping="yes">
 &lt;</xsl:text>vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_<xsl:value-of select="$currEnt"/>_pk" wparam="<xsl:value-of select="$currEnt"/>_pk" /<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-   <xsl:element name="vegbank:get">
-          <xsl:attribute name="id">related_table</xsl:attribute>
-          <xsl:attribute name="select">related_table</xsl:attribute>
-          <xsl:attribute name="beanName">map</xsl:attribute>
-          <xsl:attribute name="pager">false</xsl:attribute>
-          <xsl:attribute name="perPage">-1</xsl:attribute>
-          <xsl:attribute name="where">where_<xsl:value-of select="$currEnt"/>_pk</xsl:attribute>
-          <xsl:attribute name="wparam"><xsl:value-of select="$currEnt"/>_pk</xsl:attribute>
-        </xsl:element>
-
+   
    </xsl:comment>
  </xsl:template>
  <xsl:template name="htmlbreak" ><!-- not needed anymore --></xsl:template>
