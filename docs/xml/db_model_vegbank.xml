@@ -62,6 +62,21 @@
       <update>1.0.0</update>
     </attribute>
     <attribute>
+      <attName>commName</attName>
+      <attLabel>Community Name</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The name the community is based on, denorm of commName_ID</attDefinition>
+      <update>1.0.3</update>
+    </attribute>
+    <attribute>
       <attName>reference_ID</attName>
       <attLabel>Reference</attLabel>
       <attModel>logical</attModel>

@@ -1,0 +1,1 @@
+alter table commConcept add column commName text;
