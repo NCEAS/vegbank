@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2003-10-30 20:41:43 $'
-*  '$Revision: 1.4 $'
+*  '$Author: farrell $'
+*  '$Date: 2003-11-05 23:10:57 $'
+*  '$Revision: 1.5 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ return "@manualFrameFor-submit-plots@"
 <table  border="0" width="800" >
 	<tr>
 		<td bgcolor="white">
-			<img align="center" border="0" height="100" src="/vegbank/images/owlogoBev.jpg" alt = "Veg plots logo">
+			<img align="center" border="0" height="100" src="@images_server@owlogoBev.jpg" alt = "Veg plots logo">
 		</td>
 		<td align="left" valign="middle">
 			<font face="Helvetica,Arial,Verdana" size="6" color="23238E">
@@ -127,7 +127,7 @@ return "@manualFrameFor-submit-plots@"
 	</tr>
 	<tr>
 		<td align="center" width="5%">
-			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+			<img src="@images_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
 		</td>
 		<td class="item">
 			Please choose to either upload new plot(s)  or use previously uploaded plot(s).
@@ -169,7 +169,7 @@ return "@manualFrameFor-submit-plots@"
 	</tr>
 	<tr>
 		<td align="center" width="5%">
-			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+			<img src="@images_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
 		</td>
 		<td class="item">
 		Please choose the type of archive file that you would like to send to VegBank.
@@ -178,7 +178,7 @@ return "@manualFrameFor-submit-plots@"
 	
 	<tr>
 		<td  align="center" width="5%"> 	
-		<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" > 
+		<img src="@images_server@icon_cat31.gif" alt="exclamation" width="15" height="15" > 
 		</td>
 		<td class="item">
 		Currently this wizard only works with plots stored in the VegBank Native XML format. <br>
@@ -230,7 +230,7 @@ return "@manualFrameFor-submit-plots@"
 
 	<tr>
 		<td align="center" width="5%">
-			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+			<img src="@images_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
 		</td>
 		<td class="item">
 		Please upload the data from your hard-drive to the server here. 

@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: farrell $'
-*  '$Date: 2003-08-21 21:16:43 $'
-*  '$Revision: 1.6 $'
+*  '$Date: 2003-11-05 23:10:57 $'
+*  '$Revision: 1.7 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -53,7 +53,7 @@
 
   <html:errors/>
 
-  <h2>Reference Form -- add a new <a href="/vegbank/dbdictionary/dd~table~reference~type~tableview.html">Reference</a></h2>
+  <h2>Reference Form -- add a new <a href="@dbdictionary_link@dd~table~reference~type~tableview.html">Reference</a></h2>
 
   <html:form action="/AddReference" onsubmit="return validateAddReferenceForm(this)" >
 
@@ -63,7 +63,7 @@
   <!-- table that has the whole package in its one row -->
   <p>Note that you do not need to add the full amount of Alternate Identifiers or Reference Contributors.  Only add those appropriate for the reference you are adding.</p>
   <p><font color="red">*</font>Indicates a required field.</p>
-  <p>Click a field label or table name to see more about that field in VegBank's <a href="/vegbank/dbdictionary/dd-index.html">data dictionary</a>.  Some fields are described in more detail just below the field.</p>
+  <p>Click a field label or table name to see more about that field in VegBank's <a href="@dbdictionary_link@dd-index.html">data dictionary</a>.  Some fields are described in more detail just below the field.</p>
   <table width="799" class="formEntry" cellpadding="5" >
     <tr>
       <!-- Left hand column -->
@@ -77,7 +77,7 @@
 	  <!-- one row of data entry -->
 	  <tr class="oddrow">
 	    <!-- label -->
-	    <td class="formLbl"><p><a href="/vegbank/dbdictionary/dd~table~reference~field~shortname~type~tableview.html">Short Name</a><font color="red">*</font>:</p></td>
+	    <td class="formLbl"><p><a href="@dbdictionary_link@dd~table~reference~field~shortname~type~tableview.html">Short Name</a><font color="red">*</font>:</p></td>
 	    <!-- input -->
 	    <td>
 	      <p>
@@ -94,7 +94,7 @@
 	  <!-- end row -->
 
 	  <tr>
-	    <td class="formLbl"><p><a href="/vegbank/dbdictionary/dd~table~reference~field~referencetype~type~tableview.html">Type of Reference:</a></p></td>
+	    <td class="formLbl"><p><a href="@dbdictionary_link@dd~table~reference~field~referencetype~type~tableview.html">Type of Reference:</a></p></td>
 	    <td>
         <p>
           <html:select property="reference.referencetype">
@@ -107,7 +107,7 @@
 	    </tr>
 
 	    <tr class="oddrow">
-	      <td class="formLbl"><p><a href="/vegbank/dbdictionary/dd~table~reference~field~title~type~tableview.html">Reference Title</a><font color="red">*</font>:</p></td>
+	      <td class="formLbl"><p><a href="@dbdictionary_link@dd~table~reference~field~title~type~tableview.html">Reference Title</a><font color="red">*</font>:</p></td>
 	      <td>
 		<p>
 		<html:text property="reference.title" size="40"/>
@@ -120,7 +120,7 @@
 
 	    <tr>
 	      <td class="formLbl"><p>
-		<a href="/vegbank/dbdictionary/dd~table~reference~field~titlesuperior~type~tableview.html">
+		<a href="@dbdictionary_link@dd~table~reference~field~titlesuperior~type~tableview.html">
 		Title of Superior Reference:
 		</a></p></td>
 		<td>
@@ -135,7 +135,7 @@
 
 	      <tr class="oddrow">
 		<td class="formLbl"><p>
-		  <a href="/vegbank/dbdictionary/dd~table~reference~field~pubdate~type~tableview.html">
+		  <a href="@dbdictionary_link@dd~table~reference~field~pubdate~type~tableview.html">
 		  Date of Publication:
 		  </a></p>
 		</td>
@@ -148,7 +148,7 @@
 
 	      <tr>
 		<td class="formLbl"><p>
-		  <a href="/vegbank/dbdictionary/dd~table~reference~field~accessdate~type~tableview.html">
+		  <a href="@dbdictionary_link@dd~table~reference~field~accessdate~type~tableview.html">
 		  Date Accessed:
 		  </a></p>
 		</td>
@@ -168,7 +168,7 @@
 	      
 	      <tr class="oddrow">
 		<td class="formLbl"><p>
-		  <a href="/vegbank/dbdictionary/dd~table~reference~field~conferencedate~type~tableview.html">
+		  <a href="@dbdictionary_link@dd~table~reference~field~conferencedate~type~tableview.html">
 		  Date of Conference:
 		  </a></p>
 		</td>
@@ -181,7 +181,7 @@
 
 	      <tr>
 		<td class="formLbl"><p>
-		  <a href="/vegbank/dbdictionary/dd~table~reference~field~referencejournal_id~type~tableview.html">
+		  <a href="@dbdictionary_link@dd~table~reference~field~referencejournal_id~type~tableview.html">
 		  Journal:
 		  </a></p>
 		</td>
@@ -194,7 +194,7 @@
 		  </html:select>
 		  <br/>
 		  <!-- link to add new journal to the list -->
-		  <a href="/vegbank/forms/AddJournal.jsp">Add a new Journal to Vegbank</a>
+		  <a href="@forms_link@AddJournal.jsp">Add a new Journal to Vegbank</a>
 		</p>
 	      </td>
 	    </tr>
@@ -207,7 +207,7 @@
 
 	    <tr class="oddrow">
 	      <td class="formLbl"><p>
-		<a href="/vegbank/dbdictionary/dd~table~reference~field~volume~type~tableview.html">
+		<a href="@dbdictionary_link@dd~table~reference~field~volume~type~tableview.html">
 		Volume:
 		</a></p>
 	      </td>
@@ -220,7 +220,7 @@
 
 	    <tr>
 	      <td class="formLbl"><p>
-		<a href="/vegbank/dbdictionary/dd~table~reference~field~issue~type~tableview.html">
+		<a href="@dbdictionary_link@dd~table~reference~field~issue~type~tableview.html">
 		Issue:
 		</a></p>
 	      </td>
@@ -233,7 +233,7 @@
 
 	    <tr class="oddrow">
 	      <td class="formLbl"><p>
-		<a href="/vegbank/dbdictionary/dd~table~reference~field~pagerange~type~tableview.html">
+		<a href="@dbdictionary_link@dd~table~reference~field~pagerange~type~tableview.html">
 		Page Range:
 		</a></p>
 	      </td>
@@ -246,7 +246,7 @@
 
 	    <tr>
 	      <td class="formLbl"><p>
-		<a href="/vegbank/dbdictionary/dd~table~reference~field~totalpages~type~tableview.html">
+		<a href="@dbdictionary_link@dd~table~reference~field~totalpages~type~tableview.html">
 		Total Number of Pages:
 		</a></p>
 	      </td>
@@ -258,7 +258,7 @@
 	    </tr>
 
 	    <tr class="oddrow"><td class="formLbl"><p>
-	      <a href="/vegbank/dbdictionary/dd~table~reference~field~publisher~type~tableview.html">
+	      <a href="@dbdictionary_link@dd~table~reference~field~publisher~type~tableview.html">
 	      Name of Publisher:
 	      </a></p></td>
 	      <td>
@@ -269,7 +269,7 @@
 	    </tr>
 
 	    <tr><td class="formLbl"><p>
-	      <a href="/vegbank/dbdictionary/dd~table~reference~field~publicationplace~type~tableview.html">
+	      <a href="@dbdictionary_link@dd~table~reference~field~publicationplace~type~tableview.html">
 	      Publisher Location:
 	      </a></p></td>
 	      <td>
@@ -280,7 +280,7 @@
 	    </tr>
 
 	    <tr class="oddrow"><td class="formLbl"><p>
-	      <a href="/vegbank/dbdictionary/dd~table~reference~field~isbn~type~tableview.html">
+	      <a href="@dbdictionary_link@dd~table~reference~field~isbn~type~tableview.html">
 	      isbn:
 	      </a></p></td>
 	      <td>
@@ -297,7 +297,7 @@
 	    </tr>
 
 	    <tr><td class="formLbl"><p>
-	      <a href="/vegbank/dbdictionary/dd~table~reference~field~edition~type~tableview.html">
+	      <a href="@dbdictionary_link@dd~table~reference~field~edition~type~tableview.html">
 	      Edition:
 	      </a></p></td>
 	      <td>
@@ -308,7 +308,7 @@
 	    </tr>
 
 	    <tr class="oddrow"><td class="formLbl"><p>
-	      <a href="/vegbank/dbdictionary/dd~table~reference~field~numberofvolumes~type~tableview.html">
+	      <a href="@dbdictionary_link@dd~table~reference~field~numberofvolumes~type~tableview.html">
 	      Number of Volumes:
 	      </a></p></td>
 	      <td>
@@ -319,7 +319,7 @@
 	    </tr>
 
 	    <tr><td class="formLbl"><p>
-	      <a href="/vegbank/dbdictionary/dd~table~reference~field~chapternumber~type~tableview.html">
+	      <a href="@dbdictionary_link@dd~table~reference~field~chapternumber~type~tableview.html">
 	      Chapter:
 	      </a></p></td>
 	      <td>
@@ -330,7 +330,7 @@
 	    </tr>
 
 	    <tr class="oddrow"><td class="formLbl"><p>
-	      <a href="/vegbank/dbdictionary/dd~table~reference~field~reportnumber~type~tableview.html">
+	      <a href="@dbdictionary_link@dd~table~reference~field~reportnumber~type~tableview.html">
 	      Report Number:
 	      </a></p></td>
 	      <td>
@@ -347,7 +347,7 @@
 	    </tr>
 
 	    <tr><td class="formLbl"><p>
-	      <a href="/vegbank/dbdictionary/dd~table~reference~field~communicationtype~type~tableview.html">
+	      <a href="@dbdictionary_link@dd~table~reference~field~communicationtype~type~tableview.html">
 	      Type of Personal Communication:
 	      </a></p></td>
 	      <td>
@@ -364,7 +364,7 @@
 	    </tr>
 
 	    <tr class="oddrow"><td class="formLbl"><p>
-	      <a href="/vegbank/dbdictionary/dd~table~reference~field~degree~type~tableview.html">
+	      <a href="@dbdictionary_link@dd~table~reference~field~degree~type~tableview.html">
 	      Thesis Degree:
 	      </a></p></td>
 	      <td>
@@ -382,7 +382,7 @@
 	    </tr>
 
 	    <tr><td class="formLbl"><p>
-	      <a href="/vegbank/dbdictionary/dd~table~reference~field~url~type~tableview.html">
+	      <a href="@dbdictionary_link@dd~table~reference~field~url~type~tableview.html">
 	      URL:
 	      </a></p></td>
 	      <td>
@@ -399,7 +399,7 @@
 	    </tr>
 
 	    <tr class="oddrow"><td class="formLbl"><p>
-	      <a href="/vegbank/dbdictionary/dd~table~reference~field~doi~type~tableview.html">DOI:
+	      <a href="@dbdictionary_link@dd~table~reference~field~doi~type~tableview.html">DOI:
 	      </a></p></td>
 	      <td>
 		<p>
@@ -415,7 +415,7 @@
 	    </tr>
 
 	    <tr><td class="formLbl"><p>
-	      <a href="/vegbank/dbdictionary/dd~table~reference~field~additionalinfo~type~tableview.html">Additional Information:
+	      <a href="@dbdictionary_link@dd~table~reference~field~additionalinfo~type~tableview.html">Additional Information:
 	      </a></p></td>
 	      <td>
 		<p>
@@ -443,7 +443,7 @@
 	<br/>
 
 	<b>
-	<a href="/vegbank/dbdictionary/dd~table~referencealtident~type~tableview.html">Alternate Identifiers for this Reference:</a></b>
+	<a href="@dbdictionary_link@dd~table~referencealtident~type~tableview.html">Alternate Identifiers for this Reference:</a></b>
 	<br/>
 	<span class="item">
 	Additional identifiers that allow references to be specified.  You must specify a system that is uniquely yours, such as a URL for
@@ -460,13 +460,13 @@
 	    <th><p>num</p></th>
 	    <th>
 	      <p>
-	      <a href="/vegbank/dbdictionary/dd~table~referencealtident~field~system~type~tableview.html">system</a>
+	      <a href="@dbdictionary_link@dd~table~referencealtident~field~system~type~tableview.html">system</a>
 	      <font color="red">*</font>
 	      <p>
 	    </th>
 	    <th>
 	      <p>
-	      <a href="/vegbank/dbdictionary/dd~table~referencealtident~field~identifier~type~tableview.html">identifier</a>
+	      <a href="@dbdictionary_link@dd~table~referencealtident~field~identifier~type~tableview.html">identifier</a>
 	      <font color="red">*</font>
 	      </p>
 	    </th>
@@ -502,7 +502,7 @@
 
 
 	<p><b>
-	<a href="/vegbank/dbdictionary/dd~table~referencecontributor~type~tableview.html">
+	<a href="@dbdictionary_link@dd~table~referencecontributor~type~tableview.html">
 	Authors and other Reference Contributors:
 	</a></b>
 	<br />
@@ -518,9 +518,9 @@
 	<!-- ReferenceContributors and Reference Party Form -->
 	<table border="0" cellpadding="0" cellspacing="0">
 	  <tr class="headerrow">
-	    <th><p><a href="/vegbank/dbdictionary/dd~table~referencecontributor~field~position~type~tableview.html">order</a></p></th>
-	    <th><p><a href="/vegbank/dbdictionary/dd~table~referencecontributor~field~referenceparty_id~type~tableview.html">Party Name</a><font color="red">*</font></p></th>
-	    <th><p><a href="/vegbank/dbdictionary/dd~table~referencecontributor~field~roletype~type~tableview.html">role</a></p></th>
+	    <th><p><a href="@dbdictionary_link@dd~table~referencecontributor~field~position~type~tableview.html">order</a></p></th>
+	    <th><p><a href="@dbdictionary_link@dd~table~referencecontributor~field~referenceparty_id~type~tableview.html">Party Name</a><font color="red">*</font></p></th>
+	    <th><p><a href="@dbdictionary_link@dd~table~referencecontributor~field~roletype~type~tableview.html">role</a></p></th>
 	  </tr>
 	<%
 	  for (int i=0; i<10 ; i++)

@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: farrell $'
-* '$Date: 2003-11-05 21:15:09 $'
-* '$Revision: 1.69 $'
+* '$Date: 2003-11-05 23:10:57 $'
+* '$Revision: 1.70 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -98,6 +98,7 @@
     <filter token="forms_url" value="/${web.context_uri}/forms/"/>
     <!-- add second token for forms, which is similarly named as other links -->
     <filter token="forms_link" value="/${web.context_uri}/forms/"/>
+    <filter token="dbdictionary_link" value="/${web.context_uri}/dbdictionary/"/>
     <!-- add link for page name that links to help frame jsp -->
     <filter token="jspHelpPage" value="/${web.context_uri}/forms/getHelp.jsp"/>
     <!-- location and filename of xml index page -->
@@ -105,7 +106,7 @@
     <filter token="design_link" value="/${web.context_uri}/design/"/>
     <filter token="panel_link" value="/${web.context_uri}/panel/"/>
     <filter token="help_link" value="/help/"/>
-    <filter token="manual_link" value="/help/manual/"/>
+    <filter token="manual_link" value="${help}manual/"/>
     <!-- SERVLETS -->
     <filter token="framework_servlet" value="/${web.context_uri}/servlet/framework"/>
     <filter token="stylesheet_generator_servlet" value="/${web.context_uri}/servlet/stylesheetgenerator"/>

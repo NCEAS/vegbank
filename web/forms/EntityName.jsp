@@ -15,9 +15,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2003-10-06 20:50:23 $'
-*  '$Revision: 1.1 $'
+*    '$Author: farrell $'
+*      '$Date: 2003-11-05 23:10:57 $'
+*  '$Revision: 1.2 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -56,7 +56,7 @@ VEGBANK - Entity Name Search
 
     <tr>
       <td colspan="2" bgcolor="white">
-	<img align="center" border="0" height="144" src="/vegbank/images/owlogoBev.jpg" alt="Veg plots logo "> 
+	<img align="center" border="0" height="144" src="@images_server@owlogoBev.jpg" alt="Veg plots logo "> 
       </td>
       <td align="left" valign="middle">
 	<table border="0" cellpadding="5">

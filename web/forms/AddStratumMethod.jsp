@@ -12,8 +12,8 @@
   *     Authors: @author@
   *
   *    '$Author: farrell $'
-  *      '$Date: 2003-08-21 21:16:43 $'
-  *  '$Revision: 1.5 $'
+  *      '$Date: 2003-11-05 23:10:57 $'
+  *  '$Revision: 1.6 $'
   * This program is free software; you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
   * the Free Software Foundation; either version 2 of the License, or
@@ -89,7 +89,7 @@
 	      &nbsp;
 	    </td>
 	    <td>
-	      <a href="/vegbank/forms/AddReference.jsp">Add a new reference</a>
+	      <a href="@forms_link@AddReference.jsp">Add a new reference</a>
 	    </td>
 	  </tr>
 	</table>
@@ -147,7 +147,7 @@
 <html:submit property="commit_changes" value="--add this stratum method to VegBank--" />
 <p>Note that you do not need to add the full amount of Stratum Types.  Only add the number of types that are appropriate for the method you are adding.</p>
 <p><font color="red">*</font>Indicates a required field.</p>
-<p>Click <a href="/vegbank/dbdictionary/dd-index.html">here</a> for VegBank's data dictionary for more information on fields and tables.</p>
+<p>Click <a href="@dbdictionary_link@dd-index.html">here</a> for VegBank's data dictionary for more information on fields and tables.</p>
 </html:form>
 
 <!-- VEGBANK FOOTER -->

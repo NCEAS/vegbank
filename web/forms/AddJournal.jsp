@@ -13,8 +13,8 @@
   *  Authors: @author@
   *
   *  '$Author: farrell $'
-  *  '$Date: 2003-08-21 21:16:43 $'
-  *  '$Revision: 1.4 $'
+  *  '$Date: 2003-11-05 23:10:57 $'
+  *  '$Revision: 1.5 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -55,7 +55,7 @@
 	  <table align="left" border="0" width="90%" cellspacing="0" cellpadding="0">
 	    <tr>
 	      <td colspan="2" bgcolor="white">
-		<img align="center" border="0" height="144" src="/vegbank/images/owlogoBev.jpg" alt="[VegBank logo]" />
+		<img align="center" border="0" height="144" src="@images_server@owlogoBev.jpg" alt="[VegBank logo]" />
 	      </td>
 	      <td align="left" valign="middle">
 		<table border="0" cellpadding="5">
@@ -113,7 +113,7 @@
 		  </tr>
 		  <tr>
 		    <td align="center" width="5%">
-		      <img src="/vegbank/images/icon_cat31.gif" alt="[!]" width="15" height="15" />
+		      <img src="@images_server@icon_cat31.gif" alt="[!]" width="15" height="15" />
 		    </td>
 		    <td class="item">
 		      <p>Please enter any information that is appropriate for the journal that you would like to add to VegBank.</p>
@@ -127,7 +127,7 @@
 		    <td>
 		      <p>
 		      <span class="category">
-		      <a href="/vegbank/dbdictionary/dd~table~referencejournal~field~journal~type~tableview.html">Journal Name</a>:<font color="red">*</font>
+		      <a href="@dbdictionary_link@dd~table~referencejournal~field~journal~type~tableview.html">Journal Name</a>:<font color="red">*</font>
 		      </span>
 		      </p>
 		    </td>
@@ -147,7 +147,7 @@
 		    <td>
 		      <p>
 		      <span class="category">
-		      <a href="/vegbank/dbdictionary/dd~table~referencejournal~field~issn~type~tableview.html">ISSN</a>:</span>
+		      <a href="@dbdictionary_link@dd~table~referencejournal~field~issn~type~tableview.html">ISSN</a>:</span>
 		      </p>
 		    </td>
 		    <td>
@@ -166,7 +166,7 @@
 		    <td>
 		      <p>
 		      <span class="category">
-		      <a href="/vegbank/dbdictionary/dd~table~referencejournal~field~abbreviation~type~tableview.html">Journal Abbreviation</a>:</span>
+		      <a href="@dbdictionary_link@dd~table~referencejournal~field~abbreviation~type~tableview.html">Journal Abbreviation</a>:</span>
 		      </p>
 
 		    </td>
@@ -195,7 +195,7 @@
 		  </tr>
 		  <tr>
 		    <td align="center" width="5%">
-		      <img src="/vegbank/images/icon_cat31.gif" alt="[!]" width="15" height="15" />
+		      <img src="@images_server@icon_cat31.gif" alt="[!]" width="15" height="15" />
 		    </td>
 
 		    <td class="item">

@@ -14,9 +14,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2003-11-03 23:23:31 $'
-*  '$Revision: 1.14 $'
+*    '$Author: farrell $'
+*      '$Date: 2003-11-05 23:10:57 $'
+*  '$Revision: 1.15 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -63,7 +63,7 @@ return "@manualFrameFor-search-for-plots@"
 
     <tr>
       <td colspan="2" bgcolor="white">
-	<img align="center" border="0" height="144" src="/vegbank/images/owlogoBev.jpg" alt="Veg plots logo "> 
+	<img align="center" border="0" height="144" src="@images_server@owlogoBev.jpg" alt="Veg plots logo "> 
       </td>
       <td align="left" valign="middle">
 	<table border="0" cellpadding="5">
@@ -143,7 +143,7 @@ return "@manualFrameFor-search-for-plots@"
 	  </tr>
 	  <tr>
 	    <td align="center" width="5%">
-	      <img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15"> 
+	      <img src="@images_server@icon_cat31.gif" alt="exclamation" width="15" height="15"> 
 	    </td>
 	    <td class="item">
 	      <p>Please select the state/province and/or country in which the plot was sampled. <br />
@@ -295,7 +295,7 @@ return "@manualFrameFor-search-for-plots@"
 	  </tr>
 	  <tr>
 	    <td align="center" width="5%">
-	      <img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15"> 
+	      <img src="@images_server@icon_cat31.gif" alt="exclamation" width="15" height="15"> 
 	    </td>
 	    <td class="item">
 	      <p>Please specify a bounding box for Latitude and Longitude.  
@@ -342,7 +342,7 @@ return "@manualFrameFor-search-for-plots@"
 	  </tr>
 	  <tr>
 	    <td align="center" width="5%">
-	      <img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
+	      <img src="@images_server@icon_cat31.gif" alt="exclamation"
 	      width="15" height="15"> 
 	    </td>
 
@@ -438,7 +438,7 @@ return "@manualFrameFor-search-for-plots@"
 	  </tr>
 	  <tr>
 	    <td align="center" width="5%">
-	      <img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
+	      <img src="@images_server@icon_cat31.gif" alt="exclamation"
 	      width="15" height="15"> 
 	    </td>
 	    <td class="item"><p>
@@ -537,7 +537,7 @@ return "@manualFrameFor-search-for-plots@"
 
 	  <tr>
 	    <td align="center" width="5%">
-	      <img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
+	      <img src="@images_server@icon_cat31.gif" alt="exclamation"
 	      width="15" height="15"> 
 	    </td>
 	    <td class="item"><p>
@@ -629,7 +629,7 @@ return "@manualFrameFor-search-for-plots@"
 	  </tr>
 	  <tr>
 	    <td align="center" width="5%">
-	      <img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
+	      <img src="@images_server@icon_cat31.gif" alt="exclamation"
 	      width="15" height="15"> 
 	    </td>
 	    <td class="item"><p>
@@ -722,7 +722,7 @@ return "@manualFrameFor-search-for-plots@"
 	    <tr>
 
 	      <td align="center" width="5%">
-		<img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
+		<img src="@images_server@icon_cat31.gif" alt="exclamation"
 		width="15" height="15"> 
 	      </td>
 	      <td class="item"><p>
@@ -739,32 +739,32 @@ return "@manualFrameFor-search-for-plots@"
 	      </td>
 	      <td class="itemsmall">
 		<!--      <b>index of taxon names currently in the DB - by scientific	name:</b> <br>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=A%25">A</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=B%25">B</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=C%25">C</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=D%25">D</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=E%25">E</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=F%25">F</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=G%25">G</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=H%25">H</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=I%25">I</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=J%25">J</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=K%25">K</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=L%25">L</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=M%25">M</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=N%25">N</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=O%25">O</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=P%25">P</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=Q%25">Q</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=R%25">R</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=S%25">S</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=T%25">T</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=U%25">U</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=V%25">V</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=W%25">W</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=X%25">X</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=Y%25">Y</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=Z%25">Z</a><b>&middot;</b>-->
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=A%25">A</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=B%25">B</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=C%25">C</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=D%25">D</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=E%25">E</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=F%25">F</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=G%25">G</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=H%25">H</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=I%25">I</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=J%25">J</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=K%25">K</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=L%25">L</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=M%25">M</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=N%25">N</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=O%25">O</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=P%25">P</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=Q%25">Q</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=R%25">R</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=S%25">S</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=T%25">T</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=U%25">U</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=V%25">V</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=W%25">W</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=X%25">X</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=Y%25">Y</a><b>&middot;</b>
+      		<a target="_blank" href="@datarequestservlet@?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=Z%25">Z</a><b>&middot;</b>-->
       </td>
     </tr>
   </table>
@@ -773,7 +773,7 @@ return "@manualFrameFor-search-for-plots@"
   <tr bgcolor="#DDDDDD">
 
     <th rowspan="2"><p><span class="thsmall">Row</span></p></th>
-    <th rowspan="2"><p><span  class="thsmall">Plant Name <a class="brightyellow" target="_blank" href="/vegbank/forms/plant-query.html">search</a></span></p></th>
+    <th rowspan="2"><p><span  class="thsmall">Plant Name <a class="brightyellow" target="_blank" href="@forms_link@plant-query.html">search</a></span></p></th>
     <th colspan="2"><p><span class="thsmall">Cover (%)</span></p></th>
 
     <!-- no basal area <th colspan="2"><p><span class="thsmall">Basal Area (m2/ha)</span></p></th> -->
@@ -836,7 +836,7 @@ return "@manualFrameFor-search-for-plots@"
   <tr>
 
     <td align="center" width="5%">
-      <img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
+      <img src="@images_server@icon_cat31.gif" alt="exclamation"
       width="15" height="15"> 
     </td>
     <td class="item"><p>
@@ -882,7 +882,7 @@ return "@manualFrameFor-search-for-plots@"
   </tr>
   <tr>
     <td align="center" width="5%">
-      <img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
+      <img src="@images_server@icon_cat31.gif" alt="exclamation"
       width="15" height="15"> 
     </td>
     <td class="item"><p>
@@ -1074,7 +1074,7 @@ return "@manualFrameFor-search-for-plots@"
 	    </tr>
 	    <tr>
 	      <td align="center" width="5%">
-		<img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
+		<img src="@images_server@icon_cat31.gif" alt="exclamation"
 		width="15" height="15"> 
 	      </td>
 	      <td class="item"><p>
@@ -1091,7 +1091,7 @@ return "@manualFrameFor-search-for-plots@"
 	  <table border="0" cellspacing="1" cellpadding="1">
 	    <tr bgcolor="#DDDDDD">
 	      <th rowspan="2"><p><span class="thsmall">Row</span></p></th>
-	      <th rowspan="2"><p><span class="thsmall">Community Name <a class="brightyellow" target="_blank" href="/vegbank/forms/community-query.html">search</a></span></p></th>
+	      <th rowspan="2"><p><span class="thsmall">Community Name <a class="brightyellow" target="_blank" href="@forms_link@community-query.html">search</a></span></p></th>
 	      <!-- TODO:
 	      <th rowspan="2"><p><span class="thsmall">Fit</span></p></th>
 	      <th rowspan="2"><p><span class="thsmall">Confidence</span></p></th>
@@ -1163,7 +1163,7 @@ return "@manualFrameFor-search-for-plots@"
 		  
 		  <tr>
 		    <td align="center" width="5%">
-		      <img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
+		      <img src="@images_server@icon_cat31.gif" alt="exclamation"
 		      width="15" height="15"> 
 		    </td>
 		    <td class="item"><p>

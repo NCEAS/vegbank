@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2003-10-20 22:59:34 $'
-*  '$Revision: 1.2 $'
+*  '$Author: farrell $'
+*  '$Date: 2003-11-05 23:10:57 $'
+*  '$Revision: 1.3 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@
 <table  border="0" width="800" >
 	<tr>
 		<td bgcolor="white">
-			<img align="center" border="0" height="100" src="/vegbank/images/owlogoBev.jpg" alt = "Veg plots logo">
+			<img align="center" border="0" height="100" src="@images_server@owlogoBev.jpg" alt = "Veg plots logo">
 		</td>
 		<td align="left" valign="middle">
 			<font face="Helvetica,Arial,Verdana" size="6" color="23238E">
