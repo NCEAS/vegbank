@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-08-12 19:01:46 $'
- * '$Revision: 1.15 $'
+ *     '$Date: 2002-11-26 17:16:37 $'
+ * '$Revision: 1.16 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ public class PlantTaxaLoader
 	private String citationDetails;
 	private String dateEntered;
 	private String usageStopDate;
+	private String usageStartDate;
 	private String rank;
 	private boolean commit;	
 	private Vector usageVec = new Vector();
@@ -269,6 +270,7 @@ public class PlantTaxaLoader
 				citationDetails = (String)plantTaxon.get("citationDetails");
 				dateEntered = (String)plantTaxon.get("dateEntered");
 				usageStopDate = (String)plantTaxon.get("usageStopDate");
+				usageStartDate = (String)plantTaxon.get("usageStartDate");
 				rank = (String)plantTaxon.get("rank");
 				
 			
@@ -382,10 +384,10 @@ public class PlantTaxaLoader
 				// LOAD THE USAGE TABLES
 				//check to see if there are already usage id's in the database
 				if ( plantUsageExists(longName, longNameId, conceptId, "STANDARD", 
-					dateEntered, usageStopDate, "LONGNAME", partyId) == false )
+					dateEntered, usageStopDate, "SCIENTIFIC NAME", partyId) == false )
 				{
 					int uid = loadPlantUsageInstance(longName, longNameId, conceptId, "STANDARD", 
-					dateEntered, usageStopDate, "LONGNAME", partyId);
+					usageStartDate, usageStopDate, "SCIENTIFIC NAME", partyId);
 					System.out.println("PlantTaxonomyLoader > uid: " + uid);
 					usageVec.addElement(""+uid);
 				}
@@ -397,10 +399,10 @@ public class PlantTaxaLoader
 				if ( shortNameId != 0 )
 				{
 					if (plantUsageExists(shortName, shortNameId, conceptId, "STANDARD", 
-						dateEntered, usageStopDate,  "SHORTNAME", partyId) == false )
+						dateEntered, usageStopDate,  "COMMON NAME", partyId) == false )
 					{
 						int uid = 	loadPlantUsageInstance(shortName, shortNameId, conceptId, "STANDARD", 
-						dateEntered, usageStopDate,  "SHORTNAME", partyId);
+						usageStartDate, usageStopDate,  "COMMON NAME", partyId);
 						System.out.println("PlantTaxonomyLoader > uid: " + uid);
 						usageVec.addElement(""+uid);
 					}
@@ -411,7 +413,7 @@ public class PlantTaxaLoader
 					dateEntered, usageStopDate,  "CODE", partyId) == false )
 					{
 						int uid = loadPlantUsageInstance(code, codeId, conceptId, "STANDARD", 
-						dateEntered, usageStopDate,  "CODE", partyId);
+						usageStartDate, usageStopDate,  "CODE", partyId);
 						System.out.println("PlantTaxonomyLoader > uid: " + uid);
 						usageVec.addElement(""+uid);
 					}
@@ -435,6 +437,7 @@ public class PlantTaxaLoader
 					System.out.println("PlantTaxonomyLoader >  not commiting transaction");
 					conn.rollback();
 				}
+				conn.close();
 			}
 		}
 		catch ( Exception e )
@@ -1430,7 +1433,8 @@ public class PlantTaxaLoader
 	/**
 	 * method that loads a party occurence into the party table.  First the method
 	 * determines if the party already exits in the database, and if it does not 
-	 * then it is loaded.
+	 * then it is loaded. Becuase this inserts the party associated with a user,
+	 * the value inserted for the party orgname will be 'email_orgname'
 	 *
 	 * @param salutation
 	 * @param givenName
@@ -1444,15 +1448,20 @@ public class PlantTaxaLoader
 	{
 	 int partyId = 0; 
 	 StringBuffer sb = new StringBuffer();
+	 // create an attribute called individualParty which is the combination of the 
+	 // user's email address and the orgname, and this value should be used as the 
+	 // orgname attribute
+	 String individualParty = email+"_"+orgName;
+	 System.out.println("PlantTaxaLoader > individualParty > " + individualParty );
 	 try
 	 {
 		//first see if the reference already exists
-		boolean partyExists = plantPartyExists(salutation, givenName, surName, orgName, email);
+		boolean partyExists = plantPartyExists(salutation, givenName, surName, individualParty, email);
 		System.out.println("PlantTaxaLoader > partyExists: " + partyExists); 
 		
 		if (partyExists == true)
 		{
-			partyId = getPlantPartyId(salutation, givenName, surName, orgName, email);
+			partyId = getPlantPartyId(salutation, givenName, surName, individualParty, email);
 		}
 
 		else
@@ -1462,13 +1471,13 @@ public class PlantTaxaLoader
 			+" values(?,?,?,?)");
 			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
 			// Bind the values to the query and execute it
- 			pstmt.setString(1, orgName);
+ 			pstmt.setString(1, individualParty);
 			pstmt.setString(2, salutation);
  			pstmt.setString(3, surName);
  			pstmt.setString(4, givenName);
 			pstmt.execute();
  			// GET THE PARTY ID NOW
-			partyId = getPlantPartyId(salutation, givenName, surName, orgName, email);
+			partyId = getPlantPartyId(salutation, givenName, surName, individualParty, email);
 		}
 		System.out.println("PlantTaxaLoader > returning a plantPartyId: " + partyId);
 	 }
@@ -1732,7 +1741,7 @@ public class PlantTaxaLoader
 	/**
 	 * Main method -- for testing 
 	 */
-	public static void main(String argv[]) 
+	public static void main(String argv[])
 	{
 		if (argv.length != 0) 
 		{
@@ -1776,15 +1785,15 @@ public class PlantTaxaLoader
 			PlantTaxaLoader loader = new PlantTaxaLoader();
 			Hashtable h = new Hashtable();
 			
-			String givenName = "John";
-	 		String surName = "harris";
+			String givenName = "Johnny";
+	 		String surName = "harrison";
 	 
-	 		String	institution = "nceas";
-	 		String	longName = "Pinus ponderinguou";
-	 		String	shortName = "pondering pineuou";
-	 		String	code = "PPPuou";
+	 		String	institution = "nceas-sb";
+	 		String	longName = "Pinus ponderinguou1";
+	 		String	shortName = "pondering pineuou1";
+	 		String	code = "PPPuou1";
 	 
-	 		String	longNameRefAuthors = "John Harris, Robert Peet";
+	 		String	longNameRefAuthors = "John Harrison, Robert Peeterson";
 	 		String	longNameRefTitle = "Big Trees in California by the sea";
 	 		String	longNameRefDate  = "23-JAN-2002";
 	 		String	longNameRefEdition = "";
@@ -1832,7 +1841,7 @@ public class PlantTaxaLoader
 	 		String	conceptStatus = "accepted";
 	 		String	statusStartDate = "01-JAN-2001";
 	 		String	statusStopDate = "";
-	 		String	statusDescription = "accepted till it is figured out sometime";
+	 		String	statusDescription = "accepted till it is figured out sometime in the future";
 	 		String	taxonLevel =  "Species";
 	 		String	plantParentName = "Pinus";
 	 		String	plantParentRefTitle =  "";
@@ -1906,8 +1915,9 @@ public class PlantTaxaLoader
 			h.put("orgName", institution);
 			h.put("email", "harris02@hotmail.com");
 			h.put("citationDetails", "VB20020529");
-			h.put("dateEntered", "2002-MAY-29");
-			h.put("usageStopDate", "2005-MAY-29");
+			h.put("dateEntered", "2002-AUG-04");
+			h.put("usageStartDate", "2001-OCT-29");
+			h.put("usageStopDate", "2005-AUG-29");
 			h.put("rank", taxonLevel);
 			
 			// load this plant

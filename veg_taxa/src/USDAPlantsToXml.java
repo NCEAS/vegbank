@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-07-01 20:52:59 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2002-11-26 17:17:33 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,16 +22,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
-
 import java.io.IOException;
 import java.io.*;
 import java.util.*;
-import org.xml.sax.SAXException;
-import org.apache.xalan.xslt.XSLTProcessorFactory;
-import org.apache.xalan.xslt.XSLTInputSource;
-import org.apache.xalan.xslt.XSLTResultTarget;
-import org.apache.xalan.xslt.XSLTProcessor;
 
 
 /**
@@ -46,10 +39,8 @@ import org.apache.xalan.xslt.XSLTProcessor;
 
 public class USDAPlantsToXml 
 {
-
-
-public Vector fileVector = new Vector();
-public Hashtable attributeHash = new Hashtable();
+	public Vector fileVector = new Vector();
+	public Hashtable attributeHash = new Hashtable();
 
 
 /**
@@ -87,18 +78,17 @@ public void transformPlantList(String inputPlantList)
 	try 
 	{
 		System.out.println("USDAPlantsToXml > reading the input file: " + inputPlantList);
-		Vector v = fileToVector(inputPlantList);
+		this.fileVector = fileToVector(inputPlantList);
 		
 		System.out.println("USDAPlantsToXml > parsing the input");
-		Hashtable h = parsePlantElements(v);
+		attributeHash = parsePlantElements();
 		
 		System.out.println("USDAPlantsToXml > writing the output");
-		this.outputXml(h);
-		
+		this.outputXml(attributeHash);	
 	}
-	catch( Exception e ) {
-		System.out.println(" failed in: USDAPlantsToXml.transformPlantList "
-		+e.getMessage() );
+	catch( Exception e ) 
+	{
+		System.out.println(" Exception: "+e.getMessage() );
 		e.printStackTrace();
 	}
 }
@@ -108,16 +98,14 @@ public void transformPlantList(String inputPlantList)
  * the plant lis and returns a hashtable
  * that contains all the plant instances
  */
-private Hashtable parsePlantElements(Vector fileVector)
+private Hashtable parsePlantElements()
 {
 	Hashtable plantInstances = new Hashtable();
-	
-	for (int i=0; i<fileVector.size(); i++) 
+	for (int i=0; i<this.fileVector.size(); i++) 
 	{
 		//put each plant instance hash into the plantInstances hash
-		plantInstances.put(""+i, (Hashtable)parseSinglePlantInstance(fileVector.elementAt(i).toString()) 
-		);
-		//System.out.println( fileVector.elementAt(i).toString() );
+		plantInstances.put(""+i, (Hashtable)parseSinglePlantInstance(fileVector.elementAt(i).toString()) );
+		//System.out.println("line: " + i );
 	}
 	return(plantInstances);
 }
@@ -129,30 +117,36 @@ private Hashtable parsePlantElements(Vector fileVector)
  * case of the usda plants list, equates to a single 
  * line from the file
  */
-
 private Hashtable parseSinglePlantInstance(String fileVectorLine)
 {
 	Hashtable singlePlantInstance = new Hashtable();
-	if (fileVectorLine != null)
+	try
 	{
-		if (acceptedPlantInstance(fileVectorLine) == true )
+		if (fileVectorLine != null)
 		{
-			//System.out.println(" accepted usage :");
-			singlePlantInstance.put("plantCode", plantCode(fileVectorLine) );
-			singlePlantInstance.put("concatenatedName", plantConcatenatedName(fileVectorLine) );
-			singlePlantInstance.put("familyName", plantFamilyName(fileVectorLine) );
-			singlePlantInstance.put("commonName", plantCommonName(fileVectorLine) );
-			singlePlantInstance.put("acceptence", "accepted" );
+			if (acceptedPlantInstance(fileVectorLine) == true )
+			{
+				//System.out.println(" accepted usage :");
+				singlePlantInstance.put("plantCode", plantCode(fileVectorLine) );
+				singlePlantInstance.put("concatenatedName", plantConcatenatedName(fileVectorLine) );
+				singlePlantInstance.put("familyName", plantFamilyName(fileVectorLine) );
+				singlePlantInstance.put("commonName", plantCommonName(fileVectorLine) );
+				singlePlantInstance.put("acceptence", "accepted" );
+			}
+			else 
+			{
+				//System.out.println("non accepted usage ");
+				singlePlantInstance.put("plantCode", plantCode(fileVectorLine) );
+				singlePlantInstance.put("concatenatedName", plantConcatenatedName(fileVectorLine) );
+				singlePlantInstance.put("familyName", plantFamilyName(fileVectorLine) );
+				singlePlantInstance.put("synonymName", plantSynonymName(fileVectorLine) );
+				singlePlantInstance.put("acceptence", "not accepted" );
+			}
 		}
-		else 
-		{
-			//System.out.println("non accepted usage ");
-			singlePlantInstance.put("plantCode", plantCode(fileVectorLine) );
-			singlePlantInstance.put("concatenatedName", plantConcatenatedName(fileVectorLine) );
-			singlePlantInstance.put("familyName", plantFamilyName(fileVectorLine) );
-			singlePlantInstance.put("synonymName", plantSynonymName(fileVectorLine) );
-			singlePlantInstance.put("acceptence", "not accepted" );
-		}
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception: " + e.getMessage() );
 	}
 	return(singlePlantInstance);
 }
@@ -172,33 +166,36 @@ private void outputXml(Hashtable plantInstances)
 		StringBuffer outData = new StringBuffer();
 		PrintStream out = new PrintStream(new FileOutputStream("outfile.xml"));
 		//print the header
-		outData.append(xmlHeader()).toString();
-	
+		////outData.append(xmlHeader()).toString();
+		out.println( xmlHeader() );
+		
 		//print each instance of a plant taxon
 		for (int i=0; i<plantInstances.size(); i++) 
 		{
+			//System.out.println("outline: " + i);
 			//grab the corresponding plant instance 			
 			singlePlantInstance = (Hashtable)plantInstances.get(""+i);
 			//determine if accepted
 			if (singlePlantInstance.get("acceptence") == "accepted")
 			{
-				outData.append(xmlAcceptedInstance(singlePlantInstance, i)).toString();
+				////outData.append(xmlAcceptedInstance(singlePlantInstance, i)).toString();
+				out.println( xmlAcceptedInstance(singlePlantInstance, i) );
 				//System.out.println(singlePlantInstance);
 			}
 			else 
 			{
-				outData.append(xmlNotAcceptedInstance(singlePlantInstance, i)).toString();
+				//outData.append(xmlNotAcceptedInstance(singlePlantInstance, i)).toString();
+				out.println( xmlNotAcceptedInstance(singlePlantInstance, i) );
 			}
 		}
 		//print the footer
-		out.println(
-			outData.append(xmlFooter()).toString()
-		);
+		//out.println(outData.append(xmlFooter()).toString());
+		out.println( xmlFooter() );
+		out.close();
 	}
 	catch( Exception e ) 
 	{
-		System.out.println(" failed in: USDAPlantsToXml.outputXml "
-		+e.getMessage() );
+		System.out.println(" failed in: USDAPlantsToXml.outputXml "+e.getMessage() );
 		e.printStackTrace();
 	}
 }
@@ -415,45 +412,53 @@ private String xmlAtomicVarietyName(String  concatenatedName )
  * information about a plant taxon in xml format
  * for an non-accepted plant taxon instance
  */
-private String xmlRank(String  concatenatedName, String plantCode )
+private String xmlRank(String concatenatedName, String plantCode )
 {
-	StringBuffer rank = new StringBuffer(0);
-	if (concatenatedName != null)
+	StringBuffer rank = new StringBuffer();
+	try
 	{
-		if ( concatenatedName.indexOf("var.") > 0)
+		if (concatenatedName != null)
 		{
-			rank.append("<classLevel>variety</classLevel> \n");
-		}
-		else if ( concatenatedName.indexOf("ssp.") > 0 )
-		{
-			rank.append("<classLevel>subspecies</classLevel> \n");
+			if ( concatenatedName.indexOf("var.") > 0)
+			{
+				rank.append("<classLevel>variety</classLevel> \n");
+			}
+			else if ( concatenatedName.indexOf("ssp.") > 0 )
+			{
+				rank.append("<classLevel>subspecies</classLevel> \n");
+			}
+			else 
+			{
+				//if the second token has a period at the end then it is a Genus
+				//System.out.println("ESCOND TOKEN: "+spaceStringTokenizer(concatenatedName, 2) );
+				//if (spaceStringTokenizer(concatenatedName, 2).endsWith("."))
+				if ( rankIsGenus(concatenatedName, plantCode) == true )
+				{
+					rank.append("<classLevel>genus</classLevel> \n");
+				}
+				//serach for hybrids -- this is the new symbol for a hybrid
+				else if (spaceStringTokenizer(concatenatedName, 2).startsWith("xxx"))
+				{
+					rank.append("<classLevel>hybrid</classLevel> \n");
+				}
+				//else must be a species
+				else 
+				{
+					return("<classLevel>species</classLevel> \n");
+				}
+			}
+			return(rank.toString() );
 		}
 		else 
 		{
-			//if the second token has a period at the end then it is a Genus
-			//System.out.println("ESCOND TOKEN: "+spaceStringTokenizer(concatenatedName, 2) );
-			//if (spaceStringTokenizer(concatenatedName, 2).endsWith("."))
-			if ( rankIsGenus(concatenatedName, plantCode) == true )
-			{
-				rank.append("<classLevel>genus</classLevel> \n");
-			}
-			//serach for hybrids
-			else if (spaceStringTokenizer(concatenatedName, 2).startsWith("x"))
-			{
-				rank.append("<classLevel>Hybrid</classLevel> \n");
-			}
-			//else must be a species
-			else 
-			{
-				return("<classLevel>species</classLevel> \n");
-			}
+			return("<!-- rank should be here --> \n");
 		}
-		return(rank.toString() );
 	}
-	else 
+	catch( Exception e ) 
 	{
-		return("<!-- rank should be here --> \n");
+		System.out.println("Exception: " + e.getMessage() );
 	}
+	return( rank.toString() );
 }
 
 	/**
@@ -519,8 +524,8 @@ private String xmlRank(String  concatenatedName, String plantCode )
 		boolean result = false;
 		try
 		{
-			//make sure that the first char does not start with a 
-			// 'X'
+		
+			//make sure that the first char does not start with a  'X'
 			if ( ! string.startsWith("X") )
 			{
 				String s = spaceStringTokenizer(string, 2);
@@ -861,9 +866,7 @@ private String plantConcatenatedName(String fileVectorLine)
  *
  */	
 private Vector fileToVector(String inputPlantList)
-	throws java.io.IOException,
-        java.net.MalformedURLException,
-        org.xml.sax.SAXException
+	throws java.io.IOException
 {
 	//read the resulting file into the attribute vector
 	BufferedReader in = new BufferedReader(new FileReader(inputPlantList), 8192);

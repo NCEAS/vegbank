@@ -8,1209 +8,1257 @@ import org.apache.xalan.xslt.XSLTResultTarget;
 import org.apache.xalan.xslt.XSLTProcessor;
 import java.sql.*;
 
-//next classes are for the database connectivity
-import LocalDbConnectionBroker.*;
-import DbConnectionBroker.*;
-import utility.*;
-import issueStatement.*;
 
 /**
- * 
- * this class is inteded to be used to load the itis data
- * from the itis xml format to the plan taxonomy database
- * that is used by the plots database for tracking names
- *
- * @Author John Harris
- * @Version April 2001
- */
-
-
-public class USDAPlantsLoader2000 {
-
-public String styleSheet="../lib/plantsToNVC.xsl";
-public String attributeFile="attFile.txt";
-public Vector fileVector = new Vector();
-public Hashtable attributeHash = new Hashtable();
-public Hashtable constraintHash = new Hashtable();
-
-public String previousInstanceDate = "01-JAN-96";
-public String startDate = "01-JAN-00";
-public String stopDate = "01-JAN-50";
-public String partyName = "USDA-PLANTS";
-public String reference = "PLANTS96";
-
-//constructor -- define as static the LocalDbConnectionBroker 
-//so that methods called by this class can access the 'local' 
-//pool of database connections
-static LocalDbConnectionBroker lb;
-
-
-
-/**
- * Main method to run the Legacy Data Wizard requires only the xml file that
- * defines the relationship between the files comprising the data package
- */
-public static void main(String[] args) {
-	if (args.length != 1) {
-		System.out.println("Usage: java USDAPlantsLoader2000  [XML] \n");
-		System.exit(0);
-	}
-	else {
-		String inputXml=null;
-		inputXml=args[0];
-		//call the method to convert the data package to xml
-		USDAPlantsLoader2000 il =new USDAPlantsLoader2000();  
-		il.transformXmlData(inputXml);
-	}
-}
-
-/**
- * method that steps thru the processes associated with 
- * transforming and loading the itis xml data
- * @param inputXml
- */
-public void transformXmlData (String inputXml) 
+  * class that loads the 2002 usda plants data into the 
+	* vegbank plants database which already contains the 
+	* 1996 plants data set 
+	*/
+public class USDAPlantsLoader2000 
 {
-	try {
-		System.out.println(inputXml);
 	
-		//call the method to parse the xml file into appropriate attributes and
-		// store them in appropriate objects
-//		System.out.println(
-//			elementParser(
-//				transformToFile(inputXml)
-//			).toString()
-//		);
-		
-		//first initiate the connection pooling
-		lb.manageLocalDbConnectionBroker("initiate");
-		
-		//update the 1996 data by ending the concepts and usages --
-		//this will basically end the 
-		updatePreviousDataInstance(previousInstanceDate, startDate);
-		
-		//load new plant instances -- EXCLUDING THOSE WITH SYNONOMYS
-///		loadPlantInstances(
-///			elementParser(
-///				transformToFile(inputXml)
-///			)
-///		);
-
-		//load the plant data when there is already related 
-		//plant data that is loaded use this for loading the 
-		//usda plants list from year 2000 after the 1996 data 
-		//has already been loaded
-		loadPlantInstancesUpdate(
-			elementParser(
-				transformToFile(inputXml)
-			)
-		);
-		
-		
-		
-		
-		//purge the file vector
-///		fileVector = new Vector();
-		
-		//load the plant INSTANCES WITH SYNONOMYS
-///		loadPlantSynonym(
-///			elementParser(
-///				transformToFile(inputXml)
-///			)
-///		);
-		
-		//lastly destroy the connection pooling
-		System.out.println(" attempting to destroy the connection pool");
-		lb.manageLocalDbConnectionBroker("destroy");
-		
-	}
-	catch( Exception e ) {
-		System.out.println(" failed in: USDAPlantsLoader2000.transformXMLData "
-		+e.getMessage() );
-		e.printStackTrace();
-	}
-}
-
-
-/**
- * method to transform the input xml file into a flat file that 
- * contains the relevant elements from that xml file included 
- * in the XSLT and then passes the contents of the file back
- * as a vector
- */	
-private Vector transformToFile(String inputXml)
-	throws java.io.IOException,
-        java.net.MalformedURLException,
-        org.xml.sax.SAXException
-{
-	//obtain a interface to a new XSLTProcessor object.
-	XSLTProcessor processor = XSLTProcessorFactory.getProcessor();
-
-	// Have the XSLTProcessor processor object transform inputXML  to
-	// StringWriter, using the XSLT instructions found in "*.xsl".
-	//print to a file
-	processor.process(new XSLTInputSource(inputXml), 
-		new XSLTInputSource(styleSheet),
-		new XSLTResultTarget(attributeFile));
-
-	//read the resulting file into the attribute vector
-	BufferedReader in = new BufferedReader(new FileReader(attributeFile), 8192);
-	String s=null;
-	while ((s=in.readLine()) != null) 
+	private String styleSheet="../lib/plantsToNVC.xsl";
+	private String attributeFile="attFile.txt";
+	private Vector fileVector = new Vector();
+	private Vector missingPlantNames = new Vector();
+	private Hashtable missingNamesCache = new Hashtable(); // a cache so that a given name is not repeated
+	private String authors ="USDA, NRCS";
+	private String title = "The Plants Database";
+	private String pubdate ="30-JUN-2002";
+	private String edition  = "Version 3.5";
+	private String othercitationdetails = "(http://plants.usda.gov) National Plant Data Center, Baton Rouge, LA 70874-4490 USA.";
+	private int refId = 0;
+	// this stores the data that are to be loaded to the concept table
+	private Vector conceptTableValues = new Vector();
+	private String dateEntered = "20-AUG-2002";
+	private Vector statusTableValues = new Vector();
+	private Vector usageTableValues = new Vector();
+	private String organization = "USDA-NRCS-PLANTS-2002";
+	private  int partyId = 0;
+	private String email = "plants@plants.usda.gov";
+	private String contactInstructions = "http://plants.usda.gov";
+	private String year = "2002"; // this is the year that the list was from
+	/**
+	 * This is where it happens -- the data are loaded from this 
+	 * method
+	 */
+	public void loadPlantDataSet(String inputXml)
 	{
-//		System.out.println(s);
-		fileVector.addElement(s);
-	}
-	return(fileVector);
-}
-
-
-
-/**
- * method to load the plant synonym if 
- * it exists in the hash 
- */	
-private void loadPlantSynonym(Hashtable plantsData)
-{
-	System.out.println("Size of plantsData hash: "+plantsData.size());
-	for (int i=0; i<plantsData.size(); i++) {
-		
-		//if there is a synonymy associated with this
-		//instance of a plant
-		if (extractSinglePlantInstance(plantsData, i ).get("synonymousName").toString()
-			!= "nullToken"
-			)
-		{
-		//		System.out.println("there is a synonym associated with "+
-		//			extractSinglePlantInstance(plantsData, i
-		//			).get("synonymousName").toString()
-		//		);
-				//this will load the synonym that is required 
-				loadSinglePlantSynonym( extractSinglePlantInstance(plantsData, i) );
-		}
-	}
-}
-
-/**
- * method that will update the plant instances from the 
- * preceeding plant instance load period. (ie, this method)
- * should be run if loading the 2000 plants and the desire is 
- * to update the 1996 plant instances.  Specifically the concept
- * date should be terminated, and the usage date should be 
- * terminated
- * 
- * @param previousInstanceDate -- the date that of the previous load 
- * instance
- * 
- * @param currentInstanceDate --  the date of the current instance
- *
- */
-
-private void updatePreviousDataInstance(String previousInstanceDate,
-	 String currentInstanceDate)
-{
-	//end the concepts having the corresponding end date
-	endPlantConcept(previousInstanceDate, currentInstanceDate);
-	//end too the plant usages
-	endPlantUsage(previousInstanceDate, currentInstanceDate);
-}
-
-
-/**
- * method that ends the plant concepts having a start date
- * that corresponds to the input date
- */
-private void endPlantConcept(String startDate, String endDate)
-{
-	System.out.println("ending concepts with a startdate: "+startDate);
-	System.out.println(" assigning a stop date : "+endDate);
-	
-	//grab a connection from the pool that has already been created 
-	Connection conn=null;
-	Statement query=null;
-	try
-	{
-		conn = lb.manageLocalDbConnectionBroker("getConn");
-		query = conn.createStatement();
-	}
-	catch (Exception e) 
-	{
-		System.out.println("failed in the USDAPlantsLoader2000.endPlantConcept "
-		+" getting a connection from the local pool"
-		+ e.getMessage());
-	}
-	try 
-	{
-		query.executeUpdate("UPDATE PLANTCONCEPT set STOPDATE = '"+endDate+"' "
-		+"WHERE STARTDATE ='"+startDate+"'");
-		
-		System.out.println( query.toString() );
-		//clean up the connections and statements
-		query.close();
-	}
-	catch (Exception e) 
-	{
-		System.out.println("failed in the USDAPlantsLoader2000.endPlantConcept "
-		+ e.getMessage());
-		e.printStackTrace();
-	}
-}
-
-
-/**
- * method that ends the plant concepts having a start date
- * that corresponds to the input date
- */
-private void endPlantUsage(String startDate, String endDate)
-{
-	//grab a connection from the pool that has already been created 
-	Connection conn=null;
-	Statement query=null;
-	try
-	{
-		conn = lb.manageLocalDbConnectionBroker("getConn");
-		query = conn.createStatement();
-	}
-	catch (Exception e) 
-	{
-		System.out.println("failed in the USDAPlantsLoader2000.endPlantConcept "
-		+" getting a connection from the local pool"
-		+ e.getMessage());
-	}
-	try 
-	{
-		query.executeUpdate("UPDATE PLANTUSAGE set STOPDATE = '"+endDate+"' "
-		+"WHERE STARTDATE ='"+startDate+"'");
-		
-		System.out.println( query.toString() );
-		//clean up the connections and statements
-		query.close();
-	}
-	catch (Exception e) 
-	{
-		System.out.println("failed in the USDAPlantsLoader2000.endPlantConcept "
-		+ e.getMessage());
-		e.printStackTrace();
-	}
-}
-
-
-/**
- * method to load an instance of a synonym into the 
- * plant taxa database -- the input single plant instance 
- * must contain information related to the synonomy, also
- * the both the plants (the plant that is the synonomy and
- * the plant that has the synonymous value) must already be 
- * in the database
- */	
-private void loadSinglePlantSynonym(Hashtable singlePlantInstance)
-{
-	//veryify that the input hash table has a synonmyName element
-	if (singlePlantInstance.get("synonymousName").toString() != null )
-	{
-		//System.out.println("from loadSinglePlantSynonym "+singlePlantInstance.get("synonymousName").toString());
-		String concatenatedName
-			= singlePlantInstance.get("concatenatedName").toString();
-		String synonymousName
-			= singlePlantInstance.get("synonymousName").toString();
-		
-		//check that the plant name exists
-		if ( plantNameExists(concatenatedName) == true  && 
-			plantNameExists(synonymousName) == true)
-		{
-			//the synonymous name is the name that the concatenated 
-			//name is now known by
-			int plantConceptId = plantConceptKey(synonymousName);
-			System.out.println("KEY VAL for thet plant concept: "+plantConceptId);
-		
-			int plantNameId = plantNameKey(concatenatedName);
+		try 
+ 		{
+			System.out.println("USDAPlantsLoader > infile: " + inputXml);
+			System.out.println("USDAPlantsLoader > reading input xml  file ");
+			this.transformToFile(inputXml);
+			System.out.println("USDAPlantsLoader > reading attribute file ");
+			Vector v = this.getAttributeFile();
 			
-			//load the relevant data to the usage table
-			loadPlantUsageInstance(concatenatedName, plantNameId, plantConceptId, 
-			partyName, "SYNONYM", startDate, stopDate, reference);
+			System.out.println("USDAPlantsLoader > parsing input file contents ");
+			Hashtable plantsHash = this.elementParser(v);
+			
+			System.out.println("USDAPlantsLoader > loading data to db ");
+			////load new plant instances -- EXCLUDING THOSE WITH SYNONOMYS
+			loadPlantInstances(plantsHash);
+		}
+		catch ( Exception e )
+		{
+			System.out.println("Exception: " +e.getMessage());
+			e.printStackTrace();
+		}
 	}
-	else 
-	{
-		System.out.println("instance with synonomy does not exist");
-	}
-	}
-}
-
-
-/**
- * method that returns the primary key value
- * from the plant name table based on the 
- * input parameters
- */
-private int plantNameKey(String plantName)
-{
-	int plantNameId = 0;
-	String action="select";
-	String statement="select plantName_id from plantname where plantname = '"
-		+plantName+"'";
-
-	String returnFields[]=new String[1];
-	int returnFieldLength=1;
-	returnFields[0]="plantname_id";
-
-	// Issue the statement, and iterate the counter
-	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);
-
-	if ( j.returnedValues.size() > 1 )
-	{
-		System.out.println("plantNameKey violation: there are more than one"
-		+" keys returned");
-	}
-	//if there are no returned results
-	else if ( j.returnedValues.size() == 0 )
-	{
-		System.out.println("no usage of "+plantName+" found in the palnt name table");
-		return(0);
-	}
-	else 
-	{
-		//return the primary key value
-		plantNameId = Integer.parseInt(
-		j.returnedValues.elementAt(0).toString().replace('|', ' ').trim()
-		);
-	}
-	//System.out.println("####"+ plantNameId );
-	return(plantNameId);
-
-}
-
-
-
-
-
-
-
-
-/**
- * method that loads a new instance of a 
- * plant correlation  - name usage returns to 
- * the calling method the primary key for 
- * that concept - name usage
- */	
-private int loadPlantCorrelationInstance(String concatenatedName, 
-	int plantConceptStatusId, int plantConceptId, 
-	String convergence, String startDate)
-{
-	String action="insert";
-	String insertString="insert into plantCorrelation";
-	String attributeString="plantName, plantConceptStatus_id, plantConcept_id, convergence, "
-		+"startDate";	
-	int inputValueNum=5;
-	String inputValue[]=new String[5];
-	inputValue[0]=""+concatenatedName;
-	inputValue[1]=""+plantConceptStatusId;
-	inputValue[2]=""+plantConceptId;
-	inputValue[3]=""+convergence;
-	inputValue[4]=""+startDate;
 	
-	//get the valueString from the method
-	issueStatement k = new issueStatement();
-	k.getValueString(inputValueNum);
-	String valueString = k.outValueString;
-
-	issueStatement j = new issueStatement();
-	j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);
-
-	return(0);	
-}
-
-
-
-
-
-
-
-/**
- * method that returns the primary key value
- * from the plant concept key based on the 
- * input parameters
- */
-private int plantConceptKey(String plantName)
-{
-	int plantConceptId = 0;
-	String action="select";
-	String statement="select plantconcept_id from plantconcept where plantname = '"
-		+plantName+"'";
-
-	String returnFields[]=new String[1];
-	int returnFieldLength=1;
-	returnFields[0]="plantConcept_id";
-
-	// Issue the statement, and iterate the counter
-	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);
-
-	if ( j.returnedValues.size() > 1 )
+	
+ /**
+ 	* method to load the plant instances, stored in a 
+ 	* hashtable, to the database 
+ 	*/	
+	private void loadPlantInstances(Hashtable plantsData)
 	{
-		System.out.println("plantConceptKey violation: there are more than one"
-		+" keys returned");
-	}
-	//if there are no returned results
-	else if ( j.returnedValues.size() == 0 )
-	{
-		System.out.println("no usage of "+plantName+" found in the concept table");
-		return(0);
-	}
-	else 
-	{
-		//return the primary key value
-		plantConceptId = Integer.parseInt(
-		j.returnedValues.elementAt(0).toString().replace('|', ' ').trim()
-		);
-	}
-	//System.out.println("####"+ plantNameId );
-	return(plantConceptId);
-
-}
-
-
-/**
- * method that returns the primary key value
- * from the plantUsage table where the plantName
- * field is equal to the input value
- */
-private int plantUsageKey(String plantName)
-{
-	int plantUsageId = 0;
-	String action="select";
-	String statement="select plantusage_id from plantUsage where plantname = '"
-		+plantName+"'";
-
-	String returnFields[]=new String[1];
-	int returnFieldLength=1;
-	returnFields[0]="plantUsage_id";
-
-	// Issue the statement, and iterate the counter
-	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);
-
-	if ( j.returnedValues.size() > 1 )
-	{
-		System.out.println("plantUsageKey violation: there are more than one"
-		+" keys returned");
-	}
-	//if there are no returned results
-	else if ( j.returnedValues.size() == 0 )
-	{
-		System.out.println("no usage of "+plantName+" found");
-		return(0);
-	}
-	else 
-	{
-		//return the primary key value
-		plantUsageId = Integer.parseInt(
-		j.returnedValues.elementAt(0).toString().replace('|', ' ').trim()
-		);
-	}
-	//System.out.println("####"+ plantNameId );
-	return(plantUsageId);
-}
-
-
-
-
-
-
-
-/**
- * method to load the plant instances, stored in a 
- * hashtable, to the database 
- */	
-private void loadPlantInstances(Hashtable plantsData)
-{
-//System.out.println(plantsData.toString() );
-	for (int i=0; i<plantsData.size(); i++) {
-		loadSinglePlantInstance( 
-			extractSinglePlantInstance(plantsData, i)
-		);
-	}
-}
-
-/**
- * method to load the plant instances, stored in a 
- * hashtable, to the database 
- */	
-private void loadPlantInstancesUpdate(Hashtable plantsData)
-{
-//System.out.println(plantsData.toString() );
-	for (int i=0; i<plantsData.size(); i++) {
-		loadSinglePlantInstanceUpdate( 
-			extractSinglePlantInstance(plantsData, i)
-		);
-	}
-}
-
-
-
-
-/**
- * method to extract a single plant instance
- * from the aggregate hashtable - returning a 
- * hashtable with keys like name, author orignDate
- * etc
- */	
-private void loadSinglePlantInstance(Hashtable singlePlantInstance)
-{
-	int nameId = 0;
-	int conceptId = 0;
-	int statusId = 0;
-	if ( singlePlantInstance.toString() != null )
-	{
-		String concatenatedName=singlePlantInstance.get("concatenatedName").toString();
-		String tsnValue=singlePlantInstance.get("tsnValue").toString();
-		String rank=singlePlantInstance.get("rank").toString();
-		String initialDate=singlePlantInstance.get("initialDate").toString();
-		String updateDate=singlePlantInstance.get("updateDate").toString();
-		String parentName=singlePlantInstance.get("parentName").toString();
-		String authorName=singlePlantInstance.get("authorName").toString();
-		String itisUsage=singlePlantInstance.get("itisUsage").toString();
-		String synonymousName=singlePlantInstance.get("synonymousName").toString();
-		String publicationName=singlePlantInstance.get("publicationName").toString();
-		String commonName=singlePlantInstance.get("commonName").toString();
-		String familyName=singlePlantInstance.get("familyName").toString();
-		String plantCode=singlePlantInstance.get("plantCode").toString();
-		
-		
-		//if the plantname is not there then load it
-		if (plantNameExists(concatenatedName)==false)
+		try
 		{
-			System.out.println(" Loading the first instance of a plant");
-			nameId = loadPlantNameInstance(concatenatedName, commonName, plantCode);
-		}
-		//if the plant concept does not exist create an entry 
-		// and create a status entry for that plant instance - if 
-		//it is not a synonomy b/c if there is a synonomy then the 
-		//concatenated value does not have a concept
-		if (plantConceptExists(concatenatedName)==false)
-		{
-			if ( synonymousName.equals("nullToken") )
-			{
-				//update the concept -- get rid of the hard wired dates
-				conceptId = loadPlantConceptInstance(concatenatedName, tsnValue, rank, 
-				"PLANTS2000", "01-JAN-00");
-				//update the status
-				statusId = loadPlantStatusInstance(conceptId, itisUsage, "01-JAN-96", 
-				"01-JAN-01", "PLANTS1996");
-			}
-		}
-		//if no synonomies then add the accepted 
-		//usage to the usage table -- for 1996
-		if ( synonymousName.equals("nullToken") )
-		{
-			System.out.println("loading usage instance: \n plantNameId: "+nameId);
-			System.out.println("for plant name: "+concatenatedName);
-			if (nameId > 0)
-			{
-			loadPlantUsageInstance(concatenatedName, nameId, conceptId, "PLANTS", itisUsage, 
-					startDate, stopDate, reference);
-			}
-			else 
-			{
-				System.out.println("FAILURE LOADING THE USAGE INSTANCE FOR A PLANT");
-			}
-		}
-	}
-}
+			int plantNumber = plantsData.size();
+			System.out.println("USDAPlantsLoader > number plant instances: " + plantNumber );
+			Connection conn = this.getConnection();
+			
+			//remove any known temporary database objects 
+			this.removeTempDBObjects();
+			
+			// create the indicies on the plant name table
+			this.createPlantNameIndex();
+			//insert the reference and party info 
+			this.insertPartyReference();
+			
 
-
-
-/**
- * this method is used to load a single plant instance
- * to the plant database and then update any earlier 
- * related instances of the plant that exist in the 
- * database for loading the first instance of plant 
- * data do not use this method but instead use the 
- * method 'loadSinglePlantInstance' that will load the 
- * data for the first time
- */	
-private void loadSinglePlantInstanceUpdate(Hashtable singlePlantInstance)
-{
-	int nameId = 0;
-	int conceptId = 0;
-	int statusId = 0;
-	if ( singlePlantInstance.toString() != null )
-	{
-		String concatenatedName=singlePlantInstance.get("concatenatedName").toString();
-		String tsnValue=singlePlantInstance.get("tsnValue").toString();
-		String rank=singlePlantInstance.get("rank").toString();
-		String initialDate=singlePlantInstance.get("initialDate").toString();
-		String updateDate=singlePlantInstance.get("updateDate").toString();
-		String parentName=singlePlantInstance.get("parentName").toString();
-		String authorName=singlePlantInstance.get("authorName").toString();
-		String itisUsage=singlePlantInstance.get("itisUsage").toString();
-		String synonymousName=singlePlantInstance.get("synonymousName").toString();
-		String publicationName=singlePlantInstance.get("publicationName").toString();
-		String commonName=singlePlantInstance.get("commonName").toString();
-		String familyName=singlePlantInstance.get("familyName").toString();
-		String plantCode=singlePlantInstance.get("plantCode").toString();
-		
-		//if the plant name / concept pair is accepted then do 
-		//the following which shall include:
-		// 1] add name if not there
-		// 2] add concept if not there 
-		// 3] add the status
-		// 4] update the status 
-		// 5] add the correlation
-		// 6] add the usage
-		if ( synonymousName.equals("nullToken") )  //means that it is accepted
+			
+			// create the missing plants and the concept data vector
+			for (int i=0; i<plantNumber; i++) 
 			{
-				//if the plantname is not in the database then load it
-				if (plantNameExists(concatenatedName)==false)
+				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
+				String plantCode=plantInstanceHash.get("plantCode").toString();
+				String concatenatedName= plantInstanceHash.get("concatenatedName").toString();
+				String concatenatedLongName = plantInstanceHash.get("concatenatedLongName").toString();
+				String rank= plantInstanceHash.get("rank").toString();
+				String parentName=plantInstanceHash.get("parentName").toString();
+				String plantConceptStatus=plantInstanceHash.get("itisUsage").toString();
+				String synonymousName=plantInstanceHash.get("synonymousName").toString();
+				String familyName=plantInstanceHash.get("familyName").toString();
+				String commonName=plantInstanceHash.get("commonName").toString();
+				
+				// now get the associated primary key value for the sciname
+				String s = "select PLANTNAME_ID from PLANTNAME where PLANTNAME = '"+concatenatedName+ "' ";
+				PreparedStatement pstmt = conn.prepareStatement(s);
+				ResultSet rs = pstmt.executeQuery();
+				// if the plant is missing then add it to the list of missing names
+				if ( rs.first()  == false )
 				{
-					System.out.println("XXX Loading first instance of a plant: "+concatenatedName);
-					nameId = loadPlantNameInstance(concatenatedName, commonName, plantCode);
-					//assume that if the plantname is not there then
-					//the plant concept is not there either -- this is 
-					//a test -- and then add the status too for this 
-					//accepted value
-					if (plantConceptExists(concatenatedName)==false)
+					System.out.println("USDAPlantsLoader >>> not found: " + concatenatedName);
+					// add the names to those that are missing
+					if ( missingNamesCache.containsKey(concatenatedName) == false )
 					{
-						System.out.println("no concept either: " + concatenatedName);
-						//add the new concept
-						conceptId = loadPlantConceptInstance(concatenatedName, tsnValue, rank, 
-						"PLANTS2000", "01-JAN-00");
-						//update the status
-						statusId = loadPlantStatusInstance(conceptId, itisUsage, "01-JAN-00", 
-						"01-JAN-50", "PLANTS2000");
+						this.missingPlantNames.add(concatenatedName+"|"+concatenatedLongName+"|scientific");
+						this.missingNamesCache.put(concatenatedName, concatenatedLongName);
+					}
+				}
+
+				pstmt.close();
+				
+				//do the same for the code 
+				s = "select PLANTNAME_ID from PLANTNAME where PLANTNAME = '"+plantCode+ "' ";
+				pstmt = conn.prepareStatement(s);
+				rs = pstmt.executeQuery();
+				// if the plant is missing then add it to the list of missing names
+				if ( rs.first()  == false )
+				{
+					System.out.println("USDAPlantsLoader >>> not found: " + plantCode);
+					// add the names to those that are missing
+					if ( missingNamesCache.containsKey(plantCode) == false )
+					{
+							this.missingPlantNames.add(plantCode+"|"+concatenatedLongName+"|code");
+							this.missingNamesCache.put(plantCode, concatenatedLongName);
+					}
+				}
+				
+				//do the same for the commonname -- but only if there is one
+				if (commonName.length() > 1 )
+				{
+					s = "select PLANTNAME_ID from PLANTNAME where PLANTNAME = '"+commonName+ "' ";
+					pstmt = conn.prepareStatement(s);
+					rs = pstmt.executeQuery();
+					// if the plant is missing then add it to the list of missing names
+					if ( rs.first()  == false )
+					{
+						System.out.println("USDAPlantsLoader >>> not found: " + commonName);
+						// add the names to those that are missing
+						if ( missingNamesCache.containsKey(commonName) == false )
+					{
+						this.missingPlantNames.add(commonName+"|"+concatenatedLongName+"|common");
+						this.missingNamesCache.put(commonName, concatenatedLongName);
+					}
+					}
+				}
+				
+			}
+			
+			// now insert the missing plant names 
+			System.out.println("USDAPlantsLoader > inserting missing plant names : " + this.missingPlantNames.size()  );
+			for (int i=0; i<missingPlantNames.size(); i++) 
+			{
+				StringTokenizer st = new StringTokenizer((String)missingPlantNames.elementAt(i), "|");
+				String name = st.nextToken();
+				String longName = st.nextToken();
+				String nameType = st.nextToken(); // this is for the second step
+				
+				StringBuffer sb = new StringBuffer();
+				sb.append("insert into PLANTNAME (PLANTREFERENCE_ID, PLANTNAME, PLANTNAMEWITHAUTHOR, ");
+				sb.append(" DATEENTERED )");
+				sb.append(" values(?,?,?,?) ");
+				PreparedStatement pstmt = conn.prepareStatement(sb.toString() );
+				pstmt.setInt(1, this.refId);
+				pstmt.setString(2, name);
+				pstmt.setString(3, longName);
+				pstmt.setString(4, dateEntered);
+				pstmt.execute();
+				pstmt.close();
+			}
+			
+			// now that all the new plant names have been inserted construct the vector
+			// which contains the plantconcept data
+			// create the missing plants and the concept data vector
+			for (int i=0; i<plantNumber; i++) 
+			{
+				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
+				String plantCode=plantInstanceHash.get("plantCode").toString();
+				String concatenatedName= plantInstanceHash.get("concatenatedName").toString();
+				String concatenatedLongName = plantInstanceHash.get("concatenatedLongName").toString();
+				String rank= plantInstanceHash.get("rank").toString();
+				String parentName=plantInstanceHash.get("parentName").toString();
+				String plantConceptStatus=plantInstanceHash.get("itisUsage").toString();
+				String synonymousName=plantInstanceHash.get("synonymousName").toString();
+				String familyName=plantInstanceHash.get("familyName").toString();
+				String commonName=plantInstanceHash.get("commonName").toString();
+				
+				// now get the associated primary key value for the sciname
+				String s = "select PLANTNAME_ID from PLANTNAME where PLANTNAME = '"+concatenatedName+ "' ";
+				PreparedStatement pstmt = conn.prepareStatement(s);
+				ResultSet rs = pstmt.executeQuery();
+				// if the plant is missing then add it to the list of missing names
+				if ( rs.first()  == false )
+				{
+					System.out.println("USDAPlantsLoader >>> not found should not happen ever : " + concatenatedName);
+					// add the names to those that are missing
+					//this.missingPlantNames.add(concatenatedName+"|"+concatenatedLongName+"|scientific");
+				}
+				// if it is there set the plantname id in the concept table which should only include the sci name
+				else
+				{
+					rs.first();
+					int plantId = rs.getInt(1);
+					conceptTableValues.add(plantId+"|"+concatenatedName+"|"+plantCode+"|"+rank+"|"+parentName+"|"+plantConceptStatus);
+				}
+				pstmt.close();
+			}
+			
+			
+			// now insert the concept information
+			System.out.println("USDAPlantsLoader > inserting new concepts : " + this.conceptTableValues.size()  );
+			for (int i=0; i<this.conceptTableValues.size(); i++) 
+			{
+				StringTokenizer st = new StringTokenizer((String)conceptTableValues.elementAt(i), "|");
+				String plantId = st.nextToken();
+				String concatName = st.nextToken();
+				String code = st.nextToken();
+				String level = st.nextToken();
+				String parent = st.nextToken();
+				
+				StringBuffer sb = new StringBuffer();
+				sb.append(" insert into PLANTCONCEPT (PLANTNAME_ID, PLANTREFERENCE_ID, PLANTNAME, ");
+				sb.append(" PLANTDESCRIPTION, PLANTLEVEL, PLANTCODE) ");
+				sb.append(" values (?,?,?,?,?,?)");
+				PreparedStatement pstmt = conn.prepareStatement(sb.toString() );
+				pstmt.setString(1, plantId);
+				pstmt.setInt(2, this.refId);
+				pstmt.setString(3, concatName);
+				pstmt.setString(4, concatName);
+				pstmt.setString(5, level);
+				pstmt.setString(6, code);
+				
+				pstmt.execute();
+				pstmt.close();	
+			}
+			
+			//create the indicies for query perf in concept
+			this.createPlantConceptIndex();
+			
+			//create the vector with the status values 
+			System.out.println("USDAPlantsLoader > creating status load values: " + this.conceptTableValues.size()  );
+			for (int i=0; i<this.conceptTableValues.size(); i++) 
+			{
+				StringTokenizer st = new StringTokenizer((String)conceptTableValues.elementAt(i), "|");
+				String plantId = st.nextToken();
+				String concatName = st.nextToken();
+				String code = st.nextToken();
+				String level = st.nextToken();
+				String parent = st.nextToken();
+				String status = st.nextToken();
+				
+				StringBuffer sb = new StringBuffer();
+				sb.append("select PLANTCONCEPT_ID from PLANTCONCEPT where ");
+				sb.append(" PLANTNAME_ID =  " + plantId+ " and ");
+				sb.append(" PLANTREFERENCE_ID = " + this.refId );
+				
+				PreparedStatement pstmt = conn.prepareStatement(sb.toString() );
+				ResultSet rs = pstmt.executeQuery();
+				rs.first();
+				int conceptId = rs.getInt(1);
+				this.statusTableValues.add( conceptId+"|"+status+"|"+parent);
+				pstmt.close();	
+			}
+			
+			
+			//insert the status data
+			System.out.println("USDAPlantsLoader > inserting status values: " + this.statusTableValues.size()  );
+			for (int i=0; i<this.conceptTableValues.size(); i++)
+			{
+				StringTokenizer st = new StringTokenizer((String)statusTableValues.elementAt(i), "|");
+				String conceptId = st.nextToken();
+				String status = st.nextToken();
+				String parentname = st.nextToken();
+				
+				StringBuffer sb = new StringBuffer();
+				sb.append(" insert into PLANTSTATUS (PLANTCONCEPT_ID, PLANTREFERENCE_ID, PLANTPARTY_ID, ");
+				sb.append(" PLANTCONCEPTSTATUS, PLANTPARENTNAME, startdate) ");
+				sb.append(" values (?,?,?,?,?,?)");
+				PreparedStatement pstmt = conn.prepareStatement(sb.toString() );
+				pstmt.setString(1, conceptId);
+				pstmt.setInt(2, this.refId);
+				pstmt.setString(3, "1");
+				pstmt.setString(4, status);
+				pstmt.setString(5, parentname);
+				pstmt.setString(6, this.dateEntered);
+				pstmt.execute();
+				pstmt.close();	
+			}
+
+			//generate the usage vector 
+			System.out.println("USDAPlantsLoader > creating usage values: " + this.conceptTableValues.size()  );
+			for (int i=0; i<plantNumber; i++) 
+			{
+				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
+				String plantCode=plantInstanceHash.get("plantCode").toString();
+				String concatenatedName= plantInstanceHash.get("concatenatedName").toString();
+				String concatenatedLongName = plantInstanceHash.get("concatenatedLongName").toString();
+				String rank= plantInstanceHash.get("rank").toString();
+				String parentName=plantInstanceHash.get("parentName").toString();
+				String plantConceptStatus=plantInstanceHash.get("itisUsage").toString();
+				String synonymousName=plantInstanceHash.get("synonymousName").toString();
+				String familyName=plantInstanceHash.get("familyName").toString();
+				String commonName=plantInstanceHash.get("commonName").toString();
+				
+				// now get the associated primary key value for the sciname
+				String s = "select PLANTNAME_ID from PLANTNAME where PLANTNAME = '"+concatenatedName+ "' ";
+				PreparedStatement pstmt = conn.prepareStatement(s);
+				ResultSet rs = pstmt.executeQuery();
+				rs.first();
+				int plantNameId = rs.getInt(1);
+				pstmt.close();
+				rs.close();
+				
+				// get the concept for the plant -- using the sci name 
+				StringBuffer sb = new StringBuffer();
+				sb.append("select PLANTCONCEPT_ID from PLANTCONCEPT where ");
+				sb.append(" PLANTNAME_ID =  " + plantNameId+ " and ");
+				sb.append(" PLANTREFERENCE_ID = " + this.refId );
+				
+				pstmt = conn.prepareStatement(sb.toString() );
+				rs = pstmt.executeQuery();
+				int conceptId = 0;
+				if ( rs.first() == true )
+				{
+					conceptId = rs.getInt(1);
+				}
+				
+				if ( conceptId != 0) 
+				{
+				
+					this.usageTableValues.add(plantNameId+"|"+concatenatedName+"|"+conceptId+"|"+synonymousName+"|"+plantConceptStatus+"|SCIENTIFIC NAME");
+				
+					//now get the id's for the codes and common names
+					s = "select PLANTNAME_ID from PLANTNAME where PLANTNAME = '"+plantCode+ "' ";
+					pstmt = conn.prepareStatement(s);
+					rs = pstmt.executeQuery();
+					rs.first();
+					plantNameId = rs.getInt(1);
+					pstmt.close();
+					rs.close();
+					this.usageTableValues.add(plantNameId+"|"+plantCode+"|"+conceptId+"|"+synonymousName+"|"+plantConceptStatus+"|CODE");
+				
+					//now get the id's for the common names
+					if ( commonName.length() > 2 )
+					{
+						s = "select PLANTNAME_ID from PLANTNAME where PLANTNAME = '"+commonName+ "' ";
+						pstmt = conn.prepareStatement(s);
+						rs = pstmt.executeQuery();
+						rs.first();
+						plantNameId = rs.getInt(1);
+						pstmt.close();
+						rs.close();
+						this.usageTableValues.add(plantNameId+"|"+commonName+"|"+conceptId+"|"+synonymousName+"|"+plantConceptStatus+"|COMMON NAME");
+					}
+				}
+			}
+			
+			// insert the data to the usage table
+			System.out.println("USDAPlantsLoader > inserting usage values: " + this.usageTableValues.size()  );
+			for (int i=0; i<this.usageTableValues.size(); i++)
+			{
+				String line = (String)usageTableValues.elementAt(i);
+				StringTokenizer st = new StringTokenizer(line, "|");
+				//System.out.println("USDAPlantsLoader > line: " + line); 
+				
+				String nameId = st.nextToken();
+				String name = st.nextToken();
+				String conceptId = st.nextToken();
+				String synonym = st.nextToken();
+				String status = st.nextToken();
+				String classSystem = st.nextToken();
+				
+				StringBuffer sb = new StringBuffer();
+				sb.append(" insert into PLANTUSAGE (PLANTNAME_ID, PLANTCONCEPT_ID, PLANTNAME, PLANTPARTY_ID, ");
+				sb.append(" USAGESTART, acceptedsynonym, plantnamestatus, classsystem ) ");
+				sb.append(" values (?,?,?,?,?,?,?,?)");
+				PreparedStatement pstmt = conn.prepareStatement(sb.toString() );
+				pstmt.setString(1, nameId);
+				pstmt.setString(2, conceptId);
+				pstmt.setString(3, name);
+				pstmt.setInt(4, this.partyId);
+				pstmt.setString(5, this.dateEntered);
+				pstmt.setString(6, synonym );
+				pstmt.setString(7, status );
+				pstmt.setString(8, classSystem );
+				pstmt.execute();
+				pstmt.close();	
+			}
+			
+			//create the temporary correlation table
+			this.createTempCorrelationTable();
+			
+			//create indicies related to correlation performance
+			this.createCorrelationPerfIndicies();
+			
+			// insert into the temp the correlation table
+			System.out.println("USDAPlantsLoader > inserting correlations: "  );
+			System.out.println("USDAPlantsLoader > inserting to temp-correlation table " );
+			for (int i=0; i<this.usageTableValues.size(); i++)
+			{
+				String line = (String)usageTableValues.elementAt(i);
+				StringTokenizer st = new StringTokenizer(line, "|");
+				
+				
+				String nameId = st.nextToken();
+				String name = st.nextToken();
+				String conceptId = st.nextToken();
+				String synonym = st.nextToken();
+				String status = st.nextToken();
+				String classSystem = st.nextToken();
+				
+				 
+				// only if they are scientific names and are not standard 
+				if ( status.startsWith("not")  &&  classSystem.toUpperCase().startsWith("SCI")  )
+				{
+						StringBuffer sb = new StringBuffer();
+						sb.append(" insert into TEMP_CORRELATION (PAST_PLANTCONCEPT_ID, PLANTCONVERGENCE, CORRELATIONSTART,  ");
+						sb.append("  SYNONYM ) ");
+						sb.append(" values (?,?,?,?)");
+						PreparedStatement pstmt = conn.prepareStatement(sb.toString() );
+						pstmt.setString(1, conceptId);
+						pstmt.setString(2, "UNKNOWN");
+						pstmt.setString(3, this.dateEntered);
+						//pstmt.setInt(4, statusId);
+						pstmt.setString(4, synonym);
+						pstmt.execute();
+						pstmt.close();
+				}
+			}
+			//update the values in this table 
+			this.updateTempCorrelationTable();
+			// migrate the values from the tempoarary table 
+			System.out.println("migrating correlation data");
+			this.migrateCorrelationData();
+			
+			
+			// update the parent data in the concept table -- this can be left out 
+			System.out.println("updating parent concepts");
+///			this.updateParentConcept(plantsData);
+			this.updateParentConcept();
+			
+			
+			// if the year is 2002 then update the 1996 data that is already 
+			// in the database 
+			System.out.println("updating the existing 1996 data ");
+			if ( this.year.equalsIgnoreCase("2002") )
+			{
+				this.update1996Data();
+			}
+			
+			
+			//remove the temp correlation table 
+			//this.dropTempCorrelationTable();
+			// remove the plantname index 
+			this.dropPlantNameIndex();
+			// drop the index 
+			this.dropPlantConceptIndex();
+		}
+		catch (Exception e)
+	  {
+		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+		 e.printStackTrace();
+		// System.exit(0);
+	  }
+	}
+	
+	/**
+	 * method that removes the known temporary objects 
+	 */
+	 private void removeTempDBObjects()
+	 {
+		 try
+		 {
+			 System.out.println("USDAPlantsLoader > removing any known db temporary objects ");
+			 Connection conn = this.getConnection();
+			 StringBuffer sb = new StringBuffer();
+			 
+			 System.out.println(" dropping the temp_correlation table ");
+			 sb.append("drop table temp_correlation");
+			 PreparedStatement pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 
+			 System.out.println(" dropping the temp_parentconcepts table ");
+			 sb = new StringBuffer();
+			 sb.append("drop table temp_parentconcepts");
+			 pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 
+			 System.out.println(" dropping some indicies tmp_concept_dual ");
+			 sb = new StringBuffer();
+			 sb.append("drop index tmp_concept_dual ");
+			 pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 conn.close();
+			 
+		 
+		 }
+		 catch (Exception e)
+		 {
+			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+	 }
+	
+	/**
+	 * method that updates the 1996 data that are already stored in the 
+	 * vegbank system.  These updates include:
+	 *
+	 */
+	 private void update1996Data()
+	 {
+		 try
+		 {
+			 System.out.println("USDAPlantsLoader > updating the 1996 data");
+			 
+			 System.out.println("updating the correlations ");
+			 Connection conn = this.getConnection();
+			 StringBuffer sb = new StringBuffer();
+			 //-- first update the 1996 correlations 
+			 sb.append("update PLANTCORRELATION set correlationstop = '10-JUN-2002'");
+			 PreparedStatement pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 
+///			 System.out.println("dropping a temp table ");
+			 // drop the table if it exists
+///			 sb = new StringBuffer();
+///			 sb.append("drop table cross_year_correlations");
+///			 pstmt = conn.prepareStatement(sb.toString());
+///			 pstmt.execute();
+///			 pstmt.close();
+			 
+			 System.out.println("createing a table ");
+			 //create the table
+			 sb = new StringBuffer();
+			 sb.append("create table cross_year_correlations");
+			 sb.append("(");
+			 sb.append("PLANTSTATUS_ID integer,");
+			 sb.append("PAST_PLANTCONCEPT_ID integer,");
+			 sb.append("PLANTCONCEPT_ID integer,");
+			 sb.append("plantCode varchar (20) ");
+			 sb.append(")");
+			 pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 
+			 System.out.println("inserting the base 1996 - 2002 correlation data ");
+			 //insert the base data 
+			 sb = new StringBuffer();
+			 sb.append("insert into cross_year_correlations ( PLANTSTATUS_ID,     PAST_PLANTCONCEPT_ID) "); 
+			 sb.append("select  PLANTSTATUS_ID, PLANTCONCEPT_ID from plantstatus where plantreference_id = 1");
+			 pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 
+			 System.out.println("updating the correlation data ");
+			 //update the plantcodes
+			 sb = new StringBuffer();
+			 sb.append("update  cross_year_correlations set plantCode = ");
+			 sb.append("(select plantcode from plantconcept where plantconcept.plantconcept_id = cross_year_correlations.PAST_PLANTCONCEPT_ID)");
+			 pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 
+			 System.out.println("making some performance indexes");
+			 //create the indicies
+			 sb = new StringBuffer();
+			 sb.append("create index tmp_code_concept on plantconcept (plantCode);");
+			 sb.append("create index tmp_ref_concept on plantconcept(plantreference_id);");
+			 sb.append("create index tmp_dual_concept on  plantconcept(plantCode,plantreference_id );");
+			 sb.append("create index tmp_code_crsscorre on cross_year_correlations (plantCode);");
+			 pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 
+			 System.out.println("updating the concept id's for the new correlations ");
+			 //update the plantconcept
+			 sb = new StringBuffer();
+			 sb.append("update cross_year_correlations set PLANTCONCEPT_ID = ");
+			 sb.append("(select max(plantconcept_id) from plantconcept where plantconcept.plantcode = cross_year_correlations.plantCode and plantconcept.plantreference_id = 2)");
+			 pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 
+			 System.out.println("deleting any nulls ");
+			 //delete any nulls
+			 sb = new StringBuffer();
+			 sb.append("delete from cross_year_correlations where plantconcept_id = null");
+			 pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 
+			 System.out.println("migrating the data ");
+			 //migrate the correlation data 
+			 sb = new StringBuffer();
+			 sb.append("insert into PLANTCORRELATION (PLANTSTATUS_ID, PLANTCONCEPT_ID, PLANTCONVERGENCE, CORRELATIONSTART)");
+			 sb.append("select PLANTSTATUS_ID, PLANTCONCEPT_ID, 'UNKNOWN', '10-JUN-2002'");
+			 sb.append("from cross_year_correlations where plantstatus_id > 0 and plantconcept_id > 0");
+			 pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 
+			 System.out.println("setting the plantstatus index on the reference ");
+			 sb = new StringBuffer();
+			 sb.append(" create index tmp_status_dualb on plantstatus (  plantreference_id, plantstatus_id ); ");
+			 pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 
+			 System.out.println("setting the plantstatus stop date to 2002 ");
+			 sb = new StringBuffer();
+			 sb.append(" update plantstatus set stopdate = '20-JUN-2002' where plantreference_id = 1 and plantstatus_id > 0 ; ");
+			 //sb.append("update plantstatus set plantpartycomments  = 'supperceeded by 2002 data' where plantreference_id != "+this.refId+";");
+			 pstmt = conn.prepareStatement(sb.toString());
+			 pstmt.execute();
+			 pstmt.close();
+			 
+			 conn.close();
+			 
+		 }
+		 catch (Exception e)
+		 {
+			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+	 }
+	 
+	
+	/**
+	  * method to update the parent concept attributes 
+		*/
+		 private void updateParentConcept()
+		 {
+			 try
+			 {
+				 Connection conn = this.getConnection();
+				 StringBuffer sb = new StringBuffer();
+				 sb.append("create table temp_parentconcepts (");
+				 sb.append("child_id integer,");
+				 sb.append("childname varchar(230),");
+				 sb.append("parent_id  integer,");
+				 sb.append("parentname varchar(230),");
+				 sb.append("plantreference_id integer");
+				 sb.append(");");
+				 PreparedStatement pstmt = conn.prepareStatement(sb.toString());
+				 pstmt.execute();
+				 pstmt.close();
+				 // insert the base information and then send the updates
+				 sb = new StringBuffer();
+				 sb.append("insert into TEMP_PARENTCONCEPTS (CHILD_ID, PARENTNAME, PARENT_ID, plantreference_id) ");
+				 sb.append("select PLANTSTATUS.PLANTCONCEPT_ID, PLANTSTATUS.PLANTPARENTNAME, PLANTCONCEPT.PLANTCONCEPT_ID, PLANTCONCEPT.plantreference_id where ");
+				 sb.append("PLANTSTATUS.PLANTPARENTNAME = PLANTCONCEPT.PLANTNAME and PLANTSTATUS.PLANTREFERENCE_ID = "+this.refId+"  ; ");
+				 pstmt = conn.prepareStatement(sb.toString());
+				 pstmt.execute();
+				 pstmt.close();
+				 
+				 // get the child name 
+				 sb = new StringBuffer();
+				 sb.append("update temp_parentconcepts set childname = ( ");
+				 sb.append("select plantname from plantconcept where plantconcept.plantconcept_id = temp_parentconcepts.child_id); ");
+				 pstmt = conn.prepareStatement(sb.toString());
+				 pstmt.execute();
+				 pstmt.close();
+				 
+				 // delete some of the entries -- also delete the concepts that are not relevant to the 
+				 // current reference
+				 sb = new StringBuffer();
+				 sb.append("delete from  temp_parentconcepts where parent_id  =  child_id; ");
+				 sb.append("delete from  temp_parentconcepts where plantreference_id  != "+this.refId+"; ");
+				 pstmt = conn.prepareStatement(sb.toString());
+				 pstmt.execute();
+				 pstmt.close();
+				 
+				 // now migrate the values
+				 sb = new StringBuffer();
+				 sb.append(" CREATE INDEX tmp_child ON  temp_parentconcepts (child_id );");
+				 pstmt = conn.prepareStatement(sb.toString());
+				 pstmt.execute();
+				 pstmt.close();
+				 
+				 sb = new StringBuffer();
+				 sb.append(" update plantconcept set plantparent = ");
+				 sb.append(" ( select max(parent_id) from temp_parentconcepts where temp_parentconcepts.child_id = plantconcept.plantconcept_id ); ");
+				 pstmt = conn.prepareStatement(sb.toString());
+				 pstmt.execute();
+				 pstmt.close();
+			 }
+			 catch (Exception e)
+			 {
+				 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+				 e.printStackTrace();
+				 // System.exit(0);
+			 }
+		 }
+		 
+		 
+	/**
+	 * method to update the values in the temp correlation table
+	 */
+	private void updateTempCorrelationTable()
+	{
+		///Vector statusIdVec = new Vector();
+		///Vector conceptIdVec = new Vector();
+		///Vector targetConceptIdVec = new Vector();
+		 try
+		 {
+			 	Connection conn = this.getConnection();
+				StringBuffer sb = new StringBuffer();
+				sb.append("UPDATE  temp_correlation  SET plantstatus_id  = ");
+				sb.append(" ( select max(plantstatus_id) from plantstatus where ");
+				sb.append(" plantstatus.plantconcept_id = temp_correlation.past_plantconcept_id ");
+				sb.append(" and plantstatus.plantreference_id = "+this.refId+");");
+				PreparedStatement pstmt = conn.prepareStatement(sb.toString());
+				pstmt.execute();
+				pstmt.close();
+				
+				sb = new StringBuffer();
+				sb.append(" UPDATE  temp_correlation  SET plantconcept_id  = ");
+				sb.append(" ( select max(plantconcept_id)  from plantconcept  where ");
+				sb.append(" plantconcept.plantname = temp_correlation.synonym and plantconcept.plantreference_id = "+this.refId+"); ");
+				pstmt = conn.prepareStatement(sb.toString());
+				pstmt.execute();
+				pstmt.close();
+				conn.close();
+		 }
+		 	catch ( Exception e )
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private void createCorrelationPerfIndicies()
+	{
+		try
+		{
+			Connection conn = this.getConnection();
+			String s = " create index TMP_CONCEPT_DUAL on plantconcept (PLANTNAME, PLANTREFERENCE_ID)";
+			String s1 = " create index TMP_STATUS_DUAL on plantstatus (PLANTCONCEPT_ID, PLANTCONCEPTSTATUS)";
+			String s2 = " create index TMP_CORRCON on temp_correlation (PAST_PLANTCONCEPT_ID)";
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			pstmt.execute();
+			pstmt.close();
+			pstmt = conn.prepareStatement(s1);
+			pstmt.execute();
+			pstmt.close();
+			conn.close();
+		}
+		catch (Exception e)
+	  {
+		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+		 e.printStackTrace();
+	  }
+	}
+	
+	
+	/**
+	 * method that updates the plantparent attribute in the plant concept table
+	 * @deprecated  -- this method should never be used jhh 2002824 
+	 */
+	 private void updateParentConcept(Hashtable plantsData)
+	 {
+		 // the vector containing the data to be inserted
+		 Vector parentVector = new Vector();
+		 try
+		 {
+			 Connection conn = this.getConnection();
+			 int plantNumber = plantsData.size();
+			 // create the missing plants and the concept data vector
+			 for (int i=0; i<plantNumber; i++) 
+			 {
+					Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
+					String plantCode=plantInstanceHash.get("plantCode").toString();
+					String concatenatedName= plantInstanceHash.get("concatenatedName").toString();
+					String concatenatedLongName = plantInstanceHash.get("concatenatedLongName").toString();
+					String rank= plantInstanceHash.get("rank").toString();
+					String parentName=plantInstanceHash.get("parentName").toString();
+					//System.out.println("parent " + parentName );
+					String plantConceptStatus=plantInstanceHash.get("itisUsage").toString();
+					String synonymousName=plantInstanceHash.get("synonymousName").toString();
+					String familyName=plantInstanceHash.get("familyName").toString();
+					String commonName=plantInstanceHash.get("commonName").toString();
+						
+					// now get the associated primary key value for the sciname and not 
+					// rankled the highest ( genus )
+					if ( ( parentName.length() > 2 ) &&  (! rank.toUpperCase().startsWith("GEN") ) )
+					{
+						StringBuffer sb = new StringBuffer(); 
+						sb.append("select  PLANTCONCEPT_ID from PLANTCONCEPT  where  PLANTNAME like '"+parentName+"'");
+						sb.append(" and PLANTREFERENCE_ID = "+this.refId );
+						PreparedStatement pstmt = conn.prepareStatement(sb.toString());
+						ResultSet rs = pstmt.executeQuery();
+						if ( rs.first() )
+						{
+							int parentId = rs.getInt(1);
+							parentVector.add(concatenatedName+"|"+parentId);
+							//System.out.println("parent vec "+  );
+						}
+						pstmt.close();
+					}
+				}
+				
+				for (int i=0; i<parentVector.size(); i++) 
+				{
+					String line = (String)parentVector.elementAt(i);
+					StringTokenizer st = new StringTokenizer(line, "|");
+					String childName =  st.nextToken();
+					String parentId = st.nextToken();
+					
+					
+					StringBuffer sb = new StringBuffer(); 
+					sb.append("update plantconcept set plantparent = ");
+					sb.append(parentId+"  where plantName like '"+childName+"' ");
+							
+					PreparedStatement pstmt = conn.prepareStatement(sb.toString());
+					pstmt.execute();
+					pstmt.close();
+				}
+
+		 }
+		 catch (Exception e)
+		 {
+			 	System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+				e.printStackTrace();
+				System.exit(0);
+		 }
+	 }
+	
+	/**
+	 * method that migrates the data from the temporary table into 
+	 * the correlation table
+	 */
+	 private void migrateCorrelationData()
+	 {
+		try
+		{
+			 Connection conn = this.getConnection();
+			 StringBuffer sb = new StringBuffer();
+			 
+			 //create an index
+			 sb.append("create index bad on temp_correlation  (PLANTSTATUS_ID, PLANTCONCEPT_ID, PLANTCONVERGENCE, CORRELATIONSTART, CORRELATIONSTOP)");
+			 PreparedStatement pstmt = conn.prepareStatement(sb.toString() );
+			 pstmt.execute();
+			 pstmt.close();
+			 
+			 sb = new StringBuffer();
+			 sb.append("insert into  PLANTCORRELATION (PLANTSTATUS_ID, PLANTCONCEPT_ID, PLANTCONVERGENCE, CORRELATIONSTART, CORRELATIONSTOP)  ");
+			 sb.append(" select PLANTSTATUS_ID, PLANTCONCEPT_ID, PLANTCONVERGENCE, CORRELATIONSTART, CORRELATIONSTOP ");
+			 sb.append(" from temp_correlation where plantstatus_id > 0 and plantconcept_id > 0");
+			
+			 pstmt = conn.prepareStatement(sb.toString() );
+			 pstmt.execute();
+			 pstmt.close();
+			 conn.close();
+			 
+		}
+		catch (Exception e)
+	  {
+		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+		 e.printStackTrace();
+		 System.exit(0);
+	  }
+	 }
+	
+	/**
+	 * method that creates an index in the plantname party -- 
+	 * specifically on the plantname attribute for qury perfomance
+	 */
+	 private void createTempCorrelationTable()
+	 {
+		 try
+		 {
+			 Connection conn = this.getConnection();
+			 StringBuffer sb = new StringBuffer();
+			 
+			 sb.append("create table TEMP_CORRELATION ( ");
+			 sb.append("PLANTSTATUS_ID integer,");
+			 	sb.append("PAST_PLANTCONCEPT_ID integer,");
+			 sb.append("PLANTCONCEPT_ID integer,");
+			 sb.append("plantConvergence varchar (20),");
+			 sb.append("correlationStart timestamp,");
+			 sb.append("correlationStop timestamp, ");
+			 sb.append("synonym varchar (200) ");
+			 sb.append(")");
+			 
+			 PreparedStatement pstmt = conn.prepareStatement(sb.toString() );
+			 pstmt.execute();
+			 pstmt.close();
+			 conn.close();
+		 }
+		 catch (Exception e)
+		 {
+			System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			e.printStackTrace();
+		 }
+	 }
+	 
+	
+	
+	/**
+   * method that removes the temporary correlation 
+	 * table
+	 */
+	 private void dropTempCorrelationTable()
+	 {
+		 try
+		 {
+			 Connection conn = this.getConnection();
+			 StringBuffer sb = new StringBuffer();
+			 sb.append("drop table TEMP_CORRELATION ");
+			 PreparedStatement pstmt = conn.prepareStatement(sb.toString() );
+			 pstmt.execute();
+			 pstmt.close();
+			 conn.close();
+		 }
+		 catch (Exception e)
+		 {
+			System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			e.printStackTrace();
+		 }
+	 }
+	 
+	 
+	
+	/**
+	 * method that creates an index in the plantname party -- 
+	 * specifically on the plantname attribute for qury perfomance
+	 */
+	 private void createPlantConceptIndex()
+	 {
+		 try
+		 {
+			 Connection conn = this.getConnection();
+			 String s = "create index TMP_CONCEPT_IDX on PLANTCONCEPT (plantreference_id, plantname_id) ";
+			 PreparedStatement pstmt = conn.prepareStatement(s);
+			 pstmt.execute();
+			 pstmt.close();
+			 conn.close();
+		 }
+		 catch (Exception e)
+		 {
+			System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			e.printStackTrace();
+		 }
+	 }
+	 
+	
+	/**
+	 * method that drops the index in the plantname party -- 
+	 * specifically on the plantname attribute for qury perfomance
+	 */
+	 private void dropPlantConceptIndex()
+	 {
+		 try
+		 {
+			 Connection conn = this.getConnection();
+			 String s = "drop index TMP_CONCEPT_IDX ";
+			 PreparedStatement pstmt = conn.prepareStatement(s);
+			 pstmt.execute();
+			 pstmt.close();
+			 conn.close();
+		 }
+		 catch (Exception e)
+		 {
+			System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			e.printStackTrace();
+		 }
+	 }
+	
+	/**
+	 * method that creates an index in the plantname party -- 
+	 * specifically on the plantname attribute for qury perfomance
+	 */
+	 private void createPlantNameIndex()
+	 {
+		 try
+		 {
+			 Connection conn = this.getConnection();
+			 String s = "create index TMP_NAME_IDX on PLANTNAME (PLANTNAME) ";
+			 PreparedStatement pstmt = conn.prepareStatement(s);
+			 pstmt.execute();
+			 pstmt.close();
+			 conn.close();
+		 }
+		 catch (Exception e)
+		 {
+			System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			e.printStackTrace();
+		 }
+	 }
+	 
+	
+	
+	/**
+	 * method that drops the index in the plantname party -- 
+	 * specifically on the plantname attribute for qury perfomance
+	 */
+	 private void dropPlantNameIndex()
+	 {
+		 try
+		 {
+			 Connection conn = this.getConnection();
+			 String s = "drop index TMP_NAME_IDX ";
+			 PreparedStatement pstmt = conn.prepareStatement(s);
+			 pstmt.execute();
+			 pstmt.close();
+			 conn.close();
+		 }
+		 catch (Exception e)
+		 {
+			System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			e.printStackTrace();
+		 }
+	 }
+	
+	
+	
+	/**
+	 * method that inserts the data into the plant party and 
+	 * reference tables
+	 */
+	 private void insertPartyReference()
+	 {
+		 StringBuffer sb = new StringBuffer();
+		 try
+		 {
+			 Connection conn = this.getConnection();
+			 sb.append("select PLANTREFERENCE_ID from PLANTREFERENCE where ");
+			 sb.append( "AUTHORS like '"+this.authors+"'");
+			 sb.append(" and EDITION like '"+this.edition+"'");
+			 PreparedStatement pstmt = conn.prepareStatement(sb.toString());
+			 ResultSet rs = pstmt.executeQuery();
+			 // check to see that we got one row at least 
+			 if ( rs.first()  == true )
+			 {
+				System.out.println("USDAPlantsLoader > reference exists ");
+				refId = rs.getInt(1);
+			 }
+			 else
+			 {
+				 StringBuffer sb1 = new StringBuffer();
+				 sb1.append("INSERT into PLANTREFERENCE (OTHERCITATIONDETAILS, AUTHORS, TITLE, ");
+				 sb1.append(" PUBDATE, EDITION) ");
+				 sb1.append(" values(?,?,?,?,?)");
+				 
+				 pstmt = conn.prepareStatement( sb1.toString() );
+				 pstmt.setString(1, this.othercitationdetails);
+				 pstmt.setString(2, this.authors);
+				 pstmt.setString(3, this.title);
+				 pstmt.setString(4, this.pubdate);
+				 pstmt.setString(5, this.edition);
+				 pstmt.execute();
+				 pstmt.close();
+				 //now get the refid 
+				 pstmt = conn.prepareStatement(sb.toString());
+				 rs = pstmt.executeQuery();
+				 rs.first();
+				 refId = rs.getInt(1);
+				 
+			 }
+			 
+			 // get the party information 
+			 sb = new StringBuffer();
+			 conn = this.getConnection();
+			 sb.append("select PLANTPARTY_ID from PLANTPARTY where ");
+			 sb.append( "ORGANIZATIONNAME like '"+this.organization+"'");
+			 pstmt = conn.prepareStatement(sb.toString());
+			 rs = pstmt.executeQuery();
+			 // check to see that we got one row at least 
+			 if ( rs.first()  == true )
+			 {
+				System.out.println("USDAPlantsLoader > party exists ");
+				refId = rs.getInt(1);
+			 }
+			 // else insert it and get it
+			 else
+			 {
+				 StringBuffer  sb1 = new StringBuffer();
+				 sb1.append("INSERT into PLANTPARTY (ORGANIZATIONNAME, EMAIL, CONTACTINSTRUCTIONS) ");
+				 sb1.append(" values(?,?,?)");
+				 
+				 pstmt = conn.prepareStatement( sb1.toString() );
+				 pstmt.setString(1, this.organization);
+				  pstmt.setString(2, this.email);
+					 pstmt.setString(3, this.contactInstructions);
+				 pstmt.execute();
+				 pstmt.close();
+				 //now get the refid 
+				 pstmt = conn.prepareStatement(sb.toString());
+				 rs = pstmt.executeQuery();
+				 rs.first();
+				 this.partyId = rs.getInt(1);
+				 
+			 }
+			 
+			 
+		 }
+		 catch (Exception e)
+		 {
+			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+			 System.exit(0);
+		 }
+	 }
+	
+
+
+	/**
+	* method that will return a database connection for use with the database
+	*
+	* @return conn -- an active connection
+	*/
+	private Connection getConnection()
+	{
+		Connection c = null;
+		try 
+ 		{
+			Class.forName("org.postgresql.Driver");
+			//c = DriverManager.getConnection("jdbc:postgresql://vegbank/tmp2", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://192.168.0.21/plants_dev", "datauser", "");
+		
+		}
+		catch ( Exception e )
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return(c);
+	}
+	
+	/**
+ 	* method to extract a single plant instance from the 
+ 	* aggregate hashtable - returning a hashtable with keys 
+ 	* like name, author orignDate etc
+ 	*/	
+	private Hashtable extractSinglePlantInstance(Hashtable plantsData, int hashKeyNum)
+	{
+		Hashtable singlePlantInstance = new Hashtable();
+		try
+		{
+			if ( plantsData.containsKey(""+hashKeyNum) )
+			{
+				singlePlantInstance=(Hashtable)plantsData.get(""+hashKeyNum);
+				//System.out.println(singlePlantInstance.toString() );
+			}
+			// if it is not there then return a null
+			else
+			{
+				singlePlantInstance = null;
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception " + e.getMessage() );
+			System.out.println("on key: " + hashKeyNum);
+			e.printStackTrace();
+		}
+		return(singlePlantInstance);
+	}
+
+	
+/**
+ * method that returns true if the input line from 
+ * the vector is the first line of a plant entry
+ */
+public boolean plantEntryStart (String vectorLine)
+{
+	if (vectorLine != null && vectorLine.startsWith("tsnValue") )
+	{
+		return(true);
+	}
+	else
+	{
+		return(false);
+	}
+}
+	
+/**
+ * method to tokenize elements from a pipe delimeted string
+ */
+public String pipeStringTokenizer(String pipeString, int tokenPosition)
+{
+	String token="";
+	try
+	{
+		if (pipeString != null) 
+		{
+			StringTokenizer t = new StringTokenizer(pipeString.trim(), "|");
+			int i=1;
+			while ( i<=tokenPosition ) 
+			{
+					if ( t.hasMoreTokens() )
+					{
+						token=t.nextToken();
+						i++;
 					}
 					else 
 					{
-						System.out.println("this should never happen -- check the code");
+						token="";
+						i++;
 					}
-				}
-				//if the plantName does already exist in the database 
-				// - then update the concept status etc
-				if (plantNameExists(concatenatedName)== true)
-				{
-					//if the plant was accepted in 96 then add a correlation 
-					// to the correlation table
-					if (plantConceptAccepted(concatenatedName, "USDA-PLANTS", "01-JAN-96") == true ) 
-					{
-						conceptId = plantConceptKey(concatenatedName);
-						int conceptStatusId=plantConceptStatusKey(
-							conceptId, "accepted", "PLANTS", "01-JAN-96");
-						System.out.println("correlation> conceptID: "+conceptId+
-							" conceptStatusId: "+conceptStatusId);
-						loadPlantCorrelationInstance(concatenatedName, conceptId, 
-							conceptStatusId, "unknown", "01-JAN-00");
-						System.out.println("YYY accepted 1996 plant name already exists: "+concatenatedName);
-					}
-				}
-				//lastly load the plant usage table with the instance
-				loadPlantUsageInstance(
-					concatenatedName, 
-					plantNameKey(concatenatedName), 
-					plantConceptKey(concatenatedName),
-					"PLANTS", 
-					itisUsage, 
-					startDate, 
-					stopDate, 
-					reference);
 			}
-			
-//----------------------------break the method here -----------------------
-			
-		//else if the plant name / concept pair is not accepted
-		//then do roughly the same that is above
-		if (  !(synonymousName.equals("nullToken")) )  //means that it is not accepted
+			return(token);
+		}
+		else
+		{
+			return(token);
+		}
+	}
+	catch (Exception e)
+	{
+		System.out.println("Exception parsing: " + e.getMessage() );
+		System.out.println("Exception parsing: " + pipeString);
+	}
+	return(token);
+}
+	
+ /**
+ 	* method that parses the elements from a vector
+ 	* containing the element names and element values
+ 	* into a hashtable structure whose elements can easily
+ 	* be extracted and then loaded to the database
+ 	*
+ 	* @param fileVector -- the file after being translated via the syle sheer
+ 	* @return plantHash the hashtable containg the plant attributes 
+ 	*/	
+	private Hashtable elementParser(Vector fileVector)
+	{
+		int hashKey=0;  //the keys in the hash table are incremental integers
+		Hashtable plantHash = new Hashtable();
+		for (int i=0; i<fileVector.size(); i++) 
+		{
+			if ( fileVector.elementAt(i) != null)
 			{
-				System.out.println("THIS IS A SYNONYM");
-				//if the plantname is not in the database then load it
-				if (plantNameExists(concatenatedName)==false)
+				if ( plantEntryStart(fileVector.elementAt(i).toString() ) == true )
 				{
-					System.out.println("XXX Loading first instance of a plant (w/synonym): "+concatenatedName);
-					nameId = loadPlantNameInstance(concatenatedName, commonName, plantCode);
-				
+					//the key is a hack -- has to be a string
+					plantHash.put(""+hashKey,  plantInstance(fileVector, i)  );
+					//System.out.println("USDAPlantsLoader > trsnaleted line: "+ fileVector.elementAt(i) );
+					hashKey++;
 				}
-				if (plantNameExists(concatenatedName)== true)
-				{
-					//if the plant was accepted in 96 then add a correlation 
-					// to the correlation table
-					if (plantConceptAccepted(concatenatedName, "USDA-PLANTS", "01-JAN-96") == true ) 
-					{
-						conceptId = plantConceptKey(concatenatedName);
-						int conceptStatusId=plantConceptStatusKey(
-							conceptId, "accepted", "PLANTS", "01-JAN-96");
-						System.out.println("correlation> conceptID: "+conceptId+
-							" conceptStatusId: "+conceptStatusId);
-						//here the correlation goes with the 
-						//name and the synonym
-						loadPlantCorrelationInstance(synonymousName, conceptId, 
-							conceptStatusId, "unknown", "01-JAN-00");
-						System.out.println("YYY accepted 1996 plant name already exists: "+concatenatedName);
-					}
-				//lastly load the plant usage table with the instance
-				loadPlantUsageInstance(
-					concatenatedName, 
-					plantNameKey(concatenatedName), 
-					plantConceptKey(synonymousName),
-					"PLANTS", 
-					"SYNONYM", 
-					startDate, 
-					stopDate, 
-					reference);
-			}
-			}
-	}
-}
-
-
-
-
-
-
-
-
-/**
- * method that takes as input a concatenated
- * name, a date and a party and returns a 
- * boolean true if the concept is an accepted 
- * status by that party for that year 
- * 
- * @param year - startDate ie 01-JAN-96
- */	
-private boolean plantConceptAccepted(String concatenatedName, String Party, 
-	String year)
-{
-	//determine first that the plant concept exits and then
-	if (plantConceptExists(concatenatedName) == true )
-	{
-		int conceptId = plantConceptKey(concatenatedName);
-		//pass the concept key to see if the 
-		//this concept is accepted
-		if (plantConceptStatusKey(conceptId, "accepted", "PLANTS", year) > 0)
-		{
-			System.out.println("plantconceptStatusID: "+ 
-				plantConceptStatusKey(conceptId, "accepted", "PLANTS", year) 
-			);
-			return(true);
-		}
-		else 
-		{
-			return(false);
-		}
-	}
-	else 
-	{
-		System.out.println("this should never happen -- plantConceptAccepted method");
-		return(false);
-	}
-}
-
-
-
-
-/**
- * method that returns a plant concept status id
- * using as input a conceptId, a status, and a 
- * party if no such id exists then the method 
- * returns a zero
- *
- * @param status -- either 'accepted' or some other lowercase string
- * @param party the name of the party that has yet to be defined
- * @param startDate -- the startdate for the status
- */	
-private int plantConceptStatusKey(int conceptId, String status, String party, 
-	String year)
-{
-	int plantConceptStatusId = 0;
-	String action="select";
-	String statement=" select plantconceptstatus_id, status, partyname from "
-	+" plantConceptStatus where plantconcept_id = "+conceptId
-	+" and status like '%' and startdate = '01-JAN-96'";
-
-	String returnFields[]=new String[1];
-	int returnFieldLength=1;
-	returnFields[0]="plantconceptstatus_id";
-
-	// Issue the statement, and iterate the counter
-	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);
-
-	//if multiple returned results
-	if ( j.returnedValues.size() > 1 )
-	{
-		System.out.println("plantConceptStatusKey violation: there are more than one"
-		+" keys returned");
-	}
-	//if there are no returned results
-	else if ( j.returnedValues.size() == 0 )
-	{
-		System.out.println("no usage in plantConceptStatus table found ");
-		return(0);
-	}
-	else if ( j.returnedValues.size() == 1 ) 
-	{
-		//return the primary key value
-		//System.out.println(" fuk "+j.returnedValues.elementAt(0).toString().replace('|', ' ').trim());
-		plantConceptStatusId = Integer.parseInt(
-			j.returnedValues.elementAt(0).toString().replace('|', ' ').trim()
-		);
-	}
-	return(plantConceptStatusId);
-}
-
-
-
-
-/**
- * method that loads a new instance of a 
- * plant usage - name usage returns to 
- * the calling method the primary key for 
- * that concept - name usage
- */	
-private int loadPlantStatusInstance(int conceptId, String status, 
-	String startDate, String endDate, String event)
-{
-
-	String action="insert";
-	String insertString="insert into plantConceptStatus";
-	String attributeString="plantConcept_id, status, startDate, stopDate, event";	
-	int inputValueNum=5;
-	String inputValue[]=new String[5];
-	inputValue[0]=""+conceptId;
-	inputValue[1]=""+status;
-	inputValue[2]=""+startDate;
-	inputValue[3]=""+stopDate;
-	inputValue[4]=""+event;
-
-	//get the valueString from the method
-	issueStatement k = new issueStatement();
-	k.getValueString(inputValueNum);
-	String valueString = k.outValueString;
-
-	issueStatement j = new issueStatement();
-	j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);
-	return(0);	
-}
-
-
-
-
-
-
-
-
-
-/**
- * method that returns true if an instance of a plant
- * concept exists that is identical to the input critreria
- */	
-private boolean conceptNameUsageExists(int nameId, int conceptId)
-{
-	
-	String action="select";
-	String statement="select plantUsage_id from plantUsage where plantName_Id = "
-		+nameId+" and plantconcept_id ="+conceptId;
-
-	String returnFields[]=new String[1];
-	int returnFieldLength=1;
-	returnFields[0]="plantUsage_id";
-
-	// Issue the statement, and iterate the counter
-	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);
-
-	//entireResult=j.outReturnFields[0];
-	//entireSinglePlotOutput[0]=entireResult; //cheat here
-	//entireSinglePlotOutputNum=1; //and here
-	
-	//if there are results retuened then a 
-	//plant with the input name does exist
-	//System.out.println("#### concept "+ j.returnedValues.size());
-	if ( j.returnedValues.size() > 0 )
-	{
-		return(true);
-	}
-	else 
-	{
-		return(false);
-	}
-}
-
-
-
-
-/**
- * method that loads a new instance of a 
- * plant concept - name usage returns to 
- * the calling method the primary key for 
- * that concept - name usage
- */	
-private int loadPlantUsageInstance(String concatenatedName, int name_id, 
-	int concept_id, String partyName, String usage, String startDate, 
-	String stopDate, String reference)
-{
-	String action="insert";
-	String insertString="insert into plantUsage";
-	String attributeString="plantName, plantName_id, plantConcept_id, "+
-		"partyName, partyUsageStatus, startDate, stopDate";	
-	int inputValueNum=7;
-	String inputValue[]=new String[7];
-	inputValue[0]=""+concatenatedName;
-	inputValue[1]=""+name_id;
-	inputValue[2]=""+concept_id;
-	inputValue[3]=""+partyName;
-	inputValue[4]=""+usage;
-	inputValue[5]=""+startDate;
-	inputValue[6]=""+stopDate;
-
-	//get the valueString from the method
-	issueStatement k = new issueStatement();
-	k.getValueString(inputValueNum);
-	String valueString = k.outValueString;
-
-	issueStatement j = new issueStatement();
-	j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);
-	return(0);	
-}
-
-
-
-/**
- * method that loads a new instance of a 
- * plant concept then returns to the calling
- * method the primary key for that concept
- */	
-private int loadPlantConceptInstance(String concatenatedName, String classCode, 
-	String classRank, String conceptRef, String startDate)
-{
-	String action="insert";
-	String insertString="insert into plantConcept";
-	String attributeString="plantName, classCode, classRank, conceptRef, startDate";
-	int inputValueNum=5;
-	String inputValue[]=new String[5];
-	inputValue[0]=""+concatenatedName;
-	inputValue[1]=""+classCode;
-	inputValue[2]=""+classRank;
-	inputValue[3]=""+conceptRef;
-	inputValue[4]=""+startDate;
-	
-
-	//get the valueString from the method
-	issueStatement k = new issueStatement();
-	k.getValueString(inputValueNum);
-	String valueString = k.outValueString;
-
-	issueStatement j = new issueStatement();
-	j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);
-	
-	
-	//now query for the primary key value for this plantname
-	action="select";
-	String statement="select plantconcept_id from plantconcept where plantname = '"
-		+concatenatedName+"'";
-
-	String returnFields[]=new String[1];
-	int returnFieldLength=1;
-	returnFields[0]="plantconcept_id";
-
-	j.issueSelect(statement, action, returnFields, returnFieldLength);
-	
-	int plantConceptId = Integer.parseInt(
-		j.returnedValues.elementAt(0).toString().replace('|', ' ').trim()
-		);
-	System.out.println("#### plant concept id "+ plantConceptId );
-	return(plantConceptId);
-}
-
-
-
-
-
-/**
- * method that returns true if an instance of a plant
- * concept exists that is identical to the input critreria
- */	
-private boolean plantConceptExists(String concatenatedName)
-{
-	
-	String action="select";
-	String statement="select plantConcept_id from plantConcept where plantName = '"
-		+concatenatedName+"'";
-
-	String returnFields[]=new String[1];
-	int returnFieldLength=1;
-	returnFields[0]="plantconcept_id";
-
-	// Issue the statement, and iterate the counter
-	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);
-
-	//entireResult=j.outReturnFields[0];
-	//entireSinglePlotOutput[0]=entireResult; //cheat here
-	//entireSinglePlotOutputNum=1; //and here
-	
-	//if there are results retuened then a 
-	//plant with the input name does exist
-	//System.out.println("#### concept "+ j.returnedValues.size());
-	if ( j.returnedValues.size() > 0 )
-	{
-		return(true);
-	}
-	else 
-	{
-		return(false);
-	}
-}
-
-
-
-
-
-
-/**
- * method that loads a new instance of a 
- * plant name and then returns the primary
- * key value of that plant name to the calling
- * method
- */	
-private int loadPlantNameInstance(String concatenatedName, String commonName, 
-String plantCode)
-{
-	String action="insert";
-	String insertString="insert into plantName";
-	String attributeString="plantName, plantCommonName, plantSymbol";
-	int inputValueNum=3;
-	String inputValue[]=new String[3];
-	inputValue[0]=""+concatenatedName;
-	inputValue[1]=""+commonName;
-	inputValue[2]=""+plantCode;
-
-	//get the valueString from the method
-	issueStatement k = new issueStatement();
-	k.getValueString(inputValueNum);
-	String valueString = k.outValueString;
-
-	issueStatement j = new issueStatement();
-	j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);
-	
-	
-	//now query for the primary key value for this plantname
-	action="select";
-	String statement="select plantname_id from plantName where plantname = '"
-		+concatenatedName+"'";
-
-	String returnFields[]=new String[1];
-	int returnFieldLength=1;
-	returnFields[0]="plantname_id";
-
-	// Issue the statement, and iterate the counter
-	//issueStatement j1 = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);
-
-	//entireResult=j.outReturnFields[0];
-	//entireSinglePlotOutput[0]=entireResult; //cheat here
-	//entireSinglePlotOutputNum=1; //and here
-	
-	//if there are results retuened then a 
-	//plant with the input name does exist
-	
-	int plantNameId = Integer.parseInt(
-		j.returnedValues.elementAt(0).toString().replace('|', ' ').trim()
-		);
-	//System.out.println("####"+ plantNameId );
-	return(plantNameId);
-}
-
-
-
-
-
-
-
-
-/**
- * method that returns tru if an instance of a plant
- * name exists that is identical to the plantName 
- * input into the method
- */	
-private boolean plantNameExists(String concatenatedName)
-{
-	
-	String action="select";
-	String statement="select plantName from plantName where plantname = '"
-		+concatenatedName+"'";
-
-	String returnFields[]=new String[1];
-	int returnFieldLength=1;
-	returnFields[0]="plantName";
-
-	// Issue the statement, and iterate the counter
-	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);
-
-	//entireResult=j.outReturnFields[0];
-	//entireSinglePlotOutput[0]=entireResult; //cheat here
-	//entireSinglePlotOutputNum=1; //and here
-	
-	//if there are results retuened then a 
-	//plant with the input name does exist
-	//System.out.println("####"+ j.returnedValues.size());
-	if ( j.returnedValues.size() > 0 )
-	{
-		return(true);
-	}
-	else 
-	{
-		return(false);
-	}
-}
-
-
-
-
-
-/**
- * method to extract a single plant instance
- * from the aggregate hashtable - returning a 
- * hashtable with keys like name, author orignDate
- * etc
- */	
-private Hashtable extractSinglePlantInstance(Hashtable plantsData, 
-	int hashKeyNum)
-{
-	Hashtable singlePlantInstance = new Hashtable();
-	if ( plantsData.get(""+hashKeyNum).toString() != null )
-	{
-		singlePlantInstance=(Hashtable)plantsData.get(""+hashKeyNum);
-		//System.out.println(singlePlantInstance.toString() );
-	}
-	return(singlePlantInstance);
-}
-
-
-/**
- * method that parses the elements from a vector
- * containing the element names and element values
- * into a hashtable structure whose elements can easily
- * be extracted and then loaded to the database
- */	
-private Hashtable elementParser(Vector fileVector)
-{
-	int hashKey=0;  //the keys in the hash table are incremental integers
-	Hashtable plantHash = new Hashtable();
-	for (int i=0; i<fileVector.size(); i++) {
-		if ( fileVector.elementAt(i) != null )
-		{
-			if ( plantEntryStart(fileVector.elementAt(i).toString() ) == true )
-			{
-				//the key is a hack -- has to be a string
-				plantHash.put(""+hashKey,  plantInstance(fileVector, i)  );
-		//		System.out.println(fileVector.elementAt(i) );
-				hashKey++;
 			}
 		}
+		//System.out.println(" SIZE OF HASH (number of plant instances):"+hashKey);
+		return(plantHash);
 	}
-	System.out.println(" SIZE OF HASH (number of plant instances):"+hashKey);
-	return(plantHash);
-}
 
 
 /**
@@ -1230,13 +1278,21 @@ public Hashtable plantInstance(Vector fileVector, int startLevel)
 		//if the first level then it is the tsn value
 		if (i==startLevel) 
 		{
-			plantInstance.put("tsnValue", 
-				pipeStringTokenizer(fileVector.elementAt(i).toString(), 2) );
+			String tsnValue = pipeStringTokenizer(fileVector.elementAt(i).toString(), 2);
+			//System.out.println("USDAPlantsLoader > tsnValue: " + tsnValue);
+			plantInstance.put("tsnValue", tsnValue );
 		}
 		else if ( fileVector.elementAt(i).toString().startsWith("concatenatedName") )
 		{
 			plantInstance.put("concatenatedName", 
 				pipeStringTokenizer(fileVector.elementAt(i).toString(), 2) );
+		}
+		else if ( fileVector.elementAt(i).toString().startsWith("concatenatedLongName") )
+		{
+			// this is the name with the author, which may have some pretty weird names 
+			// so handle appropriately
+			String s = pipeStringTokenizer(fileVector.elementAt(i).toString(), 2);
+			plantInstance.put("concatenatedLongName", s );
 		}
 		else if ( fileVector.elementAt(i).toString().startsWith("rank") )
 		{
@@ -1270,8 +1326,12 @@ public Hashtable plantInstance(Vector fileVector, int startLevel)
 		}
 		else if ( fileVector.elementAt(i).toString().startsWith("synonymousName") )
 		{
-			plantInstance.put("synonymousName", 
-				pipeStringTokenizer(fileVector.elementAt(i).toString(), 2) );
+			String p = pipeStringTokenizer(fileVector.elementAt(i).toString(), 2);
+			if ( p.length() < 2)
+			{
+				p = " ";
+			}
+			plantInstance.put("synonymousName", p);
 		}
 		else if ( fileVector.elementAt(i).toString().startsWith("publicationName") )
 		{
@@ -1280,8 +1340,9 @@ public Hashtable plantInstance(Vector fileVector, int startLevel)
 		}
 		else if ( fileVector.elementAt(i).toString().startsWith("commonName") )
 		{
-			plantInstance.put("commonName", 
-				pipeStringTokenizer(fileVector.elementAt(i).toString(), 2) );
+			String c = pipeStringTokenizer(fileVector.elementAt(i).toString(), 2);
+			c = c.replace('\'', ' ');
+			plantInstance.put("commonName", c );
 		}
 		else if ( fileVector.elementAt(i).toString().startsWith("plantCode") )
 		{
@@ -1306,57 +1367,105 @@ public Hashtable plantInstance(Vector fileVector, int startLevel)
 }
 
 
-/**
- * method that returns true if the input line from 
- * the vector is the first line of a plant entry
- */
-public boolean plantEntryStart (String vectorLine)
-{
-	if (vectorLine != null && vectorLine.startsWith("tsnValue") )
+	/**
+ 	* method to transform the input xml file into a flat file that 
+ 	* contains the relevant elements from that xml file included 
+ 	* in the XSLT and then passes the contents of the file back
+ 	* as a vector
+ 	*/	
+	private void transformToFile(String inputXml)
+	throws java.io.IOException,
+        java.net.MalformedURLException,
+        org.xml.sax.SAXException
 	{
-		return(true);
+		//obtain a interface to a new XSLTProcessor object.
+		XSLTProcessor processor = XSLTProcessorFactory.getProcessor();
+
+		// Have the XSLTProcessor processor object transform inputXML  to
+		// StringWriter, using the XSLT instructions found in "*.xsl".
+		//print to a file
+		processor.process(new XSLTInputSource(inputXml), 
+		new XSLTInputSource(styleSheet),
+		new XSLTResultTarget(attributeFile));
 	}
-	else
+	
+	/**
+	 * method that reads the post-transformed data set
+	 */
+	 private Vector getAttributeFile()
+	 {
+		 try
+		 {
+			 	BufferedReader in = new BufferedReader(new FileReader(attributeFile), 8192);
+				String s=null;
+				while ((s=in.readLine()) != null) 
+				{
+					fileVector.addElement(s);
+				}
+				in.close();
+		 	}
+			catch( Exception e ) 
+			{
+				System.out.println(" Exception:  " + e.getMessage() );
+				e.printStackTrace();
+			}
+			return(fileVector);
+	 }
+	
+/**
+ * method that sets the instance varibales to correspond to the 
+ * plant list from the year entered to the main method -- this should
+ * be called before the loading is to have commenced
+ * @param year -- the year of the usda plants list
+ */
+ private void setPlantList(String year)
+ {
+	 try
+	 {
+		 // if the year is 1996 then set the parameters for that year 
+		 // otherwise leave them the way that they are
+		 if ( year.equalsIgnoreCase("1996") )
+		 {
+			 this.title = "The Plants Database 1996";
+			 this.pubdate = "30-JUN-1996";
+			 this.edition = "Plants 1996";
+			 this.dateEntered = "30-JUN-1996";
+			 this.organization = "USDA-NRCS-PLANTS-1996";
+			 this.year = "1996";
+		 }
+	 }
+	 catch( Exception e )
+	 {
+		 System.out.println(" Exception:  " + e.getMessage() );
+		 e.printStackTrace();
+	 }
+ }
+	
+/**
+ * Main method to run the Legacy Data Wizard requires only the xml file that
+ * defines the relationship between the files comprising the data package
+ */
+public static void main(String[] args) 
+{
+	if (args.length != 2) 
 	{
-		return(false);
+		System.out.println("Usage: java USDAPlantsLoader2000 [XML-file] [year] \n");
+		System.exit(0);
+	}
+	
+	else 
+	{
+		String inputXml=null;
+		inputXml = args[0];
+		String year = args[1];
+		//call the method to convert the data package to xml
+		USDAPlantsLoader2000 il =new USDAPlantsLoader2000();
+		// set the instance varaibales to the values associated 
+		// with the plants list from that year
+		il.setPlantList(year);
+		il.loadPlantDataSet(inputXml);
 	}
 }
-
-/**
- * method to tokenize elements from a pipe delimeted string
- */
-public String pipeStringTokenizer(String pipeString, int tokenPosition)
-{
-	//System.out.println("%%%%% "+pipeString+" "+tokenPosition);
-	String token="nullToken";
-	if (pipeString != null) {
-		StringTokenizer t = new StringTokenizer(pipeString.trim(), "|");
-
-		int i=1;
-		while (i<=tokenPosition) {
-			if ( t.hasMoreTokens() )
-			{
-				token=t.nextToken();
-				i++;
-			}
-			else 
-			{
-				token="nullToken";
-				i++;
-			}
-		}
-		return(token);
-	}
-	else
-	{
-		return(token);
-	}
-}
-
-
-
-
-
 
 }
 
