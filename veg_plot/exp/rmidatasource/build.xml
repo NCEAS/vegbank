@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-03-22 18:19:31 $'
- 	*     '$Revision: 1.7 $'
+ 	*     '$Date: 2002-03-29 22:31:52 $'
+ 	*     '$Revision: 1.8 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -31,17 +31,25 @@
 		<property name="rmiregistry" value="./server" />
 		<property name="translators" value="./lib/datatranslator.jar" />
 		<property name="dbaccess" value="./lib/database_access.jar" />
+		<property name="xmlresource" value="./lib/xmlresource.jar" />
 
 		
-		<filter token="release" value="alpha-20020120"/>
+		<filter token="release" value=" "/>
 		<filter token="authors" value="HARRIS"/>
-		<property name="cpath" value="${dbaccess}:${translators}:${xerces}:${xalan}:${build}"/>
+		<property name="cpath" value="${dbaccess}:${translators}:${xmlresource}:${xalan}:${build}"/>
 </target>
 
 	
 	<!-- PREPARE -->
 	<target name="prepare" depends="init">
 		<mkdir dir="${build}" />
+
+
+		<copy todir="${build}" filtering="no" >
+			<fileset dir="${lib}" >
+  	    			<include name="rmidatasource.properties"/>
+  	  		</fileset>
+  		</copy>
 	</target>	
 	
 	
