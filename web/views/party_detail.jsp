@@ -65,7 +65,7 @@
 
 
         <vegbank:get id="browseparty" select="browseparty" 
-        beanName="map" pager="false" perPage="-1"  xwhereEnable="false" />
+        beanName="map" pager="false" perPage="-1"  where="where_party_pk" wparam="party_pk" xwhereEnable="false" />
 <!-- don't show party name as is already shown on this view-->
 <bean:define id="partyShown" value="yes" />
 
