@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   * '$Author: harris $'
-  * '$Date: 2002-06-26 20:47:01 $'
-  * '$Revision: 1.20 $'
+  * '$Date: 2002-09-12 01:05:12 $'
+  * '$Revision: 1.21 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -42,10 +42,8 @@
 	<property name="pubs_src" value="./pubs" />
 	<property name="style_src" value="./includes" />
 	<property name="image_src" value="./images" />
-	
 	<filter token="dist" value="dist"/>
 	<filter token="version" value="development"/>
-	
 	
 	<!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
 	<property name="forms_server" value="/usr/local/devtools/jakarta-tomcat/webapps/forms"/>
@@ -58,6 +56,7 @@
 	<property name="history_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/history/"/>
 	<property name="pubs_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/pubs/"/>
 	<property name="style_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/includes/"/>
+	<property name="server_root" value="/usr/local/devtools/jakarta-tomcat/webapps/ROOT/"/>
 	
 	<!-- WEB SERVER LOCATIONS -->
 	<filter token="base_url" value="http://vegbank.nceas.ucsb.edu"/>
@@ -91,6 +90,15 @@
         </copy>
 </target>
 
+<target name="index" depends="init" description="target to dist. the index.html file">
+	<copy todir="${server_root}" filtering="yes" >
+     		<fileset dir="./" >
+				<include name="index.html"/>    
+        </fileset>
+  </copy>
+	
+
+</target>
 
 <!-- DISTRIBUTE THE IMAGES -->
 <target name="images" depends="init">
@@ -131,8 +139,6 @@
 				<exclude name="**.html"/>    
         </fileset>
   </copy>
-
-
 </target>
 
 
