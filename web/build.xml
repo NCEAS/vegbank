@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-09-17 00:13:37 $'
-* '$Revision: 1.118 $'
+* '$Date: 2004-09-18 22:32:22 $'
+* '$Revision: 1.119 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -139,7 +139,8 @@
     <filter token="base_url" value=""/>
     <filter token="web_context" value="${machine_url}${eighty_eighty}/${web.context_uri}/"/>
     <filter token="image_server" value="${machine_url}${eighty_eighty}/${web.context_uri}/images/"/>
-    <filter token="minimumwidth" value="650" /><!-- this is the minimum value for width of header and footer -->
+    <filter token="minimumwidth" value="650"/>
+    <!-- this is the minimum value for width of header and footer -->
     <!-- the following is a duplicate : -->
     <filter token="images_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/images/"/>
     <filter token="stylesheet" value="${machine_url}${eighty_eighty}/${web.context_uri}/includes/default.css"/>
@@ -369,7 +370,7 @@
   </target>
   <target name="views" depends="tokenfiles" description="&gt; dist the views to server (outside chain, but included in forms)">
     <copy overwrite="true" todir="${views_server}" filtering="yes">
-      <fileset dir="${views}" includes="*jsp *html" excludes="**/CVS* "/>
+      <fileset dir="${views}" includes="**/*jsp **/*html" excludes="**/CVS* "/>
     </copy>
   </target>
   <!--
