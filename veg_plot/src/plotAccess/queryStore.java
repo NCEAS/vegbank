@@ -27,6 +27,7 @@ public class  queryStore
  *
  * @param plotId - database plot id number
  * @param conn - database connection
+ *
  */
 public void getEntireSinglePlot(String plotId, Connection conn)
 {
@@ -71,7 +72,9 @@ j.issueSelect(statement, action, returnFields, returnFieldLength, conn);
 connectionUses++;
 	
 entireResult=j.outReturnFields[0];
-System.out.println(entireResult);
+//System.out.println(entireResult);
+entireSinglePlotOutput[0]=entireResult; //cheat here
+entireSinglePlotOutputNum=1; //and here
 
 
 
@@ -101,20 +104,26 @@ connectionUses++;
 //which will ultimately be passed back to the xmlWriter to be tokenized
 //and writen to xml - againd there should only be one line returned 
 
-/*
-for (int ii=0;ii<k.outReturnFieldsNum; ii++) {
-	String buf =
-	entireResult=entireResult+k.outReturnFields[ii];
-}
-*/	
 
-//entireSinglePlotOutput=entireResult;
-//entireSinglePlotOutputNum=entireResultNum;
-//outConnectionUses=connectionUses;
+entireResult=entireResult+k.outReturnFields[0];
+entireSinglePlotOutput[0]=entireResult; //cheat here
+entireSinglePlotOutputNum=1; //and here
 
 }//end method
 public String entireSinglePlotOutput[] = new String[10000];  //should always = 1
 public int entireSinglePlotOutputNum; 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -324,12 +333,17 @@ public void getPlotId(String[] queryAttributeArray, int queryAttributeArrayNum,
 {
 //map the array to the appropriate attribute
 String taxonName=queryAttributeArray[0];
-String state =queryAttributeArray[1];
+String state=queryAttributeArray[1];
 String elevationMin=queryAttributeArray[2];
 String elevationMax=queryAttributeArray[3];
 String surfGeo=queryAttributeArray[4];
 String multipleObs=queryAttributeArray[5];
 String community=queryAttributeArray[6];
+
+System.out.println("queryStore.getPlotId - queryElements > \n"
+	+" taxonName: "+taxonName+" \n state: "+state+" \n elevationMin: "
+	+elevationMin+" \n elevationMax: "+elevationMax+" \n surfGeo: "+surfGeo
+	+" \n multipleObs: "+multipleObs+" \n community: "+community);
 
 
 String action="select";

@@ -59,43 +59,39 @@ for (int ii=0; ii<g.queryOutputNum; ii++) {
 
 
 /**
-*  Public interface for running the plotAccess module, this is how the
-* interfaces and servlets will load and query the database
-* input: xml file, may be datafile or query file, xsl sheet to
-* transform the document and action, either insert or query
-*/
+ *  Public interface for running the plotAccess module, this is how the
+ * interfaces and servlets will load and query the database
+ * input: xml file, may be datafile or query file, xsl sheet to
+ * transform the document and action, either insert or query
+ * @param inputXml - input xml file
+ * @param inputXsl - input xsl transform sheet
+ * @param action - database action
+ *
+ */
 public void accessDatabase (String inputXml, String inputXSL, String action) {
 try {
 
-/**
-* call the method to transform the data xml document and pass back a string writer  
-*/
+//call the method to transform the data xml document and pass back a string writer  
 transformXML m = new transformXML();
 m.getTransformed(inputXml, inputXSL);
 
-StringWriter transformedData=m.outTransformedData;  //the stringwriter containg all the transformed data
+//the stringwriter containg all the transformed data
+StringWriter transformedData=m.outTransformedData;  
 
-/**
-* pass the String writer to the utility class to convert the StringWriter to an array
-*/
-
+//pass to the utility class to convert the StringWriter to an array
 utility u =new utility();
 u.convertStringWriter(transformedData);
 
-String transformedString[]=u.outString;  // the string from the utility.convertStringWriter
-int transformedStringNum=u.outStringNum; // the number of vertical elements contained in the string array
-
-
+String transformedString[]=u.outString; 
+int transformedStringNum=u.outStringNum; 
 
 
 
 //query action
 if (action.equals("query")) {
 
-	/**
-	* pass the array to the sql mapping class - single attribute query
-	*/
-
+	
+	// pass the array to the sql mapping class - single attribute query
 	sqlMapper w =new sqlMapper();
 	w.developPlotQuery(transformedString, transformedStringNum);
 	
@@ -103,15 +99,13 @@ if (action.equals("query")) {
 	queryOutput=w.queryOutput;
 	queryOutputNum=w.queryOutputNum;
 	
-}  //end if
+}
 
 //compound query action
 if (action.equals("compoundQuery")) {
 
-	/**
-	* pass the array to the sql mapping class - compound queries
-	*/
-
+	
+	//pass the array to the sql mapping class - compound queries
 	sqlMapper w =new sqlMapper();
 	w.developPlotQuery(transformedString, transformedStringNum, 2);
 	
@@ -119,26 +113,23 @@ if (action.equals("compoundQuery")) {
 	queryOutput=w.queryOutput;
 	queryOutputNum=w.queryOutputNum;
 	
-}  //end if
+}
 
 
 
 //insert action
 if (action.equals("insert")) {
 
-	/**
-	* pass the array to the plot writer to be inserted into the database
-	*/
-
+	
+	//pass the array to the plot writer to be inserted into the database
 	plotWriter w =new plotWriter();
 	w.insertPlot(transformedString, transformedStringNum);
 
-}  //end if
+}
 
 
 //verify action
 if (action.equals("verify")) {
-
 
 	for (int ii=0; ii<transformedStringNum; ii++) 
 	{
@@ -147,15 +138,12 @@ if (action.equals("verify")) {
 
 }
 } //end try
-
 catch( Exception e ) {System.out.println(" failed in: dbAccess.main  "+e.getMessage());}
-
-} //end method
+}
 
 
 public String queryOutput[] = new String[10000];  //the output from query
 int queryOutputNum; //the number of output rows from the query
-
 
 }
 

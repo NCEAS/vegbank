@@ -59,7 +59,7 @@ public void getDatabaseParameters(String propFile, String accessType)
 {
 String s = null;
 	try {
-		System.out.println("reading property file; base: "+propFile);
+//		System.out.println("reading property file; base: "+propFile);
 		ResourceBundle rb = ResourceBundle.getBundle(propFile);
 		driverClass=rb.getString("driverClass");
 		connectionString=rb.getString("connectString");
@@ -138,7 +138,7 @@ while ((line = br.readLine()) !=null ) {
 } //end while
 
 stringContentsNum=lineCnt;  //number of elements in the array
-System.out.println("number of lines transformed: "+lineCnt);
+//System.out.println("number of lines transformed: "+lineCnt);
 
 
 outStringNum=stringContentsNum;

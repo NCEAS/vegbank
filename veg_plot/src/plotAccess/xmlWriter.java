@@ -32,7 +32,7 @@ out.println("<vegPlot>");
 //make the token map and put into cvs
 for (int i=0;i<=plotSummaryNum; i++) {	
 	 StringTokenizer t = new StringTokenizer(plotSummary[i], "|");
-	 String plotId=t.nextToken();
+	 String plotId=t.nextToken().trim();
 	 String authorPlotCode=t.nextToken();
 	 String project_id=t.nextToken();
 	 String surfGeo=t.nextToken();
@@ -105,7 +105,8 @@ out.println("			</address>        ");
 out.println("		</party>");
 out.println("	</projectContributor>        ");
 out.println("	<plot>        ");
-out.println("		<authorPlotCode>"+ authorPlotCode+" </authorPlotCode>       ");
+out.println("		<plotId>"+ plotId +"</plotId>       ");
+out.println("		<authorPlotCode>"+ authorPlotCode+"</authorPlotCode>       ");
 out.println("		<parentPlot>"+nullValue+"</parentPlot>       ");
 out.println("		<plotType>"+plotType+"</plotType>       ");
 out.println("		<samplingMethod>"+nullValue+"</samplingMethod>       ");

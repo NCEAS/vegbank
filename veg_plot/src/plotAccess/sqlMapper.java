@@ -4,6 +4,9 @@ import java.text.*;
 import java.util.*;
 import java.sql.*;
 
+import queryStore.*;  //class that stores all the queries
+
+
 /**
  * This class will appear as a 'black box' class where inputs 
  * will be a transformed xml document string with some query/insert/update
@@ -12,13 +15,9 @@ import java.sql.*;
  * of the criteria are 'met' by the first document the SQL
  * will be passed to another class to be issued to the database
  *
- *  This current version just takes the first query xml document
- * and determines the sql code which is passed to the issueSQL
- * class to be issued to the database 
+ * @version 11 Jan 2001
+ * @author John Harris
  *
- * desire is to have a relatively universal query engine
- * where the user can make an xml document that specifies 
- * the development of a sql query in this class
  */
 
 public class  sqlMapper
@@ -38,38 +37,36 @@ public class  sqlMapper
  * @param transformedSringNum integer defining number of query elements
  */
 
-
-//accept the transformed xml document as a string and number of rows in the array
 public void developPlotQuery(String[] transformedString, int transformedStringNum)
 {
 /**
  * First set up a pool of connections that can be passed to the queryStore class
  */
 //get the database parameters from the database.parameters file
-utility g =new utility(); 
-g.getDatabaseParameters("database", "query");
+ utility g =new utility(); 
+ g.getDatabaseParameters("database", "query");
 
-Connection pconn=null; //this is a connection that is taken from within the pool
-DbConnectionBroker myBroker;
+ Connection pconn=null; //this is a connection that is taken from within the pool
+ DbConnectionBroker myBroker;
 
 try {
-myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
+ myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
 	g.login,g.passwd,g.minConnections,g.maxConnections, g.logFile,1.0);
 				  
 // Get a DB connection from the Broker
-int thisConnection;
-pconn= myBroker.getConnection(); //grab one connectionfrom pool
-thisConnection = myBroker.idOfConnection(pconn);
+ int thisConnection;
+ pconn= myBroker.getConnection(); //grab one connectionfrom pool
+ thisConnection = myBroker.idOfConnection(pconn);
 
 //This is a scheme to see how many times a database connection is used if 
 //more than like 50 times check it back into the pool and grab a new one - the 
 //exception thrown otherwise is exeeded max cursors
-int connectionUses=1;
+ int connectionUses=1;
 
 
 //pass the inputString to the tokenizer method below
-sqlMapper a =new sqlMapper();
-a.setAttributeAddress(transformedString, transformedStringNum);	
+ sqlMapper a =new sqlMapper();
+ a.setAttributeAddress(transformedString, transformedStringNum);	
 	String element[]=a.element;  // the returned database address string
 	String value[]=a.value;  // the returened data string
 	int elementNum=a.elementNum; //the number of elements returned
@@ -82,31 +79,70 @@ a.setAttributeAddress(transformedString, transformedStringNum);
  *  a result
  *
  */
-Hashtable queryElements = new Hashtable();
-for (int i=0;i<transformedStringNum; i++) {
+ Hashtable queryElements = new Hashtable();
+ Hashtable metaQuery = new Hashtable();
+ int elementTokenNum = 0; //number of query elements
+ for (int i=0;i<transformedStringNum; i++) {
+	
 	if (value[i] != null) {
-		queryElements.put(element[i],value[i]);
-		System.out.println("**: "+element[i]+" "+value[i]);
+		//System.out.println("sqlMapper.developPlotQuery > "+element[i]+
+		//	" "+value[i]);
+		
+		if (element[i].equals("queryElement")) {
+			queryElements.put(value[i],value[i+1]);
+			elementTokenNum++;
+		}
+		
+		metaQuery.put(element[i], value[i]);
+		
 	}
-}
+
+ }
+ metaQuery.put("elementTokenNum", new Integer(elementTokenNum) );
+
+
+/** Grab the meta elements - like filename & number of query elements */
+ String resultType = (String)metaQuery.get("resultType");
+ String outFile = (String)metaQuery.get("outFile");
 
 /** Look for commonly used queries elements */
-String queryElement = (String)queryElements.get("queryElement");
-String elementString = (String)queryElements.get("elementString");
-String resultType = (String)queryElements.get("resultType");
-String outFile = (String)queryElements.get("outFile");
+ String plotId = (String)queryElements.get("plotId");
+ String taxonName = (String)queryElements.get("taxonName");
 
+/** This is for debugging - and can be commented out later**/
+ System.out.println("sqlMapper.developPlotQuery > \n resultType: "+ resultType +"\n "
+	+"outFile: "+outFile+"\n plotId: "+plotId +"\n taxonName: "+taxonName );
+
+	
+
+// at the next line do a cardinality test
 /** Check that all the elements are there */
-if (queryElement != null && elementString != null && resultType != null && outFile != null) {
+if (plotId != null && resultType != null && outFile != null) {
 	
 	/** Start a search for specific queries*/
-	if ( queryElement.equals("plotId") && resultType.equals("entirePlot") ) {
-		System.out.println("printing the queryElement from a vector: "+queryElement);
+	if ( resultType.equals("full") ) {
+	
+		System.out.println("calling queryStore.getEntireSinglePlot");
 		queryStore b = new queryStore();
-		b.getEntireSinglePlot("1", pconn);
+		b.getEntireSinglePlot(plotId, pconn);
+		
+		xmlWriter l = new xmlWriter();
+		l.writePlotSummary(b.entireSinglePlotOutput, 
+			b.entireSinglePlotOutputNum, outFile);
+		
+	
 	}
 
 }
+
+
+
+
+
+
+
+
+
 /** If none of these common queries apply then pass elements thru the remain code*/
 
 
@@ -145,7 +181,7 @@ for (int i=0;i<transformedStringNum; i++) {
 		//if summary - call the method to return the summary elements
 		//using as input the plotId numbers returned in the if clause above
 		if (value[i] != null && value[i].startsWith("summary")) {
-			System.out.println("outputing the results set as: "+value[i]);
+			//System.out.println("outputing the results set as: "+value[i]);
 			queryStore k = new queryStore();
 			k.getPlotSummary(queryOutput, queryOutputNum, pconn);
 			
@@ -155,10 +191,10 @@ for (int i=0;i<transformedStringNum; i++) {
 			* to close and reopen
 			*/
 			connectionUses=connectionUses+k.outConnectionUses;
-			System.out.println("number of uses of this connection: "
-				+connectionUses);
+//			System.out.println("number of uses of this connection: "
+//				+connectionUses);
 			if (connectionUses>12) {
-				System.out.println("reseting the current connection");
+//				System.out.println("reseting the current connection");
 				try {
 				pconn.close(); //close it - it is no good anymore
 				myBroker.freeConnection(pconn); //not sure if this should be 
@@ -327,10 +363,14 @@ catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery 
 
 
 /**
-* General method to tokenize a string of type: col1|col2 into two seperate strings 
-* usually refered to as element and value.  In the future this method, being a 
-* utility should be put in a utility class
-*/
+ * General method to tokenize a string of type: col1|col2 into two seperate strings 
+ * usually refered to as element and value.  In the future this method, being a 
+ * utility should be put in a utility class
+ *
+ * @param combinedString - string
+ * @param combinedStringNum - number of levels in the string
+ *
+ */
 	
 private void setAttributeAddress (String[] combinedString, int combinedStringNum) {
 	
@@ -354,7 +394,7 @@ for (int ii=0; ii<combinedStringNum; ii++) {
 		else {value[count]="-999.25";}  //do the replacement
 			
 			
-		System.out.println(element[count]+" "+value[count]+" "+ii+" "+count);
+//		System.out.println(element[count]+" "+value[count]+" "+ii+" "+count);
 			
 		}//end if
 		count++;
