@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-03 15:34:28 $'
- * 	'$Revision: 1.14 $'
+ *  '$Date: 2002-04-03 16:59:23 $'
+ * 	'$Revision: 1.15 $'
  */
 package databaseAccess;
 
@@ -895,7 +895,7 @@ public class DBinsertPlotSource
   	  	pstmt.setInt(1, taxonObservationId);
   	  	pstmt.setInt(2, plotObservationId);
 				pstmt.setString(3, authorNameId);
-				pstmt.setString(4, plantNameId);
+				pstmt.setString(4, nameId);
 				
 				//execute the p statement
   		  pstmt.execute();
@@ -1012,7 +1012,6 @@ public class DBinsertPlotSource
 	{
 		try 
 		{
-			
 			//get the names of the recognized strata
 			Vector strataTypes = source.uniqueStrataNames;
 			for (int i =0; i < strataTypes.size(); i++)
@@ -1026,23 +1025,31 @@ public class DBinsertPlotSource
 				String cover = source.getStrataCover(plotName, sName);
 				String base =  source.getStrataBase(plotName, sName);
 				String height = source.getStrataHeight(plotName, sName);
-
-				//insert the strata values
-				sb.append("INSERT into STRATUM (stratum_id, observation_id, stratumName, " 
-				+" stratumCover, stratumBase ,stratumHeight) "
-				+" values(?,?,?,?,?,?)");
 				
-				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
-  		  // Bind the values to the query and execute it
-  		  pstmt.setInt(1, strataId);
-  		  pstmt.setInt(2, plotObservationId);
-				pstmt.setString(3, sName);
-  		  pstmt.setString(4, cover);
-				pstmt.setString(5, base);
-				pstmt.setString(6, height);
-				//execute the p statement
-  		  pstmt.execute();
-  		 // pstmt.close();
+				if ( height != null && height.length() >= 1 )
+				{
+					debug.append("<stratum> \n");
+					debug.append("<name>"+sName+"</name>\n");
+					debug.append("<base>"+base+"</base>\n");
+					debug.append("<height>"+height+"</height> \n");
+					debug.append("</stratum> \n");
+				
+					//insert the strata values
+					sb.append("INSERT into STRATUM (stratum_id, observation_id, stratumName, " 
+					+" stratumCover, stratumBase ,stratumHeight) "
+					+" values(?,?,?,?,?,?)");
+				
+					PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+  		  	// Bind the values to the query and execute it
+  		  	pstmt.setInt(1, strataId);
+  		  	pstmt.setInt(2, plotObservationId);
+					pstmt.setString(3, sName);
+  		  	pstmt.setString(4, cover);
+					pstmt.setString(5, base);
+					pstmt.setString(6, height);
+					//execute the p statement
+  		  	pstmt.execute();
+			 }
 			}			
 		}
 		catch (Exception e)
