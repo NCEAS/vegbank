@@ -53,7 +53,7 @@ SELECT stratumComposition.TAXONOBSERVATION_ID, stratumComposition.STRATUM_ID, st
 FROM stratumComposition;
 
 --populate authorPlantName on taxonObservation----
-UPDATE taxonObservation SET authorPlantName = (SELECT first(plantName.plantName) FROM plantName WHERE taxonObservation.plantName_ID = plantName.PLANTNAME_ID) ;
+UPDATE taxonObservation SET authorPlantName = (SELECT (plantName.plantName) FROM plantName WHERE taxonObservation.plantName_ID = plantName.PLANTNAME_ID) ;
 
 
 ----creating tables------------      
