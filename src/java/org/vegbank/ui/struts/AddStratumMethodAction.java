@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $' 
- *	'$Date: 2003-05-10 00:33:27 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-16 02:48:34 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,22 +83,36 @@ public class AddStratumMethodAction extends Action
 				
 				sm.addSTRATUMMETHODStratumType(st);
 			}
+      else 
+      {
+        // Check for errors
+        String[] stringsToCheck = {stratumIndex[i], stratumName[i], stratumDescription[i] };
+        if ( Utility.isAnyStringNotNullorEmpty(stringsToCheck) )
+        {
+          errors.add(ActionErrors.GLOBAL_ERROR ,
+            new ActionError("errors.required.whenadding", "stratumType", "stratumName and stratumIndex") 
+          );
+        }
+      }
 		}
 		
-		// Write this sucker to the database
-		ObjectToDB sm2db = new ObjectToDB(sm);
-		try
-		{
-			sm2db.write();
-		}
-		catch (Exception e)
-		{
-			errors.add(ActionErrors.GLOBAL_ERROR , 
-				new ActionError("errors.database", e.getMessage()) );
-			System.out.println("AddJournalAction > Added an error: " + e.getMessage() );
-			e.printStackTrace();
-		}	
-		
+		// Write this sucker to the database if all clear        
+    if (errors.isEmpty())
+    {
+		  ObjectToDB sm2db = new ObjectToDB(sm);
+  		try
+	  	{
+		  	sm2db.write();
+  		}
+	  	catch (Exception e)
+		  {
+			  errors.add(ActionErrors.GLOBAL_ERROR , 
+				  new ActionError("errors.database", e.getMessage()) );
+  			System.out.println("AddJournalAction > Added an error: " + e.getMessage() );
+	  		e.printStackTrace();
+		  }	
+	  }
+    
 		if (!errors.isEmpty()) 
 		{
 			saveErrors(request, errors);

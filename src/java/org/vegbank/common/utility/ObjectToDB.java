@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:33:27 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-05-16 02:48:34 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.AbstractList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -48,6 +50,7 @@ import java.util.Vector;
 
 public class ObjectToDB extends VegBankObjectWriter
 {
+	private boolean existsInDatabase = false;
 	Connection conn;	
 	protected AbstractList fieldNames = new Vector();
 	private AbstractList fieldValues = new Vector();
@@ -63,17 +66,31 @@ public class ObjectToDB extends VegBankObjectWriter
 		conn= new Utility().getConnection("vegbank");
 		try
 		{
-			this.generatePrimaryKey();
+			int pk = this.isObjectInDatabase();
+			if ( pk == 0 )
+			{
+				// Does not exist in database ( reseve a pk )
+				this.generatePrimaryKey();
+				System.out.println("----------------------------------------------");
+				System.out.println("Created NEW Object for " + className);
+				System.out.println("PK is " + this.primaryKey);
+				System.out.println("----------------------------------------------");
+			}
+			else 
+			{
+				this.primaryKey = pk;
+				this.existsInDatabase = true;
+				System.out.println("----------------------------------------------");
+				System.out.println("Object " + className + " exists in Database");
+				System.out.println("PK is " + this.primaryKey);
+				System.out.println("----------------------------------------------");
+			}
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("----------------------------------------------");
-		System.out.println("Created NEW Object for " + className);
-		System.out.println("PK is " + this.primaryKey);
-		System.out.println("----------------------------------------------");
 	}
 	
 	public void setForeignKey( String fieldName, int foreignKey)
@@ -136,50 +153,8 @@ public class ObjectToDB extends VegBankObjectWriter
 						storeNameAndValue(fieldName, fieldValue);
 					}
 					//System.out.println("ObjectToDB > " + fieldName + " v. " + fieldValue);
-
 				}
 			}
-			
-//					else if ( VegBankObjectWriter.existsInVegbankObjectModel(method.getReturnType().getName()))
-//					{
-//						String fieldName = this.getFieldName(methodName, "_ID");
-//						String fieldValue = null;
-//						//System.out.println("searching " + object.getClass().getName() + "  for " + method.getName() );
-//						Object obj = method.invoke(object, null);
-//						if ( obj != null)
-//						{
-//							//System.out.println("========== " + obj + " && " + method.getReturnType().getName() );
-//							ObjectToDB o2d = new ObjectToDB(obj);
-//							o2d.setForeignKey( fieldName, this.primaryKey );
-//							o2d.write();
-//							
-//							// Use the allocated pk as the foreign key for this table							
-//							fieldValue = Integer.toString( o2d.getPrimaryKey() ); // TODO: handle this as an int throughout !!!
-//						}
-//						else
-//						{
-//							Integer fK = (Integer) this.foreignKeyHash.get(fieldName.toUpperCase());
-//							
-//							Enumeration e = foreignKeyHash.keys();
-//							while ( e.hasMoreElements() )
-//							{
-//								Object  key = e.nextElement();
-//								//System.out.println(">>>>>>>>>>>>>" + key + "== " + foreignKeyHash.get(key));
-//							}
-//							
-//							if ( fK != null)
-//							{
-//								fieldValue = fK.toString();
-//							}
-//							else
-//							{
-//								fieldValue = null;
-//							}
-//							System.out.println("Could not get a VALUE for: " +this.getFieldName(methodName, "_ID") + " using " + fieldValue );
-//						}
-//						fieldNames.add(fieldName);
-//						fieldValues.add(fieldValue);
-//					}
 			else 
 			{
 				//System.out.println("I am a " + method.getReturnType().getName());
@@ -203,7 +178,11 @@ public class ObjectToDB extends VegBankObjectWriter
 	{	
 		boolean result = true;
 		
-		this.prepareObjectForWriting();
+		if (this.existsInDatabase)
+		{
+			return result;
+		}
+		
 		// Get the Prepared Statement
 		String statement = this.getPreparedStatementString();
 		try
@@ -279,8 +258,10 @@ public class ObjectToDB extends VegBankObjectWriter
 	/**
 	 * @return String - sql for creating prepared statement
 	 */
-	public String getPreparedStatementString()
+	public String getPreparedStatementString() throws Exception
 	{
+		this.prepareObjectForWriting();
+		
 		//PreparedStatement pstmt = conn.prepareStatement();
 		StringBuffer sb = new StringBuffer();
 		StringBuffer parameters = new StringBuffer();
@@ -310,8 +291,91 @@ public class ObjectToDB extends VegBankObjectWriter
 		return sb.toString();
 	}
 	
-	
-	//	Utility.dbAdapter.getNextUniqueID
+	/**
+	 * Searches for an identical record in the db.
+	 * 
+	 * @return int - primaryKey ( returns 0 if no record )
+	 */
+	public int isObjectInDatabase() throws Exception
+	{
+		primaryKey = 0;
+		Statement stmt = conn.createStatement();
+		Hashtable nameValue = new Hashtable();
+		
+		// Construct Query using Reflection of Strings and ints only
+		for (int i=0; i < methods.length ; i++)
+		{
+			Method method = methods[i];
+			String methodName = method.getName();
+			// empty parameter list for a get method
+			Object[] parameters = {};
+			
+			// Search this object for get methods 
+			if ( isGetMethod(method) )
+			{
+				if ( isGetMethod(method, "java.lang.String") )
+				{					
+					// get the name and value of the field 
+					String fieldName = this.getFieldName(methodName, null);
+					String fieldValue = (String) method.invoke(object, parameters);
+					
+					if ( ! Utility.isStringNullOrEmpty(fieldName) && ! Utility.isStringNullOrEmpty(fieldValue))
+					{
+						nameValue.put(fieldName, fieldValue);
+					}
+				}
+				else if ( isGetMethod(method, "int") )
+				{
+					// I have a referenced Object  -- I want to get its foriegn key
+					String fieldName = this.getFieldName(methodName, "");
+					String fieldValue = (String) foreignKeyHash.get(fieldName.toUpperCase() );
+					if (Utility.isStringNullOrEmpty(fieldValue))
+					{			
+						//System.out.println("ObjectToDB > No stored FK for " + fieldName + " " + foreignKeyHash);	
+						// Check the Object
+						Integer fieldValueInt = (Integer) method.invoke(object, parameters);
+						fieldValue = fieldValueInt.toString();	
+					}
+					
+					// -1 and 0 are not real FK ignore
+					if (! fieldValue.equals("-1") && !  fieldValue.equals("0") )
+					{				
+						nameValue.put(fieldName, fieldValue);
+					}
+				}
+			}
+			else 
+			{
+				//System.out.println("I am a " + method.getReturnType().getName());
+				// Not of interest
+			}
+		}		
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("select " + className + "_id from " + className +" where ");
+		Enumeration columnNames = nameValue.keys();
+		while (columnNames.hasMoreElements() )
+		{
+			String columnName = (String) columnNames.nextElement();
+			String columnValue = (String) nameValue.get(columnName);
+			sql.append(columnName + " = '" + columnValue +"'");
+			
+			if (columnNames.hasMoreElements() )
+			{
+				sql.append(" and ");
+			}
+		}
+		
+		System.out.println(" --->" + sql);
+		
+		ResultSet rs = stmt.executeQuery( sql.toString() );
+		
+		if (rs.next() )
+		{
+			primaryKey  = rs.getInt(1);
+		}
+		return primaryKey;
+	}
 	
 	
 	/**
@@ -332,5 +396,13 @@ public class ObjectToDB extends VegBankObjectWriter
 		this.primaryKey = 
 			Utility.dbAdapter.getNextUniqueID(conn, className, className + "_id");
 	}	
+
+	/**
+	 * @return
+	 */
+	public boolean isExistsInDatabase()
+	{
+		return existsInDatabase;
+	}
 
 }

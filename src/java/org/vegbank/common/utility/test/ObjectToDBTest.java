@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-16 17:37:44 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-16 02:48:35 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,10 +24,8 @@
  
 package org.vegbank.common.utility;
 
-import java.util.Hashtable;
-import java.util.Vector;
-
 import org.vegbank.common.model.Community;
+import org.vegbank.common.model.PlantParty;
 
 import junit.framework.TestCase;
 
@@ -51,8 +49,6 @@ public class ObjectToDBTest extends TestCase
 	{
 		super(arg0);
 	}
-	
-	
 
 	public void testObjectToDB()
 	{
@@ -61,13 +57,43 @@ public class ObjectToDBTest extends TestCase
 	
 	public void testGetPreparedStatementString()
 	{
-		String sqlString = o2db.getPreparedStatementString();
-		System.out.println(sqlString);
-		assertEquals("insert into Community (  ) values (  )", sqlString );
-		
-		String sqlString2 = o2db.getPreparedStatementString();
-		System.out.println(sqlString2);
-		assertEquals("insert into Community ( column1, column2 ) values ( ?,? )", sqlString2 );	
+		try
+		{
+			String sqlString = o2db.getPreparedStatementString();
+			System.out.println(sqlString);
+			assertEquals("insert into PlantParty ( GivenName, SurName, Email, PlantParty_id ) values ( ?,?,?, ? )", sqlString );	
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			fail("Had an exception thrown");
+		}
+	}
+	
+	public void testWrite()
+	{
+		try
+		{
+			o2db.write();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			fail("Had an exception thrown");
+		}
+	}
+	
+	public void testIsObjectInDatabase()
+	{
+		try
+		{
+			o2db.isObjectInDatabase();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			fail("Had an exception thrown");
+		}
 	}
 
 	/* (non-Javadoc)
@@ -75,15 +101,11 @@ public class ObjectToDBTest extends TestCase
 	 */
 	protected void setUp() throws Exception
 	{
-		comm = new Community();
-		comm.setClassLevel("Alliance");
-		comm.setCode("COOOODE");
-		comm.setName("testname");
-		comm.setDescription("this is a fake description");	
-		comm.setDateEntered("today");	
-		comm.setParentCode("I'm a bastard");	
-		comm.setCommonName("You don' want to know");	
-		o2db = new ObjectToDB(comm);
+		PlantParty pp = new PlantParty();
+		pp.setEmail("test@test.com");
+		pp.setGivenName("Gabriel");
+		pp.setSurName("Farrell");	
+		o2db = new ObjectToDB(pp);
 		super.setUp();
 	}
 

@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:33:27 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-16 02:48:34 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,9 @@ package org.vegbank.ui.struts;
 
 import org.apache.struts.validator.ValidatorForm;
 import org.vegbank.common.model.Party;
+import org.vegbank.common.model.Address;
+import org.vegbank.common.model.Telephone;
+import java.util.Collection;
 
 /**
  * @author farrell
@@ -38,21 +41,13 @@ public class AddPartyForm extends ValidatorForm
 	
 	private Party  party = new Party();
 	
-	// Phone Number
+	private Collection phoneTypes;
+
 	private String[] phoneNumber = new String[4];
 	private String[] phoneType = new String[4];
-	
-	// Address stuff
-	private String[] organization_ID = new String[2];
-	private String[] orgPosition = new String[2];
-	private String[] email = new String[2];	
-	private String[] deliveryPoint= new String[2];
-	private String[] city = new String[2];
-	private String[] administrativeArea = new String[2];
-	private String[] postalCode = new String[2];
-	private String[] country = new String[2];
-	private String[] startDate = new String[2];
-	//private boolean[] currentAddress = {false, false};
+
+  private Address address = new Address();
+  private boolean currentFlag = false;
 
 		
 	/**
@@ -63,47 +58,6 @@ public class AddPartyForm extends ValidatorForm
 		return party;
 	}
 
-
-
-	/**
-	 * @return
-	 */
-	public String[] getCity()
-	{
-		return city;
-	}
-
-	/**
-	 * @return
-	 */
-	public String[] getCountry()
-	{
-		return country;
-	}
-
-	/**
-	 * @return
-	 */
-	public String[] getEmail()
-	{
-		return email;
-	}
-
-	/**
-	 * @return
-	 */
-	public String[] getOrganization_ID()
-	{
-		return organization_ID;
-	}
-
-	/**
-	 * @return
-	 */
-	public String[] getOrgPosition()
-	{
-		return orgPosition;
-	}
 
 	/**
 	 * @return
@@ -119,62 +73,6 @@ public class AddPartyForm extends ValidatorForm
 	public String[] getPhoneType()
 	{
 		return phoneType;
-	}
-
-	/**
-	 * @return
-	 */
-	public String[] getPostalCode()
-	{
-		return postalCode;
-	}
-
-	/**
-	 * @return
-	 */
-	public String[] getStartDate()
-	{
-		return startDate;
-	}
-
-	/**
-	 * @param strings
-	 */
-	public void setCity(String[] strings)
-	{
-		city = strings;
-	}
-
-	/**
-	 * @param strings
-	 */
-	public void setCountry(String[] strings)
-	{
-		country = strings;
-	}
-
-	/**
-	 * @param strings
-	 */
-	public void setEmail(String[] strings)
-	{
-		email = strings;
-	}
-
-	/**
-	 * @param strings
-	 */
-	public void setOrganization_ID(String[] strings)
-	{
-		organization_ID = strings;
-	}
-
-	/**
-	 * @param strings
-	 */
-	public void setOrgPosition(String[] strings)
-	{
-		orgPosition = strings;
 	}
 
 	/**
@@ -202,67 +100,50 @@ public class AddPartyForm extends ValidatorForm
 	}
 
 	/**
-	 * @param strings
+	 * @return
 	 */
-	public void setPostalCode(String[] strings)
+	public Address getAddress()
 	{
-		postalCode = strings;
+		return this.address;
 	}
 
 	/**
-	 * @param strings
+	 * @param address 
 	 */
-	public void setStartDate(String[] strings)
+	public void setAddress(Address address)
 	{
-		startDate = strings;
+		this.address = address;
 	}
+
+  /**
+   * @return
+   */
+   public Collection getPhoneTypes()
+   {
+     if ( phoneTypes == null )
+     {
+       // Need to create this object
+       Telephone tel = new Telephone();
+       phoneTypes = tel.getPhoneTypePickList();
+     }
+     return phoneTypes;
+   }
+                                                
 
 	/**
 	 * @return
 	 */
-	public String[] getDeliveryPoint()
+	public boolean isCurrentFlag()
 	{
-		return deliveryPoint;
+		return currentFlag;
 	}
 
 	/**
-	 * @param strings
+	 * @param b
 	 */
-	public void setDeliveryPoint(String[] strings)
+	public void setCurrentFlag(boolean b)
 	{
-		deliveryPoint = strings;
+		currentFlag = b;
 	}
-
-	/**
-	 * @return
-	 */
-	public String[] getAdministrativeArea()
-	{
-		return administrativeArea;
-	}
-
-	/**
-	 * @param strings
-	 */
-	public void setAdministrativeArea(String[] strings)
-	{
-		administrativeArea = strings;
-	}
-
-//	/**
-//	 * @return
-//	 */
-//	public boolean[] getCurrentAddress()
-//	{
-//		return currentAddress;
-//	}
-//
-//	/**
-//	 * @param bs
-//	 */
-//	public void setCurrentAddress(boolean[] bs)
-//	{
-//		currentAddress = bs;
-//	}
 
 }

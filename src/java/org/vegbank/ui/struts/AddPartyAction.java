@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:33:27 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-16 02:48:34 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,91 +70,53 @@ public class AddPartyAction extends Action
 			String phoneNumber = phoneNumbers[i];
 			String phoneType = phoneTypes[i];
 
+			//System.out.println(phoneNumber + " and '" + phoneType + "'");
 			if (!Utility.isStringNullOrEmpty(phoneNumber)
-				&& !Utility.isStringNullOrEmpty(phoneType))
+				&& !phoneType.equals("-1"))
 			{
 				Telephone tel = new Telephone();
 				tel.setPhoneNumber(phoneNumber);
 				tel.setPhoneType(phoneType);
 				party.addPARTYTelephone(tel);
 			}
-		}
-
-		// handle the Address subform
-		String[] organizationIds = partyForm.getOrganization_ID();
-		String[] orgPositions = partyForm.getOrgPosition();
-		String[] emails = partyForm.getEmail();
-		String[] deliveryPoints = partyForm.getDeliveryPoint();
-		String[] cities = partyForm.getCity();
-		String[] areas = partyForm.getAdministrativeArea();
-		String[] postalCodes = partyForm.getPostalCode();
-		String[] countries = partyForm.getCountry();
-		String[] startDates = partyForm.getStartDate();
-		
-		//boolean[] currentAddresses = partyForm.getCurrentAddress();
-		
-		for (int i = 0; i < organizationIds.length; i++)
-		{
-			String organizationId = organizationIds[i];
-			String orgPosition = orgPositions[i];
-			String email = emails[i];
-			String deliveryPoint = deliveryPoints[i];
-			String city = cities[i];
-			String area = areas[i];
-			String postalCode = postalCodes[i];
-			String country = countries[i];
-			String startDate = startDates[i];
-
-			Address address = new Address();
-
-			String[] allAddressFields =
-				{
-					orgPosition,
-					email,
-					deliveryPoint,
-					city,
-					area,
-					postalCode,
-					country};
-					
-			// Ignore if all fields are empty
-			if ( Utility.isAnyStringNotNullorEmpty(allAddressFields))
+			else
 			{
-				System.out.println("Adding an Address");
-				// This will blow up if a non integer is passed -- trusting on previous validation
-				if (!Utility.isStringNullOrEmpty(organizationIds[i]))
+				// Check for errors
+				if (!Utility.isStringNullOrEmpty(phoneNumber)
+					|| !phoneType.equals("-1"))
 				{
-					address.setOrganization_ID(
-						new Integer(organizationIds[i]).intValue());
+					errors.add(
+						ActionErrors.GLOBAL_ERROR,
+						new ActionError(
+							"errors.required.whenadding",
+							"telephone",
+							"phoneNumber and phoneType"));
 				}
-				address.setOrgPosition(orgPositions[i]);
-				address.setEmail(emails[i]);
-				address.setDeliveryPoint(deliveryPoints[i]);
-				address.setCity(cities[i]);
-				address.setAdministrativeArea(areas[i]);
-				address.setPostalCode(postalCodes[i]);
-				address.setCountry(countries[i]);
-				address.setAddressStartDate(startDates[i]);
-				//address.setCurrentFlag( new Boolean(currentAddresses[i]).toString() );
-
-				party.addorganizationAddress(address);
 			}
 		}
 
-		// Write to the db
-		ObjectToDB party2db = new ObjectToDB(party);
-		try
+		// Get the Address and add it to the party
+		Address address = partyForm.getAddress();
+		address.setCurrentFlag("" + partyForm.isCurrentFlag());
+		party.addorganizationAddress(address);
+
+		// Write to the db if all clear
+		if (errors.isEmpty())
 		{
-			party2db.write();
-		}
-		catch (Exception e)
-		{
-			errors.add(
-				ActionErrors.GLOBAL_ERROR,
-				new ActionError("errors.database", e.getMessage()));
-			System.out.println(
-				"AddReferenceAction > Added an error: " + e.getMessage());
-			e.printStackTrace();
+			ObjectToDB party2db = new ObjectToDB(party);
+			try
+			{
+				party2db.write();
+			}
+			catch (Exception e)
+			{
+				errors.add(
+					ActionErrors.GLOBAL_ERROR,
+					new ActionError("errors.database", e.getMessage()));
+				System.out.println(
+					"AddReferenceAction > Added an error: " + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 
 		// Report any errors we have discovered back to the original form
