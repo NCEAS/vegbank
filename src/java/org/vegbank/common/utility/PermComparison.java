@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-12-10 19:38:15 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-01-01 01:14:59 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,62 +37,69 @@ import org.vegbank.common.utility.LogUtility;
  */
 public class PermComparison {
 
-	private static ResourceBundle res = null;
-	private static Map roles = new HashMap(); 
-
+	private static ResourceBundle res = ResourceBundle.getBundle("general");
 
 	/**
 	 *
 	 */
 	public PermComparison() {
-		res = ResourceBundle.getBundle("general");
-		String key;
-		
-		// load the roles
-		for (Enumeration e = res.getKeys(); e.hasMoreElements() ;) {
-			key = (String)e.nextElement();
-			if (key.startsWith("perms.role.")) {
-				roles.put(key.substring(11), res.getString(key));
-			}
-		}
 	}
 
 	/**
-	 * @return true if given sum of roles meet the minimum required roles.
+	 *
+	 */
+	public static int getRoleConstant(String role) {
+		if (role == null) {
+			return 0;
+		}
+		String value = res.getString(role);
+		if (value == null) {
+			return 0;
+		}
+		return Integer.parseInt(value);
+	}
+
+	
+	/**
+	 * @return true if given list of comma separated roles 
+	 * match at least ALL of the required roles.
 	 */
 	public static boolean matchesAll(String required, String given) {
 		return matchesAll(parsePermissions(required), parsePermissions(given));
 	}
 
 	/**
-	 * @return true if given sum of roles meet the minimum required roles.
+	 * @return true if given list of comma separated roles 
+	 * match at least ONE of the required roles.
+	 */
+	public static boolean matchesOne(String required, String given) {
+		return matchesOne(parsePermissions(required), parsePermissions(given));
+	}
+
+	/**
+	 * @return true if given sum of roles match at least all of the 
+	 * required roles.
 	 */
 	public static boolean matchesAll(int required, int given) {
-		LogUtility.log("PermComparison.matchesAll("+required+","+given+"): " +
-				(required & given));
+		//LogUtility.log("PermComparison.matchesAll("+required+","+given+"): " + (required & given));
 				
-	/*	
-		if (required & given == required) {
+		if ((required & given) != required) {
 			return false;
 		} else {
 			return true;
 		}
-	*/
-		return false;
 	}
 	
 	/**
-	 * NOT IMPLEMENTED YET.
+	 * @return true if given sum of roles meet at least one of 
+	 * the required roles.
 	 */
 	public static boolean matchesOne(int required, int given) {
-		/*
-		if (required | given == ???) {
+		if ((required & given) == 0) {
 			return false;
 		} else {
 			return true;
 		}
-		*/
-		return false;
 	}
 	
 	/**
@@ -101,19 +108,20 @@ public class PermComparison {
 	 * properties file.
 	 */
 	public static int parsePermissions(String csv) {
-		StringTokenizer st = new StringTokenizer(csv, ",");
+		StringTokenizer st = new StringTokenizer(csv, ", ");
 		String tmpRole;
 		int roleSum = 0;
 
 		while (st.hasMoreTokens()) {
 			tmpRole = st.nextToken();
 			try {
-				roleSum += Integer.parseInt( 
-						res.getString("perms.roles." + st.nextToken()));
+				//LogUtility.log(tmpRole +"="+res.getString("perms.role." + tmpRole));
+				roleSum += Integer.parseInt(
+						res.getString("perms.role." + tmpRole));
 
 			} catch (Exception ex) {
 				LogUtility.log("PermComparison: bad config value for role " +
-						tmpRole);
+						tmpRole, ex);
 			}
 
 		}
@@ -129,16 +137,33 @@ public class PermComparison {
 	 */
 	public static void main(String[] args) {
 		int sum;
-		String csv;
-		csv = "guest, registered, certified, pro, dba";
-		sum = PermComparison.parsePermissions(csv);
-		System.out.println(csv + " = " + sum);
+		String required;
+		String user;
+		required = "guest, registered, certified, pro, dba";
+		sum = PermComparison.parsePermissions(required);
+		System.out.println(required + " = " + sum);
 		System.out.println(PermComparison.matchesAll(3, sum));
 
-		csv = "guest, registered";
-		sum = PermComparison.parsePermissions(csv);
-		System.out.println(csv + " = " + sum);
-		System.out.println(PermComparison.matchesAll(7, sum));
+		required = "registered,certified";
+		user = "registered, pro, certified";
+		System.out.println("req: " + required + ", user has: " + user);
+		System.out.println(PermComparison.matchesAll(required, user));
+
+		required = "pro";
+		user = "registered, pro";
+		System.out.println("req: " + required + ", user has: " + user);
+		System.out.println(PermComparison.matchesAll(required, user));
+
+		required = "registered,pro";
+		user = "registered, certified";
+		System.out.println("req: " + required + ", user has: " + user);
+		System.out.println(PermComparison.matchesAll(required, user));
+
+		required = "certified,dba";
+		user = "registered, certified, pro";
+		System.out.println("req: " + required + ", user has: " + user);
+		System.out.println(PermComparison.matchesAll(required, user));
+
 
 	}
 
