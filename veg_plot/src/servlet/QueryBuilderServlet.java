@@ -115,15 +115,6 @@ public void doGet(HttpServletRequest request,
 					String value = queryInstanceHash.get("value").toString();
 					sb.append("operator="+operator+"&criteria="+criteria+"&value="+value);
 					
-				//	String queryInstance=queryVector.elementAt(i).toString().trim();
-					//fix up the string -- a hack
-				//	queryInstance=queryInstance.replace('{',' ').trim();
-			//		queryInstance=queryInstance.replace('}',' ').trim();
-				//	queryInstance=queryInstance.replace(',','&').trim();
-					
-					//append the query elements
-				//	sb.append(queryInstance.trim() );
-			//		System.out.println("SUBMITTED QUERY > "+queryInstance.trim());
 			}
 			
 			//connect to the DataRequestServlet
