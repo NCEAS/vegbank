@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2003-01-02 16:29:00 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2003-01-07 18:24:54 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,16 +72,18 @@ public class PlotValidator implements PlotValidationInterface
 				this.getProperties();
 				//create a new instance of the PlotValidationReport
 				report = new PlotValidationReport();
-				//create an instance of the constaint class
-				constraint = new ValidationConstraint();
+				//create an instance of the classes that store the xml data 
+				constraint = new ValidationConstraint(constraintListFile);
+				constraintMap = new ConstraintMap(constraintMapFile);
+				
+				
 				// pass the reference 'PlotDataSource' input to the instance variable
 				this.source = insource;
 				// build and populate the map of the xml elements and the methods in the 
 				// 'PlotDataSource'
 				this.constraintSourceMethodMap = this.getXMLPlotDataSourceMap();
-				System.out.println("############### " + constraintSourceMethodMap.toString() );
+				//System.out.println("############### " + constraintSourceMethodMap.toString() );
 			
-				constraintMap = new ConstraintMap();
 			}
 			catch (Exception e)
 			{
@@ -97,15 +99,11 @@ public class PlotValidator implements PlotValidationInterface
 			{
 					try
 					{
-						// get info from the properties file
-						//validatorprops = new ResourceBundle();
-						
 						//Enumeration keys = validatorprops.getKeys();
 						constraintListFile = validatorprops.getString("constraintlist");
 						constraintMapFile = validatorprops.getString("constraintmap");
-						System.out.println("####################" + constraintMapFile + "$$$$$$" + constraintListFile );
-						Thread.sleep(2000);
-						
+						System.out.println("PlotValidator > constraint map: " + constraintMapFile);
+						System.out.println("PlotValidator > constraint file: " + constraintListFile );
 					}
 					catch (Exception e)
 					{
@@ -116,7 +114,9 @@ public class PlotValidator implements PlotValidationInterface
 	  /**
 	    * this is the method that is called by the database insertion 
 	    * code to get whether the plot is valid or not
-	    */
+	    * @param plot -- the name of the plot in the plotdatasource
+			* @return boolean -- true if the plot exists 
+			*/
 	  public boolean isPlotValid(String plot)
 	  {
 			boolean validFlag = false;
@@ -125,7 +125,7 @@ public class PlotValidator implements PlotValidationInterface
 			
 			// the number of rules to use to test the plot with 
 			int constraintNumber = constraintMap.getMapSize();
-			System.out.println("#######: " + constraintNumber);
+			System.out.println("PlotValidator > number of constraints to map: " + constraintNumber);
 			for (int i = 0; i < constraintMap.getMapSize() ; i++) 
 			{
 					String methodName = constraintMap.getMethodName(i);
@@ -135,7 +135,7 @@ public class PlotValidator implements PlotValidationInterface
 					
 					// get the attribute from the plot data soure
 					String val = this.getPlotDataSourceAttributeValue(methodName, plot);
-					System.out.println("$$$$$$$$$: " + methodName +" val: " + val);
+					System.out.println("PlotValidator >: " + methodName +" val: " + val);
 					
 					//get the constaining vocabulary -- basically a list of the valid terms
 					Vector constraints = constraint.getConstraints(dbTable, dbAttribute);

@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-30 22:27:10 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2003-01-07 18:24:54 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,8 @@ import org.w3c.dom.*;                         // DOM interface
 import org.apache.xerces.parsers.DOMParser;   // Parser (to DOM)
 import org.xml.sax.InputSource;
 
-import xmlresource.utils.XMLparse; 
+import xmlresource.utils.XMLparse;
+import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidationException;
 
 
 /**
@@ -90,7 +91,7 @@ public class ConstraintMap implements ConstraintMapInterface
 	
   private XMLparse parser;
 	private Document doc;
-	private String constraintMapDocument = "constraint-map.xml";
+	//private String constraintMapDocument = "constraint-map.xml";
 
   protected Vector attributeNameVec;
   protected Vector map;
@@ -111,18 +112,26 @@ public class ConstraintMap implements ConstraintMapInterface
    * mapping the constraing items to the functions stored 
    * in the 'PlotDataSource' class
 	 */
-	 public ConstraintMap()
+	 public ConstraintMap( String constraintMapDocument)
 	 {
 		 try
 		 {
-
+			 System.out.println("ConstraintMap > init");
        //init the inst variables
        map = new Vector();
        mapInstance = new Hashtable();
        mapValues = new Vector();
        method = new Hashtable();
        database = new Hashtable();
-
+			 
+			 // check that the file exists
+			 File check = new File(constraintMapDocument);
+			 if ( check.exists() == false)
+			 {
+				 throw new PlotValidationException("constraint map not found: " + constraintMapDocument);
+			 }
+			
+			 
 			 parser = new XMLparse();
 			 doc = parser.getDocument(constraintMapDocument);
 			 
@@ -347,7 +356,7 @@ public class ConstraintMap implements ConstraintMapInterface
    */
    public static void main(String[] args)
    {
-      ConstraintMap map = new ConstraintMap(); 
+      ConstraintMap map = new ConstraintMap("constraint-map.xml"); 
       System.out.println("map size: "+ map.getMapSize() );
       System.out.println("rule: "+ map.getConstraintRule(0) );
       System.out.println("method name element 1: " + map.getMethodName(0) );

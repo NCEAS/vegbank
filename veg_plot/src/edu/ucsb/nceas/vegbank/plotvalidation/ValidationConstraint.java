@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-30 22:24:55 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2003-01-07 18:24:54 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,8 @@ import org.w3c.dom.*;                         // DOM interface
 import org.apache.xerces.parsers.DOMParser;   // Parser (to DOM)
 import org.xml.sax.InputSource;
 
-import xmlresource.utils.XMLparse; 
+import xmlresource.utils.XMLparse;
+import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidationException;
 
 
 
@@ -47,17 +48,26 @@ public class ValidationConstraint
 	
 	private XMLparse parser;
 	private Document doc;
-	private String constraintDocument = "constraints.xml";
+	//private String constraintDocument = "constraints.xml";
 	//this is the map of the list names and their position in the doc.
 	private Hashtable listMap = new Hashtable();  
 	
 	/**
 	 * constructor method to read the xml constraints file etc...
 	 */
-	 public ValidationConstraint()
+	 public ValidationConstraint(String constraintDocument)
 	 {
 		 try
 		 {
+			 System.out.println("ValidationConstraint > init");
+			 // check that the file exists
+			 File check = new File(constraintDocument);
+			 if ( check.exists() == false)
+			 {
+				 throw new PlotValidationException("constraint document  not found: " + constraintDocument);
+			 }
+			 
+			 
 			 parser = new XMLparse();
 			 doc =parser.getDocument(constraintDocument);
 			 //build the map of the table names, attribute names and the list number
