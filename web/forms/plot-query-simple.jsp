@@ -9,57 +9,61 @@
 <link type="text/css" href="@stylesheet@" rel="stylesheet">
 
 <script type="text/javascript">
+<!--
 /*
  * STRATEGY:
  * Use 3 forms named plantform, plotform, and commform.
  * On button click, copy values to appropriate form.
  */
-function doPlantQuery() 
-{
-	// VALIDATE
-	if (document.plantform.plantname == "") {
-		alert("Please enter a plant name.");
-		err = true;
-
-	} else if (strlen(document.plantform.plantname) < 3) {
-		alert("Plant names must be at least 3 characters long.");
-		err = true;
-	}
-
-	if (err) {
-		return false;
-	}
-	
-	
-	//alert("plant query for: " + document.plantform.plantname.value);
-	document.plantform.action = "@web_context@PlantQuery.do";
-	document.plantform.submit();
+function doPlantQuery() {
+	return validateName(document.plantform.plantname.value, 'plant');
 }
 
-function doCommQuery() 
-{
-	//alert("comm query for: " + document.commform.communityName.value);
-	
-	//document.commform.action = "@datarequestservlet@";
-	document.commform.submit();
+function doCommQuery() {
+	return validateName(document.commform.communityName.value, 'community');
 }
 
-function doPlotQuery() 
-{
+function doPlotQuery() {
+	if (document.plantform.plantname.value != "") {
+		if (!validateName(document.plantform.plantname.value, 'plant')) {
+			return false;
+		}
+	}
+
+	if (document.commform.communityName.value != "") {
+		if (!validateName(document.commform.communityName.value, 'community')) {
+			return false;
+		}
+	}
+
 	// set plantName
 	document.plotform.plantName.value = document.plantform.plantname.value;
 
 	// set commName
 	document.plotform.commName.value = document.commform.communityName.value;
 
-	//alert("plot query for: p=" + document.plotform.plantName.value + 
-	//		", c=" + document.plotform.commName.value);
+	return true;
+}
+			
+function validateName(value, label) {
+	// VALIDATE
+	err = false;
+	if (value == "") {
+		alert("Please enter a " + label + " name.");
+		err = true;
 
-	//document.plotform.action = "@web_context@PlotQuery.do";
-	document.plotform.submit();
+	} else if (value.length < 3) {
+		alert(label + " names must be at least 3 characters long.");
+		err = true;
+	}
+
+	if (err) {
+		return false;
+	}
+	return true;
 }
 
-
+-->
 </script>
 
 </head>
@@ -94,7 +98,7 @@ function doPlotQuery()
 	<input type=text name="plantname" size="30"/></td>
     <td bgcolor="#66CC66"></td>
     <td bgcolor="#99FF99">&nbsp; <img src="@image_server@rtarr.gif">
-              <input type="button" value="search for plants" onClick="javascript:doPlantQuery()" name="button"/></td>
+              <input type="submit" value="search for plants" onClick="javascript:return doPlantQuery()" name="btnPlant"/></td>
     <td bgcolor="#99FF99"></td></form>
   </tr>
   <tr>
@@ -130,7 +134,7 @@ function doPlotQuery()
 	<input type=text name="communityName" size="30"/></td>
     <td bgcolor="#CCCC99"></td>
     <td bgcolor="#FFFFCC">&nbsp; <img src="@image_server@rtarr.gif">
-                <input type="button" onClick="javascript:doCommQuery()" value="search for communities" name="button2"></td>
+                <input type="submit" onClick="javascript:return doCommQuery()" value="search for communities" name="btnComm"></td>
     <td bgcolor="#FFFFCC"><input type="hidden" name="requestDataType" value="vegCommunity">
 	<input type="hidden" name="requestDataFormatType" value="html">
 	<input type="hidden" name="clientType" value="browser">
@@ -287,7 +291,7 @@ function doPlotQuery()
     <td></td>
     <td bgcolor="#CCCCCC"></td>
     <td bgcolor="#CCCCCC" align="center"><img src="@image_server@downarr.gif" class="description"><br/>
-		<input type="button" onclick="javascript:doPlotQuery()" value="search for plots"/><br/>
+		<input type="submit" onClick="javascript:return doPlotQuery()" value="search for plots"/ name="btnPlot"><br/>
               <font size="-1">This searches for plots based <br/>on all criteria supplied 
               on this form</font></td>
     <td bgcolor="#CCCCCC"></td>
