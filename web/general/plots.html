@@ -5,9 +5,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: mlee $'
-  *      '$Date: 2004-04-08 05:44:27 $'
-  *  '$Revision: 1.22 $'
+  *    '$Author: anderson $'
+  *      '$Date: 2004-05-06 22:03:45 $'
+  *  '$Revision: 1.23 $'
   *
   *
   -->
@@ -23,41 +23,39 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#005680" vlink="6699CC" alink="0033FF">@vegbank_header_html_normal@
  
-<blockquote>
   <h2 align="center"><br>
-    <font face="Georgia, Times New Roman, Times, serif">Work with Plots</font></h2>
-  
+    Work with Plots</h2>
+</font>  
+<blockquote>
 		<!--Queries -->
-		<p><font face="Georgia, Times New Roman, Times, serif">
-		<b>Query the Plot Archive</b></font>  </p>		<a href="vbsummary.html">Summary of data in VegBank </a> <br>
-
-		<a href="@plotquery_page@"> Simple Query </a> <br>
-		<!--<a href="@nestedplotquery_page@">--> Nested Query <!--</a>--><font color="#F90000"> <b> coming soon! </b></font> <br />
-<!--		<a href="metadata.html">View Metadata in VegBank</a>, i.e. Methods, People, Projects, References <br> -->
+		<b>Query the Archive</b>
+		<ul>
+			<li><a href="@plotquery_page@">Simple Plot Query</a></li>
+			<li><a href="vbsummary.html">Summary of data in VegBank</a></li>
+			<!--<a href="@nestedplotquery_page@">Nested Query </a> <b> coming soon! </b> <br /> -->
+			<!--<a href="metadata.html">View Metadata in VegBank</a>, i.e. Methods, People, Projects, References <br> -->
+		</ul>
+		<br/>
 
 		<!--UPLOAD DATA -->
-		<p><font face="Georgia, Times New Roman, Times, serif">
-		<b>Load the Plot Archive</b></font>  </p>
-		<a href="@DisplayUploadPlotAction@">Load Plot Data</a>
-		 <br>
-		<a href="@vegbranch_link@vegbranch.html">Download VegBranch</a>, an MS Access Tool for preparing data for VegBank upload.
-		<br>
+		<b>Add Data</b> 
+		<ul>
+			<li><a href="@DisplayUploadPlotAction@">Load Plot Data</a></li>
+			<li><a href="@vegbranch_link@vegbranch.html">Download VegBranch</a>
+				<span class="vegbank_small">- A Microsoft Access tool for preparing data submissions.
+				</span></li>
+			<li><a href="@general_link@input.html">Input Data From Forms</a></li>
+		</ul>
+		<br/>
 		
 		<!--Account Utilities-->
-		<p><font face="Georgia, Times New Roman, Times, serif">
-		<b>Account Utilities</b></font>  </p>
-
-		<a href="@general_link@input.html">Input data</a> from forms</font></b> 
-
-		<font color="#F90000"> <b> New! </b></font> <br>
-		<a href="@general_link@datasets.html">Manage registered datasets</a> </font> 
-		<font color="#F90000"> <b> coming soon! </b></font><br>
-  <!--	<a href="@uploaddata_page@"> Upload plot data from local computer </font></b>
-		<font color="#F90000"> <b> coming soon! </b></font> <br> -->
-		</p>
-		
-		
+		<b>Manage Your Data</b> 
+		<ul>
+		<li><a href="@general_link@datasets.html">Manage Registered Datasets</a>
+		<span class="vegbank_small"> <b> coming soon</b></span></li>
+		</ul>
 </blockquote>
+</p>
 <br>@vegbank_footer_html_tworow@
 </BODY>
 </HTML>
