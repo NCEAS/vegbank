@@ -7,11 +7,11 @@ package org.vegbank.common.utility;
  *   Copyright: 2000 Regents of the University of California and the
  *              National Center for Ecological Analysis and Synthesis
  *     Authors: Dan Higgins modified for metacat by Chad Berkley
- *     Version: '$Id: HttpMessage.java,v 1.1 2003-10-10 23:37:13 farrell Exp $'
+ *     Version: '$Id: HttpMessage.java,v 1.2 2003-10-19 22:16:37 farrell Exp $'
  *
  *     '$Author: farrell $'
- *     '$Date: 2003-10-10 23:37:13 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2003-10-19 22:16:37 $'
+ *     '$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ package org.vegbank.common.utility;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -150,14 +151,27 @@ public class HttpMessage {
     /**
      * Converts a Properties list to a URL-encoded query string
      */
-    private String toEncodedString(Properties args) {
+    private String toEncodedString(Properties args) 
+    {
         StringBuffer buf = new StringBuffer();
         Enumeration names = args.propertyNames();
-        while (names.hasMoreElements()) {
+        while (names.hasMoreElements()) 
+        {
             String name = (String)names.nextElement();
             String value = args.getProperty(name);
-            buf.append(URLEncoder.encode(name) + "=" + URLEncoder.encode(value));
-            if (names.hasMoreElements()) buf.append("&");
+            try
+			{
+				buf.append(URLEncoder.encode(name, "UTF-8") + "=" + URLEncoder.encode(value, "UTF-8"));
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				System.out.println("Unexpected error with encoding");
+				e.printStackTrace();
+			}
+            if (names.hasMoreElements()) 
+            {
+            	buf.append("&");
+            } 
         }
         return buf.toString();
     }

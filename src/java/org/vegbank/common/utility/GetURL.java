@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  *		"Java Servlet Programming" by Hunter & crawford and
  *
  *     '$Author: farrell $'
- *     '$Date: 2003-10-10 23:37:13 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2003-10-19 22:16:37 $'
+ *     '$Revision: 1.2 $'
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -27,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
@@ -131,8 +132,16 @@ public class GetURL
 		{
 			String name = (String)names.nextElement();
 			String value = parameters.getProperty(name);
-    	buf.append(URLEncoder.encode(name) + "=" + URLEncoder.encode(value));
-    	if (names.hasMoreElements()) 
+	    	try
+			{
+				buf.append(URLEncoder.encode(name, "UTF-8") + "=" + URLEncoder.encode(value,"UTF-8"));
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				System.out.println("Unexpected error with encoding");
+				e.printStackTrace();
+			}
+	    	if (names.hasMoreElements()) 
 			{
 				buf.append("&");
 			}

@@ -5,8 +5,8 @@
  *             			National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-17 20:31:40 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2003-10-19 22:16:37 $'
+ *	'$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
  */
 package org.vegbank.common.utility;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -104,32 +103,4 @@ public class DatabaseAccess
 		}
 		return results;
 	} //end method
-	
-	/**
-	 * 
-	 * @return
-	 * @deprecated
-	 */
-	public Connection getConnection() 
-	{
-		//define a connection
-		Connection conn = null;
-		Statement query = null;
-		
-		//grab a connection from the local connection pooling manager
-		try
-		{
-			//this class should have been initialized by the servlet initialization
-			conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
-		}
-
-		catch (Exception e)
-		{
-			System.out.println("DatabaseAccess > Failed obtaining a connection: "
-					+ e.getMessage());
-		}
-		return conn;
-
-	}
-	
 }
