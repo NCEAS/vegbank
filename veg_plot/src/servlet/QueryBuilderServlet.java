@@ -74,7 +74,7 @@ public void doGet(HttpServletRequest request,
 				{
 					System.out.println("issueing the query to the DataRequestServlet");
 					//pass the query vector to the DataRequestServlet
-					submitExtendedQuery(queryVector);
+					out.println( submitExtendedQuery(queryVector) );
 					//make a new occurence of the queryVector
 					queryVector = new Vector();
 				}
@@ -125,6 +125,10 @@ public void doGet(HttpServletRequest request,
 
 			GetURL b =new GetURL();  
 			b.getPost(uri, port, requestType);
+			
+			//print the results back to the client
+			
+			htmlResults=b.responseVector.toString();
 		
 		}
 		catch( Exception e ) 
