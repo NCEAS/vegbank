@@ -19,7 +19,7 @@
 <logic:notEmpty name="observation-BEANLIST">
 
 <logic:iterate id="onerowofobservation" name="observation-BEANLIST">
-<TABLE class="leftrightborders" cellpadding="2" >
+<TABLE class="leftrightborders" cellpadding="2" ><!-- table for obs -->
 
 <!-- iterate over all records in set : new table for each -->
 
@@ -36,7 +36,8 @@
 <bean:write name="onerowofobservation" property="authorobscode" />
   -<a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>more details</a>
 </TH></TR>
-  <TR><TD colspan="2" valign="top"><table class="leftrightborders">
+  <TR><TD colspan="2" valign="top">
+  <table class="leftrightborders"><!-- table for plot level data -->
   <%@ include file="autogen/observation_plotshowmany_data.jsp" %>
         <%@ include file="autogen/plot_plotshowmany_data.jsp" %>
         
@@ -46,20 +47,20 @@
    <logic:notEmpty name="comminterpretation-BEANLIST">
    <!-- <tr><th>Community Classification:</th><th>&nbsp;</th></tr> -->
    <tr class='@nextcolorclass@'><td class="datalabel">Community Type:</td><td>
-   <table class="leftrightborders" cellpadding="2" width="100%"><!--each field, only write when field HAS contents-->
+   <table class="leftrightborders" cellpadding="2" width="100%"><!-- table for types -->
+     <!--each field, only write when field HAS contents-->
    
-   <!-- <tr> -->
-   <!-- %@ include file="autogen/comminterpretation_summary2_head.jsp" % -->
-   <!-- </tr> -->
-   <logic:iterate id="onerowofcomminterpretation" name="comminterpretation-BEANLIST"><!-- iterate over all records in set : new table for each -->
+   
+   <logic:iterate id="onerowofcomminterpretation" name="comminterpretation-BEANLIST">
+     <!-- iterate over all records in set  -->
    <logic:notEmpty name="onerowofcomminterpretation" property="commconcept_id">
    <tr>
-   <%@ include file="autogen/comminterpretation_summary2_data.jsp" %><td class="largefield"><a href="@get_link@summary/commclass/<bean:write 
-    name='onerowofcomminterpretation' property='commclass_id' />">details</a></td>
+   <%@ include file="autogen/comminterpretation_summary2_data.jsp" %><td class="largefield">
+   <a href="@get_link@summary/commclass/<bean:write name='onerowofcomminterpretation' property='commclass_id' />">details</a></td>
    </tr>
    </logic:notEmpty>
    </logic:iterate>
-   </table>
+   </table> <!-- table for types -->
    
    </td></tr>
 </logic:notEmpty>
@@ -67,32 +68,25 @@
    
    <%@ include file="includeviews/sub_place.jsp" %>
       
+      </table><!-- table for plot level data -->
+      
 <!--Insert a nested get statement here:
-   example:   
+-->
 
 
 
-<vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_observation_pk" wparam="observation_pk" />-->
-
-<!-- community info: , simplest format -->
-
-
-
-
-
-</table>
 </TD><TD COLSPAN="2" valign="top">
-<table class="thinlines">
+<table class="thinlines"><!-- table for plants -->
 <bean:define id="smallheader" value="yes" />
 <bean:define id="limitPlantRecs2Show" value="yes" />
 <bean:define id="showStrataDefn" value="no" />
 <%@ include file="includeviews/sub_taxonobservation.jsp" %>
 
 
-</table>
+</table><!-- table for plants -->
 </TD>
 </TR>
-</TABLE>
+</TABLE><!-- table for obs -->
 <br/>
 </logic:iterate>
 
