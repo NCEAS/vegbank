@@ -7,8 +7,8 @@
 * Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-06-04 19:11:41 $'
-*   '$Revision: 1.22 $'
+*   '$Date: 2003-06-04 21:13:08 $'
+*   '$Revision: 1.23 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -99,6 +99,7 @@ public class DBinsertPlotSource {
 	//int taxonObservationId;
 	int coverMethodId;
 	int stratumMethodId;
+	Hashtable stratumIds = new Hashtable();
 
 	//private String loaderEmail = "vegbank@" + this.getHostname();
 	//the email of the loader
@@ -1494,9 +1495,18 @@ public class DBinsertPlotSource {
         {
 					//get the strataCompId number
 					int stratumCompositionId = getNextId("stratumComposition");
+					
 					//get the strata ID
-					int stratumId = this.getStrataId(plotObservationId, curStrata);
-
+					int stratumId = 0;
+					try
+					{
+						stratumId = ( (Integer) this.stratumIds.get(curStrata)).intValue();
+					}
+					catch (RuntimeException e1)
+					{
+						 stratumId = this.getStrataId(plotObservationId, curStrata);
+					}
+					
 					debug.append("<stratumComposition> \n");
 					debug.append("<stratumName>" + curStrata + "</stratumName> \n");
 					debug.append("<taxonName>"+plantName.replace('&', '_')+"</taxonName>\n");
@@ -2138,6 +2148,9 @@ public class DBinsertPlotSource {
 				System.out.println("DBinsertPlotSource > stratum height: "
 						+ height+ " base: "+ base);
 
+				// Store the keys so we don't have to ask the database
+				stratumIds.put(sName, new Integer(strataId) );
+				
 				// Get the stratumTypeId
 				int stratumTypeId = getStratumTypeId(sName);
 
@@ -2147,8 +2160,9 @@ public class DBinsertPlotSource {
 					//insert the strata values
 					sb.append(
 						"INSERT into STRATUM (stratum_id, observation_id, stratumName, "
-							+ " stratumCover, stratumBase ,stratumHeight, STRATUMTYPE_ID) "
-							+ " values(?,?,?,?,?,?,?)");
+							+ " stratumCover, stratumBase ,stratumHeight, STRATUMTYPE_ID, "
+							+ " stratummethod_id)"
+							+ " values(?,?,?,?,?,?,?,?)");
 
 					PreparedStatement pstmt =
 						conn.prepareStatement(sb.toString());
@@ -2160,7 +2174,8 @@ public class DBinsertPlotSource {
 					pstmt.setString(5, base);
 					pstmt.setString(6, height);
 					pstmt.setInt(7, stratumTypeId);
-					//execute the p statement
+					pstmt.setInt(8, this.stratumMethodId);
+					//execute the prepared statement
 					pstmt.execute();
 				}
 			}
