@@ -1,34 +1,32 @@
+ <!--
+ *   '$RCSfile: resultset-download.jsp,v $'
+ *   Purpose: 
+ *   Copyright: 2000 Regents of the University of California and the
+ *               National Center for Ecological Analysis and Synthesis
+ *   Authors: @author@
+ *
+ *  '$Author: mlee $'
+ *  '$Date: 2003-10-14 00:53:35 $'
+ *  '$Revision: 1.3 $'
+ *
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ -->
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-
-<!--
-*   '$RCSfile: resultset-download.jsp,v $'
-*   Purpose: 
-*   Copyright: 2000 Regents of the University of California and the
-*               National Center for Ecological Analysis and Synthesis
-*   Authors: @author@
-*
-*  '$Author: farrell $'
-*  '$Date: 2003-08-21 21:16:43 $'
-*  '$Revision: 1.2 $'
-*
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
--->
-
-
  <head>
   <meta name="generator" content="HTML Tidy, see www.w3.org"><!--  -->
   <title>
@@ -66,7 +64,7 @@
   <form action="@filedownloadservlet@" method="GET">
 
 <!-- Need to pass the list of plots choosen in the previous screen -->
-  <input type="hidden" name="plots" value="<%= (String) request.getAttribute("plots") %>">
+  <input type="hidden" name="plots" value='<%= (String) request.getAttribute("plots") %>'>
   <br>
     
 
@@ -82,42 +80,29 @@
       <td rowspan="100" width="10">
        <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="10"> 
       </td>
-      <td align="Left" height="45" valign="Bottom" width="220">
-       <br>
+      <td align="Left" height="45" valign="Bottom" width="77"> <br>
         <img alt="Resultset download wizard" border="0" height="23" src=
        "/vegbank/images/hdr_file_info.gif" title="Resultset Download Wizard" vspace="2" width=
        "189"> 
       </td>
-      <td>
-       <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width=
-       "10"> 
+      <td width="10"> <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width=
+       "10"> </td>
+      <td width="10"> <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="1"> 
       </td>
-      <td>
-       <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="1">
-       
+      <td valign="Bottom" width="361"> <img alt="" border="0" height="3" src="/vegbank/images/pix_clear.gif" width="1"> 
       </td>
-      <td valign="Bottom">
-       <img alt="" border="0" height="3" src="/vegbank/images/pix_clear.gif" width="1">
-       
-      </td>
-      <td align="Left" valign="Bottom" width="260">
-       <br>
+      <td align="Left" valign="Bottom" width="80"> <br>
         <img alt="" border="0" height="3" src="/vegbank/images/pix_clear.gif" width=
-       "200"> 
+       "5"> 
       </td>
-      <td>
-       <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width=
-       "10"> 
+      <td width="10"> <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width=
+       "10"> </td>
+      <td width="126"> <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="1"> 
       </td>
-      <td width="1">
-       <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="1">
-       
-      </td>
-      <td align="left" valign="Bottom" width="200">
-      </td>
+      <td align="left" valign="Bottom" width="121"> </td>
      </tr>
      <tr>
-      <td align="Center" bgcolor="#003366" colspan="8" height="1" valign="Top">
+      <td align="Center" bgcolor="#003366" colspan="8" height="10" valign="Top">
        <img alt="" border="0" height="1" src="/vegbank/images/pix_003366.gif" width=
        "1"> 
       </td>
@@ -129,25 +114,20 @@
       </td>
      </tr>
      <tr>
-      <td>
-        <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="10"> 
+      <td width="77"> <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="10"> 
       </td>
-      <td bgcolor="#cccc99" width="1">
-       <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="1">
-       
+      <td bgcolor="#cccc99" width="10"> <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="10"> 
       </td>
-      <td>
-       <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="10"> 
+      <td width="10"> <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="10"> 
       </td>
-      <td align="Center" valign="Top">
-       <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <td align="Center" valign="Top" width="361"> 
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
         <tbody>
          <tr>
-          <td valign="Top">
-           <font color="#23238e" face="Helvetica,Arial,Verdana" size="2"><b>Desired data</b></font> 
-          </td>
-          <td align="Left" valign="Top">
-           <input name="dataType" type="radio" value="all" checked>Entire plot<br>
+            <td valign="Top" width="116"> <font color="#23238e" face="Helvetica,Arial,Verdana" size="2"><b>Desired 
+              data</b></font> </td>
+            <td align="Left" valign="Top" width="229"> 
+              <input name="dataType" type="radio" value="all" checked>Entire plot<br>
             <input name="dataType" type="radio" value=
            "environmental">Environmental data<br>
             <input name="dataType" type="radio" value="species">Species
@@ -157,58 +137,44 @@
           </td>
          </tr>
          <tr>
-          <td valign="Top">
-           <font color="#23238e" face="Helvetica,Arial,Verdana" size=
-           "2"><b>Desired format</b></font> 
-          </td>
-          <td align="Left" valign="Top">
-	    <input checked="" name="formatType" type="radio" value="xml">xml<a href="/vegbank/forms/hints.html#resultxml">
-	    <img border="0" src="/vegbank/images/question.gif"></a><br>
-            <input name="formatType" type="radio" value="html">html<a href="/vegbank/forms/hints.html#resulthtml">
-	    <img border="0" src="/vegbank/images/question.gif"></a><br>
-            <input name="formatType" type="radio" value="flat">flat-ascii<a href="/vegbank/forms/hints.html#resultascii">
-	    <img border="0" src="/vegbank/images/question.gif"></a><br>
+            <td valign="Top" width="116"> <font color="#23238e" face="Helvetica,Arial,Verdana" size=
+           "2"><b>Data format<a href="@help-for-download-formats-href@"> <img border="0" src="/vegbank/images/question.gif"></a></b></font> 
+            </td>
+            <td align="Left" valign="Top" width="229"> 
+              <input  name="formatType" type="radio" value="xml" checked>xml<br>
+        <input name="formatType" type="radio" value="flat">flat-ascii<br>
+        <input name="formatType" type="radio" value="html">html<br>
+            
 	    <!-- THIS IS THE CONDENSED ASCII-FORMAT THAT CAN BE IMPORTED INTO THE ANALYTICAL TOOLS -->
-	    <input name="formatType" type="radio" value="condensed">condensed-ascii<a href="/vegbank/forms/hints.html#resultascii">
-	    <img border="0" src="/vegbank/images/question.gif"></a><br>
+	  <!--  <input name="formatType" type="radio" value="condensed">condensed-ascii -->
+	    
             <br>
             
           </td>
          </tr>
          
 				 <tr>
-          <td height="20" valign="Top" width="5" align="Right">
-           <input name="aggregationType" type="radio" value="nocompression" checked> 
-          </td>
-          <td valign="center" width="200">
-           <img alt="multiple zipped files" hspace="2" src=
-           "/vegbank/images/icon_cat03.gif" > No Compression
-          </td>
-         </tr>
-         
-				 
-				 <tr>
-          <td height="20" valign="Top" width="5" align="Right">
-           <input name="aggregationType" type="radio" value="compress"> 
-          </td>
-          <td valign="center" width="200">
-           <img alt="Single compressed file" hspace="2" src=
+            <td height="20" valign="Top" width="116" align="Left"> <font color="#23238e" face="Helvetica,Arial,Verdana" size="2"><b>Compression</b></font> 
+            </td>
+            <td valign="center" width="229"> 
+              <input name="aggregationType" type="radio" value="nocompression" checked><img alt="multiple zipped files" hspace="2" src=
+           "/vegbank/images/icon_cat03.gif" > No Compression <br/>
+		   <input name="aggregationType" type="radio" value="compress" /><img alt="Single compressed file" hspace="2" src=
            "/vegbank/images/icon_cat09.gif"> Zip and Compress File(s)
           </td>
          </tr>
+         
+			
         </tbody>
        </table>
       </td>
-      <td>
-       <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width=
-       "10"> 
+      <td width="80"> <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width=
+       "10"> </td>
+      <td bgcolor="#cccc99" width="10"> <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="10"> 
       </td>
-      <td bgcolor="#cccc99" width="1">
-       <img alt="" border="0" height="1" src="/vegbank/images/pix_clear.gif" width="1">
-       
-      </td>
-      <td align="Left" valign="Top">
-       &nbsp; <!-- download action --> <input name="actionDownload" type=
+      <td align="Left" valign="Top" width="126"> &nbsp; 
+        <!-- download action -->
+        <input name="actionDownload" type=
        "image" value="download" border="0" height="19" src=
        "/vegbank/images/btn_download.gif" width="99">
 <!-- Edit the next line for debugging: 0 is for normal use -->       
@@ -231,7 +197,7 @@
      <tr>
       <td align="Center" bgcolor="#003366" colspan="8" height="1" valign=
       "Bottom">
-       <img alt="" border="0" height="1" src="/vegbank/images/pix_003366.gif" width=
+       <img alt="" border="0" height="10" src="/vegbank/images/pix_003366.gif" width=
        "1"> 
       </td>
      </tr>
