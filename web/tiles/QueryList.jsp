@@ -7,18 +7,18 @@
 
   <!-- format the word record to be plural if not 1 record -->
   <bean:size id="QueryResultsSize" name="QueryResults" property="rows" />
+  <p class="category bright">
   <logic:equal value="1" name="QueryResultsSize">
-    <span class="category"><font color="red">
-      There was one plant that matched your search criteria:<br/>
-    </font></span>
+    
+      There was one plant that matched your search criteria:
+  
   </logic:equal>
   <logic:notEqual name="QueryResultsSize" value="1">
-    <span class="category">
-      <font color="red">
-	<bean:write name="QueryResultsSize"/> plants matched your search criteria:<br/>
-      </font>
-    </span>
+   
+	<bean:write name="QueryResultsSize"/> plants matched your search criteria:
+
   </logic:notEqual>
+  </p>
 
 <!-- set up a table -->
 <table cellspacing="0" cellpadding="1">
