@@ -1,4 +1,4 @@
-package servlet;
+package servlet.stylesheet;
 
 import java.io.*;
 import java.text.*;
@@ -37,7 +37,7 @@ public class StyleSheetGenerator extends HttpServlet
 	 */
 	public StyleSheetGenerator()
 	{
-		System.out.println("new instance of StyleSheetGenerator");
+		System.out.println("init: StyleSheetGenerator");
 	}
 	
 	
@@ -80,7 +80,7 @@ public class StyleSheetGenerator extends HttpServlet
 				printFile( fileContents );
 				
 				//register the document
-				//util.uploadFileDataExcahgeServlet();
+				this.registerDocument(this.fileName, this.userEmail, "stylesheet");
 				
 				//sendResponse();
 			}
@@ -92,6 +92,30 @@ public class StyleSheetGenerator extends HttpServlet
 		}
 	}
 	
+	
+	/**
+	 * method that registers the stylesheet document with 
+	 * the datafile database as the user's default stylesheet
+	 * for viewing database results through
+	 *
+	 * @param file -- the file to register 
+	 * @param user -- the email address of the user
+	 * @param fileType -- the type of file specified in the database, which 
+	 *	will be used for querying
+	 */
+	 private void registerDocument(String file, String user, String fileType )
+	 {
+		 try
+		 {
+		 	System.out.println("StyleSheetGenerator > registering the stylesheet document ###");
+		 	util.uploadFileDataExcahgeServlet(file, user, fileType);
+		 }
+		 catch(Exception e )
+		 {
+			 System.out.println("Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		}
 	
 	/**
 	 * method that returns the cookie value associated with the 
