@@ -19,8 +19,8 @@ import java.util.Vector;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2003-01-14 01:12:39 $' <br>
- * 	'$Revision: 1.34 $' <br>
+ *  '$Date: 2003-02-03 18:53:16 $' <br>
+ * 	'$Revision: 1.35 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -3492,5 +3492,63 @@ public static void main(String[] args)
 	
 
 
+
+
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityInspection(java.lang.String)
+	 */
+	public String getCommunityInspection(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityPublication(java.lang.String)
+	 */
+	public String getCommunityPublication(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityStartDate(java.lang.String)
+	 */
+	public String getCommunityStartDate(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityStopDate(java.lang.String)
+	 */
+	public String getCommunityStopDate(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityExpertSystem(java.lang.String)
+	 */
+	public String getCommunityExpertSystem(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityMultiVariateAnalysis(java.lang.String)
+	 */
+	public String getCommunityMultiVariateAnalysis(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityTableAnalysis(java.lang.String)
+	 */
+	public String getCommunityTableAnalysis(String plotName)
+	{
+		return null;
+	}
 
 }

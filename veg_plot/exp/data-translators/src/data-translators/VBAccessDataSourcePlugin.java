@@ -10,8 +10,8 @@ import java.sql.*;
  *  Release: @release@
  *	
  * 	'$Author: farrell $'  
- * 	'$Date: 2003-01-08 02:00:11 $' 
- * 	'$Revision: 1.11 $'
+ * 	'$Date: 2003-02-03 18:53:17 $' 
+ * 	'$Revision: 1.12 $'
  */
  
 //public class VBAccessDataSourcePlugin
@@ -38,29 +38,7 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 	}
 
 
- 	/** 
-	 * method that returns the accession number associated with a plot id
-	 * the input plot id is the unique identifier of the plot as used by 
-	 * the RDBMS
-	 * @param plotId -- the RDBMS unique plot ID
-	 */
-	public String getAccessionValue(String plotId)
-	{
-		String s = "";
-		return(s);
-	}
-	
-	/** 
-	 * method that returns the accession number for a given plot observation.  
-	 * This method must be in this class eventhough it is not  relevant; because
-	 * the TNC plots database does not use an accession number this method 
-	 * will always return null
-	 * @param plotId -- the RDBMS unique plot ID
-	 */
-	public String getObservationAccessionNumber(String plotId)
-	{
-		return("");
-	}
+ 	
 	
   /**
 	 * method to return the taxa code from a data source using as input
@@ -123,372 +101,6 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 		}
 		return(v);
 	}
-	
-	
-	/**
-	 * method that returns a vector of plot codes which are the 
-	 * VegBank Accession Numbers, for now it will be the authorPlotCode
-	 * 
-	 */
-	public Vector getPlotCodes()
-	{
-		return super.getPlotCodes();
-	}
- 	
-
-	/**
- 	 * returns the soil drainage of a plot
- 	 * @param plotName -- the plot
- 	 */
- 	public String getSoilDrainage(String plotName)
- 	{
- 		return("");
- 	}
- 	
- 	/**
- 	 * returns the author's observation code
- 	 * @param plotName -- the plot
- 	 */
- 	public String getAuthorObsCode(String plotName)
- 	{
- 		return("");
- 	}
- 	
- 	/**
- 	 * returns the start date for the plot observation
- 	 * @param plotName -- the plot
- 	 */
- 	public String getObsStartDate(String plotName)
- 	{
-		return super.getObsStartDate(plotName);
- 	}
- 	
- 	/**
- 	 * returns the stop date for the plot observation
- 	 * @param plotName -- the plot
- 	 */
- 	public String getObsStopDate(String plotName)
- 	{
-		return super.getObsStopDate(plotName);	
- 	}
- 	
- 	/**
- 	 * returns the soil depth of a plot
- 	 * @param plotName -- the plot
- 	 */
- 	public String getSoilDepth(String plotName) 
- 	{
- 		return super.getSoilDepth(plotName);
- 	}
-	
-	//START
-	/**
-	*/
-	public String getObsDateAccuracy(String plotName)
-	{
- 		return super.getObsDateAccuracy(plotName);
-	}
-	 
-	/**
-	*/
-	public Hashtable getCoverMethod(String plotName)
-	{
- 		return super.getCoverMethod(plotName);
-	}
-	
-	/**
-	 */
-	public Hashtable getStratumMethod(String plotName)
-	{
- 		return super.getStratumMethod(plotName);
-	}
-	
-	/**
-	 */
-	public String getStemSizeLimit(String plotName)
-	{
- 		return super.getStemSizeLimit(plotName);
-	}
-
-	/**
-	 */
-	public String getMethodNarrative(String plotName)
-	{
- 		return super.getMethodNarrative(plotName);
-	}
-	
-	/**
-	 */
-	public String getTaxonObservationArea(String plotName)
-	{
- 		return super.getTaxonObservationArea(plotName);
-	}
-	
-	/**
-	 */
-	public String getCoverDispersion(String plotName )
-	{
- 		return super.getCoverDispersion(plotName);
-	}
-	
-	/**
-	 */
-	public boolean getAutoTaxonCover(String plotName)
-	{
- 		return super.getAutoTaxonCover(plotName);
-	}
-	
-	/**
-	 */
-	public String getStemObservationArea(String plotName)
-	{
- 		return super.getStemObservationArea(plotName);
-	}
-	
-	/**
-	 */
-	public String getStemSampleMethod(String plotName)
-	{
- 		return super.getStemSampleMethod(plotName);
-	}
-	
-	/**
-	 */
-	public String getOriginalData(String plotName )
-	{
- 		return super.getOriginalData(plotName);
-	}
-	
-	/**
-	 */
-	public String getEffortLevel( String plotName )
-	{
- 		return super.getEffortLevel(plotName);
-	}
-	
-	
-	public String getPlotValidationLevel(String plotName)
-	{
-		return super.getPlotValidationLevel(plotName);
-	}
-
-public String  getFloristicQuality(String plotName)
-{
-	return super.getFloristicQuality(plotName);
-}
-
-public String  getBryophyteQuality(String plotName)
-{
-	return super.getBryophyteQuality(plotName);
-}
-
-public String  getLichenQuality(String plotName)
-{
-	return super.getLichenQuality(plotName);
-}
-
-public String  getObservationNarrative(String plotName)
-{
-	return super.getObservationNarrative(plotName);
-}
-
-public String  getHomogeneity(String plotName)
-{
-	return super.getHomogeneity(plotName);
-}
-
-public String  getPhenologicalAspect(String plotName)
-{
-	return super.getPhenologicalAspect(plotName);
-}
-
-public String  getRepresentativeness(String plotName)
-{
-	return super.getRepresentativeness(plotName);
-}
-
-public String  getBasalArea(String plotName)
-{
-	return super.getBasalArea(plotName);
-}
-
-public String  getSoilMoistureRegime(String plotName)
-{
-	return super.getSoilMoistureRegime(plotName);
-}
-
-public String  getWaterSalinity(String plotName)
-{
-	return super.getWaterSalinity(plotName);
-}
-
-public String  getShoreDistance(String plotName)
-{
-	return super.getShoreDistance(plotName);
-}
-
-public String  getOrganicDepth(String plotName)
-{
-	return super.getOrganicDepth(plotName);
-}
-
-public String  getPercentBedRock(String plotName)
-{
-	return super.getPercentBedRock(plotName);
-}
-
-public String  getPercentRockGravel(String plotName)
-{
-	return super.getPercentRockGravel(plotName);
-}
-
-public String  getPercentWood(String plotName)
-{
-	return super.getPercentWood(plotName);
-}
-public String  getPercentLitter(String plotName)
-{
-	return super.getPercentLitter(plotName);
-}
-
-public String  getPercentBareSoil(String plotName)
-{
-	return super.getPercentBareSoil(plotName);
-}
-
-public String  getPercentWater(String plotName)
-{
-	return super.getPercentWater(plotName);
-}
-
-public String  getPercentOther(String plotName)
-{
-	return super.getPercentOther(plotName);
-}
-
-public String  getNameOther(String plotName)
-{
-	return super.getNameOther(plotName);
-}
-
-public String  getStandMaturity(String plotName)
-{
-	return super.getStandMaturity(plotName);
-}
-
-
-public String  getSuccessionalStatus(String plotName)
-{
-	return super.getSuccessionalStatus(plotName);
-}
-
-public String  getTreeHt(String plotName)
-{
-	return super.getTreeHt(plotName);
-}
-
-public String  getShrubHt(String plotName)
-{
-	return super.getShrubHt(plotName);
-}
-
-public String  getNonvascularHt(String plotName)
-{
-	return super.getNonvascularHt(plotName);
-}
-
-public String  getFloatingCover(String plotName)
-{
-	return super.getFloatingCover(plotName);
-}
-
-public String  getSubmergedCover(String plotName)
-{
-	return super.getSubmergedCover(plotName);
-}
-
-public String  getDominantStratum(String plotName)
-{
-	return super.getDominantStratum(plotName);
-}
-
-public String  getGrowthform1Type(String plotName)
-{
-	return super.getGrowthform1Type(plotName);
-}
-
-public String  getGrowthform2Type(String plotName)
-{
-	return super.getGrowthform2Type(plotName);
-}
-
-public String  getGrowthform3Type(String plotName)
-{
-	return super.getGrowthform3Type(plotName);
-}
-
-public String  getGrowthform1Cover(String plotName)
-{
-	return super.getGrowthform1Cover(plotName);
-}
-
-public String  getGrowthform2Cover(String plotName)
-{
-	return super.getGrowthform2Cover(plotName);
-}
-
-public String  getGrowthform3Cover(String plotName)
-{
-	return super.getGrowthform3Cover(plotName);
-}
-
-public boolean  getNotesPublic(String plotName)
-{
-	return super.getNotesPublic(plotName);
-}
-
-public boolean  getNotesMgt(String plotName)
-{
-	return super.getNotesMgt(plotName);
-}
-
-public boolean  getRevisions(String plotName)
-{
-	return super.getRevisions(plotName);
-}
-//END
-	
-	
-
-	/**
- 	 * returns true if the plot is a permanent plot or false if not
- 	 * @param plotName -- the plot
- 	 */
- 	 public boolean isPlotPermanent(String plotName)
- 	 {
- 	 	return super.isPlotPermanent(plotName);
- 	 }
-  
-  /**
- 	* returns the soil taxon for the plot -- this is the USDA class
- 	* heirarchy (eg., Order, Group, Family, Series etc..)
- 	* @param plotName -- the plot
- 	*/
- 	public String getSoilTaxon(String plotName)
- 	{
- 		return("");
- 	}
- 	
- 	/**
- 	 * returns how the soil taxon was determined (eg., field observation
- 	 * mapping, other ...)
- 	 * @param plotName -- the plot
- 	 */
- 	public String getSoilTaxonSource(String plotName)
- 	{
- 		return( super.getSoilTaxonSource(plotName) );
- 	}
-
 
 	/**
 	 * this method returns the plotid's of all the plots stored 
@@ -525,148 +137,7 @@ public boolean  getRevisions(String plotName)
 		return(v);
 	}
 	
-	//returns the project name 
-	public String getProjectName(String plotName)
-	{ 
-		return super.getProjectName(plotName); 
-	}
-	
-	//returns the project description
-	public Vector getProjectContributors(String plotName)
-	{
-		return super.getProjectContributors(plotName);
-	}
-	
-	//retuns the person's salutation based on their full name which is the
-	//concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorSalutation(String contributorWholeName)
-	{
-		return super.getProjectContributorSalutation(contributorWholeName);
-	}
-	//retuns the person's given based on their full name which is the
-	//concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorGivenName(String contributorWholeName)
-	{
-		return super.getProjectContributorGivenName(contributorWholeName);
-	}
-	//retuns the person's middle name based on their full name which is the
-	//concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorMiddleName(String contributorWholeName)
-	{
-		return super.getProjectContributorMiddleName(contributorWholeName);
-	}
-	//retuns the person's surName based on their full name which is the
-	//concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorSurName(String contributorWholeName)
-	{
-		return super.getProjectContributorSurName(contributorWholeName);
-	}
-	//retuns the name of an org. that a person is associated with based on 
-	//their full name which is the concatenated givename and surname of the 
-	//user like 'bob peet'
-	public String getProjectContributorOrganizationName(String contributorWholeName)
-	{
-		return super.getProjectContributorOrganizationName(contributorWholeName);
-	}
-	
-	//retuns the person's contactinstructions based on their full name which is the
-	//concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorContactInstructions(String contributorWholeName)
-	{
-		return super.getProjectContributorContactInstructions(contributorWholeName);
-	}
-	//retuns the person's phone number based on their full name which is the
-	//concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorPhoneNumber(String contributorWholeName)
-	{
-		return super.getProjectContributorPhoneNumber(contributorWholeName);
-	}
-	//retuns the person's cellPhone based on their full name which is the
-	//concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorCellPhoneNumber(String contributorWholeName)
-	{
-		return super.getProjectContributorCellPhoneNumber(contributorWholeName);
-	}
-	//retuns the person's fax phone number based on their full name which is the
-	//concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorFaxPhoneNumber(String contributorWholeName)
-	{
-		return super.getProjectContributorFaxPhoneNumber(contributorWholeName);
-	}
-	//retuns the party's position within an organization based on their full 
-	// name which is the concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorOrgPosition(String contributorWholeName)
-	{
-		return super.getProjectContributorOrgPosition(contributorWholeName);
-	}
-	//retuns the person's email based on their full name which is the
-	//concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorEmailAddress(String contributorWholeName)
-	{
-		return super.getProjectContributorEmailAddress(contributorWholeName);
-	}
-	//retuns the person's address line based on their full name which is the
-	//concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorDeliveryPoint(String contributorWholeName)
-	{
-		return super.getProjectContributorDeliveryPoint(contributorWholeName);
-	}
-	//retuns the person's city based on their full name which is the
-	//concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorCity(String contributorWholeName)
-	{
-		return super.getProjectContributorCity(contributorWholeName);
-	}
-	
-	//returns the administrative area, or state that a party is from
-	public String getProjectContributorAdministrativeArea(String contributorWholeName)
-	{
-		return super.getProjectContributorAdministrativeArea(contributorWholeName);
-	}
-	//retuns the zip code for a party
-	public String getProjectContributorPostalCode(String contributorWholeName)
-	{
-		return super.getProjectContributorPostalCode(contributorWholeName);
-	}
-	//retuns the person's country based on their full name which is the
-	//concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorCountry(String contributorWholeName)
-	{
-			return super.getProjectContributorCountry(contributorWholeName);
-	}
-	//retuns a boolean 'true' if it is a party's current address based on their 
-	//full name which is the concatenated givename and surname of the user like 'bob peet'
-	public String getProjectContributorCurrentFlag(String contributorWholeName)
-	{
-		return super.getProjectContributorCurrentFlag(contributorWholeName);
-	}
-	//retuns the date that the address became current for a party based on 
-	//their full name which is the concatenated givename and surname of the 
-	//user like 'bob peet'
-	public String getProjectContributorAddressStartDate(String contributorWholeName)
-	{
-		return super.getProjectContributorAddressStartDate(contributorWholeName);
-	}
-	
-	//returns the start date for the project
-	public String getProjectStartDate(String plotName )
-	{
-		return super.getProjectStartDate(plotName);
-	}
-	
-	//returns the stop date for the project
-	public String getProjectStopDate(String plotName )
-	{
-			return super.getProjectStopDate(plotName);
-	}
-	
-	//returns the placeNames each name can be used to retrieve
-	//other information about a place
-	public Vector getPlaceNames(String plotName)
-	{
-		return super.getPlaceNames(plotName);
-	}
-	
+
 	//retuns a description of a place based on a placeName
 	public String getPlaceDescription(String placeName)
 	{
@@ -730,13 +201,7 @@ public boolean  getRevisions(String plotName)
 		return(s);
 	}
 	
-	
-	//returns the plot code for the current plot
-	public String getPlotCode(String plotName)
-	{ 
-		return super.getPlotCode(plotName);
-	}
-	
+
 	//returns the easting 
 	public String getXCoord(String plotName)
 	{ 
@@ -890,12 +355,7 @@ public boolean  getRevisions(String plotName)
 		}
 		return(s);
 	}
-	
-	public String getDatumType(String plotName)
-	{
-		return(super.getDatumType(plotName) );
-	}
-	
+
 	//returns the plot shape
 	public String getPlotShape(String plotName)
 	{ 
@@ -950,45 +410,6 @@ public boolean  getRevisions(String plotName)
 			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
-		return(s);
-	}
-	
-	//returns the state for the current plot
-	public String getState(String plotName)
-	{ 
-		String s = "NC";
-		return(s);
-	}
-	
-	//returns the state for the current plot
-	public String getCommunityName(String plotName)
-	{ return("ice-plant community"); }
-	
-	
-	/**
-	 * returns the community code for the named plot
-	 */
-	public String getCommunityCode(String plotName)
-	{
-		String s = "";
-		return(s);
-	}
-	
-	/**
-	 * returns the community level of the framework for the named plot
-	 */
-	public String getCommunityLevel(String plotName)
-	{
-		String s = "";
-		return(s);
-	}
-	
-	/**
-	 * returns the community framework for the named plot
-	 */
-	public String getCommunityFramework(String plotName)
-	{
-		String s = "";
 		return(s);
 	}
 	
@@ -1049,72 +470,6 @@ public boolean  getRevisions(String plotName)
 			ex.printStackTrace();
 		}
 		return(s);
-	}
-	
-	/**
-	 * method that retuns the latitude for an input plotid
-	 * @param plotName -- the VegBank PLOTID
-	 * @return geology -- the validated surface geology of that plot
-	 */
-	public String getSurfGeo(String plotName)
-	{
-		return(super.getSurfGeo(plotName) );
-	}
-	
-	//returns the country
-	public String getCountry(String plotName)
-	{ 
-		return super.getCountry(plotName); 
-	}
-	
-	//returns the slope aspect
-	public String getSlopeAspect(String plotName)
-	{
-		return super.getSlopeAspect(plotName);
-	}
-	
-	//returns the slope gradient
-	public String getSlopeGradient(String plotName)
-	{
-		return super.getSlopeGradient(plotName);
-	}
-	
-	//returns the size of the stand -- extensive etc..
-	public String getStandSize(String plotName)
-	{
-		return("extensive");
-	}
-	//returns the location as described by the author
-	public String getAuthorLocation(String plotName)
-	{
-		return super.getAuthorLocation(plotName);
-	}
-	//returns the landForm
-	public String getLandForm(String plotName)
-	{
-		return("aluvial fan");
-	}
-	//retuns the elevation
-	public String getElevation(String plotName)
-	{
-		return super.getElevation(plotName);
-	}
-	//returns the elevation accuracy
-	public String getElevationAccuracy(String plotName)
-	{
-		return super.getElevationAccuracy(plotName);
-	}
-	
-	//return the confidentiality reason -- not null
-	public String	getConfidentialityReason(String plotName)
-	{
-		return super.getConfidentialityReason(plotName);
-	}
-	
-	//return the confidentiality status -- not null 
-	public String getConfidentialityStatus(String plotName)
-	{
-		return super.getConfidentialityStatus(plotName);
 	}
 	
 	/**
@@ -1491,7 +846,25 @@ public boolean  getRevisions(String plotName)
 			x.printStackTrace();
 		}
 	}
-	
+
+
+	/*
+	 *  Convert a String to a Boolean
+	 */
+	 private boolean getBooleanFromString(String s) 
+	 {
+			boolean retVal = false; 
+			if (s ==  "-1") 
+			{
+				retVal = true;
+			} 
+			else if ( s == "0")
+			{
+					retVal = false;
+			}
+	 		
+			return retVal;
+	 }	
 	
 	
 	

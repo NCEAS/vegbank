@@ -14,8 +14,8 @@ import xmlresource.utils.XMLparse;
  * Access to the data stored in the native VegBank XML structure.
  * 
  *	'$Author: farrell $'
- *	'$Date: 2003-01-08 02:00:10 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2003-02-03 18:53:15 $'
+ *	'$Revision: 1.15 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -1455,7 +1455,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 
 				Node cn = children.item(i);
 				String nodeName = cn.getNodeName();
-				System.out.println("NativeXMLPlugin > node name: " + nodeName+" " + cn.getNodeType() );
+				//System.out.println("NativeXMLPlugin > node name: " + nodeName+" " + cn.getNodeType() );
 				
 				if ( nodeName.equals("stratumComposition") )
 				{
@@ -1738,6 +1738,62 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
       retVal = false;
     }
     return retVal;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityExpertSystem(java.lang.String)
+	 */
+	public String getCommunityExpertSystem(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityInspection(java.lang.String)
+	 */
+	public String getCommunityInspection(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityMultiVariateAnalysis(java.lang.String)
+	 */
+	public String getCommunityMultiVariateAnalysis(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityPublication(java.lang.String)
+	 */
+	public String getCommunityPublication(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityStartDate(java.lang.String)
+	 */
+	public String getCommunityStartDate(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityStopDate(java.lang.String)
+	 */
+	public String getCommunityStopDate(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityTableAnalysis(java.lang.String)
+	 */
+	public String getCommunityTableAnalysis(String plotName)
+	{
+		return null;
 	}
 
 }

@@ -16,8 +16,8 @@ import java.util.Vector;
  * 
  * Release: @release@ <br>
  * '$Author: farrell $' <br>
- * '$Date: 2003-01-14 01:12:39 $' <br>
- * '$Revision: 1.19 $' <br>
+ * '$Date: 2003-02-03 18:53:16 $' <br>
+ * '$Revision: 1.20 $' <br>
  */
 public interface PlotDataSourceInterface
 {
@@ -286,6 +286,14 @@ public interface PlotDataSourceInterface
 	 * returns the community classification notes for the named plot
 	 */
 	String getClassNotes(String plotName);
+	
+	String getCommunityStartDate(String plotName);
+	String getCommunityStopDate(String plotName);
+	String getCommunityInspection(String plotName);
+	String getCommunityPublication(String plotName);
+	String getCommunityTableAnalysis(String plotName);
+	String getCommunityMultiVariateAnalysis(String plotName);
+	String getCommunityExpertSystem(String plotName);
 	
 	
 	/**

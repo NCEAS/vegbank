@@ -1,20 +1,19 @@
 import java.util.*;
 
 /**
- * this class represents an 'exeternal' data source -- a data source which
- * is not the vegbank databases or the vegbank native xml type document
- * at the inception of this class exteranl sources include: tnc plots, 
- * turbo veg plots and the structured data set.  In the future this class
- * will also contain local 'vegbank' data sources.  This class facilitates
- * the access to vegbank-alternative data sources via both public variables
- * and methods
+ * this class represents an 'external' data source -- a data source which is not
+ * the vegbank databases or the vegbank native xml type document at the
+ * inception of this class exteranl sources include: tnc plots, turbo veg plots
+ * and the structured data set.  In the future this class will also contain
+ * local 'vegbank' data sources.  This class facilitates the access to vegbank-
+ * alternative data sources via both public variables and methods
  *
  *  Authors: @author@
  *  Release: @release@
  *	
  *  '$Author: farrell $'
- *  '$Date: 2003-01-08 02:00:10 $'
- *  '$Revision: 1.30 $'
+ *  '$Date: 2003-02-03 18:53:15 $'
+ *  '$Revision: 1.31 $'
  */
 public class PlotDataSource 
 {
@@ -184,8 +183,49 @@ public class PlotDataSource
  	{
 		String s = ((PlotDataSourceInterface)pluginObj).getCommunityLevel(plotName);	
 		return(s);
-		
  	}
+ 	
+	public String getCommunityStartDate(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCommunityStartDate(plotName);	
+		return(s);
+	}
+	
+	public String getCommunityStopDate(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCommunityStopDate(plotName);	
+		return(s);
+	}
+	
+	public String getCommunityInspection(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCommunityInspection(plotName);	
+		return(s);
+	}
+	
+	public String getCommunityTableAnalysis(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCommunityTableAnalysis(plotName);	
+		return(s);
+	}
+	
+	public String getCommunityPublication(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCommunityLevel(plotName);	
+		return(s);
+	}
+	
+	public String getCommunityMultiVariateAnalysis(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCommunityMultiVariateAnalysis(plotName);	
+		return(s);
+	}
+	
+	public String getCommunityExpertSystem(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCommunityExpertSystem(plotName);	
+		return(s);
+	}
  	
  	/**
  	 * returns the community framework for the named plot
@@ -417,6 +457,24 @@ public class PlotDataSource
 		 return(s);
 	 }
 	 
+	/**
+	 * method that returns the ProjectDescription of a project based on a plot
+	 */
+	 public String getProjectDescription( String plotName )
+	 {
+		 String s = ((PlotDataSourceInterface)pluginObj).getProjectDescription(plotName);	
+		 return(s);
+	 }
+	 
+	/**
+	 * method that returns the ProjectName of a project based on a plot
+	 */
+	 public String getProjectName( String plotName )
+	 {
+		 String s = ((PlotDataSourceInterface)pluginObj).getProjectName(plotName);	
+		 return(s);
+	 }	 	 
+	 
 	 /**
 	 * method that returns the stopDate of a project based on a plot
 	 */
@@ -429,7 +487,7 @@ public class PlotDataSource
 	 //Observation Contributors
 	 public Vector getObservationContributors(String plotName)
 	{
-		return null;
+		return new Vector();
 	}
 	
 	public String getObservationContributorSalutation(String contributorWholeName)

@@ -1,4 +1,3 @@
-import java.lang.*;
 import java.util.*;
 import java.sql.*;
 
@@ -9,8 +8,8 @@ import java.sql.*;
  *
  *	
  *	'$Author: farrell $' <br>
- *	'$Date: 2003-01-08 02:00:11 $' <br>
- *	'$Revision: 1.26 $' <br>
+ *	'$Date: 2003-02-03 18:53:17 $' <br>
+ *	'$Revision: 1.27 $' <br>
  */
  
 public class VegBankDataSourcePlugin implements PlotDataSourceInterface
@@ -140,7 +139,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 
 	public Vector getObservationContributors ( String plotName )
 	{
-		return null;
+		return new Vector();
 	}
 	
 	public String getObservationContributorSalutation(String contributorWholeName)
@@ -269,8 +268,15 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
-		
-		return(s);
+	
+    // We want to append the current date onto this string ( business rule ?) 
+    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+    String DATE_FORMAT = "ddMMMyyyy-HH:mm:ss";
+    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(DATE_FORMAT);
+    sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+    String date = sdf.format(cal.getTime());
+		System.out.println("--->>> VegBankDataSourcePlugin > " + date + " and " + s);
+    return(s + date);
 	}
 		
   /**
@@ -423,7 +429,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
  	 */
  	public String getAuthorObsCode(String plotName)
  	{
- 		return this.getObservationElement(plotName, "authorobscode");
+ 		return this.getObservationElement(plotName, "authorObsCode");
  	}
  	
  	/**
@@ -496,29 +502,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
  	 */
  	public String getSoilDepth(String plotName) 
  	{
- 		String s = null;
-		Statement stmt = null;
-		try 
-		{
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select soilDepth "
-			+" from OBSERVATION where PLOT_ID = " + plotName );
-			while (rs.next()) 
-			{
-				 s = rs.getString(1);
-			}
-		}
-		catch (SQLException ex) 
-		{
-			this.handleSQLException( ex );
-		}
-		catch (java.lang.Exception ex) 
-		{   
-		// All other types of exceptions
-			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
-			ex.printStackTrace();
-		}
-		return(s);
+		return this.getObservationElement(plotName, "soilDepth");
  	}
 	
 	
@@ -535,6 +519,8 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 {
 		return getElement(plotName,  "OBSERVATION" , elementName, null);
 	 }
+
+ 
 	 
 	/**
 	 * utlility method for querying the project table and returning 
@@ -543,8 +529,9 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 * @param elementname -- the attribute name of the desired attribute 
 	 */
 	 private String getProjectElement(String plotName, String elementName )
-	 {			
-		return getElement(plotName,  "PROJECT" , elementName, "select project_id from PLOT where PLOT_ID =");
+	 {		
+    String subQuery = " where PROJECT_ID = (select project_id from PLOT where PLOT_ID =";
+		return getElement(plotName,  "PROJECT" , elementName, subQuery);
 	 }	 
 	 
 	/**
@@ -564,12 +551,13 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 * @param plotName -- the name of the plot 
 	 * @param elementname -- the attribute name of the desired attribute 
 	 * @return elementValue -- the value of the desired attribute
-   *
-   * FIXME: Not using this right now
 	 */
 	 private String getCommunityElement(String plotName, String elementName )
 	 {
-		return getElement(plotName,  "COMMCLASS" , elementName, null);
+    // Need a subquery because FK is Observation_id not plot_id
+    String subQuery = " where OBSERVATION_ID = "
+      + "(select OBSERVATION_ID from OBSERVATION where PLOT_ID = ";
+		return getElement(plotName,  "COMMCLASS" , elementName, subQuery);
 	 }
 	 
 	 /**
@@ -581,7 +569,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	  */
 	 private String getElement( String plotName, String tableName, String elementName, String subQuery )
 	 {
-			String retVal = null;
+			String retVal = "";		// Empty string better than null here??
 			Statement stmt = null;
 			StringBuffer sb = new StringBuffer();
 			try 
@@ -598,13 +586,17 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 				}
 				else 
 				{				
-					sb.append( " where PROJECT_ID = (" + subQuery + plotName + ")" );
+					sb.append( subQuery + plotName + ")" );
 				}
 				
+				// Get the results of the query
 				ResultSet rs = stmt.executeQuery(  sb.toString() );
 				while (rs.next()) 
 				{
-					 retVal = rs.getString(1);
+					// Only expect one value in this result set.
+					retVal = rs.getString(1);
+					if (retVal == null)
+						retVal = "";
 				}
 				rs.close();
 				stmt.close();
@@ -619,6 +611,8 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 				System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 				ex.printStackTrace();
 			}
+			System.out.println("VegbankDataSource > Searching for '" + elementName 
+																		+ "' in '" + tableName + "' FOUND: '" + retVal + "'");
 			return(retVal);	 	
 	 }
 	 	 
@@ -677,12 +671,30 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	
 	/**
 	 */
-	public boolean getAutoTaxonCover(String plantName)
+	public boolean getAutoTaxonCover(String plotName)
 	{
 		// FIXME -- not looking up the value
-		boolean s = true;
-		return(s);
+		String autoTaxonCover = this.getObservationElement(plotName, "autoTaxonCover");	
+		return getBooleanFromString(autoTaxonCover);
 	}
+	
+	/*
+	 *  Convert a String to a Boolean
+	 */
+	 private boolean getBooleanFromString(String s) 
+	 {
+	 		boolean retVal = false; 
+	 		if (s ==  "t") 
+	 		{
+	 			retVal = true;
+	 		} 
+	 		else if ( s == "f")
+	 		{
+	 				retVal = false;
+	 		}
+	 		
+	 		return retVal;
+	 }
 	
 	/**
 	 */
@@ -696,7 +708,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getStemSampleMethod(String plotName)
 	{
-		return this.getObservationElement(plotName, "stemsamplemethod");
+		return this.getObservationElement(plotName, "stemSampleMethod");
 	}
 	
 	/**
@@ -1100,6 +1112,10 @@ public boolean  getRevisions(String plotName)
 			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
+		/*
+		if ( s == null )
+			s = "My Name is Bob";
+		*/
 		return(s);
 	}
 	
@@ -1543,6 +1559,12 @@ public boolean  getRevisions(String plotName)
 			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
+		
+		/*
+		if (s == null || s == "" )
+			s = "2/2/78";
+		*/
+		
 		return(s);
 	}
 	
@@ -1568,6 +1590,11 @@ public boolean  getRevisions(String plotName)
 			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
+		
+		/*
+		if (s == null || s == "" )
+			s = "2/5/78";		
+		*/
 		return(s);
 	}
 	
@@ -1926,71 +1953,25 @@ public boolean  getRevisions(String plotName)
 	
 	public String getLocationNarrative(String plotName)
 	{
-		String s = this.getPlotElement(plotName, "locationnarrative");
-		return(s);
+	  return this.getPlotElement(plotName, "locationnarrative");
 	}
 	
 	public String getLayoutNarrative( String plotName )
 	{
 		// FIXME: layoutNarrative vs. layoutnarative in database
-		String s = this.getPlotElement(plotName, "layoutnarative");
-		return(s);
+	  return this.getPlotElement(plotName, "layoutnarative");
 	}	
 	
 	//returns the state for the current plot
 	public String getState(String plotName)
 	{ 
-		String s = null;
-		Statement stmt = null;
-		System.out.println("VegBankDataSourcePlugin > getState for plot: " + plotName);
-		try 
-		{
-			stmt = con.createStatement();
-			String query = "select state from PLOT where PLOT_ID = " + plotName;
-			System.out.println("VegBankDataSourcePlugin > query: " + query);
-			ResultSet rs = stmt.executeQuery(query);				
-			while (rs.next()) 
-			{
-				 s = rs.getString(1);
-			}
-		}
-		catch (SQLException ex) 
-		{
-			this.handleSQLException( ex );
-		}
-		catch (java.lang.Exception ex) 
-		{   
-		// All other types of exceptions
-			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
-			ex.printStackTrace();
-		}
-		System.out.println("VegBankDataSourcePlugin > state: " + s);
-		return(s);
+		return this.getPlotElement(plotName, "state");	
 	}
 	
 	//returns the state for the current plot
 	public String getCommunityName(String plotName)
 	{ 
-		String s = null;
-		Statement stmt = null;
-		try 
-		{
-			stmt = con.createStatement();
-			StringBuffer sb = new StringBuffer();
-			sb.append("select COMMNAME from COMMCLASS where OBSERVATION_ID = ");
-			sb.append(" ( select OBSERVATION_ID from OBSERVATION where PLOT_ID = "+plotName+")");
-			ResultSet rs = stmt.executeQuery( sb.toString() );			
-			while (rs.next()) 
-			{
-				 s = rs.getString(1);
-			}
-		}
-		catch (java.lang.Exception ex) 
-		{   
-			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
-			ex.printStackTrace();
-		}
-		return(s);
+		return this.getCommunityElement(plotName, "commname");
 	}
 	
 	/**
@@ -1998,26 +1979,7 @@ public boolean  getRevisions(String plotName)
    **/
   public String getClassNotes(String plotName)
 	{ 
-		String s = null;
-		Statement stmt = null;
-		try 
-		{
-			stmt = con.createStatement();
-			StringBuffer sb = new StringBuffer();
-			sb.append("select CLASSNOTES from COMMCLASS where OBSERVATION_ID = ");
-			sb.append(" ( select OBSERVATION_ID from OBSERVATION where PLOT_ID = "+plotName+")");
-			ResultSet rs = stmt.executeQuery( sb.toString() );			
-			while (rs.next()) 
-			{
-				 s = rs.getString(1);
-			}
-		}
-		catch (java.lang.Exception ex) 
-		{   
-			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
-			ex.printStackTrace();
-		}
-		return(s);
+		return this.getCommunityElement(plotName, "classnotes");
 	}
 	
 	/**
@@ -2025,26 +1987,7 @@ public boolean  getRevisions(String plotName)
 	 */
 	public String getCommunityCode(String plotName)
 	{
-		String s = null;
-		Statement stmt = null;
-		try 
-		{
-			stmt = con.createStatement();
-			StringBuffer sb = new StringBuffer();
-			sb.append("select COMMCODE from COMMCLASS where OBSERVATION_ID = ");
-			sb.append(" ( select OBSERVATION_ID from OBSERVATION where PLOT_ID = "+plotName+")");
-			ResultSet rs = stmt.executeQuery( sb.toString() );			
-			while (rs.next()) 
-			{
-				 s = rs.getString(1);
-			}
-		}
-		catch (java.lang.Exception ex) 
-		{   
-			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
-			ex.printStackTrace();
-		}
-		return(s);
+		return this.getCommunityElement(plotName, "commcode");
 	}
 	
 	/**
@@ -2052,8 +1995,7 @@ public boolean  getRevisions(String plotName)
 	 */
 	public String getCommunityLevel(String plotName)
 	{
-		String s = "";
-		return(s);
+		return this.getCommunityElement(plotName, "commlevel");
 	}
 	
     
@@ -2062,8 +2004,7 @@ public boolean  getRevisions(String plotName)
 	 */
 	public String getCommunityFramework(String plotName)
 	{
-		String s = "";
-		return(s);
+		return this.getCommunityElement(plotName, "commframework");
 	}
 	
 	
@@ -2160,8 +2101,7 @@ public boolean  getRevisions(String plotName)
 	//returns the country
 	public String getCountry(String plotName)
 	{ 
-		String s = this.getPlotElement(plotName, "country");
-		return(s);
+		return this.getPlotElement(plotName, "country");
 	}
 	
 	//returns the slope aspect
@@ -2219,7 +2159,7 @@ public boolean  getRevisions(String plotName)
 	//returns the size of the stand -- extensive etc..
 	public String getStandSize(String plotName)
 	{
-		return("extensive");
+		return this.getPlotElement( plotName, "standSize");
 	}
 	
 	//returns the location as described by the author
@@ -2247,71 +2187,20 @@ public boolean  getRevisions(String plotName)
 	//returns the landForm
 	public String getLandForm(String plotName)
 	{
-		String s = null;
-		Statement stmt = null;
-		try 
-		{
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select LANDFORM "
-			+" from PLOT where PLOT_ID = " + plotName );
-			while (rs.next()) 
-			{
-				 s = rs.getString(1);
-			}
-		}
-		catch (java.lang.Exception ex) 
-		{
-			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
-			ex.printStackTrace();
-		}
-		return(s);
+		return this.getPlotElement( plotName, "landform");
 	}
 	
 	//retuns the elevation
 	public String getElevation(String plotName)
 	{
-		String s = null;
-		Statement stmt = null;
-		try 
-		{
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select elevation "
-			+" from PLOT where PLOT_ID = " + plotName );
-			while (rs.next()) 
-			{
-				 s = rs.getString(1);
-			}
-		}
-		catch (java.lang.Exception ex) 
-		{
-			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
-			ex.printStackTrace();
-		}
-		return(s);
+		return this.getPlotElement(plotName, "elevation");
 	}
 	
 	//returns the elevation accuracy
 	public String getElevationAccuracy(String plotName)
 	{
-		String s = null;
-		Statement stmt = null;
-		try 
-		{
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select elevationAccuracy "
-			+" from PLOT where PLOT_ID = " + plotName );
-			while (rs.next()) 
-			{
-				 s = rs.getString(1);
-			}
-		}
-		catch (java.lang.Exception ex) 
-		{
-			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
-			ex.printStackTrace();
-		}
-		return(s);
-	}
+		return this.getPlotElement(plotName, "elevationAccuracy");
+  }
 	
 	//return the confidentiality reason -- not null
 	public String	getConfidentialityReason(String plotName)
@@ -2614,6 +2503,7 @@ public boolean  getRevisions(String plotName)
 		 StringBuffer sb = new StringBuffer();
 		 try
 		 {
+        // FIXME: Get data from normalized tables ?
 			 	// SELECT THE COVER VALUE DIRECTLY FROM THE DENORMALIZED TABLES
 				sb.append("SELECT PERCENTCOVER from PLOTSPECIESSUM WHERE ");
 				sb.append(" PLOT_ID = "+plotName+" and STRATUMTYPE like '"+stratum+"' and ");
@@ -2729,4 +2619,61 @@ public boolean  getRevisions(String plotName)
 		//	System.out.println( db.getPlotIDs().toString() );
 		}
 	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityInspection(java.lang.String)
+	 */
+	public String getCommunityInspection(String plotName)
+	{
+		return this.getCommunityElement(plotName, "inspection");
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityPublication(java.lang.String)
+	 */
+	public String getCommunityPublication(String plotName)
+	{
+		return null;
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityStartDate(java.lang.String)
+	 */
+	public String getCommunityStartDate(String plotName)
+	{
+		return this.getCommunityElement(plotName, "classstartdate");
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityStopDate(java.lang.String)
+	 */
+	public String getCommunityStopDate(String plotName)
+	{
+		return this.getCommunityElement(plotName, "classstopdate");
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityExpertSystem(java.lang.String)
+	 */
+	public String getCommunityExpertSystem(String plotName)
+	{
+		return this.getCommunityElement(plotName, "expertsystem");		
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityMultiVariateAnalysis(java.lang.String)
+	 */
+	public String getCommunityMultiVariateAnalysis(String plotName)
+	{
+		return this.getCommunityElement(plotName, "multivariateanalysis");
+	}
+
+	/**
+	 * @see PlotDataSourceInterface#getCommunityTableAnalysis(java.lang.String)
+	 */
+	public String getCommunityTableAnalysis(String plotName)
+	{
+		return this.getCommunityElement(plotName, "tableanalysis");
+	}
+
 }

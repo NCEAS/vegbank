@@ -13,8 +13,8 @@ import PlotDataSource;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: farrell $' <br>
- *  '$Date: 2003-01-08 02:00:10 $' <br>
- *  '$Revision: 1.15 $' <br>
+ *  '$Date: 2003-02-03 18:53:16 $' <br>
+ *  '$Revision: 1.16 $' <br>
  */
 
  
@@ -259,14 +259,17 @@ public class PlotXmlWriterV2
 			sb.append("<communityClassification> \n");
 			sb.append("	<className>"+name+"</className> \n");
 			sb.append("	<classCode>"+code+"</classCode> \n");
-			sb.append("	<classStartDate></classStartDate> \n");
-			sb.append("	<classStopDate></classStopDate> \n");
-			sb.append("	<classInspection></classInspection> \n");
-			sb.append("	<classInspection></classInspection> \n");
-			sb.append("	<tableAnalysis></tableAnalysis> \n");
-			sb.append("	<multivariateAnalysis></multivariateAnalysis> \n");
-			sb.append("	<expertSystem></expertSystem> \n");
+
+			sb.append("	<classStartDate>"+datasrc.getCommunityStartDate(plotCode)+"</classStartDate> \n");
+			sb.append("	<classStopDate>"+datasrc.getCommunityStopDate(plotCode)+"</classStopDate> \n");
+			sb.append("	<classInspection>"+datasrc.getCommunityInspection(plotCode)+"</classInspection> \n");
+			sb.append("	<tableAnalysis>"+datasrc.getCommunityTableAnalysis(plotCode)+"</tableAnalysis> \n");
+			sb.append("	<multivariateAnalysis>"+datasrc.getCommunityMultiVariateAnalysis(plotCode)+"</multivariateAnalysis> \n");
+			sb.append("	<expertSystem>"+datasrc.getCommunityExpertSystem(plotCode)+"</expertSystem> \n");
 			sb.append("	<classNotes>" + classNotes + "</classNotes> \n");
+			sb.append("	<framework>"+datasrc.getCommunityFramework(plotCode)+"</framework> \n");
+			sb.append("	<level>"+datasrc.getCommunityLevel(plotCode)+"</level> \n");		
+			//FIXME: Blank values returned			
 			sb.append("	<classPublication></classPublication> \n");
 			return( sb.toString() );
 		}
@@ -453,21 +456,20 @@ public class PlotXmlWriterV2
 				//citationId
 				//parentId
 				//sampleMethodId
-				sb.append("    <latitude>"+datasrc.latitude+"</latitude> \n");
-				sb.append("    <longitude>"+datasrc.longitude+"</longitude> \n");
+				sb.append("    <latitude>"+datasrc.getLatitude(plotCode)+"</latitude> \n");
+				sb.append("    <longitude>"+datasrc.getLongitude(plotCode)+"</longitude> \n");
 				sb.append("    <authorE>"+datasrc.xCoord+"</authorE> \n");
 				sb.append("    <authorN>"+datasrc.yCoord+"</authorN> \n");
 				sb.append("    <authorZone>"+datasrc.utmZone+"</authorZone> \n");
-				sb.append("    <authorDatum></authorDatum> \n");
+				sb.append("    <authorDatum>"+datasrc.getDatumType(plotCode)+"</authorDatum>\n");
 				sb.append("    <authorLocation>"+datasrc.getAuthorLocation(plotCode)+"</authorLocation> \n");
-				sb.append("    <locationNarrative>" + datasrc.locationNarrative +"</locationNarrative> \n");
-				sb.append("    <layoutNarrative>" + datasrc.layoutNarrative +"</layoutNarrative> \n");				
-				sb.append("    <confidentialityStatus>"+datasrc.confidentialityStatus+"</confidentialityStatus> \n");
-				sb.append("    <confidentialityReason>"+datasrc.confidentialityReason+"</confidentialityReason> \n");
-				sb.append("    <azimuth>" + datasrc.azimuth +"</azimuth> \n");
-				sb.append("    <dsgPoly>" + datasrc.dsgPoly + "</dsgPoly> \n");
-				sb.append("    <shape>"+datasrc.plotShape+"</shape> \n");
-				sb.append("    <area>"+datasrc.plotArea+"</area> \n");
+				sb.append("    <locationNarrative>" + datasrc.getLocationNarrative(plotCode) +"</locationNarrative> \n");
+				sb.append("    <confidentialityStatus>"+datasrc.getConfidentialityStatus(plotCode)+"</confidentialityStatus> \n");
+				sb.append("    <confidentialityReason>"+datasrc.getConfidentialityReason(plotCode)+"</confidentialityReason> \n");
+				sb.append("    <azimuth>" + datasrc.getAzimuth(plotCode) +"</azimuth> \n");
+				sb.append("    <dsgPoly>" + datasrc.getDSGPoly(plotCode) + "</dsgPoly> \n");
+				sb.append("    <shape>"+datasrc.getPlotShape(plotCode)+"</shape> \n");
+				sb.append("    <area>"+datasrc.getPlotArea(plotCode)+"</area> \n");
 				sb.append("    <standSize>"+datasrc.getStandSize(plotCode)+"</standSize> \n");
 				sb.append("    <placementMethod></placementMethod> \n");
 				sb.append("    <permanence>"+datasrc.isPlotPermanent(plotCode)+"</permanence> \n");
@@ -480,8 +482,6 @@ public class PlotXmlWriterV2
 				sb.append("    <landform>"+datasrc.getLandForm(plotCode)+"</landform> \n");
 				sb.append("    <geology>"+datasrc.surfGeo+"</geology> \n");
 				sb.append("    <soilTaxon>"+datasrc.getSoilTaxon(plotCode)+"</soilTaxon> \n");
-				// THIS ELEMENT HAS BEEN REMOVED FROM THE DATABASE 20020717
-				sb.append("    <soilTaxonSource>"+datasrc.getSoilTaxonSource(plotCode)+"</soilTaxonSource> \n");
 				sb.append("    <notesPublic>"+datasrc.getNotesPublic(plotCode)+"</notesPublic> \n");
 				sb.append("    <notesMgt>"+datasrc.getNotesMgt(plotCode)+"</notesMgt> \n");
 				sb.append("    <revisions>"+datasrc.getRevisions(plotCode)+"</revisions> \n");
@@ -531,7 +531,7 @@ public class PlotXmlWriterV2
     	sb.append("      <coverDispersion>"+datasrc.getCoverDispersion(plotCode)+"</coverDispersion> \n");
     	sb.append("      <autotaxonCover>"+datasrc.getAutoTaxonCover(plotCode)+"</autotaxonCover> \n");
     	sb.append("      <stemObservationArea>"+datasrc.getStemObservationArea(plotCode)+"</stemObservationArea> \n");
-    	sb.append("      <stemSampleMethod></stemSampleMethod> \n");
+    	sb.append("      <stemSampleMethod>"+datasrc.getStemSampleMethod(plotCode)+"</stemSampleMethod> \n");
     	sb.append("      <originalData>"+datasrc.getOriginalData(plotCode)+"</originalData> \n");
     	sb.append("      <effortLevel>"+datasrc.getEffortLevel(plotCode)+"</effortLevel> \n");
     	sb.append("      <plotValidationLevel>"+datasrc.getPlotValidationLevel(plotCode)+"</plotValidationLevel> \n");
@@ -550,7 +550,7 @@ public class PlotXmlWriterV2
     	sb.append("      <waterSalinity>"+datasrc.getWaterSalinity(plotCode)+"</waterSalinity> \n");
     	sb.append("      <waterDepth>"+datasrc.getWaterDepth(plotCode)+"</waterDepth> \n");
     	sb.append("      <shoreDistance>"+datasrc.getShoreDistance(plotCode)+"</shoreDistance> \n");
-			sb.append("      <soilDepth>"+datasrc.soilDepth+"</soilDepth> \n");
+			sb.append("      <soilDepth>"+datasrc.getSoilDepth(plotCode)+"</soilDepth> \n");
     	sb.append("      <organicDepth>"+datasrc.getOrganicDepth(plotCode)+"</organicDepth> \n");
     	sb.append("      <percentBedrock>"+datasrc.getPercentBedRock(plotCode)+"</percentBedrock>  \n");
     	sb.append("      <percentRockGravel>"+datasrc.getPercentRockGravel(plotCode)+"</percentRockGravel>  \n");
