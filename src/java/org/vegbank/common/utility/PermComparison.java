@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-26 20:42:46 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-04-30 13:12:53 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,11 +38,14 @@ import org.apache.commons.logging.LogFactory;
  */
 public class PermComparison {
 
-	public static final String PROP_KEY_BASE = "perms.role.";
+	public static final String PROP_KEY_ROLE_BASE = "perms.role.";
+	public static final String PROP_KEY_ABBREV_BASE = "perms.abbrev-role.";
 	
 	private static Log log = LogFactory.getLog(PermComparison.class);
 	private static ResourceBundle res = ResourceBundle.getBundle("general");
 	private static Map roleNameMap = null;
+	private static Map roleNameFullMap = null;
+	private static Map roleNameAbbrevMap = null;
 	
 	static {
 		initRoleNames();
@@ -51,22 +54,35 @@ public class PermComparison {
 	
 	/**
 	 * Builds the mapping of role names to numerical value.
+	 * roleNameMap.put(role, Long)
 	 */
 	private static void initRoleNames() {
-		// initialize the role names and numerical values
 		roleNameMap = new HashMap();
-		String property, role, value;
+		roleNameFullMap = new HashMap();
+		roleNameAbbrevMap = new HashMap();
+		String property, role, value, propBase;
 		Enumeration keys = res.getKeys();
 		
+		// initialize the role names and numerical values
 		while (keys.hasMoreElements()) {
 			property = (String)keys.nextElement();
-			if (property.startsWith("perms.role.")) {
-				// found a role property; parse it
-				role = property.substring(PROP_KEY_BASE.length());
+
+			if (property.startsWith(PROP_KEY_ROLE_BASE)) {
+				// found a role property; save it
+				role = property.substring(PROP_KEY_ROLE_BASE.length());
 				value = res.getString(property);
 				log.debug("Adding role " + role + "=" + value);
+				roleNameFullMap.put(role, new Long(value));
 				roleNameMap.put(role, new Long(value));
-				
+			}
+
+			if (property.startsWith(PROP_KEY_ABBREV_BASE)) {
+				// found an abbreviated role property; save it
+				role = property.substring(PROP_KEY_ABBREV_BASE.length());
+				value = res.getString(property);
+				log.debug("Adding abbreviate role " + role + "=" + value);
+				roleNameAbbrevMap.put(role, new Long(value));
+				roleNameMap.put(role, new Long(value));
 			}
 		}
 	}
@@ -78,19 +94,16 @@ public class PermComparison {
 	 */
 	public static long getRoleConstant(String role) {
 		
-		if (!Utility.isStringNullOrEmpty(role)) {
+		if (Utility.isStringNullOrEmpty(role)) {
 			return 0;
 		}
 		
-		if (!role.startsWith("perms.role.")) {
-			role = "perms.role." + role;
-		}
-		
-		String value = res.getString(role);
+		Long value = (Long)roleNameMap.get(role);
 		if (value == null) {
 			return 0;
 		}
-		return Long.parseLong(value);
+
+		return value.longValue();
 	}
 
 	/**
@@ -99,9 +112,9 @@ public class PermComparison {
 	 * @param sum
 	 * @return List of Strings containing full role names (not abbrev.)
 	 */
-	 public List getRoleNames(long sum) {
+	 public static List getRoleNamesFromSum(long sum) {
 		 List list = new ArrayList();
-		 Iterator nit = roleNameMap.keySet().iterator();
+		 Iterator nit = roleNameFullMap.keySet().iterator();
 		 while (nit.hasNext()) {
 			 String role = (String)nit.next();
 			 if (matchesOne(role, sum)) {
@@ -109,6 +122,26 @@ public class PermComparison {
 			 }
 		 }
 		 return list;
+	 }
+	
+	/**
+	 * Given a numerical role sum, returns all corresponding
+	 * role names as comma-separated String.
+	 * @param sum
+	 * @return String containing full role names (not abbrev.)
+	 */
+	 public static String getRoleNamesCSVFromSum(long sum) {
+		 List list = getRoleNamesFromSum(sum);
+		 Iterator nit = list.iterator();
+		 StringBuffer csv = new StringBuffer(list.size() * 15);
+		 boolean first = true;
+
+		 while (nit.hasNext()) {
+			 if (first) { first = false;
+			 } else { csv.append(", "); }
+			 csv.append((String)nit.next());
+		 }
+		 return csv.toString();
 	 }
 	
 	/* =============================================================== */
@@ -221,17 +254,11 @@ public class PermComparison {
 
 		while (st.hasMoreTokens()) {
 			tmpRole = st.nextToken();
-			try {
-				roleSum += Long.parseLong(res.getString("perms.role." + tmpRole));
-
-			} catch (Exception ex) {
-				log.debug("PermComparison: bad config value for role " +
-						tmpRole, ex);
-			}
-
+			long l = getRoleConstant(tmpRole);
+			roleSum += l;
 		}
+
 		return roleSum;
-		
 	}
 	
 	//////////////////////////////////////////////////////////
