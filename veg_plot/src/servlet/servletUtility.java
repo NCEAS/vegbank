@@ -4,14 +4,72 @@ import java.util.*;
 import java.util.zip.*;
 
 
+
 /**
 * Class that acts as a utility to the plotQuery servlet
 */
 
 
 public class servletUtility {
-	
-	
+
+
+/**
+*  Method to copy a file
+*
+* @param  inFile  a string representing the input file
+* @param  outFile a string representing the output, compressed, file
+*/
+
+public void flushFile (String inFile) {
+try {
+	(new File(inFile)).delete();
+	//inFile.delete(); 
+	//PrintStream out  = new PrintStream(new FileOutputStream(inFile, true));
+}
+catch(Exception e) {System.out.println("failed: servletUtility.flushFile");
+	e.printStackTrace();}
+}
+
+
+
+
+/**
+*  Method to copy a file
+*
+* @param  inFile  a string representing the input file
+* @param  outFile a string representing the output, compressed, file
+*/
+
+public void fileCopy (String inFile, String outFile, String appendFlag) {
+try {
+BufferedReader in = new BufferedReader(new FileReader(inFile));
+
+/** Define out by default */
+PrintStream out  = new PrintStream(new FileOutputStream(outFile, true));
+
+
+if (appendFlag.equals("append")) {
+	out  = new PrintStream(new FileOutputStream(outFile, false)); 
+}
+
+if (appendFlag.equals("concat")) {
+	out  = new PrintStream(new FileOutputStream(outFile, true)); 
+}
+
+System.out.println("servletUtility.fileCopy copying a file");
+int c;
+while((c = in.read()) != -1)
+        out.write(c);
+in.close();
+out.close();
+
+}
+catch(Exception e) {System.out.println("failed: servletUtility.fileCopy");
+	e.printStackTrace();}
+}
+
+
+
 
 /**
 *  Method to store html code that can be accessed based on the requests
@@ -39,7 +97,7 @@ String mainPage="<html> \n"
 +rb.getString("requestparams.servletPosition")+"<br> \n"
 +"<br></i></small> \n"
 +"<p> \n"
-+"<A HREF=\"http://www.nceas.ucsb.edu/collab/2180/docs/plotQuery.html\">"
++"<A HREF="+rb.getString("requestparams.servletAccessPosition")+"> "
 	+"<B><FONT SIZE=\"-1\" FACE=\"arial\">Back to the query mechanism</FONT></B></A> \n"
 +"<br></i> \n"
 +"<P> \n"

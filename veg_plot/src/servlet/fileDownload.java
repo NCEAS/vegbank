@@ -38,7 +38,6 @@ public class fileDownload extends HttpServlet {
 
 ResourceBundle rb = ResourceBundle.getBundle("fileDownload");
 
-
 private String fileName = null;
 private String downloadPath=null;
 private String fileNamePath = null;

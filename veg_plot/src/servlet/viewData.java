@@ -12,9 +12,9 @@ import java.net.URL;
 
 
 /**
-* This class allows the user to navigate the resultset produced by
-* using the plotQuery class
-*/
+ * This class allows the user to navigate the resultset produced by
+ * using the plotQuery class
+ */
 public class viewData extends HttpServlet {
 ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 
