@@ -5,8 +5,8 @@
  *  of the Turbine project )
  *
  *     '$Author: harris $'
- *     '$Date: 2001-11-20 19:50:05 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2001-12-06 02:38:51 $'
+ *     '$Revision: 1.2 $'
  *	
  *
  *
@@ -21,9 +21,6 @@ import java.math.*;
 import java.net.URL;
 import java.util.Date;
 import org.apache.xerces.parsers.DOMParser;
-//import org.apache.xalan.xpath.xml.FormatterToXML;
-//import org.apache.xalan.xpath.xml.TreeWalker;
-//import org.apache.xalan.*;
 import org.w3c.dom.Attr;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -354,52 +351,41 @@ public class VegclassXMLDoc
 	private Vector databasePlotXMLPackage()
 	{
 		Vector v = new Vector();
-		v.addElement("./data/vegclass_doc/vegPlotRevision.xml");
-		v.addElement("./data/vegclass_doc/vegPlotUserDefined.xml");
-		v.addElement("./data/vegclass_doc/vegPlotDefinedValue.xml");
-		
-		v.addElement("./data/vegclass_doc/vegPlotProject.xml");
-		
-		v.addElement("./data/vegclass_doc/vegPlotParty.xml");
 		v.addElement("./data/vegclass_doc/vegPlotAddress.xml");
-		v.addElement("./data/vegclass_doc/vegPlotTelephone.xml");
-		//v.addElement("./data/vegclass_doc/vegPlotEmail.xml");
-		
-		v.addElement("./data/vegclass_doc/vegPlotAux_Soil.xml");
-		v.addElement("./data/vegclass_doc/vegPlotCitation.xml");
-		v.addElement("./data/vegclass_doc/vegPlotNamedPlace.xml");
-		
-		v.addElement("./data/vegclass_doc/vegPlotCoverMethod.xml");
-		v.addElement("./data/vegclass_doc/vegPlotCoverIndex.xml");
-		v.addElement("./data/vegclass_doc/vegPlotStratumMethod.xml");
-		v.addElement("./data/vegclass_doc/vegPlotSampleMethod.xml");
-		v.addElement("./data/vegclass_doc/vegPlotPlot.xml");
-		v.addElement("./data/vegclass_doc/vegPlotPlace.xml");
-		v.addElement("./data/vegclass_doc/vegPlotObservation.xml");
-		v.addElement("./data/vegclass_doc/vegPlotGraphic.xml");
-		
-		v.addElement("./data/vegclass_doc/vegPlotStratumType.xml");
-		v.addElement("./data/vegclass_doc/vegPlotStratumComposition.xml");
-		
-		v.addElement("./data/vegclass_doc/vegPlotTaxonObservation.xml");
-		v.addElement("./data/vegclass_doc/vegPlotTaxonInterpretation.xml");
-		v.addElement("./data/vegclass_doc/vegPlotTreeStem.xml");
-		
-		v.addElement("./data/vegclass_doc/vegPlotSoilObs.xml");
-		v.addElement("./data/vegclass_doc/vegPlotAux_Geography.xml");
 		v.addElement("./data/vegclass_doc/vegPlotAux_Role.xml");
-		
+		v.addElement("./data/vegclass_doc/vegPlotCitation.xml");
+		v.addElement("./data/vegclass_doc/vegPlotClassContributor.xml");	
+		v.addElement("./data/vegclass_doc/vegPlotCommClass.xml");
+		v.addElement("./data/vegclass_doc/vegPlotCommInterpretation.xml");
+		v.addElement("./data/vegclass_doc/vegPlotCoverIndex.xml");
+		v.addElement("./data/vegclass_doc/vegPlotCoverMethod.xml");
+		v.addElement("./data/vegclass_doc/vegPlotDefinedValue.xml");
+		v.addElement("./data/vegclass_doc/vegPlotDisturbanceObs.xml");
+		v.addElement("./data/vegclass_doc/vegPlotGraphic.xml");
+		v.addElement("./data/vegclass_doc/vegPlotNamedPlace.xml");
 		v.addElement("./data/vegclass_doc/vegPlotNoteLink.xml");
 		v.addElement("./data/vegclass_doc/vegPlotNote.xml");
-		v.addElement("./data/vegclass_doc/vegPlotProjectContributor.xml");
 		v.addElement("./data/vegclass_doc/vegPlotObservationContributor.xml");
-		//late additions
-		v.addElement("./data/vegclass_doc/vegPlotDisturbanceObs.xml");
+		v.addElement("./data/vegclass_doc/vegPlotObservationSynonym.xml");
+		v.addElement("./data/vegclass_doc/vegPlotObservation.xml");
+		v.addElement("./data/vegclass_doc/vegPlotParty.xml");
+		v.addElement("./data/vegclass_doc/vegPlotPlace.xml");
+		v.addElement("./data/vegclass_doc/vegPlotPlot.xml");
+		v.addElement("./data/vegclass_doc/vegPlotProjectContributor.xml");
+		v.addElement("./data/vegclass_doc/vegPlotProject.xml");
+		v.addElement("./data/vegclass_doc/vegPlotRevision.xml");
+		v.addElement("./data/vegclass_doc/vegPlotSampleMethod.xml");
+		v.addElement("./data/vegclass_doc/vegPlotSoilObs.xml");
+		v.addElement("./data/vegclass_doc/vegPlotStemCount.xml");
+		v.addElement("./data/vegclass_doc/vegPlotStemLocation.xml");
+		v.addElement("./data/vegclass_doc/vegPlotStratumComposition.xml");
+		v.addElement("./data/vegclass_doc/vegPlotStratumMethod.xml");
 		v.addElement("./data/vegclass_doc/vegPlotStratum.xml");
-		v.addElement("./data/vegclass_doc/vegPlotCommInterpretation.xml");
-		v.addElement("./data/vegclass_doc/vegPlotCommClass.xml");
-		v.addElement("./data/vegclass_doc/vegPlotClassContributor.xml");
-		v.addElement("./data/vegclass_doc/vegPlotAux_usgsQuad.xml");
+		v.addElement("./data/vegclass_doc/vegPlotTaxonInterpretation.xml");
+		v.addElement("./data/vegclass_doc/vegPlotTaxonObservation.xml");
+		v.addElement("./data/vegclass_doc/vegPlotTelephone.xml");
+		v.addElement("./data/vegclass_doc/vegPlotUserDefined.xml");
+		
 		
 		
 		return(v);
