@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -30,8 +28,8 @@ import org.vegbank.common.model.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-12-05 22:16:23 $'
- * '$Revision: 1.26 $'
+ * '$Date: 2004-02-19 17:37:47 $'
+ * '$Revision: 1.27 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +56,15 @@ public class Utility
 	public static  final String VB_HOME_DIR = "/usr/vegbank";
 	
 	public static final String DATABASE_NAME = ResourceBundle.getBundle("database").getString("databaseName");
-	public static final String SMTP_SERVER = ResourceBundle.getBundle("vegbank").getString("mailHost");
+	
+	public static ResourceBundle vegbankPropFile = ResourceBundle.getBundle("vegbank");
+	public static final String SMTP_SERVER = vegbankPropFile.getString("mailHost");
+	public static final String VEGBANK_SCHEMA_LOACATION = vegbankPropFile.getString("schemaLocation");
+	public static final String VEGBANK_SCHEMA_NAME = vegbankPropFile.getString("vegbankSchemaName");	
+	public static final String VEGBANK_VERSION = vegbankPropFile.getString("vegbankVersion");
+	public static final String VEGBANK_XML_SCHEMA= VEGBANK_SCHEMA_LOACATION + "/" + VEGBANK_SCHEMA_NAME;
+
+
 	
 	/** 
 	 * Determine our db adapter class and create an instance of that class
@@ -445,44 +451,6 @@ public class Utility
 			sb.append("\t");
 		}
 		return sb.toString();
-	}
-	
-	/**
-	 * This is a hack to deal with the fact accessionCodes don't always 
-	 * have the same name
-	 * 
-	 * @param entityName
-	 * @return
-	 */
-	public static String getAccessionCodeAttributeName( String entityName )
-	{
-		String accessionCodeName = null;
-		
-		if ( entityName.equalsIgnoreCase("observation") )
-		{
-			accessionCodeName = Observation.ACCESSIONCODE;
-		}
-		else if ( entityName.equalsIgnoreCase("plantConcept") )
-		{
-			accessionCodeName = Plantconcept.ACCESSIONCODE;
-		}
-		else if ( entityName.equalsIgnoreCase("commConcept"))
-		{
-			accessionCodeName = Commconcept.ACCESSIONCODE;
-		}
-		else if ( entityName.equalsIgnoreCase("party") )
-		{
-			accessionCodeName = Party.ACCESSIONCODE;
-		}
-		else if ( entityName.equalsIgnoreCase("reference") )
-		{
-			accessionCodeName = Reference.ACCESSIONCODE;
-		}
-		else
-		{
-			// Has no known accessionCode
-		}
-		return accessionCodeName;
 	}
 
 	/**
