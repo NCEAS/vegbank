@@ -51,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-01-28 19:45:01 $'
- *  '$Revision: 1.29 $'
+ *  '$Date: 2003-01-28 21:27:33 $'
+ *  '$Revision: 1.30 $'
  * 
  */
 
@@ -783,7 +783,7 @@ public class DataRequestServlet extends HttpServlet
 		// Cheat here - to recognize the single plot query to return entire plot
 		//20020117 testing the new plot writer and data translation 
 		//modules so cheating here first
-		else if (plotId != null && resultType.equals("full") ) 
+		else if (plotId != null && ( resultType.equals("full")  ||  resultType.equals("summary") )  ) 
 		{
 			System.out.println("DataRequestServlet > requesting full data set for plot: " + plotId );
 			String outFile=servletDir+"atomicResult";
