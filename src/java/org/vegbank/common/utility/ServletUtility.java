@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: anderson $'
- *  '$Date: 2004-10-14 09:59:37 $'
- *  '$Revision: 1.16 $'
+ *  '$Date: 2005-02-11 00:32:01 $'
+ *  '$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,6 @@ public class ServletUtility
 	private GetURL gurl = new GetURL();	
 	
 	static final int BUFFER = 2048; 
-	static final String SMTP_SERVER = "hyperion.nceas.ucsb.edu"; 
 	
 	/**
 	 * method that takes a Hashtable containing fileContent and desired fileName 
@@ -198,11 +197,11 @@ public class ServletUtility
 			throw new AddressException("no email address given");
 		}
 
-		log.debug("Sending email from " + from + " to " + to);
+		//log.debug("Sending email from " + from + " to " + to);
 		if (plainText) {
-			sendPlainTextEmail(SMTP_SERVER, from, to, cc, subject, body);
+			sendPlainTextEmail(null, from, to, cc, subject, body);
 		} else {
-			sendHTMLEmail(SMTP_SERVER, from, to, cc, subject, body);
+			sendHTMLEmail(null, from, to, cc, subject, body);
 		}
 	}
 
@@ -250,6 +249,15 @@ public class ServletUtility
 		
 		Properties props =new Properties();
 		props.put("mail.smtp.host", smtpServer);
+
+        if (!Utility.isStringNullOrEmpty(Utility.SMTP_PORT)) {
+		    props.put("mail.smtp.port", smtpServer);
+            //log.debug("Using this smtp server and port: " + smtpServer + Utility.SMTP_PORT);
+        } else {
+            //log.debug("Using this smtp server: " + smtpServer);
+        }
+
+
 		Session session = Session.getDefaultInstance(props, null);
 		
 		//	-- Create a new message --
