@@ -117,7 +117,6 @@ function setNameMatchType() {
               </p>
             
 	    
-	            <hr/>
       <!-- Name ClassSystem -->
             <p><b>Name type:</b>
 			  <br/><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
@@ -143,7 +142,6 @@ function setNameMatchType() {
 	    
 		
 	    
-                <hr/>
            
             <p>
               <b>As of date:</b><br/>
@@ -186,7 +184,6 @@ function setNameMatchType() {
 				   height="14" width="14" border="0" src="@image_server@question.gif"></a>
               </p>
 
-               <hr/>
             <!-- PARTY -->
 
 
@@ -210,7 +207,6 @@ function setNameMatchType() {
 				<input type="hidden" name="xwhereKey_accordingtoparty" value="xwhere_eq"/>
               </p>
 
-                 <hr/>
            <!-- AND / OR -->
 
                 <blockquote>

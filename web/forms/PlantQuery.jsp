@@ -119,7 +119,6 @@ function setNameMatchType() {
 		<input type="hidden" name="xwhereKey_plantlevel" value="xwhere_in"/>
               </p>
 	    
-	    <hr/>
            
 		<!-- Name ClassSystem -->
             <p><b>Name type:</b>
@@ -146,8 +145,6 @@ function setNameMatchType() {
 	      </p>
 		
 	    
-           
-                <hr/>
            
             <p>
               <b>As of date:</b><br/>
@@ -190,7 +187,6 @@ function setNameMatchType() {
 				   height="14" width="14" border="0" src="@image_server@question.gif"></a>
               </p>
 
-               <hr/>
              <!-- PARTY -->
 
 
@@ -214,7 +210,6 @@ function setNameMatchType() {
 				<input type="hidden" name="xwhereKey_accordingtoparty" value="xwhere_eq"/>
               </p>
 
-                <hr/>
            <!-- AND / OR -->
 
                  <blockquote>
