@@ -6,8 +6,8 @@ package servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-11-26 22:34:10 $'
- * '$Revision: 1.12 $'
+ *     '$Date: 2003-01-09 20:46:01 $'
+ * '$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -150,11 +150,13 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 					// APPLY FOR A CERTIFICATION LEVEL
 					else if ( action.equals("certification") )
 					{
+						res.setContentType("text/html");
 						this.handleCertification(req, res);
 					}
 					// CHANGE USER SETTINGS 
 					else if ( action.equals("changeusersettings") )
 					{
+						res.setContentType("text/html");
 						this.handleSettingsModification(req, res);
 					}
 					// GET THE USER'S PERMISSION LEVEL
@@ -481,27 +483,24 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 						replaceHash.put("surName", ""+surName);
 						replaceHash.put("givenName", ""+givenName);
 						//replaceHash.put("submittedEmail", submittedEmail);
-						replaceHash.put("registeredEmail", emailAddress);
-						replaceHash.put("phoneNumber", phoneNumber);
-						replaceHash.put("currentCertLevel", currentCertLevel);
-						replaceHash.put("degreeInst", degreeInst);
-						replaceHash.put("currentInst", currentInst);
-						replaceHash.put("esaPos", esaPos);
-						replaceHash.put("vegSamplingDoc", vegSamplingDoc);
-						replaceHash.put("vegAnalysisDoc", vegAnalysisDoc);
-						replaceHash.put("usnvcExpDoc", usnvcExpDoc); // start
-						replaceHash.put("vegbankExpDoc", vegbankExpDoc);
-						replaceHash.put("useVegbank", useVegbank);
-						replaceHash.put("plotdbDoc", plotdbDoc);
-						
-						
+						replaceHash.put("registeredEmail",  ""+emailAddress);
+						replaceHash.put("phoneNumber",  ""+phoneNumber);
+						replaceHash.put("currentCertLevel",  ""+currentCertLevel);
+						replaceHash.put("degreeInst",  ""+degreeInst);
+						replaceHash.put("currentInst",  ""+currentInst);
+						replaceHash.put("esaPos",  ""+esaPos);
+						replaceHash.put("vegSamplingDoc",  ""+vegSamplingDoc);
+						replaceHash.put("vegAnalysisDoc",  ""+vegAnalysisDoc);
+						replaceHash.put("usnvcExpDoc",  ""+usnvcExpDoc); // start
+						replaceHash.put("vegbankExpDoc",  ""+vegbankExpDoc);
+						replaceHash.put("useVegbank",  ""+useVegbank);
+						replaceHash.put("plotdbDoc",  ""+plotdbDoc);
 						
 						util.filterTokenFile(certificationTemplate, certificationValidation, replaceHash);
 						//print the outfile to the browser
 						PrintWriter out = res.getWriter();
 						String s = util.fileToString(certificationValidation);
 						out.println(s);
-						//res.sendRedirect("/forms/valid.html");
 						// delete the form 
 						Thread.sleep(1000);
 						util.flushFile(certificationValidation);
