@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-28 19:07:08 $'
- * 	'$Revision: 1.9 $'
+ *  '$Date: 2002-03-28 22:59:06 $'
+ * 	'$Revision: 1.10 $'
  */
 package databaseAccess;
 
@@ -14,9 +14,11 @@ import java.text.*;
 import java.util.*;
 import java.sql.*;
 import org.w3c.dom.Node;
+import org.w3c.dom.Document;
 import databaseAccess.*;
 import xmlresource.datatype.Plot;
 import xmlresource.datatype.VegProject;
+import xmlresource.utils.XMLparse;
 import PlotDataSource;
 import servlet.util.GetURL;
 
@@ -44,6 +46,7 @@ public class DBinsertPlotSource
 	//refers to the given plot, a sub-set of data of the above project, for use in
 	//the class
 	public Plot plot;
+	private XMLparse parser;
 
 	// variable that are quite general to the class and are going to be used by a
 	// number of the methods
@@ -318,7 +321,8 @@ public class DBinsertPlotSource
 		}
 		catch (Exception e)
 		{
-			System.out.println("Caught Exception: "+e.getMessage() ); 
+			System.out.println("Caught Exception: "+e.getMessage() );
+			debug.append("<exceptionMessage>"+e.getMessage()+"</exceptionMessage>\n");
 			e.printStackTrace();
 		}
 		return( debug.toString() );
@@ -888,7 +892,8 @@ public class DBinsertPlotSource
 	
 	/**
 	 * method that returns false if the community cannot be stored in the 
-	 * database
+	 * database this method uses the webservice lookup to get the community 
+	 * info based on either a code, or name
 	 * 
 	 */
 	private boolean insertCommunities()
@@ -906,6 +911,17 @@ public class DBinsertPlotSource
 				debug.append("<communityCode>"+code+"</communityCode> \n");
 				debug.append("<communityLevel>"+level+"</communityLevel> \n");
 				debug.append("<communityFramework>"+framework+"</communityFramework> \n");
+			
+				//get the appropriate codes for this community via the web service
+				if ( code != null )
+				{
+					Hashtable h = getCommunityData(code);
+				}
+				else if ( name != null )
+				{
+					Hashtable h = getCommunityData( name );
+				}
+
 				
 				//insert the strata values
 				sb.append("INSERT into commclass (observation_id, commName, " 
@@ -920,8 +936,7 @@ public class DBinsertPlotSource
 				pstmt.setString(4, framework);
 				pstmt.setString(5, level);
 				//execute the p statement
-  		  pstmt.execute();
-			
+  		  pstmt.execute();			
 		}
 		catch (Exception e)
 		{
@@ -1203,7 +1218,8 @@ public class DBinsertPlotSource
 	 * 
 	 * @param xCoord -- the x coordinate
 	 * @param yCoord -- the y coordinate
-	 * @param zone -- the utm zone 
+	 * @param zone -- the utm zone
+	 * @return hash -- a hashtable with keys : longitide and latitude
 	 */
 	private Hashtable getGeoCoords(String xCoord, String yCoord, String zone)
 	{
@@ -1243,6 +1259,63 @@ public class DBinsertPlotSource
 		return(h);
 	}
 	
+	/**
+	 * utility method to use a webservice to lookup the community 
+	 * related attributes from the vegbank community archive
+	 * 
+	 * @param code -- the community code used to lookup the concept id
+	 */
+	private Hashtable getCommunityData(String code)
+	{
+		Hashtable h = new Hashtable();
+		try
+		{
+			//THIS USES THE REQUESTURL METHOD
+			String protocol = "http://";
+	  	String host = "vegbank.nceas.ucsb.edu";
+			String s = null;		
+			//THIS USES THE OTHER REQUEST URL METHOD
+			String servlet = "/framework/servlet/DataRequestServlet";
+			Properties parameters = new Properties();
+			parameters.setProperty("requestDataType", "vegCommunity");
+			parameters.setProperty("requestDataFormatType", "xml");
+			parameters.setProperty("clientType", "clientApplication");
+			parameters.setProperty("communityName", code);
+			parameters.setProperty("communityLevel","%" );
+			s = gurl.requestURL(servlet, protocol, host, 
+		 	parameters);
+			System.out.println("DBinsertPlotSource > string passed from web service: \n" + s);
+			
+			//parse the returned xml doc
+			parser = new XMLparse();	
+			Document doc = parser.getDocumentFromString(s);
+			String lev = parser.getNodeValue(doc, "classLevel");
+			String c  = parser.getNodeValue(doc, "classCode");
+			String conceptId = parser.getNodeValue(doc, "commConceptId");
+			System.out.println("DBinsertPlotSource > parsed community xml: " +lev+" "+c+" "+conceptId);
+			
+			if ( lev != null && c != null && conceptId != null)
+			{
+				h.put("code", c);
+				h.put("level", lev );
+				h.put("conceptId", conceptId );
+			}
+			else
+			{
+				System.out.println("DBinsertPlotSource > parsed elements returned null: " +lev+" "+c+" "+conceptId);
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage() ); 
+			e.printStackTrace();
+		}
+		return(h);
+	}
+	
+
+
+
 	
 	
 	//method that returns true if the project with this name exists in the 
