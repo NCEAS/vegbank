@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   * '$Author: harris $'
-  * '$Date: 2002-02-26 17:36:16 $'
-  * '$Revision: 1.8 $'
+  * '$Date: 2002-02-26 18:56:31 $'
+  * '$Revision: 1.9 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -58,15 +58,18 @@
 	<filter token="nestedplotquery_page" value="http://vegbank.nceas.ucsb.edu:8080/forms/nested-plot-query.html"/>
 	<filter token="uploaddata_page" value="http://vegbank.nceas.ucsb.edu:8080/forms/uploadFile.html"/>
 	<filter token="stylesheet_generator" value="http://vegbank.nceas.ucsb.edu:8080/forms/stylesheet-generator.html"/>
-	<filter token="stylesheet_generator_servlet" value="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/stylesheetgenerator"/>
-	<filter token="usermanagement_servlet" value="http://vegbank.nceas.ucsb.edu/framework:8080/servlet/usermanagement"/>
 	<filter token="general_link" value="http://vegbank.nceas.ucsb.edu:8080/vegbank/general/"/>
 	<filter token="panel_link" value="http://vegbank.nceas.ucsb.edu:8080/vegbank/panel/"/>
 	<filter token="dist" value="dist"/>
 	<filter token="version" value="development"/>
 	<filter token="image_server" value="http://vegbank.nceas.ucsb.edu:8080/vegbank/images/"/>
 	<filter token="stylesheet" value="http://vegbank.nceas.ucsb.edu:8080/vegbank/includes/default.css"/>
-
+	
+	<!-- SERVLETS -->
+	<filter token="stylesheet_generator_servlet" value="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/stylesheetgenerator"/>
+	<filter token="usermanagement_servlet" value="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/usermanagement"/>
+	<filter token="datarequestservlet" value="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/DataRequestServlet" />
+	
 </target>
 
 
@@ -155,6 +158,7 @@
 		dest="${forms_server}" 
 		filtering="yes"
 		includes="
+			nested-plot-query.html
 			resultset-download.html
 			plot-query.html
 			plant-query.html
