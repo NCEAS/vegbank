@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-22 01:31:08 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-04-16 00:16:45 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,8 +65,8 @@ public class DBCommunityWriter
 			// Need to get the referenceId;
 			Reference ref = comm.getNameReference();
 			DBReferenceWriter  dbrw = 
-				new DBReferenceWriter(ref, conn, "CommReference", "commreference_id");
-			int commRefId = dbrw.getReferenceId();
+				new DBReferenceWriter(ref, conn, "reference", "reference_id");
+			int refId = dbrw.getReferenceId();
 			
 			// Need to get the partyId
 			Party party = comm.getParty();
@@ -77,21 +77,21 @@ public class DBCommunityWriter
 			// Insert the  Name
 			int commNameId =
 				this.insertName(
-					commRefId,
+					refId,
 					comm.getName(),
 					Utility.dbAdapter.getDateTimeFunction() );
 
 			// Insert the Code
 			int commCodeId =
 				this.insertName(
-					commRefId,
+					refId,
 					comm.getCode(),
 					Utility.dbAdapter.getDateTimeFunction() );
 					
 			// Insert the CommonName
 			int commCommonId =
 				this.insertName(
-					commRefId,
+					refId,
 					comm.getCommonName(),
 					Utility.dbAdapter.getDateTimeFunction() );
 			
@@ -102,7 +102,7 @@ public class DBCommunityWriter
 			int conceptId =
 				this.insertCommConcept(
 					commCodeId,
-					commRefId,
+					refId,
 					comm.getDescription());
 
 
@@ -110,7 +110,7 @@ public class DBCommunityWriter
 			int statusId = 
 				this.insertStatus(
 					conceptId,
-					commRefId,
+					refId,
 					partyId,
 					comm.getStatus(),
 					comm.getParentCode(),
@@ -195,7 +195,7 @@ public class DBCommunityWriter
 						
 			PreparedStatement pstmt =
 						conn.prepareStatement(
-				" insert into COMMSTATUS (COMMCONCEPT_ID, COMMREFERENCE_ID,  "
+				" insert into COMMSTATUS (COMMCONCEPT_ID, REFERENCE_ID,  "
 			+ " COMMPARTY_ID, COMMCONCEPTSTATUS,  startdate, COMMLEVEL, " 
 			+ "commstatus_id, commparent)"
 			+ " values (?,?,?,?,?,?,?,?)");
@@ -298,7 +298,7 @@ public class DBCommunityWriter
 	
 				PreparedStatement pstmt =
 					conn.prepareStatement(
-						"insert into COMMNAME (commreference_id, commName,  dateEntered, "
+						"insert into COMMNAME (reference_id, commName,  dateEntered, "
 							+ "commname_id) values(?,?,?,?) ");
 	
 				//bind the values
@@ -326,7 +326,7 @@ public class DBCommunityWriter
 
 			PreparedStatement pstmt =
 				conn.prepareStatement(
-					" insert into COMMCONCEPT (COMMNAME_ID, COMMREFERENCE_ID, "
+					" insert into COMMCONCEPT (COMMNAME_ID, REFERENCE_ID, "
 						+ " CONCEPTDESCRIPTION, commconcept_id)   values (?,?,?,?)");
 
 			pstmt.setInt(1, nameId);

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-22 01:31:08 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-04-16 00:16:45 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -299,7 +299,6 @@ public class EcoArtCommunityReader implements Constants
 		while ( rs.next() )
 		{
 			String classUsed = rs.getString(6);
-			System.out.println(classUsed);
 			if ( classUsed.trim().equals("GC"))  // Ignore all others
 			{
 				String classLevel = "Association";

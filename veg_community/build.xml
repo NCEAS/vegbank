@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *     '$Date: 2003-03-20 20:35:28 $'
-  * '$Revision: 1.9 $'
+  *     '$Date: 2003-04-16 00:16:45 $'
+  * '$Revision: 1.10 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -23,7 +23,7 @@
   * "Carya".
   * usage: ant [compile|jar|install|jdoc]
 --> 
-<project name="communities_dev" default="compile" basedir=".">
+<project name="community" default="compile" basedir=".">
 	
   
   <target name="init">
@@ -47,8 +47,6 @@
 	  <property name="cpath" value="${jdbc}:${build.dir}:.:${toplib}/vegclass_common.jar"/>
 	
     <!-- FIXME: Move into higher level -->
-    <property name="torque.home" value="../common/datamodel/torque-3.0" />
-    <property name="torque.contextProperties" value="${build.dir}/torque-build.properties"/>
     <property name="hostname" value="beta.nceas.ucsb.edu"/>
 
     <filter token="ant.project.name" value="${ant.project.name}"/>

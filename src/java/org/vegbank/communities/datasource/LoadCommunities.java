@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-22 01:31:08 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-04-16 00:16:45 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,7 +97,7 @@ public class LoadCommunities
 	{
 		Utility u = new Utility();
 		// FIXME: Hard Coded references
-		Connection c = u.getConnection("communities_dev", databaseHost);
+		Connection c = u.getConnection("vegbank", databaseHost);
 		return c;
 	}
 	

@@ -35,4 +35,4 @@ database
       > ./load-ecoart.bat hostname
 
 3] run the createCommunitySummary_pg.sql SQL script on the database
-      > psql communities_dev < createCommunitySummary_pg.sql
+      > psql vegbank < createCommunitySummary_pg.sql
