@@ -25,8 +25,8 @@ import xmlresource.utils.transformXML;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-05 03:54:10 $'
- * 	'$Revision: 1.16 $'
+ *  '$Date: 2002-04-08 20:28:01 $'
+ * 	'$Revision: 1.17 $'
  *
  *
  */
@@ -914,6 +914,7 @@ public class DataSourceClient
 				Vector v = client.getPlotNames();
 				System.out.println("DataSourceCleint > found : " + v.size() +" plots in archive " );
 				String testPlot = "";
+				String email = "jim_drake@natureserve.org";
 				if (argv.length == 3)
 				{
 					testPlot =  argv[2];
@@ -926,7 +927,7 @@ public class DataSourceClient
 						System.out.println("DataSourceCleint > inserting all the plots in the archive " );
 						for (int c = 0; c < v.size(); c++)
 						{
-							 insertResults = client.insertPlot( v.elementAt(c).toString() );
+							 insertResults = client.insertPlot( v.elementAt(c).toString(), email );
 							 sb.append(insertResults);
 						}
 						sb.append("</archiveInsertion>");
@@ -942,7 +943,6 @@ public class DataSourceClient
 						System.out.println("DataSourceCleint > inserting the first plot in the archive: " + testPlot );
 						//String insertResults =  "<?xml version=\"1.0\"?> \n"+client.insertPlot(testPlot);
 						
-						String email = "harris@nceas.ucsb.edu";
 						String insertResults =   client.insertPlot(testPlot, email);
 						
 						//System.out.println("DataSourceCleint > insertion results: \n" + insertResults );
@@ -957,7 +957,7 @@ public class DataSourceClient
 				{
 					testPlot =  v.elementAt(0).toString();
 					System.out.println("DataSourceCleint > inserting the first plot in the archive: " + testPlot );
-					String insertResults = client.insertPlot(testPlot);
+					String insertResults = client.insertPlot(testPlot, email);
 					System.out.println("DataSourceCleint > insertion results: \n" + insertResults );	
 				}
 			} 
