@@ -1,0 +1,33 @@
+README file for the plant taxonomy database 
+
+
+DIRECTORY: taxaData -- data that is used by the 
+	plant taxonomy database 
+
+taxaData/caryaExample.tar -- example of you 
+ plant names and concepts changed within the 
+ Carya Genus over time.  The data was prepared
+ by Bob Peet 10/2000
+
+
+taxaData/plantlst1996.bin.orig.gz
+taxaData/plantlst2000.bin.orig.gz -- origional 
+ USDA-PLants data downloaded from their web site
+
+
+
+
+taxaData/plantlst1996.bin.gz
+taxaData/plantlst2000.bin.gz -- these 2 files
+ are the USDA-PLANTS data downloaded from their 
+ website (2000 and 1996 was from Bob Peet) with 
+ minor formatting changes including: 
+
+	removed the funny 'x' like charaters from the 2000 data list
+	and removed the ' X ' in the 1996 data -- replacing both with
+	an 'x' then the species name.  Also removed the '&' and substituted
+	with the phrase 'and' lastly I added a space ' ' that replaced the
+	single quote ''' that kept messing up the sql code embedded in the
+	java code  -- put both these files into filenames :
+
+
