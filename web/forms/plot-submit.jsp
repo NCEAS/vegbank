@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: farrell $'
-*  '$Date: 2003-11-06 17:31:11 $'
-*  '$Revision: 1.6 $'
+*  '$Author: mlee $'
+*  '$Date: 2003-11-26 21:24:41 $'
+*  '$Revision: 1.7 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -187,16 +187,7 @@ return "@manualFrameFor-submit-plots@"
 	<tr>
 	<td> </td>
 	<td class="item">
-		<!--<ul> 
-			Bellow are links to the VegBank XML Schema and an example document. 
-			<li>
-				<a href="/xml/vegbank-data-ver1.0.0-simple.xsd">VegBank 1.0.0 XML Schema (XSD)</a> [250KB]
-			</li>
-			<li>
-				<a href="/xml/vegbank-data-example-ver1.0.0.xml">VegBank 1.0.0 XML Example (XML)</a> [1.8MB]
-				<small>&#134; This Schema is still evolving. </small>
-			</li>
-		</ul>-->
+
 		--For more information on VegBank Native  XML, including sample XML documents and schemas, please click 
 		<a href="@NativeXMLIndexPage@">here.</a> The Schema is still evolving, and that page will show you the
 		most recent version.
