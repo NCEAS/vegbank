@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.6 2005-03-17 03:56:57 anderson Exp $
+ * $Id: vegbank2005.css,v 1.7 2005-03-22 00:41:11 anderson Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -92,7 +92,8 @@ body>#wrapper {
 #content-3col-a fieldset,
 #content-3col-b fieldset,
 #content-3col-c fieldset {
-    border: 1px solid #cdcdcd;
+    border: 3px double rgb(16,125,16);
+    border-color: #bcbcbc;
     width: 15em;
     padding: 5px 2px 5px 5px;
     width: 210px;
@@ -113,33 +114,41 @@ body>#wrapper {
     letter-spacing: 1px;
     font-size: 16px;
     font-weight: bold;
-    background-color: #E6E6CF;
-    border: #bcbcbc solid 1px;
+	color: #2b2b27;
+    /*border: 2px solid #bcbcbc;*/
+    border: 1px solid #a6c4a6;
+    background-color: #cfe2c9;
+			/* background-color: #E6E6CF; */
     padding: 1px 10px;
 }
 
 #home-img {
   clear: both;
   float: left;
-  margin: 10px 0 0 2px;
-  border-width: 0;
+  margin: 10px 0 0 1px;
+  border: solid #666 1px;
+  border-bottom: solid #aaa 1px;
+}
+fieldset > #home-img {
+  margin-left: 3px;
 }
 
 #content-3col-a table {
-  margin: 1px 0 2px 4px;
-  width: 199px;
+  margin: 1px 0 2px 2px;
+  width: 201px;
   clear: left;
   border-width: 0;
   z-index: 9;
 }
 #centercontent > #content-3col-a table {
-  margin: 1px 0 2px 3px;
-  width: 197px;
+  margin-left: 4px;
+  width: 200px;
 }
 #content-3col-a table td {
     padding: 2px;
     text-align: center;
 }
+
 
 
 
@@ -266,8 +275,8 @@ HEADER
     font-weight: normal;
 }
 #header-data-links a:hover {
+    background: #04d;
     text-decoration: none;
-    background: #808059;
     color: #fff;
 }
 
@@ -286,7 +295,7 @@ html>body #header-right {
 }
 #header-right a {
 display: none;
-    color: #08c;
+    color: #04d;
     font-family: arial, sans-serif;
 	font-size: 11px;
     font-weight: normal;
@@ -324,9 +333,9 @@ html>body #header-right ul li a {
     width: auto;
 }
 #header-right a:hover {
-    background-color: #08c;
+    background-color: #04d;
     color: #fff;
-    border-bottom: 1px solid #08c;
+    border-bottom: 1px solid #04d;
 }
 /* commented backslash hack hides rule from ie5-mac \*/
 #header-right a { }  /* end ie5-mac hack */
@@ -350,18 +359,15 @@ FOOTER
 #footer {
     width: 752px;
     border: 1px solid #999;
-    padding: 10px 0 0 0;
-    line-height: 1em;
+    background-color: #E6E6CF;
+    padding: 0;
     margin: 0;
     font-size: 10px;
-    height: 24px;
-    color: #999;
     text-align: left;
-    background-color: #E6E6CF;
+    line-height: 2.5em;
 }
 #wrapper > #footer {
     /* beginning to despise IE */
-    padding: 10px 0 0 0;
     width: 750px;
 }
 #footer img {
@@ -377,7 +383,12 @@ FOOTER
 }
 #footer li {
     display: inline;
-    padding: 0 15px 0 15px;
+    padding: 0 0px 0 15px;
+}
+#postfooter {
+	clear: both; 
+	font-size: 1px;
+	height: 10px;
 }
 
 /*-------------------------------------------------
@@ -434,9 +445,9 @@ DATACART
 }
 
 .input-button {
-    color: #08c;
+    color: #04d;
     background: #eee;
-    border: 2px #08c outset;
+    border: 2px #04d outset;
 }
 
 #tester {

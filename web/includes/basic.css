@@ -1,5 +1,5 @@
 /*
- * $Id: basic.css,v 1.3 2005-03-15 13:55:42 anderson Exp $
+ * $Id: basic.css,v 1.4 2005-03-22 00:41:11 anderson Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -71,7 +71,6 @@ html>body #container {
     clear: both;
 }
 #postfooter {
-    display: none;
     /* only postfooter positioning goes here */
 }
 
@@ -81,9 +80,9 @@ HTML ELEMENTS
 -------------------------------------------------*/
 a {text-decoration: underline; padding: 1px; }
 a.external { padding-left: 9px; background: url(@images_link@external.gif) no-repeat; }
-a:link { color: #08c; }
-a:visited { color: #08c; }
-a:hover { color: #fff; background-color: #08c; text-decoration: none; }
+a:link { color: #04d; }
+a:visited { color: #04d; }
+a:hover { color: #fff; background-color: #04d; text-decoration: none; }
 
 img {
   border: none;
