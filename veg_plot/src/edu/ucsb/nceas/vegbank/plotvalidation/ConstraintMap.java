@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2003-01-07 18:24:54 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2003-01-08 16:37:39 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -136,7 +136,7 @@ public class ConstraintMap implements ConstraintMapInterface
 			 doc = parser.getDocument(constraintMapDocument);
 			 
        this.attributeNameVec  = parser.getValuesForPath(doc, "/constraintMap/mapInstance/attributeName");
-			 System.out.println("attributeName: " + attributeNameVec.toString() ); 
+			 System.out.println("ConstraintMap > attributeName: " + attributeNameVec.toString() ); 
        for (int i=0;i<attributeNameVec.size();i++) 
        {
         Node n = parser.get(doc, "mapInstance", i);
@@ -357,11 +357,11 @@ public class ConstraintMap implements ConstraintMapInterface
    public static void main(String[] args)
    {
       ConstraintMap map = new ConstraintMap("constraint-map.xml"); 
-      System.out.println("map size: "+ map.getMapSize() );
-      System.out.println("rule: "+ map.getConstraintRule(0) );
-      System.out.println("method name element 1: " + map.getMethodName(0) );
-      System.out.println("method params element 1: " + map.getMethodParams(0) );
-      System.out.println("table element 1: " + map.getDBTable(0) );
-      System.out.println("attribute element 1: " + map.getDBAttribute(0) );
+      System.out.println("ConstraintMap > map size: "+ map.getMapSize() );
+      System.out.println("ConstraintMap > rule: "+ map.getConstraintRule(0) );
+      System.out.println("ConstraintMap > method name element 1: " + map.getMethodName(0) );
+      System.out.println("ConstraintMap > method params element 1: " + map.getMethodParams(0) );
+      System.out.println("ConstraintMap > table element 1: " + map.getDBTable(0) );
+      System.out.println("ConstraintMap > attribute element 1: " + map.getDBAttribute(0) );
    }
 }

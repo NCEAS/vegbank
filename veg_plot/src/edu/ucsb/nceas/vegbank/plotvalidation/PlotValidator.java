@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2003-01-07 18:24:54 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2003-01-08 16:37:39 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -173,7 +173,7 @@ public class PlotValidator implements PlotValidationInterface
 				Object[] arguments = new Object[] {parameters};
 				try {
 					targetMethod = c.getMethod( method, parameterTypes);
-					System.out.println("mName: " + targetMethod.getName() );
+					System.out.println("PlotValidator > mName: " + targetMethod.getName() );
 					result = (String) targetMethod.invoke(source, arguments);
 				} catch (NoSuchMethodException e) {
           System.out.println(e);
