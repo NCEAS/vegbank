@@ -17,6 +17,7 @@
 <BODY >@vegbank_header_html_normal@
 
 <h3>Data Currently in VegBank </h3>
+<div align="center">
 <table class="leftrightborders" cellpadding="2">
 <% String rowClass = "evenrow"; %>
 <vegbank:get select="observation_summ" beanName="map" />
@@ -80,7 +81,7 @@
      </logic:iterate>
    </table>
  </logic:notEmpty> 
-
+</div>
 
 @vegbank_footer_html_tworow@
 </BODY>
