@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: farrell $'
-* '$Date: 2003-11-05 23:10:57 $'
-* '$Revision: 1.70 $'
+* '$Date: 2003-11-06 18:41:39 $'
+* '$Revision: 1.71 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -147,7 +147,7 @@
     <copy overwrite="true" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
     <!-- add to second webpage at root/${webapp}/index.html -->
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
-    <copy todir="${apache.document.root}/plot/" file="${basedir}/plot/.htaccess"/>
+    <copy todir="${apache.document.root}/plot/" filtering="yes" file="${basedir}/plot/.htaccess"/>
   </target>
   <!-- DISTRIBUTE THE IMAGES -->
   <target name="images" depends="init" description="=&gt; dist. the images to server">
