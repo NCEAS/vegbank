@@ -15,8 +15,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2003-08-28 00:18:18 $'
-*  '$Revision: 1.7 $'
+*      '$Date: 2003-08-28 22:39:34 $'
+*  '$Revision: 1.8 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -556,8 +556,14 @@ VEGBANK - Simple Plots Query
 	    <th><p><span class="category">Units</span></p></th>
 	    <th><p><span class="category">Include Nulls?</span></p></th>
 	  </tr>
+	  <tr><!-- date --> 
+	    <td>&nbsp;</td>
+		<td colspan="2" class="itemsmaller" align="center">from 
+			<bean:write name="bean" property="curMinObsStartDate"/> to <bean:write name="bean" property="curMaxObsEndDate"/></td>
+		<td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	  </tr>
 	  <tr>
-	    <!-- date --> 
 	    <td><span class="itemsmall"><b>Date Sampled</b></span></td>
 
 	    <td>
@@ -571,7 +577,14 @@ VEGBANK - Simple Plots Query
 	      <html:checkbox property="allowNullObsDate"/>
 	    </td>
 	  </tr>
-	  <tr><!-- date2 -->
+	  <tr><!-- date2 --> 
+	    <td>&nbsp;</td>
+		<td colspan="2" class="itemsmaller" align="center">from 
+			<bean:write name="bean" property="curMinDateEntered"/> to <bean:write name="bean" property="curMaxDateEntered"/></td>
+		<td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	  </tr>
+	  <tr>
 	    <td><span class="itemsmall"><b>Date Entered into VegBank</b></span></td>
 	    <td>
 	      <html:text property="minDateEntered" size="20"/>
@@ -584,6 +597,13 @@ VEGBANK - Simple Plots Query
 	    <td><span class="itemsmall">(required)</span>
 	  </tr>
 	  <tr><!-- plot size -->
+	    <td>&nbsp;</td>
+		<td colspan="2" class="itemsmaller" align="center">from 
+			<bean:write name="bean" property="curMinArea"/> to <bean:write name="bean" property="curMaxArea"/> square meters</td>
+		<td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	  </tr>
+	  <tr>
 	    <td><span class="itemsmall"><b>Plot Size</b></span></td>
 	    <td>
 	      <html:text property="minPlotArea" size="20"/>

@@ -3,8 +3,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-08-28 00:15:42 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-08-28 22:38:35 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,6 +83,10 @@ public class PlotQueryForm extends ActionForm
   private String curMinSlopeGradient;
   private String curMaxSlopeGradient;
   private boolean allowNullSlopeGradient;
+  private String curMinDateEntered;
+  private String curMaxDateEntered;
+  private String curMinArea;
+  private String curMaxArea;
 
   private String[] rockType = new String[20];
   private String[] surficialDeposit = new String[20];
@@ -108,8 +112,10 @@ public class PlotQueryForm extends ActionForm
   private String observationContributorName;
   private boolean allowNullObservationContributorName;
   private String plotSubmitterName;
+  private String curMinObsStartDate;
+  private String curMaxObsEndDate;
 	
-  // Vegatation
+  // Vegetation
   private String[] plantName = new String[5];
   private String[] minTaxonCover = new String[5];
   private String[] maxTaxonCover = new String[5];
@@ -258,6 +264,30 @@ public class PlotQueryForm extends ActionForm
   /**
    * @return
    */
+  public String getCurMaxDateEntered()
+  {
+    return curMaxDateEntered;
+  }
+
+  /**
+   * @return
+   */
+  public String getCurMaxArea()
+  {
+    return curMaxArea;
+  }
+
+  /**
+   * @return
+   */
+  public String getCurMaxObsEndDate()
+  {
+    return curMaxObsEndDate;
+  }
+
+  /**
+   * @return
+   */
   public String getCurMinElevation()
   {
     return curMinElevation;
@@ -277,6 +307,30 @@ public class PlotQueryForm extends ActionForm
   public String getCurMinSlopeGradient()
   {
     return curMinSlopeGradient;
+  }
+
+  /**
+   * @return
+   */
+  public String getCurMinDateEntered()
+  {
+    return curMinDateEntered;
+  }
+
+  /**
+   * @return
+   */
+  public String getCurMinArea()
+  {
+    return curMinArea;
+  }
+
+  /**
+   * @return
+   */
+  public String getCurMinObsStartDate()
+  {
+    return curMinObsStartDate;
   }
 
 
@@ -379,6 +433,30 @@ public class PlotQueryForm extends ActionForm
   /**
    * @param string
    */
+  public void setCurMaxArea(String string)
+  {
+    curMaxArea = string;
+  }
+
+  /**
+   * @param string
+   */
+  public void setCurMaxDateEntered(String string)
+  {
+    curMaxDateEntered = string;
+  }
+
+  /**
+   * @param string
+   */
+  public void setCurMaxObsEndDate(String string)
+  {
+    curMaxObsEndDate = string;
+  }
+
+  /**
+   * @param string
+   */
   public void setCurMinElevation(String string)
   {
     curMinElevation = string;
@@ -398,6 +476,30 @@ public class PlotQueryForm extends ActionForm
   public void setCurMinSlopeGradient(String string)
   {
     curMinSlopeGradient = string;
+  }
+
+  /**
+   * @param string
+   */
+  public void setCurMinArea(String string)
+  {
+    curMinArea = string;
+  }
+
+  /**
+   * @param string
+   */
+  public void setCurMinDateEntered(String string)
+  {
+    curMinDateEntered = string;
+  }
+
+  /**
+   * @param string
+   */
+  public void setCurMinObsStartDate(String string)
+  {
+    curMinObsStartDate = string;
   }
 
   /**
@@ -1104,30 +1206,52 @@ public class PlotQueryForm extends ActionForm
 	 * @return void
 	 */
 	private void loadDataConstraints() {
-		StringBuffer query = new StringBuffer(1024)
+		StringBuffer plotQuery = new StringBuffer(1024)
 				.append("SELECT MIN(elevation) as curMinElevation, ")
 				.append("MAX(elevation) as curMaxElevation, ")
 				.append("MIN(slopeAspect) as curMinSlopeAspect, ")
 				.append("MAX(slopeAspect) as curMaxSlopeAspect, ")
 				.append("MIN(slopeGradient) as curMinSlopeGradient, ")
-				.append("MAX(slopeGradient) as curMaxSlopeGradient ")
+				.append("MAX(slopeGradient) as curMaxSlopeGradient, ")
+				.append("MIN(dateentered) as curMinDateEntered, ")
+				.append("MAX(dateentered) as curMaxDateEntered, ")
+				.append("MIN(area) as curMinArea, ")
+				.append("MAX(area) as curMaxArea ")
 				.append("FROM plot");
+
+		StringBuffer obsQuery = new StringBuffer(512)
+				.append("SELECT MIN(obsStartDate) as curMinObsStartDate, ")
+				.append("MAX(obsEndDate) as curMaxObsEndDate ")
+				.append("FROM observation");
+
 		try
 		{
 			DatabaseAccess da = new DatabaseAccess();
-			// hit the DB
-			ResultSet rs = da.issueSelect(query.toString());		
 
-			System.out.println("Processing " + rs.toString());
-			
+			// hit the DB, plot
+			ResultSet rs = da.issueSelect(plotQuery.toString());		
+
 			if (rs.next())
 			{
-				curMinElevation = Integer.toString( (Double.valueOf(rs.getString(1))).intValue() );
-				curMaxElevation = Integer.toString( (Double.valueOf(rs.getString(2))).intValue() );
+				curMinElevation = Integer.toString( (int)Double.parseDouble(rs.getString(1)) );
+				curMaxElevation = Integer.toString( (int)Math.ceil(Double.parseDouble(rs.getString(2))) );
 				curMinSlopeAspect = rs.getString(3);
 				curMaxSlopeAspect = rs.getString(4);
 				curMinSlopeGradient = rs.getString(5);
 				curMaxSlopeGradient = rs.getString(6);
+				curMinDateEntered = rs.getString(7);
+				curMaxDateEntered = rs.getString(8);
+				curMinArea = Integer.toString( (int)Double.parseDouble(rs.getString(9)) ) ;
+				curMaxArea = Integer.toString( (int)Math.ceil(Double.parseDouble(rs.getString(10))) );
+			}
+
+			// hit the DB, obs
+			rs = da.issueSelect(obsQuery.toString());		
+
+			if (rs.next())
+			{
+				curMinObsStartDate = rs.getString(1);
+				curMaxObsEndDate = rs.getString(2);
 			}
 		}
 		catch (SQLException e1)

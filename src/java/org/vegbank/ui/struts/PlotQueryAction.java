@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-08-28 00:17:31 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2003-08-28 22:38:35 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -592,7 +592,7 @@ public class PlotQueryAction extends Action
 			sb.append(" ( ");
 			if (!Utility.isStringNullOrEmpty(max))
 			{
-				sb.append(" ").append(fieldName).append(" < ").append(max).append(" ");
+				sb.append(" ").append(fieldName).append(" <= ").append(max).append(" ");
 
 				if (!Utility.isStringNullOrEmpty(min))
 				{
@@ -602,7 +602,7 @@ public class PlotQueryAction extends Action
 
 			if (!Utility.isStringNullOrEmpty(min))
 			{
-				sb.append(" ").append(fieldName).append(" >").append(min).append(" ");
+				sb.append(" ").append(fieldName).append(" >= ").append(min).append(" ");
 			}
 			sb.append(" ) ");
 
@@ -647,8 +647,7 @@ public class PlotQueryAction extends Action
 	
 			if (!Utility.isStringNullOrEmpty(minDate))
 			{
-				sb.append(" ( ");
-				sb.append(" ").append(startDateFieldName).append(" >= '").append(minDate).append("' ");
+				sb.append(" ( ").append(startDateFieldName).append(" >= '").append(minDate).append("' ");
 				if ( allowNulls)
 				{
 					sb.append("  OR ").append(startDateFieldName).append(" IS NULL ");
@@ -658,9 +657,7 @@ public class PlotQueryAction extends Action
 	
 			if (!Utility.isStringNullOrEmpty(maxDate))
 			{
-				sb.append(" AND ");
-				sb.append(" ( ");
-				sb.append(" ").append(endDateFieldName).append(" <= '").append(maxDate).append("' ");
+				sb.append(" AND ( ").append(endDateFieldName).append(" <= '").append(maxDate).append("' ");
 				if ( allowNulls)
 				{
 					sb.append("  OR ").append(startDateFieldName).append(" IS NULL ");
