@@ -184,8 +184,8 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
                 <li class="constsize"> VegBank workshop coming soon at a Portland 
                   ESA meeting <a href="@workshop_link@">workshop.</a> 
                 </li>
-                <li class="constsize">Users can now view VegBank <a href="@general_link@metadata.html"> 
-                  metadata.</a> </li>
+                <li class="constsize"><font color="red">NEW!</font> Take the VegBank <a href="@general_link@instructions.html"> 
+                  tutorial.</a> </li>
                 <li class="constsize">Version 2 of the ESA <i><a 
 href="@panel_link@standards.html">Guidelines for Describing 
                   Associations and Alliances of the U.S. National Vegetation 
