@@ -30,6 +30,26 @@
    example:   
 
 <vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_reference_pk" wparam="reference_pk" />-->
+<TR><TD COLSPAN="2">
+<vegbank:get id="referencecontributor" select="referencecontributor" beanName="map" pager="false" where="where_reference_pk" wparam="reference_pk" perPage="-1" />
+<table class="leftrightborders" cellpadding="2">
+<tr><th colspan="9">Reference Contributors:</th></tr>
+<logic:empty name="referencecontributor-BEANLIST">
+<tr><td class="@nextcolorclass@">  Sorry, no Reference Contributors found.</td></tr>
+</logic:empty>
+<logic:notEmpty name="referencecontributor-BEANLIST">
+<tr>
+<%@ include file="autogen/referencecontributor_summary_head.jsp" %>
+</tr>
+<logic:iterate id="onerowofreferencecontributor" name="referencecontributor-BEANLIST">
+<tr class="@nextcolorclass@">
+<%@ include file="autogen/referencecontributor_summary_data.jsp" %>
+</tr>
+</logic:iterate>
+</logic:notEmpty>
+</table>
+</TD></TR>
+
 </table>
 <p>&nbsp;</p>
 </logic:iterate>
