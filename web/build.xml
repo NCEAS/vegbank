@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   * '$Author: farrell $'
-  * '$Date: 2002-11-26 22:15:24 $'
-  * '$Revision: 1.24 $'
+  * '$Date: 2002-12-06 18:40:54 $'
+  * '$Revision: 1.25 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -24,6 +24,7 @@
 <target name="init">
 	<tstamp/>
 	<!-- LET THE USER KNOW THE TARGETS -->
+  <echo message="############ ${ant.project.name} ##############"/> 
 	<echo>
 	Targets:  {init} includes, news, panel, history, pubs, forms, general, design,
 	dictionary

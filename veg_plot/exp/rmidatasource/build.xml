@@ -13,16 +13,17 @@
 	* embedded database(s) etc.  Before building this check the 
 	* dependencies
 	*
-	* 		'$Author: harris $'
- 	*     '$Date: 2002-12-02 21:20:54 $'
- 	*     '$Revision: 1.14 $'
+	* 		'$Author: farrell $'
+ 	*     '$Date: 2002-12-06 18:40:54 $'
+ 	*     '$Revision: 1.15 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
 	<!-- INITIATION -->
 	<target name="init">
-  
-		<!-- RELEVANT DIRECTORIES -->
+
+    <echo message="############ ${ant.project.name} ##############"/>
+    <!-- RELEVANT DIRECTORIES -->
 		<property name="current_dir" value="./" />
 		<property name="src" value="./src" />
 		<property name="build" value="./build" />
@@ -125,8 +126,8 @@
 	
 	
 <!-- CLEAN UP -->
-	<target name="clean">
-		<delete dir="build" />
+	<target name="clean" depends="init">
+		<delete dir="${build}" />
 	</target>
 	
 

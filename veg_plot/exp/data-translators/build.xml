@@ -14,14 +14,15 @@
 	* dependencies
 	*
 	* 		'$Author: farrell $'
- 	*     '$Date: 2002-12-06 00:29:46 $'
- 	*     '$Revision: 1.13 $'
+ 	*     '$Date: 2002-12-06 18:40:55 $'
+ 	*     '$Revision: 1.14 $'
 --> 
 <project name="data-translators" default="compile" basedir=".">
 	
 	<!-- INITIATION -->
 	<target name="init">
-  
+ 
+    <echo message="############ ${ant.project.name} ##############"/>
 		<!-- RELEVANT DIRECTORIES -->
 		<property name="current_dir" value="./" />
 		<property name="src" value="./src" />

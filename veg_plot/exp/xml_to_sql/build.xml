@@ -11,11 +11,13 @@
 	* this build file will build the installer software for the 
 	* vegetation client software
 --> 
-<project name="VegClient" default="jar" basedir=".">
+<project name="xml to sql" default="jar" basedir=".">
 	<!-- INITIATE -->
 	<target name="init">
 		<tstamp/>
-		<!-- RELAVANT Properties-->
+
+    <echo message="############ ${ant.project.name} ##############"/> 
+    <!-- RELAVANT Properties-->
 		<property name="current_dir" value="./" />
 		<property name="src" value="./src" />
 		<property name="build" value="./build" />
@@ -72,8 +74,8 @@
 
 	
 	<!-- CLEAN -->
-	<target name="clean" depends="jar">	
-  	<delete file="${buile}/**"/>
+	<target name="clean" depends="init">	
+  	<delete dir="${build}"/>
 	</target>
 
 

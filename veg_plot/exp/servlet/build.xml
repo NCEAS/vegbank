@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *   '$Date: 2002-12-03 23:59:04 $'
-  *   '$Revision: 1.9 $'
+  *   '$Date: 2002-12-06 18:40:53 $'
+  *   '$Revision: 1.10 $'
   *
   *  Authors: John Harris
   *  Copyright: 2000 Regents of the University of California and the
@@ -24,47 +24,49 @@
 -->
  
 <project name="servlet" default="compile" basedir=".">
-	<target name="init">
-	<tstamp/>
-	
-	<property name="current" value="./" />
-	<property name="build" value="./build" />
-	<property name="lib" value="lib" />
-	<property name="servlet_api" value="lib/servlet.jar" />
-	
-	
-	<!--NOTICE THE SETTINGS FOR THE PRODUCTION VS THE DEVELOPMENT SERVLET LOCATIONS -->
-	<!-- PRODUCTION	 -->
-	<property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib" />
-        <property name="servlet_WEB_INF" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/" />
-	<property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat/bin" />
 
-<!-- DEVELOPMENT -->
-<!--
-	<property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat_dev/webapps/framework/WEB-INF/lib" />
-	<property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat_dev/bin" />
--->
-	<property name="xmlresource" value="lib/xmlresource.jar" />
-	<property name="dbaccess" value="lib/database_access.jar" />
-	<property name="data-source" value="lib/datatranslator.jar" />
-	<property name="release" value="development"/>
-	<property name="frameworksrc" value="frameworkservlet/src"/>
-	<property name="authenticationsrc" value="authentication"/>
-	<property name="utilsrc" value="util"/>
-	<property name="datafileexchg_src" value="datafile-exchange"/>
-	<property name="usermanagementsrc" value="usermanagement-servlet"/>
-	<property name="stylesheet_src" value="stylesheet_servlet/src"/>
+  <target name="init">
+	  <tstamp/>
+
+    <echo message="############ ${ant.project.name} ##############"/> 
+	  <property name="current" value="./" />
+	  <property name="build" value="./build" />
+	  <property name="lib" value="lib" />
+	  <property name="servlet_api" value="lib/servlet.jar" />
 	
-	<property name="multipart_src" value="multipart"/>
-	<property name="multipart" value="lib/multipart.jar"/>
-	<property name="ant" value="ant.jar"/>
+	
+	  <!--NOTICE THE SETTINGS FOR THE PRODUCTION VS THE DEVELOPMENT SERVLET LOCATIONS -->
+	  <!-- PRODUCTION	 -->
+	  <property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib" />
+    <property name="servlet_WEB_INF" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/" />
+	  <property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat/bin" />
+
+    <!-- DEVELOPMENT -->
+    <!--
+	  <property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat_dev/webapps/framework/WEB-INF/lib" />
+	  <property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat_dev/bin" />
+    -->
+	  <property name="xmlresource" value="lib/xmlresource.jar" />
+	  <property name="dbaccess" value="lib/database_access.jar" />
+	  <property name="data-source" value="lib/datatranslator.jar" />
+	  <property name="release" value="development"/>
+	  <property name="frameworksrc" value="frameworkservlet/src"/>
+	  <property name="authenticationsrc" value="authentication"/>
+	  <property name="utilsrc" value="util"/>
+	  <property name="datafileexchg_src" value="datafile-exchange"/>
+	  <property name="usermanagementsrc" value="usermanagement-servlet"/>
+	  <property name="stylesheet_src" value="stylesheet_servlet/src"/>
+	
+	  <property name="multipart_src" value="multipart"/>
+	  <property name="multipart" value="lib/multipart.jar"/>
+	  <property name="ant" value="ant.jar"/>
 
 	
-	<property name="cpath" value="${multipart}:${ant}:${build}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
+	  <property name="cpath" value="${multipart}:${ant}:${build}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
 	
-	<filter token="server" value="${server}" />
-	<filter token="servlet-path" value="${servlet-path}" />
-</target>
+	  <filter token="server" value="${server}" />
+	  <filter token="servlet-path" value="${servlet-path}" />
+  </target>
 
 
 
@@ -316,6 +318,12 @@
 	 use="true"
 	 windowtitle="VEGBANK FRAMEWORK SERVLET">
 </javadoc>
+</target>
+
+<!-- CLEAN -->
+<target name="clean" description="Remove generated files" depends="init" >
+	<delete dir="${build}" />
+	<ant dir="vegbank-request" target="clean"/>	
 </target>
 								 
 

@@ -6,9 +6,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  *   '$Author: harris $'
-  *     '$Date: 2002-08-29 16:51:05 $'
-  * '$Revision: 1.9 $'
+  *   '$Author: farrell $'
+  *     '$Date: 2002-12-06 18:40:53 $'
+  * '$Revision: 1.10 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -24,42 +24,43 @@
   * usage: ant [compile|jar|install|jdoc]
 --> 
 <project name="plotLoader" default="dist" basedir=".">
+
 	<target name="init">
-	<tstamp/>
-
-	
-	<!-- NOTICE THE DIFFERENCES BETWEEN THE DEV AND PRODUCTION SERVLETS-->
-	<property name="installDir" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/" />
-	<property name="tomcat_root" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/" />
-	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib//" />
-
-	<property name="current" value="./" />
-	<property name="build" value="build" />
-	<property name="src" value="src" />
-	<property name="lib" value="../lib" />
-	<property name="javadocs" value="../doc/api" />
-	
-
-
-	<property name="vegcommunity" value="../lib/vegcommunity.jar" />
-	<property name="planttaxonomy" value="../lib/planttaxonomy.jar" />
-	<property name="jdbc" value="../lib/jdbc7.0-1.2.jar" />
-	<property name="multipart" value="../lib/multipart.jar" />
-	<property name="servlet-api" value="../lib/servlet.jar" />
-	<property name="database_access" value="../lib/database_access.jar" />
-	<property name="xml_resource" value="../lib/xmlresource.jar" />
-	<property name="xalan" value="../lib/xalan_1_2_2.jar" />
-	<property name="xerces" value="../lib/xerces_1_4.jar" />
-	<property name="framework" value="../lib/frameworkservletmodule.jar" />
-	<property name="rmisystem" value="../lib/rmidatasource.jar" />
-	<property name="authentication" value="../lib/authservletmodule.jar" />
-	<property name="utilities" value="../lib/utilities.jar" />
-	<property name="cpath" value="${utilities}:${authentication}:${planttaxonomy}:${rmisystem}:${vegcommunity}:${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
-	
-	
-	<filter token="servlet-path" value="${servlet-path}" />
-  	<filter token="servlet_lib_dir" value="${installDir}" />
-</target>
+    	<tstamp/>
+    
+      <echo message="############ ${ant.project.name} ##############"/>  	
+    	<!-- NOTICE THE DIFFERENCES BETWEEN THE DEV AND PRODUCTION SERVLETS-->
+    	<property name="installDir" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/" />
+    	<property name="tomcat_root" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/" />
+    	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib//" />
+    
+    	<property name="current" value="./" />
+    	<property name="build" value="build" />
+    	<property name="src" value="src" />
+    	<property name="lib" value="../lib" />
+    	<property name="javadocs" value="../doc/api" />
+    	
+    
+    
+    	<property name="vegcommunity" value="../lib/vegcommunity.jar" />
+    	<property name="planttaxonomy" value="../lib/planttaxonomy.jar" />
+    	<property name="jdbc" value="../lib/jdbc7.0-1.2.jar" />
+    	<property name="multipart" value="../lib/multipart.jar" />
+    	<property name="servlet-api" value="../lib/servlet.jar" />
+    	<property name="database_access" value="../lib/database_access.jar" />
+    	<property name="xml_resource" value="../lib/xmlresource.jar" />
+    	<property name="xalan" value="../lib/xalan_1_2_2.jar" />
+    	<property name="xerces" value="../lib/xerces_1_4.jar" />
+    	<property name="framework" value="../lib/frameworkservletmodule.jar" />
+    	<property name="rmisystem" value="../lib/rmidatasource.jar" />
+    	<property name="authentication" value="../lib/authservletmodule.jar" />
+    	<property name="utilities" value="../lib/utilities.jar" />
+    	<property name="cpath" value="${utilities}:${authentication}:${planttaxonomy}:${rmisystem}:${vegcommunity}:${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
+    	
+    	
+    	<filter token="servlet-path" value="${servlet-path}" />
+      	<filter token="servlet_lib_dir" value="${installDir}" />
+    </target>
 
 <!-- PREPARE -->
 <target name="prepare" depends="init">
@@ -123,20 +124,20 @@
 
 <!--  JDOC  -->	
 <target name="jdoc">                                                                                                                                
- <javadoc 
-	sourcefiles="src/DataSubmitServlet.java,src/DataRequestServlet.java,src/fileDownload.java,src/viewData.java,src/QueryBuilderServlet.java"
-	sourcepath="src"				
-	destdir="doc/api"
-  author="true"
-  version="true"
-	private="true"
-  use="true"
-  windowtitle="VEGBANK SPECIFIC SERVLET">
-</javadoc>
-
-
+     <javadoc 
+    	sourcefiles="src/DataSubmitServlet.java,src/DataRequestServlet.java,src/fileDownload.java,src/viewData.java,src/QueryBuilderServlet.java"
+    	sourcepath="src"				
+    	destdir="doc/api"
+      	author="true"
+      	version="true"
+    	private="true"
+      	use="true"
+      	windowtitle="VEGBANK SPECIFIC SERVLET">
+    </javadoc>
 </target>      
 
-
+<target name="clean" description="Remove generated files" depends="init">
+	<delete dir="${build}" />
+</target>
 
 </project>

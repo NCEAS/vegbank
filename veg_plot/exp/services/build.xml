@@ -7,15 +7,16 @@
   *  See http://jakarta.apache.org for details on Ant  
   *  
 	*
-	* 		'$Author: harris $'
- 	*     '$Date: 2002-07-18 13:35:20 $'
- 	*     '$Revision: 1.2 $'
+	* 		'$Author: farrell $'
+ 	*     '$Date: 2002-12-06 18:40:54 $'
+ 	*     '$Revision: 1.3 $'
 --> 
-<project name="FormReader" default="init" basedir=".">
+<project name="services" default="init" basedir=".">
 	
 	<!-- INITIATION -->
 	<target name="init">
-  
+
+    <echo message="############ ${ant.project.name} ##############"/> 
 		<!-- RELEVANT DIRECTORIES -->
 		<property name="current_dir" value="./" />
 		<property name="src" value="./src" />
@@ -78,5 +79,8 @@
 		/>
 	</target>
 	
+	<target name="clean" description="Remove all generated files" depends="init">
+    <delete dir="${build}"/>
+  </target>
 
 </project>

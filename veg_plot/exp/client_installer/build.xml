@@ -11,9 +11,10 @@
 	* this build file will build the installer software for the 
 	* vegetation client software
 --> 
-<project name="VegClient" default="dist" basedir=".">
+<project name="Client Installer" default="dist" basedir=".">
 	<!-- INITIATE -->
 	<target name="init">
+    <echo message="############ ${ant.project.name} ##############"/>
 		<tstamp/>
 		<!-- RELAVANT Properties-->
 		<property name="current_dir" value="./" />
@@ -96,11 +97,12 @@
 	</target>
 	
 	<!-- CLEAN -->
-	<target name="clean" depends="dist">	
+	<target name="clean" depends="init">	
   	<delete file="${bin}/cygwin1.dll"/>
 		<delete file="${bin}/start_installer.exe"/>
 		<delete file="${bin}/Installer.jar"/>
 		<delete file="${bin}/jar.exe"/>
+    <delete dir="${build}"/>
 	</target>
 
 

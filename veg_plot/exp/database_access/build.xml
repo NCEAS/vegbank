@@ -17,7 +17,8 @@
 --> 
 <project name="database_access" default="dist" basedir=".">
 	<target name="init">
-    	<tstamp/>
+    <echo message="############ ${ant.project.name} ##############"/>
+    <tstamp/>
     	
     	<!-- 
     		* Below are the database connection settings
@@ -121,8 +122,8 @@
 	</target>
 	
 	<!-- CLEAN UP -->
-	<target name="clean">
-		<delete dir="build" />
+	<target name="clean" depends="init">
+		<delete dir="${build}" />
 	</target>
 	
 	
