@@ -1,26 +1,9 @@
-<HTML>
-<HEAD>@defaultHeadToken@
-<TITLE>VegBank Web Site Map</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
-<meta http-equiv="Content-Type" content="text/html; charset=">
-<script language="JavaScript">
-<!--
-function MM_jumpMenu(targ,selObj,restore)
-{ //v3.0
-  if (selObj.options[selObj.selectedIndex].value != "" ) {
-   eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
-  }
-if (restore) selObj.selectedIndex=0;
-}
-//-->
-</script>
 
-</HEAD>
-<!-- VegBank Header -->
-<BODY class="vegbank"><!-- BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF"-->
-@vegbank_header_html_normal@
-<br /><br />
-<!-- end of VegBank Header -->
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+<TITLE>VegBank Web Site Map</TITLE>
+  @webpage_masthead_html@
   <table border="1" cellspacing="1"  cellpadding="1" width="800">
   <tr valign="top"><td colspan="2" class="vegbank" border="1">
   <h2 align="center"><br><span class="vegbank">VegBank Web Site Map</span></h2>
@@ -276,6 +259,6 @@ if (restore) selObj.selectedIndex=0;
    </table>
 <!-- VegBank Footer -->
 <br>
-@vegbank_footer_html_tworow@
-</BODY>
-</HTML>
+@webpage_footer_html@
+
+

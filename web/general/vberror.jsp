@@ -1,8 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<HTML>
+
 <!-- 
   *   '$RCSfile: vberror.jsp,v $'
   *     Purpose: Deliver an error message to the user 
@@ -11,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-11-16 07:25:19 $'
-  *  '$Revision: 1.8 $'
+  *      '$Date: 2005-03-15 07:51:55 $'
+  *  '$Revision: 1.9 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -30,16 +26,13 @@
   * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
   -->
 
-<HEAD>@defaultHeadToken@
-<title>Oops! VegBank Error</title>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
-<meta http-equiv="Content-Type" content="text/html; charset=">
-</HEAD>
-<BODY>
 
-<!--xxx -->
-@vegbank_header_html_normal@ 
-<!--xxx-->
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+<title>Oops! VegBank Error</title>
+  @webpage_masthead_html@
+
 
 <blockquote>
 <h3 class="error">Oops! You found a VegBank bug.</h3>
@@ -79,8 +72,8 @@ This problem has been reported to the developers.</p>
 
 
 <!-- VEGBANK FOOTER -->
-<!-- xxx -->
-@vegbank_footer_html_tworow@ 
-<!-- xxx -->
-</BODY>
-</HTML>
+
+@webpage_footer_html@ 
+
+
+

@@ -1,15 +1,18 @@
-@stdvegbankget_jspdeclarations@
 
-<html>
+
+ 
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 @defaultHeadToken@
  
 <TITLE>Browse VegBank Plants</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css" />
-</HEAD>
-<body>
-      @vegbank_header_html_normal@
+
+
+       @webpage_masthead_html@
       @possibly_center@
         <h2>Browse VegBank Plants</h2>
         <p class="instructions">With this page, you can browse through plant concepts in VegBank.  For more search options, please see
@@ -44,5 +47,4 @@
  to search with more options.</p>
  
  
-          @vegbank_footer_html_tworow@
-</body></html>
+          @webpage_footer_html@

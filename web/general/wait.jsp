@@ -1,8 +1,3 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<HTML>
 <!-- 
   *   '$RCSfile: wait.jsp,v $'
   *     Purpose: Deliver an error message to the user 
@@ -11,8 +6,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-11-16 06:37:20 $'
-  *  '$Revision: 1.5 $'
+  *      '$Date: 2005-03-15 07:51:55 $'
+  *  '$Revision: 1.6 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -29,19 +24,12 @@
   * along with this program; if not, write to the Free Software
   * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
   -->
-
-<HEAD>@defaultHeadToken@
-<meta http-equiv="Refresh" content='5; URL=@web_context@PleaseWait.do'>
-<META HTTP-EQUIV="expires" CONTENT="Wed, 12 Nov 2003 00:00:00 GMT">
+  @webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
 <title>Please Wait</title>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
-<meta http-equiv="Content-Type" content="text/html; charset=">
-</HEAD>
-<BODY>
+  @webpage_masthead_html@
 
-<!--xxx -->
-@vegbank_header_html_normal@ 
-<!--xxx-->
 
 <blockquote>
 <h3>Please wait</h3>
@@ -83,9 +71,9 @@
 
 
 <!-- VEGBANK FOOTER -->
-<!-- xxx -->
-@vegbank_footer_html_tworow@ 
-<!-- xxx -->
-</BODY>
-</HTML>
+
+@webpage_footer_html@ 
+
+
+
 

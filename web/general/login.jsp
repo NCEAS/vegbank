@@ -1,21 +1,13 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
-<HTML>
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
 
-<HEAD>@defaultHeadToken@
  
 <TITLE>Login to VegBank</TITLE>
 
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
- 
-<meta http-equiv="Content-Type" content="text/html; charset=">
-</HEAD>
-<BODY>
 
-@vegbank_header_html_normal@
+ @webpage_masthead_html@
 
 <html:errors/>
  
@@ -33,6 +25,6 @@
 </table>
 <br/>
 
-@vegbank_footer_html_tworow@
-</BODY>
-</HTML>
+@webpage_footer_html@
+
+
