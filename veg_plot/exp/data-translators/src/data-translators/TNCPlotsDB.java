@@ -15,8 +15,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2002-12-11 21:13:52 $' <br>
- * 	'$Revision: 1.29 $' <br>
+ *  '$Date: 2002-12-12 22:38:12 $' <br>
+ * 	'$Revision: 1.30 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -1014,6 +1014,25 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		return(area);
 	}
 	
+	public String getAzimuth(String plotName) 
+	{
+		return null;
+	}	
+ 
+	public String getDSGPoly(String plotName)
+	{
+		return null;
+	}
+	
+	public String getLocationNarrative(String plotName)
+	{
+		return null;
+	}
+	
+	public String getLayoutNarrative( String plotName )
+	{
+		return null;
+	}
 	
 	/**
 	 * this is the method that returns the community 
@@ -1999,6 +2018,50 @@ public String  getStandMaturity(String plotName)
 	return("");
 }
 
+public String  getLandscapeNarrative(String plotName)
+{		
+	return("");
+}
+
+public String  getPhenologicalAspect(String plotName)
+{
+	return("");
+}
+
+public String  getWaterDepth(String plotName)
+{
+	return("");
+}
+
+public String  getFieldHt(String plotName)
+{
+	return("");
+}
+
+public String  getSubmergedHt(String plotName)
+{
+	return("");
+}
+
+public String  getTreeCover(String plotName)
+{
+	return("");
+}
+
+public String  getShrubCover(String plotName)
+{
+	return("");
+}
+
+public String  getFieldCover(String plotName)
+{
+	return("");
+}
+
+public String  getNonvascularCover(String plotName)
+{
+	return("");
+}
 
 public String  getSuccessionalStatus(String plotName)
 {
@@ -2352,9 +2415,6 @@ public boolean  getRevisions(String plotName)
 		}
 		 return(this.elevation);
 	}
-	
-
-	
 	
 	// see the interface for method descriptions
 	public String getElevationAccuracy(String plotName)
