@@ -4,8 +4,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.TimeZone;
 import java.util.Vector;
 
 import org.vegbank.common.dbAdapter.*;
@@ -16,8 +20,8 @@ import org.vegbank.common.dbAdapter.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-10-17 22:09:14 $'
- * '$Revision: 1.16 $'
+ * '$Date: 2003-10-27 19:49:02 $'
+ * '$Revision: 1.17 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +56,37 @@ public class Utility
 		}
 	}
 	
-	public static String escapeCharacters(String s)
+	/**
+	 * There are some characters that need to be escaped before they are being
+	 * written to the database, this escaping needs to be removed before usage.
+	 * 
+	 * @param String s -- String to escape chars on
+	 * @return String -- ready for db write
+	 */
+	public static String decodeFromDB(String s)
+	{
+		// Handle nulls
+		if ( s == null)
+			return null;
+			
+		String origString = s;
+
+		// TODO: Implement this method 
+		// '' -> ', '$ -> $, '^ -> ^ ( perhaps removing all ' will work?)
+		// needs experimentation
+
+		//System.out.println("---->" + origString + " VS. " + s );
+		return s;
+	}
+	
+	/**
+	 * There are some characters that need to be escaped before they are being
+	 * written to the database
+	 * 
+	 * @param String s -- String to escape chars on
+	 * @return String -- ready for db write
+	 */
+	public static String encodeForDB(String s)
 	{
 		// Handle nulls
 		if ( s == null)
@@ -354,6 +388,36 @@ public class Utility
 		return sb.toString();
 	}
 	
+	/**
+	 * Gets current date and time using UTC Timezone.
+	 *   
+	 * @return Date-- current Date
+	 */
+	public static Date getNow( ) 
+	{
+		// TODO: not tested yet
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    	return cal.getTime(); 
+	}
+	
+	/**
+	 * method that retuns the date in a format that can be accepted 
+	 * by the RDBMS and that is like: Aug 9, 2002
+	 */
+	 public static String getCurrentDate()
+	 {
+	 	// TODO: use getNow() when it has been tested
+		Date now = new Date();  //Set Date variable now to the current date and time
+		DateFormat med = DateFormat.getDateInstance (DateFormat.MEDIUM);
+		return med.format(now);
+	 }
+	
+	/**
+	 * Convience method for get a string of tabs
+	 * 
+	 * @param indent
+	 * @return
+	 */
 	private static String getIdent(int indent)
 	{
 		StringBuffer sb = new StringBuffer();
@@ -362,5 +426,36 @@ public class Utility
 			sb.append("\t");
 		}
 		return sb.toString();
+	}
+	
+	/**
+	 * This is a hack to deal with the fact accessionCodes don't always 
+	 * have the same name
+	 * 
+	 * @param entityName
+	 * @return
+	 */
+	public static String getAccessionCodeAttributeName( String entityName )
+	{
+		String accessionCodeName = null;
+		
+		if ( entityName.equalsIgnoreCase("observation") )
+		{
+			accessionCodeName = "obsaccessionnumber";
+		}
+		else if (
+			entityName.equalsIgnoreCase("plantConcept")
+			|| entityName.equalsIgnoreCase("commConcept")
+			|| entityName.equalsIgnoreCase("party")
+			|| entityName.equalsIgnoreCase("reference"))
+		{
+			accessionCodeName = "accessioncode";
+		}
+		// commConcept, party, references
+		else
+		{
+			// Has no known accessionCode
+		}
+		return null;
 	}
 }

@@ -29,8 +29,8 @@ import org.vegbank.xmlresource.transformXML;
  *	
  *  <br> <br>
  *  '$Author: farrell $'
- *  '$Date: 2003-08-21 21:16:45 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-10-27 19:49:02 $'
+ *  '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -884,46 +884,6 @@ public class DataSourceClient
      }
 		 return(results);
 	 }
-   
-   /**
-    * method that calls the same method at the server -- which validates the
-    * plot
-    * this metod uses the  plotvalidator to test that the input plot is valid.
-    * @param plotName -- the name of the plot to test for validity 
-    * @return receipt -- the xml recipt containing the terms of validitity 
-    */
-	  public boolean isPlotValid(String plot)
-    {
-     boolean result = true;
-		 try
-		 {
-      result = source.isPlotValid(plot);
-		 }
-		 catch(Exception e)
-     {
-      System.out.println("FileImpl: "+e.getMessage());
-      e.printStackTrace();
-     }
-		 return(result);
-    }
-		
-	/**
-	  * this method returns the validation report for the plot
-		* @return -- returns the xml receipt for the plot validation report 
-		*/
-		public String getValidationReport()
-		{
-			String report = null;
-			try
-			{
-				report = source.getValidationReport();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			return(report);
-		}
 
 	
 	/**
@@ -1053,15 +1013,6 @@ public class DataSourceClient
 						// set the plugin to use 
 						client.setPluginClassName(fileType);
 						
-            // validate the plot -- get the xml doc that contains the validation
-            // info
-            
-						System.out.println("DataSourceClient > validating plot: " + testPlot );
-            boolean validation = client.isPlotValid(testPlot);
-            System.out.println("DataSourceClient > plot is valid: " +validation);
-						String rept = client.getValidationReport();
-						System.out.println("DataSourceClient > validation report: " + rept);
-
 						System.out.println("DataSourceClient > inserting the plot: " + testPlot );
 						String insertResults = client.insertPlot(testPlot, fileType, email);
 						//transform and display the results to the user

@@ -6,8 +6,8 @@ package org.vegbank.plots.rmi;
  * Purpose: 
  *
  * '$Author: farrell $'
- * '$Date: 2003-08-21 21:16:45 $'
- * '$Revision: 1.4 $'
+ * '$Date: 2003-10-27 19:49:02 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,22 +30,6 @@ import java.util.Vector;
 
 public interface DataSourceServerInterface extends Remote 
 {
-	
-	 
-	 /**
-	  * this method returns the validation report for the plot
-		* @return -- returns the xml receipt for the plot validation report 
-		*/
-		public String getValidationReport()
-		throws Exception;
-
-  /**
-   * this metod uses the  plotvalidator to test that the input plot is valid.
-   * @param plotName -- the name of the plot to test for validity 
-   * @return valid  -- true if the plot is valid, else false 
-	 */
-   public boolean isPlotValid(String plot)
-   throws Exception;
 	
 	//method for inserting a plot into the database
 	public String insertPlot(String plot, String fileType, String emailAddress)

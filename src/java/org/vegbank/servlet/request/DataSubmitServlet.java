@@ -3,9 +3,9 @@ package org.vegbank.servlet.request;
 /*
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
- *	'$Author: anderson $'
- *  '$Date: 2003-10-25 22:47:28 $'
- *  '$Revision: 1.17 $'
+ *	'$Author: farrell $'
+ *  '$Date: 2003-10-27 19:49:02 $'
+ *  '$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -497,45 +497,44 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 						String values[] = request.getParameterValues(name);
 						if (values != null) 
 						{
-							for (int i=0; i < values.length; i++) 
+							for (int i = 0; i < values.length; i++)
 							{
 								String thisPlot = values[i];
-								System.out.println("DataSubmitServlet > requesting an rmi plot insert: '"+values[i]+"'" );
+								System.out.println(
+									"DataSubmitServlet > requesting an rmi plot insert: '"
+										+ values[i]
+										+ "'");
 								//insert the plot over the rmi system -- first test that the plot is valid
-								System.out.println("DataSubmitServlet > plot being loaded by: " + user );
-								
-								//JHH 20030108
-								boolean valid = rmiClient.isPlotValid(thisPlot);
-								System.out.println("DataSubmitServlet > plot is valid: " + valid);
-								if ( valid == false )
-								{
-									// get the validation report and proccess the xml that looks like
-									String report = rmiClient.getValidationReport();
-									// create a document 
-									System.out.println("DataSubmitServlet > validation report length: " + report.length() );
-									String htmlReceipt = this.getPlotValidationReceipt(report) ;
-									sb.append(htmlReceipt);
-								}
-								// if the plot is valid then load it
-								else
-								{
-                  // get the plotsArchiveType from the session
-                  String plotsArchiveType =
-                    (String) request.getSession().getAttribute("plotsArchiveType");
-									System.out.println("DataSubmitServlet > About to insert Plot");
-									String result = rmiClient.insertPlot(thisPlot, plotsArchiveType, user);
-									//System.out.println("DataSubmitServlet > Plot insert result = '" + result + "'");
-									String receipt =
-										getPlotInsertionReceipt(
-											thisPlot,
-											result,
-											receiptType,
-											i,
-											values.length,
-											su.getBrowserType(request));
-									sb.append(receipt);
-									System.out.println("DataSubmitServlet > requesting a receipt: '"+i+"' out of: " + values.length );
-								}
+								System.out.println(
+									"DataSubmitServlet > plot being loaded by: "
+										+ user);
+
+								// get the plotsArchiveType from the session
+								String plotsArchiveType =
+									(String) request.getSession().getAttribute(
+										"plotsArchiveType");
+								System.out.println(
+									"DataSubmitServlet > About to insert Plot");
+								String result =
+									rmiClient.insertPlot(
+										thisPlot,
+										plotsArchiveType,
+										user);
+								//System.out.println("DataSubmitServlet > Plot insert result = '" + result + "'");
+								String receipt =
+									getPlotInsertionReceipt(
+										thisPlot,
+										result,
+										receiptType,
+										i,
+										values.length,
+										su.getBrowserType(request));
+								sb.append(receipt);
+								System.out.println(
+									"DataSubmitServlet > requesting a receipt: '"
+										+ i
+										+ "' out of: "
+										+ values.length);
 							}
 						}
 					}

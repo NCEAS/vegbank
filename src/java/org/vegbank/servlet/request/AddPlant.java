@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-11 21:20:10 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2003-10-27 19:49:02 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ import org.vegbank.common.model.Reference;
 import org.vegbank.common.model.ReferenceSummary;
 import org.vegbank.common.utility.HTMLUtil;
 import org.vegbank.common.utility.ServletUtility;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.databaseAccess.TaxonomyQueryStore;
 import org.vegbank.plants.datasink.DBPlantWriter;
 
@@ -289,7 +290,7 @@ public class AddPlant implements Constants
 
 				plant.setParentName(plantParentName);
 				plant.setStatus(conceptStatus);
-				plant.setStatusStartDate( su.getCurrentDate() );
+				plant.setStatusStartDate( Utility.getCurrentDate() );
 				plant.setStatusPartyComments(statusDescription);
 				plant.setClassLevel(taxonLevel);
 				

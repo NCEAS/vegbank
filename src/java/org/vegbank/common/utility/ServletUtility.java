@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-10-10 23:37:13 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2003-10-27 19:49:02 $'
+ *  '$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
@@ -47,7 +46,6 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.Cookie;
@@ -104,81 +102,6 @@ public class ServletUtility
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * method that unzips the contents of a zip file
-	 * 
-	 * @param zipFile -- the zip file
-	 *
-	 */
-	 public void getZippedFileContents(String zipFile)
-	 {
-	  try 
-		{
-			String inFilename = "infile.zip";
-      String outFilename = "outfile";
-      ZipInputStream in = new ZipInputStream(new FileInputStream(inFilename));
-      OutputStream out = new FileOutputStream(outFilename);
-     
-      ZipEntry entry;
-      byte[] buf = new byte[1024];
-      int len;
-      if ((entry = in.getNextEntry()) != null) 
-			{
-				String name = entry.getName();
-				System.out.println("ServletUtility > file name: " + name);
-				while ((len = in.read(buf)) > 0) 
-				{
-					out.write(buf, 0, len);
-      	}
-     	}
-     	out.close();
-     	in.close();
-     } 
-		 catch (IOException e) 
-		 {
-     }
-	 }
- 
-
-
-
-	
-
-
-
-
- /**
-   * creates an object of a type className. this is used for instantiating
-   * plugins.
-   */
-  public static Object createObject(String className) 
-	throws InstantiationException, 
-	IllegalAccessException,
-	ClassNotFoundException
-  {
-    Object object = null;
-    try 
-    {
-        Class classDefinition = Class.forName(className);
-        object = classDefinition.newInstance();
-    } 
-    catch (InstantiationException e) 
-    {
-        throw new InstantiationException("Error instantiating plugin: " + e);
-    } 
-    catch (IllegalAccessException e) 
-    {
-        throw new IllegalAccessException("Error accessing plugin: " + e);
-    } 
-    catch (ClassNotFoundException e) 
-    {
-        throw new ClassNotFoundException("Plugin " + className + " not " +
-                                         "found: " + e);
-    }
-    return object;
-  }
-	
 	
 	public void sendHTMLEmail(
 		String smtpServer,
@@ -226,139 +149,6 @@ public class ServletUtility
 			e.printStackTrace();
 		}
 	}
-		/**
-		 * method to mail the a message to an email address
-		 *
-		 * @param mailhost -- like nceas.ucsb.edu
-		 * @param from -- like harris
-		 * @param to -- like harris02@hotmail.com
-		 * @param cc -- like vegbank@nceas.ucsb.edu
-		 * @param subject -- like 'hi'
-		 * @param body -- the main body
-		 * 
-		 * @deprecated use sendHTMLMail instead 
-		 */
-		public void sendEmail(
-			String mailHost,
-			String from,
-			String to,
-			String cc,
-			String subject,
-			String body)
-		 {
-			 try
-			 {
-			 	//String mailhost = "nceas.ucsb.edu";  // or another mail host
- 				//String from = "vegbank";
- 				//String to = this.emailAddress;
- 				//String cc1 = "vegbank@nceas.ucsb.edu";
- 				//String cc2 = "lori@esa.org";
- 				//String bcc = "bcc@you.com";
-  
- 				MailMessage msg = new MailMessage(mailHost);
- 				msg.from(from);
- 				msg.to(to);
- 				msg.cc(cc);
- 				
- 				msg.setSubject(subject);
- 				PrintStream out = msg.getPrintStream();
-  			out.println(body);
-			 	msg.sendAndClose();
- 			}
-			 catch (Exception e)
-		 	 {
-				 System.out.println("Exception: " + e.getMessage());
-				 e.printStackTrace();
-			 }
-		 }
-	
-	/**
-   * method that will retrive the authentication results
-	 * from an 'AuthenticationServlet' using as input a 
-	 * username and password -- it is expected that a number
-	 * of the inter-servlet communication practices will require
-	 * authentication and this utility method will be used 
-	 *
-	 * @param userName
-	 * @param passWord
-	 * @param authType -- this is the desired authentication type desired
-	 * 	{ uploadFile, loginUser }
-	 * @return -- a string containing either:
-	 * 	<authentication>true</auentication>
-	 * 	<cookieName>name</cookieName>
-	 * 	<cookieValue>value</cookieValue>
-	 * 	or
-	 * 	<authentication>false</auentication>
-	 *
-   */
-  public String httpAuthenticationHandler( String userName, String passWord, String authType)
-  {
-    String htmlResults = null;
-    try
-    {
-      //create the parameter string to be passed to the DataRequestServlet -- 
-			//this first part has the data request type stuff
-      StringBuffer sb = new StringBuffer();
-      sb.append("?userName="+userName+"&password="+passWord+"&authType="+authType);
-			
-      //connect to the authentication servlet
-			String uri = "/vegbank/servlet/authenticate"+sb.toString().trim();
-			System.out.println("OUT PARAMETERS: "+uri);
-      int port=80;
-      String requestType="POST";
-      htmlResults = GetURL.requestURL(uri);
-    }
-    catch( Exception e )
-    {
-      System.out.println("** failed :  "
-      +e.getMessage());
-    }
-    return(htmlResults);
-  }
-	
-
-	/**
-	 *  Method to store html code that can be accessed based on the requests
-	 * made by the user
-	 */
-
-	public String htmlStore()
-	{
-		ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
-
-		//compose a very simple html page to dispaly that the user query is being
-		//handled by the servlet engine
-		String mainPage="<html> \n"
-		//+"<body> \n"
-		+"<head> \n"
-		+"  <title> VEGBANK - QUERY ENGINE </title> \n"
-		+"</head>  \n"
-		+"  <body bgcolor=\"white\"> \n"
-		+"  <table border=\"0\" width=\"100%\"> \n"
-		+"  <tr bgcolor=\"#9999CC\"><td>&nbsp;<B><FONT FACE=\"arial\" COLOR=\"FFFFFF\" SIZE=\"-1\"> "
-		+"  VegBank - Query Engine  "
-		+"  </FONT></B></td></tr> \n"
-		+"</table> \n"
-		+" \n"
-		+"<br><i><small> \n"
-		+rb.getString("requestparams.servletPosition")+"<br> \n"
-		+"<br></i></small> \n"
-		+"<p> \n"
-		+"<A HREF="+rb.getString("requestparams.servletAccessPosition")+"> "
-		+"<B><FONT SIZE=\"-1\" FACE=\"arial\">Back to the query mechanism</FONT></B></A> \n"
-		+"<br></i> \n"
-		+"<P> \n"
-		+"<table border=\"0\" width=\"100%\"> \n"
-		+"<tr bgcolor=\"#9999CC\"><td>&nbsp;<B><FONT FACE=\"arial\" COLOR=\"FFFFFF\" SIZE=\"-1\"> "
-		+" "
-		+"</FONT></B></td></tr> \n"
-		+"</table> \n"
-		+"<br><br> \n";
-	
-		return mainPage;
-	}
-	
-	
 	
 	/**
 	 * method to stick the parameters from the client 
@@ -393,172 +183,107 @@ public class ServletUtility
 		}
 		return(params);
 	}
-	
-	
-	
-	
-	
 
-
-/**
- *  Method to copy a file
- *
- * @param  inFile  a string representing the input file
- * @param  outFile a string representing the output, compressed, file
- */
-public void flushFile(String inFile) 
-{
-	try
+	/**
+	 *  Method to copy a file
+	 *
+	 * @param  inFile  a string representing the input file
+	 * @param  outFile a string representing the output, compressed, file
+	 */
+	public void flushFile(String inFile) 
 	{
-		(new File(inFile)).delete();
-		//inFile.delete(); 
-		//PrintStream out  = new PrintStream(new FileOutputStream(inFile, true));
-	}
-	catch(Exception e) 
-	{
-		System.out.println("failed: servletUtility.flushFile");
-		e.printStackTrace();
-	}
-}
-
-
-
-
-/**
- *  Method to copy a file
- *
- * @param  inFile  a string representing the input file
- * @param  outFile a string representing the output, compressed, file
- */
-
-public void fileCopy (String inFile, String outFile, String appendFlag) 
-{
-	try
-	{
-		BufferedReader in = new BufferedReader(new FileReader(inFile));
-
-		/** Define out by default */
-		PrintStream out  = new PrintStream(new FileOutputStream(outFile, true));
-		if (appendFlag.equals("append")) 
+		try
 		{
-			out  = new PrintStream(new FileOutputStream(outFile, false)); 
+			(new File(inFile)).delete();
+			//inFile.delete(); 
+			//PrintStream out  = new PrintStream(new FileOutputStream(inFile, true));
 		}
-		if (appendFlag.equals("concat")) 
+		catch(Exception e) 
 		{
-			out  = new PrintStream(new FileOutputStream(outFile, true)); 
+			System.out.println("failed: servletUtility.flushFile");
+			e.printStackTrace();
 		}
-		
-		System.out.println("ServletUtility > fileCopy");
-		System.out.println("ServletUtility > inFile: " + inFile);
-		System.out.println("ServletUtility > outFile: " + outFile);
-		System.out.println("ServletUtility > appendFlag: " + appendFlag);
-		// CHECK THE FILE 
-		File inf = new File(inFile);
-		File outf = new File(outFile);
-		boolean readable =  inf.canRead();
-		boolean writeable =  outf.canWrite();
-		System.out.println("ServletUtility > in readable " + inf.canRead() );
-		System.out.println("ServletUtility > out writeable " + outf.canWrite() );
-
-		int c;
-		while((c = in.read()) != -1)
-		{
-    	//System.out.println("## " + c );
-			out.write(c);
-		}
-
-		in.close();
-		out.close();
-		System.out.println("ServletUtility > file size: " + c);	
 	}
-	catch(Exception e) 
+	
+	/**
+	 *  Method to copy a file
+	 *
+	 * @param  inFile  a string representing the input file
+	 * @param  outFile a string representing the output, compressed, file
+	 */
+	
+	public void fileCopy (String inFile, String outFile) 
 	{
-		System.out.println("failed: servletUtility.fileCopy");
-		e.printStackTrace();
-	}
-}
-
-
-
-/**
- *  Method to copy a file
- *
- * @param  inFile  a string representing the input file
- * @param  outFile a string representing the output, compressed, file
- */
-
-public void fileCopy (String inFile, String outFile) 
-{
-	try
-	{
-		BufferedReader in = new BufferedReader(new FileReader(inFile));
-		PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
-		
-		System.out.println("ServletUtility > fileCopy");
-		System.out.println("ServletUtility > inFile: " + inFile);
-		System.out.println("ServletUtility > outFile: " + outFile);
-		
-		int c;
-		while((c = in.read()) != -1)
+		try
 		{
-        out.write(c);
-		}
-		
-		System.out.println("ServletUtility > file size: " + c);	
-		in.close();
-		out.close();
-	}
-	catch(Exception e) 
-	{
-		System.out.println("Exception: " + e.getMessage() );
-		e.printStackTrace();
-	}
-}
-
-/**
- * utility method to return the name of the browser type that 
- * a client is using given as input an http request
- * @param request -- the http request
- *
- */
- public String getBrowserType(HttpServletRequest request)
- {
-	 String s = "";
-	 try
-	 {
-		 Enumeration headerNames = request.getHeaderNames();
-		 while(headerNames.hasMoreElements()) 
-		{
-      String headerName = (String)headerNames.nextElement();
-      String value = request.getHeader(headerName);
-			//System.out.println("ServletUtility > headerName: " + headerName+ " value: " + value);
-      if ( headerName.toUpperCase().startsWith("USER") )
+			BufferedReader in = new BufferedReader(new FileReader(inFile));
+			PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
+			
+			System.out.println("ServletUtility > fileCopy");
+			System.out.println("ServletUtility > inFile: " + inFile);
+			System.out.println("ServletUtility > outFile: " + outFile);
+			
+			int c;
+			while((c = in.read()) != -1)
 			{
-				String ua = headerName.toUpperCase();
-				//System.out.println("ServletUtility > UA: "+ value );
-				if ( value.toUpperCase().indexOf("MSIE") >= 1 )
-				{
-					s = "msie";
-				}
-				else if ( value.toUpperCase().indexOf("NETSCAPE") >= 1 )
-				{
-					 s = "netscape";
-				}
-				else 
-				{
-					s = "unknown";
-				}
+	        out.write(c);
 			}
-    }
-		System.out.println("ServletUtility > browserType: " + s); 
-	 }
-	 catch(Exception e) 
-	{
-		System.out.println("Exception: " + e.getMessage() );
-		e.printStackTrace();
+			
+			System.out.println("ServletUtility > file size: " + c);	
+			in.close();
+			out.close();
+		}
+		catch(Exception e) 
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
 	}
-	 return(s);
- }
+
+	/**
+	 * utility method to return the name of the browser type that 
+	 * a client is using given as input an http request
+	 * @param request -- the http request
+	 *
+	 */
+	 public String getBrowserType(HttpServletRequest request)
+	 {
+		 String s = "";
+		 try
+		 {
+			 Enumeration headerNames = request.getHeaderNames();
+			 while(headerNames.hasMoreElements()) 
+			{
+	      String headerName = (String)headerNames.nextElement();
+	      String value = request.getHeader(headerName);
+				//System.out.println("ServletUtility > headerName: " + headerName+ " value: " + value);
+	      if ( headerName.toUpperCase().startsWith("USER") )
+				{
+					String ua = headerName.toUpperCase();
+					//System.out.println("ServletUtility > UA: "+ value );
+					if ( value.toUpperCase().indexOf("MSIE") >= 1 )
+					{
+						s = "msie";
+					}
+					else if ( value.toUpperCase().indexOf("NETSCAPE") >= 1 )
+					{
+						 s = "netscape";
+					}
+					else 
+					{
+						s = "unknown";
+					}
+				}
+	    }
+			System.out.println("ServletUtility > browserType: " + s); 
+		 }
+		 catch(Exception e) 
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		 return(s);
+	 }
 
 	public void removeCookie(HttpServletRequest req, HttpServletResponse response )
 	{
@@ -655,176 +380,58 @@ public void fileCopy (String inFile, String outFile)
 		return results;
 	}
 	
-/**
- *  Method to compress a file using GZIP compression using as input both the
- *  input file name and the output file name
- *
- * @param  inFile  a string representing the input file
- * @param  outFile a string representing the output, compressed, file
- */
-
-public void gzipCompress(String inFile, String outFile)
-{
-	try
-	{
-		BufferedReader in = new BufferedReader(new FileReader(inFile));
-		BufferedOutputStream out =
-			new BufferedOutputStream(
-				new GZIPOutputStream(new FileOutputStream(outFile)));
-
-		System.out.println("ServletUtility > gzipCompress");
-		System.out.println("ServletUtility > inFile: " + inFile);
-		System.out.println("ServletUtility > outFile: " + outFile);
-
-		//System.out.println("servletUtility.gzipCompress Writing a compressed file");
-		int c;
-		while ((c = in.read()) != -1)
-			out.write(c);
-		in.close();
-		out.close();
-	}
-	catch (Exception e)
-	{
-		e.printStackTrace();
-	}
-}
-
-/**
- *  Method to compress an inputstream using GZIP compression
- *
- * @param  inFile  a string representing the input file
- * @param  outFile a string representing the output, compressed, file
- */
-
-public static byte[] gzipCompress(byte[]  ba) throws IOException
-{
-	ByteArrayOutputStream compressed = new ByteArrayOutputStream();
-	GZIPOutputStream gzout = new GZIPOutputStream(compressed);
-	gzout.write( ba );
-	gzout.flush();
-	gzout.close();
-	return compressed.toByteArray();
-}
-
-
-/**
- *  Method that takes as input a name of a file and writes the file contents 
- *  to a vector and then makes the vector and number of vector elements access
- *  to the public 
- *
- * @param fileName name of the file that whose contents should be written to a vector
- */
-public Vector fileVectorizer(String fileName) 
-{
-	Vector vector = new Vector();
-	try 
-	{
-		System.out.println("ServletUtility > vectorizing file: " + fileName);
-		int vecElementCnt=0;
-		BufferedReader in = new BufferedReader(new FileReader(fileName));
-		String s;
-		while((s = in.readLine()) != null) 
-		{
-			//System.out.println(s);	
-			vector.addElement(s);
-			vecElementCnt++;
-		}
-	}
-	catch (Exception e) 
-	{
-		System.out.println("failed in servletUtility.fileVectorizer" + 
-		e.getMessage());
-	}
-	return vector;
-}
-
-
-
-/**
- *  Method that takes as input a name of a file and writes the file contents 
- *  to a vector and then makes the vector and number of vector elements access
- *  to the public 
- *
- * @param fileName name of the file that whose contents should be written to a vector
- */
-public Vector fileToVector(String fileName) 
-{
-	System.out.println("ServletUtility > file to vector: " + fileName);
-	Vector v = new Vector();
-	try 
-	{
-		int vecElementCnt=0;
-		BufferedReader in = new BufferedReader(new FileReader(fileName));
-		Vector localVector = new Vector();
-		String s;
-		while((s = in.readLine()) != null) 
-		{
-			v.addElement(s);
-		}
-		in.close();
-	}
-	catch (Exception e) 
-	{
-		System.out.println("Exception: " + 
-		e.getMessage());
-		e.printStackTrace();
-	}
-	return(v);
-}
-
-
-
-/**
- *  Method that takes as input a name of a file and writes the file contents 
- *  to a vector and then makes the vector and number of vector elements access
- *  to the public 
- *
- * @param fileName name of the file that whose contents should be written to a vector
- */
-public String fileToString(String fileName) 
-{
-	System.out.println("ServletUtility > fileToString");
-	StringBuffer sb = new StringBuffer();
-	try 
-	{
-		BufferedReader in = new BufferedReader(new FileReader(fileName));
-		String s;
-		while((s = in.readLine()) != null) 
-		{
-			//System.out.println("##> " + s +" \n");
-			sb.append(s + "\n");
-		}
-	}
-	catch (Exception e) 
-	{
-		System.out.println("Exception: " + e.getMessage());
-		e.printStackTrace();
-	}
-	return(sb.toString() );
-}
 
 	/**
-	 * method that allows a class (in this case a servlet) to upload
-	 * a file to the dataexcahnge servlet and onto the data file database
-	 * 
-	 * @param fileName -- the name of the file
-	 * @param userName -- actually the email address of the user
-	 * 
+	 *  Method to compress an inputstream using GZIP compression
+	 *
+	 * @param  inFile  a string representing the input file
+	 * @param  outFile a string representing the output, compressed, file
 	 */
-	 public void uploadFileDataExcahgeServlet(String fileName, String userName)
-	 {
-		 try
-		 {
-		 	this.uploadFileDataExcahgeServlet(fileName, userName, "unknown");
-		 }
-		 catch(Exception e)
-		 {
-			 System.out.println("Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-	 }
+	
+	public static byte[] gzipCompress(byte[]  ba) throws IOException
+	{
+		ByteArrayOutputStream compressed = new ByteArrayOutputStream();
+		GZIPOutputStream gzout = new GZIPOutputStream(compressed);
+		gzout.write( ba );
+		gzout.flush();
+		gzout.close();
+		return compressed.toByteArray();
+	}
+	
+	
+	/**
+	 *  Method that takes as input a name of a file and writes the file contents 
+	 *  to a vector and then makes the vector and number of vector elements access
+	 *  to the public 
+	 *
+	 * @param fileName name of the file that whose contents should be written to a vector
+	 * @deprecated
+	 */
+	public Vector fileVectorizer(String fileName) 
+	{
+		Vector vector = new Vector();
+		try 
+		{
+			System.out.println("ServletUtility > vectorizing file: " + fileName);
+			int vecElementCnt=0;
+			BufferedReader in = new BufferedReader(new FileReader(fileName));
+			String s;
+			while((s = in.readLine()) != null) 
+			{
+				//System.out.println(s);	
+				vector.addElement(s);
+				vecElementCnt++;
+			}
+		}
+		catch (Exception e) 
+		{
+			System.out.println("failed in servletUtility.fileVectorizer" + 
+			e.getMessage());
+		}
+		return vector;
+	}
 	 
-	 	 /**
+	/**
  	 * method to copy a file and filter the tokens, this method uses the 
  	 * jakarta ant library 1.4.1 and above
  	 *
@@ -932,14 +539,14 @@ public String fileToString(String fileName)
 		 try
 		 {
 		 	String temp = null;
-     	String servlet = "/vegbank/servlet/dataexchange";
-     	String protocol = "http://";
-     	String host = "vegbank.nceas.ucsb.edu";
-     	String server = protocol + host + servlet;
-     	String filename = fileName;
+	     	String servlet = "/vegbank/servlet/dataexchange";
+	     	String protocol = "http://";
+	     	String host = "vegbank.nceas.ucsb.edu";
+	     	String server = protocol + host + servlet;
+	     	String filename = fileName;
 			
 	 		// String parameterString = "?action=uploadFile&user=harris02@hotmail.com&exchangeType=upload&submitter=harris&"
-	  	//	+"password=jasmine&file=test.dat";
+	  		//	+"password=jasmine&file=test.dat";
 	 
 			DataExchangeClient.uploadFile(servlet, protocol, host, server, filename, userName, fileType);
 		 }
@@ -980,36 +587,12 @@ public String fileToString(String fileName)
 		 
 		 while ( enum.hasMoreElements() )
 		 {
-				String attributeName = (String) enum.nextElement();
+			String attributeName = (String) enum.nextElement();
 			sb.append( attributeName + " --> " + request.getAttribute(attributeName) );
 			sb.append(",");
 		 }
 		
 		return sb.toString();
 	}
-	
-	/**
-	 * method that retuns the date in a format that can be accepted 
-	 * by the RDBMS and that is like: Aug 9, 2002
-	 */
-	 public String getCurrentDate()
-	 {
-		String s = "";
-		 try
-		 {
-			Date now = new Date();  //Set Date variable now to the current date and time
-			DateFormat med = DateFormat.getDateInstance (DateFormat.MEDIUM);
-			s = med.format(now);
-			//System.out.println ("MEDIUM: " + s);
-		 }
-			catch(Exception e )
-			{
-				e.printStackTrace();
-			}
-			return(s);
-	 }
-	 
-	 
-
 }	
 

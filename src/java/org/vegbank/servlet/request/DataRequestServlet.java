@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-10-17 22:09:14 $'
- *  '$Revision: 1.14 $'
+ *  '$Date: 2003-10-27 19:49:02 $'
+ *  '$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,8 +79,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-10-17 22:09:14 $'
- *  '$Revision: 1.14 $'
+ *  '$Date: 2003-10-27 19:49:02 $'
+ *  '$Revision: 1.15 $'
  * 
  */
 
@@ -992,59 +992,6 @@ private void updateClientLog (String clientLog, String remoteHost)
 	}
 }
 
-
-
-/**
- * Write to the browser the query elements and their respective strings as well
- * as the some other information like the last date the user accessed the servlet 
- * the authentication status of the user
- * 
- * @param out - the output stream to the client
- * @param params - the Hashtable of parameters that should be included in the
- * 	response
- * @param response - the response object linked to the client 
- */
-	public void returnQueryElementSummary (PrintWriter out, Hashtable params, 
-  	HttpServletResponse response) 
-	{
-		try 
-		{
-			//this utility class is to store reused html code
-			ServletUtility k =new ServletUtility();  
- 			out.println(k.htmlStore()); 
- 
-	 		Enumeration paramlist = params.keys();
- 
- 			//set up a table in which to print the query elements to the browser
- 			out.println("<table summary=queryElements border=0 width=60%>"
- 			+"<tr bgcolor=DFE5FA> <td>Query Element</td> <td>Element Value</td>");
-
- 			while (paramlist.hasMoreElements()) 
- 			{
-				String queryElement = (String)paramlist.nextElement();
-   			String elementValue  = (String)params.get(queryElement);
-				//System.out.println("paramter passed to DataRequestServlet: "+queryElement);
-				//print the query elements to the browser
-				out.println("<tr bgcolor=dddddd> <td><b> " + queryElement +" </b></td> "
-				+" <td><i> "+ elementValue +" </i></td> </tr>");
-			}
-
-			//close the table
-			out.println("</table>");
-			//next line is for debuging
-			out.println("---end of DataRequestServlet.returnQueryElementSummary----<br></br>");
-		}
-		catch (Exception e) 
-		{
-			System.out.println("DataRequestServlet Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-	} //end method
-
-
-
-
-
 /**
  *  Method to compose and print to a file an xml document that can be passed to
  *  the dbAccess class to perform the query and print the results to a file
@@ -1313,17 +1260,4 @@ private void updateClientLog (String clientLog, String remoteHost)
 		}
 		return query.toString();
 	}
-
-
-		
-	/**
-	 * method that registers a query document with the datafile database
-	 * this method should only be called from the 'issueQury' method and only
-	 * if the 'QUERYCACHING' attribute in the properties file is true
-	 * @see composeQuery -- the method that calls this one
-	 */
-	 private void registerQueryDocument(String userName)
-	 {		 System.out.println("DataRequestServlet > registering the query document ###");
-		 su.uploadFileDataExcahgeServlet(SERVLET_DIR+"query.xml", userName);
-	 }
 }

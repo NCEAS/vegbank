@@ -19,7 +19,6 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.vegbank.databaseAccess.*;
-import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidator;
 
 /** 
  *  Class that handles the upload of a plots data set to the VegBank database
@@ -38,8 +37,8 @@ import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidator;
  *	
  * <br> <br>
  *  '$Author: farrell $'
- *  '$Date: 2003-08-21 21:16:45 $'
- *  '$Revision: 1.7 $'
+ *  '$Date: 2003-10-27 19:49:02 $'
+ *  '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,8 +74,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	 
 	 // properties file
 	 	private ResourceBundle rb;
-   //plot validator 
-   private PlotValidator validator;
+
 	 
 	 //constructor
    public DataSourceImpl(String sourcePluginClass) 
@@ -106,8 +104,6 @@ public class DataSourceImpl extends UnicastRemoteObject
 				// This is the dataSource to use just for initialization test!!
 				source = new PlotDataSource(sourcePluginClass);
 				System.out.println("DataSourceImpl > number of plots:  " + source.getPlotNames().size() );
-        // instantiate the plot validator 
-        validator = new PlotValidator(source);
 			
 		 }
 		 catch (Exception e)
@@ -217,46 +213,6 @@ public class DataSourceImpl extends UnicastRemoteObject
 		 return(true);
 	 }
 	 
-	
-  /**
-   * this metod uses the  plotvalidator to test that the input plot is valid.
-   * @param plotName -- the name of the plot to test for validity 
-   * @return valid  -- true if the plot is valid, else false 
-   */
-   public boolean isPlotValid(String plot)
-   {
-    boolean result = true;
-    try
-    {
-			validator = new PlotValidator(this.source);
-      result  = validator.isPlotValid(plot);
-      //result = validator.getValidationReport();
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    return(result);
-   }
-	 
-	 /**
-	  * this method returns the validation report for the plot
-		* @return -- returns the xml receipt for the plot validation report 
-		*/
-		public String getValidationReport()
-		{
-			String report = null;
-			try
-			{
-				//result  = validator.isPlotValid(plot);
-				report = validator.getValidationReport();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			return(report);
-		}
   
 	 /**
 	  * 	method that examines the mdbFile stored in the location described by 

@@ -6,8 +6,8 @@ package org.vegbank.servlet.framework;
  * Purpose: 
  *
  * '$Author: farrell $'
- * '$Date: 2003-10-11 21:20:10 $'
- * '$Revision: 1.5 $'
+ * '$Date: 2003-10-27 19:49:02 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.vegbank.common.utility.ServletUtility;
+import org.vegbank.common.utility.Utility;
 
 public class FrameworkServlet extends HttpServlet 
 {
@@ -96,7 +97,7 @@ public class FrameworkServlet extends HttpServlet
     			 { 
 							//String className = "servlet.plugin.spatial.CoordinateTransform";
 							//create a generic object of the type specified in the config file.
-							Object pluginObj = ServletUtility.createObject(pluginClassName);
+							Object pluginObj = Utility.createObject(pluginClassName);
 							StringBuffer sb =((ServletPluginInterface)pluginObj).servletRequestHandler(action,  params);
 							//System.out.println("FrameworkServlet > plugin results: "+ sb.toString() );
 							out.println( sb.toString() );
