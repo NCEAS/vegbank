@@ -1,11 +1,10 @@
-/*
- *	'$RCSfile: PlotQueryForm.java,v $'
+/* *	'$RCSfile: PlotQueryForm.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-07-22 21:58:17 $'
- *	'$Revision: 1.5 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-08-28 00:15:42 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +26,8 @@ package org.vegbank.ui.struts;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.apache.struts.action.ActionForm;
 import org.vegbank.common.command.GenericCommand;
@@ -35,6 +36,7 @@ import org.vegbank.common.model.Observation;
 import org.vegbank.common.model.Plot;
 import org.vegbank.common.model.Project;
 import org.vegbank.common.model.Stratummethod;
+import org.vegbank.common.utility.DatabaseAccess;
 
 /**
  * @author farrell
@@ -68,12 +70,18 @@ public class PlotQueryForm extends ActionForm
   // Plot attributes
   private String minElevation;
   private String maxElevation;
+  private String curMinElevation;
+  private String curMaxElevation;
   private boolean allowNullElevation;
   private String minSlopeAspect;
   private String maxSlopeAspect;
+  private String curMinSlopeAspect;
+  private String curMaxSlopeAspect;
   private boolean allowNullSlopeAspect;
   private String minSlopeGradient;
   private String maxSlopeGradient;
+  private String curMinSlopeGradient;
+  private String curMaxSlopeGradient;
   private boolean allowNullSlopeGradient;
 
   private String[] rockType = new String[20];
@@ -175,6 +183,15 @@ public class PlotQueryForm extends ActionForm
 
 	
   /**
+   * Constructor
+   */
+  public PlotQueryForm()
+  {
+  	super();
+	loadDataConstraints();
+  }
+
+  /**
    * @return
    */
   public String[] getState()
@@ -213,6 +230,55 @@ public class PlotQueryForm extends ActionForm
   {
     return allowNullSlopeGradient;
   }
+
+  /**
+   * @return
+   */
+  public String getCurMaxElevation()
+  {
+    return curMaxElevation;
+  }
+
+  /**
+   * @return
+   */
+  public String getCurMaxSlopeAspect()
+  {
+    return curMaxSlopeAspect;
+  }
+
+  /**
+   * @return
+   */
+  public String getCurMaxSlopeGradient()
+  {
+    return curMaxSlopeGradient;
+  }
+
+  /**
+   * @return
+   */
+  public String getCurMinElevation()
+  {
+    return curMinElevation;
+  }
+
+  /**
+   * @return
+   */
+  public String getCurMinSlopeAspect()
+  {
+    return curMinSlopeAspect;
+  }
+
+  /**
+   * @return
+   */
+  public String getCurMinSlopeGradient()
+  {
+    return curMinSlopeGradient;
+  }
+
 
   /**
    * @return
@@ -284,6 +350,54 @@ public class PlotQueryForm extends ActionForm
   public void setAllowNullSlopeGradient(boolean b)
   {
     allowNullSlopeGradient = b;
+  }
+
+  /**
+   * @param string
+   */
+  public void setCurMaxElevation(String string)
+  {
+    curMaxElevation = string;
+  }
+
+  /**
+   * @param string
+   */
+  public void setCurMaxSlopeAspect(String string)
+  {
+    curMaxSlopeAspect = string;
+  }
+
+  /**
+   * @param string
+   */
+  public void setCurMaxSlopeGradient(String string)
+  {
+    curMaxSlopeGradient = string;
+  }
+
+  /**
+   * @param string
+   */
+  public void setCurMinElevation(String string)
+  {
+    curMinElevation = string;
+  }
+
+  /**
+   * @param string
+   */
+  public void setCurMinSlopeAspect(String string)
+  {
+    curMinSlopeAspect = string;
+  }
+
+  /**
+   * @param string
+   */
+  public void setCurMinSlopeGradient(String string)
+  {
+    curMinSlopeGradient = string;
   }
 
   /**
@@ -982,6 +1096,46 @@ public class PlotQueryForm extends ActionForm
 			}
 		}
 		return stratumMethodNames;
+	}
+
+	/**
+	 * Gets relevant plot data 
+	 *
+	 * @return void
+	 */
+	private void loadDataConstraints() {
+		StringBuffer query = new StringBuffer(1024)
+				.append("SELECT MIN(elevation) as curMinElevation, ")
+				.append("MAX(elevation) as curMaxElevation, ")
+				.append("MIN(slopeAspect) as curMinSlopeAspect, ")
+				.append("MAX(slopeAspect) as curMaxSlopeAspect, ")
+				.append("MIN(slopeGradient) as curMinSlopeGradient, ")
+				.append("MAX(slopeGradient) as curMaxSlopeGradient ")
+				.append("FROM plot");
+		try
+		{
+			DatabaseAccess da = new DatabaseAccess();
+			// hit the DB
+			ResultSet rs = da.issueSelect(query.toString());		
+
+			System.out.println("Processing " + rs.toString());
+			
+			if (rs.next())
+			{
+				curMinElevation = Integer.toString( (Double.valueOf(rs.getString(1))).intValue() );
+				curMaxElevation = Integer.toString( (Double.valueOf(rs.getString(2))).intValue() );
+				curMinSlopeAspect = rs.getString(3);
+				curMaxSlopeAspect = rs.getString(4);
+				curMinSlopeGradient = rs.getString(5);
+				curMaxSlopeGradient = rs.getString(6);
+			}
+		}
+		catch (SQLException e1)
+		{
+			System.out.println("org.vegbank.ui.struts.PlotQueryForm:: " +
+				"loadDataConstraints() ERROR: " + e1.getMessage());
+		}
+
 	}
 
 
