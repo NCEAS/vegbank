@@ -89,7 +89,7 @@
 		<forward name="EntityName" path="/forms/EntityName.jsp" />
 		<forward name="Logoff" path="/forms/Logoff.do" />
 		<forward name="Logon" path="/general/login.jsp" />
-		<forward name="MainMenu" path="/forms/MainMenu.jsp" />
+		<forward name="MainMenu" path="/index.jsp" />
 		<forward name="ManageUsers" path="/admin/manage_users.jsp" redirect="false" />
 		<forward name="PlantQuery" path="/forms/PlantQuery.jsp" />
 		<forward name="CommQuery" path="/forms/CommQuery.jsp" />
@@ -108,7 +108,7 @@
 			<set-property property="reqRoles" value="pro" />
 		</action>
 		<action path="/AddStratumMethod" type="org.vegbank.ui.struts.AddStratumMethodAction" name="AddStratumMethodForm" scope="request" validate="true" input="AddStratumMethod" />
-		<action path="/DisplayMainMenu" forward="/forms/MainMenu.jsp">
+		<action path="/DisplayMainMenu" forward="/index.jsp">
 		</action>
 		<action path="/DisplayEntity" type="org.vegbank.ui.struts.DisplayEntityAction" name="DisplayEntityForm" scope="request" validate="true" input="failure" />
 		<action path="/DisplayPlot" type="org.vegbank.ui.struts.DisplayPlotAction" name="DisplayPlotForm" scope="request" validate="true" input="failure" />
@@ -185,7 +185,7 @@
 			<forward name="success" path="/index.jsp" />
 		</action>
 		<action path="/Logon" type="org.vegbank.ui.struts.LogonAction" name="LogonForm" validate="true" input="Logon">
-			<forward name="success" path="/forms/MainMenu.jsp" redirect="true" />
+			<forward name="success" path="/index.jsp" redirect="true" />
 		</action>
 		
 		
