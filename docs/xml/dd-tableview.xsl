@@ -179,7 +179,7 @@
       <p>
         <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
       </p> 
-@vegbank_footer_html_onerow@
+@vegbank_footer_html_tworow@
 
     </body>
 </redirect:write> 

@@ -66,7 +66,7 @@ Jump to :
         <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>        <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>              
  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p> </xsl:for-each>
       <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>
-@vegbank_footer_html_onerow@
+@vegbank_footer_html_tworow@
 
 </body>
 </xsl:template>

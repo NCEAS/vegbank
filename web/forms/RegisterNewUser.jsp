@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-08-06 23:55:32 $'
-*  '$Revision: 1.9 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-11-16 04:51:23 $'
+*  '$Revision: 1.10 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -208,6 +208,6 @@ registration and <html:link action="LoadCertification.do">certification</html:li
 
 <br>
 <br>
-@vegbank_footer_html_onerow@
+@vegbank_footer_html_tworow@
 </BODY>
 </HTML>

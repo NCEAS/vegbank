@@ -55,7 +55,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
             </xsl:for-each>
 </table>
  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p> 
-@vegbank_footer_html_onerow@
+@vegbank_footer_html_tworow@
     </html>
   </xsl:template>
 </xsl:stylesheet>

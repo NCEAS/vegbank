@@ -16,8 +16,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-04-08 05:44:28 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2004-11-16 04:51:23 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
@@ -142,7 +142,7 @@
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan="2">
 <!-- VEGBANK FOOTER -->
-@vegbank_footer_html_onerow@
+@vegbank_footer_html_tworow@
 </td></tr>
 </table>
 

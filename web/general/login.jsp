@@ -33,6 +33,6 @@
 </table>
 <br/>
 
-@vegbank_footer_html_onerow@
+@vegbank_footer_html_tworow@
 </BODY>
 </HTML>

@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-07-26 15:33:54 $'
-  *  '$Revision: 1.15 $'
+  *      '$Date: 2004-11-16 04:51:23 $'
+  *  '$Revision: 1.16 $'
   *
   *
   -->
@@ -506,6 +506,6 @@
           <br/> &nbsp;
 
 
-@vegbank_footer_html_onerow@
+@vegbank_footer_html_tworow@
 </BODY>
 </HTML>
