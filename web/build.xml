@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: farrell $'
-* '$Date: 2003-02-14 20:51:32 $'
-* '$Revision: 1.31 $'
+* '$Date: 2003-02-14 21:02:19 $'
+* '$Revision: 1.32 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -285,8 +285,18 @@
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-<target name="dist" depends="	index, design, forms, general, images,
-													history, includes, init, news, panel, pubs"
+<target name="dist" depends=" index, 
+                              design, 
+                              forms, 
+                              general, 
+                              images,
+													    history, 
+                              includes, 
+                              init, 
+                              news, 
+                              panel, 
+                              pubs,
+                              xsl"
                    description="=> Distribute all web files"/>
 <!-- FIXME dictionary, images target expects files not in cvs -->
 
