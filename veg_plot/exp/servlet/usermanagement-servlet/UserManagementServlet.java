@@ -6,8 +6,8 @@ package servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-06-18 18:13:50 $'
- * '$Revision: 1.10 $'
+ *     '$Date: 2002-06-24 15:32:35 $'
+ * '$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -274,7 +274,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 						out.println(s);
 					 //res.sendRedirect("/forms/valid.html");
 					 // delete the form 
-					 Thread.sleep(10000);
+					 Thread.sleep(1000);
 					 util.flushFile(userUpdateValidation);
 				 }
 			 }
@@ -416,7 +416,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 						util.sendEmail(mailHost, from, to, cc, subject, body);
 						
 						// delete the form
-						Thread.sleep(10000);
+						Thread.sleep(1000);
 						util.flushFile(certificationValidation);
 						
 					}
@@ -447,7 +447,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 						out.println(s);
 						//res.sendRedirect("/forms/valid.html");
 						// delete the form 
-						Thread.sleep(10000);
+						Thread.sleep(1000);
 						util.flushFile(certificationValidation);
 						
 					}
