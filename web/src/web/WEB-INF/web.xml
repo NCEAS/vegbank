@@ -74,13 +74,6 @@
 
 
             <servlet>
-              <servlet-name>dataexchange</servlet-name>
-              <description>Handles uploading and downloading of files</description>
-              <servlet-class>org.vegbank.servlet.datafileexchange.DataExchangeServlet</servlet-class>
-              <load-on-startup>5</load-on-startup>
-            </servlet>
-
-            <servlet>
               <servlet-name>usermanagement</servlet-name>
               <description>A standalone servlet used for authenticating a user</description>
               <servlet-class>org.vegbank.servlet.usermanagement.UserManagementServlet</servlet-class>
@@ -147,11 +140,6 @@
               <url-pattern>/servlet/authenticate</url-pattern>
             </servlet-mapping> 
 
-            <servlet-mapping>
-              <servlet-name>dataexchange</servlet-name>
-              <url-pattern>/servlet/dataexchange</url-pattern>
-            </servlet-mapping>  
-            
             <servlet-mapping>
               <servlet-name>usermanagement</servlet-name>
               <url-pattern>/servlet/usermanagement</url-pattern>
