@@ -11,28 +11,19 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: mlee $'
-  *      '$Date: 2004-07-23 21:59:39 $'
-  *  '$Revision: 1.3 $'
+  *    '$Author: anderson $'
+  *      '$Date: 2004-11-24 19:33:37 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
 
 <head>@defaultHeadToken@
-  <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st November 2003), see www.w3.org">
 
-  <title>VEGBANK VEGETATION COMMUNITY LOOKUP</title>
+  <title>Vegetation Community Lookup</title>
   <link rel="stylesheet" href="@stylesheet@" type="text/css">
 
   <style type="text/css">
-  body {
-  background-color: #FFFFFF;
-  color: #531100;
-  }
-  :link { color: #0033CC }
-  :visited { color: #005680 }
-  :active { color: #0066FF }
   td.c4 {color: #000000; font-family: Helvetica,Arial,Verdana}
   span.c3 {color: black; font-family: Helvetica,Arial,Verdana; font-size: 70%}
   span.c2 {color: #209020; font-family: Helvetica,Arial,Verdana; font-size: 80%}
@@ -66,20 +57,17 @@
       <td width="15%" bgcolor="white" align="left" valign="top">
 
       <td align="left">
+        <!--form action="@web_context@views/commconcept_detail.jsp" method="get"-->
         <html:form action="/CommQuery">
+			<input type="hidden" name="xwhereGlue" value="AND"/>
+
           <table>
             <tr valign="top">
               <td align="left" valign="middle" colspan="2">
                 <span class="c2">
-		<b>Enter the community name below and toggle the
-                correct type and level of the community.</b>
-		</span>
-
-                <p>
-			<small>
-				<html:submit value="search for communities"/>
-			</small>
-		</p>
+				<b>Enter the community name below (e.g. tidal), 
+				then choose any type and levels.</b>
+				</span>
               </td>
             </tr>
           </table>
@@ -94,7 +82,9 @@
               <!-- COMM TAXON INPUT--> 
 
               <td width="556">
-		<html:text size="35" property="commname"/>
+		<input type="text" size="35" name="xwhereParams[commname][0]"/>
+		<input type="hidden" name="xwhereParams[commname][1]" value="commname"/>
+		<input type="hidden" name="xwhereKey[commname]" value="ops_match"/>
               	&nbsp;
 	      </td>
             </tr><!-- IGNORE CASE -->
@@ -103,10 +93,9 @@
               <td width="156"></td>
 
               <td width="556">
-	      <span class="c3">(wildcard = '%')<br>
+	      <span class="c3"><br>
                 * All Queries are Case Insensitive
 	      </span>
-                <!--<input type = "checkbox" name="ignoreCase" value = "true"> Ignore Case<br>-->
 	      </td>
             </tr><!-- HORIZONTAL LINE -->
 
@@ -121,10 +110,12 @@
               <td width="156" align="left" valign="top"><b>Community Level:</b></td>
 
 		<td width="556" class="c4" align="left" valign="top" width="556">
-	      	<html:select property="taxonLevel" size="6" multiple="true">
+	    <html:select property="xwhereParams[taxonlevel][0]" size="6" multiple="true">
 			<option value="ANY" selected>--ANY--</option>
 			<html:options property="commLevels"/>
 		</html:select>
+		<input type="hidden" name="xwhereParams[taxonlevel][1]" value="taxonlevel"/>
+		<input type="hidden" name="xwhereKey[taxonlevel]" value="ops_eq"/>
               </td>
             </tr>
 	    
@@ -138,10 +129,12 @@
             <tr>
               <td width="156" align="left" valign="top"><b>Name type:</b></td>
               <td class="c4" align="left" valign="top" width="556">
-	        <html:select property="nameType" size="6" multiple="true">
-		   <option value="ANY" selected>--ANY--</option>
-		   <html:options property="commClassSystems"/>
+	        <html:select property="xwhereParams[nametype][0]" size="6" multiple="true">
+			   <option value="ANY" selected>--ANY--</option>
+			   <html:options property="commClassSystems"/>
 	      	 </html:select>
+			<input type="hidden" name="xwhereParams[nametype][1]" value="nametype"/>
+			<input type="hidden" name="xwhereKey[nametype]" value="ops_eq"/>
 	      </td>
 	    </tr>
 		
@@ -158,7 +151,9 @@
               <b>Date:</b></td>
 
               <td class="c4" align="left" valign="top" height="20" width="556">
-               <html:text property="nameExistsBeforeDate"/> 
+				<input type="text" name="xwhereParams[nameexistsbeforedate]"/> 
+				<input type="hidden" name="xwhereParams[nameexistsbeforedate][1]" value="nameexistsbeforedate"/>
+				<input type="hidden" name="xwhereKey[nameexistsbeforedate]" value="ops_gt"/>
                  <span class="itemsmall">
                    -- If left blank, today's date will be used 
                    <a href="@help-for-concept-date-href@"><img height="14" width="14" border="0" src="@image_server@question.gif"></a>
@@ -186,17 +181,19 @@
               <b>Party:</b></td>
             
               <td class="c4" align="left" valign="top" height="54" width="556">
-                <html:select property="accordingToParty">
+                <html:select property="xwhereParams[accordingtoparty][0]">
                   <option value="">All</option>
                   <html:optionsCollection property="partyNameIds"/>
                 </html:select>
+				<input type="hidden" name="xwhereParams[accordingtoparty][1]" value="accordingtoparty"/>
+				<input type="hidden" name="xwhereKey[accordingtoparty]" value="ops_match"/>
               </td>
             </tr>
 
             <tr>
               <td align="left" valign="middle" colspan="2">
                 <small>
-		<html:submit value="search for communities"/>
+		<input type="submit" value="search for communities"/>
                 </small>
               </td>
             </tr>
