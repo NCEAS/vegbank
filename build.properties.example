@@ -22,9 +22,10 @@ logFile = connectionPool.log
 
 # MTL new settings as of 24-JUL-2004: (can be removed if JK enabled, such as on vegbank.org)
 # name of URL to get to this machine 
-machine_url=http://gyro.nceas.ucsb.edu
+machine_url=http://gyro.msi.ucsb.edu
 # the colon plus port number used for tomcat.  If JK enabled, neither of these is needed.
 eighty_eighty=:8080
+mail_host=mail.msi.ucsb.edu
 
 # New value to indicate what image to use: valid options: (none)=vegbank, gyro, aldo
 headerImageMachine=aldo

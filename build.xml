@@ -7,9 +7,9 @@
   * can call ant like this:
   *  % echo "[build.context]" | ant [target]
   *
-  *     '$Author: mlee $'
-  *     '$Date: 2004-12-15 19:56:51 $'
-  *     '$Revision: 1.55 $'
+  *     '$Author: anderson $'
+  *     '$Date: 2005-01-19 00:08:04 $'
+  *     '$Revision: 1.56 $'
 -->
 <project name="Vegbank" default="jar" basedir=".">
   <!-- ================================================================= -->
@@ -110,7 +110,9 @@
     <!-- End filters created from build.${context}.properties -->
     <!-- Copied these straight from the veg_plot build.xml, are they relevant ? -->
     <!-- Servlet specific -->
-    <filter token="mailHost" value="hyperion.nceas.ucsb.edu"/>
+	<filter token="mailHost" value="${mail_host}"/>
+	<filter token="machineURL" value="${machine_url}"/>
+	<filter token="serverAddress" value="${machine_url}${eighty_eighty}"/>
     <filter token="systemEmail" value="dba@vegbank.org"/>
     <filter token="genericForm" value="${web.context}/forms/generic_form.html"/>
     <filter token="genericTemplate" value="${web.context}/forms/tmp.html"/>
@@ -577,6 +579,19 @@
         <isset property="failOnModelDiff"/>
       </not>
     </condition>
+
+	<!-- validate first -->
+
+    <echo>Validating model XML against schema: at ${docs.dir}/xml/${vegbankSchemaName}</echo>
+    <xmlvalidate file="${docs.dir}/xml/db_model_vegbank.xml" failonerror="true">
+		<attribute name="http://apache.org/xml/features/validation/schema" value="true"/>
+		<attribute name="http://xml.org/sax/features/namespaces" value="true"/>
+		<property name="http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation" 
+			value="${docs.dir}/xml/${vegbankSchemaName}"/>
+    </xmlvalidate>
+
+
+
     <!-- get ideal model output -->
     <xslt in="${docs.dir}/xml/db_model_vegbank.xml" out="${build.status.dir}/logicalmodel.txt" style="${docs.dir}/xml/checkModelAgainstDB.xsl" force="true"/>
     <!-- get acutal model output -->

@@ -19,6 +19,7 @@ maxConnectionUsers
 resetTime
 logFile
 machine_url
+mail_host
 vegbank.home.dir
 vegbank.data.dir
 apache.document.root
