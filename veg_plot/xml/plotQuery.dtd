@@ -10,7 +10,12 @@ a query based on the elements stored in the xml document
 
 <!ELEMENT query (queryElement, queryString)>
 <!ELEMENT queryElement (#PCDATA)>  <!--query Element name like taxonName, namedPlace, PlotId-->
-<!ELEMENT elementString (#PCDATA)>
-<!ELEMENT projectDescription (#PCDATA)>
+<!ELEMENT elementString (#PCDATA)> <!--element: like Carya for a taxon-->
+
+
+<!--this is the type of result set to be returned and may include summary
+	plot, plotID -->
+<!ELEMENT resultType (#PCDATA)>
+<!ELEMENT outFile (#PCDATA)>  <!-- include path -->
 
 

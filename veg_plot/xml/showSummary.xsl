@@ -50,6 +50,18 @@
 <i><FONT SIZE="-1" FACE="arial"> <xsl:text>Origin Longitude : </xsl:text> <xsl:value-of select="plotOriginLong"/></FONT></i>
 
 
+<!--List of all the unique taxon names in small green astericked text -->
+<i><FONT SIZE="-1" FACE="arial"> <xsl:text>list of taxon names included in this plot </xsl:text></FONT></i>
+<i><FONT SIZE="-1" COLOR="GREEN" FACE="Times"> 
+<xsl:for-each select="plotObservation/taxonObservations">
+	<!--<xsl:value-of select="authNameId"/><xsl:text
+	disable-output-escaping="yes"> &#xA; </xsl:text> -->
+	
+	<xsl:value-of select="authNameId"/><xsl:text disable-output-escaping="yes">;      </xsl:text>
+	
+</xsl:for-each>
+</FONT></i>
+
 
 </xsl:for-each>
 </xsl:template>

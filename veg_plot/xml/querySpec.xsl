@@ -12,14 +12,22 @@
 
 <xsl:for-each select="query">
 
-<!--Information about the toplevel project information -->
+<!--Query element(S) -->
 <xsl:text>queryElement|</xsl:text> <xsl:value-of select="queryElement"/>
 <xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
 <xsl:text>elementString|</xsl:text> <xsl:value-of select="elementString"/>
 <xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
 
+
 </xsl:for-each>
 
+<!--desired output type-->
+<xsl:text>resultType|</xsl:text> <xsl:value-of select="resultType"/>
+<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
+
+<!--desired path and filename-->
+<xsl:text>outFile|</xsl:text> <xsl:value-of select="outFile"/>
+<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
 
 		
 	</xsl:template>

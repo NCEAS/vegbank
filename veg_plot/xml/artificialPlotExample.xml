@@ -2,7 +2,7 @@
 <!DOCTYPE vegPlot SYSTEM "vegPlot.dtd">     
 <vegPlot>
 <project>
-	<projectName>Artificial Data</projectName>
+	<projectName>Artificial Data2</projectName>
 	<projectDescription>To make up fake data to reside in the National Plots Database.  </projectDescription>
 	<projectContributor>
 		<role>project leader</role>
@@ -231,7 +231,7 @@
 		</stand>        
 		<graphic>        
 			<browseName>owlogo.jpg</browseName>       
-			<browseDescription>jpeg file of most common plant leaf</browseDescription>       
+			<browseDescription>jpeg file of plant leaf</browseDescription>       
 			<browseType>jpeg</browseType>       
 			<browseData>./images/owlogo.jpg</browseData>       
 		</graphic>        

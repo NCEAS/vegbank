@@ -3,7 +3,9 @@
 <dbQuery>
 <query>
 <queryElement>taxonName</queryElement>
-<elementString>Pinus</elementString>
+<elementString>a</elementString>
 </query>
+<resultType>summary</resultType>
+<outFile>/home/computer/harris/summary.xml</outFile>
 </dbQuery>			
 			
