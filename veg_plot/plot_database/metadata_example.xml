@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="Cp1252"?>
+<!DOCTYPE responsibleParty SYSTEM "file:C:\plot_database\metadata.dtd">
+
+<responsibleParty>
+<individualName>
+	<salutation>MR.</salutation>
+	<givenName>Robert</givenName>
+	<surName>Peet</surName>
+</individualName>
+<organizationName>some university</organizationName>
+<positionName>Ecologist</positionName>
+
+<contactInfo>
+	<phone>
+		<voice>111-2222</voice>
+		<facsimile>111-2222</facsimile>
+		<other>111-2222</other>
+		<otherType>cell</otherType>
+	</phone>
+	<address>
+		<deliveryPoint>123 some road</deliveryPoint>
+		<city>Santa Barbara</city>
+		<administrativeArea>CA</administrativeArea>]
+		<postalCode>91354</postalCode>
+		<country>USA</country>
+		<electronicMailAddress>someone@someDomain</electronicMailAddress>	
+	</address>
+</contactInfo>
+
+<onlineResource>
+	<linkage>
+		<URL>www.hotmail.com</URL>
+	</linkage>
+	<protocol>tcp</protocol>
+	<applicationProfile>java</applicationProfile>
+	<name>someName</name>
+	<description>someDescription</description>
+	<functionCode>someFunction</functionCode>
+</onlineResource>
+
+<hoursOfService>numberHours</hoursOfService>
+<contactInstructions>contactInstructions</contactInstructions>
+<roleCode>roleCode</roleCode>
+
+</responsibleParty>

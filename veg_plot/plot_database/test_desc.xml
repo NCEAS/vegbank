@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE vegetation_description SYSTEM "file:C:\plot_database\veg_description.dtd">
+<vegetation_description>
+	<plot_id>100</plot_id>
+
+	<species>
+		<orig_species>QuakingwoodyBush</orig_species>
+		<stratum>
+			<stratum_type>herb</stratum_type>
+			<percent_cover>20</percent_cover>
+				<dominance>
+					<id>yes</id>
+					<layer_height>200'</layer_height>
+					<physiogn_A>Evergreen</physiogn_A>
+					<physiogn_B>needle-leaved</physiogn_B>
+				</dominance>
+		</stratum>
+	</species>
+<species>
+<orig_species>redpine</orig_species>
+<stratum>
+<stratum_type>tree</stratum_type>
+<percent_cover>30</percent_cover>
+<dominance>
+<id>no</id>
+<layer_height/>
+<physiogn_A/>
+<physiogn_B/>
+</dominance>
+</stratum>
+</species>
+</vegetation_description>

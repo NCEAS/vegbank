@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="Cp1252"?>
+<!DOCTYPE veg_plot SYSTEM "file:C:\plot_database\veg_plot_dtd.dtd">
+<veg_plot preferred="true">
+<plot_id>4444444</plot_id>
+	<PI>	<pid>this is the id number of the pi</pid>
+		<pid_metadata>
+			<institution>null</institution>
+			<address>null</address>
+			<phone>null</phone>
+			<email>null</email>
+		</pid_metadata>
+	</PI>
+	<contact>john harris</contact>
+	<class_association>pomaguliad bush</class_association>
+</veg_plot>

@@ -1,0 +1,26 @@
+<!ENTITY % Boolean "(true | false) 'false'">
+
+<!-- JHH 7_2000: first stab at defining an object model for the plots database -->
+
+
+<!ELEMENT veg_plot (plot_id,PI*,contact*,class_association)>
+<!ATTLIST veg_plot preferred (true|false) 'true'>
+
+<!ELEMENT plot_id (#PCDATA)>
+
+<!-- Pricipal Investigator as well as the metadata accosiated with that person -->
+<!ELEMENT PI (pid,pid_metadata+)>
+<!ELEMENT pid (#PCDATA)>
+<!ELEMENT pid_metadata (institution,address,phone,email)>
+<!ATTLIST pid_metadata preferred (true|false) 'true'>
+<!ELEMENT institution (#PCDATA)>
+<!ELEMENT address (#PCDATA)>
+<!ELEMENT phone (#PCDATA)>
+<!ELEMENT email (#PCDATA)>
+
+
+
+<!ELEMENT contact (#PCDATA)>
+
+<!ELEMENT class_association (#PCDATA)>
+
