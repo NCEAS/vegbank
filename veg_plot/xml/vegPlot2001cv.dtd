@@ -1,212 +1,471 @@
 <!ENTITY % Boolean "(true | false) 'false'">
-<!--
-  * vegPlot20001cv.dtd
-  *
-  *      Authors: John Harris
-  * Organization: National Center for Ecological Analysis and Synthesis
-  *    Copyright: 2000 Regents of the University of California and the
-  *               National Center for Ecological Analysis and Synthesis
-  *  For Details: http://www.nceas.ucsb.edu/
-  *      Created: April 2001
-  *
-  * This DTD describes the structure and content of XML documents used
-  * to represent, store, and exchange a single vegetation plot or a subset 
-	* of the vegetation plot
-  *
--->
+<!ELEMENT vegPlotPackage (project)>
 
+<!ELEMENT project (
+		projectName, 
+		projectDescription, 
+		startDate, 
+		stopDate,
+	
+		projectContributor*,
+		plot*
+	)>
 
-<!ELEMENT vegPlot (project)>
-
-<!ELEMENT project (projectName, projectDescription, plot, projectContributor)>
 <!ELEMENT projectName (#PCDATA)> 
 <!ELEMENT projectDescription (#PCDATA)>
+<!ELEMENT startDate (#PCDATA)>
+<!ELEMENT stopDate (#PCDATA)>
 
-<!ELEMENT plot (plotId, authorPlotCode, parentPlot, plotType, samplingMethod, 
-	coverScale, plotOriginLat, plotOriginLong, plotShape, plotSize, 
-	plotSizeAcc, altValue, altPosAcc, slopeAspect, slopeGradient,
-	slopePosition, hydrologicRegime, soilDrainage, surfGeo, plotObservation, 
-	namedPlace, stand, graphic, plotContributor, topoPosition, elevationValue*,
-	origLat, origLong, xCoord, yCoord, coordType, soilDepth, soilType, 
-	percentRockGravel, perSmallRx, perSand, perLitter, perWood, perBareSoil,
-	leafPhenology)>
-	
-	<!ELEMENT plotId (#PCDATA)>
- 	<!ELEMENT authorPlotCode (#PCDATA)>
-	<!ELEMENT parentPlot (#PCDATA)>
-	<!ELEMENT plotType (#PCDATA)>
-	<!ELEMENT samplingMethod (#PCDATA)>
-	<!ELEMENT coverScale (#PCDATA)>
-	<!ELEMENT plotOriginLat (#PCDATA)>
-	<!ELEMENT plotOriginLong (#PCDATA)>
-	<!ELEMENT plotShape (#PCDATA)>
-	<!ELEMENT plotSize (#PCDATA)>
-	<!ELEMENT plotSizeAcc (#PCDATA)>
-	<!ELEMENT altValue (#PCDATA)>
-	<!ELEMENT altPosAcc (#PCDATA)>
-	<!ELEMENT slopeAspect (#PCDATA)>
-	<!ELEMENT slopeGradient (#PCDATA)>
-	<!ELEMENT slopePosition (#PCDATA)>
-	<!ELEMENT hydrologicRegime (#PCDATA)>
-	<!ELEMENT soilDrainage (#PCDATA)>
-	<!ELEMENT surfGeo (#PCDATA)>
-	<!ELEMENT state (#PCDATA)>
-	<!ELEMENT currentCommunity  (#PCDATA)>
-	<!ELEMENT topoPosition  (#PCDATA)>
-	<!ELEMENT elevationValue  (#PCDATA)>
-	<!ELEMENT origLat  (#PCDATA)>
-	<!ELEMENT origLong  (#PCDATA)>
-	<!ELEMENT xCoord  (#PCDATA)>
-	<!ELEMENT yCoord  (#PCDATA)>
-	<!ELEMENT coordType  (#PCDATA)>
-	<!ELEMENT soilDepth  (#PCDATA)>
-	<!ELEMENT soilType  (#PCDATA)>
-	<!ELEMENT percentRockGravel  (#PCDATA)>
-	<!ELEMENT  perSmallRx (#PCDATA)>
-	<!ELEMENT perSand  (#PCDATA)>
-	<!ELEMENT perLitter (#PCDATA)>
-	<!ELEMENT perWood  (#PCDATA)>
-	<!ELEMENT perBareSoil  (#PCDATA)>
-	<!ELEMENT leafPhenology  (#PCDATA)>
-	<!ELEMENT leafType  (#PCDATA)>
-	<!ELEMENT physioClass  (#PCDATA)>
-	
-	
-	<!-- 
-		* observational data that may change over the timescale
-		* reflective of the typical time period that various 
-		* observations of plots are collected
-	-->
-	<!ELEMENT plotObservation (parentPlot*, previousObs*, authorObsCode*, 
-		plotStartDate*, plotStopDate*, dateAccuracy*, effortLevel*,  strata*, 
-		taxonObservations*, communityType*, citation*)>
+<!-- PROJECT CONTRIBUTOR INFO-->
+<!ELEMENT projectContributor (
+	wholeName,
+	salutation,
+	givenName,
+	middleName,
+	surName,
+	organizationName,
+	contactInstructions,
+	telephone*,
+	address*
+)>
+
+<!-- element 'wholeName' added for ease of readibility 20020105-->
+<!ELEMENT	wholeName (#PCDATA)> 
+<!ELEMENT	salutation (#PCDATA)> 
+<!ELEMENT	givenName (#PCDATA)> 
+<!ELEMENT	middleName (#PCDATA)> 
+<!ELEMENT	surName (#PCDATA)> 
+<!ELEMENT	organizationName (#PCDATA)> 
+<!ELEMENT	contactInstructions (#PCDATA)>  
+
+<!-- telephone -->
+<!ELEMENT  telephone (
+	phoneNumber,
+	phoneType
+)>
+<!ELEMENT	phoneNumber (#PCDATA)> 
+<!ELEMENT	phoneType (#PCDATA)> 
+
+<!-- address -->
+<!ELEMENT  address (
+	orgPosition,
+	email,
+	deliveryPoint,
+	city,
+	administrativeArea,
+	postalCode,
+	country,
+	currentFlag,
+	addressStartDate
+)>
+<!ELEMENT	orgPosition (#PCDATA)> 
+<!ELEMENT	email (#PCDATA)>
+<!ELEMENT	deliveryPoint (#PCDATA)>
+<!ELEMENT	city (#PCDATA)>
+<!ELEMENT	administrativeArea (#PCDATA)>
+<!ELEMENT	postalCode (#PCDATA)>
+<!ELEMENT	country (#PCDATA)>
+<!ELEMENT	currentFlag (#PCDATA)>
+<!ELEMENT	addressStartDate (#PCDATA)>
+
+<!-- PLOT SITE DATA-->
+<!ELEMENT plot ( 
+		plotId*, 
+    projectId*,
+		plotAccessionNumber*,
+    authorPlotCode*,  
+    citationId*,  
+    parentId*,
+    sampleMethodId*,
+    latitude*,
+    longitude*,  
+    locationAccuracy*,  
+    authorE*,
+    authorN*,
+    authorZone*,
+    authorDatum*,
+    authorLocation*,
+    locationNarrative*,
+    confidentialityStatus*,
+    confidentialityReason*,
+    azimuth*,
+    dsgPoly*,
+    shape*,
+    area*,
+    standSize*,
+    placementMethod*,
+    permanence*,
+    layoutNarative*,
+    elevation*,
+    elevationAccuracy*,
+    slopeAspect*,
+    slopeGradient*,
+    topoPosition*,
+    landform*,
+    geology*,
+    soilTaxon*,
+    soilTaxonSource*,
+    notesPublic*,
+    notesMgt*,
+    revisions*,
 		
-		<!ELEMENT parentPlot (#PCDATA)>
-		<!ELEMENT previousObs (#PCDATA)>
-		<!ELEMENT authorObsCode (#PCDATA)>
-		<!ELEMENT plotStartDate (#PCDATA)>
-		<!ELEMENT plotStopDate (#PCDATA)>
-		<!ELEMENT dateAccuracy (#PCDATA)>
-		<!ELEMENT effortLevel (#PCDATA)>
+		state*,
+		country*,
 		
-		<!--
-			* define the strata here including height and 
-			* percent coverage of vegetation
-		-->
-		<!ELEMENT strata (strataName, strataHeight, strataCover)>
-		<!ELEMENT strataName (#PCDATA)>
-		<!ELEMENT strataCover (#PCDATA)>
-		<!ELEMENT strataHeight (#PCDATA)>
-
-		<!--
-			*	Because it was the attempt to keep the database normalized 
-			* I have set up this dtd so that the same
-		 	* taxon can be represented more than once - 
-			*	it should be replicated every time there it occurs in a new stratum
-		-->	
-		<!ELEMENT taxonObservation (authNameId*, originalAuthority*, 
-			strataComposition*, interptretation*)>
-			<!ELEMENT authNameId (#PCDATA)>
-			<!ELEMENT originalAuthority (#PCDATA)>
-			<!ELEMENT strataComposition (strataType, percentCover)>
-				<!ELEMENT strataType (#PCDATA)>
-				<!ELEMENT percentCover (#PCDATA)>	
-
-			<!ELEMENT interpretation (party, taxonName, authority, usageStartDate, 
-				usageStopDate, circum_id, role, date, notes)>
-				<!ELEMENT party (#PCDATA)>
-				<!ELEMENT taxonName (#PCDATA)>
-				<!ELEMENT authority (#PCDATA)>
-				<!ELEMENT usageStartDate (#PCDATA)>
-				<!ELEMENT usageStopDate (#PCDATA)>
-				<!ELEMENT circum_id (#PCDATA)> 
-				<!ELEMENT role (#PCDATA)> 
-				<!ELEMENT date (#PCDATA)> 
-				<!ELEMENT notes (#PCDATA)> 
+		observation*,
+		namedPlace*
+	)>
+		
+	<!ELEMENT	plotId (#PCDATA)> 
+  <!ELEMENT  projectId (#PCDATA)> 
+  <!ELEMENT  authorPlotCode  (#PCDATA)> 
+  <!ELEMENT  citationId  (#PCDATA)> 
+  <!ELEMENT  parentId  (#PCDATA)>
+	<!ELEMENT  plotAccessionNumber (#PCDATA)>
+  <!ELEMENT  sampleMethodId (#PCDATA)> 
+  <!ELEMENT  latitude  (#PCDATA)> 
+  <!ELEMENT  longitude  (#PCDATA)> 
+  <!ELEMENT  locationAccuracy  (#PCDATA)> 
+  <!ELEMENT  authorE (#PCDATA)> 
+  <!ELEMENT  authorN (#PCDATA)> 
+  <!ELEMENT  authorZone (#PCDATA)> 
+  <!ELEMENT  authorDatum  (#PCDATA)> 
+  <!ELEMENT  authorLocation  (#PCDATA)> 
+  <!ELEMENT  locationNarrative (#PCDATA)> 
+  <!ELEMENT  confidentialityStatus (#PCDATA)> 
+  <!ELEMENT  confidentialityReason (#PCDATA)> 
+  <!ELEMENT  azimuth (#PCDATA)> 
+  <!ELEMENT  dsgPoly (#PCDATA)> 
+  <!ELEMENT  shape (#PCDATA)> 
+  <!ELEMENT  area (#PCDATA)> 
+  <!ELEMENT  standSize (#PCDATA)> 
+  <!ELEMENT  placementMethod (#PCDATA)> 
+  <!ELEMENT  permanence (#PCDATA)> 
+  <!ELEMENT  layoutNarative (#PCDATA)> 
+  <!ELEMENT  elevation (#PCDATA)> 
+  <!ELEMENT  elevationAccuracy (#PCDATA)> 
+  <!ELEMENT  slopeAspect (#PCDATA)> 
+  <!ELEMENT  slopeGradient (#PCDATA)> 
+  <!ELEMENT  topoPosition (#PCDATA)> 
+  <!ELEMENT  landform (#PCDATA)> 
+  <!ELEMENT  geology (#PCDATA)> 
+  <!ELEMENT  soilTaxon (#PCDATA)> 
+  <!ELEMENT  soilTaxonSource (#PCDATA)> 
+  <!ELEMENT  notesPublic (#PCDATA)> 
+  <!ELEMENT  notesMgt (#PCDATA)> 
+  <!ELEMENT  revisions (#PCDATA)> 
 	
-		<!ELEMENT communityAssignment (communityName, CEGLCode, startDate, stopDate)>
-			<!ELEMENT communityName (#PCDATA)>
-			<!ELEMENT CEGLCode (#PCDATA)>
-			<!ELEMENT strartDate (#PCDATA)>
-			<!ELEMENT stopDate (#PCDATA)>
-
-		<!ELEMENT citation (title, altTitle, pubDate, edition, editionDate, seriesName, 
-		issueIdentification, otherCredentials, 
-			page, isbn, issn,citationContributor)>
-			<!ELEMENT title (#PCDATA)>
-			<!ELEMENT altTitle (#PCDATA)>
-			<!ELEMENT pubDate (#PCDATA)>
-			<!ELEMENT edition (#PCDATA)>
-			<!ELEMENT editionDate (#PCDATA)>
-			<!ELEMENT seriesName (#PCDATA)>
-			<!ELEMENT issueIdentification (#PCDATA)>
-			<!ELEMENT otherCredentials (#PCDATA)>
-			<!ELEMENT page (#PCDATA)>
-			<!ELEMENT isbn (#PCDATA)>
-			<!ELEMENT issn (#PCDATA)>
-
-			<!ELEMENT citationContributor (role,party)>
-
-
-	<!ELEMENT namedPlace (placeName, placeDescription, gazeteerRef)>
+	<!-- added by jhh 20011220 -->
+	<!ELEMENT  state (#PCDATA)>
+	<!-- added by jhh 20011220 -->
+	<!ELEMENT  country (#PCDATA)>
+	
+	
+		<!-- PLOT OBSERVATION DATA-->
+		<!ELEMENT observation (
+		observationId*, 
+   	plotId*,
+   	previousObsId*, 
+		authorObsCode*, 
+   	obsStartDate*, 
+    obsEndDate*,
+  	dateAccuracy*, 
+   	sampleMethodId*, 
+   	coverMethodId*,
+   	stratumMethodId*, 
+   	stemSizeLimit*,
+   	methodNarrative*, 
+   	taxonObservationArea*, 
+   	coverDispersion*,
+   	autotaxonCover*,
+   	stemObservationArea*,
+    stemSampleMethod*,
+    originalData*,
+    effortLevel*,
+    plotValidationLevel*,
+    floristicQuality*,
+    bryophyteQuality*,
+    lichenQuality*,
+    observationNarrative*,
+    landscapeNarrative*,
+    homogeneity*,
+    phenologicalAspect*,
+    representativeness*,
+    basalArea*,
+    hydrologicRegime*, 
+    soilMoistureRegime*, 
+    soilDrainage*,
+    waterSalinity*, 
+    waterDepth*,
+    shoreDistance*, 
+    soilDepth*,
+    organicDepth*, 
+    percentBedrock*, 
+    percentRockGravel*, 
+    percentWood*,
+    percentLitter*, 
+    percentBareSoil*, 
+    percentWater*,
+    percentOther*,
+    nameOther*,
+    standMaturity*, 
+    successionalStatus*, 
+    treeHt*,
+    shrubHt*, 
+    fieldHt*,
+    nonvascularHt*,
+    submergedHt*,
+    treeCover*,
+    shrubCover*,
+    fieldCover*,
+    nonvascularCover*,
+    floatingCover*,
+    submergedCover*,
+    dominantStratum*,
+    growthform1type*,
+		growthform2type*,
+    growthform3type*,
+    growthform1cover*,
+    growthform2cover*,
+   	growthform3cover*,
+    notesPublic*,
+    notesMgt*,
+		revisions*,
+		communityClassification*,
+		observationContributor*,
+		stratum*,
+		taxonObservation*
+	)>
+		
+		
+				<!ELEMENT	observationId (#PCDATA)>
+    		<!ELEMENT	plotId (#PCDATA)>
+    		<!ELEMENT	previousObsId (#PCDATA)>
+		    <!ELEMENT	authorObsCode (#PCDATA)>
+  		  <!ELEMENT	obsStartDate (#PCDATA)>
+   			<!ELEMENT	obsEndDate (#PCDATA)>
+   			<!ELEMENT	dateAccuracy (#PCDATA)>
+   		 	<!ELEMENT	sampleMethodId (#PCDATA)>
+    		<!ELEMENT	coverMethodId (#PCDATA)>
+   			<!ELEMENT	stratumMethodId (#PCDATA)>
+    		<!ELEMENT	stemSizeLimit (#PCDATA)>
+    		<!ELEMENT	methodNarrative (#PCDATA)>
+    		<!ELEMENT	taxonObservationArea (#PCDATA)>
+    		<!ELEMENT	coverDispersion (#PCDATA)>
+    		<!ELEMENT	autotaxonCover (#PCDATA)>
+    		<!ELEMENT	stemObservationArea (#PCDATA)>
+    		<!ELEMENT	stemSampleMethod (#PCDATA)>
+    		<!ELEMENT	originalData (#PCDATA)>
+    		<!ELEMENT	effortLevel (#PCDATA)>
+    		<!ELEMENT	plotValidationLevel (#PCDATA)>
+    		<!ELEMENT	floristicQuality (#PCDATA)>
+    		<!ELEMENT	bryophyteQuality (#PCDATA)>
+    		<!ELEMENT	lichenQuality (#PCDATA)>
+    		<!ELEMENT	observationNarrative (#PCDATA)>
+    		<!ELEMENT	landscapeNarrative (#PCDATA)>
+    		<!ELEMENT	homogeneity (#PCDATA)>
+    		<!ELEMENT	phenologicalAspect (#PCDATA)>
+    		<!ELEMENT	representativeness (#PCDATA)>
+    		<!ELEMENT	basalArea (#PCDATA)>
+    		<!ELEMENT	hydrologicRegime (#PCDATA)>
+    		<!ELEMENT	soilMoistureRegime (#PCDATA)>
+    		<!ELEMENT	soilDrainage (#PCDATA)>
+    		<!ELEMENT	waterSalinity (#PCDATA)>
+    		<!ELEMENT	waterDepth (#PCDATA)>
+    		<!ELEMENT	shoreDistance (#PCDATA)>
+    		<!ELEMENT	soilDepth (#PCDATA)>
+    		<!ELEMENT	organicDepth (#PCDATA)>
+    		<!ELEMENT	percentBedrock (#PCDATA)>
+    		<!ELEMENT	percentRockGravel (#PCDATA)>
+    		<!ELEMENT	percentWood (#PCDATA)>
+    		<!ELEMENT	percentLitter (#PCDATA)>
+    		<!ELEMENT	percentBareSoil (#PCDATA)>
+    		<!ELEMENT	percentWater (#PCDATA)>
+    		<!ELEMENT percentOther (#PCDATA)>
+    		<!ELEMENT nameOther (#PCDATA)>
+    		<!ELEMENT standMaturity (#PCDATA)>
+    		<!ELEMENT successionalStatus (#PCDATA)>
+    		<!ELEMENT treeHt (#PCDATA)>
+    		<!ELEMENT shrubHt (#PCDATA)>
+    		<!ELEMENT fieldHt (#PCDATA)>
+    		<!ELEMENT nonvascularHt (#PCDATA)>
+    		<!ELEMENT submergedHt (#PCDATA)>
+    		<!ELEMENT treeCover (#PCDATA)>
+    		<!ELEMENT shrubCover (#PCDATA)>
+    		<!ELEMENT fieldCover (#PCDATA)>
+    		<!ELEMENT nonvascularCover (#PCDATA)>
+    		<!ELEMENT floatingCover (#PCDATA)>
+    		<!ELEMENT submergedCover (#PCDATA)>
+    		<!ELEMENT dominantStratum (#PCDATA)>
+    		<!ELEMENT growthform1type (#PCDATA)>
+    		<!ELEMENT growthform2type (#PCDATA)>
+    		<!ELEMENT growthform3type (#PCDATA)>
+    		<!ELEMENT growthform1cover (#PCDATA)>
+    		<!ELEMENT growthform2cover (#PCDATA)>
+   		 	<!ELEMENT growthform3cover (#PCDATA)>
+    		<!ELEMENT notesPublic (#PCDATA)>
+    		<!ELEMENT notesMgt (#PCDATA)>
+    		<!ELEMENT revisions (#PCDATA)>
+				
+				<!-- SOIL OBSERVATION -->
+				<!ELEMENT soilObservation (
+					soilHorizon*,
+					soilDepthTop*,
+					soilDepthBottom*,
+					soilColor*,
+					soilOrganic*,
+					soilTexture*,
+					soilSand*,
+					soilClay*,
+					soilCoarse*,
+					soilPh*,
+					exchangeCapacity*,
+					baseSaturation*,
+					soilDescription*
+				)>
+				<!ELEMENT soilHorizon (#PCDATA)>
+				<!ELEMENT soilDepthTop (#PCDATA)>
+				<!ELEMENT soilDepthBottom (#PCDATA)>
+				<!ELEMENT soilColor (#PCDATA)>
+				<!ELEMENT soilOrganic (#PCDATA)>
+				<!ELEMENT soilTexture (#PCDATA)>
+				<!ELEMENT soilSand (#PCDATA)>
+				<!ELEMENT soilClay (#PCDATA)>
+				<!ELEMENT soilCorase (#PCDATA)>
+				<!ELEMENT soilPh (#PCDATA)>
+				<!ELEMENT exchangeCapacity (#PCDATA)>
+				<!ELEMENT baseSaturation (#PCDATA)>
+				<!ELEMENT soilDescription (#PCDATA)>
+				
+				
+				<!-- DISTURBANCE OBSERVATION -->
+				<!ELEMENT disturbanceObservation (
+					disturbanceType*,
+					disturbanceIntensity*,
+					disturbanceAge*,
+					disturbanceExtent*,
+					disturbanceComment*
+				)>
+				<!ELEMENT disturbanceType (#PCDATA)>
+				<!ELEMENT disturbanceIntensity (#PCDATA)>
+				<!ELEMENT disturbanceAge (#PCDATA)>
+				<!ELEMENT disturbanceExtent (#PCDATA)>
+				<!ELEMENT disturbanceComment (#PCDATA)>
+				
+				<!-- OBSERVATION CONTRIBUTOR INFO THE ELEMENTS ARE THE SAME
+							AS IN THE PROJECT CONTRIBUTOR -->
+				<!ELEMENT observationContributor (
+					wholeName,
+					salutation,
+					givenName,
+					middleName,
+					surName,
+					organizationName,
+					contactInstructions,
+					telephone*,
+					address*
+				)>
+				
+				<!-- VEGETATION CLASSIFICATION INFORMATION -->
+				<!ELEMENT  communityClassification (
+					className*,
+					classStartDate*,
+					classStopDate*,
+					classInspection*,
+					tableAnalysis*,
+					multivariateAnalysis*,
+					expertSystem*,
+					classNotes*,
+					classPublication*
+				)>
+				
+				<!ELEMENT className (#PCDATA)>
+				<!ELEMENT classStartDate (#PCDATA)>
+				<!ELEMENT classStopDate (#PCDATA)>
+				<!ELEMENT classInspection (#PCDATA)>
+				<!ELEMENT tableAnalysis (#PCDATA)>
+				<!ELEMENT multivariateAnalysis (#PCDATA)>
+				<!ELEMENT expertSystem (#PCDATA)>
+				<!ELEMENT classNotes (#PCDATA)>
+				<!ELEMENT classPublication (#PCDATA)>
+				
+				
+		<!-- TAXON OBSERVATION  eventhough the database uses the stratacomposition 
+				table to handle the intersection between the plant name and the strata
+				it will be 'denormalized' here so that the whole bit will be in this
+				element -->
+		<!ELEMENT taxonObservation (
+					taxonObservationId*,
+    			observationId*,
+    			plantNameId*,
+    			plantReferenceId*,
+					authorNameId*,
+					cheatPlantName*,
+    			taxonCollection*,
+    			taxonCover*,
+    			taxonBasalArea*,
+    			taxonInferenceArea*,
+					
+					stratumComposition*
+		)>
+    			
+				<!ELEMENT taxonObservationId (#PCDATA)>
+    		<!ELEMENT observationId (#PCDATA)>
+    		<!ELEMENT plantNameId (#PCDATA)>
+    		<!ELEMENT plantReferenceId (#PCDATA)>
+   		 	<!ELEMENT taxonCollection (#PCDATA)>
+    		<!ELEMENT taxonCover (#PCDATA)>
+    		<!ELEMENT taxonBasalArea (#PCDATA)>
+    		<!ELEMENT taxonInferenceArea (#PCDATA)>
+				<!ELEMENT cheatPlantName (#PCDATA)> <!-- these two are the same -->
+				<!ELEMENT authorNameId (#PCDATA)> 
+ 		
+		
+			<!-- STRATUM -->
+ 			<!ELEMENT stratumComposition (
+				taxonStratumCover,
+				stratumName,
+				authorNameId*
+			)>
+		
+				<!ELEMENT taxonStratumCover (#PCDATA)>
+				<!-- stratumName is memeber of stratum -->
+				<!-- authorNameId is memeber of stratum-->
+			
+		
+		<!-- STRATUM -->
+ 			<!ELEMENT stratum (
+					stratumId*,
+    			observationId*, 
+    			stratumMethodId*, 
+    			stratumName,
+    			stratumHeight, 
+    			stratumBase,
+    			stratumCover, 
+    			stratumMethodDescription*
+			)>
+			
+				<!ELEMENT stratumId (#PCDATA)>
+    		<!ELEMENT observationId (#PCDATA)>
+    		<!ELEMENT stratumMethodId (#PCDATA)>
+    		<!ELEMENT stratumName (#PCDATA)>
+    		<!ELEMENT stratumHeight (#PCDATA)>
+    		<!ELEMENT stratumBase (#PCDATA)>
+    		<!ELEMENT stratumCover (#PCDATA)>
+    		<!ELEMENT stratumMethodDescription (#PCDATA)>
+				
+		<!-- NAMED PLACE -->
+		<!ELEMENT namedPlace (
+			placeName,
+			placeDescription,
+			placeCode,
+			placeSystem,
+			owner
+		)>
+		
 		<!ELEMENT placeName (#PCDATA)>
 		<!ELEMENT placeDescription (#PCDATA)>
-		<!ELEMENT gazeteerRef (#PCDATA)>
-
-	<!ELEMENT stand (standSize, standDescription, standName)>
-		<!ELEMENT standSize (#PCDATA)>
-		<!ELEMENT standDescription (#PCDATA)>
-		<!ELEMENT standName (#PCDATA)>
-
-	<!ELEMENT  graphic (browseName, browseDescription, browseType, browseData)>
-		<!ELEMENT browseName (#PCDATA)>
-		<!ELEMENT browseDescription (#PCDATA)>
-		<!ELEMENT browseType (#PCDATA)>
-		<!ELEMENT browseData (#PCDATA)>
-
-	<!ELEMENT  plotContributor (role,party)> 
-	
-<!-- Identification of the project contributor-->	
-	<!ELEMENT projectContributor (role, party)>
-	<!ELEMENT role (#PCDATA)>
-	<!ELEMENT party (salutation, givenName, surName, organizationName, 
-	positionName, hoursOfService, contactInstructions,  onlineResource, 
-	telephone, email, address)>
-		<!ELEMENT salutation (#PCDATA)>
-		<!ELEMENT givenName (#PCDATA)>
-		<!ELEMENT surName (#PCDATA)>
-		<!ELEMENT organizationName (#PCDATA)>
-		<!ELEMENT positionName (#PCDATA)>
-		<!ELEMENT hoursOfService (#PCDATA)>
-		<!ELEMENT contactInstructions (#PCDATA)>
-
-			<!ELEMENT telephone (phoneNumber, phoneType)>
-			<!ELEMENT phoneNumber (#PCDATA)>
-			<!ELEMENT phoneType (#PCDATA)>
+		<!ELEMENT placeCode (#PCDATA)>
+		<!ELEMENT placeSystem (#PCDATA)>
+		<!ELEMENT owner (#PCDATA)>
 			
-			<!ELEMENT email (emailAddress)>
-			<!ELEMENT emailAddress (#PCDATA)>
-			
-			<!ELEMENT address (deliveryPoint, city, administrativeArea, 
-				postalCode, country, currentFlag)>
-			<!ELEMENT deliveryPoint (#PCDATA)>
-			<!ELEMENT city (#PCDATA)>
-			<!ELEMENT administrativeArea (#PCDATA)>
-			<!ELEMENT postalCode (#PCDATA)>
-			<!ELEMENT country (#PCDATA)>
-			<!ELEMENT currentFlag (#PCDATA)>
-			
-			
-			<!--
-				* added this for the veg plot update class
-				* so that update xml documents should conform
-				* to this
-			-->
-			<!ELEMENT dbUpdateInstance (constrainingAttribute, constrainingValue, 
-			updateTable,	updateAttribute, updateValue)>
-			
-			<!ELEMENT  constrainingAttribute (#PCDATA)>
-			<!ELEMENT  constrainingValue (#PCDATA)>
-			<!ELEMENT  updateTable (#PCDATA)>
-			<!ELEMENT  updateAttribute (#PCDATA)>
-			<!ELEMENT  updateValue (#PCDATA)>
