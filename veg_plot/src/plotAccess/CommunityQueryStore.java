@@ -32,8 +32,7 @@ private StringBuffer statement = new StringBuffer(); //sql statement
  * Method that takes as input queryelements such as communityLevel (the level in
  * the NVC heirarchy eg. class, subclass, group etc.) and communityName
  */
-public void getCommunitySummary(String communityName, String communityLevel, 
-	Connection conn)
+public void getCommunitySummary(String communityName, String communityLevel )
 {
 action = "select"; 
 statement.append("select ");
@@ -68,7 +67,7 @@ returnFields[13]="commSummary_Id";
 
 //issue the statement
 issueStatement j = new issueStatement();
-j.issueSelect(statement.toString(), action, returnFields, returnFieldLength, conn);
+j.issueSelect(statement.toString(), action, returnFields, returnFieldLength);
 
 //pass the results back to the calling class
 communitySummaryOutput=j.returnedValues;  //copy this vector
