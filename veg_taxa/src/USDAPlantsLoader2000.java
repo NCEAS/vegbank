@@ -172,18 +172,17 @@ public class USDAPlantsLoader2000
 			{
 				StringTokenizer st = new StringTokenizer((String)missingPlantNames.elementAt(i), "|");
 				String name = st.nextToken();
+				// FIXME: Should be add elsewhere
 				String longName = st.nextToken();
 				String nameType = st.nextToken(); // this is for the second step
 				
-				StringBuffer sb = new StringBuffer();
-				sb.append("insert into PLANTNAME (PLANTREFERENCE_ID, PLANTNAME, PLANTNAMEWITHAUTHOR, ");
-				sb.append(" DATEENTERED )");
-				sb.append(" values(?,?,?,?) ");
-				PreparedStatement pstmt = conn.prepareStatement(sb.toString() );
+				PreparedStatement pstmt = conn.prepareStatement(
+					"insert into PLANTNAME (PLANTREFERENCE_ID, PLANTNAME, "
+					+ " DATEENTERED ) values(?,?,?) " );
+					
 				pstmt.setInt(1, this.refId);
 				pstmt.setString(2, name);
-				pstmt.setString(3, longName);
-				pstmt.setString(4, dateEntered);
+				pstmt.setString(3, dateEntered);
 				pstmt.execute();
 				pstmt.close();
 			}

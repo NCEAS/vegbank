@@ -3,9 +3,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: farrell $'
- *     '$Date: 2003-01-14 01:12:43 $'
- * '$Revision: 1.7 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2003-03-20 20:03:05 $'
+ *  '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintStream;
+import java.util.AbstractList;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -44,7 +45,7 @@ import java.util.Vector;
 public class USDAPlantsToXml 
 {
 	public Vector fileVector = new Vector();
-	public Hashtable attributeHash = new Hashtable();
+	public AbstractList attributeList = new Vector();
 
 
 /**
@@ -85,10 +86,10 @@ public void transformPlantList(String inputPlantList)
 		this.fileVector = fileToVector(inputPlantList);
 		
 		System.out.println("USDAPlantsToXml > parsing the input");
-		attributeHash = parsePlantElements();
+		attributeList = parsePlantElements();
 		
 		System.out.println("USDAPlantsToXml > writing the output");
-		this.outputXml(attributeHash);	
+		this.outputXml(attributeList);	
 	}
 	catch( Exception e ) 
 	{
@@ -102,13 +103,13 @@ public void transformPlantList(String inputPlantList)
  * the plant lis and returns a hashtable
  * that contains all the plant instances
  */
-private Hashtable parsePlantElements()
+private AbstractList parsePlantElements()
 {
-	Hashtable plantInstances = new Hashtable();
+	Vector plantInstances = new Vector();
 	for (int i=0; i<this.fileVector.size(); i++) 
 	{
 		//put each plant instance hash into the plantInstances hash
-		plantInstances.put(""+i, (Hashtable)parseSinglePlantInstance(fileVector.elementAt(i).toString()) );
+		plantInstances.add( (Hashtable)parseSinglePlantInstance(fileVector.elementAt(i).toString()) );
 		//System.out.println("line: " + i );
 	}
 	return(plantInstances);
@@ -131,19 +132,19 @@ private Hashtable parseSinglePlantInstance(String fileVectorLine)
 			if (acceptedPlantInstance(fileVectorLine) == true )
 			{
 				//System.out.println(" accepted usage :");
-				singlePlantInstance.put("plantCode", plantCode(fileVectorLine) );
-				singlePlantInstance.put("concatenatedName", plantConcatenatedName(fileVectorLine) );
-				singlePlantInstance.put("familyName", plantFamilyName(fileVectorLine) );
-				singlePlantInstance.put("commonName", plantCommonName(fileVectorLine) );
+				singlePlantInstance.put("plantCode", getPlantCode(fileVectorLine) );
+				singlePlantInstance.put("concatenatedName", getPlantConcatenatedName(fileVectorLine) );
+				singlePlantInstance.put("familyName", getPlantFamilyName(fileVectorLine) );
+				singlePlantInstance.put("commonName", getPlantCommonName(fileVectorLine) );
 				singlePlantInstance.put("acceptence", "accepted" );
 			}
 			else 
 			{
 				//System.out.println("non accepted usage ");
-				singlePlantInstance.put("plantCode", plantCode(fileVectorLine) );
-				singlePlantInstance.put("concatenatedName", plantConcatenatedName(fileVectorLine) );
-				singlePlantInstance.put("familyName", plantFamilyName(fileVectorLine) );
-				singlePlantInstance.put("synonymName", plantSynonymName(fileVectorLine) );
+				singlePlantInstance.put("plantCode", getPlantCode(fileVectorLine) );
+				singlePlantInstance.put("concatenatedName", getPlantConcatenatedName(fileVectorLine) );
+				singlePlantInstance.put("familyName", getPlantFamilyName(fileVectorLine) );
+				singlePlantInstance.put("synonymName", getPlantSynonymName(fileVectorLine) );
 				singlePlantInstance.put("acceptence", "not accepted" );
 			}
 		}
@@ -162,15 +163,15 @@ private Hashtable parseSinglePlantInstance(String fileVectorLine)
  * plant instances and prints out an xml document - that 
  * corresponds to some dtd
  */
-private void outputXml(Hashtable plantInstances)
+private void outputXml(AbstractList plantInstances)
 {
 	try 
 	{
-		Hashtable singlePlantInstance = new Hashtable();
+		Hashtable singlePlantInstance = null;
 		StringBuffer outData = new StringBuffer();
+		// HardCoded outputfile name
 		PrintStream out = new PrintStream(new FileOutputStream("outfile.xml"));
-		//print the header
-		////outData.append(xmlHeader()).toString();
+		//print the xml header
 		out.println( xmlHeader() );
 		
 		//print each instance of a plant taxon
@@ -178,17 +179,15 @@ private void outputXml(Hashtable plantInstances)
 		{
 			//System.out.println("outline: " + i);
 			//grab the corresponding plant instance 			
-			singlePlantInstance = (Hashtable)plantInstances.get(""+i);
+			singlePlantInstance = (Hashtable)plantInstances.get(i);
 			//determine if accepted
 			if (singlePlantInstance.get("acceptence") == "accepted")
 			{
-				////outData.append(xmlAcceptedInstance(singlePlantInstance, i)).toString();
 				out.println( xmlAcceptedInstance(singlePlantInstance, i) );
 				//System.out.println(singlePlantInstance);
 			}
 			else 
 			{
-				//outData.append(xmlNotAcceptedInstance(singlePlantInstance, i)).toString();
 				out.println( xmlNotAcceptedInstance(singlePlantInstance, i) );
 			}
 		}
@@ -729,7 +728,7 @@ private String xmlHeader()
  * from a single plant instance using as input
  * a line from the USDA plants list
  */
-private String plantSynonymName(String fileVectorLine)
+private String getPlantSynonymName(String fileVectorLine)
 {
 	String synonymName = null;
 	if (fileVectorLine != null)
@@ -748,7 +747,7 @@ private String plantSynonymName(String fileVectorLine)
  * from a single plant instance using as input
  * a line from the USDA plants list
  */
-private String plantCommonName(String fileVectorLine)
+private String getPlantCommonName(String fileVectorLine)
 {
 	String commonName = null;
 	if (fileVectorLine != null)
@@ -769,7 +768,7 @@ private String plantCommonName(String fileVectorLine)
  * from a single plant instance using as input
  * a line from the USDA plants list
  */
-private String plantFamilyName(String fileVectorLine)
+private String getPlantFamilyName(String fileVectorLine)
 {
 	String familyName = null;
 	if (fileVectorLine != null)
@@ -798,7 +797,7 @@ private String plantFamilyName(String fileVectorLine)
  * from a single plant instance using as input
  * a line from the USDA plants list
  */
-private String plantCode(String fileVectorLine)
+private String getPlantCode(String fileVectorLine)
 {
 	String plantCode = null;
 	if (fileVectorLine != null)
@@ -819,7 +818,7 @@ private String plantCode(String fileVectorLine)
  * from a single plant instance using as input
  * a line from the USDA plants list
  */
-private String plantConcatenatedName(String fileVectorLine)
+private String getPlantConcatenatedName(String fileVectorLine)
 {
 	String concatenatedName = null;
 	if (fileVectorLine != null)

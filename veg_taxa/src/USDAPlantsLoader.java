@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-02-03 19:47:37 $'
- * '$Revision: 1.21 $'
+ *     '$Date: 2003-03-20 20:03:04 $'
+ * '$Revision: 1.22 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,8 @@ import org.apache.xalan.xslt.XSLTInputSource;
 import org.apache.xalan.xslt.XSLTProcessor;
 import org.apache.xalan.xslt.XSLTProcessorFactory;
 import org.apache.xalan.xslt.XSLTResultTarget;
+
+import org.vegbank.common.utility.*;
 
 /**
  * 
@@ -597,19 +599,19 @@ private int plantUsageKey(String plantName)
 						if (plantNameExists(concatenatedName)==false)
 						{
 							//sciNameId = loadPlantNameInstance(refId, concatenatedName, commonName, plantCode);
-							sciNameId = loadPlantNameInstance(refId, concatenatedName, concatenatedLongName, dateEntered);
+							sciNameId = loadPlantNameInstance(refId, concatenatedName, dateEntered);
 						}
 						//same with the common name 
 						if (plantNameExists(commonName)==false)
 						{
 							//commonNameId = loadPlantNameInstance(refId, commonName, commonName, plantCode);
-							commonNameId = loadPlantNameInstance(refId, commonName, "", dateEntered);
+							commonNameId = loadPlantNameInstance(refId, commonName, dateEntered);
 						}
 						//same with the codes
 						if (plantNameExists(plantCode)==false)
 						{
 							//codeNameId = loadPlantNameInstance(refId, plantCode, commonName, plantCode);
-							codeNameId = loadPlantNameInstance(refId, plantCode, "", dateEntered);
+							codeNameId = loadPlantNameInstance(refId, plantCode, dateEntered);
 						}
 						//if the plant concept does not exist create an entry 
 						// and create a status entry for that plant instance - if 
@@ -805,7 +807,7 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
 			//if the plantname is not there then load it
 			if (plantNameExists(familyName)==false)
 			{
-				nameId = loadPlantNameInstance(refId, familyName, "", dateEntered);
+				nameId = loadPlantNameInstance(refId, familyName, dateEntered);
 			}
 
 			//if the plant concept does not exist create an entry 
@@ -1549,43 +1551,31 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 	*
 	* @param refId -- the reference Id
 	* @param plantName -- the plantname (w/o the author bit)
-	* @param plantNameWithAuthor
 	* @param dateEntered -- the data thate the plant name is to be entered
 	* @return plantNameId -- the plant name Id assocaited with this plant
 	*
  	*/	
-	private int loadPlantNameInstance(int refId, String plantName, 
-	String plantNameWithAuthor, String dateEntered)
+	private int loadPlantNameInstance(int refId, String plantName, String dateEntered)
 	{
 		int plantNameId = -999;
 		try
 		{
-			String s = "insert into PLANTNAME (plantreference_id, plantName, "
-			+"plantNameWithAuthor, dateEntered) "
-			+" values(?,?,?,?) ";
-			PreparedStatement pstmt = conn.prepareStatement(s);
+			
+			
+			// Get Primary key for table		
+			plantNameId =  
+				(int) Utility.dbAdapter.getNextUniqueID(conn, "PLANTNAME", "plantname_id");
+				
+			PreparedStatement pstmt = conn.prepareStatement(
+				 "insert into PLANTNAME (plantreference_id, plantName,  dateEntered, "
+				 + "plantname_id) values(?,?,?,?) " );
+
 			//bind the values
 			pstmt.setInt(1, refId);
 			pstmt.setString(2, plantName);
-			pstmt.setString(3, plantNameWithAuthor);
-			pstmt.setString(4, dateEntered);
-			pstmt.execute();
+			pstmt.setInt(4, plantNameId);
+			pstmt.executeUpdate();
 			pstmt.close();	
-		
-			//now get the associated primary key value
-			String s1 = "select plantname_id from PLANTNAME where plantname = '"+ plantName+ "' ";
-			PreparedStatement pstmt1 = conn.prepareStatement(s1);
-			ResultSet rs = pstmt1.executeQuery();
-			int cnt = 0;
-			while	( rs.next() )
-			{
-				cnt++;
-				plantNameId = rs.getInt(1);
-				//System.out.println("USDAPlantsLoader >>> plantname_id: " + plantNameId);
-			}
-			if (cnt > 1)
-			throw new Exception("multiple plantnameID's found");
-			pstmt1.close();
 		}
 		catch(Exception e )
 		{

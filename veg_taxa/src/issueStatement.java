@@ -123,8 +123,7 @@ try {
 	////m.makeConnection(conn, query);
 	//System.out.println("Grabbing a DB connection from the local pool");
 
-	LocalDbConnectionBroker lb = new LocalDbConnectionBroker();
-	conn = lb.manageLocalDbConnectionBroker("getConn");
+	conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
 	query = conn.createStatement ();
 
 } catch (Exception e) 
@@ -432,8 +431,8 @@ try {
 
 //this class should have been initialized by the an interface class before this
 // method was called , allowing this method to obtain a connection
-LocalDbConnectionBroker lb = new LocalDbConnectionBroker();
-conn = lb.manageLocalDbConnectionBroker("getConn");
+
+conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
 
 query = conn.createStatement ();
 } 
@@ -556,7 +555,7 @@ try {
 	//System.out.println("Grabbing a DB connection from the local pool");
 
 	LocalDbConnectionBroker lb = new LocalDbConnectionBroker();
-	conn = lb.manageLocalDbConnectionBroker("getConn");
+	conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
 	query = conn.createStatement ();
 
 } catch (Exception e) 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-07 22:17:55 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-03-20 20:03:06 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,19 +59,39 @@ public class USDAPlantListReader implements Constants, PlantListReader
 	private static final String edition = "Version 3.5";
 	private static final String otherCitationDetails =
 		"(http://plants.usda.gov) National Plant Data Center, Baton Rouge, LA 70874-4490 USA.";
-	private static final String organization = "USDA-NRCS-PLANTS-2002";
 	private static final String email = "plants@plants.usda.gov";
+
+	// Party Information
+	private static final String organization = "USDA-NRCS-PLANTS-2002";
 	private static final String contactInstructions = "http://plants.usda.gov";
 	
-	private static Reference ref = null;
+	private static Reference ref;
+	{
+		// Initialize the Reference
+		ref = new Reference();
+		ref.setEdition(edition);
+		ref.setPubDate(pubdate);
+		ref.setTitle(title);
+	}
+	
+	private static Party party;
+	{
+		// Initialize the Party
+		party = new Party();
+		party.setOrganizationName(organization);
+		party.setContactInstructions(contactInstructions);
+	}
+	
+	private static CitationContributor citationContributor;
+	{
+		// Initailize CitationContibutor
+		citationContributor = new CitationContributor();
+		citationContributor.setReference(ref);
+		citationContributor.setOrganizationName(organization);
+	}
 
 	public USDAPlantListReader(Reader reader)
 	{
-		// Initialize the refence if needed
-		if (ref == null)
-		{
-			USDAPlantListReader.initializeReference();
-		}
 		try
 		{
 			plants = CSVParser.parse(reader);
@@ -107,6 +127,7 @@ public class USDAPlantListReader implements Constants, PlantListReader
 
 		plant.setStatusStartDate(statusStartDate);
 		plant.setAllReferences(ref);
+		plant.setParty(party);
 
 		/* Examples:
 		 * code, name, common name, genus
@@ -165,13 +186,13 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		if (otherNameField.startsWith("="))
 		{
 			// We have an unaccepted plant with an accepted synomyn 
-			plant.setStatus("not accepted");
+			plant.setStatus(CONCEPT_STATUS_NOT_ACCEPTED);
 			plant.setSynonymName(otherNameField.substring(1));
 		}
 		else
 		{
 			// This is the common name of an accepted plant
-			plant.setStatus("accepted");
+			plant.setStatus(CONCEPT_STATUS_ACCEPTED);
 			plant.setCommonName(otherNameField);
 		}
 
@@ -411,20 +432,6 @@ public class USDAPlantListReader implements Constants, PlantListReader
 			}
 
 		return classification;
-	}
-	
-	private static void initializeReference()
-	{
-			// Initialize the Reference
-			ref = new Reference();
-			ref.setAuthors(authors);
-			ref.setContactInstructions(contactInstructions);
-			ref.setEdition(edition);
-			ref.setEmail(email);
-			ref.setOrganization(organization);
-			ref.setOtherCitationDetails(otherCitationDetails);
-			ref.setPubdate(pubdate);
-			ref.setTitle(title);
 	}
 
 	public static void main(String[] args)

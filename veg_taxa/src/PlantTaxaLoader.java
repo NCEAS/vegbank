@@ -1,8 +1,8 @@
 /**
  * '$RCSfile: PlantTaxaLoader.java,v $'
  * '$Author: farrell $'
- * '$Date: 2003-02-03 19:47:35 $'
- * '$Revision: 1.18 $'
+ * '$Date: 2003-03-20 20:03:04 $'
+ * '$Revision: 1.19 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-import java.lang.*;
-import java.util.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.vegbank.common.utility.Utility;
 
 
 public class PlantTaxaLoader 
@@ -34,6 +40,7 @@ public class PlantTaxaLoader
 	private String email;
 	private String longName;
 	private int longNameId;
+	private int scientificNameWithAuthorsId;;
 	private String shortName;
 	private int shortNameId;
 	private String code;
@@ -261,6 +268,9 @@ public class PlantTaxaLoader
 	 			plantParentName =  (String)plantTaxon.get("plantParentName");
 	 			plantParentRefTitle =  (String)plantTaxon.get("plantParentRefTitle");
 	 			plantParentRefAuthors =  (String)plantTaxon.get("plantParentRefAuthors");	
+	 			
+	 			
+	 			String scientificNameWithAuthors = longName + " " + longNameRefAuthors;
 				
 				// REMOVE THESE OLD ATTRIBUTES 
 				orgName = (String)plantTaxon.get("orgName");
@@ -295,6 +305,8 @@ public class PlantTaxaLoader
 				boolean longNameExist;
 				boolean shortNameExist;
 				boolean codeExist;
+				boolean scientificWithAuthorsExist;
+								
 				// THE LONG NAME
 				if ( longName.length() < 1 )
 				{
@@ -311,7 +323,7 @@ public class PlantTaxaLoader
 					}
 					else
 					{
-						longNameId = loadPlantNameInstance(refId, longName, "", dateEntered);
+						longNameId = loadPlantNameInstance(refId, longName, dateEntered);
 					}
 				}
 				// THE SHORT NAME
@@ -330,7 +342,7 @@ public class PlantTaxaLoader
 					}
 					else
 					{
-						shortNameId = loadPlantNameInstance(shortNameRefId, shortName, "", dateEntered);
+						shortNameId = loadPlantNameInstance(shortNameRefId, shortName, dateEntered);
 					}
 				}
 				// THE CODE NAME
@@ -349,9 +361,29 @@ public class PlantTaxaLoader
 					}
 					else
 					{
-						codeId = loadPlantNameInstance(codeRefId, code, "", dateEntered);
+						codeId = loadPlantNameInstance(codeRefId, code, dateEntered);
 					}
 				}
+				// scientificNameWithAuthors
+				if ( scientificNameWithAuthors.length() < 1 )
+				{
+					System.out.println("scientificNameWithAuthors is short");
+					scientificWithAuthorsExist = false;
+				}
+				else
+				{
+					scientificWithAuthorsExist = this.plantNameExists(scientificNameWithAuthors);
+					if ( scientificWithAuthorsExist == true )
+					{
+						scientificNameWithAuthorsId = getPlantNameId(scientificNameWithAuthors);
+						System.out.println("PlantTaxaLoader > scientificNameWithAuthorsId: " + scientificNameWithAuthorsId );
+					}
+					else
+					{
+						scientificNameWithAuthorsId = loadPlantNameInstance(refId, scientificNameWithAuthors, dateEntered);
+					}
+				}
+				
 				
 				
 				//LOAD THE CONCEPT -- USE THE REFERENCE ASSOCIATED WITH THE CONCEPT
@@ -392,7 +424,7 @@ public class PlantTaxaLoader
 					System.out.println("PlantTaxonomyLoader > uid: " + uid);
 					usageVec.addElement(""+uid);
 				}
-					System.out.println("PlantTaxonomyLoader > codeNameId : " + codeId );
+				System.out.println("PlantTaxonomyLoader > codeNameId : " + codeId );
 				
 			
 				// if the nameid are '0' then the names were not inserted and thus the 
@@ -419,13 +451,39 @@ public class PlantTaxaLoader
 						usageVec.addElement(""+uid);
 					}
 				}
+				if ( scientificNameWithAuthorsId != 0 )
+				{
+					if  (	plantUsageExists(	scientificNameWithAuthors, 
+																									scientificNameWithAuthorsId, 
+																									conceptId, 
+																									"STANDARD", 
+																									dateEntered, 
+																									usageStopDate,  
+																									"Scientific", 
+																									partyId ) == false 
+							)
+					{
+						int uid = loadPlantUsageInstance(	scientificNameWithAuthors, 
+																																			scientificNameWithAuthorsId, 
+																																			conceptId, 
+																																			"STANDARD", 
+																																			usageStartDate, 
+																																			usageStopDate,  
+																																			"Scientific", 
+																																			partyId
+																																	);
+						System.out.println("PlantTaxonomyLoader > uid: " + uid);
+						usageVec.addElement(""+uid);
+					}
+				}
 				
 				
 				// last thing to do is to denormalize the database for querying
 				// but dont mess with the lengthy stuff if we have failed already
 				if (commit == true )
 				{
-					this.denormTaxonDB();
+					// I'm not sure about this ....
+					//this.denormTaxonDB();
 				}
 				// decide on the transaction
 				if (commit == true )
@@ -545,189 +603,7 @@ public class PlantTaxaLoader
 	}
 
 	
-	/**
-	public boolean loadGenericPlantTaxa(Hashtable plantTaxon)
-	{
-		try
-		{
-			//get the parameters from the hashtable
-			salutation = (String)plantTaxon.get("salutation");
-			givenName = (String)plantTaxon.get("givenName");
-			surName = (String)plantTaxon.get("surName");
-			orgName = (String)plantTaxon.get("orgName");
-			email = (String)plantTaxon.get("email");
-			longName = (String)plantTaxon.get("longName");
-			shortName = (String)plantTaxon.get("shortName");
-			code = (String)plantTaxon.get("code");
-			taxonDescription = (String)plantTaxon.get("taxonDescription");
-			citationDetails = (String)plantTaxon.get("citationDetails");
-			dateEntered = (String)plantTaxon.get("dateEntered");
-			usageStopDate = (String)plantTaxon.get("usageStopDate");
-			rank = (String)plantTaxon.get("rank");
-			//set the commit boolean to true, which can be changed by any of the 
-			// methods called from this one if an exception is thrown
-			commit = true;
-			
-			//get the connection stuff
-			conn = this.getConnection();
-			conn.setAutoCommit(false);
-			
-			//insert the plant reference information and the plant party
-			int refId = this.insertPlantReference(email, citationDetails);
-			int partyId = this.insertPlantPartyInstance(salutation, givenName, surName, orgName, email);
-			
-			// check to see if the names exists in the database after 
-			// checking that the attributes have valid names
-			boolean longNameExist;
-			boolean shortNameExist;
-			boolean codeExist;
-			
-			if ( longName.length() < 1 )
-			{
-				System.out.println("long name is short");
-				longNameExist = false;
-			}
-			else
-			{
-				longNameExist = this.plantNameExists(longName);
-				if ( longNameExist == true )
-				{
-					longNameId = getPlantNameId(longName);
-					System.out.println("PlantTaxaLoader > longNameId: " + longNameId );
-				}
-				else
-				{
-					longNameId = loadPlantNameInstance(refId, longName, "", dateEntered);
-				}
-			}
-			
-			if ( shortName.length() < 1 )
-			{
-				System.out.println("short name is short");
-				 shortNameExist = false;
-			}
-			else
-			{
-				shortNameExist = this.plantNameExists(shortName);
-				if ( shortNameExist == true )
-				{
-					shortNameId = getPlantNameId(shortName);
-					System.out.println("PlantTaxaLoader > shortNameId: " + shortNameId );
-				}
-				else
-				{
-					shortNameId = loadPlantNameInstance(refId, shortName, "", dateEntered);
-				}
-			}
-			
-			if ( code.length() < 1 )
-			{
-				System.out.println("code name is short");
-				 codeExist = false;
-			}
-			else
-			{
-				codeExist = this.plantNameExists(code);
-				if ( codeExist == true )
-				{
-					codeId = getPlantNameId(code);
-					System.out.println("PlantTaxaLoader > codeId: " + codeId );
-				}
-				else
-				{
-					codeId = loadPlantNameInstance(refId, code, "", dateEntered);
-				}
-			}
 
-			
-			//update the concept table with the long name and then
-			int conceptId;
-			int statusId;
-			if (plantConceptExists(longNameId, refId, taxonDescription) == false)
-			{
-				conceptId = loadPlantConceptInstance(longNameId, refId, taxonDescription, 
-				code, rank, longName );
-			}
-			else
-			{
-				conceptId = getPlantConceptId(longNameId, refId, taxonDescription, 
-				code, rank, longName );
-			}
-			System.out.println("PlantTaxaLoader > conceptId: " + conceptId);
-			//fix the date end date here and do a check here to make sure that it does not exist
-			if ( plantStatusExists(conceptId, "accepted", dateEntered, "2005-May-29", 
-				email, partyId, "", refId) == false )
-			{
-				statusId = loadPlantStatusInstance(conceptId, "accepted", dateEntered, 
-				usageStopDate, email, partyId, "", refId);
-			}
-			
-			//check to see if there are already usage id's in the database
-			if ( plantUsageExists(longName, longNameId, conceptId, "STANDARD", 
-				dateEntered, usageStopDate,  "LONGNAME", partyId) == false )
-			{
-				int uid = loadPlantUsageInstance(longName, longNameId, conceptId, "STANDARD", 
-				dateEntered, usageStopDate,  "LONGNAME", partyId);
-				System.out.println("PlantTaxonomyLoader > uid: " + uid);
-				usageVec.addElement(""+uid);
-			}
-				System.out.println("PlantTaxonomyLoader > codeNameId : " + codeId );
-			
-			
-			// if the nameid are '0' then the names were not inserted and thus the 
-			// usage tables does not need to be updated
-			if ( shortNameId != 0 )
-			{
-				if (plantUsageExists(shortName, shortNameId, conceptId, "STANDARD", 
-					dateEntered, usageStopDate,  "SHORTNAME", partyId) == false )
-				{
-					int uid = 	loadPlantUsageInstance(shortName, shortNameId, conceptId, "STANDARD", 
-					dateEntered, usageStopDate,  "SHORTNAME", partyId);
-					System.out.println("PlantTaxonomyLoader > uid: " + uid);
-					usageVec.addElement(""+uid);
-				}
-			}
-			if ( codeId != 0 )
-			{
-				if  (plantUsageExists(code, codeId, conceptId, "STANDARD", 
-				dateEntered, usageStopDate,  "CODE", partyId) == false )
-				{
-					int uid = loadPlantUsageInstance(code, codeId, conceptId, "STANDARD", 
-					dateEntered, usageStopDate,  "CODE", partyId);
-					System.out.println("PlantTaxonomyLoader > uid: " + uid);
-					usageVec.addElement(""+uid);
-				}
-			}
-
-			// last thing to do is to denormalize the database for querying
-			// but dont mess with the lengthy stuff if we have failed already
-			if (commit == true )
-			{
-				this.denormTaxonDB();
-			}
-			// decide on the transaction
-			if (commit == true )
-			{
-				System.out.println("PlantTaxonomyLoader > commiting transaction");
-				conn.commit();
-			}
-			else
-			{
-				System.out.println("PlantTaxonomyLoader >  not commiting transaction");
-				conn.rollback();
-			}
-			
-		}
-		catch ( Exception e )
-		{
-			commit = false;
-			System.out.println("Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return(commit);
-	}
-	
-	*/
 	
 	/**
 	 * method to denormalize the plant taxonomy database for querying
@@ -1133,7 +1009,7 @@ public class PlantTaxaLoader
 				pstmt.setInt(6, plantPartyId);
 				pstmt.setString(7, plantParent);
 				pstmt.setInt(8, parentConceptId);
-				pstmt.setString(8, taxonLevel);
+				pstmt.setString(9, taxonLevel);
 				
 				boolean results = true;
 				results = pstmt.execute();
@@ -1309,43 +1185,30 @@ public class PlantTaxaLoader
 	*
 	* @param refId -- the reference Id
 	* @param plantName -- the plantname (w/o the author bit)
-	* @param plantNameWithAuthor
 	* @param dateEntered -- the data thate the plant name is to be entered
 	* @return plantNameId -- the plant name Id assocaited with this plant
 	*
  	*/	
-	private int loadPlantNameInstance(int refId, String plantName, 
-	String plantNameWithAuthor, String dateEntered)
+	private int loadPlantNameInstance(int refId, String plantName,  String dateEntered)
 	{
 		int plantNameId = -999;
 		try
 		{
-			String s = "insert into PLANTNAME (plantreference_id, plantName, "
-			+"plantNameWithAuthor, dateEntered) "
-			+" values(?,?,?,?) ";
-			PreparedStatement pstmt = conn.prepareStatement(s);
+			// Get Primary key for table		
+			plantNameId =  
+				(int) Utility.dbAdapter.getNextUniqueID(conn, "PLANTNAME", "plantname_id");
+				
+			PreparedStatement pstmt = conn.prepareStatement(
+				 "insert into PLANTNAME (plantreference_id, plantName,  dateEntered, "
+				 + "plantname_id) values(?,?,?,?) " );
+
 			//bind the values
 			pstmt.setInt(1, refId);
 			pstmt.setString(2, plantName);
-			pstmt.setString(3, plantNameWithAuthor);
-			pstmt.setString(4, dateEntered);
-			pstmt.execute();
+			pstmt.setString(3, dateEntered);
+			pstmt.setInt(4, plantNameId);
+			pstmt.executeUpdate();
 			pstmt.close();	
-		
-			//now get the associated primary key value
-			String s1 = "select plantname_id from PLANTNAME where plantname = '"+ plantName+ "' ";
-			PreparedStatement pstmt1 = conn.prepareStatement(s1);
-			ResultSet rs = pstmt1.executeQuery();
-			int cnt = 0;
-			while	( rs.next() )
-			{
-				cnt++;
-				plantNameId = rs.getInt(1);
-				//System.out.println("USDAPlantsLoader >>> plantname_id: " + plantNameId);
-			}
-			if (cnt > 1)
-			throw new Exception("multiple plantnameID's found for: '"+plantName+"'");
-			pstmt1.close();
 		}
 		catch(Exception e )
 		{
@@ -1841,7 +1704,7 @@ public class PlantTaxaLoader
 	 		String	codeRefISBN = "";
 	 		String	codeRefOtherCitDetails = "";
 	 
-	 		String	conceptDescription = "";
+	 		String	conceptDescription = "This is a long description ... sure you wish to here it";
 	 		String	conceptRefAuthors = "Bob Peet, John Harris";
 	 		String	conceptRefTitle = "Big Trees in the State of California by the coast";
 	 		String	conceptRefDate = "24-Jan-2002";

@@ -14,7 +14,7 @@ TESTDATA00=../taxaData/testlst2000.bin
 XERCES=../lib/xerces_1_3_1.jar
 XALAN=../lib/xalan_1_2_2.jar
 JDBC=../lib/jdbc7.0-1.2.jar
-PLANTTAXONMODULE=../lib/planttaxonomy.jar:
+PLANTTAXONMODULE=../build/lib/planttaxonomy.jar:
 
 
 CLASSPATH=$JDBC:$XALAN:$XERCES:$PLANTTAXONMODULE

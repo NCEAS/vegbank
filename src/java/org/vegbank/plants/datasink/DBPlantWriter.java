@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-07 22:17:54 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-03-20 20:03:05 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,9 @@ import java.sql.SQLException;
 import java.util.AbstractList;
 import java.util.Iterator;
 
+import org.vegbank.common.model.DBPartyWriter;
 import org.vegbank.common.model.DBReferenceWriter;
+import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Plant;
 import org.vegbank.common.model.PlantUsage;
 import org.vegbank.common.model.Reference;
@@ -48,11 +50,6 @@ public class DBPlantWriter
 	private boolean commit = true;
 	private boolean writeSuccess = false;
 
-	// FIXME: These are specific for the USDA data ... they need to live in the USDA Reader
-	private static final String organization = "USDA-NRCS-PLANTS-2002";
-	private static final String email = "plants@plants.usda.gov";
-	private static final String contactInstructions = "http://plants.usda.gov";
-
 	public DBPlantWriter(Plant plant)
 	{
 		System.out.println("DBPlantWriter > inserting '" + plant.getScientificName() + "'");
@@ -64,12 +61,16 @@ public class DBPlantWriter
 
 			// Need to get the referenceId;
 			Reference ref = plant.getScientificNameNoAuthorsReference();
-			DBReferenceWriter  dbrw = new DBReferenceWriter(ref);
+			DBReferenceWriter  dbrw = 
+				new DBReferenceWriter(ref, conn, "PlantReference", "plantreference_id");
 			int plantRefId = dbrw.getReferenceId();
 			
 
-			// Insert Party Id
-			int partyId = this.insertParty(organization, email, contactInstructions);
+			// Need to get the partyId
+			Party party = plant.getParty();
+			DBPartyWriter dbpw =
+				new DBPartyWriter(party, conn, "plantparty", "plantparty_id");
+			int partyId = dbpw.getPartyId();
 
 			// Insert the Scientific Name
 			int plantNameId =
@@ -303,77 +304,8 @@ public class DBPlantWriter
 		Utility u = new Utility();
 		Connection c = u.getConnection("plants_dev");
 		return c;
-		
-		/*
-		Connection c = null;
-		try
-		{
-			// FIXME: Pull in from Properties files
-			Class.forName("org.postgresql.Driver");
-			c =
-				DriverManager.getConnection(
-					"jdbc:postgresql://127.0.0.1/plants_dev",
-					"datauser",
-					"");
-		}
-		catch (Exception e)
-		{
-			commit = false;
-			System.out.println("Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return (c);
-		*/
 	}
-
-	private int insertParty(
-		String organization,
-		String email,
-		String contactInstructions)
-		throws SQLException
-	{
-		int partyId = 0;
-		// get the party information 
-		PreparedStatement pstmt =
-			conn.prepareStatement(
-				"select PLANTPARTY_ID from PLANTPARTY where "
-					+ "ORGANIZATIONNAME like '"
-					+ organization
-					+ "'");
-
-		ResultSet rs = pstmt.executeQuery();
-		// check to see that we got one row at least 
-		if (rs.first() == true)
-		{
-			System.out.println("DBPlantWriter > party exists ");
-			partyId = rs.getInt(1);
-		}
-		// else insert it and get it
-		else
-		{
-			System.out.println("DBPlantWriter > attempting to insert party ");
-			partyId =
-				(int) Utility.dbAdapter.getNextUniqueID(
-					conn,
-					"plantparty",
-					"plantparty_id");
-			pstmt =
-				conn.prepareStatement(
-					"INSERT into PLANTPARTY (ORGANIZATIONNAME, EMAIL, CONTACTINSTRUCTIONS, plantparty_id) "
-						+ " values(?,?,?,?)");				
-			
-			pstmt.setString(1, organization);
-			pstmt.setString(2, email);
-			pstmt.setString(3, contactInstructions);
-			pstmt.setInt(4, partyId);
-			pstmt.execute();
-			pstmt.close();
-		}
-		
-		//System.out.println(" -- " + partyId);	
-		return partyId;
-	}
-
+	
 	private int insertPlantConcept(
 		int plantNameId,
 		int plantRefId,

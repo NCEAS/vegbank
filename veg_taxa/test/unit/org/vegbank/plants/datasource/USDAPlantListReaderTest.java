@@ -7,8 +7,8 @@
  *  Release: @@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-03-07 22:22:43 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2003-03-20 20:03:06 $'
+ *  '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -151,10 +151,11 @@ public class USDAPlantListReaderTest extends TestCase implements Constants
 			AbstractList plantList = plr.getAllPlants();
 			// Get the first plant
 			Plant plant = (Plant) plantList.get(0); 
-			//System.out.println(plant.getScientificName() + "\n" + plant.getClassLevel() );
+			//System.out.println(plant.getScientificName() + "\n" 
+			//	+ plant.getClassLevel() + "\n" + plant.getScientificNameNoAuthors());
 			assertEquals("Isocarpha R. Br.",plant.getScientificName());
 			assertEquals("Br.", plant.getAuthor());
-			assertEquals("Isocarpha R.", plant.getScientificNameNoAuthors());
+			assertEquals("Isocarpha", plant.getScientificNameNoAuthors());
 			assertEquals("ISOCA", plant.getCode());
 			assertEquals(PLANT_CLASS_GENUS, plant.getClassLevel());
 			assertEquals("", plant.getParentName() );

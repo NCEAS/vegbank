@@ -72,7 +72,7 @@ public void transformXmlData (String inputXml)
 //		);
 		
 		//first initiate the connection pooling
-		lb.manageLocalDbConnectionBroker("initiate");
+		LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate");
 		
 		//load new plant instances
 		loadPlantInstances(
@@ -91,7 +91,7 @@ public void transformXmlData (String inputXml)
 		);
 		
 		//lastly destroy the connection pooling
-		lb.manageLocalDbConnectionBroker("destroy");
+		LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
 		
 	}
 	catch( Exception e ) {
