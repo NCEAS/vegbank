@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-25 06:46:46 $'
- *	'$Revision: 1.18 $'
+ *	'$Date: 2004-04-20 21:35:25 $'
+ *	'$Revision: 1.19 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -337,8 +337,8 @@ public class PlotQueryAction extends VegbankAction
 	{
 		plotsum.setAccessionCode(rs.getString(1)); 
 		plotsum.setAuthorObservationCode(rs.getString(2));
-		plotsum.setLatitude(rs.getString(3));
-		plotsum.setLongitude(rs.getString(4));
+		plotsum.setLatitude(new Double(rs.getDouble(3)));
+		plotsum.setLongitude(new Double(rs.getDouble(4)));
 		plotsum.setPlotId(rs.getString(5));
 	}
 
@@ -635,8 +635,8 @@ public class PlotQueryAction extends VegbankAction
 	{
 		private String authorObservationCode = "";
 		private String accessionCode = "";
-		private String latitude = "";
-		private String longitude = "";
+		private Double latitude;
+		private Double longitude;
 		private String plotId = "";
 
 		public PlotSummary()
@@ -654,7 +654,7 @@ public class PlotQueryAction extends VegbankAction
 		/**
 		 * @return
 		 */
-		public String getLatitude()
+		public Double getLatitude()
 		{
 			return latitude;
 		}
@@ -662,7 +662,7 @@ public class PlotQueryAction extends VegbankAction
 		/**
 		 * @return
 		 */
-		public String getLongitude()
+		public Double getLongitude()
 		{
 			return longitude;
 		}
@@ -686,17 +686,17 @@ public class PlotQueryAction extends VegbankAction
 		/**
 		 * @param string
 		 */
-		public void setLatitude(String string)
+		public void setLatitude(Double d)
 		{
-			latitude = string;
+			latitude = d;
 		}
 
 		/**
 		 * @param string
 		 */
-		public void setLongitude(String string)
+		public void setLongitude(Double d)
 		{
-			longitude = string;
+			longitude = d;
 		}
 
 		/**
