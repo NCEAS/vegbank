@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-13 02:31:36 $'
- * '$Revision: 1.16 $'
+ *     '$Date: 2002-03-13 03:06:59 $'
+ * '$Revision: 1.17 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -447,6 +447,43 @@ public class VegCommunityLoader
 			 e.printStackTrace();
 		 }
 		 return(statusId);
+		}
+		
+		/**
+		 * public method to update the correlation table.  This is intended to be 
+		 * used by the servlet to update a correlation between a new concept status
+		 * defiend by a vegbank user and a usage that is generally supported by the 
+		 * NVC
+		 */
+		 public boolean insertCommunityCorrelation(int statusId, int conceptId, 
+		 String convergence, String startDate, String stopDate)
+		 {
+				boolean result = true; 
+		 		try
+		 		{
+					StringBuffer sb = new StringBuffer();
+					//insert the strata values
+					sb.append("INSERT into commcorrelation ( ");
+					sb.append(" commstatus_id, commconcept_id, commconvergence, ");
+					sb.append(" correlationStart, correlationStop )");
+					sb.append(" values(?,?,?,?,?)" );
+					PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+					// Bind the values to the query and execute it
+  				pstmt.setInt(1, statusId);
+					pstmt.setInt(2, conceptId);
+					pstmt.setString(3, convergence);
+					pstmt.setString(4, startDate);
+					pstmt.setString(5, stopDate);
+					//execute the p statement
+  				pstmt.execute();
+		 	}
+			catch (Exception e)
+		 	{
+				 result = false;
+				 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+				 e.printStackTrace();
+		 	}
+		 	return(result);	 	
 		}
 		
 		/**
