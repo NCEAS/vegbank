@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+  <head>
+    <title>
+      Upload a File to VegBank.org
+    </title>
+		
+  </head>
+  <body bgcolor="#FFFFFF">
+    <!-- colors: silver=#E6E8FA navyblu=#23238E ltblue=DFE5FA  -->
+    <table border="0" cellspacing="0" cellpadding="0" width="60%">
+      <tr>
+				<td bgcolor="#DFE5FA" width="165" height="50" align="center">
+		 			<h1 ALIGN="LEFT" CLASS="mono">&nbsp; Upload File to VegBank.org</h1>
+<p>This upload function can be used to place a file for the VegBank staff to look at. <br/>  This does NOT load plot data into the vegbank database.</p>
+		 		</td>
+       
+				
+        <td align="LEFT" valign="BOTTOM">
+          <table border="0" cellpadding="5">
+           
+            <tr>
+						
+            </tr>
+          </table>
+        </td>
+      </tr>
+			
+			<tr> &nbsp; </tr>
+      <tr>
+        
+        <!-- Input parameters here-->
+        <td align="CENTER">
+          <form action="/vegbank/servlet/upload" enctype="multipart/form-data" method="post">
+
+
+          <table border="0" cellspacing="5" cellpadding="5" width="100%">
+            <tr>
+              <td align="LEFT" valign="TOP">
+                <b><font face="Helvetica,Arial,Verdana"><font color=
+                "#23238E"><font size="+0">Browse, choose, upload.<font></font></font></b> 
+                <!--get the file name -->
+              </td>
+						</tr>
+						<tr>
+              <td align="LEFT" valign="TOP">
+			  <p>
+                STEP 1:  <input name="file" type="file"> 
+              </td>
+            </tr>
+            
+						<tr> &nbsp; </tr>
+						
+            <tr valign="TOP">
+              <td align="LEFT" valign="CENTER" colspan="2">
+                <!-- <font face="Helvetica,Arial,Verdana" size=2 color=2F4F2F> -->
+                <p>
+                  STEP 2:  <input type="submit" value="upload file">
+                </p>
+              </td>
+            </tr>
+          </table>
+					</form>
+          <!-- bottom section -->
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+
+

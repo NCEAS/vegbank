@@ -1,0 +1,6 @@
+AuthUserFile /usr/www/vegbank/.htpasswd
+AuthGroupFile /dev/null
+AuthName "File Upload Section" 
+AuthType Basic
+
+require valid-user 

@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: anderson $'
-* '$Date: 2004-08-25 01:02:00 $'
-* '$Revision: 1.115 $'
+* '$Date: 2004-09-02 23:26:58 $'
+* '$Revision: 1.116 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -235,9 +235,13 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 	-->
-  <target name="news" depends="vbsummary" description="=&gt; dist the news to server">
+  <target name="stuff" depends="vbsummary" description="=&gt; dist other static content">
     <copy overwrite="true" todir="${news_server}" filtering="yes">
       <fileset dir="${news_src}"/>
+    </copy>
+
+	<copy overwrite="true" todir="${apache.document.root}/upload" filtering="yes">
+      <fileset dir="upload"/>
     </copy>
   </target>
   <!--
@@ -554,7 +558,7 @@
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-  <target name="deploy" depends="news" description="=&gt; All files that dynamic code depends on">
+  <target name="deploy" depends="stuff" description="=&gt; All files that dynamic code depends on">
     <!-- Deployment uses a dependency chain:
 		init
 		tokenfiles
@@ -576,7 +580,8 @@
 		design
 		email_templates
 		vbsummary
-		news
+		stuff   {news, upload}
+
 MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
 	-->
   </target>
