@@ -30,8 +30,8 @@ import org.vegbank.common.utility.mail.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2005-03-11 01:52:10 $'
- * '$Revision: 1.45 $'
+ * '$Date: 2005-03-23 01:25:28 $'
+ * '$Revision: 1.46 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -864,5 +864,21 @@ public class Utility
         }
 
         return DS_CANDIDATES.contains(tableName.toLowerCase());
+    }
+
+    /**
+     * Returns a version of the given string that is no 
+     * longer than len chars and ends in "..." if 
+     * any chars were abbreviated (string was long).
+     */
+    public static String abbreviate(String src, int len) {
+        if (Utility.isStringNullOrEmpty(src)) {
+            return "";
+        }
+        if (src.length() > len) {
+            return src.substring(0, len-3) + "...";
+        } else {
+            return src;
+        }
     }
 }
