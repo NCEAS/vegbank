@@ -26,14 +26,12 @@
 
 	  <property name="xerces" value="./lib/xerces_1_4.jar" />
 		<property name="xalan" value="./lib/xalan_1_2_2.jar" />
-		<property name="xml_editor" value="./lib/xmloperator.jar" />
-		<property name="db_access_module" value="./lib/dbAccess.jar" />
-
+		<property name="xmlresource" value="./lib/xmlresource.jar" /> <!-- the vegbank xml resources module-->
 		<filter token="release" value="alpha-20011010"/>
 		<filter token="authors" value="HARRIS"/>
 	
 	
-	<property name="cpath" value="${xalan}:${xerces}:${xml_editor}:${db_access_module}:./"/>
+	<property name="cpath" value="${xmlresource}:${xalan}:${xerces}:${xml_editor}:${db_access_module}:./"/>
 	</target>
 
 	<!-- PREPARE -->
@@ -48,7 +46,7 @@
 		<!-- java files -->
 		<copy todir="${build}" filtering="yes" >
 			<fileset dir="${src}" >
-  	    <include name="**.java"/>
+  	    <include name="VegclassXMLDoc.java"/>
   	  </fileset>
   	</copy>
 		
@@ -59,7 +57,7 @@
 		<!-- java compile -->
 		<javac srcdir="${build}" 
 			classpath="${cpath}"
-			includes=" **.java "
+			includes="VegclassXMLDoc.java "
 			destdir="${build}"
 		/>	
 	</target>

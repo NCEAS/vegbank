@@ -5,13 +5,12 @@
  *  of the Turbine project )
  *
  *     '$Author: harris $'
- *     '$Date: 2002-06-15 00:12:36 $'
- *     '$Revision: 1.3 $'
+ *     '$Date: 2002-06-17 17:59:44 $'
+ *     '$Revision: 1.4 $'
  *	
  *
  *
  */
-//package vegclient.framework;
 
 import java.sql.*;
 import java.awt.*;
@@ -33,8 +32,7 @@ import java.io.*;
 import java.util.Vector;
 import java.util.Hashtable;
 import javax.swing.*;
-
-//import vegclient.framework.*;
+import xmlresource.utils.XMLparse;
 
 public class VegclassXMLDoc 
 {
@@ -108,7 +106,7 @@ public class VegclassXMLDoc
 			root = doc.getDocumentElement();
 			//the element node is the Plot_package
 			//System.out.println("Document element: "+ root.getNodeName() );
-			System.out.println("table name: "+ getTableName() );
+			System.out.println("VegclassXMLDoc > table name: "+ getTableName() );
 			//this will return the entire table
 			sb.append( getTableXMLOutput(doc) );
 		}
@@ -171,7 +169,7 @@ public class VegclassXMLDoc
 		root = doc.getDocumentElement();
 		//the element node is the Plot_package
 		System.out.println("Document element: "+ root.getNodeName() );
-		System.out.println("table name: "+ getTableName() );
+		System.out.println("VegclassXMLDoc > table name: "+ getTableName() );
 		//this will return the entire table
 		sb.append( getTableXMLOutput(doc) );
 
@@ -296,7 +294,7 @@ public class VegclassXMLDoc
 				xmlFiles=	databasePlantTaxonomyXMLPackage();
 			else
 			{ 
-				System.out.println(" unknown databaseComponent: " + databaseComponent);
+				System.out.println("VegclassXMLDoc > unknown databaseComponent: " + databaseComponent);
 				System.exit(0);
 			}
 			
@@ -325,7 +323,7 @@ public class VegclassXMLDoc
 				root = doc.getDocumentElement();
 				//the element node is the Plot_package
 				//System.out.println("Document element: "+ root.getNodeName() );
-				System.out.println("table name: "+ getTableName() );
+				System.out.println("VegclassXMLDoc > table name: "+ getTableName() );
 				//this will return the entire table
 				sb.append( getTableXMLOutput(doc) );
 			}
@@ -476,7 +474,7 @@ public class VegclassXMLDoc
 						}
 						else
 						{
-							System.out.println("warning  --- missing tokens: "+attName);
+							System.out.println("VegclassXMLDoc > warning  --- missing tokens: "+attName);
 						}
 					//System.out.println( "raw val: "+ checker.getFirstChild().getNodeValue().trim());
 				}

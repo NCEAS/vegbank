@@ -1,12 +1,12 @@
 #!/bin/sh
 
 # SHELL SCRIPT THAT WILL CONVERT THE VEGCLASS-CONSISTENT XML
-# TO KAJARTA-TORQUE CONSISTENT XML FOR CONVERSION TO RDBMS 
+# TO JAKARTA-TORQUE CONSISTENT XML FOR CONVERSION TO RDBMS 
 # SPECIFIC SQL
 #
-#     '$Author: mlee $'
-#     '$Date: 2002-06-15 00:31:23 $'
-#     '$Revision: 1.6 $'
+#     '$Author: harris $'
+#     '$Date: 2002-06-17 17:59:44 $'
+#     '$Revision: 1.7 $'
 
 
 # the directory that contains the documentation for the vegplot database
@@ -45,7 +45,7 @@ fi
 
 
 # transform the xml to the torque-xml
-java -classpath ./lib/xalan_1_2_2.jar:./lib/xerces_1_4.jar:./lib/xmltosql.jar \
+java -classpath ./lib/xmlresource.jar:./lib/xalan_1_2_2.jar:./lib/xerces_1_4.jar:./lib/xmltosql.jar \
 VegclassXMLDoc  $TARGETPACKAGE $ACTION
 
 # copy the output to he torque directory

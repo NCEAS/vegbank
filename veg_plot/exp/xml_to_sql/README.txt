@@ -1,3 +1,9 @@
+#
+#     '$Author: harris $'
+#     '$Date: 2002-06-17 17:59:44 $'
+#     '$Revision: 1.2 $'
+
+
 vegclass-torque.sh is a shell script that transforms XML from our native format
    into a sql file on which we can build a database.
 
@@ -14,6 +20,7 @@ vegclass-torque.sh is a shell script that transforms XML from our native format
 
    SQL file is copied to plot.sql, or plant-taxonomy.sql or comm-taxonomy.sql
 
-   We are using torque-020302.tar.gz 02-Mar-2002 09:44  2.1M  GZIP compressed file
+   We are using torque-020302.tar.gz 02-Mar-2002 09:44  2.1M  GZIP compressed file and a 
+	 version of this exists in the lib directory.
 
    3:18 PM 6/14/02 M. Lee
