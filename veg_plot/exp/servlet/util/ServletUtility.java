@@ -22,8 +22,8 @@ import servlet.util.GetURL;
  *    etc.. 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-04-15 20:41:29 $'
- *  '$Revision: 1.11 $'
+ *  '$Date: 2002-06-13 17:37:03 $'
+ *  '$Revision: 1.12 $'
  *
  */
 
@@ -47,7 +47,7 @@ public class ServletUtility
 	 * @param outFile -- the name of the zip file
 	 *
 	 */
-	private void setZippedFile(Vector fileVec, String outFile)
+	public void setZippedFile(Vector fileVec, String outFile)
 	{
 		try 
 		{
@@ -330,7 +330,7 @@ public void fileCopy (String inFile, String outFile, String appendFlag)
 		
 		int c;
 		while((c = in.read()) != -1)
-        out.write(c);
+    out.write(c);
 		in.close();
 		out.close();
 	}
