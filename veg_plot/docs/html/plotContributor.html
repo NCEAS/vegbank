@@ -3,20 +3,21 @@
 <HEAD>
     <META NAME="Generator" CONTENT="Cosmo Create 1.0.3">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <TITLE>Prototype Veg Plots Database Component Description: 
+    <TITLE>Prototype Veg Plots Database Component Description:  
     plotContributor (Table)</TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
 <P>
-<IMG SRC="./images/owlogo.jpg" SGI_SRC="./images/owlogo.jpg"> </P>
+<IMG SRC="owlogo.jpg" SGI_SRC="./images/owlogo.jpg"> </P>
 <P>
-<B><FONT SIZE="+2" FACE="arial">plotContributor</FONT></B><BR>
+<B><FONT SIZE="+2" FACE="arial">plotContributor</FONT></B> <BR>
 &nbsp; </P>
 <P>
 <B><FONT SIZE="-1" FACE="arial">Vegetation Plots Database Model 2000</FONT></B>
  <BR>
+&nbsp; <BR>
 &nbsp; </P>
-<TABLE BORDER="1" CELLPADDING="0" CELLSPACING="0" WIDTH="800">
+<TABLE BORDER="1" CELLPADDING="0" CELLSPACING="0" WIDTH="650">
     <TR>
         <TD></TD>
     </TR>
@@ -37,26 +38,27 @@
         <TD>P</TD>
         <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD>The system-assigned unique identifier for an individual 
-            plant species observed within the plot area.</TD>
+        <TD>Database assigned value for a party contributing to a plot.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">plot_id</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>F</TD>
-        <TD><A HREF="plotMaster.html"><FONT SIZE="-1" FACE="arial">!!</FONT></A></TD>
+        <TD><A HREF="plotMaster.html"><FONT SIZE="-1" FACE="arial">plotMaster</FONT></A></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Database assigned value for a given plot &#150; this is a 
+            link to the plotMaster entity.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">party_id</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>F</TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
+        <TD><A HREF="party.html"><FONT SIZE="-1" FACE="arial">party</FONT></A></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Database assigned value for a given party &#150; this is a 
+            link to the party entity.&nbsp;</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">roleCode</FONT></TD>
@@ -65,7 +67,10 @@
         <TD></TD>
         <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>The role that a specific party (party_id) had in the plot 
+            (plot_id)&nbsp; - this can include such roles as PI, 
+            contact, author, etc.&nbsp; This will be linked to an 
+            entity named:&nbsp; roleCode.</TD>
     </TR>
 </TABLE>
 <P>
@@ -73,7 +78,7 @@
  SIZE="-1" FACE="arial">plotContributor serves as the parent of the 
 following tables:</FONT> </P>
 <P>
-<A HREF="party.html"><FONT SIZE="-1" FACE="arial">party</FONT></A></P>
+<A HREF="party.html"><FONT SIZE="-1" FACE="arial">party</FONT></A> </P>
 <P>
 <FONT SIZE="-1">last updated: Thu Aug 31 13:32:36 PDT 2000</FONT> </P>
 </BODY>

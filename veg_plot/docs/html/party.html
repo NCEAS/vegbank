@@ -3,20 +3,21 @@
 <HEAD>
     <META NAME="Generator" CONTENT="Cosmo Create 1.0.3">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <TITLE>Prototype Veg Plots Database Component Description: party 
+    <TITLE>Prototype Veg Plots Database Component Description: party  
     (Table)</TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
 <P>
-<IMG SRC="./images/owlogo.jpg" SGI_SRC="./images/owlogo.jpg"> </P>
+<IMG SRC="owlogo.jpg" SGI_SRC="./images/owlogo.jpg"> </P>
 <P>
-<B><FONT SIZE="+2" FACE="arial">party</FONT></B><BR>
+<B><FONT SIZE="+2" FACE="arial">party</FONT></B> <BR>
 &nbsp; </P>
 <P>
 <B><FONT SIZE="-1" FACE="arial">Vegetation Plots Database Model 2000</FONT></B>
  <BR>
+&nbsp; <BR>
 &nbsp; </P>
-<TABLE BORDER="1" CELLPADDING="0" CELLSPACING="0" WIDTH="800">
+<TABLE BORDER="1" CELLPADDING="0" CELLSPACING="0" WIDTH="650">
     <TR>
         <TD></TD>
     </TR>
@@ -35,73 +36,74 @@
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>P</TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>The system-assigned unique identifier for an individual 
-            plant species observed within the plot area.</TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Party can be either a person or an organization.</TD>
+        <TD>Database assigned value that is unique to each party 
+            contributing in the collection of plots.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">salutation</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="plotMaster.html"><FONT SIZE="-1" FACE="arial">!!</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Salutation preceding one's given name</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">givenName</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>One's first name.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">surName</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Name shared in common to identify the members of a family, 
+            as distinguished from each member's given name.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">organizationName</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Name of an organization.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">positionName</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Name of one's position.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">hoursOf Service</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD>Hours in which can contact the party.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">contactInstructions</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD>Instructions for contacting a party.</TD>
     </TR>
 </TABLE>
 <P>
@@ -111,7 +113,7 @@ tables:</FONT> </P>
 <P>
 <A HREF="onlineResource.html"><FONT SIZE="-1" FACE="arial">onlineResource</FONT></A><FONT
  SIZE="-1" FACE="arial">, <A HREF="telephone.html">telephone</A>, <A
- HREF="email.html">email</A>,<A HREF="address.html"> address</A></FONT></P>
+ HREF="email.html">email</A>,<A HREF="address.html"> address</A></FONT> </P>
 <P>
 <FONT SIZE="-1">last updated: Thu Aug 31 13:32:36 PDT 2000</FONT> </P>
 </BODY>

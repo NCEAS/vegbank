@@ -8,15 +8,16 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
 <P>
-<IMG SRC="./images/owlogo.jpg" SGI_SRC="./images/owlogo.jpg"> </P>
+<IMG SRC="owlogo.jpg" SGI_SRC="./images/owlogo.jpg"> </P>
 <P>
-<B><FONT SIZE="+2" FACE="arial">citation</FONT></B><BR>
+<B><FONT SIZE="+2" FACE="arial">citation</FONT></B> <BR>
 &nbsp; </P>
 <P>
 <B><FONT SIZE="-1" FACE="arial">Vegetation Plots Database Model 2000</FONT></B>
  <BR>
+&nbsp; <BR>
 &nbsp; </P>
-<TABLE BORDER="1" CELLPADDING="0" CELLSPACING="0" WIDTH="800">
+<TABLE BORDER="1" CELLPADDING="0" CELLSPACING="0" WIDTH="650">
     <TR>
         <TD></TD>
     </TR>
@@ -35,80 +36,85 @@
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>P</TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD>The system-assigned unique identifier for an individual 
-            plant species observed within the plot area.</TD>
+        <TD>Database assigned value that will be unique for each 
+            citation.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">plot_id</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>F</TD>
-        <TD><A HREF="plotMaster.html"><FONT SIZE="-1" FACE="arial">!!</FONT></A></TD>
+        <TD><A HREF="plotMaster.html"><FONT SIZE="-1" FACE="arial">plotMaster</FONT></A></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Database assigned value that is unique to each plot &#150; 
+            this is how citations are linked to plots.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">title</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Name by which the cited resource is known.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">alternateTitle</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Short name or other language name by which the cited 
+            information is known.&nbsp; Example: &#147;Digital Chart of 
+            the World&#148; or &#147;DCW&#148;.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">date</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Reference date for the cited resource.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">edition</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Version of the cited resource.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">editionDate</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">DATE</FONT></TD>
         <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD>Date of the edition.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">citedResponsibleParty</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD>F</TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>This is <BR>
+             temporary</TD>
+        <TD>Name and position information for an individual or 
+            organization that is responsible for the resource.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">seriesName</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
         <TD></TD>
     </TR>
@@ -117,45 +123,47 @@
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD>Information identifying the issue of the series.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">otherCitationDetails</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD>Other information required to complete the citation, like a 
+            URL.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">page</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD>Details on which page of the periodical the article was 
+            published.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">ISBN</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD>International Standard Book Number.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">ISSN</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD>International Standard Serial Number.</TD>
     </TR>
 </TABLE>
 <P>
@@ -163,7 +171,8 @@
  SIZE="-1" FACE="arial">citation serves as the parent of the following 
 tables:</FONT> </P>
 <P>
-<A HREF="citationContributor.html"><FONT SIZE="-1" FACE="arial">citationContributor</FONT></A></P>
+<A HREF="citationContributor.html"><FONT SIZE="-1" FACE="arial">citationContributor</FONT></A>
+ </P>
 <P>
 <FONT SIZE="-1">last updated: Thu Aug 31 13:32:36 PDT 2000</FONT> </P>
 </BODY>

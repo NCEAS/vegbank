@@ -3,20 +3,21 @@
 <HEAD>
     <META NAME="Generator" CONTENT="Cosmo Create 1.0.3">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <TITLE>Prototype Veg Plots Database Component Description: 
+    <TITLE>Prototype Veg Plots Database Component Description:  
     speciesTaxon (Table)</TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
 <P>
-<IMG SRC="./images/owlogo.jpg" SGI_SRC="./images/owlogo.jpg"> </P>
+<IMG SRC="owlogo.jpg" SGI_SRC="./images/owlogo.jpg"> </P>
 <P>
-<B><FONT SIZE="+2" FACE="arial">speciesTaxon</FONT></B><BR>
+<B><FONT SIZE="+2" FACE="arial">speciesTaxon</FONT></B> <BR>
 &nbsp; </P>
 <P>
 <B><FONT SIZE="-1" FACE="arial">Vegetation Plots Database Model 2000</FONT></B>
  <BR>
+&nbsp; <BR>
 &nbsp; </P>
-<TABLE BORDER="1" CELLPADDING="0" CELLSPACING="0" WIDTH="800">
+<TABLE BORDER="1" CELLPADDING="0" CELLSPACING="0" WIDTH="650">
     <TR>
         <TD></TD>
     </TR>
@@ -35,55 +36,67 @@
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>P</TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>The system-assigned unique identifier for an individual 
-            plant species observed within the plot area.</TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Will be &#145;invisible&#146; to the user, it is used to 
+            link to other entities and should not be confused with either the 
+            originalTaxonName or currentTaxonUnit.</TD>
+        <TD>Database assigned value for a given species or taxon within 
+            a plot.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">plot_id</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>F</TD>
-        <TD><A HREF="plotMaster.html"><FONT SIZE="-1" FACE="arial">!!</FONT></A></TD>
+        <TD><A HREF="plotMaster.html"><FONT SIZE="-1" FACE="arial">plotMaster</FONT></A></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Database assigned value that is unique to each plot &#150; 
+            this is how the species name is related to a given plot.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">originalTaxonName</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
-        <TD>!!.</TD>
+        <TD>Original name of species as collected by author.&nbsp;</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">authority</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>!!.</TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>The authority coupled with the original taxon name from 
+            that authority is all that is needed to define a taxon.&nbsp;
+             This is like Berendsohn&#146;s potential species concept.&nbsp;
+             Both the originalTaxonName and the authority might best viewed as 
+            foreign keys to tables in the plants database.</TD>
+        <TD>Authority for the species name.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">currentTaxonUnit</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>!!.</TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Species will be variously interpreted in the long-term life 
+            of a plot record.&nbsp; We need to record these evolving 
+            understandings, which I imagine doing with start and stop dates.&nbsp;
+             This will allow the user to filter for the records with active dates.</TD>
+        <TD>Similar to 'originalTaxonName' but names adjusted for 
+            changes in nomenclature and our taxonomic understanding of the species.&nbsp;</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="-1" FACE="arial">cumStrataCoverage</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>!!.</TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>This is NOT a summation of cover in each stratum, but 
+            rather total coverage in the plot.</TD>
+        <TD>Percent coverage of a species in all strata combined.&nbsp;</TD>
     </TR>
 </TABLE>
 <P>
@@ -91,7 +104,8 @@
  SIZE="-1" FACE="arial">speciesTaxon serves as the parent of the 
 following tables:</FONT> </P>
 <P>
-<A HREF="strataComposition.html"><FONT SIZE="-1" FACE="arial">strataComposition</FONT></A></P>
+<A HREF="strataComposition.html"><FONT SIZE="-1" FACE="arial">strataComposition</FONT></A>
+ </P>
 <P>
 <FONT SIZE="-1">last updated: Thu Aug 31 13:32:36 PDT 2000</FONT> </P>
 </BODY>

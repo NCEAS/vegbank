@@ -3,356 +3,467 @@
 <HEAD>
     <META NAME="Generator" CONTENT="Cosmo Create 1.0.3">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <TITLE>Prototype Veg Plots Database Component Description: 
+    <TITLE>Prototype Veg Plots Database Component Description:  
     plotMaster (Table)</TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
 <P>
-<IMG SRC="./images/owlogo.jpg" SGI_SRC="./images/owlogo.jpg"> </P>
+<IMG SRC="owlogo.jpg" SGI_SRC="./images/owlogo.jpg"> </P>
 <P>
-<B><FONT SIZE="+2" FACE="arial">plotMaster</FONT></B><BR>
+<B><FONT SIZE="+2" FACE="arial">plotMaster</FONT></B> <BR>
 &nbsp; </P>
 <P>
 <B><FONT SIZE="-1" FACE="arial">Vegetation Plots Database Model 2000</FONT></B>
  <BR>
+&nbsp; <BR>
 &nbsp; </P>
-<TABLE BORDER="1" CELLPADDING="0" CELLSPACING="0" WIDTH="800">
+<TABLE BORDER="1" CELLPADDING="0" CELLSPACING="0" WIDTH="650">
     <TR>
         <TD></TD>
     </TR>
     <TR>
-        <TD><B><FONT SIZE="2" FACE="arial">COLUMN NAME</FONT></B></TD>
-        <TD><B><FONT SIZE="2" FACE="arial">NULLS</FONT></B></TD>
-        <TD><B><FONT SIZE="2" FACE="arial">DATA TYPE</FONT></B></TD>
-        <TD><B><FONT SIZE="2" FACE="arial">K</FONT></B></TD>
-        <TD><A HREF="FKDefinition.html"><B><FONT SIZE="2" FACE="arial">REFERENCES</FONT></B></A></TD>
-        <TD><A HREF="NotesDefinition.html"><B><FONT SIZE="2"
+        <TD><B><FONT SIZE="-1" FACE="arial">COLUMN NAME</FONT></B></TD>
+        <TD><B><FONT SIZE="-1" FACE="arial">NULLS</FONT></B></TD>
+        <TD><B><FONT SIZE="-1" FACE="arial">DATA TYPE</FONT></B></TD>
+        <TD><B><FONT SIZE="-1" FACE="arial">K</FONT></B></TD>
+        <TD><A HREF="FKDefinition.html"><B><FONT SIZE="-1" FACE="arial">REFERENCES</FONT></B></A></TD>
+        <TD><A HREF="NotesDefinition.html"><B><FONT SIZE="-1"
              FACE="arial">NOTES</FONT></B></A></TD>
-        <TD><B><FONT SIZE="2" FACE="arial">DEFINITION</FONT></B></TD>
+        <TD><B><FONT SIZE="-1" FACE="arial">DEFINITION</FONT></B></TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">plot_id</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">plot_id</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>P</TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD>hh</TD>
-        <TD>The system-assigned unique identifier for a plot.</TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD></TD>
+        <TD>Database assigned value that is unique to each plot.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">project_id</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">project_id</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>F</TD>
-        <TD><A HREF="project.html">project</A></TD>
+        <TD><A HREF="project.html"><FONT SIZE="-1" FACE="arial">project</FONT></A></TD>
         <TD></TD>
-        <TD>The system-assigned unique identifier for a project.</TD>
+        <TD>Database assigned value for a given project.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">authorPlotNumber</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">authorPlotCode</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>The code the author(s) assigned to the plot.</TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>In case of plot records taken from the literature, this 
+            field will link the plot record with a citation in a child entity.&nbsp;</TD>
+        <TD>Author&#146;s Plot No - original plot number.&nbsp;</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">previousPlotRecord</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">previousPlotRecord</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>If a re-measurement, the plot_id of the original plot</TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD><BR>
+            This may become an individual entity to store name/date information 
+            about re-measurements and editions of original plots.</TD>
+        <TD>If this plot record represents a re-measurement of a 
+            (permanent) plot, this will store the plot_id of the original plot.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">date</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">DATE</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">date</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">DATE</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Allow field to contain only a year.</TD>
         <TD>DD-MMM-YY</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">dateAccuracy</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">dateAccuracy</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Provide a pick list allowing the user to choose accuracy to 
+            a: day, month, year, or approximate year.</TD>
         <TD>Date accuracy to a day.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">landOwner</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">landOwner</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Use following pick list: USFS, USPS, USBLM, TNC, State, 
+            Private owner, Private industrial, Local Land Trust, Unknown. Do we 
+            need others?&nbsp; Owenership confidentiality might need to 
+            become a separate field here.</TD>
         <TD>Owner of the land on which the plot is located.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">effortLevel</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">effortLevel</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Use pick list; <BR>
+            &nbsp;1) Very thorough <BR>
+            &nbsp;2) Average effort <BR>
+            &nbsp;3) Hurried description; some less common species may 
+            have been missed.</TD>
         <TD>Effort spent describing the plot.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">standSize</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">standSize</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>&nbsp;Use pick list <BR>
+            &nbsp; 1)&nbsp; extensive, &gt;10x plot <BR>
+            &nbsp; 2)&nbsp; small, 3-10 x plot <BR>
+            &nbsp; 3)&nbsp; very small, 1-3x plot). <BR>
+            If possible, attach a note to the field, containing information on 
+            adjacent vegetation and position of plot within the stand.</TD>
         <TD>Extent of plant community in relation to plant size.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">treePlotSize</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">treePlotSize</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>This field should have a pick list that includes:&nbsp; (1) 
+            same as plot for field stratum, (2) 0.1 acre, (3) several other 
+            commonly used plot sizes (Please provide input). (4) Plotless method 
+            used.&nbsp; Other common sizes include 100m2, 375 m2, 
+            400m2, 1000m2, 0.25 acre, 1 acre.&nbsp;</TD>
+        <TD>The tree stratum is often sampled with larger plots than 
+            the herb and shrub strata, and attributes like dbh, density and 
+            frequency are commonly measured. Only tree cover is a required 
+            parameter, but it is useful to have the other data available since they 
+            provide a more complete description of the tree layer.&nbsp;
+             This field will contain size in m2.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">treeSamleMethod</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">treeSamleMethod</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>A pick list could be: <BR>
+            1) only percent cover estimated <BR>
+            2) Point Quarter method <BR>
+            3) Random Pairs method <BR>
+            4) Bitterlich method <BR>
+            5) Other</TD>
         <TD>Sampling method used to describe tree cover.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">plotType</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">plotType</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Database will determine this based on the number of fields 
+            in which data are entered.&nbsp; If the database determines 
+            the plot to be 'ancillary' the person entering the data will be warned.</TD>
         <TD>Type of plot (vegetation/ancillary).</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">phenologicalAspect</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">phenologicalAspect</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>This information cannot be obtained easily from the date 
+            because of altitudinal and geographic differences and annual 
+            variations. This is particularly important in spring or at the start of 
+            the wet season. Use ecological seasons of McNab (1958. Ecol. Monogr. 
+            288: 21-54) or a simplified version, i.e., early spring (before 
+            unfolding of tree foliage), spring foliage fully expanded), etc.&nbsp;</TD>
         <TD>Indicator of vegetation development at time of description.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">plotOriginLat</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">plotOriginLat</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>I suggest we use Lat./Long. rather than the UTM grid 
+            reference, because the latter cannot be used in polar regions. Our 
+            input tools will need converters between UTM and Lat/Long.</TD>
         <TD>Latitude of plot origin.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">plotOriginLong</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">plotOriginLong</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>See notes above.</TD>
         <TD>Longitude of plot origin.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">plotShape</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">plotShape</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>This will be used to calculate the Lat/Long points stored 
+            within the attribute dsgpolyo.</TD>
         <TD>Shape of the plot area</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">plotSize</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">plotSize</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>If&nbsp; plot size is an aggregate of noncontiguous plots, 
+            we need to flag this in someway or we will get inflated estimates of 
+            species density.</TD>
         <TD>Area over which all species were identified and their cover 
-            was estimated.</TD>
+            was estimated in meters-squared.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">dsgpolyo</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">dsgpolyo</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>Coordinates of the polygon surrounding the plot area.</TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD><P>
+            To calculate this information from a rectangle, will need to know an 
+            azimuth, perhaps for the first side. </P>
+            We do need to allow users to submit a series of points for cases of 
+            irregular plots.&nbsp; This might be simpler if we used 
+            coordinates relative to the 'origin' point.&nbsp; Values of 
+            a few 10s of meters are easier to think about than values in raw 
+            Lat/Long.</TD>
+        <TD>This is the attribute that will store the coordinates of 
+            the polygon surrounding the plot area.&nbsp; I plan on 
+            calculating these points in the application used to load the data to 
+            the database.&nbsp; In the case of a rectangle five points 
+            will be stored, where the first and last point will be in the same 
+            location.&nbsp; This lateral coincidence in points 
+            represents a closing polygon.&nbsp; If, in the case of a 
+            traverse, the first and last coordinates are not in the same location 
+            the plot is understood to be an open polygon.&nbsp;</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">horizPocAcc</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">horizPocAcc</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD><FONT SIZE="-1">1 = GPS within 10-20 m&nbsp;</FONT> <BR>
+            <FONT SIZE="-1">2 = GPS within 25 50 m</FONT> <BR>
+            <FONT SIZE="-1">3 = Determined by map; within 200 m</FONT> <BR>
+            <FONT SIZE="-1">4 = Weak guess from map; within 1 km</FONT> <BR>
+            <FONT SIZE="-1">5 = General locality; within 10 km</FONT> <BR>
+            <FONT SIZE="-1">6 = Region only; within 100 km</FONT> <BR>
+            <FONT SIZE="-1">7=user entered numeric value</FONT></TD>
         <TD>Estimated horizontal location accuracy in meters.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">altValue</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">altValue</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
         <TD>Altitude in meters.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">vertPosAcc</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">vertPosAcc</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>Estimated accuracy of the altitude measurement.</TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>1 = within 10 m <BR>
+            2 = within 50 m <BR>
+            3 = within 200 m <BR>
+            4 = user entered numeric value</TD>
+        <TD>Estimated accuracy of the altitude measurement in meters.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">town</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">town</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
         <TD>Loaction: town.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">county</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">county</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
         <TD>Location: county.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">state</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">state</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
         <TD>Location: state.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">country</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">country</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
         <TD>Location: country.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">slopeAspect</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">slopeAspect</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>Azimuth of slope gradient.</TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Allow user to enter general values like: NE which would be 
+            translated via the interface to 045 degrees, or allow user to enter 
+            exact coordinates.&nbsp;</TD>
+        <TD>Azimuth of slope gradient (0-360 degrees)..</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">slopeGradient</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">slopeGradient</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>Inclination of slope.</TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD><P>
+            <FONT SIZE="-1">Provide user with catagories to choose from 
+            such as:</FONT> <BR>
+            <FONT SIZE="-1">Flat; slope &lt;1% (&lt;0deg&nbsp; 34&#146;)</FONT>
+             <BR>
+            <FONT SIZE="-1">Gentle; slope 1-10% (0deg 34&#146;-5deg 
+            43&#146;)</FONT> <BR>
+            <FONT SIZE="-1">Moderately sloping; slope 10-25% (5deg 
+            43&#146;-13deg 59&#146;)</FONT> <BR>
+            <FONT SIZE="-1">Steep; slope 25-50% (13deg 59&#146;-26deg 
+            34&#146;)</FONT> <BR>
+            <FONT SIZE="-1">Very steep; slope 50-100% (26deg 
+            34&#146;-45deg&nbsp; 0&#146;)</FONT> <BR>
+            <FONT SIZE="-1">Cliff; slope &gt; 100% (&gt; 45 deg)</FONT> </P>
+            Also allow user to enter numeric value.</TD>
+        <TD>Inclination of slope in degrees.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">slopePosition</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">slopePosition</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Catagories may include: <BR>
+            Summit, shoulder, upper slope, middle slope, lower slope, toeslope, no 
+            slope</TD>
         <TD>Position of the plot on slope.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">locConfidetiality</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">locConfidetiality</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Suggested catagories: <BR>
+            0 = normal;&nbsp; <BR>
+            1 = location within x, where x is the distance used for CFI data;&nbsp;
+             <BR>
+            2 = complete confidentiality.&nbsp;</TD>
         <TD>Indicator of location confidetiality.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">specConfidentiaility</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">specConfidentiaility</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>This might be a management field.&nbsp; Or it could be 
+            based on a state-specific list of sensitive species.&nbsp;
+             We have to allow this flag to be changed as our understanding of what 
+            is sensitive evolves.</TD>
         <TD>Indicator of specices confidentiality.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">hydrologicRegime</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">hydrologicRegime</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD><FONT SIZE="-1">Non-Tidal&nbsp;</FONT> <BR>
+            <FONT SIZE="-1">&nbsp;1) Permanently flooded</FONT> <BR>
+            <FONT SIZE="-1">2) Intermittently exposed</FONT> <BR>
+            <FONT SIZE="-1">3) Semi-permanently flooded</FONT> <BR>
+            <FONT SIZE="-1">4) Seasonally flooded</FONT> <BR>
+            <FONT SIZE="-1">5) Saturated</FONT> <BR>
+            <FONT SIZE="-1">6) Temporarily flooded</FONT> <BR>
+            <FONT SIZE="-1">7) Intermittently flooded</FONT> <BR>
+            <FONT SIZE="-1">8) Artificially flooded</FONT> <BR>
+            <FONT SIZE="-1">9) Unknown</FONT> <BR>
+            <FONT SIZE="-1">&nbsp;Tidal&nbsp;</FONT> <BR>
+            <FONT SIZE="-1">&nbsp;1)&nbsp; Subtidal</FONT> <BR>
+            <FONT SIZE="-1">&nbsp;2) Irregularly exposed</FONT> <BR>
+            <FONT SIZE="-1">1) Regularly exposed&nbsp;</FONT> <BR>
+            <FONT SIZE="-1">2) Irregularly flooded</FONT> <BR>
+            <FONT SIZE="-1">3) Unknown</FONT></TD>
         <TD>FGDC hydrologic regime (follows Cowardin et al. 1979.)</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">soilMoisture</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">soilMoisture</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
         <TD></TD>
         <TD>Soil moisture (Hills' 10 step).</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">soilDrainage</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">soilDrainage</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Note that this is different from moisture regime. A 
+            well-drained soil can be permanently moist or wet, e.g., folists in 
+            forests below the alpine zone in humid climates.</TD>
         <TD>USDA soil drainage classes.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">geoSurf</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">geoSurf</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>e.g., outwash sand, glacial till, etc.:&nbsp;</TD>
         <TD>Surficial geology type.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">geoBedRx</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">geoBedRx</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>e.g.,&nbsp; serpentine, limestone, dolomite, sand stone, 
+            etc.&nbsp;</TD>
         <TD>Bedrock geology type.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">otherConditions</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">otherConditions</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2</FONT></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
+        <TD><FONT SIZE="-1" FACE="arial">n/a</FONT></TD>
+        <TD>Expand this to contain multiple fields</TD>
         <TD>User derined field.</TD>
     </TR>
 </TABLE>
@@ -365,7 +476,7 @@ tables:</FONT> </P>
  SIZE="-1" FACE="arial">, <A HREF="communityType.html">communityType</A>, <A
  HREF="plotContributor.html">plotContributor</A>, <A
  HREF="citation.html">citation</A>, <A HREF="graphic.html">graphic</A>, <A
- HREF="uniformity.html">uniformity</A></FONT></P>
+ HREF="uniformity.html">uniformity</A></FONT> </P>
 <P>
 <FONT SIZE="-1">last updated: Thu Aug 31 13:32:36 PDT 2000</FONT> </P>
 </BODY>
