@@ -1596,4 +1596,50 @@
     </attribute>
   </entity>
 
+  <entity>
+    <entityName>certificationStatusList</entityName>
+    <entityLabel>Certification Status List</entityLabel>
+    <entitySummary>A utility for storing lists of certification statuses</entitySummary>
+    <entityDescription />
+    <attribute>
+      <attName>certificationstatuses</attName>
+      <attList>
+        <attListItem>
+          <attListValue>requested</attListValue>
+          <attListName>requested</attListName>
+        </attListItem>
+      </attList>
+        <attListItem>
+          <attListValue>received</attListValue>
+          <attListName>received</attListName>
+        </attListItem>
+      </attList>
+        <attListItem>
+          <attListValue>pending</attListValue>
+          <attListName>pending</attListName>
+        </attListItem>
+      </attList>
+        <attListItem>
+          <attListValue>temporary</attListValue>
+          <attListName>temporary</attListName>
+        </attListItem>
+      </attList>
+        <attListItem>
+          <attListValue>approved</attListValue>
+          <attListName>approved</attListName>
+        </attListItem>
+      </attList>
+        <attListItem>
+          <attListValue>discarded</attListValue>
+          <attListName>discarded</attListName>
+        </attListItem>
+      </attList>
+        <attListItem>
+          <attListValue>rejected</attListValue>
+          <attListName>rejected</attListName>
+        </attListItem>
+      </attList>
+    </attribute>
+  </entity>
+
 </VegbankUtitiltyBeans>
