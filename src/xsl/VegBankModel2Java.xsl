@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-11-25 19:39:59 $'
- *  '$Revision: 1.16 $'
+ *  '$Date: 2004-02-27 16:58:46 $'
+ *  '$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -198,7 +198,7 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
       StringBuffer xml = new StringBuffer();
       xml.append(getIndent( indent ) + "&lt;<xsl:value-of select="$entityName"/>&gt;\n");
       indent = indent +1 ;
-    <xsl:for-each select="attribute">
+    <xsl:for-each select="attribute[attModel='logical']">
 
       <xsl:variable name="javaType">
         <xsl:call-template name="UpperFirstLetter">
