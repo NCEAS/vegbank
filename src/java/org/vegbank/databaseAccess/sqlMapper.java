@@ -6,8 +6,8 @@ package org.vegbank.databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *    '$Date: 2003-10-27 20:27:55 $'
- * 	'$Revision: 1.3 $'
+ *    '$Date: 2003-11-02 23:35:54 $'
+ * 	'$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -845,6 +845,150 @@ public class  sqlMapper
  		metaQueryHash.put("elementTokenNum", new Integer(elementTokenNum) );
 	}
 
+	/**	 
+	 * method to develope and issue the approporiate sql query 	 
+	 * to be issued against the plant taxonomy database	 
+	 *	 
+	 * @param transformedString - the string object containing the query elements	 
+	 * @param transformedStringNum -- the number of elements	 
+	 */
+	public String developSimplePlantTaxonomyQuery(
+		String[] transformedString,
+		int transformedStringNum)
+	{
+		String xmlResult = null;
+		try
+		{
+			System.out.println("sqlMapper > developSimplePlantTaxonomyQuery ");
+			//get the query elements into a hash table	 
+			getQueryElementHash(transformedString, transformedStringNum);
 
+			//get the needed elements	 
+			String resultType = (String) metaQueryHash.get("resultType");
+			String outFile = (String) metaQueryHash.get("outFile");
+
+			//get the taxonName entered by the user	 
+			System.out.println(
+				"sqlMapper > query elements: " + queryElementHash.toString());
+			String taxonName = (String) queryElementHash.get("taxonName");
+			String taxonNameType =
+				(String) queryElementHash.get("taxonNameType");
+			String taxonLevel = (String) queryElementHash.get("taxonLevel");
+
+			String party = (String) queryElementHash.get("party");
+			String startDate = null;
+			String stopDate = null;
+			String targetDate = null;
+			TaxonomyQueryStore tqs = new TaxonomyQueryStore();
+			Vector taxaResults = null;
+			if (queryElementHash.containsKey("startDate")
+				&& queryElementHash.containsKey("stopDate"))
+			{
+				startDate = (String) queryElementHash.get("startDate");
+				stopDate = (String) queryElementHash.get("stopDate");
+				taxaResults =
+					tqs.getPlantTaxonSummary(
+						taxonName,
+						taxonNameType,
+						taxonLevel,
+						party,
+						startDate,
+						stopDate);
+			}
+			else if (queryElementHash.containsKey("targetDate"))
+			{
+				targetDate = (String) queryElementHash.get("targetDate");
+				taxaResults =
+					tqs.getPlantTaxonSummary(
+						taxonName,
+						taxonNameType,
+						taxonLevel,
+						party,
+						targetDate);
+			}
+			queryOutputNum = taxaResults.size();
+			//print the results by passing the summary vector to the xml writer class	 
+			System.out.println("sqlMapper > writing the plant results as xml ");
+			xmlWriter l = new xmlWriter();
+			xmlResult =
+				l.getPlantTaxonomySummary(
+					taxaResults,
+					taxonName,
+					taxonNameType,
+					taxonLevel);
+			//l.writePlantTaxonomySummary(taxaResults, outFile, taxonName, taxonNameType, taxonLevel);	 
+		}
+		catch (Exception e)
+		{
+			System.out.println("sqlMapper > Exception :  " + e.getMessage());
+			e.printStackTrace();
+		}
+		return xmlResult;
+	}
+
+	/**	 
+	*	 
+	* Method to map a query xml document, containing a 'requestDataType' of	 
+	* community to either a SQL query stored in the 'CommunityQueryStore' class	 
+	* or to a method in that class that will generate a SQL query 	 
+	*	 
+	* @param transformedString string containg the query element type and 	 
+	*                value (| delimeted )	 
+	* @param transformedSringNum integer defining number of query elements	 
+	*/
+	public String developSimpleCommunityQuery(
+		String[] transformedString,
+		int transformedStringNum)
+	{
+		String xmlResult = null;
+		try
+		{
+			//get the query elements into a hash table	 
+			getQueryElementHash(transformedString, transformedStringNum);
+
+			//get the needed elements	 
+			String resultType = (String) metaQueryHash.get("resultType");
+
+			String communityName =
+				(String) queryElementHash.get("communityName");
+			String communityLevel =
+				(String) queryElementHash.get("communityLevel");
+			Integer queryElementNum =
+				(Integer) metaQueryHash.get("elementTokenNum");
+
+			//This is for debugging - and can be commented out later**/	 
+			System.out.println(
+				"sqlMapper.developSimpleCommunityQuery > \n"
+					+ " resultType: "
+					+ resultType
+					+ "\n "
+					+ "\n communityName: "
+					+ communityName
+					+ "\n communityLevel: "
+					+ communityLevel
+					+ "\n queryElementNum: "
+					+ queryElementNum);
+
+			//call the method in the CommunityQueryStore class to develop the query	 
+			CommunityQueryStore j = new CommunityQueryStore();
+			j.getCommunitySummary(communityName, communityLevel);
+			queryOutputNum = j.communitySummaryOutput.size();
+			//assign the number of returned values	
+
+			//print the results by passing the summary vector to the xml writer class	 
+			xmlWriter l = new xmlWriter();
+			xmlResult =
+				l.getCommunitySummaryXMLString(j.communitySummaryOutput);
+
+		}
+		catch (Exception e)
+		{
+			System.out.println(
+				"failed at: sqlMapper.developSimpleCommunityQuery  "
+					+ e.getMessage());
+			e.printStackTrace();
+		}
+		return xmlResult;
+	}
 
 } //end class

@@ -3,9 +3,9 @@ package org.vegbank.servlet.request;
 /*
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
- *	'$Author: anderson $'
- *  '$Date: 2003-10-29 04:03:45 $'
- *  '$Revision: 1.16 $'
+ *	'$Author: farrell $'
+ *  '$Date: 2003-11-02 23:35:54 $'
+ *  '$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.LogUtility;
+import org.vegbank.databaseAccess.dbAccess;
 
 import org.vegbank.xmlresource.transformXML;
 
@@ -79,9 +80,9 @@ import org.vegbank.xmlresource.transformXML;
  * @param plotId - database plot identification number <br> 
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
- *	'$Author: anderson $'
- *  '$Date: 2003-10-29 04:03:45 $'
- *  '$Revision: 1.16 $'
+ *	'$Author: farrell $'
+ *  '$Date: 2003-11-02 23:35:54 $'
+ *  '$Revision: 1.17 $'
  * 
  */
 
@@ -218,6 +219,19 @@ public class DataRequestServlet extends HttpServlet
 				{
 					handleExtendedQuery(enum, params, out, response, request, resultType, userName);
 				}
+			}
+			// PLANT TAXONOMY QUERY	 
+			else if ( requestDataType.trim().equals("plantTaxon") )	 
+			{	 
+					System.out.println( "DataRequstServlet > query on the plant taxonomy database \n");	 
+					handlePlantTaxonQuery( params, out, requestDataType, response, resultType, userName);	 
+			}	 
+			// VEG COMMUNITY QUERY	 
+			else if ( requestDataType.trim().equals("vegCommunity") )	 
+			{	 
+					System.out.println("DataRequstServlet > query on the vegetation community database \n"	 
+							+" not yet implemented ");	 
+					handleVegCommunityQuery( params, out, requestDataType, response, resultType, userName);	 
 			}
 			//UNKNOWN QUERY
 			else 
@@ -1259,5 +1273,189 @@ private void updateClientLog (String clientLog, String remoteHost)
 			e.printStackTrace();
 		}
 		return query.toString();
+	}
+	
+	/**	 
+	 * method to handle queries that are meant to be issued against 	 
+	 * the plantTaxonomy database	 
+	 *	 
+	 * @param params -- the prameters that are passed to the method	 
+	 * @param out -- the printwriter back to the client	 
+	 * @param requestDataType -- the data type requested by the client	 
+	 *          used to check that the query was diercted to the correct method	 
+	 *                {plantTaxon}	 
+	 * @param response - the response object linked to the client 	 
+	 * 	 
+	 */	 
+	private void handlePlantTaxonQuery(	 
+			Hashtable params, 	 
+			PrintWriter out, 	 
+			String requestDataType, 	 
+			HttpServletResponse response,	 
+			String resultType,	 
+			String userName)	 
+	{	 
+			try	 
+			{	 
+					//get the parameters needed for retuning the results	 
+					String clientType = params.get("clientType").toString();	 
+					String requestDataFormatType  = params.get("requestDataFormatType").toString();	 
+					if (requestDataType.trim().equals("plantTaxon")) 	 
+					{  	 
+					//        out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "	 
+					//        + "plant taxonomy information - not requesting plot info");	 
+							String query = composePlantTaxonomyQuery(params, resultType, requestDataType);	 
+							QueryResult qr = issueQuery("simplePlantTaxonomyQuery", clientType, userName, query);	 
+							//out.println("Number of taxa returned: "+queryOutputNum+"<br><br>");	 
+							//use the method that handles the response        	 
+							if (qr.getResultsTotal() >=1) 	 
+							{	 
+									handleQueryResultsResponse(	 
+											clientType,	 
+											requestDataType,	 
+											out,	 
+											response,	 
+											params,	 
+											resultType,	 
+											qr);	 
+							}	 
+							else 	 
+							{ 	 
+									if ( ! clientType.equals("clientApplication") )	 
+									{	 
+											String results = this.getEmptyResultSetMessage(params);	 
+											out.println( results );	 
+									}	 
+							}	 
+					}	 
+			}	 
+			catch( Exception e ) 	 
+			{	 
+					System.out.println("DataRequestServlet Exception: " + e.getMessage());	 
+					e.printStackTrace();	 
+			}	 
+	}
+	
+	/**	 
+	 * method to handle queries that are meant to be issued against 	 
+	 * the vegetation community database	 
+	 *	 
+	 *        @param params -- the prameters that are passed to the method	 
+	 *         @param out -- the printwriter back to the client	 
+	 *         @param requestDataType -- the data type requested by the client	 
+	 *          used to check that the query was diercted to the correct method	 
+	 *                {plantTaxon}	 
+	 *         @param response - the response object linked to the client 	 
+	 */	 
+	private void handleVegCommunityQuery(
+		Hashtable params,
+		PrintWriter out,
+		String requestDataType,
+		HttpServletResponse response,
+		String resultType,
+		String userName)
+	{
+		try
+		{
+			// get the parameters needed for retuning the results	 
+			String clientType = params.get("clientType").toString();
+			String requestDataFormatType =
+				params.get("requestDataFormatType").toString();
+			if (requestDataType.trim().equals("vegCommunity"))
+			{
+				System.out.println(
+					"DataRequestServlet > DataRequestServlet.handleSimpleQuery - requesting "
+						+ "community information - not requesting plot info");
+				String query =
+					composeCommunityQuery(params, resultType, requestDataType);
+				QueryResult qr =
+					issueQuery(
+						"simpleCommunityQuery",
+						clientType,
+						userName,
+						query);
+				System.out.println(
+					"DataRequestServlet > Number of communities returned: "
+						+ qr.getResultsTotal()
+						+ "<br><br>");
+
+				// use the method that handles the response if there are any results 	 
+				// from the DB otherwise just return either a request for another	 
+				// query or nothing	 
+				if (qr.getResultsTotal() >= 1)
+				{
+					handleQueryResultsResponse(
+						clientType,
+						requestDataType,
+						out,
+						response,
+						params,
+						resultType,
+						qr);
+				}
+				else
+				{
+					if (!clientType.equals("clientApplication"))
+					{
+						String results = this.getEmptyResultSetMessage(params);
+						out.println(results);
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(
+				"DataRequestServlet Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	/**	 
+	 *  Method to use dbAccess to issue the query to the database from the xml file	 
+	 *  created in the DataRequestServlet 	 
+	 *	 
+	 * @param queryType - the type of query to be sent through the dataAccess module	 
+	 * including simpleQuery (one attribute) and compoundQuery (multiple attributes) 	 
+	 */	 
+	private QueryResult issueQuery(
+		String queryType,
+		String clientType,
+		String userName,
+		String xmlString)
+	{
+		System.out.println("DataRequestServlet > QUERY TYPE  " + queryType);
+
+		// IF IT IS A BROWSER QUERY THEN REGISTER THE DOCUMENT -- IF 	 
+		// CACHING IS TURNED ON	 
+		if (clientType.equals("browser"))
+		{
+			if (QUERYCACHING.booleanValue())
+			{
+				System.out.println(
+					"DataRequestServlet > Caching the query doc");
+				// FIXME: Don't know if this used or not ???	 
+				//registerQueryDocument();	 
+			}
+			else
+			{
+				System.out.println(
+					"DataRequestServlet > Not caching the query doc");
+			}
+		}
+
+		//call the plot access module	 
+		dbAccess dba = new dbAccess();
+		String xmlResult =
+			dba.accessDatabase(
+				xmlString,
+				SERVLET_DIR + "querySpec.xsl",
+				queryType);
+
+		QueryResult qr = new QueryResult();
+		qr.setResultsTotal(dba.queryOutputNum);
+		qr.setXMLString(xmlResult);
+
+		return qr;
 	}
 }

@@ -38,8 +38,8 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-10-27 20:27:55 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2003-11-02 23:35:54 $'
+ *  '$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -196,5 +196,120 @@ public class dbAccess
 			return (false);
 		}
 		return (true);
+	}
+	
+	/**	 
+	 * Public interface for running the plotAccess module, this is how the	 
+	 * interfaces and servlets will load and query the database	 
+	 * input: xml file, may be datafile or query file, xsl sheet to	 
+	 * transform the document and action, either insert or query	 
+	 * @param inputXml - input xml String	 
+	 * @param inputXsl - input xsl transform sheet	 
+	 * @param action - database action	 
+	 *	 
+	 */	 
+	public String accessDatabase(
+		String inputXmlString,
+		String inputXSL,
+		String action)
+	{
+		String xmlResult = null;
+		try
+		{
+			//the stringwriter containg all the transformed data	 
+			StringWriter transformedData = new StringWriter();
+
+			//call the method to transform the data xml document 	 
+			transformXML m = new transformXML();
+			//System.out.println("---->>>> " + inputXmlString);	 
+			m.getTransformedFromString(
+				inputXmlString,
+				inputXSL,
+				transformedData);
+
+			//pass to the utility class to convert the StringWriter to an array	 
+			DatabaseUtility u = new DatabaseUtility();
+			u.convertStringWriter(transformedData);
+			String transformedString[] = u.outString;
+			int transformedStringNum = u.outStringNum;
+
+			xmlResult =
+				constructQuery(action, transformedString, transformedStringNum);
+		} //end try	 
+		catch (Exception e)
+		{
+			System.out.println(
+				" failed in: dbAccess.accessDatabase " + e.getMessage());
+			e.printStackTrace();
+		}
+		return xmlResult;
+	}
+	
+	private String constructQuery(
+		String action,
+		String[] transformedString,
+		int transformedStringNum)
+	{
+		String xmlResult = null;
+
+		// extended query action	 
+		if (action.equals("extendedQuery"))
+		{
+			System.out.println("dbAccess > extended query action");
+			for (int ii = 0; ii < transformedStringNum; ii++)
+			{
+				System.out.println(transformedString[ii]);
+			}
+			//pass the array to the sql mapping class - single attribute query	 
+			sqlMapper w = new sqlMapper();
+			xmlResult =
+				w.developExtendedPlotQuery(
+					transformedString,
+					transformedStringNum);
+			//grab the results from the sqlMapper class	 
+			queryOutput = w.queryOutput;
+			queryOutputNum = w.queryOutputNum;
+		}
+
+		//verify action	 
+		else if (action.equals("verify"))
+		{
+			for (int ii = 0; ii < transformedStringNum; ii++)
+			{
+				System.out.println(transformedString[ii]);
+			}
+		}
+		//simple community query action	 
+		else if (action.equals("simpleCommunityQuery"))
+		{
+			sqlMapper w = new sqlMapper();
+			xmlResult =
+				w.developSimpleCommunityQuery(
+					transformedString,
+					transformedStringNum);
+			//grab the results from the sqlMapper class	 
+			queryOutput = w.queryOutput;
+			queryOutputNum = w.queryOutputNum;
+		}
+		else if (action.equals("simplePlantTaxonomyQuery"))
+		{
+			sqlMapper w = new sqlMapper();
+			xmlResult =
+				w.developSimplePlantTaxonomyQuery(
+					transformedString,
+					transformedStringNum);
+			//grab the results from the sqlMapper class	 
+			queryOutput = w.queryOutput;
+			queryOutputNum = w.queryOutputNum;
+		}
+		else
+		{
+			System.out.println(
+				"dbAccess > accessDatabase: unrecognized action: "
+					+ action);
+		}
+
+		//System.out.println("dbAccess > get result of " + xmlResult );	 
+		return xmlResult;
 	}
 }
