@@ -65,11 +65,11 @@
 		<forward name="failure" path="/forms/failure.jsp" redirect="false" />
 		<forward name="success" path="/forms/success.html" />
 		<forward name="vberror" path="/general/vberror.jsp" />
-		<forward name="AddCoverMethod" path="/forms/AddCoverMethod.jsp" />
+		<forward name="AddCoverMethod" path="/DisplayAddCoverMethod.do" />
 		<forward name="AddJournal" path="/forms/AddJournal.jsp" />
-		<forward name="AddParty" path="/forms/AddParty.jsp" />
-		<forward name="AddReference" path="/forms/AddReference.jsp" />
-		<forward name="AddStratumMethod" path="/forms/AddStratumMethod.jsp" />
+		<forward name="AddParty" path="/DisplayAddParty.do" />
+		<forward name="AddReference" path="/DisplayAddReference.do" />
+		<forward name="AddStratumMethod" path="/DisplayAddStratumMethod.do" />
 		<forward name="AdminMenu" path="/admin/admin_menu.jsp" />
 		<forward name="AuthenticationException" path="/forms/AuthenticationException.jsp" />
 		<forward name="Certification" path="/LoadCertification.do" />
@@ -115,6 +115,22 @@
 		<action path="/DisplayUploadPlotAction" forward="/forms/plot-submit.jsp">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="reg" />
+		</action>
+		<action path="/DisplayAddStratumMethodAction" forward="/forms/AddStratumMethod.jsp">
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="cert" />
+		</action>
+		<action path="/DisplayAddPartyAction" forward="/forms/AddParty.jsp">
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="cert" />
+		</action>
+		<action path="/DisplayAddReferenceAction" forward="/forms/AddReference.jsp">
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="cert" />
+		</action>
+		<action path="/DisplayAddCoverMethodAction" forward="/forms/AddCoverMethod.jsp">
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="cert" />
 		</action>
 		<action path="/CommQuery" type="org.vegbank.ui.struts.QueryAction" name="CommQueryForm" scope="request" validate="true" input="CommQuery">
 			<forward name="success" path="/forms/DisplayQueryResults.jsp" />
