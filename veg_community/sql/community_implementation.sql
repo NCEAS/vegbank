@@ -123,7 +123,7 @@ CREATE TABLE commConcept
     COMMNAME_ID integer NOT NULL,
     COMMREFERENCE_ID integer,
     ceglCode varchar (20),
-		conceptDescription varchar (5000),
+		conceptDescription text, 
     PRIMARY KEY(COMMCONCEPT_ID)
 );
 
