@@ -21,6 +21,16 @@ MM_preloadImages(
 		'@image_server@btn_advplot_on.jpg',
 		'@image_server@btn_login_on.jpg');
 
+function setWhere(cb) {
+	if (cb.checked) {
+		document.metasearch_form.kwType.value = "brief";
+		document.metasearch_form.where.value = "where_keywords_brief";
+	} else {
+		document.metasearch_form.kwType.value = "detailed";
+		document.metasearch_form.where.value = "where_keywords_detailed";
+	}
+}
+
 // -->
 </script></head>
 
@@ -114,20 +124,21 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 	<tr>
 		<td></td>
 		<td>
-		<form action="@web_context@forms/metasearch.jsp" method="get">
+		<form action="@web_context@forms/metasearch.jsp" method="get" name="metasearch_form">
 			<span class="greytext">
 			&nbsp; Find anything in VegBank:
 			</span>  
 
 			<br>
+			 <input type="hidden" name="where" value="where_keywords_detailed"/>
 			 <input type="hidden" name="kwType" value="detailed"/>
 			 <input type="text" name="wparam" size="30" value=""/>
 		 	 <html:submit value="search"/>
 		</td>
 		</tr>
 		<tr><td></td><td align="right">
-			 <input type="hidden" name="where" value="where_keywords_detailed"/>
-			 <input type="checkbox" name="where" size="30" value="where_keywords_brief"/>Quick search?
+			 <input type="checkbox" name="quick" value="true" 
+			 	onclick="javascript:setWhere(this);"/>Quick search?
 
 			
 			
