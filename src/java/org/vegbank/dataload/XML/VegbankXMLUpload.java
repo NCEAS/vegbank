@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-01-24 18:29:59 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2005-02-11 00:27:09 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,9 @@ import java.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.DataloadLog;
 import org.vegbank.common.utility.ConditionalContentHandlerController;
+import org.vegbank.common.model.WebUser;
 import org.vegbank.plots.datasource.NativeXMLReader;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -64,6 +66,7 @@ public class VegbankXMLUpload
 	// TODO: use this variable as expected
 	private boolean rectify = true;	
 	private boolean load = true;
+	private WebUser webUser = null;
 	
 	// Errors reported
 	private LoadingErrors errors = null;
@@ -82,7 +85,7 @@ public class VegbankXMLUpload
   }
 
 	/**
-	 * <p>Set all the availible options using this constructor</code>
+	 * <p>Set all the available options using this constructor</code>
 	 * 
 	 * @param validate
 	 * @param rectify
@@ -119,15 +122,23 @@ public class VegbankXMLUpload
 	 * @throws SAXException
 	 */
 	public void processXMLFile( String xmlFileName, 
-			ConditionalContentHandlerController controller) throws IOException, SAXException
+			ConditionalContentHandlerController controller)
+            throws IOException, SAXException
 	{
 		log.info("processing XML file");
 		log.info("Validation on: " + this.validate);
 		log.info("Rectification on: " + this.rectify);
 		log.info("Database Loading on: " + this.load);
-		
+
+        String xmlFileNameNoPath = xmlFileName.substring(xmlFileName.lastIndexOf(File.separator)+1);
+        String xmlLoadDir = xmlFileName.substring(0, xmlFileName.lastIndexOf(File.separator));
+		log.info("Creating dataload log in: " + xmlLoadDir);
+        DataloadLog dlog = new DataloadLog(xmlLoadDir);
+        dlog.setUserEmail(webUser.getEmail());
+
 		errorHandler = new SAXValidationErrorHandler(errors);
-		contentHandler = new SAX2DBContentHandler(errors, accessionCodes, load);
+		contentHandler = new SAX2DBContentHandler(errors, accessionCodes, load, 
+                xmlFileNameNoPath, webUser.getUserid(), dlog);
 		contentHandler.setController(controller);
 		log.debug("set ConditionalContentHandlerController");
 
@@ -152,6 +163,11 @@ public class VegbankXMLUpload
 				xr.setContentHandler( contentHandler );
 				xr.parse( this.getInputSource(xmlFile));	
 			//} 
+
+// TODO: give these to contentHandler
+        //dlog.addTag("fileName", xxx);
+        //dlog.addTag("timestamp", xxx);
+        //dlog.addTag("username", xxx);
 
 			if (!load) {
 				contentHandler.generateSummary(null, 0);
@@ -188,6 +204,7 @@ public class VegbankXMLUpload
 	public static void  main (String[] args) throws Exception
 	{
 		String fileName = null;
+		String userEmail = null;
 		VegbankXMLUpload vbUpload = new VegbankXMLUpload();
 		
 		System.out.println("Vegbank XML Parser version 1.0.2");
@@ -215,7 +232,13 @@ public class VegbankXMLUpload
 			}
 			else if (!args[i].startsWith("-"))
 			{
-				fileName = args[i];
+                if (fileName == null) {
+				    fileName = args[i];
+                    /*
+                } else {
+                    userEmail = args[i];
+                    */
+                }
 			}
 			else
 			{
@@ -223,12 +246,11 @@ public class VegbankXMLUpload
 			}
 		}
 		
-		if ( fileName == null)
-		{
+		if ( fileName == null) {
 			System.out.println("Please enter XMLFile to process");
-		}
-		else
-		{
+		} else if (userEmail == null) {
+			System.out.println("Please enter a user's email address");
+		} else {
 			vbUpload.processXMLFile(fileName, null);
 			
 			vbUpload.getErrors().getTextReport(null);
@@ -247,6 +269,18 @@ public class VegbankXMLUpload
 	public void setLoad(boolean b)
 	{
 		load = b;
+	}
+
+	/**
+	 * <p>
+	 * Sets the user doing the loading.
+	 * </p>
+	 * 
+	 * @param w
+	 */
+	public void setUser(WebUser w)
+	{
+		webUser = w;
 	}
 
 	/**

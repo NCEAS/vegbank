@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-01-24 18:29:59 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2005-02-11 00:27:09 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.PleaseWaitThread;
+import org.vegbank.common.model.WebUser;
 import org.vegbank.plots.datasource.NativeXMLReader;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -76,9 +77,11 @@ public class VegbankXMLUploadThread extends PleaseWaitThread
 	 * @param xmlFileName
 	 * @throws Exception
 	 */
-	public void init(boolean validate, boolean rectify, boolean load, String xmlFileName) throws Exception
+	public void init(boolean validate, boolean rectify, boolean load, 
+            String xmlFileName, WebUser user) throws Exception
 	{
 		xmlUpload = new VegbankXMLUpload(validate, rectify, load);
+		xmlUpload.setUser(user);
 		xmlUpload.setLoad(load);
 		xmlUpload.setRectify(rectify);
 		xmlUpload.setValidate(validate);

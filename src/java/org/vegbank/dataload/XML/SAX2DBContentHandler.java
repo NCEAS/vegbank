@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-01-26 01:45:43 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2005-02-11 00:27:09 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.VBObjectUtils;
 import org.vegbank.common.utility.ConditionalContentHandler;
+import org.vegbank.common.utility.DataloadLog;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -48,13 +49,20 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 	private List accessionCodes = null;
 	private HashMap tableTally = null;
 	private List tallyIgnoreList = null;
+    private DataloadLog dlog = null;
+    private String xmlFileName = null;
+    private long usrId = 0;
 	
-	public SAX2DBContentHandler(LoadingErrors errors, List accessionCodes, boolean load)
+	public SAX2DBContentHandler(LoadingErrors errors, List accessionCodes, boolean load, 
+            String xmlFileName, long usrId, DataloadLog dlog)
 	{
 		this.errors = errors;
 		this.load = load;
 		this.accessionCodes = accessionCodes;
 		this.tableTally = new HashMap();
+		this.xmlFileName = xmlFileName;
+		this.usrId = usrId;
+        this.dlog = dlog;
 		//initTallyIgnoreList();
 		tables.add(tmpStore);
 	}
@@ -65,12 +73,14 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 	public void endDocument() throws SAXException
 	{
 		if (load) {
-			LoadTreeToDatabase ltdb = new LoadTreeToDatabase(errors, accessionCodes, load);
+			LoadTreeToDatabase ltdb = new LoadTreeToDatabase(errors, accessionCodes, load, dlog);
 			try
 			{
 				if (load && keepRunning()) {
 					log.info("Loading vegbank package into DB...");
-					ltdb.insertVegbankPackage( (Hashtable) ( (Vector) tmpStore.get("VegBankPackage")).firstElement());
+					ltdb.insertVegbankPackage(
+                            (Hashtable)((Vector)tmpStore.get("VegBankPackage")).firstElement(),
+                            xmlFileName, usrId);
 					log.info("XML has been loaded");
 
 					// finish the load by sending email to user and administration
@@ -78,6 +88,7 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 			}
 			catch (SQLException e)
 			{
+                log.error("Problem while inserting vegbank xml package: " + e.toString());
 				throw new SAXException(e);
 			}
 		} else {
