@@ -14,6 +14,11 @@
   @possibly_center@ 
 
 <h2>View Plant Concept Hierarchy</h2>
+
+<!-- required to provide wparam -->
+<bean:parameter id="wparam" name="wparam" value="-1" />
+<logic:notEqual name="wparam" value="-1">
+
   <vegbank:get id="concept" select="plantconcept_hierarchy" 
   beanName="map" pager="false" xwhereEnable="false" perPage="-1"
   where="where_conceptid" />
@@ -82,6 +87,10 @@
 </logic:notEmpty>
 
 <br/>
+</logic:notEqual><!-- wparam IS PASSED -->
+<logic:equal name="wparam" value="-1">
+  <p class="error">You have tried to access the hierarchy without specifying a starting concept, and this is not possible.  Please choose a concept to start with. </p>
+</logic:equal>
 
 
 <br/>
