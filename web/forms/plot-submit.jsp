@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: farrell $'
-*  '$Date: 2003-10-10 23:41:10 $'
-*  '$Revision: 1.1 $'
+*  '$Date: 2003-10-27 19:58:18 $'
+*  '$Revision: 1.2 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -151,8 +151,9 @@
 	<tr>
 		<td  align=left valign=top width="5%" >
 			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
-			<b>Archive Type:</b>
-		</font></td>
+				<b>Archive Type:</b>
+			</font>
+		</td>
 		
 	</tr>
 	<tr>
@@ -169,31 +170,25 @@
 		<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" > 
 		</td>
 		<td class="item">
-		Currently this wizard works with plots stored in the TNC MSAccess format <br>
-		the VegBank MSAccess format, and the VegBank Native XML format. <br>
+		Currently this wizard only works with plots stored in the VegBank Native XML format. <br>
 		</td>
 	</tr>
 	<tr>
 	<td> </td>
 	<td>
-		<ul>
-			
-        <li> Get a NatureServe Access Format Example Here: <font color="red" > <a href="/data/tncplots-example.mdb" >Get 
-          It!</a> </font> </li>
-			
-        <li> Get a VegBank MS Access Archive Example Here: <font color="red" > 
-          <a href="/data/vbaccess-example.mdb" >Get It!</a> </font> </li>
-			
-        <li> Get a VegBank XML Format Example Here: <font color="red" > <a href="/data/vbnative-example.xml" >Get 
-          It!</a> </font> <a href="/data/vegPlot2001cv.dtd" ><font color="red">Get 
-          the Schema!&nbsp;&#134;</font></a> <br>
-			<small>&#134; This Schema is still evolving. </small>
+		<ul> 
+			Bellow are links to the VegBank XML Schema and an example document. 
+			<li>
+				<a href="/xml/vegbank-data-ver1.0.0-simple.xsd">VegBank 1.0.0 XML Schema (XSD)</a> [250KB]
+			</li>
+			<li>
+				<a href="/xml/vegbank-data-example-ver1.0.0.xml">VegBank 1.0.0 XML Example (XML)</a> [1.8MB]
+				<small>&#134; This Schema is still evolving. </small>
 			</li>
 		</ul>
+
 	</td>
 	</tr>
-
-	
 </table>
 &nbsp;
 
@@ -201,19 +196,6 @@
 
 <!-- The codes for each format is defined in the UploadPlotForm.java, These two files need to be kept in sync -->
 <table class="category">
-	<tr>
-		<td>	
-			<html:radio value="0" property="archiveType"/>NatureServe Access Format  
-			<br>
-		</td>
-	</tr>
-	
-	<tr>
-		<td>
-			<html:radio value="1" property="archiveType"/>VegBank Access Database
-		</td>
-	</tr>
-	
 	<tr>
 		<td>
 			<html:radio value="2" property="archiveType"/>VegBank XML Format 
@@ -224,7 +206,7 @@
 <!-- PLOT FILE  -->
 <table border="0" width="799" bgcolor="#DFE5FA">
 	
-  <tr>
+	<tr>
 		<td  align=left valign=top width="5%" >
 			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
 			<b>PLOTS:</b>
@@ -284,10 +266,6 @@
 
 <!-- VEGBANK FOOTER -->
 @vegbank_footer_html_tworow@
-
-
-
-
 
 </body>
 </html>

@@ -12,9 +12,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2003-10-24 19:58:31 $'
-*  '$Revision: 1.8 $'
+*    '$Author: farrell $'
+*      '$Date: 2003-10-27 19:58:18 $'
+*  '$Revision: 1.9 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -132,19 +132,19 @@
 	    <td width="20%" bgcolor="<%= marginBgColor %>" align="center" nowrap>
 	      
 	      <!-- THE LINK TO THE SUMMARY-->
-             <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId=<bean:write property="plotId" name="row"/>"><img align="center" border="0" 
+             <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId=<bean:write property="plotId" name="row"/>" title="summary report"><img align="center" border="0" 
 	     	src="/vegbank/images/report_sm.gif" alt="Summary view"></img></a>
 
 	      <!-- THE LINK TO THE COMPREHENSIVE REPORT-->
-	      <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId=<bean:write property="plotId" name="row"/>"><img align="center" border="0" 
+	      <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId=<bean:write property="plotId" name="row"/>" title="comprehensive report"><img align="center" border="0" 
 	      	src="/vegbank/images/comprehensive_sm.gif" alt="Comprehensive view"></img></a>
 	      
 	      <!-- THE LINK TO THE LOCATION -->
-	      <a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>"><img align="center" border="0" 
+	      <a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>" title="location report"><img align="center" border="0" 
 	      	src="/vegbank/images/small_globe.gif" alt="Location"></img></a>
 	      
 	      <!-- THE LINK TO THE RAW XML-->
-              <html:link page="/DisplayPlot.do?resultType=rawXML" paramId="plotId" paramName="row" paramProperty="plotId" >
+              <html:link page="/DisplayPlot.do?resultType=rawXML" paramId="plotId" paramName="row" paramProperty="plotId" title="view raw XML">
                 <img align="center" border="0" src="/vegbank/images/xml_icon.gif" alt="Raw XML view"></img>
               </html:link>
 

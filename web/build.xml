@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2003-10-24 19:24:29 $'
-* '$Revision: 1.56 $'
+* '$Author: farrell $'
+* '$Date: 2003-10-27 19:58:18 $'
+* '$Revision: 1.57 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -99,6 +99,8 @@
     <filter token="authenticationservlet" value="/vegbank/servlet/authenticate"/>
     <filter token="viewdataservlet" value="/vegbank/servlet/viewData"/>
     <filter token="filedownloadservlet" value="/vegbank/servlet/fileDownload"/>
+    <!-- Struts ... the refering pages should be jsp but anyheck -->
+    <filter token="DisplayUploadPlotAction" value="/vegbank/DisplayUploadPlotAction.do"/>
     <!-- FIXME: Should be in a prepare target -->
     <mkdir dir="${tomcat.home.dir}/webapps/vegbank/"/>
     <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
