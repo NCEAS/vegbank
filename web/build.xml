@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: farrell $'
-* '$Date: 2003-07-23 22:28:31 $'
-* '$Revision: 1.50 $'
+* '$Author: anderson $'
+* '$Date: 2003-08-28 20:08:37 $'
+* '$Revision: 1.51 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -42,6 +42,7 @@
     <property name="xsl.src.dir" value="${web.src.dir}/xsl"/>
     <property name="panel_src" value="./panel"/>
     <property name="history_src" value="./history"/>
+    <property name="plot" value="./plot"/>
     <property name="pubs_src" value="./pubs"/>
     <property name="style_src" value="./includes"/>
     <property name="image_src" value="./images"/>
@@ -94,6 +95,7 @@
     <!-- FIXME: Should be in a prepare target -->
     <mkdir dir="${tomcat.home.dir}/webapps/vegbank/"/>
     <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
+    <mkdir dir="${apache.document.root}/plot/"/>
   </target>
   <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
@@ -114,6 +116,7 @@
     <copy overwrite="true" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
     <!-- add to second webpage at root/vegbank/index.html -->
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
+    <copy todir="${apache.document.root}/plot/" file="${basedir}/plot/.htaccess"/>
   </target>
   <!-- DISTRIBUTE THE IMAGES -->
   <target name="images" depends="init" description="=&gt; dist. the images to server">
