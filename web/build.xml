@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: farrell $'
-* '$Date: 2004-03-07 17:55:28 $'
-* '$Revision: 1.95 $'
+* '$Author: anderson $'
+* '$Date: 2004-03-25 18:27:42 $'
+* '$Revision: 1.96 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -45,6 +45,7 @@
     <property name="forms" value="./forms"/>
     <property name="tiles" value="./tiles"/>
     <property name="admin_src" value="./admin"/>
+    <property name="email_templates_src" value="./email_templates"/>
     <property name="general_src" value="./general"/>
     <property name="design_src" value="./design"/>
     <property name="dictionary_src" value="./dbdictionary"/>
@@ -82,6 +83,7 @@
     <property name="design_server" value="${tomcat.home.dir}/webapps/${webapp}/design/"/>
     <property name="dictionary_server" value="${tomcat.home.dir}/webapps/${webapp}/dbdictionary/"/>
     <property name="news_server" value="${tomcat.home.dir}/webapps/${webapp}/news/"/>
+    <property name="email_templates_server" value="${tomcat.home.dir}/webapps/${webapp}/email_templates/"/>
     <property name="panel_server" value="${tomcat.home.dir}/webapps/${webapp}/panel/"/>
     <property name="history_server" value="${tomcat.home.dir}/webapps/${webapp}/history/"/>
     <property name="pubs_server" value="${tomcat.home.dir}/webapps/${webapp}/pubs/"/>
@@ -382,13 +384,19 @@
     <!--<ant dir="${basedir}/../docs/xml" target="dist-closedlist-tokenfile"/>
     <filter filtersfile="${style_server}/closedlist-tokens.properties"/> -->
   </target>
-  <target name="vbsummary" depends="design" description="=&gt; dist a summary of data in vegbank to the appropriate page">
+  <target name="vbsummary" depends="email_templates" description="=&gt; dist a summary of data in vegbank to the appropriate page">
     <!-- create summary based on current VegBank database status -->
     <exec dir="./general" executable="psql">
       <arg line="-U datauser ${webapp} -f get_vb_stats_cmds.txt"/>
     </exec>
     <!-- copy summary file with filtering to general dir -->
     <copy overwrite="true" tofile="${general_server}/vbsummary.html" filtering="yes" file="./general/get_vb_stats_temp.html"/>
+  </target>
+
+  <target name="email_templates" depends="design" description="=&gt; dist email templates">
+    <copy overwrite="true" todir="${email_templates_server}" filtering="yes">
+      <fileset dir="${email_templates_src}"/>
+    </copy>
   </target>
   <!-- ________________________ VEGBRANCH TARGETS _____________________________________ -->
   <target name="vegbranch-init" depends="hdrftr">
@@ -509,6 +517,7 @@
 		workshop
 		pubs
 		design
+		email_templates
 		vbsummary
 		news
 MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
