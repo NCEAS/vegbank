@@ -2,10 +2,10 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  xmlns:vegbank="none"  xmlns:logic="none"  xmlns:bean= "none" xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <xsl:output method="xml" encoding="UTF-8" />
 <xsl:template match="/">
- 
+<ingoredRootEl> 
 
 @webpage_top_html@
-
+@stdvegbankget_jspdeclarations@
   @webpage_head_html@
 <TITLE>View VegBank Business Rules</TITLE>
   @webpage_masthead_html@
@@ -19,7 +19,7 @@
   <xsl:apply-templates />
 
   @webpage_footer_html@
-
+</ingoredRootEl>
 </xsl:template>
 <xsl:template match="busRule">
 <a name="{sqlSrc}">  </a>  
