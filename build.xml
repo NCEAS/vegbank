@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-05-30 23:29:32 $'
-  *     '$Revision: 1.11 $'
+  *     '$Date: 2003-07-15 17:19:34 $'
+  *     '$Revision: 1.12 $'
 --> 
 <project name="vegclass" default="compile" basedir=".">
 
@@ -33,7 +33,9 @@
     <property name="lib.dir" value="${basedir}/lib"/>
     <property name="ant.style.dir" location="${env.ANT_HOME}/etc" />
     <property name="web.docroot" location="${env.TOMCAT_HOME}/webapps" />
-       
+
+    <property name="vegbank.home.dir" location="/usr/vegbank"/>
+    
     <property name="db.name" value="vegbank" />
     
     <mkdir dir="${build.src.dir}"/>
@@ -123,7 +125,36 @@
   					destdir="${build.classes.dir}"
   		/>			
   </target>
-  
+ 
+  <target name="install"
+          depends="deploy"
+          description="Install the application">
+    <mkdir dir="${vegbank.home.dir}/lib"/>
+    <mkdir dir="${vegbank.home.dir}/bin"/>
+
+    <copy todir="${vegbank.home.dir}/lib">
+      <fileset dir="${lib.dir}">
+         <include name="**/*.jar"/>
+      </fileset>
+    </copy>
+    <copy todir="${vegbank.home.dir}/lib">
+      <fileset dir="veg_plot/build/lib">
+         <include name="**/*.jar"/>
+      </fileset>
+    </copy>
+    <copy todir="${vegbank.home.dir}/bin">
+      <fileset dir="${bin.dir}">
+         <include name="**/*"/>
+      </fileset>
+    </copy>
+
+    <chmod perm="a+x">
+      <fileset dir="${vegbank.home.dir}/bin">
+         <include name="**/*sh"/>
+      </fileset>
+    </chmod>
+  </target>
+          
   <!-- ================================================================= -->
   <!-- Database related targets                                          -->
   <!-- ================================================================= -->

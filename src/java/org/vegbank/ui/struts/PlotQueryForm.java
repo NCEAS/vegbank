@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-11 01:41:14 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-07-15 17:19:35 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -923,7 +923,7 @@ public class PlotQueryForm extends ActionForm
 	 */
 	public Collection getCoverMethodNames()
 	{
-		if ( projectNames == null )
+		if ( this.coverMethodNames == null )
 		{
 			coverMethodNames = new Vector();
 			String selectClauseKey = "covermethod";
