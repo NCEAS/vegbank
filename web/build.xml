@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2003-05-02 23:13:37 $'
-* '$Revision: 1.41 $'
+* '$Author: farrell $'
+* '$Date: 2003-05-10 00:08:25 $'
+* '$Revision: 1.42 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -233,7 +233,7 @@
   <!--
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
 -->
-  <target name="web" depends="hdrftr" description="=&gt; more xsl? ">
+  <target name="web" depends="hdrftr" description="==> Distribute Web Files ">
     <copy todir="${vegbank_server}" filtering="yes">
       <fileset dir="${web.src.dir}"/>
     </copy>
@@ -272,17 +272,17 @@
                               forms, 
                               general, 
                               images,
-			          vbsummary,	 
-			          history, 
+			                        vbsummary,	 
+			                        history, 
                               includes, 
                               init, 
                               news, 
                               panel, 
                               pubs,
                               xsl,
-                              workshop, 
-                              dictionary" description="=&gt; Distribute all web files"/>
+                              web,
+                              workshop" description="=&gt; Distribute all web files"/>
   <target name="dist-bins" depends="init, panel-big-bin " description="=&gt; dist. all targets that require access to big binary storage "/>
-  <target name="dist-everything" depends="dist, dist-bins" description="=&gt; dist all targets in the dist target and dist-bins target : DIST EVERYTHING! "/>
+  <target name="dist-everything" depends="dist, dist-bins, dictionary" description="=&gt; dist all targets in the dist target and dist-bins target : DIST EVERYTHING! "/>
   <!-- FIXME [Fixed:(MTL)dictionary], images target expects files not in cvs -->
 </project>

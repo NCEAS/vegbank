@@ -1,0 +1,568 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+
+<HTML>
+<!-- 
+*   '$RCSfile: AddReference.jsp,v $'
+*   Purpose: Add a new reference to vegbank
+*   Copyright: 2000 Regents of the University of California and the
+*               National Center for Ecological Analysis and Synthesis
+*   Authors: @author@
+*
+*  '$Author: farrell $'
+*  '$Date: 2003-05-10 00:08:25 $'
+*  '$Revision: 1.1 $'
+*
+*
+-->
+
+<HEAD>
+
+<TITLE>Add A Reference Form</TITLE>
+<!--xxx -->
+<link rel="stylesheet" href="/vegbank/includes/default.css" type="text/css"> 
+<!-- xxx-->
+
+  <style type="text/css">
+  .oddrow { background-color : #FFFFCC }
+  .evenrow {background-color : #FFFFFF }
+  .headerrow  {background-color : #DDDDDD }
+  </style>  
+  <meta http-equiv="Content-Type" content="text/html; charset=">
+  </HEAD>
+  <BODY>
+
+  <!--xxx -->
+  @vegbank_header_html_normal@ 
+  <!--xxx -->
+
+  <br/>
+
+  <html:errors/>
+
+  <h2>Reference Form -- add a new <a href="/vegbank/dbdictionary/dd~table~reference~type~tableview.html">Reference</a></h2>
+
+  <html:form action="/AddReference" onsubmit="return validateAddReferenceForm(this)" >
+
+
+
+  
+  <!-- table that has the whole package in its one row -->
+  <p>Note that you do not need to add the full amount of Alternate Identifiers or Reference Contributors.  Only add those appropriate for the reference you are adding.</p>
+  <p><font color="red">*</font>Indicates a required field.</p>
+  <p>Click a field label or table name to see more about that field in VegBank's <a href="/vegbank/dbdictionary/dd-index.html">data dictionary</a>.  Some fields are described in more detail just below the field.</p>
+  <table width="799" class="formEntry" cellpadding="5" >
+    <tr>
+      <!-- Left hand column -->
+      <td width="55%" valign="top"><p>  
+
+
+
+
+	<table class="formEntry" cellspacing="0">
+
+	  <!-- one row of data entry -->
+	  <tr class="oddrow">
+	    <!-- label -->
+	    <td class="formLbl"><p><a href="/vegbank/dbdictionary/dd~table~reference~field~shortname~type~tableview.html">Short Name</a><font color="red">*</font>:</p></td>
+	    <!-- input -->
+	    <td>
+	      <p>
+	        <html:text property="reference.shortName" size="40"/>
+	      </p>
+	    </td>
+	  </tr>
+
+
+
+
+	  <!-- explanation -->
+	  <tr class="oddrow"><td colspan="2"><p><span class="item">(a name that is used to quickly identify this reference)</span></p></td></tr>
+	  <!-- end row -->
+
+	  <tr>
+	    <td class="formLbl"><p><a href="/vegbank/dbdictionary/dd~table~reference~field~referencetype~type~tableview.html">Type of Reference:</a></p></td>
+	    <td><p><select name="reference.referencetype"><option value="-1" selected="yes">--pick a referenceType--</option>
+	      <!-- inserts values for reference type on build -->
+	    <option>Article</option><option>Book</option><option>Chapter</option><option>EditedBook</option><option>Manuscript</option><option>Report</option><option>Thesis</option><option>ConferenceProceedings</option><option>PersonalCommunication</option><option>Presentation</option><option>Website</option><option>Generic</option>
+	      </p></td>
+	    </tr>
+
+	    <tr class="oddrow">
+	      <td class="formLbl"><p><a href="/vegbank/dbdictionary/dd~table~reference~field~title~type~tableview.html">Reference Title</a><font color="red">*</font>:</p></td>
+	      <td>
+		<p>
+		<html:text property="reference.title" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+	    <tr class="oddrow">
+	      <td colspan="2"><p><span class="item">(Official title from the author)</span></p></td>
+	    </tr>
+
+	    <tr>
+	      <td class="formLbl"><p>
+		<a href="/vegbank/dbdictionary/dd~table~reference~field~titlesuperior~type~tableview.html">
+		Title of Superior Reference:
+		</a></p></td>
+		<td>
+		  <p>
+		  <html:text property="reference.titleSuperior" size="40"/>
+		  </p>
+		</td>
+	      </tr>
+	      <tr>
+		<td colspan="2"><p><span class="item">(This applies if this reference is contained by some other reference, for example if the reference is a chapter, the title of the book)</span></p></td>
+	      </tr>
+
+	      <tr class="oddrow">
+		<td class="formLbl"><p>
+		  <a href="/vegbank/dbdictionary/dd~table~reference~field~pubdate~type~tableview.html">
+		  Date of Publication:
+		  </a></p>
+		</td>
+		<td>
+		  <p>
+		  <html:text property="reference.pubDate" size="40"/>
+		  </p>
+		</td>
+	      </tr>
+
+	      <tr>
+		<td class="formLbl"><p>
+		  <a href="/vegbank/dbdictionary/dd~table~reference~field~accessdate~type~tableview.html">
+		  Date Accessed:
+		  </a></p>
+		</td>
+		<td>
+		  <p>
+		  <html:text property="reference.accessDate" size="40"/>
+		  </p>
+		</td>
+	      </tr>
+	      <tr>
+		<td colspan="2"><p><span class="item">
+		  (Date the reference was accessed, useful for references which may change after publication, 
+		  e.g. website, database)
+		  </p></span>
+		</td>
+	      </tr>
+	      
+	      <tr class="oddrow">
+		<td class="formLbl"><p>
+		  <a href="/vegbank/dbdictionary/dd~table~reference~field~conferencedate~type~tableview.html">
+		  Date of Conference:
+		  </a></p>
+		</td>
+		<td>
+		  <p>
+		  <html:text property="reference.conferenceDate" size="40"/>
+		  </p>
+		</td>
+	      </tr>
+
+	      <tr>
+		<td class="formLbl"><p>
+		  <a href="/vegbank/dbdictionary/dd~table~reference~field~referencejournal_id~type~tableview.html">
+		  Journal:
+		  </a></p>
+		</td>
+		<td>
+		  <p>
+		  <bean:define id="list" name="AddReferenceForm" property="journals" type="java.util.Vector"/>
+		  <html:select property="reference.referenceJournal_ID">
+		    <option value="-1" selected>--pick a journal--</option>
+		    <html:options collection="list" labelProperty="name" property="id"/>
+		  </html:select>
+		  <br/>
+		  <!-- link to add new journal to the list -->
+		  <a href="/vegbank/forms/AddJournal.jsp">Add a new Journal to Vegbank</a>
+		</p>
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="2"><p><span class="item">
+		If the journal that applies to your reference is not on the list, please press the "add new journal" button to add the journal to our list.
+		</p></span>
+	      </td>
+	    </tr>
+
+	    <tr class="oddrow">
+	      <td class="formLbl"><p>
+		<a href="/vegbank/dbdictionary/dd~table~reference~field~volume~type~tableview.html">
+		Volume:
+		</a></p>
+	      </td>
+	      <td>
+		<p>
+		<html:text property="reference.volume" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+
+	    <tr>
+	      <td class="formLbl"><p>
+		<a href="/vegbank/dbdictionary/dd~table~reference~field~issue~type~tableview.html">
+		Issue:
+		</a></p>
+	      </td>
+	      <td>
+		<p>
+		<html:text property="reference.issue" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+
+	    <tr class="oddrow">
+	      <td class="formLbl"><p>
+		<a href="/vegbank/dbdictionary/dd~table~reference~field~pagerange~type~tableview.html">
+		Page Range:
+		</a></p>
+	      </td>
+	      <td>
+		<p>
+		<html:text property="reference.pageRange" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+
+	    <tr>
+	      <td class="formLbl"><p>
+		<a href="/vegbank/dbdictionary/dd~table~reference~field~totalpages~type~tableview.html">
+		Total Number of Pages:
+		</a></p>
+	      </td>
+	      <td>
+		<p>
+		<html:text property="reference.totalPages" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+
+	    <tr class="oddrow"><td class="formLbl"><p>
+	      <a href="/vegbank/dbdictionary/dd~table~reference~field~publisher~type~tableview.html">
+	      Name of Publisher:
+	      </a></p></td>
+	      <td>
+		<p>
+		<html:text property="reference.publisher" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+
+	    <tr><td class="formLbl"><p>
+	      <a href="/vegbank/dbdictionary/dd~table~reference~field~publicationplace~type~tableview.html">
+	      Publisher Location:
+	      </a></p></td>
+	      <td>
+		<p>
+	        <html:text property="reference.publicationPlace" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+
+	    <tr class="oddrow"><td class="formLbl"><p>
+	      <a href="/vegbank/dbdictionary/dd~table~reference~field~isbn~type~tableview.html">
+	      isbn:
+	      </a></p></td>
+	      <td>
+		<p>
+		<html:text property="reference.isbn" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+	    <tr class="oddrow">
+	      <td colspan="2"><p><span class="item">
+		International Standard Book Number
+		</p></span>
+	      </td>
+	    </tr>
+
+	    <tr><td class="formLbl"><p>
+	      <a href="/vegbank/dbdictionary/dd~table~reference~field~edition~type~tableview.html">
+	      Edition:
+	      </a></p></td>
+	      <td>
+		<p>
+		<html:text property="reference.edition" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+
+	    <tr class="oddrow"><td class="formLbl"><p>
+	      <a href="/vegbank/dbdictionary/dd~table~reference~field~numberofvolumes~type~tableview.html">
+	      Number of Volumes:
+	      </a></p></td>
+	      <td>
+		<p>
+		<html:text property="reference.numberOfVolumes" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+
+	    <tr><td class="formLbl"><p>
+	      <a href="/vegbank/dbdictionary/dd~table~reference~field~chapternumber~type~tableview.html">
+	      Chapter:
+	      </a></p></td>
+	      <td>
+		<p>
+		<html:text property="reference.chapterNumber" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+
+	    <tr class="oddrow"><td class="formLbl"><p>
+	      <a href="/vegbank/dbdictionary/dd~table~reference~field~reportnumber~type~tableview.html">
+	      Report Number:
+	      </a></p></td>
+	      <td>
+		<p>
+		<html:text property="reference.reportNumber" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+	    <tr class="oddrow">
+	      <td colspan="2"><p><span class="item">
+		If this reference is a report, the unique number assigned to the report by issuing institution.
+		</p></span>
+	      </td>
+	    </tr>
+
+	    <tr><td class="formLbl"><p>
+	      <a href="/vegbank/dbdictionary/dd~table~reference~field~communicationtype~type~tableview.html">
+	      Type of Personal Communication:
+	      </a></p></td>
+	      <td>
+		<p>
+		<html:text property="reference.communicationType" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="2"><p><span class="item">
+		Could be an email, letter, memo, transcript of conversation either hardcopy or online.
+		</p></span>
+	      </td>
+	    </tr>
+
+	    <tr class="oddrow"><td class="formLbl"><p>
+	      <a href="/vegbank/dbdictionary/dd~table~reference~field~degree~type~tableview.html">
+	      Thesis Degree:
+	      </a></p></td>
+	      <td>
+		<p>
+		<html:text property="reference.degree" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+	    <tr class="oddrow">
+	      <td colspan="2"><p><span class="item">
+		If this reference is a thesis, this field is used to describe the name or degree level 
+		for which the thesis was completed.
+		</p></span>
+	      </td>
+	    </tr>
+
+	    <tr><td class="formLbl"><p>
+	      <a href="/vegbank/dbdictionary/dd~table~reference~field~url~type~tableview.html">
+	      URL:
+	      </a></p></td>
+	      <td>
+		<p>
+		<html:text property="reference.url" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="2"><p><span class="item">
+		(Uniform Resource Locator) from which this resource can be downloaded or additional information can be obtained.
+		</p></span>
+	      </td>
+	    </tr>
+
+	    <tr class="oddrow"><td class="formLbl"><p>
+	      <a href="/vegbank/dbdictionary/dd~table~reference~field~doi~type~tableview.html">DOI:
+	      </a></p></td>
+	      <td>
+		<p>
+		<html:text property="reference.doi" size="40"/>
+		</p>
+	      </td>
+	    </tr>
+	    <tr class="oddrow">
+	      <td colspan="2"><p><span class="item">
+		Digital Object Identifier
+		</p></span>
+	      </td>
+	    </tr>
+
+	    <tr><td class="formLbl"><p>
+	      <a href="/vegbank/dbdictionary/dd~table~reference~field~additionalinfo~type~tableview.html">Additional Information:
+	      </a></p></td>
+	      <td>
+		<p>
+		<html:textarea property="reference.additionalInfo" rows="4" cols="40"/>
+		</p>
+	      </td>
+	    </tr>
+	    <tr>
+	      <td colspan="2"><p><span class="item">
+		Any information that is not captured by the other reference fields.
+		</p></span>
+	      </td>
+	    </tr>
+
+	  </table>
+
+
+
+
+
+
+	
+	
+      </td>
+      <!-- End Left  hand column -->
+
+      <!-- blank column in between left and right panels -->
+      <td width="10%"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></td>
+
+      <!-- Start Right hand column -->
+      <td width="45%" valign="top" align="left">
+
+
+	<br/>
+	<br/>
+
+	<b>
+	<a href="/vegbank/dbdictionary/dd~table~referencealtident~type~tableview.html">Alternate Identifiers for this Reference:</a></b>
+	<br/>
+	<span class="item">
+	Additional identifiers that allow references to be specified.  You must specify a system that is uniquely yours, such as a URL for
+	your data management system.  For example: "http://metacat.somewhere.org/photos/album941" or "mailto://joe@address.com/books/classics"
+	<br/>
+	<b>You need not add any alternate identifiers, but if you do add them, both system and identifier must be filled in. </b>
+	Please only add alternate identifiers that you plan on using with the VegBank system.
+	</span>
+
+
+	<!-- table to contain referenceAltIdent -->
+	<table border="0" cellpadding="0" cellspacing="0">
+	  <tr class="headerrow">
+	    <th><p>num</p></th>
+	    <th>
+	      <p>
+	      <a href="/vegbank/dbdictionary/dd~table~referencealtident~field~system~type~tableview.html">system</a>
+	      <font color="red">*</font>
+	      <p>
+	    </th>
+	    <th>
+	      <p>
+	      <a href="/vegbank/dbdictionary/dd~table~referencealtident~field~identifier~type~tableview.html">identifier</a>
+	      <font color="red">*</font>
+	      </p>
+	    </th>
+	  </tr>
+	  <%
+	  for (int i=0; i<5 ; i++)
+	  {
+	  %>
+	  <tr>
+	    <td class="oddrow"><p><%= i+1 %></p></td>
+	    
+	    <td>
+	      <p>
+	      <html:text property='<%= "system[" + i + "]" %>' size="35"/>
+	      </p>
+	    </td>
+	    <td>
+	      <p>
+	      <html:text property='<%= "identifier[" + i + "]" %>' size="35"/>
+	      </p>
+	    </td>
+	  </tr>
+	  <%
+	  }
+	  %>
+	</table>
+	<!-- End of Alternative Identifiers table -->
+	
+	<br/>
+	<br/>
+	
+
+
+
+	<p><b>
+	<a href="/vegbank/dbdictionary/dd~table~referencecontributor~type~tableview.html">
+	Authors and other Reference Contributors:
+	</a></b>
+	<br />
+	<span class="item">
+	Authors and other parties who contribute to a reference should be specified here, using the "order" field
+	to indicate the order in which the authors should appear with the reference.  <br />
+	For each party, use "LastName, GivenName(s)" format, for example (without quotes) : "Smith, Reid P." <br />
+	"Role" is used to document how the party contributed to the reference.<br />
+	<b>Please add only the authors and reference contributors necessary for this reference.  You do not need to fill in all rows.</b>
+	</span>
+	</p>
+
+	<!-- ReferenceContributors and Reference Party Form -->
+	<table border="0" cellpadding="0" cellspacing="0">
+	  <tr class="headerrow">
+	    <th><p><a href="/vegbank/dbdictionary/dd~table~referencecontributor~field~position~type~tableview.html">order</a></p></th>
+	    <th><p><a href="/vegbank/dbdictionary/dd~table~referencecontributor~field~referenceparty_id~type~tableview.html">Party Name</a><font color="red">*</font></p></th>
+	    <th><p><a href="/vegbank/dbdictionary/dd~table~referencecontributor~field~roletype~type~tableview.html">role</a></p></th>
+	  </tr>
+	<%
+	  for (int i=0; i<10 ; i++)
+	  {
+	%>
+	<tr>
+	  <td class="oddrow"><p><%= i + 1 %></p></td> 
+	  <td>
+	    <p>
+	    <html:text property='<%= "party[" + i + "]" %>' size="35"/>
+
+	    </p>
+	  </td>
+	  <td>
+	    <p>
+	    <select name="roletype" size="1">
+	      <option value="-1">--please choose a role--</option>  
+	      <option>Author</option>
+	      <option>Editor</option>
+	      <option>Originator</option>
+	      <option>Performer</option>
+	      <option>Recipient</option>
+	      <option>CustodianSteward</option>
+	    </select>
+	    </p>
+	  </td>
+	</tr>
+	<%
+	}
+	%>
+	
+	</table>
+	<!-- End ReferenceContributors and Reference Party Form -->	
+	
+      </td>
+      <!-- End Right hand column -->
+    </tr>
+  </table>
+
+  <html:submit property="submit" value="--add this reference to VegBank--" />
+
+  </html:form>
+
+
+
+  <!-- VEGBANK FOOTER -->
+  @vegbank_footer_html_tworow@
+  <!-- END FOOTER -->
+ 
+  </BODY>
+  </HTML>
