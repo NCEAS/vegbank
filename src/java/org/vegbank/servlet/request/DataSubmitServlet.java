@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-04-16 00:12:48 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-05-07 01:37:27 $'
+ *  '$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,8 +72,8 @@ import databaseAccess.TaxonomyQueryStore;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-04-16 00:12:48 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-05-07 01:37:27 $'
+ *  '$Revision: 1.6 $'
  */
 
 
@@ -85,10 +85,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	private static String communityValidationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/community-submit_valid.html";
 	private static String communityValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
 	private static String commUpdateScript = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/update_community_summary.sql";
-	//this is the name/loaction of the uploaded file and must be consistent with 
-	//the name in the DataExchangeServlet
 	private static String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/input.data";
-	//private static String plotsArchiveType = "tnc";
 	private static String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit-select.html";
 	private static String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot_select.html";
 	private static String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
@@ -1114,140 +1111,6 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		
 		return( sb.toString() );
 	}
-		
-		
-	/**
-	 * method to handle the submittal of a new plant into the plant taxonomy 
-	 * database.  The proccesses here very closely mimic those in the submittal
-	 * of a community.  This method represents the wizard for loading new plant taxa
-	 * and the steps included in the wizard are:
-	 * 1] init -- submit the new plant name(s)
-	 *
-	 * @param params -- a hashtable with all the parameter name, value pairs
-	 * @param response -- the http response object
-	 * @return sb -- stringbuffer with any errors or warnings etc.
-	 * @deprecated
-	 */
-/*
-private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletResponse response)
-	{
-		StringBuffer sb = new StringBuffer();
-		try
-		{
-			String longName = "";
-			String shortName = "";
-			String code = "";
-			String taxonDescription= "";
-			String salutation= "";
-			String firstName = "";
-			String lastName = "";
-			String emailAddress = this.user;
-			String orgName = "";
-			
-			String action = request.getParameter("action");
-			// if the wizard is initiated the plant names will be checked against the 
-			// vegbank database for near matches and a form with these matches will be 
-			// sent to the client
-			if ( action.equals("init") )
-			{
-				System.out.println("DataSubmitServlet > init plantTaxa");
-			//	salutation = request.getParameter("salutation");;
-			//	firstName =  request.getParameter("firstName");
-			//	lastName =  request.getParameter("lastName");
-			//	emailAddress =  request.getParameter("emailAddress");
-			//	orgName =  request.getParameter("orgName");
-				
-				// the next 3 attributes refer to the plant name that the 
-				// user is trying to insert into the database
-				longName = request.getParameter("longName");
-				shortName = request.getParameter("shortName");
-				code = request.getParameter("code");
-		//		taxonDescription = request.getParameter("taxonDescription");
-		
-				System.out.println("DataSubmitServlet > longName: " + longName);
-				System.out.println("DataSubmitServlet > shortName: " + shortName);
-				System.out.println("DataSubmitServlet > code: " + code);
-			//	System.out.println("DataSubmitServlet > description: " + taxonDescription);
-				
-				// get the data already stored in the database with corresponding to the names
-				String longNameMessage = "";
-				String shortNameMessage = "";
-				String codeMessage = "";
-				tqs = new TaxonomyQueryStore();
-				Vector lv = tqs.getPlantTaxonSummary(longName, "%" );
-				Vector sv = tqs.getPlantTaxonSummary(shortName, "%" );
-				Vector cv = tqs.getPlantTaxonSummary(code, "%" );
-				if ( lv.size() > 0)
-					{	longNameMessage = "Currently Exists in VegBank"; }
-				else 
-					{ longNameMessage = "Not Currently in VegBank"; }
-				if ( sv.size() > 0)
-					{	shortNameMessage = "Currently Exists in VegBank"; }
-				else 
-					{ shortNameMessage = "Not Currently in VegBank"; }
-				if ( cv.size() > 0)
-					{ codeMessage = "Currently Exists in VegBank"; }
-				else 
-					{ codeMessage = "Not Currently in VegBank"; }
-				
-				Vector longNameNearMatches = tqs.getNameNearMatches(longName);
-				//System.out.println("DataSubmitServlet > longName match: " + lv.toString() );
-				
-				
-				//update the validation page that is returned to the user
-				updatePlantRectificationPage(emailAddress,  longName, shortName,  code, 
-				longNameMessage,  shortNameMessage, codeMessage, longNameNearMatches);
-				
-				//redirect the browser
-				response.sendRedirect("/forms/plant-valid.html");
-				
-			}
-			//THIS WHERE THE ACTUAL SUBMITTAL OF THE NEW COMMUNITY TAKES PLACE
-			else if ( action.equals("submit") )
-			{
-				//edithere
-				System.out.println("submittal to the database taking place ");
-				//init the plant loader
-				PlantTaxaLoader plantLoader = new PlantTaxaLoader();
-				
-				salutation = request.getParameter("salutation");;
-				firstName =  request.getParameter("firstName");
-				lastName =  request.getParameter("lastName");
-				emailAddress =  request.getParameter("emailAddress");
-				orgName =  request.getParameter("orgName");
-				longName = request.getParameter("longName");
-				shortName = request.getParameter("shortName");
-				code = request.getParameter("code");
-				taxonDescription = request.getParameter("taxonDescription");
-				
-				Hashtable h = new Hashtable();
-				h.put("longName", ""+longName);
-				h.put("shortName", ""+shortName);
-				h.put("code", ""+code);
-				h.put("taxonDescription", ""+taxonDescription);
-				h.put("salutation", ""+salutation);
-				h.put("givenName", ""+firstName);
-				h.put("surName", ""+lastName);
-				h.put("orgName", ""+orgName);
-				h.put("email", ""+emailAddress);
-				h.put("citationDetails", "VB2002");
-				h.put("dateEntered", "2005-MAY-30" );
-				h.put("usageStopDate", "2005-MAY-30" );
-				h.put("rank", "UNKNOWN");
-				
-				boolean results = plantLoader.loadGenericPlantTaxa(h);
-				PrintWriter out = response.getWriter();
-				out.println( "loading results: " + results);
-			}
-		}
-		catch( Exception e ) 
-		{
-			System.out.println("Exception:  " + e.getMessage() );
-			e.printStackTrace();
-		}
-		return(sb);
-	}
-*/	
 
 	/**
 	 * method that handles the updating of the plant submittal form with 
@@ -1658,32 +1521,6 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 				transformXML trans  = new transformXML();
 				String tr = trans.getTransformedFromString(plotValidationRept.replace('&', '_' ), "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/validation-report.xsl");
 				sb.append(tr);		
-/*				
-				//transformXML trans  = new transformXML();
-				//String tr = trans.getTransformedFromString(plotValidationRept.replace('&', '_' ), "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl");
-				parser = new XMLparse();
-				Document doc = parser.getDocumentFromString( plotValidationRept.replace('&', '_' ) );
-				Vector tables = parser.get(doc, "dbTable");
-				Vector attributes = parser.get(doc, "dbAttribute");
-				Vector values = parser.get(doc, "failedTarget");
-				Vector constraints = parser.getValuesForPath(doc, "/failedValidationAttribute/constraints/constraint");
-				
-				sb.append("<html> \n");
-				sb.append("<body> \n");
-				sb.append("<br>Plot is not valid: problems associated with: <br>");
-				sb.append("<table>");
-				sb.append("<tr> <td>TABLE </td> <td> ATTRIBUTE </td> <td> VALUE </td> </tr>");
-				for (int i=0; i < tables.size(); i++) 
-				{
-					sb.append("<tr> <td> " + (String)tables.elementAt(i)  
-					+" </td> <td> "+ (String)attributes.elementAt(i) 
-					+" </td> <td> "+(String)values.elementAt(i)+" </td> <td>"+constraints.toString()+"</td> </tr> "   );
-					
-				}
-				sb.append("</table>");
-				sb.append("</body> \n");
-				sb.append("</html> \n");
-*/			
 			}
 			catch (Exception e)
 			{
@@ -1956,7 +1793,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 					String commConceptId  = (String)hash.get("commConceptId");
 					String usageId  = (String)hash.get("usageId");
 						
-					sb.append("<form action=\"/framework/servlet/DataSubmitServlet\" method=\"get\" >");
+					sb.append("<form action=\"/vegbank/servlet/DataSubmitServlet\" method=\"get\" >");
 					sb.append(" <input type=hidden name=submitDataType value=vegCommunityCorrelation> ");
 					sb.append(" <input type=hidden name=action value=submit> ");
 					sb.append(" <input type=hidden name=statusId value="+statusId+"> ");

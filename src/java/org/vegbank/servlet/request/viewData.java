@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: viewData.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-04-16 00:12:48 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-05-07 01:37:27 $'
+ *  '$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -363,7 +363,7 @@ public class viewData extends HttpServlet
       	sb.append("?action=userdefaultstyle&username="+userName);
 			
       	//connect to the dataExchaneServlet
-				String uri = "/framework/servlet/dataexchange"+sb.toString().trim();
+				String uri = "/vegbank/servlet/dataexchange"+sb.toString().trim();
 				System.out.println("ViewData > sent to servlet: " + uri);
       	int port=80;
       	String requestType="POST";

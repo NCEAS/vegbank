@@ -10,8 +10,8 @@ package org.vegbank.servlet.util;
  *	
  *
  * 	'$Author: farrell $'
- *  	'$Date: 2003-04-16 00:12:48 $'
- * 	'$Revision: 1.2 $'
+ *  	'$Date: 2003-05-07 01:37:28 $'
+ * 	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -159,7 +159,7 @@ public class DataExchangeClient
 	public static void main(String[] args)
   {
 	 String temp = null;
-     String servlet = "/framework/servlet/dataexchange";
+     String servlet = "/vegbank/servlet/dataexchange";
      String protocol = "http://";
      String host = "vegbank.nceas.ucsb.edu";
      String server = protocol + host + servlet;

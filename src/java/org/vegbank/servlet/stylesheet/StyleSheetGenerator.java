@@ -175,7 +175,7 @@ public class StyleSheetGenerator extends HttpServlet
 
 			//connect to the dataExchaneServlet
 			String uri =
-				"http://vegbank.nceas.ucsb.edu/framework/servlet/dataexchange"
+				"vegbank/servlet/dataexchange"
 					+ sb.toString().trim();
 			System.out.println("StyleSheetGenerator > sent to servlet: " + uri);
 			int port = 80;
@@ -210,7 +210,7 @@ public class StyleSheetGenerator extends HttpServlet
 
 			//connect to the dataExchaneServlet
 			String uri =
-				"http://vegbank.nceas.ucsb.edu/framework/servlet/dataexchange"
+				"/vegbank/servlet/dataexchange"
 					+ sb.toString().trim();
 			System.out.println("StyleSheetGenerator > sent to servlet: " + uri);
 			int port = 80;

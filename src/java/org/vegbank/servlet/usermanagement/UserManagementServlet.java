@@ -6,8 +6,8 @@ package org.vegbank.servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *   '$Date: 2003-04-16 00:12:48 $'
- *   '$Revision: 1.5 $'
+ *   '$Date: 2003-05-07 01:37:28 $'
+ *   '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -979,7 +979,7 @@ public class UserManagementServlet extends HttpServlet
       sb.append("?action=userfilenum&username="+userName);
 			
       //connect to the dataExchaneServlet
-			String uri = "/framework/servlet/dataexchange"+sb.toString().trim();
+			String uri = "/vegbank/servlet/dataexchange"+sb.toString().trim();
 			System.out.println("UserManagementServlet > OUT PARAMETERS: "+uri);
       int port=80;
       String requestType="POST";
@@ -1011,7 +1011,7 @@ public class UserManagementServlet extends HttpServlet
 //      sb.append("?action=userfilesummary&username="+userName);
 //			
 //      //connect to the dataExchaneServlet
-//			String uri = "/framework/servlet/dataexchange"+sb.toString().trim();
+//			String uri = "/vegbank/servlet/dataexchange"+sb.toString().trim();
 //			System.out.println("UserManagementServlet > OUT PARAMETERS: "+uri);
 //      int port=80;
 //      String requestType="POST";
@@ -1095,7 +1095,7 @@ public class UserManagementServlet extends HttpServlet
 //					//sb.append("	<td width=\"10%\"><input type=\"checkbox\" name=\""+accessionNumber+"\" ></td> \n");
 //					
 //					//here is the function to delet a file
-//					sb.append("	<td width=\"8%\"> <a href=\"/framework/servlet/dataexchange?action=deletefile&filenumber="+accessionNumber+"&username="+	su.getCookieValue(req) +"\"> " 
+//					sb.append("	<td width=\"8%\"> <a href=\"/vegbank/servlet/dataexchange?action=deletefile&filenumber="+accessionNumber+"&username="+	su.getCookieValue(req) +"\"> " 
 //					+" <img src=\"/vegbank/images/deleteIcon.gif\">  </a> </td> \n");
 //					
 //					sb.append("	<td width=\"25%\"> <a href=\"/uploads/"+accessionNumber+"\">"  + userFileName + "</a> </td> \n");
@@ -1129,7 +1129,7 @@ public class UserManagementServlet extends HttpServlet
 //      sb.append("?action=userfilesummary&username="+userName);
 //			
 //      //connect to the dataExchaneServlet
-//			String uri = "/framework/servlet/dataexchange"+sb.toString().trim();
+//			String uri = "/vegbank/servlet/dataexchange"+sb.toString().trim();
 //			System.out.println("UserManagementServlet > OUT PARAMETERS: " + uri);
 //      int port=80;
 //      String requestType="POST";
@@ -1222,15 +1222,15 @@ public class UserManagementServlet extends HttpServlet
 //					//the data set in a form that the user can use to upload some or all
 //					//of the plots
 //					sb.append("	<td width=\"8%\"> "
-//					+"<a href=\"http://guest06.nceas.ucsb.edu/framework/servlet/framework?action=initPlotLoad&filename="
-//					+accessionNumber+"&username="+this.cookieValue+"&plot=all&filetype=tnc&datafileurl=vegbank.nceas.ucsb.edu/framework/servlet/dataexchage\"> " 
+//					+"<a href=\"http://guest06.nceas.ucsb.edu/vegbank/servlet/framework?action=initPlotLoad&filename="
+//					+accessionNumber+"&username="+this.cookieValue+"&plot=all&filetype=tnc&datafileurl=vegbank.nceas.ucsb.edu/vegbank/servlet/dataexchage\"> " 
 //					+" <img src=\"/vegbank/images/funnelIcon.gif\">  </a> </td> \n");
 //					
 //					
 //					
 //					//here is the function to delet a file
 //					sb.append("	<td width=\"8%\"> "
-//					+"<a href=\"/framework/servlet/dataexchange?action=deletefile&filenumber="
+//					+"<a href=\"/vegbank/servlet/dataexchange?action=deletefile&filenumber="
 //					+accessionNumber+"&username="+this.cookieValue+"\"> " 
 //					+" <img src=\"/vegbank/images/deleteIcon.gif\">  </a> </td> \n");
 //					

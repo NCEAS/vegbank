@@ -8,8 +8,8 @@ package org.vegbank.servlet.util;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-04-16 00:12:48 $'
- *  '$Revision: 1.4 $'
+ *  '$Date: 2003-05-07 01:37:28 $'
+ *  '$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -307,7 +307,7 @@ public class ServletUtility
       sb.append("?userName="+userName+"&password="+passWord+"&authType="+authType);
 			
       //connect to the authentication servlet
-			String uri = "/framework/servlet/authenticate"+sb.toString().trim();
+			String uri = "/vegbank/servlet/authenticate"+sb.toString().trim();
 			System.out.println("OUT PARAMETERS: "+uri);
       int port=80;
       String requestType="POST";
@@ -864,7 +864,7 @@ public String fileToString(String fileName)
 		 try
 		 {
 		 	String temp = null;
-     	String servlet = "/framework/servlet/dataexchange";
+     	String servlet = "/vegbank/servlet/dataexchange";
      	String protocol = "http://";
      	String host = "vegbank.nceas.ucsb.edu";
      	String server = protocol + host + servlet;

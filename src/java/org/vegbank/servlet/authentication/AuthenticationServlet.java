@@ -31,8 +31,8 @@ import org.vegbank.servlet.util.ServletUtility;
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-04-16 00:12:48 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-05-07 01:37:27 $'
+ *  '$Revision: 1.4 $'
  *
  *  @version
  *  @author
@@ -140,7 +140,7 @@ public class AuthenticationServlet extends HttpServlet
 						session.setAttribute("emailAddress", request.getParameter("userName") );
 						//send the user to the correct page
 						Thread.sleep(1100);
-						String redirect = "/framework/servlet/usermanagement?action=options";
+						String redirect = "/vegbank/servlet/usermanagement?action=options";
 						System.out.println("AuthentictionServlet > redirecting to: " + redirect);
 						response.sendRedirect(redirect);
 					}
@@ -182,7 +182,7 @@ public class AuthenticationServlet extends HttpServlet
 						//this response was throwing an exception b/c the user did not yet
 						//have a cookie associated with the browser, so as a fix create a
 						//small statement and allow the oportunity to login
-						//response.sendRedirect("/framework/servlet/usermanagement?action=options");
+						//response.sendRedirect("/vegbank/servlet/usermanagement?action=options");
 						String cresponse = getUserCreationResponse(true);
 						out.println( cresponse );
 					}

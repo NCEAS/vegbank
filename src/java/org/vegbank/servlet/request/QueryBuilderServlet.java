@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: QueryBuilderServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-04-16 00:12:48 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-05-07 01:37:27 $'
+ *  '$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,16 +60,16 @@ import org.vegbank.servlet.util.ServletUtility;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-04-16 00:12:48 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-05-07 01:37:27 $'
+ *  '$Revision: 1.3 $'
  * 
  */
 
 public class QueryBuilderServlet extends HttpServlet 
 {
 
-	ResourceBundle rb = ResourceBundle.getBundle("vegbank");
-	private String DataRequestServletURL = rb.getString("requestparams.DataRequestServletURL");
+	static ResourceBundle rb = ResourceBundle.getBundle("vegbank");
+	private static final 	String DataRequestServletURL = rb.getString("requestparams.DataRequestServletURL");
 	public DataRequestServlet drs = new DataRequestServlet();
 	public ServletUtility su = new ServletUtility();
 	public GetURL gurl = new GetURL();
@@ -158,8 +158,10 @@ public class QueryBuilderServlet extends HttpServlet
 	* @param requestDataFormatType -- html, xml, txt
 	* @param clientType -- browser or app
   */
-  private String submitExtendedQuery(Vector queryVector, 
-		String requestDataFormatType, String clientType)
+  private String submitExtendedQuery(
+  	Vector queryVector, 
+		String requestDataFormatType, 
+		String clientType)
   {
     String htmlResults = "test";
     try

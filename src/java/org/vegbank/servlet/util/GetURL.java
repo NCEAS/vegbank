@@ -6,8 +6,8 @@ package org.vegbank.servlet.util;
  *		"Java Servlet Programming" by Hunter & crawford and
  *
  *     '$Author: farrell $'
- *     '$Date: 2003-04-16 00:12:48 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2003-05-07 01:37:28 $'
+ *     '$Revision: 1.3 $'
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -54,21 +54,21 @@ public class GetURL
 	if (args.length == 0) 
 	{
 		//THIS USES THE GET POST METHOD
-		String urlString="/framework/servlet/framework?action=coordinateTransform&returnformattype=html&x=4555&y=23553&zone=12";
+		String urlString="/vegbank/servlet/framework?action=coordinateTransform&returnformattype=html&x=4555&y=23553&zone=12";
 		int port = 80;
 		String requestType = "GET";
 		g.getPost(urlString, port, requestType);
 	
 	
 		//THIS USES THE REQUESTURL METHOD
-		String servlet = "/framework/servlet/framework?action=coordinateTransform&returnformattype=html&x=4555&y=23553&zone=12";
+		String servlet = "/vegbank/servlet/framework?action=coordinateTransform&returnformattype=html&x=4555&y=23553&zone=12";
 		String protocol = "http://";
 	  String host = "vegbank.nceas.ucsb.edu";
 		String s = GetURL.requestURL(protocol+host+servlet);
 		System.out.println("GetURL > output: " + s);
 		
 		//THIS USES THE OTHER REQUEST URL METHOD
-		servlet = "/framework/servlet/framework";
+		servlet = "/vegbank/servlet/framework";
 		Properties parameters = new Properties();
 		parameters.setProperty("action", "coordinateTransform");
 		parameters.setProperty("returnformattype", "xml");
