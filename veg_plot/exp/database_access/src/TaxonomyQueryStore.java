@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-01 02:20:24 $'
- * '$Revision: 1.9 $'
+ *     '$Date: 2002-03-04 17:55:12 $'
+ * '$Revision: 1.10 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -169,6 +169,104 @@ import databaseAccess.*;
 			System.out.println("TaxonomyQueryStore > returning results: " + returnVector.size()  );
 			return( returnVector );
 		}
+		
+		
+	/**
+	 * method that is overloading the method above that in that this one
+	 * allows an explicit request of a name, name type (eg, scientific, common)
+	 * and level in the heirarchy (eg., genus, species) 
+	 * method to query the plant taxonomy database using as input a 
+	 * taxon name.  The structure of the vector that is returned is meant
+	 * to parallel the structure of the 'taxa.dtd'
+	 *
+	 * @param taxonName -- the 
+	 * @param taxonNameType -- the type of taxon name input by the client, may
+	 * include: scientificName, commonName, symbolCode (the usda code)
+	 * @param taxonLevel -- the level in the heirarchy (eg, species, genus)
+	 * 
+	 *
+ 	 */
+		public Vector getPlantTaxonSummary(String taxonName, String taxonNameType,
+		String taxonLevel)
+		{
+			Vector returnVector = new Vector();
+			try 
+			{
+				Connection conn = this.getConnection();
+				Statement query = conn.createStatement();
+				ResultSet results = null;
+				
+				
+				
+				//create and issue the query --
+				StringBuffer sqlBuf = new StringBuffer();
+
+				sqlBuf.append("SELECT plantname_id, plantconcept_id, plantName, ");
+				sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
+				sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
+				sqlBuf.append(" startDate, stopDate  ");
+				sqlBuf.append(" from VEG_TAXA_SUMMARY where plantName like '"+taxonName+"'");
+				//add the level in the heirachy
+				sqlBuf.append(" and plantlevel like  '"+taxonLevel+"'");
+				//add the name type
+				sqlBuf.append(" and classsystem like  '"+taxonNameType+"'");
+				
+				results = query.executeQuery( sqlBuf.toString() );
+			
+				//retrieve the results
+				while (results.next()) 
+				{
+					int plantNameId = results.getInt(1);
+					int plantConceptId = results.getInt(2);
+					String plantName = results.getString(3);
+					String plantDescription = results.getString(4);
+					String status = results.getString(5);
+					String classSystem = results.getString(6);
+					String plantLevel = results.getString(7);
+					String parentName = results.getString(8);
+					String acceptedSynonym = results.getString(9);
+					String startDate = results.getString(10);
+					String stopDate = results.getString(11);
+					
+					//little trick to keep from breaking the code
+					String commonName = plantName;
+					String concatenatedName = plantName;
+					
+					//bunch all of these data attributes into the return vector
+					//returnVector.addElement( consolidateTaxaSummaryInstance( 
+					//	acceptedSynonym, status, concatenatedName, 	commonName, 
+					//	startDate, stopDate) );
+					
+					Hashtable h = consolidateTaxaSummaryInstance( 
+						plantNameId,
+						plantConceptId,
+						plantName,
+						plantDescription,
+						status,
+						classSystem,
+						plantLevel,
+						parentName,
+						acceptedSynonym,
+						startDate,
+						stopDate);	
+						
+					returnVector.addElement(h);
+					//System.out.println("TaxonomyQueryStore > hash: " + h.toString()   );
+				}
+			
+				//remember to close the connections etc..
+			}
+			catch (Exception e) 
+			{
+				System.out.println("failed " 
+				+e.getMessage());
+				e.printStackTrace();
+			}
+			System.out.println("TaxonomyQueryStore > returning results: " + returnVector.size()  );
+			return( returnVector );
+		}
+		
+		
 		
 		/**
 		 * method that consolidates the summary data from the database into 

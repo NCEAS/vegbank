@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-27 00:15:54 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2002-03-04 17:55:12 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -968,10 +968,12 @@ catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery 
 			System.out.println("sqlMapper > query elements: " + queryElementHash.toString() );
 			String taxonName = (String)queryElementHash.get("taxonName");
 			String taxonNameType = (String)queryElementHash.get("taxonNameType");
+			String taxonLevel = (String)queryElementHash.get("taxonLevel");
 			
 			//test the new class for doing all of what is currently in this method
 			TaxonomyQueryStore tqs = new TaxonomyQueryStore();
-			Vector taxaResults = tqs.getPlantTaxonSummary(taxonName, taxonNameType);
+			Vector taxaResults = tqs.getPlantTaxonSummary(taxonName, taxonNameType, taxonLevel);
+			//Vector taxaResults = tqs.getPlantTaxonSummary(taxonName, taxonNameType);
 			queryOutputNum=taxaResults.size();
 			
 			//print the results by passing the summary vector to the xml writer class
@@ -979,10 +981,11 @@ catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery 
 			xmlWriter l = new xmlWriter();
 			l.writePlantTaxonomySummary(taxaResults, outFile);
 		}
-			catch ( Exception e )
+		catch ( Exception e )
 		{	
-			System.out.println("failed :  "
-			+e.getMessage());e.printStackTrace();
+			System.out.println("Exception :  "
+			+e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
