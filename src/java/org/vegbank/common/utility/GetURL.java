@@ -5,9 +5,9 @@ package org.vegbank.common.utility;
  *    with servlet. Based on code given in the book
  *		"Java Servlet Programming" by Hunter & crawford and
  *
- *     '$Author: farrell $'
- *     '$Date: 2003-10-19 22:16:37 $'
- *     '$Revision: 1.2 $'
+ *     '$Author: anderson $'
+ *     '$Date: 2004-10-13 22:32:41 $'
+ *     '$Revision: 1.3 $'
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -26,7 +26,7 @@ package org.vegbank.common.utility;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.Socket;
@@ -249,7 +249,7 @@ public class GetURL
 		try 
 		{ 
 			Socket clientSocket = new Socket(host, port); 
-			PrintStream outStream = new PrintStream(clientSocket.getOutputStream()); 
+			PrintWriter outStream = new PrintWriter(clientSocket.getOutputStream()); 
 			
 			BufferedReader buffReader
 				= new BufferedReader( new InputStreamReader( clientSocket.getInputStream()) );
