@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: farrell $'
-* '$Date: 2003-11-25 19:57:17 $'
-* '$Revision: 1.75 $'
+* '$Author: mlee $'
+* '$Date: 2003-11-26 21:22:37 $'
+* '$Revision: 1.76 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -107,6 +107,7 @@
     <filter token="design_link" value="/${web.context_uri}/design/"/>
     <filter token="panel_link" value="/${web.context_uri}/panel/"/>
     <filter token="workshop_link" value="/${web.context_uri}/workshop/"/>
+    <filter token="xml_link" value="/xml/"/>
     <filter token="help_link" value="/help/"/>
     <filter token="manual_link" value="${help}manual/"/>
     <!-- SERVLETS -->
@@ -224,8 +225,7 @@
 	* WEB SERVER
 -->
   <target name="history" depends="hdrftr" description="=&gt; dist the history pages to server ">
-    <style basedir="${history_src}" destdir="${history_src}" style="${history_src}/normalhtml.xsl" force="yes" includes=" development.xml" />
-    
+    <style basedir="${history_src}" destdir="${history_src}" style="${history_src}/normalhtml.xsl" force="yes" includes=" development.xml"/>
     <copy overwrite="true" todir="${history_server}" filtering="yes">
       <fileset dir="${history_src}">
         <exclude name="**/**.gif"/>
