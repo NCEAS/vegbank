@@ -1,0 +1,50 @@
+DEVELOPMENT_notes.txt
+---------------------
+This doc describes issues, problems, and workarounds that we encounter that may help avoid repeating errors.
+
+------------------------------------------------------------------------------------------------------------------------
+2003-01-28 : Shell script failure (see /vegclass/veg_plot/exp/database_access/bin/README for full instructions on these commands.)
+             The shell scripts to update permissions in the user database didn't work with this usage:
+                ./updatepermission.sh mikelee@email.unc.edu tekka.nceas.ucsb.edu 2
+             The error message was this:
+                  [lee@tekka]% ./updatepermission.sh mikelee@email.unc.edu tekka.nceas.ucsb.edu 2
+                  utility > Exception: Connection refused. Check that the hostname and port is correct, and that the postmaster is running with the -i flag, which enables TCP/IP networking.
+                  Connection refused. Check that the hostname and port is correct, and that the postmaster is running with the -i flag, which enables TCP/IP networking.
+                          at org.postgresql.Connection.openConnection(Connection.java:123)
+                          at org.postgresql.Driver.connect(Driver.java:116)
+                          at java.sql.DriverManager.getConnection(DriverManager.java:517)
+                          at java.sql.DriverManager.getConnection(DriverManager.java:177)
+                          at databaseAccess.utility.getUserDBConnection(utility.java:460)
+                          at databaseAccess.utility.updateUserPermission(utility.java:525)
+                          at databaseAccess.utility.main(utility.java:607)
+                  utility > Exception: null
+                  java.lang.NullPointerException
+                          at databaseAccess.utility.updateUserPermission(utility.java:526)
+                          at databaseAccess.utility.main(utility.java:607)
+               The solution was to substitue the actual IP address of tekka when already logged into tekka
+               This can be found with the command:
+                    [lee@tekka]% /sbin/ifconfig
+                    eth0      Link encap:Ethernet  HWaddr 00:10:5A:A1:A1:B6  
+                    inet addr:192.168.0.3  Bcast:192.168.0.255  Mask:255.255.255.0
+                    UP BROADCAST NOTRAILERS RUNNING MULTICAST  MTU:1500  Metric:1
+                    RX packets:1306755 errors:0 dropped:0 overruns:262 frame:0
+                    TX packets:940794 errors:0 dropped:0 overruns:0 carrier:0
+                    collisions:0 txqueuelen:100 
+                    RX bytes:981469667 (936.0 Mb)  TX bytes:192022370 (183.1 Mb)
+                    Interrupt:3 Base address:0x1000 
+
+                    lo        Link encap:Local Loopback  
+                    inet addr:127.0.0.1  Mask:255.0.0.0
+                    UP LOOPBACK RUNNING  MTU:16436  Metric:1
+                    RX packets:131528 errors:0 dropped:0 overruns:0 frame:0
+                    TX packets:131528 errors:0 dropped:0 overruns:0 carrier:0
+                    collisions:0 txqueuelen:0 
+                    RX bytes:137389945 (131.0 Mb)  TX bytes:137389945 (131.0 Mb)
+                    
+               The IP address here is 192.168.0.3
+                
+               So the correct command to issue is this:
+                    ./updatepermission.sh mikelee@email.unc.edu 192.168.0.3 2
+               Which succeeded.
+------------------------------------------------------------------------------------------------------------------------
+                  
