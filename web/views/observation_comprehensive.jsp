@@ -3,10 +3,10 @@
   @webpage_head_html@
 
    <%     String rowClass = "evenrow";  %>
-<title>VegBank Comprehensive Plot-Observation View</title>
+<title>VegBank Comprehensive Plot View</title>
 
   @webpage_masthead_html@   @possibly_center@  
-  <h2>Comprehesive View of a Plot-Observation</h2>
+  <h2>Comprehensive View of a Plot</h2>
   <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
     whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
 <vegbank:pager />
