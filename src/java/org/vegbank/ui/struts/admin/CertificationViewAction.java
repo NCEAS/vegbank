@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-25 06:52:50 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-04-15 02:08:05 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.VelocityParser;
+import org.vegbank.common.utility.Utility;
 
 
 /**
@@ -68,17 +69,16 @@ public class CertificationViewAction extends VegbankAction {
 		DynaActionForm dform = (DynaActionForm)form;
 		CertificationForm certForm = null;
 
-		// get the cert ID
-		String cert = (String)dform.get("cert");
-		if (cert == null || cert.equals("")) {
-
+		// get the certId
+		String certId = (String)dform.get("certId");
+		if (Utility.isStringNullOrEmpty(certId)) {
 			// check the request next
-			log.debug("CertificationViewAction: cert ID not in form; checking request...");
-			if (cert == null || cert.equals("")) {
-				cert = request.getParameter("cert");
-				log.debug("CertificationViewAction: no given cert");
+			log.debug("CertificationViewAction: certId not in form; checking request...");
+			if (certId == null || certId.equals("")) {
+				certId = request.getParameter("certId");
+				log.debug("CertificationViewAction: no given certId");
 				errors.add(Globals.ERROR_KEY, new ActionMessage(
-							"errors.required", "cert=usercertification_id"));
+							"errors.required", "certId=usercertification_id"));
 				saveErrors(request, errors);
 				return mapping.findForward("failure");
 			}
@@ -89,19 +89,19 @@ public class CertificationViewAction extends VegbankAction {
 
 		// handle approval & declination
 		try {
-			log.debug("CertificationViewAction: getting cert: " + cert);
-			certForm = uda.getCertificationApp(Integer.parseInt(cert));
+			log.debug("CertificationViewAction: getting certId: " + certId);
+			certForm = uda.getCertificationApp(Integer.parseInt(certId));
 
 			// get action, if there is one
 			String action = (String)dform.get("action");
 			/////String action = request.getParameter("action");
-			if (action == null || action.equals("")) {
+			if (Utility.isStringNullOrEmpty(action)) {
 				///// //////////////////////////
 				///// PRELOADING
 				///// //////////////////////////
 
 				usrId = certForm.getUsrId();
-				log.debug("CertificationViewAction: Preloading cert: " + 
+				log.debug("CertificationViewAction: Preloading certId: " + 
 					certForm.getRequestedCert() + ", " +
 					certForm.getCurrentCertLevelName() + ", " +
 					certForm.getUsrId());
@@ -121,7 +121,7 @@ public class CertificationViewAction extends VegbankAction {
 				// set the form et al. in dyna form
 				//dform.set("certBean", certForm);
 				dform.set("usrId", Long.toString(usrId));
-				dform.set("cert", cert);
+				dform.set("certId", certId);
 
 				// then set the form in the request
 				request.setAttribute("dform", dform);
@@ -137,7 +137,10 @@ public class CertificationViewAction extends VegbankAction {
 				request.setAttribute("hash", hash);
 				*/
 
-			} else if (action.equals("APPROVE")) {
+				log.debug("Leaving CertificationViewAction");
+				return mapping.findForward("view");
+
+			} else {
 				///// //////////////////////////
 				///// ACTION
 				///// //////////////////////////
@@ -152,8 +155,13 @@ public class CertificationViewAction extends VegbankAction {
 				/////usr = request.getParameter("usrId");
 				log.debug("CertificationViewAction: usr = " + usrId);
 
+				// get status comment
+				String statusComment = (String)dform.get("statusComment");
+				String certStatus;  // set this after getting action
+
 				if (action.equals("APPROVE")) {
 					// handle approval
+					certStatus = "approved";
 					int curRoles = uda.getUserPermissionSum(usrId);
 					int reqRole = Integer.parseInt(certForm.getRequestedCert());
 					int sum = curRoles | reqRole;
@@ -163,42 +171,42 @@ public class CertificationViewAction extends VegbankAction {
 
 					uda.setUserPermissionSum(usrId, sum);
 					
-					String reqRoleName;
-					if (PermComparison.matchesOne("pro", reqRole))
-						reqRoleName = "professional";
-					else if (PermComparison.matchesOne("cert", reqRole))
-						reqRoleName = "certified";
-					else
-						reqRoleName = "other";
 
 					// send email message to the user 
-					VelocityParser velo = new VelocityParser("admin/certification-approval.vm");
-					velo.put("applicantName", certForm.getGivenName() + " " + certForm.getSurName());
-					velo.put("requestedRole", reqRoleName);
-					String msgBody = velo.processTemplate(); 
-					log.debug("EMAIL MESSAGE: " + msgBody);
+					Map tags = new HashMap();
+					tags.put("applicantName", certForm.getGivenName() + " " + certForm.getSurName());
+					tags.put("requestedRole", certForm.getRequestedCertName());
+					if (!Utility.isStringNullOrEmpty(statusComment)) {
+						tags.put("comment", statusComment);
+					}
 
-					String mailHost = "hyperion.nceas.ucsb.edu";
 					String from = "panel@vegbank.org";
 					String to = certForm.getEmailAddress();
 					String cc = "";
 					String subject = "VegBank Certification Response";
 
-					if (to == null || to.equals("")) {
-						throw new AddressException("no email address for user");
-					}
-					ServletUtility.sendPlainTextEmail(mailHost, from, to, cc, subject, msgBody);
+					ServletUtility.sendEmailTemplate("admin/certification-approval.vm", 
+							tags, from, to, cc, subject, true);
 					
-					log.debug("Leaving CertificationViewAction");
-					return mapping.findForward("success");
+				} else if (action.equals("REJECT")) {
+					certStatus = "rejected";
+
+				} else if (action.equals("DISCARD")) {
+					certStatus = "discarded";
 
 				} else {
-					// handle decline
+					certStatus = "ERROR";
+					log.error("unknown action");
 				}
 
-			} else {
-					log.debug("Leaving CertificationViewAction");
-					return mapping.findForward("success");
+				// update the application
+				log.debug("Updating status: " + certStatus);
+				uda.updateCertificationStatus(Integer.parseInt(certId), certStatus, statusComment);
+
+
+				log.debug("Leaving CertificationViewAction");
+				return mapping.findForward("success");
+
 			}
 
 		
@@ -209,10 +217,7 @@ public class CertificationViewAction extends VegbankAction {
 			saveErrors(request, errors);
 			return mapping.findForward("failure");
 		}
-		
 
-		log.debug("Leaving CertificationViewAction");
-		return mapping.findForward("view");
 	}
 
 }

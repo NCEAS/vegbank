@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-01 21:06:40 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-04-15 02:08:05 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@ import java.util.*;
 import javax.servlet.http.*;
 
 import org.apache.struts.action.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.PermComparison;
 import org.vegbank.common.utility.UserDatabaseAccess;
@@ -44,19 +46,21 @@ import org.vegbank.common.model.WebUser;
  */
 public class CertificationLoadAction extends VegbankAction {
 
+	private static Log log = LogFactory.getLog(CertificationLoadAction.class);
+
 	public ActionForward execute(
 			ActionMapping mapping,
 			ActionForm form,
 			HttpServletRequest request,
 			HttpServletResponse response) {
 
-		LogUtility.log("In action CertificationLoadAction");
+		log.debug("In action CertificationLoadAction");
 		ActionErrors errors = new ActionErrors();
 
 		// Get the form
 		CertificationForm certForm = (CertificationForm)form;
 		if (certForm == null) {
-			LogUtility.log("CertificationLoadAction: constructing new certForm");
+			log.debug("CertificationLoadAction: constructing new certForm");
 			certForm = new CertificationForm();
 		}
 
@@ -64,11 +68,11 @@ public class CertificationLoadAction extends VegbankAction {
 		String cert_id = request.getParameter("cert_id");
 		WebUser user = getUser(request.getSession());
 		if (user == null) {
-			LogUtility.log("CertificationLoadAction: user is null -- VERY BAD!");
+			log.error("CertificationLoadAction: user is null -- VERY BAD!");
 		}
 
 
-		LogUtility.log("CertificationLoadAction: calling user.getUserid()");
+		log.debug("CertificationLoadAction: calling user.getUserid()");
 		long lTmp = user.getUserid();
 		if (lTmp != 0)  certForm.setUsrId(lTmp);
 
@@ -105,7 +109,7 @@ public class CertificationLoadAction extends VegbankAction {
 		// using <bean:write> requires this
 		request.setAttribute("reqAttribBean", certForm);
 
-		LogUtility.log("Leaving CertificationLoadAction");
+		log.debug("Leaving CertificationLoadAction");
 		return mapping.findForward("success");
 	}
 

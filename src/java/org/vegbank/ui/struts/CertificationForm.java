@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-02 22:32:33 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-04-15 02:08:05 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,8 +39,8 @@ public class CertificationForm extends ValidatorForm
 			implements java.io.Serializable
 {
 
-
 	// prepopulated fields
+	private long certId;
 	private long usrId;
 	private String emailAddress;
 	private String surName;
@@ -94,6 +94,20 @@ public class CertificationForm extends ValidatorForm
 		super();
 	}
 	
+	/**
+	 * Get value of 'certId' property.
+	 */
+	public long getCertId() {
+		return this.certId;
+	}
+
+	/**
+	 * Set the 'certId' property.
+	 */
+	public void setCertId(long certId) {
+		this.certId = certId;
+	}
+
 
 	/**
 	 * Get value of 'usrId' property.
@@ -200,6 +214,18 @@ public class CertificationForm extends ValidatorForm
 	 */
 	public void setCurrentCertLevelName(String currentCertLevelName) {
 		this.currentCertLevelName = currentCertLevelName;
+	}
+
+	/**
+	 * Get name based on 'requestedCert' property.
+	 */
+	public String getRequestedCertName() {
+		if (PermComparison.matchesOne("pro", this.requestedCert))
+			return "professional";
+		else if (PermComparison.matchesOne("cert", this.requestedCert))
+			return "certified";
+		else
+			return "other";
 	}
 
 	/**

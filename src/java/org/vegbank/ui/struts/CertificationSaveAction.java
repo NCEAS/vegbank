@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-02-28 11:21:16 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-04-15 02:08:05 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,8 @@ import javax.mail.MessagingException;
 
 import org.apache.struts.Globals;
 import org.apache.struts.action.*;
-import org.vegbank.common.utility.LogUtility;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.PermComparison;
@@ -44,6 +45,8 @@ import org.vegbank.common.model.WebUser;
  * @author anderson
  */
 public class CertificationSaveAction extends VegbankAction {
+
+	private static Log log = LogFactory.getLog(CertificationSaveAction.class);
 
 
 	public ActionForward execute(
@@ -57,19 +60,19 @@ public class CertificationSaveAction extends VegbankAction {
 		try {
 			CertificationForm certForm = getCertForm(form, getUser(request.getSession()));
 			
-			LogUtility.log("CertSave: Saving...");
+			log.debug("CertSave: Saving...");
 			saveCertification(certForm, errors);
 			
-			LogUtility.log("CertSave: Notifying admin...");
+			log.debug("CertSave: Notifying admin...");
 			sendAdminCertRequest(certForm, errors);
 			
 		} catch(Exception ex) {
-			LogUtility.log("ERROR: CertificationSaveAction", ex);
+			log.debug("ERROR: ", ex);
 			//errors.add(ActionErrors.GLOBAL_ERROR, new ActionMessage(
 			errors.add(Globals.ERROR_KEY, new ActionMessage(
 						"errors.general", ex.getMessage()));
 			saveErrors(request, errors);
-			return mapping.findForward("vberror");
+			return mapping.findForward("failure");
 		}
 
 		
@@ -88,25 +91,22 @@ public class CertificationSaveAction extends VegbankAction {
 
 		UserDatabaseAccess userdb = new UserDatabaseAccess();
 
-		userdb.insertUserCertificationInfo(form);
-		
-		// send email message to the user 
-		String mailHost = "hyperion.nceas.ucsb.edu";
-		String from = "help@vegbank.org";
+		long certId = userdb.insertUserCertificationInfo(form);
+		form.setCertId(certId);
+
+				
+		// prepare the email template
+		String from = "panel@vegbank.org";
 		String to = form.getEmailAddress();
 		String cc = "";
 		String subject = "Your VegBank Certification Request";
-		String body = "Dear " + form.getGivenName() + 
-			": \n\nYour VegBank certification request has been received and will " +
-			"be reviewed.  Please await our response.\n\n" +
-			"Thank you,\nThe VegPanel\n\n\n";
 
-		if (to == null || to.equals("")) {
-			throw new AddressException("CertSave: no email address for user");
-		}
-		LogUtility.log("CertSave: Sending confirmation to user: to=" +
-				to + ", from=" + from);
-		ServletUtility.sendPlainTextEmail(mailHost, from, to, cc, subject, body);
+		Map tags = new HashMap();
+		tags.put("applicantName", form.getGivenName() + " " + form.getSurName());
+		tags.put("requestedRole", form.getRequestedCertName());
+
+		ServletUtility.sendEmailTemplate("certification-application.vm", 
+				tags, from, to, cc, subject,true);
 	 }
 	 
 	/**
@@ -130,11 +130,15 @@ public class CertificationSaveAction extends VegbankAction {
 		if (tmp != null) {	regionC = regions.getName(tmp); }
 
 		
+		log.debug("sending cert request to admin for cert ID #" + form.getCertId());
 
 		StringBuffer messageBody = new StringBuffer();
 
 		messageBody.append("Dear VegPanel Member:\n")
-			.append(" Please review the following certification application. \n\n")
+			.append(" Please review the following certification application. \n")
+			.append(" http://vegbank.org/vegbank/ViewCertification.do?cert=")
+			.append(form.getCertId())
+			.append("\n\n")
 			
 			.append(" Name:  "+form.getSurName() +", "+form.getGivenName()+" \n")
 			.append(" Email:  "+form.getEmailAddress()+" \n")
@@ -255,10 +259,10 @@ public class CertificationSaveAction extends VegbankAction {
 
 		tmp = user.getDayphone();
 		if (tmp != null && !tmp.equals("") && !tmp.equals("null")) {
-			LogUtility.log("CertSave: setting phone="+tmp);
+			log.debug("CertSave: setting phone="+tmp);
 			certForm.setPhoneNumber(tmp);
 		} else {
-			LogUtility.log("CertSave: setting phone=n/a");
+			log.debug("CertSave: setting phone=n/a");
 			certForm.setPhoneNumber("n/a");
 		}
 
