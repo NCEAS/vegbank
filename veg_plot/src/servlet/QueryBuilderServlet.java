@@ -63,7 +63,7 @@ public void doGet(HttpServletRequest request,
 				if ( parameterHash(request).get("queryParameterType").toString().equals("append") )
 				{
 					System.out.println("appendingParameters to current query");
-					out.println( appendQueryAttributes( parameterHash(request)) );
+					out.println( appendQueryAttributes( parameterHash(request)).toString() );
 					System.out.println("query vector: "+queryVector.toString() );
 					//reprint the client html with the updated aggregate query
 					// in the text area
@@ -72,9 +72,11 @@ public void doGet(HttpServletRequest request,
 				//else run the query
 				else if (parameterHash(request).get("queryParameterType").toString().equals("commit"))
 				{
+					System.out.println("issueing the query to the DataRequestServlet");
+					//pass the query vector to the DataRequestServlet
+					submitExtendedQuery(queryVector);
 					//make a new occurence of the queryVector
 					queryVector = new Vector();
-					System.out.println("issueing the query to the DataRequestServlet");
 				}
 			}
 			else
@@ -90,6 +92,58 @@ public void doGet(HttpServletRequest request,
 			+e.getMessage());
 		}
 	}
+	
+			
+	/**
+	 * method to pass the extended query to the DataRequestServlet
+	 */
+	private String submitExtendedQuery (Vector queryVector) 
+	{
+		String htmlResults = "test";
+		try 
+		{
+			//create the parameter string to be passed to the DataRequestServlet
+			StringBuffer sb = new StringBuffer();
+			sb.append("?requestDataType=vegPlot&queryType=extended&resultType=summary");
+			for (int i=0; i<queryVector.size(); i++) 
+			{
+					sb.append("&");
+					//get each instance query
+					Hashtable queryInstanceHash = (Hashtable)queryVector.elementAt(i);
+					String criteria = queryInstanceHash.get("criteria").toString();
+					String operator = queryInstanceHash.get("operator").toString();
+					String value = queryInstanceHash.get("value").toString();
+					sb.append("operator="+operator+"&criteria="+criteria+"&value="+value);
+					
+				//	String queryInstance=queryVector.elementAt(i).toString().trim();
+					//fix up the string -- a hack
+				//	queryInstance=queryInstance.replace('{',' ').trim();
+			//		queryInstance=queryInstance.replace('}',' ').trim();
+				//	queryInstance=queryInstance.replace(',','&').trim();
+					
+					//append the query elements
+				//	sb.append(queryInstance.trim() );
+			//		System.out.println("SUBMITTED QUERY > "+queryInstance.trim());
+			}
+			
+			//connect to the DataRequestServlet
+			String uri = "http://dev.nceas.ucsb.edu/harris/servlet/DataRequestServlet"
+				+sb.toString().trim();
+			int port=80;
+			String requestType="POST";
+
+			GetURL b =new GetURL();  
+			b.getPost(uri, port, requestType);
+		
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("** failed :  "
+			+e.getMessage());
+		}
+		return(htmlResults);
+	}
+	
 	
 		
 	/**
@@ -110,11 +164,16 @@ public void doGet(HttpServletRequest request,
 				//updating
 				if ( su.outVector.elementAt(i).toString().indexOf("replaceAggregateQuery") >0 )
 				{
-					sb.append( queryVector.toString() );
+					//add the aggregated query to the stringbuffer 
+					//instead of the taged line in the vector
+					for (int ii=0; ii<queryVector.size(); ii++)
+					{
+						sb.append( queryVector.elementAt(ii).toString() +"\n");
+					}
 				}
 				else
 				{
-					sb.append( su.outVector.elementAt(i) );
+					sb.append( su.outVector.elementAt(i)+"\n" );
 				}
 			}
 		}
@@ -125,7 +184,6 @@ public void doGet(HttpServletRequest request,
 		}
 		return(sb.toString() );
 	}
-	
 	
 	
 	
@@ -167,22 +225,43 @@ public void doGet(HttpServletRequest request,
 	/**
 	 * method to build the aggregate of 
 	 * queries that should be issued to the 
-	 * DataRequestServlet
+	 * DataRequestServlet the structure of the 
+	 * returned vector is: a vector that contains 
+	 * a hash table for each query instance in the aggregate
+	 * the instanse hash table will contain the criteria, 
+	 * operator and the value
 	 */
-	private String appendQueryAttributes(Hashtable attributeParameters) 
+	private Vector appendQueryAttributes(Hashtable attributeParameters) 
 	{
-		String queryAggregate=null;
+		Hashtable queryInstance = new Hashtable();
 		try 
 		{
-			queryAggregate=attributeParameters.toString();
-			queryVector.addElement( queryAggregate.toString() );
+			//make sure that the correct parameters are passed 
+			//into this method
+			if (attributeParameters.containsKey("criteria") == true)
+			{
+				String criteriaValue=attributeParameters.get("criteria").toString();
+				String operator = attributeParameters.get("operator").toString();
+				String value = attributeParameters.get("value").toString();
+				//add these elements to the instance hash
+				queryInstance.put("criteria", criteriaValue);
+				queryInstance.put("operator", operator);
+				queryInstance.put("value", value);
+				//add the instance hash to the queryVector
+				//that is a static variable in this class
+				queryVector.addElement( queryInstance );
+			}
+			else 
+			{
+				System.out.println("did not find the correcte parameters");
+			}
 		}
 		catch( Exception e ) 
 		{
 			System.out.println("** failed in:  "
 			+e.getMessage());
 		}
-		return(queryAggregate);
+		return(queryVector);
 	}
 
 }
