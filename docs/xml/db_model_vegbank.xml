@@ -4429,32 +4429,32 @@ conditions may change between resampling events.
       <attList>
         <attListItem>
           <attListValue>High</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>between 85% and 95% of all taxa were identified to species level; search was thorough.</attListValueDesc>
           <attListSortOrd>2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>High but incomplete</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>at least 85% of all taxa were identified to species level; search was not so thorough.</attListValueDesc>
           <attListSortOrd>3</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Highest</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>at least 95% of all taxa were identified to species level; search was thorough.</attListValueDesc>
           <attListSortOrd>1</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Low</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>less than 70% of all taxa were identified to species level.</attListValueDesc>
           <attListSortOrd>6</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Moderate</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>between 70% and 85% of all taxa were identified to species level; search was thorough.</attListValueDesc>
           <attListSortOrd>4</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Moderate but incomplete</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>between 70% and 85% of all taxa were identified to species level; search was not so thorough.</attListValueDesc>
           <attListSortOrd>5</attListSortOrd>
         </attListItem>
       </attList>
