@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-11-25 19:37:42 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,9 @@
  
 package org.vegbank.common.utility;
 
+import org.vegbank.common.model.Address;
 import org.vegbank.common.model.Community;
-import org.vegbank.common.model.Plantparty;
+import org.vegbank.common.model.Party;
 
 import junit.framework.TestCase;
 
@@ -39,7 +40,9 @@ public class ObjectToDBTest extends TestCase
 	// Need an object to test with 
 	private Community comm = null;
 	
-	private ObjectToDB o2db;
+	private Party party =null;
+	private Address address = null;
+	private VBModelBeanToDB o2db;
 	
 	/**
 	 * Constructor for ObjectToXMLTest.
@@ -55,39 +58,11 @@ public class ObjectToDBTest extends TestCase
 
 	}
 	
-	public void testGetPreparedStatementString()
-	{
-		try
-		{
-			String sqlString = o2db.getPreparedStatementString();
-			System.out.println(sqlString);
-			assertEquals("insert into Plantparty ( givenname, surname, email, Plantparty_id ) values ( ?,?,?, ? )", sqlString );	
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			fail("Had an exception thrown");
-		}
-	}
-	
 	public void testWrite()
 	{
 		try
 		{
-			o2db.insert();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			fail("Had an exception thrown");
-		}
-	}
-	
-	public void testIsObjectInDatabase()
-	{
-		try
-		{
-			o2db.isObjectInDatabase(null);
+			o2db.insert(party);
 		}
 		catch (Exception e)
 		{
@@ -101,11 +76,18 @@ public class ObjectToDBTest extends TestCase
 	 */
 	protected void setUp() throws Exception
 	{
-		Plantparty pp = new Plantparty();
-		pp.setEmail("test@test.com");
-		pp.setGivenname("Gabriel");
-		pp.setSurname("Farrell");	
-		o2db = new ObjectToDB(pp);
+		party = new Party();
+		party.setEmail("test@test.com");
+		party.setGivenname("Gabriel");
+		party.setSurname("Farrell");	
+		
+		address = new Address();
+		address.setCity("London");
+		address.setCountry("UK");
+		
+		party.addparty_address(address);
+		
+		o2db = new VBModelBeanToDB();
 		super.setUp();
 	}
 
