@@ -6522,7 +6522,7 @@ conditions may change between resampling events.
   <modelChange>
     <modelChangeID>36</modelChangeID>
     <modelChangeName>Implementation field to link Staus and usage</modelChangeName>
-    <modelChangeStatus>false</modelChangeStatus>
+    <modelChangeStatus>true</modelChangeStatus>
     <modelChangeVersion>1.0.2</modelChangeVersion>
     <modelChangeComments>optional FK's in Usage to Status.</modelChangeComments>
     <change type="create field">
@@ -6557,7 +6557,7 @@ conditions may change between resampling events.
       <entity>
         <entityName>plantUsage</entityName>
         <entityLabel>Plant Usage</entityLabel>
-        <entitySummary> </entitySummary>
+        <entitySummary/>
         <entityDescription/>
         <module>plant</module>
         <attribute>
@@ -6583,5 +6583,12 @@ conditions may change between resampling events.
         </attribute>
       </entity>
     </change>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>37</modelChangeID>
+    <modelChangeName>graphics for any element</modelChangeName>
+    <modelChangeStatus>false</modelChangeStatus>
+    <modelChangeVersion>unknown</modelChangeVersion>
+    <modelChangeComments>link graphic to observation and noteLink? or add accessionCode, or table, field, record to allow notes to apply to any element, or even field!</modelChangeComments>
   </modelChange>
 </modelChangeDocument>
