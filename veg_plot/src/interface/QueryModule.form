@@ -222,7 +222,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints height="-1" width="-1" x="230" y="140"/>
+          <AbsoluteConstraints height="-1" width="-1" x="240" y="140"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -262,7 +262,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="jTextField1">
       <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.beaninfo.editors.StringEditor" value="%"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.beaninfo.editors.StringEditor" value="Fraxinus dipetala"/>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="af" green="af" id="pink" palette="1" red="ff" type="palette"/>
         </Property>
@@ -310,11 +310,9 @@
       </Constraints>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane3">
-      <Properties>
-      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints height="60" width="470" x="10" y="220"/>
+          <AbsoluteConstraints height="60" width="470" x="20" y="240"/>
         </Constraint>
       </Constraints>
 
