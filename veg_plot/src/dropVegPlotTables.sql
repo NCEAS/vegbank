@@ -3,6 +3,7 @@
  */
 
 set echo off
+drop table speciesTaxon;
 drop table plotmaster;
 drop table project;
 drop table party;

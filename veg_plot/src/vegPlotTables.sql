@@ -23,7 +23,7 @@ standSize INT,
 treePlotSize INT,
 plotType VARCHAR(15),
 plotOriginLat NUMBER(22,6),
-plotOriginLong NUMBER(22,6),
+plotOriginLong NUMBER(22,6), 
 plotShape VARCHAR(12),
 plotSize VARCHAR(20),
 horizPosAcc NUMBER(3),
@@ -35,11 +35,21 @@ state VARCHAR(12),
 country VARCHAR(12),
 slopeAspect NUMBER(22,6),
 slopeGradient NUMBER(22,6),
-slopePosition VARCHAR(12),
+slopePosition VARCHAR(20),
 hydrologicRegime VARCHAR(32),
-soilDrainage VARCHAR(22),
-surfGeo VARCHAR(32),
+soilDrainage VARCHAR(32),
+surfGeo VARCHAR(100),
 FOREIGN KEY (project_id) REFERENCES project
+);
+
+CREATE TABLE speciesTaxon (
+taxon_id INT NOT NULL PRIMARY KEY,
+plot_id INT NOT NULL,
+originalTaxonName VARCHAR(32),
+authority VARCHAR(32),
+currentTaxonUnit VARCHAR(32),
+cumStrataCoverage NUMBER(4,6),
+FOREIGN KEY (plot_id) REFERENCES plotMaster
 );
 
 CREATE TABLE party (
