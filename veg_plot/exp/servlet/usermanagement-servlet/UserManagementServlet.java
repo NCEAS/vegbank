@@ -6,8 +6,8 @@ package servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-06-13 13:05:35 $'
- * '$Revision: 1.8 $'
+ *     '$Date: 2002-06-14 18:22:57 $'
+ * '$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,6 +58,11 @@ public class UserManagementServlet extends HttpServlet
 	private String actionFile = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/actions.html";
 	//this is the modified page that is to be sent back to the client
 	private String outFile ="/tmp/actions_dev.html";
+
+	// these are the forms for the certification input:
+	private String certificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/certification_valid.html";
+	private String certificationValidation = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
+	private String genericForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
 	
 	//constructor
 	public UserManagementServlet()
@@ -196,46 +201,115 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 			 System.out.println("UserManagementServlet > performing certification action");
 			 
 			 //get the attributes from the form
-			 String emailAddress = "harris02@hotmail.com"; 
-			 String surName = "harris";
-			 String givenName = "john";
-			 String phoneNumber ="";
-			 String phoneType = "";
-			 String currentCertLevel = "";
-			 String cvDoc = "";
-			 String highestDegree ="";
-			 String degreeYear ="";
-			 String degreeInst ="";
-			 String  currentInst = "";
-			 String currentPos ="";
-			 String esaPos = "";
-			 String profExperienceDoc = "";
-			 String relevantPubs ="";
-			 String vegSamplingDoc = "";
-			 String vegAnalysisDoc  = "";
-			 String usnvcExpDoc = "";
-			 String vegbankExpDoc = "";
-			 String plotdbDoc = "";
-			 String nvcExpRegionA ="";
-			 String nvcExpVegA = "";
-			 String nvcExpFloristicsA = "";
-			 String nvcExpNVCA = "";
-			 String esaSponsorNameA = "";
-			 String esaSponsorEmailA = "";
-			 String esaSponsorNameB = "";
-			 String esaSponsorEmailB = "";
-			 String peerReview = "";
-			 String additionalStatements = "";
-		
-		
-			 userdb = new UserDatabaseAccess();
-			 userdb.insertUserCertificationInfo(emailAddress, surName, givenName,
-			 phoneNumber, phoneType, currentCertLevel, cvDoc, highestDegree,
-			 degreeYear, degreeInst, currentInst, currentPos, esaPos,
-			 profExperienceDoc, relevantPubs, vegSamplingDoc,  vegAnalysisDoc, usnvcExpDoc, 
-			 vegbankExpDoc, plotdbDoc, nvcExpRegionA, nvcExpVegA, nvcExpFloristicsA, 
-			 nvcExpNVCA, esaSponsorNameA, esaSponsorEmailA, esaSponsorNameB, esaSponsorEmailB, 
-			 peerReview, additionalStatements);
+			 Hashtable params = util.parameterHash(req);
+			 String emailAddress = this.cookieValue;
+			 String submittedEmail = (String)params.get("email");
+			 String surName = (String)params.get("surName");
+			 String givenName  = (String)params.get("givenName");
+			 String phoneNumber = (String)params.get("phoneNumber");
+			 String phoneType = (String)params.get("phoneType");
+			 String currentCertLevel = (String)params.get("currentCertLevel");
+			 String cvDoc = (String)params.get("cvDoc");
+			 String highestDegree = (String)params.get("highestDegree");
+			 String degreeYear = (String)params.get("degreeYear");
+			 String currentInst = (String)params.get("currentInst");
+			 String degreeInst = (String)params.get("degreeInst");
+			 String currentPos = (String)params.get("currentPos");
+			 String esaPos = (String)params.get("esaPos");
+			 String profExperienceDoc = (String)params.get("profExperienceDoc");
+			 String relevantPubs = (String)params.get("relevantPubs");
+			 String vegSamplingDoc = (String)params.get("vegSamplingDoc");
+			 String vegAnalysisDoc = (String)params.get("vegAnalysisDoc");
+			 String usnvcExpDoc = (String)params.get("usnvcExpDoc");
+			 String vegbankExpDoc = (String)params.get("vegbankExpDoc");
+			 String plotdbDoc = (String)params.get("plotdbDoc");
+			 String nvcExpRegionA = (String)params.get("nvcExpRegionA");
+			 String nvcExpVegA = (String)params.get("nvcExpVegA");
+			 String nvcExpFloristicsA = (String)params.get("nvcExpFloristicsA");
+			 String nvcExpNVCA = (String)params.get("nvcExpNVCA");
+			 String esaSponsorNameA  = (String)params.get("esaSponsorNameA");
+			 String esaSponsorEmailA = (String)params.get("esaSponsorEmailA");
+			 String esaSponsorNameB = (String)params.get("esaSponsorNameB");
+			 String esaSponsorEmailB = (String)params.get("esaSponsorEmailB");
+			 String peerReview = (String)params.get("peerReview");
+			 String additionalStatements = (String)params.get("additionalStatements");
+			 // deterimine if the correct attributes were passed and if so then 
+			 // commit to the database etc.
+			 if ( emailAddress != null && emailAddress.length() > 2)
+			 {
+			 	// check that the required paramteres are upto snuff
+				if ( surName.length() > 2 && givenName.length() > 2 && phoneNumber.length() > 2  && currentCertLevel.length() > 0 
+					&& degreeInst.length() > 2  && currentInst.length() > 2  && esaPos.length() > 2  && vegSamplingDoc.length() > 2 
+					&&  vegAnalysisDoc.length() > 2  && submittedEmail.length() > 2  )
+					{
+						System.out.println("surName: '"+surName+"'");
+			 			userdb = new UserDatabaseAccess();
+						userdb.insertUserCertificationInfo(emailAddress, surName, givenName,
+						phoneNumber, phoneType, currentCertLevel, cvDoc, highestDegree,
+			 			degreeYear, degreeInst, currentInst, currentPos, esaPos,
+			 			profExperienceDoc, relevantPubs, vegSamplingDoc,  vegAnalysisDoc, usnvcExpDoc, 
+			 			vegbankExpDoc, plotdbDoc, nvcExpRegionA, nvcExpVegA, nvcExpFloristicsA, 
+			 			nvcExpNVCA, esaSponsorNameA, esaSponsorEmailA, esaSponsorNameB, esaSponsorEmailB, 
+			 			peerReview, additionalStatements);
+						
+						// send a success message
+						Hashtable replaceHash = new Hashtable();
+						StringBuffer sb = new StringBuffer();
+						sb.append("Thank you "+emailAddress+"! <br> ");
+						sb.append("Your certification request has been passed onto the VegBank administration. <br>");
+						sb.append("We will contact you shortly.");
+						
+						replaceHash.put("messages",  sb.toString());
+						util.filterTokenFile(genericForm, certificationValidation, replaceHash);
+						res.sendRedirect("/forms/valid.html");	
+						// send email message 
+						String mailHost = "nceas.ucsb.edu";
+						String from = "vegbank";
+						String to = emailAddress;
+						String cc = "vegbank@nceas.ucsb.edu";
+						String subject = "VEGBANK CERTIFICATION RECEIPT";
+						String body = emailAddress + ": Please consider this as your receipt for VegBank certification";
+						util.sendEmail(mailHost, from, to, cc, subject, body);
+						
+						// delete the form
+						Thread.sleep(10000);
+						util.flushFile(certificationValidation);
+						
+					}
+					else
+					{
+						System.out.println("UserManagementServlet > missing required attributes ");
+						// send them a note to go back
+						
+						Hashtable replaceHash = new Hashtable();
+						replaceHash.put("messages", "You are missing a required attribute to submit this form");
+						replaceHash.put("surName", ""+surName);
+						replaceHash.put("givenName", ""+givenName);
+						replaceHash.put("submittedEmail", submittedEmail);
+						replaceHash.put("registeredEmail", emailAddress);
+						replaceHash.put("phoneNumber", phoneNumber);
+						replaceHash.put("currentCertLevel", currentCertLevel);
+						replaceHash.put("degreeInst", degreeInst);
+						replaceHash.put("currentInst", currentInst);
+						replaceHash.put("esaPos", esaPos);
+						replaceHash.put("vegSamplingDoc", vegSamplingDoc);
+						replaceHash.put("vegAnalysisDoc", vegAnalysisDoc);
+						
+						
+						util.filterTokenFile(certificationTemplate, certificationValidation, replaceHash);
+						res.sendRedirect("/forms/valid.html");
+						// delete the form 
+						Thread.sleep(10000);
+						util.flushFile(certificationValidation);
+						
+					}
+			 }
+			 else
+			 {
+			 	System.out.println("UserManagementServlet > not a valid email to commit certification");
+				// redirect to the page that redirects to the login
+				res.sendRedirect("/forms/redirection_template.html");
+			 }
 		 }
 		 catch(Exception e)
 		 {
@@ -330,8 +404,6 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 						// let the user know that what they requested could not be found
 					}
 				}
-				
-				
 			}
 			catch(Exception e)
 			{
