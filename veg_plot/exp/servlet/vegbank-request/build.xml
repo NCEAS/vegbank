@@ -1,6 +1,14 @@
 <?xml version="1.0"?>
 <!-- 
-  * buildServlet.xml
+	*
+	*
+	*  '$RCSfile: build.xml,v $'
+  *    Authors: @authors@
+  *    Release: @release@
+  *
+  *   '$Author: harris $'
+  *     '$Date: 2002-05-16 16:53:31 $'
+  * '$Revision: 1.3 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -18,20 +26,21 @@
 <project name="plotLoader" default="dist" basedir=".">
 	<target name="init">
 	<tstamp/>
+
 	
+	<!-- NOTICE THE DIFFERENCES BETWEEN THE DEV AND PRODUCTION SERVLETS-->
 	<property name="installDir" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/" />
 	<property name="tomcat_root" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/" />
+	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib//" />
 
 	<property name="current" value="./" />
 	<property name="build" value="build" />
 	<property name="src" value="src" />
 	<property name="lib" value="../lib" />
-	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib//" />
+	
 
-	
-	
-	
-	
+
+	<property name="vegcommunity" value="../lib/vegcommunity.jar" />
 	<property name="jdbc" value="../lib/jdbc7.0-1.2.jar" />
 	<property name="multipart" value="../lib/multipart.jar" />
 	<property name="servlet-api" value="../lib/servlet.jar" />
@@ -40,7 +49,8 @@
 	<property name="xalan" value="../lib/xalan_1_2_2.jar" />
 	<property name="xerces" value="../lib/xerces_1_4.jar" />
 	<property name="framework" value="../lib/frameworkservletmodule.jar" />
-	<property name="cpath" value="${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
+	<property name="rmisystem" value="../lib/rmidatasource.jar" />
+	<property name="cpath" value="${rmisystem}:${vegcommunity}:${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
 	
 	
 	<filter token="servlet-path" value="${servlet-path}" />
@@ -64,7 +74,7 @@
 <target name="compile" depends="prepare">
 	<javac srcdir="${build}" 
 		classpath="${cpath}"
-		includes="fileDownload.java  QueryBuilderServlet.java DataRequestServlet.java viewData.java " 
+		includes="DataSubmitServlet.java fileDownload.java  QueryBuilderServlet.java DataRequestServlet.java viewData.java " 
 		destdir="${build}"
 	/>
 	
@@ -82,18 +92,11 @@
 <!-- DIST -->	
 <target name="dist" depends="jar">
 	<!-- JAR LIBRARIES INCL: xml parsers/xformers, jdbc drivers, db access, servlet-->
+<!-- this and the next target are redundant
 	<copydir src="${lib}" 
   	dest="${installDir}" 
     filtering="no"
     includes=" vegbankquery.jar"
-		excludes="**/CVS* "
-	/>
-	
-<!--	
-	<copydir src="./lib/" 
-  	dest="${installDir}" 
-    filtering="no"
-    includes=" **.xsl **.dtd"
 		excludes="**/CVS* "
 	/>
 -->
@@ -106,13 +109,28 @@
 			copying jar to web server: ${servlet_lib}
 	</echo>
 
-
 	<copyfile src="${lib}/vegbankquery.jar" 
 			filtering="no" 
 			dest="${servlet_lib}/vegbankquery.jar" 
 	/>
-
 </target>		
+
+<!--  JDOC  -->	
+<target name="jdoc">                                                                                                                                
+ <javadoc 
+	sourcefiles="src/DataSubmitServlet.java,src/DataRequestServlet.java,src/fileDownload.java,src/viewData.java,src/QueryBuilderServlet.java"
+	sourcepath="src"				
+	destdir="doc/api"
+  author="true"
+  version="true"
+	private="true"
+  use="true"
+  windowtitle="VEGBANK SPECIFIC SERVLET">
+</javadoc>
+
+
+</target>      
+
 
 
 </project>
