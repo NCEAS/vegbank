@@ -24,13 +24,16 @@
 
 <target name="init">
 	<tstamp/>
-	
-	<property name="top.lib.dir" value="${basedir}/../lib" />
+
+  
+	<property name="top.dir" value="${basedir}/.." />
+	<property name="top.lib.dir" value="${top.dir}/lib" />
+	<property name="top.build.dir" value="${top.dir}/build" />
 	<property name="db_prop_file" value="./lib/database.properties" />
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="build_bin" value="${build.dir}/bin" />
 	<property name="build_sql" value="${build.dir}/sql" />
-	<property name="build_lib" value="${build.dir}/lib" />
+	<property name="build.lib.dir" value="${build.dir}/lib" />
 	<property name="build_src" value="${build.dir}/src" />
 	<property name="build_data" value="${build.dir}/data" />
 	<property name="release" value="development"/>
@@ -45,7 +48,14 @@
 	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/"/>
 	
 	<property name="toolsdir" value="/usr/local/devtools" />
-	
+
+  <property name="build.test.dir" value="${build.dir}/test"/>
+  <property name="reports.dir" value="${top.build.dir}/reports"/>
+  <property name="reports.test.dir" value="${reports.dir}/testreports"/>
+  <property name="test.dir" value="${basedir}/test" />
+  <property name="test.unit.src.dir" value="${test.dir}/unit"/>
+
+  
   <!-- FIXME: Move into higher level -->
   <property name="torque.home" value="../common/datamodel/torque-3.0" />	
   <property name="torque.contextProperties" value="${build.dir}/torque-build.properties"/>
@@ -53,7 +63,9 @@
   
 	<property name="xmljars" value="${top.lib.dir}/xalan_1_2_2.jar:${top.lib.dir}/xerces_1_3_1.jar"/> <!--:${top.lib.dir}/xml-apis.jar"/>-->
   <property name="vegclass.common.jar" value="${top.lib.dir}/vegclass_common.jar"/>
-	<property name="cpath" value="${build.dir}:${xmljars}:${vegclass.common.jar}"/>			
+  <property name="utils.jar" value="${top.lib.dir}/utils.jar"/>
+	<property name="cpath" value="${build.dir}:${xmljars}:${vegclass.common.jar}:${utils.jar}"/>			
+	<property name="cpath.test" value="${cpath}:${build.lib.dir}/planttaxonomy.jar"/>			
 
 	<filter token="version" value="development"/>
 	<filter token="dist" value="dist"/>
@@ -71,7 +83,7 @@
 	<mkdir dir="${build_bin}" />
 	<mkdir dir="${build_sql}" />
 	<mkdir dir="${build_src}" />
-	<mkdir dir="${build_lib}" />
+	<mkdir dir="${build.lib.dir}" />
 	<mkdir dir="${build_data}" />
 		
 	<!-- copy the sql scripts required to
@@ -104,11 +116,11 @@
     <fileset dir="${data}" includes="plantlst1996.bin.gz plantlst2000.bin.gz"/>
   </copy>
 
-  <copy todir="${build_lib}" filtering="yes">
+  <copy todir="${build.lib.dir}" filtering="yes">
     <fileset dir="${sql}" includes="**/*sql"/>
   </copy>
  
-  <copy todir="${build_lib}" filtering="yes">
+  <copy todir="${build.lib.dir}" filtering="yes">
     <fileset dir="${xmlFiles}" includes="**/*xsl"/>
   </copy>
        	
@@ -116,7 +128,6 @@
 		perm="a+x"
 		includes="**/*.sh"
 	/>
-  			
 </target>	
 
 
@@ -128,35 +139,35 @@
 		classpath="${cpath}"
 		includes="PlantTaxaLoader.java USDAPlantsToXml.java USDAPlantsLoader.java USDAPlantsLoader2000.java" 
 		destdir="${build_src}"
-		debug="on"
-	/>
+  >
+    <include name="org/vegbank/plants/**/*java"/>
+  </javac>
 </target>	
 
 	
 <target name="jar" depends="compile" description="==> creates a jar file and sticks it in the lib directory">
 
-	<jar jarfile ="${build_lib}/planttaxonomy.jar"
+	<jar jarfile ="${build.lib.dir}/planttaxonomy.jar"
 		basedir="${build_src}"
-		includes="${build_src}/ **.class **.dtd **.xsl  **.properties"
+		includes="${build_src}/ **.class **.dtd **.xsl  **.properties
+    org/vegbank/plants/**/*class"
 	/>
 	<!-- COPY THE JAR ARCHIVE BACK TO THE LIB DIRECTORY -->
 	<copy todir="${lib}"> 
-    <fileset dir="${build_lib}"/>
+    <fileset dir="${build.lib.dir}"/>
   </copy>	
   
 </target>		
 
+<target name="deploy" depends="jar, dist-xml"
+        description="==> deploys all the project resources">
+</target>
 
   <!-- DISTXML  -->	
   <target name="dist-xml" depends="init" description="==> copies the xml resources (dtd'd and stylesheets to the webdirectory" >
 	  <echo>copying xml resources from ${xml_dir} to web server: ${servlet_lib}</echo>
 	  <copy file="${xml_dir}/showPlantTaxaSummary.xsl" filtering="no" todir="${servlet_lib}"/>
   </target>		
-
-  <target name="deploy" depends="jar, dist-xml"
-          description="==> deploys all the project resources">
-    <copy file="${build_lib}/planttaxonomy.jar" todir="${servlet_lib}"/>
-  </target>
 
   <target name="clean" depends="init" description="==> Remove all generated files">
       <delete dir="${build.dir}"/>
@@ -174,6 +185,8 @@
     <ant antfile="${torque.home}/build-torque.xml" target="jdbc">
       <property name="torque.lib.dir" location="${torque.home}/lib"/>
     </ant>
+    <copy file="torque-output/schema/schema.xml" 
+          tofile="torque-output/schema/${ant.project.name}-schema.xml"/>
   </target>
   
   <target name="torque-doc" depends="torque-prepare" if="torque.home" 
@@ -198,6 +211,62 @@
     </ant>
   </target>
 
+  <!-- ================================================================ -->
+  <!-- TEST RELATED TARGETS                                             -->
+  <!-- ================================================================ -->
+  <!-- Compiling, running and generating reports for tests              -->
+  <!-- ================================================================ -->
+
+  <target name="test-prepare" depends="prepare">
+
+    <property name="build.test.classes.dir" value="${build.test.dir}/classes"/>
+    <mkdir dir="${build.test.dir}"/>
+    <mkdir dir="${reports.test.dir}"/>
+    <mkdir dir="${build.test.classes.dir}"/>
+    <mkdir dir="${build.test.dir}/src"/>
+
+  </target>
+
+  <target name="test" depends="test-prepare"
+          description="=> Run all the junit tests">
+
+    <!-- copy and compile the tests into a jar file -->
+    <copy todir="${build.test.dir}/src">
+      <fileset dir="${test.unit.src.dir}">
+        <include name="**/*java"/>
+      </fileset>
+    </copy>
+    
+    <echo>${cpath.test}</echo>
+    
+    <javac srcdir="${test.unit.src.dir}"
+           destdir="${build.test.classes.dir}"
+           classpath="${cpath.test}"
+           includes="**/*.java" />
+
+    <jar jarfile="${build.lib.dir}/${ant.project.name}-junittests.jar"
+         basedir="${build.test.classes.dir}"
+         includes="**/*.class" />
+
+    <!-- use the ant "junit" task to run JUnit tests. -->
+    <junit printsummary="yes" haltonfailure="no" fork="no"
+           haltonerror="no">
+      <classpath>
+        <pathelement path="${cpath}"/>
+        <fileset dir="${build.lib.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+      <formatter type="xml" />
+
+      <batchtest fork="yes" todir="${reports.test.dir}">
+        <fileset dir="${build.test.classes.dir}">
+          <include name="**/*.class" />
+        </fileset>
+      </batchtest>
+    </junit>
+
+  </target>
 
 
 </project>
