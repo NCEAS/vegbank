@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-28 22:59:06 $'
- * 	'$Revision: 1.10 $'
+ *  '$Date: 2002-03-29 23:55:17 $'
+ * 	'$Revision: 1.11 $'
  */
 package databaseAccess;
 
@@ -1033,7 +1033,7 @@ public class DBinsertPlotSource
 				// update the debugging stringbuffer
 				debug.append("<plotId>"+ plotId+"</plotId> \n");
 				debug.append("<observationCode>"+observationCode+"</observationCode>\n");
-				debug.append("<obsStartDate>"+startDate+"</obsStopDate>\n");
+				debug.append("<obsStartDate>"+startDate+"</obsStartDate>\n");
 				debug.append("<obsStopDate>"+stopDate+"</obsStopDate> \n");
 				debug.append("<permanent>"+permanence+"</permanent> \n");
 				
