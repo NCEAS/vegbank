@@ -11,8 +11,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: harris $' <br>
- *  '$Date: 2002-07-18 13:45:43 $' <br>
- * 	'$Revision: 1.14 $' <br>
+ *  '$Date: 2002-07-18 14:38:05 $' <br>
+ * 	'$Revision: 1.15 $' <br>
  */
  
 //public class VegBankDataSourcePlugin
@@ -141,9 +141,32 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getPlantTaxonCode(String plantName)
 	{
-	 	return("");
+		String code = "";
+		StringBuffer sb = new StringBuffer();
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			sb.append("select distinct(AUTHORCODEID) from PLOTSPECIESSSUM where AUTHORNAMEID LIKE '"+plantName+"'"); 
+			ResultSet rs = stmt.executeQuery(sb.toString());
+			while (rs.next()) 
+			{
+				code = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			System.out.println("sql: " + sb.toString() );
+			ex.printStackTrace();
+		}
+	 	return(code);
 	}
-																																																																																																												
 	
 	
 	/**
