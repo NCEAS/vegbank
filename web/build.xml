@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-03-16 07:04:14 $'
-* '$Revision: 1.155 $'
+* '$Date: 2005-03-16 16:49:35 $'
+* '$Revision: 1.156 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -159,6 +159,7 @@
     <filter token="plotquery_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/LoadPlotQuery.do"/>
     <filter token="nestedplotquery_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/nested-plot-query.html"/>
     <filter token="uploaddata_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/uploadFile.html"/>
+    <filter token="browseplotspage" value="${machine_url}${eighty_eighty}/${web.context_uri}/views/topdata.jsp?perPage=5&amp;getonly=0" />
     <filter token="general_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/general/"/>
     <filter token="forms_url" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/"/>
     <filter token="views_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/views/"/>
