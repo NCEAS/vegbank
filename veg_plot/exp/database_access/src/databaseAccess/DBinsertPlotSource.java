@@ -1,14 +1,14 @@
 /**
 * '$RCSfile: DBinsertPlotSource.java,v $'
-* Purpose: A Class that loads plot data to the vegbank database system
+* Purpose: A Class that loads plot data to the vegbank database systemr
 * Copyright: 2000 Regents of the University of California and the
 *            National Center for Ecological Analysis and Synthesis
 * Authors: John Harris
 * Release: @release@
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-05-16 03:33:34 $'
-*   '$Revision: 1.17 $'
+*   '$Date: 2003-05-29 00:08:19 $'
+*   '$Revision: 1.18 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -1615,32 +1615,57 @@ public class DBinsertPlotSource {
 		}
 		return result;
 	}
+	
+	private int getCommConceptId(String searchName)
+	{
+		int result = 0;
+		String sql = "select commconcept_id from commusage where commname = '"+ searchName + "'";
+		try
+		{
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			// Just get the first match --- TODO: Check for > 1 .. this is an error
+			while (rs.next() )
+			{
+				result = rs.getInt(1);
+			}
+		}
+		catch (Exception e)
+		{ 
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	/**
 	 * method that returns false if the community cannot be stored in the 
-	 * database this method uses the webservice lookup to get the community 
-	 * info based on either a code, or name
+	 * database, looks up the commconceptId based on either a code, or name
+	 * 
 	 * @return -- returns false if the code is not found in the community database
 	 * @see -- getCommunityData -- this is the method that contacts the web servlet
 	 *  to retrieve data from the community database
 	 */
 	private boolean insertCommunities() {
-		try {
-			StringBuffer sb = new StringBuffer();
-			String name = Utility.escapeCharacters( source.getCommunityName(plotName) );
-			String code = Utility.escapeCharacters( source.getCommunityCode(plotName) );
-			String framework = Utility.escapeCharacters( source.getCommunityFramework(plotName) );
-			String level = Utility.escapeCharacters( source.getCommunityLevel(plotName) );
-			String classNotes = Utility.escapeCharacters( source.getClassNotes(plotName) );
+		
+		StringBuffer sb = new StringBuffer();
+		
+		String name = Utility.escapeCharacters( source.getCommunityName(plotName) );
+		String code = Utility.escapeCharacters( source.getCommunityCode(plotName) );
+		String framework = Utility.escapeCharacters( source.getCommunityFramework(plotName) );
+		String level = Utility.escapeCharacters( source.getCommunityLevel(plotName) );
+		String classNotes = Utility.escapeCharacters( source.getClassNotes(plotName) );
 			
-			String classPublication = Utility.escapeCharacters( source.getCommunityPublication(plotName) );
-			String classStartDate = Utility.escapeCharacters( source.getCommunityStartDate(plotName) );
-			String classStopDate = Utility.escapeCharacters( source.getCommunityStopDate(plotName) );
-			String classInspection = Utility.escapeCharacters( source.getCommunityInspection(plotName) );
-			String classTableAnalysis = Utility.escapeCharacters( source.getCommunityTableAnalysis(plotName) );
-			String classMultiVariateAnalysis = Utility.escapeCharacters( source.getCommunityMultiVariateAnalysis(plotName) );
-			String classExpertSystem = Utility.escapeCharacters( source.getCommunityExpertSystem(plotName) );
-							
+		String classPublication = Utility.escapeCharacters( source.getCommunityPublication(plotName) );
+		String classStartDate = Utility.escapeCharacters( source.getCommunityStartDate(plotName) );
+		String classStopDate = Utility.escapeCharacters( source.getCommunityStopDate(plotName) );
+		String classInspection = Utility.escapeCharacters( source.getCommunityInspection(plotName) );
+		String classTableAnalysis = Utility.escapeCharacters( source.getCommunityTableAnalysis(plotName) );
+		String classMultiVariateAnalysis = Utility.escapeCharacters( source.getCommunityMultiVariateAnalysis(plotName) );
+		String classExpertSystem = Utility.escapeCharacters( source.getCommunityExpertSystem(plotName) );
+
+		int commClassId = 0;
+		
+		try {							
 			//String conceptId = "";
 			// get the appropriate codes for this community via the web service
 			// store the data in a hashtable
@@ -1685,14 +1710,15 @@ public class DBinsertPlotSource {
 			
 			// FIXME: Also add the publication_id  but more complicated as it is a foreign key
 			
+			commClassId = getNextId("commclass");
 					
 			//insert the values
 			sb.append(
 				"INSERT into commclass (observation_id, commName, "
 					+ " commCode, commFramework, commLevel, classNotes, "
 					+ " inspection, tableanalysis, multivariateanalysis, expertsystem,"
-					+ " classstartdate, classstopdate)"
-					+ " values(?,?,?,?,?,?,?,?,?,?,?,?)");
+					+ " classstartdate, classstopdate, commclass_id)"
+					+ " values(?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
 			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
 			// Bind the values to the query and execute it
@@ -1708,8 +1734,7 @@ public class DBinsertPlotSource {
 			pstmt.setString(10, classExpertSystem);
 			Utility.insertDateField(classStartDate, pstmt, 11);
 			Utility.insertDateField(classStopDate, pstmt, 12);
-			//pstmt.setString(11, classStartDate);
-			//pstmt.setString(12, classStopDate);
+			pstmt.setInt(13, commClassId);
 						
 			
 			//execute the p statement
@@ -1717,9 +1742,45 @@ public class DBinsertPlotSource {
 		} catch (Exception e) {
 			System.out.println("Caught Exception: " + e.getMessage());
 			e.printStackTrace();
-			//System.exit(0);
 			return (false);
 		}
+		
+		// Also insert the community interpretation data
+		
+		//Need to get the conceptId
+		int commConceptId = getCommConceptId(name);
+		
+		if (commConceptId == 0)
+		{
+			// Could not find a matching concept in the database
+			debug.append(
+				"<exceptionMessage>Could not find community '"+ name + "'</exceptionMessage>\n"
+			);
+			return (false);
+		}
+		
+		StringBuffer statement = new StringBuffer();
+		statement.append(
+			"INSERT INTO comminterpretation ( commclass_id, commconcept_id )"
+			+ " values (?,?)"
+		);
+		
+		try
+		{
+			PreparedStatement insertCommInt = conn.prepareStatement(statement.toString());
+			
+			insertCommInt.setInt(1, commClassId);
+			insertCommInt.setInt(2, commConceptId);
+			
+			insertCommInt.execute();
+		}
+		catch (SQLException e1)
+		{
+			System.out.println("Caught Exception: " + e1.getMessage());
+			e1.printStackTrace();
+			return( false);
+		}
+			
 		return (true);
 	}
 	
@@ -2357,7 +2418,8 @@ public class DBinsertPlotSource {
 	private String getAccessionNumber(
 		String plotName,
 		int plotId,
-		String email) {
+		String email) 
+	{
 		StringBuffer sb = new StringBuffer();
 		try 
     {
