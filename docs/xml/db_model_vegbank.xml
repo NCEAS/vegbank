@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- <?xml-stylesheet type="text/xsl" href="dbmodel_2csv_5flds_version.xsl"?> -->
 <!-- <?xml-stylesheet type="text/xsl" href="model2_url2getStrings.xsl"?> -->
+<!-- <?xml-stylesheet type="text/xsl" href="model-to-schema.xsl"?> -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
   <title>Vegetation Database Component Description: --all modules--</title>
   <version>1.0.1</version>
@@ -13640,7 +13641,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>SOILPARENT_ID</attName>
       <attLabel>Soil Parent</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
@@ -15451,7 +15452,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
-      <attRelType type="inverted" name="taxonGroup"/>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>taxonInterpretation.taxonInterpretation_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
