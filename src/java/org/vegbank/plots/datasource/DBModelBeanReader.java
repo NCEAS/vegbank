@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-05 19:49:53 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2003-11-06 18:47:08 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,12 @@
  
 package org.vegbank.plots.datasource;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -75,11 +81,13 @@ public class DBModelBeanReader
 	 */
 	private DBConnection con = null;
 	private Vector ignoreObjects = new Vector();
+	private ModelBeanCache mbCache = null;
 
 	
 	public DBModelBeanReader() throws SQLException
 	{
 		con = DBConnectionPool.getDBConnection("Needed for reading observation");
+		mbCache = ModelBeanCache.instance();
 	}
 	
 	/**
@@ -233,9 +241,10 @@ public class DBModelBeanReader
 	
 	public Plot getPlotObservationBeanTree(String observationAccessionCode) throws Exception
 	{	
+		//TODO: Am I allowed to search cache --- revisions !!!
 		// Search cache first
 		Plot plot = 
-			(Plot) ModelBeanCache.getBeanFromCache(observationAccessionCode);
+			(Plot) mbCache.getBeanFromCache(observationAccessionCode);
 		if ( plot != null )
 		{
 			return plot;
@@ -245,7 +254,7 @@ public class DBModelBeanReader
 		plot = this.getPlotObservationBeanTree(pK);	
 		
 		// Add to cache
-		ModelBeanCache.addToCache(plot, observationAccessionCode);
+		mbCache.addToCache(plot, observationAccessionCode);
 		
 		return plot;
 	}
@@ -759,8 +768,90 @@ public class DBModelBeanReader
 	 */
 	public static class ModelBeanCache
 	{
-		private static Vector cache = new Vector();
-		private static final int MAX_CACHE_SIZE = 5;
+		/**
+		 * Vector of vectors to cache Objects into memory, each element of the memoryCache
+		 * has a vector that contains an accessionCode (elementAt(0)) and the Object (elementAt(1))
+		 */
+		private static Vector memoryCache = new Vector();
+		
+		/**
+		 * Vector to store fileNames of the serialized Objects on the disk
+		 */
+		private static Vector diskCacheKeys = new Vector();
+		
+		/**
+		 * The maximum number of entries in the memory cache
+		 */
+		private static final int MAX_MEM_CACHE_SIZE = 2;
+		
+		/**
+		 * The directory to  cache into.
+		 * FIXME: Make a configurable property
+		 */
+		private static final File CACHE_DIR = new File("/usr/vegbank/cache");
+		
+		/**
+		 * The maximum number of entries in the disk cache,
+		 * can be made really large as a large bean is 200k,
+		 * Keep an eye on typical size as data is loaded, however!
+		 */
+		private static final int MAX_DISK_CACHE_SIZE = 3000;
+
+		/**
+		 * A handle to the unique ModelBeanCache instance.
+		 */
+		static private ModelBeanCache instance = null;
+ 
+		/**
+		 * Private constructor can only be called by this class, i.e Singleton
+		 */
+		private ModelBeanCache() {
+			registerDiskCachedBeans();
+		}
+		
+		/**
+		 * @return The unique instance of this class.
+		 */
+		static public ModelBeanCache instance()
+		{
+			if (null == instance)
+			{
+				LogUtility.log("ModelBeanCache: Creating Instance");
+				instance = new ModelBeanCache();
+			}
+			return instance;
+		}
+		
+		
+		/**
+		 * Register all the beans on disk to diskCache on startup
+		 */
+		private void registerDiskCachedBeans()
+		{	
+			if ( CACHE_DIR == null )
+			{
+				LogUtility.log("ModelBeanCache: Disk cache dir is absent, " + CACHE_DIR);
+			}
+			else
+			{
+				File[]  cachedFiles = CACHE_DIR.listFiles();
+				for ( int i=0; i<cachedFiles.length ; i++ )
+				{
+					String  fileName = cachedFiles[i].getName();
+					if ( fileName.startsWith( Utility.getAccessionPrefix() + ".") )
+					{
+						LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName);
+						// Add all the names to diskCacheKeys
+						diskCacheKeys.add( fileName );
+					}
+					else 
+					{
+						LogUtility.log("ModelBeanCache: Not adding to Disk Cache: " + fileName);
+					}
+
+				}
+			}
+		}
 		
 		/**
 		 * Add a new accessionCode bean pair to cache
@@ -768,35 +859,149 @@ public class DBModelBeanReader
 		 * @param bean
 		 * @param accessionCode
 		 */
-		public static synchronized  void  addToCache( VBModelBean bean, String accessionCode)
+		public synchronized  void  addToCache( VBModelBean bean, String accessionCode)
 		{
-			if ( cache.size() >= MAX_CACHE_SIZE )
+			if ( memoryCache.size() >= MAX_MEM_CACHE_SIZE )
 			{
-				cache.removeElementAt(0);
+				LogUtility.log(
+					"ModelBeanCache: Memory Cache Full: "
+						+ MAX_DISK_CACHE_SIZE
+						+ " files.");
+						
+				// Need to remove the first Object from memory and put on disk
+				Vector firstInMem = (Vector) memoryCache.firstElement();
+				
+				String fileName = (String) firstInMem.elementAt(0);
+				VBModelBean beanToSave = (VBModelBean) firstInMem.elementAt(1);
+
+				if ( CACHE_DIR == null )
+				{
+					LogUtility.log("ModelBeanCache: Disk cache dir is absent, " + CACHE_DIR);
+				}
+				else
+				{
+					try
+					{
+						if ( diskCacheKeys.size() >=  MAX_DISK_CACHE_SIZE )
+						{
+							LogUtility.log(
+								"ModelBeanCache: Disk Cache Full: "
+									+ MAX_DISK_CACHE_SIZE
+									+ " files.");
+								
+							// Need to remove first Object from disk
+							String fileNameToAxe = (String) diskCacheKeys.firstElement();
+							File fileToAxe = new File(CACHE_DIR, fileNameToAxe);
+							fileToAxe.delete();
+							LogUtility.log("ModelBeanCache: Deleted from Disk Cache: " + fileNameToAxe);
+						}
+						saveToDisk(beanToSave, fileName);			
+						LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName);
+					
+						// Put the fileName is the diskCache
+						diskCacheKeys.add(fileName);
+					}
+					catch (IOException e)
+					{
+						LogUtility.log("ModelBeanCache: Failed to save Object to disk", e);
+					}
+				}
+					
+				// Remove item from memory cache
+				memoryCache.removeElementAt(0);
+				LogUtility.log("ModelBeanCache: Removed from Memory Cache: " + fileName);
 			}
 			Vector newElement = new Vector ();
 			newElement.add(accessionCode);
 			newElement.add(bean);
-			cache.add( newElement );
+			memoryCache.add( newElement );
+			LogUtility.log("ModelBeanCache: Added to Memory Cache: " + accessionCode);
 		}
 		
 		/**
 		 * Search for a bean that has a key of accessionCode
+		 * 
 		 * @param accessionCode
 		 * @return VBModelBean -- The bean found or null if none found
 		 */
-		public static VBModelBean getBeanFromCache( String accessionCode )
+		public VBModelBean getBeanFromCache( String accessionCode )
 		{
-			for ( int i=0 ; i < cache.size() ; i++)
+			// Search memoryCache first
+			for ( int i=0 ; i < memoryCache.size() ; i++)
 			{
-				Vector currentElement = (Vector) cache.elementAt(i);
+				Vector currentElement = (Vector) memoryCache.elementAt(i);
+				LogUtility.log( "ModelBeanCache: accessionCode" + currentElement.elementAt(0) + " = " + currentElement.elementAt(1));
 				if ( accessionCode.equalsIgnoreCase( (String) currentElement.elementAt(0) ) )
 				{
+					LogUtility.log("ModelBeanCache: Retrived from memory Cache: " + accessionCode);
 					return (VBModelBean) currentElement.elementAt(1);
+				}
+			}
+			
+			// Search the diskCache
+			for ( int i=0 ; i < diskCacheKeys.size() ; i++)
+			{
+				String fileName = (String) diskCacheKeys.elementAt(i);
+				VBModelBean bean;
+				if ( accessionCode.equalsIgnoreCase( fileName ) )
+				{
+					try
+					{
+						bean = (VBModelBean) readBeanFromDisk(fileName);
+						LogUtility.log("ModelBeanCache: Retrived from disk Cache: " + fileName);
+						return bean;
+					}
+					catch (Exception e)
+					{
+						LogUtility.log("ModelBeanCache: Failed to retrieve Object from disk", e);
+					}
 				}
 			}
 			return null;
 		}
+		
+		/**
+		 * Serialize an <code>VBModelBean<code> to the disk.
+		 * 
+		 * @param bean <code>VBModelBean<code> to serialize
+		 * @param fileName Filename stored to
+		 * @throws IOException
+		 */
+		private static void saveToDisk( VBModelBean bean, String fileName ) throws IOException
+		{
+			//Write to disk with FileOutputStream
+			FileOutputStream fileOut = new FileOutputStream(new File( CACHE_DIR, fileName));
+
+			// Write object with ObjectOutputStream
+			ObjectOutputStream objectOut = new ObjectOutputStream (fileOut);
+
+			// Write object out to disk
+			objectOut.writeObject ( bean );
+		}
+		
+		/**
+		 * Retrieves a <code>VBModelBean<code> that had been serialized to the
+		 * disk.
+		 * 
+		 * @param fileName	filename the bean was serialized to.
+		 * @return bean	the restored bean
+		 * @throws IOException
+		 * @throws ClassNotFoundException
+		 */
+		private static VBModelBean readBeanFromDisk( String fileName ) throws IOException, ClassNotFoundException
+		{
+			// Read from disk using FileInputStream
+			FileInputStream fileIn = new  FileInputStream( new File( CACHE_DIR, fileName) );
+
+			// Read object using ObjectInputStream
+			ObjectInputStream beanIn = new ObjectInputStream (fileIn);
+
+			// Read an object
+			VBModelBean bean = (VBModelBean) beanIn.readObject();
+			
+			return bean;
+		}
+		
 	}
 	
 }
