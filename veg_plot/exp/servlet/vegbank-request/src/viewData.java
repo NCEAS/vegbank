@@ -218,6 +218,7 @@ public class viewData extends HttpServlet
 	{
 
 		String styleSheet=null; //the stylesheet to use
+		String xmlDoc = null;
 		//get the servlet directory
 	//	ResourceBundle rbun = ResourceBundle.getBundle("plotQuery");
 		servletDir = rb.getString("requestparams.servletDir");
@@ -227,20 +228,31 @@ public class viewData extends HttpServlet
 			if (summaryViewType.equals("vegCommunity")) 
 			{
   			styleSheet=servletDir+"showCommunitySummary.xsl";
+				xmlDoc = servletDir+"summary.xml";
 			}
 			else if (summaryViewType.equals("plantTaxon")) 
 			{
   			styleSheet=servletDir+"showPlantTaxaSummary.xsl";
+				xmlDoc = servletDir+"summary.xml";
 			}
-			//the default (plots) stylesheet
+			//GET THE USER'S DEFAULT STYLE SHEET
 			else if (summaryViewType.equals("vegPlot")) 
 			{
-				System.out.println("ViewData > retrieving the users stylesheet");
-				String stylefile = getUserDefaultStyle("user");
-				System.out.println("ViewData > stylesheet: " + stylefile );
-				styleSheet = stylefile;
+				xmlDoc = servletDir+"test-summary.xml";
+				System.out.println("ViewData > retrieving the users stylesheet -");
+				String stylefile = getUserDefaultStyle("user").trim();
+				System.out.println("ViewData > stylesheet name: '" + stylefile +"'" );
 				
-				//styleSheet=servletDir+"transformMultiPlotSummary.xsl";
+				if ( stylefile == null  ||  stylefile.equals("null")   )
+				{
+					System.out.println("ViewData > no default style for this user");
+					styleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
+				}
+				
+				else
+				{
+					styleSheet = stylefile;
+				}
 			}
 			//let the user know that there is a problem with the request
 			else 
@@ -248,12 +260,14 @@ public class viewData extends HttpServlet
 				out.println("viewData.viewResultsSummary: unknown request for xsl: '"
 					+summaryViewType+"'" );
 			}
+			
 				System.out.println("viewData > used old transformer");
 				// access the method to transfor the xml document and 
 				// retrieve the string writer
 				String teststyle = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
-				m.getTransformed(servletDir+"test-summary.xml", styleSheet);
-				StringWriter transformedData=m.outTransformedData;
+				
+				m.getTransformed(xmlDoc, styleSheet);
+				StringWriter transformedData = m.outTransformedData;
 				
 				
 				Vector contents = this.convertStringWriter(transformedData);
@@ -261,7 +275,6 @@ public class viewData extends HttpServlet
 				//##/test the new method in the xmlTransformer class
 ///			transformXML transformer = new transformXML();
 ///			String test = transformer.getTransformedNoErrors(servletDir+"summary.xml", styleSheet); 
-///			out.println(test);	
 				for (int ii=0;ii< contents.size() ; ii++) 
 				{
 					out.println( (String)contents.elementAt(ii) );
@@ -305,9 +318,10 @@ public class viewData extends HttpServlet
     	}
     	catch( Exception e )
     	{
-     	 System.out.println("** failed :  "
-     	 +e.getMessage());
+     	 System.out.println("Exception:  " + e.getMessage());
+			 e.printStackTrace();
     	}
+			
     	return(htmlResults);
 	 }
 	
