@@ -44,8 +44,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-04-15 20:19:31 $'
- *  '$Revision: 1.14 $'
+ *  '$Date: 2002-04-17 17:10:35 $'
+ *  '$Revision: 1.15 $'
  * 
  */
 
@@ -338,8 +338,6 @@ public class DataRequestServlet extends HttpServlet
 					{
 						out.println( resultsVector.elementAt(i) );
 					}
-					//suy.fileVectorizer(servletDir+"summary.xml");
-					//out.println(suy.outVector);
 				}
 				else //assume that client wants html 
 				{
@@ -349,14 +347,33 @@ public class DataRequestServlet extends HttpServlet
 					out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 					//send to the client the html summary page
 					//+"<form action=\"http://"+rb.getString("server")+""+rb.getString("servlet-path")+"viewData\" method=\"GET\"> \n"
-					response.sendRedirect("/harris/servlet/viewData?resultType=summary&summaryViewType=vegPlot");
+					if (this.requestDataType.equals("vegPlot") )
+					{
+						response.sendRedirect("/harris/servlet/viewData?resultType=summary&summaryViewType=vegPlot");
+					}
+					else
+					{
+						System.out.println("DataRequstServlet > handeling non-plot result set ");
+					}
 				}
 			}
 			else  //the browser
 			{
 				//pass back the summary of parameters passed to the servlet
 				//returnQueryElemenySummary(out, params, response);
-				out.println( this.getResultsSetOptions() );
+				if (this.requestDataType.equals("vegPlot") )
+				{
+					out.println( this.getResultsSetOptions() );
+				}
+				else
+				{
+					System.out.println("DataRequstServlet >  requestDataType" + this.requestDataType);
+					System.out.println("DataRequstServlet > handleing non-plot result set ");
+					//this method below has been deprecated and there should be a mthod
+					//written in this class to handle this
+					su.getViewOption(this.requestDataType);
+					out.println(su.outString);
+				}
 			}
 		}
 		catch( Exception e ) 
@@ -382,7 +399,6 @@ public class DataRequestServlet extends HttpServlet
 		StringBuffer su = new StringBuffer();
 		try
 		{
-			
 			su.append("<html> \n");
 			su.append("<head> \n");
 			su.append("<title> \n");
