@@ -55,11 +55,25 @@ public class DataExchangeServlet extends HttpServlet
 	private String fileType = null; //non-required parameter
 	private String requestContentType = null; // this will be null unless	multipart
 	
-	//private String uploadDir = rb.getString("uploadDir");
-	private String uploadDir = "/usr/local/devtools/jakarta-tomcat/webapps/uploads/";
+//	private String uploadDir = rb.getString("uploadDir");
+	private String uploadDir = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/";
 	private ServletUtility util = new ServletUtility();
   private MultipartRequest multi;
-	private DataFileDB filedb = new DataFileDB();
+	//if false then no authentication done
+	private boolean authenticate = false;
+	//if false then dont store the file in a database
+	private boolean databaseStorage = false;
+	//the database class
+	private DataFileDB filedb;
+	//if the string below is null then store the uploaded file as the name it is given
+	//otherwise copy the filecontents to this file
+	private String uploadFileName = "input.data"; 
+	//the strings below refer to the page name and url for the user to have access to
+	//if the upload process succeeds
+	private String referPage = "validate input data for interpolation: ";
+	private String referUrl = "http://30.8.11.21:8080/forms/validate.html";
+	private int fileMaxSize = 50000000;
+	
 	
 	/**
 	 * constructor method
@@ -67,6 +81,17 @@ public class DataExchangeServlet extends HttpServlet
 	public DataExchangeServlet()
 	{
 		System.out.println("init: DataExchangeServlet");
+		//if the database storage option is turned on then
+		//construct a method of the datafile database class
+		if (databaseStorage == true )
+		{
+			System.out.println("DataExchangeServlet > using the datafile storage database");
+			filedb = new DataFileDB();
+		}
+		else
+		{
+			System.out.println("DataExchangeServlet > not using the datafile storage database");
+		}
 	}
 	
 	
@@ -106,23 +131,34 @@ public class DataExchangeServlet extends HttpServlet
 						System.out.println("DataExchangeServlet > client connected using multipart encoding");
 						//then get the user name and password -- this is where the upload 
 						//file is defined
-						multi=new MultipartRequest(req, uploadDir, 5 * 1024 * 1024);
+						multi=new MultipartRequest(req, uploadDir, fileMaxSize);
 					
 						// get the un-encoded parameter names back from the 
 						// MultipartRequest class
 						Enumeration enum = multi.getParameterNames();
 						username = multi.getParameter("username");
 						password = multi.getParameter("password");
-						if (authenticateUser(username, password) ==  true)
+						//if authentication is turned on then do it otherwise just upload
+						if (authenticate == true )
+						{
+							if (authenticateUser(username, password) ==  true)
+							{
+								//copy the request
+								HttpServletRequest reqCopy = req;
+								//do the exchange
+								out.println( handleExchangeRequest(reqCopy, res) );
+							}
+							else
+							{
+								System.out.println("DataExchangeServlet > go home you perp");
+							}
+						}
+						else
 						{
 							//copy the request
 							HttpServletRequest reqCopy = req;
 							//do the exchange
 							out.println( handleExchangeRequest(reqCopy, res) );
-						}
-						else
-						{
-							System.out.println("DataExchangeServlet > go home you perp");
 						}
 					}
 					catch(Exception e)
@@ -498,18 +534,19 @@ public class DataExchangeServlet extends HttpServlet
 		StringBuffer sb = new StringBuffer();
 		try 
 		{
-		
 			// Construct a MultipartRequest to help read the information.
 			// Pass in the request, a directory to saves files to, and the
 			// maximum POST size we should attempt to handle.
 			// Here we (rudely) write to the server root and impose 5 Meg limit.
 			//MultipartRequest multi=new MultipartRequest(request, uploadDir, 5 * 1024 * 1024);
 
+			
+      sb.append("<html>");  
+      sb.append("<body>");  
 			//get the un-encoded parameter names back from the MultipartRequest class
 			Enumeration params = multi.getParameterNames();
       while (params.hasMoreElements()) 
 			{
-				
         String name = (String)params.nextElement();
         String value = multi.getParameter(name);
 				
@@ -518,13 +555,11 @@ public class DataExchangeServlet extends HttpServlet
 				{
 					sb.append(name + " = " + value + "<br>");
 				}
-				
 				//initialize the global fileType variable 
 				if (  name.toUpperCase().equals("FILETYPE") )
 				{
 					fileType = value;
 				}
-				
 			}
 
 			// Show which files we received
@@ -541,15 +576,18 @@ public class DataExchangeServlet extends HttpServlet
 				File f = multi.getFile(name);
 				
 				//sb.append("name: " + name +"<br>");
-				sb.append("filename: " + filename +"<br>");
-				sb.append("type: " + type +"<br>");
+				sb.append("file max size limit (in bytes): " + fileMaxSize  +" <br> \n");	
+				sb.append("filename: " + filename +"<br> \n");
+				sb.append("type: " + type +"<br> \n");
 				
 				//if the file is not null then return the length of the file
-				//and register the document in the document database
-				if (f != null) 
+				//and register the document in the document database if the 
+				//flag database storage is true otherwise just put the file
+				// in the specified director
+				if (f != null && databaseStorage == true ) 
 				{
 					String fileSize = ""+f.length();
-					sb.append("length: " + fileSize + "<br>");
+					sb.append("file length: " + fileSize + "bytes <br> \n");
 					
 					//register the document with the database
 					String currentDate = filedb.getCurrentDate();
@@ -568,23 +606,109 @@ public class DataExchangeServlet extends HttpServlet
 					util.fileCopy(uploadDir+filename, uploadDir+accessionNumber);
 					//delete the file
 					util.flushFile(uploadDir+filename);
-					
-					
-					
-					sb.append("accession number: " + accessionNumber);
+					sb.append("file accession number: " + accessionNumber);
 				}
-				sb.append("</PRE>");
+				else if ( f != null && databaseStorage == false )
+				{
+					String fileSize = ""+f.length();
+					sb.append("file length: " + fileSize + " bytes <br> \n");
+					//see if we should copy the file or leave it with the 
+					//current name
+					if ( uploadFileName != null )
+					{
+						//copy the file to a file with the name of the accesion number
+						util.fileCopy(uploadDir+filename, uploadDir+uploadFileName);
+						//delete the file
+						util.flushFile(uploadDir+filename);
+					}
+					
+				}
+				else
+				{
+					System.out.println("DataExchangeServlet > don't know what to do w/ request" );
+				}
+				
+				//get the referURL and referPage which can be passed as a parameter 
+				//in the html form and if not the default instance variables ar used
+				Enumeration rparams = multi.getParameterNames();
+				Hashtable h = getURLRefereral( rparams );
+				
+				sb.append("<br> </br> \n");
+				sb.append(" <a href="+h.get("referUrl").toString()+"> "+ 
+				h.get("referPage").toString() + "</a> </br> \n");
+				sb.append("</PRE> \n");
 			}
 		}
  		catch (Exception e) 
 		{ 
-			sb.append("<PRE>"); 
+			sb.append("<PRE> \n"); 
 			e.printStackTrace();
-      sb.append("</PRE>");  
+			sb.append( e.getMessage() );
+      sb.append("</PRE> \n");  
+      sb.append("</body> \n");  
+      sb.append("</html> \n");  
 		}
 		return(sb.toString());
 	}
 
+	
+	/**
+	 * method that looks to see if a referal is sent as a parameter to this
+	 * servelt and if it is it is used otherwise the instance variables are
+	 * used
+	 *
+	 * @param params -- hashtable with the paramteres
+	 *
+	 */
+	 private Hashtable getURLRefereral(Enumeration params )
+	 {
+		 System.out.println("DataExchangeServlet > looking for a referal");
+		 Hashtable h = new Hashtable();
+		 try
+		 {
+				String page = null;
+				String url = null;
+				System.out.println("DataExchangeServlet > parameterd dump: " + params.toString() );
+				while (params.hasMoreElements()) 
+				{
+					//System.out.println("test");
+      	  String name = (String)params.nextElement();
+    	   	String value = multi.getParameter(name);
+					System.out.println("DataExchangeServlet > parameter: "+name+" "+value);
+					if ( name.equals("referPage") )
+					{
+						System.out.println("DataExchangeServlet > refePage: "+ value);
+						page = value;
+					}
+					if ( name.equals("referUrl") )
+					{	
+						System.out.println("DataExchangeServlet > referUrl: "+ value);
+						url = value;
+					}
+				}
+				//if the paramters were passed
+				if (page != null && url != null )
+				{
+					h.put("referPage", page);
+					h.put("referUrl", url);
+				}
+				//else just use the instance variables
+				else
+				{
+					h.put("referPage", referPage);
+					h.put("referUrl", referUrl);
+				}
+			
+			}
+			catch ( Exception e ) 
+			{
+				System.out.println("Exception: " + e.getMessage());
+				e.printStackTrace();
+			}
+			return(h);
+	 }
+	 
+	 
 
  /**
   * This method handles the data file exchange of non-encoded data and is
