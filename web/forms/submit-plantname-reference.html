@@ -1,0 +1,179 @@
+<HTML>
+<!-- 
+  *   '$RCSfile: submit-plantname-reference.html,v $'
+  *     Purpose: web form to submit plant-taxonomy data to vegbank system
+  *   Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *     Authors: @author@
+  *
+  *    '$Author: farrell $'
+  *      '$Date: 2003-11-02 19:27:32 $'
+  *  '$Revision: 1.12 $'
+  *
+  *
+  -->
+
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>New Plant Concept - Enter Plant Name References</TITLE>
+<link rel="stylesheet" href="/vegbank/includes/default.css" type="text/css">
+<!-- #EndEditable --> 
+<meta http-equiv="Content-Type" content="text/html; charset=">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
+@vegbank_header_html_normal@
+
+
+
+<!-- WHERE YOU ARE indicates to user what step in the process she or he is in-->
+
+<p><font size="2" face="Helvetica,Arial,Verdana">	Where you are in the loading process:<br>
+	Enter Names--Match Names--<font color="336633" size="3"><b><i>Name References</i></b></font>--Concept 
+Reference--Status--Check and Submit</font></p>
+
+<font face="Helvetica,Arial,Verdana" size="2" color="336633">
+				<b>Enter the new Plant Name References in the fields provided below. </b>
+			</font>	
+
+ <p>Note that these references are for your new plant names (ie the source from which the names come). <br>
+    You will be able to select a reference for the new plant concept on the next screen.</p>
+
+
+
+
+<form action="/vegbank/servlet/DataSubmitServlet" method="get">
+<input type="hidden" name="submitDataType" value="plantTaxa">
+<input type="hidden" name="action" value="namereference">		
+<small>
+<INPUT TYPE="submit" VALUE="continue loading plant">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
+</small>
+<br>
+&nbsp;
+<!-- PARTY DATA TABLE WITH DESCRIPTIONS-->
+<table border="0" width="100%" bgcolor="#DFE5FA">
+	<tr>
+		<td  align=left valign=top  width="5%" >
+			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+			<b>VegBank User:</b>
+		</td>
+		</font>
+	</tr>
+</table>
+&nbsp;
+&nbsp;
+<table border="0" class="category">
+	<tr>
+		<td align="left" width="20%">
+			<font  size="2">
+			Email address<font color="#F90000"><b>*</b></font>:</font>
+		</td>
+		<td align="left">
+			<input  class="iform" readonly  type="text"  size="25" maxlength="50"  name="emailAddress" value="@emailAddress@">
+		</td>
+	</tr>
+</table>
+
+&nbsp;
+&nbsp;
+<!-- PARTY DATA TABLE WITH DESCRIPTIONS-->
+<table border="0" width="100%" bgcolor="#DFE5FA">
+	<tr>
+		<td  align=left valign=top  width="5%" >
+			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+			<b>Name References:</b>
+		</td>
+		</font>
+	</tr>
+</table>
+&nbsp;
+<!-- SCIENTIFIC NAME REFERENCE -->
+<table border="0" class="category">
+	<tr>
+		<td align="left" width="20%">
+			<font  size="2">
+			Scientific Name<font color="#F90000"><b>*</b></font>:</font>
+		</td>
+		<td align="left">
+			<input type="text" readonly size="25" maxlength="50"  name="longName" value="@longName@">
+		</td>
+	</tr>
+	<tr>
+		<td align="left" width="20%">
+			<font  size="2">
+			Reference<font color="#F90000"><b></b></font>:</font>
+		</td>
+		<td align="left">
+			<!-- THIS TOKEN IS TO BE REPLACED BY THE SERVLET WITH ALL THE REF INFO OR INPUTS-->
+			 <span CLASS="item">	 @longNameReference@ </span>
+		</td>
+	</tr>
+</table>
+
+<br>
+<br>
+<!-- COMMON NAME REFERENCE -->
+<table border="0" class="category">
+	<tr>
+		<td align="left" width="20%">
+			<font  size="2">
+			Common Name<font color="#F90000"><b>*</b></font>:</font>
+		</td>
+		<td align="left">
+			<input type="text" readonly size="25" maxlength="50"  name="shortName" value="@shortName@">
+		</td>
+	</tr>
+	<tr>
+		<td align="left" width="20%">
+			<font  size="2">
+			Reference<font color="#F90000"><b></b></font>:</font>
+		</td>
+		<td align="left">
+			<!-- THIS TOKEN IS TO BE REPLACED BY THE SERVLET WITH ALL THE REF INFO OR INPUTS-->
+		<span CLASS="item">	@shortNameReference@ </span>
+		</td>
+	</tr>
+</table>
+
+<br>
+<br>
+
+<!-- CODE NAME REFERENCE -->
+<table border="0" class="category">
+	<tr>
+		<td align="left" width="20%">
+			<font  size="2">
+			Code<font color="#F90000"><b>*</b></font>:</font>
+		</td>
+		<td align="left">
+			<input type="text" readonly size="25" maxlength="50"  name="code" value="@code@">
+		</td>
+	</tr>
+	<tr>
+		<td align="left" width="20%">
+			<font  size="2">
+			Reference<font color="#F90000"><b></b></font>:</font>
+		</td>
+		<td align="left">
+			<!-- THIS TOKEN IS TO BE REPLACED BY THE SERVLET WITH ALL THE REF INFO OR INPUTS-->
+				<span CLASS="item">	@codeNameReference@ </span>
+		</td>
+	</tr>
+</table>
+
+    <!-- required = red * -->
+			<font size="2" >
+			<font color="#F90000"><b>*</b></font><b> indicates a required field</font></b>
+
+
+</form>
+
+
+<!-- VEGBANK FOOTER -->
+<tr><td colspan="2">
+                                                                                                                                                            
+@vegbank_footer_html_tworow@
+</td></tr>
+
+</BODY>
+</HTML>
+
