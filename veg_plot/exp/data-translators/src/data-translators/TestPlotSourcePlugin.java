@@ -1,8 +1,5 @@
-import java.lang.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.util.Vector;
 
 
 /**
@@ -12,9 +9,9 @@ import java.sql.*;
  *  Authors:
  *  Release:
  *	
- *  '$Author: harris $'
- *  '$Date: 2002-04-17 01:58:46 $'
- * 	'$Revision: 1.7 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2003-01-14 01:12:39 $'
+ * 	'$Revision: 1.8 $'
  */
 //public class TestPlotSourcePlugin implements PlotDataSourceInterface
 public class TestPlotSourcePlugin

@@ -7,22 +7,17 @@
  *    Authors: John Harris
  *
  *		 '$Author: farrell $'
- *     '$Date: 2002-12-28 00:30:39 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2003-01-14 01:12:40 $'
+ *     '$Revision: 1.3 $'
  *
  */
 package databaseAccess;
 
 
-import java.sql.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
-import java.util.Date;
-
-import databaseAccess.*;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class PlotXmlWriter 
 {

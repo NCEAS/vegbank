@@ -4,35 +4,33 @@
  *  Authors: @author@
  *  Release: @release@
  *	
- *  '$Author: harris $'
- *  '$Date: 2003-01-02 21:45:32 $'
- * 	'$Revision: 1.6 $' 
+ *  '$Author: farrell $'
+ *  '$Date: 2003-01-14 01:12:42 $'
+ * 	'$Revision: 1.7 $' 
  */
 
 package xmlresource.utils; 
 
-import javax.xml.parsers.DocumentBuilder; 
-import javax.xml.parsers.DocumentBuilderFactory;  
-import javax.xml.parsers.FactoryConfigurationError;  
-import javax.xml.parsers.ParserConfigurationException;
- 
-import org.xml.sax.SAXException;  
-import org.xml.sax.SAXParseException;  
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.util.Hashtable;
+import java.util.Vector;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
-import java.io.*;
-import java.util.*;
-
-import org.w3c.dom.Element;
+import org.apache.xerces.parsers.DOMParser;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.*;                         // DOM interface
-import org.apache.xerces.parsers.DOMParser;   // Parser (to DOM)
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-
-import xmlresource.utils.*;
+import org.xml.sax.SAXException;
 
 
 

@@ -7,8 +7,8 @@
 * Release: @release@
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-01-08 01:54:13 $'
-*   '$Revision: 1.10 $'
+*   '$Date: 2003-01-14 01:12:40 $'
+*   '$Revision: 1.11 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,6 @@ import xmlresource.datatype.VegProject;
 import xmlresource.utils.XMLparse;
 import PlotDataSource;
 import servlet.util.GetURL;
-import PlantTaxaLoader;
 
 /**
  * this is a class that is used to load the vegbank plots database
@@ -100,7 +99,6 @@ public class DBinsertPlotSource {
 	//the data source that will be used for loading the db
 	public PlotDataSource source;
 	private GetURL gurl = new GetURL();
-	private PlantTaxaLoader plantLoader = new PlantTaxaLoader();
 	private String hostname = "localhost";
 	
 	// the properties file and the associated properties 
@@ -140,8 +138,8 @@ public class DBinsertPlotSource {
 
 			System.out.println("DBinsertPlotSource > pooling database connections");
 			//initialize the database connection manager
-			connectionBroker.manageLocalDbConnectionBroker("initiate");
-			conn = connectionBroker.manageLocalDbConnectionBroker("getConn");
+			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate"); 
+			conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
 
 			//System.out.println("opening log file");
 			// make a new output log file
@@ -176,8 +174,8 @@ public class DBinsertPlotSource {
 			System.out.println("DBinsertPlotSource > geoCoordRequestServletHost: " + geoCoordRequestServletHost );
 			
 			//initialize the database connection manager
-			connectionBroker.manageLocalDbConnectionBroker("initiate");
-			conn = connectionBroker.manageLocalDbConnectionBroker("getConn");
+			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate");
+			conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
 
 			out = new PrintWriter(new FileWriter(logFile));
 		} catch (Exception e) {
@@ -208,8 +206,8 @@ public class DBinsertPlotSource {
 			System.out.println("DBinsertPlotSource > geoCoordRequestServletHost: " + geoCoordRequestServletHost );
 			
 			//initialize the database connection manager
-			connectionBroker.manageLocalDbConnectionBroker("initiate");
-			conn = connectionBroker.manageLocalDbConnectionBroker("getConn");
+			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate"); 
+			conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
 		} catch (Exception e) {
 			System.out.println("Caught Exception: " + e.getMessage());
 			e.printStackTrace();
@@ -596,7 +594,7 @@ public class DBinsertPlotSource {
 		if (this.getUserPrivileges(emailAddress) <= 1) {
 			debug.append("<permissionLevel>invalid</permissionLevel> \n");
 			// close the connections 
-			connectionBroker.manageLocalDbConnectionBroker("destroy");
+			LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
 		} else {
 			try {
 				System.out.println(
@@ -614,7 +612,7 @@ public class DBinsertPlotSource {
 				//set the auto commit option on the connection to false after getting a
 				// new connection from the pool
 				conn =
-					connectionBroker.manageLocalDbConnectionBroker("getConn");
+					LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
 				conn.setAutoCommit(false);
 
 				this.projectName = source.projectName;
@@ -724,7 +722,7 @@ public class DBinsertPlotSource {
 					conn.rollback();
 					debug.append("<insert>false</insert>\n");
 				}
-				connectionBroker.manageLocalDbConnectionBroker("destroy");
+				LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
 			} catch (Exception e) {
 				System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 				debug.append(
@@ -754,7 +752,7 @@ public class DBinsertPlotSource {
 			Properties parameters = new Properties();
 			parameters.setProperty("action", "getpermissionlevel");
 			parameters.setProperty("user", emailAddress);
-			s = gurl.requestURL(servlet, protocol, host, parameters);
+			s = GetURL.requestURL(servlet, protocol, host, parameters);
 			try {
 				privilegeLevel = Integer.parseInt(s.trim());
 			} catch (Exception e1) {
@@ -2335,7 +2333,7 @@ public class DBinsertPlotSource {
 			parameters.setProperty("x", xCoord);
 			parameters.setProperty("y", yCoord);
 			parameters.setProperty("zone", zone);
-			s = gurl.requestURL(servlet, protocol, host, parameters);
+			s = GetURL.requestURL(servlet, protocol, host, parameters);
 
 			StringTokenizer tok = new StringTokenizer(s);
 			String latitude = tok.nextToken();
@@ -2375,7 +2373,7 @@ public class DBinsertPlotSource {
 			parameters.setProperty("clientType", "clientApplication");
 			parameters.setProperty("communityName", code);
 			parameters.setProperty("communityLevel", "%");
-			s = gurl.requestURL(servlet, protocol, host, parameters);
+			s = GetURL.requestURL(servlet, protocol, host, parameters);
 			System.out.println(
 				"DBinsertPlotSource > XML string from web app: \n'" + s + "'");
 
@@ -2478,7 +2476,7 @@ public class DBinsertPlotSource {
 				parameters.setProperty("taxonName", name);
 				parameters.setProperty("taxonNameType", nameType);
 				parameters.setProperty("taxonLevel", "%");
-				s = gurl.requestURL(servlet, protocol, host, parameters);
+				s = GetURL.requestURL(servlet, protocol, host, parameters);
 				System.out.println("DBinsertPlotSource > plant data XML string from web app: \n'"+s+"'");
 
 				// IF THERE ARE RESULTS THEN ADD THEM TO THE HASHTABLE

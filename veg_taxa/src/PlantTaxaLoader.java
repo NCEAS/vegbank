@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
- *   '$Author: harris $'
- *     '$Date: 2002-11-26 17:16:37 $'
- * '$Revision: 1.16 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2003-01-14 01:12:43 $'
+ * '$Revision: 1.17 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-import java.io.*;
 import java.lang.*;
-import java.text.*;
 import java.util.*;
 import java.sql.*;
 

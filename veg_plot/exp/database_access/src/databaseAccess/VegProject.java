@@ -1,23 +1,15 @@
 package databaseAccess;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.Vector;
+
 import org.apache.xerces.parsers.DOMParser;
-import org.apache.xalan.xpath.xml.FormatterToXML;
-import org.apache.xalan.xpath.xml.TreeWalker;
-import org.apache.xalan.*;
-import org.w3c.dom.Attr;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
-import java.io.*;
-import java.util.Vector;
-import java.util.Hashtable;
-import javax.swing.*;
-
-import databaseAccess.*;
 
 /**
  * class to store a vegetation plot as a DOM

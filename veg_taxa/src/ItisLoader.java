@@ -1,17 +1,13 @@
-import java.io.IOException;
-import java.io.*;
-import java.util.*;
-import org.xml.sax.SAXException;
-import org.apache.xalan.xslt.XSLTProcessorFactory;
-import org.apache.xalan.xslt.XSLTInputSource;
-import org.apache.xalan.xslt.XSLTResultTarget;
-import org.apache.xalan.xslt.XSLTProcessor;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
-//next classes are for the database connectivity
-import LocalDbConnectionBroker.*;
-import DbConnectionBroker.*;
-import utility.*;
-import issueStatement.*;
+import org.apache.xalan.xslt.XSLTInputSource;
+import org.apache.xalan.xslt.XSLTProcessor;
+import org.apache.xalan.xslt.XSLTProcessorFactory;
+import org.apache.xalan.xslt.XSLTResultTarget;
 
 /**
  * 

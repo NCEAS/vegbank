@@ -3,9 +3,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2002-03-08 18:33:11 $'
- * '$Revision: 1.13 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2003-01-14 01:12:38 $'
+ * '$Revision: 1.14 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,6 @@
 
 //package edu.ucsb.nceas.vegcommunity;
 import java.lang.*;
-import java.io.*;
-import java.text.*;
 import java.util.*;
 import java.sql.*;
 	

@@ -9,18 +9,14 @@
  *  Authors: @author@
  *  Release: @release@
  *	
- *  '$Author: harris $'
- *  '$Date: 2002-04-17 01:58:46 $'
- * 	'$Revision: 1.4 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2003-01-14 01:12:39 $'
+ * 	'$Revision: 1.5 $'
  *
  */
 
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
-import java.util.Date;
-
+import java.util.Hashtable;
+import java.util.Vector;
 
 import xmlresource.utils.PlotDataMapper;
 import xmlresource.utils.PlotXmlWriter;

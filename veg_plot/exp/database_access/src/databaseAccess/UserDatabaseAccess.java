@@ -6,23 +6,17 @@
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
  * 		
- *		 '$Author: farrell $'
- *     '$Date: 2002-11-27 22:11:27 $'
- *     '$Revision: 1.1 $'
+ *		'$Author: farrell $' 
+ *     '$Date: 2003-01-14 01:12:40 $'
+ *     '$Revision: 1.2 $'
  * @deprecated -- this class is now part of the servlet.authentication package
  */
 
 package databaseAccess;
 
-import java.sql.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
-import java.util.Date;
-
-import databaseAccess.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class UserDatabaseAccess 
 {
@@ -48,10 +42,10 @@ public class UserDatabaseAccess
 	{
 		try 
 		{
-			lb.manageLocalDbConnectionBroker("initiate");
+			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate");
 			System.out.println("Grabbing a DB connection from the local pool");
 			//get the connections etc
-			Connection conn = lb.manageLocalDbConnectionBroker("getConn");
+			Connection conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
 			Statement query = conn.createStatement ();
 			StringBuffer sb = new StringBuffer();
 			sb.append("INSERT into USER_INFO (EMAIL_ADDRESS, PASSWORD, GIVEN_NAME, SUR_NAME, REMOTE_ADDRESS, TICKET_COUNT) ");
@@ -59,7 +53,7 @@ public class UserDatabaseAccess
 			
 			//issue the query
 			query.executeUpdate(sb.toString());
-			lb.manageLocalDbConnectionBroker("destroy");
+			LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
 		}
 		catch (Exception e) 
 		{
@@ -84,7 +78,7 @@ public class UserDatabaseAccess
 	//		lb.manageLocalDbConnectionBroker("initiate");
 	//		System.out.println("Grabbing a DB connection from the local pool");
 			//get the connections etc
-			Connection conn = lb.manageLocalDbConnectionBroker("getConn");
+			Connection conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
 			Statement query = conn.createStatement ();
 			StringBuffer sb = new StringBuffer();
 			
@@ -124,10 +118,10 @@ public class UserDatabaseAccess
 	{
 		try 
 		{
-		lb.manageLocalDbConnectionBroker("initiate");
+			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate");
 			System.out.println("Grabbing a DB connection from the local pool");
 			//get the connections etc
-			Connection conn = lb.manageLocalDbConnectionBroker("getConn");
+			Connection conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
 			Statement query = conn.createStatement ();
 			ResultSet results= null;
 			StringBuffer sb = new StringBuffer();
@@ -166,7 +160,7 @@ public class UserDatabaseAccess
 				}
 			}
 			conn.close();
-			lb.manageLocalDbConnectionBroker("destroy");
+			LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
 		}
 		catch (Exception e) 
 		{

@@ -1,10 +1,10 @@
-import java.sql.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
-import java.util.Date;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.StringTokenizer;
 
 public class caryaExampleLoad{
 public static void main(String[] args) {

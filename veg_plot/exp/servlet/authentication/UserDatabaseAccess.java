@@ -7,19 +7,18 @@ package servlet.authentication;
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
  * 		
- *		 '$Author: harris $'
- *     '$Date: 2002-08-29 05:32:41 $'
- *     '$Revision: 1.8 $'
+ *		 '$Author: farrell $'
+ *     '$Date: 2003-01-14 01:12:41 $'
+ *     '$Revision: 1.9 $'
  */
 
 
-import java.sql.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
-import java.util.Date;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Hashtable;
 
 
 

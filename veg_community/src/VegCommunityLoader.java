@@ -3,9 +3,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: farrell $'
- *     '$Date: 2003-01-02 21:35:19 $'
- * '$Revision: 1.22 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-01-14 01:12:38 $'  
+ *	'$Revision: 1.23 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,11 +23,12 @@
  */
 
 //package edu.ucsb.nceas.vegcommunity;
-import java.lang.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Vector;
 
 	
 	

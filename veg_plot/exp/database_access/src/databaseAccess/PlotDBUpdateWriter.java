@@ -1,16 +1,18 @@
 package databaseAccess;
 
-import java.io.IOException;
-import java.io.*;
-import java.util.*;
-import org.xml.sax.SAXException;
-import org.apache.xalan.xslt.XSLTProcessorFactory;
-import org.apache.xalan.xslt.XSLTInputSource;
-import org.apache.xalan.xslt.XSLTResultTarget;
-import org.apache.xalan.xslt.XSLTProcessor;
-import java.sql.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
-import databaseAccess.*;
+import org.apache.xalan.xslt.XSLTInputSource;
+import org.apache.xalan.xslt.XSLTProcessor;
+import org.apache.xalan.xslt.XSLTProcessorFactory;
+import org.apache.xalan.xslt.XSLTResultTarget;
 
 /**
  * 
@@ -122,8 +124,8 @@ private String  updateDB(Vector fileVector)
 	//start the connection pooling
 	try 
 	{
-		lb.manageLocalDbConnectionBroker("initiate");
-		conn = lb.manageLocalDbConnectionBroker("getConn");
+		LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate");
+		conn = LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
 		query = conn.createStatement ();
 	}
 	catch (Exception e) 

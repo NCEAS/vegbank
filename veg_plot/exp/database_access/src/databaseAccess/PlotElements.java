@@ -1,10 +1,6 @@
 package databaseAccess;
 
-import java.io.IOException;
-import java.io.*;
-import java.util.*;
-
-import databaseAccess.*;
+import java.util.Vector;
 
 /**
  * this class contains methods for storing the plots 

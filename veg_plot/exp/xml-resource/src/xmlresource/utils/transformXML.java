@@ -7,36 +7,28 @@
  *    Authors: @author@
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2002-07-31 22:46:11 $'
- * '$Revision: 1.5 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2003-01-14 01:12:42 $'
+ * '$Revision: 1.6 $'
  */
 //package vegclient.framework;
 package xmlresource.utils; 
-import java.io.IOException;
-import java.io.*;
-import java.util.*;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
 
-import org.xml.sax.SAXException;
-import org.apache.xalan.xslt.XSLTProcessorFactory;
-import org.apache.xalan.xslt.XSLTInputSource;
-import org.apache.xalan.xslt.XSLTResultTarget;
-import org.apache.xalan.xslt.XSLTProcessor;
-
-import org.w3c.dom.*;                         // DOM interface
-import org.apache.xerces.parsers.DOMParser;   // Parser (to DOM)
-import org.apache.xerces.*; //
-
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.stream.StreamSource;
+
+import org.apache.xalan.xslt.XSLTInputSource;
+import org.apache.xalan.xslt.XSLTProcessor;
+import org.apache.xalan.xslt.XSLTProcessorFactory;
+import org.apache.xalan.xslt.XSLTResultTarget;
+import org.apache.xerces.parsers.DOMParser;
 import org.xml.sax.InputSource;
-	
-import xmlresource.utils.*;
 
 
 public class  transformXML
@@ -51,7 +43,7 @@ public class  transformXML
         
 
 
-	public void transformXML()
+	public transformXML()
 	{
 	
 	}

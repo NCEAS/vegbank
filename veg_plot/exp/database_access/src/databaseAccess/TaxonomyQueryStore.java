@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2002-12-28 00:30:39 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2003-01-14 01:12:40 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,12 +25,13 @@ package databaseAccess;
  */
 
 
-import java.lang.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.sql.*;
-import databaseAccess.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Hashtable;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
 /**
  * this class has been implemented to contain methods which are to be

@@ -1,11 +1,10 @@
-import java.lang.*;
-import java.text.*;
-import java.util.*;
-import java.sql.*;
-import java.awt.*;
-import java.io.*;
-import java.math.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.StringTokenizer;
 
 
 

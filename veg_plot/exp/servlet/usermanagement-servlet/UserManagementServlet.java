@@ -5,9 +5,9 @@ package servlet.usermanagement;
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2003-01-10 16:49:00 $'
- * '$Revision: 1.14 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2003-01-14 01:12:41 $'
+ * '$Revision: 1.15 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,22 +24,24 @@ package servlet.usermanagement;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
  
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import servlet.util.ServletUtility;
-import servlet.util.GetURL;
-import org.apache.tools.ant.taskdefs.Copy;
 import servlet.authentication.UserDatabaseAccess;
+import servlet.util.GetURL;
+import servlet.util.ServletUtility;
 
 
 public class UserManagementServlet extends HttpServlet 

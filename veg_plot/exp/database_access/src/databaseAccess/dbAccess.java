@@ -1,22 +1,10 @@
 package databaseAccess;
 
-import java.io.IOException;
-import java.io.*;
-import java.util.*;
+import java.io.StringWriter;
+import java.util.Vector;
 
-import databaseAccess.*;
-
-//this is currently in the datatranslator package
-//the package name should be changed
-import PlotDataSource;
-
-//this is currently in the datatranslator package but
-//will be moved
+import xmlresource.utils.transformXML;
 import PlotXmlWriterV2;
-
-
- 
-
 /**
  * Takes an xml file containg either query attributes
  * or plot data and depending on the document type, either
@@ -43,91 +31,78 @@ import PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-01-08 01:54:13 $'
- * 	'$Revision: 1.3 $'
+ *  '$Date: 2003-01-14 01:12:40 $'
+ * 	'$Revision: 1.4 $'
  */
 
-
-public class dbAccess 
-{
+public class dbAccess {
 
 	//constructor -- define as static the LocalDbConnectionBroker so that methods
 	// called by this class can access the 'local' pool of database connections
 	static LocalDbConnectionBroker lb;
 
-
-	public String queryOutput[] = new String[10000];  //the output from query
+	public String queryOutput[] = new String[10000]; //the output from query
 	public int queryOutputNum; //the number of output rows from the query
 
- /**
-  * constructor method
-	*/
-	public dbAccess()
-	{
+	/**
+	 * constructor method
+		*/
+	public dbAccess() {
 		System.out.println("dbAccess > init");
 	}
 
-
- /**
-  * this method will take a plot id number used in vegbank and a
-	* filename to write all the plot data associated with that plot 
-	* into an xml document -- this method is much newer than the
-	* databaseAccess method, and should be used when the explicit 
-	* desire is to write a single plot to an xml doc
-	*
-	* @param plotId -- the VegBank plotId
-	* @param outFile -- the fileName to which to write the data
-	*/
-	public boolean writeSingleVegBankPlot(String plotId, String outFile)
-	{
-		try
-		{
+	/**
+	 * this method will take a plot id number used in vegbank and a
+		* filename to write all the plot data associated with that plot 
+		* into an xml document -- this method is much newer than the
+		* databaseAccess method, and should be used when the explicit 
+		* desire is to write a single plot to an xml doc
+		*
+		* @param plotId -- the VegBank plotId
+		* @param outFile -- the fileName to which to write the data
+		*/
+	public boolean writeSingleVegBankPlot(String plotId, String outFile) {
+		try {
 			System.out.println("dbAccess > printing single plot");
 			//this class allows access to the vegbank databases
 			//so the plugin will always be the same 
 			String pluginClass = "VegBankDataSourcePlugin";
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
 			writer.writeSinglePlot(plotId, outFile);
-		}
-		catch (Exception e)
-		{
-			System.out.println("dbAccess > Exception: " + e.getMessage() );
+		} catch (Exception e) {
+			System.out.println("dbAccess > Exception: " + e.getMessage());
 			e.printStackTrace();
-			return(false);
+			return (false);
 		}
-		return(true);
+		return (true);
 	}
-	
- /**
-  * this method will take a plot id number used in vegbank and a
-	* filename to write all the plot data associated with that plot 
-	* into an xml document -- this method is much newer than the
-	* databaseAccess method, and should be used when the explicit 
-	* desire is to write a single plot to an xml doc
-	*
-	* @param plotIdVec -- a vector contaning a number of the VegBank plotId's
-	* @param outFile -- the fileName to which to write the data
-	*/
-	public boolean writeMultipleVegBankPlot(Vector plotIdVec, String outFile)
-	{
-		try
-		{
+
+	/**
+	 * this method will take a plot id number used in vegbank and a
+		* filename to write all the plot data associated with that plot 
+		* into an xml document -- this method is much newer than the
+		* databaseAccess method, and should be used when the explicit 
+		* desire is to write a single plot to an xml doc
+		*
+		* @param plotIdVec -- a vector contaning a number of the VegBank plotId's
+		* @param outFile -- the fileName to which to write the data
+		*/
+	public boolean writeMultipleVegBankPlot(Vector plotIdVec, String outFile) {
+		try {
 			System.out.println("dbAccess > printing multiple plots");
 			//this class allows access to the vegbank databases
 			//so the plugin will always be the same 
 			String pluginClass = "VegBankDataSourcePlugin";
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
 			writer.writeMultiplePlot(plotIdVec, outFile);
-		}
-		catch (Exception e)
-		{
-			System.out.println("dbAccess > Exception: " + e.getMessage() );
+		} catch (Exception e) {
+			System.out.println("dbAccess > Exception: " + e.getMessage());
 			e.printStackTrace();
-			return(false);
+			return (false);
 		}
-		return(true);
+		return (true);
 	}
-	
+
 	/**
 	 * method to write the identification file for a collection of plots
 	 * this is different than the similar summary-writer method that writes
@@ -137,201 +112,184 @@ public class dbAccess
 	 * 	@param outFile -- the fileName to which to write the data
 	 *
 	 */
-	public boolean writeMultipleVegBankPlotIdentifcation(Vector plotIdVec, String outFile)
-	{
-		try
-		{
+	public boolean writeMultipleVegBankPlotIdentifcation(
+		Vector plotIdVec,
+		String outFile) {
+		try {
 			System.out.println("dbAccess > printing multiple plots");
 			//this class allows access to the vegbank databases
 			//so the plugin will always be the same 
 			String pluginClass = "VegBankDataSourcePlugin";
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
 			writer.writeMultiplePlotIdentifcation(plotIdVec, outFile);
-		}
-		catch (Exception e)
-		{
-			System.out.println("dbAccess > Exception: " + e.getMessage() );
+		} catch (Exception e) {
+			System.out.println("dbAccess > Exception: " + e.getMessage());
 			e.printStackTrace();
-			return(false);
+			return (false);
 		}
-		return(true);
+		return (true);
 	}
-	
-	
 
+	/**
+	 * Public interface for running the plotAccess module, this is how the
+	 * interfaces and servlets will load and query the database
+	 * input: xml file, may be datafile or query file, xsl sheet to
+	 * transform the document and action, either insert or query
+	 * @param inputXml - input xml file
+	 * @param inputXsl - input xsl transform sheet
+	 * @param action - database action
+	 *
+	 */
+	public void accessDatabase(
+		String inputXml,
+		String inputXSL,
+		String action) {
+		try {
 
-/**
- * Public interface for running the plotAccess module, this is how the
- * interfaces and servlets will load and query the database
- * input: xml file, may be datafile or query file, xsl sheet to
- * transform the document and action, either insert or query
- * @param inputXml - input xml file
- * @param inputXsl - input xsl transform sheet
- * @param action - database action
- *
- */
-public void accessDatabase(String inputXml, String inputXSL, String action) 
-{
-	try 
-	{
+			//first initiate the local database pooling class so that connections may be
+			// used by the classes that are going to be subsequently called
+			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate");
 
-		//first initiate the local database pooling class so that connections may be
-		// used by the classes that are going to be subsequently called
-		lb.manageLocalDbConnectionBroker("initiate");
+			//call the method to transform the data xml document and pass back a string writer  
+			transformXML m = new transformXML();
+			m.getTransformed(inputXml, inputXSL);
+			//the stringwriter containg all the transformed data
+			StringWriter transformedData = m.outTransformedData;
+			//pass to the utility class to convert the StringWriter to an array
+			utility u = new utility();
+			u.convertStringWriter(transformedData);
+			String transformedString[] = u.outString;
+			int transformedStringNum = u.outStringNum;
 
-		//call the method to transform the data xml document and pass back a string writer  
-		transformXML m = new transformXML();
-		m.getTransformed(inputXml, inputXSL);
-		//the stringwriter containg all the transformed data
-		StringWriter transformedData=m.outTransformedData;  
-		//pass to the utility class to convert the StringWriter to an array
-		utility u =new utility();
-		u.convertStringWriter(transformedData);
-		String transformedString[]=u.outString; 
-		int transformedStringNum=u.outStringNum;
-		
-		// extended query action
-		if (action.equals("extendedQuery")) 
-		{
-			System.out.println("dbAccess > extended query action");
-			for (int ii=0; ii<transformedStringNum; ii++) 
-			{
-				System.out.println(transformedString[ii]);	
-			}
-			//pass the array to the sql mapping class - single attribute query
-			sqlMapper w =new sqlMapper();
-			w.developExtendedPlotQuery(transformedString, transformedStringNum);
-			//grab the results from the sqlMapper class
-			queryOutput=w.queryOutput;
-			queryOutputNum=w.queryOutputNum;
-		}
-		
-		// regular query action
-		else if (action.equals("query")) 
-		{
-			System.out.println("dbAccess > simple query action");
-			// pass the array to the sql mapping class - single attribute query
-			sqlMapper w =new sqlMapper();
-			w.developPlotQuery(transformedString, transformedStringNum);
-			//grab the results from the sqlMapper class
-			queryOutput=w.queryOutput;
-			queryOutputNum=w.queryOutputNum;
-		}
-		
-		//compound query action
-		else if (action.equals("compoundQuery")) 
-		{
-			//pass the array to the sql mapping class - compound queries
-			sqlMapper w =new sqlMapper();
-			w.developCompoundPlotQuery(transformedString, transformedStringNum);
-			//grab the results from the sqlMapper class
-			queryOutput=w.queryOutput;
-			queryOutputNum=w.queryOutputNum;
-		}
-		
-		//insert action -- to insert a plot to the last database
-		else if (action.equals("insert")) 
-		{
-			//pass the array to the plot writer to be inserted into the database
-			plotWriter w =new plotWriter();
-			w.insertPlot(transformedString, transformedStringNum);
-		}
-		
-		//insertPlot action -- this is to insert a plot to the most recent DB
-		else if (action.equals("insertPlot")) 	
-		{
-			//pass the array to the plot writer to be inserted into the database
-			PlotDBWriter w =new PlotDBWriter();
-			w.insertPlot(transformedString, transformedStringNum, "entirePlot");
-		}
-		
-		//verify action
-		else if (action.equals("verify")) 
-		{
-			for (int ii=0; ii<transformedStringNum; ii++) 
-			{
-				System.out.println(transformedString[ii]);	
-			}
-		}
-		
-		//simple community query action
-		else if (action.equals("simpleCommunityQuery")) 
-		{
-			{
-				sqlMapper w =new sqlMapper();
-				w.developSimpleCommunityQuery(transformedString, 
-				transformedStringNum);
+			// extended query action
+			if (action.equals("extendedQuery")) {
+				System.out.println("dbAccess > extended query action");
+				for (int ii = 0; ii < transformedStringNum; ii++) {
+					System.out.println(transformedString[ii]);
+				}
+				//pass the array to the sql mapping class - single attribute query
+				sqlMapper w = new sqlMapper();
+				w.developExtendedPlotQuery(
+					transformedString,
+					transformedStringNum);
 				//grab the results from the sqlMapper class
-				queryOutput=w.queryOutput;
-				queryOutputNum=w.queryOutputNum;
+				queryOutput = w.queryOutput;
+				queryOutputNum = w.queryOutputNum;
 			}
-		}
-		
-		else if (action.equals("simplePlantTaxonomyQuery")) 
-		{
-				sqlMapper w =new sqlMapper();
-				w.developSimplePlantTaxonomyQuery(transformedString, 
-				transformedStringNum);
-				//grab the results from the sqlMapper class
-				queryOutput=w.queryOutput;
-				queryOutputNum=w.queryOutputNum;
-		}
-		
-		else 
-		{
-			System.out.println("dbAccess > accessDatabase: unrecognized action: " + action);
-		}
 
-		//shut down the connection pooling
-		lb.manageLocalDbConnectionBroker("destroy");
-	} //end try
-	catch( Exception e ) 
-	{
-		System.out.println(" failed in: dbAccess.accessDatabase "
-		+e.getMessage() );
-		e.printStackTrace();
+			// regular query action
+			else if (action.equals("query")) {
+				System.out.println("dbAccess > simple query action");
+				// pass the array to the sql mapping class - single attribute query
+				sqlMapper w = new sqlMapper();
+				w.developPlotQuery(transformedString, transformedStringNum);
+				//grab the results from the sqlMapper class
+				queryOutput = w.queryOutput;
+				queryOutputNum = w.queryOutputNum;
+			}
+
+			//compound query action
+			else if (action.equals("compoundQuery")) {
+				//pass the array to the sql mapping class - compound queries
+				sqlMapper w = new sqlMapper();
+				w.developCompoundPlotQuery(
+					transformedString,
+					transformedStringNum);
+				//grab the results from the sqlMapper class
+				queryOutput = w.queryOutput;
+				queryOutputNum = w.queryOutputNum;
+			}
+
+			//insert action -- to insert a plot to the last database
+			else if (action.equals("insert")) {
+				//pass the array to the plot writer to be inserted into the database
+				plotWriter w = new plotWriter();
+				w.insertPlot(transformedString, transformedStringNum);
+			}
+
+			//insertPlot action -- this is to insert a plot to the most recent DB
+			else if (action.equals("insertPlot")) {
+				//pass the array to the plot writer to be inserted into the database
+				PlotDBWriter w = new PlotDBWriter();
+				w.insertPlot(
+					transformedString,
+					transformedStringNum,
+					"entirePlot");
+			}
+
+			//verify action
+			else if (action.equals("verify")) {
+				for (int ii = 0; ii < transformedStringNum; ii++) {
+					System.out.println(transformedString[ii]);
+				}
+			}
+
+			//simple community query action
+			else if (action.equals("simpleCommunityQuery")) {
+				{
+					sqlMapper w = new sqlMapper();
+					w.developSimpleCommunityQuery(
+						transformedString,
+						transformedStringNum);
+					//grab the results from the sqlMapper class
+					queryOutput = w.queryOutput;
+					queryOutputNum = w.queryOutputNum;
+				}
+			} else if (action.equals("simplePlantTaxonomyQuery")) {
+				sqlMapper w = new sqlMapper();
+				w.developSimplePlantTaxonomyQuery(
+					transformedString,
+					transformedStringNum);
+				//grab the results from the sqlMapper class
+				queryOutput = w.queryOutput;
+				queryOutputNum = w.queryOutputNum;
+			} else {
+				System.out.println(
+					"dbAccess > accessDatabase: unrecognized action: "
+						+ action);
+			}
+
+			//shut down the connection pooling
+			LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
+		} //end try
+		catch (Exception e) {
+			System.out.println(
+				" failed in: dbAccess.accessDatabase " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
-}
-
-
 
 	/**
 	 * main method -- really for testing the db
 	 * access module
 	 *
 	 */
-	 public static void main(String[] args) 
-	 {
-		 if (args.length != 3) 
-		 {
-			 System.out.println("Usage: java dbAccess [parameters]+ [action] \n"
-			 +"version: Jan 2003 \n \n"
-			 +"actions: writeSingleVegbankPlot  [plotId] and [outputFile]"
-       +"         query, compoundQuery, extendedQuery, insert, insertPlot "
-       +"         verify, simpleCommunityQuery"
-       +"         takes - [inputXML] [inputXSL]");
-			 System.exit(0);
-		 }
+	public static void main(String[] args) {
+		if (args.length != 3) {
+			System.out.println(
+				"Usage: java dbAccess [parameters]+ [action] \n"
+					+ "version: Jan 2003 \n \n"
+					+ "actions: writeSingleVegbankPlot  [plotId] and [outputFile]"
+					+ "         query, compoundQuery, extendedQuery, insert, insertPlot "
+					+ "         verify, simpleCommunityQuery"
+					+ "         takes - [inputXML] [inputXSL]");
+			System.exit(0);
+		}
 
-		 String action=args[2];
+		String action = args[2];
 
-		 //call the public method
-		 dbAccess g =new dbAccess();  
+		//call the public method
+		dbAccess g = new dbAccess();
 
-     if ( action.equals("writeSingleVegBankPlot") )
-     {
-      String plotId=args[0];
-      String outFile=args[1];
-      g.writeSingleVegBankPlot(plotId, outFile);
-     } 
-     else 
-     {
-		  //input xml file for loading to the database
-      String inputXml=args[0];
-		  String inputXSL=args[1];
-		  g.accessDatabase(inputXml, inputXSL, action);
-     }
-	 }
+		if (action.equals("writeSingleVegBankPlot")) {
+			String plotId = args[0];
+			String outFile = args[1];
+			g.writeSingleVegBankPlot(plotId, outFile);
+		} else {
+			//input xml file for loading to the database
+			String inputXml = args[0];
+			String inputXSL = args[1];
+			g.accessDatabase(inputXml, inputXSL, action);
+		}
+	}
 }
-
-

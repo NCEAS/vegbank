@@ -1,15 +1,27 @@
 package servlet.util;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.ResourceBundle;
+import java.util.Vector;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
-import org.apache.tools.ant.taskdefs.Copy;
-import org.apache.tools.ant.*;
-import org.apache.tools.mail.MailMessage;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
+import servlet.util.DataExchangeClient;
 import servlet.util.GetURL;
 //import servlet.util.*;
 
@@ -22,8 +34,8 @@ import servlet.util.GetURL;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2002-12-23 19:23:27 $'
- *  '$Revision: 1.17 $'
+ *  '$Date: 2003-01-14 01:12:42 $'
+ *  '$Revision: 1.18 $'
  *
  */
 

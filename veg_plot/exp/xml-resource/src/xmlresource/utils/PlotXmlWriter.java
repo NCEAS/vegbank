@@ -7,25 +7,19 @@
  * 		@author @author@ 
  * 		@version @release@ 
  *
- *     '$Author: harris $'
- *     '$Date: 2001-11-02 19:14:53 $'
- *     '$Revision: 1.2 $'
+ *     '$Author: farrell $'
+ *     '$Date: 2003-01-14 01:12:42 $'
+ *     '$Revision: 1.3 $'
  *
  *
  */
 //package vegclient.framework;
 package xmlresource.utils;
 
-import java.sql.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
-import java.util.Date;
-
-//import vegclient.framework.*;
-import xmlresource.utils.*;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Hashtable;
+import java.util.Vector;
 
 public class PlotXmlWriter 
 {

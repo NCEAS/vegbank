@@ -1,15 +1,6 @@
 package databaseAccess;
 
-import java.io.IOException;
-import java.io.*;
-import java.util.*;
-import java.lang.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.sql.*;
-
-import databaseAccess.*;
+import java.sql.Connection;
 
 public class LocalDbConnectionBroker 
 {
@@ -25,8 +16,8 @@ public class LocalDbConnectionBroker
 	//define the connection - these are static so that they can be
 	//used by various methods
 	public static Connection pconn=null; 
-	//the utility class
-	static utility g =new utility();
+	//the Utility class
+	static Utility g =new Utility();
 
 	/**
 	 * main method for testing the connection

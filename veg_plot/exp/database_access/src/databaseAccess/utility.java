@@ -6,9 +6,9 @@
  *    Authors: John Jarris
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2003-01-09 03:24:20 $'
- * '$Revision: 1.6 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2003-01-14 01:12:41 $'
+ * '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,12 +26,24 @@
  */
 package databaseAccess;
 
-import java.io.IOException;
-import java.io.*;
-import java.util.*;
-import java.sql.*;
-import java.net.*;
-import databaseAccess.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLWarning;
+import java.sql.Statement;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * This class contains multi-purpose utilities for dealing with plot data, 
@@ -470,7 +482,7 @@ public class utility
 			  else
 			  {
 			  	 results = pstmt.execute();
-			  	 System.out.println("utility  > dropped commclass: " );
+			  	 System.out.println("Utility  > dropped commclass: " );
 			  }
 			  sb = new StringBuffer();
 			  sb.append("delete from stratum where observation_id = (  ");
@@ -484,7 +496,7 @@ public class utility
 			  else
 			  {
 				   results = pstmt.execute();
-				  System.out.println("utility  > dropped stratum: " );
+				  System.out.println("Utility  > dropped stratum: " );
 			  }
 			 
 			  sb = new StringBuffer();
@@ -499,7 +511,7 @@ public class utility
 			  else
 			  {
 			 	 results = pstmt.execute();
-				 System.out.println("utility  > dropped taxonobservation: ");
+				 System.out.println("Utility  > dropped taxonobservation: ");
 			  }
         sb = new StringBuffer();
 			  sb.append(" delete from observation where plot_id = "+plotId );
@@ -512,7 +524,7 @@ public class utility
 			  else
 			  {
 			  	 results = pstmt.execute();
-			  	 System.out.println("utility  > dropped observation: " );
+			  	 System.out.println("Utility  > dropped observation: " );
 			  }
 			   
 			  sb = new StringBuffer();
@@ -526,7 +538,7 @@ public class utility
 			  else
 			  {
 				   results = pstmt.execute();
-			  	 System.out.println("utility  > dropped plot: " );
+			  	 System.out.println("Utility  > dropped plot: " );
 			  }
 			 
 			  // DROP ALSO FROM THE SUMMARY TABLES
@@ -542,7 +554,7 @@ public class utility
 			  else
 			  {
 			  	 results = pstmt.execute();
-			  	 System.out.println("utility  > dropped plotsitesummary: " );
+			  	 System.out.println("Utility  > dropped plotsitesummary: " );
 			  }
 			  pstmt.close();
 			 }
@@ -551,7 +563,7 @@ public class utility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("utility > Exception: " + e.getMessage());
+			System.out.println("Utility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	 }
@@ -574,7 +586,7 @@ public class utility
 		}
 		catch ( Exception e )
 		{
-			System.out.println("utility > Exception: " + e.getMessage());
+			System.out.println("Utility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(c);
@@ -597,7 +609,7 @@ public class utility
 			 sb = new StringBuffer();
 			 this.conn = this.getUserDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
-			 System.out.println("utility > dropping user profile for: " + email );
+			 System.out.println("Utility > dropping user profile for: " + email );
 			 sb.append("delete from user_info where email_address like '"+email+"';");
 			 sb.append("delete from user_certification where email_address like '"+email+"'");
 			 pstmt = conn.prepareStatement( sb.toString() );
@@ -609,7 +621,7 @@ public class utility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("utility > Exception: " + e.getMessage());
+			System.out.println("Utility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 	 }
@@ -637,7 +649,7 @@ public class utility
 			 sb = new StringBuffer();
 			 this.conn = this.getUserDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
-			 System.out.println("utility > updating user: " + email +" to permission type: " + level );
+			 System.out.println("Utility > updating user: " + email +" to permission type: " + level );
 			 sb.append("update  user_info set permission_type = '"+level+"' where email_address like '"+email+"';");
 			 pstmt = conn.prepareStatement( sb.toString() );
 			 
@@ -648,7 +660,7 @@ public class utility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("utility > Exception: " + e.getMessage());
+			System.out.println("Utility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 	 }
@@ -670,7 +682,7 @@ public class utility
 			 sb = new StringBuffer();
 			 this.conn = this.getUserDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
-			 System.out.println("utility > updating user's : " + email +" password to  : " + password );
+			 System.out.println("Utility > updating user's : " + email +" password to  : " + password );
 			 sb.append("update user_info set password = '"+password+"' where email_address like '"+email+"';");
 			 pstmt = conn.prepareStatement( sb.toString() );
 			 
@@ -681,7 +693,7 @@ public class utility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("utility > Exception: " + e.getMessage());
+			System.out.println("Utility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 	 }
@@ -694,13 +706,13 @@ public class utility
 	 */
 	public static void main(String[] args)
 	{
-		//utility u = new utility();
+		//Utility u = new Utility();
 		//u.testVegBankConnections();
 		if (args.length >= 1)
 		{
 			//get the plugin named
 			String action = args[0];
-			utility dplot = new utility();
+			Utility dplot = new Utility();
 			if ( action.equals("dropplot") )
 			{
 				String inPlot = args[1];

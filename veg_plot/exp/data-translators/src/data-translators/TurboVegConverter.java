@@ -1,39 +1,30 @@
 /**
  * 
  *
- *		 '$Author: harris $'
- *     '$Date: 2002-04-17 01:58:46 $'
- *     '$Revision: 1.3 $'
+ *		 '$Author: farrell $'
+ *     '$Date: 2003-01-14 01:12:39 $'
+ *     '$Revision: 1.4 $'
  *
  */
 //package vegclient.framework;
 
-import java.sql.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
-import java.util.Date;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.Hashtable;
+import java.util.Vector;
+
 import org.apache.xerces.parsers.DOMParser;
-import org.apache.xalan.xpath.xml.FormatterToXML;
-import org.apache.xalan.xpath.xml.TreeWalker;
-import org.apache.xalan.*;
-import org.w3c.dom.Attr;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
-import java.io.*;
-import java.util.Vector;
-import java.util.Hashtable;
-import javax.swing.*;
 
-import xmlresource.utils.transformXML;
 import xmlresource.utils.XMLparse;
+import xmlresource.utils.transformXML;
 //import vegclient.framework.*;
 
 public class TurboVegConverter 

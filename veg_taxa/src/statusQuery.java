@@ -1,8 +1,6 @@
-import java.lang.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 
 public class statusQuery 
@@ -14,7 +12,7 @@ Statement query = null;
 ResultSet results = null;
 
 
-public void statusQuery()
+public statusQuery()
 {	
 	outStatusCircumId=null;
 	outStatusNum=0;

@@ -8,20 +8,18 @@
  *  Authors: @author@
  *  Release: @release@
  *	
- *  '$Author: harris $'
- *  '$Date: 2001-11-01 17:39:00 $'
- * 	'$Revision: 1.1 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2003-01-14 01:12:39 $'
+ * 	'$Revision: 1.2 $'
  *
  */
 //package vegclient.framework;
 
-import java.sql.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
-import java.util.Date;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 import xmlresource.utils.PlotDataMapper;
 import xmlresource.utils.PlotXmlWriter;

@@ -1,6 +1,5 @@
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * This class provides an interface for the plugins to be used for
@@ -17,8 +16,8 @@ import java.util.*;
  * 
  * Release: @release@ <br>
  * '$Author: farrell $' <br>
- * '$Date: 2003-01-08 02:00:10 $' <br>
- * '$Revision: 1.18 $' <br>
+ * '$Date: 2003-01-14 01:12:39 $' <br>
+ * '$Revision: 1.19 $' <br>
  */
 public interface PlotDataSourceInterface
 {

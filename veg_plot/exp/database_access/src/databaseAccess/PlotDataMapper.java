@@ -12,15 +12,8 @@
  */
 package databaseAccess;
 
-import java.sql.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
-import java.util.Date;
-
-import databaseAccess.*;
+import java.util.Hashtable;
+import java.util.Vector;
 
 
 public class PlotDataMapper 
