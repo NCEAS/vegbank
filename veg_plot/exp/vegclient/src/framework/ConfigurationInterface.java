@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-10 18:12:41 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-10-12 18:36:22 $'
+ * 	'$Revision: 1.2 $'
  */
 package vegclient.framework;
 
@@ -18,7 +18,11 @@ public class ConfigurationInterface extends javax.swing.JFrame {
     ConfigurationFile config = new ConfigurationFile();
     
     //database plugins
-    String[] databasePlugins = {"PostgresLinuxPlugin", "PostgresNTPlugin"};
+    String[] databasePlugins = 
+    {   "vegclient.databasemanager.PostgresLinuxPlugin", 
+        "vegclient.databasemanager.PostgresNTPlugin", 
+        "vegclient.databasemanager.HypersonicSQLPlugin"
+    };
 
     
     /** Creates new form ConfigurationInterface */
@@ -28,9 +32,11 @@ public class ConfigurationInterface extends javax.swing.JFrame {
         setTitle("ConfigurationInterface - build: @release@ ");
         setSize(400, 500);
         
-        
+        //get all the settings from the configuration file class
         workingDirectoryTextField.setText( config.workingDirectory);
         servletLocationTextField.setText( config.servletLocation );
+        servletUserNameTextField.setText( config.servletUserName );
+        servletPassWordTextField.setText( config.servletPassWord );
             
     }
 
@@ -47,8 +53,15 @@ public class ConfigurationInterface extends javax.swing.JFrame {
         workingDirectoryTextField = new javax.swing.JTextField();
         workingDirectoryChooserButton = new javax.swing.JButton();
         networkConnectionPane = new javax.swing.JPanel();
+        servletLocationPane = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         servletLocationTextField = new javax.swing.JTextField();
+        userNamePane = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        servletUserNameTextField = new javax.swing.JTextField();
+        servletPasswordName = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        servletPassWordTextField = new javax.swing.JTextField();
         localDatabasePane = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         databasePluginComboPane = new JComboBox( databasePlugins );
@@ -67,6 +80,9 @@ public class ConfigurationInterface extends javax.swing.JFrame {
         
         generalSettingsPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
         
+        generalSettingsPane.setPreferredSize(new java.awt.Dimension(387, 44));
+        generalSettingsPane.setMinimumSize(new java.awt.Dimension(266, 44));
+        generalSettingsPane.setMaximumSize(new java.awt.Dimension(32767, 44));
         jLabel2.setText("Working Directory: ");
         generalSettingsPane.add(jLabel2);
         
@@ -78,7 +94,7 @@ public class ConfigurationInterface extends javax.swing.JFrame {
         
         generalSettingsPane.add(jScrollPane1);
         
-        workingDirectoryChooserButton.setText("Choose Directory");
+        workingDirectoryChooserButton.setText("Choose");
         workingDirectoryChooserButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 workingDirectoryChooserButtonActionPerformed(evt);
@@ -89,21 +105,58 @@ public class ConfigurationInterface extends javax.swing.JFrame {
         
         mainPane.add(generalSettingsPane);
         
-        networkConnectionPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        networkConnectionPane.setLayout(new javax.swing.BoxLayout(networkConnectionPane, javax.swing.BoxLayout.Y_AXIS));
+        
+        networkConnectionPane.setBorder(new javax.swing.border.EtchedBorder());
+        networkConnectionPane.setPreferredSize(new java.awt.Dimension(278, 120));
+        networkConnectionPane.setMinimumSize(new java.awt.Dimension(278, 120));
+        networkConnectionPane.setMaximumSize(new java.awt.Dimension(32771, 120));
+        servletLocationPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
         
         jLabel3.setText("Servlet Location:");
-        networkConnectionPane.add(jLabel3);
+        servletLocationPane.add(jLabel3);
         
         servletLocationTextField.setBackground(java.awt.Color.pink);
         servletLocationTextField.setPreferredSize(new java.awt.Dimension(140, 17));
         servletLocationTextField.setMaximumSize(new java.awt.Dimension(140, 2147483647));
         servletLocationTextField.setMinimumSize(new java.awt.Dimension(140, 17));
-        networkConnectionPane.add(servletLocationTextField);
+        servletLocationPane.add(servletLocationTextField);
+        
+        networkConnectionPane.add(servletLocationPane);
+        
+        userNamePane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        
+        jLabel4.setText("User Name:");
+        userNamePane.add(jLabel4);
+        
+        servletUserNameTextField.setBackground(java.awt.Color.pink);
+        servletUserNameTextField.setPreferredSize(new java.awt.Dimension(140, 17));
+        servletUserNameTextField.setMaximumSize(new java.awt.Dimension(140, 2147483647));
+        servletUserNameTextField.setMinimumSize(new java.awt.Dimension(140, 17));
+        userNamePane.add(servletUserNameTextField);
+        
+        networkConnectionPane.add(userNamePane);
+        
+        servletPasswordName.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        
+        jLabel5.setText("Password: ");
+        servletPasswordName.add(jLabel5);
+        
+        servletPassWordTextField.setBackground(java.awt.Color.pink);
+        servletPassWordTextField.setPreferredSize(new java.awt.Dimension(140, 17));
+        servletPassWordTextField.setMaximumSize(new java.awt.Dimension(140, 2147483647));
+        servletPassWordTextField.setMinimumSize(new java.awt.Dimension(140, 17));
+        servletPasswordName.add(servletPassWordTextField);
+        
+        networkConnectionPane.add(servletPasswordName);
         
         mainPane.add(networkConnectionPane);
         
         localDatabasePane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
         
+        localDatabasePane.setPreferredSize(new java.awt.Dimension(269, 45));
+        localDatabasePane.setMinimumSize(new java.awt.Dimension(265, 45));
+        localDatabasePane.setMaximumSize(new java.awt.Dimension(32767, 45));
         jLabel1.setText("Database Plugin: ");
         localDatabasePane.add(jLabel1);
         
@@ -112,7 +165,7 @@ public class ConfigurationInterface extends javax.swing.JFrame {
         
         mainPane.add(localDatabasePane);
         
-        updatePane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 6));
+        updatePane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 34));
         
         updateConfigurationButton.setText("Update Configuration");
         updateConfigurationButton.addActionListener(new java.awt.event.ActionListener() {
@@ -181,8 +234,15 @@ public class ConfigurationInterface extends javax.swing.JFrame {
     private javax.swing.JTextField workingDirectoryTextField;
     private javax.swing.JButton workingDirectoryChooserButton;
     private javax.swing.JPanel networkConnectionPane;
+    private javax.swing.JPanel servletLocationPane;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField servletLocationTextField;
+    private javax.swing.JPanel userNamePane;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JTextField servletUserNameTextField;
+    private javax.swing.JPanel servletPasswordName;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JTextField servletPassWordTextField;
     private javax.swing.JPanel localDatabasePane;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JComboBox databasePluginComboPane;

@@ -14,8 +14,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-10 18:12:41 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-10-12 18:36:21 $'
+ * 	'$Revision: 1.2 $'
  */
 package vegclient.framework;
 
@@ -46,6 +46,8 @@ public class ConfigurationFile
 	public String RDBMSType = null;
 	public String DBManagerPlugin = null;
 	public String servletLocation = null;
+	public String servletUserName = null;
+	public String servletPassWord = null;
 	
 	public String configFile = "./lib/config.xml";
 	
@@ -60,6 +62,8 @@ public class ConfigurationFile
 		DBManagerPlugin = parse.getNodeValue(configFile, "DBManagerPlugin");
 		workingDirectory = parse.getNodeValue(configFile, "workingDirectory");
 		servletLocation = parse.getNodeValue( configFile, "servletLocation");
+		servletUserName = parse.getNodeValue( configFile, "servletUserName");
+		servletPassWord = parse.getNodeValue( configFile, "servletPassWord");
 	}
 	
 	
