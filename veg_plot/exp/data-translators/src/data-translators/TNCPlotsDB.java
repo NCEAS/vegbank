@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 01:11:15 $'
- * 	'$Revision: 1.9 $'
+ *  '$Date: 2002-03-27 18:34:22 $'
+ * 	'$Revision: 1.10 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -1133,10 +1133,37 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		return("1200");
 	}
 	
-	// see the interface for method descriptions
+	/**
+	 * returns the origional location as described by the 
+	 * author -- basically the location code and the sublocation
+	 * together
+	 *
+	 * @param plotName
+	 */
 	public String getAuthorLocation(String plotName)
 	{
-		return("national forest");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Sublocation]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		 return(s);
 	}
 	
 	// see the interface for method descriptions
