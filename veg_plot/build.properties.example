@@ -1,6 +1,10 @@
-rmiserver = 128.111.220.59
+rmiserver_hostname = 128.111.220.59
+# I am mounting my home dir on the rmiserver so it easy to make updates 
+# Great for development -- production probably not
+rmiserver.home.dir = /home/farrell/muse/rmiserver/beta
 java1.4.home.dir = /usr/java/j2sdk1.4.1
 servlet_lib = /usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/
+
 
 # Database Connection Settings
 authenticationServletHost = beta.nceas.ucsb.edu

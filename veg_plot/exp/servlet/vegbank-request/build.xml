@@ -6,9 +6,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  *   '$Author: harris $'
-  *     '$Date: 2003-01-08 20:02:46 $'
-  * '$Revision: 1.12 $'
+  *   '$Author: farrell $'
+  *     '$Date: 2003-02-03 21:22:57 $'
+  * '$Revision: 1.13 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -23,7 +23,7 @@
   * "Carya".
   * usage: ant [compile|jar|install|jdoc]
 --> 
-<project name="plotLoader" default="dist" basedir=".">
+<project name="vegbank-request-servlet" default="dist" basedir=".">
 
 	<target name="init">
     	<tstamp/>
@@ -54,7 +54,7 @@
     	<property name="authentication" value="../lib/authservletmodule.jar" />
     	<property name="utilities" value="../lib/utilities.jar" />
     	<property name="cpath" value="${utilities}:${authentication}:${planttaxonomy}:${rmisystem}:${vegcommunity}:${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
-      	<property name="rmiserver" value="192.168.0.2"/>	
+      	<property name="rmiserver" value="128.111.220.59"/>	
            
 		<!-- Filters -->  	
     	<filter token="servlet-path" value="${servlet-path}" />

@@ -13,9 +13,9 @@
 	* embedded database(s) etc.  Before building this check the 
 	* dependencies
 	*
-	* 		'$Author: harris $'
- 	*     '$Date: 2003-01-08 17:34:54 $'
- 	*     '$Revision: 1.4 $'
+	* 		'$Author: farrell $'
+ 	*     '$Date: 2003-02-03 21:22:59 $'
+ 	*     '$Revision: 1.5 $'
 --> 
 <project name="xml-resource" default="jar" basedir=".">
 	
@@ -102,6 +102,10 @@
 			basedir="${build}"
 			includes="** "
 		/>
+
+    <copy file="${lib}/xmlresource.jar"
+          filtering="no"
+          todir="../../build/lib/"/>
 	</target>
 	
   <target name="clean" description="Remove all generated files" depends="init">

@@ -11,7 +11,6 @@
 # Add jars to databaseaccess library
 cp  exp/data-translators/lib/datatranslator.jar  exp/database_access/lib/.
 cp  exp/servlet/lib/utilities.jar exp/database_access/lib/.
-cp  ../veg_taxa/lib/planttaxonomy.jar exp/database_access/lib/.
 
 # Add jars to rmidatasource library
 cp  exp/database_access/lib/database_access.jar exp/rmidatasource/lib/.
