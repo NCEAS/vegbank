@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-20 21:35:25 $'
- *	'$Revision: 1.19 $'
+ *	'$Date: 2004-07-22 20:33:09 $'
+ *	'$Revision: 1.20 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,8 +59,26 @@ public class PlotQueryAction extends VegbankAction
 
 	private static final String ANDVALUE = " AND ";
 	private static final String ORVALUE = " OR ";
-	private static final String 	selectClause =	
-		" SELECT DISTINCT(observation.accessioncode), observation.authorobscode, " +	"plot.latitude, plot.longitude, observation.observation_id";
+	private static final int NUM_TOP_TAXA =	5;
+	private static String selectClause =	
+		" SELECT DISTINCT(observation.accessioncode), observation.authorobscode, " +	
+		" plot.latitude, plot.longitude, observation.observation_id ";
+
+	
+	// add sql to get the top taxa
+	static {
+		StringBuffer sb = new StringBuffer(512);
+		for (int i=0; i < NUM_TOP_TAXA; i++) {
+			sb.append(", (SELECT authorPlantName || ' (' || cover || ')' FROM taxonObservation as tob, ")
+				.append(" taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id ")
+				.append(" is null and cover is not null and authorPlantName is not null AND ")
+				.append(" tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET ")
+				.append(i)
+				.append(") as topspp")
+				.append(i+1);
+		}
+		selectClause += sb.toString();
+	}
 
 	public ActionForward execute(
 		ActionMapping mapping,
@@ -221,6 +239,7 @@ public class PlotQueryAction extends VegbankAction
 			DatabaseAccess da = new DatabaseAccess();
 			
 			// Get all resultsets
+			//log.debug("PLOT QUERY #1: " + query.toString());
 			resultSets.add( da.issueSelect(query.toString() ) );		
 			getPlantResultSets(pqForm, resultSets);
 			getCommunitiesResultSets(pqForm, resultSets);
@@ -264,7 +283,7 @@ public class PlotQueryAction extends VegbankAction
 		while ( results.hasNext() )
 		{
 			ResultSet rs = (ResultSet) results.next();
-			//log.debug("Processing " + rs.toString());
+			log.debug("Processing " + rs.toString());
 			
 			// When doing a Intesection add to current collection all objects that existed
 			// in oldWorkspace and current resultset.
@@ -340,6 +359,12 @@ public class PlotQueryAction extends VegbankAction
 		plotsum.setLatitude(new Double(rs.getDouble(3)));
 		plotsum.setLongitude(new Double(rs.getDouble(4)));
 		plotsum.setPlotId(rs.getString(5));
+
+		plotsum.setTopspp1(rs.getString(6));
+		plotsum.setTopspp2(rs.getString(7));
+		plotsum.setTopspp3(rs.getString(8));
+		plotsum.setTopspp4(rs.getString(9));
+		plotsum.setTopspp5(rs.getString(10));
 	}
 
 	private void appendWhereClause(
@@ -378,6 +403,9 @@ public class PlotQueryAction extends VegbankAction
 			// If no plantname given then forget it...
 			if ( ! Utility.isStringNullOrEmpty(plantNames[i]))
 			{		
+				if (!plantNames[i].endsWith("%")) {
+					plantNames[i] += "%";
+				}
 			
 				StringBuffer plantQuery = new StringBuffer(1024);
 				plantQuery.append( selectClause )
@@ -388,7 +416,7 @@ public class PlotQueryAction extends VegbankAction
 					.append("    ( SELECT taxonobservation." + Taxonobservation.PKNAME + ",  taxonobservation." + Taxonobservation.OBSERVATION_ID )
 					.append("       , taxonimportance." + Taxonimportance.COVER )
 					.append("       FROM taxonobservation, taxonimportance " )
-					.append("        WHERE  taxonobservation." + Taxonobservation.PKNAME + " =  taxonimportance." + Taxonimportance.TAXONIMPORTANCE_ID )
+					.append("        WHERE  taxonobservation." + Taxonobservation.PKNAME + " =  taxonimportance." + Taxonimportance.TAXONOBSERVATION_ID )
 					.append("         AND taxonimportance." + Taxonimportance.STRATUM_ID + " IS NULL " )
 					.append("     ) AS TOTI JOIN " )
 					.append("     (taxoninterpretation JOIN ")
@@ -418,6 +446,7 @@ public class PlotQueryAction extends VegbankAction
 				
 				// Have my query now run it!!
 				DatabaseAccess da = new DatabaseAccess();
+				log.debug("PLOT QUERY (plants): " + plantQuery.toString());
 				ResultSet rs2 = da.issueSelect(plantQuery.toString());
 				plantResultSets.add(rs2);
 			}
@@ -439,6 +468,10 @@ public class PlotQueryAction extends VegbankAction
 			// If no communityname given then forget it...
 			if ( ! Utility.isStringNullOrEmpty(commNames[i]))
 			{
+				if (!commNames[i].endsWith("%")) {
+					commNames[i] += "%";
+				}
+			
 				StringBuffer communityQuery = new StringBuffer(1024);
 				communityQuery.append( selectClause )
 					.append(" FROM plot JOIN " )
@@ -638,6 +671,11 @@ public class PlotQueryAction extends VegbankAction
 		private Double latitude;
 		private Double longitude;
 		private String plotId = "";
+		private String topspp1 = "";
+		private String topspp2 = "";
+		private String topspp3 = "";
+		private String topspp4 = "";
+		private String topspp5 = "";
 
 		public PlotSummary()
 		{
@@ -722,6 +760,34 @@ public class PlotQueryAction extends VegbankAction
 		{
 			plotId = string;
 		}
+
+		////////////////////////////////////////////////////
+		// Top species
+		////////////////////////////////////////////////////
+		public String getTopspp1()
+		{ return topspp1; }
+		public void setTopspp1(String string)
+		{ topspp1 = string; }
+
+		public String getTopspp2()
+		{ return topspp2; }
+		public void setTopspp2(String string)
+		{ topspp2 = string; }
+
+		public String getTopspp3()
+		{ return topspp3; }
+		public void setTopspp3(String string)
+		{ topspp3 = string; }
+
+		public String getTopspp4()
+		{ return topspp4; }
+		public void setTopspp4(String string)
+		{ topspp4 = string; }
+
+		public String getTopspp5()
+		{ return topspp5; }
+		public void setTopspp5(String string)
+		{ topspp5 = string; }
 
 	}
 	
