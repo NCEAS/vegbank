@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-11 00:40:05 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2005-02-16 20:14:52 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,9 @@ import java.io.*;
  */
 public class WebUser
 {
+    public static final String DEFAULT_VB_DATA_DIR = "/usr/vegbank/upload";
+    public static final String DEFAULT_VB_EXPORT_DIR = "/usr/vegbank/export";
+
 	private String givenname = "";
 	private String middlename = "";
 	private String surname = "";
@@ -485,6 +488,9 @@ public class WebUser
 	public String getUploadDir(boolean appendTstamp)
 	{
 		String dir = Utility.VB_DATA_DIR;
+        if (Utility.isStringNullOrEmpty(dir)) {
+            dir = DEFAULT_VB_DATA_DIR;
+        }
 
 		if (!dir.endsWith(File.separator)) {
 			 dir += File.separator;
@@ -510,6 +516,9 @@ public class WebUser
 	public String getDownloadDir()
 	{
 		String dir = Utility.VB_EXPORT_DIR;
+        if (Utility.isStringNullOrEmpty(dir)) {
+            dir = DEFAULT_VB_EXPORT_DIR;
+        }
 
 		if (!dir.endsWith(File.separator)) {
 			 dir += File.separator;
