@@ -14,8 +14,8 @@ import org.vegbank.common.utility.MBReadHelper;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-13 22:36:35 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-11-25 19:33:24 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,7 +93,7 @@ public class ASCIIReportsHelper
 			Observation obs = (Observation) observations.get(0);
 							
 			plotObservationId = obs.getObservation_id();
-			accNumber = obs.getObsaccessionnumber();
+			accNumber = obs.getAccessioncode();
 			collectionDate = obs.getObsenddate();
 							
 			// Get commName
@@ -190,41 +190,42 @@ public class ASCIIReportsHelper
 					Taxonobservation taxonObservation = (Taxonobservation) taxonIter.next();
 
 					plantName = MBReadHelper.getPlantName(taxonObservation);												
+					
+					// FIXME: Confirm this is wanted value
+					taxonCover = MBReadHelper.getTotalTaxonCover(taxonObservation);				
 									
-					taxonCover = taxonObservation.getTaxoncover();
-									
-					//Get stratumComposition
-					List stratumCompositions = taxonObservation.gettaxonobservation_stratumcompositions();
-					Iterator stratumCompIter = stratumCompositions.iterator();
-					while ( stratumCompIter.hasNext() )
+					//Get taxonImportances
+					List taxonImportances = taxonObservation.gettaxonobservation_taxonimportances();
+					Iterator taxonImpIter = taxonImportances.iterator();
+					while ( taxonImpIter.hasNext() ) 
 					{
-						Stratumcomposition stratumComposition = (Stratumcomposition) stratumCompIter.next();
-						stratumCover = stratumComposition.getTaxonstratumcover();
+						Taxonimportance taxonImportance = (Taxonimportance) taxonImpIter.next();						
 									
 						// Get the stratum name
-						Stratum stratum = stratumComposition.getStratumobject();
+						Stratum stratum = taxonImportance.getStratumobject();
 						if ( stratum != null )
-						{
+						{							
 							Stratumtype stratumType = stratum.getStratumtypeobject();
 							if ( stratumType != null )
 							{
+								stratumCover = taxonImportance.getCover();
 								stratumName = stratumType.getStratumname();
+								
+								// Put them in the StringBuffer
+								speciesData.append(
+									""
+										+ plotObservationId
+										+ ","
+										+ plantName
+										+ ","
+										+ stratumCover
+										+ ","
+										+ stratumName
+										+ ","
+										+ taxonCover
+										+"\n");
 							}
-						}
-						
-						// Put them in the StringBuffer
-						speciesData.append(
-							""
-								+ plotObservationId
-								+ ","
-								+ plantName
-								+ ","
-								+ stratumCover
-								+ ","
-								+ stratumName
-								+ ","
-								+ taxonCover
-								+"\n");
+						}	
 					}
 				}
 			}

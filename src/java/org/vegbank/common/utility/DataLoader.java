@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-17 22:09:14 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-11-25 19:31:34 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@ import java.util.AbstractList;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import org.vegbank.common.model.VBModelBean;
+
 /**
  * @author farrell
  */
@@ -43,7 +45,7 @@ public class DataLoader
 	 */
 	private static DBConnection getDBConnection() throws SQLException
 	{
-		DBConnection c = DBConnectionPool.getDBConnection("Need connection for inserting dataset");
+		DBConnection c = DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");
 		return c;
 	}
 
@@ -79,25 +81,20 @@ public class DataLoader
 			System.out.println(
 				"DataLoader > Object Total =" + objectList.size());
 
-			Hashtable foreignKeys = new Hashtable();
-
 			Iterator i = objectList.iterator();
 			while (i.hasNext())
 			{
 				System.out.println("DataLoader > I am writing a new object");
 				if (mode.toUpperCase().equals("DB"))
 				{
-					ObjectToDB o2db = new ObjectToDB(i.next());
-					o2db.setForeignKeys(foreignKeys);
-					o2db.insert();
-					foreignKeys.put(
-						o2db.getPrimaryKeyFieldName(),
-						new Integer(o2db.getPrimaryKey()));
+					VBModelBean bean = (VBModelBean) i.next();
+					VBModelBeanToDB o2db = new VBModelBeanToDB();
+					long PK = o2db.insert(bean);
 				}
 				else
 				{
-					ObjectToXML o2X = new ObjectToXML(i.next());
-					System.out.println(o2X.getXML());
+					//ObjectToXML o2X = new ObjectToXML(i.next());
+					//System.out.println(o2X.getXML());
 				}
 			}
 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-06-30 20:02:59 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-11-25 19:31:34 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ package org.vegbank.common.utility;
 
 import java.lang.reflect.Method;
 
+import org.vegbank.common.model.VBModelBean;
+
 /**
  * @author farrell
  */
@@ -33,7 +35,7 @@ import java.lang.reflect.Method;
 public class VegBankObjectWriter
 {
 	
-	public VegBankObjectWriter(Object object)
+	public VegBankObjectWriter(VBModelBean object)
 	{
 		this.object = object;
 		
@@ -44,7 +46,7 @@ public class VegBankObjectWriter
 		className = VBObjectUtils.getUnQualifiedName(theClass.getName());
 	}
 
-	protected Object object = null;
+	protected VBModelBean object = null;
 
 	protected Method[] methods = null;
 

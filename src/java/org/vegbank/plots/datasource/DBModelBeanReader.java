@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-13 22:35:17 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2003-11-25 19:33:24 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ public class DBModelBeanReader
 	
 	public DBModelBeanReader() throws SQLException
 	{
-		con = DBConnectionPool.getDBConnection("Needed for reading observation");
+		con = DBConnectionPool.getInstance().getDBConnection("Needed for reading observation");
 		mbCache = ModelBeanCache.instance();
 	}
 	
@@ -278,8 +278,6 @@ public class DBModelBeanReader
 		{
 			Taxonobservation taxonObservation = (Taxonobservation)  taxonObservations.next();
 			getRelatedObjectsFromDB(Taxonobservation.PKNAME, taxonObservation.getTaxonobservation_id(), taxonObservation );
-			
-			Plantname plantName = taxonObservation.getPlantnameobject();
 		}
 		
 		// Strata
@@ -352,7 +350,7 @@ public class DBModelBeanReader
 	 */
 	private String getTableName(Object object, Method method)
 	{
-		String tableName = VBObjectUtils.getFieldName( method.getName(), null );
+		String tableName = VBObjectUtils.getFieldName( method.getName(), null, null );
 		
 		// Reconstitute the name of the table from the mess that is the methodName
 		tableName = tableName.substring(0, tableName.length()-1); // remove the trailing 's'
@@ -445,7 +443,7 @@ public class DBModelBeanReader
 			// Process method
 			Method method = methods[i];
 			String methodName = method.getName();
-			String fieldName = VBObjectUtils.getFieldName(methodName, null);
+			String fieldName = VBObjectUtils.getFieldName(methodName, null, null);
 			Class[] parameterTypes = method.getParameterTypes();
 			
 			if ( VBObjectUtils.isGetMethod(method, "java.lang.String") )
@@ -506,7 +504,7 @@ public class DBModelBeanReader
 					Vector methodAndType = (Vector) objectSetMethods.get(fieldName);
 					String fullyQualifiedClassName = (String) methodAndType.elementAt(0);
 					Method method = (Method) methodAndType.elementAt(1);	
-					String propertyName = VBObjectUtils.getFieldName(method.getName(), "object");
+					String propertyName = VBObjectUtils.getFieldName(method.getName(), "object", null);
 					
 					// Need to get the corresponding PK name and value
 					String value = (String) hmap.get(fieldName);

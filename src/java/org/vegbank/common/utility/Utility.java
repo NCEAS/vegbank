@@ -25,8 +25,8 @@ import org.vegbank.common.model.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-11-06 18:43:07 $'
- * '$Revision: 1.24 $'
+ * '$Date: 2003-11-25 19:31:34 $'
+ * '$Revision: 1.25 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ public class Utility
 	public static  final String VB_HOME_DIR = "/usr/vegbank";
 	
 	public static final String DATABASE_NAME = ResourceBundle.getBundle("database").getString("databaseName");
+	public static final String SMTP_SERVER = ResourceBundle.getBundle("vegbank").getString("mailHost");
 	
 	/** 
 	 * Determine our db adapter class and create an instance of that class
@@ -454,7 +455,7 @@ public class Utility
 		
 		if ( entityName.equalsIgnoreCase("observation") )
 		{
-			accessionCodeName = Observation.OBSACCESSIONNUMBER;
+			accessionCodeName = Observation.ACCESSIONCODE;
 		}
 		else if ( entityName.equalsIgnoreCase("plantConcept") )
 		{
@@ -511,11 +512,7 @@ public class Utility
 		// TODO: this is not comprehesive as this is only a problem
 		// for some lookups, should be comprehensive to avoid misuse
 		String PKname = "";	
-		if ( FKName.equalsIgnoreCase(Party.OWNER_ID))
-		{
-			PKname = Party.PKNAME;
-		}
-		else if ( FKName.equalsIgnoreCase(Plantstatus.PLANTPARENT_ID))
+		if ( FKName.equalsIgnoreCase(Plantstatus.PLANTPARENT_ID))
 		{
 			PKname = Plantconcept.PKNAME;
 		}

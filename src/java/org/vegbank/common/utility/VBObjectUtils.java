@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-03 22:41:23 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-11-25 19:31:34 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ public class VBObjectUtils
 		 * @param suffixToAdd 
 		 * @return String -- the database fieldName
 		 */
-	public static String getFieldName(String methodName, String suffixToAdd)
+	public static String getFieldName(String methodName, String suffixToAdd, Vector unWantedSuffixs)
 	{
 		//System.out.println(" VegBankObjectWriter > " + methodName);
 		// Remove the first 3 chars
@@ -81,13 +81,23 @@ public class VBObjectUtils
 		// lowerCase the first Character 
 		result = result.substring(0,1).toLowerCase() + result.substring(1);
 		
-		// TODO: Have the caller pass a vector of unwanted suffixes in
-		// some methods have getXobject, the object is superfluous
-		String unwantedSuffix = "object";
-		if ( result.endsWith(unwantedSuffix))
+		if (unWantedSuffixs == null)
 		{
-			// this just truncates of the unwantedSuffix
-			result = result.substring(0, result.length() - unwantedSuffix.length() );
+			unWantedSuffixs = new Vector();
+		}
+		
+		// Always remove the object suffix
+		unWantedSuffixs.add("object");
+		
+		int size = unWantedSuffixs.size();
+		for ( int i=0; i < size; i++ )
+		{
+			String unwantedSuffix = (String) unWantedSuffixs.get(i);
+			if ( result.endsWith(unwantedSuffix))
+			{
+				// this just truncates of the unwantedSuffix
+				result = result.substring(0, result.length() - unwantedSuffix.length() );
+			}	
 		}
 		
 		if ( suffixToAdd != null)
@@ -111,7 +121,7 @@ public class VBObjectUtils
 			return false;
 		}
 
-		//System.out.println("++++++>>>> " + returnType + " & " + method.getReturnType() );
+		//System.out.println("++++++>>>> " + returnType + " & " + method.getReturnType() + " for " + method.getName() );
 		// Check for the get method naming convention
 		try
 		{

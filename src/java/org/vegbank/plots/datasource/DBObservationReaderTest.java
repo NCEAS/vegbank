@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-27 20:04:29 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-11-25 19:33:24 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,13 +83,12 @@ public class DBObservationReaderTest extends TestCase
 		
 		//System.out.println( ( (ObservationContributor) obs.getOBSERVATIONObservationContributors().get(0)) + "<-----");
 		
-		assertEquals("VB.9", obs.getObsaccessionnumber());
+		assertEquals("VB.9", obs.getAccessioncode() );
 		assertEquals("BADL.103", plot.getAuthorplotcode());
 		assertEquals("BADL Vegetation Mapping Project -- NATURESERVE", project.getProjectname());
 		assertEquals("replace this", coverMethod.getCovertype());
 		assertEquals("Fraxinus pennsylvanica - Ulmus americana / Prunus virginiana Woodland", commclass.getCommname());
 		assertEquals("Drake", projectContributorParty.getSurname());
-		assertEquals("AMCA6", to.getPlantnameobject().getPlantname());
 	}
 
 	/* (non-Javadoc)

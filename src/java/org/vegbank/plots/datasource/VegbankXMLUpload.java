@@ -6,8 +6,8 @@ package org.vegbank.plots.datasource;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-13 22:35:17 $'
- *	'$Revision: 1.15 $'
+ *	'$Date: 2003-11-25 19:33:24 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -781,7 +781,7 @@ public class VegbankXMLUpload
 		private void initDB() throws SQLException
 		{
 			//	Get DBConnection
-			dbConn=DBConnectionPool.getDBConnection("Need connection for inserting dataset");
+			dbConn=DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");
 			dbConn.setAutoCommit(false);
 		}
 		
@@ -1602,7 +1602,6 @@ public class VegbankXMLUpload
 				currentNamePartyPK = insertParty( currentNameParty);
 			}
 			
-			addForeignKey(party, Party.OWNER_ID, ownerPartyPK);
 			addForeignKey(party, Party.CURRENTNAME_ID, currentNamePartyPK);
 			
 			pKey = insertTable(tableName, party);
@@ -1899,7 +1898,6 @@ public class VegbankXMLUpload
 				long plantNameId = insertTable("Plantname", plantname);
 				
 				// Add FKs to taxonObservation
-				addForeignKey(taxonObservation, Taxonobservation.PLANTNAME_ID, plantNameId);
 				addForeignKey(taxonObservation, Taxonobservation.OBSERVATION_ID, observationId);
 			
 				
@@ -1907,26 +1905,26 @@ public class VegbankXMLUpload
 				LogUtility.log("LoadTreeToDatabase: taxonObservationId: " + taxonObservationId );
 			
 				//  Add StratumComposition
-				Enumeration stratumCompositions = getChildTables(taxonObservation, "stratumComposition");
-				while ( stratumCompositions.hasMoreElements())
-				{
-					Hashtable stratumComposition = (Hashtable) stratumCompositions.nextElement();
-					addForeignKey(stratumComposition, Stratumcomposition.TAXONOBSERVATION_ID, taxonObservationId);
-					
-					// Get the stratum_id
-					Hashtable stratum = getFKChildTable(stratumComposition, Stratumcomposition.STRATUM_ID, "stratum");
-					long stratumId = insertStratum(stratum, stratumMethodId, observationId);
-					
-					addForeignKey(stratumComposition, Stratumcomposition.STRATUM_ID, stratumId);
-					insertTable("stratumComposition", stratumComposition );
-				}
+				// FIXME: Add Taxonimportances
+//				Enumeration stratumCompositions = getChildTables(taxonObservation, "stratumComposition");
+//				while ( stratumCompositions.hasMoreElements())
+//				{
+//					Hashtable stratumComposition = (Hashtable) stratumCompositions.nextElement();
+//					addForeignKey(stratumComposition, Stratumcomposition.TAXONOBSERVATION_ID, taxonObservationId);
+//					
+//					// Get the stratum_id
+//					Hashtable stratum = getFKChildTable(stratumComposition, Stratumcomposition.STRATUM_ID, "stratum");
+//					long stratumId = insertStratum(stratum, stratumMethodId, observationId);
+//					
+//					addForeignKey(stratumComposition, Stratumcomposition.STRATUM_ID, stratumId);
+//					insertTable("stratumComposition", stratumComposition );
+//				}
 				
 				// Add  StemCount
 				Enumeration stemCounts = getChildTables(taxonObservation, "stemCount");
 				while ( stemCounts.hasMoreElements())
 				{
 					Hashtable stemCount = (Hashtable) stemCounts.nextElement();
-					addForeignKey(stemCount, Stemcount.TAXONOBSERVATION_ID, taxonObservationId);
 					
 					long stemCountId = insertTable("stemCount", stemCount);
 					
@@ -2146,11 +2144,11 @@ public class VegbankXMLUpload
 			long commParentId = insertCommConcept(commParent); // recursive
 		
 			// Add commParty
-			Hashtable commParty = this.getFKChildTable(commStatus, Commstatus.COMMPARTY_ID, "commParty");
+			Hashtable commParty = this.getFKChildTable(commStatus, Commstatus.PARTY_ID, "party");
 			long commPartyId = insertCommParty(commParty);
 			
 			addForeignKey(commStatus, Commstatus.COMMPARENT_ID, commParentId);
-			addForeignKey(commStatus, Commstatus.COMMPARTY_ID, commPartyId);
+			addForeignKey(commStatus, Commstatus.PARTY_ID, commPartyId);
 			
 			pKey = this.insertTable("commStatus", commStatus);
 			
@@ -2188,11 +2186,11 @@ public class VegbankXMLUpload
 			long commNameId = insertTable("commName", commName);
 			
 			// Add commParty
-			Hashtable commParty = this.getFKChildTable(commUsage, Commusage.COMMPARTY_ID, "commParty");
+			Hashtable commParty = this.getFKChildTable(commUsage, Commusage.PARTY_ID, "party");
 			long commPartyId = insertCommParty(commParty);
 			
 			addForeignKey(commUsage,  Commusage.COMMNAME_ID, commNameId);
-			addForeignKey(commUsage, Commusage.COMMPARTY_ID, commPartyId);
+			addForeignKey(commUsage, Commusage.PARTY_ID, commPartyId);
 			
 			insertTable( "commUsage", commUsage);
 		}
@@ -2220,12 +2218,12 @@ public class VegbankXMLUpload
 			Hashtable plantName = this.getFKChildTable(plantUsage, Plantusage.PLANTNAME_ID, "plantName");
 			long plantNameId = insertTable("plantName", plantName);
 			
-			// Add PlantParty
-			Hashtable plantParty = this.getFKChildTable(plantUsage, Plantusage.PLANTPARTY_ID, "plantParty");
-			long plantPartyId = insertPlantParty(plantParty);
+			// Add Party
+			Hashtable party = this.getFKChildTable(plantUsage, Plantusage.PARTY_ID, "party");
+			long partyId = insertParty(party);
 			
 			addForeignKey(plantUsage, Plantusage.PLANTNAME_ID, plantNameId);
-			addForeignKey(plantUsage, Plantusage.PLANTPARTY_ID, plantPartyId);
+			addForeignKey(plantUsage, Plantusage.PARTY_ID, partyId);
 			
 			insertTable( "plantUsage", plantUsage);
 		}
@@ -2251,11 +2249,11 @@ public class VegbankXMLUpload
 			long plantParentId = insertPlantConcept(plantParent); // recursive
 			
 			// Add PlantParty
-			Hashtable plantParty = this.getFKChildTable(plantStatus, Plantstatus.PLANTPARTY_ID, "plantParty");
-			long plantPartyId = insertPlantParty(plantParty);
+			Hashtable party = this.getFKChildTable(plantStatus, Plantstatus.PARTY_ID, "party");
+			long partyId = insertParty(party);
 				
 			addForeignKey(plantStatus, Plantstatus.PLANTPARENT_ID, plantParentId);
-			addForeignKey(plantStatus, Plantstatus.PLANTPARTY_ID, plantPartyId);
+			addForeignKey(plantStatus, Plantstatus.PARTY_ID, partyId);
 				
 			pKey = this.insertTable("plantStatus", plantStatus);
 				
@@ -2284,24 +2282,6 @@ public class VegbankXMLUpload
 								
 				insertTable( "plantCorrelation", plantCorrelation);
 			}
-			return pKey;
-		}
-		
-
-		/**
-		 * @param plantParty
-		 * @return
-		 */
-		private long insertPlantParty(Hashtable plantParty)
-		{
-			long pKey = 0;
-			if ( plantParty == null )
-			{
-				return pKey;
-			}
-			
-			pKey = this.insertPartyBase(plantParty, "plantParty");
-			
 			return pKey;
 		}
 

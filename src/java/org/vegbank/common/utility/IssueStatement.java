@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  * Purpose: 
  *
  * '$Author: farrell $'
- * '$Date: 2003-10-17 22:09:14 $'
- * '$Revision: 1.5 $'
+ * '$Date: 2003-11-25 19:31:34 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ public class IssueStatement
 			System.out.println(
 				"issueStatement > Grabbing a DB connection from the local pool");
 			//get the connections etc
-			conn = DBConnectionPool.getDBConnection("Need connection for inserting dataset");;
+			conn = DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");;
 			query = conn.createStatement();
 			//issue the query
 			results = query.executeQuery(sqlStatement.toString());
@@ -192,7 +192,7 @@ public class IssueStatement
 			System.out.println(
 				"issueStatement > Grabbing a DB connection from the local pool");
 
-			conn = DBConnectionPool.getDBConnection("Need connection for inserting ");;
+			conn = DBConnectionPool.getInstance().getDBConnection("Need connection for inserting ");;
 			query = conn.createStatement();
 
 			////	conn=m.outConn;
@@ -423,7 +423,7 @@ public class IssueStatement
 
 			//this class should have been initialized by the an interface class before this
 			// method was called , allowing this method to obtain a connection
-			conn = DBConnectionPool.getDBConnection("Need connection for inserting dataset");;
+			conn = DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");;
 
 			query = conn.createStatement();
 		}
@@ -551,7 +551,7 @@ public class IssueStatement
 		*/
 		try
 		{
-			conn = DBConnectionPool.getDBConnection("Need connection for inserting dataset");;
+			conn = DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");;
 		}
 		catch (Exception e)
 		{
