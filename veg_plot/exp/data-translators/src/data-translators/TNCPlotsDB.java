@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-03 17:07:56 $'
- * 	'$Revision: 1.18 $'
+ *  '$Date: 2002-04-09 00:17:16 $'
+ * 	'$Revision: 1.19 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -147,7 +147,9 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	}
 
 	
-	//retuns the unique names of all the strata in a given plot
+	/**
+	 * method that retuns the unique names of all the strata in a given plot
+	 */
 	public Vector getUniqueStrataNames(String plotName)
 	{
 		Vector v = new Vector();
@@ -158,13 +160,10 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		v.addElement("T3");
 		v.addElement("S1");
 		v.addElement("S2");
-		
 		v.addElement("S3");
 		v.addElement("N");
 		v.addElement("V");
 		v.addElement("E");
-		
-		
 		return(v);
 	}
 	
@@ -1513,7 +1512,6 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				while (rs.next()) 
 				{
 					height = rs.getString(1);
-					System.out.println("TNCPlotsDB > strata height: '" + height +"'" );
 					if ( height != null )
 					{
 						height = height.trim();
@@ -1564,7 +1562,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 					}
 					else 
 					{
-						trueHeight = "";
+						trueHeight = getDefaultStrataHeight(strataName, "top");
+						//trueHeight = "";
 					}
 				}
 				rs.close();
@@ -1575,6 +1574,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				System.out.println("Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
+			System.out.println("TNCPlotsDB > strum true base: '" + trueHeight +"'" );
 		 	return(trueHeight);
 	 }
 	 
@@ -1582,7 +1582,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 /**
 	  * method that returns the max height for a stratume 
 		* as observerd in a specific plot using as inputs a plot name 
-		* and a stratumName
+		* and a stratumName -- if the levels are not defined in the 
+		* Access table then a default is returned
 		*
 		* @param plot -- the plot
 		* @param stratumName -- the stratum
@@ -1606,7 +1607,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				while (rs.next()) 
 				{
 					height = rs.getString(1);
-					System.out.println("TNCPlotsDB > strata height: '" + height +"'" );
+					//System.out.println("TNCPlotsDB > strata height: '" + height +"'" );
 					if ( height != null )
 					{
 						height = height.trim();
@@ -1655,9 +1656,11 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 							trueHeight = "";
 						}
 					}
+					//if there is no height listed in the Access table then get the default height
 					else 
 					{
-						trueHeight = "";
+						//trueHeight = "";
+						trueHeight = getDefaultStrataHeight(strataName, "top");
 					}
 				}
 				rs.close();
@@ -1668,9 +1671,28 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				System.out.println("Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
+			System.out.println("TNCPlotsDB > strum true height: '" + trueHeight +"'" );
 		 	return(trueHeight);
 	 }
 	 
+	 /**
+	  * this method will return the default height for a given strata,  The
+		* inputs are the strata name and the term top or bottom so that the 
+		* the correct elevation is returned
+		* @param strataName --  the name of the stratum
+		* @param desiredElevation == 'top' or 'bottom'
+		*/
+		private String getDefaultStrataHeight(String strataName, String desiredElevation)
+		{
+			if ( strataName.equals("N") )
+			{
+				return("1");
+			}
+			else
+			{
+				return("100");
+			}
+		}
 	 
 	
 	/**
@@ -1848,8 +1870,10 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				while (rs.next()) 
 				{
 					String s = rs.getString(2);
-					//System.out.println(rs.getString(2) );
-					scientificNames.addElement(s);
+					if ( s != null  &&  s.length() >=2 )
+					{
+						scientificNames.addElement(s);
+					}
 					cnt++;
 				}
 				//update the public variable representing the number of 
