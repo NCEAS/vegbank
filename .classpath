@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="**/CVS|**.CVS.**|CVS/|org/CVS/|org/vegbank/common/CVS/|org/vegbank/communities/CVS/|org/vegbank/CVS/|org/vegbank/databaseAccess/CVS/|org/vegbank/plants/CVS/|org/vegbank/plots/CVS/|org/vegbank/xmlresource/CVS/|org/vegbank/common/model/CVS/|org/vegbank/communities/datasink/CVS/|org/vegbank/communities/datasource/CVS/|org/vegbank/plots/datasource/CVS/|org/vegbank/plots/rmi/CVS/|org/vegbank/servlet/authentication/CVS/|org/vegbank/servlet/CVS/|org/vegbank/servlet/datafileexchange/CVS/|org/vegbank/servlet/framework/CVS/|org/vegbank/servlet/plugin/CVS/|org/vegbank/servlet/request/CVS/|org/vegbank/servlet/stylesheet/CVS/|org/vegbank/servlet/usermanagement/CVS/|org/vegbank/servlet/util/CVS/|org/vegbank/servlet/plugin/spatial/CVS/|org/vegbank/ui/CVS/|org/vegbank/ui/struts/CVS/|org/vegbank/common/utility/CVS/|org/vegbank/common/utility/datafileexchange/CVS/|org/vegbank/common/utility/mail/CVS/" kind="src" path="src/java"/>
+	<classpathentry exported="true" kind="lib" path="build/classes"/>
+	<classpathentry kind="lib" path="lib/ant.jar"/>
+	<classpathentry sourcepath="//Chissler/farrell/src/commons-beanutils-1.6.1-src/src/java" kind="lib" path="lib/commons-beanutils.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections.jar"/>
+	<classpathentry kind="lib" path="lib/commons-dbcp.jar"/>
+	<classpathentry kind="lib" path="lib/commons-digester.jar"/>
+	<classpathentry kind="lib" path="lib/commons-fileupload.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang.jar"/>
+	<classpathentry kind="lib" path="lib/commons-pool.jar"/>
+	<classpathentry kind="lib" path="lib/commons-validator.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-oro.jar"/>
+	<classpathentry kind="lib" path="lib/junit.jar"/>
+	<classpathentry kind="lib" path="lib/mailapi.jar"/>
+	<classpathentry kind="lib" path="lib/multipart.jar"/>
+	<classpathentry kind="lib" path="lib/servlet.jar"/>
+	<classpathentry kind="lib" path="lib/smtp.jar"/>
+	<classpathentry sourcepath="//Chissler/farrell/struts/jakarta-struts-1.1-src/src/share" kind="lib" path="lib/struts.jar"/>
+	<classpathentry kind="lib" path="lib/utils.jar"/>
+	<classpathentry kind="lib" path="lib/xalan.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.1.1-dev.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/activation.jar"/>
+	<classpathentry kind="lib" path="lib/pg73jdbc3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
+	<classpathentry kind="output" path="eclipesbuild"/>
+</classpath>
