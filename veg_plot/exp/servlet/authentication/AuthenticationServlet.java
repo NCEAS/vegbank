@@ -108,6 +108,7 @@ public class AuthenticationServlet extends HttpServlet
 					}
 					else 
 					{
+						System.out.println("AuthenticationServlet > user login failed");
 						out.println( getErrorRedirection() );
 					}
 				}
@@ -142,7 +143,14 @@ public class AuthenticationServlet extends HttpServlet
 					{
 						System.out.println("AuthenticationServlet > created a new user");
 						Thread.currentThread().sleep(100);
-						response.sendRedirect("http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement?action=options");
+						
+						//this response was throwing an exception b/c the user did not yet 
+						//have a cookie associated with the browser, so as a fix create a 
+						//small statement and allow the oportunity to login
+						//response.sendRedirect("http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement?action=options");
+					
+						out.println( getUserCreationResponse() );
+					
 					}
 					else
 					{
@@ -156,7 +164,6 @@ public class AuthenticationServlet extends HttpServlet
 				}
 			}
 			
-
 		}	  //end try
 		catch( Exception e ) 
 		{
@@ -165,6 +172,32 @@ public class AuthenticationServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/**
+	 * method that provides a response to a user who has attempeted to 
+	 * make a new user account
+	 */
+	 private String getUserCreationResponse()
+	 {
+		 StringBuffer sb = new StringBuffer();
+		 sb.append("<html> \n");
+		 sb.append("<head> \n");
+		 sb.append(" <title>-- New User Account Created Successfully! -- </title> \n");
+		 sb.append("</head> \n");
+		 sb.append("<body> \n");
+			sb.append(" <p>  Thank you for using VegBank, your user account has successfully created! </p>");
+			sb.append(" <br> To Login Please Click <br> \n");
+		 	sb.append(" <a href=\"http://vegbank.nceas.ucsb.edu/vegbank/general/login.html\">here</a> \n");
+			sb.append("");
+			sb.append("");
+			sb.append("");
+			sb.append("");
+		 sb.append("</body> \n");
+		 sb.append("</html> \n");
+		 return(sb.toString() );
+	 }
+	 
 	
 	/**
 	 * method that contains the html and java script to redirect the user to
@@ -179,11 +212,11 @@ public class AuthenticationServlet extends HttpServlet
 		 sb.append("</head> \n");
 		 sb.append("<body> \n");
 		 sb.append("<script language=\"JavaScript\"> \n");
-		 sb.append("window.location=\"http://www.vegbank.org/general/login.html\"; \n");
+		 sb.append("window.location=\"http://vegbank.nceas.ucsb.edu/vegbank/general/login.html\"; \n");
 		 sb.append("</script> \n");
 		
 		 sb.append("Please Click \n");
-		 sb.append("<a href=\"http://www.vegbank.org/general/login.html\">here</a> \n");
+		 sb.append("<a href=\"http://vegbank.nceas.ucsb.edu/vegbank/general/login.html\">here</a> \n");
 		 sb.append("if your browser is not promptly redirected \n");
 		 sb.append("");
 		 sb.append("</body> \n");

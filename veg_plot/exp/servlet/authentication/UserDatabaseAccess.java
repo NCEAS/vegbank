@@ -8,8 +8,8 @@ package servlet.authentication;
  *    Authors: John Harris
  * 		
  *		 '$Author: harris $'
- *     '$Date: 2001-12-04 05:43:45 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2002-02-12 06:07:22 $'
+ *     '$Revision: 1.2 $'
  */
 
 
@@ -55,8 +55,9 @@ public class UserDatabaseAccess
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed " 
+			System.out.println("Exception: " 
 			+e.getMessage());
+			e.printStackTrace();
 		}
 	}
  
@@ -82,7 +83,7 @@ public class UserDatabaseAccess
  			java.util.Date localtime = new java.util.Date();
  	//		String dateString = formatter.format(localtime);
 			
-			System.out.println("Database date: "+localtime);
+			System.out.println("UserDatabaseAccess > Database date: "+localtime);
 			
 			sb.append("UPDATE USER_INFO set TICKET_COUNT = TICKET_COUNT + 1 ");
 			sb.append("WHERE EMAIL_ADDRESS like '"+emailAddress+"' ");
@@ -92,8 +93,9 @@ public class UserDatabaseAccess
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed " 
+			System.out.println("Exception: " 
 			+e.getMessage());
+			e.printStackTrace();
 		}
 	}
  
@@ -132,32 +134,32 @@ public class UserDatabaseAccess
 				{
 					String DBEmailAddress = results.getString(1); 
 					String DBPassWord = results.getString(2); 
-					System.out.println("Retrieved Name: "+emailAddress);
+					System.out.println("UserDatabaseAccess > Retrieved Name: "+emailAddress);
 					//validate the email and passwords
 					if ( emailAddress.trim().equals(DBEmailAddress) 
 						&& passWord.trim().equals(DBPassWord) )
 						{
-							System.out.println("Accepted at the db level");
+							System.out.println("UserDatabaseAccess > Accepted at the db level");
 							//update the ticket count
 							updateTicketCount( DBEmailAddress );
 							return(true);
 						}
 						else 
 						{
-							System.out.println("accepted user but denied access");
+							System.out.println("UserDatabaseAccess > accepted user but denied access");
 							return(false);
 						}
 				}
 				else 
 				{
-					System.out.println("User not known in database");
+					System.out.println("UserDatabaseAccess > User not known in database");
 				}
 			}
 			conn.close();
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed > " 
+			System.out.println("Exception: " 
 			+e.getMessage());
 			e.printStackTrace();
 		}
@@ -190,7 +192,7 @@ public class UserDatabaseAccess
 		}
 		catch ( Exception e )
 		{
-			System.out.println("failed making db connection: "
+			System.out.println("UserDatabaseAccess > failed making db connection: "
 			+"dbConnect.makeConnection: "+e.getMessage());
 			e.printStackTrace();
 		}
