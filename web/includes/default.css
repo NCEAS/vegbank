@@ -147,7 +147,7 @@ UL.constsize,LI.constsize {  font: 10pt Arial, Tahoma, Helvetica, Geneva, sans-s
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 				}
 				
-P, .normal		{
+P, .normal, TD	{
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 					font-size: 10pt;
 					color: #000000
