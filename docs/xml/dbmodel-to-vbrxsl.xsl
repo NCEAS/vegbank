@@ -2,20 +2,29 @@
 <!-- xsl takes the vegbank database model xml and transforms into xsl that transforms the data xml into vegbranch csv import files. Written by Michael Lee (mikelee@unc.edu) 23-APR-2004 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" >
   <xsl:output method="xml" encoding="UTF-8"/>
+  
   <xsl:template name="DoApplyTempl">
      <xsl:element name="xsl:apply-templates" />
   </xsl:template>
-  <xsl:template name="DoGetName">
-,<xsl:element name="xsl:value-of">
-<xsl:attribute name="select">name()</xsl:attribute>
-    </xsl:element>,</xsl:template>
+  
+  <xsl:template name="DoCSV"><xsl:param name="nodeName" />
+    <xsl:element name="xsl:call-template">
+      <xsl:attribute name="name">csvIt</xsl:attribute>
+      <xsl:element name="xsl:with-param">
+        <xsl:attribute name="name">text</xsl:attribute>
+        <xsl:attribute name="select"><xsl:value-of select="$nodeName" /></xsl:attribute>
+      </xsl:element>
+    </xsl:element>
+  </xsl:template>
+  
+  <xsl:template name="DoGetName"><xsl:call-template name="DoCSV"><xsl:with-param name="nodeName" >name()</xsl:with-param></xsl:call-template>,</xsl:template>
   <xsl:template match="/">
 <xsl:comment>
 
   *
   *     '$Author: mlee $'
-  *     '$Date: 2004-04-23 11:39:26 $'
-  *     '$Revision: 1.1 $'
+  *     '$Date: 2004-04-23 18:45:42 $'
+  *     '$Revision: 1.2 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -34,6 +43,11 @@
   <xsl:element name="xsl:stylesheet"><!-- = root -->
     <xsl:attribute name="version">1.0</xsl:attribute>
  <!--   <xsl:attribute name="xmlns:xsl">http://www.w3.org/1999/XSL/Transform</xsl:attribute> -->
+    <!-- get some xsl functions for the output xsl by importing from file -->
+    <xsl:element name="xsl:import">
+      <xsl:attribute name="href">csvtools.xsl</xsl:attribute>
+    </xsl:element>
+
     <xsl:element name="xsl:output">
       <xsl:attribute name="method">text</xsl:attribute>
       <xsl:attribute name="encoding">UTF-8</xsl:attribute>
@@ -50,11 +64,12 @@
 <xsl:element name="xsl:template">
   <xsl:attribute name="match"><xsl:value-of select="entityName" /></xsl:attribute>
   <!-- label this row with element name -->
+<xsl:element name="xsl:value-of"><xsl:attribute name="select">$LF</xsl:attribute></xsl:element>
   <xsl:call-template name="DoGetName" />
   <xsl:for-each select="attribute">
     <!-- get att Value for this entity -->
-    <!-- 3 cases to consider: normal data (easy), normal FK (downstream), inverted FK (upstream) -->(<xsl:value-of select="attName" />)<xsl:element name="xsl:value-of"> <xsl:attribute name="select">
-    <xsl:choose>
+    <!-- 3 cases to consider: normal data (easy), normal FK (downstream), inverted FK (upstream) -->(<xsl:value-of select="attName" />)<xsl:call-template name="DoCSV"><xsl:with-param name="nodeName">
+        <xsl:choose>
       <xsl:when test="attKey!='FK'"><xsl:value-of select="../entityName" />.<xsl:value-of select="attName"/></xsl:when>
       <xsl:otherwise>
          <!-- noraml or inverted -->
@@ -70,7 +85,7 @@
       </xsl:otherwise> 
       
     </xsl:choose> <!-- not FK or FK -->
-    </xsl:attribute></xsl:element>,<!-- value-of -->
+  </xsl:with-param></xsl:call-template>,<!-- value-of -->
     
   </xsl:for-each> <!-- looping thru atts -->
   
