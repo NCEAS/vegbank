@@ -52,7 +52,7 @@
 
 <xsl:apply-templates />
 
-@webpage_footer_html@
+
 <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p>
 <p> <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>
 <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p>
@@ -61,7 +61,7 @@
 <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p>
 
 <p>This space is intentionally left blank so that bookmarks on this page will take you to the correct part of the FAQ.</p>
-
+@webpage_footer_html@
 
 </xsl:template> <!-- root -->
 
