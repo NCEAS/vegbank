@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-02 22:33:43 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2004-03-18 02:05:29 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-03-02 22:33:43 $'
- *     '$Revision: 1.11 $'
+ *     '$Date: 2004-03-18 02:05:29 $'
+ *     '$Revision: 1.12 $'
  */
 
 import java.sql.PreparedStatement;
@@ -644,6 +644,27 @@ public class UserDatabaseAccess
 	}
 
 	/**
+	 * Set sum of permissions.
+	 * 
+	 * @param usrId -- the usr.usr_id of the user
+	 * @param sum -- the sum of roles
+	 */
+		public void setUserPermissionSum(long usrId, int sum) throws Exception
+		{
+			if (usrId == 0) {
+				throw new Exception("Can't set permissions: null usr_id");
+			}
+
+			DBConnection conn = getConnection();
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate("UPDATE usr SET permission_type=" + sum + 
+					" WHERE usr_id=" + usrId);
+
+			stmt.close();
+			DBConnectionPool.returnDBConnection(conn);
+		}
+	 
+	/**
 	 * 
 	 * @param usrId -- the usr.usr_id of the user
 	 * @return sum of permissions
@@ -655,12 +676,15 @@ public class UserDatabaseAccess
 		query.executeQuery("SELECT permission_type FROM usr WHERE usr_id=" + usrId);
 		ResultSet rs = query.getResultSet();
 		
-		DBConnectionPool.returnDBConnection(conn);
-		while (rs.next() ) 
-		{
-			return rs.getInt(1);
+		int sum = 0;
+		if (rs.next() ) {
+			sum = rs.getInt(1);
 		}
-		return 0;
+
+		rs.close();
+		query.close();
+		DBConnectionPool.returnDBConnection(conn);
+		return sum;
 	 }
 	 
 	
