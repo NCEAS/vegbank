@@ -13924,9 +13924,7 @@ conditions may change between resampling events.
       <attDefinition>The Base of the Stratum in meters.</attDefinition>
       <attUnits>m</attUnits>
       <attForms>
-        <formShow name="Summary">1299.4</formShow>
-        <formShow name="SummaryOnlyStrata">1300.4</formShow>
-      </attForms>
+           </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -13944,8 +13942,7 @@ conditions may change between resampling events.
       <attDefinition>The Tallest part of the Stratum in meters.</attDefinition>
       <attUnits>m</attUnits>
       <attForms>
-        <formShow name="Summary">1299.8</formShow>
-        <formShow name="SummaryOnlyStrata">1300.8</formShow>
+    
       </attForms>
       <update>1.0.2</update>
     </attribute>
