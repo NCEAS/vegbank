@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-09 22:41:28 $'
- *	'$Revision: 1.17 $'
+ *	'$Date: 2004-06-10 02:36:37 $'
+ *	'$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-06-09 22:41:28 $'
- *     '$Revision: 1.17 $'
+ *     '$Date: 2004-06-10 02:36:37 $'
+ *     '$Revision: 1.18 $'
  */
 
 import java.sql.PreparedStatement;
@@ -171,7 +171,8 @@ public class UserDatabaseAccess
 			.append(" esa_sponsor_name_a,  esa_sponsor_email_a, ")
 			.append(" esa_sponsor_name_b,  esa_sponsor_email_b, ")
 			.append(" peer_review, addl_stmt, usr_id, certificationstatus) ")
-			.append(" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
+			.append(" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
+		log.debug("UserDatabaseAccess > inserting user cert info");
 		
 		// create the statement
 		PreparedStatement pstmt = conn.prepareStatement( sqlInsert.toString() );
