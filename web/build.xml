@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: anderson $'
-* '$Date: 2003-12-03 02:00:02 $'
-* '$Revision: 1.82 $'
+* '$Date: 2004-01-15 18:30:30 $'
+* '$Revision: 1.83 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -137,7 +137,7 @@
   </target>
   <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
-  <target name="hdrftr" depends="init" description="=&gt; sets tokens to be replaced by those in hdrfooter file and other files">
+  <target name="hdrftr" depends="tokenfiles" description="=&gt; sets tokens to be replaced by those in hdrfooter file and other files">
     <!-- set the properties file that replaces tokens with closed list values in picklists -->
     <filter filtersfile="${style_server}/closedlist-tokens.properties"/>
     <!-- set the properties file as a filtersfile to distribute headers and footers -->
@@ -146,7 +146,7 @@
     <filter filtersfile="${style_server}/manual_filters.properties"/>
   </target>
   <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
-  <target name="includes" depends="init" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
+  <target name="includes" depends="hdrftr" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
     <copy overwrite="true" todir="${style_server}" filtering="true">
       <!-- <fileset dir="${style_src}" includes="**.css **/*jsp **.js"/> -->
       <!-- Why not just copy all? -->
@@ -161,7 +161,7 @@
     <copy todir="${apache.document.root}/plot/" filtering="yes" file="${basedir}/plot/.htaccess"/>
   </target>
   <!-- DISTRIBUTE THE IMAGES -->
-  <target name="images" depends="init" description="=&gt; dist. the images to server">
+  <target name="images" depends="includes" description="=&gt; dist. the images to server">
     <copy overwrite="true" todir="${image_server}" filtering="no">
       <fileset dir="${image_src}">
         <include name="**"/>
@@ -286,7 +286,7 @@
 	* TARGET TO PUT THE FORMS FOR INTERACTING WITH THE
 	* SERVLETS IN THE APPROPRIATE LOCATION
 -->
-  <target name="forms" depends="hdrftr" description="=&gt; dist the forms to server ">
+  <target name="forms" depends="images" description="=&gt; dist the forms to server ">
     <copy overwrite="true" todir="${forms_server}" filtering="yes">
       <fileset dir="${forms}" includes="*jsp *html" excludes="**/CVS* "/>
     </copy>
@@ -294,8 +294,10 @@
   <!--
 	* TARGET TO PUT THE GENERAL HTML DOCS INTO THE CORRECT PLACE
 -->
-  <target name="general" depends="hdrftr" description="=&gt; dist the general dir to server">
-    <copydir forceoverwrite="true" src="${general_src}" dest="${general_server}" filtering="yes" includes="**.html *jsp" excludes="**/CVS*   vbsummary.html   get_vb_stats_temp.html"/>
+  <target name="general" depends="forms" description="=&gt; dist the general dir to server">
+    <copy overwrite="true" todir="${general_server}" filtering="yes">
+		<fileset dir="${general_src}"  includes="**.html *jsp" excludes="**/CVS* vbsummary.html get_vb_stats_temp.html"/>
+	</copy>
   </target>
   <!--
 	* TARGET TO PUT THE DESIGN HTML DOCS INTO THE CORRECT PLACE
@@ -316,7 +318,7 @@
   <!--
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
 -->
-  <target name="xsl" depends="hdrftr" description="=&gt; dist the xsl dir to server">
+  <target name="xsl" depends="general" description="=&gt; dist the xsl dir to server">
     <copy overwrite="true" todir="${vegbank.lib.dir}" filtering="yes">
       <fileset dir="${xsl.src.dir}"/>
     </copy>
@@ -324,12 +326,12 @@
   <!--
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
 -->
-  <target name="web" depends="hdrftr" description="==> Distribute Web Files ">
+  <target name="web" depends="xsl" description="==> Distribute Web Files ">
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes">
       <fileset dir="${web.src.dir}"/>
     </copy>
   </target>
-  <target name="robot" depends="init" description="==&gt; Distribute robots.txt">
+  <target name="robot" depends="web" description="==&gt; Distribute robots.txt">
     <copy overwrite="true" todir="${apache.document.root}" file="./robots.txt"/>
   </target>
   <!--
@@ -363,17 +365,21 @@
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-  <target name="deploy" description="=&gt; All files that dynamic code depends on">
-    <antcall target="tokenfiles"/>
-    <antcall target="includes"/>
-    <antcall target="index"/>
-    <antcall target="forms"/>
-    <antcall target="general"/>
-    <antcall target="images"/>
-    <antcall target="init"/>
-    <antcall target="xsl"/>
-    <antcall target="web"/>
-    <antcall target="robot"/>
+  <target name="deploy" depends="robot"
+  		description="=&gt; All files that dynamic code depends on">
+  	<!-- Deployment uses a dependency chain:
+		init
+		tokenfiles
+		includes
+		index
+		forms
+		general 
+		images
+		init
+		xsl
+		web
+		robot
+	-->
   </target>
   <target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
     <property name="webapp" value="vegtest"/>
