@@ -18,6 +18,19 @@
 		           type="org.vegbank.ui.struts.AddStratumMethodForm"/>
 		<form-bean name="CertificationForm"
 		           type="org.vegbank.ui.struts.CertificationForm"/>
+		<form-bean name="CertificationViewForm"
+		           type="org.apache.struts.action.DynaActionForm">
+			<form-property name="certBean"
+			               type="org.vegbank.ui.struts.CertificationForm"/>
+			<form-property name="usrId"
+			               type="java.lang.String"/>
+			<form-property name="certId"
+			               type="java.lang.String"/>
+			<form-property name="action"
+			               type="java.lang.String"/>
+			<form-property name="statusComment"
+			               type="java.lang.String"/>
+		</form-bean>
 		<form-bean name="ChangePasswordForm"
 		           type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="password"
@@ -30,9 +43,7 @@
 			               type="java.lang.String"/>
 		</form-bean>
 		<form-bean name="CommQueryForm"
-		           type="org.vegbank.ui.struts.CommQueryForm">
-		</form-bean>
-
+		           type="org.vegbank.ui.struts.CommQueryForm"/>
 		<form-bean name="DisplayEntityForm"
 		           type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="accessionCode"
@@ -87,17 +98,15 @@
 			<form-property name="password"
 			               type="java.lang.String"/>
 		</form-bean>
-    		<form-bean  name="GenericDispatcherForm"
-                            type="org.apache.struts.action.DynaActionForm">
-			<form-property name="accessionCode" type="java.lang.String"/>
-    		</form-bean>
-
-		<form-bean name="PlantQueryForm"
-		           type="org.vegbank.ui.struts.PlantQueryForm">
+		<form-bean name="GenericDispatcherForm"
+		           type="org.apache.struts.action.DynaActionForm">
+			<form-property name="accessionCode"
+			               type="java.lang.String"/>
 		</form-bean>
+		<form-bean name="PlantQueryForm"
+		           type="org.vegbank.ui.struts.PlantQueryForm"/>
 		<form-bean name="PlotQueryForm"
-		           type="org.vegbank.ui.struts.PlotQueryForm">
-    		</form-bean>
+		           type="org.vegbank.ui.struts.PlotQueryForm"/>
 		<form-bean name="RegisterNewUserForm"
 		           type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="usr"
@@ -112,7 +121,6 @@
 			<form-property name="password2"
 			               type="java.lang.String"/>
 		</form-bean>
-
 		<form-bean name="UploadPlotForm"
 		           type="org.vegbank.ui.struts.UploadPlotForm"/>
 		<form-bean name="UserProfileForm"
@@ -120,8 +128,8 @@
 	</form-beans>
 	<global-forwards>
 		<forward name="failure"
-		         path="/forms/failure.jsp" 
-                         redirect="false"/>
+		         path="/forms/failure.jsp"
+		         redirect="false"/>
 		<forward name="success"
 		         path="/forms/success.html"/>
 		<forward name="vberror"
@@ -176,7 +184,12 @@
 		<forward name="CommQuery"
 		         path="/forms/CommQuery.jsp"/>
 		<forward name="PlotQuery"
-		         path="/forms/plot-query.jsp"/>
+		         path="/PlotQuery.do"
+		         redirect="false"
+		         contextRelative="false"/>
+		<forward name="LoadPlotQuery"
+		         path="/LoadPlotQuery.do"
+		         redirect="false"/>
 		<forward name="RegisterNewUser"
 		         path="/forms/RegisterNewUser.jsp"/>
 	</global-forwards>
@@ -292,7 +305,7 @@
 		        input="EntityName"/>
 		<action path="/GenericDispatcher"
 		        type="org.vegbank.ui.struts.GenericDispatcherAction"
-                        name="GenericDispatcherForm"
+		        name="GenericDispatcherForm"
 		        scope="request"/>
 		<action path="/Logoff"
 		        type="org.vegbank.ui.struts.LogoffAction">
@@ -332,7 +345,11 @@
 		        name="PlotQueryForm"
 		        scope="request"
 		        validate="true"
-		        input="PlotQuery"/>
+		        input="LoadPlotQuery">
+			<forward name="display_results"
+			         path="/forms/DisplayResults.jsp"
+			         redirect="false"/>
+		</action>
 		<action path="/LoadCertification"
 		        type="org.vegbank.ui.struts.CertificationLoadAction"
 		        name="CertificationForm"
@@ -344,6 +361,15 @@
 			              value="reg"/>
 			<forward name="success"
 			         path="/forms/certification.jsp"/>
+		</action>
+		<action path="/LoadPlotQuery"
+		        type="org.vegbank.ui.struts.PlotQueryLoadAction"
+		        name="PlotQueryForm"
+		        validate="false"
+		        scope="request">
+			<forward name="plot_query"
+			         path="/forms/plot-query.jsp"
+			         redirect="false"/>
 		</action>
 		<action path="/LoadUser"
 		        parameter="user"
@@ -384,6 +410,9 @@
 			              value="org.vegbank.ui.struts.Authenticate"/>
 			<set-property property="reqRoles"
 			              value="reg"/>
+			<forward name="failure"
+			         path="/LoadCertification.do"
+			         redirect="false"/>
 		</action>
 		<action path="/UpdatePassword"
 		        type="org.vegbank.ui.struts.UserProfileAction"
@@ -429,7 +458,7 @@
 		</action>
 		<action path="/ViewCertification"
 		        type="org.vegbank.ui.struts.admin.CertificationViewAction"
-		        name="CertificationForm"
+		        name="CertificationViewForm"
 		        scope="request"
 		        validate="false">
 			<set-property property="authClass"
