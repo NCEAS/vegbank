@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="view autogenerator" default="init" basedir=".">
+  <!--this creates a set of views based on the /xml/docs/db_model_vegbank.xml.  These are included in views elsewhere in the site.-->
+  <target name="init">
+     <property name="docsxmldir" value="../../docs/xml/" /> <!-- location (ending in /) for xml docs dir, as a relative path -->
+    <property name="xsl_to_unique" value="${docsxmldir}dbmodel-to-uniqueformlist.xsl" />  <!-- generates the file {temp_xml_name} that is a unique list of form-views to create for all tables -->
+    <property name="xsl_to_views" value="${docsxmldir}dbmodel-to-jsp-autogen.xsl" /> <!-- xsl that generates the views -->
+    <property name="temp_xml_name" value="${docsxmldir}uniqueformlist.xml" /><!-- the name of the xml file that is generated from xsl_to_unique -->
+    <property name="db_model" value="${docsxmldir}db_model_vegbank.xml" /> <!-- name of xml file that defines our data model -->
+    <property name="views_autogen_dir" value="../../web/views/autogen/" /><!-- relative path from docsxmldir to views/autogen -->
+  </target>
+  <target name="writeviews" depends="init">
+    
+     <style in="${db_model}" out="${temp_xml_name}" style="${xsl_to_unique}" force="true" />
+     <style in="${db_model}" out="${docsxmldir}BOGUS_autogenviews" style="${xsl_to_views}" force="true" >
+       <param name="pathToWrite" expression="${views_autogen_dir}" />
+     </style>
+  </target>
+</project>
