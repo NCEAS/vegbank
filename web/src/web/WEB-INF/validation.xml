@@ -7,7 +7,7 @@
 <!--
     Validation Rules for the Vegbank application 
 
-    $Id: validation.xml,v 1.1 2003-05-12 23:07:48 farrell Exp $
+    $Id: validation.xml,v 1.2 2003-07-23 18:45:06 mlee Exp $
 -->
 
 <form-validation>
@@ -17,7 +17,7 @@
     <formset>
 
         <form name="AddReferenceForm">
-            <field property="reference.shortName"
+            <field property="reference.shortname"
                    depends="required">
               <arg0   key="reference.shortname" resource="false"/>
             </field>
@@ -25,7 +25,7 @@
                    depends="required">
               <arg0   key="reference.title" resource="false"/>
             </field>
-            <field property="reference.pubDate"
+            <field property="reference.pubdate"
                     depends="date">
               <arg0   key="reference.pubDate"
                       resource="false"/>
@@ -44,30 +44,30 @@
         </form>
 
         <form name="AddCoverMethodForm">
-            <field property="coverMethod.coverType"
+            <field property="coverMethod.covertype"
                    depends="required">
               <arg0   key="coverMethod.coverType" resource="false"/>
             </field>
         </form>
 
         <form name="AddStratumMethodForm">
-            <field property="stratumMethod.stratumMethodName"
+            <field property="stratumMethod.stratummethodname"
                    depends="required">
               <arg0   key="stratumMethod.stratumMethodName" resource="false"/>
             </field>
-            <field property="stratumMethod.stratumMethodDescription"
+            <field property="stratumMethod.stratummethoddescription"
                    depends="required">
               <arg0   key="stratumMethod.stratumMethodDescription" resource="false"/>
             </field>
         </form>
 
         <form name="AddPartyForm">
-            <field property="party.surName"
+            <field property="party.surname"
                    depends="required">
               <arg0   key="party.surName" resource="false"/>
             </field>
             <!--
-            <field property="organization_ID"
+            <field property="organization_id"
                    depends="integer">
               <arg0   key="organization" resource="false"/>
             </field>
