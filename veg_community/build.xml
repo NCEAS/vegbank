@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *     '$Date: 2003-02-13 01:03:06 $'
-  * '$Revision: 1.6 $'
+  *     '$Date: 2003-02-13 18:37:00 $'
+  * '$Revision: 1.7 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -36,7 +36,11 @@
 	  <property name="current" value="./" />
     <property name="toplib" value="${basedir}/../lib"/>
   	<property name="build.dir" value="./build" />
-	  <property name="src" value="src" />
+    <property name="build.lib.dir" value="${build.dir}/lib"/>
+    <property name="build.src.dir" value="${build.dir}/src"/>
+    <property name="build.src.java.dir" value="${build.src.dir}/java"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="src" value="src" />
   	<property name="lib" value="./lib" />
 	  <property name="xml_dir" value="./xml"/>
   	<property name="jdbc" value="../lib/jdbc7.0-1.2.jar" />
@@ -55,34 +59,36 @@
   <!-- PREPARE -->
   <target name="prepare" depends="init" description="==> prepares the project">
 	  <mkdir dir="${build.dir}" />
-	  <mkdir dir="${lib}" />
-	
-	  <copydir  src="${src}" 
-		          dest="${build.dir}" 
-		          filtering="yes"
-		          includes="**.java"
-		          excludes="**/CVS*"
-	  />
+    <mkdir dir="${build.lib.dir}"/>
+    <mkdir dir="${build.src.dir}"/>
+    <mkdir dir="${build.src.java.dir}"/>
+    <mkdir dir="${build.classes.dir}"/>
+
+    <copy todir="${build.src.java.dir}"> 
+      <fileset dir="${src}" includes="*java"/>
+    </copy>
   </target>	
 	
 	<!-- COMPILE -->
 <target name="compile" depends="prepare"  description="==> compiles the community loaders">
 
-  <javac srcdir="${build.dir}" 
+  <javac srcdir="${build.src.java.dir}" 
     debug="on"
 		classpath="${cpath}"
 		includes="  VegCommunityLoader.java EcoartVegCommunitySource.java" 
-		destdir="${build.dir}"
+		destdir="${build.classes.dir}"
 	/>
 	
 </target>	
 
 <!-- JAR -->	
 <target name="jar" depends="compile" description="==> creates the jar archive" >
-	<jar jarfile ="${lib}/vegcommunity.jar"
-		basedir="${build.dir}"
+	<jar jarfile ="${build.lib.dir}/vegcommunity.jar"
+		basedir="${build.classes.dir}"
 		includes="**"
-	/>
+  >
+    <fileset dir="${build.src.java.dir}" casesensitive="yes"/>
+  </jar>
 </target>		
 
 
