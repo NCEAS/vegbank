@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: fileDownload.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2000-11-20 15:45:44 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-07-02 17:26:49 $'
+ *  '$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,15 +72,15 @@ public class fileDownload extends HttpServlet
 	private transformXML transformer = new transformXML();
 
 	private static final String htmlStyleSheet =
-		"/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl";
+		"/usr/local/devtools/jakarta-tomcat/webapps/vegbank/WEB-INF/lib/ascii-treeview.xsl";
 
 	//below are the stylesheets for the flat ascii file tarnsformation process 
 	private static final String asciiSitesStyleSheet =
-		"/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotsites-flatascii.xsl";
+		"/usr/local/devtools/jakarta-tomcat/webapps/vegbank/WEB-INF/lib/plotsites-flatascii.xsl";
 	private static final String asciiSpeciesStyleSheet =
-		"/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotspecies-flatascii.xsl";
+		"/usr/local/devtools/jakarta-tomcat/webapps/vegbank/WEB-INF/lib/plotspecies-flatascii.xsl";
 	private static final String condensedAsciiSpeciesStyleSheet =
-		"/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotspecies-condensedascii.xsl";
+		"/usr/local/devtools/jakarta-tomcat/webapps/vegbank/WEB-INF/lib/plotspecies-condensedascii.xsl";
 
 	/**
 	 * constructor method -- just to show status on startup
