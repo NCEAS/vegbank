@@ -14,8 +14,8 @@ import org.vegbank.common.dbAdapter.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-04-16 00:19:51 $'
- * '$Revision: 1.8 $'
+ * '$Date: 2003-05-10 00:33:27 $'
+ * '$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -183,6 +183,66 @@ public class Utility
 			throw e;
 		}
 		return object;
+	}
+	
+	/**
+	 * Utility Method to check for nulls and empty String
+	 *
+	 */
+	public static boolean isStringNullOrEmpty(String stringToCheck)
+	{
+		boolean result = false;
+		if ( stringToCheck == null || stringToCheck.equals("") ) 
+		{
+			result = true;
+		}
+		else
+		{
+			result = false;
+		}
+		return result;
+	}
+	
+	/**
+	 * Convience method to check several string for nullness or emtyness
+	 * @author farrell
+	 *
+	 * @param String[] -- Strings to check
+	 * @return boolean -- 
+	 */
+	public static boolean isAnyStringNullorEmpty( String[] stringsToCheck)
+	{
+		boolean result = false;
+		for (int i = 0; i < stringsToCheck.length; i++)
+		{
+			if ( isStringNullOrEmpty(stringsToCheck[i]) )
+			{
+				result = true;
+				return result;
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Convience method to check several string for non nullness or non emtyness
+	 * @author farrell
+	 *
+	 * @param String[] -- Strings to check
+	 * @return boolean -- 
+	 */
+	public static boolean isAnyStringNotNullorEmpty( String[] stringsToCheck)
+	{
+		boolean result = false;
+		for (int i = 0; i < stringsToCheck.length; i++)
+		{
+			if ( ! isStringNullOrEmpty(stringsToCheck[i]) )
+			{
+				result = true;
+				return result;
+			}
+		}
+		return result;
 	}
 	
 }

@@ -7,8 +7,8 @@
  *  Release: @@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-02-27 01:05:12 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2003-05-10 00:33:27 $'
+ *  '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,5 +104,36 @@ public class UtilityTest extends TestCase
 		assertEquals(expectedResultD, resultD);  
 
   }
+  
+  public void testIsStringNullOrEmpty()
+  {
+		assertEquals(true, Utility.isStringNullOrEmpty(null));
+		assertEquals(true, Utility.isStringNullOrEmpty(""));
+		assertEquals(false, Utility.isStringNullOrEmpty(" "));
+		assertEquals(false, Utility.isStringNullOrEmpty("Not an empty string"));
+  }
+  
+	public void testIsAnyStringNullorEmpty()
+	{
+		String[] emptyArray = {};
+		String[] fullOfStrings = {"full", "of", "strings"};
+		String[] onlyOneNull = {"here", "is", "that", null, "damit"};
+		
+		assertEquals(false, Utility.isAnyStringNullorEmpty(emptyArray) );
+		assertEquals(false, Utility.isAnyStringNullorEmpty(fullOfStrings) );
+		assertEquals(true, Utility.isAnyStringNullorEmpty(onlyOneNull) );
+	}
 
+	public void testIsAnyStringNotNullorEmpty()
+	{
+		String[] emptyArray = {};
+		String[] fullOfStrings = {"full", "of", "strings"};
+		String[] onlyOneNull = {"here", "is", "that", null, "damit"};
+		String[] noNonEmptyString = {"", null, "", null, ""};
+		
+		assertEquals(false, Utility.isAnyStringNotNullorEmpty(emptyArray) );
+		assertEquals(true, Utility.isAnyStringNotNullorEmpty(fullOfStrings) );
+		assertEquals(true, Utility.isAnyStringNotNullorEmpty(onlyOneNull) );
+		assertEquals(false, Utility.isAnyStringNotNullorEmpty(noNonEmptyString) );
+	}
 }

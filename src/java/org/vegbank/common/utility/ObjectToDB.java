@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-16 17:37:44 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-10 00:33:27 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
  
 package org.vegbank.common.utility;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,6 +33,7 @@ import java.util.AbstractList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -49,6 +51,7 @@ public class ObjectToDB extends VegBankObjectWriter
 	Connection conn;	
 	protected AbstractList fieldNames = new Vector();
 	private AbstractList fieldValues = new Vector();
+	//private Hashtable attributeNameValues = new Hashtable();
 	private int primaryKey;
 	private Hashtable foreignKeyHash = new Hashtable();
 	
@@ -76,7 +79,7 @@ public class ObjectToDB extends VegBankObjectWriter
 	public void setForeignKey( String fieldName, int foreignKey)
 	{	
 		System.out.println("Allocating a FK " + fieldName + " " + foreignKey);		
-		foreignKeyHash.put( fieldName.toUpperCase() , new Integer(foreignKey));
+		foreignKeyHash.put( fieldName.toUpperCase() , new Integer(foreignKey).toString()  );
 	}
 	  
 	public void setForeignKeys( Hashtable foreignKeys)
@@ -94,83 +97,114 @@ public class ObjectToDB extends VegBankObjectWriter
 		return className + "_ID";
 	}
 	
-	private void prepareObjectForWriting()
+	private void prepareObjectForWriting() throws IllegalArgumentException, ClassNotFoundException, IllegalAccessException, InvocationTargetException
 	{
 		for (int i=0; i < methods.length ; i++)
 		{
 			Method method = methods[i];
 			String methodName = method.getName();
+			// empty parameter list for a get method
+			Object[] parameters = {};
 			
-			try
+			// Search this object for get methods 
+			if ( isGetMethod(method) )
 			{
-				if ( isGetMethod(method) )
-				{
-					if ( isGetMethod(method, "java.lang.String") )
-					{
-						String fieldName = this.getFieldName(methodName, null);
-						String fieldValue = (String) method.invoke(object, null);
-						fieldNames.add(fieldName);
-						Object[] parameters = {};
-						fieldValues.add(method.invoke(object, parameters));
-					}
-					else if ( XMLToObject.existsInVegbankObjectModel(method.getReturnType().getName()))
-					{
-						String fieldName = this.getFieldName(methodName, "_ID");
-						String fieldValue = null;
-						//System.out.println("searching " + object.getClass().getName() + "  for " + method.getName() );
-						Object obj = method.invoke(object, null);
-						if ( obj != null)
-						{
-							//System.out.println("========== " + obj + " && " + method.getReturnType().getName() );
-							ObjectToDB o2d = new ObjectToDB(obj);
-							o2d.setForeignKey( fieldName, this.primaryKey );
-							o2d.write();
-							
-							// Use the allocated pk as the foreign key for this table							
-							fieldValue = Integer.toString( o2d.getPrimaryKey() ); // TODO: handle this as an int throughout !!!
-						}
-						else
-						{
-							Integer fK = (Integer) this.foreignKeyHash.get(fieldName.toUpperCase());
-							
-							Enumeration e = foreignKeyHash.keys();
-							while ( e.hasMoreElements() )
-							{
-								Object  key = e.nextElement();
-								//System.out.println(">>>>>>>>>>>>>" + key + "== " + foreignKeyHash.get(key));
-							}
-							
-							if ( fK != null)
-							{
-								fieldValue = fK.toString();
-							}
-							else
-							{
-								fieldValue = null;
-							}
-							System.out.println("Could not get a VALUE for: " +this.getFieldName(methodName, "_ID") + " using " + fieldValue );
-						}
-						fieldNames.add(fieldName);
-						fieldValues.add(fieldValue);
-					}
+				if ( isGetMethod(method, "java.lang.String") )
+				{					
+					// get the name and value of the field 
+					String fieldName = this.getFieldName(methodName, null);
+					String fieldValue = (String) method.invoke(object, parameters);
+					
+					storeNameAndValue(fieldName, fieldValue);
 				}
-				else 
+				else if ( isGetMethod(method, "int") )
 				{
-					System.out.println("I am a " + method.getReturnType().getName());
-					// Not of interest
+					// I have a referenced Object  -- I want to get its foriegn key
+					String fieldName = this.getFieldName(methodName, "");
+					String fieldValue = (String) foreignKeyHash.get(fieldName.toUpperCase() );
+					if (Utility.isStringNullOrEmpty(fieldValue))
+					{			
+						//System.out.println("ObjectToDB > No stored FK for " + fieldName + " " + foreignKeyHash);	
+						// Check the Object
+						Integer fieldValueInt = (Integer) method.invoke(object, parameters);
+						fieldValue = fieldValueInt.toString();	
+					}
+					
+					// -1 and 0 are not real FK ignore
+					if (! fieldValue.equals("-1") && !  fieldValue.equals("0") )
+					{				
+						storeNameAndValue(fieldName, fieldValue);
+					}
+					//System.out.println("ObjectToDB > " + fieldName + " v. " + fieldValue);
+
 				}
 			}
-			catch (Exception e)
+			
+//					else if ( VegBankObjectWriter.existsInVegbankObjectModel(method.getReturnType().getName()))
+//					{
+//						String fieldName = this.getFieldName(methodName, "_ID");
+//						String fieldValue = null;
+//						//System.out.println("searching " + object.getClass().getName() + "  for " + method.getName() );
+//						Object obj = method.invoke(object, null);
+//						if ( obj != null)
+//						{
+//							//System.out.println("========== " + obj + " && " + method.getReturnType().getName() );
+//							ObjectToDB o2d = new ObjectToDB(obj);
+//							o2d.setForeignKey( fieldName, this.primaryKey );
+//							o2d.write();
+//							
+//							// Use the allocated pk as the foreign key for this table							
+//							fieldValue = Integer.toString( o2d.getPrimaryKey() ); // TODO: handle this as an int throughout !!!
+//						}
+//						else
+//						{
+//							Integer fK = (Integer) this.foreignKeyHash.get(fieldName.toUpperCase());
+//							
+//							Enumeration e = foreignKeyHash.keys();
+//							while ( e.hasMoreElements() )
+//							{
+//								Object  key = e.nextElement();
+//								//System.out.println(">>>>>>>>>>>>>" + key + "== " + foreignKeyHash.get(key));
+//							}
+//							
+//							if ( fK != null)
+//							{
+//								fieldValue = fK.toString();
+//							}
+//							else
+//							{
+//								fieldValue = null;
+//							}
+//							System.out.println("Could not get a VALUE for: " +this.getFieldName(methodName, "_ID") + " using " + fieldValue );
+//						}
+//						fieldNames.add(fieldName);
+//						fieldValues.add(fieldValue);
+//					}
+			else 
 			{
-				e.printStackTrace();
+				//System.out.println("I am a " + method.getReturnType().getName());
+				// Not of interest
 			}
 		}
 	}
+
+
+	private void storeNameAndValue(String fieldName, String fieldValue)
+	{
+		// if not null add to the lists used in construction of query
+		if ( ! Utility.isStringNullOrEmpty(fieldValue))
+		{
+			this.fieldNames.add(fieldName);
+			this.fieldValues.add(fieldValue);
+		}
+	}
 	
-	public void write()
+	public boolean write() throws Exception
 	{	
+		boolean result = true;
+		
 		this.prepareObjectForWriting();
-		// Get all the Prepared Statements
+		// Get the Prepared Statement
 		String statement = this.getPreparedStatementString();
 		try
 		{		
@@ -183,7 +217,7 @@ public class ObjectToDB extends VegBankObjectWriter
 				int modInt = i+1;
 				String value = (String) fieldValues.get(i);
 				System.out.println("ObjectToDB > setting '" + fieldValues.get(i) +  "' for: " + fieldNames.get(i));
-				if ( value == null || value.equals(""))
+				if ( Utility.isStringNullOrEmpty(value) )
 				{
 					pstmt.setNull(modInt, java.sql.Types.VARCHAR );
 				}
@@ -198,18 +232,50 @@ public class ObjectToDB extends VegBankObjectWriter
 			pstmt.setInt(fieldValues.size() +1, primaryKey);
 				
 			pstmt.execute();
+			
+			// Write Objects that depend on this PK to database
+			handleChildren();
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			System.out.println("ObjectToDB > Problem with SQL '" + statement + "'"  );
 			e.printStackTrace();
+			result = false;
+			throw new Exception("Problem with SQL '" + statement + "' --> " + e.getMessage() );
 		}
-			
 
-		
-		// Write the prepared Statements
+		// if we get here 
+		return result;
 	}
 	
+	/**
+	 * 
+	 */
+	private void handleChildren() throws Exception
+	{
+		for (int i=0; i < methods.length ; i++)
+		{
+			Method method = methods[i];
+			String methodName = method.getName();
+
+			if ( isGetMethod(method, "java.util.List") )
+			{
+				System.out.println("ObjectToDB > Handling a list");
+				// Need to Loop throught all elements and insert them into the DB
+				List objList = (List) method.invoke(object, null);
+				Iterator it = objList.iterator();
+				while ( it.hasNext() )
+				{
+					Object obj = it.next();
+					// Insert the Object into the Database
+					ObjectToDB o2d = new ObjectToDB(obj);
+					o2d.setForeignKey( this.getPrimaryKeyFieldName() , this.primaryKey );
+					o2d.write();
+				}
+			}	
+		}
+	}
+
 	/**
 	 * @return String - sql for creating prepared statement
 	 */
@@ -222,7 +288,7 @@ public class ObjectToDB extends VegBankObjectWriter
 		
 		if (fieldNames != null)
 		{
-			Iterator iter = fieldNames.iterator();
+			Iterator iter = this.fieldNames.iterator();
 			while ( iter.hasNext() )
 			{
 				sb.append( iter.next() );

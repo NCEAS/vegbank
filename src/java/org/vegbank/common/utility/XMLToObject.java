@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-16 17:37:44 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-10 00:33:27 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -169,29 +169,6 @@ public class XMLToObject
 	}
 
 	/**
-	 * Seaches the vegbank object model for a a classname
-	 * 
-	 * @param className
-	 * @return boolean - is there a corresponding class
-	 */
-	public static boolean existsInVegbankObjectModel(String className)
-	{
-		boolean result = false;
-		try
-		{
-			//System.out.println("--->" + className);
-			Class classDefinition = Class.forName(className);
-			result = true;
-		}
-		catch (ClassNotFoundException e)
-		{
-			// No object of this name in the datamodel;
-		}
-		//System.out.println("--->" + result);
-		return result;
-	}
-
-	/**
 	 * Gets the value of a Text Node
 	 * 
 	 * @param node
@@ -239,7 +216,7 @@ public class XMLToObject
 		if (parent == null)
 		{
 			// Is this handled in the vegbank object model
-			if (existsInVegbankObjectModel(fullyQualifiedName))
+			if (VegBankObjectWriter.existsInVegbankObjectModel(fullyQualifiedName))
 			{
 				// create the object
 				newObject = Utility.createObject(fullyQualifiedName);
@@ -257,7 +234,7 @@ public class XMLToObject
 				newObject = this.callSetMethod(parent, method, node);
 			}
 			// No set method exists but there is a cognate object 
-			else if (existsInVegbankObjectModel(fullyQualifiedName))
+			else if (VegBankObjectWriter.existsInVegbankObjectModel(fullyQualifiedName))
 			{
 				// Get the object and search it for a set for the parent
 				newObject = Utility.createObject(fullyQualifiedName);
@@ -287,7 +264,7 @@ public class XMLToObject
 		Object newObject = null;
 		String fullyQualifiedName = getFullyQualifiedName(node);
 		//System.out.println("---> " + fullyQualifiedName);
-		if (existsInVegbankObjectModel(fullyQualifiedName) )
+		if (VegBankObjectWriter.existsInVegbankObjectModel(fullyQualifiedName) )
 		{
 			System.out.println("XMLToObject > creating Object " + fullyQualifiedName);
 			// create the object and add it to the parent

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-16 17:37:44 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-10 00:33:27 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,16 +73,29 @@ public class VegBankObjectWriter
 		 * @param method
 		 * @return boolean
 		 */
-	protected boolean isGetMethod(Method method, String returnType) throws ClassNotFoundException
+	protected boolean isGetMethod(Method method, String returnType)
 	{
 		boolean result = false;
+		//System.out.println("++++++>>>> " + returnType + " & " + method.getReturnType() );
 		// Check for the get method naming convention
-		if ( isGetMethod(method))
+		try
 		{
-			if ( method.getReturnType().equals( Class.forName(returnType))  )
+			if ( isGetMethod(method))
 			{
-				result = true;
+				if ( method.getReturnType().toString().equals(returnType) )
+				{
+					//System.out.println("match " + returnType + " & " + method.getReturnType() );
+					result = true;
+				}
+				else if ( method.getReturnType().equals( Class.forName(returnType))  )
+				{
+					result = true;
+				}
 			}
+		}
+		catch (ClassNotFoundException e)
+		{
+			// Return false here
 		}
 		return result;
 	}
@@ -95,6 +108,29 @@ public class VegBankObjectWriter
 		{
 				result = true;
 		}
+		return result;
+	}
+
+	/**
+	 * Seaches the vegbank object model for a a classname
+	 * 
+	 * @param className
+	 * @return boolean - is there a corresponding class
+	 */
+	public static boolean existsInVegbankObjectModel(String className)
+	{
+		boolean result = false;
+		try
+		{
+			//System.out.println("--->" + className);
+			Class classDefinition = Class.forName(className);
+			result = true;
+		}
+		catch (ClassNotFoundException e)
+		{
+			// No object of this name in the datamodel;
+		}
+		//System.out.println("--->" + result);
 		return result;
 	}
 

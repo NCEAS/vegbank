@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 19:34:15 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-10 00:33:26 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -237,6 +237,7 @@ public class Community implements Constants
 	 */
 	public AbstractList getCommunityUsages()
 	{
+		System.out.println("Communty > returning Usages: " + usages);
 		return usages;
 	}
 

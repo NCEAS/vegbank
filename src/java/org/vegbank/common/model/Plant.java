@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 19:34:16 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-05-10 00:33:26 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@ public class Plant implements Constants, Comparable
 	private String statusStartDate = null;
 	private String commonName = null;
 	private Vector plantUsages = new Vector();
+	private Vector plantNames = new Vector();
 	private Reference scientificNameReference = null;
 	private Reference scientificNameNoAuthorsReference = null;
 	private Reference codeNameReference = null;
@@ -282,11 +283,18 @@ public class Plant implements Constants, Comparable
 	public void setCommonName(String commonName)
 	{
 		this.commonName = commonName;
+
+		PlantName pn = new PlantName();
+		pn.setPlantName(commonName);
+		this.addPlantName(pn);
+
 		PlantUsage pu = new PlantUsage();
 		pu.setPlantName(commonName);
 		pu.setPlantNameStatus(USAGE_NAME_STATUS_STANDARD);
-		pu.setClassSystem(USAGE_NAME_COMMON);	
+		pu.setClassSystem(USAGE_NAME_COMMON);
 		this.addPlantUsage(pu);
+		
+
 	}
 
 
@@ -506,6 +514,27 @@ public class Plant implements Constants, Comparable
 	public void setStatusStopDate(String statusStopDate)
 	{
 		this.statusStopDate = statusStopDate;
+	}
+
+	/**
+	 * @return
+	 */
+	public AbstractList getPlantNames()
+	{
+		return plantNames;
+	}
+
+	/**
+	 * @param vector
+	 */
+	public void setPlantNames(AbstractList plantNameList)
+	{
+		plantNames = (Vector) plantNameList;
+	}
+	
+	public void addPlantName(PlantName plantName)
+	{
+		plantNames.add(plantName);
 	}
 
 }
