@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-31 01:29:25 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-03-02 22:32:33 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -297,7 +297,24 @@ public class CertificationForm extends ValidatorForm
 	 * @param string
 	 */
 	public void setEsaMember(String esaMember) {
-		this.esaMember = esaMember;
+		if (esaMember == null) {
+			this.esaMember = "0";
+			return;
+		}
+
+		if (esaMember.equals("false") || esaMember.equalsIgnoreCase("f") || 
+					esaMember.equalsIgnoreCase("0")) {
+			// false
+			this.esaMember = "0";
+
+		} else if (esaMember.equals("true") || esaMember.equalsIgnoreCase("t") || 
+					esaMember.equalsIgnoreCase("1")) {
+			// true
+			this.esaMember = "1";
+		} else {
+			// wTF?
+			this.esaMember = esaMember;
+		}
 	}
 
 	/**
@@ -647,7 +664,24 @@ public class CertificationForm extends ValidatorForm
 	 * @param string
 	 */
 	public void setPeerReview(String peerReview) {
-		this.peerReview = peerReview;
+		if (peerReview == null) {
+			this.peerReview = "0";
+			return;
+		}
+
+		if (peerReview.equals("false") || peerReview.equalsIgnoreCase("f") || 
+					peerReview.equalsIgnoreCase("0")) {
+			// false
+			this.peerReview = "0";
+
+		} else if (peerReview.equals("true") || peerReview.equalsIgnoreCase("t") || 
+					peerReview.equalsIgnoreCase("1")) {
+			// true
+			this.peerReview = "1";
+		} else {
+			// wTF?
+			this.peerReview = peerReview;
+		}
 	}
 
 	/**
