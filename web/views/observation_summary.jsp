@@ -10,14 +10,13 @@
 	
 <!-- 
 *  '$RCSfile: observation_summary.jsp,v $'
-*   Purpose: web form to delete plots by their plot_id values
 *   Copyright: 2000 Regents of the University of California and the
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-09-14 18:33:01 $'
-*  '$Revision: 1.1 $'
+*  '$Date: 2004-09-14 22:29:50 $'
+*  '$Revision: 1.2 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -38,15 +37,15 @@
 
 <head>@defaultHeadToken@
 <title>Plot Observation Summary View</title>
-<link REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css">
+<link REL=STYLESHEET HREF="@stylesheet@" TYPE="text/css">
 </head>
 
 
-<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
+<BODY>
 
 @vegbank_header_html_normal@
 
-  
+  <h2>View plot-observation(s) in VegBank</h2>
   <vegbank:get select="plotandobservation" beanName="map" where="where_observation_pk" pager="true"/>
 
 
