@@ -2,6 +2,12 @@ package org.vegbank.common.utility;
 
 import java.sql.Connection;
 
+/**
+ * 
+ * @author farrell
+ *
+ * @deprecated
+ */
 public class LocalDbConnectionBroker 
 {
 

@@ -103,6 +103,12 @@ public class IssueStatement
 		} //end if	
 	} //end main method
 
+	/**
+	 * 
+	 * @param sqlStatement
+	 * @return
+	 * @deprecated
+	 */
 	public Vector issuePureSQL(StringBuffer sqlStatement)
 	{
 		try
@@ -151,9 +157,9 @@ public class IssueStatement
 		int inputReturnFieldLength)
 	{
 
-		/**
-		* establish the database connection and statement
-		*/
+		
+		// establish the database connection and statement
+		
 		try
 		{
 			////dbConnect m = new dbConnect();

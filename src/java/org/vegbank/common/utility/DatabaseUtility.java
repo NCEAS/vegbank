@@ -5,8 +5,8 @@
  *             National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-15 20:22:44 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-07-23 21:51:18 $'
+ *	'$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ import java.sql.ResultSet;
 import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.MissingResourceException;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -74,6 +75,9 @@ public class DatabaseUtility
 	
 	private Connection conn = null;
 	private ResourceBundle defaultPropFile = ResourceBundle.getBundle("database");
+	
+	private static PropertyResourceBundle options = null;
+	private static String propertiesFile = "database";
 	
 	/**
 	 * due to problems connecting to the various vegbank databases and vegbank 
@@ -794,6 +798,21 @@ public class DatabaseUtility
 			System.out.println(" levels: {1=registered 2=certified 3=professional 4=senior 5=manager}");
 			System.out.println("3] changepassword email host newpassword ");
 		}
+	}
+	
+	/**
+	 * Utility method to get an option value from the properties file
+	 *
+	 * @param optionName the name of the option requested
+	 */
+	public static String getOption(String optionName) {
+			// Get the configuration file information
+			if (options == null) {
+				options = (PropertyResourceBundle)
+					PropertyResourceBundle.getBundle(propertiesFile);
+			}
+			String value = (String)options.handleGetObject(optionName);
+			return value;
 	}
 	
 

@@ -5,8 +5,8 @@
  *             			National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-15 20:22:44 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-07-23 21:51:18 $'
+ *	'$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 package org.vegbank.common.utility;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -54,8 +55,7 @@ public class DatabaseAccess
 	 * @param inputStatement
 	 * @return ResutSet
 	 */
-
-	public ResultSet issueSelect(String inputStatement) throws SQLException
+	public ResultSet issueSelectt(String inputStatement) throws SQLException
 	{
 		ResultSet results = null;
 		Connection connection = this.getConnection();
@@ -66,6 +66,41 @@ public class DatabaseAccess
 		
 		// return the connection
 		LocalDbConnectionBroker.manageLocalDbConnectionBroker("releaseConn");
+		return results;
+	} //end method
+	
+	/**
+	 * Runs select against the database
+	 *
+	 * @param inputStatement
+	 * @return ResutSet
+	 */
+	public ResultSet issueSelect(String inputStatement) throws SQLException 
+	{
+		DBConnection dbConn = null;//DBConnection
+		int serialNumber = -1;//DBConnection serial number
+		PreparedStatement pstmt = null;
+		ResultSet results = null;
+		//	Get DBConnection
+		try
+		{
+			dbConn=DBConnectionPool.getDBConnection("This is an empty string");
+			serialNumber=dbConn.getCheckOutSerialNumber();
+			
+			System.out.println("DatabaseAccess > Running query: " + inputStatement);
+			
+			Statement query = dbConn.createStatement();
+			results = query.executeQuery(inputStatement);
+		}
+		catch (SQLException e)
+		{
+			throw e;
+		}
+		finally
+		{
+			//Return dbconnection too pool
+			DBConnectionPool.returnDBConnection(dbConn, serialNumber);
+		}
 		return results;
 	} //end method
 	

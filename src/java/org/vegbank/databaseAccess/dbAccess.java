@@ -36,8 +36,8 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-07-15 20:19:27 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2003-07-23 21:51:19 $'
+ * 	'$Revision: 1.3 $'
  */
 
 public class dbAccess 
@@ -269,20 +269,6 @@ public class dbAccess
 			queryOutput = w.queryOutput;
 			queryOutputNum = w.queryOutputNum;
 		}
-		
-		//compound query action
-		else if (action.equals("compoundQuery")) 
-		{
-			//pass the array to the sql mapping class - compound queries
-			sqlMapper w = new sqlMapper();
-			xmlResult = w.developCompoundPlotQuery(
-				transformedString,
-				transformedStringNum);
-			//grab the results from the sqlMapper class
-			queryOutput = w.queryOutput;
-			queryOutputNum = w.queryOutputNum;
-		}
-		
 		//insert action -- to insert a plot to the last database
 		else if (action.equals("insert")) 
 		{

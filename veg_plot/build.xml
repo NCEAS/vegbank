@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-07-23 18:05:05 $'
-  *     '$Revision: 1.27 $'
+  *     '$Date: 2003-07-23 21:51:18 $'
+  *     '$Revision: 1.28 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -348,7 +348,6 @@
     <!-- Copy misc. files into container -->
 		<copy file="bin/coord_transform.sh" todir="${web.servlet.lib.dir}"/>
     <chmod dir="${web.servlet.lib.dir}" perm="ugo+x" includes="**/*.sh"/>
-		<copy file="../veg_community/sql/update_community_summary.sql" todir="${web.servlet.lib.dir}"/>
     
     <!-- Copy Third Party jars -->
     <copy todir="${web.servlet.lib.dir}">

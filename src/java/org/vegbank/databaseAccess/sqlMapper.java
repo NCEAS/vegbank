@@ -6,8 +6,8 @@ package org.vegbank.databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *    '$Date: 2003-07-11 23:14:04 $'
- * 	'$Revision: 1.1 $'
+ *    '$Date: 2003-07-23 21:51:19 $'
+ * 	'$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -916,105 +916,6 @@ public class  sqlMapper
 		 }
 		 return(v);
 	 }
-
-
-
-
-/**
- *
- * Method to map a query xml document containg more than one query element
- * to a query stored in the queryStore class.  The elements in the array
- * can be:
- * 	plotID
- * 	taxonName -- can have multiple if seperated by commas
- *	elevationMin
- * 	elevationMax
- * 	state
- * 	surfGeo 
- * 	multipleObs
- *  community
- *
- * @param transformedString string containg the query element type and 
- *		value (| delimeted )
- * @param transformedSringNum integer defining number of query elements
- */
-
-public String developCompoundPlotQuery(String[] transformedString, int transformedStringNum)
-{
-	String xmlResult = null;
-	try 
-	{
-		//get the query elements into a hash table
-		getQueryElementHash(transformedString, transformedStringNum);
-
-		// Grab the meta elements - like filename & number of query elements 
-		String resultType = (String)metaQueryHash.get("resultType");
- 		String outFile = (String)metaQueryHash.get("outFile");
-
-		// Look for commonly used queries elements
- 		String plotId = (String)queryElementHash.get("plotId");
-	 	String taxonName = (String)queryElementHash.get("taxonName");
- 		String elevationMin = (String)queryElementHash.get("elevationMin");
- 		String elevationMax = (String)queryElementHash.get("elevationMax");
- 		String state = (String)queryElementHash.get("state");
- 		String surfGeo = (String)queryElementHash.get("surfGeo");
- 		String multipleObs = (String)queryElementHash.get("multipleObs");
- 		String community = (String)queryElementHash.get("community");
- 
- 
-		// This is for debugging - and can be commented out later
- 		System.out.println("sqlMapper > developCompoundPlotQuery");
-		System.out.println("sqlMapper > resultType: " + resultType);
-		System.out.println("sqlMapper > plotId: " + plotId);
-		System.out.println("sqlMapper > taxonName: " + taxonName);
-		System.out.println("sqlMapper > elevationMin: " + elevationMin);
-		System.out.println("sqlMapper > elavationMax: " + elevationMax);
-		System.out.println("sqlMapper > state: " + state);
-		System.out.println("sqlMapper > multipleObs: " + multipleObs);
-		System.out.println("sqlMapper > community: " + community);
-		
-		
-		// Check that all the appropriate query elements are there
-		if (taxonName != null && resultType != null && outFile != null) 
-		{
-			System.out.println("sqlMapper.developCompoundPlotQuery  calling queryStore.getPlotId(compound)");
-			queryStore j = new queryStore();
-			j.getPlotId(taxonName, state, elevationMin, elevationMax,surfGeo, community);
-			queryOutput=j.outPlotId;
-			queryOutputNum=j.outPlotIdNum;
-		}
-		
-		
-		// GET THE PLOTID VECTOR
-		Vector plotIdVec = getVector(queryOutput);
-		System.out.println("sqlMapper > number of plots returned: " + plotIdVec.size() );
-		
-		// INSTANTIATE AN INSTANCE OF THE DATABASE ACCESS CLASS
-		dbAccess dbaccess = new dbAccess();
-		
-		if (resultType.equals("summary") )
-		{
-			String testFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml";
-			System.out.println("sqlMapper > writing the plots using new class - test file: "+testFile );
-			dbaccess.writeMultipleVegBankPlot(plotIdVec, testFile);
-		}
-		else if (resultType.equals("identity") )
-		{
-			// IF THE THE RESULT TYPE IS AN IDENTITY THEN PRODUCE THAT
-			String testFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/identity.xml";
-			System.out.println("sqlMapper > writing the plots using new class - test file: " + testFile );
-			dbaccess.writeMultipleVegBankPlotIdentifcation(plotIdVec, testFile);
-		}
-		
-	}
-	catch ( Exception e )
-	{
-		System.out.println("sqlMapper > Exception: sqlMapper.developPlotQuery " +e.getMessage());
-		e.printStackTrace();
-	}
-	return xmlResult;
-} 
-
 
 	/**
 	 * method to develope and issue the approporiate sql query 

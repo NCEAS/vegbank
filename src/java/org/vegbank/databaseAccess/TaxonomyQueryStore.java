@@ -6,8 +6,8 @@ package org.vegbank.databaseAccess;
  *    Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-11 23:14:04 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-23 21:51:19 $'
+ *	'$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import org.vegbank.common.Constants;
-import org.vegbank.common.utility.*;
 
 /**
  * this class has been implemented to contain methods which are to be
@@ -46,7 +45,6 @@ import org.vegbank.common.utility.*;
  */
 public class TaxonomyQueryStore implements Constants
 {
-	LocalDbConnectionBroker lb = new LocalDbConnectionBroker();
 	private Connection c = null;
 	private String dbConnectString = ""; // the db connect string
 	private ResourceBundle rb = ResourceBundle.getBundle("database");

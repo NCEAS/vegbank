@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-07-15 20:19:27 $'
- *  '$Revision: 1.11 $'
+ *  '$Date: 2003-07-23 21:51:19 $'
+ *  '$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,17 +29,20 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.databaseAccess.dbAccess;
 import org.vegbank.servlet.util.ServletUtility;
 
@@ -77,8 +80,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-07-15 20:19:27 $'
- *  '$Revision: 1.11 $'
+ *  '$Date: 2003-07-23 21:51:19 $'
+ *  '$Revision: 1.12 $'
  * 
  */
 
@@ -100,6 +103,7 @@ public class DataRequestServlet extends HttpServlet
 	private static final String returnXMLStyleSheet = SERVLET_DIR + "copy.xsl";
 	private static final String communityQueryPage = "/vegbank/forms/community-query.html";
 	
+	
 	/**
 	 * constructor method
 	 */
@@ -120,6 +124,36 @@ public class DataRequestServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Initialize the servlet by creating appropriate database connections
+	 */
+	public void init( ServletConfig config ) throws ServletException {
+		try {
+			super.init( config );
+			System.out.println("DataRequestServlet Initialize");
+
+
+			//initial DBConnection pool
+			DBConnectionPool.getInstance();
+
+		} catch ( ServletException ex ) {
+			throw ex;
+		} catch (SQLException e) {
+			System.out.println("Error in MetacatServlet.init: "+e.getMessage());
+		}
+	}
+
+	/**
+	 * Close all db connections from the pool
+	 */
+	public void destroy() {
+			// Close all db connection
+			System.out.println("Destroying MetacatServlet");
+			DBConnectionPool.release();
+	}
+
+
 	
 	
 

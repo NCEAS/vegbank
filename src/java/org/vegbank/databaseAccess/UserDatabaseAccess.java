@@ -7,8 +7,8 @@
  *    Authors: John Harris
  * 		
  *		'$Author: farrell $' 
- *     '$Date: 2003-07-11 23:14:04 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2003-07-23 21:51:19 $'
+ *     '$Revision: 1.2 $'
  * @deprecated -- this class is now part of the servlet.authentication package
  */
 
@@ -26,7 +26,7 @@ public class UserDatabaseAccess
 	//constructor -- define as static the LocalDbConnectionBroker 
 	//so that methods called by this class can access the 'local' 
 	//pool of database connections
-	static LocalDbConnectionBroker lb;
+	//static LocalDbConnectionBroker lb;
 	
 	
 	/**

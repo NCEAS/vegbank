@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-07-11 23:14:04 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2003-07-23 21:51:19 $'
+ *  '$Revision: 1.2 $'
  *
  *
  */
@@ -522,96 +522,5 @@ public void getPlotId(String queryElement, String queryElementType)
 			e.printStackTrace();
 		}
 	}
-
-
-/**
- * Method to query the database to get all the plotId's using as input the 
- * following query elements this method is intended for the 'multiple element
- * queries' 
- * 
- * @param taxonName
- * @param state
- * @param elevationMin
- * @param elevationMax
- * @param surfGeo
- * @param multipleObs
- * @param community
- *
- */
-	public void getPlotId(String taxonName, String state, String elevationMin, 
-	String elevationMax, String surfGeo, String community)
-	{
-		try
-		{
-			StringBuffer sb = new StringBuffer();
-			String action="select";
-			System.out.println("queryStore >  taxonName: "+ taxonName);
-			System.out.println("queryStore >  state: "+ state );
-			System.out.println("queryStore >  elevationMin: "+ elevationMin );
-			System.out.println("queryStore >  elevationMax: "+ elevationMax );
-			System.out.println("queryStore >  surfGeo: "+ surfGeo );
-			System.out.println("queryStore >  community: "+ community);
-			// CREATE THE QUERY
-			sb.append(" select DISTINCT PLOTSITESUMMARY.PLOT_ID from PLOTSITESUMMARY ");
-			sb.append(" WHERE ");
-			sb.append(" ALTVALUE <="+elevationMax );
-			sb.append(" and ");
-			sb.append(" ALTVALUE >="+elevationMin );
-			sb.append(" and ");
-			sb.append(" SURFGEO like '%" + surfGeo + "%' ");
-			sb.append(" and ");
-			sb.append(" STATE like '%"+state+"%' ");
-			sb.append(" and ");
-			sb.append(" PLOTSITESUMMARY.PLOT_ID in ");
-			// DEPENDING ON THE NUMBER OF TAXA COMPOSE A DIFFERENT SUB-QUERY
-			if ( taxonName.indexOf(",") >0 )
-			{
-				StringTokenizer st = new StringTokenizer(taxonName, ",");
-				int num = st.countTokens();
-				sb.append(" (SELECT DISTINCT PLOT_ID from PLOTSPECIESSUM where  PLOT_ID in ( ");
-				for (int i=0;i<num; i++) 
-				{
-					String buf = st.nextToken().trim();
-					if ( i == (num-1) )
-					{
-						sb.append(" select PLOT_ID from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+buf.toUpperCase()+"%' ) )");
-					}
-					else
-					{
-						sb.append(" select PLOT_ID from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+buf.toUpperCase()+"%' ");
-						sb.append(" intersect ");
-					}
-				}
-				
-			}
-			else
-			{
-				sb.append(" (SELECT DISTINCT PLOT_ID from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+taxonName.toUpperCase()+"%') ");
-			}
-			String statement = sb.toString();
-
-			String returnFields[]=new String[1];	
-			returnFields[0]="PLOT_ID";
-			int returnFieldLength=1;
-		
-			System.out.println("queryStore statement: > " + statement );
-		
-			IssueStatement j = new IssueStatement();
-			j.issueSelect(statement, returnFields, returnFieldLength);	
-
-			//grab the returned result set and transfer to a public array
-			//ultimately these results are passed to the calling class
-			outPlotId=j.outReturnFields;
-			outPlotIdNum=j.outReturnFieldsNum;
-			System.out.println("queryStore resultset size: > " + outPlotIdNum  );
-			
-		}
-		catch(Exception e)
-		{
-			System.out.println("queryStore > Exception: " + e.getMessage() );
-			e.printStackTrace();
-		}
-	}
-
 
 }
