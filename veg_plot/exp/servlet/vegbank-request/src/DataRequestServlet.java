@@ -147,7 +147,9 @@ public class DataRequestServlet extends HttpServlet
  			remoteHost=request.getRemoteHost();
 			System.out.println("DataRequstServlet > accessed by: "+remoteHost);
 			//log the use of the servlet by the client
-			updateClentLog(clientLog, remoteHost);
+			
+////			updateClientLog(clientLog, remoteHost);
+		
 			//return to the browser a summary of the request being made of the servlet this
 			//method also adds some tags that are required many browsers
 //			returnQueryElemenySummary (out, params, response);
@@ -659,7 +661,7 @@ public class DataRequestServlet extends HttpServlet
 
  			//print the query instructions in the xml document
  			queryOutFile.println("<?xml version=\"1.0\"?> \n"+       
- 				"<!DOCTYPE vegPlot SYSTEM \"plotQuery.dtd\"> \n"+     
+ 				"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n"+     
  				"<dbQuery> \n"+
  				"<query> \n"+
  				"<queryElement>communityName</queryElement> \n"+
@@ -706,6 +708,7 @@ public class DataRequestServlet extends HttpServlet
 			//grab the relevent query attributes out of the hash
 			String taxonName = (String)params.get("taxonName");
 			String taxonNameType = (String)params.get("taxonNameType");
+			String taxonLevel = (String)params.get("taxonLevel");
 		
 
 			System.out.println("DataRequstServlet > printing from DataRequestServlet.composePlantTaxonomyQuery: "+
@@ -713,7 +716,7 @@ public class DataRequestServlet extends HttpServlet
 
  			//print the query instructions in the xml document
  			queryOutFile.println("<?xml version=\"1.0\"?> \n"+       
- 				"<!DOCTYPE vegPlot SYSTEM \"plotQuery.dtd\"> \n"+     
+ 				"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n"+     
  				"	<dbQuery> \n"+
  				"		<query> \n"+
  				"			<queryElement>taxonName</queryElement> \n"+
@@ -722,6 +725,10 @@ public class DataRequestServlet extends HttpServlet
 				"		<query> \n"+
  				"			<queryElement>taxonNameType</queryElement> \n"+
  				"			<elementString>"+taxonNameType+"</elementString> \n"+
+ 				"		</query> \n"+
+				"		<query> \n"+
+ 				"			<queryElement>taxonLevel</queryElement> \n"+
+ 				"			<elementString>"+taxonLevel+"</elementString> \n"+
  				"		</query> \n"+
  				"		<requestDataType>"+requestDataType+"</requestDataType> \n"+
  				"		<resultType>"+resultType+"</resultType> \n"+
@@ -747,7 +754,7 @@ public class DataRequestServlet extends HttpServlet
  * @param remoteHost - the name of the remote host using this client
  * 
  */
-private void updateClentLog (String clientLog, String remoteHost) 
+private void updateClientLog (String clientLog, String remoteHost) 
 { 
  try 
  {
@@ -839,11 +846,11 @@ private void updateClentLog (String clientLog, String remoteHost)
 
 			//print the query instructions in the xml document
 			queryOutFile.println("<?xml version=\"1.0\"?> \n"+       
-				"<!DOCTYPE vegPlot SYSTEM \"plotQuery.dtd\"> \n"+     
+				"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n"+     
 				"<dbQuery> \n"+
 				"<query> \n"+
-				"<queryElement>plotId</queryElement> \n"+
-				"<elementString>"+plotId+"</elementString> \n"+
+				"	<queryElement>plotId</queryElement> \n"+
+				"	<elementString>"+plotId+"</elementString> \n"+
 				"</query> \n"+
 				"<resultType>"+resultType+"</resultType> \n"+
 				"<outFile>"+outFile+"</outFile> \n"+
@@ -938,7 +945,7 @@ private void updateClentLog (String clientLog, String remoteHost)
 
 			//print the query instructions in the xml document
 			outFile.println("<?xml version=\"1.0\"?> \n"+       
-				"<!DOCTYPE vegPlot SYSTEM \"plotQuery.dtd\"> \n"+     
+				"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n"+     
 				"<dbQuery> \n"+
 				"<query> \n"+
 				"<queryElement>"+queryElement+"</queryElement> \n"+
@@ -983,7 +990,7 @@ private void updateClentLog (String clientLog, String remoteHost)
 
 			//print the query instructions in the xml document
 			outFile.println("<?xml version=\"1.0\"?> \n"+       
-				"<!DOCTYPE vegPlot SYSTEM \"plotQuery.dtd\"> \n"+     
+				"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n"+     
 				"<dbQuery> \n"+
 				"<query> \n"+
 				"<queryElement>"+minElement+"</queryElement> \n"+
@@ -1039,7 +1046,7 @@ private void updateClentLog (String clientLog, String remoteHost)
 
 			//print the query instructions in the xml document
  			outFile.println("<?xml version=\"1.0\"?> \n"+       
-			"<!DOCTYPE vegPlot SYSTEM \"plotQuery.dtd\"> \n"+     
+			"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n"+     
 			"<dbQuery> \n"+
 			"<query> \n"+
 			"<queryElement>taxonName</queryElement> \n"+
