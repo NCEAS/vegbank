@@ -26,8 +26,8 @@ import org.vegbank.common.dbAdapter.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-05-29 20:57:46 $'
- * '$Revision: 1.11 $'
+ * '$Date: 2003-05-30 17:59:26 $'
+ * '$Revision: 1.12 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ public class Utility
 		throws SQLException
 	{
 		int sqlDateType = java.sql.Types.DATE;
-		if ( date.equals("") || date == null)
+		if ( date == null  ||  date.equals("") )
 		{
 			psmnt.setNull(i, sqlDateType);
 		}
