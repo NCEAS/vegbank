@@ -4,7 +4,6 @@ import java.text.*;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-
 import servlet.util.ServletUtility;
 import servlet.authentication.UserDatabaseAccess;
 
@@ -24,8 +23,8 @@ import servlet.authentication.UserDatabaseAccess;
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-06-24 17:01:26 $'
- *  '$Revision: 1.9 $'
+ *  '$Date: 2002-07-31 18:24:02 $'
+ *  '$Revision: 1.10 $'
  *		 
  *  @version 
  *  @author 
@@ -40,7 +39,10 @@ public class AuthenticationServlet extends HttpServlet
 	public ServletUtility su = new ServletUtility();
 	public UserDatabaseAccess uda = new UserDatabaseAccess();
 	
-	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
+	// THE RESOURCE BUNDLE AND THE ASSOCIATED PARAMETERS
+	private ResourceBundle rb = ResourceBundle.getBundle("authentication");
+	private String serverUrl = "";
+	
 	//public String clientLogFile = null; //the file to log the client usage
 	private String genericForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
 	private String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/tmp.html";
@@ -48,7 +50,17 @@ public class AuthenticationServlet extends HttpServlet
 	//constructor
 	public AuthenticationServlet()
 	{
-		System.out.println("init: AuthenticationServlet");
+		try
+		{
+				System.out.println("AuthenticationServlet > init");
+				this.serverUrl = rb.getString("serverurl");
+				System.out.println("AuthenticationServlet > init serverUrl: " + serverUrl  );
+		}
+		catch (Exception e)
+		{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+		}
 	}
 
 	/** 
@@ -119,7 +131,9 @@ public class AuthenticationServlet extends HttpServlet
 						response.addCookie(m.registeredCookie);
 						//send the user to the correct page
 						Thread.currentThread().sleep(100);
-						response.sendRedirect("http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement?action=options");
+						String redirect = "http://"+this.serverUrl+"/framework/servlet/usermanagement?action=options";
+						System.out.println("AuthentictionServlet > redirecting to: " + redirect);
+						response.sendRedirect(redirect);
 					}
 					else 
 					{
@@ -314,6 +328,8 @@ public class AuthenticationServlet extends HttpServlet
 	 */
 	 private String getErrorRedirection()
 	 {
+		 String errorPage = "http://"+this.serverUrl+"/vegbank/general/login.html";
+		 System.out.println("AuthenticationServlet > compiling error rediection to:  " + errorPage );
 		 StringBuffer sb = new StringBuffer();
 		 sb.append("<html> \n");
 		 sb.append("<head> \n");
@@ -321,11 +337,13 @@ public class AuthenticationServlet extends HttpServlet
 		 sb.append("</head> \n");
 		 sb.append("<body> \n");
 		 sb.append("<script language=\"JavaScript\"> \n");
-		 sb.append("window.location=\"http://vegbank.nceas.ucsb.edu/vegbank/general/login.html\"; \n");
+		 //sb.append("window.location=\"http://"+this.serverUrl+"/vegbank/general/login.html\"; \n");
+		 sb.append("window.location=\""+errorPage+"\"; \n");
 		 sb.append("</script> \n");
 		
 		 sb.append("Please Click \n");
-		 sb.append("<a href=\"http://vegbank.nceas.ucsb.edu/vegbank/general/login.html\">here</a> \n");
+		 //sb.append("<a href=\"http://"+this.serverUrl+"/vegbank/general/login.html\">here</a> \n");
+		 sb.append("<a href=\""+errorPage+"\">here</a> \n");
 		 sb.append("if your browser is not promptly redirected \n");
 		 sb.append("");
 		 sb.append("</body> \n");

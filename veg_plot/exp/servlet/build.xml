@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   *   '$Author: harris $'
-  *     '$Date: 2002-07-30 22:18:28 $'
-  * '$Revision: 1.4 $'
+  *     '$Date: 2002-07-31 18:24:02 $'
+  * '$Revision: 1.5 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -129,7 +129,7 @@
 	<copydir src="${authenticationsrc}" 
 		dest="${build}" 
 		filtering="yes"
-		includes="**.java "
+		includes="**.* "
 		excludes="**/CVS* "
 	/>
 	
@@ -195,7 +195,7 @@
 
 	<jar jarfile ="${lib}/authservletmodule.jar"
 		basedir="${build}"
-		includes="servlet/authentication/**  "
+		includes="servlet/authentication/** authentication.properties  "
 		excludes="${build}/servlet/authentication"
 	/>
 	
