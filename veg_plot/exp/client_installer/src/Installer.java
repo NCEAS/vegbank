@@ -183,8 +183,19 @@ public class Installer
 				String envp[] = {""}; 
 			  String s = directory;
 			  File path = new File(s);
-			
-				listener = Runtime.getRuntime().exec("jar.exe -xvf vegClient.jar", envp, path);
+				
+				//figure out the os type
+				String osType = System.getProperty("os.name");
+				System.out.println("Operating System: " + osType );
+				if ( osType.equals("Linux") || osType.equals("Unix") ||
+					osType.equals("linux") )
+					{
+						listener = Runtime.getRuntime().exec("jar -xvf vegClient.jar", envp, path);
+					}
+					else
+					{
+						listener = Runtime.getRuntime().exec("jar.exe -xvf vegClient.jar", envp, path);
+					}
 			
 				//listener = Runtime.getRuntime().load("cygwin1.dll").exec("cp test bad");
 				System.out.println(" issued ");
