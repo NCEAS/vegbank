@@ -4,8 +4,8 @@
  *  Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2004-03-25 06:42:07 $' 
- * '$Revision: 1.2 $'
+ * '$Date: 2004-07-22 20:33:37 $' 
+ * '$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -173,6 +173,11 @@ public class QueryHelper
 				+ "'English Common' ) AS \"English Common Name\"";
 		String selectSciName = sharedGetNameType
 				+ "'Scientific' ) AS \"Scientific Name\"";
+
+		if (!Utility.isStringNullOrEmpty(plantname) &&
+				!plantname.endsWith("%")) {
+			plantname += "%";
+		}
 
 		// Query Construct
 		StringBuffer query = new StringBuffer();
