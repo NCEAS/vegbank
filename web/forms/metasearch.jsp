@@ -4,6 +4,12 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/vegbank.tld" prefix="vegbank" %>
 <html>
+<script language="javascript">
+function clearAndSubmit() {
+	document.metasearch_form.xwhereParams.value="";
+	document.metasearch_form.submit();
+}
+</script>
 <head>@defaultHeadToken@
 
 <%
@@ -152,6 +158,8 @@ You searched for
 <logic:equal name="regexOp" value="and">all words in</logic:equal>
 <logic:equal name="regexOp" value="or">any word in</logic:equal>
 '<i><%= xwhereParams %></i>'
+<br>
+Click here to <a href="javascript:clearAndSubmit()">view all metadata</a>
 </span>
 </center>
 </logic:notEmpty>
@@ -167,6 +175,10 @@ You searched for
 
 <br/>
 <p>&nbsp;
+
+<script language="javascript">
+document.metasearch_form.xwhereParams.focus();
+</script>
 
 @vegbank_footer_html_tworow@
 </body>
