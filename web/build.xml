@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2005-03-11 17:28:11 $'
-* '$Revision: 1.145 $'
+* '$Author: anderson $'
+* '$Date: 2005-03-15 04:49:35 $'
+* '$Revision: 1.146 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -218,7 +218,7 @@
     <filter filtersfile="${includes_server}/manual_filters.properties"/>
 	-->
   </target>
-  <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
+  <!-- DISTRIBUTES THE INCLUDES (STYLESHEETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
   <target name="includes" depends="hdrftr" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
     <copy overwrite="true" todir="${includes_server}" filtering="true">
       <!-- <fileset dir="${includes_src}" includes="**.css **/*jsp **.js"/> -->
@@ -469,20 +469,44 @@
     <!-- pattern for this target: (optional: style xml to get tokens), copy from includes to includes_server, set filtersfile on server copy, post filtering -->
     <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
     <!-- load header and footer from file -->
+ 
+    <!-- 
+        @webpage_top_html@
+        @stdvegbankget_jspdeclarations@
+        @webpage_head_html@
+        <title>The Page Title</title>
+        <script>...</script>
+        @webpage_masthead_html@
+        ...page content...
+        @webpage_footer_html@
+    -->
+   <loadfile srcfile="${includes_src}/webpage_top.html" property="webpage_top_html" />
+   <filter token="webpage_top_html" value="${webpage_top_html}" />
+ 
+   <loadfile srcfile="${includes_src}/webpage_head.html" property="webpage_head_html" />
+   <filter token="webpage_head_html" value="${webpage_head_html}" />
+ 
+   <loadfile srcfile="${includes_src}/masthead.html" property="webpage_masthead_html" />
+   <filter token="webpage_masthead_html" value="${webpage_masthead_html}" />
+   
+   <loadfile srcfile="${includes_src}/footer.html" property="webpage_footer_html" />
+   <filter token="webpage_footer_html" value="${webpage_footer_html}" />
+   <!-- =========== -->
+   
+
+<!--
    <loadfile srcfile="${includes_src}/header.html" property="vegbank_header_html_help" />
    <filter token="vegbank_header_html_help" value="${vegbank_header_html_help}" />
  
    <loadfile srcfile="${includes_src}/header.html" property="vegbank_header_html_front" />
    <filter token="vegbank_header_html_front" value="${vegbank_header_html_front}" />
    
-   <loadfile srcfile="${includes_src}/header.html" property="vegbank_header_html_normal" />
-   <filter token="vegbank_header_html_normal" value="${vegbank_header_html_normal}" />
-   
    <loadfile srcfile="${includes_src}/footer.html" property="vegbank_footer_html_tworow" />
    <filter token="vegbank_footer_html_tworow" value="${vegbank_footer_html_tworow}" />
    
    <loadfile srcfile="${includes_src}/footer.html" property="vegbank_footer_html_help" />
    <filter token="vegbank_footer_html_help" value="${vegbank_footer_html_help}" />
+   -->
    
     <copy file="${includes_src}/filters.properties" tofile="${includes_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${includes_server}/filters_detokened.properties"/>
