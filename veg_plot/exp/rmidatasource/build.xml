@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2003-01-02 16:41:07 $'
- 	*     '$Revision: 1.16 $'
+ 	*     '$Date: 2003-01-02 22:18:22 $'
+ 	*     '$Revision: 1.17 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -131,8 +131,10 @@
 	
 <!-- CLEAN UP -->
 	<target name="clean" depends="init" description=">> removes the build
-  directory">
+  directory and the compiled archive(s)">
 		<delete dir="${build}" />
+    <delete file="lib/rmiserver.tar" />
+    <delete file="lib/rmidatasource.jar" />
 	</target>
 	
 
