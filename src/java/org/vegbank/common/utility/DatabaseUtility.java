@@ -5,8 +5,8 @@
  *             National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-29 00:38:52 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2004-10-05 02:12:24 $'
+ *	'$Revision: 1.12 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1010,7 +1010,7 @@ public class DatabaseUtility
 		if (values != null && values.length != 0 && !isAnyValueAllowed(values, ANYVALUE) )
 		{
 			sb.append(conjunction)
-				.append(" ( ").append(fieldName).append(" = '").append(values[0]).append("'");
+				.append(" ( ").append(fieldName).append(" = '").append(makeSQLSafe(values[0])).append("'");
 	
 			for (int i = 1; i < values.length; i++)
 			{
