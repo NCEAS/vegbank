@@ -7,3 +7,37 @@ plots_dev -- the plots database
 plants_dev -- the 
 communities_dev 
 framework 
+
+
+Database Setup:
+
+Vegclass has three separate database parts for Plots, Plant Taxonomy and Plant 
+Community. There is also a Framework database for shared resources like users.
+
+
+<--- paste -->
+
+Initializing PostgresSQL:
+
+Install PostgresSQL on the system ... 
+
+# Associate a file with the database ( e.g /home/username/pgdata )
+initdb databasefile
+
+# Start database ( with debuging output )
+postmaster -d2 -i -D databasefile 
+
+# Create databases for "plots_dev, plants_dev, framework and community_dev"
+createdb "name of database" #repeat for each 
+
+# Create user ( e.g. datauser )
+createuser "User Name"
+
+# Run create table scripts for each database ( in each modules sql directory)
+psql plots_dev < ../../veg_plot/sql/create-vegbank-plots2002.sql  
+
+psql plants_dev < ../../veg_taxa/sql/createPlantTaxonDb_pg.sql  
+
+psql community_dev < community_implementation.sql  
+psql community_dev < createCommunitySummary_pg.sql  
+psql community_dev < createEcoartTables_pg.sql   
