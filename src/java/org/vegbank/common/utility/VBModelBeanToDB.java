@@ -2,9 +2,9 @@
  * '$RCSfile: VBModelBeanToDB.java,v $' 
  * Authors: @author@ Release: @release@
  * 
- * '$Author: farrell $' 
- * '$Date: 2004-04-19 14:53:06 $' 
- * '$Revision: 1.3 $'
+ * '$Author: anderson $' 
+ * '$Date: 2004-04-29 02:07:57 $' 
+ * '$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -33,6 +33,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.Vector;
 
@@ -635,9 +636,10 @@ public class VBModelBeanToDB
 		AccessionGen ag = new AccessionGen(this.conn.getConnections(), Utility
 				.getAccessionPrefix());
 
-		if (Utility.isLoadAccessionCodeOn())
-		{
+		if (Utility.isLoadAccessionCodeOn()) {
 			accessionCodes = ag.updateSpecificRows(tableKeys);
+		} else {
+			accessionCodes = new ArrayList();
 		}
 		return accessionCodes;
 	}
