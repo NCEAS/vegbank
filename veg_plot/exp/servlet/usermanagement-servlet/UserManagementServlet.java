@@ -6,8 +6,8 @@ package servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-01-14 01:12:41 $'
- * '$Revision: 1.15 $'
+ *     '$Date: 2003-02-03 19:24:28 $'
+ * '$Revision: 1.16 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 						PrintWriter out = res.getWriter();
 						this.showUserFiles(req, res, out);
 					}
-					//SHOW USER FILES 
+					// LOGOUT USER 
 					else if ( action.equals("logout") )
 					{
 						res.setContentType("text/html");
@@ -767,7 +767,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 				res.addCookie(cookie);
 			}
 			
-			res.sendRedirect("http://vegbank.nceas.ucsb.edu/vegbank/general/login.html");
+			res.sendRedirect("/vegbank/general/login.html");
 			
 		 }
 		 catch(Exception e)
@@ -863,12 +863,12 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 		StringBuffer sb = new StringBuffer();
 		sb.append("<table width=\"87%\" class=\"navigation\"> \n");
 		sb.append("<tr>");
-		sb.append("<td width=\"10%\"> <a href=\"http://vegbank.nceas.ucsb.edu/forms/uploadFile.html\"> UPLOAD FILE </a></td> \n");
-		sb.append("<td  width=\"10%\"> <a href=\"http://vegbank.nceas.ucsb.edu/forms/utilities.html\"> UTILITIES </a></td> \n");
-		sb.append("<td  width=\"10%\"> <a href=\"http://vegbank.nceas.ucsb.edu/forms/create_user.html\"> CREATE USER ACCOUNT </a></td> \n");
-		sb.append("<td  width=\"10%\"> <a href=\"http://vegbank.org/\"> VEGBANK DOCUMENTATION </a></td> \n");
+		sb.append("<td width=\"10%\"> <a href=\"/forms/uploadFile.html\"> UPLOAD FILE </a></td> \n");
+		sb.append("<td  width=\"10%\"> <a href=\"/forms/utilities.html\"> UTILITIES </a></td> \n");
+		sb.append("<td  width=\"10%\"> <a href=\"/forms/create_user.html\"> CREATE USER ACCOUNT </a></td> \n");
+		sb.append("<td  width=\"10%\"> <a href=\"/\"> VEGBANK DOCUMENTATION </a></td> \n");
 		//next image is an exclamation
-		sb.append("<td  width=\"14%\"> <img src=\"/vegbank/images/icon_cat31.gif\"> <a href=\"http://vegbank.nceas.ucsb.edu/vegbank/sampledata/\"> SAMPLE DATA</a></td> \n");
+		sb.append("<td  width=\"14%\"> <img src=\"/vegbank/images/icon_cat31.gif\"> <a href=\"/vegbank/sampledata/\"> SAMPLE DATA</a></td> \n");
 		sb.append("</tr> \n");
 		sb.append("</table>");
 		
@@ -880,10 +880,10 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 		sb.append("<td>");
 		sb.append("<form name=\"form\"> \n");
 		sb.append("<select name=\"menu\" onChange=\"MM_jumpMenu('parent',this,0)\"> \n");
-		sb.append("<option value=\"http://vegbank.nceas.ucsb.edu/forms/plot-query.html\" selected>Simple Plot Query</option> \n");
-		sb.append("<option value=\"http://vegbank.nceas.ucsb.edu/forms/nested-plot-query.html\">Nested Plot Query</option> \n");
-		sb.append("<option value=\"http://vegbank.nceas.ucsb.edu/forms/community-query.html\">Vegtation Community Query</option> \n");
-		sb.append("<option value=\"http://vegbank.nceas.ucsb.edu/forms/plant-query.html\">Plant Taxonomy Query</option> \n");
+		sb.append("<option value=\"/forms/plot-query.html\" selected>Simple Plot Query</option> \n");
+		sb.append("<option value=\"/forms/nested-plot-query.html\">Nested Plot Query</option> \n");
+		sb.append("<option value=\"/forms/community-query.html\">Vegtation Community Query</option> \n");
+		sb.append("<option value=\"/forms/plant-query.html\">Plant Taxonomy Query</option> \n");
 		sb.append("</select> \n");
 		sb.append("</form> \n");
 		sb.append("</td> \n");
@@ -908,7 +908,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
       sb.append("?action=userfilenum&username="+userName);
 			
       //connect to the dataExchaneServlet
-			String uri = "http://vegbank.nceas.ucsb.edu/framework/servlet/dataexchange"+sb.toString().trim();
+			String uri = "/framework/servlet/dataexchange"+sb.toString().trim();
 			System.out.println("UserManagementServlet > OUT PARAMETERS: "+uri);
       int port=80;
       String requestType="POST";
@@ -940,7 +940,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
       sb.append("?action=userfilesummary&username="+userName);
 			
       //connect to the dataExchaneServlet
-			String uri = "http://vegbank.nceas.ucsb.edu/framework/servlet/dataexchange"+sb.toString().trim();
+			String uri = "/framework/servlet/dataexchange"+sb.toString().trim();
 			System.out.println("UserManagementServlet > OUT PARAMETERS: "+uri);
       int port=80;
       String requestType="POST";
@@ -1024,10 +1024,10 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 					//sb.append("	<td width=\"10%\"><input type=\"checkbox\" name=\""+accessionNumber+"\" ></td> \n");
 					
 					//here is the function to delet a file
-					sb.append("	<td width=\"8%\"> <a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/dataexchange?action=deletefile&filenumber="+accessionNumber+"&username="+this.cookieValue+"\"> " 
+					sb.append("	<td width=\"8%\"> <a href=\"/framework/servlet/dataexchange?action=deletefile&filenumber="+accessionNumber+"&username="+this.cookieValue+"\"> " 
 					+" <img src=\"/vegbank/images/deleteIcon.gif\">  </a> </td> \n");
 					
-					sb.append("	<td width=\"25%\"> <a href=\"http://vegbank.nceas.ucsb.edu/uploads/"+accessionNumber+"\">"  + userFileName + "</a> </td> \n");
+					sb.append("	<td width=\"25%\"> <a href=\"/uploads/"+accessionNumber+"\">"  + userFileName + "</a> </td> \n");
 					sb.append("	<td>" +createDate+ "</td> \n");
 					//sb.append("	<td>" +fileType+ "</td> \n");
 					sb.append("</tr> \n \n");
@@ -1058,7 +1058,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
       sb.append("?action=userfilesummary&username="+userName);
 			
       //connect to the dataExchaneServlet
-			String uri = "http://vegbank.nceas.ucsb.edu/framework/servlet/dataexchange"+sb.toString().trim();
+			String uri = "/framework/servlet/dataexchange"+sb.toString().trim();
 			System.out.println("UserManagementServlet > OUT PARAMETERS: " + uri);
       int port=80;
       String requestType="POST";
@@ -1157,11 +1157,11 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 					
 					//here is the function to delet a file
 					sb.append("	<td width=\"8%\"> "
-					+"<a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/dataexchange?action=deletefile&filenumber="
+					+"<a href=\"/framework/servlet/dataexchange?action=deletefile&filenumber="
 					+accessionNumber+"&username="+this.cookieValue+"\"> " 
 					+" <img src=\"/vegbank/images/deleteIcon.gif\">  </a> </td> \n");
 					
-					sb.append("	<td> <a href=\"http://vegbank.nceas.ucsb.edu/uploads/"+accessionNumber+"\">"  + userFileName + "</a> </td> \n");
+					sb.append("	<td> <a href=\"/uploads/"+accessionNumber+"\">"  + userFileName + "</a> </td> \n");
 					sb.append("	<td>" +createDate+ "</td> \n");
 					sb.append("	<td>" +fileType+ "</td> \n");
 					sb.append("</tr> \n \n");
