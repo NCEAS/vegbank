@@ -217,7 +217,7 @@ private void handleSimpleQuery (Hashtable params, PrintWriter out,
 if (queryOutputNum>=1) {
 	//allow the user to access the results
  	servletUtility l =new servletUtility();  
- 	l.getViewOption();
+ 	l.getViewOption("vegPlot");
  	out.println(l.outString);
 }
 
@@ -268,7 +268,7 @@ private void handleCompoundQuery (Hashtable params, PrintWriter out,
  
 //allow the user to access the summary results
  servletUtility l =new servletUtility();  
- l.getViewOption();
+ l.getViewOption("vegPlot");
  out.println(l.outString);
 
 }
