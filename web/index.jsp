@@ -58,36 +58,24 @@ function preSubmit() {
           </tr></table></td>
     <!-- whole page --><td><table width="650" border="0" cellpadding="10" cellspacing="3">
   <tbody> 
-  <!-- vegbank std header as small as possible 
-  <tr>
-  <td colspan="3" valign="top" align="center">
-  <table cellspacing="0" 
-cellpadding="0" border="0" bgcolor="#336633"><tbody>
-<tr height="6" align="left">
-<td align="left" height="6" valign="top"><img width="6" height="6" align="top" src="@image_server@uplt3.gif"></td>
-<td width="6" colspan="2"></td></tr>
-<tr><td valign="top"></td><td align="center" valign="top"><font size="7" color="#ffffff" face="Georgia, Times New Roman, Times, serif"><b><img alt="VegBank" src="@image_server@vegbanklogo4.gif"></b></font></td>
-<td width="6"></td></tr>
-<tr><td align="right" valign="bottom" height="6" colspan="2"></td><td width="6"><img width="6" height="6" align="bottom" src="@image_server@lwrt3.gif"></td></tr></tbody></table>
--->
-              
+                
 </td>
   </tr>
 
   
   <tr> 
     
-          <td colspan="3" class="vegbank" valign="top" > 
-            <font color="#000000">
+          <td colspan="3"  valign="top" > 
+            
 Vegetation plots are as central to ecology as DNA is to genetics. These 
 fundamental units describe which plants grow where, and with what others to form 
 plant communities. <b>VegBank</b> is an online archive for sharing plots, which 
-the larger ecological community can then include in their research efforts.</font>
+the larger ecological community can then include in their research efforts.
               <a href="@general_link@info.html">More info</a> 
           </td>
 		  </tr>
 		  <tr>
-          <td align="center" class="vegbank" colspan="3"> 
+          <td align="center"  colspan="3"> 
            <table>
 <tr>
 <td>
@@ -149,7 +137,7 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 	<form> 
 	</table>
 
-	<p class="vegbank"> 
+	<p > 
 	
 	<table align="center" cellpadding="7" cellspacing="0" border="0" bgcolor="#FFFFFF">
 	<tr class="sizesmall">
@@ -169,22 +157,29 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
   </tr>
   
   <tr>
-          <td class="vegbank" valign="top" > 
+          <td  valign="top" > 
               <p class="sizelarge">News</p>
               <ul>
-                <li class="constsize">
+                <li><span class="bright">New</span>, November 2004:
+                  See the new <a href="@forms_link@vbsummary.jsp">Summary of VegBank Data</a> with an 
+                  overview map.
+                </li>
+                <li><span class="bright">New</span>, September 2004: Views of everything in VegBank have
+                  been upgraded.  Query results will show you the new views.
+                </li>  
+                <li>
 					Try the simple new 
 					<a href="@web_context@forms/plot-query-simple.jsp">3-in-1 Query</a>
 					to find plots, plants and communities.
                 </li>
                
-                <li class="constsize">Take the VegBank <a href="@general_link@instructions.html"> 
+                <li>Take the VegBank <a href="@general_link@instructions.html"> 
                   tutorial.</a> </li>
-                <li class="constsize"><font color="red">NEW!</font> July 2004: Version 4 of the ESA <i><a 
+                <li>Version 4 of the ESA <i><a 
 href="@panel_link@standards.html">Guidelines for Describing 
                   Associations and Alliances of the U.S. National Vegetation 
                   Classification</a></i> has been completed.</li>
-                <li class="constsize"> Please report any 
+                <li> Please report any 
                   errors and suggestions to <a href="mailto:help@vegbank.org">help@vegbank.org</a> 
                 </li>
               </ul>
@@ -192,12 +187,12 @@ href="@panel_link@standards.html">Guidelines for Describing
 	      <td valign="top" > 
             <!--   
 	-->
-            <span class="sizetiny"> <!--VegBank is operated by the Ecological 
+            <span class="sizetiny"> VegBank is operated by the Ecological 
             Society of America's <a 
 href="@panel_link@panel.html">Vegetation Panel</a> in cooperation with the <a 
 href="http://www.nceas.ucsb.edu/">National 
             Center for Ecological Analysis and Synthesis</a>.  <br>
-            <br> -->
+            <br> 
             This material is based upon work
 			supported by the National Science Foundation under Grant Nos. DBI-9905838
 			and DBI-0213794. Any opinions, findings, and conclusions or
