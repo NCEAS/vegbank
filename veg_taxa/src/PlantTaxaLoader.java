@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-07-08 23:35:17 $'
- * '$Revision: 1.12 $'
+ *     '$Date: 2002-07-10 17:11:50 $'
+ * '$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -272,7 +272,7 @@ public class PlantTaxaLoader
 				rank = (String)plantTaxon.get("rank");
 				
 			
-				// INSERT THE PLANT REFERENCES AND THE PARTY INFORMATION
+				// INSERT THE PLANT NAME / CONCEPT REFERENCES AND THE PARTY INFORMATION
 				int refId = this.insertPlantReference(longNameRefAuthors, longNameRefTitle, longNameRefDate, 
 					longNameRefEdition, longNameRefSeriesName, longNameRefOtherCitDetails, longNameRefPage, 
 					longNameRefISBN, longNameRefISSN, conceptDescription);
@@ -282,7 +282,10 @@ public class PlantTaxaLoader
 				int codeRefId = this.insertPlantReference(codeRefAuthors, codeRefTitle, codeRefDate, 
 					codeRefEdition, codeRefSeriesName, codeRefOtherCitDetails, codeRefPage, 
 					codeRefISBN, codeRefISSN, conceptDescription);
-					
+				int conceptRefId = this.insertPlantReference(conceptRefAuthors, conceptRefTitle, conceptRefDate, 
+					conceptRefEdition, conceptRefSeriesName, conceptRefOtherCitDetails, conceptRefPage, 
+					conceptRefISBN, conceptRefISSN, conceptDescription);
+				
 				int partyId = this.insertPlantPartyInstance(salutation, givenName, surName, orgName, email);
 			
 				// INSERT THE PLANT NAME ATTRIBUTES
@@ -348,37 +351,39 @@ public class PlantTaxaLoader
 				}
 				
 				
-				//LOAD THE CONCEPT(S)
+				//LOAD THE CONCEPT -- USE THE REFERENCE ASSOCIATED WITH THE CONCEPT
 				int conceptId;
 				int statusId;
-				if (plantConceptExists(longNameId, refId, taxonDescription) == false)
+				if (plantConceptExists(longNameId, conceptRefId, taxonDescription) == false)
 				{
-					conceptId = loadPlantConceptInstance(longNameId, refId, taxonDescription, 
+					conceptId = loadPlantConceptInstance(longNameId, conceptRefId, taxonDescription, 
 					code, rank, longName );
 				}
 				else
 				{
-					conceptId = getPlantConceptId(longNameId, refId, taxonDescription, 
+					conceptId = getPlantConceptId(longNameId, conceptRefId, taxonDescription, 
 					code, rank, longName );
 				}
 				System.out.println("PlantTaxaLoader > conceptId: " + conceptId);
 				
+				
 				// LOAD THE STATUS TABLE
-				//fix the date end date here and do a check here to make sure that it does not exist
-				if ( plantStatusExists(conceptId, "accepted", dateEntered, "2005-May-29", 
-					email, partyId, "", refId) == false )
+				System.out.println("PlantTaxaLoader > status start / stop " + statusStartDate + " " + statusStopDate);
+				if ( plantStatusExists(conceptId, conceptStatus, statusStartDate, statusStopDate, 
+					email, partyId, plantParentName, refId) == false )
 				{
-					statusId = loadPlantStatusInstance(conceptId, "accepted", dateEntered, 
-					usageStopDate, email, partyId, "", refId);
+					System.out.println("PlantTaxaLoader > status does not exist ");
+					statusId = loadPlantStatusInstance(conceptId, conceptStatus, statusStartDate, 
+					statusStopDate, email, partyId, plantParentName, refId);
 				}
 				
 				// LOAD THE USAGE TABLES
 				//check to see if there are already usage id's in the database
 				if ( plantUsageExists(longName, longNameId, conceptId, "STANDARD", 
-					dateEntered, usageStopDate,  "LONGNAME", partyId) == false )
+					dateEntered, usageStopDate, "LONGNAME", partyId) == false )
 				{
 					int uid = loadPlantUsageInstance(longName, longNameId, conceptId, "STANDARD", 
-					dateEntered, usageStopDate,  "LONGNAME", partyId);
+					dateEntered, usageStopDate, "LONGNAME", partyId);
 					System.out.println("PlantTaxonomyLoader > uid: " + uid);
 					usageVec.addElement(""+uid);
 				}
@@ -1038,9 +1043,10 @@ public class PlantTaxaLoader
 		try
 		{
 			int parentConceptId = 0;
-			//get the plant parentId
+			// GET THE PLANT PARENT IF ONE IS PASSED
 			if (plantParent !=null && plantParent.length() > 1 )
 			{
+				System.out.println("PlantTaxaLoader > plant parent to be insert into status: " + plantParentName);
 				String s1 = "select plantConcept_id from plantConcept where plantDescription = '"
 				+plantParent+"'";
 				Statement query = conn.createStatement();
@@ -1059,7 +1065,8 @@ public class PlantTaxaLoader
 				String s = "insert into PLANTSTATUS "
 				+"(plantConcept_id, plantconceptstatus, startDate, stopDate, "
 				+" plantPartyComments, plantParty_id, plantParentName, "
-				+" plantParentConcept_id, plantreference_id)  values(?,?,?,?,?,?,?,?,?) ";
+				+" plantParentConcept_id)  values(?,?,?,?,?,?,?,?) ";
+				
 				PreparedStatement pstmt = conn.prepareStatement(s);
 				//bind the values
 				pstmt.setInt(1, conceptId);
@@ -1077,16 +1084,18 @@ public class PlantTaxaLoader
 				pstmt.setInt(6, plantPartyId);
 				pstmt.setString(7, plantParent);
 				pstmt.setInt(8, parentConceptId);
-				pstmt.setInt(8, refId);
+			
 				boolean results = true;
 				results = pstmt.execute();
 				pstmt.close();
 			}
+			// IF IT DOES NOT EXIST THEN SUBMIT WITHOUT IT
 			else
 			{
 				String s = "insert into PLANTSTATUS "
 				+"(plantConcept_id, plantconceptstatus, startDate, stopDate, "
-				+" plantPartyComments, plantParty_id, plantParentName, plantreference_Id)  values(?,?,?,?,?,?,?,?) ";
+				+" plantPartyComments, plantParty_id, plantParentName, plantreference_Id) "
+				+" values(?,?,?,?,?,?,?,?) ";
 				PreparedStatement pstmt = conn.prepareStatement(s);
 				//bind the values
 				pstmt.setInt(1, conceptId);
@@ -1714,12 +1723,12 @@ public class PlantTaxaLoader
 	 		String surName = "harris";
 	 
 	 		String	institution = "nceas";
-	 		String	longName = "Pinus ponderissis";
-	 		String	shortName = "ponder pine";
-	 		String	code = "PP";
+	 		String	longName = "Pinus pondering";
+	 		String	shortName = "pondering pine";
+	 		String	code = "PPP";
 	 
-	 		String	longNameRefAuthors = "Harris, Peet";
-	 		String	longNameRefTitle = "Big Trees in California";
+	 		String	longNameRefAuthors = "John Harris, Robert Peet";
+	 		String	longNameRefTitle = "Big Trees in California by the sea";
 	 		String	longNameRefDate  = "23-JAN-2002";
 	 		String	longNameRefEdition = "";
 	 		String	longNameRefSeriesName = "";
@@ -1751,9 +1760,9 @@ public class PlantTaxaLoader
 	 		String	codeRefISBN = "";
 	 		String	codeRefOtherCitDetails = "";
 	 
-	 		String	conceptDescription = "kinda like a ponderosa pine";
-	 		String	conceptRefAuthors = "Peet, Harris";
-	 		String	conceptRefTitle = "Big Trees in the State of California";
+	 		String	conceptDescription = "kinda like a ponderosa pining";
+	 		String	conceptRefAuthors = "Bob Peet, John Harris";
+	 		String	conceptRefTitle = "Big Trees in the State of California by the coast";
 	 		String	conceptRefDate = "24-Jan-2002";
 	 		String	conceptRefEdition = "";
 	 		String	conceptRefSeriesName = "";
@@ -1766,7 +1775,7 @@ public class PlantTaxaLoader
 	 		String	conceptStatus = "accepted";
 	 		String	statusStartDate = "01-JAN-2001";
 	 		String	statusStopDate = "";
-	 		String	statusDescription = "accepted till it is figured out";
+	 		String	statusDescription = "accepted till it is figured out sometime";
 	 		String	taxonLevel =  "Species";
 	 		String	plantParentName = "Pinus";
 	 		String	plantParentRefTitle =  "";
