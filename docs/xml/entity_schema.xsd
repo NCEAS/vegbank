@@ -13,7 +13,7 @@
     <!-- this was an attempt at automating what field appear on different types of forms, and in what order, might be removed from this doc if we don't use them soon -->
   </xs:element>
   <xs:element name="attFormsHTMLpre" type="xs:string"/>
-    <xs:element name="attFormsHTMLpost" type="xs:string"/>
+  <xs:element name="attFormsHTMLpost" type="xs:string"/>
   <xs:element name="attKey">
     <xs:simpleType>
       <xs:restriction base="xs:string">
@@ -62,6 +62,7 @@
   <xs:element name="attModel">
     <xs:simpleType>
       <xs:restriction base="xs:string">
+        <xs:enumeration value="denorm"/>
         <xs:enumeration value="implementation"/>
         <xs:enumeration value="logical"/>
       </xs:restriction>
