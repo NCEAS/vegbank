@@ -51,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-07-29 17:25:11 $'
- *  '$Revision: 1.21 $'
+ *  '$Date: 2002-07-30 22:18:29 $'
+ *  '$Revision: 1.22 $'
  * 
  */
 
@@ -87,12 +87,13 @@ public class DataRequestServlet extends HttpServlet
 	// community related attributes
 	// commmunity name already defined above
 	private String communityLevel = null;
-	public ServletUtility su = new ServletUtility();
+	private  ServletUtility su = new ServletUtility();
 	public dbAccess dba =new dbAccess();
 	
 	private String communityQueryPage = "http://vegbank.nceas.ucsb.edu/forms/community-query.html";
 	private transformXML transformer = new transformXML();
 	private String defaultPlotIdentityStyleSheet = "";
+	private String genericForm =""; // this is the vb generic form to attache messages to
 	
 	/**
 	 * constructor method
@@ -102,15 +103,18 @@ public class DataRequestServlet extends HttpServlet
 		try
 		{
 			System.out.println("init: DataRequestServlet");
-			//sho some of the instance variables
+			//show some of the instance variables
 			servletDir = rb.getString("requestparams.servletDir");
 			defaultPlotIdentityStyleSheet = rb.getString("defaultplotidentitystylesheet");
+			this.genericForm = rb.getString("genericform");
 			System.out.println("init: DataRequestServlet > servlet dir: " + servletDir);
 			System.out.println("init: DataRequestServlet > default style sheet: " + this.defaultPlotIdentityStyleSheet);
+			System.out.println("init: DataRequestServlet > generic html form: " + this.genericForm);
 		}
 		catch (Exception e)
 		{
 			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
 		}
 	}
 	
@@ -305,9 +309,8 @@ public class DataRequestServlet extends HttpServlet
 				}
 				else 
 				{ 
-					out.println("<br> <b> Please try another query </b> <br>"); 
-					out.println("<a href = \"http://vegbank.nceas.ucsb.edu/forms/plot-query.html\">"
-					+"return to query page</a><b>&#183;</b>");
+					String results = this.getEmptyResultSetMessage(param);
+					out.println( results );
 				}
 			}
 		}
@@ -360,7 +363,7 @@ public class DataRequestServlet extends HttpServlet
 				else
 				{
 					//pass back the summary of parameters passed to the servlet
-					returnQueryElemenySummary(out, params, response);
+					returnQueryElementSummary(out, params, response);
 					//the number of plots in the result set\
 					out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 					//send to the client the html summary page
@@ -379,7 +382,7 @@ public class DataRequestServlet extends HttpServlet
 			else
 			{
 				//pass back the summary of parameters passed to the servlet
-				//returnQueryElemenySummary(out, params, response);
+				//returnQueryElementSummary(out, params, response);
 				if (this.requestDataType.equals("vegPlot") )
 				{
 					// IF THE USER WANTS THE IDENTITY PASS THIS TO THEM
@@ -402,12 +405,28 @@ public class DataRequestServlet extends HttpServlet
 				}
 				else
 				{
-					System.out.println("DataRequstServlet >  requestDataType" + this.requestDataType);
-					System.out.println("DataRequstServlet > handleing non-plot result set ");
-					//this method below has been deprecated and there should be a mthod
-					//written in this class to handle this
-					su.getViewOption(this.requestDataType);
-					out.println(su.outString);
+					System.out.println("DataRequstServlet >  requestDataType: " + this.requestDataType);
+					System.out.println("DataRequstServlet > handling non-plot result set ");
+					
+					// IF THEY ARE REQUESTING THE VEG COMMUNITY RETURN THE RESULT SET
+					if ( requestDataType.equalsIgnoreCase("vegCommunity") )
+					{
+						String results = this.getCommunityResults();
+						out.println( results );
+					}
+					// ELSE IF LOOKING FOR THE PLANT TAXA RESULTS SET
+					else if ( requestDataType.equalsIgnoreCase("plantTaxon") )
+					{
+						String results = this.getPlantTaxaResults();
+						out.println( results );
+					}
+					else
+					{
+						//this method below has been deprecated and there should be a mthod
+						//written in this class to handle this
+						su.getViewOption(this.requestDataType);
+						out.println(su.outString);
+					}
 				}
 			}
 		}
@@ -417,6 +436,73 @@ public class DataRequestServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/**
+	 * method that returns an html form that contains the plant taxa results
+	 * by transforming the result-sets xml document with the appropriate stylesheet
+	 * @see handleQueryResultsResponse -- the method that calls this one
+	 */
+	 private String getPlantTaxaResults()
+	 {
+		 StringBuffer sb = new StringBuffer();
+		 try
+		 {
+			 String styleSheet=servletDir+"showPlantTaxaSummary.xsl";
+			 String xmlDoc = servletDir+"summary.xml";
+			 System.out.println("DataRequestServlet > xml document: '" + xmlDoc +"'" );
+			 System.out.println("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
+			 transformer.getTransformed(xmlDoc, styleSheet);
+			 StringWriter transformedData = transformer.outTransformedData;
+			 Vector contents = this.convertStringWriter(transformedData);
+			 for (int ii=0;ii< contents.size() ; ii++) 
+			 {
+					String buf =  (String)contents.elementAt(ii) ;
+					sb.append( buf + "\n");
+			 }
+		 }
+		 catch( Exception e ) 
+		 {
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		 }
+		return( sb.toString() );
+	 }
+	
+	
+	
+	/**
+	 * method that returns an html form that contains the veg community results
+	 * by transforming the result-sets xml document with the appropriate stylesheet
+	 * @see handleQueryResultsResponse -- the method that calls this one
+	 */
+	 private String getCommunityResults()
+	 {
+		 StringBuffer sb = new StringBuffer();
+		 try
+		 {
+			 String styleSheet=servletDir+"showCommunitySummary.xsl";
+			 String xmlDoc = servletDir+"summary.xml";
+			 System.out.println("DataRequestServlet > xml document: '" + xmlDoc +"'" );
+			 System.out.println("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
+			 transformer.getTransformed(xmlDoc, styleSheet);
+			 StringWriter transformedData = transformer.outTransformedData;
+			 Vector contents = this.convertStringWriter(transformedData);
+			 for (int ii=0;ii< contents.size() ; ii++) 
+			 {
+					String buf =  (String)contents.elementAt(ii) ;
+					sb.append( buf + "\n");
+			 }
+		 }
+		 catch( Exception e ) 
+		 {
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		 }
+		return( sb.toString() );
+	 }
+	 
+	 
 	
 	
 	/**
@@ -722,10 +808,8 @@ public class DataRequestServlet extends HttpServlet
 		}
 		else 
 		{ 
-			// FIX THIS SO THAT A MORE MEANINGFUL PAGE IS PASSED
-			out.println("<br> <b> Please try another query </b> <br>"); 
-			out.println("<a href = \"http://vegbank.nceas.ucsb.edu/forms/plot-query.html\">"
-			+"return to query page</a><b>&#183;</b>"); //put in rb
+			String results = this.getEmptyResultSetMessage(params);
+			out.println( results );
 		}
 	}
 	catch( Exception e)
@@ -748,7 +832,7 @@ public class DataRequestServlet extends HttpServlet
 	 * 
 	 */
 	private void handlePlantTaxonQuery(Hashtable params, PrintWriter out, 
-	String requestDataType,  HttpServletResponse response)
+	String requestDataType, HttpServletResponse response)
 	{
 		try
 		{
@@ -772,9 +856,8 @@ public class DataRequestServlet extends HttpServlet
 				{ 
 					if ( ! clientType.equals("clientApplication") )
 					{
-						out.println("<br> <b> Please try another query </b> <br>"); 
-						out.println("<a href = \"/forms/plant-query.html\">"
-						+"return to query page</a>");
+						String results = this.getEmptyResultSetMessage(params);
+						out.println( results );
 					}
 				}
 			}
@@ -785,6 +868,52 @@ public class DataRequestServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	}
+	
+	/** 
+	 * This method retuns an html form containing a message that the 
+	 * issued query did not return any results 
+	 * @param params -- the parameters passed to the servlet
+	 * @return contents -- the contents of the empty result set page
+	 *
+	 */
+	 private String getEmptyResultSetMessage(Hashtable params)
+	 {
+		 String contents ="";
+		 String errors = "/tmp/errors.html";
+		 StringBuffer sb = new StringBuffer();
+		 try
+		 {
+			 // GET THE DATA REQUEST TYPE PARAMETER
+			 String requestDataType  = params.get("requestDataType").toString();
+			 Hashtable replaceHash = new Hashtable();
+			 sb.append("<b> Sorry "+userName+" no results found for ");
+			 sb.append(requestDataType);
+			 sb.append(" query: <br> <br> </b>\n ");
+			 
+			 
+			 // GET THE REST OF THE PARAMETERS
+			 Enumeration e = params.keys();
+			 
+			 while (e.hasMoreElements()) 
+			 {
+				String name = (String)e.nextElement();
+				System.out.println("getting : " + name );
+				String value = (String)params.get(name);
+				sb.append(name+ ":   "+value+" <br>  \n");
+			 }
+			
+			 replaceHash.put("messages", sb.toString() );
+			 su.filterTokenFile(genericForm, errors , replaceHash);
+			 Thread.sleep(800);
+			 contents = su.fileToString(errors);
+		 }
+		 catch(Exception e)
+		 {
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		 }
+		 return(contents);
+	 }
 	
 	
 	/**
@@ -826,13 +955,10 @@ public class DataRequestServlet extends HttpServlet
 				{ 
 					if ( ! clientType.equals("clientApplication") )
 					{
-						out.println("<br> <b>Please try another query </b> <br>"); 
-						out.println("<a href = \""+this.communityQueryPage+"\">"
-						+"Return to community query page</a>");
+						String results = this.getEmptyResultSetMessage(params);
+						out.println( results );
 					}
-					System.out.println("DataRequestServlet > no matching communities found");
 				}
-			
 			}
 		}
 		catch( Exception e ) 
@@ -885,10 +1011,8 @@ public class DataRequestServlet extends HttpServlet
  		// IF NO RESULTS THEN PROMPT THE USER FOR ANOTHER QUERY	
 		else 
 		{ 
-			// FIX THIS SO THAT A MORE MEANINGFUL PAGE IS PASSED
-			out.println("<br> <b> Please try another query </b> <br>"); 
-			out.println("<a href = \"http://vegbank.nceas.ucsb.edu/forms/plot-query.html\">"
-			+"return to query page</a><b>&#183;</b>"); //put in rb
+			String results = this.getEmptyResultSetMessage(params);
+			out.println( results );
 		}
 		
 	}
@@ -1048,7 +1172,7 @@ private void updateClientLog (String clientLog, String remoteHost)
  * 	response
  * @param response - the response object linked to the client 
  */
-	public void returnQueryElemenySummary (PrintWriter out, Hashtable params, 
+	public void returnQueryElementSummary (PrintWriter out, Hashtable params, 
   	HttpServletResponse response) 
 	{
 		try 
@@ -1077,7 +1201,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 			//close the table
 			out.println("</table>");
 			//next line is for debuging
-			out.println("---end of DataRequestServlet.returnQueryElemenySummary----<br></br>");
+			out.println("---end of DataRequestServlet.returnQueryElementSummary----<br></br>");
 		}
 		catch (Exception e) 
 		{

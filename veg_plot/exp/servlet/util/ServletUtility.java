@@ -22,8 +22,8 @@ import servlet.util.GetURL;
  *    etc.. 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-06-14 18:28:21 $'
- *  '$Revision: 1.13 $'
+ *  '$Date: 2002-07-30 22:18:29 $'
+ *  '$Revision: 1.14 $'
  *
  */
 
@@ -684,6 +684,7 @@ public Vector fileToVector(String fileName)
  */
 public String fileToString(String fileName) 
 {
+	System.out.println("ServletUtility > fileToString");
 	StringBuffer sb = new StringBuffer();
 	try 
 	{
@@ -691,13 +692,13 @@ public String fileToString(String fileName)
 		String s;
 		while((s = in.readLine()) != null) 
 		{
-			sb.append(s+"\n");
+			//System.out.println("##> " + s +" \n");
+			sb.append(s + "\n");
 		}
 	}
 	catch (Exception e) 
 	{
-		System.out.println("Exception: " + 
-		e.getMessage());
+		System.out.println("Exception: " + e.getMessage());
 		e.printStackTrace();
 	}
 	return(sb.toString() );

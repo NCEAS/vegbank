@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: harris $'
-  *     '$Date: 2002-07-23 00:55:47 $'
-  * '$Revision: 1.7 $'
+  *     '$Date: 2002-07-30 22:18:29 $'
+  * '$Revision: 1.8 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -53,7 +53,8 @@
 	<property name="framework" value="../lib/frameworkservletmodule.jar" />
 	<property name="rmisystem" value="../lib/rmidatasource.jar" />
 	<property name="authentication" value="../lib/authservletmodule.jar" />
-	<property name="cpath" value="${authentication}:${planttaxonomy}:${rmisystem}:${vegcommunity}:${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
+	<property name="utilities" value="../lib/utilities.jar" />
+	<property name="cpath" value="${utilities}:${authentication}:${planttaxonomy}:${rmisystem}:${vegcommunity}:${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
 	
 	
 	<filter token="servlet-path" value="${servlet-path}" />
