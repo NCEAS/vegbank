@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-11 22:14:05 $'
- *	'$Revision: 1.20 $'
+ *	'$Date: 2004-10-12 01:00:33 $'
+ *	'$Revision: 1.21 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -365,7 +365,7 @@ public class GenericCommand
 			}
 
 
-			if ( selectClause.indexOf("where") == -1 ) {
+			if ( this.selectClauseWithSimpleAttribs.indexOf("where") == -1 ) {
 				whereClause = " where " +  whereClause;
 			} else {
 				whereClause = " and " +  whereClause;
