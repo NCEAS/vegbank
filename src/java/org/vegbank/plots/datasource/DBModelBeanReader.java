@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-04 10:39:53 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-11-05 18:45:30 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,6 +75,7 @@ public class DBModelBeanReader
 	 */
 	private DBConnection con = null;
 	private Vector ignoreObjects = new Vector();
+
 	
 	public DBModelBeanReader() throws SQLException
 	{
@@ -169,8 +170,12 @@ public class DBModelBeanReader
 	{
 		int pk = 0;
 
-		// Get the accessionCode for this table
-		String fieldName = Utility.getAccessionCodeAttributeName(entityName);
+		// Get the PK name for this table
+		String fieldName = Utility.getPKNameFromTableName(entityName);
+
+		// Get the accessionCode name for this table
+		String accessionCodeName = 
+			Utility.getAccessionCodeAttributeName(entityName);
 
 		if ( fieldName == null )
 		{
@@ -184,7 +189,7 @@ public class DBModelBeanReader
 				+ " from "
 				+ entityName
 				+ " where "
-				+ fieldName
+				+ accessionCodeName
 				+ "= '"
 				+ accessionCode
 				+ "'";
@@ -228,9 +233,21 @@ public class DBModelBeanReader
 	
 	public Plot getPlotObservationBeanTree(String observationAccessionCode) throws Exception
 	{	
-		int pK = 0; 
-		this.getPKFromAccessionCode( "observation", observationAccessionCode, Observation.PKNAME );
-		return this.getPlotObservationBeanTree(pK);	
+		// Search cache first
+		Plot plot = 
+			(Plot) ModelBeanCache.getBeanFromCache(observationAccessionCode);
+		if ( plot != null )
+		{
+			return plot;
+		}
+		
+		int pK = this.getPKFromAccessionCode( "observation", observationAccessionCode, Observation.PKNAME );
+		plot = this.getPlotObservationBeanTree(pK);	
+		
+		// Add to cache
+		ModelBeanCache.addToCache(plot, observationAccessionCode);
+		
+		return plot;
 	}
 	
 	public Plot getPlotObservationBeanTree(int observationId) throws Exception
@@ -736,6 +753,57 @@ public class DBModelBeanReader
 		
 		//System.out.println(">>>>> " + className +" :::: " + sb.toString());
 		return sb.toString();
+	}
+	
+	/**
+	 * ModelBeanCache implements a small, simple cache for model beans using
+	 * a Vector of Vectors  and a key of the accessionCode
+	 * 
+	 * Is a FIFO cache, first entry gets axed when size limit reached.
+	 *  
+	 * @author farrell
+	 *
+	 */
+	public static class ModelBeanCache
+	{
+		private static Vector cache = new Vector();
+		private static final int MAX_CACHE_SIZE = 5;
+		
+		/**
+		 * Add a new accessionCode bean pair to cache
+		 * 
+		 * @param bean
+		 * @param accessionCode
+		 */
+		public static synchronized  void  addToCache( VBModelBean bean, String accessionCode)
+		{
+			if ( cache.size() >= MAX_CACHE_SIZE )
+			{
+				cache.removeElementAt(0);
+			}
+			Vector newElement = new Vector ();
+			newElement.add(accessionCode);
+			newElement.add(bean);
+			cache.add( newElement );
+		}
+		
+		/**
+		 * Search for a bean that has a key of accessionCode
+		 * @param accessionCode
+		 * @return VBModelBean -- The bean found or null if none found
+		 */
+		public static VBModelBean getBeanFromCache( String accessionCode )
+		{
+			for ( int i=0 ; i < cache.size() ; i++)
+			{
+				Vector currentElement = (Vector) cache.elementAt(i);
+				if ( accessionCode.equalsIgnoreCase( (String) currentElement.elementAt(0) ) )
+				{
+					return (VBModelBean) currentElement.elementAt(1);
+				}
+			}
+			return null;
+		}
 	}
 	
 }

@@ -5,8 +5,8 @@ package org.vegbank.ui.struts;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-03 03:49:47 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-11-05 18:45:30 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ package org.vegbank.ui.struts;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
  */
  
+import java.io.PrintWriter;
 import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +41,7 @@ import org.vegbank.common.model.Plot;
 import org.vegbank.common.utility.StopWatchUtil;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.XMLUtil;
+import org.vegbank.plots.datasink.ASCIIReportsHelper;
 import org.vegbank.plots.datasource.DBModelBeanReader;
  
 /**
@@ -62,7 +64,7 @@ public class DisplayPlotAction extends Action
 		// Get the form
 		DynaActionForm thisForm = (DynaActionForm) form;
 		
-		String plotId = (String ) thisForm.get("plotId");
+		String vegbankAccessionNumber = (String ) thisForm.get("vegbankAccessionNumber");
 		String resultType = (String) thisForm.get("resultType");
 		//String accessionCode = (String)dpform.get("plotId")
 		
@@ -75,7 +77,8 @@ public class DisplayPlotAction extends Action
 				Globals.ERROR_KEY,
 				new ActionMessage("errors.required", "A resultType"));
 		}
-		else if ( resultType.equalsIgnoreCase("rawXML"))
+		// Got a resultType
+		else 
 		{
 			try
 			{
@@ -85,16 +88,45 @@ public class DisplayPlotAction extends Action
 				
 				DBModelBeanReader mbReader = new DBModelBeanReader();
 				Plot plot =
-					mbReader.getPlotObservationBeanTree(
-						((Integer) new Integer(plotId)).intValue());
+					mbReader.getPlotObservationBeanTree(vegbankAccessionNumber);
 						
 				sw.stopWatch();
 				sw.printTimeElapsed();
-						
-				response.setContentType("text/xml");
-				response.getWriter().print( XMLUtil.getVBXML(plot) );
-				// This is to prevent struts from grabbing the response away
-				fwd = null;
+
+				// rawXML			
+				if ( resultType.equalsIgnoreCase("rawXML"))
+				{
+					response.setContentType("text/xml");
+					response.getWriter().write( XMLUtil.getVBXML(plot) );
+					// This is to prevent struts from grabbing the response away
+					fwd = null;
+				}
+				// ascii Species Report
+				else if (resultType.equalsIgnoreCase("ASCIISpecies"))
+				{
+					response.setContentType("text/plain");
+					response.getWriter().write( ASCIIReportsHelper.getSpeciesData(plot) );
+					// This is to prevent struts from grabbing the response away
+					fwd = null;
+				}
+				// ascii Enviroment Report
+				else if (resultType.equalsIgnoreCase("ASCIIEvironment"))
+				{
+					response.setContentType("text/plain");
+					response.getWriter().write( ASCIIReportsHelper.getEnvironmentalData(plot) );
+					// This is to prevent struts from grabbing the response away
+					fwd = null;
+				}
+				// Got an invalid resultType
+				else
+				{
+					fwd = "failure";
+					errors.add(
+						Globals.ERROR_KEY,
+						new ActionMessage(
+							"errors.action.failed",
+							"resultType - '" + resultType + "' is not supported"));
+				}
 			}
 			catch (SQLException e)
 			{
@@ -102,16 +134,6 @@ public class DisplayPlotAction extends Action
 				errors.add(
 					Globals.ERROR_KEY,
 					new ActionMessage("errors.database", e.getMessage()));
-				e.printStackTrace();
-			} 
-			catch (NumberFormatException e)
-			{
-				fwd = "failure";
-				errors.add(
-					Globals.ERROR_KEY,
-					new ActionMessage(
-						"errors.action.failed",
-						"plotId was not a number: " + plotId));
 				e.printStackTrace();
 			} 
 			catch (Exception e)
@@ -122,17 +144,8 @@ public class DisplayPlotAction extends Action
 					new ActionMessage("errors.action.failed",e.getMessage()));
 				e.printStackTrace();
 			}
-			
 		}
-		else
-		{
-			fwd = "failure";
-			errors.add(
-				Globals.ERROR_KEY,
-				new ActionMessage(
-					"errors.action.failed",
-					"resultType - '" + resultType + "' is not supported"));
-		}
+
 		
 		if (!errors.isEmpty())
 		{

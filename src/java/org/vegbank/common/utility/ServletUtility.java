@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-11-03 03:49:47 $'
- *  '$Revision: 1.4 $'
+ *  '$Date: 2003-11-05 18:45:30 $'
+ *  '$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tools.ant.filters.ReplaceTokens;
 
+import com.Ostermiller.util.LineEnds;
+
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -62,63 +64,21 @@ public class ServletUtility
 {
 	private GetURL gurl = new GetURL();	
 	
-	/**
-	 * method that takes a vector containing a number of file names
-	 * and a string that represents the output file and creates a 
-	 * zip file with the specified name containing the specified 
-	 * files
-	 *
-	 * @param fileVec -- the vector containing the files
-	 * @param outFile -- the name of the zip file
-	 *
-	 */
-	public static void setZippedFile(Vector fileVec, String outFile) throws IOException
-	{
-		String outFilename = outFile;
-		setZippedFile(fileVec, new FileOutputStream(new File(outFilename)) );
-	}
-	
-	/**
-	 * method that takes a vector containing a number of file names
-	 * and a string that represents the output file and creates a 
-	 * zip file with the specified name containing the specified 
-	 * files
-	 *
-	 * @param fileVec -- the vector containing the files
-	 * @param outFile -- File -- The zip file
-	 *
-	 */
-	public static void  setZippedFile(Vector fileVec, OutputStream outStream) throws IOException
-	{
-		ZipOutputStream out = new ZipOutputStream(outStream);
-		for (int i =0; i < fileVec.size(); i++)
-		{
-			String inFilename = (String)fileVec.elementAt(i);
-			FileInputStream in = new FileInputStream(inFilename);
-			out.putNextEntry(new ZipEntry(inFilename));
-			byte[] buf = new byte[1024];
-			int len;
-			while ((len = in.read(buf)) > 0) 
-			{
-				out.write(buf, 0, len);
-			}
-			out.closeEntry();
-			in.close();
-		}
-		out.close();
-	}
-	
 	static final int BUFFER = 2048; 
 	
 	/**
-	 * method that takes a Hashtable containing a InputStreams / desired fileName 
-	 * and an Outputstrean that represents the created  zip file 
+	 * method that takes a Hashtable containing fileContent and desired fileName 
+	 * and an Outputstrean that represents the created  zip file plus the LineEnd 
+	 * style desired if downloading file to different OS.
+	 * 
+	 * See ( or use ) com.Ostermiller.util>LineEnds for the Constants for each system
 	 *
-	 * @param fileVec -- the vector containing the files
-	 * @param outFile -- File -- The zip file
+	 * @param nameContent -- the Hashtable containing the filesContent (as String ) and the file names
+	 * @param outStream -- OutputStream to  take zipped up files
+	 * @param style line separator style.
 	 *
 	 */
-	public static void  putZippedFileInOutputStream(Hashtable nameContent, OutputStream outStream) throws IOException
+	public static void  zipFiles(Hashtable nameContent, OutputStream outStream, int style ) throws IOException
 	{
 		ZipOutputStream zipstream = new ZipOutputStream(outStream);
 		
@@ -135,11 +95,10 @@ public class ServletUtility
 			byte data[] = new byte[BUFFER];
 			
 			ByteArrayInputStream origin = new ByteArrayInputStream(fileContent.getBytes());
-			while( (count = origin.read(data, 0, BUFFER)) != -1) 
-			{
-				zipstream.write(data, 0, count);
-			} 
-			//zipstream.closeEntry();
+			OutputStream originToConvert = new ByteArrayOutputStream();
+
+			LineEnds.convert(origin, zipstream, LineEnds.STYLE_DOS);
+			
 			origin.close();	
 		}
 		zipstream.close();
