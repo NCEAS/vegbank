@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-09-02 21:57:43 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2003-10-06 20:39:32 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -237,7 +237,7 @@ public class PlotQueryAction extends Action
 			return (mapping.getInputForward());
 		}
 
-		return mapping.findForward("DisplayResults");
+		return mapping.findForward("displayResults");
 	}
 
 	private Collection getPlotSummaries(String conjunction, Vector resultSets)
