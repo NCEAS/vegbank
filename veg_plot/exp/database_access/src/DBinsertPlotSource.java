@@ -1,10 +1,28 @@
-/** 
- *  Authors: @author@
- *  Release: @release@
- *	
- *  '$Author: harris $'
- *  '$Date: 2002-08-13 21:39:10 $'
- * 	'$Revision: 1.33 $'
+ /**
+ *  '$RCSfile: DBinsertPlotSource.java,v $'
+ *    Purpose: A Class that loads plot data to the vegbank database system
+ *  Copyright: 2000 Regents of the University of California and the
+ *             National Center for Ecological Analysis and Synthesis
+ *    Authors: John Harris
+ *    Release: @release@
+ *
+ *   '$Author: harris $'
+ *     '$Date: 2002-08-15 03:07:47 $'
+ * '$Revision: 1.34 $'
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package databaseAccess;
 
@@ -24,10 +42,10 @@ import servlet.util.GetURL;
 import PlantTaxaLoader;
 
 /**
- * this is a class that is used to load the database by parsing an xml document
- * that is consistent with the  veg plot project
+ * this is a class that is used to load the vegbank plots database
+ * by using as input data data abctracted by the 'PlotDataSource' 
+ * class and the plugins used by that system 
  */
-//public class DBinsertPlotSource implements ServletPluginInterface
 public class DBinsertPlotSource
 {
 
@@ -49,10 +67,11 @@ public class DBinsertPlotSource
 	public Plot plot;
 	private XMLparse parser;
 
-	// variable that are quite general to the class and are going to be used by a
-	// number of the methods
+	// variables that are quite general to the class
 	String projectName = null;
 	String projectDescription = null;
+	private String projectStartDate = null;
+	private String projectStopDate = null;
 	String plotName = null;
 	Vector plotNameList = new Vector();
 	// instance variables describing the person that is loading 
@@ -71,14 +90,11 @@ public class DBinsertPlotSource
 	int stratumMethodId;
 
 	private String loaderEmail = "vegbank@vegbank.org"; //the email of the loader
-
 	// the name of the plots project xml file containing the plot information
 	// to be stored in the database
 	public String filename = new String();
-	
 	//debug string buffer
 	StringBuffer debug = new StringBuffer();
-
 	//the data source that will be used for loading the db
 	public PlotDataSource source;
 	private GetURL gurl = new GetURL();
@@ -585,27 +601,27 @@ public class DBinsertPlotSource
 			
 			this.projectName = source.projectName;
 			this.projectDescription = source.projectDescription;
-			
+			this.projectStartDate = source.getProjectStartDate(plotName);
+			this.projectStopDate = source.getProjectStopDate(plotName);
 			
 			System.out.println("DBinsertPlotSource > projectName: " + this.projectName);
-			System.out.println("DBinsertPlotSource > projectDesc: " + this.projectDescription);
-			System.out.println("DBinsertPlotSource > projectContrib: " + source.projectContributors.toString() );
-				
+			System.out.println("DBinsertPlotSource > project start: " + this.projectStartDate );
+			System.out.println("DBinsertPlotSource > project stop: " + this.projectStopDate );
 		
-			//see if the project in which this plot is a member exists in the database
+			// SEE IF THE PROJECT IN WHICH THIS PLOT IS A MEMBER EXISTS IN THE DATABASE
 			if (projectExists(projectName) == true )
 			{
 				projectId = getProjectId(projectName);
 			}
-			// if the project is not there then load it and the project contributor
-			//info
+			// IF THE PROJECT IS NOT THERE THEN LOAD IT AND THE PROJECT CONT. INFO
 			else
 			{		
-				insertProject(source.projectName, source.projectDescription);
+				insertProject(source.projectName, source.projectDescription, projectStartDate, projectStopDate);
 				projectId = getProjectId(projectName);
-				//insert the project contributor information here
+				// INSERT THE PROJECT CONTRIBUTOR INFORMATION HERE, THE PARTY, ADDRESS, 
+				// TELEPHONE ALSO LOADED FROM HERE
 				Vector projContributors = source.projectContributors;
-				for (int ii =0; ii < projContributors.size(); ii++)
+				for (int ii=0; ii < projContributors.size(); ii++)
 				{
 					String contributor = (String)projContributors.elementAt(ii);
 					String salutation=source.getProjectContributorSalutation(contributor);
@@ -613,58 +629,60 @@ public class DBinsertPlotSource
 					String givenName = source.getProjectContributorGivenName(contributor);
 					String email = source.getProjectContributorEmailAddress(contributor);
 					String role = "project manager";
+					String orgName = source.getProjectContributorOrganizationName(contributor);
+					String contact = source.getProjectContributorContactInstructions(contributor);
 					insertProjectContributor(salutation, givenName, surName, email, role, 
-					projectId);
+					projectId, orgName, contact, contributor);
 				}
 			}
-//			insertNamedPlace();
-				if (insertStaticPlotData(projectId) == false ) 
-				{	
-					System.out.println("static data: "+ commit);
+			//insertNamedPlace();
+			if (insertStaticPlotData(projectId) == false ) 
+			{	
+				System.out.println("static data: "+ commit);
+				commit = false;
+			}
+			else
+			{
+				if ( insertCoverMethod() == false )
+				{
 					commit = false;
+					System.out.println("covermethod>: "+ commit);
+				}
+				if ( insertStratumMethod() == false )
+				{
+					commit = false;
+					System.out.println("stratummethod>: "+ commit);
+				}
+					
+				if( insertPlotObservation() == false )
+				{
+					commit = false;
+					System.out.println("observation>: "+commit);
+				}
+				if( insertCommunities() == false )
+				{
+					commit = false;
+					System.out.println("communities>: "+ commit);
+				}
+				if( insertStrata() == false )
+				{
+					commit = false;
+					System.out.println("observation>: "+ commit);
+				}
+				// BOTH THE TAXON OBSERVATION TABLES
+				// AND THE STRATA COMPOSITION ARE LOADED HERE
+				if( insertTaxonObservations() == false )
+				{
+					commit = false;
+					System.out.println("taxonobservation>: "+commit);
+					debug.append( "<taxaInsertion>false</taxaInsertion> \n" );
 				}
 				else
 				{
-					if ( insertCoverMethod() == false )
-					{
-						commit = false;
-						System.out.println("covermethod>: "+ commit);
-					}
-					if ( insertStratumMethod() == false )
-					{
-						commit = false;
-						System.out.println("stratummethod>: "+ commit);
-					}
-					
-					if( insertPlotObservation() == false )
-					{
-						commit = false;
-						System.out.println("observation>: "+commit);
-					}
-					if( insertCommunities() == false )
-					{
-						commit = false;
-						System.out.println("communities>: "+ commit);
-					}
-					if( insertStrata() == false )
-					{
-						commit = false;
-						System.out.println("observation>: "+ commit);
-					}
-					//both the taxon observation tables
-					//and the strata composition are uypdated here
-					if( insertTaxonObservations() == false )
-					{
-						commit = false;
-						System.out.println("taxonobservation>: "+commit);
-						debug.append( "<taxaInsertion>false</taxaInsertion> \n" );
-					}
-					else
-					{
-						debug.append( "<taxaInsertion>true</taxaInsertion> \n" );
-					}
+					debug.append( "<taxaInsertion>true</taxaInsertion> \n" );
 				}
-				System.out.println("DBinsertPlotSource > insertion success: "+ commit);
+			}
+			System.out.println("DBinsertPlotSource > insertion success: "+ commit);
 			if ( commit == true) 
 			{
 				conn.commit();
@@ -695,22 +713,34 @@ public class DBinsertPlotSource
 	 * @param givenName
 	 * @param email
 	 * @param role
-	 * @param projectId 
+	 * @param projectId
+	 * @param orgName -- the name of the org that the contributor belongs
+	 * @param contact -- the contact instructions
+	 * @param contributor -- the contributors whole name which is used 
+	 * to lookup via the 'PlotDataSource' object the required info
 	 *
 	 */
 	 private void insertProjectContributor(String salutation, String givenName,
-	 String surName, String email, String role, int projectId )
+	 String surName, String email, String role, int projectId, String orgName, 
+	 String contact, String contributor )
 	 {
 		 try
 		 {
 			 int partyId = 0;
-			 //insert into the party table first
 			 boolean pExists = partyExists(salutation, givenName, surName, email);
 			 System.out.println("DBinsertPlotSource > party exists: " + pExists);
+			 // INSERT INTO THE PARTY TABLE FIRST, ALONG WITH THE ADDRESS AND TELEPHONE
 			 if ( pExists == false )
 			 {
-				 partyId = insertParty(salutation, givenName, surName, email );
+				 partyId = insertParty(salutation,givenName,surName,email,orgName,contact );
+				 if ( partyId > 0 )
+				 {
+					 // THESE METHODS USER THE 'PlotDataSource' Object directly
+					 insertAddress(partyId, contributor);
+					 //insertTelephone(partyId, contributor);
+				 }
 			 }
+			 
 			 //else get the party id for this contributor
 			 else
 			 {
@@ -720,21 +750,67 @@ public class DBinsertPlotSource
 			 
 			 //insert into the project contributor table
 			 StringBuffer sb = new StringBuffer();
-				sb.append("INSERT into PROJECTCONTRIBUTOR ");
-				sb.append("( party_id, project_id, surName, role) ");
-				sb.append(" values ("+partyId+", "+projectId+", '"+surName+"', '"+role+"')" );
-			
-				//System.out.println("query > " + sb.toString() );
-				Statement insertStatement = conn.createStatement();
-				insertStatement.executeUpdate(sb.toString());	
+			 sb.append("INSERT into PROJECTCONTRIBUTOR ");
+			 sb.append("( party_id, project_id, surName, role) ");
+			 sb.append(" values ("+partyId+", "+projectId+", '"+surName+"', '"+role+"')" );
+			 
+			 Statement insertStatement = conn.createStatement();
+			 insertStatement.executeUpdate(sb.toString());
+			 insertStatement.close();
 		 }
 		 catch( Exception e)
 		 {
-			 	System.out.println("Exception: "+e.getMessage() ); 
-				e.printStackTrace();
-				//System.exit(1);
+			 System.out.println("Exception: "+e.getMessage() ); 
+			e.printStackTrace();
 		 }
 	 }
+	 
+	 /**
+	  * method that inserts address information for a user
+		* by using the contributor ( the wholename of the user
+		* and the partyId.  The contributor string is used directly
+		* with the PlotDataSource object for looking up the address
+		* information
+		* @param partyId  -- the partyid for the party table
+		* @param contributor -- the whole name of the contributor
+		*/
+		private void insertAddress(int partyId, String contributor)
+		{
+			
+			StringBuffer sb = new StringBuffer();
+			try
+			{
+				String email = source.getProjectContributorEmailAddress(contributor);
+				String street = source.getProjectContributorDeliveryPoint(contributor);
+				String adminArea = source.getProjectContributorAdministrativeArea(contributor);
+				String city = source.getProjectContributorCity(contributor);
+				String postalCode = source.getProjectContributorPostalCode(contributor);
+				String country = source.getProjectContributorCountry(contributor);
+				
+				sb.append("INSERT into ADDRESS ");
+				sb.append("( party_id, email, deliverypoint, city, administrativearea, ");
+				sb.append(" postalcode, country ) ");
+				sb.append(" values (?,?,?,?,?,?,?)");
+				
+				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+				pstmt.setInt(1, partyId);
+  	  	pstmt.setString(2, email);
+				pstmt.setString(3, street);
+				pstmt.setString(4, city);
+				pstmt.setString(5, adminArea);
+				pstmt.setString(6, postalCode);
+				pstmt.setString(7, country);
+				
+				pstmt.execute();
+				pstmt.close();
+			}
+			catch( Exception e)
+			{
+				System.out.println("Exception: "+e.getMessage() );
+				System.out.println("sql: " + sb.toString() );
+				e.printStackTrace();
+			}
+		}
 	 
 	 
 	/**
@@ -787,19 +863,22 @@ public class DBinsertPlotSource
 	 * @param surName
 	 * @param givenName
 	 * @param email
+	 * @param orgName 
+	 * @param contact -- the contact instructions 
 	 */
 	 private int insertParty(String salutation, String givenName, String surName, 
-	 String email)
+	 String email, String orgName, String contact)
 	 {
-		 int partyId = 0;
+		int partyId = 0;
+		StringBuffer sb = new StringBuffer();
 		try
 		{
-			StringBuffer sb = new StringBuffer();
 			sb.append("INSERT into PARTY ");
-			sb.append("( salutation, givenName, surName, email) ");
-			sb.append(" values ('"+salutation+"', '"+givenName+"', '"+surName+"', '"+email+"')" );
+			sb.append("( salutation, givenName, surName, email, organizationName,");
+			sb.append(" contactinstructions) ");
+			sb.append(" values ('"+salutation+"', '"+givenName+"', '"+surName+"', '");
+			sb.append(email+"', '"+orgName+"', '"+contact+"')" );
 			
-			//System.out.println("query > " + sb.toString() );
 			Statement insertStatement = conn.createStatement();
 			insertStatement.executeUpdate(sb.toString());	
 			
@@ -815,9 +894,8 @@ public class DBinsertPlotSource
 		}
 		 catch( Exception e)
 		 {
-			 	System.out.println("Exception: "+e.getMessage() ); 
-				e.printStackTrace();
-				//System.exit(1);
+			 System.out.println("Exception: "+e.getMessage() ); 
+			 e.printStackTrace();
 		 }
 		 return(partyId);
 	 }
@@ -1085,6 +1163,7 @@ public class DBinsertPlotSource
 	private boolean insertTaxonObservations()
 	{
 		boolean successfulCommit = true;
+		StringBuffer sb = new StringBuffer();
 		try 
 		{
 			System.out.println("DBinsertPlotSource > inserting taxonomy data for: " + plotName+" " + plot);
@@ -1098,7 +1177,7 @@ public class DBinsertPlotSource
 				String conceptId  = "";
 				String name = "";
 				String nameId = "";
-				StringBuffer sb = new StringBuffer();
+				sb = new StringBuffer();
 				// get the taxonObservation number which will be used in the 
 				// strata composition insertion method called below too
 				taxonObservationId = getNextId("taxonObservation");	
@@ -1166,7 +1245,8 @@ public class DBinsertPlotSource
 		}
 		catch (Exception e)
 		{
-			System.out.println("Caught Exception: " + e.getMessage() ); 
+			System.out.println("Caught Exception: " + e.getMessage() );
+			System.out.println("sql: " + sb.toString() );
 			e.printStackTrace();
 			successfulCommit = false; 
 		}
@@ -1817,7 +1897,7 @@ public class DBinsertPlotSource
 				parameters.setProperty("taxonNameType", nameType );
 				parameters.setProperty("taxonLevel","%" );
 				s = gurl.requestURL(servlet, protocol, host, parameters);
-				System.out.println("DBinsertPlotSource > XML string from web app: \n'"+s+"'");
+				//System.out.println("DBinsertPlotSource > XML string from web app: \n'"+s+"'");
 			
 				// IF THERE ARE RESULTS THEN ADD THEM TO THE HASHTABLE
 				if ( s.length() > 3 && s != null )
@@ -1864,12 +1944,14 @@ public class DBinsertPlotSource
 		}
 		return(h);
 	}
-	
 
-	
-	
-	//method that returns true if the project with this name exists in the 
-	//database
+
+
+
+	/**
+	 * method that returns true if the project with this name exists in the 
+	 * database
+	 */
 	private boolean projectExists(String projectName)
 	{
 		int rows = 0;
@@ -1936,7 +2018,9 @@ public class DBinsertPlotSource
 	
 	
 	/**
-	 * method that returns the number of row in a given table
+	 * method that returns the next primary key value for a table
+	 * @param tableName -- the table whose pk value is desired
+	 * @return int -- the promary key value
 	 */
 	private int getNextId(String tableName)
 	{
@@ -1944,7 +2028,30 @@ public class DBinsertPlotSource
 		StringBuffer sb = new StringBuffer();
 		try 
 		{
-			sb.append("SELECT count(*) from "+tableName );
+			if ( tableName.toUpperCase().equals("TAXONOBSERVATION") )
+			{
+				sb.append("SELECT max(taxonobservation_id)+1 from taxonobservation" );
+			}
+			else if ( tableName.toUpperCase().equals("STRATUMCOMPOSITION") )
+			{
+				sb.append("SELECT max(stratumcomposition_id)+1 from stratumcomposition" );
+			}
+			else if ( tableName.toUpperCase().equals("PLOT") )
+			{
+				sb.append("SELECT max(plot_id)+1 from plot" );
+			}
+			else if ( tableName.toUpperCase().equals("STRATUM") )
+			{
+				sb.append("SELECT max(stratum_id)+1 from stratum" );
+			}
+			else if ( tableName.toUpperCase().equals("OBSERVATION") )
+			{
+				sb.append("SELECT max(observation_id)+1 from observation" );
+			}
+			else
+			{
+				sb.append("SELECT count(*)+1 from "+tableName );
+			}
 			Statement query = conn.createStatement();
 			ResultSet rs = query.executeQuery( sb.toString() );
 			while ( rs.next() ) 
@@ -1957,23 +2064,39 @@ public class DBinsertPlotSource
 			System.out.println("Exception: "+e.getMessage() );
 			System.out.println("sql: " + sb.toString() );
 			e.printStackTrace();
-			//System.exit(0);
 		}
 		return(rows);
 	}
 	
 	/**
-	 * method that will insert the project data
+	 * method that will insert the project data into the project table
+	 * @param projectName -- the name of the project
+	 * @param projectDescription -- the description of the project
+	 * @param projectStartDate -- the start date of the project must be like 
+	 * 	'01-JAN-2002'
+	 * @param projectStopDate -- the stop date of the project must be like 
+	 * 	'01-JAN-2002'
 	 */
-	public void insertProject(String projectName, String projectDescription)
+	public void insertProject(String projectName, String projectDescription, 
+	String projectStartDate, String projectStopDate)
 	{
+		StringBuffer sb = new StringBuffer();
 		try 
 		{
-			System.out.println("DBinsertPlotSource > project primary Key: "+getNextId("project") );
-			StringBuffer sb = new StringBuffer();
 			int projectId = getNextId("project");
-			sb.append("INSERT into PROJECT (project_id, projectName, projectdescription) "
-			 +"values("+projectId+", '"+projectName+"', '"+projectDescription+"')" );
+			// DETERMINE IF THE DATE FORMAT IS CORRECT AND QUERY ACCORDINGLY
+			if ( (projectStartDate.indexOf("-") > 0) && (projectStopDate.indexOf("-") > 0) )
+			{
+				sb.append("INSERT into PROJECT (project_id, projectName, projectdescription,  ");
+				sb.append(" startdate, stopdate) ");
+				sb.append(" values("+projectId+", '"+projectName+"', '"+projectDescription+"', " );
+				sb.append("'"+projectStartDate+"', '"+projectStopDate+"') ");
+			}
+			else
+			{
+				sb.append("INSERT into PROJECT (project_id, projectName, projectdescription) ");
+				sb.append(" values("+projectId+", '"+projectName+"', '"+projectDescription+"' )" );
+			}
 			Statement insertStatement = conn.createStatement();
 			insertStatement.executeUpdate(sb.toString());
 			System.out.println("DBinsertPlotSource > inserted PROJECT");	
@@ -1981,6 +2104,7 @@ public class DBinsertPlotSource
 		catch (Exception e)
 		{
 			System.out.println("Caught Exception: "+e.getMessage() ); 
+			System.out.println("sql: " + sb.toString() );
 			e.printStackTrace();
 		}
 	}
