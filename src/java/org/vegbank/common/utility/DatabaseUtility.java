@@ -5,8 +5,8 @@
  *             National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-10-17 01:30:26 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-10-18 01:32:01 $'
+ *	'$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,6 +44,8 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 /**
  * This class contains multi-purpose utilities for dealing with plot data, 
  * and the VegBank database at this point these may include utilities to 
@@ -79,6 +81,7 @@ public class DatabaseUtility
 	private static PropertyResourceBundle options = null;
 	private static String propertiesFile = "database";
 	
+	private static final Log _logger = LogFactory.getLog(DatabaseUtility.class);
 	/**
 	 * due to problems connecting to the various vegbank databases and vegbank 
 	 * url-based services at runtime  'test' connection methods have been 
@@ -394,7 +397,7 @@ public class DatabaseUtility
 
 	/**
 	* method that will return a database connection for use with the 
-	* vegetation plots database on the machine described in the input 
+	* vegetation plot's database on the machine described in the input 
 	* parameter.
 	*
 	* @param host -- the host machine on which the plots database is running
@@ -429,183 +432,178 @@ public class DatabaseUtility
 	 * for removal of the plot from the plot table -- thus there are some data
 	 * left in the database that do not have foreign key relationships with 
 	 * the plot table or any of the children tables.
-	 * @param plotId -- the PK value of the plot that should be droped
+	 * @param plotId -- the PK value of the plot that should be dropped
 	 * @param dbHost -- the host machine onwhich the database is running
 	 */
-	 public void dropPlot( int plotId, String dbHost  )
-		 				throws java.sql.SQLException {
+	public void dropPlot( int plotId, String dbHost )
+				throws java.sql.SQLException {
 
-		 StringBuffer sb;
-		 boolean results = true;
-		 PreparedStatement pstmt = null;
+		StringBuffer sb;
+		String obsIds;
+		boolean results = true;
+		PreparedStatement pstmt = null;
 
-		 sb = new StringBuffer();
-		 this.conn = this.getPlotDBConnection(dbHost);
-		 this.conn.setAutoCommit(false);
-   
-		 // check that the plot exists if not then bail
-   		sb.append("select count(plot_id) from plot where plot_id = "+plotId);
-		 Statement query = conn.createStatement();
-		 ResultSet dbresults = null;
-	   dbresults = query.executeQuery( sb.toString() );
-	   //retrieve the results
-	   int res = 0;
-	   while (dbresults.next())
-	   {
-		res = dbresults.getInt(1);
-	   }
-	   // if the res -- number of plots is 0 then alert 
-	   if ( res == 0 )
-	   {
-		System.out.println("DatabaseUtility > This plot does not exist in the database and will not be removed: " + res);
-	   }
-	   else
-	   {
-		System.out.println("DatabaseUtility > This plot exists in the database and will be removed: " + res);
-		// do the deletion 
-		sb = new StringBuffer();
-			  sb.append("delete from stratumcomposition where taxonobservation_id in ( ");
-			  sb.append("select taxonobservation_id from taxonobservation where observation_id = ( ");
-			  sb.append("select observation_id from observation where plot_id = ("+plotId+"))); \n");
-			  pstmt = conn.prepareStatement( sb.toString() );
-		  SQLWarning warning = pstmt.getWarnings();
-		  if ( warning != null )
-		  {
-			 System.out.println("WARNINGS > " + warning.toString());
-		  }
-		  else
-		  {
-			 results = pstmt.execute();
-			 System.out.println("DatabaseUtility  > dropped stratumcomposition: " );
-		  }
-		 
-		 // Delete the commclass, comminterpretation and classcontributor
-		 
-		 sb = new StringBuffer();
-		 sb.append("delete from comminterpretation where commclass_id = ( ");
-		 sb.append("select commclass_id from commclass where observation_id = ");
-		 sb.append("( select observation_id from observation where plot_id =  "+plotId+" ))");
-		 pstmt = conn.prepareStatement( sb.toString() );
-		 warning = pstmt.getWarnings();
-		 if ( warning != null )
-		 {
-				System.out.println("WARNINGS > " + warning.toString());
-		 }
-		 else
-		 {
-				results = pstmt.execute();
-				System.out.println("DatabaseUtility  > dropped comminterpretation: " );
-		 }
+		sb = new StringBuffer(256);
+		this.conn = this.getPlotDBConnection(dbHost);
 
-		 sb = new StringBuffer();
-		 sb.append("delete from classcontributor where  commclass_id = ( "); 
-		 sb.append("select commclass_id from commclass where observation_id = ");		 
-		 sb.append("( select observation_id from observation where plot_id =  "+plotId+" ))");
-		 pstmt = conn.prepareStatement( sb.toString() );
-		 warning = pstmt.getWarnings();
-		 if ( warning != null )
-		 {
-				System.out.println("WARNINGS > " + warning.toString());
-		 }
-		 else
-		 {
-				results = pstmt.execute();
-				System.out.println("DatabaseUtility  > dropped classcontributor: " );
-		 }			 
-		 
-		 
-		  sb = new StringBuffer();
-		  sb.append("delete from commclass where observation_id = ( ");
-		  sb.append("select observation_id from observation where plot_id = "+plotId+" )");
-		  pstmt = conn.prepareStatement( sb.toString() );
-		  warning = pstmt.getWarnings();
-		  if ( warning != null )
-		  {
-			 System.out.println("WARNINGS > " + warning.toString());
-		  }
-		  else
-		  {
-			 results = pstmt.execute();
-			 System.out.println("DatabaseUtility  > dropped commclass: " );
-		  }
-		  
-		  sb = new StringBuffer();
-		  sb.append("delete from stratum where observation_id = (  ");
-		  sb.append(" select observation_id from observation where plot_id = ("+plotId+" ))");
-		  pstmt = conn.prepareStatement( sb.toString() );
-		  warning = pstmt.getWarnings();
-		  if ( warning != null )
-		  {
-			   System.out.println("WARNINGS > " + warning.toString());
-		  }
-		  else
-		  {
-			   results = pstmt.execute();
-			  System.out.println("DatabaseUtility  > dropped stratum: " );
-		  }
-		 
-		  sb = new StringBuffer();
-		  sb.append("delete from taxonobservation where observation_id = ( ");
-		  sb.append("select observation_id from observation where plot_id = ( "+plotId+" ))");
-		  pstmt = conn.prepareStatement( sb.toString() );
-		  warning = pstmt.getWarnings();
-		  if ( warning != null )
-		  {
-			 System.out.println("WARNINGS > " + warning.toString());
-		  }
-		  else
-		  {
-			 results = pstmt.execute();
-			 System.out.println("DatabaseUtility  > dropped taxonobservation: ");
-		  }
-	sb = new StringBuffer();
-		  sb.append(" delete from observation where plot_id = "+plotId );
-		  pstmt = conn.prepareStatement( sb.toString() );
-		  warning = pstmt.getWarnings();
-		  if ( warning != null )
-		  {
-			 System.out.println("WARNINGS > " + warning.toString());
-		  }
-		  else
-		  {
-			 results = pstmt.execute();
-			 System.out.println("DatabaseUtility  > dropped observation: " );
-		  }
-		   
-		  sb = new StringBuffer();
-		  sb.append(" delete from plot where plot_id = "+plotId );
-		  pstmt = conn.prepareStatement( sb.toString() );
-		  warning = pstmt.getWarnings();
-		  if ( warning != null )
-		  {
-			   System.out.println("WARNINGS > " + warning.toString());
-		  }
-		  else
-		  {
-			   results = pstmt.execute();
-			 System.out.println("DatabaseUtility  > dropped plot: " );
-		  }
-		 
-		  // DROP ALSO FROM THE SUMMARY TABLES
-		  sb = new StringBuffer();
-		  sb.append(" delete from plotspeciessum where plot_id = "+plotId +";" );
-		  sb.append(" delete from plotsitesummary where plot_id = "+plotId );
-		  pstmt = conn.prepareStatement( sb.toString() );
-		  warning = pstmt.getWarnings();
-		  if ( warning != null )
-		  {
-			 System.out.println("WARNINGS > " + warning.toString());
-		  }
-		  else
-		  {
-			 results = pstmt.execute();
-			 System.out.println("DatabaseUtility  > dropped plotsitesummary: " );
-		  }
-		  pstmt.close();
-		 }
-		  conn.commit();
-		  conn.close();
-	 }
+		// check that the plot exists if not then bail
+		sb.append("select count(plot_id) from plot where plot_id = ")
+				.append(plotId);
+		Statement query = conn.createStatement();
+		ResultSet dbresults = query.executeQuery( sb.toString() );
+
+		//retrieve the results
+		int res = 0; 
+		while (dbresults.next()) {
+			res = dbresults.getInt(1);
+		}
+
+		// if the res -- number of plots is 0 then alert 
+		if ( res == 0 ) {
+			System.out.println("DatabaseUtility > cannot remove plot #" + 
+					plotId + " because it does not exist.");
+			this.conn.close();
+			return;
+		}
+
+		// do the deletions
+		System.out.println("DatabaseUtility > This plot exists in the database and will be removed");
+		this.conn.setAutoCommit(false);
+
+		// get all obs. IDs for this plot; use them later 
+		obsIds = getPlotObservationIds(plotId);
+		System.out.println("DatabaseUtility > got obs IDs: " + obsIds);
+
+		// precompile SQL statements
+		stmtSingle = conn.prepareStatement("DELETE FROM ? WHERE ? = ?");
+
+		stmtMulti = conn.prepareStatement("DELETE FROM ? WHERE ? IN " +
+			"( SELECT ? from ? where observation_id IN ? )");
+		
+		// STRATUMCOMPOSITION
+		stmtMulti.setString(1, "stratumcomposition");  
+		stmtMulti.setString(2, "taxonobservation_id");  
+		stmtMulti.setString(3, "taxonobservation_id");  
+		stmtMulti.setString(4, "taxonobservation");  
+		stmtMulti.setString(5, obsIds);  
+		execStatement(stmtMulti);
+
+		// COMMINTERPRETATION
+		stmtMulti.setString(1, "comminterpretation"); 
+		stmtMulti.setString(2, "commclass_id"); 
+		stmtMulti.setString(3, "commclass_id"); 
+		stmtMulti.setString(4, "commclass"); 
+		stmtMulti.setString(5, obsIds);
+		execStatement(stmtMulti);
+
+		// CLASSCONTRIBUTOR
+		stmtMulti.setString(1, "classcontributor"); 
+		stmtMulti.setString(2, "commclass_id"); 
+		stmtMulti.setString(3, "commclass_id"); 
+		stmtMulti.setString(4, "commclass"); 
+		stmtMulti.setString(5, obsIds);
+		execStatement(stmtMulti);
+
+		// COMMCLASS
+		stmtSingle.setString(1, "commclass"); 
+		stmtSingle.setString(2, "observation_id");
+		stmtSingle.setString(3, obsIds);
+		execStatement(stmtSingle);
+
+		// STRATUM
+		stmtSingle.setString(1, "stratum"); 
+		stmtSingle.setString(2, "observation_id");
+		stmtSingle.setString(3, obsIds);
+		execStatement(stmtSingle);
+
+		// TAXONOBSERVATION
+		stmtSingle.setString(1, "taxonobservation"); 
+		stmtSingle.setString(2, "observation_id");
+		stmtSingle.setString(3, obsIds);
+		execStatement(stmtSingle);
+
+		// OBSERVATION
+		stmtSingle.setString(1, "observation"); 
+		stmtSingle.setString(2, "plot_id");
+		stmtSingle.setInt(3, plotId);
+		execStatement(stmtSingle);
+
+		// PLOT
+		stmtSingle.setString(1, "plot"); 
+		stmtSingle.setString(2, "plot_id");
+		stmtSingle.setInt(3, plotId);
+		execStatement(stmtSingle);
+
+		// DROP ALSO FROM THE SUMMARY TABLES
+		// PLOTSPECIESSUM
+		stmtSingle.setString(1, "plotspeciessum");
+		stmtSingle.setString(2, "plot_id");
+		stmtSingle.setInt(3, plotId);
+		execStatement(stmtSingle);
+
+		// PLOTSITESUMMARY
+		stmtSingle.setString(1, "plotsitesummary");
+		stmtSingle.setString(2, "plot_id");
+		stmtSingle.setInt(3, plotId);
+		execStatement(stmtSingle);
+
+		stmtSingle.close();
+		stmtMulti.close();
+
+		conn.commit();
+		conn.close();
+	}
+
+	/**
+	 *  Executes 
+	 *  @param pstmt -- contains the SQL PreparedStatment to execute
+	 *  @return int -- number of records updated or deleted
+	 */
+	private int	execStatement(PreparedStatment pstmt) throws SQLException {
+
+		int updateCount = 0;
+		pstmt = conn.prepareStatement( sb.toString() );
+		warnings = pstmt.getWarnings();
+		if ( warnings == null ) {
+			if (pstmt.execute() == false) {
+				updateCount = pstmt.getUpdateCount();
+			}
+		} else {
+			System.out.println("DatabaseUtility > WARNINGS: " + warnings.toString());
+		}			 
+
+		return updateCount;
+	}
+
+	/**
+	 *  @param plotId -- plot_id to get observation IDs on
+	 *  @return Commas separated String of observation_id values in the form
+	 * 	"1,2,3,4,5" which can easily be appended to SQL statements.
+	 */
+	private String getPlotObservationIds(int plotId) 
+				throws SQLException {
+
+		boolean first = true;
+		StringBuffer plotIds = new StringBuffer(128).append("(");
+		StringBuffer sb = new StringBuffer(256)
+			.append("select observation_id from observation where plot_id=")
+			.append(plotId);
+
+		ResultSet dbresults = conn.createStatement().query.executeQuery( sb.toString() );
+		while (dbresults.next()) {
+			if (first) {
+				first = false;
+			} else { 
+				plotIds.append(",");
+			}
+
+			plotIds.append(dbresults.getString(1));
+		}
+		plotIds.append(")");
+
+		return plotIds.toString();
+	}
+	
 	
 	/**
 	* method that will return a database connection for use with the 
@@ -645,7 +643,7 @@ public class DatabaseUtility
 		 PreparedStatement pstmt = null;
 		 try
 		 {
-			 sb = new StringBuffer();
+			 sb = new StringBuffer(256);
 			 this.conn = this.getUserDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
 			 System.out.println("DatabaseUtility > dropping user profile for: " + email );
