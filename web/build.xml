@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2004-05-12 22:35:11 $'
-* '$Revision: 1.104 $'
+* '$Author: anderson $'
+* '$Date: 2004-05-13 17:59:06 $'
+* '$Revision: 1.105 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -202,6 +202,7 @@
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.jsp"/>
     <copy todir="${apache.document.root}/plot/" filtering="yes" file="${basedir}/plot/.htaccess"/>
+    <copy todir="${apache.document.root}/" filtering="yes" file="${basedir}/.htaccess"/>
   </target>
   <!-- DISTRIBUTE THE IMAGES -->
   <target name="images" depends="index" description="=&gt; dist. the images to server">
