@@ -14876,35 +14876,9 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attListType>closed</attListType>
-      <attList>
-        <attListItem>
-          <attListValue>0</attListValue>
-          <attListValueDesc>Guest User - permission to view data</attListValueDesc>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>1</attListValue>
-          <attListValueDesc>Registered User - can build datasets and store queries</attListValueDesc>
-          <attListSortOrd>1</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>2</attListValue>
-          <attListValueDesc>Certified User - permission to load data: plots, plants, communities, metadata</attListValueDesc>
-          <attListSortOrd>2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>3</attListValue>
-          <attListValueDesc>Professional User - permission to annotate</attListValueDesc>
-          <attListSortOrd>3</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>10</attListValue>
-          <attListValueDesc>Database Administrator - full privileges</attListValueDesc>
-          <attListSortOrd>10</attListSortOrd>
-        </attListItem>
-      </attList>
-      <attNotes>This list is also in 2 other fields!</attNotes>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
       <attDefinition>Level of permission that the user has, corresponding to certification.</attDefinition>
       <update>1.0.2</update>
     </attribute>
@@ -15044,35 +15018,9 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attListType>closed</attListType>
-      <attList>
-        <attListItem>
-          <attListValue>0</attListValue>
-          <attListValueDesc>Guest User - permission to view data</attListValueDesc>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>1</attListValue>
-          <attListValueDesc>Registered User - can build datasets and store queries</attListValueDesc>
-          <attListSortOrd>1</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>2</attListValue>
-          <attListValueDesc>Certified User - permission to load data: plots, plants, communities, metadata</attListValueDesc>
-          <attListSortOrd>2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>3</attListValue>
-          <attListValueDesc>Professional User - permission to annotate</attListValueDesc>
-          <attListSortOrd>3</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>10</attListValue>
-          <attListValueDesc>Database Administrator - full privileges</attListValueDesc>
-          <attListSortOrd>10</attListSortOrd>
-        </attListItem>
-      </attList>
-      <attNotes>This list is also in 2 other fields!</attNotes>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
       <attDefinition>Level of certification the user currently has.</attDefinition>
       <update>1.0.2</update>
     </attribute>
@@ -15085,35 +15033,9 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attListType>closed</attListType>
-      <attList>
-        <attListItem>
-          <attListValue>0</attListValue>
-          <attListValueDesc>Guest User - permission to view data</attListValueDesc>
-          <attListSortOrd>0</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>1</attListValue>
-          <attListValueDesc>Registered User - can build datasets and store queries</attListValueDesc>
-          <attListSortOrd>1</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>2</attListValue>
-          <attListValueDesc>Certified User - permission to load data: plots, plants, communities, metadata</attListValueDesc>
-          <attListSortOrd>2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>3</attListValue>
-          <attListValueDesc>Professional User - permission to annotate</attListValueDesc>
-          <attListSortOrd>3</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>10</attListValue>
-          <attListValueDesc>Database Administrator - full privileges</attListValueDesc>
-          <attListSortOrd>10</attListSortOrd>
-        </attListItem>
-      </attList>
-      <attNotes>This list is also in 2 other fields!</attNotes>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
       <attDefinition>Level of certification the user is requesting in this record.</attDefinition>
       <update>1.0.2</update>
     </attribute>
