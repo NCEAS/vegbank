@@ -18,6 +18,10 @@ import java.net.URL;
  *
  * <p>Valid parameters are:<br><br>
  * 
+ * REQUIRED PARAMETERS
+ * @param queryType -- includes: simple, compound and extended
+ * @param requestDataType -- includes: vegPlot, plantTaxon, vegCommunity
+ *
  * taxonName - name of a taxon occuring in a plot <br>
  * communityName - name of a vegetaion community <br>
  * minElevation - minimum elavation in an elevation range <br>
