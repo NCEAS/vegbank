@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-02-04 21:41:21 $'
-  *     '$Revision: 1.14 $'
+  *     '$Date: 2003-02-05 22:37:35 $'
+  *     '$Revision: 1.15 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -43,7 +43,7 @@
     <!-- Location of jar files -->
     <property name="xmlp" value="${lib.dir}/xalan_1_2_2.jar:${lib.dir}/xerces_1_3_1.jar:${lib.dir}/xml-apis.jar" />
     <property name="jdbc" value="${lib.dir}/jdbc7.0-1.2.jar" />
-    <property name="vegclass_common" value="../lib/vegclass_common.jar" />
+    <property name="vegclass_common" value="${lib.dir}/vegclass_common.jar" />
     <property name="servlet" value="${lib.dir}/servlet.jar" />
     <property name="xmlresource" value="${build.lib.dir}/xmlresource.jar" />
     <property name="datatranslator" value="${build.lib.dir}/datatranslator.jar" />
@@ -359,7 +359,7 @@
       <arg value="vbaccessout.xml"/>
       <arg value="vbaccess"/>
       <arg value="VegBankAccessPlotInsert"/>
-      <arg value="${rmiserver}"/>
+      <arg value="${rmiserver.hostname}"/>
       <arg value="../testdata/vbaccess-output.xml"/>
     </exec>
     --> 
@@ -371,10 +371,10 @@
       <arg value="vbaccessout.xml"/>
       <arg value="vbaccess"/>
       <arg value="VegBankAccessPlotInsert2"/>
-      <arg value="${rmiserver}"/>
+      <arg value="${rmiserver.hostname}"/>
       <arg value="../testdata/vbaccess-example2.xml"/>
     </exec>
-
+    
     <!-- Test Loading a tnc plot 
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
       <env key="CLASSPATH" value="${cpath2}"/>
@@ -383,7 +383,7 @@
       <arg value="tncout.xml"/>
       <arg value="tnc"/>
       <arg value="TNCPlotInsert"/>
-      <arg value="${rmiserver}"/>
+      <arg value="${rmiserver.hostname}"/>
       <arg value="../testdata/tnc-output.xml"/>
     </exec>
     -->
@@ -396,7 +396,7 @@
       <arg value="nativeout.xml"/>
       <arg value="NativeXmlPlugin"/>
       <arg value="NativePlotInsert"/>
-      <arg value="${rmiserver}"/>
+      <arg value="${rmiserver.hostname}"/>
       <arg value="../testdata/nativeDataSource.xml"/>
     </exec>
   
