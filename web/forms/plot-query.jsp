@@ -10,9 +10,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2005-02-10 21:20:00 $'
-*  '$Revision: 1.31 $'
+*    '$Author: mlee $'
+*      '$Date: 2005-02-12 02:17:20 $'
+*  '$Revision: 1.32 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -189,8 +189,6 @@ VegBank - Advanced Plot Query
 		  </logic:iterate>
         </logic:notEmpty>
    
-                <!-- Pull in StateList widget -->
-                <!-- %@ include file="../includes/StatesList.jsp" % -->
 
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>

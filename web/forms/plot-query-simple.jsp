@@ -163,7 +163,7 @@ function validateName(value, label) {
 	&nbsp; 
 	<select name="state" size="1">
 <option value="ANY">--ANY--</option>  
- <!-- %@ include file="../includes/StatesList.jsp" % -->
+ 
    <vegbank:get id="plotstatelist" select="plotstatelist" 
  		  beanName="map" pager="false" where="empty" 
  		  wparam="" perPage="-1" />
