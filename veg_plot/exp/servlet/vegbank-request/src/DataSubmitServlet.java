@@ -30,8 +30,8 @@ import servlet.authentication.UserDatabaseAccess;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-08-09 19:43:23 $'
- *  '$Revision: 1.41 $'
+ *  '$Date: 2002-08-13 15:45:27 $'
+ *  '$Revision: 1.42 $'
  */
 
 
@@ -56,16 +56,16 @@ public class DataSubmitServlet extends HttpServlet
 	private int rmiServerPort = 1099;
 	private DataSourceClient rmiClient;
 	
-	private String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/input.data";
+	private String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/uploads/input.data";
 	private String plotsArchiveType = "tnc";
 	
 	private String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit-select.html";
 	private String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot_select.html";
 	
 	private String browserType = "";
+	// THESE VARIBLES ARE USED BY THE VARIOUS SUBMITTAL ROUTINES
 	private String user = ""; //the email addy of the user as stored in the framwork cookie
-	
-	// THESE VARIABLES ARE USED BY THE PLANT SUBMITTAL 
+	private String salutation = "";
 	private String givenName = "";
 	private String surName = "";
 	private String institution ="";
@@ -138,6 +138,11 @@ public class DataSubmitServlet extends HttpServlet
 	//this is the file that has the updated tokens and should be shown to the client
 	private String plantValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-valid.html";
 	
+	
+	private String plotSubmittalInitTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit.html";
+	//this is the file that has the updated tokens and should be shown to the client
+	private String plotSubmittalInitForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-valid.html";
+	
 	/**
 	 * constructor method
 	 */
@@ -179,10 +184,23 @@ public class DataSubmitServlet extends HttpServlet
 		PrintWriter out = response.getWriter();
 		try 
 		{
-			// get the cookie for the current user which will be referenced elsewhere in the class
-			// and will be stored with the data that is loaded to vegbank
-			user= su.getCookieValue(request);
+			// GET THE COOKIE FOR THE CURRENT USER WHICH WILL BE REFERENCED 
+			// ELSEWHERE IN THE CLASS AND WILL BE STORED WITH THE DATA THAT 
+			// IS LOADED TO VEGBANK AND THEN GET THE REST OF THE USER-RELATED 
+			// ATTRIBUTES
+			user = su.getCookieValue(request);
+			Hashtable userAtts = this.getUserIdParameters(user);
+			this.salutation = (String)userAtts.get("salutation");
+			this.surName = (String)userAtts.get("surName");
+			this.givenName = (String)userAtts.get("givenName");
+			this.institution = (String)userAtts.get("institution");
+			
+			
 			System.out.println("DataSubmitServlet > current user email: " + user   );
+			System.out.println("DataSubmitServlet > current user salutation: " + salutation);
+			System.out.println("DataSubmitServlet > current user surName: " + surName   );
+			System.out.println("DataSubmitServlet > current user givenName: " + givenName   );
+			System.out.println("DataSubmitServlet > current user institution: " + institution   );
 			
 			Hashtable params = new Hashtable();
 			params = su.parameterHash(request);
@@ -280,12 +298,10 @@ public class DataSubmitServlet extends HttpServlet
 				longName = (String)params.get("longName");
 				shortName = (String)params.get("shortName");
 				code = (String)params.get("code");
-		//		taxonDescription = (String)params.get("taxonDescription");
 		
 				System.out.println("DataSubmitServlet > longName: " + longName);
 				System.out.println("DataSubmitServlet > shortName: " + shortName);
 				System.out.println("DataSubmitServlet > code: " + code);
-			//	System.out.println("DataSubmitServlet > description: " + taxonDescription);
 				
 				// get the data already stored in the database with corresponding to the names
 				String longNameMessage = "";
@@ -690,6 +706,44 @@ public class DataSubmitServlet extends HttpServlet
 			 e.printStackTrace();
 		 }
 	 }
+	 /**
+	  * Method that uses the user database class to access the parameters 
+		* for a given user so that those attributes can be used in the 
+		* forms.
+		* 
+		* @param emailAddress -- the email address of the user
+		* @return userInfo -- a hashtable with the following attributes <br> <br>
+		* surName
+		*	givenName
+		*	password 
+		*	address
+		*	city
+		*	state
+		*	country
+		*	zipCode
+		*	dayPhone
+		*	ticketCount
+		*	permissionType
+		*	institution
+		*/
+		private Hashtable getUserIdParameters(String emailAddress)
+		{
+			Hashtable h = new Hashtable();
+			try
+			{
+				userdb = new UserDatabaseAccess();
+				h = userdb.getUserInfo(emailAddress);
+			}
+			catch( Exception e ) 
+			{
+				System.out.println("Exception:  " + e.getMessage() );
+				e.printStackTrace();
+			}
+			return(h);
+		}
+	
+	
+	
 	
 	/**
 	 * method that updates the plant usage / status page 
@@ -707,20 +761,6 @@ public class DataSubmitServlet extends HttpServlet
 			Hashtable replaceHash = new Hashtable();
 			// to this form add the names and the concept description and the 
 			// party names for perspectives
-			userdb = new UserDatabaseAccess();
-			Hashtable h = userdb.getUserInfo(emailAddress);
-			this.surName = (String)h.get("surName");
-			this.givenName = (String)h.get("givenName");
-			String password = (String)h.get("password");
-			String address = (String)h.get("address");
-			String city = (String)h.get("city");
-			String state = (String)h.get("state");
-			String country = (String)h.get("country");
-			String zipCode = (String)h.get("zipCode");
-			String dayPhone = (String)h.get("dayPhone");
-			String ticketCount =  (String)h.get("ticketCount");
-			String permissionType = (String)h.get("permissionType");
-			this.institution = (String)h.get("institution");
 			
 			replaceHash.put("longName", ""+longName);
 			replaceHash.put("shortName", ""+shortName);
@@ -1103,10 +1143,36 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 		 }
 		 return(true);
 	 }
-	 
-	 
-		
-		
+
+
+
+	 /**
+	  * mrthod to read, format and return as a string the plot submittal 
+		* initaition page.
+		*/
+		private String updatePlotInitPage()
+		{
+			String contents ="";
+			try
+			{		
+				// set up the filter tokens
+				Hashtable replaceHash = new Hashtable();
+				replaceHash.put("emailAddress", ""+user);
+				replaceHash.put("salutation", ""+salutation);
+				replaceHash.put("givenName", ""+givenName);
+				replaceHash.put("surName", ""+surName);
+				replaceHash.put("institution", ""+institution);
+				su.filterTokenFile(plotSubmittalInitTemplate, plotSubmittalInitForm, replaceHash);
+				contents = su.fileToString( plotSubmittalInitForm );
+			}
+			catch( Exception e ) 
+			{
+				System.out.println("Exception:  " + e.getMessage() );
+				e.printStackTrace();
+			}
+			return(contents);
+		}
+
 	/**
 	 * this method is used to handle the submittal of a vegplot into the 
 	 * VegBank database using for the insertion of either an MS access file 
@@ -1137,7 +1203,23 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 			String inputEmail = "";
 			String action = (String)params.get("action");
 			System.out.println("DataSubmitServlet > action: " + action);
-			if ( action.equals("init") )
+			
+			PrintWriter out = response.getWriter();
+			String htmlContents = "";
+			
+			// THE FIRST STEP IS THE PREINIT STEP WHICH TAKES PLACE WHEN THE USER 
+			// HITS THE LINK TO UPLOAD PLOT DATA, THIS STEP LOOKS UP THE 
+			// USERS INFO AND RETURNS A FORM WITH THEIR INFO AND THE FORM 
+			// TO SELECT THE PLOT TYPE
+			if ( action.equals("preinit") )
+			{
+				System.out.println("DataSubmitServlet > loading plots preinit ");
+				// GET THE FORM WITH THE UPDATED ATTRIBUTES AND SEND IT TO THE USER
+				htmlContents = updatePlotInitPage();
+				out.println(htmlContents);
+			}
+			
+			else if ( action.equals("init") )
 			{
 				//get the paramter refering to the plot archive type (ie tnc, vbaccess, nativexml)
 				String plotFileType = (String)params.get("plotFileType");
@@ -1212,8 +1294,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 				// instead
 				//response.sendRedirect("/forms/plot_select.html");
 				String s = su.fileToString(plotSelectForm);
-				sb.append( s );
-				
+				sb.append(s);
 			}
 			// this is the actual submittal of one or many plots from the 
 			// uploaded archive
