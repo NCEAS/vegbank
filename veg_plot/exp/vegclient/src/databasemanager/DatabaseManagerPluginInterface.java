@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2001-10-09 22:37:47 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2001-10-11 11:15:01 $'
+ * '$Revision: 1.2 $'
  *
  *
  */
@@ -26,6 +26,8 @@ public interface DatabaseManagerPluginInterface
 	void createUser( String userName)
 		throws Exception;
 	void createDatabase( String databaseName )
+		throws Exception;
+	void createBaseTables( )
 		throws Exception;
  // String getOutput();
   

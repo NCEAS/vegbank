@@ -9,8 +9,8 @@
  * 		@version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2001-10-11 10:36:17 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2001-10-11 11:15:01 $'
+ *     '$Revision: 1.3 $'
  */
 package vegclient.databasemanager;
 
@@ -19,6 +19,7 @@ import java.io.*;
 import java.util.*;
 import java.sql.*;
 
+import vegclient.framework.sql2db;
 import vegclient.databasemanager.*;
 import org.hsqldb.*;
 
@@ -26,6 +27,12 @@ import org.hsqldb.*;
 
 public class HypersonicSQLPlugin implements DatabaseManagerPluginInterface
 {
+	
+	//used classes
+	sql2db sqlFile = new sql2db();
+	
+	public String baseTablesScript = "./lib/vegPlot2001DBTables_hsqldb.sql";
+	public String summaryTablesScript = "./lib/makePlotSummaryTables_hsqldb.sql";
 
 	/** 
 	 * method that creates the database  -- named something like 'nvc'
@@ -97,33 +104,6 @@ public class HypersonicSQLPlugin implements DatabaseManagerPluginInterface
 			t.start();
 			System.out.println("started  the thread");
 		
-		
-		
-		
-		/*
-			Process listener;
-			DataInputStream listenerStream;
-			listener = Runtime.getRuntime().exec("./bin/HypersonicManager start");
-			listenerStream = new DataInputStream(new BufferedInputStream(listener.getInputStream()));
-			BufferedReader in=new BufferedReader(new InputStreamReader(listenerStream));
-			String response = null;
-	
-			
-			while (( response=in.readLine() ) != null  ) 
-			{
-				StringTokenizer t = new StringTokenizer(response, "	\t");
-				if ( t.hasMoreTokens() )
-				{
-					String buf = t.nextToken();
-					System.out.println(buf);
-				}
-				else
-				{
-					System.out.println( "Executable returned a blank line: ");
-				}
-			}
-		System.out.println("started ");
-		*/
 		}
 		catch (Exception e) 
 		{
@@ -144,5 +124,17 @@ public class HypersonicSQLPlugin implements DatabaseManagerPluginInterface
 		
 	}
 	
+	
+	/** 
+	 * method that creates the base tables
+	 *
+	 */
+	public void createBaseTables()
+	{
+		System.out.println("creating the base tables on the HypersonicSQL database platform");
+		
+		sqlFile.insertStatement(baseTablesScript);
+		
+	}
 
 }
