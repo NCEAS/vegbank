@@ -9,13 +9,13 @@
   <bean:size id="QueryResultsSize" name="QueryResults" property="rows" />
   <logic:equal value="1" name="QueryResultsSize">
     <span class="category"><font color="red">
-      There was one match to your search criteria:<br/>
+      There was one plant that matched your search criteria:<br/>
     </font></span>
   </logic:equal>
   <logic:notEqual name="QueryResultsSize" value="1">
     <span class="category">
       <font color="red">
-	<bean:write name="QueryResultsSize"/> records matched your search criteria<br/>
+	<bean:write name="QueryResultsSize"/> plants matched your search criteria:<br/>
       </font>
     </span>
   </logic:notEqual>
@@ -98,10 +98,18 @@ if ( ! columnName.equalsIgnoreCase("accessioncode") )
                 <img align="center" border="0" src="@image_server@xml_icon.gif" alt="Raw XML view"></img>
               </html:link>
               
-              <!-- USDA link to plant -->
-              <html:link href="http://plants.usda.gov/cgi_bin/plant_search.cgi?mode=Symbol&go=go" paramId="keywordquery" paramName="row" paramProperty="code" title="View USDA Plants page" target="_new">
+              <!-- USDA link to plant --><!-- only if code isn't empty -->
+        <logic:empty name="row" property="code">
+         <!-- <img align="center" border="2" src="@image_server@leaficon.gif" alt="No USDA Plants page available" ></img> -->
+       </logic:empty>
+    <logic:notEmpty name="row" property="code">
+
+      <html:link href="http://plants.usda.gov/cgi_bin/plant_search.cgi?mode=Symbol&go=go" paramId="keywordquery" paramName="row" paramProperty="code" title="View USDA Plants page" target="_new">
                 <img align="center" border="0" src="@image_server@leaficon.gif" alt="View USDA Plants page"></img>
-              </html:link>
+       </html:link>
+    </logic:notEmpty>
+    
+        
             </th>
 	     
    <!-- MTL: manually setting these properties, so that I can arrange order and such here          <logic:iterate id="column" name="QueryResults" property="dynaProperties" indexId="dynaPropertyId"> 
@@ -163,7 +171,7 @@ if ( ! columnName.equalsIgnoreCase("accessioncode") )
      
 	  </tr>
 	  <tr class="<%= rowClass %>">
-	    <td colspan="20" align="right"><!-- accessionCode --><span class="itemsmaller"><bean:write name="row" property="accessioncode" /></span></td>
+	    <td colspan="20" align="right"><!-- accessionCode --><span title="This is the VegBank plant concept accession code." class="itemsmaller"><bean:write name="row" property="accessioncode" /></span></td>
 	  </tr>
 	 
 	  <tr bgcolor="#666666">
