@@ -1,104 +1,104 @@
 #these are the fields in the vegetation plots database
 
 #Table: PLOTS
-Plot Code
-SubPlot
-SubPlot Parent Code
-Air Photo Number
-Polygon Code
-Provisional Community Name
-Classified Community Name
-TNC Elcode
-TNC EONum Suffix
-Location Code
-Sublocation
-Quad Name
-Quad Code
-Coord System
-GPS File
-GPS Techniques
-Field UTM X
-Field UTM Y
-Corrected UTM X
-Corrected UTM Y
-UTM Zone
-Field Lat
-Field Long
-Corrected Lat
-Corrected Long
-Survey Date
-Surveyors
-Plot Directions
-X Dimension
-Y Dimension
-Plot Shape
-Photos
-Roll Number
-Frame Number
-Permanent
-Representativeness
-Elevation
-Elevation Units
-Slope
-Aspect
-Topo Position
-Landform
-Surficial Geology
-Cowardin System
-Hydro Regime
-Salinity/Halinity
-Hydrology Evidence
-Environmental Comments
-Landscape Comments
-Soil Taxon/Description
-Soil Texture
-Soil Depth
-Soil Depth Units
-Soil Drainage
-% Bedrock
-% Large Rocks
-% Small Rocks
-% Sand
-% Litter, Duff
-% Wood
-% Water
-% Bare Soil
-% Other
-% Other Description
-Leaf Phenology
-Leaf Type
-Physio Class
-T1 Hgt
-T1 Cover
-T2 Hgt
-T2 Cover
-T3 Hgt
-T3 Cover
-S1 Hgt
-S1 Cover
-S2 Hgt
-S2 Cover
-S3 Hgt
-S3 Cover
-H Hgt
-H Cover
-N Hgt
-N Cover
-V Hgt
-V Cover
-E Hgt
-E Cover
-Other Measure1 Defined
-Other Measure2 Defined
-Animal Use Evidence
-Disturbance Comments
-Other Comments
-Update
-User
-Species Counter
-Optional Fields Defined
-Opt1
-Opt2
-Opt3
-Opt4
-Opt5
+1 Plot Code
+2 SubPlot
+3 SubPlot Parent Code
+4 Air Photo Number
+5 Polygon Code
+6 Provisional Community Name
+7 Classified Community Name
+8 TNC Elcode
+9 TNC EONum Suffix
+10 Location Code
+11 Sublocation
+12 Quad Name
+13 Quad Code
+14 Coord System
+15 GPS File
+16 GPS Techniques
+17 Field UTM X
+18 Field UTM Y
+19 Corrected UTM X
+20 Corrected UTM Y
+21 UTM Zone
+22 Field Lat
+23 Field Long
+24 Corrected Lat
+25 Corrected Long
+26 Survey Date
+27 Surveyors
+28 Plot Directions
+29 X Dimension
+30 Y Dimension
+31 Plot Shape
+32 Photos
+33 Roll Number
+34 Frame Number
+35 Permanent
+36 Representativeness
+37 Elevation
+38 Elevation Units
+39 Slope
+40 Aspect
+41 Topo Position
+42 Landform
+43 Surficial Geology
+44 Cowardin System
+45 Hydro Regime
+46 Salinity/Halinity
+47 Hydrology Evidence
+48 Environmental Comments
+49 Landscape Comments
+50 Soil Taxon/Description
+51 Soil Texture
+52 Soil Depth
+53 Soil Depth Units
+54 Soil Drainage
+55 % Bedrock
+56 % Large Rocks
+57 % Small Rocks
+58 % Sand
+59 % Litter, Duff
+60 % Wood
+61 % Water
+62 % Bare Soil
+63 % Other
+64 % Other Description
+65 Leaf Phenology
+66 Leaf Type
+67 Physio Class
+68 T1 Hgt
+69 T1 Cover
+70 T2 Hgt
+71 T2 Cover
+72 T3 Hgt
+73 T3 Cover
+74 S1 Hgt
+75 S1 Cover
+76 S2 Hgt
+77 S2 Cover
+78 S3 Hgt
+79 S3 Cover
+80 H Hgt
+81 H Cover
+82 N Hgt
+83 N Cover
+84 V Hgt
+85 V Cover
+86 E Hgt
+87 E Cover
+88 Other Measure1 Defined
+89 Other Measure2 Defined
+90 Animal Use Evidence
+91 Disturbance Comments
+92 Other Comments
+93 Update
+94 User
+95 Species Counter
+96 Optional Fields Defined
+97 Opt1
+98 Opt2
+99 Opt3
+100 Opt4
+101 Opt5
