@@ -23,6 +23,32 @@ a.headerLink:hover {
 	text-decoration: underline;
 }
 
+.featureLink { 
+	font-family:  sans-serif;
+	color: #3399FF; 
+	text-decoration: none;
+	font-size: 14pt;
+}
+.featureLink2 { 
+	font-family:  sans-serif;
+	color: #3399FF; 
+	text-decoration: none;
+	font-size: 14pt;
+}
+a.featureLink:visited,
+a.featureLink:link { 
+	color: #336633; 
+	text-decoration: none;
+}
+a.featureLink2:link { 
+	color: #3399FF; 
+	text-decoration: none;
+}
+a.featureLink:hover {
+	color: #003366;
+	text-decoration: none;
+}
+
 H1, H2, H3, H4, H5, H6	{
 							font-family: Georgia, Times New Roman, Times, serif;
 							color: #333333;
@@ -42,6 +68,9 @@ a.whitetext:link	{ color: #FFFFFF; text-decoration: none}
 a.whitetext:visited	{ color: #FFFFFF; text-decoration: none}
 a.whitetext:hover	{ color: #3399FF; text-decoration: none}
 
+.greytext 		{ font-family: Verdana, Arial, Helvetica, Geneva, sans-serif; 
+				color: #666666; 
+			 	font-size: 8pt}
 
 .vegbank		{ font-family: Verdana, Arial, Helvetica, serif; color : #531100; }
 .vegbank_tiny	{ font-family: Verdana, Arial, Helvetica, serif; color : #531100; font-size: 8pt}
@@ -73,7 +102,7 @@ UL.constsize,LI.constsize {  font: 10pt Verdana, Arial, Helvetica, Geneva, sans-
 				}
 				
 P, .normal		{
-					font-family: Verdana, Arial, Helvetica, sans-serif;
+					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 					font-size: 10pt;
 					color: #000000
 				}
@@ -211,6 +240,8 @@ UL, OL, DL, LI, .list	{
 					padding-left: 1.5em;
 				}
 
+
+
 CODE	{
 			color: red;
 		}
@@ -244,4 +275,3 @@ TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 	font-weight: bold;
 	background-color: #DDDDDD;
 }
-
