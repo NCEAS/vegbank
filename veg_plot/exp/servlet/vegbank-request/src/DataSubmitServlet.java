@@ -11,9 +11,7 @@ import java.net.URL;
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
 import xmlresource.utils.transformXML;
-
-
-
+import xmlresource.utils.XMLparse;
 
 import databaseAccess.dbAccess;
 import databaseAccess.CommunityQueryStore;
@@ -27,8 +25,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-03-29 23:53:43 $'
- *  '$Revision: 1.18 $'
+ *  '$Date: 2002-04-03 21:34:13 $'
+ *  '$Revision: 1.19 $'
  */
 
 
@@ -46,6 +44,7 @@ public class DataSubmitServlet extends HttpServlet
 	private ServletUtility su = new ServletUtility();
 	private CommunityQueryStore qs;
 	private VegCommunityLoader commLoader = new VegCommunityLoader();
+	private XMLparse parser;
 	
 	private String rmiServer = "guest06.nceas.ucsb.edu";
 	private int rmiServerPort = 1099;
@@ -57,7 +56,7 @@ public class DataSubmitServlet extends HttpServlet
 	private String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit-select.html";
 	private String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot_select.html";
 	
-
+	private String browserType = "";
 	
 	/**
 	 * constructor method
@@ -95,6 +94,9 @@ public class DataSubmitServlet extends HttpServlet
 			// with the same name and they all need to be accessed so 
 			// capture an ennumeration here
 			Enumeration enum = request.getParameterNames();
+			
+			//get the browser type 
+			this.browserType = su.getBrowserType(request); 
 			
 			System.out.println("DataSubmitServlet > IN PARAMETERS: "+params.toString() );
 			submitDataType = (String)params.get("submitDataType");
@@ -204,8 +206,12 @@ public class DataSubmitServlet extends HttpServlet
 				sb.append( s );
 				
 			}
+			// this is the actual submittal of one or many plots from the 
+			// uploaded archive
 			else if ( action.equals("submit") )
 			{
+				String receiptType  = (String)params.get("receiptType");
+				System.out.println("DataSubmitServlet > requesting a receipt type: "+receiptType );
 				while (enum.hasMoreElements()) 
 				{
 					String name = (String) enum.nextElement();
@@ -217,22 +223,12 @@ public class DataSubmitServlet extends HttpServlet
 							for (int i=0; i<values.length; i++) 
 							{
 								String thisPlot = values[i];
-								
-								
-								System.out.println("DataSubmitServlet > requesting an rmi plot insert: " + values[i] );
+								System.out.println("DataSubmitServlet > requesting an rmi plot insert: '"+values[i]+"'" );
 								//insert the plot over the rmi system
 								String result = rmiClient.insertPlot(thisPlot);
-								System.out.println("DataSubmitServlet > results: " + result );
+								String receipt = getPlotInsertionReceipt(thisPlot, result, receiptType, i);
+								sb.append( receipt );
 								
-								
-								// make a table with the salient info associated with this plots 
-								// to return to the browser so that the user can see which plots 
-								// were loaded to the database
-								String table = getPlotSalientStatistics( thisPlot, result);
-								
-								//this is a temp hack to append all these tables to the stringbuffer
-								//so that it is returned to the browser
-								sb.append( table );
 							}
 						}
 					}
@@ -273,67 +269,85 @@ public class DataSubmitServlet extends HttpServlet
 	 * @see DataSourceClient
 	 * @param plot  -- the string name of the plot as it used in the users archive
 	 * @param results -- the string results that have been returnd by the loader
-	 *		which is the rmi client
-	 *
+	 *		which is the rmi client -- this is strictly an XML document
+	 * @param receiptType -- 'minimal' or 'extensive'
+	 * @param plotNumber -- the current number of the plots that to be inserted
+	 * 	- if this is the first then the xml 1.0 header will be attached here
 	 */
-	 private String getPlotSalientStatistics(String plot, String results)
+	 private String getPlotInsertionReceipt(String plot, String results, 
+	 String receiptType, int plotNumber)
 	 {
 	 	StringBuffer sb = new StringBuffer();
 	 		try
 			{
+				parser = new XMLparse();	
+				Document doc = parser.getDocumentFromString(results);
+				Vector accessionNumber = parser.getValuesForPath(doc, "/plotInsertion/accessionNumber");
+				Vector latitude = parser.getValuesForPath(doc, "/plotInsertion/latitude");
+				Vector longitude = parser.getValuesForPath(doc, "/plotInsertion/longitude");
+				
 				String plotName = rmiClient.getAuthorPlotCode(plot);
 				String state = rmiClient.getState(plot);
 				String community= rmiClient.getCommunityName(plot);
-				String x = rmiClient.getXCoord(plot);
-				String y = rmiClient.getYCoord(plot);
 				
-				sb.append("<table> \n");
-				sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");	
-				sb.append(" 	<td> Plot Name: </td> \n");	
-				sb.append(" 	<td> "+plotName+" </td> \n");	
-				sb.append(" </tr> \n");
+				if ( this.browserType.equals("msie") )
+				{
+					if ( plotNumber == 0 )
+					{
+						sb.append("<?xml version=\"1.0\"?>");
+					}
+					sb.append(results);
+				}
 				
-				//the state
-				sb.append(" <tr> \n");	
-				sb.append(" 	<td> State </td> \n");	
-				sb.append(" 	<td> "+state+" </td> \n");	
-				sb.append(" </tr> \n");	
+				else
+				{
+					sb.append("<table> \n");
+					sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");	
+					sb.append(" 	<td> Plot Name: </td> \n");	
+					sb.append(" 	<td> "+plotName+" </td> \n");
+					sb.append(" </tr> \n");
+				
+					//accession number
+					sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");	
+					sb.append(" 	<td> VegBank Identifier: </td> \n");	
+					sb.append(" 	<td> "+accessionNumber.toString()+" </td> \n");
+					sb.append(" </tr> \n");
+				
+					//the state
+					sb.append(" <tr> \n");	
+					sb.append(" 	<td> State </td> \n");	
+					sb.append(" 	<td> "+state+" </td> \n");	
+					sb.append(" </tr> \n");	
 			
-				//the locations
-				sb.append(" <tr> \n");	
-				sb.append(" 	<td> X Coordinate:  </td> \n");	
-				sb.append(" 	<td> "+x+" </td> \n");	
-				sb.append(" </tr> \n");	
-				sb.append(" <tr> \n");	
-				sb.append(" 	<td> Y Coordinate:  </td> \n");	
-				sb.append(" 	<td> "+y+" </td> \n");	
-				sb.append(" </tr> \n");	
-
+					//the locations
+					sb.append(" <tr> \n");	
+					sb.append(" 	<td> Latitude:  </td> \n");	
+					sb.append(" 	<td> "+latitude+" </td> \n");	
+					sb.append(" </tr> \n");	
+					sb.append(" <tr> \n");	
+					sb.append(" 	<td> Longitude:  </td> \n");	
+					sb.append(" 	<td> "+longitude+" </td> \n");	
+					sb.append(" </tr> \n");	
 			
-				//the community
-				sb.append(" <tr> \n");	
-				sb.append(" 	<td> Commmunity: </td> \n");	
-				sb.append(" 	<td> "+community+" </td> \n");	
-				sb.append(" </tr> \n");	
+					//the community
+					sb.append(" <tr> \n");	
+					sb.append(" 	<td> Commmunity: </td> \n");	
+					sb.append(" 	<td> "+community+" </td> \n");	
+					sb.append(" </tr> \n");	
 
-				//the loading results 
-				// first transform the xml that is returned as the results string
-				// into an html body
-				transformXML trans  = new transformXML();
-				String tr = trans.getTransformedFromString(results, "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl");
-				
-				sb.append(" <tr> \n");	
-				sb.append(" 	<td> Loading Results </td> \n");	
-				//sb.append(" 	<td> "++" </td> \n");	
-				sb.append(" </tr> \n");	
-
-				
-				sb.append("</table> \n");
-				
-				sb.append(tr);
-				// a new line
-				sb.append("<br>");
-				
+					//the loading results 
+					// first transform the xml that is returned as the results string
+					// into an html body
+					transformXML trans  = new transformXML();
+					String tr = trans.getTransformedFromString(results, "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl");
+					sb.append(" <tr> \n");	
+					sb.append(" 	<td> Loading Results </td> \n");	
+					//sb.append(" 	<td> "++" </td> \n");	
+					sb.append(" </tr> \n");	
+					sb.append("</table> \n");
+					sb.append(tr);
+					sb.append("<br>");
+				}
 			}
 			catch( Exception e ) 
 			{
