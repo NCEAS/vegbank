@@ -1,6 +1,6 @@
 Option Compare Database
 Option Explicit
-Const debugVlue = 0
+Const debugVlue = 2
 Public Function trans_closedLists_withData()
 ''function gets fields that have data and are constrained to a closed list and opens appropriate form
    ''clear list of field that are to be translated:
@@ -101,15 +101,25 @@ Public Function trans_ManualMatchField(strFld As String, blnShowForm As Boolean,
   ''returns true if all automatched, else returns false
   Dim blnOneDidntMatch As Boolean
  
+  If strFld = "placeSystem" Then
+    'handle differently
+    'only add those that aren't for sure matched
+    DoCmd.RunSQL "DELETE * FROM  Z_VB_Reconcile WHERE loadVarName='placeSystem' and vbFieldTextVal is null;  "
+    DoCmd.RunSQL "INSERT INTO Z_VB_Reconcile (LoadVarName,LoadVarValue,VBTableName,VBFieldName,notes) SELECT " _
+    & "'placeSystem',placeSystem,'namedPlace','placeSystem','set to default value' FROM chk_c2_placeSystemsUsed_interp_maybeProb;"
+     blnOneDidntMatch = True
+     GoTo openFormMaybe
+  End If
+ 
   Dim rstFlds As New ADODB.Recordset
   rstFlds.Open "SELECT * FROM Z_VB_Reconcile_FldsChoose WHERE LoadVarName = """ & strFld & """;" _
     , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
   With rstFlds
     If Not .EOF Then
       ''get variables to copy to next table when adding
-      Dim timNow As Date, strvbTbl As String, strVBFld As String
+      Dim timNow As Date, strVBTbl As String, strVBFld As String
       timNow = Now()
-      strvbTbl = !VBTableName
+      strVBTbl = !VBTableName
       strVBFld = !VBFieldName
       
       ''found field -- now get source fields in loading module
@@ -144,8 +154,11 @@ Public Function trans_ManualMatchField(strFld As String, blnShowForm As Boolean,
               'Debug.Print "Not matched = " & strTempVal
               'find any automatch, if possible
               Dim lngAutoMatchID As Long, strNoteForMatch As String
-              lngAutoMatchID = interp_thing(strvbTbl, strTempVal)
-              Select Case lngAutoMatchID
+              
+              lngAutoMatchID = interp_thing(strVBTbl, strTempVal)
+                
+          
+                Select Case lngAutoMatchID
                 Case Is > 0
                   strNoteForMatch = "automatched!"
                 Case -1
@@ -159,8 +172,10 @@ Public Function trans_ManualMatchField(strFld As String, blnShowForm As Boolean,
                   blnOneDidntMatch = True
                End Select
               ''add new value without a VegBank match:
-              trans_AddManualMatch strFld, strTempVal, strvbTbl, strVBFld, _
+              trans_AddManualMatch strFld, strTempVal, strVBTbl, strVBFld, _
                 IIf(lngAutoMatchID < 0, 0, lngAutoMatchID), , timNow, , strNoteForMatch
+           
+              
             End If
            End If
           .MoveNext
@@ -170,6 +185,7 @@ Public Function trans_ManualMatchField(strFld As String, blnShowForm As Boolean,
       Next inttemp
     End If
   End With
+openFormMaybe:
   If blnShowForm Then
     ''open form to view results:, but only if not suppressed
     If (Not blnSuppressOpenIfSucceed) Or (blnOneDidntMatch) Then
@@ -202,7 +218,7 @@ End Function
 
 Public Function trans_ManualMatch_getVBVal(strFld As String, strVal As String, Optional strPrefx As String) As Long
  ''function checks to see if a value has already been assigned in z_VB_Reconcile for a field = LoadingFldName
- ''returns the VegBank PK value
+ ''returns the VegBank PK value or string value if that's the field type
   Dim rstChkVal As New ADODB.Recordset
   'open rst with possible value for loading field and value
   rstChkVal.Open "SELECT * FROM Z_VB_Reconcile WHERE LoadVarName = " & SQLizeTxt(strFld) _
@@ -211,7 +227,27 @@ Public Function trans_ManualMatch_getVBVal(strFld As String, strVal As String, O
   If rstChkVal.EOF Then
     trans_ManualMatch_getVBVal = -1
   Else
-    trans_ManualMatch_getVBVal = Nz(rstChkVal!VBFieldValue, -1)
+    
+      trans_ManualMatch_getVBVal = Nz(rstChkVal!VBFieldValue, -1)
+   
+  End If
+  rstChkVal.Close
+End Function
+
+Public Function trans_ManualMatch_getVBVal_str(strFld As String, strVal As String, Optional strPrefx As String) As String
+ ''function checks to see if a value has already been assigned in z_VB_Reconcile for a field = LoadingFldName
+ ''returns the VegBank PK value or string value if that's the field type
+  Dim rstChkVal As New ADODB.Recordset
+  'open rst with possible value for loading field and value
+  rstChkVal.Open "SELECT * FROM Z_VB_Reconcile WHERE LoadVarName = " & SQLizeTxt(strFld) _
+     & " AND LoadVarVAlue = " & SQLizeTxt(IIf(strPrefx <> "", strPrefx & ":", "") & strVal) & ";" _
+    , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  If rstChkVal.EOF Then
+    trans_ManualMatch_getVBVal_str = ""
+  Else
+    
+      trans_ManualMatch_getVBVal_str = Nz(rstChkVal!VBFieldTextVal)
+   
   End If
   rstChkVal.Close
 End Function
@@ -318,6 +354,43 @@ Public Function trans_IsNewRecAllowed(strFld As String) As Integer
   End With
   rstNews.Close
 End Function
+
+Public Function trans_IsStringMatch(strFld As String) As Boolean
+  ''function looks in Z_VB_Reconcile_fldschoose to see if match is a string type or now
+  'true is if it's a string match
+  Dim rstNews As New ADODB.Recordset
+  rstNews.Open "SELECT * FROM Z_VB_Reconcile_FldsChoose WHERE LoadVarName = """ & strFld & """;", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstNews
+  If .EOF Then
+     ''hmm, field not found, error
+     trans_IsStringMatch = False
+  Else
+     ''found field
+     trans_IsStringMatch = !stringMatch
+  End If
+  End With
+  rstNews.Close
+End Function
+
+Public Function trans_manualCanRemove(strFld As String, strRetFunction As String) As Boolean
+  'looks into the Z_VB_Reconcile_FldsChoose table and returns TRUE if it knows how to remove loading table variables, and passes back the function in strRetFunction
+   Dim rstNews As New ADODB.Recordset
+  rstNews.Open "SELECT * FROM Z_VB_Reconcile_FldsChoose WHERE LoadVarName = """ & strFld & """;", _
+    CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstNews
+  If .EOF Then
+     ''hmm, field not found, error
+     trans_manualCanRemove = False
+  Else
+     ''found field
+     trans_manualCanRemove = !allowDeletes
+     strRetFunction = Nz(!deleteFunction)
+  End If
+  End With
+  rstNews.Close
+End Function
+
 
 Public Function trans_addNewRecNow(strFld As String, strVal As String) As Long
   ''function adds a new value to the table indicated, using the value from the user,
@@ -1065,15 +1138,15 @@ Public Function interp_AuthorPlotObsCode(ByVal strCode As String, blnObs As Bool
  'blnRetOKOrNOT is useful in that error checking just needs found or not, not the PK value, which could be negative, dep on # recs in tables
  'blnObs = true makes it deal with observation table, not plot
  'MTL 09-JAN-2004
- Dim strPKZC As String, strvbTbl As String, strMatchBYZC As String, strMatchByPlt As String
+ Dim strPKZC As String, strVBTbl As String, strMatchBYZC As String, strMatchByPlt As String
  If blnObs Then 'look for obs
    strPKZC = "NewObsID"
-   strvbTbl = "observation"
+   strVBTbl = "observation"
    strMatchBYZC = "New_authObsCode"
    strMatchByPlt = "authorObsCode" 'used as Z_VB_reconcile name, too
  Else 'look for plot
    strPKZC = "NewPlotID"
-   strvbTbl = "Plot"
+   strVBTbl = "Plot"
    strMatchBYZC = "authorPlotCode"
    strMatchByPlt = "authorPlotCode" 'used as Z_VB_reconcile name, too
  End If
@@ -1095,7 +1168,7 @@ Public Function interp_AuthorPlotObsCode(ByVal strCode As String, blnObs As Bool
  If rstZC.EOF Then
    'not found, try plot
    Dim rstPlt As New ADODB.Recordset
-   rstPlt.Open "select " & strvbTbl & "_ID from " & strvbTbl & " where " & strMatchByPlt & "=" & SQLizeTxt(strCode), CurrentProject.Connection _
+   rstPlt.Open "select " & strVBTbl & "_ID from " & strVBTbl & " where " & strMatchByPlt & "=" & SQLizeTxt(strCode), CurrentProject.Connection _
     , adOpenForwardOnly, adLockReadOnly, adCmdText
    If rstPlt.EOF Then
      'not found, at all, report -1
@@ -1143,8 +1216,121 @@ exitInterpAuthPlotCode:
  
 End Function
 
+Public Function interp_placeSystem(ByVal strSystem As String) As String
+  ''lists all the possible ways that VegBranch will smartly try to understand what place system is being used.  If can't figure it out, will prompt user to say
+     Dim blnOK As Boolean, strDefault As String
+     strDefault = "Geographic Name"
+     strSystem = Trim(strSystem)
+     'make sure something is here
+     If strSystem = "" Or strSystem = " " Then
+       strSystem = strDefault 'default
+       blnOK = True
+     End If
 
-Public Function interp_placeName(ByVal strName As String, ByVal strSystem As String, Optional strMoreINFO As String, Optional blnIgnoreCache As Boolean) As Long
+   If Not blnOK Then
+     Select Case strSystem
+     'known system abbreviations and misspellings
+     Case "state", "stateProvince", "prov", "provence", "province", "state/province", "region", "region|state|province"
+       strSystem = "region|state|province"
+       blnOK = True
+     Case "quadrangleName", "quad", "quadrangle"
+       strSystem = "quadrangle"
+       blnOK = True
+     Case "country", "area", "nation", "area|country|territory"
+       strSystem = "area|country|territory"
+       blnOK = True
+     Case Else
+       If InStr(strSystem, "USGS") Or InStr(strSystem, "quad") Then
+         strSystem = "quadrangle"
+         blnOK = True
+       End If
+   End Select
+   End If 'blnNotOK
+  
+  If Not blnOK Then
+       'check closed list table:
+     If strSystem = getvalFrmSQL("select listValue from fieldList where tableName='namedplace' and fieldName='placeSystem' and listValue=" & SQLizeTxt(strSystem)) Then
+       'strSystem is found in FieldList, it's ok
+       blnOK = True
+       
+     End If
+  End If
+   
+  'check manual match table
+   If Not blnOK Then
+     Dim strManMatch As String
+     strManMatch = trans_ManualMatch_getVBVal_str("placeSystem", strSystem)
+     If strManMatch <> "" Then
+      'get value
+      strSystem = strManMatch
+      blnOK = True
+     End If
+   End If
+   
+   If Not blnOK Then
+     'we don't know what to make of this system, please ask the user, using msgBox_cust
+ '    Dim intResp As Integer
+ '    intResp = MsgBox_cust("VegBranch can't figure out what kind of place your are using.  What is: " & strSystem & "?" _
+       , "state or province,quadrangle,country,county,user defined,more info & options", _
+        "VegBranch and VegBank have Place Systems that categorize places into groups, like state or country.  VegBranch attempts " _
+        & " to figure out these automatically, but can't figure out what: " & strSystem & " is.  Please select an option.", _
+        "Place System Unknown")
+ '     Select Case intResp
+ '       Case 1
+          'state prov
+  '           strSystem = "region|state|province"
+  '      Case 2
+          'quad
+  '          strSystem = "quadrangle"
+  '      Case 3
+  '         strSystem = "area|country|territory"
+   '     Case 4
+    '      strSystem = "county"
+     '   Case 6
+          'show more info
+     '     Call showClosedListDetails("namedplace", "placeSystem", True)
+    '      Dim strNewSystem As String
+    '      strNewSystem = RememberString("fieldList", "", "get")
+     '     If strNewSystem <> "-1" And strNewSystem <> "" Then
+            'remember this match as a manual match
+      '      DoCmd.RunSQL "INSERT INTO Z_VB_reconcile (LoadVarName,LoadVarValue,VBTableName,VBFieldName,VBFieldTextVal,notes)" _
+& " SELECT 'placeSystem'," & SQLizeTxt(strSystem) & ",'namedPlace','placeSystem'," & SQLizeTxt(strNewSystem) & ",'prompted user for match';"
+            'return new value
+       '     strSystem = strNewSystem
+       '   Else
+            'use default
+       '     strSystem = strDefault
+       '   End If
+       ' Case Else
+          'just use default
+          strSystem = strDefault
+     ' End Select
+   End If
+   interp_placeSystem = strSystem
+End Function
+
+Public Function checkPlaceAbbrev(strName As String, ByVal strSystem As String, Optional blnRetNameNotAccCode As Boolean) As String
+'looks up state abbreviation and returns accCode if finding abbreviation,
+'or full name if blnRetNameNotAccCode
+'standardize system
+strSystem = interp_placeSystem(strSystem)
+Dim rstTemp As New ADODB.Recordset
+rstTemp.Open "select * from v_placeAbbrev where placeSystem=" & SQLizeTxt(strSystem) & " AND placeAbbrev=" & SQLizeTxt(strName) _
+  , CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+If rstTemp.EOF Then
+  checkPlaceAbbrev = ""
+Else
+  'have value
+  If blnRetNameNotAccCode Then
+    checkPlaceAbbrev = rstTemp!FullPlaceName
+  Else
+    checkPlaceAbbrev = rstTemp!placeAccCode
+  End If
+End If
+rstTemp.Close
+End Function
+
+Public Function interp_placeName(ByVal strName As String, ByVal strSystem As String, Optional ByVal strMoreINFO As String, Optional blnIgnoreCache As Boolean) As Long
   ''function attempts to match a place name (including system) to a namedplace.namedPlace_ID
   'returns -1 if not successful
   'returns -2 if ambiguous
@@ -1152,15 +1338,27 @@ Public Function interp_placeName(ByVal strName As String, ByVal strSystem As Str
   'If strSystem = "" Then strSystem = "Geographic Places" 'default system that users may add to. '@HARDCODE@'
   'no longer hardcoded here, but instead in append_C2_getNewPKs
    'state, province, stateProvince -> correct system:
-   Select Case strSystem
-     Case "state", "stateProvince", "province", "state/province"
-       strSystem = "region|state|province"
-     Case "quadrangleName"
-       strSystem = "quadrangle"
-     Case "country"
-       strSystem = "area|country|territory"
-   End Select
+strSystem = interp_placeSystem(strSystem)
   
+  'if more info is passed, see if its an abbrev
+  If strMoreINFO <> "" Then
+   'what to look for?
+   Dim strParentSystem As String
+   Select Case strSystem
+     Case "county", "quadrangle"
+       strParentSystem = "region|state|province"
+     Case "region|state|province"
+       strParentSystem = "area|country|territory"
+     Case Else
+       strParentSystem = ""
+   End Select
+   If strParentSystem <> "" Then
+     'look for abbrev for this name
+     Dim strParentFullName As String
+     strParentFullName = checkPlaceAbbrev(strMoreINFO, strParentSystem, True)
+     If strParentFullName <> "" Then strMoreINFO = strParentFullName
+   End If
+  End If 'has moreInfo
   
   'REALLY first, look in cache:
   Dim strWHERE As String
@@ -1180,10 +1378,19 @@ Public Function interp_placeName(ByVal strName As String, ByVal strSystem As Str
   End If
   rstCache.Close
   Set rstCache = Nothing
+  'SECOND, look in Abbreviations table:
+  Dim strAbbrevCode As String
+  strAbbrevCode = checkPlaceAbbrev(strName, strSystem)
+  If strAbbrevCode <> "" Then
+    'try to find the accCode and PK corresponding to it
+    lngPK = getPKfromAccessionCode(strAbbrevCode, "namedplace")
+    If lngPK > 0 Then GoTo interpNMPLExt 'have abbreviation
+  End If
+  
   
   'first, look for manual match, which would be listed as system:name in manual match table
   'manual match needs quandrangleNAme not quadrangle
-  lngPK = trans_ManualMatch_getVBVal("namedPlace", IIf(strSystem = "quadrangle", "quadrangleName", strSystem) & ":" & strName)
+  lngPK = trans_ManualMatch_getVBVal("namedPlace", strSystem & ":" & strName)
   
   'next, look for manual match as accessionCode
   If lngPK <= 0 Then lngPK = getPKfromAccessionCode(strName, "namedPlace")
@@ -1224,6 +1431,7 @@ If lngPK < 0 And InStr(strName, "{") > 0 And InStr(strName, "}") > 0 Then
   strState = Trim(compressChar(strState, "}"))
  ' Debug.Print "State:" & strState
   strNewName = Trim(Left(strName, InStr(strName, "{") - 1))
+  
   'dont do this if strName still is the same as before, could lead to infinite recursion
   If strName <> strNewName Then lngPK = interp_placeName(strNewName, strSystem, strState)    'open new rst, looking for name with state passed
 End If
@@ -1252,6 +1460,7 @@ End Function
 Public Function interp_placeName_clearCache(blnClearAll As Boolean)
   'clears cache of namedplaces
   'if blnClearAll then clears entire cache, else only undetermined places (ambig or not found)
+  Debug.Print "clearing named place cache at : " & Now()
   DoCmd.RunSQL "delete * from Z_C2_placesCache " & IIf(blnClearAll, "", " WHERE namedPLace_ID<0")
 End Function
 
@@ -1260,6 +1469,7 @@ Public Function interp_thing(strThing As String, ByVal strValue As String) As Lo
   'returns -1 if not successful
   'returns -2 if ambiguous
   'similar to interpreting plantNAme or commName:
+
   
   'first, look for manual match, which would be listed as system:name in manual match table
   
@@ -1313,6 +1523,7 @@ Next inttemp
   
 interpNMPLExt:
 interp_thing = lngPK
+exitthis:
   Exit Function
 End Function
 Public Function getManualMatchStats()
@@ -1484,3 +1695,9 @@ Public Function getValidCovCodesFrmPlot(strPlotCode As String) As String
   lngCM = getvalFrmSQL("select M_coverMethod from append_C_getNewPKs where authorplotcode=" & SQLizeTxt(strPlotCode))
   getValidCovCodesFrmPlot = getValidCoverCodes(lngCM)
 End Function
+
+Public Function removeSoilTaxonFromLoadingTbl(strSoilTaxon As String)
+  'function removes the string passed here from the plot data loading table
+  DoCmd.RunSQL "update Z_USER_C_plotDAta set soilTaxon=null where soilTaxon=" & SQLizeTxt(strSoilTaxon) & ";"
+End Function
+

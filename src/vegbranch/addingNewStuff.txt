@@ -1,6 +1,5 @@
 Option Compare Database
 Option Explicit
-
 Public Function writeCodeToFiles()
       Dim obj As AccessObject, dbs As Object, strDir As String
       strDir = "C:\temp\vegbranchCode\"
@@ -28,8 +27,8 @@ Public Function writeCodeToFiles()
    '   DoCmd.OpenModule "addingnewStuff", "junk"
       '  If obj.IsLoaded = True Then
       'Dim mdl As Module
-    DoCmd.OpenModule obj.Name
-    Set mdl = Modules(obj.Name)
+      DoCmd.OpenModule obj.Name
+      Set mdl = Modules(obj.Name)
           Debug.Print obj.Name
   '  Dim strContents As String
      strContents = mdl.Lines(1, mdl.CountOfLines)
@@ -44,6 +43,18 @@ Public Function writeCodeToFiles()
     Next obj
 End Function
 
+Function junk()
+    Dim obj As AccessObject, dbs As Object
+    Set dbs = Application.CurrentProject
+    ' Search for open AccessObject objects in AllForms collection.
+    For Each obj In dbs.AllForms
+        If obj.IsLoaded = True Then
+            ' Print name of obj.
+            Debug.Print obj.Name
+        End If
+    Next obj
+
+End Function
 
 Public Function showPlotsForParty(strParty As String)
   Dim strForm As String

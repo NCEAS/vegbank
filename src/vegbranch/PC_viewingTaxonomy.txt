@@ -444,7 +444,7 @@ Public Function switchViewCommPlant(strWhich As String, Optional frmToOpen As St
        
        'get what we are changing from
        Dim strSrcTbl As String
-       If InStr(CurrentDb.querydefs(strQryToChng).SQL, "'comm' as NowShowing") Then
+       If InStr(CurrentDb.querydefs(strQryToChng).sql, "'comm' as NowShowing") Then
          strSrcTbl = "comm"
        Else
          strSrcTbl = "plant"
@@ -490,7 +490,7 @@ If strSrcTbl <> strWhich Then 'need to change
     Dim strSQL As String
     strSQL = "SELECT " & Left(strSEL, Len(strSEL) - 1) & " FROM " & strFrom
    If intDebgLvl > 1 Then Debug.Print "------" & Chr(13) & strSQL & Chr(13) & "--------------"
-    dbsCurr.querydefs(strQryToChng).SQL = strSQL
+    dbsCurr.querydefs(strQryToChng).sql = strSQL
   
 End If 'need to change
       
@@ -865,7 +865,7 @@ Function QryParseFldExpName(strQryName As String, colGetExpr As Collection, colG
   EmptyCollection colGetNames
   Dim colNew As New Collection
   'split the SQL into divisions based on commas, ignoring those inside quotes or parens
-  Set colNew = csv_parseCSVstring(CurrentDb.querydefs(strQryName).SQL, ",", False, True, True)
+  Set colNew = csv_parseCSVstring(CurrentDb.querydefs(strQryName).sql, ",", False, True, True)
   Dim inttemp As Integer, strItem As String
   'go through each item
   For inttemp = 1 To colNew.Count
@@ -931,7 +931,7 @@ End Function
 Public Function qryGetSrcTbl(strQueryName As String) As String
   'function gets the first table that is after 'FROM' in the query sql
   Dim colNew As New Collection, strSQL As String
-  strSQL = CurrentDb.querydefs(strQueryName).SQL
+  strSQL = CurrentDb.querydefs(strQueryName).sql
   strSQL = substTextForText(strSQL, Chr(13), " ")
   strSQL = substTextForText(strSQL, Chr(10), " ")
   Set colNew = csv_parseCSVstring(strSQL, "FROM ", False, True, True)

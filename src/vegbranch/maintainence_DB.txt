@@ -715,13 +715,13 @@ Public Function findStringInQrySQL(strText As String, Optional blnFix As Boolean
   Set dbsCurr = CurrentDb
   
   For Each qdfTemp In dbsCurr.querydefs
-    If InStr(qdfTemp.SQL, strText) <> 0 Then
+    If InStr(qdfTemp.sql, strText) <> 0 Then
       Debug.Print qdfTemp.Name
       If blnFix Then
          Debug.Print "Current SQL: "
-         Debug.Print qdfTemp.SQL
+         Debug.Print qdfTemp.sql
         Debug.Print "--end--"
-         strReplaceSQL = substTextForText_once(qdfTemp.SQL, strText, strRepl, 1, blnWhole)
+         strReplaceSQL = substTextForText_once(qdfTemp.sql, strText, strRepl, 1, blnWhole)
          Debug.Print "------replace with----"
          Debug.Print strReplaceSQL
          msgBox "Ctl-Break to decide"

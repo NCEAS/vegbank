@@ -365,7 +365,7 @@ Public Function EditQrySql(strQry As String, strSQL As String, blnOpen As Boolea
   Else
     'qry exists, edit its SQL
     Set qdfTemp = dbsCurr.querydefs(strQry)
-    qdfTemp.SQL = strSQL
+    qdfTemp.sql = strSQL
   End If
   CurrentDb.querydefs.Refresh
   'unhide any hidden columns

@@ -219,7 +219,7 @@ Public Function runQuerySQLWithReplacements(strQryName As String, strSearch As S
   Else
     'different strSearch that strREplace, get SQL to change it
     Dim strSQL As String
-    strSQL = CurrentDb.querydefs(strQryName).SQL
+    strSQL = CurrentDb.querydefs(strQryName).sql
     strSQL = substTextForText_once(strSQL, strSearch, strReplace, 1)
     Debug.Print strSQL
     DoCmd.RunSQL strSQL

@@ -124,10 +124,10 @@ If lngVal < 0 Then lngVal = 0
     !nowPerc = lngVal
     'calculate estimated end point
     If lngVal > 0 Then
-       !End = !start + ((!Now - !start) / (lngVal / 100))
+       !end = !start + ((!Now - !start) / (lngVal / 100))
        'calculate time left
        Dim lngDaysLeft As Double
-       lngDaysLeft = !End - !Now
+       lngDaysLeft = !end - !Now
        
        Dim intHrs, intMin, intSec As Long
        intHrs = Int(lngDaysLeft * 24)
@@ -210,10 +210,10 @@ If lngVal < 0 Then lngVal = 0
     
     'calculate estimated end point
     If lngVal > 0 Then
-       !End = !start + ((!Now - !start) / (lngVal / 100))
+       !end = !start + ((!Now - !start) / (lngVal / 100))
        'calculate time left
        Dim lngDaysLeft As Double
-       lngDaysLeft = !End - !Now
+       lngDaysLeft = !end - !Now
        
        Dim intHrs, intMin, intSec As Long
        intHrs = Int(lngDaysLeft * 24)

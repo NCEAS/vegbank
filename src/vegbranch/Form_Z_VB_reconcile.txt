@@ -47,9 +47,14 @@ cantGet:
 End Function
 
 Private Sub Combo14_Change()
-  Me.RecordSource = "SELECT * FROM Z_VB_Reconcile_query WHERE LoadVarName= """ & Nz(Combo14.Value, "") & """"
+'  If IsNull(Combo14.Value) Then
+'    Combo14.Value = Combo14.DefaultValue
+'  End If
+Dim strThisField As String
+strThisField = Nz(Combo14.Value)
+  Me.RecordSource = "SELECT * FROM Z_VB_Reconcile_query WHERE LoadVarName= """ & strThisField & """"
 '  Me.Requery
-  Dim intNews As Integer, strToShowHide As String
+  Dim intNews As Integer, strToShowHide As String, blnString As Boolean
   strToShowHide = "SetToNew,lbl_SetToNew,cmd_ThisIsNewRec"
   intNews = NewRecsAllowed()
   If intNews = 1 Then 'no news allowed
@@ -57,13 +62,26 @@ Private Sub Combo14_Change()
   Else 'new recs are allowed
     Call ShowTheControls(strToShowHide, True, Me.Name)
   End If
+  'see if we can remove values:
+  Debug.Print strThisField & " :" & 0 + (Not trans_manualCanRemove(strThisField, ""))
+  Call ShowTheControls("removeValueLabel,removeValue", 0 + (trans_manualCanRemove(strThisField, "")), Me.Name)
+  
   Dim strCtlsReplPick As String
   strCtlsReplPick = "find,lbl_Find"
   Call ShowTheControls(strCtlsReplPick, getFormReplacePicklist() <> "", Me.Name)
-  
+  'is this a string field?
+  blnString = trans_IsStringMatch(strThisField)
+  If blnString Then
+    Me.VBFieldValue.ControlSource = "VBFieldTextVAl"
+  Else
+    Me.VBFieldValue.ControlSource = "VBFieldVAlue"
+  End If
   On Error Resume Next
   Me.VBFieldValue.RowSource = [VBFieldName] & "_transl"
+  
   Me.Recalc
+  'this value was getting away, make sure it's still there after the picklist change
+  Combo14 = strThisField
 End Sub
 
 Private Function getFormReplacePicklist() As String
@@ -95,6 +113,12 @@ If msgBox("Are you sure you want to add all values for this field to this table?
 End If
 End Sub
 
+Private Sub Command47_Click()
+  'this removes values that aren't used and are problematic
+  DoCmd.RunSQL "delete * from Z_VB_reconcile where Z_reconcileID in (select Z_reconcileID from chk_Z_VB_Reconcile_badValues);"
+  Me.Requery
+ End Sub
+
 Private Sub find_Click()
   'go get value for this
   Dim strForm As String, lngVal As Long
@@ -120,3 +144,34 @@ Private Sub Form_Load()
   Combo14_Change
 End Sub
 
+Private Sub removeValue_Click()
+  'remove the value from the loading tables!
+  Dim strValue As String
+  strValue = Me!LoadVarValue
+  If AreYouSure("You really want to remove the value:""" & strValue & """ from your loading module?") Then
+    'do it
+    Dim strFunction As String
+    'get the function in strFunction and only do this if allowed
+    If trans_manualCanRemove([LoadVarName], strFunction) Then
+      On Error GoTo cantdel
+      'try to remove
+      Eval (strFunction & "(" & SQLizeTxt(strValue, """") & ")")
+      'if here then succeeded and remove this line.
+      'refresh changes to avoid conflict:
+      Me.Refresh
+      'delete this row
+      Me.Recordset.delete
+      'tell user happened ok
+      msgBox "Successfully deleted: """ & strValue & """", , "VegBranch"
+    Else
+      'cannot remove
+      msgBox "Sorry, you cannot remove values for this field."
+    End If 'allowed to delete
+  End If 'they are sure
+exitthis:
+  Exit Sub
+cantdel:
+  msgBox "Sorry, there was an error trying to remove the value (" & strValue & ") you requested and it could not be removed.  You will have to update the loading tables manually." _
+    & Chr(13) & "err details: " & Err.Description
+    Resume exitthis
+End Sub

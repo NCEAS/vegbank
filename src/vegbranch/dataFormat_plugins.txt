@@ -55,11 +55,11 @@ End If
 If InStr(strToSend, "d2,") Then
   If Not blnNoDel Then DoCmd.RunSQL "Delete * from Z_USER_D2_strataCover"
   '*****************send data to D2: stratumCover ****************
-  DoCmd.RunSQL substTextForText(dbsCurr.querydefs("cust_NPS_toD2_run").SQL, ";", "") & IIf(blnOnlyInPlotSpp, " where [Within plot]=true", "")
+  DoCmd.RunSQL substTextForText(dbsCurr.querydefs("cust_NPS_toD2_run").sql, ";", "") & IIf(blnOnlyInPlotSpp, " where [Within plot]=true", "")
   
   If blnOtherMeas1IsTaxonCover Then
-    Debug.Print substTextForText(dbsCurr.querydefs("cust_NPS_toD2_run_totCvr").SQL, ";", "") & IIf(blnOnlyInPlotSpp, " where [Within plot]=true", "")
-   DoCmd.RunSQL substTextForText(dbsCurr.querydefs("cust_NPS_toD2_run_totCvr").SQL, ";", "") & IIf(blnOnlyInPlotSpp, " where [Within plot]=true", "")
+    Debug.Print substTextForText(dbsCurr.querydefs("cust_NPS_toD2_run_totCvr").sql, ";", "") & IIf(blnOnlyInPlotSpp, " where [Within plot]=true", "")
+   DoCmd.RunSQL substTextForText(dbsCurr.querydefs("cust_NPS_toD2_run_totCvr").sql, ";", "") & IIf(blnOnlyInPlotSpp, " where [Within plot]=true", "")
   End If
   '*****add that data to D, where appropriate
   If Not blnNoDel Then DoCmd.RunSQL "Delete * from Z_USER_D_coverData"

@@ -13,7 +13,7 @@ Public Function getAccessionCode(strTbl As String, lngID As Long, Optional blnAd
  getAccessionCode = strTemp
 End Function
 
-Public Function accessionCodeValid(ByVal strCode As String) As Boolean
+Public Function accessionCodeValid(ByVal strCode As String, Optional ByRef strTblReturn As String) As Boolean
   'returns true if accessionCode format is valid, false otherwise
   'assume false unless true:
   accessionCodeValid = False
@@ -23,6 +23,7 @@ Public Function accessionCodeValid(ByVal strCode As String) As Boolean
   If colCode.Count >= 3 And colCode.Count <= 5 Then
     If colCode.Count < 4 Then colCode.Add "OKTEXT"
     If colCode.Count < 5 Then colCode.Add "1/1/2004"
+    strTblReturn = colCode(2)
     '1 must be Alpha only, ditto for 2, 3 numeric, 4 is alphanum, 5 is date
       accessionCodeValid = isAlpha(colCode(1)) * isAlpha(colCode(2)) * IsNumeric(colCode(3)) * isAlphaNumeric(colCode(4)) * IsDate(colCode(5))
   End If
@@ -140,3 +141,123 @@ Public Function getRandomChar() As String
 End Function
 
 
+Public Function processAccCodeReceipt(strFile As String, Optional blnNoImport As Boolean)
+  'this functin processes a receipt from vegbank with accessionCode info: the old AccCodes here are mapped to new ones in VegBank
+  Dim strTbl As String, strStdErr As String
+  strStdErr = "  Please make sure that your receipt file wasn't edited after download from VegBank and try again."
+  strTbl = "x_accessionCode_receipt"
+  'import to table
+  If Not blnNoImport Then importCSV2table_new strTbl, strFile, False, True
+  'validate:
+  
+  Dim rstValid As New ADODB.Recordset
+  rstValid.Open "select * from [" & strTbl & "]", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstValid
+  If .EOF Then
+    'nothing to process
+    msgBox "No records were imported from the receipt file." & strStdErr
+    GoTo exitthis
+  End If
+  Do Until .EOF
+    'something to process
+    Dim strValidationErrs As String
+    strValidationErrs = validateAccCodeUpdate(Nz(!yourAccessionCode), Nz(!VegBankAccessionCode))
+    If strValidationErrs = "" Then
+      'ok, keep going
+    Else
+      msgBox "The accessionCodes in your receipt file were not valid:" & Chr(13) & strValidationErrs & strStdErr
+      GoTo exitthis
+    End If
+    
+  .MoveNext
+  Loop
+  End With
+  rstValid.Close
+  Set rstValid = Nothing
+  'ok the file is valid, do the updates
+  Dim rstUpdate As New ADODB.Recordset
+  rstUpdate.Open "select * from [" & strTbl & "]", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstUpdate
+  Do Until .EOF
+    'update one AccCode:
+    Dim strOld As String, strNew As String
+    strOld = !yourAccessionCode
+    strNew = !VegBankAccessionCode
+    Dim strAbbrevTbl As String, strFullTbl As String
+    strAbbrevTbl = ""
+    'get table to update, 2 letters:
+    Call accessionCodeValid(strOld, strAbbrevTbl)
+    strFullTbl = getAccessionInfo("table", strAbbrevTbl)
+    'have table to update, do so
+    If globaldebug > 0 Then Debug.Print "running:" & "UPDATE [" & strFullTbl & "] set accessionCode='" & strNew & "' WHERE accessionCode='" & strOld & "';"
+    DoCmd.RunSQL "UPDATE [" & strFullTbl & "] set accessionCode='" & strNew & "' WHERE accessionCode='" & strOld & "';"
+    
+    'update any loading module tables, too
+    Dim strErrsLoadMod As String
+    strErrsLoadMod = ""
+    If updateLoadingModAccCodes(strOld, strNew, strErrsLoadMod, False) = False Then
+      'error getting loading module updates
+      msgBox "there was an error updating codes in your loading module, some accessionCodes may be left not-updated." & Chr(13) & strErrsLoadMod
+    End If
+  .MoveNext
+  Loop
+  End With
+  rstUpdate.Close
+  Set rstUpdate = Nothing
+exitthis:
+  Exit Function
+  
+End Function
+
+Public Function validateAccCodeUpdate(strOld As String, strNew As String) As String
+  'returns string message reporting error in accessionCodes if there is one, else ""
+    'must have all records for YourAccCode and VegBankAccCode, and values must be valid
+    Dim strYourTbl As String, strVBTbl As String, strRep As String
+    strYourTbl = ""
+    strVBTbl = ""
+    If accessionCodeValid(Nz(strOld), strYourTbl) And accessionCodeValid(Nz(strNew), strVBTbl) Then
+       'ok, now check that both from same table
+       If strYourTbl = strVBTbl And strYourTbl <> "" Then
+         'ok
+       Else
+         'NOT ok, must match accCode table type
+         strRep = strOld & " and " & strNew & " are both valid accessionCodes in your data, but they are not linked to the same table.  "
+           
+         GoTo exitthis
+       End If
+      Else
+       'not ok, report error and quit
+       strRep = "You have invalid or null accessionCodes."
+       GoTo exitthis
+    End If
+exitthis:
+    validateAccCodeUpdate = strRep
+End Function
+
+Public Function updateLoadingModAccCodes(strOld As String, strNew As String, ByVal strRetErrs As String, Optional blnValidate As Boolean) As Boolean
+  'function updates any accessinCodes in loading module from old to new
+  If blnValidate Then
+    strRetErrs = "" 'init return var
+    Dim strNotValid As String
+    strNotValid = validateAccCodeUpdate(strOld, strNew)
+    If strNotValid <> "" Then
+      'errors, return false
+      strRetErrs = strNotValid
+      GoTo exitthis
+    End If
+  End If
+  Dim rstToUpdate As New ADODB.Recordset
+  rstToUpdate.Open "select * from x_accessionCode_maintain", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstToUpdate
+    Do Until .EOF
+    'have something to update, do it
+    If globaldebug > 0 Then Debug.Print "running:" & "update [" & !Table & "] set [" & !accField & "]='" & strNew & "' WHERE [" & !accField & "]='" & strOld & "';"
+    DoCmd.RunSQL "update [" & !Table & "] set [" & !accField & "]='" & strNew & "' WHERE [" & !accField & "]='" & strOld & "';"
+    .MoveNext
+    Loop
+  End With
+  updateLoadingModAccCodes = True
+exitthis:
+  
+  Exit Function
+End Function

@@ -160,11 +160,21 @@ Public Function DD_OpenUpdateRecForm(strTbl As String, strMod As String)
   Forms!UpdateNumNonNullRecs!CurrModule = strMod
 End Function
 
-Public Function showClosedListDetails(strTbl As String, strFld As String)
+Public Function showClosedListDetails(strTbl As String, strFld As String, Optional blnPopUp As Boolean)
   'function shows a closed list, given table and field
-  DoCmd.OpenForm "fieldList", , , "FieldName=""" & strFld & """ AND tableNAme=""" & strTbl & """"
-  Forms!fieldList!FiltTable = strTbl
-  Forms!fieldList!FiltField = strFld
+  If blnPopUp Then
+    DoCmd.OpenForm "fieldList", , , "FieldName=""" & strFld & """ AND tableNAme=""" & strTbl & """", , acDialog
+  Else
+    DoCmd.OpenForm "fieldList", , , "FieldName=""" & strFld & """ AND tableNAme=""" & strTbl & """"
+    Forms!fieldList!filtTable = strTbl
+    Forms!fieldList!filtfield = strFld
+    Forms!fieldList!filtTable.Visible = True
+    Forms!fieldList!filtfield.Visible = True
+    Forms!fieldList!Command23.Visible = True
+    Forms!fieldList!buttonClose.Visible = True
+    Forms!fieldList!buttonok.Visible = False
+    Forms!fieldList!buttonCancel.Visible = False
+  End If
 End Function
 
 Public Function ManualHyperLinkReadOnly(strDtl As String, blnReadOnly As Boolean, _
@@ -244,7 +254,7 @@ Public Function dd_ChangeTable(strTbl As String, Optional blnShowAllFlds As Bool
   'redefine query that is displayed here to select source table
   Dim qdfTemp As Object
   Set qdfTemp = CurrentDb.querydefs!DD_TableToShow
-  qdfTemp.SQL = "SELECT " & nblnk(strFieldsToGet, "'' as [No Fields Shown]") & " FROM [" & strTbl & "];"
+  qdfTemp.sql = "SELECT " & nblnk(strFieldsToGet, "'' as [No Fields Shown]") & " FROM [" & strTbl & "];"
   CurrentDb.querydefs.Refresh
   'unhide any hidden columns
   'dont do this, unless requested
@@ -340,7 +350,7 @@ Public Function DD_GetFieldInfo(lngID As Long, strWhat As String) As Variant
  rstFlds.Close
 End Function
 
-Public Function DD_BrowseForFieldID(strStart As String) As String
+Public Function DD_BrowseForFieldID(strSTart As String) As String
 ''function is enacted by user who wants to browse for a file
     On Error GoTo StoreFileErr:
 GoTo Past_err
@@ -352,7 +362,7 @@ ExitThisFCN:
 Past_err:
   
 ''  Debug.Print strExt & " is extension to search for"
-  DoCmd.OpenForm "Z_FieldDesc_countRecs", acNormal, , , acFormEdit, acDialog, strStart
+  DoCmd.OpenForm "Z_FieldDesc_countRecs", acNormal, , , acFormEdit, acDialog, strSTart
   ''return result:
   DD_BrowseForFieldID = DD_GetPutFieldID(-1, "get")
 End Function

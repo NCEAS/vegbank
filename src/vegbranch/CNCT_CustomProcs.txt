@@ -280,19 +280,19 @@ Public Function checkAccCodes2VBMod(Optional blnFormOpenOnConfl As Boolean, Opti
   With rstCodesToCheck
   Do Until .EOF
      
-     Dim strTbl As String, strCodeFld As String, strPKFld As String, strvbTbl As String, lngConflicts As Long
+     Dim strTbl As String, strCodeFld As String, strPKFld As String, strVBTbl As String, lngConflicts As Long
      lngConflicts = 0 'default
      strTbl = !Table
      strCodeFld = !accField
      strPKFld = !PKField
-     strvbTbl = !VegBankTable
+     strVBTbl = !VegBankTable
      'If debugCNCTmod > 1 Then Debug.Print "checkAccCodes2VBMod>> looking at table: " & strTbl & " accCodeFld : " & strCodeFld
      If debugCNCTmod > 0 Then Debug.Print "checkAccCodes2VBMod>> Starting Check of: " & !Table & " accCodeFld : " & strCodeFld & " @ " & Now()
      'it is not always the same vegbank table, determined in table there:
      Dim blnVarVBTable As Boolean, strFldOfVBTbl As String
-     If Left(strvbTbl, 1) = "!" Then
+     If Left(strVBTbl, 1) = "!" Then
        blnVarVBTable = True
-       strvbTbl = Right(strvbTbl, Len(strvbTbl) - 1)
+       strVBTbl = Right(strVBTbl, Len(strVBTbl) - 1)
      Else
        'always same table
        blnVarVBTable = False
@@ -311,9 +311,9 @@ Public Function checkAccCodes2VBMod(Optional blnFormOpenOnConfl As Boolean, Opti
        Dim strCurrentcode As String, lngPK As Long, strVBRealTblName As String, strIdealCode As String, lngIdealPK As Long
        'string that contains the name of the vegbank table for the accCode in this record
        If blnVarVBTable Then
-          strVBRealTblName = .Fields(strvbTbl)
+          strVBRealTblName = .Fields(strVBTbl)
        Else
-          strVBRealTblName = strvbTbl
+          strVBRealTblName = strVBTbl
        End If
        'current code & long int for this rec
        strCurrentcode = Nz(.Fields(strCodeFld), "")

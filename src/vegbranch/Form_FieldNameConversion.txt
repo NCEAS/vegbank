@@ -74,14 +74,19 @@ Private Sub fieldsNotUsed_DblClick(Cancel As Integer)
   End If
 End Sub
 
+Private Function returnToNormalFormat()
+  Me!Command7.Enabled = True
+    Me!Message.Caption = " "
+End Function
+
 Private Sub Format_afterUpdate()
   'ok, so user wants to pick a different format.  Check to see if their fields are contained within the new one
   
   'query to edit to put users fields in it:
   'enable command7 if format matches original
   If Me!Format = Me!OrigFormat Then
-    Me!Command7.Enabled = True
-    Me!Message.Caption = " "
+    Call returnToNormalFormat
+    Exit Sub
   End If
   'W_convert_csv_usersnames_edit
   Dim strBaseSQL As String
@@ -125,7 +130,7 @@ Private Sub Format_afterUpdate()
           'cancel
 '          Cancel = 1
           Me!Format = Me!OrigFormat
-        
+          Call returnToNormalFormat
       End Select
   End If
   End With

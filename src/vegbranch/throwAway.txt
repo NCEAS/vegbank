@@ -7,3 +7,14 @@ Function write2plants()
   strRep = autoG_table2xml_plantConcept("plantConcept_ID>192 and plantConcept_ID<195", 0, False)
   Call WriteLineToFile("<root>" & strRep & "</root>", "C:\temp\testout.xml")
 End Function
+
+Function getallQrysLike(strSTart As String)
+  'gets queries matching a pattern
+  Dim qry As Object, dbs As Object
+  Set dbs = CurrentDb
+  For Each qry In dbs.querydefs
+    If Left(qry.Name, Len(strSTart)) = strSTart Then
+      Debug.Print "CREATE VIEW " & qry.Name & " AS " & qry.sql
+    End If
+  Next
+End Function

@@ -406,13 +406,13 @@ Public Function frm_delete_tempgraphs()
       
    Next frmCurr
    For inttemp = 1 To colToDel.Count
-     On Error GoTo cantDel
+     On Error GoTo cantdel
      DoCmd.DeleteObject acForm, colToDel(inttemp)
    Next
    
 exitDel:
 Exit Function
-cantDel:
+cantdel:
    Debug.Print "frm_delete_tempgraphs>> can't delete: " & strName & Err.Description
    Resume Next
 End Function
