@@ -121,7 +121,203 @@ public class XMLparse
 		}
 	}
 	
-
+	 /**
+   * Assume that there is some parent node which has a subset of
+   * child nodes that are repeated e.g. 
+   * <parent>
+   *    <name>xxx</name>
+   *    <value>qqq</value>
+   *    <name>yyy</value>
+   *    <value>www</value>
+   *    ...
+   * </parent>
+   *
+   * this method will return a Hashtable of names-values of parent
+   */
+  public Hashtable getHashtable(Document doc, String parentName, String keyName,
+                                String valueName)
+  {
+    String keyval = "";
+    String valval = "";
+    Hashtable ht = new Hashtable();
+    NodeList nl = doc.getElementsByTagName(parentName);
+    if (nl.getLength() > 0)
+    {
+      // always use the first parent
+      NodeList children = nl.item(0).getChildNodes();
+      if (children.getLength() > 0)
+      {
+        for (int j = 0; j < children.getLength(); j++)
+        {
+          Node cn = children.item(j);
+          if ((cn.getNodeType() == Node.ELEMENT_NODE)
+              && (cn.getNodeName().equalsIgnoreCase(keyName)))
+          {
+            Node ccn = cn.getFirstChild();        // assumed to be a text node
+            if ((ccn != null) && (ccn.getNodeType() == Node.TEXT_NODE))
+            {
+              keyval = ccn.getNodeValue();
+            }
+          }
+          if ((cn.getNodeType() == Node.ELEMENT_NODE)
+              && (cn.getNodeName().equalsIgnoreCase(valueName)))
+          {
+            Node ccn = cn.getFirstChild();        // assumed to be a text node
+            if ((ccn != null) && (ccn.getNodeType() == Node.TEXT_NODE))
+            {
+              valval = ccn.getNodeValue();
+              ht.put(keyval, valval);
+            }
+          }
+        }
+      }
+    }
+    return ht;
+  }
+	
+	
+	 /**
+   * Gets the value(s) corresponding to a key string (i.e. the 
+   * value(s) for a named parameter.
+   * 
+   * @param key 'key' is element name.
+   * @return Returns a Vector of strings because may have repeated elements
+   */
+  public Vector get(Document doc, String key)
+  {
+    NodeList nl = doc.getElementsByTagName(key);
+    Vector result = new Vector();
+    if (nl.getLength() < 1)
+    {
+      return result;
+    }
+    for (int i = 0; i < nl.getLength(); i++)
+    {
+      Node cn = nl.item(i).getFirstChild(); // assume 1st child is text node
+      if ((cn != null) && (cn.getNodeType() == Node.TEXT_NODE))
+      {
+        String temp = cn.getNodeValue();
+        result.addElement(temp.trim());
+      }
+    }
+    return result;
+  }
+	
+	
+	/**
+   * Gets the value(s) corresponding to a key string (i.e. the 
+   * value(s) for a named parameter.
+   * 
+   * @param key 'key' is element name.
+   * @param i zero based index of elements with the name stored in key
+   * @return Node
+   */
+  public Node get(Document doc, String key, int i)
+  {
+    NodeList nl = doc.getElementsByTagName(key);
+//		System.out.println("number of nodes in the plot:" + nl.getLength() );
+    Node resultNode;
+		
+		
+		resultNode = nl.item(i);
+    
+		
+//		if (nl.getLength() < 1)
+//    {
+//      return result;
+//    }
+//    if (nl.getLength() < i)
+//    {
+//      return result;
+//    }
+//    Node cn = nl.item(i).getFirstChild(); // assume 1st child is text node
+//    if ((cn != null) && (cn.getNodeType() == Node.TEXT_NODE))
+//    {
+//      result = (cn.getNodeValue().trim());
+//    }
+    return( resultNode);
+  }
+	
+	
+	 /**
+   * Gets the value(s) corresponding to a key string (i.e. the 
+   * value(s) for a named parameter.
+   * 
+   * @param key 'key' is element name.
+   * @param i zero based index of elements with the name stored in key
+   * @return String value of the ith element with name in 'key'
+   */
+  public String getNodeValue(Document doc, String key, int i)
+  {
+    NodeList nl = doc.getElementsByTagName(key);
+    String result = null;
+    if (nl.getLength() < 1)
+    {
+      return result;
+    }
+    if (nl.getLength() < i)
+    {
+      return result;
+    }
+    Node cn = nl.item(i).getFirstChild(); // assume 1st child is text node
+    if ((cn != null) && (cn.getNodeType() == Node.TEXT_NODE))
+    {
+      result = (cn.getNodeValue().trim());
+    }
+    return result;
+  }
+	
+	
+	/**
+	 * method that overloads the next method
+	 *
+	 */
+	
+	public void addNewElement(String fileName, String parentName, int i, 
+	String childName, String value)
+  {
+		Node newNode = null;
+		Document doc = getDocument(fileName);
+		newNode = addNewElement( doc, parentName, i, childName, value);
+		save(newNode, "process.xml");
+	}
+	
+	
+	 /**
+   * Add a child node to the specified parent
+   * 
+   * @param parentName name of parent element
+   * @param i index of parent element
+   * @param childName element name of new child
+   * @param value value of new child
+   */
+  public Node addNewElement(Document doc, String parentName, int i, 
+	String childName, String value)
+  {
+		Node returnNode = null ;
+    NodeList nl = doc.getElementsByTagName(parentName);
+		
+    if (nl.getLength() > 0)
+    {
+      if (nl.getLength() <= i)
+      {
+      	System.out.println( "node list too short! ");
+      }
+      else
+      {
+        Node parent = nl.item(i);
+        Node newElem = doc.createElement(childName);
+        Node newText = doc.createTextNode(value);
+        //add text to element
+        newElem.appendChild(newText);
+        //add newElem to parent
+        parent.appendChild(newElem);
+				returnNode = parent;
+      }
+    }
+		return( returnNode );
+  }
+	
 	
 	 /**
    * Save the configuration file
@@ -152,7 +348,6 @@ public class XMLparse
      {
       PrintWriter out = new PrintWriter(new FileWriter(fileName));
      		out.println("<?xml version=\"1.0\"?>");
-				out.println("test");
      		print(out, nd);
      		out.close(); 
 		 }
@@ -438,6 +633,9 @@ public class XMLparse
 		try 
 		{
 			DOMParser dp = new DOMParser();
+			// Turn off validation
+     // dp.setFeature("http://xml.org/sax/features/validation", false);
+			
 			dp.parse(filename);
 			doc = dp.getDocument();
 		}
@@ -531,8 +729,30 @@ public class XMLparse
 	}
 		return(valString);
 	}
-			
-
+	
+	
+	
+	/**
+	 * method that overloads the next method, that uses as input a fileName
+	 * and a node name
+	 *
+	 * @param filename -- name of the xml file
+	 * @param node -- the name of the node for which the value is to be returned
+	 * 	from
+	 * @return nodeValue - the value for the node
+	 *
+	 * limitations:  if multiple nodes exist then the last one is the 
+	 *	one that is returned
+	 */
+		public String getNodeValue(String fileName, String node) 
+		{
+			String result = new String();
+			Document doc = getDocument(fileName);
+			//call the method which this method is overloading
+			return( getNodeValue(doc, node) );
+		}
+	
+	
 	
 	/**
 	 * method that returns the value of a node -- if 
@@ -550,12 +770,12 @@ public class XMLparse
 	Node checker;
 	boolean ascending = false;
 	int level = 1;
-	System.out.println();
+//	System.out.println();
 	try 
 	{
 		//	checker=doc.getDocumentElement();
 		NodeList nlist =doc.getElementsByTagName(node);
-		System.out.println("number of childern nodes: " + nlist.getLength() );
+//		System.out.println("number of childern nodes: " + nlist.getLength() );
 		for(int i = 0; i < nlist.getLength(); i++ ) 
 		{ 
 			checker = nlist.item(i);
@@ -569,7 +789,14 @@ public class XMLparse
 		return(valString);
 	}
 			
-	
+	//method that returns the number of a given node in a document
+	public int getNumberOfNodes(Document doc, String node)
+	{
+		int nodeNumber = 0;
+		NodeList nlist =doc.getElementsByTagName(node);
+		nodeNumber = nlist.getLength();
+		return(nodeNumber);
+	}
 	
 	
 }
