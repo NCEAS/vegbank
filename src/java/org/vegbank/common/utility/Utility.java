@@ -25,8 +25,8 @@ import org.vegbank.common.model.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-11-05 19:49:53 $'
- * '$Revision: 1.23 $'
+ * '$Date: 2003-11-06 18:43:07 $'
+ * '$Revision: 1.24 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,19 +47,25 @@ public class Utility
 {
 	
 	public static AbstractDatabase dbAdapter;
-	// Make a configuration option
-	public static  String dbAdapterName = "org.vegbank.common.dbAdapter.PostgresqlAdapter";
+	// FIXME: Read from properties
+	public static  final String DB_ADAPTER_NAME = "org.vegbank.common.dbAdapter.PostgresqlAdapter";
+//	FIXME: Read from properties
+	public static  final String VB_HOME_DIR = "/usr/vegbank";
 	
-	public static final String databaseName = ResourceBundle.getBundle("database").getString("databaseName");
+	public static final String DATABASE_NAME = ResourceBundle.getBundle("database").getString("databaseName");
 	
 	/** 
 	 * Determine our db adapter class and create an instance of that class
 	 */
-	static {
-		try {
-			dbAdapter = (AbstractDatabase) createObject(dbAdapterName);
-		} catch (Exception e) {
-			System.err.println("Error in Vegbank Util static block:" + e.getMessage());
+	static 
+	{
+		try 
+		{
+			dbAdapter = (AbstractDatabase) createObject(DB_ADAPTER_NAME);
+		} 
+		catch (Exception e) 
+		{
+			LogUtility.log("Error in Vegbank Util static block:" + e.getMessage());
 		}
 	}
 	
@@ -529,9 +535,9 @@ public class Utility
 	public static boolean isLoadAccessionCodeOn()
 	{
 		boolean result = false;
-		LogUtility.log("Utility: databaseName = " + databaseName);
+		LogUtility.log("Utility: databaseName = " + DATABASE_NAME);
 		
-		if ( databaseName.equalsIgnoreCase("vegbank") || databaseName.equalsIgnoreCase("vegtest"))
+		if ( DATABASE_NAME.equalsIgnoreCase("vegbank") || DATABASE_NAME.equalsIgnoreCase("vegtest"))
 		{
 			result = true;
 		}
@@ -550,11 +556,11 @@ public class Utility
 		String accessionPrefix = "";
 		
 		// This is a function of database name and host machine
-		if ( databaseName.equalsIgnoreCase("vegbank"))
+		if ( DATABASE_NAME.equalsIgnoreCase("vegbank"))
 		{
 			accessionPrefix = "VB";
 		}
-		else if ( databaseName.equalsIgnoreCase("vegtest"))
+		else if ( DATABASE_NAME.equalsIgnoreCase("vegtest"))
 		{
 			accessionPrefix = "VT";
 		}
