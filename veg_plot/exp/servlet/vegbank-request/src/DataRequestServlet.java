@@ -51,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-07-02 23:35:23 $'
- *  '$Revision: 1.17 $'
+ *  '$Date: 2002-07-03 22:06:30 $'
+ *  '$Revision: 1.18 $'
  * 
  */
 
@@ -92,16 +92,26 @@ public class DataRequestServlet extends HttpServlet
 	
 	private String communityQueryPage = "http://vegbank.nceas.ucsb.edu/forms/community-query.html";
 	private transformXML transformer = new transformXML();
+	private String defaultPlotIdentityStyleSheet = "";
 	
 	/**
 	 * constructor method
 	 */
 	public DataRequestServlet()
 	{
-		System.out.println("init: DataRequestServlet");
-		//sho some of the instance variables
-		servletDir = rb.getString("requestparams.servletDir");
-		System.out.println("init: DataRequestServlet > servlet dir: " + servletDir);	
+		try
+		{
+			System.out.println("init: DataRequestServlet");
+			//sho some of the instance variables
+			servletDir = rb.getString("requestparams.servletDir");
+			defaultPlotIdentityStyleSheet = rb.getString("defaultplotidentitystylesheet");
+			System.out.println("init: DataRequestServlet > servlet dir: " + servletDir);
+			System.out.println("init: DataRequestServlet > default style sheet: " + this.defaultPlotIdentityStyleSheet);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+		}
 	}
 	
 	
@@ -440,7 +450,7 @@ public class DataRequestServlet extends HttpServlet
 		 try
 		 {
 			 String xmlDoc = servletDir + "identity.xml";
-			 String styleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
+			 String styleSheet = this.defaultPlotIdentityStyleSheet;
 			 System.out.println("DataRequestServlet > xml document: '" + xmlDoc +"'" );
 			 System.out.println("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
 			 transformer.getTransformed(xmlDoc, styleSheet);
