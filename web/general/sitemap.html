@@ -3,28 +3,29 @@
 <TITLE>VegBank Web Site Map</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=">
-<script language="JavaScript"> 
-<!-- 
+<script language="JavaScript">
+<!--
 function MM_jumpMenu(targ,selObj,restore)
-{ //v3.0 
+{ //v3.0
   if (selObj.options[selObj.selectedIndex].value != "" ) {
-   eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'"); 
+   eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
   }
-if (restore) selObj.selectedIndex=0; 
+if (restore) selObj.selectedIndex=0;
 }
-//--> 
-</script> 
+//-->
+</script>
 </HEAD>
 <!-- VegBank Header -->
 <BODY class="vegbank"><!-- BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF"-->
 @vegbank_header_html_normal@
+<br /><br />
 <!-- end of VegBank Header -->
-  <table border="4" cellspacing="1"  cellpadding="1" width="800">
+  <table border="1" cellspacing="1"  cellpadding="1" width="800">
   <tr valign="top"><td colspan="2" class="vegbank" border="1">
   <h2 align="center"><br><span class="vegbank">VegBank Web Site Map</span></h2>
   <p class="vegbank"><b>Click on a link below to jump directly to a page:</b><br />
   <font color="red" size="-1">(Warning: This sitemap shows the functionality we expect to build.
-    Some of the links below are not activated, meaning that that particular functionality 
+    Some of the links below are not activated, meaning that that particular functionality
     is not yet completed.  Thanks for your patience!)</font></p>
   </td></tr>
   <tr valign="top" border="1">
@@ -35,12 +36,11 @@ if (restore) selObj.selectedIndex=0;
       <ul class="constsize">
         <li>News</li>
         <ul class="constsize">
-          <li><a href="/vegbank/news/beta_schedule.html">VegBank release beta 1.0</a></li>
-		  <li><a href="/vegbranch/vegbranch.html">VegBranch release beta 3.0</a></li>
-		  <li><a href="/services">VegBank Web Services</a></li>
-		  <li><a href="/vegbank/panel/standards.html"><i>Standards 
+          <li><a href="/vegbranch/vegbranch.html">VegBranch released</a></li>
+		<!--  <li><a href="/services/index.html">VegBank Web Services</a></li> -->
+		  <li><a href="/vegbank/panel/standards.html"><i>Standards
 		       for Associations and Alliances of the U.S. National Vegetation Classification</i></a></li>
-			<li><a href="http://bugzilla.ecoinformatics.org/enter_bug.cgi?product=VegBank">Bugzilla error reporting</a></li> 
+			<li><a href="http://bugzilla.ecoinformatics.org/enter_bug.cgi?product=VegBank">Bugzilla error reporting</a></li>
         </ul>
         <li><a href="@general_link@login.html">Login</a></li>
         <li><a href="@general_link@logout.html">Logout</a></li>
@@ -61,8 +61,9 @@ if (restore) selObj.selectedIndex=0;
 	   <li><a href="/vegbank/general/terms.html">Intellectual property</a></li>
 	   <li><a href="/vegbank/general/privacy.html">Privacy</a></li>
 	   </ul>
-	   <li>Database Architecture <font color="red">(update v2beta)</font></li>
+	   <li>Database Architecture <font color="green">(updated v2beta)</font></li>
 	   <ul class="constsize">
+	   <li><a href="/vegbank/dbdicationary/dd-index.html">VegBank Data Dictionary</a></li>
 	   <li><a href="/vegbank/design/plots.html">Plot Module</a></li>
 		   <ul class="constsize">
 			   <li><a href="/vegbank/design/general.html">Overview</a></li>
@@ -72,123 +73,54 @@ if (restore) selObj.selectedIndex=0;
 			   <li><a href="/vegbank/design/party.html">Party roles and relationships</a></li>
 			   <li><a href="/vegbank/design/supplemental.html">Supplemental functions</a></li>
 			   <li><a href="/vegbank/design/ploterd_small.html">Full entity relationship diagram</a></li>
- 			   <li><a href="/vegbank/design/plottables.html">Table attributes and fields</a></li> 
+ 			   <li><a href="/vegbank/design/plottables.html">Table attributes and fields</a></li>
 		   <ul class="constsize"><li>
 		   <select name="plotsmod" onChange="MM_jumpMenu('parent',this,0)">
 		      <option value="">----Select a table----</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotPlot.html">Plot</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotNamedPlace.html">- NamedPlace</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotPlace.html">- Place</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotSoilTaxon.html">- SoilTaxon</option> 
-			  
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotObservation.html">Observation</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotDisturbanceObs.html">- DisturbanceObs</option> 
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotGraphic.html">- Graphic</option> 
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotObservationContributor.html">- ObservationContributor</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotObservationSynonym.html">- ObservationSynonym</option>
-			  
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotProject.html">- Project</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotProjectContributor.html">- ProjectContributor</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotSoilObs.html">- SoilObs</option> 
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotStratum.html">- Stratum</option> 
-			  
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotCommClass.html">CommClass</option> 
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotCommInterpretation.html">- CommInterpretation</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotClassContributor.html">- ClassContributor</option> 
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotDisturbanceObs.html">- DisturbanceObs</option>
-			  
-			  <option value="">----Methods----</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotCoverMethod.html">- CoverMethod</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotCoverIndex.html">- CoverIndex</option> 
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotStratumMethod.html">- StratumMethod</option> 
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotStratumType.html">- StratumType</option>
-			  
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotTaxonObservation.html">TaxonObservation</option> 
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotStratumComposition.html">- StratumComposition</option> 
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotStemCount.html">- StemCount</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotStemLocation.html">- StemLocation</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotTaxonInterpretation.html">- TaxonInterpretation</option>
-			  
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotParty.html">Party</option> 
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotAddress.html">- Address</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotAux_Role.html">- Aux_role</option> 
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotTelephone.html">- Telephone</option> 
-			  
-			  <option value="">----Supplementary----</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotCitation.html">- Citation</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotNoteLink.html">- NoteLink</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotNote.html">- Note</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotRevision.html">- Revision</option>
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotUserDefined.html">- UserDefined</option> 
-			  <option value="/vegbank/dbdictionary/vegplot/vegPlotDefinedValue.html">- DefinedValue</option> 
+<option value="/vegbank/dbdictionary/dd~table~address~type~tableview.html">address</option>
+<option value="/vegbank/dbdictionary/dd~table~aux_role~type~tableview.html">aux_Role</option>
+
+<option value="/vegbank/dbdictionary/dd~table~classcontributor~type~tableview.html">classContributor</option>
+<option value="/vegbank/dbdictionary/dd~table~commclass~type~tableview.html">commClass</option>
+<option value="/vegbank/dbdictionary/dd~table~comminterpretation~type~tableview.html">commInterpretation</option>
+<option value="/vegbank/dbdictionary/dd~table~coverindex~type~tableview.html">coverIndex</option>
+<option value="/vegbank/dbdictionary/dd~table~covermethod~type~tableview.html">coverMethod</option>
+<option value="/vegbank/dbdictionary/dd~table~definedvalue~type~tableview.html">definedValue</option>
+<option value="/vegbank/dbdictionary/dd~table~disturbanceobs~type~tableview.html">disturbanceObs</option>
+<option value="/vegbank/dbdictionary/dd~table~graphic~type~tableview.html">graphic</option>
+<option value="/vegbank/dbdictionary/dd~table~namedplace~type~tableview.html">namedPlace</option>
+<option value="/vegbank/dbdictionary/dd~table~note~type~tableview.html">note</option>
+<option value="/vegbank/dbdictionary/dd~table~notelink~type~tableview.html">noteLink</option>
+<option value="/vegbank/dbdictionary/dd~table~observation~type~tableview.html">observation</option>
+<option value="/vegbank/dbdictionary/dd~table~observationcontributor~type~tableview.html">observationContributor</option>
+<option value="/vegbank/dbdictionary/dd~table~observationsynonym~type~tableview.html">observationSynonym</option>
+<option value="/vegbank/dbdictionary/dd~table~party~type~tableview.html">party</option>
+<option value="/vegbank/dbdictionary/dd~table~place~type~tableview.html">place</option>
+<option value="/vegbank/dbdictionary/dd~table~plot~type~tableview.html">plot</option>
+<option value="/vegbank/dbdictionary/dd~table~project~type~tableview.html">project</option>
+<option value="/vegbank/dbdictionary/dd~table~projectcontributor~type~tableview.html">projectContributor</option>
+<option value="/vegbank/dbdictionary/dd~table~reference~type~tableview.html">reference</option>
+<option value="/vegbank/dbdictionary/dd~table~referencealtident~type~tableview.html">referenceAltIdent</option>
+<option value="/vegbank/dbdictionary/dd~table~referencecontributor~type~tableview.html">referenceContributor</option>
+<option value="/vegbank/dbdictionary/dd~table~referencejournal~type~tableview.html">referenceJournal</option>
+<option value="/vegbank/dbdictionary/dd~table~referenceparty~type~tableview.html">referenceParty</option>
+<option value="/vegbank/dbdictionary/dd~table~revision~type~tableview.html">revision</option>
+<option value="/vegbank/dbdictionary/dd~table~soilobs~type~tableview.html">soilObs</option>
+<option value="/vegbank/dbdictionary/dd~table~soiltaxon~type~tableview.html">soilTaxon</option>
+<option value="/vegbank/dbdictionary/dd~table~stemcount~type~tableview.html">stemCount</option>
+<option value="/vegbank/dbdictionary/dd~table~stemlocation~type~tableview.html">stemLocation</option>
+<option value="/vegbank/dbdictionary/dd~table~stratum~type~tableview.html">stratum</option>
+<option value="/vegbank/dbdictionary/dd~table~stratumcomposition~type~tableview.html">stratumComposition</option>
+<option value="/vegbank/dbdictionary/dd~table~stratummethod~type~tableview.html">stratumMethod</option>
+<option value="/vegbank/dbdictionary/dd~table~stratumtype~type~tableview.html">stratumType</option>
+<option value="/vegbank/dbdictionary/dd~table~taxoninterpretation~type~tableview.html">taxonInterpretation</option>
+<option value="/vegbank/dbdictionary/dd~table~taxonobservation~type~tableview.html">taxonObservation</option>
+<option value="/vegbank/dbdictionary/dd~table~telephone~type~tableview.html">telephone</option>
+<option value="/vegbank/dbdictionary/dd~table~userdefined~type~tableview.html">userDefined</option>
 			</select>
 			</li></ul>
 			<li><a href="/vegbank/design/plotauxillary.html">Auxillary tables and picklists</a></li>
-			<ul class="constsize"><li>
-			  <select name="auxtables" onChange="MM_jumpMenu('parent',this,0)">
-				<option value="">----Select a table----</option>
-				<option value="">----commInterpretation----</option>
-				<option value="/vegbank/design/lists/commInterpretation.classConfidence.html">classConfidence</option>
-				<option value="/vegbank/design/lists/commInterpretation.classFit.html">classFit</option>
-				<option value="">----disturbanceObs----</option>
-				<option value="/vegbank/design/lists/disturbanceObs.disturbanceIntensity.html">disturbanceIntensity</option>
-				<option value="/vegbank/design/lists/disturbanceObs.disturbanceType.html">disturbanceType</option>
-				<option value="">----note----</option>
-				<option value="/vegbank/design/lists/note.noteType.html">noteType</option>
-				<option value="">----observation----</option>
-				<option value="/vegbank/design/lists/observation.bryophyteQuality.html">bryophyteQuality</option>
-				<option value="/vegbank/design/lists/observation.coverDispersion.html">coverDispersion</option>
-				<option value="/vegbank/design/lists/observation.dateAccuracy.html">dateAccuracy</option>
-				<option value="/vegbank/design/lists/observation.dominantStratum.html">dominantStratum</option>
-				<option value="/vegbank/design/lists/observation.effortLevel.html">effortLevel</option>
-				<option value="/vegbank/design/lists/observation.growthformType.html">growthformType</option>
-				<option value="/vegbank/design/lists/observation.floristicQuality.html">floristicQuality</option>
-				<option value="/vegbank/design/lists/observation.homogeneity.html">homogeneity</option>
-				<option value="/vegbank/design/lists/observation.hydrologicRegime.html">hydrologicRegime</option>
-				<option value="/vegbank/design/lists/observation.lichenQuality.html">lichenQuality</option>
-				<option value="/vegbank/design/lists/observation.phenologicAspect.html">phenologicAspect</option>
-				<option value="/vegbank/design/lists/observation.plotQuality.html">plotQuality</option>
-				<option value="/vegbank/design/lists/observation.representativeness.html">representativeness</option>
-				<option value="/vegbank/design/lists/observation.salinity.html">salinity</option>
-				<option value="/vegbank/design/lists/observation.soilDrainage.html">soilDrainage</option>
-				<option value="/vegbank/design/lists/observation.soilMoistureRegime.html">soilMoistureRegime</option>
-				<option value="/vegbank/design/lists/observation.standMaturity.html">standMaturity</option>
-				<option value="/vegbank/design/lists/observation.stemSampleMethod.html">stemSampleMethod</option>
-				<option value="/vegbank/design/lists/observation.vegetationOrigin.html">vegetationOrigin</option>
-				<option value="">----party &amp; place----</option>
-				<option value="/vegbank/design/lists/aux_Role.html">aux_Role</option>
-				<option value="/vegbank/design/lists/namedPlace.html">namedPlace</option>
-				<option value="/vegbank/design/lists/telephone.telephoneType.html">telephone.telephoneType</option>
-				<option value="">----plot----</option>
-				<option value="/vegbank/design/lists/plot.geology.html">geology</option>
-				<option value="/vegbank/design/lists/plot.landform.html">landform</option>
-				<option value="/vegbank/design/lists/plot.confidentialityStatus.html">confidentialityStatus</option>
-				<option value="/vegbank/design/lists/plot.placementMethod.html">placementMethod</option>
-				<option value="/vegbank/design/lists/plot.shape.html">shape</option>
-				<option value="/vegbank/design/lists/plot.slopeAspect.html">slopeAspect</option>
-				<option value="/vegbank/design/lists/plot.slopeGradient.html">slopeGradient</option>
-				<option value="/vegbank/design/lists/plot.soilTaxonAccuracy.html">soilTaxonAccuracy</option>
-				<option value="/vegbank/design/lists/plot.soilTaxonSource.html">soilTaxonSource</option>
-				<option value="/vegbank/design/lists/plot.soilType.html">soilType</option>
-				<option value="/vegbank/design/lists/plot.standSize.html">standSize</option>
-				<option value="/vegbank/design/lists/plot.topoPosition.html">topoPosition</option>
-				<option value="">----region----</option>
-				<option value="/vegbank/design/lists/aux_Ecoregions.html">aux_Ecoregions</option>
-				<option value="/vegbank/design/lists/aux_Geography(1-3).html">aux_Geography1-3</option>
-				<option value="/vegbank/design/lists/aux_Geography(4).html">aux_Geography4</option>
-				<option value="/vegbank/design/lists/aux_usgsQuad.html">aux_usgsQuad</option>
-				<option value="/vegbank/design/lists/region.system.html">region.system</option>
-				<option value="">----soilObs----</option>
-				<option value="/vegbank/design/lists/soilObs.soilHorizon.html">soilHorizon</option>
-				<option value="/vegbank/design/lists/soilObs.soilTexture.html">soilTexture</option>
-				<option value="">----taxonInterpretation----</option>
-				<option value="/vegbank/design/lists/taxonInterpretation.interpretationType.html">interpretationType</option>
-				<option value="">----userDefined----</option>
-				<option value="/vegbank/design/lists/userDefined.userDefinedCategory.html">userDefinedCategory</option>
-				<option value="/vegbank/design/lists/userDefined.userDefinedName.html">userDefinedName</option>			
-			  </select>
-			</li></ul>
-		  </ul>
+
 	      <li><a href="/vegbank/design/types.html">Community Type Module </a></li>
 		  <ul class="constsize">
 		   <li><a href="/vegbank/design/communityerd.html">Entity relationship diagram</a></li>
@@ -196,17 +128,17 @@ if (restore) selObj.selectedIndex=0;
 		   <ul class="constsize"><li>
 		   <select name="commtables" onChange="MM_jumpMenu('parent',this,0)">
 		      <option value="">----Select a table----</option>
-		      <option value="/vegbank/dbdictionary/commtaxa/commTaxaCommConcept.html">CommConcept</option> 
-		      <option value="/vegbank/dbdictionary/commtaxa/commTaxaCommCorrelation.html">CommCorrelation</option> 
-		      <option value="/vegbank/dbdictionary/commtaxa/commTaxaCommLineage.html">CommLineage</option> 
-		      <option value="/vegbank/dbdictionary/commtaxa/commTaxaCommName.html">CommName</option>
-		      <option value="/vegbank/dbdictionary/commtaxa/commTaxaCommParty.html">CommParty</option>
-		      <option value="/vegbank/dbdictionary/commtaxa/commTaxaCommReference.html">CommReference</option> 
-		      <option value="/vegbank/dbdictionary/commtaxa/commTaxaCommStatus.html">CommStatus</option> 
-		      <option value="/vegbank/dbdictionary/commtaxa/commTaxaCommUsage.html">CommUsage</option> 
+<option value="/vegbank/dbdictionary/dd~table~commconcept~type~tableview.html">commConcept</option>
+<option value="/vegbank/dbdictionary/dd~table~commcorrelation~type~tableview.html">commCorrelation</option>
+<option value="/vegbank/dbdictionary/dd~table~commlineage~type~tableview.html">commLineage</option>
+<option value="/vegbank/dbdictionary/dd~table~commname~type~tableview.html">commName</option>
+<option value="/vegbank/dbdictionary/dd~table~commparty~type~tableview.html">commParty</option>
+<option value="/vegbank/dbdictionary/dd~table~commstatus~type~tableview.html">commStatus</option>
+<option value="/vegbank/dbdictionary/dd~table~commusage~type~tableview.html">commUsage</option>
+<option value="/vegbank/dbdictionary/dd~table~reference~type~tableview.html">reference</option>
 		   </select>
 		   </li></ul>
-		   
+
 	      </ul>
 	        <li><a href="/vegbank/design/plants.html">Plant Taxon Module</a></li>
 	   		<ul class="constsize">
@@ -216,14 +148,14 @@ if (restore) selObj.selectedIndex=0;
 			  <ul class="constsize"><li>
 				  <select name="planttables" onChange="MM_jumpMenu('parent',this,0)">
 		      		<option value="">----Select a table----</option>
-				    <option value="/vegbank/dbdictionary/planttaxa/plantTaxaPlantConcept.html">PlantConcept</option> 
-				    <option value="/vegbank/dbdictionary/planttaxa/plantTaxaPlantCorrelation.html">PlantCorrelation</option>
-				    <option value="/vegbank/dbdictionary/planttaxa/plantTaxaPlantLineage.html">PlantLineage</option> 
-				    <option value="/vegbank/dbdictionary/planttaxa/plantTaxaPlantName.html">PlantName</option>
-				    <option value="/vegbank/dbdictionary/planttaxa/plantTaxaPlantParty.html">PlantParty</option>
-				    <option value="/vegbank/dbdictionary/planttaxa/plantTaxaPlantReference.html">PlantReference</option> 
-				    <option value="/vegbank/dbdictionary/planttaxa/plantTaxaPlantStatus.html">PlantStatus</option>
-					<option value="/vegbank/dbdictionary/planttaxa/plantTaxaPlantUsage.html">PlantUsage</option> 
+<option value="/vegbank/dbdictionary/dd~table~plantconcept~type~tableview.html">plantConcept</option>
+<option value="/vegbank/dbdictionary/dd~table~plantcorrelation~type~tableview.html">plantCorrelation</option>
+<option value="/vegbank/dbdictionary/dd~table~plantlineage~type~tableview.html">plantLineage</option>
+<option value="/vegbank/dbdictionary/dd~table~plantname~type~tableview.html">plantName</option>
+<option value="/vegbank/dbdictionary/dd~table~plantparty~type~tableview.html">plantParty</option>
+<option value="/vegbank/dbdictionary/dd~table~plantstatus~type~tableview.html">plantStatus</option>
+<option value="/vegbank/dbdictionary/dd~table~plantusage~type~tableview.html">plantUsage</option>
+<option value="/vegbank/dbdictionary/dd~table~reference~type~tableview.html">reference</option>
 				  </select>
 			  </li></ul>
 	   		</ul>
@@ -238,7 +170,7 @@ if (restore) selObj.selectedIndex=0;
 	   	</ul>
 	   		<li><a href="/vegbank/general/acknowledgements.html">Acknowledgements</a></li>
 	   </ul>
-        </ul>        
+        </ul>
   </ul></td>
   <td class="vegbank" width="400"><p>VegBank registration needed (you must log in)</p>
   <ul class="constsize">
@@ -246,27 +178,27 @@ if (restore) selObj.selectedIndex=0;
     <ul class="constsize">
 	    <li><a href="/vegbank/general/plots.html">Access or submit Plot data</a></li>
 	      <ul class="constsize">
-            <li><a href="/vegbank/forms/plot-query.html">Simple Query</a> <font color="red">redesign(v1.0)</font> 
-              | <a href="/vegbank/forms/nested-plot-query.html">Nested (Advanced) Query</a> 
-              <font color="red">redesign(v1.0)</font></li>
-            <li>View plot : overview<font color="red">(v1beta)</font> | <a href="@datarequestservlet@?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=full&queryType=simple&plotId=1">extended</a></li>
+            <li><a href="/vegbank/forms/plot-query.html">Simple Query</a> <font color="red">redesign(v1.0)</font>
+              | <a href="/vegbank/forms/nested-plot-query.html">Nested (Advanced) Query</a>
+              <font color="darkSalmon">redesign(v1.1)</font></li>
+            <li>View plot : overview<font color="green">(v1beta)</font> | extended<font color="green">(v1beta)</font></li>
             <ul class="constsize">
-              <li>Add interpretation of plant in plot<font color="red">(v1.1)</font></li>
-              <li>Assign a plot to a community<font color="red">(v1.1)</font></li>
-              <li>Create a note about a field in a plot<font color="red">(v2.0)</font></li>
+              <li>Add interpretation of plant in plot<font color="darkSalmon">(v1.1)</font></li>
+              <li>Assign a plot to a community<font color="darkSalmon">(v1.1)</font></li>
+              <li>Create a note about a field in a plot<font color="darkSalmon">(v2.0)</font></li>
             </ul>
-            <li><a href="/vegbank/forms/resultset-download.html">Export plots</a><font color="red"> 
+            <li><a href="/vegbank/forms/resultset-download.html">Export plots</a><font color="red">
               redesign(v1.0)</font></li>
 			  <ul class="constsize">
-			    
-              <li>Formats: ASCII, HTML , XML <font color="red">(redesign v2.0)</font>, 
-                VegBranch <font color="red">(v3.0)</font>, User specified <font color="red">(v2.0)</font>, TurboVeg <font color="red">(v3.0)</font>
+
+              <li>Formats: ASCII, HTML, XML <font color="darkSalmon">(redesign v2.0)</font>,
+                VegBranch <font color="darkSalmon">(v3.0)</font>, User specified <font color="darkSalmon">(v2.0)</font>, TurboVeg <font color="darkSalmon">(v3.0)</font>
             </ul>
-            <li><a href="@datasubmitservlet@?submitDataType=vegPlot&action=preinit">Load 
+            <li><a href="@datasubmitservlet@?submitDataType=vegPlot&action=preinit">Load
               Plot Data</a></li>
             <ul class="constsize">
-			  <li>Formats: NPS, VegBranch, XML <font color="red">(redesign v2.0)</font>, TurboVeg <font color="red">(v2.0)</font></li>
-              <li>Pre-Validate upload <font color="red">(v1.0)</font></li>
+			  <li>Formats: NPS, VegBranch, XML <font color="darkSalmon">(redesign v2.0)</font>, TurboVeg <font color="darkSalmon">(v2.0)</font></li>
+              <li>Pre-Validate upload <font color="darkSalmon">(v1.1)</font></li>
             </ul>
             <li><a href="/vegbank/general/input.html">Input data from forms</a></li>
             <ul class="constsize">
@@ -274,49 +206,49 @@ if (restore) selObj.selectedIndex=0;
               <li>Add stratum method<font color="red"> (v1.0)</font></li>
               <li>Add cover method<font color="red"> (v1.0)</font></li>
               <li>Add citation<font color="red"> (v1.0)</font></li>
-              <li>Add user-defined variable<font color="red"> (v1.1)</font></li>
-              <li>Add named place <font color="red"> (v2.0)</font></li>
+              <li>Add user-defined variable<font color="darkSalmon"> (v1.1)</font></li>
+              <li>Add named place <font color="darkSalmon"> (v2.0)</font></li>
             </ul>
-            <li><a href="/vegbank/general/datasets.html">Manage registered datasets</a><font color="red"> 
+            <li><a href="/vegbank/general/datasets.html">Manage registered datasets</a><font color="darkSalmon">
               (v2.0)</font></li>
              <ul class="constsize">
-			  <li>Fix an error in your plot (revision)<font color="red">(v3.0)</font></li>
-			  <li>Grant a user permission to view your confidential plot(s)<font color="red">(v2.0)</font></li>
+			  <li>Fix an error in your plot (revision)<font color="darkSalmon">(v3.0)</font></li>
+			  <li>Grant a user permission to view your confidential plot(s)<font color="darkSalmon">(v2.0)</font></li>
 			 </ul>
             <!--	  <li><a href="/vegbank/forms/uploadFile.html" Upload plot data</li> -->
-            <li>Project search and summary<font color="red">(v2.0)</font></li>
+            <li>Project search and summary<font color="darkSalmon">(v2.0)</font></li>
           </ul>
 		<li><a href="/vegbank/general/types.html">Access or submit Community Type data</a></li>
 		  <ul class="constsize">
-            <li><a href="/vegbank/forms/community-query.html">Query Communities</a><font color="red"> 
+            <li><a href="/vegbank/forms/community-query.html">Query Communities</a><font color="red">
               update(v1.0)</font></li>
-            <li><a href="/vegbank/forms/community-submit.html">Create a new Community Type</a><font color="red"> 
-              update(v1.0)</font></li>
-            <li>Bulk load new Community Types <font color="red">(v2.0)</font></li>
-			<li><a href="/vegbank/forms/community-correlate.html">Correlate your type 
+            <li><a href="/vegbank/forms/community-submit.html">Create a new Community Type</a><font color="red">
+              update(v1.0?)</font></li>
+            <li>Bulk load new Community Types <font color="darkSalmon">(v2.0)</font></li>
+			<li><a href="/vegbank/forms/community-correlate.html">Correlate your type
               with an NVC Type</a></li>
-            <li>Manage your party perspective on Community Types <font color="red">(v2.0)</font></li>
+            <li>Manage your party perspective on Community Types <font color="darkSalmon">(v2.0)</font></li>
           </ul>
 		<li><a href="/vegbank/general/plants.html">Access or submit Plant Taxon data</a></li>
 		<ul class="constsize">
-		  <li><a href="/vegbank/forms/plant-query.html">Query Plants</a><font color="red"> update(v1.0)</font></li> 
-		  <li><a href="/vegbank/forms/plant-submit.html">Enter a new Plant</a><font color="red"> update(v1.0)</font></li>
-		  <li>Bulk load new Plants <font color="red">(v2.0)</font></li>
-          <li>Manage your party perspective on Plants <font color="red">(v2.0)</font></li>
+		  <li><a href="/vegbank/forms/plant-query.html">Query Plants</a><font color="red"> update(v1.0)</font></li>
+		  <li><a href="/vegbank/forms/plant-submit.html">Enter a new Plant</a><font color="red"> update(v1.0?)</font></li>
+		  <li>Bulk load new Plants <font color="darkSalmon">(v2.0)</font></li>
+          <li>Manage your party perspective on Plants <font color="darkSalmon">(v2.0)</font></li>
 		</ul>
-		<li><a href="@usermanagement_servlet@?action=changeusersettings">Edit your VegBank Profile</a></li> 
-		<li><a href="/vegbank/forms/certification.html">Apply to become a Certified VegBank User</a></li> 
+		<li><a href="@usermanagement_servlet@?action=changeusersettings">Edit your VegBank Profile</a></li>
+		<li><a href="/vegbank/forms/certification.html">Apply to become a Certified VegBank User</a></li>
 		  <ul class="constsize">
             <li><a href="/vegbank/forms/hints.html#certification">Certification Help</a></li>
-            <li>View registry of certified users <font color="red">(v2.0)</font></li>
-          </ul>	
+            <li>View registry of certified users <font color="darkSalmon">(v2.0)</font></li>
+          </ul>
 	</ul>
-    
+
    </ul>
    <hr />
    <p>VegBank Header Links:</p>
 	<ul class="constsize">
-     <li><a href="/vegbank/general/login.html">Login</a> | <a href="/vegbank/general/logout.html">Logout</a> 
+     <li><a href="/vegbank/general/login.html">Login</a> | <a href="/vegbank/general/logout.html">Logout</a>
 	| <a href="/vegbank/general/info.html">Information</a>
 	 | <a href="/vegbank/general/help.html">Help</a></li>
 	 <form action=/services/servlet/ExchangeServlet method=get target=_blank>
@@ -325,18 +257,18 @@ if (restore) selObj.selectedIndex=0;
    <hr />
    <p>VegBank Footer Links:</p>
 	<ul class="constsize">
-	  <li><a href="http://www.vegbank.org/index.html">VegBank Home</a> 
-	  | <a href="/vegbank/general/info.html">About VegBank</a> 
-	  | <a href="/vegbank/general/instructions.html">Instructions</a> 
-	  | <a href="/vegbank/panel/panel.html">ESA Vegetation Panel</a> 
-	  | <a href="/vegbank/general/contact.html">Contact</a>  
-	  | <a href="/vegbank/general/help.html">Help</a> 
-	  | <a href="/vegbank/general/register.html">Register</a></li> 
-	  <li><a href="/vegbank/general/login.html">Login</a>   
-	  | <a href="/vegbank/general/actions.html">use VegBank</a> 
-	  | <a href="/vegbank/general/logout.html">Logout</a> 
-	  | <a href="/vegbank/general/account.html">My VegBank Account</a> 
-	  | <a href="/vegbank/general/terms.html">Terms of use</a> 
+	  <li><a href="http://www.vegbank.org/index.html">VegBank Home</a>
+	  | <a href="/vegbank/general/info.html">About VegBank</a>
+	  | <a href="/vegbank/general/instructions.html">Instructions</a>
+	  | <a href="/vegbank/panel/panel.html">ESA Vegetation Panel</a>
+	  | <a href="/vegbank/general/contact.html">Contact</a>
+	  | <a href="/vegbank/general/help.html">Help</a>
+	  | <a href="/vegbank/general/register.html">Register</a></li>
+	  <li><a href="/vegbank/general/login.html">Login</a>
+	  | <a href="/vegbank/general/actions.html">use VegBank</a>
+	  | <a href="/vegbank/general/logout.html">Logout</a>
+	  | <a href="/vegbank/general/account.html">My VegBank Account</a>
+	  | <a href="/vegbank/general/terms.html">Terms of use</a>
 	  | <a href="/vegbank/general/privacy.html">Privacy policy</a></li>
 	</ul>
    </td>
