@@ -23,7 +23,7 @@
 
 
   <vegbank:get id="concept" select="commconcept_hierarchy" 
-  beanName="map" pager="false" xwhereEnable="false" perPage="-1"
+  beanName="map" pager="true" xwhereEnable="false" 
   where="where_conceptid" />
 
 
@@ -85,7 +85,7 @@
 </table>
 
  <!-- concept -->
-
+<vegbank:pager />
 
 </logic:notEmpty>
 
