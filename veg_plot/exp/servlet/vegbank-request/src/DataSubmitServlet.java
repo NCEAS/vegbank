@@ -29,9 +29,9 @@ import servlet.authentication.UserDatabaseAccess;
  * @param submitDataType -- 
  * 
  *
- *	'$Author: harris $'
- *  '$Date: 2002-12-05 00:20:05 $'
- *  '$Revision: 1.44 $'
+ *	'$Author: farrell $'
+ *  '$Date: 2002-12-23 22:51:27 $'
+ *  '$Revision: 1.45 $'
  */
 
 
@@ -39,11 +39,37 @@ public class DataSubmitServlet extends HttpServlet
 {
 
 	private String submitDataType = null;
+	// FIXME: Should be in properties
 	private String communityValidationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/community-submit_valid.html";
 	private String communityValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
 	private String commUpdateScript = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/update_community_summary.sql";
+	//this is the name/loaction of the uploaded file and must be consistent with 
+	//the name in the DataExchangeServlet
+	private String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/input.data";
+	private String plotsArchiveType = "tnc";
+	private String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit-select.html";
+	private String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot_select.html";
+	private String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
+	// this is the pre-transformed init template 
+	private String plantNameRectificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-rectification.html";
+	private String plantNameReferenceTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-reference.html";
+	private String plantConceptTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantconcept.html";
+	private String plantStatusUsageTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantstatususage.html";
+	private String plantSubmittalReceiptTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantsubmittal-receipt.html";
+	//this is the file that has the updated tokens and should be shown to the client
+	private String plantValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-valid.html";
+	private String plotSubmittalInitTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit.html";
+	//this is the file that has the updated tokens and should be shown to the client
+	private String plotSubmittalInitForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-valid.html";
+	// END FIXME: Should be in properties
+				
+	// ResourceBundle properties
+	private ResourceBundle rb = ResourceBundle.getBundle("vegbank");
+	private String serverUrl = "";
+	private String mailHost = "";
+	private String cc = "";
 	
-	ResourceBundle rb = ResourceBundle.getBundle("vegbank");
+	
 	private SqlFile sqlFile = new SqlFile(); 
 	private ServletUtility su = new ServletUtility();
 	private CommunityQueryStore qs;
@@ -52,20 +78,11 @@ public class DataSubmitServlet extends HttpServlet
 	private UserDatabaseAccess userdb = new UserDatabaseAccess();
 	private XMLparse parser;
 	
-	private String rmiServer = "raptor.nceas.ucsb.edu";  //this will be replaced with prop file
+	private String rmiServer = "";  //this will be replaced with prop file
 	private int rmiServerPort = 1099;
 	private DataSourceClient rmiClient;
 
-  //this is the name/loaction of the uploaded file and must be consistent with
-  //the name in the DataExchangeServlet
-	private String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/input.data";
-	private String plotsArchiveType = "tnc";
-	
-	private String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit-select.html";
-	private String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot_select.html";
-	
-	private String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
-	
+
 	private String browserType = "";
 	// THESE VARIBLES ARE USED BY THE VARIOUS SUBMITTAL ROUTINES
 	private String user = ""; //the email addy of the user as stored in the framwork cookie
@@ -136,21 +153,6 @@ public class DataSubmitServlet extends HttpServlet
 	private String plantParentRefTitle ="";
 	private String plantParentRefAuthors ="";
 	
-	
-	// this is the pre-transformed init template 
-	private String plantNameRectificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-rectification.html";
-	private String plantNameReferenceTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-reference.html";
-	private String plantConceptTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantconcept.html";
-	private String plantStatusUsageTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantstatususage.html";
-	private String plantSubmittalReceiptTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantsubmittal-receipt.html";
-	//this is the file that has the updated tokens and should be shown to the client
-	private String plantValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plant-valid.html";
-	
-	
-	private String plotSubmittalInitTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit.html";
-	//this is the file that has the updated tokens and should be shown to the client
-	private String plotSubmittalInitForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-valid.html";
-	
 	private PlantTaxon plantTaxon;
 	
 	/**
@@ -162,6 +164,9 @@ public class DataSubmitServlet extends HttpServlet
 		{
 			System.out.println("init: DataSubmitServlet");
 			this.rmiServer = rb.getString("rmiserver");
+			this.mailHost = rb.getString("mailHost");
+			this.cc = rb.getString("systemEmail");	
+				
 			System.out.println("DataSumbitServlet > init rmiserver: " + rmiServer);
 			//construct a new instance of the rmi client
 			rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
@@ -1396,7 +1401,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 						//they are just not logged in
 						else
 						{
-							sb.append("<a href=\"http://www.vegbank.org\">You are not logged in! </a> ");
+							sb.append("<a href=\"\\\">You are not logged in! </a> ");
 						}
 					}
 				}
@@ -1504,13 +1509,11 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 	 */
 	 private void emailPlotSubmitalReceipt(String inputEmail, String receipt)
 	 {
-	 	String mailHost = "nceas.ucsb.edu";
 		String from = "vegbank";
 		String to = inputEmail;
-		String cc = "dba@vegbank.org";
 		String subject = "VEGBANK PLOT INSERTION RECEIPT";
 	 	String body = receipt;
-		su.sendEmail(mailHost, from, to, cc, subject, body);
+		su.sendEmail(this.mailHost, from, to, this.cc, subject, body);
 	 }
 		
 	
@@ -1746,7 +1749,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 					String commConceptId  = (String)hash.get("commConceptId");
 					String usageId  = (String)hash.get("usageId");
 						
-					sb.append("<form action=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataSubmitServlet\" method=\"get\" >");
+					sb.append("<form action=\"/framework/servlet/DataSubmitServlet\" method=\"get\" >");
 					sb.append(" <input type=hidden name=submitDataType value=vegCommunityCorrelation> ");
 					sb.append(" <input type=hidden name=action value=submit> ");
 					sb.append(" <input type=hidden name=statusId value="+statusId+"> ");

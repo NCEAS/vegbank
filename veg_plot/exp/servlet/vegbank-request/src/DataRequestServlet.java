@@ -50,9 +50,9 @@ import servlet.util.ServletUtility;
  * @param plotId - database plot identification number <br> 
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
- *	'$Author: harris $'
- *  '$Date: 2002-08-29 16:51:05 $'
- *  '$Revision: 1.26 $'
+ *	'$Author: farrell $'
+ *  '$Date: 2002-12-23 22:51:27 $'
+ *  '$Revision: 1.27 $'
  * 
  */
 
@@ -90,7 +90,7 @@ public class DataRequestServlet extends HttpServlet
 	private  ServletUtility su = new ServletUtility();
 	public dbAccess dba =new dbAccess();
 	
-	private String communityQueryPage = "http://vegbank.nceas.ucsb.edu/forms/community-query.html";
+	private String communityQueryPage = "/forms/community-query.html";
 	private transformXML transformer = new transformXML();
 	private String defaultPlotIdentityStyleSheet = "";
 	private String genericForm =""; // this is the vb generic form to attache messages to
@@ -670,7 +670,7 @@ public class DataRequestServlet extends HttpServlet
 			su.append("<br>");
 			su.append("<br>");
 				
-			su.append("<form action=\"http://vegbank.nceas.ucsb.edu/framework/servlet/viewData\" method=\"GET\"> \n");
+			su.append("<form action=\"/framework/servlet/viewData\" method=\"GET\"> \n");
 			// the options to view summaries or identifiers -- either way the user
 			// can get to the download option
 			su.append("<input type=\"radio\" name=\"resultType\" value=\"identity\" checked> View Plot Id's \n");

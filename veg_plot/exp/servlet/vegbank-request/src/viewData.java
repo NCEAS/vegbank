@@ -350,7 +350,7 @@ public class viewData extends HttpServlet
       	sb.append("?action=userdefaultstyle&username="+userName);
 			
       	//connect to the dataExchaneServlet
-				String uri = "http://vegbank.nceas.ucsb.edu/framework/servlet/dataexchange"+sb.toString().trim();
+				String uri = "/framework/servlet/dataexchange"+sb.toString().trim();
 				System.out.println("ViewData > sent to servlet: " + uri);
       	int port=80;
       	String requestType="POST";

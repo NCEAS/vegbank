@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *     '$Date: 2002-12-06 18:40:53 $'
-  * '$Revision: 1.10 $'
+  *     '$Date: 2002-12-23 22:51:27 $'
+  * '$Revision: 1.11 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -40,8 +40,6 @@
     	<property name="lib" value="../lib" />
     	<property name="javadocs" value="../doc/api" />
     	
-    
-    
     	<property name="vegcommunity" value="../lib/vegcommunity.jar" />
     	<property name="planttaxonomy" value="../lib/planttaxonomy.jar" />
     	<property name="jdbc" value="../lib/jdbc7.0-1.2.jar" />
@@ -56,25 +54,27 @@
     	<property name="authentication" value="../lib/authservletmodule.jar" />
     	<property name="utilities" value="../lib/utilities.jar" />
     	<property name="cpath" value="${utilities}:${authentication}:${planttaxonomy}:${rmisystem}:${vegcommunity}:${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
-    	
-    	
+      	<property name="rmiserver" value="128.111.220.59"/>	
+           
+		<!-- Filters -->  	
     	<filter token="servlet-path" value="${servlet-path}" />
-      	<filter token="servlet_lib_dir" value="${installDir}" />
+     	<filter token="servlet_lib_dir" value="${installDir}" />
+      	<filter token="rmiserver" value="${rmiserver}"/>
+		<filter token="mailHost" value="nceas.ucsb.edu"/>
+		<filter token="systemEmail" value="dba@vegbank.org"/>
+		<!-- Filters End -->
+		  
     </target>
 
-<!-- PREPARE -->
-<target name="prepare" depends="init">
-	<mkdir dir="${build}" />
-
-	
-	<copydir src="${src}" 
-		dest="${build}" 
-		filtering="yes"
-		includes="**.java vegbank.properties  pageDirector.properties 
-		fileDownload.properties authenticate.properties plotQuery.properties"
-		excludes="**/CVS* MetaCatServlet.java"
-	/>
-</target>	
+    <!-- PREPARE -->
+    <target name="prepare" depends="init">
+    	<mkdir dir="${build}" />
+    	
+    	<copy todir="${build}" filtering="true">
+    		<fileset dir="${src}"/>
+    	</copy>
+    		
+    </target>	
 	
 	<!-- COMPILE -->
 <target name="compile" depends="prepare">

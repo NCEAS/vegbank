@@ -8,9 +8,9 @@ package servlet.datafile_exchange;
  *    Authors: Chad Berkley
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2002-01-24 00:26:35 $'
- * '$Revision: 1.2 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2002-12-23 22:51:27 $'
+ * '$Revision: 1.3 $'
  */
 
 
@@ -228,25 +228,18 @@ import servlet.util.ServletUtility;
 	 {
 		try
 		{
-		 System.out.println("DataFileServer > REGISTERED USER: " + username);
-		 //figure out a way for determinin file size
-		 String fileSize = "0";
-		 
-		 //register the document with the database
-			String currentDate = filedb.getCurrentDate();
+			System.out.println("DataFileServer > REGISTERED USER: " + username);
+			 //figure out a way for determinin file size
+			 int fileSize = 0;
+			 
+			 //register the document with the database
+			int accessionId = filedb.getNewAccessionId();
 			//register and make sure that we get back an
 			//accession number 
-			String accessionNumber = filedb.registerDocument(username, 
-				"givenname",
-				 currentDate, 
-				 fileSize, 
-				 uploadDir, 
-				 filename, 
-				 fileType
-			);
+			filedb.registerDocument(accessionId, fileSize, filename, uploadDir );
 					
 			//copy the file to a file with the name of the accesion number
-			util.fileCopy(uploadDir+filename, uploadDir+accessionNumber);
+			util.fileCopy(uploadDir+filename, uploadDir+accessionId);
 			//delete the file
 			util.flushFile(uploadDir+filename);
 		}

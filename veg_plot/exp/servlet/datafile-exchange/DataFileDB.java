@@ -9,7 +9,7 @@ import java.sql.*;
 
 /**
  * handles all related to storing data files on the webserver 
- * and reggistering those documents in the 'framework database'
+ * and registering those documents in the 'framework database'
  * 
  */
 public class DataFileDB  {
@@ -26,7 +26,7 @@ public class DataFileDB  {
   public DataFileDB() 
   {
 		try{
-    	conn = getConnection();
+    		conn = getConnection();
 		}
 		catch(Exception e)
 		{
@@ -42,50 +42,79 @@ public class DataFileDB  {
   {
     String uniqueid = null;
     
-    try {
-			//conn = getConnection();
-      PreparedStatement pstmt;
-      pstmt = conn.prepareStatement
-              ("INSERT into file_accession (create_date, create_time) " +
-               "VALUES (now()::date, now()::time)");
+    try 
+    {
+		//conn = getConnection();
+      	PreparedStatement pstmt;
+      	pstmt = conn.prepareStatement
+              ("INSERT into file_accession (create_date) " +
+               "VALUES (now())");
      	// pstmt.setString(1, sitecode);
-      pstmt.execute();
-      pstmt.close();
+      	pstmt.execute();
+      	pstmt.close();
  			
-			//create the accession number
-			//PreparedStatement pstmt;
-      pstmt = conn.prepareStatement(
-                "SELECT accession_id, create_date, create_time FROM file_accession " + 
+		//create the accession number
+		//PreparedStatement pstmt;
+      	pstmt = conn.prepareStatement(
+                "SELECT accession_id, create_date FROM file_accession " + 
                 "WHERE accession_id = " +
                 " (SELECT max(accession_id) FROM file_accession ) " );
                 
-      pstmt.execute();
-      ResultSet rs = pstmt.getResultSet();
-			
-			//results = query.executeQuery(sb.toString());
-			
-			//get the results
-			
-			//	if (results.getString(1) != null) 
-			//	{
+      	pstmt.execute();
+      	ResultSet rs = pstmt.getResultSet();
 					
-			while (rs.next()) 
-			{
-      if (rs != null)
+		while (rs.next()) 
+		{
+      		if (rs != null)
 			{
 				String accessionId = rs.getString(1);
 				String createDate = rs.getString(2);
-				String createTime = rs.getString(3);
-			
-				uniqueid = accessionId+createDate+createTime;
+						
+				uniqueid = accessionId+createDate;
 			}
-			}
+		}
     } catch (Exception e) {
       	System.out.println("Error on DataFileDB.getUniqueID(): "+e.getMessage());
-				e.printStackTrace();
+		e.printStackTrace();
     }
-
     return uniqueid;
+  }
+  
+    // get Unique ID from DB sequence
+  protected int getNewAccessionId() 
+  {
+    int accessionId=0; 
+
+    try 
+    {
+		//conn = getConnection();
+      	PreparedStatement pstmt;
+      	pstmt = conn.prepareStatement
+              ("INSERT into file_accession (create_date) " +
+               "VALUES (now())");
+      	pstmt.execute();
+      	pstmt.close();
+ 			
+		//create the accession number
+		//PreparedStatement pstmt;
+      	pstmt = conn.prepareStatement(
+                	"SELECT max(accession_id) FROM file_accession " 
+                	);
+      	pstmt.execute();
+      	ResultSet rs = pstmt.getResultSet();
+					
+		while (rs.next()) 
+		{
+      		if (rs != null)
+			{
+				accessionId = rs.getInt(1);
+			}
+		}
+    } catch (Exception e) {
+      	System.out.println("Error on DataFileDB.getUniqueID(): "+e.getMessage());
+		e.printStackTrace();
+    }
+    return accessionId;
   }
 
 	
@@ -191,9 +220,7 @@ public class DataFileDB  {
 			pstmt.setString(6, file);
 			pstmt.setString(7, accessionNumber);
 			pstmt.setString(8, fileType);
-			
-
-			
+				
 			pstmt.execute();
 			pstmt.close();
 		}
@@ -305,22 +332,40 @@ public class DataFileDB  {
 		}
 		 return(accessionNumber);
 	 }
-	
+	 
 	/**
-	 * method that passes back, as a string, the current
-	 * database date
+	 * Register a document with the database - insert 
+	 * the accession number, username, create date etc
 	 *
 	 */
-	 public String getCurrentDate()
-	 {
-		 String s = null;
- 			java.util.Date localtime = new java.util.Date();
-			//System.out.println("Database date: "+localtime);
-		 return(localtime.toString() );
+	 public void registerDocument 	( 	
+ 																int accessionId,
+ 																int fileSize,
+ 																String fileName,
+ 																String path
+ 															)
+	 {		 
+		try
+		{		
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement
+			("INSERT into datafile (accession_id, file_size, user_filename, path) " +
+				"VALUES (?, ?, ?,?)");
+			
+			pstmt.setInt(1, accessionId);
+			pstmt.setInt(2, fileSize);
+			pstmt.setString(3, fileName);
+			pstmt.setString(4, path);
+						
+			pstmt.execute();
+			pstmt.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+		}
 	 }
-	 
-	 //method that retuns the number of files the user has on the 
-	 //server
+	
 	public String getUserFileNumber(String userName)
 	{
 		String s = null;
@@ -443,21 +488,16 @@ public class DataFileDB  {
 				System.out.println("inserting a test document");
 				try {
 					DataFileDB an = new DataFileDB();
-					String aNum = an.getUniqueID();
-					String surName = "harris";
-					String givenName = "john";
-					String createDate = "26-NOV-2001";
-					String size = "0";
-					String path = "/usr/local/devtools/jakarta-tomcat/uploads/";
-					String file = "test.txt";
-					String fileType = "UNKNOWN";
+					int accessionId = an.getNewAccessionId();
+					int fileSize = 55435435;
+					String fullPath = "Follow the yellow brick road";
+					String fileName = "thisANDthat.hex";
 					
 					//try to register the document with the database
-					boolean result = an.registerDocument(surName, givenName, createDate, 
-						size, path, file, fileType, aNum );
+					an.registerDocument( accessionId, fileSize, fileName, fullPath);
 						
 						
-					System.out.println("results: " + result);
+					System.out.println("Finished");
 				}
 				catch (Exception e ) { 
 					System.out.println("Exception: " + e.getMessage() ); 
