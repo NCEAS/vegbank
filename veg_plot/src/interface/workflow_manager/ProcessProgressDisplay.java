@@ -11,8 +11,8 @@ import java.io.*;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-08-18 00:49:16 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-08-21 23:10:43 $'
+ * 	'$Revision: 1.2 $'
  */
 
 
@@ -75,7 +75,8 @@ public class ProcessProgressDisplay extends JFrame
 	
 	
 //	private JLabel projectDescriptionStatus = new JLabel("pending");
-	
+		//other classes needed	
+		XMLparse xp = new XMLparse();
 
 	 /**
     * @param args the command line arguments
@@ -94,7 +95,9 @@ public class ProcessProgressDisplay extends JFrame
 				setTitle("Progress");
         initComponents(1, Color.pink);
         pack();
-        setSize(320, 400);
+				//for linux increase size by 50
+        //setSize(320, 400);
+				setSize(370, 450);
     }
 		
 		 public void initComponents(int buttonNumber, Color color) 
@@ -108,25 +111,96 @@ public class ProcessProgressDisplay extends JFrame
         }
 			});
 			
+			
+			
 			//this is the main panel for the interface
-		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
-		mainPane.add(Box.createRigidArea(new Dimension(2,30)));
-		mainPane.add( projectDescriptionStatus(projectDescriptionPanel) );
-		mainPane.add( transformDataStatus(transformDataPanel) );
-		mainPane.add( loadDatabaseStatus(loadDatabasePanel) );
-		mainPane.add( exportDataStatus( exportDataPanel ) );
-		mainPane.add(Box.createRigidArea(new Dimension(2,30)));
+			mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
+			mainPane.add(Box.createRigidArea(new Dimension(2,30)));
+			mainPane.add( projectDescriptionStatus(projectDescriptionPanel) );
+			if (processConfig("dataTransformSelector") == true)
+			{
+				mainPane.add( transformDataStatus(transformDataPanel) );
+			}
+			//use the workflow manager config file
+			if (processConfig("dataLoadRemoteSelector") == true)
+			{
+				mainPane.add( loadDatabaseStatus(loadDatabasePanel) );
+  	  }
+			if (processConfig("dataExportSelector") == true)
+			{
+				mainPane.add( exportDataStatus( exportDataPanel ) );
+			}
+			mainPane.add(Box.createRigidArea(new Dimension(2,30)));
 		
-		//add the continue button
-		continueSelector.setText("Continue");
-		continueSelectorPanel.setLayout(new FlowLayout(0,5,1));
-		continueSelectorPanel.add(continueSelector);
-		mainPane.add(continueSelectorPanel);
+			//add the continue button
+			continueSelector.setText("Continue");
+			continueSelectorPanel.setLayout(new FlowLayout(0,5,1));
+			continueSelectorPanel.add(continueSelector);
+			mainPane.add(continueSelectorPanel);
 
 			//show the panes
 			setContentPane(mainPane);
       //frame.getContentPane().add(mainPane);
+		
+			//set up the activators
+			continueSelector.addActionListener(new java.awt.event.ActionListener() 
+			{
+    	  public void actionPerformed(ActionEvent evt) 
+				{
+    	    handleContinueAcivator(evt);
+    	   }
+    	});
+		
+	}
+	
+	
+	/**
+	 * method to handle the continuation thru the work flow process
+	 * as the 'continue' button is pushed -- this method should probably
+	 * be put into the 'Manager' class
+	 */
+	 	private String handleContinueAcivator(ActionEvent evt)
+		{
+			String returnString = "ok";
+			try
+			{
+				System.out.println( "continuing");
+				//for now start the Project class
+				new Project ().show ();
+
+					
+			} 
+			catch (Exception e) 
+			{
+				System.err.println(e);
+			}
+			return(returnString);
 		}
+		
+		//method that returns true or false based on the 
+		//actions provided in the xml config file
+		public boolean processConfig (String elementName)
+		{
+			String nodeValue = xp.getNodeValue("process.xml", elementName);
+			System.out.println(" returned node for : "+elementName+" "+nodeValue);
+			if (nodeValue != null)
+			{
+				if ( nodeValue.trim().equals("true") )
+				{
+					return(true);
+				}
+				else
+				{
+					return(false);
+				}
+			}
+			else 
+			{
+				return(false);
+			}
+			
+		}
+		
 		
 		public JPanel exportDataStatus(JPanel panel)
 		{
@@ -139,6 +213,7 @@ public class ProcessProgressDisplay extends JFrame
 			projectExportStatus.setColumns(7);
 			projectExportStatus.setBackground(java.awt.Color.pink);
 			projectExportStatus.setText("pending");
+			exportDataSelectorPanel.setLayout(new FlowLayout(0,5,1));
 			exportDataSelectorPanel.add(exportDataSelector);
 			exportDataSelectorPanel.add(projectExportStatus);
 			panel.add(labelPanel);
@@ -149,9 +224,12 @@ public class ProcessProgressDisplay extends JFrame
 		public JPanel loadDatabaseStatus(JPanel panel)
 		{
 			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-			labelPanel = new JPanel();
-			labelPanel.setLayout(new FlowLayout(0,5,1));
-			labelPanel.add(loadDatabaseLabel);
+//			labelPanel = new JPanel();
+//			labelPanel.setLayout(new FlowLayout(0,5,1));
+//			labelPanel.add(loadDatabaseLabel);
+			loadRemoteDatabaseSelectorPanel.setLayout(new FlowLayout(0,5,1));
+			loadLocalDatabaseSelectorPanel.setLayout(new FlowLayout(0,5,1));
+			
 			loadLocalDatabaseSelector.setText("Load Local Database");
 			loadRemoteDatabaseSelector.setText("Load Remote Database");
 			loadLocalDatabaseSelectorPanel.add(loadLocalDatabaseSelector);
@@ -163,11 +241,15 @@ public class ProcessProgressDisplay extends JFrame
 			projectLoadRemoteStatus.setBackground(java.awt.Color.pink);
 			projectLoadRemoteStatus.setText("pending");
 			
+			
 			loadRemoteDatabaseSelector.setPreferredSize(new Dimension(220, 20));
 			loadLocalDatabaseSelector.setPreferredSize(new Dimension(220, 20));
 			
 			loadRemoteDatabaseSelectorPanel.add(loadRemoteDatabaseSelector);
 			loadRemoteDatabaseSelectorPanel.add(projectLoadRemoteStatus);
+			labelPanel = new JPanel();
+			labelPanel.setLayout(new FlowLayout(0,5,1));
+			labelPanel.add(loadDatabaseLabel);
 			panel.add(labelPanel);
 			panel.add(loadLocalDatabaseSelectorPanel);
 			panel.add(loadRemoteDatabaseSelectorPanel);
@@ -233,43 +315,43 @@ public class ProcessProgressDisplay extends JFrame
 		}
 		
 		
-		public void appendYellow(JPanel panel )
-		{
-			Container contentPane = getContentPane();
-			panel.remove(red_label);
-			panel.add(yellow_label);
-			contentPane.validate();
-			repaint();
-		}
+//		public void appendYellow(JPanel panel )
+//		{
+//			Container contentPane = getContentPane();
+//			panel.remove(red_label);
+//			panel.add(yellow_label);
+//			contentPane.validate();
+//			repaint();
+//		}
 			
-		public void appendGreen(JPanel panel )
-		{
-			Container contentPane = getContentPane();
-			panel.remove(yellow_label);
-			panel.add(green_label);
-			contentPane.validate();
-			repaint();
-		}
+//		public void appendGreen(JPanel panel )
+//		{
+//			Container contentPane = getContentPane();
+//			panel.remove(yellow_label);
+//			panel.add(green_label);
+//			contentPane.validate();
+//			repaint();
+//		}
 		
 		
 		
-		public void addPanelElement(String itemName)
-		{
-			setTitle("Progress ...");
-			Container contentPane = getContentPane();
-			contentPane.remove(button);
-			JPanel newElement = new JPanel();
-			newElement.setBackground(Color.white);
-			button = new JButton();
-			newElement.add(button);
-		//	Container contentPane =	getContentPane();
-	//		frame.getContentPane().add(newElement);
-			 getContentPane().add(newElement);
-			 //  pack();
-      //  setSize(375, 370);
-			contentPane.validate();
-			repaint();
-        
-		}
+//		public void addPanelElement(String itemName)
+//		{
+//			setTitle("Progress ...");
+//			Container contentPane = getContentPane();
+//			contentPane.remove(button);
+//			JPanel newElement = new JPanel();
+//			newElement.setBackground(Color.white);
+//			button = new JButton();
+//			newElement.add(button);
+//		//	Container contentPane =	getContentPane();
+//	//		frame.getContentPane().add(newElement);
+//			 getContentPane().add(newElement);
+//			 //  pack();
+//      //  setSize(375, 370);
+//			contentPane.validate();
+//			repaint();
+//        
+//		}
 	
 }
