@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *    '$Date: 2002-08-09 14:48:20 $'
- * 	'$Revision: 1.19 $'
+ *    '$Date: 2002-08-13 21:39:10 $'
+ * 	'$Revision: 1.20 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1016,14 +1016,14 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 	 * method to develope and issue the approporiate sql query 
 	 * to be issued against the plant taxonomy database
 	 *
-	 * @param transformedString -
+	 * @param transformedString - the string object containing the query elements
+	 * @param transformedStringNum -- the number of elements
 	 */
 	public void developSimplePlantTaxonomyQuery(String[] transformedString, 
 	int transformedStringNum)
 	{
 		try 
 		{
-			
 			System.out.println("sqlMapper > developSimplePlantTaxonomyQuery ");
 			//get the query elements into a hash table
 			getQueryElementHash(transformedString, transformedStringNum);
@@ -1038,10 +1038,12 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 			String taxonNameType = (String)queryElementHash.get("taxonNameType");
 			String taxonLevel = (String)queryElementHash.get("taxonLevel");
 			
-			//test the new class for doing all of what is currently in this method
+			String party = (String)queryElementHash.get("party");
+			String startDate = (String)queryElementHash.get("startDate");
+			String stopDate = (String)queryElementHash.get("stopDate");
+			
 			TaxonomyQueryStore tqs = new TaxonomyQueryStore();
-			Vector taxaResults = tqs.getPlantTaxonSummary(taxonName, taxonNameType, taxonLevel);
-			//Vector taxaResults = tqs.getPlantTaxonSummary(taxonName, taxonNameType);
+			Vector taxaResults = tqs.getPlantTaxonSummary(taxonName, taxonNameType, taxonLevel, party, startDate, stopDate);
 			queryOutputNum=taxaResults.size();
 			
 			//print the results by passing the summary vector to the xml writer class

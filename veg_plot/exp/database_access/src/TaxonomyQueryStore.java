@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-08-12 14:46:48 $'
- * '$Revision: 1.22 $'
+ *     '$Date: 2002-08-13 21:39:10 $'
+ * '$Revision: 1.23 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,28 +133,15 @@ import databaseAccess.*;
 				Statement query = conn.createStatement();
 				ResultSet results = null;
 				
-				//create and issue the query --
-				///if (taxonNameType.trim().equals("scientificName") )
-				///{
-					sqlBuf.append("SELECT plantname_id, plantconcept_id, plantName, ");
-					sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
-					sqlBuf.append(" plantlevel, parentName, acceptedsynonym, plantConceptRefAuthor, plantConceptRefDate, plantUsagePartyOrgName");
-					sqlBuf.append(" ,startDate, stopDate, plantNameAlias ");
-					sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"+taxonName.toUpperCase()+"'");
-				///}
-				///else if ( taxonNameType.trim().equals("commonName")  ) 
-				///{
-				///	sqlBuf.append("SELECT acceptedsynonym, plantnamestatus, ");
-				///	sqlBuf.append(" plantName, parentName, startDate, stopDate");
-				///	sqlBuf.append(" from VEG_TAXA_SUMMARY where plantName like '%"+taxonName+"%'");
-				///}
-				///else 
-				///{
-				///	System.out.println("TaxonomyQueryStore > unrecognized taxonNameType: "+taxonNameType);
-				///}
+				sqlBuf.append("SELECT plantname_id, plantconcept_id, plantName, ");
+				sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
+				sqlBuf.append(" plantlevel, parentName, acceptedsynonym, plantConceptRefAuthor, plantConceptRefDate, plantUsagePartyOrgName");
+				sqlBuf.append(" ,startDate, stopDate, plantNameAlias ");
+				sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"+taxonName.toUpperCase()+"'");
+
 				//issue the query
 				results = query.executeQuery( sqlBuf.toString() );
-			
+
 				//retrieve the results
 				while (results.next()) 
 				{
@@ -217,6 +204,9 @@ import databaseAccess.*;
 			System.out.println("TaxonomyQueryStore > returning results: " + returnVector.size()  );
 			return( returnVector );
 		}
+
+		
+		
 		
 		
 	/**
@@ -236,15 +226,27 @@ import databaseAccess.*;
 	 * 
  	 */
 		public Vector getPlantTaxonSummary(String taxonName, String taxonNameType,
-		String taxonLevel)
+		String taxonLevel, String party, String startDate, String stopDate)
 		{
 			Vector returnVector = new Vector();
 			try 
 			{
-				//connection stuff
+				// CONNECTION STUFF
 				Connection conn = this.getConnection();
 				Statement query = conn.createStatement();
 				ResultSet results = null;
+				
+				// MAKE SURE THE INPUT CRITERIA ARE OK
+				if (party == null || party.length() == 0 || party.trim().equals("null")){
+					party = "%";
+				}
+				if (startDate == null || startDate.length() <= 4 ){
+					startDate = "01-JAN-1900";
+				}
+				if (stopDate == null || stopDate.length() <= 4 ){
+					stopDate = "01-JAN-2100";
+				}
+				
 
 				//create and issue the query --
 				StringBuffer sqlBuf = new StringBuffer();
@@ -254,27 +256,19 @@ import databaseAccess.*;
 				sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
 				sqlBuf.append(" startDate, stopDate, plantNameAlias, plantConceptRefAuthor, plantConceptRefDate, plantUsagePartyOrgName  ");
 				sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"+taxonName.toUpperCase()+"'");
-			
-				System.out.println("TaxonQueryStore > taxonLevel: '"+taxonLevel+"' ");
-				//add the level in the heirachy
-				if ( ! taxonLevel.trim().equals("%") )
-				{
-					sqlBuf.append(" and upper(plantlevel) like  '"+taxonLevel.toUpperCase()+"'");
-				}
 				
-				System.out.println("TaxonQueryStore > taxonNameType: '"+taxonNameType+"' ");
-				//add the name type
-				if ( ! taxonNameType.trim().equals("%") ) 
-				{
-					sqlBuf.append(" and ( classsystem like '"+taxonNameType+"' ");
-					sqlBuf.append(" or  upper(classsystem) like '"+taxonNameType.toUpperCase()+"' ");
-					sqlBuf.append(")");
-				}
-				
-				// add the end quote
-				//sqlBuf.append(")");
-			
-			System.out.println("TaxonomyQueryStore > query: " + sqlBuf.toString() );	
+				// ADD THE PARTY ELEMENT
+				sqlBuf.append(" and upper(PLANTUSAGEPARTYORGNAME) like '%"+party.toUpperCase()+"%' ");
+				// ADD THE DATE RESTRICTION
+				sqlBuf.append(" and STARTDATE > '"+startDate+"' and STOPDATE < '"+stopDate+"'  ");
+				// ADD THE PLANTLEVEL 
+				sqlBuf.append(" and upper(PLANTLEVEL) like  '"+taxonLevel.toUpperCase()+"'");
+				// ADD THE NAME TYPE
+				sqlBuf.append(" and ( CLASSSYSTEM like '"+taxonNameType+"' ");
+				sqlBuf.append(" or  upper(CLASSSYSTEM) like '"+taxonNameType.toUpperCase()+"' ");
+				sqlBuf.append(")");
+
+				System.out.println("TaxonomyQueryStore > query: " + sqlBuf.toString() );	
 				results = query.executeQuery( sqlBuf.toString() );
 			
 				//retrieve the results
@@ -289,8 +283,8 @@ import databaseAccess.*;
 					String plantLevel = results.getString(7);
 					String parentName = results.getString(8);
 					String acceptedSynonym = results.getString(9);
-					String startDate = results.getString(10);
-					String stopDate = results.getString(11);
+					startDate = results.getString(10);
+					stopDate = results.getString(11);
 					String plantNameAlias = results.getString(12);
 					String plantConceptRefAuthor = results.getString(13);
 					String plantConceptRefDate = results.getString(14);
@@ -323,11 +317,8 @@ import databaseAccess.*;
 						comName, 
 						plantConceptRefAuthor, plantConceptRefDate, plantUsagePartyOrgName, 
 						scientificName);	
-						
 					returnVector.addElement(h);
-					//System.out.println("TaxonomyQueryStore > hash: " + h.toString()   );
 				}
-			
 				//remember to close the connections etc..
 				results.close();
 				query.close();
