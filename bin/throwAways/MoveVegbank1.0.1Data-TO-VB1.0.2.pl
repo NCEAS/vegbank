@@ -46,8 +46,8 @@ print "# Restore old 1.0.1 into $tempDB \n";
 print `psql -U $username  $tempDB < oldProduction_1.0.1-UTF-8.bak`;
 
 print "\n######################################################################\n";
-print "# ReSync keys and Pks tempDB ... and SLEEP until finished \n"; 
-print `./bin/ReSyncPKsWithSeqence.pl $tempDB`;
+print "# ReSync keys and Pks tempDB ... \n";
+print `./bin/ReSyncPKsWithSeqence.pl $tempDB $username`;
 
 print "\n######################################################################\n";
 print "# Modify $tempDB to fit new schema\n"; 
@@ -92,7 +92,7 @@ print `psql  -U $username  $finalDestinationDB  < vegbank101_102-WITHOUT_SEQUENC
 
 print "\n######################################################################\n";
 print "# ReSync sequences and Pks on $finalDestinationDB ... and SLEEP until finished \n"; 
-print `./bin/ReSyncPKsWithSeqence.pl $tempDB`;
+print `./bin/ReSyncPKsWithSeqence.pl $finalDestinationDB $username`;
 
 
 print "\n######################################################################\n";
@@ -124,7 +124,7 @@ print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes
 # ReSyncSequences and PKs
 print "\n######################################################################\n";
 print "# Just in case ReSync sequences and Pks on $finalDestinationDB ... and SLEEP until finished \n"; 
-print `./bin/ReSyncPKsWithSeqence.pl $tempDB`;
+print `./bin/ReSyncPKsWithSeqence.pl $finalDestinationDB $username`;
 
 
 print "\n######################################################################\n";
