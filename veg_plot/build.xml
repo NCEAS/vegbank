@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: anderson $'
-  *     '$Date: 2003-10-17 02:08:43 $'
-  *     '$Revision: 1.34 $'
+  *     '$Date: 2003-10-17 19:16:44 $'
+  *     '$Revision: 1.35 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -155,8 +155,10 @@
       <classpath refid="classpath.compilation"/>
     </javac>
 
-    <echo message="Compiling the RMI Stubs and Skeletons"/>
+    <echo message="NOT Compiling the RMI Stubs and Skeletons"/>
+    <!--
     <rmic classname="org.vegbank.plots.rmi.DataSourceImpl" base="${build.classes.dir}" />
+    -->
     
   </target>
 	
@@ -370,9 +372,12 @@
 		<ant dir="exp/services" target="clean"/>
 	</target>
 
-	<target name="cleanprops" depends="init" 
+	<target name="cleanprops" depends="init,prepare" 
 		description="=> Remove generated properties files">
-		<delete dir="${build.classes.dir}/*.properties"/>
+		<echo>cleanprops: removing old generated properties files</echo>
+		<delete>
+			<fileset dir="${build.classes.dir}" includes="**/*.properties"/>
+		</delete>
 	</target>
   
   <!-- ================================================================ -->
