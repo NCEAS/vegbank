@@ -10,8 +10,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-12-14 01:55:30 $'
-  *  '$Revision: 1.8 $'
+  *      '$Date: 2004-12-14 01:59:36 $'
+  *  '$Revision: 1.9 $'
   *
   *
   -->
@@ -135,9 +135,9 @@ function setNameMatchType() {
 		<input type="radio" name="matchType" value="any"/>contains ANY word
 				<br>
 		<input type="radio" name="matchType" value="is"/>is exactly
-			<span class="sizetiny">
-			(use % as a wildcard to match anything)
-			</span>
+				<span class="sizetiny">
+				(use % as a wildcard to match anything)
+				</span>
 				<br>
 		<input type="hidden" name="xwhereKey_plantname" value="xwhere_match"/>
 		<input type="hidden" name="xwhereSearch_plantname" value="true"/>
