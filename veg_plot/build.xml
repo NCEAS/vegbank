@@ -6,17 +6,54 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2002-12-06 18:40:55 $'
-  *     '$Revision: 1.4 $'
+  *     '$Date: 2002-12-27 21:24:07 $'
+  *     '$Revision: 1.5 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
-	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/" />
-    <property name="target" value="${target}" />
+	<property name="servlet_lib" 
+            value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/" />
+  <property name="target" value="${target}" />
       
-	<target name="compile" description="Compiles all code in veg_plot module">
+	
+  <target name="init" description="Initialize global variables">
+    <property environment="env" />
+    <property name="build.dir" value="${basedir}/build" />
+    <property name="doc.dir" value="${basedir}/doc"/>
+    <property name="build.test.dir" value="${build.dir}/test"/>
+    <property name="build.test.integration.dir"
+      value="${build.test.dir}/integration"/>
+    <property name="build.lib.dir" value="${build.dir}/lib"/>
+    <property name="reports.dir" value="${build.dir}/reports"/>
+    <property name="reports.test.dir" value="${reports.dir}/testreports"/>
+    <property name="src.dir" value="${basedir}/src" />
+    <property name="dist.dir" value="${basedir}/dist" />
+    <property name="test.dir" value="${basedir}/test" />
+    <property name="test.unit.src.dir" value="${test.dir}/Unit"/>
+    <property name="test.integration.dir" value="${test.dir}/Integration"/>
+    <property name="ant.style.dir" value="${env.ANT_HOME}/etc" /> 
+    <property name="web.docroot" value="${env.TOMCAT_HOME}/webapps" /> 
+    <property name="web.servlet.lib.dir"
+      value="${web.docroot}/framework/WEB-INF/lib" /> 
+
+    <filter token="reports.test.dir" value="${reports.test.dir}"/>
+    <filter token="outputXML" value="${web.servlet.lib.dir}/atomicResult"/>
+    <filter token="java1.4.home.dir" value="/usr/java/j2sdk1.4.1"/>   
+    <filter token="build.test.integration.dir"
+      value="${build.test.integration.dir}"/>
+    <filter token="" value=""/>
+    
+  </target>
+  
+  <target name="prepare" depends="init">
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.lib.dir}"/>
+  </target>
+  
+  <target name="compile" depends="prepare"
+          description="Compiles all code in veg_plot module">
 		<echo message="Compiling all of ${ant.project.name}"/>
-		<ant dir="exp/client_installer" target="compile"/>
+    <ant dir="exp/client_installer" target="compile"/>
 		<ant dir="exp/database_access" target="compile"/>
 		<ant dir="exp/data-translators" target="compile"/>
 		<ant dir="exp/rmidatasource" target="compile"/> 
@@ -27,9 +64,10 @@
 		<ant dir="exp/xml_to_sql" target="compile"/>
 	</target>
 	
-	<target name="jar" description="Generates all jars in veg_plot module">
+	<target name="jar" depends="compile"
+          description="Generates all jars in veg_plot module">
 		<echo message="Creating all of jars in ${ant.project.name}"/>
-		<ant dir="exp/database_access" target="dist"/> <!-- Change this target name -->
+		<ant dir="exp/database_access" target="jar"/>
 		<ant dir="exp/data-translators" target="jar"/>
 		<ant dir="exp/rmidatasource" target="jar"/> 
 		<ant dir="exp/services" target="jar"/>
@@ -40,7 +78,8 @@
 		<ant dir="exp/xml_to_sql" target="jar"/>
 	</target>
 	
-	<target name="deploy" description="Deploys jars in veg_plot module to servlet container">
+	<target name="deploy" depends="jar"
+          description="Deploys jars in veg_plot module to servlet container">
 		<echo message="Distr all of jars in ${ant.project.name}"/>
 		<ant dir="exp/database_access" target="dist-web"/> 
 		<ant dir="exp/data-translators" target="dist"/>
@@ -57,13 +96,17 @@
 	<target name="deploy-resources" description="Deploy resources to servlet container">
 		<!-- Copy xml resources to servlet container -->
 		<copy todir="${servlet_lib}">
-			<fileset dir="xml" includes="querySpec.xsl, plotQuery.dtd"/>
+			<fileset dir="xml" includes="querySpec.xsl, plotQuery.dtd,
+      ascii-treeview.xsl, showCommunitySummary.xsl"/>
 		</copy>
+    
 		<copy file="src/utilities/coord_transform.sh" todir="${servlet_lib}"/>
 	</target>
 
 	<target name="clean" description="Remove all generated files">
-		 <ant dir="exp/client_installer" target="clean"/>
+    <delete dir="${build.dir}"/>
+  
+		<ant dir="exp/client_installer" target="clean"/>
 		<ant dir="exp/database_access" target="clean"/>
 		<ant dir="exp/data-translators" target="clean"/>
 		<ant dir="exp/rmidatasource" target="clean"/> 
@@ -73,12 +116,96 @@
 		<ant dir="exp/xml-resource" target="clean"/>
 		<ant dir="exp/xml_to_sql" target="clean"/>
 	</target>
+  
 	<!-- Want to pass command line variables in ant but no working yet	
 	<target name="database_access">
 		<echo message="Going to call ${target} "/>
 		<ant dir="exp/database_access" target="${target}"/>		
 	</target>
 	-->
-	
+  
+  <target name="test" depends="prepare" 
+          description="Run all the junit tests">
+    
+    <property name="build.test.classes.dir" value="${build.test.dir}/classes"/>
+    <mkdir dir="${build.test.dir}"/>
+    <mkdir dir="${reports.test.dir}"/>
+    <mkdir dir="${build.test.classes.dir}"/>
+    <mkdir dir="${build.test.dir}/src"/>
+    <mkdir dir="${build.test.dir}/testdata"/>
+
+    <!-- Copy testdata into build tree -->
+    <copy todir="${build.test.dir}/testdata">
+      <fileset dir="${test.dir}/TestData">
+        <include name="*xml"/>
+      </fileset>
+    </copy>
+    
+    <!-- copy and compile the tests into a jar file -->
+    <copy todir="${build.test.dir}/src">
+      <fileset dir="${test.unit.src.dir}">
+        <include name="**/*java"/>
+      </fileset>
+    </copy>
+    
+    <javac srcdir="${test.unit.src.dir}"
+           destdir="${build.test.classes.dir}"
+           classpath="${cpath}:${lib}/database_access.jar"
+           includes="**/*.java" />
+
+    <jar jarfile="${build.lib.dir}/${ant.project.name}-junittests.jar"
+         basedir="${build.test.classes.dir}"
+         includes="**/*.class" />
+
+    <!-- use the ant "junit" task to run JUnit tests. -->
+    <junit printsummary="yes" haltonfailure="no" fork="no"
+           haltonerror="no">
+      <classpath>
+        <pathelement path="${cpath}"/>
+        <fileset dir="${build.lib.dir}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+      
+      <formatter type="xml" />
+
+      <batchtest fork="yes" todir="${reports.test.dir}">
+        <fileset dir="${build.test.classes.dir}">
+          <include name="**/*.class" />
+        </fileset>
+      </batchtest>
+    </junit>
+
+  </target>
+
+  <target name="dist-testreport" depends="test" 
+          description="Generate a html and distribute a report from tests output">
+
+    <!-- Create a report from the junit output -->
+    <junitreport todir="${reports.test.dir}">
+      <fileset dir="${reports.test.dir}">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="noframes" todir="${web.docroot}/vegbank/" styledir="${ant.style.dir}"/> 
+    </junitreport>
+
+  </target>
+ 
+  <target name="test-integration" depends="prepare"
+          description="Run Integration Tests">
+    
+    <property name="build.test.integration.dir" value="${build.test.dir}/integration"/>
+    <mkdir dir="${build.test.integration.dir}"/>
+
+    <copy todir="${build.test.integration.dir}" filtering="yes">
+      <fileset dir="${test.integration.dir}">
+        <include name="*sh"/>
+        <include name="*xsl"/>
+      </fileset>
+    </copy>
+    
+    <exec executable="${build.test.integration.dir}/LoadPlotTest.sh"/>
+  
+  </target>
 </project>
 
