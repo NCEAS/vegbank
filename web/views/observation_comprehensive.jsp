@@ -90,7 +90,30 @@
 </logic:notEmpty>
 
 </TD>
-</TR><TR><TD colspan="2" valign="top" align="left">
+</TR>
+<!-- obs contrib -->
+<TR><TD COLSPAN="2">
+<vegbank:get id="observationcontributor" select="observationcontributor" beanName="map" pager="false" where="where_observation_pk" wparam="observation_pk" perPage="-1" />
+<table class="leftrightborders" cellpadding="2">
+<tr><th colspan="9">Observation Contributors:</th></tr>
+<logic:empty name="observationcontributor-BEANLIST">
+<tr><td class="@nextcolorclass@">  Sorry, no Observation Contributors found.</td></tr>
+</logic:empty>
+<logic:notEmpty name="observationcontributor-BEANLIST">
+<tr>
+<%@ include file="autogen/observationcontributor_summary_head.jsp" %>
+</tr>
+<logic:iterate id="onerowofobservationcontributor" name="observationcontributor-BEANLIST">
+<tr class="@nextcolorclass@">
+<%@ include file="autogen/observationcontributor_summary_data.jsp" %>
+</tr>
+</logic:iterate>
+</logic:notEmpty>
+</table>
+</TD></TR>
+
+
+<TR><TD colspan="2" valign="top" align="left">
 <!-- community info -->
 <vegbank:get id="commclass" select="commclass" beanName="map" 
     where="where_observation_pk" wparam="observation_pk" pager="false"/>
