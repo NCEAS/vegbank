@@ -6,9 +6,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: mlee $'
-  *      '$Date: 2003-02-01 18:21:50 $'
-  *  '$Revision: 1.17 $'
+  *    '$Author: farrell $'
+  *      '$Date: 2003-05-01 18:33:15 $'
+  *  '$Revision: 1.18 $'
   *
   *
   -->
@@ -36,11 +36,11 @@ MM_reloadPage(true);
 <body BGCOLOR="#FFFFFF" text="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
 @vegbank_header_html_normal@
 
-<form action= "/framework/servlet/dataexchange" enctype="multipart/form-data" method="post">
+<form action= "@datasubmitservlet@" enctype="multipart/form-data" method="post">
 <input type="hidden" name="submitDataType" value="vegPlot">
 <input type="hidden" name="action" value="upload">		
 <input type="hidden" name="referPage" value="continue with the plot upload wizard">
-<input type="hidden" name="referUrl" value="@datasubmitservlet@/?action=upload&submitDataType=vegPlot">
+<input type="hidden" name="referUrl" value="@datasubmitservlet@?action=upload&submitDataType=vegPlot">
 
 
 

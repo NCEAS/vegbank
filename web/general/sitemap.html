@@ -57,7 +57,7 @@ if (restore) selObj.selectedIndex=0;
 	   <li>Policy</li>
 	   <ul class="constsize">
 	   <li>Citation of VegBank data</li>
-	   <li><a href="/forms/certification.html">Certification</a></li>
+	   <li><a href="/vegbank/forms/certification.html">Certification</a></li>
 	   <li><a href="/vegbank/general/terms.html">Intellectual property</a></li>
 	   <li><a href="/vegbank/general/privacy.html">Privacy</a></li>
 	   </ul>
@@ -246,23 +246,23 @@ if (restore) selObj.selectedIndex=0;
     <ul class="constsize">
 	    <li><a href="/vegbank/general/plots.html">Access or submit Plot data</a></li>
 	      <ul class="constsize">
-            <li><a href="/forms/plot-query.html">Simple Query</a> <font color="red">redesign(v1.0)</font> 
-              | <a href="/forms/nested-plot-query.html">Nested (Advanced) Query</a> 
+            <li><a href="/vegbank/forms/plot-query.html">Simple Query</a> <font color="red">redesign(v1.0)</font> 
+              | <a href="/vegbank/forms/nested-plot-query.html">Nested (Advanced) Query</a> 
               <font color="red">redesign(v1.0)</font></li>
-            <li>View plot : overview<font color="red">(v1beta)</font> | <a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=full&queryType=simple&plotId=1">extended</a></li>
+            <li>View plot : overview<font color="red">(v1beta)</font> | <a href="@datarequestservlet@?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=full&queryType=simple&plotId=1">extended</a></li>
             <ul class="constsize">
               <li>Add interpretation of plant in plot<font color="red">(v1.1)</font></li>
               <li>Assign a plot to a community<font color="red">(v1.1)</font></li>
               <li>Create a note about a field in a plot<font color="red">(v2.0)</font></li>
             </ul>
-            <li><a href="/forms/resultset-download.html">Export plots</a><font color="red"> 
+            <li><a href="/vegbank/forms/resultset-download.html">Export plots</a><font color="red"> 
               redesign(v1.0)</font></li>
 			  <ul class="constsize">
 			    
               <li>Formats: ASCII, HTML , XML <font color="red">(redesign v2.0)</font>, 
                 VegBranch <font color="red">(v3.0)</font>, User specified <font color="red">(v2.0)</font>, TurboVeg <font color="red">(v3.0)</font>
             </ul>
-            <li><a href="/framework/servlet/DataSubmitServlet?submitDataType=vegPlot&action=preinit">Load 
+            <li><a href="@datasubmitservlet@?submitDataType=vegPlot&action=preinit">Load 
               Plot Data</a></li>
             <ul class="constsize">
 			  <li>Formats: NPS, VegBranch, XML <font color="red">(redesign v2.0)</font>, TurboVeg <font color="red">(v2.0)</font></li>
@@ -283,31 +283,31 @@ if (restore) selObj.selectedIndex=0;
 			  <li>Fix an error in your plot (revision)<font color="red">(v3.0)</font></li>
 			  <li>Grant a user permission to view your confidential plot(s)<font color="red">(v2.0)</font></li>
 			 </ul>
-            <!--	  <li><a href="/forms/uploadFile.html" Upload plot data</li> -->
+            <!--	  <li><a href="/vegbank/forms/uploadFile.html" Upload plot data</li> -->
             <li>Project search and summary<font color="red">(v2.0)</font></li>
           </ul>
 		<li><a href="/vegbank/general/types.html">Access or submit Community Type data</a></li>
 		  <ul class="constsize">
-            <li><a href="/forms/community-query.html">Query Communities</a><font color="red"> 
+            <li><a href="/vegbank/forms/community-query.html">Query Communities</a><font color="red"> 
               update(v1.0)</font></li>
-            <li><a href="/forms/community-submit.html">Create a new Community Type</a><font color="red"> 
+            <li><a href="/vegbank/forms/community-submit.html">Create a new Community Type</a><font color="red"> 
               update(v1.0)</font></li>
             <li>Bulk load new Community Types <font color="red">(v2.0)</font></li>
-			<li><a href="/forms/community-correlate.html">Correlate your type 
+			<li><a href="/vegbank/forms/community-correlate.html">Correlate your type 
               with an NVC Type</a></li>
             <li>Manage your party perspective on Community Types <font color="red">(v2.0)</font></li>
           </ul>
 		<li><a href="/vegbank/general/plants.html">Access or submit Plant Taxon data</a></li>
 		<ul class="constsize">
-		  <li><a href="/forms/plant-query.html">Query Plants</a><font color="red"> update(v1.0)</font></li> 
-		  <li><a href="/forms/plant-submit.html">Enter a new Plant</a><font color="red"> update(v1.0)</font></li>
+		  <li><a href="/vegbank/forms/plant-query.html">Query Plants</a><font color="red"> update(v1.0)</font></li> 
+		  <li><a href="/vegbank/forms/plant-submit.html">Enter a new Plant</a><font color="red"> update(v1.0)</font></li>
 		  <li>Bulk load new Plants <font color="red">(v2.0)</font></li>
           <li>Manage your party perspective on Plants <font color="red">(v2.0)</font></li>
 		</ul>
-		<li><a href="/framework/servlet/usermanagement?action=changeusersettings">Edit your VegBank Profile</a></li> 
-		<li><a href="/forms/certification.html">Apply to become a Certified VegBank User</a></li> 
+		<li><a href="@usermanagement_servlet@?action=changeusersettings">Edit your VegBank Profile</a></li> 
+		<li><a href="/vegbank/forms/certification.html">Apply to become a Certified VegBank User</a></li> 
 		  <ul class="constsize">
-            <li><a href="/forms/hints.html#certification">Certification Help</a></li>
+            <li><a href="/vegbank/forms/hints.html#certification">Certification Help</a></li>
             <li>View registry of certified users <font color="red">(v2.0)</font></li>
           </ul>	
 	</ul>

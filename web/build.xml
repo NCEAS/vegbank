@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2003-05-01 07:47:20 $'
-* '$Revision: 1.39 $'
+* '$Author: farrell $'
+* '$Date: 2003-05-01 18:33:14 $'
+* '$Revision: 1.40 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -47,13 +47,12 @@
     <property name="image_src" value="./images"/>
     <property name="hostname" value="vegbank"/>
     <property name="sharedhtml_src" value="./sharedhtml"/>
-    <property name="lrg_binary_src" value="/home/lee/VegBranchReleases"/>
     <filter token="dist" value="dist"/>
     <filter token="hostname" value="${hostname}"/>
     <filter token="version" value="development"/>
     <!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
     <property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
-    <property name="forms_server" value="${tomcat.home.dir}/webapps/forms"/>
+    <property name="forms_server" value="${tomcat.home.dir}/webapps/vegbank/forms"/>
     <property name="image_server" value="${tomcat.home.dir}/webapps/vegbank/images"/>
     <property name="general_server" value="${tomcat.home.dir}/webapps/vegbank/general/"/>
     <property name="design_server" value="${tomcat.home.dir}/webapps/vegbank/design/"/>
@@ -65,24 +64,25 @@
     <property name="style_server" value="${tomcat.home.dir}/webapps/vegbank/includes/"/>
     <property name="vegbank_server" value="${tomcat.home.dir}/webapps/vegbank/"/>
     <property name="server_root" value="${tomcat.home.dir}/webapps/ROOT/"/>
-    <property name="framwork.lib.dir" value="${tomcat.home.dir}/webapps/framework/WEB-INF/lib"/>
+    <property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/vegbank/WEB-INF/lib"/>
     <!-- WEB SERVER LOCATIONS -->
     <filter token="base_url" value=""/>
     <filter token="image_server" value="/vegbank/images/"/>
     <filter token="stylesheet" value="/vegbank/includes/default.css"/>
-    <filter token="plotquery_page" value="/forms/plot-query.html"/>
-    <filter token="nestedplotquery_page" value="/forms/nested-plot-query.html"/>
-    <filter token="uploaddata_page" value="/forms/uploadFile.html"/>
-    <filter token="stylesheet_generator" value="/forms/stylesheet-generator.html"/>
+    <filter token="plotquery_page" value="/vegbank/forms/plot-query.html"/>
+    <filter token="nestedplotquery_page" value="/vegbank/forms/nested-plot-query.html"/>
+    <filter token="uploaddata_page" value="/vegbank/forms/uploadFile.html"/>
+    <filter token="stylesheet_generator" value="/vegbank/forms/stylesheet-generator.html"/>
     <filter token="general_link" value="/vegbank/general/"/>
     <filter token="panel_link" value="/vegbank/panel/"/>
     <!-- SERVLETS -->
-    <filter token="stylesheet_generator_servlet" value="/framework/servlet/stylesheetgenerator"/>
-    <filter token="usermanagement_servlet" value="/framework/servlet/usermanagement"/>
-    <filter token="datarequestservlet" value="/framework/servlet/DataRequestServlet"/>
-    <filter token="datasubmitservlet" value="/framework/servlet/DataSubmitServlet"/>
-    <filter token="nestedquerybuilder" value="/framework/servlet/QueryBuilderServlet"/>
-    <filter token="authenticationservlet" value="/framework/servlet/authenticate"/>
+    <filter token="framework_servlet" value="/vegbank/servlet/framework"/>
+    <filter token="stylesheet_generator_servlet" value="/vegbank/servlet/stylesheetgenerator"/>
+    <filter token="usermanagement_servlet" value="/vegbank/servlet/usermanagement"/>
+    <filter token="datarequestservlet" value="/vegbank/servlet/DataRequestServlet"/>
+    <filter token="datasubmitservlet" value="/vegbank/servlet/DataSubmitServlet"/>
+    <filter token="nestedquerybuilder" value="/vegbank/servlet/QueryBuilderServlet"/>
+    <filter token="authenticationservlet" value="/vegbank/servlet/authenticate"/>
     <!-- FIXME: Should be in a prepare target -->
     <mkdir dir="${tomcat.home.dir}/webapps/vegbank/"/>
   </target>
@@ -94,19 +94,20 @@
     <!-- set the properties file as a filtersfile to distribute headers and footers -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
   </target>
+  
   <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
   <target name="includes" depends="init" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
     <copy todir="${style_server}" filtering="no">
-      <fileset dir="${style_src}">
-        <include name="**.css"/>
-      </fileset>
+      <fileset dir="${style_src}" includes="**.css **/*jsp"/>
     </copy>
   </target>
-  <target name="index" depends="hdrftr" description="=&gt; target to dist. the index.html file">
+  
+  <target name="index" depends="hdrftr" description="target to dist. the index.html file">
     <copy tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
     <!-- add to second webpage at root/vegbank/index.html -->
     <copy todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
   </target>
+  
   <!-- DISTRIBUTE THE IMAGES -->
   <target name="images" depends="init" description="=&gt; dist. the images to server">
     <copy todir="${image_server}" filtering="no">
@@ -133,9 +134,6 @@
       <fileset dir="${panel_src}">
         <include name="*.html"/>
       </fileset>
-    </copy>
-    <copy todir="${panel_server}" filtering="no">
-      <fileset dir="${lrg_binary_src}" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip   "/>
     </copy>
   </target>
   <!--
@@ -169,47 +167,7 @@
 -->
   <target name="forms" depends="hdrftr" description="=&gt; dist the (specific list of) forms to server ">
     <copy todir="${forms_server}" filtering="yes">
-      <fileset dir="${forms}" includes="*jsp
-      nested-plot-query.html
-			resultset-download.html
-			plot-query.html
-			plant-query.html
-			plant-name-lookup.html
-			utilities.html
-			stylesheet-generator.html
-			community-submit.html
-			community-submit_valid.html
-			community-correlate.html
-			community-query.html
-			plot-submit.html
-			plot-upload.html
-			plot-submit-select.html
-			fetch-password.html
-			hints.html
-			plant-submit.html
-			plant-submit-template.html
-			plant-submit_valid.html
-			sw-download.html
-			redirection_template.html
-			certification.html
-			certification_valid.html
-			generic_form.html
-			user_update_form.html
-			user_update_password_form.html
-			submit-plantname-init.html
-			submit-plantname-rectification.html
-			submit-plantname-reference.html
-			submit-plantconcept.html
-			submit-plantstatususage.html
-			submit-plantcorrelation.html
-			submit-plantsubmittal-receipt.html" excludes="**/CVS* "/>
-    </copy>
-    <copy todir="${forms_server}" filtering="yes">
-      <fileset dir="${forms}">
-        <!-- FIXME: html handled in previous copy , is there a point to listing
-      all the files explicitly ??? -->
-        <exclude name="**/*html"/>
-      </fileset>
+      <fileset dir="${forms}" includes="*jsp *html" excludes="**/CVS* "/>
     </copy>
   </target>
   <!--
@@ -237,8 +195,8 @@
   <!--
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
 -->
-  <target name="xsl" depends="hdrftr" description="=&gt; dist the xsl dir to server">
-    <copy todir="${framwork.lib.dir}" filtering="yes">
+  <target name="xsl" depends="hdrftr">
+    <copy todir="${vegbank.lib.dir}" filtering="yes">
       <fileset dir="${xsl.src.dir}"/>
     </copy>
   </target>
