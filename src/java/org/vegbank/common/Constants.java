@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-12-03 02:00:55 $'
- *	'$Revision: 1.6 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-12-05 23:32:49 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ public interface Constants
 			
 	public static final String USAGE_NAME_SCIENTIFIC = "Scientific"; 
 	public static final String USAGE_NAME_SCIENTIFIC_NOAUTHORS = "Scientific without authors";
-	public static final String USAGE_NAME_CODE = "Code";  
+	public static final String USAGE_NAME_CODE = "Code";
 	public static final String USAGE_NAME_COMMON = "English Common"; 
 	
 	public static final String USAGE_NAME_STATUS_STANDARD =  "Standard";
@@ -56,6 +56,11 @@ public interface Constants
 	public static final String CONCEPT_STATUS_ACCEPTED = "accepted";
 	public static final String CONCEPT_STATUS_NOT_ACCEPTED = "not accepted";
 
+	// For the web application
 	public static final String USER_KEY = "USER";
-	public static final String GUEST_USER_KEY = "GUEST";
+	public static final String GUEST_USER_KEY = "GUESTUSER@VEGBANK.ORG";
+	
+	// Application Scope Beans
+	public static final String STATELISTBEAN_KEY = "statelistbean"; 
+	public static final String COUNTRYLISTBEAN_KEY = "countrylistbean";;
 }
