@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-07-10 17:10:11 $'
- * '$Revision: 1.16 $'
+ *     '$Date: 2002-07-11 16:17:39 $'
+ * '$Revision: 1.17 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 import java.sql.*;
-
 import databaseAccess.*;
 
 /**
@@ -72,7 +71,7 @@ import databaseAccess.*;
 	
 	/**
 	 * this method will return near matches for a given taxon name using the 
-	 * logic the Mik Lee and J Harris came up with on June 8, 2002
+	 * logic the Mike Lee and J Harris came up with on June 8, 2002
 	 * @param name -- the plant name
 	 * @return v -- a vector with the near matches
 	 */
@@ -220,7 +219,6 @@ import databaseAccess.*;
 	 * include: scientificName, commonName, symbolCode (the usda code)
 	 * @param taxonLevel -- the level in the heirarchy (eg, species, genus)
 	 * 
-	 *
  	 */
 		public Vector getPlantTaxonSummary(String taxonName, String taxonNameType,
 		String taxonLevel)
@@ -240,13 +238,23 @@ import databaseAccess.*;
 				sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
 				sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
 				sqlBuf.append(" startDate, stopDate, plantNameAlias  ");
-				sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"
-				+taxonName.toUpperCase()+"'");
+				sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"+taxonName.toUpperCase()+"'");
+				
 				//add the level in the heirachy
-				sqlBuf.append(" and upper(plantlevel) like  '"+taxonLevel.toUpperCase()+"'");
+				if ( ! taxonLevel.trim().equals("%") )
+				{
+					sqlBuf.append(" and upper(plantlevel) like  '"+taxonLevel.toUpperCase()+"'");
+				}
+				
 				//add the name type
-				sqlBuf.append(" and ( classsystem like '"+taxonNameType+"' ");
-				sqlBuf.append(" or  upper(classsystem) like '"+taxonNameType.toUpperCase()+"' )");
+				if ( taxonNameType.trim().equals("%") ) 
+				{
+					sqlBuf.append(" and ( classsystem like '"+taxonNameType+"' ");
+					sqlBuf.append(" or  upper(classsystem) like '"+taxonNameType.toUpperCase()+"' ");
+				}
+				
+				// add the end quote
+				sqlBuf.append(")");
 				
 				results = query.executeQuery( sqlBuf.toString() );
 			
