@@ -1,4 +1,4 @@
-BACKUP_DIR=/usr/local/backup/vegbank
+BACKUP_DIR=/usr/vegbank/backup/
 TS=`date +%d%b%G`
 BACKUP_FILE_PATH=$BACKUP_DIR/vegbank$TS.sql
 PG_DUMP=pg_dump
