@@ -118,10 +118,12 @@ WRITING TO:<xsl:value-of select="concat($vers,'Help.',$pathSoFar,'.',name,$htmls
  </xsl:template>
   
   <xsl:template name="writehtmlhead">
-    <head>
+   @webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
       <title>VegBranch help</title>
-      <link rel="stylesheet" type="text/css" href="@stylesheet@" />
-    </head>
+  @webpage_masthead_html@
+   
   </xsl:template>
   
   <xsl:template name="getCtls">

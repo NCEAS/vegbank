@@ -20,12 +20,11 @@
    <xsl:variable name="CurrEnt" select="../entityName" />
    <xsl:variable name="fieldhtmlpart"><xsl:if test="string-length($CurrentField)&gt;0">~field~<xsl:value-of select="translate($CurrentField,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')" /></xsl:if></xsl:variable>
   <redirect:write file="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}{$fieldhtmlpart}~type~tableview.html"> 
- <head>
-    <link rel="stylesheet" href="@stylesheet@" type="text/css"/> 
-       <title>VegBank Data Dictionary - table view: <xsl:value-of select="../entityName" /></title>
-    </head>
-    <body>
-    @vegbank_header_html_normal@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+   <title>VegBank Data Dictionary - table view: <xsl:value-of select="../entityName" /></title>
+     @webpage_masthead_html@
       <h2>
         <a  href="{$htmlPrefix}-index.html">VegBank data dictionary</a>
       </h2>
@@ -179,9 +178,9 @@
       <p>
         <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
       </p> 
-@vegbank_footer_html_tworow@
+@webpage_footer_html@
 
-    </body>
+
 </redirect:write> 
 
   </xsl:template>

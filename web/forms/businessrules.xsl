@@ -2,25 +2,24 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  xmlns:vegbank="none"  xmlns:logic="none"  xmlns:bean= "none" xmlns:fo="http://www.w3.org/1999/XSL/Format">
 <xsl:output method="xml" encoding="UTF-8" />
 <xsl:template match="/">
-  @stdvegbankget_jspdeclarations@
-
-<html>
-<HEAD>
-@defaultHeadToken@
  
+
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
 <TITLE>View VegBank Business Rules</TITLE>
-<link type="text/css" href="@stylesheet@" rel="stylesheet"/>
-</HEAD>
-<body>@vegbank_header_html_normal@  @possibly_center@
+  @webpage_masthead_html@
+
+  @possibly_center@
 <h1>View VegBank Business Rules: current status</h1>
 <!--Get standard declaration of rowClass as string: -->
         @subst_lt@% String rowClass = "evenrow"; %@subst_gt@
   
   
   <xsl:apply-templates />
-<p>THIS IS THE END OF THIS BUSINESS RULES CHECKING DOCUMENT.  Since the page loads slowly, this message may be helpful.</p>
-  </body>
-  </html>
+
+  @webpage_footer_html@
+
 </xsl:template>
 <xsl:template match="busRule">
 <a name="{sqlSrc}">  </a>  

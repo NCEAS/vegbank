@@ -12,12 +12,13 @@
   <xsl:template match="/dataModel">
   <xsl:for-each select="entity/attribute" >
  <redirect:write file="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">
-    <head>@defaultHeadToken@
+   @webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+
  <title>VegBank Data Dictionary - field view : <xsl:value-of select="../entityName" />.<xsl:value-of select="attName" /></title>
-<link rel="stylesheet" href="@stylesheet@" type="text/css" />
-    </head>
-    <body>
-    @vegbank_header_html_normal@
+
+    @webpage_masthead_html@
 
       <h2>
         <a  href="{$htmlPrefix}-index.html">VegBank data dictionary</a>
@@ -191,9 +192,8 @@
               <!--        <tr bgcolor="#{$RowColor}"> -->
             </table>
       <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>
-@vegbank_footer_html_tworow@
+@webpage_footer_html@
 
-    </body>
 </redirect:write>
 </xsl:for-each> <!-- table -->
   </xsl:template>

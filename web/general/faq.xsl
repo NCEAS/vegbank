@@ -2,8 +2,9 @@
   <!--capture the information to be put in the name table-->
   <xsl:output method="html"/>
 <xsl:template match="/faq">
-<HTML>
-  <HEAD>@defaultHeadToken@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
  <style type="text/css">
  .local_yellow {background-color : #FFFFCC }	
   .local_white {background-color : #FFFFFF }	
@@ -21,12 +22,11 @@
 	</xsl:for-each>
 }
  </script>
+
 <TITLE>VegBank FAQ</TITLE>
-    <link rel="stylesheet" href="http://vegbank.org/vegbank/includes/default.css" type="text/css"/>
-    <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
-  </HEAD>
-  <BODY>
-@vegbank_header_html_normal@
+  @webpage_masthead_html@
+
+
 <table width="799"><tr><td>
 <h1 align="center">VegBank FAQ</h1>
     <h4 align="center">Frequently Asked Questions about the VegBank database and website</h4>
@@ -51,18 +51,17 @@
 
 <xsl:apply-templates />
 
-@vegbank_footer_html_tworow@
+@webpage_footer_html@
 <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p>
 <p> <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>
 <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p>
+<p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><!-- extra space at bottom so # targets work -->
 
-<h1><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </h1><h1><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </h1><h1><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </h1><h1><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </h1><h1><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </h1><h1><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </h1><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><!-- extra space at bottom so # targets work -->
+<p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p>
 
-<h1><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </h1><h1><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </h1><h1><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </h1><h1><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </h1><h1><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </h1><h1><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </h1><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p>
 <p>This space is intentionally left blank so that bookmarks on this page will take you to the correct part of the FAQ.</p>
 </td></tr></table>
-</BODY>
-</HTML>
+
 </xsl:template> <!-- root -->
 
 <xsl:template match="question">

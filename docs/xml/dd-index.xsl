@@ -3,22 +3,11 @@
   <xsl:param name="htmlPrefix">datadictionary</xsl:param>
   <xsl:output method="xml" omit-xml-declaration="no" encoding="UTF-8"/>
   <xsl:template match="/dataModel">
-    <html>
-    <head>@defaultHeadToken@
-<title>VegBank Data Dictionary -- Index</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<script language="JavaScript">
-
-function MM_jumpMenu(targ,selObj,restore){ //v3.0
-  eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
-  if (restore) selObj.selectedIndex=0;
-}
-
-</script>
- 
-<link rel="stylesheet" href="@stylesheet@" type="text/css" />
-</head>
-@vegbank_header_html_normal@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+  <title>VegBank Data Dictionary Index</title>
+  @webpage_masthead_html@
     <h2>VegBank Data Dictionary Index</h2>
     <p>See the <a href="{$htmlPrefix}-guide.html">data dictionary guide</a> for more information on how to interpret the information in the data dictionary.</p>
     <table border="1" cellpadding="0" cellspacing="0">
@@ -55,7 +44,6 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
             </xsl:for-each>
 </table>
  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p> 
-@vegbank_footer_html_tworow@
-    </html>
+@webpage_footer_html@
   </xsl:template>
 </xsl:stylesheet>

@@ -3,22 +3,12 @@
   <xsl:param name="htmlPrefix">datadictionary</xsl:param>
   <xsl:output method="html"/>
   <xsl:template match="/dataDictionaryKey">
-    <head>@defaultHeadToken@
-      <style type="text/css">
-  td , th , p
-  {
-  font-family: verdana, arial, sans-serif  ;
-  font-size:smaller
-  }
-  h2
-  {
-  font-family:georgia, Times New Roman,  times, serif 
-  }
-</style>
-<link rel="stylesheet" href="@stylesheet@" type="text/css" />
-    </head>
-    <body>
-    @vegbank_header_html_normal@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+  <title>VegBank Data Dictionary Key</title>
+  @webpage_masthead_html@ 
+
 
       <h2>
      <a name="top" /> VegBank data dictionary - guide
@@ -66,8 +56,8 @@ Jump to :
         <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>        <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>              
  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>  <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p> </xsl:for-each>
       <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>
-@vegbank_footer_html_tworow@
+@webpage_footer_html@
 
-</body>
+
 </xsl:template>
 </xsl:stylesheet>
