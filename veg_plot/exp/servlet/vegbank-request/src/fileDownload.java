@@ -60,8 +60,13 @@ public class fileDownload extends HttpServlet
 	private ServletUtility sutil; 
 	private GetURL gurl;
 	private transformXML transformer; 
-	private String asciiStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl";
+	
 	private String htmlStyleSheet =  "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl";
+	
+	//below are the stylesheets for the flat ascii file tarnsformation process 
+	private String asciiSitesStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotsites-flatascii.xsl";
+	private String asciiSpeciesStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotspecies-flatascii.xsl";
+	
 	
 	/**
 	 * constructor method -- just to show status on startup
@@ -289,14 +294,20 @@ public class fileDownload extends HttpServlet
 	private void dataTransformer (String plotFile, String formatType) 
 	{
 		String workFile = "/tmp/filedownload-work.txt";
+		String workFile2 = "/tmp/filedownload-work-species.txt";
 		try
 		{
+			// the user wants to transform to a flat file -- which is actually two files 
+			// one with the 
 			if ( formatType.equals("flat") )
 			{
-				System.out.println("fileDownload > transforming data to flat-ascii");
-				transformer.transformXMLDocumentToFile(plotFile,asciiStyleSheet,workFile);
+				System.out.println("fileDownload > transforming data to flat-ascii -- sites");
+				transformer.transformXMLDocumentToFile(plotFile, asciiSitesStyleSheet, workFile);
+				System.out.println("fileDownload > transforming data to flat-ascii -- species");
+				transformer.transformXMLDocumentToFile(plotFile, asciiSpeciesStyleSheet, workFile2);
 				//copy the work file to the target file
 				sutil.fileCopy(workFile, cummulativeResultSet, "append");
+				sutil.fileCopy(workFile2, cummulativeResultSet, "concat");
 			}
 			else if ( formatType.equals("html") ) 
 			{
