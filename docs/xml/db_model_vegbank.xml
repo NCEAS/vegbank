@@ -8451,20 +8451,20 @@ conditions may change between resampling events.
       <attNotes>Foreign key into the plot table.</attNotes>
       <attDefinition>Link to a specific plot.</attDefinition>
       <attForms>
-        <formShow name="Summary">892</formShow>
         <formShow name="Detail">893</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
     <attribute>
       <attName>calculated</attName>
-      <attLabel>Calculated</attLabel>
+      <attLabel>Calculated?</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN calculated THEN 'Yes' ELSE 'No' END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -8484,6 +8484,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>namedPlace.NAMEDPLACE_ID</attReferences>
+      <attFKTranslationSQL>(select placeSystem || ': ' || placeName from namedPlace where namedPlace.NAMEDPLACE_ID=place.namedplace_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the namedPlace table</attNotes>
@@ -8621,6 +8622,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Estimated accuracy of the location of the plot. Plot origin has a 95% or greater probability of being within this many meters of the reported location.</attDefinition>
+      <attUnits>m</attUnits>
       <attForms>
         <formShow name="plotLocShort">914</formShow>
         <formShow name="plotLocLong">916</formShow>
