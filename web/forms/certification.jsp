@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-06-10 21:48:52 $'
-  *  '$Revision: 1.13 $'
+  *      '$Date: 2004-07-13 18:46:15 $'
+  *  '$Revision: 1.14 $'
   *
   *
   -->
@@ -35,6 +35,7 @@
         <h2 align="center" class="vegbank">Certification Application</h2>
 
 <logic:messagesPresent message="false">
+<h3><font color="red">Please Try Again</font></h3>
 	<ul>
 	<html:messages id="error" message="false">
 		<li><bean:write name="error"/></li>

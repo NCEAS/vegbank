@@ -19,7 +19,7 @@
   <xsl:output method="html"/>
   <xsl:template match="/">
     <html>
-      <xsl:variable name="pageTitle">Observation, full details</xsl:variable>
+		<xsl:variable name="pageTitle">Plot Observation: comprehensive view</xsl:variable>
       <head>@defaultHeadToken@
         <title>VegBank -- <xsl:copy-of select="$pageTitle"/>
         </title>
@@ -102,713 +102,729 @@ return "Check All"; }
   <a href="#{position()}ObsContrib">ObsContrib</a>
   </b></font></p>
 </td></tr>
+	<tr align="left" valign="center">
+		<td class="category" colspan="2">
+			<p>
+				<font face="Arial, Helvetica, sans-serif" size="-1"><b>
+				   <font color="red">ACTIONS: </font>
+				   <!--a href="">Interpret Plot To Community</a> | -->
+
+			   <a><xsl:attribute name="href">@web_context@GenericDispatcherFwd.do?prop=taxonobservation_v_annotate_obs_ac&amp;param=<xsl:value-of select="observationSequence"/></xsl:attribute>Interpret Plant on This Plot</a>
+
+
+				<!-- |
+				<a href="">Add a Note about something here</a-->
+					</b></font>
+			</p>
+		</td>
+	</tr>
 <tr valign="center" align="left" colspan="1">
-              <td class="tablehead" width="35%" bgcolor="#336633">
-                <font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1"><b>
-           <a name="{position()}plotobs">Plot and Observation Data</a></b></font>
-              </td>
-              <td class="tablehead" width="65%" bgcolor="#336633">
-                <font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1"><b>
-                <a name="{position()}cover">Plant Cover/Stratum Data</a></b></font>
-              </td>
+		  <td class="tablehead" width="35%" bgcolor="#336633">
+			<font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1"><b>
+	   <a name="{position()}plotobs">Plot and Observation Data</a></b></font>
+		  </td>
+		  <td class="tablehead" width="65%" bgcolor="#336633">
+			<font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1"><b>
+			<a name="{position()}cover">Plant Cover/Stratum Data</a></b></font>
+		  </td>
 </tr>
 
-  <tr vAlign="top">
-   
-    <td vAlign="top" align="left" width="35%" bgcolor="{$oddRowColor}" height="106">
-      <p>
-        <font size="-1" face="Arial, Helvetica, sans-serif">
-          <b>
-            <span class="category">
-												plotId: <span class="item">
-                <xsl:value-of select="../plotId"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												plotAccessionNumber: <span class="item">
-                <xsl:value-of select="../plotAccessionNumber"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												authorPlotCode: <span class="item">
-                <xsl:value-of select="../authorPlotCode"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												latitude: <span class="item">
-                <xsl:value-of select="../latitude"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												longitude: <span class="item">
-                <xsl:value-of select="../longitude"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												authorE: <span class="item">
-                <xsl:value-of select="../authorE"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												authorN: <span class="item">
-                <xsl:value-of select="../authorN"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												authorZone: <span class="item">
-                <xsl:value-of select="../authorZone"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												authorDatum: <span class="item">
-                <xsl:value-of select="../authorDatum"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												authorLocation: <span class="item">
-                <xsl:value-of select="../authorLocation"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												locationNarrative: <span class="item">
-                <xsl:value-of select="../locationNarrative"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												confidentialityStatus: <span class="item">
-                <xsl:value-of select="../confidentialityStatus"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												confidentialityReason: <span class="item">
-                <xsl:value-of select="../confidentialityReason"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												azimuth: <span class="item">
-                <xsl:value-of select="../azimuth"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												dsgPoly: <span class="item">
-                <xsl:value-of select="../dsgPoly"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												shape: <span class="item">
-                <xsl:value-of select="../shape"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												area: <span class="item">
-                <xsl:value-of select="../area"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												standSize: <span class="item">
-                <xsl:value-of select="../standSize"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												placementMethod: <span class="item">
-                <xsl:value-of select="../placementMethod"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												permanence: <span class="item">
-                <xsl:value-of select="../permanence"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												layoutNarative: <span class="item">
-                <xsl:value-of select="../layoutNarative"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												elevation: <span class="item">
-                <xsl:value-of select="../elevation"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												elevationAccuracy: <span class="item">
-                <xsl:value-of select="../elevationAccuracy"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												slopeAspect: <span class="item">
-                <xsl:value-of select="../slopeAspect"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												slopeGradient: <span class="item">
-                <xsl:value-of select="../slopeGradient"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												topoPosition: <span class="item">
-                <xsl:value-of select="../topoPosition"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												landform: <span class="item">
-                <xsl:value-of select="../landform"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												geology: <span class="item">
-                <xsl:value-of select="../geology"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												soilTaxon: <span class="item">
-                <xsl:value-of select="../soilTaxon"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												soilTaxonSource: <span class="item">
-                <xsl:value-of select="../soilTaxonSource"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												notesPublic: <span class="item">
-                <xsl:value-of select="../notesPublic"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												notesMgt: <span class="item">
-                <xsl:value-of select="../notesMgt"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												revisions: <span class="item">
-                <xsl:value-of select="../revisions"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												state: <span class="item">
-                <xsl:value-of select="../state"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												country: <span class="item">
-                <xsl:value-of select="../country"/>
-              </span>
-              <br/>
-            </span>
-           <span class="category">
-												authorObsCode: <span class="item">
-                <xsl:value-of select="authorObsCode"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												obsStartDate: <span class="item">
-                <xsl:value-of select="obsStartDate"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												obsEndDate: <span class="item">
-                <xsl:value-of select="obsEndDate"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												dateAccuracy: <span class="item">
-                <xsl:value-of select="dateAccuracy"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												sampleMethodId: <span class="item">
-                <xsl:value-of select="sampleMethodId"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												coverMethodId: <span class="item">
-                <xsl:value-of select="coverMethodId"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												stratumMethodId: <span class="item">
-                <xsl:value-of select="stratumMethodId"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												stemSizeLimit: <span class="item">
-                <xsl:value-of select="stemSizeLimit"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												methodNarrative: <span class="item">
-                <xsl:value-of select="methodNarrative"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												taxonObservationArea: <span class="item">
-                <xsl:value-of select="taxonObservationArea"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												coverDispersion: <span class="item">
-                <xsl:value-of select="coverDispersion"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												autotaxonCover: <span class="item">
-                <xsl:value-of select="autotaxonCover"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												stemObservationArea: <span class="item">
-                <xsl:value-of select="stemObservationArea"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												stemSampleMethod: <span class="item">
-                <xsl:value-of select="stemSampleMethod"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												originalData: <span class="item">
-                <xsl:value-of select="originalData"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												effortLevel: <span class="item">
-                <xsl:value-of select="effortLevel"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												plotValidationLevel: <span class="item">
-                <xsl:value-of select="plotValidationLevel"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												floristicQuality: <span class="item">
-                <xsl:value-of select="floristicQuality"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												bryophyteQuality: <span class="item">
-                <xsl:value-of select="bryophyteQuality"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												lichenQuality: <span class="item">
-                <xsl:value-of select="lichenQuality"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												observationNarrative: <span class="item">
-                <xsl:value-of select="observationNarrative"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												landscapeNarrative: <span class="item">
-                <xsl:value-of select="landscapeNarrative"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												homogeneity: <span class="item">
-                <xsl:value-of select="homogeneity"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												phenologicalAspect: <span class="item">
-                <xsl:value-of select="phenologicalAspect"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												representativeness: <span class="item">
-                <xsl:value-of select="representativeness"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												basalArea: <span class="item">
-                <xsl:value-of select="basalArea"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												hydrologicRegime: <span class="item">
-                <xsl:value-of select="hydrologicRegime"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												soilMoistureRegime: <span class="item">
-                <xsl:value-of select="soilMoistureRegime"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												soilDrainage: <span class="item">
-                <xsl:value-of select="soilDrainage"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												waterSalinity: <span class="item">
-                <xsl:value-of select="waterSalinity"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												waterDepth: <span class="item">
-                <xsl:value-of select="waterDepth"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												shoreDistance: <span class="item">
-                <xsl:value-of select="shoreDistance"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												soilDepth: <span class="item">
-                <xsl:value-of select="soilDepth"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												organicDepth: <span class="item">
-                <xsl:value-of select="organicDepth"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												percentBedrock: <span class="item">
-                <xsl:value-of select="percentBedrock"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												percentRockGravel: <span class="item">
-                <xsl:value-of select="percentRockGravel"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												percentWood: <span class="item">
-                <xsl:value-of select="percentWood"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												percentLitter: <span class="item">
-                <xsl:value-of select="percentLitter"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												percentBareSoil: <span class="item">
-                <xsl:value-of select="percentBareSoil"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												percentWater: <span class="item">
-                <xsl:value-of select="percentWater"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												percentOther: <span class="item">
-                <xsl:value-of select="percentOther"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												nameOther: <span class="item">
-                <xsl:value-of select="nameOther"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												standMaturity: <span class="item">
-                <xsl:value-of select="standMaturity"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												successionalStatus: <span class="item">
-                <xsl:value-of select="successionalStatus"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												treeHt: <span class="item">
-                <xsl:value-of select="treeHt"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												shrubHt: <span class="item">
-                <xsl:value-of select="shrubHt"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												fieldHt: <span class="item">
-                <xsl:value-of select="fieldHt"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												nonvascularHt: <span class="item">
-                <xsl:value-of select="nonvascularHt"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												submergedHt: <span class="item">
-                <xsl:value-of select="submergedHt"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												treeCover: <span class="item">
-                <xsl:value-of select="treeCover"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												shrubCover: <span class="item">
-                <xsl:value-of select="shrubCover"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												fieldCover: <span class="item">
-                <xsl:value-of select="fieldCover"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												nonvascularCover: <span class="item">
-                <xsl:value-of select="nonvascularCover"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												floatingCover: <span class="item">
-                <xsl:value-of select="floatingCover"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												submergedCover: <span class="item">
-                <xsl:value-of select="submergedCover"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												dominantStratum: <span class="item">
-                <xsl:value-of select="dominantStratum"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												growthform1type: <span class="item">
-                <xsl:value-of select="growthform1type"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												growthform2type: <span class="item">
-                <xsl:value-of select="growthform2type"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												growthform3type: <span class="item">
-                <xsl:value-of select="growthform3type"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												growthform1cover: <span class="item">
-                <xsl:value-of select="growthform1cover"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												growthform2cover: <span class="item">
-                <xsl:value-of select="growthform2cover"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												growthform3cover: <span class="item">
-                <xsl:value-of select="growthform3cover"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												notesPublic: <span class="item">
-                <xsl:value-of select="notesPublic"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												notesMgt: <span class="item">
-                <xsl:value-of select="notesMgt"/>
-              </span>
-              <br/>
-            </span>
-            <span class="category">
-												revisions: <span class="item">
-                <xsl:value-of select="revisions"/>
-              </span>
-              <br/>
-            </span>
-          </b>
-        </font>
-      </p>
-    </td>
-    
-    <td vAlign="top" align="left" width="65%" bgcolor="{$oddRowColor}" height="106">
-      <p>
-        <font size="-1" face="Arial, Helvetica, sans-serif">
-          <b>
-            
-            <table cellpadding="0" cellspacing="0" border="1">
-              <tr vAlign="top">
-                <td vAlign="top" align="left" width="8%" bgcolor="{$oddRowColor}"><p><font size="-1" face="Arial, Helvetica, sans-serif"><b><span class="category">
-                  Count</span></b></font></p></td>
-                <td vAlign="top" align="left" width="65%" bgcolor="{$oddRowColor}"><p><font size="-1" face="Arial, Helvetica, sans-serif"><b><span class="category">
-                   Plant Name</span></b></font></p></td>
-                <td vAlign="top" align="left" width="10%" bgcolor="{$oddRowColor}"><p><font size="-1" face="Arial, Helvetica, sans-serif"><b><span class="category">
-                  Code
-                  </span></b></font></p></td>
-                <td vAlign="top" align="left" width="7%" bgcolor="{$oddRowColor}"><p><font size="-1" face="Arial, Helvetica, sans-serif"><b><span class="category">
-                  Cover
-                  </span></b></font></p></td>
-                <td vAlign="top" align="left" width="10%" bgcolor="{$oddRowColor}"><p><font size="-1" face="Arial, Helvetica, sans-serif"><b><span class="category">
-                  Stratum
-                  </span></b></font></p></td>
-              </tr>  
-              
-                <xsl:for-each select="taxonObservation">
-                 <xsl:sort select="/"/>
-              <tr vAlign="top">
-              <td>
-               <span class="item">
+<tr vAlign="top">
 
-                 <xsl:number value="position()"/>
-               </span>
-              </td>
-              <td>
-               <span class="item">
-                  <xsl:value-of select="authorNameId"/>
-                </span>
-              </td>
-              <td>
-                <span class="item">
-                    <xsl:value-of select="authorCodeId"/>
-                </span>
-              </td>
-              <td>
-                <span class="item">
-                  <xsl:value-of select="taxonCover"/>
-                </span>
-              </td>
-              <td><span class="item">[-all strata-]</span></td>
-              </tr>
-            
-              <xsl:for-each select="stratumComposition">
-                <xsl:sort select="/"/>
-               <tr>
-               <td colspan="3" />
-               
+<td vAlign="top" align="left" width="35%" bgcolor="{$oddRowColor}" height="106">
+  <p>
+	<font size="-1" face="Arial, Helvetica, sans-serif">
+	  <b>
+		<span class="category">
+											plotId: <span class="item">
+			<xsl:value-of select="../plotId"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											plotAccessionNumber: <span class="item">
+			<xsl:value-of select="../plotAccessionNumber"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											authorPlotCode: <span class="item">
+			<xsl:value-of select="../authorPlotCode"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											latitude: <span class="item">
+			<xsl:value-of select="../latitude"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											longitude: <span class="item">
+			<xsl:value-of select="../longitude"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											authorE: <span class="item">
+			<xsl:value-of select="../authorE"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											authorN: <span class="item">
+			<xsl:value-of select="../authorN"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											authorZone: <span class="item">
+			<xsl:value-of select="../authorZone"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											authorDatum: <span class="item">
+			<xsl:value-of select="../authorDatum"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											authorLocation: <span class="item">
+			<xsl:value-of select="../authorLocation"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											locationNarrative: <span class="item">
+			<xsl:value-of select="../locationNarrative"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											confidentialityStatus: <span class="item">
+			<xsl:value-of select="../confidentialityStatus"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											confidentialityReason: <span class="item">
+			<xsl:value-of select="../confidentialityReason"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											azimuth: <span class="item">
+			<xsl:value-of select="../azimuth"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											dsgPoly: <span class="item">
+			<xsl:value-of select="../dsgPoly"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											shape: <span class="item">
+			<xsl:value-of select="../shape"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											area: <span class="item">
+			<xsl:value-of select="../area"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											standSize: <span class="item">
+			<xsl:value-of select="../standSize"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											placementMethod: <span class="item">
+			<xsl:value-of select="../placementMethod"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											permanence: <span class="item">
+			<xsl:value-of select="../permanence"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											layoutNarative: <span class="item">
+			<xsl:value-of select="../layoutNarative"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											elevation: <span class="item">
+			<xsl:value-of select="../elevation"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											elevationAccuracy: <span class="item">
+			<xsl:value-of select="../elevationAccuracy"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											slopeAspect: <span class="item">
+			<xsl:value-of select="../slopeAspect"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											slopeGradient: <span class="item">
+			<xsl:value-of select="../slopeGradient"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											topoPosition: <span class="item">
+			<xsl:value-of select="../topoPosition"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											landform: <span class="item">
+			<xsl:value-of select="../landform"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											geology: <span class="item">
+			<xsl:value-of select="../geology"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											soilTaxon: <span class="item">
+			<xsl:value-of select="../soilTaxon"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											soilTaxonSource: <span class="item">
+			<xsl:value-of select="../soilTaxonSource"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											notesPublic: <span class="item">
+			<xsl:value-of select="../notesPublic"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											notesMgt: <span class="item">
+			<xsl:value-of select="../notesMgt"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											revisions: <span class="item">
+			<xsl:value-of select="../revisions"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											state: <span class="item">
+			<xsl:value-of select="../state"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											country: <span class="item">
+			<xsl:value-of select="../country"/>
+		  </span>
+		  <br/>
+		</span>
+	   <span class="category">
+											authorObsCode: <span class="item">
+			<xsl:value-of select="authorObsCode"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											obsStartDate: <span class="item">
+			<xsl:value-of select="obsStartDate"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											obsEndDate: <span class="item">
+			<xsl:value-of select="obsEndDate"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											dateAccuracy: <span class="item">
+			<xsl:value-of select="dateAccuracy"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											sampleMethodId: <span class="item">
+			<xsl:value-of select="sampleMethodId"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											coverMethodId: <span class="item">
+			<xsl:value-of select="coverMethodId"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											stratumMethodId: <span class="item">
+			<xsl:value-of select="stratumMethodId"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											stemSizeLimit: <span class="item">
+			<xsl:value-of select="stemSizeLimit"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											methodNarrative: <span class="item">
+			<xsl:value-of select="methodNarrative"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											taxonObservationArea: <span class="item">
+			<xsl:value-of select="taxonObservationArea"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											coverDispersion: <span class="item">
+			<xsl:value-of select="coverDispersion"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											autotaxonCover: <span class="item">
+			<xsl:value-of select="autotaxonCover"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											stemObservationArea: <span class="item">
+			<xsl:value-of select="stemObservationArea"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											stemSampleMethod: <span class="item">
+			<xsl:value-of select="stemSampleMethod"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											originalData: <span class="item">
+			<xsl:value-of select="originalData"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											effortLevel: <span class="item">
+			<xsl:value-of select="effortLevel"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											plotValidationLevel: <span class="item">
+			<xsl:value-of select="plotValidationLevel"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											floristicQuality: <span class="item">
+			<xsl:value-of select="floristicQuality"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											bryophyteQuality: <span class="item">
+			<xsl:value-of select="bryophyteQuality"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											lichenQuality: <span class="item">
+			<xsl:value-of select="lichenQuality"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											observationNarrative: <span class="item">
+			<xsl:value-of select="observationNarrative"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											landscapeNarrative: <span class="item">
+			<xsl:value-of select="landscapeNarrative"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											homogeneity: <span class="item">
+			<xsl:value-of select="homogeneity"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											phenologicalAspect: <span class="item">
+			<xsl:value-of select="phenologicalAspect"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											representativeness: <span class="item">
+			<xsl:value-of select="representativeness"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											basalArea: <span class="item">
+			<xsl:value-of select="basalArea"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											hydrologicRegime: <span class="item">
+			<xsl:value-of select="hydrologicRegime"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											soilMoistureRegime: <span class="item">
+			<xsl:value-of select="soilMoistureRegime"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											soilDrainage: <span class="item">
+			<xsl:value-of select="soilDrainage"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											waterSalinity: <span class="item">
+			<xsl:value-of select="waterSalinity"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											waterDepth: <span class="item">
+			<xsl:value-of select="waterDepth"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											shoreDistance: <span class="item">
+			<xsl:value-of select="shoreDistance"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											soilDepth: <span class="item">
+			<xsl:value-of select="soilDepth"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											organicDepth: <span class="item">
+			<xsl:value-of select="organicDepth"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											percentBedrock: <span class="item">
+			<xsl:value-of select="percentBedrock"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											percentRockGravel: <span class="item">
+			<xsl:value-of select="percentRockGravel"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											percentWood: <span class="item">
+			<xsl:value-of select="percentWood"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											percentLitter: <span class="item">
+			<xsl:value-of select="percentLitter"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											percentBareSoil: <span class="item">
+			<xsl:value-of select="percentBareSoil"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											percentWater: <span class="item">
+			<xsl:value-of select="percentWater"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											percentOther: <span class="item">
+			<xsl:value-of select="percentOther"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											nameOther: <span class="item">
+			<xsl:value-of select="nameOther"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											standMaturity: <span class="item">
+			<xsl:value-of select="standMaturity"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											successionalStatus: <span class="item">
+			<xsl:value-of select="successionalStatus"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											treeHt: <span class="item">
+			<xsl:value-of select="treeHt"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											shrubHt: <span class="item">
+			<xsl:value-of select="shrubHt"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											fieldHt: <span class="item">
+			<xsl:value-of select="fieldHt"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											nonvascularHt: <span class="item">
+			<xsl:value-of select="nonvascularHt"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											submergedHt: <span class="item">
+			<xsl:value-of select="submergedHt"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											treeCover: <span class="item">
+			<xsl:value-of select="treeCover"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											shrubCover: <span class="item">
+			<xsl:value-of select="shrubCover"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											fieldCover: <span class="item">
+			<xsl:value-of select="fieldCover"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											nonvascularCover: <span class="item">
+			<xsl:value-of select="nonvascularCover"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											floatingCover: <span class="item">
+			<xsl:value-of select="floatingCover"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											submergedCover: <span class="item">
+			<xsl:value-of select="submergedCover"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											dominantStratum: <span class="item">
+			<xsl:value-of select="dominantStratum"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											growthform1type: <span class="item">
+			<xsl:value-of select="growthform1type"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											growthform2type: <span class="item">
+			<xsl:value-of select="growthform2type"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											growthform3type: <span class="item">
+			<xsl:value-of select="growthform3type"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											growthform1cover: <span class="item">
+			<xsl:value-of select="growthform1cover"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											growthform2cover: <span class="item">
+			<xsl:value-of select="growthform2cover"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											growthform3cover: <span class="item">
+			<xsl:value-of select="growthform3cover"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											notesPublic: <span class="item">
+			<xsl:value-of select="notesPublic"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											notesMgt: <span class="item">
+			<xsl:value-of select="notesMgt"/>
+		  </span>
+		  <br/>
+		</span>
+		<span class="category">
+											revisions: <span class="item">
+			<xsl:value-of select="revisions"/>
+		  </span>
+		  <br/>
+		</span>
+	  </b>
+	</font>
+  </p>
+</td>
 
-							 <td>					
-									 <span class="item">
-                    <xsl:value-of select="taxonStratumCover"/>
-                  </span>
-                </td>
-                <td>
-									<span class="item">
-                    <xsl:value-of select="stratumName"/>
-                  </span>
-                </td>
-                </tr>
-              </xsl:for-each>
-            </xsl:for-each>
-            </table>
-            
-          </b>
-        </font>
-      </p>
-    </td>
-    </tr>
-    <tr valign="center" align="left" colspan="1">
-        <td class="tablehead" bgcolor="#336633">
-                    <font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1"><b>
-                    <a name="{position()}comm">Community Classification</a></b></font>
-                  </td>
-                  <td class="tablehead"  bgcolor="#336633">
-                    <font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1"><b>
-                    <a name="{position()}stratumdefn">Strata Definitions</a></b></font>
-              </td>
-    </tr>          
+<td vAlign="top" align="left" width="65%" bgcolor="{$oddRowColor}" height="106">
+  <p>
+	<font size="-1" face="Arial, Helvetica, sans-serif">
+	  <b>
+		
+		<table cellpadding="0" cellspacing="0" border="1">
+		  <tr vAlign="top">
+			<td vAlign="top" align="left" width="8%" bgcolor="{$oddRowColor}"><p><font size="-1" face="Arial, Helvetica, sans-serif"><b><span class="category">
+			  Count</span></b></font></p></td>
+			<td vAlign="top" align="left" width="65%" bgcolor="{$oddRowColor}"><p><font size="-1" face="Arial, Helvetica, sans-serif"><b><span class="category">
+			   Plant Name</span></b></font></p></td>
+			<td vAlign="top" align="left" width="10%" bgcolor="{$oddRowColor}"><p><font size="-1" face="Arial, Helvetica, sans-serif"><b><span class="category">
+			  Code
+			  </span></b></font></p></td>
+			<td vAlign="top" align="left" width="7%" bgcolor="{$oddRowColor}"><p><font size="-1" face="Arial, Helvetica, sans-serif"><b><span class="category">
+			  Cover
+			  </span></b></font></p></td>
+			<td vAlign="top" align="left" width="10%" bgcolor="{$oddRowColor}"><p><font size="-1" face="Arial, Helvetica, sans-serif"><b><span class="category">
+			  Stratum
+			  </span></b></font></p></td>
+		  </tr>  
+		  
+			<xsl:for-each select="taxonObservation">
+			 <xsl:sort select="/"/>
+		  <tr vAlign="top">
+		  <td>
+		   <span class="item">
+
+			 <xsl:number value="position()"/>
+		   </span>
+		  </td>
+		  <td>
+		   <span class="item">
+			  <xsl:value-of select="authorNameId"/>
+			</span>
+		  </td>
+		  <td>
+			<span class="item">
+				<xsl:value-of select="authorCodeId"/>
+			</span>
+		  </td>
+		  <td>
+			<span class="item">
+			  <xsl:value-of select="taxonCover"/>
+			</span>
+		  </td>
+		  <td><span class="item">[-all strata-]</span></td>
+		  </tr>
+		
+		  <xsl:for-each select="stratumComposition">
+			<xsl:sort select="/"/>
+		   <tr>
+		   <td colspan="3" />
+		   
+
+						 <td>					
+								 <span class="item">
+				<xsl:value-of select="taxonStratumCover"/>
+			  </span>
+			</td>
+			<td>
+								<span class="item">
+				<xsl:value-of select="stratumName"/>
+			  </span>
+			</td>
+			</tr>
+		  </xsl:for-each>
+		</xsl:for-each>
+		</table>
+		
+	  </b>
+	</font>
+  </p>
+</td>
+</tr>
+<tr valign="center" align="left" colspan="1">
+	<td class="tablehead" bgcolor="#336633">
+				<font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1"><b>
+				<a name="{position()}comm">Community Classification</a></b></font>
+			  </td>
+			  <td class="tablehead"  bgcolor="#336633">
+				<font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1"><b>
+				<a name="{position()}stratumdefn">Strata Definitions</a></b></font>
+		  </td>
+</tr>          
     
     <tr vAlign="top">
     <td vAlign="top" align="left" width="35%" bgcolor="{$oddRowColor}" height="106">
@@ -1276,6 +1292,22 @@ return "Check All"; }
                     </p>
                   </td>
                 </tr>
+	<tr align="left" valign="center">
+		<td class="category" colspan="2">
+			<p>
+				<font face="Arial, Helvetica, sans-serif" size="-1"><b>
+				   <font color="red">ACTIONS: </font>
+				   <!--a href="">Interpret Plot To Community</a> | -->
+
+			   <a><xsl:attribute name="href">@web_context@GenericDispatcherFwd.do?prop=taxonobservation_v_annotate_obs_ac&amp;param=<xsl:value-of select="observationSequence"/></xsl:attribute>Interpret Plant on This Plot</a>
+
+
+				<!-- |
+				<a href="">Add a Note about something here</a-->
+					</b></font>
+			</p>
+		</td>
+	</tr>
                 <tr valign="center" align="left" colspan="1">
                   <td class="tablehead" width="35%" bgcolor="#336633">
                     <font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1">

@@ -170,7 +170,24 @@
 				<arg0 key="Email address" resource="false" />
 			</field>
 		</form>
-		<form name="InterpretPlantForm"><field property="plantName" depends="required" /><field property="taxonInterpretation.taxonfit" depends="required" /><field property="interpretation.taxonconfidence" depends="required" /><field property="taxonInterpretation.notes" depends="required" /></form><form name="LogonForm">
+		<form name="InterpretPlantForm">
+			<field property="pcAC" depends="required">
+				<arg0 key="Plant concept accession code" resource="false" />
+			</field>
+			<field property="plantName" depends="required">
+				<arg0 key="Name you call this concept" resource="false" />
+			</field>
+			<field property="taxonfit" depends="required">
+				<arg0 key="Taxon fit" resource="false" />
+			</field>
+			<field property="taxonconfidence" depends="required">
+				<arg0 key="Confidence" resource="false" />
+			</field>
+			<field property="notes" depends="required">
+				<arg0 key="The Notes field" resource="false" />
+			</field>
+		</form>
+		<form name="LogonForm">
 			<field property="username" depends="required,email">
 				<arg0 key="Username" resource="false" />
 			</field>

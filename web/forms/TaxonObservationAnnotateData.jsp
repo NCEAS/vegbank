@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: anderson $'
-*  '$Date: 2004-06-29 06:51:57 $'
-*  '$Revision: 1.1 $'
+*  '$Date: 2004-07-13 18:46:15 $'
+*  '$Revision: 1.2 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 *
 -->
 <head><script src="/vegbank/includes/utils.js"></script>
+@defaultHeadToken@
 
 <title>Interpret a Taxon -- choose taxon on plot</title>
 <link rel="stylesheet" href="/vegbank/includes/default.css" type="text/css"/>
@@ -44,20 +45,32 @@
   <body>
 
   <!--xxx -->
-  <script src="/vegbank/includes/utils.js"></script><table bgcolor="#336633" border="0" cellpadding="0" cellspacing="0" width="779"><tr align="left"><td valign="top" colspan="3" height="6" align="left"><img src="/vegbank/images/uplt3.gif" align="top" height="6" width="6" /></td><td width="6"></td></tr><tr><td valign="top" width="14" rowSpan="1">&#160;</td><td valign="center" width="241" colSpan="1" rowSpan="1" align="center"><font face="Georgia, Times New Roman, Times, serif" color="#ffffff" size="5"><b><a href="/vegbank/"><img src="/vegbank/images/vegbanklogo4.gif" height="43" width="169" alt="VegBank" border="0"/></a></b></font></td><td vAlign="bottom" width="558" colSpan="1" align="right"><select name="vegbankNav" onChange="MM_jumpMenu('parent',this,0)"><option value="#">---Common Pages---</option><option value="/vegbank/">VegBank Home</option><option value="/vegbank/DisplayMainMenu.do">Main Menu</option><option value="/vegbank/LoadPlotQuery.do">Search for Plots</option><option value="/vegbank/forms/PlantQuery.jsp">Search for Plants</option><option value="/vegbank/forms/community-query.html">Search Communities</option><option value="/vegdocs/vegbranch/vegbranch.html">VegBranch</option><option value="/vegbank/general/info.html">Information</option><option value="/vegbank/design/erd/vegbank_erd.pdf">--ERD</option><option value="/vegbank/dbdictionary/dd-index.html">--Data Dictionary</option><option value="/vegbank/general/sitemap.html">VegBank Sitemap</option></select></td><td width="6"></td></tr><tr><td colspan="3" height="6" valign="bottom" align="right"></td><td width="6"><img src="/vegbank/images/lwrt3.gif" align="bottom" height="6" width="6"/></td></tr></table>
+  @vegbank_header_html_normal@ 
   <!--xxx -->
 
 
-  <h2>Interpret a Taxon -- choose taxon on plot</h2>
+  <h2>Interpret a Taxon from Plot</h2>
+
+<logic:messagesPresent message="true">
+	<ul>
+	<html:messages id="msg" message="true">
+		<li><bean:write name="msg"/></li>
+	</html:messages>
+	</ul>
+</logic:messagesPresent>
+
+
+  <logic:notEmpty name="Taxonobservation">
+
   <p>Please choose one of these taxa to interpret. </p>
   <blockquote>
   <table border="0" cellspacing="1" cellpadding="0"><tr bgcolor="#666666"><td>
-   <table border="0" cellspacing="1" cellpadding="4">
+   <table border="0" cellspacing="1" cellpadding="3">
 
     <tr class="listhead">
-      <td>Taxon Observation</td>
-      <td>Plant Code</td>
-      <td>INTERPRET?</td>
+      <td width="200">Taxon Observation</td>
+      <td width="110">Plant Name</td>
+      <td width="100">INTERPRET?</td>
     </tr>
 
     <%
@@ -67,7 +80,7 @@
     String bgColor = "#FFFFF";
     %>
 
-    <logic:iterate id="taxonobservation" name="genericBean" type="org.vegbank.common.model.Taxonobservation">
+    <logic:iterate id="tobs" name="Taxonobservation" type="org.vegbank.common.model.Taxonobservation">
 
     <%
     //**************************************************************************************
@@ -78,21 +91,24 @@
 
     <tr class="item" valign="top" bgcolor="<%= bgColor %>" >
   	<td>
-		<bean:write name="taxonobservation" property="accessioncode"/>
+		&nbsp; &nbsp; 
+		<bean:write name="tobs" property="accessioncode"/>
 	</td>
 
 
 <!-- plant Name -->    
   <td>
-	<bean:write name="taxonobservation" property="authorplantname"/>
+  	&nbsp; &nbsp; 
+	<bean:write name="tobs" property="authorplantname"/>
   </td>
 
 
 <!-- interp link -->
-<td>
-	<html:link action="InterpretTaxonObservation" paramId="tobsAC" paramName="taxonobservation" paramProperty="accessioncode">
+  <td>
+	&nbsp; &nbsp; 
+	<html:link action="InterpretTaxonObservation" paramId="tobsAC" paramName="tobs" paramProperty="accessioncode">
 	interpret...</html:link>
-</td>
+  </td>
 
     </tr>
     </logic:iterate>
@@ -100,11 +116,20 @@
   </table>
     </td></tr></table>
 	</blockquote>
+  </logic:notEmpty>
+
+  <logic:empty name="Taxonobservation">
+  <blockquote>
+    <p>This plot does not have any taxon observations.<br>
+  	<a href="javascript:history.go(-1)">Go back</a></p>
+  </blockquote>
+  </logic:empty>
+
 
   <br/>
 
   <!-- VEGBANK FOOTER -->
-  <table bgColor="#eed85b" border="0" cellpadding="0" cellspacing="0" width="779"><tr><td valign="top" width="6" height="6" align="left"><img src="/vegbank/images/uplt3.gif" align="top" height="6" width="6" /></td><td width="787"></td><td valign="top" width="6" height="6" align="right"><img src="/vegbank/images/uprt3.gif" align="top" height="6" width="6" /></td></tr><tr><td width="779" colspan="3" valign="center" align="center"><font size="2" face="Georgia, Times New Roman, Times, serif"><a href="/vegbank/general/../index.jsp">VegBank Home</a> | <a href="/vegbank/general/info.html">About VegBank</a> | <a href="/vegbank/general/instructions.html">Instructions</a> | <a href="/vegbank/general/../panel/panel.html">ESA Vegetation Panel</a> | <a href="/vegbank/general/contact.html">Contact</a> | <a href="/vegbank/general/help.html">Help</a></font><font size="2" face="Georgia, Times New Roman, Times, serif"><br/><font size="2" face="Georgia, Times New Roman, Times, serif"><a href="/vegbank/forms/RegisterNewUser.jsp">Register</a> | <a href="/vegbank/general/login.jsp">Login</a> | <a href="/vegbank/DisplayMainMenu.do">use VegBank</a> | <a href="/vegbank/Logoff.do">Logout</a> | <a href="/vegbank/general/account.html">My VegBank Account</a></font></font></td></tr><tr><td valign="bottom" width="6" height="6" align="left"><img src="/vegbank/images/lwlt3.gif" align="bottom" height="6" width="6" /></td><td width="786"></td><td valign="bottom" width="6" height="6" align="right"><img src="/vegbank/images/lwrt3.gif" align="bottom" height="6" width="6" /></td></tr></table><table bgColor="#ffffff" border="0" cellpadding="0" cellspacing="0"><tr><td width="779" height="24" valign="top" align="center"><font size="1" face="Georgia, Times New Roman, Times, serif" color="#808000">&#169; 2003 Ecological Society of America<br/><a href="/vegbank/general/terms.html">Terms of use</a> | <a href="/vegbank/general/privacy.html">Privacy policy</a></font></td></tr></table>
+  @vegbank_footer_html_tworow@
   <!-- END FOOTER -->
 
   </body>

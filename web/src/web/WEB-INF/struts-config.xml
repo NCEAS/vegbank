@@ -40,7 +40,8 @@
 			<form-property name="email" type="java.lang.String" />
 		</form-bean>
 		<form-bean name="EntityNameForm" type="org.vegbank.ui.struts.EntityNameForm" />
-		<form-bean name="InterpretPlantForm" type="org.vegbank.ui.struts.InterpretPlantForm" /><form-bean name="LogonForm" type="org.apache.struts.validator.DynaValidatorForm">
+		<form-bean name="InterpretPlantForm" type="org.vegbank.ui.struts.InterpretPlantForm" />
+		<form-bean name="LogonForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="username" type="java.lang.String" />
 			<form-property name="password" type="java.lang.String" />
 		</form-bean>
@@ -74,6 +75,7 @@
 		<forward name="CertificationException" path="/forms/CertificationException.jsp" />
 		<forward name="CertificationList" path="/ListCertifications.do" />
 		<forward name="ChangePassword" path="/forms/change_pwd.jsp" redirect="false" />
+		<forward name="InterpretTaxonObservation" path="/InterpretTaxonObservation.do" redirect="false" />
 		<forward name="DownLoad" path="/forms/DownLoad.jsp" />
 		<forward name="DownLoadManager" path="/DownLoadManager.do" />
 		<forward name="DisplayLoadReport" path="/forms/DisplayLoadReport.jsp" redirect="true" />
@@ -128,7 +130,11 @@
 		<action path="/EntityName" type="org.vegbank.ui.struts.EntityNameAction" name="EntityNameForm" scope="request" validate="true" input="EntityName" />
 		<action path="/GenericDispatcher" type="org.vegbank.ui.struts.GenericDispatcherAction" name="GenericDispatcherForm" scope="request" />
 		<action path="/GenericDispatcherFwd" type="org.vegbank.ui.struts.GenericDispatcherFwdAction" />
-		<action path="/InterpretTaxonObservation" parameter="edit" type="org.vegbank.ui.struts.InterpretPlantAction" name="InterpretPlantForm" input="InterpretTaxonObservation" validate="false"><forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" redirect="false" /></action>
+		<action path="/InterpretTaxonObservation" parameter="edit" type="org.vegbank.ui.struts.InterpretPlantAction" scope="request" name="InterpretPlantForm" input="InterpretTaxonObservation" validate="false">
+			<forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" redirect="false" />
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="pro" />
+		</action>
 		<action path="/ListCertifications" type="org.vegbank.ui.struts.admin.CertificationListAction" name="CertificationForm" scope="request" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="dba" />
@@ -172,8 +178,8 @@
 			<set-property property="reqRoles" value="reg" />
 			<forward name="failure" path="/LoadCertification.do" redirect="false" />
 		</action>
-		<action path="/SaveTaxonInterpretation" parameter="save" type="org.vegbank.ui.struts.InterpretPlantAction" name="InterpretPlantForm" input="InterpretTaxonObservation">
-			<forward name="done" path="/forms/TaxonInterpretationAnnotateData.jsp" redirect="false" />
+		<action path="/SaveTaxonInterpretation" validate="true" parameter="save" type="org.vegbank.ui.struts.InterpretPlantAction" name="InterpretPlantForm"  input="InterpretTaxonObservation" scope="request">
+			<forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" redirect="false" />
 		</action>
 		<action path="/UpdatePassword" type="org.vegbank.ui.struts.UserProfileAction" name="ChangePasswordForm" parameter="pwd" scope="request" validate="true" input="ChangePassword">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />

@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: anderson $'
-*  '$Date: 2004-06-29 06:51:57 $'
-*  '$Revision: 1.1 $'
+*  '$Date: 2004-07-13 18:46:15 $'
+*  '$Revision: 1.2 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,11 @@
 <head>
 <script language="javascript">
 function doLookup(ac) {
-	window.open('@web_context@GenericDispatcher.do?command=RetrieveVBModelBean&jsp=GenericDisplay.jsp&rootEntity=PlantConcept&accessionCode=' + ac, '', 'width=830,height=550,location,status,scrollbars,resizable');
+	window.open('@web_context@GenericDispatcher.do?command=RetrieveVBModelBean&jsp=GenericDisplay.jsp&rootEntity=PlantConcept&accessionCode=' + ac, '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
+}
+
+function popupPlantQuery() {
+	window.open('@web_context@forms/PlantQuery.jsp', '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
 }
 </script>
 @defaultHeadToken@
@@ -51,9 +55,33 @@ function doLookup(ac) {
   
   <br/>
 
-  <html:errors/>
-
   <h2>Interpret Plant Taxon</h2>
+
+<logic:messagesPresent message="false">
+<table border="0"><tr><td>
+<h3><font color="red">Please Try Again</font></h3>
+	<ul>
+	<html:messages id="error" message="false">
+		<li><bean:write name="error"/></li>
+	</html:messages>
+	</ul>
+	<hr noshade>
+</td></tr></table>
+<br>
+</logic:messagesPresent>
+
+<logic:messagesPresent property="saved" message="true">
+<table border="0"><tr><td>
+	<ul>
+	<html:messages id="msg" property="saved" message="true">
+		<li><bean:write name="msg"/></li>
+	</html:messages>
+	</ul>
+	<hr noshade>
+</td></tr></table>
+<br>
+</logic:messagesPresent>
+
 
 <bean:define id="tobsAC" name="tobsAC"/>
 <%
@@ -83,14 +111,18 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 
 <html:form action="/SaveTaxonInterpretation.do">
 	<html:hidden name="formBean" property="tobsId" value="<%= tobsId.toString() %>"/>
-	<html:hidden name="formBean" property="taxonInterpretation.interpretationtype" value="Other"/>
+	<html:hidden name="formBean" property="interpretationtype" value="Other"/>
 	<html:hidden name="Taxonobservation" property="observation_id"/>
-	<hidden name="tobsAC" value="<bean:write name="tobsAC"/>">
+	<input type="hidden" name="tobsAC" value="<bean:write name="tobsAC"/>">
 
-<blockquote>
+
+<p>Please enter your re-interpretation of the author's plant choice.
+<br>
+
+ <table border="0" cellspacing="15" cellpadding="5" bgcolor="#FFFFFF" width="750"><tr><td>
 
  <table border="0" cellspacing="1" cellpadding="1" bgcolor="#333333"><tr><td>
-  <table border="0" cellspacing="1" cellpadding="4" bgcolor="#FFFFFF">
+  <table border="0" cellspacing="1" cellpadding="3" bgcolor="#FFFFFF">
 <tr>
 	<td class="listhead">Author Plant Name</td>
 	<td><span class="item"><bean:write name="Taxonobservation" property="authorplantname"/></span></td>
@@ -102,18 +134,25 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 </tr>
 
 <tr>
+	<td class="listhead">Plant concept accession code</td>
+	<td><html:text name="formBean" property="pcAC" size="30"/>
+	&nbsp; &nbsp; &nbsp; &raquo; 
+		<span class="item"><a href="javascript:void popupPlantQuery()">lookup</a></span>
+	</td>
+</tr>
+
+<tr>
 	<td class="listhead">Name you call this concept</td>
-	<!-- check table plantName; if exists use, else create -->
-	<td><html:text property="plantName" size="45"/></td>
+	<td><html:text name="formBean" property="plantName" size="45"/></td>
 </tr>
 <tr>
 	<td class="listhead">Fit</td>
 	<td>
-	    <html:select property="taxonInterpretation.taxonfit" size="1">
+	    <html:select name="formBean" property="taxonfit" size="1">
 			<html:option value="">choose...</html:option>
 			<html:option value="Absolutely wrong">Absolutely wrong</html:option>
 			<html:option value="Understandable but wrong">Understandable but wrong</html:option>
-			<html:option value="Reasonable or acceptable an...">Reasonable or acceptable an...</html:option>
+			<html:option value="Reasonable or acceptable answer">Reasonable or acceptable answer</html:option>
 			<html:option value="Good answer">Good answer</html:option>
 			<html:option value="Absolutely correct">Absolutely correct</html:option>
 		</html:select>
@@ -122,7 +161,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 	<tr>
 		<td class="listhead">Confidence</td>
 		<td> 
-	    	<html:select property="taxonInterpretation.taxonconfidence" size="1">
+	    	<html:select name="formBean" property="taxonconfidence" size="1">
 				<html:option value="">choose...</html:option>
 				<html:option value="High">High</html:option>
 				<html:option value="Medium">Medium</html:option>
@@ -132,11 +171,75 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 	</tr>
 	<tr>
 		<td class="listhead">Notes</td>
-		<td><html:textarea property="taxonInterpretation.notes" rows="8" cols="45"/></td>
+		<td><html:textarea name="formBean" property="notes" rows="8" cols="45"/></td>
 	</tr>
 
 </table>
 	</td></tr></table>
+
+	</td>
+	<td valign="top">
+		<br/>
+ 		<table border="0" cellspacing="4" cellpadding="0">
+		<tr>
+		<td colspan="2">
+			<span class="vegbank_normal"><b>Information</b></span>
+		</td>
+		</tr>
+
+		<tr class="vegbank_tiny">
+		<td valign="top">&raquo;</td>
+		<td>
+			You can more narrowly define the plant in question due to your 
+			knowledge of the area in which the plant is found.  
+			E.g. you can identify which species the plant is, though 
+			the author only knew genus (or you can specify variety, 
+			but the author knew only species).
+		</td>
+		</tr>
+
+		<tr>
+		<td></td>
+		<td bgcolor="#AAAAAA"><img src="@image_server@pix_clear.gif"></td>
+		</tr>
+			
+		<tr class="vegbank_tiny">
+		<td valign="top">&raquo;</td>
+		<td>
+			You disagree with the author's interpretation of the plant and 
+			wish to point to a new plant.
+		</td>
+		</tr>
+
+		<tr>
+		<td></td>
+		<td bgcolor="#AAAAAA"><img src="@image_server@pix_clear.gif"></td>
+		</tr>
+			
+			
+		<tr class="vegbank_tiny">
+		<td valign="top">&raquo;</td>
+		<td>
+			(Rarely) you disagree with the author's interpretation and wish 
+			to state only that the plant is NOT the concept mentioned (use Fit = Absolutely wrong).
+		</td>
+		</tr>
+			
+		<tr>
+		<td></td>
+		<td bgcolor="#AAAAAA"><img src="@image_server@pix_clear.gif"></td>
+		</tr>
+			
+		<tr class="vegbank_tiny">
+		<td valign="top">&raquo;</td>
+		<td>
+			You are REQUIRED to fill in the Notes section with a good 
+			explanation for why you are interpreting this plant the way you are.
+		</td></tr>
+
+		</table>
+	</td></tr></table>
+
 
 	<br/>
 	&nbsp; &nbsp; &nbsp; &nbsp;
@@ -144,8 +247,6 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 	&nbsp; &nbsp; &nbsp; &nbsp;
   <html:cancel/>
 
-</blockquote>
-  
   </html:form>
 
 
@@ -210,13 +311,22 @@ org.vegbank.common.command.GenericCommand.execute(request, "reference", "where_r
 </logic:notEmpty>
 	   </td>
 	   <td>
-		<a href="javascript:doLookup('<bean:write name="Plantconcept" property="accessioncode"/>');">
+		<a href="javascript:void doLookup('<bean:write name="Plantconcept" property="accessioncode"/>');">
 			lookup</a> 
 
 	   </td>
-	   <td><bean:write name="tint" property="interpretationtype"/></td>
-	   <td><bean:write name="tint" property="taxonfit"/></td>
-	   <td><bean:write name="tint" property="taxonconfidence"/></td>
+	   <td>
+		<logic:empty name="tint" property="interpretationtype">n/a</logic:empty>
+	    <bean:write name="tint" property="interpretationtype"/>
+	   </td>
+	   <td>
+		<logic:empty name="tint" property="taxonfit">n/a</logic:empty>
+		<bean:write name="tint" property="taxonfit"/>
+	   </td>
+	   <td>
+		<logic:empty name="tint" property="taxonconfidence">n/a</logic:empty>
+	   	<bean:write name="tint" property="taxonconfidence"/>
+	   </td>
 	   <td>
 <!-- translate the PK -->
 <bean:define id="partyId" name="tint" property="party_id"/>
@@ -230,12 +340,12 @@ org.vegbank.common.command.GenericCommand.execute(request, "party_simple", "wher
 	<logic:notEmpty name="Party" property="surname">
 		<bean:write name="Party" property="surname"/>,
 	</logic:notEmpty>
-	<logic:notEmpty name="Party" property="givenname">
-		, <bean:write name="Party" property="givenname"/>
+	<logic:notEmpty name="Party" property="givenname"> 
+		<bean:write name="Party" property="givenname"/>
 	</logic:notEmpty>
 
 	<logic:notEmpty name="Party" property="organizationname">
-		ORG: <bean:write name="Party" property="organizationname"/>
+		org: <bean:write name="Party" property="organizationname"/>
 	</logic:notEmpty>
 </logic:notEmpty>
 	</td>

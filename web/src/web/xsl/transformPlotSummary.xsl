@@ -19,7 +19,7 @@
   <xsl:output method="html"/>
   <xsl:template match="/">
     <html>
-      <xsl:variable name="pageTitle">Observation, full details</xsl:variable>
+      <xsl:variable name="pageTitle">Plot Observation: summary</xsl:variable>
       <head>@defaultHeadToken@
         <title>VegBank -- <xsl:copy-of select="$pageTitle"/>
         </title>
@@ -104,20 +104,25 @@ return "Check All"; }
                     </p>
                   </td>
                 </tr>
-				<!--
 				<tr align="left" valign="center">
 					<td class="category" colspan="2">
 						<p>
 							<font face="Arial, Helvetica, sans-serif" size="-1"><b>
 							   <font color="red">ACTIONS: </font>
+							   <!--
 							   <a href="">Interpret Plot To Community</a> |
-						   <a href="@web_context@InterpretPlant.do">Interpret Plant on This Plot</a> |
+							   -->
+
+						<a><xsl:attribute name="href">@web_context@GenericDispatcherFwd.do?prop=taxonobservation_v_annotate_obs_ac&amp;param=<xsl:value-of select="observationSequence"/></xsl:attribute>Interpret Plant on This Plot</a> |
+
+
+							   <!--
 								<a href="">Add a Note about something here</a>
+								-->
 								</b></font>
 						</p>
 					</td>
 				</tr>
-				-->
                 <tr valign="center" align="left" colspan="1">
                   <td class="tablehead" width="35%" bgcolor="#336633">
                     <font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1">
@@ -729,20 +734,23 @@ return "Check All"; }
                     </p>
                   </td>
                 </tr>
-				<!--
 				<tr align="left" valign="center">
 					<td class="category" colspan="2">
 						<p>
 							<font face="Arial, Helvetica, sans-serif" size="-1"><b>
 							   <font color="red">ACTIONS: </font>
-							   <a href="">Interpret Plot To Community</a> |
-						   	<a href="@web_context@InterpretPlant.do">Interpret Plant on This Plot</a> | 
-								<a href="">Add a Note about something here</a>
+							   <!--a href="">Interpret Plot To Community</a> | -->
+
+						<a><xsl:attribute name="href">@web_context@GenericDispatcherFwd.do?prop=taxonobservation_v_annotate_obs_ac&amp;param=<xsl:value-of select="observationSequence"/></xsl:attribute>Interpret Plant on This Plot</a>
+
+
+							<!-- |
+							<a href="">Add a Note about something here</a-->
 								</b></font>
 						</p>
 					</td>
 				</tr>
-				-->
+				
                 <tr valign="center" align="left" colspan="1">
                   <td class="tablehead" width="35%" bgcolor="#336633">
                     <font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1">
