@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: farrell $'
-* '$Date: 2003-10-31 22:23:55 $'
-* '$Revision: 1.68 $'
+* '$Date: 2003-11-05 21:15:09 $'
+* '$Revision: 1.69 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -114,8 +114,6 @@
     <filter token="datasubmitservlet" value="/${web.context_uri}/servlet/DataSubmitServlet"/>
     <filter token="nestedquerybuilder" value="/${web.context_uri}/servlet/QueryBuilderServlet"/>
     <filter token="authenticationservlet" value="/${web.context_uri}/servlet/authenticate"/>
-    <filter token="viewdataservlet" value="/${web.context_uri}/servlet/viewData"/>
-    <filter token="filedownloadservlet" value="/${web.context_uri}/servlet/fileDownload"/>
     <!-- Struts -->
     <filter token="DisplayUploadPlotAction" value="/${web.context_uri}/DisplayUploadPlotAction.do"/>
     <!-- FIXME: Should be in a prepare target -->

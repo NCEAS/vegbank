@@ -130,21 +130,9 @@
             </servlet-mapping>  
             
             <servlet-mapping>
-              <servlet-name>viewData</servlet-name>
-              <url-pattern>/servlet/viewData</url-pattern>
-            </servlet-mapping>  
-            
-            <servlet-mapping>
               <servlet-name>stylesheetgenerator</servlet-name>
               <url-pattern>/servlet/stylesheetgenerator</url-pattern>
             </servlet-mapping>  
-
-
-            <servlet-mapping>
-              <servlet-name>result-download</servlet-name>
-              <url-pattern>/servlet/fileDownload</url-pattern>
-            </servlet-mapping>  
-
             
             <servlet-mapping>
               <servlet-name>framework</servlet-name>
