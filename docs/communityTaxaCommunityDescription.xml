@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+
+<dataModel>	
+<title>Prototype Veg Plots Database Component Description: communityDescription</title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
+<contributor> </contributor>
+<description> </description>
+<date></date>
+
+
+
+<entity>
+	<entityName>community.communityDescription</entityName>
+	<entitySummary>This table stores descriptive attributes used for describing a 
+	concept that can be applied to a community name.</entitySummary>
+	<entityDescription> </entityDescription>
+	<attribute> 
+		<attName>DESCRIPTION_ID</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>PK</attKey>
+		<attReferences>n/a</attReferences>
+		<attNotes>n/a</attNotes>
+		<attDefinition>Database assigned value to each unique record in 
+		the communityDescription table.</attDefinition>
+	</attribute>
+
+
+	<attribute> 
+		<attName>COMMUNITYCONCEPT_ID</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>FK</attKey>
+		<attReferences>communityConcept</attReferences>
+		<attNotes>n/a</attNotes>
+		<attDefinition>Foreign key into the communityConcept table.</attDefinition>
+	</attribute>
+	
+	<attribute> 
+		<attName>text</attName>
+		<attNulls>No</attNulls>	
+		<attType>TEXT</attType>
+		<attKey>n/a</attKey>
+		<attReferences>n/a</attReferences>
+		<attNotes>n/a</attNotes>
+		<attDefinition>This text field stores the description of the community.</attDefinition>
+	</attribute>
+	
+	<attribute> 
+		<attName>supportingFields</attName>
+		<attNulls>Yes</attNulls>	
+		<attType>VARCHAR2</attType>
+		<attKey>n/a</attKey>
+		<attReferences>n/a</attReferences>
+		<attNotes>n/a</attNotes>
+		<attDefinition>These fields will stores data which support the 
+		vegetation community classification, and the attribute names will 
+		be updated from the CDMS.</attDefinition>
+	</attribute>
+	
+	
+	<attribute>
+                <attName>startDate</attName>
+                <attNulls>NO</attNulls>
+                <attType>DATE</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is the date for which a description started being 
+		standard status.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>stopDate</attName>
+                <attNulls>NO</attNulls>
+                <attType>DATE</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is the date for which a description stoped being 
+		standard status.</attDefinition>
+        </attribute>
+	
+
+	<children> </children>
+</entity>
+</dataModel>	

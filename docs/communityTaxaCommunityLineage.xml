@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+
+<dataModel>	
+<title>Prototype Veg Plots Database Component Description: communityLineage</title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
+<contributor> </contributor>
+<description> </description>
+<date></date>
+
+
+
+<entity>
+	<entityName>community.communityLineation</entityName>
+	<entitySummary>This table stores tracks the lineage of vegetation community 
+	concepts.</entitySummary>
+	<entityDescription> </entityDescription>
+	<attribute> 
+		<attName>LINEAGE_ID</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>PK</attKey>
+		<attReferences>n/a</attReferences>
+		<attNotes>n/a</attNotes>
+		<attDefinition>Database assigned value to each unique record in 
+		the communityLineage table.</attDefinition>
+	</attribute>
+	
+	<attribute>
+                <attName>CONCEPT1_ID</attName>
+                <attNulls>NO</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attReferences>communityConcept</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is the foreign key into the communityConcept table 
+		"pointing" to the child concept.</attDefinition>
+        </attribute>
+
+	<attribute>
+                <attName>CONCEPT2_ID</attName>
+                <attNulls>NO</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attReferences>communityConcept</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is the foreign key into the communityConcept table 
+		"pointing" to the parent concept.</attDefinition>
+        </attribute>
+
+	
+
+
+	<children> </children>
+</entity>
+</dataModel>	
