@@ -13,8 +13,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2004-06-14 22:16:51 $'
-*  '$Revision: 1.21 $'
+*      '$Date: 2004-06-29 06:53:26 $'
+*  '$Revision: 1.22 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -78,14 +78,12 @@
   
       <!-- SOME NOTES ABOUT THE USE OF ICONS-->
       <br/>
-      <span class="intro">Available Reports:</span><br/>
+      <span class="intro">Available Reports:</span>
+		&nbsp; &nbsp; &nbsp; &nbsp;
       <span class="item">
-        <img src="@image_server@report_sm.gif"></img>=Summary,
-        <img src="@image_server@comprehensive_sm.gif"></img>=Comprehensive,
-        <img src="@image_server@small_globe.gif"></img>=Location,
-        <img src="@image_server@xml_icon.gif"></img>=Raw XML,
-        <img src="@image_server@environmental_text.gif"></img>=Environment ASCII,
-        <img src="@image_server@species_text.gif"></img>=Species ASCII
+        <img src="@image_server@report_sm.gif"></img>=Summary 
+		&nbsp; &nbsp; &nbsp; &nbsp;
+        <img src="@image_server@comprehensive_sm.gif"></img>=Comprehensive
       </span>
 	  <br/> &nbsp;
 
@@ -95,9 +93,9 @@
 	 <br/>
 		<input type="button" value="Download Selected Plots" onClick="postAction('DownLoadManager.do')"/> 
 		&nbsp; &nbsp; &nbsp; 
-		<!--
 		<input type="button" value="Request Access from Plot Owner" onClick="postAction('LoadPlotQuery.do')"/> 
-		-->
+		&nbsp; &nbsp; &nbsp; 
+		<input type="button" value="Add Selected Plots to Dataset" onClick="postAction('DatasetAppend.do')"/> 
 	   <br/>&nbsp;
 
            <!-- set up a table -->
@@ -157,12 +155,6 @@
 	    <!-- First Cell-->
 	    <th width="20%" class="<%= rowClass %>" align="center" nowrap>
 	     
-             <!-- THE LINK TO THE SUMMARY-->
-             <html:link page="/GenericDispatcher.do?command=RetrieveVBModelBean&jsp=GenericDisplay.jsp&rootEntity=Observation" title="summary report" paramId="accessionCode" paramName="row" paramProperty="accessionCode">
-                <img align="center" src="@image_server@report_sm.gif" alt="Summary view"></img>
-              </html:link>
-
-
 	      <!-- THE LINK TO THE SUMMARY-->
              <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;accessionCode=<bean:write property="accessionCode" name="row"/>" title="summary report"><img align="center" border="0" 
 	     	src="@image_server@report_sm.gif" alt="Summary view"></img></a>
@@ -172,32 +164,17 @@
 	      	src="@image_server@comprehensive_sm.gif" alt="Comprehensive view"></img></a>
 	      
 	      <!-- THE LINK TO THE LOCATION -->
-	      <a href="http://68.171.138.181:8000/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" 
+	      <!-- Removing link to map until is works -->
+		  <!--
+		  a href="http://68.171.138.181:8000/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" 
 		  property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>" title="location report"><img align="center" 
 		  border="0" src="@image_server@small_globe.gif" alt="Location"></img></a>
+		  -->
 		  <!--
 	      <a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" 
 		  	property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>" title="location report">
 		  -->
 	      
-	      <!-- THE LINK TO THE RAW XML-->
-              <html:link page="/DisplayEntity.do?resultType=rawXML" paramId="accessionCode" paramName="row" paramProperty="accessionCode" title="view raw XML">
-        
-                <img align="center" border="0" src="@image_server@xml_icon.gif" alt="Raw XML view"></img>
-              </html:link>
-		      
-	      <!-- THE LINK TO THE Environmental Data ASCII report -->
-
-              <html:link page="/DisplayEntity.do?resultType=ASCIIEvironment" paramId="accessionCode" paramName="row" paramProperty="accessionCode" title="Environmental ASCII Report">
-                <img align="center" border="0" src="@image_server@environmental_text.gif" alt="Environmental ASCII Report"></img>
-              </html:link>
-
-      
-	      <!-- THE LINK TO THE Species Data ASCII report -->
-              <html:link page="/DisplayEntity.do?resultType=ASCIISpecies" paramId="accessionCode" paramName="row" paramProperty="accessionCode" title="Species ASCII Report">
-                <img align="center" border="0" src="@image_server@species_text.gif" alt="Species ASCII Report"></img>
-              </html:link>
-
 
 	      <!-- Checkbox for action selection -->
 	      <br/>
@@ -256,10 +233,11 @@
 	<br/>
 	 <span class="item">Choose plots from the search results above, then...</span>
 	<br/>
-	<input type="button" value="Download Selected Plots" onClick="postAction('DownLoadManager.do')"/> &nbsp; &nbsp; &nbsp; 
-		<!--
-		<input type="button" value="Request Access from Plot Owner" onClick="postAction('LoadPlotQuery.do')"/> 
-		-->
+	<input type="button" value="Download Selected Plots" onClick="postAction('DownLoadManager.do')"/>
+		&nbsp; &nbsp; &nbsp; 
+	<input type="button" value="Request Access from Plot Owner" onClick="postAction('LoadPlotQuery.do')"/> 
+		&nbsp; &nbsp; &nbsp; 
+	<input type="button" value="Add Selected Plots to Dataset" onClick="postAction('DatasetAppend.do')"/> 
 	<br/>&nbsp;
 
      </form>      
