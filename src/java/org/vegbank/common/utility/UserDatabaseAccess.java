@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:29:25 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-01-16 07:09:01 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ package org.vegbank.common.utility;
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
  * 		
- *		'$Author: farrell $'
- *     '$Date: 2003-11-25 19:29:25 $'
- *     '$Revision: 1.2 $'
+ *		'$Author: anderson $'
+ *     '$Date: 2004-01-16 07:09:01 $'
+ *     '$Revision: 1.3 $'
  */
 
 import java.sql.PreparedStatement;
@@ -50,6 +50,7 @@ import org.vegbank.common.model.Address;
 import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Telephone;
 import org.vegbank.common.model.WebUser;
+import org.vegbank.ui.struts.CertificationForm;
 
 public class UserDatabaseAccess 
 {	
@@ -63,19 +64,11 @@ public class UserDatabaseAccess
 		 try
 		 {
 			 WebUser user = this.getUser(email);
-			 String buf =  user.getPermissiontype();
-			 try
-			 {
-				 level = Integer.parseInt(buf);
-			 }
-			 catch (Exception e1) 
-			 {
-				 System.out.println("Exception parsing permission level: " + e1.getMessage());
-			 }
+			 level = user.getPermissiontype();
 		 }
 		 catch (Exception e) 
 		 {
-			System.out.println("Exception: " + e.getMessage());
+			LogUtility.log("Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 		 return(level);
@@ -89,7 +82,7 @@ public class UserDatabaseAccess
 	 */
 	public String getPassword(String emailAddress)
 	{
-		System.out.println("UserDatabaseAccess > looking up the password for user: " + emailAddress);
+		LogUtility.log("UserDatabaseAccess > looking up the password for user: " + emailAddress);
 		String s = null;
 		try 
 		{
@@ -111,7 +104,7 @@ public class UserDatabaseAccess
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage());
+			LogUtility.log("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(s);
@@ -124,7 +117,7 @@ public class UserDatabaseAccess
 	 */
 	public boolean userCertificationExists(String emailAddress)
 	{
-		//System.out.println("UserDatabaseAccess > looking up the user id for user: " + emailAddress);
+		//LogUtility.log("UserDatabaseAccess > looking up the user id for user: " + emailAddress);
 		int s = 0;
 		StringBuffer sb = new StringBuffer();
 		try 
@@ -134,7 +127,7 @@ public class UserDatabaseAccess
 			Statement query = conn.createStatement();
 			sb.append("select CERTIFICATION_ID from USER_CERTIFICATION ");
 			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"'");
-			//System.out.println("sql: " + sb.toString() );
+			//LogUtility.log("sql: " + sb.toString() );
 			
 			//issue the query
 			query.executeQuery(sb.toString());
@@ -145,7 +138,7 @@ public class UserDatabaseAccess
 			{
 				resultCnt++;
      		s = rs.getInt(1);
-				System.out.println("result: " + s);
+				LogUtility.log("result: " + s);
 				if ( s > 0 )
 				{
 					return( true );
@@ -163,8 +156,8 @@ public class UserDatabaseAccess
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage());
-			System.out.println("sql: " + sb.toString() );
+			LogUtility.log("Exception: " + e.getMessage());
+			LogUtility.log("sql: " + sb.toString() );
 			e.printStackTrace();
 			return(false);
 		}
@@ -173,141 +166,87 @@ public class UserDatabaseAccess
 	 
 	/**
 	 * method that inserts the certification info to the user database
-	 * The following parameters can be passed as input <br>
 	 * 
-	 * @param emailAddress
-	 * @param surName 
-	 * @param givenName
-	 * @param phoneNumber
-	 * @param phoneType
-	 * @param currentCertLevel
-	 * @param cvDoc
-	 * @param highestDegree
-	 * @param degreeYear
-	 * @param degreeInst
-	 * @param currentInst
-	 * @param currentPos
-	 * @param esaPos
-	 * @param profExperienceDoc
-	 * @param relevantPubs
-	 * @param vegSamplingDoc
-	 * @param vegAnalysisDoc
-	 * @param usnvcExpDoc
-	 * @param vegbankExpDoc
-	 * @param plotdbDoc
-	 * @param nvcExpRegionA
-	 * @param nvcExpExpVegA
-	 * @param nvcExpFloristicsA
-	 * @param nvcExpNVCA
-	 * @param esaSponsorNameA
-	 * @param esaSponsorEmailA
-	 * @param esaSponsorNameB
-	 * @param esaSponsorEmailB
-	 * @param peerReview
-	 * @param additionalStatements
+	 * @param form
 	 *
 	 */
-	public boolean insertUserCertificationInfo(
-		String emailAddress,
-		String surName,
-		String givenName,
-		String phoneNumber,
-		String phoneType,
-		String currentCertLevel,
-		String cvDoc,
-		String highestDegree,
-		String degreeYear,
-		String degreeInst,
-		String currentInst,
-		String currentPos,
-		String esaPos,
-		String profExperienceDoc,
-		String relevantPubs,
-		String vegSamplingDoc,
-		String vegAnalysisDoc,
-		String usnvcExpDoc,
-		String vegbankExpDoc,
-		String plotdbDoc,
-		String nvcExpRegionA,
-		String nvcExpVegA,
-		String nvcExpFloristicsA,
-		String nvcExpNVCA,
-		String esaSponsorNameA,
-		String esaSponsorEmailA,
-		String esaSponsorNameB,
-		String esaSponsorEmailB,
-		String peerReview,
-		String additionalStatements)
-	 {
-		 StringBuffer sb = new StringBuffer();
-		 try
-		 {	
-			 System.out.println("UserDatabaseAccess > inserting user cert info");
+	public boolean insertUserCertificationInfo(CertificationForm form) {
+
+		 StringBuffer sqlInsert = new StringBuffer();
+		 try {	
+			 LogUtility.log("UserDatabaseAccess > inserting user cert info");
 			 //get the connections etc
 			 DBConnection conn = getConnection();
+
 			 //see if this user has an entry in this table and ifso then update it
-			 if ( this.userCertificationExists(emailAddress) == true )
-			 {
+			 if ( this.userCertificationExists(form.getEmailAddress()) == true ) {
 				 return(false);
-			 }
-			 else
-			 {
-				 //get the userId of the user 
-				 int userid = this.getUserId( emailAddress );
-				 // now make the entry in the download table
-				 // this is the postgresql date function
-				 String sysdate = "now()";
-				 sb.append("INSERT into USER_CERTIFICATION ");
-				 sb.append(" (email_address, sur_name, given_name, phone_number, phone_type, current_cert_level,  ");
-				 sb.append("  cv_documentation, highest_degree, degree_year, degree_institution, current_institution, ");
-				 sb.append(" current_position, esa_certified, prof_experience_doc, relevant_pubs, veg_sampling_doc, ");
-				 sb.append(" veg_analysis_doc, usnvc_experience_doc, vegbank_experience_doc, plotdb_experience_doc, ");
-				 sb.append(" nvc_exp_region_a, nvc_exp_vegetation_a, nvc_exp_floristics_a, nvc_exp_usnvc_a, ");
-				 sb.append(" esa_sponsor_name_a,  esa_sponsor_email_a, ");
-				 sb.append("  peer_review, additional_statements ) ");
-				 sb.append(" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
-				 // create the statement
-				 PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
-				 // Bind the values to the query and execute it
-				 pstmt.setString(1, emailAddress);
-				 pstmt.setString(2, surName);
-				 pstmt.setString(3, givenName);
-				 pstmt.setString(4, phoneNumber);
-				 pstmt.setString(5, phoneType);
-				 pstmt.setString(6, currentCertLevel);
-				 pstmt.setString(7, cvDoc);
-				 pstmt.setString(8, highestDegree);
-				 pstmt.setString(9, degreeYear);
-				 pstmt.setString(10, degreeInst);
-				 pstmt.setString(11, currentInst);
-				 pstmt.setString(12, currentPos);
-				 pstmt.setString(13, esaPos);
-				 pstmt.setString(14, profExperienceDoc);
-				 pstmt.setString(15, relevantPubs);
-				 pstmt.setString(16, vegSamplingDoc);
-				 pstmt.setString(17, vegAnalysisDoc);
-				 pstmt.setString(18, usnvcExpDoc);
-				 pstmt.setString(19, vegbankExpDoc);
-				 pstmt.setString(20, plotdbDoc);
-				 pstmt.setString(21, nvcExpRegionA);
-				 pstmt.setString(22, nvcExpVegA);
-				 pstmt.setString(23, nvcExpFloristicsA);
-				 pstmt.setString(24, nvcExpNVCA);
-				 pstmt.setString(25, esaSponsorNameA);
-				 pstmt.setString(26, esaSponsorEmailA);
-				 pstmt.setString(27, peerReview);
-				 pstmt.setString(28, additionalStatements);
-				
-				 
-				 // execute the insert
+			 } else {
+
+				//get the userId of the user 
+				int userid = this.getUserId( form.getEmailAddress() );
+				// now make the entry in the download table
+				// this is the postgresql date function
+				sqlInsert.append("INSERT into usercertification ")
+					.append(" (current_cert_level, requested_cert_level, ")
+					.append(" highest_degree, degree_year, degree_institution, current_org, ")
+					.append(" current_pos, esa_member, prof_exp, relevant_pubs, veg_sampling_exp, ")
+					.append(" veg_analysis_exp, usnvc_exp, vb_exp, tools_exp, vb_intention")
+					.append(" exp_region_a, exp_region_a_veg, exp_region_a_flor, exp_region_a_nvc, ")
+					.append(" exp_region_b, exp_region_b_veg, exp_region_b_flor, exp_region_b_nvc, ")
+					.append(" exp_region_c, exp_region_c_veg, exp_region_c_flor, exp_region_c_nvc, ")
+					.append(" esa_sponsor_name_a,  esa_sponsor_email_a, ")
+					.append(" esa_sponsor_name_b,  esa_sponsor_email_b, ")
+					.append(" peer_review, addl_stmt) ")
+					.append(" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
+
+				// create the statement
+				PreparedStatement pstmt = conn.prepareStatement( sqlInsert.toString() );
+
+				pstmt.setString(1, form.getCurrentCertLevel());
+				pstmt.setString(2, form.getRequestedCert());
+				pstmt.setString(3, form.getHighestDegree());
+				pstmt.setString(4, form.getDegreeYear());
+				pstmt.setString(5, form.getDegreeInst());
+				pstmt.setString(6, form.getCurrentOrg());
+				pstmt.setString(7, form.getCurrentPos());
+				pstmt.setString(8, form.getEsaMember());
+				pstmt.setString(9, form.getProfExp());
+				pstmt.setString(10, form.getRelevantPubs());
+				pstmt.setString(11, form.getVegSamplingExp());
+				pstmt.setString(12, form.getVegAnalysisExp());
+				pstmt.setString(13, form.getUsnvcExp());
+				pstmt.setString(14, form.getVbExp());
+				pstmt.setString(15, form.getToolsExp());
+				pstmt.setString(16, form.getVbIntention());
+				pstmt.setString(17, form.getNvcExpRegionA());
+				pstmt.setString(18, form.getNvcExpVegA());
+				pstmt.setString(19, form.getNvcExpFloristicsA());
+				pstmt.setString(20, form.getNvcExpNVCA());
+				pstmt.setString(21, form.getNvcExpRegionB());
+				pstmt.setString(22, form.getNvcExpVegB());
+				pstmt.setString(23, form.getNvcExpFloristicsB());
+				pstmt.setString(24, form.getNvcExpNVCB());
+				pstmt.setString(25, form.getNvcExpRegionC());
+				pstmt.setString(26, form.getNvcExpVegC());
+				pstmt.setString(27, form.getNvcExpFloristicsC());
+				pstmt.setString(28, form.getNvcExpNVCC());
+				pstmt.setString(29, form.getEsaSponsorNameA());
+				pstmt.setString(30, form.getEsaSponsorEmailA());
+				pstmt.setString(31, form.getEsaSponsorNameB());
+				pstmt.setString(32, form.getEsaSponsorEmailB());
+				pstmt.setString(33, form.getPeerReview());
+				pstmt.setString(34, form.getAddlStmt());
+
+				// execute the insert
 				pstmt.execute();
 				return(true);
 			 }
 		 }
 		 catch (Exception e) 
 		 {
-			 System.out.println("Exception: " + e.getMessage());
-			 System.out.println("sql: " + sb.toString() );
+			 LogUtility.log("Exception: " + e.getMessage());
+			 LogUtility.log("sql: " + sqlInsert.toString() );
 			 e.printStackTrace();
 			 return(false);
 		 }
@@ -352,7 +291,7 @@ public class UserDatabaseAccess
 		{
 			// FIGURE OUT IF THE USER HAS AN ACCOUNT
 			int i = this.getUserId(emailAddress);
-			//System.out.println("userid: " + i);
+			//LogUtility.log("userid: " + i);
 			if (i == 0)
 			{
 				//get the connections etc
@@ -401,8 +340,8 @@ public class UserDatabaseAccess
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage());
-			System.out.println("sql: " + sb.toString() );
+			LogUtility.log("Exception: " + e.getMessage());
+			LogUtility.log("sql: " + sb.toString() );
 			e.printStackTrace();
 			success = false;
 		}
@@ -418,7 +357,7 @@ public class UserDatabaseAccess
 	*/
 	public int getUserId(String emailAddress)
 	{
-		System.out.println("UserDatabaseAccess > looking up the user id for user: " + emailAddress);
+		LogUtility.log("UserDatabaseAccess > looking up the user id for user: " + emailAddress);
 		int s = 0;
 		try 
 		{
@@ -439,7 +378,7 @@ public class UserDatabaseAccess
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage());
+			LogUtility.log("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(s);
@@ -455,7 +394,7 @@ public class UserDatabaseAccess
 	*/
 	public boolean userDownloadEntryExists(String emailAddress, String downloadType)
 	{
-		System.out.println("UserDatabaseAccess > looking up the user id for user: " + emailAddress);
+		LogUtility.log("UserDatabaseAccess > looking up the user id for user: " + emailAddress);
 		int s = 0;
 		StringBuffer sb = new StringBuffer();
 		try 
@@ -467,7 +406,7 @@ public class UserDatabaseAccess
 			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"' AND ");
 			sb.append(" DOWNLOAD_TYPE like '"+downloadType+"'");
 			
-			//System.out.println("sql: " + sb.toString() );
+			//LogUtility.log("sql: " + sb.toString() );
 			
 			//issue the query
 			query.executeQuery(sb.toString());
@@ -479,7 +418,7 @@ public class UserDatabaseAccess
 			{
 				resultCnt++;
      		s = rs.getInt(1);
-				System.out.println("result: " + s);
+				LogUtility.log("result: " + s);
 				if ( s > 0 )
 				{
 					return( true );
@@ -497,8 +436,8 @@ public class UserDatabaseAccess
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage());
-			System.out.println("sql: " + sb.toString() );
+			LogUtility.log("Exception: " + e.getMessage());
+			LogUtility.log("sql: " + sb.toString() );
 			e.printStackTrace();
 			return(false);
 		}
@@ -511,7 +450,7 @@ public class UserDatabaseAccess
 	 */
 	 public void updateDownloadInfo(String emailAddress, String downloadType)
 	 {
-		 System.out.println("UserDatabaseAccess > updating download info");
+		 LogUtility.log("UserDatabaseAccess > updating download info");
 		 StringBuffer sb = new StringBuffer();
 		try
 		{	
@@ -526,7 +465,7 @@ public class UserDatabaseAccess
 			sb.append("WHERE EMAIL_ADDRESS like '"+emailAddress+"'  and download_type like '");
 			sb.append(downloadType+"'");
 			
-			System.out.println("sql: " + sb.toString() );
+			LogUtility.log("sql: " + sb.toString() );
 			
 			// create the statement
 			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
@@ -536,8 +475,8 @@ public class UserDatabaseAccess
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage());
-			System.out.println("sql: " + sb.toString() );
+			LogUtility.log("Exception: " + e.getMessage());
+			LogUtility.log("sql: " + sb.toString() );
 			e.printStackTrace();
 		}
 	 }
@@ -552,7 +491,7 @@ public class UserDatabaseAccess
 		StringBuffer sb = new StringBuffer();
 		try
 		{	
-			System.out.println("UserDatabaseAccess > inserting download info");
+			LogUtility.log("UserDatabaseAccess > inserting download info");
 			//get the connections etc
 			DBConnection conn = getConnection();
 			// update the ticket count
@@ -590,8 +529,8 @@ public class UserDatabaseAccess
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage());
-			System.out.println("sql: " + sb.toString() );
+			LogUtility.log("Exception: " + e.getMessage());
+			LogUtility.log("sql: " + sb.toString() );
 			e.printStackTrace();
 		}
 		
@@ -609,7 +548,7 @@ public class UserDatabaseAccess
 		}
 		catch (SQLException e)
 		{
-			System.out.println("Exception: " + e.getMessage());
+			LogUtility.log("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -634,7 +573,7 @@ public class UserDatabaseAccess
  			java.util.Date localtime = new java.util.Date();
  	//		String dateString = formatter.format(localtime);
 			
-			System.out.println("UserDatabaseAccess > Database date: "+localtime);
+			LogUtility.log("UserDatabaseAccess > Database date: "+localtime);
 			
 			sb.append("UPDATE USER_INFO set TICKET_COUNT = TICKET_COUNT + 1 ");
 			sb.append("WHERE EMAIL_ADDRESS like '"+emailAddress+"' ");
@@ -644,7 +583,7 @@ public class UserDatabaseAccess
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage());
+			LogUtility.log("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -684,32 +623,32 @@ public class UserDatabaseAccess
 				{
 					String DBEmailAddress = results.getString(1); 
 					String DBPassWord = results.getString(2); 
-					System.out.println("UserDatabaseAccess > Retrieved Name: "+emailAddress);
+					LogUtility.log("UserDatabaseAccess > Retrieved Name: "+emailAddress);
 					//validate the email and passwords
 					if ( emailAddress.trim().equals(DBEmailAddress) 
 						&& passWord.trim().equals(DBPassWord) )
 						{
-							System.out.println("UserDatabaseAccess > Accepted at the db level");
+							LogUtility.log("UserDatabaseAccess > Accepted at the db level");
 							//update the ticket count
 							updateTicketCount( DBEmailAddress );
 							return(true);
 						}
 						else 
 						{
-							System.out.println("UserDatabaseAccess > accepted user but denied access");
+							LogUtility.log("UserDatabaseAccess > accepted user but denied access");
 							return(false);
 						}
 				}
 				else 
 				{
-					System.out.println("UserDatabaseAccess > User not known in database");
+					LogUtility.log("UserDatabaseAccess > User not known in database");
 				}
 			}
 			conn.close();
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " 
+			LogUtility.log("Exception: " 
 			+e.getMessage());
 			e.printStackTrace();
 		}
@@ -797,7 +736,7 @@ public class UserDatabaseAccess
 			h.put("userid",  userId);
 			h.put("partyid",  partyId);		
 			
-			//System.out.println(">>>> " + userId + "  " + dayPhone);
+			//LogUtility.log(">>>> " + userId + "  " + dayPhone);
 		}
 		else
 		{
@@ -811,12 +750,12 @@ public class UserDatabaseAccess
 		{
 			String name = (String) it.next();
 			String value = (String) h.get(name);
-			//System.out.println("DBObservationReader > name: '" + name + "' value: '" + value + "'" );
+			//LogUtility.log("DBObservationReader > name: '" + name + "' value: '" + value + "'" );
 					
 			// Populate Object with value
 			String property = name;
 			BeanUtils.copyProperty(userBean, property, value);
-			//System.out.println(BeanUtils.getSimpleProperty(object, property) );
+			//LogUtility.log(BeanUtils.getSimpleProperty(object, property) );
 		}
 		
 		return userBean;
@@ -845,7 +784,7 @@ public class UserDatabaseAccess
 	{
 		try
 		{
-			System.out.println("Attempting to update Profile");
+			LogUtility.log("Attempting to update Profile");
 
 			String surName = (String) h.get("surName");
 			String givenName = (String) h.get("givenName");
@@ -884,7 +823,7 @@ public class UserDatabaseAccess
 
 				sb.append("WHERE USER_ID = '" + userId + "' ");
 				
-				System.out.println("sql: " + sb.toString());
+				LogUtility.log("sql: " + sb.toString());
 				// create the statement
 				PreparedStatement pstmt = conn.prepareStatement(sb.toString());
 				// execute the insert
@@ -927,12 +866,12 @@ public class UserDatabaseAccess
 				conn.commit();
 				vbconn.commit();
 				
-				System.out.println("Updated Profile");
+				LogUtility.log("Updated Profile");
 			}
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage());
+			LogUtility.log("Exception: " + e.getMessage());
 			e.printStackTrace();
 			return (false);
 		}
@@ -975,7 +914,7 @@ public class UserDatabaseAccess
 			e.printStackTrace();
 		}
 
-		System.out.println("UserDatabaseAccess > user info: " + user );
+		LogUtility.log("UserDatabaseAccess > user info: " + user );
 		//h.put("surName", "Harris");
 		//h.put("givenName", "John");
 		//udb.updateUserInfo(h);
