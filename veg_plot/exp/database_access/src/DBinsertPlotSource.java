@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-08-07 18:22:20 $'
- * 	'$Revision: 1.31 $'
+ *  '$Date: 2002-08-08 14:07:20 $'
+ * 	'$Revision: 1.32 $'
  */
 package databaseAccess;
 
@@ -393,8 +393,8 @@ public class DBinsertPlotSource
 				pstmt.close();
 				//this.conn.close();
 				// let the connection pool know that the connection pool is to be destroyed
-				System.out.println("DBinsertPlotSource > destroying the conn. pool");
-				connectionBroker.manageLocalDbConnectionBroker("destroy");
+				//System.out.println("DBinsertPlotSource > destroying the conn. pool");
+				//connectionBroker.manageLocalDbConnectionBroker("destroy");
 		 }
 		 catch (Exception e )
 		 {
@@ -669,6 +669,8 @@ public class DBinsertPlotSource
 			{
 				conn.commit();
 				debug.append( "<insert>true</insert>\n" );
+				// CREATE THE DENORM TABLES
+				this.createSummaryTables();
 			}
 			else
 			{
