@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-03-21 17:12:51 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2002-03-21 21:51:05 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
@@ -76,10 +76,13 @@
 	
 		<td align="left">
 			<table border="0" cellspacing=5 cellpadding=5>
-			<form action="@datasubmitservlet@" method="get">
+<!--			<form action="@datasubmitservlet@" method="get"> -->
+			
+			<form action= "http://128.111.220.69/framework/servlet/dataexchange" enctype="multipart/form-data" method=+"post">
 			<input type="hidden" name="submitDataType" value="vegPlot">
-			<input type="hidden" name="action" value="init">		
-	
+			<input type="hidden" name="action" value="upload">		
+			<input type="hidden" name="referPage" value="continue with the plot upload wizard">
+			<input type="hidden" name="referUrl" value="@datasubmitservlet@/?action=upload&submitDataType=vegPlot">
 			
 			<tr valign=top>
 			<td  align=left valign=middle colspan=2>
@@ -101,7 +104,7 @@
 	
 
 
-<!-- PLOT DATA DESCRIPTION -->
+<!-- PLOT FILE  -->
 <table border="0" width="100%" bgcolor="#DFE5FA">
 	<tr>
 		<td  align=left valign=top width="5%" >
