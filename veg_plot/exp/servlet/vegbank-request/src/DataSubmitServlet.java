@@ -25,8 +25,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-05-16 15:52:46 $'
- *  '$Revision: 1.26 $'
+ *  '$Date: 2002-05-16 16:47:09 $'
+ *  '$Revision: 1.27 $'
  */
 
 
@@ -248,12 +248,12 @@ public class DataSubmitServlet extends HttpServlet
 			{
 				String receiptType  = (String)params.get("receiptType");
 				//the plot file can only be tnc, vbaccess, nativexml
-				String plotFileType = (String)params.get("plotFileType");
+				//String plotFileType = (String)params.get("plotFileType");
 				
 				System.out.println("DataSubmitServlet > requesting a receipt type: "+receiptType );
-				System.out.println("DataSubmitServlet > plot file type: "+plotFileType );
+				System.out.println("DataSubmitServlet > plot file type: "+ this.plotsArchiveType);
 				//sleep so that admin can see the debugging
-				Thread.sleep(3000);
+				Thread.sleep(2000);
 				
 				while (enum.hasMoreElements()) 
 				{
@@ -269,7 +269,7 @@ public class DataSubmitServlet extends HttpServlet
 								System.out.println("DataSubmitServlet > requesting an rmi plot insert: '"+values[i]+"'" );
 								//insert the plot over the rmi system
 								System.out.println("DataSubmitServlet > plot being loaded by: " + user );
-								String result = rmiClient.insertPlot(thisPlot, plotFileType, user);
+								String result = rmiClient.insertPlot(thisPlot, this.plotsArchiveType, user);
 								String receipt = getPlotInsertionReceipt(thisPlot, result, receiptType, i, values.length);
 								sb.append( receipt );
 								System.out.println("DataSubmitServlet > requesting a receipt: '"+i+"' out of: " + values.length );
