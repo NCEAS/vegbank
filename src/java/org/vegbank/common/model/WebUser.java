@@ -9,8 +9,8 @@ import org.vegbank.common.utility.Utility;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-02-28 11:19:35 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2004-03-01 01:04:49 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,9 +92,6 @@ public class WebUser
 	 * @return
 	 */
 	public String getPreferredname() {
-		LogUtility.log("####### WebUser ############");
-		LogUtility.log("WebUser.getPreferredname: " + preferredname);
-		LogUtility.log("####### WebUser ############");
 		if (sqlSafe)
 			return Utility.encodeForDB(preferredname);
 		else

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-02-28 11:19:11 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-03-01 01:04:49 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-02-28 11:19:11 $'
- *     '$Revision: 1.9 $'
+ *     '$Date: 2004-03-01 01:04:49 $'
+ *     '$Revision: 1.10 $'
  */
 
 import java.sql.PreparedStatement;
@@ -336,15 +336,22 @@ public class UserDatabaseAccess
 		 
 		 Statement query = conn.createStatement();
 		 StringBuffer sb = new StringBuffer();
-			sb.append("SELECT email_address, password, surname, givenname, preferred_name,");
-			sb.append(" permission_type, organizationname, ticket_count, deliverypoint, ");
-			sb.append(" city, administrativearea, country, postalcode, phonenumber, ");
-			sb.append(" usr_id, party_id, address_id");
-			sb.append(" FROM usr NATURAL JOIN (party LEFT JOIN  ");
-			sb.append(" ( telephone NATURAL JOIN address ) USING (party_id) )");
-			sb.append(" WHERE ( currentflag = true  OR currentflag IS NULL ) AND ");
-			sb.append(" ( lower(phonetype) = '" + Telephone.PHONETYPE_WORK.toLowerCase()); 
-			sb.append("' OR phonetype IS NULL ) AND " + uniqueClause);
+		sb.append("SELECT email_address, password, surname, givenname, preferred_name,");
+		sb.append(" permission_type, organizationname, ticket_count, deliverypoint, ");
+		sb.append(" city, administrativearea, country, postalcode, usr_id, party_id, address_id");
+		sb.append(" FROM usr NATURAL JOIN (party LEFT JOIN address USING (party_id) )");
+		sb.append(" WHERE ( currentflag = true  OR currentflag IS NULL ) AND " + uniqueClause);
+		 /*
+		sb.append("SELECT email_address, password, surname, givenname, preferred_name,");
+		sb.append(" permission_type, organizationname, ticket_count, deliverypoint, ");
+		sb.append(" city, administrativearea, country, postalcode, phonenumber, ");
+		sb.append(" usr_id, party_id, address_id");
+		sb.append(" FROM usr NATURAL JOIN (party LEFT JOIN  ");
+		sb.append(" ( telephone NATURAL JOIN address ) USING (party_id) )");
+		sb.append(" WHERE ( currentflag = true  OR currentflag IS NULL ) AND ");
+		sb.append(" ( lower(phonetype) = '" + Telephone.PHONETYPE_WORK.toLowerCase()); 
+		sb.append("' OR phonetype IS NULL ) AND " + uniqueClause);
+		*/
 	
 		LogUtility.log("UDA.getAllUserData(): " + sb.toString() );
 		
@@ -370,10 +377,9 @@ public class UserDatabaseAccess
 			userBean.setState( results.getString(11) ); 
 			userBean.setCountry( results.getString(12) ); 
 			userBean.setPostalcode( results.getString(13) );
-			userBean.setDayphone( results.getString(14) );
-			userBean.setUserid( results.getInt(15) );
-			userBean.setPartyid( results.getInt(16) );		
-			userBean.setAddressid( results.getInt(17) );		
+			userBean.setUserid( results.getInt(14) );
+			userBean.setPartyid( results.getInt(15) );		
+			userBean.setAddressid( results.getInt(16) );		
 
 		}
 		
@@ -430,43 +436,86 @@ public class UserDatabaseAccess
 		try
 		{
 			LogUtility.log("Attempting to update Profile");
+			StringBuffer sb = new StringBuffer();
 
 			//get the connections etc
 			conn = getConnection();
-			Statement update = conn.createStatement();
-			conn.setAutoCommit(false);
+			Statement stmt = conn.createStatement();
+			ResultSet rs;
 
+			conn.setAutoCommit(false);
 			webuser.setSQLSafe(true);
 			
+
+			// check for extant address
+			String currentFlagSQL = "";
+			boolean doAddressUpdate = true;
+			if (webuser.getAddressid() == 0) {
+				doAddressUpdate = false;
+				// double check the db
+				rs = stmt.executeQuery(
+						"SELECT address_id from address where party_id = " + 
+						webuser.getPartyid() );
+				if (rs.next()) {
+					// found a record, so there was a problem building the webuser
+     				int extantAddressId = rs.getInt(1);
+					LogUtility.log("UDA.updateUserInfo: possible problem: address #" +
+							+ extantAddressId + " extant in db but not webuser");
+					webuser.setAddressid(extantAddressId);
+					doAddressUpdate = true;
+					currentFlagSQL = ", currentflag=true ";
+
+				} else {
+					// let's create a new address record
+					sb = new StringBuffer()
+						.append("INSERT INTO address (deliverypoint,city,")
+						.append("administrativearea,country,postalcode,party_id,currentflag) VALUES (")
+						.append("'" + webuser.getAddress() + "', ")
+						.append("'" + webuser.getCity() + "', ")
+						.append("'" + webuser.getState() + "', ")
+						.append("'" + webuser.getCountry() + "', ")
+						.append("'" + webuser.getPostalcode() + "', ")
+						.append(webuser.getPartyid() + ", ")
+						.append("true)");
+						LogUtility.log("UDA.updateUserInfo: NEW address: " + sb.toString());
+						stmt.executeUpdate(sb.toString());
+				}
+
+			} 
+
+			if (doAddressUpdate) {
+				// update address as normal
+				sb = new StringBuffer();
+				sb.append("UPDATE address SET ");
+				sb.append("deliverypoint='" + webuser.getAddress() + "', ");
+				sb.append("city='" + webuser.getCity() + "', ");
+				sb.append("administrativearea='" + webuser.getState() + "', ");
+				sb.append("country='" + webuser.getCountry() + "', ");
+				sb.append("postalcode='" + webuser.getPostalcode() + "' ");
+				sb.append(currentFlagSQL);
+				sb.append("WHERE address_id='" + webuser.getAddressid() + "' ");
+				LogUtility.log("UDA.updateUserInfo: address: " + sb.toString());
+				stmt.executeUpdate(sb.toString());
+			}
+
+
 			// usr
-			StringBuffer sb = new StringBuffer();
+			sb = new StringBuffer();
 			sb.append("UPDATE usr SET preferred_name='" + webuser.getPreferredname() + "', ");
 			sb.append("email_address='" + webuser.getEmail() + "' ");
 			sb.append("WHERE usr_id='" + webuser.getUserid() + "' ");
 			LogUtility.log("UDA.updateUserInfo: usr: " + sb.toString());
-			update.executeUpdate(sb.toString());
+			stmt.executeUpdate(sb.toString());
 
-			// address
-			sb = new StringBuffer();
-			sb.append("UPDATE address SET ");
-			sb.append("deliverypoint='" + webuser.getAddress() + "', ");
-			sb.append("city='" + webuser.getCity() + "', ");
-			sb.append("administrativearea='" + webuser.getState() + "', ");
-			sb.append("country='" + webuser.getCountry() + "', ");
-			sb.append("postalcode='" + webuser.getPostalcode() + "' ");
-			sb.append("WHERE address_id='" + webuser.getAddressid() + "' ");
-			LogUtility.log("UDA.updateUserInfo: address: " + sb.toString());
-			update.executeUpdate(sb.toString());
-			
 			// party
 			sb = new StringBuffer();
 			sb.append("UPDATE party SET organizationname='" + webuser.getOrganizationname() + "' ");
 			sb.append("WHERE party_id='" + webuser.getPartyid() + "' ");
 			LogUtility.log("UDA.updateUserInfo: party: " + sb.toString());
-			update.executeUpdate(sb.toString());
+			stmt.executeUpdate(sb.toString());
 			
 			
-			update.close();
+			stmt.close();
 			conn.commit();
 			
 			LogUtility.log("Updated Profile");
