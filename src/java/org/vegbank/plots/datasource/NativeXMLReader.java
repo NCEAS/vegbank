@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-02-19 17:39:03 $'
- *	'$Revision: 1.5 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-07-23 01:13:44 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,8 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.vegbank.common.utility.Utility;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -45,6 +47,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class NativeXMLReader 
 {	
+	private static Log log = LogFactory.getLog(NativeXMLReader.class); 
 	private XMLReader reader = null;
 	private boolean validate = false;
 	public NativeXMLReader( boolean validating ) throws Exception
@@ -67,7 +70,7 @@ public class NativeXMLReader
 			}
 			catch (SAXException e) 
 			{
-				System.err.println("could not set parser feature");
+				log.error("could not set parser feature");
 				throw e;
 			}
 		} 
@@ -106,7 +109,7 @@ public class NativeXMLReader
 		}
 		catch ( Exception  e  )
 		{
-			System.out.println( "Could not Parse file " );
+			log.debug( "Could not Parse file " );
 			e.printStackTrace();
 		}
 
@@ -124,7 +127,7 @@ public class NativeXMLReader
 		}
 		catch ( Exception  e  )
 		{
-			System.out.println( "Could not Parse file " );
+			log.debug( "Could not Parse file " );
 			e.printStackTrace();
 		}
 
@@ -156,6 +159,7 @@ public class NativeXMLReader
 				
 			// Sanity check -- can the schema be found
 			File schema = new File(Utility.VEGBANK_XML_SCHEMA);
+			log.info("Validating against schema file: " + Utility.VEGBANK_XML_SCHEMA);
 			if ( ! schema.exists() || ! schema.canRead() )
 			{
 				// Cannot find or work with this file
@@ -163,7 +167,7 @@ public class NativeXMLReader
 			}
 			else
 			{
-				System.out.println("NativeXMLReader > Found the schema file: '" + Utility.VEGBANK_XML_SCHEMA + "'.");
+				log.debug("NativeXMLReader > Found the schema file: '" + Utility.VEGBANK_XML_SCHEMA + "'.");
 			}
 			
 			reader.setProperty(
@@ -172,7 +176,7 @@ public class NativeXMLReader
 		}
 		catch (SAXException e) 
 		{
-			System.err.println("could not set parser feature");
+			log.error("could not set parser feature");
 			throw e;
 		}
 	}
