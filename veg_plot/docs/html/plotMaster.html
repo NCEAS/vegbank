@@ -9,8 +9,8 @@
 <P>
 </P>
 <P>
-<FONT SIZE="2" FACE="arial"><IMG SRC="owlogo.jpg"
- SGI_SRC="/home/computer/harris/db_proposal/openworks_model/owlogo.jpg"></FONT></P>
+<FONT SIZE="2" FACE="arial"><IMG SRC="./images/owlogo.jpg"
+ SGI_SRC="./images/owlogo.jpg"></FONT></P>
 <P>
 <B><FONT SIZE="5" FACE="arial">PlotMaster </FONT></B></P>
 <P>
@@ -18,7 +18,7 @@
 </P>
 <P>
 </P>
-<TABLE BORDER="3" CELLPADDING="0" CELLSPACING="0" WIDTH="300">
+<TABLE BORDER="1" CELLPADDING="0" CELLSPACING="0" WIDTH="800">
     <TR>
         <TD></TD>
     </TR>
@@ -35,88 +35,88 @@
     <TR>
         <TD><FONT SIZE="2" FACE="arial">PLOT_ID</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER(,)</FONT></TD>
-        <TD></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(38)</FONT></TD>
+        <TD>P</TD>
         <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD>hh</TD>
-        <TD>ii</TD>
+        <TD>The system-assigned unique identifier for a plot.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="2" FACE="arial">PROJECT_ID</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER(,)</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(38)</FONT></TD>
+        <TD>F</TD>
+        <TD><A HREF="project.html">project</A></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD>The system-assigned unique identifier for a project.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="2" FACE="arial">authorPlotNumber</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(5)</FONT></TD>
-        <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">previousPlotRecord</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(15)</FONT></TD>
-        <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">date</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER(,)</FONT></TD>
-        <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">dateAccuracy</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(60)</FONT></TD>
-        <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">landOwner</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">VARCHAR2(30)</FONT></TD>
         <TD></TD>
         <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD></TD>
+        <TD>The code the author(s) assigned to the plot.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">effortLevel</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">previousPlotRecord</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(38)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>If a re-measurement, the plot_id of the original plot</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">date</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">DATE()</FONT></TD>
         <TD></TD>
         <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
+        <TD>DD-MMM-YY</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">dateAccuracy</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(38)</FONT></TD>
         <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Date accuracy to a day.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">landOwner</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(10)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Owner of the land on which the plot is located.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">effortLevel</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(8)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Effort spent describing the plot.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="2" FACE="arial">standSize</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER(,)</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(38)</FONT></TD>
         <TD></TD>
         <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD></TD>
+        <TD>Extent of plant community in relation to plant size.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="2" FACE="arial">treePlotSize</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER(,)</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(38)</FONT></TD>
         <TD></TD>
         <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
@@ -125,20 +125,20 @@
     <TR>
         <TD><FONT SIZE="2" FACE="arial">treeSamleMethod</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">NUMBER(,)</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(22)</FONT></TD>
         <TD></TD>
         <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD></TD>
+        <TD>Sampling method used to describe tree cover.</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="2" FACE="arial">plotType</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">DATE()</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(15)</FONT></TD>
         <TD></TD>
         <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD></TD>
+        <TD>Type of plot (vegetation/ancillary).</TD>
     </TR>
     <TR>
         <TD><FONT SIZE="2" FACE="arial">phenologicalAspect</FONT></TD>
@@ -147,190 +147,218 @@
         <TD></TD>
         <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD></TD>
+        <TD>Indicator of vegetation development at time of description.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">plotOrigin</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">plotOriginLat</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(22,6)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Latitude of plot origin.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">plotOriginLong</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(22,6)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Longitude of plot origin.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">plotShape</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(12)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Shape of the plot area</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">plotSize</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(20)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Area over which all species were identified and their cover 
+            was estimated.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">dsgpolyo</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(200)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Coordinates of the polygon surrounding the plot area.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">horizPocAcc</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(3)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Estimated horizontal location accuracy in meters.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">altValue</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(8)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Altitude in meters.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">vertPosAcc</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(8)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Estimated accuracy of the altitude measurement.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">town</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(12)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Loaction: town.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">county</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(12)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Location: county.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">state</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(12)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Location: state.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">country</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">N</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(12)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Location: country.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">slopeAspect</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(22,6)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Azimuth of slope gradient.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">slopeGradient</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">NUMBER(22,6)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Inclination of slope.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">slopePosition</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(20)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Position of the plot on slope.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">locConfidetiality</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(20)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Indicator of location confidetiality.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">specConfidentiaility</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(20)</FONT></TD>
+        <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
+        <TD></TD>
+        <TD>Indicator of specices confidentiality.</TD>
+    </TR>
+    <TR>
+        <TD><FONT SIZE="2" FACE="arial">hydrologicRegime</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">VARCHAR2(32)</FONT></TD>
         <TD></TD>
         <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD></TD>
+        <TD>FGDC hydrologic regime (follows Cowardin et al. 1979.)</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">plotShape</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">soilMoisture</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">DATE()</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(20)</FONT></TD>
         <TD></TD>
         <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD></TD>
+        <TD>Soil moisture (Hills' 10 step).</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">plotSize</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">soilDrainage</FONT></TD>
         <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(80)</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(20)</FONT></TD>
         <TD></TD>
         <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD></TD>
+        <TD>USDA soil drainage classes.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">pdsgpolyo</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">geoSurf</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(100)</FONT></TD>
         <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD>Surficial geology type.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">phorizPocAcc</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">geoBedRx</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2(100)</FONT></TD>
         <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD>Bedrock geology type.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="2" FACE="arial">paltValue</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">otherConditions</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="2" FACE="arial">VARCHAR2()</FONT></TD>
         <TD></TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="2" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">pvertPosAcc</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">ptown</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">pcounty</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">pstate</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">pcountry</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">pslopeaspect</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">pslopePosition</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">plocConfidetiality</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">pspecConfidentiaility</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">psoilMoisture</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">psoilDrainage</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">pgeoSurf</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">pgeoBedRx</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="2" FACE="arial">potherConditions</FONT></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
-        <TD></TD>
+        <TD>User derined field.</TD>
     </TR>
 </TABLE>
 <P>
-last updated: Aug. 30, 2000</P>
+<FONT SIZE="-1">last updated: Thu Aug 31 13:32:36 PDT 2000</FONT> </P>
 </BODY>
 </HTML>

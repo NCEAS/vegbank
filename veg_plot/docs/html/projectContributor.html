@@ -3,14 +3,14 @@
 <HEAD>
     <META NAME="Generator" CONTENT="Cosmo Create 1.0.3">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <TITLE>Prototype Veg Plots Database Component Description: project 
-    (Table)</TITLE>
+    <TITLE>Prototype Veg Plots Database Component Description: 
+    projectContributor (Table)</TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
 <P>
 <IMG SRC="./images/owlogo.jpg" SGI_SRC="./images/owlogo.jpg"> </P>
 <P>
-<B><FONT SIZE="+2" FACE="arial">Project</FONT></B> <BR>
+<B><FONT SIZE="+2" FACE="arial">projectContributor</FONT></B> <BR>
 &nbsp; </P>
 <P>
 <B><FONT SIZE="-1" FACE="arial">Vegetation Plots Database Model 2000</FONT></B>
@@ -31,67 +31,49 @@
         <TD><B><FONT SIZE="-1" FACE="arial">DEFINITION</FONT></B></TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="-1" FACE="arial">project_id</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">projectContributor_id</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
         <TD>P</TD>
         <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD>The system-assigned unique identifier for a project.</TD>
+        <TD>The system-assigned unique identifier for a project 
+            contributor.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="-1" FACE="arial">projectName</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">project_id</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2(20)</FONT></TD>
-        <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
+        <TD>F</TD>
+        <TD><A HREF="project.html"><FONT SIZE="-1" FACE="arial">project</FONT></A></TD>
         <TD></TD>
         <TD>Project name as defined by the PI.</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="-1" FACE="arial">purpose</FONT></TD>
-        <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">party_id</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2(20)</FONT></TD>
+        <TD>F</TD>
+        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">party</FONT></A></TD>
         <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>Purpose for collecting the plots.</TD>
+        <TD>The system-assigned unique identifier for a party 
+            (individual or organization).</TD>
     </TR>
     <TR>
-        <TD><FONT SIZE="-1" FACE="arial">plotChoiceType</FONT></TD>
+        <TD><FONT SIZE="-1" FACE="arial">roleCode</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
         <TD><FONT SIZE="-1" FACE="arial">VARCHAR2(15)</FONT></TD>
         <TD></TD>
         <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
         <TD></TD>
-        <TD>Reason for choosing the method of plot collection.</TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="-1" FACE="arial">samplingMethod</FONT></TD>
-        <TD><FONT SIZE="-1" FACE="arial">Y</FONT></TD>
-        <TD><FONT SIZE="-1" FACE="arial">VARCHAR2(20)</FONT></TD>
-        <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>Method used for plot data collection.</TD>
-    </TR>
-    <TR>
-        <TD><FONT SIZE="-1" FACE="arial">coverScale</FONT></TD>
-        <TD><FONT SIZE="-1" FACE="arial">N</FONT></TD>
-        <TD><FONT SIZE="-1" FACE="arial">NUMBER</FONT></TD>
-        <TD></TD>
-        <TD><A HREF="n/a.html"><FONT SIZE="-1" FACE="arial">n/a</FONT></A></TD>
-        <TD></TD>
-        <TD>Cover scale used to estimate species cover.</TD>
+        <TD>Role that a specific party had in the project (PI, contct, 
+            author, etc.).</TD>
     </TR>
 </TABLE>
 <P>
 <B><FONT SIZE="-1" FACE="arial">Child tables: </FONT></B><FONT
- SIZE="-1" FACE="arial">Project serves as the parent of the following 
-tables:</FONT> </P>
-<P>
-<A HREF="plotMaster.html"><FONT SIZE="-1" FACE="arial">plotMaster,</FONT></A><FONT
- SIZE="-1" FACE="arial"> projectContributor</FONT></P>
+ SIZE="-1" FACE="arial">projectContributor serves as the parent of the 
+following tables:</FONT> </P>
 <P>
 <FONT SIZE="-1">last updated: Thu Aug 31 13:32:36 PDT 2000</FONT> </P>
 </BODY>
