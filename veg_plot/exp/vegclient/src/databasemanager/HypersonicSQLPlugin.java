@@ -9,8 +9,8 @@
  * 		@version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2001-10-11 10:21:35 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2001-10-11 10:36:17 $'
+ *     '$Revision: 1.2 $'
  */
 package vegclient.databasemanager;
 
@@ -20,6 +20,7 @@ import java.util.*;
 import java.sql.*;
 
 import vegclient.databasemanager.*;
+import org.hsqldb.*;
 
 
 
@@ -72,8 +73,34 @@ public class HypersonicSQLPlugin implements DatabaseManagerPluginInterface
 		System.out.println("starting the HypersonicSQL database: "+database);
 		 try 
 		{
-			//Thread thread = new Thread();
+			Thread t = new Thread("runner") 
+			{
+			public void run() 
+			{
+
+				try 
+				{ 
+					String[] cmd = new String[0];
+					//cmd[0] = "-?" ;
+					Server server = new Server();
+					server.main(cmd);
+					//Server.printHelp();
+				} 
+	
+				catch (Exception e) 
+				{ 
+					e.printStackTrace(); 
+				}
+			}
+			}; //end thread
+			t.setDaemon(false);
+			t.start();
+			System.out.println("started  the thread");
 		
+		
+		
+		
+		/*
 			Process listener;
 			DataInputStream listenerStream;
 			listener = Runtime.getRuntime().exec("./bin/HypersonicManager start");
@@ -96,6 +123,7 @@ public class HypersonicSQLPlugin implements DatabaseManagerPluginInterface
 				}
 			}
 		System.out.println("started ");
+		*/
 		}
 		catch (Exception e) 
 		{
