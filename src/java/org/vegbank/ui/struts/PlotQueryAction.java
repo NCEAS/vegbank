@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 00:24:54 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-06-05 03:03:59 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,10 +66,10 @@ public class PlotQueryAction extends Action
 				+ " FROM plot, project, observation, taxonobservation, covermethod, stratummethod, "
 				
 				// Allow searching for Commusage for commname
-				+ " (commConcept INNER JOIN (commClass INNER JOIN commInterpretation ON"
+				+ " (commConcept RIGHT OUTER JOIN (commClass LEFT OUTER JOIN commInterpretation ON"
 				+ " commClass.COMMCLASS_ID = commInterpretation.COMMCLASS_ID) ON "
 				+ " commConcept.COMMCONCEPT_ID = commInterpretation.COMMCONCEPT_ID) " 
-				+	"INNER JOIN commUsage ON commConcept.COMMCONCEPT_ID = commUsage.COMMCONCEPT_ID "
+				+	" LEFT OUTER JOIN commUsage ON commConcept.COMMCONCEPT_ID = commUsage.COMMCONCEPT_ID "
 				// End Joining Observation to commUsage
 				
 				+ " WHERE plot.plot_id = observation.plot_id AND taxonobservation.observation_id = observation.observation_id "
