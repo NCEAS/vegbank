@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!-- 
+  * build_client.xml
+  *
+  *	Authors: John Harris
+  *	Copyright: 2000 Regents of the University of California and the
+  *           National Center for Ecological Analysis and Synthesis
+  *  Build file for the Ant cross-platform build system for metacat
+  *  See http://jakarta.apache.org for details on Ant  
+  *  
+	* this build file builds the client software for the 
+	* national plots database including: the interfaces, the
+	* embedded database(s) etc.  Before building this check the 
+	* dependencies
+	*
+	* 		'$Author: harris $'
+ 	*     '$Date: 2001-11-01 17:52:04 $'
+ 	*     '$Revision: 1.1 $'
+--> 
+<project name="data-translators" default="compile" basedir=".">
+	
+	<!-- INITIATION -->
+	<target name="init">
+  
+		<!-- RELEVANT DIRECTORIES -->
+		<property name="current_dir" value="./" />
+		<property name="src" value="./src" />
+		<property name="build" value="./build" />
+		<property name="lib" value="./lib" />
+		<property name="bin" value="./bin" />
+		<property name="dist" value="./dist" />
+		<property name="doc" value="./docs" />
+		<property name="data" value="./data" />
+	  <property name="xerces" value="./lib/xerces_1_4.jar" />
+		<property name="xalan" value="./lib/xalan_1_2_2.jar" />
+		<property name="xmlresource" value="./lib/xmlresource.jar" />
+		<property name="cpath" value="${hsqldb}:${xerces}:${xalan}:${xmlresource}:${build}"/>
+		<filter token="release" value="alpha-20011020"/>
+		<filter token="authors" value="HARRIS"/>
+	</target>
+
+	
+	<!-- PREPARE -->
+	<target name="prepare" depends="init">
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${bin}" />
+	</target>	
+	
+		<!-- COPY -->
+<target name="copy" depends="init">
+<!--
+<copy file="README" tofile="${bin}/README"/>
+-->
+
+		
+		<!-- java files -->
+		<copy todir="${build}" filtering="yes" >
+			<fileset dir="${src}/data-translators" >
+  	    <include name="**.java"/>
+  	  </fileset>
+  	</copy>
+	</target>	
+	
+	
+	<!-- COMPILE -->
+	<target name="compile" depends="copy">
+
+		<echo message="Compiling the Veg Client Code"/>
+		
+		<javac srcdir="${build}" 
+			classpath="${cpath}"
+			includes="
+			 StructuredDataFile.java
+			 StructuredDataPackage.java
+			 StructuredPartyFile.java
+			 StructuredProjectFile.java
+			 StructuredSiteFile.java
+			 StructuredSpeciesFile.java
+		
+			 TncConverter.java
+			 TurboVegConverter.java
+			 TNCPlotsDB.java
+			 TncAccessFileConverter.java
+			"
+			destdir="${build}"
+		/>
+	</target>	
+	
+	
+	
+	<!-- JAR -->
+	<target name="jar" depends="compile">
+		<jar jarfile ="${lib}/datatranslator.jar"
+			basedir="${build}"
+			includes="** "
+		/>
+	</target>
+	
+	
+	
+	
+
+</project>
