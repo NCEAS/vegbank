@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-10-06 20:50:23 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-30 19:46:22 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@ public class EntityNameAction extends Action
 		*/
 
 		System.out.println("Leaving EntityNameAction");
-		return mapping.findForward("entityName");
+		return mapping.findForward("EntityName");
 	}
 
 	/**
