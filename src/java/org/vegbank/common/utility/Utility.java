@@ -29,8 +29,8 @@ import org.vegbank.common.model.Plantstatus;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2004-09-24 01:39:38 $'
- * '$Revision: 1.36 $'
+ * '$Date: 2004-09-24 18:08:10 $'
+ * '$Revision: 1.37 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,35 +56,56 @@ public class Utility
 	
 	public static AbstractDatabase dbAdapter;
 	// FIXME: Read from properties
-	public static  final String DB_ADAPTER_NAME = "org.vegbank.common.dbAdapter.PostgresqlAdapter";
+	public static  String DB_ADAPTER_NAME = "org.vegbank.common.dbAdapter.PostgresqlAdapter";
 
-	
 	// Bundle:  database
-	public static final String DATABASE_NAME =
-		ResourceBundle.getBundle("database").getString("databaseName");
+	public static String DATABASE_NAME;
 
 	// Bundle:  general
 	public static boolean AUTO_APPEND_WILDCARD = false;
-	static {
+
+	// Bundle:  vegbank
+	public static ResourceBundle vegbankPropFile;
+	public static String SMTP_SERVER;
+	public static String VEGBANK_SCHEMA_LOACATION;
+	public static String VEGBANK_SCHEMA_NAME;
+	public static String VEGBANK_XML_SCHEMA;
+	public static String VEGBANK_VERSION;
+	public static String VEGBANK_XML_SCHEM;
+	public static String VB_HOME_DIR;
+	public static String VB_DATA_DIR;
+	public static String WEBAPP_DIR;
+	public static String MODELBEAN_CACHING;
+
+
+	static { try {
+		// Bundle:  database
+		DATABASE_NAME = ResourceBundle.getBundle("database").getString("databaseName");
+
+		// Bundle:  general
+		AUTO_APPEND_WILDCARD = false;
 		String tmp = ResourceBundle.getBundle("general").getString("queries.auto_append_wildcard");
 		if (!isStringNullOrEmpty(tmp) && !tmp.equals("false") && !tmp.equals("0")) {
 			AUTO_APPEND_WILDCARD = true;
 		}
-	}
 
-	// Bundle:  vegbank
-	public static ResourceBundle vegbankPropFile = ResourceBundle.getBundle("vegbank");
-	public static final String SMTP_SERVER = vegbankPropFile.getString("mailHost");
-	public static final String VEGBANK_SCHEMA_LOACATION = vegbankPropFile.getString("schemaLocation");
-	public static final String VEGBANK_SCHEMA_NAME = vegbankPropFile.getString("vegbankSchemaName");	
-	public static final String VEGBANK_VERSION = vegbankPropFile.getString("vegbankVersion");
-	public static final String VEGBANK_XML_SCHEMA= VEGBANK_SCHEMA_LOACATION + "/" + VEGBANK_SCHEMA_NAME;
-	public static final String VB_HOME_DIR = vegbankPropFile.getString("vegbank.home.dir");
-	public static final String VB_DATA_DIR = vegbankPropFile.getString("vegbank.data.dir");
-	public static final String WEBAPP_DIR = vegbankPropFile.getString("vegbank.webapp.dir");
-	public static final String MODELBEAN_CACHING = vegbankPropFile.getString("modelbean.caching");
+		// Bundle:  vegbank
+		vegbankPropFile = ResourceBundle.getBundle("vegbank");
+		SMTP_SERVER = vegbankPropFile.getString("mailHost");
+		VEGBANK_SCHEMA_LOACATION = vegbankPropFile.getString("schemaLocation");
+		VEGBANK_SCHEMA_NAME = vegbankPropFile.getString("vegbankSchemaName");	
+		VEGBANK_VERSION = vegbankPropFile.getString("vegbankVersion");
+		VEGBANK_XML_SCHEMA = VEGBANK_SCHEMA_LOACATION + "/" + VEGBANK_SCHEMA_NAME;
+		VB_HOME_DIR = vegbankPropFile.getString("vegbank.home.dir");
+		VB_DATA_DIR = vegbankPropFile.getString("vegbank.data.dir");
+		WEBAPP_DIR = vegbankPropFile.getString("vegbank.webapp.dir");
+		MODELBEAN_CACHING = vegbankPropFile.getString("modelbean.caching");
+		
+	} catch (Exception ex) {
+		log.error("There was a problem loading Utility properties", ex);
+	} }
 
-	
+
 	/** 
 	 * Determine our db adapter class and create an instance of that class
 	 */
