@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2003-08-28 20:08:37 $'
-* '$Revision: 1.51 $'
+* '$Author: mlee $'
+* '$Date: 2003-10-14 00:46:19 $'
+* '$Revision: 1.52 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -37,6 +37,7 @@
     <property name="design_src" value="./design"/>
     <property name="dictionary_src" value="./dbdictionary"/>
     <property name="news_src" value="./news"/>
+    <property name="help_src" value="./help"/>
     <property name="src.dir" value="./src"/>
     <property name="web.src.dir" value="${src.dir}/web"/>
     <property name="xsl.src.dir" value="${web.src.dir}/xsl"/>
@@ -47,6 +48,7 @@
     <property name="style_src" value="./includes"/>
     <property name="image_src" value="./images"/>
     <property name="hostname" value="vegbank"/>
+   
     <property name="sharedhtml_src" value="./sharedhtml"/>
     <property name="workshop_src" value="./workshop"/>
     <property name="apache.document.root" value="/var/www/html"/>
@@ -69,6 +71,7 @@
     <property name="style_server" value="${tomcat.home.dir}/webapps/vegbank/includes/"/>
     <property name="vegbank_server" value="${tomcat.home.dir}/webapps/vegbank/"/>
     <property name="workshop_server" value="${tomcat.home.dir}/webapps/vegbank/workshop/"/>
+    <property name="help_server" value="${apache.document.root}/help/"/>
     <property name="server_root" value="${tomcat.home.dir}/webapps/ROOT/"/>
     <property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/vegbank/WEB-INF/lib"/>
     <!-- WEB SERVER LOCATIONS -->
@@ -82,6 +85,8 @@
     <filter token="general_link" value="/vegbank/general/"/>
     <filter token="forms_url" value="/vegbank/forms/"/>
     <filter token="panel_link" value="/vegbank/panel/"/>
+    
+    <filter token="help_link" value="/help/"/>  
     <!-- SERVLETS -->
     <filter token="framework_servlet" value="/vegbank/servlet/framework"/>
     <filter token="stylesheet_generator_servlet" value="/vegbank/servlet/stylesheetgenerator"/>
@@ -96,6 +101,7 @@
     <mkdir dir="${tomcat.home.dir}/webapps/vegbank/"/>
     <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
     <mkdir dir="${apache.document.root}/plot/"/>
+    <mkdir dir="${help_server}"/>
   </target>
   <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
@@ -143,6 +149,14 @@
     <copy overwrite="true" todir="${panel_server}" filtering="yes">
       <fileset dir="${panel_src}">
         <include name="*.html"/>
+      </fileset>
+    </copy>
+  </target>
+  <target name="help" depends="hdrftr" description="=&gt; dist the help pages to server">
+    <copy overwrite="true" todir="${help_server}" filtering="yes">
+      <fileset dir="${help_src}">
+        <include name="*.html"/>
+        <exclude name="template.html" /> <!-- don't copy the template file -->
       </fileset>
     </copy>
   </target>
@@ -247,13 +261,9 @@
       <fileset dir="${web.src.dir}"/>
     </copy>
   </target>
-
-  <target name="robot" depends="init" description="==> Distribute robots.txt">
-    <copy overwrite="true" 
-          todir="${apache.document.root}"
-          file="./robots.txt"/>
+  <target name="robot" depends="init" description="==&gt; Distribute robots.txt">
+    <copy overwrite="true" todir="${apache.document.root}" file="./robots.txt"/>
   </target>
-  
   <!--
 	* TARGET TO PUT THE DICTIONARY HTML DOCS INTO THE CORRECT PLACE
 -->
@@ -298,7 +308,7 @@
                               pubs,
                               xsl,
                               web,
-			      robot,
+ robot,
                               workshop" description="=&gt; Distribute all web files"/>
   <target name="dist-bins" depends="init, panel-big-bin " description="=&gt; dist. all targets that require access to big binary storage "/>
   <target name="dist-everything" depends="dist, dist-bins, dictionary" description="=&gt; dist all targets in the dist target and dist-bins target : DIST EVERYTHING! "/>
