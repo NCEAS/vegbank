@@ -24,8 +24,8 @@ import  xmlresource.utils.XMLparse;
  * Access to the data stored in the native VegBank XML structure.
  * 
  * 	'$Author: harris $'
- *	'$Date: 2002-05-20 23:06:04 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2002-05-22 14:29:00 $'
+ *	'$Revision: 1.4 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -158,11 +158,15 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	 **/
 	public String getProjectName(String plotName)
 	{
-		return(stringBuf);
+		this.init(plotName);
+		return( this.getPlotAttribute(plotName, "projectName") );
 	}
 	public Vector getProjectContributors(String plotName)
 	{
-		return(vectorBuf);
+		this.init(plotName);
+		String path = "/project/projectContributor/wholeName";
+		Vector pathContent = parse.getValuesForPath(doc, path);
+		return(pathContent);
 	}
 	public String getProjectContributorSalutation(String contributorWholeName)
 	{
@@ -226,7 +230,15 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	}
 	public String getProjectContributorCountry(String contributorWholeName)
 	{
-		return(stringBuf);
+		//this.init(plotName);
+		String s = null;
+		String path = "/project/projectContributor/address/country";
+		Vector pathContent = parse.getValuesForPath(doc, path);
+		if ( pathContent.size() == 1 )
+		{
+			s = (String)pathContent.elementAt(0);
+		}
+		return( s );
 	}
 	public String getProjectContributorCurrentFlag(String contributorWholeName)
 	{
@@ -238,15 +250,18 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	}
 	public String getProjectStartDate(String plotName)
 	{
-		return(stringBuf);
+		this.init(plotName);
+		return( this.getPlotAttribute(plotName, "startDate") );
 	}
 	public String getProjectStopDate(String plotName)
 	{
-		return(stringBuf);
+		this.init(plotName);
+		return( this.getPlotAttribute(plotName, "stopDate") );
 	}
 	public String getProjectDescription(String plotName)
 	{
-		return(stringBuf);
+		this.init(plotName);
+		return( this.getPlotAttribute(plotName, "projectDescription") );
 	}
 		
 	/**
@@ -389,7 +404,14 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String getCountry(String plotName)
 	{
 		this.init(plotName);
-		return( this.getPlotAttribute(plotName, "country") );
+		String s = null;
+		String path = "/project/plot/country";
+		Vector pathContent = parse.getValuesForPath(doc, path);
+		if ( pathContent.size() == 1 )
+		{
+			s = (String)pathContent.elementAt(0);
+		}
+		return( s );
 	}
 	public String getStandSize(String plotName)
 	{
@@ -399,7 +421,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String getAuthorLocation(String plotName)
 	{
 		this.init(plotName);
-		return(stringBuf);
+		return( this.getPlotAttribute(plotName, "authorLocation") );
 	}
 	public String getLandForm(String plotName)
 	{
@@ -488,7 +510,8 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	 **/
 	public String getCommunityName(String plotName)
 	{
-		return(stringBuf);
+		this.init(plotName);
+		return( this.getPlotAttribute(plotName, "className") );
 	}
 	public String getCommunityCode(String plotName)
 	{
