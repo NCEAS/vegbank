@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-12-05 23:15:29 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2004-02-19 17:28:34 $'
+ *  '$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 
   <!-- ***************************************************************************** -->
   <!-- 
-       Generated java source code from the data schema definition file
+       Generates jsp source code from the data schema definition file
        This uses the xalan "redirect" extension to generate many outputs 
        When the XSL standard comes up with a standard way of doing this
        the method should be changed, right now this XSL depends on Xalan.
@@ -48,11 +48,15 @@
 
   <xsl:param name="outdir"/>
 
-
+   <!-- Match the root element and apply all templates -->
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>
 
+
+  <!-- ********************************************************************* -->
+  <!--  Match all the entities in the XML                                    -->
+  <!-- ********************************************************************* -->
   <xsl:template match="entity">
 
    <xsl:variable name="entityName" select="entityName"/>
@@ -74,6 +78,7 @@
    <!-- Create a new file for this entity -->
    <redirect:write select="$aFile">
 
+     <!-- Generated files need access to some resources, defined here -->
      <xsl:text disable-output-escaping="yes">
 <![CDATA[
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -109,28 +114,96 @@
      <!-- One to many children -->
      <xsl:variable name="childrenObjects"
        select="../entity/attribute[starts-with(attReferences, concat($entityName,'.') ) and attRelType/@type = 'inverted']"/>
+     
 
-   <table border="1">
-     <xsl:apply-templates select="$primativeAttribs">
-       <xsl:with-param name="lcEntityName" select="$lcEntityName"/>
-       <xsl:with-param name="CappedEntityName" select="$CappedEntityName"/>
-     </xsl:apply-templates>
+     <!-- Logic regarding to display or not -->
+     <logic:equal name="DisplayProps" value="1" property="expandStatus({$lcEntityName})">
 
-     <xsl:apply-templates mode="ChildObject" select="$simpleChildObjects">
-       <xsl:with-param name="lcEntityName" select="$lcEntityName"/>
-       <xsl:with-param name="CappedEntityName" select="$CappedEntityName"/>
-     </xsl:apply-templates>
+       <!-- Entire Entity -->
+       <table>
+         <tr>
+           <td>
+             <table> 
+               <tr colspan="100">
+                          
 
-     <xsl:apply-templates mode="ChildrenObjects" select="$childrenObjects">
-       <xsl:with-param name="lcEntityName" select="$lcEntityName"/>
-       <xsl:with-param name="CappedEntityName" select="$CappedEntityName"/>
-       <xsl:with-param name="childEntityName" select="$CappedEntityName"/>
-     </xsl:apply-templates>
-   </table>
+                 <xsl:comment>Control to contract this composite</xsl:comment>
+                 <th valign="top">
+                   <a name="{$lcEntityName}"/>
+                   <html:link action="GenericDispatcher?command=RetrieveVBModelBean&amp;jsp=GenericDisplay.jsp&amp;entityName=Plot&amp;accessionCode=VB.Ob.658.YOSE99K84001&amp;contractEntity={$lcEntityName}" anchor="{$lcEntityName}" title="View {$entityName} Summary">
+                     <img valign="top" src="/vegbank/images/yellow_minus.gif"/>
+                   </html:link>       
+                 </th>
+
+                 <xsl:comment>The Detail Table for  <xsl:value-of select="$CappedEntityName"/> </xsl:comment>
+                 <th align="left" colspan="100"><xsl:value-of select="$CappedEntityName"/></th>
+               </tr>
+               <tr>
+                 <td><xsl:comment>Empty cell for contract/expand control</xsl:comment></td>
+                 <td>
+                   <xsl:comment>Contents of this entity</xsl:comment>
+                   <table cellpadding="0" cellspacing="0" border="1" width="100%">
+                     
+                     <!-- Display all simple attributes -->
+                     <xsl:apply-templates select="$primativeAttribs">
+                       <xsl:with-param name="lcEntityName" select="$lcEntityName"/>
+                       <xsl:with-param name="CappedEntityName" select="$CappedEntityName"/>
+                     </xsl:apply-templates>
+         
+                     <!-- Display all Child Object attributes -->
+                     <xsl:apply-templates mode="ChildObject" select="$simpleChildObjects">
+                       <xsl:with-param name="lcEntityName" select="$lcEntityName"/>
+                       <xsl:with-param name="CappedEntityName" select="$CappedEntityName"/>
+                     </xsl:apply-templates>
+                     
+                     
+                     <!-- Display all One to many Child Object attributes -->
+                     <xsl:apply-templates mode="ChildrenObjects" select="$childrenObjects">
+                       <xsl:with-param name="lcEntityName" select="$lcEntityName"/>
+                       <xsl:with-param name="CappedEntityName" select="$CappedEntityName"/>
+                     </xsl:apply-templates>
+
+                   </table><xsl:comment>End of entity content table</xsl:comment>
+                 </td>
+               </tr>
+             </table>
+           </td>
+         </tr>
+       </table>
+     </logic:equal>
+
+     <logic:equal name="DisplayProps" value="0" property="expandStatus({$lcEntityName})">
+       <xsl:comment>Summary Table</xsl:comment>
+       <tr>
+             
+         <!-- One row summary -->
+         <xsl:comment>The Summary Row for  <xsl:value-of select="$CappedEntityName"/> </xsl:comment>
+
+         
+         <th valign="top">
+           <a name="{$lcEntityName}"/>
+           <html:link action="GenericDispatcher?command=RetrieveVBModelBean&amp;jsp=GenericDisplay.jsp&amp;entityName=Plot&amp;accessionCode=VB.Ob.658.YOSE99K84001&amp;expandEntity={$lcEntityName}" anchor="{$lcEntityName}" title="View {$entityName} Detail">
+             <img valign="top" src="/vegbank/images/yellow_plus.gif"/>
+           </html:link>
+         </th>
+         
+         <xsl:apply-templates mode="displaySummaryRow" select=".">
+           <xsl:with-param name="lcEntityName" select="$lcEntityName"/>
+           <xsl:with-param name="CappedEntityName" select="$CappedEntityName"/>
+         </xsl:apply-templates>
+
+       </tr>
+       <xsl:comment>End Summary Row</xsl:comment>
+     </logic:equal>
+     <!-- End Display or not logic -->
+     
  
    </redirect:write>
  </xsl:template>
 
+ <!-- ********************************************************************* -->
+ <!--  Display simple attributes                                            -->
+ <!-- ********************************************************************* -->
  <xsl:template match="attribute">
    <xsl:param name="lcEntityName"/>
    <xsl:param name="CappedEntityName"/>
@@ -144,12 +217,10 @@
    </xsl:variable>
 
    <tr>
-     <td>
-       <span class="category">
-         <xsl:value-of select="attLabel"/>
-       </span>       
-     </td>
-     <td> 
+     <xsl:call-template name="rowHeader">
+       <xsl:with-param name="rowLabel" select="attLabel"/>
+     </xsl:call-template>
+     <td class="listRowA" size="100%"> 
        <span class="item">
          <bean:write 
            name='{$lcEntityName}' 
@@ -161,6 +232,10 @@
  </xsl:template>
 
 
+
+ <!-- ********************************************************************* -->
+ <!--  Display Object attributes                                            -->
+ <!-- ********************************************************************* -->
  <xsl:template match="attribute" mode="ChildObject">
    <xsl:param name="lcEntityName"/>
    <xsl:param name="CappedEntityName"/>
@@ -189,13 +264,20 @@
      </xsl:call-template>     
    </xsl:variable>
 
-   <!-- Do not do self recursive -->
-   <xsl:if test="$CappedEntityName != $javaType">
+   <logic:present name="{$lcEntityName}" property="{$lcJavaType}object">
+
      <tr>
-       <td><xsl:value-of select="attLabel"/></td>
-       <td>
-         <logic:present name="{$lcEntityName}" property="{$lcJavaType}object">
-           Has as child ob
+       <td colspan="100">
+         <xsl:comment>The  Cell to display <xsl:value-of select="$lcJavaType"/> </xsl:comment>
+         <table>
+
+           <xsl:call-template name="SummaryTitleRow">
+             <xsl:with-param name="entityName" select="$javaType"/>
+           </xsl:call-template>
+           <xsl:apply-templates mode="SummaryFieldsRow" select="../../entity[entityName=$lcJavaType]"/>
+
+     
+           <!-- Get the bean for this object -->
            <bean:define name="{$lcEntityName}" property="{$lcJavaType}object" id="{$lcJavaType}"/>
 
            <!-- put the object into the request -->
@@ -203,70 +285,190 @@
              <xsl:with-param 
                name="expression" 
                select="concat('request.setAttribute(&quot;',$lcJavaType ,'&quot;',',',$lcJavaType,');')"
-             /> 
+               /> 
+           </xsl:call-template>
+     
+           <jsp:include page="Display{$javaType}.jsp" flush="true"/>
+  
+
+           <xsl:apply-templates mode="SummaryFieldsRow" select="../../entity[entityName=$lcJavaType]"/>
+           <xsl:call-template name="SummaryTitleRow">
+             <xsl:with-param name="entityName" select="$javaType"/>
            </xsl:call-template>
 
-           <jsp:include page="Display{$javaType}.jsp" flush="true"/>
-
-         </logic:present>
-       </td>
-     </tr>   
-   </xsl:if>
-
+         </table>
+       </td> <xsl:comment>End cell to display <xsl:value-of select="$lcEntityName"/> </xsl:comment>
+     </tr>
+         
+   </logic:present>
+   
  </xsl:template>
 
+
+ <!-- ********************************************************************* -->
+ <!--  Display one to many Objects                                          -->
+ <!-- ********************************************************************* -->
  <xsl:template match="attribute" mode="ChildrenObjects">
    <xsl:param name="lcEntityName"/>
    <xsl:param name="CappedEntityName"/>
 
-   <xsl:variable name="javaType">
+   <xsl:variable name="childEntityName">
      <xsl:call-template name="UpperFirstLetter">
        <xsl:with-param name="text">
          <xsl:value-of select="../entityName"/>
        </xsl:with-param>
      </xsl:call-template>
    </xsl:variable>
-
-   <xsl:variable name="variableName">
-     <xsl:call-template name="to-lower">
-       <xsl:with-param name="text">
-         <xsl:value-of select="substring-before(attName, '_ID')"/>_<xsl:value-of select="$javaType"/>
-       </xsl:with-param>
-     </xsl:call-template>
-   </xsl:variable>
-
-   <xsl:variable name="lcJavaType">
+                       
+   <xsl:variable name="lcChildEntityName">
      <xsl:call-template name="to-lower">
        <xsl:with-param name="text">
          <xsl:value-of select="../entityName"/>
        </xsl:with-param>
      </xsl:call-template>
    </xsl:variable>
+
+
+   <xsl:variable name="variableName">
+     <xsl:call-template name="to-lower">
+       <xsl:with-param name="text">
+         <xsl:value-of select="substring-before(attName, '_ID')"/>_<xsl:value-of select="$childEntityName"/>
+       </xsl:with-param>
+     </xsl:call-template>
+   </xsl:variable>
+      
+   <logic:notEmpty name="{$lcEntityName}" property="{$variableName}s">
+     <tr>
+       <td colspan="100">
+         <xsl:comment>The  Cell to display <xsl:value-of select="$childEntityName"/> </xsl:comment>
+         <table>
+           <!-- Summary title and fields Header -->
+           <xsl:call-template name="SummaryTitleRow">
+             <xsl:with-param name="entityName" select="$childEntityName"/>
+           </xsl:call-template>
+           <xsl:apply-templates mode="SummaryFieldsRow" select=".."/>
+
+
+
+           <xsl:comment>The view of each  <xsl:value-of select="$childEntityName"/> </xsl:comment>
+           <logic:iterate id="{$lcChildEntityName}" name="{$lcEntityName}" property="{$variableName}s">
+             
+             <!-- put the object into the request -->
+             <xsl:call-template name="jspExpression">
+               <xsl:with-param 
+                 name="expression" 
+                 select="concat('request.setAttribute(&quot;',$lcChildEntityName ,'&quot;',',',$lcChildEntityName,');')"
+                 /> 
+             </xsl:call-template>
+           
+             <jsp:include page="Display{$childEntityName}.jsp" flush="true"/>
+           
+           </logic:iterate>
+           <xsl:comment>End  view of each  <xsl:value-of select="$childEntityName"/> </xsl:comment>
+
+           <!--
+           <xsl:call-template name="ChildrenObjects">
+             <xsl:with-param name="lcEntityName" select="$lcEntityName"/>
+             <xsl:with-param name="CappedEntityName" select="$CappedEntityName"/>
+             <xsl:with-param name="childEntityName" select="$childEntityName"/>
+             <xsl:with-param name="lcChildEntityName" select="$lcChildEntityName"/>
+           </xsl:call-template>
+           -->
+
+           <!-- Summary title and fields Footer -->
+           <xsl:apply-templates mode="SummaryFieldsRow" select=".."/>
+           <xsl:call-template name="SummaryTitleRow">
+             <xsl:with-param name="entityName" select="$childEntityName"/>
+           </xsl:call-template>
+
+         </table>
+       </td> <xsl:comment>End cell to display <xsl:value-of select="$childEntityName"/> </xsl:comment>
+     </tr>
+   </logic:notEmpty>
    
-   <tr>
-     <td><xsl:value-of select="attLabel"/></td>
-     <td>
+ </xsl:template>
+   
 
-       <logic:iterate id="{$lcJavaType}" name="{$lcEntityName}" property="{$variableName}s">
-         
-         <!-- put the object into the request -->
-         <xsl:call-template name="jspExpression">
-           <xsl:with-param 
-             name="expression" 
-             select="concat('request.setAttribute(&quot;',$lcJavaType ,'&quot;',',',$lcJavaType,');')"
-           /> 
-         </xsl:call-template>
+ <!-- ********************************************************************* -->
+ <!--  Display each Child Object                                            -->
+ <!-- ********************************************************************* -->
+ <xsl:template name="ChildrenObjects">
+   <xsl:param name="lcEntityName"/>
+   <xsl:param name="CappedEntityName"/>
+   <xsl:param name="childEntityName"/>
+   <xsl:param name="lcChildEntityName"/>
 
-         <jsp:include page="Display{$javaType}.jsp" flush="true"/>
-         
-       </logic:iterate>
 
+   
+ </xsl:template>
+
+ <!-- ********************************************************************* -->
+ <!--  Display Summary in a row                                          -->
+ <!-- ********************************************************************* -->
+ <xsl:template match="entity" mode="displaySummaryRow">
+   <xsl:param name="lcEntityName"/>
+   <xsl:param name="CappedEntityName"/>
+   
+   <xsl:comment>The Values of the summary Row</xsl:comment>
+   <xsl:for-each select="attribute[attForms/formShow/@name='Austere']">
+
+     <xsl:variable name="lcAttName">
+       <xsl:call-template name="to-lower">
+         <xsl:with-param name="text">
+           <xsl:value-of select="attName"/>
+         </xsl:with-param>
+       </xsl:call-template>
+     </xsl:variable>
+     
+     <td class="listRowA">
+       <span class="item">
+         <bean:write 
+           name='{$lcEntityName}' 
+           property='{$lcAttName}'
+           />
+       </span>
      </td>
-   </tr>
-
+   </xsl:for-each>
  </xsl:template>
 
 
+ <!-- ********************************************************************* -->
+ <!--  Display the Summary FieldNames                                       -->
+ <!-- ********************************************************************* -->
+ <xsl:template match="entity" mode="SummaryFieldsRow">
+   <xsl:comment>Summary fields header row</xsl:comment>
+   <tr>
+     <td><xsl:comment>Empty cell for expand contract icon</xsl:comment></td>
+     <xsl:for-each select="attribute[attForms/formShow/@name='Austere']">
+       <th class="grey">
+         <xsl:value-of select="attName"/>
+       </th>
+     </xsl:for-each>
+   </tr>
+   <xsl:comment>End summary fields header row</xsl:comment>
+ </xsl:template>
+
+ <!-- ********************************************************************* -->
+ <!--  SummaryTitle Row                                                     -->
+ <!-- ********************************************************************* -->
+ <xsl:template name="SummaryTitleRow">
+   <xsl:param name="entityName"/>
+   <tr>
+     <th colspan="100" align="left"><xsl:value-of select="$entityName"/></th>
+   </tr>
+ </xsl:template>
+
+ <!-- ********************************************************************* -->
+ <!--  Display the rowHeader Label                                          -->
+ <!-- ********************************************************************* -->
+ <xsl:template name="rowHeader">
+   <xsl:param name="rowLabel"/>
+
+   <xsl:comment>The row label <xsl:value-of select="$rowLabel"/></xsl:comment>
+   <th valign="top" align="left">
+       <xsl:value-of select="$rowLabel"/>
+   </th>
+ </xsl:template>
 
  <!-- ********************************************************************* -->
  <!--  Put the ugliness of getting a jsp expression in a template           -->
