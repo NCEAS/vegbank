@@ -48,7 +48,7 @@ ALTER TABLE taxonAlt   ADD COLUMN taxonAltConfidence varchar (50) ;
 
 ALTER TABLE taxonAlt   ADD COLUMN taxonAltNotes text ;
 
-ALTER TABLE taxonObservation   ADD COLUMN plantName varchar (255) ;
+ALTER TABLE taxonObservation   ADD COLUMN authorPlantName varchar (255) ;
 
 ALTER TABLE taxonInterpretation   ADD COLUMN groupType varchar (20) ;
 
