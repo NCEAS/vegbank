@@ -30,7 +30,7 @@ Public Function accessionCodeValid(ByVal strCode As String, Optional ByRef strTb
 End Function
 
 Public Function getPKfromAccessionCode(strAccession As String, Optional strTbl As String) As Long
- Dim inttemp As Integer, strTemp As String, intStart As Integer, lngRet As Long
+ Dim intTemp As Integer, strTemp As String, intStart As Integer, lngRet As Long
  'no accesion code
  If Trim(strAccession) = " " Or Trim(strAccession) = "" Then GoTo exitThisOK
  'invalid accCode
@@ -40,13 +40,13 @@ Public Function getPKfromAccessionCode(strAccession As String, Optional strTbl A
  'get second phrase separated by .
  intStart = 0
  If strTbl = "" Then
-   For inttemp = 1 To Len(strAccession)
-     If Mid(strAccession, inttemp, 1) = "." Then
+   For intTemp = 1 To Len(strAccession)
+     If Mid(strAccession, intTemp, 1) = "." Then
        If intStart > 0 Then Exit For
-       intStart = inttemp + 1
+       intStart = intTemp + 1
      End If
-   Next inttemp
-   strTbl = Mid(strAccession, intStart, (inttemp) - (intStart))
+   Next intTemp
+   strTbl = Mid(strAccession, intStart, (intTemp) - (intStart))
  End If
  'if in translation table, use that value:
  Dim strRealTbl As String
@@ -87,13 +87,13 @@ End Function
 
 Public Function writeNewAccCode(strTable As String, lngID As Long) As String
   'function returns a new AccessionCode, given table and ID in table.  Assumes vegbranch database and generates a 15Char random string for confirm code
-  Dim strTemp As String, inttemp As Integer
+  Dim strTemp As String, intTemp As Integer
   strTemp = getAccessionInfo("table", strTable, True)
   Dim strRdm As String
   strRdm = DateDiff("s", #1/1/2001#, Now())             'number of seconds this millineum
-  For inttemp = 1 To 7 'hardCODE  confirm code length, after datechk
+  For intTemp = 1 To 7 'hardCODE  confirm code length, after datechk
     strRdm = strRdm & getRandomChar()
-  Next inttemp
+  Next intTemp
   writeNewAccCode = "VBrTEMP." & strTemp & "." & lngID & "." & strRdm 'HARDcODE  db : hardcoded b/c this function will be accessed a lot: dont want manual lookup
 End Function
 
@@ -261,3 +261,5 @@ exitthis:
   
   Exit Function
 End Function
+
+

@@ -1,10 +1,11 @@
 Option Compare Database
 Option Explicit
-Public Function writeCodeToFiles()
+Public Function writeCodeToFiles(Optional blnModsOnly As Boolean)
       Dim obj As AccessObject, dbs As Object, strDir As String
       strDir = "C:\temp\vegbranchCode\"
     Set dbs = Application.CodeProject
     ' Search for open AccessObject objects in AllModules collection.
+ If Not blnModsOnly Then
     For Each obj In dbs.AllForms
       '  If obj.IsLoaded = True Then
            Dim mdl As Object, strForm As String
@@ -16,13 +17,15 @@ Public Function writeCodeToFiles()
     'Debug.Print Forms(strForm).Module.Name
     Dim strFile As String
     strFile = strDir & Forms(strForm).Module.Name
+    strFile = Replace(strFile, " ", "")
     Call prepareFileToWrite(strFile, True, ".txt")
     WriteLineToFile strContents, strFile
   End If
   DoCmd.Close acForm, strForm
      '   End If
     Next obj
-    
+End If
+
       For Each obj In dbs.AllModules
    '   DoCmd.OpenModule "addingnewStuff", "junk"
       '  If obj.IsLoaded = True Then
@@ -35,10 +38,11 @@ Public Function writeCodeToFiles()
     'Debug.Print Forms(strForm).Module.Name
    ' Dim strFile As String
     strFile = strDir & mdl.Name
+    strFile = Replace(strFile, " ", "")
     Call prepareFileToWrite(strFile, True, ".txt")
     WriteLineToFile strContents, strFile
 
-  DoCmd.Close acForm, strForm
+'  DoCmd.Close acForm, strForm
      '   End If
     Next obj
 End Function
