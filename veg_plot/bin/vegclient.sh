@@ -8,9 +8,8 @@
 
 XMLP=xerces_1_3_1.jar
 XALAN=xalan_1_2_2.jar
-VCLIENT=interface.jar
+VCLIENT=client.jar
 ACCESSMODULE=dbAccess.jar
-CLIENT_COMMUNICATION=clientcommunication.jar
 JDBC_PG=jdbc7.0-1.2.jar
 JAVAX_JDBC=jta-spec1_0_1.jar
 JDBC_INSTANTDB=idb.jar
@@ -21,7 +20,7 @@ if [ "$OSTYPE" = "cygwin32" ] || [ "$OSTYPE" = "cygwin" ] ; then
    CLASSPATH=`cygpath --path --unix "$CLASSPATH"`
 fi
 
-CLASSPATH=$XMLP:$XALAN:$ACCESSMODULE:$CLIENT_COMMUNICATION:$JDBC_PG:$JDBC_INSTANTDB:$JAVAX_JDBC:$VCLIENT
+CLASSPATH=$XMLP:$XALAN:$ACCESSMODULE:$JDBC_PG:$JDBC_INSTANTDB:$JAVAX_JDBC:$VCLIENT
 
 #for i in *.jar
 #do
@@ -36,4 +35,4 @@ fi
 
 echo $CLASSPATH
 #java   -cp $CLASSPATH -jar $VCLIENT
-java -verbose  -classpath  $CLASSPATH  MenuTest
+java  -classpath  $CLASSPATH  VegClient
