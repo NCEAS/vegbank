@@ -14,8 +14,8 @@
 *     Authors: @author@
 *
 *    '$Author: mlee $'
-*      '$Date: 2004-11-17 00:19:47 $'
-*  '$Revision: 1.27 $'
+*      '$Date: 2004-12-01 00:15:12 $'
+*  '$Revision: 1.28 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -421,7 +421,11 @@ VegBank - Advanced Plot Query
 	      width="15" height="15"> 
 	    </td>
 	    <td class="instructions">
-	      Enter date ranges or plot size ranges that apply to plots of interest.
+	      Enter date ranges or plot size ranges that apply to plots of interest.  
+	      Enter dates in the format: 
+	      "M/D/YYYY" where M is the number of the month 
+	      (e.g. June is 6), D is day of the month, 
+	      and YYYY is the four digit year.
 	    </td>
 	  </tr>
 	</table>
@@ -442,7 +446,7 @@ VegBank - Advanced Plot Query
 	    <td>&nbsp;</td>
 	  </tr>
 	  <tr>
-	    <td>Date Sampled</td>
+	    <td>Date Sampled <br/> <span class="instructions">M/D/YYYY</span></td>
 
 	    <td>
 	      <html:text property="minObsStartDate" size="20"/>
@@ -458,12 +462,12 @@ VegBank - Advanced Plot Query
 	  <tr><!-- date2 --> 
 	    <td>&nbsp;</td>
 		<td colspan="2" class="itemsmaller" align="center">from 
-			<bean:write name="bean" property="curMinDateEntered"/> to <bean:write name="bean" property="curMaxDateEntered"/></td>
+			<bean:write name="bean" property="curMinDateEntered" /> to <bean:write name="bean" property="curMaxDateEntered"/></td>
 		<td>&nbsp;</td>
 	    <td>&nbsp;</td>
 	  </tr>
 	  <tr>
-	    <td>Date Entered into VegBank</td>
+	    <td>Date Entered into VegBank <br/> <span class="instructions">M/D/YYYY</span></td>
 	    <td>
 	      <html:text property="minDateEntered" size="20"/>
 	    </td>
