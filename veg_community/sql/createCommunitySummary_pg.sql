@@ -11,7 +11,6 @@ CREATE TABLE commSummary (
 	COMMSUMMARY_ID  NUMERIC(20) default nextval('commSummary_id_seq'),
 	commName VARCHAR(500),
 	dateEntered date,
-	abiCode VARCHAR(50),
 	classCode VARCHAR(50),
 	classLevel VARCHAR(50), 
 	commDescription VARCHAR(2000), --truncated description
@@ -31,7 +30,6 @@ CREATE TABLE commSummary (
 insert into commSummary (
 	commName, 
 	dateEntered, 
-	abiCode, 
 	classCode, 
 	classLevel,
 	commDescription, 
@@ -42,7 +40,6 @@ insert into commSummary (
 	select 
 	commName.commName, 
 	commName.dateEntered, 
-	'null', 
 	commConcept.ceglCode, 
 	commConcept.commLevel, 
 	commConcept.conceptDescription,
