@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-03-05 22:41:58 $'
- *	'$Revision: 1.17 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-03-25 06:46:46 $'
+ *	'$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,18 +41,22 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.vegbank.common.model.*;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.DatabaseUtility;
-import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.Utility;
 
 /**
  * @author farrell
  */
 
-public class PlotQueryAction extends Action
+public class PlotQueryAction extends VegbankAction
 {
+	private static Log log = LogFactory.getLog(PlotQueryAction.class); 
+
 	private static final String ANDVALUE = " AND ";
 	private static final String ORVALUE = " OR ";
 	private static final String 	selectClause =	
@@ -64,7 +68,7 @@ public class PlotQueryAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		System.out.println(" In action PlotQueryAction");
+		log.debug(" In action PlotQueryAction");
 		ActionErrors errors = new ActionErrors();
 
 		StringBuffer query = new StringBuffer(1024);
@@ -89,7 +93,7 @@ public class PlotQueryAction extends Action
 		dynamicQuery.append(DatabaseUtility.handleValueList(pqForm.getState(), "plot." + Plot.STATEPROVINCE, conjunction));
 
 		// Elevation
-		//System.out.println(  pqForm.getMaxElevation())+ " " + pqForm.getMinElevation() + " " +  pqForm.isAllowNullElevation() + " elevation" );
+		//log.debug(  pqForm.getMaxElevation())+ " " + pqForm.getMinElevation() + " " +  pqForm.isAllowNullElevation() + " elevation" );
 		dynamicQuery.append(
 			this.handleMaxMinNull(
 				pqForm.getMaxElevation(),
@@ -228,23 +232,25 @@ public class PlotQueryAction extends Action
 		{
 			errors.add(
 				ActionErrors.GLOBAL_ERROR,
-				new ActionError("errors.database", e1.getMessage(), query.toString()));
-			System.out.println(query.toString());
+				new ActionError("errors.database", e1.getMessage()));
+			log.debug("PlotQueryAction: SQL ERROR ON QUERY: " + query.toString());
 		}
 
 		if (!errors.isEmpty())
 		{
 			saveErrors(request, errors);
+			log.debug("PlotQueryAction: getting input fwd: " + mapping.getInputForward().toString());
 			return (mapping.getInputForward());
 		}
 
-		return mapping.findForward("DisplayResults");
+		log.debug("PlotQueryAction: GOOD: fwd to display results");
+		return mapping.findForward("display_results");
 	}
 
 	private Collection getPlotSummaries(String conjunction, Vector resultSets)
 		throws SQLException
 	{
-		System.out.println("Conjunction is '" + conjunction + "'");
+		log.debug("Conjunction is '" + conjunction + "'");
 		
 		// Collection for adding valid object created from current resultset
 		Hashtable workspace = new Hashtable();
@@ -253,25 +259,25 @@ public class PlotQueryAction extends Action
 		// Used in Union to capture all of first resultset.
 		boolean isFirstResultSet = true;
 		
-		//System.out.println(">>> " + resultSets);
+		//log.debug(">>> " + resultSets);
 		Iterator results = resultSets.iterator();
 		while ( results.hasNext() )
 		{
 			ResultSet rs = (ResultSet) results.next();
-			//System.out.println("Processing " + rs.toString());
+			//log.debug("Processing " + rs.toString());
 			
 			// When doing a Intesection add to current collection all objects that existed
 			// in oldWorkspace and current resultset.
 			if ( conjunction.equals(ANDVALUE) ) 
 			{
 				validKeys.clear();
-				//System.out.println("111===> " + validKeys);
+				//log.debug("111===> " + validKeys);
 				Enumeration keysEnum = workspace.keys();
 				while ( keysEnum.hasMoreElements() )
 				{
 					validKeys.add(keysEnum.nextElement());
 				}
-				//System.out.println("222===> " + validKeys );
+				//log.debug("222===> " + validKeys );
 				workspace.clear();
 			}
 			
@@ -284,23 +290,23 @@ public class PlotQueryAction extends Action
 				{
 					if ( isFirstResultSet )	// if empty dump all into collection
 					{
-						//LogUtility.log("#Adding " + plotsum + " has " + plotsum.getAccessionCode());
+						//log.debug("#Adding " + plotsum + " has " + plotsum.getAccessionCode());
 						workspace.put(plotsum.getAccessionCode(), plotsum);
 					}
 					else //Only add element if in oldWorkspace
 					{
 						
-						//LogUtility.log("3333===> " + validKeys);
+						//log.debug("3333===> " + validKeys);
 						
 						// Did this object exist in the previous results
 						if ( validKeys.contains(plotsum.getAccessionCode()))
 						{
-							//LogUtility.log("Adding " + plotsum.getAccessionCode());
+							//log.debug("Adding " + plotsum.getAccessionCode());
 							workspace.put(plotsum.getAccessionCode(), plotsum);
 						}
 						else
 						{
-							//LogUtility.log("Not Adding " + plotsum.getAccessionCode());
+							//log.debug("Not Adding " + plotsum.getAccessionCode());
 							// Don't add this object
 						}
 					}
@@ -309,14 +315,14 @@ public class PlotQueryAction extends Action
 				{
 					if ( workspace.contains(plotsum.getAccessionCode()))
 					{
-						//LogUtility.log("No need to ADD " + plotsum.getAccessionCode());
+						//log.debug("No need to ADD " + plotsum.getAccessionCode());
 						// No need to add
 					}
 					else
 					{
 						// Add this new object
 						workspace.put(plotsum.getAccessionCode(), plotsum);
-						//LogUtility.log("ADD " + plotsum.getAccessionCode());
+						//log.debug("ADD " + plotsum.getAccessionCode());
 					}
 				}
 			}
@@ -417,7 +423,7 @@ public class PlotQueryAction extends Action
 			}
 			// I've got all my resultSets
 		}
-		LogUtility.log("Number of records matching plants: " +  plantResultSets.size() );
+		log.debug("Number of records matching plants: " +  plantResultSets.size() );
 	}
 
 
@@ -476,7 +482,7 @@ public class PlotQueryAction extends Action
 			}
 			// I've got all my resultSets
 		}
-		LogUtility.log("Number of records matching communities: " +  resultSets.size() );
+		log.debug("Number of records matching communities: " +  resultSets.size() );
 	}
 
 
