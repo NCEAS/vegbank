@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-29 01:06:12 $'
- *	'$Revision: 1.23 $'
+ *	'$Date: 2004-08-01 15:11:22 $'
+ *	'$Revision: 1.24 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ public class PlotQueryAction extends VegbankAction
 
 	private static final String ANDVALUE = " AND ";
 	private static final String ORVALUE = " OR ";
-	private static final int NUM_TOP_TAXA =	0;
+	private static final int NUM_TOP_TAXA =	5;
 	private static String selectClause =	
 		" SELECT DISTINCT(observation.accessioncode), observation.authorobscode, " +	
 		" plot.latitude, plot.longitude, observation.observation_id ";
@@ -247,12 +247,12 @@ public class PlotQueryAction extends VegbankAction
 			// Save the Collection of Summaries into the session
 			request.getSession().setAttribute("PlotsResults", getPlotSummaries(conjunction, resultSets));
 		}
-		catch (SQLException e1)
+		catch (Exception e1)
 		{
 			errors.add(
 				ActionErrors.GLOBAL_ERROR,
 				new ActionError("errors.database", e1.getMessage()));
-			log.debug("PlotQueryAction: SQL ERROR ON QUERY: " + query.toString());
+			log.debug("PlotQueryAction: ERROR ON QUERY: " + query.toString());
 		}
 
 		if (!errors.isEmpty())
@@ -267,7 +267,7 @@ public class PlotQueryAction extends VegbankAction
 	}
 
 	private Collection getPlotSummaries(String conjunction, Vector resultSets)
-		throws SQLException
+		throws SQLException, Exception
 	{
 		log.debug("Conjunction is '" + conjunction + "'");
 		
@@ -305,6 +305,11 @@ public class PlotQueryAction extends VegbankAction
 			{
 				PlotSummary plotsum = new PlotSummary();
 				populatePlotSummary(rs, plotsum);
+				if (plotsum == null) {
+					log.error("Unable to retrieve build PlotSummary from DB result");
+					continue;
+				}
+
 				if ( conjunction.equals(ANDVALUE) ) // Do a Intesection of all resultset
 				{
 					if ( isFirstResultSet )	// if empty dump all into collection
@@ -354,19 +359,28 @@ public class PlotQueryAction extends VegbankAction
 	private void populatePlotSummary(ResultSet rs, PlotSummary plotsum)
 		throws SQLException
 	{
+		String ac = rs.getString(1);
+		if (Utility.isStringNullOrEmpty(ac)) {
+			log.debug("PlotSummary AC is empty for obs code:  " + rs.getString(2));
+			plotsum = null;
+			return;
+		}
+
+		if (plotsum == null) {
+			plotsum = new PlotSummary();
+		}
+
 		plotsum.setAccessionCode(rs.getString(1)); 
 		plotsum.setAuthorObservationCode(rs.getString(2));
 		plotsum.setLatitude(new Double(rs.getDouble(3)));
 		plotsum.setLongitude(new Double(rs.getDouble(4)));
 		plotsum.setPlotId(rs.getString(5));
 
-		/*
 		plotsum.setTopspp1(rs.getString(6));
 		plotsum.setTopspp2(rs.getString(7));
 		plotsum.setTopspp3(rs.getString(8));
 		plotsum.setTopspp4(rs.getString(9));
 		plotsum.setTopspp5(rs.getString(10));
-		*/
 	}
 
 	private void appendWhereClause(
