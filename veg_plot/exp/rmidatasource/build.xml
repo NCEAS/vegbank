@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-12-02 15:34:29 $'
- 	*     '$Revision: 1.13 $'
+ 	*     '$Date: 2002-12-02 21:20:54 $'
+ 	*     '$Revision: 1.14 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -60,7 +60,8 @@
 		<echo message="Compiling the RMI Code"/>
 		
 		<javac srcdir="${src}"  classpath="${cpath}"
-			includes="
+			debug="on"
+      includes="
 			 DataSourceClient.java
 			 DataSourceServer.java
 			 DataSourceServerInterface.java
