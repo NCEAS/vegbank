@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-24 05:27:21 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-10-24 19:26:40 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,13 @@ package org.vegbank.plots.datasource;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Types;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -44,7 +48,6 @@ import org.vegbank.common.model.Stratum;
 import org.vegbank.common.model.Taxonobservation;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
-import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.VBObjectUtils;
 
@@ -103,8 +106,6 @@ public class DBObservationReader
 			Taxonobservation taxonObservation = (Taxonobservation)  taxonObservations.next();
 			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("TaxonObservation"), taxonObservation.getTaxonobservation_id(), taxonObservation, ignoreObjects );
 			
-			System.out.println("]]]]] " + taxonObservation.toXML());
-			
 			Plantname plantName = taxonObservation.getPlantnameobject();
 //			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("PlantName"), plantName.getPLANTNAME_ID(), plantName, ignoreObjects );
 //			Iterator plantNames = plantName.getPLANTNAMEPlantUsages().iterator();
@@ -132,8 +133,6 @@ public class DBObservationReader
 		Plot plot = obs.getPlotobject();
 		System.out.println("Ignore when searching through Plot " + ignoreObjects);
 		getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Plot"), plot.getPlot_id(), plot, ignoreObjects );
-		
-		System.out.println(">>>> " + obs.toXML());
 		
 		return obs;
 	}
@@ -188,7 +187,6 @@ public class DBObservationReader
 	private String getTableName(Object object, Method method)
 	{
 		String tableName = VBObjectUtils.getFieldName( method.getName(), null );
-		System.out.println(">>>>>>>>>>>" + tableName);
 		
 		// Reconstitute the name of the table from the mess that is the methodName
 		tableName = tableName.substring(0, tableName.length()-1); // remove the trailing 's'
@@ -199,7 +197,7 @@ public class DBObservationReader
 		
 		// Reconstitute the name of the table from the mess that is the methodName
 		
-		System.out.println(VBObjectUtils.getUnQualifiedName( object.getClass().getName().toLowerCase()));
+		//System.out.println(VBObjectUtils.getUnQualifiedName( object.getClass().getName().toLowerCase()));
 		//tableName = StringUtils.replaceOnce(tableName,VBObjectUtils.getUnQualifiedName( object.getClass().getName()).toLowerCase(), "");
 		
 		return tableName;
@@ -264,7 +262,7 @@ public class DBObservationReader
 		
 		Method[] methods = object.getClass().getMethods();
 		String className = VBObjectUtils.getUnQualifiedName(object.getClass().getName());
-		System.out.println(">>>> " + className + "," + object+ "," + object.getClass().getName());
+		//System.out.println(">>>> " + className + "," + object+ "," + object.getClass().getName());
 		
 		Vector fieldNames = new Vector();
 		
@@ -311,13 +309,15 @@ public class DBObservationReader
 			ResultSet rs = selectStatement.executeQuery(sqlStatement);
 			int columnNumber = rs.getMetaData().getColumnCount();
 			
-			// Is there an observation?
+			// Is there an row?
 			if ( rs.next() )
 			{
+				ResultSetMetaData metaData = rs.getMetaData();
+				
 				// For each value add to the HashMap
 				for ( int ii=0; ii < columnNumber; ii++ )
 				{
-					hmap.put(fieldNames.elementAt(ii), rs.getString(ii+1) );	
+					hmap.put(fieldNames.elementAt(ii), this.getColumnValue(rs, ii+1, metaData ));	
 				}
 				
 				Iterator iter = objectSetMethods.keySet().iterator();
@@ -380,6 +380,41 @@ public class DBObservationReader
 		}
 	}
 	
+	/**
+	 * @param rs
+	 * @param i
+	 * @return
+	 */
+	private String getColumnValue(ResultSet rs, int i, ResultSetMetaData metaData) throws SQLException
+	{
+		String value = null;
+		int SQLType = metaData.getColumnType(i);
+		
+		if ( SQLType == Types.BOOLEAN )
+		{
+			boolean booleanValue = rs.getBoolean(i);
+			value = (new Boolean(booleanValue)).toString();
+		}
+		else if ( SQLType == Types.DATE )
+		{
+			// check for null
+			Date dateValue = rs.getDate(i);
+			if ( dateValue == null )
+			{
+				value = null;
+			}
+			else
+			{
+				value = dateValue.toString();
+			}
+		}
+		else
+		{
+			value = rs.getString(i);
+		}
+		return value;
+	}
+
 	/**
 	 * This is used to convert reflected fieldNames from the Vegbank Datamodel 
 	 * to the corresponding property name for use with the apache BeanUtils class.

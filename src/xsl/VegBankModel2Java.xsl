@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-10-24 05:27:21 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2003-10-24 19:26:40 $'
+ *  '$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -214,7 +214,7 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
         </xsl:when>
         <xsl:otherwise>
           // Got <xsl:value-of select="./javaType/@type"/> <xsl:value-of select="./attName"/>
-          <!-- Do Nothing -->
+          xml.append(getIdent( indent ) + "&lt;!-- Ignoring " + <xsl:value-of select="./attName"/> + " --&gt;\n");
         </xsl:otherwise>
       </xsl:choose>
 

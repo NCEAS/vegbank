@@ -49,6 +49,11 @@
 		<form-property name="plotIdList" type="java.lang.String"/>
     </form-bean>
 		
+    <form-bean  name="DisplayPlotForm"
+                type="org.apache.struts.validator.DynaValidatorForm">
+		<form-property name="plotId" type="java.lang.String"/>
+		<form-property name="resultType" type="java.lang.String"/>
+    </form-bean>
 
   </form-beans>
 
@@ -71,6 +76,7 @@
     <forward   name="authenticationException" path="/forms/authenticationException.jsp"/>
     <forward   name="DisplayUploadPlotAction" path="/forms/plot-submit.jsp"/>
     <forward   name="DropPlotAction" path="/forms/plot-drop.jsp"/>
+    <!--<forward   name="DisplayPlot" path="/DisplayPlot.do" contextRelative="true"  redirect="true"/>-->
   </global-forwards>
 
 
@@ -148,6 +154,16 @@
       	validate="true"
       	input="PlotQuery">
     </action>
+
+    <!-- Display a plot -->
+    <action path="/DisplayPlot"
+        type="org.vegbank.ui.struts.DisplayPlotAction"
+        name="DisplayPlotForm"
+        scope="request"
+        validate="true"
+	input="failure">
+    </action>
+
 
     <action path="/EntityName"
     	  type="org.vegbank.ui.struts.EntityNameAction"

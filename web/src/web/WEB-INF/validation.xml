@@ -7,7 +7,7 @@
 <!--
     Validation Rules for the Vegbank application 
 
-    $Id: validation.xml,v 1.3 2003-10-10 23:41:10 farrell Exp $
+    $Id: validation.xml,v 1.4 2003-10-24 19:26:40 farrell Exp $
 -->
 
 <form-validation>
@@ -72,9 +72,10 @@
               <arg0   key="organization" resource="false"/>
             </field>
             -->
+	</form>
 
         <form name="UploadPlotForm">
-            <field property="archieveType"
+            <field property="archiveType"
                    depends="required">
               <arg0   key="Archive type" resource="false"/>
             </field>
@@ -89,8 +90,17 @@
         </form>
 
 
+	<form name="DisplayPlotForm">
+	    <field property="resultType"
+		depends="required">
+              <arg0   key="The type of result requested" resource="false"/>
+            </field>
+	    <field property="plotId"
+		depends="required">
+              <arg0   key="The primary key of the plot" resource="false"/>
+            </field>
+	</form>
 
-        </form>
 
     </formset>
 

@@ -13,9 +13,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2003-10-24 19:10:15 $'
-*  '$Revision: 1.6 $'
+*    '$Author: farrell $'
+*      '$Date: 2003-10-24 19:26:40 $'
+*  '$Revision: 1.7 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -66,6 +66,7 @@
         <img src="/vegbank/images/report_sm.gif"></img>=Summary
         <img src="/vegbank/images/comprehensive_sm.gif"></img>=Comprehensive
         <img src="/vegbank/images/small_globe.gif"></img>=Location 
+        <img src="/vegbank/images/xml_icon.gif"></img>=Raw XML
       </span>
 
       <!-- set up the form which is required by netscape 4.x browsers -->
@@ -132,21 +133,11 @@
 	    <td width="20%" bgcolor="<%= marginBgColor %>" align="center">
 	      
 	      <!-- THE LINK TO THE SUMMARY-->
-	      <!--
-	      <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;vbaccessionnumber=<bean:write property="vegbankAccessionNumber" name="row"/>"> 
-	        <img align="center" border="0" src="/vegbank/images/report_sm.gif" alt="Summary view"> </img> 
-              </a>
-              -->
              <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId=<bean:write property="plotId" name="row"/>"><img align="center" border="0" 
 	     	src="/vegbank/images/report_sm.gif" alt="Summary view"></img></a>
 	      &#160;
 
 	      <!-- THE LINK TO THE COMPREHENSIVE REPORT-->
-	      <!--
-	      <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;vbaccessionnumber=<bean:write property="vegbankAccessionNumber" name="row"/>"> 
-	        <img align="center" border="0" src="/vegbank/images/comprehensive_sm.gif" alt="Comprehensive view"> </img> 
-	      </a>
-	      -->
 	      <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId=<bean:write property="plotId" name="row"/>"><img align="center" border="0" 
 	      	src="/vegbank/images/comprehensive_sm.gif" alt="Comprehensive view"></img></a>
 	      &#160;
@@ -155,6 +146,14 @@
 	      <a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>"><img align="center" border="0" 
 	      	src="/vegbank/images/small_globe.gif" alt="Location"></img></a>
 	      
+	      <!-- THE LINK TO THE RAW XML-->
+              <html:link page="/DisplayPlot.do?resultType=rawXML" paramId="plotId" paramName="row" paramProperty="plotId" >
+                <img align="center" border="0" src="/vegbank/images/xml_icon.gif" alt="Raw XML view"></img>
+              </html:link>
+              &#160;
+	      <br/>
+
+		<!-- Checkbox for download -->
 		<br/>
               <input name="plotName" type="checkbox" value='<bean:write property="plotId" name="row"/>' 
 			  	 onclick="toggle(this)" id='<bean:write property="plotId" name="row"/>'>
