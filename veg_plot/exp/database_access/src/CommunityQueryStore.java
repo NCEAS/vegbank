@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-12 21:27:18 $'
- * '$Revision: 1.6 $'
+ *     '$Date: 2002-03-13 17:57:17 $'
+ * '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,7 +165,8 @@ public class  CommunityQueryStore
 	
 	//get a vector that contains hashtables with all the possible 
 	//correlation ( name, recognizing party, system, status, level)
-	public Vector getCorrelationTargets(String commName)
+	//as input use the authors and the commname
+	public Vector getCorrelationTargets(String commName, String nameRefAuthors)
 	{
 		Vector v = new Vector();
 		try
@@ -174,9 +175,10 @@ public class  CommunityQueryStore
 			
 			statement.append("select ");
 			statement.append("commName, recognizingParty, partyConceptStatus, classLevel,  ");
-			statement.append(" commconcept_id  ");
+			statement.append(" commconcept_id, usage_id ");
 			statement.append("from commSummary where upper(commName) like '");
-			statement.append(commName.toUpperCase()+"'");
+			statement.append(commName.toUpperCase()+"' and upper(nameRefAuthors) ");
+			statement.append(" like '"+nameRefAuthors.toUpperCase()+"'");
 			//gather the responses
 			System.out.println("CommunityQueryStore > "+ statement.toString()  );
 			PreparedStatement pstmt;
@@ -200,6 +202,8 @@ public class  CommunityQueryStore
 				hash.put("level", ""+buf);
 				buf = rs.getString(5);
 				hash.put("commConceptId", ""+buf);
+				buf = rs.getString(6);
+				hash.put("usageId", ""+buf);
 				//put the hash into the vector
 				v.addElement(hash);
 				
@@ -217,19 +221,26 @@ public class  CommunityQueryStore
 	}
 						
 	
-	
+	/**
+	 * this method will return the name reference information based 
+	 * soley on a community name
+	 * 
+	 * @param commName -- the community name
+	 */
 	public Hashtable getNameReference(String commName)
 	{
 		Hashtable nameRef = new Hashtable();
 		try
 		{
+			System.out.println("CommunityQueryStore > looking up name ref for: " + commName);
 			Connection conn = this.getConnection();
 			
 			statement.append("select ");
 			statement.append("title, authors, pubDate, edition, seriesName, issueIdentification,  ");
 			statement.append("otherCitationDetails, page, isbn, issn  ");
-			statement.append("from commReference where commreference_id = 2");
-		
+			statement.append("from commReference where commreference_id = ");
+			statement.append(" (select commreference_id from commName where upper(commName)   ");
+			statement.append(" like '"+commName.toUpperCase()+"')");
 			//gather the responses
 			System.out.println("CommunityQueryStore > "+ statement.toString()  );
 			PreparedStatement pstmt;
@@ -240,12 +251,11 @@ public class  CommunityQueryStore
 			String buf = null;
 			while (rs.next()) 
 			{
-				System.out.println("CommunityQueryStore > new reference record "  );
-				
 				buf = rs.getString(1);
 				nameRef.put("title", ""+buf);
 				buf = rs.getString(2);
 				nameRef.put("authors", ""+buf);
+				System.out.println("CommunityQueryStore > found authors:  " + buf  );
 				buf = rs.getString(3);
 				nameRef.put("pubDate", ""+buf);
 				buf = rs.getString(4);
