@@ -1,7 +1,10 @@
 #!/bin/sh -ev
 
-INFILE=../data/native-xml-test.xml
-PLOT=Fern-1
+export INFILE=../data/native-xml-test.xml
+export PLOT=Fern-1
+
+cd $VEGBANK_HOME/veg_plot/exp/database_access/bin
+
 # copy the infile to the target file
 cp $INFILE ./input.xml
 
