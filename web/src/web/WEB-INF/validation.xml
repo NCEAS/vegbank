@@ -7,7 +7,7 @@
 <!--
     Validation Rules for the Vegbank application 
 
-    $Id: validation.xml,v 1.2 2003-07-23 18:45:06 mlee Exp $
+    $Id: validation.xml,v 1.3 2003-10-10 23:41:10 farrell Exp $
 -->
 
 <form-validation>
@@ -72,6 +72,23 @@
               <arg0   key="organization" resource="false"/>
             </field>
             -->
+
+        <form name="UploadPlotForm">
+            <field property="archieveType"
+                   depends="required">
+              <arg0   key="Archive type" resource="false"/>
+            </field>
+            <field property="plotFile"
+                   depends="required">
+              <arg0   key="Plot data file" resource="false"/>
+            </field>
+            <field property="updateArchivedPlot"
+                   depends="required">
+              <arg0   key="Is plot already archived" resource="false"/>
+            </field>
+        </form>
+
+
 
         </form>
 

@@ -36,6 +36,9 @@
 
     <form-bean  name="PlotQueryForm"
                 type="org.vegbank.ui.struts.PlotQueryForm"/>
+		
+    <form-bean  name="UploadPlotForm"
+                type="org.vegbank.ui.struts.UploadPlotForm"/>
 
   </form-beans>
 
@@ -53,11 +56,27 @@
     <forward   name="AddParty"	path="/forms/AddParty.jsp"/>
     <forward   name="PlotQuery"	path="/forms/plot-query.jsp"/>
     <forward   name="DisplayResults" path="/forms/DisplayResults.jsp"/>
+    <forward   name="DisplayLoadReport" path="/forms/DisplayLoadReport.jsp"/>
+    <forward   name="authenticationException" path="/forms/authenticationException.jsp"/>
+    <forward   name="DisplayUploadPlotAction" path="/forms/plot-submit.jsp"/>
   </global-forwards>
 
 
   <!-- ========== Action Mapping Definitions ============================== -->
-  <action-mappings>
+  <action-mappings type="com.livinglogic.struts.workflow.WorkflowMapping">
+
+ 
+    <action path="/DisplayUploadPlotAction" forward="/forms/plot-submit.jsp">
+      <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+    </action>
+
+    <action path="/UploadPlot"
+	type="org.vegbank.ui.struts.UploadPlotAction"
+        name="UploadPlotForm"
+        scope="request"
+        validate="true"
+        input="DisplayUploadPlotAction">
+    </action>		 
 
 	<!-- Add a reference to vegbank -->
     <action    path="/AddReference"
@@ -120,10 +139,11 @@
 
   <!-- ========== Controller Configuration ================================ -->
 
-  <controller>
+  <controller processorClass="com.livinglogic.struts.workflow.WorkflowRequestProcessor" >
     <!-- The "input" parameter on "action" elements is the name of a
          local or global "forward" rather than a module-relative path -->
     <set-property property="inputForward" value="true"/>
+    <set-property property="maxFileSize" value="20M"/>
   </controller>
 
 
@@ -131,12 +151,6 @@
 
   <message-resources
     parameter="org.apache.struts.webapp.example.ApplicationResources"/>
-
-  <message-resources
-    parameter="org.apache.struts.webapp.example.AlternateApplicationResources"
-    key="alternate">
-  </message-resources>
-
 
   <!-- ========== Plug Ins Configuration ================================== -->
 
