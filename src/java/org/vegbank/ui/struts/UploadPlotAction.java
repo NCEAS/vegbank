@@ -30,8 +30,8 @@ import org.vegbank.dataload.XML.*;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-01 23:33:27 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-03-05 22:39:14 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ public class UploadPlotAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		LogUtility.log(" In UploadPlotAction ", LogUtility.TRACE);
+		LogUtility.log(" In UploadPlotAction ", LogUtility.DEBUG );
 		ActionErrors errors = new ActionErrors();
 		LoadingErrors loadingErrors = null;
 
