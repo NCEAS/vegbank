@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-11-16 01:17:07 $'
-*  '$Revision: 1.11 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-11-16 06:19:24 $'
+*  '$Revision: 1.12 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -125,7 +125,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="vegbank_small">
+		<td class="sizesmall">
 			&nbsp; &nbsp; &nbsp; Local data file path:
 		</td>
 		<td>
@@ -145,7 +145,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="vegbank_small">
+		<td class="sizesmall">
 			&nbsp; &nbsp; &nbsp; Data file URL:
 		</td>
 		<td>

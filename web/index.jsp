@@ -52,7 +52,7 @@ function preSubmit() {
 		<%@ include file="../includes/HomePageImg.jsp" %>
 		</td></tr><tr>
             <td align="left"> <!--
-              <p class="vegbank_tiny">Eventually: click the picture above to see 
+              <p class="sizetiny">Eventually: click the picture above to see 
                 plot data for the above plot</p> -->
             </td>
           </tr></table></td>
@@ -152,7 +152,7 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 	<p class="vegbank"> 
 	
 	<table align="center" cellpadding="7" cellspacing="0" border="0" bgcolor="#FFFFFF">
-	<tr class="vegbank_small">
+	<tr class="sizesmall">
 	<td align="center">
 		&raquo; <a href="@forms_link@PlantQuery.jsp">Explore Plant Taxa</a> 
 	</td>
@@ -170,7 +170,7 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
   
   <tr>
           <td class="vegbank" valign="top" > 
-              <p class="vegbank_large">News</p>
+              <p class="sizelarge">News</p>
               <ul>
                 <li class="constsize">
 					Try the simple new 
@@ -192,7 +192,7 @@ href="@panel_link@standards.html">Guidelines for Describing
 	      <td valign="top" > 
             <!--   
 	-->
-            <span class="vegbank_tiny"> <!--VegBank is operated by the Ecological 
+            <span class="sizetiny"> <!--VegBank is operated by the Ecological 
             Society of America's <a 
 href="@panel_link@panel.html">Vegetation Panel</a> in cooperation with the <a 
 href="http://www.nceas.ucsb.edu/">National 
@@ -210,7 +210,7 @@ href="http://www.nceas.ucsb.edu/">National
 height="1"/></td><td><img  src="@image_server@transparent.gif" width="200" 
 height="1" /></td></tr>
   <tr><td colspan="2" align="center">
-              <p class="vegbank_tiny">&copy; 2004 Ecological Society of America<br>
+              <p class="sizetiny">&copy; 2004 Ecological Society of America<br>
                 <a href="@general_link@terms.html">Terms of use</a> | <a href="@general_link@privacy.html">Privacy policy</a></p></td></tr>
  
   </tbody> 

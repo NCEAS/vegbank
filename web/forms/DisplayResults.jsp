@@ -13,8 +13,8 @@
 *     Authors: @author@
 *
 *    '$Author: mlee $'
-*      '$Date: 2004-11-11 20:24:43 $'
-*  '$Revision: 1.28 $'
+*      '$Date: 2004-11-16 06:19:24 $'
+*  '$Revision: 1.29 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -194,7 +194,7 @@
 	          <bean:write name="row" property="authorObservationCode"/>   
 	        </span>
 			<br/>
-			<span class="vegbank_tiny">
+			<span class="sizetiny">
 				<bean:write name="row" property="accessionCode"/>
 	        </span>
          </td>		 
@@ -213,7 +213,7 @@
          </td>		
 		 <td>&nbsp;<!-- a little space before dominant species --></td> 
 	    <td align="left" valign="middle" colspan="2"> <!-- colspan 2 b/c top black bars as separators are cells -->
-	        <span class="vegbank_tiny">
+	        <span class="sizetiny">
 	    <!-- no top species returned -->      
 	    <logic:empty name="row" property="topspp1"> 
 			    None available <br/>

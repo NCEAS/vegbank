@@ -149,11 +149,11 @@ WRITING TO:<xsl:value-of select="concat($vers,'Help.',$pathSoFar,'.',name,$htmls
     <xsl:when test="$ctlType=107"><!-- option group --><xsl:value-of select="$caption" /> <i> options box</i></xsl:when>
     <xsl:when test="$ctlType=105"><!-- radio --><input type="radio" /><xsl:value-of select="$caption" /> <i> option</i></xsl:when>
     <xsl:when test="$ctlType=110"><!-- list box --><xsl:value-of select="$caption" /><select size="2"><option>list of</option><option>options</option></select></xsl:when>
-    <xsl:when test="$ctlType=123"><!-- tab control --><xsl:value-of select="$caption" /><i> Tabbed pages: </i><table class="vegbank_tiny"  border="0" cellpadding="0" cellspacing="0" >
+    <xsl:when test="$ctlType=123"><!-- tab control --><xsl:value-of select="$caption" /><i> Tabbed pages: </i><table class="sizetiny"  border="0" cellpadding="0" cellspacing="0" >
        <tr><td bgcolor="#CCCCCC">Page 1</td><td bgcolor="#FFFFFF"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td><td bgcolor="#999999">Page 2</td><td bgcolor="#FFFFFF"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td><td bgcolor="#999999">Page 3</td></tr>
        <tr><td bgcolor="#CCCCCC" colspan="5"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td></tr>
        </table> </xsl:when>
-    <xsl:when test="$ctlType=124"><!--page --><table class="vegbank_tiny" border="0" cellpadding="0" cellspacing="0" >
+    <xsl:when test="$ctlType=124"><!--page --><table class="sizetiny" border="0" cellpadding="0" cellspacing="0" >
        <tr><td bgcolor="#CCCCCC"><xsl:value-of select="$caption" /></td><td colspan="2" bgcolor="#FFFFFF"><xsl:text disable-output-escaping="yes">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</xsl:text></td></tr>
        <tr><td bgcolor="#CCCCCC" colspan="3"> (page contents)</td></tr>
        </table></xsl:when>

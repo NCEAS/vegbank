@@ -150,7 +150,7 @@ Design
 
 
     </p>
-    <p class="vegbank_tiny">
+    <p class="sizetiny">
       <sup>*</sup>We are using the new name "NatureServe" for all references to "ABI," even for 
 
   references which predate the name change. This allows for consistency in referencing one organization.
@@ -482,13 +482,13 @@ Design
       [<a href="@workshop_link@vegbank-workshop-agenda-nov03.html">Agenda</a>] 
       [Why VegBank? <a href="@workshop_link@VegBank_tutorial_why.pdf">pdf</a>
         | <a href="@workshop_link@VegBank_tutorial_why.ppt">ppt</a>
-        <span class="vegbank_tiny">(IE)</span>]
+        <span class="sizetiny">(IE)</span>]
       [VegBank Data Model <a href="@workshop_link@VegBank_tutorial_model.pdf">pdf</a>
         | <a href="@workshop_link@VegBank_tutorial_model.ppt">ppt</a>
-        <span class="vegbank_tiny">(IE)</span>]  
+        <span class="sizetiny">(IE)</span>]  
       [VegBank-NVC <a href="@workshop_link@VegBank_NVC.pdf">pdf</a>
         | <a href="@workshop_link@VegBank_NVC.ppt">ppt</a>
-        <span class="vegbank_tiny">(IE)</span>]  
+        <span class="sizetiny">(IE)</span>]  
 
    
       </li>

@@ -10,9 +10,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: anderson $'
-  *      '$Date: 2004-04-30 13:09:35 $'
-  *  '$Revision: 1.5 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2004-11-16 06:19:25 $'
+  *  '$Revision: 1.6 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -43,15 +43,15 @@
 
 <blockquote>
 <h3><font color="red">Oops! You found a VegBank bug.</font></h3>
-<span class="vegbank_large">Sorry, but the last thing you tried to do did not work.</span><br/>
+<span class="sizelarge">Sorry, but the last thing you tried to do did not work.</span><br/>
 <br/>
-<span class="vegbank_small">
+<span class="sizesmall">
 Please try again right now by reloading/refreshing this page or going back.<br/>
 If it is still broken, please try again later and keep your fingers crossed.<br/>
 This problem has been reported to the developers.<br/></span>
 
 	<br/> 
-	<span class="vegbank_normal">
+	<span class="sizenormal">
 		Thank you for your patience.<br/>
 		<a href="mailto:help@vegbank.org">help@vegbank.org</a>
 	</span>	

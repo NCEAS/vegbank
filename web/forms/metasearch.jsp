@@ -178,7 +178,7 @@ String getURL = "@get_link@" + getView + "/" + getName + "/" + params +
 	</table></td></tr></table>
 </blockquote>
 	<center>
-<span class="vegbank_small" align="center">
+<span class="sizesmall" align="center">
 <% if (searchString !=  null && !searchString.equals("")) { %>
 You searched for 
 <logic:equal name="regexOp" value="and">all words in</logic:equal>

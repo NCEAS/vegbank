@@ -5,15 +5,15 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!--
-  * '$Id: change_pwd.jsp,v 1.3 2004-04-30 13:09:01 anderson Exp $'
+  * '$Id: change_pwd.jsp,v 1.4 2004-11-16 06:19:24 mlee Exp $'
   * Purpose: Display change user password form.
   * Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   * Authors: @author@
   *
-  * '$Author: anderson $'
-  * '$Date: 2004-04-30 13:09:01 $'
-  * '$Revision: 1.3 $'
+  * '$Author: mlee $'
+  * '$Date: 2004-11-16 06:19:24 $'
+  * '$Revision: 1.4 $'
   *
   *
   -->
@@ -46,7 +46,7 @@
 		if (!isAdmin.booleanValue()) {
 %>
 	<tr> 
-      <td colspan="2"><span class="vegbank_small">Current Password: </span><br/>
+      <td colspan="2"><span class="sizesmall">Current Password: </span><br/>
           <input type="password" name="password" size="25" maxlength="100"/>
 	  </td>
     </tr>
@@ -57,13 +57,13 @@
 
 	
 	<tr> 
-      <td colspan="2"><span class="vegbank_small">New Password: </span><br/>
+      <td colspan="2"><span class="sizesmall">New Password: </span><br/>
         <input type="password" name="newpassword1" size="25" maxlength="100"/>
 	  </td>
     </tr>
 
 	<tr> 
-      <td colspan="2"><span class="vegbank_small">Re-type New Password: </span><br/>
+      <td colspan="2"><span class="sizesmall">Re-type New Password: </span><br/>
         <input type="password" name="newpassword2" size="25" maxlength="100"/>
 	  </td>
     </tr>

@@ -12,9 +12,9 @@
   *               National Center for Ecological Analysis and Synthesis
   * Authors: @author@
   *
-  * '$Author: anderson $'
-  * '$Date: 2004-04-30 13:10:21 $'
-  * '$Revision: 1.3 $'
+  * '$Author: mlee $'
+  * '$Date: 2004-11-16 06:19:24 $'
+  * '$Revision: 1.4 $'
   *
   *
   -->
@@ -68,7 +68,7 @@
 			</tr>
 			</table>
 
-			<p class="vegbank_normal">
+			<p class="sizenormal">
 				The following fields are all required for <html:link action="LoadCertification.do">certification</html:link>.
 				<br/>
 			</p> 
@@ -77,7 +77,7 @@
 	</tr>
 	
 	<tr> 
-      <td colspan="2"><span class="vegbank_small">Email Address / Username: </span><br/>
+      <td colspan="2"><span class="sizesmall">Email Address / Username: </span><br/>
         
         <!--html:text name="webuser" property="email"  size="25"/-->
         <html:text name="upform" property="webuser.email"  size="25"/>
@@ -102,36 +102,36 @@
 	-->
 		
 	<tr> 
-      <td colspan="2"><span class="vegbank_small">Preferred Name (nickname): </span><br/>
+      <td colspan="2"><span class="sizesmall">Preferred Name (nickname): </span><br/>
         <html:text name="upform" property="webuser.preferredname"  size="25" maxlength="30"/>
         <!--html:text property="preferredname" name="webuser" size="25" maxlength="30"/-->
-		<span class="vegbank_tiny"></span>
+		<span class="sizetiny"></span>
 	  </td>
     </tr>
 		
 	<tr> 
-      <td colspan="2"><span class="vegbank_small">Institution / Organization: </span><br/>
+      <td colspan="2"><span class="sizesmall">Institution / Organization: </span><br/>
         <html:text name="upform" property="webuser.organizationname"  size="60" maxlength="200"/>
         <!--html:text property="organizationname" name="webuser" size="60" maxlength="200"/-->
 	  </td>
     </tr>
 		
 	<tr> 
-      <td colspan="2"><span class="vegbank_small">Address: </span><br/>
+      <td colspan="2"><span class="sizesmall">Address: </span><br/>
         <html:text name="upform" property="webuser.address"  size="60" maxlength="100"/>
         <!--html:text property="address" name="webuser" size="60" maxlength="100"/-->
 	  </td>
     </tr>
 		
 	<tr> 
-      <td colspan="2"><span class="vegbank_small">City: </span><br/>
+      <td colspan="2"><span class="sizesmall">City: </span><br/>
         <html:text name="upform" property="webuser.city"  size="20" maxlength="20"/>
         <!--html:text property="city" name="webuser" size="20" maxlength="20"/-->
 		</td>
     </tr>
 
 	<tr> 
-      <td colspan="2"><span class="vegbank_small">State / Province (USA, Mexico &amp; Canada only): </span><br/>
+      <td colspan="2"><span class="sizesmall">State / Province (USA, Mexico &amp; Canada only): </span><br/>
         <!--html:select name="webuser" property="state" --> 
         <html:select name="upform" property="webuser.state"> 
           <option value="">-- select one --</option>
@@ -141,7 +141,7 @@
     </tr>
 		
 	<tr> 
-      <td colspan="2"><span class="vegbank_small">Country: </span><br/>
+      <td colspan="2"><span class="sizesmall">Country: </span><br/>
         <!--html:select name="webuser" property="country"-->
         <html:select name="upform" property="webuser.country">
           <option value="">-- select one --</option>
@@ -151,7 +151,7 @@
     </tr>
 		
 	<tr> 
-      <td colspan="2"><span class="vegbank_small">Postal Code: </span><br/>
+      <td colspan="2"><span class="sizesmall">Postal Code: </span><br/>
         <html:text name="upform" property="webuser.postalcode"  size="20" maxlength="20"/>
         <!--html:text property="postalcode" name="webuser" size="20" maxlength="20"/-->
 		</td>

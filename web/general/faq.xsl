@@ -67,10 +67,10 @@
 
 <xsl:template match="question">
   <div id="{qname}">
-  <p class="vegbank_normal">
+  <p class="sizenormal">
   <a name="{qname}"><xsl:copy-of select="qtxt" /></a></p>
   <blockquote>
-  <p class="vegbank_small">
+  <p class="sizesmall">
     <xsl:copy-of select="atxt" />
   </p>
   </blockquote>

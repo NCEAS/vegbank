@@ -10,9 +10,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2004-04-26 20:49:43 $'
-*  '$Revision: 1.5 $'
+*    '$Author: mlee $'
+*      '$Date: 2004-11-16 06:19:24 $'
+*  '$Revision: 1.6 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -42,19 +42,19 @@
 <blockquote>
 <p>
 	<br/>
-	<span class="vegbank_small">The page you tried to access requires a higher level of certification.
+	<span class="sizesmall">The page you tried to access requires a higher level of certification.
 	</span>
 	<br/>
 	<br/>
 	Please login to your VegBank account.
 	</span>
 	<br/>
-	<span class="vegbank_small">
+	<span class="sizesmall">
 	Certified and professional users increase their ability to use VegBank more effectively.<br/>
 	</span>
 	<br/>
 	<br/>
-	<span class="vegbank_normal">
+	<span class="sizenormal">
 		Thank you,<br/>
 		<a href="mailto:help@vegbank.org">help@vegbank.org</a>
 	</span>	

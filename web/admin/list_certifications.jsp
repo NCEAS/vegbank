@@ -5,15 +5,15 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!-- 
-  *   '$Id: list_certifications.jsp,v 1.6 2004-11-16 05:07:02 mlee Exp $ '
+  *   '$Id: list_certifications.jsp,v 1.7 2004-11-16 06:19:25 mlee Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-11-16 05:07:02 $'
-  *  '$Revision: 1.6 $'
+  *      '$Date: 2004-11-16 06:19:25 $'
+  *  '$Revision: 1.7 $'
   *
   *
   -->
@@ -41,7 +41,7 @@
 			</ul>
 		</logic:messagesPresent>
 
-        <p class="vegbank_normal">
+        <p class="sizenormal">
 			Below is a list of all VegBank certification applications.
 			<br/>
         </p> 

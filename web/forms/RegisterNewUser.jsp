@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-11-16 04:51:23 $'
-*  '$Revision: 1.10 $'
+*  '$Date: 2004-11-16 06:19:24 $'
+*  '$Revision: 1.11 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -59,24 +59,24 @@
 
 <tr>
 <td valign="top">
-<span class="vegbank_large">Register here.</h3>
+<span class="sizelarge">Register here.</h3>
   <br/>
   <br/>
-  <span class="vegbank_small">
+  <span class="sizesmall">
   <html:errors/>
   </span>
 
   <TABLE width="315" border="0">
     <TR> 
       <TD>
-	  	<b><span class="vegbank_normal">Login Information</span></b>
+	  	<b><span class="sizenormal">Login Information</span></b>
 	  </TD>
     </TR>
 
     <TR> 
       <TD>
 	  	<font color="#FF0000">*</font>
-	  	<span class="vegbank_small">e-Mail Address (login name): 
+	  	<span class="sizesmall">e-Mail Address (login name): 
 		<br/>
 	  	<html:text property="usr.email_address" size="30"/>
       </TD>
@@ -85,7 +85,7 @@
     <TR> 
       <TD>
 		<font color="#FF0000">*</font>
-		<span class="vegbank_small">Password:</span>
+		<span class="sizesmall">Password:</span>
 		<br/>
 		<html:password property="password1" size="30" redisplay="true"/>
       </TD>
@@ -95,7 +95,7 @@
     <TR> 
       <TD>
 	 	 	<font color="#FF0000">*</font>
-            <span class="vegbank_small">Confirm Password: </span>
+            <span class="sizesmall">Confirm Password: </span>
 			<br/>
         	<html:password property="password2" size="30" redisplay="true"/>
       </TD>
@@ -107,7 +107,7 @@
 
     <TR>
       <TD> 
-         <b><span class="vegbank_normal">Personal Information</span></b>
+         <b><span class="sizenormal">Personal Information</span></b>
       </TD>
     </TR>
 
@@ -115,7 +115,7 @@
     <TR> 
       <TD>
 	 	  <font color="#FF0000">*</font>
-          <span class="vegbank_small">First Name: </span>
+          <span class="sizesmall">First Name: </span>
 		  <br/>
 		  <html:text property="party.givenname" size="30"/>
       </TD>
@@ -125,7 +125,7 @@
     <TR> 
       <TD>
 	 	  <font color="#FF0000">*</font>
-          <span class="vegbank_small">Last Name:</span>
+          <span class="sizesmall">Last Name:</span>
 		  <br/>
 		  <html:text property="party.surname" size="30"/>
       </TD>
@@ -150,11 +150,11 @@
       <td>
           <font color="red">*</font> 
           <html:radio value="accept" property="termsaccept"/> 
-          <span class="vegbank_small">I accept these terms</span>
+          <span class="sizesmall">I accept these terms</span>
       </td>
       <td>
            <html:radio value="decline" property="termsaccept"/> 
-           <span class="vegbank_small">I decline</span>
+           <span class="sizesmall">I decline</span>
       </td>
     </tr>
 
@@ -162,7 +162,7 @@
 
 
           <p><b><font color="red">*</font> 
-		  <span class="vegbank_small">denotes required field</span>
+		  <span class="sizesmall">denotes required field</span>
 		  </b></p>
 
 		<html:submit property="submit" value="Register Now" />
@@ -184,9 +184,9 @@
 to use VegBank without registration, registered users are able to...</p>
 
 <ul>
-  <li class="vegbank_small">add your data and annotate extant data (certification required)</li>
-  <li class="vegbank_small">build personal datasets and queries (coming soon)
-  <li class="vegbank_small">request permission to view non-public data (coming soon)</li>
+  <li class="sizesmall">add your data and annotate extant data (certification required)</li>
+  <li class="sizesmall">build personal datasets and queries (coming soon)
+  <li class="sizesmall">request permission to view non-public data (coming soon)</li>
 </ul>
 
 <p>Visitors to vegbank.org are <b>guaranteed privacy</b>. 

@@ -5,15 +5,15 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!-- 
-  *   '$Id: view_certification.jsp,v 1.8 2004-11-16 04:51:22 mlee Exp $ '
+  *   '$Id: view_certification.jsp,v 1.9 2004-11-16 06:19:25 mlee Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-11-16 04:51:22 $'
-  *  '$Revision: 1.8 $'
+  *      '$Date: 2004-11-16 06:19:25 $'
+  *  '$Revision: 1.9 $'
   *
   *
   -->
@@ -38,7 +38,7 @@
 
 		<html:errors/>
 
-        <p class="vegbank_normal">
+        <p class="sizenormal">
         </p> 
 	
 	<!-- main table -->
@@ -48,7 +48,7 @@
 		<html:hidden name="certBean" property="certId"/>
 
     <tr> 
-      <td colspan="2" class="vegbank_small">
+      <td colspan="2" class="sizesmall">
 	    <br/>
         <b>Enter comments</b> (optional):
         <br/>
@@ -56,7 +56,7 @@
       </td>
     </tr>
     <tr> 
-      <td colspan="3" class="vegbank_small"> 
+      <td colspan="3" class="sizesmall"> 
 		<b>Choose a new status:</b>
 			<html:select name="certBean" property="certificationstatus">
 			  <option value="<bean:write name="certBean" property="certificationstatus"/>">
@@ -110,7 +110,7 @@
     <tr> 
       <td> 
 		 
-        <span class="vegbank_small">
+        <span class="sizesmall">
 		Requested certification 
 		</span>
 		<br/>
@@ -125,7 +125,7 @@
     <tr> 
       <td>
 		 
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
 		Highest degree
 	    </span>
         <br/> 
@@ -134,7 +134,7 @@
     </tr>
     <tr>
       <td>
-	    <span class="vegbank_small">Year of degree</span>
+	    <span class="sizesmall">Year of degree</span>
         <br/> 
         &raquo; <bean:write name="certBean" property="degreeYear"/>
         </td>
@@ -142,7 +142,7 @@
     <tr> 
       <td>
 		
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
 		Institution of highest degree
 		</span>
         <br/> 
@@ -153,7 +153,7 @@
       <td>
 		
 		 
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
 		Current organization  
 		</span>
 		<br/>
@@ -164,7 +164,7 @@
       <td>
         
 		 
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
 		Current position </span>
 		<br/>
         &raquo; <bean:write name="certBean" property="currentPos"/>
@@ -174,7 +174,7 @@
       <td>
         
 		 
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
 		ESA Certified Ecologist?</span>
 		<br/>
 		&raquo;
@@ -189,7 +189,7 @@
     <tr> 
       <td colspan="2">
 	    <br/>
-        <span class="vegbank_small">Other <b>PROFESSIONAL</b> certification or experience?</span>
+        <span class="sizesmall">Other <b>PROFESSIONAL</b> certification or experience?</span>
 		<br/>
         &raquo; <bean:write name="certBean" property="profExp"/>
       </td>
@@ -197,7 +197,7 @@
     <tr> 
       <td colspan="2">
 		<br/>
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
         List up to 5 of your relevant <b>PUBLICATIONS/THESES</b>:
 		</span>
 		<br/>
@@ -208,7 +208,7 @@
       <td colspan="2">
         <br/>
          
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
 		Briefly describe your background and expertise in vegetation <b>SAMPLING</b>:</span>
         <br/>
         &raquo; <bean:write name="certBean" property="vegSamplingExp"/>
@@ -218,7 +218,7 @@
       <td colspan="2">
         <br/>
          
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
 		Briefly describe your background and expertise with vegetation <b>ANALYSIS</b>, description &amp; classification:</span>
         <br/>
         &raquo; <bean:write name="certBean" property="vegAnalysisExp"/>
@@ -228,7 +228,7 @@
       <td colspan="2">
         <br/>
          
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
 		Briefly describe your prior experience with the <b>US National Vegetation Classification</b>, if any:</span>
 		<br/>
         &raquo; <bean:write name="certBean" property="usnvcExp"/>
@@ -237,7 +237,7 @@
     <tr> 
       <td colspan="2">
         <br/>
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
 		Briefly describe your prior experience with <b>VEGBANK</b>, if any:</span>
         <br/>
         &raquo; <bean:write name="certBean" property="vbExp"/>
@@ -247,7 +247,7 @@
       <td colspan="2">
         <br/>
          
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
 		How do you <b>INTEND TO USE VEGBANK</b>?</span>
 		<br/>
         &raquo; <bean:write name="certBean" property="vbIntention"/>
@@ -256,7 +256,7 @@
     <tr> 
       <td colspan="2">
         <br/> 
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
 		Briefly describe your prior experience with vegetation plot <b>DATABASES</b> and/or analytical <b>TOOLS</b>:</span>
 		<br/>
         &raquo; <bean:write name="certBean" property="toolsExp"/>
@@ -266,7 +266,7 @@
 	  <td colspan="4">
 	    <br/> 
 	     
-		<span class="vegbank_small">
+		<span class="sizesmall">
 	    Please rate your expertise for the <b>3 REGIONS</b> you know best in terms 
 	    of knowledge of the vegetation, the flora, and the US-NVC (1=Weak, 5=Expert) 
 		</span>
@@ -351,7 +351,7 @@
 	<tr bgcolor="#FFFFFF">
 	  <td colspan="5">
 	  	<br/>
-		  <span class="vegbank_small">
+		  <span class="sizesmall">
 		  List up to two ESA members who are familiar with your background and 
 		  expertise and who have agreed to sponsor your certification.
 		  </span>
@@ -405,7 +405,7 @@
    <tr> 
       <td colspan="2">
 		<br/>
-	    <span class="vegbank_small">
+	    <span class="sizesmall">
         Are you interested in serving as a <b>PEER REVIEWER</b> for proposed changes in the US-NVC?
         </span>
 		<br/>
@@ -422,7 +422,7 @@
     <tr> 
       <td colspan="2">
 	    <br/>
-		<span class="vegbank_small">
+		<span class="sizesmall">
         Additional statements:
 		</span>
         <br/>

@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-08-24 00:42:14 $'
-*  '$Revision: 1.5 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-11-16 06:19:24 $'
+*  '$Revision: 1.6 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -183,11 +183,11 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
  		<table border="0" cellspacing="4" cellpadding="0">
 		<tr>
 		<td colspan="2">
-			<span class="vegbank_normal"><b>Information</b></span>
+			<span class="sizenormal"><b>Information</b></span>
 		</td>
 		</tr>
 
-		<tr class="vegbank_tiny">
+		<tr class="sizetiny">
 		<td valign="top">&raquo;</td>
 		<td>
 			You can more narrowly define the plant in question due to your 
@@ -203,7 +203,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 		<td bgcolor="#AAAAAA"><img src="@image_server@pix_clear.gif"></td>
 		</tr>
 			
-		<tr class="vegbank_tiny">
+		<tr class="sizetiny">
 		<td valign="top">&raquo;</td>
 		<td>
 			You disagree with the author's interpretation of the plant and 
@@ -217,7 +217,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 		</tr>
 			
 			
-		<tr class="vegbank_tiny">
+		<tr class="sizetiny">
 		<td valign="top">&raquo;</td>
 		<td>
 			(Rarely) you disagree with the author's interpretation and wish 
@@ -230,7 +230,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 		<td bgcolor="#AAAAAA"><img src="@image_server@pix_clear.gif"></td>
 		</tr>
 			
-		<tr class="vegbank_tiny">
+		<tr class="sizetiny">
 		<td valign="top">&raquo;</td>
 		<td>
 			You are REQUIRED to fill in the Notes section with a good 

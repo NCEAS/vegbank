@@ -10,9 +10,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: anderson $'
-  *      '$Date: 2004-07-24 00:56:02 $'
-  *  '$Revision: 1.3 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2004-11-16 06:19:25 $'
+  *  '$Revision: 1.4 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -45,7 +45,7 @@
 
 <blockquote>
 <h3>Please wait</h3>
-<span class="vegbank_large">Your request is being processed.</span><br/>
+<span class="sizelarge">Your request is being processed.</span><br/>
 <br/>
 <br/>
 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
@@ -64,7 +64,7 @@
 
 <br/> 
 <p>
-<span class="vegbank_normal">
+<span class="sizenormal">
 	Thank you for your patience.<br/>
 	<a href="mailto:help@vegbank.org">help@vegbank.org</a>
 </span>	
