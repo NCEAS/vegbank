@@ -10,7 +10,13 @@
        -->
 
 
-<%     int rowOrder = 0;  %>
+<%     int rowOrder = 0;  %><!-- this is the number for the original sort order -->
+<%     int strataGroup = 0; %> <!-- which class to use for stratum coloring -->
+<%     String strataClass = "" ; %> <!-- class to use for stratum coloring where non-strata also exist -->
+    <bean:define id="lastStratum">
+      ---nonEe------
+    </bean:define>
+		 <!-- this is the last stratum-- attempting to shade according to stratum values -->
 
      <TABLE cellpadding="0" class="thinlines">
   <logic:equal name="smallheader" value="yes">
@@ -49,9 +55,34 @@
          </tr>
     
          <logic:iterate id="onerowoftaxonimportance" name="taxonimportanceall-BEANLIST">
+        	<logic:notEqual name="onerowoftaxonimportance" property="stratum_id_transl"
+	       	  value='<%= lastStratum %>'>
+	       	  <!-- change the color of this -->
+	       	   <% strataGroup ++ ; %>
+	       	   
+	       	   <% if (( strataGroup == 13 )) 
+	       	   {
+	       	   
+	       	     strataGroup = 1;
+	       	   } 
+	       	   %>
+	       	   
+	       	  
+	            <bean:define id="lastStratum"><bean:write name="onerowoftaxonimportance" property="stratum_id_transl" /></bean:define>
+	            <logic:equal name="lastStratum" value="-all-">
+	             <!-- set class to normal -->
+	                <% strataClass = "normal" ; %>
+	             
+	            </logic:equal>
+	            <logic:notEqual name="lastStratum" value="-all-" >
+	               <!-- set class to group -->
+	               <% strataClass = "group" + strataGroup ; %>
+	            </logic:notEqual>
+      	</logic:notEqual> 
+       
      
-         <tr class='@nextcolorclass@'>
-          <td class="sizetiny"><% rowOrder ++ ; %> <%= rowOrder %></td>
+         <tr class='<%= strataClass %>'>
+          <td class="sizetiny"><% rowOrder ++ ; %><%= rowOrder %></td>
           <%@ include file="../autogen/taxonimportance_summary_data.jsp" %>
          </tr>
 
@@ -92,8 +123,28 @@
      </tr>
 
      <logic:iterate id="onerowoftaxonimportance" name="taxonimportance-BEANLIST">
+        
+      	<logic:notEqual name="onerowoftaxonimportance" property="stratum_id_transl"
+      	  value='<%= lastStratum %>'>
+      	  <!-- change the color of this -->
+      	   <% strataGroup ++ ; %>
+      	   
+      	   <% if (( strataGroup == 13 )) 
+      	   {
+      	   
+      	     strataGroup = 1;
+      	   } 
+      	   %>
+      	   
+      	  
+           <bean:define id="lastStratum">
+            <bean:write name="onerowoftaxonimportance" property="stratum_id_transl" />
+           </bean:define>
+      	</logic:notEqual>  
+
  
-     <tr class='@nextcolorclass@'><td class="sizetiny"><% rowOrder ++ ; %> <%= rowOrder %></td>
+ 
+     <tr class='group<%= strataGroup %>'><td class="sizetiny"><% rowOrder ++ ; %><%= rowOrder %></td>
       <%@ include file="../autogen/taxonimportance_summaryonlystrata_data.jsp" %>
      </tr>
             
@@ -142,7 +193,7 @@
     
          <logic:iterate id="onerowoftaxonimportance" name="taxonimportancens-BEANLIST">
      
-         <tr class='@nextcolorclass@'><td class="sizetiny"><% rowOrder ++ ; %> <%= rowOrder %></td>
+         <tr class='normal'><td class="sizetiny"><% rowOrder ++ ; %><%= rowOrder %></td>
           <%@ include file="../autogen/taxonimportance_summarynostrata_data.jsp" %>
          </tr>
                
