@@ -14,10 +14,10 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2001-11-01 17:44:41 $'
- 	*     '$Revision: 1.1 $'
+ 	*     '$Date: 2002-03-30 00:06:09 $'
+ 	*     '$Revision: 1.2 $'
 --> 
-<project name="xml-resource" default="compile" basedir=".">
+<project name="xml-resource" default="jar" basedir=".">
 	
 	<!-- INITIATION -->
 	<target name="init">
