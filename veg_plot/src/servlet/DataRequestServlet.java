@@ -68,6 +68,7 @@ private String servletDir = null; // the absolute path to the servlet
 // commmunity name already defined above
 private String communityLevel = null;
 public servletUtility su = new servletUtility();
+public dbAccess dba =new dbAccess(); 
 
 /** Handle "POST" method requests from HTTP clients */
 public void doPost(HttpServletRequest request,
@@ -195,7 +196,9 @@ public void doGet(HttpServletRequest request,
 			{
 				while (enum.hasMoreElements()) 
 				{
-					//process the criteria data
+					//process the criteria data to make a hashtbale
+					// with keys that equal 'criteria', 'operator'
+					// and 'value'
 					String name = (String)enum.nextElement();
 					if ( name.equals("criteria")  
 						|| name.equals("operator") 
@@ -814,41 +817,44 @@ private void updateClentLog (String clientLog, String remoteHost)
 	private void issueQuery (String queryType) 
 	{
 		//the database access module
-		dbAccess g =new dbAccess(); 
+		//dbAccess g =new dbAccess(); 
 		if (queryType.equals("simpleQuery")) 
 		{ 
 			//call the plot access module
-			g.accessDatabase(servletDir+"query.xml", servletDir+"querySpec.xsl", "query");	
+			dba.accessDatabase(servletDir+"query.xml", servletDir+"querySpec.xsl", "query");	
+			//dba.accessDatabase("query.xml", "querySpec.xsl", "query");	
+//			dba.accessDatabase("/jakarta-tomcat/webapps/examples/WEB-INF/lib/query.xml", "/jakarta-tomcat/webapps/examples/WEB-INF/lib/querySpec.xsl", "query");
+			
 			//grab the result set from the dbAccess class
-			queryOutput=g.queryOutput;
-			queryOutputNum=g.queryOutputNum;
+			queryOutput=dba.queryOutput;
+			queryOutputNum=dba.queryOutputNum;
 		}
 		else if (queryType.equals("compoundQuery")) 
 		{
 			//call the plot access module
-			g.accessDatabase(servletDir+"query.xml", 
+			dba.accessDatabase(servletDir+"query.xml", 
 			servletDir+"querySpec.xsl", "compoundQuery");	
 			//grab the result set from the dbAccess class
-			queryOutput=g.queryOutput;
-			queryOutputNum=g.queryOutputNum;
+			queryOutput=dba.queryOutput;
+			queryOutputNum=dba.queryOutputNum;
 		}
 		else if (queryType.equals("extendedQuery")) 
 		{
 			//call the plot access module
-			g.accessDatabase(servletDir+"query.xml", 
+			dba.accessDatabase(servletDir+"query.xml", 
 			servletDir+"querySpec.xsl", "extendedQuery");	
 			//grab the result set from the dbAccess class
-			queryOutput=g.queryOutput;
-			queryOutputNum=g.queryOutputNum;
+			queryOutput=dba.queryOutput;
+			queryOutputNum=dba.queryOutputNum;
 		}
 		else if (queryType.equals("simpleCommunityQuery")) 
 		{ 
 			//call the plot access module
-			g.accessDatabase(servletDir+"commQuery.xml", 
+			dba.accessDatabase(servletDir+"commQuery.xml", 
 			servletDir+"querySpec.xsl", "simpleCommunityQuery");	
 			//grab the result set from the dbAccess class
-			queryOutput=g.queryOutput;
-			queryOutputNum=g.queryOutputNum;
+			queryOutput=dba.queryOutput;
+			queryOutputNum=dba.queryOutputNum;
 		}
 		else
 		{
