@@ -4,9 +4,9 @@
 # TO KAJARTA-TORQUE CONSISTENT XML FOR CONVERSION TO RDBMS 
 # SPECIFIC SQL
 #
-#     '$Author: harris $'
-#     '$Date: 2001-10-17 20:42:39 $'
-#     '$Revision: 1.5 $'
+#     '$Author: mlee $'
+#     '$Date: 2002-06-15 00:31:23 $'
+#     '$Revision: 1.6 $'
 
 
 # the directory that contains the documentation for the vegplot database
@@ -21,6 +21,8 @@ then
 fi
 
 ACTION=$1
+
+#select which module
 
 if test $ACTION = plot 
 then
@@ -52,5 +54,6 @@ cp test_fix.xml ./torque/schema/project-schema.xml
 # move into the torque directory and execute ant -- to handle the transformation 
 # to sql
 cd torque
-ant
-cp src/sql/project-schema.sql ../output.sql 
+ant project-sql
+cp src/sql/project-schema.sql ../$ACTION.sql 
+echo $ACTION.sql written
