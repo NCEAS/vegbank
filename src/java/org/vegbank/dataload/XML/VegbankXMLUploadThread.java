@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-05-06 22:40:34 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-05-07 19:08:34 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -139,7 +139,7 @@ public class VegbankXMLUploadThread
 	 * Prepares the request.
 	 */
 	public void prepareRequest(HttpServletRequest request) {
-		request.setAttribute("ErrorsReport",  xmlUpload.getErrors());
+		request.getSession().setAttribute("ErrorsReport",  xmlUpload.getErrors());
 	}
 
 	/* ========================================================== */
