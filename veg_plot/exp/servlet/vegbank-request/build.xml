@@ -19,14 +19,16 @@
 	<target name="init">
 	<tstamp/>
 	
-	<property name="installDir" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/WEB-INF/lib/" />
-	
-	<property name="tomcat_root" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/" />
+	<property name="installDir" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/" />
+	<property name="tomcat_root" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/" />
 
 	<property name="current" value="./" />
 	<property name="build" value="build" />
 	<property name="src" value="src" />
 	<property name="lib" value="../lib" />
+	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib//" />
+
+	
 	
 	
 	
@@ -34,10 +36,11 @@
 	<property name="multipart" value="../lib/multipart.jar" />
 	<property name="servlet-api" value="../lib/servlet.jar" />
 	<property name="database_access" value="../lib/database_access.jar" />
+	<property name="xml_resource" value="../lib/xmlresource.jar" />
 	<property name="xalan" value="../lib/xalan_1_2_2.jar" />
 	<property name="xerces" value="../lib/xerces_1_4.jar" />
 	<property name="framework" value="../lib/frameworkservletmodule.jar" />
-	<property name="cpath" value="${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
+	<property name="cpath" value="${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
 	
 	
 	<filter token="servlet-path" value="${servlet-path}" />
@@ -51,7 +54,7 @@
 	<copydir src="${src}" 
 		dest="${build}" 
 		filtering="yes"
-		includes="**.java veg_servlet.properties  pageDirector.properties 
+		includes="**.java vegbank.properties  pageDirector.properties 
 		fileDownload.properties authenticate.properties plotQuery.properties"
 		excludes="**/CVS* MetaCatServlet.java"
 	/>
@@ -61,7 +64,7 @@
 <target name="compile" depends="prepare">
 	<javac srcdir="${build}" 
 		classpath="${cpath}"
-		includes=" QueryBuilderServlet.java DataRequestServlet.java  " 
+		includes="fileDownload.java  QueryBuilderServlet.java DataRequestServlet.java viewData.java " 
 		destdir="${build}"
 	/>
 	
@@ -82,10 +85,34 @@
 	<copydir src="${lib}" 
   	dest="${installDir}" 
     filtering="no"
-    includes=" vegbankquery.jar frameworkservletmodule.jar database_access.jar xerces** xalan** jdbc7.0-1.2.jar"
+    includes=" vegbankquery.jar"
 		excludes="**/CVS* "
 	/>
+	
+<!--	
+	<copydir src="./lib/" 
+  	dest="${installDir}" 
+    filtering="no"
+    includes=" **.xsl **.dtd"
+		excludes="**/CVS* "
+	/>
+-->
+	
 </target>
+
+<!-- DISTWEB  -->	
+<target name="dist-web" depends="dist">
+	<echo>
+			copying jar to web server: ${servlet_lib}
+	</echo>
+
+
+	<copyfile src="${lib}/vegbankquery.jar" 
+			filtering="no" 
+			dest="${servlet_lib}/vegbankquery.jar" 
+	/>
+
+</target>		
 
 
 </project>
