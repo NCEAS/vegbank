@@ -1,0 +1,57 @@
+<!ENTITY % Boolean "(true | false) 'false'">
+
+<!-- JHH 2000  DTD which will be parsed into the vegplot database -->
+
+<!ELEMENT vegPlot (project)>
+
+
+
+
+<!ELEMENT project (projectName, projectDescription, plot, projectContributor)>
+<!ELEMENT projectName (#PCDATA)>
+<!ELEMENT projectDescription (#PCDATA)>
+
+
+<!ELEMENT projectContributor (role, party)>
+	<!ELEMENT role (#PCDATA)>
+	<!ELEMENT party (onlineResource, telephone, email, address)>
+		<!ELEMENT onlineResource (linkage, protocol, name, applicationProfile, description)>
+		<!ELEMENT telephone (phoneNumber, phoneType)>
+		<!ELEMENT email (emailAddress)>
+		<!ELEMENT address (deliveryPoint, city, administrativeArea, postalCode, country, currentFlag)>
+
+
+<!ELEMENT plot (attributes, plotObservation, namedPlace, stand, graphic, plotContributor)>
+ 	<!ELEMENT authorPlotCode (#PCDATA)>
+	 <!ELEMENT parentPlot (#PCDATA)>
+	 <!ELEMENT plotType (#PCDATA)>
+	 <!ELEMENT samplingMethod (#PCDATA)>
+	 <!ELEMENT coverScale (#PCDATA)>
+	 <!ELEMENTplotOriginLat (#PCDATA)>
+	 <!ELEMENT plotOriginLong (#PCDATA)>
+	 <!ELEMENT plotShape (#PCDATA)>
+	 <!ELEMENT plotSize (#PCDATA)>
+	 <!ELEMENT plotSizeAcc (#PCDATA)>
+	 <!ELEMENT altValue (#PCDATA)>
+	 <!ELEMENT altPosAcc (#PCDATA)>
+	 <!ELEMENT slopeAspecy (#PCDATA)>
+	 <!ELEMENT slopeGradient (#PCDATA)>
+	 <!ELEMENT slopePosition (#PCDATA)>
+	 <!ELEMENT hydrologicRegime (#PCDATA)>
+	 <!ELEMENT soilDrainage (#PCDATA)>
+	 <!ELEMENT surfGeo (#PCDATA)>
+
+	
+	<!ELEMENT plotObservation (attributes, strata, taxonObservations, communityType, citation)>
+
+		<!ELEMENT taxonObservations (attributes, strataComposition, interptretation)>
+
+		<!ELEMENT citation (citationContributor)>
+			<!ELEMENT citationContributor (party)>
+
+
+
+
+
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
