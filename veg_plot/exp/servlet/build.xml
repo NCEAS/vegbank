@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *   '$Date: 2002-12-08 23:04:49 $'
-  *   '$Revision: 1.11 $'
+  *   '$Date: 2002-12-27 19:32:33 $'
+  *   '$Revision: 1.12 $'
   *
   *  Authors: John Harris
   *  Copyright: 2000 Regents of the University of California and the
@@ -25,63 +25,70 @@
  
 <project name="servlet" default="compile" basedir=".">
 
-  <target name="init">
-	  <tstamp/>
-
-    <echo message="############ ${ant.project.name} ##############"/> 
-	  <property name="current" value="./" />
-	  <property name="build" value="./build" />
-	  <property name="lib" value="lib" />
-	  <property name="servlet_api" value="lib/servlet.jar" />
-	
-	
-	  <!--NOTICE THE SETTINGS FOR THE PRODUCTION VS THE DEVELOPMENT SERVLET LOCATIONS -->
-	  <!-- PRODUCTION	 -->
-	  <property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib" />
-    <property name="servlet_WEB_INF" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/" />
-	  <property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat/bin" />
-
-    <!-- DEVELOPMENT -->
-    <!--
-	  <property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat_dev/webapps/framework/WEB-INF/lib" />
-	  <property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat_dev/bin" />
-    -->
-	  <property name="xmlresource" value="lib/xmlresource.jar" />
-	  <property name="dbaccess" value="lib/database_access.jar" />
-	  <property name="data-source" value="lib/datatranslator.jar" />
-	  <property name="release" value="development"/>
-	  <property name="frameworksrc" value="frameworkservlet/src"/>
-	  <property name="authenticationsrc" value="authentication"/>
-	  <property name="utilsrc" value="util"/>
-	  <property name="datafileexchg_src" value="datafile-exchange"/>
-	  <property name="usermanagementsrc" value="usermanagement-servlet"/>
-	  <property name="stylesheet_src" value="stylesheet_servlet/src"/>
-	
-	  <property name="multipart_src" value="multipart"/>
-	  <property name="multipart" value="lib/multipart.jar"/>
-	  <property name="ant" value="ant.jar"/>
-
-	
-	  <property name="cpath" value="${multipart}:${ant}:${build}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
-	
-	  <filter token="server" value="${server}" />
-	  <filter token="servlet-path" value="${servlet-path}" />
-  </target>
+ 	<target name="init">
+    	<tstamp/>
+    
+        <echo message="############ ${ant.project.name} ##############"/> 
+        <property name="current" value="./" />
+        <property name="build" value="./build" />
+        <property name="lib" value="lib" />
+        <property name="servlet_api" value="lib/servlet.jar" />
+        
+        
+        <!--NOTICE THE SETTINGS FOR THE PRODUCTION VS THE DEVELOPMENT SERVLET LOCATIONS -->
+        <!-- PRODUCTION	 -->
+        <property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib" />
+        <property name="servlet_WEB_INF" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/" />
+        <property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat/bin" />
+        <property name="servlet.webapp.dir" value="/usr/local/devtools/jakarta-tomcat/webapps" />
+        
+        <!-- DEVELOPMENT -->
+        <!--
+          <property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat_dev/webapps/framework/WEB-INF/lib" />
+          <property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat_dev/bin" />
+        -->
+        <property name="xmlresource" value="lib/xmlresource.jar" />
+        <property name="dbaccess" value="lib/database_access.jar" />
+        <property name="data-source" value="lib/datatranslator.jar" />
+        <property name="release" value="development"/>
+        <property name="frameworksrc" value="frameworkservlet/src"/>
+        <property name="authenticationsrc" value="authentication"/>
+        <property name="utilsrc" value="util"/>
+        <property name="datafileexchg_src" value="datafile-exchange"/>
+        <property name="usermanagementsrc" value="usermanagement-servlet"/>
+        <property name="stylesheet_src" value="stylesheet_servlet/src"/>       
+        <property name="multipart_src" value="multipart"/>
+        <property name="multipart" value="lib/multipart.jar"/>
+        <property name="ant" value="ant.jar"/>
+        <property name="cpath" value="${multipart}:${ant}:${build}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
+ 		<property name="vegbank.home.dir" value="/usr/vegbank"/>
+        <property name="originalDataStore" value="${vegbank.home.dir}/originalDataStore"/>
+        
+        <!-- Filters -->
+        <filter token="serverUrl" value="beta.nceas.ucsb.edu" />
+        <filter token="servlet-path" value="${servlet-path}" />
+        <filter token="mailHost" value="nceas.ucsb.edu"/>
+        <filter token="systemEmail" value="dba@vegbank.org"/>
+        <filter token="genericForm" value="${servlet.webapp.dir}/forms/generic_form.html"/>
+        <filter token="genericTemplate" value="${servlet.webapp.dir}/forms/tmp.html"/>
+        <filter token="rmiserver"  value="128.111.220.59"/>  
+        <filter token="uploadDir" value="${servlet_location}"/>
+        <filter token="originalDataStore" value="${originalDataStore}"/>
+        <!-- End Filters -->
+        
+	</target>
 
 
 
 <!-- PREPARE TARGET -->
 <target name="prepare" depends="init">
 	<mkdir dir="${build}" />
-	<mkdir dir="${lib}" />
-
 </target>
 
 
 <!-- COPY TARGET -->
 <target name="copy" depends="prepare">
-	
-	
+
 	<!-- the utilities -->
 	<copydir src="${utilsrc}" 
 		dest="${build}" 
@@ -113,19 +120,14 @@
 		includes="**.java "
 		excludes="**/CVS* "
 	/>
-	<copydir src="${lib}" 
-		dest="${build}" 
-		filtering="yes"
-		includes=" frameworkservlet-config.xml "
-		excludes="**/CVS "
-	/>
 	
+	<copy file="${lib}/frameworkservlet-config.xml" todir="${build}"/>
 	
 	<!-- the authentication -->
 	<copydir src="${authenticationsrc}" 
 		dest="${build}" 
 		filtering="yes"
-		includes="**.* "
+		includes="**.java "
 		excludes="**/CVS* "
 	/>
 	
@@ -136,6 +138,13 @@
 		includes="**.java "
 		excludes="**/CVS* "
 	/>
+	 
+	 <!-- The Property files -->
+	 <copy todir="${build}" filtering="yes">
+		<fileset dir="${lib}">
+			<include name="*properties"/>
+		</fileset>
+	 </copy>
 	 
 </target>	
 
@@ -200,7 +209,7 @@
 	
 	<jar jarfile ="${lib}/datafile-exchange.jar"
 		basedir="${build}"
-		includes="servlet/datafile_exchange/** "
+		includes="servlet/datafile_exchange/** dataexchange.properties"
 		excludes="${build}/servlet/authentication"
 	/>
 	
