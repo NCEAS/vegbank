@@ -216,6 +216,8 @@ if (requestDataType.trim().equals("community")) {
 	issueQuery("simpleCommunityQuery");
 	
 	out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
+
+
 }
 
 
@@ -249,11 +251,10 @@ if (requestDataType.trim().equals("community")) {
  }
  
  
- 
+//if multiple results returned then grab the summary viewer
 if (queryOutputNum>=1) {
-	//allow the user to access the results
  	servletUtility l =new servletUtility();  
- 	l.getViewOption();
+ 	l.getViewOption(requestDataType);
  	out.println(l.outString);
 }
 
@@ -264,7 +265,6 @@ else {
 
 }
 
-//}
 }
 
 
@@ -304,7 +304,7 @@ private void handleCompoundQuery (Hashtable params, PrintWriter out,
  
 //allow the user to access the summary results
  servletUtility l =new servletUtility();  
- l.getViewOption();
+ l.getViewOption("vegPlot");  //change the attribute being passed to requestDataType
  out.println(l.outString);
 
 }
