@@ -876,8 +876,8 @@ public class DataSourceClient
 				System.out.println("DataSourceCleint > found : " + v.size() +" plots in archive " );
 				String testPlot =  v.elementAt(0).toString();
 				System.out.println("DataSourceCleint > inserting the first plot in the archive: " + testPlot );
-				client.insertPlot(testPlot);
-			
+				String insertResults = client.insertPlot(testPlot);
+				System.out.println("DataSourceCleint > insertion results: \n" + insertResults );	
 			
 			} 
 			catch(Exception e) 

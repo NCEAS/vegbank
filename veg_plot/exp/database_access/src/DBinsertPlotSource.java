@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-28 05:14:57 $'
- * 	'$Revision: 1.8 $'
+ *  '$Date: 2002-03-28 19:07:08 $'
+ * 	'$Revision: 1.9 $'
  */
 package databaseAccess;
 
@@ -99,6 +99,7 @@ public class DBinsertPlotSource
 			conn = connectionBroker.manageLocalDbConnectionBroker("getConn");
 			
 			//System.out.println("opening log file");
+			// make a new output log file
     	out = new PrintWriter(new FileWriter(logFile));
 		}
 		catch (Exception e)
@@ -276,10 +277,61 @@ public class DBinsertPlotSource
 	}
 	
 	
+	/**
+	 * this method is a wrapper for the insertPlot method that takes just the 
+	 * plot name.  This method differs in that it if the debugging level is
+	 * greater than 0 then an xml debugging string is returned to the calling
+	 * class
+	 * 
+	 * @param plotName -- the name of the plot that exists in the archive
+	 * @param debugLevel  -- the level of debugging -- right now it can be 0, 1, 2
+	 * 		where 0=nothing returned; 1=commit results; 3=above and exceptions
+	 */
+	public String insertPlot( String plotName, int debugLevel)
+	{
+		try
+		{
+			
+			if (debugLevel == 0)
+			{
+				debug.append("<plotInsertion> \n");
+				this.insertPlot(plotName);
+				debug.append("</plotInsertion> \n");
+			}
+			else if (debugLevel == 1)
+			{
+				debug.append("<plotInsertion> \n");
+				this.insertPlot(plotName);
+				debug.append("</plotInsertion> \n");
+			}
+			else if (debugLevel == 2)
+			{
+				debug.append("<plotInsertion> \n");
+				this.insertPlot(plotName);
+				debug.append("</plotInsertion> \n");
+			}
+			else
+			{
+				System.out.println("DbinsertPlotSource > invalid debug level: " + debugLevel );
+				this.insertPlot(plotName);
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("Caught Exception: "+e.getMessage() ); 
+			e.printStackTrace();
+		}
+		return( debug.toString() );
+	}
 	
 	
-	//method to initiate the insertion of a plot, there are a series of private
-	//methods that will be called to actually get the data into the database
+	/**
+	 * method to initiate the insertion of a plot, there are a series of private
+	 * methods that will be called to actually get the data into the database
+	 *
+	 * @param plotName -- the name of the plot that exists in the archive
+	 */
+	 
 	public void insertPlot(String plotName)
 	{
 		try 
@@ -373,18 +425,19 @@ public class DBinsertPlotSource
 			if ( commit == true) 
 			{
 				conn.commit();
-				debug.append( "INSERTION SUCCESS: \n" );
+				debug.append( "<insert>true</insert>\n" );
 			}
 			else
 			{
 				conn.rollback();
-				debug.append( "INSERTION FAILURE: \n" );
+				debug.append( "<insert>false</insert>\n" );
 			}
 			connectionBroker.manageLocalDbConnectionBroker("destroy");
 		}
 		catch (Exception e)
 		{
 			System.out.println("Exception: "+e.getMessage() ); 
+			debug.append("<exceptionMessage>"+e.getMessage()+"</exceptionMessage>\n");
 			e.printStackTrace();
 		}
 	}
@@ -849,6 +902,11 @@ public class DBinsertPlotSource
 				String framework = source.getCommunityFramework(plotName);
 				String level = source.getCommunityLevel(plotName);
 				
+				debug.append("<communityName>"+name+"</communityName> \n");
+				debug.append("<communityCode>"+code+"</communityCode> \n");
+				debug.append("<communityLevel>"+level+"</communityLevel> \n");
+				debug.append("<communityFramework>"+framework+"</communityFramework> \n");
+				
 				//insert the strata values
 				sb.append("INSERT into commclass (observation_id, commName, " 
 				+" commCode, commFramework, commLevel) "
@@ -952,21 +1010,19 @@ public class DBinsertPlotSource
 				String observationCode = "obscode";
 				String startDate = source.getObsStartDate(plotName);
 				String stopDate = source.getObsStopDate(plotName);
-				
 				String taxonObservationArea = "999.99";
-				String autoTaxonCover = "replace this";
-				String coverDispersion = "replace this";
+				String autoTaxonCover = " ";
+				String coverDispersion = " ";
+				boolean permanence = source.isPlotPermanent(plotName);
 			
-				//set up the debugging
-//				StringBuffer debug = new StringBuffer();
-				debug.append("plotId: "+ plotId+"\n");
-				debug.append("observationCode: "+ observationCode+"\n");
-				debug.append("startDate: "+ startDate+"\n");
-				debug.append("stopDate: "+ stopDate +"\n");
-			
-				//System.out.println( debug.toString() );
-			
-
+				// update the debugging stringbuffer
+				debug.append("<plotId>"+ plotId+"</plotId> \n");
+				debug.append("<observationCode>"+observationCode+"</observationCode>\n");
+				debug.append("<obsStartDate>"+startDate+"</obsStopDate>\n");
+				debug.append("<obsStopDate>"+stopDate+"</obsStopDate> \n");
+				debug.append("<permanent>"+permanence+"</permanent> \n");
+				
+				
 				sb.append("INSERT into OBSERVATION (observation_id, covermethod_id,  "
 				+" plot_Id, authorobscode, "
 				+" obsStartDate, obsEndDate, stratummethod_id, taxonObservationArea, "
@@ -983,22 +1039,17 @@ public class DBinsertPlotSource
 				pstmt.setString(5, startDate);
 				pstmt.setString(6, stopDate);
 				pstmt.setInt(7, stratumMethodId);
-				
 				pstmt.setString(8, taxonObservationArea);
 				pstmt.setString(9, autoTaxonCover);
 				pstmt.setString(10, coverDispersion);
 				
-			
-				//execute the p statement
   		  pstmt.execute();
-  		 // pstmt.close();
 			}
 			catch (Exception e)
 			{
 				System.out.println("Caught Exception: "+e.getMessage() ); 
 				e.printStackTrace();
-				System.exit(1);
-				//return false so that the calling method knows to roll-back
+				debug.append("<exceptionMessage>"+e.getMessage()+"</exceptionMessage>\n");
 				return(false);
 			}
 		return(true);
@@ -1080,8 +1131,8 @@ public class DBinsertPlotSource
 			System.out.println("DBinsertPlotSource > accession number: " + accessionNumber);
 			
 			//print the variables to the screen for debugging
-			//StringBuffer debug = new StringBuffer();
-			debug.append("authorPlotCode: "+ plotName+"\n");
+			debug.append("<authorPlotCode>"+ plotName+"</authorPlotCode>\n");
+			
 			
 			//this is the postgresql date function
 			String sysdate = "now()";

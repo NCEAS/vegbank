@@ -57,11 +57,14 @@ public class DataSourceImpl extends UnicastRemoteObject
 		 String s = null;
 		 try
 		 {
-			 //the plugin and the source are the same in this case
-			 String plugin = "";
-			 //construct an instance of the plot loader
-			dbinsert = new DBinsertPlotSource(loaderPlugin, plot);
-			dbinsert.insertPlot(plot);
+		 		//set the debugging level to 2 -- the highest on the loader
+				int debugLevel = 2;
+			 	//the plugin and the source are the same in this case
+				 String plugin = "";
+			 	//construct an instance of the plot loader
+				dbinsert = new DBinsertPlotSource(loaderPlugin, plot);
+				s = dbinsert.insertPlot(plot, debugLevel);
+				//dbinsert.insertPlot(plot);
 		 }
 		 catch (Exception e)
 		 {
