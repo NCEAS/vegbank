@@ -54,7 +54,7 @@ String currentPlotId=plotId[i].replace('|',' ').trim();
 
 
 	/*
-	* Call the issueSelect method which will return an arry with the return
+	* Call the issueSelect method which will return an array with the return
 	*/
 
 	issueStatement j = new issueStatement();
@@ -62,10 +62,18 @@ String currentPlotId=plotId[i].replace('|',' ').trim();
 
 	//take the results from the issueSelect and put into the array
 	//note that the j.outReturnFieldsNum should always be = 1 in this case
+	//because we are querying by a plot ID number which should be unique
 	for (int ii=0;ii<j.outReturnFieldsNum; ii++) {
 	summaryResult[i]=j.outReturnFields[ii];
 	}
 	summaryResultNum=i;
+/**	
+* make a second query here to get the species specific information which will
+* be appended onto the summary results line and ultimately tokenized in the 
+* xmlWrter class - at some point this function may become its own method
+*/
+
+
 } //end for
 
 summaryOutput=summaryResult;
