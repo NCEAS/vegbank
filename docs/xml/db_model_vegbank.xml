@@ -8961,24 +8961,29 @@ conditions may change between resampling events.
       <attListType>closed</attListType>
       <attList>
         <attListItem>
+          <attListValue>user</attListValue>
+          <attListValueDesc>a private user of vegbank- party info not to be exported or displayed</attListValueDesc>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+        <attListItem>
           <attListValue>person</attListValue>
           <attListValueDesc>a person</attListValueDesc>
-          <attListSortOrd>1</attListSortOrd>
+          <attListSortOrd>2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>team</attListValue>
           <attListValueDesc>a group of persons, but not a whole organization</attListValueDesc>
-          <attListSortOrd>2</attListSortOrd>
+          <attListSortOrd>3</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>organization</attListValue>
           <attListValueDesc>an entire organization</attListValueDesc>
-          <attListSortOrd>3</attListSortOrd>
+          <attListSortOrd>4</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>consortium</attListValue>
           <attListValueDesc>a group of organizations</attListValueDesc>
-          <attListSortOrd>4</attListSortOrd>
+          <attListSortOrd>5</attListSortOrd>
         </attListItem>
       </attList>
       <attNotes>n/a</attNotes>
