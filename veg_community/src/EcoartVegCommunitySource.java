@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-21 22:38:06 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2002-02-22 02:44:16 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -201,7 +201,7 @@ import java.sql.*;
 			 String query = null;
 			 if (level.equals("association"))
 			 {
-				 query = "select distinct ([Elcode]) from ETC";
+				 query = "select ([Elcode]) from ETC";
 			 }
 			 else if (level.equals("alliance"))
 			 {
@@ -301,6 +301,14 @@ import java.sql.*;
 			try
 			{
 				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
+				//print the number of codes
+				
+				System.out.println("EcoartVegCommunitySource > number of alliances: " 
+				+ source.getCommunityCodes("alliance").size()  );
+				
+				System.out.println("EcoartVegCommunitySource > number of association: " 
+				+ source.getCommunityCodes("association").size()  );
+		/*		
 				String ecoartCode = "A.101";
 			
 				String name = source.getCommunityName(ecoartCode);
@@ -320,7 +328,8 @@ import java.sql.*;
 				System.out.println("EcoartVegCommunitySource > parentLevel: " + parentLevel);
 				System.out.println("EcoartVegCommunitySource > parentName: " + parentName);
 				System.out.println("EcoartVegCommunitySource > parentCommonName: " + parentCommonName);
-			}
+		*/			
+		}
 			catch (Exception e)
 		 {
 			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
