@@ -1,3 +1,4 @@
+DROP VIEW view_browsenamedplace_bystate;
 DROP VIEW view_browseparty_all_count_combined;
 
 DROP VIEW view_browseparty_classcontrib_count;
@@ -233,3 +234,7 @@ CREATE VIEW view_countcomms_perobs_pre AS
 CREATE VIEW view_countcomms_perobs AS
   SELECT commConcept_ID, d_obscount as countObs FROM commconcept
   ORDER BY countObs DESC;
+  
+CREATE VIEW view_browsenamedplace_bystate AS 
+  SELECT * from namedplace WHERE placeSystem='region|state|province' AND d_obscount>0 ORDER BY d_obscount DESC;
+  
