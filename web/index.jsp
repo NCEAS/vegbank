@@ -10,9 +10,9 @@
     <fieldset>
     <legend>Find Plots</legend>
     <ul>
-    <li><a href="@plotquery_page@">Advanced plot search</a></li>
+    <li><a href="@browseplotspage@">Browse plots</a></li>
     <li><a href="@forms_link@plot-query-simple.jsp">Simple search</a></li>
-    <!--li><a href="xxx">Browse plots</a></li-->
+    <li><a href="@plotquery_page@">Advanced plot search</a></li>
     </ul>
 
     <bean:include id="smallmap" href="@forms_link@plot-map-northamerica-sml.jsp" />
@@ -65,8 +65,8 @@
     <li><a href="@general_link@info.html">What is VegBank?</a></li>
     <li><a href="@general_link@faq.html">FAQ</a></li>
     <li><a href="@general_link@instructions.html">Tutorial</a></li>
-    <li><a href="@forms_link@getHelp.jsp?helpPage=@manual_link@how-to-cite-vegbank.html">Cite or link to VegBank</a></li>
-    <li><a href="@general_link@terms.html">Intellectual property</a></li>
+    <li><a href="@general_link@cite.html">Cite or link to VegBank</a></li>
+    <li><a href="@general_link@terms.html">Terms of use</a></li>
     <li><a href="@general_link@sitemap.html">Site map</a></li>
     <li><a href="@general_link@contact.html">Contact</a></li>
     </ul>
