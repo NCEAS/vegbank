@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-05-30 21:44:41 $'
-  *     '$Revision: 1.9 $'
+  *     '$Date: 2003-05-30 22:37:19 $'
+  *     '$Revision: 1.10 $'
 --> 
 <project name="vegclass" default="compile" basedir=".">
 
@@ -29,6 +29,7 @@
     <property name="bin.dir" value="${basedir}/bin"/>
     <property name="src.dir" value="${basedir}/src"/>
     <property name="xsl.src.dir" value="${src.dir}/xsl"/>
+    <property name="sql.src.dir" value="${src.dir}/sql"/>
     <property name="lib.dir" value="${basedir}/lib"/>
     <property name="ant.style.dir" location="${env.ANT_HOME}/etc" />
     <property name="web.docroot" location="${env.TOMCAT_HOME}/webapps" />
@@ -158,8 +159,14 @@
       <arg value="veg_plot/sql/makePlotSummaryTables_postgres.sql"/>
       <arg value="${sql.src.dir}/insert_preload_ANSI.sql"/>
     </exec>
-    
-    
+
+    <antcall target="grant_db_privilages"/>
   </target>
-  
+ 
+  <target name="grant_db_privilages"
+          description="==> Grant privilages to qa user">
+    <!-- Grant privilages -->
+    <exec executable="bin/qa_user/grantQAPrivil.pl"/>
+  </target>
+
 </project>
