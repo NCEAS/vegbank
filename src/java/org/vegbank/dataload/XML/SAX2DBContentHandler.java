@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-11-16 01:21:31 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-11-18 22:39:22 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,13 +65,13 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 	public void endDocument() throws SAXException
 	{
 		if (load) {
-			//LoadTreeToDatabase ltdb = new LoadTreeToDatabase(errors, accessionCodes, load);
+			LoadTreeToDatabase ltdb = new LoadTreeToDatabase(errors, accessionCodes, load);
 			try
 			{
 				if (load && keepRunning()) {
 					log.info("!!!! WOULD BE !!!! inserting vegbank package...");
-					//log.info("inserting vegbank package...");
-					//ltdb.insertVegbankPackage( (Hashtable) ( (Vector) tmpStore.get("VegBankPackage")).firstElement());
+					log.info("inserting vegbank package...");
+					ltdb.insertVegbankPackage( (Hashtable) ( (Vector) tmpStore.get("VegBankPackage")).firstElement());
 				}
 			}
 			catch (SQLException e)
