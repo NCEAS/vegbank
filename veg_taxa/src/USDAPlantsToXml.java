@@ -1,3 +1,29 @@
+/**
+ *  '$RCSfile: USDAPlantsToXml.java,v $'
+ *    Authors: @authors@
+ *    Release: @release@
+ *
+ *   '$Author: harris $'
+ *     '$Date: 2002-02-20 01:50:52 $'
+ * '$Revision: 1.2 $'
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+
+
 import java.io.IOException;
 import java.io.*;
 import java.util.*;
@@ -15,12 +41,11 @@ import org.apache.xalan.xslt.XSLTProcessor;
  * the concept-based-taxonomy database that acts as an
  * auxiliary database to the plots database
  *
- * @Author John Harris
- * @Version April 2001
  */
 
 
-public class USDAPlantsToXml {
+public class USDAPlantsToXml 
+{
 
 
 public Vector fileVector = new Vector();
@@ -33,12 +58,15 @@ public Hashtable attributeHash = new Hashtable();
  * the xml file
  *
  */
-public static void main(String[] args) {
-	if (args.length != 1) {
+public static void main(String[] args) 
+{
+	if (args.length != 1) 
+	{
 		System.out.println("Usage: java USDAPlantsToXml  [plantList] \n");
 		System.exit(0);
 	}
-	else {
+	else 
+	{
 		String inputPlantList=null;
 		inputPlantList=args[0];
 		//call the method to convert the data package to xml
@@ -46,6 +74,8 @@ public static void main(String[] args) {
 		px.transformPlantList(inputPlantList);
 	}
 }
+
+
 
 /**
  * method that transforms the input file 
@@ -56,17 +86,15 @@ public void transformPlantList(String inputPlantList)
 {
 	try 
 	{
-	//	System.out.println(
-	//		parsePlantElements(
-	//			fileToVector(inputPlantList)
-	//		)
-	//	);
+		System.out.println("USDAPlantsToXml > reading the input file: " + inputPlantList);
+		Vector v = fileToVector(inputPlantList);
 		
-		outputXml(
-			parsePlantElements(
-				fileToVector(inputPlantList)
-			)
-		);
+		System.out.println("USDAPlantsToXml > parsing the input");
+		Hashtable h = parsePlantElements(v);
+		
+		System.out.println("USDAPlantsToXml > writing the output");
+		this.outputXml(h);
+		
 	}
 	catch( Exception e ) {
 		System.out.println(" failed in: USDAPlantsToXml.transformPlantList "
@@ -233,7 +261,7 @@ private String xmlAtomicName(String  concatenatedName )
 		//else is a variety
 		else if ( concatenatedName.indexOf("var.") > 0 )
 		{
-			System.out.println("VARIETY");
+			//System.out.println("VARIETY");
 			atomicElements.append( xmlAtomicVarietyName(concatenatedName) );
 		}
 	}
@@ -301,9 +329,6 @@ private String xmlAtomicVarietyName(String  concatenatedName )
 	return(atomicElements.toString() );
 }
  
- 
- 
-
 
 /**
  * method that returns the main components of
@@ -321,7 +346,7 @@ private String xmlRank(String  concatenatedName )
 		}
 		else if ( concatenatedName.indexOf("ssp.") > 0 )
 		{
-			rank.append("<classLevel>sub-species</classLevel> \n");
+			rank.append("<classLevel>subspecies</classLevel> \n");
 		}
 		else 
 		{
@@ -329,12 +354,12 @@ private String xmlRank(String  concatenatedName )
 			//System.out.println("ESCOND TOKEN: "+spaceStringTokenizer(concatenatedName, 2) );
 			if (spaceStringTokenizer(concatenatedName, 2).endsWith("."))
 			{
-				rank.append("<classLevel>Genus</classLevel> \n");
+				rank.append("<classLevel>genus</classLevel> \n");
 			}
 			//serach for hybrids
 			else if (spaceStringTokenizer(concatenatedName, 2).startsWith("x"))
 			{
-				System.out.println("ESCOND TOKEN: "+spaceStringTokenizer(concatenatedName, 2) );
+				//System.out.println("SECOND TOKEN: "+spaceStringTokenizer(concatenatedName, 2) );
 				rank.append("<classLevel>Hybrid</classLevel> \n");
 			}
 			//else must be a species
@@ -655,7 +680,6 @@ private Vector fileToVector(String inputPlantList)
  */
 public String commaStringTokenizer(String pipeString, int tokenPosition)
 {
-	//System.out.println("%%%%% "+pipeString+" "+tokenPosition);
 	String token="nullToken";
 	if (pipeString != null) {
 		StringTokenizer t = new StringTokenizer(pipeString.trim(), ",");
@@ -689,7 +713,6 @@ public String commaStringTokenizer(String pipeString, int tokenPosition)
  */
 public String spaceStringTokenizer(String pipeString, int tokenPosition)
 {
-	//System.out.println("%%%%% "+pipeString+" "+tokenPosition);
 	String token="nullToken";
 	if (pipeString != null) {
 		StringTokenizer t = new StringTokenizer(pipeString.trim(), " ");
