@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-31 01:27:17 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-02-07 06:44:37 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-01-31 01:27:17 $'
- *     '$Revision: 1.5 $'
+ *     '$Date: 2004-02-07 06:44:37 $'
+ *     '$Revision: 1.6 $'
  */
 
 import java.sql.PreparedStatement;
@@ -51,6 +51,7 @@ import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Telephone;
 import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.PermComparison;
+import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.ui.struts.CertificationForm;
 
 public class UserDatabaseAccess 
@@ -161,7 +162,6 @@ public class UserDatabaseAccess
 		LogUtility.log("UserDatabaseAccess > inserting user cert info");
 		DBConnection conn = getConnection();
 
-		//get the userId of the user 
 		sqlInsert.append("INSERT into usercertification ")
 			.append(" (current_cert_level, requested_cert_level, ")
 			.append(" highest_degree, degree_year, degree_institution, current_org, ")
@@ -259,9 +259,9 @@ public class UserDatabaseAccess
 		try 
 		{
 			// FIGURE OUT IF THE USER HAS AN ACCOUNT
-			int i = this.getUserId(emailAddress);
-			//LogUtility.log("userid: " + i);
-			if (i == 0)
+			long l = this.getUserId(emailAddress);
+			//LogUtility.log("userid: " + l);
+			if (l == 0)
 			{
 				//get the connections etc
 				DBConnection conn = getConnection();
@@ -326,31 +326,27 @@ public class UserDatabaseAccess
 	*/
 	public int getUserId(String emailAddress)
 	{
-		LogUtility.log("UserDatabaseAccess > looking up the user id for user: " + emailAddress);
-		int s = 0;
-		try 
-		{
+		LogUtility.log("UDA.getUserId(): getting usr_id for: " + emailAddress);
+		int usrId = 0;
+		try {
 			//get the connections etc
 			DBConnection conn = getConnection();
 			Statement query = conn.createStatement();
 			StringBuffer sb = new StringBuffer();
-			sb.append("select user_id from USER_INFO ");
-			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"' ");
+			sb.append("SELECT usr_id FROM usr WHERE LOWER(email_address) LIKE '" +
+					emailAddress.toLowerCase()+"' ");
 			
 			//issue the query
 			query.executeQuery(sb.toString());
 			ResultSet rs = query.getResultSet();
-			while (rs.next()) 
-			{
-     		s = rs.getInt(1);
-    	}
+			if (rs.next()) {
+     			usrId = rs.getInt(1);
+    		}
+
+		} catch (Exception e) {
+			LogUtility.log("UDA.getUserId(): Exception: " + e.getMessage(), e);
 		}
-		catch (Exception e) 
-		{
-			LogUtility.log("Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return(s);
+		return(usrId);
 	}
  
  
@@ -511,8 +507,8 @@ public class UserDatabaseAccess
 		{
 			DBConnection conn = getConnection();
 			Statement query = conn.createStatement();
-			query.execute("UPDATE USER_INFO set PASSWORD =  '" 
-				+ password + "' WHERE EMAIL_ADDRESS = '"+emailAddress+"' ");	
+			query.execute("UPDATE usr set password='" + password + 
+					"' WHERE email_address='"+emailAddress+"' ");	
 			conn.close();
 		}
 		catch (SQLException e)
@@ -636,21 +632,17 @@ public class UserDatabaseAccess
 	}
 	
 	/**
-	 * method to return the user info for a user in the user database.  The
+	 * Private method to return the user info for a user in the user database.  The
 	 * user data will be returned as a WebUser bean.
 	 * 
-	 * @param user -- the email address of the user
+	 * @param uniqueClause - part of SQL WHERE that gets user
 	 * @return WebUser or null if none found
 	 */
-	 public WebUser getUser(String emailAddress ) throws Exception
+	 private WebUser getAllUserData(String uniqueClause) throws Exception
 	 {
 		 Hashtable h = new Hashtable();
 		 WebUser userBean = new WebUser();
 		 
-		LogUtility.log(
-			"UserDatabaseAccess: Searching for user with email of: "
-				+ emailAddress);
-
 		 //get the connections etc
 		 DBConnection conn = getConnection();
 		 Statement query = conn.createStatement ();
@@ -662,9 +654,10 @@ public class UserDatabaseAccess
 			sb.append(" FROM usr NATURAL JOIN (party LEFT JOIN  ");
 			sb.append(" ( telephone NATURAL JOIN address ) USING (party_id) )");
 			sb.append(" WHERE ( currentflag = true  OR currentflag IS NULL ) AND ");
-			sb.append(" ( phonetype = '" + Telephone.PHONETYPE_WORK + "' OR phonetype IS NULL )   AND EMAIL_ADDRESS = '"+emailAddress+"'");
+			sb.append(" ( lower(phonetype) = '" + Telephone.PHONETYPE_WORK.toLowerCase()); 
+			sb.append("' OR phonetype IS NULL ) AND " + uniqueClause);
 	
-		LogUtility.log("UserDatabaseAccess: SQL > " + sb.toString() );
+		LogUtility.log("UDA.getAllUserData(): " + sb.toString() );
 		
 		//issue the query
 		results = query.executeQuery(sb.toString());
@@ -672,43 +665,27 @@ public class UserDatabaseAccess
 		//get the results -- assumming 0 or 1 rows returned
 		if (results.next()) 
 		{
-			String DBEmailAddress = results.getString(1); 
-			String DBPassWord = results.getString(2);
-			String surName = results.getString(3);
-			String givenName = results.getString(4);
-			String permissionType = results.getString(5);
-			String institution = results.getString(6);
-			String ticketCount = results.getString(7);
+			h.put("email", ""+results.getString(1));
+			h.put("password", ""+results.getString(2));
+			h.put("surname", ""+results.getString(3));
+			h.put("givenname", ""+results.getString(4));
+			h.put("permissiontype", ""+results.getString(5));
+			h.put("institution", ""+results.getString(6)); 
+			h.put("ticketcount", ""+results.getString(7)); 
+			h.put("address", ""+results.getString(8)); 
+			h.put("city", ""+results.getString(9)); 
+			h.put("state", ""+results.getString(10)); 
+			h.put("country", ""+results.getString(11)); 
+			h.put("postalcode", ""+results.getString(12));
+			h.put("dayphone", ""+results.getString(13));
+			h.put("userid",  new Integer( results.getInt(14) ).toString());
+			h.put("partyid",  new Integer( results.getInt(15) ).toString());		
 			
-			String address = results.getString(8);
-			String city = results.getString(9);
-			String state = results.getString(10);
-			String country = results.getString(11);
-			String zipCode = results.getString(12);
-			String dayPhone = results.getString(13);
-			String userId = new Integer( results.getInt(14) ).toString();
-			String partyId = new Integer( results.getInt(15) ).toString();
-						 
-			h.put("email", ""+DBEmailAddress);
-			h.put("password", ""+DBPassWord);
-			h.put("surname", ""+surName);
-			h.put("givenname", ""+givenName);
-			h.put("permissiontype", ""+permissionType);
-			h.put("institution", ""+institution); 
-			h.put("ticketcount", ""+ticketCount); 
-			h.put("address", ""+address); 
-			h.put("city", ""+city); 
-			h.put("state", ""+state); 
-			h.put("country", ""+country); 
-			h.put("zipcode", ""+zipCode);
-			h.put("dayphone", ""+dayPhone);
-			h.put("userid",  userId);
-			h.put("partyid",  partyId);		
-			
-			//LogUtility.log(">>>> " + userId + "  " + dayPhone);
+			LogUtility.log(">>>> UDA: Got user: " + h.toString());
 		}
 		else
 		{
+			conn.close();
 			return null;	
 		}
 		
@@ -722,12 +699,49 @@ public class UserDatabaseAccess
 			//LogUtility.log("DBObservationReader > name: '" + name + "' value: '" + value + "'" );
 					
 			// Populate Object with value
-			String property = name;
-			BeanUtils.copyProperty(userBean, property, value);
-			//LogUtility.log(BeanUtils.getSimpleProperty(object, property) );
+			BeanUtils.copyProperty(userBean, name, value);
+			//LogUtility.log(BeanUtils.getSimpleProperty(object, name) );
 		}
 		
 		return userBean;
+	 }
+	 
+	/**
+	 * method to return the user info for a user in the user database.  The
+	 * user data will be returned as a WebUser bean.
+	 * 
+	 * @param usrId -- the usr.usr_id of the user
+	 * @return WebUser or null if none found
+	 */
+	 public WebUser getUser(long usrId) throws Exception
+	 {
+		LogUtility.log("UserDatabaseAccess.getUser: usr_id= " + usrId);
+		return getAllUserData(" usr_id=" + usrId);
+	 }
+	 
+	/**
+	 * method to return the user info for a user in the user database.  The
+	 * user data will be returned as a WebUser bean.
+	 * 
+	 * @param usrId -- the usr.usr_id of the user
+	 * @return WebUser or null if none found
+	 */
+	 public WebUser getUser(Long usrId) throws Exception
+	 {
+		return getUser(usrId.longValue());
+	 }
+	 
+	/**
+	 * method to return the user info for a user in the user database.  The
+	 * user data will be returned as a WebUser bean.
+	 * 
+	 * @param user -- the email address of the user
+	 * @return WebUser or null if none found
+	 */
+	 public WebUser getUser(String emailAddress ) throws Exception
+	 {
+		LogUtility.log("UDA.getUser: email_address= " + emailAddress);
+		return getAllUserData(" LOWER(email_address)='" + emailAddress.toLowerCase() + "'");
 	 }
 	 
 	/**
@@ -745,7 +759,7 @@ public class UserDatabaseAccess
 	 * "city"
 	 * "state"
 	 * "country"
-	 * "zipCode"
+	 * "postalcode"
 	 * "dayPhone"
 	 *
 	 */
@@ -764,7 +778,7 @@ public class UserDatabaseAccess
 			String state = (String) h.get("state");
 			String country = (String) h.get("country");
 			String phoneNumber = (String) h.get("phoneNumber");
-			String zipCode = (String) h.get("zipCode");
+			String postalcode = (String) h.get("postalcode");
 			String userId = (String) h.get("userId");
 			String partyId = (String) h.get("partyId");
 						
@@ -778,19 +792,18 @@ public class UserDatabaseAccess
 				conn.setAutoCommit(false);
 
 				//int userid = this.getUserId( emailAddress );
-				sb.append("UPDATE USER_INFO set SUR_NAME =  '" + surName + "', ");
-				sb.append("GIVEN_NAME = '" + givenName + "', ");
+				sb.append("UPDATE usr SET sur_name='" + surName + "', ");
+				sb.append("given_name='" + givenName + "', ");
+				sb.append("institution='" + institution + "', ");
+				sb.append("address='" + address + "', ");
+				sb.append("city='" + city + "', ");
+				sb.append("state='" + state + "', ");
+				sb.append("country='" + country + "', ");
+				sb.append("postalcode='" + postalcode + "', ");
+				sb.append("phone_number='" + phoneNumber + "', ");
+				sb.append("email_address='" + emailAddress + "' ");
 
-				sb.append("INSTITUTION = '" + institution + "', ");
-				sb.append("ADDRESS= '" + address + "', ");
-				sb.append("CITY= '" + city + "', ");
-				sb.append("STATE= '" + state + "', ");
-				sb.append("COUNTRY= '" + country + "', ");
-				sb.append("ZIP_CODE= '" + zipCode + "', ");
-				sb.append("PHONE_NUMBER = '" + phoneNumber + "', ");
-				sb.append("EMAIL_ADDRESS = '" + emailAddress + "' ");
-
-				sb.append("WHERE USER_ID = '" + userId + "' ");
+				sb.append("WHERE usr_id='" + userId + "' ");
 				
 				LogUtility.log("sql: " + sb.toString());
 				// create the statement
@@ -829,7 +842,7 @@ public class UserDatabaseAccess
 				addressUpdate.setString(2, city );
 				addressUpdate.setString(3, state );
 				addressUpdate.setString(4, country );
-				addressUpdate.setString(5, zipCode );
+				addressUpdate.setString(5, postalcode );
 				addressUpdate.execute();
 
 				conn.commit();
