@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-28 15:21:16 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2002-03-05 23:07:56 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -383,21 +383,20 @@ public class  xmlWriter
 			PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
 
 			String commName="null";
-			String commDesc="null";
-			String abiCode="null";
-			String parentCommName="null";
 			String dateEntered="null";
 			String classCode="null";
 			String classLevel="null";
+			String commDesc="null";
 			String conceptOriginDate="null";
 			String conceptUpdateDate="null";
-			String parentAbiCode="null";
+			String commConceptId = "null";
 			String recognizingParty="null";
 			String partyConceptStatus="null";
+			String parentCommConceptId = "null";
+			String parentCommConceptCode = "null";
+			String parentCommName = "null";
 			String parentCommDescription="null";
-			String commSummaryId="null";
-			String nullValue = "-999.25";
-
+			
 			//header
 			printString.append("<?xml version=\"1.0\"?> \n");
 			//printString.append("<!DOCTYPE vegPlot SYSTEM \"vegCommunity.dtd\">     \n");
@@ -411,24 +410,23 @@ public class  xmlWriter
 				System.out.println("xmlWriter > number of community elements: " + t.countTokens() );
 				
 				commName=t.nextToken().trim();				
-				abiCode=t.nextToken();
-				commDesc=t.nextToken();
-				parentCommName=t.nextToken();
 				dateEntered=t.nextToken();
 				classCode=t.nextToken();
 				classLevel=t.nextToken();
-				conceptOriginDate=t.nextToken();
-				conceptUpdateDate=t.nextToken();
-				parentAbiCode=t.nextToken();
-				recognizingParty=t.nextToken();
-				partyConceptStatus=t.nextToken();
+				commDesc =t.nextToken();
+				conceptOriginDate =t.nextToken();
+				conceptUpdateDate =t.nextToken();
+				commConceptId =t.nextToken();
+				recognizingParty =t.nextToken();
+				partyConceptStatus =t.nextToken();
+				parentCommConceptId =t.nextToken();
+				parentCommConceptCode =t.nextToken();
+				parentCommName=t.nextToken();
 				parentCommDescription=t.nextToken();
-				commSummaryId=t.nextToken();
-			
+
 				System.out.println("xmlWriter > commName: "+ commName);
-				System.out.println("xmlWriter > abiCode: "+ abiCode);
 				
-				
+			
 				//temporary fix to trim the description to 100 chars
 				if (commDesc.length() >100) 
 				{
@@ -436,20 +434,22 @@ public class  xmlWriter
 				}
 
 				printString.append("<community> \n");
-				printString.append("   <commSummaryId>"+commSummaryId+"</commSummaryId> \n");
+				//printString.append("   <commSummaryId>"+commSummaryId+"</commSummaryId> \n");
 				printString.append("   <commName>"+commName+"</commName> \n");
-				printString.append("   <commDesc>"+commDesc+"</commDesc> \n");
-				printString.append("   <abiCode>"+abiCode+"</abiCode> \n");
+				printString.append("   <dateEntered>"+dateEntered+"</dateEntered> \n");
 				printString.append("   <classCode>"+classCode+"</classCode> \n");
 				printString.append("   <classLevel>"+classLevel+"</classLevel> \n");
-				printString.append("   <originDate>"+conceptOriginDate+"</originDate> \n");
-				printString.append("   <updateDate>"+conceptUpdateDate+"</updateDate> \n");
+				printString.append("   <commDesc>"+commDesc+"</commDesc> \n");	
+				printString.append("   <conceptOriginDate>"+conceptOriginDate+"</conceptOriginDate> \n");
+				printString.append("   <conceptUpdateDate>"+conceptUpdateDate+"</conceptUpdateDate> \n");
+				printString.append("   <commConceptId>"+commConceptId+"</commConceptId> \n");
 				printString.append("   <recognizingParty>"+recognizingParty+"</recognizingParty> \n");
 				printString.append("   <partyConceptStatus>"+partyConceptStatus+"</partyConceptStatus> \n");
-
+				//the parent info
 				printString.append("   <parentComm> \n");
 				printString.append("     <commName>"+parentCommName+"</commName> \n");
-				printString.append("     <abiCode>"+parentAbiCode+"</abiCode> \n");
+				printString.append("     <commConceptId>"+parentCommConceptId +"</commConceptId> \n");
+				printString.append("     <classCode>"+parentCommConceptCode+"</classCode> \n");
 				printString.append("     <commDesc>"+parentCommDescription+"</commDesc> \n");
 				printString.append("   </parentComm> \n");
 				printString.append("</community> \n");

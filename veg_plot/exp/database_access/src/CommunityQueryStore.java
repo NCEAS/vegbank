@@ -1,5 +1,29 @@
 package databaseAccess;
 
+/**
+ *  '$RCSfile: CommunityQueryStore.java,v $'
+ *    Authors: @authors@
+ *    Release: @release@
+ *
+ *   '$Author: harris $'
+ *     '$Date: 2002-03-05 23:07:55 $'
+ * '$Revision: 1.3 $'
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 import java.lang.*;
 import java.io.*;
 import java.text.*;
@@ -38,101 +62,95 @@ public class  CommunityQueryStore
 	{
 		try
 		{
-		Connection conn = this.getConnection();
-		
-		action = "select"; 
-		statement.append("select ");
-		statement.append("commName, abiCode, commDescription, parentCommName, "
-		+" dateEntered, classCode, classLevel, conceptOriginDate, conceptUpdateDate, "
-		+" parentAbiCode, recognizingParty, partyConceptStatus,  " 
-		+" parentCommDescription, commSummary_Id ");
-		statement.append("from commSummary where commName like '");
-		statement.append(communityName+"'");
-		statement.append("and classLevel like '"+communityLevel+"'");
+			Connection conn = this.getConnection();
 
-		String returnFields[]=new String[14];
-		int returnFieldLength=14;
-		
-		
-		
+			action = "select";	
+			statement.append("select ");
+			statement.append("commName, ");
+			statement.append("dateentered, ");
+			statement.append("classcode, ");
+			statement.append("classlevel, ");
+			statement.append("commdescription, ");
+			statement.append("conceptorigindate, ");
+			statement.append("conceptupdatedate, ");
+			statement.append("commconcept_id, ");
+			statement.append("recognizingparty, ");
+			statement.append("partyconceptstatus, ");
+			statement.append("parentcommconceptid, ");
+			statement.append("parentcommconceptcode, ");
+			statement.append("parentcommname, ");
+			statement.append("parentcommdescription ");
+			statement.append("from commSummary where commName like '");
+			statement.append(communityName+"'");
+			statement.append("and classLevel like '"+communityLevel+"'");
 
-		System.out.println("CommunityQueryStore > "+ statement.toString()  );
-		
-		PreparedStatement pstmt;
-      
-		//create the accession number
-		//PreparedStatement pstmt;
-    pstmt = conn.prepareStatement( statement.toString()  );
+			String returnFields[]=new String[14];
+			int returnFieldLength=14;
+
+			System.out.println("CommunityQueryStore > "+ statement.toString()  );
+			PreparedStatement pstmt;
+    	pstmt = conn.prepareStatement( statement.toString()  );
                 
-    pstmt.execute();
-    ResultSet rs = pstmt.getResultSet();
+    	pstmt.execute();
+    	ResultSet rs = pstmt.getResultSet();
 		
 
-		while (rs.next()) 
-		{
-			System.out.println("CommunityQueryStore > 	new record "  );
+			while (rs.next()) 
+			{
+				System.out.println("CommunityQueryStore > 	new record "  );
+				//put the name values into the serial string buffer
+				StringBuffer serial = new StringBuffer();
+				
+				String commname = rs.getString(1);
+				serial.append(commname+"|");
+				String  dateentered = rs.getString(2);
+				serial.append(dateentered+"|");
+				String classcode = rs.getString(3);
+				serial.append(classcode+"|");
+				String classlevel = rs.getString(4);
+				serial.append(classlevel+"|");
+				String commdescription = rs.getString(5);
+				serial.append(commdescription+"|");
+				String conceptorigindate = rs.getString(6);
+				serial.append(conceptorigindate+"|");
+				String conceptupdatedate = rs.getString(7);
+				serial.append(conceptupdatedate+"|");
+				String commconceptid = rs.getString(8);
+				serial.append(commconceptid+"|");
+				String recognizingparty = rs.getString(9);
+				serial.append(recognizingparty+"|");
+				String partyconceptstatus = rs.getString(10);
+				serial.append(partyconceptstatus+"|");
+				String parentcommconceptid  = rs.getString(11);
+				serial.append(parentcommconceptid+"|");
+				String parentcommconceptcode  = rs.getString(12);
+				serial.append(parentcommconceptcode+"|");
+				String parentcommname  = rs.getString(13);
+				serial.append(parentcommname+"|");
+				String parentcommdescription  = rs.getString(14);
+				serial.append(parentcommdescription+"|");
+				
+				System.out.println("CommunityQueryStore > commname: "+ commname   );
+				System.out.println("CommunityQueryStore > dateentered: "+ dateentered   );
+				System.out.println("CommunityQueryStore > classcode: "+ classcode    );
+				System.out.println("CommunityQueryStore > classlevel: "+ classlevel    );
+				System.out.println("CommunityQueryStore > commdescription: "+ commdescription    );
+				System.out.println("CommunityQueryStore > conceptorigindate: "+ conceptorigindate   );
+				System.out.println("CommunityQueryStore > conceptupdatedate: "+ conceptupdatedate  );
+				System.out.println("CommunityQueryStore > commconceptid: "+ commconceptid    );
+				System.out.println("CommunityQueryStore > recognizingparty: "+ recognizingparty);
+				System.out.println("CommunityQueryStore > partyconceptstatus: "+ partyconceptstatus );
+				System.out.println("CommunityQueryStore > parentcommconceptid: "+ parentcommconceptid);
+				System.out.println("CommunityQueryStore > parentcommconceptcode: "+ parentcommconceptcode);
+				System.out.println("CommunityQueryStore > parentcommname: "+ parentcommname );
+				System.out.println("CommunityQueryStore > parentcommdescription : "+ parentcommdescription );
 			
-			//put the name values into the serial string buffer
-			StringBuffer serial = new StringBuffer();
-			
-			String commName = rs.getString(1);
-			serial.append(commName+"|");
-			String abiCode = rs.getString(2);
-			serial.append(abiCode+"|");
+				//System.out.println("CommunityQueryStore > serial string: "+ serial.toString()  );
+				communitySummaryOutput.addElement(serial.toString() );
+			}
 
-			String commDescription = rs.getString(3);
-			serial.append(commDescription+"|");
-			String parentCommName = rs.getString(4);
-			serial.append(parentCommName+"|");
-			String dateEntered = rs.getString(5);
-			serial.append(dateEntered+"|");
-			String classCode = rs.getString(6);
-			serial.append(classCode+"|");
-			String classLevel = rs.getString(7);
-			serial.append(classLevel+"|");
-			String conceptOriginDate = rs.getString(8);
-			serial.append(conceptOriginDate+"|");
-			String conceptUpdateDate = rs.getString(9);
-			serial.append(conceptUpdateDate+"|");
-			String parentAbiCode = rs.getString(10);
-			serial.append(parentAbiCode+"|");
-			String recognizingParty = rs.getString(11);
-			serial.append(recognizingParty+"|");
-			String partyConceptStatus = rs.getString(12);
-			serial.append(partyConceptStatus+"|");
-			String parentCommDescription = rs.getString(13);
-			serial.append(parentCommDescription+"|");
-			String commSummary_Id = rs.getString(14);
-			serial.append(commSummary_Id+"|");
-		
-				System.out.println("CommunityQueryStore > commName: "+ commName   );
-				System.out.println("CommunityQueryStore > abiCode: "+ abiCode   );
-				System.out.println("CommunityQueryStore > commDescription: "+commDescription    );
-				System.out.println("CommunityQueryStore > parentCommName: "+ parentCommName    );
-				System.out.println("CommunityQueryStore > dateEntered: "+ dateEntered    );
-				System.out.println("CommunityQueryStore > classCode : "+  classCode  );
-				System.out.println("CommunityQueryStore > classLevel: "+ classLevel   );
-				System.out.println("CommunityQueryStore > conceptOriginDate: "+ conceptOriginDate    );
-				System.out.println("CommunityQueryStore > conceptUpdateDate : "+ conceptUpdateDate    );
-				System.out.println("CommunityQueryStore > recognizingParty: "+ recognizingParty    );
-				System.out.println("CommunityQueryStore > partyConceptStatus : "+ partyConceptStatus    );
-				System.out.println("CommunityQueryStore > parentCommDescription: "+ parentCommDescription    );
-				System.out.println("CommunityQueryStore > commSummary_Id : "+  commSummary_Id   );
-			
-			System.out.println("CommunityQueryStore > serial string: "+ serial.toString()  );
-			communitySummaryOutput.addElement(serial.toString() );
-		}
-		
-		//issue the statement
-///		issueStatement j = new issueStatement();
-///		j.issueSelect(statement.toString(), action, returnFields, returnFieldLength);
-
-		//pass the results back to the calling class
-///		communitySummaryOutput =j.returnedValues;  //copy this vector
-
-
-		System.out.println("CommunityQueryStore > vector size: "+ communitySummaryOutput.size() );
-		//System.out.println( j.returnedValues.toString());
+			System.out.println("CommunityQueryStore > vector size: "+ communitySummaryOutput.size() );
+			//System.out.println( j.returnedValues.toString());
 		}
 		catch(Exception e)
 		{
@@ -153,7 +171,7 @@ public class  CommunityQueryStore
  		{
 			Class.forName("org.postgresql.Driver");
 			//the community database
-			c = DriverManager.getConnection("jdbc:postgresql://dev.nceas.ucsb.edu/nvc", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/communities_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
