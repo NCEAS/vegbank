@@ -121,22 +121,36 @@ try {
 
 if (inputAction.equals("select")) {
 
-//statement query=null;
-
+//execute the query
 results = query.executeQuery(inputStatement);
 
 outReturnFieldsNum=0;
+//make a matrix to store the returned values because storing them directly
+//in a string was giving a jdbc error that couldn't be fixed
+//String verticalStore[] = new String[inputReturnFieldLength];
+
+//get all the levels returned
 while (results.next()) {
 	
-	String resultLine="";
-	for (int i=0;i<inputReturnFieldLength; i++) {			
-			String buf = results.getString(inputReturnFields[i]);
-			resultLine=resultLine.trim()+" "+buf.trim();
+	StringBuffer resultLine = new StringBuffer();
+	//match return elements with correct column name
+	for (int i=0;i<inputReturnFieldLength; i++) {
+		
+		//if the results is null then handle it below
+		if (results.getString(inputReturnFields[i])==null) {
+			resultLine=resultLine.append(" nullValue");
+		}
+
+		else {			
+			String buf =(results.getString(inputReturnFields[i]));
+			resultLine.append(" ").append(buf.trim());
+		}
+
 	}
 
-	//System.out.println(resultLine);
 	
-	outReturnFields[outReturnFieldsNum]=resultLine;
+	
+	outReturnFields[outReturnFieldsNum]=resultLine.toString();
 	outReturnFieldsNum++;
 	
 }  //end while
