@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-10-27 20:27:55 $'
- *	'$Revision: 1.6 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-10-29 04:01:23 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -313,7 +313,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getCummulativeStrataCover(String plantName, String plotCode)
 	{
 		// TODO: Implement ( not sure what this is about )
-		return null;
+		return this.getPlantTaxonCover(plantName, plotCode);
 	}
 
 	/* (non-Javadoc)
