@@ -19,7 +19,7 @@
     <tr bgcolor="#dfe5fa">
      <td >
       <img align="Center" border="0" height="70" src=
-      "http://vegbank.nceas.ucsb.edu/vegbank/images/owlogoBev.jpg"
+      "http://vegbank.nceas.ucsb.edu:8080/vegbank/images/owlogoBev.jpg"
        alt="Vegetation plots logo"> 
      </td>
 		 <td>
@@ -31,9 +31,7 @@
  <br>
  
  
- <form action=
-     "http://vegbank.nceas.ucsb.edu/framework/servlet/QueryBuilderServlet"
-      method="Get">
+ <form action="@datarequestservlet@" method="get">
 		 <input type="hidden" name="requestDataType" value="vegPlot">
      <input value="summary" name="resultType" type="hidden">
      <input value="html" name="requestDataFormatType" type="hidden"> 
