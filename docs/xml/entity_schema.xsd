@@ -271,6 +271,7 @@
         <xs:enumeration value="plant"/>
         <xs:enumeration value="plot"/>
         <xs:enumeration value="user"/>
+        <xs:enumeration value="extra" />
       </xs:restriction>
     </xs:simpleType>
   </xs:element>
