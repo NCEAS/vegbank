@@ -6,8 +6,8 @@ package org.vegbank.plots.datasource;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-03 18:45:55 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2003-11-04 06:06:18 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -938,8 +938,8 @@ public class VegbankXMLUpload
 			
 			int PK = 0;
 
-			// Handle null being passed
-			if ( fieldValueHash == null)
+			// Handle null being passed or empty
+			if ( fieldValueHash == null )
 			{
 				return PK;
 			}
@@ -955,10 +955,7 @@ public class VegbankXMLUpload
 			
 			// Check if this already exists in the database
 			// TODO: This is unlikely to be valid ... need per table rules for identicalness
-			if ( this.tableExists(tableName, fieldValueHash) )
-			{
-				return this.getTablePK(tableName, fieldValueHash);
-			}
+
 			
 			LogUtility.log("LoadTreeToDatabase: INSERT: " + tableName);
 			PK = this.getNextId(tableName);
@@ -1012,7 +1009,7 @@ public class VegbankXMLUpload
 			
 			return PK;
 		}
-		
+
 		/**
 		 * Add an accessionCode to the tables that need it
 		 * 
@@ -1352,13 +1349,6 @@ public class VegbankXMLUpload
 		{
 			int rows = 0;
 			
-			///LogUtility.log("====> " + fieldValueHash);
-			// Filter out empty requests
-			if ( fieldValueHash.isEmpty() )
-			{
-				return false; // I hope no empty tables exist :)	
-			}
-			
 			Vector fieldEqualsValue = new Vector();
 			StringBuffer sb = new StringBuffer();
 			
@@ -1378,12 +1368,13 @@ public class VegbankXMLUpload
 				
 				// TODO: All fields that have no value should be placed in the search 
 				
-				
 				sb.append(
 					"SELECT count(*) from "+tableName+" where " 
 					+ Utility.joinArray(fieldEqualsValue.toArray(), " and ")
 				);
 
+				sb.append(this.getSQLNullValues(tableName, fieldValueHash));
+				
 				Statement query = dbConn.createStatement();
 				ResultSet rs = query.executeQuery(sb.toString());
 				while (rs.next()) 
@@ -1415,6 +1406,41 @@ public class VegbankXMLUpload
 			}
 		}
 		
+		
+		private String getSQLNullValues( String tableName, Hashtable fieldValuesHash ) throws SQLException
+		{
+			StringBuffer sb = new StringBuffer();
+			
+			ResultSet rs = dbConn.getMetaData().getColumns(null, null, tableName.toLowerCase(), "%" );
+			
+			//LogUtility.log("LoadTreeToDatabase : Got a Result Set");
+			while ( rs.next() )
+			{
+				// according to api value 4 is the columnName
+				String columnName = rs.getString(4);
+				//LogUtility.log("LoadTreeToDatabase : ColumnName> " + columnName + " in table > " + tableName);
+				
+				boolean foundValueForColumn = false;
+				Enumeration fields = fieldValuesHash.keys();
+				while ( fields.hasMoreElements())
+				{
+					String fieldName = (String) fields.nextElement();
+					
+					// Compare with the currentColumnName
+					if ( fieldName.equalsIgnoreCase(columnName))
+					{
+						foundValueForColumn = true;
+					}
+				}
+				if ( ! foundValueForColumn )
+				{
+					// Need to add a null here
+					sb.append(" and "  + columnName + " = NULL" );
+				}
+			}
+			
+			return sb.toString();
+		}
 		
 		/**
 		 * Convience method to get the a child TableHash that has is a FK
@@ -1467,7 +1493,7 @@ public class VegbankXMLUpload
 			else
 			{
 				// Don't know what to do here
-				LogUtility.log("LoadTreeToDatabase: Type: '" + o.getClass() + "' should not exist here." );
+				LogUtility.log("LoadTreeToDatabase: Type: '" + o.getClass() + "' should not exist here in" + tableName + "?." );
 			}
 			return childHash;
 		}
