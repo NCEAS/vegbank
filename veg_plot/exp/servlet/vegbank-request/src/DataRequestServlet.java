@@ -51,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2002-12-23 22:51:27 $'
- *  '$Revision: 1.27 $'
+ *  '$Date: 2003-01-28 19:27:57 $'
+ *  '$Revision: 1.28 $'
  * 
  */
 
@@ -90,11 +90,16 @@ public class DataRequestServlet extends HttpServlet
 	private  ServletUtility su = new ServletUtility();
 	public dbAccess dba =new dbAccess();
 	
-	private String communityQueryPage = "/forms/community-query.html";
 	private transformXML transformer = new transformXML();
-	private String defaultPlotIdentityStyleSheet = "";
 	private String genericForm =""; // this is the vb generic form to attache messages to
 	private boolean queryCaching; // true if queries should be cached for the user
+	
+	// TODO: This need to taken out of here !!
+	private static final String servletLib = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/";
+	private static final String summaryViewStyleSheet = servletLib + "TransformPlot_Summary.xsl";
+	private static final String comprehensiveViewStyleSheet = servletLib + "transformFullPlot.xsl";
+	private String defaultPlotIdentityStyleSheet = "";
+	private static final String communityQueryPage = "/forms/community-query.html";
 	
 	/**
 	 * constructor method
@@ -137,7 +142,7 @@ public class DataRequestServlet extends HttpServlet
 		}
 
 
-	/** Handle "GET" method requests from HTTP clients */ 
+	/** Handle "POST" method requests from HTTP clients */ 
 	public void doPost(HttpServletRequest request, 
 		HttpServletResponse response)
 		throws IOException, ServletException  
@@ -411,7 +416,12 @@ public class DataRequestServlet extends HttpServlet
 					// OF A PLOT
 					else if ( resultType.equalsIgnoreCase("full") )
 					{
-						out.println( this.getPlotFullView() );
+						out.println( this.getPlotView(comprehensiveViewStyleSheet) );
+					}
+					// THE USER WANTS TO SEE THE SUMMARY VIEW OF A PLOT
+					else if ( resultType.equalsIgnoreCase("summary") )
+					{
+						out.println( this.getPlotView(summaryViewStyleSheet) );
 					}
 					else
 					{
@@ -521,9 +531,11 @@ public class DataRequestServlet extends HttpServlet
 	
 	
 	/**
-	 * method for showing a full view of a plot by transforming the 
+	 * shows a full view of a plot by transforming the 
 	 * xml document containing the plot by the stylesheet to display 
 	 * the full plot view
+	 * 
+	 * @deprecated  TODO: get rid of.
 	 */
 	 private String getPlotFullView()
 	 {
@@ -552,10 +564,40 @@ public class DataRequestServlet extends HttpServlet
 		return( sb.toString() );
 	 }
 	 
-	 
+	 /**
+	  *  Shows a view of the plot
+	  * 
+	  * @param  String  - the full filename of the stylesheet to use
+	  */
+	 private String getPlotView(String styleSheet)
+	 {
+		StringBuffer sb = new StringBuffer();
+				 try
+				 {
+					 System.out.println("DataRequestServlet > getPlotView ");
+					 String xmlDoc = servletDir + "atomicResult";
+					 System.out.println("DataRequestServlet > xml document: '" + xmlDoc +"'" );
+					 System.out.println("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
+					 transformer.getTransformed(xmlDoc, styleSheet);
+					 StringWriter transformedData = transformer.outTransformedData;
+					 Vector contents = this.convertStringWriter(transformedData);
+					 for (int ii=0;ii< contents.size(); ii++) 
+					 {
+							String buf =  (String)contents.elementAt(ii) ;
+							sb.append( buf + "\n");
+					 }
+				 }
+				 catch( Exception e ) 
+				 {
+					System.out.println("Exception: " + e.getMessage());
+					e.printStackTrace();
+				 }
+				return( sb.toString() );
+	 }
+
 	 
 	/**
-	 * method that returns the identity page containing all the plots that 
+	 * returns the identity page containing all the plots that 
 	 * were in the result set ( or a range of plots )
 	 */
 	 private String getPlotIdentityResults()
