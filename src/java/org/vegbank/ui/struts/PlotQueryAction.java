@@ -1,11 +1,11 @@
-/*
+ /*
  *	'$RCSfile: PlotQueryAction.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-27 21:39:57 $'
- *	'$Revision: 1.16 $'
+ *	'$Date: 2004-03-05 22:41:58 $'
+ *	'$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.vegbank.common.model.*;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.DatabaseUtility;
 import org.vegbank.common.utility.LogUtility;
@@ -69,9 +70,9 @@ public class PlotQueryAction extends Action
 		StringBuffer query = new StringBuffer(1024);
 		query.append(selectClause)
 				.append(" FROM plot, project, observation, covermethod, stratummethod ")	
-				.append(" WHERE plot.plot_id = observation.plot_id ")
-				.append(" AND project.project_id = observation.project_id AND observation.covermethod_id = covermethod.covermethod_id")
-				.append(" AND observation.stratummethod_id = stratummethod.stratummethod_id");
+				.append(" WHERE plot." + Plot.PKNAME + " = observation." + Observation.PLOT_ID)
+				.append(" AND project." + Project.PKNAME + " = observation." + Observation.PROJECT_ID + " AND observation." + Observation.COVERMETHOD_ID + " = covermethod." + Covermethod.PKNAME )
+				.append(" AND observation." + Observation.STRATUMMETHOD_ID + " = stratummethod." + Stratummethod.PKNAME);
 
 		// Get the form
 		PlotQueryForm pqForm = (PlotQueryForm) form;
@@ -82,10 +83,10 @@ public class PlotQueryAction extends Action
 		StringBuffer dynamicQuery = new StringBuffer(1024);
 		
 		// Countries
-		dynamicQuery.append(DatabaseUtility.handleValueList(pqForm.getCountries(), "plot.country", conjunction));
+		dynamicQuery.append(DatabaseUtility.handleValueList(pqForm.getCountries(), "plot." + Plot.COUNTRY, conjunction));
 		
 		// States
-		dynamicQuery.append(DatabaseUtility.handleValueList(pqForm.getState(), "plot.state", conjunction));
+		dynamicQuery.append(DatabaseUtility.handleValueList(pqForm.getState(), "plot." + Plot.STATEPROVINCE, conjunction));
 
 		// Elevation
 		//System.out.println(  pqForm.getMaxElevation())+ " " + pqForm.getMinElevation() + " " +  pqForm.isAllowNullElevation() + " elevation" );
@@ -94,7 +95,7 @@ public class PlotQueryAction extends Action
 				pqForm.getMaxElevation(),
 				pqForm.getMinElevation(),
 				pqForm.isAllowNullElevation(),
-				"plot.elevation",
+				"plot." + Plot.ELEVATION,
 				conjunction));
 
 		// SlopeAspect
@@ -103,7 +104,7 @@ public class PlotQueryAction extends Action
 				pqForm.getMaxSlopeAspect(),
 				pqForm.getMinSlopeAspect(),
 				pqForm.isAllowNullSlopeAspect(),
-				"plot.slopeaspect",
+				"plot." + Plot.SLOPEASPECT,
 				conjunction));
 
 		// SlopeGradient
@@ -112,7 +113,7 @@ public class PlotQueryAction extends Action
 				pqForm.getMaxSlopeGradient(),
 				pqForm.getMinSlopeGradient(),
 				pqForm.isAllowNullSlopeGradient(),
-				"plot.slopegradient",
+				"plot." + Plot.SLOPEGRADIENT,
 				conjunction));
 
 		// rockType
@@ -121,19 +122,19 @@ public class PlotQueryAction extends Action
 		dynamicQuery.append(
 			DatabaseUtility.handleValueList(
 				pqForm.getSurficialDeposit(),
-				"plot.surficialdeposits",
+				"plot" + Plot.SURFICIALDEPOSITS,
 				conjunction));
 		// hydrologicregime
 		dynamicQuery.append(
 				DatabaseUtility.handleValueList(
 				pqForm.getSurficialDeposit(),
-				"observation.hydrologicregime",
+				"observation." + Observation.HYDROLOGICREGIME,
 				conjunction));
 		// topoposition
 		dynamicQuery.append(
-				DatabaseUtility.handleValueList(pqForm.getTopoPosition(), "plot.topoposition", conjunction));
+				DatabaseUtility.handleValueList(pqForm.getTopoPosition(), "plot." + Plot.TOPOPOSITION, conjunction));
 		// landForm
-		dynamicQuery.append(DatabaseUtility.handleValueList(pqForm.getLandForm(), "plot.landform", conjunction));
+		dynamicQuery.append(DatabaseUtility.handleValueList(pqForm.getLandForm(), "plot." + Plot.LANDFORM, conjunction));
 
 		// Date Observed
 		// This need special handling because of the start/end points....
@@ -141,8 +142,8 @@ public class PlotQueryAction extends Action
 			this.handleMaxMinNullDateRange(
 				pqForm.getMinObsStartDate(),
 				pqForm.getMaxObsEndDate(),
-				"observation.obsstartdate",
-				"observation.obsenddate",
+				"observation." + Observation.OBSSTARTDATE,
+				"observation." + Observation.OBSENDDATE,
 				pqForm.isAllowNullObsDate(),
 				" AND ")
 		);
@@ -153,7 +154,7 @@ public class PlotQueryAction extends Action
 				pqForm.getMaxDateEntered(),
 				pqForm.getMinDateEntered(),
 				false,
-				"plot.dateentered",
+				"plot." + Plot.DATEENTERED,
 				conjunction));
 
 		// Plot Area
@@ -162,14 +163,14 @@ public class PlotQueryAction extends Action
 				pqForm.getMaxPlotArea(),
 				pqForm.getMinPlotArea(),
 				pqForm.isAllowNullPlotArea(),
-				"plot.area",
+				"plot." + Plot.AREA,
 				conjunction));
 
 		// METHODS and PEOPLE
 		dynamicQuery.append(
 			DatabaseUtility.handleValueList(
 				pqForm.getCoverMethodType(),
-				"covermethod.covertype",
+				"covermethod." + Covermethod.COVERTYPE,
 				conjunction)); 
 				
 //		dynamicQuery.append(
@@ -183,7 +184,7 @@ public class PlotQueryAction extends Action
 		dynamicQuery.append(
 			DatabaseUtility.handleValueList(
 				pqForm.getStratumMethodName(),
-				"stratummethod.stratummethodname",
+				"stratummethod." + Stratummethod.STRATUMMETHODNAME,
 				conjunction)); 
 				
 //		dynamicQuery.append(
@@ -200,7 +201,7 @@ public class PlotQueryAction extends Action
 		dynamicQuery.append(
 			DatabaseUtility.handleValueList(
 				pqForm.getProjectName(),
-				"project.projectname",
+				"project." + Project.PROJECTNAME,
 				conjunction)); 
 		// name is multifield
 		//query.append( this.handleSimpleEquals( pqForm.getPlotSubmitterName(),
@@ -227,7 +228,7 @@ public class PlotQueryAction extends Action
 		{
 			errors.add(
 				ActionErrors.GLOBAL_ERROR,
-				new ActionError("errors.database", e1.getMessage()));
+				new ActionError("errors.database", e1.getMessage(), query.toString()));
 			System.out.println(query.toString());
 		}
 
@@ -370,30 +371,43 @@ public class PlotQueryAction extends Action
 		{
 			// If no plantname given then forget it...
 			if ( ! Utility.isStringNullOrEmpty(plantNames[i]))
-			{
+			{		
+			
 				StringBuffer plantQuery = new StringBuffer(1024);
 				plantQuery.append( selectClause )
 					.append(" FROM plot JOIN " )
 					.append("	(observation JOIN  " )
-					.append("		(taxonobservation JOIN " )
-					.append("			( select codes.plantname_id from plantusage JOIN " )
-					.append("				(select plantconcept_id, plantname_id from plantusage where classsystem = 'Code' )" )
-					.append(" 			AS codes ON plantusage.plantconcept_id = codes.plantconcept_id " )
-					.append(" 				where plantusage.plantname like '")
-					.append( 					plantNames[i] )
-					.append("					' ) " )
-					.append("			AS FOO ON taxonobservation.plantname_id = FOO.plantname_id) " )
-					.append("		ON observation.observation_id = taxonobservation.observation_id) " )
-					.append("	ON plot.plot_id = observation.plot_id ");
-			
-				plantQuery.append(" WHERE ( true AND ");
+					.append("		( " )
+													// JOIN taxonobservation and taxonimportance to allow cover lookup
+					.append("    ( SELECT taxonobservation." + Taxonobservation.PKNAME + ",  taxonobservation." + Taxonobservation.OBSERVATION_ID )
+					.append("       , taxonimportance." + Taxonimportance.COVER )
+					.append("       FROM taxonobservation, taxonimportance " )
+					.append("        WHERE  taxonobservation." + Taxonobservation.PKNAME + " =  taxonimportance." + Taxonimportance.TAXONIMPORTANCE_ID )
+					.append("         AND taxonimportance." + Taxonimportance.STRATUM_ID + " IS NULL " )
+					.append("     ) AS TOTI JOIN " )
+					.append("     (taxoninterpretation JOIN ")
+					                  // Get any names that match input string
+					.append("			  ( SELECT " + Plantusage.PLANTCONCEPT_ID + " FROM plantusage WHERE" )
+					.append(" 				 UPPER(" + Plantusage.PLANTNAME + ") LIKE '" + plantNames[i].toUpperCase() + "'" )
+					.append("				 ) AS PU" )				
+					.append("			  ON taxoninterpretation." +  Taxoninterpretation.PLANTCONCEPT_ID + " = PU." + Plantusage.PLANTCONCEPT_ID + " ) " )
+					.append("			ON TOTI." + Taxonobservation.PKNAME + " = taxoninterpretation." + Taxoninterpretation.TAXONOBSERVATION_ID + " ) " )	
+					.append("		ON observation." + Observation.PKNAME + " = TOTI." + Taxonobservation.OBSERVATION_ID + " ) " )
+					.append("	ON plot." + Plot.PKNAME + " = observation." + Observation.PLOT_ID );
+				
+				plantQuery.append(" WHERE ( true ");
 				
 				StringBuffer plantQueryConditions = new StringBuffer(1024);
 				
 				plantQueryConditions.append(
-					this.handleMaxMinNull(maxTaxonCover[i], minTaxonCover[i], true, "taxonobservation.taxoncover", " AND")
+					this.handleMaxMinNull(maxTaxonCover[i], minTaxonCover[i], true, "TOTI." +  Taxonimportance.COVER, " AND ")
 				);
 				
+				// hack -- SQL need AND if  plantQueryConditions empty
+				if ( Utility.isStringNullOrEmpty( plantQueryConditions.toString() ) )
+ 				{
+ 					plantQuery.append(" AND ");
+ 				}
 				appendWhereClause(plantQuery, "", plantQueryConditions );
 				
 				// Have my query now run it!!
@@ -425,18 +439,16 @@ public class PlotQueryAction extends Action
 					.append("	(observation JOIN  " )
 					.append("		(commclass JOIN " )
 					.append(" 		(comminterpretation JOIN")
-					.append("				(select codes.commconcept_id from commusage JOIN " )
-					.append("					(select commconcept_id, commname_id from commusage where classsystem = 'CEGL' )" )
-					.append(" 				AS codes ON commusage.commconcept_id = codes.commconcept_id " )
-					.append(" 					where commusage.commname like '")
-					.append(						commNames[i]) 
-					.append("							' ) " ) 
-					.append(" 			AS FOO ON comminterpretation.commconcept_id = FOO.commconcept_id) "	)
-					.append("			ON commclass.commclass_id = comminterpretation.commclass_id) " )
-					.append("		ON observation.observation_id = commclass.observation_id) " )
-					.append("	ON plot.plot_id = observation.plot_id ");
+          		// Get any names that match input string
+					.append("			  ( SELECT " + Commusage.COMMCONCEPT_ID + " FROM commusage WHERE" )
+					.append(" 				 UPPER(" + Commusage.COMMNAME + ") LIKE '" + commNames[i].toUpperCase() + "'" )
+					.append("				 ) AS CU" )	 
+					.append(" 			ON comminterpretation." + Comminterpretation.COMMCONCEPT_ID + " = CU." + Commusage.COMMCONCEPT_ID + " ) "	)
+					.append("			ON commclass." + Commclass.PKNAME + " = comminterpretation. " + Comminterpretation.COMMCLASS_ID + " ) " )
+					.append("		ON observation." + Observation.PKNAME + " = commclass." + Commclass.OBSERVATION_ID + ") " )
+					.append("	ON plot." + Plot.PKNAME + " = observation." + Observation.PLOT_ID );
 				
-				communityQuery.append(" WHERE ( true AND ");
+				communityQuery.append(" WHERE ( true ");
 				
 				StringBuffer communityQueryConditions = new StringBuffer(1024);
 				
@@ -444,11 +456,16 @@ public class PlotQueryAction extends Action
 						this.handleMaxMinNullDateRange(
 						minCommStopDates[i],
 						maxCommStartDates[i],
-						"commclass.classstartdate",
-						"commclass.classstopdate",
+						"commclass." + Commclass.CLASSSTARTDATE,
+						"commclass." + Commclass.CLASSSTOPDATE,
 						true, 
 						" AND ")
 				);
+				// hack -- SQL need AND if  communityQueryConditions empty
+				if ( Utility.isStringNullOrEmpty( communityQueryConditions.toString() ) )
+ 				{
+ 					communityQuery.append(" AND ");
+ 				}
  			
 				appendWhereClause(communityQuery, "", communityQueryConditions );
 				
