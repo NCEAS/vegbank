@@ -1,0 +1,25 @@
+rmiserver = 128.111.220.59
+java1.4.home.dir = /usr/java/j2sdk1.4.1
+servlet_lib = /usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/
+
+# Database Connection Settings
+authenticationServletHost = beta.nceas.ucsb.edu
+communityRequestServletHost = beta.nceas.ucsb.edu
+plantRequestServletHost = beta.nceas.ucsb.edu
+geoCoordRequestServletHost = beta.nceas.ucsb.edu
+databaseType = postgresql
+databaseUser = [The database user name] 
+databaseUserPassword = [ the database users password ]
+databasePort = 1521
+hostname = beta.nceas.ucsb.edu
+databaseDriverType = thin
+databaseDriverClass = org.postgresql.Driver
+databaseConnectString = jdbc:postgresql://beta.nceas.ucsb.edu/plots_dev
+databaseName = nvc
+insert.minConnections = 1
+insert.maxConnections = 3
+query.minConnections = 1
+query.maxConnections = 3
+maxConnectionUsers = 100
+resetTime = 0.01
+logFile = connectionPool.log
