@@ -30,8 +30,8 @@ public class DataSourceServer
 				System.out.print("DataSourceServer > binding to host: " + server);
 				System.out.println(" on port: " + port);
         
-				DataSourceServerInterface fi = new DataSourceImpl("NativeXmlPlugin");
-        //DataSourceServerInterface fi = new DataSourceImpl("TestPlotSourcePlugin");
+				//DataSourceServerInterface fi = new DataSourceImpl("NativeXmlPlugin");
+				DataSourceServerInterface fi = new DataSourceImpl("TNCPlotsDB");
 				
 				//list the bound serveres to this host
 				String[] remoteObjects = Naming.list(server);  

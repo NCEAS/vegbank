@@ -9,7 +9,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.Vector;
 
 import databaseAccess.DBinsertPlotSource;
@@ -33,18 +38,22 @@ import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidator;
  *	
  * <br> <br>
  *  '$Author: farrell $'
- *  '$Date: 2003-03-20 20:50:17 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2003-05-06 23:27:44 $'
+ * 	'$Revision: 1.3 $'
  *
  */
 
 public class DataSourceImpl extends UnicastRemoteObject
   implements DataSourceServerInterface 
 	{
+
 		private String name;
 	 	private PlotDataSource source;
-		private String mdbFile = ""; //the file that the uploaded access files are written to
+		//private String mdbFile = ""; //the file that the uploaded access files are written to
 	  private String xmlFile = ""; //the file that the uploaded xml files are written to
+	  
+	  private static Set availableLocations = new HashSet();
+		private static Hashtable unAvailableLocations = new Hashtable();
 	 
 	 	//loader stuff -- default to the native xml because it can be run on any
     //architecture and OS
@@ -72,7 +81,11 @@ public class DataSourceImpl extends UnicastRemoteObject
 				System.out.println("DataSourceImpl >  VegBank services passed:  " + success );
 				
 				rb = ResourceBundle.getBundle("rmidatasource");
-				mdbFile = rb.getString("access_file");
+				String mdbFile = rb.getString("access_file");
+				
+				// Add to availibleLocations if it is not there already
+				availableLocations.add(mdbFile);
+				
 				System.out.println("DataSourceImpl > ms database file:  " + mdbFile );
 				xmlFile = rb.getString("xml_file");
 				System.out.println("DataSourceImpl > xml file:  " + xmlFile );
@@ -188,7 +201,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	 * @param  buffer -- the file contents
 	 *
 	 */
-	 public boolean getMDBFile(String fileName, String fileType, byte buffer[] )
+	 public boolean getMDBFile(String fileName, String fileType, byte buffer[], String location)
 	 {
 		 try
 		 {
@@ -203,7 +216,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 				}
 				else
 				{
-					serverFile = mdbFile;
+					serverFile = location;
 				}
 				byte[] filedata = buffer;
 				//make the file that is defined as the instance variable
@@ -273,9 +286,9 @@ public class DataSourceImpl extends UnicastRemoteObject
 		* 	'mdbFile' instance variable to verify that it is indeed an ms access 
 		* 	file.
 		*/
-	 public boolean isMDBFileValid()
+	 public boolean isMDBFileValid(String location)
 	 {
-		 System.out.println("DataSourceImpl > validating: " + mdbFile);
+		 System.out.println("DataSourceImpl > validating: " + location);
 		 
 		 //for now just check that there are vlid plot names in the file
 		 Vector v = getPlotNames();
@@ -980,6 +993,64 @@ public class DataSourceImpl extends UnicastRemoteObject
       e.printStackTrace();
     }
 		return(s);
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.rmi.DataSourceServerInterface#getFileUploadLocation()
+	 */
+	public String getFileUploadLocation()
+	{
+		String locationString = null;
+		Iterator i = availableLocations.iterator();
+		if ( i.hasNext() )
+		{
+			System.out.println("DataSourceImpl > Getting a location");
+			Object location = i.next();
+			availableLocations.remove(location);
+			unAvailableLocations.put(location, new Long(System.currentTimeMillis()));
+			locationString = (String) location;
+		}
+		else
+		{
+			locationString = findExpiredLocation();
+		}
+		return locationString;
+	}
+
+
+	private String findExpiredLocation()
+	{
+		String locationString = null;
+		// Check the locations in use for older than 10 minutes ( 10 * 60 *  1000 )
+		long TIME_OUT = 600000;  // in milliseconds
+		System.out.println("DataSourceImpl > Check each unAvailableLocation");
+		Enumeration keys = unAvailableLocations.keys();
+		while (keys.hasMoreElements() )
+		{
+			Object location = keys.nextElement();
+			Long startTime = (Long) unAvailableLocations.get(location);
+			long timeUsed = System.currentTimeMillis() - startTime.longValue();
+			System.out.println("DataSourceImpl > " + location + "has beeb busy for" 
+					+ timeUsed + "milliseconds" );
+			
+			
+			// If the location is older than arbritary time limit  
+			if ( timeUsed > TIME_OUT)
+			{
+				// take over this location 
+				System.out.println("DataSourceImpl > Taking over " + location);
+				unAvailableLocations.put(location, new Long(System.currentTimeMillis()));
+				locationString = (String) location;
+			}
+			
+		}
+		return locationString;
+	}
+	
+	public void releaseFileUploadLocation(String location)
+	{
+		availableLocations.add(location);
 	}
 	
 }

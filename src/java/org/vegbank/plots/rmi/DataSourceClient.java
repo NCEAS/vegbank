@@ -1,6 +1,5 @@
 package org.vegbank.plots.rmi;
 
-import org.vegbank.plots.rmi.DataSourceServerInterface;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -30,8 +29,8 @@ import xmlresource.utils.transformXML;
  *	
  *  <br> <br>
  *  '$Author: farrell $'
- *  '$Date: 2003-03-07 22:49:21 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2003-05-06 23:27:44 $'
+ * 	'$Revision: 1.2 $'
  *
  *
  */
@@ -819,28 +818,36 @@ public class DataSourceClient
 		*		upload to the server 
 		* @param fileType -- the type of file (see above description)
 		*/
-		public boolean putMDBFile(String fileName, String fileType)
+		public boolean putMDBFile(String fileName, String fileType, String location)
 		{
 			boolean results = true;
 			try 
 			{
-				System.out.println("DataSourceClient > loading file name: " + fileName +" file type: " + fileType);
-         File file = new File(fileName);
-         byte buffer[] = new byte[(int)file.length()];
-         BufferedInputStream input = new
-      	 BufferedInputStream(new FileInputStream(fileName));
-         input.read(buffer,0,buffer.length);
-         input.close();
-				
-				 results = source.getMDBFile(fileName, fileType, buffer);
+				boolean lock = true;//= source.getMDBFileLock();
+				if (lock)
+				{
+					System.out.println("DataSourceClient > loading file name: " + fileName +" file type: " + fileType);
+					File file = new File(fileName);
+					byte buffer[] = new byte[(int)file.length()];
+					BufferedInputStream input = new
+					BufferedInputStream(new FileInputStream(fileName));
+					input.read(buffer,0,buffer.length);
+					input.close();
+					results = source.getMDBFile(fileName, fileType, buffer, location);
+				}
+				else
+				{
+					System.out.println("");
+				}
+
       } 
 			catch(Exception e)
 			{
          System.out.println("FileImpl: "+e.getMessage());
          e.printStackTrace();
-				 return(false);
+				 return(results);
       }
-			return(true);
+			return(results);
 		}
 		
 	  
@@ -849,12 +856,12 @@ public class DataSourceClient
 		* 	'mdbFile' instance variable to verify that it is indeed an ms access 
 		* 	file
 		*/
-	 public boolean isMDBFileValid()
+	 public boolean isMDBFileValid(String location)
 	 {
 		 boolean results = true;
 		 try
 		 {
-      results = source.isMDBFileValid();
+      results = source.isMDBFileValid(location);
 		 }
 		 catch(Exception e)
      {
@@ -992,6 +999,26 @@ public class DataSourceClient
 	 			e.printStackTrace();
 	 		}
 	 }
+	 
+	 /**
+	  * Returns the location to upload the file. This acts as a lock, if no 
+	  * location availible then returns null
+	  */
+	 public String getFileUploadLocation()
+	 {
+
+	 	String location = null;
+		try
+		{
+			location = source.getFileUploadLocation();
+		}
+		catch (Exception e)
+		{
+			System.out.println("DataSourceClient > Exception " + e.getMessage() );
+			e.printStackTrace();
+		}
+	 	return location;
+	 }
 
 	 
 	/**
@@ -1021,10 +1048,11 @@ public class DataSourceClient
 				System.out.println("DataSourceClient > file type: " + fileType );
 				
 				DataSourceClient client = new DataSourceClient(hostServer, "1099");
+				String location = client.getFileUploadLocation();
 				System.out.println("DataSourceClient > sending file: " + file );
-				boolean sendResults = client.putMDBFile(file, fileType);
+				boolean sendResults = client.putMDBFile(file, fileType, location);
 				System.out.println("DataSourceClient > transmittal results: " + sendResults );
-				boolean fileValidityResults = client.isMDBFileValid();
+				boolean fileValidityResults = client.isMDBFileValid(location);
 				System.out.println("DataSourceClient > access file validity: " + fileValidityResults );
 				Vector v = client.getPlotNames(fileType);
 				System.out.println("DataSourceClient > found : " + v.size() +" plots in archive " );
@@ -1079,12 +1107,30 @@ public class DataSourceClient
 						System.out.println("DataSourceClient > insertion results html: \n" + tr );
 					}
 				}
+				client.releaseFileUploadLocation(location);
 			} 
 			catch(Exception e) 
 			{
 				System.err.println("FileServer exception: "+ e.getMessage());
 				e.printStackTrace();
 			}
+		}
+	}
+
+
+	/**
+	 * @param location
+	 */
+	public void releaseFileUploadLocation(String location)
+	{
+		try
+		{
+			source.releaseFileUploadLocation(location);
+		}
+		catch (Exception e)
+		{
+			System.out.println("DataSourceClient > Exception " + e.getMessage() );
+			e.printStackTrace();
 		}
 	}
 

@@ -32,11 +32,11 @@ public interface DataSourceServerInterface extends Remote
 	throws Exception;
 		
 		//method for validating that the uploaded file is indeed an mdb file
-		public boolean isMDBFileValid()
+		public boolean isMDBFileValid( String location )
 		throws Exception;
 		
    //method for uploading a file to the server
-	 public boolean getMDBFile(String fileName, String fileType,  byte buffer[] )
+	 public boolean getMDBFile(String fileName, String fileType,  byte buffer[], String location )
 	 throws Exception;
 	 
 	 public byte[] downloadFile(String fileName) throws
@@ -206,6 +206,18 @@ public interface DataSourceServerInterface extends Remote
 	
 	public void setPluginClassName(String pluginClassName)
 	throws Exception;
+
+	/**
+	 * @return  -- the location the file can be saved
+	 */
+	public String getFileUploadLocation()
+		throws Exception;
+
+	/**
+	 * @param location
+	 */
+	public void releaseFileUploadLocation(String location)
+		throws Exception;
 	
 //#STOP EDDITIONS
 	
