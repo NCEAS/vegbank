@@ -27,13 +27,13 @@
 <%     int strataGroup = 0; %> <!-- which class to use for stratum coloring -->
 <%     String strataClass = "" ; %> <!-- class to use for stratum coloring where non-strata also exist -->
     <bean:define id="lastStratum">
-      ---nonEe------
+      -none-
     </bean:define>
-		 <!-- this is the last stratum-- attempting to shade according to stratum values -->
+		 <!-- this is the last stratum- attempting to shade according to stratum values -->
 
      <TABLE cellpadding="0" class="thinlines">
   <logic:equal name="smallheader" value="yes">
-     <TR><TH colspan="9">--Taxa--
+     <TR><TH colspan="9">-Taxa-
      
      
 
