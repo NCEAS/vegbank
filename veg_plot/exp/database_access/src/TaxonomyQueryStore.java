@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-27 00:23:02 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2002-02-27 00:56:59 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,8 +98,10 @@ import databaseAccess.*;
 				StringBuffer sqlBuf = new StringBuffer();
 				///if (taxonNameType.trim().equals("scientificName") )
 				///{
-					sqlBuf.append("SELECT acceptedsynonym, plantnamestatus, ");
-					sqlBuf.append(" plantName, parentName, startDate, stopDate");
+					sqlBuf.append("SELECT plantname_id, plantconcept_id, plantName, ");
+					sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
+					sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
+					sqlBuf.append(" startDate, stopDate  ");
 					sqlBuf.append(" from VEG_TAXA_SUMMARY where plantName like '%"+taxonName+"%'");
 				///}
 				///else if ( taxonNameType.trim().equals("commonName")  ) 
@@ -118,12 +120,21 @@ import databaseAccess.*;
 				//retrieve the results
 				while (results.next()) 
 				{
-					String acceptedSynonym = results.getString(1);
-					String status = results.getString(2);
-					String concatenatedName = results.getString(3);
-					String commonName = results.getString(4);
-					String startDate = results.getString(5);
-					String stopDate = results.getString(6);
+					int plantNameId = results.getInt(1);
+					int plantConceptId = results.getInt(2);
+					String plantName = results.getString(3);
+					String plantDescription = results.getString(4);
+					String status = results.getString(5);
+					String classSystem = results.getString(6);
+					String plantLevel = results.getString(7);
+					String parentName = results.getString(8);
+					String acceptedSynonym = results.getString(9);
+					String startDate = results.getString(10);
+					String stopDate = results.getString(11);
+					
+					//little trick to keep from breaking the code
+					String commonName = plantName;
+					String concatenatedName = plantName;
 					
 					//bunch all of these data attributes into the return vector
 					returnVector.addElement( consolidateTaxaSummaryInstance( 
@@ -134,7 +145,21 @@ import databaseAccess.*;
 						startDate, 
 						stopDate) );
 					
-					//System.out.println("TaxonomyQueryStore > plantName: " + returnVector.toString()  );
+					Hashtable h = consolidateTaxaSummaryInstance( 
+						plantNameId,
+						plantConceptId,
+						plantName,
+						plantDescription,
+						status,
+						classSystem,
+						plantLevel,
+						parentName,
+						acceptedSynonym,
+						startDate,
+						stopDate);	
+						
+					
+					System.out.println("TaxonomyQueryStore > hash: " + h.toString()   );
 				}
 			
 				//remember to close the connections etc..
@@ -148,6 +173,80 @@ import databaseAccess.*;
 			System.out.println("TaxonomyQueryStore > returning results: " + returnVector.size()  );
 			return( returnVector );
 		}
+		
+		/**
+		 * method that consolidates the summary data from the database into 
+		 * a hashtable, with appropriate key names and passes back the hashtable
+		 * which is in turn appended to the results vector
+		 *
+		 * @param acceptedSynonym -- the accepted name if the taxon is, itself,
+		 *		not accepted
+		 */
+		private Hashtable consolidateTaxaSummaryInstance( int plantNameId,
+		int plantConceptId, String plantName, String plantDescription,
+		String status, String	classSystem, String	plantLevel, String parentName,
+		String acceptedSynonym, String startDate, String stopDate)
+		{
+			Hashtable returnHash = new Hashtable();
+			 try
+			 {
+				 //replace the null values that were retrieved from the database
+					if (plantName == null )
+					{
+						plantName ="";
+					}
+					if (plantDescription == null )
+					{
+						 plantDescription="";
+					}
+					if (status == null )
+					{
+						 status="";
+					}
+					if (classSystem == null )
+					{
+						 classSystem="";
+					}
+					if (plantLevel == null )
+					{
+						 plantLevel="";
+					}
+					if (parentName == null )
+					{
+						 parentName="";
+					}
+					if (acceptedSynonym == null )
+					{
+						 acceptedSynonym="";
+					}
+					if (startDate == null )
+					{
+						 startDate="";
+					}
+					if (stopDate == null )
+					{
+						 stopDate="";
+					}
+					
+					returnHash.put("plantNameId", ""+plantNameId);
+					returnHash.put("plantConceptId", ""+plantConceptId);
+			 		returnHash.put("plantName", plantName);
+					returnHash.put("status", status);
+					returnHash.put("classSystem", classSystem);
+			 		returnHash.put("plantLevel", plantLevel);
+					returnHash.put("parentName", parentName);
+					returnHash.put("acceptedSynonym", acceptedSynonym);
+					returnHash.put("startDate", startDate);
+					returnHash.put("stopDate", stopDate);
+					
+			 }
+			 catch(Exception e)
+			 {
+				 System.out.println("Exception : " + e.getMessage());
+				 e.printStackTrace();
+			 }
+			 return( returnHash );
+		 }
 		
 		
 		/**
