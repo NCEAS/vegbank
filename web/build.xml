@@ -89,9 +89,18 @@
 -->
 <target name="panel" depends="init">
 	<copy todir="${panel_server}" filtering="yes" >
-		<fileset dir="${panel_src}" >    
+		<fileset dir="${panel_src}" >
+		<exclude name="**.pdf"/>    
   	</fileset>
 	</copy>
+	
+	<copy todir="${panel_server}" filtering="no" >
+                <fileset dir="${panel_src}" >
+		<exclude name="**.html"/>    
+        </fileset>
+        </copy>
+
+
 </target>
 
 
