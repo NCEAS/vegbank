@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-09-17 05:34:25 $'
-*  '$Revision: 1.4 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-09-17 18:56:47 $'
+*  '$Revision: 1.5 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,9 @@
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="2">
 <TR><TD width="55%" valign="top"><!-- plot level info -->
 
-<table border="1" cellpadding="1" cellspacing="0" class="item"><!--each field, only write when HAS contents-->
+
+<table border="1" cellpadding="0" cellspacing="0" class="item"><!--each field, only write when HAS contents-->
+<tr><th colspan="2">Plot Level Data: <bean:write name="onerow" property="authorplotcode"/></th></tr>
 
 
 <logic:notEmpty name="onerow" property="authorplotcode">
@@ -270,14 +272,15 @@
 
 <vegbank:get select="taxonimportance" where="where_observation_pk" beanName="map" wparam="obsId" perPage="-1"/>
 
-
+     <table border="1" cellpadding="0" cellspacing="0" class="item">
+     <tr><th colspan="2"><strong>Taxa occurring on <bean:write name="onerow" property="authorplotcode"/></strong></th></tr>
   <logic:empty name="BEANLIST">
-                <p>(no plants recorded on this plot: error!)</p>
+                <tr><td colspan="2">(no plants recorded on this plot: error!)</td></tr>
   </logic:empty>
   <logic:notEmpty name="BEANLIST">
-     <table width="100%" border="1" cellpadding="1" cellspacing="0" class="item">
-     <tr colspan="2"><strong>Taxa occurring on this plot:</strong></tr>
+
      <tr><th width="75%">Author's Plant Name</th><th>overall cover</th></tr>
+
      <logic:iterate id="oneobsplants" name="BEANLIST">
      <tr>
        <td><p><span class="item"><bean:write name="oneobsplants" property="authorplantname" />&nbsp;</span></p></td>
@@ -294,8 +297,9 @@
 	 </tr>
 	 </logic:notEmpty>
 
-     </table>
+
   </logic:notEmpty>
+     </table>
 </TD>
 </TR>
 
