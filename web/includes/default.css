@@ -4,13 +4,18 @@ BODY			{ background-color: #FFFFFF;}
 table.thinlines {border-style: solid; 
                  border-width:1px; 
                  border-collapse: collapse; 
-                 border-color:#333333}
+                 border-color:#333333 }
 table.thinlines td {border-style:solid; border-width:1px; border-color:#333333}                 
 table.thinlines th {border-style:solid; border-width:1px; border-color:#333333}
 /* left right class for table gets you vertical lines for your tables only (and surrounding thin line) */
 table.leftrightborders {border-style:solid; border-color:#333333; border-collapse:collapse; border-width:1px }
 table.leftrightborders td {border-style:solid; border-bottom-width:0px ; border-left-width:1px ; border-right-width:1px ; border-top-width:0px}
 table.leftrightborders th {border-style:solid; border-width:1px ; border-color:#333333;}
+
+table.outsideborder {border-style: solid; 
+                 border-width:1px; 
+                 border-collapse: collapse; 
+                 border-color:#333333 }
 
 A:Link			{ color: #005680; text-decoration: underline }
 A:Visited		{ color: #003366; text-decoration: underline }
@@ -41,6 +46,12 @@ TH	{
 	font-size: 14pt;
 	background-color : #333333;
 	}
+.major_smaller	{
+	font-family:  Arial, Tahoma, Helvetica, Geneva, sans-serif;
+	color: #FFFF80;
+	font-size: 12pt;
+	background-color : #333333;
+	}	
 
 .description { 
 	color: #000000; 
@@ -107,6 +118,7 @@ a.featureLink:hover {
 H1, H2, H3, H4, H5, H6	{
 							font-family: Georgia, Times New Roman, Times, serif;
 							color: #333333;
+							text-align: center;
 						}
 .headequiv	{
 							font-family: Georgia, Times New Roman, Times, serif;
@@ -122,6 +134,8 @@ H1, H2, H3, H4, H5, H6	{
 .sizelarge  { font-size: 14pt }
 .sizelarger { font-size: 18pt }
 .sizehuge { font-size: 24pt }
+
+.subheader { font-size: 18pt ; text-align: left; }
 
 th.grey, td.grey, tr.grey {background-color : #DDDDDD; }
 .listRowA {background-color : #FFFFCC; }						
