@@ -19,7 +19,8 @@ import java.lang.*;
 
 
 
-public class PlotDBWriter {
+public class PlotDBWriter 
+{
 
 
 
@@ -167,18 +168,19 @@ for (int ii=0; ii<addressNum; ii++)
 				
 	
 		//put the strataName vector into the hash
-		if (address[ii].trim().equals("plotObservation.strata.stratumName")) {
-//			System.out.println("xxxxxxxxxx--->test");
-			stratumNameElements.addElement(dataString[ii]);
-			plotObservationParams.put("plotObservation.strata.stratumName",
+		if (address[ii].trim().equals("plotObservation.strata.stratumName")) 
+		{
+				stratumNameElements.addElement(dataString[ii]);
+				plotObservationParams.put("plotObservation.strata.stratumName",
 				stratumNameElements);
 		}
 	
 		//put the strataHeight vector into the hash
-		else if (address[ii].trim().equals("plotObservation.strata.stratumHeight")) {
+		else if (address[ii].trim().equals("plotObservation.strata.stratumHeight")) 
+		{
 			stratumHeightElements.addElement(dataString[ii]);
 			plotObservationParams.put("plotObservation.strata.stratumHeight",
-				stratumHeightElements);
+			stratumHeightElements);
 		}
 		
 		//put the strataCover vector into the hash
@@ -357,16 +359,21 @@ putPlot(conn);
 putPlotObservation(conn);
 
 //cycle thru the strata that are recognized in this observation
-for (int i=0; i<stratumNameElements.size(); i++) {
-	
+//although at times there may be no strata in the xml file
+
+/*
+System.out.println("strata "+stratumNameElements.isEmpty());
+System.out.println("Number of strata types included in this file: "
+	+stratumNameElements.size());
+for (int i=0; i<stratumNameElements.size(); i++) 
+{
 	stratumType=(String)stratumNameElements.elementAt(i);
 	stratumHeight=(String)stratumHeightElements.elementAt(i);
 	stratumCover=(String)stratumCoverElements.elementAt(i);
-	
 	//load these strata to the database
 	putStrata(conn);
-
 }
+*/
 
 //get a new connection
 try {
@@ -669,7 +676,8 @@ catch (Exception e) {System.out.println("failed in PlotDBWriter.putPlotObservati
  * insert/update the table with the input data
  *
  */
-private void putStrata (Connection conn) {
+private void putStrata (Connection conn) 
+{
 try {
 
 //grab the next value in the strata table
