@@ -22,12 +22,12 @@
 <p>  Sorry, no Observations found.</p>
 </logic:empty>
 <logic:notEmpty name="observation-BEANLIST">
-<table class="outsideborders" cellpadding="2">
-<TR><!-- one row for whole thing -->
+
 <logic:iterate id="onerowofobservation" name="observation-BEANLIST">
-<TD valign="top"><!-- new column -->
+<TABLE class="leftrightborders" cellpadding="2" width="700px">
+
 <!-- iterate over all records in set : new table for each -->
-<table class="leftrightborders" cellpadding="2">
+
 <bean:define id="onerowofplot" name="onerowofobservation" />
 <!-- get both PKs -->
         <bean:define id="observation_pk" name="onerowofobservation" property="observation_id" />
@@ -35,10 +35,14 @@
 
 
 <% rowClass = "evenrow"; %> <!-- reset colors -->
-<tr><th colspan="2"><bean:write name="onerowofobservation" property="authorobscode" />
+
+<TR>
+<TH class="major" colspan="4">
+<bean:write name="onerowofobservation" property="authorobscode" />
   -<a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>more details</a>
-</th></tr>
-        <%@ include file="autogen/observation_plotshowmany_data.jsp" %>
+</TH></TR>
+  <TR><TD colspan="2"><table class="leftrightborders">
+  <%@ include file="autogen/observation_plotshowmany_data.jsp" %>
         <%@ include file="autogen/plot_plotshowmany_data.jsp" %>
         
       <%@ include file="includeviews/sub_place.jsp" %>
@@ -46,20 +50,57 @@
 <!--Insert a nested get statement here:
    example:   
 
-<vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_observation_pk" wparam="observation_pk" />-->
-<TR><TD COLSPAN="2">
-<bean:define id="smallheader" value="yes" />
-<%@ include file="includeviews/sub_taxonobservation.jsp" %>
-</TD></TR>
 
-<p>&nbsp;</p>
+
+<vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_observation_pk" wparam="observation_pk" />-->
+
+<!-- community info: , simplest format -->
+
+
+<!-- community info -->
+<vegbank:get id="comminterpretation" select="comminterpretation_withobs" beanName="map" 
+  where="where_observation_pk" wparam="observation_pk" perPage="-1" pager="false"/>
+<logic:notEmpty name="comminterpretation-BEANLIST">
+<!-- <tr><th>Community Classification:</th><th>&nbsp;</th></tr> -->
+<tr><td colspan="2">
+<table class="leftrightborders" cellpadding="2" width="100%"><!--each field, only write when field HAS contents-->
+
+<tr>
+<%@ include file="autogen/comminterpretation_summary2_head.jsp" %>
+</tr>
+<logic:iterate id="onerowofcomminterpretation" name="comminterpretation-BEANLIST"><!-- iterate over all records in set : new table for each -->
+<logic:notEmpty name="onerowofcomminterpretation" property="commconcept_id">
+<tr class='@nextcolorclass@'>
+<%@ include file="autogen/comminterpretation_summary2_data.jsp" %>
+</tr>
+</logic:notEmpty>
+</logic:iterate>
+</table>
+
+</td></tr>
+</logic:notEmpty>
+
+
+</table>
+</TD><TD COLSPAN="2">
+<table class="thinlines">
+<bean:define id="smallheader" value="yes" />
+<bean:define id="plantRecs2Show" value="8" />
+<bean:define id="showStrataDefn" value="no" />
+<%@ include file="includeviews/sub_taxonobservation.jsp" %>
+
+
 </table>
 </TD>
-</logic:iterate>
 </TR>
 </TABLE>
+<br/>
+</logic:iterate>
+
+
 </logic:notEmpty>
 <br />
 <vegbank:pager />
-</body></html>
+
           @vegbank_footer_html_tworow@
+</body></html>
