@@ -5,8 +5,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-07-31 22:46:11 $'
- * 	'$Revision: 1.4 $' 
+ *  '$Date: 2002-12-16 19:31:30 $'
+ * 	'$Revision: 1.5 $' 
  */
 
 package xmlresource.utils; 
@@ -95,9 +95,7 @@ public class XMLparse
 				Node node = nodelist.item(0);
 				System.out.println( "printing the first occurence of: "+nodeName+"to a file named: test" ); 
 				xp.save(node, "test");
-				
 			}
-			
 			else
 			{
 				String filename = args[0];
@@ -107,16 +105,13 @@ public class XMLparse
 			System.out.println( xp.getChildNodeValue(doc, parentNode, childNode) );
 			}
 		}
-		
-		
 		else
 		{
 			
 		}
-		
-//		String filename = args[0];
-//		DocumentMaker docMaker = new DocumentMaker(filename);
-//		Document doc = docMaker.getDocument();
+		//		String filename = args[0];
+		//		DocumentMaker docMaker = new DocumentMaker(filename);
+		//		Document doc = docMaker.getDocument();
 		try 
 		{
 		//	WhiteSpaceKiller wpc = new WhiteSpaceKiller(doc);
@@ -261,14 +256,9 @@ public class XMLparse
   public Node get(Document doc, String key, int i)
   {
     NodeList nl = doc.getElementsByTagName(key);
-	//	System.out.println("keyname:  "+key);
-	//	System.out.println("number of nodes in the plot:" + nl.getLength() );
-    Node resultNode;
-		
-		
+    System.out.println("XMLParse > get() list length: " + nl.getLength() );
+		Node resultNode;
 		resultNode = nl.item(i);
-    
-		
 //		if (nl.getLength() < 1)
 //    {
 //      return result;
@@ -613,23 +603,25 @@ public class XMLparse
 	
  /**
   * gets the content of a tag in a given xml file with the given path
+	* @param doc -- the document to extract the values from
   * @param path the path to get the content from
+	* @return vec -- a vector with the elements
   */
   public Vector getPathContent(Document doc, String path)
   {
 		Vector returnVec = new Vector();
     try
     {
-     NodeList nlist = XPathAPI.selectNodeList(doc, path);
-     for(int i = 0; i < nlist.getLength(); i++ ) 
+			NodeList nlist = XPathAPI.selectNodeList(doc, path);
+			for(int i = 0; i < nlist.getLength(); i++ ) 
 			{ 
   			returnVec.addElement(nlist.item(i).getNodeName() ); 
 			}
     }
     catch(SAXException se)
     {
-      System.err.println(se.toString());
-    //  return null;
+      System.err.println( se.toString() );
+			se.printStackTrace();
     }
 			return returnVec;
   }
@@ -643,34 +635,87 @@ public class XMLparse
 	 * @param doc -- the document to extract the values from
 	 * @param pathstring the path string which should look like:
 	 *  /community/classCode where community would be the root node
+	 *	@return vec -- a vector with the elements
 	 *
    */
   public Vector getValuesForPath(Document doc, String pathstring) 
 	{
     Vector val = new Vector();
-    if (!pathstring.startsWith("/")) {
+    if (!pathstring.startsWith("/")) 
+		{
       pathstring = "//*/"+pathstring;
 			System.out.println("XMLparse > pathstring: "+pathstring);
     }
-    try{
+    try
+		{
       NodeList nl = null;
       nl = XPathAPI.selectNodeList(doc, pathstring);
-      if ((nl!=null)&&(nl.getLength()>0)) {
+      if ((nl!=null)&&(nl.getLength()>0)) 
+			{
         // loop over node list is needed if node is repeated
-        for (int k=0;k<nl.getLength();k++) {
+        for (int k=0;k<nl.getLength();k++) 
+				{
           Node cn = nl.item(k).getFirstChild();  // assume 1st child is text node
-          if ((cn!=null)&&(cn.getNodeType()==Node.TEXT_NODE)) {
+          if ((cn!=null)&&(cn.getNodeType()==Node.TEXT_NODE)) 
+					{
             String temp = cn.getNodeValue().trim();
             val.addElement(temp);
           }
         }
       }
-    } catch (Exception e) {
+    } 
+		catch (Exception e) 
+		{
 		System.out.println("Excpetion: " + e.getMessage() );
-   //   ClientFramework.debug(4, "Error in getValueForPath method");
     }
     return val;    
   }
+	
+	
+	/**
+	 * method that takes a Node and the root name and creates a DOM 
+	 * Document from it
+	 * @param Node -- the node that is to be contained in the document
+	 * @param root -- the name of the root
+	 * @param doc -- the new document
+	 */
+	 public Document createDocFromNode(Node n, String root)
+	 {
+		 Document document;
+		 try
+		 {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			document = builder.newDocument();  // Create from whole cloth
+
+			//Element root = (Element) document.createElement("rootElement"); 
+		 
+    
+    	// Insert the root element node
+			Element element = document.createElement(root);
+			document.appendChild(element);
+    
+    	// Insert a comment in front of the element node
+			Comment comment = document.createComment("created by the XMLparse class");
+			document.insertBefore(comment, element);
+    
+    	// Add a text node to the element
+			//element.appendChild(document.createTextNode("D"));
+			
+			Node newNode = document.importNode(n, true);
+			element.appendChild(newNode);
+			
+			return( document );
+		 }
+		 catch(Exception e)
+		 {
+			 e.printStackTrace();
+		 }
+		 return( doc );
+	 }
+	
+	
+	
 	
 	
 	
@@ -893,15 +938,20 @@ public class XMLparse
   {
     boolean result = false;
     NodeList nl = doc.getElementsByTagName(key);
-    if (nl.getLength() <= i) {
+    if (nl.getLength() <= i) 
+		{
       result = false;
-    } else {
+    } 
+		else 
+		{
       Node cn = nl.item(i).getFirstChild(); // assumed to be a text node
-      if (cn == null) {
+      if (cn == null) 
+			{
         // No text node, so append one with the value
         Node newText = doc.createTextNode(value);
         nl.item(i).appendChild(newText);
-      } else if (cn.getNodeType() == Node.TEXT_NODE) 
+      } 
+			else if (cn.getNodeType() == Node.TEXT_NODE) 
 			{
         // found the text node, so change its value
         cn.setNodeValue(value);
