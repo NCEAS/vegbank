@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-30 18:01:59 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-06-30 20:15:59 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,10 +39,10 @@ import javax.servlet.http.HttpSession;
 
 import org.vegbank.common.Constants;
 import org.vegbank.common.command.QueryReferences;
-import org.vegbank.common.command.QueryReferences.ReferenceSummary;
 import org.vegbank.common.model.Plant;
 import org.vegbank.common.model.PlantParty;
 import org.vegbank.common.model.Reference;
+import org.vegbank.common.model.ReferenceSummary;
 import org.vegbank.plants.datasink.DBPlantWriter;
 import org.vegbank.servlet.util.HTMLUtil;
 import org.vegbank.servlet.util.ServletUtility;
