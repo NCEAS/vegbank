@@ -392,7 +392,8 @@ PreparedStatement pstmt=null;
 			}
 			
 			//do the insertion
-			pstmt.execute();			
+			pstmt.execute();
+			pstmt.close();
 	//query.close();
 	//conn.close();
 	} // end try 
