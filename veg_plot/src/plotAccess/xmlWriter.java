@@ -22,8 +22,8 @@ private StringBuffer printString = new StringBuffer(); //this is the print strin
 
 
 /**
- *  This is an overloaded method that accepts a hashtable containg plot summary
- * data
+ *  This method accepts a hashtable containg plot summary
+ *  data and prints it to file in an xml format
  *
  */
 
@@ -42,7 +42,8 @@ Hashtable multiPlotComprehensive = new Hashtable();
 System.out.println("hash size: "+cumulativeSummaryResultHash.size());
 
 //write one plot at a time
-for (int i=0; i< cumulativeSummaryResultHash.size(); i++) {
+for (int i=0; i< cumulativeSummaryResultHash.size(); i++) 
+{
 	
 	//get a single plot and stick into a temporary hash
 	String plotRecord = "plot"+i;
@@ -60,14 +61,18 @@ for (int i=0; i< cumulativeSummaryResultHash.size(); i++) {
 
 //take the returned hash table and pass it to the xml writer class
 //put a try here b/c this class has been sensitive
-try {
+try 
+{
 		PlotXmlWriter pxw = new PlotXmlWriter();
 		pxw.writeMultiplePlot(multiPlotComprehensive, outFile);
 	
 	}
-catch (Exception e) {System.out.println("failed in xmlWriter.writePlotSummary "
+catch (Exception e) 
+{
+	System.out.println("failed in xmlWriter.writePlotSummary "
 	+"(using a hash table as input ) -- trying to write xml output" + 
-	e.getMessage()); e.printStackTrace();}
+	e.getMessage()); e.printStackTrace();
+}
 
 
 }
@@ -82,9 +87,10 @@ catch (Exception e) {System.out.println("failed in xmlWriter.writePlotSummary "
 
 
 /**
- * Method to map the plot summary elements being passed to this class in a hash
- * table into the 'PlotDataMapper' class which prepares the data for printing in
- * the 'PlotXmlWriter' class 
+ * Method to map the plot summary elements being passed 
+ * to this class in a hash table into the 'PlotDataMapper' 
+ * class which prepares the data for printing in the 
+ * 'PlotXmlWriter' class 
  *
  * @param singlePlotSummary - is a hash table that contains all the summary
  * elements for a given plot
@@ -97,6 +103,7 @@ private Hashtable mapSummaryElements (Hashtable singlePlotSummary)
 //pass the elements to the plotDatamapper class
 PlotDataMapper pdm = new PlotDataMapper();
 
+String plotId = "nulValue";
 String authorPlotCode = "nullValue";
 String plotShape = "nullValue";
 String slopeGradient = "nullValue";
@@ -122,10 +129,18 @@ String physionomicClass = "nullValue";
 String authorObservationCode = "nullValue";
 
 
-try {
-//first get the elements  - then next map them using the 'PlotDataMapper' class
-if (singlePlotSummary.containsKey("AUTHORPLOTCODE"))
-	authorPlotCode = (String)singlePlotSummary.get("AUTHORPLOTCODE");
+try 
+{
+	//first get the elements  - then next map them using 
+	//the 'PlotDataMapper' class
+
+	if (singlePlotSummary.containsKey("PLOT_ID"))
+	{
+	//	System.out.println("Does contain a plotId!");
+		plotId = (String)singlePlotSummary.get("PLOT_ID");
+	}
+	if (singlePlotSummary.containsKey("AUTHORPLOTCODE"))
+		authorPlotCode = (String)singlePlotSummary.get("AUTHORPLOTCODE");
 if (singlePlotSummary.containsKey("PLOTSHAPE"))
 	plotShape = (String)singlePlotSummary.get("PLOTSHAPE");
 if (singlePlotSummary.containsKey("SLOPEGRADIENT"))
@@ -187,6 +202,7 @@ pdm.plotElementMapper("national veg plots database entry", "projectName", "proje
 
 
 //site info
+pdm.plotElementMapper(plotId, "plotId", "site");
 pdm.plotElementMapper(authorPlotCode, "authorCode", "site");
 pdm.plotElementMapper(plotShape, "shape", "site");
 pdm.plotElementMapper(slopeGradient, "slopeGradient", "site");
