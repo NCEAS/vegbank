@@ -15,6 +15,8 @@ import java.sql.*;
 import org.apache.tools.mail.MailMessage;
 import servlet.util.ServletUtility;
 import xmlresource.utils.transformXML;
+import servlet.util.GetURL;
+
 
 
 /**
@@ -31,7 +33,7 @@ public class StyleSheetGenerator extends HttpServlet
 	private ServletUtility util = new ServletUtility();
 	private String userEmail = null;
 	private transformXML transformer = new transformXML();
-	
+	private GetURL gurl = new GetURL();
 	
 	/**
 	 * constructor method
@@ -70,36 +72,45 @@ public class StyleSheetGenerator extends HttpServlet
 				System.out.println("StyleSheetGenerator > INPUT PARAMS: "
 				+  params.toString() );
 				
-				//first get the cookie value etc
+				//first get the cookie value and action etc
 				this.userEmail = this.getCookieValue(request);
 				System.out.println("StyleSheetGenerator > user: " + this.userEmail );
+				String action = getAction(params);
+				System.out.println("StyleSheetGenerator > action: " + action );
 				
+				//figure out what should be done based on the action
+				if ( action != null )
+				{
+					if ( action.equals("deletedefault") )
+					{
+						System.out.println("StyleSheetGenerator > deleting default style " );
+						System.out.println("StyleSheetGenerator > results: " + this.deleteSavedStyleSheets() );
+						
+					}
+				}
+				//IF NO ACTION THEN ASSUME THE USER WANTS TO CREAT AND REGISTER
+				// A NEW STYLESHEET
+				else
+				{
+					//the temp file name
+					StringBuffer fileContents = new StringBuffer();
 				
-			
+					//print the xslt file in order from left to right
+					fileContents.append( getHeader().toString() );
+					fileContents.append( this.getIdentificationAttributes(params).toString()  );
+					//fileContents.append( getBody(params).toString() );
+					fileContents.append( this.getSiteAttributes(params).toString() );
+					fileContents.append( this.getObservationAttributes(params).toString() );
+					fileContents.append( this.getTaxaAttributes(params).toString() );
+					fileContents.append( getFooter().toString() );
+					printFile( fileContents );
 				
-				//the temp file name
-				StringBuffer fileContents = new StringBuffer();
+					//register the document
+					this.registerDocument(this.fileName, this.userEmail, "stylesheet");
 				
-				//print the xslt file in order from left to right
-				fileContents.append( getHeader().toString() );
-				fileContents.append( this.getIdentificationAttributes(params).toString()  );
-				//fileContents.append( getBody(params).toString() );
-				fileContents.append( this.getSiteAttributes(params).toString() );
-				
-				fileContents.append( this.getObservationAttributes(params).toString() );
-				
-				fileContents.append( this.getTaxaAttributes(params).toString() );
-				
-				fileContents.append( getFooter().toString() );
-				printFile( fileContents );
-				
-				//register the document
-///#				this.registerDocument(this.fileName, this.userEmail, "stylesheet");
-				
-				
-				//SHOW THE USER THE STYLE SHEET THAT THE GENERATED 
-				out.println( this.showTransformedDataSet() );
-
+					//SHOW THE USER THE STYLE SHEET THAT THE GENERATED 
+					out.println( this.showTransformedDataSet() );
+				}
 			}
 		catch( Exception e ) 
 		{
@@ -109,14 +120,106 @@ public class StyleSheetGenerator extends HttpServlet
 		}
 	}
 	
+	
+	/**
+	 * method that returns the action parameter value passed
+	 * to the servlet from the client using as input a hashtable
+	 * with all the parameters
+	 *
+	 * @param params -- the hashtable containing all the parameters
+	 *
+	 */
+	 private String getAction(Hashtable params)
+	 {
+			String s = null;
+			try
+			{
+				if (params.containsKey("action") )
+				{
+					s = (String)params.get("action");
+				}
+				else
+				{
+					System.out.println("StyleSheetGenerator > no action passed" );
+				}
+			}
+			catch( Exception e ) 
+			{
+				System.out.println("Exception:  "
+				+e.getMessage());
+				e.printStackTrace();
+			}
+			return(s);
+	 }
+	 
+	
 	/**
 	 * method allowing the user to delete the current
 	 * style sheet
 	 */
 	 private boolean deleteSavedStyleSheets()
-	 {
+	 { 
+		 try
+		 {
+				String styleSheet = this.getUserDefaultStyle(this.userEmail);
+				System.out.println("StyleSheetGenerator > stylesheet file name: " + styleSheet );
+				
+				String htmlResults = null;
+				
+				//set up for the file deletion through the data exchange servlet
+				StringBuffer sb = new StringBuffer();
+      	sb.append("?action=deletefiletype&username="+this.userEmail+"&filetype=stylesheet");
+			
+      	//connect to the dataExchaneServlet
+				String uri = "http://vegbank.nceas.ucsb.edu/framework/servlet/dataexchange"+sb.toString().trim();
+				System.out.println("StyleSheetGenerator > sent to servlet: " + uri);
+      	int port=80;
+      	String requestType="POST";
+      	htmlResults = gurl.requestURL(uri);
+				
+				  //public void doPost(HttpServletRequest req, HttpServletResponse res)
+					//else if (action.equals("deletefile") && ( req.getParameter("username") != null) )
+				
+		 }
+		 catch(Exception e )
+		 {
+			 System.out.println("Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
 		 return(true);
 	 }
+	
+	
+	/**
+	 * method to request the users default style sheet from the 
+	 * profile database
+	 */
+	 private String getUserDefaultStyle(String userName)
+	 {
+			String htmlResults = null;
+    	try
+    	{
+      	//create the parameter string to be passed to the DataRequestServlet -- 
+				//this first part has the data request type stuff
+      	StringBuffer sb = new StringBuffer();
+      	sb.append("?action=userdefaultstyle&username="+userName);
+			
+      	//connect to the dataExchaneServlet
+				String uri = "http://vegbank.nceas.ucsb.edu/framework/servlet/dataexchange"+sb.toString().trim();
+				System.out.println("StyleSheetGenerator > sent to servlet: " + uri);
+      	int port=80;
+      	String requestType="POST";
+      	htmlResults = gurl.requestURL(uri);
+    	}
+    	catch( Exception e )
+    	{
+     	 System.out.println("** failed :  "
+     	 +e.getMessage());
+    	}
+    	return(htmlResults);
+	 }
+	
+	
 	
 	
 	/**
