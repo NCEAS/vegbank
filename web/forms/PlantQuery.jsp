@@ -1,40 +1,14 @@
-
-
-
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
-<!-- 
-  *   '$RCSfile: PlantQuery.jsp,v $'
-  *     Purpose: web form to query the plant taxonomy portion of vegbank
-  *   Copyright: 2000 Regents of the University of California and the
-  *               National Center for Ecological Analysis and Synthesis
-  *     Authors: @author@
-  *
-  *    '$Author: mlee $'
-  *      '$Date: 2005-03-15 18:59:59 $'
-  *  '$Revision: 1.14 $'
-  *
-  *
-  -->
-
-
 
   <title>PLANT CONCEPT LOOKUP</title>
   
-
   <style type="text/css">
-  body {
-  background-color: #FFFFFF;
-  color: #531100;
-  }
-  :link { color: #0033CC }
-  :visited { color: #005680 }
-  :active { color: #0066FF }
-  td.c4 {color: #000000; font-family: Helvetica,Arial,Verdana}
-  span.c3 {color: black; font-family: Helvetica,Arial,Verdana; font-size: 70%}
-  span.c2 {color: #209020; font-family: Helvetica,Arial,Verdana; font-size: 80%}
-  span.c1 {color: #23238E; font-family: Helvetica,Arial,Verdana; font-size: 200%}
+  xxtd.c4 {color: #000000; font-family: Helvetica,Arial,Verdana}
+  xxspan.c3 {color: black; font-family: Helvetica,Arial,Verdana; font-size: 70%}
+  xxspan.c2 {color: #209020; font-family: Helvetica,Arial,Verdana; font-size: 80%}
+  xxspan.c1 {color: #23238E; font-family: Helvetica,Arial,Verdana; font-size: 200%}
   </style>
 
 <script language="javascript">
@@ -79,91 +53,53 @@ function setNameMatchType() {
 
 </script>
 
+  @webpage_masthead_html@ 
 
+  <h1>Plant Concept Query</h1>
 
-
-  @webpage_masthead_html@ <!-- SECOND TABLE -->
-
-  <table align="left" border="0" width="90%" cellspacing="0" cellpadding="0">
-    <tr>
-      <td bgcolor="white"><img align="center" border="0" height="100" src=
-      "@image_server@owlogoBev.jpg" alt="Veg plots logo"></td>
-
-      <td align="left" valign="middle">
-        <table border="0" cellpadding="5"  height="55">
-          <tr>
-            <td align="left" valign="bottom"><span class="c1">Plant Concept Lookup</span><br></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <!-- LEFT MARGIN -->
-      <td width="15%" bgcolor="white" align="left" valign="top">
-
-      <td align="left">
 
         <form action="@views_link@plantconcept_detail.jsp" method="get" name="queryform" onsubmit="prepareForm()">
 			<input type="hidden" name="where" value="where_plantconcept_mpq"/>
 
-          <table>
-            <tr valign="top">
-              <td align="left" valign="middle" colspan="2">
-                <span class="c2">
-				<b>All search criteria are optional.</b>
-				<br>
+         
+                <p class="instructions">
+				<strong>All search criteria are optional.</strong>
+				<br />
 				Try the <a href="@forms_link@CommQuery.jsp">community query</a> too.
-				</span>
-              </td>
-            </tr>
-          </table>
+				</p>
+             
+          
+             <p><b>Taxon name:</b><br/>
 
-          <br/>
-
-          <table border="0" >
-            <!--TAXON NAME -->
-
-            <tr align="left" valign="top">
-              <td ><b>Taxon name:</b></td>
-
-              <td >
+             
 		<input type="text" size="35" name="xwhereParams_plantname_0"/>
 		<input type="hidden" name="xwhereParams_plantname_1" value="pu.plantname"/>
 				&nbsp; <span class="normal">e.g. maple, acer rubrum
-				<br>
+				<br/>
 		<input type="radio" name="matchType" value="all" checked="checked"/>contains ALL words
-				<br>
+				<br/>
 		<input type="radio" name="matchType" value="any"/>contains ANY word
-				<br>
+				<br/>
 		<input type="radio" name="matchType" value="is"/>is exactly
 				<span class="sizetiny">
 				(use % as a wildcard: e.g. maple%)
 				</span>
-				<br>
+				<br/>
 		<input type="hidden" name="xwhereKey_plantname" value="xwhere_match"/>
 		<input type="hidden" name="xwhereSearch_plantname" value="true"/>
 		<input type="hidden" name="xwhereMatchAny_plantname" value="false"/>
 				</span>
-			  <br>
+			  <br />
 					<input type="submit" value="search for plants"/>
-
-	      </td>
-            </tr><!-- IGNORE CASE -->
-
-            <tr>
-              <td colspan="2" rowspan="1" align="left" valign="middle">
-                <hr size=".1">
-              </td>
-            </tr>
-	    
+         </p>
+                <hr/>
+              
 	    <!-- Taxon level -->	    
-            <tr>
-              <td  align="left" valign="top"><b>Taxon level:</b>
-			  <br><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
-			  </td>
+           <p><b>Taxon level:</b>
+			  <br/><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
+			  <br/>
 
-		<td  class="c4" align="left" valign="top" >
+		
 	    <select name="xwhereParams_plantlevel_0" size="5" multiple="true">
 			<option value="" selected>--ANY--</option>
 
@@ -171,7 +107,7 @@ function setNameMatchType() {
 <logic:notEmpty name="plantlevel-BEANLIST">
 	<logic:iterate id="onerow" name="plantlevel-BEANLIST">
 		<logic:notEmpty name="onerow" property="plantlevel">
-		  	<option value="<bean:write name="onerow" property="plantlevel"/>">
+		  	<option value='<bean:write name="onerow" property="plantlevel"/>'>
 				<bean:write name="onerow" property="plantlevel"/></option>
 		</logic:notEmpty>
 	</logic:iterate>
@@ -181,21 +117,15 @@ function setNameMatchType() {
 
 		<input type="hidden" name="xwhereParams_plantlevel_1" value="ps.plantlevel"/>
 		<input type="hidden" name="xwhereKey_plantlevel" value="xwhere_in"/>
-              </td>
-            </tr>
+              </p>
 	    
-	    <!-- HORIZONTAL LINE -->
-            <tr>
-              <td colspan="2" rowspan="1" align="left" valign="middle">
-                <hr size=".1">
-              </td>
-            </tr>
+	    <hr/>
+           
 		<!-- Name ClassSystem -->
-            <tr>
-              <td  align="left" valign="top"><b>Name type:</b>
-			  <br><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
-			  </td>
-              <td class="c4" align="left" valign="top" >
+            <p><b>Name type:</b>
+			  <br/><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
+			  <br/>
+              
 	        <!--html:select property="xwhereParams_classsystem_0" size="6" multiple="true"-->
 	        <select name="xwhereParams_classsystem_0" size="5" multiple="true">
 			   <option value="" selected>--ANY--</option>
@@ -204,7 +134,7 @@ function setNameMatchType() {
 <vegbank:get id="classsystem" select="plantusage_classsystem" where="where"/>
 <logic:notEmpty name="classsystem-BEANLIST">
 	<logic:iterate id="onerow" name="classsystem-BEANLIST">
-	<option value="<bean:write name="onerow" property="classsystem"/>">
+	<option value='<bean:write name="onerow" property="classsystem"/>'>
 			<bean:write name="onerow" property="classsystem"/></option>
 	</logic:iterate>
 </logic:notEmpty>
@@ -213,22 +143,16 @@ function setNameMatchType() {
 	      	 </select>
 			<input type="hidden" name="xwhereParams_classsystem_1" value="pu.classsystem"/>
 			<input type="hidden" name="xwhereKey_classsystem" value="xwhere_in"/>
-	      </td>
-	    </tr>
+	      </p>
 		
 	    
-            <!-- HORIZONTAL LINE -->
-            <tr>
-              <td colspan="2" rowspan="1" align="left" valign="middle">
-                <hr size=".1">
-              </td>
-            </tr>
+           
+                <hr/>
+           
+            <p>
+              <b>As of date:</b><br/>
 
-            <tr>
-              <td  align="left" valign="top" height="20">
-              <b>As of date:</b></td>
-
-              <td class="c4" align="left" valign="top" height="20" >
+              
 				<select name="ebDate"> 
 					<option value=""></option> <option value="1">1</option>
 					<option value="2">2</option> <option value="3">3</option>
@@ -264,21 +188,16 @@ function setNameMatchType() {
 				<input type="hidden" name="xwhereKey_date" value="where_plantstatus_daterange"/>
                    <a href="@help-for-concept-date-href@"><img 
 				   height="14" width="14" border="0" src="@image_server@question.gif"></a>
-              </td>
-            </tr>
+              </p>
 
-            <tr>
-              <td colspan="2" rowspan="1" align="left" valign="middle">
-                <hr size=".1">
-              </td>
-            </tr><!-- PARTY -->
+               <hr/>
+             <!-- PARTY -->
 
 
-            <tr>
-              <td  align="left" valign="top">
-              <b>Party:</b></td>
+            <p>
+              <b>Party:</b><br/>
             
-              <td class="c4" align="left" valign="top" height="54" >
+              
                 <!--html:select property="xwhereParams_accordingtoparty_0"-->
                 <select name="xwhereParams_accordingtoparty_0">
                   <option value="">--ANY--</option>
@@ -293,47 +212,21 @@ function setNameMatchType() {
                 </select>
 				<input type="hidden" name="xwhereParams_accordingtoparty_1" value="ps.party_id"/>
 				<input type="hidden" name="xwhereKey_accordingtoparty" value="xwhere_eq"/>
-              </td>
-            </tr>
+              </p>
 
-            <tr>
-              <td colspan="2" rowspan="1" align="left" valign="middle">
-                <hr size=".1">
-              </td>
-            </tr>
-			<!-- AND / OR -->
+                <hr/>
+           <!-- AND / OR -->
 
-            <tr>
-              <td align="left" valign="middle" colspan="2">
-                <blockquote>
+                 <blockquote>
 		      <input type="radio" name="xwhereGlue" value="AND" checked="checked"/>match ALL criteria<br/>
 		      <input type="radio" name="xwhereGlue" value="OR"/>match ANY criteria<br/>
                 </blockquote>
-              </td>
-            </tr>
-	    
-            <tr>
-              <td align="left" valign="middle" colspan="2">
-			  <br>
-					<input type="submit" value="search for plants"/>
-              </td>
-            </tr>
-	    
-            <tr>
-              <td ></td>
-            </tr>
-          </table>
+            
+            			<input type="submit" value="search for plants"/>
+              
         <!--/html:form-->
         </form>
 
-        <table border="0" cellspacing="5" cellpadding="5">
-          <tr>
-            <td colspan="2"><!-- VEGBANK FOOTER -->
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+        
 
 @webpage_footer_html@
