@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-04 19:32:21 $'
- * 	'$Revision: 1.17 $'
+ *  '$Date: 2002-04-04 22:22:07 $'
+ * 	'$Revision: 1.18 $'
  */
 package databaseAccess;
 
@@ -205,9 +205,10 @@ public class DBinsertPlotSource
 				if (args.length == 2)
 				{
 					String plot = args[1];
+					String emailAddress = "";
 					System.out.println("loading single plot: "+plot+"\n");
 					DBinsertPlotSource db = new DBinsertPlotSource(plugin, plot);
-					db.insertPlot(plot);
+					db.insertPlot(plot, emailAddress);
 				}
 			}
 			//load all the plots in the package
@@ -220,11 +221,13 @@ public class DBinsertPlotSource
 				//System.out.println("DBinsertPlotSource > plots: " + v.toString() );
 				for (int i=0; i < v.size(); i++)
 				{
+
+					String emailAddress = "";
 					String plot = (String)v.elementAt(i);
 					plot = plot.trim();
 					System.out.println("DBinsertPlotSource > loading plot: " + plot +" \n");
 					db = new DBinsertPlotSource(plugin, plot);
-					db.insertPlot(plot);
+					db.insertPlot(plot, emailAddress);
 					db = null;
 				}
 			}
@@ -268,9 +271,10 @@ public class DBinsertPlotSource
 			{
 				
 				String pName = plotNames.elementAt(i).toString();
+				String emailAddress = "";
 				source = new PlotDataSource(pluginClass);
 				DBinsertPlotSource db = new DBinsertPlotSource(pluginClass, pName);
-				db.insertPlot(pName);
+				db.insertPlot(pName, emailAddress);
 			}
 		}
 		catch (Exception e)
@@ -291,7 +295,7 @@ public class DBinsertPlotSource
 	 * @param debugLevel  -- the level of debugging -- right now it can be 0, 1, 2
 	 * 		where 0=nothing returned; 1=commit results; 3=above and exceptions
 	 */
-	public String insertPlot( String plotName, int debugLevel)
+	public String insertPlot(String plotName, int debugLevel, String emailAddress)
 	{
 		try
 		{
@@ -299,25 +303,25 @@ public class DBinsertPlotSource
 			if (debugLevel == 0)
 			{
 				debug.append("<plotInsertion> \n");
-				this.insertPlot(plotName);
+				this.insertPlot(plotName, emailAddress);
 				debug.append("</plotInsertion> \n");
 			}
 			else if (debugLevel == 1)
 			{
 				debug.append("<plotInsertion> \n");
-				this.insertPlot(plotName);
+				this.insertPlot(plotName, emailAddress);
 				debug.append("</plotInsertion> \n");
 			}
 			else if (debugLevel == 2)
 			{
 				debug.append("<plotInsertion> \n");
-				this.insertPlot(plotName);
+				this.insertPlot(plotName, emailAddress);
 				debug.append("</plotInsertion> \n");
 			}
 			else
 			{
 				System.out.println("DbinsertPlotSource > invalid debug level: " + debugLevel );
-				this.insertPlot(plotName);
+				this.insertPlot(plotName, emailAddress);
 			}
 		}
 		catch (Exception e)
@@ -336,11 +340,12 @@ public class DBinsertPlotSource
 	 *
 	 * @param plotName -- the name of the plot that exists in the archive
 	 */
-	 
-	public void insertPlot(String plotName)
+	public void insertPlot(String plotName, String emailAddress)
 	{
 		try 
 		{
+			//add a line for the user that is inserting the data
+			debug.append( "<vegbankUser>"+emailAddress+"</vegbankUser> \n" );
 			//this boolean determines if the plot should be commited or rolled-back
 			boolean commit = true;
 			int projectId = 0;
