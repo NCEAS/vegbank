@@ -4,8 +4,6 @@ databases.
 The qa user must be created before these are run.
 > createuser qa    # Answer no to all prompts
 
-Run the scripts for each database
-> psql plots_dev < grant_privil_plots_dev.sql
-> psql plants_dev < grant_privil_plants_dev.sql
-> psql communties_dev < grant_privil_communtities_dev.sql
-> psql framework < grant_privil_framework.sql
+Run the scripts 
+
+> ./grantQAPrivil.pl
