@@ -6,12 +6,12 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2002-11-26 19:06:32 $'
-  *     '$Revision: 1.2 $'
+  *     '$Date: 2002-11-27 19:44:39 $'
+  *     '$Revision: 1.3 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
-	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib//" />
+	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/" />
     <property name="target" value="${target}" />
       
 	<target name="compile" description="Compiles all code in veg_plot module">
@@ -51,8 +51,15 @@
 		<!-- FIXME <ant dir="exp/vegclient" target="dist"/>  target fails to build -->
 		<!-- <ant dir="exp/xml-resource" target="dist"/> No dist target -->
 		<!-- <ant dir="exp/xml_to_sql" target="jar"/> No dist target -->
+		<antcall target="deploy-resources"/>
 	</target>
 
+	<target name="deploy-resources" description="Deploy resources to servlet container">
+		<!-- Copy xml resources to servlet container -->
+		<copy todir="${servlet_lib}">
+			<fileset dir="xml" includes="querySpec.xsl, plotQuery.dtd"/>
+		</copy>
+	</target>
 
 	<!-- Want to pass command line variables in ant but no working yet	
 	<target name="database_access">
