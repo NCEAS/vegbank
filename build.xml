@@ -7,9 +7,9 @@
   * can call ant like this:
   *  % echo "[build.context]" | ant [target]
   *
-  *     '$Author: anderson $'
-  *     '$Date: 2004-01-16 07:06:39 $'
-  *     '$Revision: 1.35 $'
+  *     '$Author: farrell $'
+  *     '$Date: 2004-02-19 17:35:13 $'
+  *     '$Revision: 1.36 $'
 --> 
 <project name="Vegbank" default="jar" basedir=".">
 
@@ -101,6 +101,7 @@
     <filter token="resetTime" value="${resetTime}" />
     <filter token="logFile" value="${logFile}" />
     <filter token="vegbankSchemaName" value="${vegbankSchemaName}" />
+    <filter token="vegbankVersion" value="1.0.2" />
     <filter token="vegbank.home.dir" value="${vegbank.home.dir}/" />
     <filter token="originalDataStore" value="${vegbank.home.dir}/originalDataStore"/>
     <filter token="schemaLocation" value="${vegbank.home.dir}/lib"/>
@@ -137,6 +138,7 @@
 
     <!-- Classpaths -->
     <path id="classpath.compilation">
+      <pathelement path="${build.classes.dir}"/>
       <fileset dir="${lib.dir}">
         <include name="**/*jar"/>
       </fileset>
@@ -178,10 +180,23 @@
 	
   </target>
 
-  <target name="run-tests" description="==> Run all the tests availible">
-    <ant dir="veg_plot" target="run-tests" inheritAll="false"/> 
-    <ant dir="common" target="test" inheritAll="false"/>
-    <ant dir="veg_taxa" target="test" inheritAll="false"/>
+  <target name="run-tests" depends="compile" description="==> Run all the tests availible">
+
+    <!-- use the ant "junit" task to run JUnit tests. -->
+    <junit printsummary="yes" haltonfailure="no" fork="no"
+           haltonerror="no">
+      <classpath refid="classpath.compilation"/>
+
+      <formatter type="xml" />
+
+      <batchtest fork="yes" todir="${build.reports.test.dir}">
+        <fileset dir="${build.classes.dir}">
+          <include name="**/*Test.class" />
+        </fileset>
+      </batchtest>
+    </junit>
+
+
   </target>
 
 
@@ -270,25 +285,24 @@
   </target>
   
   <target name="dist-reports" 
-          depends="prepare"
+          depends="prepare, run-tests"
           description="==> Generate htmls from generated reports and distributes to web">
 
-    <ant dir="common" target="dist-testreport" inheritAll="false"/>
-    <!--<ant dir="veg_plot" target="run-tests" inheritAll="false"/>-->
-    <ant dir="veg_community" target="clean" inheritAll="false"/>
-    <ant dir="veg_taxa" target="test" inheritAll="false"/>
- 
-		<!-- Create a report from the junit output -->
-		<junitreport todir="${build.reports.test.dir}">
-	  		<fileset dir="${build.reports.test.dir}">
-	  			<include name="TEST-*.xml"/>
-			</fileset>
-	  		<report format="frames"
-				        todir="${web.context}/dev/reports/junit"
-	              styledir="${ant.style.dir}"/>
-	  	</junitreport>
-	
-	</target>
+    <!-- Create a report from the junit output -->
+    <junitreport todir="${build.reports.test.dir}">
+      <fileset dir="${build.reports.test.dir}">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames"
+            todir="${web.context}/dev/reports/junit"
+	    styledir="${ant.style.dir}"/>
+    </junitreport>
+    <echo>
+	**************************************************
+	Reports distributed to ${build.context}/dev/reports on tomcat
+	**************************************************	
+    </echo>
+  </target>
 
 
   <!-- ================================================================= -->
@@ -360,7 +374,8 @@
 
     <javac srcdir="${build.java.src.dir}"
       includes="**/*.java"
-      destdir="${build.classes.dir}">			
+      destdir="${build.classes.dir}"
+      debug="on">			
       <classpath refid="classpath.compilation"/>
    </javac>
   
