@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.5 2005-03-17 03:55:19 anderson Exp $
+ * $Id: vegbank2005.css,v 1.6 2005-03-17 03:56:57 anderson Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -430,7 +430,7 @@ DATACART
     color: #000;
     background-color: #fff;
     border: #000 solid 1px;
-    padding-left: 3px;
+    padding-left: 2px;
 }
 
 .input-button {
