@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-01 23:11:25 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-07-11 21:24:39 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.AbstractList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import org.vegbank.common.Constants;
@@ -55,6 +59,9 @@ public class USDAPlantListReader implements Constants, PlantListReader
 	// The plantlist is a csv file
 	//CSVParser csvp = new CSVParser();
 	private String[][] plants;
+	
+	// To hold a the family Names
+	Set  familyNames = new TreeSet();
 
 	// Some hardcoded values
 	private final String statusStartDate = "20-AUG-2002";
@@ -201,7 +208,36 @@ public class USDAPlantListReader implements Constants, PlantListReader
 				plantsV.add(this.getPlant(plants[i]));
 			}
 		}
+		// Need to add in the Families
+		plantsV.addAll(this.getAllFamillies());
 		return plantsV;
+	}
+
+	/**
+	 * @return
+	 */
+	private Collection getAllFamillies()
+	{
+		Vector results = new Vector();
+				
+		Iterator famillies = familyNames.iterator();
+		while ( famillies.hasNext() )
+		{
+			// Always the same for families
+			Plant plant = new Plant();
+			plant.setStatusStartDate(statusStartDate);
+			plant.setAllReferenceIds( new Integer(refId).toString() );
+			plant.setPlantPartyId( new Integer(plantPartyId).toString());
+			plant.setClassLevel(PLANT_CLASS_FAMILY);
+			plant.setStatus(CONCEPT_STATUS_ACCEPTED);
+			
+			String family = (String) famillies.next();			
+			plant.setScientificNameNoAuthors(family);
+			
+			results.add(plant);
+		}
+
+		return results;
 	}
 
 	private Plant getPlant(String[] singlePlant)
@@ -217,45 +253,27 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		*"ABGR4","Abelia xgrandiflora (André) Rehd. ","glossy abelia","Caprifoliaceae"
 		*/
 
+		// Fourth field is the family name .... 
+		String familyName = singlePlant[3];
+
 		// First field always Code
 		plant.setCode(singlePlant[0]);
 
 		// Second Entry needs parsing to get at all its  information
 		plant.setClassLevel(
 			getClassificationLevel(plant.getCode(), singlePlant[1]));
-		this.parseNameField(plant, singlePlant[1]);
+		this.parseNameField(plant, singlePlant[1], familyName);
+
 
 		// Third Field can be the common name or the accepted synonym
 		// Synonym is not used at present
 		this.parseOtherNameField(plant, singlePlant[2]);
 
-		// Fourth field is the family name .... it is not used at present 
 
-		//plant.setParentName( getParentName(singlePlant[1], plant) );
+		// Add name to a list with no duplicates
+		familyNames.add(familyName);
 
 		return plant;
-	}
-
-	/**
-	 * @param String -- nameField
-	 * @param Plant
-	 * @return String
-	 */
-	private String getParentName(String nameField, Plant plant)
-	{
-		String parentName = null;
-
-		if (plant.getClassLevel().equals(PLANT_CLASS_SUBSPECIES))
-		{
-			parentName = "";
-		}
-		else
-			if (plant.getClassLevel().equals(PLANT_CLASS_VARIETY))
-			{
-
-			}
-
-		return parentName;
 	}
 
 	/**
@@ -286,7 +304,7 @@ public class USDAPlantListReader implements Constants, PlantListReader
 
 	}
 
-	private void parseNameField(Plant plant, String nameField)
+	private void parseNameField(Plant plant, String nameField, String familyName)
 	{
 		// A few rules here
 		// Abelia xgrandiflora (André) Rehd.
@@ -299,18 +317,18 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		if (nameField.indexOf(" var. ") > 0)
 		{
 			// I am a variety
-			this.parseNameField(plant, nameField, "var.");
+			this.parseNameField(plant, nameField, "var.", familyName);
 		}
 		else
 			if (nameField.indexOf(" ssp. ") > 0)
 			{
 				// I am a sub-species
-				this.parseNameField(plant, nameField, "ssp.");
+				this.parseNameField(plant, nameField, "ssp.",  familyName);
 			}
 			else
 			{
 				// I must be a species / genus  or hybrid
-				this.parseNameField(plant, nameField, null);
+				this.parseNameField(plant, nameField, null, familyName);
 			}
 
 		// Get the first two tokens in the name field.
@@ -323,7 +341,8 @@ public class USDAPlantListReader implements Constants, PlantListReader
 	private void parseNameField(
 		Plant plant,
 		String nameField,
-		String classIndicator)
+		String classIndicator,
+		String familyName)
 	{
 		String scientificName = nameField.trim();
 		String scientificNameNoAuthors = "";
@@ -336,7 +355,7 @@ public class USDAPlantListReader implements Constants, PlantListReader
 			if (classLevel.equals(PLANT_CLASS_GENUS))
 			{
 				//has no parent in our system currently -- could use family
-				parentName = "";
+				parentName = familyName;
 				// The first token
 				scientificNameNoAuthors = this.getToken(nameField, 1);
 			}
@@ -353,8 +372,6 @@ public class USDAPlantListReader implements Constants, PlantListReader
 				// TODO: Throw an exception or something
 				System.out.println("I never expect to get here !!!");
 			}
-
-
 
 			// author is token 3 onward
 			author =

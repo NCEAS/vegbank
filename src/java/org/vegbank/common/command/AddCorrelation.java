@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-16 02:46:58 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-11 21:24:38 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,14 +40,23 @@ public class AddCorrelation
 			String convergence) throws Exception
 		{
 			System.out.println("AddCorrelation > " + unacceptedName + " with " + synoymnName);
-			//Get Primary key of concept using synonymnName
-			int conceptId = query.getPlantConceptId(synoymnName);
 			
-			// Get PK of status using unacceptedName
-			int statusId = query.getPlantStatusId(unacceptedName);
-			
-			//Write into the PlantCorrelation table -- need statusId, conceptId, correlation string, dates .
-			query.insertPlantCorrelation(synoymnName, statusId, convergence, startDate, stopDate );
+			int statusId;
+			try
+			{
+				//Get Primary key of concept using synonymnName
+				//int conceptId = query.getPlantConceptId(synoymnName);	
+				// Get PK of status using unacceptedName
+				statusId = query.getPlantStatusId(unacceptedName);
+
+				//Write into the PlantCorrelation table -- need statusId, conceptId, correlation string, dates .
+				query.insertPlantCorrelation(synoymnName, statusId, convergence, startDate, stopDate );
+			}
+			catch (Exception e)
+			{
+				System.out.println("Cannot find '" + unacceptedName + "' in database. SKIPPING");
+				e.printStackTrace();
+			}
 		}
 
 }

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 19:34:13 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-07-11 21:24:38 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,8 @@ public interface Constants
 	public static final String PLANT_CLASS_VARIETY = "Variety"; 
 	public static final String PLANT_CLASS_GENUS = "Genus"; 
 	public static final String PLANT_CLASS_HYBRID = "Hybrid"; 
-		
+	public static final String PLANT_CLASS_FAMILY = "Family"; 
+			
 	public static final String USAGE_NAME_SCIENTIFIC = "Scientific"; 
 	public static final String USAGE_NAME_SCIENTIFIC_NOAUTHORS = "Scientific without authors";
 	public static final String USAGE_NAME_CODE = "Code";  

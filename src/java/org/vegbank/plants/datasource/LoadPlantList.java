@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-01 23:11:25 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2003-07-11 21:24:39 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,10 +45,14 @@ public class LoadPlantList
 
 	public static void main(String[] args)
 	{
-		if (args.length < 1) 
+		if (args.length < 3) 
 		{
 			System.out.println(
-				"Usage: java org.vegbank.datasource.LoadPlantList  [plantList] [first plantCode] [correlate]\n");
+				"Usage: java org.vegbank.datasource.LoadPlantList  [plantList] [first plantCode] [correlate]\n"
+				+ " plantList -  the name of the USDA format file to load\n"
+				+ " first PlantCode - start loading after seeing this code, use 'any' to mean any code "
+				+ " correlate - only do correlation step, yes or no" 
+			);
 			System.exit(0);
 		}
 		else 
@@ -65,7 +69,7 @@ public class LoadPlantList
 			{
 				startLoadingAfterPlantCode = args[1];
 			}
-			boolean startLoading = ( startLoadingAfterPlantCode == null || startLoadingAfterPlantCode.equals("") );
+			boolean startLoading = ( startLoadingAfterPlantCode == null || startLoadingAfterPlantCode.equals("any") );
 			
 			USDAPlantListReader plr;
 			try
@@ -80,8 +84,9 @@ public class LoadPlantList
 				int count = 1;
 				long startAllTime = System.currentTimeMillis();
 				
-				if ( args[2] == null || ! args[2].equals("correlate") ) 
+				if ( args[2] == null || ! args[2].equals("yes") ) 
 				{
+					System.out.println("Begin Loading Plants");
 					loadPlants(
 						pl,
 						conn,
@@ -125,7 +130,7 @@ public class LoadPlantList
 			// Hack to allow starting latter down the list 
 			if ( ! startLoading )
 			{
-				if ( startLoadingAfterPlantCode.equals(plant.getCode()) )
+				if ( startLoadingAfterPlantCode.equals(plant.getCode()) || startLoadingAfterPlantCode.equals("*") )
 				{
 					startLoading = true;
 					System.out.println("FOUND PLANTCODE = '" + plant.getCode() + "' about to start loading.");

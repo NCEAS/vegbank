@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 20:57:46 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2003-07-11 21:24:39 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,20 @@ public class DBPlantWriter implements Constants
 	
 	public DBPlantWriter(Plant plant, Connection conn)
 	{
-		System.out.println("DBPlantWriter > inserting '" + plant.getScientificName() + "'");
+		if ( plant.getScientificName() != null )
+		{
+			System.out.println("DBPlantWriter > inserting '" + plant.getScientificName() + "'");
+		}
+		else if ( plant.getScientificNameNoAuthors() != null )
+		{
+			System.out.println("DBPlantWriter > inserting '" + plant.getScientificNameNoAuthors() + "'");
+		}
+		else 
+		{
+			System.out.println("Cannot insert this plant because name cannot be found");
+			return;
+		}
+		
 		// This is going to know about the Data Model the database has 
 		try
 		{
@@ -128,31 +141,69 @@ public class DBPlantWriter implements Constants
 						System.out.println("DBPlantWriter: Name classsystem not recoginized");
 					}
 					
-					
-					int plantNameId =
-						this.insertPlantName(
-							refId,
-							pu.getPlantName(),
-							Utility.dbAdapter.getDateTimeFunction() );
+					// Does it have this kind  of  name
+					if ( pu.getPlantName() != null )
+					{
+						int plantNameId =
+							this.insertPlantName(
+								refId,
+								pu.getPlantName(),
+								Utility.dbAdapter.getDateTimeFunction() );
 						
-					plantNameIds.put(pu.getClassSystem(), new Integer(plantNameId) );
+						System.out.println("===" + pu.getClassSystem() + " AND " +plantNameId);
+						plantNameIds.put(pu.getClassSystem(), new Integer(plantNameId) );
+					}
 				}
 			}
 	
 			//System.out.println("Get a PlantParty Id of " + partyId + " " + refId + " ---> " + plantNameIds);
 			//System.out.println(">>>> Loaded Names and " + plantNameIds.get("Scientific") );
 			
-			int sciNameId = ( (Integer) plantNameIds.get("Scientific")).intValue(); 
+			// The Scienticfic name is prefered for linking but scientic name without authors 
+			// can also be used	
+			Integer sciNameId = (Integer) plantNameIds.get(USAGE_NAME_SCIENTIFIC);
+			Integer sciNameWAId = (Integer) plantNameIds.get(USAGE_NAME_SCIENTIFIC_NOAUTHORS);
 			
-			System.out.println("sciNameId: " + sciNameId);
-			// Insert the Concept
-			int conceptId =
-				this.insertPlantConcept(
-					sciNameId,
-					conceptRefId,
-					plant.getScientificName(),
-					plant.getPlantDescription(),
-					plant.getCode());
+			int conceptId = 0;
+			
+			System.out.println( ">>>> " +sciNameId + " **** " + sciNameWAId + " " +plantNameIds);
+			if ( sciNameId == null || sciNameId.equals("") )
+			{
+				if ( sciNameWAId != null || !sciNameWAId.equals("") )
+				{
+					int intSciNameWAId =  sciNameWAId.intValue(); 
+				
+					System.out.println("sciNameId: " + sciNameId);
+					// Insert the Concept
+					conceptId =
+						this.insertPlantConcept(
+							intSciNameWAId,
+							conceptRefId,
+							plant.getScientificNameNoAuthors(),
+							plant.getPlantDescription(),
+							plant.getCode());
+				}
+				else
+				{
+					System.out.println("Cannot find a nameId to use");
+				}
+			}
+			else
+			{
+				// Use the scientific Name Id
+				int intSciNameId =  sciNameId.intValue(); 
+			
+				System.out.println("sciNameId: " + sciNameId);
+				// Insert the Concept
+				conceptId =
+					this.insertPlantConcept(
+						intSciNameId,
+						conceptRefId,
+						plant.getScientificName(),
+						plant.getPlantDescription(),
+						plant.getCode());
+			}
+
 	
 			//System.out.println(">>>> Loaded Concept");
 			//System.out.println(">>>>  " + plant.getStatusStopDate());

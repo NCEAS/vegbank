@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 20:57:46 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-07-11 21:24:38 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -389,10 +389,14 @@ public class Plant implements Constants, Comparable
 	{
 		int rank;
 		// Natural order is:
-		// Genus, Species, SubSpecies, Variety, Hybrid
-		if (this.classLevel.equals(PLANT_CLASS_GENUS) )
+		// Family, Genus, Species, SubSpecies, Variety, Hybrid
+	  if (this.classLevel.equals(PLANT_CLASS_FAMILY) )
 		{
-			rank = 100;
+			rank = 95;
+		}
+	  else if (this.classLevel.equals(PLANT_CLASS_GENUS) )
+		{
+			rank = 92;
 		}
 		else if (this.classLevel.equals(PLANT_CLASS_SPECIES) )
 		{
