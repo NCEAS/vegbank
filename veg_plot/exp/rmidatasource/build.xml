@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!-- 
+  * build_client.xml
+  *
+  *	Authors: John Harris
+  *	Copyright: 2000 Regents of the University of California and the
+  *           National Center for Ecological Analysis and Synthesis
+  *  Build file for the Ant cross-platform build system for metacat
+  *  See http://jakarta.apache.org for details on Ant  
+  *  
+	* this build file builds the client software for the 
+	* national plots database including: the interfaces, the
+	* embedded database(s) etc.  Before building this check the 
+	* dependencies
+	*
+	* 		'$Author: harris $'
+ 	*     '$Date: 2002-01-31 19:22:43 $'
+ 	*     '$Revision: 1.1 $'
+--> 
+<project name="rmi-datasource" default="jar" basedir=".">
+	
+	<!-- INITIATION -->
+	<target name="init">
+  
+		<!-- RELEVANT DIRECTORIES -->
+		<property name="current_dir" value="./" />
+		<property name="src" value="./src" />
+		<property name="build" value="./build" />
+		<property name="lib" value="./lib" />
+		<property name="bin" value="./" />
+		<property name="translators" value="./lib/datatranslator.jar" />
+
+		
+		<filter token="release" value="alpha-20020120"/>
+		<filter token="authors" value="HARRIS"/>
+		<property name="cpath" value="${translators}:${xerces}:${xalan}:${build}"/>
+</target>
+
+	
+	<!-- PREPARE -->
+	<target name="prepare" depends="init">
+		<mkdir dir="${build}" />
+	</target>	
+	
+	
+	
+	<!-- COMPILE -->
+	<target name="compile" depends="prepare">
+
+		<echo message="Compiling the RMI Code"/>
+		
+		<javac srcdir="${src}" 
+			classpath="${cpath}"
+			includes="
+			 DataSourceClient.java
+			 DataSourceServer.java
+			 DataSourceServerInterface.java
+			 DataSourceImpl.java
+			"
+			destdir="${build}"
+		/>
+	</target>	
+	
+	<!-- RMI COMPILE -->
+	<target name="rmic" depends="compile">
+
+		<echo message="Compiling the RMI Stubs and Skeletons"/>
+		<rmic classname="DataSourceImpl" base="${build}" />
+	</target>	
+	
+	<!-- JAR -->
+	<target name="jar" depends="compile">
+		<jar jarfile ="${lib}/rmidatasource.jar"
+			basedir="${build}"
+			includes="** "
+		/>
+	</target>
+	
+		
+	<!-- DIST  - this will put the package into the db access lib -->
+	<target name="dist" depends="jar">
+		<copy todir="../database_access/lib/" filtering="no" >
+			<fileset dir="${lib}" >
+  	    <include name="datatranslator.jar"/>
+  	  </fileset>
+  	</copy>
+	</target>
+	
+	
+	<!-- TEST - this will test the package -->
+	<target name="test">
+		<exec dir="./" executable="write-VegBank-plot.sh" os="Linux" >
+		</exec>
+	</target>
+	
+	
+	
+	
+
+</project>
