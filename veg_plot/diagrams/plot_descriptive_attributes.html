@@ -1,0 +1,79 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="john harris">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (Win98; I) [Netscape]">
+   <title>plot_descriptive_attributes</title>
+</head>
+<body>
+Vegetation Plots Database - <i>working draft
+7/30/2000</i>
+<br>&nbsp;
+<p><b><u>plot_descriptive_attributes</u></b>
+<p><b>plot_id</b> - System assigned unique identifier for each individual
+plot.&nbsp; At this time a vegetation plot is defined by both discrete
+location (a single point) and date; meaning that two plots may exist for
+a single location if the supporting data were collected at differing times.&nbsp;
+Also, sub-plots having smaller lateral coverage may exist within a larger
+regional plot.
+<p><b>altmin</b> - minimum altitude within a plot.&nbsp; Because a vegetation
+plot has been defined as a single point in time and space, we may want
+to store just the altitude at the origin of the plot.&nbsp; On the other
+hand, I recognize that a plot does have area and the vegetation within
+that area is seen as a proxy for a discrete point - so at this point i'm
+in favor of storing the min and max altitude just as I hope to store the
+coordinates of the sampling area
+<p><b>altmax</b> - altitude maximum (see above for comments)
+<p><b>plotOrigin</b> - The discrete geographic point defining the plot.&nbsp;
+This attribute will be represented by a latitude and longitude
+<p>dsgpolyo -&nbsp; Data Set G-Polygon coordinates defining the outline
+of an area covered by a data set from the csdgm-fgdc-std-001-1998.pdf.&nbsp;
+Even though a plot is defined as a single point, we recognize that the
+point is reflective of a sampling area and storing that area is important.&nbsp;
+This information does not have to be collected directly from the user;
+instead the points will be calculated by the interface or database.&nbsp;
+Many plots, for example, are circles whose center is the <b>plotOrigin.
+
+</b>Prompting the user for the shape of the plot, most plots are circular
+or rectilinear, the plotOrigin and, in this case, radius we can calculate
+this polygon.&nbsp; In the case of closing polygons (circles, rectangles,
+etc.) it is suggested that the first and last pair of coordinates defining
+a point in a polygon have the same location.&nbsp; Plots defined by non-closing
+polygons (lines) will obviously not have this condition.
+<p><b>town</b> - town in which the plot was collected
+<p><b>county</b> - county which the town is in
+<p><b>state</b> - state in which the county exists
+<p><b>country</b> - country where the plot was collected (these location
+identifiers are used, for among other reasons, to detect major errors in
+the lat./long. records
+<p><b>altdatum&nbsp;</b>&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp; Altitude Datum
+consistent with csdgm-fgdc-std-001-1998.pdf
+<p><b>altres</b>&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp; Altitude Resolution
+consistent with csdgm-fgdc-std-001-1998.pdf
+<p><b>altunits</b>&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp;&nbsp; Altitude
+Units consistent with csdgm-fgdc-std-001-1998.pdf
+<p><b>altenc</b>&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp; Altitude Encoding
+Scheme consistent with csdgm-fgdc-std-001-1998.pdf
+<p><b>slope_aspect</b>&nbsp; -&nbsp; Azimuth of the Slope consistent with
+the&nbsp; FGDC-STD-006 Soil Geographic Data Standard (word document)&nbsp;
+At this point only one slope description per plot is going to be stored.
+<p><b>slope_gradient</b>&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp; Gradient
+of the Slope consistent with the&nbsp; FGDC-STD-006 Soil Geographic Data
+Standard (word document)
+<p><b>location_confidentiality</b> - Security Attribute - adopted from
+the iso-geo-md-1999Dec-draft.pdf 'MD_Classification'
+<p><b>hydrologic_regime</b> - Soil element (see FGDC-STD-006 Soil Geographic
+Data Standard) follows Cowardin et al. 1979 - see vegclass.pdf, includes
+tidal and non-tidal zones
+<p><b>soil_moisture</b>&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp; This follows
+Hills' (10 step) moisture regime scale
+<p><b>soil_drainage</b>&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp; This follows
+Hills' (10 step) moisture regime scale
+<p><b>water_table_depth</b> - (not added yet) depth to water table in meters
+<p><b>geological_materials</b>&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp; not
+yet defined - but will probably be type of bedrock and surficial deposits
+<p><b>other_conditions</b>&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp; not yet
+defined (waiting to hear from ecologists)
+</body>
+</html>
