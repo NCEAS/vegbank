@@ -47,4 +47,32 @@ This doc describes issues, problems, and workarounds that we encounter that may 
                     ./updatepermission.sh mikelee@email.unc.edu 192.168.0.3 2
                Which succeeded.
 ------------------------------------------------------------------------------------------------------------------------
-                  
+                 
+ Setting Properties for building:
+
+  There is a file called vegclass/veg_plot/build.properties.example in CVS.
+  This needs to be renamed build.properties and edited to suit your environment.
+  When the example file changes it generally means you should update your
+  personal build.properties to have values for new properties, renamed
+  properties etc.
+
+------------------------------------------------------------------------------------------------------------------------
+
+ Components needed for building and running vegbank
+
+  Ant: http://ant.apache.org/ is used for building vegbank
+  Junit: http://www.junit.org is our testing framework
+  Postgresql: http://www.postgresql.org/ is our current Database
+  CVS: http://www.cvshome.org/ is the version control system
+  Java: http://java.sun.com is the main development language
+  Grass: http://grass.itc.it/ is needed for some gis calculations we do
+  Torque: http://jakarta.apache.org/turbine/torque/index.html is used to
+     generate sql create scripts and data-dictionary.
+  Tomcat: http://jakarta.apache.org/tomcat/ is the servlet container used.
+
+  Setting up all of this is not comprihensively documented but some good info
+  can be found in vegclass/README
+
+  
+------------------------------------------------------------------------------------------------------------------------
+  
