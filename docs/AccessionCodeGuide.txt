@@ -74,8 +74,8 @@ PK# is self-explanatory, ranging from 1 to 2147483647
 Confirm is derived from data in tables, as follows [ALWAYS RULES: only alpha numeric (other chars deleted) shouldn't be too long, not longer than 15 chars initially]:
 plot			authorPlotCode
 observation		authorObsCode
-plantConcept		if scientific name without authors system exists for this concept, use the first two letters of the first word there and first 2 letters of the second word (ie ACRU for Acer rubrum), else metaphonetic code for plantName.plantName corresponding to plantConcept.plantName_ID 
-commConcept		if commConcept.commName_ID -> commName.commName if like 'CEGL%' then 'C' + everything after 'CEGL' in name; if like 'A.%' then 'A' + everything after 'A.', If like '[IV]+\.[A-Z]\.[0-9]+\.[A-Z]\.[a-z]+' ('+'= one or more of what was in previous [], '\.' is literal period) then commName with '.' removed (ie : IVA3Na), else metaphonetic code for commName.commName
+plantConcept    plantName.plantName corresponding to plantConcept.plantName_ID
+commConcept	    commName.commName corresponding to commConcept.commName_ID	
 party			surname, unless null, then organizationname
 reference		shortName, unless null, then title
 referenceJournal	abbreviation, unless null, then journal
