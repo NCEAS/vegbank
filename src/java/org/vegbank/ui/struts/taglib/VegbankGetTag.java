@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-08 22:34:44 $'
- *	'$Revision: 1.16 $'
+ *	'$Date: 2004-12-09 00:58:44 $'
+ *	'$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ import org.vegbank.common.utility.CompositeRequestParamUtil;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.16 $ $Date: 2004-12-08 22:34:44 $
+ * @version $Revision: 1.17 $ $Date: 2004-12-09 00:58:44 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -133,6 +133,8 @@ public class VegbankGetTag extends VegbankTag {
 			//
 			
 			String where = request.getParameter("where");
+			////////String where = getWhere();
+
 			if (Utility.isStringNullOrEmpty(where)) {
 				String params = request.getParameter("params");
 				if (Utility.isStringNullOrEmpty(params)) {
@@ -490,12 +492,16 @@ public class VegbankGetTag extends VegbankTag {
 
 	
     /**
-     * 
+     * default: AND.
      */
 	protected String xwhereGlue;
 
     public String getXwhereGlue() {
-        return findAttribute("xwhereGlue", this.xwhereGlue);
+        String s = findAttribute("xwhereGlue", this.xwhereGlue);
+		if (Utility.isStringNullOrEmpty(s)) {
+			s = "AND";
+		}
+        return s;
     }
 
     public void setXwhereGlue(String s) {

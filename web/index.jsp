@@ -123,8 +123,8 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 		</td>
 		</tr>
 		<tr><td></td><td align="right">
-			 <input type="checkbox" name="xwhereGlue" value="and" checked/>
-			 	Match all words
+			 <input type="checkbox" name="xwhereMatchAny" value="true" checked/>
+			 	Match any word
 			
 		</td>
 		<td></td>

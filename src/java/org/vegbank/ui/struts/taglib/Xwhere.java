@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-08 22:34:44 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-12-09 00:58:44 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ import org.vegbank.common.utility.CompositeRequestParamUtil;
  * 
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.4 $ $Date: 2004-12-08 22:34:44 $
+ * @version $Revision: 1.5 $ $Date: 2004-12-09 00:58:44 $
  */
 
 public class Xwhere {
@@ -262,6 +262,10 @@ public class Xwhere {
 		// I think it was supposed to be for entering multiple
 		// record IDs or something.  Not terribly important now.
 
+		if (Utility.isStringNullOrEmpty(xwKeySQL)) {
+			log.error("Can't swap into empty template.");
+			return "";
+		}
 
 		log.debug("swap params: " + Arrays.asList(xwParams).toString());
 		if (Utility.isStringNullOrEmpty(xwParams[0])) {
@@ -303,7 +307,11 @@ public class Xwhere {
 
 	//////////////////////// xwhereKey /////////////////////////
 	private String getXwhereKeySQL() {
-		return getXwhereValue("xwhereKey", null, null, true);
+		String s = getTag.getXwhereKey();
+		if (!Utility.isStringNullOrEmpty(s)) {
+			return sqlResources.getString(s);
+		}
+		return s;
 	}
 
 	private String getXwhereKeySQL(String parent) {
@@ -429,8 +437,11 @@ public class Xwhere {
 			xwv = getTag.findAttribute(xwName);
 		}
 
-		if (isProp) { return sqlResources.getString(xwv);
-		} else { return xwv; }
+		if (isProp && !Utility.isStringNullOrEmpty(xwv)) { 
+			return sqlResources.getString(xwv);
+		} else { 
+			return xwv; 
+		}
 	}
 
 	/**
@@ -475,6 +486,11 @@ public class Xwhere {
 	 * Only the first index, [0], is searchable.
 	 */
 	private String doSwapSearchable(String tpl, String[] params, boolean matchAny) {
+		if (Utility.isStringNullOrEmpty(tpl)) {
+			log.error("Can't swap into empty template.");
+			return "";
+		}
+
 		StringTokenizer stWords = new StringTokenizer(params[0], " ");
 		int numWords = stWords.countTokens();
 

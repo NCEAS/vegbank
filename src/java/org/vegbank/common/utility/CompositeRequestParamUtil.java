@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-08 22:34:44 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-12-09 00:58:44 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
  * servlet request parameters.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.4 $ $Date: 2004-12-08 22:34:44 $
+ * @version $Revision: 1.5 $ $Date: 2004-12-09 00:58:44 $
  */
 
 public class CompositeRequestParamUtil {
@@ -59,7 +59,7 @@ public class CompositeRequestParamUtil {
 	 * children and puts it in the request.
 	 */
 	public boolean parseParent(String parent) {
-		log.debug("parsing one parent from the top: " + parent);
+		log.debug("parsing parents that start with: " + parent);
 
 		boolean rv = false;
 		Enumeration theFields = request.getParameterNames();

@@ -22,9 +22,9 @@ function preSubmit() {
 <head>@defaultHeadToken@
 
 <%
-String xwhereGlue = request.getParameter("xwhereGlue");
-if (xwhereGlue == null) {
-	xwhereGlue = "or";
+String xwhereMatchAny = request.getParameter("xwhereMatchAny");
+if (xwhereMatchAny == null) {
+	xwhereMatchAny = "false";
 }
 
 String blackBoxText = "Search Results";
@@ -59,7 +59,7 @@ if (searchString ==  null || searchString.equals("")) {
 <center>
 
 <bean:define id="search" value="<%= searchString %>"/>
-<bean:define id="regexOp" value="<%= xwhereGlue %>"/>
+<bean:define id="matchAny" value="<%= xwhereMatchAny %>"/>
 <vegbank:get id="meta" select="keywords_count" where="where_keywords_grouped"
 		xwhereKey="xwhere_kw_match" xwhereEnable="true" xwhereSearch="true" perPage="-1"/>
 
@@ -95,8 +95,9 @@ if (searchString ==  null || searchString.equals("")) {
 		</td>
 		</tr>
 		<tr><td></td><td align="right">
-			 <input type="checkbox" name="xwhereGlue" value="and" <logic:equal name="regexOp" value="and">checked</logic:equal>/>
-			 	Match all words
+			 <input type="checkbox" name="xwhereMatchAny" value="true" <logic:equal 
+			 name="matchAny" value="true">checked</logic:equal>/>
+			 	Match any word
 			
 		</td>
 		<td></td>
@@ -134,7 +135,7 @@ if (searchString ==  null || searchString.equals("")) {
 			<bean:define id="getName" name="onerow" property="entity"/>
 			<bean:define id="getView" value="std"/>
 <%
-			String getExtra = "&xwhereGlue=" + xwhereGlue;
+			String getExtra = "&xwhereMatchAny=" + xwhereMatchAny;
 %>
 
 			<logic:equal name="onerow" property="entity" value="community">
@@ -182,8 +183,8 @@ String getURL = "@get_link@" + getView + "/" + getName + "/" + params +
 <span class="sizesmall" align="center">
 <% if (searchString !=  null && !searchString.equals("")) { %>
 You searched for 
-<logic:equal name="regexOp" value="and">all words in</logic:equal>
-<logic:equal name="regexOp" value="or">any word in</logic:equal>
+<logic:equal name="matchAny" value="true">any word in</logic:equal>
+<logic:notEqual name="matchAny" value="true">all words in</logic:notEqual>
 '<i><%= searchString %></i>'
 <br>
 
