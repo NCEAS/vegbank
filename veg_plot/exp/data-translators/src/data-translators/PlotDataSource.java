@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-03 00:28:33 $'
- * 	'$Revision: 1.13 $'
+ *  '$Date: 2002-04-10 18:42:56 $'
+ * 	'$Revision: 1.14 $'
  */
 public class PlotDataSource 
 {
@@ -106,6 +106,30 @@ public class PlotDataSource
 		}
 	}
 	
+	/** 
+	 * method that returns the accession number associated with a plot id
+	 * the input plot id is the unique identifier of the plot as used by 
+	 * the RDBMS
+	 * @param plotId -- the RDBMS unique plot ID
+	 */
+	public String getAccessionValue(String plotId)
+	{
+		String accessionValue = ((PlotDataSourceInterface)pluginObj).getAccessionValue(plotId);
+		return(accessionValue);
+	}
+	
+	/**
+ 	 * returns the plotId for an input plot -- the plot id id the 
+	 * unique value the RDBMS uses to identify the plot -- as opposed
+	 * to the name that the author gives the plot or the application-assigned
+	 * unique identifier
+ 	 */
+ 	public String getPlotId(String plotName)
+ 	{
+		plotId = plotName;
+		return(plotId);
+ 	}
+	
 	/**
  	 * returns the community code for the named plot
  	 */
@@ -115,6 +139,8 @@ public class PlotDataSource
 		return(s);
  	}
  	
+	
+	
  	/**
  	 * returns the community level of the framework for the named plot
  	 */
@@ -309,7 +335,6 @@ public class PlotDataSource
 			uniqueStrataNames = ((PlotDataSourceInterface)pluginObj).getUniqueStrataNames(plotName);
 			plantTaxaNames = ((PlotDataSourceInterface)pluginObj).getPlantTaxaNames(plotName);
 			uniquePlantTaxaNumber =  plantTaxaNames.size();
-			//System.out.println("PlotDataSource >  end");
 		}
 		catch (Exception e)
 		{
@@ -946,8 +971,8 @@ public class PlotDataSource
 		else
 		{
 			//use the plugin with the test data
-			PlotDataSource source = new PlotDataSource("TestPlotSourcePlugin");
-			source.printDBVariables("TestPlotSourcePlugin" , "test-plot");
+			PlotDataSource source = new PlotDataSource("VegBankDataSourcePlugin");
+			source.printDBVariables("VegBankDataSourcePlugin" , "1");
 		}
 	}
 	

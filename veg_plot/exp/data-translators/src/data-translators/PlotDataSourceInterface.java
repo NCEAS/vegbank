@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-04-03 00:28:33 $'
- * '$Revision: 1.6 $'
+ *     '$Date: 2002-04-10 18:42:55 $'
+ * '$Revision: 1.7 $'
  *
  *
  */
@@ -74,8 +74,16 @@ public interface PlotDataSourceInterface
 	 ** THE PLOT - RELATED DATA
 	 **
 	 **/
-	//returns the current plot code
+	//returns the current plot name -- the name given to the plot by the author
 	String getPlotCode(String plotName);
+	
+	/** 
+	 * method that returns the accession number associated with a plot id
+	 * the input plot id is the unique identifier of the plot as used by 
+	 * the RDBMS
+	 * @param plotId -- the RDBMS unique plot ID
+	 */
+	 String getAccessionValue(String plotId);
 	//returns the placeNames each name can be used to retrieve
 	//other information about a place
 	Vector getPlaceNames(String plotName);

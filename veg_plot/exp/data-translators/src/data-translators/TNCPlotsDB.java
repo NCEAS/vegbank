@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-09 00:17:16 $'
- * 	'$Revision: 1.19 $'
+ *  '$Date: 2002-04-10 18:42:56 $'
+ * 	'$Revision: 1.20 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -118,6 +118,20 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			System.out.println("Exception: " + ex + "<BR>");
 		}
 	}
+	
+	/** 
+	 * method that returns the accession number for a given plot.  This method 
+	 * must be in this class eventhough it is not entirely relevant; because
+	 * the TNC plots database does not use an accession number this method 
+	 * will always return null
+	 * @param plotId -- the RDBMS unique plot ID
+	 */
+	public String getAccessionValue(String plotId)
+	{
+		return("null");
+	}
+	
+	
 	
 	//returns all the plots stored in the access file
 	public Vector getPlotNames()

@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-05 01:23:56 $'
- * 	'$Revision: 1.8 $'
+ *  '$Date: 2002-04-10 18:42:56 $'
+ * 	'$Revision: 1.9 $'
  */
  
 //public class VegBankDataSourcePlugin
@@ -21,7 +21,8 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 {
 	
 	private String driver = "org.postgresql.Driver";
-	private String dbUrl = "jdbc:postgresql://vegbank.nceas.ucsb.edu/plots_dev";
+	//private String dbUrl = "jdbc:postgresql://vegbank.nceas.ucsb.edu/plots_dev";
+	private String dbUrl = "jdbc:postgresql://127.0.0.1/plots_dev";
 	private String dbUser = "datauser";
 	private Connection con = null;
 
@@ -76,6 +77,40 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		return(c);
 	}
  
+ 
+ 	/** 
+	 * method that returns the accession number associated with a plot id
+	 * the input plot id is the unique identifier of the plot as used by 
+	 * the RDBMS
+	 * @param plotId -- the RDBMS unique plot ID
+	 */
+	public String getAccessionValue(String plotId)
+	{
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  accession_number "
+			+" from PLOT where PLOT_ID = " + plotId );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
+	
 	
   /**
 	 * method to return the taxa code from a data source using as input
@@ -182,7 +217,29 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
  	 */
  	public String getObsStartDate(String plotName)
  	{
- 		return("");
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select obsstartdate "
+			+" from OBSERVATION where PLOT_ID = " + plotName );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
  	}
  	
  	/**
@@ -191,7 +248,29 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
  	 */
  	public String getObsStopDate(String plotName)
  	{
- 		return("");
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select obsenddate "
+			+" from OBSERVATION where PLOT_ID = " + plotName );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
  	}
  	
  	/**

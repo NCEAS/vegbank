@@ -8,8 +8,8 @@
  * 		@version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2002-04-09 16:09:53 $'
- *     '$Revision: 1.3 $'
+ *     '$Date: 2002-04-10 18:42:56 $'
+ *     '$Revision: 1.4 $'
  *
  *
  */
@@ -97,9 +97,7 @@ public class PlotXmlWriterV2
 				sb.append( getPlotPlaceContent() );
 			
 				sb.append( getPlotObservationContent() );
-				
-				
-			//end tags
+				//end tags
 				sb.append( getPlotObservationEndTag() );
 			sb.append( getPlotSiteEndTag() );
 			sb.append( getPlotProjectEndTag() );
@@ -114,9 +112,6 @@ public class PlotXmlWriterV2
 			System.out.println("Exception: " + e.getMessage() );
 		}
 	}
-	
-	
-	
 	
 	/**
 	 * overloaded method of the same name above
@@ -156,8 +151,7 @@ public class PlotXmlWriterV2
 				sb.append( getPlotPlaceContent() );
 			
 				sb.append( getPlotObservationContent() );
-				
-				
+			
 				//end tags
 				sb.append( getPlotObservationEndTag() );
 				sb.append( getPlotSiteEndTag() );
@@ -177,9 +171,58 @@ public class PlotXmlWriterV2
 		}
 	}
 	
-	
-	
-	
+	/**
+	 * method that writes an XML Identification document for a vector of 
+	 * plots.  This identification is the most fundamental identification 
+	 * attributes of a plot (ie., the name(s) of the plots, the location of the 
+	 * plots, the origional community associated with the plot, and the 
+	 * some information correponding to the party responsible for the plotCode
+	 * this identification is to be displayed to the user who may then choose
+	 * to either view a summary of the plot or download the plot 
+	 *
+	 * @param plotIdVec -- the vector containing the plot id's 
+	 * @param idnetificationFile -- the file to which the plot should be written
+	 */
+	public void writeMultiplePlotIdentifcation(Vector plotNameVec, String fileName)
+	 {
+		try
+		{
+			PrintWriter out = new PrintWriter(new FileWriter(fileName));
+			//String buffer to store the plot
+			StringBuffer sb = new StringBuffer();
+
+			sb.append( getPlotHeader() );			
+			//get each of the plots in the vector
+			for (int i=0; i< plotNameVec.size(); i++)
+			{
+				String plotName = plotNameVec.elementAt(i).toString();
+				//initialize the instance variable, plotCode, with this plot name
+				this.plotCode = plotName;
+				datasrc.getPlot(plotName);
+				// get the plotid which is the unique ID for a plot as used by the RDBMS
+				String plotId = datasrc.getPlotId(plotCode);
+				// get the accession number associtated with this 
+				String accession = datasrc.getAccessionValue(plotId);
+				sb.append(" <plot> \n");
+				sb.append("		<plotId>"+plotId+"</plotId> \n");
+				sb.append("		<plotAccessionNumber>"+accession+"</plotAccessionNumber> \n");
+				sb.append("		<authorPlotCode>"+datasrc.plotCode+"</authorPlotCode> \n");
+				sb.append("		<state>"+datasrc.state+"</state> \n");
+				sb.append("		<latitude>"+datasrc.latitude+"</latitude> \n");
+				sb.append("		<longitude>"+datasrc.longitude+"</longitude> \n");
+				sb.append(" </plot> \n");
+				
+			}
+			sb.append( getPlotFooter() );
+			out.println( sb.toString() );
+			out.close();
+			//System.out.println("datasrc: " + datasrc.state);
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Exception: " + e.getMessage() );
+		}
+	}
 	
 	
 	
@@ -246,8 +289,6 @@ public class PlotXmlWriterV2
 		{
 			return("</communityClassification> \n \n");
 		}
-	
-	
 	
 	/**
 	 * Method to write a plot xml header which defihe the root node 
@@ -411,8 +452,14 @@ public class PlotXmlWriterV2
 			{
 				sb.append(" \n");
 				sb.append(" <plot> \n");
-				sb.append("		<plotId>"+datasrc.plotId+"</plotId> \n");
-				sb.append("		<plotAccessionNumber></plotAccessionNumber> \n");
+				// get the plotid which is the unique ID for a plot as used by the 
+				// RDBMS
+				String plotId = datasrc.getPlotId(plotCode);
+				// get the accession number associtated with this 
+				String accession = datasrc.getAccessionValue(plotId);
+				
+				sb.append("		<plotId>"+plotId+"</plotId> \n");
+				sb.append("		<plotAccessionNumber>"+accession+"</plotAccessionNumber> \n");
 				sb.append("		<authorPlotCode>"+datasrc.plotCode+"</authorPlotCode> \n");
 				//citationId
 				//parentId
@@ -482,8 +529,8 @@ public class PlotXmlWriterV2
 		 	sb.append("	<observation> \n");
 		 	
 			sb.append("	<authorObsCode></authorObsCode> \n");
-  		sb.append("	<obsStartDate></obsStartDate> \n");
-   		sb.append("	<obsEndDate>	</obsEndDate> \n");
+  		sb.append("	<obsStartDate>"+datasrc.getObsStartDate(plotCode)+"</obsStartDate> \n");
+   		sb.append("	<obsEndDate>"+datasrc.getObsStopDate(plotCode)+"</obsEndDate> \n");
    		sb.append("	<dateAccuracy> </dateAccuracy> \n");
    		sb.append("	<sampleMethodId> </sampleMethodId>  \n");
     	sb.append("	<coverMethodId></coverMethodId> \n");
@@ -712,7 +759,6 @@ public class PlotXmlWriterV2
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
 			writer.writeSinglePlot(plotName);
 		}
-		
 		//the default
 		else
 		{
@@ -727,6 +773,7 @@ public class PlotXmlWriterV2
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(plugin);
 			//writer.writeSinglePlot("test-plot");
 			writer.writeMultiplePlot(plotIdVec, "test.xml");
+			writer.writeMultiplePlotIdentifcation(plotIdVec, "plot-identification.xml");
 		}
 	}
 	
