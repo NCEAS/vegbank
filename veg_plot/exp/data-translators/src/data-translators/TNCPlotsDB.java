@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-11 01:27:03 $'
- * 	'$Revision: 1.4 $'
+ *  '$Date: 2002-01-31 22:32:27 $'
+ * 	'$Revision: 1.5 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -97,10 +97,10 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			// some information about the connection
 			DatabaseMetaData dma = con.getMetaData();
 
-			System.out.println("\nConnected to " + dma.getURL() );
-			System.out.println("Driver       " + dma.getDriverName() );
-			System.out.println("Version      " + dma.getDriverVersion() );
-			System.out.println("Catalog      " + con.getCatalog() );
+			System.out.println("TNCPlotsDB > Connected to " + dma.getURL() );
+			System.out.println("TNCPlotsDB > Driver       " + dma.getDriverName() );
+			System.out.println("TNCPlotsDB > Version      " + dma.getDriverVersion() );
+			System.out.println("TNCPlotsDB > Catalog      " + con.getCatalog() );
 			
 		}
 		catch (SQLException ex) 
@@ -109,10 +109,9 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			System.out.println ("<BR><B>*** SQLException caught ***</B><BR>");
 			while (ex != null)
 			{
-				System.out.println ("ErrorCode: " + ex.getErrorCode () + "<BR>");
-				System.out.println ("SQLState:  " + ex.getSQLState () + "<BR>");
-				System.out.println ("Message:   " + ex.getMessage () + "<BR>");
-				System.out.println ("&nbsp;<BR>");
+				System.out.println ("TNCPlotsDB > ErrorCode: " + ex.getErrorCode () + "<BR>");
+				System.out.println ("TNCPlotsDB > SQLState:  " + ex.getSQLState () + "<BR>");
+				System.out.println ("TNCPlotsDB > Message:   " + ex.getMessage () + "<BR>");
 				ex = ex.getNextException();
 			}
 		}
@@ -921,7 +920,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 					date = rs.getString(9);
 					elevation = rs.getString(10);
 					slopeGradient = rs.getString(11);
-					System.out.println("slope: " + slope);
+					System.out.println("TNCPlotsDB > slope: " + slope);
 					slopeAspect = rs.getString(12);
 					surfGeo = rs.getString(13);
 					locationCode = rs.getString(14);
@@ -1000,7 +999,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				//update the public variable representing the number of 
 				//unique scientific names
 				uniquePlantNameNumber = cnt;
-				System.out.println( uniquePlantNameNumber + " unique plant names for plot: " + plotName);
+				System.out.println("TNCPlotsDB > " + uniquePlantNameNumber + " unique plant names for plot: " + plotName);
 			}
 			catch (SQLException ex) 
 			{
