@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.7 2005-03-19 02:50:15 mlee Exp $
+# $Id: .htaccess,v 1.8 2005-03-22 20:32:02 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -61,3 +61,12 @@ RewriteRule ^cite/([^\.]+)\.DS\.(.*)$	   @get_link@std/userdataset/'$1.DS.$2'   
 
 ## for deep links FROM natureserve
 RewriteRule ^natureserve/(.*)$   @get_link@std/observation/$1?where=where_observation_nsuid   [NC,QSA,L]
+
+
+## for browsing data
+RewriteRule ^browse$	 	   @views_link@topdata.jsp?perPage=5&getonly=0       [NC,QSA,L]
+RewriteRule ^browse-byplace$	   @views_link@topdata.jsp?perPage=20&getonly=1       [NC,QSA,L]
+RewriteRule ^browse-bycomm$	   @views_link@topdata.jsp?perPage=20&getonly=5       [NC,QSA,L]
+RewriteRule ^browse-byparty$	   @views_link@topdata.jsp?perPage=20&getonly=2       [NC,QSA,L]
+RewriteRule ^browse-byplant$	   @views_link@topdata.jsp?perPage=20&getonly=4       [NC,QSA,L]
+RewriteRule ^browse-byproject$	   @views_link@topdata.jsp?perPage=20&getonly=3       [NC,QSA,L]
