@@ -1,57 +1,69 @@
 <!-- created with MS ACCESS VBA by Michael Lee 12/12/02 11:02:22 AM-->
 <!-- updated after SBA meeting 1/2003 on 2/3/2003 by Michael Lee -->
-<?xml-stylesheet type="text/xsl" href="closedList.xsl"?>
+<?xml-stylesheet type="text/xsl" href="C:\data\VegBank\sandbox\vegbank\docs\xml\model-chk-lists2.xsl"?>
 <tableDefns>
+  <update>27-Mar-2003 (MTL)</update>
   <list>
     <sourceTableName>aux_commStatus_commLevel</sourceTableName>
     <TableName>commStatus</TableName>
     <FieldName>commLevel</FieldName>
     <tableDataType>varchar (50)</tableDataType>
-    <listcomment>descriptions from standards document, alliance may need revision.</listcomment>
+    <listcomment>Field commLevel is an open list with the possible values defined by the classification system employed. If the party responsible for the record in the commStatus table is using the U.S. National Vegetation Classification, the acceptable levels are defined in the Vegetation Classification Standard of the Federal Geographic Data Committee as adopted June 1997. The standard is available at http://biology.usgs.gov/fgdc.veg/standards/vegstd.htm and the allowable entries for each of the physiognomic levels are listed in the appendix (see http://www.fgdc.gov/standards/documents/standards/vegetation/tables19-41.pdf). If the Braun-Blanquet classification system is employed, the acceptable values are defined in the International Code of Phytosociological Nomenclature (Weber, H.E., Moravec, J. Theurillat, J.-P. 2000. Journal of Vegetation Science. 11: 739-769).
+
+Below are the US FGDC levels.</listcomment>
     <record>
       <values>alliance</values>
       <valueDescription>A grouping of associations with a characteristic physiognomy and habitat and which share one or more diagnostic species typically found in the uppermost or dominant stratum of the vegetation. (This definition includes both floristic and physiognomic criteria, in keeping with the integrated physiognomic-floristic hierarchy of the NVC.  It is similar to the FGDC 1997 definition:  a physiognomically uniform group of Associations sharing one or more diagnostic (dominant, differential, indicator, or character) species, which, as a rule, are found in the uppermost stratum of the vegetation.)</valueDescription>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>association</values>
       <valueDescription>A recurring plant community with a characteristic range in species composition, specific diagnostic species, and a defined range in habitat conditions and physiognomy or structure.</valueDescription>
       <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>class</values>
-      <valueDescription>the first level in the NVC hierarchy; based on the structure of the vegetation and determined by the relative percentage of cover and the height of the dominant, life forms (Grossman et al. 1998).</valueDescription>
+      <values>Physiognomic class</values>
+      <valueDescription>the first physiognomic level in the NVC hierarchy; based on the structure of the vegetation and determined by the relative percentage of cover and the height of the dominant, life forms (Grossman et al. 1998).</valueDescription>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>formation</values>
       <valueDescription>a level in the NVC based on physiognomic grouping of vegetation units with broadly defined environmental and additional physiognomic factors in common. (FGDC 1997).  Grossman et al. (1998) clarified this definition as a level in the classification hierarchy below subgroup which represents vegetation types that share a definite physiognomy or structure within broadly defined environmental factors, relative landscape positions, or hydrologic regimes.   Both of these definitions derive from Whittaker 1962: a "community type defined by dominance of a given growth form in the uppermost stratum of the community, or by a combination of dominant growth forms."</valueDescription>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>group</values>
+      <values>Physiognomic group</values>
       <valueDescription>the level in the classification hierarchy below subclass based on leaf characters and identified and named in conjunction with broadly defined macroclimatic types to provide a structural-geographic orientation (Grossman et al. 1998).</valueDescription>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>other</values>
       <valueDescription/>
       <sortOrd>9</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>phase</values>
       <valueDescription/>
       <sortOrd>8</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>subclass</values>
+      <values>Physiognomic subclass</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>subgroup</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -59,41 +71,54 @@
     <TableName>commCorrelation</TableName>
     <FieldName>commConvergence</FieldName>
     <tableDataType>varchar (20)</tableDataType>
-    <listcomment>MTL descriptions</listcomment>
+    <listcomment>RKP Revised Descriptions.</listcomment>
     <record>
       <values>equal</values>
-      <valueDescription>the two concepts are exactly the same</valueDescription>
+      <valueDescription>The two concepts are exactly the same.</valueDescription>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>greater than</values>
-      <valueDescription>the concept referenced in table:Status fully contains the concepts referenced in table:Concept, but also includes additional entities.</valueDescription>
+      <valueDescription>The reference concept (referenced in table:Status) fully contains the correlated concept (referenced in table:Concept), but also includes additional entities. </valueDescription>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>less than</values>
-      <valueDescription>the concept referenced in table:Status is fully included in the concept referenced in table:Concept, but the latter concept contains additional entities.</valueDescription>
+      <valueDescription>The reference concept is fully included in the correlated concept, but the latter concept contains additional entities. </valueDescription>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>not equal</values>
-      <valueDescription>the two concepts, are not exactly the same.  This leaves the possibilties that the concepts are greater than, less than, overlapping, or disjunct.</valueDescription>
+      <valueDescription>The two concepts are not exactly the same. This leaves the possibilties that the reference concept is greater than, less than, overlapping, similar, or disjunct relative to the correlated concept.</valueDescription>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>overlapping</values>
-      <valueDescription>the two concepts contain at least one common individual, and each concept also contains at least one individual that the other does not contain.  Neither concept is fully contained in the other.</valueDescription>
+      <valueDescription>The two concepts contain at least one common entity, and each concept also contains at least one entity that the other does not contain.  Neither concept is fully contained in the other.</valueDescription>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>similar</values>
+      <valueDescription>The two concepts contain at least one common individual.</valueDescription>
+      <sortOrd>6</sortOrd>
+      <valueNotes>NEWER</valueNotes>
     </record>
     <record>
       <values>disjunct</values>
-      <valueDescription>the two concepts in question contain no common individuals.</valueDescription>
-      <sortOrd>6</sortOrd>
+      <valueDescription>The two concepts in question contain no common entities.</valueDescription>
+      <sortOrd>7</sortOrd>
+      <valueNotes>NEW</valueNotes>
     </record>
     <record>
       <values>undetermined</values>
-      <valueDescription>The party responsible for this correlation has not made a determination as to the correlation between the two entities referenced in table:Status and table:Concept.  Some a correlation is likely to the degree that it was reasonable to create this record.  For example, the names of the two statuses are the same, but the reference is different.  Or, names have changed and a correlation is possible, but has not been thoroughly investigated (i.e. the name change could have also incurred a concept change).</valueDescription>
-      <sortOrd>7</sortOrd>
+      <valueDescription>Although some correlation is likely, the party responsible for the this correlation has not made a determination.</valueDescription>
+      <sortOrd>8</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -101,21 +126,24 @@
     <TableName>commInterpretation</TableName>
     <FieldName>classConfidence</FieldName>
     <tableDataType>varchar (15)</tableDataType>
-    <listcomment>MTL descriptions</listcomment>
+    <listcomment>RKP Revised Descriptions.</listcomment>
     <record>
       <values>High</values>
-      <valueDescription>The party making the community interpretation has a high confidence in the precision of this interpretation.  That is, the person feels confident that the community and fit described would be agreed upon easily by others.  A person can have high confidence that a plot has a fit of "absolutely wrong" for a particular community.</valueDescription>
+      <valueDescription>The party making the community interpretation has a high confidence in the accuracy of this interpretation. A party can have high confidence that a plot has a fit of "absolutely wrong" for a particular community. </valueDescription>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Low</values>
-      <valueDescription>The party making the community interpretation has a low confidence in the precision of this interpretation.  That is, the person doubts that the community and fit described would be agreed upon easily by others.</valueDescription>
+      <valueDescription>The party making the community interpretation has a low confidence in the accuracy of this interpretation.</valueDescription>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Medium</values>
-      <valueDescription>The party making the community interpretation has a medium amount of confidence in the precision of this interpretation.  That is, the person is unsure of whether or not the community and fit described would be agreed upon easily by others.</valueDescription>
+      <valueDescription>The party making the community interpretation has a medium amount of confidence in the accuracy of this interpretation.</valueDescription>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -123,31 +151,36 @@
     <TableName>commInterpretation</TableName>
     <FieldName>classFit</FieldName>
     <tableDataType>varchar (50)</tableDataType>
-    <listcomment> descriptions are from : http://www.gap.uidaho.edu/handbook/LandCoverAssessment/default.htm  </listcomment>
+    <listcomment> descriptions are (modified) from : http://www.gap.uidaho.edu/handbook/LandCoverAssessment/default.htm  </listcomment>
     <record>
       <values>Absolutely right</values>
-      <valueDescription>No doubt about the match. Perfect.</valueDescription>
+      <valueDescription>No doubt about the match. Perfect fit.</valueDescription>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Absolutely wrong</values>
-      <valueDescription>This answer is absolutely unacceptable. Very wrong.</valueDescription>
+      <valueDescription>This answer is absolutely unacceptable. Unambiguously incorrect. </valueDescription>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Good answer</values>
-      <valueDescription>Would be happy to find this answer given on a map. Very right.</valueDescription>
+      <valueDescription>Good match with the concept.  Unambiguously correct. </valueDescription>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Reasonable or acceptable answer</values>
-      <valueDescription>Maybe not the best possible answer but it is acceptable; this answer does not pose a problem to the user. Right.</valueDescription>
+      <valueDescription>Maybe not the best possible answer but it is acceptable; this answer does not pose a problem to the user. Correct.</valueDescription>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Understandable but wrong</values>
-      <valueDescription>Not a good answer. There is something about the site that makes the answer understandable, but there is clearly a better answer. This answer would pose a problem for users. Not right</valueDescription>
+      <valueDescription>Not a good answer. There is something about the plot that makes the answer understandable, but there is clearly a better answer. This answer would pose a problem for users.  Incorrect.</valueDescription>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -160,16 +193,19 @@
       <values>accepted</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>not accepted</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>undetermined</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -178,37 +214,37 @@
     <FieldName>classSystem</FieldName>
     <tableDataType>varchar (50)</tableDataType>
     <record>
-      <values>Code</values>
-      <valueDescription/>
+      <values>NVC-Code</values>
+      <valueDescription>Ecological Society of American Vegetation Classification Panel. 2003. Guidelines ver. 2</valueDescription>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>English Common</values>
-      <valueDescription/>
+      <values>NVC-English Common</values>
+      <valueDescription>Ecological Society of American Vegetation Classification Panel. 2003. Guidelines ver. 2</valueDescription>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Other</values>
-      <valueDescription/>
-      <sortOrd>7</sortOrd>
-    </record>
-    <record>
-      <values>Scientific</values>
-      <valueDescription/>
-      <sortOrd>1</sortOrd>
-    </record>
-    <record>
-      <values>Scientific translated</values>
-      <valueDescription/>
-      <sortOrd>2</sortOrd>
-    </record>
-    <record>
-      <values>French Common</values>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>Spanish Common</values>
-      <valueDescription/>
+      <values>NVC-Scientific</values>
+      <valueDescription>Ecological Society of American Vegetation Classification Panel. 2003. Guidelines ver. 2</valueDescription>
+      <sortOrd>1</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>NVC-Scientific translated</values>
+      <valueDescription>Ecological Society of American Vegetation Classification Panel. 2003. Guidelines ver. 2</valueDescription>
+      <sortOrd>2</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>ICPN-Scientific</values>
+      <valueDescription>International Code of Phytosociological Nomenclature (2000. J. Veg. Sci. 11: 739-769)</valueDescription>
       <sortOrd>5</sortOrd>
     </record>
   </list>
@@ -221,16 +257,19 @@
       <values>not standard</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>standard</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>undetermined</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -242,21 +281,25 @@
       <values>High</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>None</values>
       <valueDescription>No disturbance of this type was observed on the plot.  This may be a useful observation where certain types of disturbance are expected, but no signs of such disturbance were found.</valueDescription>
       <sortOrd>4</sortOrd>
+      <valueNotes>NEW</valueNotes>
     </record>
     <record>
       <values>Low</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Medium</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -264,59 +307,80 @@
     <TableName>disturbanceObs</TableName>
     <FieldName>disturbanceType</FieldName>
     <tableDataType>varchar (30)</tableDataType>
-    <listcomment>There was some conversation about possibly adding "bark beetle" and/or "adelgid' to this list.  Not yet added.  Also, more general cateigores, such as "fire", "timber harvest, unknown", might be helpful for migration of legacy data.</listcomment>
+    <record>
+      <values>Avalanche and snow</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+      <valueNotes/>
+    </record>
     <record>
       <values>Cryoturbation</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Cultivation</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Erosion</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Fire suppression</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Fire, canopy</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Fire, ground</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>Fire, general</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Floods</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Grazing, domestic stock</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Grazing, native ungulates</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Herbicide or chemical</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>Invertebrate</values>
+      <values>Herbivory, invertebrate</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
@@ -324,14 +388,22 @@
       <values>Herbivory, vertebrates</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Hydrologic alteration</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Ice</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>Mass movements (landslides)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
@@ -339,29 +411,40 @@
       <values>Mowing</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Other disturbances</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Plant disease</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Roads and vehicular traffic</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Salt spray</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Tides</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>Timber harvest, general</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
@@ -369,89 +452,102 @@
       <values>Timber harvest, clearcut</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Timber harvest, selective</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Trampling and trails</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>Wind</values>
+      <values>Wind, chronic</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>Wind event</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
-  </list>
-  <list>
-    <sourceTableName>aux_namedPlace_placeName</sourceTableName>
-    <TableName>namedPlace</TableName>
-    <FieldName>placeName</FieldName>
-    <tableDataType>varchar (100)</tableDataType>
-    <listcomment>this is not a closed list!</listcomment>
   </list>
   <list>
     <sourceTableName>aux_namedPlace_placeSystem</sourceTableName>
     <TableName>namedPlace</TableName>
     <FieldName>placeSystem</FieldName>
     <tableDataType>varchar (50)</tableDataType>
-    <listcomment>not sure that this is the desired format for Omernik and Bailey's Ecoregion value</listcomment>
     <record>
       <values>area|country|territory</values>
       <valueDescription>area, country, or territory</valueDescription>
       <sortOrd>3</sortOrd>
+      <valueNotes>new description</valueNotes>
     </record>
     <record>
       <values>continent</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>county</values>
-      <valueDescription>county, canton, municipality, township, or parrish</valueDescription>
+      <valueDescription>county, canton, or parrish</valueDescription>
       <sortOrd>2</sortOrd>
+      <valueNotes>new description</valueNotes>
     </record>
     <record>
       <values>Geographic Name</values>
       <valueDescription>User named places</valueDescription>
       <sortOrd>11</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>HUC Code</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes>formerly just HUC</valueNotes>
     </record>
     <record>
       <values>TNC Conservation Region</values>
       <valueDescription/>
       <sortOrd>7</sortOrd>
+      <valueNotes>formerly NatureServe Ecoregion</valueNotes>
     </record>
     <record>
       <values>quadrangle</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>region|state|province</values>
       <valueDescription>region or state or province</valueDescription>
       <sortOrd>1</sortOrd>
+      <valueNotes>new description</valueNotes>
     </record>
     <record>
-      <values>Omernik and Bailey Ecoregion</values>
+      <values>EPA-Omernik Ecoregion</values>
+      <valueDescription/>
       <sortOrd>8</sortOrd>
+      <valueNotes>OmerniK, not OmerniC (?), formerly US EPA Ecoregion</valueNotes>
     </record>
     <record>
-      <values>US EPA Ecoregion</values>
+      <values>USFS-Bailey Ecoregion</values>
       <valueDescription/>
       <sortOrd>9</sortOrd>
+      <valueNotes>new</valueNotes>
     </record>
     <record>
       <values>Ecoregion</values>
       <valueDescription>A non-standard or generic ecoregion that is not specifically menioned in this list.</valueDescription>
       <sortOrd>10</sortOrd>
+      <valueNotes>NEW keep???</valueNotes>
     </record>
   </list>
   <list>
@@ -459,28 +555,30 @@
     <TableName>note</TableName>
     <FieldName>noteType</FieldName>
     <tableDataType>varchar (20)</tableDataType>
-    <listcomment>aren't these handled by ROLES??  Perhaps this field is redundant.  These values do not describe the type of note, but rather the person making the note, which is a role.  Note types might be useful if they were values like "implausible value, anomoly flag, unclear explanation, revision in progress, etc." (?)
-
-FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ; Plot author ; Co-PI ; Computer (automated) ; Consultant ; Field assistant ; Guide ; Land owner ; Not specified ; Not specified/Unknown ; Passive observer ; Plot contributor ; Publication author ; Research advisor ; System manager ; Taxonomist</listcomment>
+    <listcomment>Open List with a few types we know we need prepopulated.  Will be changed so that Role_ID will show this.</listcomment>
     <record>
-      <values>Database Management</values>
-      <valueDescription>=System Manager?</valueDescription>
+      <values>Clarification</values>
+      <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes>=System Manager?</valueNotes>
     </record>
     <record>
-      <values>Database User</values>
-      <valueDescription>=Passive observer?</valueDescription>
+      <values>Correction</values>
+      <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes>=Passive observer?</valueNotes>
     </record>
     <record>
       <values>Internal</values>
-      <valueDescription>(This one is a real noteType)</valueDescription>
+      <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes>(This one is a real noteType)</valueNotes>
     </record>
     <record>
-      <values>Observation Author</values>
-      <valueDescription>=Author</valueDescription>
+      <values>Warning</values>
+      <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes>=Author</valueNotes>
     </record>
   </list>
   <list>
@@ -492,41 +590,49 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>High</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>High but incomplete</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Highest</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Low</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Moderate</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Moderate but incomplete</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Not examined</values>
       <valueDescription/>
       <sortOrd>8</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Very incomplete</values>
       <valueDescription/>
       <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -534,26 +640,33 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
     <TableName>observation</TableName>
     <FieldName>coverDispersion</FieldName>
     <tableDataType>varchar (30)</tableDataType>
-    <listcomment>MTL descr - using "subplot" notation as opposed to "subsample" notation, which can infer something different from subplots, which is what we're after here, I believe.</listcomment>
+    <listcomment>RKP modified.</listcomment>
     <record>
       <values>Entire</values>
-      <valueDescription>The plot was not subdivided into non-connected subplots.  Contiguous.</valueDescription>
+      <valueDescription>Cover based on observation of an entire plot consisting of a single contiguous area of land.</valueDescription>
       <sortOrd>1</sortOrd>
     </record>
     <record>
       <values>subplot-random</values>
-      <valueDescription>Subplots are dispersed randomly in a stand.</valueDescription>
-      <sortOrd>3</sortOrd>
+      <valueDescription>Cover based on observation of multiple randomly dispersed within the overall plot.</valueDescription>
+      <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>subplot-regular</values>
-      <valueDescription>Subplots are dispersed in some regular pattern in a stand.</valueDescription>
-      <sortOrd>2</sortOrd>
+      <valueDescription>Cover based on observation of multiple subplots arranged in a regular pattern within the overall plot.</valueDescription>
+      <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>subplot-nested</values>
-      <valueDescription>Suplots are nested within one another</valueDescription>
-      <sortOrd>4</sortOrd>
+      <values>subplot-haphazard</values>
+      <valueDescription>Cover based on observation of multiple subplots haphazardly arranged within the overall plot.</valueDescription>
+      <sortOrd>5</sortOrd>
+    </record>
+    <record>
+      <values>subplot-contiguous</values>
+      <valueDescription>Cover based on observation of a single contiguous area of land of less spatial extent than the entire plot.</valueDescription>
+      <sortOrd>2</sortOrd>
     </record>
   </list>
   <list>
@@ -561,41 +674,52 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
     <TableName>observation</TableName>
     <FieldName>dateAccuracy</FieldName>
     <tableDataType>varchar (30)</tableDataType>
-    <listcomment>Would be want to add One week as a value - fairly large jump from exact to one month? (MTL)</listcomment>
     <record>
       <values>Exact</values>
       <valueDescription>The exact date of the observation - within one day.</valueDescription>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>One week</values>
+      <valueDescription/>
+      <sortOrd>2</sortOrd>
     </record>
     <record>
       <values>One month</values>
       <valueDescription>Within one month of the observation.</valueDescription>
-      <sortOrd>2</sortOrd>
+      <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Three months</values>
       <valueDescription/>
-      <sortOrd>3</sortOrd>
+      <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>One year</values>
       <valueDescription/>
-      <sortOrd>4</sortOrd>
+      <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Three years</values>
       <valueDescription/>
-      <sortOrd>5</sortOrd>
+      <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Ten years</values>
       <valueDescription/>
-      <sortOrd>6</sortOrd>
+      <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Greater than ten years</values>
       <valueDescription/>
-      <sortOrd>7</sortOrd>
+      <sortOrd>8</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -607,31 +731,37 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Floating</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Herb</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Nonvascular</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Shrub</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Submerged</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Tree</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -643,16 +773,19 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Accurate</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>Hurried</values>
+      <values>Hurried or incomplete</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Very thorough</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -664,470 +797,212 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>High </values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>High but incomplete</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Highest</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Low</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Moderate</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Moderate but incomplete</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
     <sourceTableName>aux_observation_growthform1Type</sourceTableName>
     <TableName>observation</TableName>
-    <FieldName>growthform1Type</FieldName>
+    <FieldName>growthformType</FieldName>
     <tableDataType>varchar (40)</tableDataType>
     <listcomment>Don F-L working on this one</listcomment>
     <record>
       <values>Alga</values>
       <valueDescription/>
       <sortOrd>26</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Aquatic herb</values>
       <valueDescription/>
       <sortOrd>23</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Bamboo</values>
       <valueDescription/>
       <sortOrd>9</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Broad-leaved deciduous shrub</values>
       <valueDescription/>
       <sortOrd>11</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Broad-leaved deciduous tree</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Broad-leaved evergreen shrub</values>
       <valueDescription/>
       <sortOrd>12</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Broad-leaved evergreen tree</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Bryophyte</values>
       <valueDescription/>
       <sortOrd>24</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Dwarf-shrub</values>
       <valueDescription/>
       <sortOrd>16</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Epiphyte</values>
       <valueDescription/>
       <sortOrd>27</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Evergreen sclerophyllous shrub</values>
       <valueDescription/>
       <sortOrd>14</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Evergreen sclerophyllous tree</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>Fern</values>
+      <values>Fern or fern allie</values>
       <valueDescription/>
       <sortOrd>20</sortOrd>
+      <valueNotes>altered</valueNotes>
     </record>
     <record>
       <values>Forb</values>
       <valueDescription/>
       <sortOrd>19</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Graminoid</values>
       <valueDescription/>
       <sortOrd>21</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Lichen </values>
       <valueDescription/>
       <sortOrd>25</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Needle-leaved shrub</values>
       <valueDescription/>
       <sortOrd>10</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Needle-leaved tree</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Palm shrub </values>
       <valueDescription/>
       <sortOrd>15</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Palm tree </values>
       <valueDescription/>
       <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Semi-shrub</values>
       <valueDescription/>
       <sortOrd>17</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Succulent forb</values>
       <valueDescription/>
       <sortOrd>22</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Succulent shrub</values>
       <valueDescription/>
       <sortOrd>18</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Succulent tree</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Thorn shrub</values>
       <valueDescription/>
       <sortOrd>13</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Thorn tree</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Tree fern</values>
       <valueDescription/>
       <sortOrd>8</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Vine/Liana (woody climbers or vines)</values>
       <valueDescription/>
       <sortOrd>28</sortOrd>
-    </record>
-  </list>
-  <list>
-    <sourceTableName>aux_observation_growthform2Type</sourceTableName>
-    <TableName>observation</TableName>
-    <FieldName>growthform2Type</FieldName>
-    <tableDataType>varchar (40)</tableDataType>
-    <record>
-      <values>Alga</values>
-      <valueDescription/>
-      <sortOrd>26</sortOrd>
-    </record>
-    <record>
-      <values>Aquatic herb</values>
-      <valueDescription/>
-      <sortOrd>23</sortOrd>
-    </record>
-    <record>
-      <values>Bamboo</values>
-      <valueDescription/>
-      <sortOrd>9</sortOrd>
-    </record>
-    <record>
-      <values>Broad-leaved deciduous shrub</values>
-      <valueDescription/>
-      <sortOrd>11</sortOrd>
-    </record>
-    <record>
-      <values>Broad-leaved deciduous tree</values>
-      <valueDescription/>
-      <sortOrd>2</sortOrd>
-    </record>
-    <record>
-      <values>Broad-leaved evergreen shrub</values>
-      <valueDescription/>
-      <sortOrd>12</sortOrd>
-    </record>
-    <record>
-      <values>Broad-leaved evergreen tree</values>
-      <valueDescription/>
-      <sortOrd>3</sortOrd>
-    </record>
-    <record>
-      <values>Bryophyte</values>
-      <valueDescription/>
-      <sortOrd>24</sortOrd>
-    </record>
-    <record>
-      <values>Dwarf-shrub</values>
-      <valueDescription/>
-      <sortOrd>16</sortOrd>
-    </record>
-    <record>
-      <values>Epiphyte</values>
-      <valueDescription/>
-      <sortOrd>27</sortOrd>
-    </record>
-    <record>
-      <values>Evergreen sclerophyllous shrub</values>
-      <valueDescription/>
-      <sortOrd>14</sortOrd>
-    </record>
-    <record>
-      <values>Evergreen sclerophyllous tree</values>
-      <valueDescription/>
-      <sortOrd>5</sortOrd>
-    </record>
-    <record>
-      <values>Fern</values>
-      <valueDescription/>
-      <sortOrd>20</sortOrd>
-    </record>
-    <record>
-      <values>Forb</values>
-      <valueDescription/>
-      <sortOrd>19</sortOrd>
-    </record>
-    <record>
-      <values>Graminoid</values>
-      <valueDescription/>
-      <sortOrd>21</sortOrd>
-    </record>
-    <record>
-      <values>Lichen </values>
-      <valueDescription/>
-      <sortOrd>25</sortOrd>
-    </record>
-    <record>
-      <values>Needle-leaved shrub</values>
-      <valueDescription/>
-      <sortOrd>10</sortOrd>
-    </record>
-    <record>
-      <values>Needle-leaved tree</values>
-      <valueDescription/>
-      <sortOrd>1</sortOrd>
-    </record>
-    <record>
-      <values>Palm shrub </values>
-      <valueDescription/>
-      <sortOrd>15</sortOrd>
-    </record>
-    <record>
-      <values>Palm tree </values>
-      <valueDescription/>
-      <sortOrd>7</sortOrd>
-    </record>
-    <record>
-      <values>Semi-shrub</values>
-      <valueDescription/>
-      <sortOrd>17</sortOrd>
-    </record>
-    <record>
-      <values>Succulent forb</values>
-      <valueDescription/>
-      <sortOrd>22</sortOrd>
-    </record>
-    <record>
-      <values>Succulent shrub</values>
-      <valueDescription/>
-      <sortOrd>18</sortOrd>
-    </record>
-    <record>
-      <values>Succulent tree</values>
-      <valueDescription/>
-      <sortOrd>6</sortOrd>
-    </record>
-    <record>
-      <values>Thorn shrub</values>
-      <valueDescription/>
-      <sortOrd>13</sortOrd>
-    </record>
-    <record>
-      <values>Thorn tree</values>
-      <valueDescription/>
-      <sortOrd>4</sortOrd>
-    </record>
-    <record>
-      <values>Tree fern</values>
-      <valueDescription/>
-      <sortOrd>8</sortOrd>
-    </record>
-    <record>
-      <values>Vine/Liana (woody climbers or vines)</values>
-      <valueDescription/>
-      <sortOrd>28</sortOrd>
-    </record>
-  </list>
-  <list>
-    <sourceTableName>aux_observation_growthform3Type</sourceTableName>
-    <TableName>observation</TableName>
-    <FieldName>growthform3Type</FieldName>
-    <tableDataType>varchar (40)</tableDataType>
-    <record>
-      <values>Alga</values>
-      <valueDescription/>
-      <sortOrd>26</sortOrd>
-    </record>
-    <record>
-      <values>Aquatic herb</values>
-      <valueDescription/>
-      <sortOrd>23</sortOrd>
-    </record>
-    <record>
-      <values>Bamboo</values>
-      <valueDescription/>
-      <sortOrd>9</sortOrd>
-    </record>
-    <record>
-      <values>Broad-leaved deciduous shrub</values>
-      <valueDescription/>
-      <sortOrd>11</sortOrd>
-    </record>
-    <record>
-      <values>Broad-leaved deciduous tree</values>
-      <valueDescription/>
-      <sortOrd>2</sortOrd>
-    </record>
-    <record>
-      <values>Broad-leaved evergreen shrub</values>
-      <valueDescription/>
-      <sortOrd>12</sortOrd>
-    </record>
-    <record>
-      <values>Broad-leaved evergreen tree</values>
-      <valueDescription/>
-      <sortOrd>3</sortOrd>
-    </record>
-    <record>
-      <values>Bryophyte</values>
-      <valueDescription/>
-      <sortOrd>24</sortOrd>
-    </record>
-    <record>
-      <values>Dwarf-shrub</values>
-      <valueDescription/>
-      <sortOrd>16</sortOrd>
-    </record>
-    <record>
-      <values>Epiphyte</values>
-      <valueDescription/>
-      <sortOrd>27</sortOrd>
-    </record>
-    <record>
-      <values>Evergreen sclerophyllous shrub</values>
-      <valueDescription/>
-      <sortOrd>14</sortOrd>
-    </record>
-    <record>
-      <values>Evergreen sclerophyllous tree</values>
-      <valueDescription/>
-      <sortOrd>5</sortOrd>
-    </record>
-    <record>
-      <values>Fern</values>
-      <valueDescription/>
-      <sortOrd>20</sortOrd>
-    </record>
-    <record>
-      <values>Forb</values>
-      <valueDescription/>
-      <sortOrd>19</sortOrd>
-    </record>
-    <record>
-      <values>Graminoid</values>
-      <valueDescription/>
-      <sortOrd>21</sortOrd>
-    </record>
-    <record>
-      <values>Lichen </values>
-      <valueDescription/>
-      <sortOrd>25</sortOrd>
-    </record>
-    <record>
-      <values>Needle-leaved shrub</values>
-      <valueDescription/>
-      <sortOrd>10</sortOrd>
-    </record>
-    <record>
-      <values>Needle-leaved tree</values>
-      <valueDescription/>
-      <sortOrd>1</sortOrd>
-    </record>
-    <record>
-      <values>Palm shrub </values>
-      <valueDescription/>
-      <sortOrd>15</sortOrd>
-    </record>
-    <record>
-      <values>Palm tree </values>
-      <valueDescription/>
-      <sortOrd>7</sortOrd>
-    </record>
-    <record>
-      <values>Semi-shrub</values>
-      <valueDescription/>
-      <sortOrd>17</sortOrd>
-    </record>
-    <record>
-      <values>Succulent forb</values>
-      <valueDescription/>
-      <sortOrd>22</sortOrd>
-    </record>
-    <record>
-      <values>Succulent shrub</values>
-      <valueDescription/>
-      <sortOrd>18</sortOrd>
-    </record>
-    <record>
-      <values>Succulent tree</values>
-      <valueDescription/>
-      <sortOrd>6</sortOrd>
-    </record>
-    <record>
-      <values>Thorn shrub</values>
-      <valueDescription/>
-      <sortOrd>13</sortOrd>
-    </record>
-    <record>
-      <values>Thorn tree</values>
-      <valueDescription/>
-      <sortOrd>4</sortOrd>
-    </record>
-    <record>
-      <values>Tree fern</values>
-      <valueDescription/>
-      <sortOrd>8</sortOrd>
-    </record>
-    <record>
-      <values>Vine/Liana (woody climbers or vines)</values>
-      <valueDescription/>
-      <sortOrd>28</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1139,21 +1014,25 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>compositional trend across plot</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>conspicuous inclusions</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>homogeneous</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>irregular or pattern mosaic</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1165,68 +1044,82 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Intermittently flooded</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Permanently flooded</values>
       <valueDescription/>
       <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Permanently flooded - tidal</values>
       <valueDescription/>
       <sortOrd>8</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Saturated</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Seasonally flooded</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Seasonally saturated</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Semipermanently flooded</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Temporarily flooded</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Tidally flooded</values>
       <valueDescription/>
       <sortOrd>9</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Unknown</values>
       <valueDescription/>
       <sortOrd>14</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Upland</values>
       <sortOrd>13</sortOrd>
+      <valueNotes>NEW</valueNotes>
     </record>
     <record>
       <values>Irregularly flooded</values>
       <sortOrd>11</sortOrd>
+      <valueNotes>NEW</valueNotes>
     </record>
     <record>
       <values>Irregularly exposed</values>
       <sortOrd>12</sortOrd>
+      <valueNotes>NEW</valueNotes>
     </record>
     <record>
       <values>Wind-tidally flooded</values>
       <valueDescription/>
       <sortOrd>10</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1238,41 +1131,49 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>High </values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>High but incomplete</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Highest</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Low</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Moderate</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Moderate but incomplete</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Not examined</values>
       <valueDescription/>
       <sortOrd>8</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Very incomplete</values>
       <valueDescription/>
       <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1284,121 +1185,61 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>aestival</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>autumnal</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>dry season</values>
       <valueDescription/>
       <sortOrd>9</sortOrd>
+      <valueNotes>altered</valueNotes>
     </record>
     <record>
       <values>early wet season</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes>altered</valueNotes>
     </record>
     <record>
       <values>irregular ephemeral phase</values>
       <valueDescription/>
       <sortOrd>10</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>late wet season</values>
       <valueDescription/>
       <sortOrd>7</sortOrd>
+      <valueNotes>altered</valueNotes>
     </record>
     <record>
-      <values>Typical growing season</values>
+      <values>typical growing season</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>vernal</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>wet season</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes>altered</valueNotes>
     </record>
     <record>
       <values>winter</values>
       <valueDescription/>
       <sortOrd>8</sortOrd>
-    </record>
-  </list>
-  <list>
-    <sourceTableName>aux_observation_plotQuality</sourceTableName>
-    <TableName>observation</TableName>
-    <FieldName>plotQuality</FieldName>
-    <listcomment>This field has been deleted!</listcomment>
-    <record>
-      <values>---</values>
-      <valueDescription/>
-      <sortOrd>1</sortOrd>
-    </record>
-    <record>
-      <values>---</values>
-      <valueDescription/>
-      <sortOrd>3</sortOrd>
-    </record>
-    <record>
-      <values>---</values>
-      <valueDescription/>
-      <sortOrd>2</sortOrd>
-    </record>
-  </list>
-  <list>
-    <sourceTableName>aux_observation_plotValidationLevel</sourceTableName>
-    <TableName>observation</TableName>
-    <FieldName>plotValidationLevel</FieldName>
-    <tableDataType>varchar (60)</tableDataType>
-    <listcomment>deleted this field, as it is a computer generated field.  Should be minimally hidden from the user as an implementation field.</listcomment>
-    <record>
-      <values>(1) sufficient for determining type occurrence</values>
-      <valueDescription/>
-      <sortOrd>1</sortOrd>
-    </record>
-    <record>
-      <values>(2) sufficient for inclusion in a classification revision</values>
-      <valueDescription/>
-      <sortOrd>2</sortOrd>
-    </record>
-    <record>
-      <values>(3) fully compliant with recommendations</values>
-      <valueDescription/>
-      <sortOrd>3</sortOrd>
-    </record>
-  </list>
-  <list>
-    <sourceTableName>aux_observation_representativeness</sourceTableName>
-    <TableName>observation</TableName>
-    <FieldName>representativeness</FieldName>
-    <tableDataType>varchar (100)</tableDataType>
-    <listcomment>this is no longer a list, but is just a text field where the user can write whatever they want</listcomment>
-    <record>
-      <values>Vegetation differences form similar sites in area owing to environmental heterogeneity</values>
-      <valueDescription/>
-      <sortOrd>4</sortOrd>
-    </record>
-    <record>
-      <values>Vegetation differences from similar sites in area owing to chance dispersal to insular habitats.</values>
-      <valueDescription/>
-      <sortOrd>3</sortOrd>
-    </record>
-    <record>
-      <values>Vegetation differs from similar sites in area owing to environmental setting</values>
-      <valueDescription/>
-      <sortOrd>2</sortOrd>
-    </record>
-    <record>
-      <values>Vegetation typical of similar sites in area</values>
-      <valueDescription/>
-      <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1406,35 +1247,47 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
     <TableName>observation</TableName>
     <FieldName>soilDrainage</FieldName>
     <tableDataType>varchar (30)</tableDataType>
+    <listcomment>Soil drainage classes conform to the FGDC Soil Geographic Data Standards, September 1997. http://www.fgdc.gov/standards/documents/standards/soils/soil997.PDF</listcomment>
     <record>
-      <values>Moderately well drained</values>
-      <valueDescription/>
-      <sortOrd>3</sortOrd>
-    </record>
-    <record>
-      <values>Poorly drained</values>
-      <valueDescription/>
-      <sortOrd>5</sortOrd>
-    </record>
-    <record>
-      <values>Rapidly drained</values>
+      <values>excessively drained</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>Somewhat poorly drained</values>
-      <valueDescription/>
-      <sortOrd>4</sortOrd>
-    </record>
-    <record>
-      <values>Very poorly drained</values>
-      <valueDescription/>
-      <sortOrd>6</sortOrd>
-    </record>
-    <record>
-      <values>Well drained</values>
+      <values>somewhat excessively drained</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>well drained</values>
+      <valueDescription/>
+      <sortOrd>3</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>moderately well drained</values>
+      <valueDescription/>
+      <sortOrd>4</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>somewhat poorly drained</values>
+      <valueDescription/>
+      <sortOrd>5</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>poorly drained</values>
+      <valueDescription/>
+      <sortOrd>6</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>very poorly drained</values>
+      <valueDescription/>
+      <sortOrd>7</sortOrd>
     </record>
   </list>
   <list>
@@ -1446,46 +1299,55 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Hydric </values>
       <valueDescription/>
       <sortOrd>9</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Hygric</values>
       <valueDescription/>
       <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Mesic</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Subhydric</values>
       <valueDescription/>
       <sortOrd>8</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Subhygric</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Submesic</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Subxeric</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Very xeric</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Xeric</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1497,16 +1359,19 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Field observation</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Other soil map</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>USDA county soil survey</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1518,31 +1383,37 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Even-age, aggrading</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Mature, even-age</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Oldgrowth, all-age</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Transition, breakup</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Young, regenerative</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Uneven-age</values>
       <valueDescription>Ages of individuals are uneven so that this community does not fit neatly into the succession model.</valueDescription>
       <sortOrd>6</sortOrd>
+      <valueNotes>NEW</valueNotes>
     </record>
   </list>
   <list>
@@ -1554,31 +1425,37 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Bitterlich</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Full census</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Other</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Point quarter</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Random pairs</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Subsample census</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1590,16 +1467,19 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Brackish</values>
       <valueDescription>0.5 to 30 ppt</valueDescription>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Freshwater</values>
       <valueDescription>less than 0.5 ppt</valueDescription>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Saltwater</values>
       <valueDescription>greater than 30 ppt</valueDescription>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1611,101 +1491,121 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Class</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Cultivar/Forma</values>
       <valueDescription/>
       <sortOrd>20</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Division</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Family</values>
       <valueDescription/>
       <sortOrd>9</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Genus</values>
       <valueDescription/>
       <sortOrd>13</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Kingdom</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Order</values>
       <valueDescription/>
       <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Section</values>
       <valueDescription/>
       <sortOrd>15</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Species</values>
       <valueDescription/>
       <sortOrd>17</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Species Aggregate</values>
       <valueDescription/>
       <sortOrd>16</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Subclass</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Subfamily</values>
       <valueDescription/>
       <sortOrd>10</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Subgenus</values>
       <valueDescription/>
       <sortOrd>14</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Subkingdom</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Suborder</values>
       <valueDescription/>
       <sortOrd>8</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Subspecies</values>
       <valueDescription/>
       <sortOrd>18</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Subtribe</values>
       <valueDescription/>
       <sortOrd>12</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Superdivision</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Tribe</values>
       <valueDescription/>
       <sortOrd>11</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Variety</values>
       <valueDescription/>
       <sortOrd>19</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1714,39 +1614,52 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
     <FieldName>plantConvergence</FieldName>
     <tableDataType>varchar (20)</tableDataType>
     <record>
-      <values>equal</values>
-      <valueDescription/>
+      <values>equal         </values>
+      <valueDescription>The two concepts are exactly the same.</valueDescription>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>greater than</values>
-      <valueDescription/>
+      <values>greater than  </values>
+      <valueDescription>The reference concept (referenced in table:Status) fully contains the correlated concept (referenced in table:Concept), but also includes additional entities.</valueDescription>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>less than</values>
-      <valueDescription/>
+      <values>less than     </values>
+      <valueDescription>The reference concept is fully included in the correlated concept, but the latter concept contains additional entities.</valueDescription>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>not equal</values>
-      <valueDescription/>
+      <values>not equal     </values>
+      <valueDescription>The two concepts, are not exactly the same. This leaves the possibilties that the reference concept is greater than, less than, overlapping, similar, or disjunct relative to the correlated concept.</valueDescription>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>overlapping</values>
-      <valueDescription/>
+      <values>overlapping   </values>
+      <valueDescription>The two concepts contain at least one common individual, and each concept also contains at least one individual that the other does not contain. Neither concept is fully contained in the other.</valueDescription>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>undetermined</values>
-      <valueDescription/>
-      <sortOrd>7</sortOrd>
-    </record>
-    <record>
-      <values>disjunct</values>
-      <valueDescription/>
+      <values>similar       </values>
+      <valueDescription>The two concepts contain at least one common individual.</valueDescription>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>disjunct      </values>
+      <valueDescription>The two concepts in question contain no common individuals.</valueDescription>
+      <sortOrd>7</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>undetermined </values>
+      <valueDescription>Although some correlation is likely, the party responsible for the this correlation has not made a determination.</valueDescription>
+      <sortOrd>8</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1758,16 +1671,19 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>accepted</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>not accepted</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>undetermined</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1779,36 +1695,43 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Code</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>English Common</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Other</values>
       <valueDescription/>
       <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Scientific</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Scientific without authors</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Spanish Common</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>French Common</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1820,16 +1743,19 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>not standard</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>standard</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>undetermined</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -1841,216 +1767,528 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>0</values>
       <valueDescription>Public </valueDescription>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>1</values>
       <valueDescription>1 km radius</valueDescription>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>2</values>
       <valueDescription>10 km radius</valueDescription>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>3</values>
       <valueDescription>100 km radius</valueDescription>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>4</values>
       <valueDescription>Location embargo</valueDescription>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>5</values>
       <valueDescription>Public embargo on data</valueDescription>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>6</values>
       <valueDescription>Full embargo on data</valueDescription>
       <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
-    <sourceTableName>aux_plot_geology</sourceTableName>
+    <sourceTableName>aux_plot_rockType</sourceTableName>
     <TableName>plot</TableName>
-    <FieldName>geology</FieldName>
+    <FieldName>rockType</FieldName>
     <tableDataType>varchar (50)</tableDataType>
-    <listcomment>Dave Roberts working on this list</listcomment>
+    <listcomment>formerly geology field.  Geologic classes conform to the lithic types in the FGDC Soil Geographic Data Standards, September 1997. http://www.fgdc.gov/standards/documents/standards/soils/soil997.PDF pages 56-59.</listcomment>
     <record>
-      <values>Aeolian Deposits: Aeolian sand flats</values>
+      <values>aa</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Aeolian Deposits: Cover sands</values>
+      <values>acidic-ash</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Aeolian Deposits: Dunes</values>
+      <values>andesite</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Aeolian Deposits: Loess deposits</values>
+      <values>andesitic-ash</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Flat (n/a)</values>
+      <values>arkose</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Glacial Deposits: Bedrock and till</values>
+      <values>basalt</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Glacial Deposits: Deltaic deposits</values>
+      <values>basaltic-ash</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Glacial Deposits: Glacial-fluvial deposits</values>
+      <values>basic-ash</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Glacial Deposits: Lacustrine and fluvial deposits</values>
+      <values>chalk</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Glacial Deposits: Marine deposits</values>
+      <values>charcoal</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Glacial Deposits: Moraine</values>
+      <values>chert</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Glacial Deposits: Till</values>
+      <values>cinders</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Glacial Deposits: Undifferentiated glacial deposit</values>
+      <values>coal</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Igneous Rocks: Dioritic</values>
+      <values>conglomerate, calcareous</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Igneous Rocks: Gabbroic</values>
+      <values>conglomerate, noncalcareous</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Igneous Rocks: Granitic</values>
+      <values>conglomerate, unspecified</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Metamorphic Rocks: Gneiss</values>
+      <values>diorite</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Metamorphic Rocks: Marble</values>
+      <values>dolostone</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Metamorphic Rocks: Schist</values>
+      <values>ejecta-ash</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Metamorphic Rocks: Serpentine</values>
+      <values>gabbro</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Metamorphic Rocks: Slate and Phyllite</values>
+      <values>glauconite</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Organic Deposits: Marsh: regularly flooded by lake or river</values>
+      <values>gneiss</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Organic Deposits: Muck</values>
+      <values>gneiss-acidic</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Organic Deposits: Peat</values>
+      <values>gneiss-basic</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Sedimentary Rocks: Conglomerates and Breccias</values>
+      <values>granite</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Sedimentary Rocks: Gypsum</values>
+      <values>graywacke</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Sedimentary Rocks: Limestone and Dolomite</values>
+      <values>gypsum</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Sedimentary Rocks: Marl</values>
+      <values>hornfels</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Sedimentary Rocks: Sandstone</values>
+      <values>igneous, acid</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Sedimentary Rocks: Shale</values>
+      <values>igneous, basic</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Sedimentary Rocks: Siltstone</values>
+      <values>igneous, coarse crystal</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Slope &amp; Modified Deposits: Colluvial</values>
+      <values>igneous, fine crystal</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Slope &amp; Modified Deposits: Solifluction, landslide</values>
+      <values>igneous, intermediate</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Slope &amp; Modified Deposits: Talus and scree slopes</values>
+      <values>igneous, ultrabasic</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
     <record>
-      <values>Variable</values>
+      <values>igneous, unspecified</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>interbedded sedimentary</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>limestone, arenaceous</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>limestone, argillaceous</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>limestone, cherty</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>limestone, phosphatic</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>limestone, unspecified</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>limestone-sandstone</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>limestone-sandstone-shale</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>limestone-shale</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>limestone-siltstone</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>marble</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>marl</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>metaconglomerate</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>metamorphic, unspecified</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>mixed</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>mixed calcareous</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>mixed igneous-metamorphic</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>mixed igneous-metamorphic-sedimentary</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>mixed igneous-sedimentary</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>mixed metamorphic-sedimentary</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>mixed noncalcareous</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>obsidian</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>pahoehoe</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>phyllite</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>pumice</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>pyroclastic, unspecified</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>quartzite</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>rhyolite</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>sandstone, calcareous</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>sandstone, noncalcareous</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>sandstone, unspecified</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>sandstone-shale</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>sandstone-siltstone</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>schist, acidic</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>schist, basic</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>schist, unspecified</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>scoria</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>sedimentary, unspecified</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>serpentinite</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>shale, acid</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>shale, calcareous</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>shale, clayey</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>shale, noncalcareous</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>shale, unspecified</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>shale-siltstone</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>siltstone, calcareous</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>siltstone, noncalcareous</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>siltstone, unspecified</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>slate</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>tuff breccia</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>tuff, acidic</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>tuff, basic</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>tuff, unspecified</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>volcanic bombs</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>volcanic breccia, acidic</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>volcanic breccia, basic</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>volcanic breccia, unspecified</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>wood</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>other</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>no rock visible</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>no observation</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
     </record>
@@ -2060,1046 +2298,1260 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
     <TableName>plot</TableName>
     <FieldName>landform</FieldName>
     <tableDataType>varchar (50)</tableDataType>
-    <listcomment>changed to an open list.  There were several values that we thought about adding in SBA- Dave Roberts should be queried as to what he'd like to add.  For more values (as if that were helpful), see http://soils.usda.gov/procedures/handbook/content/629ex1.htm</listcomment>
+    <listcomment>Open list.</listcomment>
     <record>
       <values>alluvial fan</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>alluvial flat</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>alluvial terrace</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>backshore terrace</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>backwater</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>badlands</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>bajada</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+      <valueNotes>NEW</valueNotes>
     </record>
     <record>
       <values>bald</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>bank</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>bar</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>barrier beach</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>barrier flat</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>barrier island(s)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>barrier reef</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>basin</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>basin floor</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>bay</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>bayou</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>beach</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>beach ridge</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>bench</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>blowout</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>bottomlands</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>butte</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>caldera</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>canyon</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>carolina bay</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>channel</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>chenier</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>chenier plain</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>cirque</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>cirque floor</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>cirque headwall</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>cliff</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>coast</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>coastal plain</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>col</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>collapse sinkhole</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>colluvial shoulder</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>colluvial slope</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>cove</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>cuesta</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>debris slide</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>delta</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>delta plain</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>depositional levee</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>depositional stream terrace</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>depression</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>desert pavement</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>dike</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>doline</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>dome</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>drainage</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>drainage channel (undifferentiated)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>draw</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>drumlin</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>dune (undifferentiated)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>dune field</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>earth flow</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>earth hummock</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>eroded bench</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>eroding stream channel system</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>erosional stream terrace</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>escarpment</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>esker</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>estuary</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>exogenous dome</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>fan piedmont</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>fault scarp</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>fault terrace</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>fissure</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>fissure vent</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>flood plain</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>fluvial</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>foothills</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>foredune</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>frost creep slope</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>frost mound</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>frost scar</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>gap</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>glaciated uplands</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>glacier</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>gorge</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>graben</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>ground moraine</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>gulch</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>hanging valley</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>headland</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>highland</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>hills</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>hillslope bedrock outcrop</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>hogback</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>hoodoo</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>hummock</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>inlet</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>inselberg</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>interdune flat</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>interfluve</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>island</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>kame</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>kame moraine</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>kame terrace</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>karst</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>karst tower</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>karst window</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>kegel karst</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>kettle</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>kettled outwash plain</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>knob</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>knoll</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>lagoon</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>lake</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>lake bed</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>lake plain</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>lake terrace</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>lateral moraine</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>lateral scarp (undifferentiated)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>lava flow (undifferentiated)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>ledge</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>levee</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>loess deposit (undifferentiated)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>longshore bar</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>lowland</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>marine terrace (undifferentiated)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>meander belt</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>meander scar</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>mesa</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>mid slope</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>mima mound</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>monadnock</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>moraine (undifferentiated)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>mound</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>mountain valley</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>mountain(s)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>mountain-valley fan</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>mud flat</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>noseslope</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>outwash fan</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>outwash plain</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>outwash terrace</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>oxbow</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>patterned ground (undifferentiated)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>peat dome</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>periglacial boulderfield</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>piedmont</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>pimple mounds</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>pingo</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>pinnacle</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>plain</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>plateau</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>playa</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>polygon (high-centered)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>polygon (low-centered)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>pothole</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>raised beach</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>raised estuary</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>raised mudflat</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>raised tidal flat</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>ravine</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>relict coastline</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>ridge</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>ridge and valley</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>ridgetop bedrock outcrop</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>rift valley</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>rim</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>riverbed</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>rock fall avalanche</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>saddle</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>sag pond</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>sandhills</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>scarp</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>scarp slope</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>scour</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>scoured basin</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>sea cliff</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>seep</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>shoal</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>shoreline</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>sinkhole (undifferentiated)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>slide</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>slope</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>slough</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>slump and topple prone slope</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>slump pond</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>soil creep slope</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>solution sinkhole</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>spit</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>splay</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>stone circle</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>stone stripe</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>stream terrace (undifferentiated)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>streambed</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>subjacent karst collapse sinkhole</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>subsidence sinkhole</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>swale</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>talus</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>tarn</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>tidal flat</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>tidal gut</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>till plain</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>toe slope</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>toe zone (undifferentiated)</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>transverse dune</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>trench</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>trough</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>valley</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>valley floor</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>wave-built terrace</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>wave-cut platform</values>
       <valueDescription/>
       <sortOrd>0</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -3111,31 +3563,37 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Capture specific feature</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Random</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Regular</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Representative</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Stratified random</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Transect component</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -3147,36 +3605,43 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Circle</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Diffuse </values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Plotless</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Rectangular</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Square</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Transect/Strip</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Other</values>
       <valueDescription/>
       <sortOrd>7</sortOrd>
+      <valueNotes>NEW</valueNotes>
     </record>
   </list>
   <list>
@@ -3184,30 +3649,186 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
     <TableName>plot</TableName>
     <FieldName>standSize</FieldName>
     <tableDataType>varchar (50)</tableDataType>
+    <listcomment>this list distributed from names with parenthetical descriptions to shorter names and separate descriptions.</listcomment>
     <record>
       <values>Extensive</values>
       <valueDescription>greater than 100x plot size</valueDescription>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Large</values>
       <valueDescription>10-100x plot size</valueDescription>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Small</values>
       <valueDescription>3-10x plot size</valueDescription>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Very Extensive</values>
       <valueDescription>greater than 1000x plot size</valueDescription>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Very small</values>
       <valueDescription>1-3x plot size</valueDescription>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>Inclusion</values>
+      <valueDescription>less than 1x plot size</valueDescription>
+      <sortOrd>6</sortOrd>
+      <valueNotes>NEW</valueNotes>
+    </record>
+  </list>
+  <list>
+    <sourceTableName>aux_plot_surficialDeposits</sourceTableName>
+    <TableName>plot</TableName>
+    <FieldName>surficialDeposits</FieldName>
+    <tableDataType>varchar (200)</tableDataType>
+    <listcomment>new field, split from geology.</listcomment>
+    <record>
+      <values>Residual Material: Bedrock</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+      <valueNotes/>
+    </record>
+    <record>
+      <values>Residual Material: Disintegrated Rock</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Residual Material: Deeply Weathered Rock</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Glacial Deposits: Undifferentiated glacial deposit</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Glacial Deposits: Till</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Glacial Deposits: Moraine</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Glacial Deposits: Bedrock and till</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Glacial Deposits: Glacial-fluvial deposits (outwash)</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Glacial Deposits: Deltaic deposits</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Alluvial Deposits: Floodplain</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Alluvial Deposits: Alluvial Fan</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Alluvial Deposits: Deltas</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Marine and Lacustrine Deposits: Unconsolidated Sediments</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+      <valueNotes>New - SE NatureServe suggestion</valueNotes>
+    </record>
+    <record>
+      <values>Marine and Lacustrine Deposits: Coarse sediments</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Marine and Lacustrine Deposits: Fine-grained sediments</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Organic Deposits: Peat</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Organic Deposits: Muck</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Slope and Modified Deposits: Talus and scree slopes</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Slope and Modified Deposits: Colluvial</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Slope and Modified Deposits: Solifluction, landslide</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Aeolian Deposits: Dunes</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Aeolian Deposits: Aeolian sand flats and cover sands</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Aeolian Deposits: Loess deposits</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Aeolian Deposits: Volcanic Ash</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Chemical Deposits: Evaporites and Precipitates</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Other</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
+    </record>
+    <record>
+      <values>Variable</values>
+      <valueDescription/>
+      <sortOrd>0</sortOrd>
     </record>
   </list>
   <list>
@@ -3215,65 +3836,78 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
     <TableName>plot</TableName>
     <FieldName>topoPosition</FieldName>
     <tableDataType>varchar (50)</tableDataType>
+    <listcomment>this list distributed from names with parenthetical descriptions to shorter names and separate descriptions.</listcomment>
     <record>
       <values>Backslope</values>
       <valueDescription>dipslope</valueDescription>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Basin floor</values>
       <valueDescription>depression</valueDescription>
       <sortOrd>12</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Channel bed</values>
       <valueDescription>narrow valley bottom, gully arroyo</valueDescription>
       <sortOrd>11</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Channel wall</values>
       <valueDescription>bank</valueDescription>
       <sortOrd>10</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>High level</values>
       <valueDescription>mesa, high flat</valueDescription>
       <sortOrd>3</sortOrd>
+      <valueNotes>altered desc</valueNotes>
     </record>
     <record>
       <values>High slope</values>
       <valueDescription>shoulder slope, upper slope, convex creep slope</valueDescription>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Interfluve</values>
       <valueDescription>crest, summit, ridge</valueDescription>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Low level</values>
       <valueDescription>terrace, low flat</valueDescription>
       <sortOrd>9</sortOrd>
+      <valueNotes>altered desc</valueNotes>
     </record>
     <record>
       <values>Lowslope</values>
       <valueDescription>lower slope, foot slope, colluvial footslope</valueDescription>
       <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Midslope</values>
       <valueDescription>transportational midslope, middle slope</valueDescription>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Step in slope</values>
       <valueDescription>ledge, terracette</valueDescription>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Toeslope</values>
       <valueDescription>alluvial toeslope</valueDescription>
       <sortOrd>8</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -3285,36 +3919,43 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>A</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>B</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>C</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>E</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>L</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>O</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>R</values>
       <valueDescription/>
       <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -3322,45 +3963,129 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
     <TableName>soilObs</TableName>
     <FieldName>soilTexture</FieldName>
     <tableDataType>varchar (20)</tableDataType>
+    <listcomment>Delegated to Don.</listcomment>
     <record>
-      <values>Clay</values>
-      <valueDescription/>
-      <sortOrd>6</sortOrd>
-    </record>
-    <record>
-      <values>Clay loam</values>
-      <valueDescription/>
-      <sortOrd>5</sortOrd>
-    </record>
-    <record>
-      <values>Loam</values>
-      <valueDescription/>
-      <sortOrd>3</sortOrd>
-    </record>
-    <record>
-      <values>Muck</values>
-      <valueDescription/>
-      <sortOrd>8</sortOrd>
-    </record>
-    <record>
-      <values>Peat</values>
-      <valueDescription/>
-      <sortOrd>7</sortOrd>
-    </record>
-    <record>
-      <values>Sand</values>
-      <valueDescription/>
+      <values>Sands: Coarse Sand</values>
+      <valueDescription>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Sands | Texture Subclass: Coarse Sand</valueDescription>
       <sortOrd>1</sortOrd>
     </record>
     <record>
-      <values>Sandy loam</values>
-      <valueDescription/>
+      <values>Sands: Sand</values>
+      <valueDescription>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Sands | Texture Subclass: Sand</valueDescription>
       <sortOrd>2</sortOrd>
     </record>
     <record>
-      <values>Silt loam</values>
-      <valueDescription/>
+      <values>Sands: Fine Sand</values>
+      <valueDescription>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Sands | Texture Subclass: Fine Sand</valueDescription>
+      <sortOrd>3</sortOrd>
+    </record>
+    <record>
+      <values>Sands: Very Fine Sand</values>
+      <valueDescription>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Sands | Texture Subclass: Very Fine Sand</valueDescription>
       <sortOrd>4</sortOrd>
+    </record>
+    <record>
+      <values>Sands: (unspecified)</values>
+      <valueDescription>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Sands | Texture Subclass: (unspecified)</valueDescription>
+      <sortOrd>5</sortOrd>
+      <valueNotes>added for those who do not subdivide sands</valueNotes>
+    </record>
+    <record>
+      <values>Loamy Sands: Loamy Coarse Sand</values>
+      <valueDescription>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Loamy Sands | Texture Subclass: Loamy Coarse Sand</valueDescription>
+      <sortOrd>6</sortOrd>
+    </record>
+    <record>
+      <values>Loamy Sands: Loamy Sand</values>
+      <valueDescription>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Loamy Sands | Texture Subclass: Loamy Sand</valueDescription>
+      <sortOrd>7</sortOrd>
+    </record>
+    <record>
+      <values>Loamy Sands: Loamy Fine Sand</values>
+      <valueDescription>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Loamy Sands | Texture Subclass: Loamy Fine Sand</valueDescription>
+      <sortOrd>8</sortOrd>
+    </record>
+    <record>
+      <values>Loamy Sands: Loamy Very Fine Sand</values>
+      <valueDescription>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Loamy Sands | Texture Subclass: Loamy Very Fine Sand</valueDescription>
+      <sortOrd>9</sortOrd>
+    </record>
+    <record>
+      <values>Loamy Sands: (unspecified)</values>
+      <valueDescription>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Loamy Sands | Texture Subclass: (unspecified)</valueDescription>
+      <sortOrd>10</sortOrd>
+      <valueNotes>added for those who do not subdivide loamy sands</valueNotes>
+    </record>
+    <record>
+      <values>Sandy Loams: Coarse Sandy Loam</values>
+      <valueDescription>Texture Group: Loamy soils | General Term: Moderately coarse-textured | Texture Class: Sandy Loams | Texture Subclass: Coarse Sandy Loam</valueDescription>
+      <sortOrd>11</sortOrd>
+    </record>
+    <record>
+      <values>Sandy Loams: Sandy Loam</values>
+      <valueDescription>Texture Group: Loamy soils | General Term: Moderately coarse-textured | Texture Class: Sandy Loams | Texture Subclass: Sandy Loam</valueDescription>
+      <sortOrd>12</sortOrd>
+    </record>
+    <record>
+      <values>Sandy Loams: Fine Sandy Loam</values>
+      <valueDescription>Texture Group: Loamy soils | General Term: Moderately coarse-textured | Texture Class: Sandy Loams | Texture Subclass: Fine Sandy Loam</valueDescription>
+      <sortOrd>13</sortOrd>
+    </record>
+    <record>
+      <values>Sandy Loams: Very Fine Sandy Loam</values>
+      <valueDescription>Texture Group: Loamy soils | General Term: Medium-textured | Texture Class: Sandy Loams | Texture Subclass: Very Fine Sandy Loam</valueDescription>
+      <sortOrd>14</sortOrd>
+    </record>
+    <record>
+      <values>Sandy Loams: (unspecified)</values>
+      <valueDescription>Texture Group: Loamy soils | General Term: Moderately coarse-textured to Medium-textured | Texture Class: Sandy Loams | Texture Subclass: (unspecified)</valueDescription>
+      <sortOrd>15</sortOrd>
+      <valueNotes>added for those who do not subdivide sandy loams : the general term for texture is ambiguous in the heirarchy for sandy loams.</valueNotes>
+    </record>
+    <record>
+      <values>Loam</values>
+      <valueDescription>Texture Group: Loamy soils | General Term: Medium-textured | Texture Class: Loam | Texture Subclass: Loam</valueDescription>
+      <sortOrd>16</sortOrd>
+    </record>
+    <record>
+      <values>Silt Loam</values>
+      <valueDescription>Texture Group: Loamy soils | General Term: Medium-textured | Texture Class: Silt Loam | Texture Subclass: Silt Loam</valueDescription>
+      <sortOrd>17</sortOrd>
+    </record>
+    <record>
+      <values>Silt</values>
+      <valueDescription>Texture Group: Loamy soils | General Term: Medium-textured | Texture Class: Silt | Texture Subclass: Silt</valueDescription>
+      <sortOrd>18</sortOrd>
+    </record>
+    <record>
+      <values>Sandy Clay Loam</values>
+      <valueDescription>Texture Group: Loamy soils | General Term: Moderately fine-textured | Texture Class: Sandy Clay Loam | Texture Subclass: Sandy Clay Loam</valueDescription>
+      <sortOrd>19</sortOrd>
+    </record>
+    <record>
+      <values>Clay Loam</values>
+      <valueDescription>Texture Group: Loamy soils | General Term: Moderately fine-textured | Texture Class: Clay Loam | Texture Subclass: Clay Loam</valueDescription>
+      <sortOrd>20</sortOrd>
+    </record>
+    <record>
+      <values>Silty Clay Loam</values>
+      <valueDescription>Texture Group: Loamy soils | General Term: Moderately fine-textured | Texture Class: Silty Clay Loam | Texture Subclass: Silty Clay Loam</valueDescription>
+      <sortOrd>21</sortOrd>
+    </record>
+    <record>
+      <values>Sandy Clay</values>
+      <valueDescription>Texture Group: Clayey soils | General Term: Fine-textured | Texture Class: Sandy Clay | Texture Subclass: Sandy Clay</valueDescription>
+      <sortOrd>22</sortOrd>
+    </record>
+    <record>
+      <values>Silty Clay</values>
+      <valueDescription>Texture Group: Clayey soils | General Term: Fine-textured | Texture Class: Silty Clay | Texture Subclass: Silty Clay</valueDescription>
+      <sortOrd>23</sortOrd>
+    </record>
+    <record>
+      <values>Clay</values>
+      <valueDescription>Texture Group: Clayey soils | General Term: Fine-textured | Texture Class: Clay | Texture Subclass: Clay</valueDescription>
+      <sortOrd>24</sortOrd>
     </record>
   </list>
   <list>
@@ -3372,31 +4097,37 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Author</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Computer (automated)</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Correction</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Finer resolution</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Simplification for analysis</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Taxonomic revision</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -3408,31 +4139,37 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Cell</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Fax</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Home</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Not specified</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Secretary</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Work</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -3441,49 +4178,58 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
     <FieldName>userDefinedCategory</FieldName>
     <tableDataType>varchar (30)</tableDataType>
     <record>
-      <values>Disturbance &amp; land use</values>
+      <values>Disturbance and land use</values>
       <valueDescription/>
       <sortOrd>7</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Environment</values>
       <valueDescription/>
       <sortOrd>5</sortOrd>
+      <valueNotes/>
     </record>
     <record>
-      <values>Geology &amp; geomorphology</values>
+      <values>Geology and geomorphology</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Moisture</values>
       <valueDescription/>
       <sortOrd>4</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Not specified</values>
       <valueDescription/>
       <sortOrd>9</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Soil, chemical attributes</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Soil, physical attributes</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Subplots</values>
       <valueDescription/>
       <sortOrd>8</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Topography</values>
       <valueDescription/>
       <sortOrd>6</sortOrd>
+      <valueNotes/>
     </record>
   </list>
   <list>
@@ -3495,16 +4241,19 @@ FYI:roles (table:aux_role):  Author ; Contact ; PI ; Data Manager ; Classifier ;
       <values>Depth to permafrost</values>
       <valueDescription/>
       <sortOrd>3</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Microbial biomass</values>
       <valueDescription/>
       <sortOrd>1</sortOrd>
+      <valueNotes/>
     </record>
     <record>
       <values>Slope convexity</values>
       <valueDescription/>
       <sortOrd>2</sortOrd>
+      <valueNotes/>
     </record>
   </list>
 </tableDefns>
