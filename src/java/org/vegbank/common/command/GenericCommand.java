@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-23 03:56:53 $'
- *	'$Revision: 1.16 $'
+ *	'$Date: 2004-10-05 02:10:52 $'
+ *	'$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -302,7 +302,14 @@ public class GenericCommand
 
 		// WHERE
 		if (!Utility.isStringNullOrEmpty(whereClauseKey)) {
-			whereClause = sqlResources.getString(whereClauseKey);
+			if (whereClauseKey.startsWith("where_")) {
+				// get the SQL from props file
+				whereClause = sqlResources.getString(whereClauseKey);
+
+			} else {
+				// just use the given where clause
+				log.info("Using non-configured (dangerous) where: " + whereClause);
+			}
 		} 
 
 
