@@ -6,34 +6,26 @@
 
   <!-- Title -->
   <tr>
-    <td colSpan="2" align="center">
-      <div align=left><br/>
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100" size="4">
-          <b>Login to VegBank</b>
-        </font> 
-      </div>
+    <td colSpan="2" class="category">
+     Login to VegBank
     </td>
 
   <!-- Username -->
   <tr>
-    <td align="left">
-      <font face="Georgia, Times New Roman, Times, serif" color="#531100">
+    <td>
         e-Mail:
-      </font>
     </td>
-    <td align="left">
+    <td>
       <html:text property="username" size="25" maxlength="50"/>
     </td>
   </tr>
   
   <!-- Password -->
   <tr>
-    <td align="left">
-      <font face="Georgia, Times New Roman, Times, serif" color="#531100">
+    <td>
         Password:
-      <font>
     </td>
-    <td align="left">
+    <td>
       <html:password property="password" size="25" maxlength="18"
                     redisplay="false"/>
     </td>
@@ -48,14 +40,17 @@
   </tr>
   <tr>
     <td></td>
-    <!-- Some usefull links -->
+    <!-- Some useful links -->
     <td>
 		<p>
         &raquo; <a href="@forms_link@RegisterNewUser.jsp">Not yet a user? <b>Register</b> here.</a>
-        <br/>
-        &raquo; <a href="/vegbank/Logon.do?username=GUESTUSER@VEGBANK.ORG&password=nopassword">Use vegbank as a guest? Login here.</a>
+      <!--  <br/>
+        &raquo; <a href="/vegbank/Logon.do?username=GUESTUSER@VEGBANK.ORG&password=nopassword">Use vegbank as a guest? Login here.</a> -->
         <br/>
         &raquo; <a href="@forms_link@EmailPassword.jsp">Lost your password?</a>
+         <br/>
+        &raquo; Note that you need not login for most VegBank functions.  <br/>To use VegBank without logging in, 
+        click <a href="@web_context@DisplayMainMenu.do">here for the Main Menu</a>.
       </p>
     </td>
   </tr>
