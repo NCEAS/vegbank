@@ -108,17 +108,29 @@ print `bin/throwAways/MoveFramework1.0Data-TO-VB1.0.2.pl $finalDestinationDB $us
 # Run Throwaways
 print "\n######################################################################\n";
 print "# Run the plant QA fixes on $finalDestinationDB\n";
+print "# QA step 1\n";
 print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/0OneRecTbl_create.txt`;
+print "# QA step 2\n";
 print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/1plantNAmes_add_sql.txt`;
+print "# QA step 3\n";
 print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/2updateSNsql_nonAccess.txt`;
+print "# QA step 4\n";
 print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/3updateParentsSQL.txt`;
+print "# QA step 5\n";
 print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/4updateParents_round2_sql.txt`;
+print "# QA step 6\n";
 print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/5fixLevels.txt`;
+print "# QA step 7\n";
 print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/6addNewCorrs.txt`;
+print "# QA step 8\n";
 print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/7specialCaseORNO11.txt`;
+print "# QA step 9\n";
 print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/8DropOneRecTbl.txt`;
+print "# QA step 10\n";
 print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/9RemoveParentsOfNotAccepted.txt`;
+print "# QA step 11\n";
 print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/A_RemoveQuestionMarksFromNames.txt`;
+print "# QA COMPLETE.\n";
 
 
 # ReSyncSequences and PKs
