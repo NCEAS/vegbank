@@ -20,41 +20,43 @@
 	<property name="current" value="./" />
 	<property name="build" value="./build" />
 	<property name="build_src" value="./build/src/client" />
+	<property name="build_xml" value="build/xml" />
 	<property name="build_lib" value="build/lib" />
 	<property name="build_html" value="build/html" />
 	<property name="build_bin" value="build/bin" />
 	<property name="build_data" value="build/data" />
 	
-	<property name="build_communication" value="./build/src/client/communication" />
-	<property name="build_interface" value="./build/src/client/interface" />
+	<property name="build_legacy_loader" value="build/src/client/legacy_data_loader" />
+	<property name="build_client" value="./build/src/client" />
 	<property name="build_embedded_db" value="./build/src/client/embedded_db" />
-	<property name="src_communication" value="./client" />
-	<property name="src_interface" value="./interface" />
+	<property name="src_client" value="./client" />
+	<property name="src_legacy_loader" value="./legacy_data_loader" />
 	<property name="src_embedded_db" value="./embeddedDB" />
 	<property name="src_bin" value="../bin" />
 	<property name="src_lib" value="../lib" />
-	
 	<property name="src_xml" value="../xml"/>
 	<property name="utility_src" value="./utilities" />
 	<property name="src_embedded_db" value="./embeddedDB" /> 
 
-	<property name="release" value="development"/>
 	<property name="dbAccess_src" value="./plotAccess"/>
 	<property name="database_access_module" value="build/lib/dbAccess.jar" />
 	<property name="jdbc_drivers" value="build/lib/idb.jar" />
+  <property name="xerces" value="../lib/xerces_1_3_1.jar" />
+	<property name="xalan" value="../lib/xalan_1_2_2.jar" /> 
 
-	<filter token="version" value="development"/>
+	<filter token="release" value="DEVELOPMENT"/>
+	<filter token="authors" value="HARRIS"/>
 	
 	
-	<property name="cpath" 
-		value="${jdbc_drivers}:${database_access_module}:${build_communication}:${build_interface}:./"/>
+<property name="cpath" 
+value="${xerces}:${xalan}:${jdbc_drivers}:${database_access_module}:${build_communication}:${build_interface}:./"/>
 </target>
 
 <target name="prepare" depends="init">
-	<mkdir dir="${build_communication}" />
-	<mkdir dir="${build_interface}" />
-	<mkdir dir="${build_src}" />
+	<mkdir dir="${build_client}" />
 	<mkdir dir="${build_embedded_db}" />
+	<mkdir dir="${build_legacy_loader}" />
+	
 	
 <!-- 
 	* get the resources for the embedded database 
@@ -70,6 +72,7 @@
 		excludes="**/CVS* "
 	/>
 
+	<!-- GET THE SCRIPTS TO START THE CLEINT-->
 	<copydir src="${src_bin}"
 		dest="${build_bin}"
     filtering="yes"
@@ -83,8 +86,6 @@
 	* the build_data file - this is the location for the 
 	* embedded database
 	-->
-
-
 	<copyfile src="${src_lib}/nvc.prp"
   	filtering="yes"
 	  dest="${build_data}/nvc.prp"
@@ -92,37 +93,45 @@
 			
 
 <!-- 
-	* client library src which contains the classes 
-	* to do such things as request data from the servlet  
+	* get the source code from the client directory that contains
+	* all the code for the client including both the interface classes
+	* and the communication classes
 	-->
-	<copydir src="${src_communication}"
-		dest="${build_communication}"
+	<copydir src="${src_client}"
+		dest="${build_client}"
     filtering="yes"
-    includes="DataRequestClient.java 
-			DataExchangeClient.java HttpMessage.java 
+    includes=" NestedQueryBuilder.java VegClient.java QueryModule.java
+		HtmlViewer.java DataRequestClient.java 
+			DataExchangeClient.java DataUpload.java 
+			HttpMessage.java 
 			DataRequestHandler.java **.properties"
-    excludes="**/CVS* "
-	/>
-
-
-<!-- 
-	* get the source code for the interface classes 
-	*	and the manifest file that is used to create 
-	*executable jar file 
--->
-	<copydir src="${src_interface}" 
-		dest="${build_interface}" 
-    filtering="yes"
-    includes="HtmlViewer.java DataUpload.java QueryModule.java 
-		MenuTest.java interface.properties manifest"
     excludes="**/CVS* "
 	/>
 	
 	<!--
+		* the legacy data loader code
+		-->
+	<copydir src="${src_legacy_loader}"
+		dest="${build_legacy_loader}"
+    filtering="yes"
+    includes="**.java **.properties"
+    excludes="**/CVS* "
+	/>
+	
+	<copydir src="${src_xml}"
+		dest="${build_xml}"
+    filtering="yes"
+    includes="legacyDataDescription.dtd legacyDataDescription.xsl"
+    excludes="**/CVS* "
+	/>
+
+
+	
+	<!--
 		* now get any binary files that should not be filtered
 		* -->
-		<copydir src="${src_interface}" 
-		dest="${build_interface}" 
+		<copydir src="${src_client}" 
+		dest="${build_client}" 
     filtering="no"
     includes="**.gif **.jpeg"
     excludes="**/CVS* "
@@ -134,16 +143,10 @@
 <!-- compile all the java code -->
 <target name="compile" depends="prepare">
 
-<javac srcdir="${build_communication}" 
+<javac srcdir="${build_client}" 
 		classpath="${cpath}"
-		includes="**.java  " 
-		destdir="${build_communication}"
-	/>
-	
-	<javac srcdir="${build_interface}" 
-		classpath="${cpath}"
-		includes="**.java  " 
-		destdir="${build_interface}"
+		includes="**.java  "
+		destdir="${build_client}"
 	/>
 	
 	<javac srcdir="${build_embedded_db}" 
@@ -151,6 +154,13 @@
 		includes="**.java  " 
 		destdir="${build_embedded_db}"
 	/>
+	
+	<javac srcdir="${build_legacy_loader}" 
+		classpath="${cpath}"
+		includes="**.java  " 
+		destdir="${build_legacy_loader}"
+	/>
+	
 </target>	
 	
 	
@@ -161,34 +171,32 @@
 	* archive the client communication classes
 	* into a single archive
 -->
-	<jar jarfile ="${build_lib}/clientcommunication.jar"
-		basedir="${build_communication}"
-		includes="${build_communication}/ ** "
+	<jar jarfile ="${build_lib}/client.jar"
+		basedir="${build_client}"
+		manifest="${src_client}/manifest"
+		includes="${build_client}/ ** "
 	/>
 	
-	<!-- 
-		* copy this archive into the inteface dir
-		* so that is incorporated into the interface 
-		* main archive
-		-->
-	<copyfile src="${build_lib}/clientcommunication.jar" 
-		filtering="no" 
-		dest="${build_interface}/clientcommunication.jar" 
-	/>
-	
-	<!-- now archive that jar file into the main interface-->
+
+<!--
 	<jar jarfile ="${build_lib}/interface.jar"
 		basedir="${build_interface}"
 		manifest="${build_interface}/manifest"
 		includes="${build_interface}/ ** ${src_interface}/test.gif"
 	/>
+-->
 
 	<!-- jar the embedded database classes into a jar file -->
 	<jar jarfile ="${build_lib}/embedded_db.jar"
 		basedir="${build_embedded_db}"
 		includes="${build_embedded_db}/ ** "
 	/>
-								
+	
+	<!-- the legacy data formatter -->
+	<jar jarfile ="${build_lib}/legacy_formatter.jar"
+		basedir="${build_legacy_loader}"
+		includes="${build_legacy_loader}/ ** "
+	/>
 	
 	
 </target>
