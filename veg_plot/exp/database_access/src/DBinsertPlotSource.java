@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-07-23 21:41:17 $'
- * 	'$Revision: 1.28 $'
+ *  '$Date: 2002-07-30 17:52:09 $'
+ * 	'$Revision: 1.29 $'
  */
 package databaseAccess;
 
@@ -1748,22 +1748,21 @@ public class DBinsertPlotSource
 	private int getNextId(String tableName)
 	{
 		int rows = -1;
+		StringBuffer sb = new StringBuffer();
 		try 
 		{
-			StringBuffer sb = new StringBuffer();
 			sb.append("SELECT count(*) from "+tableName );
 			Statement query = conn.createStatement();
 			ResultSet rs = query.executeQuery( sb.toString() );
 			while ( rs.next() ) 
 			{
 				rows = rs.getInt(1);
-				//System.out.println("grabbed "+rows );
-				//query = conn.createStatement();
 			}
 		}
 		catch (Exception e)
 		{
-			System.out.println("Caught Exception: "+e.getMessage() ); 
+			System.out.println("Exception: "+e.getMessage() );
+			System.out.println("sql: " + sb.toString() );
 			e.printStackTrace();
 			//System.exit(0);
 		}

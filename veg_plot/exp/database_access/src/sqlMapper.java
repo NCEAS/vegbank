@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *    '$Date: 2002-07-30 16:36:50 $'
- * 	'$Revision: 1.17 $'
+ *    '$Date: 2002-07-30 17:52:09 $'
+ * 	'$Revision: 1.18 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -203,8 +203,7 @@ public class  sqlMapper
 		}
 		catch ( Exception e )
 		{
-			System.out.println("failed :   "
-			+e.getMessage());
+			System.out.println("Exception :  " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(sb.toString() );
