@@ -74,7 +74,7 @@
           </td>
           <!-- state/province list -->
           
-          <td> 
+          <td class="largefield"> 
           <vegbank:get id="places" select="place_summ" beanName="map" perPage="-1" pager="false" 
            where="where_group_place_summ_project" wparam="project_pk"/>
 		   <logic:notEmpty name="places-BEANLIST">
@@ -85,8 +85,8 @@
 		        <!-- add semicolon before states that aren't the first one -->
 		        </logic:notEqual>
 		        <bean:define id="firstplace" value="false" /> 
-		        <bean:write name="oneplace" property="region_name"/> 
-		         (<bean:write name="oneplace" property="count_obs"/>) 
+		        <a href='@get_link@simple/observation/<bean:write name="project_pk" />;<bean:write name="oneplace" property="namedplace_id" />?where=where_project_place'><bean:write name="oneplace" property="region_name"/>
+		         (<bean:write name="oneplace" property="count_obs"/>)</a>
 		       </logic:iterate>
 		    
 			 </logic:notEmpty>
