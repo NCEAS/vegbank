@@ -22,8 +22,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:35:44 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-12-02 20:02:15 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,10 +67,6 @@ public class LogonAction  extends Action
 		HttpServletResponse response)
 		throws Exception
 	{
-
-		// Extract attributes we will need
-		//Locale locale = getLocale(request);
-		//MessageResources messages = getResources(request);
 		WebUser user = null;
 
 		// Validate the request parameters specified by the user
@@ -83,6 +79,7 @@ public class LogonAction  extends Action
 	
 		try
 		{
+			// Attempt to get user from database;
 			user = getUser(username);
 			
 			if ( user == null )
@@ -90,6 +87,10 @@ public class LogonAction  extends Action
 				errors.add(
 				ActionErrors.GLOBAL_ERROR,
 				new ActionError("errors.user.not.found", username));
+			}
+			else if ( user.isGuest() )
+			{
+				// No need to check password
 			}
 			else if  ( ! user.getPassword().equals(password) )
 			{
@@ -150,9 +151,34 @@ public class LogonAction  extends Action
 	 * @exception Exception if a business logic rule is violated
 	 */
 	public WebUser getUser(String username) throws Exception
-	{          
-		UserDatabaseAccess uda = new UserDatabaseAccess();                                                                                                                                            
-		return uda.getUser(username);                                                                                                                                               
+	{ 
+		WebUser user = null;
+		if ( username.equalsIgnoreCase(Constants.GUEST_USER_KEY))
+		{
+			user = this.getGuestUser();
+		}
+		else
+		{
+			UserDatabaseAccess uda = new UserDatabaseAccess();                                                                                                                                            
+			user = uda.getUser(username);
+		}
+		return user;
+	}
+
+	/**
+	 * @return
+	 */
+	private WebUser getGuestUser()
+	{
+		// Set up the guest user
+		// TODO: This can be made more efficient, 
+		// make a singleton by subclassing webuser?
+		WebUser guestUser = new WebUser();
+		guestUser.setPermissiontype("0");
+		guestUser.setGivenname("Guest");
+		guestUser.setSurname("User");
+		guestUser.isGuest(true);
+		return guestUser;
 	}
 
 

@@ -51,7 +51,7 @@
 		
     <form-bean  name="DisplayPlotForm"
                 type="org.apache.struts.validator.DynaValidatorForm">
-		<form-property name="vegbankAccessionNumber" type="java.lang.String"/>
+		<form-property name="accessionCode" type="java.lang.String"/>
 		<form-property name="resultType" type="java.lang.String"/>
     </form-bean>
 
@@ -92,12 +92,21 @@
 		<form-property name="party" type="org.vegbank.common.model.Party"/>
 		<form-property name="address" type="org.vegbank.common.model.Address"/>
 		<form-property name="telephone" type="org.vegbank.common.model.Telephone"/>
-		<form-property name="termsaccept" type="java.lang.String"/>
+		<form-property name="termsaccept" type="java.lang.String" initial="decline"/>
 		<form-property name="password1" type="java.lang.String"/>
 		<form-property name="password2" type="java.lang.String"/>
-		<form-property name="statelist" type="org.vegbank.common.model.utility.Statelist"/>
     </form-bean>
 
+    <!-- Query Plants form bean -->
+    <form-bean  name="PlantQueryForm"
+                type="org.apache.struts.validator.DynaValidatorForm">
+		<form-property name="plantname" type="java.lang.String"/>
+		<form-property name="nameType" type="java.lang.String"/>
+		<form-property name="taxonLevel" type="java.lang.String"/>
+		<form-property name="nameExistsBeforeDate" type="java.lang.String"/>
+		<form-property name="accordingToParty" type="java.lang.String"/>
+    </form-bean>
+	
 
   </form-beans>
 
@@ -118,7 +127,7 @@
     <forward   name="EntityName"	path="/forms/EntityName.jsp"/>
     <forward   name="DisplayResults" path="/forms/DisplayResults.jsp"/>
     <forward   name="DisplayLoadReport" path="/forms/DisplayLoadReport.jsp"/>
-    <forward   name="AuthenticationException" path="/forms/authenticationException.jsp"/>
+    <forward   name="AuthenticationException" path="/forms/AuthenticationException.jsp"/>
     <forward   name="CertificationException" path="/forms/CertificationException.jsp"/>
     <forward   name="DisplayUploadPlotAction" path="/forms/plot-submit.jsp"/>
     <forward   name="DropPlotAction" path="/forms/plot-drop.jsp"/>
@@ -126,6 +135,7 @@
     <forward   name="DownLoadManager"	path="/DownLoadManager.do"/>
     <forward   name="EmailPassword"	path="/forms/EmailPassword.jsp"/>
     <forward   name="RegisterNewUser"	path="/forms/RegisterNewUser.jsp"/>
+    <forward   name="PlantQuery"	path="/forms/PlantQuery.jsp"/>
   </global-forwards>
 
 
@@ -158,6 +168,7 @@
       <set-property property="minCertLevel" value="2" />
     </action>
 
+    <!-- Upload Plot Action -->
     <action path="/UploadPlot"
 	type="org.vegbank.ui.struts.UploadPlotAction"
         name="UploadPlotForm"
@@ -166,6 +177,7 @@
         input="DisplayUploadPlotAction">
     </action>		 
 
+    <!-- Drop Plot Action -->
     <action path="/DropPlot"
 	type="org.vegbank.ui.struts.DropPlotAction"
         name="DropPlotForm"
@@ -174,7 +186,7 @@
         input="DropPlotAction">
     </action>		 
 
-	<!-- Add a reference to vegbank -->
+    <!-- Add a reference to vegbank -->
     <action    path="/AddReference"
     	  type="org.vegbank.ui.struts.AddReferenceAction"
      	  name="AddReferenceForm"
@@ -234,13 +246,24 @@
 	input="failure">
     </action>
 
+    <!-- Query for Plants -->
+    <action path="/PlantQuery"
+        type="org.vegbank.ui.struts.PlantQueryAction"
+        name="PlantQueryForm"
+        scope="request"
+        validate="true"
+	input="PlantQuery">
+      <forward name="success" path="/forms/DisplayPlantQueryResults.jsp"/>
+    </action>
+
+
     <!-- Manage file download -->
     <action path="/DownLoadManager"
         type="org.vegbank.ui.struts.DownLoadManagerAction"
         name="DownLoadManagerForm"
         scope="request"
         validate="true"
-		input="DisplayResults">
+	input="DisplayResults">
       <forward name="success" path="/forms/DownLoad.jsp"/>
     </action>
 
@@ -250,28 +273,18 @@
         name="DownLoadForm"
         scope="request"
         validate="true"
-		input="DownLoad">
+	input="DownLoad">
     </action>
 
-
-
     <action path="/EntityName"
-    	type="org.vegbank.ui.struts.EntityNameAction"
-     	name="EntityNameForm"
+    	  type="org.vegbank.ui.struts.EntityNameAction"
+     	  name="EntityNameForm"
       	scope="request"
       	validate="true"
       	input="EntityName">
     </action>
 
-    <action path="/Cert"
-    	type="org.vegbank.ui.struts.CertificationAction"
-     	name="CertificationForm"
-      	scope="request"
-      	validate="true"
-      <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
-      <set-property property="minCertLevel" value="1" />
-    </action>
-
+    <!-- Allows a libary of precanned SQL to be run and displayed -->
     <action path="/GenericDispatcher"
     	  type="org.vegbank.ui.struts.GenericDispatcherAction"
           scope="request">
@@ -287,7 +300,7 @@
       <forward name="success" path="/index.jsp"/>
     </action>
 
-    <!-- Email the user their password -->
+    <!-- Register a new vegbank user -->
     <action path="/RegisterNewUser"
             type="org.vegbank.ui.struts.RegisterNewUserAction"
             name="RegisterNewUserForm"
@@ -324,5 +337,8 @@
                      value="/WEB-INF/validator-rules.xml,
                             /WEB-INF/validation.xml"/>
   </plug-in>
+
+  <!-- Plugin to for configuring vegbank application .. home grown not third party -->
+  <plug-in className="org.vegbank.ui.struts.VegbankInitPlugin"/>
 
 </struts-config>

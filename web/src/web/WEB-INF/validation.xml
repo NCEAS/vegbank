@@ -7,7 +7,7 @@
 <!--
     Validation Rules for the Vegbank application 
 
-    $Id: validation.xml,v 1.8 2003-11-25 20:04:17 farrell Exp $
+    $Id: validation.xml,v 1.9 2003-12-02 20:02:15 farrell Exp $
 -->
 
 <form-validation>
@@ -95,9 +95,9 @@
 		depends="required">
               <arg0   key="The type of result requested" resource="false"/>
             </field>
-	    <field property="vegbankAccessionNumber"
+	    <field property="accessionCode"
 		depends="required">
-              <arg0   key="The accessionNumber of the observation" resource="false"/>
+              <arg0   key="The accessionCode of the observation" resource="false"/>
             </field>
 	</form>
 

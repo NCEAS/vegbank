@@ -57,6 +57,8 @@
         <a href="@forms_link@EmailPassword.jsp">Lost your password?</a>
         <br/>
         <a href="@forms_link@RegisterNewUser.jsp">Not yet a user? Register here.</a>
+        <br/>
+        <a href="/vegbank/Logon.do?username=GUESTUSER@VEGBANK.ORG&password=nopassword">Use vegbank as a guest? Logon  here.</a>
       </font>
     </td>
   </tr>
