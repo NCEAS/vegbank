@@ -1,0 +1,3660 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VegBankPackage>
+<entity>
+<entity.entity_id>1</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>8</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>128143</reference.reference_id>
+<reference.full_citation>Esslinger, T.L. and R.S. Egan. 1995. A sixth checklist of the lichen-forming, lichenicolous, and allied fungi of the continental United States and Canada. The Bryologist 98(4):467-549. As supplied by USDA, NRCS from The PLANTS database. National Plant Data Center, Baton Rouge, LA. Version: November 19, 1997.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Bacidia laurocerasi ssp. laurocerasi</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>128143</reference.reference_id>
+<reference.full_citation>Esslinger, T.L. and R.S. Egan. 1995. A sixth checklist of the lichen-forming, lichenicolous, and allied fungi of the continental United States and Canada. The Bryologist 98(4):467-549. As supplied by USDA, NRCS from The PLANTS database. National Plant Data Center, Baton Rouge, LA. Version: November 19, 1997.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Subspecies</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>15</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>22</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>128143</reference.reference_id>
+<reference.full_citation>Esslinger, T.L. and R.S. Egan. 1995. A sixth checklist of the lichen-forming, lichenicolous, and allied fungi of the continental United States and Canada. The Bryologist 98(4):467-549. As supplied by USDA, NRCS from The PLANTS database. National Plant Data Center, Baton Rouge, LA. Version: November 19, 1997.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Bacidia laurocerasi (Delise ex Duby) Ozenda &amp; Clauzade</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>128143</reference.reference_id>
+<reference.full_citation>Esslinger, T.L. and R.S. Egan. 1995. A sixth checklist of the lichen-forming, lichenicolous, and allied fungi of the continental United States and Canada. The Bryologist 98(4):467-549. As supplied by USDA, NRCS from The PLANTS database. National Plant Data Center, Baton Rouge, LA. Version: November 19, 1997.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Species</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>2002-10-18 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.126003</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>NLT0004170</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:28.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>16</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>128143</reference.reference_id>
+<reference.full_citation>Esslinger, T.L. and R.S. Egan. 1995. A sixth checklist of the lichen-forming, lichenicolous, and allied fungi of the continental United States and Canada. The Bryologist 98(4):467-549. As supplied by USDA, NRCS from The PLANTS database. National Plant Data Center, Baton Rouge, LA. Version: November 19, 1997.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Bacidia laurocerasi</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:28.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name + author -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>16</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>128143</reference.reference_id>
+<reference.full_citation>Esslinger, T.L. and R.S. Egan. 1995. A sixth checklist of the lichen-forming, lichenicolous, and allied fungi of the continental United States and Canada. The Bryologist 98(4):467-549. As supplied by USDA, NRCS from The PLANTS database. National Plant Data Center, Baton Rouge, LA. Version: November 19, 1997.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Bacidia laurocerasi (Delise ex Duby) Ozenda &amp; Clauzade</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:28.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>2002-10-18 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.121695</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>NLT0004172</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:28:41.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>2</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>128143</reference.reference_id>
+<reference.full_citation>Esslinger, T.L. and R.S. Egan. 1995. A sixth checklist of the lichen-forming, lichenicolous, and allied fungi of the continental United States and Canada. The Bryologist 98(4):467-549. As supplied by USDA, NRCS from The PLANTS database. National Plant Data Center, Baton Rouge, LA. Version: November 19, 1997.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Bacidia laurocerasi ssp. laurocerasi</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:28:41.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>29</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>36</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Scapania compacta</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>Schuster (1974) believes that this species should not be admitted as a member of the North American flora.</entity.classification_com>
+
+
+<entity.classification_level>Species</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>2002-10-18 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.121717</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>NBHEP33080</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:23:58.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>30</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Scapania compacta</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:23:58.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>43</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>50</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>139486</reference.reference_id>
+<reference.full_citation>Anderson, L.E., H.A. Crum, and W.R. Buck. 1990. List of the mosses of North America north of Mexico. The Bryologist 93(4):448-499.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Splachnum vasculosum var. vasculosum</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>139486</reference.reference_id>
+<reference.full_citation>Anderson, L.E., H.A. Crum, and W.R. Buck. 1990. List of the mosses of North America north of Mexico. The Bryologist 93(4):448-499.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Variety</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>57</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>64</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>139486</reference.reference_id>
+<reference.full_citation>Anderson, L.E., H.A. Crum, and W.R. Buck. 1990. List of the mosses of North America north of Mexico. The Bryologist 93(4):448-499.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Splachnum vasculosum Hedw.</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>139486</reference.reference_id>
+<reference.full_citation>Anderson, L.E., H.A. Crum, and W.R. Buck. 1990. List of the mosses of North America north of Mexico. The Bryologist 93(4):448-499.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Species</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>2002-10-18 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.124646</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>NBMUS71060</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:18.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>58</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>139486</reference.reference_id>
+<reference.full_citation>Anderson, L.E., H.A. Crum, and W.R. Buck. 1990. List of the mosses of North America north of Mexico. The Bryologist 93(4):448-499.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Splachnum vasculosum</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:18.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name + author -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>58</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>139486</reference.reference_id>
+<reference.full_citation>Anderson, L.E., H.A. Crum, and W.R. Buck. 1990. List of the mosses of North America north of Mexico. The Bryologist 93(4):448-499.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Splachnum vasculosum Hedw.</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:18.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>2002-10-18 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.121761</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>NBMUS71062</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:23:58.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>44</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>139486</reference.reference_id>
+<reference.full_citation>Anderson, L.E., H.A. Crum, and W.R. Buck. 1990. List of the mosses of North America north of Mexico. The Bryologist 93(4):448-499.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Splachnum vasculosum var. vasculosum</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:23:58.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>71</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>78</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Lophozia ventricosa var. silvicola</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Variety</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>85</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>92</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Lophozia ventricosa</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Species</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>2002-10-18 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.123119</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>NBHEP1Y0X0</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:08.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>86</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Lophozia ventricosa</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:08.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>2002-10-18 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.122092</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>NBHEP1Y0X5</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:00.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>72</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Lophozia ventricosa var. silvicola</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:00.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>99</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>106</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>152855</reference.reference_id>
+<reference.full_citation>Esslinger, T.L. and R.S. Egan. 1995. A sixth checklist of the lichen-forming, lichenicolous, and allied fungi of the continental United States and Canada. The Bryologist 98(4): 467-549.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Bacidia akompsa (Tuck.) Fink</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>152855</reference.reference_id>
+<reference.full_citation>Esslinger, T.L. and R.S. Egan. 1995. A sixth checklist of the lichen-forming, lichenicolous, and allied fungi of the continental United States and Canada. The Bryologist 98(4): 467-549.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>According to Esslinger and Egan (1995) Bacidia akompsa should be in the genus Lecanactis, but it has not yet been published there.</entity.classification_com>
+
+
+<entity.classification_level>Species</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>2002-10-18 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.122563</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>NLT0032150</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:04.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>100</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>152855</reference.reference_id>
+<reference.full_citation>Esslinger, T.L. and R.S. Egan. 1995. A sixth checklist of the lichen-forming, lichenicolous, and allied fungi of the continental United States and Canada. The Bryologist 98(4): 467-549.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Lecanactis sp. 1</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:04.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>113</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>120</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Riccardia multifida var. multifida</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>Treated as a subspecies by Schuster.</entity.classification_com>
+
+
+<entity.classification_level>Variety</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>127</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>134</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Riccardia multifida</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Species</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>2002-10-18 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.123529</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>NBHEP2Y040</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:28:42.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>128</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Riccardia multifida</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:28:42.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>2002-10-18 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.122626</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>NBHEP2Y042</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-05-26 09:41:09.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>114</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Riccardia multifida var. multifida</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-05-26 09:41:09.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>141</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>148</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Cephaloziella rappii</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>Schuster (1980) treats this taxon as a subspecies of Cephaloziella hyalina.</entity.classification_com>
+
+
+<entity.classification_level>Species</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>2002-10-18 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.122768</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>NBHEP0Q0G0</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:05.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>142</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>131975</reference.reference_id>
+<reference.full_citation>Stotler, R. and B. Crandall-Stotler. 1977. A checklist of liverworts and hornworts of North America. The Bryologist. 76:405-428.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Cephaloziella rappii</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:24:05.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>155</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>162</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Alnus viridis ssp. crispa (Ait.) Turrill</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Subspecies</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>171</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>178</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Alnus viridis (Vill.) Lam. &amp; DC.</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>Alnus viridis is recognized by most North American floras as Alnus crispa (e.g., Gleason and Cronquist 1990). Scoggan (1978) recognizes ssp. sinuata and ssp. crispa, but A. sinuata has been treated as a distinct species (Hitchcock and Cronquist 1973).</entity.classification_com>
+
+
+<entity.classification_level>Species</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>2002-10-19 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.149029</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>PDBET01080</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-06-07 13:13:15.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>172</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Alnus viridis</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-06-07 13:13:15.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name + author -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>172</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Alnus viridis (Vill.) Lam. &amp; DC.</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-06-07 13:13:15.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>G_PRIMARY_COMMON_NAME</entity_name.name_system>
+<entity_name.entity_name>Green Alder</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-06-07 13:13:15.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>2002-10-19 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.129412</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>PDBET01081</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-06-07 13:11:47.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>156</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Alnus viridis ssp. crispa</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-06-07 13:11:47.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name + author -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>156</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Alnus viridis ssp. crispa (Ait.) Turrill</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-06-07 13:11:47.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>OTHER_GLOBAL_COMMON_NAME</entity_name.name_system>
+<entity_name.entity_name>Mountain Alder</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-06-07 13:11:47.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>185</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>192</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Prosopis pallida (Humb. &amp; Bonpl. ex Willd.) Kunth</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Species</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>2002-10-19 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.130994</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>PDFAB3A040</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:25:02.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>186</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Prosopis pallida</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:25:02.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name + author -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>186</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Prosopis pallida (Humb. &amp; Bonpl. ex Willd.) Kunth</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:25:02.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>G_PRIMARY_COMMON_NAME</entity_name.name_system>
+<entity_name.entity_name>Kiawe</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:25:02.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>201</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>208</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Batis maritima L.</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Species</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>2002-10-19 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+
+
+
+<entity.entity_type_cd>P</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.133234</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>PDBAT01010</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:25:18.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>202</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Batis maritima</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:25:18.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name + author -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>202</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>154408</reference.reference_id>
+<reference.full_citation>Kartesz, J.T. 1994. A synonymized checklist of the vascular flora of the United States, Canada, and Greenland. 2nd edition. 2 vols. Timber Press, Portland, OR.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Batis maritima L.</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME AUTHOR_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:25:18.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>G_PRIMARY_COMMON_NAME</entity_name.name_system>
+<entity_name.entity_name>Saltwort</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:25:18.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+<entity>
+<entity.entity_id>217</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>224</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Pinus echinata - Quercus stellata - Quercus marilandica / Schizachyrium scoparium Woodland</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>See related oak-dominated vegetation in II.B.2.N.a ~&lt;i&gt;Quercus stellata - Quercus marilandica&lt;/i&gt; Woodland Alliance (A.625)$$, and see ~&lt;i&gt;Pinus echinata - Quercus velutina - Quercus stellata / Vaccinium&lt;/i&gt; spp. Forest (CEGL002401)$$, a similar dry forest type. The equivalent dry-mesic pine - oak type is ~&lt;i&gt;Pinus echinata - Quercus alba / Schizachyrium scoparium&lt;/i&gt; Woodland (CEGL002394)$$.</entity.classification_com>
+
+
+<entity.classification_level>Association</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>230</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>230</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Pinus echinata - Quercus stellata - Quercus marilandica Woodland Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>Develop historic type for Louisiana and elsewhere. In Louisiana, this vegetation only occurs as &lt;i&gt;Pinus echinata&lt;/i&gt; stands with &lt;i&gt;Quercus&lt;/i&gt; spp. coming in because of lack of fire. In South Carolina, this vegetation is known from the Blue Ridge/Piedmont transition but is all but extirpated. According to Tom Foti, this alliance occurred in the Coastal Plain of Arkansas, at least historically.</entity.classification_com>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance includes shortleaf pine-oak woodlands of the interior southeastern United States, ranging from the Piedmont along the southern edge of the Southern Blue Ridge and into the Southern Ridge and Valley, possibly into the Cumberland Plateau, and west into the Ozark and Ouachita mountains. These woodlands have mixed evergreen and deciduous canopies where &lt;i&gt;Pinus echinata, Quercus stellata&lt;/i&gt;, and &lt;i&gt;Quercus marilandica&lt;/i&gt; occur in varying ratios. This vegetation tends to occur on edaphically and/or topographically extreme sites such as on steep and rocky south- and west-facing slopes and ridges with thin soils, although some may be on upland flats with extreme soil conditions. Canopy associates include &lt;i&gt;Pinus virginiana, Quercus prinus, Quercus falcata, Nyssa sylvatica, Quercus alba, Quercus coccinea var. coccinea, Quercus velutina&lt;/i&gt;, and other species. The trees are often stunted. Subcanopy and shrub species include &lt;i&gt;Oxydendrum arboreum, Acer rubrum var. rubrum, Kalmia latifolia, Symplocos tinctoria, Vaccinium arboreum, Vaccinium formosum, Vaccinium pallidum, Vaccinium stamineum, Gaylussacia dumosa (= var. dumosa)&lt;/i&gt;, and &lt;i&gt;Lyonia mariana&lt;/i&gt;. The herbaceous layer varies from sparse to dense and may contain &lt;i&gt;Schizachyrium scoparium, Andropogon glomeratus var. pumilus (= Andropogon tenuispatheus), Danthonia spicata, Danthonia sericea, Iris verna var. verna, Pteridium aquilinum var. pseudocaudatum, Smilax glauca (= var. glauca)&lt;/i&gt;, and &lt;i&gt;Tephrosia virginiana&lt;/i&gt;. Occurrences in the mountains likely will have &lt;i&gt;Baptisia tinctoria, Chamaecrista fasciculata (= Cassia fasciculata), Chamaecrista nictitans (= Cassia nictitans), Ceanothus americanus, Chrysopsis mariana, Clitoria mariana, Coreopsis tripteris, Crotalaria sagittalis, Desmodium rotundifolium, Saccharum giganteum, Euphorbia corollata, Helianthus atrorubens, Helianthus microcephalus&lt;/i&gt;, and &lt;i&gt;Pityopsis aspera&lt;/i&gt; in the herbaceous layer. Species that are common on occurrences on mafic rock include &lt;i&gt;Carya carolinae-septentrionalis, Fraxinus americana, Vaccinium arboreum, Viburnum rufidulum&lt;/i&gt;, and &lt;i&gt;Cercis canadensis var. canadensis&lt;/i&gt;.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.124758</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.680</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:30.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Shortleaf Pine - Post Oak - Blackjack Oak Woodland Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:30.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This shortleaf pine - oak woodland is found in the Ozark/Ouachita region of the United States. Stands occur along ridges and on upper south- to southwest-facing slopes. The vegetation contains an open canopy dominated by &lt;i&gt;Pinus echinata&lt;/i&gt; codominating with &lt;i&gt;Quercus stellata&lt;/i&gt; and &lt;i&gt;Quercus marilandica&lt;/i&gt;, either singly or in combination. &lt;i&gt;Pinus echinata&lt;/i&gt; may form an emergent canopy over the oaks. Common woody associates include &lt;i&gt;Carya texana, Quercus velutina&lt;/i&gt;, and &lt;i&gt;Diospyros virginiana&lt;/i&gt;. Grassy openings are dominated by &lt;i&gt;Schizachyrium scoparium&lt;/i&gt;. Other abundant herbs include &lt;i&gt;Baptisia bracteata, Helianthus hirsutus, Liatris aspera, Solidago nemoralis, Solidago petiolaris&lt;/i&gt;, and &lt;i&gt;Tephrosia virginiana&lt;/i&gt;. This type represents the driest shortleaf pine - oak communities in the Ozarks.</entity.entity_desc>
+
+
+
+<entity.entity_type_cd>C</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.683060</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>CEGL002393</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>218</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Pinus echinata - Quercus stellata - Quercus marilandica / Schizachyrium scoparium Woodland</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Shortleaf Pine - Post Oak - Blackjack Oak / Little Bluestem Woodland</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2003-10-06 09:26:03.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>G_PRIMARY_COMMON_NAME</entity_name.name_system>
+<entity_name.entity_name>Ozark/Ouachita Shortleaf Pine - Oak Dry Woodland</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>237</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>244</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Leucophyllum frutescens Shrubland</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Association</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>250</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>250</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Acacia rigidula - Leucophyllum frutescens - Acacia berlandieri Shrubland Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1998-07-28 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance includes deciduous shrublands dominated by &lt;i&gt;Acacia berlandieri, Acacia rigidula&lt;/i&gt;, and/or &lt;i&gt;Leucophyllum frutescens&lt;/i&gt; found on rocky slopes, uplands with shallow soils and disturbed areas in the South Texas Plains, Stockton Plateau and Lower Rio Grande Valley of Texas and the Mexican states of Tamaulipas, Nuevo Leon, and Coahuila. Composition varies with soils, slope, and past land use. Associated shrubs can include &lt;i&gt;Acacia schaffneri, Calliandra conferta, Condalia spathulata, Krameria ramosissima, Guajacum angustifolium, Citharexylum brachyanthum, Jatropha dioica, Castela erecta ssp. texana, Prosopis glandulosa, Celtis pallida, Ziziphus obtusifolia var. obtusifolia&lt;/i&gt;, and &lt;i&gt;Karwinskia humboldtiana&lt;/i&gt;. One association has ten or more species of small cacti along with &lt;i&gt;Agave parryi ssp. parryi (= Agave scabra)&lt;/i&gt; and &lt;i&gt;Agave lophantha&lt;/i&gt;. Shrubland associations in this alliance often occur intermixed with each other and with grassland associations of the South Texas Plains such as ~&lt;i&gt;Bothriochloa barbinodis - Chloris pluriflora&lt;/i&gt; Herbaceous Vegetation (CEGL002236)$$. Also included here are shrublands of tropical/subtropical southern Texas and adjacent Tamaulipas and Nuevo León, Mexico, dominated by &lt;i&gt;Helietta parvifolia&lt;/i&gt;.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.125641</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.1909</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:33.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Chaparro-Prieto - Cenizo - Guajillo Shrubland Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:33.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>1994-11-01 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>Vegetation in this association includes shrublands dominated by &lt;i&gt;Leucophyllum frutescens&lt;/i&gt; occurring over shallow limestone soils on the hills near the Rio Grande, on the Stockton Plateau, on the South Texas Plains, and in northeastern Mexico (Coahuila). &lt;i&gt;Calliandra conferta, Acacia berlandieri, Acacia rigidula&lt;/i&gt;, and &lt;i&gt;Ziziphus obtusifolia var. obtusifolia&lt;/i&gt; are associated shrubs. These shrublands usually grade into other shrublands dominated by &lt;i&gt;Prosopis glandulosa var. glandulosa, Acacia rigidula&lt;/i&gt;, or &lt;i&gt;Acacia berlandieri&lt;/i&gt;.</entity.entity_desc>
+
+
+
+<entity.entity_type_cd>C</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.683062</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>CEGL002168</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>238</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Leucophyllum frutescens Shrubland</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Cenizo Shrubland</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2003-10-06 09:25:50.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>G_PRIMARY_COMMON_NAME</entity_name.name_system>
+<entity_name.entity_name>Ceniza Shrubland</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>257</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>264</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Quercus macrocarpa / Andropogon gerardii - Hesperostipa spartea Woodland</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>190544</reference.reference_id>
+<reference.full_citation>Midwestern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Minneapolis, MN.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>In Missouri it's possible that &lt;i&gt;Quercus alba, Quercus rubra&lt;/i&gt;, and &lt;i&gt;Quercus velutina&lt;/i&gt; were also present in the loess hills region. The type may have once occurred widely across glaciated northern Missouri (T. Nigh pers. comm. 2000). In Nebraska this type is fairly heterogeneous and needs further review. Currently Nebraska combines oak savanna and oak woodland in this type (Steinauer and Rolfsmeier 2000). This community may overlap with ~&lt;i&gt;Quercus macrocarpa / (Amelanchier alnifolia, Cornus drummondii) / Aralia nudicaulis&lt;/i&gt; Forest (CEGL002072)$$ in a more closed condition, and can overlap with ~&lt;i&gt;Quercus macrocarpa / Andropogon gerardii - Panicum virgatum&lt;/i&gt; Woodland (CEGL002052)$$ in stream bottoms. Type should be in southeastern South Dakota on loess soils.</entity.classification_com>
+
+
+<entity.classification_level>Association</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>270</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>270</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>190544</reference.reference_id>
+<reference.full_citation>Midwestern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Minneapolis, MN.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Quercus macrocarpa Woodland Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>190544</reference.reference_id>
+<reference.full_citation>Midwestern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Minneapolis, MN.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance is widespread in the northern and central Great Plains. All of its associations are found exclusively or primarily in the midwestern United States west of the Mississippi River. The canopy is open to moderately closed and usually dominated by &lt;i&gt;Quercus macrocarpa&lt;/i&gt;. Common associates in the canopy are &lt;i&gt;Quercus muehlenbergii&lt;/i&gt; in the southeast portion, &lt;i&gt;Fraxinus pennsylvanica, Tilia americana&lt;/i&gt;, and &lt;i&gt;Populus tremuloides&lt;/i&gt; in the northern half, and &lt;i&gt;Carya&lt;/i&gt; spp. and &lt;i&gt;Ulmus&lt;/i&gt; spp. in the eastern part of the alliance's range. &lt;i&gt;Pinus ponderosa&lt;/i&gt; can occur in some stands at the extreme western limit of this alliance's range. A shrub layer 1-2 m tall is often present, especially in the northern half of the range of this alliance. Dominant shrubs include &lt;i&gt;Amelanchier alnifolia, Corylus americana, Corylus cornuta, Prunus virginiana&lt;/i&gt;, and &lt;i&gt;Symphoricarpos occidentalis&lt;/i&gt;. The herbaceous layer is dominated by graminoids. These can range from tall grasses, such as &lt;i&gt;Andropogon gerardii, Panicum virgatum&lt;/i&gt;, and &lt;i&gt;Sorghastrum nutans&lt;/i&gt;, to mid grasses, such as &lt;i&gt;Schizachyrium scoparium&lt;/i&gt; and &lt;i&gt;Hesperostipa spartea (= Stipa spartea)&lt;/i&gt;, to short graminoids, such as &lt;i&gt;Carex inops ssp. heliophila&lt;/i&gt;. This alliance is found in a landscape dominated by prairie communities. The woodland is typically found on rolling hills, lower mountain slopes (in the Black Hills), or along ravines. These topographic positions provided some protection from the fires that regularly occurred on the surrounding prairies in pre-European times. However, some fire was necessary to prevent the woodland physiognomy from closing and becoming a forest. This was especially important in the more mesic eastern portions of this alliance's range. In Nebraska, the soils are fertile, moderately well-drained to well-drained, and deep.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.125327</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.620</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:28:57.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Bur Oak Woodland Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:28:57.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This bur oak woodland community is associated with the floodplains of rivers and streams in the central-western tallgrass region of the midwestern United States. Stands occur on gentle to steep slopes with silt or loam soils. Soils are well-drained to moderately well-drained, sometimes shallow (0-40 cm), and formed from loess or glacial till. The overstory of this community is open and dominated by &lt;i&gt;Quercus macrocarpa&lt;/i&gt;. &lt;i&gt;Quercus muehlenbergii&lt;/i&gt; can be a common associate. Shrubs are absent to common, and include &lt;i&gt;Cornus drummondii, Ceanothus herbaceus (= Ceanothus ovatus), Corylus americana, Prunus americana, Rhus glabra, Ribes missouriense, Symphoricarpos occidentalis&lt;/i&gt;, and &lt;i&gt;Zanthoxylum americanum&lt;/i&gt;. The herbaceous stratum can be similar to dry prairie. It includes the grasses &lt;i&gt;Andropogon gerardii, Schizachyrium scoparium, Sorghastrum nutans, Sporobolus heterolepis&lt;/i&gt;, and &lt;i&gt;Hesperostipa spartea (= Stipa spartea)&lt;/i&gt;, as well as &lt;i&gt;Maianthemum stellatum, Monarda fistulosa&lt;/i&gt;, and &lt;i&gt;Solidago canadensis&lt;/i&gt;. In the past, periodic fires kept the canopy from closing. Where fire regimes have been disrupted, this community often begins to succeed to other, more closed oak types.</entity.entity_desc>
+
+
+
+<entity.entity_type_cd>C</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.683064</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>CEGL002053</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>258</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Quercus macrocarpa / Andropogon gerardii - Hesperostipa spartea Woodland</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Bur Oak / Big Bluestem - Porcupine Grass Woodland</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2003-10-06 09:27:10.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>G_PRIMARY_COMMON_NAME</entity_name.name_system>
+<entity_name.entity_name>Western Tallgrass Bur Oak Woodland</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>277</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>284</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Heuchera bracteata - Heuchera parvifolia var. nivalis Herbaceous Vegetation</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>This association is chasmophytic (rooting in fissures of rocks) and may be better classified in a sparsely vegetated pavement formation (VII.A.2.N.a.).</entity.classification_com>
+
+
+<entity.classification_level>Association</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>290</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>290</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Heuchera bracteata Herbaceous Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>Given that this alliance occurs on rock outcrops and in crevices, the total vegetation cover is likely to be sparse (&lt;25%), and the alliance might be better classified in a sparse formation (VII.A.2.N.a.).</entity.classification_com>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance occurs in the alpine tundra in the Colorado Front Range. Stands are located primarily in the lower subnival zone, the area just below permanent snow and ice, on granite and gneiss rock outcrops that are nearly blown free of snow in winter. Stands are found on warm, dry microsites in rock crevices and on outcrop ledges. Soils are young and poorly developed, with the majority of the ground surface covered with rock. &lt;i&gt;Heuchera bracteata&lt;/i&gt; and &lt;i&gt;Heuchera parvifolia var. nivalis&lt;/i&gt; are the dominant species. &lt;i&gt;Potentilla nivea&lt;/i&gt; and &lt;i&gt;Elymus scribneri&lt;/i&gt; are common associates. The cryptogam layer is sparse due to the &lt;i&gt;Heuchera&lt;/i&gt; leaf litter that covers the ground. &lt;i&gt;Tortula norvegica&lt;/i&gt; is the most common moss species, and &lt;i&gt;Cladonia pyxidata&lt;/i&gt; and &lt;i&gt;Xanthoria elegans&lt;/i&gt; are the most common lichens present.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.125377</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.1646</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:04.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Rocky Mountain Alumroot Herbaceous Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:04.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc/>
+
+
+
+<entity.entity_type_cd>C</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.683065</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>CEGL001971</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>278</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Heuchera bracteata - Heuchera parvifolia var. nivalis Herbaceous Vegetation</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Rocky Mountain Alumroot - Littleleaf Alumroot Herbaceous Vegetation</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2003-10-06 09:25:45.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>297</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>304</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Myriophyllum heterophyllum Herbaceous Vegetation</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Association</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>310</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>310</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Myriophyllum heterophyllum Permanently Flooded Herbaceous Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>2000-09-01 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance consists of aquatic vegetation in rivers and streams of the southern United States, in the coastal plains and possibly adjacent ecoregions, dominated by &lt;i&gt;Myriophyllum heterophyllum&lt;/i&gt;. This alliance may require modification as more information becomes available.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.126035</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.2003</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:34.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Variable Water-milfoil Permanently Flooded Herbaceous Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:34.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>2000-09-01 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This vegetation consists of emergent/submergent monospecific beds of &lt;i&gt;Myriophyllum heterophyllum&lt;/i&gt;, which occur in natural or impounded lakes and ponds in the southeastern United States. This vegetation is possible anywhere in the range of the species, which is widespread across the United States and adjacent Canada. It has been documented from the Upper East Gulf Coastal Plain of Georgia.</entity.entity_desc>
+
+
+
+<entity.entity_type_cd>C</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.683066</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>CEGL008457</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>298</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Myriophyllum heterophyllum Herbaceous Vegetation</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Variable Water-milfoil Herbaceous Vegetation</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2003-10-06 09:25:54.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>G_PRIMARY_COMMON_NAME</entity_name.name_system>
+<entity_name.entity_name>Variable Water-milfoil Emergent Aquatic Vegetation</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>317</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>324</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Aristida beyrichiana - Rhynchospora oligantha - Panicum nudicaule - (Eurybia eryngiifolia) Herbaceous Vegetation</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>This type is based on A. Schotz observations at Eglin AFB and has later been applied to AL examples (Conecuh NF) which are being regularly burned. The placement of Splinter Hill Bog under this type is not clear. &lt;i&gt;Aristida beyrichiana&lt;/i&gt; and &lt;i&gt;Eurybia eryngiifolia (= Aster eryngiifolius)&lt;/i&gt; distinguish this type from more western parts of the East Gulf Coastal Plain seepage bogs (of eastern LA and MS). &lt;i&gt;Eurybia eryngiifolia&lt;/i&gt; is rare in Alabama, and may not be present in occurrences of this association found in that state. Note that &lt;i&gt;Panicum nudicaule&lt;/i&gt; is erroneously not regarded as a valid taxon in Kartesz (1999), and also needs a name in &lt;i&gt;Dichanthelium&lt;/i&gt;. Examples of this association are documented at Splinter Hill Bog, Alabama.</entity.classification_com>
+
+
+<entity.classification_level>Association</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>330</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>330</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Rhynchospora oligantha - Sarracenia spp. - (Aristida beyrichiana, Ctenium aromaticum) - Osmunda cinnamomea / Sphagnum spp. Saturated Herbaceous Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance includes herbaceous bogs and wetland savannas of the southeastern Coastal Plain ranging from Texas and Oklahoma eastward to North Carolina. Such communities have been variously called hillside seepage bogs, wet prairies, muck bogs, poor fens, sandhill seeps, and other names. Examples are influenced by groundwater seepage and/or seasonally high water tables. Given the large geographic range and extensive species turnover within the Coastal Plain, associations found in this alliance are quite floristically variable. Most types are heavily dominated by wetland herbaceous species. Woody species may occur in scattered clumps and patches in most examples, with density dependent largely on fire frequency and seasonality. In some parts of the distribution of this alliance, especially the Atlantic Coastal Plain, shrubs can be very prominent, even when fire is relatively frequent. &lt;i&gt;Rhynchospora&lt;/i&gt; spp. are especially prominent and diverse in most examples; many associations may have as many as ten &lt;i&gt;Rhynchospora&lt;/i&gt; spp. present. Carnivorous taxa are also usually present and diagnostic, especially &lt;i&gt;Sarracenia&lt;/i&gt; spp. &lt;i&gt;Sarracenia&lt;/i&gt; spp. range from dominant or codominant to sparse but diagnostic, and from a single species to several present. The range of species include &lt;i&gt;Sarracenia alata, Sarracenia leucophylla, Sarracenia psittacina, Sarracenia flava, Sarracenia purpurea (= Sarracenia purpurea var. burkii)&lt;/i&gt;, and &lt;i&gt;Sarracenia rubra&lt;/i&gt;. Woody species are &lt;i&gt;Magnolia virginiana, Smilax laurifolia, Morella cerifera (= Myrica cerifera var. cerifera), Morella caroliniensis (= Myrica heterophylla), Morella inodora (= Myrica inodora), Cliftonia monophylla, Cyrilla racemiflora, Clethra alnifolia, Arundinaria gigantea ssp. tecta&lt;/i&gt;, and &lt;i&gt;Toxicodendron vernix&lt;/i&gt;.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.125989</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.1463</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:33.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Feather-bristle Beaksedge - Pitcherplant species - (Southern Wiregrass, Toothache Grass) - Cinnamon Fern / Peatmoss species Saturated Herbaceous Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:33.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>1996-02-01 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This association occurs in the western Florida Panhandle and adjacent Alabama. It occurs in a hilly landscape, typically associated with seepage on slopes where clay or hardpan is close to the surface; it is characterized by &lt;i&gt;Aristida beyrichiana, Rhynchospora oligantha, Panicum nudicaule, Eurybia eryngiifolia (= Aster eryngiifolius)&lt;/i&gt; (rare or absent in Alabama examples), &lt;i&gt;Rhynchospora macra, Carphephorus pseudoliatris, Pleea tenuifolia, Eriocaulon decangulare, Ctenium aromaticum, Rhexia alifanus, Aletris aurea, Sarracenia psittacina, Sarracenia flava, Sarracenia leucophylla&lt;/i&gt; (rarely), &lt;i&gt;Andropogon arctatus, Aristida purpurascens, Aristida palustris, Lachnocaulon digynum, Liatris spicata, Balduina uniflora, Polygala ramosa, Polygala&lt;/i&gt; spp., &lt;i&gt;Xyris ambigua, Platanthera integra&lt;/i&gt;, and others. Other typical species include &lt;i&gt;Andropogon glomeratus, Aristida palustris, Arundinaria gigantea ssp. tecta, Bidens mitis, Bigelowia nudata ssp. nudata, Coreopsis linifolia, Fuirena squarrosa, Helianthus heterophyllus, Hypericum brachyphyllum, Ilex glabra, Liatris spicata, Lophiola aurea, Lycopodiella&lt;/i&gt; spp., &lt;i&gt;Magnolia virginiana, Morella caroliniensis (= Myrica heterophylla), Nyssa biflora, Oxypolis filiformis, Rhexia lutea, Rhexia petiolata, Rhynchospora chalarocephala, Rhynchospora plumosa, Schizachyrium scoparium, Scleria muehlenbergii, Smilax laurifolia, Triantha racemosa (= Tofieldia racemosa), Xyris baldwiniana, Xyris stricta&lt;/i&gt;, and &lt;i&gt;Zigadenus glaberrimus&lt;/i&gt;.</entity.entity_desc>
+
+
+
+<entity.entity_type_cd>C</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.683067</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>CEGL004155</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>318</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Aristida beyrichiana - Rhynchospora oligantha - Panicum nudicaule - (Eurybia eryngiifolia) Herbaceous Vegetation</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Southern Wiregrass - Feather-bristle Beaksedge - Gulf Bog Panicgrass - (Eryngo Aster) Herbaceous Vegetation</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2003-10-06 09:25:23.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>G_PRIMARY_COMMON_NAME</entity_name.name_system>
+<entity_name.entity_name>East Gulf Coastal Plain Seepage Bog (Upper Terrace Type)</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>337</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>344</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Distichlis spicata Mixed Herb Herbaceous Vegetation</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Association</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>350</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>350</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Distichlis spicata Intermittently Flooded Herbaceous Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>The classification of vegetation in this alliance is difficult for two reasons. First, &lt;i&gt;Distichlis spicata&lt;/i&gt; is a widespread halophytic grass species that dominates or codominates the herbaceous layer of stands classified into many different associations in several different alliances. This results in many closely related associations in other alliances where this grass is a diagnostic species. Secondly, most of these related alliances have an intermittent, temporary, seasonal or tidal flood regime. These flood regimes sometimes separate vegetation that otherwise is very similar. For example, the flood regime that separates this alliance from the ~&lt;i&gt;Distichlis spicata - (Hordeum jubatum)&lt;/i&gt; Temporarily Flooded Herbaceous Alliance (A.1341)$$ can be somewhat arbitrary in regions that have large year-to-year variation in precipitation.</entity.classification_com>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance occurs throughout much of the semi-arid and arid western U.S. in lowland sites such as playas, swales and terraces along washes that are intermittently flooded. The flooding is usually the result of highly localized thunderstorms. The unpredictable nature of the flooding is the key environmental factor separating this alliance from similar alliances with more predictable flooding regimes. Soils are deep, saline, alkaline and fine-textured. They generally have an impermeable layer and therefore are poorly drained. When the soil is dry, the surface usually has salt accumulations. This intermittently flooded grassland of playas and ephemeral streams has a sparse to dense herbaceous layer that is dominated by &lt;i&gt;Distichlis spicata&lt;/i&gt;, sometimes occurring in nearly pure stands. The level of salinity in the soil may restrict associated species. Associated graminoids may include &lt;i&gt;Puccinellia nuttalliana, Hordeum jubatum, Pascopyrum smithii, Sporobolus airoides, Carex filifolia&lt;/i&gt;, and &lt;i&gt;Juncus balticus&lt;/i&gt;. Forb cover is generally low and may include &lt;i&gt;Salicornia rubra, Triglochin maritima, Suaeda calceoliformis (= Suaeda depressa), Helianthus&lt;/i&gt; spp., and Asteraceae spp. Diagnostic of this alliance is the &lt;i&gt;Distichlis spicata&lt;/i&gt;-dominated herbaceous layer and the presence of surface water for brief periods at unpredictable times during the growing season.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.124691</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.1332</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:02.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Saltgrass Intermittently Flooded Herbaceous Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:02.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>Flooding is often from groundwater wicking to the surface. The most 'typical' playa in inland saltgrass communities; forb diversity is high. Includes &lt;i&gt;Salicornia rubra, Suaeda calceoliformis (= Suaeda depressa), Crepis&lt;/i&gt; spp., &lt;i&gt;Iva&lt;/i&gt; spp., &lt;i&gt;Triglochin maritima, Puccinellia nuttalliana, Juncus balticus&lt;/i&gt;. &lt;i&gt;Hordeum jubatum&lt;/i&gt; increases with grazing. These are short grasslands.</entity.entity_desc>
+
+
+
+<entity.entity_type_cd>C</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.683068</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>CEGL001771</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>338</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Distichlis spicata Mixed Herb Herbaceous Vegetation</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Saltgrass Mixed Herb Herbaceous Vegetation</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2003-10-06 09:25:38.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>357</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>364</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Pinus leiophylla / Piptochaetium fimbriatum Woodland</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Association</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>370</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>370</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Pinus leiophylla Woodland Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This woodland alliance occurs in mountains below the Mogollon Rim in southeastern Arizona, southwestern New Mexico and northern Mexico. Sites range from mesic, nearly level washes, stream terraces and toeslopes to very steep, rocky, xeric, mountain slopes. Aspect is variable depending on elevation. Soils range from moderately deep alluvium to shallow, lithic colluvium and residuum. Woodlands included in this alliance are characterized by a moderately sparse upper tree canopy, typically 10-20 m tall, with a moderately dense subcanopy. The upper canopy is dominated by &lt;i&gt;Pinus leiophylla&lt;/i&gt;. Scattered &lt;i&gt;Pinus ponderosa&lt;/i&gt; or &lt;i&gt;Pseudotsuga menziesii&lt;/i&gt; may be present in higher elevation stands. The subcanopy is a mixture of trees, such as &lt;i&gt;Juniperus deppeana, Juniperus monosperma, Pinus discolor&lt;/i&gt;, or Madrean encinals, such as &lt;i&gt;Quercus arizonica, Quercus emoryi&lt;/i&gt; or &lt;i&gt;Quercus hypoleucoides&lt;/i&gt;. Mesic semi-riparian sites may include scattered individuals of &lt;i&gt;Cupressus arizonica, Juglans major, Fraxinus velutina, Platanus wrightii&lt;/i&gt;, or &lt;i&gt;Prunus serotina&lt;/i&gt;. The shrub layer is typically sparse depending on the density of the tree canopy. Shrub associates include &lt;i&gt;Agave&lt;/i&gt; spp., &lt;i&gt;Arbutus arizonica, Arctostaphylos&lt;/i&gt; spp., &lt;i&gt;Ceanothus fendleri, Fallugia paradoxa, Garrya wrightii, Nolina microcarpa, Opuntia&lt;/i&gt; spp., &lt;i&gt;Quercus&lt;/i&gt; spp., &lt;i&gt;Rhus aromatica, Yucca schottii&lt;/i&gt;, and immature trees species. The herbaceous layer is composed primarily of perennial graminoids, particularly &lt;i&gt;Aristida schiedeana var. orcuttiana (= Aristida orcuttiana), Cyperus&lt;/i&gt; spp., &lt;i&gt;Koeleria macrantha, Muhlenbergia&lt;/i&gt; spp., &lt;i&gt;Panicum bulbosum, Piptochaetium fimbriatum, Schizachyrium cirratum&lt;/i&gt;, and &lt;i&gt;Piptochaetium pringlei (= Stipa pringlei)&lt;/i&gt;. Forb diversity may be high, but cover is low. Some of the more common forbs include &lt;i&gt;Artemisia ludoviciana, Brickellia lemmonii, Erigeron neomexicanus, Gnaphalium&lt;/i&gt; spp., &lt;i&gt;Penstemon barbatus, Packera neomexicana (= Senecio neomexicanus)&lt;/i&gt;, and &lt;i&gt;Solidago wrightii&lt;/i&gt;. Diagnostic of this woodland alliance is the tree canopy dominated by&lt;i&gt;Pinus leiophylla&lt;/i&gt;.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.126689</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.542</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:08.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Chihuahuan Pine Woodland Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:08.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This Madrean conifer woodland occurs in the mountains of southeastern Arizona, southwestern New Mexico and possibly northern Mexico. Stands are naturally small and patchy in distribution being restricted to flat to gently sloping streamsides and alluvial benches along drainages and washes. Elevation is roughly 1520-1830 m. Soils are fluventic and derived from alluvial sediments. The open to moderately dense (25-60% cover) tree canopy has an overstory of &lt;i&gt;Pinus leiophylla&lt;/i&gt; (8% cover), with a subcanopy codominated by &lt;i&gt;Pinus discolor&lt;/i&gt; (10%) and &lt;i&gt;Juniperus deppeana&lt;/i&gt; (13%) with evergreen oaks present such as &lt;i&gt;Quercus arizonica&lt;/i&gt; or &lt;i&gt;Quercus X organensis [arizonica X grisea]&lt;/i&gt; hybrid, &lt;i&gt;Quercus hypoleucoides&lt;/i&gt;, and &lt;i&gt;Quercus emoryi&lt;/i&gt;. Occasional &lt;i&gt;Platanus wrightii, Juglans major, Prunus serotina&lt;/i&gt;, and &lt;i&gt;Fraxinus velutina&lt;/i&gt; may also occur in the tree canopy. The shrub layer is typically moderately dense (&gt;25%) and is dominated by tree regeneration and shrubs such as &lt;i&gt;Quercus toumeyi, Quercus rugosa&lt;/i&gt;, and &lt;i&gt;Rhus trilobata&lt;/i&gt;. Other species, including &lt;i&gt;Arctostaphylos pungens, Nolina microcarpa, Frangula betulifolia, Garrya wrightii&lt;/i&gt;, and the vine &lt;i&gt;Vitis arizonica&lt;/i&gt;, are also present in low cover. The moderately dense herbaceous layer (25-60% cover) is dominated by the perennial grass &lt;i&gt;Piptochaetium fimbriatum&lt;/i&gt;. &lt;i&gt;Aristida schiedeana var. orcuttiana (= Aristida orcuttiana), Bouteloua curtipendula, Bouteloua gracilis, Bromus porteri (= Bromopsis porteri), Carex geophila&lt;/i&gt;, and &lt;i&gt;Muhlenbergia longiligula&lt;/i&gt; are also common, but the herbaceous layer is typically very diverse and includes sparse cover of many other grass and forb species. The &lt;i&gt;Pinus leiophylla&lt;/i&gt; overstory and &lt;i&gt;Piptochaetium fimbriatum&lt;/i&gt;-dominated herbaceous layer are diagnostic of this late-successional woodland.</entity.entity_desc>
+
+
+
+<entity.entity_type_cd>C</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.683069</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>CEGL000821</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>358</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Pinus leiophylla / Piptochaetium fimbriatum Woodland</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Chihuahuan Pine / Pinyon Speargrass Woodland</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2003-10-06 09:26:05.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>377</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>384</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Abies grandis / Arctostaphylos nevadensis Woodland</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Association</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>390</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>390</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Abies grandis Woodland Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>This alliance is derived from a series concept and as such is based on the presence of &lt;i&gt;Abies grandis&lt;/i&gt;, successfully reproducing in the understory, as a diagnostic species. Most stands are codominated by &lt;i&gt;Pinus ponderosa&lt;/i&gt; and &lt;i&gt;Pseudotsuga menziesii&lt;/i&gt;, with only moderate amounts of &lt;i&gt;Abies grandis&lt;/i&gt; in the canopy. The associations in this alliance should probably be moved into the ~&lt;i&gt;Pinus ponderosa - Pseudotsuga menziesii&lt;/i&gt; Woodland Alliance (A.533)$$, but further review is needed to determine if this is appropriate.</entity.classification_com>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc/>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.126471</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.558</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:08.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Grand Fir Woodland Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:08.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This is an evergreen conifer woodland association generally found on ridgetops and rocky sites in the eastern Cascades. The name of the type reflects a potential vegetation. The existing vegetation is dominated by &lt;i&gt;Pseudotsuga menziesii&lt;/i&gt; and/or &lt;i&gt;Pinus ponderosa&lt;/i&gt; in the main canopy. &lt;i&gt;Abies grandis&lt;/i&gt; and &lt;i&gt;Pinus contorta var. latifolia&lt;/i&gt; can be important in some stands. The tree canopy is mostly open. The undergrowth is patchy often with rocks exposed among a dwarf-shrub layer. &lt;i&gt;Arctostaphylos nevadensis&lt;/i&gt; is nearly always present and can be very abundant especially on glacial outwash or till in cold-air drainages. &lt;i&gt;Paxistima myrsinites, Spiraea betulifolia&lt;/i&gt; and several &lt;i&gt;Vaccinium&lt;/i&gt; species are present or can be abundant. &lt;i&gt;Arctostaphylos patula&lt;/i&gt; is associated in some Oregon stands. The herbaceous layer is sparse, patchy and dominated by graminoids, primarily &lt;i&gt;Calamagrostis rubescens, Carex geyeri&lt;/i&gt; and &lt;i&gt;Festuca occidentalis&lt;/i&gt;.</entity.entity_desc>
+
+
+
+<entity.entity_type_cd>C</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.683070</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>CEGL000915</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>378</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Abies grandis / Arctostaphylos nevadensis Woodland</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Grand Fir / Pinemat Manzanita Woodland</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2003-10-06 09:25:14.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>G_PRIMARY_COMMON_NAME</entity_name.name_system>
+<entity_name.entity_name>Grand Fir / Pinemat Manzanita</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>397</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>404</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<!--NOTICE: this SCIENTIFIC_NAME row has no AUTHOR_NAME value-->
+<entity_name.entity_name>Artemisia tridentata ssp. tridentata / Pleuraphis jamesii Shrubland</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Association</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_parent_id>
+<entity>
+<entity.entity_id>410</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>410</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Artemisia tridentata (ssp. tridentata, ssp. xericensis) Shrubland Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>Stands included in this alliance occur in environments (climate or substrates) that limited the growth of perennial graminoids or may be the result heavy livestock grazing depleting the perennial graminoid layer of stands of ~&lt;i&gt;Artemisia tridentata (ssp. tridentata, ssp. xericensis)&lt;/i&gt; Shrub Herbaceous Alliance (A.1522)$$.</entity.classification_com>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>These shrublands occur throughout the Intermountain West from the western Great Basin to the northern Rocky Mountains and Colorado Plateau. Sites supporting this alliance include sloping fans, footslopes, rolling hills, and deep, well-drained alluvial bottomlands. Soils are deep, fine- to medium-textured alluvial soils with some source of subirrigation during the summer season, but moderately deep upland soils with ample moisture storage also support these shrublands. Some stands occur on deep, sandy soils, or soils that are highly calcareous. The vegetation included in this alliance is characterized by a somewhat sparse to moderately dense (10-70% cover) shrub layer of &lt;i&gt;Artemisia tridentata ssp. tridentata&lt;/i&gt; or &lt;i&gt;Artemisia tridentata ssp. xericensis&lt;/i&gt;. Shrub associates include &lt;i&gt;Ericameria nauseosa (= Chrysothamnus nauseosus)&lt;/i&gt; or &lt;i&gt;Chrysothamnus viscidiflorus&lt;/i&gt; which increase with disturbance. Other shrubs occasionally present include &lt;i&gt;Purshia tridentata, Ephedra viridis, Gutierrezia sarothrae, Tetradymia canescens, Sarcobatus vermiculatus&lt;/i&gt;, and &lt;i&gt;Atriplex&lt;/i&gt; spp. Occasionally individual trees are present in some stands. The relatively sparse herbaceous layer is dominated by bunch grasses (&lt;20% cover) that occupy patches in the shrub matrix. The most widespread species is &lt;i&gt;Pseudoroegneria spicata&lt;/i&gt;, which occurs from the Columbia Basin to the northern Rockies. Other locally dominant or important species include &lt;i&gt;Leymus cinereus, Festuca idahoensis, Pascopyrum smithii, Elymus lanceolatus, Elymus elymoides, Pleuraphis jamesii (= Hilaria jamesii), Koeleria macrantha, Muhlenbergia richardsonis, Hesperostipa comata (= Stipa comata)&lt;/i&gt;, and &lt;i&gt;Poa secunda&lt;/i&gt;. Forbs are generally of low importance and are highly variable across the range. Mosses and lichens are important ground cover in some stands. Diagnostic of this alliance is the &lt;i&gt;Artemisia tridentata ssp. tridentata&lt;/i&gt;- or &lt;i&gt;Artemisia tridentata ssp. xericensis&lt;/i&gt;-dominated shrub layer that lacks a significant graminoid layer (&lt;20% cover perennial graminoids) or has over 40% total cover of shrubs.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.126668</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.830</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:08.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>(Basin Big Sagebrush, Foothill Big Sagebrush) Shrubland Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:08.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</entity.classification_parent_id>
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This association has been described on the Colorado Plateau in southeastern Utah and may occur in parts of Colorado, New Mexico and Arizona. Elevation ranges from 2000-2200 m. Sites are found on mesas and alluvial flats often surrounded by washes or woodlands. Soils are generally deep, calcareous, alkaline, sandy to fine textured loams. Bare soil may be up to 80% of the ground cover. Stands have an open short (less than 1 m tall) shrub canopy dominated by the &lt;i&gt;Artemisia tridentata ssp. tridentata&lt;/i&gt;. Scattered short shrubs and dwarf-shrubs may include &lt;i&gt;Gutierrezia&lt;/i&gt; sp., &lt;i&gt;Ephedra viridis, Atriplex&lt;/i&gt; spp., and &lt;i&gt;Krascheninnikovia lanata&lt;/i&gt;. Total woody canopy ranges from 10-35% cover. The sparse herbaceous layer (5-15% cover) is dominated by graminoids such as &lt;i&gt;Pleuraphis jamesii (= Hilaria jamesii), Achnatherum hymenoides (= Oryzopsis hymenoides), Bouteloua gracilis, Aristida purpurea var. fendleriana&lt;/i&gt;, and &lt;i&gt;Sporobolus cryptandrus&lt;/i&gt;. Forbs are sparse. Some stands may be considered sparse vegetation. Bare soil is often over 60%. Gravel and cryptogam typically have low cover.</entity.entity_desc>
+
+
+
+<entity.entity_type_cd>C</entity.entity_type_cd>
+
+
+
+
+
+<!--NOTICE: the final uid format is still pending...--><entity.ns_uid>ELEMENT_GLOBAL.2.683071</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ELCODE_BCD</entity_name.name_system>
+<entity_name.entity_name>CEGL001015</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<!-- gname as scientific name -->
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.entity_name_id>398</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176901</reference.reference_id>
+<reference.full_citation>NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Central Databases. NatureServe, Arlington, VA.</reference.full_citation>
+</reference>
+</entity_name.ref_id>
+<entity_name.entity_name>Artemisia tridentata ssp. tridentata / Pleuraphis jamesii Shrubland</entity_name.entity_name>
+<entity_name.name_system>SCIENTIFIC_NAME</entity_name.name_system>
+</entity_name>
+
+
+
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-02-20 09:29:27.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Basin Big Sagebrush / James' Galleta Shrubland</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2003-10-06 09:25:25.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+
+<entity>
+<entity.entity_id>417</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>417</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Maclura pomifera Woodland Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1998-08-06 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This woodland alliance occurs in a blackland prairie landscape and occurs in deep mesic soils on level terrain, typically as relatively narrow communities adjacent to ephemeral streams.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.124466</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.1917</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:29.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Osage-orange Woodland Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:29.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>423</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>423</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Salix boothii Temporarily Flooded Shrubland Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This widespread riparian shrubland alliance is found throughout the interior western U.S. between 1320-2800 m in elevation. Stands occur in valley bottoms, swales, streambanks, and occasionally terraces of stream channels in areas that have surface water present for only brief periods of time during the growing season, and are usually found within 1 m of the water table. Stands are also located adjacent to seeps on gently sloping toeslopes. The ground surface is often uneven and hummocky due to past flooding and beaver activity. The soils are variable and include highly stratified alluvium or fine-textured, highly organic soils. Shrublands within this alliance are dominated by &lt;i&gt;Salix boothii&lt;/i&gt; with a canopy ranging from 20-80% cover. &lt;i&gt;Salix geyeriana, Salix lemmonii&lt;/i&gt;, or &lt;i&gt;Salix drummondiana&lt;/i&gt; may codominate. Other shrubs present include &lt;i&gt;Dasiphora fruticosa ssp. floribunda (= Pentaphylloides floribunda)&lt;/i&gt; and &lt;i&gt;Betula nana (= Betula glandulosa)&lt;/i&gt;. A mixture of forbs and graminoids growing on raised hummocks characterizes the moderately dense herbaceous layer. Common forb and graminoid species include &lt;i&gt;Swertia perennis, Pedicularis groenlandica, Polygonum bistortoides, Heracleum maximum (= Heracleum lanatum), Achillea millefolium, Carex aquatilis, Carex utriculata&lt;/i&gt;, and &lt;i&gt;Calamagrostis canadensis&lt;/i&gt;. Diagnostic of this riparian alliance is a &lt;i&gt;Salix boothii&lt;/i&gt;-dominated or -codominated tall shrubland that is flooded for brief periods during the growing season and has a shallow water table.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.124468</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.972</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:01.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Booth's Willow Temporarily Flooded Shrubland Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:01.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>429</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>429</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Eupatorium serotinum - Diodia virginiana Temporarily Flooded Herbaceous Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>2002-11-01 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance consists of drawdown zones around artificial impoundments in the Southern Appalachians and likely adjacent provinces. Physiognomy and composition are highly variable. A scattering to sometimes well-developed stratum of woody trees and saplings is sometime present, and often includes species such as &lt;i&gt;Diospyros virginiana, Betula nigra&lt;/i&gt;, and &lt;i&gt;Platanus occidentalis&lt;/i&gt;. Characteristic herbs are weedy colonizers, such as &lt;i&gt;Eupatorium serotinum, Diodia virginiana, Juncus effusus, Ambrosia artemisiifolia, Juncus tenuis, Scirpus cyperinus, Lobelia inflata, Lobelia cardinalis, Apocynum cannabinum, Polygonum hydropiperoides, Acalypha virginica, Andropogon virginicus, Panicum&lt;/i&gt; spp., &lt;i&gt;Hypericum mutilum, Hypericum punctatum, Plantago&lt;/i&gt; spp., &lt;i&gt;Pseudognaphalium&lt;/i&gt; spp., and others.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.124469</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.2017</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:29.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Late Thoroughwort - Virginia Buttonweed Temporarily Flooded Herbaceous Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:29.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>435</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>435</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Muhlenbergia filiculmis Herbaceous Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>Stands included in the ~&lt;i&gt;Festuca arizonica&lt;/i&gt; Herbaceous Alliance (A.1245)$$ and the ~&lt;i&gt;Muhlenbergia filiculmis&lt;/i&gt; Herbaceous Alliance (A.1288)$$ occur sympatrically and have similar species compositions. However, stands in ~&lt;i&gt;Festuca arizonica - Muhlenbergia filiculmis&lt;/i&gt; Herbaceous Vegetation (CEGL001605)$$ are usually found on upland slopes and where snow drifts occur. It can be distinguished by the codominance of &lt;i&gt;Festuca arizonica&lt;/i&gt;. Impacts of grazing on these stands may reduce the abundance of taller, palatable species such as &lt;i&gt;Festuca arizonica&lt;/i&gt;. Some &lt;i&gt;Muhlenbergia filiculmis / Bouteloua gracilis&lt;/i&gt;-dominated stands may be seral stages of &lt;i&gt;Festuca arizonica&lt;/i&gt; grassland.</entity.classification_com>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance includes grasslands that occur at moderately high elevations (2500-2900 m) in broad, flat valley floors or on mesa tops in the central Colorado Rocky Mountains. The region has a semi-arid, continental climate. Average annual precipitation is low, &lt;25 cm, with a summer peak in July and August. January is the coldest and driest month, and April is the month of greatest snow accumulation. The region is often subjected to strong northerly and westerly winds that can remove snow cover and subject plants to severe desiccation. Sites are level to moderately steep (to 10%) with south aspects, but are usually more mesic than the surrounding uplands. Rocks and boulders are common especially on the steeper slopes. Soils are generally dry, well-drained, shallow and coarse-textured. Parent materials include andesite and tuff. Stands described had 30-40% bare ground, 10-25% rock and 40-50% litter on the ground surface. Stands included in this montane grassland alliance have moderate canopy cover dominated by the medium-tall perennial sod grass &lt;i&gt;Muhlenbergia filiculmis&lt;/i&gt; and the short sod grass &lt;i&gt;Bouteloua gracilis&lt;/i&gt;. Other associated graminoids include perennial bunch grasses like &lt;i&gt;Festuca arizonica, Koeleria macrantha, Muhlenbergia montana, Elymus elymoides&lt;/i&gt;, and the sedge &lt;i&gt;Carex obtusata&lt;/i&gt;. The usually sparse forb cover may include species such as &lt;i&gt;Hymenoxys richardsonii, Eriogonum umbellatum, Arenaria fendleri, Penstemon secundiflorus&lt;/i&gt;, and &lt;i&gt;Castilleja integra&lt;/i&gt;. A sparse dwarf-shrub layer is often present, composed primarily of &lt;i&gt;Artemisia frigida, Chrysothamnus&lt;/i&gt; spp. and &lt;i&gt;Gutierrezia sarothrae&lt;/i&gt;. Lichens are typically relatively common. Total mean canopy cover, graminoid cover, forb cover, dwarf-shrub cover, and lichen cover were 31%, 20-23%, 4-7%, 4%, and 9-12%, respectively. These grasslands are often surrounded by montane and subalpine forest, or steep, dry grassy slopes dominated by &lt;i&gt;Festuca arizonica&lt;/i&gt;.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.124472</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.1288</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:01.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Slim-stem Muhly Herbaceous Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:01.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>441</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>441</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Castanea dentata - Quercus prinus Forest Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>The species &lt;i&gt;Castanea dentata&lt;/i&gt; apparently formerly existed as far south at least as Fort Benning, Georgia (M. Pyne pers. comm.), but its frequency was probably not sufficient to represent this alliance.</entity.classification_com>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance is now extirpated but included subxeric forests dominated by mixtures of &lt;i&gt;Castanea dentata&lt;/i&gt; and &lt;i&gt;Quercus prinus&lt;/i&gt;, formerly occurring in the Appalachian Mountains, the Cumberland Plateau, Knobs, and perhaps as far west as the Shawnee Hills of Kentucky. &lt;i&gt;Castanea dentata&lt;/i&gt; was a major forest dominant in the eastern United States that has virtually been eliminated since 1900 by &lt;i&gt;Cryphonectria parasitica (= Endothia parasitica)&lt;/i&gt; (Chestnut Blight), introduced on Asiatic chestnut. Forests in this alliance have been described as the most extensive forests of the middle and lower elevations (1220-1370 m, 4000-4500 feet) in the Great Smoky Mountains. Whittaker described both xeric and subxeric phases of this alliance. Forests on xeric ridges and upper slopes had a closed shrub stratum dominated by &lt;i&gt;Kalmia latifolia&lt;/i&gt;, with an open tree stratum of &lt;i&gt;Castanea dentata&lt;/i&gt; and &lt;i&gt;Quercus prinus&lt;/i&gt;, and a sparse herbaceous stratum dominated by &lt;i&gt;Galax urceolata&lt;/i&gt;. More mesic forests in this alliance occurred on less exposed slope positions and had canopies dominated by &lt;i&gt;Castanea dentata&lt;/i&gt; and &lt;i&gt;Quercus prinus&lt;/i&gt; occurring with lesser amounts of &lt;i&gt;Quercus rubra, Quercus alba, Quercus velutina, Nyssa sylvatica, Acer rubrum&lt;/i&gt;, and &lt;i&gt;Liriodendron tulipifera&lt;/i&gt;, with open or heath-dominated understories. Although replacement forests vary with geography, in the southern Appalachians, I.B.2.N.a ~&lt;i&gt;Quercus prinus - (Quercus coccinea, Quercus velutina)&lt;/i&gt; Forest Alliance (A.248)$$ and other forests dominated by &lt;i&gt;Quercus rubra, Quercus prinus&lt;/i&gt;, and &lt;i&gt;Acer rubrum&lt;/i&gt; have been the major replacement types. There is some hope for the potential recovery of this community, or something resembling it, if a blight-resistant chestnut can be developed and introduced.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.124473</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.224</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:29.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>American Chestnut - Rock Chestnut Oak Forest Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:29.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>447</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>447</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Rhus trilobata Shrub Herbaceous Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>It is often difficult to determine the borders of stands within this alliance because one of the primary distinguishing features of this alliance, the presence of a 10-25% canopy of &lt;i&gt;Rhus trilobata&lt;/i&gt;, is not continuous over the entire stand. When grassland communities adjoin stands of this alliance, they usually contain many of the same species. The presence and approximate limits of stands within this alliance is judged from physiognomic and sometimes floristic differences between adjacent stands. In the dry environments in which stands of this alliance are found, certain species not commonly found in the open grow in the shade of shrubs (Hansen and Hoffman 1988). &lt;br&gt;&lt;br&gt;In his &lt;i&gt;Rhus aromatica ssp. trilobata&lt;/i&gt; Series, Johnson (1987) described two other plant associations with &lt;i&gt;Sporobolus cryptandrus&lt;/i&gt;- and &lt;i&gt;Muhlenbergia montana&lt;/i&gt;-dominated herbaceous layers that need to be reviewed for possible inclusion into this alliance. Grasslands with clumps of &lt;i&gt;Rhus trilobata&lt;/i&gt; are common in the foothills of the Colorado Front Range and also need association-level classification.</entity.classification_com>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance is concentrated in Montana but is also found in adjacent states. The vegetation is dominated by herbaceous species with a conspicuous component of &lt;i&gt;Rhus trilobata&lt;/i&gt;. Average cover is moderate with bare ground and rock exposed. The shrubs occur in patches 0.5-1 m tall and with fairly complete cover over small areas. The total canopy cover of shrubs, however, is approximately 10-25% (Mueggler and Stewart 1978, Hansen and Hoffman 1988). In addition to &lt;i&gt;Rhus trilobata&lt;/i&gt; there are small amounts of &lt;i&gt;Artemisia tridentata, Chrysothamnus&lt;/i&gt; spp., &lt;i&gt;Prunus virginiana, Ribes&lt;/i&gt; spp., and &lt;i&gt;Symphoricarpos occidentalis&lt;/i&gt;. Shorter shrubs, such as &lt;i&gt;Artemisia frigida, Rosa&lt;/i&gt; spp., and &lt;i&gt;Yucca glauca&lt;/i&gt; are also present. The herbaceous stratum is dominated by graminoids, such as &lt;i&gt;Bouteloua gracilis, Calamovilfa longifolia, Carex inops ssp. heliophila, Carex filifolia, Festuca idahoensis, Pseudoroegneria spicata, Pascopyrum smithii, Schizachyrium scoparium&lt;/i&gt;, and &lt;i&gt;Hesperostipa comata (= Stipa comata)&lt;/i&gt;. Forbs that may occur in communities within this alliance include &lt;i&gt;Artemisia dracunculus, Symphyotrichum ericoides (= Aster ericoides), Dalea purpurea, Echinacea angustifolia, Heterotheca villosa var. villosa, Gaura coccinea&lt;/i&gt;, and &lt;i&gt;Sphaeralcea coccinea&lt;/i&gt;. &lt;br&gt;&lt;br&gt;Communities in this alliance are not extensive; they are usually found in patches or strips on gentle to moderate slopes (Hansen and Hoffman 1988, MTNHP 1988). The soils are shallow and rocky and may be sandy loam, loamy sand, or loam (Hansen and Hoffman 1988, Thilenius et al. 1995).</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.124474</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.1537</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:01.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Squawbush Shrub Herbaceous Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:01.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>453</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>453</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>176422</reference.reference_id>
+<reference.full_citation>Eastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boston, MA.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Andropogon gerardii - (Sorghastrum nutans) Temporarily Flooded Herbaceous Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>176422</reference.reference_id>
+<reference.full_citation>Eastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boston, MA.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com>On the Daniel Boone National Forest, this vegetation is found only in the southern part, i.e., Big South Fork and (I believe) Marsh creek and mainstem of the Cumberland above Cumberland Falls (M. Evans pers. comm.).</entity.classification_com>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance includes scoured riverbank 'prairies' in northeastern and southeastern United States, which may be called 'riverside prairies,' 'linear prairies,' 'rivershore grasslands,' or 'scoured riverine bluff prairie.' In addition to the nominal species, examples may also contain &lt;i&gt;Schizachyrium scoparium, Chasmanthium latifolium&lt;/i&gt;, and/or &lt;i&gt;Panicum virgatum&lt;/i&gt;, any of which could be locally dominant. These grasslands may be associated with dry cobble riverbanks and lakeshores, as well as flood-scoured, acidic or calcareous bedrock exposures associated with major rivers. This includes riverine gravel/cobble bar 'prairies' along the upper Cumberland River in Kentucky and Tennessee; scour areas along high gradient sections of major rivers, such as in gorges in Virginia, Maryland, Pennsylvania, and possibly farther west; and scoured limestone bluffs along the Duck River in Tennessee's Central Basin.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.124475</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.1337</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:28:02.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Big Bluestem - (Yellow Indiangrass) Temporarily Flooded Herbaceous Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:28:02.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>459</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>459</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Sabal palmetto - Coccoloba uvifera Forest Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>Tropical maritime hammocks generally codominated by &lt;i&gt;Sabal palmetto&lt;/i&gt; and &lt;i&gt;Coccoloba uvifera&lt;/i&gt;. These forests are relatively simple in structure and composition and have less diverse canopies compared to other hardwood hammocks of south Florida. One extremely rare association in this alliance is dominated by the nominal species and also has &lt;i&gt;Piscidia piscipula, Myrsine floridana&lt;/i&gt;, and &lt;i&gt;Hymenocallis latifolia&lt;/i&gt;.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.124476</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.43</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:29.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Cabbage Palmetto - Sea-grape Forest Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:29.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>465</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>465</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Schinus terebinthifolius Shrubland Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181492</reference.reference_id>
+<reference.full_citation>Southeastern Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Durham, NC.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>This alliance consists of uplands of southern and central peninsular Florida, dominated by the exotic &lt;i&gt;Schinus terebinthifolius&lt;/i&gt;. This alliance now occupies large portions of southern Florida, especially in the vicinity of urban and semi-urban areas. It also occurs in Texas, in the vicinity of Corpus Christi. Vegetation may be strongly dominated by &lt;i&gt;Schinus terebinthifolius&lt;/i&gt;, or may contain admixtures of the native species which formerly occupied these areas.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.124477</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.711</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:29.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Brazilian-pepper Shrubland Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:29:29.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+<entity>
+<entity.entity_id>471</entity.entity_id>
+<entity.circ_name_id>
+<entity_name>
+<entity_name.entity_name_id>471</entity_name.entity_name_id>
+<entity_name.ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity_name.ref_id>
+<entity_name.entity_name>Glyceria borealis Semipermanently Flooded Herbaceous Alliance</entity_name.entity_name>
+<entity_name.name_system>HIGHER_CLASS_UNIT_NAME</entity_name.name_system>
+</entity_name>
+</entity.circ_name_id>
+<entity.circ_ref_id>
+<reference>
+<reference.reference_id>181797</reference.reference_id>
+<reference.full_citation>Western Ecology Working Group of NatureServe. No date. International Ecological Classification Standard: International Vegetation Classification. Terrestrial Vegetation. NatureServe, Boulder, CO.</reference.full_citation>
+</reference>
+
+</entity.circ_ref_id>
+<entity.classification_com/>
+
+
+<entity.classification_level>Alliance</entity.classification_level>
+
+
+
+
+
+
+
+<entity.classification_start_date>1997-11-26 00:00:00.0</entity.classification_start_date>
+<entity.classification_status>accepted</entity.classification_status>
+<entity.entity_desc>The vegetation in this alliance occurs in wetlands along pond and lake margins and low-gradient streams in the northwestern United States. Stands are located between 670-1810 m elevation. Stands are found on level sites in standing water. Water is present above the soil surface throughout the summer. Soils are poorly to very poorly drained and vary from mineral to organic. Mineral soils usually have a thick layer of organic matter in the upper horizon. Species diversity is low due to the wet conditions. &lt;i&gt;Glyceria borealis&lt;/i&gt; generally forms monotypic stands with 30-90% cover. Other graminoids that may be present include &lt;i&gt;Eleocharis acicularis, Eleocharis palustris&lt;/i&gt;, and &lt;i&gt;Glyceria striata (= Glyceria elata)&lt;/i&gt;. &lt;i&gt;Ranunculus aquatilis&lt;/i&gt; and &lt;i&gt;Sparganium angustifolium&lt;/i&gt; are occasional forb associates.</entity.entity_desc>
+<entity.entity_type_cd>C</entity.entity_type_cd>
+<!--NOTICE: the final uid format is still pending...-->
+<entity.ns_uid>HIGHER_CLASS_UNIT.2.124478</entity.ns_uid>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>ALLIANCE_KEY_BCD</entity_name.name_system>
+<entity_name.entity_name>A.1445</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:01.0</entity_usage.usage_start_date>
+</entity_usage>
+<entity_usage>
+<entity_usage.entity_name_id>
+<entity_name>
+<entity_name.name_system>TRANSLATED_NAME</entity_name.name_system>
+<entity_name.entity_name>Small Floating Mannagrass Semipermanently Flooded Herbaceous Alliance</entity_name.entity_name>
+</entity_name>
+</entity_usage.entity_name_id>
+<entity_usage.name_status_cd>S</entity_usage.name_status_cd>
+<entity_usage.usage_start_date>2004-07-26 13:30:01.0</entity_usage.usage_start_date>
+</entity_usage>
+</entity>
+
+
+
+</VegBankPackage>
