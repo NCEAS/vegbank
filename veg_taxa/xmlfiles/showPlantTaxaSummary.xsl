@@ -23,11 +23,10 @@
   
 
 <html>
-      <head>
-      <!--
-             <link rel="stylesheet" type="text/css" 
-              href="@web-base-url@/default.css" />
-        -->
+<head>
+  	
+		<link rel="stylesheet" type="text/css" href="http://numericsolutions.com/includes/default.css" />
+	
 	<script LANGUAGE="JavaScript">
 <!-- Modified By:  Steve Robison, Jr. (stevejr@ce.net) -->
 <!-- This script and many more are available free online at -->
@@ -76,29 +75,42 @@ return "Check All"; }
 	   
 	<xsl:for-each select="taxon">
 	<xsl:sort select="name"/>	
-
 	<tr valign="top">
-
 
 <!--if even row -->
 <xsl:if test="position() mod 2 = 1">			
 	<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="middle">
-  		<a>Plant Name: <xsl:value-of select="name/plantName"/></a> <br></br>
-		<a>Name ID: <xsl:value-of select="name/plantNameId"/></a> <br></br>
-		<a>Name Status: <xsl:value-of select="name/status"/></a> <br></br>
-		<a>Parent Name: <xsl:value-of select="name/parentName"/></a> <br></br>
+  	<a><span class="category">Plant Name: </span> 
+		<span class="item"><xsl:value-of select="name/plantName"/> </span> </a> <br></br>
+  	<a><span class="category">Alias: </span> 
+		<span class="item"> <xsl:value-of select="name/plantName"/> </span> </a> <br></br>
+<!--
+		<a><span class="category">Name ID: </span> <xsl:value-of select="name/plantNameId"/></a> <br></br>
+-->		
+		<a><span class="category">Name Status: </span> 
+		<span class="item"> <xsl:value-of select="name/status"/> </span> </a> <br></br>
+		<a><span class="category">Parent Name:</span>  
+		<span class="item"> <xsl:value-of select="name/parentName"/> </span> </a> <br></br>
 	</td>
 	<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="top">
-		<a>Class System: <xsl:value-of select="name/classSystem"/>; </a> <br></br>
-		<a>Plant Level: <xsl:value-of select="name/plantLevel"/>; </a> <br></br>
-		<a>Concept ID: <xsl:value-of select="name/plantConceptId"/>; </a> <br></br>
-		<a>Concept Desc: <xsl:value-of select="name/plantDescription"/>; </a> <br></br>
+		<a> <span class="category">Class System:</span>  
+		<span class="item"> <xsl:value-of select="name/classSystem"/>; </span> </a> <br></br>
+		<a> <span class="category">Plant Level:</span>  
+		<span class="item"> <xsl:value-of select="name/plantLevel"/>; </span> </a> <br></br>
+<!--		
+		<a> <span class="category">Concept ID:</span>  <xsl:value-of select="name/plantConceptId"/>;</span>  </a> <br></br>
+-->		
+		<a> <span class="category">Concept Desc:</span> 
+		<xsl:value-of select="name/plantDescription"/>; </a> <br></br>
 		
 	</td>
 	<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="middle">
-		<a>Start Date: <xsl:value-of select="name/startDate"/>; </a> <br></br>
-		<a>Stop Date: <xsl:value-of select="name/stopDate"/>; </a> <br></br>
-		<a>Synonym: <xsl:value-of select="name/acceptedSynonym"/>; </a> <br></br>
+		<a> <span class="category">Start Date: </span> 
+		<span class="item"><xsl:value-of select="name/startDate"/>;</span>  </a> <br></br>
+		<a> <span class="category"> Stop Date: </span> 
+		<span class="item"><xsl:value-of select="name/stopDate"/>;</span>  </a> <br></br>
+		<a> <span class="category"> Synonym: </span> 
+		<span class="item"><xsl:value-of select="name/acceptedSynonym"/>;</span>  </a> <br></br>
 	</td>
 </xsl:if>
 	 
@@ -107,38 +119,44 @@ return "Check All"; }
 <xsl:if test="position() mod 2 = 0">
 	
 	<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="middle">
-  		<a>Plant Name: <xsl:value-of select="name/plantName"/></a> <br></br>
-		<a>Name ID: <xsl:value-of select="name/plantNameId"/></a> <br></br>
-		<a>Name Status: <xsl:value-of select="name/status"/></a> <br></br>
-		<a>Parent Name: <xsl:value-of select="name/parentName"/></a> <br></br>
+  	<a> <span class="category">Plant Name:</span> 
+		<span class="item"><xsl:value-of select="name/plantName"/> </span>  </a> <br></br>
+  	<a> <span class="category">Alias:</span> 
+		<span class="item"><xsl:value-of select="name/plantName"/> </span> </a> <br></br>
+<!--		
+		<a><span class="category"> Name ID:</span>  <xsl:value-of select="name/plantNameId"/></a> <br></br>
+-->
+		<a> <span class="category">Name Status:</span>  
+		<span class="item"><xsl:value-of select="name/status"/> </span> </a> <br></br>
+		<a><span class="category"> Parent Name:</span> 
+		<span class="item"><xsl:value-of select="name/parentName"/> </span> </a> <br></br>
 	</td>
 	<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
-		<a>Class System: <xsl:value-of select="name/classSystem"/>; </a> <br></br>
-		<a>Plant Level: <xsl:value-of select="name/plantLevel"/>; </a> <br></br>
-		<a>Concept ID: <xsl:value-of select="name/plantConceptId"/>; </a> <br></br>
-		<a>Concept Desc: <xsl:value-of select="name/plantDescription"/>; </a> <br></br>
+		<a><span class="category"> Class System:</span> 
+		<span class="item"><xsl:value-of select="name/classSystem"/>;</span>  </a> <br></br>
+		<a> <span class="category">Plant Level:</span> 
+		<span class="item"><xsl:value-of select="name/plantLevel"/>;</span>  </a> <br></br>
+<!--
+		<a><span class="category"> Concept ID:</span>  <xsl:value-of select="name/plantConceptId"/>;</span>  </a> <br></br>
+-->		
+		<a><span class="category"> Concept Desc:</span> <span class="item">   <xsl:value-of select="name/plantDescription"/>;</span>  </a> <br></br>
 		
 	</td>
 	<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="middle">
-		<a>Start Date: <xsl:value-of select="name/startDate"/>; </a> <br></br>
-		<a>Stop Date: <xsl:value-of select="name/stopDate"/>; </a> <br></br>
-		<a>Synonym: <xsl:value-of select="name/acceptedSynonym"/>; </a> <br></br>
+		<a><span class="category"> Start Date:</span> 
+		<span class="item"><xsl:value-of select="name/startDate"/>;</span>  </a> <br></br>
+		<a><span class="category"> Stop Date:</span> 
+		<span class="item"><xsl:value-of select="name/stopDate"/>;</span>  </a> <br></br>
+		<a><span class="category"> Synonym:</span> 
+		<span class="item"><xsl:value-of select="name/acceptedSynonym"/>;</span>   </a> <br></br>
 	</td>
 
 
 </xsl:if>
-
-
 </tr>    
 </xsl:for-each>
-
-
-
-
 </table>
 </form>
-	
-
 </body>
 </html> 
 </xsl:template>
