@@ -18,6 +18,7 @@
   
   
   <xsl:apply-templates />
+<p>THIS IS THE END OF THIS BUSINESS RULES CHECKING DOCUMENT.  Since the page loads slowly, this message may be helpful.</p>
   </body>
   </html>
 </xsl:template>
