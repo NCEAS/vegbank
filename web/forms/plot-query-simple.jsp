@@ -72,7 +72,7 @@ function validateName(value, label) {
 @vegbank_header_html_normal@
 <h3>VegBank Simple Query</h3>
 <blockquote>
-<p><span class="description">Three-in-one plot/plant/community search.</span></p>
+<p><span class="category">Three-in-one plot/plant/community search.</span></p>
 <table  bgcolor="#FFFFFF" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td></td><form name="plantform" action="/vegbank/PlantQuery.do" method="get">
@@ -290,10 +290,9 @@ function validateName(value, label) {
   <tr>
     <td></td>
     <td bgcolor="#CCCCCC"></td>
-    <td bgcolor="#CCCCCC" align="center"><img src="@image_server@downarr.gif" class="description"><br/>
+    <td bgcolor="#CCCCCC" align="center"><img src="@image_server@downarr.gif"><br/>
 		<input type="submit" onClick="javascript:return doPlotQuery()" value="search for plots"/ name="btnPlot"><br/>
-              <font size="-1">This searches for plots based <br/>on all criteria supplied 
-              on this form</font></td>
+              <span class="sizetiny">Plot search uses all three criteria</span></td>
     <td bgcolor="#CCCCCC"></td>
     <td></td>
     <td></td>
@@ -309,7 +308,7 @@ function validateName(value, label) {
  </table>
 
  <br>
-<p><span class="description">Want more search options?<br>
+<p><span class="category">Want more search options?<br>
 <a href="/vegbank/LoadPlotQuery.do">Try the advanced plot query</a>.
 </span>
 </blockquote>
