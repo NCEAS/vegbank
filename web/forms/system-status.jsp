@@ -1,8 +1,20 @@
+
+
+
+
 @webpage_top_html@
-@stdvegbankget_jspdeclarations@
-@webpage_head_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+
+
  
 <TITLE>VegBank System Status</TITLE>
+
+ 
+
+
+
+
 @webpage_masthead_html@
  
 
@@ -53,7 +65,7 @@
 %>
 
 <br/>
-@webpage_footer_html@
+
 </div>
 
-
+@webpage_footer_html@

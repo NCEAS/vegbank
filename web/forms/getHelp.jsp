@@ -1,11 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<%@ page language="java" %>
-<html>
+@webpage_top_html@
 <head>
 <title>VegBank Tutorial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=">
 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
+
  <%
 
    String strMainPg = request.getParameter("mainPage");
@@ -27,13 +26,9 @@
 
 
 </frameset>
-<noframes><body>
-Sorry, but your browser doesn't support frames.  <a href="<%= strHelpPg %>">Try this link</a> 
+<noframes>
+Sorry, but your browser doesn't support frames.  <a href="<%= strHelpPg %>">Try this link</a> or press the back button on your browser.
+</noframes>
+</html>
 
-
-
-
-
-<I></I>
-	
 

@@ -1,8 +1,48 @@
-@webpage_top_html@
-@stdvegbankget_jspdeclarations@
-@webpage_head_html@
 
-<title>VegBank - Advanced Plot Query</title>
+
+
+
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+<!-- 
+*   '$RCSfile: plot-query.jsp,v $'
+*     Purpose: web page querying the plots stored in vegbank
+*   Copyright: 2000 Regents of the University of California and the
+*               National Center for Ecological Analysis and Synthesis
+*     Authors: @author@
+*
+*    '$Author: mlee $'
+*      '$Date: 2005-03-15 12:35:28 $'
+*  '$Revision: 1.35 $'
+*
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+
+
+
+
+
+<title>
+VegBank - Advanced Plot Query
+</title>
+
+
+
+
 @webpage_masthead_html@
 
   
@@ -33,7 +73,7 @@
       
       <td align="left">
 	<table border="0" width="550">
-	  
+	  <tbody>
 	  <tr valign="top">
 	    <td align="left" colspan="2" valign="center" class="instructions">
 		   This form can be used to find plots in VegBank. 
@@ -127,7 +167,7 @@
 		      <option value="IS NULL">--NULL--</option> -->
 		      
 		      
-	      
+	      </html:select>
 	    </td>	 
 
 	    <td class="itemsmall">
@@ -154,7 +194,7 @@
 
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
-	      
+	      </html:select>
 	    </td>
      
 	  </tr>
@@ -334,7 +374,7 @@
 		<html:options property="rockTypes"/>
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
-	      
+	      </html:select>
 	    </td>
 	    
 	    <td align="left" valign="top">
@@ -344,7 +384,7 @@
 		 <html:options property="surficialDeposits"/>
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
-	      
+	      </html:select> 
 	    </td>
 
 	    <td align="left" valign="top">
@@ -354,7 +394,7 @@
 		<html:options property="hydrologicRegimes"/>
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
-	      
+	      </html:select> 
 	    </td>
 
 	    
@@ -371,7 +411,7 @@
 		<html:options property="topoPositions"/>
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
-	      
+	      </html:select> 
 	    </td>
 	    <!-- This is an open list i.e. not supported yet -->
 	    <td align="left" valign="top">Landform<br />
@@ -382,7 +422,7 @@
 
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
-	      
+	      </html:select> 
 	    </td>
 	
 	    
@@ -554,7 +594,7 @@
 		        <html:options property="coverMethodNames"/>
 		        <option value="IS NOT NULL">--NOT NULL--</option>
 		        <option value="IS NULL">--NULL--</option>
-	        
+	        </html:select>
 	    </td>
 	    </tr>
 	    <tr>
@@ -566,7 +606,7 @@
 		        <html:options property="stratumMethodNames"/>
 		        <option value="IS NOT NULL">--NOT NULL--</option>
 		        <option value="IS NULL">--NULL--</option>
-	        
+	        </html:select>
 	      </td>
 	    </tr>
 	    
@@ -601,7 +641,7 @@
 		        
 		        <option value="IS NOT NULL">--NOT NULL--</option>
 		        <option value="IS NULL">--NULL--</option>
-	        
+	        </html:select>
 	
         </td>
 	    </tr>
@@ -1086,10 +1126,10 @@
 	<td colspan="3">
 	  <!-- VEGBANK FOOTER -->
 <br /><br />
-	  @webpage_footer_html@
+	  
 	</td>
       </tr>
     </table>
+    </html:form>    
     
-    
-  
+  @webpage_footer_html@

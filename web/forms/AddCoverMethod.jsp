@@ -1,10 +1,52 @@
+
+
 @webpage_top_html@
-@stdvegbankget_jspdeclarations@
-@webpage_head_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+<!-- 
+*   '$RCSfile: AddCoverMethod.jsp,v $'
+*   Purpose: Add a new reference to vegbank
+*   Copyright: 2000 Regents of the University of California and the
+*               National Center for Ecological Analysis and Synthesis
+*   Authors: @author@
+*
+*  '$Author: mlee $'
+*  '$Date: 2005-03-15 12:35:27 $'
+*  '$Revision: 1.11 $'
+*
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+
 
 <title>Add A Cover Method Form</title>
+ 
+  <style type="text/css">
+  .oddrow { background-color : #FFFFCC }
+  .evenrow {background-color : #FFFFFF }
+  </style>  
+  
+  
+
+  
+
+  
   @webpage_masthead_html@ 
   
+  
+  <br/>
 
   <html:errors/>
 
@@ -56,7 +98,7 @@ the method.
 	      <html:select property="coverMethod.reference_id">
         <option value="-1">--select a reference--</option>
 	      <html:options collection="list" labelProperty="title" property="id"/>
-	      
+	      </html:select>
 	    </td>
 	  </tr>
 	  <tr>
@@ -147,11 +189,11 @@ the method.
 
   <html:submit property="submit" value="--add this cover method to VegBank--" />
   
-  
+  </html:form>
 
   <!-- VEGBANK FOOTER -->
-  @webpage_footer_html@
+  
   <!-- END FOOTER -->
 
   
-  
+  @webpage_footer_html@

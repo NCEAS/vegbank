@@ -1,7 +1,41 @@
 @webpage_top_html@
-@stdvegbankget_jspdeclarations@
-@webpage_head_html@
-		<title>Submit XML Data</title>
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+	<!-- 
+  *   '$RCSfile: plot-upload.html,v $'
+  *     Purpose: web form tosubmit community data to vegbank system
+  *   Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *     Authors: @author@
+  *
+  *    '$Author: mlee $'
+  *      '$Date: 2005-03-15 12:35:28 $'
+  *  '$Revision: 1.24 $'
+  *
+  *
+  -->
+  
+
+
+
+		<title>
+			VEGBANK VEGETATION PLOT DATA SUBMITTAL WIZARD
+		</title>
+		
+<script language="JavaScript">
+<!--
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+// -->
+</script>
+	
+
+
+
 @webpage_masthead_html@
 
 <form action= "@datasubmitservlet@" enctype="multipart/form-data" method="post">
@@ -123,11 +157,11 @@
 
 
 </form>
-<p>
+
 <!-- VEGBANK FOOTER -->
+
+
 @webpage_footer_html@
-
-
 
 
 

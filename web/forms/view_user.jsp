@@ -1,8 +1,31 @@
+
 @webpage_top_html@
-@stdvegbankget_jspdeclarations@
-@webpage_head_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+<!-- 
+  * '$Id :  $'
+  * Purpose: Display a user's profile read-only
+  * Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  * Authors: @author@
+  *
+  * '$Author: mlee $'
+  * '$Date: 2005-03-15 12:35:28 $'
+  * '$Revision: 1.5 $'
+  *
+  *
+  -->
+  
+
 <!-- #BeginEditable "doctitle" --> 
 <TITLE>Edit Your Profile</TITLE>
+
+<!-- #EndEditable --> 
+
+
+
+
+
 @webpage_masthead_html@
 
 <br>
@@ -113,7 +136,7 @@
 	</table>
     <!-- Modify your password -->
 
+
+
 @webpage_footer_html@
-
-
 

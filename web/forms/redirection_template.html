@@ -1,11 +1,38 @@
 @webpage_top_html@
-@stdvegbankget_jspdeclarations@
-@webpage_head_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+<!-- 
+  *   '$RCSfile: redirection_template.html,v $'
+  *     Purpose: 
+  *   Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *     Authors: @author@
+  *
+  *    '$Author: mlee $'
+  *      '$Date: 2005-03-15 12:35:28 $'
+  *  '$Revision: 1.11 $'
+  *
+  *
+  -->
 
-<META HTTP-EQUIV="Refresh" CONTENT="8;URL=@general_link@login.jsp">
+
 
 <TITLE>Automatic Redirection</TITLE>
+
+<META HTTP-EQUIV="Refresh" CONTENT="10;URL="@general_link@login.jsp">
+
+<SCRIPT LANGUAGE="JavaScript"><!--
+function redirect () { setTimeout("go_now()",8000); }
+function go_now ()   { window.location.href = "@general_link@login.jsp"; }
+//--></SCRIPT>
+
 @webpage_masthead_html@
+
+
+
+
+
+<body onLoad="redirect()">
 
 <H1>You are not currently logged in!</H1>
 
@@ -16,10 +43,10 @@
 <P>If this does not work for any reason use the link below:
 <P><A HREF="@general_link@login.jsp">VegBank Login</A>
 <P>
+
+
+
 @webpage_footer_html@
-
-
-
 
 
 

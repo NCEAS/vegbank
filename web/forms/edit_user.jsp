@@ -1,8 +1,31 @@
 @webpage_top_html@
-@stdvegbankget_jspdeclarations@
-@webpage_head_html@
+  @stdvegbankget_jspdeclarations@
 <jsp:useBean id="bean" class="org.vegbank.ui.struts.UserProfileForm"/>
+  @webpage_head_html@
+<!-- 
+  * '$RCSfile: edit_user.jsp,v $'
+  * Purpose: 
+  * Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  * Authors: @author@
+  *
+  * '$Author: mlee $'
+  * '$Date: 2005-03-15 12:35:28 $'
+  * '$Revision: 1.6 $'
+  *
+  *
+  -->
+  
+
+<!-- #BeginEditable "doctitle" --> 
 <TITLE>Edit Your Profile</TITLE>
+
+<!-- #EndEditable --> 
+
+
+
+
+
 @webpage_masthead_html@
 
 <br>
@@ -43,7 +66,7 @@
 			</table>
 
 			<p class="sizenormal">
-				The following fields are all required for <html:link action="LoadCertification.do">certification
+				The following fields are all required for <html:link action="LoadCertification.do">certification</html:link>.
 				<br/>
 			</p> 
 
@@ -58,7 +81,7 @@
 		&nbsp;&nbsp;&nbsp;
         &raquo; Click here to 
 		<html:link forward="ChangePassword" paramId="usrId" paramName="beanUsrId">change 
-				password
+				password</html:link>.
 	  </td>
     </tr>
 	<!--
@@ -110,7 +133,7 @@
         <html:select name="upform" property="webuser.state"> 
           <option value="">-- select one --</option>
           <html:optionsCollection name="statelistbean" property="allStatesNames"/>
-        
+        </html:select>
 		</td>
     </tr>
 		
@@ -120,7 +143,7 @@
         <html:select name="upform" property="webuser.country">
           <option value="">-- select one --</option>
           <html:optionsCollection name="countrylistbean" property="allCountriesNames"/>
-        
+        </html:select>
 		</td>
     </tr>
 		
@@ -135,16 +158,16 @@
       <td>
 	  <br/>
         <html:submit value="Update profile"/>
-		&nbsp; &nbsp; &nbsp; <html:link forward="MainMenu">Cancel
+		&nbsp; &nbsp; &nbsp; <html:link forward="MainMenu">Cancel</html:link>
 	  <br/>&nbsp;
       </td>
     </tr>
 		
 	</table>
-	
+	</html:form>
     <!-- Modify your password -->
 
+
+
 @webpage_footer_html@
-
-
 

@@ -1,19 +1,28 @@
 @webpage_top_html@
-@stdvegbankget_jspdeclarations@
+  @stdvegbankget_jspdeclarations@
 <jsp:useBean id="bean" class="org.vegbank.ui.struts.CertificationForm"/>
-@webpage_head_html@
+  @webpage_head_html@
+
 
 <TITLE>VegBank Certification</TITLE>
+
+
+
+
+
+
+
+
 @webpage_masthead_html@
 
-<h2 align="center" class="vegbank">Certification Application</h2>
+        <h2 align="center" class="vegbank">Certification Application</h2>
 
 <logic:messagesPresent message="false">
 <h3><font color="red">Please Try Again</font></h3>
 	<ul>
 	<html:messages id="error" message="false">
 		<li><bean:write name="error"/></li>
-	
+	</html:messages>
 	</ul>
 </logic:messagesPresent>
 
@@ -56,7 +65,7 @@
 					<bean:write name="reqAttribBean" property="phoneNumber"/>
 				</logic:notEqual>
 				<br/>
-				&nbsp;&raquo; <html:link action="/LoadUser.do">update info
+				&nbsp;&raquo; <html:link action="/LoadUser.do">update info</html:link>
 			  </td>
 			</tr>
 			</table>
@@ -82,7 +91,7 @@
 	    <html:select property="requestedCertName" size="1">
           <option value="certified">Certified User</option>
           <option value="professional">Professional User</option>
-	    
+	    </html:select>
 		&nbsp;&nbsp;
 		<a href="@help-for-userlevels-href@">Which level is right for me?</a>
 		</span>
@@ -108,7 +117,7 @@
           <option value="BA/BS">BA/BS</option>
           <option value="MA/MS">MA/MS</option>
           <option value="PhD">PhD</option>
-	    
+	    </html:select></span>
         </td>
     </tr>
     <tr>
@@ -268,40 +277,40 @@
 			<html:select property="expRegionA">
 			  <option value="">--select a region--</option>
 			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
-			
+			</html:select>
 		  </td>
 		  <td bgcolor="#FFFFFF" align="center"> 
 
 			<html:select property="expRegionAVeg">
-			  <html:option value="0">0
-			  <html:option value="1">1
-			  <html:option value="2">2
-			  <html:option value="3">3
-			  <html:option value="4">4
-			  <html:option value="5">5
-			
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
+			</html:select>
 
 
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionAFlor">
-			  <html:option value="0">0
-			  <html:option value="1">1
-			  <html:option value="2">2
-			  <html:option value="3">3
-			  <html:option value="4">4
-			  <html:option value="5">5
-			
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
+			</html:select>
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionANVC">
-			  <html:option value="0">0
-			  <html:option value="1">1
-			  <html:option value="2">2
-			  <html:option value="3">3
-			  <html:option value="4">4
-			  <html:option value="5">5
-			
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
+			</html:select>
 		  </td>
 		</tr>
 		<tr bgcolor="#EEEEEE"> 
@@ -309,37 +318,37 @@
 			<html:select property="expRegionB">
 			  <option value="">--no other regions--</option>
 			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
-			
+			</html:select>
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionBVeg">
-			  <html:option value="0">0
-			  <html:option value="1">1
-			  <html:option value="2">2
-			  <html:option value="3">3
-			  <html:option value="4">4
-			  <html:option value="5">5
-			
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
+			</html:select>
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionBFlor">
-			  <html:option value="0">0
-			  <html:option value="1">1
-			  <html:option value="2">2
-			  <html:option value="3">3
-			  <html:option value="4">4
-			  <html:option value="5">5
-			
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
+			</html:select>
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionBNVC">
-			  <html:option value="0">0
-			  <html:option value="1">1
-			  <html:option value="2">2
-			  <html:option value="3">3
-			  <html:option value="4">4
-			  <html:option value="5">5
-			
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
+			</html:select>
 		  </td>
 		</tr>
 		<tr bgcolor="#FFFFFF"> 
@@ -347,37 +356,37 @@
 			<html:select property="expRegionC">
 			  <option value="">--no other regions--</option>
 			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
-			
+			</html:select>
 			</td>
 		  <td bgcolor="#FFFFFF" align="center"> 
 			<html:select property="expRegionCVeg">
-			  <html:option value="0">0
-			  <html:option value="1">1
-			  <html:option value="2">2
-			  <html:option value="3">3
-			  <html:option value="4">4
-			  <html:option value="5">5
-			
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
+			</html:select>
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionCFlor">
-			  <html:option value="0">0
-			  <html:option value="1">1
-			  <html:option value="2">2
-			  <html:option value="3">3
-			  <html:option value="4">4
-			  <html:option value="5">5
-			
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
+			</html:select>
 		  </td>
 		  <td bgcolor="#FFFFFF" align="center"> 
 			<html:select property="expRegionCNVC">
-			  <html:option value="0">0
-			  <html:option value="1">1
-			  <html:option value="2">2
-			  <html:option value="3">3
-			  <html:option value="4">4
-			  <html:option value="5">5
-			
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
+			</html:select>
 		  </td>
 		</tr>
 		  </table>
@@ -470,7 +479,7 @@
         <html:submit value="Request Certification"/>
       </td>
     </tr>
-
+</html:form>
   </table>
        <p>
        <font color="red">*</font> 
@@ -481,6 +490,6 @@
           <br/> &nbsp;
         </p>
 
+
+
 @webpage_footer_html@
-
-

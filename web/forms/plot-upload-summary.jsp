@@ -1,8 +1,34 @@
+
 @webpage_top_html@
-@stdvegbankget_jspdeclarations@
-@webpage_head_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+
+<!-- 
+  *   '$RCSfile: plot-upload-summary.jsp,v $'
+  *     Purpose: to inform the user that changes they made to vegbank were successful
+  *   Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *     Authors: @author@
+  *
+  *    '$Author: mlee $'
+  *      '$Date: 2005-03-15 12:35:28 $'
+  *  '$Revision: 1.5 $'
+  *
+  *
+  -->
+
+
+
  
 <TITLE>Upload Received</TITLE>
+
+
+
+ 
+
+
+
+
 @webpage_masthead_html@
  
 
@@ -29,7 +55,7 @@ An email will be sent to <bean:write name="email"/> containing load results.
 	<!--html:submit property="submit" value="Yes, load data now"/-->
 <!--/html:form-->
 
-<p>&raquo; <html:link action="/DisplayUploadPlotAction.do">Back to upload page
+<p>&raquo; <html:link action="/DisplayUploadPlotAction.do">Back to upload page</html:link>
 
 <blockquote>
 
@@ -77,7 +103,7 @@ while (kit.hasNext()) {
 <br>
 <br>
 <br>
+
+
 @webpage_footer_html@
-
-
 

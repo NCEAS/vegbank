@@ -1,9 +1,30 @@
+
 @webpage_top_html@
-@stdvegbankget_jspdeclarations@
-@webpage_head_html@
-@defaultHeadToken@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+<!-- 
+  *   '$RCSfile: get_test.jsp,v $'
+  *     Purpose: web form to query the plant taxonomy portion of vegbank
+  *   Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *     Authors: @author@
+  *
+  *    '$Author: mlee $'
+  *      '$Date: 2005-03-15 12:35:28 $'
+  *  '$Revision: 1.5 $'
+  *
+  *
+  -->
+
+
+
 
   <title>vegbank:get Test</title>
+  
+
+
+
+
   @webpage_masthead_html@ 
 
 <%
@@ -111,6 +132,6 @@ out.println("<BR><BR>");
 	<br>
 	<p>
 
-            @webpage_footer_html@
+            
 
-
+@webpage_footer_html@

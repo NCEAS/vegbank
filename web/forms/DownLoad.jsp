@@ -1,7 +1,42 @@
+
+<!--
+ *   '$RCSfile: DownLoad.jsp,v $'
+ *   Purpose: 
+ *   Copyright: 2000 Regents of the University of California and the
+ *               National Center for Ecological Analysis and Synthesis
+ *   Authors: @author@
+ *
+ *  '$Author: mlee $'
+ *  '$Date: 2005-03-15 12:35:28 $'
+ *  '$Revision: 1.12 $'
+ *
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ -->
+
+
 @webpage_top_html@
-@stdvegbankget_jspdeclarations@
-@webpage_head_html@
-  <title>VegBank Plot Data Download</title>
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+ 
+  <meta name="generator" content="HTML Tidy, see www.w3.org"><!--  -->
+  <title>
+   VegBank plots data download
+  </title>
+  <meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+
 <style type="text/css">
 .tiny {
     FONT-SIZE: 10px
@@ -22,6 +57,10 @@
     FONT-SIZE: 18px
 }
 </style>
+ 
+ <!--access to the fileDownload servlet-->
+ 
+<!-- VegBank Header -->
   @webpage_masthead_html@
 
 
@@ -29,7 +68,7 @@
     <ul>
       <html:messages id="error" message="false">
         <li><bean:write name="error"/></li>
-      
+      </html:messages> 
     </ul>
   </logic:messagesPresent>
 
@@ -52,7 +91,7 @@
     
 
    <table border="0" cellpadding="0" cellspacing="0" width="725" bgcolor="#ffffcc">
-    
+    <tbody>
      <tr>
       <td align="Center" colspan="8" height="10" valign="center">
        <img alt="" border="0" height="10" src="@image_server@pix_clear.gif" width="1"> 
@@ -78,7 +117,7 @@
       <td bgcolor="#cccc99" width="10"> <img alt="" border="0" height="1" src="@image_server@pix_clear.gif" width="10"> </td>
       <td align="Center" valign="Top" width="361"> 
         <table border="0" cellpadding="0" cellspacing="0" width="100%">
-        
+        <tbody>
          <tr>
             <td valign="top">
               <font color="#23238e" face="Helvetica,Arial,Verdana" size="2">
@@ -130,7 +169,7 @@
     </tbody>
    </table>
    <table summary="navigation" border="0" cellpadding="0" cellspacing="5" width="725">
-   
+   <tbody>
      <tr>
        <td align="Center"><br/></td>
      </tr>
@@ -139,10 +178,10 @@
      </tr>
     </tbody>
    </table>
-  
+  </html:form>
    <!-- VegBank footer -->
-   @webpage_footer_html@
+   
  
-
+@webpage_footer_html@
 
 

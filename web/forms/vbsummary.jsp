@@ -1,9 +1,17 @@
+
+
 @webpage_top_html@
-@stdvegbankget_jspdeclarations@
-@webpage_head_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+
+
  
 <TITLE>Summary of Data in VegBank</TITLE>
-<body>@webpage_masthead_html@
+
+
+
+
+@webpage_masthead_html@
 
 <h1>Data Currently in VegBank </h1>
 <div align="center">
@@ -73,6 +81,6 @@
 
 </div>
 
+
+
 @webpage_footer_html@
-
-

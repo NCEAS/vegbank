@@ -1,8 +1,27 @@
+
+
 @webpage_top_html@
-@stdvegbankget_jspdeclarations@
-@webpage_head_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+<!-- 
+  *   '$RCSfile: CommQuery.jsp,v $'
+  *     Purpose: web form to query the plant taxonomy portion of vegbank
+  *   Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *     Authors: @author@
+  *
+  *    '$Author: mlee $'
+  *      '$Date: 2005-03-15 12:35:28 $'
+  *  '$Revision: 1.11 $'
+  *
+  *
+  -->
+
+
 
   <title>Vegetation Community Lookup</title>
+  
+
   <style type="text/css">
   td.c4 {color: #000000; font-family: Helvetica,Arial,Verdana}
   span.c3 {color: black; font-family: Helvetica,Arial,Verdana; font-size: 70%}
@@ -50,7 +69,11 @@ function setNameMatchType() {
 	}
 }
 </script>
-  @webpage_masthead_html@ 
+
+
+
+
+  @webpage_masthead_html@ <!-- SECOND TABLE -->
 
   <!--html:errors/-->
   
@@ -302,10 +325,10 @@ function setNameMatchType() {
 
           <tr>
             <td colspan="2"><!-- VEGBANK FOOTER -->
-            @webpage_footer_html@
+            </td>
           </tr>
       </td>
     </tr>
   </table>
 
-
+@webpage_footer_html@
