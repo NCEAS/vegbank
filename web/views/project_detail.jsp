@@ -14,6 +14,7 @@
         <% String rowClass = "evenrow"; %>
         <vegbank:get id="project" select="project" beanName="map" pager="true" />
 <!--Where statement removed from preceding: -->
+<vegbank:pager />
 <logic:empty name="project-BEANLIST">
 <p>  Sorry, no projects found.</p>
 </logic:empty>
@@ -23,10 +24,31 @@
 <table class="leftrightborders" cellpadding="0">
         <%@ include file="autogen/project_detail_data.jsp" %>
         <bean:define id="project_pk" name="onerowofproject" property="project_id" />
+<!-- custom bits:
+-->
+
+
+<vegbank:get id="observation" select="observation_count" beanName="map" pager="false" perPage="-1" 
+  where="where_project_pk" wparam="project_pk" />
+
+<tr  class='@nextcolorclass@'><td>Count of Observations in this project</td>
+<td>
+<logic:empty name="observation-BEAN">
+-none-
+</logic:empty>
+<logic:notEmpty name="observation-BEAN">
+<bean:write name="observation-BEAN" property="count_observations" />
+<logic:notEqual name="observation-BEAN" property="count_observations" value="0">
+<a href="@get_link@std/observation/<bean:write name='project_pk' />?where=where_project_pk">View observations</a>
+</logic:notEqual>
+</logic:notEmpty>
+
+
+
 <!--Insert a nested get statement here:
    example:   
 
-<vegbank:get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_project_pk" wparam="project_pk" />-->
+<vegbankget id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_project_pk" wparam="project_pk" />-->
 <tr><th colspan="2">projectContributors:</th></tr>
 <TR><TD COLSPAN="2">
 <vegbank:get id="projectcontributor" select="projectcontributor" beanName="map" pager="false" where="where_project_pk" wparam="project_pk" perPage="-1" />
