@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-10-29 04:01:23 $'
- *	'$Revision: 1.7 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-11-05 20:50:58 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import org.vegbank.common.model.*;
-import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.MBReadHelper;
 
 /**
  * @author farrell
@@ -59,12 +59,12 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	{
 	}
 
-	public VegbankOMPlugin(int plotId)
+	public VegbankOMPlugin(String accessionCode)
 	{
-	 	init(plotId);	
+	 	init(accessionCode);	
 	}
 
-	private void  init(int observation_id)
+	private void  init(String accessionCode)
   	{
 		// Get All Observations related to this plot
   	
@@ -73,7 +73,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 			DBModelBeanReader mbReader = new DBModelBeanReader();
 			// TODO:  Get a single observation_id for this plot  
 			Plot plot =
-				mbReader.getPlotObservationBeanTree(observation_id);
+				mbReader.getPlotObservationBeanTree(accessionCode);
 				
 			observation = (Observation) plot.getplot_observations().get(0);
 			
@@ -937,28 +937,10 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		{
 			Taxonobservation to = (Taxonobservation) taxonObservations.next();
 
-			// Get the current interpritation ... if none then return the author name for the plant
-			String key = "";
-			Iterator taxonInterpritations = to.gettaxonobservation_taxoninterpretations().iterator();
-			while( taxonInterpritations.hasNext() )
-			{
-				Taxoninterpretation ti =  (Taxoninterpretation) taxonInterpritations.next();
-				// Converting a String to boolean ... risky
-        System.out.println("Is this the current interpritation ?" + ti.getCurrentinterpretation() );
-				if ( Utility.isTrue(ti.getCurrentinterpretation()) )
-				{
-					key = ti.getPlantconceptobject().getPlantname();
-				}
-				if ( key == null || key.equals(""))
-				{
-					// No valid taxonInterpritation found use the authors name for the plant
-					// *** to indicate on the ui that this is not accepted yet .
-					key = "*** " + to.getCheatplantname() + " ***";
-				}
+			String plantName = MBReadHelper.getPlantName(to);
 
-			}
-			taxonObs.put(key, to);
-			nameList.add(key);
+			taxonObs.put(plantName, to);
+			nameList.add(plantName);
 		}
 		return nameList;
 	}
@@ -1322,7 +1304,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	{
     if ( project == null )
     {
-      this.init(new Integer(plotName).intValue() );
+      this.init(plotName );
     }
 		return project.getProjectname();
 	}
