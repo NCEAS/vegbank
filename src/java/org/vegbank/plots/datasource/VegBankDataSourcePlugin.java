@@ -9,8 +9,8 @@ import java.sql.*;
  *
  *	
  *	'$Author: farrell $' <br>
- *	'$Date: 2003-05-06 23:25:31 $' <br>
- *	'$Revision: 1.2 $' <br>
+ *	'$Date: 2003-06-03 01:11:45 $' <br>
+ *	'$Revision: 1.3 $' <br>
  */
  
 public class VegBankDataSourcePlugin implements PlotDataSourceInterface
@@ -293,7 +293,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 *
 	 * @param plantName -- the scientific plantName
 	 */
-	public String getPlantTaxonCover(String plantName)
+	public String getPlantTaxonCover(String plantName, String plotName)
 	{
 		String taxonCover = "";
 		StringBuffer sb = new StringBuffer();
@@ -2677,6 +2677,15 @@ public boolean  getRevisions(String plotName)
 	{
 		String s = this.getPlotElement(plotName, "surficialdeposits");
 		return(s);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getStratumMethodName(java.lang.String)
+	 */
+	public String getStratumMethodName(String plotName)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

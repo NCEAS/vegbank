@@ -13,8 +13,8 @@ import java.util.*;
  *  Release: @release@
  *	
  *  '$Author: farrell $'
- *  '$Date: 2003-05-06 23:25:31 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-06-03 01:11:45 $'
+ *  '$Revision: 1.3 $'
  */
 public class PlotDataSource 
 {
@@ -81,13 +81,6 @@ public class PlotDataSource
   //constructor method
 	public PlotDataSource()
 	{
-		try
-		{ 
-		}
-		catch(Exception e)
-		{
-			System.out.println("Error getting plugin: " + e.getMessage());
-		}
 	}
 	
 	
@@ -1146,6 +1139,7 @@ public class PlotDataSource
 		//String s = "bad";	
 		return(s);
 	}
+	 
 	/**
 	 * method to return the taxon cover from a data source using as input 
 	 * the scientific plant name -- or the plant name that comes from 
@@ -1153,9 +1147,9 @@ public class PlotDataSource
 	 *
 	 * @param plantName -- the scientific plantName
 	 */
-	 public String getPlantTaxonCover(String plantName)
+	 public String getPlantTaxonCover(String plantName, String plotName)
 	 {
-		 String s = ((PlotDataSourceInterface)pluginObj).getPlantTaxonCover(plantName);
+		 String s = ((PlotDataSourceInterface)pluginObj).getPlantTaxonCover(plantName, plotName);
 		return(s);
 	 }
 	 
@@ -1791,6 +1785,16 @@ public String getSurficialDeposits(String plotName)
 	// TODO Auto-generated method stub
 	return null;
 }
+
+	/**
+	 * @param plotName
+	 * @return
+	 */
+	public String getStratumMethodName(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getStratumMethodName(plotName);
+		return(s);
+	}
 	
 }
 	

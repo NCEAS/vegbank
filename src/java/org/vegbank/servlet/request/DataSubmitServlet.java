@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-29 00:14:08 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2003-06-03 01:11:45 $'
+ *  '$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,8 +62,8 @@ import databaseAccess.CommunityQueryStore;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-29 00:14:08 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2003-06-03 01:11:45 $'
+ *  '$Revision: 1.9 $'
  */
 
 
@@ -75,7 +75,12 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	private static String commUpdateScript = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/update_community_summary.sql";
 	private static String communityValidationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/community-submit_valid.html";
 	//private static String communityValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/valid.html";
-	private static String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/input.data";
+	
+	ResourceBundle DataExchangeRb = ResourceBundle.getBundle("dataexchange");
+	private String uploadDir = rb.getString("uploadDir");
+	
+	private String plotsArchiveFile =  uploadDir + "/input.data";
+	
 	private static String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/plot-submit-select.html";
 	private static String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/plot_select.html";
 	private static String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/generic_form.html";

@@ -14,8 +14,8 @@ import xmlresource.utils.XMLparse;
  * Access to the data stored in the native VegBank XML structure.
  * 
  *	'$Author: farrell $'
- *	'$Date: 2003-05-06 23:25:31 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-06-03 01:11:45 $'
+ *	'$Revision: 1.3 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -1489,7 +1489,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
     return (String) taxonCodes.firstElement(); 
   }
   
-  public String getPlantTaxonCover(String plantName)
+  public String getPlantTaxonCover(String plantName, String plotName)
 	{
 		String taxonCover = null;
 		String path2taxonCover = 
@@ -1758,6 +1758,15 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String getSurficialDeposits(String plotName)
 	{
 		return this.getPlotAttribute(plotName, "surficialDeposits") ;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getStratumMethodName(java.lang.String)
+	 */
+	public String getStratumMethodName(String plotName)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

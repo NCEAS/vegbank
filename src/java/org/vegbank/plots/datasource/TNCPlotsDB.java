@@ -20,8 +20,8 @@ import java.util.Vector;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2003-05-06 23:25:31 $' <br>
- * 	'$Revision: 1.2 $' <br>
+ *  '$Date: 2003-06-03 01:11:45 $' <br>
+ * 	'$Revision: 1.3 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -2944,6 +2944,7 @@ public boolean  getRevisions(String plotName)
 			 //call the private getSpeciesInfo method
 			 scientificNames = new Vector();
 			 getSpeciesInfo(plotName);
+			 System.out.println("TNCPlotsDB > The plants in this plot: " +scientificNames);
 			 return( scientificNames );
 		 }
 		 
@@ -2988,24 +2989,23 @@ public boolean  getRevisions(String plotName)
 	 	 *
 	 	 * @param plantName -- the scientific plantName
 	 	 */
-		public String getPlantTaxonCover(String plantName)
+		public String getPlantTaxonCover(String plantName, String plotName)
 	 	{
 			Statement stmt = null;
 			String taxonCover = "";
       
-      /*
-      FIXME: Need to get the return the taxonCover instead of empty string
 			try
 			{
 				// Create a Statement so we can submit SQL statements to the driver
 				stmt = con.createStatement();
 				//create the result set
 				ResultSet rs = stmt.executeQuery("select "
-				+" ([Plant Symbol])  "
-				+" from ([Plots-Species]) where ([Scientific Name]) like '"+plantName+"'");
+				+" ([Real Cover])  "
+				+" from ([Plots-Species]) where ([Scientific Name]) = '"+plantName+"'"
+				+ " AND ([Plot Code]) like '"+plotName+"'");
 				while (rs.next()) 
 				{
-					code = rs.getString(1);
+					taxonCover = rs.getString(1);
 				}
 				rs.close();
 				stmt.close();
@@ -3015,16 +3015,11 @@ public boolean  getRevisions(String plotName)
 				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
-      */
       
-			System.out.println("TNCPlotsDB > FIXME: returing '' for taxonCover"); 
-      
+      System.out.println("TNCPlotsDB > cover: " + taxonCover);
 			return(taxonCover);
-	 	}
-		
-
-
-		 
+	 	}		
+	 
 	 /**
 	  * method that updates the publicly accessible variables with the 
 		* site specific data
@@ -3568,6 +3563,14 @@ public static void main(String[] args)
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getStratumMethodName(java.lang.String)
+	 */
+	public String getStratumMethodName(String plotName)
+	{
+		return "NatureServe StratumMethod"; 
 	}
 
 }

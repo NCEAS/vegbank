@@ -17,8 +17,8 @@ import java.util.Vector;
  * 
  * Release: @release@ <br>
  * '$Author: farrell $' <br>
- * '$Date: 2003-05-06 23:25:31 $' <br>
- * '$Revision: 1.2 $' <br>
+ * '$Date: 2003-06-03 01:11:45 $' <br>
+ * '$Revision: 1.3 $' <br>
  */
 public interface PlotDataSourceInterface
 {
@@ -609,8 +609,7 @@ public interface PlotDataSourceInterface
 	 *
 	 * @param plantName -- the scientific plantName
 	 */
-	 String getPlantTaxonCover(String plantName);
-	
+		String getPlantTaxonCover(String plantName, String plotName);	
 
 	/**
 	 * method that retuns the names of the unique strata elements 
@@ -650,5 +649,13 @@ public interface PlotDataSourceInterface
 		 * @param strataName -- the name of the stratum 
 		 */
 		 String getStrataHeight(String plotName, String strataName);
+		 
+	/**
+	 * method that returns the name of the stratumMethod used
+	 *
+	 * @param plotName -- the name of the plot
+	 * @param strataName -- the name of the stratum 
+	 */
+	 String getStratumMethodName(String plotName);
 		
 }
