@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-07-25 02:07:42 $'
- * '$Revision: 1.18 $'
+ *     '$Date: 2002-07-30 15:58:52 $'
+ * '$Revision: 1.19 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -241,23 +241,27 @@ import databaseAccess.*;
 				sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
 				sqlBuf.append(" startDate, stopDate, plantNameAlias  ");
 				sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"+taxonName.toUpperCase()+"'");
-				
+			
+				System.out.println("TaxonQueryStore > taxonLevel: '"+taxonLevel+"' ");
 				//add the level in the heirachy
 				if ( ! taxonLevel.trim().equals("%") )
 				{
 					sqlBuf.append(" and upper(plantlevel) like  '"+taxonLevel.toUpperCase()+"'");
 				}
 				
+				System.out.println("TaxonQueryStore > taxonNameType: '"+taxonNameType+"' ");
 				//add the name type
-				if ( taxonNameType.trim().equals("%") ) 
+				if ( ! taxonNameType.trim().equals("%") ) 
 				{
 					sqlBuf.append(" and ( classsystem like '"+taxonNameType+"' ");
 					sqlBuf.append(" or  upper(classsystem) like '"+taxonNameType.toUpperCase()+"' ");
+					sqlBuf.append(")");
 				}
 				
 				// add the end quote
-				sqlBuf.append(")");
-				
+				//sqlBuf.append(")");
+			
+			System.out.println("TaxonomyQueryStore > query: " + sqlBuf.toString() );	
 				results = query.executeQuery( sqlBuf.toString() );
 			
 				//retrieve the results

@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-07-26 15:13:50 $'
- * 	'$Revision: 1.11 $'
+ *  '$Date: 2002-07-30 15:58:52 $'
+ * 	'$Revision: 1.12 $'
  *
  *
  */
@@ -446,6 +446,11 @@ public void getPlotId(String queryElement, String queryElementType)
 						sb.append(" intersect ");
 					}
 				}
+			}
+			// ELSE IF JUST A SINGLE PLANT PASSED
+			else
+			{
+				sb.append(" select PLOT_ID from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+queryElement.toUpperCase()+"%'");
 			}
 	}
 	// ALSO HANDLE THE COMMUNITIES A LITTLE DIFFERENTLY BECAUSE THEY CAN 
