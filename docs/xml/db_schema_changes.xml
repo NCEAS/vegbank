@@ -2982,4 +2982,50 @@ observation.autoTaxonCover
 observation.coverDispersion
 observation.COVERMETHOD_ID</modelChangeComments>
   </modelChange>
+  <modelChange>
+    <modelChangeID>15</modelChangeID>
+    <modelChangeName>Braun-Blanquet comm considerations</modelChangeName>
+    <modelChangeStatus>TRUE beta.2</modelChangeStatus>
+    <modelChangeComments>1 field needs adding and some additional name Systems are necessary for Braun-Blanquet communities.</modelChangeComments>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>commInterpretation</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>nomenclaturalType</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>boolean</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes/>
+        <attDefinition>Typal plot for the Braun-Blanquet community name.</attDefinition>
+        <attListType>no</attListType>
+        <attList/>
+      </attribute>
+    </entity>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>comm</entityModule>
+      <entityName>commUsage</entityName>
+      <attribute>
+        <attChangeType>change</attChangeType>
+        <attName>classSystem</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (50)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes/>
+        <attDefinition>TRUE if this plot-commConcept link represents the typal plot for the Braun-Blanquet community name referenced by the commConcept.</attDefinition>
+        <attListType>open</attListType>
+        <attList>
+          <attListItem>COMING SOON!</attListItem>
+        </attList>
+      </attribute>
+    </entity>
+  </modelChange>
 </modelChangeDocument>
