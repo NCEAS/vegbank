@@ -30,8 +30,8 @@
 
 
 	 <tr bgcolor="#336633" align="left" valign="top">
-	   <th align="center" nowrap> SEARCH<br>RESULTS </th>
-           <logic:iterate id="heading" name="QueryResults" property="dynaProperties"  indexId="dynaPropertyId">
+	   <th align="center" nowrap rowspan="1"> SEARCH<br>RESULTS </th>
+<!-- MTL: manually setting these properties, so that I can arrange order and such here            <logic:iterate id="heading" name="QueryResults" property="dynaProperties"  indexId="dynaPropertyId">
 
 <%
 RowSetDynaClass queryResults = (RowSetDynaClass) request.getAttribute("QueryResults");
@@ -39,15 +39,27 @@ String columnName = queryResults.getDynaProperties()[dynaPropertyId.intValue()].
 // Filter out the accessioncode
 if ( ! columnName.equalsIgnoreCase("accessioncode") )
 {
-%>
+%> 
 		<th align="center" valign=center nowrap>
                    <bean:write name="heading" property="name"/>
                 </th>
 <%
 }
-%>
-           </logic:iterate>
+%>  
+           </logic:iterate> -->
+          <th align="center" valign="left" nowrap>
+                   Scientific Name
+          </th>
+          <th align="center" valign="left" nowrap>
+                   English Common Name
+          </th>
+          <th align="center" valign="left" nowrap>
+                   Code
+          </th>
+
+           
 	 </tr>
+
 
 	 <%
 	 //**************************************************************************************
@@ -55,6 +67,7 @@ if ( ! columnName.equalsIgnoreCase("accessioncode") )
 	 //**************************************************************************************
 	 boolean toggle = true;
 	 String rowClass, marginBgColor;
+	
 	 %>
 	
 	 <logic:iterate id="row" name="QueryResults" property="rows" >
@@ -75,9 +88,9 @@ if ( ! columnName.equalsIgnoreCase("accessioncode") )
 	 %>
 	 
      <tr class="<%= rowClass %>" valign="top">
-
+  
 	    <!-- First Cell-->
-	    <th width="20%" bgcolor="<%= marginBgColor %>" align="center" nowrap>
+	    <th width="20%" bgcolor="<%= marginBgColor %>" align="center" nowrap rowspan="2">
 	      <html:link page="/GenericDispatcher.do?command=RetrieveVBModelBean&jsp=GenericDisplay.jsp&rootEntity=PlantConcept" title="summary report" paramId="accessionCode" paramName="row" paramId="accessionCode" paramProperty="accessioncode">
                 <img align="center" src="@image_server@report_sm.gif" alt="Summary view"></img>
               </html:link>
@@ -91,7 +104,7 @@ if ( ! columnName.equalsIgnoreCase("accessioncode") )
               </html:link>
             </th>
 	     
-            <logic:iterate id="column" name="QueryResults" property="dynaProperties" indexId="dynaPropertyId"> 
+   <!-- MTL: manually setting these properties, so that I can arrange order and such here          <logic:iterate id="column" name="QueryResults" property="dynaProperties" indexId="dynaPropertyId"> 
 <%
 // Apologies for this hack, could not find a syntatically neat way to do this, 
 // I want to get the name of the current column to use to access the property 
@@ -112,8 +125,47 @@ if ( ! columnName.equalsIgnoreCase("accessioncode") )
 <%
 }
 %>	
-            </logic:iterate> 
+            </logic:iterate> -->
+            
+     <td align="left" valign="middle">
+       <logic:empty name="row" property="scientific name">
+         <span class="itemsmaller">[n/a]</span>
+       </logic:empty>
+       <logic:notEmpty name="row" property="scientific name">
+         <span class="item">
+           <bean:write	name="row" property="scientific name" />
+         </span>
+       </logic:notEmpty>
+     </td>
+     
+      <td align="left" valign="middle">
+     <logic:empty name="row" property="english common name">
+         <span class="itemsmaller">[n/a]</span>
+       </logic:empty>
+    <logic:notEmpty name="row" property="english common name">
+       <span class="item">
+          <bean:write	name="row" property="english common name" />
+       </span>
+     </logic:notEmpty>  
+     </td>
+     
+        <td align="left" valign="middle">
+         <logic:empty name="row" property="code">
+         <span class="itemsmaller">[n/a]</span>
+       </logic:empty>
+    <logic:notEmpty name="row" property="code">
+
+       <span class="item">
+          <bean:write	name="row" property="code" />
+       </span>
+    </logic:notEmpty>
+     </td>
+     
 	  </tr>
+	  <tr class="<%= rowClass %>">
+	    <td colspan="20" align="right"><!-- accessionCode --><span class="itemsmaller"><bean:write name="row" property="accessioncode" /></span></td>
+	  </tr>
+	 
 	  <tr bgcolor="#666666">
          <td colspan="20"><img src="transparent.gif" height="1" width="1"></td>		 
 	  </tr>
@@ -121,6 +173,9 @@ if ( ! columnName.equalsIgnoreCase("accessioncode") )
 
 	 <tr bgcolor="#336633">
 	   <td colspan="20">&nbsp; </td>
+	 </tr>
+	 <tr bgcolor="#336633">
+	   <td colspan="20" align="right" class="grey"><span class="itemsmaller">Note: VegBank Accession Codes appear below each plant.  These uniquely identify each plant concept.</span></td>
 	 </tr>
       </table>
       
