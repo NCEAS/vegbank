@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-21 15:13:25 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2004-12-06 18:49:35 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,13 +50,14 @@ import org.apache.struts.taglib.bean.WriteTag;
 
 import org.vegbank.common.command.GenericCommand;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.CompositeRequestParamUtil;
 
 /**
  * Tag that queries the DB and puts a map or bean in the 
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.12 $ $Date: 2004-10-21 15:13:25 $
+ * @version $Revision: 1.13 $ $Date: 2004-12-06 18:49:35 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -436,71 +437,8 @@ public class VegbankGetTag extends VegbankTag {
 	 * Gets SQL, swaps in xwhereParams and handles xwhereSearch.
 	 */
     public String getXwhereClause() {
-		String xwKey = getXwhereKey();
-		if (Utility.isStringNullOrEmpty(xwKey)) {
-			return "";
-		}
-
-		String xwClause = sqlResources.getString(xwKey);
-		String xwParams = getXwhereParams();
-		String[] xwParamArray;
-
-		if (!Utility.isStringNullOrEmpty(xwParams)) {
-			xwParams = xwParams.replaceAll("%20", " ");
-		}
-
-		log.debug("xwhereClause: " + xwClause);
-		log.debug("xwhereParams: " + xwParams);
-
-		if (Utility.isStringNullOrEmpty(xwClause)) {
-			return "";
-		}
-
-		boolean isSearch = getXwhereSearch();
-
-		if (xwParams.indexOf(";") == -1) {
-			// only one xwParam
-			// format xwClause with xwParams as is
-			xwParamArray = new String[1];
-
-			if (isSearch) {
-				xwParamArray[0] = makeStringSearchable(xwParams, xwClause, getXwhereGlue());
-			} else {
-				xwParamArray[0] = xwParams;
-			}
-
-		} else {
-			// there are multiple xwParam values
-			StringTokenizer stParams = new StringTokenizer(xwParams, ";");
-			xwParamArray = new String[stParams.countTokens()];
-			int j=0;
-			while (stParams.hasMoreTokens()) {
-				if (isSearch) {
-					xwParamArray[j++] = makeStringSearchable(stParams.nextToken(), xwClause, getXwhereGlue());
-				} else {
-					xwParamArray[j++] = stParams.nextToken();
-				}
-			}
-		}
-
-		// expand the entire xwClause
-		MessageFormat format = new MessageFormat(xwClause);
-		StringBuffer sb = new StringBuffer(xwParamArray.length * 24);
-		boolean first = true;
-		String[] arr = new String[1];
-		for (int i=0; i<xwParamArray.length; i++) {
-			if (first) { first = false;
-			} else { sb.append(" AND "); }
-
-			if (isSearch) {
-				sb.append(xwParamArray[i]);
-			} else {
-				arr[0] = xwParamArray[i];
-				sb.append(format.format(arr));
-			}
-		}
-
-		return sb.toString();
+		Xwhere xw = new Xwhere(pageContext.getRequest());
+		return xw.getXwhereClause();
     }
 
     public void setXwhereKey(String s) {
@@ -513,6 +451,9 @@ public class VegbankGetTag extends VegbankTag {
 	protected String xwhereParams;
 
     public String getXwhereParams() {
+		CompositeRequestParamUtil util = new CompositeRequestParamUtil(pageContext.getRequest()); 
+		log.debug("about to parse composite params...");
+		util.parseIntoRequest("xwhereParams");
         return findAttribute("xwhereParams", this.xwhereParams);
     }
 

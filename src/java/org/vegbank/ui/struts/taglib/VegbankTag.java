@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-21 15:13:25 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-12-06 18:49:35 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ package org.vegbank.ui.struts.taglib;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.Utility;
  * Abstract base class tag.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.5 $ $Date: 2004-10-21 15:13:25 $
+ * @version $Revision: 1.6 $ $Date: 2004-12-06 18:49:35 $
  */
 
 public abstract class VegbankTag extends TagSupport {
