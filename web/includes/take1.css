@@ -1,0 +1,388 @@
+/*-------------------------------------------------
+BODY
+-------------------------------------------------*/
+body {
+	background: #dfdfdf url(@images_link@bg_texture.jpg);
+}
+
+#maincontent {
+    position: relative;
+    top: 60px;
+    float: left;
+    width: 85%;
+    min-width: 700px;
+    margin: 0 0 20px 10px;
+    text-align: left;
+}
+#maincontent fieldset {
+    float: left;
+}
+
+/*-------------------------------------------------
+HEADER, FOOTER & NAV
+-------------------------------------------------*/
+#ceiling {
+	background-color: #fff;
+	padding: 0 15px 0px 15px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #999; /*#CCCC8F;  #97e79b; */
+    height: 25px;
+}
+
+#ceiling.fattop {
+    height: 63px;
+}
+
+body>#ceiling.fattop {
+    /* IE-free zone */
+}
+
+#permanav {
+    position: absolute;
+    right: 4%;
+    top: 4px;
+    float: right;
+    /*
+    position: absolute;
+    right: 7%;
+    top: 4px;
+    */
+    padding: 0;
+	text-align: center;
+	font-size: 11px;
+    font-weight: normal;
+    color: #666;
+    line-height: 2em;
+}
+
+#ceiling>#permanav {
+    /* IE-free zone */
+}
+
+#permanav img {
+	vertical-align: text-top;
+}
+
+#permanav a {
+    text-decoration: none;
+}
+
+/* #permanav a.carticon:hover { */
+a.nobg:hover {
+	background: none;
+}
+
+#logo img {
+    float: left;
+    border: none;
+    overflow: visible;
+}
+
+#logo #logo-word {
+    margin: 11px 0 0 70px;
+}
+
+#logo #logo-icon {
+    position: absolute;
+    top: 0px;
+    left: 10px;
+}
+
+#header {
+    position: absolute;
+    left: 80px;
+    top: 25px;
+    width: 650px;
+    height: 69px;
+    margin: 0 0 20px 0;
+    text-align: left;
+    background: url(@images_link@header_bg650.gif) top left no-repeat;
+              /* padding: 2px 3px 3px 3px ;*/
+              /* padding: 5px 10px 5px 10px; */
+    font-size: 15px;
+    vertical-align: text-top;
+    color: #808059;
+    font-weight: bold;
+
+    /*
+    background-color: #fff;
+    background-color: #cccc8f;
+    background-color: #808059;
+    border: 3px solid #E6E6CF;
+    border-width: 1px 1px 2px 1px;
+    border-color: #E6E6CF #CCCC8F #CCCC8F #E6E6CF;
+    */
+}
+#header.fattop {
+    top: 55px;
+    /*
+    position: relative;
+    left: 152px;
+    top: -30px;
+    */
+}
+
+#header-left {
+    float: left;
+    height: 59px;
+    padding: 7px 0px 0px 8px ;
+}
+#header>#header-left {
+    /* reset font to normal in all but IE */
+    font-weight: normal;
+}
+
+#header-data-links {
+    position: absolute;
+    top: 40px;
+    left: 218px;
+    font-size: 11px;
+    font-weight: normal;
+    color: #000;
+}
+#header-left>#header-data-links {
+    left: 225px;
+}
+#header-data-links a {
+	font-size: 11px;
+    color: #000;
+    text-decoration: underline;
+    font-weight: normal;
+}
+#header-data-links a:hover {
+    text-decoration: none;
+    background: #808059;
+    color: #fff;
+}
+
+
+/* this is where the 8 nav links live */
+#header-right {
+    float: right;
+    height: 66px;
+    margin: -1px 2px 0 0px;
+    padding: 3px 0 0 3px;
+    overflow: visible;
+}
+html>body #header-right {
+    /* non IE browser zone */
+    margin: -2px 4px 0 0px;
+}
+#header-right a {
+    color: #08c;
+    font-family: arial, sans-serif;
+	font-size: 11px;
+    font-weight: normal;
+    text-decoration: none;
+    padding: 0;
+}
+#header-right ul {
+    float: left;
+    width: 100px;
+    margin: 0;
+    padding: 1px 0 0 0;
+}
+#header-right ul li {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+#header-right li {
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+}
+#header-right ul li a {
+    display: block;
+    text-align: center;
+    width: 100px;
+    line-height: 1.4em;
+}
+#header-right a {
+    border-bottom: 1px dotted #fff;
+}
+html>body #header-right ul li a {
+    width: auto;
+}
+#header-right ul li a:hover {
+    background-color: #08c;
+    color: #fff;
+    border-bottom: 1px solid #08c;
+}
+/* commented backslash hack hides rule from ie5-mac \*/
+#header-right a {float: none;}  /* end ie5-mac hack */
+#header-right li {
+}
+/*
+#header>#header-right li {
+}
+*/
+
+
+/* the navmenu divs are side by side with 4 links each */
+#navmenu-left {
+    text-align: center;
+    border-left: 3px double #fff;
+}
+#navmenu-left a {
+    padding: 0 7px 0 7px;
+}
+#navmenu-right {
+    border-left: 2px dotted #fff;
+    text-align: center;
+}
+#navmenu-right a {
+    padding: 0 7px 0 7px;
+}
+
+
+#footer {
+    position: relative;
+    left: 70px;
+    clear: both;
+    float: left;
+    width: 650px;
+    border: 1px solid #999;
+    margin: 10px 0 0 0;
+    padding: 10px 0 11px 0;
+    background-color: #E6E6CF;
+    font-size: 10px;
+    line-height: 3.2em;
+    color: #999;
+    text-align: center;
+    -moz-border-radius: 8px;
+}
+#maincontent > #footer {
+    /* beginning to despise IE */
+    padding: 0px 0 2px 0;
+    line-height: 3.2em;
+}
+#footer img {
+	vertical-align: text-bottom;
+    margin-bottom: -2px;
+}
+#footer a {
+    text-decoration: none;
+}
+#footer li {
+    display: inline;
+    padding: 0 15px 0 15px;
+}
+
+/*-------------------------------------------------
+DATACART
+-------------------------------------------------*/
+#datacart {
+    display: none;
+  position: relative;
+  top: 8em;
+  text-align: left;
+  border: 1px solid #bcbcbc;
+  float: left;
+  width: 12em;
+  font-weight: normal;
+  color: #333;
+  line-height: 14px;
+  font-size: 11px;
+  overflow: visible;
+  background: url(@images_link@cart1.jpg) #fff top right no-repeat;
+
+  -moz-border-radius: 8px;
+}
+
+#datacart a {text-decoration: none; padding: 1px; }
+
+#datacart h2 {
+  margin: 0;
+  font-size: 12px;
+  padding: 2px 0 2px 8px;
+  font-weight: bold;
+  border-bottom: 1px dashed #cdcdcd;
+  color: #333;
+}
+
+#datacart ul {
+  float: left;
+  list-style-type: none;
+  padding: 6px 3px 6px 15px;
+}
+
+#datacart li {
+  padding: 0;
+}
+
+#datacart li:before {
+  content:"-";
+}
+
+fieldset {
+    border: 2px solid #fff;
+    width: 20em;
+    padding: 4px 7px;
+    margin: 2em;
+    -moz-border-radius: 8px;
+}
+
+legend {
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #E6E6CF;
+    border: #fff solid 1px;
+    padding: 1px 10px;
+}
+
+.input-box {
+    color: #000;
+    background-color: #fff;
+    border: #000 solid 1px;
+}
+
+.input-button {
+    color: #08c;
+    background: #eee;
+    border: 2px #08c outset;
+}
+
+#tester {
+    display: none;
+    position: relative; background: cyan; border: 1px solid; border-top-width: 3px;
+}
+
+/*-------------------------------------------------
+ROUND BOX
+-------------------------------------------------*/
+/*
+<div class="bl"><div class="br"><div class="tl"><div class="tr">
+Lorem ipsum dolor sit amet consectetur adipisicing elit
+</div></div></div></div>
+<div class="clear">&nbsp;</div>
+*/
+/* requires small, colored, rounded corner images with transparent bgs */
+.bl {background: url(@images_link@bl.gif) 0 100% no-repeat; width: 20em}
+.br {background: url(@images_link@br.gif) 100% 100% no-repeat}
+.tl {background: url(@images_link@tl.gif) 0 0 no-repeat}
+.tr {background: url(@images_link@tr.gif) 100% 0 no-repeat #ff0; padding:10px}
+.clear {clear: both; font-size: 1px; height: 1px}
+/* ---------- */
+
+
+/* rounded edges */
+.rounded {
+    max-width: 620px;
+    background: url(@images_link@rs-right.png) right repeat-y
+}
+
+.rounded:before {
+    display: block;
+    line-height: 0;
+    background: url(@images_link@rs-topright.png) top right no-repeat;
+    content: url(@images_link@rs-topleft.png)
+}
+
+.rounded:after {
+    display: block;
+    line-height: 0;
+    background: url(@images_link@rs-bottomright.png) bottom right no-repeat;
+    content: url(rs-bottomleft.png)
+}
+

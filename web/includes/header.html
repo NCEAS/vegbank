@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  <title>VegBank</title>
+  <link rel="Stylesheet" href="basic.css" type="text/css" media="screen" />
+  <link rel="Stylesheet" href="take1.css" type="text/css" media="screen" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="shortcut icon"  href="@images_link@vegbank_logo16x16.gif" type="image/gif" />
+
+<script language="JavaScript">
+<!--
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+
+function preSubmit() {
+    if (document.quicksearch_form.xwhereParams.value == null ||
+        document.quicksearch_form.xwhereParams.value == "") {
+        document.quicksearch_form.xwhereParams.value="vb";
+        document.quicksearch_form.clearSearch.value="1";
+    }
+}
+// -->
+</script>
+</head>
+
+<body>
+
+<div id="ceiling" class="fattop">
+    <div id="logo">
+      <div id="logo-icon">
+          <img src="@images_link@vegbank_logo69x100trans.gif" />
+      </div>
+        <a href="/" class="nobg"><img id="logo-word" alt="vegbank" border="0"
+			src="@images_link@vegbank_caps170x40outline.jpg" /></a>
+	</div>
+
+    <div id="permanav">
+        <a href="#" class="nobg"><img src="@images_link@cart1.jpg" border="0" /></a><a 
+            href="#">Datacart</a> &middot;
+	<a href="#">My Account</a> &middot;
+	<a href="#">Help</a>
+
+    <br>
+    <select class="input-box" name="vegbankNav" onChange="window.location=this.value"><option value="#">Jump to...</option>
+     <option value="@web_context@">VegBank Home</option>
+         <option value="@web_context@DisplayMainMenu.do">Main Menu</option>
+   	<option value="@forms_link@plot-query-simple.jsp">3-in-1 Query</option>
+         <option value="@web_context@LoadPlotQuery.do">Search for Plots</option>
+         <option value="@forms_link@PlantQuery.jsp">Search for Plants</option>
+         <option value="@forms_link@CommQuery.jsp">Search Communities</option>
+         <option value="@general_link@instructions.html">Tutorial</option>
+         <option value="@general_link@faq.html">FAQ</option>
+       <option value="@vegbranch_link@vegbranch.html">VegBranch</option>
+       <option value="@general_link@info.html">Information</option>
+       <option value="@design_link@erd/vegbank_erd.pdf">--ERD</option>
+       <option value="@dbdictionary_link@dd-index.html">--Data Dictionary</option>
+    <option value="@general_link@sitemap.html">VegBank Site Map</option>
+    </select>
+
+    </div>
+    &nbsp;
+</div>
+
+
+<div id="header" class="fattop">
+        <div id="header-left">
+        <!--a href="#">Find</a> plots<strong>&middot;</strong>
+            <a href="#">Submit</a> data <strong>&middot;</strong>
+        <a href="#">Login</a> to your account
+        -->
+
+            <form action="@forms_link@quicksearch.jsp"
+                method="get" name="quicksearch_form">
+
+                find 
+            <select class="input-box" name="xwhereParams_entity_0" value="entity" />
+                <option value="anything">anything</option>
+                <option value="plot" selected="selected">plots</option>
+                <option value="plant">plants</option>
+                <option value="place">places</option>
+                <option value="party">people</option>
+                <option value="project">projects</option>
+                <option value="community">communities</option>
+            </select>
+
+            containing
+            <input class="input-box" type="text" name="xwhereParams" size="15" value="" 
+                style="width: 115px" />
+            <input class="input-button" type="submit" value="go" 
+                onclick="javascript:preSubmit()" style="width: 35px" />
+            </form>
+
+                <div id="header-data-links">
+                    <a href="#">advanced search</a> 
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a href="#">browse data</a>
+                </div>
+
+            <!-- end header-left -->
+            </div>
+
+            <div id="header-right">
+
+                <ul id="navmenu-left"><li><a href="#">HOME</a></li><li><a href="#">FIND PLOTS</a></li><li><a href="#">OTHER DATA</a></li><li><a href="#">SUBMIT DATA</a></li></ul>
+
+                <ul id="navmenu-right"><li><a href="#">FAQ</a></li><li><a href="#">HELP</a></li><li><a href="#">SITE MAP</a></li><li><a href="#">CONTACT</a></li></ul>
+
+              <!-- end header-right -->
+            </div>
+
+<!-- end header -->
+</div>
+
+
+<div id="maincontent">
