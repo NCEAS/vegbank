@@ -14,7 +14,7 @@ silver=#E6E8FA navyblu=#23238E ltblue=DFE5FA  -->
 <tr>
 <td bgcolor=DFE5FA>
 <img align=center border=0 height=144 
-src="/harris/images/owlogoBev.jpg" alt = "Vegetation plots logo">
+src="@image-path@/owlogoBev.jpg" alt = "Vegetation plots logo">
 <!-- title of page -->
 <td align=left valign=bottom>
  <table border=0 cellpadding=5>
@@ -58,7 +58,10 @@ src="/harris/images/owlogoBev.jpg" alt = "Vegetation plots logo">
 <!-- main menu -->
 <td align=left>
 <table border=0 cellspacing=3 cellpadding=1>
-<FORM ACTION="http://dev.nceas.ucsb.edu/harris/servlet/QueryBuilderServlet" METHOD="GET">
+<FORM ACTION="http://@server@@servlet-path@QueryBuilderServlet" METHOD="GET">
+<!--
+	<FORM ACTION="http://dev.nceas.ucsb.edu/harris/servlet/QueryBuilderServlet" METHOD="GET">
+-->
 <!--variables that are used by the servlet to figure out which query(s) to issue -->
 <input type="hidden" name="requestDataType" value="vegPlot">
 <input type="hidden" name="resultType" value="summary">
@@ -83,11 +86,10 @@ src="/harris/images/owlogoBev.jpg" alt = "Vegetation plots logo">
 <!--
 <option selected>"*"
 -->
-	<option value="%">any</option>
 	<option value="authorPlotCode">Plot code</option>
 	<option value="state">State</option>
 	<option value="elevation">Elevation</option>
-	<option value="plantTaxa">Plant Taxa</option>
+	<option value="plantTaxon">Plant Taxon</option>
 	<option value="surfGeo">Geology</option>
 	<option value="plotShape">Plot shape</option>
 	<option value="slopeGradient">Slope gradient</option>

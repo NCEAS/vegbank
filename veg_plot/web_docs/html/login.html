@@ -18,7 +18,7 @@
    <tbody>
     <tr valign="top">
      <td valign="top" width="200" bgcolor="white">
-      <img alt="login page" height="120" src="/harris/images/owlogoBev.jpg" width=
+      <img alt="login page" height="120" src="@image-path@/owlogoBev.jpg" width=
       "120"><br>
 
        
@@ -95,11 +95,11 @@
        <tbody>
         <tr valign="top">
          <td valign="top" width="37%">
-          <font color="#23238e"><b>UserName</b><b><br>
+          <font color="#23238e"><b>Email Address</b><b><br>
           </b></font> 
          </td>
          <td valign="top">
-          <font color="#23238e"><b>PassWord</b></font><br>
+          <font color="#23238e"><b>Password</b></font><br>
 
            
 
@@ -110,22 +110,24 @@
      </td>
     </tr>
     <tr valign="top">
-     <td valign="top" width="37%">
+     <td valign="top" width="35%">
       <table border="0" cellpadding="0" cellspacing="0" height="100%" width=
       "100%">
        <tbody>
 			 
 		<!-- CREATE A NEW USER ACCOUNT -->
-<!--		<td height="19" valign="top" width="78"> -->
+	<td height="19" valign="top" width="76">
       <a href="pageDirector?pageType=createUser"><img
-      alt="create a new user account" height="19" src="/harris/images/btn_sign.gif" width="78"></a> 
+      	alt="create a new user account" height="19"
+				src="@image-path@/btn_sign.gif" width="76" border="0">
+			</a> 
 <!--    </td> -->
 			 
 			 
 			
 <!--
           <img alt="establish an account" height="19" src=
-          "/harris/images/btn_sign.gif" width="78">
+          "@image-path@/btn_sign.gif" width="78">
 -->
          </td>
         </tr>
@@ -152,7 +154,7 @@
            <input name="password" size="16" value="pass" style="10width: 100px" tabindex="2"
            title="Enter your password here." type="password" taborder="2">
            &nbsp; &nbsp; <input alt="Log On." border="0" height="22" name=
-           "logOnSubmit" src="/harris/images/btn_log.gif" tabindex="3" title=
+           "logOnSubmit" src="@image-path@/btn_log.gif" tabindex="3" title=
            "Click here to log on your account." type="image" width="68"
            taborder="3"> 
           </td>
@@ -168,23 +170,40 @@
   <br>
    <br>
    <br>
-
-   
-
-  <table align="center" border="0" cellpadding="0" cellspacing="0" width="270">
+<!-- new deal-->
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="250">
    <tbody>
+	 <tr>
+	 		<td height="16" align="left" valign="bottom" width="16">
+      <a href="/harris/html/plotQueryBuilder.html"><img alt="new query engine!"
+      height="16" valign="center" border="0" src="@image-path@/icon_cat31.gif" 
+			width="16"></a>
+     	</td>
+			<td valign="middle" >
+      <b><font size="2" face="Helvetica,Arial,Verdana" color=
+      "#23238e">Extended Plot Query Module</font></b> 
+     </td>
+	 </tr>
+</tbody>
+</table>   
+	 
+	 
+<!-- USER OPTIONS -- QUERY DEVICES-->
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="250">
+   <tbody>
+	
     <tr valign="top">
      <td height="90" valign="top" width="90">
       <a href="pageDirector?pageType=plotQuery"><img alt=""
-      height="90" src="/harris/images/owlogomap.jpg" width="90"></a> 
+      height="90" src="@image-path@/owlogomap.jpg" width="90"></a> 
      </td>
      <td height="90" valign="top" width="90">
       <a href="pageDirector?pageType=communityQuery"><img
-      alt="" height="90" src="/harris/images/owlogocom.jpg" width="90"></a> 
+      alt="" height="90" src="@image-path@/owlogocom.jpg" width="90"></a> 
      </td>
      <td height="90" valign="top" width="90">
       <a href="pageDirector?pageType=plantQuery"><img alt=""
-      height="90" src="/harris/images/owlogoplant.jpg" width="90"></a> 
+      height="90" src="@image-path@/owlogoplant.jpg" width="90"></a> 
      </td>
     </tr>
     <tr valign="Top">

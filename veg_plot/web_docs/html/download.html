@@ -29,7 +29,7 @@
  </head>
  <!--access to the fileDownload servlet-->
  <body bgcolor="#ffffcc">
-  <form action="/harris/servlet/fileDownload" method="post">
+  <form action="@servlet-path@fileDownload" method="post">
    <br>
     
    <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -48,61 +48,61 @@
     <tbody>
      <tr>
       <td align="Center" colspan="8" height="10" valign="center">
-       <img alt="" border="0" height="10" src="/harris/images/pix_clear.gif" width=
+       <img alt="" border="0" height="10" src="@image-path@/pix_clear.gif" width=
        "1"> 
       </td>
      </tr>
      <tr>
       <td rowspan="100" width="10">
-       <img alt="" border="0" height="1" src="/harris/images/pix_clear.gif" width=
+       <img alt="" border="0" height="1" src="@image-path@/pix_clear.gif" width=
        "10"> 
       </td>
       <td align="Left" height="45" valign="Bottom" width="220">
        <br>
         <img alt="File Information" border="0" height="23" src=
-       "/harris/images/hdr_file_info.gif" title="File Information" vspace="2" width=
+       "@image-path@/hdr_file_info.gif" title="File Information" vspace="2" width=
        "189"> 
       </td>
       <td>
-       <img alt="" border="0" height="1" src="/harris/images/pix_clear.gif" width=
+       <img alt="" border="0" height="1" src="@image-path@/pix_clear.gif" width=
        "10"> 
       </td>
       <td>
-       <img alt="" border="0" height="1" src="/harris/images/pix_clear.gif" width="1">
+       <img alt="" border="0" height="1" src="@image-path@/pix_clear.gif" width="1">
        
       </td>
       <td valign="Bottom">
-       <img alt="" border="0" height="3" src="/harris/images/pix_clear.gif" width="1">
+       <img alt="" border="0" height="3" src="@image-path@/pix_clear.gif" width="1">
        
       </td>
       <td align="Left" valign="Bottom" width="260">
        <br>
-        <img alt="" border="0" height="3" src="/harris/images/pix_clear.gif" width=
+        <img alt="" border="0" height="3" src="@image-path@/pix_clear.gif" width=
        "200"> 
       </td>
       <td>
-       <img alt="" border="0" height="1" src="/harris/images/pix_clear.gif" width=
+       <img alt="" border="0" height="1" src="@image-path@/pix_clear.gif" width=
        "10"> 
       </td>
       <td width="1">
-       <img alt="" border="0" height="1" src="/harris/images/pix_clear.gif" width="1">
+       <img alt="" border="0" height="1" src="@image-path@/pix_clear.gif" width="1">
        
       </td>
       <td align="left" valign="Bottom" width="200">
-       <a href="/harris/servlet/viewData"><img alt="Back to My Files" border=
-       "0" height="19" src="/harris/images/btn_back_to_files.gif" title=
+       <a href="@servlet-path@viewData"><img alt="Back to My Files" border=
+       "0" height="19" src="@image-path@/btn_back_to_files.gif" title=
        "Back to My Files" vspace="5" width="124"></a> 
       </td>
      </tr>
      <tr>
       <td align="Center" bgcolor="#003366" colspan="8" height="1" valign="Top">
-       <img alt="" border="0" height="1" src="/harris/images/pix_003366.gif" width=
+       <img alt="" border="0" height="1" src="@image-path@/pix_003366.gif" width=
        "1"> 
       </td>
      </tr>
      <tr>
       <td align="Center" colspan="8" height="10" valign="center">
-       <img alt="" border="0" height="10" src="/harris/images/pix_clear.gif" width=
+       <img alt="" border="0" height="10" src="@image-path@/pix_clear.gif" width=
        "1"> 
       </td>
      </tr>
@@ -113,7 +113,7 @@
          <tr>
           <td align="Left" height="25" valign="Bottom" width="25">
            <img alt="huh" border="0" height="16" hspace="3" src=
-           "/harris/images/icon_generic.gif" title=
+           "@image-path@/icon_generic.gif" title=
            "application/x-unknown-content-type-Visio.Drawing.5" width="17"> 
           </td>
           <td align="Left" valign="Bottom">
@@ -126,7 +126,7 @@
          </tr>
          <tr>
           <td align="Right" height="25" rowspan="5" valign="Bottom" width="25">
-           <img alt="" border="0" height="1" src="/harris/images/pix_clear.gif" width=
+           <img alt="" border="0" height="1" src="@image-path@/pix_clear.gif" width=
            "25"> 
           </td>
 	  
@@ -185,15 +185,15 @@
        </table>
       </td>
       <td>
-       <img alt="" border="0" height="1" src="/harris/images/pix_clear.gif" width=
+       <img alt="" border="0" height="1" src="@image-path@/pix_clear.gif" width=
        "10"> 
       </td>
       <td bgcolor="#cccc99" width="1">
-       <img alt="" border="0" height="1" src="/harris/images/pix_clear.gif" width="1">
+       <img alt="" border="0" height="1" src="@image-path@/pix_clear.gif" width="1">
        
       </td>
       <td>
-       <img alt="" border="0" height="1" src="/harris/images/pix_clear.gif" width=
+       <img alt="" border="0" height="1" src="@image-path@/pix_clear.gif" width=
        "10"> 
       </td>
       <td align="Center" valign="Top">
@@ -234,7 +234,7 @@
           </td>
           <td valign="center" width="200">
            <img alt="Single compressed file" hspace="2" src=
-           "/harris/images/icon_cat09.gif" title="Personal"> single compressed file
+           "@image-path@/icon_cat09.gif" title="Personal"> single compressed file
           </td>
          </tr>
          <tr>
@@ -244,7 +244,7 @@
           </td>
           <td valign="center" width="200">
            <img alt="multiple zipped files" hspace="2" src=
-           "/harris/images/icon_cat03.gif" title="Business"> multiple zipped files
+           "@image-path@/icon_cat03.gif" title="Business"> multiple zipped files
           </td>
          </tr>
          <tr>
@@ -253,45 +253,45 @@
           </td>
           <td valign="center" width="200">
            <img alt="both multiple zipped and single compressed" hspace="2"
-           src="/harris/images/icon_cat31.gif" title="Important"> both
+           src="@image-path@/icon_cat31.gif" title="Important"> both
           </td>
          </tr>
         </tbody>
        </table>
       </td>
       <td>
-       <img alt="" border="0" height="1" src="/harris/images/pix_clear.gif" width=
+       <img alt="" border="0" height="1" src="@image-path@/pix_clear.gif" width=
        "10"> 
       </td>
       <td bgcolor="#cccc99" width="1">
-       <img alt="" border="0" height="1" src="/harris/images/pix_clear.gif" width="1">
+       <img alt="" border="0" height="1" src="@image-path@/pix_clear.gif" width="1">
        
       </td>
       <td align="Left" valign="Top">
        &nbsp; <!-- download action --> <input name="actionDownload" type=
        "image" value="download" border="0" height="19" src=
-       "/harris/images/btn_download.gif" width="99">
+       "@image-path@/btn_download.gif" width="99">
 <!-- Edit the next line for debugging: 0 is for normal use -->       
         <input name="debugLevel" type="hidden" value="0"> &nbsp;<br>
         <br>
         
         &nbsp; <input alt="Update" border="0" height="19" name="upload" src=
-       "/harris/images/btn_update.gif" title="Update" type="image" width="99"><br>
+       "@image-path@/btn_update.gif" title="Update" type="image" width="99"><br>
         <br>
         &nbsp; <img alt="Cancel" border="0" height="19" src=
-       "/harris/images/btn_cancel.gif" title="Cancel" width="99"> 
+       "@image-path@/btn_cancel.gif" title="Cancel" width="99"> 
       </td>
      </tr>
      <tr>
       <td align="Center" colspan="8" height="10" valign="center">
-       <img alt="" border="0" height="10" src="/harris/images/pix_clear.gif" width=
+       <img alt="" border="0" height="10" src="@image-path@/pix_clear.gif" width=
        "1"> 
       </td>
      </tr>
      <tr>
       <td align="Center" bgcolor="#003366" colspan="8" height="1" valign=
       "Bottom">
-       <img alt="" border="0" height="1" src="/harris/images/pix_003366.gif" width=
+       <img alt="" border="0" height="1" src="@image-path@/pix_003366.gif" width=
        "1"> 
       </td>
      </tr>
