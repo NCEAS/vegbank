@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: anderson $'
-* '$Date: 2004-04-29 17:24:34 $'
-* '$Revision: 1.101 $'
+* '$Date: 2004-05-08 01:10:16 $'
+* '$Revision: 1.102 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -553,6 +553,10 @@ MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
   <target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
     <property name="webapp" value="vegtest"/>
     <antcall target="deploy"/>
+  </target>
+  <target name="deploy-vegtest-all" description="=&gt; (vegtest) All files that dynamic code depends on">
+    <property name="webapp" value="vegtest"/>
+    <antcall target="deploy-all"/>
   </target>
   <target name="dist-vegtest" description="=&gt; (vegtest) Distribute all web files">
     <property name="webapp" value="vegtest"/>
