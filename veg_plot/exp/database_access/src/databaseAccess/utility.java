@@ -7,8 +7,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2003-01-03 18:17:09 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2003-01-03 18:20:05 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -675,9 +675,8 @@ public class utility
 	 */
 	public static void main(String[] args)
 	{
-		utility u = new utility();
-		u.testVegBankConnections();
-/*		
+		//utility u = new utility();
+		//u.testVegBankConnections();
 		if (args.length >= 1)
 		{
 			//get the plugin named
@@ -725,7 +724,6 @@ public class utility
 			System.out.println(" levels: {1=registered 2=certified 3=professional 4=senior 5=manager}");
 			System.out.println("3] changepassword email host newpassword ");
 		}
-*/		
 	}
 	
 
