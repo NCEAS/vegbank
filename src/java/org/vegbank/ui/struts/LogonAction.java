@@ -23,8 +23,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-02-28 11:22:01 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-02-29 19:46:46 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -117,22 +117,23 @@ public class LogonAction extends VegbankAction
 					new ActionError("errors.password.mismatch"));
 			} 
 
+			// Report any errors we have discovered back to the original form
+			if (!errors.isEmpty()) {
+				saveErrors(request, errors);
+				return (mapping.getInputForward());
+			}
+
+			if (!user.isGuest()) {
+				// this is a valid, authenticated user
+				uda.updateTicketCount(user.getUsername());
+			}
+
 		} catch (Exception e) {
 			errors.add(ActionErrors.GLOBAL_ERROR,
 				new ActionError("errors.action.failed", e.getMessage() ));
 			LogUtility.log("LogonAction: problem: ", e);
 		}
 		
-		// Report any errors we have discovered back to the original form
-		if (!errors.isEmpty()) {
-			saveErrors(request, errors);
-			return (mapping.getInputForward());
-		}
-
-		if (!user.isGuest()) {
-			// this is a valid, authenticated user
-			uda.updateTicketCount(user.getUsername());
-		}
 
 		// Save the logged-in user's ID in session
 		HttpSession session = request.getSession();
