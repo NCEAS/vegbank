@@ -1,19 +1,8 @@
-<!--
-<html>
-<head>@defaultHeadToken@
-<title>Current Map of Plots in VegBank</title>
 
-<link type="text/css" href="@stylesheet@" rel="stylesheet" />
-
-</head>
-
-<body>
-@ vegbank_header_html_normal @
--->
-<table class="noborder"><tr><td>
+<table class="noborder"><tr><td colspan="2">
 <h2>Current Map of Plots in VegBank</h2>
-<p>Click on a state or province to see the plots located within it.</p>
- <img src="@images_link@plots_northamerica_map.png" usemap="#Map" border="0" /> 
+<p>Click on a state or province to see the plots located within it.</p></td></tr>
+ <tr><td colspan="2"><img src="@images_link@plots_northamerica_map.png" usemap="#Map" border="0" /> 
 <map name="Map"> 
   <area shape="poly" coords="321,397,322,426,378,422,377,402,373,395,369,393" href="@placeURL_KS@">
   <area shape="poly" coords="306,369,306,388,321,388,322,396,369,392,359,371,346,367" href="@placeURL_NE@">
@@ -85,18 +74,15 @@
   <area shape="poly" coords="178,323,185,331,217,333,223,337,218,346,215,370,166,359,167,348" href="@placeURL_OR@">
   <area shape="poly" coords="203,463,223,464,261,483,284,478,297,488,312,503,323,497,347,522,369,530,235,530,210,502" href="@placeURL_MX@">
 </map>
-
-<p>&nbsp;</p>
-<p><span class="category">Not finding the plots you want?<br>
+</td></tr>
+<tr><td><p><span class="category">Not finding the plots you want?<br>
 <a href="@web_context@forms/metasearch.jsp">Try the keyword search</a>.
 <br>
 
 <a href="@web_context@LoadPlotQuery.do">Try the advanced plot query</a>.
 </span>
-</p>
-</td></tr></table>
-<!--
-@vegbank_footer_html_tworow@
-</body>
-</html>
--->
+</p></td>
+<td align="right">
+<%@ include file="plot-map-northamerica-key.html" %>
+</td></tr>
+
