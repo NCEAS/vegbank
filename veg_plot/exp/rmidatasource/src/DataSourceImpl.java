@@ -95,8 +95,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			 return("x coord not done yet");
-			//return( source.getXCoord(plotName) );
+			return( source.getXCoord(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -111,7 +110,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getYCoord(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -126,7 +125,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getLatitude(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -141,7 +140,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getLongitude(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -156,7 +155,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getUTMZone(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -171,7 +170,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getPlotShape(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -187,7 +186,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getPlotArea(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -202,7 +201,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getCommunityName(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -218,7 +217,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getState(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -233,7 +232,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getHydrologicRegime(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -248,7 +247,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getTopoPosition(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -263,7 +262,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getSlopeAspect(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -278,7 +277,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getSlopeGradient(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -293,7 +292,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getSurfGeo(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -308,7 +307,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getCountry(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -323,7 +322,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getStandSize(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -338,7 +337,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getAuthorLocation(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -353,7 +352,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getLandForm(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -368,7 +367,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getElevation(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -383,7 +382,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getElevationAccuracy(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -398,7 +397,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getConfidentialityReason(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -413,7 +412,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	{
 		try
 		{
-			return( source.projectDescription );
+			return( source.getConfidentialityStatus(plotName) );
 		}
 		catch (Exception e)
 		{
@@ -444,12 +443,12 @@ public class DataSourceImpl extends UnicastRemoteObject
 		try
 		{
 			s = 	source.projectName;
-			System.out.println("proj name contacted");
+			System.out.println("DataSourceImpl > proj name contacted");
 			this.getPlotNames();
 		}
 		catch(Exception e) 
 		{
-     	System.err.println("FileServer exception: "+ e.getMessage());
+     	System.err.println("Exception: "+ e.getMessage());
       e.printStackTrace();
     }
 		return(s);
