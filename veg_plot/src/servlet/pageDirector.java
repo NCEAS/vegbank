@@ -25,7 +25,7 @@ private String loggedinPage = null;
 private String plantQueryPage = null;
 private String communityQueryPage = null;
 private String downloadPage = null;
-
+private String uploadPage = null;
 
 
 public void doGet(HttpServletRequest req, HttpServletResponse res) 
@@ -39,6 +39,7 @@ try {
  plantQueryPage=(rb.getString("requestparams.plantQueryPage"));
  communityQueryPage=(rb.getString("requestparams.communityQueryPage"));
  downloadPage=(rb.getString("requestparams.downloadPage"));
+ uploadPage=(rb.getString("requestparams.uploadPage"));
  
 }
 catch( Exception e ) {System.out.println("servlet failed in: pageDirector.main "
@@ -97,7 +98,7 @@ if (cookieName != null && cookieValue != null) {
 		ViewFile.returnFile("C:\\\\jakarta-tomcat\\webapps\\examples\\WEB-INF\\lib\\login.html", out);
 	}
           
-        }
+}
 
 //if not then pass the login page to the browser	
 else {	
@@ -151,6 +152,8 @@ public void pageTranslator (String pageType)
 	if (pageType.equals("loggedin")) pageFileName=loggedinPage;
 	
 	if (pageType.equals("download")) pageFileName=downloadPage;
+	
+	if (pageType.equals("upload")) pageFileName=uploadPage;
 	
 	}
 public String pageFileName; 
