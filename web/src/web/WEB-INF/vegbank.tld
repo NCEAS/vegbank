@@ -8,6 +8,7 @@
 <jspversion>1.1</jspversion>
 <shortname>vegbank</shortname>
 <uri>http://vegbank.org/tags/vegbank</uri>
+
 <tag>
 <name>get</name>
 <tagclass>org.vegbank.ui.struts.taglib.VegbankGetTag</tagclass>
@@ -43,6 +44,28 @@
 	<rtexprvalue>true</rtexprvalue>
 </attribute>
 </tag>
+
+<tag>
+<name>pager</name>
+<tagclass>org.vegbank.ui.struts.taglib.VegbankPagerTag</tagclass>
+<bodycontent>empty</bodycontent>
+<attribute>
+	<name>pageNumber</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>perPage</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>numItems</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+</tag>
+
 </taglib>
 
 
