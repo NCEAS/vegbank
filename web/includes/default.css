@@ -234,3 +234,14 @@ TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 .gdRowLabel { color: Bisque; }
 .gdAttName { background-color : #686868; color: LightSalmon; }
 
+.oddrow { background-color : #FFFFCC }
+.evenrow {background-color : #FFFFFF }
+
+.listhead { 
+	color: #000000; 
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+	font-size: 10pt;
+	font-weight: bold;
+	background-color: #DDDDDD;
+}
+
