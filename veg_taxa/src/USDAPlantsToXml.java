@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-20 20:29:21 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2002-02-21 18:41:50 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -209,8 +209,11 @@ private void outputXml(Hashtable plantInstances)
  * method that returns the atomized taxon name 
  * components based on the long cancateneted string 
  * containg authors etc
+ * 
+ * @param concatenatedName -- the long concatenated name
+ * @param rank -- the reank (eg., genus, species, family, variety ...)
  */
-private String xmlAtomicName(String  concatenatedName )
+private String xmlAtomicName(String  concatenatedName, String rank)
 {
 	StringBuffer atomicElements = new StringBuffer(0);
 	if (concatenatedName != null)
@@ -228,10 +231,18 @@ private String xmlAtomicName(String  concatenatedName )
 		if (concatenatedName.indexOf("var.") < 0 && concatenatedName.indexOf("ssp.") < 0)
 		{
 			//make a concatenated name
-			atomicElements.append("    <concatenatedName>"+
+			if ( rank.trim().indexOf("genus") > 0 )
+			{
+				//System.out.println(">> GENUS" );
+				String s = spaceStringTokenizer(concatenatedName, 1);
+				atomicElements.append("    <concatenatedName>"+s+"</concatenatedName> \n");
+			}
+			else
+			{
+				atomicElements.append("    <concatenatedName>"+
 				spaceStringTokenizer(concatenatedName, 1)+" "+spaceStringTokenizer(concatenatedName, 2)
-			+"</concatenatedName> \n");
-			
+				+"</concatenatedName> \n");
+			}
 			//add the parent name
 			atomicElements.append("    <parentName>"+
 				spaceStringTokenizer(concatenatedName, 1)
@@ -387,25 +398,24 @@ private String xmlRank(String  concatenatedName, String plantCode )
 	 */
  private boolean rankIsGenus(String concatenatedName, String plantCode)
  {
-		
 		//if there are only two tokens then it is a genus
 		if( getNumberOfNameTokens(concatenatedName) == 2 )
 		{
-			System.out.println("USDAPlantsToXml > two tokens: " + concatenatedName);
+			//System.out.println("USDAPlantsToXml > two tokens: " + concatenatedName);
 			return(true);
 		}
 
 		//the following is a genus: ZYGOP2
 		else if (plantCode.length() >= 5)
 		{
-			System.out.println("USDAPlantsToXml > genus code: " + plantCode );
+			//System.out.println("USDAPlantsToXml > genus code: " + plantCode );
 			//String s = plantCode.substring(4,5);
 			//System.out.println("USDAPlantsToXml > 5th char: " + s );
 			char c = plantCode.charAt(4);
-			System.out.println("USDAPlantsToXml > 5th char: " + c );
+			//System.out.println("USDAPlantsToXml > 5th char: " + c );
 			if ( java.lang.Character.isDigit(c) == false )
 			{
-				System.out.println("USDAPlantsToXml > is alpha: ");
+				//System.out.println("USDAPlantsToXml > is alpha: ");
 				return(true);
 			}
 			else
@@ -507,7 +517,7 @@ private String xmlNotAcceptedInstance(Hashtable singlePlantInstance, int instanc
 	String familyName = (String)singlePlantInstance.get("familyName");
 	String status = (String)singlePlantInstance.get("acceptence");
 	String rank = xmlRank(concatenatedName, plantCode);
-	String atomicNames = xmlAtomicName(concatenatedName);
+	String atomicNames = xmlAtomicName(concatenatedName, rank);
 	
 	
 	//parent node open
@@ -523,10 +533,8 @@ private String xmlNotAcceptedInstance(Hashtable singlePlantInstance, int instanc
 		singlePlantInstance.get("concatenatedName")
 	+"</concatenatedLongName> \n");
 	
-		//append the atomic names
-	plantInstance.append("    "+xmlAtomicName(
-		singlePlantInstance.get("concatenatedName").toString()
-	));
+	//append the atomic names
+	plantInstance.append("    "+atomicNames);
 	
 	//append the symbol
 	plantInstance.append("    <plantCode>"+
@@ -572,7 +580,7 @@ private String xmlAcceptedInstance(Hashtable singlePlantInstance, int instanceVa
 	String familyName = (String)singlePlantInstance.get("familyName");
 	String status = (String)singlePlantInstance.get("acceptence");
 	String rank = xmlRank(concatenatedName, plantCode);
-	String atomicNames = xmlAtomicName(concatenatedName);
+	String atomicNames = xmlAtomicName(concatenatedName, rank);
 	
 	if( rank.indexOf("genus") > 0)
 	{
@@ -751,26 +759,26 @@ private String plantConcatenatedName(String fileVectorLine)
 
 
 
-/**
- * method that returns true is the plant
- * instance on a line is an accepted usage
- * by the USDA
- */
-private boolean acceptedPlantInstance(String fileVectorLine)
-{
-	//the equals sign in the plant instance 
-	//means the plant is not accepted and that
-	//the synonym on the right of the equals
-	//sign is the accepted element
-	if (fileVectorLine.indexOf("=") > 0)
+ /**
+ 	* method that returns true is the plant
+ 	* instance on a line is an accepted usage
+ 	* by the USDA
+ 	*/
+	private boolean acceptedPlantInstance(String fileVectorLine)
 	{
-		return(false);
+		//the equals sign in the plant instance 
+		//means the plant is not accepted and that
+		//the synonym on the right of the equals
+		//sign is the accepted element
+		if (fileVectorLine.indexOf("=") > 0)
+		{
+			return(false);
+		}
+		else 
+		{
+			return(true);
+		}
 	}
-	else 
-	{
-		return(true);
-	}
-}
 
 
 
