@@ -70,6 +70,7 @@ public class pageDirector extends HttpServlet
 		String cookieValue = null;
 
 		Cookie[] cookies = req.getCookies();
+		//determine if the requested page should be shown
     if (cookies.length > 0) 
 		{
 			for (int i = 0; i < cookies.length; i++) 
@@ -84,7 +85,17 @@ public class pageDirector extends HttpServlet
 				
 		else 
 		{
-    	out.println("cookies.no-cookies");
+			//if the request is made to become a new user - do it
+			if ( req.getParameter("pageType").equals("createUser") )
+			{
+			//	ViewFile.returnFile(createUserPage, out);
+				res.sendRedirect("/examples/html/create_user.html");
+				System.out.println("OK >");
+			}
+			else 
+			{
+    		out.println("cookies.no-cookies");
+			}
 		}
 
 
