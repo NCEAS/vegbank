@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: mlee $'
- *  '$Date: 2004-11-17 02:02:56 $'
- *  '$Revision: 1.6 $'
+ *  '$Date: 2005-03-07 20:03:56 $'
+ *  '$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@
     <redirect:write file="{$directory}{$menu_url}">
       <html>
         <head>
-          <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
+         @defaultHeadToken@
         </head>
         <body>
           <table width="100%" height="100%">
