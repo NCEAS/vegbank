@@ -7,9 +7,9 @@
   *  See http://jakarta.apache.org for details on Ant  
   *  
 	*
-	* 		'$Author: farrell $'
- 	*     '$Date: 2003-05-28 23:59:24 $'
- 	*     '$Revision: 1.5 $'
+	* 		'$Author: harris $'
+ 	*     '$Date: 2003-08-04 00:37:11 $'
+ 	*     '$Revision: 1.6 $'
 --> 
 <project name="services" default="init" basedir=".">
 	
@@ -62,8 +62,11 @@
 			classpath="${cpath}"
 			includes="**.java"
 			debug="on"
-			destdir="${build}/WEB-INF/classes"
+			destdir="${build}"
 		/>
+      
+      <!-- JHH 20030724 not sure why the classes are being comiled into the
+      web-inf dir as they are not all servlet classes? -->
 	</target>	
 	
 	<!-- JAR -->
