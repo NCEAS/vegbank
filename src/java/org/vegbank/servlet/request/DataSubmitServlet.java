@@ -3,9 +3,9 @@ package org.vegbank.servlet.request;
 /*
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
- *	'$Author: anderson $'
- *  '$Date: 2004-01-16 20:41:27 $'
- *  '$Revision: 1.23 $'
+ *	'$Author: farrell $'
+ *  '$Date: 2004-01-18 20:47:47 $'
+ *  '$Revision: 1.24 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -139,15 +139,15 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				String surName = user.getSurname();
 				String givenName = user.getGivenname();
 				String institution = user.getInstitution();
-				int permissionLevel = user.getPermissiontype();
+				int permissionType = user.getPermissiontype();
 				
 				System.out.println("DataSubmitServlet > current user email: " + user);
 				System.out.println("DataSubmitServlet > current user salutation: " + salutation);
 				System.out.println("DataSubmitServlet > current user surName: " + surName);
 				System.out.println("DataSubmitServlet > current user givenName: " + givenName);
 				System.out.println("DataSubmitServlet > current user institution: " + institution);
-				System.out.println("DataSubmitServlet > current user permission lev: " + permissionLevel);
-				if ( permissionLevel <= 1)
+				System.out.println("DataSubmitServlet > current user permission lev: " + permissionType);
+				if ( permissionType <= 1)
 				{
 					// don't let the user any further into the loading process
 					System.out.println("DataSubmitServlet > ## this user does not have the appropriate permissions");

@@ -6,9 +6,9 @@
  *  Authors: @@
  *  Release: @@
  *
- *  '$Author: anderson $'
- *  '$Date: 2003-12-10 19:37:40 $'
- *  '$Revision: 1.4 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2004-01-18 20:47:47 $'
+ *  '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
  */
  
 package org.vegbank.common.utility.test;
+
 
 import org.vegbank.common.dbAdapter.*;
 import junit.framework.Test;
@@ -80,32 +81,5 @@ public class PostgresqlAdapterTest extends TestCase
     assertEquals(1,1);
   }
 
-
-  public void testgetSequenceColumnName() {
-    PostgresqlAdapter pa = new PostgresqlAdapter();
-    assertEquals("this_that_seq", pa.getSequenceColumnName("this", "that") );
-    // 32 char 
-    assertEquals("12345_6789ABCDEFGHIJ0123456_seq", pa.getSequenceColumnName("12345", "6789ABCDEFGHIJ01234567") );
-    // 33 char 
-    assertEquals("12345_6789ABCDEFGHIJ0123456_seq", pa.getSequenceColumnName("12345", "6789ABCDEFGHIJ012345678") );
-    // many char 
-    assertEquals("12345_6789ABCDEFGHIJ0123456_seq", pa.getSequenceColumnName("12345", "6789ABCDEFGHIJ0123456789ABCDEFGHIJK") );
-		// pk and table name are too long
-		assertEquals("here_is_a_ver_here_is_a_ver_seq", pa.getSequenceColumnName("here_is_a_very_long_table_name", "here_is_a_very_long_table_name_id") );
-		// tablename is too long
-		assertEquals("A23456789012345678901_A2345_seq", pa.getSequenceColumnName( "A2345678901234567890123456", "A2345") );
-  }
-  
-	public void testGetSequenceColumnNameTest() {  
-		PostgresqlAdapter pa = new PostgresqlAdapter();
-		assertEquals("this_seq", pa.getSequenceColumnName("this") );
-		// 32 char 
-		assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1_seq", pa.getSequenceColumnName("ABCDEFGHIJKLMNOPQRSTUVWXYZ1") );
-		// 33 char 
-		assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1_seq", pa.getSequenceColumnName("ABCDEFGHIJKLMNOPQRSTUVWXYZ12") );
-		// 40 char 
-		assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1_seq", pa.getSequenceColumnName("ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789") );
-								
-	}
 
 }

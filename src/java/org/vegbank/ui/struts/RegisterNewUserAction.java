@@ -25,9 +25,9 @@ import org.vegbank.common.utility.PermComparison;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2004-01-07 21:47:59 $'
- *	'$Revision: 1.4 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2004-01-18 20:47:47 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,10 +116,18 @@ public class RegisterNewUserAction extends Action
 				usr.setPassword(password1);
 
 				// Get as a constant
-				telephone.setPhonetype(Telephone.PHONETYPE_WORK);
-
+				if ( telephone.getPhonenumber().equals(""))
+				{
+					// No need to add the telephone if no number provided
+				}
+				else
+				{
+					// Go ahead and add the telephone
+					telephone.setPhonetype(Telephone.PHONETYPE_WORK);
+					party.addparty_telephone(telephone);
+				}
+				
 				party.addparty_address(address);
-				party.addparty_telephone(telephone);
 				party.addparty_usr(usr);
 
 				// Put in the database

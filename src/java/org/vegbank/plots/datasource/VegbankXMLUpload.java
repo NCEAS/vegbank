@@ -5,9 +5,9 @@ package org.vegbank.plots.datasource;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2004-01-01 01:12:53 $'
- *	'$Revision: 1.19 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2004-01-18 20:47:47 $'
+ *	'$Revision: 1.20 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -862,7 +862,7 @@ public class VegbankXMLUpload
 		{
 			long PK = -1;
 			StringBuffer sb = new StringBuffer();
-			sb.append("SELECT nextval('" + this.getPKName(tableName) + "_seq')");
+			sb.append("SELECT nextval('" + tableName + "_" + this.getPKName(tableName) + "_seq')");
 			try 
 			{
 			   Statement query = dbConn.createStatement();

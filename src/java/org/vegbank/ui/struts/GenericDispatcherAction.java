@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-12-05 23:15:29 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-01-18 20:47:47 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ import java.util.Collection;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -67,6 +68,8 @@ public class GenericDispatcherAction extends Action
 		String command = request.getParameter("command");
 		String jsp = request.getParameter("jsp");
 		String entityName = request.getParameter("entityName");
+		String expandEntity = request.getParameter("expandEntity");
+		String contractEntity = request.getParameter("contractEntity");
 		
 		try
 		{
@@ -82,6 +85,30 @@ public class GenericDispatcherAction extends Action
 				LogUtility.log( "GD: executing new RetriveVBModelBean cmd" );
 				new RetrieveVBModelBean().execute(request, response);
 				LogUtility.log( "GD: done executing RetriveVBModelBean" );
+				
+				//Testing out
+				HttpSession session = request.getSession();
+				
+				ExpandStatusStore ess = 
+					(ExpandStatusStore) session.getAttribute("DisplayProps");
+				if ( ess == null )
+				{	
+					ess = new ExpandStatusStore();
+				}
+				
+				if ( expandEntity != null )
+				{
+					LogUtility.log("Expand: " + expandEntity);
+					ess.setNodeExpanded(expandEntity);
+				}
+				if ( contractEntity != null )
+				{
+					LogUtility.log("Expand: " + contractEntity);
+					ess.setNodeContracted(contractEntity);
+				}
+				
+				// put in  session
+				session.setAttribute("DisplayProps", ess);
 			}
 			else
 			{

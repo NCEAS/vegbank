@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-12-05 23:15:29 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2004-01-18 20:47:47 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -821,57 +821,66 @@ public class DBModelBeanReader
 					"ModelBeanCache: Memory Cache Full: "
 						+ MAX_DISK_CACHE_SIZE
 						+ " files.");
-						
-				// Need to remove the first Object from memory and put on disk
-				Vector firstInMem = (Vector) memoryCache.firstElement();
 				
-				String fileName = (String) firstInMem.elementAt(0);
-				VBModelBean beanToSave = (VBModelBean) firstInMem.elementAt(1);
-
-				if ( CACHE_DIR == null )
-				{
-					LogUtility.log("ModelBeanCache: Disk cache dir is absent, " + CACHE_DIR);
-				}
-				else
-				{
-					try
-					{
-						if ( diskCacheKeys.size() >=  MAX_DISK_CACHE_SIZE )
-						{
-							LogUtility.log(
-								"ModelBeanCache: Disk Cache Full: "
-									+ MAX_DISK_CACHE_SIZE
-									+ " files.");
-								
-							// Need to remove first Object from disk
-							String fileNameToAxe = (String) diskCacheKeys.firstElement();
-							File fileToAxe = new File(CACHE_DIR, fileNameToAxe);
-							fileToAxe.delete();
-							LogUtility.log("ModelBeanCache: Deleted from Disk Cache: " + fileNameToAxe);
-						}
-						saveToDisk(beanToSave, fileName);			
-						LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName);
-					
-						// Put the fileName is the diskCache
-						diskCacheKeys.add(fileName);
-					}
-					catch (IOException e)
-					{
-						LogUtility.log("ModelBeanCache: Failed to save Object to disk", e);
-					}
-				}
-					
 				// Remove item from memory cache
 				memoryCache.removeElementAt(0);
-				LogUtility.log("ModelBeanCache: Removed from Memory Cache: " + fileName);
+				LogUtility.log("ModelBeanCache: Removed oldest bean from cache Memory Cache");
 			}
 			Vector newElement = new Vector ();
 			newElement.add(accessionCode);
 			newElement.add(bean);
 			memoryCache.add( newElement );
 			LogUtility.log("ModelBeanCache: Added to Memory Cache: " + accessionCode);
+			
+			// Also add to diskCache
+			addToDiskCache(accessionCode, bean);
 		}
 		
+		/**
+		 * Add a bean to the disk cache, does some sanity checks and tests removes
+		 * oldest bean if Cache is full. <br/>
+		 * Allows the caching to persist between JVM lifetimes.
+		 * 
+		 * @param fileName -- the name to save the bean as.
+		 * @param bean -- the bean to cache on disk
+		 * 
+		 */
+		private void addToDiskCache(String fileName, VBModelBean beanToSave)
+		{
+			if ( CACHE_DIR == null )
+			{
+				LogUtility.log("ModelBeanCache: Disk cache dir is absent, " + CACHE_DIR);
+			}
+			else
+			{
+				try
+				{
+					if ( diskCacheKeys.size() >=  MAX_DISK_CACHE_SIZE )
+					{
+						LogUtility.log(
+							"ModelBeanCache: Disk Cache Full: "
+								+ MAX_DISK_CACHE_SIZE
+								+ " files.");
+							
+						// Need to remove first Object from disk
+						String fileNameToAxe = (String) diskCacheKeys.firstElement();
+						File fileToAxe = new File(CACHE_DIR, fileNameToAxe);
+						fileToAxe.delete();
+						LogUtility.log("ModelBeanCache: Deleted from Disk Cache: " + fileNameToAxe);
+					}
+					saveToDisk(beanToSave, fileName);			
+					LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName);
+				
+					// Put the fileName is the diskCache
+					diskCacheKeys.add(fileName);
+				}
+				catch (IOException e)
+				{
+					LogUtility.log("ModelBeanCache: Failed to save Object to disk", e);
+				}
+			}
+		}
+
 		/**
 		 * Search for a bean that has a key of accessionCode
 		 * 
