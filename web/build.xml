@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2003-11-28 23:14:48 $'
-* '$Revision: 1.81 $'
+* '$Author: anderson $'
+* '$Date: 2003-12-03 02:00:02 $'
+* '$Revision: 1.82 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -345,7 +345,7 @@
     <copy file="${sharedhtml_src}/url2get_data.properties" tofile="${style_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
     <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="true"/>
     <copy file="${manual_src}/manual_filters.properties" tofile="${style_server}/manual_filters.properties" filtering="yes" overwrite="yes"/>
-    <ant dir="../../../docs/xml" target="dist-closedlist-tokenfile"/>
+    <ant dir="${basedir}/../docs/xml" target="dist-closedlist-tokenfile"/>
   </target>
   <target name="vbsummary" depends="hdrftr" description="=&gt; dist a summary of data in vegbank to the appropriate page">
     <!-- create summary based on current VegBank database status -->
