@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-23 03:56:53 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-10-11 21:55:06 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,13 +101,16 @@ select (subquery stuff goes here as stuff) as somename from...
 			String selectClauseKey, 
 			String whereClauseKey, 
 			String beanName, 
-			String whereParam) 
+			Object whereParam) 
+			///////String whereParam) 
 			throws Exception {
 
 		log.debug("execute(req, select, where, bean, (String)where): " + whereParam);
 		String[] arr;
 		arr = new String[1];
-		arr[0] = whereParam;
+		if (whereParam != null) {
+			arr[0] = whereParam.toString();
+		}
 
 		///////////////////////////////////////////////////////////////////
 		/*
