@@ -97,9 +97,9 @@
               <xsl:value-of select="entity_usage.usage_start_date"/>
             </plantUsage.usageStart>
           </xsl:if>
-          <xsl:if test="string-length(entity_usage.usage_start_date)&gt;0">
+          <xsl:if test="string-length(entity_usage.usage_stop_date)&gt;0">
             <plantUsage.usageStop>
-              <xsl:value-of select="entity_usage.usage_start_date"/>
+              <xsl:value-of select="entity_usage.usage_stop_date"/>
             </plantUsage.usageStop>
           </xsl:if>
           <plantUsage.plantNameStatus>
@@ -119,6 +119,26 @@
         </plantUsage>
         <!-- ready -->
       </xsl:for-each>
+      <!-- ready -->
+      <plantUsage>
+          <plantUsage.PLANTNAME_ID>
+            <plantName>
+              <plantName.PLANTNAME_ID>-<xsl:number count="*" level="any" /></plantName.PLANTNAME_ID>
+              <plantName.plantName><xsl:value-of select="entity.ns_uid" /></plantName.plantName>
+            </plantName>
+          </plantUsage.PLANTNAME_ID>
+            <plantUsage.usageStart>
+              <xsl:value-of select="/VegBankPackage/doc-date"/>
+            </plantUsage.usageStart>
+          <plantUsage.plantNameStatus>
+            <xsl:call-template name="writeUsageStatus">
+              <xsl:with-param name="statusCode">S</xsl:with-param><!-- hard code standard name status for NS UID -->
+            </xsl:call-template>
+          </plantUsage.plantNameStatus>
+          <plantUsage.classSystem>UID</plantUsage.classSystem>
+
+      </plantUsage>
+      
          </plantStatus>
     </plantConcept>
     <!-- ready -->
@@ -256,9 +276,9 @@ doc-comments	"/>
               <xsl:value-of select="entity_usage.usage_start_date"/>
             </commUsage.usageStart>
           </xsl:if>
-          <xsl:if test="string-length(entity_usage.usage_start_date)&gt;0">
+          <xsl:if test="string-length(entity_usage.usage_stop_date)&gt;0">
             <commUsage.usageStop>
-              <xsl:value-of select="entity_usage.usage_start_date"/>
+              <xsl:value-of select="entity_usage.usage_stop_date"/>
             </commUsage.usageStop>
           </xsl:if>
           <commUsage.commNameStatus>
@@ -278,6 +298,26 @@ doc-comments	"/>
         </commUsage>
         <!-- ready -->
       </xsl:for-each>
+         <!-- ready -->
+      <commUsage>
+          <commUsage.commNAME_ID>
+            <commName>
+              <commName.commNAME_ID>-<xsl:number count="*" level="any" /></commName.commNAME_ID>
+              <commName.commName><xsl:value-of select="entity.ns_uid" /></commName.commName>
+            </commName>
+          </commUsage.commNAME_ID>
+            <commUsage.usageStart>
+              <xsl:value-of select="/VegBankPackage/doc-date"/>
+            </commUsage.usageStart>
+          <commUsage.commNameStatus>
+            <xsl:call-template name="writeUsageStatus">
+              <xsl:with-param name="statusCode">S</xsl:with-param><!-- hard code standard name status for NS UID -->
+            </xsl:call-template>
+          </commUsage.commNameStatus>
+          <commUsage.classSystem>UID</commUsage.classSystem>
+
+      </commUsage>
+      
           </commStatus>
     </commConcept>
     <!-- ready -->
