@@ -35,6 +35,13 @@ TH	{
 	background-color : #336633;
 	}
 
+.major	{
+	font-family:  Arial, Tahoma, Helvetica, Geneva, sans-serif;
+	color: #FFFF80;
+	font-size: 14pt;
+	background-color : #333333;
+	}
+
 .description { 
 	color: #000000; 
 	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; 
