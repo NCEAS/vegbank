@@ -29,24 +29,30 @@ import java.net.URL;
  * @author John Harris
  *
  */
-public class viewData extends HttpServlet {
+public class viewData extends HttpServlet 
+{
 
 ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 
 private String downLoadAction=null;
 private String summaryViewType=null;
 private String resultType=null;
+private String servletDir= null; //like: /opt/jakarta/harris/servlet
+private String servletPath=null; //like: /harris/servlet
+
 
 /** Handle "POST" method requests from HTTP clients */
 public void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws IOException, ServletException {
+        throws IOException, ServletException 
+{
         doGet(request, response);
 }
 
 
 /** Handle "GET" method requests from HTTP clients */
 public void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws IOException, ServletException  {
+        throws IOException, ServletException  
+{
 
 response.setContentType("text/html");
 PrintWriter out = response.getWriter();
@@ -73,42 +79,52 @@ System.out.println("viewData.doGet - input params > \n downLoadAction: "+
  */
 
 //handle a download request
-if (downLoadAction != null) {
-	try {
-	//print out to file the names of the plots and their plotId's for use by the 
-	//fileDownload servlet
+if (downLoadAction != null) 
+{
+	try 
+	{
+	//print out to file the names of the plots and their 
+	//plotId's for use by the fileDownload servlet
+	
+	servletDir = rb.getString("requestparams.servletDir");
+	servletPath = rb.getString("servlet-path");
+	
  	PrintStream outFile  = new PrintStream(
-	new FileOutputStream("/jakarta-tomcat/webapps/examples/WEB-INF/lib/plotDownloadList", false));
-
+		new FileOutputStream(servletDir+"plotDownloadList", false));
+		
 	//use this function to figure out the type and number of inputs
 	//it is a temporary function - comment out later
 	Enumeration enum =request.getParameterNames();
-	while (enum.hasMoreElements()) {
+	while (enum.hasMoreElements()) 
+	{
 		String name = (String) enum.nextElement();
 		String values[] = request.getParameterValues(name);
-		if (values != null) {
-			for (int i=0; i<values.length; i++) {
-				if (name.equals("plotName")) {
-				outFile.println(values[i]);	
-				out.println(name +" ("+ i + "): "
-				+values[i]+"; <br>");
-			
+		if (values != null) 
+		{
+			for (int i=0; i<values.length; i++) 
+			{
+				if (name.equals("plotName")) 
+				{
+					System.out.println(name+" "+values[i]);
+					outFile.println(values[i]);	
+					out.println(name +" ("+ i + "): "
+					+values[i]+"; <br>");
 				}
-		
 			}
 		}
 	}
  	//now call the download page
- 	response.sendRedirect("/examples/servlet/pageDirector?pageType=download");	
+ 	response.sendRedirect(servletPath+"pageDirector?pageType=download");	
 	}
-catch( Exception e ) {System.out.println("servlet failed in: viewData.main"
-	+e.getMessage());
+	catch( Exception e ) 
+	{
+		System.out.println("servlet failed in: viewData.main"
+		+e.getMessage());
+	}
 }
-}
-
- 
 //If the download page is not requested then request then show the summary
-else {
+else 
+{
 	viewResultsSummary(response, out, "fileName", summaryViewType.trim());
 }
 
@@ -127,54 +143,61 @@ else {
  * browser including: vegPlot, community, plantTaxa
  * 
  */
-private void viewResultsSummary (HttpServletResponse response, 
-	PrintWriter out, String fileName, String summaryViewType) {
+	private void viewResultsSummary(HttpServletResponse response, 
+	PrintWriter out, String fileName, String summaryViewType) 
+	{
 
-String styleSheet=null; //the stylesheet to use
-try {
+		String styleSheet=null; //the stylesheet to use
+		//get the servlet directory
+	//	ResourceBundle rbun = ResourceBundle.getBundle("plotQuery");
+		servletDir = rb.getString("requestparams.servletDir");
+		try 
+		{
+			//determine the style sheet to use for the xsl transform
+			if (summaryViewType.equals("community")) 
+			{
+  			styleSheet=servletDir+"showCommunitySummary.xsl";
+			}
+			if (summaryViewType.equals("plantTaxa")) 
+			{
+  			styleSheet=servletDir+"showPlantTaxaSummary.xsl";
+			}
+			//the default (plots) stylesheet
+			if (summaryViewType.equals("vegPlot")) 
+			{
+				///styleSheet="/jakarta-tomcat/webapps/examples/WEB-INF/lib/showSummary.xsl";
+				styleSheet=servletDir+"transformMultiPlotSummary.xsl";
+			}
+			//let the user know that there is a problem with the request
+			else 
+			{
+				out.println("viewData.viewResultsSummary: unknown request for xsl sheet");
+			}
 
-//determine the style sheet to use for the xsl transform
-if (summaryViewType.equals("community")) {
-  styleSheet="/jakarta-tomcat/webapps/examples/WEB-INF/lib/showCommunitySummary.xsl";
-}
-if (summaryViewType.equals("plantTaxa")) {
-  styleSheet="/jakarta-tomcat/webapps/examples/WEB-INF/lib/showPlantTaxaSummary.xsl";
-}
-//the default (plots) stylesheet
-if (summaryViewType.equals("vegPlot")) {
-///  styleSheet="/jakarta-tomcat/webapps/examples/WEB-INF/lib/showSummary.xsl";
-styleSheet="/jakarta-tomcat/webapps/examples/WEB-INF/lib/transformMultiPlotSummary.xsl";
+			//access the method to transfor the xml document and retrieve the string writer
+			transformXML m = new transformXML();
+			m.getTransformed(servletDir+"summary.xml", 
+			styleSheet);
+			StringWriter transformedData=m.outTransformedData;
 
-}
-//let the user know that there is a problem with the request
-else {out.println("viewData.viewResultsSummary: unknown request for xsl sheet");}
-
-
-//access the method to transfor the xml document and retrieve the string writer
-transformXML m = new transformXML();
-m.getTransformed("/jakarta-tomcat/webapps/examples/WEB-INF/lib/summary.xml", 
-	styleSheet);
-StringWriter transformedData=m.outTransformedData;
-
-
-//pass the String writer to the utility class to convert the StringWriter to an array
-utility u =new utility();
-u.convertStringWriter(transformedData);
-String transformedString[]=u.outString;  
-int transformedStringNum=u.outStringNum; 
-
-//print the list of plots to the browser as a summary and then
-//read the further requests such as expanded species, or download
-for (int ii=0;ii<u.outStringNum; ii++) {
-	out.println(u.outString[ii]+"");
-}
-	
-}  //end try
-catch( Exception e ) {System.out.println("servlet failed in: "
-	+"viewData.viewResultsSummary"+e.getMessage());
-}
-}
-
-
+			//pass the String writer to the utility class to convert the StringWriter to an array
+			utility u =new utility();
+			u.convertStringWriter(transformedData);
+			String transformedString[]=u.outString;  
+			int transformedStringNum=u.outStringNum; 
+			//print the list of plots to the browser as a summary and then
+			//read the further requests such as expanded species, or download
+			for (int ii=0;ii<u.outStringNum; ii++) 
+			{
+				out.println(u.outString[ii]+"");
+			}
+		}  //end try
+		catch( Exception e ) 
+		{
+				System.out.println("servlet failed in: "
+			+"viewData.viewResultsSummary: "
+			+e.getMessage());
+		}
+	}
 
 }
