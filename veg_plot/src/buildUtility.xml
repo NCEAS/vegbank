@@ -2,8 +2,8 @@
 <!-- 
   * build.xml
   *
-  *      Authors: John Harris
-  *    Copyright: 2000 Regents of the University of California and the
+  *  Authors: John Harris
+  *  Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *  Build file for the Ant cross-platform build system for metacat
   *  See http://jakarta.apache.org for details on Ant  
@@ -16,82 +16,106 @@
 <project name="plotLoader" default="dist" basedir=".">
 	<target name="init">
 	<tstamp/>
-        <property name="current" value="./" />
-	<property name="build" value="utilityBuild" />
-	<property name="dist" value="dist" />
-	<property name="release" value="development"/>
-	<property name="src" value="./utilities"/>
-	<property name="plotData" value="../plotData/tncData"/>
-	<property name="dbAccess_src" value="./plotAccess"/>
-	<property name="xmlFiles" value="../xml"/>
-	<filter token="dist" value="dist"/>
-	<filter token="version" value="development"/>
+  <property name="current" value="./" />
+	<property name="build" value="build" />
+	<property name="build_src" value="build/src/utilities" />
+	<property name="build_lib" value="build/lib" />
+	<property name="build_xml" value="build/xml" />
+	<property name="build_bin" value="build/bin" />
+	<property name="build_data" value="build/data" />
 	
-	<property name="servlet_home" 
-                value="/usr/local/devtools/jakarta-tomcat/lib/servlet.jar" />
-	<property name="oracle_home" 
-                value="/oracle01/app/oracle/product/8.1.6" />
-	<property name="toolsdir" 
-                value="/usr/local/devtools" />
-	<property name="localToolsDir" 
-                value="/home/computer/harris/tools" />	
-	<property name="xmlp" 
-                value="${localToolsDir}/xmlTools/xalan.jar:${localToolsDir}/xmlTools/xerces.jar:" />
-	<property name="jdbc" 
-                value="${oracle_home}/jdbc/lib/classes111.zip" />
+	<property name="src" value="./utilities"/>
+	<property name="src_bin" value="../bin" />
+	<property name="src_xml" value="../xml" />
+	<property name="src_lib" value="../lib" />
+	<property name="dbaccess_src" value="./plotAccess" />
+	
+
+
+
+	<property name="data" value="../plotData/tncData"/>
+	<property name="dbAccess_src" value="./plotAccess"/>
+	<property name="xmlp" value="${src_lib}/xalan_1_2_2.jar:${src_lib}/xerces_1_3_1.jar:" />
+	<property name="jdbc" value="" />
 	<property name="cpath" 
-                value="${servlet_home}:${xmlp}:${jdbc}:${jserv}:${jsdk}:${build}:${localToolsDir}:./"/>
+		value="${servlet_home}:${xmlp}:${jdbc}:${jserv}:${jsdk}:${build}:${localToolsDir}:./"/>
 </target>
 
 <target name="prepare" depends="init">
 	<mkdir dir="${build}" />
-	<mkdir dir="${dist}" />
+	<mkdir dir="${build_src}" />
+	<mkdir dir="${build_lib}" />	
+	<mkdir dir="${build_bin}" />
+	<mkdir dir="${build_xml}" />
 	
 	<copydir src="${src}" 
-               dest="${build}" 
-               filtering="yes"
-               includes="**.java"
-               excludes="**/CVS* "/>
+		dest="${build_src}" 
+   	filtering="no"
+    includes="**.java tncPlots.properties"
+    excludes="**/CVS* "
+	/>
 
-        <copydir src="${dbAccess_src}" 
-               dest="${build}" 
-               filtering="yes"
-               includes="utility.java"
-               excludes="**/CVS* "/>
+<!-- copy just the relevant executable files -->
+	<copydir src="${src_bin}" 
+		dest="${build_bin}" 
+   	filtering="yes"
+    includes="loadTNCPlots.sh"
+    excludes="**/CVS* "
+	/>
+
+	<copydir src="${dbaccess_src}" 
+		dest="${build_src}" 
+    filtering="yes"
+    includes="dbConnect.java"
+    excludes="**/CVS* "
+	/>
+
 	 
-	 <!--Copy to the build directory some of the sample data -->
-	 <copydir src="${plotData}" 
-               dest="${build}" 
-               filtering="yes"
-               includes="tncSampleSpeciesInput  tncSamplePlotsInput"
-               excludes="**/CVS* "/>
+	 <!--
+	 	* Copy to the build directory 
+		*	some of the sample data 
+	-->
+	 <copydir src="${data}" 
+    dest="${build_data}" 
+    filtering="no"
+    includes="tncSampleSpeciesInput  tncSamplePlotsInput"
+		excludes="**/CVS* "
+	/>
 	
-        </target>	
+</target>	
 	
 <target name="compile" depends="prepare">
-	<javac srcdir="${build}" 
-	classpath="${cpath}"
-	includes="**.java  " 
-	destdir="${build}"
-	/>
-	</target>	
+
+
+<javac srcdir="${build_src}" 
+		classpath="${cpath}"
+		includes="**.java  " 
+		destdir="${build_src}"
+/>
+	
+</target>	
 	
 	
 <target name="dist" depends="compile">
-	<mkdir dir="${dist}/lib" />
-	<deltree dir="${dist}" />
 	
-	<!-- test the tnc conversion tool-->
-	<java classname="TNCplot2xml"
-        args="${build}/tncSamplePlotsInput ${build}/tncSampleSpeciesInput"
-        classpath="${cpath}"
-        fork="yes"
+	<!--
+		* jar the utility libarary
+		* and put into the lib directory
+		-->
+	<jar jarfile ="${build_lib}/utility.jar"
+		basedir="${build_src}"
+		manifest="${src_lib}/manifest"
+		includes="${build_src}/ **"
 	/>
-	
-	
+
+	<!-- test the tnc conversion tool-->
+<!--
+	<java classname="TncConverter"
+		args="${build_data}/tncSamplePlotsInput ${build_data}/tncSampleSpeciesInput"
+    classpath="${cpath}:${build_lib}/utility.jar"
+    fork="yes"
+	/>
+-->
 	
 </target>		
-
-
-
 </project>

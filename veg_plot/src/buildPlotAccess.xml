@@ -32,7 +32,7 @@
 	<filter token="port" value="1521" />
 	<filter token="driverType" value="thin" />
 	<filter token="driverClass" value="org.postgresql.Driver" />
-	<filter token="connectString" value="jdbc:postgresql://dev.nceas.ucsb.edu/nvc" />
+	<filter token="connectString" value="jdbc:postgresql://127.0.0.1/nvc" />
 	<filter token="databaseName" value="nvc" />
 	<filter token="insert.minConnections" value="8" />
 	<filter token="insert.maxConnections" value="20" />
@@ -84,7 +84,7 @@
 	
 	<property name="toolsdir"   value="/usr/local/devtools" />
 	<property name="localToolsDir"  value="/home/computer/harris/tools" />	
-	<property name="xmlp" value="${src_lib}/xalan.jar:${src_lib}/xerces.jar:" />
+	<property name="xmlp" value="${src_lib}/xalan_1_2_2.jar:${src_lib}/xerces_1_3_1.jar:" />
 	<property name="jdbc" value="" />
 	<property name="cpath" value="${xmlp}:${jdbc}:${jserv}:${jsdk}:${build}:${localToolsDir}:./"/>
 
@@ -132,7 +132,10 @@
 	
 
 
-<copyfile src="${src_lib}/database.properties" filtering="yes" dest="${build_src}/database.properties" />
+<copyfile src="${src_lib}/database.properties" 
+	filtering="yes" 
+	dest="${build_src}/database.properties" 
+	/>
 
 
 <!--
