@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   *   '$Author: harris $'
-  *     '$Date: 2002-02-26 17:23:03 $'
-  * '$Revision: 1.1 $'
+  *     '$Date: 2002-05-22 20:43:23 $'
+  * '$Revision: 1.2 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -28,20 +28,21 @@
 	<tstamp/>
 	
 	<property name="current" value="./" />
-	<property name="build" value="build" />
+	<property name="build" value="./build" />
 	<property name="lib" value="lib" />
 	<property name="servlet_api" value="lib/servlet.jar" />
 	
 	
 	<!--NOTICE THE SETTINGS FOR THE PRODUCTION VS THE DEVELOPMENT SERVLET LOCATIONS -->
-<!-- PRODUCTION	
+	<!-- PRODUCTION	 -->
 	<property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib" />
 	<property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat/bin" />
--->
+
 <!-- DEVELOPMENT -->
+<!--
 	<property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat_dev/webapps/framework/WEB-INF/lib" />
 	<property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat_dev/bin" />
-
+-->
 	<property name="xmlresource" value="lib/xmlresource.jar" />
 	<property name="dbaccess" value="lib/database_access.jar" />
 	<property name="data-source" value="lib/datatranslator.jar" />
@@ -57,7 +58,7 @@
 	<property name="ant" value="ant.jar"/>
 
 	
-	<property name="cpath" value="${ant}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
+	<property name="cpath" value="${ant}:${build}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
 	
 	<filter token="server" value="${server}" />
 	<filter token="servlet-path" value="${servlet-path}" />
@@ -143,8 +144,25 @@
 </target>	
 
 
+
+
 <!-- COMPILE TARGET -->	
 <target name="compile" depends="copy">
+
+	
+	<echo message="compiling utility classes" />
+	<javac srcdir="${build}" 
+		classpath="${cpath}"
+		includes="GetURL.java ServletUtility.java HttpMessage.java DataExchangeClient.java" 
+		destdir="${build}"
+	/>
+
+	<!--
+	includes="GetURL.java ServletUtility.java HttpMessage.java DataExchangeClient.java"
+	-->
+	
+	
+	<echo message="compiling other classes" />
 	<javac srcdir="${build}" 
 		classpath="${cpath}"
 		includes="**.java  " 
@@ -157,7 +175,12 @@
 
 <!-- JAR TARGET -->
 <target name="jar" depends="compile">
-
+	
+	<jar jarfile ="${lib}/utilities.jar"
+		basedir="${build}"
+		includes="servlet/util/** "
+	/>
+	
 	<jar jarfile ="${lib}/stylesheet-generator.jar"
 		basedir="${build}"
 		includes="servlet/stylesheet/** "
@@ -258,5 +281,19 @@
 	
 </target>
 
+<!--  JDOC  -->
+<target name="jdoc">
+ <javadoc 
+   sourcefiles="util/GetURL.java,util/DataExchangeClient.java,util/ServletUtility.java,authentication/UserDatabaseAccess.java,authentication/AuthenticationServlet.java"
+	 sourcepath="src"        
+	 destdir="doc/api"
+	 author="true"
+	 version="true"
+	 private="true"
+	 use="true"
+	 windowtitle="VEGBANK FRAMEWORK SERVLET">
+</javadoc>
+</target>
+								 
 
 </project>
