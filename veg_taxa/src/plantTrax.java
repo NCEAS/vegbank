@@ -100,7 +100,8 @@ if (firstName != null || lastName != null) {
 
 /*Make connection to the DB*/
 try {
-PrintStream outfile  = new PrintStream(new FileOutputStream("/opt/tomcat/webapps/harris/results.html"));
+//PrintStream outfile  = new PrintStream(new FileOutputStream("/opt/tomcat/webapps/harris/results.html"));
+PrintStream outfile  = new PrintStream(new FileOutputStream("C://jakarta-tomcat/webapps/examples/WEB-INF/lib/results.html", true));
 
 Class.forName(driver_class);
 if( conn == null)
@@ -118,8 +119,10 @@ catch ( Exception e ){out.println("did not connect "+e.getMessage());}
 * query the database for all the names similar to the name given at the browser
 */
 try {
-PrintStream outfile  = new PrintStream(new FileOutputStream("/opt/tomcat/webapps/harris/results.html", true));
-results = query.executeQuery("select name_id, name, symbol, commonname, family, AUTHORNAME  from name where name like '%"+firstName+"%'");
+//PrintStream outfile  = new PrintStream(new FileOutputStream("/opt/tomcat/webapps/harris/results.html", true));
+PrintStream outfile  = new PrintStream(new FileOutputStream("C://jakarta-tomcat/webapps/examples/WEB-INF/lib/results.html", true));
+results = query.executeQuery("select name_id, name, symbol, commonname, family, "
+	+" AUTHORNAME  from name where name like '%"+firstName+"%'");
 int ii=0;
 while (results.next()) {
 	ii++;
@@ -156,7 +159,8 @@ catch ( Exception e ){out.println("The Query Jumbled at the first block - lookin
 * name_id should be analyzed at a time
 */
 try {
-PrintStream outfile  = new PrintStream(new FileOutputStream("/opt/tomcat/webapps/harris/results.html", true)); //append mode
+//PrintStream outfile  = new PrintStream(new FileOutputStream("/opt/tomcat/webapps/harris/results.html", true)); //append mode
+PrintStream outfile  = new PrintStream(new FileOutputStream("C://jakarta-tomcat/webapps/examples/WEB-INF/lib/results.html", true));
 
 /*select all the usages of the name as provided in the browser - later the name_id's should come from above block*/
 //results = query.executeQuery("select NAMEUSAGEID, PARTY_ID, CIRCUM_ID  from name_usage where (select name_id from name where name like '%"+firstName+"%')=name_id");
