@@ -1,0 +1,188 @@
+<HTML><!-- #BeginTemplate "/Templates/VegBank_Master.dwt" -->
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>VegBank Certification</TITLE>
+<link rel="stylesheet" href="@stylesheet@" type="text/css">
+<!-- #EndEditable --> 
+<meta http-equiv="Content-Type" content="text/html; charset=">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
+<table cellspacing="0" cellpadding="0" border="0" width="800">
+  <tr> 
+    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
+    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
+      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
+    </td>
+    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
+    <td width="119" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="@general_link@login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="@general_link@info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="@general_link@help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
+    </td>
+  </tr>
+</table>
+
+<br>
+<br>
+
+
+<!-- THE SERVLET TO BE REFERENCED --> 
+<form action="@datasubmitservlet@" method="get">
+<input type="hidden" name="submitDataType" value="plantTaxa">
+<input type="hidden" name="action" value="namereference">		
+<small> <input TYPE="submit" VALUE="continue">&nbsp;&nbsp;<input TYPE="reset" VALUE=reset> </small>
+
+<!-- PARTY DATA TABLE WITH DESCRIPTIONS-->
+<table border="0" width="100%" bgcolor="#DFE5FA">
+	<tr>
+		<td  align=left valign=top  width="5%" >
+			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+			<b>VegBank User:</b>
+		</td>
+		</font>
+	</tr>
+</table>
+&nbsp;
+&nbsp;
+<table border="0" class="category">
+	<tr>
+		<td align="left" width="20%">
+			<font  size="2">
+			Email address<font color="#F90000"><b>*</b></font>:</font>
+		</td>
+		<td align="left">
+			<input type="text" disabled size="25" maxlength="50"  name="emailAddress" value="@emailAddress@">
+		</td>
+	</tr>
+</table>
+
+<!-- BLUE TABLE WITH THE PLANT NAME-->
+<table border="0" width="100%" bgcolor="#DFE5FA">
+	<tr>
+		<td  align=left valign=top width="5%" >
+			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+			<b>Plant Concept:</b>
+		</td>
+		</font>
+	</tr>
+	<tr>
+		<td align="center" width="5%">
+			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+		</td>
+		<td class="item">
+		Please enter data corresponding to the plant concept for the following plant names: <br>
+		<font color="red"> <b>
+			@longName@ <br>
+			@shortName@ <br>
+			@code@ <br>
+		</b>
+		</font>
+		</td>
+	</tr>
+</table>
+&nbsp;
+
+<!-- THE PARTY WITH THE PERSPECTIVE -->
+<table>
+	<tr> 
+	<td width="9%">Party:</td>
+	<td colspan="2"> 
+		<input type="text" name="partyFullName" value="@PartyFullName@">
+	</td>
+</tr>
+</table>
+
+<!-- CONCEPT STATUS -->
+<table>
+	<tr> 
+		<td width="9%">Concept Status:</td>
+		<td colspan="2">  
+		<select name="plantConceptStatus">
+			<option selected>accepted</option>
+			<option>not accepted</option>
+			<option>undetermined</option>
+		</select>
+		</td>
+	</tr>
+	<tr> 
+ 		<td width="9%">Dates:</td>
+		<td colspan="3"> Status start: 
+  		<input type="text" name="startDate" value="@startDate@" size="30">
+			Status stop: 
+    	<input type="text" name="stopDate" value="@stopDate@" size="30">
+		</td>
+	</tr>
+
+	<tr> 
+		<td width="9%">Status Description:</td>
+		<td colspan="2"> 
+			<textarea name="plantPartyComments" rows="6" cols="50">@plantPartyComments@</textarea>
+		</td>
+	</tr>
+	
+	<tr> 
+	<td width="9%" height="43"> Plant Level:</td>
+	<td height="43" colspan="2">  
+	<select name="plantLevel">
+		<option>Kingdom</option>
+		<option>Subkingdom</option>
+		<option>Superdivision</option>
+		<option>Division</option>
+		<option>Class</option>
+		<option>Subclass</option>
+		<option>Order</option>
+		<option>Suborder</option>
+		<option>Family</option>
+		<option>Subfamily</option>
+		<option>Tribe</option>
+		<option>Subtribe</option>
+		<option>Genus</option>
+		<option>Subgenus</option>
+		<option>Section</option>
+		<option>Species Aggregate</option>
+		<option selected>Species</option>
+		<option>Subspecies</option>
+		<option>Variety</option>
+		<option>Cultivar/Forma</option>
+	</select>
+	</td>
+	</tr>
+
+
+
+	<tr> 
+		<td width="9%">Plant Parent Concept:</td>
+		<td width="26%"> Plant Parent Name: <br>
+			<input type="text" name="plantParentName" maxlength="50" size="50" value="@plantParentName@">
+		</td>
+		<td width="22%"> Plant Reference Title, Author:<br>
+			<input type="text" name="parentRefTitle" value="@parentRefTitle@">
+			<input type="text" name="parentRefAuthor" value="@parentRefAuthor@">
+		</td>
+	</tr>
+
+
+
+
+</table>
+
+
+
+
+
+
+
+</form>
+
+</BODY>
+</HTML>
+
