@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: anderson $'
-  *     '$Date: 2003-10-10 16:13:09 $'
-  *     '$Revision: 1.16 $'
+  *     '$Date: 2003-10-10 23:35:15 $'
+  *     '$Revision: 1.17 $'
 --> 
 <project name="vegclass" default="jar" basedir=".">
 
@@ -46,6 +46,15 @@
     <mkdir dir="${build.javadatamodel.src.dir}"/>
     <mkdir dir="${dist.dir}"/>
     <mkdir dir="${rmi.dist.dir}"/>
+
+    <!-- Classpaths -->
+    <path id="classpath.compilation">
+      <pathelement path="veg_taxa/build/lib/planttaxonomy.jar"/>
+      <pathelement path="veg_community/build/lib/vegcommunity.jar"/>
+      <fileset dir="${lib.dir}">
+        <include name="**/*jar"/>
+      </fileset>
+    </path>
   </target>
     
   <target name="jar" depends="compile"
@@ -126,8 +135,9 @@
   			description="==> Compile the java code">
   		<javac srcdir="${build.java.src.dir}"
   					includes="**/*.java"
-  					destdir="${build.classes.dir}"
-  		/>			
+  					destdir="${build.classes.dir}">			
+	      	<classpath refid="classpath.compilation"/>
+   		 </javac>
   </target>
  
   <target name="install"
