@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -14,7 +16,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.vegbank.common.Constants;
 import org.vegbank.common.model.WebUser;
-import org.vegbank.common.utility.LogUtility;
+import org.vegbank.common.utility.PermComparison;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.UserDatabaseAccess;
 
 /*
@@ -23,8 +26,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-24 17:14:53 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-04-26 20:45:25 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,6 +50,9 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  */
 public class LogonAction extends VegbankAction 
 {
+	private static Log log = LogFactory.getLog(LogonAction.class);
+
+	
 	/**
 	 * Process the specified HTTP request, and create the corresponding HTTP
 	 * response (or forward to another web component that will create it).
@@ -67,7 +73,7 @@ public class LogonAction extends VegbankAction
 			HttpServletRequest request,
 			HttpServletResponse response)	{
 			
-		LogUtility.log("LogonAction: calling other execute()");
+		log.debug("LogonAction: calling other execute()");
 		return execute(mapping, (DynaActionForm)form, request, response);
 	}
 
@@ -77,7 +83,7 @@ public class LogonAction extends VegbankAction
 			HttpServletRequest request,
 			HttpServletResponse response)	{
 				
-		LogUtility.log("LogonAction: begin");
+		log.debug("LogonAction: begin");
 		
 		// Validate the request parameters specified by the user
 		ActionErrors errors = new ActionErrors();
@@ -88,7 +94,7 @@ public class LogonAction extends VegbankAction
 			(String)form.get("password");
 //			(String) PropertyUtils.getSimpleProperty(form, "password");
 		
-		LogUtility.log("LogonAction: authenticating user: '"+ username); 
+		log.debug("LogonAction: authenticating user: '"+ username); 
 	
 		WebUser user = null;
 		UserDatabaseAccess uda = new UserDatabaseAccess();
@@ -100,7 +106,7 @@ public class LogonAction extends VegbankAction
 				user = this.getGuestUser();
 				
 			} else {
-				LogUtility.log("LogonAction: getting user " + username);
+				log.debug("LogonAction: getting user " + username);
 				user = uda.getUser(username);			
 			}
 			
@@ -131,7 +137,7 @@ public class LogonAction extends VegbankAction
 		} catch (Exception e) {
 			errors.add(ActionErrors.GLOBAL_ERROR,
 				new ActionError("errors.action.failed", e.getMessage() ));
-			LogUtility.log("LogonAction: problem: ", e);
+			log.debug("LogonAction: problem: ", e);
 		}
 		
 
@@ -139,7 +145,7 @@ public class LogonAction extends VegbankAction
 		HttpSession session = request.getSession();
 		session.setAttribute(Constants.USER_KEY, user.getUseridLong());
 
-		LogUtility.log("LogonAction: User '"+ user.getUsername() + 
+		log.debug("LogonAction: User '"+ user.getUsername() + 
 				"' authenticated in session " + session.getId());
 
 		// Remove the obsolete form bean
@@ -151,6 +157,17 @@ public class LogonAction extends VegbankAction
 			} else {
 				session.removeAttribute(mapping.getAttribute());
 			}
+		}
+
+		// if admin...
+		Boolean isAdmin = new Boolean(
+				PermComparison.matchesOne(user.getPermissiontype(), "dba"));
+		log.debug("Logged in user is admin?: " + isAdmin.booleanValue());
+		session.setAttribute("isAdmin", isAdmin);
+
+		String postLoginFwd = (String)session.getAttribute("postLoginFwd");
+		if (!Utility.isStringNullOrEmpty(postLoginFwd)) {
+			return mapping.findForward(postLoginFwd);
 		}
 
 		// Forward control to the specified success URI
