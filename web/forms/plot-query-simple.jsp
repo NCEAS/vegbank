@@ -20,7 +20,7 @@ function doPlantQuery() {
 }
 
 function doCommQuery() {
-	return validateName(document.commform.communityName.value, 'community');
+	return validateName(document.commform.wparam.value, 'community');
 }
 
 function doPlotQuery() {
@@ -30,8 +30,8 @@ function doPlotQuery() {
 		}
 	}
 
-	if (document.commform.communityName.value != "") {
-		if (!validateName(document.commform.communityName.value, 'community')) {
+	if (document.commform.wparam.value != "") {
+		if (!validateName(document.commform.wparam.value, 'community')) {
 			return false;
 		}
 	}
@@ -40,7 +40,7 @@ function doPlotQuery() {
 	document.plotform.plantName.value = document.plantform.plantname.value;
 
 	// set commName
-	document.plotform.commName.value = document.commform.communityName.value;
+	document.plotform.commName.value = document.commform.wparam.value;
 
 	return true;
 }
@@ -126,19 +126,17 @@ function validateName(value, label) {
     <td bgcolor="#FFFFCC"></td>
     <td bgcolor="#FFFFCC"><img src="@image_server@uprt3.gif" /></td>
   </tr>
-  <tr><form name="commform" action="/vegbank/servlet/DataRequestServlet" method="get">
+  <tr><form name="commform" action="@views_link@commconcept_query.jsp" method="get">
     <td  bgcolor="#FFFFCC"></td>
     <td bgcolor="#CCCC99"></td>
     <td bgcolor="#CCCC99" class="label_small">Community name<br/>
 	&nbsp; 
-	<input type=text name="communityName" size="30"/></td>
+	<input type=text name="wparam" size="30"/></td>
     <td bgcolor="#CCCC99"></td>
     <td bgcolor="#FFFFCC">&nbsp; <img src="@image_server@rtarr.gif">
                 <input type="submit" onClick="javascript:return doCommQuery()" value="search for communities" name="btnComm"></td>
-    <td bgcolor="#FFFFCC"><input type="hidden" name="requestDataType" value="vegCommunity">
-	<input type="hidden" name="requestDataFormatType" value="html">
-	<input type="hidden" name="clientType" value="browser">
-	<input type="hidden" name="communityLevel" value="%">
+    <td bgcolor="#FFFFCC">
+	
 </form></td>	
   </tr>
   <tr>
