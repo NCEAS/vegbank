@@ -14,9 +14,9 @@ import java.sql.*;
  * consistent with many other plugins <br> <br>
  *
  *	
- *  '$Author: harris $' <br>
- *  '$Date: 2002-08-30 19:12:03 $' <br>
- * 	'$Revision: 1.25 $' <br>
+ *  '$Author: farrell $' <br>
+ *  '$Date: 2002-12-02 22:59:06 $' <br>
+ * 	'$Revision: 1.26 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -2142,7 +2142,11 @@ public boolean  getRevisions(String plotName)
 			//there should only be one
 			while (rs.next()) 
 			{
-				this.elevation = rs.getString(1);
+				// Assuming that this is an double of the elevation in feet
+				String elevationFeet = rs.getString(1);
+				double elevationMeters = feetToMeters( Double.valueOf(elevationFeet).doubleValue() );
+				System.out.println("TNCPlotsDB > Elevation is " + elevationFeet +  " feet (" + elevationMeters + " meters)" );				
+				this.elevation = Double.toString(elevationMeters);
 			}
 			rs.close();
 			stmt.close();
@@ -3026,7 +3030,19 @@ public boolean  getRevisions(String plotName)
 	{
 		return("7");
 	}
-	
+
+	/**
+	 * This method should be in a utility class. 
+	 * Convert number feet into number of meters
+	 * 
+	 * @param feet the number of feet to convert to meters.
+     * @return the number of meters in the feet. 
+	 * */
+	public double feetToMeters(double feet) 
+	{	
+		double meters = feet  *  0.305f;
+		return meters;
+	}	
 
 /**
  * main method for testing --
@@ -3093,6 +3109,9 @@ public static void main(String[] args)
 		System.out.println( db.getPlotCodes().toString() );
 	}
 }
+
+
+
 	
 	
 
