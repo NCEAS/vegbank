@@ -24,8 +24,8 @@ import  xmlresource.utils.XMLparse;
  * Access to the data stored in the native VegBank XML structure.
  * 
  * 	'$Author: harris $'
- *	'$Date: 2002-05-20 20:15:40 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2002-05-20 23:06:04 $'
+ *	'$Revision: 1.3 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -73,8 +73,12 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	 {
 		  
 	 }
-	 //init 
-	//public void init(String plotName ) throws FileNotFoundException
+	 
+	/**
+	 * this is the method that is called to check and see that the XML document 
+	 * associated with this plotname exists in the cache
+	 * @param plotName -- the name of the plot
+	 */ 
 	public void init(String plotName )
 	{
 		try
@@ -301,88 +305,170 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	}
 	public String getXCoord(String plotName)
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "authorE") );
 	}
 	public String getYCoord(String plotName)
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "authorN") );
 	}
 	public String getLatitude(String plotName)
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "latitude") );
 	}
 	public String getLongitude(String plotName)
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "longitude") );
 	}
 	public String getUTMZone(String plotName)
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "authorZone") );
 	}
 	public String getPlotShape(String plotName)
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "shape") );
 	}
 	public String getPlotArea(String plotName)	
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "area") );
 	}
 	
 	public String getState(String plotName)
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "state") );
 	}
 	
 	public String getTopoPosition(String plotName)
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "topoPosition") );
 	}
 	
+	//must me a numeric value	
 	public String getSlopeAspect(String plotName)
 	{
-		return( this.getPlotAttribute(plotName, "slopeAspect") );
+		this.init(plotName);
+		String s = this.getPlotAttribute(plotName, "slopeAspect");
+		if ( (s != null) && (! s.trim().equals("null")) )
+		{
+			return( s.trim() );
+		}
+		else
+		{
+			return("");
+		}
 	}
 	
+	//must be numeric
 	public String getSlopeGradient(String plotName)
 	{
-		return( this.getPlotAttribute(plotName, "slopeGradient") );
+		this.init(plotName);
+		String s = this.getPlotAttribute(plotName, "slopeGradient");
+		if ( (s != null) && (! s.trim().equals("null")) )
+		{
+			return( s.trim() );
+		}
+		else
+		{
+			return("");
+		}
 	}
+
 	public String getSurfGeo(String plotName)
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "geology") );
 	}
 	public String getCountry(String plotName)
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "country") );
 	}
 	public String getStandSize(String plotName)
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "standSize") );
 	}
 	public String getAuthorLocation(String plotName)
 	{
+		this.init(plotName);
 		return(stringBuf);
 	}
 	public String getLandForm(String plotName)
 	{
+		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "landform") );
 	}
+	
+	// this has cannot be null and should be numeric
 	public String getElevation(String plotName)
 	{
-		return( this.getPlotAttribute(plotName, "elevation") );
+		this.init(plotName);
+		String s = "";
+		s =  this.getPlotAttribute(plotName, "elevation");
+		if ( s != null )
+		{
+			return( s.trim() );
+		}
+		else
+		{
+			return( "");
+		}
 	}
+	
+	// this has cannot be null and should be numeric
 	public String getElevationAccuracy(String plotName)
 	{
-		return( this.getPlotAttribute(plotName, "elevationAccuracy") );
+		this.init(plotName);
+		String s = "";
+		s =  this.getPlotAttribute(plotName, "elevationAccuracy");
+		if ( s != null )
+		{
+		  return( s.trim() );
+		}
+		else
+		{
+			return( "");
+		}
 	}
+
+	
+	//this method must return a not-null value
 	public String	getConfidentialityReason(String plotName)
 	{
-		return(stringBuf);
+		this.init(plotName);
+		String s = this.getPlotAttribute(plotName, "confidentialityReason");
+		if ( s != null)
+		{
+			return(s);
+		}
+		else
+		{
+			return("");
+		}
 	}
+	//this method must return a not-null value
 	public String getConfidentialityStatus(String plotName)
 	{
-		return(stringBuf);
+		this.init(plotName);
+		String s = this.getPlotAttribute(plotName, "confidentialityStatus");
+		if ( s != null)
+		{
+			return(s);
+		}
+		else
+		{
+			return("");
+		}
 	}
+	
 	public boolean isPlotPermanent(String plotName)
 	{
 		return(booleanBuf);
