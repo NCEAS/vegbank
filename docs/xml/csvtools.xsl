@@ -53,4 +53,14 @@
     </xsl:choose>            
  </xsl:template>
 
+<!-- reusable lower-case function -->
+<xsl:template name="lower-case">
+  <xsl:param name="text"/>
+  <xsl:value-of select="translate($text,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')" />
+</xsl:template>
+<xsl:template name="upper-case">
+  <xsl:param name="text"/>
+  <xsl:value-of select="translate($text,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')" />
+</xsl:template>
+
 </xsl:stylesheet>
