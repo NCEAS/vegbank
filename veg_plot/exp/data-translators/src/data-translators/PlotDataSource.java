@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-08-30 19:12:03 $'
- * 	'$Revision: 1.24 $'
+ *  '$Date: 2002-09-16 17:23:11 $'
+ * 	'$Revision: 1.25 $'
  */
 public class PlotDataSource 
 {
@@ -1166,7 +1166,7 @@ public boolean  getRevisions(String plotName)
 	}
 	
 	//returns the elevation accuracy
-	String getElevationAccuracy(String plotName)
+	public String getElevationAccuracy(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getElevationAccuracy(plotName);
 		return(s);

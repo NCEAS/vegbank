@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-07-18 13:45:43 $'
- 	*     '$Revision: 1.10 $'
+ 	*     '$Date: 2002-09-16 17:23:10 $'
+ 	*     '$Revision: 1.11 $'
 --> 
 <project name="data-translators" default="compile" basedir=".">
 	
@@ -60,7 +60,15 @@
   	    <include name="**.java"/>
   	  </fileset>
   	</copy>
-	</target>	
+		
+		<!-- properties files -->
+		<copy todir="${build}" filtering="yes" >
+			<fileset dir="${src}/data-translators" >
+  	    <include name="plugin.properties"/>
+  	  </fileset>
+  	</copy>
+		
+</target>	
 	
 	
 	<!-- COMPILE -->
