@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-01-14 01:12:38 $'  
- *	'$Revision: 1.23 $'
+ *	'$Date: 2003-02-07 17:46:49 $'  
+ *	'$Revision: 1.24 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,9 +92,14 @@ public class VegCommunityLoader
 	 * (ie, from an entry on the website into the database), and this 
 	 * method should really be called load ecoart (or nvc) community
 	 */
-	 private void insertCommunity(String conceptCode, String conceptLevel, 
-	 String commName, String otherCitationDetails, String dateEntered, 
-	 String parentCommunity, String allianceTransName )
+	 private void insertCommunity(	String conceptCode, 
+	 																	String commLevel, 
+	 																	String commName, 
+	 																	String otherCitationDetails, 
+	 																	String dateEntered, 
+	 																	String parentCommunity, 
+	 																	String allianceTransName 
+	 															)
 	 {
 		 try
 		 {
@@ -111,17 +116,24 @@ public class VegCommunityLoader
 			//load the alliance trans if this is an alliance that trans name is
 			//basically a common name used to describe the association 
 			int commTransId = 0;
-			if (conceptLevel.equals("alliance") &&  allianceTransName != null )
+			if (commLevel.equals("alliance") &&  allianceTransName != null )
 				commTransId = insertCommunityName(allianceTransName, refId, dateEntered);
 			
 			
 			// INSERT THE CONCEPT
-			int commConceptId = insertCommunityConcept(conceptCode, commCodeId, 
-			conceptLevel, parentCommunity, commName, refId );
+			int commConceptId = insertCommunityConcept(	conceptCode, 
+																										commCodeId,  
+																										commName, 
+																										refId );
 
 			// THE STATUS -- there may be a proble with the date entered
-			int commStatusId = insertCommunityStatus(commConceptId, "accepted", 
-			dateEntered, partyId, refId, parentCommunity );
+			int commStatusId = insertCommunityStatus(	commConceptId, 
+																									"accepted", 
+																									dateEntered, 
+																									partyId, 
+																									refId,
+																									commLevel, 
+																									parentCommunity );
 			
 			
 			//UPDATE THE USAGE FOR THE NAMES 
@@ -132,7 +144,7 @@ public class VegCommunityLoader
 			insertCommunityUsage( commNameId, commConceptId, partyId, "standard"
 			, dateEntered, "NVC", commName, conceptCode);
 			//the trans name (alliance only)
-			if ( conceptLevel.equals("alliance") &&  allianceTransName != null )
+			if ( commLevel.equals("alliance") &&  allianceTransName != null )
 				insertCommunityUsage( commTransId, commConceptId, partyId, "standard"
 				, dateEntered, "NVC", allianceTransName ,conceptCode);
 			
@@ -188,7 +200,7 @@ public class VegCommunityLoader
                                               String nameReferenceAuthor,
 	                                            String nameReferenceDate,
 	                                            String conceptCode, 
-                                              String conceptLevel, 
+                                              String commLevel, 
 	                                            String commName, 
                                               String dateEntered, 
                                               String parentCommunity, 
@@ -196,7 +208,7 @@ public class VegCommunityLoader
 	 {
 	 	StringBuffer sb = new StringBuffer();
     System.out.println( "VegCommunityLoader > conceptCode = '" + conceptCode + 
-                        "' conceptLevel = '" + conceptLevel+ 
+                        "' commLevel = '" + commLevel+ 
                         "' commName= '" + commName+
                         "' dateEntered= '" + dateEntered+
                         "' parentCommunity= '" + parentCommunity+
@@ -233,14 +245,24 @@ public class VegCommunityLoader
 			//FORGET THE CODE NAMES FOR NOW
 			
 			// INSERT THE CONCEPT
-			int commConceptId = insertCommunityConcept(conceptCode, commNameId, 
-			conceptLevel, parentCommunity, commName, conceptRefId );
+			int commConceptId = insertCommunityConcept(	conceptCode, 
+																										commNameId, 
+																										commName, 
+																										conceptRefId 
+																									);
 			System.out.println("VegCommunityLoader > concept id: " + commConceptId);
 			if (commConceptId == 0  ) this.commit = false;
 			
 			// THE STATUS -- there may be a proble with the date entered
-			int commStatusId = insertCommunityStatus(commConceptId, "accepted", 
-			dateEntered, partyId, conceptRefId, parentCommunity );
+			int commStatusId = insertCommunityStatus(	commConceptId, 
+																									"accepted", 
+																									dateEntered, 
+																									partyId, 
+																									conceptRefId, 
+																									commLevel,
+																									parentCommunity 
+																								);
+																								
 			System.out.println("VegCommunityLoader > status id: " + commStatusId);
 			if (commStatusId == 0  ) this.commit = false;
 						
@@ -292,7 +314,7 @@ public class VegCommunityLoader
 	 *
 	 */
 	 public StringBuffer insertGenericCommunity(String conceptCode, 
-                                              String conceptLevel, 
+                                              String commLevel, 
 	                                            String commName, 
                                               String dateEntered, 
                                               String parentCommunity, 
@@ -301,7 +323,7 @@ public class VegCommunityLoader
 	 {
 	 	StringBuffer sb = new StringBuffer();
 
-    System.out.println("conceptCode = '" + conceptCode + "' conceptLevel = '" + conceptLevel+ 
+    System.out.println("conceptCode = '" + conceptCode + "' commLevel = '" + commLevel+ 
                         "' commName= '" + commName+
                         "' dateEntered= '" + dateEntered+
                         "' parentCommunity= '" + parentCommunity+
@@ -347,12 +369,21 @@ public class VegCommunityLoader
 			
 			
 			// INSERT THE CONCEPT
-			int commConceptId = insertCommunityConcept(conceptCode, commNameId, 
-			conceptLevel, parentCommunity, commName, refId );
+			int commConceptId = insertCommunityConcept(	conceptCode, 
+																										commNameId, 
+																										commName, 
+																										refId 
+																									);
 
 			// THE STATUS -- there may be a proble with the date entered
-			int commStatusId = insertCommunityStatus(commConceptId, "accepted", 
-			dateEntered, partyId, refId, parentCommunity );
+			int commStatusId = insertCommunityStatus(	commConceptId, 
+																									"accepted", 
+																									dateEntered, 
+																									partyId, 
+																									refId, 
+																									commLevel,
+																									parentCommunity 
+																								);
 			
 			
 			//UPDATE THE USAGE FOR THE NAMES 
@@ -588,8 +619,13 @@ public class VegCommunityLoader
 	  /**
 	  * method to insert data into the commname table
 		*/
-		private int insertCommunityStatus(int commConceptId, String status,  
-			String startDate, int partyId, int refId, String parentCommunity)
+		private int insertCommunityStatus(	int commConceptId, 
+																					String status,  
+																					String startDate, 
+																					int partyId, 
+																					int refId, 
+																					String commLevel,
+																					String parentCommunity)
 	  {
 		 int statusId = 0; 
 		 try
@@ -597,8 +633,8 @@ public class VegCommunityLoader
 				StringBuffer sb = new StringBuffer();
 				//insert the VALS
 				sb.append("INSERT into COMMSTATUS( commconcept_id, commreference_id, "
-				+" commconceptstatus, startDate, commparty_id) "
-				+" values(?,?,?,?,?)"); 
+				+" commconceptstatus, startDate, commparty_id, commlevel) "
+				+" values(?,?,?,?,?,?)"); 
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
   			// Bind the values to the query and execute it
   			pstmt.setInt(1, commConceptId);
@@ -606,6 +642,7 @@ public class VegCommunityLoader
 				pstmt.setString(3, status);
 				pstmt.setString(4, startDate);
 				pstmt.setInt(5, partyId);
+				pstmt.setString(6, commLevel);
 				//execute the p statement
   			pstmt.execute();
   			pstmt.close();
@@ -830,9 +867,10 @@ public class VegCommunityLoader
 	 /**
 	  * method to insert data into the commname table
 		*/
-		private int insertCommunityConcept(String commConceptCode, int commNameId, 
-		String conceptLevel, String parentCommunity, String conceptDescription, 
-		int refId )
+		private int insertCommunityConcept(String commConceptCode, 
+																				int commNameId, 
+																				String conceptDescription, 
+																				int refId )
 	  {
 		 int commConceptId = 0; 
 		 try
@@ -840,7 +878,7 @@ public class VegCommunityLoader
 			StringBuffer sb = new StringBuffer();
 				
 			//insert the strata values
-			sb.append("INSERT into COMMCONCEPT (commname_id, ceglcode, commlevel, "
+			sb.append("INSERT into COMMCONCEPT (commname_id, ceglcode, "
 			+" conceptDescription, commreference_id) "
 			+" values(?, ?, ?, ?,?)");
 				
@@ -849,23 +887,11 @@ public class VegCommunityLoader
   		// Bind the values to the query and execute it
   		pstmt.setInt(1, commNameId);
 			pstmt.setString(2, commConceptCode);
-			pstmt.setString(3, conceptLevel);
 			pstmt.setString(4, conceptDescription);
 			pstmt.setInt(5, refId);
 			//execute the p statement
   		pstmt.execute();
 			
-			//update the parentCommunity
-			if (parentCommunity != null)
-			{
-				//System.out.println("VegCommunityLoader > updating parentCommunity" );
-				sb = new StringBuffer();
-				sb.append("UPDATE commconcept set commparent = ");
-				sb.append("(select commconcept_id from commconcept where ceglcode = '"+parentCommunity+"')");
-				sb.append(" where ceglcode ='"+commConceptCode+"'");
-				PreparedStatement pstmt2 = conn.prepareStatement( sb.toString() );
-				pstmt2.execute();
-			}
 			//get the concept id for return
 			commConceptId = getCommunityConceptId(conceptDescription);
 			
