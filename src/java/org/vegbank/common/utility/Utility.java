@@ -30,8 +30,8 @@ import org.vegbank.common.utility.mail.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2004-11-29 18:35:52 $'
- * '$Revision: 1.41 $'
+ * '$Date: 2005-02-11 00:34:05 $'
+ * '$Revision: 1.42 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,6 +68,7 @@ public class Utility
 	// Bundle:  vegbank
 	public static ResourceBundle vegbankPropFile;
 	public static String SMTP_SERVER;
+	public static String SMTP_PORT;
 	public static String VEGBANK_SCHEMA_LOCATION;
 	public static String VEGBANK_SCHEMA_NAME;
 	public static String VEGBANK_XML_SCHEMA;
@@ -77,6 +78,10 @@ public class Utility
 	public static String VB_DATA_DIR;
 	public static String WEBAPP_DIR;
 	public static String MODELBEAN_CACHING;
+	public static String VB_EMAIL_FROM;
+	public static String VB_EMAIL_ADMIN_TO;
+	public static String VB_EMAIL_ADMIN_FROM;
+	public static List DS_CANDIDATES;
 
 
 	static { try {
@@ -92,7 +97,6 @@ public class Utility
 
 		// Bundle:  vegbank
 		vegbankPropFile = ResourceBundle.getBundle("vegbank");
-		SMTP_SERVER = vegbankPropFile.getString("mailHost");
 		VEGBANK_SCHEMA_LOCATION = vegbankPropFile.getString("schemaLocation");
 		if (!VEGBANK_SCHEMA_LOCATION.endsWith("/")) { VEGBANK_SCHEMA_LOCATION += "/"; }
 		VEGBANK_SCHEMA_NAME = vegbankPropFile.getString("vegbankSchemaName");	
@@ -104,6 +108,12 @@ public class Utility
 		WEBAPP_DIR = vegbankPropFile.getString("vegbank.webapp.dir");
 		MODELBEAN_CACHING = vegbankPropFile.getString("modelbean.caching");
 		
+		SMTP_SERVER = vegbankPropFile.getString("mailHost");
+		SMTP_PORT = vegbankPropFile.getString("mailPort");
+		VB_EMAIL_FROM = vegbankPropFile.getString("systemEmail");
+		VB_EMAIL_ADMIN_TO = vegbankPropFile.getString("admin.email.to");
+		VB_EMAIL_ADMIN_FROM = vegbankPropFile.getString("admin.email.from");
+
 	} catch (Exception ex) {
 		log.error("There was a problem loading Utility properties", ex);
 	} }
@@ -455,18 +465,20 @@ public class Utility
 	 */
 	public static void prettyPrintHash( Hashtable hash )
 	{
-		//System.out.println(hash);
-		System.out.println(prettyPrintHash(hash, 0));
+        if (hash == null) {
+            return;
+        }
+		log.debug(prettyPrintHash(hash, 0));
 	}
 	
 	private static String prettyPrintHash( Hashtable hash,  int indent)
 	{
-		//System.out.println(""+indent +" -- "+hash.hashCode());
-		StringBuffer sb = new StringBuffer();
-		Enumeration keys = hash.keys();
-		while ( keys.hasMoreElements() )
+		//log.debug(indent +" -- "+hash.hashCode());
+		StringBuffer sb = new StringBuffer(256);
+		Iterator keys = hash.keySet().iterator();
+		while ( keys.hasNext() )
 		{
-			Object key = keys.nextElement();
+			Object key = keys.next();
 			sb.append(getIdent( indent ) + key + ":");  
 			Object value = hash.get( key  );
 			if ( value instanceof  java.util.Hashtable )
@@ -476,10 +488,10 @@ public class Utility
 			}
 			else if ( value instanceof java.util.Vector )
 			{
-				Enumeration elements =  ((Vector) value).elements();
-				while ( elements.hasMoreElements())
+				Iterator it =  ((Vector) value).iterator();
+				while ( it.hasNext())
 				{
-					Object element = elements.nextElement();
+					Object element = it.next();
 					if ( element instanceof  java.util.Hashtable )
 					{		
 						sb.append( "--->" +((Hashtable) element).get("TableName") );
@@ -600,18 +612,21 @@ public class Utility
 	 */
 	public static boolean isLoadAccessionCodeOn()
 	{
-		boolean result = false;
+        // I'm not sure what we were thinking when this code was written, 
+        // but I'm disabling it.  2/1/2005 PMA
+        return true;
+
+        /*
+		boolean genAC = false;
 		log.debug("Utility: databaseName = " + DATABASE_NAME);
 		
-		if ( DATABASE_NAME.equalsIgnoreCase("vegbank") || DATABASE_NAME.equalsIgnoreCase("vegtest"))
-		{
-			result = true;
+		if (DATABASE_NAME.equalsIgnoreCase("vegbank") || DATABASE_NAME.equalsIgnoreCase("vegtest")) {
+			genAC = true;
+		} else {
+			genAC = false;
 		}
-		else
-		{
-			result = false;
-		}
-		return result;
+		return genAC;
+        */
 	}
 
 	/**
@@ -624,7 +639,12 @@ public class Utility
 		// This is a function of database name and host machine
 		if ( DATABASE_NAME.equalsIgnoreCase("vegbank"))
 		{
-			accessionPrefix = "VB";
+			accessionPrefix = vegbankPropFile.getString("vegbank.accession.prefix");
+			if (Utility.isStringNullOrEmpty(accessionPrefix)) {
+			    accessionPrefix = "VB";
+            } else {
+			    accessionPrefix = accessionPrefix.toUpperCase();
+            }
 		}
 		else if ( DATABASE_NAME.equalsIgnoreCase("vegtest"))
 		{
@@ -819,4 +839,25 @@ public class Utility
 			log.error("Problem notifying admin", mex);
 		}
 	}
+
+	/**
+	 * @return
+	 */
+	public static boolean canBeDatasetItem(String tableName) {
+        if (Utility.isStringNullOrEmpty(tableName)) {
+            log.debug("canBeDataItem(): given empty string");
+            return false;
+        }
+
+        if (DS_CANDIDATES == null) {
+            String s = vegbankPropFile.getString("dataset.candidates");
+            StringTokenizer st = new StringTokenizer(s, ",");
+            DS_CANDIDATES = new ArrayList();
+            while (st.hasMoreTokens()) {
+                DS_CANDIDATES.add(st.nextToken().toLowerCase());
+            }
+        }
+
+        return DS_CANDIDATES.contains(tableName.toLowerCase());
+    }
 }
