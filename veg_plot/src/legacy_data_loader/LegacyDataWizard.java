@@ -20,7 +20,7 @@ import org.apache.xalan.xslt.XSLTProcessor;
 public class LegacyDataWizard 
 {
 
-public String styleSheet="legacyDataWizard.xsl";
+public String styleSheet="legacyDataDescription.xsl";
 public String attributeFile="attFile.txt"; //the resuting transformed file
 public Vector fileVector = new Vector();
 public Hashtable attributeHash = new Hashtable();
