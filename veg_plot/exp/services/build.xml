@@ -8,8 +8,8 @@
   *  
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-07-12 23:13:20 $'
- 	*     '$Revision: 1.1 $'
+ 	*     '$Date: 2002-07-18 13:35:20 $'
+ 	*     '$Revision: 1.2 $'
 --> 
 <project name="FormReader" default="init" basedir=".">
 	
@@ -65,6 +65,7 @@
 		<javac srcdir="${build}" 
 			classpath="${cpath}"
 			includes="**.java"
+			debug="on"
 			destdir="${build}"
 		/>
 	</target>	

@@ -18,7 +18,7 @@ public class ExchangeServlet extends HttpServlet
 
  public void init(ServletConfig config) throws ServletException 
 	{
-		System.out.println("MapTest > init");
+		System.out.println("ExchangeServlet > init");
 		super.init(config);
   }
 		
@@ -59,11 +59,11 @@ public class ExchangeServlet extends HttpServlet
 		 sb.append("<head>");
 		 sb.append("<link href=\"http://numericsolutions.com/includes/default.css\" type=\"text/css\" rel=\"stylesheet\">");
 		 sb.append("</head>");
-		 sb.append("<body>");
+		 sb.append("<body bgcolor=\"white\">");
 		 
 		 sb.append("Number of Unique Matches: " + v.size() +"<br> <br>" );
 		 
-		 sb.append("<table width=100> \n");
+		 sb.append("<table width=\"500\"> \n");
 		 sb.append("<tr>");
 		 sb.append("<td width=40> PLOT </td> <td width=20>LOCATION</td> <td width=20> STATE </td>");
 		 sb.append("</tr>");
@@ -72,6 +72,12 @@ public class ExchangeServlet extends HttpServlet
 			{
 				Hashtable h = (Hashtable)v.elementAt(i);
 				String accessionNumber = (String)h.get("accessionNumber");
+				// TOKENIZE THE  ACCESSION NUMBER TO GET THE PLOT ID
+				StringTokenizer st = new StringTokenizer(accessionNumber, ".");
+				String buf = st.nextToken();
+				 buf = st.nextToken();
+				String plotId = st.nextToken();
+				//System.out.println("# " + plotId);
 				String longitude = (String)h.get("longitude");
 				String latitude = (String)h.get("latitude");
 				String state = (String)h.get("state");
@@ -79,7 +85,13 @@ public class ExchangeServlet extends HttpServlet
 				if ( row == 0)
 				{
 					sb.append("<tr bgcolor=\"#C0D3E7\" >");
-					sb.append("<td> <span class=\"itemsmall\">  "+accessionNumber+" </span> </td> ");
+					// THE ACCESSION NUMBER AND THE COMPREHENSIVE VIEW 
+					sb.append("<td> <span class=\"itemsmall\">  "+accessionNumber+"  ");
+					sb.append(" <a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=full&queryType=simple&plotId="+plotId+"\"><img alt=\"Comprehensive view\" src=\"/vegbank/images/comprehensive_sm.gif\" border=\"0\" align=\"left\"></a>");
+					sb.append(" &nbsp;");
+					sb.append(" <a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=summary&queryType=simple&plotId="+plotId+"\"><img alt=\"Comprehensive view\" src=\"/vegbank/images/report_sm.gif\" border=\"0\" align=\"left\"></a>");
+					sb.append(" </span> </td>");
+					
 					sb.append("<td> <span class=\"itemsmall\"> ");
 					sb.append(" <a href=\"http://beta.nceas.ucsb.edu:8080/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&longitude="+longitude+"&latitude="+latitude+"\">");
 					sb.append(" <img alt=\"Location\" src=\"/vegbank/images/small_globe.gif\" border=\"0\" align=\"center\"> </a> </span> </td> ");
@@ -89,7 +101,13 @@ public class ExchangeServlet extends HttpServlet
 				else
 				{
 					sb.append("<tr bgcolor=\"white\" >");
-					sb.append("<td> <span class=\"itemsmall\">  "+accessionNumber+" </span> </td> ");
+						// THE ACCESSION NUMBER AND THE COMPREHENSIVE VIEW 
+					sb.append("<td> <span class=\"itemsmall\">  "+accessionNumber+"  ");
+					sb.append(" <a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=full&queryType=simple&plotId="+plotId+"\"><img alt=\"Comprehensive view\" src=\"/vegbank/images/comprehensive_sm.gif\" border=\"0\" align=\"left\"></a>");
+					sb.append(" &nbsp;");
+					sb.append(" <a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=summary&queryType=simple&plotId="+plotId+"\"><img alt=\"Comprehensive view\" src=\"/vegbank/images/report_sm.gif\" border=\"0\" align=\"left\"></a>");
+					sb.append(" </span> </td>");
+					
 					sb.append("<td> <span class=\"itemsmall\"> ");
 					sb.append(" <a href=\"http://beta.nceas.ucsb.edu:8080/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&longitude="+longitude+"&latitude="+latitude+"\">");
 					sb.append(" <img alt=\"Location\" src=\"/vegbank/images/small_globe.gif\" border=\"0\" align=\"center\"> </a> </span> </td> ");
