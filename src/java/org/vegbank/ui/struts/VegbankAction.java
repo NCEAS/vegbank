@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-26 20:47:08 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-04-30 13:16:26 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,20 @@ public abstract class VegbankAction extends Action {
 			return (new UserDatabaseAccess().getUser(
 				(Long)session.getAttribute(Constants.USER_KEY)));
 		} catch (Exception ex) {
-			log.error("VegbankAction.getUser() error: returning null", ex);
+			log.error("VegbankAction.getUser(session) error: returning null", ex);
+			return null;
+		}
+	}
+
+	/**
+	 * Only for convenience.
+	 * @return the WebUser instance with the given usr_id
+	 */
+	public WebUser getUser(long usrId) {
+		try {
+			return (new UserDatabaseAccess().getUser(usrId));
+		} catch (Exception ex) {
+			log.error("VegbankAction.getUser(long) error: returning null", ex);
 			return null;
 		}
 	}
@@ -63,6 +76,15 @@ public abstract class VegbankAction extends Action {
 	 */
 	public ResourceBundle getResourceBundle(String path) {
 		return ResourceBundle.getBundle(path);
+	}
+		
+	/**
+	 * Is the current user an administrator?
+	 * @return true if current user is admin
+	 */
+	public boolean userIsAdmin(HttpSession session) {
+		Boolean b = (Boolean)session.getAttribute("isAdmin");
+		return (b != null && b.booleanValue() == true);
 	}
 		
 	/**

@@ -4,18 +4,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.*;
+import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.model.Address;
 import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Telephone;
 import org.vegbank.common.model.Usr;
-import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.common.utility.VBModelBeanToDB;
 import org.vegbank.common.utility.Utility;
@@ -28,8 +28,8 @@ import org.vegbank.common.utility.PermComparison;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-02-28 11:22:01 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-04-30 13:16:26 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ import org.vegbank.common.utility.PermComparison;
  */
 public class RegisterNewUserAction extends VegbankAction
 {
+	private static Log log = LogFactory.getLog(RegisterNewUserAction.class);
 	
 	public ActionForward execute(
 		ActionMapping mapping,
@@ -60,20 +61,19 @@ public class RegisterNewUserAction extends VegbankAction
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		LogUtility.log(" In RegisterNewUserAction ");
+		log.debug(" In RegisterNewUserAction ");
 		ActionErrors errors = new ActionErrors();
 
 		DynaActionForm dform = (DynaActionForm) form;
 
-		// Get the properties of the form
-		Party party = (Party) dform.get("party");
-		Usr usr = (Usr) dform.get("usr");
-		String termsaccept = (String) dform.get("termsaccept");
-		String password1 = (String) dform.get("password1");
-		String password2 = (String) dform.get("password2");
+		try {
+			// Get the properties of the form
+			Party party = (Party) dform.get("party");
+			Usr usr = (Usr) dform.get("usr");
+			String termsaccept = (String) dform.get("termsaccept");
+			String password1 = (String) dform.get("password1");
+			String password2 = (String) dform.get("password2");
 
-		try
-		{
 			UserDatabaseAccess uda = new UserDatabaseAccess();
 			if (! uda.isEmailUnique(usr.getEmail_address()))
 			{
@@ -82,7 +82,7 @@ public class RegisterNewUserAction extends VegbankAction
 					new ActionError(
 						"errors.user.already.created",
 						usr.getEmail_address()));
-				LogUtility.log("RegisterNewUserAction: Username is taken.");
+				log.debug("Username is taken.");
 			}
 			// Assert that the passwords match
 			else if (!password1.equals(password2))
@@ -92,7 +92,7 @@ public class RegisterNewUserAction extends VegbankAction
 					new ActionError(
 						"errors.action.failed",
 						"Password mismatch"));
-				LogUtility.log("RegisterNewUserAction: Password mismatch");
+				log.debug("Password mismatch");
 			}
 			else if (!termsaccept.equals("accept"))
 			{
@@ -101,14 +101,14 @@ public class RegisterNewUserAction extends VegbankAction
 					new ActionError(
 						"errors.action.failed",
 						"Must accept vegbank terms."));
-				LogUtility.log("RegisterNewUserAction: Terms not accepted");
+				log.debug("Terms not accepted");
 			}
 			else
 			{
 				// Fill out default fields
 				// Start off as registered user 
-				usr.setPermission_type(String.valueOf(
-						PermComparison.getRoleConstant("reg")));
+				usr.setPermission_type(Long.toString(
+							PermComparison.getRoleConstant("reg")));
 
 				usr.setBegin_time(Utility.getCurrentDate());
 
@@ -120,21 +120,19 @@ public class RegisterNewUserAction extends VegbankAction
 
 				// Put in the database
 				VBModelBeanToDB party2db = new VBModelBeanToDB();
+				log.debug("inserting new usr");
 				party2db.insert(party);
 
 				// create a session
 				long usrId = uda.getUserId(usr.getEmail_address());
-				LogUtility.log("RegisterNewUserAction: logging in new user, ID #" + usrId);
+				log.debug("logging in new user, ID #" + usrId);
 				HttpSession session = request.getSession();
 				session.setAttribute(Constants.USER_KEY, new Long(usrId));
 			}
-		}
-		catch (Exception e)
-		{
-			errors.add(
-				ActionErrors.GLOBAL_ERROR,
-				new ActionError("errors.database", e.getMessage()));
-			LogUtility.log("RegisterNewUserAction error: " + e.getMessage(), e);
+		} catch (Exception e) {
+			errors.add(Globals.ERROR_KEY,
+				new ActionError("errors.general", e.toString()));
+			log.debug("error: " + e.toString(), e);
 			return mapping.findForward("vberror");
 		}
 

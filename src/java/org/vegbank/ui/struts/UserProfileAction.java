@@ -1,11 +1,11 @@
 /*
- *	'$Id: UserProfileAction.java,v 1.3 2004-04-26 20:48:29 anderson Exp $'
+ *	'$Id: UserProfileAction.java,v 1.4 2004-04-30 13:16:26 anderson Exp $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-26 20:48:29 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-04-30 13:16:26 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +33,10 @@ import javax.mail.MessagingException;
 import org.apache.struts.Globals;
 import org.apache.struts.action.*;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.vegbank.common.utility.LogUtility;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.UserDatabaseAccess;
-import org.vegbank.common.utility.ServletUtility;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.common.Constants;
 import org.vegbank.common.model.WebUser;
 
@@ -47,6 +48,8 @@ import org.vegbank.common.model.WebUser;
  */
 public class UserProfileAction extends VegbankAction {
 	
+	static final Log log = LogFactory.getLog(UserProfileAction.class);
+
 	static final String FWD_CHANGE_PWD = "change_pwd";
 	static final String FWD_EDIT_USER = "edit_user";
 	static final String FWD_VIEW_USER = "view_user";
@@ -79,11 +82,37 @@ public class UserProfileAction extends VegbankAction {
 			}
 		}
 		
-		LogUtility.log("UserProfileAction: Focus,Action="+param+","+action);
+		log.debug("Focus,Action="+param+","+action);
 
-		WebUser curUser = getUser(request.getSession());
 		UserDatabaseAccess userdb;
 		HttpSession session = request.getSession();
+		WebUser curUser = null;
+		String curUsrId = null;
+		String reqUsrId = (String)request.getParameter("usrId");
+		boolean isAdmin = userIsAdmin(session);
+
+		// dig up the user's profile
+		if (isAdmin && !Utility.isStringNullOrEmpty(reqUsrId)) {
+			// Admin can edit other users with this action
+			//curUser = getUser(session);
+			//curUsrId = curUser.getUseridLong().toString();
+
+
+			//if (!curUsrId.equals(reqUsrId) ) {
+				// this is admin and given usrId is NOT admin's usrId
+				curUser = getUser(Long.parseLong(reqUsrId));
+			//} else {
+				// error
+				//log.error("ERROR: must be admin to edit other user: " + reqUsrId);
+				//return mapping.findForward(RequestProcessor.CERTIFICATION_VIOLATION_FORWARD);
+			//}
+		} else {
+			// this is a normal user
+			curUser = getUser(session);
+			curUsrId = curUser.getUseridLong().toString();
+		}
+		log.debug("curUsrId, reqUsrId: " + curUsrId +", "+reqUsrId);
+
 		
 		try {
 			if (param.equals("user")) {
@@ -97,28 +126,39 @@ public class UserProfileAction extends VegbankAction {
 
 				if (action.equals("edit")) {
 					// EDIT by default
-					LogUtility.log("UserProfileAction: edit");
-					LogUtility.log("UserProfileAction: putting webuser in request attribute 'webuser'");
-					//////////////request.setAttribute("webuser", curUser); 
-					LogUtility.log("UserProfileAction: calling upForm.setWebUser ");
+					log.debug("edit");
+					log.debug("putting webuser in request attribute 'webuser'");
+					request.setAttribute("webuser", curUser); 
+
+					log.debug("calling upForm.setWebUser ");
 					upForm.setWebuser(curUser);
+					log.debug("putting upform in request attribute 'upform'");
+					request.setAttribute("upform", upForm); 
 					return mapping.findForward(FWD_EDIT_USER);
 					
 				} else if (action.equals("view")) {
 					// VIEW
-					LogUtility.log("UserProfileAction: view");
+					log.debug("view");
+					log.debug("putting webuser in request attribute 'webuser'");
 					request.setAttribute("webuser", curUser); 
+
+					log.debug("calling upForm.setWebUser ");
+					upForm.setWebuser(curUser);
+					log.debug("putting upform in request attribute 'upform'");
+					request.setAttribute("upform", upForm); 
 					return mapping.findForward(FWD_VIEW_USER);
 		
 				} else if (action.equals("update")) {
 					// UPDATE
-					LogUtility.log("UserProfileAction: update");
+					log.debug("update");
 					userdb = new UserDatabaseAccess();
 					WebUser changedUser = upForm.getWebuser();
 					String newEmail = changedUser.getEmail();
 
 					if (!newEmail.equals(curUser.getEmail())) {
+						log.debug("newEmail ("+newEmail+") != current ("+curUser.getEmail() +")");
 						if (!userdb.isEmailUnique(newEmail)) {
+							log.debug("newEmail is not unique");
 							errors.add(Globals.ERROR_KEY, new ActionError(
 										"errors.user.already.created", newEmail));
 							saveErrors(request, errors);
@@ -133,7 +173,7 @@ public class UserProfileAction extends VegbankAction {
 					changedUser.setAddressid(curUser.getAddressid());
 					userdb.updateUserInfo(changedUser);
 									
-					LogUtility.log("UserProfileAction: done updating");
+					log.debug("done updating");
 		
 					session.removeAttribute("UserProfileForm");
 					request.setAttribute("webuser", changedUser); 
@@ -145,7 +185,7 @@ public class UserProfileAction extends VegbankAction {
 			//// PASSWORD FUNCTIONS
 				DynaActionForm dform = (DynaActionForm)form;
 				String act2 = (String)dform.get("action");
-				LogUtility.log("UserProfileAction: act2=" + act2);
+				log.debug("act2=" + act2);
 				if (act2 != null && act2.equals("Cancel")) {
 					session.removeAttribute("ChangePasswordForm");
 					return mapping.findForward(FWD_MAIN_MENU);
@@ -153,39 +193,39 @@ public class UserProfileAction extends VegbankAction {
 		
 				if (action.equals("edit")) {
 					// CHANGE PASSWORD FORM
-					LogUtility.log("UserProfileAction: pwd");
+					log.debug("pwd");
 					return mapping.findForward(FWD_CHANGE_PWD);
 		
 				} else if (action.equals("update")) {
 					// UPDATE PASSWORD
 					
-					// make sure old pwd matches entry
-					String str = (String)request.getParameter("password");
-					LogUtility.log("UserProfileAction: your pwd is " + str);
-					
-					if ( str != null && !str.equals(
-					curUser.getPassword())) {
-						LogUtility.log("UserProfileAction: wrong pwd");
-						errors.add(Globals.ERROR_KEY, new ActionError(
-									"errors.password.mismatch"));
-						saveErrors(request, errors);
-						LogUtility.log("UserProfileAction: returning to input (pwd form)");
+					if (!isAdmin) {
+						String str = (String)request.getParameter("password");
+						log.debug("your pwd is " + str);
+						
+						if (str != null && !str.equals(curUser.getPassword())) {
+							log.error("wrong pwd");
+							errors.add(Globals.ERROR_KEY, new ActionError(
+										"errors.password.mismatch"));
+							saveErrors(request, errors);
+							log.debug("returning to input (pwd form)");
 
-						return mapping.getInputForward();
+							return mapping.getInputForward();
+						}
 					}
 	
 					// check retyped pwd
 					if ( !((String)request.getParameter("newpassword1")).equals(
 					(String)request.getParameter("newpassword2"))) {
-						LogUtility.log("UserProfileAction: pwds don't match");
+						log.error("pwds don't match");
 						errors.add(Globals.ERROR_KEY, new ActionError(
 									"errors.password.wrong_retype"));
 						saveErrors(request, errors);
-						LogUtility.log("UserProfileAction: returning to input (pwd form)");
+						log.debug("returning to input (pwd form)");
 						return mapping.getInputForward();
 					}		
 
-					LogUtility.log("UserProfileAction: updating pwd");
+					log.debug("updating pwd");
 					userdb = new UserDatabaseAccess();
 					userdb.updatePassword((String)request.getParameter("newpassword1"),
 							curUser.getEmail());
@@ -197,7 +237,7 @@ public class UserProfileAction extends VegbankAction {
 			} // end if param
 
 		} catch (Exception ex) {
-			LogUtility.log("ERROR: UserProfileAction", ex);
+			log.error("ERROR: ", ex);
 			errors.add(Globals.ERROR_KEY, new ActionError(
 						"errors.general", ex.toString()));
 			saveErrors(request, errors);
