@@ -4,8 +4,8 @@
  *  Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2004-11-04 19:27:04 $' 
- * '$Revision: 1.5 $'
+ * '$Date: 2005-01-24 18:29:33 $' 
+ * '$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -28,6 +28,8 @@ import org.vegbank.common.utility.DatabaseUtility;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.ui.struts.CommQueryForm;
 import org.vegbank.ui.struts.PlantQueryForm;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -38,6 +40,7 @@ import org.vegbank.ui.struts.PlantQueryForm;
  */
 public class QueryHelper
 {
+	private static Log log = LogFactory.getLog(QueryHelper.class);
 
 	/**
 	 * Get a query for communities constructed from form.
@@ -222,6 +225,7 @@ public class QueryHelper
 		if (!Utility.isStringNullOrEmpty(acordingToParty))
 			query.append(" AND plantstatus.party_id = " + acordingToParty);
 
+		log.debug("generated plant query sql: " + query);
 		return query;
 	}
 
