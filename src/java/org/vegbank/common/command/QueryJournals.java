@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-06-30 20:02:59 $'
- *	'$Revision: 1.3 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-07-23 01:12:51 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,12 +94,13 @@ public class QueryJournals  implements VegbankCommand
 	/* (non-Javadoc)
 	 * @see org.vegbank.common.command.VegbankCommand#execute(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-	public void execute(HttpServletRequest request, HttpServletResponse response)
+	public Collection execute(HttpServletRequest request, HttpServletResponse response)
 		throws Exception
 	{
 		// Query the database for references
 		Collection collection = this.execute();
 		request.setAttribute("journals", collection);
+		return collection;
 	}
 
 	public Collection execute()

@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:12 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-07-23 01:12:51 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,11 +46,12 @@ public class QueryCoverMethods  implements VegbankCommand
 	/* (non-Javadoc)
 	 * @see org.vegbank.common.command.VegbankCommand#execute(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-	public void execute(HttpServletRequest request, HttpServletResponse response)
+	public Collection execute(HttpServletRequest request, HttpServletResponse response)
 		throws Exception
 	{
 		Collection collection = this.execute();
 		request.setAttribute("covermethods", collection);
+		return collection;
 	}
 	
 	public Collection execute()
