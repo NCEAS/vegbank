@@ -30,10 +30,7 @@
               href="@web-base-url@/default.css" />
         
 	</head>
-  	
 	<body>
-
-
 	</body>
  </html>
 -->
@@ -194,6 +191,7 @@ return "Check All"; }
 <!--			
 	  <td  width="20%" colspan="1"  bgcolor="{$evenRowColor}" align="left" valign="top">
 					<a> <b>Community Name:</b> <xsl:value-of select="currentCommunity"/> <br></br> </a>
+					<a> <b>Community Code:</b> <xsl:value-of select="currentCommunityCode"/> <br></br> </a>
        		<a> <b>Hydrologic Regime:</b> <xsl:value-of select="observation/hydrologicRegime"/> <br></br> </a>
 			 		<xsl:for-each select="observation/stratum">
 	    			<a> <b>Strata:</b> <xsl:value-of select="stratumName"/>;  <br></br> </a>
@@ -217,7 +215,9 @@ return "Check All"; }
 				</FONT> 
 			</i>
 			<xsl:for-each select="observation/communityClassification">
-			<xsl:value-of select="className"/>; </xsl:for-each>
+			<xsl:value-of select="className"/> --  
+			<xsl:value-of select="classCode"/> 
+			</xsl:for-each>
 	</td>
 		
 	 </xsl:if>
@@ -296,6 +296,7 @@ return "Check All"; }
 <!--			
 	  <td  width="20%" colspan="1"  bgcolor="{$evenRowColor}" align="left" valign="top">
 					<a> <b>Community Name:</b> <xsl:value-of select="currentCommunity"/> <br></br> </a>
+
        		<a> <b>Hydrologic Regime:</b> <xsl:value-of select="observation/hydrologicRegime"/> <br></br> </a>
 			 		<xsl:for-each select="observation/stratum">
 	    			<a> <b>Strata:</b> <xsl:value-of select="stratumName"/>;  <br></br> </a>
@@ -355,6 +356,7 @@ return "Check All"; }
 	     
 	     		<td colspan="1"  bgcolor="{$oddRowColor}" align="left" valign="top">
                		<b>community Name:</b> <xsl:value-of select="currentCommunity"/>
+               		<b>community Code:</b> <xsl:value-of select="currentCommunityCode"/>
              		</td>
 	 		
 	    		<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
