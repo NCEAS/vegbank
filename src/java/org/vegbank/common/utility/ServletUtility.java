@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: anderson $'
- *  '$Date: 2004-10-14 09:43:37 $'
- *  '$Revision: 1.15 $'
+ *  '$Date: 2004-10-14 09:59:37 $'
+ *  '$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -292,9 +292,11 @@ public class ServletUtility
 				String values[] = request.getParameterValues(name);
 				if (values != null) 
 				{
-					for (int i=0; i<values.length; i++) 
-					{
-						params.put(name,values[i]);
+					//for (int i=0; i<values.length; i++) {
+					if (values.length == 1) {
+						params.put(name,values[0]);
+					} else {
+						params.put(name,values);
 					}
 				}
  			}
