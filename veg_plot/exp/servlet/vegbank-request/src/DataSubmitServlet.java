@@ -39,6 +39,10 @@ public class DataSubmitServlet extends HttpServlet
 	private String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/input.data";
 	private String plotsArchiveType = "tncplots";
 	
+	private String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit-select.html";
+	private String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot_select.html";
+	
+
 	
 	/**
 	 * constructor method
@@ -72,6 +76,10 @@ public class DataSubmitServlet extends HttpServlet
 		{
 			Hashtable params = new Hashtable();
 			params = su.parameterHash(request);
+			// there will be cases where there will be multiple parameters 
+			// with the same name and they all need to be accessed so 
+			// capture an ennumeration here
+			Enumeration enum = request.getParameterNames();
 			
 			System.out.println("DataSubmitServlet > IN PARAMETERS: "+params.toString() );
 			submitDataType = (String)params.get("submitDataType");
@@ -94,7 +102,7 @@ public class DataSubmitServlet extends HttpServlet
 			else if ( submitDataType.trim().equals("vegPlot")  )
 			{
 				//out.println("DataSubmitServlet > action unknown!");
-				StringBuffer sb = handleVegPlotSubmittal(params, response);
+				StringBuffer sb = handleVegPlotSubmittal(enum, params, request, response);
 				out.println( sb.toString() );
 			}
 			else
@@ -115,8 +123,8 @@ public class DataSubmitServlet extends HttpServlet
 	 * this method is used to handle the submittal of a vegplot
 	 * 
 	 */
-	 private StringBuffer handleVegPlotSubmittal(Hashtable params, 
-	 HttpServletResponse response)
+	 private StringBuffer handleVegPlotSubmittal(Enumeration enum,
+	 Hashtable params, HttpServletRequest request, HttpServletResponse response)
 	{
 		StringBuffer sb = new StringBuffer();
 		try
@@ -139,12 +147,58 @@ public class DataSubmitServlet extends HttpServlet
 			// if the action is upload that is basically ar referal 
 			// from the data exchange client after the file has been 
 			// upload
-			if ( action.equals("upload") )
+			else if ( action.equals("upload") )
 			{
 				//take the file that was just deposited via the data exchange servlet
 				//and pass it onto the winnt machine
 				boolean sendResults = rmiClient.putMDBFile(plotsArchiveFile, plotsArchiveType);
+				System.out.println("DataSubmitServlet > RMI file send results: " + sendResults);
+				
+				//validate that the plot archive is real
+				boolean fileValidityResults = rmiClient.isMDBFileValid();
+				System.out.println("DataSubmitServlet > file validity at RMI server: " + fileValidityResults);
+				
+				// get the name of the plots and update the selection form and redircet
+				// the browser there
+				Vector plots = rmiClient.getPlotNames();
+				// prepare the plots element
+				StringBuffer sb2 = new StringBuffer();
+				for (int i=0; i<plots.size(); i++) 
+				{
+					sb2.append("<option>" + (String)plots.elementAt(i) + "</option> \n");
+					System.out.println("DataSubmitServlet > add plot: " + (String)plots.elementAt(i) );
+				}
+				//create the form
+				su.filterTokenFile(plotSelectTemplate, plotSelectForm, "plots", sb2.toString() );
+				//send the user there
+				response.sendRedirect("/forms/plot_select.html");
+				
 			}
+			else if ( action.equals("submit") )
+			{
+				while (enum.hasMoreElements()) 
+				{
+					String name = (String) enum.nextElement();
+					if ( name.toUpperCase().equals("PLOTID") )
+					{
+						String values[] = request.getParameterValues(name);
+						if (values != null) 
+						{
+							for (int i=0; i<values.length; i++) 
+							{
+								System.out.println("DataSubmitServlet > requesting an rmi plot insert: " + values[i] );
+							}
+						}
+					}
+				}
+				System.out.println("DataSubmitServlet > requesting an rmi insert ");
+			}
+			else
+			{
+				System.out.println("DataSubmitServlet > unknown plot submital task ");
+			}
+			
+			
 		}
 		catch( Exception e ) 
 		{
