@@ -124,8 +124,8 @@ for (int ii=0; ii<addressNum; ii++)
 	System.out.println("XMLfile AUTHORPLOTNAME: "+dataString[ii]);	
 	String authorPlotCode=dataString[ii];
 	String parentPlot=dataString[ii+1];
-	String plotType =dataString[ii+2];
-	String samplingMethod =dataString[ii+3];
+	String plotType=dataString[ii+2];
+	String samplingMethod=dataString[ii+3];
 	String coverScale=dataString[ii+4];
 	String latitude=dataString[ii+5];
 	String longitude=dataString[ii+6];
@@ -133,9 +133,20 @@ for (int ii=0; ii<addressNum; ii++)
 	String plotSize=dataString[ii+8];
 	String plotSizeAcc=dataString[ii+9];
 	String altValue=dataString[ii+10];
+	String altPosAcc=dataString[ii+11];
+	String slopeAspect=dataString[ii+12];
+	String slopeGradient=dataString[ii+13];
+	String slopePosition=dataString[ii+14];
+	String hydrologicRegime=dataString[ii+15];
+	String soilDrainage=dataString[ii+16];
+	String surfGeo=dataString[ii+17];
+	String state=dataString[ii+18];
+	String currentCommunity=dataString[ii+19];
+	//skipping
+	
 	plotWriter g =new plotWriter();  
 	g.putPlot(projectId, authorPlotCode, parentPlot, plotType, samplingMethod, coverScale, latitude,
-	longitude, plotShape, plotSize, plotSizeAcc, altValue, pconn);
+	longitude, plotShape, plotSize, plotSizeAcc, altValue, surfGeo, state, currentCommunity, pconn);
 	plotId=g.outPlotId;
 
 	//increment the connection uses - couple times for its entire use
@@ -406,8 +417,8 @@ public String outProjectId=null;
 
 private void putPlot (String projectId, String authorPlotCode, String parentPlot, 
 String plotType, String samplingMethod, String coverScale, String latitude, 
-String longitude, String plotShape, String plotSize, String plotSizeAcc, String altValue, 
-Connection conn) {
+String longitude, String plotShape, String plotSize, String plotSizeAcc, String altValue,
+String surfGeo, String state, String currentCommunity, Connection conn) {
 int plotId=0;
 try {
 
@@ -425,9 +436,9 @@ System.out.println("PlotID returned: "+plotId);  //this is check the return valu
 //pass the required arguements to the isssue SQl class
 String insertString="INSERT INTO PLOT";
 String attributeString="PLOT_ID, PROJECT_ID, AUTHORPLOTCODE, PARENTPLOT, PLOTTYPE, "+
-"SAMPLINGMETHOD, COVERSCALE, PLOTORIGINLAT, PLOTORIGINLONG, PLOTSHAPE, PLOTSIZE, PLOTSIZEACC, ALTVALUE";
-int inputValueNum=13;
-String inputValue[]=new String[13];	
+"SAMPLINGMETHOD, COVERSCALE, PLOTORIGINLAT, PLOTORIGINLONG, PLOTSHAPE, PLOTSIZE, PLOTSIZEACC, ALTVALUE, SURFGEO, STATE, CURRENTCOMMUNITY";
+int inputValueNum=16;
+String inputValue[]=new String[16];	
 inputValue[0]=""+plotId;
 	System.out.println(" plotId: "+plotId);
 inputValue[1]=projectId;
@@ -453,6 +464,13 @@ inputValue[10]=plotSize;
 inputValue[11]=plotSizeAcc;
 	System.out.println(" elevation: "+altValue);
 inputValue[12]=altValue;
+	System.out.println(" elevation: "+altValue);
+inputValue[13]=surfGeo;
+	System.out.println(" surfGeo: "+surfGeo);	
+inputValue[14]=state;
+	System.out.println(" state: "+state);
+inputValue[15]=currentCommunity;
+	System.out.println(" currentCommunity: "+currentCommunity);
 //get the valueString from the method
 issueStatement k = new issueStatement();
 k.getValueString(inputValueNum);	

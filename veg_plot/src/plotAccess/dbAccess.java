@@ -93,11 +93,27 @@ int transformedStringNum=u.outStringNum; // the number of vertical elements cont
 if (action.equals("query")) {
 
 	/**
-	* pass the array to the sql mapping class
+	* pass the array to the sql mapping class - single attribute query
 	*/
 
 	sqlMapper w =new sqlMapper();
 	w.developPlotQuery(transformedString, transformedStringNum);
+	
+	//grab the results from the sqlMapper class
+	queryOutput=w.queryOutput;
+	queryOutputNum=w.queryOutputNum;
+	
+}  //end if
+
+//compound query action
+if (action.equals("compoundQuery")) {
+
+	/**
+	* pass the array to the sql mapping class - compound queries
+	*/
+
+	sqlMapper w =new sqlMapper();
+	w.developPlotQuery(transformedString, transformedStringNum, 2);
 	
 	//grab the results from the sqlMapper class
 	queryOutput=w.queryOutput;
@@ -132,7 +148,7 @@ if (action.equals("verify")) {
 }
 } //end try
 
-catch( Exception e ) {System.out.println(" failed in: dbLoader.main  "+e.getMessage());}
+catch( Exception e ) {System.out.println(" failed in: dbAccess.main  "+e.getMessage());}
 
 } //end method
 

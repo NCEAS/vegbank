@@ -124,7 +124,6 @@ for (int i=0;i<transformedStringNum; i++) {
 			k.getPlotSummary(queryOutput, queryOutputNum, pconn);
 			
 			
-			
 			/**
 			* in the near future will want to look here to check
 			* the number of connection uses to determine if need
@@ -181,22 +180,119 @@ catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery 
 * @param  transformedString string containg the query element type and 
 *		value (| delimeted )
 * @param  transformedSringNum integer defining number of query elements
-* @param  elementTypeNum the number of different element types
+* @param  elementTypeNum the number of different element types - usually 2
 *
 */
-
-
-//accept the transformed xml document as a string and number of rows in the array
 public void developPlotQuery(String[] transformedString, int transformedStringNum,
 	int elementTypeNum)
 {
+sqlMapper a =new sqlMapper();
+a.setAttributeAddress(transformedString, transformedStringNum);	
+String element[]=a.element;  // the returned database address string
+String value[]=a.value;  // the returened data string
+int elementNum=a.elementNum; //the number addresses and attributes in the returned set
 
-//grab the elements and put into an array mapping to the following:
+
+
+//grab the elements and put into an array mapping the following into an array:
 //	1] taxonName, 2] state, 3] eleveationMin, 4] elevationMax, 5] surfGeo
 //	6] multipleObs, 7]community
+String queryAttributeArray[]=new String [20];
+int queryAttributeArrayNum=0;
+for (int i=0;i<transformedStringNum; i++) {
+	//System.out.println("testing:  "+element[i]+" . "+value[i]);
+	if (value[i] != null) {
+	
+		if (value[i].equals("taxonName")) {queryAttributeArray[0]=value[i+1];
+			queryAttributeArrayNum++;}
+		if (value[i].equals("state")) {queryAttributeArray[1]=value[i+1];
+			queryAttributeArrayNum++;}
+		if (value[i].equals("elevationMin")) {queryAttributeArray[2]=value[i+1];
+			queryAttributeArrayNum++;}
+		if (value[i].equals("elevationMax")) {queryAttributeArray[3]=value[i+1];
+			queryAttributeArrayNum++;}
+		if (value[i].equals("surfGeo")) {queryAttributeArray[4]=value[i+1];
+			queryAttributeArrayNum++;}
+		if (value[i].equals("multipleObs")) {queryAttributeArray[5]=value[i+1];
+			queryAttributeArrayNum++;}
+		if (value[i].equals("community")) {queryAttributeArray[6]=value[i+1];
+			queryAttributeArrayNum++;}
+
+	}
+}
+/*
+*pass the array to the corresponding getPlotId
+*/
+
+//get the database parameters from the database.parameters file
+utility g =new utility(); 
+g.getDatabaseParameters("database", "query");
+Connection pconn=null;
+DbConnectionBroker myBroker;
+try {
+myBroker = new DbConnectionBroker(g.driverClass,
+                                  g.connectionString,
+                                  g.login,g.passwd,
+				  g.minConnections,g.maxConnections,
+                                  g.logFile,1.0);
+
+				  
+// Get a DB connection from the Broker
+int thisConnection;
+pconn= myBroker.getConnection(); //grab one connectionfrom pool
+thisConnection = myBroker.idOfConnection(pconn);
+int connectionUses=1;
+
+//pass the array to the queryStore.getPlotId method
+queryStore j = new queryStore();
+j.getPlotId(queryAttributeArray, queryAttributeArrayNum, pconn);
+queryOutput=j.outPlotId;
+queryOutputNum=j.outPlotIdNum;
+
+connectionUses++;
+
+//pass the results, containing the plot id numbers to the get plot summary method
+queryStore k = new queryStore();
+k.getPlotSummary(queryOutput, queryOutputNum, pconn);
+connectionUses=connectionUses+k.outConnectionUses;
+System.out.println("number of uses of this connection: "+connectionUses);
+
+if (connectionUses>12) {
+	System.out.println("reseting the current connection");
+	try {
+		pconn.close(); 
+		myBroker.freeConnection(pconn); 
+		pconn=myBroker.getConnection();
+		connectionUses=0;
+	} catch (Exception e) {System.out.println("failed calling "
+		+" dbConnect.makeConnection call" + e.getMessage());}
+}
+
+//figure out the type of results to write to output
+String outFile=null;
+for (int i=0;i<transformedStringNum; i++) {
+	if (element[i] != null && element[i].startsWith("resultType")) {
+		//if summary - call the method to return the summary elements
+		//using as input the plotId numbers returned in the if clause above
+		if (value[i] != null && value[i].startsWith("summary")) {
+			outFile = value[i+1];
+			System.out.println("outputing the results set as: "+outFile);
+		}
+	}
+}
+//print the summary results
+
+xmlWriter l = new xmlWriter();
+l.writePlotSummary(k.summaryOutput, k.summaryOutputNum, outFile);  //change out
 
 
-//pass the array to the corresponding getPlotId
+myBroker.freeConnection(pconn);
+myBroker.destroy();
+} //end try - for conn pooler
+catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery  "
+	+e.getMessage());}
+
+
 
 
 //grab the summary data and send to xml writer
@@ -244,7 +340,8 @@ for (int ii=0; ii<combinedStringNum; ii++) {
 		elementNum=count;
 }//end for
 } //end try
-catch ( Exception e ){System.out.println("failed at: sqlMapper.setAttributeAddress  "+e.getMessage());}
+catch ( Exception e ){System.out.println("failed at: sqlMapper.setAttributeAddress  "
+	+e.getMessage());}
 }  //end method
 
 

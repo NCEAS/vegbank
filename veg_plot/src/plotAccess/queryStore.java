@@ -42,10 +42,12 @@ String currentPlotId=plotId[i].replace('|',' ').trim();
 
 	String action="select";
 	String statement="select PLOT_ID, AUTHORPLOTCODE, project_id, "+
-		"surfGeo,  PLOTTYPE, PLOTORIGINLAT, PLOTORIGINLONG  from PLOT "+
-		"where PLOT_ID = "+currentPlotId;
+		"surfGeo,  PLOTTYPE, PLOTORIGINLAT, PLOTORIGINLONG, PLOTSHAPE, "
+		+" PLOTSIZE, PLOTSIZEACC, ALTVALUE, ALTPOSACC, SLOPEASPECT, SLOPEGRADIENT, "
+		+" SLOPEPOSITION, HYDROLOGICREGIME, SOILDRAINAGE, STATE, CURRENTCOMMUNITY "
+		+" from PLOT where PLOT_ID = "+currentPlotId;
 		
-	String returnFields[]=new String[7];	
+	String returnFields[]=new String[19];	
 	returnFields[0]="PLOT_ID";	
 	returnFields[1]="AUTHORPLOTCODE";
 	returnFields[2]="project_id";
@@ -53,8 +55,21 @@ String currentPlotId=plotId[i].replace('|',' ').trim();
 	returnFields[4]="PLOTTYPE";
 	returnFields[5]="PLOTORIGINLAT";
 	returnFields[6]="PLOTORIGINLONG";
-	int returnFieldLength=7;
-
+	
+	returnFields[7]="PLOTSHAPE";
+	returnFields[8]="PLOTSIZE";
+	returnFields[9]="PLOTSIZEACC";
+	returnFields[10]="ALTVALUE";
+	returnFields[11]="ALTPOSACC";
+	returnFields[12]="SLOPEASPECT";
+	returnFields[13]="SLOPEGRADIENT";
+	returnFields[14]="SLOPEPOSITION";
+	returnFields[15]="HYDROLOGICREGIME";
+	returnFields[16]="SOILDRAINAGE";
+	returnFields[17]="STATE";
+	returnFields[18]="CURRENTCOMMUNITY";
+	
+	int returnFieldLength=19;
 
 	/*
 	* Call the issueSelect method which will return an array with the return
@@ -195,11 +210,53 @@ outPlotIdNum=j.outReturnFieldsNum;
 } //end method
 
 
+/**
+* Method to query the database to get all the plotId's usind as input a array
+* containing the following levels:
+*	1] taxonName, 2] state, 3] elevationMin, 4] elevationMax, 5] surfGeo
+*	6] multipleObs, 7]community
+*
+* @param     queryAttributeArray - array containg the input attributes
+* @param     queryAttributeArrayNum - integer representing the number iof
+*		attributes contained in the array - should be = 7
+* @param     conn  a database connection that was presumedly taken from the pool 
+*/
+
+public void getPlotId(String[] queryAttributeArray, int queryAttributeArrayNum, 
+	Connection conn)
+{
+//map the array to the appropriate attribute
+String taxonName=queryAttributeArray[0];
+String state =queryAttributeArray[1];
+String elevationMin=queryAttributeArray[2];
+String elevationMax=queryAttributeArray[3];
+String surfGeo=queryAttributeArray[4];
+String multipleObs=queryAttributeArray[5];
+String community=queryAttributeArray[6];
+
+
+String action="select";
+String statement="select PLOT.PLOT_ID from PLOT where PLOT.ALTVALUE >="+elevationMin+
+" and PLOT.ALTVALUE <="+elevationMax+" and PLOT.SURFGEO like '%"+surfGeo+"%' and "
++"PLOT.STATE like '%"+state+"%' and PLOT.CURRENTCOMMUNITY like '%"+community+"%' and PLOT_ID in"+
+	"(select PARENTPLOT  from PLOTOBSERVATION  where OBS_ID in"+
+		"(select OBS_ID from TAXONOBSERVATION where AUTHORNAMEID like '%"+taxonName+"%'))";
+String returnFields[]=new String[1];	
+returnFields[0]="PLOT_ID";
+int returnFieldLength=1;
 
 
 
-public String outPlotId[] = new String[10000];  //the output plotIds
-public int outPlotIdNum; //the number of plotId's
+issueStatement j = new issueStatement();
+j.issueSelect(statement, action, returnFields, returnFieldLength, conn);	
+
+
+//grab the returned result set and transfer to a public array
+//ultimately these results are passed to the calling class
+outPlotId=j.outReturnFields;
+outPlotIdNum=j.outReturnFieldsNum;
+	
+} //end method
 
 
 
@@ -212,5 +269,11 @@ public void getPlot(int plotId)
 
 	
 } //end method
+
+
+
+public String outPlotId[] = new String[10000];  //the output plotIds
+public int outPlotIdNum; //the number of plotId's
+
 
 }
