@@ -121,17 +121,14 @@ public int summaryOutputNum; //the number of output rows from the issue sql is m
 
 /**
 * Method to query the database to get all the plotId's 
-* for the plots containing a taxon that matches that in the 
-* input 
+* for the plots containing a taxon that matches the input 
 */
-public void getPlotId(String taxonName)
+public void getPlotId(String queryElement, String queryElementType)
 {
-
-
 String action="select";
 String statement="select PLOT_ID from PLOT where PLOT_ID in"+
 	"(select PARENTPLOT  from PLOTOBSERVATION  where OBS_ID in"+
-		"(select OBS_ID from TAXONOBSERVATION where AUTHORNAMEID like '%"+taxonName+"%'))";
+		"(select OBS_ID from TAXONOBSERVATION where AUTHORNAMEID like '%"+queryElement+"%'))";
 String returnFields[]=new String[1];	
 returnFields[0]="PLOT_ID";
 int returnFieldLength=1;

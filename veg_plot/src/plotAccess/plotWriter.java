@@ -4,22 +4,21 @@ import java.sql.*;
 
 
 
-
 /**
-* This class will insert a plot into the database the string passed to this class is the transformed (via XSLT)
-*  XML data document and the string has both a database address and the data which wil have to be converted to
+* This class will insert a plot into the database the string passed to this 
+* class is the transformed (via XSLT) XML data document and the string has 
+* both a database address and the data which wil have to be converted to
 *  the correct type and then bound to one of the prepared statements
 */
 
 public class plotWriter {
-
-	
 	
 /**
-* This method takes the input stream from the xslt transform and inserts the data into their
-* respective cells, at this point the method is extremely long because there is one or
-* a series of prepared statements for loading each table.  Currently working on a method 
-* in the issueSQL class that will replace all the prepared statements.
+* This method takes the input stream from the xslt transform and inserts the 
+* data into their respective cells, at this point the method is extremely long 
+* because there is one or a series of prepared statements for loading each 
+* table.  Currently working on a method in the issueSQL class that will 
+* replace all the prepared statements.
 */	
 
 public void insertPlot (String[] transformedString, int transformedStringNum) {
@@ -89,9 +88,13 @@ for (int ii=0; ii<addressNum; ii++)
 	String coverScale=dataString[ii+4];
 	String latitude=dataString[ii+5];
 	String longitude=dataString[ii+6];
+	String plotShape=dataString[ii+7];
+	String plotSize=dataString[ii+8];
+	String plotSizeAcc=dataString[ii+9];
+	String altValue=dataString[ii+10];
 	plotWriter g =new plotWriter();  
 	g.putPlot(projectId, authorPlotCode, parentPlot, plotType, samplingMethod, coverScale, latitude,
-	longitude);
+	longitude, plotShape, plotSize, plotSizeAcc, altValue);
 	plotId=g.outPlotId;		
 	}//end if
 				
@@ -246,7 +249,7 @@ try {
 		System.out.println("  Number of redundancies: "+j.outReturnFieldsNum);
 		
 		//return the first project id that matches to caller
-		outProjectId=j.outReturnFields[0];
+		outProjectId=j.outReturnFields[0].replace('|', ' ').trim();;
 	}
 		
 	//if single match found
@@ -268,6 +271,7 @@ try {
 		g.getNextId("test", "project");
 		projectId=g.outNextId;  //assign the projectID
 		outProjectId=""+projectId;
+		outProjectId=outProjectId.replace('|', ' ').trim();
 		
 		//pass the required arguements to the isssue SQl class
 		String insertString="INSERT INTO PROJECT";
@@ -307,9 +311,10 @@ public String outProjectId=null;
 
 private void putPlot (String projectId, String authorPlotCode, String parentPlot, 
 String plotType, String samplingMethod, String coverScale, String latitude, 
-String longitude) {
+String longitude, String plotShape, String plotSize, String plotSizeAcc, String altValue) {
 int plotId=0;
 try {
+
 
 //add here a redundancy checker
 	
@@ -319,13 +324,14 @@ g.getNextId("test", "plot");
 			
 plotId=g.outNextId;  //grab the returned value		
 outPlotId=""+plotId; //pass to public
+System.out.println("PlotID returned: "+plotId);  //this is check the return values 
 		
 //pass the required arguements to the isssue SQl class
 String insertString="INSERT INTO PLOT";
 String attributeString="PLOT_ID, PROJECT_ID, AUTHORPLOTCODE, PARENTPLOT, PLOTTYPE, "+
-"SAMPLINGMETHOD, COVERSCALE, PLOTORIGINLAT, PLOTORIGINLONG";
-int inputValueNum=9;
-String inputValue[]=new String[9];	
+"SAMPLINGMETHOD, COVERSCALE, PLOTORIGINLAT, PLOTORIGINLONG, PLOTSHAPE, PLOTSIZE, PLOTSIZEACC, ALTVALUE";
+int inputValueNum=13;
+String inputValue[]=new String[13];	
 inputValue[0]=""+plotId;
 	System.out.println(" plotId: "+plotId);
 inputValue[1]=projectId;
@@ -343,8 +349,14 @@ inputValue[6]=coverScale;
 inputValue[7]=latitude;
 	System.out.println(" latitude: "+latitude);
 inputValue[8]=longitude;
-	System.out.println(" longitude: "+longitude);
-	
+	System.out.println(" plotShape: "+plotShape);
+inputValue[9]=plotShape;
+	System.out.println(" plotSize: "+plotSize);
+inputValue[10]=plotSize;
+	System.out.println(" plot size accuracy: "+plotSizeAcc);
+inputValue[11]=plotSizeAcc;
+	System.out.println(" elevation: "+altValue);
+inputValue[12]=altValue;
 //get the valueString from the method
 issueStatement k = new issueStatement();
 k.getValueString(inputValueNum);	

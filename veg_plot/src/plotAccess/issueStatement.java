@@ -152,13 +152,16 @@ while (results.next()) {
 	}
 
 	//grab the values out of the vertical store and stick them into a string
-	//that is separated by pipes
+	//that is separated by pipes, this way all the data associated with a 
+	//plot is on a sigle line which can be tokenized later and positioned
+	//into an xml structure
+	
 	String returnedRow="";
 	for (int ii=0;ii<verticalStore.length; ii++) {
 			returnedRow=returnedRow+"|"+verticalStore[ii];
 	}
 		
-	System.out.println("Printed from issueStatement.issueSelect: "+returnedRow);
+	//System.out.println("Printed from issueStatement.issueSelect: "+returnedRow);
 	//outReturnFields[outReturnFieldsNum]=resultLine.toString();
 	outReturnFields[outReturnFieldsNum]=returnedRow;
 	outReturnFieldsNum++;
@@ -170,7 +173,7 @@ conn.close();
 
 } //end if			
 } // end try 
-	catch ( Exception e ){System.out.println("failed at issueStatement.issueSelect "+e.getMessage());e.printStackTrace();}
+catch ( Exception e ){System.out.println("failed at issueStatement.issueSelect "+e.getMessage());e.printStackTrace();}
 
 
 }	
@@ -226,10 +229,9 @@ PreparedStatement pstmt=null;
 	conn.close();
 	
 	} // end try 
-	//catch ( Exception e ){System.out.println("Query failed issueStatement.insert method "+e.getMessage());e.printStackTrace();}
-	catch ( Exception e ){System.out.println("Query failed issueStatement.insert method "+e.getMessage());}
+	catch ( Exception e ){System.out.println("Query failed issueStatement.insert method "+e.getMessage());e.printStackTrace();}
+	//catch ( Exception e ){System.out.println("Query failed issueStatement.insert method "+e.getMessage());}
 }
-
 
 
 /**

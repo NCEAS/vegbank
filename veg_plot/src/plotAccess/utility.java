@@ -10,11 +10,10 @@ import java.util.*;
 
 public class utility {
 
-
-
-	public void utility() 
+public void utility() 
 {
-/*variable to make available to the calling class -- the string containg the db location (table.attribute) and the data*/
+/*variable to make available to the calling class -- the string containg the 
+db location (table.attribute) and the data*/
         
 outString  = null;  //string containg the contents from a converted StringWriter
 outStringNum = 0;  //integer representing the number of elements in the above string array
@@ -23,13 +22,12 @@ outStringNum = 0;  //integer representing the number of elements in the above st
 
 
 /**
-*  this method will take, as input a StringWriter object and return a String Array and the number of vertical
-*  elements in the array structure
+*  this method will take, as input a StringWriter object and return a String Array 
+* and the number of vertical elements in the array structure
 */
 
 public void convertStringWriter  (StringWriter inputStringWriter)
-
-        {
+{
 
 
 try {
@@ -65,10 +63,79 @@ outStringNum=stringContentsNum;
 } //end try
 
 catch( Exception e ) {System.out.println(" failed in: utility "+e.getMessage());}
+}//end method
 
 
-    }
+    
+    
+/**
+* This method will take an array as input and check to see if there are any
+* redundant levels in the array and if there are redundancies will remove them
+* returning to the calling class a unique array
+*/
 
+public void getUniqueArray (String[] inputArray, int inputArrayNum)
+{
+
+try { 
+int uniqueSwitch=0;  //switch is one if redundant otherwise unique is zero
+String uniqueArray[]=new String[100000];
+String inputArrayValue=null;
+String uniqueArrayValue=null;
+int uniqueArrayNum=0;
+
+for (int i=0; i<=inputArrayNum; i++) { 
+	
+	
+	//load the first value into the unique array
+	if (i==0) {
+			uniqueArray[uniqueArrayNum]=inputArray[i];
+			uniqueArrayNum++;
+			//System.out.println("first value: "+inputArray[i]);
+	}
+	
+	//check for redundancies
+	if (i>0) {
+		
+		//make sure that the array value is not null then grab the value
+		if (inputArray[i] != null) {
+			inputArrayValue=inputArray[i].trim();
+		}
+		uniqueSwitch=0;  //make swich 0 for new level
+	
+		for (int ii=0; ii<uniqueArrayNum; ii++) {  //pass thru all uniq vals
+			uniqueArrayValue=uniqueArray[ii].trim();
+						
+			if (uniqueArrayValue.equals(inputArrayValue)) {
+				uniqueSwitch=1;
+				break;
+			}//end if
+	
+		}//end for
+		if (uniqueSwitch==0) {
+			uniqueArray[uniqueArrayNum]=inputArrayValue;
+			uniqueArrayNum++;
+		}
+	}//end if
+	
+} //end for 
+
+//pass to calling class
+outArray=uniqueArray;
+outArrayNum=uniqueArrayNum;
+	
+
+} //end try
+catch( Exception e ) {System.out.println(" failed in: utility.getUniqueArray: "+
+	e.getMessage());e.printStackTrace();}
+} //end method
+public String outArray[]=new String[100000];
+public int outArrayNum;
+
+    
+  
+  
+    
 public String outString[] =new String[100000];
 public int outStringNum;
 

@@ -58,18 +58,19 @@ for (int i=0;i<transformedStringNum; i++) {
 	
 	if (element[i] != null && element[i].startsWith("queryElement")) {
 		
-		if (value[i] != null && value[i].startsWith("taxonName")) { //if this and the above are true then trigger sql stmt below
+		if (value[i] != null && value[i].startsWith("taxonName")) { 
+			//if this and the above are true then trigger sql stmt below
 			//call the queryStore method associated with this request
 			//to get the plot id numbers having the associated taxon
 			queryStore j = new queryStore();
-			j.getPlotId(value[i+1]);
+			j.getPlotId(value[i+1], "taxonName");
 			queryOutput=j.outPlotId;
 			queryOutputNum=j.outPlotIdNum;
 		}  //end if
 	} //end if
 
 	
-	/*determine the type of out put requested by the calling class*/
+	/*determine the type of output requested by the calling class*/
 	if (element[i] != null && element[i].startsWith("resultType")) {
 		//if summary - call the method to return the summary elements
 		if (value[i] != null && value[i].startsWith("summary")) {
