@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: farrell $'
-* '$Date: 2003-11-06 18:41:39 $'
-* '$Revision: 1.71 $'
+* '$Date: 2003-11-12 22:14:43 $'
+* '$Revision: 1.72 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -88,12 +88,12 @@
     <property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/${webapp}/WEB-INF/lib"/>
     <!-- WEB SERVER LOCATIONS -->
     <filter token="base_url" value=""/>
+    <filter token="web_context" value="/${web.context_uri}/"/>
     <filter token="image_server" value="/${web.context_uri}/images/"/>
     <filter token="stylesheet" value="/${web.context_uri}/includes/default.css"/>
     <filter token="plotquery_page" value="/${web.context_uri}/forms/plot-query.jsp"/>
     <filter token="nestedplotquery_page" value="/${web.context_uri}/forms/nested-plot-query.html"/>
     <filter token="uploaddata_page" value="/${web.context_uri}/forms/uploadFile.html"/>
-    <filter token="stylesheet_generator" value="/${web.context_uri}/forms/stylesheet-generator.html"/>
     <filter token="general_link" value="/${web.context_uri}/general/"/>
     <filter token="forms_url" value="/${web.context_uri}/forms/"/>
     <!-- add second token for forms, which is similarly named as other links -->
@@ -109,7 +109,6 @@
     <filter token="manual_link" value="${help}manual/"/>
     <!-- SERVLETS -->
     <filter token="framework_servlet" value="/${web.context_uri}/servlet/framework"/>
-    <filter token="stylesheet_generator_servlet" value="/${web.context_uri}/servlet/stylesheetgenerator"/>
     <filter token="usermanagement_servlet" value="/${web.context_uri}/servlet/usermanagement"/>
     <filter token="datarequestservlet" value="/${web.context_uri}/servlet/DataRequestServlet"/>
     <filter token="datasubmitservlet" value="/${web.context_uri}/servlet/DataSubmitServlet"/>
@@ -137,7 +136,7 @@
   </target>
   <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
   <target name="includes" depends="init" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
-    <copy overwrite="true" todir="${style_server}" filtering="no">
+    <copy overwrite="true" todir="${style_server}" filtering="true">
       <!-- <fileset dir="${style_src}" includes="**.css **/*jsp **.js"/> -->
       <!-- Why not just copy all? -->
       <fileset dir="${style_src}" includes="**.* **/*jsp"/>
@@ -147,6 +146,7 @@
     <copy overwrite="true" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
     <!-- add to second webpage at root/${webapp}/index.html -->
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
+    <copy overwrite="true" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.jsp"/>
     <copy todir="${apache.document.root}/plot/" filtering="yes" file="${basedir}/plot/.htaccess"/>
   </target>
   <!-- DISTRIBUTE THE IMAGES -->
@@ -278,7 +278,7 @@
 	* TARGET TO PUT THE GENERAL HTML DOCS INTO THE CORRECT PLACE
 -->
   <target name="general" depends="hdrftr" description="=&gt; dist the general dir to server">
-    <copydir forceoverwrite="true" src="${general_src}" dest="${general_server}" filtering="yes" includes="**.html" excludes="**/CVS*   vbsummary.html   get_vb_stats_temp.html"/>
+    <copydir forceoverwrite="true" src="${general_src}" dest="${general_server}" filtering="yes" includes="**.html *jsp" excludes="**/CVS*   vbsummary.html   get_vb_stats_temp.html"/>
   </target>
   <!--
 	* TARGET TO PUT THE DESIGN HTML DOCS INTO THE CORRECT PLACE

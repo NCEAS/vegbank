@@ -43,32 +43,6 @@
               <!-- <load-on-startup>5</load-on-startup> -->
             </servlet>
             
-
-            <servlet>
-              <servlet-name>viewData</servlet-name>
-              <description>servlet to allow for the viewing of an xml doc</description>
-              <servlet-class>org.vegbank.servlet.request.viewData</servlet-class>
-              <load-on-startup>5</load-on-startup>
-            </servlet>
-
-
-            <servlet>
-              <servlet-name>stylesheetgenerator</servlet-name>
-              <description>servlet to create a custom stylesheet</description>
-              <servlet-class>org.vegbank.servlet.stylesheet.StyleSheetGenerator</servlet-class>
-              <load-on-startup>5</load-on-startup>
-            </servlet>
-
-
-
-            <servlet>
-              <servlet-name>result-download</servlet-name>
-               <description>a servlet to handle the downloading of a resultset that was just returned from vegbank</description>
-              <servlet-class>org.vegbank.servlet.request.fileDownload</servlet-class>
-              <load-on-startup>5</load-on-startup>
-            </servlet>
-
-
             <servlet>
               <servlet-name>framework</servlet-name>
               <description>The general servlet framework containing a varaiety of utilities</description>
@@ -104,12 +78,6 @@
               <servlet-class>org.vegbank.servlet.request.QueryBuilderServlet</servlet-class>
             </servlet>
 
-            <servlet>
-              <servlet-name>VegbankController</servlet-name>
-              <description>A dispatcher to the commands</description>
-              <servlet-class>org.vegbank.servlet.VegbankController</servlet-class>
-            </servlet>
-
             <!-- The Mappings -->
 
             <!-- Action Servlet Mapping -->
@@ -127,11 +95,6 @@
             <servlet-mapping>
               <servlet-name>ImageServlet</servlet-name>
               <url-pattern>/servlet/img</url-pattern>
-            </servlet-mapping>  
-            
-            <servlet-mapping>
-              <servlet-name>stylesheetgenerator</servlet-name>
-              <url-pattern>/servlet/stylesheetgenerator</url-pattern>
             </servlet-mapping>  
             
             <servlet-mapping>
@@ -159,11 +122,6 @@
               <url-pattern>/servlet/QueryBuilderServlet</url-pattern>
             </servlet-mapping>  
          
-            <servlet-mapping>
-              <servlet-name>VegbankController</servlet-name>
-              <url-pattern>/servlet/VegbankController</url-pattern>
-            </servlet-mapping>  
-            
           <!-- Struts Tag Library Descriptors -->
           <taglib>
             <taglib-uri>/WEB-INF/struts-bean.tld</taglib-uri>

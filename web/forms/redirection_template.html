@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: farrell $'
-  *      '$Date: 2003-11-05 23:10:57 $'
-  *  '$Revision: 1.6 $'
+  *      '$Date: 2003-11-12 22:14:43 $'
+  *  '$Revision: 1.7 $'
   *
   *
   -->
@@ -17,13 +17,13 @@
 
 <TITLE>Automatic Redirection</TITLE>
 <LINK REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css">
-<META HTTP-EQUIV="Refresh" CONTENT="10;URL="@general_link@login.html">
+<META HTTP-EQUIV="Refresh" CONTENT="10;URL="@general_link@login.jsp">
 
 @vegbank_header_html_normal@
 
 <SCRIPT LANGUAGE="JavaScript"><!--
 function redirect () { setTimeout("go_now()",8000); }
-function go_now ()   { window.location.href = "@general_link@login.html"; }
+function go_now ()   { window.location.href = "@general_link@login.jsp"; }
 //--></SCRIPT>
 
 </HEAD>
@@ -37,7 +37,7 @@ function go_now ()   { window.location.href = "@general_link@login.html"; }
 <P>After logging in please navigate back.
 <P>
 <P>If this does not work for any reason use the link below:
-<P><A HREF="@general_link@login.html">VegBank Login</A>
+<P><A HREF="@general_link@login.jsp">VegBank Login</A>
 <P>
 @vegbank_footer_html_tworow@
 

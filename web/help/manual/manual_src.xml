@@ -58,7 +58,7 @@ You may <a href="@usermanagement_servlet@?action=changeusersettings">change info
       </manualHTML>
     </manualItem>
     <manualItem refURL="@forms_link@fetch-password.html" name="forgot-my-password" topic="Forgot my Password">
-      <manualHTML>If you have forgotten your password, use the <a href="@forms_link@fetch-password.html">forgot my password</a> link on the <a href="@general_link@login.html">Login</a> page.  Your password will be emailed to the email address you used to register with VegBank.  If the email account you provided at VegBank registration has been closed, please use a different email account to register for a new account.  If you wish to keep your old account due to certification or plots submitted, please contact the help desk using the <a href="@general_link@contact.html">contact link</a> on the footer.</manualHTML>
+      <manualHTML>If you have forgotten your password, use the <a href="@forms_link@fetch-password.html">forgot my password</a> link on the <a href="@general_link@login.jsp">Login</a> page.  Your password will be emailed to the email address you used to register with VegBank.  If the email account you provided at VegBank registration has been closed, please use a different email account to register for a new account.  If you wish to keep your old account due to certification or plots submitted, please contact the help desk using the <a href="@general_link@contact.html">contact link</a> on the footer.</manualHTML>
     </manualItem>
     <manualItem refURL="@forms_link@certification.html" name="request-certification" topic="Request Certification">
       <manualHTML>
