@@ -3552,15 +3552,15 @@ change through time.</entitySummary>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
       <attReferences>observation.OBSERVATION_ID</attReferences>
+      <attFKTranslationSQL>(select authorObsCode from observation where observation.OBSERVATION_ID=commclass.observation_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the observation table</attNotes>
       <attDefinition>Link to the observation table identifying which observation is being classified.</attDefinition>
       <attForms>
-
-  <formShow name="Summary">439</formShow>
-  <formShow name="Detail">440</formShow>
-</attForms>
+        <formShow name="Summary">439</formShow>
+        <formShow name="Detail">440</formShow>
+      </attForms>
       <update>1.0.0</update>
     </attribute>
     <attribute>
