@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-30 13:03:53 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-06-09 22:47:07 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,18 +67,16 @@ public class CertificationViewAction extends VegbankAction {
 		// get the certId from the form
 		UserDatabaseAccess uda = new UserDatabaseAccess(); 
 		CertificationForm adminCertForm = (CertificationForm)form; 
-		CertificationForm certForm = null;
+		CertificationForm dbCertForm = null;
 
 
 		try {
 			long certId = adminCertForm.getCertId();
 			log.debug("loading cert #" + certId);
 
-			certForm = uda.getCertificationApp(certId);
-			certForm.setCertificationstatus(
-					adminCertForm.getCertificationstatus());
-			certForm.setCertificationstatuscomments(
-					adminCertForm.getCertificationstatuscomments());
+			// get the cert
+			dbCertForm = uda.getCertificationApp(certId);
+
 
 			if (certId == 0) {
 				// check the request next
@@ -105,22 +103,22 @@ public class CertificationViewAction extends VegbankAction {
 				///// PRELOADING
 				///// //////////////////////////
 
-				usrId = certForm.getUsrId();
+				usrId = dbCertForm.getUsrId();
 				log.debug("Preloading certId: " + 
-					certForm.getRequestedCert() + ", " +
-					certForm.getCurrentCertLevelName() + ", " +
-					certForm.getUsrId());
+					dbCertForm.getRequestedCert() + ", " +
+					dbCertForm.getCurrentCertLevelName() + ", " +
+					dbCertForm.getUsrId());
 
 				// set current certification level; use String for display ONLY
 				long userPerms = uda.getUserPermissionSum(usrId);
-				certForm.setCurrentCertLevel(userPerms);
+				dbCertForm.setCurrentCertLevel(userPerms);
 
 				log.debug("setting usr: " + usrId);
-				certForm.setUsrId(usrId);
-				certForm.setCertId(certId);
+				dbCertForm.setUsrId(usrId);
+				dbCertForm.setCertId(certId);
 
 				// using <bean:write> requires this
-				request.setAttribute("certBean", certForm);
+				request.setAttribute("certBean", dbCertForm);
 
 				/*
 				BasicDynaBean hash = new BasicDynaBean( 
@@ -137,18 +135,19 @@ public class CertificationViewAction extends VegbankAction {
 				///// ACTION
 				///// //////////////////////////
 				log.debug("Taking action: " + cmd);
-				usrId = certForm.getUsrId();
+				usrId = dbCertForm.getUsrId();
 				log.debug("got usrId: " + usrId);
 
 				// get status comment
-				String comment = certForm.getCertificationstatuscomments();
-				String newStatus = certForm.getCertificationstatus();
+				String comment = adminCertForm.getCertificationstatuscomments();
+				String newStatus = adminCertForm.getCertificationstatus();
 				log.debug("Updating status: " + newStatus);
+
 
 				if (newStatus.equals("approved")) {
 					// handle approval
 					long curRoles = uda.getUserPermissionSum(usrId);
-					long reqRole = certForm.getRequestedCert();
+					long reqRole = dbCertForm.getRequestedCert();
 					long sum = curRoles | reqRole;
 
 					// update applicant's permissions
@@ -157,9 +156,9 @@ public class CertificationViewAction extends VegbankAction {
 					uda.setUserPermissionSum(usrId, sum);
 					
 					// send email message to the applicant 
-					notifyApplicant(certForm.getEmailAddress(), 
-							certForm.getGivenName() + " " + certForm.getSurName(),
-							certForm.getRequestedCertName(), comment);
+					notifyApplicant(dbCertForm.getEmailAddress(), 
+							dbCertForm.getGivenName() + " " + dbCertForm.getSurName(),
+							dbCertForm.getRequestedCertName(), comment);
 
 					log.debug("updating status of #" + certId + " to " + newStatus);
 					// add and ActionMessage
@@ -169,7 +168,7 @@ public class CertificationViewAction extends VegbankAction {
 					
 					// add and ActionMessage
 					messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-								"messages.cert.approval-email-sent", certForm.getEmailAddress()));
+								"messages.cert.approval-email-sent", dbCertForm.getEmailAddress()));
 					saveMessages(request, messages);
 					///////////////////
 					// Messages are not working.
