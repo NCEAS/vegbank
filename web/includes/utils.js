@@ -83,10 +83,6 @@ function refreshHighlight(checkboxName) {
 	}
 }
 
-function VBNav_viewObsCode(targ,accCode) {
-  eval(targ+".location='/vegbank/servlet/DataRequestServlet?requestDataType=vegPlot&resultType=summary&queryType=simple&accessionCode="+accCode+"'");
-}
-
 
 function MM_jumpMenu(targ,selObj,restore){ //v3.0
   eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
