@@ -47,8 +47,8 @@
     <legend>Supplemental Data</legend>
     <ul>
     <li><a href="@get_link@std/party">People</a></li>
-    <li><a href="@get_link@std/stratummethod">Stratum</a></li>
-    <li><a href="@get_link@std/covermethod">Cover</a></li>
+    <li><a href="@get_link@std/stratummethod">Stratum Methods</a></li>
+    <li><a href="@get_link@std/covermethod">Cover Methods</a></li>
     <li><a href="@get_link@std/project">Projects</a></li>
     <li><a href="@get_link@std/reference">References</a></li>
     </ul>

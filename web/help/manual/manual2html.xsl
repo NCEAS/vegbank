@@ -4,9 +4,9 @@
  *  Authors: @author@
  *  Release: @release@
  *
- *  '$Author: mlee $'
- *  '$Date: 2005-03-15 17:47:05 $'
- *  '$Revision: 1.10 $'
+ *  '$Author: anderson $'
+ *  '$Date: 2005-03-16 06:07:05 $'
+ *  '$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,18 +81,12 @@
     <redirect:write select="$aFile">
       <html>
         <head>
+        @webpage_stylesheets_declaration@
           <title>VegBank Tutorial -- <xsl:value-of select="@topic"/>
           </title>
-          <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
-          <meta http-equiv="Content-Type" content="text/html; charset="/>
-          <script language="JavaScript">
-            <xsl:comment>
-function MM_jumpMenu(targ,selObj,restore){ //v3.0
-  eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
-  if (restore) selObj.selectedIndex=0;
-}
-//</xsl:comment>
-          </script>
+          
+          
+          
         </head>
         <body>
           <a name="{@name}.html"/>

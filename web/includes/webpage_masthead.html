@@ -19,19 +19,19 @@
 
     <br>
     <select class="input-box" name="vegbankNav" onChange="window.location=this.value"><option value="#">Jump to...</option>
-     <option value="@web_context@">VegBank Home</option>
-         <option value="@web_context@DisplayMainMenu.do">Main Menu</option>
-   	<option value="@forms_link@plot-query-simple.jsp">3-in-1 Query</option>
-         <option value="@web_context@LoadPlotQuery.do">Search for Plots</option>
-         <option value="@forms_link@PlantQuery.jsp">Search for Plants</option>
-         <option value="@forms_link@CommQuery.jsp">Search Communities</option>
-         <option value="@general_link@instructions.html">Tutorial</option>
-         <option value="@general_link@faq.html">FAQ</option>
-       <option value="@vegbranch_link@vegbranch.html">VegBranch</option>
-       <option value="@general_link@info.html">Information</option>
-       <option value="@design_link@erd/vegbank_erd.pdf">--ERD</option>
-       <option value="@dbdictionary_link@dd-index.html">--Data Dictionary</option>
-    <option value="@general_link@sitemap.html">VegBank Site Map</option>
+        <option value="@web_context@">Home</option>
+        <option value="@forms_link@plot-query-simple.jsp">Simple plot search</option>
+        <option value="@web_context@LoadPlotQuery.do">Advanced plot search</option>
+        <option value="@forms_link@CommQuery.jsp">Community search</option>
+        <option value="@forms_link@PlantQuery.jsp">Plant search</option>
+        <option value="@general_link@instructions.html">Tutorial</option>
+        <option value="@general_link@info.html">About</option>
+        <option value="@general_link@faq.html">FAQ</option>
+        <option value="">-------</option>
+        <option value="@general_link@sitemap.html">Site map</option>
+        <option value="@vegbranch_link@vegbranch.html">VegBranch</option>
+        <option value="@dbdictionary_link@dd-index.html">Data dictionary</option>
+        <option value="@design_link@erd/vegbank_erd.pdf">ERD</option>
     </select>
     <!-- end permanav -->
     </div>
@@ -46,7 +46,7 @@
   <div id="header-left">
 
    <form action="@forms_link@metasearch.jsp"
-        method="get" name="quicksearch_form">
+        method="post" name="quicksearch_form">
 
    find 
    <select class="input-box" name="selEntity" value="entity" />
@@ -78,14 +78,9 @@
 
   <div id="header-right">
 
-    <ul id="navmenu-left"><li><a href="@web_context@">HOME</a></li>
-    <li><a href="@web_context@LoadPlotQuery.do">SUBMIT DATA</a></li>
-    <li><a href="@general_link@metadata.html">MORE DATA</a></li></ul>
+    <ul id="navmenu-left"><li><a href="@web_context@">HOME</a></li><li><a href="@web_context@DisplayUploadPlotAction.do">SUBMIT DATA</a></li><li><a href="@general_link@metadata.html">MORE DATA</a></li></ul>
 
-    <ul id="navmenu-right">
-     <li><a href="@general_link@faq.html">HELP</a></li>
-     <li><a href="@general_link@instructions.html">ABOUT</a></li>
-     <li><a href="@general_link@sitemap.html">SITE MAP</a></li></ul>
+    <ul id="navmenu-right"><li><a href="@general_link@faq.html">HELP</a></li><li><a href="@general_link@instructions.html">ABOUT</a></li><li><a href="@general_link@sitemap.html">SITE MAP</a></li></ul>
 
   <!-- end header-right -->
   </div>

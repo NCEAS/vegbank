@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.3 2005-03-15 13:55:42 anderson Exp $
+ * $Id: vegbank2005.css,v 1.4 2005-03-16 06:07:05 anderson Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -24,10 +24,31 @@ MAINCONTENT
     display: block;
 }
 #centercontent {
+    /*
     margin-top: -48px;
+    */
+    margin-top: 0px;
     padding: 0 18px 0 18px;
     text-align: left;
+    overflow: visible;
 }
+#centercontent fieldset ul li {
+  margin: 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+#centercontent ol, #centercontent ul, #centercontent li {
+  margin: 0;
+  padding-left: 8px;
+}
+
+#centercontent ul li {
+  list-style-type: disc;
+  list-style-position: outside;
+}
+
+
 
 #maincontent > #centercontent {
     padding: 0 18px 0 18px;
@@ -43,7 +64,9 @@ body>#wrapper {
 }
 
 #centercontent ul {
+/*
     padding-left: 27px;
+*/
 }
 #maincontent > #centercontent ul {
     padding-left: 22px;
@@ -96,12 +119,26 @@ body>#wrapper {
 }
 
 #home-img {
-  padding: 10px 0 2px 4px;
-  display: inline;
+  clear: both;
+  float: left;
+  margin: 10px 0 0 2px;
+  border-width: 0;
 }
 
 #content-3col-a table {
-  display: inline;
+  margin: 1px 0 2px 4px;
+  width: 199px;
+  clear: left;
+  border-width: 0;
+  z-index: 9;
+}
+#centercontent > #content-3col-a table {
+  margin: 1px 0 2px 3px;
+  width: 197px;
+}
+#content-3col-a table td {
+    padding: 2px;
+    text-align: center;
 }
 
 
@@ -213,13 +250,14 @@ HEADER
 #header-data-links {
     position: relative;
     top: 12px;
-    left: 218px;
+    left: 217px;
     font-size: 11px;
     font-weight: normal;
     color: #000;
+    width: 190px;
 }
 #header-left>#header-data-links {
-    left: 225px;
+    left: 220px;
 }
 #header-data-links a {
 	font-size: 11px;
@@ -234,7 +272,7 @@ HEADER
 }
 
 
-/* this is where the 8 nav links live */
+/* this is where the 6 nav links live */
 #header-right {
     float: right;
     height: 66px;
@@ -247,6 +285,7 @@ html>body #header-right {
     margin: -2px 4px 0 0px;
 }
 #header-right a {
+display: none;
     color: #08c;
     font-family: arial, sans-serif;
 	font-size: 11px;
@@ -254,25 +293,24 @@ html>body #header-right {
     text-decoration: none;
     padding: 0;
 }
+
 #header-right ul {
-    display: inline;
     float: left;
     width: 100px;
     margin: 0;
-    padding: 0px 0 0 0;
+    padding: 0;
 }
 #header-right li {
-    white-space: nowrap;
     margin: 0;
     padding: 0;
+    list-style-type: none;
 }
-/*
 #header-right ul li {
-    display: inline;
+    white-space: nowrap;
+    list-style-type: none;
     margin: 0;
     padding: 0;
 }
-*/
 #header-right ul li a {
     display: block;
     text-align: center;
@@ -291,29 +329,18 @@ html>body #header-right ul li a {
     border-bottom: 1px solid #08c;
 }
 /* commented backslash hack hides rule from ie5-mac \*/
-#header-right a {float: none;}  /* end ie5-mac hack */
-#header-right li {
-}
-/*
-#header>#header-right li {
-}
-*/
+#header-right a { }  /* end ie5-mac hack */
 
 
-/* the navmenu divs are side by side with 4 links each */
+/* the navmenu divs are side by side with 3 links each */
 #navmenu-left {
+    margin: 0;
     text-align: center;
     border-left: 3px double #fff;
-}
-#navmenu-left a {
-    padding: 0 7px 0 7px;
 }
 #navmenu-right {
     border-left: 2px dotted #fff;
     text-align: center;
-}
-#navmenu-right a {
-    padding: 0 7px 0 7px;
 }
 
 
@@ -329,7 +356,7 @@ FOOTER
     font-size: 10px;
     height: 24px;
     color: #999;
-    text-align: center;
+    text-align: left;
     background-color: #E6E6CF;
 }
 #wrapper > #footer {
@@ -346,6 +373,7 @@ FOOTER
 }
 #footer ul {
     display: inline;
+    padding-left: 15px;
 }
 #footer li {
     display: inline;
@@ -430,7 +458,7 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit
 .tl {background: url(@images_link@tl.gif) 0 0 no-repeat}
 .tr {background: url(@images_link@tr.gif) 100% 0 no-repeat #ff0; padding:10px}
 .clear {clear: both; font-size: 1px; height: 1px}
-.spacer {clear: both; font-size: 20px; height: 20px}
+.spacer {clear: both; font-size: 10px; height: 10px}
 /* ---------- */
 
 

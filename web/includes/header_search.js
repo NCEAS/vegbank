@@ -2,10 +2,9 @@
 function doSubmit() {
     ent = document.quicksearch_form.selEntity.value;
     xwhereParams = document.quicksearch_form.xwhereParams.value;
-    alert("searching " + ent + " for " + xwhereParams);
     if (xwhereParams == null || xwhereParams == "") {
         // submit to metasearch
-        ent = 'anything';
+        ent = "anything";
         document.quicksearch_form.xwhereParams.value="vb";
     }
 
@@ -13,13 +12,11 @@ function doSubmit() {
         // set action
         document.quicksearch_form.action = "@forms_link@metasearch.jsp";
         document.quicksearch_form.submit();
-        alert("metasearch");
 
     } else {
         getView = "std";
         getName = ent;
         getPk = ent;
-        params = getPk + ";" + ent;
         getExtra = "&xwhereMatchAny=true";
 
 
@@ -44,14 +41,15 @@ function doSubmit() {
             case 'community': 
 				getPk = "commconcept";
 				getName = "commconcept";
+				getExtra = getExtra + "&perPage=5";
                 break;
         }
 
+        params = getPk + ";" + ent;
         getURL = "@get_link@" + getView + "/" + getName + "/" + params + 
                 "?where=where_keywords_pk_in&xwhereKey=xwhere_kw_match&xwhereSearch=true&xwhereParams=" + 
                 xwhereParams + getExtra;
 
-        alert(getURL);
         document.quicksearch_form.action = getURL;
         document.quicksearch_form.submit();
     }

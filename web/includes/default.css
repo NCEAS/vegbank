@@ -240,6 +240,9 @@ ul.compact   {
 				}
 
 
+.center {
+    text-align: center;
+}
 
 /* standard sizes for normal text */
 .sizetiny   { font-size: 8pt }
