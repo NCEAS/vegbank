@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-21 02:23:52 $'
- * '$Revision: 1.10 $'
+ *     '$Date: 2002-02-21 20:21:53 $'
+ * '$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -581,7 +581,7 @@ private int plantUsageKey(String plantName)
 							
 							//update the status add the plant parent here and also
 							statusId = loadPlantStatusInstance(conceptId, plantConceptStatus, "30-JUN-96", 
-							"01-JAN-01", "PLANTS96", partyId);
+							"01-JAN-01", "PLANTS96", partyId, parentName);
 							
 							//first and always load the usage for the code no matter if it is standard or not
 							loadPlantUsageInstanceNew(plantCode, codeNameId, conceptId, "STANDARD", 
@@ -647,6 +647,7 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
 		String rank = "family";
 		String plantCode = "";
 		String commonName = "";
+		String parentName = "";
 		
 		
 		//see if we already loaded this plant
@@ -680,7 +681,7 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
 					plantCode, rank);
 					//update the status
 					statusId = loadPlantStatusInstance(conceptId, plantConceptStatus, 
-					"30-JUN-96", "01-JAN-01", "PLANTS96", partyId);
+					"30-JUN-96", "01-JAN-01", "PLANTS96", partyId, parentName);
 			}
 			
 			//load the plant usage 
@@ -957,26 +958,92 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
  	* plant usage - name usage returns to 
  	* the calling method the primary key for 
  	* that concept - name usage
+	*
+	* @param conceptId
+	* @param status
+	* @param startDate
+	* @param endDate
+	* @param event
+	* @param plantPartyId
  	*/	
 	private int loadPlantStatusInstance(int conceptId, String status, 
-	String startDate, String endDate, String event, int plantPartyId)
+	String startDate, String endDate, String event, int plantPartyId, 
+	String plantParent)
 	{
+		
 		try
 		{
-			String s = "insert into PLANTSTATUS "
-			+"(plantConcept_id, plantconceptstatus, startDate, stopDate, "
-			+" plantPartyComments, plantParty_id)  values(?,?,?,?,?,?) ";
-			PreparedStatement pstmt = conn.prepareStatement(s);
-			//bind the values
-			pstmt.setInt(1, conceptId);
-			pstmt.setString(2, status);
-			pstmt.setString(3, startDate);
-			pstmt.setString(4, stopDate);
-			pstmt.setString(5, event);
-			pstmt.setInt(6, plantPartyId);
-			boolean results = true;
-			results = pstmt.execute();
-			pstmt.close();
+			int parentConceptId = 0;
+			
+			//System.out.println("USDAPlantsLoader > conceptId: " + conceptId);
+			//System.out.println("USDAPlantsLoader > status: " + status);
+			//System.out.println("USDAPlantsLoader > startDate: "+ startDate);
+			//System.out.println("USDAPlantsLoader > endDate: " + endDate);
+			//System.out.println("USDAPlantsLoader > event: " + event);
+			//System.out.println("USDAPlantsLoader > plantPartyId: " + plantPartyId);
+			//System.out.println("USDAPlantsLoader > plantParent: " + plantParent);
+			
+			//get the plant parentId
+			if (plantParent !=null && plantParent.length() > 1 )
+			{
+				String s1 = "select plantConcept_id from plantConcept where plantDescription = '"
+				+plantParent+"'";
+				
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( s1 );
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					parentConceptId = rs.getInt(1);
+					cnt++;
+				}
+				
+				if (cnt > 1 )
+				{
+					System.out.println("USDAPlantsLoader > warning: to many parent concept id's");	
+				}
+				
+				String s = "insert into PLANTSTATUS "
+				+"(plantConcept_id, plantconceptstatus, startDate, stopDate, "
+				+" plantPartyComments, plantParty_id, plantParentName, "
+				+" plantParentConcept_id)  values(?,?,?,?,?,?,?,?) ";
+				PreparedStatement pstmt = conn.prepareStatement(s);
+				//bind the values
+				pstmt.setInt(1, conceptId);
+				pstmt.setString(2, status);
+				pstmt.setString(3, startDate);
+				pstmt.setString(4, stopDate);
+				pstmt.setString(5, event);
+				pstmt.setInt(6, plantPartyId);
+				pstmt.setString(7, plantParent);
+				pstmt.setInt(8, parentConceptId);
+			
+				boolean results = true;
+				results = pstmt.execute();
+				pstmt.close();
+				
+			}
+			else
+			{
+			
+				String s = "insert into PLANTSTATUS "
+				+"(plantConcept_id, plantconceptstatus, startDate, stopDate, "
+				+" plantPartyComments, plantParty_id, plantParentName)  values(?,?,?,?,?,?,?) ";
+				PreparedStatement pstmt = conn.prepareStatement(s);
+				//bind the values
+				pstmt.setInt(1, conceptId);
+				pstmt.setString(2, status);
+				pstmt.setString(3, startDate);
+				pstmt.setString(4, stopDate);
+				pstmt.setString(5, event);
+				pstmt.setInt(6, plantPartyId);
+				pstmt.setString(7, plantParent);
+			
+				boolean results = true;
+				results = pstmt.execute();
+				pstmt.close();
+			}
+		
 		}
 		catch(Exception e)
 		{
