@@ -22,11 +22,17 @@
 <logic:notEmpty name="namedplace-BEANLIST">
 <table class="leftrightborders" cellpadding="2">
 <tr>
+<th>More</th>
                   <%@ include file="autogen/namedplace_summary_head.jsp" %>
                   
                   </tr>
 <logic:iterate id="onerowofnamedplace" name="namedplace-BEANLIST">
 <tr class="@nextcolorclass@">
+<td class="sizetiny">
+<a href="@get_link@detail/namedplace/@subst_lt@bean:write name='onerowofnamedplace' property='namedplace_id' /@subst_gt@">
+                            Details
+                            </a>
+</td>
                        <%@ include file="autogen/namedplace_summary_data.jsp" %>
 <bean:define id="namedplace_pk" name="onerowofnamedplace" property="namedplace_id" />
 
