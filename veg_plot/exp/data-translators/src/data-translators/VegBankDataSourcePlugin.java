@@ -11,8 +11,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: harris $' <br>
- *  '$Date: 2002-07-18 14:38:05 $' <br>
- * 	'$Revision: 1.15 $' <br>
+ *  '$Date: 2002-07-18 23:14:56 $' <br>
+ * 	'$Revision: 1.16 $' <br>
  */
  
 //public class VegBankDataSourcePlugin
@@ -147,17 +147,17 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		try 
 		{
 			stmt = con.createStatement();
-			sb.append("select distinct(AUTHORCODEID) from PLOTSPECIESSSUM where AUTHORNAMEID LIKE '"+plantName+"'"); 
+			sb.append("select distinct(AUTHORPLANTCODE) from PLOTSPECIESSUM where AUTHORNAMEID LIKE '"+plantName+"'"); 
 			ResultSet rs = stmt.executeQuery(sb.toString());
 			while (rs.next()) 
 			{
 				code = rs.getString(1);
 			}
 		}
-		catch (SQLException ex) 
-		{
-			this.handleSQLException( ex );
-		}
+	//	catch (SQLException ex) 
+	//	{
+	//		this.handleSQLException( ex );
+	//	}
 		catch (java.lang.Exception ex) 
 		{   
 			// All other types of exceptions
@@ -1776,10 +1776,21 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			while (rs.next()) 
 			{
 				 s = rs.getString(1);
-				 //if we get null returned then make the value = '999.99'
+				 // IF WE GET A NULL VALUE THEN TAKE THE MAX OF THE SPECIES
 				 if ( s == null )
 				 {
-					 s = "999.99";
+					 sb = new StringBuffer();
+					 sb.append(" select max(PERCENTCOVER) from PLOTSPECIESSUM where ");
+					 sb.append(" AUTHORNAMEID like '"+plantName+"' and PLOT_ID = "+ plotName  );
+					 ResultSet rs1 = stmt.executeQuery( sb.toString() );
+					 while (rs1.next()) 
+					 {
+						 s = rs1.getString(1);
+						 if (s == null )
+						 {
+							 s = "";
+						 }
+					 }
 				 }
 			}
 			stmt.close();

@@ -19,8 +19,8 @@ import PlotDataSource;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: harris $' <br>
- *  '$Date: 2002-07-18 13:45:43 $' <br>
- *  '$Revision: 1.7 $' <br>
+ *  '$Date: 2002-07-18 23:14:56 $' <br>
+ *  '$Revision: 1.8 $' <br>
  */
 
  
@@ -669,6 +669,9 @@ public class PlotXmlWriterV2
 			{
 				sb.append("<taxonObservation> \n" );
 				sb.append("  <authorNameId>"+ plantName.replace('&', ' ') +"</authorNameId> \n" );
+				// GET THE ASSOCIATED PLANT CODE
+				String code = datasrc.getPlantTaxonCode(plantName);
+				sb.append("  <authorCodeId>"+ code +"</authorCodeId> \n" );
 				
 				//this is the cover of this taxon accross all strata
 				sb.append("   <taxonCover>"+datasrc.getCummulativeStrataCover(plantName, plotCode)+"</taxonCover> \n");
