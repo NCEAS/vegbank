@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-14 09:43:37 $'
- *	'$Revision: 1.23 $'
+ *	'$Date: 2004-10-21 15:12:43 $'
+ *	'$Revision: 1.24 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -343,16 +343,20 @@ public class GenericCommand
 	 */
 	private String buildFormattedWhereClause(String whereClause, String[] whereParams, String selectClause) {
 
-		/*
-		whereParams = new String[3];
-		whereParams[0] = "party";
-		whereParams[1] = "detailed";
-		whereParams[2] = "gill";
-		*/
-
 		this.whereClauseFormatted = "";
 		boolean hasWhereClause = !Utility.isStringNullOrEmpty(whereClause);
-		boolean hasParams = (whereParams != null && whereParams.length > 0);
+		boolean hasParams = false;
+		if (whereParams != null) {
+			hasParams = true;
+			if (whereParams.length == 0) {
+				hasParams = false;
+			} else if (whereParams.length == 1) {
+				if (Utility.isStringNullOrEmpty(whereParams[0])) {
+					hasParams = false;
+				}
+			}
+		}
+
 		MessageFormat format;
 
 		log.debug("hasWhereClause: " + hasWhereClause);

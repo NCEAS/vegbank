@@ -21,18 +21,10 @@ MM_preloadImages(
 		'@image_server@btn_advplot_on.jpg',
 		'@image_server@btn_login_on.jpg');
 
-function setWhere(cb) {
-	if (cb.checked) {
-		document.metasearch_form.kwType.value = "brief";
-		document.metasearch_form.where.value = "where_keywords_brief";
-	} else {
-		document.metasearch_form.kwType.value = "detailed";
-		document.metasearch_form.where.value = "where_keywords_detailed";
-	}
-}
 
 // -->
-</script></head>
+</script>
+</head>
 
 
 <body>
@@ -130,19 +122,13 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 			</span>  
 
 			<br>
-			 <input type="hidden" name="where" value="where_keywords_detailed"/>
-			 <input type="hidden" name="kwType" value="detailed"/>
-			 <input type="text" name="wparam" size="30" value=""/>
+			 <input type="text" name="xwhereParams" size="30" value=""/>
 		 	 <html:submit value="search"/>
 		</td>
 		</tr>
 		<tr><td></td><td align="right">
-			 <input type="checkbox" name="quick" value="true" 
-			 	onclick="javascript:setWhere(this);"/>Quick search?
-
-			
-			
-			
+			 <input type="checkbox" name="xwhereGlue" value="and" checked/>
+			 	Match all words
 			
 		</td>
 		<td></td>

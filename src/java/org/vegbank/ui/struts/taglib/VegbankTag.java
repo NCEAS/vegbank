@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-14 09:44:06 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-10-21 15:13:25 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.Utility;
  * Abstract base class tag.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.4 $ $Date: 2004-10-14 09:44:06 $
+ * @version $Revision: 1.5 $ $Date: 2004-10-21 15:13:25 $
  */
 
 public abstract class VegbankTag extends TagSupport {
@@ -80,12 +80,12 @@ public abstract class VegbankTag extends TagSupport {
         String attribValue;
 		try {
 			// look in the request
-			log.debug("Finding " + attribName + " with Request.getParameter()");
+			//log.debug("Finding " + attribName + " with Request.getParameter()");
         	attribValue = pageContext.getRequest().getParameter(attribName);
 			if (attribValue == null || attribValue.equals("")) {
 				
 				// find in other scopes
-				log.debug("Finding " + attribName + " with RequestUtils.lookup()");
+				//log.debug("Finding " + attribName + " with RequestUtils.lookup()");
 				attribValue = (String)RequestUtils.lookup(pageContext, attribName, null);
 			}
 
@@ -104,7 +104,7 @@ public abstract class VegbankTag extends TagSupport {
 
 
 	/**
-	 *
+	 * Gets attribName from value in attribValue if attribValue[0] is set.
 	 */
     protected String[] findAttributeArray(String attribName, String[] attribValue) {
 
@@ -131,26 +131,26 @@ public abstract class VegbankTag extends TagSupport {
         String[] attribValue;
 		try {
 			// look in the request
-			log.debug("Finding " + attribName + " with Request.getParameter()");
+			//log.debug("Finding " + attribName + " with Request.getParameter()");
         	attribValue = pageContext.getRequest().getParameterValues(attribName);
 			if (Utility.isArrayNullOrEmpty(attribValue)) {
 				// find in other scopes
-				log.debug("Finding " + attribName + " with RequestUtils.lookup()");
+				//log.debug("Finding " + attribName + " with RequestUtils.lookup()");
 				attribValue = (String[])RequestUtils.lookup(pageContext, attribName, null);
 			}
 
-			if (attribValue == null) {
-				attribValue = new String[1];
-				attribValue[0] = "";
-			} 
-
-
 		} catch (JspException jspex) {
-			attribValue = new String[1];
-			attribValue[0] = "";
+			attribValue = null;
 		}
 
-		log.debug("findAttributeArray: " + attribName + " ARRAY SIZE = " + attribValue.length);
+		/*
+		if (attribValue == null) {
+			attribValue = new String[1];
+			attribValue[0] = "";
+		} 
+		*/
+
+		//log.debug("findAttributeArray: " + attribName);
 		return attribValue;
     }
 

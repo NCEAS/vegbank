@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-14 09:44:06 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2004-10-21 15:13:25 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ package org.vegbank.ui.struts.taglib;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.text.SimpleDateFormat;
+import java.text.MessageFormat;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.Format;
@@ -55,13 +56,15 @@ import org.vegbank.common.utility.Utility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.11 $ $Date: 2004-10-14 09:44:06 $
+ * @version $Revision: 1.12 $ $Date: 2004-10-21 15:13:25 $
  */
 
 public class VegbankGetTag extends VegbankTag {
 
 	private static final Log log = LogFactory.getLog(VegbankGetTag.class);
 
+	private static ResourceBundle sqlResources = 
+			ResourceBundle.getBundle("org.vegbank.common.SQLStore");
 
     /**
      * Process the start tag.
@@ -248,9 +251,9 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * Key in SQLStore.properties that defines SQL select clause.
+     * 
      */
-	protected String wparam;
+	protected String wparam = null;
 
     public String getWparam() {
 		String s = findAttribute("wparam", this.wparam);
@@ -258,54 +261,60 @@ public class VegbankGetTag extends VegbankTag {
 			s = s.toLowerCase();
 		}
 
-		// prepare the wparam string for regex ~* match
-		if (Boolean.valueOf(getWparamSearch()).booleanValue()) {
-			s = addPosixRegex(s);
-		}
-
 		return s;
     }
 
     public String[] getWparamArray() {
 		String[] arr;
-		//String tmp = getWparam();
+
+		// override if set explicitely
 		String tmp = this.wparam;
 		if (!Utility.isStringNullOrEmpty(tmp)) {
-			arr = new String[1];
-			arr[0] = getWparam();
-			log.debug("RETURNING 1 WPARAM");
+			// check for xwhere
+			if (getXwhereEnable()) {
+				arr = new String[2];
+				arr[0] = getWparam();
+				arr[1] = getXwhereClause();
+				log.debug(this.select + " has 1 WPARAM + XWHERE");
+			} else {
+				arr = new String[1];
+				arr[0] = getWparam();
+				log.debug(this.select + " has 1 WPARAM");
+			}
+
 			return arr;
 		}
 
-		log.debug("MULTIPLE WPARAMS");
-		boolean wparamSearch = Boolean.valueOf(getWparamSearch()).booleanValue();
-		int lastPos;
+
+		//log.debug(this.select + " MULTIPLE WPARAMS");
 		arr = findAttributeArray("wparam", null);
 		if (arr != null) {
-			/*
-			if (arr.length == 1) {
-				String[] tmpArr = { arr[0] };
-				return tmpArr;
-			}
-			*/
-
 			for (int i=0; i<arr.length; i++) {
-				arr[i] = arr[i].toLowerCase();
-				lastPos = arr[i].length()-1;
-				if (arr[i].charAt(0) == '\'' && arr[i].charAt(lastPos) == '\'') {
-					log.debug("Removing 'single' quotes");
-					arr[i] = arr[i].substring(1, lastPos);
-					
-				}
-				
-				// prepare the wparam string for regex ~* match
-				if (wparamSearch) {
-					arr[i] = addPosixRegex(arr[i]);
-				}
-
+				arr[i] = stripSingleQuotes(arr[i]);
 			}
 		}
 
+		if (getXwhereEnable()) {
+			log.debug("xwhere enabled!");
+
+			// add the xwhereClause to the end of the wparam array
+			int i=0;
+			String[] wpArr;
+			if (arr == null) {
+				wpArr = new String[1];
+			} else {
+				wpArr = new String[arr.length+1];
+				for (i=0; i<arr.length; i++) {
+					wpArr[i] = arr[i];
+				}
+			}
+			wpArr[i] = getXwhereClause();
+
+			log.debug("added xwhere clause: " + wpArr[i]);
+			return wpArr;
+		}
+
+		log.debug("xwhere NOT enabled");
 		return arr;
     }
 
@@ -371,33 +380,261 @@ public class VegbankGetTag extends VegbankTag {
     /**
      * 
      */
-	protected String wparamSearch;
+	protected boolean xwhereSearch;
 
-    public String getWparamSearch() {
-        return findAttribute("wparamSearch", this.wparamSearch);
+    public boolean getXwhereSearch() {
+		log.debug("get xwhereSearch: " + xwhereSearch);
+		if (xwhereSearch) {
+			return true;
+		}
+
+        setXwhereSearch(findAttribute("xwhereSearch"));
+		return this.xwhereSearch;
     }
 
-    public void setWparamSearch(String s) {
-        this.wparamSearch = s;
+    public void setXwhereSearch(String s) {
+        this.xwhereSearch = Utility.isStringTrue(s);
     }
 
+    public void setXwhereSearch(boolean b) {
+        this.xwhereSearch = b;
+    }
+
+    /**
+     * 
+     */
+	protected boolean xwhereEnable = false;
+
+    public boolean getXwhereEnable() {
+		if (this.xwhereEnable) {
+			return true;
+		}
+
+        setXwhereEnable(findAttribute("xwhereEnable"));
+        return this.xwhereEnable;
+    }
+
+    public void setXwhereEnable(String s) {
+		log.debug("setXwhereEnable(string): " + s);
+		this.xwhereEnable = Utility.isStringTrue(s);
+    }
+    public void setXwhereEnable(boolean b) {
+		log.debug("setXwhereEnable(boolean): " + b);
+		this.xwhereEnable = b;
+    }
+
+    /**
+     * 
+     */
+	protected String xwhereKey;
+
+    public String getXwhereKey() {
+        return findAttribute("xwhereKey", this.xwhereKey);
+    }
+
+	/**
+	 * Gets SQL, swaps in xwhereParams and handles xwhereSearch.
+	 */
+    public String getXwhereClause() {
+		String xwKey = getXwhereKey();
+		if (Utility.isStringNullOrEmpty(xwKey)) {
+			return "";
+		}
+
+		String xwClause = sqlResources.getString(xwKey);
+		String xwParams = getXwhereParams();
+		String[] xwParamArray;
+
+		if (!Utility.isStringNullOrEmpty(xwParams)) {
+			xwParams = xwParams.replaceAll("%20", " ");
+		}
+
+		log.debug("xwhereClause: " + xwClause);
+		log.debug("xwhereParams: " + xwParams);
+
+		if (Utility.isStringNullOrEmpty(xwClause)) {
+			return "";
+		}
+
+		boolean isSearch = getXwhereSearch();
+
+		if (xwParams.indexOf(";") == -1) {
+			// only one xwParam
+			// format xwClause with xwParams as is
+			xwParamArray = new String[1];
+
+			if (isSearch) {
+				xwParamArray[0] = makeStringSearchable(xwParams, xwClause, getXwhereGlue());
+			} else {
+				xwParamArray[0] = xwParams;
+			}
+
+		} else {
+			// there are multiple xwParam values
+			StringTokenizer stParams = new StringTokenizer(xwParams, ";");
+			xwParamArray = new String[stParams.countTokens()];
+			int j=0;
+			while (stParams.hasMoreTokens()) {
+				if (isSearch) {
+					xwParamArray[j++] = makeStringSearchable(stParams.nextToken(), xwClause, getXwhereGlue());
+				} else {
+					xwParamArray[j++] = stParams.nextToken();
+				}
+			}
+		}
+
+		// expand the entire xwClause
+		MessageFormat format = new MessageFormat(xwClause);
+		StringBuffer sb = new StringBuffer(xwParamArray.length * 24);
+		boolean first = true;
+		String[] arr = new String[1];
+		for (int i=0; i<xwParamArray.length; i++) {
+			if (first) { first = false;
+			} else { sb.append(" AND "); }
+
+			if (isSearch) {
+				sb.append(xwParamArray[i]);
+			} else {
+				arr[0] = xwParamArray[i];
+				sb.append(format.format(arr));
+			}
+		}
+
+		return sb.toString();
+    }
+
+    public void setXwhereKey(String s) {
+        this.xwhereKey = s;
+    }
+
+    /**
+     * 
+     */
+	protected String xwhereParams;
+
+    public String getXwhereParams() {
+        return findAttribute("xwhereParams", this.xwhereParams);
+    }
+
+    public void setXwhereParams(String s) {
+        this.xwhereParams = s;
+    }
+
+    /**
+     * 
+     */
+	protected String xwhereGlue;
+
+    public String getXwhereGlue() {
+        return findAttribute("xwhereGlue", this.xwhereGlue);
+    }
+
+    public void setXwhereGlue(String s) {
+        this.xwhereGlue = s;
+    }
 
 	/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-	private String addPosixRegex(String s) {
+	/**
+	 * @param 
+	 */
+	/*
+	private String addPosixRegex(String s, String regexOp) {
 		StringBuffer sb = new StringBuffer(128);
 		StringTokenizer st = new StringTokenizer(s, " ");
+		String next;
 		boolean first = true;
+		boolean isAnd = regexOp.equals("");
+		if (isAnd) {
+			// final string will be 
+			// abc.*def.*ghi|ghi.*def.*abc
+			// which isn't right
+			regexOp = ".*";
+		}
 
 		while (st.hasMoreTokens()) {
 			if (first) { 
 				first = false;
 			} else { 
-				sb.append("|"); 
+				if (isAnd) {
+					appendix.insert(regexOp); 
+				}
+				sb.append(regexOp); 
 			}
 
-			sb.append(st.nextToken());
+			next = st.nextToken();
+			if (isAnd) {
+				appendix.insert(next); 
+			}
+			sb.append(next);
+		}
+
+		if (isAnd) {
+			sb.append("|").append(appendix);
 		}
 		return sb.toString();
 	}
+	*/
+
+	/**
+	 *
+	 */
+	private String stripSingleQuotes(String s) {
+		if (!Utility.isStringNullOrEmpty(s) && s.length() > 2) {
+			s = s.toLowerCase();
+			int lastPos = s.length()-1;
+			if (s.charAt(0) == '\'' && s.charAt(lastPos) == '\'') {
+				log.debug("Removing 'single' quotes");
+				s = s.substring(1, lastPos);
+			}
+		}
+		return s;
+	}
+
+	/**
+	 *
+	 */
+	private String makeStringSearchable(String xwParam, String xwClause, String type) {
+		StringTokenizer stWords = new StringTokenizer(xwParam, " ");
+		int numWords = stWords.countTokens();
+
+		MessageFormat format = new MessageFormat(xwClause);
+		String[] arr = new String[1];
+
+		// handle AND specially
+		if (numWords > 1 && getXwhereGlue().equalsIgnoreCase("and")) {
+			StringBuffer sb = new StringBuffer(numWords * xwParam.length() * 2);
+
+			// repeat the swapped xwClause for each word in order to match all words
+			boolean first = true;
+			while (stWords.hasMoreTokens()) {
+				if (first) { first = false;
+				} else { sb.append(" AND "); }
+
+				arr[0] = stWords.nextToken();
+				log.debug("formatting with: " + arr[0]);
+				sb.append(format.format(arr));
+			}
+
+//			for (int j=0; j<numWords; j++) {
+//				if (j>0) {
+//					sb.append(".*");
+//				}
+//
+//				sb.append("(").append(xwParam).append(")");
+//			}
+
+			xwParam = sb.toString();
+
+		} else {
+			// matching any word (OR) is easy
+			log.debug("Just one word or ANY match");
+			arr[0] = xwParam.replace(' ', '|');
+			xwParam = format.format(arr);
+		}
+
+		log.debug("searchable xwParam: " + xwParam);
+		return xwParam;
+	}
+
 }

@@ -64,7 +64,27 @@
 	<rtexprvalue>true</rtexprvalue>
 </attribute>
 <attribute>
-	<name>wparamSearch</name>
+	<name>xwhereSearch</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>xwhereEnable</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>xwhereKey</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>xwhereParams</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>xwhereGlue</name>
 	<required>false</required>
 	<rtexprvalue>true</rtexprvalue>
 </attribute>

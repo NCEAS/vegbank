@@ -29,8 +29,8 @@ import org.vegbank.common.model.Plantstatus;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2004-10-14 09:43:37 $'
- * '$Revision: 1.38 $'
+ * '$Date: 2004-10-21 15:13:25 $'
+ * '$Revision: 1.39 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -326,6 +326,16 @@ public class Utility
 		return ( stringToCheck == null || stringToCheck.equals("") );
 	}
 
+	/**
+	 * Return true if string is not "false", "no", "O", empty or null.
+	 */
+	public static boolean isStringTrue(String stringToCheck)
+	{
+		return !(Utility.isStringNullOrEmpty(stringToCheck) ||
+				stringToCheck.equalsIgnoreCase("false") ||
+				stringToCheck.equalsIgnoreCase("no") ||
+				stringToCheck.equalsIgnoreCase("0"));
+	}
 	
 	/**
 	 * <p>

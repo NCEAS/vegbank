@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-14 09:43:37 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-10-21 15:13:25 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -156,9 +156,9 @@ public class KeywordGen {
 		}
 		System.out.println("Got entity query: " + entityQuery);
 
-		String selectBrief = res.getString("select.brief." + entityName);
-		StringTokenizer st = new StringTokenizer(selectBrief, ",");
-		int numBriefFields = st.countTokens();
+		String select = res.getString("select." + entityName);
+		StringTokenizer st = new StringTokenizer(select, ",");
+		int numFields = st.countTokens();
 
 
 		// count records
@@ -205,9 +205,9 @@ public class KeywordGen {
 
 		// get metadata
 		ResultSetMetaData rsmd = rs.getMetaData();
-		int numFields = rsmd.getColumnCount();
+		numFields = rsmd.getColumnCount();
 		String tmpValue, tmpField;
-		StringBuffer kwDetailed, kwBrief;
+		StringBuffer kwDetailed;
 
 		// set up the progress meter
 		StatusBarUtil sb = new StatusBarUtil();
@@ -228,21 +228,16 @@ public class KeywordGen {
 			}
 
 			kwDetailed = new StringBuffer(256);
-			kwBrief = new StringBuffer(128);
 
 			for (int i=1; i<numFields; i++) {
 				tmpValue = rs.getString(i);
 				if (tmpValue != null && !tmpValue.equals("null")) {
 					kwDetailed.append(KW_DELIM).append(tmpValue);
-
-					if (i <= numBriefFields) {
-						kwBrief.append(KW_DELIM).append(tmpValue);
-					}
 				}
 
 			}
 			
-			insertRow(pstmt, tmpId, entityName, kwBrief.toString(), kwDetailed.toString());
+			insertRow(pstmt, tmpId, entityName, kwDetailed.toString());
 		}
 
 		// tidy up the end of the status bar
@@ -256,12 +251,11 @@ public class KeywordGen {
 
 
 	private void insertRow(PreparedStatement pstmt, long tableId, 
-			String entity, String brief, String detailed) throws SQLException {
+			String entity, String detailed) throws SQLException {
 		
 		pstmt.setLong(1, tableId);
 		pstmt.setString(2, entity);
-		pstmt.setString(3, brief);
-		pstmt.setString(4, detailed);
+		pstmt.setString(3, detailed);
 
 		pstmt.executeUpdate();
 	}
@@ -274,7 +268,7 @@ public class KeywordGen {
 	private PreparedStatement getUpdatePreparedStatement(String entityName) throws SQLException {
 
 		return conn.prepareStatement(
-				"UPDATE keywords SET table_id = ?, brief_keywords = ?, detailed_keywords = ? WHERE table_id = ?");
+				"UPDATE keywords SET table_id = ?, keywords = ? WHERE table_id = ?");
 	}
 
 
@@ -283,7 +277,7 @@ public class KeywordGen {
 	 */
 	private PreparedStatement getInsertPreparedStatement(String entityName) throws SQLException {
 		return conn.prepareStatement(
-			"INSERT INTO keywords (table_id,entity,brief_keywords,detailed_keywords) VALUES (?,?,?,?)");
+			"INSERT INTO keywords (table_id,entity,keywords) VALUES (?,?,?)");
 	}
 
 
@@ -300,36 +294,27 @@ public class KeywordGen {
 	 */
 	private String getEntityQuery(String entityName) {
 
-		String query = null;
 		String pkField = res.getString("pk." + entityName);
 		String from = res.getString("from." + entityName);
-		String select;
+		String select = res.getString("select." + entityName);
+
+		if (Utility.isStringNullOrEmpty(select)) {
+			System.err.println("ERROR: select." + entityName + " must be specified");
+			return null;
+		}
+
+		if (Utility.isStringNullOrEmpty(from)) {
+			System.err.println("ERROR: from." + entityName + " must be specified");
+			return null;
+		}
 
 
 		if (Utility.isStringNullOrEmpty(pkField)) {
-			System.err.println("ERROR: PK field for " + entityName +
-					" must be specified");
+			System.err.println("ERROR: pk." + entityName + " must be specified");
 			return null;
 		}
 
-		// add the pk field, then the brief fields
-		select = "DISTINCT " + pkField + "," + res.getString("select.brief." + entityName);
-
-		if (!Utility.isStringNullOrEmpty(select) && !select.endsWith(",")) {
-			select += ",";
-		}
-
-		// add the detailed fields
-		select += res.getString("select.detailed." + entityName);
-		
-		if (Utility.isStringNullOrEmpty(select) || 
-				Utility.isStringNullOrEmpty(from)) {
-			return null;
-		}
-
-		query = "SELECT " + select + " FROM " + from;
-
-		return query;
+		return "SELECT DISTINCT " + pkField + "," + select + " FROM " + from;
 	}
 
 
