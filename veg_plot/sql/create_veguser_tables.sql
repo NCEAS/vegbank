@@ -7,8 +7,8 @@
  *	
  *
  * '$Author: harris $'
- * '$Date: 2002-06-13 13:02:24 $'
- * '$Revision: 1.3 $'
+ * '$Date: 2002-06-18 14:44:06 $'
+ * '$Revision: 1.4 $'
  *
  */
 
@@ -34,7 +34,13 @@ CREATE table user_info (
 	initial_ip_address varchar(50),
 	given_name  varchar(50),
 	sur_name  varchar(50),
-	remote_address  varchar(50)
+	remote_address  varchar(50),
+	address varchar(500),
+	phone_number varchar(20),
+	phone_type varchar(12),
+	state varchar(20),
+	country varchar(50),
+	zip_code varchar(20)
 );
 
 CREATE table user_submitted_queries (
@@ -75,7 +81,7 @@ current_institution  varchar(50),
 current_position varchar(200),
 esa_certified varchar(12),
 prof_experience_doc  varchar(500),
-revevant_pubs  varchar(500),
+relevant_pubs  varchar(500),
 veg_sampling_doc  varchar(500),
 veg_analysis_doc  varchar(500),
 usnvc_experience_doc  varchar(500),
