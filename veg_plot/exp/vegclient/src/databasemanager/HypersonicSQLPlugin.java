@@ -9,8 +9,8 @@
  * 		@version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2001-10-11 11:15:01 $'
- *     '$Revision: 1.3 $'
+ *     '$Date: 2001-10-11 12:38:37 $'
+ *     '$Revision: 1.4 $'
  */
 package vegclient.databasemanager;
 
@@ -134,6 +134,19 @@ public class HypersonicSQLPlugin implements DatabaseManagerPluginInterface
 		System.out.println("creating the base tables on the HypersonicSQL database platform");
 		
 		sqlFile.insertStatement(baseTablesScript);
+		
+	}
+	
+		
+	/** 
+	 * method that creates the summary tables -- used for querying
+	 *
+	 */
+	public void createSummaryTables()
+	{
+		System.out.println("creating the base tables on the HypersonicSQL database platform");
+		
+		sqlFile.insertStatement(summaryTablesScript);
 		
 	}
 

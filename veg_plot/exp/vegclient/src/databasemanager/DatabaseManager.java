@@ -6,8 +6,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-11 11:15:01 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2001-10-11 12:38:37 $'
+ * 	'$Revision: 1.3 $'
  */
  
 package vegclient.databasemanager;
@@ -111,7 +111,19 @@ public class DatabaseManager
 	 
 	public void createSummaryTables( )
 	{
-		sqlFile.insertStatement(summaryTablesScript);
+		try 
+		{
+    	//cast the object and make the call to the interface specified runCode
+   	 //method. 
+	 	  ((DatabaseManagerPluginInterface)pluginObj).createSummaryTables(  );
+		}
+		
+		 catch(Exception e)
+    {
+      System.out.println("Error : " + e.getMessage());
+			e.printStackTrace();
+    }
+		//sqlFile.insertStatement(summaryTablesScript);
 	}
 	
 	

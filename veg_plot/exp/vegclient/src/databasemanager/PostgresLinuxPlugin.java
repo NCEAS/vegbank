@@ -7,8 +7,8 @@
  * 		@version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2001-10-11 11:15:01 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2001-10-11 12:38:37 $'
+ *     '$Revision: 1.3 $'
  */
 package vegclient.databasemanager;
 
@@ -242,5 +242,15 @@ public class PostgresLinuxPlugin implements DatabaseManagerPluginInterface
 		//sqlFile.insertStatement(baseTablesScript);
 	}
 	
-
+	/** 
+	 * method that creates the summary tables -- used for querying
+	 *
+	 */
+	public void createSummaryTables()
+	{
+		System.out.println("creating the base tables on the Postgres database platform");
+		
+		sqlFile.insertStatement(summaryTablesScript);
+		
+	}
 }
