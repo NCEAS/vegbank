@@ -32,15 +32,16 @@ import java.net.URL;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2001-07-19 03:37:39 $'
- *  '$Revision: 1.9 $'
+ *  '$Date: 2001-07-20 05:14:56 $'
+ *  '$Revision: 1.10 $'
  * 
  */
 
 public class QueryBuilderServlet extends HttpServlet 
 {
 
-	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
+	ResourceBundle rb = ResourceBundle.getBundle("veg_servlet");
+	private String DataRequestServletURL = rb.getString("requestparams.DataRequestServletURL");
 	public DataRequestServlet drs = new DataRequestServlet();
 	public servletUtility su = new servletUtility();
 	public GetURL gurl = new GetURL();
@@ -145,8 +146,8 @@ public class QueryBuilderServlet extends HttpServlet
           sb.append("operator="+operator+"&criteria="+criteria+"&value="+value);
       }
       //connect to the DataRequestServlet
-      String uri = "http://dev.nceas.ucsb.edu/harris/servlet/DataRequestServlet"
-        +sb.toString().trim();
+			//String uri = "http://dev.nceas.ucsb.edu/harris/servlet/DataRequestServlet"
+			String uri = DataRequestServletURL+"/"+sb.toString().trim();
 			System.out.println("OUT PARAMETERS: "+uri);
       int port=80;
       String requestType="POST";
