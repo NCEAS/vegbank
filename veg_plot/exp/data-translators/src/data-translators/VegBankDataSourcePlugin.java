@@ -12,33 +12,54 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-10 18:42:56 $'
- * 	'$Revision: 1.9 $'
+ *  '$Date: 2002-04-17 01:57:22 $'
+ * 	'$Revision: 1.10 $'
  */
  
 //public class VegBankDataSourcePlugin
 public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 {
+	//private String driver = "sun.jdbc.odbc.JdbcOdbcDriver";
+	//private String dbUrl = "jdbc:odbc:vegbank_access";
 	
+	//variables below are for VEGBANK on postgresql
 	private String driver = "org.postgresql.Driver";
-	//private String dbUrl = "jdbc:postgresql://vegbank.nceas.ucsb.edu/plots_dev";
-	private String dbUrl = "jdbc:postgresql://127.0.0.1/plots_dev";
+	private String dbUrl = "jdbc:postgresql://vegbank.nceas.ucsb.edu/plots_dev";
 	private String dbUser = "datauser";
-	private Connection con = null;
-
+	public Connection con = null;
 	
 	/**
-	 * constructor for this class
+	 * constructor -- assume that if this constructor is being called then the 
+	 * default database is to be accessed.  There may be times when the calling
+	 * class wants to specify the database type -- like the class that supports
+	 * access to the Access VegBank access version where the class wants to 
+	 * specify the database type as an access database type
 	 */
-	public VegBankDataSourcePlugin() 
+	public VegBankDataSourcePlugin()
 	{
+		//use the default database -- postgresql
+		this("postgresql");
+	}
+	
+	/**
+	 * constructor for this class.  The input parameter is the database type
+	 * so that the class can determine the type of database parameters to 
+	 * use
+	 * @param databaseType -- includes: postgresql, oracle, msaccess -- for now 
+	 */
+	public VegBankDataSourcePlugin(String databaseType)
+	{
+		System.out.println("VegBankDataSourcePlugin > using database type: " + databaseType);
 		try 
 		{
+			if (databaseType.equals("msaccess"))
+			{
+				driver = "sun.jdbc.odbc.JdbcOdbcDriver";
+				dbUrl = "jdbc:odbc:vegbank_access";
+			}
+			//else use the default database settings
 			con = this.getConnection();
-			// Get the DatabaseMetaData object and display
-			// some information about the connection
 			DatabaseMetaData dma = con.getMetaData();
-			
 			System.out.println("VegBankDataSourcePlugin > Connected to " + dma.getURL() );
 			System.out.println("VegBankDataSourcePlugin > Driver       " + dma.getDriverName() );
 			System.out.println("VegBankDataSourcePlugin > Version      " + dma.getDriverVersion() );
@@ -289,7 +310,29 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
  	 */
  	 public boolean isPlotPermanent(String plotName)
  	 {
- 	 	return(true);
+		boolean b = true; //default is true
+ 	 	String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select permanence "
+			+" from PLOT where PLOT_ID = " + plotName );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+				 if ( s.toUpperCase().equals("false") )
+				 {
+					 b = false;
+				 }
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(b);
  	 }
   
   /**
@@ -324,34 +367,69 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	
 	//returns the project name 
 	public String getProjectName(String plotName)
-	{ return("testproject"); }
+	{ 
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select  projectname from PROJECT where PROJECT_ID = (");
+			sb.append(" select project_id from PLOT where PLOT_ID = "+plotName+")");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	//returns the project description
 	public Vector getProjectContributors(String plotName)
 	{
-		Vector v = new Vector();
-		v.addElement("Bob Peet");
-		v.addElement("John Harris");
-		return(v);
+		Vector contributors = new Vector();
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select givenName, surName from PARTY where PARTY_ID = (");
+			sb.append(" select PARTY_ID from PROJECTCONTRIBUTOR where PROJECT_ID = (");
+			sb.append(" select PROJECT_ID from PLOT where PLOT_ID = "+plotName+"))");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+				 s = s+" "+rs.getString(2);
+				 contributors.addElement(s);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(contributors);
 	}
 	
 	//retuns the person's salutation based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorSalutation(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("Dr.");
-		else
-			return("Mr.");
+			return("");
 	}
 	//retuns the person's given based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorGivenName(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("Robert");
-		else
-			return("John");
+			return("");
 	}
 	//retuns the person's middle name based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
@@ -360,150 +438,111 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		if (contributorWholeName.startsWith("Bob"))
 			return("");
 		else
-			return("Howland");
+			return("");
 	}
 	//retuns the person's surName based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorSurName(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("Peet");
-		else
-			return("Harris");
+			return("");
 	}
 	//retuns the name of an org. that a person is associated with based on 
 	//their full name which is the concatenated givename and surname of the 
 	//user like 'bob peet'
 	public String getProjectContributorOrganizationName(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("University of North Carolina Chapel Hill");
-		else
-			return("University of California Santa Barbara");
+			return("");
 	}
 	
 	//retuns the person's contactinstructions based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorContactInstructions(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("email at peet@unc.edu");
-		else
-			return("email at harris@nceas.ucsb.edu");
+			return("");
 	}
 	//retuns the person's phone number based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorPhoneNumber(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("919 945-0788");
-		else
-			return("805 123-4523");
+			return("");
 	}
 	//retuns the person's cellPhone based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorCellPhoneNumber(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("949 222-4555");
-		else
-			return("805 222-3434");
+			return("");
 	}
 	//retuns the person's fax phone number based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorFaxPhoneNumber(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("949 456-7856");
-		else
-			return("805 456-6576");
+			return("");
 	}
 	//retuns the party's position within an organization based on their full 
 	// name which is the concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorOrgPosition(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("Professor");
-		else
-			return("Software Developer");
+			return("");
 	}
 	//retuns the person's email based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorEmailAddress(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("peet@unc.edu");
-		else
-			return("harris@nceas.ucsb.edu");
+			return("");
 	}
 	//retuns the person's address line based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorDeliveryPoint(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("Department of Biology, CB#3280");
-		else
-			return("735 State Street, Suite 300");
+			return("");
 	}
 	//retuns the person's city based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorCity(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("Chapel Hill");
-		else
-			return("Santa Barbara");
+			return("");
 	}
 	
 	//returns the administrative area, or state that a party is from
 	public String getProjectContributorAdministrativeArea(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("NC");
-		else
-			return("CA");
+			return("");
 	}
 	//retuns the zip code for a party
 	public String getProjectContributorPostalCode(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("27599-3280");
-		else
-			return("93101");
+			return("");
 	}
 	//retuns the person's country based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorCountry(String contributorWholeName)
 	{
-			return("USA");
+			return("");
 	}
 	//retuns a boolean 'true' if it is a party's current address based on their 
 	//full name which is the concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorCurrentFlag(String contributorWholeName)
 	{
-		return("true");
+		return("");
 	}
 	//retuns the date that the address became current for a party based on 
 	//their full name which is the concatenated givename and surname of the 
 	//user like 'bob peet'
 	public String getProjectContributorAddressStartDate(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("01-JAN-1977");
-		else
-			return("01-JAN-2000");
+			return("");
 	}
 	
 	//returns the start date for the project
 	public String getProjectStartDate(String plotName )
 	{
-		return("01-JAN-1999");
+		return("");
 	}
 	
 	//returns the stop date for the project
 	public String getProjectStopDate(String plotName )
 	{
-		return("01-JAN-2002");
+		return("");
 	}
 	
 	//returns the placeNames each name can be used to retrieve
@@ -511,8 +550,26 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	public Vector getPlaceNames(String plotName)
 	{
 		Vector placeNames = new Vector();
-		placeNames.addElement("Marina Park");
-		placeNames.addElement("Ventura Harbor Area");
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select  placeName from NAMEDPLACE where NAMEDPLACE_ID = (");
+			sb.append(" select NAMEDPLACE_ID from PLACE where PLOT_ID = "+plotName+")");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+				 placeNames.addElement(s);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
 		return(placeNames);
 	}
 	
@@ -559,20 +616,14 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		{
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("select  projectdescription  "
-			+" from PROJECT where PROJECT_ID = 0 "  );
-							
+			+" from PROJECT where PROJECT_ID = 0 "  );			
 			while (rs.next()) 
 			{
 				 s = rs.getString(1);
 			}
 		}
-		catch (SQLException ex) 
-		{
-			this.handleSQLException( ex );
-		}
 		catch (java.lang.Exception ex) 
 		{   
-		// All other types of exceptions
 			System.out.println("Exception: " + ex );
 			ex.printStackTrace();
 		}
@@ -814,7 +865,6 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("select  area "
 			+" from PLOT where PLOT_ID = " + plotName );
-							
 			while (rs.next()) 
 			{
 				 s = rs.getString(1);
@@ -838,12 +888,13 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	{ 
 		String s = null;
 		Statement stmt = null;
+		System.out.println("VegBankDataSourcePlugin > getState for plot: " + plotName);
 		try 
 		{
 			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select  state "
-			+" from PLOT where PLOT_ID = " + plotName );
-							
+			String query = "select state from PLOT where PLOT_ID = " + plotName;
+			System.out.println("VegBankDataSourcePlugin > query: " + query);
+			ResultSet rs = stmt.executeQuery(query);				
 			while (rs.next()) 
 			{
 				 s = rs.getString(1);
@@ -859,8 +910,8 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			System.out.println("Exception: " + ex );
 			ex.printStackTrace();
 		}
+		System.out.println("VegBankDataSourcePlugin > state: " + s);
 		return(s);
-		
 	}
 	
 	//returns the state for the current plot
@@ -968,21 +1019,18 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("select  GEOLOGY "
 			+" from PLOT where PLOT_ID = " + plotName );
-							
 			while (rs.next()) 
 			{
 				//remove the apersand so that the xml can be parsed
 				 String buf  = rs.getString(1);
-				 s = buf.replace('&', 'a');
+				 if ( buf != null)
+				 {
+				 	s = buf.replace('&', 'a');
+				 }
 			}
-		}
-		catch (SQLException ex) 
-		{
-			this.handleSQLException( ex );
 		}
 		catch (java.lang.Exception ex) 
 		{   
-		// All other types of exceptions
 			System.out.println("Exception: " + ex );
 			ex.printStackTrace();
 		}
@@ -1032,19 +1080,13 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("select  slopegradient "
 			+" from PLOT where PLOT_ID = " + plotName );
-							
 			while (rs.next()) 
 			{
 				 s = rs.getString(1);
 			}
 		}
-		catch (SQLException ex) 
-		{
-			this.handleSQLException( ex );
-		}
 		catch (java.lang.Exception ex) 
 		{   
-		// All other types of exceptions
 			System.out.println("Exception: " + ex );
 			ex.printStackTrace();
 		}
@@ -1056,34 +1098,126 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	{
 		return("extensive");
 	}
+	
 	//returns the location as described by the author
 	public String getAuthorLocation(String plotName)
 	{
-		return("by the ventura river mouth");
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select authorlocation "
+			+" from PLOT where PLOT_ID = " + plotName );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	//returns the landForm
 	public String getLandForm(String plotName)
 	{
 		return("aluvial fan");
 	}
+	
 	//retuns the elevation
 	public String getElevation(String plotName)
 	{
-		return("10");
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select elevation "
+			+" from PLOT where PLOT_ID = " + plotName );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
+	
 	//returns the elevation accuracy
 	public String getElevationAccuracy(String plotName)
 	{
-		return("20"); //20%
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select elevationAccuracy "
+			+" from PLOT where PLOT_ID = " + plotName );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	
 	//return the confidentiality reason -- not null
 	public String	getConfidentialityReason(String plotName)
-	{  return("no real reason");  }
+	{  
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select confidentialityReason "
+			+" from PLOT where PLOT_ID = " + plotName );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	//return the confidentiality status -- not null 
 	public String getConfidentialityStatus(String plotName)
-	{ return("0"); }
+	{
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select confidentialitystatus "
+			+" from PLOT where PLOT_ID = " + plotName );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	/**
 	 * method that retuns the unique names for a plotID
@@ -1251,7 +1385,26 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		*/
 		public String getStrataBase(String plotName, String strataName)
 		{
-			return("12");
+			String s = null;
+			Statement stmt = null;
+			try 
+			{
+				stmt = con.createStatement();
+				StringBuffer sb = new StringBuffer();
+				sb.append("select STRATUMBASE from STRATUM where STRATUMNAME like '"+strataName+"' and OBSERVATION_ID = (");
+				sb.append(" select OBSERVATION_ID from OBSERVATION where PLOT_ID = "+plotName+")");
+				ResultSet rs = stmt.executeQuery( sb.toString() );			
+				while (rs.next()) 
+				{
+					s = rs.getString(1);
+				}
+			}
+			catch (java.lang.Exception ex) 
+			{   
+				System.out.println("Exception: " + ex );
+				ex.printStackTrace();
+			}
+			return(s);
 		}
 		
 		/**
@@ -1260,7 +1413,26 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		 */
 		public String getStrataHeight(String plotName, String strataName)
 		{
-			return("100");
+			String s = null;
+			Statement stmt = null;
+			try 
+			{
+				stmt = con.createStatement();
+				StringBuffer sb = new StringBuffer();
+				sb.append("select STRATUMHEIGHT from STRATUM where STRATUMNAME like '"+strataName+"' and OBSERVATION_ID = (");
+				sb.append(" select OBSERVATION_ID from OBSERVATION where PLOT_ID = "+plotName+")");
+				ResultSet rs = stmt.executeQuery( sb.toString() );			
+				while (rs.next()) 
+				{
+					s = rs.getString(1);
+				}
+			}
+			catch (java.lang.Exception ex) 
+			{   
+				System.out.println("Exception: " + ex );
+				ex.printStackTrace();
+			}
+			return(s);
 		}
 		
 	 
@@ -1317,8 +1489,6 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	
 	
 	
-	
-	
 /**
  * main method for testing --
  */
@@ -1327,14 +1497,14 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		if (args.length == 1) 
 		{
 			String plotName = args[0];
-			VegBankDataSourcePlugin db = new VegBankDataSourcePlugin();
-			System.out.println(" VegBankDataSourcePlugin > getting info for: " + plotName );
+		//	VegBankDataSourcePlugin db = new VegBankDataSourcePlugin("postgresql");
+		//	System.out.println(" VegBankDataSourcePlugin > getting info for: " + plotName );
 		}
 		else
 		{
-			VegBankDataSourcePlugin db = new VegBankDataSourcePlugin();
-			System.out.println( db.getPlotCodes().toString() );
-			System.out.println( db.getPlotIDs().toString() );
+		//	VegBankDataSourcePlugin db = new VegBankDataSourcePlugin("postgresql");
+		//	System.out.println( db.getPlotCodes().toString() );
+		//	System.out.println( db.getPlotIDs().toString() );
 		}
 	}
 	
