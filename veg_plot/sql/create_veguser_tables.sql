@@ -6,9 +6,9 @@
  *	information related to the practices of downloading apps and
  *	
  *
- * '$Author: harris $'
- * '$Date: 2002-08-30 19:08:26 $'
- * '$Revision: 1.5 $'
+ * '$Author: farrell $'
+ * '$Date: 2002-12-03 22:39:24 $'
+ * '$Revision: 1.6 $'
  *
  */
 
@@ -96,9 +96,9 @@ esa_sponsor_name_a varchar(120),
 esa_sponsor_email_a varchar(120),
 peer_review varchar(10),
 additional_statements varchar(500)
-)
+);
 
 
 
---INSERT INTO user_info (email_address, password, ticket_count)
---values ('user', 'pass', 1);				
+INSERT INTO user_info (email_address, password, ticket_count)
+values ('test@test.com', 'pass', 2);				
