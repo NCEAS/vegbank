@@ -30,8 +30,8 @@ import servlet.authentication.UserDatabaseAccess;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-08-29 16:51:05 $'
- *  '$Revision: 1.43 $'
+ *  '$Date: 2002-12-05 00:20:05 $'
+ *  '$Revision: 1.44 $'
  */
 
 
@@ -55,8 +55,10 @@ public class DataSubmitServlet extends HttpServlet
 	private String rmiServer = "raptor.nceas.ucsb.edu";  //this will be replaced with prop file
 	private int rmiServerPort = 1099;
 	private DataSourceClient rmiClient;
-	
-	private String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/uploads/input.data";
+
+  //this is the name/loaction of the uploaded file and must be consistent with
+  //the name in the DataExchangeServlet
+	private String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/input.data";
 	private String plotsArchiveType = "tnc";
 	
 	private String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit-select.html";
