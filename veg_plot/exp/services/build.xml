@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!-- 
+  * build.xml
+  *
+  *	Authors: John Harris
+  *	Copyright: 2002 NumericSolutions
+  *  See http://jakarta.apache.org for details on Ant  
+  *  
+	*
+	* 		'$Author: harris $'
+ 	*     '$Date: 2002-07-12 23:13:20 $'
+ 	*     '$Revision: 1.1 $'
+--> 
+<project name="FormReader" default="init" basedir=".">
+	
+	<!-- INITIATION -->
+	<target name="init">
+  
+		<!-- RELEVANT DIRECTORIES -->
+		<property name="current_dir" value="./" />
+		<property name="src" value="./src" />
+		<property name="html" value="./html" />
+		
+		<property name="build" value="./build" />
+		<property name="lib" value="./lib" />
+		<property name="bin" value="./bin" />
+		<property name="data" value="./data" />
+		<property name="jardist" value="/usr/local/devtools/jakarta-tomcat/webapps/mapplotter/WEB-INF/lib/" />
+	  <property name="htmldist" value="/usr/local/devtools/jakarta-tomcat/webapps/forms" />
+		
+		<property name="ant" value="./lib/ant.jar" /> <!-- for mail services -->
+		<property name="xerces" value="./lib/xerces_1_3_1.jar" />
+		<property name="xalan" value="./lib/xalan_1_2_2.jar" />
+		<property name="glue" value="lib/GLUE-STD.jar" />
+		<property name="servlet" value="lib/servlet.jar" />
+		
+		<property name="cpath" value="${servlet}:${glue}:${utilities}:${xmlresource}:${ant}:${servlet_api}:${xerces}:${xalan}:${xml_editor}:${db_access_module}:${build}"/>
+	</target>
+
+	
+	<!-- PREPARE -->
+	<target name="prepare" depends="init">
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${bin}" />
+	</target>	
+	
+	
+	<!-- COPY -->
+	<target name="copy" depends="init">
+		<echo message="Copying java files"/>
+		<!-- java files -->
+		<copy todir="${build}" filtering="yes" >
+			<fileset dir="${src}" >
+  	    <include name="**.java"/>
+  	  </fileset>
+  	</copy>
+	</target>	
+	
+	<!-- COMPILE -->
+	<target name="compile" depends="copy">
+
+		<echo message="Compiling the Java Code"/>
+		
+		<javac srcdir="${build}" 
+			classpath="${cpath}"
+			includes="**.java"
+			destdir="${build}"
+		/>
+	</target>	
+	
+	<!-- JAR -->
+	<target name="jar" depends="compile">
+		<jar jarfile ="${lib}/vegservice.jar"
+			basedir="${build}"
+			includes="** "
+		/>
+	</target>
+	
+
+</project>
