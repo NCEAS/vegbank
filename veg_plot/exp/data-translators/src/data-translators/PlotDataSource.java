@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-07-23 21:42:53 $'
- * 	'$Revision: 1.22 $'
+ *  '$Date: 2002-08-15 03:10:22 $'
+ * 	'$Revision: 1.23 $'
  */
 public class PlotDataSource 
 {
@@ -318,6 +318,27 @@ public class PlotDataSource
 		String s = ((PlotDataSourceInterface)pluginObj).getEffortLevel(plotName);	
 		return(s);
 	}
+	
+	
+	/**
+	 * method that returns the startDate of a project based on a plot
+	 */
+	 public String getProjectStartDate( String plotName )
+	 {
+		 String s = ((PlotDataSourceInterface)pluginObj).getProjectStartDate(plotName);	
+		 return(s);
+	 }
+	 
+	 /**
+	 * method that returns the stopDate of a project based on a plot
+	 */
+	 public String getProjectStopDate( String plotName )
+	 {
+		 String s = ((PlotDataSourceInterface)pluginObj).getProjectStopDate(plotName);	
+		 return(s);
+	 }
+	 
+	 
 //END
 
 

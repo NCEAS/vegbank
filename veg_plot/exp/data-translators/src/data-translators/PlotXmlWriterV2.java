@@ -19,8 +19,8 @@ import PlotDataSource;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: harris $' <br>
- *  '$Date: 2002-07-30 20:05:24 $' <br>
- *  '$Revision: 1.9 $' <br>
+ *  '$Date: 2002-08-15 03:10:22 $' <br>
+ *  '$Revision: 1.10 $' <br>
  */
 
  
@@ -764,7 +764,7 @@ public class PlotXmlWriterV2
 			Vector plotIdVec = new Vector();
 		//	plotIdVec.addElement("0");
 		//	plotIdVec.addElement("1");
-			plotIdVec.addElement("200");
+			plotIdVec.addElement("377");
 		//	plotIdVec.addElement("3");
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(plugin);
 			//writer.writeSinglePlot("test-plot");

@@ -11,16 +11,17 @@ import java.sql.*;
  *
  *	
  *  '$Author: harris $' <br>
- *  '$Date: 2002-07-23 21:42:54 $' <br>
- * 	'$Revision: 1.17 $' <br>
+ *  '$Date: 2002-08-15 03:10:22 $' <br>
+ * 	'$Revision: 1.18 $' <br>
  */
  
 //public class VegBankDataSourcePlugin
 public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 {
-	//private String driver = "sun.jdbc.odbc.JdbcOdbcDriver";
-	//private String dbUrl = "jdbc:odbc:vegbank_access";
 	
+	// THE PLUGIN PROPERTIES FILE
+	private ResourceBundle rb;
+
 	//variables below are for VEGBANK on postgresql
 	private String driver = "org.postgresql.Driver";
 	private String dbUrl = "jdbc:postgresql://vegbank.nceas.ucsb.edu/plots_dev";
@@ -51,6 +52,10 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		System.out.println("VegBankDataSourcePlugin > using database type: " + databaseType);
 		try 
 		{
+			// 	GET THE PARAMETERS FROM THE PROPERTIES FILE
+			rb = ResourceBundle.getBundle("plugin");
+			this.dbUrl =rb.getString("vegbankdburl");
+			System.out.println("VegBankDataSource init > dbUrl: " + this.dbUrl );
 			if (databaseType.equals("msaccess"))
 			{
 				driver = "sun.jdbc.odbc.JdbcOdbcDriver";
@@ -595,7 +600,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		return(s);
 	}
 	
-	//returns the project description
+	//returns a vector with the project contributors
 	public Vector getProjectContributors(String plotName)
 	{
 		Vector contributors = new Vector();
@@ -605,7 +610,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		{
 			stmt = con.createStatement();
 			StringBuffer sb = new StringBuffer();
-			sb.append("select givenName, surName from PARTY where PARTY_ID = (");
+			sb.append("select givenName, surName from PARTY where PARTY_ID in (");
 			sb.append(" select PARTY_ID from PROJECTCONTRIBUTOR where PROJECT_ID = (");
 			sb.append(" select PROJECT_ID from PLOT where PLOT_ID = "+plotName+"))");
 			ResultSet rs = stmt.executeQuery( sb.toString() );			
@@ -628,35 +633,107 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorSalutation(String contributorWholeName)
 	{
-			return("");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			// FIRST GET THE SURNAME AND GIVEN NAME
+			StringTokenizer st = new StringTokenizer(contributorWholeName);
+			String givenName = st.nextToken(); 
+			String surName = st.nextToken();
+			// WRITE THE QUERY
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select salutation from PARTY where surname like '"+surName+"' ");
+			sb.append("and givenname like '"+givenName+"'");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
+	
+	
 	//retuns the person's given based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorGivenName(String contributorWholeName)
 	{
-			return("");
+		String s = "";
+		try 
+		{
+			StringTokenizer st = new StringTokenizer(contributorWholeName);
+			s = st.nextToken(); 
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
+	
 	//retuns the person's middle name based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorMiddleName(String contributorWholeName)
 	{
-		if (contributorWholeName.startsWith("Bob"))
-			return("");
-		else
-			return("");
+		return("");
 	}
+	
 	//retuns the person's surName based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorSurName(String contributorWholeName)
 	{
-			return("");
+		String s = "";
+		try 
+		{
+			StringTokenizer st = new StringTokenizer(contributorWholeName);
+			s = st.nextToken();
+			s = st.nextToken();
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	//retuns the name of an org. that a person is associated with based on 
 	//their full name which is the concatenated givename and surname of the 
 	//user like 'bob peet'
 	public String getProjectContributorOrganizationName(String contributorWholeName)
 	{
-			return("");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			// FIRST GET THE SURNAME AND GIVEN NAME
+			StringTokenizer st = new StringTokenizer(contributorWholeName);
+			String givenName = st.nextToken(); 
+			String surName = st.nextToken();
+			// WRITE THE QUERY
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select ORGANIZATIONNAME from PARTY where surname like '"+surName+"' ");
+			sb.append("and givenname like '"+givenName+"'");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	
 	//retuns the person's contactinstructions based on their full name which is the
@@ -669,7 +746,32 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorPhoneNumber(String contributorWholeName)
 	{
-			return("");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			// FIRST GET THE SURNAME AND GIVEN NAME
+			StringTokenizer st = new StringTokenizer(contributorWholeName);
+			String givenName = st.nextToken(); 
+			String surName = st.nextToken();
+			// WRITE THE QUERY
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select phonenumber from telephone where party_id = ( " );
+			sb.append("select party_id from PARTY where surname like '"+surName+"' ");
+			sb.append("and givenname like '"+givenName+"')");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	//retuns the person's cellPhone based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
@@ -693,36 +795,185 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorEmailAddress(String contributorWholeName)
 	{
-			return("");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			// FIRST GET THE SURNAME AND GIVEN NAME
+			StringTokenizer st = new StringTokenizer(contributorWholeName);
+			String givenName = st.nextToken(); 
+			String surName = st.nextToken();
+			// WRITE THE QUERY
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select email from PARTY where surname like '"+surName+"' ");
+			sb.append("and givenname like '"+givenName+"'");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	//retuns the person's address line based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorDeliveryPoint(String contributorWholeName)
 	{
-			return("");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			// FIRST GET THE SURNAME AND GIVEN NAME
+			StringTokenizer st = new StringTokenizer(contributorWholeName);
+			String givenName = st.nextToken(); 
+			String surName = st.nextToken();
+			// WRITE THE QUERY
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select deliverypoint from address where party_id in ( " );
+			sb.append("select party_id from PARTY where surname like '"+surName+"' ");
+			sb.append("and givenname like '"+givenName+"')");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	//retuns the person's city based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorCity(String contributorWholeName)
 	{
-			return("");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			// FIRST GET THE SURNAME AND GIVEN NAME
+			StringTokenizer st = new StringTokenizer(contributorWholeName);
+			String givenName = st.nextToken(); 
+			String surName = st.nextToken();
+			// WRITE THE QUERY
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select city from address where party_id in ( " );
+			sb.append("select party_id from PARTY where surname like '"+surName+"' ");
+			sb.append("and givenname like '"+givenName+"')");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	
 	//returns the administrative area, or state that a party is from
 	public String getProjectContributorAdministrativeArea(String contributorWholeName)
 	{
-			return("");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			// FIRST GET THE SURNAME AND GIVEN NAME
+			StringTokenizer st = new StringTokenizer(contributorWholeName);
+			String givenName = st.nextToken(); 
+			String surName = st.nextToken();
+			// WRITE THE QUERY
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select administrativearea from address where party_id in ( " );
+			sb.append("select party_id from PARTY where surname like '"+surName+"' ");
+			sb.append("and givenname like '"+givenName+"')");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	//retuns the zip code for a party
 	public String getProjectContributorPostalCode(String contributorWholeName)
 	{
-			return("");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			// FIRST GET THE SURNAME AND GIVEN NAME
+			StringTokenizer st = new StringTokenizer(contributorWholeName);
+			String givenName = st.nextToken(); 
+			String surName = st.nextToken();
+			// WRITE THE QUERY
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select postalcode from address where party_id in ( " );
+			sb.append("select party_id from PARTY where surname like '"+surName+"' ");
+			sb.append("and givenname like '"+givenName+"')");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	//retuns the person's country based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorCountry(String contributorWholeName)
 	{
-			return("");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			// FIRST GET THE SURNAME AND GIVEN NAME
+			StringTokenizer st = new StringTokenizer(contributorWholeName);
+			String givenName = st.nextToken(); 
+			String surName = st.nextToken();
+			// WRITE THE QUERY
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select country from address where party_id in ( " );
+			sb.append("select party_id from PARTY where surname like '"+surName+"' ");
+			sb.append("and givenname like '"+givenName+"')");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	//retuns a boolean 'true' if it is a party's current address based on their 
 	//full name which is the concatenated givename and surname of the user like 'bob peet'
@@ -739,15 +990,53 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	}
 	
 	//returns the start date for the project
-	public String getProjectStartDate(String plotName )
+	public String getProjectStartDate(String plotName)
 	{
-		return("");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select startdate from project where project_id = ");
+			sb.append("( select project_id from plot where plot_id = "+plotName+") ");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	
 	//returns the stop date for the project
 	public String getProjectStopDate(String plotName )
 	{
-		return("");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select stopdate from project where project_id = ");
+			sb.append("( select project_id from plot where plot_id = "+plotName+") ");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	
 	//returns the placeNames each name can be used to retrieve
@@ -1853,6 +2142,4 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		//	System.out.println( db.getPlotIDs().toString() );
 		}
 	}
-	
-	
 }

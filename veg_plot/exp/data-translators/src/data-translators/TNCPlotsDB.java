@@ -15,8 +15,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: harris $' <br>
- *  '$Date: 2002-07-30 20:05:24 $' <br>
- * 	'$Revision: 1.23 $' <br>
+ *  '$Date: 2002-08-15 03:10:22 $' <br>
+ * 	'$Revision: 1.24 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -203,7 +203,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				while (rs.next()) 
 				{
 					s = rs.getString(1);
-					s = s.trim()+" Vegetation Mapping Project";
+					s = s.trim()+" Vegetation Mapping Project -- NATURESERVE";
 				}
 				rs.close();
 			stmt.close();
@@ -241,52 +241,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		try 
 		{
 			v.addElement("Jim Drake");
-			
-			
-			// USE THE CODE BELOW FOR THE OBSERVATION CONTRIBUTOR
-			/*
-			stmt = con.createStatement();
-			String query = " select ([Surveyors])  "
-			+" from ([Plots])  where ([Plot Code]) = '"+plotName+"'";
-			//System.out.println(query);
-			ResultSet rs = stmt.executeQuery( query);
-			while (rs.next()) 
-			{
-				String party = rs.getString(1);
-				if (party.indexOf(",") >= 0 || party.indexOf("&") >= 0 )
-				{
-					if (party.indexOf(",") >= 0)
-					{
-						StringTokenizer t = new StringTokenizer(party, ",");
-						while ( t.hasMoreTokens() )
-						{
-							String buf = t.nextToken();
-							v.addElement( buf );
-						}
-					}
-					else if ( party.indexOf("&") >= 0 )
-					{
-						StringTokenizer t = new StringTokenizer(party, "&");
-						while ( t.hasMoreTokens() )
-						{
-							String buf = t.nextToken();
-							v.addElement( buf );
-						}
-					}
-					else
-					{
-						System.out.println("cannot tokenize the surveyors");
-					}
-				}
-				else
-				{
-					//add the single surveyor
-					v.addElement(party);
-				}
-			}
-			rs.close();
-			stmt.close();
-		*/
+			v.addElement("Dennis Grossman");
 		}
 		catch( Exception e)
 		{
@@ -300,9 +255,19 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	//retuns the person's salutation based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorSalutation(String contributorWholeName)
-	{
-			return("");
+	{ 
+		String salutation = "";
+		if ( contributorWholeName.trim().toUpperCase().startsWith("JIM") )
+		{
+			salutation = "Mr.";
+		}
+		else if ( contributorWholeName.trim().toUpperCase().startsWith("DEN") )
+		{
+			salutation = "Dr.";
+		}
+		return(salutation);
 	}
+	
 	//retuns the person's given based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorGivenName(String contributorWholeName)
@@ -360,13 +325,22 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorContactInstructions(String contributorWholeName)
 	{
-		return("");
+		return("contact the contributor at specified email:");
 	}
 	//retuns the person's phone number based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorPhoneNumber(String contributorWholeName)
 	{
-		return("");
+		String s = "";
+		if ( contributorWholeName.trim().toUpperCase().startsWith("JIM") )
+		{
+			s = "303-444-1060";
+		}
+		else if ( contributorWholeName.trim().toUpperCase().startsWith("DEN") )
+		{
+			s = "703-908-1800";
+		}
+		return(s);
 	}
 	//retuns the person's cellPhone based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
@@ -390,36 +364,81 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorEmailAddress(String contributorWholeName)
 	{
-		return("");
+		String email = "";
+		if ( contributorWholeName.trim().toUpperCase().startsWith("JIM") )
+		{
+			email = "jim_drake@natureserve.org";
+		}
+		else if ( contributorWholeName.trim().toUpperCase().startsWith("DEN") )
+		{
+			email = "denny_grossman@natureserve.org";
+		}
+		return(email);
 	}
 	//retuns the person's address line based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorDeliveryPoint(String contributorWholeName)
 	{
-		return("");
+		String s = "";
+		if ( contributorWholeName.trim().toUpperCase().startsWith("JIM") )
+		{
+			s = "1313 Fifth Street, SE";
+		}
+		else if ( contributorWholeName.trim().toUpperCase().startsWith("DEN") )
+		{
+			s = "1101 Wilson Boulevard, 15th Floor";
+		}
+		return(s);
 	}
 	//retuns the person's city based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorCity(String contributorWholeName)
 	{
-		return("");
+		String s = "";
+		if ( contributorWholeName.trim().toUpperCase().startsWith("JIM") )
+		{
+			s = "Minneapolis";
+		}
+		else if ( contributorWholeName.trim().toUpperCase().startsWith("DEN") )
+		{
+			s = "Arlington";
+		}
+		return(s);
 	}
 	
 	//returns the administrative area, or state that a party is from
 	public String getProjectContributorAdministrativeArea(String contributorWholeName)
 	{
-		return("");
+		String state = "";
+		if ( contributorWholeName.trim().toUpperCase().startsWith("JIM") )
+		{
+			state = "MN";
+		}
+		else if ( contributorWholeName.trim().toUpperCase().startsWith("DEN") )
+		{
+			state = "VA";
+		}
+		return(state);
 	}
 	//retuns the zip code for a party
 	public String getProjectContributorPostalCode(String contributorWholeName)
 	{
-		return("");
+		String s = "";
+		if ( contributorWholeName.trim().toUpperCase().startsWith("JIM") )
+		{
+			s = "55414";
+		}
+		else if ( contributorWholeName.trim().toUpperCase().startsWith("DEN") )
+		{
+			s = "22209";
+		}
+		return(s);
 	}
 	//retuns the person's country based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorCountry(String contributorWholeName)
 	{
-			return("USA");
+		return("USA");
 	}
 	//retuns a boolean 'true' if it is a party's current address based on their 
 	//full name which is the concatenated givename and surname of the user like 'bob peet'
@@ -439,13 +458,13 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	// see the interface for method descriptions
 	public String getProjectStartDate(String plotName)
 	{
-		return("02-JAN-1998");
+		return("01-JAN-1996");
 	}
 	
 	// see the interface for method descriptions
 	public String getProjectStopDate(String plotName)
 	{
-		return("02-JAN-1998");
+		return("01-JAN-2003");
 	}
 	
 	/**

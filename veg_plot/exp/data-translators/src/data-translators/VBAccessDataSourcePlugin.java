@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-07-30 20:05:24 $'
- * 	'$Revision: 1.6 $'
+ *  '$Date: 2002-08-15 03:10:22 $'
+ * 	'$Revision: 1.7 $'
  */
  
 //public class VBAccessDataSourcePlugin
@@ -68,7 +68,6 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 		Statement stmt = null;
 		try 
 		{
-			
 			stmt = con.createStatement();
 			StringBuffer sb = new StringBuffer();
 			sb.append(" select PLANTCODE from PLANTCONCEPT where PLANTNAME like '"+plantName+"'");
