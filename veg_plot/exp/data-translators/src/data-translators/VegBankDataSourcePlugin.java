@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-17 22:27:02 $'
- * 	'$Revision: 1.3 $'
+ *  '$Date: 2002-01-23 08:09:13 $'
+ * 	'$Revision: 1.4 $'
  */
  
 //public class VegBankDataSourcePlugin
@@ -346,6 +346,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		placeNames.addElement("Ventura Harbor Area");
 		return(placeNames);
 	}
+	
 	//retuns a description of a place based on a placeName
 	public String getPlaceDescription(String placeName)
 	{
@@ -382,9 +383,40 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	
 	//returns the project description
 	public String getProjectDescription(String plotName )
-	{ return("projectDescription"); }
+	{
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  projectdescription  "
+			+" from PROJECT where PROJECT_ID = 0 "  );
+							
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	
+	/**
+	 * private method that returns the project ids in the 
+	 * form of a vector for a given plot
+	 * 
+	 */
+	//private Vector 
 	
 	
 	
@@ -394,11 +426,61 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	
 	//returns the easting 
 	public String getXCoord(String plotName)
-	{ return("325307"); }
+	{ 
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  authore "
+			+" from PLOT where PLOT_ID = " + plotName );
+							
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	//returns the northing
 	public String getYCoord(String plotName)
-	{ return("3884137"); }
+	{ 
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  authorn "
+			+" from PLOT where PLOT_ID = " + plotName );
+							
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	/**
 	 * method that retuns the latitude for an input plotid
@@ -469,19 +551,120 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	
 	//returns the geographic zone
 	public String getUTMZone(String plotName)
-	{ return("17"); }
+	{ 
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  authorzone "
+			+" from PLOT where PLOT_ID = " + plotName );
+							
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	//returns the plot shape
 	public String getPlotShape(String plotName)
-	{ return("rectangular"); }
+	{ 
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  shape "
+			+" from PLOT where PLOT_ID = " + plotName );
+							
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	//returns the plot area -n m^2
 	public String getPlotArea(String plotName)
-	{ return("10"); }
+	{ 
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  area "
+			+" from PLOT where PLOT_ID = " + plotName );
+							
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	//returns the state for the current plot
 	public String getState(String plotName)
-	{ return("CA"); }
+	{ 
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  state "
+			+" from PLOT where PLOT_ID = " + plotName );
+							
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+		
+	}
 	
 	//returns the state for the current plot
 	public String getCommunityName(String plotName)
@@ -489,11 +672,61 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	
 	//retuns the topo position
 	public String getTopoPosition(String plotName)
-	{ return("toe"); }
+	{ 
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  topoposition "
+			+" from PLOT where PLOT_ID = " + plotName );
+							
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	//returns the hydrologic regime
 	public String getHydrologicRegime(String plotName)
-	{ return("moist"); }
+	{ 
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  hydrologicregime "
+			+" from observation where  PLOT_ID = " + plotName );
+							
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	/**
 	 * method that retuns the latitude for an input plotid
@@ -534,11 +767,61 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	
 	//returns the slope aspect
 	public String getSlopeAspect(String plotName)
-	{ return("320"); }
+	{
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  slopeaspect "
+			+" from PLOT where PLOT_ID = " + plotName );
+							
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	//returns the slope gradient
 	public String getSlopeGradient(String plotName)
-	{ return("12"); }
+	{
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  slopegradient "
+			+" from PLOT where PLOT_ID = " + plotName );
+							
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	//returns the size of the stand -- extensive etc..
 	public String getStandSize(String plotName)
@@ -626,7 +909,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		try 
 		{
 			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select OBSERVATION_ID  from OBSERVATION "
+			ResultSet rs = stmt.executeQuery("select OBSERVATION_ID from OBSERVATION "
 			+"where PLOT_ID = " + plotName );
 							
 			while (rs.next()) 
