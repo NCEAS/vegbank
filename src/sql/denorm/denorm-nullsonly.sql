@@ -156,3 +156,5 @@ update project set d_obsCount=(select count(1) from view_notemb_observation as o
       
 update party set d_obsCount=(select countallcontrib 
    from view_browseparty_all_count where view_browseparty_all_count.party_ID=party.party_ID) where d_obsCount is null;
+
+UPDATE namedplace set d_obsCount=(select count(1) from place where namedplace.namedplacE_ID = place.namedplace_ID)  where d_obsCount is null;
