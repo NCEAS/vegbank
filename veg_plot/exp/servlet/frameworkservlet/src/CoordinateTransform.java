@@ -149,9 +149,10 @@ public class CoordinateTransform implements ServletPluginInterface
 				//line that is returned
 				if (responseLine.length()>0)
 				{
+          System.out.println("CoordinateTransform  > grass shell script response: " + responseLine);
 					//tokenize the input into two strings --
 					//a lat and long
-					StringTokenizer st=new StringTokenizer(responseLine, " \t");
+					StringTokenizer st=new StringTokenizer(responseLine);
 					longitude = st.nextToken();
 					latitude = st.nextToken();
 					llCoordinates.put("latitude", latitude);
@@ -162,8 +163,7 @@ public class CoordinateTransform implements ServletPluginInterface
 		}
 		catch ( Exception e ) 
 		{
-			System.out.println("failed in: LegacyDataFormatter.readTNCData "
-			+e.getMessage());
+			System.out.println("Exception " + e.getMessage());
       e.printStackTrace();
 		}
 		return(llCoordinates);
