@@ -3,9 +3,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: anderson $'
- *   '$Date: 2004-02-07 06:45:56 $'
- *   '$Revision: 1.21 $'
+ *   '$Author: farrell $'
+ *   '$Date: 2004-02-18 19:00:36 $'
+ *   '$Revision: 1.22 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -249,9 +249,13 @@ public class UserManagementServlet extends HttpServlet
 			System.out.println(
 				"UserManagementServlet > performing user settings modification");
 
-			WebUser user = 
-				(WebUser) req.getSession().getAttribute(Constants.USER_KEY);
-			String emailAddress = user.getEmail();
+			Long usrId = (Long)req.getSession().getAttribute(Constants.USER_KEY);
+			String emailAddress = null;
+			if (usrId.longValue() == 0) 
+			{
+				WebUser user = (new UserDatabaseAccess()).getUser(usrId);
+				emailAddress = user.getEmail();
+			}
 
 			// FIGURE OUT WHETHER TO SEND THE UPDATE FORM OR GET THE PARAMETRS
 			Hashtable params = util.parameterHash(req);

@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-12-05 22:24:20 $'
- *  '$Revision: 1.22 $'
+ *  '$Date: 2004-02-18 19:00:36 $'
+ *  '$Revision: 1.23 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.LogUtility;
+import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.databaseAccess.dbAccess;
 
 import org.vegbank.xmlresource.transformXML;
@@ -81,8 +82,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-12-05 22:24:20 $'
- *  '$Revision: 1.22 $'
+ *  '$Date: 2004-02-18 19:00:36 $'
+ *  '$Revision: 1.23 $'
  * 
  */
 
@@ -173,9 +174,14 @@ public class DataRequestServlet extends HttpServlet
 		PrintWriter out = response.getWriter();
 		try
 		{
-			WebUser user =
-				(WebUser) request.getSession().getAttribute(Constants.USER_KEY);
-			String userName = user.getUsername();
+			Long usrId = (Long)request.getSession().getAttribute(Constants.USER_KEY);
+			String userName = null;
+			if (usrId.longValue() == 0) 
+			{
+				WebUser user = (new UserDatabaseAccess()).getUser(usrId);
+				userName = user.getUsername();
+			}
+			
 
 			LogUtility.log("DataRequstServlet > current user: " + userName);
 
@@ -238,8 +244,7 @@ public class DataRequestServlet extends HttpServlet
 		}
 		catch (Exception e)
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			LogUtility.log("DataRequestServlet: " + e.getMessage(), e);
 		}
 	}
 

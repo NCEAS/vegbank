@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2004-01-18 20:47:47 $'
- *  '$Revision: 1.24 $'
+ *  '$Date: 2004-02-18 19:00:36 $'
+ *  '$Revision: 1.25 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ import org.vegbank.common.Constants;
 import org.vegbank.common.command.Query;
 import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.ServletUtility;
+import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.communities.datasource.VegCommunityLoader;
 import org.vegbank.databaseAccess.CommunityQueryStore;
 import org.vegbank.plots.datasource.PlotDataSource;
@@ -131,15 +132,25 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			PrintWriter out = response.getWriter();
 			try 
 			{	
-				WebUser user = 
-					(WebUser) request.getSession().getAttribute( Constants.USER_KEY );
+				Long usrId = (Long)request.getSession().getAttribute(Constants.USER_KEY);
+				String userName = null;
+				String salutation = null;
+				String surName = null;
+				String givenName = null;
+				String institution = null;
+				int permissionType = 0;
+				WebUser user = null;
 				
-				String userName = user.getUsername();
-				String salutation = user.getSalutation();
-				String surName = user.getSurname();
-				String givenName = user.getGivenname();
-				String institution = user.getInstitution();
-				int permissionType = user.getPermissiontype();
+				if (usrId.longValue() == 0) 
+				{
+					user = (new UserDatabaseAccess()).getUser(usrId);
+					userName = user.getUsername();
+					salutation = user.getSalutation();
+					surName = user.getSurname();
+					givenName = user.getGivenname();
+					institution = user.getInstitution();
+					permissionType = user.getPermissiontype();
+				}
 				
 				System.out.println("DataSubmitServlet > current user email: " + user);
 				System.out.println("DataSubmitServlet > current user salutation: " + salutation);
