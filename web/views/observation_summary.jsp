@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-09-14 22:29:50 $'
-*  '$Revision: 1.2 $'
+*  '$Date: 2004-09-17 00:15:35 $'
+*  '$Revision: 1.3 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -56,15 +56,15 @@
 
 
 <logic:iterate id="onerow" name="BEANLIST"><!-- iterate over all records in set : new table for each -->
-<TABLE border="0" cellpadding="2" cellspacing="2">
-<TR><TD valign="top"><!-- plot level info -->
+<TABLE width="100%" border="0" cellpadding="2" cellspacing="2">
+<TR><TD width="55%" valign="top"><!-- plot level info -->
 
 <table border="1" cellpadding="0" cellspacing="0" class="item"><!--each field, only write when HAS contents-->
 
 
 <logic:notEmpty name="onerow" property="authorplotcode">
-<tr><td><!--label:--><p><span class="category">Author Plot Code</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="authorplotcode"/>&nbsp;</span></p></td>
+<tr><td width="15%"><!--label:--><p><span class="category">Author Plot Code</span></p></td>
+<td width="40%"><p><span class="category"><bean:write name="onerow" property="authorplotcode"/>&nbsp;</span></p></td>
 </tr>
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="confidentialitystatus">
@@ -150,7 +150,7 @@
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="project_id">
 <tr><td><!--label:--><p><span class="category">Project</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="project_id"/>&nbsp;</span></p></td>
+<td><p><span class="item"><bean:write name="onerow" property="project_id_transl"/>&nbsp;</span></p></td>
 </tr>
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="obsstartdate">
@@ -160,12 +160,12 @@
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="covermethod_id">
 <tr><td><!--label:--><p><span class="category">Cover Method</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="covermethod_id"/>&nbsp;</span></p></td>
+<td><p><span class="item"><bean:write name="onerow" property="covermethod_id_transl"/>&nbsp;</span></p></td>
 </tr>
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="stratummethod_id">
 <tr><td><!--label:--><p><span class="category">Stratum Method</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="stratummethod_id"/>&nbsp;</span></p></td>
+<td><p><span class="item"><bean:write name="onerow" property="stratummethod_id_transl"/>&nbsp;</span></p></td>
 </tr>
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="stemsizelimit">
@@ -190,7 +190,7 @@
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="autotaxoncover">
 <tr><td><!--label:--><p><span class="category">Taxon Cover Automatically Calculated?</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="autotaxoncover"/>&nbsp;</span></p></td>
+<td><p><span class="item"><bean:write name="onerow" property="autotaxoncover_transl"/>&nbsp;</span></p></td>
 </tr>
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="stemobservationarea">
@@ -263,7 +263,7 @@
 </table>
 
 
-</TD><TD valign="top"><!-- plants in this plot -->
+</TD><TD width="45%" valign="top"><!-- plants in this plot -->
 
 <bean:define id="obsId" name="onerow" property="observation_id"/>
 <!-- Obs id is <%= obsId %> -->
@@ -272,18 +272,28 @@
 
 
   <logic:empty name="BEANLIST">
-                (no plants recorded on this plot: error!)
+                <p>(no plants recorded on this plot: error!)</p>
   </logic:empty>
   <logic:notEmpty name="BEANLIST">
      <table border="1" cellpadding="0" cellspacing="0" class="item">
-     <tr><th>Author's Plant Name</th><th>stratum (blank=all strata)</th><th>cover (%)</th></tr>
+     <tr colspan="2"><p>Taxa occurring on this plot</p></tr>
+     <tr><th>Author's Plant Name</th><th>overall cover</th></tr>
      <logic:iterate id="oneobsplants" name="BEANLIST">
      <tr>
-       <td><bean:write name="oneobsplants" property="authorplantname" />&nbsp;</td>
-       <td><bean:write name="oneobsplants" property="stratum_id_transl" />&nbsp;</td>
-       <td><bean:write name="oneobsplants" property="cover" />&nbsp;</td>
+       <td><p><span class="item"><bean:write name="oneobsplants" property="authorplantname" />&nbsp;</span></p></td>
+       <td width="20%"><p><span class="item">&nbsp;
+       <logic:notEmpty name="oneobsplants" property="cover">
+       <bean:write name="oneobsplants" property="cover" /> %
+       </logic:notEmpty>
+       </span></p></td>
      </tr>
      </logic:iterate>
+     <logic:notEmpty name="onerow" property="autotaxoncover">
+	 <tr><td><!--label:--><p><span class="category">Cover Values Calculated?</span></p></td>
+	 <td><p><span class="item"><bean:write name="onerow" property="autotaxoncover_transl"/>&nbsp;</span></p></td>
+	 </tr>
+	 </logic:notEmpty>
+
      </table>
   </logic:notEmpty>
 </TD>
