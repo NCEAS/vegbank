@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- xsl takes the vegbank database model xml and transforms into xsl that transforms the data xml into vegbranch csv import files. Written by Michael Lee (mikelee@unc.edu) 23-APR-2004 -->
+<!-- attempting to fix weirdities of xml: ie stratumType without method as parent, have to go look it up elsewhere, see http://tekka.nceas.ucsb.edu/~lee/xml/guide/all-conflicts.html -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
   <xsl:output method="xml" encoding="UTF-8"/>
   <xsl:param name="txtdelim">"</xsl:param>
@@ -8,13 +9,39 @@
      <xsl:element name="xsl:apply-templates" />
   </xsl:template>
   
-  <xsl:template name="DoCSV"><xsl:param name="nodeName" /><xsl:param name="literalText" />
+  <xsl:template name="DoCSV"><xsl:param name="nodeName" /><xsl:param name="literalText" /><xsl:param name="nodeAlt" />
     <xsl:element name="xsl:call-template">
       <xsl:attribute name="name">csvIt</xsl:attribute>
       <xsl:element name="xsl:with-param">
         <xsl:attribute name="name">text</xsl:attribute>
         <xsl:choose>
           <xsl:when test="string-length($literalText)&gt;0"><xsl:value-of select="$literalText" /></xsl:when>
+          <xsl:when test="string-length($nodeAlt)&gt;0">
+            <!-- two places to pull from or more may apply -->
+            <xsl:element name="xsl:choose">
+               <xsl:element name="xsl:when">
+                 <xsl:attribute name="test">string-length(<xsl:value-of select="$nodeName" />)&gt;0</xsl:attribute><!-- have normal att -->
+                   <xsl:element name="xsl:value-of">
+                     <xsl:attribute name="select"><xsl:value-of select="$nodeName" /></xsl:attribute>
+                   </xsl:element>
+               </xsl:element><!-- when normal one is there -->
+               <xsl:element name="xsl:otherwise"> <!-- get alt -->
+                  <xsl:element name="xsl:value-of">
+                    <xsl:attribute name="select"><xsl:value-of select="$nodeAlt" /></xsl:attribute>
+                  </xsl:element>
+               </xsl:element><!-- /otherwise -->
+            </xsl:element><!-- /choose -->
+            <!-- targ:
+            <xsl:choose>
+
+        <xsl:when test="string-length(../observation.OBSERVATION_ID)&gt;0"><xsl:value-of select="../observation.OBSERVATION_ID" /></xsl:when>
+        <xsl:otherwise><xsl:value-of select="../../../../observation.OBSERVATION_ID" /></xsl:otherwise>
+
+      </xsl:choose>
+            
+            -->
+            
+          </xsl:when>
           <xsl:otherwise><!-- normal get value from doc -->
                   <xsl:attribute name="select">
                   <xsl:value-of select="$nodeName" /></xsl:attribute>
@@ -43,8 +70,8 @@
 
   *
   *     '$Author: mlee $'
-  *     '$Date: 2004-04-24 01:14:26 $'
-  *     '$Revision: 1.3 $'
+  *     '$Date: 2004-04-27 00:32:29 $'
+  *     '$Revision: 1.4 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -98,11 +125,20 @@
   <!-- label this row with element name -->
 <xsl:element name="xsl:value-of"><xsl:attribute name="select">$LF</xsl:attribute></xsl:element><xsl:value-of select="$txtdelim" />d<xsl:value-of select="$txtdelim" />,<!-- data row --><xsl:call-template name="DoGetName" />,<xsl:for-each select="attribute">
     <!-- get att Value for this entity -->
-    <!-- 3 cases to consider: normal data (easy), normal FK (downstream), inverted FK (upstream) --><!-- can add parenthetical field name here (<xsl:value-of select="attName" />) --><xsl:call-template name="DoCSV"><xsl:with-param name="nodeName">
+
+    <xsl:call-template name="DoCSV">
+    
+<!-- special cases exist?? these are FKs not abiding by normal rules, having conflicts, need to look elsewhere for value -->
+<xsl:with-param name="nodeAlt">
+ <xsl:choose>
+  <xsl:when test="(attName='OBSERVATION_ID') and (../entityName='stratum')">../../../../observation.OBSERVATION_ID</xsl:when>
+</xsl:choose>
+</xsl:with-param>
+    <xsl:with-param name="nodeName">
+    <!-- 3 cases to consider: normal data (easy), normal FK (downstream), inverted FK (upstream) --><!-- can add parenthetical field name here (<xsl:value-of select="attName" />) -->
         <xsl:choose>
       <xsl:when test="attKey!='FK'"><xsl:value-of select="../entityName" />.<xsl:value-of select="attName"/></xsl:when>
-      <xsl:otherwise>
-         <!-- noraml or inverted -->
+      <xsl:otherwise><!-- noraml or inverted FK -->
          <xsl:choose>
           <xsl:when test="attRelType/@type='inverted'">
              <!-- get value from upstream -->../<xsl:value-of select="attReferences" />
@@ -115,6 +151,7 @@
       </xsl:otherwise> 
       
     </xsl:choose> <!-- not FK or FK -->
+
   </xsl:with-param></xsl:call-template>,<!-- value-of -->
     
   </xsl:for-each> <!-- looping thru atts -->
