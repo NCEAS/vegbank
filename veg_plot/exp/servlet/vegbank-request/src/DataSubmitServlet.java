@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Enumeration;
@@ -7,6 +9,7 @@ import java.util.Hashtable;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.io.FileReader;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,8 +32,8 @@ import databaseAccess.TaxonomyQueryStore;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-02-24 19:37:17 $'
- *  '$Revision: 1.49 $'
+ *  '$Date: 2003-02-25 18:40:34 $'
+ *  '$Revision: 1.50 $'
  */
 
 
@@ -309,10 +312,11 @@ public class DataSubmitServlet extends HttpServlet
 				// party-related attributes
 				replaceHash.put("messages", message.toString() );
 				
-				su.filterTokenFile(genericTemplate, "/tmp/vbtmp.html", replaceHash);
-				String contents = su.fileToString( "/tmp/vbtmp.html" );
+				StringWriter output = new StringWriter();
+				su.filterTokenFile(genericTemplate, output, replaceHash);
+
 				PrintWriter out = response.getWriter();
-				out.println(contents);
+				out.println( output.toString() );
 			
 		 }
 		 catch( Exception e ) 
@@ -337,6 +341,7 @@ public class DataSubmitServlet extends HttpServlet
 	private StringBuffer handlePlantTaxaSubmittal(Hashtable params, HttpServletResponse response)
 	{
 		StringBuffer sb = new StringBuffer();
+		PrintWriter out = response.getWriter();
 		try
 		{
 			String taxonDescription= "";
@@ -400,13 +405,18 @@ public class DataSubmitServlet extends HttpServlet
 				//System.out.println("DataSubmitServlet > longName match: " + lv.toString() );
 				
 				//update the validation page that is returned to the user
-				updatePlantRectificationPage(emailAddress,  longName, shortName,  code, 
-				longNameMessage,  shortNameMessage, codeMessage, longNameNearMatches, 
-				shortNameNearMatches, codeNearMatches);
-				
-				//redirect the browser
-				response.sendRedirect("/forms/plant-valid.html");
-				
+				updatePlantRectificationPage(
+					emailAddress,
+					longName,
+					shortName,
+					code,
+					longNameMessage,
+					shortNameMessage,
+					codeMessage,
+					longNameNearMatches,
+					shortNameNearMatches,
+					codeNearMatches,
+					out);			
 			}
 			// THIS WHERE THE RECTIFIED NAMES ARE SUBMITTED TO THE SERVLET
 			// AND WHERE THOSE ATTRIBUTES SHOULD BE IDENTIFIED AND STORED IN THE INSTANCE
@@ -439,9 +449,14 @@ public class DataSubmitServlet extends HttpServlet
 				System.out.println("code: " + code + " match: " + codeMatch );
 				Hashtable codeNameRef = tqs.getPlantNameReference(codeMatch);
 				
-				updatePlantNameReferencePage(emailAddress, longNameRef, shortNameRef,  codeNameRef);
-				//redirect the browser
-				response.sendRedirect("/forms/plant-valid.html");
+				updatePlantNameReferencePage(
+					emailAddress, 
+					longNameRef, 
+					shortNameRef,  
+					codeNameRef,
+					out
+				);
+
 			}
 			// THIS IS WHERE THE NAME REFERENCES INFORMATION IS SUBMITTED TO THE SERVLET
 			// AND WHERE THOSE ATTRIBUTES SHOULD BE STORED
@@ -519,8 +534,7 @@ public class DataSubmitServlet extends HttpServlet
 				
 				plantTaxon.isValid();
 				System.out.println("## long name auth: " + longNameRefAuthors);
-				updatePlantConceptPage(emailAddress, longName, shortName, code);
-				response.sendRedirect("/forms/plant-valid.html");
+				updatePlantConceptPage(emailAddress, longName, shortName, code, out);
 			}
 			else if ( action.equals("plantconcept") )
 			{
@@ -557,8 +571,7 @@ public class DataSubmitServlet extends HttpServlet
 				
 				// send the user the attributes related to the plant status/usage
 				// this is where the instance variables (surName,givenName etc..) are updated
-				updatePlantStatusUsagePage(emailAddress, longName, shortName, code);
-				response.sendRedirect("/forms/plant-valid.html");
+				updatePlantStatusUsagePage(emailAddress, longName, shortName, code, out);
 			}
 			// STEP WHEREBY THE USER SUBMITS THE STATUS USAGE DATA AND 
 			// THE RECIPT IS RETURNED
@@ -590,9 +603,8 @@ public class DataSubmitServlet extends HttpServlet
 				plantTaxon.setPlantParentRefAuthors(plantParentRefAuthors);
 				plantTaxon.isValid();
 				
-				
-				updatePlantSubmittalRecipt(emailAddress);
-				response.sendRedirect("/forms/plant-valid.html");
+
+				updatePlantSubmittalRecipt(emailAddress, out);
 			}
 			// STEP WHERE THE PLANT ACTUALLY GETS LOADED TO THE DATABASE
 			else if ( action.equals("plantsubmittalreceipt") )
@@ -689,7 +701,6 @@ public class DataSubmitServlet extends HttpServlet
 ///					boolean results = true;
 				// WRITE THE RESULTS BACK TO THE BROWSER
 				String receipt = this.getPlantInsertionReceipt(plantHash, results);
-				PrintWriter out = response.getWriter();
 				out.println(receipt);
 				
 			}
@@ -720,7 +731,7 @@ public class DataSubmitServlet extends HttpServlet
 	 */
 	 private String getPlantInsertionReceipt(Hashtable plantAtts, boolean results)
 	 {
-		 String contents = "";
+		 StringWriter output = new StringWriter();
 		 StringBuffer sb = new StringBuffer();
 		 try
 		 {
@@ -757,15 +768,15 @@ public class DataSubmitServlet extends HttpServlet
 			 // set up the filter tokens
 			 Hashtable replaceHash = new Hashtable();
 			 replaceHash.put("messages", sb.toString() );
-			 su.filterTokenFile(genericTemplate, "/tmp/vbtmp.html", replaceHash);
-			 contents = su.fileToString( "/tmp/vbtmp.html" );
+			 su.filterTokenFile(genericTemplate, output, replaceHash);
+
 			
 		 }
 		 catch (Exception e )
 		 {
 			 System.out.println("Exception > " + e.getMessage() );
 		 }
-		 return( contents );
+		 return( output.toString() );
 	 }
 	 
 	
@@ -773,7 +784,7 @@ public class DataSubmitServlet extends HttpServlet
 	 * method that updates the plant submittal receipt page --
 	 * this is the last sub-step in the plant submittal process
 	 */
-	 private void updatePlantSubmittalRecipt(String emailAddress)
+	 private void updatePlantSubmittalRecipt(String emailAddress, Writer out)
 	 {
 		 try
 		 {
@@ -845,7 +856,8 @@ public class DataSubmitServlet extends HttpServlet
 			 replaceHash.put("plantParentRefTitle", ""+plantParentRefTitle);
 			 replaceHash.put("plantParentRefAuthors", ""+plantParentRefAuthors);
 			 
-			 su.filterTokenFile(plantSubmittalReceiptTemplate, plantValidationForm, replaceHash);
+			 
+			 su.filterTokenFile(plantSubmittalReceiptTemplate, out, replaceHash);
 		 }
 		 catch( Exception e ) 
 		 {
@@ -899,8 +911,12 @@ public class DataSubmitServlet extends HttpServlet
 	 * @param shortName -- the short or common name of the plant
 	 * @param code -- the code of the plant
 	 */
-	 private void updatePlantStatusUsagePage(String emailAddress, String longName, 
-	 String shortName, String code)
+	private void updatePlantStatusUsagePage(
+		String emailAddress,
+		String longName,
+		String shortName,
+		String code,
+		Writer out)
 	 {
 		try
 		{		
@@ -925,7 +941,7 @@ public class DataSubmitServlet extends HttpServlet
 			replaceHash.put("statusStopDate", curDate);
 			
 			
-			su.filterTokenFile(plantStatusUsageTemplate, plantValidationForm, replaceHash);
+			su.filterTokenFile(plantStatusUsageTemplate, out, replaceHash);
 			// the calling method will redirect the browser
 		}
 		catch( Exception e ) 
@@ -960,8 +976,12 @@ public class DataSubmitServlet extends HttpServlet
 	/**
 	 * method that handles the updating of the plant concept page
 	 */
-	private void updatePlantConceptPage(String emailAddress, String longName, 
-	String shortName, String code)
+	private void updatePlantConceptPage(
+		String emailAddress,
+		String longName,
+		String shortName,
+		String code,
+		Writer out)
 	{
 		try
 		{		
@@ -972,8 +992,7 @@ public class DataSubmitServlet extends HttpServlet
 			replaceHash.put("code", ""+code);
 			
 			replaceHash.put("emailAddress", ""+emailAddress);
-			su.filterTokenFile(plantConceptTemplate, plantValidationForm, replaceHash);
-			// the calling method will redirect the browser
+			su.filterTokenFile(plantConceptTemplate, out, replaceHash);
 		}
 		catch( Exception e ) 
 		{
@@ -985,8 +1004,12 @@ public class DataSubmitServlet extends HttpServlet
 	/**
 	 * method that handles the plant name reference page
 	 */
-	private void updatePlantNameReferencePage(String emailAddress, Hashtable longNameRef, 
-	Hashtable shortNameRef,  Hashtable codeNameRef)
+	private void updatePlantNameReferencePage(
+		String emailAddress,
+		Hashtable longNameRef,
+		Hashtable shortNameRef,
+		Hashtable codeNameRef,
+		Writer out)
 	{
 		try
 		{
@@ -1036,8 +1059,8 @@ public class DataSubmitServlet extends HttpServlet
 				replaceHash.put("codeNameReference", ""+ this.getReferenceForm("code") );
 			}
 			
-			su.filterTokenFile(plantNameReferenceTemplate, plantValidationForm, replaceHash);
-			// the calling method will redirect the browser
+			su.filterTokenFile(plantNameReferenceTemplate, out, replaceHash);
+
 		}
 		catch( Exception e ) 
 		{
@@ -1227,9 +1250,18 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 	 * @return -- retuns false if there are any exceptions thrown while
 	 * 	genetaing the html form
 	 */
-	 private boolean updatePlantRectificationPage(String emailAddress, String longName, 
-	 String shortName, String code, String longNameMessage, String shortNameMessage, 
-	 String codeMessage, Vector longNameMatches, Vector shortNameMatches, Vector codeMatches)
+	private boolean updatePlantRectificationPage(
+		String emailAddress,
+		String longName,
+		String shortName,
+		String code,
+		String longNameMessage,
+		String shortNameMessage,
+		String codeMessage,
+		Vector longNameMatches,
+		Vector shortNameMatches,
+		Vector codeMatches,
+		Writer out)
 	 {
 		 try
 		 {
@@ -1281,7 +1313,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 			 replaceHash.put("shortNameNearMatchMessages", "VegBank has " +shortNameMatches.size()+ " near matches" );
 			 replaceHash.put("codeNearMatchMessages", "VegBank has " +codeMatches.size()+ " near matches" );
 				
-			 su.filterTokenFile(plantNameRectificationTemplate, plantValidationForm, replaceHash);
+			 su.filterTokenFile(plantNameRectificationTemplate, out, replaceHash);
 		 }
 		 catch( Exception e ) 
 		 {
@@ -1300,7 +1332,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 		*/
 		private String updatePlotInitPage()
 		{
-			String contents ="";
+			StringWriter output = new StringWriter();
 			try
 			{		
 				// set up the filter tokens
@@ -1310,15 +1342,14 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 				replaceHash.put("givenName", ""+givenName);
 				replaceHash.put("surName", ""+surName);
 				replaceHash.put("institution", ""+institution);
-				su.filterTokenFile(plotSubmittalInitTemplate, plotSubmittalInitForm, replaceHash);
-				contents = su.fileToString( plotSubmittalInitForm );
+				su.filterTokenFile(plotSubmittalInitTemplate, output, replaceHash);
 			}
 			catch( Exception e ) 
 			{
 				System.out.println("Exception:  " + e.getMessage() );
 				e.printStackTrace();
 			}
-			return(contents);
+			return(output.toString());
 		}
 
 	/**
@@ -1440,12 +1471,14 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 					System.out.println("DataSubmitServlet > add plot: " + (String)plots.elementAt(i) );
 				}
 				//create the form
-				su.filterTokenFile(plotSelectTemplate, plotSelectForm, "plots", sb2.toString() );
+        StringWriter output = new StringWriter();
+        FileReader inFile = new FileReader(plotSelectTemplate);
+				su.filterTokenFile(inFile, output, "plots", sb2.toString() );
 				// send the user there -- this is getting cached so print it to the user 
 				// instead
 				//response.sendRedirect("/forms/plot_select.html");
-				String s = su.fileToString(plotSelectForm);
-				sb.append(s);
+				//String s = su.fileToString(plotSelectForm);
+				sb.append( output.toString() );
 			}
 			// this is the actual submittal of one or many plots from the 
 			// uploaded archive
@@ -2214,7 +2247,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 			//replaceHash.put("", );
 			//replaceHash.put("", );
 			//replaceHash.put("", );
-			su.filterTokenFile(communityValidationTemplate, communityValidationForm, replaceHash);
+			//su.filterTokenFile(communityValidationTemplate, communityValidationForm, replaceHash);
 		}
 		catch( Exception e)
 		{
@@ -2303,7 +2336,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 			replaceHash.put("conceptRefISSN", ""+conceptRefISSN);
 			replaceHash.put("message", ""+message);
 			replaceHash.put("classSystem", ""+classSystem );
-			su.filterTokenFile(communityValidationTemplate, communityValidationForm, replaceHash);
+			//su.filterTokenFile(communityValidationTemplate, communityValidationForm, replaceHash);
 		}
 		catch( Exception e)
 		{

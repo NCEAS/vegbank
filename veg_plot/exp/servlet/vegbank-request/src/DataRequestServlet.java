@@ -54,8 +54,8 @@ import databaseAccess.dbAccess;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-02-24 19:37:17 $'
- *  '$Revision: 1.31 $'
+ *  '$Date: 2003-02-25 18:40:34 $'
+ *  '$Revision: 1.32 $'
  * 
  */
 
@@ -953,9 +953,8 @@ public class DataRequestServlet extends HttpServlet
 	 */
 	 private String getEmptyResultSetMessage(Hashtable params)
 	 {
-		 String contents ="";
-		 String errors = "/tmp/errors.html";
 		 StringBuffer sb = new StringBuffer();
+			StringWriter output = new StringWriter();
 		 try
 		 {
 			 // GET THE DATA REQUEST TYPE PARAMETER
@@ -978,16 +977,16 @@ public class DataRequestServlet extends HttpServlet
 			 }
 			
 			 replaceHash.put("messages", sb.toString() );
-			 su.filterTokenFile(genericForm, errors , replaceHash);
+			 
+			 su.filterTokenFile(genericForm, output , replaceHash);
 			 Thread.sleep(800);
-			 contents = su.fileToString(errors);
 		 }
 		 catch(Exception e)
 		 {
 			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
-		 return(contents);
+		 return( output.toString() );
 	 }
 	
 	
