@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-08-25 00:38:20 $'
-* '$Revision: 1.113 $'
+* '$Date: 2004-08-25 00:40:11 $'
+* '$Revision: 1.114 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -366,7 +366,7 @@
     <!-- style must be run before copy to get the faq.html document -->
     <style in="${general_src}/faq.xml" out="${general_src}/faq.html" style="${general_src}/faq.xsl"/>
     <copy overwrite="true" todir="${general_server}" filtering="yes">
-      <fileset dir="${general_src}" includes="**.html *jsp" excludes="**/CVS* vbsummary.html get_vb_stats_temp.html *.xml *.xsl"/>
+      <fileset dir="${general_src}" includes="**.html *jsp" excludes="**/CVS*  *.xml *.xsl"/>
     </copy>
   </target>
   <!--
