@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-31 01:31:13 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-03-24 17:16:04 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,9 @@ import javax.servlet.ServletException;
 import org.apache.struts.action.ActionServlet;
 import org.apache.struts.action.PlugIn;
 import org.apache.struts.config.ModuleConfig;
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.Constants;
 import org.vegbank.common.model.utility.Countrylist;
 import org.vegbank.common.model.utility.Statelist;
@@ -44,6 +47,7 @@ import org.vegbank.common.model.utility.Regionlist;
  **/
 public class VegbankInitPlugin implements PlugIn
 {
+	private static Log log = LogFactory.getLog(VegbankInitPlugin.class);
 
 	/* (non-Javadoc)
 	 * @see org.apache.struts.action.PlugIn#destroy()
@@ -65,6 +69,8 @@ public class VegbankInitPlugin implements PlugIn
 		sc.setAttribute(Constants.STATELISTBEAN_KEY, new Statelist());
 		sc.setAttribute(Constants.COUNTRYLISTBEAN_KEY, new Countrylist());
 		sc.setAttribute(Constants.REGIONLISTBEAN_KEY, new Regionlist());
+		log.info("Watching log4j.properties");
+		PropertyConfigurator.configureAndWatch("log4j.properties", 20 * 1000);
 	}
 
 }
