@@ -1,0 +1,60 @@
+<html>
+<head>@defaultHeadToken@
+<title>VegBranch-- overview</title>
+<link rel="stylesheet" href="@stylesheet@" type="text/css">
+ 
+</head>
+<body>
+@vegbank_header_html_normal@
+<table width = "800">
+<tr width="800">
+    <td width = "800">
+
+<h2 class="VegBank" align="center"><img src="images/vegbranch_logo_med.jpg" alt="VegBranch logo"/>VegBranch</h2>
+<h4 class="VegBank" align="center"><a href="vegbranch.html">Download</a> | Overview | <a href="vbr-loadmod.html">Loading Module</a> | <a href="vbr-help.html">Help</a> </h4>
+      <p>VegBranch is a Microsoft Access database designed primarily to import legacy
+  vegetation plot data, modify those data to conform to VegBank standards, migrate
+  the data to the VegBank format, then prepare the data to be sent to the VegBank
+  server (vegbank.org). There are help files associated with VegBranch that
+  describe each function of VegBranch in detail. VegBranch now supports
+  downloading of data from VegBank so that one can easily manipulate and analyze
+  data on their home computer (see the <a href="help/@vbr_version@/Help.form.navform.html">main menu</a> in VegBranch for details).  The following overview helps
+  show the relationship between VegBranch and the other VegBank components.  Click the overview to see a larger version in a new browser window.</p>
+<a href="images/vegbranch_overview.jpg" target="_new"><img src="images/vegbranch_overview_sml.jpg" border="0"  alt="diagram of VegBranch/VegBank relationship" /></a>
+
+
+<p><b>Explanation of Overview</b>, <i>Form Names</i> in italics</p>
+<p>VegBranch can <i><a href="help/@vbr_version@/Help.form.master_switchboard.html">Load Data</a></i> from files on your computer, 
+either <b>.csv (comma separated values</b>, a generic spreadsheet format) 
+or .mdb (Access database), into the loading module of VegBranch.  
+The <b>Loading Module</b> is a set of generic ecological tables in VegBranch, which simplify the vegbank datatable 
+structure greatly, allowing easier import and data checking.  
+</p><p>Once your data are in the Loading Tables, you then
+provide VegBranch with some <i><a href="help/@vbr_version@/Help.form.metadataswitchboard.html">Metadata</a></i> (which is often missing in data files), <br/>
+<i><a href="help/@vbr_version@/Help.form.translateyourdataform.html">Translate Data</a></i> from your format into the VegBank data format, <br/>
+<i><a href="help/@vbr_version@/Help.form.datacheckswitchboard.html">Data Check</a></i> for errors,<br/>
+then <i><a href="help/@vbr_version@/Help.form.migratedata_final.html">Migrate Data</a></i> to the Vegbank Module.  
+</p><p>
+The <b>VegBank Module</b> is a <a href="help/@vbr_version@/Help.form.w_connecttodb.html">connected MS Access database</a> which mimics vegbank.org's database structure exactly.
+Once migration has been completed and your data are in the vegbank module, you have a small version of the vegbank
+database on your computer.  
+</p><p>To send this data to vegbank.org for inclusion in the central database there, you will need to
+<i><a href="help/@vbr_version@/Help.form.exportdata.html">Export Data</a></i> to an <b>XML file</b> which is a specially formatted text file that can hold vegbank data.  This file can be 
+uploaded to vegbank.org, and the data in it will be used to add plots, parties, project, plants, communities and the rest
+of your data to the vegbank.org database.
+</p>
+<p>Note that the yellow triangle shows what parts of the process take place on your computer, and the green one shows 
+what happens on the internet.  VegBranch operates completely on your computer.  The only interaction with vegbank.org is
+with the XML files.</p>
+<p><font color="red"><B>NEW!</B></font> You can now download data from vegbank.org to import into VegBranch.  
+Download a <b>"VegBranch Import" file</b> from vegbank.org.  This is a specially formatted .csv file based on the VegBank
+XML file.  Just as with the loading process, the interaction between VegBank and VegBranch is entirely via 
+uploaded and downloaded files.  See the <a href="help/@vbr_version@/Help.form.navform.html">main menu</a> to link to the form to import data.  
+Documentation of this functionality is available from that form.</p>
+
+
+
+</td></tr></table>  
+@vegbank_footer_html_onerow@
+</body>
+</html>
