@@ -128,7 +128,7 @@
   <target name="make-jsp">
     <property file="jsp-template.properties" />
     <echo>Read jsp-template.properties</echo>
-    <style in="${dbmodelfile}" out="${jsptemp}" force="yes" style="${dbmodel-to-jsp-template.xsl}" >
+    <style in="${dbmodelfile}" out="${jsptemp}" force="yes" style="${templatexsl}" >
        <param name="view" expression="${view}"/>
        <param name="oneTbl" expression="${oneTbl}"/>
        <param name="detailAdd" expression="${detailAdd}"/>
