@@ -10,7 +10,6 @@ function MM_jumpMenu(targ,selObj,restore)
   if (selObj.options[selObj.selectedIndex].value != "" ) {
    eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'"); 
   }
-
 if (restore) selObj.selectedIndex=0; 
 }
 //--> 
@@ -45,13 +44,16 @@ if (restore) selObj.selectedIndex=0;
   <table border="4" cellspacing="1"  cellpadding="1" width="800">
   <tr valign="top"><td colspan="2" class="vegbank" border="1">
   <h2 align="center"><br><span class="vegbank">VegBank Web Site Map</span></h2>
-  <h4 class="vegbank">Click on a link below to jump directly to a page:</h4>
+  <p class="vegbank"><b>Click on a link below to jump directly to a page:</b><br />
+  <font color="red" size="-1">(Warning: This sitemap shows the functionality we expect to build.
+    Some of the links below are not activated, meaning that that particular functionality 
+    is not yet completed.  Thanks for your patience!)</font></p>
   </td></tr>
   <tr valign="top" border="1">
   <td colspan="2" class="vegbank" border="1">
-      <p><a href="http://www.vegbank.org/index.html">VegBank Home</a></p>
+      <p class="vegbank"><a href="http://www.vegbank.org/index.html">VegBank Home</a></p>
   </td></tr>
-  <tr valign="top"><td class="vegbank" width="400"><p>Public pages, log in not required</p>
+  <tr valign="top"><td class="vegbank" width="380"><p>Public pages, log in not required</p>
       <ul class="constsize">
         <li>News</li>
         <ul class="constsize">
@@ -59,7 +61,7 @@ if (restore) selObj.selectedIndex=0;
 		  <li><a href="/vegbranch/vegbranch.html">VegBranch release beta 3.0</a></li>
 		  <li><a href="/services">VegBank Web Services</a></li>
 		  <li><a href="/vegbank/panel/standards.html"><i>Standards 
-		       for Associations and Alliances of the U.S. National Vegetation Classification<i></a></li> 
+		       for Associations and Alliances of the U.S. National Vegetation Classification</i></a></li>
 			<li><a href="http://bugzilla.ecoinformatics.org/enter_bug.cgi?product=VegBank">Bugzilla error reporting</a></li> 
         </ul>
         <li><a href="@general_link@login.html">Login</a></li>
@@ -81,7 +83,7 @@ if (restore) selObj.selectedIndex=0;
 	   <li><a href="/vegbank/general/terms.html">Intellectual property</a></li>
 	   <li><a href="/vegbank/general/privacy.html">Privacy</a></li>
 	   </ul>
-	   <li>Database Architecture</li>
+	   <li>Database Architecture <font color="red">(update v2beta)</font></li>
 	   <ul class="constsize">
 	   <li><a href="/vegbank/design/plots.html">Plot Module</a></li>
 		   <ul class="constsize">
@@ -143,7 +145,6 @@ if (restore) selObj.selectedIndex=0;
 			  <option value="/vegbank/dbdictionary/vegplot/vegPlotDefinedValue.html">- DefinedValue</option> 
 			</select>
 			</li></ul>
-
 			<li><a href="/vegbank/design/plotauxillary.html">Auxillary tables and picklists</a></li>
 			<ul class="constsize"><li>
 			  <select name="auxtables" onChange="MM_jumpMenu('parent',this,0)">
@@ -255,80 +256,114 @@ if (restore) selObj.selectedIndex=0;
 	   <li><a href="/vegbank/pubs/pubs.html">Publications and Presentations</a></li>
 	   <li><a href="/vegbank/history/development.html">History of the VegBank Project</a></li>
 	   	<ul class="constsize">
-	   	  <li><a href="/vegbank/history/development.html#abstract">Abstract and overview</a></li>
-		  <li><a href="/vegbank/history/development.html#flow">Information flow in vegetation classification</a></li>
-		  <li><a href="/vegbank/history/development.html#process">The development process </a></li>
-		  <li><a href="/vegbank/history/development.html#meetings">Meetings</a></li>
-		  <li><a href="/vegbank/history/development.html#participants">Participants</a></li>
 		  <li><a href="/vegbank/history/nsf.html">The Original NSF proposal</a></li>
 	   	</ul>
 	   		<li><a href="/vegbank/general/acknowledgements.html">Acknowledgements</a></li>
 	   </ul>
         </ul>        
-  </td>
+  </ul></td>
   <td class="vegbank" width="400"><p>VegBank registration needed (you must log in)</p>
   <ul class="constsize">
     <li><a href="@general_link@actions.html">VegBank - Main Menu</a> (actions)</li>
     <ul class="constsize">
 	    <li><a href="/vegbank/general/plots.html">Access or submit Plot data</a></li>
-	    <ul class="constsize">
-	      <li><a href="/forms/plot-query.html">Simple Query</a></li> 
-		  <li><a href="/forms/nested-plot-query.html">Nested Query</a></li>
-		  <li><a href="/framework/servlet/DataSubmitServlet?submitDataType=vegPlot&action=preinit">Load Plot Data</a></li>
-		  <li><a href="/vegbank/general/datasets.html">Manage registered datasets</a></li>  
-		  <li><!--a href="/forms/uploadFile.html"-->Upload plot data</a></li> 
-		  <li><a href="/vegbank/general/input.html">Input data from forms</a></li>
-	    </ul>
+	      <ul class="constsize">
+            <li><a href="/forms/plot-query.html">Simple Query</a> <font color="red">redesign(v1.0)</font> 
+              | <a href="/forms/nested-plot-query.html">Nested (Advanced) Query</a> 
+              <font color="red">redesign(v1.0)</font></li>
+            <li>View plot : overview<font color="red">(v1beta)</font> | <a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=full&queryType=simple&plotId=1">extended</a></li>
+            <ul class="constsize">
+              <li>Add interpretation of plant in plot<font color="red">(v1.1)</font></li>
+              <li>Assign a plot to a community<font color="red">(v1.1)</font></li>
+              <li>Create a note about a field in a plot<font color="red">(v2.0)</font></li>
+            </ul>
+            <li><a href="/forms/resultset-download.html">Export plots</a><font color="red"> 
+              redesign(v1.0)</font></li>
+			  <ul class="constsize">
+			    
+              <li>Formats: ASCII, HTML , XML <font color="red">(redesign v2.0)</font>, 
+                VegBranch <font color="red">(v3.0)</font>, User specified <font color="red">(v2.0)</font>, TurboVeg <font color="red">(v3.0)</font>
+            </ul>
+            <li><a href="/framework/servlet/DataSubmitServlet?submitDataType=vegPlot&action=preinit">Load 
+              Plot Data</a></li>
+            <ul class="constsize">
+			  <li>Formats: NPS, VegBranch, XML <font color="red">(redesign v2.0)</font>, TurboVeg <font color="red">(v2.0)</font></li>
+              <li>Pre-Validate upload <font color="red">(v1.0)</font></li>
+            </ul>
+            <li><a href="/vegbank/general/input.html">Input data from forms</a></li>
+            <ul class="constsize">
+              <li>Add party<font color="red"> (v1.0)</font></li>
+              <li>Add stratum method<font color="red"> (v1.0)</font></li>
+              <li>Add cover method<font color="red"> (v1.0)</font></li>
+              <li>Add citation<font color="red"> (v1.0)</font></li>
+              <li>Add user-defined variable<font color="red"> (v1.1)</font></li>
+              <li>Add named place <font color="red"> (v2.0)</font></li>
+            </ul>
+            <li><a href="/vegbank/general/datasets.html">Manage registered datasets</a><font color="red"> 
+              (v2.0)</font></li>
+             <ul class="constsize">
+			  <li>Fix an error in your plot (revision)<font color="red">(v3.0)</font></li>
+			  <li>Grant a user permission to view your confidential plot(s)<font color="red">(v2.0)</font></li>
+			 </ul>
+            <!--	  <li><a href="/forms/uploadFile.html" Upload plot data</li> -->
+            <li>Project search and summary<font color="red">(v2.0)</font></li>
+          </ul>
 		<li><a href="/vegbank/general/types.html">Access or submit Community Type data</a></li>
-		<ul class="constsize">
-		  <li><a href="/forms/community-query.html">Query community type database</a></li>
-		  <li><a href="/forms/community-submit.html">Create a new Type</a></li>
-		  <li><a href="/forms/community-correlate.html">Correlate your type with an NVC Type</a></li>
-		</ul>
+		  <ul class="constsize">
+            <li><a href="/forms/community-query.html">Query Communities</a><font color="red"> 
+              update(v1.0)</font></li>
+            <li><a href="/forms/community-submit.html">Create a new Community Type</a><font color="red"> 
+              update(v1.0)</font></li>
+            <li>Bulk load new Community Types <font color="red">(v2.0)</font></li>
+			<li><a href="/forms/community-correlate.html">Correlate your type 
+              with an NVC Type</a></li>
+            <li>Manage your party perspective on Community Types <font color="red">(v2.0)</font></li>
+          </ul>
 		<li><a href="/vegbank/general/plants.html">Access or submit Plant Taxon data</a></li>
 		<ul class="constsize">
-		  <li><a href="/forms/plant-query.html">Query plants database</a></li> 
-		  <li><a href="/forms/plant-submit.html">Enter a New Plant</a></li>
+		  <li><a href="/forms/plant-query.html">Query Plants</a><font color="red"> update(v1.0)</font></li> 
+		  <li><a href="/forms/plant-submit.html">Enter a new Plant</a><font color="red"> update(v1.0)</font></li>
+		  <li>Bulk load new Plants <font color="red">(v2.0)</font></li>
+          <li>Manage your party perspective on Plants <font color="red">(v2.0)</font></li>
 		</ul>
 		<li><a href="/framework/servlet/usermanagement?action=changeusersettings">Edit your VegBank Profile</a></li> 
 		<li><a href="/forms/certification.html">Apply to become a Certified VegBank User</a></li> 
-		<ul class="constsize">
-			<li><a href="/forms/hints.html#certification">Certification Help</a></li>
-		</ul>	
+		  <ul class="constsize">
+            <li><a href="/forms/hints.html#certification">Certification Help</a></li>
+            <li>View registry of certified users <font color="red">(v2.0)</font></li>
+          </ul>	
 	</ul>
-    </li>
+    
    </ul>
    <hr />
    <p>VegBank Header Links:</p>
 	<ul class="constsize">
-     <li><a href="/vegbank/general/login.html">Login</a></li>
-	 <li><a href="/vegbank/general/logout.html">Logout</a></li>
-	 <li><a href="/vegbank/general/info.html">Information</a></li>
-	 <li><a href="/vegbank/general/help.html">Help</a></li>
-	 <li><form action=/services/servlet/ExchangeServlet method=get target=_blank>
-	     Quick Search <input size="11" name=querytoken><input type=submit value=Go name=submit></form></li>
+     <li><a href="/vegbank/general/login.html">Login</a> | <a href="/vegbank/general/logout.html">Logout</a> 
+	| <a href="/vegbank/general/info.html">Information</a>
+	 | <a href="/vegbank/general/help.html">Help</a></li>
+	 <form action=/services/servlet/ExchangeServlet method=get target=_blank>
+	     Quick Search <input size="11" name=querytoken><input type=submit value=Go name=submit></form>
 	</ul>
    <hr />
    <p>VegBank Footer Links:</p>
 	<ul class="constsize">
-	  <li><a href="http://www.vegbank.org/index.html">VegBank Home</a></li>
-	  <li><a href="/vegbank/general/info.html">About VegBank</a></li>
-	  <li><a href="/vegbank/general/instructions.html">Instructions</a></li> 
-	  <li><a href="/vegbank/panel/panel.html">ESA Vegetation Panel</a></li> 
-	  <li><a href="/vegbank/general/contact.html">Contact</a></li> 
-	  <li><a href="/vegbank/general/help.html">Help</a></li>
-	  <li><a href="/vegbank/general/register.html">Register</a></li> 
-	  <li><a href="/vegbank/general/login.html">Login</a></li> 
-	  <li><a href="/vegbank/general/actions.html">use VegBank</a></li>
-	  <li><a href="/vegbank/general/logout.html">Logout</a></li> 
-	  <li><a href="/vegbank/general/account.html">My VegBank Account</a></li>
-	  <li><a href="/vegbank/general/terms.html">Terms of use</a></li> 
-	  <li><a href="/vegbank/general/privacy.html">Privacy policy</a></li>
+	  <li><a href="http://www.vegbank.org/index.html">VegBank Home</a> 
+	  | <a href="/vegbank/general/info.html">About VegBank</a> 
+	  | <a href="/vegbank/general/instructions.html">Instructions</a> 
+	  | <a href="/vegbank/panel/panel.html">ESA Vegetation Panel</a> 
+	  | <a href="/vegbank/general/contact.html">Contact</a>  
+	  | <a href="/vegbank/general/help.html">Help</a> 
+	  | <a href="/vegbank/general/register.html">Register</a></li> 
+	  <li><a href="/vegbank/general/login.html">Login</a>   
+	  | <a href="/vegbank/general/actions.html">use VegBank</a> 
+	  | <a href="/vegbank/general/logout.html">Logout</a> 
+	  | <a href="/vegbank/general/account.html">My VegBank Account</a> 
+	  | <a href="/vegbank/general/terms.html">Terms of use</a> 
+	  | <a href="/vegbank/general/privacy.html">Privacy policy</a></li>
 	</ul>
    </td>
    <tr>
    </table>
-
 <!-- VegBank Footer -->
 <br>
 <table cellspacing="0" cellpadding="0" border="0">
