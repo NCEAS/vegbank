@@ -4,7 +4,7 @@
 # the relationship between the overlapping diagrams
 #
 # John Harris  
-# Jan 22, 2001
+# Jan 23, 2001
 
 - servletDesign.vsd:
 	This document shows the methods included in the various classes
@@ -41,3 +41,24 @@
 	classes.
 	
 	
+- plotAccessArchitecture.vsd:
+
+	This diagram shows how an xml document containing plot data, query
+	elements/instructions or update data is used by the "plotAccess" module.
+	This module is used by the servlets for either querying the database or
+	loading/updating data to the database.  Currently the database
+	connection pooling is initiated in the sqlMapper class where the number
+	or uses of the database connection is monitored.  This should be
+	modified so that the connection pool can be managed directly from within
+	the servlet or, for that matter, any client tool that uses the module.
+	Also, at the moment the most common queries issued on the database are
+	stored in the 'queryStore' class -- in the future another class to be
+	used for composing more sophisticated queries should be added parallel
+	to the 'queryStore' class.
+
+
+-plotsArchitecture.vsd:
+
+	This quite abstract diagram depicts the ideal functionality of the plots
+	database, auxiliary databases and related tools.  The diagram is out of
+	date.
