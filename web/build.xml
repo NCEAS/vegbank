@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!-- 
+  * build.xml
+  *
+  *	Authors: John Harris
+  *	Copyright: 2002 Regents of the University of California and the
+  *							National Center for Ecological Analysis and Synthesis
+  *  Build file for the Ant cross-platform build system for bulding the 
+	*	 web content for vegbank.org
+	*
+  *  See http://jakarta.apache.org for details on Ant  
+  *  
+  * usage: ant forms, images
+--> 
+<project name="vegbank_web" default="init" basedir=".">
+
+<target name="init">
+	<tstamp/>
+	<!-- 
+		* Below are the basic propoerties and tokens for
+		* building the vegbank web site
+	-->
+	<property name="forms" value="./forms" />
+	<property name="forms_server" value="/usr/local/devtools/jakarta-tomcat/webapps/forms"/>
+	<filter token="dist" value="dist"/>
+	<filter token="version" value="development"/>
+	<filter token="image_server" value="http://vegbank.nceas.ucsb.edu/vegbank/images/"/>
+</target>
+
+
+
+<!--
+	* TARGET TO BUILD THE DATABASE DICTIONARY BY
+	* TRANSLATING THE XML INTO HTML
+-->
+<target name="db_dictionary" depends="init">
+	
+
+</target>
+
+
+
+<!-- 
+	* TARGET TO PUT THE FORMS FOR INTERACTING WITH THE 
+	* SERVLETS IN THE APPROPRIATE LOCATION
+-->
+<target name="forms" depends="init">
+	<copydir src="${forms}" 
+		dest="${forms_server}" 
+		filtering="yes"
+		includes="
+			resultset-download.html
+			plot-query.html"
+		excludes="**/CVS* "
+	/>
+</target>
+
+
+
+
+
+
+
+</project>
