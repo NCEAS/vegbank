@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: anderson $'
-  *     '$Date: 2003-08-28 20:05:03 $'
-  *     '$Revision: 1.14 $'
+  *     '$Date: 2003-10-06 20:37:15 $'
+  *     '$Revision: 1.15 $'
 --> 
 <project name="vegclass" default="compile" basedir=".">
 
@@ -30,7 +30,6 @@
     <property name="src.dir" value="${basedir}/src"/>
     <property name="xsl.src.dir" value="${src.dir}/xsl"/>
     <property name="sql.src.dir" value="${src.dir}/sql"/>
-    <property name="lib.dir" value="${basedir}/lib"/>
     <property name="ant.style.dir" location="${env.ANT_HOME}/etc" />
     <property name="web.docroot" location="${env.TOMCAT_HOME}/webapps" />
 
