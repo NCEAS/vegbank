@@ -4,43 +4,30 @@
 <HEAD   >
 @defaultHeadToken@
  
-<TITLE>View Data in VegBank : userDataset(s)</TITLE>
+<TITLE>View Data in VegBank : Dataset(s)</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=">
 </HEAD>
 <body   >@vegbank_header_html_normal@  <br><h2>View VegBank Datasets</h2>
-<vegbank:get select="userdataset" beanName="map" where="where_usr_pk"/>
+<!-- get user ID -->
+<% 
+Long localPgUserId = (Long)(request.getSession().getAttribute("USER")); 
+String strUserId = "0";
+
+if ( localPgUserId==null )
+  { strUserId = "-1" ;}
+  else strUserId = localPgUserId.toString();
+
+%>
+<!-- <h1>Temp: You are user: <%= strUserId %> </h1> -->
+<vegbank:get select="userdataset" beanName="map" where="where_usr_pk" wparam="<%= strUserId %>"/>
 <logic:empty name="BEANLIST">
-                Sorry, no userDataset(s) are available in the database!
+                Sorry, you have no Datasets in the database!
           </logic:empty>
 <logic:notEmpty name="BEANLIST"><!-- set up table -->
+
 <logic:iterate id="onerow" name="BEANLIST"><!-- iterate over all records in set : new table for each -->
 <table border="1" cellpadding="0" cellspacing="0" class="item"><!--each field, only write when HAS contents-->
-<logic:notEmpty name="onerow" property="userdataset_id">
-<tr><td><!--label:--><p><span class="category">User Dataset ID</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="userdataset_id"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="usr_id">
-<tr><td><!--label:--><p><span class="category">User ID</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="usr_id"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="datasetstart">
-<tr><td><!--label:--><p><span class="category">Dataset Start</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="datasetstart"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="datasetstop">
-<tr><td><!--label:--><p><span class="category">Dataset Stop</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="datasetstop"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="accessioncode">
-<tr><td><!--label:--><p><span class="category"> Accession Code</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="accessioncode"/>&nbsp;</span></p></td>
-</tr>
-</logic:notEmpty>
 <logic:notEmpty name="onerow" property="datasetname">
 <tr><td><!--label:--><p><span class="category">Dataset Name</span></p></td>
 <td><p><span class="item"><bean:write name="onerow" property="datasetname"/>&nbsp;</span></p></td>
@@ -59,6 +46,22 @@
 <logic:notEmpty name="onerow" property="datasetsharing">
 <tr><td><!--label:--><p><span class="category">Dataset Sharing</span></p></td>
 <td><p><span class="item"><bean:write name="onerow" property="datasetsharing"/>&nbsp;</span></p></td>
+</tr>
+</logic:notEmpty>
+
+<logic:notEmpty name="onerow" property="datasetstart">
+<tr><td><!--label:--><p><span class="category">Dataset Start</span></p></td>
+<td><p><span class="item"><bean:write name="onerow" property="datasetstart"/>&nbsp;</span></p></td>
+</tr>
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="datasetstop">
+<tr><td><!--label:--><p><span class="category">Dataset Stop</span></p></td>
+<td><p><span class="item"><bean:write name="onerow" property="datasetstop"/>&nbsp;</span></p></td>
+</tr>
+</logic:notEmpty>
+<logic:notEmpty name="onerow" property="accessioncode">
+<tr><td><!--label:--><p><span class="category"> Accession Code</span></p></td>
+<td><p><span class="item"><bean:write name="onerow" property="accessioncode"/>&nbsp;</span></p></td>
 </tr>
 </logic:notEmpty>
 <!-- show dataset items -->
