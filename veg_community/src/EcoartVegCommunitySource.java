@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-13 21:12:59 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2002-02-14 00:58:24 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,8 +36,10 @@ import java.sql.*;
  	 */
 	public class EcoartVegCommunitySource
 	{
-	private String dbUrl = "jdbc:odbc:ecoart"; 
-	private Connection con = null;
+	private String dbUrl = "jdbc:odbc:ecoart";
+	//made the connection public so that the calling class can close it
+	//before re-initiilizing this class
+	public Connection con = null;
 	//the level in the heirarchy that that community is in
 	private String level = null;
 	
@@ -94,12 +96,12 @@ import java.sql.*;
 	 * 	elcode
 	 * @return commName -- the name of the community
 	 */
-	 private String getCommunityName(String community)
+	 public String getCommunityName(String community)
 	 {
 		 String commName = null;
 		 try
 		 {
-			  //first figure out the level in the heirarcy
+			 //first figure out the level in the heirarcy
 			 this.level = this.getCommunityLevel(community);
 			 System.out.println("EcoartVegCommunity > internal level: " + level); 
 			// Create a Statement so we can submit SQL statements to the driver
@@ -118,6 +120,8 @@ import java.sql.*;
 			{
 				commName = rs.getString(1);
 			}
+			rs.close();
+			stmt.close();
 		 }
 		 catch (Exception e)
 		 {
@@ -180,17 +184,24 @@ import java.sql.*;
  		*
  		* @return communities -- a vector containing all the communities
 		*/
- 	 private Vector getCommunityCodes()
+ 	 public Vector getCommunityCodes(String level)
  	 {
  		Vector communities = new Vector();
  		 try
  		 {
+			 String query = null;
+			 if (level.equals("association"))
+			 {
+				 query = "select distinct ([Elcode]) from ETC";
+			 }
+			 else if (level.equals("alliance"))
+			 {
+				 query = "select distinct ([AllianceKey]) from Alliance";
+			 }
  			// Create a Statement so we can submit SQL statements to the driver
  			Statement stmt = con.createStatement();
  			//create the result set
- 			ResultSet rs = stmt.executeQuery("select distinct "
- 			+" ([Elcode]) "
- 			+" from ETC");
+ 			ResultSet rs = stmt.executeQuery(query);
  			while (rs.next()) 
  			{
  				 communities.addElement(rs.getString(1));
@@ -236,7 +247,7 @@ import java.sql.*;
 		* @param community -- the ecoart code
 		* @return parentCode -- the parent code 
 		*/
-		private String getParentCode(String community)
+	public String getParentCode(String community)
 	 {
 		 String parentCode = null;
 		 try
@@ -257,12 +268,13 @@ import java.sql.*;
 				{
 					parentCode = rs.getString(1);
 				}
+				rs.close();
+				stmt.close();
 			}
 			else
 			{
 				return("formation");
 			}
-			
 		 }
 		 catch (Exception e)
 		 {
