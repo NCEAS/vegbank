@@ -35,9 +35,9 @@
     <property name="local.web.dir" value="../../web" />
     <property name="local.vegbranch.dir" value="${local.web.dir}/vegbranch" />
     <!-- filters -->
-    <filter filtersfile="${style_server}/filters_detokened.properties"/>
+<!--    <filter filtersfile="${style_server}/filters_detokened.properties"/>
     <filter filtersfile="${style_server}/manual_filters.properties"/>
-    <filter token="stylesheet" value="/vegbank/includes/default.css"/>
+    <filter token="stylesheet" value="/vegbank/includes/default.css"/> -->
   </target>
   <target name="logical" depends="init">
     <echo>Limiting fields to logical</echo>
