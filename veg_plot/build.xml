@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-01-15 00:57:16 $'
-  *     '$Revision: 1.9 $'
+  *     '$Date: 2003-01-17 00:51:53 $'
+  *     '$Revision: 1.10 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -174,12 +174,12 @@
 	<target name="deploy" depends="jar"
           description="=> Deploys jars in veg_plot module to servlet container">
 		<echo message="Distr all of jars in ${ant.project.name}"/>
-		<ant dir="exp/database_access" target="dist-web"/> 
-		<ant dir="exp/data-translators" target="dist"/>
-		<ant dir="exp/rmidatasource" target="dist"/> 
+		<ant dir="exp/database_access" target="dist-web" inheritAll="false"/> 
+		<ant dir="exp/data-translators" target="dist" inheritAll="false"/>
+		<ant dir="exp/rmidatasource" target="dist" inheritAll="false"/> 
 		<!-- <ant dir="exp/services" target="jar"/> No dist target -->
-		<ant dir="exp/servlet" target="dist"/>
-		<ant dir="exp/vegbank_web" target="dist"/>
+		<ant dir="exp/servlet" target="dist" inheritAll="false"/>
+		<ant dir="exp/vegbank_web" target="dist" inheritAll="false"/>
 		<!-- FIXME <ant dir="exp/vegclient" target="dist"/>  target fails to build -->
 		<!-- <ant dir="exp/xml-resource" target="dist"/> No dist target -->
 		<!-- <ant dir="exp/xml_to_sql" target="jar"/> No dist target -->
@@ -226,15 +226,17 @@
   <!-- This is getting big maybe .. could make separate build file      -->
   <!-- ================================================================ -->
 
-  <target name="test" depends="prepare" 
-          description="=> Run all the junit tests">
-    
+  <target name="test-prepare" depends="prepare">
+     
     <property name="build.test.classes.dir" value="${build.test.dir}/classes"/>
+    <property name="build.test.integration.dir" value="${build.test.dir}/integration"/>
     <mkdir dir="${build.test.dir}"/>
     <mkdir dir="${reports.test.dir}"/>
     <mkdir dir="${build.test.classes.dir}"/>
     <mkdir dir="${build.test.dir}/src"/>
     <mkdir dir="${build.test.dir}/testdata"/>
+    <mkdir dir="${build.test.integration.dir}"/>
+
 
     <!-- Copy testdata into build tree -->
     <copy todir="${build.test.dir}/testdata">
@@ -244,6 +246,11 @@
       </fileset>
     </copy>
     
+  </target>
+ 
+  <target name="test" depends="test-prepare" 
+          description="=> Run all the junit tests">
+   
     <!-- copy and compile the tests into a jar file -->
     <copy todir="${build.test.dir}/src">
       <fileset dir="${test.unit.src.dir}">
@@ -296,7 +303,7 @@
 
   </target>
  
-  <target name="test-integration" depends="prepare"
+  <target name="test-integration" depends="test-prepare"
           description="=> Run Integration Tests">
 
     <echo message="+-----------------------------------------------+"/>
@@ -304,9 +311,6 @@
     <echo message="| Running Integation tests                      |"/>
     <echo message="|                                               |"/>
     <echo message="+-----------------------------------------------+"/>
- 
-    <property name="build.test.integration.dir" value="${build.test.dir}/integration"/>
-    <mkdir dir="${build.test.integration.dir}"/>
 
     <copy todir="${build.test.integration.dir}" filtering="yes">
       <fileset dir="${test.integration.dir}">
@@ -316,9 +320,15 @@
       </fileset>
     </copy>
     
+    <chmod perm="ug+x">
+      <fileset dir="${build.test.integration.dir}">
+        <include name="*sh"/>
+      </fileset>
+    </chmod>
+
     <!-- Test Loading a vbaccess plot -->
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
-      <env key="CLASSPATH" value="${cpath}"/>
+      <env key="CLASSPATH" value="${cpath2}"/>
       <arg value="../testdata/vbaccess-example.mdb"/>
       <arg value="157"/>
       <arg value="vbaccessout.xml"/>
