@@ -34,8 +34,8 @@ import servlet.util.*;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-04-09 21:57:38 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2002-07-29 17:25:11 $'
+ *  '$Revision: 1.4 $'
  * 
  */
 
@@ -91,7 +91,8 @@ public class QueryBuilderServlet extends HttpServlet
 				//the the input query elements to the current standing query
 				if ( parameterHash(request).get("queryParameterType").toString().equals("append") )
 				{
-					out.println( appendQueryAttributes( parameterHash(request)).toString() );
+					
+					System.out.println( appendQueryAttributes( parameterHash(request)).toString() );
 					System.out.println("QueryBuilderServlet > query vector: "+queryVector.toString() );
 					//reprint the client html with the updated aggregate query
 					// in the text area
@@ -127,6 +128,9 @@ public class QueryBuilderServlet extends HttpServlet
 	* and get the results which are to be passed back to the client
 	* browser
 	*
+	* @param queryVector -- the vector containg the query
+	* @param requestDataFormatType -- html, xml, txt
+	* @param clientType -- browser or app
   */
   private String submitExtendedQuery(Vector queryVector, 
 		String requestDataFormatType, String clientType)
@@ -138,7 +142,7 @@ public class QueryBuilderServlet extends HttpServlet
 			//this first part has the data request type stuff
       StringBuffer sb = new StringBuffer();
       sb.append("?clientType="+clientType+"&requestDataFormatType="
-			+requestDataFormatType+"&requestDataType=vegPlot&queryType=extended&resultType=summary");
+			+requestDataFormatType+"&requestDataType=vegPlot&queryType=extended&resultType=identity");
       for (int i=0; i<queryVector.size(); i++)
       {
           sb.append("&");

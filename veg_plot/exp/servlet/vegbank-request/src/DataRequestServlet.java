@@ -51,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-07-26 01:28:00 $'
- *  '$Revision: 1.20 $'
+ *  '$Date: 2002-07-29 17:25:11 $'
+ *  '$Revision: 1.21 $'
  * 
  */
 
@@ -241,12 +241,14 @@ public class DataRequestServlet extends HttpServlet
 	 * whose parameters are equal to criteria operator and value
 	 * and are being requested by a more complex client than
 	 * the simple html form known as plot query --
-	 * @param
-	 * @param
+	 * @param enum -- an enumeration of all the paramters passed to the servlet
+	 * @param param -- a hashtable with all the parameters passed to the servlet
+	 * @param out --  the printwriter back to the client
+	 * @param response -- the http response object
+	 * @param request -- the http request object
 	 */	 
-	private void handleExtendedQuery(Enumeration enum,
-	Hashtable param, PrintWriter out,	HttpServletResponse response, 
-	HttpServletRequest request) 
+	private void handleExtendedQuery(Enumeration enum,Hashtable param, PrintWriter out,	
+	HttpServletResponse response, HttpServletRequest request) 
 	{
 		Hashtable extendedParamsHash = new Hashtable();
 		try
@@ -255,6 +257,7 @@ public class DataRequestServlet extends HttpServlet
 			//the results that are returned depend on this parameter
 			this.clientType = param.get("clientType").toString();
 			String requestDataFormatType  = param.get("requestDataFormatType").toString();
+			System.out.println("DataRequestServlet > resultType for extended query: " + requestDataFormatType);
 			
 			//validate that there are the correct type and number
 			//of parameters being passed to thie method
@@ -1168,12 +1171,11 @@ private void updateClientLog (String clientLog, String remoteHost)
 				System.out.println("DataRequstServlet > cannot compose extended query");
 			}
 			sb.append("</extendedQuery>"+"\n");
-			sb.append("<requestDataType>summary</requestDataType> \n");
-			sb.append("<resultType>summary</resultType> \n");
-			sb.append("<outFile>"+servletDir+"summary.xml</outFile> \n");
+			sb.append("<requestDataType>identity</requestDataType> \n");
+			sb.append("<resultType>identity</resultType> \n");
+			sb.append("<outFile>"+servletDir+"identity.xml</outFile> \n");
 			sb.append("</dbQuery>"+"\n");
 			outFile.println( sb.toString() );
-			
 		}
 		
 		catch (Exception e) 
