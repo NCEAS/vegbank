@@ -60,6 +60,7 @@
 <vegbank:get id="commstatus" select="commstatus" where="where_commconcept_pk" beanName="map" wparam="concId" perPage="-1" pager="false"/>
 <logic:notEmpty name="commstatus-BEANLIST">
 <logic:iterate id="statusbean" name="commstatus-BEANLIST">
+<bean:define id="thispartyacccode" name="statusbean" property="party_accessioncode" /> <!-- get accCode of this party as bean -->
 <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td class="grey" colspan="3">
 <!-- party perspective -->
@@ -94,7 +95,21 @@
   <logic:notEmpty name="commusage-BEANLIST">
     <strong>Names: </strong>
     <logic:iterate id="usagebean" name="commusage-BEANLIST">
-      &nbsp;&nbsp;<span class="datalabelsmall"><bean:write name="usagebean" property="classsystem" />:</span> <bean:write name="usagebean" property="commname_id_transl" /><br/>
+      &nbsp;&nbsp;<span class="datalabelsmall"><bean:write name="usagebean" property="classsystem" />:</span> <bean:write name="usagebean" property="commname_id_transl" />
+      <logic:equal name="thispartyacccode" value="VB.Py.512.NATURESERVE">
+	          <!-- only link if party is NatureServe -->
+	          <logic:equal name="usagebean" property="classsystem" value="UID">
+	             <!-- and this is a UID -->  <!-- and is accepted -->
+	             <logic:equal name="statusbean" property="commconceptstatus" value="accepted">
+	               <a target="_new" 
+	  href="http://www.natureserve.org/explorer/servlet/NatureServe?searchCommunityUid=<bean:write name='usagebean' property='commname_id_transl' />"
+	  title="An authoritative source for information on the plants, animals, and ecological communities of the United States and Canada. 	      NatureServe Explorer is a product of NatureServe and its network of natural heritage member programs.">NatureServe 
+	  Explorer<img border="0" src="@image_server@natureserveexplorer.png" alt="NatureServe Explorer logo" /></a>
+	             </logic:equal>     
+	          </logic:equal>  
+      </logic:equal>
+      
+      <br/>
     </logic:iterate>
   </logic:notEmpty>
    <!-- nested :get #4 -->
