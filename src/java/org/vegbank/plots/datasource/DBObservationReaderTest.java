@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-10-22 21:47:10 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,13 +70,13 @@ public class DBObservationReaderTest extends TestCase
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Plot plot = obs.getPlot();
-		Project project = obs.getProject();
-		Covermethod coverMethod = obs.getCovermethod();
+		Plot plot = obs.getPlotobject();
+		Project project = obs.getProjectobject();
+		Covermethod coverMethod = obs.getCovermethodobject();
 		List commClasses = obs.getobservationcommclasss();
 		Commclass commclass 	=	(Commclass) commClasses.get(0);
 		List projectContributors = project.getprojectprojectcontributors();
-		Party projectContributorParty = (Party)( (Projectcontributor) projectContributors.get(0)).getParty();
+		Party projectContributorParty = (Party)( (Projectcontributor) projectContributors.get(0)).getPartyobject();
 		Taxonobservation to = (Taxonobservation) obs.getobservationtaxonobservations().get(0);
 		
 		//Address projectContributorAddress = (Address) projectContributorParty.getpartyAddresss().get(0);
@@ -89,7 +89,7 @@ public class DBObservationReaderTest extends TestCase
 		assertEquals("replace this", coverMethod.getCovertype());
 		assertEquals("Fraxinus pennsylvanica - Ulmus americana / Prunus virginiana Woodland", commclass.getCommname());
 		assertEquals("Drake", projectContributorParty.getSurname());
-		assertEquals("AMCA6", to.getPlantname().getPlantname());
+		assertEquals("AMCA6", to.getPlantnameobject().getPlantname());
 	}
 
 	/* (non-Javadoc)
