@@ -56,13 +56,16 @@
 </td></tr>
 
 <vegbank:get id="plantstatus" select="plantstatus" where="where_plantconcept_pk" beanName="map" wparam="concId" perPage="-1" pager="false"/>
+
 <logic:notEmpty name="plantstatus-BEANLIST">
 <logic:iterate id="statusbean" name="plantstatus-BEANLIST">
+<bean:define id="thispartyacccode" name="statusbean" property="party_accessioncode" />
 <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td class="grey" colspan="3">
 <!-- party perspective -->
 <span class="datalabelsmall">Party Perspective according to: </span>
-<bean:write name="statusbean" property="party_id_transl" />
+<a href="@get_link@std/party/<bean:write name='statusbean' property='party_id' />"><bean:write 
+  name="statusbean" property="party_id_transl" /></a>
 </td></tr>
 <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td valign="top" class="grey" >
@@ -91,7 +94,17 @@
   <logic:notEmpty name="plantusage-BEANLIST">
     <strong>Names: </strong>
     <logic:iterate id="usagebean" name="plantusage-BEANLIST">
-      <span class="datalabelsmall"><bean:write name="usagebean" property="classsystem" />:</span> <bean:write name="usagebean" property="plantname_id_transl" /><br/>
+      <span class="datalabelsmall"><bean:write name="usagebean" property="classsystem" />:</span> 
+      <bean:write name="usagebean" property="plantname_id_transl" />
+      <logic:equal name="thispartyacccode" value="VB.Py.511.USDANRCSPLANTS2">
+        <!-- only link if party is USDA -->
+        <logic:equal name="usagebean" property="classsystem" value="Code">
+           <!-- and this is a code -->  
+           <a target="_new" href="http://plants.usda.gov/cgi_bin/plant_search.cgi?mode=Symbol&go=go&keywordquery=<bean:write name='usagebean' property='plantname_id_transl' />">USDA PLANTS Profile <img border="0" src="@image_server@leaficon.gif" alt="USDA PLANTS logo" /></a>
+           
+        </logic:equal>  
+      </logic:equal>
+      <br/>
     </logic:iterate>
   </logic:notEmpty>
   
