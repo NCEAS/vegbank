@@ -13,8 +13,8 @@ import java.io.*;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-07-25 23:24:56 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-07-26 18:51:26 $'
+ * 	'$Revision: 1.2 $'
  */
 
 
@@ -104,7 +104,7 @@ public class NestedQueryBuilder extends javax.swing.JFrame
 				"begins with", "ends with", "contains"};
       queryOperatorList.setListData(queryOperatorElements);
 			//value text area
-			queryValue.setText("Fraxinus dipetala");
+			queryValue.setText("%");
     	queryValue.setColumns(20);
 			queryValue.setBackground(java.awt.Color.pink);
 			
