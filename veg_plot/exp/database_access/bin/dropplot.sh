@@ -2,9 +2,9 @@
 
 # This script will delete a plot from the plots 
 # database 
-#	 '$Author: harris $'
-#  '$Date: 2002-08-29 17:18:53 $'
-#  '$Revision: 1.1 $'
+#	 '$Author: farrell $'
+#  '$Date: 2003-02-03 18:41:06 $'
+#  '$Revision: 1.2 $'
 
 if [ "$#" -ne 2 ]
 then
@@ -30,4 +30,4 @@ PLANTTAXON=../lib/planttaxonomy.jar
 CLASSPATH=$XMLRESOURCE:$DATATRANSLATOR:$PG_JDBC:$XALAN:$XERCES:$ACCESSRESOURCE:$UTILS:$PLANTTAXON
 
 
-java  -cp $CLASSPATH databaseAccess.utility $ACTION $PLOT $HOST 
+java  -cp $CLASSPATH databaseAccess.Utility $ACTION $PLOT $HOST 

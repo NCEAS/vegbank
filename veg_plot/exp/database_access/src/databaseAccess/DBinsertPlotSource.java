@@ -7,8 +7,8 @@
 * Release: @release@
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-01-14 01:12:40 $'
-*   '$Revision: 1.11 $'
+*   '$Date: 2003-02-03 18:41:08 $'
+*   '$Revision: 1.12 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -26,20 +26,34 @@
 */
 package databaseAccess;
 
-import java.lang.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.sql.*;
+import PlotDataSource;
+
+import org.vegbank.common.utility.Utility;
+
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.Statement;
 import java.text.DateFormat;
-import org.w3c.dom.Node;
+import java.text.ParseException;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
 import org.w3c.dom.Document;
-import databaseAccess.*;
+import org.w3c.dom.Node;
+
+import servlet.util.GetURL;
 import xmlresource.datatype.Plot;
 import xmlresource.datatype.VegProject;
 import xmlresource.utils.XMLparse;
-import PlotDataSource;
-import servlet.util.GetURL;
 
 /**
  * this is a class that is used to load the vegbank plots database
@@ -131,7 +145,6 @@ public class DBinsertPlotSource {
 			System.out.println("DBinsertPlotSource > geoCoordRequestServletHost: " + geoCoordRequestServletHost );
 			
 			//initialize the data source
-			source = null;
 			source = new PlotDataSource(plugin);
 			System.out.println("DBinsertPlotSource > initializing the plot plugin framework: " + plugin);
 			source.getPlot(plot);
@@ -186,7 +199,7 @@ public class DBinsertPlotSource {
 
 	/**
 	 * this constructor is called when the class is going to connect 
-	 * to the vagbank database and not to any of the plugins.  This 
+	 * to the vegbank database and not to any of the plugins.  This 
 	 * occurs when, for example, the class attemts to create the 
 	 * summary tables.
 	 * @deprecated
@@ -215,11 +228,11 @@ public class DBinsertPlotSource {
 	}
 
 	/**
-	 * this is the method that the servlet plugin interface uses
+	 * servlet plugin interface uses this
 	 */
-	public StringBuffer servletRequestHandler(
-		String action,
-		Hashtable params) {
+	public StringBuffer servletRequestHandler(	String action,
+																																					Hashtable params) 
+	{
 		StringBuffer sb = new StringBuffer();
 		sb.append("accessed the DBinsertPlotSource class");
 		return (sb);
@@ -327,7 +340,7 @@ public class DBinsertPlotSource {
 			sb.append("AUTHOROBSCODE VARCHAR(100), ");
 			sb.append("TAXONOBSERVATION_ID NUMERIC(20), ");
 			sb.append("STRATUMTYPE VARCHAR(32), ");
-			sb.append("PERCENTCOVER NUMERIC(8), ");
+			sb.append("PERCENTCOVER NUMERIC(8), "); // Should this be double precision
 			sb.append(
 				"CONSTRAINT plotSpeciesSum_pk PRIMARY KEY (PLOTSPECIESSUM_ID) ");
 			sb.append(");");
@@ -615,120 +628,129 @@ public class DBinsertPlotSource {
 					LocalDbConnectionBroker.manageLocalDbConnectionBroker("getConn");
 				conn.setAutoCommit(false);
 
-				this.projectName = source.projectName;
-				this.projectDescription = source.projectDescription;
-				this.projectStartDate = source.getProjectStartDate(plotName);
-				this.projectStopDate = source.getProjectStopDate(plotName);
+				this.projectName = Utility.escapeCharacters( source.getProjectName(plotName) );
+				this.projectDescription = Utility.escapeCharacters( source.getProjectDescription(plotName) );
+				this.projectStartDate = Utility.escapeCharacters( source.getProjectStartDate(plotName) );
+				this.projectStopDate = Utility.escapeCharacters( source.getProjectStopDate(plotName) );
 
-				System.out.println(
-					"DBinsertPlotSource > projectName: " + this.projectName);
-				System.out.println(
-					"DBinsertPlotSource > project start: "
-						+ this.projectStartDate);
-				System.out.println(
-					"DBinsertPlotSource > project stop: "
-						+ this.projectStopDate);
+				System.out.println("DBinsertPlotSource > projectName: "+projectName);
+				System.out.println("DBinsertPlotSource > projectDescription: "+projectDescription);				
+				System.out.println("DBinsertPlotSource > project start: "+projectStartDate);
+				System.out.println("DBinsertPlotSource > project stop: "+projectStopDate);
 
 				// SEE IF THE PROJECT IN WHICH THIS PLOT IS A MEMBER EXISTS IN THE DATABASE
-				if (projectExists(projectName) == true) {
+				if (projectExists(projectName) == true)
+				{
 					projectId = getProjectId(projectName);
 				}
+				else if ( projectName == null) 
+				{
+					// This is  a hack allow loading of a plot without project info
+				}
 				// IF THE PROJECT IS NOT THERE THEN LOAD IT AND THE PROJECT CONT. INFO
-				else {
-					insertProject(
-						source.projectName,
-						source.projectDescription,
-						projectStartDate,
-						projectStopDate);
+				else 
+				{
+					
+					insertProject(projectName, 
+																projectDescription, 
+																projectStartDate, 
+																projectStopDate);
+																
 					projectId = getProjectId(projectName);
 					// INSERT THE PROJECT CONTRIBUTOR INFORMATION HERE, THE PARTY, ADDRESS, 
 					// TELEPHONE ALSO LOADED FROM HERE
 					Vector projContributors = source.projectContributors;
 					for (int ii = 0; ii < projContributors.size(); ii++) {
-						String contributor =
-							(String) projContributors.elementAt(ii);
-						String salutation =
-							source.getProjectContributorSalutation(contributor);
-						String surName =
-							source.getProjectContributorSurName(contributor);
-						String givenName =
-							source.getProjectContributorGivenName(contributor);
-						String email =
-							source.getProjectContributorEmailAddress(
-								contributor);
+						String contributor =(String) projContributors.elementAt(ii);
+						String salutation =Utility.escapeCharacters( source.getProjectContributorSalutation(contributor) );
+						String surName =Utility.escapeCharacters( source.getProjectContributorSurName(contributor) );
+						String givenName = Utility.escapeCharacters( source.getProjectContributorGivenName(contributor) );
+						String email =Utility.escapeCharacters( source.getProjectContributorEmailAddress(contributor) );
 						String role = "project manager";
 						String orgName =
-							source.getProjectContributorOrganizationName(
-								contributor);
+							Utility.escapeCharacters( source.getProjectContributorOrganizationName(contributor) );
 						String contact =
-							source.getProjectContributorContactInstructions(
-								contributor);
-						insertProjectContributor(
-							salutation,
-							givenName,
-							surName,
-							email,
-							role,
-							projectId,
-							orgName,
-							contact,
-							contributor);
+							Utility.escapeCharacters( source.getProjectContributorContactInstructions(contributor) );
+							
+						insertProjectContributor(	salutation,
+																											givenName,
+																											surName,
+																											email,
+																											role,
+																											projectId,
+																											orgName,
+																											contact,
+																											contributor);
 					}
 				}
 				//insertNamedPlace();
-				if (insertStaticPlotData(projectId) == false) {
-					System.out.println("static data: " + commit);
+				if (insertStaticPlotData(projectId) == false) 
+				{
+					System.out.println("DBinsertPlotSource > static data: " + commit);
 					commit = false;
-				} else {
-					if (insertCoverMethod() == false) {
+				} 
+				else 
+				{
+					if (insertCoverMethod() == false) 
+					{
 						commit = false;
-						System.out.println("covermethod>: " + commit);
+						System.out.println("DBinsertPlotSource > covermethod: " + commit);
 					}
-					if (insertStratumMethod() == false) {
+					
+					if (insertStratumMethod() == false) 
+					{
 						commit = false;
-						System.out.println("stratummethod>: " + commit);
+						System.out.println("DBinsertPlotSource > stratummethod: " + commit);
+					}
+					
+					if (insertPlotObservation() == false) 
+					{
+						commit = false;
+						System.out.println("DBinsertPlotSource > observation: " + commit);
 					}
 
-					if (insertPlotObservation() == false) {
+ 					if (insertCommunities() == false) 
+ 					{
 						commit = false;
-						System.out.println("observation>: " + commit);
+						System.out.println("DBinsertPlotSource > communities: " + commit);
 					}
-					if (insertCommunities() == false) {
+					
+					if (insertStrata() == false) 
+					{
 						commit = false;
-						System.out.println("communities>: " + commit);
-					}
-					if (insertStrata() == false) {
-						commit = false;
-						System.out.println("observation>: " + commit);
+						System.out.println("DBinsertPlotSource > strata: " + commit);
 					}
 					// BOTH THE TAXON OBSERVATION TABLES
 					// AND THE STRATA COMPOSITION ARE LOADED HERE
-					if (insertTaxonObservations() == false) {
+					if (insertTaxonObservations() == false) 
+					{
 						commit = false;
 						System.out.println("taxonobservation>: " + commit);
-						debug.append("<taxaInsertion>false</taxaInsertion> \n");
-					} else {
+						debug.append("<taxaInsertion>"+commit+"</taxaInsertion> \n");
+					} 
+					else 
+					{
 						debug.append("<taxaInsertion>true</taxaInsertion> \n");
 					}
 				}
-				System.out.println(
-					"DBinsertPlotSource > insertion success: " + commit);
-				if (commit == true) {
+				System.out.println("DBinsertPlotSource > insertion success: " + commit);
+				if (commit == true) 
+				{
 					conn.commit();
 					debug.append("<insert>true</insert>\n");
 					// CREATE THE DENORM TABLES
 					this.createSummaryTables();
-				} else {
+				} 
+				else 
+				{
 					conn.rollback();
 					debug.append("<insert>false</insert>\n");
 				}
 				LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
 			} catch (Exception e) {
 				System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
-				debug.append(
-					"<exceptionMessage>"
-						+ e.getMessage()
-						+ "</exceptionMessage>\n");
+				debug.append("<exceptionMessage>"+e.getMessage()
+					+"</exceptionMessage>\n");
 				e.printStackTrace();
 			}
 		}
@@ -861,14 +883,14 @@ public class DBinsertPlotSource {
 	 *
 	 */
 	private void insertObservationContributor( 	String salutation,
-																			        String givenName,
-																			        String surName,
-																			        String email,
-																			        String roleDescription,
-																			        int observationId,
-																			        String orgName,
-																			        String contact,
-																			        String contributor) 
+																																	        String givenName,
+																																	        String surName,
+																																	        String email,
+																																	        String roleDescription,
+																																	        int observationId,
+																																	        String orgName,
+																																	        String contact,
+																																	        String contributor) 
     {
 		try 
 		{
@@ -879,11 +901,12 @@ public class DBinsertPlotSource {
 			if (pExists == false) 
 			{
 				partyId = insertParty(salutation,
-                              givenName,
-													    surName,
-													    email,
-													    orgName,
-													    contact);
+						                              givenName,
+																			    surName,
+																			    email,
+																			    orgName,
+																			    contact
+																			    );
 				if (partyId > 0) 
 				{
 					// THESE METHODS USER THE 'PlotDataSource' Object directly
@@ -970,7 +993,7 @@ public class DBinsertPlotSource {
    **/
   private void insertProjectContributorTelephone(int partyId, String contributor)
 	{
-		String number = source.getProjectContributorPhoneNumber(contributor);	
+		String number = Utility.escapeCharacters( source.getProjectContributorPhoneNumber(contributor) );	
 		this.insertTelephone(partyId, number);
 	}
 	
@@ -983,7 +1006,7 @@ public class DBinsertPlotSource {
    **/
 	private void insertObservationContributorTelephone(int partyId, String contributor) 
   {
-		String number = source.getObservationContributorPhoneNumber(contributor);	
+		String number = Utility.escapeCharacters( source.getObservationContributorPhoneNumber(contributor) );	
 		this.insertTelephone(partyId, number);
   }
   
@@ -1035,12 +1058,12 @@ public class DBinsertPlotSource {
   
 	private void insertObservationContributorAddress(int partyId, String contributor)
 	{
-		String email = source.getObservationContributorEmailAddress(contributor);
-		String street = source.getObservationContributorDeliveryPoint(contributor);
-		String adminArea = source.getObservationContributorAdministrativeArea(contributor);
-		String city = source.getObservationContributorCity(contributor);
-		String postalCode = source.getObservationContributorPostalCode(contributor);
-		String country =  source.getObservationContributorCountry(contributor);
+		String email = Utility.escapeCharacters( source.getObservationContributorEmailAddress(contributor) );
+		String street = Utility.escapeCharacters( source.getObservationContributorDeliveryPoint(contributor) );
+		String adminArea = Utility.escapeCharacters( source.getObservationContributorAdministrativeArea(contributor) );
+		String city = Utility.escapeCharacters( source.getObservationContributorCity(contributor) );
+		String postalCode = Utility.escapeCharacters( source.getObservationContributorPostalCode(contributor) );
+		String country =  Utility.escapeCharacters( source.getObservationContributorCountry(contributor) );
 
 		this.insertAddress(partyId, email, street, city, adminArea, postalCode, country);		
 	}
@@ -1055,12 +1078,12 @@ public class DBinsertPlotSource {
   
 	private void insertProjectContributorAddress(int partyId, String contributor)
 	{
-		String email = source.getProjectContributorEmailAddress(contributor);
-		String street = source.getProjectContributorDeliveryPoint(contributor);
-		String adminArea = source.getProjectContributorAdministrativeArea(contributor);
-		String city = source.getProjectContributorCity(contributor);
-		String postalCode = source.getProjectContributorPostalCode(contributor);
-		String country =  source.getProjectContributorCountry(contributor);
+		String email = Utility.escapeCharacters( source.getProjectContributorEmailAddress(contributor) );
+		String street = Utility.escapeCharacters( source.getProjectContributorDeliveryPoint(contributor) );
+		String adminArea = Utility.escapeCharacters( source.getProjectContributorAdministrativeArea(contributor) );
+		String city = Utility.escapeCharacters( source.getProjectContributorCity(contributor) );
+		String postalCode = Utility.escapeCharacters( source.getProjectContributorPostalCode(contributor) );
+		String country =  Utility.escapeCharacters( source.getProjectContributorCountry(contributor) );
 	
     this.insertAddress(partyId, email, street, city, adminArea, postalCode, country);		
 	}
@@ -1270,7 +1293,7 @@ public class DBinsertPlotSource {
 
 				// get the cover of the plant within that strata -- if this comes back
 				// null then there was no observation of this plant in the strata
-				String cover = source.getTaxaStrataCover(plantName, plotName, curStrata);
+				String cover = Utility.escapeCharacters( source.getTaxaStrataCover(plantName, plotName, curStrata) );
 				if (cover != null) 
         {
 					//get the strataCompId number
@@ -1470,8 +1493,8 @@ public class DBinsertPlotSource {
 				taxonObservationId = getNextId("taxonObservation");
 				String authorNameId = uniqueTaxa.elementAt(i).toString();
 				//sci name
-				String code = source.getPlantTaxonCode(authorNameId);
-        String taxonCover = source.getPlantTaxonCover(authorNameId);
+				String code = Utility.escapeCharacters( source.getPlantTaxonCode(authorNameId) );
+        String taxonCover = Utility.escapeCharacters( source.getPlantTaxonCover(authorNameId) );
 				//corresponding code
 				System.out.println(
           "DBinsertPlotSource > cur. tax. name: "+ authorNameId+ " code: "+ code
@@ -1564,11 +1587,20 @@ public class DBinsertPlotSource {
 	private boolean insertCommunities() {
 		try {
 			StringBuffer sb = new StringBuffer();
-			String name = source.getCommunityName(plotName);
-			String code = source.getCommunityCode(plotName);
-			String framework = source.getCommunityFramework(plotName);
-			String level = source.getCommunityLevel(plotName);
-			String classNotes = source.getClassNotes(plotName);
+			String name = Utility.escapeCharacters( source.getCommunityName(plotName) );
+			String code = Utility.escapeCharacters( source.getCommunityCode(plotName) );
+			String framework = Utility.escapeCharacters( source.getCommunityFramework(plotName) );
+			String level = Utility.escapeCharacters( source.getCommunityLevel(plotName) );
+			String classNotes = Utility.escapeCharacters( source.getClassNotes(plotName) );
+			
+			String classPublication = Utility.escapeCharacters( source.getCommunityPublication(plotName) );
+			String classStartDate = Utility.escapeCharacters( source.getCommunityStartDate(plotName) );
+			String classStopDate = Utility.escapeCharacters( source.getCommunityStopDate(plotName) );
+			String classInspection = Utility.escapeCharacters( source.getCommunityInspection(plotName) );
+			String classTableAnalysis = Utility.escapeCharacters( source.getCommunityTableAnalysis(plotName) );
+			String classMultiVariateAnalysis = Utility.escapeCharacters( source.getCommunityMultiVariateAnalysis(plotName) );
+			String classExpertSystem = Utility.escapeCharacters( source.getCommunityExpertSystem(plotName) );
+							
 			String conceptId = "";
 			// get the appropriate codes for this community via the web service
 			// store the data in a hashtable
@@ -1587,17 +1619,33 @@ public class DBinsertPlotSource {
 				conceptId = (String) h.get("conceptId");
 				name = (String) h.get("name");
 			}
+			
 			debug.append("<communityName>" + name + "</communityName> \n");
 			debug.append("<communityCode>" + code + "</communityCode> \n");
 			debug.append("<communityLevel>" + level + "</communityLevel> \n");
 			debug.append("<classNotes>" + classNotes + "</classNotes> \n");
 			debug.append("<communityFramework>"+framework+"</communityFramework> \n");
 			debug.append("<communityConceptId>"+conceptId+"</communityConceptId> \n");
+			
+			debug.append("<communityStartDate>"+classStartDate+"</communityStartDate> \n");	
+			debug.append("<communityStopDate>"+classStopDate+"</communityStopDate> \n");		
+			debug.append("<communityInspection>"+classInspection+"</communityInspection> \n");
+			debug.append("<communityTableAnalysis>"+classTableAnalysis+"</communityTableAnalysis> \n");
+			debug.append("<communityMultiVariateAnalysis>"+classMultiVariateAnalysis+"</communityMultiVariateAnalysis> \n");
+			debug.append("<communityExpertSystem>"+classExpertSystem+"</communityExpertSystem> \n");	
+			debug.append("<communityPublication>"+classPublication+"</communityPublication> \n");	
+			
+			
+			// FIXME: Also add the publication_id  but more complicated as it is a foreign key
+			
+					
 			//insert the values
 			sb.append(
 				"INSERT into commclass (observation_id, commName, "
-					+ " commCode, commFramework, commLevel, classNotes) "
-					+ " values(?,?,?,?,?,?)");
+					+ " commCode, commFramework, commLevel, classNotes, "
+					+ " inspection, tableanalysis, multivariateanalysis, expertsystem,"
+					+ " classstartdate, classstopdate)"
+					+ " values(?,?,?,?,?,?,?,?,?,?,?,?)");
 
 			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
 			// Bind the values to the query and execute it
@@ -1607,6 +1655,16 @@ public class DBinsertPlotSource {
 			pstmt.setString(4, framework);
 			pstmt.setString(5, level);
 			pstmt.setString(6, classNotes);
+			pstmt.setString(7, classInspection);
+			pstmt.setString(8, classTableAnalysis);
+			pstmt.setString(9, classMultiVariateAnalysis);
+			pstmt.setString(10, classExpertSystem);
+			this.insertDateField(classStartDate, pstmt, 11);
+			this.insertDateField(classStopDate, pstmt, 12);
+			//pstmt.setString(11, classStartDate);
+			//pstmt.setString(12, classStopDate);
+						
+			
 			//execute the p statement
 			pstmt.execute();
 		} catch (Exception e) {
@@ -1625,9 +1683,11 @@ public class DBinsertPlotSource {
 	 * @return b -- either a success or failure boolean 
 	 * @see this.insertStratumType -- this method calls this one
 	 */
-	private boolean insertStrata() {
+	private boolean insertStrata() 
+	{
 		StringBuffer sb = new StringBuffer();
-		try {
+		try 
+		{
 			//get the names of the recognized strata
 			Vector strataTypes = source.uniqueStrataNames;
 			for (int i = 0; i < strataTypes.size(); i++) {
@@ -1637,9 +1697,9 @@ public class DBinsertPlotSource {
 				//get the strataId number
 				strataId = getNextId("stratum");
 				String sName = strataTypes.elementAt(i).toString();
-				String cover = source.getStrataCover(plotName, sName);
-				String base = source.getStrataBase(plotName, sName);
-				String height = source.getStrataHeight(plotName, sName);
+				String cover = Utility.escapeCharacters( source.getStrataCover(plotName, sName) );
+				String base = Utility.escapeCharacters( source.getStrataBase(plotName, sName) );
+				String height = Utility.escapeCharacters( source.getStrataHeight(plotName, sName) );
 				String description = "";
 				System.out.println(
 					"DBinsertPlotSource > inserting stratum type: " + sName);
@@ -1649,7 +1709,8 @@ public class DBinsertPlotSource {
 						+ " base: "
 						+ base);
 
-				if (height != null && height.length() >= 1) {
+				if (height != null && height.length() >= 1) 
+				{
 					debug.append("<stratum> \n");
 					debug.append("<name>" + sName + "</name>\n");
 					debug.append("<base>" + base + "</base>\n");
@@ -1660,12 +1721,10 @@ public class DBinsertPlotSource {
 					// THE 'OBSERVATION' TABLE INSERT INTO THE 'STRATUMTYPE' TABLE THEN
 					// INTO THE STRATUM TABLE
 
-					int stratumTypeId =
-						this.insertStratumType(
-							this.stratumMethodId,
-							sName,
-							sName,
-							description);
+					int stratumTypeId = this.insertStratumType( this.stratumMethodId,
+							                                        sName,
+							                                        sName,
+							                                        description);
 
 					//insert the strata values
 					sb.append(
@@ -1767,17 +1826,17 @@ public class DBinsertPlotSource {
 			//get the plotid number
 			plotObservationId = getNextId("observation");
 			
-			Vector projContributors = source.observationContributors;
-			for (int i = 0; i < projContributors.size(); i++) 
+			Vector obsContributors = source.getObservationContributors(plotName);
+			for (int i = 0; i < obsContributors.size(); i++) 
 			{			
 				String wholeName = source.observationContributors.elementAt(i).toString();
-				String salutation = source.getObservationContributorSalutation(wholeName);
-				String givenName = source.getObservationContributorGivenName(wholeName);
-				String surName = source.getObservationContributorSurName(wholeName);
-				String email = source.getObservationContributorEmailAddress(wholeName);
+				String salutation = Utility.escapeCharacters( source.getObservationContributorSalutation(wholeName) );
+				String givenName = Utility.escapeCharacters( source.getObservationContributorGivenName(wholeName) );
+				String surName = Utility.escapeCharacters( source.getObservationContributorSurName(wholeName) );
+				String email = Utility.escapeCharacters( source.getObservationContributorEmailAddress(wholeName) );
 				String role = "project manager";
-				String organizationName = source.getObservationContributorOrganizationName(wholeName);
-				String contactInstructions = source.getObservationContributorContactInstructions(wholeName);
+				String organizationName = Utility.escapeCharacters( source.getObservationContributorOrganizationName(wholeName) );
+				String contactInstructions = Utility.escapeCharacters( source.getObservationContributorContactInstructions(wholeName) );
 				
 				insertObservationContributor(
 					salutation,
@@ -1788,85 +1847,86 @@ public class DBinsertPlotSource {
 					plotObservationId,
 					organizationName,
 					contactInstructions,
-					wholeName);
+					wholeName
+				);
 			}
 			
 			// get the observation accession number
 			String obsAccession =
-				getObservationAccessionNumber(plotName, plotObservationId);
+				getObservationAccessionNumber(plotObservationId);
 			System.out.println("############### " + obsAccession);
 
-			String observationCode = source.getAuthorObsCode(plotName);
-			String startDate = source.getObsStartDate(plotName);
-			String stopDate = source.getObsStopDate(plotName);
+			String observationCode = Utility.escapeCharacters( source.getAuthorObsCode(plotName) );
+			String startDate = Utility.escapeCharacters( source.getObsStartDate(plotName) );
+			String stopDate = Utility.escapeCharacters( source.getObsStopDate(plotName) );
 			String taxonObservationArea =
-				source.getTaxonObservationArea(plotName);
+				Utility.escapeCharacters( source.getTaxonObservationArea(plotName) );
 			boolean autoTaxonCover = source.getAutoTaxonCover(plotName);
-			String coverDispersion = source.getCoverDispersion(plotName);
+			String coverDispersion = Utility.escapeCharacters( source.getCoverDispersion(plotName) );
 			boolean permanence = source.isPlotPermanent(plotName);
 			String stemObservationArea =
-				source.getStemObservationArea(plotName);
+				Utility.escapeCharacters( source.getStemObservationArea(plotName) );
 
 			// ADDED 
-			String dateAccuracy = source.getObsDateAccuracy(plotName);
-			String hydrologicRegime = source.getHydrologicRegime(plotName);
-			String stemSampleMethod = source.getStemSampleMethod(plotName);
-			String originalData = source.getOriginalData(plotName);
-			String effortLevel = source.getEffortLevel(plotName);
+			String dateAccuracy = Utility.escapeCharacters( source.getObsDateAccuracy(plotName) );
+			String hydrologicRegime = Utility.escapeCharacters( source.getHydrologicRegime(plotName) );
+			String stemSampleMethod = Utility.escapeCharacters( source.getStemSampleMethod(plotName) );
+			String originalData = Utility.escapeCharacters( source.getOriginalData(plotName) );
+			String effortLevel = Utility.escapeCharacters( source.getEffortLevel(plotName) );
 			String plotValidationLevel =
-				source.getPlotValidationLevel(plotName);
-			String floristicQuality = source.getFloristicQuality(plotName);
-			String bryophyteQuality = source.getBryophyteQuality(plotName);
-			String lichenQuality = source.getLichenQuality(plotName);
+				Utility.escapeCharacters( source.getPlotValidationLevel(plotName) );
+			String floristicQuality = Utility.escapeCharacters( source.getFloristicQuality(plotName) );
+			String bryophyteQuality = Utility.escapeCharacters( source.getBryophyteQuality(plotName) );
+			String lichenQuality = Utility.escapeCharacters( source.getLichenQuality(plotName) );
 			String observationNarrative =
-				source.getObservationNarrative(plotName);
-			String homogeneity = source.getHomogeneity(plotName);
-			String representativeness = source.getRepresentativeness(plotName);
-			String basalArea = source.getBasalArea(plotName);
-			String soilMoistureRegime = source.getSoilMoistureRegime(plotName);
-			String soilDrainage = source.getSoilDrainage(plotName);
-			String waterSalinity = source.getWaterSalinity(plotName);
-			String shoreDistance = source.getShoreDistance(plotName);
-			String soilDepth = source.getSoilDepth(plotName);
-			String organicDepth = source.getOrganicDepth(plotName);
-			String percentBedRock = source.getPercentBedRock(plotName);
-			String percentRockGravel = source.getPercentRockGravel(plotName);
-			String percentWood = source.getPercentWood(plotName);
-			String percentLitter = source.getPercentLitter(plotName);
-			String percentBareSoil = source.getPercentBareSoil(plotName);
-			String percentWater = source.getPercentWater(plotName);
-			String percentOther = source.getPercentOther(plotName);
-			String nameOther = source.getNameOther(plotName);
-			String standMaturity = source.getStandMaturity(plotName);
-			String successionalStatus = source.getSuccessionalStatus(plotName);
-			String treeHt = source.getTreeHt(plotName);
-			String shrubHt = source.getShrubHt(plotName);
-			String nonvascularHt = source.getNonvascularHt(plotName);
-			String floatingCover = source.getFloatingCover(plotName);
+				Utility.escapeCharacters( source.getObservationNarrative(plotName) );
+			String homogeneity = Utility.escapeCharacters( source.getHomogeneity(plotName) );
+			String representativeness = Utility.escapeCharacters( source.getRepresentativeness(plotName) );
+			String basalArea = Utility.escapeCharacters( source.getBasalArea(plotName) );
+			String soilMoistureRegime = Utility.escapeCharacters( source.getSoilMoistureRegime(plotName) );
+			String soilDrainage = Utility.escapeCharacters( source.getSoilDrainage(plotName) );
+			String waterSalinity = Utility.escapeCharacters( source.getWaterSalinity(plotName) );
+			String shoreDistance = Utility.escapeCharacters( source.getShoreDistance(plotName) );
+			String soilDepth = Utility.escapeCharacters( source.getSoilDepth(plotName) );
+			String organicDepth = Utility.escapeCharacters( source.getOrganicDepth(plotName) );
+			String percentBedRock = Utility.escapeCharacters( source.getPercentBedRock(plotName) );
+			String percentRockGravel = Utility.escapeCharacters( source.getPercentRockGravel(plotName) );
+			String percentWood = Utility.escapeCharacters( source.getPercentWood(plotName) );
+			String percentLitter = Utility.escapeCharacters( source.getPercentLitter(plotName) );
+			String percentBareSoil = Utility.escapeCharacters( source.getPercentBareSoil(plotName) );
+			String percentWater = Utility.escapeCharacters( source.getPercentWater(plotName) );
+			String percentOther = Utility.escapeCharacters( source.getPercentOther(plotName) );
+			String nameOther = Utility.escapeCharacters( source.getNameOther(plotName) );
+			String standMaturity = Utility.escapeCharacters( source.getStandMaturity(plotName) );
+			String successionalStatus = Utility.escapeCharacters( source.getSuccessionalStatus(plotName) );
+			String treeHt = Utility.escapeCharacters( source.getTreeHt(plotName) );
+			String shrubHt = Utility.escapeCharacters( source.getShrubHt(plotName) );
+			String nonvascularHt = Utility.escapeCharacters( source.getNonvascularHt(plotName) );
+			String floatingCover = Utility.escapeCharacters( source.getFloatingCover(plotName) );
       
-			String stemSizeLimit = source.getStemSizeLimit(plotName);
-			String landscapeNarrative = source.getLandscapeNarrative(plotName);
-			String phenologicalAspect = source.getPhenologicalAspect(plotName);
-			String waterDepth = source.getWaterDepth(plotName);
-			String fieldHt = source.getFieldHt(plotName);
-			String submergedHt = source.getSubmergedHt(plotName);
-			String treeCover = source.getTreeCover(plotName);
-			String shrubCover = source.getShrubCover(plotName);
-			String fieldCover = source.getFieldCover(plotName);
-			String nonvascularCover = source.getNonvascularCover(plotName);
+			String stemSizeLimit = Utility.escapeCharacters( source.getStemSizeLimit(plotName) );
+			String landscapeNarrative = Utility.escapeCharacters( source.getLandscapeNarrative(plotName) );
+			String phenologicalAspect = Utility.escapeCharacters( source.getPhenologicalAspect(plotName) );
+			String waterDepth = Utility.escapeCharacters( source.getWaterDepth(plotName) );
+			String fieldHt = Utility.escapeCharacters( source.getFieldHt(plotName) );
+			String submergedHt = Utility.escapeCharacters( source.getSubmergedHt(plotName) );
+			String treeCover = Utility.escapeCharacters( source.getTreeCover(plotName) );
+			String shrubCover = Utility.escapeCharacters( source.getShrubCover(plotName) );
+			String fieldCover = Utility.escapeCharacters( source.getFieldCover(plotName) );
+			String nonvascularCover = Utility.escapeCharacters( source.getNonvascularCover(plotName) );
 			
-      String submergedCover = source.getSubmergedCover(plotName);
-			String dominantStratum = source.getDominantStratum(plotName);
-			String growthform1Type = source.getGrowthform1Type(plotName);
-			String growthform2Type = source.getGrowthform2Type(plotName);
-			String growthform3Type = source.getGrowthform3Type(plotName);
-			String growthform1Cover = source.getGrowthform1Cover(plotName);
-			String growthform2Cover = source.getGrowthform2Cover(plotName);
-			String growthform3Cover = source.getGrowthform3Cover(plotName);
+      String submergedCover = Utility.escapeCharacters( source.getSubmergedCover(plotName) );
+			String dominantStratum = Utility.escapeCharacters( source.getDominantStratum(plotName) );
+			String growthform1Type = Utility.escapeCharacters( source.getGrowthform1Type(plotName) );
+			String growthform2Type = Utility.escapeCharacters( source.getGrowthform2Type(plotName) );
+			String growthform3Type = Utility.escapeCharacters( source.getGrowthform3Type(plotName) );
+			String growthform1Cover = Utility.escapeCharacters( source.getGrowthform1Cover(plotName) );
+			String growthform2Cover = Utility.escapeCharacters( source.getGrowthform2Cover(plotName) );
+			String growthform3Cover = Utility.escapeCharacters( source.getGrowthform3Cover(plotName) );
 			boolean notesPublic = source.getNotesPublic(plotName);
 			boolean notesMgt = source.getNotesMgt(plotName);
 			boolean revisions = source.getRevisions(plotName);
-			String methodNarrative = source.getMethodNarrative(plotName);
+			String methodNarrative = Utility.escapeCharacters( source.getMethodNarrative(plotName) );
 
 			// update the debugging stringbuffer
 			debug.append("<plotId>" + plotId + "</plotId> \n");
@@ -1919,8 +1979,10 @@ public class DBinsertPlotSource {
 			pstmt.setInt(2, coverMethodId);
 			pstmt.setInt(3, plotId);
 			pstmt.setString(4, observationCode);
-			pstmt.setString(5, startDate);
-			pstmt.setString(6, stopDate);
+			this.insertDateField(startDate, pstmt, 5);
+			this.insertDateField(startDate, pstmt, 6);		
+			//pstmt.setString(5, startDate);
+			//pstmt.setString(6, stopDate);
 			pstmt.setInt(7, stratumMethodId);
 			pstmt.setString(8, taxonObservationArea);
 			pstmt.setBoolean(9, autoTaxonCover);
@@ -2047,28 +2109,29 @@ public class DBinsertPlotSource {
 			//the variables from the plot file
 
 			//plotName = source.plotCode;
-			String authorPlotCode = source.getPlotCode(plotName);
-			String surfGeo = source.surfGeo;
+			String authorPlotCode = Utility.escapeCharacters( source.getPlotCode(plotName) );
+			String surfGeo = Utility.escapeCharacters( source.getSurfGeo(plotName) );
 			String parentPlot = "9";
-			String plotArea = source.plotArea;
-			String elevation = source.elevation;
-      		String elevationAccuracy = source.elevationAccuracy;
-			String slopeAspect = source.slopeAspect;
-			String slopeGradient = source.slopeGradient;
-			String topoPosition = source.topoPosition;
-			String hydrologicRegime = source.hydrologicRegime;
-			String plotShape = source.plotShape;
-			String confidentialityStatus = source.confidentialityStatus;
-			String confidentialityReason = source.confidentialityReason;
-			String azimuth = source.azimuth;
-			String dsgPoly = source.dsgPoly;
-			String xCoord = source.getXCoord(plotName);
-			String yCoord = source.getYCoord(plotName);
-			String zone = source.getUTMZone(plotName);
+			String plotArea = Utility.escapeCharacters( source.getPlotArea(plotName) );
+			String elevation = Utility.escapeCharacters( source.getElevation(plotName) );
+			String datumType = Utility.escapeCharacters( source.getDatumType(plotName) );
+      String elevationAccuracy = Utility.escapeCharacters( source.getElevationAccuracy(plotName) );
+			String slopeAspect = Utility.escapeCharacters( source.getSlopeAspect(plotName) );
+			String slopeGradient = Utility.escapeCharacters( source.getSlopeGradient(plotName) );
+			String topoPosition = Utility.escapeCharacters( source.getTopoPosition(plotName) );
+			String hydrologicRegime = Utility.escapeCharacters( source.getHydrologicRegime(plotName) );
+			String plotShape = Utility.escapeCharacters( source.getPlotShape(plotName) );
+			String confidentialityStatus = Utility.escapeCharacters( source.getConfidentialityStatus(plotName) );
+			String confidentialityReason = Utility.escapeCharacters( source.getConfidentialityReason(plotName) );
+			String azimuth = Utility.escapeCharacters( source.getAzimuth(plotName) );
+			String dsgPoly = Utility.escapeCharacters( source.getDSGPoly(plotName) );
+			String xCoord = Utility.escapeCharacters( source.getXCoord(plotName) );
+			String yCoord = Utility.escapeCharacters( source.getYCoord(plotName) );
+			String zone = Utility.escapeCharacters( source.getUTMZone(plotName) );
 			// if the plot data source has geocoordinates (latitude, logitude )
 			// use them otherwise lookup the information from the web service
-			String latitude = source.getLatitude(plotName);
-			String longitude = source.getLongitude(plotName);
+			String latitude = Utility.escapeCharacters( source.getLatitude(plotName) );
+			String longitude = Utility.escapeCharacters( source.getLongitude(plotName) );
 			if (latitude == null || latitude.length() < 2) 
 			{
 				Hashtable geoCoords = getGeoCoords(xCoord, yCoord, zone);
@@ -2076,14 +2139,14 @@ public class DBinsertPlotSource {
 				longitude = (String) geoCoords.get("longitude");
 			}
 
-			String state = source.state;
-			String country = source.country;
-			String authorLocation = source.authorLocation;
+			String state = Utility.escapeCharacters( source.getState(plotName) );
+			String country = Utility.escapeCharacters( source.getCountry(plotName) );
+			String authorLocation = Utility.escapeCharacters( source.getAuthorLocation(plotName) );
 			boolean permanence = source.isPlotPermanent(plotName);
-      		String layoutNarrative = source.layoutNarrative;
-      		String locationNarrative = source.locationNarrative;
-			String landForm = source.getLandForm(plotName);
-      		String standSize = source.standSize;
+     	String layoutNarrative = Utility.escapeCharacters( source.getLayoutNarrative(plotName) );
+     	String locationNarrative = Utility.escapeCharacters( source.getLocationNarrative(plotName) );
+			String landForm = Utility.escapeCharacters( source.getLandForm(plotName) );
+     	String standSize = Utility.escapeCharacters( source.getStandSize(plotName) );
 
 			//make a temporary accession number for each unique plot
 			String accessionNumber =
@@ -2098,9 +2161,11 @@ public class DBinsertPlotSource {
 				"<authorPlotCode>" + authorPlotCode + "</authorPlotCode>\n");
 			debug.append("<geology>" + surfGeo + "</geology>\n");
 			debug.append("<plotArea>" + plotArea + "</plotArea>\n");
+			debug.append("<elevation>" + elevation + "</elevation>\n");
 			debug.append(
         		"<elevationAccuracy>" + elevationAccuracy + "</elevationAccuracy>\n");
 			debug.append("<slopeAspect>" + slopeAspect + "</slopeAspect>\n");
+			debug.append("<authorDatum>"+datumType+"</authorDatum>\n");			
 			debug.append(
 				"<slopeGradient>" + slopeGradient + "</slopeGradient>\n");
 			debug.append("<topoPosition>" + topoPosition + "</topoPosition>\n");
@@ -2133,9 +2198,9 @@ public class DBinsertPlotSource {
 					+ "authore, authorn, state, country, authorLocation, accession_number, "
 					+ "dateEntered, submitter_surname, submitter_givenname, submitter_email, "
 					+ "authorzone, permanence, landform, layoutnarative, locationnarrative, "
-          + "azimuth, elevationaccuracy, dsgpoly, standsize ) "
+          + "azimuth, elevationaccuracy, dsgpoly, standsize, authordatum ) "
 					+
-          "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+          "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
 			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
 
@@ -2147,7 +2212,7 @@ public class DBinsertPlotSource {
 			pstmt.setString(5, latitude);
 			pstmt.setString(6, longitude);
 			pstmt.setString(7, plotArea);
-			pstmt.setString(8, elevationAccuracy);
+			pstmt.setString(8, elevation);
 			pstmt.setString(9, slopeAspect);
 			pstmt.setString(10, slopeGradient);
 			pstmt.setString(11, topoPosition);
@@ -2173,7 +2238,8 @@ public class DBinsertPlotSource {
 			pstmt.setString(31, elevationAccuracy);
 			pstmt.setString(32, dsgPoly);
 			pstmt.setString(33, standSize);
-      
+			pstmt.setString(34, datumType);
+			     
 			pstmt.getWarnings();
 			pstmt.execute();
 			pstmt.close();
@@ -2212,13 +2278,15 @@ public class DBinsertPlotSource {
 		int plotId,
 		String email) {
 		StringBuffer sb = new StringBuffer();
-		try {
-			String date = source.getObsStartDate(plotName);
+		try 
+    {
+			String date = Utility.escapeCharacters( source.getObsStartDate(plotName) );
+
 			// THE PLOTNAME HEAR REFERS TO THE UNIQUE PLOT IDENTIFIER FOR A
 			// GIVEN CLASS SO THE CODE FOR THAT CLASS MUST BE LOOKED UP AND
 			// USED 
 
-			String plotCode = source.getPlotCode(plotName);
+			String plotCode = Utility.escapeCharacters( source.getPlotCode(plotName) );
 
 			StringTokenizer tok = new StringTokenizer(date);
 			String buf = tok.nextToken().replace('-', ' ');
@@ -2252,60 +2320,13 @@ public class DBinsertPlotSource {
 	 * it is being added with the hope that nothing breaks
 	 *
 	 * @param observationId -- the PK of the observation in the system
-	 * @param email -- the email address of the user loading the plot
-	 * @return accession number like: VB-obsId-yyyymmdd
+	 * @return accession number like: VB-obsId
 	 * @see getAccessionNumber
 	 */
-	private String getObservationAccessionNumber(
-		String plotName,
-		int observationId) {
-		StringBuffer sb = new StringBuffer();
-		try {
-
-			//int observationId =  getNextId("observation");
-
-			// get the database data and parse it
-			Statement query = conn.createStatement();
-			ResultSet rs = query.executeQuery("select now()");
-			String date = null;
-			while (rs.next()) {
-				date = rs.getString(1);
-				//System.out.println("date: " + date);
-			}
-
-			StringTokenizer tok = new StringTokenizer(date);
-			// the first token is the date
-			String datePart = tok.nextToken().replace('-', ' ');
-			// the second token is the time
-			String time = tok.nextToken().replace(':', ' ');
-
-			StringTokenizer tok2 = new StringTokenizer(datePart);
-			StringBuffer sb2 = new StringBuffer();
-			while (tok2.hasMoreTokens()) {
-				sb2.append(tok2.nextToken());
-			}
-			//tokenize the time-part
-			StringTokenizer tok3 = new StringTokenizer(time);
-			StringBuffer sb3 = new StringBuffer();
-			while (tok3.hasMoreTokens()) {
-				sb3.append(tok3.nextToken());
-			}
-
-			// append
-			String startDate = sb2.toString() + sb3.toString();
-
-			sb.append("VB");
-			sb.append(".");
-			sb.append(observationId);
-			sb.append(".");
-			sb.append(startDate);
-
-			Thread.sleep(4000);
-		} catch (Exception e) {
-			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return (sb.toString());
+	private String getObservationAccessionNumber(int observationId) 
+  {
+    // This is of overkill for just this but it may change
+		return ( "VB." + observationId);
 	}
 
 	/**
@@ -2539,6 +2560,30 @@ public class DBinsertPlotSource {
 	}
 
 	/**
+	 * Thin wrapper around setting a date field in a PreparedStatement to handle
+	 * adding nulls when needed, e.g. empty string.
+	 * 
+	 * @param date
+	 * @param psmnt
+	 * @param i
+	 * @throws SQLException
+	 */
+	private void insertDateField ( String date, PreparedStatement psmnt, int i)
+		throws SQLException
+	{
+		int sqlDateType = java.sql.Types.DATE;
+		if ( date == "" )
+		{
+			psmnt.setNull(i, sqlDateType);
+		}
+		else
+		{
+			// this maybe should be setDate
+			psmnt.setString(i, date);
+		}
+	}
+
+	/**
 	 * method that returns true if the project with this name exists in the 
 	 * database
 	 */
@@ -2697,10 +2742,10 @@ public class DBinsertPlotSource {
 			pstmt.setInt(1, projectId);
 			pstmt.setString(2, projectName);
 			pstmt.setString(3, projectDescription);
-			//pstmt.setDate(4, startDate);
-			//pstmt.setDate(5, stopDate);
-      pstmt.setString(4, projectStartDate);
-      pstmt.setString(5, projectStopDate);
+			this.insertDateField(projectStartDate, pstmt, 4);
+			this.insertDateField(projectStopDate, pstmt, 5);			
+      //pstmt.setString(4, projectStartDate);
+      //pstmt.setString(5, projectStopDate);
 
       pstmt.execute();
       pstmt.close();

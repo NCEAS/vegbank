@@ -2,9 +2,9 @@
 
 # This script will change a user's password in the profile 
 # database
-#	 '$Author: harris $'
-#  '$Date: 2002-08-30 18:25:17 $'
-#  '$Revision: 1.1 $'
+#	 '$Author: farrell $'
+#  '$Date: 2003-02-03 18:41:06 $'
+#  '$Revision: 1.2 $'
 
 
 if [ "$#" -ne 3 ]
@@ -32,5 +32,5 @@ UTILS=../lib/utilities.jar
 PLANTTAXON=../lib/planttaxonomy.jar
 CLASSPATH=$XMLRESOURCE:$DATATRANSLATOR:$PG_JDBC:$XALAN:$XERCES:$ACCESSRESOURCE:$UTILS:$PLANTTAXON
 
-java  -cp $CLASSPATH databaseAccess.utility $ACTION $EMAIL $HOST $LEVEL
+java  -cp $CLASSPATH databaseAccess.Utility $ACTION $EMAIL $HOST $LEVEL
  

@@ -11,6 +11,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
+import xmlresource.utils.*;
+
 /**
  * class to store a vegetation plot as a DOM
  * and to perform specific functions to the DOM

@@ -2,9 +2,9 @@
 
 # This script will delete a user from the vegbank 
 # user profile database 
-#	 '$Author: harris $'
-#  '$Date: 2002-08-29 17:18:53 $'
-#  '$Revision: 1.1 $'
+#	 '$Author: farrell $'
+#  '$Date: 2003-02-03 18:41:07 $'
+#  '$Revision: 1.2 $'
 
 
 if [ "$#" -ne 2 ]
@@ -31,5 +31,5 @@ UTILS=../lib/utilities.jar
 PLANTTAXON=../lib/planttaxonomy.jar
 CLASSPATH=$XMLRESOURCE:$DATATRANSLATOR:$PG_JDBC:$XALAN:$XERCES:$ACCESSRESOURCE:$UTILS:$PLANTTAXON
 
-java  -cp $CLASSPATH databaseAccess.utility $ACTION $EMAIL $HOST
+java  -cp $CLASSPATH databaseAccess.Utility $ACTION $EMAIL $HOST
  
