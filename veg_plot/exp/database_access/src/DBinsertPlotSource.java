@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-14 16:54:56 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2002-03-14 17:23:02 $'
+ * 	'$Revision: 1.3 $'
  */
 package databaseAccess;
 
@@ -155,6 +155,26 @@ public class DBinsertPlotSource
 	
 	
 	/**
+	 * utility method to get a vector containg all the plots in a specific 
+	 * data source
+	 */
+	 private Vector getPlotNames()
+	 {
+		 Vector v = new Vector();
+		 	try
+			{
+				v = source.getPlotNames();
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception: "+ e.getMessage() );
+				e.printStackTrace();
+			}
+			return(v);
+	 }
+	
+	
+	/**
    * the main routine used to test the DB class which interacts with the 
 	 * vegclass database.
    * 
@@ -165,6 +185,7 @@ public class DBinsertPlotSource
 	{
   	try 
 		{
+			//load an individual plot aor allow the user to specify the plots to load
 			if (args.length >= 2)
 			{
 				//get the plugin named
@@ -177,21 +198,26 @@ public class DBinsertPlotSource
 					DBinsertPlotSource db = new DBinsertPlotSource(plugin, plot);
 					db.insertPlot(plot);
 				}
-				//multiple plots on the command line
-				else
+			}
+			//load all the plots in the package
+			else if ( args.length == 1 )
+			{
+				System.out.println("DBinsertPlotSource > loading entire source");
+				String plugin = args[0];
+				DBinsertPlotSource db = new DBinsertPlotSource(plugin);
+				Vector v = db.getPlotNames();
+				//System.out.println("DBinsertPlotSource > plots: " + v.toString() );
+				for (int i=0; i < v.size(); i++)
 				{
-					DBinsertPlotSource db = new DBinsertPlotSource();
-					for (int i=1; i < args.length; i++)
-					{
-						String plot = args[i];
-						plot = plot.trim();
-						System.out.println("loading plot: " + plot +" \n");
-						db = new DBinsertPlotSource(plugin, plot);
-						db.insertPlot(plot);
-						db = null;
-					}
+					String plot = (String)v.elementAt(i);
+					plot = plot.trim();
+					System.out.println("DBinsertPlotSource > loading plot: " + plot +" \n");
+					db = new DBinsertPlotSource(plugin, plot);
+					db.insertPlot(plot);
+					db = null;
 				}
 			}
+				
 			else
 			{
 				System.out.println("Usage: DBinsertPlotSource pluginName plot1 plot2 ... plotn");
