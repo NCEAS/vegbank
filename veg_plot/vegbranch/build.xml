@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--    * build_client.xml   *   *  Authors: John Harris, Michael Lee   * Copyright: 2000 Regents of the University of California and the   *           National Center for Ecological Analysis and Synthesis   *  Build file for the Ant cross-platform build system for metacat   *  See http://jakarta.apache.org for details on Ant     *     * this build file copies VegBranch files from the vegbank machine (home/lee/VegBranchReleases) to vegbank webspace.  They are separated into two classes: docs and client
-      '$Author: mlee $'    *     '$Date: 2003-04-15 00:34:00 $'   *     '$Revision: 1.1 $' -->
+      '$Author: mlee $'    *     '$Date: 2003-09-24 18:46:01 $'   *     '$Revision: 1.2 $' -->
 <project name="vegbranch" default="init" basedir=".">
   <!-- INITIATION -->
   <target name="init">
@@ -9,7 +9,7 @@
     <!-- RELEVANT DIRECTORIES -->
     <property name="current_dir" value="./"/>
     <property name="lrg_binary_src" value="/home/lee/VegBranchReleases"/>
-    <property name="build" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbranch"/>
+    <property name="build" value="/var/www/html/vegbranch"/>
     <!-- property name="build" value="/home/lee/temp"/ -->
     <!-- RELEVANT FILES TO COPY / DELETE -->
     <!-- client files: -->
@@ -82,7 +82,7 @@
   </target>
   <!-- examples -->
   <target name="dist-examples" depends="init">
-    <copy todir="${build}/examples" filtering="yes">
+    <copy todir="${build}/examples" filtering="no">
       <fileset dir="${lrg_binary_src}" includes="${examples_include}"/>
     </copy>
   </target>
