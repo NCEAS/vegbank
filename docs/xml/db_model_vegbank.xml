@@ -223,7 +223,7 @@
         </attListItem>
         <attListItem>
           <attListValue>not equal</attListValue>
-          <attListValueDesc>The two concepts are not exactly the same. This leaves the possibilties that the reference concept is greater than, less than, overlapping, similar, or disjunct relative to the correlated concept.</attListValueDesc>
+          <attListValueDesc>The two concepts are not exactly the same. This leaves the possibilities that the reference concept is greater than, less than, overlapping, similar, or disjunct relative to the correlated concept.</attListValueDesc>
           <attListSortOrd>4</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -473,7 +473,7 @@
   <entity>
     <entityName>commParty</entityName>
     <entityLabel>Community Party</entityLabel>
-    <entitySummary>Party contributing commuinity taxonomic perspective;  may be either an individual or an organization.</entitySummary>
+    <entitySummary>Party contributing community taxonomic perspective;  may be either an individual or an organization.</entitySummary>
     <entityDescription/>
     <module>community</module>
     <attribute>
@@ -1267,7 +1267,7 @@
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This is a foreign key into the plant name list, the entery in which when combined wiht a reference constitutes a concept.</attDefinition>
+      <attDefinition>This is a foreign key into the plant name list, the entry in which when combined with a reference constitutes a concept.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>6</formAustere>
@@ -1483,7 +1483,7 @@ change through time.</entitySummary>
         </attListItem>
         <attListItem>
           <attListValue>not equal</attListValue>
-          <attListValueDesc>The two concepts, are not exactly the same. This leaves the possibilties that the reference concept is greater than, less than, overlapping, similar, or disjunct relative to the correlated concept.</attListValueDesc>
+          <attListValueDesc>The two concepts, are not exactly the same. This leaves the possibilities that the reference concept is greater than, less than, overlapping, similar, or disjunct relative to the correlated concept.</attListValueDesc>
           <attListSortOrd>4</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -2335,7 +2335,7 @@ change through time.</entitySummary>
         </attListItem>
       </attList>
       <attNotes>n/a</attNotes>
-      <attDefinition>The classLevel attribute specifies a level in the taxonomic hierarcy that a class belongs.</attDefinition>
+      <attDefinition>The classLevel attribute specifies a level in the taxonomic hierarchy that a class belongs.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>214</formAustere>
@@ -3197,7 +3197,7 @@ change through time.</entitySummary>
         </attListItem>
       </attList>
       <attNotes>n/a</attNotes>
-      <attDefinition>Describes the type of reference this generic type is being used to represent.  Examples: book, journal article, webpage.</attDefinition>
+      <attDefinition>Describes the type of reference this generic type is being used to represent.  Examples: book, journal article, web page.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>301</formAustere>
@@ -3285,7 +3285,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>The date the resource being referenced was accessed.  This is useful if the resource is could be changed after formal publication, such as websites or databases.</attDefinition>
+      <attDefinition>The date the resource being referenced was accessed.  This is useful if the resource is could be changed after formal publication, such as web sites or databases.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>313</formAustere>
@@ -4242,7 +4242,7 @@ change through time.</entitySummary>
     <entityName>classContributor</entityName>
     <entityLabel>Classification Contributor</entityLabel>
     <entitySummary>This table stores information about who participated in a classification event</entitySummary>
-    <entityDescription>This table serves as an interesection entity used to link a party with a specific plot classification event.</entityDescription>
+    <entityDescription>This table serves as an intersection entity used to link a party with a specific plot classification event.</entityDescription>
     <module>plot</module>
     <attribute>
       <attName>CLASSCONTRIBUTOR_ID</attName>
@@ -4257,7 +4257,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Primary key for the classContributor table.</attNotes>
-      <attDefinition>Database generated identifier assigned to each unique contribution to the classificaiton of a plot observation.</attDefinition>
+      <attDefinition>Database generated identifier assigned to each unique contribution to the classification of a plot observation.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>-1</formAustere>
@@ -4841,7 +4841,7 @@ change through time.</entitySummary>
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
-      <attDefinition>Indicates the degree of confidence of the interpretor(s) in the interpretation made. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</attDefinition>
+      <attDefinition>Indicates the degree of confidence of the interpreter(s) in the interpretation made. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>489</formAustere>
@@ -4863,7 +4863,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the reference table</attNotes>
-      <attDefinition>Link to the reference from which information on the community concept was obtained during the classification event. (A case could be made for thisd being moved to reference.)</attDefinition>
+      <attDefinition>Link to the reference from which information on the community concept was obtained during the classification event. (A case could be made for this being moved to reference.)</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>-1</formAustere>
@@ -5002,7 +5002,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>The name or label used in the coverclass scale for this specific specific coverclass.</attDefinition>
+      <attDefinition>The name or label used in the coverclass scale for this specific coverclass.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>5</formAustere>
@@ -5270,8 +5270,8 @@ change through time.</entitySummary>
   </entity>
   <entity>
     <entityName>disturbanceObs</entityName>
-    <entityLabel>Disturbance Obs</entityLabel>
-    <entitySummary>This table stores plot observation information pertaining toobserver estamation of the disturbance history of the plot.</entitySummary>
+    <entityLabel>Disturbance Observation</entityLabel>
+    <entitySummary>This table stores plot observation information pertaining to observer estimation of the disturbance history of the plot.</entitySummary>
     <entityDescription>disturbanceObs is  a child of observation; a plot might experience many types of disturbance unique to different observation events.</entityDescription>
     <module>plot</module>
     <attribute>
@@ -5768,7 +5768,7 @@ change through time.</entitySummary>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes>may be constrainted by a maximum size</attNotes>
+      <attNotes>may be constrained by a maximum size</attNotes>
       <attDefinition>The graphical file data. - Max = 5 M total per plot</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
@@ -5782,7 +5782,7 @@ change through time.</entitySummary>
   <entity>
     <entityName>namedPlace</entityName>
     <entityLabel>Named Place</entityLabel>
-    <entitySummary>This tables stores information about the various 'named places' that a plot may have been located within. Such places could include geographic regions, study sites, ownership units, managed units, any placename in the USGS glossary (http://www-nmd.usgs.go</entitySummary>
+    <entitySummary>This tables stores information about the various 'named places' that a plot may have been located within. Such places could include geographic regions, study sites, ownership units, managed units, any place name in the USGS glossary (http://www-nmd.usgs.go</entitySummary>
     <entityDescription/>
     <module>plot</module>
     <attribute>
@@ -5831,7 +5831,7 @@ change through time.</entitySummary>
         </attListItem>
         <attListItem>
           <attListValue>county</attListValue>
-          <attListValueDesc>county, canton, or parrish</attListValueDesc>
+          <attListValueDesc>county, canton, or parish</attListValueDesc>
           <attListSortOrd>2</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -5871,12 +5871,12 @@ change through time.</entitySummary>
         </attListItem>
         <attListItem>
           <attListValue>Ecoregion</attListValue>
-          <attListValueDesc>A non-standard or generic ecoregion that is not specifically menioned in this list.</attListValueDesc>
+          <attListValueDesc>A non-standard or generic ecoregion that is not specifically mentioned in this list.</attListValueDesc>
           <attListSortOrd>10</attListSortOrd>
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
-      <attDefinition>Name of the system of names.  These can be treated as points as with placenames, or as a coverage or set of polygons (e.g., geographic area names, HUC codes, Ecoregions, Quadrangles).</attDefinition>
+      <attDefinition>Name of the system of names.  These can be treated as points as with place names, or as a coverage or set of polygons (e.g., geographic area names, HUC codes, Ecoregions, Quadrangles).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>582</formAustere>
@@ -5964,7 +5964,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Although sometwhat redundant with the owner information contained in observationContributor with roleCode of owner, this allows the program to provide ownership information automatically.  The ownership field supercedes this field in priority.</attDefinition>
+      <attDefinition>Although somewhat redundant with the owner information contained in observationContributor with roleCode of owner, this allows the program to provide ownership information automatically.  The ownership field supercedes this field in priority.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>594</formAustere>
@@ -6081,7 +6081,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the aux_role table</attNotes>
-      <attDefinition>What role was the party palying when the note was applied?</attDefinition>
+      <attDefinition>What role was the party playing when the note was applied?</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>-1</formAustere>
@@ -6146,7 +6146,7 @@ change through time.</entitySummary>
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
-      <attDefinition>The type of note: Database Management, Observation Author, Database User and Internal. "Database Managment" notes are those added by the management team and may be queried and viewed by the public. "Database Use" notes are those entered by the users of the database and are publicly viewable. "Internal" notes are for management to use internally and will not be broadcast.</attDefinition>
+      <attDefinition>The type of note: Database Management, Observation Author, Database User and Internal. "Database Management" notes are those added by the management team and may be queried and viewed by the public. "Database Use" notes are those entered by the users of the database and are publicly viewable. "Internal" notes are for management to use internally and will not be broadcast.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>610</formAustere>
@@ -6277,7 +6277,7 @@ change through time.</entitySummary>
     <entityName>observation</entityName>
     <entityLabel>Observation</entityLabel>
     <entitySummary>This table stores plot observation results that might vary between official observation events.</entitySummary>
-    <entityDescription>Observation is a child of plot in recognition of the fact that a plot may be resampled and that some of the environmental
+    <entityDescription>Observation is a child of plot in recognition of the fact that a plot may be re-sampled and that some of the environmental
 conditions may change between resampling events.
 	</entityDescription>
     <module>plot</module>
@@ -6643,7 +6643,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>default = plot.area</attNotes>
-      <attDefinition>the total surface area (in m2) used for cover estimates and for which a complete species list is provided.  If subplots were used, this would be the total area of the subplots without intersticial space.</attDefinition>
+      <attDefinition>the total surface area (in m2) used for cover estimates and for which a complete species list is provided.  If subplots were used, this would be the total area of the subplots without interstitial space.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>660</formAustere>
@@ -7012,7 +7012,7 @@ conditions may change between resampling events.
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
-      <attDefinition>Subjective assessment of the taxonmic quality of the bryophye data by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low, Very incomplete,absent).</attDefinition>
+      <attDefinition>Subjective assessment of the taxonomic quality of the bryophyte data by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low, Very incomplete, absent).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>687</formAustere>
@@ -7075,7 +7075,7 @@ conditions may change between resampling events.
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
-      <attDefinition>Subjective assessment of the taxonmic quality of the lichen data by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low, Very incomplete,absent).</attDefinition>
+      <attDefinition>Subjective assessment of the taxonomic quality of the lichen data by the party that submitted the plot (e.g., Highest, High, High but incomplete, Moderate, Moderate and incomplete, Low, Very incomplete, absent).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>690</formAustere>
@@ -7162,7 +7162,7 @@ conditions may change between resampling events.
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
-      <attDefinition>How homogeneous was the community (e.g., homogeneous, compositionial trend across plot, conspicuous inclusions, irregular mosaic or pattern).</attDefinition>
+      <attDefinition>How homogeneous was the community (e.g., homogeneous, compositional trend across plot, conspicuous inclusions, irregular mosaic or pattern).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>699</formAustere>
@@ -7602,7 +7602,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Median depth to bedrockor permafrost in m (usually from averaging multiple probe readings).</attDefinition>
+      <attDefinition>Median depth to bedrock or permafrost in m (usually from averaging multiple probe readings).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>729</formAustere>
@@ -7624,7 +7624,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Depth of the curficial organic layer, where present, in centimeters.</attDefinition>
+      <attDefinition>Depth of the surficial organic layer, where present, in centimeters.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>732</formAustere>
@@ -7800,7 +7800,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Name of additional itemized groundcover category (e.g., beer cans).</attDefinition>
+      <attDefinition>Name of additional itemized ground cover category (e.g., beer cans).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>756</formAustere>
@@ -7875,7 +7875,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Description of the assumed successional status of the plot. This descriptionis of necessity highly subjective.</attDefinition>
+      <attDefinition>Description of the assumed successional status of the plot. This description is of necessity highly subjective.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>762</formAustere>
@@ -8333,7 +8333,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>Other herbaceous</attListValue>
-          <attListValueDesc>other type of herbacious species not on the list</attListValueDesc>
+          <attListValueDesc>other type of herbaceous species not on the list</attListValueDesc>
           <attListSortOrd>290</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -8541,7 +8541,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>Other herbaceous</attListValue>
-          <attListValueDesc>other type of herbacious species not on the list</attListValueDesc>
+          <attListValueDesc>other type of herbaceous species not on the list</attListValueDesc>
           <attListSortOrd>290</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -8749,7 +8749,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>Other herbaceous</attListValue>
-          <attListValueDesc>other type of herbacious species not on the list</attListValueDesc>
+          <attListValueDesc>other type of herbaceous species not on the list</attListValueDesc>
           <attListSortOrd>290</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -8860,7 +8860,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Total cover of the third-most predominent growthform?</attDefinition>
+      <attDefinition>Total cover of the third-most predominant growthform?</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>816</formAustere>
@@ -9000,7 +9000,7 @@ conditions may change between resampling events.
     <entityName>observationContributor</entityName>
     <entityLabel>Observation Contributor</entityLabel>
     <entitySummary>This table stores information about which parties contributed to specific plot observation events.</entitySummary>
-    <entityDescription>This table serves as an interesection that links a party with a specific plot observation event.  Note that there is no plotContributor table because all contributions take place at a particular observation, such as the first observation.</entityDescription>
+    <entityDescription>This table serves as an intersection that links a party with a specific plot observation event.  Note that there is no plotContributor table because all contributions take place at a particular observation, such as the first observation.</entityDescription>
     <module>plot</module>
     <attribute>
       <attName>OBSERVATIONCONTRIBUTOR_ID</attName>
@@ -9036,7 +9036,7 @@ conditions may change between resampling events.
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes>This is tforeign key into the Observation table.</attNotes>
+      <attNotes>This is the foreign key into the Observation table.</attNotes>
       <attDefinition>Foreign key pointing to a given plot observation event to which the contribution was made.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
@@ -9081,7 +9081,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>This is the foreign key into the aux_Role table</attNotes>
-      <attDefinition>Foreign key that identifies the role that the party had in the plot obsevation (e.g.,  PI, contact, research advisor, field assistant, taxonomist, owner, guide, etc.).</attDefinition>
+      <attDefinition>Foreign key that identifies the role that the party had in the plot observation (e.g.,  PI, contact, research advisor, field assistant, taxonomist, owner, guide, etc.).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>-1</formAustere>
@@ -9132,7 +9132,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>Primary Key for the observationSynonym table.</attNotes>
-      <attDefinition>Database generated identifier assigned to each unique interpretaiton of an observation as a synonym.</attDefinition>
+      <attDefinition>Database generated identifier assigned to each unique interpretation of an observation as a synonym.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>-1</formAustere>
@@ -9176,7 +9176,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the observation table</attNotes>
-      <attDefinition>Link to the observation table identifying which observation is the prefered synonym for the observation being reduced to synonym.</attDefinition>
+      <attDefinition>Link to the observation table identifying which observation is the preferred synonym for the observation being reduced to synonym.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>-1</formAustere>
@@ -9610,7 +9610,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>TRUE If occurrence is calculated based on geocoordinates, FALSE if assigned by the author (If, both methods used, the author assigned value takes priority).</attDefinition>
+      <attDefinition>TRUE If occurrence is calculated based on geo-coordinates, FALSE if assigned by the author (If, both methods used, the author assigned value takes priority).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>894</formAustere>
@@ -10027,7 +10027,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Original location as described by author (eg Town-Range-Section)</attDefinition>
+      <attDefinition>Original location as described by author (e.g. Town-Range-Section)</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>941</formAustere>
@@ -10082,7 +10082,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>dsgpoly</attName>
-      <attLabel>DSG Poly</attLabel>
+      <attLabel>DSG Polygon</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
@@ -10093,7 +10093,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This field is a text string containing the points circumscribing a plot area.  These points are anticipated to have been collected using tapes, GPS, or calculated from the plot shape and area. Points are x-y coordinates in m relative to plot origin.</attDefinition>
+      <attDefinition>This field is a text string containing the points circumscribing a plot area.  These points are anticipated to have been collected using tapes, GPS, or calculated from the plot shape and area. Points are X-Y coordinates in m relative to plot origin.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>950</formAustere>
@@ -10173,7 +10173,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Total area of the plot in m2.  If many subplots, this area includes the subplots and the intersticial space.</attDefinition>
+      <attDefinition>Total area of the plot in m2.  If many subplots, this area includes the subplots and the interstitial space.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>956</formAustere>
@@ -10433,7 +10433,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>optional list that converts</attNotes>
-      <attDefinition>Minimum azimuth of slope gradient (0-360 degrees), counterclockwise from representative azmuth.</attDefinition>
+      <attDefinition>Minimum azimuth of slope gradient (0-360 degrees), counterclockwise from representative azimuth.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>983</formAustere>
@@ -10455,7 +10455,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>optional list that converts</attNotes>
-      <attDefinition>Maximum azimuth of slope gradient (0-360 degrees), clockwise from representative azmuth</attDefinition>
+      <attDefinition>Maximum azimuth of slope gradient (0-360 degrees), clockwise from representative azimuth</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>986</formAustere>
@@ -10499,7 +10499,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>optional list that converts</attNotes>
-      <attDefinition>Minimum inclindation of slope in degrees.</attDefinition>
+      <attDefinition>Minimum inclination of slope in degrees.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>992</formAustere>
@@ -12592,7 +12592,7 @@ conditions may change between resampling events.
     <entityName>project</entityName>
     <entityLabel>Project</entityLabel>
     <entitySummary>This table stores information about a project established to collect vegetation plot data.</entitySummary>
-    <entityDescription>Each plot originates as part of a project. A project can contain from one tomany plots.</entityDescription>
+    <entityDescription>Each plot originates as part of a project. A project can contain from one to many plots.</entityDescription>
     <module>plot</module>
     <attribute>
       <attName>PROJECT_ID</attName>
@@ -12709,7 +12709,7 @@ conditions may change between resampling events.
     <entityName>projectContributor</entityName>
     <entityLabel>Project Contributor</entityLabel>
     <entitySummary>This table stores information about a party contributing to a project.</entitySummary>
-    <entityDescription>This table serves as an intersection entity used to 'link' a party with a specific project wherin vegetation plots are described.</entityDescription>
+    <entityDescription>This table serves as an intersection entity used to 'link' a party with a specific project wherein vegetation plots are described.</entityDescription>
     <module>plot</module>
     <attribute>
       <attName>PROJECTCONTRIBUTOR_ID</attName>
@@ -12929,7 +12929,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>The number of the record in which the change occurred (i.e., the value of the primary key associated with the value in which the change occured)</attDefinition>
+      <attDefinition>The number of the record in which the change occurred (i.e., the value of the primary key associated with the value in which the change occurred)</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>1076</formAustere>
@@ -13029,9 +13029,9 @@ conditions may change between resampling events.
   </entity>
   <entity>
     <entityName>soilObs</entityName>
-    <entityLabel>Soil Obs</entityLabel>
+    <entityLabel>Soil Observation</entityLabel>
     <entitySummary>This table stores observation on soil horizons made during the plot observation event.</entitySummary>
-    <entityDescription>soilObs is child of observation in recognition of the fact that the hoizons observed vary among plot observation events as a results of real change plus changes in investigators, methods and circumstances. 
+    <entityDescription>soilObs is child of observation in recognition of the fact that the horizons observed vary among plot observation events as a results of real change plus changes in investigators, methods and circumstances. 
 	</entityDescription>
     <module>plot</module>
     <attribute>
@@ -13380,7 +13380,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Percent sand in the soil hoizon.</attDefinition>
+      <attDefinition>Percent sand in the soil horizon.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>1112</formAustere>
@@ -13869,7 +13869,7 @@ conditions may change between resampling events.
   <entity>
     <entityName>stemLocation</entityName>
     <entityLabel>Stem Location</entityLabel>
-    <entitySummary>This table is intended to store location information about indivdual tree stems.</entitySummary>
+    <entitySummary>This table is intended to store location information about individual tree stems.</entitySummary>
     <entityDescription/>
     <module>plot</module>
     <attribute>
@@ -13929,7 +13929,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Name or code applied to a specific stem in the plot. This is generally a numeric label to associate a fielddata entry with a stem in the database.</attDefinition>
+      <attDefinition>Name or code applied to a specific stem in the plot. This is generally a numeric label to associate a field data entry with a stem in the database.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>1178</formAustere>
@@ -14368,7 +14368,7 @@ conditions may change between resampling events.
   <entity>
     <entityName>stratumMethod</entityName>
     <entityLabel>Stratum Method</entityLabel>
-    <entitySummary>This table links a set of strata to a sampling protocol . This table, when combined a set of linked stratum occurences, defines the strata used by a plot observer.</entitySummary>
+    <entitySummary>This table links a set of strata to a sampling protocol . This table, when combined a set of linked stratum occurrences, defines the strata used by a plot observer.</entitySummary>
     <entityDescription/>
     <module>plot</module>
     <attribute>
@@ -14803,7 +14803,7 @@ conditions may change between resampling events.
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
-      <attDefinition>Categories for the interpretation (e.g.,  author, computer generated, simplified for comparative analysis, correction,finer resolution).</attDefinition>
+      <attDefinition>Categories for the interpretation (e.g.,  author, computer generated, simplified for comparative analysis, correction, finer resolution).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>1263</formAustere>
@@ -14847,7 +14847,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This interpretation corrsponds to the original interpretation of the plot author, as best as can be determined.  There is no requirement that the authority match the authority of the author; only that the concepts are synonymous.</attDefinition>
+      <attDefinition>This interpretation corresponds to the original interpretation of the plot author, as best as can be determined.  There is no requirement that the authority match the authority of the author; only that the concepts are synonymous.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>1268</formAustere>
@@ -14949,7 +14949,7 @@ conditions may change between resampling events.
         </attListItem>
       </attList>
       <attNotes>n/a</attNotes>
-      <attDefinition>Indicates the degree of confidence of the interpretor(s) in the interpretation made. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</attDefinition>
+      <attDefinition>Indicates the degree of confidence of the interpreter(s) in the interpretation made. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</attDefinition>
       <update>1.0.1</update>
     </attribute>
     <attribute>
@@ -15565,7 +15565,7 @@ conditions may change between resampling events.
         </attListItem>
       </attList>
       <attNotes>n/a</attNotes>
-      <attDefinition>Indicates the degree of confidence of the interpretor(s) in the interpretation made. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</attDefinition>
+      <attDefinition>Indicates the degree of confidence of the interpreter(s) in the interpretation made. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>5</formAustere>
