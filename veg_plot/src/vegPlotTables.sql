@@ -39,7 +39,8 @@ slopePosition VARCHAR(20),
 hydrologicRegime VARCHAR(32),
 soilDrainage VARCHAR(32),
 surfGeo VARCHAR(100),
-currentCommunity VARCHAR(200)  
+currentCommunity VARCHAR(200),  
+state VARCHAR(100)
 );
 
 

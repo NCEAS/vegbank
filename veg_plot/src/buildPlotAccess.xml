@@ -48,13 +48,16 @@
 	<copydir src="${src}" 
                dest="${build}" 
                filtering="yes"
-               includes="xmlWriter.java queryStore.java dbConnect.java plotWriter.java dbAccess.java utility.java transformXML.java sqlMapper.java issueStatement.java "
+               includes="xmlWriter.java queryStore.java dbConnect.java plotWriter.java 
+	       dbAccess.java utility.java transformXML.java sqlMapper.java 
+	       issueStatement.java DbConnectionBroker.java "
                excludes="**/CVS* "/>
 
         <copydir src="${xmlFiles}" 
                dest="${build}" 
                filtering="yes"
-               includes="artificialPlotExample.xml plot2DBaddress.xsl vegPlot.dtd plotQuery.dtd querySpec.xsl examplePlotQuery.xml"
+               includes="artificialPlotExample.xml plot2DBaddress.xsl vegPlot.dtd 
+	       plotQuery.dtd querySpec.xsl examplePlotQuery.xml examplePlotQuery2.xml"
                excludes="**/CVS* "/>
 	 
         <copydir src="${current}" 
@@ -77,21 +80,21 @@
 	<mkdir dir="${dist}/lib" />
 	<deltree dir="${dist}" />
 	
-
+<!--
 <java classname="dbAccess" 
 classpath="${cpath}"
-args="${build}/outfile0.xml  ${build}/plot2DBaddress.xsl insert"
+args="${build}/outfile7.xml  ${build}/plot2DBaddress.xsl insert"
 fork="yes"
 />
+-->
 
-	
 <!--Query for all plots with a taxon containing the string: "Carya" -->
 	<java classname="dbAccess"
-	args="${build}/examplePlotQuery.xml ${build}/querySpec.xsl query"
+	args="${build}/exampleCompoundQuery.xml ${build}/querySpec.xsl compoundQuery"
 	classpath="${cpath}"
 	fork="yes"
-	
 	/>
+
 </target>		
 
 
