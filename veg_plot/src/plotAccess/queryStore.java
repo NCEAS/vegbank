@@ -174,6 +174,14 @@ Hashtable summaryResultHash = new Hashtable();
 //and the output values are tokenized by pipes replace all the pipes below
 String currentPlotId=plotId[i].replace('|',' ').trim();
 
+//this code should be replaced by a method that checks to see that the plotId is
+//a valid one
+
+if (currentPlotId.equals("nullValue") || currentPlotId == null ) {
+	currentPlotId="0";  //change this to a more resonable value
+}
+
+
 String action="select";
 String statement="select PLOT_ID, PROJECT_ID, PLOTTYPE, SAMPLINGMETHOD, "
 	+" COVERSCALE, PLOTORIGINLAT,  PLOTORIGINLONG, PLOTSHAPE, PLOTAREA, "
@@ -273,10 +281,13 @@ statement="select AUTHORNAMEID, AUTHORPLOTCODE, STRATUMTYPE, PERCENTCOVER"
 
 //iterate the connection use counter
 	connectionUses++;
-	System.out.println("queryStore.getPlotSummaryNew - connection uses:"
-		+connectionUses);
+	
 	//if the connection has been used more than some arbitrary times renew conn
 	if (connectionUses > 90) {
+		
+		System.out.println("queryStore.getPlotSummaryNew - connection uses:"
+		+connectionUses);
+		
 		conn.close(); 
 		myBroker.freeConnection(conn); 
 		conn=myBroker.getConnection();
@@ -474,30 +485,60 @@ catch (Exception e) {System.out.println("failed in querySrore.getPlotSummary"
 
 
 /**
-* Method to query the database to get all the plotId's by using a single attribute
-* currently only a taxon will work - soon to implement a community name -
-* this method will be overloaded in methods below
-* @param     queryElement  the value of the attribute used to query
-* @param     queryElementType  the type of element used for querying the DB
-* @param     conn  a database connection that was presumedly taken from the pool 
-*/
+ * Method to query the database to get all the plotId's by using a single 
+ * attribute including taxonName, surfGeo, communityName, etc.  This method is
+ * linked to the 'handleSimpleQuery' method in the DataRequestServlet
+ * @param     queryElement  the value of the attribute used to query
+ * @param     queryElementType  the type of element used for querying the DB
+ * @param     conn  a database connection that was presumedly taken from the pool 
+ */
 public void getPlotId(String queryElement, String queryElementType, Connection conn)
 {
+
+String queryTableName = null;  //name of the table for which the query to be made
+
+//translate the query attributeName into the table name and determine the table
+if ( queryElementType.equals("taxonName") ) {
+	queryElementType = "AUTHORNAMEID";
+	queryTableName = "PLOTSPECIESSUM";
+}
+
+else if ( queryElementType.equals("state") ) {
+	queryElementType = "STATE";
+	queryTableName = "PLOTSITESUMMARY";
+}
+
+else if ( queryElementType.equals("surfGeo") ) {
+	queryElementType = "SURFGEO";
+	queryTableName = "PLOTSITESUMMARY";
+}
+
+else if ( queryElementType.equals("communityName") ) {
+	queryElementType = "CURRENTCOMMUNITY";
+	queryTableName = "PLOTSITESUMMARY";
+} 
+
+else {System.out.println("plotQuery.getPlotId: unrecognized queryElementType: "
+	+queryElementType); }
+
+//this select statement will use the summary tables for the plots database where
+//most of the database attributes are denormalized to two tables:
+// 'plotSiteSummary' and 'plotSpeciesSum'
 String action="select";
-String statement="select PLOT_ID from PLOT where PLOT_ID in"+
-	"(select PARENTPLOT  from PLOTOBSERVATION  where OBS_ID in"+
-		"(select OBS_ID from TAXONOBSERVATION where AUTHORNAMEID like '%"+queryElement+"%'))";
+String statement="select PLOT_ID from "+queryTableName+" where "+queryElementType
++" like '%"+queryElement+"%'";
+
+
 String returnFields[]=new String[1];	
 returnFields[0]="PLOT_ID";
 int returnFieldLength=1;
 
-
 issueStatement j = new issueStatement();
 j.issueSelect(statement, action, returnFields, returnFieldLength, conn);	
 
-
 //grab the returned result set and transfer to a public array
-//ultimately these results are passed to the calling class
+//ultimately these results are passed to the calling class -- if for some reason
+//the value was null then a string: 'nullValue' is returned
 outPlotId=j.outReturnFields;
 outPlotIdNum=j.outReturnFieldsNum;
 	
