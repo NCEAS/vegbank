@@ -8,8 +8,8 @@
   *  % echo "[build.context]" | ant [target]
   *
   *     '$Author: farrell $'
-  *     '$Date: 2004-03-07 17:55:27 $'
-  *     '$Revision: 1.39 $'
+  *     '$Date: 2004-03-07 19:23:39 $'
+  *     '$Revision: 1.40 $'
 --> 
 <project name="Vegbank" default="jar" basedir=".">
 
@@ -438,13 +438,15 @@
       </fileset>
     </chmod>
 
-   <!-- For sanity preservation -->
+   <!-- For sanity preservation 
+	#### NEED TO BE OWNER TO CHANGE THESE, NEED TO FIND OUT HOW TO GET ANT TO RUN AS TOMCAT USER!!
    <exec executable="chmod" >
-     <arg line="-R g+wr ${vegbank.home.dir} ${env.TOMCAT_HOME}/"/>
+     <arg line="-R g+wr ${vegbank.home.dir} ${env.TOMCAT_HOME}/webapps"/>
    </exec>
    <exec executable="chown" >
-     <arg line="-R :vegbank ${vegbank.home.dir} ${env.TOMCAT_HOME}/"/>
+     <arg line="-R :vegbank ${vegbank.home.dir} ${env.TOMCAT_HOME}/webapps"/>
    </exec>
+   -->
      <!-- Need to do the apache dir too -->
    <!-- The following are only supported by apache ant 1.6.0 and higher, comment out for now
    <chgrp group="vegbank"> 

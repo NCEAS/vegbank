@@ -1,0 +1,5 @@
+# The database needs to be vacumed regularily here are cronjobs for it
+# crontab -u postgres -e from root and paste this in
+30 2 * * * vacuumdb -z -f vegbank >/dev/null 2>&1 # 2:30 everynight
+50 2 * * * vacuumdb -z -f vegtest >/dev/null 2>&1 # 2:50 everynight
+

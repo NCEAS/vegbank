@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-07 17:55:28 $'
- *	'$Revision: 1.18 $'
+ *	'$Date: 2004-03-07 19:23:40 $'
+ *	'$Revision: 1.19 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -803,9 +803,9 @@ public class DBModelBeanReader
 				}
 				else
 				{
+					log.info("Reading all disk cached bean: " + cachedFiles.length+" files"); 
 					for ( int i=0; i<cachedFiles.length ; i++ )
 					{
-						log.info("Reading all disk cached bean: " + cachedFiles.length+" files"); 
 						String  fileName = cachedFiles[i].getName();
 						if ( fileName.startsWith( Utility.getAccessionPrefix() + ".") )
 						{
