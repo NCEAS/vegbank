@@ -159,7 +159,7 @@ function validateName(value, label) {
   <tr>
     <td></td>
     <td bgcolor="#CCCCCC"></td>
-    <td bgcolor="#CCCCCC" class="label_small">State / Province<br/>
+    <td bgcolor="#CCCCCC" class="label_small">State / Province <br/><span class="psmall">(list shows plot count)</span><br/>
 	&nbsp; 
 	<select name="state" size="1">
 <option value="ANY">--ANY--</option>  
