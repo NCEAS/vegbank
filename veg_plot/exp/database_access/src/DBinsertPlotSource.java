@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-05-31 22:20:08 $'
- * 	'$Revision: 1.23 $'
+ *  '$Date: 2002-07-16 19:41:23 $'
+ * 	'$Revision: 1.24 $'
  */
 package databaseAccess;
 
@@ -121,7 +121,7 @@ public class DBinsertPlotSource
 	
 	/**
 	 * this constructor, unlike the other is for inserting a potentially large
-	 * numebe of plots stored on a given source
+	 * numeber of plots stored on a given source
 	 */
 	public DBinsertPlotSource(String plugin) throws FileNotFoundException
   {
@@ -233,7 +233,6 @@ public class DBinsertPlotSource
 					db = null;
 				}
 			}
-				
 			else
 			{
 				System.out.println("Usage: DBinsertPlotSource pluginName plot1 plot2 ... plotn");
@@ -253,7 +252,7 @@ public class DBinsertPlotSource
 	 *
 	 * @param plotNames -- a vector that holds all the plotNames
 	 */
-	 public void insertPlotPackage(String pluginClass)
+	 public void  insertPlotPackage(String pluginClass)
 	{
 		try 
 		{
@@ -397,44 +396,44 @@ public class DBinsertPlotSource
 //			insertNamedPlace();
 				if (insertStaticPlotData(projectId) == false ) 
 				{	
-					System.out.println("static data: "+commit);
+					System.out.println("static data: "+ commit);
 					commit = false;
 				}
 				else
 				{
 					if ( insertCoverMethod() == false )
 					{
-						System.out.println("covermethod>: "+commit);
 						commit = false;
+						System.out.println("covermethod>: "+ commit);
 					}
 					if ( insertStratumMethod() == false )
 					{
-						System.out.println("stratummethod>: "+commit);
 						commit = false;
+						System.out.println("stratummethod>: "+ commit);
 					}
 					
 					if( insertPlotObservation() == false )
 					{
-						System.out.println("observation>: "+commit);
 						commit = false;
+						System.out.println("observation>: "+commit);
 					}
 					if( insertCommunities() == false )
 					{
-						System.out.println("communities>: "+commit);
 						commit = false;
+						System.out.println("communities>: "+ commit);
 					}
 					if( insertStrata() == false )
 					{
-						System.out.println("observation>: "+commit);
 						commit = false;
+						System.out.println("observation>: "+ commit);
 					}
 					//both the taxon observation tables
 					//and the strata composition are uypdated here
 					if( insertTaxonObservations() == false )
 					{
-						System.out.println("observation>: "+commit);
-						debug.append( "<taxaInsertion>false</taxaInsertion> \n" );
 						commit = false;
+						System.out.println("taxonobservation>: "+commit);
+						debug.append( "<taxaInsertion>false</taxaInsertion> \n" );
 					}
 					else
 					{
@@ -912,7 +911,7 @@ public class DBinsertPlotSource
 				}
 				else
 				{
-					System.out.println("damn plant does not exist");
+					System.out.println("DBinsertPlotSource >  plant does not exist in taxonomy database");
 					//insert the plant using the plant loader
 					Hashtable h1 = new Hashtable();
 					h1.put("longName", authorNameId );
@@ -932,9 +931,14 @@ public class DBinsertPlotSource
 					// info again from the webservice -- it should exist
 					plantLoader = new PlantTaxaLoader();
 					boolean results = plantLoader.loadGenericPlantTaxa(h1);
+					System.out.println("DBinsertPlotSource > loading results from taxonomy database: " + results);
 					if ( results == false )
 					{
-						successfulCommit = false; 
+						//successfulCommit = false;
+							level =	"";	
+							conceptId = "0";
+							name = authorNameId;
+							nameId = "0";
 					}
 					else
 					{
@@ -948,7 +952,6 @@ public class DBinsertPlotSource
 						}
 					}
 				}
-				
 				//add the taxon name to the debugging
 				debug.append("<taxonObservation> \n");
 				debug.append("<authorTaxonName>"+authorNameId.replace('&', '_')+"</authorTaxonName> \n");
