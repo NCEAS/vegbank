@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 
 
 ---creating fields ----------------------
@@ -40,7 +39,7 @@ INSERT INTO taxonImportance ( taxonObservation_ID, cover, basalArea )
 SELECT taxonObservation.TAXONOBSERVATION_ID, taxonObservation.taxonCover, taxonObservation.taxonBasalArea
 FROM taxonObservation;
 --stemCount new key to taxonImp------
-UPDATE stemCount SET TAXONIMPORTANCE_ID = (SELECT min([taxonImportance].[taxonImportance_ID])
+UPDATE stemCount SET TAXONIMPORTANCE_ID = (SELECT min(taxonImportance.taxonImportance_ID)
  FROM  taxonImportance  WHERE stemCount.taxonObservation_ID = taxonImportance.taxonObservation_ID and ((taxonImportance.stratum_ID) Is Null));
 --manual fix required field on stemCount
 ALTER TABLE stemCount ALTER COLUMN TAXONIMPORTANCE_ID SET NOT NULL;
@@ -494,4 +493,3 @@ ALTER TABLE plantUsage   ADD CONSTRAINT R1plantUsage_PLANTSTATUS_ID FOREIGN KEY 
 
 
 
-END TRANSACTION;
