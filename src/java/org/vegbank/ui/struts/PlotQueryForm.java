@@ -2,9 +2,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-08-28 22:38:35 $'
- *	'$Revision: 1.7 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-12-05 23:14:22 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import org.apache.struts.action.ActionForm;
@@ -37,6 +38,8 @@ import org.vegbank.common.model.Plot;
 import org.vegbank.common.model.Project;
 import org.vegbank.common.model.Stratummethod;
 import org.vegbank.common.utility.DatabaseAccess;
+import org.vegbank.common.utility.LogUtility;
+import org.vegbank.common.utility.Utility;
 
 /**
  * @author farrell
@@ -70,8 +73,6 @@ public class PlotQueryForm extends ActionForm
   // Plot attributes
   private String minElevation;
   private String maxElevation;
-  private String curMinElevation;
-  private String curMaxElevation;
   private boolean allowNullElevation;
   private String minSlopeAspect;
   private String maxSlopeAspect;
@@ -80,13 +81,21 @@ public class PlotQueryForm extends ActionForm
   private boolean allowNullSlopeAspect;
   private String minSlopeGradient;
   private String maxSlopeGradient;
-  private String curMinSlopeGradient;
-  private String curMaxSlopeGradient;
   private boolean allowNullSlopeGradient;
-  private String curMinDateEntered;
-  private String curMaxDateEntered;
-  private String curMinArea;
-  private String curMaxArea;
+
+	// These are queried values from db of current min/max values.
+	// They give the user some constraints to help them construct queries.
+  // Give these default values to handle the null case ( unusual => 0/few plots )
+  private String curMinElevation = "";
+  private String curMaxElevation = "";
+  private String curMinSlopeGradient ="";
+  private String curMaxSlopeGradient ="";
+  private String curMinDateEntered = "";
+  private String curMaxDateEntered = "";
+  private String curMinArea = "";
+  private String curMaxArea = "";
+  private String curMinObsStartDate = "";
+  private String curMaxObsEndDate = "";
 
   private String[] rockType = new String[20];
   private String[] surficialDeposit = new String[20];
@@ -112,8 +121,6 @@ public class PlotQueryForm extends ActionForm
   private String observationContributorName;
   private boolean allowNullObservationContributorName;
   private String plotSubmitterName;
-  private String curMinObsStartDate;
-  private String curMaxObsEndDate;
 	
   // Vegetation
   private String[] plantName = new String[5];
@@ -194,7 +201,9 @@ public class PlotQueryForm extends ActionForm
   public PlotQueryForm()
   {
   	super();
-	loadDataConstraints();
+		LogUtility.log("Constructing PlotQueryForm");
+		loadDataConstraints();
+		LogUtility.log("Constructed PlotQueryForm");
   }
 
   /**
@@ -1218,36 +1227,49 @@ public class PlotQueryForm extends ActionForm
 				.append("MIN(area) as curMinArea, ")
 				.append("MAX(area) as curMaxArea ")
 				.append("FROM plot");
-
+	
 		StringBuffer obsQuery = new StringBuffer(512)
 				.append("SELECT MIN(obsStartDate) as curMinObsStartDate, ")
 				.append("MAX(obsEndDate) as curMaxObsEndDate ")
 				.append("FROM observation");
-
+	
 		try
 		{
 			DatabaseAccess da = new DatabaseAccess();
-
+	
 			// hit the DB, plot
 			ResultSet rs = da.issueSelect(plotQuery.toString());		
-
+	
 			if (rs.next())
 			{
-				curMinElevation = Integer.toString( (int)Double.parseDouble(rs.getString(1)) );
-				curMaxElevation = Integer.toString( (int)Math.ceil(Double.parseDouble(rs.getString(2))) );
+				curMinElevation = rs.getString(1);
+				// Confirm that the value was not a NULL and do numerical processing
+				if ( ! rs.wasNull())
+					curMinElevation = Integer.toString( (int)Double.parseDouble(curMinElevation));
+		
+				curMaxElevation = rs.getString(2);
+				if ( ! rs.wasNull() )
+					curMaxElevation = Integer.toString( (int)Math.ceil(Double.parseDouble(curMaxElevation)) );
+
 				curMinSlopeAspect = rs.getString(3);
 				curMaxSlopeAspect = rs.getString(4);
 				curMinSlopeGradient = rs.getString(5);
 				curMaxSlopeGradient = rs.getString(6);
 				curMinDateEntered = rs.getString(7);
 				curMaxDateEntered = rs.getString(8);
-				curMinArea = Integer.toString( (int)Double.parseDouble(rs.getString(9)) ) ;
-				curMaxArea = Integer.toString( (int)Math.ceil(Double.parseDouble(rs.getString(10))) );
-			}
 
+				curMinArea = rs.getString(9);
+				if ( ! rs.wasNull() )
+					curMinArea = Integer.toString( (int)Double.parseDouble(curMinArea) ) ;
+				
+				curMaxArea = rs.getString(10);
+				if ( ! rs.wasNull() )
+					curMaxArea = Integer.toString( (int)Math.ceil(Double.parseDouble(curMaxArea)) );
+			}
+	
 			// hit the DB, obs
 			rs = da.issueSelect(obsQuery.toString());		
-
+	
 			if (rs.next())
 			{
 				curMinObsStartDate = rs.getString(1);
@@ -1256,11 +1278,9 @@ public class PlotQueryForm extends ActionForm
 		}
 		catch (SQLException e1)
 		{
-			System.out.println("org.vegbank.ui.struts.PlotQueryForm:: " +
-				"loadDataConstraints() ERROR: " + e1.getMessage());
+			LogUtility.log("org.vegbank.ui.struts.PlotQueryForm:: " +
+				"loadDataConstraints() ERROR: " + e1.getMessage(), e1);
 		}
-
+	
 	}
-
-
 }

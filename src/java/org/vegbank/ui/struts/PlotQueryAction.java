@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-03 03:49:47 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2003-12-05 23:14:22 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.vegbank.common.utility.DatabaseAccess;
+import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.Utility;
 
 /**
@@ -55,7 +56,7 @@ public class PlotQueryAction extends Action
 	private static final String ANDVALUE = " AND ";
 	private static final String ORVALUE = " OR ";
 	private static final String 	selectClause =	
-		" SELECT DISTINCT(observation.obsaccessionnumber), observation.authorobscode, " +	"plot.latitude, plot.longitude, observation.observation_id";
+		" SELECT DISTINCT(observation.accessioncode), observation.authorobscode, " +	"plot.latitude, plot.longitude, observation.observation_id";
 
 	public ActionForward execute(
 		ActionMapping mapping,
@@ -283,39 +284,39 @@ public class PlotQueryAction extends Action
 				{
 					if ( isFirstResultSet )	// if empty dump all into collection
 					{
-						System.out.println("#Adding " + plotsum + " has " + plotsum.getVegbankAccessionNumber());
-						workspace.put(plotsum.getVegbankAccessionNumber(), plotsum);
+						LogUtility.log("#Adding " + plotsum + " has " + plotsum.getAccessionCode());
+						workspace.put(plotsum.getAccessionCode(), plotsum);
 					}
 					else //Only add element if in oldWorkspace
 					{
 						
-						//System.out.println("3333===> " + validKeys);
+						//LogUtility.log("3333===> " + validKeys);
 						
 						// Did this object exist in the previous results
-						if ( validKeys.contains(plotsum.getVegbankAccessionNumber()))
+						if ( validKeys.contains(plotsum.getAccessionCode()))
 						{
-							//System.out.println("Adding " + plotsum.getVegbankAccessionNumber());
-							workspace.put(plotsum.getVegbankAccessionNumber(), plotsum);
+							//LogUtility.log("Adding " + plotsum.getVegbankAccessionNumber());
+							workspace.put(plotsum.getAccessionCode(), plotsum);
 						}
 						else
 						{
-							//System.out.println("Not Adding " + plotsum.getVegbankAccessionNumber());
+							//LogUtility.log("Not Adding " + plotsum.getVegbankAccessionNumber());
 							// Don't add this object
 						}
 					}
 				}
 				else // Concatonate without duplicates
 				{
-					if ( workspace.contains(plotsum.getVegbankAccessionNumber()))
+					if ( workspace.contains(plotsum.getAccessionCode()))
 					{
-						//System.out.println("No need to ADD " + plotsum.getVegbankAccessionNumber());
+						//LogUtility.log("No need to ADD " + plotsum.getVegbankAccessionNumber());
 						// No need to add
 					}
 					else
 					{
 						// Add this new object
-						workspace.put(plotsum.getVegbankAccessionNumber(), plotsum);
-						//System.out.println("ADD " + plotsum.getVegbankAccessionNumber());
+						workspace.put(plotsum.getAccessionCode(), plotsum);
+						//LogUtility.log("ADD " + plotsum.getVegbankAccessionNumber());
 					}
 				}
 			}
@@ -328,7 +329,7 @@ public class PlotQueryAction extends Action
 	private void populatePlotSummary(ResultSet rs, PlotSummary plotsum)
 		throws SQLException
 	{
-		plotsum.setVegbankAccessionNumber(rs.getString(1)); 
+		plotsum.setAccessionCode(rs.getString(1)); 
 		plotsum.setAuthorObservationCode(rs.getString(2));
 		plotsum.setLatitude(rs.getString(3));
 		plotsum.setLongitude(rs.getString(4));
@@ -403,7 +404,7 @@ public class PlotQueryAction extends Action
 			}
 			// I've got all my resultSets
 		}
-		System.out.println("Number of records matching plants: " +  plantResultSets.size() );
+		LogUtility.log("Number of records matching plants: " +  plantResultSets.size() );
 	}
 
 
@@ -459,7 +460,7 @@ public class PlotQueryAction extends Action
 			}
 			// I've got all my resultSets
 		}
-		System.out.println("Number of records matching communities: " +  resultSets.size() );
+		LogUtility.log("Number of records matching communities: " +  resultSets.size() );
 	}
 
 
@@ -678,7 +679,7 @@ public class PlotQueryAction extends Action
 	public class PlotSummary
 	{
 		private String authorObservationCode = "";
-		private String vegbankAccessionNumber = "";
+		private String accessionCode = "";
 		private String latitude = "";
 		private String longitude = "";
 		private String plotId = "";
@@ -714,9 +715,9 @@ public class PlotQueryAction extends Action
 		/**
 		 * @return
 		 */
-		public String getVegbankAccessionNumber()
+		public String getAccessionCode()
 		{
-			return vegbankAccessionNumber;
+			return accessionCode;
 		}
 
 		/**
@@ -746,9 +747,9 @@ public class PlotQueryAction extends Action
 		/**
 		 * @param string
 		 */
-		public void setVegbankAccessionNumber(String string)
+		public void setAccessionCode(String string)
 		{
-			vegbankAccessionNumber = string;
+			accessionCode = string;
 		}
 
 		/**
