@@ -9,8 +9,11 @@ import java.util.*;
 * array, and number of elements in the array structure
 */
 
-public class utility {
+public class utility 
+{
 
+public Vector outVector;
+public int vecElementCnt;
 public String driverClass;
 public String connectionString;
 public String login;
@@ -157,6 +160,70 @@ catch( Exception e ) {System.out.println(" failed in: utility "+e.getMessage());
 }//end method
 
 
+/**
+ * method to tokenize elements from a string
+ */
+public String positionStringTokenizer(String pipeString, int tokenPosition)
+{
+  //System.out.println("%%%%% "+pipeString+" "+tokenPosition);
+  String token="nullToken";
+  if (pipeString != null)
+  {
+    StringTokenizer t = new StringTokenizer(pipeString.trim(), " \t");
+    int i=1;
+    while (i<=tokenPosition)
+    {
+      if ( t.hasMoreTokens() )
+      {
+        token=t.nextToken();
+        i++;
+      }
+      else
+      {
+        token="nullToken";
+        i++;
+      }
+    }
+    return(token);
+  }
+  else
+  {
+    return(token);
+  }
+}
+
+
+/**
+ *  Method that takes as input a name of a file and writes the file contents 
+ *  to a vector and then makes the vector and number of vector elements access
+ *  to the public 
+ *
+ * @param fileName name of the file that whose contents should be written to a vector
+ */
+
+public void fileVectorizer (String fileName) 
+{
+
+	try 
+	{
+		vecElementCnt=0;
+		BufferedReader in = new BufferedReader(new FileReader(fileName));
+		Vector localVector = new Vector();
+		String s;
+		while((s = in.readLine()) != null) 
+		{
+			//System.out.println(s);	
+			localVector.addElement(s);
+			vecElementCnt++;
+		}
+		outVector=localVector;
+	}
+	catch (Exception e) 
+	{
+		System.out.println("failed in servletUtility.fileVectorizer" + 
+		e.getMessage());
+	}
+} 
     
     
 /**
