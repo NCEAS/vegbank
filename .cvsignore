@@ -2,3 +2,5 @@
 .classpath
 dist
 build
+build.properties
+.build.properties.compare.tmp
