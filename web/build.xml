@@ -5,9 +5,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: farrell $'
-  * '$Date: 2002-12-27 18:14:15 $'
-  * '$Revision: 1.27 $'
+  * '$Author: mlee $'
+  * '$Date: 2003-02-01 17:27:23 $'
+  * '$Revision: 1.28 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -26,7 +26,7 @@
 	<!-- LET THE USER KNOW THE TARGETS -->
   <echo message="############ ${ant.project.name} ##############"/> 
 	<echo>
-	Targets:  {init} includes, news, panel, history, pubs, forms, general, design,
+	Targets:  {init} {hdrftr} includes, news, panel, history, pubs, forms, general, design,
 	dictionary
 	</echo>
 	<!-- 
@@ -43,6 +43,7 @@
 	<property name="pubs_src" value="./pubs" />
 	<property name="style_src" value="./includes" />
 	<property name="image_src" value="./images" />
+	<property name="sharedhtml_src" value="./sharedhtml"/>
 	<filter token="dist" value="dist"/>
 	<filter token="version" value="development"/>
 	
@@ -82,7 +83,13 @@
 	<filter token="authenticationservlet" value="/framework/servlet/authenticate" />
 	
 </target>
-
+<!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
+<!-- this copy stays local on the machine that it is on - not needed on webserver -->
+  <target name="hdrftr" depends="init">
+     <copy file="${sharedhtml_src}/filters.properties" tofile="${sharedhtml_src}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
+     <!-- set the newly created properties file as a filtersfile to distribute headers and footers -->
+     <filter filtersfile="${sharedhtml_src}/filters_detokened.properties"/>
+  </target>
 
 <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
 <target name="includes" depends="init">
@@ -93,7 +100,7 @@
         </copy>
 </target>
 
-<target name="index" depends="init" description="target to dist. the index.html file">
+<target name="index" depends="hdrftr" description="target to dist. the index.html file">
 	<copy todir="${server_root}" filtering="yes" >
      		<fileset dir="./" >
 				<include name="index.html"/>    
@@ -123,7 +130,7 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-<target name="news" depends="init">
+<target name="news" depends="hdrftr">
 	<copy todir="${news_server}" filtering="yes" >
 		<fileset dir="${news_src}" >    
   	</fileset>
@@ -135,7 +142,7 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-<target name="panel" depends="init">
+<target name="panel" depends="hdrftr">
 	<copy todir="${panel_server}" filtering="yes" >
 		<fileset dir="${panel_src}" >
 		<exclude name="**.pdf"/>    
@@ -154,7 +161,7 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-<target name="history" depends="init">
+<target name="history" depends="hdrftr">
 
 	<copy todir="${history_server}" filtering="yes" >
      		<fileset dir="${history_src}" >
@@ -187,7 +194,7 @@
 	* TARGET TO PUT THE FORMS FOR INTERACTING WITH THE 
 	* SERVLETS IN THE APPROPRIATE LOCATION
 -->
-<target name="forms" depends="init">
+<target name="forms" depends="hdrftr">
 	<copydir src="${forms}" 
 		dest="${forms_server}" 
 		filtering="yes"
@@ -233,7 +240,7 @@
 <!-- 
 	* TARGET TO PUT THE GENERAL HTML DOCS INTO THE CORRECT PLACE
 -->
-<target name="general" depends="init">
+<target name="general" depends="hdrftr">
 	<copydir src="${general_src}" 
 		dest="${general_server}" 
 		filtering="yes"
