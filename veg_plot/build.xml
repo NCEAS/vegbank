@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: anderson $'
-  *     '$Date: 2003-10-17 01:56:29 $'
-  *     '$Revision: 1.33 $'
+  *     '$Date: 2003-10-17 02:08:43 $'
+  *     '$Revision: 1.34 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -128,7 +128,7 @@
   </target>
   
   
-  <target name="compile" depends="prepare"
+  <target name="compile" depends="cleanprops,prepare"
           description="=> Compiles all code in veg_plot module">
 		<echo message="Compiling all of ${ant.project.name}"/>
 
@@ -210,15 +210,6 @@
       </fileset>
       <fileset dir="${build.java.src.dir}" casesensitive="yes">
         <include name="org/vegbank/servlet/usermanagement/**/*java"/>
-      </fileset>
-    </jar>
-    <!-- utilities.jar -->
-    <jar  destfile ="${build.lib.dir}/utilities.jar">
-      <fileset dir="${build.classes.dir}" casesensitive="yes">
-        <include name="org/vegbank/servlet/util/**/*class"/>
-      </fileset>
-      <fileset dir="${build.java.src.dir}" casesensitive="yes">
-        <include name="org/vegbank/servlet/util/**/*java"/>
       </fileset>
     </jar>
     <!-- framework.jar -->
@@ -377,6 +368,11 @@
   
 		<ant dir="exp/rmidatasource" target="clean"/> 
 		<ant dir="exp/services" target="clean"/>
+	</target>
+
+	<target name="cleanprops" depends="init" 
+		description="=> Remove generated properties files">
+		<delete dir="${build.classes.dir}/*.properties"/>
 	</target>
   
   <!-- ================================================================ -->
