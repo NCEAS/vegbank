@@ -1,0 +1,9 @@
+These sql scripts grant read permissions for the qa user on each of the
+databases.
+
+The qa user must be created before these are run.
+> createuser qa    # Answer no to all prompts
+
+Run the scripts 
+
+> ./grantQAPrivil.pl
