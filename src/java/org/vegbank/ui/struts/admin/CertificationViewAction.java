@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-11 00:27:58 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-03-25 06:52:50 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@ package org.vegbank.ui.struts.admin;
 import java.sql.*;
 import java.util.*;
 import javax.servlet.http.*;
+import javax.mail.internet.AddressException;
+import javax.mail.MessagingException;
 
 import org.apache.commons.beanutils.BasicDynaBean;
 import org.apache.commons.beanutils.BasicDynaClass;
@@ -36,10 +38,11 @@ import org.apache.struts.Globals;
 import org.apache.struts.action.*;
 import org.vegbank.ui.struts.CertificationForm;
 import org.vegbank.ui.struts.VegbankAction;
-import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.PermComparison;
+import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.common.model.WebUser;
+import org.vegbank.common.utility.VelocityParser;
 
 
 /**
@@ -81,7 +84,7 @@ public class CertificationViewAction extends VegbankAction {
 			}
 		}
 
-		long usr = 0;
+		long usrId = 0;
 		UserDatabaseAccess uda = new UserDatabaseAccess(); 
 
 		// handle approval & declination
@@ -97,14 +100,14 @@ public class CertificationViewAction extends VegbankAction {
 				///// PRELOADING
 				///// //////////////////////////
 
-				usr = certForm.getUsrId();
+				usrId = certForm.getUsrId();
 				log.debug("CertificationViewAction: Preloading cert: " + 
 					certForm.getRequestedCert() + ", " +
 					certForm.getCurrentCertLevelName() + ", " +
 					certForm.getUsrId());
 
 				// set current certification level; use String for display ONLY
-				int userPerms = uda.getUserPermissionSum(usr);
+				int userPerms = uda.getUserPermissionSum(usrId);
 
 				if (PermComparison.matchesOne("pro", userPerms)) {
 					certForm.setCurrentCertLevelName("professional");
@@ -114,10 +117,10 @@ public class CertificationViewAction extends VegbankAction {
 					certForm.setCurrentCertLevelName("registered");
 				}
 
-				log.debug("CertificationViewAction: setting usr: " + Long.toString(usr));
+				log.debug("CertificationViewAction: setting usr: " + Long.toString(usrId));
 				// set the form et al. in dyna form
 				//dform.set("certBean", certForm);
-				dform.set("usr", Long.toString(usr));
+				dform.set("usrId", Long.toString(usrId));
 				dform.set("cert", cert);
 
 				// then set the form in the request
@@ -141,27 +144,50 @@ public class CertificationViewAction extends VegbankAction {
 				log.debug("CertificationViewAction: action = " + action);
 
 				log.debug("CertificationViewAction: getting usr from dform");
-				String tmp = (String)dform.get("usr");
+				String tmp = (String)dform.get("usrId");
 				if (tmp == null || tmp.equals("")) {
 					log.debug("CertificationViewAction: usr is empty!");
 				}
-				usr = Long.parseLong(tmp);
-				/////usr = request.getParameter("usr");
-				log.debug("CertificationViewAction: usr = " + usr);
+				usrId = Long.parseLong(tmp);
+				/////usr = request.getParameter("usrId");
+				log.debug("CertificationViewAction: usr = " + usrId);
 
 				if (action.equals("APPROVE")) {
 					// handle approval
-					int curRoles = uda.getUserPermissionSum(usr);
+					int curRoles = uda.getUserPermissionSum(usrId);
 					int reqRole = Integer.parseInt(certForm.getRequestedCert());
 					int sum = curRoles | reqRole;
 
 					log.debug("Adding roles: (sum = cur | req): "  +
 							sum + " = " + curRoles + " | " + reqRole);
 
-					uda.setUserPermissionSum(usr, sum);
+					uda.setUserPermissionSum(usrId, sum);
+					
+					String reqRoleName;
+					if (PermComparison.matchesOne("pro", reqRole))
+						reqRoleName = "professional";
+					else if (PermComparison.matchesOne("cert", reqRole))
+						reqRoleName = "certified";
+					else
+						reqRoleName = "other";
 
-					// send email -- how do i load a template?
-					///// see CertSave
+					// send email message to the user 
+					VelocityParser velo = new VelocityParser("admin/certification-approval.vm");
+					velo.put("applicantName", certForm.getGivenName() + " " + certForm.getSurName());
+					velo.put("requestedRole", reqRoleName);
+					String msgBody = velo.processTemplate(); 
+					log.debug("EMAIL MESSAGE: " + msgBody);
+
+					String mailHost = "hyperion.nceas.ucsb.edu";
+					String from = "panel@vegbank.org";
+					String to = certForm.getEmailAddress();
+					String cc = "";
+					String subject = "VegBank Certification Response";
+
+					if (to == null || to.equals("")) {
+						throw new AddressException("no email address for user");
+					}
+					ServletUtility.sendPlainTextEmail(mailHost, from, to, cc, subject, msgBody);
 					
 					log.debug("Leaving CertificationViewAction");
 					return mapping.findForward("success");
