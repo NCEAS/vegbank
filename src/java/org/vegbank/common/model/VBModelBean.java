@@ -5,8 +5,8 @@ package org.vegbank.common.model;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-26 06:25:12 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-27 20:16:42 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,14 +31,7 @@ package org.vegbank.common.model;
  * and some abstract methods that need to be implemented by the beans.
  */
 public abstract class VBModelBean
-{
-	public int indent = 0;
-	
-	public String toXML(int indent)
-	{
-	  this.indent = indent; 
-	  return this.toXML();
-	}   
+{	 
  
  	/**
  	 * UnMarshall this bean to an XML String.
@@ -48,27 +41,26 @@ public abstract class VBModelBean
  	public abstract String toXML();
  	
  	/**
+ 	 * Allows pretty printing of xml ( tabs )
+ 	 * @return String
+ 	 */
+	public abstract String toXML(int indent);  
+ 	
+ 	/**
  	 * Can this bean be a top level element?
  	 * 
  	 * @return boolean
  	 */
  	public abstract boolean isRootElement();
 
-    /**
-     * This is used for pretty printing the generated XML
-     * 
-     * @param int - number of indents
-     * @return String -- tab x indent number
-     */
-	public static String getIdent(int indent)
-	{
-	  StringBuffer sb = new StringBuffer();
-	  for ( int i=0; i<indent; i++)
-	  {
-		sb.append("\t");
-	  }
-	  return sb.toString();
-	}
+	/**
+	 * Does this attribute have an inverted relationship in the XML?
+	 * 
+	 * @return boolean
+	 */
+	public abstract boolean isInvertedRelationship( String attributName );
+	
+	// Implemented methods 
     
 	/**
 	 * Replaces XML sensitive characters with their safe versions

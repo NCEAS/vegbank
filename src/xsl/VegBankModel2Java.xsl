@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-10-26 06:25:12 $'
- *  '$Revision: 1.11 $'
+ *  '$Date: 2003-10-27 20:16:42 $'
+ *  '$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,7 +65,6 @@ package org.vegbank.common.model;
  
 import java.util.Vector;
 import java.util.Collection;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
@@ -73,7 +72,8 @@ import java.util.Iterator;
 
 public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean implements Serializable
 {
-   
+  
+
    <xsl:choose>
      <xsl:when test="javaType/@relation= 'many'">
        <xsl:variable name="javaType" select="AbstractList"/>
@@ -84,12 +84,21 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
      </xsl:otherwise>
    </xsl:choose>
    
+
    <xsl:variable name="primativeAttribs" select="attribute[attRelType/@type = 'n/a' or attKey='PK']"/>
    <xsl:variable name="FKAttribs" select="attribute[attRelType/@type = 'normal' or attRelType/@type='inverted']"/>
    <!--<xsl:variable name="simpleRelationalAttribs" select="attribute[javaType/@type='Object' and javaType/@relation='one']"/>-->
    <!--   <xsl:variable name="simpleRelationalAttribs" select="attribute[javaType/@type='int' and javaType/@relation='one']"/>-->
     <!--    <xsl:variable name="complexRelationalAttribs" select="../entity/attribute/attReferences[starts-with(text(),$entityName)]"/> -->
 
+
+    <!-- Delclare constants for the Bean -->
+  // Declare all the public CONSTANSTS	
+  public static final String PKNAME = "<xsl:value-of select="./attribute[attKey = 'PK']/attName"/>"; 
+    <xsl:apply-templates mode="declareConstants" select="$primativeAttribs"/>
+    <xsl:apply-templates mode="declareConstants" select="$FKAttribs"/>
+
+  // Delare private class members    
     <xsl:apply-templates mode="declareAttrib" select="$primativeAttribs"/>
     <xsl:apply-templates mode="declareAttrib" select="$FKAttribs"/>
     <xsl:apply-templates mode="declareObjectAttrib" select="$FKAttribs"/>
@@ -165,7 +174,7 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
     public String toXML()
     {
       StringBuffer xml = new StringBuffer();
-      xml.append(getIdent( indent ) + "&lt;<xsl:value-of select="$entityName"/>&gt;\n");
+      xml.append(getIndent( indent ) + "&lt;<xsl:value-of select="$entityName"/>&gt;\n");
       indent = indent +1 ;
     <xsl:for-each select="attribute">
 
@@ -199,7 +208,7 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
         <xsl:when test="./attRelType/@type ='n/a' and attKey!='PK'">
       if ( this.get<xsl:value-of select="$cappedVariableName"/>() != null)
       {
-        xml.append(getIdent( indent ) + "&lt;<xsl:value-of select="$XMLElementName"/>&gt;");
+        xml.append(getIndent( indent ) + "&lt;<xsl:value-of select="$XMLElementName"/>&gt;");
         xml.append(escapeXML(this.get<xsl:value-of select="$cappedVariableName"/>()) );
         xml.append("&lt;/<xsl:value-of select="$XMLElementName"/>&gt;\n");
       }
@@ -207,7 +216,7 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
         <xsl:when test="attKey='PK'">
       if ( this.get<xsl:value-of select="$cappedVariableName"/>() != 0)
       {
-        xml.append(getIdent( indent ) + "&lt;<xsl:value-of select="$XMLElementName"/>&gt;");
+        xml.append(getIndent( indent ) + "&lt;<xsl:value-of select="$XMLElementName"/>&gt;");
         xml.append(this.get<xsl:value-of select="$cappedVariableName"/>() );
         xml.append("&lt;/<xsl:value-of select="$XMLElementName"/>&gt;\n");
       }
@@ -215,15 +224,15 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
         <xsl:when test="./attRelType/@type ='normal'">
       if ( this.get<xsl:value-of select="$cappedVariableName"/>() != null)
       {
-        xml.append(getIdent( indent ) + "&lt;<xsl:value-of select="$XMLElementName"/>&gt;\n");
+        xml.append(getIndent( indent ) + "&lt;<xsl:value-of select="$XMLElementName"/>&gt;\n");
         <xsl:value-of select="$javaType"/> object = this.get<xsl:value-of select="$cappedVariableName"/>();
         xml.append( object.toXML(indent + 1) );
-        xml.append(getIdent( indent ) + "&lt;/<xsl:value-of select="$XMLElementName"/>&gt;\n");
+        xml.append(getIndent( indent ) + "&lt;/<xsl:value-of select="$XMLElementName"/>&gt;\n");
       }
         </xsl:when>
         <xsl:otherwise>
           // Got <xsl:value-of select="./javaType/@type"/> <xsl:value-of select="./attName"/>
-          xml.append(getIdent( indent ) + "&lt;!-- Ignoring <xsl:value-of select="$XMLElementName"/>  --&gt;\n");
+          xml.append(getIndent( indent ) + "&lt;!-- Ignoring <xsl:value-of select="$XMLElementName"/>  --&gt;\n");
         </xsl:otherwise>
       </xsl:choose>
 
@@ -263,9 +272,50 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
       }
     </xsl:for-each>
 
-      xml.append(getIdent( indent -1 ) +"&lt;/<xsl:value-of select="$entityName"/>&gt;\n");
+      xml.append(getIndent( indent -1 ) +"&lt;/<xsl:value-of select="$entityName"/>&gt;\n");
       return xml.toString();
     }
+    
+ <!-- ***************************************************************************** -->
+ <!-- Generate isInvertedRelationship(String attributeName) method  -->
+ <!-- ***************************************************************************** -->
+ 
+    public boolean isInvertedRelationship(String attributeName)
+    {
+      // One to ones
+   <xsl:for-each select="attribute[attKey='FK' and attRelType/@type='inverted']">
+      if ( attributeName.equalsIgnoreCase("<xsl:value-of select="concat(substring-before(attName, '_ID'), 'object')"/>") )
+      {
+        return true;
+      }
+   </xsl:for-each>
+      return false; 
+    }
+    
+    private int indent = 0;
+	
+    /**
+     * This is used for pretty printing the generated XML
+     * 
+     * @param int - number of indents
+     * @return String -- tab x indent number
+     */
+     private static String getIndent(int indent)
+     {
+       StringBuffer sb = new StringBuffer();
+       for ( int i=0; i&lt;indent; i++)
+       {
+         sb.append("\t");
+       }
+       return sb.toString();
+     }
+
+     public String toXML(int indent)
+     {
+       this.indent = indent; 
+       return this.toXML();
+     } 
+    
 }
     </redirect:write>
  </xsl:template>
@@ -306,7 +356,14 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
  </xsl:template>
 
  <xsl:template match="attribute" mode="declareAttrib">
-   <xsl:variable name="javaType">
+   <xsl:variable name="variableName">
+     <xsl:call-template name="to-lower">
+       <xsl:with-param name="text">
+         <xsl:value-of select="attName"/>
+       </xsl:with-param>
+     </xsl:call-template>
+   </xsl:variable>
+  <xsl:variable name="javaType">
      <xsl:choose>
        <xsl:when test="attKey='FK' or attKey='PK'">int</xsl:when>
        <xsl:otherwise>
@@ -314,10 +371,23 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
        </xsl:otherwise>
      </xsl:choose>
    </xsl:variable>
-
-  private <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> <xsl:value-of select="attName"/>; 
+  private <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> <xsl:value-of select="$variableName"/>; 
  </xsl:template>
 
+ <!-- ***************************************************************************** -->
+ <!-- Declare public Constants -->
+ <!-- ***************************************************************************** -->
+	
+ <xsl:template match="attribute" mode="declareConstants">
+   <xsl:variable name="constantName">
+     <xsl:call-template name="to-upper">
+       <xsl:with-param name="text">
+         <xsl:value-of select="attName"/>
+       </xsl:with-param>
+     </xsl:call-template>
+   </xsl:variable>
+  public static final String <xsl:value-of select="$constantName"/> = "<xsl:value-of select="attName"/>"; 
+ </xsl:template>
 
  <!-- ***************************************************************************** -->
  <!-- Generate get and set methods -->
@@ -341,7 +411,9 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
      </xsl:call-template>
    </xsl:variable>
    <xsl:variable name="uncappedVariableName">
-     <xsl:value-of select="attName"/>
+     <xsl:call-template name="to-lower">
+       <xsl:with-param name="text" select="attName"/>
+     </xsl:call-template>
    </xsl:variable>
 
    <xsl:call-template name="GenerateGetSet">
