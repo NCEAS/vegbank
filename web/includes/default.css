@@ -232,6 +232,11 @@ P, .normal, TD, UL, OL, DL, LI	{
 					color: #000000
 				}
 
+ul.compact   {
+	             list-style-type:none;  padding-left: 10px; margin-left: 10px;
+             }
+
+
 .psmall	        {
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 					font-size: 8pt;
@@ -326,7 +331,7 @@ THESE are all just normal styles.  The sizes have been changed to size[thesize]
 }
 
 .on_page_help	{
-		font-family: Helvetica,Arial,Verdana;
+		font-family: Helvetica,Arial,Verdana, sans-serif;
 		font-size: 13pt;
 		color: #23238E;
 		background-color : #DFE5FA;
@@ -571,7 +576,7 @@ VAR		{
 .whitegallery	{	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; font-size: 10px; text-align: center; color: black;}
 TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 
-.iform { color: #000000; font-family: Arial; background: #cccc99; font-weight: normal; font-size: 11px; }
+.iform { color: #000000; font-family: Arial, sans-serif; background: #cccc99; font-weight: normal; font-size: 11px; }
 .irform { color: #000000; background: #cccc99; font-weight: normal; font-size: 8pt; }
 
 
