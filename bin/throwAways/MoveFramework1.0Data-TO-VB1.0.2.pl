@@ -21,7 +21,7 @@ print `pg_dump -U $username framework > frameworkProd.sql`;
 
 print "\n######################################################################\n";
 print "# Create a frameworktest database for framework data\n"; 
-;
+print `dropdb -U $username frameworktest`;
 print `createdb  -U $username frameworktest`;
 
 print "\n######################################################################\n";
