@@ -7,8 +7,8 @@
  *	
  *
  * '$Author: farrell $'
- * '$Date: 2002-12-03 22:39:24 $'
- * '$Revision: 1.6 $'
+ * '$Date: 2002-12-03 23:22:44 $'
+ * '$Revision: 1.7 $'
  *
  */
 
@@ -99,6 +99,6 @@ additional_statements varchar(500)
 );
 
 
-
-INSERT INTO user_info (email_address, password, ticket_count)
-values ('test@test.com', 'pass', 2);				
+--CREATE A TEST USER WITH A HIGH PERMISSION LEVEL 
+INSERT INTO user_info (sur_name, given_name, email_address, password, ticket_count, permission_type)
+values ('testlastname', 'testfirstname', 'test@test.com', 'pass', 1, 2);				
