@@ -22,8 +22,8 @@ import servlet.util.GetURL;
  *    etc.. 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-04-11 23:53:24 $'
- *  '$Revision: 1.9 $'
+ *  '$Date: 2002-04-15 16:03:38 $'
+ *  '$Revision: 1.10 $'
  *
  */
 
@@ -34,8 +34,92 @@ public class ServletUtility
 	private GetURL gurl = new GetURL();
 	public Vector outVector;
 	public int vecElementCnt;
+
+
 	
-  /**
+	/**
+	 * method that takes a vector containing a number of file names
+	 * and a string that represents the output file and creates a 
+	 * zip file with the specified name containing the specified 
+	 * files
+	 *
+	 * @param fileVec -- the vector containing the files
+	 * @param outFile -- the name of the zip file
+	 *
+	 */
+	private void setZippedFile(Vector fileVec, String outFile)
+	{
+		try 
+		{
+		 	String outFilename = outFile;
+     	ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
+			for (int i =0; i < fileVec.size(); i++)
+			{
+				String inFilename = (String)fileVec.elementAt(i);
+     		FileInputStream in = new FileInputStream(inFilename);
+     		out.putNextEntry(new ZipEntry(inFilename));
+     		byte[] buf = new byte[1024];
+     		int len;
+      	while ((len = in.read(buf)) > 0) 
+				{
+         	out.write(buf, 0, len);
+       	}
+     		out.closeEntry();
+				in.close();
+     	}
+			out.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+ e.getMessage() );
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * method that unzips the contents of a zip file
+	 * 
+	 * @param zipFile -- the zip file
+	 *
+	 */
+	 public void getZippedFileContents()
+	 {
+	  try 
+		{
+			String inFilename = "infile.zip";
+      String outFilename = "outfile";
+      ZipInputStream in = new ZipInputStream(new FileInputStream(inFilename));
+      OutputStream out = new FileOutputStream(outFilename);
+     
+      ZipEntry entry;
+      byte[] buf = new byte[1024];
+      int len;
+      if ((entry = in.getNextEntry()) != null) 
+			{
+				String name = entry.getName();
+				System.out.println("ServletUtility > file name: " + name);
+				while ((len = in.read(buf)) > 0) 
+				{
+					out.write(buf, 0, len);
+      	}
+     	}
+     	out.close();
+     	in.close();
+     } 
+		 catch (IOException e) 
+		 {
+     }
+	 }
+ 
+
+
+
+	
+
+
+
+
+ /**
    * creates an object of a type className. this is used for instantiating
    * plugins.
    */

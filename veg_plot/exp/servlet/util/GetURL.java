@@ -1,5 +1,4 @@
 package servlet.util;
-
 /**
  *	Name: GetUrl.java
  *  Purpose: Used for Java servlet/applet/application communication
@@ -7,8 +6,8 @@ package servlet.util;
  *		"Java Servlet Programming" by Hunter & crawford and
  *
  *     '$Author: harris $'
- *     '$Date: 2002-04-11 23:53:25 $'
- *     '$Revision: 1.3 $'
+ *     '$Date: 2002-04-15 16:03:38 $'
+ *     '$Revision: 1.4 $'
  *
  */
 
