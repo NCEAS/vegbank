@@ -11,8 +11,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: harris $' <br>
- *  '$Date: 2002-07-18 23:14:56 $' <br>
- * 	'$Revision: 1.16 $' <br>
+ *  '$Date: 2002-07-23 21:42:54 $' <br>
+ * 	'$Revision: 1.17 $' <br>
  */
  
 //public class VegBankDataSourcePlugin
@@ -261,12 +261,14 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
  	public String getObsStartDate(String plotName)
  	{
 		String s = null;
+		StringBuffer sb = new StringBuffer();
 		Statement stmt = null;
 		try 
 		{
+			sb.append("select OBSSTARTDATE from OBSERVATION where PLOT_ID = " + plotName);
 			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select obsstartdate "
-			+" from OBSERVATION where PLOT_ID = " + plotName );
+			System.out.println("VegBankDataSourcePlugin > query: " + sb.toString() );
+			ResultSet rs = stmt.executeQuery(sb.toString());
 			while (rs.next()) 
 			{
 				 s = rs.getString(1);

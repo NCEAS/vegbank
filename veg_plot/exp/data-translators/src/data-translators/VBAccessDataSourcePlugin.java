@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-05-24 20:22:25 $'
- * 	'$Revision: 1.4 $'
+ *  '$Date: 2002-07-23 21:42:54 $'
+ * 	'$Revision: 1.5 $'
  */
  
 //public class VBAccessDataSourcePlugin
@@ -59,10 +59,32 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 	 * the 'getPlantTaxaNames' method
 	 *
 	 * @param plantName -- the scientific plantName
+	 * @see DBinsertPlotSource.insertTaxonObservation() -- calls this 
+	 * 	method
 	 */
 	public String getPlantTaxonCode(String plantName)
 	{
-	 	return("");
+		String code = null;
+		Statement stmt = null;
+		try 
+		{
+			
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append(" select PLANTCODE from PLANTCONCEPT where PLANTNAME like '"+plantName+"'");
+			System.out.println("VBAccessDataSourcePlugin > query: " + sb.toString() );
+			ResultSet rs = stmt.executeQuery( sb.toString() );	
+			while (rs.next()) 
+			{
+				code = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(code);
 	}
 																																																																																																												
 	
@@ -1017,6 +1039,10 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 	/**
 	 * method that returns the strata in which the input plant
 	 * exists within the input plot
+	 * @param plantName -- the name of the plant
+	 * @param plotName -- the name of the plot
+	 * @return v -- a vector containing the names of the strata for
+	 * 	which this plant was collected
 	 */
 	 public Vector getTaxaStrataExistence(String plantName, String plotName)
 	 {
@@ -1033,12 +1059,17 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 				sb.append(" ( select STRATUM_ID from stratumcomposition where TAXONOBSERVATION_ID in ( ");
 				sb.append(" select TAXONOBSERVATION_ID from TAXONOBSERVATION where PLANTNAME_ID = ( ");
 				sb.append(" select PLANTNAME_ID from PLANTNAME where PLANTNAME LIKE '"+plantName+"' ) ) ) ) ");
+				System.out.println("VBAceessDataSource > query: " + sb.toString() );
 				ResultSet rs = stmt.executeQuery( sb.toString() );
+				
+				int cnt = 0;
 				while (rs.next()) 
 				{
+					cnt++;
 					s = rs.getString(1);
 					v.addElement(s);
 				}
+				System.out.println("VBAceessDataSource > result set size: " + cnt);
 				rs.close();
 				stmt.close();
 			}

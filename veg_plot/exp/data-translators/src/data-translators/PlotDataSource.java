@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-07-18 13:45:43 $'
- * 	'$Revision: 1.21 $'
+ *  '$Date: 2002-07-23 21:42:53 $'
+ * 	'$Revision: 1.22 $'
  */
 public class PlotDataSource 
 {
@@ -101,6 +101,20 @@ public class PlotDataSource
 		}
 	}
 	
+		 
+	/**
+	 * this method takes the primary plot identifier and returns the 
+	 * name of the plot as assigned by the author.  In the case of the 
+	 * vegbank databases, this will return the authorPlotCode for a given 
+	 * 'plot_id' (the primary-key value for the plot table), whereas for 
+	 * the TNC plots database, the the unique plotid is the name of the 
+	 * plot
+	 */
+	 public String getPlotCode(String plotName)
+	 {
+		 String s = ((PlotDataSourceInterface)pluginObj).getPlotCode(plotName);
+		 return(s);
+	 }
 	
 	
 	/** 
@@ -126,6 +140,8 @@ public class PlotDataSource
 		plotId = plotName;
 		return(plotId);
  	}
+	
+	
 	
 	/**
  	 * returns the community code for the named plot

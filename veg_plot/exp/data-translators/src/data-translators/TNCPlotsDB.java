@@ -15,8 +15,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: harris $' <br>
- *  '$Date: 2002-05-24 20:22:25 $' <br>
- * 	'$Revision: 1.21 $' <br>
+ *  '$Date: 2002-07-23 21:42:54 $' <br>
+ * 	'$Revision: 1.22 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -447,8 +447,13 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		return("02-JAN-1998");
 	}
 	
-	// see the interface for method descriptions
-	public String getPlotCode(String plotName)
+	/**
+	 * this method returns the plotName.  The plotName is the 
+	 * unique identifier for a plot, akin to the plot_id in vegbank
+	 * and so the code and the name in this class and database 
+	 * are the same
+	 */
+	 public String getPlotCode(String plotName)
 	{
 		return(plotName);
 	}
@@ -2490,7 +2495,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 * method that retuns the cummulative cover accoss all strata for a given 
 	 * plant taxa in a given plot
 	 */
-	public String getCummulativeStrataCover( String plantName, String plotName )
+	public String getCummulativeStrataCover(String plantName, String plotName)
 	{
 		return("7");
 	}
