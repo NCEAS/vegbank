@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-29 20:04:53 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-10-29 20:17:52 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,6 +73,7 @@ public class NativeXMLReader
 			catch (SAXException e) 
 			{
 				System.err.println("could not set parser feature");
+				throw e;
 			}
 		} 
 		catch (FactoryConfigurationError e) 
