@@ -1,0 +1,239 @@
+<?xml version="1.0"?>
+<vegPlotPackage>
+  <project>
+    <projectName>Gregarious Ferns of B.C. - TEST UPLOAD</projectName>
+    <projectDescription>Investigation of fern species in Garibaldi Provincial Park</projectDescription>
+    <startDate>9/02/02</startDate>
+    <stopDate>9/05/02</stopDate>
+    <plot>
+      <plotId/>
+      <plotAccessionNumber/>
+      <authorPlotCode>Fern-1</authorPlotCode>
+      <latitude>49.99749</latitude>
+      <longitude>-123.00169</longitude>
+      <authorE/>
+      <authorN/>
+      <authorZone>10</authorZone>
+      <authorDatum/>
+      <authorLocation>Garibaldi Provincial Park</authorLocation>
+      <locationNarrative>Near Whistler</locationNarrative>
+      <confidentialityStatus>5</confidentialityStatus>
+      <confidentialityReason>test data</confidentialityReason>
+      <azimuth>12</azimuth>
+      <dsgPoly>(0,0),(5,0),(0,0),(5,1)</dsgPoly>
+      <shape>Diffuse</shape>
+      <area>41</area>
+      <standSize>extensive</standSize>
+      <placementMethod/>
+      <permanence>false</permanence>
+      <layoutNarative>odd-shaped</layoutNarative>
+      <elevation>1145</elevation>
+      <elevationAccuracy>25</elevationAccuracy>
+      <slopeAspect>13.2 </slopeAspect>
+      <slopeGradient>12</slopeGradient>
+      <topoPosition>High slope (shoulder slope, upper slope, convex cr</topoPosition>
+      <landform>aluvial fan</landform>
+      <geology>Slope a Modified Deposits: Solifluction, landslide</geology>
+      <soilTaxon/>
+      <soilTaxonSource>null</soilTaxonSource>
+      <notesPublic/>
+      <notesMgt/>
+      <revisions/>
+      <state>BC</state>
+      <country>Canada</country>
+      <observation>
+        <authorObsCode>Fern-1-2002</authorObsCode>
+        <obsStartDate>2002-09-03 00:00:00-07</obsStartDate>
+        <obsEndDate>2002-09-04 00:00:00-07</obsEndDate>
+        <dateAccuracy>One day</dateAccuracy>
+        <observationSequence/>
+        <sampleMethodId/>
+        <coverMethodId/>
+        <stratumMethodId/>
+        <stemSizeLimit>2.2</stemSizeLimit>
+        <methodNarrative>Used BCVS protocol</methodNarrative>
+        <taxonObservationArea>4.55</taxonObservationArea>
+        <coverDispersion>Dispersed-regular</coverDispersion>
+        <autotaxonCover>false</autotaxonCover>
+        <stemObservationArea>85</stemObservationArea>
+        <stemSampleMethod/>
+        <originalData>Victoria, BC</originalData>
+        <effortLevel>Very thorough</effortLevel>
+        <plotValidationLevel>(3) fully compliant with recommendations</plotValidationLevel>
+        <floristicQuality>Moderate</floristicQuality>
+        <bryophyteQuality>Moderate but incomplete</bryophyteQuality>
+        <lichenQuality>Low</lichenQuality>
+        <observationNarrative>good study, excellent work done</observationNarrative>
+        <landscapeNarrative>Lacks pollution</landscapeNarrative>
+        <homogeneity>compositional trend across plot</homogeneity>
+        <phenologicalAspect>vernal</phenologicalAspect>
+        <representativeness>vegetation differences from similar sites in area owing to chance dispersal to insular habitats.</representativeness>
+        <basalArea>95.12</basalArea>
+        <hydrologicRegime>Tidally flooded</hydrologicRegime>
+        <soilMoistureRegime>Xeric</soilMoistureRegime>
+        <soilDrainage>Well Drained</soilDrainage>
+        <waterSalinity>Brackish (0.5-30 ppt)</waterSalinity>
+        <waterDepth>42</waterDepth>
+        <shoreDistance>17</shoreDistance>
+        <soilDepth>null</soilDepth>
+        <organicDepth>77</organicDepth>
+        <percentBedrock>122</percentBedrock>
+        <percentRockGravel>13</percentRockGravel>
+        <percentWood>14</percentWood>
+        <percentLitter>15</percentLitter>
+        <percentBareSoil>16</percentBareSoil>
+        <percentWater>17</percentWater>
+        <percentOther>188</percentOther>
+        <nameOther>nineteen</nameOther>
+        <standMaturity>Mature, even-age</standMaturity>
+        <successionalStatus>25% there</successionalStatus>
+        <treeHt>85</treeHt>
+        <shrubHt>35</shrubHt>
+        <fieldHt>1</fieldHt>
+        <nonvascularHt>5</nonvascularHt>
+        <submergedHt>7</submergedHt>
+        <treeCover>9</treeCover>
+        <shrubCover>11</shrubCover>
+        <fieldCover>13</fieldCover>
+        <nonvascularCover>15</nonvascularCover>
+        <floatingCover>3</floatingCover>
+        <submergedCover>1</submergedCover>
+        <dominantStratum>Nonvascular</dominantStratum>
+        <growthform1type>Tree fern</growthform1type>
+        <growthform2type>Palm shrub</growthform2type>
+        <growthform3type>Aquatic herb</growthform3type>
+        <growthform1cover>81</growthform1cover>
+        <growthform2cover>61</growthform2cover>
+        <growthform3cover>4</growthform3cover>
+        <notesPublic>false</notesPublic>
+        <notesMgt>false</notesMgt>
+        <revisions>false</revisions>
+        <communityClassification>
+          <className>fern-plant community</className>
+          <classCode>IR67</classCode>
+          <classStartDate/>
+          <classStopDate/>
+          <classInspection/>
+          <classInspection/>
+          <tableAnalysis/>
+          <multivariateAnalysis/>
+          <expertSystem/>
+          <classNotes>TEST community</classNotes>
+          <classPublication/>
+        </communityClassification>
+        <stratum>
+          <stratumName>E</stratumName>
+          <stratumHeight>12</stratumHeight>
+          <stratumBase>25</stratumBase>
+          <stratumCover>12</stratumCover>
+        </stratum>
+        <stratum>
+          <stratumName>hrb</stratumName>
+          <stratumHeight>1</stratumHeight>
+          <stratumBase>0.5</stratumBase>
+          <stratumCover>25</stratumCover>
+        </stratum>
+        <stratum>
+          <stratumName>Other</stratumName>
+          <stratumHeight>85</stratumHeight>
+          <stratumBase>0</stratumBase>
+          <stratumCover>17</stratumCover>
+        </stratum>
+        <stratum>
+          <stratumName>shb</stratumName>
+          <stratumHeight>8</stratumHeight>
+          <stratumBase>13</stratumBase>
+          <stratumCover>4</stratumCover>
+        </stratum>
+        <stratum>
+          <stratumName>T53.10</stratumName>
+          <stratumHeight>14</stratumHeight>
+          <stratumBase>12</stratumBase>
+          <stratumCover>6</stratumCover>
+        </stratum>
+        <taxonObservation>
+          <authorNameId>Abies concolor (Gord. and Glend.) Lindl. ex Hildebr.</authorNameId>
+          <authorCodeId>ABCO</authorCodeId>
+          <taxonCover>55</taxonCover>
+          <stratumComposition>
+            <taxonStratumCover>20</taxonStratumCover>
+            <stratumName>hrb</stratumName>
+          </stratumComposition>
+          <stratumComposition>
+            <taxonStratumCover>44</taxonStratumCover>
+            <stratumName>shb</stratumName>
+          </stratumComposition>
+          <stratumComposition>
+            <taxonStratumCover>29</taxonStratumCover>
+            <stratumName>T53.10</stratumName>
+          </stratumComposition>
+        </taxonObservation>
+        <taxonObservation>
+          <authorNameId>Abies lasiocarpa (Hook.) Nutt. var. arizonica (Merriam) Lemmon</authorNameId>
+          <authorCodeId>ABLAA</authorCodeId>
+          <taxonCover>3</taxonCover>
+          <stratumComposition>
+            <taxonStratumCover>2</taxonStratumCover>
+            <stratumName>E</stratumName>
+          </stratumComposition>
+          <stratumComposition>
+            <taxonStratumCover>2</taxonStratumCover>
+            <stratumName>Other</stratumName>
+          </stratumComposition>
+          <stratumComposition>
+            <taxonStratumCover>2</taxonStratumCover>
+            <stratumName>shb</stratumName>
+          </stratumComposition>
+          <stratumComposition>
+            <taxonStratumCover>2</taxonStratumCover>
+            <stratumName>T53.10</stratumName>
+          </stratumComposition>
+        </taxonObservation>
+        <taxonObservation>
+          <authorNameId>Asteraceae</authorNameId>
+          <authorCodeId>Asteraceae</authorCodeId>
+          <taxonCover>28</taxonCover>
+          <stratumComposition>
+            <taxonStratumCover>2</taxonStratumCover>
+            <stratumName>hrb</stratumName>
+          </stratumComposition>
+        </taxonObservation>
+        <taxonObservation>
+          <authorNameId>Bidens L.</authorNameId>
+          <authorCodeId>BIDEN</authorCodeId>
+          <taxonCover>1</taxonCover>
+          <stratumComposition>
+            <taxonStratumCover>54</taxonStratumCover>
+            <stratumName>hrb</stratumName>
+          </stratumComposition>
+          <stratumComposition>
+            <taxonStratumCover>65</taxonStratumCover>
+            <stratumName>Other</stratumName>
+          </stratumComposition>
+          <stratumComposition>
+            <taxonStratumCover>33</taxonStratumCover>
+            <stratumName>T53.10</stratumName>
+          </stratumComposition>
+        </taxonObservation>
+        <taxonObservation>
+          <authorNameId>Bouteloua curtipendula (Michx.) Torr.</authorNameId>
+          <authorCodeId>BOCU</authorCodeId>
+          <taxonCover/>
+        </taxonObservation>
+        <taxonObservation>
+          <authorNameId>Mammillaria Haw.</authorNameId>
+          <authorCodeId>MAMMI</authorCodeId>
+          <taxonCover>3</taxonCover>
+          <stratumComposition>
+            <taxonStratumCover>31</taxonStratumCover>
+            <stratumName>hrb</stratumName>
+          </stratumComposition>
+          <stratumComposition>
+            <taxonStratumCover>12</taxonStratumCover>
+            <stratumName>T53.10</stratumName>
+          </stratumComposition>
+        </taxonObservation>
+      </observation>
+    </plot>
+  </project>
+</vegPlotPackage>
