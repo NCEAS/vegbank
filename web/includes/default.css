@@ -1,4 +1,9 @@
-BODY			{ background-color: #FFFFFF; }
+BODY			{ background-color: #FFFFFF;}
+
+table.thinlines {border-style: solid; 
+                 border-width:1px; 
+                 border-collapse: collapse; 
+                 border-color:#666666}
 
 A:Link			{ color: #005680; text-decoration: underline }
 A:Visited		{ color: #003366; text-decoration: underline }
