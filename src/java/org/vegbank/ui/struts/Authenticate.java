@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-14 17:09:36 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-11-12 22:22:18 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,42 +24,64 @@
 package org.vegbank.ui.struts;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.vegbank.common.utility.ServletUtility;
+import org.vegbank.common.Constants;
+import org.vegbank.common.model.WebUser;
+import org.vegbank.common.utility.LogUtility;
 
-import com.livinglogic.struts.workflow.Authentication;
 
 /**
  * @author farrell
  *
- * Impliements autentication by checking that the vegbank cookie for a a non 
- * null username. 
+ * Impliements autentication by checking for session with user object.
  * 
  * TODO: Replace with a more sensible method of authentication.
  */
-public class Authenticate implements Authentication {
+public class Authenticate implements  Authentication
+{
 
 	/* (non-Javadoc)
-	 * @see com.livinglogic.struts.workflow.Authentication#check(javax.servlet.http.HttpServletRequest)
+	 * @see org.vegbank.ui.struts.Authentication#check(javax.servlet.http.HttpServletRequest)
 	 */
-	public boolean check(HttpServletRequest request) {	
+	public boolean checkAuth(HttpServletRequest request) 
+	{	
+		boolean valid = false;
 		
-		boolean result = false;
-		// get the name and username
-		String cookieName = (new ServletUtility()).getCookieValue(request);
-		String  emailAddress = request.getParameter("emailAddress");
+		// Get logged on status from session / user object
+		HttpSession session = 
+			 request.getSession();
 		
-		System.out.println("Authenticate: cookieName: " +  cookieName);
-		
-		if ( cookieName == null || cookieName.equals(""))
+		if ((session != null)
+			&& (session.getAttribute(Constants.USER_KEY) != null))
 		{
-			result = false;
+			valid = true;
 		}
-		else 
+		LogUtility.log("Authenticate: User logged on: "+ valid);
+		return valid;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.vegbank.ui.struts.Authentication#checkCertLevel(javax.servlet.http.HttpServletRequest, int)
+	 */
+	public boolean checkCertLevel(HttpServletRequest request, int minCertLevel)
+	{
+		boolean result = false;
+		
+		// Get the certification level of the user
+		WebUser user = 
+			(WebUser) request.getSession().getAttribute(Constants.USER_KEY);
+			
+		int certificationLevel = user.getCertificationLevel();
+		LogUtility.log(
+			"Authenticate: Comparing users cert level;  "
+				+ certificationLevel
+				+ " with the minimum level of; "
+				+ minCertLevel);
+		if (minCertLevel <= certificationLevel)
 		{
 			result = true;
 		}
-		System.out.println("Authenticate: succeeded? "+ result);
 		return result;
 	}
 
