@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-07 23:36:14 $'
- * '$Revision: 1.11 $'
+ *     '$Date: 2002-03-08 17:36:43 $'
+ * '$Revision: 1.12 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -124,6 +124,27 @@ import java.sql.*;
 			{
 				query = "select ([AllianceName]) from Alliance where ([AllianceKey]) like '"+community+"'";
 			}
+			else if (level.equals("formation") )
+			{
+				query = "select ([FormationName]) from Formation where ([FormationKey]) like '"+community+"'";
+			}
+			else if (level.equals("subgroup") )
+			{
+				query = "select ([Subgroupname]) from subgroup where ([subgroupKey]) like '"+community+"'";
+			}
+			else if (level.equals("group") )
+			{
+				query = "select ([Groupname]) from group_ where ([GroupKey]) like '"+community+"'";
+				System.out.println("EcoartVegCommunity > query: " + query );
+			}
+			else if (level.equals("subclass") )
+			{
+				query = "select ([SubClassname]) from subclass where ([subclassKey]) like '"+community+"'";
+			}
+			else if (level.equals("class") )
+			{
+				query = "select ([Classname]) from class where ([classKey]) like '"+community+"'";
+			}
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) 
 			{
@@ -241,10 +262,32 @@ import java.sql.*;
 				{
 					query = "select ([AllianceOriginDate]) from ALLIANCE where ([AllianceKey]) like '"+communityCode+"'";
 				}
-				else
+				else if ( level.equals("association"))
 				{
 					query = "select ([AssocOriginDate]) from ETC where ([Elcode]) like '"+communityCode+"'";
 				}
+				else if  ( level.equals("formation"))
+				{
+					query = "select ([Update]) from Formation where ([FormationKey]) like '"+communityCode+"'";
+				}
+				else if  ( level.equals("subgroup"))
+				{
+					query = "select ([Update]) from subgroup where ([subgroupKey]) like '"+communityCode+"'";
+				}
+				
+				else if  ( level.equals("group"))
+				{
+					query = "select ([Update]) from group_ where ([groupKey]) like '"+communityCode+"'";
+				}
+				else if  ( level.equals("subclass"))
+				{
+					query = "select ([Update]) from subclass where ([subclassKey]) like '"+communityCode+"'";
+				}
+				else if  ( level.equals("class"))
+				{
+					query = "select ([Update]) from class where ([classKey]) like '"+communityCode+"'";
+				}
+				System.out.println("EcoartVegCommunity > query: " + query);
 				ResultSet rs = stmt.executeQuery(query);
 				while (rs.next()) 
 				{
@@ -274,6 +317,7 @@ import java.sql.*;
  		Vector communities = new Vector();
  		 try
  		 {
+			 System.out.println("EcoartVegCommunity > level: " + level);
 			 String query = null;
 			 if (level.equals("association"))
 			 {
@@ -283,13 +327,36 @@ import java.sql.*;
 			 {
 				 query = "select distinct ([AllianceKey]) from Alliance";
 			 }
+			 else if (level.equals("formation"))
+			 {
+				 query = "select distinct([FormationKey]) from Formation";
+			 }
+			 else if (level.equals("subgroup"))
+			 {
+				 query = "select distinct([SubgroupKey]) from Subgroup";
+			 }
+			 else if (level.equals("group"))
+			 {
+				 query = "select distinct([GroupKey]) from Group_ ";
+			 }
+			  else if (level.equals("subclass"))
+			 {
+				 query = "select distinct([SubClassKey]) from subclass ";
+			 }
+			 else if (level.equals("class"))
+			 {
+				 query = "select distinct([ClassKey]) from Class ";
+			 }
+			System.out.println("EcoartVegCommunity > query: " + query);
  			// Create a Statement so we can submit SQL statements to the driver
  			Statement stmt = con.createStatement();
  			//create the result set
  			ResultSet rs = stmt.executeQuery(query);
  			while (rs.next()) 
  			{
- 				 communities.addElement(rs.getString(1));
+				String resp = rs.getString(1);
+				 System.out.println("EcoartVegCommunity > resp: " + resp );
+ 				 communities.addElement( resp );
  			}
 			rs.close();
 			stmt.close();
@@ -319,6 +386,26 @@ import java.sql.*;
 		else if (community.startsWith("A.") )
 		{
 			return("alliance");
+		}
+			else if (community.startsWith("F.") )
+		{
+			return("formation");
+		}
+		else if (community.startsWith("SG.") )
+		{
+			return("subgroup");
+		}
+		else if (community.startsWith("G.") )
+		{
+			return("group");
+		}
+		else if (community.startsWith("SC.") )
+		{
+			return("subclass");
+		}
+		else if (community.startsWith("C.") )
+		{
+			return("class");
 		}
 		else
 		{

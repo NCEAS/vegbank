@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-07 23:36:14 $'
- * '$Revision: 1.11 $'
+ *     '$Date: 2002-03-08 17:36:43 $'
+ * '$Revision: 1.12 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -827,6 +827,210 @@ public class VegCommunityLoader
 		}
 	 
 	 
+	  /**
+	  * method to load the ecoart alliances
+		*/
+		private void loadEcoartFormations()
+		{
+			try
+			{
+				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
+				//update the class varaibles
+				this.otherCitationDetails = source.otherCitationDetails;
+				this.refAuthors =source.refAuthors;
+				this.refTitle = source.refTitle;
+				this.refPubDate = source.refPubDate;
+				this.partyOrgName = source.partyOrgName;
+				
+				Vector v = source.getCommunityCodes("formation");
+				for (int i =0; i < v.size(); i++)
+				{
+					String communityCode = v.elementAt(i).toString();
+					String commName = source.getCommunityName(communityCode);
+					String level = "formation";
+					//pass the code and the level to the method below
+					String dateEntered = source.getDateEntered(communityCode, "formation");
+					String parentCommunity = null; //this means top level
+					if (commName != null)
+					{
+						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
+						dateEntered, parentCommunity, "");
+					}
+				}
+				//close the connections 
+				source.con.close();
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		}
+	 
+	 
+	  /**
+	  * method to load the ecoart alliances
+		*/
+		private void loadEcoartSubGroups()
+		{
+			try
+			{
+				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
+				//update the class varaibles
+				this.otherCitationDetails = source.otherCitationDetails;
+				this.refAuthors =source.refAuthors;
+				this.refTitle = source.refTitle;
+				this.refPubDate = source.refPubDate;
+				this.partyOrgName = source.partyOrgName;
+				
+				Vector v = source.getCommunityCodes("subgroup");
+				for (int i =0; i < v.size(); i++)
+				{
+					String communityCode = v.elementAt(i).toString();
+					String commName = source.getCommunityName(communityCode);
+					String level = "subgroup";
+					//pass the code and the level to the method below
+					String dateEntered = source.getDateEntered(communityCode, "subgroup");
+					String parentCommunity = null; //this means top level
+					if (commName != null)
+					{
+						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
+						dateEntered, parentCommunity, "");
+					}
+				}
+				//close the connections 
+				source.con.close();
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		}
+	 
+	 
+	  /**
+	  * method to load the ecoart alliances
+		*/
+		private void loadEcoartGroups()
+		{
+			try
+			{
+				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
+				//update the class varaibles
+				this.otherCitationDetails = source.otherCitationDetails;
+				this.refAuthors =source.refAuthors;
+				this.refTitle = source.refTitle;
+				this.refPubDate = source.refPubDate;
+				this.partyOrgName = source.partyOrgName;
+				
+				Vector v = source.getCommunityCodes("group");
+				for (int i =0; i < v.size(); i++)
+				{
+					String communityCode = v.elementAt(i).toString();
+					String commName = source.getCommunityName(communityCode);
+					String level = "group";
+					//pass the code and the level to the method below
+					String dateEntered = source.getDateEntered(communityCode, "group");
+					String parentCommunity = null; //this means top level
+					if (commName != null)
+					{
+						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
+						dateEntered, parentCommunity, "");
+					}
+				}
+				//close the connections 
+				source.con.close();
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		}
+		
+		 
+	  /**
+	  * method to load the ecoart alliances
+		*/
+		private void loadEcoartSubClasses()
+		{
+			try
+			{
+				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
+				//update the class varaibles
+				this.otherCitationDetails = source.otherCitationDetails;
+				this.refAuthors =source.refAuthors;
+				this.refTitle = source.refTitle;
+				this.refPubDate = source.refPubDate;
+				this.partyOrgName = source.partyOrgName;
+				
+				Vector v = source.getCommunityCodes("subclass");
+				for (int i =0; i < v.size(); i++)
+				{
+					String communityCode = v.elementAt(i).toString();
+					String commName = source.getCommunityName(communityCode);
+					String level = "subclass";
+					//pass the code and the level to the method below
+					String dateEntered = source.getDateEntered(communityCode, "subclass");
+					String parentCommunity = null; //this means top level
+					if (commName != null)
+					{
+						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
+						dateEntered, parentCommunity, "");
+					}
+				}
+				//close the connections 
+				source.con.close();
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		}
+		
+		 /**
+	  * method to load the ecoart alliances
+		*/
+		private void loadEcoartClasses()
+		{
+			try
+			{
+				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
+				//update the class varaibles
+				this.otherCitationDetails = source.otherCitationDetails;
+				this.refAuthors =source.refAuthors;
+				this.refTitle = source.refTitle;
+				this.refPubDate = source.refPubDate;
+				this.partyOrgName = source.partyOrgName;
+				
+				Vector v = source.getCommunityCodes("class");
+				for (int i =0; i < v.size(); i++)
+				{
+					String communityCode = v.elementAt(i).toString();
+					String commName = source.getCommunityName(communityCode);
+					String level = "class";
+					//pass the code and the level to the method below
+					String dateEntered = source.getDateEntered(communityCode, "class");
+					String parentCommunity = null; //this means top level
+					if (commName != null)
+					{
+						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
+						dateEntered, parentCommunity, "");
+					}
+				}
+				//close the connections 
+				source.con.close();
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		}
+		
+		
 	 
 	 /**
 	  * main method for testing this code
@@ -837,6 +1041,12 @@ public class VegCommunityLoader
 			{
 				VegCommunityLoader loader = new VegCommunityLoader();
 				//loader.insertCommunity("TEST", "ecoart");
+				
+				loader.loadEcoartClasses();
+				loader.loadEcoartSubClasses();
+				loader.loadEcoartGroups();
+				loader.loadEcoartSubGroups();
+				loader.loadEcoartFormations();
 				loader.loadEcoartAlliances();
 				loader.loadEcoartAssociations();
 			}
