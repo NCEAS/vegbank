@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-30 22:24:00 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2003-01-10 21:43:12 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,16 @@ import java.util.*;
 public class PlotValidationReport
 {
 	// this is the buffer that contains the report
-	private static StringBuffer report = new StringBuffer();
+	private  StringBuffer report = new StringBuffer();
 	
+	// constructor
+	public PlotValidationReport()
+	{
+		// create a new report 
+		report = new StringBuffer();
+		// start the root element
+		this.report.append("\n<plotValidationReport>\n");
+	}
 	
 	/**
 	 * method called by the validator to set a message in the report
@@ -50,26 +58,28 @@ public class PlotValidationReport
 	String methodParams, String target, Vector constraints)
 	{
 		System.out.println("PlotValidationReport > setMessage called");
-		this.report.append("\n<failedAttribute>\n");
-		this.report.append("<dbTable>"+dbTable+"</dbTable>\n");
-		this.report.append("<dbAttribute>"+dbAttribute+"</dbAttribute>\n");
-		this.report.append("<methodName>"+methodName+"</methodName>\n");
-		this.report.append("<methodParams>"+methodParams+"</methodParams>\n");
-		this.report.append("<failedTarget>" +target+ "</failedTarget>\n");
-		this.report.append("<constraints>\n");
+		this.report.append("\n <failedValidationAttribute>\n");
+		this.report.append("  <dbTable>"+dbTable+"</dbTable>\n");
+		this.report.append("  <dbAttribute>"+dbAttribute+"</dbAttribute>\n");
+		this.report.append("  <methodName>"+methodName+"</methodName>\n");
+		this.report.append("  <methodParams>"+methodParams+"</methodParams>\n");
+		this.report.append("  <failedTarget>" +target+ "</failedTarget>\n");
+		this.report.append("  <constraints>\n");
 		 for (int i = 0; i < constraints.size(); i++)
 		 {
-			 this.report.append("<constraint>" + (String)constraints.elementAt(i) + "</constraint>\n");
+			 this.report.append("   <constraint>" + (String)constraints.elementAt(i) + "</constraint>\n");
 		 }
-		this.report.append("</constraints> \n");
-		this.report.append("</failedAttribute> \n");
+		this.report.append("  </constraints> \n");
+		this.report.append(" </failedValidationAttribute> \n");
 	}
 	
 	/**
-	 * method to retrieve the report
+	 * method to retrieve the  xml report
 	 */
 	 public String getReport()
 	 {
+		 // end the root element 
+		 	this.report.append("</plotValidationReport>\n");
 		 return(report.toString() );
 	 }
 }

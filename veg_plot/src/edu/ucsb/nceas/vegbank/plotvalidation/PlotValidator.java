@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2003-01-08 16:37:39 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2003-01-10 21:43:12 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -121,6 +121,8 @@ public class PlotValidator implements PlotValidationInterface
 	  {
 			boolean validFlag = false;
 			System.out.println("PlotValidator > isPlotValid() called for: " + plot );
+			// make a new instance of the report class
+			report = new PlotValidationReport();
 			
 			
 			// the number of rules to use to test the plot with 
@@ -147,7 +149,7 @@ public class PlotValidator implements PlotValidationInterface
 					if (validFlag == false)
 					{
 						// this will log the messages
-						report.setMessage(dbTable, dbTable, methodName, methodParams, val, constraints);
+						report.setMessage(dbTable, dbAttribute, methodName, methodParams, val, constraints);
 					}
 			}
 			
