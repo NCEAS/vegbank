@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-10-17 01:23:58 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-17 15:51:15 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,7 @@
 
 package org.vegbank.ui.struts;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,15 +32,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.DynaActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.commons.codec.language.DoubleMetaphone;
-import org.vegbank.common.utility.DatabaseAccess;
-import org.vegbank.common.utility.Utility;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.DynaActionForm;
 import org.vegbank.common.utility.DatabaseUtility;
 
 /**

@@ -3,8 +3,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-10-06 20:50:23 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-17 15:51:15 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
  
 package org.vegbank.ui.struts;
 
-import java.util.*;
 import java.sql.*;
 
 import org.apache.struts.action.ActionForm;
