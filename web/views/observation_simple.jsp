@@ -45,7 +45,32 @@
   <%@ include file="autogen/observation_plotshowmany_data.jsp" %>
         <%@ include file="autogen/plot_plotshowmany_data.jsp" %>
         
-      <%@ include file="includeviews/sub_place.jsp" %>
+   <!-- community info -->
+   <vegbank:get id="comminterpretation" select="comminterpretation_withobs" beanName="map" 
+     where="where_observation_pk" wparam="observation_pk" perPage="-1" pager="false"/>
+   <logic:notEmpty name="comminterpretation-BEANLIST">
+   <!-- <tr><th>Community Classification:</th><th>&nbsp;</th></tr> -->
+   <tr class='@nextcolorclass@'><td class="datalabel">Community Type:</td><td>
+   <table class="leftrightborders" cellpadding="2" width="100%"><!--each field, only write when field HAS contents-->
+   
+   <!-- <tr> -->
+   <!-- %@ include file="autogen/comminterpretation_summary2_head.jsp" % -->
+   <!-- </tr> -->
+   <logic:iterate id="onerowofcomminterpretation" name="comminterpretation-BEANLIST"><!-- iterate over all records in set : new table for each -->
+   <logic:notEmpty name="onerowofcomminterpretation" property="commconcept_id">
+   <tr>
+   <%@ include file="autogen/comminterpretation_summary2_data.jsp" %><td class="largefield"><a href="@get_link@summary/commclass/<bean:write 
+    name='onerowofcomminterpretation' property='commclass_id' />">details</a></td>
+   </tr>
+   </logic:notEmpty>
+   </logic:iterate>
+   </table>
+   
+   </td></tr>
+</logic:notEmpty>
+   
+   
+   <%@ include file="includeviews/sub_place.jsp" %>
       
 <!--Insert a nested get statement here:
    example:   
@@ -57,28 +82,7 @@
 <!-- community info: , simplest format -->
 
 
-<!-- community info -->
-<vegbank:get id="comminterpretation" select="comminterpretation_withobs" beanName="map" 
-  where="where_observation_pk" wparam="observation_pk" perPage="-1" pager="false"/>
-<logic:notEmpty name="comminterpretation-BEANLIST">
-<!-- <tr><th>Community Classification:</th><th>&nbsp;</th></tr> -->
-<tr><td colspan="2">
-<table class="leftrightborders" cellpadding="2" width="100%"><!--each field, only write when field HAS contents-->
 
-<tr>
-<%@ include file="autogen/comminterpretation_summary2_head.jsp" %>
-</tr>
-<logic:iterate id="onerowofcomminterpretation" name="comminterpretation-BEANLIST"><!-- iterate over all records in set : new table for each -->
-<logic:notEmpty name="onerowofcomminterpretation" property="commconcept_id">
-<tr class='@nextcolorclass@'>
-<%@ include file="autogen/comminterpretation_summary2_data.jsp" %>
-</tr>
-</logic:notEmpty>
-</logic:iterate>
-</table>
-
-</td></tr>
-</logic:notEmpty>
 
 
 </table>
