@@ -40,7 +40,7 @@ out.println("<head>");
 String title =("plotQuery - Interface to the Plots Database");
 out.println("<title>" + title + "</title>");
 out.println("</head>");
-out.println("<body bgcolor=\"336699\">");
+out.println("<body bgcolor=\"white\">");
 out.println("<h3>" + title + "</h3>");
 
 out.println("<p>");
@@ -51,26 +51,31 @@ String firstName = request.getParameter("firstname");
 String lastName = request.getParameter("lastname");
 int i=0;
 out.println(rb.getString("requestparams.params-in-req") + "<br>");
+out.println("<br><i>");
+out.println(rb.getString("requestparams.protoDescription")+"<br>");
+out.println("<br></i>");
+out.println("<A HREF=\"http://www.nceas.ucsb.edu/collab/2180/docs/diagrams/prototypeERD.pdf\"><B><FONT SIZE=\"-1\" FACE=\"arial\">Current Plots Data Model</FONT></B></A>");
+out.println("<br></i>");
 
 if (firstName != null || lastName != null) {
     out.println(rb.getString("requestparams.firstname"));
-    out.println(" = " + firstName + "<br>");
-    out.println(rb.getString("requestparams.lastname"));
-    out.println(" = " + lastName);
+    //out.println(" = " + firstName + "<br>");
+   //out.println(rb.getString("requestparams.lastname"));
+    //out.println(" = " + lastName);
 		//for (i = 0; i < 5; i++) {out.println(firstName);} //end for
 
 /*Query the DB*/
 
 try {
 Class.forName(driver_class);
-out.println("Trying to connect...<br>");
+//out.println("Trying to connect...<br>");
 if( conn == null)
 	conn = DriverManager.getConnection (connect_string, login, passwd);
 	query = conn.createStatement ();
 	query2 = conn.createStatement ();
 	query3= conn.createStatement ();
 	stmt = conn.createStatement ();
-	out.println("Connected.<br>");
+	out.println("Connected to dev.nceas.ucsb.edu:exp.<br>");
 	}
 catch ( Exception e ){out.println("did not connect "+e.getMessage());}
 
@@ -109,16 +114,38 @@ int obsId=-999;
 int parentPlot=-99;
 String authorPlotCode=null;
 String surfGeo=null;
-
+String authNameId=null;
+String classAssociation=null;
 
 /*get the basic name information*/
 try {
 out.println("<b>Selection results:</b> <br>");
 out.println("<b>Author assigned plot name:</b> <br>");
-results = query.executeQuery("select obs_id from taxonObservation where authornameid like '%"+firstName+"%'");
+
+/*insert the table structure here*/
+
+out.println("<TABLE BORDER=\"1\" CELLPADDING=\"0\" CELLSPACING=\"0\" WIDTH=\"650\">");
+
+out.println("<TR>");
+out.println("        <TD></TD>");
+out.println("</TR>");
+
+out.println("<TR>");
+out.println("<TD><B><FONT COLOR=red SIZE=\"-1\" FACE=\"arial\">author's plot name</FONT></B></TD>");
+out.println("<TD><B><FONT COLOR=red  SIZE=\"-1\" FACE=\"arial\">taxon match</FONT></B></TD>");
+out.println("<TD><B><FONT COLOR=red SIZE=\"-1\" FACE=\"arial\">place name</FONT></B></TD>");
+out.println("<TD><B><FONT COLOR=red SIZE=\"-1\" FACE=\"arial\">surficial geology</FONT></B></TD>");
+out.println("<TD><B><FONT COLOR=green SIZE=\"-1\" FACE=\"arial\">community type</FONT></B></A></TD>");
+//out.println("<TD><A HREF=\"NotesDefinition.html\"><B><FONT SIZE=\"-1\"");
+//out.println(" FACE=\"arial\">NOTES</FONT></B></A></TD>");
+//out.println("<TD><B><FONT SIZE=\"-1\" FACE=\"arial\">DEFINITION</FONT></B></TD>");
+out.println("</TR>");
+
+results = query.executeQuery("select obs_id, authorNameId from taxonObservation where authornameid like '%"+firstName+"%'");
 
 while (results.next()) {
 	obsId = results.getInt("obs_id");
+	authNameId = results.getString("authorNameId");
 //	out.println(obsId);
 	
 		obsData = query2.executeQuery("select parentPlot from plotObservation where obs_id="+obsId);
@@ -129,21 +156,40 @@ while (results.next()) {
 	//	}
 
 
-			plotData=query3.executeQuery("select authorplotcode, surfGeo  from plot where plot_id= "+parentPlot);
+plotData=query3.executeQuery("select authorplotcode, surfGeo, currentCommunity  from plot where plot_id= "+parentPlot);
 
 			while (plotData.next()) {
       				 authorPlotCode =plotData.getString("authorplotcode");
 				surfGeo=plotData.getString("surfGeo");
+				classAssociation=plotData.getString("currentCommunity");
 
-			out.println("<i>"+authorPlotCode+"	"+surfGeo+"</i><br>  \n");
-			out.println("</i><P>");
+/*insert the table data  here*/
+
+out.println("</TR>");
+out.println("<TD><FONT SIZE=\"-1\" FACE=\"arial\">"+authorPlotCode+"</FONT></TD>");
+out.println("<TD><FONT SIZE=\"-1\" FACE=\"arial\">"+authNameId+"</FONT></TD>");
+out.println("<TD><FONT SIZE=\"-1\" FACE=\"arial\">"+authorPlotCode+"</FONT></TD>");
+out.println("<TD><FONT SIZE=\"-1\" FACE=\"arial\">"+surfGeo+"</FONT></TD>");
+out.println("<TD><FONT SIZE=\"-1\" FACE=\"arial\">"+classAssociation+"</FONT></TD>");
+
+
+out.println("</TR>");
+
+
+
+		//	out.println("<i>"+authorPlotCode+"	"+surfGeo+"	"+authNameId+"</i><br>  \n");
+		//	out.println("</i><P>");
+
+
 		} 
 	} //end while
 } //end while
-
+out.println("</TABLE>");
 
 stmt.close();
 query.close();
+query2.close();
+query3.close();
 conn.close();
 
 
