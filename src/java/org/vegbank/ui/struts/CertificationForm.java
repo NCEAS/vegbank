@@ -1,10 +1,11 @@
-/* *	'$RCSfile: CertificationForm.java,v $'
+/**	
+ *  '$RCSfile: CertificationForm.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-11-26 00:46:40 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-01-16 02:14:58 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +26,7 @@ package org.vegbank.ui.struts;
 
 import java.sql.*;
 
-import org.apache.struts.action.ActionForm;
+import org.apache.struts.validator.ValidatorForm;
 import org.vegbank.common.command.GenericCommand;
 import org.vegbank.common.utility.DatabaseAccess;
 
@@ -33,40 +34,52 @@ import org.vegbank.common.utility.DatabaseAccess;
  * @author anderson
  */
 
-public class CertificationForm extends ActionForm implements java.io.Serializable
+public class CertificationForm extends ValidatorForm 
+			implements java.io.Serializable
 {
+	// prepopulated fields
 	private String emailAddress;
-	private String submittedEmail;
 	private String surName;
-	private String givenName ;
+	private String givenName;
 	private String phoneNumber;
-	private String phoneType;
 	private String currentCertLevel;
-	private String cvDoc;
+	
+	// user enters these fields
+	private String requestedCert;
 	private String highestDegree;
 	private String degreeYear;
-	private String currentInst;
 	private String degreeInst;
+	private String currentOrg;
 	private String currentPos;
-	private String esaPos;
-	private String profExperienceDoc;
+	private String esaMember="no";
+
+	private String profExp;
 	private String relevantPubs;
-	private String vegSamplingDoc;
-	private String vegAnalysisDoc;
-	private String usnvcExpDoc;
-	private String vegbankExpDoc;
-	private String useVegbank;
-	private String plotdbDoc;
+	private String vegSamplingExp;
+	private String vegAnalysisExp;
+	private String usnvcExp;
+	private String vbExp;
+	private String vbIntention;
+	private String toolsExp;
+
 	private String nvcExpRegionA;
 	private String nvcExpVegA;
 	private String nvcExpFloristicsA;
 	private String nvcExpNVCA;
-	private String esaSponsorNameA ;
+	private String nvcExpRegionB;
+	private String nvcExpVegB;
+	private String nvcExpFloristicsB;
+	private String nvcExpNVCB;
+	private String nvcExpRegionC;
+	private String nvcExpVegC;
+	private String nvcExpFloristicsC;
+	private String nvcExpNVCC;
+	private String esaSponsorNameA;
 	private String esaSponsorEmailA;
 	private String esaSponsorNameB;
 	private String esaSponsorEmailB;
 	private String peerReview;
-	private String additionalStatements;
+	private String addlStmt;
 
 
 	/**
@@ -93,16 +106,16 @@ public class CertificationForm extends ActionForm implements java.io.Serializabl
 	/**
 	 * @return
 	 */
-	public String getSubmittedEmail() {
-		return submittedEmail;
-	}
+//	public String getSubmittedEmail() {
+//		return submittedEmail;
+//	}
 
 	/**
 	 * @param string
 	 */
-	public void setSubmittedEmail(String submittedEmail) {
-		this.submittedEmail = submittedEmail;
-	}
+//	public void setSubmittedEmail(String submittedEmail) {
+//		this.submittedEmail = submittedEmail;
+//	}
 
 	/**
 	 * @return
@@ -122,14 +135,14 @@ public class CertificationForm extends ActionForm implements java.io.Serializabl
 	 * @return
 	 */
 	public String getGivenName () {
-		return givenName ;
+		return givenName;
 	}
 
 	/**
 	 * @param string
 	 */
 	public void setGivenName (String givenName ) {
-		this.givenName  = givenName ;
+		this.givenName  = givenName;
 	}
 
 	/**
@@ -147,45 +160,31 @@ public class CertificationForm extends ActionForm implements java.io.Serializabl
 	}
 
 	/**
-	 * @return
-	 */
-	public String getPhoneType() {
-		return phoneType;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setPhoneType(String phoneType) {
-		this.phoneType = phoneType;
-	}
-
-	/**
-	 * @return
+	 * @return abbreviated name of role
 	 */
 	public String getCurrentCertLevel() {
 		return currentCertLevel;
 	}
 
 	/**
-	 * @param string
+	 * @param string must be either "cert" or "pro"
 	 */
 	public void setCurrentCertLevel(String currentCertLevel) {
 		this.currentCertLevel = currentCertLevel;
 	}
 
 	/**
-	 * @return
+	 * Get value of 'requestedCert' property.
 	 */
-	public String getCvDoc() {
-		return cvDoc;
+	public String getRequestedCert() {
+		return this.requestedCert;
 	}
 
 	/**
-	 * @param string
+	 * Set the 'requestedCert' property.
 	 */
-	public void setCvDoc(String cvDoc) {
-		this.cvDoc = cvDoc;
+	public void setRequestedCert(String requestedCert) {
+		this.requestedCert = requestedCert;
 	}
 
 	/**
@@ -219,15 +218,15 @@ public class CertificationForm extends ActionForm implements java.io.Serializabl
 	/**
 	 * @return
 	 */
-	public String getCurrentInst() {
-		return currentInst;
+	public String getCurrentOrg() {
+		return currentOrg;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setCurrentInst(String currentInst) {
-		this.currentInst = currentInst;
+	public void setCurrentOrg(String currentOrg) {
+		this.currentOrg = currentOrg;
 	}
 
 	/**
@@ -261,29 +260,29 @@ public class CertificationForm extends ActionForm implements java.io.Serializabl
 	/**
 	 * @return
 	 */
-	public String getEsaPos() {
-		return esaPos;
+	public String getEsaMember() {
+		return esaMember;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setEsaPos(String esaPos) {
-		this.esaPos = esaPos;
+	public void setEsaMember(String esaMember) {
+		this.esaMember = esaMember;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getProfExperienceDoc() {
-		return profExperienceDoc;
+	public String getProfExp() {
+		return profExp;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setProfExperienceDoc(String profExperienceDoc) {
-		this.profExperienceDoc = profExperienceDoc;
+	public void setProfExp(String profExp) {
+		this.profExp= profExp;
 	}
 
 	/**
@@ -303,85 +302,85 @@ public class CertificationForm extends ActionForm implements java.io.Serializabl
 	/**
 	 * @return
 	 */
-	public String getVegSamplingDoc() {
-		return vegSamplingDoc;
+	public String getVegSamplingExp() {
+		return vegSamplingExp;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setVegSamplingDoc(String vegSamplingDoc) {
-		this.vegSamplingDoc = vegSamplingDoc;
+	public void setVegSamplingExp(String vegSamplingExp) {
+		this.vegSamplingExp = vegSamplingExp;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getVegAnalysisDoc() {
-		return vegAnalysisDoc;
+	public String getVegAnalysisExp() {
+		return vegAnalysisExp;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setVegAnalysisDoc(String vegAnalysisDoc) {
-		this.vegAnalysisDoc = vegAnalysisDoc;
+	public void setVegAnalysisExp(String vegAnalysisExp) {
+		this.vegAnalysisExp = vegAnalysisExp;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getUsnvcExpDoc() {
-		return usnvcExpDoc;
+	public String getUsnvcExp() {
+		return usnvcExp;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setUsnvcExpDoc(String usnvcExpDoc) {
-		this.usnvcExpDoc = usnvcExpDoc;
+	public void setUsnvcExp(String usnvcExp) {
+		this.usnvcExp= usnvcExp;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getVegbankExpDoc() {
-		return vegbankExpDoc;
+	public String getVbExp() {
+		return vbExp;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setVegbankExpDoc(String vegbankExpDoc) {
-		this.vegbankExpDoc = vegbankExpDoc;
+	public void setVbExp(String vbExp) {
+		this.vbExp= vbExp;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getUseVegbank() {
-		return useVegbank;
+	public String getVbIntention() {
+		return vbIntention;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setUseVegbank(String useVegbank) {
-		this.useVegbank = useVegbank;
+	public void setVbIntention(String vbIntention) {
+		this.vbIntention = vbIntention;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getPlotdbDoc() {
-		return plotdbDoc;
+	public String getToolsExp() {
+		return toolsExp;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setPlotdbDoc(String plotdbDoc) {
-		this.plotdbDoc = plotdbDoc;
+	public void setToolsExp(String toolsExp) {
+		this.toolsExp = toolsExp;
 	}
 
 	/**
@@ -438,6 +437,118 @@ public class CertificationForm extends ActionForm implements java.io.Serializabl
 	 */
 	public void setNvcExpNVCA(String nvcExpNVCA) {
 		this.nvcExpNVCA = nvcExpNVCA;
+	}
+
+	/**
+	 * Get value of 'nvcExpRegionB' property.
+	 */
+	public String getNvcExpRegionB() {
+		return this.nvcExpRegionB;
+	}
+
+	/**
+	 * Set the 'nvcExpRegionB' property.
+	 */
+	public void setNvcExpRegionB(String nvcExpRegionB) {
+		this.nvcExpRegionB = nvcExpRegionB;
+	}
+
+	/**
+	 * Get value of 'nvcExpVegB' property.
+	 */
+	public String getNvcExpVegB() {
+		return this.nvcExpVegB;
+	}
+
+	/**
+	 * Set the 'nvcExpVegB' property.
+	 */
+	public void setNvcExpVegB(String nvcExpVegB) {
+		this.nvcExpVegB = nvcExpVegB;
+	}
+
+	/**
+	 * Get value of 'nvcExpFloristicsB' property.
+	 */
+	public String getNvcExpFloristicsB() {
+		return this.nvcExpFloristicsB;
+	}
+
+	/**
+	 * Set the 'nvcExpFloristicsB' property.
+	 */
+	public void setNvcExpFloristicsB(String nvcExpFloristicsB) {
+		this.nvcExpFloristicsB = nvcExpFloristicsB;
+	}
+
+	/**
+	 * Get value of 'nvcExpNVCB' property.
+	 */
+	public String getNvcExpNVCB() {
+		return this.nvcExpNVCB;
+	}
+
+	/**
+	 * Set the 'nvcExpNVCB' property.
+	 */
+	public void setNvcExpNVCB(String nvcExpNVCB) {
+		this.nvcExpNVCB = nvcExpNVCB;
+	}
+
+	/**
+	 * Get value of 'nvcExpRegionC' property.
+	 */
+	public String getNvcExpRegionC() {
+		return this.nvcExpRegionC;
+	}
+
+	/**
+	 * Set the 'nvcExpRegionC' property.
+	 */
+	public void setNvcExpRegionC(String nvcExpRegionC) {
+		this.nvcExpRegionC = nvcExpRegionC;
+	}
+
+	/**
+	 * Get value of 'nvcExpVegC' property.
+	 */
+	public String getNvcExpVegC() {
+		return this.nvcExpVegC;
+	}
+
+	/**
+	 * Set the 'nvcExpVegC' property.
+	 */
+	public void setNvcExpVegC(String nvcExpVegC) {
+		this.nvcExpVegC = nvcExpVegC;
+	}
+
+	/**
+	 * Get value of 'nvcExpFloristicsC' property.
+	 */
+	public String getNvcExpFloristicsC() {
+		return this.nvcExpFloristicsC;
+	}
+
+	/**
+	 * Set the 'nvcExpFloristicsC' property.
+	 */
+	public void setNvcExpFloristicsC(String nvcExpFloristicsC) {
+		this.nvcExpFloristicsC = nvcExpFloristicsC;
+	}
+
+	/**
+	 * Get value of 'nvcExpNVCC' property.
+	 */
+	public String getNvcExpNVCC() {
+		return this.nvcExpNVCC;
+	}
+
+	/**
+	 * Set the 'nvcExpNVCC' property.
+	 */
+	public void setNvcExpNVCC(String nvcExpNVCC) {
+		this.nvcExpNVCC = nvcExpNVCC;
 	}
 
 	/**
@@ -513,15 +624,15 @@ public class CertificationForm extends ActionForm implements java.io.Serializabl
 	/**
 	 * @return
 	 */
-	public String getAdditionalStatements() {
-		return additionalStatements;
+	public String getAddlStmt() {
+		return addlStmt;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setAdditionalStatements(String additionalStatements) {
-		this.additionalStatements = additionalStatements;
+	public void setAddlStmt(String addlStmt) {
+		this.addlStmt = addlStmt;
 	}
 
 }
