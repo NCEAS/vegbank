@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *     '$Date: 2003-02-13 18:37:00 $'
-  * '$Revision: 1.7 $'
+  *     '$Date: 2003-03-20 19:57:37 $'
+  * '$Revision: 1.8 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -65,7 +65,7 @@
     <mkdir dir="${build.classes.dir}"/>
 
     <copy todir="${build.src.java.dir}"> 
-      <fileset dir="${src}" includes="*java"/>
+      <fileset dir="${src}" includes="**/*java"/>
     </copy>
   </target>	
 	
@@ -73,11 +73,11 @@
 <target name="compile" depends="prepare"  description="==> compiles the community loaders">
 
   <javac srcdir="${build.src.java.dir}" 
-    debug="on"
+    debug="off"
 		classpath="${cpath}"
-		includes="  VegCommunityLoader.java EcoartVegCommunitySource.java" 
 		destdir="${build.classes.dir}"
-	/>
+	>
+  </javac>
 	
 </target>	
 
@@ -85,7 +85,7 @@
 <target name="jar" depends="compile" description="==> creates the jar archive" >
 	<jar jarfile ="${build.lib.dir}/vegcommunity.jar"
 		basedir="${build.classes.dir}"
-		includes="**"
+		includes="**/**"
   >
     <fileset dir="${build.src.java.dir}" casesensitive="yes"/>
   </jar>

@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-02-13 01:03:08 $'  
- *	'$Revision: 1.25 $'
+ *	'$Date: 2003-03-20 19:57:37 $'  
+ *	'$Revision: 1.26 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1301,8 +1301,8 @@ public class VegCommunityLoader
 				//	this is a hack to restart the ecoart connections after 100 uses
 				int connCnt = 0;	
 				
-				for (int i =0; i < v.size(); i++)
-        //for (int i =0; i < 200; i++)  // hack tor testing
+				//for (int i =0; i < v.size(); i++)
+        for (int i =0; i < 20; i++)  // hack tor testing
 				{
 
 					connCnt++;

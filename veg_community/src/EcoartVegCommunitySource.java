@@ -2,8 +2,8 @@
  *  '$RCSfile: EcoartVegCommunitySource.java,v $'
  *
  * '$Author: farrell $'     
- * '$Date: 2003-02-13 01:03:08 $' 
- * '$Revision: 1.15 $'
+ * '$Date: 2003-03-20 19:57:37 $' 
+ * '$Revision: 1.16 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,14 @@
  */
 
 //package edu.ucsb.nceas.vegcommunity;
-import java.lang.*;
-import java.util.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Enumeration;
+import java.util.Vector;
 	
 	/**
  	 * This class is the basic interface to the vegetation community data 
@@ -322,73 +327,98 @@ import java.sql.*;
  		*
  		* @return communities -- a vector containing all the communities
 		*/
- 	 public Vector getCommunityCodes(String level)
- 	 {
- 		Vector communities = new Vector();
- 		 try
- 		 {
-			 //System.out.println("EcoartVegCommunity > level: " + level);
-			 String query = null;
-			 if (level.equals("association"))
-			 {
-				 query = "select ([Elcode]) from ETC";
-			 }
-			 else if (level.equals("alliance"))
-			 {
-				 query = "select distinct ([AllianceKey]) from Alliance";
-			 }
-			 else if (level.equals("formation"))
-			 {
-				 query = "select distinct([FormationKey]) from Formation";
-			 }
-			 else if (level.equals("subgroup"))
-			 {
-				 query = "select distinct([SubgroupKey]) from Subgroup";
-			 }
-			 else if (level.equals("group"))
-			 {
-				 query = "select distinct([GroupKey]) from Group_ ";
-			 }
-			  else if (level.equals("subclass"))
-			 {
-				 query = "select distinct([SubClassKey]) from subclass ";
-			 }
-			 else if (level.equals("class"))
-			 {
-				 query = "select distinct([ClassKey]) from Class ";
-			 }
-			//System.out.println("EcoartVegCommunity > query: " + query);
- 			// Create a Statement so we can submit SQL statements to the driver
- 			Statement stmt = con.createStatement();
- 			//create the result set
- 			ResultSet rs = stmt.executeQuery(query);
- 			while (rs.next()) 
- 			{
-				String code = rs.getString(1);
-				 //System.out.println("EcoartVegCommunity > resp: " + resp );
+	 public Vector getCommunityCodes(String level)
+	 {
+	
+		//System.out.println("EcoartVegCommunity > level: " + level);
+	 	Vector queries = new Vector();
+	 	if (level.equals("association"))
+	 	{
+	 		// Associations come from several tables in the the datasource !!!
+			queries.addElement("select ([Elcode]) from ETC");
+		}
+	 	else if (level.equals("alliance"))
+		{
+			//query = "select distinct ([AllianceKey]) from Alliance";
+		 	queries.addElement("select distinct ([AllianceKey]) from Alliance");
+		}
+		else if (level.equals("formation"))
+		{
+			queries.addElement("select distinct([FormationKey]) from Formation");
+		}
+		else if (level.equals("subgroup"))
+		{
+			queries.addElement("select distinct([SubgroupKey]) from Subgroup");
+		}
+		else if (level.equals("group"))
+		{
+			queries.addElement("select distinct([GroupKey]) from Group_ ");
+		}
+		else if (level.equals("subclass"))
+		{
+			queries.addElement("select distinct([SubClassKey]) from subclass ");
+		}
+		else if (level.equals("class"))
+		{
+			queries.addElement("select distinct([ClassKey]) from Class ");
+		}
 				 
-				 // Filter out CAVE & COMPLEX rows
-				 if ( code.startsWith("CAVE") || code.startsWith("COMPLEX") || code.startsWith("CECX"))
-				 {
-				 	// Do not add to communities vector
-				 }
-				 else
-				 {
- 				 	communities.addElement( code );
-				 }
- 			}
-			rs.close();
-			stmt.close();
- 		 }
- 		 catch (Exception e)
- 		 {
- 			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
- 			 e.printStackTrace();
- 		 }
- 		 return(communities);
- 	 }
-	 
-	 
+		Vector communities = this.getCommunityCodes(queries);		 
+		return(communities);
+	 }
+	
+	 /** 
+	  * Returns all the results of a set of queries as a Vector
+	  * of Strings.
+	  * Filters out some of the results ( CVE, COMPLEX and CECX)
+	  * 
+		* @param querys --  vector of sql queries to be run
+		* @return community codes -- a vector containing code found by the queries
+		*/ 
+	private Vector getCommunityCodes (Vector querys)
+	{	 	
+		Vector results = new Vector();
+		Enumeration queryEnum = querys.elements();
+		while(queryEnum.hasMoreElements())
+		{
+			String query =  (String) queryEnum.nextElement();
+			try
+			{
+				System.out.println("We have '" + query + "'");
+	
+				Statement stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery(query);
+				while (rs.next())
+				{
+					String code = rs.getString(1);
+					//System.out.println("EcoartVegCommunity > resp: " + resp );
+	
+					// Filter out CAVE & COMPLEX rows
+					if (code.startsWith("CAVE")
+						|| code.startsWith("COMPLEX")
+						|| code.startsWith("CECX"))
+					{
+						// Do not add to communities vector
+					}
+					else
+					{
+						results.addElement(code);
+					}
+				}
+	
+				rs.close();
+				stmt.close();
+			}
+			catch (Exception e)
+			{
+				System.out.println("EcoartVegCommunity > Exception: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		return(results);
+	}
+	
 	 /**
 		* method that returns the community level in the heirarchy based on 
 		* an input code
