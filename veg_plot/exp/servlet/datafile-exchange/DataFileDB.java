@@ -229,7 +229,7 @@ public class DataFileDB  {
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("DataFileDB > Exception Registering Document : " + e.getMessage() );
 		}
 		 return(true);
 	 }
@@ -331,7 +331,7 @@ public class DataFileDB  {
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("DataFileDB > Exception Registering Document : " + e.getMessage() );
 		}
 		 return(accessionNumber);
 	 }
@@ -365,7 +365,7 @@ public class DataFileDB  {
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("DataFileDB > Exception Registering Document : " + e.getMessage() );
 		}
 	 }
 	
