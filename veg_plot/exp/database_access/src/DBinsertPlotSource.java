@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 19:46:13 $'
- * 	'$Revision: 1.7 $'
+ *  '$Date: 2002-03-28 05:14:57 $'
+ * 	'$Revision: 1.8 $'
  */
 package databaseAccess;
 
@@ -843,12 +843,11 @@ public class DBinsertPlotSource
 		try 
 		{
 				StringBuffer sb = new StringBuffer();
-				//String name = source.getCommunityName(plotName);
-				String name = "test";
+				String name = source.getCommunityName(plotName);
 				//these are place holders for later extension of the plot source
-				String code =  "";
-				String framework = "";
-				String level = "";
+				String code =  source.getCommunityCode(plotName);
+				String framework = source.getCommunityFramework(plotName);
+				String level = source.getCommunityLevel(plotName);
 				
 				//insert the strata values
 				sb.append("INSERT into commclass (observation_id, commName, " 
@@ -951,8 +950,9 @@ public class DBinsertPlotSource
 				plotObservationId = getNextId("observation");
 				//the variables from the plot file
 				String observationCode = "obscode";
-				String startDate = "01-jan-1998";
-				String stopDate = "02-jan-1998";
+				String startDate = source.getObsStartDate(plotName);
+				String stopDate = source.getObsStopDate(plotName);
+				
 				String taxonObservationArea = "999.99";
 				String autoTaxonCover = "replace this";
 				String coverDispersion = "replace this";
@@ -997,9 +997,9 @@ public class DBinsertPlotSource
 			{
 				System.out.println("Caught Exception: "+e.getMessage() ); 
 				e.printStackTrace();
+				System.exit(1);
 				//return false so that the calling method knows to roll-back
 				return(false);
-				//System.exit(0);
 			}
 		return(true);
 	}
