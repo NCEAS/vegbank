@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dataModel SYSTEM "db_model.dtd">
-<?xml-stylesheet type="text/xsl" href="model_ToSQL.xsl"?>
+<!-- <!DOCTYPE dataModel SYSTEM "db_model.dtd"> -->
+<?xml-stylesheet type="text/xsl" href="dbmodel-to-schema.xsl"?>
 <dataModel>
   <title>Vegetation Database Component Description: --all modules--</title>
   <version>beta.2</version>
@@ -21,6 +21,7 @@
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -34,6 +35,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>commName.COMMNAME_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -47,6 +49,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -60,6 +63,7 @@
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -79,6 +83,7 @@
       <attType>serial</attType>
       <javaType type="String" relation="one"/>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -92,6 +97,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>commStatus.COMMSTATUS_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -105,6 +111,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>commConcept.COMMCONCEPT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -118,6 +125,7 @@
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -172,6 +180,7 @@
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -185,6 +194,7 @@
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -203,6 +213,7 @@
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -216,6 +227,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>commStatus.COMMSTATUS_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -230,6 +242,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>commStatus.COMMSTATUS_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -249,6 +262,7 @@
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -262,6 +276,7 @@
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -275,6 +290,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -288,6 +304,7 @@
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -306,6 +323,7 @@
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -319,6 +337,7 @@
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -332,6 +351,7 @@
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -345,6 +365,7 @@
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -358,6 +379,7 @@
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -371,6 +393,7 @@
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -384,6 +407,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>commParty.COMMPARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -397,6 +421,7 @@
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -410,6 +435,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>commParty.COMMPARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -428,6 +454,7 @@
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -441,6 +468,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>commConcept.COMMCONCEPT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -454,6 +482,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -467,6 +496,7 @@
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -496,6 +526,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>commConcept.COMMCONCEPT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -509,6 +540,7 @@
       <attType>varchar (80)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -578,6 +610,7 @@
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -591,6 +624,7 @@
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -604,6 +638,7 @@
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -617,6 +652,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>commParty.COMMPARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -635,6 +671,7 @@
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -648,6 +685,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>commName.COMMNAME_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -661,6 +699,7 @@
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -674,6 +713,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>commConcept.COMMCONCEPT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -687,6 +727,7 @@
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -700,6 +741,7 @@
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -713,6 +755,7 @@
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -742,6 +785,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>commParty.COMMPARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -755,6 +799,7 @@
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>open</attListType>
       <attList>
@@ -804,6 +849,7 @@
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -817,6 +863,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plantName.PLANTNAME_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -830,6 +877,7 @@
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -843,6 +891,7 @@
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -856,6 +905,7 @@
       <attType>varchar (23)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -869,6 +919,7 @@
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -888,6 +939,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -901,6 +953,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>plantStatus.PLANTSTATUS_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -914,6 +967,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -927,6 +981,7 @@ change through time.</entitySummary>
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -981,6 +1036,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -994,6 +1050,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1012,6 +1069,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1025,6 +1083,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>plantStatus.PLANTSTATUS_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1039,6 +1098,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plantStatus.PLANTSTATUS_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1058,6 +1118,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1071,6 +1132,7 @@ change through time.</entitySummary>
       <attType>varchar (255)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1084,6 +1146,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1097,6 +1160,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1115,6 +1179,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1128,6 +1193,7 @@ change through time.</entitySummary>
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1141,6 +1207,7 @@ change through time.</entitySummary>
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1154,6 +1221,7 @@ change through time.</entitySummary>
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1167,6 +1235,7 @@ change through time.</entitySummary>
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1180,6 +1249,7 @@ change through time.</entitySummary>
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1193,6 +1263,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plantParty.PLANTPARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1206,6 +1277,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1219,6 +1291,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plantParty.PLANTPARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1232,6 +1305,7 @@ change through time.</entitySummary>
       <attType>varchar (120)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1250,6 +1324,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1263,6 +1338,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1276,6 +1352,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1289,6 +1366,7 @@ change through time.</entitySummary>
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -1318,6 +1396,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1331,6 +1410,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1344,6 +1424,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1357,6 +1438,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plantParty.PLANTPARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1370,6 +1452,7 @@ change through time.</entitySummary>
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1383,6 +1466,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1396,6 +1480,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1409,6 +1494,7 @@ change through time.</entitySummary>
       <attType>varchar (80)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -1528,6 +1614,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1541,6 +1628,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plantName.PLANTNAME_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1554,6 +1642,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1567,6 +1656,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1580,6 +1670,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1593,6 +1684,7 @@ change through time.</entitySummary>
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -1622,6 +1714,7 @@ change through time.</entitySummary>
       <attType>varchar (220)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1635,6 +1728,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plantParty.PLANTPARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1648,6 +1742,7 @@ change through time.</entitySummary>
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>open</attListType>
       <attList>
@@ -1697,6 +1792,7 @@ change through time.</entitySummary>
       <attType>varchar (220)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1715,6 +1811,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1728,6 +1825,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1741,6 +1839,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1754,6 +1853,7 @@ change through time.</entitySummary>
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1767,6 +1867,7 @@ change through time.</entitySummary>
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1780,6 +1881,7 @@ change through time.</entitySummary>
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1794,6 +1896,7 @@ change through time.</entitySummary>
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1807,6 +1910,7 @@ change through time.</entitySummary>
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1820,6 +1924,7 @@ change through time.</entitySummary>
       <attType>varchar (10)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1833,6 +1938,7 @@ change through time.</entitySummary>
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1846,6 +1952,7 @@ change through time.</entitySummary>
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1859,6 +1966,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1877,6 +1985,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1890,6 +1999,7 @@ change through time.</entitySummary>
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1903,6 +2013,7 @@ change through time.</entitySummary>
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1916,6 +2027,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1929,6 +2041,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1942,6 +2055,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1955,6 +2069,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1973,6 +2088,7 @@ change through time.</entitySummary>
       <attNulls>no</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1986,6 +2102,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1999,6 +2116,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -2073,6 +2191,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2086,6 +2205,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2099,6 +2219,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2112,6 +2233,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2125,6 +2247,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2138,6 +2261,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>referenceJournal.referenceJournal_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2151,6 +2275,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2164,6 +2289,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2177,6 +2303,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2190,6 +2317,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2203,6 +2331,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2216,6 +2345,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2229,6 +2359,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2242,6 +2373,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2255,6 +2387,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2268,6 +2401,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2281,6 +2415,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2294,6 +2429,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2307,6 +2443,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2320,6 +2457,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2333,6 +2471,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2346,6 +2485,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2364,6 +2504,7 @@ change through time.</entitySummary>
       <attNulls>no</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2377,6 +2518,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2390,6 +2532,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2403,6 +2546,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2421,6 +2565,7 @@ change through time.</entitySummary>
       <attNulls>no</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2434,6 +2579,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2447,6 +2593,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>referenceParty.referenceParty_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2460,6 +2607,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -2492,6 +2640,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2510,6 +2659,7 @@ change through time.</entitySummary>
       <attNulls>no</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2523,6 +2673,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2536,6 +2687,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2549,6 +2701,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2562,6 +2715,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2575,6 +2729,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2588,6 +2743,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2601,6 +2757,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2614,6 +2771,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>referenceParty.referenceParty_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2632,6 +2790,7 @@ change through time.</entitySummary>
       <attNulls>no</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2645,6 +2804,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2658,6 +2818,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2671,6 +2832,7 @@ change through time.</entitySummary>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2689,6 +2851,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2702,6 +2865,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>commClass.COMMCLASS_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2715,6 +2879,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2728,6 +2893,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2746,6 +2912,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2759,6 +2926,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2772,6 +2940,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2785,6 +2954,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2798,6 +2968,7 @@ change through time.</entitySummary>
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2811,6 +2982,7 @@ change through time.</entitySummary>
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2824,6 +2996,7 @@ change through time.</entitySummary>
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2837,6 +3010,7 @@ change through time.</entitySummary>
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2850,6 +3024,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2863,6 +3038,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2876,6 +3052,7 @@ change through time.</entitySummary>
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2889,6 +3066,7 @@ change through time.</entitySummary>
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2902,6 +3080,7 @@ change through time.</entitySummary>
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2915,6 +3094,7 @@ change through time.</entitySummary>
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2933,6 +3113,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2946,6 +3127,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>commClass.COMMCLASS_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2959,6 +3141,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>commConcept.COMMCONCEPT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2972,6 +3155,7 @@ change through time.</entitySummary>
       <attType>varchar (34)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2985,6 +3169,7 @@ change through time.</entitySummary>
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -2998,6 +3183,7 @@ change through time.</entitySummary>
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -3037,6 +3223,7 @@ change through time.</entitySummary>
       <attType>varchar (15)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -3066,6 +3253,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3079,6 +3267,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3092,6 +3281,7 @@ change through time.</entitySummary>
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3104,6 +3294,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3122,6 +3313,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3135,6 +3327,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>coverMethod.COVERMETHOD_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3148,6 +3341,7 @@ change through time.</entitySummary>
       <attType>varchar (10)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3161,6 +3355,7 @@ change through time.</entitySummary>
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3174,6 +3369,7 @@ change through time.</entitySummary>
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3187,6 +3383,7 @@ change through time.</entitySummary>
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3200,6 +3397,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3218,6 +3416,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3231,6 +3430,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3244,6 +3444,7 @@ change through time.</entitySummary>
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3262,6 +3463,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3275,6 +3477,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>userDefined.USERDEFINED_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3288,6 +3491,7 @@ change through time.</entitySummary>
       <attType>varchar (255)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3301,6 +3505,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3319,6 +3524,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3332,6 +3538,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3345,6 +3552,7 @@ change through time.</entitySummary>
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -3504,6 +3712,7 @@ change through time.</entitySummary>
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -3538,6 +3747,7 @@ change through time.</entitySummary>
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3551,6 +3761,7 @@ change through time.</entitySummary>
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3564,6 +3775,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3582,6 +3794,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3595,6 +3808,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3608,6 +3822,7 @@ change through time.</entitySummary>
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3621,6 +3836,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3634,6 +3850,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3647,6 +3864,7 @@ change through time.</entitySummary>
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3660,6 +3878,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3673,6 +3892,7 @@ change through time.</entitySummary>
       <attType>BLOB</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3691,6 +3911,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3704,6 +3925,7 @@ change through time.</entitySummary>
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -3773,6 +3995,7 @@ change through time.</entitySummary>
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3786,6 +4009,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3799,6 +4023,7 @@ change through time.</entitySummary>
       <attType>varchar (15)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3812,6 +4037,7 @@ change through time.</entitySummary>
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3825,6 +4051,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3843,6 +4070,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3856,6 +4084,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>noteLink.NOTELINK_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3869,6 +4098,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3882,6 +4112,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3895,6 +4126,7 @@ change through time.</entitySummary>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3908,6 +4140,7 @@ change through time.</entitySummary>
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -3942,6 +4175,7 @@ change through time.</entitySummary>
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3960,6 +4194,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="allfields" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3973,6 +4208,7 @@ change through time.</entitySummary>
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3986,6 +4222,7 @@ change through time.</entitySummary>
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -3999,6 +4236,7 @@ change through time.</entitySummary>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4019,6 +4257,7 @@ conditions may change between resampling events.
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4032,6 +4271,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4046,6 +4286,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>plot.PLOT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4059,6 +4300,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>project.PROJECT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4072,6 +4314,7 @@ conditions may change between resampling events.
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4085,6 +4328,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4098,6 +4342,7 @@ conditions may change between resampling events.
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4112,6 +4357,7 @@ conditions may change between resampling events.
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4125,6 +4371,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4179,6 +4426,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>coverMethod.coverMethod_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4192,6 +4440,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>stratumMethod.stratumMethod_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4205,6 +4454,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4218,6 +4468,7 @@ conditions may change between resampling events.
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4231,6 +4482,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4244,6 +4496,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4254,7 +4507,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>subplot-random</attListValue>
-          <attListValueDesc>Cover based on observation of multiple randomly dispersed within the overall plot.</attListValueDesc>
+          <attListValueDesc>Cover based on observation of multiple randomly dispersed subplots within the overall plot.</attListValueDesc>
           <attListSortOrd>4</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -4274,7 +4527,7 @@ conditions may change between resampling events.
         </attListItem>
       </attList>
       <attNotes>closed list; default = contiguous</attNotes>
-      <attDefinition>Were cover values for the total taxon list collected from one contiguous area or dispersed subplots (e.g., continguous, dispersed-regular, dispered-random)?</attDefinition>
+      <attDefinition>Were cover values for the total taxon list collected from one contiguous area or dispersed subplots (e.g., contiguous, dispersed-regular, dispersed-random)?</attDefinition>
     </attribute>
     <attribute>
       <attName>autoTaxonCover</attName>
@@ -4283,6 +4536,7 @@ conditions may change between resampling events.
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4296,6 +4550,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4309,6 +4564,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4353,6 +4609,7 @@ conditions may change between resampling events.
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4366,6 +4623,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4395,6 +4653,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4424,6 +4683,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4468,6 +4728,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4522,6 +4783,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4576,6 +4838,7 @@ conditions may change between resampling events.
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4589,6 +4852,7 @@ conditions may change between resampling events.
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4602,6 +4866,7 @@ conditions may change between resampling events.
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4636,6 +4901,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4700,6 +4966,7 @@ conditions may change between resampling events.
       <attType>varchar (255)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4713,6 +4980,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4726,6 +4994,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4801,7 +5070,7 @@ conditions may change between resampling events.
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
-      <attDefinition>What is the hydrologic regime, which is a refelction of frequency and duration of flooding)?</attDefinition>
+      <attDefinition>What is the hydrologic regime, which is a reflection of frequency and duration of flooding?  List is taken from Cowardin et al. 1979, 1985.</attDefinition>
     </attribute>
     <attribute>
       <attName>soilMoistureRegime</attName>
@@ -4810,6 +5079,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4869,47 +5139,48 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
         <attListItem>
           <attListValue>excessively drained</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Soils are free from any evidence of gleying throughout the profile.  These soils are commonly very coarse textured (e.g., &gt;35% volume of particles &gt; 2 mm in size) or soils on very steep slopes.  Sometimes described as "very rapidly drained."</attListValueDesc>
           <attListSortOrd>1</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>somewhat excessively drained</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>The soil moisture content seldom exceeds field capacity in any horizon except immediately after water addition. Soils are free from any evidence of gleying throughout the profile.  Rapidly drained soils are commonly coarse textured or soils on steep slopes. Sometimes described as "rapidly drained."</attListValueDesc>
           <attListSortOrd>2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>well drained</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>The soil moisture content does not normally exceed field capacity in any horizon (except possibly the C) for a significant part of the year.  Soils are usually free from mottling in the upper 3 feet (1 m), but may be mottled below this depth. B horizons, if present, are reddish, brownish, or yellowish.</attListValueDesc>
           <attListSortOrd>3</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>moderately well drained</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>The soil moisture in excess of field capacity remains for a small but significant period of the year.  Soils are commonly mottled (chroma &lt; 2) in the lower B and C horizons or below a depth of 2 feet (0.6 m).  The Ae horizon, if present, may be faintly mottled in fine-textured soils and in medium-textured soils that have a slowly permeable layer below the solum.  In grassland soils the B and C horizons may be only faintly mottled and the A horizon may be relatively thick and dark.</attListValueDesc>
           <attListSortOrd>4</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>somewhat poorly drained</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>The soil moisture in excess of field capacity remains in subsurface horizons for moderately long periods during the year. Soils are commonly mottled in the B and C horizons; the Ae horizon, if present, may be mottled.  The matrix generally has a lower chroma than in the well-drained soil on similar parent material. Sometimes described as "imperfectly drained."</attListValueDesc>
           <attListSortOrd>5</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>poorly drained</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>The soil moisture in excess of field capacity remains in all horizons for a large part of the year.  The soils are usually very strongly gleyed (low chroma colors, such as gray, bluish, or gray-green). Except in high-chroma parent materials the B, if present, and upper C horizons usually have matrix colors of low chroma.  Faint mottling may occur throughout.</attListValueDesc>
           <attListSortOrd>6</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>very poorly drained</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Free water remains at or within 12 inches of the surface most of the year.  The soils are usually very strongly gleyed. Subsurface horizons usually are of low chroma and yellowish to bluish hues. Mottling may be present but at the depth in the profile.  Very poorly drained soils usually have a mucky or peaty surface horizon.</attListValueDesc>
           <attListSortOrd>7</attListSortOrd>
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
-      <attDefinition>How well drained is the site.  Soil drainage classes conform to the FGDC Soil Geographic Data Standards, September 1997. http://www.fgdc.gov/standards/documents/standards/soils/soil997.PDF</attDefinition>
+      <attDefinition>Identifies the natural drainage conditions of the soil and refers to the frequency and duration of wet periods. The soil drainage classes are defined in terms of (1) actual moisture content (in excess of field moisture capacity) and (2) the extent of the period during which excess water is present in the plant-root zone. Soil drainage class categories conform to the FGDC Soil Geographic Data Standards, September 1997. (http://www.fgdc.gov/standards/documents/standards/soils/soil997.PDF.) Definitions are derived from Grossman et al. (1998) and Sims et al. (1997). </attDefinition>
     </attribute>
     <attribute>
       <attName>waterSalinity</attName>
@@ -4918,6 +5189,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -4947,6 +5219,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4960,6 +5233,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4973,6 +5247,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4986,6 +5261,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4999,6 +5275,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5012,6 +5289,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5025,6 +5303,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5038,6 +5317,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5051,6 +5331,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5064,6 +5345,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5077,6 +5359,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5090,6 +5373,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5103,6 +5387,7 @@ conditions may change between resampling events.
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -5147,6 +5432,7 @@ conditions may change between resampling events.
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5160,6 +5446,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5173,6 +5460,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5186,6 +5474,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5199,6 +5488,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5212,6 +5502,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5225,6 +5516,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5238,6 +5530,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5251,6 +5544,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5264,6 +5558,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5277,6 +5572,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5290,6 +5586,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5303,6 +5600,7 @@ conditions may change between resampling events.
       <attType>varchar (40)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -5347,6 +5645,7 @@ conditions may change between resampling events.
       <attType>varchar (40)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -5546,6 +5845,7 @@ conditions may change between resampling events.
       <attType>varchar (40)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -5745,6 +6045,7 @@ conditions may change between resampling events.
       <attType>varchar (40)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -5944,6 +6245,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5957,6 +6259,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5970,6 +6273,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5983,6 +6287,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>soilTaxon.soilTaxon_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5996,6 +6301,7 @@ conditions may change between resampling events.
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -6025,6 +6331,7 @@ conditions may change between resampling events.
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6038,6 +6345,7 @@ conditions may change between resampling events.
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6051,6 +6359,7 @@ conditions may change between resampling events.
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6069,6 +6378,7 @@ conditions may change between resampling events.
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6082,6 +6392,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6095,6 +6406,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6108,6 +6420,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6121,6 +6434,7 @@ conditions may change between resampling events.
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6139,6 +6453,7 @@ conditions may change between resampling events.
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6152,6 +6467,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6165,6 +6481,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6178,6 +6495,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6191,6 +6509,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6204,6 +6523,7 @@ conditions may change between resampling events.
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6217,6 +6537,7 @@ conditions may change between resampling events.
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6230,6 +6551,7 @@ conditions may change between resampling events.
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6249,6 +6571,7 @@ conditions may change between resampling events.
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6263,6 +6586,7 @@ conditions may change between resampling events.
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6276,6 +6600,7 @@ conditions may change between resampling events.
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6290,6 +6615,7 @@ conditions may change between resampling events.
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6304,6 +6630,7 @@ conditions may change between resampling events.
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6318,6 +6645,7 @@ conditions may change between resampling events.
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6332,6 +6660,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6345,6 +6674,7 @@ conditions may change between resampling events.
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6359,6 +6689,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6372,6 +6703,7 @@ conditions may change between resampling events.
       <attType>varchar (120)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6391,6 +6723,7 @@ conditions may change between resampling events.
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6404,6 +6737,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>plot.PLOT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6417,6 +6751,7 @@ conditions may change between resampling events.
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6430,6 +6765,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>namedPlace.NAMEDPLACE_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6448,6 +6784,7 @@ conditions may change between resampling events.
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="root" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6461,6 +6798,7 @@ conditions may change between resampling events.
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6474,6 +6812,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6487,6 +6826,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="subplot"/>
       <attReferences>plot.PLOT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6500,6 +6840,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6513,6 +6854,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6526,6 +6868,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6539,6 +6882,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -6588,6 +6932,7 @@ conditions may change between resampling events.
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6601,6 +6946,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6614,6 +6960,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6627,6 +6974,7 @@ conditions may change between resampling events.
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6640,6 +6988,7 @@ conditions may change between resampling events.
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6653,6 +7002,7 @@ conditions may change between resampling events.
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6666,6 +7016,7 @@ conditions may change between resampling events.
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6679,6 +7030,7 @@ conditions may change between resampling events.
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6692,6 +7044,7 @@ conditions may change between resampling events.
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6705,6 +7058,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6718,6 +7072,7 @@ conditions may change between resampling events.
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6732,6 +7087,7 @@ conditions may change between resampling events.
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>open</attListType>
       <attList>
@@ -6781,6 +7137,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6795,6 +7152,7 @@ conditions may change between resampling events.
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -6839,6 +7197,7 @@ conditions may change between resampling events.
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -6883,6 +7242,7 @@ conditions may change between resampling events.
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6896,6 +7256,7 @@ conditions may change between resampling events.
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6909,6 +7270,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6922,6 +7284,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6935,6 +7298,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6948,6 +7312,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6961,6 +7326,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6974,6 +7340,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -6987,6 +7354,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -7000,6 +7368,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -7013,6 +7382,7 @@ conditions may change between resampling events.
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -7026,6 +7396,7 @@ conditions may change between resampling events.
       <attType>varchar (90)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -7100,6 +7471,7 @@ conditions may change between resampling events.
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>open</attListType>
       <attList>
@@ -8159,6 +8531,7 @@ conditions may change between resampling events.
       <attType>varchar (90)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -8336,6 +8709,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (90)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -8830,6 +9204,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8843,6 +9218,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8856,6 +9232,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8869,6 +9246,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (55)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8882,6 +9260,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8895,6 +9274,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8908,6 +9288,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8921,6 +9302,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8934,6 +9316,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8947,6 +9330,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8965,6 +9349,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8978,6 +9363,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (150)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8991,6 +9377,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9004,6 +9391,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9017,6 +9405,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9035,6 +9424,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9048,6 +9438,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>project.PROJECT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9061,6 +9452,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9074,6 +9466,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9087,6 +9480,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9100,6 +9494,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9118,6 +9513,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="allfields" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9131,6 +9527,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9144,6 +9541,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9157,6 +9555,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9170,6 +9569,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9183,6 +9583,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9196,6 +9597,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9209,6 +9611,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>revision.REVISION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9228,6 +9631,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9241,6 +9645,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>observation.observation_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9254,6 +9659,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (15)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -9303,6 +9709,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9316,6 +9723,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9329,6 +9737,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9342,6 +9751,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9355,6 +9765,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -9489,6 +9900,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9502,6 +9914,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9515,6 +9928,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9528,6 +9942,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9541,6 +9956,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9554,6 +9970,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9567,6 +9984,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9580,6 +9998,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9598,6 +10017,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9611,6 +10031,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (15)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9624,6 +10045,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9637,6 +10059,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9650,6 +10073,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>soilTaxon.SOILTAXON_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9663,6 +10087,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (33)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9681,6 +10106,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9694,6 +10120,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>taxonObservation.TAXONOBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9707,6 +10134,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9720,6 +10148,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9733,6 +10162,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9746,6 +10176,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9759,6 +10190,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9772,6 +10204,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9790,6 +10223,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9803,6 +10237,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>stemCount.STEMCOUNT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9816,6 +10251,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9829,6 +10265,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9842,6 +10279,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9860,6 +10298,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9873,6 +10312,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>observation.observation_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9886,6 +10326,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>stratumType.STRATUMTYPE_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9899,6 +10340,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>stratumMethod.STRATUMMETHOD_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9912,6 +10354,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9925,6 +10368,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9938,6 +10382,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9951,6 +10396,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9964,6 +10410,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9982,6 +10429,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -9995,6 +10443,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>taxonObservation.TAXONOBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10008,6 +10457,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>stratum.STRATUM_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10021,6 +10471,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10034,6 +10485,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10047,6 +10499,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10065,6 +10518,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10078,6 +10532,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10091,6 +10546,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10104,6 +10560,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10122,6 +10579,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10135,6 +10593,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>stratumMethod.STRATUMMETHOD_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10148,6 +10607,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (10)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10161,6 +10621,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10174,6 +10635,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10192,6 +10654,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10205,6 +10668,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>taxonObservation.TAXONOBSERVATION_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10218,6 +10682,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10231,6 +10696,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10244,6 +10710,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plantName.PLANTNAME_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10257,6 +10724,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10270,6 +10738,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10283,6 +10752,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -10327,6 +10797,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10340,6 +10811,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10353,6 +10825,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10366,6 +10839,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10379,6 +10853,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10392,6 +10867,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10405,6 +10881,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Boolean</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10423,6 +10900,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10436,6 +10914,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>observation.observation_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10449,6 +10928,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plantName.plantName_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10462,6 +10942,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10475,6 +10956,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10488,6 +10970,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10501,6 +10984,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10514,6 +10998,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Float</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10527,6 +11012,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10545,6 +11031,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10558,6 +11045,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10571,6 +11059,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10584,6 +11073,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -10633,6 +11123,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
+      <attRelType type="alltables" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10646,6 +11137,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>open</attListType>
       <attList>
@@ -10675,6 +11167,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>text</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10688,6 +11181,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (30)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
       <attList>
@@ -10747,6 +11241,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (20)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -10760,6 +11255,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attType>varchar (50)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
