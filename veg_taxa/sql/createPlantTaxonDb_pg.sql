@@ -108,7 +108,7 @@ CREATE TABLE plantCorrelation
     PLANTCONCEPT_ID integer NOT NULL,
     plantConvergence varchar (20) NOT NULL,
     correlationStart timestamp NOT NULL,
-    correlationStop timestamp NOT NULL,
+    correlationStop timestamp,
     PRIMARY KEY(PLANTCORRELATION_ID)
 );
 
