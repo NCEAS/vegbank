@@ -11,8 +11,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-11-16 06:37:20 $'
-  *  '$Revision: 1.7 $'
+  *      '$Date: 2004-11-16 07:25:19 $'
+  *  '$Revision: 1.8 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,7 @@
 <!--xxx-->
 
 <blockquote>
-<h3><font color="red">Oops! You found a VegBank bug.</font></h3>
+<h3 class="error">Oops! You found a VegBank bug.</h3>
 <p class="sizelarge">Sorry, but the last thing you tried to do did not work.</p>
 <p class="sizesmall">
 Please try again right now by reloading/refreshing this page or going back.<br/>
@@ -55,7 +55,7 @@ This problem has been reported to the developers.</p>
 	</p>	
 
 	<p>
-	<font color="red">ERROR MESSAGES:<br/>
+	<span class="error">ERROR MESSAGES:</span>
 <logic:messagesPresent>
 	<ul>
 	<html:messages id="err">
