@@ -58,7 +58,7 @@ function setNameMatchType() {
   <h1>Plant Search</h1>
 
 
-        <form action="@views_link@plantconcept_detail.jsp" method="get" name="queryform" onsubmit="prepareForm()">
+        <form action="@views_link@plantconcept_summary.jsp" method="get" name="queryform" onsubmit="prepareForm()">
 			<input type="hidden" name="where" value="where_plantconcept_mpq"/>
 
          
@@ -103,7 +103,7 @@ function setNameMatchType() {
 	    <select name="xwhereParams_plantlevel_0" size="5" multiple="true">
 			<option value="" selected>--ANY--</option>
 
-<vegbank:get id="plantlevel" select="plantstatus_plantlevel" where="where"/>
+<vegbank:get id="plantlevel" select="plantstatus_plantlevel" where="where" pager="false" perPage="-1"/>
 <logic:notEmpty name="plantlevel-BEANLIST">
 	<logic:iterate id="onerow" name="plantlevel-BEANLIST">
 		<logic:notEmpty name="onerow" property="plantlevel">
@@ -130,7 +130,7 @@ function setNameMatchType() {
 			   <option value="" selected>--ANY--</option>
 			   <!--html:options property="plantClassSystems"/-->
 
-<vegbank:get id="classsystem" select="plantusage_classsystem" where="where"/>
+<vegbank:get id="classsystem" select="plantusage_classsystem" where="where" pager="false" perPage="-1"/>
 <logic:notEmpty name="classsystem-BEANLIST">
 	<logic:iterate id="onerow" name="classsystem-BEANLIST">
 	<option value='<bean:write name="onerow" property="classsystem"/>'>
@@ -197,7 +197,7 @@ function setNameMatchType() {
                 <!--html:select property="xwhereParams_accordingtoparty_0"-->
                 <select name="xwhereParams_accordingtoparty_0">
                   <option value="">--ANY--</option>
-<vegbank:get id="party" select="plantstatus_party" where="where"/>
+<vegbank:get id="party" select="plantstatus_party" where="where" pager="false" perPage="-1"/>
 <logic:notEmpty name="party-BEANLIST">
 	<logic:iterate id="onerow" name="party-BEANLIST">
 	<option value="<bean:write name="onerow" property="party_id"/>">

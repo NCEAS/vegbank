@@ -53,7 +53,7 @@ function setNameMatchType() {
  <h1>Community Type Search</h1>
 			
     
-         <form action="@web_context@views/commconcept_detail.jsp" method="get" name="queryform" onsubmit="prepareForm()">
+         <form action="@web_context@views/commconcept_summary.jsp" method="get" name="queryform" onsubmit="prepareForm()">
         <!--html:form action="/CommQuery"-->
 			<input type="hidden" name="where" value="where_commconcept_mpq" size="40"/>
 
@@ -101,7 +101,7 @@ function setNameMatchType() {
 			<option value="" selected>--ANY--</option>
 			<!--html:options property="commLevels"/-->
 
-<vegbank:get id="commlevel" select="commstatus_commlevel" where="where"/>
+<vegbank:get id="commlevel" select="commstatus_commlevel" where="where" pager="false" perPage="-1"/>
 <logic:notEmpty name="commlevel-BEANLIST">
 	<logic:iterate id="onerow" name="commlevel-BEANLIST">
 	<option value="<bean:write name="onerow" property="commlevel"/>">
@@ -126,7 +126,7 @@ function setNameMatchType() {
 			   <option value="" selected>--ANY--</option>
 			   <!--html:options property="commClassSystems"/-->
 
-<vegbank:get id="classsystem" select="commusage_classsystem" where="where"/>
+<vegbank:get id="classsystem" select="commusage_classsystem" where="where" pager="false" perPage="-1"/>
 <logic:notEmpty name="classsystem-BEANLIST">
 	<logic:iterate id="onerow" name="classsystem-BEANLIST">
 	<option value="<bean:write name="onerow" property="classsystem"/>">
@@ -194,7 +194,7 @@ function setNameMatchType() {
                 <!--html:select property="xwhereParams_accordingtoparty_0"-->
                 <select name="xwhereParams_accordingtoparty_0">
                   <option value="">--ANY--</option>
-<vegbank:get id="party" select="commstatus_party" where="where"/>
+<vegbank:get id="party" select="commstatus_party" where="where" pager="false" perPage="-1"/>
 <logic:notEmpty name="party-BEANLIST">
 	<logic:iterate id="onerow" name="party-BEANLIST">
 	<option value="<bean:write name="onerow" property="party_id"/>">
