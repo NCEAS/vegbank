@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-27 23:26:32 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-09-01 03:01:40 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,13 +37,14 @@ import org.apache.struts.util.MessageResources;
 import org.apache.struts.util.RequestUtils;
 import org.apache.struts.util.ResponseUtils;
 import org.apache.struts.taglib.bean.WriteTag;
+import org.vegbank.common.utility.Utility;
 
 
 /**
  * Abstract base class tag.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.1 $ $Date: 2004-08-27 23:26:32 $
+ * @version $Revision: 1.2 $ $Date: 2004-09-01 03:01:40 $
  */
 
 public abstract class VegbankTag extends TagSupport {
@@ -51,31 +52,53 @@ public abstract class VegbankTag extends TagSupport {
 	private static final Log log = LogFactory.getLog(VegbankTag.class);
 
 
-    protected Object findAttribute(String attribName) {
-        Object attribValue;
+	/**
+	 *
+	 */
+    protected String findAttribute(String attribName, String attribValue) {
+
+		if (Utility.isStringNullOrEmpty(attribValue)) {
+			return findAttribute(attribName);
+
+		} else {
+			// search for an attribute with the name of the value
+			String tmp = findAttribute(attribValue);
+			if (Utility.isStringNullOrEmpty(tmp)) {
+        		return attribValue;
+			} else {
+				// just return the original attribute's value
+				return tmp;
+			}
+		}
+    }
+
+
+	/**
+	 *
+	 */
+    protected String findAttribute(String attribName) {
+        String attribValue;
 		try {
 			// look in the request
+			//log.debug("Finding " + attribName + " with Request.getParameter()");
         	attribValue = pageContext.getRequest().getParameter(attribName);
-			if (attribValue == null) {
+			if (attribValue == null || attribValue.equals("")) {
 				
 				// find in other scopes
+				//log.debug("Finding " + attribName + " with RequestUtils.lookup()");
 				attribValue = (String)RequestUtils.lookup(pageContext, attribName, null);
 			}
 
 			if (attribValue == null) {
-				// just set it to the given value
 				attribValue = "";
-
-			} else {
-				attribValue = (String)attribValue;
-			}
+			} 
 
 
 		} catch (JspException jspex) {
 			attribValue = "";
 		}
 
-		log.debug("findAttribute: " + attribName + " = " + attribValue);
+		//log.debug("findAttribute: " + attribName + " = " + attribValue);
 		return attribValue;
     }
 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-27 23:26:32 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-09-01 03:01:40 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.vegbank.common.utility.ServletUtility;
  * Tag that builds a page selector in HTML.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.1 $ $Date: 2004-08-27 23:26:32 $
+ * @version $Revision: 1.2 $ $Date: 2004-09-01 03:01:40 $
  */
 
 public class VegbankPagerTag extends VegbankTag {
@@ -77,7 +77,7 @@ public class VegbankPagerTag extends VegbankTag {
 		int numItems;
 
 		try {
-			String tmp = (String)findAttribute("numItems");
+			String tmp = findAttribute("numItems");
 			log.debug("numItems: " + tmp);
 			if (Utility.isStringNullOrEmpty(tmp)) {
 				// no deal if no numItems given
@@ -86,7 +86,7 @@ public class VegbankPagerTag extends VegbankTag {
 				numItems = Integer.parseInt(tmp);
 			} 
 
-			tmp = (String)findAttribute("perPage");
+			tmp = findAttribute("perPage");
 			log.debug("perPage: " + tmp);
 			if (Utility.isStringNullOrEmpty(tmp)) {
 				// no deal if no perPage given
@@ -98,7 +98,7 @@ public class VegbankPagerTag extends VegbankTag {
 			int numPages = numItems / perPage;
 			int pageNumber;
 
-			tmp = (String)findAttribute("pageNumber");
+			tmp = findAttribute("pageNumber");
 			log.debug("pageNumber: " + tmp);
 			if (Utility.isStringNullOrEmpty(tmp)) {
 				pageNumber = 1;
@@ -161,11 +161,7 @@ public class VegbankPagerTag extends VegbankTag {
 	protected String numItems;
 
     public String getNumItems() {
-		if (Utility.isStringNullOrEmpty(this.numItems)) {
-			return (String)findAttribute("numItems");
-		} else {
-        	return this.numItems;
-		}
+		return findAttribute("numItems", this.numItems);
     }
 
     public void setNumItems(String s) {
@@ -183,11 +179,7 @@ public class VegbankPagerTag extends VegbankTag {
 	 * or finds pageNumber attribute in any scope.
 	 */
     public String getPageNumber() {
-		if (Utility.isStringNullOrEmpty(this.pageNumber)) {
-        	return (String)findAttribute("pageNumber");
-		} else {
-        	return this.pageNumber;
-		}
+        return findAttribute("pageNumber", this.pageNumber);
     }
 
     public void setPageNumber(String s) {
@@ -200,11 +192,7 @@ public class VegbankPagerTag extends VegbankTag {
 	protected String perPage;
 
     public String getPerPage() {
-		if (Utility.isStringNullOrEmpty(perPage)) {
-			return (String)findAttribute("perPage");
-		} else {
-        	return this.perPage;
-		}
+		return findAttribute("perPage", this.perPage);
     }
 
     public void setPerPage(String s) {

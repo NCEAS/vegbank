@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-27 23:27:27 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2004-09-01 03:01:40 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -159,20 +159,28 @@ public class GenericCommand
 		// Count results
 		////////////////////////////////////////////////////
 		int numItems = 0;
-		tmp = getNumItems();
-		if (Utility.isStringNullOrEmpty(tmp)) {
-			// run a query
+		
+		// FOR NOW WE'LL COUNT RESULTS EACH TIME 
+		if (getPager()) {
 			numItems = countResults(sqlMainQuery);
 
-		} else {
-			// use the preset numItems
-			numItems = Integer.parseInt(tmp);
-		}
+			/* 
+			tmp = getNumItems();
+			if (Utility.isStringNullOrEmpty(tmp)) {
+				// run a query
+				numItems = countResults(sqlMainQuery);
 
-		if (request != null) {
-			log.debug("Setting numItems: " + numItems);
-			request.setAttribute("numItems", Integer.toString(numItems));
-		} 
+			} else {
+				// use the preset numItems
+				numItems = Integer.parseInt(tmp);
+			}
+			*/
+
+			if (request != null) {
+				log.info("Count found " + numItems);
+				request.setAttribute("numItems", Integer.toString(numItems));
+			} 
+		}
 
 
 
@@ -185,7 +193,7 @@ public class GenericCommand
 			setPerPage(null);
 
 		} else if (numItems == 1) {
-			setPerPage("1");
+			//setPerPage("1");
 			setPageNumber("0");
 		} 
 
@@ -196,6 +204,7 @@ public class GenericCommand
 		////////////////////////////////////////////////////
 		sqlMainQuery += buildLimitClause();
 
+		log.info("--------- " + selectClauseKey + " QUERY::: \n\t" + sqlMainQuery + "\n=======================================");
 		DatabaseAccess da = new DatabaseAccess();
 		ResultSet rs = da.issueSelect( sqlMainQuery );
 		
@@ -235,7 +244,7 @@ public class GenericCommand
 
 		String sql = "SELECT count(1) FROM " + stripSQLAttribs(origQuery);
 
-		log.debug("COUNT QUERY:  " + sql);
+		log.info("::: COUNT QUERY:::\n\t" + sql + "\n=======================================");
 		DatabaseAccess da = new DatabaseAccess();
 		ResultSet rs = da.issueSelect( sql );
 		
@@ -432,7 +441,7 @@ public class GenericCommand
 		//log.debug("MODIFIED 2: " + selectClause);
 		//log.debug("============================");
 
-		log.debug("========== QUERY: " + selectClause);
+		//log.debug("========== QUERY: " + selectClause);
 
 		StringTokenizer st = new StringTokenizer(selectClause);
 		int indexOfDot, indexOfComma, indexOfAs;
@@ -575,6 +584,20 @@ public class GenericCommand
     public void setNumItems(String s) {
 		log.debug("GC: setNumItems: " + s);
         this.numItems = s;
+    }
+
+
+    /**
+     * 
+     */
+	protected boolean pager;
+
+    public boolean getPager() {
+        return this.pager;
+    }
+
+    public void setPager(boolean b) {
+        this.pager = b;
     }
 
 

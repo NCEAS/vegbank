@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-27 23:26:32 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-09-01 03:01:40 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.vegbank.common.utility.Utility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.2 $ $Date: 2004-08-27 23:26:32 $
+ * @version $Revision: 1.3 $ $Date: 2004-09-01 03:01:40 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -88,9 +88,12 @@ public class VegbankGetTag extends VegbankTag {
 			GenericCommand gc = new GenericCommand();
 
 			gc.setId(getId());
-			gc.setNumItems((String)findAttribute("numItems"));
+			gc.setNumItems(findAttribute("numItems"));
 			gc.setPageNumber(getPageNumber());
 			gc.setPerPage(getPerPage());
+			try { 
+				gc.setPager(Boolean.valueOf(getPager()).booleanValue()); 
+			} catch (Exception ex) { gc.setPager(false); }
 
 			gc.execute(
 					(HttpServletRequest)pageContext.getRequest(), 
@@ -113,11 +116,7 @@ public class VegbankGetTag extends VegbankTag {
 	protected String select;
 
     public String getSelect() {
-		if (Utility.isStringNullOrEmpty(this.select)) {
-        	return (String)findAttribute("select");
-		} else {
-        	return this.select;
-		}
+        return findAttribute("select", this.select);
     }
 
     public void setSelect(String s) {
@@ -130,11 +129,7 @@ public class VegbankGetTag extends VegbankTag {
 	protected String where;
 
     public String getWhere() {
-		if (Utility.isStringNullOrEmpty(this.where)) {
-        	return (String)findAttribute("where");
-		} else {
-        	return this.where;
-		}
+        return findAttribute("where", this.where);
     }
 
     public void setWhere(String s) {
@@ -151,11 +146,7 @@ public class VegbankGetTag extends VegbankTag {
 	 * or finds pageNumber attribute in any scope.
 	 */
     public String getBeanName() {
-		if (Utility.isStringNullOrEmpty(this.beanName)) {
-        	return (String)findAttribute("beanName");
-		} else {
-        	return this.beanName;
-		}
+        return findAttribute("beanName", this.beanName);
     }
 
     public void setBeanName(String s) {
@@ -172,11 +163,7 @@ public class VegbankGetTag extends VegbankTag {
 	 * or finds pageNumber attribute in any scope.
 	 */
     public String getPageNumber() {
-		if (Utility.isStringNullOrEmpty(this.pageNumber)) {
-        	return (String)findAttribute("pageNumber");
-		} else {
-        	return this.pageNumber;
-		}
+        return findAttribute("pageNumber", this.pageNumber);
     }
 
     public void setPageNumber(String s) {
@@ -189,11 +176,7 @@ public class VegbankGetTag extends VegbankTag {
 	protected String perPage;
 
     public String getPerPage() {
-		if (Utility.isStringNullOrEmpty(perPage)) {
-			return (String)findAttribute("perPage");
-		} else {
-        	return this.perPage;
-		}
+		return findAttribute("perPage", this.perPage);
     }
 
     public void setPerPage(String s) {
@@ -206,11 +189,7 @@ public class VegbankGetTag extends VegbankTag {
 	protected String wparam;
 
     public String getWparam() {
-		if (Utility.isStringNullOrEmpty(this.wparam)) {
-			return (String)findAttribute("wparam");
-		} else {
-        	return this.wparam;
-		}
+		return findAttribute("wparam", this.wparam);
     }
 
     public void setWparam(String s) {
@@ -223,17 +202,24 @@ public class VegbankGetTag extends VegbankTag {
 	protected String id;
 
     public String getId() {
-		if (Utility.isStringNullOrEmpty(id)) {
-			log.debug("setId: finding...");
-			return (String)findAttribute("id");
-		} else {
-			log.debug("setId: returning");
-        	return this.id;
-		}
+		return findAttribute("id", this.id);
     }
 
     public void setId(String s) {
         this.id = s;
+    }
+
+    /**
+     * 
+     */
+	protected String pager;
+
+    public String getPager() {
+		return findAttribute("pager", this.pager);
+    }
+
+    public void setPager(String s) {
+        this.pager = s;
     }
 
 
