@@ -8,8 +8,11 @@ import java.io.*;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 
+
 //the data translator classes
 import PlotDataSource;
+//the plot loader
+import databaseAccess.DBinsertPlotSource;
 
 public class DataSourceImpl extends UnicastRemoteObject
   implements DataSourceServerInterface 
@@ -17,6 +20,10 @@ public class DataSourceImpl extends UnicastRemoteObject
 		private String name;
 	 	private PlotDataSource source;
 		private String mdbFile = "E:\\cygwin\\tmp\\rmi_exp.mdb";
+	 
+	 	//loader stuff
+	 	private DBinsertPlotSource dbinsert;
+	 	private String loaderPlugin = "TNCPlotsDB";
 	 
 	 
 	 //constructor
@@ -31,13 +38,34 @@ public class DataSourceImpl extends UnicastRemoteObject
    }
 	
 	
+	/**
+ 	 * this method handles the loading of a plot into the database
+	 */	
+	 public String insertPlot(String plot)
+	 {
+		 String s = null;
+		 try
+		 {
+			 //the plugin and the source are the same in this case
+			 String plugin = "";
+			 //construct an instance of the plot loader
+			dbinsert = new DBinsertPlotSource(loaderPlugin, plot);
+			dbinsert.insertPlot(plot);
+		 }
+		 catch (Exception e)
+		 {
+		 	System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+     }
+		 return(s);
+	 }
 	
 	/**
 	 * method used for uploading the access mdb file of a given type
 	 *
 	 * @param  fileName -- the name of the uploaded file
 	 * @param  fileType -- the type of the uploaded file
-	 * @param 	buffer -- the file contents
+	 * @param  buffer -- the file contents
 	 *
 	 */
 	 public boolean getMDBFile(String fileName, String fileType, byte buffer[] )

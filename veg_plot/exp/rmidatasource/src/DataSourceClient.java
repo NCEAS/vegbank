@@ -804,18 +804,19 @@ public class DataSourceClient
 	 * method that will insert a plot on the windows machine based on the name
 	 * of that plot
 	 */
-	 public String insertPlot()
+	 public String insertPlot(String plot)
 	 {
+		 String s = null;
 		 try
 			{
-				
-				
+				s= source.insertPlot(plot);
 			}
 			catch(Exception e) 
 			{
 				System.err.println("Exception: "+ e.getMessage());
 				e.printStackTrace();
-			}		
+			}
+			return(s);
 	 }
 	
 	 
@@ -863,9 +864,9 @@ public class DataSourceClient
 				System.out.println("DataSourceCleint > access file validity: " + fileValidityResults );
 				Vector v = client.getPlotNames();
 				System.out.println("DataSourceCleint > found : " + v.size() +" plots in archive " );
-				
-				System.out.println("DataSourceCleint > inserting the first plot in the archive: " + v.elementAt(0).toString() );
-				
+				String testPlot =  v.elementAt(0).toString();
+				System.out.println("DataSourceCleint > inserting the first plot in the archive: " + testPlot );
+				client.insertPlot(testPlot);
 			
 			
 			} 

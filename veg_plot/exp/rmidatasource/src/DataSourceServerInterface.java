@@ -9,8 +9,17 @@ import java.rmi.RemoteException;
 
 public interface DataSourceServerInterface extends Remote 
 {
+	
+		//method for inserting a plot into the database
+		public String insertPlot(String plot)
+	 	throws Exception;
+			
+		//method for validating that the uploaded file is indeed an mdb file
+		public boolean isMDBFileValid()
+		throws Exception;
+		
    //method for uploading a file to the server
-	 public String getMDBFile(String fileName, String fileType,  byte buffer[] )
+	 public boolean getMDBFile(String fileName, String fileType,  byte buffer[] )
 	 throws Exception;
 	 
 	 public byte[] downloadFile(String fileName) throws
