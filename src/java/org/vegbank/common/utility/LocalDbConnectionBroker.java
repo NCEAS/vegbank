@@ -86,12 +86,7 @@ public class LocalDbConnectionBroker
 			
 			//increment the use of the current connection
 			currentConnectionUses++;
-	
-			///	System.out.println("LocalDbConnectionBroker.currentConnectionUses: "+currentConnectionUses);
-			///	System.out.println("LocalDbConnectionBroker.poolSize: "+myBroker.getSize() );
-			///	System.out.println("LocalDbConnectionBroker.currentConnectionUses: "+currentConnectionUses);
-			///	System.out.println("LocalDbConnectionBroker.currentConnectionNum: "+curentConnectionNum);
-	
+
 	
 			//use the current connection about 100 times
 			if (currentConnectionUses < dbUtil.maxConnectionUses ) 

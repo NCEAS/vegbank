@@ -7,11 +7,9 @@
 package org.vegbank.common.utility;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Hashtable;
 import java.util.Vector;
 
 
@@ -46,13 +44,10 @@ public class DatabaseAccess
 		//execute the query
 		Statement query = this.getConnection().createStatement();
 		results = query.executeQuery(inputStatement);
+		LocalDbConnectionBroker.manageLocalDbConnectionBroker("releaseConn");
 		return results;
 	} //end method
 	
-	public void issueInsert(String inputStatement)
-	{
-		
-	}
 	
 	public Connection getConnection() 
 	{
