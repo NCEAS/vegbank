@@ -5,7 +5,7 @@ Const intMakeSmaller = 39  'number of chars that, if exceeded, results in smalle
 'Const strStylesheetLoc = "file:///C:/vegbank/sandbox/vegbank/web/includes/default.css"
 Const strStylesheetLoc = "/vegbank/includes/default.css"
 Global Const constVegBranchAppTitle = "VegBranch"
-Global Const globaldebug = 1
+Global Const globaldebug = 0 'should be 0 when releasing VegBranch.
 Global Const conEasyFormat = "__#easyImport@"
 'name of simpleImport format for W_Convert_CSVColNames
 
@@ -507,16 +507,16 @@ End Function
 
 
 Public Function IsStringLettNumb(strStr As String) As Boolean
-  Dim inttemp As Integer
+  Dim intTemp As Integer
   'get ASCII value of string (first letter)
   If strStr = "" Then
     IsStringLettNumb = False
     Debug.Print "YIKES!:"
     Exit Function
   End If
-  inttemp = Asc(strStr)
-  If (((inttemp >= 65) And (inttemp <= 90)) Or (inttemp = 95) Or (inttemp >= 97 And inttemp <= 122) _
-                   Or (inttemp >= 48 And inttemp <= 57)) Then ''is a number or letter or (_)
+  intTemp = Asc(strStr)
+  If (((intTemp >= 65) And (intTemp <= 90)) Or (intTemp = 95) Or (intTemp >= 97 And intTemp <= 122) _
+                   Or (intTemp >= 48 And intTemp <= 57)) Then ''is a number or letter or (_)
      IsStringLettNumb = True
      Else
      IsStringLettNumb = False
@@ -534,10 +534,10 @@ End Function
 
 Public Function compressChar(ByVal strMain As String, ByVal strRemoveChars As String) As String 'not case sens
   'function removes characters from string
-  Dim inttemp As Long
-  For inttemp = 1 To Len(strRemoveChars)
-    strMain = substTextForText(strMain, Mid(strRemoveChars, inttemp, 1), "")
-  Next inttemp
+  Dim intTemp As Long
+  For intTemp = 1 To Len(strRemoveChars)
+    strMain = substTextForText(strMain, Mid(strRemoveChars, intTemp, 1), "")
+  Next intTemp
   compressChar = strMain
 End Function
 
@@ -655,8 +655,8 @@ WhenDoneErr:
 End Function
 
 Public Function EmptyCollection(colToEmpty As Collection)
-  Dim inttemp As Integer
-  For inttemp = 1 To colToEmpty.Count
+  Dim intTemp As Integer
+  For intTemp = 1 To colToEmpty.Count
     colToEmpty.Remove (1)
   Next
 End Function
@@ -673,13 +673,13 @@ Public Function csv_parseCSVstring(strTxt As String, Optional strDelim As String
   Dim colTemp As New Collection, strTemp As String
   strTemp = strTxt
   ''2 length variables to see when we are finished
-  Dim lngLEn As Long, lngCurr As Long
-  lngLEn = Len(strTemp)
+  Dim lngLen As Long, lngCurr As Long
+  lngLen = Len(strTemp)
   lngCurr = 0
   Dim strRemaining As String '(remaining to be parsed)
   
-  While lngCurr <= lngLEn  'while the current length taken is less than the total length of the str
-    strRemaining = Right(strTemp, lngLEn - lngCurr)
+  While lngCurr <= lngLen  'while the current length taken is less than the total length of the str
+    strRemaining = Right(strTemp, lngLen - lngCurr)
     Dim strNewItem As String
     strNewItem = csv_FindNextField(strRemaining, strDelim, blnParens, blnAllQuots)
     ''add length of new item and delimiter to "done" length
@@ -716,7 +716,7 @@ Public Function SQLValuesToCSV(strSQL As String, Optional ByVal strQuotType As S
   On Error GoTo reTnothing
   If strQuotType = "" Then strQuotType = "'"
   If intFieldsIncl < 1 Then intFieldsIncl = 1
-  Dim rstTemp As New ADODB.Recordset, strRep As String, inttemp As Integer, strColDiv As String, strRecDiv As String, lngRec As Long
+  Dim rstTemp As New ADODB.Recordset, strRep As String, intTemp As Integer, strColDiv As String, strRecDiv As String, lngRec As Long
   strColDiv = ","
   lngRec = 1
   If intFieldsIncl > 1 Then
@@ -731,10 +731,10 @@ Public Function SQLValuesToCSV(strSQL As String, Optional ByVal strQuotType As S
   'loop over recs
   Do Until .EOF
     'loop over fields
-    For inttemp = 0 To intFieldsIncl - 1
-      If inttemp > 0 Then strRep = strRep & strColDiv  'add col separator
-      strRep = strRep & SQLizeTxt(Nz(.Fields(inttemp)), strQuotType)
-    Next inttemp
+    For intTemp = 0 To intFieldsIncl - 1
+      If intTemp > 0 Then strRep = strRep & strColDiv  'add col separator
+      strRep = strRep & SQLizeTxt(Nz(.Fields(intTemp)), strQuotType)
+    Next intTemp
     'next rec #
     strRep = strRep & strRecDiv 'include ; at end
     lngRec = lngRec + 1
@@ -1070,17 +1070,17 @@ Public Function HideSomeFields(strNm As String, strQT As String, strFieldsToHide
   
   With qdfTemp
     Dim fldCurr As Object
-    Dim colTohide As New Collection, inttemp As Integer
+    Dim colTohide As New Collection, intTemp As Integer
     Set colTohide = csv_parseCSVstring(strFieldsToHide, ",", True)
-    For inttemp = 1 To colTohide.Count
+    For intTemp = 1 To colTohide.Count
     'For Each fldCurr In qdfTemp.Fields
       'unhides each column :
     '  Debug.Print "accessing field:" & fldCurr.Name
      ' On Error Resume Next  'if property not available, then all fields are visible
     '  Debug.Print "  " & qdfTemp.Fields(fldCurr.Name).Properties("ColumnHidden")
       'Debug.Print colTohide(inttemp)
-      If fieldExistOnTbl(colTohide(inttemp), strNm) Then
-      Set fldCurr = .Fields(colTohide(inttemp))
+      If fieldExistOnTbl(colTohide(intTemp), strNm) Then
+      Set fldCurr = .Fields(colTohide(intTemp))
       'If InStr("," & strFieldsToHide & ",", "," & fldCurr.Name & ",") > 0 Then 'hide
       Call hideOneField(fldCurr)
           'qdfTemp.Fields(fldCurr.Name).Properties("ColumnHidden") = -1
@@ -1237,17 +1237,17 @@ Public Function areFldsOnTbl(strFlds As String, strTbl As String, blnIgnoreSkips
   ''checks multiple fields to see if they are on a tbl, if so, then passes "", if not, then passes fields not
   Dim colFlds As New Collection
   Set colFlds = csv_parseCSVstring(strFlds, ",", True)
-  Dim inttemp As Long, strRept As String
-  For inttemp = 1 To colFlds.Count
+  Dim intTemp As Long, strRept As String
+  For intTemp = 1 To colFlds.Count
     Dim strFldNm As String
-    strFldNm = colFlds(inttemp)
+    strFldNm = colFlds(intTemp)
     If strFldNm = "" Then strFldNm = "--null!--"
     If Not fieldExistOnTbl(strFldNm, strTbl) Then
       If (Left(strFldNm, 10) <> "!SkipField") Or blnIgnoreSkips Then
         strRept = strRept & strFldNm & ","
       End If
     End If
-  Next inttemp
+  Next intTemp
   If strRept <> "" Then
     'strip last ,
     strRept = Left(strRept, Len(strRept) - 1)
@@ -1346,11 +1346,11 @@ End Function
 
 Function goooooootest()
   Debug.Print "start:" & Now()
-  Dim inttemp As Long, intOther As Double
+  Dim intTemp As Long, intOther As Double
   intOther = -3
-  For inttemp = 1 To 1000
+  For intTemp = 1 To 1000
     intOther = intOther + getvalFrmSQL("select 1 from Z_USER_C_plotData")
-  Next inttemp
+  Next intTemp
   Debug.Print "done:" & Now()
 End Function
 
@@ -1466,21 +1466,21 @@ End Function
 
 Public Function getNewQryName(strPrefix As String, strSuffix As String) As String
   'function checks queries in database and comes up with name that is not used
-  Dim inttemp As Integer
-  Do Until Not (QueryExist(strPrefix & IIf(inttemp > 0, inttemp, "") & strSuffix)) And Not (TableExist(strPrefix & IIf(inttemp > 0, inttemp, "") & strSuffix))
-    inttemp = inttemp + 1
+  Dim intTemp As Integer
+  Do Until Not (QueryExist(strPrefix & IIf(intTemp > 0, intTemp, "") & strSuffix)) And Not (TableExist(strPrefix & IIf(intTemp > 0, intTemp, "") & strSuffix))
+    intTemp = intTemp + 1
   Loop
-  getNewQryName = strPrefix & IIf(inttemp > 0, inttemp, "") & strSuffix
+  getNewQryName = strPrefix & IIf(intTemp > 0, intTemp, "") & strSuffix
 
 End Function
 
 Public Function getNewFrmName(strPrefix As String, strSuffix As String) As String
   'function checks queries in database and comes up with name that is not used
-  Dim inttemp As Integer
-  Do Until Not (FormExist(strPrefix & IIf(inttemp > 0, inttemp, "") & strSuffix))
-    inttemp = inttemp + 1
+  Dim intTemp As Integer
+  Do Until Not (FormExist(strPrefix & IIf(intTemp > 0, intTemp, "") & strSuffix))
+    intTemp = intTemp + 1
   Loop
-  getNewFrmName = strPrefix & IIf(inttemp > 0, inttemp, "") & strSuffix
+  getNewFrmName = strPrefix & IIf(intTemp > 0, intTemp, "") & strSuffix
 
 End Function
 
@@ -1863,17 +1863,17 @@ Public Function col_valuesAreUnique(colToCheck As Collection) As Long
   'returns -1 if all are unique
   On Error GoTo haveNonUnique
   Dim colNew As New Collection
-  Dim inttemp As Long
-  For inttemp = 1 To colToCheck.Count
-    colNew.Add colToCheck(inttemp), "_" & colToCheck(inttemp)
-  Next inttemp
+  Dim intTemp As Long
+  For intTemp = 1 To colToCheck.Count
+    colNew.Add colToCheck(intTemp), "_" & colToCheck(intTemp)
+  Next intTemp
   'if made it thru, then it's ok
   col_valuesAreUnique = -1
 exitthis:
   Exit Function
 haveNonUnique:
   'have a non unique value, pass # back
-  col_valuesAreUnique = inttemp
+  col_valuesAreUnique = intTemp
   GoTo exitthis
 End Function
 
@@ -1884,10 +1884,10 @@ Public Function xxxx_testUnique()
   colChk.Add "he2llo"
   colChk.Add "he2llo"
   colChk.Add "hello"
-  Dim inttemp As Long
-  inttemp = col_valuesAreUnique(colChk)
-  If inttemp > 0 Then
-    Debug.Print colChk(inttemp) & " is duplicated!"
+  Dim intTemp As Long
+  intTemp = col_valuesAreUnique(colChk)
+  If intTemp > 0 Then
+    Debug.Print colChk(intTemp) & " is duplicated!"
   Else
     Debug.Print "unique!"
   End If
@@ -1899,4 +1899,43 @@ Public Function rememberLastFileLoc(Optional strFile As String, Optional blnPut 
     LastFileLocationSeen = strFile
   End If
   rememberLastFileLoc = LastFileLocationSeen
+End Function
+
+Public Function csv_listIsNumeric(ByVal strText As String, Optional blnRetCollection As Boolean, Optional ByRef colAllValues As Collection) As Boolean
+  'checks to see if a comma list contains only numeric values : true if so
+  'no handling of ( ) or quotes etc.
+  If strText = "" Then
+    GoTo okAndExit
+  End If
+  On Error GoTo notNumeric
+  Dim dblNum As Double, intTemp As Long, intStartEl As Integer, intNextComma As Long
+  If blnRetCollection Then
+   If colAllValues.Count > 0 Then
+    Call EmptyCollection(colAllValues)
+   End If
+  End If
+  intStartEl = 1
+  'get number of elements in list
+  For intTemp = 1 To CountOccOf(strText, ",") + 1
+    'find location of next comma
+    intNextComma = InStr(intStartEl, strText, ",")
+    If intNextComma = 0 Then intNextComma = Len(strText) + 1
+    dblNum = Trim(mid_2(strText, intStartEl, intNextComma - 1))
+   If blnRetCollection Then colAllValues.Add (dblNum)
+  '  Debug.Print dblNum & " = from " & intStartEl & " to " & intNextComma - 1
+    intStartEl = intNextComma + 1
+    
+  Next intTemp
+okAndExit:
+  csv_listIsNumeric = True
+exitthis:
+  Exit Function
+notNumeric:
+  csv_listIsNumeric = False
+  Resume exitthis
+End Function
+
+Public Function mid_2(ByVal strText As String, ByVal lngStart As Long, ByVal lngEnd As Long) As String
+  'returns string from and to characters (inclusive) instead of length of string, as in Mid function
+  mid_2 = Mid(strText, lngStart, lngEnd - lngStart + 1)
 End Function
