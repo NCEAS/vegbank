@@ -13,9 +13,10 @@
 
 
 	<entity>
-	<entityName>vegPlot.PARTY </entityName>
+	<entityName>vegPlot.vegPlotParty </entityName>
 	<entitySummary>This table stores information relevent to a party which may be either an individual or an organization.</entitySummary>
-	<entityDescription> </entityDescription>
+	<entityDescription>After the September NCEAS meeting, this table was renamed from: party to: vegPlotParty
+	because there was a table in the plant taxa database also named party.</entityDescription>
 	
 
 <attribute>
@@ -23,6 +24,7 @@
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>P</attKey>
+		<attReferences> n/a </attReferences>
                 <attNotes>Primary key for PARTY table.</attNotes>
                 <attDefinition> Database assigned value that is
                                                  unique to each party
@@ -49,7 +51,8 @@
                 <attNulls>Yes</attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a</attKey>
-                <attNotes>n/a</attNotes>
+                <attReferences> n/a </attReferences>
+		<attNotes>n/a</attNotes>
                 <attDefinition>One's first name.</attDefinition>
         </attribute>
         
@@ -69,6 +72,7 @@
                 <attNulls>No</attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a </attKey>
+		<attReferences> n/a </attReferences>
                 <attNotes>n/a </attNotes>
                 <attDefinition>Name of an organization. </attDefinition>
         </attribute>
@@ -89,6 +93,7 @@
                 <attNulls>Yes </attNulls>
                 <attType>VARCHAR2</attType>
                 <attKey>n/a </attKey>
+		<attReferences> n/a </attReferences>
                 <attNotes>n/a </attNotes>
                 <attDefinition>Hours in which one may contact the party. </attDefinition>
         </attribute>

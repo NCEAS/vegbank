@@ -16,12 +16,15 @@
 	<entityDescription>Graphical files currently can include: gif, jpeg, and tiff file formats.  It is
 	recognized that many graphical files, especially remote sensing digital photographs may be
 	gigabytes in size and for this reason the database developers are considering limiting the 
-	size of the files stored in the plots database.</entityDescription>
+	size of the files stored in the plots database.  Also, after discussion at the Sepetember NCEAS
+	meeting, it was decided that a URL pointing to the image file would not work unless we controlled the
+	web address.</entityDescription>
 	<attribute> 
 		<attName>graphic_id</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
-		<attKey>n/a </attKey>
+		<attKey>PK </attKey>
+		<attReferences>n/a</attReferences>
 		<attNotes>n/a </attNotes>
 		<attDefinition>This is an internal database identifier assigned to each unique grapical file.</attDefinition>
 	</attribute>
@@ -32,7 +35,7 @@
                 <attName>plot_id</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>PLOT</attReferences>
                 <attNotes>Foregin key into the plot table.</attNotes>
                 <attDefinition>This represents the link between a graphical file and a specific plot.</attDefinition>

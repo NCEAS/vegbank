@@ -12,15 +12,16 @@
 
 <entity>
 	<entityName>vegPlot.PROJECTCONTRIBUTOR</entityName>
-	<entitySummary>This table stores information about a party contributing to a project where vegetation plots are described</entitySummary>
+	<entitySummary>This table stores information about a party contributing to a project.</entitySummary>
 	<entityDescription>This table serves as an interesection entity used to 'link' a party with
 a specific project where vegetation plots are described. </entityDescription>
 	<attribute> 
 		<attName>projectContributor_id </attName>
 		<attNulls>No </attNulls>	
 		<attType>NUMBER </attType>
-		<attKey>P </attKey>
-		<attNotes> </attNotes>
+		<attKey>PK </attKey>
+		<attReferences>n/a</attReferences>
+		<attNotes>n/a </attNotes>
 		<attDefinition>Database assigned value for a party contributing to a 
             project. </attDefinition>
 	</attribute>
@@ -31,9 +32,9 @@ a specific project where vegetation plots are described. </entityDescription>
                 <attName>project_id </attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
-                <attKey>F </attKey>
+                <attKey>FK </attKey>
                 <attReferences>PROJECT</attReferences>
-                <attNotes> </attNotes>
+                <attNotes>n/a </attNotes>
                 <attDefinition>Database assigned value for a given project &#150; this is 
             a link to the project entity. </attDefinition>
         </attribute>
@@ -42,7 +43,7 @@ a specific project where vegetation plots are described. </entityDescription>
                 <attName> party_id</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
-                <attKey>F </attKey>
+                <attKey>FK </attKey>
                 <attReferences>PARTY </attReferences>
                 <attNotes> </attNotes>
                 <attDefinition>Database assigned value for a given party this is a link to 
@@ -53,16 +54,16 @@ a specific project where vegetation plots are described. </entityDescription>
                 <attName>roleCode </attName>
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
                 <attDefinition>The role that a specific party (party_id) had in the 
             project (project_id) - this can include such roles as 
             PI, contact, author, etc.  This will be linked to an 
             entity named: </attDefinition>
         </attribute>
 
-
+	
 	<children> PARTY </children>
 </entity>
 </dataModel>	

@@ -12,12 +12,16 @@
 <entity>
 	<entityName>vegPlot.PLOT </entityName>
 	<entitySummary>This table stores general information about the a given plot loaction</entitySummary>
-	<entityDescription> </entityDescription>
+	<entityDescription>This table initially stored all the environmental/conditional data that had a one-to-one relationship
+with the plot.  During the September meeting at NCEAS, it was decided that this entity should be disemminated to two 
+tables: one for data that is static over the period of which sampling events are carried out and a second table (called
+plotObservation) to store time-dependent data.  Following this structure a single plot position is stored only once
+and observational information (procured during one or multiple sampling events) will be stored separately. </entityDescription>
 	<attribute> 
 		<attName>plot_id</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
-		<attKey>P</attKey>
+		<attKey>PK</attKey>
 		<attNotes>G</attNotes>
 		<attDefinition>Database assigned value that is unique to each plot</attDefinition>
 	</attribute>
@@ -26,7 +30,7 @@
                 <attName>project_id</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>Project</attReferences>
                 <attNotes>Foreign key to the project table.</attNotes>
                 <attDefinition>Database assigned value for a given project.</attDefinition>
@@ -35,7 +39,7 @@
                 <attName>stand_id</attName>
                 <attNulls>Yes</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>stand</attReferences>
                 <attNotes>Foreign key into the stand table.</attNotes>
                 <attDefinition>The attribute used to identify which stand from which 
@@ -60,7 +64,7 @@ the plot was sampled. </attDefinition>
                 <attName>parentPlot</attName>
                 <attNulls>Yes</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>plot</attReferences>
                 <attNotes>This attribute has a recursive relationship with the plot_id attribute</attNotes>
                 <attDefinition>Attribute refers to a parent plot - which is the plot_id for which this plot is a sub-plot.</attDefinition>
@@ -71,7 +75,7 @@ the plot was sampled. </attDefinition>
                 <attName>namedPlace </attName>
                 <attNulls> Yes</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>namedPlace</attReferences>
                 <attNotes>Foreign key into the namedPlace table.</attNotes>
                 <attDefinition>Attribute to track if the plot was collected with an
@@ -84,7 +88,7 @@ area corresponding to a 'named place'.</attDefinition>
                 <attType>NARCHAR2</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes>Database will determine this based on the number of fields
+                <attNotes>Possibly the database will determine this based on the number of fields
             in which data are entered. If the database determines
             the plot to be 'ancillary' the person entering the data will be warned. </attNotes>
                 <attDefinition>Type of plot (vegetation/ancillary).</attDefinition>
@@ -167,7 +171,20 @@ This will be a pick list with standard plot description methods, such as Daubenm
                 <attNotes>See notes above</attNotes>
                 <attDefinition>Original longitude of the plot origin. </attDefinition>
         </attribute>
+<!-- added Oct 19th -->
 
+<attribute>
+                <attName>horizPosAcc </attName>
+                <attNulls> No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This attribute is the estimated accuracy of the lateral position of the plot. </attDefinition>
+        </attribute>
+	
+	
+	
 <attribute>
                 <attName>plotShape</attName>
                 <attNulls>No </attNulls>

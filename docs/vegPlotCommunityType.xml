@@ -14,14 +14,22 @@
 <entity>
 	<entityName>vegPlot.COMMUNITYTYPE </entityName>
 	<entitySummary>This table stores the information responsible for the relationship between a plot observation and a community type. </entitySummary>
-	<entityDescription>There are still some major issues with this entity.  Primarily, the decision about where to store the updated 'link' between plots and community types has not yet been made. </entityDescription>
+	<entityDescription>There is still some debate whether or not this entity actually belongs here.  
+	The issues here are the same as those surrounding the plant taxa database.  Do we store all the 
+	plant taxa, or in this case all the community types, in a database local to the plots datbase or is 
+	there a communication process between the plots database and HDMS.  With the plant taxa, we are leaning towards
+	developing our own database component to store information related to plant taxa which will be structurally
+	similar to that same functional component in HDMS and will at some point probably be updated from HDMS.  
+	Fortunately, the designers at TNC have been concerned with designing a 'universal' data model which will
+	be capable of storing/tracking either plant taxa or community types or both. </entityDescription>
 
 
 <attribute>
                 <attName>communityType_id </attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>P </attKey>
+                <attKey>PK </attKey>
+		<attReferences> n/a </attReferences>
                 <attNotes>The Primary key of the communityType table. </attNotes>
                 <attDefinition>Database assigned value for a unique community type applied to a single plot observation. </attDefinition>
         </attribute>
@@ -32,16 +40,17 @@
                 <attName>OBS_ID </attName>
                 <attNulls>N </attNulls>
                 <attType>NUMBER </attType>
-                <attKey>F </attKey>
+                <attKey>FK </attKey>
                 <attReferences>plotObservation </attReferences>
                 <attNotes>Foreign key into the plotObservation table. </attNotes>
                 <attDefinition>This key provides a link between comminity type(s) with a specific plot observation. </attDefinition>
         </attribute>
 <attribute>
-                <attName>class_association </attName>
+                <attName>classAssociation </attName>
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a </attKey>
+		<attReferences> n/a </attReferences>
                 <attNotes>n/a </attNotes>
                 <attDefinition>This is the class_association from the National Vegetaion Classification Standard. </attDefinition>
         </attribute>
@@ -49,7 +58,7 @@
 
 
         <attribute>
-                <attName>classification_quality</attName>
+                <attName>classificationQuality</attName>
                 <attNulls>Yes </attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a </attKey>
@@ -66,6 +75,7 @@
 		<attNulls>No </attNulls>	
 		<attType>DATE </attType>
 		<attKey>n/a </attKey>
+		<attReferences> n/a </attReferences>
 		<attNotes>n/a </attNotes>
 		<attDefinition>Start date for the classification assignment of the plot observation. </attDefinition>
 	</attribute>
@@ -78,8 +88,8 @@
                 <attType>DATE </attType>
                 <attKey>n/a </attKey>
                 <attReferences>n/a </attReferences>
-                <attNotes>Stop date for the classification assignment of the plot observation. </attNotes>
-                <attDefinition> </attDefinition>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Stop date for the classification assignment of the plot observation.</attDefinition>
         </attribute>
 
 

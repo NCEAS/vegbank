@@ -14,10 +14,11 @@
 	<entitySummary>This table was designed to allow users other than the author of the plot to interpret taxon names and authorities used to describe a population. </entitySummary>
 	<entityDescription>The development of this table was initiated at the working group meeting at NCEAS in September 2000.  The desire to re-interpret the taxon names used by the plot author was realized and this table subsequently initiated.</entityDescription>
 	<attribute> 
-		<attName>interpretationId</attName>
+		<attName>interpretation_Id</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
-		<attKey>P</attKey>
+		<attKey>PK</attKey>
+		<attReferences>n/a</attReferences>
 		<attNotes>Primary key for the interpretation table.</attNotes>
 		<attDefinition>Database assigned value for a unique interpretation of a taxon used in a plot observation.</attDefinition>
 	</attribute>
@@ -26,27 +27,79 @@
                 <attName>party_id </attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F </attKey>
+                <attKey>FK </attKey>
                 <attReferences>PARTY </attReferences>
                 <attNotes>Foreign key into the party table. </attNotes>
                 <attDefinition>This key links a party to an interpretation. </attDefinition>
         </attribute>
         <attribute>
-                <attName>taxonObservationId</attName>
+                <attName>taxonObservation_Id</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER </attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>taxonObservation </attReferences>
                 <attNotes>Foreign key into the taxonObservation table. </attNotes>
                 <attDefinition>This key 'links' the interpretation to a particular taxon recognized in a plot. </attDefinition>
         </attribute>
+
+	
+	<!-- below added on Oct 18 -->
+	<attribute>
+                <attName>taxonName</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>This is the name applied to the vegetation by the interpreter which
+		will be used, along with the authority, to look up the current circumscription from the 
+		HDMS or a local instance of a plant taxa database.</attDefinition>
+        </attribute>
+
+	<attribute>
+                <attName>authority </attName>
+                <attNulls>No </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>This is the authority that the interpreter is following when he/she applies the
+		above taxon to a plant.  This, along with the taxon name and some date information, will be used to look up the current circumscription from the 
+		HDMS or a local instance of a plant taxa database.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>usageStartDate </attName>
+                <attNulls>No </attNulls>
+                <attType>Date </attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>This is the date that the authority started using the above taxon name. </attDefinition>
+        </attribute>
+
+	<attribute>
+                <attName>usageStopDate </attName>
+                <attNulls>No </attNulls>
+                <attType>Date </attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>This may be too detailed information to really expect to include, although it is
+		required to lookup a circumscription from the plant taxa database.  Maybe a single date would work, where the 
+		date was a point in time when the authority was using the taxon name.</attNotes>
+                <attDefinition>This is the date that the authority stopped using the above taxon name. </attDefinition>
+        </attribute>
+	
+
+	<!-- above added on Oct 18 -->
         <attribute>
                 <attName>circum_id</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>plantTaxa.CIRCUMSCRIPTION </attReferences>
-                <attNotes>This is the foreign key into the plantTaxa database, that will store the circumscription corresponding to the re-interpretaion of the taxon.</attNotes>
+                <attNotes>This is the foreign key into the plantTaxa or HDMS database, that will store the 
+		circumscription corresponding to the re-interpretaion of the taxon.</attNotes>
                 <attDefinition>Circumscription number updated from the plant taxa database. </attDefinition>
         </attribute>
         <attribute>
@@ -59,7 +112,7 @@
                 <attDefinition>This is the role of the party making the interpretation.  Expected values may be: author, interpreter. </attDefinition>
         </attribute>
         <attribute>
-                <attName>date </attName>
+                <attName>interpretationDate</attName>
                 <attNulls>No </attNulls>
                 <attType>DATE </attType>
                 <attKey>n/a </attKey>

@@ -8,7 +8,7 @@
 <author>J. Harris </author>
 <institution>NCEAS </institution>
 <contributor> </contributor>
-<description> </description>
+<description>This table stores an email address for a party.   </description>
 <date></date>
 
 <entity>
@@ -20,9 +20,9 @@
                 <attName>email_id </attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
-                <attKey>P </attKey>
+                <attKey>PK </attKey>
                 <attNotes>n/a </attNotes>
-                <attDefinition>Database assigned value for a unique email address. </attDefinition>
+                <attDefinition> </attDefinition>
         </attribute>
 
 
@@ -30,7 +30,7 @@
 		<attName>party_id </attName>
 		<attNulls>No </attNulls>	
 		<attType>NUMBER </attType>
-		<attKey>F </attKey>
+		<attKey>FK </attKey>
 		<attReferences>PARTY </attReferences>
 		<attNotes>Foreign key into the party table.</attNotes>
 		<attDefinition>This key links an email address(s) to a given party. </attDefinition>
@@ -44,7 +44,7 @@
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a </attKey>
                 <attReferences>n/a </attReferences>
-                <attNotes> </attNotes>
+                <attNotes>n/a </attNotes>
                 <attDefinition>The email address. </attDefinition>
         </attribute>
 

@@ -15,12 +15,17 @@
 <entity>
 	<entityName>vegPlot.ADDRESS </entityName>
 	<entitySummary>This table contains addresses for parties. </entitySummary>
-	<entityDescription> </entityDescription>
+	<entityDescription>Initially, before the September meeting at NCEAS, there was a link between each of the 
+	contributor tables and the addess table which allowed for the address of a given contributor to be
+	stored each time he/she contributed to either a plot, project, citation.  Now all these 
+	entries are not being stored, instead the institution at which the plot contributor was 
+	working while contributing to the plot/project/citation is stored in the plotContributor table.</entityDescription>
 <attribute>
                 <attName>address_id </attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
-                <attKey>P </attKey>
+                <attKey>PK </attKey>
+		<attReferences>n/a </attReferences>
                 <attNotes>Primary key for the address table. </attNotes>
                 <attDefinition>Database assigned value unique
                                                 to each address for a given party
@@ -36,7 +41,7 @@
                 <attName>party_id </attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
-                <attKey>F </attKey>
+                <attKey>FK </attKey>
                 <attReferences>PARTY </attReferences>
                 <attNotes>Foreign key into the party table. </attNotes>
                 <attDefinition>Database assigned value that is
@@ -47,6 +52,7 @@
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a </attKey>
+		<attReferences>n/a </attReferences>
                 <attNotes>n/a </attNotes>
                 <attDefinition>
                                                 Address line for the location
@@ -94,6 +100,7 @@
 		<attNulls>No </attNulls>	
 		<attType>VARCHAR2 </attType>
 		<attKey>n/a </attKey>
+		<attReferences> n/a </attReferences>
 		<attNotes>n/a </attNotes>
 		<attDefinition>
                                                 Country of the physical address. </attDefinition>
@@ -108,7 +115,7 @@
                 <attKey>n/a </attKey>
                 <attReferences>n/a </attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>This is the flag to signify whether or not a address is the current address of the party. </attDefinition>
+                <attDefinition>This is the flag to signify whether or not an address is the current address of the party. </attDefinition>
         </attribute>
 
 

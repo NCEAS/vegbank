@@ -23,6 +23,7 @@
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
 		<attKey>P</attKey>
+		<attReferences>n/a</attReferences>
 		<attNotes>n/a </attNotes>
 		<attDefinition>This is an internal database identifier assigned to each unique observation. </attDefinition>
 	</attribute>
@@ -77,7 +78,7 @@
                 <attDefinition>If the observation takes more than a single day then this is the last day in which observations were made. </attDefinition>
         </attribute>
 <attribute>
-                <attName>dateAcc</attName>
+                <attName>dateAccuracy</attName>
                 <attNulls>Yes</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>n/a</attKey>
@@ -101,6 +102,30 @@
                 <attDefinition>This is the effort spent making the observations as estimated by the data collector.</attDefinition>
         </attribute>
 
+<!-- below was Added Oct 19 -->
+<attribute>
+                <attName>hardCopyLocation</attName>
+                <attNulls>Yes</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>Added at the September meeting at NCEAS. </attNotes>
+                <attDefinition>Name of the institution where the original data resides.</attDefinition>
+</attribute>
+
+
+<attribute>
+                <attName>userDefined</attName>
+                <attNulls>Yes</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>Added at the September meeting at NCEAS. </attNotes>
+                <attDefinition>User Defined Fields.  Many of these fields may be added.</attDefinition>
+        </attribute>
+
+
+<!-- nn  -->
 	
 	<children>taxonObservations, communityType</children>
 </entity>

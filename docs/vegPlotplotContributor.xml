@@ -15,7 +15,10 @@
 	<entitySummary>This table stores information about a party contributing to
  a vegetation plot.</entitySummary>
 	<entityDescription>This table serves as an interesection entity used to 
-'link' a party with a specific vegetation plot. </entityDescription>
+'link' a party with a specific vegetation plot.  During the working group meeting at NCEAS in Septemeber, the 'institution'
+attribute was added.  This attribute will hold the name of the institution at which the contributor worked during
+the collection of the plot.  The addition of this attribute replaced the link between the plotContributor table
+and the address table. </entityDescription>
 	<attribute> 
 		<attName>plotContributor_id </attName>
 		<attNulls>No </attNulls>	
@@ -61,9 +64,20 @@ this is a link to the project entity. </attDefinition>
                 <attDefinition>The role that a specific party (party_id) had in the 
             plot collection - this can include such roles as 
             PI, contact, author, etc.  This will be linked to an 
-            entity named: </attDefinition>
+            entity named. </attDefinition>
         </attribute>
 
+	<attribute>
+                <attName> institution</attName>
+                <attNulls>No </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is the name of the institution at which the plot contributor worked during the 
+		sampling of the plot.</attDefinition>
+        </attribute>
+	
 
 	<children> PARTY </children>
 </entity>

@@ -69,7 +69,7 @@
 </p>
 
 <p>
-<i><FONT SIZE="-2" FACE="arial"><xsl:value-of select="entity/entityDescription"/></FONT></i>
+<i><b><FONT SIZE="-1" COLOR="GREEN" FACE="arial"><xsl:value-of select="entity/entityDescription"/></FONT></b></i>
 </p>
 
 

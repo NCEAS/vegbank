@@ -18,6 +18,7 @@
 		<attNulls>No </attNulls>	
 		<attType>NUMBER </attType>
 		<attKey>P</attKey>
+		<attReferences>n/a</attReferences>
 		<attNotes>n/a</attNotes>
 		<attDefinition>Database assigned value for a given project.</attDefinition>
 	</attribute>
@@ -41,6 +42,26 @@
                 <attNotes>Not sure what would show up here.  Do we want a pick list so as to force convergence to some consistent set of terms? </attNotes>
                 <attDefinition> Short description of the project including the purpose for doing the project.</attDefinition>
         </attribute>
+
+	
+	<!-- added on Oct 19 -->
+	
+	<attribute>
+                <attName>samplingApproach </attName>
+                <attNulls>Yes </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Initially, this field was samplingMethod, which was decided belonged in the 
+		plot table.  This field is for notes describing the general sampling approach that the project author(s)
+		applied to collecting vegetation data.</attDefinition>
+        </attribute>
+	
+	
+	
+	
+	<!-- nn -->
 
 
 

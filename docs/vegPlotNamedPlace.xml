@@ -14,19 +14,33 @@
 	<entityName> vegPlot.NAMEDPLACE</entityName>
 	<entitySummary>This tables stores information about the various 'named places' that a plot may have been 
 	sample within.</entitySummary>
-	<entityDescription> </entityDescription>
+	<entityDescription>This table was added to the plots database during the Septemeber meeting at NCEAS.  By including 
+	this table one can query a 'set' of plots within a given 'named place'.  For example one could query all plots sampled within
+	the Yosemite National Forest.  We feel that the inclusion of this table will nullify the need for a sitename attribute.</entityDescription>
 	<attribute> 
 		<attName>namedPlaceId</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
-		<attKey>P</attKey>
+		<attKey>PK</attKey>
+		<attReferences> n/a </attReferences>
 		<attNotes>n/a </attNotes>
 		<attDefinition>Internal database unique value assigned to every named place 
 		entered in the database.</attDefinition>
 	</attribute>
 
-
-
+<!-- below added on Oct 18 -->
+        <attribute>
+                <attName>plot_id</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER </attType>
+                <attKey>FK</attKey>
+                <attReferences>plantTaxa.PLOT </attReferences>
+                 <attNotes>Foreign key into the plot table. </attNotes>
+                <attDefinition>This key links a named place to a plot. </attDefinition>
+        </attribute>
+<!-- above added on Oct 18 -->
+	
+	
 	<attribute>
                 <attName>placeName </attName>
                 <attNulls>No</attNulls>
@@ -43,8 +57,8 @@
                 <attNulls>No</attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a </attKey>
-                <attReferences> </attReferences>
-                <attNotes></attNotes>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a</attNotes>
                 <attDefinition>This is the description of a named place. </attDefinition>
         </attribute>
 
@@ -54,8 +68,8 @@
                 <attNulls>Yes</attNulls>
                 <attType>VARCHAR2</attType>
                 <attKey>n/a </attKey>
-                <attReferences> </attReferences>
-                <attNotes></attNotes>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a</attNotes>
                 <attDefinition>This is a reference to a gazeteer containing the named place.</attDefinition>
         </attribute>
 	

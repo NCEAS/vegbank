@@ -15,7 +15,11 @@
 <entity>
 	<entityName>vegPlot.CITATION </entityName>
 	<entitySummary>This table stores information about citations in which plots are referenced. </entitySummary>
-	<entityDescription> </entityDescription>
+	<entityDescription>Currently we have the citation table linked with the plotObservation table so that 
+	any number of citations may stored for a given plotObservation.  There has been some discussion about 
+	linking the citation table directly with either the taxonObservation or interpretation table 
+	so that a citation may be refered to when an interpreter decides to apply a different taxon 
+	or authority to a plant that the author used.</entityDescription>
 
 
 
@@ -23,7 +27,8 @@
                 <attName>citation_id </attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
-                <attKey>P </attKey>
+                <attKey>PK </attKey>
+		<attReferences> n/a </attReferences>
                 <attNotes>Primary key of the citation table. </attNotes>
                 <attDefinition>Database assigned value that will be unique
                                          for each citation. </attDefinition>
@@ -35,11 +40,11 @@
                 <attName>OBS_ID </attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
-                <attKey>F </attKey>
+                <attKey>FK </attKey>
                 <attReferences>plotObservation </attReferences>
                 <attNotes>Foreign key into the plotObservation table.</attNotes>
                 <attDefinition>Database assigned value that is unique to
-                                         each plot observation, this is how citations are linked to
+                                         each plot observation - this is how citations are linked to
                                          plots. </attDefinition>
         </attribute>
 <attribute>
@@ -47,6 +52,7 @@
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a </attKey>
+		<attReferences> n/a </attReferences>
                 <attNotes>n/a </attNotes>
                 <attDefinition>Name by which the cited resource is
                                          known. </attDefinition>
@@ -61,7 +67,7 @@
                 <attKey>n/a </attKey>
                 <attReferences>n/a </attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>Short name or other language name by
+                <attDefinition>Short name or other name by
                                          which the cited information is known. 
                                          Example: "Digital Chart of the World or
                                          DCW. </attDefinition>
@@ -71,6 +77,7 @@
                 <attNulls>No </attNulls>
                 <attType>DATE </attType>
                 <attKey>n/a </attKey>
+		<attReferences> n/a </attReferences>
                 <attNotes>n/a </attNotes>
                 <attDefinition>Date the citation was published. </attDefinition>
         </attribute>
@@ -91,6 +98,7 @@
                 <attNulls> No</attNulls>
                 <attType>DATE </attType>
                 <attKey>n/a </attKey>
+		<attReferences> n/a </attReferences>
                 <attNotes>n/a </attNotes>
                 <attDefinition>Date of the edition. </attDefinition>
         </attribute>
@@ -111,6 +119,7 @@
                 <attNulls>Yes </attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a </attKey>
+		<attReferences> n/a </attReferences>
                 <attNotes>n/a </attNotes>
                 <attDefinition>Information identifying the issue of the
                                          series. </attDefinition>
@@ -133,8 +142,9 @@
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a </attKey>
+		<attReferences> n/a </attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>Details on which page of the periodical the
+                <attDefinition>Details about which page of the periodical the
                                          article was published. </attDefinition>
         </attribute>
 
@@ -155,6 +165,7 @@
 		<attNulls>Yes </attNulls>	
 		<attType>VARCHAR2 </attType>
 		<attKey>n/a </attKey>
+		<attReferences> n/a </attReferences>
 		<attNotes>n/a </attNotes>
 		<attDefinition>International Standard Serial Number. </attDefinition>
 	</attribute>

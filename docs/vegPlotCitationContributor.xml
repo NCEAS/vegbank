@@ -16,15 +16,17 @@
 	<entityName>vegPlot.CITATIONCONTRIBUTOR </entityName>
 	<entitySummary>This table is the intersection between citation and party and relates the role a party has had in a citation(s). </entitySummary>
 
-	<entityDescription> </entityDescription>
+	<entityDescription>This table serves as an intersection between vegPlotParty and citation.  
+	Expected values may include links between a citation and the author, publisher and/or editor.</entityDescription>
 
  <attribute>
                 <attName>citationContributor_id </attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
-                <attKey>P </attKey>
+                <attKey>PK </attKey>
+		<attReferences> n/a </attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>Database assigned value for a uniquely identifying a particular party with a particular citation. </attDefinition>
+                <attDefinition>Database assigned value for uniquely identifying a particular party responsible for a particular citation. </attDefinition>
         </attribute>
 
 
@@ -33,7 +35,7 @@
                 <attName>citation_id </attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
-                <attKey>F </attKey>
+                <attKey>FK </attKey>
                 <attReferences>CITATION </attReferences>
                 <attNotes>Foreign key into the citation table. </attNotes>
                 <attDefinition>This key provides a link to a citation.</attDefinition>
@@ -43,7 +45,8 @@
 		<attName>party_id </attName>
 		<attNulls>No </attNulls>	
 		<attType>NUMBER </attType>
-		<attKey>F </attKey>
+		<attKey>FK </attKey>
+		<attReferences> n/a </attReferences>
 		<attNotes>Foreign key into the party table. </attNotes>
 		<attDefinition>This key provides a link to a party. </attDefinition>
 	</attribute>
@@ -57,7 +60,7 @@
                 <attKey>n/a </attKey>
                 <attReferences>n/a </attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>This is the role that a particular party had in a particular citation. </attDefinition>
+                <attDefinition>This defines the role which a particular party played in a particular citation. </attDefinition>
         </attribute>
 
 
