@@ -10,7 +10,7 @@
 <xsl:output method="text"/>
 <xsl:template match="/vegPlotPackage">
 
-<xsl:text>project name, startDate, stopDate</xsl:text> 
+<xsl:text>project name, accession_number, obsStartDate, obsStopDate, authorcode</xsl:text> 
 <xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
 
 <xsl:for-each select="project">
@@ -18,8 +18,9 @@
 		<xsl:for-each select="plot/observation/taxonObservation">
 
 	 		<xsl:value-of select="../../../projectName"/> <xsl:text>,&#x20;</xsl:text>
-	 		<xsl:value-of select="../../../startDate"/> <xsl:text>,&#x20;</xsl:text>
-	 		<xsl:value-of select="../../../stopDate"/> <xsl:text>,&#x20;</xsl:text>
+	 		<xsl:value-of select="../../../plot/plotAccessionNumber"/> <xsl:text>,&#x20;</xsl:text>
+	 		<xsl:value-of select="../obsStartDate"/> <xsl:text>,&#x20;</xsl:text>
+	 		<xsl:value-of select="../obsEndDate"/> <xsl:text>,&#x20;</xsl:text>
 	 		<xsl:value-of select="../../../plot/authorPlotCode"/> <xsl:text>,&#x20;</xsl:text>
 
 	 		<xsl:value-of select="*"/> 
