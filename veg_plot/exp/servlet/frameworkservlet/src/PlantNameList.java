@@ -1,12 +1,15 @@
 package servlet.plugin;
 
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.sql.*;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
+import java.math.*;
+import java.net.URL;
+import java.util.Date;
+
+import servlet.framework.ServletPluginInterface;
 
 public class PlantNameList implements ServletPluginInterface
 {
