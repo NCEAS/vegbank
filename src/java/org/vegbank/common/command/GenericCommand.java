@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-11 18:45:06 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-08-24 01:41:55 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,6 +62,7 @@ select (subquery stuff goes here as stuff) as somename from...
 */
 
 	private static Log log = LogFactory.getLog(GenericCommand.class);
+	private static final String DEFAULT_PER_PAGE = "10";
 
 
 	//// THIS WORKS 
@@ -79,7 +80,7 @@ select (subquery stuff goes here as stuff) as somename from...
 	/* (non-Javadoc)
 	 * @see org.vegbank.common.command.VegbankCommand#execute(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-	public static List execute(HttpServletRequest request, HttpServletResponse response)
+	public List execute(HttpServletRequest request, HttpServletResponse response)
 		throws Exception
 	{
 		// Run the query and stick the generated object into the request
@@ -96,9 +97,13 @@ select (subquery stuff goes here as stuff) as somename from...
 	 * from a JSP page directly rather than going through the 
 	 * GenericDispatcherAction.
 	 */
-	public static List execute(HttpServletRequest request, String selectClauseKey, 
-				String whereClauseKey, String beanName, String whereParam)
-				throws Exception {
+	public List execute(
+			HttpServletRequest request, 
+			String selectClauseKey, 
+			String whereClauseKey, 
+			String beanName, 
+			String whereParam) 
+			throws Exception {
 
 		log.debug("execute(req, select, where, bean, (String)where): " + whereParam);
 		String[] arr;
@@ -134,7 +139,7 @@ select (subquery stuff goes here as stuff) as somename from...
 	 * GenericDispatcherAction.
 	 */
 	/*
-	public static List execute(HttpServletRequest request, String selectClauseKey, 
+	public List execute(HttpServletRequest request, String selectClauseKey, 
 				String whereClauseKey, String beanName, Object whereParam)
 				throws Exception {
 
@@ -150,34 +155,34 @@ select (subquery stuff goes here as stuff) as somename from...
 	*/
 
 
-	/*
-	public static List execute(String selectClauseKey, String whereClauseKey, 
-				String beanName, Object whereParam) throws Exception {
+	public List execute(String selectClauseKey, String whereClauseKey, 
+				String beanName, String whereParam) throws Exception {
 
 		log.debug("execute(select, where, bean, (Object)where)");
-		HttpServletRequest req = null;
-		return execute(req, selectClauseKey, whereClauseKey, beanName, whereParam);
+		return execute(null, selectClauseKey, whereClauseKey, beanName, whereParam);
 	}
-	*/
 
 
-	/*
-	public static List execute(String selectClauseKey, String whereClauseKey, 
+	public List execute(String selectClauseKey, String whereClauseKey, 
 				String beanName, String[] whereParams ) throws Exception
 	{
 		log.debug("execute(select, where, bean, (String[])where)");
 		return execute(null, selectClauseKey, whereClauseKey, beanName, whereParams);
 	}
-	*/
+
 
 	/**
 	 * Another way to execute a command.  It's easier to call this
 	 * from a JSP page directly rather than going through the 
 	 * GenericDispatcherAction.
 	 */
-	public static List execute(HttpServletRequest request, String selectClauseKey, 
-				String whereClauseKey, String beanName, String[] whereParams)
-				throws Exception {
+	public List execute(
+			HttpServletRequest request,
+			String selectClauseKey, 
+			String whereClauseKey,
+			String beanName,
+			String[] whereParams)
+			throws Exception {
 
 		log.debug("execute(req, select, where, bean, (String[])where)");
 
@@ -214,7 +219,7 @@ select (subquery stuff goes here as stuff) as somename from...
 	 * @param request
 	 * @return
 	 */
-	private static String getSQLStatement(String selectClauseKey, String whereClauseKey, String[] whereParams)
+	private String getSQLStatement(String selectClauseKey, String whereClauseKey, String[] whereParams)
 {
 		ResourceBundle SQLResources =  ResourceBundle.getBundle("org.vegbank.common.SQLStore");
 		String selectClause = "";
@@ -253,8 +258,23 @@ select (subquery stuff goes here as stuff) as somename from...
 				SQLStatement.append(" WHERE " +  format.format(whereParams));
 			}
 		}
+
+		// set up the pagination
+		String pn = getPageNumber();
+		String pp = getPerPage();
+		if (!Utility.isStringNullOrEmpty(pp)) {
+
+			String offset = String.valueOf(
+					Integer.parseInt(pn) * Integer.parseInt(pp));
+
+			SQLStatement.append(" LIMIT ")
+				.append(pp)
+				.append(" OFFSET ")
+				.append(offset);
+		}
+
 		
-		//log.debug(">>>>>>>>>>" + SQLStatement);
+		log.debug(">>>>>>>>>>" + SQLStatement);
 		return SQLStatement.toString();
 	}
 	
@@ -269,13 +289,13 @@ select (subquery stuff goes here as stuff) as somename from...
 	 * @return
 	 * @throws Exception
 	 */
-	private static List getBeanList( String className, ResultSet rs, Vector propNames) 
+	private List getBeanList( String className, ResultSet rs, Vector propNames) 
 		throws Exception
 	{
 		List col = new Vector();
 		while ( rs.next() )
 		{
-			if (className.equalsIgnoreCase("map")) {
+			if (Utility.isStringNullOrEmpty(className) || className.equalsIgnoreCase("map")) {
 				Map map = new HashMap();
 				for ( int i=0; i<propNames.size(); i++)
 				{
@@ -315,7 +335,7 @@ select (subquery stuff goes here as stuff) as somename from...
 	 * @param selectClause
 	 * @return
 	 */
-	private static Vector getPropertyNames(String selectClause)
+	private Vector getPropertyNames(String selectClause)
 	{
 		Vector results = new Vector();
 		
@@ -391,6 +411,43 @@ select (subquery stuff goes here as stuff) as somename from...
 		}	
 		return results;
 	}
+
+    /**
+     * 
+     */
+	protected String pageNumber;
+
+    public String getPageNumber() {
+        return (this.pageNumber);
+    }
+
+    public void setPageNumber(String s) {
+		if (!Utility.isStringNullOrEmpty(s) || Integer.parseInt(s) < 0) {
+			s = "0";
+		}
+
+		log.debug("Setting pageNumber = " + s);
+        this.pageNumber = s;
+    }
+
+    /**
+     * 
+     */
+	protected String perPage;
+
+    public String getPerPage() {
+        return (this.perPage);
+    }
+
+    public void setPerPage(String s) {
+		if (Utility.isStringNullOrEmpty(s)) {
+			s = null;
+		}
+
+		log.debug("Setting perPage = " + s);
+        this.perPage = s;
+    }
+
 	
 	/**
 	 * Just for testing.
