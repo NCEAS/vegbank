@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-15 03:29:08 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-10-14 09:44:06 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.Utility;
  * Abstract base class tag.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.3 $ $Date: 2004-09-15 03:29:08 $
+ * @version $Revision: 1.4 $ $Date: 2004-10-14 09:44:06 $
  */
 
 public abstract class VegbankTag extends TagSupport {
@@ -99,6 +99,58 @@ public abstract class VegbankTag extends TagSupport {
 		}
 
 		log.debug("findAttribute: " + attribName + " = " + attribValue);
+		return attribValue;
+    }
+
+
+	/**
+	 *
+	 */
+    protected String[] findAttributeArray(String attribName, String[] attribValue) {
+
+		if (Utility.isArrayNullOrEmpty(attribValue)) {
+			return findAttributeArray(attribName);
+
+		} else {
+			// search for an attribute with the name of the value
+			String[] tmp = findAttributeArray(attribValue[0]);
+			if (Utility.isArrayNullOrEmpty(tmp)) {
+        		return attribValue;
+			} else {
+				// just return the original attribute's value
+				return tmp;
+			}
+		}
+    }
+
+
+	/**
+	 *
+	 */
+    protected String[] findAttributeArray(String attribName) {
+        String[] attribValue;
+		try {
+			// look in the request
+			log.debug("Finding " + attribName + " with Request.getParameter()");
+        	attribValue = pageContext.getRequest().getParameterValues(attribName);
+			if (Utility.isArrayNullOrEmpty(attribValue)) {
+				// find in other scopes
+				log.debug("Finding " + attribName + " with RequestUtils.lookup()");
+				attribValue = (String[])RequestUtils.lookup(pageContext, attribName, null);
+			}
+
+			if (attribValue == null) {
+				attribValue = new String[1];
+				attribValue[0] = "";
+			} 
+
+
+		} catch (JspException jspex) {
+			attribValue = new String[1];
+			attribValue[0] = "";
+		}
+
+		log.debug("findAttributeArray: " + attribName + " ARRAY SIZE = " + attribValue.length);
 		return attribValue;
     }
 

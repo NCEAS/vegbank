@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-12 00:58:33 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2004-10-14 09:44:06 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -211,22 +211,28 @@ public class GenericDispatcherAction extends Action
 					wparam = buildWparamArray(params);
 
 					if (!Utility.isStringNullOrEmpty(params)) {
-						//
-						// add the comma separated list as one wparam
-						//
-						String wparamList = "";
+						if (params.indexOf(";") == -1) {
+							//
+							// add the comma separated list as one wparam
+							//
+							String wparamList = "";
 
-						boolean first = true;
-						for (int i=0; i<wparam.length; i++) {
-							if (first) {
-								first = false;
-							} else {
-								wparamList += ",";
+							boolean first = true;
+							for (int i=0; i<wparam.length; i++) {
+								if (first) {
+									first = false;
+								} else {
+									wparamList += ",";
+								}
+
+								wparamList += wparam[i];
 							}
+							urlParams.put("wparam", wparamList);
 
-							wparamList += wparam[i];
+						} else {
+							// add the whole array
+							urlParams.put("wparam", wparam);
 						}
-						urlParams.put("wparam", wparamList);
 
 
 						/*
@@ -358,12 +364,12 @@ public class GenericDispatcherAction extends Action
 	/**
 	 *
 	 */
-	private String buildWhereKey(String entity, String csvParams) {
-		if (Utility.isStringNullOrEmpty(csvParams)) {
+	private String buildWhereKey(String entity, String delimitedParams) {
+		if (Utility.isStringNullOrEmpty(delimitedParams)) {
 			return entity;
 		}
 
-		if (Utility.isNumericList(csvParams)) {
+		if (Utility.isNumericList(delimitedParams)) {
 			return "where_" + entity + "_pk";
 		} else {
 			return "where_accessioncode";
@@ -375,12 +381,12 @@ public class GenericDispatcherAction extends Action
 	/**
 	 * @return a List of values
 	 */
-	private String[] buildWparamArray(String csvParams) {
-		if (Utility.isStringNullOrEmpty(csvParams)) {
+	private String[] buildWparamArray(String delimitedParams) {
+		if (Utility.isStringNullOrEmpty(delimitedParams)) {
 			return null;
 		}
 
-		StringTokenizer st = new StringTokenizer(csvParams, ",|");
+		StringTokenizer st = new StringTokenizer(delimitedParams, ",;");
 		String[] arr = new String[st.countTokens()];
 		String param;
 		boolean first = true;

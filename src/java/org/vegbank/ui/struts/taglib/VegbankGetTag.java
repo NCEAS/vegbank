@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-12 17:50:40 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-10-14 09:44:06 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +26,7 @@ package org.vegbank.ui.struts.taglib;
 
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.text.SimpleDateFormat;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -56,7 +55,7 @@ import org.vegbank.common.utility.Utility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.10 $ $Date: 2004-10-12 17:50:40 $
+ * @version $Revision: 1.11 $ $Date: 2004-10-14 09:44:06 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -93,7 +92,6 @@ public class VegbankGetTag extends VegbankTag {
 			gc.setPageNumber(getPageNumber());
 			gc.setNumItems(findAttribute("numItems"));
 			gc.setPerPage(getPerPage());
-			gc.setWhereSubquery(getWhereSubquery());
 
 			try { gc.setPager(Boolean.valueOf(getPager()).booleanValue()); 
 			} catch (Exception ex) { gc.setPager(false); }
@@ -108,7 +106,7 @@ public class VegbankGetTag extends VegbankTag {
 					getSelect(), 
 					getWhere(), 
 					getBeanName(),
-					getWparam());
+					getWparamArray());
 
 		} catch (Exception ex) { 
 			log.error("Problem running GenericCommand", ex);
@@ -257,14 +255,65 @@ public class VegbankGetTag extends VegbankTag {
     public String getWparam() {
 		String s = findAttribute("wparam", this.wparam);
 		if (s != null) {
-			return s.toLowerCase();
-		} else {
-			return s;
+			s = s.toLowerCase();
 		}
+
+		// prepare the wparam string for regex ~* match
+		if (Boolean.valueOf(getWparamSearch()).booleanValue()) {
+			s = addPosixRegex(s);
+		}
+
+		return s;
     }
+
+    public String[] getWparamArray() {
+		String[] arr;
+		//String tmp = getWparam();
+		String tmp = this.wparam;
+		if (!Utility.isStringNullOrEmpty(tmp)) {
+			arr = new String[1];
+			arr[0] = getWparam();
+			log.debug("RETURNING 1 WPARAM");
+			return arr;
+		}
+
+		log.debug("MULTIPLE WPARAMS");
+		boolean wparamSearch = Boolean.valueOf(getWparamSearch()).booleanValue();
+		int lastPos;
+		arr = findAttributeArray("wparam", null);
+		if (arr != null) {
+			/*
+			if (arr.length == 1) {
+				String[] tmpArr = { arr[0] };
+				return tmpArr;
+			}
+			*/
+
+			for (int i=0; i<arr.length; i++) {
+				arr[i] = arr[i].toLowerCase();
+				lastPos = arr[i].length()-1;
+				if (arr[i].charAt(0) == '\'' && arr[i].charAt(lastPos) == '\'') {
+					log.debug("Removing 'single' quotes");
+					arr[i] = arr[i].substring(1, lastPos);
+					
+				}
+				
+				// prepare the wparam string for regex ~* match
+				if (wparamSearch) {
+					arr[i] = addPosixRegex(arr[i]);
+				}
+
+			}
+		}
+
+		return arr;
+    }
+
 
     public void setWparam(String s) {
 		this.wparam = s;
+		//////////this.wparam = new String[1];
+		//////////this.wparam[0] = s;
 	}
 
     /**
@@ -322,15 +371,33 @@ public class VegbankGetTag extends VegbankTag {
     /**
      * 
      */
-	protected String whereSubquery;
+	protected String wparamSearch;
 
-    public String getWhereSubquery() {
-        return findAttribute("whereSubquery", this.whereSubquery);
+    public String getWparamSearch() {
+        return findAttribute("wparamSearch", this.wparamSearch);
     }
 
-    public void setWhereSubquery(String s) {
-        this.whereSubquery = s;
+    public void setWparamSearch(String s) {
+        this.wparamSearch = s;
     }
 
 
+	/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+	private String addPosixRegex(String s) {
+		StringBuffer sb = new StringBuffer(128);
+		StringTokenizer st = new StringTokenizer(s, " ");
+		boolean first = true;
+
+		while (st.hasMoreTokens()) {
+			if (first) { 
+				first = false;
+			} else { 
+				sb.append("|"); 
+			}
+
+			sb.append(st.nextToken());
+		}
+		return sb.toString();
+	}
 }
