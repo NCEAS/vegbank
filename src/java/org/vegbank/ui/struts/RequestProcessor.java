@@ -19,8 +19,8 @@ import org.vegbank.ui.struts.Authentication;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-01 22:34:26 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-11-16 01:19:58 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,29 +88,30 @@ public class RequestProcessor extends org.apache.struts.action.RequestProcessor
 		
 		// acquire the specified authClass if there is one defined and do the checks
 		String authClassName = vbMapping.getAuthClass();
-		if (null != authClassName)
-		{
+		if (null != authClassName) {
 			Authentication authClass = processAuthClassCreate(response, authClassName);
-			if (null == authClass)
-			{
+			if (null == authClass) {
 					return true;
 			}
-			if (!authClass.checkAuth(request))
-			{
-				ActionForward forward = mapping.findForward(AUTHENTICATION_VIOLATION_FORWARD);
-				setPostLoginFwd(request);
-				super.processForwardConfig(request, response, forward);
-				return false;
+
+			try {
+				if (!authClass.checkAuth(request)) {
+					ActionForward forward = mapping.findForward(AUTHENTICATION_VIOLATION_FORWARD);
+					setPostLoginFwd(request);
+					super.processForwardConfig(request, response, forward);
+					return false;
+				}
+					
+				String reqRoles = vbMapping.getReqRoles();
+				if (!authClass.checkReqRoles(request, reqRoles)) {
+					ActionForward forward = mapping.findForward(CERTIFICATION_VIOLATION_FORWARD);
+					setPostLoginFwd(request);
+					super.processForwardConfig(request, response, forward);
+					return false;
+				}
+			} catch (Exception ex) { 
+				throw new ServletException("User probably needs to be logged in.");
 			}
-				
-			String reqRoles = vbMapping.getReqRoles();
-			if (!authClass.checkReqRoles(request, reqRoles))
-			{
-				ActionForward forward = mapping.findForward(CERTIFICATION_VIOLATION_FORWARD);
-				setPostLoginFwd(request);
-				super.processForwardConfig(request, response, forward);
-				return false;
-			}		
 		}
 
 		//request.getSession().removeAttribute("postLoginFwd");
@@ -121,12 +122,14 @@ public class RequestProcessor extends org.apache.struts.action.RequestProcessor
 	/**
 	 * Sets the postLoginFwd session attribute.
 	 */
-	private void setPostLoginFwd(HttpServletRequest request) {
+	private void setPostLoginFwd(HttpServletRequest request) throws Exception {
 		if (request.getSession() == null) {
 			log.debug("sPLF: session is null!");
 		}
+
 		request.getSession().setAttribute("postLoginFwd", 
 				request.getRequestURL().toString() + "?" + request.getQueryString());
+
 	}
 
 
