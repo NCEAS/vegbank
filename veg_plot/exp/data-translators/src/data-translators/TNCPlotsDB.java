@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-31 22:32:27 $'
- * 	'$Revision: 1.5 $'
+ *  '$Date: 2002-03-14 18:03:43 $'
+ * 	'$Revision: 1.6 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -138,6 +138,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				{
 					v.addElement( rs.getString(1) );
 				}
+				rs.close();
+				stmt.close();
 			}
 			catch (Exception x) 
 			{
@@ -237,6 +239,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 					v.addElement(party);
 				}
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch( Exception e)
 		{
@@ -448,6 +452,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				{
 					xCoord= rs.getString(1);
 				}
+				rs.close();
+			stmt.close();
 			}
 			catch (Exception x) 
 			{
@@ -472,6 +478,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				{
 					yCoord= rs.getString(1);
 				}
+				rs.close();
+				stmt.close();
 			}
 			catch (Exception x) 
 			{
@@ -508,6 +516,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				{
 					this.utmZone = rs.getString(1);
 				}
+				rs.close();
+			stmt.close();
 			}
 			catch (Exception x) 
 			{
@@ -532,6 +542,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				{
 					this.plotShape = rs.getString(1);
 				}
+				rs.close();
+			stmt.close();
 			}
 			catch (Exception x) 
 			{
@@ -560,6 +572,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 					xDim = rs.getString(1);
 					yDim = rs.getString(2);
 				}
+				rs.close();
+			stmt.close();
 			}
 			catch (Exception x) 
 			{
@@ -599,6 +613,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 					this.state="CA";
 				}
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch( Exception e)
 		{
@@ -624,6 +640,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			{
 				this.hydrologicRegime = rs.getString(1);
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch( Exception e)
 		{
@@ -650,6 +668,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			{
 				this.topoPosition = rs.getString(1);
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch( Exception e)
 		{
@@ -687,6 +707,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				else
 					this.slopeAspect ="-1";
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch( Exception e)
 		{
@@ -718,6 +740,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				else if (s.startsWith("Steep"))
 					this.slopeGradient = "20";
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch( Exception e)
 		{
@@ -743,6 +767,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			{
 				this.surfGeo = rs.getString(1);
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch( Exception e)
 		{
@@ -792,6 +818,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			{
 				this.elevation = rs.getString(1);
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch( Exception e)
 		{
@@ -928,6 +956,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				}
 				//create the obscode by combining the plot with the date
 				this.authorObsCode = plotCode+date;
+			rs.close();
+			stmt.close();
 			}
 			catch (SQLException ex) 
 			{
@@ -1000,6 +1030,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				//unique scientific names
 				uniquePlantNameNumber = cnt;
 				System.out.println("TNCPlotsDB > " + uniquePlantNameNumber + " unique plant names for plot: " + plotName);
+			rs.close();
+			stmt.close();
 			}
 			catch (SQLException ex) 
 			{
@@ -1063,6 +1095,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 						//System.out.println(rs.getString(2) );
 						//scientificNames.addElement(s);
 					}
+					rs.close();
+					stmt.close();
 				}
 				catch (SQLException ex) 
 				{
@@ -1115,6 +1149,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				//System.out.println(rs.getString(1) );
 				v.addElement(s);
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch (SQLException ex) 
 		{
@@ -1151,20 +1187,24 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 {
 		 Vector v = new Vector();
 		 Statement stmt = null;
+		 ResultSet rss = null;
 		try 
 		{
 			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
 			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select "
+			rss = stmt.executeQuery("select "
 			+" ([Stratum]) "
 			+" from ([Plots-Species]) where ([Plot Code]) like '"+plotName+"' and ([Scientific Name]) like '"+plantName+"'");
 			//there should only be one
-			while (rs.next()) 
+			while (rss.next()) 
 			{
-				String curStrata = rs.getString(1);
+				String curStrata = rss.getString(1);
 				//System.out.println( curStrata );
 				v.addElement( curStrata );
 			}
+			rss.close();
+			stmt.close();
+			
 		}
 		catch( Exception e)
 		{
@@ -1196,13 +1236,15 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			while (rs.next()) 
 			{
 				s = rs.getString(1);
-				v.addElement( s);
+				v.addElement(s);
 			}
 			//make sure that there are not too many values in the vector
 			if ( v.size() > 1)
 			{
-				System.out.println( " warning - more than one cover value found for a taxa strata pair");
+				System.out.println("TNCPlotsDB > warning - more than one cover value found for a taxa strata pair");
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch( Exception e)
 		{
@@ -1221,87 +1263,90 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		*/
 		private void getStrataInfo(String plotName)
 		{
-		Statement stmt = null;
-		try 
-		{
-			System.out.println( " plotName " + plotName);
-			// Create a Statement so we can submit SQL statements to the driver
-			stmt = con.createStatement();
-			//create the result set
-			ResultSet rs = stmt.executeQuery("select "
-			+" ([T1 Hgt]), "
-			+" ([T1 Cover]), "
-			+" ([T2 Hgt]), "
-			+" ([T1 Cover]), "
-			+" ([T2 Hgt]), "
-			+" ([T3 Cover]), "
-			+" ([T3 Hgt]), "
-			+" ([S1 Cover]), "
-			+" ([S1 Hgt]) "
-			+" from plots where ([Plot Code]) like '"+plotName+"'");
-			
-			//there should only be one
-			while (rs.next()) 
-			{
-				t1Height = rs.getString(1);
-				t1Cover = rs.getString(2);
-				t2Height = rs.getString(3);
-				t2Cover= rs.getString(4);
-				t3Height= rs.getString(5);
-				t3Cover = rs.getString(6);
-				s1Height = rs.getString(7);
-				s1Cover = rs.getString(8);
-			}
-			
-			//update the publicly accessible variables
-			strataNames.addElement("t1");
-			strataMinHeight.addElement(t1Height);
-			strataMaxHeight.addElement(t1Height);
-			strataCover.addElement(t1Cover);
-			strataNames.addElement("t2");
-			strataMinHeight.addElement(t2Height);
-			strataMaxHeight.addElement(t2Height);
-			strataCover.addElement(t2Cover);
-			strataNames.addElement("t3");
-			strataMinHeight.addElement(t3Height);
-			strataMaxHeight.addElement(t3Height);
-			strataCover.addElement(t3Cover);
-			strataNames.addElement("s1");
-			strataMinHeight.addElement(s1Height);
-			strataMaxHeight.addElement(s1Height);
-			strataCover.addElement(s1Cover);
-			
-			//make sure that the strata codes do not have null values
-			//create the obscode by combining the plot with the date
-			this.authorObsCode = plotCode+date.replace(' ','_');
-		}
-		catch (SQLException ex) 
-		{
-			// Error, a SQLException was generated. Display the error information
-			System.out.println (" SQLException caught ");
+			Statement stmt = null;
 			try 
-			{  
-				System.out.println("Warning =   " + stmt.getWarnings() ); 
-			}
-			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println( " plotName " + plotName);
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([T1 Hgt]), "
+				+" ([T1 Cover]), "
+				+" ([T2 Hgt]), "
+				+" ([T1 Cover]), "
+				+" ([T2 Hgt]), "
+				+" ([T3 Cover]), "
+				+" ([T3 Hgt]), "
+				+" ([S1 Cover]), "
+				+" ([S1 Hgt]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+			
+				//there should only be one
+				while (rs.next()) 
+				{
+					t1Height = rs.getString(1);
+					t1Cover = rs.getString(2);
+					t2Height = rs.getString(3);
+					t2Cover= rs.getString(4);
+					t3Height= rs.getString(5);
+					t3Cover = rs.getString(6);
+					s1Height = rs.getString(7);
+					s1Cover = rs.getString(8);
+				}
+			
+				//update the publicly accessible variables
+				strataNames.addElement("t1");
+				strataMinHeight.addElement(t1Height);
+				strataMaxHeight.addElement(t1Height);
+				strataCover.addElement(t1Cover);
+				strataNames.addElement("t2");
+				strataMinHeight.addElement(t2Height);
+				strataMaxHeight.addElement(t2Height);
+				strataCover.addElement(t2Cover);
+				strataNames.addElement("t3");
+				strataMinHeight.addElement(t3Height);
+				strataMaxHeight.addElement(t3Height);
+				strataCover.addElement(t3Cover);
+				strataNames.addElement("s1");
+				strataMinHeight.addElement(s1Height);
+				strataMaxHeight.addElement(s1Height);
+				strataCover.addElement(s1Cover);
+			
+				//make sure that the strata codes do not have null values
+				//create the obscode by combining the plot with the date
+				this.authorObsCode = plotCode+date.replace(' ','_');
+				stmt.close();
+				rs.close();
+			
 			}
-			// get all sql error messages in a loop
-			while (ex != null)
+			catch (SQLException ex) 
 			{
-				System.out.println ("ErrorCode: " + ex.getErrorCode () + "<BR>");
-				System.out.println ("SQLState:  " + ex.getSQLState () + "<BR>");
-				System.out.println ("Message:   " + ex.getMessage () + "<BR>");
-				System.out.println ("&nbsp;<BR>");
-				ex.printStackTrace();
-				ex = ex.getNextException();
+				// Error, a SQLException was generated. Display the error information
+				System.out.println (" SQLException caught ");
+				try 
+				{  
+					System.out.println("Warning =   " + stmt.getWarnings() ); 
+				}
+				catch (Exception x) 
+				{
+					System.out.println("Exception: " + x.getMessage() );
+				}
+				// get all sql error messages in a loop
+				while (ex != null)
+				{
+					System.out.println ("ErrorCode: " + ex.getErrorCode () + "<BR>");
+					System.out.println ("SQLState:  " + ex.getSQLState () + "<BR>");
+					System.out.println ("Message:   " + ex.getMessage () + "<BR>");
+					System.out.println ("&nbsp;<BR>");
+					ex.printStackTrace();
+					ex = ex.getNextException();
+				}
 			}
-		}
-		catch (java.lang.Exception ex) 
-		{   // All other types of exceptions
-			System.out.println("Exception: " + ex + "<BR>");
-		}	
+			catch (java.lang.Exception ex) 
+			{   // All other types of exceptions
+				System.out.println("Exception: " + ex + "<BR>");
+			}	
 		}
 		
 		/**
