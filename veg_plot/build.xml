@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-03-20 20:50:12 $'
-  *     '$Revision: 1.20 $'
+  *     '$Date: 2003-05-07 02:38:25 $'
+  *     '$Revision: 1.21 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -40,7 +40,7 @@
     <property name="test.integration.dir" location="${test.dir}/Integration"/>
     <property name="ant.style.dir" location="${env.ANT_HOME}/etc" /> 
     <property name="web.docroot" location="${env.TOMCAT_HOME}/webapps" /> 
-    <property name="web.context" location="${web.docroot}/framework" /> 
+    <property name="web.context" location="${web.docroot}/vegbank" /> 
     <property name="web.servlet.lib.dir"
       location="${web.context}/WEB-INF/lib" /> 
     <property name="rmiserver.lib.dir" location="${rmiserver.home.dir}/lib" /> 
@@ -79,13 +79,13 @@
     <filter token="plantRequestServletHost" value="${plantRequestServletHost}" />
     <filter token="geoCoordRequestServletHost" value="${geoCoordRequestServletHost}" />
     <filter token="databaseType" value="${databaseType}" />
-    <filter token="user" value="${databaseUser}" />
-    <filter token="password" value="${databaseUserPassword}" />
-    <filter token="port" value="${databasePort}" />
+    <filter token="databaseUser" value="${databaseUser}" />
+    <filter token="databaseUserPassword" value="${databaseUserPassword}" />
+    <filter token="databasePort" value="${databasePort}" />
     <filter token="hostname" value="${hostname}"/>
-    <filter token="driverType" value="${databaseDriverType}" />
-    <filter token="driverClass" value="${databaseDriverClass}" />
-    <filter token="connectString" value="${databaseConnectString}"/>
+    <filter token="databaseDriverType" value="${databaseDriverType}" />
+    <filter token="databaseDriverClass" value="${databaseDriverClass}" />
+    <filter token="databaseConnectString" value="${databaseConnectString}"/>
     <filter token="databaseName" value="${databaseName}" />
     <filter token="insert.minConnections" value="${insert.minConnections}" />
     <filter token="insert.maxConnections" value="${insert.maxConnections}" />
@@ -98,8 +98,8 @@
     <!-- Servlet specific -->
     <filter token="mailHost" value="nceas.ucsb.edu"/>
     <filter token="systemEmail" value="dba@vegbank.org"/>
-    <filter token="genericForm" value="${web.docroot}/forms/generic_form.html"/>
-    <filter token="genericTemplate" value="${web.docroot}/forms/tmp.html"/>
+    <filter token="genericForm" value="${web.docroot}/vegbank/forms/generic_form.html"/>
+    <filter token="genericTemplate" value="${web.docroot}/vegbank/forms/tmp.html"/>
     <filter token="rmiserver"  value="${rmiserver}"/>
     <filter token="uploadDir" value="${web.servlet.lib.dir}"/>
     <filter token="originalDataStore" value="${vegbank.home.dir}/originalDataStore"/>
@@ -153,9 +153,6 @@
 
 
     <!-- Copy property files -->
-    <copy file="./exp/database_access/lib/database.properties" 
-          todir="${build.classes.dir}"
-          filtering="true"/>
     <copy todir="${build.classes.dir}" filtering="true">
       <fileset dir="${lib.dir}">
         <include name="**/*properties"/>
@@ -266,6 +263,16 @@
         <include name="org/vegbank/servlet/stylesheet/**/*java"/>
       </fileset>
     </jar>
+    <!-- VegbankWeb.jar -->
+    <jar  destfile ="${build.lib.dir}/vegbankWeb.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/**/*class"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/**/*java"/>
+      </fileset>
+    </jar>
+
     <!-- vegbankquery.jar -->
     <jar  destfile ="${build.lib.dir}/vegbankquery.jar">
       <fileset dir="${build.classes.dir}" casesensitive="yes">
@@ -306,7 +313,7 @@
 	</target>
 
   <target name="jar-subprojects" depends="prepare" description="==> jar up subprojects">
-		<ant dir="exp/services" target="jar" inheritAll="false"/>
+		<!--<ant dir="exp/services" target="jar" inheritAll="false"/>-->
   </target>
   
   <target name="jar-all" depends="jar, jar-subprojects" description="==> Generate all jar files"/>
@@ -322,9 +329,6 @@
 	
     <echo message="Distr all of jars in ${ant.project.name}"/>
     
-		<ant dir="exp/data-translators" target="dist" inheritAll="false">
-      <property name="hostname" value="${hostname}"/>
-    </ant>
 		<ant dir="exp/vegbank_web" target="dist" inheritAll="false">
       <property name="hostname" value="${hostname}"/>
     </ant>
@@ -354,6 +358,7 @@
    
     <!-- Copy misc. files into container -->
 		<copy file="src/utilities/coord_transform.sh" todir="${web.servlet.lib.dir}"/>
+    <chmod dir="${web.servlet.lib.dir}" perm="ugo+x" includes="**/*.sh"/>
 		<copy file="../veg_community/sql/update_community_summary.sql" todir="${web.servlet.lib.dir}"/>
     
     <!-- Copy Third Party jars -->
@@ -495,7 +500,7 @@
       </fileset>
     </chmod>
 
-    <!-- Test Loading a vbaccess plot
+    <!-- Test Loading a vbaccess plot -->
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
       <env key="CLASSPATH" value="${classpath.compilation}"/>
       <arg value="../testdata/vbaccess-example.mdb"/>
@@ -506,8 +511,8 @@
       <arg value="${rmiserver}"/>
       <arg value="../testdata/vbaccess-output.xml"/>
     </exec>
-     -->
-    <!-- Test Loading a second vbaccess plot 
+    
+    <!-- Test Loading a second vbaccess plot -->    
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
       <env key="CLASSPATH" value="${classpath.compilation}"/>
       <arg value="../testdata/vbaccess-example2.mdb"/>
@@ -518,7 +523,7 @@
       <arg value="${rmiserver}"/>
       <arg value="../testdata/vbaccess-example2.xml"/>
     </exec>
--->    
+
     <!-- Test Loading a tnc plot -->
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
       <env key="CLASSPATH" value="${classpath.compilation}"/>
@@ -530,8 +535,8 @@
       <arg value="${rmiserver}"/>
       <arg value="../testdata/tnc-output.xml"/>
     </exec>
-
-    <!-- Test Loading a native plot -->
+    
+    <!-- Test Loading a native plot --> 
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
       <env key="CLASSPATH" value="${classpath.compilation}"/>
       <arg value="../testdata/nativeDataSource.xml"/>
@@ -542,7 +547,19 @@
       <arg value="${rmiserver}"/>
       <arg value="../testdata/nativeDataSource.xml"/>
     </exec>
-  
+    
+    <!-- Test Loading a native plot    --> 
+    <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
+      <env key="CLASSPATH" value="${classpath.compilation}"/>
+      <arg value="../testdata/nativeDataSource2.xml"/>
+      <arg value="Fern-1"/>
+      <arg value="nativeout.xml"/>
+      <arg value="NativeXmlPlugin"/>
+      <arg value="NativePlotInsert2"/>
+      <arg value="${rmiserver}"/>
+      <arg value="../testdata/nativeDataSource.xml"/>
+    </exec>
+ 
   </target>
 
   <target name="run-tests" depends="test, test-integration" description="==> Run all availible tests"/>
