@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <!-- 
-	*
+  *
   *  '$RCSfile: build.xml,v $'
   *    Authors: @authors@
   *    Release: @release@
   *
-  *   '$Author: harris $'
-  *     '$Date: 2002-11-26 22:34:10 $'
-  * '$Revision: 1.8 $'
+  *   '$Author: farrell $'
+  *   '$Date: 2002-12-03 23:59:04 $'
+  *   '$Revision: 1.9 $'
   *
-  *	Authors: John Harris
-  *	Copyright: 2000 Regents of the University of California and the
+  *  Authors: John Harris
+  *  Copyright: 2000 Regents of the University of California and the
   *           National Center for Ecological Analysis and Synthesis
   *  Build file for the Ant cross-platform build system for metacat
   *  See http://jakarta.apache.org for details on Ant  
@@ -36,6 +36,7 @@
 	<!--NOTICE THE SETTINGS FOR THE PRODUCTION VS THE DEVELOPMENT SERVLET LOCATIONS -->
 	<!-- PRODUCTION	 -->
 	<property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib" />
+        <property name="servlet_WEB_INF" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/" />
 	<property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat/bin" />
 
 <!-- DEVELOPMENT -->
@@ -163,8 +164,9 @@
 		includes="**.java  " 
 		destdir="${build}"
 	/>
-	
-	
+
+	<echo message="compiling other vegbank-request" />
+	<ant dir="vegbank-request" target="compile"/>	
 </target>	
 
 
@@ -206,6 +208,8 @@
 		excludes="${build}/servlet/authentication"
 	/>
 	
+	<echo message="Generating jar for vegbank-request" />
+	<ant dir="vegbank-request" target="jar"/>	
 	
 </target>
 
@@ -261,12 +265,42 @@
   	</fileset>
 	</copy>
 	
+
 	<copy todir="${servlet_location}" filtering="no" >
 		<fileset dir="${lib}" >
   	    <include name="usermanagement.jar"/>
   	</fileset>
 	</copy>
+
+	<copy todir="${servlet_location}" filtering="no" >
+		<fileset dir="${lib}" >
+  	    		<include name="utilities.jar"/>
+            		<include name="database_access.jar"/>
+            		<include name="datafile-exchange.jar"/>
+            		<include name="planttaxonomy.jar"/>
+            		<include name="rmidatasource.jar"/>
+            		<include name="vegcommunity.jar"/>
+	      		<include name="jdbc7.0-1.2.jar"/>	
+             	</fileset>
+	</copy>
+
+	<copy todir="${servlet_location}" filtering="no" >
+            <fileset dir="${lib}" >
+  	        <include name="xml-apis.jar"/>
+  	        <include name="xalan_1_2_2.jar"/>
+  	        <include name="xerces_1_4.jar"/>
+  	        <include name="ant.jar"/>
+  	    </fileset>
+	</copy>
+
+	<copy todir="${servlet_WEB_INF}" filtering="no" >
+		<fileset dir="${lib}" >
+  	    <include name="web.xml"/>
+  	</fileset>
+	</copy>
 	
+	<echo message="Distributing vegbank-request" />
+	<ant dir="vegbank-request" target="dist-web"/>	
 	
 </target>
 
