@@ -7,7 +7,7 @@
 <!--
     Validation Rules for the Vegbank application 
 
-    $Id: validation.xml,v 1.12 2004-01-16 21:55:43 anderson Exp $
+    $Id: validation.xml,v 1.13 2004-01-31 01:25:56 anderson Exp $
 -->
 
 <form-validation>
@@ -190,14 +190,6 @@
             <field property="party.surname" depends="required">
                 <arg0   key="Last name" resource="false"/>
             </field>
-            <field property="address.postalcode" depends="mask">
-                <arg0   key="Postal Code" resource="false"/>
-                <var>
-                  <var-name>mask</var-name>
-                  <var-value>^\d{5}\d*$</var-value>
-                </var>
-
-            </field>
         </form>
 
         <!-- Rules for certification form -->
@@ -208,14 +200,8 @@
             <field property="highestDegree" depends="required">
 				<arg0 key="cert.req.highestDegree"/>
 			</field>
-            <field property="degreeYear" depends="required">
-				<arg0 key="cert.req.degreeYear"/>
-			</field>
             <field property="currentOrg" depends="required">
 				<arg0 key="cert.req.currentOrg"/>
-			</field>
-            <field property="degreeInst" depends="required">
-				<arg0 key="cert.req.degreeInst"/>
 			</field>
             <field property="currentPos" depends="required">
 				<arg0 key="cert.req.currentPos"/>
@@ -229,7 +215,7 @@
 				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
-					<var-value>500</var-value>
+					<var-value>2000</var-value>
 				</var>
 			</field>
             <field property="relevantPubs" depends="maxlength">
@@ -237,31 +223,31 @@
 				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
-					<var-value>500</var-value>
+					<var-value>2000</var-value>
 				</var>
 			</field>
-            <field property="vegSamplingExp" depends="maxlength">
+            <field property="vegSamplingExp" depends="required,maxlength">
 				<arg0 key="cert.req.vegSamplingExp"/>
 				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
-					<var-value>500</var-value>
+					<var-value>2000</var-value>
 				</var>
 			</field>
-            <field property="vegAnalysisExp" depends="maxlength">
+            <field property="vegAnalysisExp" depends="required,maxlength">
 				<arg0 key="cert.req.vegAnalysisExp"/>
 				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
-					<var-value>500</var-value>
+					<var-value>2000</var-value>
 				</var>
 			</field>
-            <field property="usnvcExp" depends="maxlength">
+            <field property="usnvcExp" depends="required,maxlength">
 				<arg0 key="cert.req.usnvcExp"/>
 				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
-					<var-value>500</var-value>
+					<var-value>2000</var-value>
 				</var>
 			</field>
             <field property="vbExp" depends="maxlength">
@@ -269,15 +255,15 @@
 				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
-					<var-value>500</var-value>
+					<var-value>2000</var-value>
 				</var>
 			</field>
-            <field property="vbIntention" depends="maxlength">
+            <field property="vbIntention" depends="required,maxlength">
 				<arg0 key="cert.req.vbIntention"/>
 				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
-					<var-value>500</var-value>
+					<var-value>2000</var-value>
 				</var>
 			</field>
             <field property="toolsExp" depends="maxlength">
@@ -285,10 +271,14 @@
 				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
 				<var>
 					<var-name>maxlength</var-name>
-					<var-value>500</var-value>
+					<var-value>2000</var-value>
 				</var>
 			</field>
 
+            <field property="expRegionA" depends="required">
+				<arg0 key="cert.req.expRegionA"/>
+			</field>
+			
             <field property="esaSponsorEmailA" depends="email">
 				<arg0 key="cert.req.esaSponsorEmailA"/>
 			</field>
@@ -301,7 +291,7 @@
 				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
                 <var>
                     <var-name>maxlength</var-name>
-                    <var-value>500</var-value>
+                    <var-value>2000</var-value>
                 </var>
 			</field>
         </form>

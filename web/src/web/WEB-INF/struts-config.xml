@@ -127,6 +127,7 @@
     <forward   name="MainMenu"	path="/forms/MainMenu.jsp"/>
     <forward   name="success"	path="/forms/success.html"/>
     <forward   name="failure"	path="/forms/failure.jsp"/>
+    <forward   name="vberror"	path="/forms/vberror.jsp"/>
     <forward   name="AddReference"	path="/forms/AddReference.jsp"/>
     <forward   name="AddJournal"	path="/forms/AddJournal.jsp"/>
     <forward   name="AddCoverMethod"	path="/forms/AddCoverMethod.jsp"/>
@@ -168,7 +169,7 @@
     </action>
 
     <!-- Display the MainMenu screen --> 
-    <action path="/DisplayMainMenu" forward="MainMenu">
+    <action path="/DisplayMainMenu" forward="/forms/MainMenu.jsp">
       <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
     </action>
 

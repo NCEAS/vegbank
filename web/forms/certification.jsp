@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-01-16 20:56:44 $'
-  *  '$Revision: 1.4 $'
+  *      '$Date: 2004-01-31 01:25:56 $'
+  *  '$Revision: 1.5 $'
   *
   *
   -->
@@ -33,16 +33,21 @@
 @vegbank_header_html_normal@
 
         <h2 align="center" class="vegbank">Certification Application</h2>
+
+		<html:errors/>
+
         <p class="vegbank_normal">
 			Become a certified or professional user to start contributing data to VegBank.
-			<br/><b>Please see the <a href="@help-for-certification-href@">!!FIX ME!! explanation here</a></b>
+			<br/><b>Please see the <a href="@help-for-certification-href@">explanation here</a></b>
 			for more information.
 			<br/>
         </p> 
 	
 	<!-- main table -->
-	<table width="600" border="0" cellspacing="5" cellpadding="2">
+	<table width="700" border="0" cellspacing="5" cellpadding="2">
 <html:form method="get" action="/SaveCertification.do">
+	<html:hidden property="usrId"/>
+
     <tr> 
       <td colspan="2">
 	    <!-- user personal info table -->
@@ -55,12 +60,12 @@
 			<tr bgcolor="#EBF3F8"> 
 			  <td align="center">Your Personal Information</td> 
 			</tr>
-			<tr bgcolor="#EFEFEF">
+			<tr bgcolor="#FEFEFE">
 			  <td>
 			    <p>
 				<bean:write name="reqAttribBean" property="givenName"/> 
 				<bean:write name="reqAttribBean" property="surName"/>
-        		(<bean:write name="reqAttribBean" property="currentCertLevel"/>)
+        		(<bean:write name="reqAttribBean" property="currentCertLevelName"/>)
 				<br/>
 				<logic:notEqual name="reqAttribBean" property="emailAddress" value="null">
 					<bean:write name="reqAttribBean" property="emailAddress"/>
@@ -93,11 +98,11 @@
 		Requested certification 
 		<br/>
 	    <html:select property="requestedCert" size="1">
-          <option value="cert">Certified User</option>
-          <option value="pro">Professional User</option>
+          <option value="certified">Certified User</option>
+          <option value="professional">Professional User</option>
 	    </html:select>
 		&nbsp;&nbsp;
-		<a href="@help-for-userlevels-href@">!!FIX ME!! Which level is right for me?</a>
+		<a href="@help-for-userlevels-href@">Which level is right for me?</a>
 		</span>
 	  </td>
     </tr>
@@ -117,10 +122,10 @@
 		Highest degree
         <br/> 
 	    <html:select property="highestDegree" size="1">
-          <option value="0">None</option>
-          <option value="1">BA/BS</option>
-          <option value="2">MA/MS</option>
-          <option value="3">PhD</option>
+          <option value="None">None</option>
+          <option value="BA/BS">BA/BS</option>
+          <option value="MA/MS">MA/MS</option>
+          <option value="PhD">PhD</option>
 	    </html:select></span>
         </td>
     </tr>
@@ -169,14 +174,14 @@
 	    <span class="vegbank_small">
 		ESA Certified Ecologist?</span>
 		<br/>
-        &nbsp;&nbsp;&nbsp;&raquo;No <html:radio property="esaMember" value="no" title="I am not ESA certified"/>;
-        &nbsp;&nbsp;&nbsp;Yes <html:radio property="esaMember" title="I am ESA certified" value="yes"/>
+        &nbsp;&nbsp;&nbsp;&raquo;No <html:radio property="esaMember" value="0" title="I am not ESA certified"/>;
+        &nbsp;&nbsp;&nbsp;Yes <html:radio property="esaMember" title="I am ESA certified" value="1"/>
         </td>
     </tr>
     <tr> 
       <td colspan="2">
 	    <br/>
-        <span class="vegbank_small">Other professional certification or experience?</span>
+        <span class="vegbank_small">Other <b>PROFESSIONAL</b> certification or experience?</span>
 		<br/>
         <html:textarea property="profExp" cols="60" rows="3"/>
       </td>
@@ -185,7 +190,7 @@
       <td colspan="2">
 		<br/>
 	    <span class="vegbank_small">
-        List up to 5 of your relevant publications/theses:
+        List up to 5 of your relevant <b>PUBLICATIONS/THESES</b>:
 		</span>
 		<br/>
         <html:textarea property="relevantPubs" cols="60" rows="3"/>
@@ -196,7 +201,7 @@
         <br/>
         <font color="red">*</font> 
 	    <span class="vegbank_small">
-		Briefly describe your background and expertise in vegetation sampling:</span>
+		Briefly describe your background and expertise in vegetation <b>SAMPLING</b>:</span>
         <br/>
         <html:textarea property="vegSamplingExp" cols="60" rows="3"/>
       </td>
@@ -206,7 +211,7 @@
         <br/>
         <font color="red">*</font> 
 	    <span class="vegbank_small">
-		Briefly describe your background and expertise with vegetation analysis, description &amp; classification:</span>
+		Briefly describe your background and expertise with vegetation <b>ANALYSIS</b>, description &amp; classification:</span>
         <br/>
         <html:textarea property="vegAnalysisExp" cols="60" rows="3"/>
       </td>
@@ -216,7 +221,7 @@
         <br/>
         <font color="red">*</font> 
 	    <span class="vegbank_small">
-		Briefly describe your prior experience with the US National Vegetation Classification, if any:</span>
+		Briefly describe your prior experience with the <b>US National Vegetation Classification</b>, if any:</span>
 		<br/>
         <html:textarea property="usnvcExp" cols="60" rows="3"/>
       </td>
@@ -224,9 +229,8 @@
     <tr> 
       <td colspan="2">
         <br/>
-        <font color="red">*</font> 
 	    <span class="vegbank_small">
-		Briefly describe your prior experience with the VegBank archive, if any:</span>
+		Briefly describe your prior experience with <b>VEGBANK</b>, if any:</span>
         <br/>
         <html:textarea property="vbExp" cols="60" rows="3"/>
       </td>
@@ -236,17 +240,16 @@
         <br/>
         <font color="red">*</font> 
 	    <span class="vegbank_small">
-		What use do you anticipate making the VegBank archive?</span>
+		How do you <b>INTEND TO USE VEGBANK</b>?</span>
 		<br/>
         <html:textarea property="vbIntention" cols="60" rows="3"/>
       </td>
     </tr>
     <tr> 
       <td colspan="2">
-        <br/>
-        <font color="red">*</font> 
+        <br/> 
 	    <span class="vegbank_small">
-		Briefly describe your prior experience with vegetation plot databases and/or analytical tools:</span>
+		Briefly describe your prior experience with vegetation plot <b>DATABASES</b> and/or analytical <b>TOOLS</b>:</span>
 		<br/>
         <html:textarea property="toolsExp" cols="60" rows="3"/>
       </td>
@@ -256,7 +259,7 @@
 	    <br/> 
 	    <font color="blue" size=-1>#</font> 
 		<span class="vegbank_small">
-	    Please rate your expertise for the 3 regions you know best in terms 
+	    Please rate your expertise for the <b>3 REGIONS</b> you know best in terms 
 	    of knowledge of the vegetation, the flora, and the US-NVC (1=Weak, 5=Expert) 
 		</span>
 	    <br/>
@@ -281,22 +284,8 @@
 		<tr bgcolor="#FFFFFF"> 
 		  <td align="center"> 
 			<html:select property="expRegionA">
-			  <option>US/CAN - NE </option>
-			  <option>US - SE</option>
-			  <option>US/CAN - Midwest </option>
-			  <option>US/CAN - Great Plains</option>
-			  <option>US/CAN - Rocky Mts </option>
-			  <option>US/CAN - NW </option>
-			  <option>US/Mex - SW</option>
-			  <option>US Alaska / N Canada</option>
-			  <option>US - California</option>
-			  <option>South &amp; Middle Amer</option>
-			  <option>Pacific</option>
-			  <option>Carribean</option>
-			  <option>Europe</option>
-			  <option>Asia</option>
-			  <option>Africa</option>
-			  <option>Australia/New Zealand</option>
+			  <option value="">--select a region--</option>
+			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
 			</html:select>
 		  </td>
 		  <td bgcolor="#FFFFFF" align="center"> 
@@ -330,23 +319,8 @@
 		<tr bgcolor="#EEEEEE"> 
 		  <td align="center">
 			<html:select property="expRegionB">
-			  <option>--no other regions--</option>
-			  <option>US/CAN - NE </option>
-			  <option>US - SE</option>
-			  <option>US/CAN - Midwest </option>
-			  <option>US/CAN - Great Plains</option>
-			  <option>US/CAN - Rocky Mts </option>
-			  <option>US/CAN - NW </option>
-			  <option>US/Mex - SW</option>
-			  <option>US Alaska / N Canada</option>
-			  <option>US - California</option>
-			  <option>South &amp; Middle Amer</option>
-			  <option>Pacific</option>
-			  <option>Carribean</option>
-			  <option>Europe</option>
-			  <option>Asia</option>
-			  <option>Africa</option>
-			  <option>Australia/New Zealand</option>
+			  <option value="">--no other regions--</option>
+			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
 			</html:select>
 		  </td>
 		  <td align="center"> 
@@ -380,23 +354,8 @@
 		<tr bgcolor="#FFFFFF"> 
 		  <td align="center">
 			<html:select property="expRegionC">
-			  <option>--no other regions--</option>
-			  <option>US/CAN - NE </option>
-			  <option>US - SE</option>
-			  <option>US/CAN - Midwest </option>
-			  <option>US/CAN - Great Plains</option>
-			  <option>US/CAN - Rocky Mts </option>
-			  <option>US/CAN - NW </option>
-			  <option>US/Mex - SW</option>
-			  <option>US Alaska / N Canada</option>
-			  <option>US - California</option>
-			  <option>South &amp; Middle Amer</option>
-			  <option>Pacific</option>
-			  <option>Carribean</option>
-			  <option>Europe</option>
-			  <option>Asia</option>
-			  <option>Africa</option>
-			  <option>Australia/New Zealand</option>
+			  <option value="">--no other regions--</option>
+			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
 			</html:select>
 			</td>
 		  <td bgcolor="#FFFFFF" align="center"> 
@@ -493,11 +452,11 @@
       <td colspan="2">
 		<br/>
 	    <span class="vegbank_small">
-        Are you interested in serving as a peer reviewer for proposed changes in the US-NVC?
+        Are you interested in serving as a <b>PEER REVIEWER</b> for proposed changes in the US-NVC?
         </span>
 		<br/>
-		&nbsp;&nbsp;&nbsp;&raquo; <html:checkbox property="peerReview" value="yes" title="Be a peer reviewer"/>
-		 Check this box if so.
+		&nbsp;&nbsp;&nbsp;&raquo; <html:checkbox property="peerReview" value="1" title="Be a peer reviewer"/>
+		 Yes, I am interested in being a peer reviewer.
 		</td>
     </tr>
 
