@@ -3,20 +3,21 @@
   <xsl:output omit-xml-declaration="yes" method="xml"/>
   <xsl:param name="alphahigh">QWERTYUIOPASDFGHJKLZXCVBNM</xsl:param>
   <xsl:param name="alphalow">qwertyuiopasdfghjklzxcvbnm</xsl:param>
-  <xsl:template match="/VegBankPackage">
-    <!-- <VegBankPackage> -->
-    <!--  <doc-VegBankVersion>1.0.2</doc-VegBankVersion>
-<doc-date>2004-04-23T03:04:31</doc-date>
-<doc-author>Michael  Lee</doc-author>
-<doc-authorSoftware>VegBranch, version: 1.2b</doc-authorSoftware>
-<doc-comments>This is an example dataset for the 1.0.2. vegbank version xml.</doc-comments> -->
+  
+<xsl:template match="/VegBankPackage">
+     <VegBankPackage> 
+      <doc-VegBankVersion><xsl:value-of select="doc-VegBankVersion" /></doc-VegBankVersion>
+<doc-date><xsl:value-of select="doc-date" /></doc-date>
+<doc-author><xsl:value-of select="doc-author" /></doc-author>
+<doc-authorSoftware><xsl:value-of select="doc-authorSoftware" /></doc-authorSoftware>
+<doc-comments><xsl:value-of select="doc-comments" /></doc-comments> 
     <xsl:for-each select="entity[entity.entity_type_cd='C']">
       <xsl:call-template name="writeCommConcept"/>
     </xsl:for-each>
     <xsl:for-each select="entity[entity.entity_type_cd='P']">
       <xsl:call-template name="writePlantConcept"/>
     </xsl:for-each>
-    <!--  </VegBankPackage>-->
+      </VegBankPackage>
   </xsl:template>
   <xsl:template match="entity[entity.entity_type_cd='P']" name="writePlantConcept">
     <plantConcept>
