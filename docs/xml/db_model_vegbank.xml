@@ -5,18 +5,18 @@
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
   -->
 <!--<?xml-stylesheet type="text/xsl" href="check_attForms.xsl"?>-->
-<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp-template.xsl"?>
+<?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
 <!--
 -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
   <title>Vegetation Database Component Description: --all modules--</title>
-  <version>1.0.2</version>
-  <versionDesc>Framework DB has moved into VegBank, taxonImportance replaces stratumComposition, only one party table (2 including referenceParty), several other more minor changes.</versionDesc>
+  <version>1.0.3</version>
+  <versionDesc>1.0.3 not yet complete, added intially namedPlaceCorrelation table.</versionDesc>
   <author>M. Lee</author>
   <institution>NCEAS</institution>
   <contributor>M. Lee</contributor>
   <description>This file describes the vegbank database structure.</description>
-  <date>2003-11-18T13:03:00-07:00</date>
+  <date>2005-03-05T15:03:00-07:00</date>
   <entity>
     <entityName>commConcept</entityName>
     <entityLabel>Community Concept</entityLabel>
@@ -4408,9 +4408,9 @@ change through time.</entitySummary>
       <attUnits>%</attUnits>
       <attForms>
         <formShow name="Austere">6</formShow>
-        <formShow name="Summary">514</formShow>
-        <formShow name="Detail">515</formShow>
-        <formShow name="csvvegbranch">152</formShow>
+        <formShow name="Summary">510</formShow>
+        <formShow name="Detail">510</formShow>
+        <formShow name="csvvegbranch">150</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -5401,6 +5401,131 @@ change through time.</entitySummary>
         <formShow name="csvvegbranch">181</formShow>
       </attForms>
       <update>1.0.2</update>
+    </attribute>
+  </entity>
+  <entity>
+    <entityName>namedPlaceCorrelation</entityName>
+    <entityLabel>Named Place Correlation</entityLabel>
+    <entitySummary>Stores information about how different named places related to one another.</entitySummary>
+    <entityDescription/>
+    <module>plot</module>
+    <attribute>
+      <attName>NAMEDPLACECORRELATION_ID</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Primary Key.</attDefinition>
+      <update>1.0.3</update>
+    </attribute>
+    <attribute>
+      <attName>PARENTPLACE_ID</attName>
+      <attLabel>Parent Place</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
+      <attReferences>namedPlace.NAMEDPLACE_ID</attReferences>
+      <attFKTranslationSQL>(select placeSystem || ': ' || placeName from namedPlace where namedPlace.NAMEDPLACE_ID=place.namedplace_id)</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>Foreign key into the namedPlace table</attNotes>
+      <attDefinition>Link to a parent geographical region.</attDefinition>
+      <attForms>
+        <formShow name="Summary">897</formShow>
+        <formShow name="Detail">898</formShow>
+        <formShow name="csvvegbranch">289</formShow>
+      </attForms>
+      <update>1.0.3</update>
+    </attribute>
+    <attribute>
+      <attName>CHILDPLACE_ID</attName>
+      <attLabel>Child Place</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
+      <attReferences>namedPlace.NAMEDPLACE_ID</attReferences>
+      <attFKTranslationSQL>(select placeSystem || ': ' || placeName from namedPlace where namedPlace.NAMEDPLACE_ID=place.namedplace_id)</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>Foreign key into the namedPlace table</attNotes>
+      <attDefinition>Link to a child geographical region.</attDefinition>
+      <attForms>
+        <formShow name="Summary">898</formShow>
+        <formShow name="Detail">899</formShow>
+        <formShow name="csvvegbranch">290</formShow>
+      </attForms>
+      <update>1.0.3</update>
+    </attribute>
+    <attribute>
+      <attName>placeConvergence</attName>
+      <attLabel>Place Convergence</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>varchar (20)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>closed</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>equal</attListValue>
+          <attListValueDesc>The two places are exactly the same.</attListValueDesc>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>greater than</attListValue>
+          <attListValueDesc>The parent place fully contains the child place, and also includes additional space.</attListValueDesc>
+          <attListSortOrd>2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>less than</attListValue>
+          <attListValueDesc>The parent place is fully included in the child place, but the child place contains additional space.</attListValueDesc>
+          <attListSortOrd>3</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>not equal</attListValue>
+          <attListValueDesc>The two places are not exactly the same. This leaves the possibilities that the parent place is greater than, less than, overlapping, similar, or disjunct relative to the child place.</attListValueDesc>
+          <attListSortOrd>4</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>overlapping</attListValue>
+          <attListValueDesc>The two places contain at least some common area, and each place also contains at least some area that the other does not contain.  Neither place is fully contained in the other.</attListValueDesc>
+          <attListSortOrd>5</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>similar</attListValue>
+          <attListValueDesc>The two places contain at least some common area.</attListValueDesc>
+          <attListSortOrd>6</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>disjunct</attListValue>
+          <attListValueDesc>The two places in question contain no common area.</attListValueDesc>
+          <attListSortOrd>7</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>undetermined</attListValue>
+          <attListValueDesc>Although some correlation is likely, the correlation has not been determined.</attListValueDesc>
+          <attListSortOrd>8</attListSortOrd>
+        </attListItem>
+      </attList>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This is the descriptive attribute that is used to relate the congruence between two places, Parent [convergence value] child (generally greater than).</attDefinition>
+      <attForms>
+        <formShow name="Austere">1016</formShow>
+        <formShow name="Summary">1017</formShow>
+        <formShow name="Detail">1018</formShow>
+        <formShow name="csvvegbranch">1009</formShow>
+      </attForms>
+      <update>1.0.3</update>
     </attribute>
   </entity>
   <entity>
@@ -12095,8 +12220,6 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Short description of the project including the original purpose for conducting the project. This can be viewed as the project abstract plus supporting metadata.</attDefinition>
       <attForms>
-        <formShow name="Austere">1045</formShow>
-        <formShow name="Summary">1046</formShow>
         <formShow name="Detail">1047</formShow>
         <formShow name="csvvegbranch">336</formShow>
       </attForms>
