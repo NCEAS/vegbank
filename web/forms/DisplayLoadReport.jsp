@@ -14,8 +14,8 @@
 *     Authors: @author@
 *
 *    '$Author: farrell $'
-*      '$Date: 2003-10-16 20:58:54 $'
-*  '$Revision: 1.2 $'
+*      '$Date: 2003-10-17 20:31:40 $'
+*  '$Revision: 1.3 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -41,17 +41,7 @@
 
   <body>
   @vegbank_header_html_normal@
------
-  <bean:write name="ErrorsReport" property="hTMLReport"/>
-
-  <hr/>
-
-  <bean:write name="ErrorsReport" property="rectificationReport"/>
-
-  <hr/>
-
-  <bean:write name="ErrorsReport" property="loadReport"/>
-
+  <bean:write name="ErrorsReport" property="HTMLReport" filter="false"/>
   <!-- VEGBANK FOOTER -->
   @vegbank_footer_html_tworow@
   </body>

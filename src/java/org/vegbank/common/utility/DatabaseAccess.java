@@ -5,8 +5,8 @@
  *             			National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-10 23:37:13 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2003-10-17 20:31:40 $'
+ *	'$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Vector;
 
 
 /**
@@ -42,26 +41,6 @@ public class DatabaseAccess
 {
 
 	//Global variables for the database connection
-
-	/**
-	 * Runs select against the database
-	 *
-	 * @param inputStatement
-	 * @return ResutSet
-	 */
-	public ResultSet issueSelectt(String inputStatement) throws SQLException
-	{
-		ResultSet results = null;
-		Connection connection = this.getConnection();
-		System.out.println("DatabaseAccess > Running query: " + inputStatement);
-		
-		Statement query = connection.createStatement();
-		results = query.executeQuery(inputStatement);
-		
-		// return the connection
-		LocalDbConnectionBroker.manageLocalDbConnectionBroker("releaseConn");
-		return results;
-	} //end method
 	
 	/**
 	 * Runs select against the database
@@ -86,10 +65,6 @@ public class DatabaseAccess
 			Statement query = dbConn.createStatement();
 			results = query.executeQuery(inputStatement);
 		}
-		catch (SQLException e)
-		{
-			throw e;
-		}
 		finally
 		{
 			//Return dbconnection too pool
@@ -99,6 +74,42 @@ public class DatabaseAccess
 	} //end method
 	
 	
+	/**
+	 * Runs select against the database
+	 *
+	 * @param inputStatement
+	 * @return ResutSet
+	 */
+	public int issueUpdate(String inputStatement) throws SQLException 
+	{
+		DBConnection dbConn = null;//DBConnection
+		int serialNumber = -1;//DBConnection serial number
+		PreparedStatement pstmt = null;
+		int results = -1;
+		//	Get DBConnection
+		try
+		{
+			dbConn=DBConnectionPool.getDBConnection("This is an empty string");
+			serialNumber=dbConn.getCheckOutSerialNumber();
+			
+			System.out.println("DatabaseAccess > Running query: " + inputStatement);
+			
+			Statement query = dbConn.createStatement();
+			results = query.executeUpdate(inputStatement);
+		}
+		finally
+		{
+			//Return dbconnection too pool
+			DBConnectionPool.returnDBConnection(dbConn, serialNumber);
+		}
+		return results;
+	} //end method
+	
+	/**
+	 * 
+	 * @return
+	 * @deprecated
+	 */
 	public Connection getConnection() 
 	{
 		//define a connection

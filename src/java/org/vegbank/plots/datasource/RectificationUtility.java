@@ -5,14 +5,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.vegbank.common.utility.DBConnection;
+
 /*
  * '$RCSfile: RectificationUtility.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-10 23:48:13 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-17 20:31:40 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +35,7 @@ import java.sql.Statement;
  *
  * Utilities to assist with rectification of loaded data with data in the database
  */
-public class RectificationUtility
+public class RectificationUtility 
 {
 	
 	public static String GETCOMMCONCEPTID = "select commconcept_id from commusage where commname =";
@@ -50,7 +52,7 @@ public class RectificationUtility
 	 * @param String -- Hard Coded SQL Statement to use
 	 * @return int -- the value of the FK
 	 */
-	public static int getForiegnKey(Connection conn, String SQL, Object searchParameter)
+	public static int getForiegnKey(DBConnection conn, String SQL, Object searchParameter)
 	{
 		int result = 0;
 		ResultSet rs = null;

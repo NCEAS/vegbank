@@ -30,8 +30,8 @@ import org.vegbank.plots.datasource.VegbankXMLUpload.LoadingErrors;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-14 18:39:00 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-10-17 20:31:40 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -124,9 +124,19 @@ public class UploadPlotAction extends Action
 			errors.add(
 				ActionErrors.GLOBAL_ERROR,
 				new ActionError(
-				"errors.database",
+				"errors.action.failed",
 				"RMIServer Busy, please try upload latter")
 			);
+		}
+		catch ( Exception e )
+		{
+			errors.add(
+				ActionErrors.GLOBAL_ERROR,
+				new ActionError(
+				"errors.action.failed",
+				e.getMessage())
+			);
+			e.printStackTrace();
 		}
 
 
@@ -144,7 +154,7 @@ public class UploadPlotAction extends Action
 	/**
 	 * @param savedFileName
 	 */
-	private LoadingErrors uploadVegbankXML(String savedFileName)
+	private LoadingErrors uploadVegbankXML(String savedFileName) throws Exception
 	{
 		VegbankXMLUpload xmlUpload = new VegbankXMLUpload();
 		xmlUpload.uploadFromXMLFile(new File(savedFileName));

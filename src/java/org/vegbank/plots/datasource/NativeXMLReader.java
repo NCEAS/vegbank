@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-14 18:39:00 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-17 20:31:40 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,9 @@ package org.vegbank.plots.datasource;
  * @author farrell
  */
 
+import java.io.File;
+import java.util.ResourceBundle;
+
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -44,10 +47,12 @@ public class NativeXMLReader
 {	
 	private XMLReader reader = null;
 	private boolean validate = false;
+	private static ResourceBundle defaultPropFile = ResourceBundle.getBundle("vegbank");
 	private static final String VEGBANK_XML_SCHEMA= 
-		"/home/farrell/vegbank1-1.xsd";
+		defaultPropFile.getString("schemaLocation") + "/" + defaultPropFile.getString("vegbankSchemaName");
 
-	public NativeXMLReader( boolean validating )
+
+	public NativeXMLReader( boolean validating ) throws Exception
 	{
 		try 
 		{
@@ -142,7 +147,7 @@ public class NativeXMLReader
 	/**
 	 * @param b
 	 */
-	public void setValidate(boolean b)
+	public void setValidate(boolean b) throws Exception
 	{
 		try 
 		{
@@ -152,6 +157,19 @@ public class NativeXMLReader
 			reader.setFeature(
 				"http://apache.org/xml/features/validation/schema",
 				b);
+				
+			// Sanity check -- can the schema be found
+			File schema = new File(VEGBANK_XML_SCHEMA);
+			if ( ! schema.exists() || ! schema.canRead() )
+			{
+				// Cannot find or work with this file
+				throw new Exception("Cannot find the schema file at '" + VEGBANK_XML_SCHEMA + "'.");
+			}
+			else
+			{
+				System.out.println("NativeXMLReader > Found the schema file: '" + VEGBANK_XML_SCHEMA + "'.");
+			}
+			
 			reader.setProperty(
 				"http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
 				VEGBANK_XML_SCHEMA);	
