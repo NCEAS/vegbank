@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+<jsp:useBean id="bean" class="org.vegbank.ui.struts.PlotQueryForm"/>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
@@ -13,9 +14,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: farrell $'
-*      '$Date: 2003-08-21 21:16:43 $'
-*  '$Revision: 1.6 $'
+*    '$Author: anderson $'
+*      '$Date: 2003-08-28 00:18:18 $'
+*  '$Revision: 1.7 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -350,7 +351,23 @@ VEGBANK - Simple Plots Query
 	    <th><p><span class="category">Units</span></p></th>
 	    <th><p><span class="category">Include Nulls?</span></p></th>
 	  </tr>
+	  <%
+	  /*
+	  String curMinElevation = "0";
+	  String curMaxElevation = "30000";
+	  String curMinSlopeAspect = "0";
+	  String curMaxSlopeAspect = "x";
+	  String curMinSlopeGradient = "0";
+	  String curMaxSlopeGradient = "y";
+	  */
+	  %>
 	  <tr><!-- ELEVATION --> 
+	    <td>&nbsp;</td>
+	    <td colspan="2" class="itemsmaller" align="center">from <bean:write name="bean" property="curMinElevation"/> to <bean:write name="bean" property="curMaxElevation"/> meters</td>
+	    <td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	  </tr>
+	  <tr>
 	    <td><span class="itemsmall"><b>Elevation</b></span></td>
 	    <td>
 	      <html:text property="minElevation" size="20"/>
@@ -364,6 +381,12 @@ VEGBANK - Simple Plots Query
 	    </td>
 	  </tr>
 	  <tr><!-- Slope Aspect -->
+	    <td>&nbsp;</td>
+	    <td colspan="2" class="itemsmaller" align="center">from <bean:write name="bean" property="curMinSlopeAspect"/> to <bean:write name="bean" property="curMaxSlopeAspect"/> degrees</td>
+	    <td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	  </tr>
+	  <tr>
 	    <td><span class="itemsmall"><b>Slope Aspect</b></span></td>
 	    <td>
 	      <html:text property="minSlopeAspect" size="20"/>
@@ -377,6 +400,12 @@ VEGBANK - Simple Plots Query
 	    </td>
 	  </tr>
 	  <tr><!-- Slope Gradient -->
+	    <td>&nbsp;</td>
+		<td colspan="2" class="itemsmaller" align="center">from <bean:write name="bean" property="curMinSlopeGradient"/> to <bean:write name="bean" property="curMaxSlopeGradient"/> degrees</td>
+		<td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	  </tr>
+	  <tr>
 	    <td><span class="itemsmall"><b>Slope Gradient</b></span></td>
 	    <td>
 	      <html:text property="minSlopeGradient" size="20"/>
