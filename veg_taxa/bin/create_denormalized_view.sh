@@ -5,7 +5,7 @@
 # the plant taxa database in a denormalized structure
 # that will be used for simplifying query creation
 
-DENORMSCRIPT=../lib/denormalize.sql
+DENORMSCRIPT=../lib/denormPlantTaxonDb.sql
 
 # Remove any existing tables
 sqlplus nvc/jhhtpass @$DENORMSCRIPT <<EOF
