@@ -26,24 +26,24 @@ print `createdb  -U $username frameworktest`;
 
 print "\n######################################################################\n";
 print "# Populate frameworktest\n"; 
-
 print `psql  -U $username frameworktest < frameworkProd.sql`;
 
 print "\n######################################################################\n";
 print "# Modify frameworktest to fit new schema\n"; 
-
 print `psql  -U $username frameworktest < src/sql/throwAways/prepareFrameworkForDumpToVB_1.02.sql`;
 
 print "\n######################################################################\n";
 print "# Dump frameworktest \n"; 
-
 print `pg_dump -aD --disable-triggers  -U $username frameworktest > readyForImport.sql`;
 
 print "\n######################################################################\n";
-print "# Attempt to load frameworktest dump into production after running backup.\n"; 
+print "# Strip sequence setting from dump \n";
+stripOutSetSequence( "readyForImport.sql", "readyForImport-WITHOUT_SEQUENCE.sql"  );
 
+print "\n######################################################################\n";
+print "# Attempt to load frameworktest dump into production after running backup.\n"; 
 print `pg_dump  -U $username $dbname > productionDump.bak`;
-print `psql  -U $username $dbname < readyForImport.sql`;
+print `psql  -U $username $dbname < readyForImport-WITHOUT_SEQUENCE.sql`;
 
 print "\n######################################################################\n";
 print "# Need to fix the party_id on usr table\n"; 
@@ -67,3 +67,28 @@ print "if anything went wrong.\n";
 
 print "\nThere is a backup of the target database called productionDump.bak\n";
 print "\n######################################################################\n";
+
+
+sub stripOutSetSequence
+  {
+    my ($InFileName, $outFileName) = @_;
+    open(INPUT, "$InFileName");
+    open(OUTPUT, ">$outFileName");
+
+    while (<INPUT> )
+      {
+	my ($line) = $_; #preserve $_, the line just read, nomatter what
+	chomp($line); #blow off trailing newline
+
+	if ( $line =~ /pg_catalog\.setval/i)
+	  {
+	    print OUTPUT "-- $line\n";
+	  }
+	else
+	  {
+	    print OUTPUT "$line\n";
+	  }
+      }
+    close(INPUT);
+    close(OUTPUT);
+  }
