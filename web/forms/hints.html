@@ -1,0 +1,454 @@
+<!-- 
+  *   '$RCSfile: hints.html,v $'
+  *     Purpose: web page describing eml
+  *   Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *     Authors: @author@
+  *
+  *    '$Author: harris $'
+  *      '$Date: 2002-05-28 18:02:01 $'
+  *  '$Revision: 1.1 $'
+  *
+  *
+  -->
+<html>
+	<head>
+		<title> --- VEGBANK HINTS ---</title>
+		<link rel="STYLESHEET" href="http://numericsolutions.com/includes/default.css" type="text/css">
+	</head>
+	<body bgcolor="white">
+		
+		<!--LOGINNAME-->
+		<a name="loginname">
+			<table border="0" width="80%" bgcolor="#DFE5FA">
+			<tr>
+				<td  align=left valign=top  width="5%" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+					<b>Login:</b>
+				</td>
+				</font>
+			</tr>
+				
+			<tr>
+				<td align="center" width="5%">
+				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				<td class="item">
+					The VegBank authentication system, since late Feb, 2002, uses the user's <br>
+					email address as the 'Username' for logging into the VegBank system. <br>
+					<br>
+					The VegBank System, due to its developmental nature, started using a new <br> 
+					user authentication system in late Feb.2002, and many of the user accounts <br>
+					which did not contain the elements critical to this new system were removed <br>.
+					If you find that you cannot login please create a new account.  July 1, 2002 is<br>
+					the date that marks the official kickoff date of the VegBank System and currently <br>
+					any data that is resident in the system should be considered transient. <br>
+				</td>
+			</tr>
+			</table>
+		</a>
+		
+		<br>
+			<!--GENERAL-->
+		<a name="general">
+			<!-- DESCRIPTIONS-->
+			<table border="0" width="80%" bgcolor="#DFE5FA">
+			<tr>
+				<td  align=left valign=top  width="5%" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+					<b>Nested Query:</b> <br>
+					<font class="itemsmall"> General </font>
+				</td>
+				</font>
+			</tr>
+				
+			<tr>
+				<td align="center" width="5%">
+				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				<td class="item">
+					The basic idea for using this query tool is to build a nested query by generating <br>
+					A number of atomic qurey statements that are then nested by the application and  <br>
+					issued against the VegBank database.  There is a bug in the current system that allows <br>
+					for only a single plant name (the 'Plant Taxon' query criteria) to be issued against <br>
+					the database for each nested query. <br>
+				</td>
+			</tr>
+			</table>
+		</a>
+		<br>
+		
+		<!--MULTIPLE ATTRIBUTE QUERY-->
+		<a name="multiquery">
+			<!-- DESCRIPTIONS-->
+			<table border="0" width="80%" bgcolor="#DFE5FA">
+			<tr>
+				<td  align=left valign=top  width="5%" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+					<b>Plot Query:</b> <br>
+					<font class="itemsmall"> Multiple options </font>
+				</td>
+				</font>
+			</tr>
+				
+			<tr>
+				<td align="center" width="5%">
+				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				<td class="item">
+					When this option is selected the user must enter a value in all the input criteria
+					on this form.  An example of a successful query is below:
+					<br>
+					<p><i>
+					Plant Taxon = Pinus% <br>
+					State = CA<br>
+					Elevation 8000 - 15000<br>
+					Geology = igneous<br>
+					</i> </p>
+					
+					
+				</td>
+			</tr>
+			</table>
+		</a>
+		<br>
+		
+		
+		<!-- RESULT SET XML -->
+		<a name="resultxml">
+			<!-- DESCRIPTIONS-->
+			<table border="0" width="80%" bgcolor="#DFE5FA">
+			<tr>
+				<td  align=left valign=top  width="5%" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+					<b>Download:</b> <br>
+					<font class="itemsmall"> xml format </font>
+				</td>
+				</font>
+			</tr>
+				
+			<tr>
+				<td align="center" width="5%">
+				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				<td class="item">
+					This will download a result set as a native VegBank xml document.
+				</td>
+			</tr>
+			</table>
+		</a>
+		
+		<br>
+		
+		<!-- RESULT SET XML -->
+		<a name="resulthtml">
+			<!-- DESCRIPTIONS-->
+			<table border="0" width="80%" bgcolor="#DFE5FA">
+			<tr>
+				<td  align=left valign=top  width="5%" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+					<b>Download:</b> <br>
+					<font class="itemsmall"> html format </font>
+				</td>
+				</font>
+			</tr>
+				
+			<tr>
+				<td align="center" width="5%">
+				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				<td class="item">
+					This will download a result set as an HTML document using a generic 'tree-view' <br>
+					style for displaying the results
+				</td>
+			</tr>
+			</table>
+		</a>
+		
+		<br>
+		
+		<!-- RESULT SET XML -->
+		<a name="resultascii">
+			<!-- DESCRIPTIONS-->
+			<table border="0" width="80%" bgcolor="#DFE5FA">
+			<tr>
+				<td  align=left valign=top  width="5%" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+					<b>Download:</b> <br>
+					<font class="itemsmall"> ascii format </font>
+				</td>
+				</font>
+			</tr>
+				
+			<tr>
+				<td align="center" width="5%">
+				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				<td class="item">
+					This will download a result set as an ASCII data set where the site data related <br>
+					to the plots will be in one entity and the species-related data will be in a second.
+				</td>
+			</tr>
+			</table>
+		</a>
+		
+		
+		<br>
+		
+		<!-- QUERY CRITERIA-->
+		<a name="querycriteria"> 
+			<!-- DESCRIPTIONS-->
+			<table border="0" width="80%" bgcolor="#DFE5FA">
+			<tr>
+				<td  align=left valign=top  width="5%" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+					<b>Nested Query:</b><br>
+					<font class="itemsmall"> Criteria </font>
+				</td>
+				</font>
+			</tr>
+			<tr>
+				<td align="center" width="5%">
+				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				<td class="item">
+					The query criteria element is the database attribute that is used for selecting data <br>
+					from the VegBank system. Currently there is only a small number of query criteria elements <br>
+					that can be used to construct a nested query, but in the future we anticipate extending this  <br>
+					number.  Below is a small explanation of how to use each of the query criteria: <br>
+					<br> 
+					<b>Plant Taxon: </b> This criterion refers to a plant name associated with the plot to be targeted 
+					by the query.  Currently, there can only be one plant taxon query element used in a single nested 
+					query. Usually this criterion is to be used with the 'like' operator and a value that is buffered
+					by the ('%') VegBank wildcard.  For example one might build a query element like:
+					<p>
+						<i>Plant Taxon like Pinus%</i>
+					</p>
+					
+					<br>
+					<b>State: </b> This is the US state from which the plot was collected.
+					The following query would return all the plot from the state of California
+					<p>
+						<i>State is equal to CA</i>
+					</p>
+					
+					<br>
+					<b>Elevation: </b> This the topographic elevation of the plot in feet.  The 
+					following query would return all the plots above 10000 feet.
+					<p>
+						<i>Elevation is greater than 10000</i>
+					</p>
+					
+					<br>
+					<b>Latitude: </b> This is the latitude at which the plot was collected.  The following 
+					query would return all the plots in the nothern hemisphere.
+					<p>
+						<i>Latitude is greater than 0.0 </i>
+					</p>
+					
+					<br>
+					<b>Latitude: </b> This is the longitude at which the plot was collected.  The following 
+					query would return all the plots collected from the eastern hemisphere. 
+					<p>
+						<i>Longitude is greater than 0.0 </i>
+					</p>
+					
+					<br>
+					<b>Plot code: </b> This is the code that the author of the plot used to describe the 
+					plot.  The following query would return all the plots in colleceted during the TNC 
+					Yosemite plot collection project.
+					<p>
+						<i>Plot code like %YOS% </i>
+					</p>
+					
+					<br>
+				
+				</td>
+			</tr>
+			</table>
+		</a>
+		
+		<br>
+		
+		<!-- QUERY OPERATOR-->
+		<a name="queryoperator"> 
+			<!-- DESCRIPTIONS-->
+			<table border="0" width="80%" bgcolor="#DFE5FA">
+			<tr>
+				<td  align=left valign=top  width="5%" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+					<b>Nested query:</b><br>
+					<font class="itemsmall"> Operator </font>
+				</td>
+				</font>
+			</tr>
+
+			<tr>
+				<td align="center" width="5%">
+				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				<td class="item">
+					The query operator is the expression used to limit the query by the query value. <br>
+					The operators associated with numeric values are: <br>
+					<br>
+					<p><i>
+					is greater than <br>
+					is less than <br>
+					is equal to 
+					</i> </p>
+					The operators used for string comparisons are:
+					<p><i>
+					like <br>
+					contains 
+					</i> </p>
+					
+					
+				</td>
+			</tr>
+			</table>
+		</a>
+		
+		<br>
+		
+		<!-- QUERY VALUE-->
+		<a name="queryvalue"> 
+			<!-- DESCRIPTIONS-->
+			<table border="0" width="80%" bgcolor="#DFE5FA">
+			<tr>
+				<td  align=left valign=top  width="5%" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+					<b>Nested query:</b><br>
+					<font class="itemsmall"> Value </font>
+				</td>
+				</font>
+			</tr>
+				
+			<tr>
+				<td align="center" width="5%">
+				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				<td class="item">
+					This is the value to be applied to the query criteria by the operator.  The following
+					criteria require character values:
+					<br>
+					<p><i>
+					Plant Taxon <br>
+					State <br>
+					Plot Code <br>
+					Geology <br>
+					Plot Shape <br>
+					</i> </p>
+					The following query criteria require numeric values:
+					<br>
+					<p><i>
+					Latitude <br>
+					Longitude <br>
+					Elevation <br>
+					</i> </p>
+					
+				</td>
+			</tr>
+			</table>
+		</a>
+		
+		<br>
+		
+		<!-- COMMON QUERIES-->
+		<a name="commonqueries">
+		
+			<!-- DESCRIPTIONS-->
+			<table border="0" width="80%" bgcolor="#DFE5FA">
+			<tr>
+				<td  align=left valign=top  width="5%" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+					<b>Nested Query:</b><br>
+					<font class="itemsmall">Common queries </font>
+				</td>
+				</font>
+			</tr>
+
+			<tr>
+				<td align="center" width="5%">
+				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				<td class="item">
+					Below are a list of commonly issued queries that have been run against the VegBank <br>
+					system.  We realize that the number of query criteria are somewhat limited at the moment <br>
+					and if you would like to make a request to update the 
+				</td>
+			</tr>
+			
+			
+			<tr>
+			<td>
+			</td>
+			<td>
+			<table border="0" class="itemsmall" >
+			<tr bgcolor="grey">
+				<td> Criteria </td>
+				<td> Operator </td>
+				<td> Value </td>
+			</tr>
+			<tr>
+				<td> Plant Taxon </td>
+				<td> is equal to </td>
+				<td> %Pinus% </td>
+			</tr>
+			<tr>
+				<td> State </td>
+				<td> is equal to </td>
+				<td> CA </td>
+			</tr>
+			<tr>
+				<td> Elevation </td>
+				<td> is greater than </td>
+				<td> 10000 </td>
+			</tr>
+			</table>
+			</td>
+			</tr>
+			
+			<tr>
+			<td>
+			</td>
+			<td>
+			<table border="0" class="itemsmall" >
+			<tr bgcolor="grey">
+				<td> Criteria </td>
+				<td> Operator </td>
+				<td> Value </td>
+			</tr>
+			<tr>
+				<td> Plant Taxon </td>
+				<td> like </td>
+				<td> %Abies% </td>
+			</tr>
+			<tr>
+				<td> State </td>
+				<td> is equal to </td>
+				<td> UT </td>
+			</tr>
+			<tr>
+				<td> Elevation </td>
+				<td> is greater than </td>
+				<td> 2000 </td>
+			</tr>
+			</table>
+			</td>
+			</tr>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		</table>
+		</a>
+		
+		
+	</body>
+</html>

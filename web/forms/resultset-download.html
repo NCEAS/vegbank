@@ -59,8 +59,8 @@
       </td>
       <td align="Left" height="45" valign="Bottom" width="220">
        <br>
-        <img alt="File Information" border="0" height="23" src=
-       "@image_server@hdr_file_info.gif" title="File Information" vspace="2" width=
+        <img alt="Resultset download wizard" border="0" height="23" src=
+       "@image_server@hdr_file_info.gif" title="Resultset Download Wizard" vspace="2" width=
        "189"> 
       </td>
       <td>
@@ -89,7 +89,7 @@
        
       </td>
       <td align="left" valign="Bottom" width="200">
-       <a href="/harris/servlet/viewData"><img alt="Back to My Files" border=
+       <a href="/framework/servlet/viewData?resultType=identity&summaryViewType=vegPlot&submitButton=Continue"><img alt="Back to My Files" border=
        "0" height="19" src="@image_server@btn_back_to_files.gif" title=
        "Back to My Files" vspace="5" width="124"></a> 
       </td>
@@ -221,9 +221,12 @@
            "2"><b>Desired format</b></font> 
           </td>
           <td align="Left" valign="Top">
-           <input checked="" name="formatType" type="radio" value="xml">xml<br>
-            <input name="formatType" type="radio" value="html">html<br>
-            <input name="formatType" type="radio" value="flat">flat-ascii<br>
+           <input checked="" name="formatType" type="radio" value="xml">xml<a href="/forms/hints.html#resultxml">
+						<img border="0" src="/vegbank/images/question.gif"></a><br>
+            <input name="formatType" type="radio" value="html">html<a href="/forms/hints.html#resulthtml">
+						<img border="0" src="/vegbank/images/question.gif"></a><br>
+            <input name="formatType" type="radio" value="flat">flat-ascii<a href="/forms/hints.html#resultascii">
+						<img border="0" src="/vegbank/images/question.gif"></a><br>
             <br>
             
           </td>
