@@ -243,7 +243,9 @@ public class viewData extends HttpServlet
 			{
 				xmlDoc = servletDir+"test-summary.xml";
 				System.out.println("ViewData > retrieving the users stylesheet -");
-				String stylefile = getUserDefaultStyle("user").trim();
+				//JHH TURND THIS FUNCTION OFF 20020315
+				//String stylefile = getUserDefaultStyle("user").trim();
+				String stylefile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/transformMultiPlotSummary.xsl";
 				System.out.println("ViewData > stylesheet name: '" + stylefile +"'" );
 				
 				if ( stylefile == null  ||  stylefile.equals("null")   )
