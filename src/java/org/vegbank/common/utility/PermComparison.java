@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-01 01:14:59 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-01-08 23:48:30 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,9 +49,15 @@ public class PermComparison {
 	 *
 	 */
 	public static int getRoleConstant(String role) {
+		
 		if (role == null) {
 			return 0;
 		}
+		
+		if (!role.startsWith("perms.role.")) {
+			role = "perms.role." + role;
+		}
+		
 		String value = res.getString(role);
 		if (value == null) {
 			return 0;
