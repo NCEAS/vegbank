@@ -19,8 +19,8 @@ create table veg_taxa_summary (
 --INSERT ALL THE PLANT NAMES FROM THE USAGE TABLE
 --ALL NAMES SHOULD BE INCLUDED HERE
 INSERT INTO veg_taxa_summary 
- (plantusage_id, plantname_id, plantconcept_id, plantName, classsystem, plantnamestatus, startdate, stopDate)
- SELECT plantusage_id, plantname_id, plantconcept_id, plantname, classsystem, plantnamestatus, usagestart, usagestop
+ (plantusage_id, plantname_id, plantconcept_id, plantName, classsystem, plantnamestatus, startdate, stopDate, acceptedSynonym)
+ SELECT plantusage_id, plantname_id, plantconcept_id, plantname, classsystem, plantnamestatus, usagestart, usagestop, acceptedSynonym
  from plantusage where plantusage_id > 0;
 
 /*
