@@ -19,7 +19,7 @@
       <attName>COMMCONCEPT_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
-      <attType>serial</attType> 
+      <attType>serial</attType>
       <attKey>PK</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -32,8 +32,8 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
-      <attKey>FK</attKey>
       <javaType type="Object" relation="one"/>
+      <attKey>FK</attKey>
       <attReferences>commName.COMMNAME_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4382,8 +4382,8 @@ conditions may change between resampling events.
       <attName>plotValidationLevel</attName>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
-      <javaType type="primative" relation="one"/>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
