@@ -12327,7 +12327,6 @@ conditions may change between resampling events.
       <attNotes>Foreign key into the taxonImportance table</attNotes>
       <attDefinition>Foreign key into the taxonImportance table, thereby associating a taxon identification with the tree stem(s).</attDefinition>
       <attForms>
-        <formShow name="Summary">1154</formShow>
         <formShow name="Detail">1155</formShow>
       </attForms>
       <update>1.0.2</update>
