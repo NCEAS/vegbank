@@ -1,0 +1,42 @@
+VegBank -- Apache 1.3 Special Setup
+===============================================================
+
+VegBank makes minor adjustments to the Apache config file,
+which is usually found at /etc/httpd/conf/httpd.conf.
+
+#################################################
+# PLOT ACCESS THROUGH DIRECT URL		#
+#################################################
+VegBank uses an .htaccess file with RewriteRule directives, so
+Apache needs to allow the FileInfo override in the directory
+where VegBank lives.  Choose one of the following configuration
+types for your system, either document root or virtual host.
+
+>>> MAIN DOCUMENT ROOT
+If your VegBank web files are part of the main document root,
+find the <Directory "/your/document/root"> section and add
+or change the AllowOverride directive to look like this:
+
+
+	<Directory "/var/www/html">
+
+	# This controls which options the .htaccess files in directories can
+	# override. Can also be "All", or any combination of "Options", "FileInfo",
+	# "AuthConfig", and "Limit"
+	#
+	    #AllowOverride None
+	    AllowOverride FileInfo
+
+	</Directory>
+
+
+
+>>> VIRTUAL HOST
+If your VegBank web files are part of the main document root,
+find the <VirtualHost> section for the site and add the following:
+
+	<Directory "/absolute/path/to/directory/called/plot">
+	    AllowOverride FileInfo
+	</Directory>
+
+
