@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2004-02-27 16:58:46 $'
- *  '$Revision: 1.17 $'
+ *  '$Date: 2004-03-05 16:33:20 $'
+ *  '$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -583,6 +583,33 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
     </xsl:for-each>
    
   </xsl:if>
+
+  <!--
+    Provide method the get all the values of a open picklist
+  -->
+   <xsl:if test="attListType='open'">
+  private static Collection <xsl:value-of select="$uncappedVariableName"/>OpenPickList;
+
+  {
+    <xsl:value-of select="$uncappedVariableName"/>OpenPickList = new Vector();
+    
+    <xsl:for-each select="attList/attListItem">
+      <xsl:sort select="attListSortOrd" data-type="number"/>
+      <xsl:value-of select="$uncappedVariableName"/>OpenPickList.add("<xsl:value-of select="attListValue"/>");
+    </xsl:for-each>
+  }
+  
+  /**
+   * Get all the system defined values in this open picklist for <xsl:value-of select="attName"/>.
+   *
+   * @return Collection -- All the system defined values in this open Picklist
+   */ 
+  public Collection get<xsl:value-of select="$cappedVariableName"/>OpenPickList()
+  {
+    return <xsl:value-of select="$uncappedVariableName"/>OpenPickList;
+  }
+  </xsl:if>
+
 
  </xsl:template>
 
