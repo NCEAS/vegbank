@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-11-16 06:19:24 $'
-*  '$Revision: 1.11 $'
+*  '$Date: 2004-11-16 06:43:45 $'
+*  '$Revision: 1.12 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -180,8 +180,7 @@
 <h3>Learn more here.</h3>
   <br/>
 <p>Although you may 
-<html:link action="Logon.do?username=GUESTUSER@VEGBANK.ORG&password=nopassword">login as a guest</html:link>
-to use VegBank without registration, registered users are able to...</p>
+ use VegBank freely without registration, registered users are able to...</p>
 
 <ul>
   <li class="sizesmall">add your data and annotate extant data (certification required)</li>
