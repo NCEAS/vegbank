@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.io.*;
 import java.util.*;
 import java.util.zip.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 
 
@@ -14,7 +16,49 @@ import java.util.zip.*;
  */
 
 
-public class servletUtility {
+public class servletUtility 
+{
+
+	
+	
+	
+	/**
+	 * method to stick the parameters from the client 
+	 * into a hashtable and then pass it back to the 
+	 * calling method
+	 */
+	public Hashtable parameterHash (HttpServletRequest request) 
+	{
+		Hashtable params = new Hashtable();
+		try 
+		{
+			Enumeration enum =request.getParameterNames();
+			System.out.println("QueryBuilderServlet contacted");
+ 			while (enum.hasMoreElements()) 
+			{
+				String name = (String) enum.nextElement();
+				String values[] = request.getParameterValues(name);
+				if (values != null) 
+				{
+					for (int i=0; i<values.length; i++) 
+					{
+						params.put(name,values[i]);
+					}
+				}
+ 			}
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("** failed in:  "
+			+" first try - reading parameters "
+			+e.getMessage());
+		}
+		return(params);
+	}
+	
+	
+	
+	
 
 
 /**
@@ -86,7 +130,7 @@ public void fileCopy (String inFile, String outFile, String appendFlag)
  * made by the user 
  */
 
-public void htmlStore () 
+public void htmlStore() 
 {
 	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 
@@ -137,6 +181,7 @@ public void htmlStore ()
  */
 public void getViewOption (String summaryViewType) 
 {
+	System.out.println("accessing the getViewOptionMethod");
 	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 	StringBuffer responseBuf=null; //use this string buffer instead
 	String response=
@@ -228,7 +273,6 @@ catch(Exception e)
  *
  * @param fileName name of the file that whose contents should be written to a vector
  */
-
 public void fileVectorizer (String fileName) 
 {
 	try 
