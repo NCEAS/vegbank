@@ -27,15 +27,19 @@
     		*
     		* the default settings are for:
     	-->
-    
-    	<filter token="databaseType" value="postgresql" />
+			<filter token="authenticationServletHost" value="tekka.nceas.ucsb.edu" />
+    	<filter token="communityRequestServletHost" value="vegbank.nceas.ucsb.edu" />
+			<filter token="plantRequestServletHost" value="vegbank.nceas.ucsb.edu" />
+			<filter token="geoCoordRequestServletHost" value="vegbank.nceas.ucsb.edu" />
+			
+			<filter token="databaseType" value="postgresql" />
     	<filter token="user" value="datauser" />
     	<filter token="password" value="pass" />
     	<filter token="port" value="1521" />
-    	<filter token="hostname" value="beta.nceas.ucsb.edu"/>
+    	<filter token="hostname" value="127.0.0.1"/>
     	<filter token="driverType" value="thin" />
     	<filter token="driverClass" value="org.postgresql.Driver" />
-    	<filter token="connectString" value="jdbc:postgresql://beta/plots_dev" />
+    	<filter token="connectString" value="jdbc:postgresql://127.0.0.1/plots_dev" />
     	<filter token="databaseName" value="nvc" />
     	<filter token="insert.minConnections" value="1" />
     	<filter token="insert.maxConnections" value="3" />

@@ -61,12 +61,11 @@ public class LocalDbConnectionBroker
 			{
 				//get the database management parameter settings
 				g.getDatabaseParameters("database", "query");
+				System.out.println("LocalDbConnectionBroker > connection string: " + g.connectionString);
 				myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
 				g.login,g.passwd,g.minConnections,g.maxConnections, 
 				g.logFile,1.0);
-				pconn=myBroker.getConnection(); //get a connection that will be closed
-				//pool stats -- number of connections in the pool
-				System.out.println("LocalDbConnectionBroker > connection string: " + g.connectionString);
+				pconn=myBroker.getConnection();
 			}
 			catch( Exception e ) 
 			{

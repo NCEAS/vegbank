@@ -6,9 +6,9 @@
 * Authors: John Harris
 * Release: @release@
 *
-*   '$Author: farrell $'
-*   '$Date: 2002-12-28 00:30:39 $'
-*   '$Revision: 1.6 $'
+*   '$Author: harris $'
+*   '$Date: 2003-01-02 21:31:48 $'
+*   '$Revision: 1.7 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -102,21 +102,43 @@ public class DBinsertPlotSource {
 	private GetURL gurl = new GetURL();
 	private PlantTaxaLoader plantLoader = new PlantTaxaLoader();
 	private String hostname = "localhost";
-
+	
+	// the properties file and the associated properties 
+	private ResourceBundle rb;
+	private String authenticationServletHost;
+	private String plantRequestServletHost;
+	private String communityRequestServletHost;
+	private String geoCoordRequestServletHost;
+	
+	
 	/**
 		* constructor -- input the name if the plugin and plot
+		* @param plugin -- the name of the plugin that corresponds to the type 
+		*  of plot datasource 
+		* @param -- the name of the plot to load
 		*/
 	public DBinsertPlotSource(String plugin, String plot)
 		throws FileNotFoundException {
 		try {
-			//System.out.println("start");
+			System.out.println("DBinsertPlotSource > init");
+			// read the paramters from the properties file
+			rb = ResourceBundle.getBundle("database");
+			this.authenticationServletHost = rb.getString("authenticationServletHost");
+			this.plantRequestServletHost = rb.getString("plantRequestServletHost");
+			this.communityRequestServletHost = rb.getString("communityRequestServletHost");
+			this.geoCoordRequestServletHost = rb.getString("geoCoordRequestServletHost");
+			System.out.println("DBinsertPlotSource > authenticationServletHost: " + authenticationServletHost);
+			System.out.println("DBinsertPlotSource > plantRequestServletHost: " + plantRequestServletHost );
+			System.out.println("DBinsertPlotSource > communityRequestServletHost: " + communityRequestServletHost );
+			System.out.println("DBinsertPlotSource > geoCoordRequestServletHost: " + geoCoordRequestServletHost );
+			
 			//initialize the data source
 			source = null;
 			source = new PlotDataSource(plugin);
-			//System.out.println("getting the plot data");
+			System.out.println("DBinsertPlotSource > initializing the plot plugin framework: " + plugin);
 			source.getPlot(plot);
 
-			//System.out.println("init db");
+			System.out.println("DBinsertPlotSource > pooling database connections");
 			//initialize the database connection manager
 			connectionBroker.manageLocalDbConnectionBroker("initiate");
 			conn = connectionBroker.manageLocalDbConnectionBroker("getConn");
@@ -135,12 +157,24 @@ public class DBinsertPlotSource {
 	/**
 	 * this constructor, unlike the other is for inserting a potentially large
 	 * numeber of plots stored on a given source
+	 * @deprecated
 	 */
 	public DBinsertPlotSource(String plugin) throws FileNotFoundException {
 		try {
 			//initialize the data source 
 			source = new PlotDataSource(plugin);
-
+			
+			// read the paramters from the properties file
+			rb = ResourceBundle.getBundle("database");
+			this.authenticationServletHost = rb.getString("authenticationServletHost");
+			this.plantRequestServletHost = rb.getString("plantRequestServletHost");
+			this.communityRequestServletHost = rb.getString("communityRequestServletHost");
+			this.geoCoordRequestServletHost = rb.getString("geoCoordRequestServletHost");
+			System.out.println("DBinsertPlotSource > authenticationServletHost: " + authenticationServletHost);
+			System.out.println("DBinsertPlotSource > plantRequestServletHost: " + plantRequestServletHost );
+			System.out.println("DBinsertPlotSource > communityRequestServletHost: " + communityRequestServletHost );
+			System.out.println("DBinsertPlotSource > geoCoordRequestServletHost: " + geoCoordRequestServletHost );
+			
 			//initialize the database connection manager
 			connectionBroker.manageLocalDbConnectionBroker("initiate");
 			conn = connectionBroker.manageLocalDbConnectionBroker("getConn");
@@ -157,9 +191,22 @@ public class DBinsertPlotSource {
 	 * to the vagbank database and not to any of the plugins.  This 
 	 * occurs when, for example, the class attemts to create the 
 	 * summary tables.
+	 * @deprecated
 	 */
 	public DBinsertPlotSource() {
 		try {
+			
+			// read the paramters from the properties file
+			rb = ResourceBundle.getBundle("database");
+			this.authenticationServletHost = rb.getString("authenticationServletHost");
+			this.plantRequestServletHost = rb.getString("plantRequestServletHost");
+			this.communityRequestServletHost = rb.getString("communityRequestServletHost");
+			this.geoCoordRequestServletHost = rb.getString("geoCoordRequestServletHost");
+			System.out.println("DBinsertPlotSource > authenticationServletHost: " + authenticationServletHost);
+			System.out.println("DBinsertPlotSource > plantRequestServletHost: " + plantRequestServletHost );
+			System.out.println("DBinsertPlotSource > communityRequestServletHost: " + communityRequestServletHost );
+			System.out.println("DBinsertPlotSource > geoCoordRequestServletHost: " + geoCoordRequestServletHost );
+			
 			//initialize the database connection manager
 			connectionBroker.manageLocalDbConnectionBroker("initiate");
 			conn = connectionBroker.manageLocalDbConnectionBroker("getConn");
@@ -699,8 +746,8 @@ public class DBinsertPlotSource {
 		try {
 			//THIS USES THE REQUESTURL METHOD
 			String protocol = "http://";
-			String host = this.getHostname();
-			System.out.println("DBinsertPlotSource > requiesting permission level from: " + host);
+			String host = this.authenticationServletHost;
+			System.out.println("DBinsertPlotSource > requesting permission level from: " + this.authenticationServletHost);
 			String s = null;
 			//THIS USES THE OTHER REQUEST URL METHOD
 			String servlet = "/framework/servlet/usermanagement";
@@ -1407,10 +1454,7 @@ public class DBinsertPlotSource {
 		StringBuffer sb = new StringBuffer();
 		try {
 			System.out.println(
-				"DBinsertPlotSource > inserting taxonomy data for: "
-					+ plotName
-					+ " "
-					+ plot);
+				"DBinsertPlotSource > inserting taxonomy data for: "+ plotName+ " "+ plot);
 			//get the number of taxonObservations
 			Vector uniqueTaxa = source.plantTaxaNames;
 			// INSERT EACH OF THE PLANTS ASSOCIATED WITH THIS PLOT
@@ -1428,25 +1472,25 @@ public class DBinsertPlotSource {
 				//sci name
 				String code = source.getPlantTaxonCode(authorNameId);
 				//corresponding code
-				System.out.println(
-					"DBinsertPlotSource > cur. tax. name: "
-						+ authorNameId
-						+ " code: "
-						+ code);
+				System.out.println("DBinsertPlotSource > cur. tax. name: "+ authorNameId+ " code: "+ code);
 
 				// IF THE CODE HAS A VALID VALUE THEN ATTEMPT FIRST TO LOOKUP THE TAXON
-				if (code != null && code.length() > 1) {
+				if (code != null && code.length() > 1) 
+				{
 					plantTaxon = getPlantTaxonomyData(code, "CODE");
 					// IF IT IS EMPTY THEN TRY AGAIN WITH THE SCI NAME
-					if (plantTaxon.isEmpty() == true) {
-						plantTaxon =
-							getPlantTaxonomyData(code, "SCIENTIFICNAME");
+					if (plantTaxon.isEmpty() == true) 
+					{
+						plantTaxon = getPlantTaxonomyData(authorNameId, "SCIENTIFIC NAME");
 					}
-				} else {
-					plantTaxon = getPlantTaxonomyData(code, "SCIENTIFICNAME");
+				} 
+				else 
+				{
+					plantTaxon = getPlantTaxonomyData(authorNameId, "SCIENTIFIC NAME");
 				}
 				// GET THE TAXON ELEMENTS IF THEY ARE AVAILABLE
-				if (plantTaxon.isEmpty() == false) {
+				if (plantTaxon.isEmpty() == false) 
+				{
 					level = (String) plantTaxon.get("level");
 					conceptId = (String) plantTaxon.get("conceptId");
 					name = (String) plantTaxon.get("name");
@@ -2026,15 +2070,16 @@ public class DBinsertPlotSource {
 			String confidentialityReason = source.confidentialityReason;
 			//not null
 			String azimuth = source.azimuth;
-     	 	String dsgPoly = source.dsgPoly;
-      		String xCoord = source.xCoord;
+			String dsgPoly = source.dsgPoly;
+			String xCoord = source.xCoord;
 			String yCoord = source.yCoord;
 			String zone = source.getUTMZone(plotName);
 			// if the plot data source has geocoordinates (latitude, logitude )
 			// use them otherwise lookup the information from the web service
 			String latitude = source.getLatitude(plotName);
 			String longitude = source.getLongitude(plotName);
-			if (latitude == null || latitude.length() < 2) {
+			if (latitude == null || latitude.length() < 2) 
+			{
 				Hashtable geoCoords = getGeoCoords(xCoord, yCoord, zone);
 				latitude = (String) geoCoords.get("latitude");
 				longitude = (String) geoCoords.get("longitude");
@@ -2282,11 +2327,12 @@ public class DBinsertPlotSource {
 	 * @return hash -- a hashtable with keys : longitide and latitude
 	 */
 	private Hashtable getGeoCoords(String xCoord, String yCoord, String zone) {
+		System.out.println("DBinsertPlotSource > requesting coordinates -- x,y: "+xCoord+","+yCoord+" host: " + this.geoCoordRequestServletHost);
 		Hashtable h = new Hashtable();
 		try {
 			//THIS USES THE REQUESTURL METHOD
 			String protocol = "http://";
-			String host = this.getHostname();
+			String host = this.geoCoordRequestServletHost;
 			String s = null;
 			//THIS USES THE OTHER REQUEST URL METHOD
 			String servlet = "/framework/servlet/framework";
@@ -2326,7 +2372,7 @@ public class DBinsertPlotSource {
 		try {
 			//THIS USES THE REQUESTURL METHOD
 			String protocol = "http://";
-			String host = this.getHostname();	
+			String host = this.communityRequestServletHost;
 			String s = null;
 			//THIS USES THE OTHER REQUEST URL METHOD
 			String servlet = "/framework/servlet/DataRequestServlet";
@@ -2408,17 +2454,19 @@ public class DBinsertPlotSource {
 		 * @param name -- the plant taxonomy code used to lookup the related data
 		 * 	that will be returned to from the web service in an xml format
 		 * @param nameType -- the type of name that the name paremeter is
-		 * these values may only be: CODE, COMMONNAME, SCIENTIFICNAME or ANY
+		 * these values may only be: CODE, COMMON NAME, SCIENTIFIC NAME or ANY
 		 * @return h -- a hastable with the elements for the plant that matches in the 
 		 * 	vegbank database system.
 		 */
 	private Hashtable getPlantTaxonomyData(String name, String nameType) {
+		System.out.print("DBinsertPlotSource > getting plant info  -- type: " + nameType);
+		System.out.println(" name: " + name + " host:" + plantRequestServletHost);
 		Hashtable h = new Hashtable();
 		try {
 			// TEST THAT THE NAME TYPES AR VALID
 			if (nameType.equals("CODE")
-				|| nameType.equals("COMMONNAME")
-				|| nameType.equals("SCIENTIFICNAME")
+				|| nameType.equals("COMMON NAME")
+				|| nameType.equals("SCIENTIFIC NAME")
 				|| nameType.equals("ANY")) {
 				// SET THE NAMETYPE TO A WILDCARD IF IT IS 'ANY'
 				if (nameType.equals("ANY")) {
@@ -2426,7 +2474,7 @@ public class DBinsertPlotSource {
 				}
 				//THIS USES THE REQUESTURL METHOD
 				String protocol = "http://";
-				String host = this.getHostname();
+				String host = this.plantRequestServletHost;
 				String s = null;
 				//THIS USES THE OTHER REQUEST URL METHOD
 				String servlet = "/framework/servlet/DataRequestServlet";
@@ -2438,7 +2486,7 @@ public class DBinsertPlotSource {
 				parameters.setProperty("taxonNameType", nameType);
 				parameters.setProperty("taxonLevel", "%");
 				s = gurl.requestURL(servlet, protocol, host, parameters);
-				//System.out.println("DBinsertPlotSource > XML string from web app: \n'"+s+"'");
+				System.out.println("DBinsertPlotSource > plant data XML string from web app: \n'"+s+"'");
 
 				// IF THERE ARE RESULTS THEN ADD THEM TO THE HASHTABLE
 				if (s.length() > 3 && s != null) {
@@ -2689,30 +2737,7 @@ public class DBinsertPlotSource {
 		}
 	}
 	
-  /*
-   * Find the hostname that should be used for
-   * servlet communication such as getting the permission levels 
-   */
-	private String getHostname() 
-  {
-	  try
-    {
-	  	String propFile = "database";
-	  	ResourceBundle rb = ResourceBundle.getBundle(propFile);
-	  	hostname=rb.getString("hostname");
 	
-		// Give it a default value if needed
-		if  ( hostname == null || hostname.equals("")  ) {
-			hostname = "localhost"; 
-		}
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-		return hostname;
-	}
-  
   /**
   * Handle SQLExceceptions thrown by JDBC layer. 
   * In particular the "No results found" error" does not trigger a
