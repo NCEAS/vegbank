@@ -5,8 +5,8 @@
  *  Release: @release@
  *	
  *  '$Author: farrell $'
- *  '$Date: 2003-02-24 19:50:04 $'
- * 	'$Revision: 1.8 $' 
+ *  '$Date: 2003-05-07 02:45:51 $'
+ * 	'$Revision: 1.9 $' 
  */
 
 package xmlresource.utils;
@@ -742,9 +742,11 @@ public class XMLparse
 	 */
 	public Document getDocumentFromString(String s)
 	{
-		System.out.println("XMLparse > creating a document from a string");
+		System.out.println("XMLparse > creating a document from a string of lenght: " + s.length());
 		StringReader sr = new StringReader(s);
 		InputSource in = new InputSource(sr);
+		Document doc = null;
+		DocumentBuilder db = getDocumentBuilder();
 
 		try
 		{

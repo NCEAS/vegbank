@@ -8,8 +8,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-02-24 19:50:04 $'
- * '$Revision: 1.7 $'
+ *     '$Date: 2003-05-07 02:45:51 $'
+ * '$Revision: 1.8 $'
  */
 //package vegclient.framework;
 package xmlresource.utils; 
@@ -54,13 +54,6 @@ public class  transformXML
 	* @param inputXSL -- the file name of the input xsl style sheet
 	*
 	*/
-//	public void getTransformed(String inputXML, String inputXSL)
-//	{
-//			XMLparse xp = new XMLparse();
-//			Document doc = xp.getDocument(inputXML);
-//			this.getTransformed(doc, inputXSL, outTransformedData);
-//	}
-	
 	public void getTransformed(String inputXML, String inputXSL, Writer out)
 	{
 		XMLparse xp = new XMLparse();
@@ -134,7 +127,7 @@ public class  transformXML
 		StringWriter out = new StringWriter();
 		try
 		{
-			System.out.println("transformXML > input xml string: \n '"+inXml+"'");
+			//System.out.println("transformXML > input xml string: \n '"+inXml+"'");
 			XMLparse xp = new XMLparse();
 			Document doc = xp.getDocumentFromString(inXml);
 			this.getTransformed(doc, inputXSL, output);			
