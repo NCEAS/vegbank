@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-05-29 19:12:45 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2002-05-30 00:10:31 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,9 @@ public class PlantTaxaLoader
 	private String taxonDescription;
 	private String citationDetails;
 	private String dateEntered;
-	
+	private String usageStopDate;
+	private String rank;
+	private boolean commit;	
 	
 	
 	/**
@@ -69,6 +71,11 @@ public class PlantTaxaLoader
 			taxonDescription = (String)plantTaxon.get("taxonDescription");
 			citationDetails = (String)plantTaxon.get("citationDetails");
 			dateEntered = (String)plantTaxon.get("dateEntered");
+			usageStopDate = (String)plantTaxon.get("usageStopDate");
+			rank = (String)plantTaxon.get("rank");
+			//set the commit boolean to true, which can be changed by any of the 
+			// methods called from this one if an exception is thrown
+			commit = true;
 			
 			//get the connection stuff
 			conn = this.getConnection();
@@ -114,7 +121,7 @@ public class PlantTaxaLoader
 			
 			//update the concept table with the long name and then
 			int conceptId;
-			String rank ="";
+			int statusId;
 			if (plantConceptExists(longNameId, refId, taxonDescription) == false)
 			{
 				conceptId = loadPlantConceptInstance(longNameId, refId, taxonDescription, 
@@ -127,26 +134,49 @@ public class PlantTaxaLoader
 			}
 			System.out.println("PlantTaxaLoader > conceptId: " + conceptId);
 			//fix the date end date here and do a check here to make sure that it does not exist
-			int statusId = loadPlantStatusInstance(conceptId, "accepted", dateEntered, 
-			"2005-May-29", email, partyId, "");
+			if ( plantStatusExists(conceptId, "accepted", dateEntered, "2005-May-29", 
+				email, partyId, "", refId) == false )
+			{
+				statusId = loadPlantStatusInstance(conceptId, "accepted", dateEntered, 
+				usageStopDate, email, partyId, "", refId);
+			}
 			
-			loadPlantUsageInstance(longName, longNameId, conceptId, "STANDARD", 
-			dateEntered, "30-JUN-2001",  "SCIENTIFICNAME", partyId);
 			
-			//fix this to work with the other two too
-			loadPlantUsageInstance(shortName, shortNameId, conceptId, "STANDARD", 
-			dateEntered, "30-JUN-2001",  "SHORTNAME", partyId);
+			if ( plantUsageExists(shortName, shortNameId, conceptId, "STANDARD", 
+				dateEntered, usageStopDate,  "SHORTNAME", partyId) == false )
+			{
+				loadPlantUsageInstance(longName, longNameId, conceptId, "STANDARD", 
+				dateEntered, usageStopDate,  "LONGNAME", partyId);
+			}
 			
-			loadPlantUsageInstance(code, codeId, conceptId, "STANDARD", 
-			dateEntered, "30-JUN-2001",  "CODE", partyId);
+			if (plantUsageExists(shortName, shortNameId, conceptId, "STANDARD", 
+				dateEntered, usageStopDate,  "SHORTNAME", partyId) == false )
+			{
+				loadPlantUsageInstance(shortName, shortNameId, conceptId, "STANDARD", 
+				dateEntered, usageStopDate,  "SHORTNAME", partyId);
+			}
+
+			if  (plantUsageExists(code, codeId, conceptId, "STANDARD", 
+				dateEntered, usageStopDate,  "CODE", partyId) == false )
+			{
+				loadPlantUsageInstance(code, codeId, conceptId, "STANDARD", 
+				dateEntered, usageStopDate,  "CODE", partyId);
+			}
 			
-			conn.commit();
-			//conn.rollback();
-			
+			// decide on the transaction
+			if (commit == true )
+			{
+				conn.commit();
+			}
+			else
+			{
+				conn.rollback();
+			}
 			
 		}
 		catch ( Exception e )
 		{
+			commit = false;
 			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
@@ -154,6 +184,57 @@ public class PlantTaxaLoader
 	}
 	
 		
+	
+ /**
+	* method that returs true if a usage instance exists 
+	* 
+ 	*/	
+	private boolean plantUsageExists(String concatenatedName, int nameId, 
+	int conceptId, String usage, String startDate, String stopDate, 
+	String classSystem, int partyId )
+	{
+		boolean exists = false;
+		StringBuffer sb = new StringBuffer();
+		try
+		{
+			sb.append("select PLANTUSAGE_ID from PLANTUSAGE ");
+			sb.append("where plantConcept_id = " +conceptId+" and ");
+			sb.append("plantname_id = " +nameId+" and ");
+			sb.append("classSystem like '" +classSystem+"' and ");
+			sb.append("plantnamestatus like  '"+usage+"'" );
+			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+			ResultSet rs = pstmt.executeQuery();
+			int statusId = 0;
+			int cnt = 0;
+				
+			while	( rs.next() )
+			{	
+				statusId = rs.getInt(1);
+				cnt++;
+			}
+			if ( cnt >= 1 )
+			{
+				System.out.println("usage key exists");
+				exists = true;
+			}
+			//if there are no returned results
+			else if ( cnt == 0 )
+			{
+				exists = false;
+			}
+			
+			pstmt.close();
+		}
+		catch(Exception e)
+		{
+			commit = false;
+			System.out.println("Erroneous sql: " + sb.toString() );
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(exists);
+	}
+
 	/**
  	* method that loads a new instance of a 
  	* plant concept - name usage returns to 
@@ -184,7 +265,14 @@ public class PlantTaxaLoader
 			pstmt.setInt(3, concept_id);
 			pstmt.setString(4, usage);
 			pstmt.setString(5, startDate);
-			pstmt.setString(6, stopDate);
+			if ( stopDate == null || stopDate.length() < 2 )
+			{
+				pstmt.setNull(6, 6);
+			}
+			else
+			{	
+				pstmt.setString(6, stopDate);
+			}
 			pstmt.setString(7, classSystem);
 			pstmt.setInt(8, partyId);
 			boolean results = true;
@@ -193,6 +281,7 @@ public class PlantTaxaLoader
 		}
 		catch(Exception e)
 		{
+			commit = false;
 			System.out.println("Exception: " + e.getMessage() );
 			System.out.println("plantNameId: " + name_id );
 			System.out.println("plantConceptId: " + concept_id );
@@ -241,12 +330,77 @@ public class PlantTaxaLoader
 		}
 		catch(Exception e)
 		{
+			commit = false;
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
 			//System.exit(0);
 		}
 		return(plantConceptId);
 	}
+
+
+ /**
+	*
+	* method that returns true if the plant instance already exists in
+	* the taxonomy database.
+	*
+	* @param conceptId
+	* @param status
+	* @param startDate
+	* @param endDate
+	* @param event
+	* @param plantPartyId
+ 	*/	
+	private boolean plantStatusExists(int conceptId, String status, 
+	String startDate, String endDate, String event, int plantPartyId, 
+	String plantParent, int refId)
+	{
+		boolean exists = false;
+		StringBuffer sb = new StringBuffer();
+		try
+		{
+			sb.append("select PLANTSTATUS_ID from PLANTSTATUS ");
+			sb.append("where plantConcept_id = " +conceptId+" and ");
+			sb.append("plantconceptstatus like '" +status+"' and ");
+			//fix the block below
+			//sb.append("startDate like '" +startDate+"' and ");
+			//sb.append("endDate like '" +endDate.setNull()+"' and ");
+			sb.append("plantPartyComments like '" +event+"' and ");
+			sb.append("plantparty_id = " +plantPartyId+" and ");
+			sb.append("plantreference_id = " +refId);
+			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+			ResultSet rs = pstmt.executeQuery();
+			int statusId = 0;
+			int cnt = 0;
+				
+			while	( rs.next() )
+			{	
+				statusId = rs.getInt(1);
+				cnt++;
+			}
+			if ( cnt >= 1 )
+			{
+				System.out.println("status key exists");
+				exists = true;
+			}
+			//if there are no returned results
+			else if ( cnt == 0 )
+			{
+				exists = false;
+			}
+			
+			pstmt.close();
+		}
+		catch(Exception e)
+		{
+			commit = false;
+			System.out.println("Erroneous sql: " + sb.toString() );
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(exists);
+	}
+
 
 	
 	/**
@@ -264,19 +418,16 @@ public class PlantTaxaLoader
  	*/	
 	private int loadPlantStatusInstance(int conceptId, String status, 
 	String startDate, String endDate, String event, int plantPartyId, 
-	String plantParent)
+	String plantParent, int refId)
 	{
-		
 		try
 		{
 			int parentConceptId = 0;
-			
 			//get the plant parentId
 			if (plantParent !=null && plantParent.length() > 1 )
 			{
 				String s1 = "select plantConcept_id from plantConcept where plantDescription = '"
 				+plantParent+"'";
-				
 				Statement query = conn.createStatement();
 				ResultSet rs = query.executeQuery( s1 );
 				int cnt = 0;
@@ -285,7 +436,6 @@ public class PlantTaxaLoader
 					parentConceptId = rs.getInt(1);
 					cnt++;
 				}
-				
 				if (cnt > 1 )
 				{
 					System.out.println("USDAPlantsLoader > warning: to many parent concept id's");	
@@ -294,52 +444,69 @@ public class PlantTaxaLoader
 				String s = "insert into PLANTSTATUS "
 				+"(plantConcept_id, plantconceptstatus, startDate, stopDate, "
 				+" plantPartyComments, plantParty_id, plantParentName, "
-				+" plantParentConcept_id)  values(?,?,?,?,?,?,?,?) ";
+				+" plantParentConcept_id, plantreference_id)  values(?,?,?,?,?,?,?,?,?) ";
 				PreparedStatement pstmt = conn.prepareStatement(s);
 				//bind the values
 				pstmt.setInt(1, conceptId);
 				pstmt.setString(2, status);
 				pstmt.setString(3, startDate);
-				pstmt.setString(4, endDate);
+				if ( endDate == null || endDate.length() < 2 )
+				{
+					pstmt.setNull(4, 4);
+				}
+				else
+				{	
+					pstmt.setString(4, endDate);
+				}
 				pstmt.setString(5, event);
 				pstmt.setInt(6, plantPartyId);
 				pstmt.setString(7, plantParent);
 				pstmt.setInt(8, parentConceptId);
-			
+				pstmt.setInt(8, refId);
 				boolean results = true;
 				results = pstmt.execute();
 				pstmt.close();
-				
 			}
 			else
 			{
-			
 				String s = "insert into PLANTSTATUS "
 				+"(plantConcept_id, plantconceptstatus, startDate, stopDate, "
-				+" plantPartyComments, plantParty_id, plantParentName)  values(?,?,?,?,?,?,?) ";
+				+" plantPartyComments, plantParty_id, plantParentName, plantreference_Id)  values(?,?,?,?,?,?,?,?) ";
 				PreparedStatement pstmt = conn.prepareStatement(s);
 				//bind the values
 				pstmt.setInt(1, conceptId);
 				pstmt.setString(2, status);
 				pstmt.setString(3, startDate);
-				pstmt.setString(4, endDate);
+				if ( endDate == null || endDate.length() < 2 )
+				{
+					pstmt.setNull(4, 4);
+				}
+				else
+				{	
+					pstmt.setString(4, endDate);
+				}
 				pstmt.setString(5, event);
 				pstmt.setInt(6, plantPartyId);
 				pstmt.setString(7, plantParent);
-			
+				pstmt.setInt(8, refId);
 				boolean results = true;
 				results = pstmt.execute();
 				pstmt.close();
 			}
-		
 		}
 		catch(Exception e)
 		{
+			commit = false;
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 	return(0);	
 }
+
+
+
+
+
 
 	/**
  	* method that loads a new instance of a 
@@ -384,6 +551,7 @@ public class PlantTaxaLoader
 		}
 		catch(Exception e)
 		{
+			commit = false;
 			System.out.println("Exception: " + e.getMessage() 
 			+ "\n conceptId: " +  plantConceptId 
 			+"\n plantDescription: " + plantDescription);
@@ -431,6 +599,7 @@ public class PlantTaxaLoader
 		}
 		catch(Exception e)
 		{
+			commit = false;
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
@@ -485,6 +654,7 @@ public class PlantTaxaLoader
 		}
 		catch(Exception e )
 		{
+			commit = false;
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
@@ -529,6 +699,7 @@ public class PlantTaxaLoader
 		 }
 			catch (Exception e)
 		 {
+			commit = false;
 			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 			 System.out.println("Erroneous sql: " + sb.toString() );
@@ -568,6 +739,7 @@ public class PlantTaxaLoader
 			}
 			catch (Exception e)
 		 {
+			commit = false;
 			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
@@ -628,6 +800,7 @@ public class PlantTaxaLoader
 	 }
 		catch (Exception e)
 	 {
+			commit = false;
 		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
 		 e.printStackTrace();
 	 }
@@ -667,6 +840,7 @@ public class PlantTaxaLoader
 		 }
 			catch (Exception e)
 		 {
+			commit = false;
 			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
@@ -697,6 +871,7 @@ public class PlantTaxaLoader
 			}
 			catch (Exception e)
 		 {
+			commit = false;
 			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
@@ -741,6 +916,7 @@ public class PlantTaxaLoader
 	 }
 		catch (Exception e)
 	 {
+			commit = false;
 		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
 		 e.printStackTrace();
 	 }
@@ -773,6 +949,7 @@ public class PlantTaxaLoader
 			}
 			catch (Exception e)
 		 {
+			commit = false;
 			 System.out.println("PlantTaxaLoader > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
@@ -815,6 +992,7 @@ public class PlantTaxaLoader
 		}
 		catch(Exception e)
 		{
+			commit = false;
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
@@ -834,11 +1012,12 @@ public class PlantTaxaLoader
 		try 
  		{
 			Class.forName("org.postgresql.Driver");
-			//c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
-			c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/plants_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
+			//c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/plants_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
+			commit = false;
 			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
@@ -865,6 +1044,8 @@ public class PlantTaxaLoader
 		h.put("email", "harris02@hotmail.com");
 		h.put("citationDetails", "VB20020529");
 		h.put("dateEntered", "2002-MAY-29");
+		h.put("usageStopDate", "2005-MAY-29");
+		h.put("rank", "SPECIES");
 		// load this plant
 		loader.loadGenericPlantTaxa(h);
 	}
