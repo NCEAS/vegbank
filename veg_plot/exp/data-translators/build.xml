@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-04-17 02:03:43 $'
- 	*     '$Revision: 1.7 $'
+ 	*     '$Date: 2002-05-20 19:55:05 $'
+ 	*     '$Revision: 1.8 $'
 --> 
 <project name="data-translators" default="compile" basedir=".">
 	
@@ -94,6 +94,8 @@
 			 TNCPlotsDB.java
 			 
 			 PlotXmlWriterV2.java
+			 
+			 NativeXmlCache.java
 			"
 			destdir="${build}"
 		/>
@@ -124,7 +126,21 @@
   	</copy>
 	</target>
 	
-	
+	<!-- JDOC - creates the javadoc's -->
+	<target name="jdoc"> 	
+	<javadoc
+  		sourcefiles="src/data-translators/PlotDataSourceInterface.java,src/data-translators/NativeXmlCache.java,src/data-translators/NativeXmlPlugin.java"
+  		sourcepath="src/data-translators/"
+  		destdir="doc/api"
+  		author="true"
+  		version="true"
+  		private="true"
+  		use="true"
+  		windowtitle="VEGBANK DATA TRANSLATORS">
+	</javadoc>
+	</target>
+
+
 	<!-- TEST - this will test the package -->
 	<target name="test">
 		<exec dir="./" executable="write-VegBank-plot.sh" os="Linux" >
