@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-05-06 22:40:02 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2005-02-11 00:20:25 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ public class LoadingErrors
 	 * @param TYPE
 	 * @param message
 	 */
-	public void  AddError( int TYPE, String message)
+	public void  addError( int TYPE, String message)
 	{
 		hasErrors = true;
 		
