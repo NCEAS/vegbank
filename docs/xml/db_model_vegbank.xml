@@ -11257,7 +11257,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>2 letter State or Province Code where the plot is located (US and Canada only).</attDefinition>
+      <attDefinition>State or Province Name (full name) where the plot is located (US and Canada only).</attDefinition>
       <attForms>
         <formShow name="plotLocShort">1009</formShow>
         <formShow name="plotLocLong">1010</formShow>
