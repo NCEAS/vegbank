@@ -6,8 +6,8 @@
  * 		@version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2001-10-11 12:38:37 $'
- *     '$Revision: 1.3 $'
+ *     '$Date: 2001-10-30 22:27:38 $'
+ *     '$Revision: 1.4 $'
  *
  *
  */
@@ -30,6 +30,7 @@ public class PostgresNTPlugin implements DatabaseManagerPluginInterface
 	//used classes
 	sql2db sqlFile = new sql2db();
 	
+	private String databasePropertiesFile = "psql_db";
 	public String baseTablesScript = "./lib/vegPlot2001DBTables_postgres.sql";
 	public String summaryTablesScript = "./lib/makePlotSummaryTables_postgres.sql";
 	
@@ -270,8 +271,8 @@ public class PostgresNTPlugin implements DatabaseManagerPluginInterface
 	 */
 	public void createBaseTables()
 	{
-		System.out.println("creating the base tables on the HypersonicSQL database platform");
-				
+		System.out.println("creating the base tables on the postgresql NT database platform");
+		sqlFile.insertStatement(databasePropertiesFile, baseTablesScript);
 	}
 	
 		/** 
@@ -281,8 +282,7 @@ public class PostgresNTPlugin implements DatabaseManagerPluginInterface
 	public void createSummaryTables()
 	{
 		System.out.println("creating the base tables on the Postgres database platform");
-		
-		sqlFile.insertStatement(summaryTablesScript);
+		sqlFile.insertStatement(databasePropertiesFile, summaryTablesScript);
 		
 	}
 

@@ -7,8 +7,8 @@
  * 		@version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2001-10-11 12:38:37 $'
- *     '$Revision: 1.3 $'
+ *     '$Date: 2001-10-30 22:27:38 $'
+ *     '$Revision: 1.4 $'
  */
 package vegclient.databasemanager;
 
@@ -30,6 +30,7 @@ public class PostgresLinuxPlugin implements DatabaseManagerPluginInterface
 
 	public String baseTablesScript = "./lib/vegPlot2001DBTables_postgres.sql";
 	public String summaryTablesScript = "./lib/makePlotSummaryTables_postgres.sql";
+	private String databasePropertiesFile = "psql_db";
 	
 	/** 
 	 * method that creates the database  -- named something like 'nvc'
@@ -239,7 +240,7 @@ public class PostgresLinuxPlugin implements DatabaseManagerPluginInterface
 	public void createBaseTables()
 	{
 		System.out.println("creating the base tables on the Postgres database platform");
-		//sqlFile.insertStatement(baseTablesScript);
+		sqlFile.insertStatement(databasePropertiesFile, baseTablesScript);
 	}
 	
 	/** 
@@ -248,9 +249,7 @@ public class PostgresLinuxPlugin implements DatabaseManagerPluginInterface
 	 */
 	public void createSummaryTables()
 	{
-		System.out.println("creating the base tables on the Postgres database platform");
-		
-		sqlFile.insertStatement(summaryTablesScript);
-		
+		System.out.println("creating the base tables on the Postgres database platform");	
+		sqlFile.insertStatement(databasePropertiesFile, summaryTablesScript);	
 	}
 }

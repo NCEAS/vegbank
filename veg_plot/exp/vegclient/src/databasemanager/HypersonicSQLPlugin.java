@@ -9,8 +9,8 @@
  * 		@version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2001-10-11 12:38:37 $'
- *     '$Revision: 1.4 $'
+ *     '$Date: 2001-10-30 22:27:38 $'
+ *     '$Revision: 1.5 $'
  */
 package vegclient.databasemanager;
 
@@ -31,6 +31,7 @@ public class HypersonicSQLPlugin implements DatabaseManagerPluginInterface
 	//used classes
 	sql2db sqlFile = new sql2db();
 	
+	private String databasePropertiesFile = "hsql_db";
 	public String baseTablesScript = "./lib/vegPlot2001DBTables_hsqldb.sql";
 	public String summaryTablesScript = "./lib/makePlotSummaryTables_hsqldb.sql";
 
@@ -133,7 +134,7 @@ public class HypersonicSQLPlugin implements DatabaseManagerPluginInterface
 	{
 		System.out.println("creating the base tables on the HypersonicSQL database platform");
 		
-		sqlFile.insertStatement(baseTablesScript);
+		sqlFile.insertStatement(databasePropertiesFile, baseTablesScript);
 		
 	}
 	
@@ -146,7 +147,7 @@ public class HypersonicSQLPlugin implements DatabaseManagerPluginInterface
 	{
 		System.out.println("creating the base tables on the HypersonicSQL database platform");
 		
-		sqlFile.insertStatement(summaryTablesScript);
+		sqlFile.insertStatement(databasePropertiesFile, summaryTablesScript);
 		
 	}
 
