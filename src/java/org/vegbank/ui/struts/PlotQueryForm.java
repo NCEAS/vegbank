@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-07-22 21:58:17 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -928,7 +928,7 @@ public class PlotQueryForm extends ActionForm
 			coverMethodNames = new Vector();
 			String selectClauseKey = "covermethod";
 			String whereClauseKey = null;
-			String beanName = "CoverMethod";
+			String beanName = "Covermethod";
 			String[] whereParams = null;
 			// Need to create this object
 			GenericCommand  gc = new GenericCommand();
@@ -961,7 +961,7 @@ public class PlotQueryForm extends ActionForm
 			stratumMethodNames = new Vector();
 			String selectClauseKey = "stratummethod";
 			String whereClauseKey = null;
-			String beanName = "StratumMethod";
+			String beanName = "Stratummethod";
 			String[] whereParams = null;
 			// Need to create this object
 			GenericCommand  gc = new GenericCommand();
