@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: mlee $'
- *  '$Date: 2004-11-17 01:56:30 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2004-11-17 02:02:56 $'
+ *  '$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -316,7 +316,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
     </xsl:if>
   </xsl:template>
 <xsl:template name="closeManual">
-<a style="COLOR: #ff0000" href="javascript:document.top.location=window.upperframe.location">close tutorial</a>
+<a style="COLOR: #ff0000" href="javascript:document.top.location=window.upperframe.location">close frame</a> | <a style="COLOR: #ff0000" href="@web_context@" target="_top">exit</a>
 </xsl:template>
 
 </xsl:stylesheet>
