@@ -89,6 +89,7 @@ CREATE TABLE strataComposition (
 strataComposition_id INT NOT NULL PRIMARY KEY,
 taxonObservation_id INT NOT NULL,
 strata_id INT NOT NULL,
+cheatStratumType VARCHAR(32),
 percentCover NUMBER(8)
 );
 
