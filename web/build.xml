@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2005-03-15 07:08:09 $'
-* '$Revision: 1.148 $'
+* '$Author: anderson $'
+* '$Date: 2005-03-15 08:51:13 $'
+* '$Revision: 1.149 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -486,13 +486,13 @@
    <loadfile srcfile="${includes_src}/webpage_head.html" property="webpage_head_html" />
    <filter token="webpage_head_html" value="${webpage_head_html}" />
  
-   <loadfile srcfile="${includes_src}/masthead.html" property="webpage_masthead_html" />
+   <loadfile srcfile="${includes_src}/webpage_masthead.html" property="webpage_masthead_html" />
    <filter token="webpage_masthead_html" value="${webpage_masthead_html}" />
 
    <loadfile srcfile="${includes_src}/masthead_small.html" property="webpage_masthead_small_html" />
    <filter token="webpage_masthead_small_html" value="${webpage_masthead_small_html}" />
    
-   <loadfile srcfile="${includes_src}/footer.html" property="webpage_footer_html" />
+   <loadfile srcfile="${includes_src}/webpage_footer.html" property="webpage_footer_html" />
    <filter token="webpage_footer_html" value="${webpage_footer_html}" />
    <loadfile srcfile="${includes_src}/stylesheets_declaration.html" property="stylesheets_declaration.html" />
    <filter token="stylesheets_declaration.html" value="${stylesheets_declaration.html}" />
