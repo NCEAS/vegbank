@@ -56,8 +56,10 @@
 	<property name="jdbc" value="" />
 	<property name="xmlresource" value="./lib/xmlresource.jar" />
 	<property name="datatranslator" value="./lib/datatranslator.jar" />
+	<property name="servletutil" value="./lib/utilities.jar" />
+	<property name="planttaxonomy" value="./lib/planttaxonomy.jar" />
 	
-	<property name="cpath" value="${datatranslator}:${xmlresource}:${xmlp}:${jdbc}:${build}:./"/>
+	<property name="cpath" value="${planttaxonomy}:${servletutil}:${datatranslator}:${xmlresource}:${xmlp}:${jdbc}:${build}:./"/>
 
 	<!-- SERVLET LOCATION -->
 	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib//" />
@@ -144,5 +146,4 @@
 	
 	</target>
 	
-
 </project>

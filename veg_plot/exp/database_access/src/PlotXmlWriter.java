@@ -7,8 +7,8 @@
  *    Authors: John Harris
  *
  *		 '$Author: harris $'
- *     '$Date: 2002-01-16 04:48:17 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2002-05-31 22:20:09 $'
+ *     '$Revision: 1.3 $'
  *
  */
 package databaseAccess;
@@ -552,7 +552,7 @@ private void writeSpeciesData (
 		else 
 		{
 		//This is set up this way to rectify the failures that was having
-		System.out.println("number of taxon elements: " + taxonNameElements.size());
+		System.out.println("PlotXmlWriter > number of taxon elements: " + taxonNameElements.size());
 		for (int i=0; i<taxonNameElements.size(); i++)
 		{
 			String strataType = null;

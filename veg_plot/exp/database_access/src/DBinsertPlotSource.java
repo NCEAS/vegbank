@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-05-20 23:11:15 $'
- * 	'$Revision: 1.22 $'
+ *  '$Date: 2002-05-31 22:20:08 $'
+ * 	'$Revision: 1.23 $'
  */
 package databaseAccess;
 
@@ -21,6 +21,7 @@ import xmlresource.datatype.VegProject;
 import xmlresource.utils.XMLparse;
 import PlotDataSource;
 import servlet.util.GetURL;
+import PlantTaxaLoader;
 
 /**
  * this is a class that is used to load the database by parsing an xml document
@@ -81,7 +82,8 @@ public class DBinsertPlotSource
 	//the data source that will be used for loading the db
 	public PlotDataSource source;
 	private GetURL gurl = new GetURL();
-
+	private PlantTaxaLoader plantLoader = new PlantTaxaLoader();
+	
  /**
 	* constructor -- input the name if the plugin and plot
 	*/
@@ -255,10 +257,6 @@ public class DBinsertPlotSource
 	{
 		try 
 		{
-				
-			//use the test plugin
-	//		DBinsertPlotSource db = new DBinsertPlotSource(pluginClass);
-			
 			//initialize the data source 
 			source = new PlotDataSource(pluginClass);
 			Vector plotNames = source.getPlotNames();
@@ -339,6 +337,8 @@ public class DBinsertPlotSource
 	 * methods that will be called to actually get the data into the database
 	 *
 	 * @param plotName -- the name of the plot that exists in the archive
+	 * @param emailAddress -- the VegBank valid email address of the person
+	 *	inserting this plot
 	 */
 	public void insertPlot(String plotName, String emailAddress)
 	{
@@ -857,6 +857,8 @@ public class DBinsertPlotSource
 	 * method to add the taxonObservation data to the database
 	 * if the method fails it will return false and the plot 
 	 * will be rolled back
+	 * @see PlantTaxaLoader -- the class used for loading plant 
+	 * 	taxonomy data
 	 */
 	private boolean insertTaxonObservations()
 	{
@@ -891,7 +893,8 @@ public class DBinsertPlotSource
 				String percentCover = "25";
 				
 				// get the hashtable with the plant name look up results from the 
-				// web application
+				// web application and if there is no result, meaning no entry in the 
+				// database then enter it
 				Hashtable h = getPlantTaxonomyData( code );
 				String level  = "";
 				String conceptId  = "";
@@ -906,6 +909,44 @@ public class DBinsertPlotSource
 					conceptId = (String)h.get("conceptId");
 					name = (String)h.get("name");
 					nameId = (String)h.get("nameId");
+				}
+				else
+				{
+					System.out.println("damn plant does not exist");
+					//insert the plant using the plant loader
+					Hashtable h1 = new Hashtable();
+					h1.put("longName", authorNameId );
+					h1.put("shortName", "");
+					h1.put("code", "" );
+					h1.put("taxonDescription", authorNameId );
+					h1.put("salutation", "" );
+					h1.put("givenName", "" );
+					h1.put("surName", "" );
+					h1.put("orgName", "VEGBANK" );
+					h1.put("email", loaderEmail );
+					h1.put("citationDetails", "VEGBANK");
+					h1.put("dateEntered", "2002-MAY-31");
+					h1.put("usageStopDate", "2005-MAY-31");
+					h1.put("rank", "UNKNOWN");
+					// load the plant taxon and then request the taxon
+					// info again from the webservice -- it should exist
+					plantLoader = new PlantTaxaLoader();
+					boolean results = plantLoader.loadGenericPlantTaxa(h1);
+					if ( results == false )
+					{
+						successfulCommit = false; 
+					}
+					else
+					{
+						Hashtable h2 = getPlantTaxonomyData( code );
+						if ( h2.containsKey("level") )
+						{
+							level =	(String)h2.get("level");	
+							conceptId = (String)h2.get("conceptId");
+							name = (String)h2.get("name");
+							nameId = (String)h2.get("nameId");
+						}
+					}
 				}
 				
 				//add the taxon name to the debugging
@@ -939,7 +980,6 @@ public class DBinsertPlotSource
 					successfulCommit = false; 
 				}
 				debug.append("<insertStrataComp>"+result+"</insertStrataComp> \n");
-			
 			}
 		}
 		catch (Exception e)
