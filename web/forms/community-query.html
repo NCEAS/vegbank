@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-03-06 18:33:20 $'
-  *  '$Revision: 1.4 $'
+  *      '$Date: 2002-03-08 00:21:10 $'
+  *  '$Revision: 1.5 $'
   *
   *
   -->
@@ -83,6 +83,8 @@
 			<font face="Helvetica,Arial,Verdana" size="2" color="209020">
 				<b>Enter the taxon name below and toggle the correct type and level of the taxon. </b>
 			</font>
+			<br>
+			NOTE: All Queries are Case Insensitive
 			<p>
 			<small>
 			<INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
@@ -100,7 +102,7 @@
 		</td>
 		<!-- 	PLANT TAXON INPUT-->
 		<td  align="left" valign="middle">
-			<input size="35" name="communityName">
+			<input size="55" name="communityName">
 			<b>
 			<font face="Helvetica,Arial,Verdana" size=1>
 			</font>
@@ -153,9 +155,9 @@
 			<td>
 				<b> Query examples: </b>
 				<br>
-				Community Name=TIDAL%,  Community Level=Alliance 
+				Community Name=%tidal%,  Community Level=Alliance 
 				<br>
-				Community Name=Brackish%, Community Level=Association
+				Community Name=%brackish%, Community Level=Association
 			</td>
 		</tr>
 	</table>
