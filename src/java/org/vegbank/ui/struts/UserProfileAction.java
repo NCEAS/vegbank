@@ -1,11 +1,11 @@
 /*
- *	'$Id: UserProfileAction.java,v 1.4 2004-04-30 13:16:26 anderson Exp $'
+ *	'$Id: UserProfileAction.java,v 1.5 2004-11-19 20:58:11 anderson Exp $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-30 13:16:26 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-11-19 20:58:11 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -132,7 +132,7 @@ public class UserProfileAction extends VegbankAction {
 
 					log.debug("calling upForm.setWebUser ");
 					upForm.setWebuser(curUser);
-					log.debug("putting upform in request attribute 'upform'");
+					log.debug("edit: putting upform in request attribute 'upform'");
 					request.setAttribute("upform", upForm); 
 					return mapping.findForward(FWD_EDIT_USER);
 					
@@ -144,7 +144,7 @@ public class UserProfileAction extends VegbankAction {
 
 					log.debug("calling upForm.setWebUser ");
 					upForm.setWebuser(curUser);
-					log.debug("putting upform in request attribute 'upform'");
+					log.debug("view: putting upform in request attribute 'upform'");
 					request.setAttribute("upform", upForm); 
 					return mapping.findForward(FWD_VIEW_USER);
 		
@@ -164,6 +164,9 @@ public class UserProfileAction extends VegbankAction {
 							saveErrors(request, errors);
 							//session.removeAttribute("UserProfileForm");
 							request.setAttribute("webuser", changedUser); 
+							log.debug("update: putting upform in request attribute 'upform'");
+							upForm.setWebuser(changedUser);
+							request.setAttribute("upform", upForm); 
 							return mapping.getInputForward();
 						}
 					}
