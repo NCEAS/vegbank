@@ -101,7 +101,7 @@ public void doGet(HttpServletRequest request,
 		 	{
  				resultType = (String)params.get("resultType");
  			}
- 			//what type of data is being requested -- ie. plot, plant, community
+ 			//what type of data is being requested -- ie. plot, plantTaxon, vegCommunity
  			if ( (String)params.get("requestDataType") != null )
  			{
  				requestDataType = (String)params.get("requestDataType");
@@ -120,19 +120,42 @@ public void doGet(HttpServletRequest request,
 			//method also adds some tags that are required many browsers
 			returnQueryElemenySummary (out, params, response);
 			
-			System.out.println("determining query type: " + determineQueryType(params) );
-			if ( determineQueryType(params).equals("simple") )
+			//figure out what of data request type the client is requesting?
+			if ( requestDataType.trim().equals("vegPlot") )
 			{
-				handleSimpleQuery (params, out, response);
-			}
-			else if ( determineQueryType(params).equals("compound") )
-			{
-				handleCompoundQuery (params, out, response);
-			}
-			else if ( determineQueryType(params).equals("extended") )
-			{
+				System.out.println("determining query type: " + determineQueryType(params) );
+				if ( determineQueryType(params).equals("simple") )
+				{
+					handleSimpleQuery (params, out, response);
+				}
+				else if ( determineQueryType(params).equals("compound") )
+				{
+					handleCompoundQuery (params, out, response);
+				}
+				else if ( determineQueryType(params).equals("extended") )
+				{
 				handleExtendedQuery(enum, params, out, response, request);
+				}
 			}
+			else if ( requestDataType.trim().equals("plantTaxon") )
+			{
+				System.out.println( " query on the plant taxonomy database \n");
+				handlePlantTaxonQuery( params, out, requestDataType );
+			}
+			else if ( requestDataType.trim().equals("vegCommunity") )
+			{
+				System.out.println( " query on the vegetation community database \n"
+					+" not yet implemented ");
+				handleVegCommunityQuery( params, out, requestDataType);
+			}
+			else 
+			{
+				System.out.println( " unknown 'requestDataType' parameter "
+					+" must be: vegPlot or plantTaxon or vegCommunity ");
+				
+			}
+			
+			
 		}//end try
 		catch( Exception e ) 
 		{
@@ -363,7 +386,41 @@ public void doGet(HttpServletRequest request,
 		}
 	}
 
-
+	
+	/**
+	 * method to handle queries that are meant to be issued against 
+	 * the plantTaxonomy database
+	 */
+	private void handlePlantTaxonQuery(Hashtable params, PrintWriter out, 
+	String requestDataType)
+	{
+		if (requestDataType.trim().equals("plantTaxon")) 
+		{  
+			out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
+			+ "plant taxonomy information - not requesting plot info");
+			composePlantTaxonomyQuery(params);
+			issueQuery("simplePlantTaxonomyQuery");
+			out.println("Number of taxa returned: "+queryOutputNum+"<br><br>");
+		}
+	}
+	
+	/**
+	 * method to handle queries that are meant to be issued against 
+	 * the vegetation community database
+	 */
+	private void handleVegCommunityQuery( Hashtable params, PrintWriter out, 
+	String requestDataType)
+	{
+		if (requestDataType.trim().equals("vegCommunity")) 
+		{  
+			out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "
+			+ "community information - not requesting plot info");
+			composeCommunityQuery(params);
+			issueQuery("simpleCommunityQuery");
+			out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
+		}
+	}
+	
 
 /**
  * Handles compound queries where there are more than one query elements
@@ -458,6 +515,52 @@ public void doGet(HttpServletRequest request,
 
 
 
+
+
+/**
+ * This method takes the hashtable that stores the input parameters passed to
+ * the servlet -- which in this case refer to the community that the user wants
+ * data about and builds the query xml file that is passed then to the database
+ * access module
+ *
+ * @param params -- all the params passed to the servlet that contains
+ * attributes used for, in this care, query the community database
+ * 
+ */
+	private void composePlantTaxonomyQuery (Hashtable params) 
+	{
+ 		try 
+		{
+ 			PrintStream queryOutFile = new PrintStream(
+ 			new FileOutputStream(servletDir+"taxonQuery.xml", false)); 
+			
+			//grab the relevent query attributes out of the hash
+			String taxonName = (String)params.get("taxonName");
+		
+
+			System.out.println("printing from DataRequestServlet.composePlantTaxonomyQuery: "+
+			"taxonName: "+taxonName);
+
+ 			//print the query instructions in the xml document
+ 			queryOutFile.println("<?xml version=\"1.0\"?> \n"+       
+ 				"<!DOCTYPE vegPlot SYSTEM \"plotQuery.dtd\"> \n"+     
+ 				"	<dbQuery> \n"+
+ 				"		<query> \n"+
+ 				"			<queryElement>taxonName</queryElement> \n"+
+ 				"			<elementString>"+taxonName+"</elementString> \n"+
+ 				"		</query> \n"+
+ 				"		<requestDataType>"+requestDataType+"</requestDataType> \n"+
+ 				"		<resultType>"+resultType+"</resultType> \n"+
+ 				"		<outFile>"+servletDir+"summary.xml</outFile> \n"+
+ 				"</dbQuery>"
+ 			);
+ 		}
+		catch (Exception e) 
+		{
+			System.out.println(" failed : " 
+			+ e.getMessage());
+		}
+	}
 
 
 
@@ -858,9 +961,20 @@ private void updateClentLog (String clientLog, String remoteHost)
 			queryOutput=dba.queryOutput;
 			queryOutputNum=dba.queryOutputNum;
 		}
+			else if (queryType.equals("simplePlantTaxonomyQuery")) 
+		{ 
+			//call the plot access module
+			dba.accessDatabase(servletDir+"taxonQuery.xml", 
+			servletDir+"querySpec.xsl", "simplePlantTaxonomyQuery");	
+			//grab the result set from the dbAccess class
+			queryOutput=dba.queryOutput;
+			queryOutputNum=dba.queryOutputNum;
+		}
+		
 		else
 		{
-			System.out.println("DataRequestServlet could not handle query");
+			System.out.println("DataRequestServlet could not handle query type: "
+				+queryType);
 		}
 	}
 	
