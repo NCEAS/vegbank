@@ -17,7 +17,7 @@
 <blockquote>
 <p><span class="category">Search all of VegBank by keyword.</span></p>
 
-<vegbank:get id="meta" select="keywords_count"/>
+<vegbank:get id="meta" select="keywords_count" wparamSearch="true"/>
 
 
 <logic:empty name="meta-BEANLIST">
@@ -27,6 +27,7 @@
 
 <logic:notEmpty name="meta-BEANLIST">
 <% String rowClass = "evenrow"; %>
+<blockquote>
 	<table  bgcolor="#FFFFFF" border="0" cellspacing="0" cellpadding="10" width="300">
 	<tr>
 		<th colspan="10">Search Results</th>
@@ -37,29 +38,38 @@
 		<tr class="@nextcolorclass@">
 			<td align="right">
 
+			<bean:define id="entity" name="onerow" property="entity"/>
+			<bean:define id="getPk" name="onerow" property="entity"/>
 			<bean:define id="getName" name="onerow" property="entity"/>
 			<bean:define id="getView" value="std"/>
-
-<% 
-String wparamList = "wparam=" + getName + ";" + request.getParameter("kwType") + 
-		";" + request.getParameter("wparam");
-%>
+			<bean:define id="getExtra" value=""/>
 
 			<logic:equal name="onerow" property="entity" value="community">
+				<bean:define id="getPk" value="commconcept"/>
 				<bean:define id="getName" value="commconcept"/>
 			</logic:equal>
 			<logic:equal name="onerow" property="entity" value="plant">
+				<bean:define id="getPk" value="plantconcept"/>
 				<bean:define id="getName" value="plantconcept"/>
 			</logic:equal>
 			<logic:equal name="onerow" property="entity" value="plot">
+				<bean:define id="getPk" value="observation"/>
 				<bean:define id="getName" value="observation"/>
 				<bean:define id="getView" value="simple"/>
+				<bean:define id="getExtra" value="&perPage=3"/>
 			</logic:equal>
 				
 
-<% String where = "where_" + getName + "_pk"; %>
+<% 
+String params = getPk + ";" + entity + ";" + request.getParameter("kwType") + 
+		";" + request.getParameter("wparam");
 
-				<a href="@get_link@<bean:write name="getView"/>/<bean:write name="getName"/>?where=<%=where%>&whereSubquery=keywords_id&<%=wparamList%>"><bean:write name="onerow" property="entity"/></a>
+String getURL = "@get_link@" + getView + "/" + getName + "/" + params + 
+		"?where=where_keywords_pk";
+%>
+
+
+				<a href="<%=getURL%><%=getExtra%>"><bean:write name="onerow" property="entity"/></a>
 			</td>
 			<td>
 				<bean:write name="onerow" property="count"/>
@@ -68,6 +78,7 @@ String wparamList = "wparam=" + getName + ";" + request.getParameter("kwType") +
 	</logic:iterate>
 
 	</table>
+</blockquote>
 </logic:notEmpty>
 
 
