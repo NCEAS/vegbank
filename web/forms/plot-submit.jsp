@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2004-04-08 05:44:28 $'
-*  '$Revision: 1.9 $'
+*  '$Author: anderson $'
+*  '$Date: 2004-11-06 01:06:32 $'
+*  '$Revision: 1.10 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,9 @@
 
 <br> 
 
-<html:form action="/UploadPlot"  enctype="multipart/form-data" onsubmit="return validateUploadPlot(this)" >
+<html:form action="/UploadPlot"  enctype="multipart/form-data">
+	<html:hidden value="false" property="updateArchivedPlot"/>
+	<html:hidden value="2" property="archiveType"/>
 
 
 <table  border="0" width="800" >
@@ -62,7 +64,7 @@
 		</td>
 		<td align="left" valign="middle">
 			<font face="Helvetica,Arial,Verdana" size="6" color="23238E">
-				Vegetation Plots Submittal Wizard
+				Vegetation Plot Submission
 			</font>
 		</td>
 	</tr>
@@ -72,189 +74,98 @@
 
 <br> 
 
-<table border="0">
+<table border="0" width="550">
 	<tr>
-		<td  align=left valign=middle colspan=2>
-			<font face="Helvetica,Arial,Verdana" size="2" color="209020">
-				<b>Use this form to initiate the plot loading process to VegBank. </b>
-			</font>
-		</td>
-	</tr>
-	<tr>
-	<td>
-		<small>
-			<html:submit property="submit" value="continue"/>
-			&nbsp;&nbsp;
-			<html:submit property="reset" value="reset"/>
-		</small>
-	</td>
-	</tr>	
-</table>
+		<td colspan="2">
+			<p>In order to share your plot observation data, it must be contained 
+			in a VegBank native XML file.  
+			<a href="http://gyro.nceas.ucsb.edu/vegdocs/vegbranch/vbr-overview.html">VegBranch</a>
+			is a Microsoft Access tool which you can use to generate this XML file.
 
-<br>	
+			<p>Please see the 
+			<a href="http://gyro.nceas.ucsb.edu:8080/vegbank/general/faq.html#catg_loading">FAQ</a>
+			to learn more about how to submit plots.  See the 
+			<a href="@NativeXMLIndexPage@">VegBank native XML</a> page for more information, 
+			sample XML documents and schemas.  Although the schema is still evolving, that 
+			page will be updated.
 
-	
-    <!-- required = red * -->
-	
-		<font size="2" >
-			<font color="#F90000">
-        <b>*</b>
-      </font>
-      <b> indicates a required field</b>
-    </font>
-
-&nbsp;
-&nbsp;
-
-
-<!-- PLOT DATA DESCRIPTION -->
-<table border="0" width="799" bgcolor="#DFE5FA">
-	<tr>
-		<td  align=left valign=top width="5%" >
-			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
-				<b>Plots Archive:</b>
-			</font>
-		</td>
-		
-	</tr>
-	<tr>
-		<td align="center" width="5%">
-			<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
-		</td>
-		<td class="item">
-			Please choose to either upload new plot(s)  or use previously uploaded plot(s).
-		</td>
-	</tr>
-	
-</table>
-&nbsp;
-
-<!-- CHOOSE A DATA SOURCE EITHER UPLOAD OR FROM THE USER DATABASE -->
-<table class="category">
-	<tr>
-		<td>
-			<html:radio value="false" property="updateArchivedPlot"/>
-    			Upload new Plot(s) 
-	 	</td>
-	</tr>
-	
-	<tr>
-		<td>
-			<html:radio value="true" property="updateArchivedPlot" disabled="true"/> 
-			Use a Plot Archive Previously Uploaded 
-			<font color="#F90000" size="1"><b> -- not yet implemented</b></font><br>
 		</td>
 	</tr>
 </table>
 
 &nbsp;
 
-<!-- PLOT DATA ARCHIVE TYPE -->
-<table border="0" width="799" bgcolor="#DFE5FA">
-	<tr>
-		<td  align=left valign=top width="5%" >
-			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
-				<b>Archive Type:</b>
-			</font>
-		</td>
-		
-	</tr>
-	<tr>
-		<td align="center" width="5%">
-			<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
-		</td>
-		<td class="item">
-		Please choose the type of archive file that you would like to send to VegBank.
-		</td>
-	</tr>
-	
-	<tr>
-		<td  align="center" width="5%"> 	
-		<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" > 
-		</td>
-		<td class="item">
-		Currently this wizard only works with plots stored in the VegBank Native XML format. <br>
-		</td>
-	</tr>
-	<tr>
-	<td> </td>
-	<td class="item">
 
-		--For more information on VegBank Native  XML, including sample XML documents and schemas, please click 
-		<a href="@NativeXMLIndexPage@">here.</a> The Schema is still evolving, and that page will show you the
-		most recent version.
-
-	</td>
-	</tr>
-</table>
-&nbsp;
-
-
-
-<!-- The codes for each format is defined in the UploadPlotForm.java, These two files need to be kept in sync -->
-<table class="category">
-	<tr>
-		<td>
-			<html:radio value="2" property="archiveType"/>VegBank XML Format 
-		</td>
-	</tr>
-</table>
 
 <!-- PLOT FILE  -->
-<table border="0" width="799" bgcolor="#DFE5FA">
+<table border="0" width="780" class="on_page_help">
 	
 	<tr>
-		<td  align=left valign=top width="5%" >
-			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
-			<b>PLOTS:</b>
-			</font>		
+		<td colspan="2">
+			<b>Plot Data File Location:</b>
+		</td>
+	</tr>
+	<tr>
+		<td width="5%" align="center">
+			<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
+		</td>
+		<td class="on_page_help_text">
+			Specify the location of a VegBank XML data file.
 		</td>
 	</tr>
 
-	<tr>
-		<td align="center" width="5%">
-			<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
-		</td>
-		<td class="item">
-		Please upload the data from your hard-drive to the server here. 
-		<br>
-		</td>
-	</tr>
 </table>
 &nbsp;
 
-<table class="category">
+<table>
 	
-	<!--SELECT DATA FILE-->
-	<tr align="left">
-		<td width="30%" align=left valign=top>
-			<font size="2" >
-			<b>Plot Data File:</b><font color="#F90000"><b>*</b></font>:</font>
-		</td>
-		<td  align="left" valign="middle">
-			<html:file property="plotFile"  size="50"/>
-			<b><font face="Helvetica,Arial,Verdana" size="1"></font></b>
+	<!-- LOCAL UPLOAD -->
+	<tr>
+		<td colspan="2" class="category">
+			<html:radio value="local" property="dataFileLocation"/>
+				Upload from your computer
 		</td>
 	</tr>
+	<tr>
+		<td class="vegbank_small">
+			&nbsp; &nbsp; &nbsp; Local data file path:
+		</td>
+		<td>
+			<html:file property="plotFile" size="50"/>
+		</td>
+	</tr>
+
+	<tr>
+		<td colspan="2"><br> &nbsp; </td>
+	</tr>
+
+	<!-- REMOTE DOWNLOAD -->
+	<tr>
+		<td colspan="2" class="category">
+			<html:radio value="remote" property="dataFileLocation"/>
+				Download from web address
+		</td>
+	</tr>
+	<tr>
+		<td class="vegbank_small">
+			&nbsp; &nbsp; &nbsp; Data file URL:
+		</td>
+		<td>
+			<html:text property="plotFileURL" size="50" value="http://"/>
+		</td>
+	</tr>
+
+
 </table>
 
 <table>
 
-<font size="2" >
-	<font color="#F90000">
-    <b>*</b>
-  </font>
-  <b> indicates a required field</b>
-</font>
 
 <table border="0">
 	<tr>
 	 <td>
-		<small>
-			<html:submit property="submit" value="continue"/>
-			&nbsp;&nbsp;
-			<html:submit property="reset" value="reset"/>
-		</small>
+	 	<br>
+		<html:submit property="submit" value="continue"/>
 	 </td>
 	</tr>	
 </table>
