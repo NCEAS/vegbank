@@ -14,13 +14,11 @@ import java.sql.*;
 
 import org.apache.tools.mail.MailMessage;
 import servlet.util.ServletUtility;
-//import servlet.plugin.*;
-//import org.w3c.dom.Document;
-//import xmlresource.utils.XMLparse;
-//import servlet.util.ServletUtility;
 
 
 /**
+ * servlet class to allow a user to creat a default 
+ * style sheet to be stored in the profile
  *
  */
 
@@ -91,6 +89,15 @@ public class StyleSheetGenerator extends HttpServlet
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * method allowing the user to delete the current
+	 * style sheet
+	 */
+	 private boolean deleteSavedStyleSheets()
+	 {
+		 
+	 }
 	
 	
 	/**
