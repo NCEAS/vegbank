@@ -23,9 +23,11 @@ import org.vegbank.common.model.Commclass;
 import org.vegbank.common.model.Observation;
 import org.vegbank.common.model.Plot;
 import org.vegbank.common.model.Stratumcomposition;
+import org.vegbank.common.model.Taxoninterpretation;
 import org.vegbank.common.model.Taxonobservation;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.ServletUtility;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.XMLUtil;
 import org.vegbank.plots.datasource.DBModelBeanReader;
 
@@ -35,8 +37,8 @@ import org.vegbank.plots.datasource.DBModelBeanReader;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-03 04:22:19 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-11-03 05:06:37 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -250,17 +252,41 @@ public class DownLoadAction extends Action
 								// Get taxonObservations
 								List taxonobservations = obs.getobservation_taxonobservations();
 								Iterator taxonIter = taxonobservations.iterator();
-								if ( taxonIter.hasNext() )
+								while ( taxonIter.hasNext() )
 								{
 									Taxonobservation taxonObservation = (Taxonobservation) taxonIter.next();
 
 									plantName = taxonObservation.getAuthorplantname();
+									
+									if ( Utility.isStringNullOrEmpty(plantName) )
+									{
+										List taxonInterpretations = taxonObservation.gettaxonobservation_taxoninterpretations();
+										Iterator taxonInterpIter = taxonInterpretations.iterator();
+										while( taxonInterpIter.hasNext() )
+										{
+											Taxoninterpretation ti =  (Taxoninterpretation) taxonInterpIter.next();
+											// Converting a String to boolean ... risky
+											System.out.println("Is this the current interpritation ?" + ti.getCurrentinterpretation() );
+											if ( Utility.isTrue(ti.getCurrentinterpretation()) )
+											{
+												plantName = ti.getPlantconceptobject().getPlantnameobject().getPlantname();
+												System.out.println("The Plantname is  ?" +plantName );
+											}
+											if ( Utility.isStringNullOrEmpty(plantName) )
+											{
+												// No valid taxonInterpritation found use the authors name for the plant
+												// *** to indicate on the ui that this is not accepted yet .
+												plantName =  taxonObservation.getCheatplantname() ;
+											}
+										}
+									}								
+									
 									taxonCover = taxonObservation.getTaxoncover();
 									
 									//Get stratumComposition
 									List stratumCompositions = taxonObservation.gettaxonobservation_stratumcompositions();
 									Iterator stratumCompIter = stratumCompositions.iterator();
-									if ( stratumCompIter.hasNext() )
+									while ( stratumCompIter.hasNext() )
 									{
 										Stratumcomposition stratumComposition = (Stratumcomposition) stratumCompIter.next();
 										stratumCover = stratumComposition.getTaxonstratumcover();
