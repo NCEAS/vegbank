@@ -89,4 +89,15 @@ This doc describes issues, problems, and workarounds that we encounter that may 
   I'm not sure if the last step is needed.
 
 ------------------------------------------------------------------------------------------------------------------------
-  
+ 
+  Error in displaying jsp form
+
+  For jsp pages that need the database to populate there ActionForm we have seen
+  an error when visiting the jsp log.
+
+  Search catalina.log for:
+		Error in DBConnectionPool ${databaseDriverClass} 
+
+  If you see this then vegbank was build without a build.properties file
+
+------------------------------------------------------------------------------------------------------------------------
