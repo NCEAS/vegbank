@@ -30,7 +30,7 @@ if (xwhereGlue == null) {
 String xwhereParams = request.getParameter("xwhereParams");
 String searchString = xwhereParams;
 if (xwhereParams == null) {
-	xwhereParams = "";
+	xwhereParams = "vb";
 	searchString = "";
 }
 
