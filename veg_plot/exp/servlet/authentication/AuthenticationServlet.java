@@ -82,13 +82,62 @@ public class AuthenticationServlet extends HttpServlet
 			//determine what the client wants to do
 			if ( requestParams.containsKey("authType") == false)
 			{
-				out.println("PARAMETERS INCLUDE: " + this.getParameters() );
+				out.println("AuthenticationServlet > PARAMETERS INCLUDE: " + this.getParameters() );
 			}
 			else
 			{
 				//figure out what the client wants to do -- exactly
+				//GET A LOST PASSWORD
+				if ( requestParams.get("authType").toString().toUpperCase().equals("GETPASSWORD")  )
+				{
+					String s =  handlePasswordRetreival(requestParams);
+					out.println(s);
+/*					
+					String email = (String)requestParams.get("userLogin");
+					String passwd = uda.getPassword(email);
+					System.out.println("AuthenticationServlet > emailing password to: " + email );
+					
+					String givenName = "";
+					String surName = "";
+					String body = "";
+					String mailHost = "nceas.ucsb.edu";
+					String from = "vegbank";
+					String to = email;
+					String cc = "dba@vegbank.org";
+					String subject = "Recovered VegBank Password";
+					
+					// if there is a name use it
+					if ( (requestParams.containsKey("firstName") == true ) &&  
+						(requestParams.containsKey("lastName") == true  ))
+					{
+						givenName = (String)requestParams.get("firstName");
+						surName = (String)requestParams.get("lastName");
+						System.out.println("AuthenticationServlet > surName: " + surName 
+						+ " givenName: " + givenName );
+						if ( surName.length() > 1 )
+						{
+							String wholename = givenName+ " "+surName;
+							StringBuffer sb = new StringBuffer();
+							sb.append("Dear "+wholename+", \n");
+							sb.append("\t Your VegBank password is: "+passwd);
+							body = sb.toString();
+						}
+					}
+					// else a generic string
+					else
+					{
+						body = "\n  Your Vegbank Password is: " + passwd;
+					}
+					
+					//if a password is retreived then send it to the user
+					if ( passwd != null && passwd.length() > 1 )
+					{
+						su.sendEmail( mailHost, from, to, cc, subject, body);
+					}
+ */
+				}		
 				//LOGIN THE USER
-				if ( requestParams.get("authType").toString().equals("loginUser")  )
+				else if ( requestParams.get("authType").toString().equals("loginUser")  )
 				{
 					System.out.println("AuthenticationServlet > user login attempt");
 					if ( authenticateUser(requestParams, remoteAddress) == true)
@@ -100,8 +149,6 @@ public class AuthenticationServlet extends HttpServlet
 						AuthenticationServlet m =new AuthenticationServlet();  
 						m.cookieDelegator(cookie, requestParams, remoteAddress, user);
 						response.addCookie(m.registeredCookie);
-						
- 						
 						//send the user to the correct page
 						Thread.currentThread().sleep(100);
 						response.sendRedirect("http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement?action=options");
@@ -112,7 +159,7 @@ public class AuthenticationServlet extends HttpServlet
 						out.println( getErrorRedirection() );
 					}
 				}
-				//AUTHENTICATE THE USER TO UPLOAD A FILE
+				//AUTHENTICATE THE USER TO UPLOAD A FILE OR SOMETHING SIMILAR
 				else if ( requestParams.get("authType").toString().equals("uploadfile")  )
 				{
 					System.out.println("AuthenticationServlet > authenticating for file upload");
@@ -127,7 +174,6 @@ public class AuthenticationServlet extends HttpServlet
 						AuthenticationServlet m =new AuthenticationServlet();  
 						m.cookieDelegator(cookie, requestParams, remoteAddress, user);
 						response.addCookie(m.registeredCookie);
-						
 					}
 					else 
 					{
@@ -148,9 +194,7 @@ public class AuthenticationServlet extends HttpServlet
 						//have a cookie associated with the browser, so as a fix create a 
 						//small statement and allow the oportunity to login
 						//response.sendRedirect("http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement?action=options");
-					
-						out.println( getUserCreationResponse() );
-					
+						out.println( getUserCreationResponse() );	
 					}
 					else
 					{
@@ -163,16 +207,89 @@ public class AuthenticationServlet extends HttpServlet
 					System.out.println("AuthenticationServlet > incorect input paramaters to authenticate");
 				}
 			}
-			
-		}	  //end try
+		}
 		catch( Exception e ) 
 		{
-			System.out.println("Exception: "
-			+e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * method that handles the retreival of a lost password,
+	 * emails it to the valid user and then returns the 
+	 * message to the browser
+	 * @param requestParams -- the hashtable containg the request paramteres
+	 */
+	 private String handlePasswordRetreival(Hashtable requestParams)
+	 {
+		 StringBuffer msg = new StringBuffer();
+		 try
+		 {
+			 
+			 	String email = (String)requestParams.get("userLogin");
+				String passwd = uda.getPassword(email);
+				System.out.println("AuthenticationServlet > emailing password to: " + email );
+					
+				boolean validUser = false;
+				String givenName = "";
+				String surName = "";
+				String body = "";
+				String mailHost = "nceas.ucsb.edu";
+				String from = "vegbank";
+				String to = email;
+				String cc = "dba@vegbank.org";
+				String subject = "Recovered VegBank Password";
+				
+					
+				// if there is a name use it
+				if ( (requestParams.containsKey("firstName") == true ) &&  
+				(requestParams.containsKey("lastName") == true  ))
+				{
+					givenName = (String)requestParams.get("firstName");
+					surName = (String)requestParams.get("lastName");
+					System.out.println("AuthenticationServlet > surName: " + surName 
+					+ " givenName: " + givenName );
+					if ( surName.length() > 1 )
+					{
+						String wholename = givenName+ " "+surName;
+						StringBuffer sb = new StringBuffer();
+						sb.append("Dear "+wholename+", \n");
+						sb.append("\t Your VegBank password is: "+passwd);
+						body = sb.toString();
+					}
+				}
+					// else a generic string
+				else
+				{
+					body = "\n  Your Vegbank Password is: " + passwd;
+				}
+					
+				//if a password is retreived then send it to the user
+				if ( passwd != null && passwd.length() > 1 )
+				{
+					su.sendEmail( mailHost, from, to, cc, subject, body);
+					validUser = true;
+				}
+				
+				//create the message
+				msg.append("<passwordRequest> \n");
+				msg.append("<message> password sent to: </message>\n");
+				msg.append("<user> \n");
+				msg.append(" <email>"+email+"</email>\n");
+				msg.append(" <surName>"+surName+"</surName>\n");
+				msg.append(" <givenName>"+givenName+"</givenName>\n");
+				msg.append(" <validUser>"+validUser+"</validUser>\n");
+				msg.append("</user> \n");
+				msg.append("</passwordRequest> \n");
+		 }
+		catch( Exception e ) 
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return( msg.toString() );
+	 }
 	
 	/**
 	 * method that provides a response to a user who has attempeted to 

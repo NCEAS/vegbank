@@ -8,8 +8,8 @@ package servlet.authentication;
  *    Authors: John Harris
  * 		
  *		 '$Author: harris $'
- *     '$Date: 2002-02-12 06:07:22 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2002-04-04 03:00:07 $'
+ *     '$Revision: 1.3 $'
  */
 
 
@@ -28,6 +28,43 @@ public class UserDatabaseAccess
 	
 	
 	/**
+	 * method to get the password from the database based on an email address
+	 * 
+	 * @param emailAddress
+	 */
+	public String getPassword(String emailAddress)
+	{
+		System.out.println("UserDatabaseAccess > looking up the password for user: " + emailAddress);
+		String s = null;
+		try 
+		{
+			//get the connections etc
+			Connection conn = getConnection();
+			Statement query = conn.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select password from USER_INFO ");
+			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"' ");
+			
+			//issue the query
+			query.executeQuery(sb.toString());
+			ResultSet rs = query.getResultSet();
+			while (rs.next()) 
+			{
+     		s = rs.getString(1);
+    	}
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return(s);
+	}
+	
+	
+	
+	
+	/**
 	 * method to create a new user in the vegetation user 
 	 * database.  This is used to create the intial instance 
 	 * of a user
@@ -42,7 +79,6 @@ public class UserDatabaseAccess
 	{
 		try 
 		{
-			
 			//get the connections etc
 			Connection conn = getConnection();
 			Statement query = conn.createStatement ();
