@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-19 21:13:16 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2002-02-19 22:14:31 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,6 +62,7 @@ public class USDAPlantsLoader
 	public String startDate = "01-JAN-96";
 	public String stopDate = "01-JAN-22";
 	public String partyName = "USDA-PLANTS";
+	private String partyContractInstructions = "http://plants.usda.gov";
 	public String reference = "PLANTS96";
 	public String otherCitationDetails = "PLANTS1996";
 
@@ -460,13 +461,16 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 		
 		//first load the reference table
 		int refId = this.insertPlantReference(this.otherCitationDetails);
-
+		
+		//load the party table
+		int partyId = this.insertPlantPartyInstance(this.partyName, this.partyContractInstructions);
+		System.out.println("USDAPlantsLoader > party id: " + partyId);
 
 		//if the plantname is not there then load it
 		if (plantNameExists(concatenatedName)==false)
 		{
-			System.out.println("USDAPlantsLoader > first instance of plant name: "
-				+ concatenatedName );
+			//System.out.println("USDAPlantsLoader > first instance of plant name: "
+			//	+ concatenatedName );
 			nameId = loadPlantNameInstance(refId, concatenatedName, commonName, plantCode);
 		}
 
@@ -481,10 +485,10 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 			{
 				//upadte the concept
 				conceptId = loadPlantConceptInstance(nameId, refId, concatenatedName, 
-				plantCode);
+				plantCode );
 				//update the status
 				statusId = loadPlantStatusInstance(conceptId, itisUsage, "01-JAN-96", 
-				"01-JAN-01", "PLANTS96");
+				"01-JAN-01", "PLANTS96", partyId);
 			}
 		}
 /*	
@@ -509,7 +513,132 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 	}
 }
 
+	
+	/**
+	 * method that loads a party occurence into the party table
+	 */
+	private int insertPlantPartyInstance(String partyName, String partyContractInstructions)
+	{
+	 int partyId = 0; 
+	 try
+	 {
+	 	StringBuffer sb = new StringBuffer();
+		//first see if the reference already exists
+		boolean partyExists = plantPartyExists(partyName);
+		System.out.println("USDAPlantsLoader > partyExists: " + partyExists); 
+		
+		if (partyExists == true)
+		{
+			partyId = getPlantPartyId(partyName);
+			//throw new Exception("reference already exists");
+		}
+		else
+		{
+			//insert the strata values
+			sb.append("INSERT into PLANTPARTY (organizationName, contactInstructions) "
+			+" values(?,?)");
+			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+			// Bind the values to the query and execute it
+ 			pstmt.setString(1, partyName);
+			pstmt.setString(2, partyContractInstructions);
+			//execute the p statement
+ 			pstmt.execute();
+ 			// pstmt.close();
+			
+			//get the partyId
+			sb = new StringBuffer();
+			sb.append("SELECT plantParty_id from PLANTPARTY where organizationName"
+			+" like '"+partyName+"'");
+			Statement query = conn.createStatement();
+			ResultSet rs = query.executeQuery( sb.toString() );
+			int cnt = 0;
+			while ( rs.next() ) 
+			{
+				partyId = rs.getInt(1);
+				cnt++;
+			}
+		}
+	 }
+		catch (Exception e)
+	 {
+		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+		 e.printStackTrace();
+		 System.exit(0);
+	 }
+	 return(partyId);
+	}
 
+	/** 
+	 * method that returns the party nameId for an organization name
+	 * 
+	 */
+		private int getPlantPartyId(String partyName)
+	  {
+		 	int partyId = 0; 
+			try
+			{
+		 		StringBuffer sb = new StringBuffer();
+				sb.append("SELECT plantparty_id from PLANTPARTY where organizationName"
+				+" like '"+partyName+"'");
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					partyId = rs.getInt(1);
+					cnt++;
+				}
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(partyId);
+	 }
+	 
+	
+	/** 
+	  * method that returns true if the party already exists 
+		*/
+		private boolean plantPartyExists(String partyName)
+	  {
+			boolean exists = false;
+		 try
+		 {
+		 	StringBuffer sb = new StringBuffer();
+			//get the refId
+			sb = new StringBuffer();
+			sb.append("SELECT plantparty_id from PLANTPARTY where organizationName"
+			+" like '"+partyName+"'");
+			
+			Statement query = conn.createStatement();
+			ResultSet rs = query.executeQuery( sb.toString() );
+			
+			int cnt = 0;
+			while ( rs.next() ) 
+			{
+				cnt++;
+			}
+			if (cnt > 0)
+			{
+				System.out.println("USDAPlantsLoader > matching party:  " + cnt  );
+				exists = true;
+			}
+			else
+			{
+				exists = false;
+			}
+		 }
+			catch (Exception e)
+		 {
+			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(exists);
+	 }
+	
+	
  /** 
 	 * method that inserts the reference data 
 	 */
@@ -642,12 +771,13 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
  	* that concept - name usage
  	*/	
 	private int loadPlantStatusInstance(int conceptId, String status, 
-	String startDate, String endDate, String event)
+	String startDate, String endDate, String event, int plantPartyId)
 	{
 		try
 		{
 			String s = "insert into PLANTSTATUS "
-			+"(plantConcept_id, plantconceptstatus, startDate, stopDate, plantPartyComments)  values(?,?,?,?,?) ";
+			+"(plantConcept_id, plantconceptstatus, startDate, stopDate, "
+			+" plantPartyComments, plantParty_id)  values(?,?,?,?,?,?) ";
 			PreparedStatement pstmt = conn.prepareStatement(s);
 			//bind the values
 			pstmt.setInt(1, conceptId);
@@ -655,6 +785,7 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 			pstmt.setString(3, startDate);
 			pstmt.setString(4, stopDate);
 			pstmt.setString(5, event);
+			pstmt.setInt(6, plantPartyId);
 			boolean results = true;
 			results = pstmt.execute();
 			pstmt.close();
