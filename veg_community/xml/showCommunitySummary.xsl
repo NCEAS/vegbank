@@ -128,10 +128,16 @@ return "Check All"; }
 
 
 
+<!--
 <input type="button" value="Check All" onClick="this.value=check(this.form.plotName)">
 </input> 
+-->
 </table>
+
+<!--
 <input type="submit" name="downLoadAction" value="start downLoad" /> 
+-->
+
 </form>
 	
 
