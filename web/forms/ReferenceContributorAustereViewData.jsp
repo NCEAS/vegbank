@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: farrell $'
-*  '$Date: 2003-08-21 21:16:43 $'
-*  '$Revision: 1.2 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-07-13 18:42:00 $'
+*  '$Revision: 1.3 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 *
 --> --%>
 
-
+<logic:notEmpty name="genericBean">
 
   <table border="1" cellspacing="0" cellpadding="0">
 
@@ -87,4 +87,6 @@
     </logic:iterate>
 
   </table>
+</logic:notEmpty>
 
+<logic:empty name="genericBean"><table cellspacing="0" cellpadding="0"><tr><td><span class="item"><p>(none)</p></span></td></tr></table></logic:empty>

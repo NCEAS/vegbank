@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-04-08 05:44:28 $'
-*  '$Revision: 1.3 $'
+*  '$Date: 2004-07-13 18:42:00 $'
+*  '$Revision: 1.4 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -49,12 +49,12 @@
 
 <h2>View Current References -- Summary</h2>
 
-  <p>Click on the ID (left-most) column to see more on a reference.</p>
+  <p>Click on the left-most column to see more on a reference.</p>
   <table border="1" cellspacing="0" cellpadding="0">
 
 
     <tr class="grey">
-       <td><p><span class="category">ID</span></p></td>
+       <td><p><span class="category">more?</span></p></td>
        <td><p><span class="category">Short Name</span></p></td>
        <td><p><span class="category">Reference Type</span></p></td>
        <td><p><span class="category">Title</span></p></td>
@@ -94,7 +94,7 @@
 
 <td><span class="item">
   <a
-href='/vegbank@url2get_reference_v_dtl_pk@<bean:write name="reference" property="reference_id"/>'><bean:write name="reference" property="reference_id"/></a>&nbsp;
+href='/vegbank@url2get_reference_v_dtl_pk@<bean:write name="reference" property="reference_id"/>'>more</a>&nbsp;
 </span></td>
 <td><span class="item"><bean:write name="reference" property="shortname"/>&nbsp;</span></td>
 <td><span class="item"><bean:write name="reference" property="referencetype"/>&nbsp;</span></td>
