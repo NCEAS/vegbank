@@ -6,21 +6,56 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: farrell $'
-  *      '$Date: 2002-12-27 19:00:01 $'
-  *  '$Revision: 1.10 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2003-02-04 00:06:56 $'
+  *  '$Revision: 1.11 $'
   *
   *
   -->
 <head>
 		<title>VegBank Hints</title>
-		<link rel="STYLESHEET" href="/vegbank/includes/default.css" type="text/css">
+		<link rel="STYLESHEET" href="@stylesheet@" type="text/css">
+
 	</head>
 	<body bgcolor="white">
-		
+		<p><a name="top"/></p>
+
+<table align="center" border="0" width="100%">
+<tr><td align="center">@vegbank_header_html_normal@</td></tr>
+</table>
+<table align="center" border="0" width="96%">
+			<tr>
+				<td align="center">
+<h1 class="vegbank"><a name="ctgy_top" />VegBank hints and help</h1></td>
+			</tr>
+<tr><td>&nbsp;</td></tr>
+</table>
+<table  align="center" border="0" width="96%" bgcolor="#ffffcc">
+<tr>
+<td class="item" align="left">This page is designed to give you, the VegBank user, some hints and 
+help in your interaction with Vegbank's website.  You can also see our <a href="@general_link@sitemap.html">sitemap</a> for more information on navigating our website.  
+Click one of the categories below to 
+see the hints and help. You can also use the "Find" function on your browser 
+(often accessed with the Edit Menu, then Find) to search for a particular word or phrase in 
+this help section.<hr />
+</td>
+</tr>
+			<tr>
+<td align="center" class="item">
+<a href="#ctgy_user">Login/Certification</a>&nbsp;&nbsp;&nbsp;
+<a href="#ctgy_dbinfo">VegBank Database Structure</a>&nbsp;&nbsp;&nbsp;
+<a href="#ctgy_load">Importing data to VegBank</a>&nbsp;&nbsp;&nbsp;
+<a href="#ctgy_query">Querying data in VegBank</a>&nbsp;&nbsp;&nbsp;
+<a href="#ctgy_download">Downloading data from VegBank</a>&nbsp;&nbsp;&nbsp;
+</td></tr>
+</table>
+<p>&nbsp;</p>
+<!-- LOGIN AND CERTIFICATION HELP -->
+<table align="center" border="0" width="96%"><tr><td align="center"><h2 class="vegbank">
+<a name="ctgy_user"/>Login/Certification</h2></td></tr></table>
 		<!--LOGINNAME-->
 		<a name="loginname">
-			<table border="0" width="80%" bgcolor="#ffffcc">
+			<table align="center" border="0" width="96%" bgcolor="#ffffcc">
 			<tr>
 				<td  align=left valign=top  width="10%" colspan="2">
 					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
@@ -31,11 +66,11 @@
             <!-- add row for column and row spacing -->
 			<tr>
 				<td  align=left valign=top  height="1" width="10%"></td>
-				<td  align=left valign=top  height="1" width="90%"></td>			
+				<td  align=left valign=top  height="1" width="96%"></td>			
 			</tr>				
 			<tr>
 				<td align="center" width="5%">
-				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
 				</td>
 				<td class="item">
 					The VegBank authentication system uses the user's email address as the 'Username'  
@@ -50,45 +85,7 @@
 				</td>
 			</tr>
 			<tr>
-			  <td colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>
-			</tr>
-			</table>
-		</a>
-<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-
-  <!--GENERAL-->
-  <a name="general"> 
-  <!-- DESCRIPTIONS-->
-  
-<table border="0" width="80%" bgcolor="#ffffcc">
-			<tr>
-				<td  align=left valign=top  width="10%" colspan="2" >
-					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
-					<b>Nested Query:</b> <br>
-					<font class="itemsmall"> General </font>
-				</font></td>
-				
-			</tr>
-			            <!-- add row for column and row spacing -->
-			<tr>
-				<td  align=left valign=top  height="1" width="10%"></td>
-				<td  align=left valign=top  height="1" width="90%"></td>			
-			</tr>
-				
-			<tr>
-				<td align="center" width="10%">
-				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
-				</td>
-				
-    <td class="item"> The basic idea for using this query tool is to build a nested 
-      query by generating a number of atomic (simple) query statements that are 
-      then combined and issued against the VegBank database. <br>There is currently a bug in 
-      the system that allows for only a single plant name (the 'Plant 
-      Taxon' query criteria) to be issued against the database for each nested 
-      query. </td>
-			</tr>
-			<tr>
-			  <td colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>
+			  <td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td>
 			</tr>
 			</table>
 		</a>
@@ -97,7 +94,7 @@
 		<!-- CERTIFICATION -->
 		<a name="certification">
 			<!-- DESCRIPTIONS-->
-			<table border="0" width="80%" bgcolor="#ffffcc">
+			<table align="center" border="0" width="96%" bgcolor="#ffffcc">
 			<tr>
 				<td  align=left valign=top  width="10%" colspan="2" >
 					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
@@ -109,11 +106,11 @@
 				            <!-- add row for column and row spacing -->
 			<tr>
 				<td  align=left valign=top  height="1" width="10%"></td>
-				<td  align=left valign=top  height="1" width="90%"></td>			
+				<td  align=left valign=top  height="1" width="96%"></td>			
 			</tr>
 			<tr>
 				<td align="center" width="10%">
-				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
 				</td>
 				
     <td class="item"> Each VegBank user is initially certified as a registered 
@@ -122,7 +119,103 @@
       for greater certification.</td>
 			</tr>
 			<tr>
-			  <td colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>
+			  <td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td>
+			</tr>
+			</table>
+		</a>
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+
+<!-- DATABASE STRUCTURE HELP -->
+<table align="center" border="0" width="96%"><tr><td align="center"><h2 class="vegbank">
+<a name="ctgy_dbinfo"/>VegBank Database Structure</h2></td></tr></table>
+
+
+<a name="database_structure">
+<!-- DESCRIPTIONS-->
+<table align="center" border="0" width="96%" bgcolor="#ffffcc">
+	<tr>	<td  align=left valign=top  width="10%" colspan="2" ><font face="Helvetica,Arial,Verdana" size="3" color="336633">			<b>
+VegBank Database design:		</b> <br><font class="itemsmall">
+learning about our data structure</font>	</font></td>	</tr>
+	<!-- add row for column and row spacing --><tr><td  align=left valign=top  height="1" width="10%"></td><td  align=left valign=top  height="1" width="96%"></td></tr>
+	<tr><td align="center" width="10%">
+		<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" ></td>		
+		<td class="item">
+Users are encouraged to learn more about VegBank's database structure. 
+The better understanding you have about the data structure, 
+the better you will be able to understand and use VegBank's powerful capabilities.  
+To find out more about our database structure click "Information" on the header bar 
+at the top of this page.
+</td>
+	</tr>
+	<tr><td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td></tr>
+</table>
+		</a>
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+
+<!-- Loading data HELP -->
+<table align="center" border="0" width="96%"><tr><td align="center"><h2 class="vegbank">
+<a name="ctgy_load"/>Importing data to VegBank</h2></td></tr></table>
+
+<a name="import_general">
+<!-- DESCRIPTIONS-->
+<table align="center" border="0" width="96%" bgcolor="#ffffcc">
+	<tr>	<td  align=left valign=top  width="10%" colspan="2" ><font face="Helvetica,Arial,Verdana" size="3" color="336633">			<b>
+Loading data into VegBank:		</b> <br><font class="itemsmall">
+General instructions			</font>		</font></td>	</tr>
+	<!-- add row for column and row spacing --><tr><td  align=left valign=top  height="1" width="10%"></td><td  align=left valign=top  height="1" width="96%"></td></tr>
+	<tr><td align="center" width="10%">
+		<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" ></td>		
+		<td class="item">
+<font class="itemsmall">(Note: You must be a certified user to submit data to VegBank; see above for more on that.)</font><br />
+<p>Currently, VegBank has been pre-loaded with a set of NPS (National Park Service) Plots, the USDA plant taxa concepts, and the NVC community concepts.</p>
+<p>If you wish to load plot data of your own, you can do so by sending us your plot data in one of three formats, NPS MS-Access Database, VegBranch (VegBank's MS-Access Database), and VegBank native-XML.
+<br />(How? <a href="@general_link@login.html">Login</a>, then selects PLOTS, then LOAD Plot Data.)</p>
+<p>If you wish to load plant or community data, you can specify the various data required through a series of webforms. 
+<br />(How? <a href="@general_link@login.html">Login</a>, then selects PLANT TAXON / COMMUNITY TYPE, then Create/Enter New.)</p>
+</td>
+	</tr>
+	<tr><td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td></tr>
+</table>
+		</a>
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+
+<!-- Querying data HELP -->
+<table align="center" border="0" width="96%"><tr><td align="center"><h2 class="vegbank">
+<a name="ctgy_query"/>Querying data in VegBank</h2></td></tr></table>
+
+  <!--GENERAL-->
+  <a name="general"> 
+  <!-- DESCRIPTIONS-->
+  
+<table align="center" border="0" width="96%" bgcolor="#ffffcc">
+			<tr>
+				<td  align=left valign=top  width="10%" colspan="2" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
+					<b>Nested Query:</b> <br>
+					<font class="itemsmall"> General </font>
+				</font></td>
+				
+			</tr>
+			            <!-- add row for column and row spacing -->
+			<tr>
+				<td  align=left valign=top  height="1" width="10%"></td>
+				<td  align=left valign=top  height="1" width="96%"></td>			
+			</tr>
+				
+			<tr>
+				<td align="center" width="10%">
+				<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				
+    <td class="item"> The basic idea for using this query tool is to build a nested 
+      query by generating a number of atomic (simple) query statements that are 
+      then combined and issued against the VegBank database. <br>There is currently a bug in 
+      the system that allows for only a single plant name (the 'Plant 
+      Taxon' query criteria) to be issued against the database for each nested 
+      query. </td>
+			</tr>
+			<tr>
+			  <td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td>
 			</tr>
 			</table>
 		</a>
@@ -131,7 +224,7 @@
 		<!-- DATEFORMATS -->
 		<a name="dateformats">
 			<!-- DESCRIPTIONS-->
-			<table border="0" width="80%" bgcolor="#ffffcc">
+			<table align="center" border="0" width="96%" bgcolor="#ffffcc">
 			<tr>
 				<td  align=left valign=top  width="10%" colspan="2" >
 					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
@@ -143,11 +236,11 @@
             <!-- add row for column and row spacing -->
 			<tr>
 				<td  align=left valign=top  height="1" width="10%"></td>
-				<td  align=left valign=top  height="1" width="90%"></td>			
+				<td  align=left valign=top  height="1" width="96%"></td>			
 			</tr>				
 			<tr>
 				<td align="center" width="10%">
-				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
 				</td>
 				<td class="item">
 				    Date often refers to the state of the database as of a certain date.  <br>
@@ -162,7 +255,7 @@
 			</td>
 			</tr>
 			<tr>
-			  <td colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>
+			  <td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td>
 			</tr>
 			</table>
 		</a>
@@ -172,7 +265,7 @@
 		<!--MULTIPLE ATTRIBUTE QUERY-->
 		<a name="multiquery">
 			<!-- DESCRIPTIONS-->
-			<table border="0" width="80%" bgcolor="#ffffcc">
+			<table align="center" border="0" width="96%" bgcolor="#ffffcc">
 			<tr>
 				<td  align=left valign=top  width="10%" colspan="2" >
 					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
@@ -184,11 +277,11 @@
             <!-- add row for column and row spacing -->
 			<tr>
 				<td  align=left valign=top  height="1" width="10%"></td>
-				<td  align=left valign=top  height="1" width="90%"></td>			
+				<td  align=left valign=top  height="1" width="96%"></td>			
 			</tr>				
 			<tr>
 				<td align="center" width="10%">
-				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
 				</td>
 				
     <td class="item"> When this option is selected the user must enter a value 
@@ -205,119 +298,16 @@
 				</td>
 			</tr>
 			<tr>
-			  <td colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>
+			  <td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td>
 			</tr>			
 			</table>
 		</a>
 <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-		
-		
-		<!-- RESULT SET XML -->
-		<a name="resultxml">
-			<!-- DESCRIPTIONS-->
-			<table border="0" width="80%" bgcolor="#ffffcc">
-			<tr>
-				<td  align=left valign=top  width="10%" colspan="2" >
-					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
-					<b>Download:</b> <br>
-					<font class="itemsmall"> Native xml format </font>
-				</font></td>
-				
-			</tr>
-            <!-- add row for column and row spacing -->
-			<tr>
-				<td  align=left valign=top  height="1" width="10%"></td>
-				<td  align=left valign=top  height="1" width="90%"></td>			
-			</tr>				
-			<tr>
-				<td align="center" width="10%">
-				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
-				</td>
-				<td class="item">
-					This will download a result set as a native VegBank xml document.
-				</td>
-			</tr>
-			<tr>
-			  <td colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>
-			</tr>			
-			</table>
-		</a>
-		
-<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-		
-		<!-- RESULT SET XML -->
-		<a name="resulthtml">
-			<!-- DESCRIPTIONS-->
-			<table border="0" width="80%" bgcolor="#ffffcc">
-			<tr>
-				<td  align=left valign=top  width="10%" colspan="2" >
-					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
-					<b>Download:</b> <br>
-					<font class="itemsmall"> html format </font>
-				</font></td>
-				
-			</tr>
-            <!-- add row for column and row spacing -->
-			<tr>
-				<td  align=left valign=top  height="1" width="10%"></td>
-				<td  align=left valign=top  height="1" width="90%"></td>			
-			</tr>				
-			<tr>
-				<td align="center" width="10%">
-				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
-				</td>
-				<td class="item">
-					This will download a result set as an HTML document using a generic 'tree-view' 
-					style for displaying the results.
-				</td>
-			</tr>
-			<tr>
-			  <td colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>
-			</tr>			
-			</table>
-		</a>
-		
-<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-		
-		<!-- RESULT SET XML -->
-		<a name="resultascii">
-			<!-- DESCRIPTIONS-->
-			<table border="0" width="80%" bgcolor="#ffffcc">
-			<tr>
-				<td  align=left valign=top  width="10%" colspan="2" >
-					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
-					<b>Download:</b> <br>
-					<font class="itemsmall"> ascii format </font>
-				</font></td>
-				
-			</tr>
-            <!-- add row for column and row spacing -->
-			<tr>
-				<td  align=left valign=top  height="1" width="10%"></td>
-				<td  align=left valign=top  height="1" width="90%"></td>			
-			</tr>				
-			<tr>
-				<td align="center" width="10%">
-				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
-				</td>
-				
-    <td class="item"> This will download a result set as an ASCII data set where 
-      the site data related to the plots will be in one file and the species-related 
-      data will be in a second. </td>
-			</tr>
-			<tr>
-			  <td colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>
-			</tr>			
-			</table>
-		</a>
-		
-		
-<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-		
-		<!-- QUERY CRITERIA-->
+
+<!-- QUERY CRITERIA-->
 		<a name="querycriteria"> 
 			<!-- DESCRIPTIONS-->
-			<table border="0" width="80%" bgcolor="#ffffcc">
+			<table align="center" border="0" width="96%" bgcolor="#ffffcc">
 			<tr>
 				<td  align=left valign=top  width="10%" colspan="2" >
 					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
@@ -329,11 +319,11 @@
             <!-- add row for column and row spacing -->
 			<tr>
 				<td  align=left valign=top  height="1" width="10%"></td>
-				<td  align=left valign=top  height="1" width="90%"></td>			
+				<td  align=left valign=top  height="1" width="96%"></td>			
 			</tr>			
 			<tr>
 				<td align="center" width="10%">
-				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
 				</td>
 				<td class="item">
 					The query criteria element is the database attribute that is used for selecting data 
@@ -390,7 +380,7 @@
 				</td>
 			</tr>
 			<tr>
-			  <td colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>
+			  <td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td>
 			</tr>			
 			</table>
 		</a>
@@ -400,7 +390,7 @@
 		<!-- QUERY OPERATOR-->
 		<a name="queryoperator"> 
 			<!-- DESCRIPTIONS-->
-			<table border="0" width="80%" bgcolor="#ffffcc">
+			<table align="center" border="0" width="96%" bgcolor="#ffffcc">
 			<tr>
 				<td  align=left valign=top  width="10%" colspan="2" >
 					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
@@ -412,11 +402,11 @@
             <!-- add row for column and row spacing -->
 			<tr>
 				<td  align=left valign=top  height="1" width="10%"></td>
-				<td  align=left valign=top  height="1" width="90%"></td>			
+				<td  align=left valign=top  height="1" width="96%"></td>			
 			</tr>
 			<tr>
 				<td align="center" width="10%">
-				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
 				</td>
 				<td class="item">
 					The query operator is the expression used to limit the query by the query value. <br>
@@ -437,7 +427,7 @@
 				</td>
 			</tr>
 			<tr>
-			  <td colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>
+			  <td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td>
 			</tr>			
 			</table>
 		</a>
@@ -447,7 +437,7 @@
 		<!-- QUERY VALUE-->
 		<a name="queryvalue"> 
 			<!-- DESCRIPTIONS-->
-			<table border="0" width="80%" bgcolor="#ffffcc">
+			<table align="center" border="0" width="96%" bgcolor="#ffffcc">
 			<tr>
 				<td  align=left valign=top  width="10%" colspan="2" >
 					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
@@ -459,11 +449,11 @@
             <!-- add row for column and row spacing -->
 			<tr>
 				<td  align=left valign=top  height="1" width="10%"></td>
-				<td  align=left valign=top  height="1" width="90%"></td>			
+				<td  align=left valign=top  height="1" width="96%"></td>			
 			</tr>				
 			<tr>
 				<td align="center" width="10%">
-				<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
 				</td>
 				<td class="item">
 					This is the value to be applied to the query criteria by the operator.  The following
@@ -487,7 +477,7 @@
 				</td>
 			</tr>
 			<tr>
-			  <td colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>
+			  <td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td>
 			</tr>			
 			</table>
 		</a>
@@ -498,7 +488,7 @@
 		<a name="commonqueries">
 		
 			<!-- DESCRIPTIONS-->
-			<table border="0" width="80%" bgcolor="#ffffcc">
+			<table align="center" border="0" width="96%" bgcolor="#ffffcc">
 			<tr>
 				<td  align=left valign=top  width="10%" colspan="2" >
 					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
@@ -510,11 +500,11 @@
             <!-- add row for column and row spacing -->
 			<tr>
 				<td  align=left valign=top  height="1" width="10%"></td>
-				<td  align=left valign=top  height="1" width="90%"></td>			
+				<td  align=left valign=top  height="1" width="96%"></td>			
 			</tr>
 			<tr>
 				
-    <td align="center" width="10%"> <img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" > 
+    <td align="center" width="10%"> <img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" > 
     </td>
 				<td class="item">
 					<p>Below are a list of commonly issued queries that have been run against the VegBank 
@@ -522,7 +512,7 @@
 					If you would like to make a request to add queryable criteria, email 
 					<a href="mailto:vegbank@nceas.ucsb.edu">vegbank@nceas.ucsb.edu</a>.<br>&nbsp;
       
-      <table border="0" class="item" >
+      <table align="center" border="0" class="item" >
 			<tr bgcolor="#cccccc">
 				<td> Criteria </td>
 				<td> Operator </td>
@@ -545,7 +535,7 @@
 			</tr>
 			</table>
 			<br>
-			<table border="0" class="item" >
+			<table align="center" border="0" class="item" >
 			<tr bgcolor="#cccccc">
 				<td> Criteria </td>
 				<td> Operator </td>
@@ -570,14 +560,124 @@
 			</td>
 			</tr>
 			<tr>
-			  <td colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>
+			  <td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td>
 			</tr>
 			
 	
 		</table>
 		</a>
+		
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+		
+<!-- DOWNLOADING HELP -->
+<table align="center" border="0" width="96%"><tr><td align="center"><h2 class="vegbank">
+<a name="ctgy_download"/>Downloading data from VegBank</h2></td></tr></table>		
+		<!-- RESULT SET XML -->
+		<a name="resultxml">
+			<!-- DESCRIPTIONS-->
+			<table align="center" border="0" width="96%" bgcolor="#ffffcc">
+			<tr>
+				<td  align=left valign=top  width="10%" colspan="2" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
+					<b>Download:</b> <br>
+					<font class="itemsmall"> Native xml format </font>
+				</font></td>
+				
+			</tr>
+            <!-- add row for column and row spacing -->
+			<tr>
+				<td  align=left valign=top  height="1" width="10%"></td>
+				<td  align=left valign=top  height="1" width="96%"></td>			
+			</tr>				
+			<tr>
+				<td align="center" width="10%">
+				<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				<td class="item">
+					This will download a result set as a native VegBank xml document.
+				</td>
+			</tr>
+			<tr>
+			  <td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td>
+			</tr>			
+			</table>
+		</a>
+		
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+		
+		<!-- RESULT SET XML -->
+		<a name="resulthtml">
+			<!-- DESCRIPTIONS-->
+			<table align="center" border="0" width="96%" bgcolor="#ffffcc">
+			<tr>
+				<td  align=left valign=top  width="10%" colspan="2" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
+					<b>Download:</b> <br>
+					<font class="itemsmall"> html format </font>
+				</font></td>
+				
+			</tr>
+            <!-- add row for column and row spacing -->
+			<tr>
+				<td  align=left valign=top  height="1" width="10%"></td>
+				<td  align=left valign=top  height="1" width="96%"></td>			
+			</tr>				
+			<tr>
+				<td align="center" width="10%">
+				<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				<td class="item">
+					This will download a result set as an HTML document using a generic 'tree-view' 
+					style for displaying the results.
+				</td>
+			</tr>
+			<tr>
+			  <td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td>
+			</tr>			
+			</table>
+		</a>
+		
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+		
+		<!-- RESULT SET XML -->
+		<a name="resultascii">
+			<!-- DESCRIPTIONS-->
+			<table align="center" border="0" width="96%" bgcolor="#ffffcc">
+			<tr>
+				<td  align=left valign=top  width="10%" colspan="2" >
+					<font face="Helvetica,Arial,Verdana" size="3" color="336633">
+					<b>Download:</b> <br>
+					<font class="itemsmall"> ascii format </font>
+				</font></td>
+				
+			</tr>
+            <!-- add row for column and row spacing -->
+			<tr>
+				<td  align=left valign=top  height="1" width="10%"></td>
+				<td  align=left valign=top  height="1" width="96%"></td>			
+			</tr>				
+			<tr>
+				<td align="center" width="10%">
+				<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
+				</td>
+				
+    <td class="item"> This will download a result set as an ASCII data set where 
+      the site data related to the plots will be in one file and the species-related 
+      data will be in a second. </td>
+			</tr>
+			<tr>
+			  <td class="item" colspan="2"><a href="javascript:history.back()" onclick="history.back();return false">back from whence you came</a>&nbsp;&nbsp;<a href="#ctgy_top">top</a></td>
+			</tr>			
+			</table>
+		</a>
+		
+<!--		
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p> -->
+<table align="center" border="0" width="96%">		
+<tr><td align="center">@vegbank_footer_html_onerow@</td></tr>		
+</table>
 <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>		
-	
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>	
 	<!-- Make sure that the page is long enough that bookmarks link to last anchor correctly -->
 	<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>	
 	</body>
