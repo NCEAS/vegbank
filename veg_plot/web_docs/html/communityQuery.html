@@ -18,7 +18,7 @@ Plots Database - vegetation communities
 <td bgcolor=DFE5FA>
 
 <img align=center border=0 height=144 
- src="/images/owlogocom.jpg" alt = "Veg plots logo">
+ src="@image-path@/owlogocom.jpg" alt = "Veg plots logo">
 
 
 <!-- title of page -->
@@ -99,7 +99,10 @@ see also:
 <td align=left>
 
 <table border=0 cellspacing=5 cellpadding=5>
-<FORM ACTION="http://beta.nceas.ucsb.edu:8080/examples/servlet/DataRequestServlet" METHOD="GET">
+<FORM ACTION="http://@server@@servlet-path@DataRequestServlet" METHOD="POST">
+<!--
+<FORM ACTION="http://dev.nceas.ucsb.edu/harris/servlet/DataRequestServlet" METHOD="GET">
+-->
 
 <tr valign=top>
 <td  align=left valign=middle colspan=2>
@@ -118,7 +121,7 @@ for Biodiversity Information (ABI) ecological community data
 <hr size=.5>
 
 <!--variables that are used by the servlet to figure out which query(s) to issue -->
-<input type="hidden" name="requestDataType" value="community">
+<input type="hidden" name="requestDataType" value="vegCommunity">
 <input type="hidden" name="resultType" value="summary">
 
 
