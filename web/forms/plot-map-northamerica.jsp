@@ -88,6 +88,9 @@
 
 
 <p><span class="category">Not finding the plots you want?<br />
+<a href="/browse-byplace">Browse for plots</a> (this lists all states and provinces that have plots).
+<br />
+
 <a href="@web_context@forms/metasearch.jsp">Try the keyword search</a>.
 <br />
 
