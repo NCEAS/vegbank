@@ -55,7 +55,7 @@ public void transformXML()
 	
 		try
 		{
-			System.out.println("transforming xml file: '"+inputXML+"'");
+			System.out.println("transformXML > transforming xml file: '"+inputXML+"'");
 			
 			StringWriter out =new StringWriter();
 			// Have the XSLTProcessorFactory obtain a interface to a
@@ -72,7 +72,7 @@ public void transformXML()
 	}
 	catch( Exception e ) 
 	{
-		System.out.println(" failed in: dbAccess.accessDatabase "
+		System.out.println("Exception: "
 		+e.getMessage() );
 		e.printStackTrace();
 	}

@@ -1,5 +1,30 @@
 package databaseAccess;
 
+/**
+ *  '$RCSfile: sqlMapper.java,v $'
+ *    Authors: @authors@
+ *    Release: @release@
+ *
+ *   '$Author: harris $'
+ *     '$Date: 2002-02-27 00:15:54 $'
+ * '$Revision: 1.3 $'
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+
 import java.lang.*;
 import java.io.*;
 import java.text.*;
@@ -18,10 +43,6 @@ import databaseAccess.*;
  * with some criteria and SQL statements, which if some or all
  * of the criteria are 'met' by the first document the SQL
  * will be passed to another class to be issued to the database
- *
- * @version March 22, 2001
- * @author John Harris
- *
  */
 
 public class  sqlMapper
@@ -935,7 +956,7 @@ catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery 
 		try 
 		{
 			
-			System.out.println(" sqlMapper.developSimplePlantTaxonomyQuery ");
+			System.out.println("sqlMapper > developSimplePlantTaxonomyQuery ");
 			//get the query elements into a hash table
 			getQueryElementHash(transformedString, transformedStringNum);
 
@@ -944,27 +965,17 @@ catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery 
 			String outFile = (String)metaQueryHash.get("outFile");
 			
 			//get the taxonName entered by the user
-			System.out.println( queryElementHash.toString() );
+			System.out.println("sqlMapper > query elements: " + queryElementHash.toString() );
 			String taxonName = (String)queryElementHash.get("taxonName");
 			String taxonNameType = (String)queryElementHash.get("taxonNameType");
-///			String communityLevel = (String)queryElementHash.get("communityLevel");
-///			Integer queryElementNum = (Integer)metaQueryHash.get("elementTokenNum");
-			
-			//create and issue the query to the database
-////			StringBuffer sqlBuf = new StringBuffer();
-////			sqlBuf.append("select acceptedsynonym, status, concatenatedName from ");
-////			sqlBuf.append("veg_taxa_summary where concatenatedName like '%"+taxonName+"%'");
-			
-////			Vector taxaResults = is.issuePureSQL(sqlBuf);
-////			queryOutputNum=taxaResults.size();
 			
 			//test the new class for doing all of what is currently in this method
 			TaxonomyQueryStore tqs = new TaxonomyQueryStore();
 			Vector taxaResults = tqs.getPlantTaxonSummary(taxonName, taxonNameType);
 			queryOutputNum=taxaResults.size();
-//			System.out.println( taxaResults.toString() );
 			
 			//print the results by passing the summary vector to the xml writer class
+			System.out.println("sqlMapper > writing the plant results as xml ");
 			xmlWriter l = new xmlWriter();
 			l.writePlantTaxonomySummary(taxaResults, outFile);
 		}
@@ -1130,7 +1141,7 @@ for (int i=0;i<pipeDelimitStringNum; i++)
 	{	
 		if (element[i].equals("queryElement")) 
 		{
-			System.out.println("*"+value[i]+" "+value[i+1]);
+			//System.out.println("*"+value[i]+" "+value[i+1]);
 			queryElementHash.put(value[i],value[i+1]);
 			elementTokenNum++;
 		}

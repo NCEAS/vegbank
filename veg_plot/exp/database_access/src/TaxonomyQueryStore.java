@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-26 22:33:21 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2002-02-27 00:15:54 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,8 +93,7 @@ import databaseAccess.*;
 				Connection conn = this.getConnection();
 				Statement query = conn.createStatement();
 				ResultSet results = null;
-
-
+				
 				//create and issue the query --
 				StringBuffer sqlBuf = new StringBuffer();
 				if (taxonNameType.trim().equals("scientificName") )
@@ -111,7 +110,7 @@ import databaseAccess.*;
 				}
 				else 
 				{
-					System.out.println(" unrecognized taxonNameType: "+taxonNameType);
+					System.out.println("TaxonomyQueryStore > unrecognized taxonNameType: "+taxonNameType);
 				}
 				//issue the query
 				results = query.executeQuery( sqlBuf.toString() );
@@ -125,11 +124,17 @@ import databaseAccess.*;
 					String commonName = results.getString(4);
 					String startDate = results.getString(5);
 					String stopDate = results.getString(6);
+					
+					//bunch all of these data attributes into the return vector
 					returnVector.addElement( consolidateTaxaSummaryInstance( 
-						acceptedSynonym, status, concatenatedName, commonName, startDate, 
+						acceptedSynonym, 
+						status, 
+						concatenatedName, 
+						commonName, 
+						startDate, 
 						stopDate) );
 					
-					//System.out.println( acceptedSynonym+ " "+ status+ " "+concatenatedName);
+					//System.out.println("TaxonomyQueryStore > plantName: " + returnVector.toString()  );
 				}
 			
 				//remember to close the connections etc..
@@ -140,6 +145,7 @@ import databaseAccess.*;
 				+e.getMessage());
 				e.printStackTrace();
 			}
+			System.out.println("TaxonomyQueryStore > returning results: " + returnVector.size()  );
 			return( returnVector );
 		}
 		
@@ -158,14 +164,48 @@ import databaseAccess.*;
 			String startDate, String stopDate)
 		 {
 			 Hashtable returnHash = new Hashtable();
-			 if (acceptedSynonym != null)
+			 try
 			 {
-			 	returnHash.put("acceptedSynonym", acceptedSynonym);
-				returnHash.put("status", status);
-				returnHash.put("concatenatedName", concatenatedName);
-				returnHash.put("commonName", commonName);
-				returnHash.put("startDate", startDate);
-				returnHash.put("stopDate", stopDate);
+				 //replace the null values that were retrieved from the database
+					if (acceptedSynonym == null )
+					{
+						acceptedSynonym ="";
+					}
+					if (status == null )
+					{
+						status ="";
+					}
+					if (concatenatedName == null )
+					{
+						concatenatedName ="";
+					}
+					if (commonName == null )
+					{
+						commonName ="";
+					}
+					if (startDate == null )
+					{
+						startDate ="";
+					}
+					if (stopDate == null )
+					{
+						stopDate ="";
+					}
+					
+					if (concatenatedName != null)
+			 		{
+			 			returnHash.put("acceptedSynonym", acceptedSynonym);
+						returnHash.put("status", status);
+						returnHash.put("concatenatedName", concatenatedName);
+						returnHash.put("commonName", commonName);
+						returnHash.put("startDate", startDate);
+						returnHash.put("stopDate", stopDate);
+			 		}
+			 }
+			 catch(Exception e)
+			 {
+				 System.out.println("Exception : " + e.getMessage());
+				 e.printStackTrace();
 			 }
 			 return( returnHash );
 		 }
