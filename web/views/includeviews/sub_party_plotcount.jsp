@@ -1,8 +1,8 @@
 <!--Where statement removed from preceding: -->
 <!-- can ask for only total plots -->
-<logic:empty name="browseparty-BEANLIST">
+<!--<logic:empty name="browseparty-BEANLIST">
 <p>  Sorry, no parties found (error!)</p>
-</logic:empty>
+</logic:empty> -->
 <logic:notEmpty name="browseparty-BEANLIST">
 <table class="leftrightborders" cellpadding="2">
 <tr>
