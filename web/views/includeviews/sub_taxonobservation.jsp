@@ -9,6 +9,17 @@
        otherwise, if no reocrds written do this:, and write the records without any strata if so
        -->
 
+<!-- also pass a bean: plantRecs2Show : number means that many are shown (max), if -1, then shows all -->
+
+<!-- also CAN pass a bean: showStrataDefn : if "no" then doesn't show strata definitions, else does -->
+<logic:empty name="showStrataDefn">
+ <bean:define id="showStrataDefn" value="yes" /><!-- default value -->
+</logic:empty>
+
+
+<logic:empty name="plantRecs2Show">
+ <bean:define id="plantRecs2Show" value="-1" /><!-- default value -->
+</logic:empty>
 
 <%     int rowOrder = 0;  %><!-- this is the number for the original sort order -->
 <%     int strataGroup = 0; %> <!-- which class to use for stratum coloring -->
@@ -20,10 +31,24 @@
 
      <TABLE cellpadding="0" class="thinlines">
   <logic:equal name="smallheader" value="yes">
-     <TR><TH colspan="9">--Taxa--</TH></TR>
+     <TR><TH colspan="9">--Taxa--
+     
+     <logic:notEmpty name="plantRecs2Show">
+  <!-- tell user that not all plants are shown! -->
+<span class="psmall">  Note: maximum of <bean:write name="plantRecs2Show" /> are shown. </span>
+</logic:notEmpty>
+
+</TH></TR>
   </logic:equal>
   <logic:notEqual name="smallheader" value="yes">
-   <TR><TH colspan="9" class="major">Taxa occurring on this plot-observation</TH></TR>  
+   <TR><TH colspan="9" class="major">Taxa occurring on this plot-observation
+   
+   <logic:notEmpty name="plantRecs2Show">
+     <!-- tell user that not all plants are shown! -->
+   <span class="psmall">  Note: maximum of <bean:write name="plantRecs2Show" /> are shown. </span>
+</logic:notEmpty>
+   
+   </TH></TR>  
   </logic:notEqual>
   
 
@@ -33,7 +58,7 @@
 
 <logic:equal parameter="strata2Show" value="3"> <!-- show all records of taxImp -->
    <vegbank:get id="taxonimportanceall" select="taxonimportance" where="where_taxonimportance_obsid_addsort" beanName="map" 
-   wparam="observation_pk" perPage="-1"/>
+   wparam="observation_pk" perPage="plantRecs2Show"/>
      
      <TR><TH colspan="9"><a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=2">show strata</a> | 
 	      <a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=1">show overall cover</a>
@@ -103,7 +128,7 @@
 <!-- also make sure didn't just write them: -->
 <logic:notEqual name="stratawritten" value="yes"><!-- default -->
  <vegbank:get id="taxonimportance" select="taxonimportance_onlystrata" where="where_taxonimportance_obsid_addsort" 
- beanName="map"  wparam="observation_pk" perPage="-1"/>
+ beanName="map"  wparam="observation_pk" perPage="plantRecs2Show"/>
  
  
   <logic:notEmpty name="taxonimportance-BEANLIST">
@@ -170,7 +195,7 @@
  
  <!-- show WITH NO strata -->
    <vegbank:get id="taxonimportancens" select="taxonimportance_nostrata" where="where_taxonimportance_obsid_addsort" beanName="map" 
-   wparam="observation_pk" perPage="-1"/>
+   wparam="observation_pk" perPage="plantRecs2Show"/>
      
      <tr><th colspan="9"><a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=2">show strata</a> | 
 	      SHOWING overall cover
@@ -217,7 +242,10 @@
 
      <TR><TD colspan="9" class="bright sizetiny">This table is SORTABLE.  Click the headers to sort ascending and descending.</TD></TR>
      </TABLE>
-     <br/>
+  
+<logic:notEqual name="showStrataDefn" value="no"> <!-- if no, then don't show this part -->
+  
+  <br/>
 <!-- ############################# stratum definitions #################################### -->     
      <vegbank:get id="stratum" select="stratum" beanName="map" pager="false" where="where_observation_pk" wparam="observation_pk" perPage="-1" />
 	 <TABLE class="thinlines" cellpadding="2">
@@ -245,3 +273,5 @@
 	   </logic:notEmpty>
 <TR><TD colspan="9" class="bright sizetiny">This table is SORTABLE.  Click the headers to sort ascending and descending.</TD></TR>
 </TABLE>
+
+</logic:notEqual> <!-- whether or not to show strata -->
