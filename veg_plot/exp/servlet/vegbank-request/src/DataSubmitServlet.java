@@ -29,8 +29,8 @@ import servlet.authentication.UserDatabaseAccess;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-07-12 18:19:35 $'
- *  '$Revision: 1.39 $'
+ *  '$Date: 2002-08-02 14:29:51 $'
+ *  '$Revision: 1.40 $'
  */
 
 
@@ -51,7 +51,7 @@ public class DataSubmitServlet extends HttpServlet
 	private UserDatabaseAccess userdb = new UserDatabaseAccess();
 	private XMLparse parser;
 	
-	private String rmiServer = "raptor.nceas.ucsb.edu";
+	private String rmiServer = "raptor.nceas.ucsb.edu";  //this will be replaced with prop file
 	private int rmiServerPort = 1099;
 	private DataSourceClient rmiClient;
 	
@@ -142,9 +142,20 @@ public class DataSubmitServlet extends HttpServlet
 	 */
 	public DataSubmitServlet()
 	{
-		System.out.println("init: DataSubmitServlet");
-		//construct a new instance of the rmi client
-		rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
+		try
+		{
+			System.out.println("init: DataSubmitServlet");
+			this.rmiServer = rb.getString("rmiserver");
+			System.out.println("DataSumbitServlet > init rmiserver: " + rmiServer);
+			//construct a new instance of the rmi client
+			rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
+			
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
 	}
 	
 	

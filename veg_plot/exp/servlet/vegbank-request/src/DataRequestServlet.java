@@ -51,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-08-01 13:56:38 $'
- *  '$Revision: 1.24 $'
+ *  '$Date: 2002-08-02 14:29:51 $'
+ *  '$Revision: 1.25 $'
  * 
  */
 
@@ -358,17 +358,25 @@ public class DataRequestServlet extends HttpServlet
 				//does the client want xml or html?
 				if ( requestDataFormatType.trim().equals("xml") )
 				{
-					//out.println("sending xml");
-					suy.fileVectorizer(servletDir+"summary.xml");
-					Vector resultsVector = suy.outVector;
+					System.out.println("DataRequestServlet > sending xml ");
+					// GET THE FILE INTO A VECTOR AND SENT IT BACK
+					//suy.fileVectorizer(servletDir+"summary.xml");
+					Vector resultsVector = suy.fileToVector(servletDir+"summary.xml");
+					System.out.println("DataRequestServlet > xml line num " + resultsVector.size() );
 					for (int i=0; i<resultsVector.size(); i++) 
 					{
-						out.println( resultsVector.elementAt(i) );
+						String s = (String)resultsVector.elementAt(i);
+						//System.out.println("## " + s );
+						out.println( s );
 					}
+					System.out.println("DataRequestServlet > done passing the xml " );
+					out.close();
+					
 				}
 				//assume that client wants html 
 				else
 				{
+					System.out.println("DataRequestServlet > sending element summary ");
 					//pass back the summary of parameters passed to the servlet
 					returnQueryElementSummary(out, params, response);
 					//the number of plots in the result set\

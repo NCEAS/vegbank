@@ -22,8 +22,8 @@ import servlet.util.GetURL;
  *    etc.. 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-07-31 22:47:44 $'
- *  '$Revision: 1.15 $'
+ *  '$Date: 2002-08-02 14:29:51 $'
+ *  '$Revision: 1.16 $'
  *
  */
 
@@ -636,6 +636,7 @@ public void fileVectorizer(String fileName)
 {
 	try 
 	{
+		System.out.println("ServletUtility > vectorizing file: " + fileName);
 		vecElementCnt=0;
 		BufferedReader in = new BufferedReader(new FileReader(fileName));
 		Vector localVector = new Vector();
@@ -666,6 +667,7 @@ public void fileVectorizer(String fileName)
  */
 public Vector fileToVector(String fileName) 
 {
+	System.out.println("ServletUtility > file to vector: " + fileName);
 	Vector v = new Vector();
 	try 
 	{
@@ -677,6 +679,7 @@ public Vector fileToVector(String fileName)
 		{
 			v.addElement(s);
 		}
+		in.close();
 	}
 	catch (Exception e) 
 	{
