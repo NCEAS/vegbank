@@ -141,7 +141,7 @@
                     boolean connectionsSucceeded=false;
                     int dbLoop=20;
 
-                    try {
+                   // try {
                         for(int i=1; i < dbLoop; i++) {
                             try {
                                 for(int j=0; j < currConnections; j++) {
@@ -163,9 +163,12 @@
                             log.println("\r\nAll attempts at connecting to Database exhausted");
                             throw new IOException();
                         }
+                        /*
                     } catch (Exception e) {
                         throw new IOException();
                     }
+                    */
+                    
 
                     // Fire up the background housekeeping thread
 
@@ -173,6 +176,7 @@
                     runner.start();
 
                 }//End DbConnectionBroker()
+
                 private void createConn(int i)
 
                     throws SQLException {
@@ -181,10 +185,7 @@
 
                     try {
                         Class.forName (dbDriver);
-//System.out.println("> "+dbServer);
-dbServer = dbServer.trim();
-//dbServer="jdbc:idb:/home/computer/harris/compare/vegclass/veg_plot/src/build/bin/sample.prp";
-//System.out.println("> "+dbServer);
+                        dbServer = dbServer.trim();
 												connPool[i] = DriverManager.getConnection
                                       (dbServer,dbLogin,dbPassword);
 
@@ -192,13 +193,21 @@ dbServer = dbServer.trim();
                         connID[i]=connPool[i].toString();
                         connLockTime[i]=0;
                         connCreateDate[i] =  now.getTime();
+
+                        
+                        log.println(now.toString() + "  Opening connection " 
+                                    + String.valueOf(i) + " " 
+                                    + connPool[i].toString() + ":");
                     }
                     catch (ClassNotFoundException e2)
-                    {}
+                    {
+                      System.out.println(" failed in: DbConnectionBroker "
+				              +e2.getMessage() );
+				              e2.printStackTrace();
+                    }
 
-                    log.println(now.toString() + "  Opening connection " + String.valueOf(i) +
-                                " " + connPool[i].toString() + ":");
                 }
+
                 /**
                  * Less safe shutdown.  Uses default timeout value.
                  * This method simply calls the <code>destroy()</code> method
