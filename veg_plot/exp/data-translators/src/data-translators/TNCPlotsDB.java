@@ -15,8 +15,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2002-12-14 00:03:20 $' <br>
- * 	'$Revision: 1.31 $' <br>
+ *  '$Date: 2002-12-28 00:37:12 $' <br>
+ * 	'$Revision: 1.32 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -112,7 +112,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch (java.lang.Exception ex) 
 		{
-			System.out.println("Exception: " + ex + "<BR>");
+			System.out.println("TNCPlotsDB > Exception: " + ex + "<BR>");
 		}
 	}
 	
@@ -164,7 +164,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + x.getMessage() );
 			}
 		return(v);
 	}
@@ -227,7 +227,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + x.getMessage() );
 			}
 		return(s);
 		
@@ -262,7 +262,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(v);
@@ -298,7 +298,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(givenName);
@@ -325,7 +325,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(surName);
@@ -557,7 +557,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch (Exception e)                                                                                                                              
 		{
-			System.out.println("Exception: " + e.getMessage() );                                                                                           
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );                                                                                           
 			e.printStackTrace();
 		}
 		return(this.yCoord);
@@ -593,7 +593,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception e) 
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 		return(y);
@@ -629,7 +629,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception e) 
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 		return(y);
@@ -674,7 +674,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch (Exception e)                                                                                                                              
 		{
-			System.out.println("Exception: " + e.getMessage() );                                                                                           
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );                                                                                           
 			e.printStackTrace();
 		}
 		return(this.xCoord);
@@ -710,7 +710,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception e) 
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 		return(x);
@@ -746,7 +746,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception e) 
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 		return(x);
@@ -778,7 +778,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception e) 
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 		return(x);
@@ -810,7 +810,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception e) 
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 		return(x);
@@ -842,7 +842,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception e) 
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 		return(x);
@@ -874,7 +874,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception e) 
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 		return(x);
@@ -933,7 +933,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + x.getMessage() );
 			}
 		return(this.utmZone);
 	}
@@ -964,7 +964,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + x.getMessage() );
 			}
 			return(this.plotShape);
 	}
@@ -1002,14 +1002,14 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				}
 				catch (Exception x) 
 				{
-					System.out.println("Exception: " + x.getMessage() );
-					System.out.println("Exception:  could not parse the integers " );
+					System.out.println("TNCPlotsDB > Exception: " + x.getMessage() );
+					System.out.println("TNCPlotsDB > Exception:  could not parse the integers " );
 					return("");
 				}
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + x.getMessage() );
 			}
 		return(area);
 	}
@@ -1070,7 +1070,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 	return(cn);	
@@ -1102,7 +1102,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch( Exception e)
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 			return(code);
@@ -1145,7 +1145,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(cf);
@@ -1180,7 +1180,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch( Exception e)
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 			return(name);
@@ -1213,7 +1213,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch( Exception e)
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 			return(name);
@@ -1257,7 +1257,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 			return("unknown");
 		}
@@ -1285,7 +1285,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		//System.out.println("hydroregime: "+ this.hydrologicRegime);
@@ -1316,7 +1316,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(depth);
@@ -1348,7 +1348,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(observationContributors);	
@@ -1370,7 +1370,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception e)
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 			return(givenName);
@@ -1404,7 +1404,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			catch (Exception e)
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 			return(surName);
@@ -1560,7 +1560,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(date);
@@ -1588,7 +1588,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(depth);
@@ -1736,7 +1736,7 @@ public String  getObservationNarrative(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(s);
@@ -1765,7 +1765,7 @@ public String  getRepresentativeness(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(s);
@@ -1799,7 +1799,7 @@ public String  getWaterSalinity(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(s);
@@ -1833,7 +1833,7 @@ public String  getPercentBedRock(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(s);
@@ -1857,7 +1857,7 @@ public String  getPercentRockGravel(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(s);
@@ -1881,7 +1881,7 @@ public String  getPercentWood(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(s);
@@ -1906,7 +1906,7 @@ public String  getPercentLitter(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(s);
@@ -1930,7 +1930,7 @@ public String  getPercentBareSoil(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(s);
@@ -1954,7 +1954,7 @@ public String  getPercentWater(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(s);
@@ -1978,7 +1978,7 @@ public String  getPercentOther(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(s);
@@ -2002,7 +2002,7 @@ public String  getNameOther(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(s);
@@ -2106,7 +2106,7 @@ public String  getDominantStratum(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(s);
@@ -2182,7 +2182,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(this.topoPosition);
@@ -2230,7 +2230,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(this.slopeAspect );
@@ -2273,7 +2273,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(this.slopeGradient );
@@ -2301,7 +2301,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(this.surfGeo);
@@ -2346,7 +2346,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(s);
@@ -2374,7 +2374,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(s);
@@ -2405,7 +2405,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(this.elevation);
@@ -2463,7 +2463,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch (Exception e) 
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 	 	return(r);
@@ -2496,7 +2496,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(x);
@@ -2549,7 +2549,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch( Exception e)
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 		 	return(cover);
@@ -2642,7 +2642,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch( Exception e)
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 			//System.out.println("TNCPlotsDB > strum true base: '" + trueHeight +"'" );
@@ -2739,7 +2739,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch( Exception e)
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 			//System.out.println("TNCPlotsDB > strum true height: '" + trueHeight +"'" );
@@ -2936,7 +2936,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch (java.lang.Exception ex) 
 			{   // All other types of exceptions
-				System.out.println("Exception: " + ex + "<BR>");
+				System.out.println("TNCPlotsDB > Exception: " + ex + "<BR>");
 			}		
 		}
 		
@@ -2982,7 +2982,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch( Exception e)
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 			return(code);
@@ -3046,7 +3046,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch (java.lang.Exception ex) 
 			{   // All other types of exceptions
-				System.out.println("Exception: " + ex + "<BR>");
+				System.out.println("TNCPlotsDB > Exception: " + ex + "<BR>");
 			}	
 		}
 		
@@ -3111,7 +3111,7 @@ public boolean  getRevisions(String plotName)
 				}
 				catch (java.lang.Exception ex) 
 				{   // All other types of exceptions
-					System.out.println("Exception: " + ex + "<BR>");
+					System.out.println("TNCPlotsDB > Exception: " + ex + "<BR>");
 				}
 			}//end else
 			}
@@ -3165,7 +3165,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   // All other types of exceptions
-			System.out.println("Exception: " + ex + "<BR>");
+			System.out.println("TNCPlotsDB > Exception: " + ex + "<BR>");
 		}
 		return(v);
 }
@@ -3200,7 +3200,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 		}
 		 return(v);
 	 }
@@ -3240,7 +3240,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(s);
@@ -3323,7 +3323,7 @@ public boolean  getRevisions(String plotName)
 				}
 				catch (Exception x) 
 				{
-					System.out.println("Exception: " + x.getMessage() );
+					System.out.println("TNCPlotsDB > Exception: " + x.getMessage() );
 				}
 				// get all sql error messages in a loop
 				while (ex != null)
@@ -3338,7 +3338,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch (java.lang.Exception ex) 
 			{
-				System.out.println("Exception: " + ex + "<BR>");
+				System.out.println("TNCPlotsDB > Exception: " + ex + "<BR>");
 			}
 		}
 		

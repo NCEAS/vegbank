@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: farrell $'
- *  '$Date: 2002-12-14 00:03:19 $'
- *  '$Revision: 1.28 $'
+ *  '$Date: 2002-12-28 00:37:12 $'
+ *  '$Revision: 1.29 $'
  */
 public class PlotDataSource 
 {
@@ -470,7 +470,7 @@ public class PlotDataSource
 	public String getObservationContributorContactInstructions(String contributorWholeName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorContactInstructions(contributorWholeName);	
-		return(s);;
+		return(s);
 	}
 	
 	public String getObservationContributorPhoneNumber(String contributorWholeName)
@@ -908,7 +908,7 @@ public class PlotDataSource
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("PlotDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(true);
@@ -1665,7 +1665,7 @@ public class PlotDataSource
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("PlotDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 	}

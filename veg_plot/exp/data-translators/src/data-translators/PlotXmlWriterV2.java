@@ -19,8 +19,8 @@ import PlotDataSource;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: farrell $' <br>
- *  '$Date: 2002-12-17 20:51:44 $' <br>
- *  '$Revision: 1.13 $' <br>
+ *  '$Date: 2002-12-28 00:37:12 $' <br>
+ *  '$Revision: 1.14 $' <br>
  */
 
  
@@ -58,7 +58,7 @@ public class PlotXmlWriterV2
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class PlotXmlWriterV2
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
 		}
 	}
 	
@@ -158,7 +158,7 @@ public class PlotXmlWriterV2
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
 		}
 	}
 	
@@ -211,7 +211,7 @@ public class PlotXmlWriterV2
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
 		}
 	}
 	
@@ -246,7 +246,7 @@ public class PlotXmlWriterV2
 			 }
 			 catch (Exception e)
 			 {
-				 System.out.println("Exception: " + e.getMessage() );
+				 System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
 			 }
 		 return( sb.toString() );
 	 } 
@@ -321,7 +321,7 @@ public class PlotXmlWriterV2
 		 }
 		 catch (Exception e)
 		 {
-			 System.out.println("Exception: " + e.getMessage() );
+			 System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
 		 }
 		 return( sb.toString() );
 	 }
@@ -378,7 +378,7 @@ public class PlotXmlWriterV2
 		 }
 		 catch (Exception e)
 		 {
-			 System.out.println("Exception: " + e.getMessage() );
+			 System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
 		 }
 		 return( sb.toString() );
 	 }
@@ -430,7 +430,7 @@ public class PlotXmlWriterV2
 		 }
 		 catch (Exception e)
 		 {
-			 System.out.println("Exception: " + e.getMessage() );
+			 System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
 		 }
 		 return( sb.toString() );
 	 }
@@ -497,7 +497,7 @@ public class PlotXmlWriterV2
 			}
 			catch (Exception e)
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}	
 			return( sb.toString() );
@@ -614,7 +614,7 @@ public class PlotXmlWriterV2
 		 }
 		 catch (Exception e)
 		 {
-			 System.out.println("Exception: " + e.getMessage() );
+			 System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
 		 }
 		 return( sb.toString() );
 	  }
@@ -655,7 +655,7 @@ public class PlotXmlWriterV2
 		 }
 		 catch (Exception e) 
 		 {
-			 System.out.println( "Exception: " + e.getMessage() );
+			 System.out.println( "PlotXmlWriterV2 > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
 		 return(sb.toString() );
@@ -694,7 +694,7 @@ public class PlotXmlWriterV2
 			}
 			catch (Exception e )
 			{
-				System.out.println("Exception: " + e.getMessage() );
+				System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
 			return( sb.toString() );

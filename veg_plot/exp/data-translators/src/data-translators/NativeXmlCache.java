@@ -19,9 +19,9 @@ import xmlresource.utils.XMLparse;
 
 /**
  * 
- * 	'$Author: harris $'
- *	'$Date: 2002-05-20 20:00:41 $'
- *	'$Revision: 1.1 $'
+ * 	'$Author: farrell $'
+ *	'$Date: 2002-12-28 00:37:11 $'
+ *	'$Revision: 1.2 $'
  */
  
 public class NativeXmlCache
@@ -65,7 +65,7 @@ public class NativeXmlCache
     } 
 		catch(Exception e1) 
 		{
-			System.out.println("Exception: "+e1.getMessage() );
+			System.out.println("NativeXmlCache > Exception: "+e1.getMessage() );
     }
     doc = parser.getDocument();
     root = doc.getDocumentElement();
@@ -194,7 +194,7 @@ public class NativeXmlCache
 		 }
 		 catch (Exception e)
 		 {
-			 System.out.println("Exception: " + e.getMessage() );
+			 System.out.println("NativeXmlCache > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
 	 }
@@ -223,7 +223,7 @@ public class NativeXmlCache
 		 }
 		 catch (Exception e)
 		 {
-			 System.out.println("Exception: " + e.getMessage() );
+			 System.out.println("NativeXmlCache > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
 	 }
@@ -287,7 +287,7 @@ public class NativeXmlCache
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NativeXmlCache > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 	}

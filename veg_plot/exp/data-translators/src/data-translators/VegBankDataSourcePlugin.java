@@ -11,8 +11,8 @@ import java.sql.*;
  *
  *	
  *	'$Author: farrell $' <br>
- *	'$Date: 2002-12-17 20:51:44 $' <br>
- *	'$Revision: 1.24 $' <br>
+ *	'$Date: 2002-12-28 00:37:12 $' <br>
+ *	'$Revision: 1.25 $' <br>
  */
  
 public class VegBankDataSourcePlugin implements PlotDataSourceInterface
@@ -74,7 +74,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		}
 		catch (java.lang.Exception ex) 
 		{   // All other types of exceptions
-			System.out.println("Exception: " + ex + "<BR>");
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex + "<BR>");
 			ex.printStackTrace();
 		}
 	}
@@ -95,7 +95,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		}
 		catch ( Exception e )
 		{
-			System.out.println("Exception : " +e.getMessage());
+			System.out.println("VegBankDataSourcePlugin > Exception : " +e.getMessage());
 			e.printStackTrace();
 		}
 		return(c);
@@ -131,7 +131,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -266,7 +266,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		
@@ -303,7 +303,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		catch (java.lang.Exception ex) 
 		{   
 			// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			System.out.println("sql: " + sb.toString() );
 			ex.printStackTrace();
 		}
@@ -337,7 +337,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		catch (java.lang.Exception ex) 
 		{   
 			// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(v);
@@ -371,7 +371,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		catch (java.lang.Exception ex) 
 		{   
 			// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(v);
@@ -424,7 +424,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -455,7 +455,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -486,7 +486,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -573,7 +573,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			}
 			catch (java.lang.Exception ex) 
 			{
-				System.out.println("Exception: " + ex );
+				System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 				ex.printStackTrace();
 			}
 			return(retVal);	 	
@@ -699,7 +699,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		}
 		catch (java.lang.Exception ex) 
 		{
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(b);
@@ -739,7 +739,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1054,7 +1054,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1083,7 +1083,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(contributors);
@@ -1114,7 +1114,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1133,7 +1133,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1160,7 +1160,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1191,7 +1191,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1222,7 +1222,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1256,7 +1256,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1305,7 +1305,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1336,7 +1336,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1367,7 +1367,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1398,7 +1398,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1428,7 +1428,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1459,7 +1459,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1497,7 +1497,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1522,7 +1522,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1550,7 +1550,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(placeNames);
@@ -1628,7 +1628,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1657,7 +1657,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1686,7 +1686,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1719,7 +1719,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 	return(s);
@@ -1752,7 +1752,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1782,7 +1782,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1805,7 +1805,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1835,7 +1835,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1863,7 +1863,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1918,7 +1918,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		System.out.println("VegBankDataSourcePlugin > state: " + s);
@@ -1944,7 +1944,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1972,7 +1972,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -2020,7 +2020,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -2049,7 +2049,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -2081,7 +2081,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -2117,7 +2117,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -2140,7 +2140,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -2169,7 +2169,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -2191,7 +2191,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -2214,7 +2214,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -2237,7 +2237,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -2260,7 +2260,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -2283,7 +2283,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -2320,7 +2320,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 			// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(v);
@@ -2358,7 +2358,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 			// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(v);
@@ -2409,7 +2409,7 @@ public boolean  getRevisions(String plotName)
 				catch (java.lang.Exception ex) 
 				{   
 					// All other types of exceptions
-					System.out.println("Exception: " + ex );
+					System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 					ex.printStackTrace();
 				}
 				return(v);
@@ -2442,7 +2442,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		 return(v);
@@ -2471,7 +2471,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch (java.lang.Exception ex) 
 			{   
-				System.out.println("Exception: " + ex );
+				System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 				ex.printStackTrace();
 			}
 			return(s);
@@ -2499,7 +2499,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch (java.lang.Exception ex) 
 			{   
-				System.out.println("Exception: " + ex );
+				System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 				ex.printStackTrace();
 			}
 			return(s);
@@ -2527,7 +2527,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch (java.lang.Exception ex) 
 			{   
-				System.out.println("Exception: " + ex );
+				System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 				ex.printStackTrace();
 			}
 			return(s);
@@ -2558,7 +2558,7 @@ public boolean  getRevisions(String plotName)
 		 }
 		 catch (java.lang.Exception ex) 
 			{   
-				System.out.println("Exception: " + ex );
+				System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 				ex.printStackTrace();
 			}
 			return(cover);
@@ -2606,7 +2606,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{
-			System.out.println("Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 			System.out.println("VegBankDataSource > query which failed: " + sb.toString() );
 		}
@@ -2634,7 +2634,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception x) 
 		{   
 			// All other types of exceptions
-			System.out.println("Exception: " + x + "<BR>");
+			System.out.println("VegBankDataSourcePlugin > Exception: " + x + "<BR>");
 			x.printStackTrace();
 		}
 	}

@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: farrell $'
- *  '$Date: 2002-12-14 00:03:20 $'
- * 	'$Revision: 1.9 $'
+ *  '$Date: 2002-12-28 00:37:12 $'
+ * 	'$Revision: 1.10 $'
  */
  
 //public class VBAccessDataSourcePlugin
@@ -34,7 +34,7 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 		}
 		catch (java.lang.Exception ex) 
 		{
-			System.out.println("Exception: " + ex + "<BR>");
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex + "<BR>");
 			ex.printStackTrace();
 		}
 	}
@@ -91,7 +91,7 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(code);
@@ -120,7 +120,7 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 		}
 		catch (java.lang.Exception ex) 
 		{   
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(v);
@@ -521,7 +521,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 			// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(v);
@@ -726,7 +726,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -762,7 +762,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -791,7 +791,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -824,7 +824,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 	return(s);
@@ -857,7 +857,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -887,7 +887,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -921,7 +921,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -949,7 +949,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1018,7 +1018,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1047,7 +1047,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 		// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1144,7 +1144,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 			// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(v);
@@ -1182,7 +1182,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception ex) 
 		{   
 			// All other types of exceptions
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(v);
@@ -1230,7 +1230,7 @@ public boolean  getRevisions(String plotName)
 				}
 				catch (java.lang.Exception ex) 
 				{   
-					System.out.println("Exception: " + ex );
+					System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 					ex.printStackTrace();
 				}
 				return(v);
@@ -1278,7 +1278,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch (java.lang.Exception ex) 
 			{   
-				System.out.println("Exception: " + ex );
+				System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 				ex.printStackTrace();
 			}
 			return(v);
@@ -1308,7 +1308,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch (java.lang.Exception ex) 
 			{   
-				System.out.println("Exception: " + ex );
+				System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 				ex.printStackTrace();
 			}
 			return(s);
@@ -1343,7 +1343,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch (java.lang.Exception ex) 
 			{   
-				System.out.println("Exception: " + ex );
+				System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 				ex.printStackTrace();
 			}
 			return(s);
@@ -1378,7 +1378,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch (java.lang.Exception ex) 
 			{   
-				System.out.println("Exception: " + ex );
+				System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 				ex.printStackTrace();
 			}
 			return(s);
@@ -1423,7 +1423,7 @@ public boolean  getRevisions(String plotName)
 			}
 			catch (java.lang.Exception ex) 
 			{   
-				System.out.println("Exception: " + ex );
+				System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 				System.out.println("sql: " + sb.toString() );
 				ex.printStackTrace();
 			}
@@ -1462,7 +1462,7 @@ public boolean  getRevisions(String plotName)
 		}
 		catch (java.lang.Exception ex) 
 		{
-			System.out.println("Exception: " + ex );
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + ex );
 			ex.printStackTrace();
 		}
 		return(s);
@@ -1489,7 +1489,7 @@ public boolean  getRevisions(String plotName)
 		catch (java.lang.Exception x) 
 		{   
 			// All other types of exceptions
-			System.out.println("Exception: " + x + "<BR>");
+			System.out.println("VBAccessDataSourcePlugin > Exception: " + x + "<BR>");
 			x.printStackTrace();
 		}
 	}

@@ -24,8 +24,8 @@ import  xmlresource.utils.XMLparse;
  * Access to the data stored in the native VegBank XML structure.
  * 
  *	'$Author: farrell $'
- *	'$Date: 2002-12-17 20:51:44 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2002-12-28 00:37:12 $'
+ *	'$Revision: 1.13 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -110,7 +110,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 			} 
 			catch(Exception e1) 
 			{
-				System.out.println("Exception: "+e1.getMessage() );
+				System.out.println("NativeXmlPlugin > Exception: "+e1.getMessage() );
 				e1.printStackTrace();
 			}
 			doc = parser.getDocument();
@@ -121,7 +121,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e1) 
 			{
-				System.out.println("Exception: "+e1.getMessage() );
+				System.out.println("NativeXmlPlugin > Exception: "+e1.getMessage() );
 				e1.printStackTrace();
 			}
 	}
@@ -140,7 +140,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e1) 
 		{
-			System.out.println("Exception: "+e1.getMessage() );
+			System.out.println("NativeXmlPlugin > Exception: "+e1.getMessage() );
 			e1.printStackTrace();
     }
 	}
@@ -807,7 +807,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	  }
 	  catch(Exception e )
 	  {
-		  System.out.println("Exception parsing: lichenQuality");
+		  System.out.println("NativeXmlPlugin > Exception parsing: lichenQuality");
 	  }
 	  return(elementValue);
   }
@@ -822,7 +822,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	  }
 	  catch(Exception e )
 	  {
-		  System.out.println("Exception parsing: observationNarrative");
+		  System.out.println("NativeXmlPlugin > Exception parsing: observationNarrative");
 	  }
 	  return(elementValue);
   }
@@ -837,7 +837,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	  }
 	  catch(Exception e )
 	  {
-		  System.out.println("Exception parsing: homogeneity");
+		  System.out.println("NativeXmlPlugin > Exception parsing: homogeneity");
 	  }
 	  return(elementValue);
   }
@@ -852,7 +852,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	  }
 	  catch(Exception e )
 	  {
-		  System.out.println("Exception parsing: representativeness");
+		  System.out.println("NativeXmlPlugin > Exception parsing: representativeness");
 	  }
 	  return(elementValue);
   }
@@ -867,7 +867,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: basalArea");
+			System.out.println("NativeXmlPlugin > Exception parsing: basalArea");
 		}
 		return(elementValue);
 	}
@@ -882,7 +882,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: soilMoistureRegime");
+			System.out.println("NativeXmlPlugin > Exception parsing: soilMoistureRegime");
 		}
 		return(elementValue);
 	}
@@ -910,7 +910,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: organicDepth");
+			System.out.println("NativeXmlPlugin > Exception parsing: organicDepth");
 		}
 		return(elementValue);
 	}
@@ -925,7 +925,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: percentBedRock");
+			System.out.println("NativeXmlPlugin > Exception parsing: percentBedRock");
 		}
 		return(elementValue);
 	}
@@ -940,7 +940,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: percentRockGravel");
+			System.out.println("NativeXmlPlugin > Exception parsing: percentRockGravel");
 		}
 		return(elementValue);
 	}
@@ -955,7 +955,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: percentWood");
+			System.out.println("NativeXmlPlugin > Exception parsing: percentWood");
 		}
 		return(elementValue);
 	}
@@ -969,7 +969,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: percentLitter");
+			System.out.println("NativeXmlPlugin > Exception parsing: percentLitter");
 		}
 		return(elementValue);
 	}
@@ -984,7 +984,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: percentBareSoil");
+			System.out.println("NativeXmlPlugin > Exception parsing: percentBareSoil");
 		}
 		return(elementValue);
 	}
@@ -999,7 +999,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: percentWater");
+			System.out.println("NativeXmlPlugin > Exception parsing: percentWater");
 		}
 		return(elementValue);
 	}
@@ -1014,7 +1014,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: percentOther");
+			System.out.println("NativeXmlPlugin > Exception parsing: percentOther");
 		}
 		return(elementValue);
 	}
@@ -1029,7 +1029,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: nameOther");
+			System.out.println("NativeXmlPlugin > Exception parsing: nameOther");
 		}
 		return(elementValue);
 	}
@@ -1044,7 +1044,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: standMaturity");
+			System.out.println("NativeXmlPlugin > Exception parsing: standMaturity");
 		}
 		return(elementValue);
 	}
@@ -1060,7 +1060,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: landscapeNarrative");
+			System.out.println("NativeXmlPlugin > Exception parsing: landscapeNarrative");
 		}
 		return(elementValue);
 	}
@@ -1075,7 +1075,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: phenologicalAspect");
+			System.out.println("NativeXmlPlugin > Exception parsing: phenologicalAspect");
 		}
 		return(elementValue);
 	}
@@ -1090,7 +1090,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: waterDepth");
+			System.out.println("NativeXmlPlugin > Exception parsing: waterDepth");
 		}
 		return(elementValue);
 	}
@@ -1105,7 +1105,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: fieldHt");
+			System.out.println("NativeXmlPlugin > Exception parsing: fieldHt");
 		}
 		return(elementValue);
 	}
@@ -1120,7 +1120,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: submergedHt");
+			System.out.println("NativeXmlPlugin > Exception parsing: submergedHt");
 		}
 		return(elementValue);
 	}
@@ -1135,7 +1135,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: treeCover");
+			System.out.println("NativeXmlPlugin > Exception parsing: treeCover");
 		}
 		return(elementValue);
 	}
@@ -1150,7 +1150,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: shrubCover");
+			System.out.println("NativeXmlPlugin > Exception parsing: shrubCover");
 		}
 		return(elementValue);
 	}
@@ -1165,7 +1165,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: fieldCover");
+			System.out.println("NativeXmlPlugin > Exception parsing: fieldCover");
 		}
 		return(elementValue);
 	}
@@ -1180,7 +1180,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: nonvascularCover");
+			System.out.println("NativeXmlPlugin > Exception parsing: nonvascularCover");
 		}
 		return(elementValue);
 	}
@@ -1196,7 +1196,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: successionalStatus");
+			System.out.println("NativeXmlPlugin > Exception parsing: successionalStatus");
 		}
 		return(elementValue);
 	}
@@ -1211,7 +1211,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: treeHt");
+			System.out.println("NativeXmlPlugin > Exception parsing: treeHt");
 		}
 		return(elementValue);
 	}
@@ -1226,7 +1226,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: shrubHt");
+			System.out.println("NativeXmlPlugin > Exception parsing: shrubHt");
 		}
 		return(elementValue);
 	}
@@ -1241,7 +1241,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: nonvascularHt");
+			System.out.println("NativeXmlPlugin > Exception parsing: nonvascularHt");
 		}
 		return(elementValue);
 	}
@@ -1256,7 +1256,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: floatingCover");
+			System.out.println("NativeXmlPlugin > Exception parsing: floatingCover");
 		}
 		return(elementValue);
 	}
@@ -1271,7 +1271,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: submergedCover");
+			System.out.println("NativeXmlPlugin > Exception parsing: submergedCover");
 		}
 		return(elementValue);
 	}
@@ -1286,7 +1286,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: dominantStratum");
+			System.out.println("NativeXmlPlugin > Exception parsing: dominantStratum");
 		}
 		return(elementValue);
 	}
@@ -1301,7 +1301,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: growthform1type");
+			System.out.println("NativeXmlPlugin > Exception parsing: growthform1type");
 		}
 		return(elementValue);
 	}
@@ -1316,7 +1316,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: growthform2type");
+			System.out.println("NativeXmlPlugin > Exception parsing: growthform2type");
 		}
 		return(elementValue);
 	}
@@ -1331,7 +1331,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: growthform3type");
+			System.out.println("NativeXmlPlugin > Exception parsing: growthform3type");
 		}
 		return(elementValue);
 	}
@@ -1346,7 +1346,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: growthform1cover");
+			System.out.println("NativeXmlPlugin > Exception parsing: growthform1cover");
 		}
 		return(elementValue);
 	}
@@ -1361,7 +1361,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: growthform2cover");
+			System.out.println("NativeXmlPlugin > Exception parsing: growthform2cover");
 		}
 		return(elementValue);
 	}
@@ -1376,7 +1376,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e )
 		{
-			System.out.println("Exception parsing: growthform3cover");
+			System.out.println("NativeXmlPlugin > Exception parsing: growthform3cover");
 		}
 		return(elementValue);
 	}
@@ -1602,7 +1602,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		catch(Exception e) 
 		{
-			System.out.println("Exception: " +e.getMessage() );
+			System.out.println("NativeXmlPlugin > Exception: " +e.getMessage() );
 			e.printStackTrace();
 		}
 		return(returnVec);
@@ -1676,7 +1676,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 			}
 			catch(Exception e) 
 			{
-				System.out.println("Exception: " +e.getMessage() );
+				System.out.println("NativeXmlPlugin > Exception: " +e.getMessage() );
 
 				e.printStackTrace();
 			}

@@ -11,9 +11,9 @@ import java.sql.*;
  *
  *  Release: 
  *	
- *  '$Author: harris $'
- *  '$Date: 2002-04-17 01:51:05 $'
- * 	'$Revision: 1.6 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2002-12-28 00:37:11 $'
+ * 	'$Revision: 1.7 $'
  */
 //public class NCVSDataSource implements PlotDataSourceInterface
 public class NCVSDataSource
@@ -115,7 +115,7 @@ public class NCVSDataSource
 		}
 		catch (java.lang.Exception ex) 
 		{   // All other types of exceptions
-			System.out.println("Exception: " + ex + "<BR>");
+			System.out.println("NCVSDataSource > Exception: " + ex + "<BR>");
 			ex.printStackTrace();
 		}
 	}
@@ -140,7 +140,7 @@ public class NCVSDataSource
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 				x.printStackTrace();
 			}
 		return(v);
@@ -170,7 +170,7 @@ public class NCVSDataSource
 		}
 		catch (Exception x) 
 		{
-			System.out.println("Exception: " + x.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 			x.printStackTrace();
 		}
 		return(placeNames);
@@ -196,7 +196,7 @@ public class NCVSDataSource
 		}
 		catch (Exception x) 
 		{
-			System.out.println("Exception: " + x.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 			x.printStackTrace();
 		}
 		return(placeName);
@@ -221,7 +221,7 @@ public class NCVSDataSource
 		}
 		catch (Exception x) 
 		{
-			System.out.println("Exception: " + x.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 			x.printStackTrace();
 		}
 		return(placeId);
@@ -282,7 +282,7 @@ public class NCVSDataSource
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 				x.printStackTrace();
 			}
 		return(v);
@@ -317,7 +317,7 @@ public class NCVSDataSource
 				}
 				catch (Exception x) 
 				{
-					System.out.println("Exception: " + x.getMessage() );
+					System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 					x.printStackTrace();
 				}
 			return(stratumName);
@@ -346,7 +346,7 @@ public class NCVSDataSource
 				}
 				catch (Exception x) 
 				{
-					System.out.println("Exception: " + x.getMessage() );
+					System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 					x.printStackTrace();
 				}
 			return(stratumId);
@@ -383,7 +383,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(projectName);
@@ -409,7 +409,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(projectDescription);
@@ -441,7 +441,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(v);
@@ -468,7 +468,7 @@ public class NCVSDataSource
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 				x.printStackTrace();
 			}
 		return(partyName);
@@ -494,7 +494,7 @@ public class NCVSDataSource
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(givenName);
@@ -521,7 +521,7 @@ public class NCVSDataSource
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(surName);
@@ -548,7 +548,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(orgName);
@@ -604,7 +604,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(email);
@@ -671,7 +671,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(startDate);
@@ -696,7 +696,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(stopDate);
@@ -727,7 +727,7 @@ public class NCVSDataSource
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 				x.printStackTrace();
 			}
 		return(this.xCoord);
@@ -752,7 +752,7 @@ public class NCVSDataSource
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 				x.printStackTrace();
 			}
 		return(this.yCoord);
@@ -789,7 +789,7 @@ public class NCVSDataSource
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 				x.printStackTrace();
 			}
 		return(this.utmZone);
@@ -826,7 +826,7 @@ public class NCVSDataSource
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 				x.printStackTrace();
 			}
 */
@@ -972,7 +972,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 			//System.out.println("hydroregime: "+ this.hydrologicRegime);
@@ -998,7 +998,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(this.topoPosition);
@@ -1044,7 +1044,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(this.slopeAspect );
@@ -1070,7 +1070,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(this.slopeGradient );
@@ -1096,7 +1096,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(this.surfGeo);
@@ -1132,7 +1132,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(location);
@@ -1163,7 +1163,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		 return(this.elevation);
@@ -1218,7 +1218,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(percentCover);
@@ -1254,7 +1254,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(base);
@@ -1289,7 +1289,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(top);
@@ -1399,7 +1399,7 @@ public class NCVSDataSource
 			}
 			catch (java.lang.Exception ex) 
 			{   // All other types of exceptions
-				System.out.println("Exception: " + ex + "<BR>");
+				System.out.println("NCVSDataSource > Exception: " + ex + "<BR>");
 				ex.printStackTrace();
 			}		
 		}
@@ -1434,7 +1434,7 @@ public class NCVSDataSource
 				}
 				catch (Exception x) 
 				{
-					System.out.println("Exception: " + x.getMessage() );
+					System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 					x.printStackTrace();
 				}
 			return(v);
@@ -1465,7 +1465,7 @@ public class NCVSDataSource
 				}
 				catch (Exception x) 
 				{
-					System.out.println("Exception: " + x.getMessage() );
+					System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 					x.printStackTrace();
 				}
 			return(binomial);
@@ -1531,7 +1531,7 @@ public class NCVSDataSource
 				}
 				catch (java.lang.Exception ex) 
 				{   // All other types of exceptions
-					System.out.println("Exception: " + ex + "<BR>");
+					System.out.println("NCVSDataSource > Exception: " + ex + "<BR>");
 					ex.printStackTrace();
 				}
 			}//end else
@@ -1584,7 +1584,7 @@ public class NCVSDataSource
 		}
 		catch (java.lang.Exception ex) 
 		{   // All other types of exceptions
-			System.out.println("Exception: " + ex + "<BR>");
+			System.out.println("NCVSDataSource > Exception: " + ex + "<BR>");
 			ex.printStackTrace();
 		}
 		return(v);
@@ -1618,7 +1618,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		*/
@@ -1661,7 +1661,7 @@ public class NCVSDataSource
 		}
 		catch( Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("NCVSDataSource > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		*/
@@ -1741,7 +1741,7 @@ public class NCVSDataSource
 			}
 			catch (Exception x) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("NCVSDataSource > Exception: " + x.getMessage() );
 			}
 			// get all sql error messages in a loop
 			while (ex != null)
@@ -1756,7 +1756,7 @@ public class NCVSDataSource
 		}
 		catch (java.lang.Exception ex) 
 		{   // All other types of exceptions
-			System.out.println("Exception: " + ex + "<BR>");
+			System.out.println("NCVSDataSource > Exception: " + ex + "<BR>");
 		}	
 		}
 		
