@@ -22,8 +22,8 @@ import servlet.util.GetURL;
  *    etc.. 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-04-15 16:03:38 $'
- *  '$Revision: 1.10 $'
+ *  '$Date: 2002-04-15 20:41:29 $'
+ *  '$Revision: 1.11 $'
  *
  */
 
@@ -82,7 +82,7 @@ public class ServletUtility
 	 * @param zipFile -- the zip file
 	 *
 	 */
-	 public void getZippedFileContents()
+	 public void getZippedFileContents(String zipFile)
 	 {
 	  try 
 		{
@@ -430,7 +430,10 @@ public void htmlStore()
  * user the summary of the selected plots, veg vommunities, or plant taxonmies.
  *
  * @param summaryViewType -- the type of summary to view, can include vegPlot, 
- *	vegCommunity, or plantTaxa 
+ *	vegCommunity, or plantTaxa
+ * 
+ * @deprecated -- this code has been moved to the data request servlet 20020415
+ *
  */
 public void getViewOption(String summaryViewType) 
 {
@@ -451,6 +454,9 @@ public void getViewOption(String summaryViewType)
 	+"</html> \n";
 	outString=response;	
 }
+
+
+
 
 /**
  * utility method to return the name of the browser type that 
