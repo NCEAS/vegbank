@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: farrell $'
-* '$Date: 2003-03-25 20:17:44 $'
-* '$Revision: 1.36 $'
+* '$Author: mlee $'
+* '$Date: 2003-04-01 06:05:38 $'
+* '$Revision: 1.37 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -18,184 +18,157 @@
 *  See http://jakarta.apache.org for details on Ant
 *
 * usage: ant forms, images
---> 
+-->
 <project name="vegbank_web" default="init" basedir=".">
-
-<target name="init">
-	<tstamp/>
-	<!-- LET THE USER KNOW THE TARGETS -->
-	<echo message="############ ${ant.project.name} ##############"/>
-	<echo>
+  <target name="init">
+    <tstamp/>
+    <!-- LET THE USER KNOW THE TARGETS -->
+    <echo message="############ ${ant.project.name} ##############"/>
+    <echo>
 	Targets:  {init} {hdrftr} includes, news, panel, history, pubs, forms, general, design,
-	dictionary
+	vbsummary, dictionary
 	</echo>
-	<!-- 
+    <!-- 
 		* Below are the basic propoerties and tokens for
 		* building the vegbank web site
 	-->
-	<property name="forms" value="./forms" />
-	<property name="general_src" value="./general" />
-	<property name="design_src" value="./design" />
-	<property name="dictionary_src" value="./dbdictionary" />
-	<property name="news_src" value="./news" />
-	<property name="src.dir" value="./src" />
-	<property name="web.src.dir" value="${src.dir}/web" />
-	<property name="xsl.src.dir" value="${web.src.dir}/xsl" />
-	<property name="panel_src" value="./panel" />
-	<property name="history_src" value="./history" />
-	<property name="pubs_src" value="./pubs" />
-	<property name="style_src" value="./includes" />
-	<property name="image_src" value="./images" />
-	<property name="hostname" value="beta" />
-	<property name="sharedhtml_src" value="./sharedhtml"/>
-	<filter token="dist" value="dist"/>
-	<filter token="hostname" value="${hostname}"/>
-	<filter token="version" value="development"/>
-	
-	<!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
-	<property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
-	<property name="forms_server" value="${tomcat.home.dir}/webapps/forms"/>
-	<property name="image_server" value="${tomcat.home.dir}/webapps/vegbank/images"/>
-	<property name="general_server" value="${tomcat.home.dir}/webapps/vegbank/general/"/>
-	<property name="design_server" value="${tomcat.home.dir}/webapps/vegbank/design/"/>
-	<property name="dictionary_server" value="${tomcat.home.dir}/webapps/vegbank/dbdictionary/"/>
-	<property name="news_server" value="${tomcat.home.dir}/webapps/vegbank/news/"/>
-	<property name="panel_server" value="${tomcat.home.dir}/webapps/vegbank/panel/"/>
-	<property name="history_server" value="${tomcat.home.dir}/webapps/vegbank/history/"/>
-	<property name="pubs_server" value="${tomcat.home.dir}/webapps/vegbank/pubs/"/>
-	<property name="style_server" value="${tomcat.home.dir}/webapps/vegbank/includes/"/>
-	<property name="vegbank_server" value="${tomcat.home.dir}/webapps/vegbank/"/>
-	<property name="server_root" value="${tomcat.home.dir}/webapps/ROOT/"/>
-	<property name="framwork.lib.dir" value="${tomcat.home.dir}/webapps/framework/WEB-INF/lib"/>
-
-	<!-- WEB SERVER LOCATIONS -->
-	<filter token="base_url" value=""/>
-	<filter token="image_server" value="/vegbank/images/"/>
-	<filter token="stylesheet" value="/vegbank/includes/default.css"/>
-	<filter token="plotquery_page" value="/forms/plot-query.html"/>
-	<filter token="nestedplotquery_page" value="/forms/nested-plot-query.html"/>
-	<filter token="uploaddata_page" value="/forms/uploadFile.html"/>
-	<filter token="stylesheet_generator" value="/forms/stylesheet-generator.html"/>
-	<filter token="general_link" value="/vegbank/general/"/>
-	<filter token="panel_link" value="/vegbank/panel/"/>
-	
-	
-	<!-- SERVLETS -->
-	<filter token="stylesheet_generator_servlet" value="/framework/servlet/stylesheetgenerator"/>
-	<filter token="usermanagement_servlet" value="/framework/servlet/usermanagement"/>
-	<filter token="datarequestservlet" value="/framework/servlet/DataRequestServlet" />
-	<filter token="datasubmitservlet" value="/framework/servlet/DataSubmitServlet" />
-	<filter token="nestedquerybuilder" value="/framework/servlet/QueryBuilderServlet" />
-	<filter token="authenticationservlet" value="/framework/servlet/authenticate" />
-
-  <!-- FIXME: Should be in a prepare target -->
-  <mkdir dir="${tomcat.home.dir}/webapps/vegbank/"/>
-</target>
-<!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
-<!-- this copy stays local on the machine that it is on - not needed on webserver -->
-<target name="hdrftr" depends="init">
-     <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
-     <!-- set the newly created properties file as a filtersfile to distribute headers and footers -->
-     <filter filtersfile="${style_server}/filters_detokened.properties"/>
-</target>
-
-
-<!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
-<target name="includes" depends="init">
-  <copy todir="${style_server}" filtering="no" >
-    <fileset dir="${style_src}" >
-      <include name="**.css"/>
-    </fileset>
-  </copy>
-</target>
-
-<target name="index" depends="hdrftr" description="target to dist. the index.html file">
-	<copy tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
-	<!-- add to second webpage at root/vegbank/index.html -->
-	<copy todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
-</target>
-
-<!-- DISTRIBUTE THE IMAGES -->
-<target name="images" depends="init">
-	<copy todir="${image_server}" filtering="no" >
-		<fileset dir="${image_src}" >
-			<include name="**"/>
-		</fileset>
-	</copy>
-</target>
-
-
-
-<!--
+    <property name="forms" value="./forms"/>
+    <property name="general_src" value="./general"/>
+    <property name="design_src" value="./design"/>
+    <property name="dictionary_src" value="./dbdictionary"/>
+    <property name="news_src" value="./news"/>
+    <property name="src.dir" value="./src"/>
+    <property name="web.src.dir" value="${src.dir}/web"/>
+    <property name="xsl.src.dir" value="${web.src.dir}/xsl"/>
+    <property name="panel_src" value="./panel"/>
+    <property name="history_src" value="./history"/>
+    <property name="pubs_src" value="./pubs"/>
+    <property name="style_src" value="./includes"/>
+    <property name="image_src" value="./images"/>
+    <property name="hostname" value="vegbank"/>
+    <property name="sharedhtml_src" value="./sharedhtml"/>
+    <property name="lrg_binary_src" value="/home/lee/VegBranchReleases"/>
+    <filter token="dist" value="dist"/>
+    <filter token="hostname" value="${hostname}"/>
+    <filter token="version" value="development"/>
+    <!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
+    <property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
+    <property name="forms_server" value="${tomcat.home.dir}/webapps/forms"/>
+    <property name="image_server" value="${tomcat.home.dir}/webapps/vegbank/images"/>
+    <property name="general_server" value="${tomcat.home.dir}/webapps/vegbank/general/"/>
+    <property name="design_server" value="${tomcat.home.dir}/webapps/vegbank/design/"/>
+    <property name="dictionary_server" value="${tomcat.home.dir}/webapps/vegbank/dbdictionary/"/>
+    <property name="news_server" value="${tomcat.home.dir}/webapps/vegbank/news/"/>
+    <property name="panel_server" value="${tomcat.home.dir}/webapps/vegbank/panel/"/>
+    <property name="history_server" value="${tomcat.home.dir}/webapps/vegbank/history/"/>
+    <property name="pubs_server" value="${tomcat.home.dir}/webapps/vegbank/pubs/"/>
+    <property name="style_server" value="${tomcat.home.dir}/webapps/vegbank/includes/"/>
+    <property name="vegbank_server" value="${tomcat.home.dir}/webapps/vegbank/"/>
+    <property name="server_root" value="${tomcat.home.dir}/webapps/ROOT/"/>
+    <property name="framwork.lib.dir" value="${tomcat.home.dir}/webapps/framework/WEB-INF/lib"/>
+    <!-- WEB SERVER LOCATIONS -->
+    <filter token="base_url" value=""/>
+    <filter token="image_server" value="/vegbank/images/"/>
+    <filter token="stylesheet" value="/vegbank/includes/default.css"/>
+    <filter token="plotquery_page" value="/forms/plot-query.html"/>
+    <filter token="nestedplotquery_page" value="/forms/nested-plot-query.html"/>
+    <filter token="uploaddata_page" value="/forms/uploadFile.html"/>
+    <filter token="stylesheet_generator" value="/forms/stylesheet-generator.html"/>
+    <filter token="general_link" value="/vegbank/general/"/>
+    <filter token="panel_link" value="/vegbank/panel/"/>
+    <!-- SERVLETS -->
+    <filter token="stylesheet_generator_servlet" value="/framework/servlet/stylesheetgenerator"/>
+    <filter token="usermanagement_servlet" value="/framework/servlet/usermanagement"/>
+    <filter token="datarequestservlet" value="/framework/servlet/DataRequestServlet"/>
+    <filter token="datasubmitservlet" value="/framework/servlet/DataSubmitServlet"/>
+    <filter token="nestedquerybuilder" value="/framework/servlet/QueryBuilderServlet"/>
+    <filter token="authenticationservlet" value="/framework/servlet/authenticate"/>
+    <!-- FIXME: Should be in a prepare target -->
+    <mkdir dir="${tomcat.home.dir}/webapps/vegbank/"/>
+  </target>
+  <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
+  <!-- this copy stays local on the machine that it is on - not needed on webserver -->
+  <target name="hdrftr" depends="init">
+    <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
+    <!-- set the newly created properties file as a filtersfile to distribute headers and footers -->
+    <filter filtersfile="${style_server}/filters_detokened.properties"/>
+  </target>
+  <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
+  <target name="includes" depends="init">
+    <copy todir="${style_server}" filtering="no">
+      <fileset dir="${style_src}">
+        <include name="**.css"/>
+      </fileset>
+    </copy>
+  </target>
+  <target name="index" depends="hdrftr" description="target to dist. the index.html file">
+    <copy tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
+    <!-- add to second webpage at root/vegbank/index.html -->
+    <copy todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
+  </target>
+  <!-- DISTRIBUTE THE IMAGES -->
+  <target name="images" depends="init">
+    <copy todir="${image_server}" filtering="no">
+      <fileset dir="${image_src}">
+        <include name="**"/>
+      </fileset>
+    </copy>
+  </target>
+  <!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-<target name="news" depends="hdrftr">
-	<copy todir="${news_server}" filtering="yes" >
-		<fileset dir="${news_src}"/>
-	</copy>
-</target>
-
-
-<!--
+  <target name="news" depends="hdrftr">
+    <copy todir="${news_server}" filtering="yes">
+      <fileset dir="${news_src}"/>
+    </copy>
+  </target>
+  <!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-<target name="panel" depends="hdrftr">
-	<copy todir="${panel_server}" filtering="yes" >
-		<fileset dir="${panel_src}" >
-			<exclude name="**.pdf"/>
-  		</fileset>
-	</copy>
-
-	<copy todir="${panel_server}" filtering="no" >
-     		<fileset dir="${panel_src}" >
-			<exclude name="**.html"/>
-        	</fileset>
-	</copy>
-</target>
-
-
-<!--
+  <target name="panel" depends="hdrftr">
+    <copy todir="${panel_server}" filtering="yes">
+      <fileset dir="${panel_src}">
+        <include name="*.html"/>
+      </fileset>
+    </copy>
+    <copy todir="${panel_server}" filtering="no">
+      <fileset dir="${lrg_binary_src}" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip   "/>
+    </copy>
+  </target>
+  <!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-<target name="history" depends="hdrftr">
-
-	<copy todir="${history_server}" filtering="yes" >
-     		<fileset dir="${history_src}" >
-			<exclude name="**/**.gif"/>
-        	</fileset>
-	</copy>
-
-	<copy todir="${history_server}" filtering="no" >
-     		<fileset dir="${history_src}" >
-			<exclude name="**/**.html"/>
-        	</fileset>
-	</copy>
-
-</target>
-
-<!--
+  <target name="history" depends="hdrftr">
+    <copy todir="${history_server}" filtering="yes">
+      <fileset dir="${history_src}">
+        <exclude name="**/**.gif"/>
+      </fileset>
+    </copy>
+    <copy todir="${history_server}" filtering="no">
+      <fileset dir="${history_src}">
+        <exclude name="**/**.html"/>
+      </fileset>
+    </copy>
+  </target>
+  <!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-<target name="pubs" depends="init">
-	<copy todir="${pubs_server}" filtering="no" >
-		<fileset dir="${pubs_src}" />
-	</copy>
-</target>
-
-
-
-<!--
+  <target name="pubs" depends="init">
+    <copy todir="${pubs_server}" filtering="no">
+      <fileset dir="${pubs_src}"/>
+    </copy>
+  </target>
+  <!--
 	* TARGET TO PUT THE FORMS FOR INTERACTING WITH THE
 	* SERVLETS IN THE APPROPRIATE LOCATION
 -->
-<target name="forms" depends="hdrftr">
-	<copy todir="${forms_server}" filtering="yes">
-    <fileset dir="${forms}"
-      includes="*jsp
+  <target name="forms" depends="hdrftr">
+    <copy todir="${forms_server}" filtering="yes">
+      <fileset dir="${forms}" includes="*jsp
       nested-plot-query.html
 			resultset-download.html
 			plot-query.html
@@ -228,105 +201,82 @@
 			submit-plantconcept.html
 			submit-plantstatususage.html
 			submit-plantcorrelation.html
-			submit-plantsubmittal-receipt.html"
-		  excludes="**/CVS* "
-	  />
-  </copy>
-
-  <copy todir="${forms_server}" filtering="yes">
-    <fileset dir="${forms}">
-      <!-- FIXME: html handled in previous copy , is there a point to listing
-      all the files explicitly ??? --> 
-      <exclude name="**/*html"/>
-    </fileset>
-  </copy>
-
-</target>
-
-
-<!--
+			submit-plantsubmittal-receipt.html" excludes="**/CVS* "/>
+    </copy>
+    <copy todir="${forms_server}" filtering="yes">
+      <fileset dir="${forms}">
+        <!-- FIXME: html handled in previous copy , is there a point to listing
+      all the files explicitly ??? -->
+        <exclude name="**/*html"/>
+      </fileset>
+    </copy>
+  </target>
+  <!--
 	* TARGET TO PUT THE GENERAL HTML DOCS INTO THE CORRECT PLACE
 -->
-<target name="general" depends="hdrftr">
-	<copydir src="${general_src}"
-		dest="${general_server}"
-		filtering="yes"
-		includes="**.html"
-		excludes="**/CVS* vbsummary.html get_vb_stats_temp.html"
-	/>
-</target>
-
-
-
-<!--
+  <target name="general" depends="hdrftr">
+    <copydir src="${general_src}" dest="${general_server}" filtering="yes" includes="**.html" excludes="**/CVS*   vbsummary.html   get_vb_stats_temp.html"/>
+  </target>
+  <!--
 	* TARGET TO PUT THE DESIGN HTML DOCS INTO THE CORRECT PLACE
 -->
-<target name="design" depends="init">
-	<copy todir="${design_server}" filtering="no" >
-		<fileset dir="${design_src}"/>
-	</copy>
-</target>
-
-<!--
+  <target name="design" depends="init">
+    <copy todir="${design_server}" filtering="no">
+      <fileset dir="${design_src}"/>
+    </copy>
+  </target>
+  <!--
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
 -->
-<target name="xsl" depends="hdrftr">
-	<copy todir="${framwork.lib.dir}" filtering="yes" >
-		<fileset dir="${xsl.src.dir}" />
-	</copy>
-</target>
-
-<!--
+  <target name="xsl" depends="hdrftr">
+    <copy todir="${framwork.lib.dir}" filtering="yes">
+      <fileset dir="${xsl.src.dir}"/>
+    </copy>
+  </target>
+  <!--
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
 -->
-<target name="web" depends="hdrftr">
-	<copy todir="${vegbank_server}" filtering="yes" >
-		<fileset dir="${web.src.dir}" />
-	</copy>
-</target>
-
-
-<!--
+  <target name="web" depends="hdrftr">
+    <copy todir="${vegbank_server}" filtering="yes">
+      <fileset dir="${web.src.dir}"/>
+    </copy>
+  </target>
+  <!--
 	* TARGET TO PUT THE DICTIONARY HTML DOCS INTO THE CORRECT PLACE
 -->
-<target name="dictionary" depends="init">
-	<copy todir="${dictionary_server}" filtering="no" >
-		<fileset dir="${dictionary_src}" />
-	</copy>
-</target>
-
-<target name="vbsummary" depends="hdrftr">
-  <!-- create summary based on current VegBank database status -->
-  <exec dir="./general" executable="psql">
-    <arg line="plots_dev qa -f get_vb_stats_cmds.txt"/>
-  </exec>
-  <!-- copy summary file with filtering to general dir -->
-  <copy tofile="${general_server}/vbsummary.html" filtering="yes">
-    <fileset dir="./general" >
-      <include name="get_vb_stats_temp.html" />
-    </fileset>
-  </copy>  
-</target>
-
-<!--
+  <target name="dictionary" depends="init">
+    <copy todir="${dictionary_server}" filtering="no">
+      <fileset dir="${dictionary_src}"/>
+    </copy>
+  </target>
+  <target name="vbsummary" depends="hdrftr">
+    <!-- create summary based on current VegBank database status -->
+    <exec dir="./general" executable="psql">
+      <arg line="plots_dev qa -f get_vb_stats_cmds.txt"/>
+    </exec>
+    <!-- copy summary file with filtering to general dir -->
+    <copy tofile="${general_server}/vbsummary.html" filtering="yes">
+      <fileset dir="./general">
+        <include name="get_vb_stats_temp.html"/>
+      </fileset>
+    </copy>
+  </target>
+  <!--
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-<target name="dist" depends=" index, 
+  <target name="dist" depends=" index, 
                               design, 
                               forms, 
                               general, 
                               images,
-			vbsummary,										    history, 
+			          vbsummary,	 
+			          history, 
                               includes, 
                               init, 
                               news, 
                               panel, 
                               pubs,
-                              xsl"
-                   description="=> Distribute all web files"/>
-<!-- FIXME dictionary, images target expects files not in cvs -->
-
-
-
+                              xsl" description="=> Distribute all web files"/>
+  <!-- FIXME dictionary, images target expects files not in cvs -->
 </project>
