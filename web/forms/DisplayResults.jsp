@@ -13,8 +13,8 @@
 *     Authors: @author@
 *
 *    '$Author: mlee $'
-*      '$Date: 2004-10-12 15:32:12 $'
-*  '$Revision: 1.27 $'
+*      '$Date: 2004-11-11 20:24:43 $'
+*  '$Revision: 1.28 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -158,11 +158,12 @@
 	    <th  class="<%= rowClass %>" align="center" valign="middle" nowrap colspan="2">
 	     
 	      <!-- THE LINK TO THE SUMMARY-->
-             <a href='@get_link@simple/observation/<bean:write property="accessionCode" name="row"/>' title="summary report"><img align="center" border="0" 
+	      <!-- URL for getting observation via accessionCode is facilited with %27 which is URL safe version of apostrophe -->
+             <a href='@get_link@simple/observation/%27<bean:write property="accessionCode" name="row"/>%27' title="summary report"><img align="center" border="0" 
 	     	src="@image_server@report_sm.gif" alt="Summary view"></img></a>
 
 	      <!-- THE LINK TO THE COMPREHENSIVE REPORT-->
-	      <a href='@get_link@comprehensive/observation/<bean:write property="accessionCode" name="row"/>' title="comprehensive report"><img align="center" border="0" 
+	      <a href='@get_link@comprehensive/observation/%27<bean:write property="accessionCode" name="row"/>%27' title="comprehensive report"><img align="center" border="0" 
 	      	src="@image_server@comprehensive_sm.gif" alt="Comprehensive view"></img></a>
 	      
 	      <!-- THE LINK TO THE LOCATION -->
