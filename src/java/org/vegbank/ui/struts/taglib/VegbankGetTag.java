@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-06 18:49:35 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2004-12-07 02:53:45 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ import org.vegbank.common.utility.CompositeRequestParamUtil;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.13 $ $Date: 2004-12-06 18:49:35 $
+ * @version $Revision: 1.14 $ $Date: 2004-12-07 02:53:45 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -172,7 +172,6 @@ public class VegbankGetTag extends VegbankTag {
 		} catch (Exception ex) {
 			log.error("Error while setting where clause key", ex);
 		}
-
     }
 
 
@@ -287,7 +286,6 @@ public class VegbankGetTag extends VegbankTag {
 		}
 
 
-		//log.debug(this.select + " MULTIPLE WPARAMS");
 		arr = findAttributeArray("wparam", null);
 		if (arr != null) {
 			for (int i=0; i<arr.length; i++) {
@@ -304,11 +302,14 @@ public class VegbankGetTag extends VegbankTag {
 			if (arr == null) {
 				wpArr = new String[1];
 			} else {
+				// copy all wparams to wpArr
 				wpArr = new String[arr.length+1];
 				for (i=0; i<arr.length; i++) {
 					wpArr[i] = arr[i];
 				}
 			}
+
+			// add the xwhere clause in the last slot
 			wpArr[i] = getXwhereClause();
 
 			log.debug("added xwhere clause: " + wpArr[i]);
@@ -437,7 +438,7 @@ public class VegbankGetTag extends VegbankTag {
 	 * Gets SQL, swaps in xwhereParams and handles xwhereSearch.
 	 */
     public String getXwhereClause() {
-		Xwhere xw = new Xwhere(pageContext.getRequest());
+		Xwhere xw = new Xwhere(this, pageContext.getRequest());
 		return xw.getXwhereClause();
     }
 
@@ -450,17 +451,78 @@ public class VegbankGetTag extends VegbankTag {
      */
 	protected String xwhereParams;
 
-    public String getXwhereParams() {
+	/**
+	 * Gets an array of xwhereParam values, or an array of arrays.
+	 * Allows for composite request params up to two levels deep.
+	 * e.g. xwhereParams.0, xwhereParams.1, xwhereParams.2 or 
+	 * xwhereParams.something.0, xwhereParams.something.1, etc. and
+	 * xwhereParams.another.0, xwhereParams.something.1 etc.
+	 *
+	 * Note that the final param key must be an integer and order matters.
+	 *
+	 * If the non-composite xwhereParams is also set, that value is added
+	 * to the end of the returned String[] array.
+	 */
+    public String[] getXwhereParamArray() {
+		String normalXwhereParams = findAttribute("xwhereParams", this.xwhereParams);
+
+		log.debug("about to parse composite xwhereParams...");
 		CompositeRequestParamUtil util = new CompositeRequestParamUtil(pageContext.getRequest()); 
-		log.debug("about to parse composite params...");
-		util.parseIntoRequest("xwhereParams");
-        return findAttribute("xwhereParams", this.xwhereParams);
+		boolean hasCompositeParams = util.parseParent("xwhereParams");
+
+		String[] arr;
+		if (!hasCompositeParams) {
+			arr = new String[1];
+			arr[0] = normalXwhereParams;
+			return arr;
+
+		} else {
+			arr = util.getStringArray("xwhereParams");
+			if (Utility.isArrayNullOrEmpty(arr)) {
+				// try digging one level deeper
+				Map m = util.getMap("xwhereParams");
+				if (m == null) {
+					return null;
+				}
+
+				Iterator it = m.keySet().iterator();
+				ArrayList l = new ArrayList();
+				while (it.hasNext()) {
+					arr = util.getStringArray("xwhereParams." + (String)it.next());
+					if (!Utility.isArrayNullOrEmpty(arr)) {
+						l.add(arr);
+					}
+				}
+
+				if (!Utility.isStringNullOrEmpty(normalXwhereParams)) {
+					// add the simple xwhereParams value too
+					l.add(normalXwhereParams);
+				}
+
+				return l.toArray();
+
+			} else {
+				// just return the first level array
+				return arr;
+			}
+		}
+	}
+
+	/**
+	 *
+	 */
+    public String getXwhereParams() {
+		return findAttribute("xwhereParams", this.xwhereParams);
     }
 
+	/**
+	 *
+	 */
     public void setXwhereParams(String s) {
         this.xwhereParams = s;
     }
 
+	
     /**
      * 
      */
@@ -535,7 +597,7 @@ public class VegbankGetTag extends VegbankTag {
 	/**
 	 *
 	 */
-	private String makeStringSearchable(String xwParam, String xwClause, String type) {
+	public String makeStringSearchable(String xwParam, String xwClause, String type) {
 		StringTokenizer stWords = new StringTokenizer(xwParam, " ");
 		int numWords = stWords.countTokens();
 
