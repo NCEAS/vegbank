@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-01-29 01:29:14 $'
- *	'$Revision: 1.15 $'
+ *	'$Date: 2005-02-11 00:20:07 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,12 +26,8 @@ package org.vegbank.dataload.XML;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Vector;
+import java.util.*;
+import java.io.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -72,10 +68,15 @@ import org.vegbank.common.model.Taxonalt;
 import org.vegbank.common.model.Taxonimportance;
 import org.vegbank.common.model.Taxoninterpretation;
 import org.vegbank.common.model.Taxonobservation;
+import org.vegbank.common.model.Userdatasetitem;
+import org.vegbank.common.model.Userdataset;
 import org.vegbank.common.utility.AccessionGen;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.KeywordGen;
+import org.vegbank.common.utility.DataloadLog;
+import org.vegbank.common.utility.VBModelBeanToDB;
 
 
 /**
@@ -91,11 +92,13 @@ public class LoadTreeToDatabase
 
 	public static final String TABLENAME = "TableName";
 	public InputPKTracker inputPKTracker = new InputPKTracker();
+	private static ResourceBundle vbResources = ResourceBundle.getBundle("vegbank");
 	
 	// A connection for transactions to be rollback if error and not  
 	private DBConnection readConn = null;
 	private DBConnection writeConn = null;
 	
+    private DataloadLog dlog = null;
 	private Hashtable revisionsHash = null;
 	private Hashtable noteLinksHash = null;
 	private Hashtable vegbankPackage = null;
@@ -105,20 +108,27 @@ public class LoadTreeToDatabase
 	// Allow no commit for testing
 	private boolean doCommit = true;
 	private HashMap tableKeys = new HashMap();
+    private AccessionGen ag = null;
+    private VBModelBeanToDB bean2db = null;
+    private String xmlFileName = null;
+    private long usrId = 0;
+
 	
 	// This holds the name of the current concept
 	private String currentConceptName = null;
 	
-	public LoadTreeToDatabase(LoadingErrors errors, List accessionCodes, boolean doCommit)
+	public LoadTreeToDatabase(LoadingErrors errors, List accessionCodes, boolean doCommit, DataloadLog dlog)
 	{
 		this.doCommit = doCommit;
-		this.errors = errors;
 		this.accessionCodesAdded = accessionCodes;
+		this.errors = errors;
+        this.dlog = dlog;
 	}
 
-	public LoadTreeToDatabase(LoadingErrors errors)
+	public LoadTreeToDatabase(LoadingErrors errors, DataloadLog dlog)
 	{
 		this.errors = errors;
+        this.dlog = dlog;
 	}
 	
 	/**
@@ -126,11 +136,28 @@ public class LoadTreeToDatabase
 	 * 
 	 * @param vegbankPackage -- the root of the dataset 
 	 */
-	public void insertVegbankPackage(Hashtable vegbankpackage)
-		throws SQLException
+	public void insertVegbankPackage(Hashtable vbPkg, String xmlFileName, long usrId)
+		    throws SQLException
 	{
-		this.vegbankPackage = vegbankpackage;
+		this.vegbankPackage = vbPkg;
+		this.xmlFileName = xmlFileName;
+		this.usrId = usrId;
 		//Utility.prettyPrintHash(vegbankPackage);
+
+        try {
+            this.bean2db = new VBModelBeanToDB();
+        } catch(Exception vbex) {
+            log.error("FATAL: problem initializing VBModelBeanToDB: " + vbex.getMessage());
+		    errors.addError(LoadingErrors.DATABASELOADINGERROR, vbex.getMessage());
+            dlog.append(errors.getTextReport("XML dataload"));
+
+            try {
+                dlog.saveFormatted("dataload.log", DataloadLog.TPL_LOG);
+            } catch(Exception ioex) {
+                log.error("Can't even write dataload.log", ioex);
+            }
+            return;
+        }
 
 		//this boolean determines if the dataset should be commited or rolled-back
 		commit = true;
@@ -177,21 +204,115 @@ public class LoadTreeToDatabase
 			insertObservation(observation);
 		}
 
-		log.info("insertion success: " + commit);
 
-		if (commit == true && doCommit == true)
-		{				
+		log.info("commit new data?: " + commit);
+
+        String dsAC = "";
+        String receiptTpl, subject;
+		if (commit == true && doCommit == true) {
+            //////////////////////////////////////////////////////////////////
+            // COMMIT
+            //////////////////////////////////////////////////////////////////
+			log.debug("committing xml data to DB");
 			writeConn.commit();
-			log.info("Adding AccessionCodes to loaded data");
-			accessionCodesAdded.addAll(this.addAllAccessionCodes());
-			writeConn.commit();
-		}
-		else
-		{
+
+            try {
+                // DATASET CREATION
+			    log.debug("creating dataset");
+                dsAC = createDataset();
+                dlog.addTag("datasetURL", vbResources.getString("machine_url") + 
+                        "/get/std/userdataset/" + dsAC);
+            } catch (Exception ex) {
+                log.error("problem creating dataset or dataset items", ex);
+				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                        "Problem creating dataset: " + ex.toString());
+            }
+
+
+            try {
+                // ACCESSION CODE GENERATION
+                log.info("Adding AccessionCodes to loaded data");
+                List newAccessionCodes = this.addAllAccessionCodes();
+                log.debug("========= DONE adding ACs");
+                accessionCodesAdded.addAll(newAccessionCodes);
+                writeConn.commit();
+            } catch (Exception ex) {
+                log.error("Problem while generating accession codes", ex);
+				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                        "Problem generating accession codes: " + ex.toString());
+            }
+
+
+            try {
+                // RUN DENORMALIZATION SQL
+                //log.info("Running denormalizations");
+
+                // TODO: run denorms
+                
+                //writeConn.commit();
+            } catch (Exception ex) {
+                log.error("Problem while running denormalizations", ex);
+				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                        "Problem while running denormalizations: " + ex.toString());
+            }
+
+
+            try {
+                // KEYWORD GENERATION
+                KeywordGen kwGen = new KeywordGen(writeConn.getConnections());
+                Iterator tit = tableKeys.keySet().iterator();
+                while (tit.hasNext()) {
+                    String tableName = ((String)tit.next()).toLowerCase();
+                    kwGen.updatePartialEntityByTable(tableName);
+                }
+            } catch (SQLException kwex) {
+                log.error("problem inserting new keywords", kwex);
+				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                        "Problem generating keywords: " + kwex.toString());
+            } catch (Exception ex) {
+                log.error("Some lame problem inserting new keywords", ex);
+				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                        "Problem generating keywords: " + ex.toString());
+            }
+
+            // this is still considered a successful load, despite potential errors
+            receiptTpl = DataloadLog.TPL_SUCCESS;
+            subject = vbResources.getString("dataload.subject.success");
+
+		} else {
+            //////////////////////////////////////////////////////////////////
+            // ROLLBACK
+            //////////////////////////////////////////////////////////////////
 			writeConn.rollback();
+            receiptTpl = DataloadLog.TPL_FAILURE;
+            subject = vbResources.getString("dataload.subject.failure");
 		}
+
+        dlog.addTag("fileName", xmlFileName);
+
+        try { 
+            if (errors.hasErrors()) {
+                dlog.append(errors.getTextReport("XML dataload"));
+            }
+
+            // send message to user, assuming email has been preset
+            dlog.send(subject, null, 
+                    Utility.VB_EMAIL_ADMIN_FROM, receiptTpl);
+
+            // send log to admin
+            dlog.send(vbResources.getString("dataload.subject.admin"), Utility.VB_EMAIL_ADMIN_TO, 
+                    Utility.VB_EMAIL_ADMIN_FROM, receiptTpl);
+
+            // write log to disk
+            log.debug("writing dataload.log...");
+            dlog.saveFormatted("dataload.log", DataloadLog.TPL_LOG);
+
+        } catch (IOException ioex) {
+            log.error("problem writing dataload log to dataload.log: " + ioex.getMessage());
+        } catch (Exception ex) {
+            log.error("problem sending dataload receipt via email: " + ex.getMessage());
+        }
 		
-		log.debug("Returning the DBConnection to the pool");
 		//Return dbconnection to pool
 		DBConnectionPool.returnDBConnection(writeConn);
 		readConn.setReadOnly(false);
@@ -206,6 +327,9 @@ public class LoadTreeToDatabase
 		
 		readConn=DBConnectionPool.getInstance().getDBConnection("Need read connection to support inserting dataset");
 		readConn.setReadOnly(true);
+
+		// Initialize the AccessionGen
+		ag = new AccessionGen(this.writeConn.getConnections(), Utility.getAccessionPrefix() );
 	}
 	
 	/**
@@ -261,7 +385,7 @@ public class LoadTreeToDatabase
 				log.error("problematic sql: '" + sql + "'");
 				log.error(se);
 				commit = false;
-				errors.AddError(LoadingErrors.DATABASELOADINGERROR, se.getMessage());
+				errors.addError(LoadingErrors.DATABASELOADINGERROR, se.getMessage());
 			}
 	}
 
@@ -366,7 +490,7 @@ public class LoadTreeToDatabase
 	 * @return long -- PK of the table
 	 */
 	private long insertTable( String tableName, Hashtable fieldValueHash ) throws SQLException
-	{	
+	{
 		//log.debug("insertTable: " + tableName);
 		
 		long PK = 0;
@@ -470,12 +594,18 @@ public class LoadTreeToDatabase
 			if (tableName.equals("plot")) {
 				log.info("Loaded Table : " +tableName + " with PK of " + PK);
 			}
-			
+
+            // update the dataload log's insertion count for this table
+            if (Utility.canBeDatasetItem(tableName)) {
+                dlog.increment("entityCounts", tableName);
+            }
+
 			Statement query = writeConn.createStatement();
 			int rowCount = query.executeUpdate(sb.toString());
 		}
 		catch ( SQLException se ) 
 		{
+            log.error("sql exception while inserting: " + se.toString() + "\n:::" + sb.toString());
 			this.filterSQLException(se, sb.toString());
 		}
 		
@@ -503,20 +633,19 @@ public class LoadTreeToDatabase
 	}
 
 	/**
-	 * Store the tableName and the Pk so an accessionCode can be generated later
+	 * Store the tableName and the PK so an accessionCode can be generated later
 	 * 
 	 * @param tableName
 	 * @param PK
 	 */
 	private void storeTableNameAndPK(String tableName, long PK)
 	{	
-			Vector keys = (Vector) tableKeys.get(tableName);
-			if ( keys == null )
-			{
-				keys = new Vector();
-				tableKeys.put(tableName, keys);
-			}
-			keys.add(new Long(PK));
+        Vector keys = (Vector) tableKeys.get(tableName.toLowerCase());
+        if ( keys == null ) {
+            keys = new Vector();
+            tableKeys.put(tableName, keys);
+        }
+        keys.add(new Long(PK));
 	}
 	
 	/**
@@ -525,13 +654,12 @@ public class LoadTreeToDatabase
 	private List addAllAccessionCodes() throws SQLException
 	{
 		List accessionCodes = null;
-		// Initialize the AccessionGen
-		AccessionGen ag = new AccessionGen(this.writeConn.getConnections(), Utility.getAccessionPrefix() );
 		
-		if ( Utility.isLoadAccessionCodeOn() )
-		{
+		if ( Utility.isLoadAccessionCodeOn() ) {
+            log.debug("Updating accession codes for given PKs");
 			accessionCodes = ag.updateSpecificRows(tableKeys);
 		} else {
+            log.debug("Accession code updates DISABLED");
 			accessionCodes = new ArrayList();
 		}
 		return accessionCodes;
@@ -552,25 +680,19 @@ public class LoadTreeToDatabase
 		
 		accessionCode = (String) fieldValueHash.get(Constants.ACCESSIONCODENAME);
 		
-		if ( Utility.isStringNullOrEmpty( accessionCode ))
-		{
+		if ( Utility.isStringNullOrEmpty( accessionCode )) {
 			//log.debug("Found no accessionCode for " + tableName);
 			// do nothing
-		}
-		else 
-		{
+		} else {
 			// Need to get the pK of the table
 			PK = this.getTablePK(tableName, accessionCode);
 			
-			if ( PK != 0 )
-			{
+			if ( PK != 0 ) {
 				// great got a real PK
 				//log.debug("Found PK ("+PK+") for "+tableName+" accessionCode: "+ accessionCode);
-			}
-			else
-			{
+			} else {
 				/*
-				// Problem no accessionCode like that in database 
+				// problem no accessionCode like that in database 
 				StringBuffer emSb = new StringBuffer(256)
 					.append("Can't find ")
 					.append(tableName)
@@ -580,7 +702,7 @@ public class LoadTreeToDatabase
 				String errorMessage = emSb.toString();
 				log.error(": " + errorMessage);
 				//commit = false;
-				errors.AddError(
+				errors.addError(
 					LoadingErrors.DATABASELOADINGERROR,
 					errorMessage);
 				*/
@@ -637,7 +759,7 @@ public class LoadTreeToDatabase
 				|| ! isFieldValueEqual(noteLinkDescription, noteLink, "attributeName"))
 			{
 				// Housten we have a problem
-				errors.AddError(LoadingErrors.VALIDATIONERROR, "Mismatch on NOTELINK_ID = " + noteLinkId);
+				errors.addError(LoadingErrors.VALIDATIONERROR, "Mismatch on NOTELINK_ID = " + noteLinkId);
 				commit = false;
 			}
 			else
@@ -690,7 +812,7 @@ public class LoadTreeToDatabase
 				|| ! isFieldValueEqual(revisionDescription, revision, "tableAttribute"))
 			{
 				// Housten we have a problem
-				errors.AddError(LoadingErrors.VALIDATIONERROR, "Mismatch on REVISION_ID = " + revisionId);
+				errors.addError(LoadingErrors.VALIDATIONERROR, "Mismatch on REVISION_ID = " + revisionId);
 				commit = false;
 			}
 			else
@@ -1931,7 +2053,6 @@ public class LoadTreeToDatabase
 		{
 			Hashtable plantCorrelation = (Hashtable) plantCorrelations.nextElement();
 
-			// TODO:  Add PlantConcept
 			Hashtable plantConcept = this.getFKChildTable(plantCorrelation, Plantcorrelation.PLANTCONCEPT_ID, "plantConcept");
 			long plantConceptId = insertPlantConcept(plantConcept); 
 
@@ -2062,7 +2183,7 @@ public class LoadTreeToDatabase
 				+ " assigned AccessionCode. ";
 			log.error(": " + errorMessage);
 			commit = false;
-			errors.AddError(
+			errors.addError(
 				LoadingErrors.DATABASELOADINGERROR,
 				errorMessage); 
 		}
@@ -2074,4 +2195,95 @@ public class LoadTreeToDatabase
 		//log.debug("Check allowed to load " + tableName + ": " + result);
 		return result;
 	}
+
+
+    /**
+     * Populate a Userdatasetitem as much as possible.
+     */
+    private Userdatasetitem createDatasetItem(String tableName, long PK) throws SQLException {
+        Userdatasetitem dsiBean = new Userdatasetitem();
+        dsiBean.setItemaccessioncode(ag.getAccession(tableName, PK));
+        dsiBean.setUserdatasetitem_id(-1); // don't check for duplicates
+        dsiBean.setItemtype(tableName);
+        return dsiBean;
+    }
+
+    /**
+     * Creates and inserts into the DB a userdataset 
+     * along with all of its userdatasetitem records.
+     * @return new userdataset's accession code
+     */
+    private String createDataset() throws SQLException, Exception {
+        String dsAC;
+        long dsPK, realDsPK;
+
+        Userdataset dsBean = new Userdataset();
+        dsBean.setDatasetname(xmlFileName);
+        dsBean.setDatasetdescription("Created via XML upload");
+        dsBean.setDatasettype("load");
+        dsBean.setUsr_id(usrId);
+
+        //synchronized (this) {
+            // get the PK, make AC, insert into DB
+            /////////dsPK = getNextId("userdataset");
+            /////////dsAC = ag.buildAccession("userdataset", Long.toString(dsPK), xmlFileName);
+            /////////dsBean.setAccessioncode(dsAC);
+            /////////realDsPK = bean2db.insert(dsBean);
+        //}
+
+        //dsPK = realDsPK;
+
+        //if (realDsPK != dsPK) {
+            // put this new userdataset in tableKeys to have the AC populated later
+            //log.error("new userdataset PK mismatch, " + dsPK + " != " + realDsPK +
+            //        ".  Adding dataset to AC generation task.");
+        //}
+
+
+        // insert a userdatasetitem for each appropriate record
+        String tableName;
+        Userdatasetitem dsiBean = null;
+        List dsiBeanList = new ArrayList();
+        Iterator it = tableKeys.keySet().iterator();
+        while (it.hasNext()) {
+            tableName = (String)it.next();
+    
+            // Is this a supported table?
+            if (Utility.canBeDatasetItem(tableName) ) {
+                Vector keys = (Vector)tableKeys.get(tableName);
+                Iterator kit = keys.iterator();
+                while (kit.hasNext()) {
+                    try {
+                        dsiBean = null;
+                        dsiBean = createDatasetItem(tableName, ((Long)kit.next()).longValue());
+                        log.debug("+++ ADDING userdatasetitem for " + tableName + ": " + dsiBean.getItemaccessioncode());
+                        dsiBeanList.add(dsiBean);
+                        //log.debug("done ADDING dsi #" + bean2db.insert(dsiBean));
+
+                    } catch (Exception bex) {
+                        log.error("problem while inserting userDatasetItem", bex);
+                        errors.addError(LoadingErrors.DATABASELOADINGERROR, bex.toString());
+                        dlog.append("problem while inserting userDatasetItem: " + bex.toString());
+                    }
+                } // end while table PKs
+            } // end if
+        } // end while table names
+
+        // create dsi objects as children of dsBean
+        // fill in ds blanks, then insert
+        log.debug("trying to insert the parent ds bean with " + dsiBeanList.size() + " dsi children");
+        dsBean.setuserdataset_userdatasetitems(dsiBeanList); 
+        dsPK = bean2db.insert(dsBean);
+        log.debug("inserted new userdataset with its children: #" + dsPK);
+
+        // put this new userdataset in tableKeys to have the AC populated later
+        storeTableNameAndPK("userdataset", dsPK);
+
+        // return the dataset's AC
+        dsAC = ag.buildAccession("userdataset", Long.toString(dsPK), xmlFileName);
+        log.debug("ADDED userdataset " + dsAC);
+        return dsAC;
+    }
+
+
 }
