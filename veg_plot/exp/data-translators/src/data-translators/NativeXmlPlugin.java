@@ -20,9 +20,12 @@ import  xmlresource.datatype.*;
 import  xmlresource.utils.XMLparse;
 
 /**
+ * This is a plugin to implement the DataSourceInterface class, allowing 
+ * Access to the data stored in the native VegBank XML structure.
+ * 
  * 	'$Author: harris $'
- *	'$Date: 2002-05-20 20:00:41 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2002-05-20 20:15:40 $'
+ *	'$Revision: 1.2 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -137,9 +140,11 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 			e1.printStackTrace();
     }
 	}
+	//returns all the names of the plots stored in the archive file
 	public Vector getPlotNames()
 	{
-		return(vectorBuf);
+		Vector v = parse.get(plotArchiveFile, "authorPlotCode");
+		return(v);
 	}
 		
 	/**
@@ -515,6 +520,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 			String plotName = "YOSE.98K116";
 			NativeXmlPlugin nativesrc = new NativeXmlPlugin(plotName);
 			System.out.println("slope: " + nativesrc.getSlopeAspect(plotName) );
+			System.out.println("plots: " + nativesrc.getPlotNames() );
 		}
 		catch (Exception e)
 		{
