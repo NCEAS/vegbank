@@ -505,6 +505,7 @@ Design
     
       </li>
     </ul>
+    <p class="sansserif">Additionally, workshops have taken place to educate users about VegBank.  Information about these can be found on our <a href="@panel_link@training.html">Professional Training Page</a>.</p>
     <hr/>
     <h3>
       <a name="participants"/>Participants
@@ -590,7 +591,6 @@ Design
         <td>2004<br/>Jan<br/>23</td>
         <td>2004<br/>Mar<br/>8</td>
         <td>2004<br/>June<br/>14</td>
-
       </tr>
       <tr height="17">
         <td class="stayleft" width="170">
