@@ -1,3 +1,6 @@
+-- Drop these old tables
+DROP TABLE plotspeciessum;
+DROP TABLE plotsitesummary;
 
 ---creating fields ----------------------
 

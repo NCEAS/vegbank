@@ -101,8 +101,31 @@ print `psql -U $username $finalDestinationDB < src/sql/vegbank-changes-1.0.1to1.
 
 # Need to run post processing
 # Run Framework to Vegbank
+print "\n######################################################################\n";
+print "# Move framework data to  $finalDestinationDB\n";
+print `bin/throwAways/MoveFramework1.0Data-TO-VB1.0.2.pl $finalDestinationDB $username`;
+
 # Run Throwaways
+print "\n######################################################################\n";
+print "# Run the plant QA fixes on $finalDestinationDB\n";
+print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/0OneRecTbl_create.txt`;
+print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/1plantNAmes_add_sql.txt`;
+print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/2updateSNsql_nonAccess.txt`;
+print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/3updateParentsSQL.txt`;
+print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/4updateParents_round2_sql.txt`;
+print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/5fixLevels.txt`;
+print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/6addNewCorrs.txt`;
+print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/7specialCaseORNO11.txt`;
+print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/8DropOneRecTbl.txt`;
+print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/9RemoveParentsOfNotAccepted.txt`;
+print `psql -U $username $finalDestinationDB < src/sql/throwAways/plant-qa-fixes/A_RemoveQuestionMarksFromNames.txt`;
+
+
 # ReSyncSequences and PKs
+print "\n######################################################################\n";
+print "# Just in case ReSync sequences and Pks on $finalDestinationDB ... and SLEEP until finished \n"; 
+print `./bin/ReSyncPKsWithSeqence.pl $tempDB`;
+
 
 print "\n######################################################################\n";
 print "#CLEAN UP\n";
@@ -110,7 +133,7 @@ print "#CLEAN UP\n";
 
 print "\n######################################################################\n";
 print "\n\nThe process finishing running. Some temp files are left behind, \n";
-print "oldProduction_1.0.1.bak and  vegbank101_102.sq These may be useful for debuging\n";
+print "oldProduction_1.0.1.bak and  vegbank101_102.sql These may be useful for debuging\n";
 print "if anything went wrong.\n";
 
 print "\nThere is a backup of the target database called productionDump.bak\n";
