@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-02 03:36:43 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-03-05 22:24:57 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -331,7 +331,7 @@ import org.vegbank.common.utility.Utility;
 			}
 			LogUtility.log("isPKFieldOfInput tested :" + field
 					+ " and decided it is the PK of " + tableName + " : " + result,
-					LogUtility.TRACE);
+					LogUtility.DEBUG);
 			return result;
 		}
 		
@@ -356,7 +356,7 @@ import org.vegbank.common.utility.Utility;
 			   }
 			   rs.close();
 			   LogUtility.log("Get next PK: SQL: " + sb.toString() + " returned PK ="
-			   		+ PK ,LogUtility.TRACE);
+			   		+ PK ,LogUtility.DEBUG);
 			}
 			catch (SQLException se)
 			{
@@ -461,7 +461,7 @@ import org.vegbank.common.utility.Utility;
 					String field = (String) fields.nextElement();
 					Object value = fieldValueHash.get(field);
 					
-					//LogUtility.log("Handle fieldName " + field + " with value " + value, LogUtility.TRACE);
+					//LogUtility.log("Handle fieldName " + field + " with value " + value, LogUtility.DEBUG);
 					
 					// Ignore if not a string, null or empty
 					if ( value instanceof String && ! Utility.isStringNullOrEmpty((String) value) )
@@ -482,14 +482,14 @@ import org.vegbank.common.utility.Utility;
 							{
 								LogUtility.log("Already entered record xmlPK "
 										+ stringValue.toString() + " into " + tableName + " using PK of "
-										+ storedPK, LogUtility.TRACE);
+										+ storedPK, LogUtility.DEBUG);
 								return storedPK;
 							}
 							// Need to add this to the datastruture that prevents
 							// the adding duplicate fields
 							inputPKTracker.setTablesPKs(tableName, stringValue.toString(), PK);
 							LogUtility.log("No record added for xmlPK :" + stringValue.toString()
-									+ " for table " + tableName + " adding PK now: " + PK, LogUtility.TRACE);
+									+ " for table " + tableName + " adding PK now: " + PK, LogUtility.DEBUG);
 						}
 					}
 				}
@@ -501,7 +501,7 @@ import org.vegbank.common.utility.Utility;
 				sb.append(" (" + Utility.arrayToCommaSeparatedString( fieldNames.toArray() ) + ")" );
 				sb.append(" VALUES (" + Utility.arrayToCommaSeparatedString( fieldValues.toArray() ) +")" );
 				
-				LogUtility.log("Running SQL: " + sb.toString(), LogUtility.TRACE );
+				LogUtility.log("Running SQL: " + sb.toString(), LogUtility.DEBUG );
 				LogUtility.log("Loaded Table : " +tableName + " with PK of " + PK, LogUtility.INFO );
 				
 				Statement query = dbConn.createStatement();
@@ -521,7 +521,7 @@ import org.vegbank.common.utility.Utility;
 			
 			this.storeTableNameAndPK(tableName, PK);
 			
-			LogUtility.log("Returning with PK :" + PK + " for table " + tableName, LogUtility.TRACE);
+			LogUtility.log("Returning with PK :" + PK + " for table " + tableName, LogUtility.DEBUG);
 			return PK;
 		}
 
@@ -588,7 +588,7 @@ import org.vegbank.common.utility.Utility;
 			
 			if ( Utility.isStringNullOrEmpty( accessionCode ))
 			{
-				LogUtility.log("LoadTreeToDatabase: Found no accessionCode for " + tableName, LogUtility.TRACE);
+				LogUtility.log("LoadTreeToDatabase: Found no accessionCode for " + tableName, LogUtility.DEBUG);
 				// do nothing
 			}
 			else 
@@ -630,7 +630,7 @@ import org.vegbank.common.utility.Utility;
 //					"LoadTreeToDatabase: Got an accessionCode in table "
 //						+ tableName
 //						+ " --> "
-//						+ accessionCode, LogUtility.TRACE);
+//						+ accessionCode, LogUtility.DEBUG);
 //						
 //				// Remove from hash
 //				fieldValueHash.remove(Constants.ACCESSIONCODENAME);
@@ -638,7 +638,7 @@ import org.vegbank.common.utility.Utility;
 			
 			LogUtility.log(
 					"LoadTreeToDatabase: Using accessionCode " + accessionCode + " in table "
-						+ tableName + " got DB PK of " + PK,  LogUtility.TRACE);
+						+ tableName + " got DB PK of " + PK,  LogUtility.DEBUG);
 			return PK;
 		}
 
@@ -898,12 +898,12 @@ import org.vegbank.common.utility.Utility;
 				
 			if (rows == 0) 
 			{
-				LogUtility.log("LoadTreeToDatabase : "+tableName+" does not exist", LogUtility.TRACE);
+				LogUtility.log("LoadTreeToDatabase : "+tableName+" does not exist", LogUtility.DEBUG);
 				return (false);
 			} 
 			else 
 			{
-				LogUtility.log("LoadTreeToDatabase : "+tableName+" does exist", LogUtility.TRACE);
+				LogUtility.log("LoadTreeToDatabase : "+tableName+" does exist", LogUtility.DEBUG);
 				return (true);
 			}
 		}
@@ -990,7 +990,7 @@ import org.vegbank.common.utility.Utility;
 			}
 			else if ( o == null)
 			{
-				LogUtility.log("LoadTreeToDatabase: Could not find table.. " + tableName + " as child of  table " + parentHash.get("TableName"), LogUtility.TRACE);
+				LogUtility.log("LoadTreeToDatabase: Could not find table.. " + tableName + " as child of  table " + parentHash.get("TableName"), LogUtility.DEBUG);
 			}
 			else
 			{
@@ -1889,7 +1889,7 @@ import org.vegbank.common.utility.Utility;
 			if ( FKValue > 0 )
 			{
 				table.put(FKName, ""+FKValue);
-				LogUtility.log("Set FK: " + FKName + " to: " + FKValue, LogUtility.TRACE);
+				LogUtility.log("Set FK: " + FKName + " to: " + FKValue, LogUtility.DEBUG);
 			}
 		}
 
@@ -2003,7 +2003,7 @@ import org.vegbank.common.utility.Utility;
 				result = true;
 			}
 			
-			LogUtility.log("Check allowed to load " + tableName + ": " + result, LogUtility.TRACE);
+			LogUtility.log("Check allowed to load " + tableName + ": " + result, LogUtility.DEBUG);
 			return result;
 		}
 	}

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-01 01:54:42 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-03-05 22:24:57 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -243,7 +243,7 @@ public class SAX2DBContentHandler implements ContentHandler
 		 */
 		private void showMeTheTable(String tableName, Hashtable hashtable)
 		{
-			LogUtility.log("SAX2DBContentHandler: Finished storing table: " + tableName, LogUtility.TRACE);
+			LogUtility.log("SAX2DBContentHandler: Finished storing table: " + tableName, LogUtility.DEBUG);
 			if ( tableName.equalsIgnoreCase("plantstatus"))
 			{
 				Utility.prettyPrintHash( hashtable );
@@ -334,7 +334,7 @@ public class SAX2DBContentHandler implements ContentHandler
 				//if ( this.getPreviousTable() != null && this.getPreviousTable().containsKey(tableName))
 				if ( this.getCurrentTable() != null && this.getCurrentTable().containsKey(tableName))
 				{
-					LogUtility.log("SAX2DBContentHandler: ... table exists ... adding another : " + tableName, LogUtility.TRACE );
+					LogUtility.log("SAX2DBContentHandler: ... table exists ... adding another : " + tableName, LogUtility.DEBUG );
 				
 					//vector = (Vector)  this.getPreviousTable().get(tableName);	
 					vector = (Vector)  this.getCurrentTable().get(tableName);			

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-01 01:54:42 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-03-05 22:24:57 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ class InputPKTracker
 	
 	public long getTablesPK( String tableName, String xmlPK)
 	{
-		LogUtility.log("InputPKTracker is checking for xmlPK: " + xmlPK + " for table: " + tableName, LogUtility.TRACE);
+		LogUtility.log("InputPKTracker is checking for xmlPK: " + xmlPK + " for table: " + tableName, LogUtility.DEBUG);
 		long dbPK = 0;
 		Hashtable xmlPKdbPKLookup = (Hashtable)store.get(tableName);
 		if ( xmlPKdbPKLookup != null )
