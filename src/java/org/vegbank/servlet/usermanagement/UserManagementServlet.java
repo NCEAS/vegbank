@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *   '$Date: 2003-05-20 21:56:54 $'
- *   '$Revision: 1.7 $'
+ *   '$Date: 2003-07-09 23:33:04 $'
+ *   '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -514,12 +514,13 @@ public class UserManagementServlet extends HttpServlet
 			 // commit to the database etc.
 			 if ( emailAddress != null && emailAddress.length() > 2)
 			 {
+			 	// Need much better validation on the form with relevant error messages.
 			 	// check that the required paramteres are upto snuff
-				if ( surName.length() > 1 && givenName.length() > 1 && phoneNumber.length() > 4  && currentCertLevel.length() > 0 
-					&& degreeInst.length() > 1  && currentInst.length() > 1  && esaPos.length() > 0  && vegSamplingDoc.length() > 1 
-					&&  vegAnalysisDoc.length() > 1  && submittedEmail.length() > 3
-					&& vegSamplingDoc.length() > 1 && vegAnalysisDoc.length() > 1  && usnvcExpDoc.length() >2 
-					&&  vegbankExpDoc.length() > 1 &&  useVegbank.length() > 1 && plotdbDoc.length() > 1)
+				if ( surName.length() > 0 && givenName.length() > 0 && phoneNumber.length() > 0  && currentCertLevel.length() > 0 
+					&& degreeInst.length() > 0  && currentInst.length() > 0  && esaPos.length() > 0  && vegSamplingDoc.length() > 0 
+					&&  vegAnalysisDoc.length() > 0  && submittedEmail.length() > 0 
+					&& vegSamplingDoc.length() > 0 && vegAnalysisDoc.length() > 0  && usnvcExpDoc.length() >0 
+					&&  vegbankExpDoc.length() > 0 &&  useVegbank.length() > 0 && plotdbDoc.length() > 0)
 					{
 						System.out.println("surName: '"+surName+"'");
 						UserDatabaseAccess userdb = new UserDatabaseAccess();

@@ -31,8 +31,8 @@ import org.vegbank.servlet.util.ServletUtility;
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-05-16 03:33:34 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-07-09 23:33:04 $'
+ *  '$Revision: 1.6 $'
  *
  *  @version
  *  @author
@@ -174,6 +174,7 @@ public class AuthenticationServlet extends HttpServlet
 				else if ( requestParams.get("authType").toString().equals("createUser")  )
 				{
 					System.out.println("AuthenticationServlet > creating a new user");
+					
 					if (createNewUser(requestParams, remoteAddress) == true )
 					{
 						System.out.println("AuthenticationServlet > created a new user");
@@ -183,12 +184,12 @@ public class AuthenticationServlet extends HttpServlet
 						//have a cookie associated with the browser, so as a fix create a
 						//small statement and allow the oportunity to login
 						//response.sendRedirect("/vegbank/servlet/usermanagement?action=options");
-						String cresponse = getUserCreationResponse(true);
+						String cresponse = getUserCreationResponse(true, request, response);
 						out.println( cresponse );
 					}
 					else
 					{
-						String cresponse = getUserCreationResponse(false);
+						String cresponse = getUserCreationResponse(false, request, response);
 						out.println( cresponse );
 					}
 				}
@@ -286,18 +287,18 @@ public class AuthenticationServlet extends HttpServlet
 	 * response will be modified accordingly
 	 * @param createResult -- true or false
 	 */
-	 private String getUserCreationResponse(boolean createResult)
+	 private String getUserCreationResponse(boolean createResult, HttpServletRequest request, HttpServletResponse response) throws IOException
 	 {
 		 StringBuffer sb = new StringBuffer();
 		 Hashtable replaceHash = new Hashtable();
 		 if ( createResult == true )
-		 {
-			 sb.append("Thank you. <br> ");
-			 sb.append("Your VegBank account has been created. <br>");
-             /* The following 3 lines added by MTL Tuesday, September 10, 2002 */
-			 sb.append("<br>To apply for certification, click ");
-			 sb.append("<a href=\"/forms/certification.html\">here.</a><br>");
-		   sb.append("<br>To begin using VegBank, click \"Login\" above. <br>");
+		 {				
+			String emailAddress = request.getParameter("emailAddress");
+			String passWord =  request.getParameter("password");
+			response.sendRedirect(
+				"/vegbank/servlet/authenticate?authType=loginUser&Submit=Submit"
+				+ "&userName=" + emailAddress + "&password=" + passWord
+				);
 		 }
 		 else
 		 {
