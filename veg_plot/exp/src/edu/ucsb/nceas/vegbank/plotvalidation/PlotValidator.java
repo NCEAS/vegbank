@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-19 00:34:46 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2002-12-19 23:38:54 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,48 +108,21 @@ public class PlotValidator implements PlotValidationInterface
 					// get the attribute from the plot data soure
 					String val = this.getPlotDataSourceAttributeValue(methodName, plot);
 					System.out.println("$$$$$$$$$: " + methodName +" val: " + val);
+					
+					//get the constaining vocabulary -- basically a list of the valid terms
+					Vector constraints = constraint.getConstraints(dbTable, dbAttribute);
+					//get the value from the data source 
+
+					validFlag = this.isAttributeValid(val, constraints);
+					// if this is false then the whole plot is false and a message should be 
+					// reported to the PlotValidationReport class
+					if (validFlag == false)
+					{
+						// this will log the messages
+						report.setMessage(val, constraints);
+					}
 				}
- 
-				
-				
-				
-//				Hashtable database = 
-//				String methodName  = 
-//				String pethodParameters
-//				String dbTable
-//				String dbAttribute 
-				/*
-				Vector mapVals = new Vector();
-				// this hashtable stores the method paremetres
-				Hashtable method = new Hashtable();
-				method.put("methodName", "getRepresentativeness");
-				method.put("methodParameters", "plotName");
-				Hashtable database = new Hashtable();
-				database.put("dbTable", "observation");
-				database.put("dbAttribute", "representativeness"); 
-				mapVals.addElement(method);
-				mapVals.addElement(database);
-				mapInstance.put("representativeness", mapVals);
-				//put the methods into the map vector
-				map.addElement(mapInstance);
-			*/
 			}
-		
-		
-			//get the constaining vocabulary -- basically a list of the valid terms
-			Vector constraints = constraint.getConstraints(table, attribute);
-			//get the value from the data source 
-			String target = this.source.getRepresentativeness(plot);
-		
-			validFlag = this.isAttributeValid(target, constraints);
-			// if this is false then the whole plot is false and a message should be 
-			// reported to the PlotValidationReport class
-			if (validFlag == false)
-			{
-				// this will log the messages
-				report.setMessage(target, constraints);
-			}
-		
 			return(validFlag);
 	  }
 	  
