@@ -11,8 +11,8 @@ import java.sql.*;
  *
  *	
  *	'$Author: farrell $' <br>
- *	'$Date: 2002-12-11 21:13:52 $' <br>
- *	'$Revision: 1.21 $' <br>
+ *	'$Date: 2002-12-12 22:36:53 $' <br>
+ *	'$Revision: 1.22 $' <br>
  */
  
 //public class VegBankDataSourcePlugin
@@ -837,6 +837,61 @@ public String  getStandMaturity(String plotName)
 		return(s);
 }
 
+
+public String  getLandscapeNarrative(String plotName)
+{		
+  String s = this.getObservationElement(plotName, "landscapeNarrative");
+	return(s);
+
+}
+
+public String  getPhenologicalAspect(String plotName)
+{
+		String s = this.getObservationElement(plotName, "phenologicalAspect");
+		return(s);
+}
+
+public String  getWaterDepth(String plotName)
+{
+		String s = this.getObservationElement(plotName, "waterDepth");
+		return(s);
+}
+
+public String  getFieldHt(String plotName)
+{
+		String s = this.getObservationElement(plotName, "fieldHt");
+		return(s);
+}
+
+public String  getSubmergedHt(String plotName)
+{
+		String s = this.getObservationElement(plotName, "submergedHt");
+		return(s);
+}
+
+public String  getTreeCover(String plotName)
+{
+		String s = this.getObservationElement(plotName, "treeCover");
+		return(s);
+}
+
+public String  getShrubCover(String plotName)
+{
+		String s = this.getObservationElement(plotName, "shrubCover");
+		return(s);
+}
+
+public String  getFieldCover(String plotName)
+{
+		String s = this.getObservationElement(plotName, "fieldCover");
+		return(s);
+}
+
+public String  getNonvascularCover(String plotName)
+{
+		String s = this.getObservationElement(plotName, "nonvascularCover");
+		return(s);
+}
 
 public String  getSuccessionalStatus(String plotName)
 {
@@ -1790,6 +1845,26 @@ public boolean  getRevisions(String plotName)
 		}
 		return(s);
 	}
+	
+	public String getAzimuth(String plotName) 
+	{
+		return null;
+	}	
+ 
+	public String getDSGPoly(String plotName)
+	{
+		return null;
+	}
+	
+	public String getLocationNarrative(String plotName)
+	{
+		return null;
+	}
+	
+	public String getLayoutNarrative( String plotName )
+	{
+		return null;
+	}	
 	
 	//returns the state for the current plot
 	public String getState(String plotName)
