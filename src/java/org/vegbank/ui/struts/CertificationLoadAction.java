@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-02-28 11:21:16 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-03-01 21:06:40 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,8 +95,10 @@ public class CertificationLoadAction extends VegbankAction {
 		// but note that the Save action uses ints
 		if (PermComparison.matchesOne("pro", user.getPermissiontype())) {
 			certForm.setCurrentCertLevelName("professional");
-		} else {
+		} else if (PermComparison.matchesOne("certified", user.getPermissiontype())) {
 			certForm.setCurrentCertLevelName("certified");
+		} else {
+			certForm.setCurrentCertLevelName("registered");
 		}
 	
 		
