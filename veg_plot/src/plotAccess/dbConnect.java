@@ -73,7 +73,7 @@ m.getParameters("database.properties"); //assume that the parameters file is loc
 			//point to the conncstion parameters determined in getParameters
         		conn = DriverManager.getConnection (m.connectString, m.user, m.password);
         		query = conn.createStatement ();
-			//System.out.println("Connected to database via string: "+m.connectString);
+			System.out.println("Connected to database via string: "+m.connectString);
 			outConn=conn;
 			outStmt=query;
 	} //end try

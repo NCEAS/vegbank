@@ -44,7 +44,24 @@ String inputXml=args[0];
 String inputXSL=args[1];
 String action=args[2];
 
+//call the public method
 
+dbAccess g =new dbAccess();  
+g.accessDatabase(inputXml, inputXSL, action);
+
+
+} //end main method
+
+
+
+
+/**
+*  Public interface for running the plotAccess module, this is how the
+* interfaces and servlets will load and query the database
+* input: xml file, may be datafile or query file, xsl sheet to
+* transform the document and action, either insert or query
+*/
+public void accessDatabase (String inputXml, String inputXSL, String action) {
 
 try {
 
@@ -78,22 +95,20 @@ if (action.equals("query")) {
 * pass the array to the sql mapping class
 */
 
-sqlMapper w =new sqlMapper();
-w.developPlotQuery(transformedString, transformedStringNum);
+	sqlMapper w =new sqlMapper();
+	w.developPlotQuery(transformedString, transformedStringNum);
 
 }  //end if
 
 //insert action
-
-
 if (action.equals("insert")) {
 
 /**
 * pass the array to the plot writer to be inserted into the database
 */
 
-plotWriter w =new plotWriter();
-w.insertPlot(transformedString, transformedStringNum);
+	plotWriter w =new plotWriter();
+	w.insertPlot(transformedString, transformedStringNum);
 
 }  //end if
 
@@ -102,21 +117,19 @@ w.insertPlot(transformedString, transformedStringNum);
 if (action.equals("verify")) {
 
 
-for (int ii=0; ii<transformedStringNum; ii++) 
+	for (int ii=0; ii<transformedStringNum; ii++) 
 	{
 		System.out.println(transformedString[ii]);	
 	}
 
 }
-
-
 } //end try
 
 catch( Exception e ) {System.out.println(" failed in: dbLoader.main  "+e.getMessage());}
 
+} //end method
 
 
-    }
 
 }
 

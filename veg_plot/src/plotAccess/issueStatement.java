@@ -95,8 +95,9 @@ j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputVa
 
 
 /**
-* This method will take the action, target table, number of satatements and the variable name/data as input and compose 
-* statements to be passed to the database.
+* This method will take the action, target table, number of satatements and 
+* the variable name/data as input and compose statements to be passed to 
+* the database.
 */
 
 public void issueSelect(String inputStatement, String inputAction, String[] inputReturnFields, int inputReturnFieldLength)
@@ -145,7 +146,9 @@ conn.close();
 
 } //end if			
 } // end try 
-	catch ( Exception e ){System.out.println("failed at issueStatement.issueSelect "+e.getMessage());}
+	catch ( Exception e ){System.out.println("failed at issueStatement.issueSelect "+e.getMessage());e.printStackTrace();}
+
+
 }	
 	
 
@@ -187,7 +190,7 @@ PreparedStatement pstmt=null;
 			
 			//bind the values to the statement	
 			for (int i=0; i<inputValueNum; i++) {			
-				System.out.println(i+1+" "+inputValue[i]);
+				//System.out.println(i+1+" "+inputValue[i]);
 				pstmt.setString(i+1, inputValue[i]);
 			}
 			
@@ -199,8 +202,8 @@ PreparedStatement pstmt=null;
 	conn.close();
 	
 	} // end try 
+	//catch ( Exception e ){System.out.println("Query failed issueStatement.insert method "+e.getMessage());e.printStackTrace();}
 	catch ( Exception e ){System.out.println("Query failed issueStatement.insert method "+e.getMessage());}
-
 }
 
 

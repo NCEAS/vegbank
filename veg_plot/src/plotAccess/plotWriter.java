@@ -15,316 +15,152 @@ public class plotWriter {
 
 	
 	
-	/**
-	* This method takes the input stream from the xslt transform and inserts the data into their
-	* respective cells, at this point the method is extremely long because there is one or
-	* a series of prepared statements for loading each table.  Currently working on a method 
-	* in the issueSQL class that will replace all the prepared statements.
-	*/
-	
+/**
+* This method takes the input stream from the xslt transform and inserts the data into their
+* respective cells, at this point the method is extremely long because there is one or
+* a series of prepared statements for loading each table.  Currently working on a method 
+* in the issueSQL class that will replace all the prepared statements.
+*/	
 
 public void insertPlot (String[] transformedString, int transformedStringNum) {
 
-	/**
-	* the ordering of events is critical in this method and will be in the following order:  validate if project exists,
-	*  update project, validate if plot exists, update plots
-	*/
-	
-	//call the setAttributeAddress method to separate the database address from the data
-	
-	plotWriter a =new plotWriter();
-	a.setAttributeAddress(transformedString, transformedStringNum);
-	
-	String address[]=a.dbAddress;  // the returned database address string
-	String dataString[]=a.attributeData;  // the returened data string
-	int addressNum=a.dbAddressNum; //the number of addresses and attributes in the returned set
-	
-	
-	//Define the variable that will be reused in this method
-	Connection conn=null;
-	Statement query = null;
-	ResultSet results = null;
-	
-	int projectId=0;  //this is the global variable b/c it will be needed for inserting the plots etc.
-	int plotId=0;  //this is the global variable b/c it will be needed for inserting the plot observations etc.
-	int plotObservationId=0; //this is the global variable b/c it will be needed for inserting taxon observations etc.
-	int strataId=0; //this is the global variable b/c it will be needed for inserting taxon observations etc.
-	int taxonObservationId=0;
-	int namedPlaceId=0;
-	int graphicId=0;
-	
-	
-	
-	//get a database connection
-	
-	try {
-	dbConnect m = new dbConnect();
-	m.makeConnection(conn, query);
-	conn=m.outConn;
-	query=m.outStmt;	
-	} catch (Exception e) {System.out.println("failed calling dbConnect.makeConnection call" + e.getMessage());}
-
-	
-	
-	
-	PreparedStatement pstmt=null;
-	for (int ii=0; ii<addressNum; ii++) 
-	{
-		//check for the project name and insert project info to the database
-		
-		if (address[ii] != null && address[ii].startsWith("project.projectName")) {
-		System.out.println(dataString[ii]);	
-		
-		
-			try {
-	
-		//grab the next project_id in the project table in a future version check to see if this value
-		//already exists and if so do an update instead of an insert
-		plotWriter g =new plotWriter();  
-		g.getNextId(dataString[ii], "project");
-	
-		projectId=g.outNextId;  //grab the returned value for the project id number
-		
-		
-		//insert the data into the project table;
-			pstmt=conn.prepareStatement(
-			"INSERT INTO project "+
-			" (project_ID, projectName, Description) " +
-			"VALUES (?, ?, ?)");
-			//bind the values to the statement
-			pstmt.setInt(1, projectId);
-			pstmt.setString(2, dataString[ii]);
-			pstmt.setString(3, dataString[ii+1]);
-			
-			
-			//do the insertion
-			pstmt.execute();
-			pstmt.close();
-			//conn.close();
-			
-			} //end try
-		catch (Exception e) {System.out.println("failed in plotWriter.insertPlot trying to insert project data: " + e.getMessage());}
-		
-		
-		}//end if
-		
-		
-		//insert the plot information
-		if (address[ii] != null && address[ii].startsWith("plot.authorPlotCode")) {
-			
-			try {	
-				
-			//grab the next value in the plot table
-			plotWriter g =new plotWriter();  
-			g.getNextId(dataString[ii], "plot");
-	
-			
-			plotId=g.outNextId;  //grab the returned value
-		
-			
-			
-			pstmt=conn.prepareStatement(
-			"INSERT INTO plot "+
-			" (PLOT_ID, project_id, authorPlotCode, parentPlot) " +
-			"VALUES (?, ?, ?, ?)");
-			//bind the values to the statement
-			pstmt.setInt(1, plotId);
-			pstmt.setInt(2, projectId);
-			pstmt.setString(3, dataString[ii]);
-			pstmt.setString(4, dataString[ii+1]);
-			
-			
-			//do the insertion
-			pstmt.execute();
-			pstmt.close();
-			
-			System.out.println(dataString[ii]);
-		
-			}//end try
-			catch (Exception e) {System.out.println("failed in plotWriter.insertPlot trying to insert plot data: " + e.getMessage());}
-		
-		}//end if
-		
-		
-		//insert the plotObservationData
-		if (address[ii] != null && address[ii].startsWith("plotObservation.previousObs")) {
-			
-			try {	
-				
-			//grab the next value in the plotObservation table
-			plotWriter g =new plotWriter();  
-			g.getNextId(dataString[ii], "plotObservation");
-	
-			
-			plotObservationId=g.outNextId;  //grab the returned value
-		
-			
-			
-			pstmt=conn.prepareStatement(
-			"INSERT INTO plotObservation "+
-			" (Obs_ID, parentPlot, authorObsCode) " +
-			"VALUES (?, ?, ?)");
-			//bind the values to the statement
-			pstmt.setInt(1, plotObservationId);
-			pstmt.setInt(2, plotId);
-			pstmt.setString(3, dataString[ii+1]);
-			
-			
-			//do the insertion
-			pstmt.execute();
-			pstmt.close();
-			
-			System.out.println(dataString[ii]);
-		
-			}//end try
-			catch (Exception e) {System.out.println("failed in plotWriter.insertPlot trying to insert plot observation data: " + e.getMessage());}
-		
-		}//end if
-		
-		
-		//insert the strata
-		if (address[ii] != null && address[ii].startsWith("strata.stratumType")) {
-			
-			try {	
-				
-			//grab the next value in the strata table
-			plotWriter g =new plotWriter();  
-			g.getNextId(dataString[ii], "strata");
-	
-			
-			strataId=g.outNextId;  //grab the returned value
-		
-			
-			
-			pstmt=conn.prepareStatement(
-			"INSERT INTO strata "+
-			" (strata_id, OBS_ID, stratumType, stratumCover, stratumHeight) " +
-			"VALUES (?, ?, ?, ?, ?)");
-			//bind the values to the statement
-			pstmt.setInt(1, strataId);
-			pstmt.setInt(2, plotObservationId);
-			pstmt.setString(3, dataString[ii]);  
-			pstmt.setString(4, dataString[ii+1]); 
-			pstmt.setString(5, dataString[ii+1]);
-			
-			
-			//do the insertion
-			pstmt.execute();
-			pstmt.close();
-			
-			System.out.println(dataString[ii]);
-		
-			}//end try
-			catch (Exception e) {System.out.println("failed in plotWriter.insertPlot trying to insert plot observation data: " + e.getMessage());}
-		
-		}//end if
-		
-		
-		
-		
-		//insert the taxonObservation
-		if (address[ii] != null && address[ii].startsWith("taxonObservation.authNameId")) {
-			
-			try {	
-				
-			//grab the next value in the strata table
-			plotWriter g =new plotWriter();  
-			g.getNextId(dataString[ii], "taxonObservation");
-	
-			
-			taxonObservationId=g.outNextId;  //grab the returned value
-		
-			
-			
-			pstmt=conn.prepareStatement(
-			"INSERT INTO taxonObservation "+
-			" (taxonobservation_id, OBS_ID, authorNameId, originalAuthority) " +
-			"VALUES (?, ?, ?, ?)");
-			//bind the values to the statement
-			pstmt.setInt(1, taxonObservationId);
-			pstmt.setInt(2, plotObservationId);
-			pstmt.setString(3, dataString[ii]);  
-			pstmt.setString(4, dataString[ii+1]); 
-			
-			
-			//do the insertion
-			pstmt.execute();
-			pstmt.close();
-			
-			
-			//in this try statement the strataComposition table should be updated
-			//because in this version evrytime a taxon is recognized in a different strata it should 
-			//be recorded so every taxon has beneath it a strataType and percentCoverage which should be put in
-			//the strataCompositionTable
-			
-			System.out.println("the starta type for the above taxon: "+ dataString[ii+2]);
-			System.out.println(dataString[ii+3]);
-			
-			//get the required information for updating the stratumComposition table
-			plotWriter gs =new plotWriter();  
-			gs.getStrataComposition(plotObservationId,  dataString[ii+2]);
-			
-			int returnStrataId=gs.outStrataId;
-			int strataCompositionId=gs.outStrataCompositionId;
-			
-			System.out.println(returnStrataId+" * "+strataCompositionId);
-			
-			pstmt=conn.prepareStatement(
-			"INSERT INTO strataComposition "+
-			" (strataComposition_Id, taxonobservation_id, strata_Id, cheatStratumType, percentcover) " +
-			"VALUES (?, ?, ?, ?, ?)");
-			//bind the values to the statement
-			pstmt.setInt(1, strataCompositionId);
-			pstmt.setInt(2, taxonObservationId);
-			pstmt.setInt(3, returnStrataId);
-			pstmt.setString(4, dataString[ii+2]);
-			pstmt.setString(5, dataString[ii+3]); 
-			
-			
-			//do the insertion
-			pstmt.execute();
-			pstmt.close();
-			
-		
-			}//end try
-			catch (Exception e) {System.out.println("failed in plotWriter.insertPlot trying to insert plot observation data: " + e.getMessage());}
-		
-		}//end if
-		
-		
 /**
-* Use the issue statement class for loading the rest of the tables - this is a 
-* new class as of November 17, 2000
-*/		
-		
-		if (address[ii] != null && address[ii].startsWith("namedPlace.placeName")) {
-			
-			plotWriter g =new plotWriter();  
-			g.getNextId(dataString[ii], "namedPlace");
-			
-			namedPlaceId=g.outNextId;  //grab the nextValue in the namedPlace table
-			
-			//pass the required arguements to the isssue SQl class
-			String insertString="INSERT INTO NAMEDPLACE";
-			String attributeString="namedplace_id, placeName, placeDesc";
-			int inputValueNum=3;
-			String inputValue[]=new String[3];	
-			inputValue[0]=""+namedPlaceId;
-			inputValue[1]=dataString[ii];
-			inputValue[2]=dataString[ii+1];
-
-			//get the valueString from the method
-			issueStatement k = new issueStatement();
-			k.getValueString(inputValueNum);	
-			String valueString = k.outValueString;
-			System.out.println(valueString);
-
-				issueStatement j = new issueStatement();
-				j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+* the ordering of events is critical in this method and will be in the following order:  validate if project exists,
+*  update project, validate if plot exists, update plots
+*/
 	
+//call the setAttributeAddress method to separate the database address from the data
+	
+plotWriter a = new plotWriter();
+a.setAttributeAddress(transformedString, transformedStringNum);
+	
+String address[]=a.dbAddress;  // the returned database address string
+String dataString[]=a.attributeData;  // the returened data string
+int addressNum=a.dbAddressNum; //the number of addresses and attributes in the returned set
+	
+	
+//Define the variable that will be reused in this method
+Connection conn=null;
+Statement query = null;
+ResultSet results = null;
+	
+String projectId=null;  //this is the global variable b/c it will be needed for inserting the plots etc.
+String plotId=null;  //this is the global variable b/c it will be needed for inserting the plot observations etc.
+String plotObservationId=null; //this is the global variable b/c it will be needed for inserting taxon observations etc.
+int strataId=0; //this is the global variable b/c it will be needed for inserting taxon observations etc.
+int taxonObservationId=0;
+int namedPlaceId=0;
+int graphicId=0;
+	
+	
+	
+//get a database connection
+	
+try {
+dbConnect m = new dbConnect();
+m.makeConnection(conn, query);
+conn=m.outConn;
+query=m.outStmt;	
+} catch (Exception e) {System.out.println("failed calling dbConnect.makeConnection call" + e.getMessage());}
+
+	
+	
+	
+PreparedStatement pstmt=null;
+for (int ii=0; ii<addressNum; ii++) 
+{
+		
+//insert project data
+	if (address[ii] != null && address[ii].startsWith("project.projectName")) {
+	System.out.println("XMLfile PROJECTNAME: "+dataString[ii]);	
+		
+	plotWriter g =new plotWriter();  
+	g.putProject(dataString[ii], dataString[ii]);
+	projectId=g.outProjectId;
+	}//end if
+		
+//insert the plot data
+	if (address[ii] != null && address[ii].startsWith("plot.authorPlotCode")) {
+	System.out.println("XMLfile AUTHORPLOTNAME: "+dataString[ii]);	
+		
+	plotWriter g =new plotWriter();  
+	g.putPlot(projectId, dataString[ii], dataString[ii+1]);
+	plotId=g.outPlotId;		
+	}//end if
+				
+//insert the plotObservationData
+	if (address[ii] != null && address[ii].startsWith("plotObservation.previousObs")) {
+	System.out.println("XMLfile OBSERVATIONCODE: "+dataString[ii+1]);	
+	String previousObservation=dataString[ii+1];
+	String plotObservationCode=dataString[ii+1];	
+	
+	plotWriter g =new plotWriter();  
+	g.putPlotObservation(plotId, previousObservation, plotObservationCode);		
+	plotObservationId=g.outPlotObservationId;
+	}//end if
+		
+//insert the strata
+	if (address[ii] != null && address[ii].startsWith("strata.stratumType")) {
+	System.out.println("XMLfile STRATUMTYPE: "+dataString[ii]);	
+	String stratumType=dataString[ii];
+	String stratumCover=dataString[ii+1];
+	String stratumHeight=dataString[ii+2];
+	
+	plotWriter g =new plotWriter();  
+	g.putStrata(plotObservationId, stratumType, stratumCover, stratumHeight);				
+	}//end if
+			
+		
+//insert the taxonObservation
+	if (address[ii] != null && address[ii].startsWith("taxonObservation.authNameId")) {
+	System.out.println("XMLfile TAXONNAME: "+dataString[ii]);
+	String authorNameId=dataString[ii];
+	String originalAuthority=dataString[ii+1];
+	String stratumType=dataString[ii+2];
+	String percentCover=dataString[ii+3];
+	
+	plotWriter g =new plotWriter();  
+	g.putTaxonObservation(plotObservationId, authorNameId, originalAuthority);
+	String taxonObservation=g.outTaxonObservationId;
+	
+//insert the strataComposition too  -- from the same if statement
+	
+	//get the strataId and strataCompositionId needed for this insertion
+	//by calling the method below
+	
+	int buf=Float.valueOf(plotObservationId).intValue();  //convert the string to and int
+	plotWriter gs=new plotWriter();  
+	gs.getStrataComposition(buf,  stratumType);
+			
+	int returnStrataId=gs.outStrataId;
+	int strataCompositionId=gs.outStrataCompositionId;
+
+	plotWriter h =new plotWriter();  
+	h.putStrataComposition(returnStrataId, strataCompositionId, taxonObservation, stratumType, percentCover);
+	
+	//(int strataId, int strataCompositionId, String taxonObservationId, 
+	//String stratumType, String percentCover) {
+	
+	
+	
+	}//end if
+
+//insert the named place information	
+	if (address[ii] != null && address[ii].startsWith("namedPlace.placeName")) {
+		
+	System.out.println("XMLfile placeName: "+dataString[ii]);	
+	String placeName=dataString[ii];
+	String placeDesc=dataString[ii+1];
+	
+	plotWriter g =new plotWriter();  
+	g.putNamedPlace(placeName, placeDesc);	
+	
+
+}//end if
+
 
 //insert the grahical information		
-		}//end if
+		
 		
 		if (address[ii] != null && address[ii].startsWith("graphic.graphicName")) {
 			
@@ -348,8 +184,7 @@ public void insertPlot (String[] transformedString, int transformedStringNum) {
 			issueStatement k = new issueStatement();
 			k.getValueString(inputValueNum);	
 			String valueString = k.outValueString;
-			System.out.println(valueString);
-
+			
 				issueStatement j = new issueStatement();
 				j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
 	
@@ -362,22 +197,374 @@ public void insertPlot (String[] transformedString, int transformedStringNum) {
 		
 		
 		
-	//remeber to close the connection here
+	//remember to close the connection here
 	}  //end for
-
-	
-	
 	}
 
+/**
+*  Method that takes as input the attributes in the project table and insert/
+* update the table after perfroming a check to determine if there is redundancy
+* in the table
+*/
 
+private void putProject (String projectName, String projectDescription) {
+int projectId=0;
+try {
+		
+//check to see if the project already exists  by making a query
+//and sending it to the issue statement class
+		
+	String action="select";
+	String statement="select PROJECT_ID from PROJECT where PROJECTNAME like '%"+projectName+"%'";
+	String returnFields[]=new String[1];	
+	returnFields[0]="PROJECT_ID";
+	int returnFieldLength=1;
 
 	/**
-	* general method to tokenize a string of type: col1|col2 into two seperate strings called dbAddress and 
-	* attributeData.  There is a bug here: there are some strings included in the output that have nulls and have to be stripped 
-	* in the above method - I can not figure out what is the problem
+	* Call the issueSelect method which will return an array with the return
+	* values containing the project_id number associated with this
+	* plot file if the project_id is null then iterate the
+	* project_id number if there are more than a single project_id
+	* numbers then the database is corrupt and send a message
+	* relaying this
 	*/
+
+	issueStatement j = new issueStatement();
+	j.issueSelect(statement, action, returnFields, returnFieldLength);
 	
-	private void setAttributeAddress (String[] combinedString, int combinedStringNum) {
+	
+	//if redundancies	
+	if (j.outReturnFieldsNum>1) {
+		System.out.println("WARNING: corrpted database multiple projects with identical name");
+		System.out.println("  Number of redundancies: "+j.outReturnFieldsNum);
+		
+		//return the first project id that matches to caller
+		outProjectId=j.outReturnFields[0];
+	}
+		
+	//if single match found
+	if (j.outReturnFieldsNum==1) {
+		
+		outProjectId=j.outReturnFields[0];  //return to caller
+		System.out.println("Matching project found, ID number: "+j.outReturnFields[0]);
+	
+	}
+	
+	//if zero matches found then create a new project_id number
+
+	if (j.outReturnFieldsNum==0) {
+		System.out.println("No Matching projects found - creating a new one \n"+
+		"Project ID number: ");
+		
+		//grab the next project ID number
+		plotWriter g =new plotWriter();  
+		g.getNextId("test", "project");
+		projectId=g.outNextId;  //assign the projectID
+		outProjectId=""+projectId;
+		
+		//pass the required arguements to the isssue SQl class
+		String insertString="INSERT INTO PROJECT";
+		String attributeString="PROJECT_ID, PROJECTNAME, DESCRIPTION";
+		int inputValueNum=3;
+		String inputValue[]=new String[3];	
+		inputValue[0]=""+projectId;
+		inputValue[1]=projectName;
+		inputValue[2]=projectDescription;
+
+		//get the valueString from the method
+		issueStatement k = new issueStatement();
+		k.getValueString(inputValueNum);	
+		String valueString = k.outValueString;
+		//issue the above statement
+		issueStatement l = new issueStatement();
+		l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);
+	
+	}
+			
+	} //end try
+	catch (Exception e) {System.out.println("failed in plotWriter.putProject: " + 
+	e.getMessage());}
+
+
+}  //end method
+public String outProjectId=null;
+
+
+
+/**
+*  Method that takes as input the attributes in the plot table and insert/
+* update the table after perfroming a check to determine if there is redundancy
+* in the table
+*/
+
+private void putPlot (String projectId, String authorPlotCode, String parentPlot) {
+int plotId=0;
+try {
+
+//add here a redundancy checker
+	
+//grab the next value in the plot table
+plotWriter g =new plotWriter();  
+g.getNextId("test", "plot");
+			
+plotId=g.outNextId;  //grab the returned value		
+outPlotId=""+plotId; //pass to public
+		
+//pass the required arguements to the isssue SQl class
+String insertString="INSERT INTO PLOT";
+String attributeString="PLOT_ID, PROJECT_ID, AUTHORPLOTCODE, PARENTPLOT";
+int inputValueNum=4;
+String inputValue[]=new String[4];	
+inputValue[0]=""+plotId;
+inputValue[1]=projectId;
+inputValue[2]=authorPlotCode;
+inputValue[3]=parentPlot;
+
+//get the valueString from the method
+issueStatement k = new issueStatement();
+k.getValueString(inputValueNum);	
+String valueString = k.outValueString;
+//issue the above statement
+issueStatement l = new issueStatement();
+l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+	
+}
+catch (Exception e) {System.out.println("failed in plotWriter.putPlot " + 
+	e.getMessage());}
+	
+} //end method
+public String outPlotId=null;
+
+	
+
+/**
+*  Method that takes as input the attributes in the plot observation table and 
+* insert/update the table after perfroming a check to determine if there is 
+* redundancy in the table
+*/
+
+private void putPlotObservation (String plotId, String previousObservation, String plotObservationCode) {
+int plotObservationId=0;
+try {
+
+//grab the next value in the plotObservation table
+plotWriter g =new plotWriter(); 
+g.getNextId("test", "plotObservation");
+				
+plotObservationId=g.outNextId;  //grab the returned value
+outPlotObservationId=""+plotObservationId; //pass to public
+		
+//pass the required arguements to the isssue SQl class
+String insertString="INSERT INTO PLOTOBSERVATION";
+String attributeString="OBS_ID, PARENTPLOT, AUTHOROBSCODE";
+int inputValueNum=3;
+String inputValue[]=new String[3];	
+inputValue[0]=""+plotObservationId;
+inputValue[1]=plotId;
+inputValue[2]=plotObservationCode;
+
+//get the valueString from the method
+issueStatement k = new issueStatement();
+k.getValueString(inputValueNum);	
+String valueString = k.outValueString;
+//issue the above statement
+issueStatement l = new issueStatement();
+l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+	
+
+}
+catch (Exception e) {System.out.println("failed in plotWriter.putPlotObservation " + 
+	e.getMessage());}	
+} //end method
+public String outPlotObservationId=null;
+
+
+
+/**
+*  Method that takes as input the attributes in the strata related tables and 
+* insert/update the table with the input data
+*/
+private void putStrata (String plotObservationId, String stratumType, String stratumCover, String stratumHeight) {
+int strataId=0;
+try {
+
+//grab the next value in the strata table
+plotWriter g =new plotWriter();  
+g.getNextId("test", "strata");
+				
+strataId=g.outNextId;  //grab the returned value
+		
+//pass the required arguements to the isssue SQl class
+String insertString="INSERT INTO STRATA";
+String attributeString="STRATA_ID, OBS_ID, STRATUMTYPE, STRATUMCOVER, STRATUMHEIGHT";
+int inputValueNum=5;
+String inputValue[]=new String[5];	
+inputValue[0]=""+strataId;
+inputValue[1]=plotObservationId;
+inputValue[2]=stratumType;
+inputValue[3]=stratumCover;
+inputValue[4]=stratumHeight;
+
+//get the valueString from the method
+issueStatement k = new issueStatement();
+k.getValueString(inputValueNum);	
+String valueString = k.outValueString;
+//issue the above statement
+issueStatement l = new issueStatement();
+l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+				
+
+}
+catch (Exception e) {System.out.println("failed in plotWriter.putStrata " + 
+	e.getMessage());}
+}  //end method
+
+
+
+/**
+*  Method that takes as input the attributes from the taxonObservation tables and 
+* inserts/updates the table with the input data
+*/
+
+private void putTaxonObservation (String plotObservationId, String authorNameId, String originalAuthority) {
+int taxonObservationId=0;
+try {
+
+	//grab the next value in the strata table
+	plotWriter g =new plotWriter();  
+	g.getNextId("test", "taxonObservation");
+				
+	taxonObservationId=g.outNextId;  //grab the returned value
+	outTaxonObservationId=""+taxonObservationId;
+
+	//taxonobservation_id, OBS_ID, authorNameId, originalAuthority) " +
+	
+	//pass the required arguements to the isssue SQl class
+	String insertString="INSERT INTO TAXONOBSERVATION";
+	String attributeString="TAXONOBSERVATION_ID, OBS_ID, AUTHORNAMEID, ORIGINALAUTHORITY";
+	int inputValueNum=4;
+	String inputValue[]=new String[4];	
+	inputValue[0]=""+taxonObservationId;
+	inputValue[1]=plotObservationId;
+	inputValue[2]=authorNameId;
+	inputValue[3]=originalAuthority;
+
+	//get the valueString from the method
+	issueStatement k = new issueStatement();
+	k.getValueString(inputValueNum);	
+	String valueString = k.outValueString;
+	//issue the above statement
+	issueStatement l = new issueStatement();
+	l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+				
+
+}
+catch (Exception e) {System.out.println("failed in plotWriter.putTaxonObservation " + 
+	e.getMessage());}
+}  //end method
+public String outTaxonObservationId=null;
+
+
+/**
+*  Method that takes as input the attributes from the strataComposition tables and 
+* inserts/updates the table with the input data
+*/
+private void putStrataComposition (int strataId, int strataCompositionId, String taxonObservationId, 
+				String stratumType, String percentCover) {
+
+try {
+
+String insertString="INSERT INTO STRATACOMPOSITION";
+String attributeString="STRATACOMPOSITION_ID, TAXONOBSERVATION_ID, STRATA_ID, CHEATSTRATUMTYPE, PERCENTCOVER";
+int inputValueNum=5;
+String inputValue[]=new String[5];	
+inputValue[0]=""+strataCompositionId;
+inputValue[1]=taxonObservationId;
+inputValue[2]=""+strataId;
+inputValue[3]=stratumType;
+inputValue[4]=percentCover;
+
+//get the valueString from the method
+issueStatement k = new issueStatement();
+k.getValueString(inputValueNum);	
+String valueString = k.outValueString;
+//issue the above statement
+issueStatement l = new issueStatement();
+l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+
+
+
+}
+catch (Exception e) {System.out.println("failed in plotWriter.putStrataComposition " + 
+	e.getMessage());}
+}  //end method
+
+
+/**
+*  Method that takes as input the attributes associated with the namedPlace table 
+* inserts/updates the table with the input data
+*/
+private void putNamedPlace (String placeName, String placeDesc) {
+int namedPlaceId=0;
+try {
+
+//grab the next value in the namedPlace table
+plotWriter g =new plotWriter();  
+g.getNextId("test", "namedPlace");
+				
+namedPlaceId=g.outNextId;  //grab the returned value
+System.out.println("******** "+namedPlaceId);
+
+
+String insertString="INSERT INTO NAMEDPLACE";
+String attributeString="namedplace_id, placeName, placeDesc";
+int inputValueNum=3;
+String inputValue[]=new String[3];	
+inputValue[0]=""+namedPlaceId;
+inputValue[1]=placeName;
+inputValue[2]=""+placeDesc;
+
+//get the valueString from the method
+issueStatement k = new issueStatement();
+k.getValueString(inputValueNum);	
+String valueString = k.outValueString;
+//issue the above statement
+issueStatement l = new issueStatement();
+l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+	
+}
+catch (Exception e) {System.out.println("failed in plotWriter.putNamedPlace " + 
+	e.getMessage());}
+} //end method
+
+
+
+
+/**
+*  Method that takes as input the attributes associated with the graphic table 
+* inserts/updates the table with the input data
+*/
+private void putGraphic () {
+try {
+
+
+	
+}
+catch (Exception e) {System.out.println("failed in plotWriter.putNamedPlace " + 
+	e.getMessage());}
+} //end method
+
+
+
+
+	
+/**
+* general method to tokenize a string of type: col1|col2 into two seperate strings called dbAddress and 
+* attributeData.  There is a bug here: there are some strings included in the output that have nulls and have to be stripped 
+* in the above method - I can not figure out what is the problem
+*/
+	
+private void setAttributeAddress (String[] combinedString, int combinedStringNum) {
 	
 	
 	try {
@@ -478,9 +665,10 @@ private void getNextId (String projectName, String tableName) {
 		
 /**
 * a method to get the required information for the strataComposition table which is an intersection between
-* that strata and the taxonObservation take as input the taxonObservationId, and stratumType to gain the output
-* containing strataCompositionId, strataId - this table should be denormalized to include stratum type
+* that strata and the taxonObservation. 1] take as input the observationId, and stratumType to gain 2]
+* the output containing strataCompositionId, strataId - this table should be denormalized to include stratum type
 */
+
 		
 private void getStrataComposition (int observationId, String stratumType) {
 	
@@ -505,7 +693,8 @@ private void getStrataComposition (int observationId, String stratumType) {
 	try {	
 		int strataId=0;
 		System.out.println("passed values: "+observationId+" "+stratumType);
-		ResultSet strataIdResult=query.executeQuery("SELECT strata_id from strata where OBS_ID = "+observationId+"and stratumType like '%"+stratumType+"%'");
+		ResultSet strataIdResult=query.executeQuery("SELECT strata_id from strata where OBS_ID = "+observationId+
+		"and stratumType like '%"+stratumType+"%'");
 			
 			
                         while (strataIdResult.next()) {
@@ -547,15 +736,14 @@ private void getStrataComposition (int observationId, String stratumType) {
 	
 	
 	
-	
-	public String dbAddress[] =new String[100000];
-	public String attributeData[] =new String[100000];
-	public int dbAddressNum;
+public String dbAddress[] =new String[100000];
+public String attributeData[] =new String[100000];
+public int dbAddressNum;
 
-	public int outNextId;  // this is the value returned from teh getProjectId method
+public int outNextId;  // this is the value returned from teh getProjectId method
 	
-	public int outStrataId; //this is the return value from the getStrataCampositionId method
-	public int outStrataCompositionId; //this is the return value from the getStrataCampositionId method
+public int outStrataId; //this is the return value from the getStrataCampositionId method
+public int outStrataCompositionId; //this is the return value from the getStrataCampositionId method
 	
 	
 }
