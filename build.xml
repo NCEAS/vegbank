@@ -8,8 +8,8 @@
   *  % echo "[build.context]" | ant [target]
   *
   *     '$Author: anderson $'
-  *     '$Date: 2004-06-04 17:00:31 $'
-  *     '$Revision: 1.45 $'
+  *     '$Date: 2004-06-10 21:48:10 $'
+  *     '$Revision: 1.46 $'
 --> 
 <project name="Vegbank" default="jar" basedir=".">
 
@@ -164,8 +164,12 @@
 			<fileset dir="${build.java.src.dir}" casesensitive="yes">
 				<include name="**/*.java"/>
 				<include name="**/*.properties"/>
-				<include name="**/*.xml"/>
+      			</fileset>
+			<fileset dir="${src.dir}/xsl" casesensitive="yes">
 				<include name="**/*.xsl"/>
+      			</fileset>
+			<fileset dir="${docs.dir}/xml" casesensitive="yes">
+				<include name="csvtools.xsl"/>
       			</fileset>
     	</jar> 
 
@@ -239,6 +243,7 @@
 
 	<copy todir="${web.context}/xsl">
 		<fileset dir="${xsl.src.dir}" includes="**/*.xsl"/>
+		<fileset dir="${docs.dir}/xml" includes="csvtools.xsl"/>
 	</copy> 
 
   </target>
