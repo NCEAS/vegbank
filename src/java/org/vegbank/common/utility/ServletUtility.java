@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-10-27 19:49:02 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-10-29 18:27:44 $'
+ *  '$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ package org.vegbank.common.utility;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,12 +36,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.Vector;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
@@ -53,7 +50,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tools.ant.filters.ReplaceTokens;
-import org.apache.tools.mail.MailMessage;
 
 import javax.mail.Message;
 import javax.mail.Session;
