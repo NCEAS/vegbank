@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2003-11-26 22:54:39 $'
-* '$Revision: 1.78 $'
+* '$Date: 2003-11-27 00:39:09 $'
+* '$Revision: 1.79 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -90,6 +90,8 @@
     <filter token="base_url" value=""/>
     <filter token="web_context" value="/${web.context_uri}/"/>
     <filter token="image_server" value="/${web.context_uri}/images/"/>
+<!-- the following is a duplicate : -->
+    <filter token="images_link" value="/${web.context_uri}/images/"/>
     <filter token="stylesheet" value="/${web.context_uri}/includes/default.css"/>
     <filter token="plotquery_page" value="/${web.context_uri}/forms/plot-query.jsp"/>
     <filter token="nestedplotquery_page" value="/${web.context_uri}/forms/nested-plot-query.html"/>
@@ -100,10 +102,12 @@
     <filter token="forms_link" value="/${web.context_uri}/forms/"/>
     <filter token="dbdictionary_link" value="/${web.context_uri}/dbdictionary/"/>
     <filter token="includes_link" value="/${web.context_uri}/includes/"/>
+    <filter token="pubs_link" value="/${web.context_uri}/pubs/"/>
+    <filter token="history_link" value="/${web.context_uri}/history/"/>
+    <filter token="news_link" value="/${web.context_uri}/news/"/>    
     <!-- add link for page name that links to help frame jsp -->
     <filter token="jspHelpPage" value="/${web.context_uri}/forms/getHelp.jsp"/>
     <!-- location and filename of xml index page -->
-    
     <filter token="design_link" value="/${web.context_uri}/design/"/>
     <filter token="panel_link" value="/${web.context_uri}/panel/"/>
     <filter token="workshop_link" value="/${web.context_uri}/workshop/"/>
@@ -188,7 +192,6 @@
       <fileset dir="${lrg_binary_src}" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip  NVC_guidelines_v3.pdf "/>
     </copy>
   </target>
-
   <target name="help" depends="hdrftr" description="=&gt; dist the help pages to server">
     <copy overwrite="true" todir="${help_server}" filtering="yes">
       <fileset dir="${help_src}">
@@ -223,7 +226,6 @@
       </fileset>
     </copy>
   </target>
-
   <!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
