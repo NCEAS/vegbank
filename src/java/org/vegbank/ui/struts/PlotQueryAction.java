@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-11 01:41:14 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-07-11 21:23:42 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -489,23 +489,37 @@ public class PlotQueryAction extends Action
 		return sb.toString();
 	}
 
+	/**
+	 * Is the ANYVALUE present or is this a list of nulls
+	 * which is functionally the same.
+	 * 
+	 * @param values
+	 * @return
+	 */
 	private boolean isAnyValueAllowed(String[] values)
 	{
+		boolean allNulls = true;
+
 		for (int i = 0; i < values.length; i++)
 		{
-			//System.out.println("-->" + values + " " + values[i]);
-			if (!(values[i] == null) && values[i].equals(ANYVALUE))
+			if ( values[i] != null )
 			{
-				return true;
+				allNulls = false;
+				// Is ANYVALUE present
+				if ( values[i].equals(ANYVALUE))
+				{
+					return true;
+				}
 			}
 		}
-		return false;
+		return allNulls;
 	}
 
 	/**
 	 * Generated SQL for option boxs where many options can be selected
 	 * 
 	 * Special handling for values ANY, IS NULL and IS NOT NULL 
+	 * Needs to handle a list of nulls 
 	 * 
 	 * @param values
 	 * @param fieldName
@@ -515,13 +529,18 @@ public class PlotQueryAction extends Action
 	{
 		StringBuffer sb = new StringBuffer();
 
-		if (values != null && values.length == 0 && !isAnyValueAllowed(values))
+		// Are there any constraints
+		if (values != null && values.length != 0 && !isAnyValueAllowed(values) )
 		{
 			sb.append(
 				conjunction + " ( " + fieldName + " = '" + values[0] + "'");
 			for (int i = 0; i < values.length; i++)
 			{
-				if (values[i].trim().equals("IS NOT NULL")
+				if ( values[i] == null)
+				{
+					// Do nothing
+				}
+				else if (values[i].trim().equals("IS NOT NULL")
 					|| values[i].trim().equals("IS NULL"))
 				{
 					sb.append(" OR " + fieldName + " " + values[i] + " ");
