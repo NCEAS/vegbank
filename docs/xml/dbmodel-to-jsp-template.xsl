@@ -2,10 +2,10 @@
 <xsl:stylesheet version="1.0"  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:vegbank="http://vegbank.org" xmlns:logic="http://vegbank.org" xmlns:bean="http://vegbank.org" >
   <xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes" />
 
-  <xsl:param name="view">Detail</xsl:param>
-  <xsl:param name="oneTbl">reference</xsl:param>
+  <xsl:param name="view">Summary</xsl:param>
+  <xsl:param name="oneTbl">namedPlace</xsl:param>
   <xsl:param name="detailAdd"></xsl:param>
-  <xsl:param name="more">yes</xsl:param><!-- yes if you want a link to details for each summary row -->
+  <xsl:param name="more">no</xsl:param><!-- yes if you want a link to details for each summary row -->
   <xsl:param name="alphalow">abcdefghijklmnopqrstuvwxyz</xsl:param>
   <xsl:param name="alphahigh">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:param>
   <xsl:template match="entity">
@@ -33,7 +33,7 @@ Copy from after the START: comment to the END: comment for contents of the file!
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 @defaultHeadToken@
  
-<TITLE>View VegBank Data: <xsl:value-of select="entityName"/>s - <xsl:value-of select="$view"/>
+<TITLE>View VegBank Data: <xsl:value-of select="entityLabel"/>s - <xsl:value-of select="$view"/>
         </TITLE>
         <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
 
@@ -60,7 +60,7 @@ Copy from after the START: comment to the END: comment for contents of the file!
 
 <vegbank:pager /><!-- top copy of pager -->
         <logic:empty name="{$currEnt}-BEANLIST">
-          <p>  Sorry, no <xsl:value-of select="entityName"/>s found.</p>
+          <p>  Sorry, no <xsl:value-of select="entityLabel"/>s found.</p>
         </logic:empty>
         <logic:notEmpty name="{$currEnt}-BEANLIST">
           <!-- begin writing data here -->
