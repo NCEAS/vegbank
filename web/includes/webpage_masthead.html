@@ -1,6 +1,6 @@
 </head>
 
-<body onLoad="defaultOnLoad()">
+<body onLoad="defaultOnLoad(); updateQuicksearch();">
 
 <div id="container">
 
@@ -20,10 +20,10 @@
     <br>
     <select class="input-box" name="vegbankNav" onChange="window.location=this.value"><option value="#">Jump to...</option>
         <option value="@web_context@">Home</option>
-        <option value="@forms_link@plot-query-simple.jsp">Simple plot search</option>
-        <option value="@web_context@LoadPlotQuery.do">Advanced plot search</option>
-        <option value="@forms_link@CommQuery.jsp">Community search</option>
-        <option value="@forms_link@PlantQuery.jsp">Plant search</option>
+        <option value="@web_context@LoadPlotQuery.do">PLOT search</option>
+        <option value="@forms_link@PlantQuery.jsp">PLANT search</option>
+        <option value="@forms_link@CommQuery.jsp">COMMUNITY search</option>
+        <option value="@forms_link@plot-query-simple.jsp">Simple search</option>
         <option value="@general_link@instructions.html">Tutorial</option>
         <option value="@general_link@info.html">About</option>
         <option value="@general_link@faq.html">FAQ</option>
@@ -49,7 +49,7 @@
         method="post" name="quicksearch_form">
 
    find 
-   <select class="input-box" name="selEntity" value="entity" />
+   <select class="input-box" name="selEntity" id="selEntity" value="entity" />
     <option value="anything">anything</option>
     <option value="community">communities</option>
     <option value="party">people</option>

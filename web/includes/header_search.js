@@ -2,6 +2,9 @@
 function doSubmit() {
     ent = document.quicksearch_form.selEntity.value;
     xwhereParams = document.quicksearch_form.xwhereParams.value;
+    qsent = "qsent=" + document.quicksearch_form.selEntity.selectedIndex;
+    xwp = "xwhereParams=" + xwhereParams;
+
     if (xwhereParams == null || xwhereParams == "") {
         // submit to metasearch
         ent = "anything";
@@ -10,7 +13,7 @@ function doSubmit() {
 
     if (ent == 'anything') {
         // set action
-        document.quicksearch_form.action = "@forms_link@metasearch.jsp";
+        document.quicksearch_form.action = "@forms_link@metasearch.jsp?" + qsent + "&" + xwp;
         document.quicksearch_form.submit();
 
     } else {
@@ -26,7 +29,7 @@ function doSubmit() {
 				getPk = "observation";
 				getName = "observation";
 				getView = "summary";
-				getExtra = getExtra + "&perPage=3";
+				getExtra += getExtra + "&perPage=3";
                 break;
             case 'plant': 
 				getPk = "plantconcept";
@@ -41,16 +44,27 @@ function doSubmit() {
             case 'community': 
 				getPk = "commconcept";
 				getName = "commconcept";
-				getExtra = getExtra + "&perPage=5";
+				getExtra += getExtra + "&perPage=5";
                 break;
         }
 
         params = getPk + ";" + ent;
         getURL = "@get_link@" + getView + "/" + getName + "/" + params + 
-                "?where=where_keywords_pk_in&xwhereKey=xwhere_kw_match&xwhereSearch=true&xwhereParams=" + 
-                xwhereParams + getExtra;
+                "?where=where_keywords_pk_in&xwhereKey=xwhere_kw_match&xwhereSearch=true&" +
+                xwp + getExtra + "&" + qsent;
 
         document.quicksearch_form.action = getURL;
         document.quicksearch_form.submit();
+    }
+}
+
+function updateQuicksearch() {
+    ent = getURLParam("qsent");
+    xwp = getURLParam("xwhereParams");
+
+    if (ent != null && ent != '') {
+        //document.getElementById("selEntity").selectedIndex = ent;
+        document.quicksearch_form.selEntity.selectedIndex = ent;
+        document.quicksearch_form.xwhereParams.value = xwp;
     }
 }
