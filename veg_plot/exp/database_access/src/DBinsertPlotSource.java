@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-14 17:23:02 $'
- * 	'$Revision: 1.3 $'
+ *  '$Date: 2002-03-15 01:13:36 $'
+ * 	'$Revision: 1.4 $'
  */
 package databaseAccess;
 
@@ -13,14 +13,12 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 import java.sql.*;
-
 import org.w3c.dom.Node;
-
 import databaseAccess.*;
 import xmlresource.datatype.Plot;
 import xmlresource.datatype.VegProject;
-
 import PlotDataSource;
+import servlet.util.GetURL;
 
 /**
  * this is a class that is used to load the database by parsing an xml document
@@ -74,6 +72,7 @@ public class DBinsertPlotSource
 
 	//the data source that will be used for loading the db
 	public PlotDataSource source;
+	private GetURL gurl = new GetURL();
 
 	//filename is the xml file that contains the project data and the plots
 	public DBinsertPlotSource(String plugin, String plot) throws FileNotFoundException
@@ -878,8 +877,6 @@ public class DBinsertPlotSource
 			String authorPlotCode = plotName;
 			String surfGeo = source.surfGeo;
 			String parentPlot = "9";
-			String latitude = source.latitude; //not null
-			String longitude = source.longitude; //not null
 			String plotArea = source.plotArea;
 			String altValue = source.elevation;
 			String slopeAspect = source.slopeAspect;
@@ -892,6 +889,16 @@ public class DBinsertPlotSource
 			
 			String xCoord = source.xCoord;
 			String yCoord = source.yCoord;
+			String zone = source.utmZone;
+			//use this method to get the latitudes and longitudes
+			Hashtable geoCoords=getGeoCoords(xCoord, yCoord, zone);
+			String latitude = (String)geoCoords.get("latitude");
+			String longitude = (String)geoCoords.get("longitude");
+			
+			//String latitude = source.latitude; //not null
+			//String longitude = source.longitude; //not null
+			
+			
 			String state = source.state;
 			String country = source.country;
 			String authorLocation = source.authorLocation;
@@ -926,16 +933,12 @@ public class DBinsertPlotSource
 			pstmt.setString(12, plotShape);
 			pstmt.setString(13, confidentialityStatus);
 			pstmt.setString(14, confidentialityReason);
-			
 			pstmt.setString(15, xCoord);
 			pstmt.setString(16, yCoord);
 			pstmt.setString(17, state);
 			pstmt.setString(18, country);
 			pstmt.setString(19, authorLocation);
 
-			
-			
-			
 			pstmt.getWarnings();
   	  pstmt.execute();
   	  pstmt.close();
@@ -958,6 +961,47 @@ public class DBinsertPlotSource
 	}
 	
 	
+	/**
+	 * utility method to get the loatitude and longitude from 
+	 * the web service that serves that information
+	 */
+	private Hashtable getGeoCoords(String xCoord, String yCoord, String zone)
+	{
+		Hashtable h = new Hashtable();
+		try
+		{
+			//THIS USES THE REQUESTURL METHOD
+			String protocol = "http://";
+	  	String host = "vegbank.nceas.ucsb.edu";
+			String s = null;		
+			//THIS USES THE OTHER REQUEST URL METHOD
+			String servlet = "/framework/servlet/framework";
+			Properties parameters = new Properties();
+			parameters.setProperty("action", "coordinateTransform");
+			parameters.setProperty("returnformattype", "xml");
+			parameters.setProperty("x", xCoord);
+			parameters.setProperty("y", yCoord);
+			parameters.setProperty("zone", zone);
+			s = gurl.requestURL(servlet, protocol, host, 
+		 	parameters);
+			
+			StringTokenizer tok = new StringTokenizer(s);
+			String latitude = tok.nextToken();
+			String longitude = tok.nextToken();
+			
+			System.out.println("DBinsertPlotSource > lat : " + latitude );
+			System.out.println("DBinsertPlotSource > long : " + longitude );
+			
+			h.put("latitude", latitude);
+			h.put("longitude",longitude );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage() ); 
+			e.printStackTrace();
+		}
+		return(h);
+	}
 	
 	//method that returns true if the project with this name exists in the 
 	//database
