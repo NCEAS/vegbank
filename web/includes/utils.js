@@ -121,9 +121,9 @@ function MM_swapImage() { //v3.0
 }
 
 
-/****************************************************************************/
-/*  the following from http://www.kryogenix.org/code/browser/sorttable/     */
-/****************************************************************************/
+/*************************************************************************************************/
+/*  the following from http://www.kryogenix.org/code/browser/sorttable/   on about 2004-DEC-01   */
+/*************************************************************************************************/
 
 addEvent(window, "load", sortables_init);
 
@@ -313,4 +313,29 @@ function addEvent(elm, evType, fn, useCapture)
 
 /****************************************************************************/
 /*  the preceding from http://www.kryogenix.org/code/browser/sorttable/     */
+/****************************************************************************/
+
+
+
+/***********************************************************************************************/
+/*  the following from http://johnkerry.com/js/kerry.js  on 2004-DEC-03   function showtwo     */
+/***********************************************************************************************/
+
+
+function showorhidediv(theid)
+{
+	var el = document.getElementById(theid);
+	if (el.style.display == 'none')
+	{
+		el.style.display = 'block';
+
+	} else {
+		el.style.display = 'none';
+		
+	}
+}
+
+
+/****************************************************************************/
+/*  the preceding from http://johnkerry.com/js/kerry.js  on 2004-DEC-03     */
 /****************************************************************************/
