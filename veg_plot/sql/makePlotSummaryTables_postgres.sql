@@ -21,8 +21,8 @@ CREATE SEQUENCE PLOTSITESUMMARY_ID_seq;
 
 CREATE TABLE plotSiteSummary (
 PLOTSITESUMMARY_ID NUMERIC(20) default nextval('PLOTSITESUMMARY_ID_seq'),
-PLOT_ID NUMERIC(30),
-PROJECT_ID NUMERIC(30),
+PLOT_ID integer,
+PROJECT_ID integer,
 PLOTTYPE VARCHAR(30),
 SAMPLINGMETHOD VARCHAR(45),
 COVERSCALE VARCHAR(30),
@@ -59,69 +59,48 @@ PHYSIONOMICCLASS VARCHAR(100),
 AUTHORPLOTCODE VARCHAR(100),
 SURFGEO  VARCHAR(70),
 STATE VARCHAR(50),
+COUNTRY VARCHAR(100),
 PARENTPLOT NUMERIC(12),
 AUTHOROBSCODE VARCHAR(100),
 CONSTRAINT plotSiteSummary_pk PRIMARY KEY (PLOTSITESUMMARY_ID)
 );
 
---CREATE SEQUENCE PLOTSITESUMMARY_ID_seq;
---CREATE TRIGGER PLOTSITESUMMARY_before_insert
---BEFORE INSERT ON plotSiteSummary FOR EACH ROW
---BEGIN
---  SELECT PLOTSITESUMMARY_ID_seq.nextval
---    INTO :new.PLOTSITESUMMARY_ID
---    FROM dual;
+
 
 /*
  * Load the site table
  */
-insert into plotSiteSummary (plot_id, project_id, plotType, samplingmethod, coverscale,
+insert into plotSiteSummary (plot_id, project_id, 
 plotoriginlat, plotoriginlong, plotshape, altvalue, slopeaspect,
 slopegradient, slopeposition, hydrologicregime, soildrainage, currentcommunity,
-xcoord, ycoord, coordtype, obsstartdate, obsstopdate, effortlevel, hardcopylocation, 
-soiltype, authorplotcode, surfGeo, state, parentplot, authorobscode,
+xcoord, ycoord, coordtype, obsstartdate, obsstopdate, effortlevel,  
+authorplotcode, surfGeo, state, country, parentplot, authorobscode,
 soilDepth, leaftype )
-select plot.plot_id, plot.project_id, plot.plotType, plot.samplingMethod, plot.coverScale,
-plot.plotoriginlat, plot.plotoriginlong, plot.plotshape,  plot.altvalue,
-plot.slopeaspect, plot.slopegradient, plot.slopeposition, plot.hydrologicregime,
-plot.soildrainage, plot.currentcommunity, plot.xcoord, plot.ycoord,
-plot.coordtype, plotObservation.obsstartdate, plotObservation.obsstopdate,
-plotObservation.effortLevel, plotObservation.hardcopylocation,
-plotObservation.soiltype, plot.authorplotcode, plot.surfGeo, plot.state, 
-plotObservation.parentplot, plotObservation.authorobscode, 
-plotObservation.soilDepth, plotObservation.leaftype
-from plot, plotObservation where plot_id > 0
-and plotObservation.parentplot = plot.plot_id;
+select plot.plot_id, plot.project_id,  
+plot.latitude, plot.longitude, plot.shape,  plot.elevation,
+plot.slopeaspect, plot.slopegradient, plot.topoposition, observation.hydrologicregime,
+observation.soildrainage, null, plot.authore, plot.authorn,
+plot.authordatum, observation.obsstartdate, observation.obsenddate,
+observation.effortLevel,
+plot.authorplotcode, plot.geology, plot.state, 
+plot.country, null, observation.authorobscode, 
+observation.soilDepth, null
+from plot, observation where observation.plot_id = plot.plot_id;
 
-/*
- *Show the load results
- */
-
- /*
- select PLOTTYPE, AUTHOROBSCODE, SLOPEGRADIENT, SLOPEASPECT from plotsitesummary;
- select HYDROLOGICREGIME, AUTHOROBSCODE from plotsitesummary;
-*/
-
-/** ------------------------------------------------------------------------*/
-
-/*
- * drop already existing tables -- for plot species information
- */ 
-drop table plotSpeciesSum;
-drop SEQUENCE PLOTSPECIESSUM_ID_seq;
 
 
 /*
  * create the tables  -- for plot species related information
  */
 
+drop table plotSpeciesSum;
+drop SEQUENCE PLOTSPECIESSUM_ID_seq;
 CREATE SEQUENCE PLOTSPECIESSUM_ID_seq;
-
 CREATE TABLE plotSpeciesSum (
-PLOTSPECIESSUM_ID NUMERIC(20) default nextval('PLOTSITESUMMARY_ID_seq'),
-PLOT_ID NUMERIC(30),
-OBS_ID NUMERIC(30),
-PARENTPLOT NUMERIC(38),
+PLOTSPECIESSUM_ID integer default nextval('PLOTSITESUMMARY_ID_seq'),
+PLOT_ID integer,
+OBS_ID integer,
+PARENTPLOT integer,
 AUTHORNAMEID VARCHAR(300),
 AUTHORPLOTCODE VARCHAR(100),
 AUTHOROBSCODE VARCHAR(100),
@@ -131,42 +110,45 @@ PERCENTCOVER NUMERIC(8),
 CONSTRAINT plotSpeciesSum_pk PRIMARY KEY (PLOTSPECIESSUM_ID)
 );
 
---CREATE SEQUENCE PLOTSPECIESSUM_ID_seq;
---CREATE TRIGGER PLOTSPECIESSUM_before_insert
---BEFORE INSERT ON plotSpeciesSum FOR EACH ROW
---BEGIN
---  SELECT PLOTSPECIESSUM_ID_seq.nextval
---    INTO :new.PLOTSPECIESSUM_ID
---    FROM dual;
---END;
---/
+
 
 /*
 * load the species summary table 
 */
 
 insert into plotSpeciesSum (OBS_ID, AUTHORNAMEID, STRATUMTYPE, PERCENTCOVER )
-select TAXONOBSERVATION.OBS_ID, TAXONOBSERVATION.AUTHORNAMEID, STRATACOMPOSITION.CHEATSTRATUMTYPE,
-STRATACOMPOSITION.PERCENTCOVER
-from TAXONOBSERVATION, STRATACOMPOSITION where TAXONOBSERVATION.TAXONOBSERVATION_ID =
-STRATACOMPOSITION.TAXONOBSERVATION_ID 
-and STRATACOMPOSITION.STRATACOMPOSITION_ID > 0;
+select 
+	TAXONOBSERVATION.OBSERVATION_ID, 
+	TAXONOBSERVATION.cheatPlantName, 
+	STRATUMCOMPOSITION.CHEATSTRATUMNAME,
+	STRATUMCOMPOSITION.TAXONSTRATUMCOVER
+from 
+	TAXONOBSERVATION, STRATUMCOMPOSITION 
+where 
+	TAXONOBSERVATION.TAXONOBSERVATION_ID =
+	STRATUMCOMPOSITION.TAXONOBSERVATION_ID 
+and 
+	STRATUMCOMPOSITION.STRATUMCOMPOSITION_ID > 0;
+	
+
+
+	--UPDATE THE SPECIES SUMMARY TABLE
 
 
 --update the 'AUTHOROBSCODE' table
 update plotSpeciesSum
 	set AUTHOROBSCODE  = 
-	(select PLOTOBSERVATION.AUTHOROBSCODE
-	from PLOTOBSERVATION 
-	where PLOTOBSERVATION.OBS_ID = PLOTSPECIESSUM.OBS_ID);
+	(select OBSERVATION.AUTHOROBSCODE
+	from OBSERVATION 
+	where OBSERVATION.OBSERVATION_ID = PLOTSPECIESSUM.OBS_ID);
 
 
 --update the 'parentPlot' table
 update plotSpeciesSum
 	set PARENTPLOT  = 
-	(select PLOTOBSERVATION.PARENTPLOT
-	from PLOTOBSERVATION
-	where PLOTOBSERVATION.OBS_ID = PLOTSPECIESSUM.OBS_ID);
+	(select OBSERVATION.PLOT_ID
+	from OBSERVATION
+	where OBSERVATION.OBSERVATION_ID = PLOTSPECIESSUM.OBS_ID);
 
 
 --update the authorplot code
@@ -188,8 +170,13 @@ update plotSpeciesSum
 * Send a test query
 */
 
-select PLOT_ID, AUTHORPLOTCODE, AUTHOROBSCODE,  AUTHORNAMEID,  STRATUMTYPE, PERCENTCOVER 
+select PLOT_ID, AUTHORPLOTCODE, AUTHOROBSCODE,  
+AUTHORNAMEID,  STRATUMTYPE, PERCENTCOVER 
 from plotSpeciesSum where AUTHORPLOTCODE like '%';
+
+
+
+
 
 
 
