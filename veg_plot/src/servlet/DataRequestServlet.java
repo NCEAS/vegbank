@@ -115,7 +115,7 @@ try {
  	resultType = (String)params.get("resultType");
  }
  
- //what type of data is being requested -- plot, plant, community
+ //what type of data is being requested -- ie. plot, plant, community
  if ( (String)params.get("requestDataType") != null )
  {
  	requestDataType = (String)params.get("requestDataType");
@@ -160,6 +160,7 @@ returnQueryElemenySummary (out, params, response);
  //else is not a coumpund query
  else 
  {
+	System.out.println("params used for a simple query: "+params.toString());
 	handleSimpleQuery (params, out, response);
  }	
 
@@ -185,13 +186,15 @@ catch( Exception e ) {System.out.println("** failed in: DataRequestServlet.main 
 /**
  * Handles simple queries which are those queries where there is only one 
  * queryElemnt such as taxon or community name this is in contrast to a compound
- * query which has multiple query elements and is handled by another metod
+ * query which has multiple query elements and is handled by the
+ * 'handleCompoundQuery' method
  *
  * @param params - the Hashtable of parameters that should be included in the
  * 	query
  * @param out - the output stream to the client
  * @param response - the response object linked to the client 
  */
+ 
 private void handleSimpleQuery (Hashtable params, PrintWriter out, 
 	HttpServletResponse response) {
 		
@@ -220,7 +223,6 @@ if (requestDataType.trim().equals("community")) {
 	
 	out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
 
-
 }
 
 
@@ -235,6 +237,11 @@ if (requestDataType.trim().equals("community")) {
  }
 
  
+ // this is where the query element checking is done for the vegetation plots
+ // the way that this is structured currently the user is not forced to choose a
+ //single query element
+
+//look for a taxonName
  if ( taxonName != null  && taxonName.length()>0 ) {  
 	 out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
 		+"containing plots with taxonName: "+taxonName+" <br>");
@@ -244,6 +251,7 @@ if (requestDataType.trim().equals("community")) {
 	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
  }
  
+ //look for elevation
  if ( minElevation != null  && minElevation.length()>0 ) {  
 	 out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
 		+"containing plots with a minElevation of: "+minElevation+" <br>");
@@ -253,7 +261,40 @@ if (requestDataType.trim().equals("community")) {
 	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
  }
  
- 
+ //look for state
+ if ( state != null  && state.length()>0 ) {  
+	 out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+		+"containing plots with a state equal to: "+state+" <br>");
+	composeQuery("state", state);
+ 	issueQuery("simpleQuery");
+	
+	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+ }
+
+//look for the community name
+if ( communityName != null  && communityName.length()>0 ) {  
+	 out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+		+"containing plots with a communityName equal to: "+communityName+" <br>");
+	composeQuery("communityName", communityName);
+ 	issueQuery("simpleQuery");
+	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+ }
+
+
+//look for the surface geology option
+if ( surfGeo != null  && surfGeo.length()>0 ) {  
+	 out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+		+"containing plots with a surface geology like: "+surfGeo+" <br>");
+	composeQuery("surfGeo", surfGeo);
+ 	issueQuery("simpleQuery");
+	out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+ }
+
+
+
+
+
+
 //if there are results returned to the servlet from the database in the form 
 //of a file returned then grab the summary viewer then let the user know
 
@@ -270,10 +311,6 @@ else {
 	out.println("<br> <b> Please try another query </b> <br>"); 
 	out.println("<a href = \"/examples/servlet/pageDirector?pageType=DataRequestServlet\">"
 		+"return to query page</a><b>&#183;</b>"); //put in rb
-
-
-
-
 
 }
 
@@ -432,9 +469,12 @@ try {
       {
         String queryElement = (String)paramlist.nextElement();
         String elementValue  = (String)params.get(queryElement);
-	out.println("<tr bgcolor=dddddd> <td><b> " + queryElement +" </b></td> "
+		
+		//print the query elements to the browser
+		out.println("<tr bgcolor=dddddd> <td><b> " + queryElement +" </b></td> "
 		+" <td><i> "+ elementValue +" </i></td> </tr>");
-      }
+      
+	  }
 
 //close the table
 out.println("</table>");
