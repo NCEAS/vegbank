@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: farrell $'
-*  '$Date: 2003-11-05 23:10:57 $'
-*  '$Revision: 1.3 $'
+*  '$Date: 2003-11-06 17:31:11 $'
+*  '$Revision: 1.4 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@
 <table  border="0" width="800" >
 	<tr>
 		<td bgcolor="white">
-			<img align="center" border="0" height="100" src="@images_server@owlogoBev.jpg" alt = "Veg plots logo">
+			<img align="center" border="0" height="100" src="@image_server@owlogoBev.jpg" alt = "Veg plots logo">
 		</td>
 		<td align="left" valign="middle">
 			<font face="Helvetica,Arial,Verdana" size="6" color="23238E">

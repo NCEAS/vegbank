@@ -13,8 +13,8 @@
   *  Authors: @author@
   *
   *  '$Author: farrell $'
-  *  '$Date: 2003-11-05 23:10:57 $'
-  *  '$Revision: 1.5 $'
+  *  '$Date: 2003-11-06 17:31:11 $'
+  *  '$Revision: 1.6 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -55,7 +55,7 @@
 	  <table align="left" border="0" width="90%" cellspacing="0" cellpadding="0">
 	    <tr>
 	      <td colspan="2" bgcolor="white">
-		<img align="center" border="0" height="144" src="@images_server@owlogoBev.jpg" alt="[VegBank logo]" />
+		<img align="center" border="0" height="144" src="@image_server@owlogoBev.jpg" alt="[VegBank logo]" />
 	      </td>
 	      <td align="left" valign="middle">
 		<table border="0" cellpadding="5">
@@ -113,7 +113,7 @@
 		  </tr>
 		  <tr>
 		    <td align="center" width="5%">
-		      <img src="@images_server@icon_cat31.gif" alt="[!]" width="15" height="15" />
+		      <img src="@image_server@icon_cat31.gif" alt="[!]" width="15" height="15" />
 		    </td>
 		    <td class="item">
 		      <p>Please enter any information that is appropriate for the journal that you would like to add to VegBank.</p>
@@ -195,7 +195,7 @@
 		  </tr>
 		  <tr>
 		    <td align="center" width="5%">
-		      <img src="@images_server@icon_cat31.gif" alt="[!]" width="15" height="15" />
+		      <img src="@image_server@icon_cat31.gif" alt="[!]" width="15" height="15" />
 		    </td>
 
 		    <td class="item">

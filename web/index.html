@@ -2,7 +2,7 @@
 <HTML>
 <HEAD>
 <TITLE>VegBank Home</TITLE>
-<link rel="stylesheet" href="/vegbank/includes/default.css" type="text/css">
+<link rel="stylesheet" href="@stylesheet@" type="text/css">
 <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
 <SCRIPT language=JavaScript>
 <!--
@@ -53,7 +53,7 @@ MM_reloadPage(true);
         
         <LI class="constsize"><FONT size=3 face="Georgia, Times New Roman, Times, serif" 
         color=#531100>Version 2 of the ESA <I><A 
-        href="/vegbank/panel/standards.html">Guidelines for Describing Associations and Alliances of the U.S. National Vegetation Classification</A> 
+        href="@panel_link@standards.html">Guidelines for Describing Associations and Alliances of the U.S. National Vegetation Classification</A> 
           </I>has been completed. </FONT></LI>
         <LI class="constsize"><font size=3 face="Georgia, Times New Roman, Times, serif" color="#531100"> 
           Users of VegBank are encouraged to report errors and suggestions with 
@@ -74,7 +74,7 @@ MM_reloadPage(true);
     <TD vAlign=top height=149 rowSpan=2></TD>
     <TD vAlign=top width=336 colSpan=6 height=149 rowSpan=2> 
       <FORM name="login" 
-      action="/vegbank/servlet/authenticate" 
+      action="@authenticationservlet@" 
       method="get">
         <TABLE height=135 cellSpacing=0 cellPadding=0 width="100%" border=0>
           <TBODY> 
@@ -85,8 +85,8 @@ MM_reloadPage(true);
             name=authType>
                 <FONT face="Georgia, Times New Roman, Times, serif" 
             color=#531100 size=4><B>Login to VegBank</B></FONT> <!-- <A 
-            href="/vegbank/forms/hints.html#loginname"><IMG 
-            src="/vegbank/images/question.gif" border=0></A> --> </DIV>
+            href="@forms_link@hints.html#loginname"><IMG 
+            src="@image_server@question.gif" border=0></A> --> </DIV>
             </TD>
           </TR>
           <TR> 
@@ -111,10 +111,10 @@ MM_reloadPage(true);
 			  <TR> 
 			    <TD></TD>
 			    <TD>
-			       <A href="/vegbank/forms/fetch-password.html">
+			       <A href="@forms_link@fetch-password.html">
 			       <FONT face="Georgia, Times New Roman, Times, serif" color="red" size=1>Lost 
 			       your password? </FONT></A> <BR>
-                   <A href="/vegbank/general/register.html">
+                   <A href="@general_link@register.html">
                    <FONT face="Georgia, Times New Roman, Times, serif" color="red" size=1>Not 
                    yet a user? Register here.</FONT></A>
 			  </TD>
@@ -145,7 +145,7 @@ MM_reloadPage(true);
     <TD vAlign=top width=417 colSpan=8 height=78> 
       <DIV align=left><FONT face="Georgia, Times New Roman, Times, serif" 
       color=#531100 size=2>VegBank is operated by the <A 
-      href="/vegbank/panel/panel.html">Panel on Vegetation 
+      href="@panel_link@panel.html">Panel on Vegetation 
         Classification</A> of the Ecological Society of America in cooperation 
         with the <A href="http://www.nceas.ucsb.edu/">National Center for Ecological 
         Analysis and Synthesis</A>. </FONT></DIV>

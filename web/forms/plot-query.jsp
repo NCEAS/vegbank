@@ -15,8 +15,8 @@
 *     Authors: @author@
 *
 *    '$Author: farrell $'
-*      '$Date: 2003-11-05 23:10:57 $'
-*  '$Revision: 1.15 $'
+*      '$Date: 2003-11-06 17:31:11 $'
+*  '$Revision: 1.16 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -63,7 +63,7 @@ return "@manualFrameFor-search-for-plots@"
 
     <tr>
       <td colspan="2" bgcolor="white">
-	<img align="center" border="0" height="144" src="@images_server@owlogoBev.jpg" alt="Veg plots logo "> 
+	<img align="center" border="0" height="144" src="@image_server@owlogoBev.jpg" alt="Veg plots logo "> 
       </td>
       <td align="left" valign="middle">
 	<table border="0" cellpadding="5">
@@ -143,7 +143,7 @@ return "@manualFrameFor-search-for-plots@"
 	  </tr>
 	  <tr>
 	    <td align="center" width="5%">
-	      <img src="@images_server@icon_cat31.gif" alt="exclamation" width="15" height="15"> 
+	      <img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15"> 
 	    </td>
 	    <td class="item">
 	      <p>Please select the state/province and/or country in which the plot was sampled. <br />
@@ -295,7 +295,7 @@ return "@manualFrameFor-search-for-plots@"
 	  </tr>
 	  <tr>
 	    <td align="center" width="5%">
-	      <img src="@images_server@icon_cat31.gif" alt="exclamation" width="15" height="15"> 
+	      <img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15"> 
 	    </td>
 	    <td class="item">
 	      <p>Please specify a bounding box for Latitude and Longitude.  
@@ -342,7 +342,7 @@ return "@manualFrameFor-search-for-plots@"
 	  </tr>
 	  <tr>
 	    <td align="center" width="5%">
-	      <img src="@images_server@icon_cat31.gif" alt="exclamation"
+	      <img src="@image_server@icon_cat31.gif" alt="exclamation"
 	      width="15" height="15"> 
 	    </td>
 
@@ -438,7 +438,7 @@ return "@manualFrameFor-search-for-plots@"
 	  </tr>
 	  <tr>
 	    <td align="center" width="5%">
-	      <img src="@images_server@icon_cat31.gif" alt="exclamation"
+	      <img src="@image_server@icon_cat31.gif" alt="exclamation"
 	      width="15" height="15"> 
 	    </td>
 	    <td class="item"><p>
@@ -537,7 +537,7 @@ return "@manualFrameFor-search-for-plots@"
 
 	  <tr>
 	    <td align="center" width="5%">
-	      <img src="@images_server@icon_cat31.gif" alt="exclamation"
+	      <img src="@image_server@icon_cat31.gif" alt="exclamation"
 	      width="15" height="15"> 
 	    </td>
 	    <td class="item"><p>
@@ -629,7 +629,7 @@ return "@manualFrameFor-search-for-plots@"
 	  </tr>
 	  <tr>
 	    <td align="center" width="5%">
-	      <img src="@images_server@icon_cat31.gif" alt="exclamation"
+	      <img src="@image_server@icon_cat31.gif" alt="exclamation"
 	      width="15" height="15"> 
 	    </td>
 	    <td class="item"><p>
@@ -722,7 +722,7 @@ return "@manualFrameFor-search-for-plots@"
 	    <tr>
 
 	      <td align="center" width="5%">
-		<img src="@images_server@icon_cat31.gif" alt="exclamation"
+		<img src="@image_server@icon_cat31.gif" alt="exclamation"
 		width="15" height="15"> 
 	      </td>
 	      <td class="item"><p>
@@ -836,7 +836,7 @@ return "@manualFrameFor-search-for-plots@"
   <tr>
 
     <td align="center" width="5%">
-      <img src="@images_server@icon_cat31.gif" alt="exclamation"
+      <img src="@image_server@icon_cat31.gif" alt="exclamation"
       width="15" height="15"> 
     </td>
     <td class="item"><p>
@@ -882,7 +882,7 @@ return "@manualFrameFor-search-for-plots@"
   </tr>
   <tr>
     <td align="center" width="5%">
-      <img src="@images_server@icon_cat31.gif" alt="exclamation"
+      <img src="@image_server@icon_cat31.gif" alt="exclamation"
       width="15" height="15"> 
     </td>
     <td class="item"><p>
@@ -1074,7 +1074,7 @@ return "@manualFrameFor-search-for-plots@"
 	    </tr>
 	    <tr>
 	      <td align="center" width="5%">
-		<img src="@images_server@icon_cat31.gif" alt="exclamation"
+		<img src="@image_server@icon_cat31.gif" alt="exclamation"
 		width="15" height="15"> 
 	      </td>
 	      <td class="item"><p>
@@ -1163,7 +1163,7 @@ return "@manualFrameFor-search-for-plots@"
 		  
 		  <tr>
 		    <td align="center" width="5%">
-		      <img src="@images_server@icon_cat31.gif" alt="exclamation"
+		      <img src="@image_server@icon_cat31.gif" alt="exclamation"
 		      width="15" height="15"> 
 		    </td>
 		    <td class="item"><p>

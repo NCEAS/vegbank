@@ -13,8 +13,8 @@
 *     Authors: @author@
 *
 *    '$Author: farrell $'
-*      '$Date: 2003-11-05 23:10:57 $'
-*  '$Revision: 1.15 $'
+*      '$Date: 2003-11-06 17:31:11 $'
+*  '$Revision: 1.16 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -73,12 +73,12 @@
       <!-- SOME NOTES ABOUT THE USE OF ICONS-->
       <br/>
       <span class="intro">Available Reports:<br/>
-        <img src="@images_server@report_sm.gif"></img>=Summary
-        <img src="@images_server@comprehensive_sm.gif"></img>=Comprehensive
-        <img src="@images_server@small_globe.gif"></img>=Location 
-        <img src="@images_server@xml_icon.gif"></img>=Raw XML
-        <img src="@images_server@environmental_text.gif"></img>=Environment ASCII
-        <img src="@images_server@species_text.gif"></img>=Species ASCII
+        <img src="@image_server@report_sm.gif"></img>=Summary
+        <img src="@image_server@comprehensive_sm.gif"></img>=Comprehensive
+        <img src="@image_server@small_globe.gif"></img>=Location 
+        <img src="@image_server@xml_icon.gif"></img>=Raw XML
+        <img src="@image_server@environmental_text.gif"></img>=Environment ASCII
+        <img src="@image_server@species_text.gif"></img>=Species ASCII
       </span>
 
       <html:form action="/DownLoadManager">
@@ -145,17 +145,17 @@
 	    <td width="20%" bgcolor="<%= marginBgColor %>" align="center" nowrap>
 	      
 	      <!-- THE LINK TO THE SUMMARY-->
-             <a href="@datarequestservlet@?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;vegbankAccessionNumber=<bean:write property="vegbankAccessionNumber" name="row"/>" title="summary report"><img align="center" border="0" 
-	     	src="@images_server@report_sm.gif" alt="Summary view"></img></a>
+             <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;vegbankAccessionNumber=<bean:write property="vegbankAccessionNumber" name="row"/>" title="summary report"><img align="center" border="0" 
+	     	src="@image_server@report_sm.gif" alt="Summary view"></img></a>
 
 	      <!-- THE LINK TO THE COMPREHENSIVE REPORT-->
-	      <a href="@datarequestservlet@?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;vegbankAccessionNumber=<bean:write property="vegbankAccessionNumber" name="row"/>" title="comprehensive report"><img align="center" border="0" 
-	      	src="@images_server@comprehensive_sm.gif" alt="Comprehensive view"></img></a>
+	      <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;vegbankAccessionNumber=<bean:write property="vegbankAccessionNumber" name="row"/>" title="comprehensive report"><img align="center" border="0" 
+	      	src="@image_server@comprehensive_sm.gif" alt="Comprehensive view"></img></a>
 	      
 	      <!-- THE LINK TO THE LOCATION -->
 	      <a href="http://68.171.138.181:8000/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" 
 		  property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>" title="location report"><img align="center" 
-		  border="0" src="@images_server@small_globe.gif" alt="Location"></img></a>
+		  border="0" src="@image_server@small_globe.gif" alt="Location"></img></a>
 		  <!--
 	      <a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" 
 		  	property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>" title="location report">
@@ -163,18 +163,18 @@
 	      
 	      <!-- THE LINK TO THE RAW XML-->
               <html:link page="/DisplayPlot.do?resultType=rawXML" paramId="vegbankAccessionNumber" paramName="row" paramProperty="vegbankAccessionNumber" title="view raw XML">
-                <img align="center" border="0" src="@images_server@xml_icon.gif" alt="Raw XML view"></img>
+                <img align="center" border="0" src="@image_server@xml_icon.gif" alt="Raw XML view"></img>
               </html:link>
 		      
 	      <!-- THE LINK TO THE Environmental Data ASCII report -->
               <html:link page="/DisplayPlot.do?resultType=ASCIIEvironment" paramId="vegbankAccessionNumber" paramName="row" paramProperty="vegbankAccessionNumber" title="Environmental ASCII Report">
-                <img align="center" border="0" src="@images_server@environmental_text.gif" alt="Environmental ASCII Report"></img>
+                <img align="center" border="0" src="@image_server@environmental_text.gif" alt="Environmental ASCII Report"></img>
               </html:link>
 
       
 	      <!-- THE LINK TO THE Species Data ASCII report -->
               <html:link page="/DisplayPlot.do?resultType=ASCIISpecies" paramId="vegbankAccessionNumber" paramName="row" paramProperty="vegbankAccessionNumber" title="Species ASCII Report">
-                <img align="center" border="0" src="@images_server@species_text.gif" alt="Species ASCII Report"></img>
+                <img align="center" border="0" src="@image_server@species_text.gif" alt="Species ASCII Report"></img>
               </html:link>
 
 

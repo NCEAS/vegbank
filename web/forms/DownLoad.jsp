@@ -11,8 +11,8 @@
  *   Authors: @author@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-11-05 23:10:57 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-11-06 17:31:11 $'
+ *  '$Revision: 1.4 $'
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -96,27 +96,27 @@
     <tbody>
      <tr>
       <td align="Center" colspan="8" height="10" valign="center">
-       <img alt="" border="0" height="10" src="@images_server@pix_clear.gif" width="1"> 
+       <img alt="" border="0" height="10" src="@image_server@pix_clear.gif" width="1"> 
       </td>
      </tr>
      <tr>
       <td align="Left" height="45" valign="Bottom" width="77"> <br>
-        <img alt="Resultset download wizard" border="0" height="23" src="@images_server@hdr_file_info.gif" title="Resultset Download Wizard" vspace="2" width="189"> 
+        <img alt="Resultset download wizard" border="0" height="23" src="@image_server@hdr_file_info.gif" title="Resultset Download Wizard" vspace="2" width="189"> 
       </td>
      </tr>
      <tr>
       <td align="Center" bgcolor="#003366" colspan="8" height="10" valign="Top">
-       <img alt="" border="0" height="1" src="@images_server@pix_003366.gif" width="1"> 
+       <img alt="" border="0" height="1" src="@image_server@pix_003366.gif" width="1"> 
       </td>
      </tr>
      <tr>
       <td align="Center" colspan="8" height="10" valign="center">
-       <img alt="" border="0" height="10" src="@images_server@pix_clear.gif" width="1"> 
+       <img alt="" border="0" height="10" src="@image_server@pix_clear.gif" width="1"> 
       </td>
      </tr>
      <tr>
-      <td width="77"> <img alt="" border="0" height="1" src="@images_server@pix_clear.gif" width="10"> </td>
-      <td bgcolor="#cccc99" width="10"> <img alt="" border="0" height="1" src="@images_server@pix_clear.gif" width="10"> </td>
+      <td width="77"> <img alt="" border="0" height="1" src="@image_server@pix_clear.gif" width="10"> </td>
+      <td bgcolor="#cccc99" width="10"> <img alt="" border="0" height="1" src="@image_server@pix_clear.gif" width="10"> </td>
       <td align="Center" valign="Top" width="361"> 
         <table border="0" cellpadding="0" cellspacing="0" width="100%">
         <tbody>
@@ -133,7 +133,7 @@
          <tr>
             <td valign="Top" width="116"> 
               <font color="#23238e" face="Helvetica,Arial,Verdana" size="2">
-                <b>Data format<a href="@help-for-download-formats-href@"> <img border="0" src="@images_server@question.gif"></a></b>
+                <b>Data format<a href="@help-for-download-formats-href@"> <img border="0" src="@image_server@question.gif"></a></b>
               </font> 
             </td>
             <td align="Left" valign="Top" width="229"> 
@@ -145,24 +145,24 @@
         </tbody>
        </table>
       </td>
-      <td width="80"> <img alt="" border="0" height="1" src="@images_server@pix_clear.gif" width="10"> </td>
-      <td bgcolor="#cccc99" width="10"> <img alt="" border="0" height="1" src="@images_server@pix_clear.gif" width="10"> </td>
+      <td width="80"> <img alt="" border="0" height="1" src="@image_server@pix_clear.gif" width="10"> </td>
+      <td bgcolor="#cccc99" width="10"> <img alt="" border="0" height="1" src="@image_server@pix_clear.gif" width="10"> </td>
       <td align="Left" valign="Top" width="126"> &nbsp; 
         <!-- download action -->
-        <input name="actionDownload" type="image" value="download" border="0" height="19" src="@images_server@btn_download.gif" width="99">
+        <input name="actionDownload" type="image" value="download" border="0" height="19" src="@image_server@btn_download.gif" width="99">
         <br>
       </td>
      </tr>
      <tr>
       <td align="Center" colspan="8" height="10" valign="center">
-       <img alt="" border="0" height="10" src="@images_server@pix_clear.gif" width=
+       <img alt="" border="0" height="10" src="@image_server@pix_clear.gif" width=
        "1"> 
       </td>
      </tr>
      <tr>
       <td align="Center" bgcolor="#003366" colspan="8" height="1" valign=
       "Bottom">
-       <img alt="" border="0" height="10" src="@images_server@pix_003366.gif" width=
+       <img alt="" border="0" height="10" src="@image_server@pix_003366.gif" width=
        "1"> 
       </td>
      </tr>
