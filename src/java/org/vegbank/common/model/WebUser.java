@@ -2,6 +2,7 @@ package org.vegbank.common.model;
 
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.PermComparison;
 
 /*
  * '$RCSfile: WebUser.java,v $'
@@ -9,8 +10,8 @@ import org.vegbank.common.utility.Utility;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-26 20:43:05 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2004-04-30 13:05:25 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -226,6 +227,14 @@ public class WebUser
 	public long getPermissiontype()
 	{
 		return permissiontype;
+	}
+
+	/**
+	 * Get all permissions.
+	 * @return Comma separated list of permission names.
+	 */
+	public String getPermissions() {
+		return PermComparison.getRoleNamesCSVFromSum(this.permissiontype);
 	}
 
 	/**
