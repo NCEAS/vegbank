@@ -22,6 +22,7 @@ logFile = connectionPool.log
 
 # Vegbank Directories
 vegbank.home.dir=/usr/vegbank
+apache.document.root=/var/www/html
 
 # XML Schema
 vegbankSchemaName=vegbank-data-ver1.0.2.xsd
