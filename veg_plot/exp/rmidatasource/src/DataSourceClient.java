@@ -23,6 +23,7 @@ public class DataSourceClient
 {
 	
 	private String serverHost =  null;
+	private String port = null;
 	private String serverClass = "DataSourceServer";
 	private String url = null;
 	DataSourceServerInterface source;
@@ -34,13 +35,15 @@ public class DataSourceClient
 	 * @param hostName -- the resolveable name or IP of host running the 
 	 * 		RMI server 
 	 */
-	public DataSourceClient(String hostName)
+	public DataSourceClient(String hostName, String port)
 	{
 		try
 		{
 			System.out.println("DataSourceCleint > connecting to server: " +hostName );
+			System.out.println("DataSourceCleint > on port: " +port );
 			this.serverHost = hostName;
-			this.url = "//" + hostName + "/"+serverClass;
+			this.url = "//" + hostName + ":"+port+"/"+serverClass;
+			
 			//list the bound serveres to this host
 			String[] remoteObjects = Naming.list(url);  
 			for (int c = 0; c < remoteObjects.length; c++) 
@@ -307,6 +310,15 @@ public class DataSourceClient
 	public Vector getPlantNames(String plotName)
 	{
 		Vector v = new Vector();
+		try
+		{
+			return( source.getPlantNames(plotName) );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
 		return(v);
 	}
 	
@@ -469,7 +481,8 @@ public class DataSourceClient
 		String s = null;
 		try
 		{
-		s = source.getHydrologicRegime(plotName);
+			s = source.getHydrologicRegime(plotName);
+			System.out.println("DataSourceClient > hydro regime: " + s);
 		}
 		catch (Exception e)
 		{
@@ -745,7 +758,7 @@ public class DataSourceClient
 			try
 			{
 				String hostServer =  argv[0];
-				DataSourceClient client = new DataSourceClient(hostServer);
+				DataSourceClient client = new DataSourceClient(hostServer, "1099");
 				System.out.println("DataSourceCleint > " + client.getPlotNames() );
 				String plot ="VOYA.01";
 				//call the method that prints the salient attributes
