@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--    * build_client.xml   *   *  Authors: John Harris, Michael Lee   * Copyright: 2000 Regents of the University of California and the   *           National Center for Ecological Analysis and Synthesis   *  Build file for the Ant cross-platform build system for metacat   *  See http://jakarta.apache.org for details on Ant     *     * this build file copies VegBranch files from the vegbank machine (home/lee/VegBranchReleases) to vegbank webspace.  They are separated into two classes: docs and client
-      '$Author: mlee $'    *     '$Date: 2003-11-03 05:00:47 $'   *     '$Revision: 1.4 $' -->
+      '$Author: mlee $'    *     '$Date: 2003-11-24 22:20:11 $'   *     '$Revision: 1.5 $' -->
 <project name="vegbranch" default="init" basedir=".">
   <!-- INITIATION -->
   <target name="init">
@@ -9,7 +9,7 @@
     <!-- RELEVANT DIRECTORIES -->
     <property name="current_dir" value="./"/>
     <property name="lrg_binary_src" value="/home/lee/VegBranchReleases"/>
-    <property name="build" value="/var/www/html/vegbranch"/>
+    <property name="build" value="/var/www/vegbank/htdocs/vegbranch"/>
     <!-- property name="build" value="/home/lee/temp"/ -->
     <!-- RELEVANT FILES TO COPY / DELETE -->
     <!-- client files: -->
@@ -32,11 +32,11 @@
     <filter token="vbr_examplesserver" value="/vegbranch/examples/"/>
     <filter token="vbr_clientserver" value="/vegbranch/client/"/>
     <!-- make certain that dir structure is there -->
-    <mkdir dir="${tomcat.home.dir}/webapps/vegbranch"/>
-    <mkdir dir="${tomcat.home.dir}/webapps/vegbranch/images"/>
-    <mkdir dir="${tomcat.home.dir}/webapps/vegbranch/docs"/>
-    <mkdir dir="${tomcat.home.dir}/webapps/vegbranch/client"/>
-    <mkdir dir="${tomcat.home.dir}/webapps/vegbranch/examples"/>
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build}/images"/>
+    <mkdir dir="${build}/docs"/>
+    <mkdir dir="${build}/client"/>
+    <mkdir dir="${build}/examples"/>
   </target>
   <target name="clean-all" depends="init">
     <delete>
