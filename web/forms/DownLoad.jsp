@@ -7,8 +7,8 @@
  *   Authors: @author@
  *
  *  '$Author: mlee $'
- *  '$Date: 2005-03-15 12:35:28 $'
- *  '$Revision: 1.12 $'
+ *  '$Date: 2005-03-15 18:59:59 $'
+ *  '$Revision: 1.13 $'
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -90,7 +90,7 @@
   <br>
     
 
-   <table border="0" cellpadding="0" cellspacing="0" width="725" bgcolor="#ffffcc">
+   <table border="0" cellpadding="0" cellspacing="0"  bgcolor="#ffffcc">
     <tbody>
      <tr>
       <td align="Center" colspan="8" height="10" valign="center">
@@ -98,8 +98,8 @@
       </td>
      </tr>
      <tr>
-      <td align="Left" height="45" valign="Bottom" width="77"> <br>
-        <img alt="Resultset download wizard" border="0" height="23" src="@image_server@hdr_file_info.gif" title="Resultset Download Wizard" vspace="2" width="189"> 
+      <td align="Left" height="45" valign="Bottom" > <br>
+        <img alt="Resultset download wizard" border="0" height="23" src="@image_server@hdr_file_info.gif" title="Resultset Download Wizard" vspace="2" > 
       </td>
      </tr>
      <tr>
@@ -113,10 +113,10 @@
       </td>
      </tr>
      <tr>
-      <td width="77"> <img alt="" border="0" height="1" src="@image_server@pix_clear.gif" width="10"> </td>
+      <td > <img alt="" border="0" height="1" src="@image_server@pix_clear.gif" width="10"> </td>
       <td bgcolor="#cccc99" width="10"> <img alt="" border="0" height="1" src="@image_server@pix_clear.gif" width="10"> </td>
-      <td align="Center" valign="Top" width="361"> 
-        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <td align="Center" valign="Top" > 
+        <table border="0" cellpadding="0" cellspacing="0" >
         <tbody>
          <tr>
             <td valign="top">
@@ -145,9 +145,9 @@
         </tbody>
        </table>
       </td>
-      <td width="80"> <img alt="" border="0" height="1" src="@image_server@pix_clear.gif" width="10"> </td>
+      <td > <img alt="" border="0" height="1" src="@image_server@pix_clear.gif" width="10"> </td>
       <td bgcolor="#cccc99" width="10"> <img alt="" border="0" height="1" src="@image_server@pix_clear.gif" width="10"> </td>
-      <td align="Left" valign="Top" width="126"> &nbsp; 
+      <td align="Left" valign="Top" > &nbsp; 
         <!-- download action -->
         <input name="actionDownload" type="image" value="download" border="0" height="19" src="@image_server@btn_download.gif" width="99">
         <br>
@@ -168,7 +168,7 @@
      </tr>
     </tbody>
    </table>
-   <table summary="navigation" border="0" cellpadding="0" cellspacing="5" width="725">
+   <table summary="navigation" border="0" cellpadding="0" cellspacing="5" >
    <tbody>
      <tr>
        <td align="Center"><br/></td>

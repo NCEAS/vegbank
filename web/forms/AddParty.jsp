@@ -10,8 +10,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-03-15 12:35:28 $'
-*  '$Revision: 1.8 $'
+*  '$Date: 2005-03-15 18:59:58 $'
+*  '$Revision: 1.9 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -64,7 +64,7 @@
   <html:form action="/AddParty" onsubmit="return validateAddPartyMethodForm(this)">
 
   <!-- table that has the whole package in its one row -->
-  <table width="799" class="formEntry" cellpadding="5">
+  <table  class="formEntry" cellpadding="5">
     <tr>
       <td width="45%" valign="top">  
 

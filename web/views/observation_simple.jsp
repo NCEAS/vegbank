@@ -2,14 +2,7 @@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
 
-
-
-
-
- 
 <TITLE>View VegBank Data: Observations - Simple Summary</TITLE>
-
-
 
       @webpage_masthead_html@
       @possibly_center@
@@ -26,7 +19,7 @@
 <logic:notEmpty name="observation-BEANLIST">
 
 <logic:iterate id="onerowofobservation" name="observation-BEANLIST">
-<TABLE class="leftrightborders" cellpadding="2" width="700px">
+<TABLE class="leftrightborders" cellpadding="2" >
 
 <!-- iterate over all records in set : new table for each -->
 

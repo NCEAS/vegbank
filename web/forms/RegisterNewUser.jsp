@@ -10,8 +10,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-03-15 12:35:28 $'
-*  '$Revision: 1.14 $'
+*  '$Date: 2005-03-15 18:59:59 $'
+*  '$Revision: 1.15 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -43,7 +43,7 @@
 
   <br/>
 <!-- table that limits width of text -->
-<table cellspacing="2" cellpadding="0" border="0" width="725">
+<table cellspacing="2" cellpadding="0" border="0" >
 <tr>
  <td colspan="8">
 		<h2 align="center">VegBank Registration</h2>
@@ -64,7 +64,7 @@
   <html:errors/>
   </span>
 
-  <TABLE width="315" border="0">
+  <TABLE  border="0">
     <TR> 
       <TD>
 	  	<b><span class="sizenormal">Login Information</span></b>
@@ -132,7 +132,7 @@
   &nbsp;
 
 <!-- TERMS -->
-<table bgcolor="#EEEEEE" cellpadding="5" border="0" width="90%">
+<table bgcolor="#EEEEEE" cellpadding="5" border="0" >
 <tr>
 	<td>
 		<span class="psmall">Acceptance of the  
@@ -143,7 +143,7 @@
 </tr>
 </table>
 
-  <table cellspacing="2" cellpadding="2" width="90%" border="1">
+  <table cellspacing="2" cellpadding="2"  border="1">
     <tr> 
       <td>
           <font color="red">*</font> 

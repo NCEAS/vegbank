@@ -27,7 +27,7 @@
   @webpage_masthead_html@
 
 
-<table width="799"><tr><td>
+
  <a name="topoffaq"></a>
 <h1>VegBank FAQ</h1>
 
@@ -62,7 +62,7 @@
 <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p><p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text> </p>
 
 <p>This space is intentionally left blank so that bookmarks on this page will take you to the correct part of the FAQ.</p>
-</td></tr></table>
+
 
 </xsl:template> <!-- root -->
 

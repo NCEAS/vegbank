@@ -33,7 +33,7 @@
 						<font face="Arial, Helvetica, sans-serif" size="5"> Results of Community Concept Lookup</font>
 					</p>
 				</blockquote>
-				<table width="799" cellpadding="0" cellspacing="0" border="1">
+				<table cellpadding="0" cellspacing="0" border="1">
 					<tr vAlign="top" align="left" colspan="1">
 						<th class="tablehead" colspan="3" height="25">
 							<font face="Arial, Helvetica, sans-serif">
@@ -43,7 +43,7 @@ Matches found: <xsl:number value="count(community)"/>
 					</tr>
 				</table>
 				<!-- TABLE HEADER -->
-				<table width="799" cellpadding="0" cellspacing="0" border="1">
+				<table cellpadding="0" cellspacing="0" border="1">
 					<tr valign="center" align="left" colspan="1">
 						<th class="tablehead" width="55%" bgcolor="#336633">
 							<font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1">COMMUNITY NAME</font>

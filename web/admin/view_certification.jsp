@@ -1,15 +1,15 @@
 
 
 <!-- 
-  *   '$Id: view_certification.jsp,v 1.10 2005-03-15 12:36:19 mlee Exp $ '
+  *   '$Id: view_certification.jsp,v 1.11 2005-03-15 18:59:58 mlee Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2005-03-15 12:36:19 $'
-  *  '$Revision: 1.10 $'
+  *      '$Date: 2005-03-15 18:59:58 $'
+  *  '$Revision: 1.11 $'
   *
   *
   -->
@@ -41,7 +41,7 @@
         </p> 
 	
 	<!-- main table -->
-	<table width="700" border="0" cellspacing="5" cellpadding="2">
+	<table  border="0" cellspacing="5" cellpadding="2">
 	<html:form method="post" action="ViewCertification.do">
 		<html:hidden name="certBean" property="usrId"/>
 		<html:hidden name="certBean" property="certId"/>
@@ -81,7 +81,7 @@
 		<td bgcolor="#FFFFFF"><img src="@image_server@pix_clear" width="20" height="1"></td>
 
 		<td>
-			<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" width="360">
+			<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" >
 			<tr bgcolor="#EBF3F8"> 
 			  <td align="center">Personal Information</td> 
 			</tr>
@@ -277,7 +277,7 @@
 		<td bgcolor="#FFFFFF"><img src="@image_server@pix_clear" width="20" height="1"></td>
 
 		<td bgcolor="#BBBBBB">
-		<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" width="560">
+		<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" >
 		<tr bgcolor="#EBF3F8"> 
 		  <td width="40%" align="center">Region</td> 
 		  <td width="20%" align="center">Vegetation</td>
@@ -361,7 +361,7 @@
 			<td bgcolor="#FFFFFF"><img src="@image_server@pix_clear" width="20" height="1"></td>
 
 			<td bgcolor="#BBBBBB">
-			<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" width="560">
+			<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" >
 			<tr bgcolor="#EBF3F8"> 
 			  <td colspan="2" align="center">Member #1</td>
 			  <td colspan="2" align="center">Member #2</td>

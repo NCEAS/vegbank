@@ -10,8 +10,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-03-15 12:35:28 $'
-*  '$Revision: 1.9 $'
+*  '$Date: 2005-03-15 18:59:59 $'
+*  '$Revision: 1.10 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -120,7 +120,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 <p>Please enter your re-interpretation of the author's plant choice.
 <br>
 
- <table border="0" cellspacing="15" cellpadding="5" bgcolor="#FFFFFF" width="750"><tr><td>
+ <table border="0" cellspacing="15" cellpadding="5" bgcolor="#FFFFFF" ><tr><td>
 
  <table border="0" cellspacing="1" cellpadding="1" bgcolor="#333333"><tr><td>
   <table border="0" cellspacing="1" cellpadding="3" bgcolor="#FFFFFF">

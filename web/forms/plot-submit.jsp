@@ -12,9 +12,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2005-03-15 13:55:41 $'
-*  '$Revision: 1.18 $'
+*  '$Author: mlee $'
+*  '$Date: 2005-03-15 18:59:59 $'
+*  '$Revision: 1.19 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ function selectRadio(radioIndex) {
 <html:form action="/UploadPlot"  enctype="multipart/form-data">
 
 
-<table  border="0" width="800" >
+<table  border="0"  >
 	<tr>
 		<td bgcolor="white">
 			<img align="center" border="0" height="100" src="@image_server@owlogoBev.jpg" alt = "Veg plots logo">
@@ -74,7 +74,7 @@ function selectRadio(radioIndex) {
 
 <br> 
 
-<table border="0" width="550">
+<table border="0" >
 	<tr>
 		<td colspan="2">
 			<p>In order to share your plot observation data, it must be contained 
@@ -98,7 +98,7 @@ function selectRadio(radioIndex) {
 
 
 <!-- PLOT FILE  -->
-<table border="0" width="780" class="on_page_help">
+<table border="0"  class="on_page_help">
 	
 	<tr>
 		<td colspan="2">

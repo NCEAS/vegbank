@@ -1,4 +1,3 @@
-
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
@@ -10,8 +9,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-03-15 12:35:28 $'
-*  '$Revision: 1.10 $'
+*  '$Date: 2005-03-15 18:59:58 $'
+*  '$Revision: 1.11 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -62,7 +61,7 @@
   <p>Note that you do not need to add the full amount of Alternate Identifiers or Reference Contributors.  Only add those appropriate for the reference you are adding.</p>
   <p><font color="red">*</font>Indicates a required field.</p>
   <p>Click a field label or table name to see more about that field in VegBank's <a href="@dbdictionary_link@dd-index.html">data dictionary</a>.  Some fields are described in more detail just below the field.</p>
-  <table width="799" class="formEntry" cellpadding="5" >
+  <table class="formEntry" cellpadding="5" >
     <tr>
       <!-- Left hand column -->
       <td width="55%" valign="top"><p>  

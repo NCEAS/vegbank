@@ -1,5 +1,3 @@
-
-
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
@@ -11,8 +9,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2005-03-15 12:35:28 $'
-  *  '$Revision: 1.11 $'
+  *      '$Date: 2005-03-15 18:59:58 $'
+  *  '$Revision: 1.12 $'
   *
   *
   -->
@@ -77,7 +75,7 @@ function setNameMatchType() {
 
   <!--html:errors/-->
   
-  <table align="left" border="0" width="90%" cellspacing="0" cellpadding="0">
+  <table align="left" border="0"  cellspacing="0" cellpadding="0">
     <tr>
       <td bgcolor="white"><img align="center" border="0" height="100" src=
       "@image_server@owlogoBev.jpg" alt="Comms logo"></td>
@@ -116,14 +114,14 @@ function setNameMatchType() {
 
           <br/>
 
-          <table border="0" width="722">
+          <table border="0" >
             <!--TAXON NAME -->
 
             <tr align="left" valign="top">
-              <td width="156"><b>Community name:</b></td>
+              <td ><b>Community name:</b></td>
               <!-- COMM TAXON INPUT--> 
 
-              <td width="556">
+              <td >
 		<input type="text" size="35" name="xwhereParams_commname_0"/>
 		<input type="hidden" name="xwhereParams_commname_1" value="cu.commname"/>
 				&nbsp; <span class="normal">e.g. tidal, brackish
@@ -155,11 +153,11 @@ function setNameMatchType() {
 	    
 	    <!-- Community level -->	    
             <tr>
-              <td width="156" align="left" valign="top"><b>Community level:</b>
+              <td  align="left" valign="top"><b>Community level:</b>
 			  <br><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
 			  </td>
 
-		<td width="556" class="c4" align="left" valign="top" width="556">
+		<td  class="c4" align="left" valign="top" >
 	    <select name="xwhereParams_commlevel_0" size="5" multiple="true">
 			<option value="" selected>--ANY--</option>
 			<!--html:options property="commLevels"/-->
@@ -188,10 +186,10 @@ function setNameMatchType() {
             </tr>
 		<!-- Name ClassSystem -->
             <tr>
-              <td width="156" align="left" valign="top"><b>Name type:</b>
+              <td  align="left" valign="top"><b>Name type:</b>
 			  <br><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
 			  </td>
-              <td class="c4" align="left" valign="top" width="556">
+              <td class="c4" align="left" valign="top" >
 	        <select name="xwhereParams_classsystem_0" size="5" multiple="true">
 			   <option value="" selected>--ANY--</option>
 			   <!--html:options property="commClassSystems"/-->
@@ -220,10 +218,10 @@ function setNameMatchType() {
             </tr>
 
             <tr>
-              <td width="156" align="left" valign="top" height="20">
+              <td  align="left" valign="top" height="20">
               <b>As of date:</b></td>
 
-              <td class="c4" align="left" valign="top" height="20" width="556">
+              <td class="c4" align="left" valign="top" height="20" >
 				<select name="ebDate"> 
 					<option value=""></option> <option value="1">1</option>
 					<option value="2">2</option> <option value="3">3</option>
@@ -270,10 +268,10 @@ function setNameMatchType() {
 
 
             <tr>
-              <td width="156" align="left" valign="top">
+              <td  align="left" valign="top">
               <b>Party:</b></td>
             
-              <td class="c4" align="left" valign="top" height="54" width="556">
+              <td class="c4" align="left" valign="top" height="54" >
                 <!--html:select property="xwhereParams_accordingtoparty_0"-->
                 <select name="xwhereParams_accordingtoparty_0">
                   <option value="">--ANY--</option>
@@ -315,7 +313,7 @@ function setNameMatchType() {
             </tr>
 	    
             <tr>
-              <td width="156"></td>
+              <td ></td>
             </tr>
           </table>
         <!--/html:form-->

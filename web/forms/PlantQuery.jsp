@@ -12,8 +12,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2005-03-15 12:35:28 $'
-  *  '$Revision: 1.13 $'
+  *      '$Date: 2005-03-15 18:59:59 $'
+  *  '$Revision: 1.14 $'
   *
   *
   -->
@@ -90,7 +90,7 @@ function setNameMatchType() {
       "@image_server@owlogoBev.jpg" alt="Veg plots logo"></td>
 
       <td align="left" valign="middle">
-        <table border="0" cellpadding="5" width="366" height="55">
+        <table border="0" cellpadding="5"  height="55">
           <tr>
             <td align="left" valign="bottom"><span class="c1">Plant Concept Lookup</span><br></td>
           </tr>
@@ -121,13 +121,13 @@ function setNameMatchType() {
 
           <br/>
 
-          <table border="0" width="722">
+          <table border="0" >
             <!--TAXON NAME -->
 
             <tr align="left" valign="top">
-              <td width="156"><b>Taxon name:</b></td>
+              <td ><b>Taxon name:</b></td>
 
-              <td width="556">
+              <td >
 		<input type="text" size="35" name="xwhereParams_plantname_0"/>
 		<input type="hidden" name="xwhereParams_plantname_1" value="pu.plantname"/>
 				&nbsp; <span class="normal">e.g. maple, acer rubrum
@@ -159,11 +159,11 @@ function setNameMatchType() {
 	    
 	    <!-- Taxon level -->	    
             <tr>
-              <td width="156" align="left" valign="top"><b>Taxon level:</b>
+              <td  align="left" valign="top"><b>Taxon level:</b>
 			  <br><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
 			  </td>
 
-		<td width="556" class="c4" align="left" valign="top" width="556">
+		<td  class="c4" align="left" valign="top" >
 	    <select name="xwhereParams_plantlevel_0" size="5" multiple="true">
 			<option value="" selected>--ANY--</option>
 
@@ -192,10 +192,10 @@ function setNameMatchType() {
             </tr>
 		<!-- Name ClassSystem -->
             <tr>
-              <td width="156" align="left" valign="top"><b>Name type:</b>
+              <td  align="left" valign="top"><b>Name type:</b>
 			  <br><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
 			  </td>
-              <td class="c4" align="left" valign="top" width="556">
+              <td class="c4" align="left" valign="top" >
 	        <!--html:select property="xwhereParams_classsystem_0" size="6" multiple="true"-->
 	        <select name="xwhereParams_classsystem_0" size="5" multiple="true">
 			   <option value="" selected>--ANY--</option>
@@ -225,10 +225,10 @@ function setNameMatchType() {
             </tr>
 
             <tr>
-              <td width="156" align="left" valign="top" height="20">
+              <td  align="left" valign="top" height="20">
               <b>As of date:</b></td>
 
-              <td class="c4" align="left" valign="top" height="20" width="556">
+              <td class="c4" align="left" valign="top" height="20" >
 				<select name="ebDate"> 
 					<option value=""></option> <option value="1">1</option>
 					<option value="2">2</option> <option value="3">3</option>
@@ -275,10 +275,10 @@ function setNameMatchType() {
 
 
             <tr>
-              <td width="156" align="left" valign="top">
+              <td  align="left" valign="top">
               <b>Party:</b></td>
             
-              <td class="c4" align="left" valign="top" height="54" width="556">
+              <td class="c4" align="left" valign="top" height="54" >
                 <!--html:select property="xwhereParams_accordingtoparty_0"-->
                 <select name="xwhereParams_accordingtoparty_0">
                   <option value="">--ANY--</option>
@@ -320,7 +320,7 @@ function setNameMatchType() {
             </tr>
 	    
             <tr>
-              <td width="156"></td>
+              <td ></td>
             </tr>
           </table>
         <!--/html:form-->

@@ -10,8 +10,8 @@
   * Authors: @author@
   *
   * '$Author: mlee $'
-  * '$Date: 2005-03-15 12:35:28 $'
-  * '$Revision: 1.6 $'
+  * '$Date: 2005-03-15 18:59:59 $'
+  * '$Revision: 1.7 $'
   *
   *
   -->
@@ -38,10 +38,10 @@
  	<bean:define id="beanUsrId"><bean:write name="webuser" property="userid"/></bean:define>
  	<input type="hidden" name="usrId" value="<bean:write name="beanUsrId"/>"/>
 	
-	<table width="700" border="0" cellspacing="5" cellpadding="3">
+	<table  border="0" cellspacing="5" cellpadding="3">
 	<tr>
       <td colspan="2">
-			<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" width="360">
+			<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" >
 			<tr bgcolor="#EBF3F8"> 
 			  <td align="center">Personal Information</td> 
 			</tr>

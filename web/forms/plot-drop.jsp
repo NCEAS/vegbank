@@ -13,8 +13,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-03-15 12:35:28 $'
-*  '$Revision: 1.8 $'
+*  '$Date: 2005-03-15 18:59:59 $'
+*  '$Revision: 1.9 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
 @webpage_masthead_html@
 
 <br/> 
-<table  border="0" width="800" >
+<table  border="0"  >
 	<tr>
 		<td bgcolor="white">
 			<img align="center" border="0" height="100" src="@image_server@owlogoBev.jpg" alt = "Veg plots logo">

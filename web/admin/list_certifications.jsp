@@ -1,15 +1,15 @@
 
 
 <!-- 
-  *   '$Id: list_certifications.jsp,v 1.8 2005-03-15 12:36:18 mlee Exp $ '
+  *   '$Id: list_certifications.jsp,v 1.9 2005-03-15 18:59:58 mlee Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2005-03-15 12:36:18 $'
-  *  '$Revision: 1.8 $'
+  *      '$Date: 2005-03-15 18:59:58 $'
+  *  '$Revision: 1.9 $'
   *
   *
   -->
@@ -45,7 +45,7 @@
         </p> 
 	
 	<!-- main table -->
-	<table width="700" border="0" cellspacing="5" cellpadding="2">
+	<table  border="0" cellspacing="5" cellpadding="2">
 		<!--  display list containing applicant name, date, requested perm. Delim by status. -->
 
 	<bean:define id="sortbyId" value="usercertification_id"/>

@@ -10,8 +10,8 @@
   * Authors: @author@
   *
   * '$Author: mlee $'
-  * '$Date: 2005-03-15 12:35:28 $'
-  * '$Revision: 1.5 $'
+  * '$Date: 2005-03-15 18:59:59 $'
+  * '$Revision: 1.6 $'
   *
   *
   -->
@@ -40,7 +40,7 @@
 </p> 
 	
 
-	<table width="700" border="0" cellspacing="5" cellpadding="3">
+	<table  border="0" cellspacing="5" cellpadding="3">
 	
 	<tr> 
       <td colspan="2"><span class="sizesmall">Email Address / Username: </span><br/>

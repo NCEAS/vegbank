@@ -34,7 +34,7 @@
         </p> 
 	
 	<!-- main table -->
-	<table width="700" border="0" cellspacing="5" cellpadding="2">
+	<table border="0" cellspacing="5" cellpadding="2">
 <html:form method="post" action="SaveCertification.do">
 	<html:hidden property="usrId"/>
 
@@ -46,7 +46,7 @@
 		<td bgcolor="#FFFFFF"><img src="@image_server@pix_clear" width="20" height="1"></td>
 
 		<td>
-			<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" width="360">
+			<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" >
 			<tr bgcolor="#EBF3F8"> 
 			  <td align="center">Your Personal Information</td> 
 			</tr>
@@ -261,7 +261,7 @@
 		<td bgcolor="#FFFFFF"><img src="@image_server@pix_clear" width="20" height="1"></td>
 
 		<td bgcolor="#BBBBBB">
-		<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" width="560">
+		<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" >
 		<tr bgcolor="#EBF3F8"> 
 		  <td width="40%" align="center">Region</td> 
 		  <td width="20%" align="center">Vegetation</td>
@@ -411,7 +411,7 @@
 			<td bgcolor="#FFFFFF"><img src="@image_server@pix_clear" width="20" height="1"></td>
 
 			<td bgcolor="#BBBBBB">
-			<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" width="560">
+			<table bgcolor="#CCCCCC" cellpadding="1" cellspacing="1" border="0" >
 			<tr bgcolor="#EBF3F8"> 
 			  <td colspan="2" align="center">Member #1</td>
 			  <td colspan="2" align="center">Member #2</td>
