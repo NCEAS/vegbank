@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-12-02 02:11:05 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2004-02-28 11:22:37 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -127,7 +127,7 @@ public class AddPlant implements Constants
 
 				party.setGivenname( userBean.getGivenname() );
 				party.setSurname( userBean.getSurname()  );
-				party.setOrganizationname( userBean.getInstitution() );
+				party.setOrganizationname( userBean.getOrganizationname() );
 
 				plant.setParty(party);
 
@@ -373,7 +373,7 @@ public class AddPlant implements Constants
 			//get the required elements from the planttaxonobject
 			String email = userBean.getEmail();
 			String name = userBean.getSurname();
-			String institution = userBean.getInstitution();
+			String organizationname = userBean.getOrganizationname();
 			String sciName = plant.getScientificName();
 			String commonName = plant.getCommonName();
 			String code = plant.getCode();
@@ -386,7 +386,7 @@ public class AddPlant implements Constants
 			sb.append("Insertion Results: " + results + "<br> \n");
 			sb.append("Email: " + email + "<br> \n");
 			sb.append("Name: " + name + "<br> \n");
-			sb.append("Institution: " + institution + "<br> \n");
+			sb.append("Organizationname: " + organizationname + "<br> \n");
 			sb.append("Scientific Name: " + sciName + "<br> \n");
 			sb.append("Common Name: " + commonName + "<br> \n");
 			sb.append("Code: " + code + "<br> \n");
@@ -706,8 +706,8 @@ public class AddPlant implements Constants
 				"" + userBean.getGivenname() );
 			replaceHash.put("plantPartySurName", "" + userBean.getSurname() );
 			replaceHash.put(
-				"plantPartyInstitution",
-				"" + userBean.getInstitution() );
+				"plantPartyOrganizationname",
+				"" + userBean.getOrganizationname() );
 			replaceHash.put("plantPartyEmailAddress", "" + emailAddress);
 
 			su.filterTokenFile(plantStatusUsageTemplate, out, replaceHash);

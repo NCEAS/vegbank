@@ -3,9 +3,9 @@ package org.vegbank.servlet.request;
 /*
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
- *	'$Author: farrell $'
- *  '$Date: 2004-02-18 19:00:36 $'
- *  '$Revision: 1.25 $'
+ *	'$Author: anderson $'
+ *  '$Date: 2004-02-28 11:22:37 $'
+ *  '$Revision: 1.26 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,7 +137,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				String salutation = null;
 				String surName = null;
 				String givenName = null;
-				String institution = null;
+				String organizationname = null;
 				int permissionType = 0;
 				WebUser user = null;
 				
@@ -148,7 +148,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					salutation = user.getSalutation();
 					surName = user.getSurname();
 					givenName = user.getGivenname();
-					institution = user.getInstitution();
+					organizationname = user.getOrganizationname();
 					permissionType = user.getPermissiontype();
 				}
 				
@@ -156,7 +156,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				System.out.println("DataSubmitServlet > current user salutation: " + salutation);
 				System.out.println("DataSubmitServlet > current user surName: " + surName);
 				System.out.println("DataSubmitServlet > current user givenName: " + givenName);
-				System.out.println("DataSubmitServlet > current user institution: " + institution);
+				System.out.println("DataSubmitServlet > current user organizationname: " + organizationname);
 				System.out.println("DataSubmitServlet > current user permission lev: " + permissionType);
 				if ( permissionType <= 1)
 				{
@@ -324,7 +324,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			String salutation, 
 			String givenName, 
 			String surName,
-			String institution)
+			String organizationname)
 		{
 			StringWriter output = new StringWriter();
 			try
@@ -335,7 +335,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				replaceHash.put("salutation", ""+salutation);
 				replaceHash.put("givenName", ""+givenName);
 				replaceHash.put("surName", ""+surName);
-				replaceHash.put("institution", ""+institution);
+				replaceHash.put("organizationname", ""+organizationname);
 				su.filterTokenFile(plotSubmittalInitTemplate, output, replaceHash);
 			}
 			catch( Exception e ) 
@@ -379,7 +379,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		String salutation = userBean.getSalutation();
 		String surName = userBean.getSurname();
 		String givenName = userBean.getGivenname();
-		String institution = userBean.getInstitution();
+		String organizationname = userBean.getOrganizationname();
 		
 		try
 		{
@@ -398,7 +398,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			{
 				System.out.println("DataSubmitServlet > loading plots preinit ");
 				// GET THE FORM WITH THE UPDATED ATTRIBUTES AND SEND IT TO THE USER
-				htmlContents = updatePlotInitPage(user, salutation, givenName, surName, institution);
+				htmlContents = updatePlotInitPage(user, salutation, givenName, surName, organizationname);
 				out.println(htmlContents);
 			}
 			

@@ -3,9 +3,9 @@ package org.vegbank.servlet.request;
 /*
  *  '$RCSfile: PlantTaxon.java,v $'
  *
- *	'$Author: farrell $'
- *  '$Date: 2003-04-16 00:12:48 $'
- *  '$Revision: 1.2 $'
+ *	'$Author: anderson $'
+ *  '$Date: 2004-02-28 11:22:37 $'
+ *  '$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,22 +112,22 @@ public class PlantTaxon
 	 
 	 
 	 /**
-	 * method to set the inserter's institution
+	 * method to set the inserter's organizationname
 	 */
-	 public void setInserterInstitution(String institution)
+	 public void setInserterOrganizationname(String organizationname)
 	 {
-		 plantTaxon.put("inserterInstitution", institution);
+		 plantTaxon.put("inserterOrganizationname", organizationname);
 	 }
 	
 	 /**
-	 * method to get the inserter's Institution
+	 * method to get the inserter's Organizationname
 	 */
-	 public String getInserterInstitution()
+	 public String getInserterOrganizationname()
 	 {
 		 String s = null;
-		 if ( plantTaxon.containsKey("inserterInstitution") )
+		 if ( plantTaxon.containsKey("inserterOrganizationname") )
 		 {
-			 s = (String)plantTaxon.get("inserterInstitution");
+			 s = (String)plantTaxon.get("inserterOrganizationname");
 		 }
 		 return(s);
 	 }

@@ -3,9 +3,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: farrell $'
- *   '$Date: 2004-02-18 19:00:36 $'
- *   '$Revision: 1.22 $'
+ *   '$Author: anderson $'
+ *   '$Date: 2004-02-28 11:22:37 $'
+ *   '$Revision: 1.23 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -271,7 +271,7 @@ public class UserManagementServlet extends HttpServlet
 				String givenName = (String) params.get("givenName");
 				String permissionType =
 					(String) params.get("permissionType");
-				String institution = (String) params.get("institution");
+				String organizationname = (String) params.get("organizationname");
 				String ticketCount = (String) params.get("ticketCount");
 				String address = (String) params.get("address");
 				String city = (String) params.get("city");
@@ -288,7 +288,7 @@ public class UserManagementServlet extends HttpServlet
 				h.put("surName", "" + surName);
 				h.put("givenName", "" + givenName);
 				h.put("permissionType", "" + permissionType);
-				h.put("institution", "" + institution);
+				h.put("organizationname", "" + organizationname);
 				h.put("ticketCount", "" + ticketCount);
 				h.put("address", "" + address);
 				h.put("city", "" + city);
@@ -308,7 +308,7 @@ public class UserManagementServlet extends HttpServlet
 
 				if (userdb.isEmailUnique(newEmailAddress))
 				{
-					userdb.updateUserInfo(h);
+					//userdb.updateUserInfo(h);
 
 					// send a success message
 					sb.append(
@@ -358,7 +358,7 @@ public class UserManagementServlet extends HttpServlet
 				replaceHash.put("country", ""+userBean.getCountry());
 				replaceHash.put("postalcode", ""+userBean.getPostalcode() );
 				replaceHash.put("phoneNumber", ""+userBean.getDayphone() );
-				replaceHash.put("institution", "" + userBean.getInstitution());
+				replaceHash.put("organizationname", "" + userBean.getOrganizationname());
 				replaceHash.put("ticketCount", ""+userBean.getTicketcount() );
 				replaceHash.put("permissionType", String.valueOf(userBean.getPermissiontype()));
 				replaceHash.put("emailAddress", emailAddress);
