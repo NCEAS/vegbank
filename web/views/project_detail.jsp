@@ -8,7 +8,7 @@
 <TITLE>View VegBank Data: projects - Detail</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css" />
 </HEAD>
-<body>@vegbank_header_html_normal@  
+<body class="center">@vegbank_header_html_normal@  
 <h2>View VegBank Projects</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
@@ -19,11 +19,10 @@
 <p>  Sorry, no projects found.</p>
 </logic:empty>
 <logic:notEmpty name="project-BEANLIST">
-<% int countRows = 0 ; %>
 <logic:iterate id="onerowofproject" name="project-BEANLIST">
 <!-- iterate over all records in set : new table for each -->
 <table class="leftrightborders" cellpadding="2">
-<tr><th class="major" colspan="9">Project #<%= countRows = countRows + 1 %></th></tr>
+<tr><th class="major_smaller" colspan="9">Project: <bean:write name="onerowofproject" property="projectname" /></th></tr>
         <%@ include file="autogen/project_detail_data.jsp" %>
         <bean:define id="project_pk" name="onerowofproject" property="project_id" />
 <!-- custom bits:
