@@ -13,6 +13,7 @@ import java.net.URL;
 import java.sql.*;
 
 import org.apache.tools.mail.MailMessage;
+import servlet.util.ServletUtility;
 //import servlet.plugin.*;
 //import org.w3c.dom.Document;
 //import xmlresource.utils.XMLparse;
@@ -20,34 +21,16 @@ import org.apache.tools.mail.MailMessage;
 
 
 /**
- * Servlet to read the attributes from an html form, store the 
- * attributes in an RDBMS and then send an email to the submitter
- * describing the stored attributes
  *
- * <p>Valid parameters are:<br><br>
- * @param tableName -- the name of the database table inwhich to store
- * 		attributes
- * @param databaseName -- the name of the database to use to store data
- *
- * Optional Parameters
- * @param redirectPoint -- the url to redirect the user to
- * @param responseMessage -- the message to respond to the client after data 
- *	has be retrieved
- * @param validation -- a comma-separated string containg the attributes that 
- * must be validated.  in this case validated simply means that it is required
- * 
  */
 
 public class StyleSheetGenerator extends HttpServlet 
 {
 	
-	
-	private String databaseName = null;
-	private String tableName = null;
-	private String emailAddress = null;
-	private String redirectPoint = null;
-	private String responseMessage = null;
-	private String validation = null; 
+	//this is the tmp file that will be written
+	private String fileName = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
+	private ServletUtility util = new ServletUtility();
+	private String userEmail = null;
 	
 	/**
 	 * constructor method
@@ -77,45 +60,29 @@ public class StyleSheetGenerator extends HttpServlet
 			PrintWriter out = response.getWriter();
 			try 
 			{
+				
+				//first get the cookie value etc
+				this.userEmail = this.getCookieValue(request);
+				System.out.println("user: " + this.userEmail );
+				
+				
 			//enumeration is needed for the attributes
 				Enumeration enum =request.getParameterNames();
 				Hashtable params = this.parameterHash( request );
-				//the required parameters
-				this.databaseName = (String)params.get("databaseName");
-				this.tableName = (String)params.get("tableName");
-				this.redirectPoint = (String)params.get("redirectPoint");
-				this.responseMessage = (String)params.get("responseMessage");
-				this.emailAddress = (String)params.get("emailAddress");
-				this.validation = (String)params.get("validation");
-				System.out.println("validation string: " + this.validation );
 				
-				//out.println("IN PARAMETERS: " + params.toString() + "\n" );
-				//System.out.println("testing the form reader class: " + params);
+				//the temp file name
+				StringBuffer fileContents = new StringBuffer();
 				
-				//validate
-				if ( this.validateInput( params ) == true )
-				{
+				//print the xslt file
+				fileContents.append( getHeader().toString() );
+				fileContents.append( getBody(params).toString() );
+				fileContents.append( getFooter().toString() );
+				printFile( fileContents );
 				
-						//try to load the database
-						if ( this.handleRequest(request, params) == true )
-						{
-							//send response
-							out.println( this.sendResponseMessage(this.responseMessage, true ) );
-						}
-						//end the failure message
-						else
-						{
-							//send response
-							out.println( this.sendResponseMessage(this.responseMessage , false));
-						}
-				}
-				//end the failure message
-				else
-				{
-					//send response
-					out.println( this.sendResponseMessage(this.responseMessage , false));
-				}
+				//register the document
+				//util.uploadFileDataExcahgeServlet();
 				
+				//sendResponse();
 			}
 		catch( Exception e ) 
 		{
@@ -125,391 +92,245 @@ public class StyleSheetGenerator extends HttpServlet
 		}
 	}
 	
-	//method to send the response to the clent and a linkto the redirect point
-	private String sendResponseMessage(String message, boolean validationpass)
-	{
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd G 'at' hh:mm:ss a zzz");
-		java.util.Date now = new java.util.Date();
-		String dateString = formatter.format(now);
-		
-		StringBuffer sb = new StringBuffer();
-		if (validationpass == true )
-		{
-			sb.append("<html> \n");
-			sb.append("<head> \n");
-			sb.append("<title> Data Received -- Thank You! </title> \n");
-			sb.append("</head> \n");
-			sb.append("<body> \n");
-			sb.append("Thank You: " + this.emailAddress + " <br> ");
-			sb.append(" receipt email sent: "+ dateString + "+<br> <br> \n");
-			sb.append("<br> "+ this.responseMessage+ "<br> ");
-			sb.append("<a href="+this.redirectPoint+" > return </a>" );
-		
-			sb.append("</body> \n");
-			sb.append("</html> \n");
-			return(sb.toString() );
-		}
-		
-		else
-		{
-			sb.append("<html> \n");
-			sb.append("<head> \n");
-			sb.append("<title> Missing Data! </title> \n");
-			sb.append("</head> \n");
-			sb.append("<body> \n");
-			sb.append("Missing data in a Required field! Go Back<br> <br> \n");
-			sb.append("</body> \n");
-			sb.append("</html> \n");
-			return(sb.toString() );
-		}
-	}
 	
 	/**
-	 * method that inserts the parameters into a database table
-	 *
+	 * method that returns the cookie value associated with the 
+	 * current browser
 	 */
-	 private boolean handleRequest(HttpServletRequest request, Hashtable params )
-	 {
-		 try
-		 {
-			 //get the database connection
-			 Connection c = this.getConnection();
-			 //if he database exists then load it 
-			 if (this.tableExists(c, "form") == true)
-			 {
-				 System.out.println("exists and loading");
-				 Vector v = getAttributeNames( request  );
-				 if ( loadAttributes( c, v, request,  params  ) == true )
-				 {
-				 	//this.loadAttributes( c, v, request,  params  );
-				 	this.mailRecipt(request);
-				 	//this.sendResponseMessage();
-				 }
-				 else
-				 {
-					 System.out.println(" Data not loaded to DB");
-					 return(false);
-				 }
-			 }
-			 //otherwise create it then load it
-			 else
-			 {
-				 Vector v = getAttributeNames( request  );
-				 System.out.println("creating table: " + v.toString() );
-				 this.createTable(c, v, this.tableName);
-				 if ( loadAttributes( c, v, request,  params  ) == true )
-				 {
-				 //this.loadAttributes(c, v, request,  params  );
-			 	 this.mailRecipt(request);
-				 //this.sendResponseMessage()
-				 }
-				 else
-				 {
-					 System.out.println(" Data not loaded to DB");
-					 return(false);
-				 }
-			 }
-		 }
-		 catch (Exception e)
-		 {
-			 System.out.println("Exception: " + e.getMessage());
-			 e.printStackTrace();
-		 }
-		 return(true);
-	 }
-	 
-	 
-	 /**
-	  * method that loads the attributes
-		*/
-		private boolean loadAttributes(Connection conn, Vector attributeNames, 
-		HttpServletRequest request, Hashtable params)
-		{
-		 try
-		 {
-			 PreparedStatement pstmt;
-			 StringBuffer sb = new StringBuffer();
-			 
-			 sb.append("INSERT into "+this.tableName+" (");
-			 
-			 //the attribute names
-			 for (int i=0; i<attributeNames.size(); i++) 
-				{
-					//comma separate these
-					if ( i < (attributeNames.size() -1) )
-					{
-						sb.append(attributeNames.elementAt(i).toString()  + ", " );
-					}
-					else
-					{
-						sb.append(attributeNames.elementAt(i).toString()  + " ) ");
-					}
-				}
-	
-			sb.append(" values (");
-			//the values
-			for (int i=0; i<attributeNames.size(); i++) 
-			{
-					//comma separate these
-					if ( i < (attributeNames.size() -1) )
-					{
-						String key = (String)attributeNames.elementAt(i).toString();
-						String val = ((String)params.get( key )).replace('\'', ' ');
-						sb.append(" '"+val  + "', " );
-					}
-					else
-					{
-						String key = (String)attributeNames.elementAt(i).toString();
-						String val = ((String)params.get(key)).replace('\'', ' ');
-						sb.append(" '"+val + "') " );
-					}
-			}
-			pstmt = conn.prepareStatement( sb.toString() );
-			
-			pstmt.execute();
-			pstmt.close();
-			 
-		 }
-		 catch (Exception e)
-		 {
-			 System.out.println("Exception: " + e.getMessage());
-			 //e.printStackTrace();
-			 return(false);
-		 }
-		 return(true);
-		}
-		
-		
-		/**
-		 * method to mail the receipt
-		 */
-		 private void mailRecipt( HttpServletRequest req )
-		 {
-			 try
-			 {
-			 	String mailhost = "nceas.ucsb.edu";  // or another mail host
- 				String from = "vegbank";
- 				String to = this.emailAddress;
- 				String cc1 = "vegbank@nceas.ucsb.edu";
- 				//String cc2 = "cc2@you.com";
- 				//String bcc = "bcc@you.com";
-  
- 				MailMessage msg = new MailMessage(mailhost);
- 				msg.from(from);
- 				msg.to(to);
- 				msg.cc(cc1);
- 				//msg.cc(cc2);
- 				//msg.bcc(bcc);
- 				msg.setSubject(" Auto-Receipt ");
- 				PrintStream out = msg.getPrintStream();
-  
- 				Enumeration enum = req.getParameterNames();
- 				while (enum.hasMoreElements()) 
-				{
-   			String name = (String)enum.nextElement();
-   			String value = req.getParameter(name);
-   			out.println(name + " = " + value);
- 				}
-  
-			 msg.sendAndClose();
- 			}
-			 catch (Exception e)
-		 	 {
-				 System.out.println("Exception: " + e.getMessage());
-				 e.printStackTrace();
-			 }
-		 }
-		 
-		
-	 
-	 /**
-	  *  method that returns a vector with the names of the attributes 
-		* stored in the parmeters
-		*/
-		private Vector getAttributeNames(HttpServletRequest request)
-		{
-			Vector v = new Vector();
-			try
-		 	{
-				Enumeration enum =request.getParameterNames();
- 				while (enum.hasMoreElements()) 
-				{
-					String name = (String) enum.nextElement();
-					String values[] = request.getParameterValues(name);
-					if (values != null) 
-					{
-						for (int i=0; i<values.length; i++) 
-						{
-							v.addElement(name);
-							//params.put(name,values[i]);
-						}
-					}
- 				}
-				
-			}
-			 catch (Exception e)
-		 	{
-				 System.out.println("Exception: " + e.getMessage());
-				 e.printStackTrace();
-		 	}
-		 	return(v);
-		}
-		
-	 
-	 /**
-	  * method to create a table 
-		*/
-		private void createTable(Connection conn, Vector attributeNames, String tableName )
-		{
-			try
-		 	{
-				StringBuffer sb = new StringBuffer();
-      	PreparedStatement pstmt;
-      	
-				sb.append("CREATE TABLE "+tableName+" ( ");
-				
-				//add each attribute as a varchar
-				for (int i=0; i<attributeNames.size(); i++) 
-				{
-					//comma separate these
-					if ( i < (attributeNames.size() -1) )
-					{
-						sb.append(attributeNames.elementAt(i).toString()  + " varchar(200), " );
-					}
-					else
-					{
-						sb.append(attributeNames.elementAt(i).toString()  + " varchar(200) " );
-					}
-				}
-				//add the ending text
-				sb.append( " )");
-     		pstmt = conn.prepareStatement(sb.toString() );
-				
-				// pstmt.setString(1, sitecode);
-     	 	pstmt.execute();
-      	pstmt.close();
-				 
-			}
-
-			catch (Exception e)
-		 	{
-				System.out.println("Exception: " + e.getMessage());
-			 	e.printStackTrace();
-		 	}
-		}
-	 
-	 /**
-	  *
-		* method that tells if a table by the name of the table that the 
-		* form correspons to exists
-		*/
-		private boolean tableExists(Connection conn, String tableName)
-		{
-		 try
-		 {
-				
-     
-			DatabaseMetaData dmd = conn.getMetaData();
-			String types[] = {"TABLE", "INDEX", "SEQUENCE" };
-			ResultSet rs = dmd.getTables("", "", "%", types );
-			ResultSetMetaData rsmd = rs.getMetaData();
-			
-			//figure out if there is a match
-			int cols = rsmd.getColumnCount();
-			for ( int i = 1; i <=cols;i++)
-			{
-				System.out.println("table: " + rsmd.getColumnLabel(i) );
-			}
-
-			//now the table names 
-			while ( rs.next() )
-			{
-				for ( int i = 1; i <=cols;i++)
-				{
-					Object o = rs.getObject(i);
-					if (rs.wasNull() )
-						System.out.print(" ");
-					else
-					{
-						String objName = o.toString();
-						System.out.println("object name: " + o.toString() );
-						if ( this.tableName.equals(objName) )
-						{
-							return (true);
-						}
-					}
-				}
-			}
-		 }
-		 catch (Exception e)
-		 {
-			 System.out.println("Exception: " + e.getMessage());
-			 e.printStackTrace();
-		 }
-		 return(false);
-		
-		}
-		
-	 /**
-	  * method that validates the input -- meaning that it checks to see if
-		* every thing is there
-		*/
-		private boolean validateInput(Hashtable params)
-		{
-			boolean test = true;
-			try
-			{
-				
-				//get the attributes which must have to have an attribute
-				StringTokenizer t = new StringTokenizer(this.validation, ",");
-				while (t.hasMoreTokens() )
-				{
-					String buf = t.nextToken().trim();
-					System.out.println("validation token: " + buf);
-					
-					//get the value from the hash -- rememeber that it must be there
-					//bc who wrote the form also wrote the validation string
-					String val = (String)params.get(buf);
-					System.out.println("validation value: " + val );
-					//make sure that the val has a character -- if not then 
-					//return a false
-					if ( val.length() < 1 || val == null )
-					{
-						return(false);
-					}
-					
-				}
-			}
-			catch (Exception e)
-			{
-				System.out.println("Exception - mis matching form and validation string");
-				System.out.println(" Exception: " + e.getMessage() );
-				//e.printStackTrace();
-			}
-			return (true);
-		}
-	 
-	 
-	 /**
-	  * method to get a database connection
-		*/
-	private Connection getConnection()
+	private String getCookieValue(HttpServletRequest req)
 	{
-		Connection c = null;
-		try 
- 		{
-			Class.forName("org.postgresql.Driver");
-			//the html_forms database
-			c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/html_forms", "datauser", "");
-		}
-		catch ( Exception e )
+		
+		//get the cookies - if there are any
+		String cookieName = null;
+		String cookieValue = null;
+		try
 		{
-			System.out.println("Exception: "+e.getMessage());
+			Cookie[] cookies = req.getCookies();
+			//determine if the requested page should be shown
+    	if (cookies.length > 0) 
+			{
+				for (int i = 0; i < cookies.length; i++) 
+				{
+      		Cookie cookie = cookies[i];
+					//out.print("Cookie Name: " +cookie.getName()  + "<br>");
+       	 cookieName=cookie.getName();
+					//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
+					cookieValue=cookie.getValue();
+					System.out.println("cleint passing the cookie name: "+cookieName+" value: "
+					+cookieValue);
+				}
+  		}
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
-			return(c);
+		return(cookieValue);
 	}
+	
+	
+	/**
+	 * method that returns the head for the style  sheet
+	 */
+	private StringBuffer getHeader()
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("<?xml version=\"1.0\"?> \n");
+		sb.append("<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\"> \n");
+		sb.append("<xsl:output method=\"html\"/> \n");
+		sb.append("<xsl:template match=\"/vegPlot\"> \n");
+
+		sb.append("<html> \n");
+		sb.append("<head> \n");
+		sb.append("</head> \n");
+		sb.append("<body bgcolor=\"FFFFFF\"> \n");
+
+		sb.append("<br></br> \n");
+		sb.append("<xsl:number value=\"count(project/plot)\" /> DOCUMENTS FOUND \n");
+	
+		sb.append("<!-- THE PROJECT LEVEL INFORMATION --> \n");
+		sb.append("<br></br><a> <b> Project name: </b> <xsl:value-of select=\"project/projectName\"/> <br></br> \n");
+		sb.append("<b> Project description: </b> <xsl:value-of select=\"project/projectDescription\"/> </a> \n");
+
+
+		sb.append("<!-- set up a table --> \n");
+		sb.append("<table width=\"100%\"> \n");
+
+		//correct the widths for the 3 collumns
+    sb.append("       <tr colspan=\"1\" bgcolor=\"CCCCFF\" align=\"left\" valign=\"top\"> \n");
+    sb.append("         <th width=\"25%\" class=\"tablehead\">Site Data</th> \n");
+    sb.append("         <th width=\"25%\" class=\"tablehead\">Observation Data</th> \n");
+    sb.append("         <th width=\"50%\" class=\"tablehead\">Vegetation Data</th> \n");
+    sb.append("       </tr> \n");
+
+		sb.append("<!-- Header and row colors --> \n");
+  	sb.append("      <xsl:variable name=\"evenRowColor\">#C0D3E7</xsl:variable> \n");
+	  sb.append("      <xsl:variable name=\"oddRowColor\">#FFFFFF</xsl:variable> \n");
+	
+	   
+		sb.append("	<xsl:for-each select=\"project/plot\"> \n");
+		sb.append("	<xsl:sort select=\"authorPlotCode\"/> \n");
+	
+		sb.append("	<tr valign=\"top\"> \n");
+
+		return(sb);
+	}
+	
+	
+	/**
+	 * method that returns the body of the stylesheet
+	 * @param params -- the hashtable that contains the common name and the
+	 * attribute name
+	 */
+	private StringBuffer getBody(Hashtable params)
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("    <!--if even row --> \n");
+		sb.append("    <xsl:if test=\"position() mod 2 = 1\"> \n");
+		
+		sb.append("		<td colspan=\"1\" bgcolor=\"{$evenRowColor}\" align=\"left\" valign=\"top\"> \n ");
+		
+		sb.append("	<!-- Site data here --> \n ");
+		sb.append("	<xsl:variable name=\"PLOT\"> \n ");
+  	sb.append("		<xsl:value-of select=\"authorPlotCode\"/> \n");
+		sb.append("	</xsl:variable> \n");
+		
+		sb.append("	<xsl:variable name=\"PLOTID\"> \n");
+  	sb.append("		<xsl:value-of select=\"plotId\"/> \n");
+		sb.append("	</xsl:variable> \n");
+
+            
+		sb.append("	<xsl:number value=\"position()\"/> \n");
+		
+		
+		//get the attribute xsl lines
+		sb.append( getSiteAttributes(params).toString()  );
+
+		//replace this with a method that returns the lines for processing 
+		// the observational data
+		sb.append("	<!--Observation data hera --> \n ");
+	  sb.append("   <td colspan=\"1\"  bgcolor=\"{$evenRowColor}\" align=\"left\" valign=\"top\"> \n");
+    sb.append("   	<a> <b>observation code: </b><br></br> <font color=\"FF0066\"> <xsl:value-of select=\"plotObservation/authorObsCode\"/> </font> <br> </br></a> \n");
+		sb.append("			<b>community Name:</b> <br></br> <font color=\"FF0066\"> <xsl:value-of select=\"plotObservation/communityAssignment/communityName\"/> </font>\n");
+    sb.append("   </td> ");
+	 
+
+	 sb.append("<!-- Species data here --> \n");
+	 sb.append("   	<td colspan=\"1\" bgcolor=\"{$evenRowColor}\" align=\"left\" valign =\"top\">  \n");
+   sb.append("     <i><FONT color=\"green\" SIZE=\"-1\" FACE=\"arial\"> \n");
+	 sb.append("			<b>Top species:</b> <xsl:for-each select=\"plotObservation/taxonObservation\"> \n");
+	 sb.append("    	 <xsl:value-of select=\"authNameId\"/>; </xsl:for-each> \n");
+	 sb.append("				</FONT></i> \n"); 
+   sb.append("    	  </td> \n");
+	 sb.append("				</xsl:if> \n");
+	 
+	 
+	 //IF ODD ROW
+	sb.append("    <!--if odd row --> \n");
+	sb.append("    <xsl:if test=\"position() mod 2 = 0\"> \n");
+		
+	sb.append("		<td colspan=\"1\" bgcolor=\"{$oddRowColor}\" align=\"left\" valign=\"top\"> \n ");
+	
+		sb.append("	<!-- Site data here --> \n ");
+		sb.append("	<xsl:variable name=\"PLOT\"> \n ");
+  	sb.append("		<xsl:value-of select=\"authorPlotCode\"/> \n");
+		sb.append("	</xsl:variable> \n");
+		
+		sb.append("	<xsl:variable name=\"PLOTID\"> \n");
+  	sb.append("		<xsl:value-of select=\"plotId\"/> \n");
+		sb.append("	</xsl:variable> \n");
+
+            
+		sb.append("	<xsl:number value=\"position()\"/> \n");
+		
+		
+		//get the attribute xsl lines
+		sb.append( getSiteAttributes(params).toString()  );
+	
+		sb.append("	<!--Observation data hera --> \n ");
+	  sb.append("   <td colspan=\"1\"  bgcolor=\"{$oddRowColor}\" align=\"left\" valign=\"top\"> \n");
+    sb.append("   	<a> <b>observation code: </b><br></br> <font color=\"FF0066\"> <xsl:value-of select=\"plotObservation/authorObsCode\"/> </font> <br> </br></a> \n");
+		sb.append("			<b>community Name:</b> <br></br> <font color=\"FF0066\"> <xsl:value-of select=\"plotObservation/communityAssignment/communityName\"/> </font>\n");
+    sb.append("   </td> ");
+	 
+
+	 	sb.append("<!-- Species data here --> \n");
+	 	sb.append("   	<td colspan=\"1\" bgcolor=\"{$oddRowColor}\" align=\"left\" valign =\"top\">  \n");
+   	sb.append("     <i><FONT color=\"green\" SIZE=\"-1\" FACE=\"arial\"> \n");
+	 	sb.append("			<b>Top species:</b> <xsl:for-each select=\"plotObservation/taxonObservation\"> \n");
+	 	sb.append("    	 <xsl:value-of select=\"authNameId\"/>; </xsl:for-each> \n");
+	 	sb.append("				</FONT></i> \n"); 
+   	sb.append("    	  </td> \n");
+	 	sb.append("				</xsl:if> \n");
+	 
+	 
+		return(sb);
+	}
+	
+	
+	
+	private StringBuffer getSiteAttributes( Hashtable params )
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		System.out.println("site params: "+params.toString() );
+		//get all the keys
+	 	Enumeration paramlist = params.keys();
  
+ 		//everyone needs a plot -- so return the plot code
+		sb.append("	<a><br></br> <b>plot code: </b> <br></br> ");
+		sb.append("<font color = \"red\"> <xsl:value-of select=\"authorPlotCode\"/> </font><br> </br></a> \n");
+
+ 		while (paramlist.hasMoreElements()) 
+ 		{
+			String element = (String)paramlist.nextElement();
+   		String value  = (String)params.get(element);
+			sb.append(" <a><b>"+element+":</b> <br></br> <font color=\"FF0066\"> <xsl:value-of select=\""+value+"\"/> </font> <br></br> </a> \n");
+		}
+		
+		sb.append("	</td> \n");
+
+		return(sb);
+	}
+	
+	
+	
+	private StringBuffer getFooter()
+	{
+		StringBuffer sb = new StringBuffer();
+		sb.append("	</tr>  \n "); 
+		sb.append("</xsl:for-each> \n ");  
+		sb.append("</table> \n"); 
+		sb.append("</body> \n"); 
+		sb.append("</html> \n"); 
+		sb.append("</xsl:template> \n"); 
+		sb.append("</xsl:stylesheet> \n"); 
+		return(sb);
+	}
+	
+	
+	/**
+	 * this is a method that prints the stylesheet, whose contents are stored
+	 * in a string buffer
+	 *
+	 */
+	private void printFile(StringBuffer sb)
+	{
+	  try
+     {
+      PrintWriter out = new PrintWriter(new FileWriter(this.fileName));
+     		out.println(sb.toString() );
+     		out.close(); 
+				System.out.println("done printing to the file system");
+		 }
+     catch(Exception e)
+     {
+				System.out.println( "Caught Exception: "+ e.getMessage() ); 
+     }
+		}	 
 	 
 
 	 /**
