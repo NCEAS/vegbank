@@ -5,11 +5,11 @@
   * Global build script for vegclass. This simply allows running all the sub 
   * scripts from one place.
   *
-  *     '$Author: anderson $'
-  *     '$Date: 2003-10-28 17:42:46 $'
-  *     '$Revision: 1.27 $'
+  *     '$Author: farrell $'
+  *     '$Date: 2003-11-06 18:40:36 $'
+  *     '$Revision: 1.28 $'
 --> 
-<project name="vegclass" default="jar" basedir=".">
+<project name="Vegbank" default="jar" basedir=".">
 
 	
   <target name="prepare">
@@ -22,6 +22,8 @@
     <property name="build.classes.dir" value="${build.dir}/classes"/>   
     <property name="build.reports.dir" value="${build.dir}/reports"/>
     <property name="build.reports.test.dir" value="${build.reports.dir}/testreports"/>
+    <property name="build.docs.dir" value="${build.dir}/docs"/>
+    <property name="build.docs.api.dir" value="${build.docs.dir}/docs"/>
     <property name="lib.dir" value="${basedir}/lib"/>
     <property name="docs.dir" value="${basedir}/docs"/>
     <property name="dist.dir" value="${basedir}/dist"/>
@@ -40,7 +42,7 @@
     <property name="web.context" location="${env.TOMCAT_HOME}/webapps/${webapp}" />
     <property name="web.inf" location="${web.context}/WEB-INF" /> 
     <property name="web.lib.dir" location="${web.inf}/lib" /> 
-
+    
     <property name="vegbank.home.dir" location="/usr/vegbank"/>
     
     <property name="db.name" value="vegbank" />
@@ -54,6 +56,8 @@
     <mkdir dir="${build.javadatamodel.src.dir}"/>
     <mkdir dir="${dist.dir}"/>
     <mkdir dir="${rmi.dist.dir}"/>
+    <mkdir dir="${build.docs.dir}"/>
+    <mkdir dir="${build.docs.api.dir}"/>
 
     <!-- Classpaths -->
     <path id="classpath.compilation">
@@ -128,7 +132,11 @@
   </target>
 
 
-  <target name="dist" depends="deploy">
+  <target name="dist" depends="deploy, javadoc">
+    <copy todir="${web.context}">
+      <fileset dir="${build.docs.dir}" casesensitive="yes"/>
+    </copy>
+
     <ant dir="veg_plot/exp/vegbank_web" target="dist" inheritAll="false"/>
   </target>
   
@@ -199,7 +207,7 @@
  
   <target name="install"
           depends="deploy"
-          description="Install the application">
+          description="==> Install the application">
     <mkdir dir="${vegbank.home.dir}/lib"/>
     <mkdir dir="${vegbank.home.dir}/bin"/>
     <mkdir dir="${vegbank.home.dir}/originalDataStore"/>
@@ -228,7 +236,55 @@
          <include name="**/*sh"/>
       </fileset>
     </chmod>
+  </target> 
+
+  <!-- ================================================================= -->
+  <!-- Generate Javadoc                                                  -->
+  <!-- ================================================================= -->
+  <target name="javadoc"
+          depends="prepare"
+          description="==> Generate projects javadoc">
+ 
+    <javadoc 
+      destdir="${build.docs.api.dir}"
+      author="true"
+      version="true"
+      use="true"
+      windowtitle="${Name} API">
+
+      <packageset dir="src" defaultexcludes="yes">
+        <include name="org/**" />
+      </packageset>
+
+      <packageset dir="common/src" defaultexcludes="yes">
+        <include name="org/**" />
+      </packageset>
+
+      <packageset dir="veg_plot/src" defaultexcludes="yes">
+        <include name="org/vegbank" />
+      </packageset>
+
+      <packageset dir="veg_taxa/src" defaultexcludes="yes">
+        <include name="org/vegbank" />
+      </packageset>
+
+      <packageset dir="veg_community/src" defaultexcludes="yes">
+        <include name="org/vegbank" />
+      </packageset>
+
+      <packageset dir="${build.java.src.dir}" defaultexcludes="yes">
+        <include name="org/vegbank" />
+      </packageset>
+      
+      <doctitle><![CDATA[<h1>${Name}</h1>]]></doctitle>
+      <bottom><![CDATA[<i>Copyright &#169; 2001-2003 vegbank.org. All Rights Reserved.</i>]]></bottom>
+      <tag name="TODO" scope="all" description="To do:" />
+      <tag name="FIXME" scope="all" description="Fix me:" />
+      <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
+    </javadoc>
+
   </target>
+
           
   <!-- ================================================================= -->
   <!-- Database related targets                                          -->
