@@ -11,8 +11,8 @@
  *   Authors: @author@
  *
  *  '$Author: anderson $'
- *  '$Date: 2004-06-04 17:00:31 $'
- *  '$Revision: 1.6 $'
+ *  '$Date: 2004-06-09 22:40:23 $'
+ *  '$Revision: 1.7 $'
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -121,27 +121,26 @@
         <table border="0" cellpadding="0" cellspacing="0" width="100%">
         <tbody>
          <tr>
-            <td valign="Top" width="116"> <font color="#23238e" face="Helvetica,Arial,Verdana" size="2"><b>Desired 
-              data</b></font> </td>
-            <td align="Left" valign="Top" width="229"> 
-              <html:radio value="all" property="dataType"/>Entire plot<br/>
-              <html:radio value="environmental" property="dataType"/>Only environmental data<br/>
-              <html:radio value="species" property="dataType"/>Only species data<br/>
-              <br/>
-          </td>
-         </tr>
-         <tr>
-            <td valign="Top" width="116"> 
+            <td valign="top">
               <font color="#23238e" face="Helvetica,Arial,Verdana" size="2">
-                <b>Data format<a href="@help-for-download-formats-href@"> <img border="0" src="@image_server@question.gif"></a></b>
+                <b>Data Format <a href="@help-for-download-formats-href@"><img 
+					border="0" src="@image_server@question.gif"></a></b>
               </font> 
-            </td>
-            <td align="Left" valign="Top" width="229"> 
-              <html:radio value="xml" property="formatType"/>xml<br/>
-              <html:radio value="flat" property="formatType"/>flat-ascii<br/>
-              <html:radio value="vegbranch" property="formatType"/>VegBranch import-ready<br/>
-              <br/>
-            </td>
+			  <br/>
+              &nbsp; &nbsp; <html:radio value="xml" property="formatType"/>XML<br/>
+              &nbsp; &nbsp; <html:radio value="vegbranch" property="formatType"/>VegBranch import<br/>
+              &nbsp; &nbsp; <html:radio value="flat" property="formatType"/>Flat ASCII comma separated<br/>
+
+			  <blockquote>
+              	<font color="#23238e" face="Helvetica,Arial,Verdana" size="2">
+			  	<b>Flat ASCII Options</b>
+				</font>
+				<br/>
+				  &nbsp; &nbsp; <html:radio value="all" property="dataType"/>Entire plot<br/>
+				  &nbsp; &nbsp; <html:radio value="environmental" property="dataType"/>Only environmental data<br/>
+				  &nbsp; &nbsp; <html:radio value="species" property="dataType"/>Only species data<br/>
+			  </blockquote>
+          </td>
          </tr>
         </tbody>
        </table>

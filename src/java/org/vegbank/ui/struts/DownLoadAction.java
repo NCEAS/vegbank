@@ -1,11 +1,7 @@
 package org.vegbank.ui.struts;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.ResourceBundle;
+import java.io.*;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.model.Observation;
 import org.vegbank.common.utility.ServletUtility;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.XMLUtil;
 import org.vegbank.plots.datasink.ASCIIReportsHelper;
 import org.vegbank.plots.datasource.DBModelBeanReader;
@@ -35,8 +32,8 @@ import com.Ostermiller.util.LineEnds;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-04 17:00:31 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-06-09 22:40:23 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,47 +101,30 @@ public class DownLoadAction extends Action
 			// Handle the format type
 			if ( formatType.equalsIgnoreCase( XML_FORMAT_TYPE) )
 			{
-				// Check that all data is requested
-				if ( dataType.equalsIgnoreCase( ALL_DATA_TYPE ) )
-				{					
-					// Store the returned ModelBean Trees
-					Collection plotObservations = this.getPlotObservations(plotsToDownLoad);
-			
-					// wrap in XML
-					String XML = XMLUtil.getVBXML(plotObservations);
-					
-					// Place into file for download
-					//this.initResponseForFileDownLoad( response, "VegbankDownload.xml", DOWNLOAD_CONTENT_TYPE);
-					//this.sendFileToBrowser(XML, response);
+				// Store the returned ModelBean Trees
+				Collection plotObservations = this.getPlotObservations(plotsToDownLoad);
+		
+				// wrap in XML
+				String xml = XMLUtil.getVBXML(plotObservations);
+				
+				// Place into file for download
+				//this.initResponseForFileDownLoad( response, "VegbankDownload.xml", DOWNLOAD_CONTENT_TYPE);
+				//this.sendFileToBrowser(xml, response);
 
-					/////////////////
-					// ZIP the XML doc
-					/////////////////
-					this.initResponseForFileDownLoad(response, "VegbankDownload.zip", ZIP_CONTENT_TYPE);
-					
-					Hashtable nameContent = new Hashtable();
-					nameContent.put("plotObservations.xml", XML);
-					OutputStream responseOutputStream = response.getOutputStream();
-					responseOutputStream.flush();
-					
-					ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS );
-						
-				}
-				else
-				{
-					// Invalid Request --- xml formatType only supports dataType all
-					errors.add(
-						Globals.ERROR_KEY,
-						new ActionMessage(
-							"errors.action.failed",
-							"Download '"
-								+ XML_FORMAT_TYPE
-								+ "' formatType only supports - dataType = '"
-								+ ALL_DATA_TYPE
-								+ "', '"
-								+ dataType
-								+ "' not supported"));
-				}
+				/////////////////
+				// ZIP the XML doc
+				/////////////////
+				this.initResponseForFileDownLoad(response, "VegbankPlotsXML.zip", ZIP_CONTENT_TYPE);
+				
+				Hashtable nameContent = new Hashtable();
+				nameContent.put("vb_plot_observation.xml", xml);
+				OutputStream responseOutputStream = response.getOutputStream();
+				responseOutputStream.flush();
+				
+				// TODO: Get the OS of user if possible and return a native file	
+				// For now use DOS style, cause those idiots would freak with anything else ;)					
+				ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS );
+				/////////////////
 			}
 			else if ( formatType.equalsIgnoreCase( FLAT_FORMAT_TYPE ) )
 			{
@@ -186,7 +166,7 @@ public class DownLoadAction extends Action
 					// Place generated file in ZIP archive
 					if ( dataType.equalsIgnoreCase(ALL_DATA_TYPE) )
 					{
-						this.initResponseForFileDownLoad(response, "VegbankDownload.zip", ZIP_CONTENT_TYPE);
+						this.initResponseForFileDownLoad(response, "VegbankPlotsFlat.zip", ZIP_CONTENT_TYPE);
 						
 						Hashtable nameContent = new Hashtable();
 						nameContent.put("environmentalData.txt",environmentalData);
@@ -214,58 +194,48 @@ public class DownLoadAction extends Action
 					}
 				}
 			}
-			else if ( formatType.equalsIgnoreCase( VEGBRANCH_FORMAT_TYPE ) )
+			else if ( formatType.equalsIgnoreCase( VEGBRANCH_FORMAT_TYPE) )
 			{
-				// Check that all data is requested
-				if ( dataType.equalsIgnoreCase( ALL_DATA_TYPE ) )
-				{
-					// Store the returned ModelBean Trees
-					Collection plotObservations = this.getPlotObservations(plotsToDownLoad);
-			
-					// wrap in XML
-					String xml = XMLUtil.getVBXML(plotObservations);
+				// Store the returned ModelBean Trees
+				Collection plotObservations = this.getPlotObservations(plotsToDownLoad);
+		
+				// wrap in XML
+				String xml = XMLUtil.getVBXML(plotObservations);
 
-					java.io.File f = new java.io.File(VEGBRANCH_XSL_PATH);
-					log.debug("XSL file: " + f.getAbsolutePath());
-					if (f.exists()) {
-						log.debug("XSL file exists");
-					}
-					
-					// Use XSLT to transform the XML
+				// transform
+				String vegbranchCSV = null;
+				log.debug("finding XSL file: " + branchXSL);
+				File f = new File(branchXSL);
+				if (f.exists()) {
 					transformXML transformer = new transformXML();
-					String xmlToImport = transformer.getTransformedFromString(xml, VEGBRANCH_XSL_PATH);
-
-					log.debug("Transformed XML; VegBranch CSV:\n" + xmlToImport);
-
-					/////////////////
-					// ZIP the CSV doc
-					/////////////////
-					this.initResponseForFileDownLoad(response, "VegBranchImport.zip", ZIP_CONTENT_TYPE);
-					
-					Hashtable nameContent = new Hashtable();
-					nameContent.put("VegBranchImport.csv", xmlToImport);
-					OutputStream responseOutputStream = response.getOutputStream();
-					responseOutputStream.flush();
-					
-					ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS );
-					/////////////////
-						
+					vegbranchCSV = transformer.getTransformedFromString(xml, branchXSL);
+				} else {
+					errors.add(Globals.ERROR_KEY,
+						new ActionMessage("errors.action.failed",
+							"Problem creating VegBranch download file: no XSL"));
 				}
-				else
-				{
-					// Invalid Request --- xml formatType only supports dataType all
-					errors.add(
-						Globals.ERROR_KEY,
-						new ActionMessage(
-							"errors.action.failed",
-							"Download '"
-								+ VEGBRANCH_FORMAT_TYPE
-								+ "' formatType only supports - dataType = '"
-								+ ALL_DATA_TYPE
-								+ "', '"
-								+ dataType
-								+ "' not supported"));
+
+				if (Utility.isStringNullOrEmpty(vegbranchCSV)) {
+					errors.add(Globals.ERROR_KEY,
+						new ActionMessage("errors.action.failed",
+							"Problem creating VegBranch download file: empty file"));
 				}
+
+				
+				/////////////////
+				// ZIP the XML doc
+				/////////////////
+				this.initResponseForFileDownLoad(response, "VegbranchImport.zip", ZIP_CONTENT_TYPE);
+				
+				Hashtable nameContent = new Hashtable();
+				nameContent.put("vegbranch_import.csv", vegbranchCSV);
+				OutputStream responseOutputStream = response.getOutputStream();
+				responseOutputStream.flush();
+				
+				// TODO: Get the OS of user if possible and return a native file	
+				// For now use DOS style, cause those idiots would freak with anything else ;)					
+				ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS );
+				/////////////////
 			}
 			else
 			{
