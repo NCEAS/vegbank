@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2004-11-16 06:19:24 $'
-*  '$Revision: 1.6 $'
+*  '$Author: anderson $'
+*  '$Date: 2004-12-13 06:38:15 $'
+*  '$Revision: 1.7 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,10 @@
 <head>
 <script language="javascript">
 function doLookup(ac) {
-	window.open('@web_context@GenericDispatcher.do?command=RetrieveVBModelBean&jsp=GenericDisplay.jsp&rootEntity=PlantConcept&accessionCode=' + ac, '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
+	window.open('@get_link@std/plantconcept/' + ac, '', 'width=700,height=400,location,status,scrollbars,toolbar,resizable');
+
+	////////////OLD
+	//window.open('@web_context@GenericDispatcher.do?command=RetrieveVBModelBean&jsp=GenericDisplay.jsp&rootEntity=PlantConcept&accessionCode=' + ac, '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
 }
 
 function popupPlantQuery() {
