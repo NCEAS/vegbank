@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-22 20:40:12 $'
- * 	'$Revision: 1.7 $'
+ *  '$Date: 2002-03-22 22:07:52 $'
+ * 	'$Revision: 1.8 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -433,11 +433,216 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	{
 		return("getPlaceOwner not implemented");
 	}
-	
-	// see the interface for method descriptions
-	public String getXCoord(String plotName)
+
+
+
+	/**
+	 * this method looks up the y coordiante in the 
+	 * access database ased on a plot.  Because many 
+	 * plots seem not to have the 'Corrected UTM Y' 
+	 * this method will return the 'Field UTM Y' if the 
+	 * corrected value does not exist 
+	 *
+	 * @param plotName -- the name of the plot
+	 */
+	public String getYCoord(String plotName)
+	{
+		String y = null;
+		try
+		{
+			y = getCorrectedYCoord( plotName);
+			if ( ( y != null ) && (! y.equals("0.0") ) )
+			{
+				System.out.println("TNCPlotsDB > using corrected y coordinate");
+				this.yCoord = y;
+			}
+			else
+			{	
+				y = getFieldYCoord(plotName);
+				if ( y != null )
+				{
+					System.out.println("TNCPlotsDB > using field y coordinate");
+					this.yCoord = y;
+				}
+			}
+		}
+		catch (Exception e)                                                                                                                              
+		{
+			System.out.println("Exception: " + e.getMessage() );                                                                                           
+			e.printStackTrace();
+		}
+		return(this.yCoord);
+	}
+
+
+
+
+
+
+	/**
+	 * method for looking up the 'Field UTM Y' and if it 
+	 * does not exist a null is returned
+	 *
+	 * 
+	 * @param plotName -- the name of the plot
+	 */
+	public String getFieldYCoord(String plotName)
 	{
 		Statement stmt = null;
+		String y = null;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Field UTM Y]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					y= rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch (Exception e) 
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+		return(y);
+	}
+	
+
+
+	/**
+	 * method for looking up the 'Corrected UTM Y' and if it 
+	 * does not exist a null is returned
+	 *
+	 * 
+	 * @param plotName -- the name of the plot
+	 */
+	public String getCorrectedYCoord(String plotName)
+	{
+		Statement stmt = null;
+		String y = null;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Corrected UTM Y]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					y = rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch (Exception e) 
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+		return(y);
+	}
+	
+
+//end edit
+
+
+
+
+
+	/**
+	 * this method looks up the x coordiante in the 
+	 * access database ased on a plot.  Because many 
+	 * plots seem not to have the 'Corrected UTM X' 
+	 * this method will return the 'Field UTM X' if the 
+	 * corrected value does not exist 
+	 *
+	 * @param plotName -- the name of the plot
+	 */
+	public String getXCoord(String plotName)
+	{
+		String x = null;
+		try
+		{
+			x = getCorrectedXCoord( plotName);
+			if ( ( x != null ) && (! x.equals("0.0") ) )
+			{
+				System.out.println("TNCPlotsDB > using corrected x coordinate");
+				this.xCoord = x;
+			}
+			else
+			{	
+				x = getFieldXCoord(plotName);
+				if ( x != null )
+				{
+					System.out.println("TNCPlotsDB > using field x coordinate");
+					this.xCoord = x;
+				}
+			}
+		}
+		catch (Exception e)                                                                                                                              
+		{
+			System.out.println("Exception: " + e.getMessage() );                                                                                           
+			e.printStackTrace();
+		}
+		return(this.xCoord);
+	}
+
+
+
+	/**
+	 * method for looking up the 'Field UTM X' and if it 
+	 * does not exist a null is returned
+	 *
+	 * 
+	 * @param plotName -- the name of the plot
+	 */
+	public String getFieldXCoord(String plotName)
+	{
+		Statement stmt = null;
+		String x = null;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Field UTM X]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					x= rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch (Exception e) 
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+		return(x);
+	}
+	
+
+
+	/**
+	 * method for looking up the 'Corrected UTM X' and if it 
+	 * does not exist a null is returned
+	 *
+	 * 
+	 * @param plotName -- the name of the plot
+	 */
+	public String getCorrectedXCoord(String plotName)
+	{
+		Statement stmt = null;
+		String x = null;
 			try 
 			{
 				// Create a Statement so we can submit SQL statements to the driver
@@ -448,17 +653,21 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				+" from plots where ([Plot Code]) like '"+plotName+"'");
 				while (rs.next()) 
 				{
-					xCoord= rs.getString(1);
+					x= rs.getString(1);
 				}
 				rs.close();
-			stmt.close();
+				stmt.close();
 			}
-			catch (Exception x) 
+			catch (Exception e) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
 			}
-		return(this.xCoord);
+		return(x);
 	}
+	
+
+/*
 	
 	// see the interface for method descriptions
 	public String getYCoord(String plotName)
@@ -485,6 +694,9 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 		return(this.yCoord);
 	}
+	
+*/
+
 	
 	// see the interface for method descriptions
 	public String getLatitude(String plotName)
