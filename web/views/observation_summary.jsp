@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-10-02 00:33:21 $'
-*  '$Revision: 1.14 $'
+*  '$Date: 2004-10-02 19:44:37 $'
+*  '$Revision: 1.15 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -210,7 +210,6 @@
 
 <vegbank:pager/>
 
-<bean:define id="hadData" value="true" />
 </logic:notEmpty>
 
 <br>
