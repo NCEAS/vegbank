@@ -1,3 +1,11 @@
+/*
+ *
+ * '$Author: harris $'
+ * '$Date: 2002-06-11 23:32:33 $'
+ * '$Revision: 1.2 $'
+ *
+ */
+
 drop sequence datafile_DATAFILE_ID_seq;
 drop table datafile;
 
