@@ -5,15 +5,15 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!-- 
-  *   '$Id: view_certification.jsp,v 1.3 2004-04-15 02:49:21 anderson Exp $ '
+  *   '$Id: view_certification.jsp,v 1.4 2004-04-17 02:52:06 anderson Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-04-15 02:49:21 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2004-04-17 02:52:06 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
@@ -423,7 +423,7 @@
         Panel Member's Comments (optional):
 		</span>
         <br/>
-        <html:textarea property="statusComment" cols="60" rows="3"/>
+        <html:textarea property="certificationstatuscomments" cols="60" rows="3"/>
       </td>
     </tr>
     <tr> 
