@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-11 00:20:07 $'
- *	'$Revision: 1.16 $'
+ *	'$Date: 2005-02-11 21:58:06 $'
+ *	'$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,6 +74,7 @@ import org.vegbank.common.utility.AccessionGen;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.DatasetUtility;
 import org.vegbank.common.utility.KeywordGen;
 import org.vegbank.common.utility.DataloadLog;
 import org.vegbank.common.utility.VBModelBeanToDB;
@@ -2205,6 +2206,7 @@ public class LoadTreeToDatabase
         dsiBean.setItemaccessioncode(ag.getAccession(tableName, PK));
         dsiBean.setUserdatasetitem_id(-1); // don't check for duplicates
         dsiBean.setItemtype(tableName);
+        log.debug("+++ ADDING userdatasetitem for " + tableName + ": " + dsiBean.getItemaccessioncode());
         return dsiBean;
     }
 
@@ -2214,37 +2216,13 @@ public class LoadTreeToDatabase
      * @return new userdataset's accession code
      */
     private String createDataset() throws SQLException, Exception {
-        String dsAC;
-        long dsPK, realDsPK;
-
-        Userdataset dsBean = new Userdataset();
-        dsBean.setDatasetname(xmlFileName);
-        dsBean.setDatasetdescription("Created via XML upload");
-        dsBean.setDatasettype("load");
-        dsBean.setUsr_id(usrId);
-
-        //synchronized (this) {
-            // get the PK, make AC, insert into DB
-            /////////dsPK = getNextId("userdataset");
-            /////////dsAC = ag.buildAccession("userdataset", Long.toString(dsPK), xmlFileName);
-            /////////dsBean.setAccessioncode(dsAC);
-            /////////realDsPK = bean2db.insert(dsBean);
-        //}
-
-        //dsPK = realDsPK;
-
-        //if (realDsPK != dsPK) {
-            // put this new userdataset in tableKeys to have the AC populated later
-            //log.error("new userdataset PK mismatch, " + dsPK + " != " + realDsPK +
-            //        ".  Adding dataset to AC generation task.");
-        //}
-
 
         // insert a userdatasetitem for each appropriate record
         String tableName;
         Userdatasetitem dsiBean = null;
         List dsiBeanList = new ArrayList();
         Iterator it = tableKeys.keySet().iterator();
+
         while (it.hasNext()) {
             tableName = (String)it.next();
     
@@ -2254,11 +2232,8 @@ public class LoadTreeToDatabase
                 Iterator kit = keys.iterator();
                 while (kit.hasNext()) {
                     try {
-                        dsiBean = null;
                         dsiBean = createDatasetItem(tableName, ((Long)kit.next()).longValue());
-                        log.debug("+++ ADDING userdatasetitem for " + tableName + ": " + dsiBean.getItemaccessioncode());
                         dsiBeanList.add(dsiBean);
-                        //log.debug("done ADDING dsi #" + bean2db.insert(dsiBean));
 
                     } catch (Exception bex) {
                         log.error("problem while inserting userDatasetItem", bex);
@@ -2269,18 +2244,11 @@ public class LoadTreeToDatabase
             } // end if
         } // end while table names
 
-        // create dsi objects as children of dsBean
-        // fill in ds blanks, then insert
-        log.debug("trying to insert the parent ds bean with " + dsiBeanList.size() + " dsi children");
-        dsBean.setuserdataset_userdatasetitems(dsiBeanList); 
-        dsPK = bean2db.insert(dsBean);
-        log.debug("inserted new userdataset with its children: #" + dsPK);
+        // insert the dataset items as a new dataset
+        DatasetUtility dsu = new DatasetUtility();
+        String dsAC = dsu.insertDataset(null, xmlFileName, 
+                "Created via XML upload", "load", "private", usrId);
 
-        // put this new userdataset in tableKeys to have the AC populated later
-        storeTableNameAndPK("userdataset", dsPK);
-
-        // return the dataset's AC
-        dsAC = ag.buildAccession("userdataset", Long.toString(dsPK), xmlFileName);
         log.debug("ADDED userdataset " + dsAC);
         return dsAC;
     }
