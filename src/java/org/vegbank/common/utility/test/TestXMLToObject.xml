@@ -1,0 +1,7 @@
+<PlantConcept>
+  <plantdescription>this is a description</plantdescription>
+  <PlantName>
+  	<plantName>this is my name</plantName>
+  	<dateentered>2/3/45</dateentered>
+  </PlantName>
+</PlantConcept>
