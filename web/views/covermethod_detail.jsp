@@ -25,7 +25,8 @@
 <logic:iterate id="onerowofcovermethod" name="covermethod-BEANLIST">
 <!-- iterate over all records in set : new table for each -->
 <table class="leftrightborders" cellpadding="2">
-        <%@ include file="autogen/covermethod_detail_data.jsp" %>
+ <tr><th class="major_smaller" colspan="4"><bean:write name="onerowofcovermethod" property="covertype" /></th></tr>
+ <%@ include file="autogen/covermethod_detail_data.jsp" %>
         <bean:define id="covermethod_pk" name="onerowofcovermethod" property="covermethod_id" />
 <!-- custom bits:
 -->
@@ -34,7 +35,7 @@
 <vegbank:get id="observation" select="observation_count" beanName="map" pager="false" perPage="-1" 
   where="where_covermethod_pk" wparam="covermethod_pk" />
 
-<tr class='@nextcolorclass@'><td>Count of Observations using this method</td>
+<tr class='@nextcolorclass@'><td class="datalabel">Count of Observations using this method</td>
 <td>
 <logic:empty name="observation-BEAN">
 -none-

@@ -34,7 +34,7 @@
 <vegbank:get id="observation" select="observation_count" beanName="map" pager="false" perPage="-1" 
   where="where_project_pk" wparam="project_pk" />
 
-<tr  class='@nextcolorclass@'><td>Count of Observations in this project</td>
+<tr  class='@nextcolorclass@'><td class="datalabel">Count of Observations in this project</td>
 <td>
 <logic:empty name="observation-BEAN">
 -none-

@@ -25,6 +25,7 @@
 <logic:iterate id="onerowofstratummethod" name="stratummethod-BEANLIST">
 <!-- iterate over all records in set : new table for each -->
 <table class="leftrightborders" cellpadding="2">
+        <tr><th class="major" colspan="4"><bean:write name="onerowofstratummethod" property="stratummethodname" /></th></tr>
         <%@ include file="autogen/stratummethod_detail_data.jsp" %>
         <bean:define id="stratummethod_pk" name="onerowofstratummethod" property="stratummethod_id" />
 <!-- custom bits:
@@ -34,7 +35,7 @@
 <vegbank:get id="observation" select="observation_count" beanName="map" pager="false" perPage="-1" 
   where="where_stratummethod_pk" wparam="stratummethod_pk" />
 
-<tr  class='@nextcolorclass@'><td>Count of Observations using this method</td>
+<tr  class='@nextcolorclass@'><td class="datalabel">Count of Observations using this method</td>
 <td>
 <logic:empty name="observation-BEAN">
 -none-
@@ -55,10 +56,10 @@
 
 <TR><TD COLSPAN="2">
 <table class="leftrightborders" cellpadding="2">
-<tr><th colspan="8">stratumTypes:</th></tr>
+<tr><th colspan="8">Stratum Types:</th></tr>
 <vegbank:get id="stratumtype" select="stratumtype" beanName="map" pager="false" where="where_stratummethod_pk" wparam="stratummethod_pk" perPage="-1" />
 <logic:empty name="stratumtype-BEANLIST">
-<tr><td class='@nextcolorclass@'>  Sorry, no stratum types found.</td></tr>
+<tr><td class='@nextcolorclass@'>  Sorry, no Stratum Types found.</td></tr>
 </logic:empty>
 <logic:notEmpty name="stratumtype-BEANLIST">
 
