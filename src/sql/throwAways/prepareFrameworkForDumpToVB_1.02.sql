@@ -27,7 +27,7 @@ alter table usercertification rename column vegbank_experience_doc to vb_exp;
 alter table usercertification rename column plotdb_experience_doc to tools_exp;
 alter table usercertification rename column additional_statements to addl_stmt;
 
-alter table usercertification add column vegbank_expected_uses text;
+alter table usercertification add column vb_intention text;
 
 alter table usercertification add column exp_region_a varchar (32);
 alter table usercertification add column exp_region_a_veg integer;
