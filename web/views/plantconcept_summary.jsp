@@ -25,7 +25,7 @@
 <tr>
 <td colspan="4">
 <span class="datalabelsmall">Name: </span><bean:write name="onerow" property="plantname_id_transl"/><br/>
-<span class="datalabelsmall">Reference: </span><a href='@web_context@get/reference/<bean:write name="onerow" property="reference_id_transl"/>'><bean:write name="onerow" property="reference_id_transl"/></a><br/>
+<span class="datalabelsmall">Reference: </span><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_idl"/>'><bean:write name="onerow" property="reference_id_transl"/></a><br/>
 <logic:notEmpty name="onerow" property="plantdescription">
 <span class="datalabelsmall">Description: </span><bean:write name="onerow" property="plantdescription"/>&nbsp;
 </logic:notEmpty>
@@ -49,7 +49,7 @@
 <logic:notEmpty name="statusbean" property="plantparent_id">
 <br/>
 &nbsp;&nbsp;&nbsp;
-Parent:<a href='@web_context@get/plantconcept/<bean:write name="statusbean" property="plantparent_id" />'><bean:write name="statusbean" property="plantparent_id_transl" /></a>
+Parent:<a href='@get_link@std/plantconcept/<bean:write name="statusbean" property="plantparent_id" />'><bean:write name="statusbean" property="plantparent_id_transl" /></a>
 </logic:notEmpty><!-- has parent-->
 
 <!-- end status -->
@@ -78,7 +78,7 @@ Parent:<a href='@web_context@get/plantconcept/<bean:write name="statusbean" prop
       <strong>(convergence) and Synonyms: </strong><br/>
       <logic:iterate id="corrbean" name="plantcorrelation-BEANLIST">
         <span class="datalabelsmall">(<bean:write name="corrbean" property="plantconvergence" />)</span> 
-        <a href='@web_context@get/plantconcept/<bean:write name="corrbean" property="plantconcept_id" />'>
+        <a href='@get_link@std/plantconcept/<bean:write name="corrbean" property="plantconcept_id" />'>
         <bean:write name="corrbean" property="plantconcept_id_transl" /></a><br/>
       </logic:iterate>
   </logic:notEmpty>

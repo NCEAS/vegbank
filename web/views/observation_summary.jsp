@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-09-23 03:56:12 $'
-*  '$Revision: 1.9 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-09-23 17:35:33 $'
+*  '$Revision: 1.10 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="project_id">
 <tr class='@nextcolorclass@'><td class="datalabel">Project</td>
-<td><a href='@web_context@get/project/<bean:write name="onerow" property="project_id"/>'><bean:write name="onerow" property="project_id_transl"/></a>&nbsp;</td>
+<td><a href='@get_link@std/project/<bean:write name="onerow" property="project_id"/>'><bean:write name="onerow" property="project_id_transl"/></a>&nbsp;</td>
 </tr>
 <bean:define id="hadData" value="true" />
 </logic:notEmpty>
@@ -245,14 +245,14 @@
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="covermethod_id">
 <tr class='@nextcolorclass@'><td class="datalabel">Cover Method</td>
-<td><a href='@web_context@get/covermethod/<bean:write name="onerow" property="covermethod_id"/>'><bean:write 
+<td><a href='@get_link@std/covermethod/<bean:write name="onerow" property="covermethod_id"/>'><bean:write 
 name="onerow" property="covermethod_id_transl"/></a>&nbsp;</td>
 </tr>
 <bean:define id="hadData" value="true" />
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="stratummethod_id">
 <tr class='@nextcolorclass@'><td class="datalabel">Stratum Method</td>
-<td><a href='@web_context@get/stratummethod/<bean:write name="onerow" property="stratummethod_id"/>'><bean:write 
+<td><a href='@get_link@std/stratummethod/<bean:write name="onerow" property="stratummethod_id"/>'><bean:write 
   name="onerow" property="stratummethod_id_transl"/></a>&nbsp;</td>
 </tr>
 <bean:define id="hadData" value="true" />

@@ -25,7 +25,7 @@
 <tr>
 <td colspan="4">
 <span class="datalabelsmall">Name: </span><bean:write name="onerow" property="commname_id_transl"/><br/>
-<span class="datalabelsmall">Reference: </span><a href='@web_context@get/reference/<bean:write name="onerow" property="reference_id_transl"/>'><bean:write name="onerow" property="reference_id_transl"/></a><br/>
+<span class="datalabelsmall">Reference: </span><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a><br/>
 <logic:notEmpty name="onerow" property="commdescription">
 <span class="datalabelsmall">Description: </span><bean:write name="onerow" property="commdescription"/>&nbsp;
 </logic:notEmpty>
@@ -49,7 +49,7 @@
 <logic:notEmpty name="statusbean" property="commparent_id">
 <br/>
 &nbsp;&nbsp;&nbsp;
-<span class="datalabelsmall">Parent: </span><a href='@web_context@get/commconcept/<bean:write name="statusbean" property="commparent_id" />'><bean:write name="statusbean" property="commparent_id_transl" /></a>
+<span class="datalabelsmall">Parent: </span><a href='@get_link@std/commconcept/<bean:write name="statusbean" property="commparent_id" />'><bean:write name="statusbean" property="commparent_id_transl" /></a>
 </logic:notEmpty><!-- has parent-->
 
 <!-- end status -->

@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-09-18 22:32:22 $'
-* '$Revision: 1.119 $'
+* '$Date: 2004-09-23 17:35:33 $'
+* '$Revision: 1.120 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -138,6 +138,7 @@
     <!-- WEB SERVER LOCATIONS -->
     <filter token="base_url" value=""/>
     <filter token="web_context" value="${machine_url}${eighty_eighty}/${web.context_uri}/"/>
+    <filter token="get_link" value="${machine_url}/get/"/>
     <filter token="image_server" value="${machine_url}${eighty_eighty}/${web.context_uri}/images/"/>
     <filter token="minimumwidth" value="650"/>
     <!-- this is the minimum value for width of header and footer -->

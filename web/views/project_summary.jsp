@@ -25,7 +25,7 @@
 </tr>
 <logic:iterate id="onerow" name="project-BEANLIST">
 <tr class="@nextcolorclass@">
-<td class="sizetiny"><a href="@web_context@get/detail/project/<bean:write name='onerow' property='project_id' />">
+<td class="sizetiny"><a href="@get_link@detail/project/<bean:write name='onerow' property='project_id' />">
                             Details
                             </a></td>
 <td class="sizetiny">
