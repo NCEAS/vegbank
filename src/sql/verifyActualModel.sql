@@ -13,6 +13,6 @@ mtl_FTbl || '.' || mtl_fFldNm as MTL_references, 'dil' as unknownModel, 'if i''m
 FROM pg_constraint WHERE conrelid>0 and confrelid>0) as mtl_cons 
 
 ON (select relname from pg_statio_all_tables where attrelid=relid)=mtl_tblNm and pg_attribute.attname=mtl_fldNm where attstattarget=-1 and attrelid in (select relid from pg_statio_all_tables where schemaname='public') 
-
+  HAVING (select relname from pg_statio_all_tables where attrelid=relid) NOT LIKE 'dba_%'  
 ORDER BY (select relname from pg_statio_all_tables where attrelid=relid),  replace(attname,'_','a')
 ;
