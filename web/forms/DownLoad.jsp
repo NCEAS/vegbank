@@ -11,8 +11,8 @@
  *   Authors: @author@
  *
  *  '$Author: mlee $'
- *  '$Date: 2004-11-16 07:41:14 $'
- *  '$Revision: 1.9 $'
+ *  '$Date: 2005-03-11 03:54:43 $'
+ *  '$Revision: 1.10 $'
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -131,15 +131,17 @@
               &nbsp; &nbsp; <html:radio value="vegbranch" property="formatType"/>VegBranch import<br/>
               &nbsp; &nbsp; <html:radio value="flat" property="formatType"/>Flat ASCII comma separated<br/>
 
-			  <blockquote>
+                <input type="hidden" name="dataType" value="all" />
+
+			<!--  <blockquote>
               	<font color="#23238e" face="Helvetica,Arial,Verdana" size="2">
 			  	<b>Flat ASCII Options</b>
 				</font>
 				<br/>
-				  &nbsp; &nbsp; <html:radio value="all" property="dataType"/>Entire plot<br/>
-				  &nbsp; &nbsp; <html:radio value="environmental" property="dataType"/>Only environmental data<br/>
-				  &nbsp; &nbsp; <html:radio value="species" property="dataType"/>Only species data<br/>
-			  </blockquote>
+				  &nbsp; &nbsp; <xx html:radio value="all" property="dataType"/>Entire plot<br/>
+				  &nbsp; &nbsp; <xx html:radio value="environmental" property="dataType"/>Only environmental data<br/>
+				  &nbsp; &nbsp; <xx html:radio value="species" property="dataType"/>Only species data<br/>
+			  </blockquote> -->
           </td>
          </tr>
         </tbody>
