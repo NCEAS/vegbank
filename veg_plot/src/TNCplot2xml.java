@@ -29,6 +29,8 @@ int lineNum=0;
 int speciesLineNum=0;
 String infileArray[]=new String[1000];
 String speciesArray[]=new String[1000];
+String speciesInfoArray[]=new String[1000];
+int speciesCount=0;
 
 /*Below are all the variables that are going to be required for writing out teh xml file*/
 String nullValue="-999.25";
@@ -286,8 +288,11 @@ for (int ii=0; ii<speciesLineNum; ii++) {
 		StringTokenizer speciesTok = new StringTokenizer(speciesArray[ii], "|");
 		String speciesBuf= speciesTok.nextToken();
 		speciesBuf= speciesTok.nextToken();
-
-		System.out.println(speciesBuf);
+		int bufCount=0;
+		while (speciesTok.hasMoreTokens() && bufCount<4 ) {speciesBuf= speciesTok.nextToken();bufCount++;}
+				speciesInfoArray[speciesCount]=speciesBuf;
+				speciesCount++;
+			//	System.out.println(speciesBuf);
 		} //end if
 } //end for
 
