@@ -12,9 +12,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2003-11-03 23:27:10 $'
-*  '$Revision: 1.12 $'
+*    '$Author: farrell $'
+*      '$Date: 2003-11-05 18:47:20 $'
+*  '$Revision: 1.13 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -38,7 +38,7 @@
   </title>
   </head>
 
-  <body>
+  <body onLoad="refreshHighlight('plotsToDownLoad')">
 
   <script src="/vegbank/includes/utils.js"></script>
 
@@ -72,11 +72,13 @@
   
       <!-- SOME NOTES ABOUT THE USE OF ICONS-->
       <br/>
-      <span class="intro">Available Reports:
+      <span class="intro">Available Reports:<br/>
         <img src="/vegbank/images/report_sm.gif"></img>=Summary
         <img src="/vegbank/images/comprehensive_sm.gif"></img>=Comprehensive
         <img src="/vegbank/images/small_globe.gif"></img>=Location 
         <img src="/vegbank/images/xml_icon.gif"></img>=Raw XML
+        <img src="/vegbank/images/environmental_text.gif"></img>=Environment ASCII
+        <img src="/vegbank/images/species_text.gif"></img>=Species ASCII
       </span>
 
       <html:form action="/DownLoadManager">
@@ -160,16 +162,28 @@
 		  -->
 	      
 	      <!-- THE LINK TO THE RAW XML-->
-              <html:link page="/DisplayPlot.do?resultType=rawXML" paramId="plotId" paramName="row" paramProperty="plotId" title="view raw XML">
+              <html:link page="/DisplayPlot.do?resultType=rawXML" paramId="vegbankAccessionNumber" paramName="row" paramProperty="vegbankAccessionNumber" title="view raw XML">
                 <img align="center" border="0" src="/vegbank/images/xml_icon.gif" alt="Raw XML view"></img>
               </html:link>
+		      
+	      <!-- THE LINK TO THE Environmental Data ASCII report -->
+              <html:link page="/DisplayPlot.do?resultType=ASCIIEvironment" paramId="vegbankAccessionNumber" paramName="row" paramProperty="vegbankAccessionNumber" title="Environmental ASCII Report">
+                <img align="center" border="0" src="/vegbank/images/environmental_text.gif" alt="Environmental ASCII Report"></img>
+              </html:link>
+
+      
+	      <!-- THE LINK TO THE Species Data ASCII report -->
+              <html:link page="/DisplayPlot.do?resultType=ASCIISpecies" paramId="vegbankAccessionNumber" paramName="row" paramProperty="vegbankAccessionNumber" title="Species ASCII Report">
+                <img align="center" border="0" src="/vegbank/images/species_text.gif" alt="Species ASCII Report"></img>
+              </html:link>
+
 
 	      <!-- Checkbox for download -->
 	      <br/>
-              <input name="plotsToDownLoad" type="checkbox" value='<bean:write property="plotId" name="row"/>' 
-			  	 onclick="toggle(this)" id='<bean:write property="plotId" name="row"/>'>
+              <input name="plotsToDownLoad" type="checkbox" value='<bean:write property="vegbankAccessionNumber" name="row"/>' 
+			  	 onclick="toggle(this)" id='<bean:write property="vegbankAccessionNumber" name="row"/>'>
                 <span class="itemlabel" style="cursor:hand">
-					<label for='<bean:write property="plotId" name="row"/>'>download</label></span>
+					<label for='<bean:write property="vegbankAccessionNumber" name="row"/>'>download</label></span>
               </input>
 
 	    </td>

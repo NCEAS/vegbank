@@ -11,8 +11,8 @@
  *   Authors: @author@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-11-03 03:54:17 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2003-11-05 18:47:20 $'
+ *  '$Revision: 1.2 $'
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -78,7 +78,17 @@
 <html:form action="/DownLoad">
 
 <!-- Need to pass the list of plots choosen in the previous screen -->
-  <input type="hidden" name="plotsToDownLoad" value='<%= (String) request.getAttribute("plotsToDownLoad") %>'>
+<%  	
+	String[] plotsToDownLoad = (String[]) request.getAttribute("plotsToDownLoad"); 
+	for(int i=0; i < plotsToDownLoad.length; i++)
+	{
+		// print out the hidden attribute
+%>
+ 		<input type="hidden" name="plotsToDownLoad" value="<%= plotsToDownLoad[i] %>"/>
+<%  	
+	}   
+%>  
+
   <br>
     
 
