@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   * '$Author: harris $'
-  * '$Date: 2002-03-21 00:57:52 $'
-  * '$Revision: 1.13 $'
+  * '$Date: 2002-04-04 03:32:14 $'
+  * '$Revision: 1.14 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -179,7 +179,9 @@
 			plant-submit.html
 			community-query.html
 			plot-submit.html
-			plot-upload.html"
+			plot-upload.html
+			plot-submit-select.html
+			fetch-password.html"
 		excludes="**/CVS* "
 	/>
 
