@@ -5,8 +5,8 @@
  * the two tables include site data and species information
  *
  * '$Author: harris $'
- * '$Date: 2002-07-26 01:29:49 $'
- * '$Revision: 1.10 $'
+ * '$Date: 2002-08-01 18:07:58 $'
+ * '$Revision: 1.11 $'
  *
  */
 
@@ -46,8 +46,8 @@ PLOTORIGINLONG NUMERIC(30),
 PLOTSHAPE VARCHAR(30),
 PLOTAREA VARCHAR(30),
 ALTVALUE float,
-SLOPEASPECT VARCHAR(30),
-SLOPEGRADIENT VARCHAR(100),
+SLOPEASPECT NUMERIC(30),
+SLOPEGRADIENT NUMERIC(30),
 SLOPEPOSITION VARCHAR(100),
 HYDROLOGICREGIME VARCHAR(100),
 SOILDRAINAGE VARCHAR(100),
