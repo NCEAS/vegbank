@@ -6,8 +6,8 @@ package servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2003-01-09 20:46:01 $'
- * '$Revision: 1.13 $'
+ *     '$Date: 2003-01-10 16:49:00 $'
+ * '$Revision: 1.14 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -425,11 +425,11 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 			 if ( emailAddress != null && emailAddress.length() > 2)
 			 {
 			 	// check that the required paramteres are upto snuff
-				if ( surName.length() > 2 && givenName.length() > 2 && phoneNumber.length() > 2  && currentCertLevel.length() > 0 
-					&& degreeInst.length() > 2  && currentInst.length() > 2  && esaPos.length() > 0  && vegSamplingDoc.length() > 2 
-					&&  vegAnalysisDoc.length() > 2  && submittedEmail.length() > 2 
-					&& vegSamplingDoc.length() > 2 && vegAnalysisDoc.length() > 2  && usnvcExpDoc.length() >2 
-					&&  vegbankExpDoc.length() > 2 &&  useVegbank.length() > 2 && plotdbDoc.length() > 2)
+				if ( surName.length() > 1 && givenName.length() > 1 && phoneNumber.length() > 4  && currentCertLevel.length() > 0 
+					&& degreeInst.length() > 1  && currentInst.length() > 1  && esaPos.length() > 0  && vegSamplingDoc.length() > 1 
+					&&  vegAnalysisDoc.length() > 1  && submittedEmail.length() > 3
+					&& vegSamplingDoc.length() > 1 && vegAnalysisDoc.length() > 1  && usnvcExpDoc.length() >2 
+					&&  vegbankExpDoc.length() > 1 &&  useVegbank.length() > 1 && plotdbDoc.length() > 1)
 					{
 						System.out.println("surName: '"+surName+"'");
 			 			userdb = new UserDatabaseAccess();
@@ -475,9 +475,8 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 					}
 					else
 					{
-						System.out.println("UserManagementServlet > missing required attributes ");
+						System.out.println("UserManagementServlet > inadequate value(s) for required attributes ");
 						// send them a note to go back and fill in the correct required attributes
-						
 						Hashtable replaceHash = new Hashtable();
 						replaceHash.put("messages", "You are missing a required attribute to submit this form");
 						replaceHash.put("surName", ""+surName);
