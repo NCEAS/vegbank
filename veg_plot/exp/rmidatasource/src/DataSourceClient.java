@@ -100,7 +100,9 @@ public class DataSourceClient
     }
 		return(null);
 	}
-
+	
+	
+//#START EDITIONS
 	/**
 	 * method that retuns the description of a project that corresponds
 	 * to the input plot
@@ -155,7 +157,7 @@ public class DataSourceClient
 		return(null);
 	}
 
-//#START EDITIONS
+
 	//retuns the input plot name
 	public String getAuthorPlotCode(String plotName)
 	{
@@ -287,6 +289,17 @@ public class DataSourceClient
 	public Vector getUniqueStrataNames(String plotName)
 	{
 		Vector v = new Vector();
+		try
+		{
+			v = source.getUniqueStrataNames(plotName);
+			System.out.println("DataSourceClient > strata: " + v.toString() );
+			return( v );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
 		return(v);
 	}
 	

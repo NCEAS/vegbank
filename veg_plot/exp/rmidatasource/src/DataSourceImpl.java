@@ -201,6 +201,16 @@ public class DataSourceImpl extends UnicastRemoteObject
 	public Vector getUniqueStrataNames(String plotName)
 	{
 		Vector v = new Vector();
+		try
+		{
+			v = source.getUniqueStrataNames(plotName);
+			System.out.println("DataSourceImpl > number of strata: " + v.size() );
+		}
+		catch (Exception e)
+		{
+			System.out.println( "Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
 		return(v);
 	}
 	
