@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-06-29 06:50:48 $'
-*  '$Revision: 1.4 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-07-31 23:44:06 $'
+*  '$Revision: 1.5 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@
     %>
 
     <tr valign="top" bgcolor="<%= bgColor %>" >
-      <td><span class="item"><a href="/vegbank/servlet/DataRequestServlet?requestDataType=vegPlot&resultType=summary&queryType=simple&accessionCode=<bean:write name='row' property='accessionCode'/>"><bean:write name="row" property="authorobscode"/>&nbsp;</a></span></td>
+      <td><span class="item"><a href='/vegbank/servlet/DataRequestServlet?requestDataType=vegPlot&resultType=summary&queryType=simple&accessionCode=<bean:write name="row" property="accessioncode"/>'><bean:write name="row" property="authorobscode"/>&nbsp;</a></span></td>
     </tr>
     </logic:iterate>
 
