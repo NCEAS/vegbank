@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-06 18:47:08 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2003-11-12 22:18:38 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,20 +43,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.vegbank.common.model.Covermethod;
-import org.vegbank.common.model.Observation;
-import org.vegbank.common.model.Observationsynonym;
-import org.vegbank.common.model.Party;
-import org.vegbank.common.model.Plantconcept;
-import org.vegbank.common.model.Plantname;
-import org.vegbank.common.model.Plot;
-import org.vegbank.common.model.Project;
-import org.vegbank.common.model.Projectcontributor;
-import org.vegbank.common.model.Stratum;
-import org.vegbank.common.model.Stratummethod;
-import org.vegbank.common.model.Taxoninterpretation;
-import org.vegbank.common.model.Taxonobservation;
-import org.vegbank.common.model.VBModelBean;
+import org.vegbank.common.model.*;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.LogUtility;
@@ -67,7 +54,7 @@ import org.vegbank.common.utility.XMLUtil;
 import org.apache.commons.beanutils.BeanUtils;
 
 /**
- * Reads an Observation from the Vegbank Database and populates
+ * Reads an <code>VBModelBean</code> from the Vegbank Database and populates
  * a tree of beans with the data. The root of the tree is observation.
  * 
  * @author farrell
