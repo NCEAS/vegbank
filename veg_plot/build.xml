@@ -5,9 +5,9 @@
   * Global build script for veg_plot. This simply allows running all the sub 
   * scripts from one place 
   *
-  *     '$Author: anderson $'
-  *     '$Date: 2003-10-23 18:43:24 $'
-  *     '$Revision: 1.37 $'
+  *     '$Author: mlee $'
+  *     '$Date: 2003-10-24 18:47:25 $'
+  *     '$Revision: 1.38 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -314,7 +314,7 @@
 	
     <echo message="Distr all of jars in ${ant.project.name}"/>
     
-		<ant dir="exp/vegbank_web" target="dist" inheritAll="false">
+		<ant dir="exp/vegbank_web" target="dist-everything" inheritAll="false">
       <property name="hostname" value="${hostname}"/>
     </ant>
 
