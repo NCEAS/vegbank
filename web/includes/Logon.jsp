@@ -26,7 +26,7 @@
       </font>
     </td>
     <td align="left">
-      <html:text property="username" size="16" maxlength="18"/>
+      <html:text property="username" size="16"/>
     </td>
   </tr>
   
