@@ -11,7 +11,7 @@
   <h4>Why Cite or Link?</h4>
   <p>One of the biggest advantages of VegBank is that the data that are
   stored in it are <strong>permanently archived</strong>.  This means 
-  that you can cite a plot in VegBank, and others will always be able to 
+  that you can cite a plot in VegBank, and others will be able to 
   follow your citation hyperlink to see the same data you saw.  
   </p>
   <h4>How do I cite?</h4>
@@ -22,18 +22,20 @@
   
   <p>Once you know the Accession Code of a plot, you can cite it by
   using the following URL (to type into a web browser) formula: </p>
-  <p>http://vegbank.org/get/[view]/[type of data]/'[AccessionCode]'</p>
-  <p>[view] is the type of view you want shown, the default is "std" for the standard view, which is always available.  
-    "summary" and "detail" are generally also available.</p>
-  <p>[type of data] is the entity that you are citing, usually "observation".</p>
+  <p>http://vegbank.org/cite/[AccessionCode]</p>
   <p>[AccessionCode] is the Accession Code of the plot you are interested in.</p>
   
   <h4>Example</h4>
-  <p>Cite <a href="@get_link@std/observation/'VB.Ob.3736.GRSM125'">this plot</a>
-  with the following URL: http://vegbank.org/get/std/observation/'VB.Ob.3736.GRSM125' </p>
-    
+  <p>Cite <a href="@cite_link@VB.Ob.3736.GRSM125">this plot</a>
+  with the following URL: http://vegbank.org/VB.Ob.3736.GRSM125 </p>
   
-
+  <p>Cite <a href="@cite_link@VB.CC.5728.CEGL003906">this community</a>
+    with the following URL: http://vegbank.org/VB.CC.5728.CEGL003906 </p>
+  
+  <p>Cite <a href="@cite_link@VB.PC.54588.SPOROBOLUSAIROI">this plant</a>
+    with the following URL: http://vegbank.org/VB.PC.54588.SPOROBOLUSAIROI </p>
+  
+  <p>You can cite anything in VegBank that has an Accession Code like this.</p>
 
 @webpage_footer_html@
 
