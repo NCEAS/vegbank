@@ -321,7 +321,40 @@ public class DataFileDB  {
 		return(s);
 	}
 	
-	
+	/**
+	 * method to retrieve a users style sheet
+	 */
+		public String getUserStyleSheet(String userName)
+		{
+			String s = null;
+		try 
+		{
+			//conn = getConnection();
+      PreparedStatement pstmt;
+      pstmt = conn.prepareStatement(
+				"SELECT path, db_filename from datafile where user_surname like " + 
+				" '"+userName+"' and file_type like 'style%' ");
+                
+      	pstmt.execute();
+      	ResultSet rs = pstmt.getResultSet();
+					
+			while (rs.next()) 
+			{
+     	 if (rs != null)
+				{
+					String path = rs.getString(1);
+					String file = rs.getString(2);
+					s = path+file;
+				}
+    	}
+		}
+		catch (Exception e) 
+		{
+      	System.out.println("Exception: "+e.getMessage());
+				e.printStackTrace();
+    }  
+		return(s);
+		}
 	
 	
 	 //method that retuns the number of files the user has on the 

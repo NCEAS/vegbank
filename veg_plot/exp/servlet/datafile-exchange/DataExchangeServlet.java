@@ -173,7 +173,14 @@ public class DataExchangeServlet extends HttpServlet
 							System.out.println("DataExchangeServlet > the response to the client: " + s);
 							out.println(s ); 
 						}
-						
+						//if the requestor asks for a style sheet
+						else if (action.equals("userdefaultstyle") && ( req.getParameter("username") != null) )
+						{
+							System.out.println("DataExchangeServlet > looking up a users style sheet");
+							String s = handleStyleSheetLookup(req, res);
+							System.out.println("DataExchangeServlet > the response to the client: " + s);
+							out.println(s ); 
+						}
 						
 						else 
 						{
@@ -191,12 +198,33 @@ public class DataExchangeServlet extends HttpServlet
 				e.printStackTrace();
 			}
 		}
+		
+		/**
+		 * method that will look up a users style sheet
+		 */
+		 private String handleStyleSheetLookup(HttpServletRequest req, 
+		 	HttpServletResponse res)
+		 {
+			 String s = null;
+			 try
+			 {
+				 username = req.getParameter("username");
+				 s = filedb.getUserStyleSheet(username) ;
+			 }
+			 catch(Exception e) 
+			 {
+				 System.out.println("Exception: " + e.getMessage() );
+				 e.printStackTrace();
+			 }
+			 return(s);
+		 }
 	
 	/**
 	 * methodf to delete a file from the database -- uses the username and the 
 	 * file accession number
 	 */
-	 private String handleFileDeletion(HttpServletRequest req, HttpServletResponse res)
+	 private String handleFileDeletion(HttpServletRequest req, 
+	 	HttpServletResponse res)
 	 {
 			StringBuffer s = new StringBuffer();
 			
