@@ -3,8 +3,8 @@ package org.vegbank.common.utility;
 /**
  * '$RCSfile: Utility.java,v $'
  * '$Author: farrell $'
- * '$Date: 2003-02-03 21:46:13 $'
- * '$Revision: 1.1 $'
+ * '$Date: 2003-02-05 21:43:32 $'
+ * '$Revision: 1.2 $'
  * 
  */ 
 
@@ -15,6 +15,10 @@ public class Utility
 	
 	public static String escapeCharacters(String s)
 	{
+		// Handle nulls
+		if ( s == null)
+			return null;
+			
 		String origString = s;
 		// List of characters to escape
 		char[] specialChar = {'\'', '$', '^'};
