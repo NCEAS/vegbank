@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-02-26 19:18:46 $'
-  *     '$Revision: 1.18 $'
+  *     '$Date: 2003-03-07 22:57:02 $'
+  *     '$Revision: 1.19 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -16,7 +16,9 @@
   
   <target name="init" description="=> Initialize global variables">
     <property environment="env" />
-    <property name="top.lib.dir" location="${basedir}/../lib"/>
+    <property name="top.dir" location="${basedir}/.."/>
+    <property name="top.lib.dir" location="${top.dir}/lib"/>
+    <property name="top.build.dir" location="${top.dir}/build"/>
     <property name="build.dir" location="${basedir}/build" />
     <property name="src.dir" location="${basedir}/src" />
     <property name="java.src.dir" location="${basedir}/src" />
@@ -30,7 +32,7 @@
     <property name="build.test.integration.dir"
       location="${build.test.dir}/integration"/>
     <property name="build.lib.dir" location="${build.dir}/lib"/>
-    <property name="reports.dir" location="${build.dir}/reports"/>
+    <property name="reports.dir" location="${top.build.dir}/reports"/>
     <property name="reports.test.dir" location="${reports.dir}/testreports"/>
     <property name="dist.dir" location="${basedir}/dist" />
     <property name="test.dir" location="${basedir}/test" />
@@ -144,9 +146,6 @@
       </fileset>
       <fileset dir="./exp/data-translators/src/data-translators/" casesensitive="yes">
         <include name="**/*.java"/>
-      </fileset>
-      <fileset dir="${java.src.dir}" casesensitive="yes">
-        <include name="edu/**/*.java"/>
       </fileset>
       <fileset dir="./exp/xml-resource/src" casesensitive="yes">
         <include name="**/*.java"/>
@@ -282,6 +281,15 @@
       </fileset>
       <fileset dir="${build.java.src.dir}" casesensitive="yes">
         <include name="org/vegbank/servlet/request/**/*java"/>
+      </fileset>
+    </jar>
+    <!-- rmidatasource.jar -->
+    <jar  destfile ="${build.lib.dir}/rmidatasource.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="org/vegbank/plots/rmi/**/*class"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="org/vegbank/plots/rmi/**/*java"/>
       </fileset>
     </jar>
 
