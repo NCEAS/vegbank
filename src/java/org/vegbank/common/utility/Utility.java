@@ -1,5 +1,7 @@
 package org.vegbank.common.utility;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import org.vegbank.common.dbAdapter.*;
@@ -10,8 +12,8 @@ import org.vegbank.common.dbAdapter.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-02-27 01:05:12 $'
- * '$Revision: 1.4 $'
+ * '$Date: 2003-03-07 22:28:44 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,19 +83,20 @@ public class Utility
   
   /**
 	* return a database connection for use with the database
-	*
-	private Connection getConnection(String databaseName)
+	*/
+	public Connection getConnection(String databaseName)
 	{
-		String driverClassName = "";
-    String databaseUserName = "";
+		String driverClassName = "org.postgresql.Driver";
+    String databaseUserName = "datauser";
     String databasePassword = "";
-    String host = "";
-    String connectionString = "jdbc:" + database + 
+    String host = "127.0.0.1";
+    String connectionString = "jdbc:postgresql://" + host + "/" + databaseName;
     Connection c = null;
+    
 		try 
  		{
-			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection("jdbc:postgresql://"+host+"/communities_dev", "datauser", "");
+			Class.forName(driverClassName);
+			c = DriverManager.getConnection(connectionString, "datauser", "");
 		}
 		catch ( Exception e )
 		{
@@ -102,6 +105,30 @@ public class Utility
 		}
 			return(c);
 	}
+	
+	/*
+		private Connection getConnection()
+	{
+		Connection c = null;
+		try
+		{
+			// FIXME: Pull in from Properties files
+			Class.forName("org.postgresql.Driver");
+			c =
+				DriverManager.getConnection(
+					"jdbc:postgresql://127.0.0.1/plants_dev",
+					"datauser",
+					"");
+		}
+		catch (Exception e)
+		{
+			commit = false;
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return (c);
+	}
+
 	*/
 		
 	/**

@@ -3,8 +3,8 @@
  * Purpose: An adapter class for PostgreSQL RDBMS.
  *
  * '$Author: farrell $'     
- * '$Date: 2003-02-13 01:06:07 $' 
- * '$Revision: 1.1 $'
+ * '$Date: 2003-03-07 22:28:42 $' 
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,13 +23,17 @@
 
 package org.vegbank.common.dbAdapter;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * The PostgreSQL db adapter implementation.
  * Stolen from Metacat.
  */
-public class PostgresqlAdapter extends AbstractDatabase {
+public class PostgresqlAdapter extends AbstractDatabase
+{
 
 	/**
 	 * The PostgreSQL unique ID /sequence generator
@@ -46,30 +50,89 @@ public class PostgresqlAdapter extends AbstractDatabase {
 	 *            during the db operation
 	 * @return return the generated unique id as a long type
 	 */
-	public long getNextUniqueID(Connection conn, String tableName, String primaryKeyName) 
-																				 throws SQLException { 
+	public long getNextUniqueID(
+		Connection conn,
+		String tableName,
+		String primaryKeyName)
+		throws SQLException
+	{
 		long uniqueid = 0;
 		Statement stmt = null;
 		stmt = conn.createStatement();
 		// constructing the name of the seq to call...
-		stmt.execute("SELECT nextval('" + tableName + "_" + primaryKeyName  + "_seq')");
+		stmt.execute(
+			"SELECT nextval('" + getSequenceColumnName(tableName, primaryKeyName) + "')");
 		ResultSet rs = stmt.getResultSet();
-		if ( rs.next() ) 
-					{
-				uniqueid = rs.getLong(1);
+		if (rs.next())
+		{
+			uniqueid = rs.getLong(1);
 		}
 		stmt.close();
- 
+
 		return uniqueid;
 	}
 
+	/**
+	 * Postgresql pre 7.3  has a 32 character limit on column names 
+	 * This is a ugly hack that attemps to reverse engineer what they are up to.
+	 * <br/>
+	 * 
+	 * Postgresql 7.3 has a 64 character limit so upgrading to this in essence 
+	 * solves this, also it is posible to directly specify the sequence name in the 
+	 * SQL builds scripts. <br/>
+	 * 
+	 * I think the algorithm use by postgres truncateds the longest subpart of the 
+	 * sequence column name ( tablename and pkname ) until it fits. I think the pk
+	 * is truncated first in the event they are the same lenght. <br/>
+	 * 
+	 * 
+	 * @param tableName
+	 * @param pKName
+	 * @return String
+	 */
+	public String getSequenceColumnName(String tableName, String pKName)
+	{
+		String result = "";
+		
+    // Max columnLenght is 32 (but -4 to account for '_seq'  and -1 for the '_' to join the tableName and PK) 
+    int maxAvailibleLength = 26;
+    
+		int nameLength = tableName.length() + pKName.length();
+
+		// Do I  need to truncate ?
+		if ( nameLength - maxAvailibleLength > 0)
+		{
+
+			while ( nameLength - maxAvailibleLength > 0 )
+			{
+        //Truncate the longest value starting with key in a tie
+        if ( pKName.length() >=  tableName.length() )
+        {
+					pKName = pKName.substring(0, pKName.length() - 1);
+        }
+        else
+        {
+					tableName =	tableName.substring(0, tableName.length() - 1);
+        }
+				
+				// reset Name Lenght
+				nameLength = tableName.length() + pKName.length();
+				//System.out.println(pKName.length() + " and " + maxAvailibleLength + " and " + nameLength + " and " +  modifiedPKName.length() + " and " + modifiedTableName.length());
+			}
+		}
+
+		result = tableName  + "_" + pKName + "_seq";
+		return result;
+	}
+	
 	/**
 	 * The PostgreSQL function name that gets the current date 
 	 * and time from the database server
 	 *
 	 * @return return the current date and time function name: "now()"
 	 */
-	public String getDateTimeFunction() {
+	public String getDateTimeFunction()
+	{
 		return "now()";
 	}
 
@@ -78,8 +141,9 @@ public class PostgresqlAdapter extends AbstractDatabase {
 	 *
 	 * @return return the non-NULL function name: "coalesce"
 	 */
-	public String getIsNULLFunction() {
-    
+	public String getIsNULLFunction()
+	{
+
 		return "coalesce";
 	}
 
@@ -88,9 +152,10 @@ public class PostgresqlAdapter extends AbstractDatabase {
 	 *
 	 * @return return the string delimiter: single quote (')
 	 */
-	public String getStringDelimiter() {
+	public String getStringDelimiter()
+	{
 
 		return "\"";
 	}
-  
+
 }
