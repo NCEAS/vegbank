@@ -30,14 +30,21 @@ foreach $database (@databases) {
     $table =~ m/^\s*pg_/ and next; # Skip internal tables
     $table =~ s/^\s*//; # Strip leading spaces
     chomp($table); # Strip trailing spaces
-    print "\'$table\'\n";
 	
 
+    print "\n########################### Sync $table ########################################\n";
     # run a grant on this table
     print "\nRun update Sequence on $table\n";
     $sql = "SELECT setval('$table" . "_" . "$table" . "_id_seq',MAX($table" . "_id)) FROM $table"; 
     print "psql $database -c \"$sql\"\n";
     print `psql $database -c \"$sql\"`;
+    
+    # Hack because older vegbanks sometimes use different naming convention
+    $sql = "SELECT setval('$table" . "_id_seq',MAX($table" . "_id)) FROM $table"; 
+    print "psql $database -c \"$sql\"\n";
+    print `psql $database -c \"$sql\"`;
+    
+    print "\n########################### Sync $table complete  ########################################\n";
   }
   # Theres always one that disobays the rule :)
   print `psql $database -c \"SELECT setval('aux_role_role_id_seq',MAX(role_id)) FROM aux_role\"`;
