@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- this document validates VegBank data xml documents, for version 1.0.0 
+ this document validates VegBank data xml documents, for version 1.0.1 
 
   *
   *     '$Author: mlee $'
-  *     '$Date: 2003-10-15 21:13:50 $'
-  *     '$Revision: 1.1 $'
+  *     '$Date: 2003-10-19 05:41:24 $'
+  *     '$Revision: 1.2 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -21,7 +21,7 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="VegBankPackage">
     <xs:complexType>
       <xs:sequence>
@@ -208,7 +208,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="commConcept.COMMCONCEPT_ID" minOccurs="0"/>
-        <xs:element ref="commConcept.COMMNAME_ID"/>
+        <xs:element ref="commConcept.COMMNAME_ID" minOccurs="1"/>
         <xs:element ref="commConcept.reference_ID" minOccurs="0"/>
         <xs:element ref="commConcept.commDescription" minOccurs="0"/>
         <xs:element ref="commConcept.accessionCode" minOccurs="0"/>
@@ -270,12 +270,12 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="commCorrelation.COMMCORRELATION_ID" minOccurs="0"/>
-        <xs:element ref="commCorrelation.COMMCONCEPT_ID"/>
-        <xs:element ref="commCorrelation.commConvergence"/>
-        <xs:element ref="commCorrelation.correlationStart"/>
+        <!--COMMSTATUS_ID is inverted rel-->
+        <xs:element ref="commCorrelation.COMMCONCEPT_ID" minOccurs="1"/>
+        <xs:element ref="commCorrelation.commConvergence" minOccurs="1"/>
+        <xs:element ref="commCorrelation.correlationStart" minOccurs="1"/>
         <xs:element ref="commCorrelation.correlationStop" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--COMMSTATUS_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -332,9 +332,9 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="commLineage.COMMLINEAGE_ID" minOccurs="0"/>
-        <xs:element ref="commLineage.parentCommStatus_ID"/>
-        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="commLineage.parentCommStatus_ID" minOccurs="1"/>
         <!--childCommStatus_ID is inverted rel-->
+        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -361,7 +361,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="commName.COMMNAME_ID" minOccurs="0"/>
-        <xs:element ref="commName.commName"/>
+        <xs:element ref="commName.commName" minOccurs="1"/>
         <xs:element ref="commName.reference_ID" minOccurs="0"/>
         <xs:element ref="commName.dateEntered" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
@@ -515,18 +515,18 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="commStatus.COMMSTATUS_ID" minOccurs="0"/>
+        <!--COMMCONCEPT_ID is inverted rel-->
         <xs:element ref="commStatus.reference_ID" minOccurs="0"/>
-        <xs:element ref="commStatus.commConceptStatus"/>
+        <xs:element ref="commStatus.commConceptStatus" minOccurs="1"/>
         <xs:element ref="commStatus.commParent_ID" minOccurs="0"/>
         <xs:element ref="commStatus.commLevel" minOccurs="0"/>
-        <xs:element ref="commStatus.startDate"/>
+        <xs:element ref="commStatus.startDate" minOccurs="1"/>
         <xs:element ref="commStatus.stopDate" minOccurs="0"/>
         <xs:element ref="commStatus.commPartyComments" minOccurs="0"/>
-        <xs:element ref="commStatus.COMMPARTY_ID"/>
+        <xs:element ref="commStatus.COMMPARTY_ID" minOccurs="1"/>
         <xs:element ref="commCorrelation" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="commLineage" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--COMMCONCEPT_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -621,14 +621,14 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="commUsage.COMMUSAGE_ID" minOccurs="0"/>
-        <xs:element ref="commUsage.COMMNAME_ID"/>
+        <xs:element ref="commUsage.COMMNAME_ID" minOccurs="1"/>
+        <!--COMMCONCEPT_ID is inverted rel-->
         <xs:element ref="commUsage.usageStart" minOccurs="0"/>
         <xs:element ref="commUsage.usageStop" minOccurs="0"/>
         <xs:element ref="commUsage.commNameStatus" minOccurs="0"/>
         <xs:element ref="commUsage.COMMPARTY_ID" minOccurs="0"/>
         <xs:element ref="commUsage.classSystem" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--COMMCONCEPT_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -704,8 +704,8 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="plantConcept.PLANTCONCEPT_ID" minOccurs="0"/>
-        <xs:element ref="plantConcept.PLANTNAME_ID"/>
-        <xs:element ref="plantConcept.reference_ID"/>
+        <xs:element ref="plantConcept.PLANTNAME_ID" minOccurs="1"/>
+        <xs:element ref="plantConcept.reference_ID" minOccurs="1"/>
         <xs:element ref="plantConcept.plantDescription" minOccurs="0"/>
         <xs:element ref="plantConcept.accessionCode" minOccurs="0"/>
         <xs:element ref="plantStatus" minOccurs="0" maxOccurs="unbounded"/>
@@ -766,12 +766,12 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="plantCorrelation.PLANTCORRELATION_ID" minOccurs="0"/>
-        <xs:element ref="plantCorrelation.PLANTCONCEPT_ID"/>
-        <xs:element ref="plantCorrelation.plantConvergence"/>
-        <xs:element ref="plantCorrelation.correlationStart"/>
+        <!--PLANTSTATUS_ID is inverted rel-->
+        <xs:element ref="plantCorrelation.PLANTCONCEPT_ID" minOccurs="1"/>
+        <xs:element ref="plantCorrelation.plantConvergence" minOccurs="1"/>
+        <xs:element ref="plantCorrelation.correlationStart" minOccurs="1"/>
         <xs:element ref="plantCorrelation.correlationStop" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--PLANTSTATUS_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -828,9 +828,9 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="plantLineage.PLANTLINEAGE_ID" minOccurs="0"/>
-        <xs:element ref="plantLineage.parentPlantStatus_ID"/>
-        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
         <!--childPlantStatus_ID is inverted rel-->
+        <xs:element ref="plantLineage.parentPlantStatus_ID" minOccurs="1"/>
+        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -857,7 +857,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="plantName.PLANTNAME_ID" minOccurs="0"/>
-        <xs:element ref="plantName.plantName"/>
+        <xs:element ref="plantName.plantName" minOccurs="1"/>
         <xs:element ref="plantName.reference_ID" minOccurs="0"/>
         <xs:element ref="plantName.dateEntered" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
@@ -1011,18 +1011,18 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="plantStatus.PLANTSTATUS_ID" minOccurs="0"/>
+        <!--PLANTCONCEPT_ID is inverted rel-->
         <xs:element ref="plantStatus.reference_ID" minOccurs="0"/>
-        <xs:element ref="plantStatus.plantConceptStatus"/>
-        <xs:element ref="plantStatus.startDate"/>
+        <xs:element ref="plantStatus.plantConceptStatus" minOccurs="1"/>
+        <xs:element ref="plantStatus.startDate" minOccurs="1"/>
         <xs:element ref="plantStatus.stopDate" minOccurs="0"/>
         <xs:element ref="plantStatus.plantPartyComments" minOccurs="0"/>
-        <xs:element ref="plantStatus.PLANTPARTY_ID"/>
+        <xs:element ref="plantStatus.PLANTPARTY_ID" minOccurs="1"/>
         <xs:element ref="plantStatus.plantParent_ID" minOccurs="0"/>
         <xs:element ref="plantStatus.plantLevel" minOccurs="0"/>
         <xs:element ref="plantCorrelation" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="plantLineage" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--PLANTCONCEPT_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1117,14 +1117,14 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="plantUsage.PLANTUSAGE_ID" minOccurs="0"/>
-        <xs:element ref="plantUsage.PLANTNAME_ID"/>
+        <xs:element ref="plantUsage.PLANTNAME_ID" minOccurs="1"/>
+        <!--PLANTCONCEPT_ID is inverted rel-->
         <xs:element ref="plantUsage.usageStart" minOccurs="0"/>
         <xs:element ref="plantUsage.usageStop" minOccurs="0"/>
         <xs:element ref="plantUsage.plantNameStatus" minOccurs="0"/>
         <xs:element ref="plantUsage.PLANTPARTY_ID" minOccurs="0"/>
         <xs:element ref="plantUsage.classSystem" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--PLANTCONCEPT_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1200,6 +1200,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="address.ADDRESS_ID" minOccurs="0"/>
+        <!--party_ID is inverted rel-->
         <xs:element ref="address.organization_ID" minOccurs="0"/>
         <xs:element ref="address.orgPosition" minOccurs="0"/>
         <xs:element ref="address.email" minOccurs="0"/>
@@ -1211,7 +1212,6 @@
         <xs:element ref="address.currentFlag" minOccurs="0"/>
         <xs:element ref="address.addressStartDate" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--party_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1328,7 +1328,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="aux_Role.ROLE_ID" minOccurs="0"/>
-        <xs:element ref="aux_Role.roleCode"/>
+        <xs:element ref="aux_Role.roleCode" minOccurs="1"/>
         <xs:element ref="aux_Role.roleDescription" minOccurs="0"/>
         <xs:element ref="aux_Role.roleProject" minOccurs="0"/>
         <xs:element ref="aux_Role.roleObservation" minOccurs="0"/>
@@ -1411,7 +1411,7 @@
   <xs:element name="reference">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="reference.reference_ID"/>
+        <xs:element ref="reference.reference_ID" minOccurs="1"/>
         <xs:element ref="reference.shortName" minOccurs="0"/>
         <xs:element ref="reference.fulltext" minOccurs="0"/>
         <xs:element ref="reference.referenceType" minOccurs="0"/>
@@ -1716,11 +1716,11 @@
   <xs:element name="referenceAltIdent">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="referenceAltIdent.referenceAltIdent_ID"/>
-        <xs:element ref="referenceAltIdent.system" minOccurs="0"/>
-        <xs:element ref="referenceAltIdent.identifier"/>
-        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="referenceAltIdent.referenceAltIdent_ID" minOccurs="1"/>
         <!--reference_ID is inverted rel-->
+        <xs:element ref="referenceAltIdent.system" minOccurs="0"/>
+        <xs:element ref="referenceAltIdent.identifier" minOccurs="1"/>
+        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1757,12 +1757,12 @@
   <xs:element name="referenceContributor">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="referenceContributor.referenceContributor_ID"/>
-        <xs:element ref="referenceContributor.referenceParty_ID"/>
+        <xs:element ref="referenceContributor.referenceContributor_ID" minOccurs="1"/>
+        <!--reference_ID is inverted rel-->
+        <xs:element ref="referenceContributor.referenceParty_ID" minOccurs="1"/>
         <xs:element ref="referenceContributor.roleType" minOccurs="0"/>
         <xs:element ref="referenceContributor.position" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--reference_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1808,7 +1808,7 @@
   <xs:element name="referenceParty">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="referenceParty.referenceParty_ID"/>
+        <xs:element ref="referenceParty.referenceParty_ID" minOccurs="1"/>
         <xs:element ref="referenceParty.type" minOccurs="0"/>
         <xs:element ref="referenceParty.positionName" minOccurs="0"/>
         <xs:element ref="referenceParty.salutation" minOccurs="0"/>
@@ -1913,8 +1913,8 @@
   <xs:element name="referenceJournal">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="referenceJournal.referenceJournal_ID"/>
-        <xs:element ref="referenceJournal.journal"/>
+        <xs:element ref="referenceJournal.referenceJournal_ID" minOccurs="1"/>
+        <xs:element ref="referenceJournal.journal" minOccurs="1"/>
         <xs:element ref="referenceJournal.issn" minOccurs="0"/>
         <xs:element ref="referenceJournal.abbreviation" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
@@ -1965,10 +1965,10 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="classContributor.CLASSCONTRIBUTOR_ID" minOccurs="0"/>
-        <xs:element ref="classContributor.PARTY_ID"/>
+        <!--COMMCLASS_ID is inverted rel-->
+        <xs:element ref="classContributor.PARTY_ID" minOccurs="1"/>
         <xs:element ref="classContributor.ROLE_ID" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--COMMCLASS_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2004,6 +2004,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="commClass.COMMCLASS_ID" minOccurs="0"/>
+        <!--OBSERVATION_ID is inverted rel-->
         <xs:element ref="commClass.classStartDate" minOccurs="0"/>
         <xs:element ref="commClass.classStopDate" minOccurs="0"/>
         <xs:element ref="commClass.inspection" minOccurs="0"/>
@@ -2015,7 +2016,6 @@
         <xs:element ref="classContributor" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="commInterpretation" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--OBSERVATION_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2112,6 +2112,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="commInterpretation.COMMINTERPRETATION_ID" minOccurs="0"/>
+        <!--COMMCLASS_ID is inverted rel-->
         <xs:element ref="commInterpretation.COMMCONCEPT_ID" minOccurs="0"/>
         <xs:element ref="commInterpretation.classFit" minOccurs="0"/>
         <xs:element ref="commInterpretation.classConfidence" minOccurs="0"/>
@@ -2120,7 +2121,6 @@
         <xs:element ref="commInterpretation.type" minOccurs="0"/>
         <xs:element ref="commInterpretation.nomenclaturalType" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--COMMCLASS_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2206,13 +2206,13 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="coverIndex.COVERINDEX_ID" minOccurs="0"/>
-        <xs:element ref="coverIndex.coverCode"/>
+        <!--COVERMETHOD_ID is inverted rel-->
+        <xs:element ref="coverIndex.coverCode" minOccurs="1"/>
         <xs:element ref="coverIndex.upperLimit" minOccurs="0"/>
         <xs:element ref="coverIndex.lowerLimit" minOccurs="0"/>
-        <xs:element ref="coverIndex.coverPercent"/>
+        <xs:element ref="coverIndex.coverPercent" minOccurs="1"/>
         <xs:element ref="coverIndex.indexDescription" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--COVERMETHOD_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2281,7 +2281,7 @@
       <xs:sequence>
         <xs:element ref="coverMethod.COVERMETHOD_ID" minOccurs="0"/>
         <xs:element ref="coverMethod.reference_ID" minOccurs="0"/>
-        <xs:element ref="coverMethod.coverType"/>
+        <xs:element ref="coverMethod.coverType" minOccurs="1"/>
         <xs:element ref="coverIndex" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -2320,10 +2320,10 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="definedValue.DEFINEDVALUE_ID" minOccurs="0"/>
-        <xs:element ref="definedValue.value"/>
-        <xs:element ref="definedValue.tableRecord_ID"/>
-        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
         <!--USERDEFINED_ID is inverted rel-->
+        <xs:element ref="definedValue.value" minOccurs="1"/>
+        <xs:element ref="definedValue.tableRecord_ID" minOccurs="1"/>
+        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2361,13 +2361,13 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="disturbanceObs.disturbanceObs_ID" minOccurs="0"/>
-        <xs:element ref="disturbanceObs.disturbanceType"/>
+        <!--OBSERVATION_ID is inverted rel-->
+        <xs:element ref="disturbanceObs.disturbanceType" minOccurs="1"/>
         <xs:element ref="disturbanceObs.disturbanceIntensity" minOccurs="0"/>
         <xs:element ref="disturbanceObs.disturbanceAge" minOccurs="0"/>
         <xs:element ref="disturbanceObs.disturbanceExtent" minOccurs="0"/>
         <xs:element ref="disturbanceObs.disturbanceComment" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--OBSERVATION_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2435,6 +2435,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="graphic.GRAPHIC_ID" minOccurs="0"/>
+        <!--OBSERVATION_ID is inverted rel-->
         <xs:element ref="graphic.graphicName" minOccurs="0"/>
         <xs:element ref="graphic.graphicLocation" minOccurs="0"/>
         <xs:element ref="graphic.graphicDescription" minOccurs="0"/>
@@ -2442,7 +2443,6 @@
         <xs:element ref="graphic.graphicDate" minOccurs="0"/>
         <xs:element ref="graphic.graphicData" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--OBSERVATION_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2521,7 +2521,7 @@
       <xs:sequence>
         <xs:element ref="namedPlace.NAMEDPLACE_ID" minOccurs="0"/>
         <xs:element ref="namedPlace.placeSystem" minOccurs="0"/>
-        <xs:element ref="namedPlace.placeName"/>
+        <xs:element ref="namedPlace.placeName" minOccurs="1"/>
         <xs:element ref="namedPlace.placeDescription" minOccurs="0"/>
         <xs:element ref="namedPlace.placeCode" minOccurs="0"/>
         <xs:element ref="namedPlace.owner" minOccurs="0"/>
@@ -2603,13 +2603,13 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="note.NOTE_ID" minOccurs="0"/>
-        <xs:element ref="note.PARTY_ID"/>
-        <xs:element ref="note.ROLE_ID"/>
-        <xs:element ref="note.noteDate" minOccurs="0"/>
-        <xs:element ref="note.noteType"/>
-        <xs:element ref="note.noteText"/>
-        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
         <!--NOTELINK_ID is inverted rel-->
+        <xs:element ref="note.PARTY_ID" minOccurs="1"/>
+        <xs:element ref="note.ROLE_ID" minOccurs="1"/>
+        <xs:element ref="note.noteDate" minOccurs="0"/>
+        <xs:element ref="note.noteType" minOccurs="1"/>
+        <xs:element ref="note.noteText" minOccurs="1"/>
+        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2675,9 +2675,9 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="noteLink.NOTELINK_ID" minOccurs="0"/>
-        <xs:element ref="noteLink.tableName"/>
-        <xs:element ref="noteLink.attributeName"/>
-        <xs:element ref="noteLink.tableRecord"/>
+        <xs:element ref="noteLink.tableName" minOccurs="1"/>
+        <xs:element ref="noteLink.attributeName" minOccurs="1"/>
+        <xs:element ref="noteLink.tableRecord" minOccurs="1"/>
         <xs:element ref="note" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -2728,6 +2728,7 @@
       <xs:sequence>
         <xs:element ref="observation.OBSERVATION_ID" minOccurs="0"/>
         <xs:element ref="observation.PREVIOUSOBS_ID" minOccurs="0"/>
+        <!--PLOT_ID is inverted rel-->
         <xs:element ref="observation.PROJECT_ID" minOccurs="0"/>
         <xs:element ref="observation.authorObsCode" minOccurs="0"/>
         <xs:element ref="observation.obsStartDate" minOccurs="0"/>
@@ -2803,7 +2804,6 @@
         <xs:element ref="stratum" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="taxonObservation" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--PLOT_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -3486,11 +3486,11 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="observationContributor.OBSERVATIONCONTRIBUTOR_ID" minOccurs="0"/>
-        <xs:element ref="observationContributor.PARTY_ID"/>
-        <xs:element ref="observationContributor.ROLE_ID"/>
+        <!--OBSERVATION_ID is inverted rel-->
+        <xs:element ref="observationContributor.PARTY_ID" minOccurs="1"/>
+        <xs:element ref="observationContributor.ROLE_ID" minOccurs="1"/>
         <xs:element ref="observationContributor.contributionDate" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--OBSERVATION_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -3536,14 +3536,14 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="observationSynonym.OBSERVATIONSYNONYM_ID" minOccurs="0"/>
-        <xs:element ref="observationSynonym.synonymObservation_ID"/>
-        <xs:element ref="observationSynonym.PARTY_ID"/>
-        <xs:element ref="observationSynonym.ROLE_ID"/>
-        <xs:element ref="observationSynonym.classStartDate"/>
+        <xs:element ref="observationSynonym.synonymObservation_ID" minOccurs="1"/>
+        <!--primaryObservation_ID is inverted rel-->
+        <xs:element ref="observationSynonym.PARTY_ID" minOccurs="1"/>
+        <xs:element ref="observationSynonym.ROLE_ID" minOccurs="1"/>
+        <xs:element ref="observationSynonym.classStartDate" minOccurs="1"/>
         <xs:element ref="observationSynonym.classStopDate" minOccurs="0"/>
         <xs:element ref="observationSynonym.SynonymComment" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--primaryObservation_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -3735,10 +3735,10 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="place.PLACE_ID" minOccurs="0"/>
-        <xs:element ref="place.Calculated" minOccurs="0"/>
-        <xs:element ref="place.NAMEDPLACE_ID"/>
-        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
         <!--PLOT_ID is inverted rel-->
+        <xs:element ref="place.Calculated" minOccurs="0"/>
+        <xs:element ref="place.NAMEDPLACE_ID" minOccurs="1"/>
+        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -3775,12 +3775,13 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="plot.PLOT_ID" minOccurs="0"/>
-        <xs:element ref="plot.authorPlotCode"/>
+        <xs:element ref="plot.authorPlotCode" minOccurs="1"/>
         <xs:element ref="plot.reference_ID" minOccurs="0"/>
+        <!--PARENT_ID is inverted rel-->
         <xs:element ref="plot.realLatitude" minOccurs="0"/>
         <xs:element ref="plot.realLongitude" minOccurs="0"/>
         <xs:element ref="plot.locationAccuracy" minOccurs="0"/>
-        <xs:element ref="plot.confidentialityStatus"/>
+        <xs:element ref="plot.confidentialityStatus" minOccurs="1"/>
         <xs:element ref="plot.confidentialityReason" minOccurs="0"/>
         <xs:element ref="plot.Latitude" minOccurs="0"/>
         <xs:element ref="plot.Longitude" minOccurs="0"/>
@@ -3824,7 +3825,6 @@
           </xs:complexType>
         </xs:element>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--PARENT_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -4231,7 +4231,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="project.PROJECT_ID" minOccurs="0"/>
-        <xs:element ref="project.projectName"/>
+        <xs:element ref="project.projectName" minOccurs="1"/>
         <xs:element ref="project.projectDescription" minOccurs="0"/>
         <xs:element ref="project.startDate" minOccurs="0"/>
         <xs:element ref="project.stopDate" minOccurs="0"/>
@@ -4294,10 +4294,10 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="projectContributor.PROJECTCONTRIBUTOR_ID" minOccurs="0"/>
-        <xs:element ref="projectContributor.PARTY_ID"/>
+        <!--PROJECT_ID is inverted rel-->
+        <xs:element ref="projectContributor.PARTY_ID" minOccurs="1"/>
         <xs:element ref="projectContributor.ROLE_ID" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--PROJECT_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -4333,12 +4333,12 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="revision.REVISION_ID" minOccurs="0"/>
-        <xs:element ref="revision.tableName"/>
-        <xs:element ref="revision.tableAttribute"/>
-        <xs:element ref="revision.tableRecord"/>
-        <xs:element ref="revision.revisionDate"/>
-        <xs:element ref="revision.previousValueText"/>
-        <xs:element ref="revision.previousValueType"/>
+        <xs:element ref="revision.tableName" minOccurs="1"/>
+        <xs:element ref="revision.tableAttribute" minOccurs="1"/>
+        <xs:element ref="revision.tableRecord" minOccurs="1"/>
+        <xs:element ref="revision.revisionDate" minOccurs="1"/>
+        <xs:element ref="revision.previousValueText" minOccurs="1"/>
+        <xs:element ref="revision.previousValueType" minOccurs="1"/>
         <xs:element ref="revision.previousRevision_ID" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -4427,7 +4427,8 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="soilObs.SOILOBS_ID" minOccurs="0"/>
-        <xs:element ref="soilObs.soilHorizon"/>
+        <!--OBSERVATION_ID is inverted rel-->
+        <xs:element ref="soilObs.soilHorizon" minOccurs="1"/>
         <xs:element ref="soilObs.soilDepthTop" minOccurs="0"/>
         <xs:element ref="soilObs.soilDepthBottom" minOccurs="0"/>
         <xs:element ref="soilObs.soilColor" minOccurs="0"/>
@@ -4442,7 +4443,6 @@
         <xs:element ref="soilObs.baseSaturation" minOccurs="0"/>
         <xs:element ref="soilObs.soilDescription" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--OBSERVATION_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -4672,15 +4672,15 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="stemCount.STEMCOUNT_ID" minOccurs="0"/>
+        <!--TAXONOBSERVATION_ID is inverted rel-->
         <xs:element ref="stemCount.stemDiameter" minOccurs="0"/>
         <xs:element ref="stemCount.stemDiameterAccuracy" minOccurs="0"/>
         <xs:element ref="stemCount.stemHeight" minOccurs="0"/>
         <xs:element ref="stemCount.stemHeightAccuracy" minOccurs="0"/>
-        <xs:element ref="stemCount.stemCount"/>
+        <xs:element ref="stemCount.stemCount" minOccurs="1"/>
         <xs:element ref="stemCount.stemTaxonArea" minOccurs="0"/>
         <xs:element ref="stemLocation" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--TAXONOBSERVATION_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -4758,13 +4758,13 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="stemLocation.STEMLOCATION_ID" minOccurs="0"/>
+        <!--STEMCOUNT_ID is inverted rel-->
         <xs:element ref="stemLocation.stemCode" minOccurs="0"/>
         <xs:element ref="stemLocation.stemXPosition" minOccurs="0"/>
         <xs:element ref="stemLocation.stemYPosition" minOccurs="0"/>
         <xs:element ref="stemLocation.stemHealth" minOccurs="0"/>
         <xs:element ref="taxonInterpretation" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--STEMCOUNT_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -4822,12 +4822,12 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="stratum.STRATUM_ID" minOccurs="0"/>
-        <xs:element ref="stratum.STRATUMTYPE_ID"/>
+        <!--OBSERVATION_ID is inverted rel-->
+        <xs:element ref="stratum.STRATUMTYPE_ID" minOccurs="1"/>
         <xs:element ref="stratum.stratumHeight" minOccurs="0"/>
         <xs:element ref="stratum.stratumBase" minOccurs="0"/>
         <xs:element ref="stratum.stratumCover" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--OBSERVATION_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -4884,10 +4884,10 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="stratumComposition.STRATUMCOMPOSITION_ID" minOccurs="0"/>
-        <xs:element ref="stratumComposition.STRATUM_ID"/>
-        <xs:element ref="stratumComposition.taxonStratumCover"/>
-        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
         <!--TAXONOBSERVATION_ID is inverted rel-->
+        <xs:element ref="stratumComposition.STRATUM_ID" minOccurs="1"/>
+        <xs:element ref="stratumComposition.taxonStratumCover" minOccurs="1"/>
+        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -4925,7 +4925,7 @@
       <xs:sequence>
         <xs:element ref="stratumMethod.STRATUMMETHOD_ID" minOccurs="0"/>
         <xs:element ref="stratumMethod.reference_ID" minOccurs="0"/>
-        <xs:element ref="stratumMethod.stratumMethodName"/>
+        <xs:element ref="stratumMethod.stratumMethodName" minOccurs="1"/>
         <xs:element ref="stratumMethod.stratumMethodDescription" minOccurs="0"/>
         <xs:element ref="stratumType" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
@@ -4975,11 +4975,11 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="stratumType.STRATUMTYPE_ID" minOccurs="0"/>
+        <!--STRATUMMETHOD_ID is inverted rel-->
         <xs:element ref="stratumType.stratumIndex" minOccurs="0"/>
         <xs:element ref="stratumType.stratumName" minOccurs="0"/>
         <xs:element ref="stratumType.stratumDescription" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--STRATUMMETHOD_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -5027,15 +5027,17 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="taxonInterpretation.TAXONINTERPRETATION_ID" minOccurs="0"/>
-        <xs:element ref="taxonInterpretation.PLANTCONCEPT_ID"/>
-        <xs:element ref="taxonInterpretation.interpretationDate"/>
+        <!--TAXONOBSERVATION_ID is inverted rel-->
+        <!--stemLocation_ID is inverted rel-->
+        <xs:element ref="taxonInterpretation.PLANTCONCEPT_ID" minOccurs="1"/>
+        <xs:element ref="taxonInterpretation.interpretationDate" minOccurs="1"/>
         <xs:element ref="taxonInterpretation.PLANTNAME_ID" minOccurs="0"/>
-        <xs:element ref="taxonInterpretation.PARTY_ID"/>
-        <xs:element ref="taxonInterpretation.ROLE_ID"/>
+        <xs:element ref="taxonInterpretation.PARTY_ID" minOccurs="1"/>
+        <xs:element ref="taxonInterpretation.ROLE_ID" minOccurs="1"/>
         <xs:element ref="taxonInterpretation.interpretationType" minOccurs="0"/>
         <xs:element ref="taxonInterpretation.reference_ID" minOccurs="0"/>
-        <xs:element ref="taxonInterpretation.originalInterpretation"/>
-        <xs:element ref="taxonInterpretation.currentInterpretation"/>
+        <xs:element ref="taxonInterpretation.originalInterpretation" minOccurs="1"/>
+        <xs:element ref="taxonInterpretation.currentInterpretation" minOccurs="1"/>
         <xs:element ref="taxonInterpretation.taxonFit" minOccurs="0"/>
         <xs:element ref="taxonInterpretation.taxonConfidence" minOccurs="0"/>
         <xs:element ref="taxonInterpretation.collector_ID" minOccurs="0"/>
@@ -5048,16 +5050,8 @@
         <xs:element ref="taxonInterpretation.notesPublic" minOccurs="0"/>
         <xs:element ref="taxonInterpretation.notesMgt" minOccurs="0"/>
         <xs:element ref="taxonInterpretation.revisions" minOccurs="0"/>
-        <xs:element name="taxonGroup" minOccurs="0" maxOccurs="unbounded">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element ref="taxonAlt" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
+        <xs:element ref="taxonAlt" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--TAXONOBSERVATION_ID is inverted rel-->
-        <!--stemLocation_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -5278,6 +5272,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="taxonObservation.TAXONOBSERVATION_ID" minOccurs="0"/>
+        <!--OBSERVATION_ID is inverted rel-->
         <xs:element ref="taxonObservation.authorPlantName" minOccurs="0"/>
         <xs:element ref="taxonObservation.reference_ID" minOccurs="0"/>
         <xs:element ref="taxonObservation.taxonCollection" minOccurs="0"/>
@@ -5288,7 +5283,6 @@
         <xs:element ref="stratumComposition" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="taxonInterpretation" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--OBSERVATION_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -5365,12 +5359,12 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="taxonAlt.taxonAlt_ID" minOccurs="0"/>
-        <xs:element ref="taxonAlt.plantConcept_ID"/>
+        <!--taxonInterpretation_ID is inverted rel-->
+        <xs:element ref="taxonAlt.plantConcept_ID" minOccurs="1"/>
         <xs:element ref="taxonAlt.taxonAltFit" minOccurs="0"/>
         <xs:element ref="taxonAlt.taxonAltConfidence" minOccurs="0"/>
         <xs:element ref="taxonAlt.taxonAltNotes" minOccurs="0"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
-        <!--taxonInterpretation_ID is inverted rel-->
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -5427,10 +5421,10 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="telephone.TELEPHONE_ID" minOccurs="0"/>
-        <xs:element ref="telephone.phoneNumber"/>
-        <xs:element ref="telephone.phoneType"/>
-        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
         <!--PARTY_ID is inverted rel-->
+        <xs:element ref="telephone.phoneNumber" minOccurs="1"/>
+        <xs:element ref="telephone.phoneType" minOccurs="1"/>
+        <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -5471,8 +5465,8 @@
         <xs:element ref="userDefined.userDefinedName" minOccurs="0"/>
         <xs:element ref="userDefined.userDefinedMetadata" minOccurs="0"/>
         <xs:element ref="userDefined.userDefinedCategory" minOccurs="0"/>
-        <xs:element ref="userDefined.userDefinedType"/>
-        <xs:element ref="userDefined.tableName"/>
+        <xs:element ref="userDefined.userDefinedType" minOccurs="1"/>
+        <xs:element ref="userDefined.tableName" minOccurs="1"/>
         <xs:element ref="definedValue" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="userDefined" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
