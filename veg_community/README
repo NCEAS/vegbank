@@ -24,3 +24,13 @@ Subtargets:
 
  init
 
+
+TO LOAD ECOART DATA:
+-------------------
+
+1] set up an ODBC source with the name 'ecoart' to point to the main ECOART mdb
+database
+
+2] cd to the veg_community/bin directory and run the load-ecoart.bat script
+
+
