@@ -3,7 +3,7 @@
 
 <?xml-stylesheet type="text/xsl" href="dbmodel_2AccessZTbl.xsl"?>
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
-<?xml-stylesheet type="text/xsl" href="dbmodel-to-schema.xsl"?>
+<?xml-stylesheet type="text/xsl" href="dbmodel-to-csv.xsl"?>
 -->
 
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
@@ -2155,8 +2155,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Address line for the location
-(Street name, box number, suite).</attDefinition>
+      <attDefinition>Address line for the location (Street name, box number, suite).</attDefinition>
       <attForms>
         <formShow name="Austere">255</formShow>
         <formShow name="Summary">256</formShow>
@@ -4462,7 +4461,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
-      <attRelType type="n/a" name="n/a"/>
+      <attRelType type="alltables" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -4481,7 +4480,7 @@ change through time.</entitySummary>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attRelType type="inverted" name="n/a"/>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>userDefined.USERDEFINED_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -5492,7 +5491,7 @@ conditions may change between resampling events.
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
-      <attRelType type="n/a" name="n/a"/>
+      <attRelType type="root" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8587,7 +8586,7 @@ conditions may change between resampling events.
     <entityLabel>Party Member</entityLabel>
     <entitySummary>Allows parties to contain other parties within them, so that the children parties can have permissions of the parent parties.</entitySummary>
     <entityDescription/>
-    <module>user</module>
+    <module>plot</module>
     <attribute>
       <attName>partyMember_ID</attName>
       <attLabel>Party Member ID</attLabel>
@@ -8776,7 +8775,7 @@ conditions may change between resampling events.
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
-      <attRelType type="root" name="n/a"/>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -14467,7 +14466,7 @@ conditions may change between resampling events.
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
-      <attRelType type="alltables" name="n/a"/>
+      <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
