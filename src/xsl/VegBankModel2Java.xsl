@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-11-13 22:35:17 $'
- *  '$Revision: 1.14 $'
+ *  '$Date: 2003-11-17 19:10:24 $'
+ *  '$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,19 +71,19 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 /**
- * <p><xsl:value-of select="entitySummary"/></p>
- * This is an object that represents a entity of the vegbank datamodel.<br/>
+ * &lt;p&gt;<xsl:value-of select="entitySummary"/>&lt;/p&gt;
+ * This is an &lt;code&gt;VBModelBean&lt;/code&gt; that represents a entity of the vegbank datamodel.&lt;br/&gt;
  * Useful as a data transfer object in the vegbank system, also can be be 
- * unmarshaled into XML for use outside the system. <br/>
+ * unmarshaled into XML for use outside the system. &lt;br/&gt;
  *
- * <p><xsl:value-of select="entityDescription"/></p>
+ * &lt;p&gt;<xsl:value-of select="entityDescription"/>&lt;/p&gt;
  *
  */
 public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean implements Serializable
 {
 
    <xsl:variable name="primativeAttribs" select="attribute[attRelType/@type = 'n/a' or attKey='PK']"/>
-   <xsl:variable name="FKAttribs" select="attribute[attRelType/@type = 'normal' or attRelType/@type='inverted']"/>
+   <xsl:variable name="FKAttribs" select="attribute[attKey='FK' and attRelType/@type = 'normal' or attRelType/@type='inverted']"/>
 
     <!-- Delclare constants for the Bean -->
   // Declare all the public CONSTANSTS	
@@ -399,7 +399,7 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
 	
  <xsl:template match="attribute" mode="declareConstants">
    <xsl:variable name="constantName">
-     <xsl:call-template name="to-upper">
+     <xsl:call-template name="getConstantName">
        <xsl:with-param name="text">
          <xsl:value-of select="attName"/>
        </xsl:with-param>
@@ -444,7 +444,7 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
      <xsl:with-param name="attDefinition" select="$attDefinition"/>
    </xsl:call-template>
 
-   <!-- Has a closed list of values generate a get${variable}PickList method-->
+   <!-- Has a closed list of values generate some convience methods -->
    <xsl:if test="attListType='closed'">
   private static Collection <xsl:value-of select="$uncappedVariableName"/>PickList;
 
@@ -453,12 +453,12 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
     
     <xsl:for-each select="attList/attListItem">
       <xsl:sort select="attListSortOrd" data-type="number"/>
-    <xsl:value-of select="$uncappedVariableName"/>PickList.add("<xsl:value-of select="attListValue"/>");
+      <xsl:value-of select="$uncappedVariableName"/>PickList.add("<xsl:value-of select="attListValue"/>");
     </xsl:for-each>
   }
   
   /**
-   * Get all the values in this closed picklist.
+   * Get all the values in this closed picklist for <xsl:value-of select="attName"/>.
    *
    * @return Collection -- All the values of this closed Picklist
    */ 
@@ -466,7 +466,23 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
   {
     return <xsl:value-of select="$uncappedVariableName"/>PickList;
   }
-   </xsl:if>
+
+  // Constants for each legal picklist value
+    <xsl:for-each select="attList/attListItem">
+      <xsl:sort select="attListSortOrd" data-type="number"/>
+      <xsl:variable name="constantName">
+        <xsl:call-template name="getConstantName">
+          <xsl:with-param name="text" select="concat($cappedVariableName,'_',attListValue)"/>
+        </xsl:call-template>
+      </xsl:variable>
+  /**
+   * Legit <xsl:value-of select="$cappedVariableName"/> value: "<xsl:value-of select="attListValue"/>"&lt;br/&gt;
+   * <xsl:value-of select="attListValueDesc"/>  
+   */
+  public static final String <xsl:value-of select="$constantName"/> = "<xsl:value-of select="attListValue"/>"; 
+    </xsl:for-each>
+   
+  </xsl:if>
 
  </xsl:template>
 
@@ -616,6 +632,24 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
   </xsl:call-template>
  </xsl:template>
 
+  <!--
+   # Basically convert to upper case, replace ' ' with '_' and no longer than 62 chars
+  -->
+  <xsl:template name="getConstantName">
+    <xsl:param name="text"/>
+    
+    <xsl:variable name="upperTruncatedText">
+      <xsl:call-template name="to-upper">
+        <xsl:with-param name="text" select="substring($text,1,62)"/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <!-- Replace problem chars with '_', this is genrating a java constant name 
+         so its pretty sensitive to characters, a better way to come up with a
+         meaningful and unique name must exist -->
+    <xsl:value-of select="translate($upperTruncatedText, ' -|/,:()', '________')"/>
+  </xsl:template>
+
   <xsl:template name="to-upper">
     <xsl:param name="text"/>
     <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
@@ -640,7 +674,7 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
    <xsl:param name="attDefinition"/>
 
   /**
-   * Set the value for <xsl:value-of select="$uncappedVariableName"/>.<br/>
+   * Set the value for <xsl:value-of select="$uncappedVariableName"/>.&lt;br/&gt;
    * <xsl:value-of select="$attDefinition"/>.
    */
    public void set<xsl:value-of select="$cappedVariableName"/>( <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> <xsl:value-of select="$uncappedVariableName"/>)
@@ -649,7 +683,7 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
   }
 
   /**
-   * Get the value for <xsl:value-of select="$uncappedVariableName"/>.<br/>
+   * Get the value for <xsl:value-of select="$uncappedVariableName"/>.&lt;br/&gt;
    * <xsl:value-of select="$attDefinition"/>.
    */
   public <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> get<xsl:value-of select="$cappedVariableName"/>()
