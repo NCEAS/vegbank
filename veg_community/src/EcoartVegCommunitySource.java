@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-22 03:07:50 $'
- * '$Revision: 1.7 $'
+ *     '$Date: 2002-02-25 21:50:55 $'
+ * '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -139,6 +139,41 @@ import java.sql.*;
 		 }
 		 return(commName);
 	 }
+	 
+	  /**
+	 * public method that retuns the create date for a community
+		*
+		* @param communityCode -- the alliance code
+		* @return allianceNameTrans -- the common name
+		*/
+		public String getAllianceNameTrans(String code)
+		{
+			String allianceNameTrans = null;
+		 try
+		 {
+			// Create a Statement so we can submit SQL statements to the driver
+			Statement stmt = con.createStatement();
+			String query = null;
+			query = "select ([alliancenametrans]) from alliance where ([alliancekey]) like '"+code+"'";
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) 
+			{
+				//trim out the faulty characters
+				String s =  rs.getString(1);
+				allianceNameTrans =s.replace('\'', ' ');
+			}
+			rs.close();
+			stmt.close();
+		 }
+		 catch (Exception e)
+		 {
+			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(allianceNameTrans);
+		}
+		
+		
 	 
 	 /**
 	  * public method to allow access to the alliance name trans which can
