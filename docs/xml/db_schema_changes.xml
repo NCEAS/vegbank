@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!-- This stylesheet is a rough beginning and not checked into cvs initially: -->
-<!--<?xml-stylesheet type="text/xsl" href="changedoc_2XMLtoMerge.xsl"?>-->
-<?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
+<?xml-stylesheet type="text/xsl" href="changedoc_2ALTER.xsl"?>
+<!--<?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>-->
 <!-- <?xml-stylesheet type="text/xsl" href="dbmodel_2csv_5flds_version.xsl"?> -->
-<!-- <?xml-stylesheet type="text/xsl" href="changedoc_2dbdoc.xsl"?> -->
+<!-- <?xml-stylesheet type="text/xsl" href="changedoc_2ALTER.xsl"?> -->
 <modelChangeDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_schema_changes_schema.xsd">
   <modelChange>
     <modelChangeID>1</modelChangeID>
@@ -5985,7 +5985,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
   <modelChange>
     <modelChangeID>33</modelChangeID>
     <modelChangeName>standardize accessioncode field name</modelChangeName>
-    <modelChangeStatus>false</modelChangeStatus>
+    <modelChangeStatus>true</modelChangeStatus>
     <modelChangeVersion>1.0.2</modelChangeVersion>
     <modelChangeComments>add accessionCode to some tables that may need it later, also change obs and plot for this.</modelChangeComments>
     <change type="create field">
@@ -6299,6 +6299,287 @@ conditions may change between resampling events.
             <formDetail>637</formDetail>
           </attForms>
           <update>1.0.0</update>
+        </attribute>
+      </entity>
+    </change>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>34</modelChangeID>
+    <modelChangeName>avoid use of SQL reserved words</modelChangeName>
+    <modelChangeStatus>true</modelChangeStatus>
+    <modelChangeVersion>1.0.2</modelChangeVersion>
+    <modelChangeComments>plot.state, projContrib.role, definedValue.value all get renamed</modelChangeComments>
+    <change type="create field">
+      <entity>
+        <entityName>projectContributor</entityName>
+        <entityLabel>Project Contributor</entityLabel>
+        <entitySummary>This table stores information about a party contributing to a project.</entitySummary>
+        <entityDescription>This table serves as an intersection entity used to 'link' a party with a specific project wherein vegetation plots are described.</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>cheatRole</attName>
+          <attLabel>Role</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (50)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes/>
+          <attDefinition/>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>1065</formAustere>
+            <formSummary>1066</formSummary>
+            <formDetail>1067</formDetail>
+          </attForms>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>plot</entityName>
+        <entityLabel>Plot</entityLabel>
+        <entitySummary>This table stores general, constant information about the a given plot</entitySummary>
+        <entityDescription>plot contains Plot location, dimension, and similarly constant site data, plus metadata that need be stored only once.   Transient observational information (procured during the first or subsequent observation events) are stored separately in observation or its children.</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>stateProvince</attName>
+          <attLabel>State or Province</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (55)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>State or Province where the plot is located.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>1019</formAustere>
+            <formSummary>1020</formSummary>
+            <formDetail>1021</formDetail>
+          </attForms>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>definedValue</entityName>
+        <entityLabel>Defined Value</entityLabel>
+        <entitySummary>This table stores the values of user-defined variables.</entitySummary>
+        <entityDescription>This table stores values associated with specific user-defined variables identified in the userDefined table.</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>definedValue</attName>
+          <attLabel>Defined Value</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>no</attNulls>
+          <attType>varchar (255)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>The value of the user-defined variable.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>533</formAustere>
+            <formSummary>534</formSummary>
+            <formDetail>535</formDetail>
+          </attForms>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+    </change>
+    <change type="drop field">
+      <entity>
+        <entityName>projectContributor</entityName>
+        <entityLabel>Project Contributor</entityLabel>
+        <entitySummary>This table stores information about a party contributing to a project.</entitySummary>
+        <entityDescription>This table serves as an intersection entity used to 'link' a party with a specific project wherein vegetation plots are described.</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>role</attName>
+          <attLabel>Role</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (50)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes/>
+          <attDefinition/>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>1065</formAustere>
+            <formSummary>1066</formSummary>
+            <formDetail>1067</formDetail>
+          </attForms>
+          <update>1.0.0</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>plot</entityName>
+        <entityLabel>Plot</entityLabel>
+        <entitySummary>This table stores general, constant information about the a given plot</entitySummary>
+        <entityDescription>plot contains Plot location, dimension, and similarly constant site data, plus metadata that need be stored only once.   Transient observational information (procured during the first or subsequent observation events) are stored separately in observation or its children.</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>state</attName>
+          <attLabel>State</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (55)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>State or Province where the plot is located.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>1019</formAustere>
+            <formSummary>1020</formSummary>
+            <formDetail>1021</formDetail>
+          </attForms>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>definedValue</entityName>
+        <entityLabel>Defined Value</entityLabel>
+        <entitySummary>This table stores the values of user-defined variables.</entitySummary>
+        <entityDescription>This table stores values associated with specific user-defined variables identified in the userDefined table.</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>value</attName>
+          <attLabel>Defined Value</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>no</attNulls>
+          <attType>varchar (255)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>The value of the user-defined variable.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>533</formAustere>
+            <formSummary>534</formSummary>
+            <formDetail>535</formDetail>
+          </attForms>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+    </change>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>35</modelChangeID>
+    <modelChangeName>Do not require attribute for notes- can apply to whole record.</modelChangeName>
+    <modelChangeStatus>true</modelChangeStatus>
+    <modelChangeVersion>1.0.2</modelChangeVersion>
+    <modelChangeComments>notelink.attribute = nulls ok.</modelChangeComments>
+    <change type="alter field">
+      <entity>
+        <entityName>noteLink</entityName>
+        <entityLabel>Note Link</entityLabel>
+        <entitySummary>This table links a note made by a database user or manager to a specific table, record and attribute in the database.</entitySummary>
+        <entityDescription>This table was developed with the goal of keeping all the notes associated with the plots in a single table rather than distributed in many tables across  the database.</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>attributeName</attName>
+          <attLabel>Attribute Name</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (50)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Name of the attribute in the table (stored in tableName) that the note is associated with.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>621</formAustere>
+            <formSummary>622</formSummary>
+            <formDetail>623</formDetail>
+          </attForms>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+    </change>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>36</modelChangeID>
+    <modelChangeName>Implementation field to link Staus and usage</modelChangeName>
+    <modelChangeStatus>false</modelChangeStatus>
+    <modelChangeVersion>1.0.2</modelChangeVersion>
+    <modelChangeComments>optional FK's in Usage to Status.</modelChangeComments>
+    <change type="create field">
+      <entity>
+        <entityName>commUsage</entityName>
+        <entityLabel>Community Usage</entityLabel>
+        <entitySummary>This table links a community name with a concept.</entitySummary>
+        <entityDescription/>
+        <module>community</module>
+        <attribute>
+          <attName>COMMSTATUS_ID</attName>
+          <attLabel>Comm Status</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>Integer</attType>
+          <attKey>FK</attKey>
+          <attRelType type="normal" name="n/a"/>
+          <attReferences>commStatus.COMMSTATUS_ID</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Comm Status which applies to this commUsage.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>-1</formAustere>
+            <formSummary>108</formSummary>
+            <formDetail>109</formDetail>
+          </attForms>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>plantUsage</entityName>
+        <entityLabel>Plant Usage</entityLabel>
+        <entitySummary> </entitySummary>
+        <entityDescription/>
+        <module>plant</module>
+        <attribute>
+          <attName>PLANTSTATUS_ID</attName>
+          <attLabel>Plant Status</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>Integer</attType>
+          <attKey>FK</attKey>
+          <attRelType type="normal" name="n/a"/>
+          <attReferences>plantStatus.PLANTSTATUS_ID</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Plant Status which applies to this plantUsage.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>-1</formAustere>
+            <formSummary>108</formSummary>
+            <formDetail>109</formDetail>
+          </attForms>
+          <update>1.0.2</update>
         </attribute>
       </entity>
     </change>
