@@ -15,23 +15,22 @@
   font-family: verdana, arial, sans-serif  ;
   font-size:smaller
   }
+  tr.greenbkgrd {
+  font-color : #FFFF80 ; background-color: #336633
+  }
   h2
   {
   font-family:georgia, Times New Roman,  times, serif 
   }
-  a.quiet  
-  {
-    text-decoration: underline ; 
-    color: #000000
-  }
+
 </style>
-      <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
-      <title>VegBank Data Dictionary - table view</title>
+    <link rel="stylesheet" href="@stylesheet@" type="text/css"/> 
+       <title>VegBank Data Dictionary - table view</title>
     </head>
     <body>
     @vegbank_header_html_normal@
       <h2>
-        <a class="blk" href="{$htmlPrefix}-index.html">VegBank data dictionary</a>
+        <a  href="{$htmlPrefix}-index.html">VegBank data dictionary</a>
       </h2>
       <xsl:for-each select="entity">
         <xsl:if test="entityName=$CurrentTable">
@@ -45,46 +44,46 @@
           </p>
           <xsl:if test="string-length($CurrentField)&gt;0"><p>The field:<xsl:value-of select="$CurrentField" /> is highlighted below.  Click <a href="#this_field">here</a> to jump there.</p></xsl:if>
           <table border="1" cellpadding="0" cellspacing="0" width="100%">
-            <tr>
+            <tr class="greenbkgrd">
               <td>
                 <b>
-                  <a class="blk" href="dd-guide.html#field-name">field name</a>
+                  <a class="brightyellow" href="dd-guide.html#field-name">field name</a>
                 </b>
               </td>
               <td>
                 <b>
-                  <a class="blk" href="dd-guide.html#nulls">nulls</a>
+                  <a  class="brightyellow" href="dd-guide.html#nulls">nulls</a>
                 </b>
               </td>
               <td>
                 <b>
-                  <a class="blk" href="dd-guide.html#type">type</a>
+                  <a  class="brightyellow"  href="dd-guide.html#type">type</a>
                 </b>
               </td>
               <td>
                 <b>
-                  <a class="blk" href="dd-guide.html#key">key</a>
+                  <a  class="brightyellow" href="dd-guide.html#key">key</a>
                 </b>
               </td>
               <td>
                 <b>
-                  <a class="blk" href="dd-guide.html#references">references</a>
+                  <a  class="brightyellow" href="dd-guide.html#references">references</a>
                 </b>
               </td>
               <td>
                 <b>
-                  <a class="blk" href="dd-guide.html#list">list</a>
+                  <a class="brightyellow" href="dd-guide.html#list">list</a>
                 </b>
               </td>
               <!-- <td><b><font size="+1">List Values</font></b></td> -->
               <td>
                 <b>
-                  <a class="blk" href="dd-guide.html#field-notes">field notes</a>
+                  <a  class="brightyellow" href="dd-guide.html#field-notes">field notes</a>
                 </b>
               </td>
               <td>
                 <b>
-                  <a class="blk" href="dd-guide.html#field-definition">field definition</a>
+                  <a  class="brightyellow" href="dd-guide.html#field-definition">field definition</a>
                 </b>
               </td>
             </tr>
