@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-05-21 18:17:40 $'
-  *     '$Revision: 1.23 $'
+  *     '$Date: 2003-07-11 23:14:04 $'
+  *     '$Revision: 1.24 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -139,9 +139,6 @@
 
     <!-- FIXME: temporary hack to move code up into single tree -->
     <copy todir="${build.java.src.dir}">
-      <fileset dir="./exp/database_access/src" casesensitive="yes">
-        <include name="**/*.java"/>
-      </fileset>
       <fileset dir="./exp/xml-resource/src" casesensitive="yes">
         <include name="**/*.java"/>
       </fileset>
@@ -179,11 +176,11 @@
     <!-- database_access.jar -->
     <jar  destfile ="${build.lib.dir}/database_access.jar">
       <fileset dir="${build.classes.dir}" casesensitive="yes">
-        <include name="databaseAccess/*.class"/>
+        <include name="org.vegbank.databaseAccess/*.class"/>
         <include name="database.properties"/>
       </fileset>
       <fileset dir="${build.java.src.dir}" casesensitive="yes">
-        <include name="databaseAccess/*.java"/>
+        <include name="org.vegbank.databaseAccess/*.java"/>
       </fileset>
     </jar>
     <!-- xmlresource.jar -->
@@ -383,7 +380,6 @@
           description="=> Remove all generated files">
     <delete dir="${build.dir}"/>
   
-		<ant dir="exp/database_access" target="clean"/>
 		<ant dir="exp/data-translators" target="clean"/>
 		<ant dir="exp/rmidatasource" target="clean"/> 
 		<ant dir="exp/services" target="clean"/>

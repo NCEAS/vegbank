@@ -3,10 +3,10 @@
  *  Release: @release@
  *	
  *  '$Author: farrell $'
- *  '$Date: 2003-05-16 03:33:34 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-07-11 23:14:04 $'
+ *  '$Revision: 1.1 $'
  */
-package databaseAccess;
+package org.vegbank.databaseAccess;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;

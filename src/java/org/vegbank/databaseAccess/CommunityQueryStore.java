@@ -1,4 +1,4 @@
-package databaseAccess;
+package org.vegbank.databaseAccess;
 
 /**
  *  '$RCSfile: CommunityQueryStore.java,v $'
@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  * '$Author: farrell $'
- * '$Date: 2003-05-16 03:33:34 $'
- * '$Revision: 1.4 $'
+ * '$Date: 2003-07-11 23:14:04 $'
+ * '$Revision: 1.1 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,8 +91,11 @@ public class  CommunityQueryStore
 
 			action = "select";	
 			StringBuffer sqlStatement = new StringBuffer(
-				"select commusage.commname, commname.dateentered, commstatus.commlevel, "				+ "commconcept.conceptdescription, commstatus.startdate, commusage.classsystem, "
-				+ "commconcept.commconcept_id, commstatus.commconceptstatus from commusage, "				+ "commstatus, commconcept, commname " 				+ "where commconcept.commname_id = commname.commname_id and "
+				"select commusage.commname, commname.dateentered, commstatus.commlevel, "
+				+ "commconcept.conceptdescription, commstatus.startdate, commusage.classsystem, "
+				+ "commconcept.commconcept_id, commstatus.commconceptstatus from commusage, "
+				+ "commstatus, commconcept, commname " 
+				+ "where commconcept.commname_id = commname.commname_id and "
 				+ "commstatus.commconcept_id = commconcept.commconcept_id and "
 				+ "commusage.commconcept_id = commconcept.commconcept_id "
 			);

@@ -10,13 +10,13 @@
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-05-30 22:58:55 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-07-11 23:14:04 $'
+ *  '$Revision: 1.1 $'
  *
  *
  */
 
-package databaseAccess;
+package org.vegbank.databaseAccess;
 
 import java.util.Hashtable;
 import java.util.StringTokenizer;

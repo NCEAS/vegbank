@@ -1,4 +1,4 @@
-package databaseAccess;
+package org.vegbank.databaseAccess;
 
 /**
  *  '$RCSfile: TaxonomyQueryStore.java,v $'
@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-16 03:33:34 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-07-11 23:14:04 $'
+ *	'$Revision: 1.1 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -679,7 +679,10 @@ public class TaxonomyQueryStore implements Constants
 
 
 			String referenenceQuery = 
-				"select  reference.REFERENCE_ID, additionalinfo, TITLE, PUBDATE, " +				"EDITION, PAGERANGE, ISBN from REFERENCE, referencecontributor, " +				"referenceparty where reference.REFERENCE_ID = " +				"(  select REFERENCE_ID from PLANTNAME where PLANTNAME ="; 
+				"select  reference.REFERENCE_ID, additionalinfo, TITLE, PUBDATE, " +
+				"EDITION, PAGERANGE, ISBN from REFERENCE, referencecontributor, " +
+				"referenceparty where reference.REFERENCE_ID = " +
+				"(  select REFERENCE_ID from PLANTNAME where PLANTNAME ="; 
 			// create and issue the query --
 			sqlBuf.append(referenenceQuery);
 			sqlBuf.append("'" + name + "' )");

@@ -1,4 +1,4 @@
-package databaseAccess;
+package org.vegbank.databaseAccess;
 
 import java.util.Vector;
 

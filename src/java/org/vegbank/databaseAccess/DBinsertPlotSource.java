@@ -7,8 +7,8 @@
 * Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-06-04 21:13:08 $'
-*   '$Revision: 1.23 $'
+*   '$Date: 2003-07-11 23:14:04 $'
+*   '$Revision: 1.1 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-package databaseAccess;
+package org.vegbank.databaseAccess;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -2095,7 +2095,8 @@ public class DBinsertPlotSource {
 		
 		String sql = 
 			"select commstatus.commlevel, commusage.commname from commstatus, commusage "
-			+ "WHERE commusage.commname = '" + searchName + "'" 			+ " and ( commusage.classsystem = '" + codeClassSystem + "' or  commusage.classsystem = '" + nameClassSystem + "')"
+			+ "WHERE commusage.commname = '" + searchName + "'" 
+			+ " and ( commusage.classsystem = '" + codeClassSystem + "' or  commusage.classsystem = '" + nameClassSystem + "')"
 			+ "and commstatus.commconcept_id = commusage.commconcept_id";
 		
 		try

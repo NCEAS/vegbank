@@ -12,7 +12,7 @@
  *
  */
 
-package databaseAccess;
+package org.vegbank.databaseAccess;
 
 import java.io.*;
 import java.util.*;

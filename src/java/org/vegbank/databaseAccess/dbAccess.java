@@ -1,4 +1,4 @@
-package databaseAccess;
+package org.vegbank.databaseAccess;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -36,8 +36,8 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-07-01 23:11:24 $'
- * 	'$Revision: 1.11 $'
+ *  '$Date: 2003-07-11 23:14:04 $'
+ * 	'$Revision: 1.1 $'
  */
 
 public class dbAccess 
@@ -85,7 +85,7 @@ public class dbAccess
 	 * this method will take a plot id number used in vegbank and a
 		* filename to write all the plot data associated with that plot 
 		* into an xml document -- this method is much newer than the
-		* databaseAccess method, and should be used when the explicit 
+		* org.vegbank.databaseAccess method, and should be used when the explicit 
 		* desire is to write a single plot to an xml doc
 		*
 		* @param plotIdVec -- a vector contaning a number of the VegBank plotId's

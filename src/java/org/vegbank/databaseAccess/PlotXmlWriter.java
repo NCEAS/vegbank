@@ -7,11 +7,11 @@
  *    Authors: John Harris
  *
  *		 '$Author: farrell $'
- *     '$Date: 2003-05-07 01:41:35 $'
- *     '$Revision: 1.4 $'
+ *     '$Date: 2003-07-11 23:14:04 $'
+ *     '$Revision: 1.1 $'
  *
  */
-package databaseAccess;
+package org.vegbank.databaseAccess;
 
 
 import java.io.FileOutputStream;

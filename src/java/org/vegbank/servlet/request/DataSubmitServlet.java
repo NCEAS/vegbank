@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-07-01 23:11:24 $'
- *  '$Revision: 1.13 $'
+ *  '$Date: 2003-07-11 23:14:05 $'
+ *  '$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,12 +21,6 @@ package org.vegbank.servlet.request;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
-import org.vegbank.communities.datasource.VegCommunityLoader;
-
-import org.vegbank.plots.datasource.PlotDataSource;
-import org.vegbank.plots.rmi.DataSourceClient;
-//import org.vegbank.communities.datasink.DBCommunityWriter;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -44,8 +38,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.vegbank.common.Constants;
 import org.vegbank.common.command.Query;
-//import org.vegbank.common.model.Community;
-
+import org.vegbank.communities.datasource.VegCommunityLoader;
+import org.vegbank.databaseAccess.CommunityQueryStore;
+import org.vegbank.plots.datasource.PlotDataSource;
+import org.vegbank.plots.rmi.DataSourceClient;
 import org.vegbank.servlet.authentication.UserDatabaseAccess;
 import org.vegbank.servlet.datafileexchange.DataFileExchange;
 import org.vegbank.servlet.util.ServletUtility;
@@ -53,18 +49,6 @@ import org.w3c.dom.Document;
 
 import xmlresource.utils.XMLparse;
 import xmlresource.utils.transformXML;
-import databaseAccess.CommunityQueryStore;
-
-
-/**
- * REQUIRED PARAMETERS
- * @param submitDataType -- 
- * 
- *
- *	'$Author: farrell $'
- *  '$Date: 2003-07-01 23:11:24 $'
- *  '$Revision: 1.13 $'
- */
 
 
 public class DataSubmitServlet extends HttpServlet implements Constants

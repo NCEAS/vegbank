@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-06-09 22:06:48 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-07-11 23:14:05 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ package org.vegbank.servlet.request;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import databaseAccess.dbAccess;
+import org.vegbank.databaseAccess.dbAccess;
 
 /**
  * @author farrell

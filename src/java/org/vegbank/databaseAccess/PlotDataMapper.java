@@ -10,7 +10,7 @@
  *    Authors: John Harris
  *
  */
-package databaseAccess;
+package org.vegbank.databaseAccess;
 
 import java.util.Hashtable;
 import java.util.Vector;

@@ -1,4 +1,4 @@
-package databaseAccess;
+package org.vegbank.databaseAccess;
 
 /**
  *  '$RCSfile: sqlMapper.java,v $'
@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *    '$Date: 2003-05-30 22:58:55 $'
- * 	'$Revision: 1.6 $'
+ *    '$Date: 2003-07-11 23:14:04 $'
+ * 	'$Revision: 1.1 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Vector;
 
-import databaseAccess.DBinsertPlotSource;
+import org.vegbank.databaseAccess.*;
 import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidator;
 
 /** 
@@ -38,8 +38,8 @@ import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidator;
  *	
  * <br> <br>
  *  '$Author: farrell $'
- *  '$Date: 2003-06-04 19:11:42 $'
- * 	'$Revision: 1.5 $'
+ *  '$Date: 2003-07-11 23:14:05 $'
+ * 	'$Revision: 1.6 $'
  *
  */
 
