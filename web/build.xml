@@ -95,10 +95,10 @@
 	</copy>
 	
 	<copy todir="${panel_server}" filtering="no" >
-                <fileset dir="${panel_src}" >
-		<exclude name="**.html"/>    
+     		<fileset dir="${panel_src}" >
+				<exclude name="**.html"/>    
         </fileset>
-        </copy>
+  </copy>
 
 
 </target>
@@ -109,10 +109,19 @@
 	* WEB SERVER
 -->
 <target name="history" depends="init">
+
 	<copy todir="${history_server}" filtering="yes" >
-		<fileset dir="${history_src}" >    
-  	</fileset>
-	</copy>
+     		<fileset dir="${history_src}" >
+				<exclude name="**/**.gif"/>    
+        </fileset>
+  </copy>
+	
+	<copy todir="${history_server}" filtering="no" >
+     		<fileset dir="${history_src}" >
+				<exclude name="**/**.html"/>    
+        </fileset>
+  </copy>
+
 </target>
 
 <!--
@@ -120,7 +129,7 @@
 	* WEB SERVER
 -->
 <target name="pubs" depends="init">
-	<copy todir="${pubs_server}" filtering="yes" >
+	<copy todir="${pubs_server}" filtering="no" >
 		<fileset dir="${pubs_src}" >    
   	</fileset>
 	</copy>
@@ -145,7 +154,8 @@
 			plot-query.html
 			plant-query.html
 			plant-name-lookup.html
-			utilities.html"
+			utilities.html
+			stylesheet-generator.html"
 		excludes="**/CVS* "
 	/>
 </target>
@@ -185,10 +195,6 @@
   	</fileset>
 	</copy>
 </target>
-
-
-
-
 
 
 </project>
