@@ -94,21 +94,23 @@ String infileArray[]=new String[100000];
 int lineNum=0;
 String s=null;
 
-	/*read the input file into the array*/
-	while ( (s=in.readLine()) != null ){
+/*read the input file into the array*/
+while ( (s=in.readLine()) != null ){
 
-		if (s.startsWith("#")) {System.out.println("reading header");}
+	if (s.startsWith("#")) {System.out.println("reading header");}
 
-		else {
-	//System.out.println(s);
+	else {
 	infileArray[lineNum]=s;
 	lineNum++;
 	} //end else
-	}
+	}  //end while
 
-	for (int i=0; i<lineNum; i++) {
+	
 
+/* Read back the data and load to the respective table */
 
+int sysPrinter=0; //every time this gets to 100 print the line
+for (int i=0; i<lineNum; i++) {
 
 		StringTokenizer t = new StringTokenizer(infileArray[i], "|");
 		/*authorPlotCode: 1:*/ String authorPlotCode=t.nextToken().replace('"',' ').trim();
@@ -116,9 +118,9 @@ String s=null;
 		String buf=t.nextToken().replace('"',' ').trim();
 		/*plantSpeciesCounter: 2:*/ String plotSpeciesCounter=buf;
 
-/*take out later*/
-buf=t.nextToken().replace('"',' ').trim();
-buf=t.nextToken().replace('"',' ').trim();
+		/*take out later*/
+		buf=t.nextToken().replace('"',' ').trim();
+		buf=t.nextToken().replace('"',' ').trim();
 
 		buf=t.nextToken().replace('"',' ').trim();
 		/*plantSymbol:3*/ String plantSymbol=buf;
@@ -191,17 +193,17 @@ lastSpeciesNum++;
 /*get the correct plot_id from the plotmaster table*/
 
 
-
-ResultSet plot_id =query.executeQuery("SELECT plot_id from plotMaster where authorPlotNum like '%"+authorPlotCode+"%'");
+ResultSet plot_id=query.executeQuery("SELECT plot_id from plotMaster where authorPlotNum like '%"+authorPlotCode+"%'");
 	int plotId = 0;
 	while (plot_id.next()) {
 		plotId = plot_id.getInt(1);
-		//System.out.println(plotId);
 			} //end while
 
-
+sysPrinter++;
+if (sysPrinter==100) { 
 System.out.println(lastSpeciesNum+" "+plotId+" "+plantSymbol+"    "+scientificName+" "+stratum+" "+realCover);
-
+sysPrinter=0;
+}
 
 
 /* insert the data  into the plotShape */
