@@ -4419,6 +4419,7 @@ change through time.</entitySummary>
     </attribute>
     <attribute>
       <attName>coverEstimationMethod</attName>
+      <attLabel>Cover Estimation Method</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (80)</attType>
@@ -4429,12 +4430,12 @@ change through time.</entitySummary>
       <attList>
         <attListItem>
           <attListValue>canopy cover</attListValue>
-          <attListValueDesc>every part of each plant is included in estimating cover</attListValueDesc>
+          <attListValueDesc>Cover estimated as the percentage of ground covered by a vertical outermost perimeter of the natural spread of foliage of plants. (SRM 1989)</attListValueDesc>
           <attListSortOrd>1</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>foliar cover</attListValue>
-          <attListValueDesc>only foliage is included in estimating cover</attListValueDesc>
+          <attListValueDesc>Cover estimated as the percentage of ground covered by the vertical portion of plants. Small openings in the canopy and intraspecific overlap are excluded (SRM 1989). Foliar cover is the vertical projection of shoots; i.e., stems and leaves.</attListValueDesc>
           <attListSortOrd>2</attListSortOrd>
         </attListItem>
       </attList>
@@ -14900,7 +14901,7 @@ conditions may change between resampling events.
       <attLabel>Permission Type</attLabel>
       <attModel>implementation</attModel>
       <attNulls>no</attNulls>
-      <attType>Long</attType>
+      <attType>Integer</attType>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
