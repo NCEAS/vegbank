@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-03-29 22:31:52 $'
- 	*     '$Revision: 1.8 $'
+ 	*     '$Date: 2002-05-15 19:50:53 $'
+ 	*     '$Revision: 1.9 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -59,8 +59,7 @@
 
 		<echo message="Compiling the RMI Code"/>
 		
-		<javac srcdir="${src}" 
-			classpath="${cpath}"
+		<javac srcdir="${src}"  classpath="${cpath}"
 			includes="
 			 DataSourceClient.java
 			 DataSourceServer.java
@@ -125,16 +124,20 @@
 
 <!-- JAVA DOC -->
 <target name="jdoc">                                                                                                                                
-	<javadoc 
-		sourcepath="src"
-		sourcefiles="./src/DataSourceClient.java,  ./src/DataSourceServer.java, ./src/DataSourceServerInterface.java, 
-		./src/DataSourceImpl.java	"
-		destdir="doc/api"
-		author="true"
-		version="true"
-		use="true"
-		windowtitle="Test API"
-/>
+ <javadoc 
+ 	
+	sourcefiles="src/DataSourceImpl.java,src/DataSourceClient.java,src/DataSourceServerInterface.java,src/Proxy.java,src/DataSourceServer.java"
+	sourcepath="src"				
+	destdir="doc/api"
+  author="true"
+  version="true"
+  use="true"
+  windowtitle="Test API">
+
+
+</javadoc>
+
+
 </target>      
 	
 	
