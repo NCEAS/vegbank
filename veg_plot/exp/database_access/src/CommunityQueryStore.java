@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-12 19:15:33 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2002-03-12 21:27:18 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -173,7 +173,8 @@ public class  CommunityQueryStore
 			Connection conn = this.getConnection();
 			
 			statement.append("select ");
-			statement.append("commName, recognizingParty, partyConceptStatus, classLevel  ");
+			statement.append("commName, recognizingParty, partyConceptStatus, classLevel,  ");
+			statement.append(" commconcept_id  ");
 			statement.append("from commSummary where upper(commName) like '");
 			statement.append(commName.toUpperCase()+"'");
 			//gather the responses
@@ -197,7 +198,8 @@ public class  CommunityQueryStore
 				hash.put("conceptStatus", ""+buf);
 				buf = rs.getString(4);
 				hash.put("level", ""+buf);
-				
+				buf = rs.getString(5);
+				hash.put("commConceptId", ""+buf);
 				//put the hash into the vector
 				v.addElement(hash);
 				

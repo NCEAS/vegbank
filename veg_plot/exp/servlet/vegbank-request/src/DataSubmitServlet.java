@@ -133,6 +133,7 @@ public class DataSubmitServlet extends HttpServlet
 						String recognizingParty  = (String)hash.get("recognizingParty");
 						String level  = (String)hash.get("level");
 						String conceptStatus  = (String)hash.get("conceptStatus");
+						String commConceptId  = (String)hash.get("commConceptId");
 						
 						sb.append("<form action=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataSubmitServlet\" method=\"get\" >");
 						sb.append(" <input type=hidden name=submitDataType value=vegCommunityCorrelation> ");
@@ -141,6 +142,8 @@ public class DataSubmitServlet extends HttpServlet
 						sb.append("party: " +recognizingParty + "<br> ");
 						sb.append("level: " +level + "<br> ");
 						sb.append("status: "+conceptStatus + "<br> ");
+						sb.append("concept: "+commConceptId + "<br> ");
+						
 						sb.append("<select class=item name=correlation multiple size=3>");
 						sb.append("<option selected>unknown");
 						sb.append("<option>gt");
