@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-03-21 21:51:05 $'
-  *  '$Revision: 1.1 $'
+  *      '$Date: 2002-03-22 02:10:21 $'
+  *  '$Revision: 1.2 $'
   *
   *
   -->
@@ -76,18 +76,15 @@
 	
 		<td align="left">
 			<table border="0" cellspacing=5 cellpadding=5>
-<!--			<form action="@datasubmitservlet@" method="get"> -->
+			<form action="@datasubmitservlet@" method="get"> 
 			
-			<form action= "http://128.111.220.69/framework/servlet/dataexchange" enctype="multipart/form-data" method=+"post">
 			<input type="hidden" name="submitDataType" value="vegPlot">
-			<input type="hidden" name="action" value="upload">		
-			<input type="hidden" name="referPage" value="continue with the plot upload wizard">
-			<input type="hidden" name="referUrl" value="@datasubmitservlet@/?action=upload&submitDataType=vegPlot">
+			<input type="hidden" name="action" value="submit">		
 			
 			<tr valign=top>
 			<td  align=left valign=middle colspan=2>
 			<font face="Helvetica,Arial,Verdana" size="2" color="209020">
-				<b>Use this form to access a plot archive on you machine for submittal to VegBank. </b>
+				<b>Use this form to select the specific plot(s) from you file for loading. </b>
 			</font>
 			<p>
 			<small>
@@ -118,12 +115,7 @@
 			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
 		</td>
 		<td class="item">
-		Please upload the data from your hard-drive to the server here.  Currently VegBank is <br>
-		accepting data stored in the following Format(s): <br>
-		<br>
-		<b> TNC Plots MS Access Format </b>
-			&nbsp;	&nbsp; 
-		<a href="/data/tncplots-example.mdb">Example data file</a>
+		Please select the plot(s) that you would like to load to the server <br>
 		</td>
 	</tr>
 </table>
@@ -131,17 +123,16 @@
 
 <table class="category">
 	
-	<!--SELECT DATA FILE-->
+	<!--SELECT PLOTS-->
 	<tr align="left">
 		<td width="30%" align=left valign=top>
 			<font size="2" >
 			<b>Plot Data File: <font color="#F90000"><b>*</b></font>:</font></b>
 		</td>
 		<td  align="left" valign="middle">
-			<input type="file" name="file">
-			<b>
-			<font face="Helvetica,Arial,Verdana" size=1>
-			</font>
+			<select class="item" name="plotID" multiple size=10>
+				@plots@
+			</select>
 		</td>
 	</tr>
 	
