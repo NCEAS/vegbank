@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-01 03:01:40 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-09-15 03:29:08 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.vegbank.common.utility.Utility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.3 $ $Date: 2004-09-01 03:01:40 $
+ * @version $Revision: 1.4 $ $Date: 2004-09-15 03:29:08 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -87,14 +87,16 @@ public class VegbankGetTag extends VegbankTag {
 		try {
 			GenericCommand gc = new GenericCommand();
 
+			log.debug("Setting GC's id, numItems, pageNumber, perPage and pager");
 			gc.setId(getId());
 			gc.setNumItems(findAttribute("numItems"));
 			gc.setPageNumber(getPageNumber());
 			gc.setPerPage(getPerPage());
-			try { 
-				gc.setPager(Boolean.valueOf(getPager()).booleanValue()); 
+
+			try { gc.setPager(Boolean.valueOf(getPager()).booleanValue()); 
 			} catch (Exception ex) { gc.setPager(false); }
 
+			log.debug("Calling gc.execute()");
 			gc.execute(
 					(HttpServletRequest)pageContext.getRequest(), 
 					getSelect(), 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-01 03:01:40 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-09-15 03:29:08 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.Utility;
  * Abstract base class tag.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.2 $ $Date: 2004-09-01 03:01:40 $
+ * @version $Revision: 1.3 $ $Date: 2004-09-15 03:29:08 $
  */
 
 public abstract class VegbankTag extends TagSupport {
@@ -80,12 +80,12 @@ public abstract class VegbankTag extends TagSupport {
         String attribValue;
 		try {
 			// look in the request
-			//log.debug("Finding " + attribName + " with Request.getParameter()");
+			log.debug("Finding " + attribName + " with Request.getParameter()");
         	attribValue = pageContext.getRequest().getParameter(attribName);
 			if (attribValue == null || attribValue.equals("")) {
 				
 				// find in other scopes
-				//log.debug("Finding " + attribName + " with RequestUtils.lookup()");
+				log.debug("Finding " + attribName + " with RequestUtils.lookup()");
 				attribValue = (String)RequestUtils.lookup(pageContext, attribName, null);
 			}
 
@@ -98,10 +98,22 @@ public abstract class VegbankTag extends TagSupport {
 			attribValue = "";
 		}
 
-		//log.debug("findAttribute: " + attribName + " = " + attribValue);
+		log.debug("findAttribute: " + attribName + " = " + attribValue);
 		return attribValue;
     }
 
+
+	/**
+	 * @param attrib String value of an attribute
+	 * @param default int value to return if attrib is empty
+	 */
+	protected int convStringToInt(String attrib, int defVal) {
+		if (Utility.isStringNullOrEmpty(attrib)) {
+			return defVal;
+		} else {
+			return Integer.parseInt(attrib);
+		}
+	}
 
 
 }

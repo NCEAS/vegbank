@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-01 03:01:40 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-09-15 03:29:08 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,12 +56,13 @@ import org.vegbank.common.utility.ServletUtility;
  * Tag that builds a page selector in HTML.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.2 $ $Date: 2004-09-01 03:01:40 $
+ * @version $Revision: 1.3 $ $Date: 2004-09-15 03:29:08 $
  */
 
 public class VegbankPagerTag extends VegbankTag {
 
 	private static final Log log = LogFactory.getLog(VegbankPagerTag.class);
+	public static final int DEF_PER_BATCH = 10;
 
 
     /**
@@ -71,61 +72,143 @@ public class VegbankPagerTag extends VegbankTag {
      */
     public int doStartTag() throws JspException {
 
-		// read perPage and pageNumber from the request
+		int iNumItems;
+		int iPerPage;
+		int iPageNumber;
+		int iPerBatch;
+		int iCurBatch;
+		int numPagesInBatch;
+		int numTotalPages;
+		int numTotalBatches;
+		int firstPageInBatch;
+		int lastPageInBatch;
+		boolean hasMoreBatchesBefore, hasMoreBatchesAfter;
 
-		int perPage;
-		int numItems;
+		String pagerHTML = "";
+		String queryString;
+
+		HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
+		Map urlParams;
+
 
 		try {
-			String tmp = findAttribute("numItems");
-			log.debug("numItems: " + tmp);
-			if (Utility.isStringNullOrEmpty(tmp)) {
-				// no deal if no numItems given
-				return SKIP_BODY;
-			} else {
-				numItems = Integer.parseInt(tmp);
-			} 
-
-			tmp = findAttribute("perPage");
-			log.debug("perPage: " + tmp);
-			if (Utility.isStringNullOrEmpty(tmp)) {
-				// no deal if no perPage given
-				return SKIP_BODY;
-			} else {
-				perPage = Integer.parseInt(tmp);
-			} 
-
-			int numPages = numItems / perPage;
-			int pageNumber;
-
-			tmp = findAttribute("pageNumber");
-			log.debug("pageNumber: " + tmp);
-			if (Utility.isStringNullOrEmpty(tmp)) {
-				pageNumber = 1;
-			} else {
-				pageNumber = Integer.parseInt(tmp);
-			}
-
-			String pagerHTML = "";
-			String queryString;
-
-			HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
-
-			Map urlParams;
 			urlParams = ServletUtility.parameterHash(request);
 
-			urlParams.put("numItems", Integer.toString(numItems));
-
-			if (pageNumber > 1) {
-				urlParams.put("pageNumber", Integer.toString(pageNumber - 1));
-				queryString = ServletUtility.buildQueryString(urlParams);
-				pagerHTML += "&laquo; <a href='" + request.getRequestURI() + queryString + "'>previous</a> ";
+			iNumItems = convStringToInt(getNumItems(), 0);
+			log.debug("numItems: " + iNumItems);
+			if (iNumItems == 0) {
+				return SKIP_BODY; 	// no deal if no numItems given
 			}
 
-			for (int i=1; i<=numPages; i++) {
+			iPerPage = convStringToInt(getPerPage(), 0);
+			log.debug("perPage: " + iPerPage);
+			if (iPerPage == 0) {
+				return SKIP_BODY; 	// no deal if no perPage given
+			}
 
-				if (pageNumber == i) {
-					pagerHTML += " " + i + " ";
+			iPageNumber = convStringToInt(getPageNumber(), 1);
+			log.debug("pageNumber: " + iPageNumber);
+
+			iPerBatch = convStringToInt(getPerBatch(), DEF_PER_BATCH);
+			log.debug("perBatch: " + iPerBatch);
+
+			//iCurBatch = convStringToInt(findAttribute("curBatch"), 1);
+			//log.debug("curBatch: " + iCurBatch);
+
+		
+			// calculate shit
+			numTotalPages = (int)Math.round(Math.ceil(iNumItems / iPerPage));
+			numTotalBatches = (int)Math.round(Math.ceil(numTotalPages / iPerBatch));
+
+			if (numTotalPages % iPerBatch == 0) {
+				numTotalBatches = numTotalPages / iPerBatch;
+			} else {
+				numTotalBatches = (int)(numTotalPages / iPerBatch) + 1;
+			}
+
+			if (iPageNumber % iPerBatch == 0) {
+				iCurBatch = iPageNumber / iPerBatch;
+			} else {
+				iCurBatch = iPageNumber / iPerBatch + 1;
+			}
+
+			log.debug("numTotalPages: " + numTotalPages);
+			log.debug("numTotalBatches: " + numTotalBatches);
+
+			if (numTotalPages > iPerBatch) {
+				// there is more than one batch of pages
+				if (iCurBatch > 1 && iPageNumber > iPerBatch) {
+					hasMoreBatchesBefore = true;
+				} else {
+					hasMoreBatchesBefore = false;
+				}
+
+				if (iCurBatch < numTotalBatches) {
+					hasMoreBatchesAfter = true;
+					numPagesInBatch = iPerBatch;
+				} else {
+					hasMoreBatchesAfter = false;
+					numPagesInBatch = numTotalPages - ((numTotalBatches-1) * iPerBatch);
+				}
+
+				firstPageInBatch = ((iCurBatch - 1) * iPerBatch) + 1;
+				lastPageInBatch = firstPageInBatch + numPagesInBatch - 1;
+
+			} else {
+				hasMoreBatchesBefore = false;
+				hasMoreBatchesAfter = false;
+				firstPageInBatch = 1;
+				lastPageInBatch = numTotalPages;
+				numPagesInBatch = numTotalPages;
+			}
+
+			// fix the page number
+			if (iPageNumber > lastPageInBatch) {
+				iPageNumber = lastPageInBatch;
+			} else if (iPageNumber < firstPageInBatch) {
+				iPageNumber = firstPageInBatch;
+			}
+
+			log.debug("CORRECTED pageNumber: " + iPageNumber);
+			log.debug("num pages in batch: " + numPagesInBatch);
+			log.debug("first page in batch: " + firstPageInBatch);
+			log.debug("last page in batch: " + lastPageInBatch);
+
+			// set up the next page request
+			urlParams.put("perBatch", Integer.toString(iPerBatch));
+			urlParams.put("perPage", Integer.toString(iPerPage));
+			///////urlParams.put("numItems", Integer.toString(iNumItems));
+
+
+			////////////////
+			// MORE
+			////////////////
+			if (hasMoreBatchesBefore) {
+				// render the "get last batch" link
+				urlParams.put("pageNumber", Integer.toString(firstPageInBatch - 1));
+				//urlParams.put("curBatch", Integer.toString(iCurBatch - 1));
+				queryString = ServletUtility.buildQueryString(urlParams);
+				pagerHTML += "&laquo;&laquo; <a href='" + request.getRequestURI() + 
+						queryString + "'>more</a> <font color='#AAAAAA'>||</font> &nbsp; ";
+			}
+
+			////////////////
+			// PREVIOUS
+			////////////////
+			if (iPageNumber > 1) {
+				urlParams.put("pageNumber", Integer.toString(iPageNumber - 1));
+				queryString = ServletUtility.buildQueryString(urlParams);
+				pagerHTML += "&laquo; <a href='" + request.getRequestURI() + queryString + "'>previous</a>&nbsp; <font color='#AAAAAA'>||</font> ";
+			}
+
+
+			////////////////
+			// PAGE NUMBERS
+			////////////////
+			for (int i=firstPageInBatch; i<=lastPageInBatch; i++) {
+
+				if (iPageNumber == i) {
+					pagerHTML += " page <font color='red' size='+1'>" + i + "</font> ";
 
 				} else {
 					urlParams.put("pageNumber", Integer.toString(i));
@@ -133,18 +216,39 @@ public class VegbankPagerTag extends VegbankTag {
 					pagerHTML += "<a href='" + request.getRequestURI() + queryString + "'>" + i + "</a>";
 				}
 
-				if (i < numPages) {
-					pagerHTML += " | ";
+				if (i < lastPageInBatch) {
+					pagerHTML += " <font color='#AAAAAA'>|</font> ";
 				}
 			}
 
-			if (pageNumber < numPages) {
-				urlParams.put("pageNumber", Integer.toString(pageNumber + 1));
+			
+			////////////////
+			// NEXT
+			////////////////
+			if (iPageNumber < numTotalPages) {
+				urlParams.put("pageNumber", Integer.toString(iPageNumber + 1));
 				queryString = ServletUtility.buildQueryString(urlParams);
-				pagerHTML += " <a href='" + request.getRequestURI() + queryString + "'>next</a> &raquo;";
+				pagerHTML += " <font color='#AAAAAA'>||</font> &nbsp;<a href='" + request.getRequestURI() + queryString + "'>next</a> &raquo;";
 			}
 
-			pageContext.getOut().println("<strong>" + pagerHTML + "</strong>");
+			////////////////
+			// MORE
+			////////////////
+			if (hasMoreBatchesAfter) {
+				// render the "get next batch" link
+				urlParams.put("pageNumber", Integer.toString(lastPageInBatch + 1));
+				//urlParams.put("curBatch", Integer.toString(iCurBatch + 1));
+				queryString = ServletUtility.buildQueryString(urlParams);
+				pagerHTML += "&nbsp; &nbsp; <font color='#AAAAAA'>||</font> <a href='" + request.getRequestURI() + 
+						queryString + "'>more</a> &raquo;&raquo;";
+			}
+
+			int firstItemNumber = iPerPage * (iPageNumber - 1) + 1;
+
+			pageContext.getOut().println("<p align='center'><strong>" + pagerHTML + 
+					"</strong><br/><font color='#AAAAAA'>" + firstItemNumber + " through " 
+					+ (firstItemNumber+iPerPage-1) + " of " + iNumItems + "</font></p>");
+
 		} catch (Exception ex) {
 			log.error("Error while creating pager", ex);
 		}
@@ -153,6 +257,19 @@ public class VegbankPagerTag extends VegbankTag {
         return SKIP_BODY;
     }
 
+
+    /**
+     * 
+     */
+	protected String id;
+
+    public String getId() {
+		return findAttribute("id", this.id);
+    }
+
+    public void setId(String s) {
+        this.id = s;
+    }
 
 
     /**
@@ -198,5 +315,19 @@ public class VegbankPagerTag extends VegbankTag {
     public void setPerPage(String s) {
         this.perPage = s;
     }
+
+    /**
+     * 
+     */
+	protected String perBatch;
+
+    public String getPerBatch() {
+        return findAttribute("perBatch", this.perBatch);
+    }
+
+    public void setPerBatch(String s) {
+        this.perBatch = s;
+    }
+
 
 }
