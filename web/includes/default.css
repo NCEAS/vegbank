@@ -26,6 +26,8 @@ A:hover			{ color: #3399FF;}
 A.blk { color:#000000 }
 A.brightyellow { color:#FFFF80 }
 
+  .units {color: #333333 ; font-size: 8pt;}
+
 TH	{
 	font-family:  Arial, Tahoma, Helvetica, Geneva, sans-serif;
 	color: #FFFF80;
