@@ -20,6 +20,12 @@ maxConnectionUsers = 100
 resetTime = 0.01
 logFile = connectionPool.log
 
+# MTL new settings as of 24-JUL-2004: (can be removed if JK enabled, such as on vegbank.org)
+# name of URL to get to this machine 
+machine_url=http://gyro.nceas.ucsb.edu
+# the colon plus port number used for tomcat.  If JK enabled, neither of these is needed.
+eighty_eighty=:8080
+
 # Vegbank Directories
 vegbank.home.dir=/usr/vegbank
 apache.document.root=/var/www/html
