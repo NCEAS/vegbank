@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-05 02:10:52 $'
- *	'$Revision: 1.17 $'
+ *	'$Date: 2004-10-08 23:51:50 $'
+ *	'$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,8 +64,18 @@ public class GenericCommand
 	//// THIS WORKS 
 	// Caveat: Can't put (parens) in subqueries, or within other (parens)
 	// \S matches non-whitespace characters
-	private static Pattern subqueryPattern = Pattern.compile("\\S*\\(.*?\\) as ");
-	private static Pattern attribAsPattern = Pattern.compile("\\S* as ");
+
+
+	//// PMA ORIG (reluctant)
+	private static Pattern subqueryPattern = Pattern.compile("\\S*\\(.*?\\) +as +");
+
+	//// PMA (possesive)
+	//private static Pattern subqueryPattern = Pattern.compile("\\S*\\(.*?\\) as ");
+
+	//// MLEE
+	//private static Pattern subqueryPattern = Pattern.compile("\\S*\\([^)]*\\) as ");
+
+	private static Pattern attribAsPattern = Pattern.compile("\\S* +as ");
 	private static Pattern afterFromPattern = Pattern.compile(".* from ");
 
 	//// OTHER ATTEMPTS
@@ -463,26 +473,27 @@ public class GenericCommand
 		//log.debug("ORIGINAL: " + selectClause);
 		m = subqueryPattern.matcher(selectClause);
 		selectClause = m.replaceAll("");
-		//log.debug("REGEX: " + subqueryPattern.pattern());
-		//log.debug("MODIFIED 1: " + selectClause);
+		log.debug("REGEX: " + subqueryPattern.pattern());
+		log.debug("MODIFIED 1: " + selectClause);
 
 		m = attribAsPattern.matcher(selectClause);
 		selectClause = m.replaceAll("");
-		//log.debug("REGEX: " + attribAsPattern.pattern());
-		//log.debug("--------------");
-		//log.debug("MODIFIED 2: " + selectClause);
-		//log.debug("============================");
+		log.debug("REGEX: " + attribAsPattern.pattern());
+		log.debug("--------------");
+		log.debug("MODIFIED 2: " + selectClause);
+		log.debug("============================");
 
-		//log.debug("========== QUERY: " + selectClause);
+		log.debug("========== CENSORED QUERY: " + selectClause);
 
-		StringTokenizer st = new StringTokenizer(selectClause);
+		selectClause = selectClause.substring(selectClause.indexOf("select ")+7, selectClause.indexOf("from"));
+		StringTokenizer st = new StringTokenizer(selectClause, ",");
 		int indexOfDot, indexOfComma, indexOfAs;
 		
 		// get the property names
 
 		while ( st.hasMoreTokens() )
 		{
-			String propertyName = st.nextToken();
+			String propertyName = st.nextToken().trim();
 			if ( propertyName.equals("select") )
 			{
 				// Do Nothing
@@ -496,7 +507,7 @@ public class GenericCommand
 				// Add this token with any trailing ',' removed
 				
 				// Check for a named field
-				//log.debug("property name:  " + propertyName);
+				log.debug("property name:  '" + propertyName + "'");
 				indexOfAs = propertyName.indexOf(" as ");
 				if ( indexOfAs != -1 ) {
 					propertyName = propertyName.substring(indexOfAs + 4 );
