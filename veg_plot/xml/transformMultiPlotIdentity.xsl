@@ -79,20 +79,12 @@ return "Check All"; }
    //--&gt;
    </xsl:text>
  </script>
-
- 
 </head>
-
-
-
 
 <body bgcolor="FFFFFF">
 
-
-
 <br></br>
 <xsl:number value="count(project/plot)" /> documents found.
-
 
 <!-- set up the form which is required by netscape 4.x browsers -->
 <form name="myform" action="viewData" method="post">
@@ -138,11 +130,20 @@ return "Check All"; }
 				</FONT>
 			</a>
 			<a> <b>Author code: </b> <xsl:value-of select="authorPlotCode"/> <br> </br></a>
-			<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a>
-		<!--	
-			<a><b>Latitude:</b> <xsl:value-of select="latitude"/>  <br></br> </a>
-	    <a><b>Longitude:</b> <xsl:value-of select="longitude"/>  <br></br> </a>
-		-->
+		<!--	<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a> -->
+		
+		<!-- GET THE LATS AND LONGS INTO A VARIABLE -->
+			<xsl:variable name="LATITUDE">
+  			<xsl:value-of select="latitude"/>
+			</xsl:variable>
+			<xsl:variable name="LONGITUDE">
+  			<xsl:value-of select="longitude"/>
+			</xsl:variable>
+			<a href="http://beta.nceas.ucsb.edu:8080/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude={$LONGITUDE}&amp;latitude={$LATITUDE}"> 
+				<img align="center" border="0" src="/vegbank/images/small_globe.gif" alt="Location"> </img> 
+			</a>
+			<br> </br>
+		
 		<input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes">download</input>
 			<xsl:number value="position()"/>
 	</td>		 
@@ -170,11 +171,20 @@ return "Check All"; }
 				</FONT>
 			</a>
 			<a> <b>Author code: </b> <xsl:value-of select="authorPlotCode"/> <br> </br></a>
-			<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a>
-		<!--	
-			<a><b>Latitude:</b> <xsl:value-of select="latitude"/>  <br></br> </a>
-	    <a><b>Longitude:</b> <xsl:value-of select="longitude"/>  <br></br> </a>
-		-->
+		<!--	<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a> -->
+		
+		<!-- GET THE LATS AND LONGS INTO A VARIABLE -->
+			<xsl:variable name="LATITUDE">
+  			<xsl:value-of select="latitude"/>
+			</xsl:variable>
+			<xsl:variable name="LONGITUDE">
+  			<xsl:value-of select="longitude"/>
+			</xsl:variable>
+			<a href="http://beta.nceas.ucsb.edu:8080/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude={$LONGITUDE}&amp;latitude={$LATITUDE}"> 
+				<img align="center" border="0" src="/vegbank/images/small_globe.gif" alt="Location"> </img> 
+			</a>
+			<br> </br>
+		
 		<input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes">download</input>
 			<xsl:number value="position()"/>
 	</td>		 
