@@ -15,8 +15,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2003-08-28 22:39:34 $'
-*  '$Revision: 1.8 $'
+*      '$Date: 2003-10-06 20:45:10 $'
+*  '$Revision: 1.9 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -351,16 +351,6 @@ VEGBANK - Simple Plots Query
 	    <th><p><span class="category">Units</span></p></th>
 	    <th><p><span class="category">Include Nulls?</span></p></th>
 	  </tr>
-	  <%
-	  /*
-	  String curMinElevation = "0";
-	  String curMaxElevation = "30000";
-	  String curMinSlopeAspect = "0";
-	  String curMaxSlopeAspect = "x";
-	  String curMinSlopeGradient = "0";
-	  String curMaxSlopeGradient = "y";
-	  */
-	  %>
 	  <tr><!-- ELEVATION --> 
 	    <td>&nbsp;</td>
 	    <td colspan="2" class="itemsmaller" align="center">from <bean:write name="bean" property="curMinElevation"/> to <bean:write name="bean" property="curMaxElevation"/> meters</td>
