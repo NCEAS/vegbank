@@ -1,11 +1,11 @@
-/*
+ /*
  *	'$RCSfile: AccessionGen.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-29 22:34:55 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2004-03-01 01:50:57 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ public class AccessionGen {
 			conjugator = " WHERE ";
 		}
 				
-		query += conjugator + table + "_id=" + pk;
+		query += conjugator + Utility.getPKNameFromTableName(table) + " =" + pk;
 		//LogUtility.log("===> " + query);
 		ResultSet rs = conn.createStatement().executeQuery(query);
 
