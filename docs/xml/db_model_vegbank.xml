@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- <!DOCTYPE dataModel SYSTEM "db_model.dtd"> -->
+<!DOCTYPE dataModel SYSTEM "db_model.dtd">
 <?xml-stylesheet type="text/xsl" href="dbmodel-to-schema.xsl"?>
 <dataModel>
   <title>Vegetation Database Component Description: --all modules--</title>
@@ -3787,7 +3787,7 @@ change through time.</entitySummary>
   <entity>
     <entityName>graphic</entityName>
     <entitySummary>This table stores information about graphical files related to vegetation plot observations</entitySummary>
-    <entityDescription>Graphical files can include, among other formats: gif, jpeg, and tif file formats.  Because many graphical files, especially remote sensing digital photographs, may be too large to be stored within the database, a graphicLocation may be given as an altern</entityDescription>
+    <entityDescription>Graphical files can include, among other formats: gif, jpeg, and tif file formats.  Because many graphical files, especially remote sensing digital photographs, may be too large to be stored within the database, a graphicLocation may be given as an alternative. Current Business rules cap graphic size at 5M per plot. Graphics of modest size should be included rather than referenced by external address.</entityDescription>
     <module>plot</module>
     <attribute>
       <attName>GRAPHIC_ID</attName>
@@ -6576,9 +6576,9 @@ conditions may change between resampling events.
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <archive>true</archive>
       <attNotes>Primary key for the party table.</attNotes>
       <attDefinition>Database generated identifier assigned to each unique party.</attDefinition>
+      <archive>true</archive>
     </attribute>
     <attribute>
       <attName>salutation</attName>
@@ -6777,7 +6777,7 @@ conditions may change between resampling events.
   <entity>
     <entityName>plot</entityName>
     <entitySummary>This table stores general, constant information about the a given plot</entitySummary>
-    <entityDescription>plot contains Plot location, dimension, and similarly constant site data, plus metadata that need be stored only once.   Transient observational information (procured during the first or subsequent observation events) are stored separately in observation</entityDescription>
+    <entityDescription>plot contains Plot location, dimension, and similarly constant site data, plus metadata that need be stored only once.   Transient observational information (procured during the first or subsequent observation events) are stored separately in observation or its children.</entityDescription>
     <module>plot</module>
     <attribute>
       <attName>PLOT_ID</attName>
@@ -10893,7 +10893,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
   <entity>
     <entityName>taxonObservation</entityName>
     <entitySummary>This table contains the author's determination of a taxon and the overall cover of that taxon.</entitySummary>
-    <entityDescription>This table stores information about the original identification by the author of the plot and the taxonomic authority used by that author (i.e. a name - reference pair constituting a taxnomic concept).  The table also contains a record of cumulative cover</entityDescription>
+    <entityDescription>This table stores information about the original identification by the author of the plot and the taxonomic authority used by that author (i.e. a name - citation pair constituting a taxnomic concept).  The table also contains a record of cumulative cover (cover across all strata) of the taxon when not divided into strata.</entityDescription>
     <module>plot</module>
     <attribute>
       <attName>TAXONOBSERVATION_ID</attName>
@@ -10962,7 +10962,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>pecifics about the accession number and location of a collection made of the taxon</attDefinition>
+      <attDefinition>Specifics about the accession number and location of a collection made of the taxon</attDefinition>
     </attribute>
     <attribute>
       <attName>taxonCover</attName>
