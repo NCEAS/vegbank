@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-04-19 14:53:06 $'
- *	'$Revision: 1.11 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-04-29 22:59:11 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ public class AccessionGen {
 
 	private HashMap tableCodes;
 	private String dbCode;
+	private boolean overwriteExtant;
 
 
 	public AccessionGen() {
@@ -83,6 +84,8 @@ public class AccessionGen {
 				tableCodes.put(key.substring(5), res.getString(key));
 			}
 		}
+
+		this.overwriteExtant = false;
 	}
 
 	/**
@@ -200,11 +203,13 @@ public class AccessionGen {
 	//////////////////////////////////////////////////////////
 	// STANDALONE
 	//////////////////////////////////////////////////////////
-	public void run(String dbName, String dbCode, String dbHost) {
+	public void run(String dbName, String dbCode, String dbHost, boolean overwriteExtant) {
 		this.dbCode = dbCode.toUpperCase();
 
 		String dbURL = "jdbc:postgresql://"+dbHost+"/"+dbName;
 		System.out.println("connect string: " + dbURL);
+
+		this.overwriteExtant = overwriteExtant;
 
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -212,7 +217,9 @@ public class AccessionGen {
 
 			//countRecords();
 
-			String s = prompt("\nAre you sure you want to update accession codes in " +
+			String ow = (overwriteExtant ? " and overwrite" : "");
+			String s = prompt("\nAre you sure you want to update" +
+					ow + " accession codes in " +
 					dbName + " on " + dbHost + " [y|n] > ");
 
 			if (!s.equals("y")) {
@@ -406,7 +413,14 @@ public class AccessionGen {
 		// prepare the update statement
 		String pKName = Utility.getPKNameFromTableName(tableName);
 		
-		String update = "UPDATE " + tableName + " SET accessioncode = ? WHERE " + pKName + " = ?";
+		String update = "UPDATE " + tableName + " SET accessioncode = ? WHERE " + 
+				pKName + " = ?";
+
+		if (!overwriteExtant) {
+			// preserve extant codes
+			update = update + " AND accessioncode IS NULL";
+		}
+
 		PreparedStatement pstmt = conn.prepareStatement(update);
 		return pstmt;
 	}
@@ -464,9 +478,10 @@ public class AccessionGen {
 	}
 
 	private void usage(String msg) {
-		System.out.println("USAGE: AccessionGen <dbname> [dbcode] [dbhost]");
+		System.out.println("USAGE: AccessionGen <dbname> [dbcode] [dbhost] [overwrite extant]");
 		System.out.println("Default dbcode is 'VB'");
 		System.out.println("Default dbhost is 'localhost'");
+		System.out.println("Default overwrite is FALSE");
 		System.out.println(msg);
 	}
 
@@ -497,7 +512,7 @@ public class AccessionGen {
 	 */
 	public static void main(String[] args) {
 		AccessionGen ag = new AccessionGen();
-		String dbCode, dbHost;
+		String dbCode, dbHost, overwriteExtant;
 
 		if (args.length < 1) {
 			ag.usage("Database name is required to run.");
@@ -516,9 +531,20 @@ public class AccessionGen {
 			dbHost = args[2];
 		}
 
+		if (args.length < 4) { // overwrite
+			overwriteExtant = "false";
+		} else {
+			overwriteExtant = args[3].toLowerCase();
+			if (!overwriteExtant.equals("false") ||
+					!overwriteExtant.equals("true")) {
+				ag.usage("Overwrite choice must be either 'true' or 'false'");
+				System.exit(0);
+			}
+		}
+
 		String dbName = args[0];
 
-		ag.run(args[0], dbCode, dbHost);
+		ag.run(args[0], dbCode, dbHost, Boolean.valueOf(overwriteExtant).booleanValue());
 	}
 
 }
