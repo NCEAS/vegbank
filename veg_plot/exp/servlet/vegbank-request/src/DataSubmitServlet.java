@@ -29,8 +29,8 @@ import servlet.authentication.UserDatabaseAccess;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-06-26 19:13:26 $'
- *  '$Revision: 1.37 $'
+ *  '$Date: 2002-06-28 17:20:57 $'
+ *  '$Revision: 1.38 $'
  */
 
 
@@ -65,6 +65,10 @@ public class DataSubmitServlet extends HttpServlet
 	private String user = ""; //the email addy of the user as stored in the framwork cookie
 	
 	// THESE VARIABLES ARE USED BY THE PLANT SUBMITTAL 
+	private String givenName = "";
+	private String surName = "";
+	private String institution ="";
+	
 	private String longName = "";
 	private String shortName = "";
 	private	String code = "";
@@ -101,6 +105,28 @@ public class DataSubmitServlet extends HttpServlet
 	private String codeRefISSN = "";
 	private String codeRefISBN = "";
 	private String codeRefOtherCitDetails = "";
+	
+	private String conceptDescription = "";
+	private String conceptRefAuthors = "";
+	private String conceptRefTitle = "";
+	private String conceptRefDate = "";
+	private String conceptRefEdition = "";
+	private String conceptRefSeriesName = "";
+	private String conceptRefVolume = "";
+	private String conceptRefPage = "";
+	private String conceptRefISSN = "";
+	private String conceptRefISBN = "";
+	private String conceptRefOtherCitDetails = "";
+	
+	private String conceptStatus = "";
+	private String statusStartDate = "";
+	private String statusStopDate = "";
+	private String statusDescription = "";
+	private String taxonLevel = "";
+	private String plantParentName = "";
+	private String plantParentRefTitle ="";
+	private String plantParentRefAuthors ="";
+	
 	
 	// this is the pre-transformed init template 
 	private String plantNameRectificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-rectification.html";
@@ -358,6 +384,22 @@ public class DataSubmitServlet extends HttpServlet
 			else if ( action.equals("plantconcept") )
 			{
 				System.out.println("DataSubmitServlet > getting the name reference ");
+				conceptDescription = (String)params.get("conceptDescription");
+				conceptRefAuthors = (String)params.get("conceptRefAuthors");
+				conceptRefTitle  = (String)params.get("conceptRefTitle");
+				conceptRefDate  = (String)params.get("conceptRefDate");
+				conceptRefEdition  = (String)params.get("conceptRefEdition");
+				conceptRefSeriesName  = (String)params.get("conceptRefSeriesName");
+				conceptRefVolume  = (String)params.get("conceptRefVolume");
+				conceptRefPage  = (String)params.get("conceptRefPage");
+				conceptRefISSN  = (String)params.get("conceptRefISSN");
+				conceptRefISBN  = (String)params.get("conceptRefISBN");
+				conceptRefOtherCitDetails = (String)params.get("conceptRefOtherCitDetails");
+				
+				plantParentName = (String)params.get("plantParentName");
+				plantParentRefTitle =(String)params.get("plantParentRefTitle");
+				plantParentRefAuthors = (String)params.get("plantParentRefAuthors");
+				
 				// send the user the attributes related to the plant status/usage
 				updatePlantStatusUsagePage(emailAddress, longName, shortName, code);
 				response.sendRedirect("/forms/plant-valid.html");
@@ -367,6 +409,15 @@ public class DataSubmitServlet extends HttpServlet
 			else if ( action.equals("plantstatususage") )
 			{
 				System.out.println("DataSubmitServlet > getting the status-usage data, returnig recipt");
+				conceptStatus = (String)params.get("conceptStatus");
+				statusStartDate = (String)params.get("statusStartDate");
+				statusStopDate = (String)params.get("statusStopDate");
+				statusDescription = (String)params.get("statusDescription");
+				taxonLevel = (String)params.get("taxonLevel");
+				plantParentName = (String)params.get("plantParentName");
+				plantParentRefAuthors = (String)params.get("plantParentRefAuthors");
+				plantParentRefTitle = (String)params.get("plantParentRefTitle");
+				
 				updatePlantSubmittalRecipt(emailAddress);
 				response.sendRedirect("/forms/plant-valid.html");
 			}
@@ -391,9 +442,73 @@ public class DataSubmitServlet extends HttpServlet
 		 try
 		 {
 			 Hashtable replaceHash = new Hashtable();
+			 
+			 // THE INFORMATION ABOUT THE SUBMITTER
 			 replaceHash.put("emailAddress", ""+emailAddress);
-			 System.out.println("## long name auth: " + longNameRefAuthors);
+			 replaceHash.put("givenName", ""+givenName);
+			 replaceHash.put("surName", ""+surName);
+			 
+			 // THE NAMES OF THE PLANT
+			  replaceHash.put("longName", ""+longName);
+				replaceHash.put("shortName", ""+shortName);
+				replaceHash.put("code", ""+code);
+				
+			 
+			 // THE NAME REFERENCE 
 			 replaceHash.put("longNameRefAuthors", ""+longNameRefAuthors);
+			 replaceHash.put("longNameRefTitle", ""+ longNameRefTitle);
+			 replaceHash.put("longNameRefDate", ""+ longNameRefDate);
+			 replaceHash.put("longNameRefEdition", ""+ longNameRefEdition);
+			 replaceHash.put("longNameRefSeriesName", ""+ longNameRefSeriesName);
+			 replaceHash.put("longNameRefVolume", ""+ longNameRefVolume);
+			 replaceHash.put("longNameRefPage", ""+ longNameRefPage);
+			 replaceHash.put("longNameRefISSN", ""+longNameRefISSN );
+			 replaceHash.put("longNameRefISBN", ""+ longNameRefISBN);
+			 replaceHash.put("longNameRefOtherCitDetails", ""+longNameRefOtherCitDetails );
+			 replaceHash.put("shortNameRefAuthors", ""+shortNameRefAuthors );
+			 replaceHash.put("shortNameRefTitle", ""+shortNameRefTitle );
+			 replaceHash.put("shortNameRefDate", ""+shortNameRefDate );
+			 replaceHash.put("shortNameRefEdition", ""+shortNameRefEdition );
+			 replaceHash.put("shortNameRefSeriesName", ""+shortNameRefSeriesName );
+			 replaceHash.put("shortNameRefVolume", ""+ shortNameRefVolume);
+			 replaceHash.put("shortNameRefPage", ""+shortNameRefPage );
+			 replaceHash.put("shortNameRefISSN", ""+shortNameRefISSN );
+			 replaceHash.put("shortNameRefISBN", ""+shortNameRefISBN );
+			 replaceHash.put("shortNameRefOtherCitDetails", ""+shortNameRefOtherCitDetails );
+			 replaceHash.put("codeRefAuthors", ""+codeRefAuthors );
+			 replaceHash.put("codeRefTitle", ""+ codeRefTitle);
+			 replaceHash.put("codeRefDate", ""+codeRefDate);
+			 replaceHash.put("codeRefEdition", ""+codeRefEdition );
+			 replaceHash.put("codeRefSeriesName", ""+codeRefSeriesName );
+			 replaceHash.put("codeRefVolume", ""+codeRefVolume );
+			 replaceHash.put("codeRefPage", ""+codeRefPage );
+			 replaceHash.put("codeRefISSN", ""+ codeRefISSN);
+			 replaceHash.put("codeRefISBN", ""+codeRefISBN );
+			 replaceHash.put("codeRefOtherCitDetails", ""+codeRefOtherCitDetails );
+			 
+			 // CONCEPT REFERENCE
+			 replaceHash.put("conceptDescription", ""+conceptDescription );
+			 replaceHash.put("conceptRefAuthors", ""+conceptRefAuthors );
+			 replaceHash.put("conceptRefTitle", ""+conceptRefTitle );
+			 replaceHash.put("conceptRefDate", ""+conceptRefDate );
+			 replaceHash.put("conceptRefEdition", ""+conceptRefEdition );
+			 replaceHash.put("conceptRefSeriesName", ""+conceptRefSeriesName );
+			 replaceHash.put("conceptRefVolume", ""+conceptRefVolume );
+			 replaceHash.put("conceptRefPage", ""+conceptRefPage );
+			 replaceHash.put("conceptRefISSN", ""+conceptRefISSN );
+			 replaceHash.put("conceptRefISBN", ""+conceptRefISBN );
+			 replaceHash.put("conceptRefOtherCitDetails", ""+conceptRefOtherCitDetails );
+			 
+			 // STATUS AND USAGE
+			 replaceHash.put("conceptStatus", ""+conceptStatus);
+			 replaceHash.put("statusStartDate", ""+statusStartDate);
+			 replaceHash.put("statusStopDate", ""+statusStopDate);
+			 replaceHash.put("statusDescription", ""+statusDescription);
+			 replaceHash.put("taxonLevel", ""+taxonLevel);
+			 replaceHash.put("plantParentName", ""+plantParentName);
+			 replaceHash.put("plantParentRefTitle", ""+plantParentRefTitle);
+			 replaceHash.put("plantParentRefAuthors", ""+plantParentRefAuthors);
+			 
 			 su.filterTokenFile(plantSubmittalReceiptTemplate, plantValidationForm, replaceHash);
 		 }
 		 catch( Exception e ) 
@@ -417,8 +532,8 @@ public class DataSubmitServlet extends HttpServlet
 			// party names for perspectives
 			userdb = new UserDatabaseAccess();
 			Hashtable h = userdb.getUserInfo(emailAddress);
-			String surName = (String)h.get("surName");
-			String givenName = (String)h.get("givenName");
+			this.surName = (String)h.get("surName");
+			this.givenName = (String)h.get("givenName");
 			String password = (String)h.get("password");
 			String address = (String)h.get("address");
 			String city = (String)h.get("city");
@@ -428,7 +543,7 @@ public class DataSubmitServlet extends HttpServlet
 			String dayPhone = (String)h.get("dayPhone");
 			String ticketCount =  (String)h.get("ticketCount");
 			String permissionType = (String)h.get("permissionType");
-			String institution = (String)h.get("institution");
+			this.institution = (String)h.get("institution");
 			
 			replaceHash.put("longName", ""+longName);
 			replaceHash.put("shortName", ""+shortName);
@@ -528,7 +643,7 @@ public class DataSubmitServlet extends HttpServlet
 			}
 			else
 			{
-				replaceHash.put("codeNameReference", ""+ this.getReferenceForm("codeName") );
+				replaceHash.put("codeNameReference", ""+ this.getReferenceForm("code") );
 			}
 			
 			su.filterTokenFile(plantNameReferenceTemplate, plantValidationForm, replaceHash);
@@ -568,7 +683,6 @@ public class DataSubmitServlet extends HttpServlet
 		StringBuffer sb = new StringBuffer();
 		
 		sb.append("Authors: <input type=text size=25 name="+plantNameType+"RefAuthors> <br> \n");
-		
 		sb.append("Title: <input type=text size=25 name="+plantNameType+"RefTitle> <br> \n");
 		sb.append("Date: <input type=text size=25 name="+plantNameType+"RefDate> <br> \n");
 		sb.append("Edition: <input type=text size=25 name="+plantNameType+"RefEdition> <br> \n");
@@ -577,7 +691,7 @@ public class DataSubmitServlet extends HttpServlet
 		sb.append("Page: <input type=text size=25 name="+plantNameType+"RefPage> <br> \n");
 		sb.append("ISSN: <input type=text size=25 name="+plantNameType+"RefISSN> <br> \n");
 		sb.append("ISBN: <input type=text size=25 name="+plantNameType+"RefISBN> <br> \n");
-		sb.append("Other details: <input type=text size=25 name="+plantNameType+"RefOtherCitationDetails> <br> \n");
+		sb.append("Other details: <input type=text size=25 name="+plantNameType+"RefOtherCitDetails> <br> \n");
 		
 		return( sb.toString() );
 	}
@@ -1676,15 +1790,8 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 			replaceHash.put("conceptRefPageNumber", ""+conceptRefPageNumber );
 			replaceHash.put("conceptRefISBN", ""+conceptRefISBN );
 			replaceHash.put("conceptRefISSN", ""+conceptRefISSN);
-			
 			replaceHash.put("message", ""+message);
-			
 			replaceHash.put("classSystem", ""+classSystem );
-			
-			//replaceHash.put("", );
-			//replaceHash.put("", );
-			//replaceHash.put("", );
-			//replaceHash.put("", );
 			su.filterTokenFile(communityValidationTemplate, communityValidationForm, replaceHash);
 		}
 		catch( Exception e)
@@ -1694,9 +1801,4 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 		}
 		return(results);
 	 }
-	 
-	 
-	 
-
-
 }
