@@ -5828,27 +5828,6 @@ conditions may change between resampling events.
       <update>1.0.0</update>
     </attribute>
     <attribute>
-      <attName>dateEntered</attName>
-      <attLabel>Date Entered into VegBank</attLabel>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Date</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Date that the observation was added to VegBank</attDefinition>
-      <attForms>
-        <formPKTranslate>-1</formPKTranslate>
-        <formAustere>635.5</formAustere>
-        <formSummary>636.5</formSummary>
-        <formDetail>637.5</formDetail>
-      </attForms>
-      <update>1.0.1</update>
-    </attribute>
-    <attribute>
       <attName>authorObsCode</attName>
       <attLabel>Author Observation Code</attLabel>
       <attModel>logical</attModel>
@@ -5974,6 +5953,27 @@ conditions may change between resampling events.
       <update>1.0.0</update>
     </attribute>
     <attribute>
+      <attName>dateEntered</attName>
+      <attLabel>Date Entered into VegBank</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Date</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Date that the observation was added to VegBank</attDefinition>
+      <attForms>
+        <formPKTranslate>-1</formPKTranslate>
+        <formAustere>635.5</formAustere>
+        <formSummary>636.5</formSummary>
+        <formDetail>637.5</formDetail>
+      </attForms>
+      <update>1.0.1</update>
+    </attribute>
+    <attribute>
       <attName>COVERMETHOD_ID</attName>
       <attLabel>Cover Method</attLabel>
       <attModel>logical</attModel>
@@ -5995,88 +5995,29 @@ conditions may change between resampling events.
       <update>1.0.0</update>
     </attribute>
     <attribute>
-      <attName>STRATUMMETHOD_ID</attName>
-      <attLabel>Stratum Method</attLabel>
+      <attName>coverEstimationMethod</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attRelType type="normal" name="n/a"/>
-      <attReferences>stratumMethod.stratumMethod_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>Foreign key into the stratumMethod table</attNotes>
-      <attDefinition>Link to the definitions of strata used in recording taxon-specific values of cover.</attDefinition>
-      <attForms>
-        <formPKTranslate>-1</formPKTranslate>
-        <formAustere>-1</formAustere>
-        <formSummary>652</formSummary>
-        <formDetail>653</formDetail>
-      </attForms>
-      <update>1.0.0</update>
-    </attribute>
-    <attribute>
-      <attName>stemSizeLimit</attName>
-      <attLabel>Stem Size Limit</attLabel>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Float</attType>
+      <attType>varchar (80)</attType>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
+      <attListType>closed</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>canopy cover</attListValue>
+          <attListValueDesc>every part of each plant is included in estimating cover</attListValueDesc>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>foliar cover</attListValue>
+          <attListValueDesc>only foliage is included in estimating cover</attListValueDesc>
+          <attListSortOrd>2</attListSortOrd>
+        </attListItem>
+      </attList>
       <attNotes>n/a</attNotes>
-      <attDefinition>Lower diameter limit in centimeters for inclusion of a tree in the stem count (stemCount).</attDefinition>
-      <attForms>
-        <formPKTranslate>-1</formPKTranslate>
-        <formAustere>654</formAustere>
-        <formSummary>655</formSummary>
-        <formDetail>656</formDetail>
-      </attForms>
-      <update>1.0.0</update>
-    </attribute>
-    <attribute>
-      <attName>methodNarrative</attName>
-      <attLabel>Method Narrative</attLabel>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>text</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Additional metadata helpful for understanding how the data were collected during the observation event.</attDefinition>
-      <attForms>
-        <formPKTranslate>-1</formPKTranslate>
-        <formAustere>657</formAustere>
-        <formSummary>658</formSummary>
-        <formDetail>659</formDetail>
-      </attForms>
-      <update>1.0.0</update>
-    </attribute>
-    <attribute>
-      <attName>taxonObservationArea</attName>
-      <attLabel>Taxon Observation Area</attLabel>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Float</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>default = plot.area</attNotes>
-      <attDefinition>the total surface area (in m2) used for cover estimates and for which a complete species list is provided.  If subplots were used, this would be the total area of the subplots without interstitial space.</attDefinition>
-      <attForms>
-        <formPKTranslate>-1</formPKTranslate>
-        <formAustere>660</formAustere>
-        <formSummary>661</formSummary>
-        <formDetail>662</formDetail>
-      </attForms>
-      <update>1.0.0</update>
+      <attDefinition>The way that cover is estimated on the observation.</attDefinition>
+      <update>1.0.2</update>
     </attribute>
     <attribute>
       <attName>coverDispersion</attName>
@@ -6153,6 +6094,115 @@ conditions may change between resampling events.
         <formAustere>666</formAustere>
         <formSummary>667</formSummary>
         <formDetail>668</formDetail>
+      </attForms>
+      <update>1.0.0</update>
+    </attribute>
+    <attribute>
+      <attName>STRATUMMETHOD_ID</attName>
+      <attLabel>Stratum Method</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
+      <attReferences>stratumMethod.stratumMethod_ID</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>Foreign key into the stratumMethod table</attNotes>
+      <attDefinition>Link to the definitions of strata used in recording taxon-specific values of cover.</attDefinition>
+      <attForms>
+        <formPKTranslate>-1</formPKTranslate>
+        <formAustere>-1</formAustere>
+        <formSummary>652</formSummary>
+        <formDetail>653</formDetail>
+      </attForms>
+      <update>1.0.0</update>
+    </attribute>
+    <attribute>
+      <attName>stratumIndividualDivision</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>closed</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>individual division</attListValue>
+          <attListValueDesc>An individual's cover is divided into separate strata if the individual spans multiple strata, as defined by the strata's heights.  For example, a tall tree would have its cover in a Canopy stratum, but its low branches would be in an Understory stratum.</attListValueDesc>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>No individual division</attListValue>
+          <attListValueDesc>An individual's cover is completely assigned to one stratum (and one stratum only), regardless of where on the individual the cover occurs.  For example, a tall tree would have all of its cover assigned to the Canopy stratum, including any cover that was contributed by lower branches that do not, by themselves, occupy space in the Canopy stratum.</attListValueDesc>
+          <attListSortOrd>2</attListSortOrd>
+        </attListItem>
+      </attList>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The way that an individual's cover is assigned to the different stratum.  Some methodologies allow an individul to span multiple strata and have stratumCover values in each stratum. Other methodologies require that all cover from an individual be assigned to the upper-most stratum.  Further information about the specifics of stratum Methodologies that deviate from the standard practice of the stratumMethod referened in the field stratumMethod_ID should be described in methodNarrative.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>methodNarrative</attName>
+      <attLabel>Method Narrative</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Additional metadata helpful for understanding how the data were collected during the observation event.</attDefinition>
+      <attForms>
+        <formPKTranslate>-1</formPKTranslate>
+        <formAustere>657</formAustere>
+        <formSummary>658</formSummary>
+        <formDetail>659</formDetail>
+      </attForms>
+      <update>1.0.0</update>
+    </attribute>
+    <attribute>
+      <attName>taxonObservationArea</attName>
+      <attLabel>Taxon Observation Area</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>default = plot.area</attNotes>
+      <attDefinition>the total surface area (in m2) used for cover estimates and for which a complete species list is provided.  If subplots were used, this would be the total area of the subplots without interstitial space.</attDefinition>
+      <attForms>
+        <formPKTranslate>-1</formPKTranslate>
+        <formAustere>660</formAustere>
+        <formSummary>661</formSummary>
+        <formDetail>662</formDetail>
+      </attForms>
+      <update>1.0.0</update>
+    </attribute>
+    <attribute>
+      <attName>stemSizeLimit</attName>
+      <attLabel>Stem Size Limit</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Lower diameter limit in centimeters for inclusion of a tree in the stem count (stemCount).</attDefinition>
+      <attForms>
+        <formPKTranslate>-1</formPKTranslate>
+        <formAustere>654</formAustere>
+        <formSummary>655</formSummary>
+        <formDetail>656</formDetail>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -6678,6 +6728,79 @@ conditions may change between resampling events.
       <update>1.0.0</update>
     </attribute>
     <attribute>
+      <attName>standMaturity</attName>
+      <attLabel>Stand Maturity</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>closed</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>Even-age, aggrading</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Mature, even-age</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>3</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Oldgrowth, all-age</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>5</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Transition, breakup</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>4</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Young, regenerative</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Uneven-age</attListValue>
+          <attListValueDesc>Ages of individuals are uneven so that this community does not fit neatly into the succession model.</attListValueDesc>
+          <attListSortOrd>6</attListSortOrd>
+        </attListItem>
+      </attList>
+      <attNotes>closed list</attNotes>
+      <attDefinition>How mature is the stand.  Could be young, mature but even-aged, old-growth, etc.</attDefinition>
+      <attForms>
+        <formPKTranslate>-1</formPKTranslate>
+        <formAustere>759</formAustere>
+        <formSummary>760</formSummary>
+        <formDetail>761</formDetail>
+      </attForms>
+      <update>1.0.0</update>
+    </attribute>
+    <attribute>
+      <attName>successionalStatus</attName>
+      <attLabel>Successional Status</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Description of the assumed successional status of the plot. This description is of necessity highly subjective.</attDefinition>
+      <attForms>
+        <formPKTranslate>-1</formPKTranslate>
+        <formAustere>762</formAustere>
+        <formSummary>763</formSummary>
+        <formDetail>764</formDetail>
+      </attForms>
+      <update>1.0.0</update>
+    </attribute>
+    <attribute>
       <attName>basalArea</attName>
       <attLabel>Basal Area</attLabel>
       <attModel>logical</attModel>
@@ -7036,6 +7159,64 @@ conditions may change between resampling events.
       <update>1.0.0</update>
     </attribute>
     <attribute>
+      <attName>SOILTAXON_ID</attName>
+      <attLabel>Soil Taxon</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
+      <attReferences>soilTaxon.soilTaxon_ID</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>hierarchy</attNotes>
+      <attDefinition>Foreign key into table of soil taxa within the USDA classification hierarchy, including Order, Suborder, Greatgroup, Subgroup, Family and Series.</attDefinition>
+      <attForms>
+        <formPKTranslate>-1</formPKTranslate>
+        <formAustere>-1</formAustere>
+        <formSummary>819</formSummary>
+        <formDetail>820</formDetail>
+      </attForms>
+      <update>1.0.0</update>
+    </attribute>
+    <attribute>
+      <attName>soilTaxonSrc</attName>
+      <attLabel>Soil Taxon Source</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (200)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>closed</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>Field observation</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Other soil map</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>3</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>USDA county soil survey</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>2</attListSortOrd>
+        </attListItem>
+      </attList>
+      <attNotes>closed list</attNotes>
+      <attDefinition>How was the soil taxon determined (e.g., field observation, map,  other sources)?</attDefinition>
+      <attForms>
+        <formPKTranslate>-1</formPKTranslate>
+        <formAustere>821</formAustere>
+        <formSummary>822</formSummary>
+        <formDetail>823</formDetail>
+      </attForms>
+      <update>1.0.0</update>
+    </attribute>
+    <attribute>
       <attName>percentBedRock</attName>
       <attLabel>Percent Bedrock</attLabel>
       <attModel>logical</attModel>
@@ -7200,79 +7381,6 @@ conditions may change between resampling events.
         <formAustere>756</formAustere>
         <formSummary>757</formSummary>
         <formDetail>758</formDetail>
-      </attForms>
-      <update>1.0.0</update>
-    </attribute>
-    <attribute>
-      <attName>standMaturity</attName>
-      <attLabel>Stand Maturity</attLabel>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (50)</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>closed</attListType>
-      <attList>
-        <attListItem>
-          <attListValue>Even-age, aggrading</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Mature, even-age</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>3</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Oldgrowth, all-age</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>5</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Transition, breakup</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>4</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Young, regenerative</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>1</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Uneven-age</attListValue>
-          <attListValueDesc>Ages of individuals are uneven so that this community does not fit neatly into the succession model.</attListValueDesc>
-          <attListSortOrd>6</attListSortOrd>
-        </attListItem>
-      </attList>
-      <attNotes>closed list</attNotes>
-      <attDefinition>How mature is the stand.  Could be young, mature but even-aged, old-growth, etc.</attDefinition>
-      <attForms>
-        <formPKTranslate>-1</formPKTranslate>
-        <formAustere>759</formAustere>
-        <formSummary>760</formSummary>
-        <formDetail>761</formDetail>
-      </attForms>
-      <update>1.0.0</update>
-    </attribute>
-    <attribute>
-      <attName>successionalStatus</attName>
-      <attLabel>Successional Status</attLabel>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>text</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Description of the assumed successional status of the plot. This description is of necessity highly subjective.</attDefinition>
-      <attForms>
-        <formPKTranslate>-1</formPKTranslate>
-        <formAustere>762</formAustere>
-        <formSummary>763</formSummary>
-        <formDetail>764</formDetail>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -8242,114 +8350,6 @@ conditions may change between resampling events.
         <formDetail>818</formDetail>
       </attForms>
       <update>1.0.0</update>
-    </attribute>
-    <attribute>
-      <attName>SOILTAXON_ID</attName>
-      <attLabel>Soil Taxon</attLabel>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attRelType type="normal" name="n/a"/>
-      <attReferences>soilTaxon.soilTaxon_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>hierarchy</attNotes>
-      <attDefinition>Foreign key into table of soil taxa within the USDA classification hierarchy, including Order, Suborder, Greatgroup, Subgroup, Family and Series.</attDefinition>
-      <attForms>
-        <formPKTranslate>-1</formPKTranslate>
-        <formAustere>-1</formAustere>
-        <formSummary>819</formSummary>
-        <formDetail>820</formDetail>
-      </attForms>
-      <update>1.0.0</update>
-    </attribute>
-    <attribute>
-      <attName>soilTaxonSrc</attName>
-      <attLabel>Soil Taxon Source</attLabel>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (200)</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>closed</attListType>
-      <attList>
-        <attListItem>
-          <attListValue>Field observation</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>1</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Other soil map</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>3</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>USDA county soil survey</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>2</attListSortOrd>
-        </attListItem>
-      </attList>
-      <attNotes>closed list</attNotes>
-      <attDefinition>How was the soil taxon determined (e.g., field observation, map,  other sources)?</attDefinition>
-      <attForms>
-        <formPKTranslate>-1</formPKTranslate>
-        <formAustere>821</formAustere>
-        <formSummary>822</formSummary>
-        <formDetail>823</formDetail>
-      </attForms>
-      <update>1.0.0</update>
-    </attribute>
-    <attribute>
-      <attName>coverEstimationMethod</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (80)</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>closed</attListType>
-      <attList>
-        <attListItem>
-          <attListValue>canopy cover</attListValue>
-          <attListValueDesc>every part of each plant is included in estimating cover</attListValueDesc>
-          <attListSortOrd>1</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>foliar cover</attListValue>
-          <attListValueDesc>only foliage is included in estimating cover</attListValueDesc>
-          <attListSortOrd>2</attListSortOrd>
-        </attListItem>
-      </attList>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The way that cover is estimated on the observation.</attDefinition>
-      <update>1.0.2</update>
-    </attribute>
-    <attribute>
-      <attName>stratumIndividualDivision</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (50)</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>closed</attListType>
-      <attList>
-        <attListItem>
-          <attListValue>individual division</attListValue>
-          <attListValueDesc>An individual's cover is divided into separate strata if the individual spans multiple strata, as defined by the strata's heights.  For example, a tall tree would have its cover in a Canopy stratum, but its low branches would be in an Understory stratum.</attListValueDesc>
-          <attListSortOrd>1</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>No individual division</attListValue>
-          <attListValueDesc>An individual's cover is completely assigned to one stratum (and one stratum only), regardless of where on the individual the cover occurs.  For example, a tall tree would have all of its cover assigned to the Canopy stratum, including any cover that was contributed by lower branches that do not, by themselves, occupy space in the Canopy stratum.</attListValueDesc>
-          <attListSortOrd>2</attListSortOrd>
-        </attListItem>
-      </attList>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The way that an individual's cover is assigned to the different stratum.  Some methodologies allow an individul to span multiple strata and have stratumCover values in each stratum. Other methodologies require that all cover from an individual be assigned to the upper-most stratum.  Further information about the specifics of stratum Methodologies that deviate from the standard practice of the stratumMethod referened in the field stratumMethod_ID should be described in methodNarrative.</attDefinition>
-      <update>1.0.2</update>
     </attribute>
     <attribute>
       <attName>totalCover</attName>
