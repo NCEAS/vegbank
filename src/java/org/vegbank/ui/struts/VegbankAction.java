@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-25 06:42:06 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-04-26 20:47:08 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,6 +63,24 @@ public abstract class VegbankAction extends Action {
 	 */
 	public ResourceBundle getResourceBundle(String path) {
 		return ResourceBundle.getBundle(path);
+	}
+		
+	/**
+	 * Helps with i18n. 
+	 * Gets the value of the request parameter named 'cmd'.
+	 * If 'cmd' is not specified then returns 'action'.
+	 * The intended value of 'cmd' is a unique name of some
+	 * action to process in the Action.
+	 */
+	public String getDispatchCommand(HttpServletRequest request) {
+		String cmd = request.getParameter("cmd");
+		if (cmd == null) {
+			// no cmd, use action instead
+			return request.getParameter("action");
+		} else {
+			// use cmd
+			return cmd;
+		}
 	}
 		
 }
