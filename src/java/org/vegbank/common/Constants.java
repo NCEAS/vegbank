@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:22:17 $'
- *	'$Revision: 1.5 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-12-03 02:00:55 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,4 +57,5 @@ public interface Constants
 	public static final String CONCEPT_STATUS_NOT_ACCEPTED = "not accepted";
 
 	public static final String USER_KEY = "USER";
+	public static final String GUEST_USER_KEY = "GUEST";
 }
