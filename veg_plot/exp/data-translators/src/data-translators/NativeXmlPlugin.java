@@ -23,9 +23,9 @@ import  xmlresource.utils.XMLparse;
  * This is a plugin to implement the DataSourceInterface class, allowing 
  * Access to the data stored in the native VegBank XML structure.
  * 
- * 	'$Author: farrell $'
- *	'$Date: 2002-12-11 21:13:51 $'
- *	'$Revision: 1.9 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2002-12-12 22:07:23 $'
+ *	'$Revision: 1.10 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -437,26 +437,31 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "latitude") );
 	}
+	
 	public String getLongitude(String plotName)
 	{
 		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "longitude") );
 	}
+	
 	public String getUTMZone(String plotName)
 	{
 		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "authorZone") );
 	}
+	
 	public String getDatumType(String plotName)
 	{
 		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "authorDatum") );
 	}
+	
 	public String getPlotShape(String plotName)
 	{
 		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "shape") );
 	}
+	
 	public String getPlotArea(String plotName)	
 	{
 		this.init(plotName);
@@ -504,7 +509,33 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 			return("");
 		}
 	}
+	
+	public String getAzimuth(String plotName) 
+	{
+		this.init(plotName);
+		return this.getPlotAttribute(plotName, "azimuth");
+	}	
+ 
+	public String getDSGPoly(String plotName)
+	{
+		this.init(plotName);
+		return this.getPlotAttribute(plotName, "dsgPoly");
 
+	}
+	
+	public String getLocationNarrative(String plotName)
+	{
+		this.init(plotName);
+		return this.getPlotAttribute(plotName, "locationNarrative");
+	}
+	
+	public String getLayoutNarrative( String plotName )
+	{
+		this.init(plotName);
+		// NOTE: Thris is misspelled in the XML
+		return this.getPlotAttribute(plotName, "layoutNarative");
+	}
+	
 	public String getSurfGeo(String plotName)
 	{
 		this.init(plotName);
@@ -523,16 +554,19 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		return( s );
 	}
+	
 	public String getStandSize(String plotName)
 	{
 		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "standSize") );
 	}
+	
 	public String getAuthorLocation(String plotName)
 	{
 		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "authorLocation") );
 	}
+	
 	public String getLandForm(String plotName)
 	{
 		this.init(plotName);
@@ -586,6 +620,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 			return("");
 		}
 	}
+	
 	//this method must return a not-null value
 	public String getConfidentialityStatus(String plotName)
 	{
@@ -605,10 +640,12 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	{
 		return(booleanBuf);
 	}
+	
 	public String getSoilTaxon(String plotName)
 	{
 		return(stringBuf);
 	}
+	
 	public String getSoilTaxonSource(String plotName)
 	{
 		return(stringBuf);
@@ -1038,6 +1075,142 @@ public String  getStandMaturity(String plotName)
 	catch(Exception e )
 	{
 		System.out.println("Exception parsing: standMaturity");
+	}
+	return(elementValue);
+}
+
+
+public String  getLandscapeNarrative(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "landscapeNarrative");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: landscapeNarrative");
+	}
+	return(elementValue);
+}
+
+public String  getPhenologicalAspect(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "phenologicalAspect");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: phenologicalAspect");
+	}
+	return(elementValue);
+}
+
+public String  getWaterDepth(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "waterDepth");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: waterDepth");
+	}
+	return(elementValue);
+}
+
+public String  getFieldHt(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "fieldHt");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: fieldHt");
+	}
+	return(elementValue);
+}
+
+public String  getSubmergedHt(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "submergedHt");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: submergedHt");
+	}
+	return(elementValue);
+}
+
+public String  getTreeCover(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "treeCover");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: treeCover");
+	}
+	return(elementValue);
+}
+
+public String  getShrubCover(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "shrubCover");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: shrubCover");
+	}
+	return(elementValue);
+}
+
+public String  getFieldCover(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "fieldCover");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: fieldCover");
+	}
+	return(elementValue);
+}
+
+public String  getNonvascularCover(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "nonvascularCover");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: nonvascularCover");
 	}
 	return(elementValue);
 }
