@@ -29,8 +29,8 @@ import org.vegbank.common.model.Plantstatus;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2004-10-21 15:13:25 $'
- * '$Revision: 1.39 $'
+ * '$Date: 2004-11-06 01:10:20 $'
+ * '$Revision: 1.40 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ public class Utility
 	// Bundle:  vegbank
 	public static ResourceBundle vegbankPropFile;
 	public static String SMTP_SERVER;
-	public static String VEGBANK_SCHEMA_LOACATION;
+	public static String VEGBANK_SCHEMA_LOCATION;
 	public static String VEGBANK_SCHEMA_NAME;
 	public static String VEGBANK_XML_SCHEMA;
 	public static String VEGBANK_VERSION;
@@ -92,10 +92,12 @@ public class Utility
 		// Bundle:  vegbank
 		vegbankPropFile = ResourceBundle.getBundle("vegbank");
 		SMTP_SERVER = vegbankPropFile.getString("mailHost");
-		VEGBANK_SCHEMA_LOACATION = vegbankPropFile.getString("schemaLocation");
+		VEGBANK_SCHEMA_LOCATION = vegbankPropFile.getString("schemaLocation");
+		if (!VEGBANK_SCHEMA_LOCATION.endsWith("/")) { VEGBANK_SCHEMA_LOCATION += "/"; }
 		VEGBANK_SCHEMA_NAME = vegbankPropFile.getString("vegbankSchemaName");	
 		VEGBANK_VERSION = vegbankPropFile.getString("vegbankVersion");
-		VEGBANK_XML_SCHEMA = VEGBANK_SCHEMA_LOACATION + "/" + VEGBANK_SCHEMA_NAME;
+		VEGBANK_XML_SCHEMA = VEGBANK_SCHEMA_LOCATION + VEGBANK_SCHEMA_NAME;
+
 		VB_HOME_DIR = vegbankPropFile.getString("vegbank.home.dir");
 		VB_DATA_DIR = vegbankPropFile.getString("vegbank.data.dir");
 		WEBAPP_DIR = vegbankPropFile.getString("vegbank.webapp.dir");

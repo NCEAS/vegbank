@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-11-01 20:37:52 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2004-11-06 01:10:20 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,7 +86,6 @@ public class UploadPlotAction extends VegbankAction
 		boolean validate = theForm.isValidate();
 		boolean rectify = theForm.isRectify();
 
-		log.debug("ACTION.execute(): calling isUpload");
 		boolean upload = theForm.isUpload();
 		String savedFileName = null;
 		VegbankXMLUploadThread worker = null;
@@ -186,9 +185,9 @@ public class UploadPlotAction extends VegbankAction
 		else
 		{
 			FileWrapper thisFile = (FileWrapper) files.iterator().next();
+			extension = this.getFileExtension(thisFile.getFileName());
 			
-			String thisExtension = this.getFileExtension(  thisFile.getFileName());
-			if ( thisExtension.equalsIgnoreCase("XML") )
+			if ( extension.equalsIgnoreCase("XML") )
 			{
 				try 
 				{
@@ -236,7 +235,7 @@ public class UploadPlotAction extends VegbankAction
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 					"errors.action.failed", "Vegbank can only upload a *.xml file or a zipped *.xml file" ));
-				log.warn("Added error: Attempt to load a file with extension  " + thisExtension + " failed");
+				log.warn("Added error: Attempt to load a file with extension  " + extension + " failed");
 			}
 		}
 		//destroy the temporary file created
@@ -304,10 +303,33 @@ public class UploadPlotAction extends VegbankAction
 	private String saveFile(FileWrapper file) throws Exception {
 		
 		String fileNameAndPath = getSaveDir();
+
+		try {
+			// make the upload dirs if not there
+			File udir = new File(fileNameAndPath);
+			if (!udir.exists()) {
+				udir.mkdirs();
+			}
+		} catch (Exception ex) {
+			log.error("problem making upload dirs", ex);
+		}
+
 		fileNameAndPath += file.getFileName();
 
 		//write the file to the file specified
-		InputStream stream = file.getInputStream();
+		log.debug("file content-type: " + file.getContentType());
+		InputStream stream;
+		
+		// 11/2/2004: ORIGINAL WAY 
+		stream = file.getInputStream();
+		//
+
+		//
+		// 11/2/2004: Force the encoding to be UTF-16
+		//
+		//String fileContents = new String(file.getFileData());
+		//stream = new ByteArrayInputStream(fileContents.getBytes("UTF-16"));
+
 		OutputStream bos = new FileOutputStream(fileNameAndPath);
 		int bytesRead = 0;
 		byte[] buffer = new byte[8192];
@@ -379,7 +401,6 @@ public class UploadPlotAction extends VegbankAction
 		if (!saveDir.endsWith(File.separator)) {
 			 saveDir += File.separator;
 		}
-		saveDir += File.separator;
 	}
 
 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-27 23:28:22 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-11-06 01:10:20 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ public class FileWrapper implements FormFile
 	{
 		isFormFile = true;
 		formFile = f;
-		inputStream = f.getInputStream();
+		inputStream = new BufferedInputStream(f.getInputStream());
 		fileName = f.getFileName();
 		fileSize = f.getFileSize();
 	}
