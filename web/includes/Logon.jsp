@@ -23,7 +23,7 @@
       </font>
     </td>
     <td align="left">
-      <html:text property="username" size="16"/>
+      <html:text property="username" size="25" maxlength="50"/>
     </td>
   </tr>
   
@@ -35,7 +35,7 @@
       <font>
     </td>
     <td align="left">
-      <html:password property="password" size="16" maxlength="18"
+      <html:password property="password" size="25" maxlength="18"
                     redisplay="false"/>
     </td>
   </tr>

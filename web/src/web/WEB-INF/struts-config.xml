@@ -34,6 +34,9 @@
     <form-bean  name="AddPartyForm"
                 type="org.vegbank.ui.struts.AddPartyForm"/>
 
+    <form-bean  name="CertificationForm"
+                type="org.vegbank.ui.struts.CertificationForm"/>
+				
     <form-bean  name="PlotQueryForm"
                 type="org.vegbank.ui.struts.PlotQueryForm"/>
 		
@@ -130,6 +133,7 @@
     <forward   name="AddStratumMethod"	path="/forms/AddStratumMethod.jsp"/>
     <forward   name="AddParty"	path="/forms/AddParty.jsp"/>
     <forward   name="PlotQuery"	path="/forms/plot-query.jsp"/>
+    <forward   name="Certification"	path="/forms/certification.jsp"/>
     <forward   name="EntityName"	path="/forms/EntityName.jsp"/>
     <forward   name="DisplayResults" path="/forms/DisplayResults.jsp"/>
     <forward   name="DisplayLoadReport" path="/forms/DisplayLoadReport.jsp"/>
@@ -181,6 +185,7 @@
         scope="request"
         validate="true"
         input="DisplayUploadPlotAction">
+      <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
       <set-property property="reqRoles" value="cert" />
     </action>		 
 
@@ -191,6 +196,7 @@
         scope="request"
         validate="true"
         input="DropPlotAction">
+      <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
       <set-property property="reqRoles" value="dba" />
     </action>		 
 
@@ -201,6 +207,7 @@
       	scope="request"
       	validate="true"
       	input="AddReference">
+      <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
       <set-property property="reqRoles" value="pro" />
     </action>
 
@@ -246,6 +253,29 @@
       	input="PlotQuery">
     </action>
 
+	<!-- Prepopulate the certification form -->
+	<action path="/LoadCertification"
+		    type="org.vegbank.ui.struts.CertificationLoadAction"
+		    name="CertificationForm"
+		   scope="request"
+		validate="false">
+      <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+      <set-property property="reqRoles" value="reg" />
+      <forward name="success" path="/forms/certification.jsp"/>
+      <forward name="view" path="/forms/certification-view.jsp"/>
+    </action>
+	
+	<!-- Save user certification form -->
+    <action path="/SaveCertification"
+		    type="org.vegbank.ui.struts.CertificationSaveAction"
+     	    name="CertificationForm"
+      	   scope="request"
+		   input="Certification"
+      	validate="true">
+      <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+      <set-property property="reqRoles" value="reg" />
+	</action>		
+		   
     <!-- Display a Entity -->
     <action path="/DisplayEntity"
         type="org.vegbank.ui.struts.DisplayEntityAction"
@@ -280,7 +310,7 @@
         name="DownLoadManagerForm"
         scope="request"
         validate="true"
-	input="DisplayResults">
+		input="DisplayResults">
       <forward name="success" path="/forms/DownLoad.jsp"/>
     </action>
 
@@ -334,7 +364,8 @@
 
   <controller processorClass="org.vegbank.ui.struts.RequestProcessor">
     <!-- The "input" parameter on "action" elements is the name of a
-         local or global "forward" rather than a module-relative path -->
+         local or global "forward" rather than a module-relative path
+		 when "inputForward" is true -->
     <set-property property="inputForward" value="true"/>
     <set-property property="maxFileSize" value="20M"/>
   </controller>

@@ -7,7 +7,7 @@
 <!--
     Validation Rules for the Vegbank application 
 
-    $Id: validation.xml,v 1.10 2003-12-05 22:49:35 farrell Exp $
+    $Id: validation.xml,v 1.11 2004-01-16 07:07:27 anderson Exp $
 -->
 
 <form-validation>
@@ -200,6 +200,148 @@
             </field>
         </form>
 
+        <!-- Rules for certification form -->
+        <form name="CertificationForm">
+            <field property="requestedCert" depends="required">
+				<arg0 key="cert.req.requestedCert"/>
+			</field>
+            <field property="highestDegree" depends="required">
+				<arg0 key="cert.req.highestDegree"/>
+			</field>
+            <field property="degreeYear" depends="required">
+				<arg0 key="cert.req.degreeYear"/>
+			</field>
+            <field property="currentInst" depends="required">
+				<arg0 key="cert.req.currentInst"/>
+			</field>
+            <field property="degreeInst" depends="required">
+				<arg0 key="cert.req.degreeInst"/>
+			</field>
+            <field property="currentPos" depends="required">
+				<arg0 key="cert.req.currentPos"/>
+			</field>
+            <field property="esaMember" depends="required">
+				<arg0 key="cert.req.esaMember"/>
+			</field>
+
+            <field property="profExp" depends="maxlength">
+				<arg0 key="cert.req.profExp"/>
+				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+            <field property="relevantPubs" depends="maxlength">
+				<arg0 key="cert.req.relevantPubs"/>
+				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+            <field property="vegSamplingExp" depends="maxlength">
+				<arg0 key="cert.req.vegSamplingExp"/>
+				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+            <field property="vegAnalysisExp" depends="maxlength">
+				<arg0 key="cert.req.vegAnalysisExp"/>
+				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+            <field property="usnvcExp" depends="maxlength">
+				<arg0 key="cert.req.usnvcExp"/>
+				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+            <field property="vegbankExp" depends="maxlength">
+				<arg0 key="cert.req.vegbankExp"/>
+				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+            <field property="vegbankIntention" depends="maxlength">
+				<arg0 key="cert.req.vegbankIntention"/>
+				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+            <field property="toolsExp" depends="maxlength">
+				<arg0 key="cert.req.toolsExp"/>
+				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>500</var-value>
+				</var>
+			</field>
+
+            <field property="nvcExpRegionA" depends="required">
+				<arg0 key="cert.req.nvcExpRegionA"/>
+			</field>
+            <field property="nvcExpVegA" depends="required">
+				<arg0 key="cert.req.nvcExpVegA"/>
+			</field>
+            <field property="nvcExpFloristicsA" depends="required">
+				<arg0 key="cert.req.nvcExpFloristicsA"/>
+			</field>
+            <field property="nvcExpNVCA" depends="required">
+				<arg0 key="cert.req.nvcExpNVCA"/>
+			</field>
+            <field property="nvcExpRegionB" depends="required">
+				<arg0 key="cert.req.nvcExpRegionB"/>
+			</field>
+            <field property="nvcExpVegB" depends="required">
+				<arg0 key="cert.req.nvcExpVegB"/>
+			</field>
+            <field property="nvcExpFloristicsB" depends="required">
+				<arg0 key="cert.req.nvcExpFloristicsB"/>
+			</field>
+            <field property="nvcExpNVCB" depends="required">
+				<arg0 key="cert.req.nvcExpNVCB"/>
+			</field>
+            <field property="nvcExpRegionC" depends="required">
+				<arg0 key="cert.req.nvcExpRegionC"/>
+			</field>
+            <field property="nvcExpVegC" depends="required">
+				<arg0 key="cert.req.nvcExpVegC"/>
+			</field>
+            <field property="nvcExpFloristicsC" depends="required">
+				<arg0 key="cert.req.nvcExpFloristicsC"/>
+			</field>
+            <field property="nvcExpNVCC" depends="required">
+				<arg0 key="cert.req.nvcExpNVCC"/>
+			</field>
+
+            <field property="esaSponsorEmailA" depends="email">
+				<arg0 key="cert.req.esaSponsorEmailA"/>
+			</field>
+            <field property="esaSponsorEmailB" depends="email">
+				<arg0 key="cert.req.esaSponsorEmailB"/>
+			</field>
+
+            <field property="addlStmt" depends="maxlength">
+				<arg0 key="cert.req.addlStmt"/>
+				<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+			</field>
+        </form>
     </formset>
 
 

@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-01-16 02:04:16 $'
-  *  '$Revision: 1.2 $'
+  *      '$Date: 2004-01-16 07:07:27 $'
+  *  '$Revision: 1.3 $'
   *
   *
   -->
@@ -35,7 +35,7 @@
         <h2 align="center" class="vegbank">Certification Application</h2>
         <p class="vegbank_normal">
 			Become a certified or professional user to start contributing data to VegBank.
-			<br><b>Please see the <a href="@help-for-certification-href@">!!FIX ME!! explanation here</a></b>
+			<br/><b>Please see the <a href="@help-for-certification-href@">!!FIX ME!! explanation here</a></b>
 			for more information.
 			<br/>
         </p> 
@@ -55,20 +55,20 @@
 			<tr bgcolor="#EBF3F8"> 
 			  <td align="center">Your Personal Information</td> 
 			</tr>
-			<tr bgcolor="#EEEEEE">
+			<tr bgcolor="#EFEFEF">
 			  <td>
 			    <p>
 				<bean:write name="reqAttribBean" property="givenName"/> 
 				<bean:write name="reqAttribBean" property="surName"/>
         		(<bean:write name="reqAttribBean" property="currentCertLevel"/>)
-				<br>
+				<br/>
 				<logic:notEqual name="reqAttribBean" property="emailAddress" value="null">
 					<bean:write name="reqAttribBean" property="emailAddress"/>
 				</logic:notEqual> 
 				<logic:notEqual name="reqAttribBean" property="phoneNumber" value="null">
 					<bean:write name="reqAttribBean" property="phoneNumber"/>
 				</logic:notEqual>
-				<br>
+				<br/>
 				&nbsp;&raquo; <a href="/LoadUser.do">update info</a>
 			  </td>
 			</tr>
@@ -80,10 +80,10 @@
       <td colspan="3"> 
           <font color="red">*</font> 
 		  <span class="vegbank_small"> Required fields</span>
-		  <br>
+		  <br/>
           <font color="blue" size=-1>#</font>
 		  <span class="vegbank_small"> Field listed in the public registry of certified users</span>
-		  <br>&nbsp;
+		  <br/>&nbsp;
 	  </td>
 	</tr>
     <tr> 
@@ -91,7 +91,7 @@
 		<font color="red">*</font> 
         <span class="vegbank_small">
 		Requested certification 
-		<br>
+		<br/>
 	    <html:select property="requestedCert" size="1">
           <option value="cert">Certified User</option>
           <option value="pro">Professional User</option>
@@ -115,7 +115,7 @@
 		<font color="red">*</font> 
 	    <span class="vegbank_small">
 		Highest degree
-        <br> 
+        <br/> 
 	    <html:select property="highestDegree" size="1">
           <option value="0">None</option>
           <option value="1">BA/BS</option>
@@ -127,7 +127,7 @@
     <tr>
       <td>
 	    <span class="vegbank_small">Year of degree</span>
-        <br> 
+        <br/> 
         <html:text property="degreeYear" size="4" maxlength="4"/>
         </td>
     </tr>
@@ -137,7 +137,7 @@
 	    <span class="vegbank_small">
 		Institution of highest degree
 		</span>
-        <br> 
+        <br/> 
         <html:text property="degreeInst" size="50" maxlength="50"/>
         </td>
     </tr>
@@ -148,7 +148,7 @@
 	    <span class="vegbank_small">
 		Current organization  
 		</span>
-		<br>
+		<br/>
         <html:text property="currentOrg" size="50" maxlength="50"/>
         </td>
     </tr>
@@ -158,7 +158,7 @@
 		<font color="blue" size=-1>#</font> 
 	    <span class="vegbank_small">
 		Current position </span>
-		<br>
+		<br/>
         <html:text property="currentPos" size="50" maxlength="50"/>
         </td>
     </tr>
@@ -168,98 +168,98 @@
 		<font color="blue" size=-1>#</font> 
 	    <span class="vegbank_small">
 		ESA Certified Ecologist?</span>
-		<br>
+		<br/>
         &nbsp;&nbsp;&nbsp;&raquo;No <html:radio property="esaMember" value="no" title="I am not ESA certified"/>;
         &nbsp;&nbsp;&nbsp;Yes <html:radio property="esaMember" title="I am ESA certified" value="yes"/>
         </td>
     </tr>
     <tr> 
       <td colspan="2">
-	    <br>
+	    <br/>
         <span class="vegbank_small">Other professional certification or experience?</span>
-		<br>
+		<br/>
         <html:textarea property="profExp" cols="60" rows="3"/>
       </td>
     </tr>
     <tr> 
       <td colspan="2">
-		<br>
+		<br/>
 	    <span class="vegbank_small">
         List up to 5 of your relevant publications/theses:
 		</span>
-		<br>
+		<br/>
         <html:textarea property="relevantPubs" cols="60" rows="3"/>
       </td>
     </tr>
     <tr> 
       <td colspan="2">
-        <br>
+        <br/>
         <font color="red">*</font> 
 	    <span class="vegbank_small">
 		Briefly describe your background and expertise in vegetation sampling:</span>
-        <br>
+        <br/>
         <html:textarea property="vegSamplingExp" cols="60" rows="3"/>
       </td>
     </tr>
     <tr> 
       <td colspan="2">
-        <br>
+        <br/>
         <font color="red">*</font> 
 	    <span class="vegbank_small">
 		Briefly describe your background and expertise with vegetation analysis, description &amp; classification:</span>
-        <br>
+        <br/>
         <html:textarea property="vegAnalysisExp" cols="60" rows="3"/>
       </td>
     </tr>
     <tr> 
       <td colspan="2">
-        <br>
+        <br/>
         <font color="red">*</font> 
 	    <span class="vegbank_small">
 		Briefly describe your prior experience with the US National Vegetation Classification, if any:</span>
-		<br>
+		<br/>
         <html:textarea property="usnvcExp" cols="60" rows="3"/>
       </td>
     </tr>
     <tr> 
       <td colspan="2">
-        <br>
+        <br/>
         <font color="red">*</font> 
 	    <span class="vegbank_small">
 		Briefly describe your prior experience with the VegBank archive, if any:</span>
-        <br>
+        <br/>
         <html:textarea property="vbExp" cols="60" rows="3"/>
       </td>
     </tr>
   <tr> 
       <td colspan="2">
-        <br>
+        <br/>
         <font color="red">*</font> 
 	    <span class="vegbank_small">
 		What use do you anticipate making the VegBank archive?</span>
-		<br>
+		<br/>
         <html:textarea property="vbIntention" cols="60" rows="3"/>
       </td>
     </tr>
     <tr> 
       <td colspan="2">
-        <br>
+        <br/>
         <font color="red">*</font> 
 	    <span class="vegbank_small">
 		Briefly describe your prior experience with vegetation plot databases and/or analytical tools:</span>
-		<br>
+		<br/>
         <html:textarea property="toolsExp" cols="60" rows="3"/>
       </td>
     </tr> 
 	<tr bgcolor="#FFFFFF"> 
 	  <td colspan="4">
-	    <br> 
+	    <br/> 
 	    <font color="blue" size=-1>#</font> 
 		<span class="vegbank_small">
 	    Please rate your expertise for the 3 regions you know best in terms 
 	    of knowledge of the vegetation, the flora, and the US-NVC (1=Weak, 5=Expert) 
 		</span>
-	    <br>
+	    <br/>
 
 		<!-- Region expertise table -->
 		<table bgcolor="#FFFFFF" cellpadding="1" cellspacing="0" border="0">
@@ -437,12 +437,12 @@
     </tr>
 	<tr bgcolor="#FFFFFF">
 	  <td colspan="5">
-	  	<br>
+	  	<br/>
 		  <span class="vegbank_small">
 		  List up to two ESA members who are familiar with your background and 
 		  expertise and who have agreed to sponsor your certification.
 		  </span>
-		  <br>
+		  <br/>
 		    <!-- sponsor table -->
 			<table bgcolor="#FFFFFF" cellpadding="1" cellspacing="1" border="0">
 			<tr>
@@ -491,11 +491,11 @@
 
    <tr> 
       <td colspan="2">
-		<br>
+		<br/>
 	    <span class="vegbank_small">
         Are you interested in serving as a peer reviewer for proposed changes in the US-NVC?
         </span>
-		<br>
+		<br/>
 		&nbsp;&nbsp;&nbsp;&raquo; <html:checkbox property="peerReview" value="yes" title="Be a peer reviewer"/>
 		 Check this box if so.
 		</td>
@@ -503,29 +503,28 @@
 
     <tr> 
       <td colspan="2">
-	    <br>
+	    <br/>
 		<span class="vegbank_small">
         Additional statements:
 		</span>
-        <br>
+        <br/>
 		<html:textarea property="addlStmt" rows="3" cols="60"/>
       </td>
     </tr>
     <tr> 
       <td colspan="2">
-        <br>
+        <br/>
         <html:submit value="Request Certification"/>
       </td>
     </tr>
 </html:form>
   </table>
-<p class="vegbank_small">
           <font color="red">*</font> 
 		  <span class="vegbank_small"> Required fields</span>
-		  <br>
+		  <br/>
           <font color="blue" size=-1>#</font>
 		  <span class="vegbank_small"> Field listed in the public registry of certified users</span>
-          </p> &nbsp;
+          <br/> &nbsp;
 
 
 @vegbank_footer_html_onerow@

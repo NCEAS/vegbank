@@ -32,7 +32,10 @@ a.whitetext:visited	{ color: #FFFFFF; text-decoration: none}
 a.whitetext:hover	{ color: #3399FF; text-decoration: none}
 
 
-.vegbank		{ font-family: Georgia, Times New Roman, Times, serif; color : #531100}
+.vegbank		{ font-family: Georgia, Times New Roman, Times, serif; color : #531100; }
+.vegbank_small	{ font-family: Georgia, Times New Roman, Times, serif; color : #531100; font-size: 10pt}
+.vegbank_normal	{ font-family: Georgia, Times New Roman, Times, serif; color : #531100; font-size: 12pt}
+.vegbank_large	{ font-family: Georgia, Times New Roman, Times, serif; color : #531100; font-size: 14pt}
 .sansserif		{ font-family: Verdana, Arial, Helvetica, sans-serif ; color : #531100}
 
 UL.constsize,LI.constsize {  font: 10pt Verdana, Arial, Helvetica, Geneva, sans-serif; }						
