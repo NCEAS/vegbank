@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-04-19 14:53:06 $'
- *	'$Revision: 1.7 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-05-06 22:40:01 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,8 +30,11 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Vector;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.Constants;
 import org.vegbank.common.model.Address;
 import org.vegbank.common.model.Commclass;
@@ -72,7 +75,6 @@ import org.vegbank.common.model.Taxonobservation;
 import org.vegbank.common.utility.AccessionGen;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
-import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.Utility;
 
 
@@ -85,6 +87,8 @@ import org.vegbank.common.utility.Utility;
 	 */
 	public class LoadTreeToDatabase
 	{
+		private static Log log = LogFactory.getLog(LoadTreeToDatabase.class);
+
 		public static final String TABLENAME = "TableName";
 		public InputPKTracker inputPKTracker = new InputPKTracker();
 		
@@ -173,13 +177,13 @@ import org.vegbank.common.utility.Utility;
 				insertObservation(observation);
 			}
 
-			LogUtility.log(
+			log.debug(
 				"LoadTreeToDatabase:  insertion success: " + commit);
 
 			if (commit == true && doCommit == true)
 			{				
 				writeConn.commit();
-				LogUtility.log("LoadTreeToDatabase: Adding AccessionCodes to loaded data");
+				log.debug("LoadTreeToDatabase: Adding AccessionCodes to loaded data");
 				accessionCodesAdded.addAll(this.addAllAccessionCodes());
 				writeConn.commit();
 			}
@@ -188,7 +192,7 @@ import org.vegbank.common.utility.Utility;
 				writeConn.rollback();
 			}
 			
-			LogUtility.log("LoadTreeToDatabase: Returning the DBConnection to the pool");
+			log.debug("LoadTreeToDatabase: Returning the DBConnection to the pool");
 			//Return dbconnection to pool
 			DBConnectionPool.returnDBConnection(writeConn);
 			readConn.setReadOnly(false);
@@ -235,7 +239,7 @@ import org.vegbank.common.utility.Utility;
 			{ 
 				this.filterSQLException(se, sb.toString());     
 			}
-			LogUtility.log("LoadTreeToDatabase:  Query: '" + sb.toString() + "' got PK = " + PK);
+			log.debug("LoadTreeToDatabase:  Query: '" + sb.toString() + "' got PK = " + PK);
 			return PK;
 		}
 		
@@ -255,8 +259,8 @@ import org.vegbank.common.utility.Utility;
 				else
 				{
 
-					LogUtility.log("LoadTreeToDatabase: problematic sql: '" + sql + "'", LogUtility.ERROR);
-					LogUtility.log(se, LogUtility.ERROR);
+					log.error("LoadTreeToDatabase: problematic sql: '" + sql + "'");
+					log.error(se);
 					commit = false;
 					errors.AddError(LoadingErrors.DATABASELOADINGERROR, se.getMessage());
 				}
@@ -292,9 +296,8 @@ import org.vegbank.common.utility.Utility;
 			{
 				result = true;
 			}
-			LogUtility.log("isPKFieldOfInput tested :" + field
-					+ " and decided it is the PK of " + tableName + " : " + result,
-					LogUtility.DEBUG);
+			//log.debug("isPKFieldOfInput tested :" + field
+			//		+ " and decided it is the PK of " + tableName + " : " + result);
 			return result;
 		}
 		
@@ -318,8 +321,7 @@ import org.vegbank.common.utility.Utility;
 					   PK = rs.getLong(1);
 			   }
 			   rs.close();
-			   LogUtility.log("Get next PK: SQL: " + sb.toString() + " returned PK ="
-			   		+ PK ,LogUtility.DEBUG);
+			   log.debug("Get next PK: SQL: " + sb.toString() + " returned PK =" + PK);
 			}
 			catch (SQLException se)
 			{
@@ -343,7 +345,7 @@ import org.vegbank.common.utility.Utility;
 			while( tables.hasMoreElements()  )
 			{
 				Hashtable table = (Hashtable) tables.nextElement();
-				//LogUtility.log("LoadTreeToDatabase: " + tableName + " : " + table);
+				//log.debug(tableName + " : " + table);
 				addForeignKey(table, fKName, fKValue);
 				insertTable(tableName, table);
 			}
@@ -366,7 +368,7 @@ import org.vegbank.common.utility.Utility;
 		 */
 		private long insertTable( String tableName, Hashtable fieldValueHash ) throws SQLException
 		{	
-			//LogUtility.log("LoadTreeToDatabase : insert: " + tableName);
+			//log.debug("insert: " + tableName);
 			
 			long PK = 0;
 
@@ -406,7 +408,7 @@ import org.vegbank.common.utility.Utility;
 //				return this.getTablePK(tableName, fieldValueHash);
 //			}
 			
-			//LogUtility.log("LoadTreeToDatabase: INSERT: " + tableName);
+			//log.debug("INSERT: " + tableName);
 			PK = this.getNextId(tableName);
 			
 			// Strip out accessionCodes before writing to database
@@ -424,7 +426,7 @@ import org.vegbank.common.utility.Utility;
 					String field = (String) fields.nextElement();
 					Object value = fieldValueHash.get(field);
 					
-					//LogUtility.log("Handle fieldName " + field + " with value " + value, LogUtility.DEBUG);
+					log.debug("Handle fieldName " + field + " with value " + value);
 					
 					// Ignore if not a string, null or empty
 					if ( value instanceof String && ! Utility.isStringNullOrEmpty((String) value) )
@@ -443,16 +445,16 @@ import org.vegbank.common.utility.Utility;
 							long storedPK = inputPKTracker.getAssignedPK(tableName, stringValue.toString());
 							if (storedPK != 0) 
 							{
-								LogUtility.log("Already entered record xmlPK "
+								log.debug("Already entered record xmlPK "
 										+ stringValue.toString() + " into " + tableName + " using PK of "
-										+ storedPK, LogUtility.DEBUG);
+										+ storedPK);
 								return storedPK;
 							}
 							// Need to add this to the datastruture that prevents
 							// the adding duplicate fields
 							inputPKTracker.setAssignedPK(tableName, stringValue.toString(), PK);
-							LogUtility.log("No record added for xmlPK :" + stringValue.toString()
-									+ " for table " + tableName + " adding PK now: " + PK, LogUtility.DEBUG);
+							log.debug("No record added for xmlPK :" + stringValue.toString()
+									+ " for table " + tableName + " adding PK now: " + PK);
 						}
 					}
 				}
@@ -464,8 +466,8 @@ import org.vegbank.common.utility.Utility;
 				sb.append(" (" + Utility.arrayToCommaSeparatedString( fieldNames.toArray() ) + ")" );
 				sb.append(" VALUES (" + Utility.arrayToCommaSeparatedString( fieldValues.toArray() ) +")" );
 				
-				LogUtility.log("Running SQL: " + sb.toString(), LogUtility.DEBUG );
-				LogUtility.log("Loaded Table : " +tableName + " with PK of " + PK, LogUtility.INFO );
+				log.debug("Running SQL: " + sb.toString());
+				log.info("Loaded Table : " +tableName + " with PK of " + PK);
 				
 				Statement query = writeConn.createStatement();
 				int rowCount = query.executeUpdate(sb.toString());
@@ -484,7 +486,7 @@ import org.vegbank.common.utility.Utility;
 			
 			this.storeTableNameAndPK(tableName, PK);
 			
-			LogUtility.log("Returning with PK :" + PK + " for table " + tableName, LogUtility.DEBUG);
+			log.debug("Returning with PK :" + PK + " for table " + tableName);
 			return PK;
 		}
 
@@ -527,6 +529,8 @@ import org.vegbank.common.utility.Utility;
 			if ( Utility.isLoadAccessionCodeOn() )
 			{
 				accessionCodes = ag.updateSpecificRows(tableKeys);
+			} else {
+				accessionCodes = new ArrayList();
 			}
 			return accessionCodes;
 		}
@@ -548,7 +552,7 @@ import org.vegbank.common.utility.Utility;
 			
 			if ( Utility.isStringNullOrEmpty( accessionCode ))
 			{
-				LogUtility.log("LoadTreeToDatabase: Found no accessionCode for " + tableName, LogUtility.DEBUG);
+				log.debug("Found no accessionCode for " + tableName);
 				// do nothing
 			}
 			else 
@@ -559,13 +563,13 @@ import org.vegbank.common.utility.Utility;
 				if ( PK != 0 )
 				{
 					// great got a real PK
-					LogUtility.log(
-						"LoadTreeToDatabase: Found PK ("
+					log.info(
+						"Found PK ("
 							+ PK
 							+ ") for "
 							+ tableName
 							+ " accessionCode: "
-							+ accessionCode, LogUtility.INFO);
+							+ accessionCode);
 				}
 				else
 				{
@@ -577,7 +581,7 @@ import org.vegbank.common.utility.Utility;
 							+ accessionCode
 							+ "' in the database.";
 							
-					LogUtility.log("LoadTreeToDatabase:  : " + errorMessage, LogUtility.ERROR );
+					log.error(": " + errorMessage);
 					commit = false;
 					errors.AddError(
 						LoadingErrors.DATABASELOADINGERROR,
@@ -586,19 +590,19 @@ import org.vegbank.common.utility.Utility;
 			}
 //			else
 //			{
-//				LogUtility.log(
-//					"LoadTreeToDatabase: Got an accessionCode in table "
+//				log.debug(
+//					"Got an accessionCode in table "
 //						+ tableName
 //						+ " --> "
-//						+ accessionCode, LogUtility.DEBUG);
+//						+ accessionCode);
 //						
 //				// Remove from hash
 //				fieldValueHash.remove(Constants.ACCESSIONCODENAME);
 //			}
 			
-			LogUtility.log(
-					"LoadTreeToDatabase: Using accessionCode " + accessionCode + " in table "
-						+ tableName + " got DB PK of " + PK,  LogUtility.DEBUG);
+			log.debug(
+					"Using accessionCode " + accessionCode + " in table "
+						+ tableName + " got DB PK of " + PK);
 			return PK;
 		}
 
@@ -827,7 +831,7 @@ import org.vegbank.common.utility.Utility;
 				while ( fields.hasMoreElements())
 				{					
 					String field = (String) fields.nextElement();
-					//LogUtility.log("===" + field);
+					//log.debug("===" + field);
 					Object value = fieldValueHash.get(field);
 					if ( this.isDatabaseReadyField(field, value, tableName) )
 					{				
@@ -858,12 +862,12 @@ import org.vegbank.common.utility.Utility;
 				
 			if (rows == 0) 
 			{
-				LogUtility.log("LoadTreeToDatabase : "+tableName+" does not exist", LogUtility.DEBUG);
+				log.debug(tableName+" does not exist");
 				return (false);
 			} 
 			else 
 			{
-				LogUtility.log("LoadTreeToDatabase : "+tableName+" does exist", LogUtility.DEBUG);
+				log.debug(tableName+" does exist");
 				return (true);
 			}
 		}
@@ -875,12 +879,12 @@ import org.vegbank.common.utility.Utility;
 			
 			ResultSet rs = readConn.getMetaData().getColumns(null, null, tableName.toLowerCase(), "%" );
 			
-			//LogUtility.log("LoadTreeToDatabase : Got a Result Set");
+			//log.debug("Got a Result Set");
 			while ( rs.next() )
 			{
 				// according to api value 4 is the columnName
 				String columnName = rs.getString(4);
-				//LogUtility.log("LoadTreeToDatabase : ColumnName> " + columnName + " in table > " + tableName);
+				//log.debug("ColumnName> " + columnName + " in table > " + tableName);
 				
 				boolean foundValueForColumn = false;
 				Enumeration fields = fieldValuesHash.keys();
@@ -931,7 +935,7 @@ import org.vegbank.common.utility.Utility;
 			Hashtable childHash = null;
 			if ( parentHash == null )
 			{
-				LogUtility.log("Got asked to find: '" + tableName+ "' from a null Hashtable. This shouldn't happen but hey, what do I know?", LogUtility.WARN);
+				log.warn("Got asked to find: '" + tableName+ "' from a null Hashtable. This shouldn't happen but hey, what do I know?");
 				return childHash;
 
 				//Utility.prettyPrintHash(parentHash);
@@ -950,12 +954,12 @@ import org.vegbank.common.utility.Utility;
 			}
 			else if ( o == null)
 			{
-				LogUtility.log("LoadTreeToDatabase: Could not find table.. " + tableName + " as child of  table " + parentHash.get("TableName"), LogUtility.DEBUG);
+				log.debug("LoadTreeToDatabase: Could not find table.. " + tableName + " as child of  table " + parentHash.get("TableName"));
 			}
 			else
 			{
 				// Don't know what to do here
-				LogUtility.log("LoadTreeToDatabase: Type: '" + o.getClass() + "' should not exist here in" + tableName + "?." , LogUtility.WARN);
+				log.warn("LoadTreeToDatabase: Type: '" + o.getClass() + "' should not exist here in" + tableName + "?.");
 			}
 			return childHash;
 		}
@@ -996,7 +1000,7 @@ import org.vegbank.common.utility.Utility;
 		 */
 		private long insertParty( Hashtable party) throws SQLException
 		{
-			//LogUtility.log("### " +party);
+			//log.debug("### " +party);
 			
 			long pKey = 0;
 			// Handle null
@@ -1047,7 +1051,7 @@ import org.vegbank.common.utility.Utility;
 			
 			if (ownerParty != null)
 			{
-				//LogUtility.log(">>>>" + ownerParty);			
+				//log.debug(">>>>" + ownerParty);			
 				ownerPartyPK = insertParty(ownerParty);
 			}
 			
@@ -1392,7 +1396,7 @@ import org.vegbank.common.utility.Utility;
 			
 				
 				taxonObservationId = insertTable("taxonObservation", taxonObservation);
-				//LogUtility.log("LoadTreeToDatabase: taxonObservationId: " + taxonObservationId );
+				//log.debug("LoadTreeToDatabase: taxonObservationId: " + taxonObservationId );
 			
 				//  Add Taxonimportances
 				Enumeration taxonImportances = getChildTables(taxonObservation, "taxonImportance");
@@ -1849,7 +1853,7 @@ import org.vegbank.common.utility.Utility;
 			if ( FKValue > 0 )
 			{
 				table.put(FKName, ""+FKValue);
-				LogUtility.log("Set FK: " + FKName + " to: " + FKValue, LogUtility.DEBUG);
+				log.debug("Set FK: " + FKName + " to: " + FKValue);
 			}
 		}
 
@@ -1954,7 +1958,7 @@ import org.vegbank.common.utility.Utility;
 					+ "] \n Please use an existing records AccessionCode to"
 					+ " load or have someone with permissions load this record and use the"
 					+ " assigned AccessionCode. ";
-				LogUtility.log("LoadTreeToDatabase:  : " + errorMessage, LogUtility.ERROR );
+				log.error("LoadTreeToDatabase:  : " + errorMessage);
 				commit = false;
 				errors.AddError(
 					LoadingErrors.DATABASELOADINGERROR,
@@ -1965,7 +1969,7 @@ import org.vegbank.common.utility.Utility;
 				result = true;
 			}
 			
-			LogUtility.log("Check allowed to load " + tableName + ": " + result, LogUtility.DEBUG);
+			log.debug("Check allowed to load " + tableName + ": " + result);
 			return result;
 		}
 	}

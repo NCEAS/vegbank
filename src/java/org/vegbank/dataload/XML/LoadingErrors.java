@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-04-19 14:53:06 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-05-06 22:40:02 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@ package org.vegbank.dataload.XML;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.vegbank.common.utility.LogUtility;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -37,6 +38,8 @@ import org.vegbank.common.utility.LogUtility;
  */
 public class LoadingErrors
 {
+	private static Log log = LogFactory.getLog(LoadingErrors.class);
+
 	private Vector retificationErrors = new Vector();
 	private Vector validationErrors = new Vector();
 	private Vector databaseLoadingErrors = new Vector();
@@ -71,7 +74,7 @@ public class LoadingErrors
 				databaseLoadingErrors.add(message);
 				break;
 			default:
-				LogUtility.log("LoadingErrors: Invalid Error type", LogUtility.ERROR);
+				log.error("LoadingErrors: Invalid Error type");
 		}
 	}
 	

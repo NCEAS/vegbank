@@ -5,9 +5,9 @@ package org.vegbank.dataload.XML;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-04-19 14:53:06 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-05-06 22:40:02 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.vegbank.common.utility.LogUtility;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.plots.datasource.NativeXMLReader;
 import org.xml.sax.InputSource;
@@ -52,6 +53,8 @@ import org.xml.sax.XMLReader;
  */
 public class VegbankXMLUpload 
 {
+	private static Log log = LogFactory.getLog(VegbankXMLUpload.class);
+
 	private XMLReader xr = null;
 	private NativeXMLReader nr = null;
 	
@@ -116,9 +119,9 @@ public class VegbankXMLUpload
 	 */
 	public void processXMLFile( String xmlFileName ) throws IOException, SAXException
 	{
-		LogUtility.log( "VegbankXMLUpload: Validation on: " + this.validate, LogUtility.INFO);
-		LogUtility.log( "VegbankXMLUpload: Rectification on: " + this.rectify, LogUtility.INFO);
-		LogUtility.log( "VegbankXMLUpload: Database Loading on: " + this.load, LogUtility.INFO);
+		log.info( "VegbankXMLUpload: Validation on: " + this.validate);
+		log.info( "VegbankXMLUpload: Rectification on: " + this.rectify);
+		log.info( "VegbankXMLUpload: Database Loading on: " + this.load);
 		
 		SAXValidationErrorHandler errorHandler = new SAXValidationErrorHandler(errors);
 		SAX2DBContentHandler contentHandler = new SAX2DBContentHandler(errors, accessionCodes, load);
@@ -129,7 +132,7 @@ public class VegbankXMLUpload
 		{	
 			xr.setErrorHandler( errorHandler );
 			xr.parse( this.getInputSource(xmlFile) );
-			LogUtility.log( "This file is valid: " + errorHandler.isValid(), LogUtility.INFO );
+			log.info( "This file is valid: " + errorHandler.isValid());
 		}
 		
 		if ( errorHandler.isValid() )
@@ -143,7 +146,7 @@ public class VegbankXMLUpload
 		}
 		else 
 		{
-			LogUtility.log( "No attempt was made to rectify or load this dataset", LogUtility.ERROR);
+			log.debug( "No attempt was made to rectify or load this dataset");
 		}
 	}
 	

@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-04-19 14:53:06 $'
- *	'$Revision: 1.3 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-05-06 22:40:01 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,11 +25,14 @@ package org.vegbank.dataload.XML;
 
 import java.util.Hashtable;
 
-import org.vegbank.common.utility.LogUtility;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 public class InputPKTracker
 {
+	private static Log log = LogFactory.getLog(InputPKTracker.class);
+
 	private Hashtable store = new Hashtable();
 	
 	public void setAssignedPK(String tableName, String xmlPK, long dbPK)
@@ -45,7 +48,7 @@ public class InputPKTracker
 	
 	public long getAssignedPK( String tableName, String xmlPK)
 	{
-		LogUtility.log("InputPKTracker is checking for xmlPK: " + xmlPK + " for table: " + tableName, LogUtility.DEBUG);
+		log.debug("InputPKTracker is checking for xmlPK: " + xmlPK + " for table: " + tableName);
 		long dbPK = 0;
 		Hashtable xmlPKdbPKLookup = (Hashtable)store.get(tableName);
 		if ( xmlPKdbPKLookup != null )
