@@ -7,8 +7,8 @@
 * Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-06-03 21:41:33 $'
-*   '$Revision: 1.20 $'
+*   '$Date: 2003-06-04 00:33:36 $'
+*   '$Revision: 1.21 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -656,13 +656,13 @@ public class DBinsertPlotSource {
 				else
 				{
 
-					insertProject(
+					projectId =insertProject(
 						projectName,
 						projectDescription,
 						projectStartDate,
 						projectStopDate);
-
-					projectId = getProjectId(projectName);
+					
+					System.out.println("DBinsertPlotDataSource > ProjectId: " + projectId);
 					// INSERT THE PROJECT CONTRIBUTOR INFORMATION HERE, THE PARTY, ADDRESS, 
 					// TELEPHONE ALSO LOADED FROM HERE
 					Vector projContributors = source.projectContributors;
@@ -3140,7 +3140,7 @@ public class DBinsertPlotSource {
 	 * @param projectStartDate -- the start date of the project
 	 * @param projectStopDate -- the stop date of the project
 	 */
-	public void insertProject(
+	public int insertProject(
 		String projectName,
 		String projectDescription,
 		String projectStartDate,
@@ -3149,19 +3149,8 @@ public class DBinsertPlotSource {
 		StringBuffer sb = new StringBuffer();
 		try 
     {
-			int projectId = getNextId("project");
-
-      //java.util.Date startDate = this.parseDateString(projectStartDate);
-      //java.util.Date stopDate = this.parseDateString(projectStopDate);
-      //java.sql.Date sqlDate = new java.sql.Date( stopDate.toString() );
-      //String startDate = this.parseDateString(projectStartDate).toString();
-      //String stopDate = this.parseDateString(projectStartDate).toString();
-			// DETERMINE IF THE DATE FORMAT IS CORRECT AND QUERY ACCORDINGLY
-		/*
-    if ((projectStartDate.indexOf("-") > 0)
-				&& (projectStopDate.indexOf("-") > 0)) 
-      {
-    */
+			projectId = getNextId("project");
+			
 				sb.append(
 					"INSERT into PROJECT (project_id, projectName, projectdescription,  ");
 				sb.append(" startdate, stopdate) ");
@@ -3173,31 +3162,10 @@ public class DBinsertPlotSource {
 			pstmt.setString(3, projectDescription);
 			Utility.insertDateField(projectStartDate, pstmt, 4);
 			Utility.insertDateField(projectStopDate, pstmt, 5);			
-      //pstmt.setString(4, projectStartDate);
-      //pstmt.setString(5, projectStopDate);
 
       pstmt.execute();
       pstmt.close();
 
-      // DEBUG
-      /*
-      } 
-      else 
-      {
-				sb.append(
-					"INSERT into PROJECT (project_id, projectName, projectdescription) ");
-				sb.append(
-					" values("
-						+ projectId
-						+ ", '"
-						+ projectName
-						+ "', '"
-						+ projectDescription
-						+ "' )");
-			}
-			Statement insertStatement = conn.createStatement();
-			insertStatement.executeUpdate(sb.toString());
-      */
       
 			System.out.println("DBinsertPlotSource > inserted PROJECT");
 		} 
@@ -3207,6 +3175,7 @@ public class DBinsertPlotSource {
 			System.out.println("sql: " + sb.toString());
 			e.printStackTrace();
 		}
+		return projectId;
 	}
 	
 	
