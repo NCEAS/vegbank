@@ -327,32 +327,35 @@ public class  xmlWriter
 			//set up the output query file called query.xml	using append mode 
 			PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
 
-			String commName=null;
-			String commDesc=null;
-			String abiCode=null;
-			String parentCommName=null;
-			String dateEntered=null;
-			String classCode=null;
-			String classLevel=null;
-			String conceptOriginDate=null;
-			String conceptUpdateDate=null;
-			String parentAbiCode=null;
-			String recognizingParty=null;
-			String partyConceptStatus=null;
-			String parentCommDescription=null;
-			String commSummaryId=null;
+			String commName="null";
+			String commDesc="null";
+			String abiCode="null";
+			String parentCommName="null";
+			String dateEntered="null";
+			String classCode="null";
+			String classLevel="null";
+			String conceptOriginDate="null";
+			String conceptUpdateDate="null";
+			String parentAbiCode="null";
+			String recognizingParty="null";
+			String partyConceptStatus="null";
+			String parentCommDescription="null";
+			String commSummaryId="null";
 			String nullValue = "-999.25";
 
 			//header
 			printString.append("<?xml version=\"1.0\"?> \n");
-			printString.append("<!DOCTYPE vegPlot SYSTEM \"vegCommunity.dtd\">     \n");
+			//printString.append("<!DOCTYPE vegPlot SYSTEM \"vegCommunity.dtd\">     \n");
 			printString.append("<vegCommunity> \n");
 
 			for (int i=0;i<communitySummary.size(); i++) 
 			{
+			
 				//tokenize each line of the vector
 				StringTokenizer t = new StringTokenizer(communitySummary.elementAt(i).toString().trim(), "|");
-				commName=t.nextToken().trim();
+				System.out.println("xmlWriter > number of community elements: " + t.countTokens() );
+				
+				commName=t.nextToken().trim();				
 				abiCode=t.nextToken();
 				commDesc=t.nextToken();
 				parentCommName=t.nextToken();
@@ -366,6 +369,11 @@ public class  xmlWriter
 				partyConceptStatus=t.nextToken();
 				parentCommDescription=t.nextToken();
 				commSummaryId=t.nextToken();
+			
+				System.out.println("xmlWriter > commName: "+ commName);
+				System.out.println("xmlWriter > abiCode: "+ abiCode);
+				
+				
 				//temporary fix to trim the description to 100 chars
 				if (commDesc.length() >100) 
 				{
@@ -398,8 +406,9 @@ public class  xmlWriter
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed in xmlWriter.writePlotSummary" + 
+			 System.out.println("xmlWriter > Exception: " + 
 			e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
