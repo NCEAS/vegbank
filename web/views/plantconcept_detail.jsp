@@ -47,10 +47,16 @@
 <td valign="top" class="grey" >
 &nbsp;&nbsp;&nbsp;
 <b><bean:write name="statusbean" property="plantconceptstatus" /></b>
+<logic:notEmpty name="statusbean" property="plantlevel">
+<br/>
+&nbsp;&nbsp;&nbsp;
+<span class="datalabelsmall">Level:</span>
+<bean:write name="statusbean" property="plantlevel" />
+</logic:notEmpty><!-- has level-->
 <logic:notEmpty name="statusbean" property="plantparent_id">
 <br/>
 &nbsp;&nbsp;&nbsp;
-Parent:<a href='@get_link@std/plantconcept/<bean:write name="statusbean" property="plantparent_id" />'><bean:write name="statusbean" property="plantparent_id_transl" /></a>
+<span class="datalabelsmall">Parent:</span><a href='@get_link@std/plantconcept/<bean:write name="statusbean" property="plantparent_id" />'><bean:write name="statusbean" property="plantparent_id_transl" /></a>
 </logic:notEmpty><!-- has parent-->
 
 <!-- end status -->

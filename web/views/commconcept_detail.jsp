@@ -47,11 +47,18 @@
 <td valign="top" class="grey" >
 &nbsp;&nbsp;&nbsp;
 <span class="datalabelsmall">status: </span><strong><bean:write name="statusbean" property="commconceptstatus" /></strong>
+<logic:notEmpty name="statusbean" property="commlevel">
+<br/>
+&nbsp;&nbsp;&nbsp;
+<span class="datalabelsmall">Level:</span>
+<bean:write name="statusbean" property="commlevel" />
+</logic:notEmpty><!-- has level-->
 <logic:notEmpty name="statusbean" property="commparent_id">
 <br/>
 &nbsp;&nbsp;&nbsp;
 <span class="datalabelsmall">Parent: </span><a href='@get_link@std/commconcept/<bean:write name="statusbean" property="commparent_id" />'><bean:write name="statusbean" property="commparent_id_transl" /></a>
 </logic:notEmpty><!-- has parent-->
+
 
 <!-- end status -->
 </td>
