@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:33:26 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-05-16 02:39:50 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ public class DBPartyWriter
 		public int partyId = 0;
 		private String pKName = null;
 		private String tableName = null;
+	 
 	 
 		public DBPartyWriter(
 			Party party, 

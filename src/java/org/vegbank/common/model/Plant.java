@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:33:26 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-05-16 02:39:50 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,8 +45,8 @@ public class Plant implements Constants, Comparable
 	private String status = null;
 	private String classLevel = null;
 	private String synonymName = null;
-	private String description = null;
 	private String statusStartDate = null;
+	private String statusStopDate = null;
 	private String commonName = null;
 	private Vector plantUsages = new Vector();
 	private Vector plantNames = new Vector();
@@ -55,10 +55,17 @@ public class Plant implements Constants, Comparable
 	private Reference codeNameReference = null;
 	private Reference commonNameReference = null;
 	private Reference conceptReference = null;	
-	private Party party = null;
-	private String statusStopDate = null;
-		
-	//private String  = "";
+	private String scientificNameReferenceId = null;
+	private String scientificNameNoAuthorsReferenceId = null;
+	private String codeNameReferenceId = null;
+	private String commonNameReferenceId = null;
+	private String conceptReferenceId = null;	
+	private String plantDescription = null;
+	
+	private PlantParty plantParty = null;
+	private String plantPartyId = null;
+	private String statusPartyComments = null;
+	
 	
 	public void setPlantName( String plantName)
 	{
@@ -232,25 +239,6 @@ public class Plant implements Constants, Comparable
 		this.synonymName = synonymName;
 	}
 
-
-
-	/**
-	 * @return String
-	 */
-	public String getDescription()
-	{
-		return description;
-	}
-
-	/**
-	 * Sets the description.
-	 * @param description The description to set
-	 */
-	public void setDescription(String description)
-	{
-		this.description = description;
-	}
-
 	/**
 	 * @return String
 	 */
@@ -322,6 +310,7 @@ public class Plant implements Constants, Comparable
 	 */
 	public void addPlantUsage(PlantUsage plantUsage)
 	{
+		//System.out.println("Adding a new plantUsage, now have "+this.plantUsages.size() );
 		this.plantUsages.add(plantUsage);
 	}
 	
@@ -332,6 +321,7 @@ public class Plant implements Constants, Comparable
 	{
 		Plant plant = (Plant) object;
 		int result = 0;
+		// Sort on the rank first 
 		if (this.getRank() > plant.getRank())
 		{
 			result = -1;
@@ -342,10 +332,54 @@ public class Plant implements Constants, Comparable
 		}
 		else
 		{
-			result = 0;
+			// the rank is equal so accepted status is tybreaker
+//			if ( this.getStatusRank() > plant.getStatusRank() )
+//			{
+//				result = -1;
+//			}
+//			else if (this.getStatusRank() < plant.getStatusRank())
+//			{
+//				result = 1;
+//			}
+//			else
+//			{
+//				result = 0;
+//			}
+			 result = 0;
 		}
 		return result;
 	}
+
+//	/**
+//	 * @return int
+//	 */
+//	private int getStatusRank()
+//	{
+//		PlantStatus ps = new PlantStatus();
+//		Vector v = (Vector) ps.getPlantConceptStatusPickList();
+//		
+//		// Being clever here ( a bad sign )
+//		// The order of the picklist I stored in v is what I want ( currently )
+//		// i.e [accepted, not accepted, undetermined]
+//		// I use the counter in a loop to access the value and to return a larger 
+//		// number a higher ranking status 
+//		
+//		for ( int i = 0 ; i < v.size() ; i++)
+//		{
+//			if ( this.getStatus().equals(v.get(i) ) )
+//			{
+//				//System.out.println("" + v.get(i) + " got a score of "  + (10 - i) );
+//				return (10 - i );
+//			}
+//			else
+//			{
+//				// Ignored 
+//				//System.out.println("Ignored >>" + v.get(i) + " vs. " + this.getStatus());
+//			}
+//		}
+//		
+//		return 0;
+//	}
 
 	/**
 	 * @return int
@@ -373,7 +407,8 @@ public class Plant implements Constants, Comparable
 		}
 		else if (this.classLevel.equals(PLANT_CLASS_HYBRID) )
 		{
-			rank = 50;
+			// same as variety
+			rank = 60;
 		}
 		else
 		{
@@ -404,18 +439,18 @@ public class Plant implements Constants, Comparable
 	/**
 	 * @return Party
 	 */
-	public Party getParty()
+	public PlantParty getPlantParty()
 	{
-		return party;
+		return plantParty;
 	}
 
 	/**
 	 * Sets the party.
 	 * @param party The party to set
 	 */
-	public void setParty(Party party)
+	public void setPlantParty(PlantParty plantParty)
 	{
-		this.party = party;
+		this.plantParty = plantParty;
 	}
 
 	/**
@@ -498,6 +533,19 @@ public class Plant implements Constants, Comparable
 		this.scientificNameNoAuthorsReference = reference;
 		this.codeNameReference = reference;
 	}
+	
+	/**
+	 * Convience method that sets all the References to a single reference.
+	 * @param conceptReference The conceptReference to set
+	 */
+	public void setAllReferenceIds(String id)
+	{
+		this.conceptReferenceId = id;
+		this.commonNameReferenceId =id;
+		this.scientificNameReferenceId = id;
+		this.codeNameReferenceId = id;
+		this.scientificNameNoAuthorsReferenceId = id;
+	}
 
 	/**
 	 * @return String
@@ -535,6 +583,136 @@ public class Plant implements Constants, Comparable
 	public void addPlantName(PlantName plantName)
 	{
 		plantNames.add(plantName);
+	}
+
+	/**
+	 * @return
+	 */
+	public String getCodeNameReferenceId()
+	{
+		return codeNameReferenceId;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getCommonNameReferenceId()
+	{
+		return commonNameReferenceId;
+	}
+
+
+	/**
+	 * @return
+	 */
+	public String getScientificNameNoAuthorsReferenceId()
+	{
+		return scientificNameNoAuthorsReferenceId;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setCodeNameReferenceId(String string)
+	{
+		codeNameReferenceId = string;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setCommonNameReferenceId(String string)
+	{
+		commonNameReferenceId = string;
+	}
+
+
+	/**
+	 * @param string
+	 */
+	public void setScientificNameNoAuthorsReferenceId(String string)
+	{
+		scientificNameNoAuthorsReferenceId = string;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getScientificNameReferenceId()
+	{
+		return scientificNameReferenceId;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setScientificNameReferenceId(String string)
+	{
+		scientificNameReferenceId = string;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getConceptReferenceId()
+	{
+		return conceptReferenceId;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setConceptReferenceId(String string)
+	{
+		conceptReferenceId = string;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getPlantDescription()
+	{
+		return plantDescription;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setPlantDescription(String string)
+	{
+		plantDescription = string;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getStatusPartyComments()
+	{
+		return statusPartyComments;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setStatusPartyComments(String string)
+	{
+		statusPartyComments = string;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getPlantPartyId()
+	{
+		return plantPartyId;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setPlantPartyId(String string)
+	{
+		plantPartyId = string;
 	}
 
 }
