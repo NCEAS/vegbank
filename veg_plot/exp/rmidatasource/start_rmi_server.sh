@@ -1,1 +1,3 @@
-java -classpath ./lib/datatranslator.jar:./:./lib/rmidatasource.jar  -Djava.security.policy=./lib/policy.txt DataSourceServer
+#!/bin/sh
+
+java -classpath ./build/:lib/rmidatasource.jar:lib/datatranslator.jar:./  -Djava.security.policy=./lib/policy.txt DataSourceServer
