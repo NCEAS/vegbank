@@ -6372,7 +6372,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>obsaccessionnumber</attName>
       <attLabel>Observation Accession Number</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
       <javaType type="String" relation="one"/>
@@ -6394,7 +6394,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>dateEntered</attName>
       <attLabel>Date Entered into VegBank</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
       <javaType type="String" relation="one"/>
@@ -6870,7 +6870,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>plotValidationLevel</attName>
       <attLabel>Plot Validation Level</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
@@ -12436,7 +12436,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>state</attName>
       <attLabel>State</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (55)</attType>
       <javaType type="String" relation="one"/>
@@ -12445,8 +12445,8 @@ conditions may change between resampling events.
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes/>
-      <attDefinition/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>State or Province where the plot is located.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>1019</formAustere>
@@ -12458,7 +12458,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>country</attName>
       <attLabel>Country</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
       <javaType type="String" relation="one"/>
@@ -12467,8 +12467,8 @@ conditions may change between resampling events.
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes/>
-      <attDefinition/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Country where the plot is located.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>1022</formAustere>
@@ -12489,7 +12489,7 @@ conditions may change between resampling events.
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes/>
+      <attNotes>n/a</attNotes>
       <attDefinition/>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
@@ -12511,8 +12511,8 @@ conditions may change between resampling events.
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes/>
-      <attDefinition/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Date this plot was entered into VegBank</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
         <formAustere>1028</formAustere>
@@ -12533,7 +12533,7 @@ conditions may change between resampling events.
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes/>
+      <attNotes>n/a</attNotes>
       <attDefinition/>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
@@ -12555,7 +12555,7 @@ conditions may change between resampling events.
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes/>
+      <attNotes>n/a</attNotes>
       <attDefinition/>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
@@ -12577,7 +12577,7 @@ conditions may change between resampling events.
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes/>
+      <attNotes>n/a</attNotes>
       <attDefinition/>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
