@@ -1,0 +1,106 @@
+<xml xmlns:v="urn:schemas-microsoft-com:vml"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:p="urn:schemas-microsoft-com:office:powerpoint">
+ <p:presentation>
+  <p:master id="4" type="main" href="master04.htm" xmlhref="master04.xml"
+   template="A_nbii" layout="title_body"
+   slots="title,body,dateTime,footer,slideNumber">
+   <p:schemes>
+    <p:colorscheme
+     colors="#0000FF,#FFFFFF,#000000,#FFFF00,#FF9900,#00FFFF,#FF0000,#969696"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#808080,#000000,#00CC99,#3333CC,#CCCCFF,#B2B2B2"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#333333,#000000,#DDDDDD,#808080,#4D4D4D,#EAEAEA"/>
+    <p:colorscheme
+     colors="#FFFFCC,#000000,#666633,#808000,#339933,#800000,#0033CC,#FFCC66"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#808080,#000000,#FFCC66,#0000FF,#CC00CC,#C0C0C0"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#808080,#000000,#C0C0C0,#0066FF,#FF0000,#009900"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#808080,#000000,#3399FF,#99FFCC,#CC00CC,#B2B2B2"/>
+   </p:schemes>
+  </p:master>
+  <p:slide id="1" href="slide0001.htm">
+   <p:tag name="___PPT10" type="binary" datasize="105" dataoffset="0"/>
+  </p:slide>
+  <p:slide id="3" href="slide0003.htm" layout="2_columns"
+   slots="title,object,object">
+   <p:tag name="___PPT10" type="binary" datasize="89" dataoffset="1"/>
+  </p:slide>
+  <p:slide id="5" href="slide0005.htm">
+   <p:tag name="___PPT10" type="binary" datasize="311" dataoffset="2"/>
+  </p:slide>
+  <p:slide id="88" href="slide0088.htm">
+   <p:tag name="___PPT10" type="binary" datasize="150" dataoffset="3"/>
+  </p:slide>
+  <p:slide id="91" href="slide0091.htm">
+   <p:tag name="___PPT10" type="binary" datasize="114" dataoffset="4"/>
+  </p:slide>
+  <p:slide id="6" href="slide0006.htm">
+   <p:tag name="___PPT10" type="binary" datasize="89" dataoffset="5"/>
+  </p:slide>
+  <p:slide id="12" href="slide0012.htm">
+   <p:tag name="___PPT10" type="binary" datasize="89" dataoffset="6"/>
+  </p:slide>
+  <p:slide id="96" href="slide0096.htm"/>
+  <p:slide id="13" href="slide0013.htm" layout="big_object" slots="object">
+   <p:tag name="___PPT10" type="binary" datasize="89" dataoffset="7"/>
+  </p:slide>
+  <p:slide id="15" href="slide0015.htm">
+   <p:tag name="___PPT10" type="binary" datasize="89" dataoffset="8"/>
+  </p:slide>
+  <p:slide id="29" href="slide0029.htm">
+   <p:tag name="___PPT10" type="binary" datasize="89" dataoffset="9"/>
+  </p:slide>
+  <p:slide id="30" href="slide0030.htm">
+   <p:tag name="___PPT10" type="binary" datasize="89" dataoffset="10"/>
+  </p:slide>
+  <p:slide id="85" href="slide0085.htm"/>
+  <p:slide id="31" href="slide0031.htm">
+   <p:tag name="___PPT10" type="binary" datasize="105" dataoffset="11"/>
+  </p:slide>
+  <p:slide id="94" href="slide0094.htm">
+   <p:tag name="___PPT10" type="binary" datasize="218" dataoffset="12"/>
+  </p:slide>
+  <p:slide id="37" href="slide0037.htm">
+   <p:tag name="___PPT10" type="binary" datasize="89" dataoffset="13"/>
+  </p:slide>
+  <p:slide id="76" href="slide0076.htm"/>
+  <p:slide id="77" href="slide0077.htm"/>
+  <p:slide id="78" href="slide0078.htm"/>
+  <p:slide id="79" href="slide0079.htm"/>
+  <p:slide id="80" href="slide0080.htm"/>
+  <p:slide id="81" href="slide0081.htm"/>
+  <p:slide id="97" href="slide0097.htm"/>
+  <p:slide id="82" href="slide0082.htm">
+   <p:tag name="___PPT10" type="binary" datasize="146" dataoffset="14"/>
+  </p:slide>
+  <p:slide id="75" href="slide0075.htm">
+   <p:tag name="___PPT10" type="binary" datasize="89" dataoffset="15"/>
+  </p:slide>
+  <p:slide id="86" href="slide0086.htm">
+   <p:tag name="___PPT10" type="binary" datasize="224" dataoffset="16"/>
+  </p:slide>
+  <p:slide id="70" href="slide0070.htm">
+   <p:tag name="___PPT10" type="binary" datasize="105" dataoffset="17"/>
+  </p:slide>
+  <p:slide id="95" href="slide0095.htm"/>
+  <p:slide id="69" href="slide0069.htm" collapseoutline="t">
+   <p:tag name="___PPT10" type="binary" datasize="275" dataoffset="18"/>
+  </p:slide>
+  <p:slide id="87" href="slide0087.htm"/>
+  <p:viewstate type="outline" sorterscale="100" restoredleft="141"
+   restoredtop="945" horizbarstate="2" manualadjustleft="t" manualadjusttop="t"/>
+  <p:tag name="___PPT10" type="binary" datasize="73" dataoffset="19"/>
+  <p:font name="Arial" charset="0" type="6" family="34"/>
+  <p:font name="Times New Roman" charset="0" type="6" family="18"/>
+  <p:font name="Arial Unicode MS" charset="128" type="6" family="34"/>
+  <p:headersfooters formatid="13" noheader="t"/>
+  <p:pptdocumentsettings framecolors="WhiteTextOnBlack" hideslideanimation="t"/>
+ </p:presentation>
+ <o:shapedefaults v:ext="edit" spidmax="111619" style='mso-wrap-style:none'>
+  <o:colormru v:ext="edit" colors="#ff9,#ff6,#060,#efedcb,#99f,#ccf,#b2acfa,#33c"/>
+  <o:colormenu v:ext="edit" fillcolor="none" strokecolor="none"/>
+ </o:shapedefaults></xml>
