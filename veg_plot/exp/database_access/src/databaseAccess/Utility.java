@@ -7,8 +7,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-01-14 01:23:51 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2003-05-07 01:41:35 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -125,14 +125,14 @@ public class Utility
 			 // create a vector to store the urls for testing
 			 Vector testUrls = new Vector();
 			 String authenticationServletHost = defaultPropFile.getString("authenticationServletHost");
-			 testUrls.addElement("http://"+authenticationServletHost+"/framework/servlet/usermanagement");
+			 testUrls.addElement("http://"+authenticationServletHost+"/vegbank/servlet/usermanagement");
 			 
 			 String plantRequestServletHost = defaultPropFile.getString("plantRequestServletHost");
-			 testUrls.addElement("http://"+plantRequestServletHost+"/framework/servlet/DataRequestServlet");
+			 testUrls.addElement("http://"+plantRequestServletHost+"/vegbank/servlet/DataRequestServlet");
 			 String communityRequestServletHost = defaultPropFile.getString("communityRequestServletHost");
-			 testUrls.addElement("http://"+communityRequestServletHost+"/framework/servlet/DataRequestServlet");
+			 testUrls.addElement("http://"+communityRequestServletHost+"/vegbank/servlet/DataRequestServlet");
 			 String geoCoordRequestServletHost = defaultPropFile.getString("geoCoordRequestServletHost");
-			 testUrls.addElement("http://"+geoCoordRequestServletHost+"/framework/servlet/framework");
+			 testUrls.addElement("http://"+geoCoordRequestServletHost+"/vegbank/servlet/framework");
 			 
 			 for (int ii = 0; ii < testUrls.size(); ii++) 
 			 {
@@ -403,8 +403,15 @@ public class Utility
 		Connection c = null;
 		try 
  		{
-			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection("jdbc:postgresql://"+host+"/plots_dev", "datauser", "");
+			String dbConnectString = defaultPropFile.getString("connectString");
+			String driverClass = defaultPropFile.getString("driverClass");
+			String user = defaultPropFile.getString("user");
+			String password = defaultPropFile.getString("password");
+			
+			Class.forName(driverClass);
+			System.out.println("CommunityQueryStore > db connect string: " + dbConnectString);
+			c = DriverManager.getConnection(dbConnectString, user, password);			
+
 		}
 		catch ( Exception e )
 		{

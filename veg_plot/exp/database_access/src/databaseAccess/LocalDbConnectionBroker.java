@@ -53,9 +53,17 @@ public class LocalDbConnectionBroker
 				//get the database management parameter settings
 				g.getDatabaseParameters("database", "query");
 				System.out.println("LocalDbConnectionBroker > connection string: " + g.connectionString);
-				myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
-				g.login,g.passwd,g.minConnections,g.maxConnections, 
-				g.logFile,1.0);
+				myBroker = 
+					new DbConnectionBroker(
+						g.driverClass, 
+						g.connectionString,
+						g.login,
+						g.passwd,
+						g.minConnections,
+						g.maxConnections, 
+						g.logFile,
+						1.0);
+						
 				pconn=myBroker.getConnection();
 			}
 			catch( Exception e ) 

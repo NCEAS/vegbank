@@ -7,8 +7,8 @@
  *    Authors: John Harris
  *
  *		 '$Author: farrell $'
- *     '$Date: 2003-01-14 01:12:40 $'
- *     '$Revision: 1.3 $'
+ *     '$Date: 2003-05-07 01:41:35 $'
+ *     '$Revision: 1.4 $'
  *
  */
 package databaseAccess;
@@ -188,15 +188,32 @@ public void writePlot (Hashtable comprehensivePlot, String outFile)
  
 public void writeMultiplePlot(Hashtable multiPlotComprehensive, String outFile)
 {
+	getMultiplePlotXMLString(multiPlotComprehensive);
+
+	try 
+	{
+		PrintStream out = new PrintStream(new FileOutputStream(outFile));
+		out.println(output.toString());
+	}
+	catch (Exception ex) 
+	{
+		System.out.println("Error printing the xml file "+ex);
+		System.exit(1);
+	}
+}
+
+
+public String getMultiplePlotXMLString(Hashtable multiPlotComprehensive)
+{
 	try 
 	{
 		//prepare the header
 		writeHeader();
-
+	
 		//figure out how many plots
 		System.out.println("PlotXmlWriter.writeMultiplePlot: hash size: "
 		+multiPlotComprehensive.size());
-
+	
 		//write all the plots
 		for (int i=0; i< multiPlotComprehensive.size(); i++) 
 		{
@@ -205,7 +222,7 @@ public void writeMultiplePlot(Hashtable multiPlotComprehensive, String outFile)
 	
 			//decompose the comprehensive plot data hastable
 			dataDecomposer(singlePlotSummary);
-
+	
 			//write the project related data -- the remaining children nodes will be
 			// automatically written
 			writeProjectData(singlePlotSummary);
@@ -219,17 +236,8 @@ public void writeMultiplePlot(Hashtable multiPlotComprehensive, String outFile)
 		+ex.getMessage() ); 
 		ex.printStackTrace();
 	}
-
-	try 
-	{
-		PrintStream out = new PrintStream(new FileOutputStream(outFile));
-		out.println(output.toString());
-	}
-	catch (Exception ex) 
-	{
-		System.out.println("Error printing the xml file "+ex);
-		System.exit(1);
-	}
+  System.out.println("Her I am ----->" + output);
+	return output.toString();
 }
 
 

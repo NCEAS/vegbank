@@ -17,9 +17,6 @@ package databaseAccess;
 import java.io.*;
 import java.util.*;
 import java.sql.*;
-import java.lang.*;
-
-import databaseAccess.*;
 
 public class PlotDBWriter 
 {
@@ -465,7 +462,7 @@ try {
 
 
 	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength, conn);
+	j.issueSelect(statement, returnFields, returnFieldLength, conn);
 	
 	
 	//if redundancies	
@@ -944,7 +941,7 @@ catch (Exception e) {System.out.println("failed in PlotDBWriter.getNextId trying
 
 
 		issueStatement j = new issueStatement();
-		j.issueSelect(statement, action, returnFields, returnFieldLength, pconn);	
+		j.issueSelect(statement, returnFields, returnFieldLength, pconn);	
 
 		//return the strataId
 		strataId=j.outReturnFields[0].replace('|',' ').trim();

@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-01-14 01:12:40 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-05-07 01:41:35 $'
+ *  '$Revision: 1.4 $'
  *
  *
  */
@@ -196,8 +196,7 @@ public class queryStore
 
 				//execute the selection request
 				issueStatement j = new issueStatement();
-				j.issueSelect(statement, action, returnFields, returnFieldLength, 
-				summaryResultHash);	
+				j.issueSelect(statement, returnFields, summaryResultHash);	
 			
 				
 	
@@ -225,8 +224,7 @@ public class queryStore
 	
 			//issue the select statement
 			issueStatement k = new issueStatement();
-			k.issueSelect(statement, action, returnSpeciesFields, 
-			returnSpeciesFieldLength, summaryResultHash);
+			k.issueSelect(statement, returnSpeciesFields, summaryResultHash);
 	
 
 	
@@ -314,7 +312,7 @@ public void getPlotSummary(String plotId[], int plotIdNum)
 			returnFields[18]="CURRENTCOMMUNITY";
 			int returnFieldLength=19;
 			issueStatement j = new issueStatement();
-			j.issueSelect(statement, action, returnFields, returnFieldLength);	
+			j.issueSelect(statement, returnFields, returnFieldLength);	
 			
 			for (int ii=0;ii<j.outReturnFieldsNum; ii++) 
 			{
@@ -334,7 +332,7 @@ public void getPlotSummary(String plotId[], int plotIdNum)
 	
 			//issue the select statement
 			issueStatement k = new issueStatement();
-			k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB);	
+			k.issueSelect(statement, returnFieldsB, returnFieldLengthB);	
 	
 			//take the results from this query and append to the summary line
 			//which will ultimately be passed back to the xmlWriter to be tokenized
@@ -471,7 +469,7 @@ public void getPlotId(String queryElement, String queryElementType)
 	int returnFieldLength=1;
 	// ISSUE THE STATEMENT TO THE DATABASE
 	issueStatement j = new issueStatement();
-	j.issueSelect(sb.toString(), action, returnFields, returnFieldLength);	
+	j.issueSelect(sb.toString(), returnFields, returnFieldLength);	
 
 	//grab the returned result set and transfer to a public array
 	//ultimately these results are passed to the calling class -- if for some reason
@@ -508,7 +506,7 @@ public void getPlotId(String queryElement, String queryElementType)
 			System.out.println("queryStore > " + statement );
 
 			issueStatement j = new issueStatement();
-			j.issueSelect(statement, action, returnFields, returnFieldLength);	
+			j.issueSelect(statement, returnFields, returnFieldLength);	
 
 
 			//grab the returned result set and transfer to a public array
@@ -597,7 +595,7 @@ public void getPlotId(String queryElement, String queryElementType)
 			System.out.println("queryStore statement: > " + statement );
 		
 			issueStatement j = new issueStatement();
-			j.issueSelect(statement, action, returnFields, returnFieldLength);	
+			j.issueSelect(statement, returnFields, returnFieldLength);	
 
 			//grab the returned result set and transfer to a public array
 			//ultimately these results are passed to the calling class

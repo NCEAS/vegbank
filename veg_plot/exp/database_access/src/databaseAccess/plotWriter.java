@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 import java.sql.*;
 
-import databaseAccess.*;
 
 
 /**
@@ -349,7 +348,7 @@ try {
 	*/
 
 	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength, conn);
+	j.issueSelect(statement, returnFields, returnFieldLength, conn);
 	
 	
 	//if redundancies	

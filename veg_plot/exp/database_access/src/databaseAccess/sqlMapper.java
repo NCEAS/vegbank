@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *    '$Date: 2003-02-24 20:01:45 $'
- * 	'$Revision: 1.4 $'
+ *    '$Date: 2003-05-07 01:41:35 $'
+ * 	'$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,8 +73,9 @@ public class  sqlMapper
  * @param transformedSringNum integer defining number of query elements
  */
 
-	public void developExtendedPlotQuery(String[] transformedString, int transformedStringNum)
+	public String  developExtendedPlotQuery(String[] transformedString, int transformedStringNum)
 	{
+		String xmlResult = null;
 		StringBuffer sb = new StringBuffer();
 		try 
 		{
@@ -141,13 +142,12 @@ public class  sqlMapper
 			if ( resultType.equals("summary") )
 			{
 				System.out.println("sqlMapper > writing the plots using new class - test file: " + outFile );
-				dbaccess.writeMultipleVegBankPlot(plotIdVec, outFile);
+				xmlResult = dbaccess.getMultipleVegBankPlotXMLString(plotIdVec);
 			}
 			else
 			{
-				// PRINT THE DATA TO FILE USING THE IDENTITY PRINT FUNCTION
 				System.out.println("sqlMapper > writing the plots using new class -  file: " + outFile );
-				dbaccess.writeMultipleVegBankPlotIdentifcation(plotIdVec, outFile);
+				//xmlResult = dbaccess.writeMultipleVegBankPlotIdentifcation(plotIdVec, outFile);
 			}
 		}
 		catch ( Exception e )
@@ -155,6 +155,7 @@ public class  sqlMapper
 			System.out.println("sqlMapper > Exception :   " + e.getMessage());
 			e.printStackTrace();
 		}
+		return xmlResult;
 	}
 	
 	/**
@@ -723,8 +724,9 @@ public class  sqlMapper
  * @param transformedSringNum integer defining number of query elements
  */
 
-	public void developPlotQuery(String[] transformedString, int transformedStringNum)
+	public String developPlotQuery(String[] transformedString, int transformedStringNum)
 	{
+		String xmlResult = null;
 		try 
 		{
 			//get the query elements into a hash table
@@ -752,7 +754,8 @@ public class  sqlMapper
 
 					//write to a summary information to the file that can be used by the application
 					xmlWriter xw = new xmlWriter();
-					xw.writePlotSummary(qs.cumulativeSummaryResultHash, outFile);
+					//xw.writePlotSummary(qs.cumulativeSummaryResultHash, outFile);
+					xmlResult = xw.writePlotSummary(qs.cumulativeSummaryResultHash);
 				}
 				else
 				{
@@ -857,10 +860,11 @@ public class  sqlMapper
 				
 				// instantiate a new instance of the dbAccess class 
 				// -- probably should be done above
-				String testFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/identity.xml";
-				System.out.println("sqlMapper > writing the plots using new class - test file: " + testFile );
+				
+				System.out.println("sqlMapper >getting the plots");
 				dbAccess dbaccess = new dbAccess();
-				dbaccess.writeMultipleVegBankPlotIdentifcation(plotIdVec, testFile);
+				xmlResult = dbaccess.getMultipleVegBankPlotIdentifcationXMLString(plotIdVec); 
+				
 			}
 			// ELSE DONT RECOGNIZE WHAT TO DO
 			else
@@ -874,6 +878,7 @@ public class  sqlMapper
 			+e.getMessage());
 			e.printStackTrace();
 		}
+		return xmlResult;
 	}
 
 
@@ -932,8 +937,9 @@ public class  sqlMapper
  * @param transformedSringNum integer defining number of query elements
  */
 
-public void developCompoundPlotQuery(String[] transformedString, int transformedStringNum)
+public String developCompoundPlotQuery(String[] transformedString, int transformedStringNum)
 {
+	String xmlResult = null;
 	try 
 	{
 		//get the query elements into a hash table
@@ -1004,6 +1010,7 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 		System.out.println("sqlMapper > Exception: sqlMapper.developPlotQuery " +e.getMessage());
 		e.printStackTrace();
 	}
+	return xmlResult;
 } 
 
 
@@ -1014,11 +1021,11 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 	 * @param transformedString - the string object containing the query elements
 	 * @param transformedStringNum -- the number of elements
 	 */
-	public void developSimplePlantTaxonomyQuery(
-																																										String[] transformedString, 
-																																										int transformedStringNum
-																																										)
+	public String developSimplePlantTaxonomyQuery(
+		String[] transformedString,
+		int transformedStringNum)
 	{
+		String xmlResult = null;
 		try 
 		{
 			System.out.println("sqlMapper > developSimplePlantTaxonomyQuery ");
@@ -1045,35 +1052,40 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 			{
 				startDate = (String)queryElementHash.get("startDate");
 				stopDate = (String)queryElementHash.get("stopDate");
-				taxaResults = tqs.getPlantTaxonSummary(
-																																								taxonName, 
-																																								taxonNameType, 
-																																								taxonLevel, party, 
-																																								startDate, 
-																																								stopDate
-																																							);
+				taxaResults =
+					tqs.getPlantTaxonSummary(
+						taxonName,
+						taxonNameType,
+						taxonLevel,
+						party,
+						startDate,
+						stopDate);
 			}
-			else if ( queryElementHash.containsKey("targetDate") )
-			{
-				targetDate = (String)queryElementHash.get("targetDate");
-				taxaResults = tqs.getPlantTaxonSummary(
-																																								taxonName, 
-																																								taxonNameType, 
-																																								taxonLevel, party, 
-																																								targetDate
-																																							);
+				else
+					if (queryElementHash.containsKey("targetDate"))
+					{
+						targetDate = (String) queryElementHash.get("targetDate");
+						taxaResults =
+							tqs.getPlantTaxonSummary(
+								taxonName,
+								taxonNameType,
+								taxonLevel,
+								party,
+								targetDate);
 			}
 			queryOutputNum=taxaResults.size();
 			//print the results by passing the summary vector to the xml writer class
 			System.out.println("sqlMapper > writing the plant results as xml ");
 			xmlWriter l = new xmlWriter();
-			l.writePlantTaxonomySummary(taxaResults, outFile, taxonName, taxonNameType, taxonLevel);
+			xmlResult = l.getPlantTaxonomySummary(taxaResults, taxonName, taxonNameType, taxonLevel);
+			//l.writePlantTaxonomySummary(taxaResults, outFile, taxonName, taxonNameType, taxonLevel);
 		}
 		catch ( Exception e )
 		{	
 			System.out.println("sqlMapper > Exception :  " + e.getMessage());
 			e.printStackTrace();
 		}
+		return xmlResult;
 	}
 
 
@@ -1089,9 +1101,12 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
  	*		value (| delimeted )
  	* @param transformedSringNum integer defining number of query elements
  	*/
-	public void developSimpleCommunityQuery(String[] transformedString, 
-	int transformedStringNum)
+	public String developSimpleCommunityQuery(
+		String[] transformedString, 
+		int transformedStringNum
+		)
 	{
+		String xmlResult = null;
 		try 
 		{
 			//get the query elements into a hash table
@@ -1099,7 +1114,6 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 
 			//get the needed elements
 			String resultType = (String)metaQueryHash.get("resultType");
-			String outFile = (String)metaQueryHash.get("outFile");
 
 			String communityName = (String)queryElementHash.get("communityName");
 			String communityLevel = (String)queryElementHash.get("communityLevel");
@@ -1108,7 +1122,7 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 			//This is for debugging - and can be commented out later**/
  			System.out.println("sqlMapper.developSimpleCommunityQuery > \n"
  			+" resultType: "+ resultType +"\n "
-			+"outFile: "+outFile+"\n communityName: "+communityName
+			+"\n communityName: "+communityName
 			+"\n communityLevel: "	+communityLevel+"\n queryElementNum: "+queryElementNum);
 	
 			//call the method in the CommunityQueryStore class to develop the query
@@ -1118,7 +1132,7 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 
 			//print the results by passing the summary vector to the xml writer class
 			xmlWriter l = new xmlWriter();
-			l.writeCommunitySummary(j.communitySummaryOutput, outFile);
+			xmlResult = l.getCommunitySummaryXMLString(j.communitySummaryOutput);
 
 		}
 		catch ( Exception e )
@@ -1126,6 +1140,7 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 			System.out.println("failed at: sqlMapper.developSimpleCommunityQuery  "
 			+e.getMessage());e.printStackTrace();
 		}
+		return xmlResult;
 	}
 
 

@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-02-24 20:01:44 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-05-07 01:41:35 $'
+ *	'$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@ import java.util.Hashtable;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import org.vegbank.common.Constants;
+
 /**
  * this class has been implemented to contain methods which are to be
  * used to query the plant taxonomy database - a database that follows 
@@ -41,26 +43,12 @@ import java.util.Vector;
  * @author John Harris
  *
  */
-public class TaxonomyQueryStore
+public class TaxonomyQueryStore implements Constants
 {
 	LocalDbConnectionBroker lb = new LocalDbConnectionBroker();
 	private Connection c = null;
 	private String dbConnectString = ""; // the db connect string
 	private ResourceBundle rb = ResourceBundle.getBundle("database");
-	
-	//FIXME: These need to be in a central location 
-	/*
-	private static final String TAXON_SCIENTIFIC_NAME = "Scientific";  
-	private static final String TAXON_SCIENTIFIC_NO_AUTHORS_NAME = 
-		"Scientific without authors";
-	private static final String TAXON_CODE_NAME = "Code";
-	private static final String TAXON_ENGLISH_COMMON_NAME = "English Common"; 
-	*/
-	private static final String TAXON_SCIENTIFIC_NAME = "Scientific";  
-	private static final String TAXON_SCIENTIFIC_NO_AUTHORS_NAME = 
-		"SCIENTIFIC NAME";
-	private static final String TAXON_CODE_NAME = "CODE";
-	private static final String TAXON_ENGLISH_COMMON_NAME = "COMMON NAME"; 	
 	
 	/**
 	* method that will return a database connection for use with the database
@@ -72,12 +60,14 @@ public class TaxonomyQueryStore
 		Connection c = null;
 		try
 		{
-			Class.forName("org.postgresql.Driver");
-			String s = rb.getString("plantdbconnectstring");
-			this.dbConnectString = s;
-			System.out.println("TaxonomyQueryStore > db connect string: " + s);
-			//c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
-			c = DriverManager.getConnection(s, "datauser", "");
+			this.dbConnectString = rb.getString("connectString");
+			String driverClass = rb.getString("driverClass");
+			String user = rb.getString("user");
+			String password = rb.getString("password");
+			
+			Class.forName(driverClass);
+			System.out.println("TaxonomyQueryStore > db connect string: " + dbConnectString);
+			c = DriverManager.getConnection(dbConnectString, user, password);
 		}
 		catch (Exception e)
 		{
@@ -165,46 +155,47 @@ public class TaxonomyQueryStore
 
 			//create and issue the query --
 			StringBuffer sqlBuf = new StringBuffer();
-
+			
+			
 			sqlBuf.append(
-				"SELECT plantname_id, plantconcept_id, plantName, plantDescription,"
-			);
-			sqlBuf.append(
-				" plantNameStatus, classsystem, plantlevel, parentName, acceptedsynonym,  "
-			);
-			sqlBuf.append(
-				" startDate, stopDate, plantNameAlias, plantConceptRefAuthor, "
-				);
-			sqlBuf.append(			
-				" plantConceptRefDate, plantUsagePartyOrgName  from VEG_TAXA_SUMMARY "
+				"SELECT plantconcept.plantname_id, plantconcept.plantconcept_id, "
+				+ "plantusage.plantname, plantconcept.plantdescription, " 
+				+ "plantstatus.plantconceptstatus,  plantusage.classsystem, "
+				+ "plantstatus.plantlevel, plantstatus.plantparentname, "
+				+ "plantusage.acceptedsynonym,  plantstatus.startdate, plantstatus.stopdate, "
+				+ "plantparty.organizationname "
+				+ "FROM plantconcept, plantstatus, plantusage, plantparty "
+				+ "WHERE plantconcept.plantconcept_id = plantusage.plantconcept_id "
+				+ "and plantconcept.plantconcept_id = plantstatus.plantconcept_id "
+				+ "and plantusage.plantparty_id = plantparty.plantparty_id"
 			);
 			
 			sqlBuf.append(
-				" where upper(plantName) like '" + taxonName.toUpperCase()+ "'");
+				" and upper(plantusage.plantname) like '" + taxonName.toUpperCase()+ "'");
 
 			// Add the party if needed
 			if (party != null  && ! (party.trim()).equals("")  )
 			{
 				sqlBuf.append(
-					" and upper(PLANTUSAGEPARTYORGNAME) like '%"+party.toUpperCase()+"%' "
+					" and upper(plantparty.organizationname) like '%"+party.toUpperCase()+"%' "
 					);
 			}
 					
 			// Add date restrictions if needed
 			if (startDate != null  && ! (startDate.trim()).equals("")  )
 			{
-				sqlBuf.append(" and STARTDATE <'" + startDate + "'" );
+				sqlBuf.append(" and plantstatus.startdate <'" + startDate + "'" );
 			}
 			if (stopDate != null && ! (stopDate.trim()).equals("") )
 			{
-				sqlBuf.append("and STOPDATE > '" + stopDate + "'" );
+				sqlBuf.append("and ( plantstatus.stopdate > '" + stopDate + "' or plantstatus.stopdate IS NULL )" );
 			}
 			
 			// Add the plantlevel if needed
 			if ( taxonLevel != null && ! (taxonLevel.trim()).equals("") )
 			{
 				sqlBuf.append(
-					" and upper(PLANTLEVEL) like  '" + taxonLevel.toUpperCase() + "'"
+					" and upper(plantstatus.plantlevel) =  '" + taxonLevel.toUpperCase() + "'"
 				);
 			}
 
@@ -212,7 +203,7 @@ public class TaxonomyQueryStore
 			if ( taxonNameType != null && ! (taxonNameType.trim()).equals("") )
 			{
 				sqlBuf.append(
-					" and  upper(CLASSSYSTEM) like '" + taxonNameType.toUpperCase() + "' "
+					" and  upper(plantusage.classsystem) = '" + taxonNameType.toUpperCase() + "' "
 				);				
 			}
 
@@ -235,12 +226,12 @@ public class TaxonomyQueryStore
 					this.removeSensitiveChars(results.getString(9));
 				startDate = results.getString(10);
 				stopDate = results.getString(11);
-				String plantNameAlias =  
-					this.removeSensitiveChars(results.getString(12));
-				String plantConceptRefAuthor =
-					this.removeSensitiveChars(results.getString(13));
-				String plantConceptRefDate = results.getString(14);
-				String plantUsagePartyOrgName = results.getString(15);
+//				String plantNameAlias =  
+//					this.removeSensitiveChars(results.getString(12));
+//				String plantConceptRefAuthor =
+//					this.removeSensitiveChars(results.getString(13));
+//				String plantConceptRefDate = results.getString(14);
+//				String plantUsagePartyOrgName = results.getString(15);
 
 				//little trick to keep from breaking the code
 				String commonName = plantName;
@@ -274,12 +265,12 @@ public class TaxonomyQueryStore
 						acceptedSynonym,
 						startDate,
 						stopDate,
-						plantNameAlias,
+						null, //plantNameAlias,
 						code,
 						comName,
-						plantConceptRefAuthor,
-						plantConceptRefDate,
-						plantUsagePartyOrgName,
+						null, //plantConceptRefAuthor,
+						null, //plantConceptRefDate,
+						null, //plantUsagePartyOrgName,
 						scientificName,
 						scientificNameWA);
 				returnVector.addElement(h);
@@ -386,7 +377,7 @@ public class TaxonomyQueryStore
 	private String getCommonName(int conceptId)
 	{
 		String commonName =
-			this.getTaxonName(conceptId, TAXON_ENGLISH_COMMON_NAME);
+			this.getTaxonName(conceptId, USAGE_NAME_COMMON);
 
 		return (commonName);
 	}
@@ -402,7 +393,7 @@ public class TaxonomyQueryStore
 	private String getScientificName(int conceptId)
 	{
 		String scientificName = 
-			this.getTaxonName(conceptId, TAXON_SCIENTIFIC_NO_AUTHORS_NAME);
+			this.getTaxonName(conceptId, USAGE_NAME_SCIENTIFIC_NOAUTHORS);
 		return (scientificName);
 	}
 	
@@ -417,7 +408,7 @@ public class TaxonomyQueryStore
 	private String getScientificNameWithAuthors(int conceptId)
 	{
 		String scientificNameWA = 
-			this.getTaxonName(conceptId, TAXON_SCIENTIFIC_NAME);
+			this.getTaxonName(conceptId, USAGE_NAME_SCIENTIFIC);
 		return (scientificNameWA);
 	}	
 
@@ -426,7 +417,7 @@ public class TaxonomyQueryStore
 	 */
 	private String getTaxonCode(int conceptId)
 	{
-		String code = this.getTaxonName(conceptId, TAXON_CODE_NAME);
+		String code = this.getTaxonName(conceptId, USAGE_NAME_CODE);
 		return (code);
 	}
 	

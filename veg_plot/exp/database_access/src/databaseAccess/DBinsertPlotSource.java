@@ -7,8 +7,8 @@
 * Release: @release@
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-03-21 22:26:38 $'
-*   '$Revision: 1.15 $'
+*   '$Date: 2003-05-07 01:41:35 $'
+*   '$Revision: 1.16 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -39,8 +39,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
+import java.sql.Types;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.AbstractList;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -95,6 +97,7 @@ public class DBinsertPlotSource {
 
 	//these variables are returned from the database and are used throughout the
 	// class
+	int projectId;
 	int plotId;
 	int namedPlaceId;
 	int plotObservationId;
@@ -363,7 +366,7 @@ public class DBinsertPlotSource {
 			sb.append(
 				"authorplotcode, surfGeo, state, country, parentplot, authorobscode, ");
 			sb.append("soilDepth, leaftype, accession_number ) ");
-			sb.append("select plot.plot_id, plot.project_id,  ");
+			sb.append("select plot.plot_id, observation.project_id,  ");
 			sb.append(
 				"plot.latitude, plot.longitude, plot.shape,  plot.elevation, ");
 			sb.append(
@@ -373,20 +376,19 @@ public class DBinsertPlotSource {
 			sb.append(
 				"plot.authordatum, observation.obsstartdate, observation.obsenddate, ");
 			sb.append("observation.effortLevel, ");
-			sb.append("plot.authorplotcode, plot.geology, plot.state, ");
+			sb.append("plot.authorplotcode, plot.rocktype, plot.state, ");
 			sb.append("plot.country, null, observation.authorobscode,  ");
-			sb.append("observation.soilDepth, null, plot.accession_number ");
+			sb.append("observation.soilDepth, null, observation.obsaccessionnumber ");
 			sb.append(
 				"from plot, observation where observation.plot_id = plot.plot_id; ");
 
 			sb.append(
-				"insert into plotSpeciesSum (OBS_ID, AUTHORNAMEID, STRATUMTYPE, PERCENTCOVER, AUTHORPLANTCODE ) ");
+				"insert into plotSpeciesSum (OBS_ID, AUTHORNAMEID, STRATUMTYPE, PERCENTCOVER ) ");
 			sb.append("select ");
 			sb.append("TAXONOBSERVATION.OBSERVATION_ID, ");
 			sb.append("TAXONOBSERVATION.cheatPlantName, ");
 			sb.append("STRATUMCOMPOSITION.CHEATSTRATUMNAME, ");
-			sb.append("STRATUMCOMPOSITION.TAXONSTRATUMCOVER, ");
-			sb.append("STRATUMCOMPOSITION.CHEATPLANTCODE ");
+			sb.append("STRATUMCOMPOSITION.TAXONSTRATUMCOVER ");
 			sb.append("from ");
 			sb.append("	TAXONOBSERVATION, STRATUMCOMPOSITION ");
 			sb.append("where  ");
@@ -439,10 +441,10 @@ public class DBinsertPlotSource {
 
 			// commit if there are no warning and if the execute executed 
 			if (warning == null) {
-				System.out.println("DBinsertPlotSource > got no warning");
+				System.out.println("DBinsertPlotSource > got no warning denormalizing tables");
 				this.conn.commit();
 			} else {
-				System.out.println("DBinsertPlotSource > got a warning: ");
+				System.out.println("DBinsertPlotSource > got a warning denormalizing tables: ");
 				//System.out.println(  warning.toString()  );
 				System.out.println(r);
 				this.conn.rollback();
@@ -620,7 +622,6 @@ public class DBinsertPlotSource {
 
 				//this boolean determines if the plot should be commited or rolled-back
 				boolean commit = true;
-				int projectId = 0;
 
 				//set the auto commit option on the connection to false after getting a
 				// new connection from the pool
@@ -770,7 +771,7 @@ public class DBinsertPlotSource {
 			System.out.println("DBinsertPlotSource > requesting permission level from: " + this.authenticationServletHost);
 			String s = null;
 			//THIS USES THE OTHER REQUEST URL METHOD
-			String servlet = "/framework/servlet/usermanagement";
+			String servlet = "/vegbank/servlet/usermanagement";
 			Properties parameters = new Properties();
 			parameters.setProperty("action", "getpermissionlevel");
 			parameters.setProperty("user", emailAddress);
@@ -1298,7 +1299,6 @@ public class DBinsertPlotSource {
         {
 					//get the strataCompId number
 					int stratumCompositionId = getNextId("stratumComposition");
-
 					//get the strata ID
 					int stratumId = this.getStrataId(plotObservationId, curStrata);
 
@@ -1312,8 +1312,8 @@ public class DBinsertPlotSource {
 					sb.append(
 						"INSERT into STRATUMCOMPOSITION ( stratumComposition_Id, "
 							+ " cheatPlantName, cheatStratumName, taxonStratumCover, stratum_id, "
-							+ " taxonobservation_id, CHEATPLANTCODE) ");
-					sb.append("values(?,?,?,?,?,?,?)");
+							+ " taxonobservation_id) ");
+					sb.append("values(?,?,?,?,?,?)");
 
 					PreparedStatement pstmt =
 						conn.prepareStatement(sb.toString());
@@ -1325,7 +1325,6 @@ public class DBinsertPlotSource {
 					pstmt.setString(4, cover);
 					pstmt.setInt(5, stratumId);
 					pstmt.setInt(6, taxonObservationId);
-					pstmt.setString(7, plantCode);
 					pstmt.execute();
 				}
 			}
@@ -1486,12 +1485,12 @@ public class DBinsertPlotSource {
 				String level = "";
 				String conceptId = "";
 				String name = "";
-				String nameId = "";
+				int nameId = 0;
 				sb = new StringBuffer();
 				// get the taxonObservation number which will be used in the 
 				// strata composition insertion method called below too
 				taxonObservationId = getNextId("taxonObservation");
-				String authorNameId = uniqueTaxa.elementAt(i).toString();
+				String authorNameId = Utility.escapeCharacters (uniqueTaxa.elementAt(i).toString() );
 				//sci name
 				String code = Utility.escapeCharacters( source.getPlantTaxonCode(authorNameId) );
         String taxonCover = Utility.escapeCharacters( source.getPlantTaxonCover(authorNameId) );
@@ -1500,28 +1499,41 @@ public class DBinsertPlotSource {
           "DBinsertPlotSource > cur. tax. name: "+ authorNameId+ " code: "+ code
         );
 
-				// IF THE CODE HAS A VALID VALUE THEN ATTEMPT FIRST TO LOOKUP THE TAXON
-				if (code != null && code.length() > 1) 
+
+//				// IF THE CODE HAS A VALID VALUE THEN ATTEMPT FIRST TO LOOKUP THE TAXON
+//				if (code != null && code.length() > 1) 
+//				{
+//					plantTaxon = getPlantTaxonomyData(code, "CODE");
+//					// IF IT IS EMPTY THEN TRY AGAIN WITH THE SCI NAME
+//					if (plantTaxon.isEmpty() == true) 
+//					{
+//						plantTaxon = getPlantTaxonomyData(authorNameId, "SCIENTIFIC NAME");
+//					}
+//				} 
+//				else 
+//				{
+//					plantTaxon = getPlantTaxonomyData(authorNameId, "SCIENTIFIC NAME");
+//				}
+//				// GET THE TAXON ELEMENTS IF THEY ARE AVAILABLE
+//				if (plantTaxon.isEmpty() == false) 
+//				{
+//					level = (String) plantTaxon.get("level");
+//					conceptId = (String) plantTaxon.get("conceptId");
+//					name = (String) plantTaxon.get("name");
+//					nameId = (String) plantTaxon.get("nameId");
+//				}
+
+				if (code != null && code.length() > 1)
 				{
-					plantTaxon = getPlantTaxonomyData(code, "CODE");
-					// IF IT IS EMPTY THEN TRY AGAIN WITH THE SCI NAME
-					if (plantTaxon.isEmpty() == true) 
-					{
-						plantTaxon = getPlantTaxonomyData(authorNameId, "SCIENTIFIC NAME");
-					}
-				} 
-				else 
-				{
-					plantTaxon = getPlantTaxonomyData(authorNameId, "SCIENTIFIC NAME");
+					// Get the plantName_ID from the code
+					nameId = getPlantNameId(code);
 				}
-				// GET THE TAXON ELEMENTS IF THEY ARE AVAILABLE
-				if (plantTaxon.isEmpty() == false) 
+				else
 				{
-					level = (String) plantTaxon.get("level");
-					conceptId = (String) plantTaxon.get("conceptId");
-					name = (String) plantTaxon.get("name");
-					nameId = (String) plantTaxon.get("nameId");
+					// Get the plantName_ID from the scientific name
+					nameId = getPlantNameId(authorNameId);
 				}
+		
 
 				//add the taxon name info to the debugging output
 				debug.append("<taxonObservation>\n");
@@ -1541,16 +1553,22 @@ public class DBinsertPlotSource {
 				//insert the values
 				sb.append(
 					"INSERT into TAXONOBSERVATION (TAXONOBSERVATION_ID, OBSERVATION_ID, ");
-				sb.append(" CHEATPLANTNAME, PLANTNAME_ID, CHEATPLANTCODE, TAXONCOVER ) ");
-				sb.append(" values(?,?,?,?,?,?) ");
+				sb.append(" PLANTNAME_ID, TAXONCOVER ) ");
+				sb.append(" values(?,?,?,?) ");
 
 				PreparedStatement pstmt = conn.prepareStatement(sb.toString());
 				pstmt.setInt(1, taxonObservationId);
 				pstmt.setInt(2, plotObservationId);
-				pstmt.setString(3, authorNameId);
-				pstmt.setString(4, nameId);
-				pstmt.setString(5, code);
-				pstmt.setString(6, taxonCover);
+				if ( nameId != 0)
+				{
+					pstmt.setInt(3, nameId);
+				}
+				else
+				{
+					pstmt.setNull(3, Types.INTEGER);
+				}
+
+				pstmt.setString(4, taxonCover);
 				pstmt.execute();
 
 				// insert the strata composition
@@ -1574,6 +1592,27 @@ public class DBinsertPlotSource {
 			successfulCommit = false;
 		}
 		return (successfulCommit);
+	}
+
+	private int getPlantNameId(String searchName)
+	{
+		int result = 0;
+		String sql = "select plantname_id from plantusage where plantname = '"+ searchName + "'";
+		try
+		{
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			// Just get the first match --- TODO: Check for > 1 .. this is an error
+			while (rs.next() )
+			{
+				result = rs.getInt(1);
+			}
+		}
+		catch (Exception e)
+		{ 
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	/**
@@ -1601,31 +1640,38 @@ public class DBinsertPlotSource {
 			String classMultiVariateAnalysis = Utility.escapeCharacters( source.getCommunityMultiVariateAnalysis(plotName) );
 			String classExpertSystem = Utility.escapeCharacters( source.getCommunityExpertSystem(plotName) );
 							
-			String conceptId = "";
+			//String conceptId = "";
 			// get the appropriate codes for this community via the web service
 			// store the data in a hashtable
-			Hashtable h = new Hashtable();
+			AbstractList l = new Vector();
 			if (code != null) {
-				h = getCommunityData(code);
+				l = getCommunityData(code);
 			} else if (name != null) {
-				h = getCommunityData(name);
+				l = getCommunityData(name);
 			}
 
 			// if the hashtable has a sible key then it will have 
 			// all the keys associated with a community
-			if (h.containsKey("conceptId")) {
-				level = (String) h.get("level");
-				code = (String) h.get("code");
-				conceptId = (String) h.get("conceptId");
-				name = (String) h.get("name");
-			}
+//			if (h.containsKey("conceptId")) {
+//				level = (String) h.get("level");
+//				code = (String) h.get("code");
+//				conceptId = (String) h.get("conceptId");
+//				name = (String) h.get("name");
+//			}
+
+			// TODO: Get values for communities
+			// FIXME: Completely broken !!
+//			level = (String) l.get(0);
+//			code = (String) l.get(1);
+//			name = (String) l.get(2);
+			
 			
 			debug.append("<communityName>" + name + "</communityName> \n");
 			debug.append("<communityCode>" + code + "</communityCode> \n");
 			debug.append("<communityLevel>" + level + "</communityLevel> \n");
 			debug.append("<classNotes>" + classNotes + "</classNotes> \n");
 			debug.append("<communityFramework>"+framework+"</communityFramework> \n");
-			debug.append("<communityConceptId>"+conceptId+"</communityConceptId> \n");
+//			debug.append("<communityConceptId>"+conceptId+"</communityConceptId> \n");
 			
 			debug.append("<communityStartDate>"+classStartDate+"</communityStartDate> \n");	
 			debug.append("<communityStopDate>"+classStopDate+"</communityStopDate> \n");		
@@ -1674,6 +1720,37 @@ public class DBinsertPlotSource {
 			return (false);
 		}
 		return (true);
+	}
+	
+	private AbstractList getCommunityData(String searchName)
+	{
+		Vector result = new Vector();
+		String codeClassSystem = "NVC-Code";
+		String nameClassSystem = "NVC-Scientific";
+		
+		String sql = 
+			"select commstatus.commlevel, commusage.commname from commstatus, commusage "
+			+ "WHERE commusage.commname = '" + searchName + "'" 			+ " and ( commusage.classsystem = '" + codeClassSystem + "' or  commusage.classsystem = '" + nameClassSystem + "')"
+			+ "and commstatus.commconcept_id = commusage.commconcept_id";
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while (rs.next())
+			{
+				// Only expect 2 rows back
+				result.set(0, rs.getString(1));	 	// This should be the level
+				result.add(rs.getString(2));				// This is one of the names, assuming first is code second is name 		
+			}	
+		}
+		catch ( Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 	/**
@@ -1930,9 +2007,12 @@ public class DBinsertPlotSource {
 
 			// update the debugging stringbuffer
 			debug.append("<plotId>" + plotId + "</plotId> \n");
+			debug.append("<projectId>" + projectId + "</projectId> \n");
 			debug.append("<observationCode>" + observationCode + "</observationCode>\n");
 			debug.append("<obsStartDate>" + startDate + "</obsStartDate>\n");
 			debug.append("<obsStopDate>" + stopDate + "</obsStopDate> \n");
+			debug.append(
+				"<accessionNumber>" + obsAccession + "</accessionNumber>\n");
 
 			sb.append(
 				"INSERT into OBSERVATION (observation_id, covermethod_id,  ");
@@ -1964,13 +2044,13 @@ public class DBinsertPlotSource {
 				" growthform3Cover, notesPublic, notesMgt, revisions, methodnarrative, ");
 			sb.append("stemsizelimit, landscapenarrative, ");
       sb.append("waterdepth, fieldht, submergedht, treecover, shrubcover, ");
-			sb.append(" fieldcover, nonvascularCover, accession_number )");
+			sb.append(" fieldcover, nonvascularCover, obsAccessionNumber, project_Id )");
 
 			//68 total
 			sb.append(" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,");  //15
 			sb.append("?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?"); //20
 			sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?");  //19
-      sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?)");         //13
+      sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?,?)");         //14
 			//68
 
 			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
@@ -2045,7 +2125,8 @@ public class DBinsertPlotSource {
 			pstmt.setString(65, fieldCover);
 			pstmt.setString(66, nonvascularCover);
 			pstmt.setString(67, obsAccession);
-
+			pstmt.setInt(68, projectId);
+			
 			pstmt.execute();
 			Thread.sleep(2000);
 			pstmt.close();
@@ -2109,7 +2190,8 @@ public class DBinsertPlotSource {
 
 			//plotName = source.plotCode;
 			String authorPlotCode = Utility.escapeCharacters( source.getPlotCode(plotName) );
-			String surfGeo = Utility.escapeCharacters( source.getSurfGeo(plotName) );
+			String rockType = Utility.escapeCharacters( source.getRockType(plotName) );
+			String surficialDeposits = Utility.escapeCharacters( source.getSurficialDeposits(plotName) ); 	
 			String parentPlot = "9";
 			String plotArea = Utility.escapeCharacters( source.getPlotArea(plotName) );
 			String elevation = Utility.escapeCharacters( source.getElevation(plotName) );
@@ -2158,7 +2240,7 @@ public class DBinsertPlotSource {
       		// stuff
 			debug.append(
 				"<authorPlotCode>" + authorPlotCode + "</authorPlotCode>\n");
-			debug.append("<geology>" + surfGeo + "</geology>\n");
+			debug.append("<rockType>" + rockType + "</rockType>\n");
 			debug.append("<plotArea>" + plotArea + "</plotArea>\n");
 			debug.append("<elevation>" + elevation + "</elevation>\n");
 			debug.append(
@@ -2176,69 +2258,68 @@ public class DBinsertPlotSource {
 			debug.append("<latitude>" + latitude + "</latitude>\n");
 			debug.append("<longitude>" + longitude + "</longitude>\n");
 			debug.append("<zone>" + zone + "</zone>\n");
-			debug.append(
-				"<accessionNumber>" + accessionNumber + "</accessionNumber>\n");
 			debug.append("<country>" + country + "</country>\n");
 			debug.append("<state>" + state + "</state>\n");
 			debug.append(
 				"<authorLocation>" + authorLocation + "</authorLocation>\n");
 			debug.append("<permanence>" + permanence + "</permanence>\n");
 			debug.append("<standsize>" + standSize + "</standsize>\n");
+			debug.append("<surficialDeposits>" + surficialDeposits + "</surficialDeposits>\n");			
 			
       		//this is the postgresql date function
 			String sysdate = "now()";
 
       		// The mother of all inserts ;)
 			sb.append(
-				"INSERT into PLOT (project_id, authorPlotCode, plot_id, "
-					+ "geology, latitude, longitude, area, elevation,"
+				"INSERT into PLOT (authorPlotCode, plot_id, "
+					+ "rocktype, latitude, longitude, area, elevation,"
 					+ "slopeAspect, slopeGradient, topoPosition, "
 					+ "shape, confidentialityStatus, confidentialityReason, "
 					+ "authore, authorn, state, country, authorLocation, accession_number, "
 					+ "dateEntered, submitter_surname, submitter_givenname, submitter_email, "
 					+ "authorzone, permanence, landform, layoutnarative, locationnarrative, "
-          + "azimuth, elevationaccuracy, dsgpoly, standsize, authordatum ) "
+          + "azimuth, elevationaccuracy, dsgpoly, standsize, authordatum, surficialDeposits) "
 					+
           "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
 			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
 
 			// Bind the values to the query and execute it
-			pstmt.setInt(1, projectId);
-			pstmt.setString(2, authorPlotCode);
-			pstmt.setInt(3, plotId);
-			pstmt.setString(4, surfGeo);
-			pstmt.setString(5, latitude);
-			pstmt.setString(6, longitude);
-			pstmt.setString(7, plotArea);
-			pstmt.setString(8, elevation);
-			pstmt.setString(9, slopeAspect);
-			pstmt.setString(10, slopeGradient);
-			pstmt.setString(11, topoPosition);
-			pstmt.setString(12, plotShape);
-			pstmt.setString(13, confidentialityStatus);
-			pstmt.setString(14, confidentialityReason);
-			pstmt.setString(15, xCoord);
-			pstmt.setString(16, yCoord);
-			pstmt.setString(17, state);
-			pstmt.setString(18, country);
-			pstmt.setString(19, authorLocation);
-			pstmt.setString(20, accessionNumber);
-			pstmt.setString(21, sysdate);
-			pstmt.setString(22, this.submitterSurName);
-			pstmt.setString(23, this.submitterGivenName);
-			pstmt.setString(24, this.submitterEmail);
-			pstmt.setString(25, zone);
-			pstmt.setBoolean(26, permanence);
-			pstmt.setString(27, landForm);
-			pstmt.setString(28, layoutNarrative);
-			pstmt.setString(29, locationNarrative);
-			pstmt.setString(30, azimuth);
-			pstmt.setString(31, elevationAccuracy);
-			pstmt.setString(32, dsgPoly);
-			pstmt.setString(33, standSize);
-			pstmt.setString(34, datumType);
-			     
+			pstmt.setString(1, authorPlotCode);
+			pstmt.setInt(2, plotId);
+			pstmt.setString(3, rockType);
+			pstmt.setString(4, latitude);
+			pstmt.setString(5, longitude);
+			pstmt.setString(6, plotArea);
+			pstmt.setString(7, elevation);
+			pstmt.setString(8, slopeAspect);
+			pstmt.setString(9, slopeGradient);
+			pstmt.setString(10, topoPosition);
+			pstmt.setString(11, plotShape);
+			pstmt.setString(12, confidentialityStatus);
+			pstmt.setString(13, confidentialityReason);
+			pstmt.setString(14, xCoord);
+			pstmt.setString(15, yCoord);
+			pstmt.setString(16, state);
+			pstmt.setString(17, country);
+			pstmt.setString(18, authorLocation);
+			pstmt.setString(19, accessionNumber);
+			pstmt.setString(20, sysdate);
+			pstmt.setString(21, this.submitterSurName);
+			pstmt.setString(22, this.submitterGivenName);
+			pstmt.setString(23, this.submitterEmail);
+			pstmt.setString(24, zone);
+			pstmt.setBoolean(25, permanence);
+			pstmt.setString(26, landForm);
+			pstmt.setString(27, layoutNarrative);
+			pstmt.setString(28, locationNarrative);
+			pstmt.setString(29, azimuth);
+			pstmt.setString(30, elevationAccuracy);
+			pstmt.setString(31, dsgPoly);
+			pstmt.setString(32, standSize);
+			pstmt.setString(33, datumType);
+			pstmt.setString(34, surficialDeposits);
+						     
 			pstmt.getWarnings();
 			pstmt.execute();
 			pstmt.close();
@@ -2346,7 +2427,7 @@ public class DBinsertPlotSource {
 			String host = this.geoCoordRequestServletHost;
 			String s = null;
 			//THIS USES THE OTHER REQUEST URL METHOD
-			String servlet = "/framework/servlet/framework";
+			String servlet = "/vegbank/servlet/framework";
 			Properties parameters = new Properties();
 			parameters.setProperty("action", "coordinateTransform");
 			parameters.setProperty("returnformattype", "xml");
@@ -2378,83 +2459,83 @@ public class DBinsertPlotSource {
 	 * @param code -- the community code used to lookup the concept id
 	 * @return hastable -- a hashtable containing the community data
 	 */
-	private Hashtable getCommunityData(String code) {
-		Hashtable h = new Hashtable();
-		try {
-			//THIS USES THE REQUESTURL METHOD
-			String protocol = "http://";
-			String host = this.communityRequestServletHost;
-			String s = null;
-			//THIS USES THE OTHER REQUEST URL METHOD
-			String servlet = "/framework/servlet/DataRequestServlet";
-			Properties parameters = new Properties();
-			parameters.setProperty("requestDataType", "vegCommunity");
-			parameters.setProperty("requestDataFormatType", "xml");
-			parameters.setProperty("clientType", "clientApplication");
-			parameters.setProperty("communityName", code);
-			parameters.setProperty("communityLevel", "%");
-			s = GetURL.requestURL(servlet, protocol, host, parameters);
-			System.out.println(
-				"DBinsertPlotSource > XML string from web app: \n'" + s + "'");
-
-			if (s.length() > 3 && s != null) {
-				// parse the returned xml doc to get the relevant data and 
-				// put it into the hash table
-				parser = new XMLparse();
-				Document doc = parser.getDocumentFromString(s);
-				Vector levelVec =
-					parser.getValuesForPath(
-						doc,
-						"/vegCommunity/community/classLevel");
-				Vector codeVec =
-					parser.getValuesForPath(
-						doc,
-						"/vegCommunity/community/classCode");
-				Vector conceptIdVec =
-					parser.getValuesForPath(
-						doc,
-						"/vegCommunity/community/commConceptId");
-				// THIS IS A HACK TO GET AT THE COMMUNITY NAME
-				Vector nameVec =
-					parser.getValuesForPath(
-						doc,
-						"/vegCommunity/community/commDesc");
-				String lev = (String) levelVec.elementAt(0);
-				String c = (String) codeVec.elementAt(0);
-				String conceptId = (String) conceptIdVec.elementAt(0);
-				String name = (String) nameVec.elementAt(0);
-				System.out.println(
-					"DBinsertPlotSource > parsed community xml: "
-						+ lev
-						+ " "
-						+ c
-						+ " "
-						+ conceptId);
-
-				if (lev != null && c != null && conceptId != null) {
-					h.put("code", c);
-					h.put("level", lev);
-					h.put("conceptId", conceptId);
-					h.put("name", name);
-				} else {
-					System.out.println(
-						"DBinsertPlotSource > parsed elements returned null: "
-							+ lev
-							+ " "
-							+ c
-							+ " "
-							+ conceptId);
-				}
-			} else {
-				System.out.println(
-					"DBinsertPlotSource > no results from web app");
-			}
-		} catch (Exception e) {
-			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return (h);
-	}
+//	private Hashtable getCommunityData(String code) {
+//		Hashtable h = new Hashtable();
+//		try {
+//			//THIS USES THE REQUESTURL METHOD
+//			String protocol = "http://";
+//			String host = this.communityRequestServletHost;
+//			String s = null;
+//			//THIS USES THE OTHER REQUEST URL METHOD
+//			String servlet = "/vegbank/servlet/DataRequestServlet";
+//			Properties parameters = new Properties();
+//			parameters.setProperty("requestDataType", "vegCommunity");
+//			parameters.setProperty("requestDataFormatType", "xml");
+//			parameters.setProperty("clientType", "clientApplication");
+//			parameters.setProperty("communityName", code);
+//			parameters.setProperty("communityLevel", "%");
+//			s = GetURL.requestURL(servlet, protocol, host, parameters);
+//			System.out.println(
+//				"DBinsertPlotSource > XML string from web app: \n'" + s + "'");
+//
+//			if (s.length() > 3 && s != null) {
+//				// parse the returned xml doc to get the relevant data and 
+//				// put it into the hash table
+//				parser = new XMLparse();
+//				Document doc = parser.getDocumentFromString(s);
+//				Vector levelVec =
+//					parser.getValuesForPath(
+//						doc,
+//						"/vegCommunity/community/classLevel");
+//				Vector codeVec =
+//					parser.getValuesForPath(
+//						doc,
+//						"/vegCommunity/community/classCode");
+//				Vector conceptIdVec =
+//					parser.getValuesForPath(
+//						doc,
+//						"/vegCommunity/community/commConceptId");
+//				// THIS IS A HACK TO GET AT THE COMMUNITY NAME
+//				Vector nameVec =
+//					parser.getValuesForPath(
+//						doc,
+//						"/vegCommunity/community/commDesc");
+//				String lev = (String) levelVec.elementAt(0);
+//				String c = (String) codeVec.elementAt(0);
+//				String conceptId = (String) conceptIdVec.elementAt(0);
+//				String name = (String) nameVec.elementAt(0);
+//				System.out.println(
+//					"DBinsertPlotSource > parsed community xml: "
+//						+ lev
+//						+ " "
+//						+ c
+//						+ " "
+//						+ conceptId);
+//
+//				if (lev != null && c != null && conceptId != null) {
+//					h.put("code", c);
+//					h.put("level", lev);
+//					h.put("conceptId", conceptId);
+//					h.put("name", name);
+//				} else {
+//					System.out.println(
+//						"DBinsertPlotSource > parsed elements returned null: "
+//							+ lev
+//							+ " "
+//							+ c
+//							+ " "
+//							+ conceptId);
+//				}
+//			} else {
+//				System.out.println(
+//					"DBinsertPlotSource > no results from web app");
+//			}
+//		} catch (Exception e) {
+//			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
+//			e.printStackTrace();
+//		}
+//		return (h);
+//	}
 
 	/**
 		 * utility method to use a webservice to lookup the plant 
@@ -2488,7 +2569,7 @@ public class DBinsertPlotSource {
 				String host = this.plantRequestServletHost;
 				String s = null;
 				//THIS USES THE OTHER REQUEST URL METHOD
-				String servlet = "/framework/servlet/DataRequestServlet";
+				String servlet = "/vegbank/servlet/DataRequestServlet";
 				Properties parameters = new Properties();
 				parameters.setProperty("requestDataType", "plantTaxon");
 				parameters.setProperty("requestDataFormatType", "xml");
@@ -2586,7 +2667,7 @@ public class DBinsertPlotSource {
 	/**
 	 * method that returns true if the project with this name exists in the 
 	 * database
-	 */
+	 */ 
 	private boolean projectExists(String projectName) 
   {
 		int rows = 0;
@@ -2657,48 +2738,51 @@ public class DBinsertPlotSource {
 		return (projectId);
 	}
 
-	/**
-	 * method that returns the next primary key value for a table
-	 * @param tableName -- the table whose pk value is desired
-	 * @return int -- the primary key value
-	 */
-	private int getNextId(String tableName) {
-		int rows = -1;
-		StringBuffer sb = new StringBuffer();
-		try {
-			if (tableName.toUpperCase().equals("TAXONOBSERVATION")) {
-				sb.append(
-					"SELECT max(taxonobservation_id)+1 from taxonobservation");
-			} else if (tableName.toUpperCase().equals("STRATUMCOMPOSITION")) {
-				sb.append(
-					"SELECT max(stratumcomposition_id)+1 from stratumcomposition");
-			} else if (tableName.toUpperCase().equals("PLOT")) {
-				sb.append("SELECT max(plot_id)+1 from plot");
-			} else if (tableName.toUpperCase().equals("STRATUM")) {
-				sb.append("SELECT max(stratum_id)+1 from stratum");
-			} else if (tableName.toUpperCase().equals("PROJECT")) {
-				sb.append("SELECT max(project_id)+1 from project");
-			} else if (tableName.toUpperCase().equals("OBSERVATION")) {
-				sb.append("SELECT max(observation_id)+1 from observation");
-			} else {
-				sb.append("SELECT count(*)+1 from " + tableName);
-			}
-			Statement query = conn.createStatement();
-			ResultSet rs = query.executeQuery(sb.toString());
-			while (rs.next()) {
-				rows = rs.getInt(1);
-			}
-	  } 
-    catch (SQLException se) 
-    {
-			System.out.println("Caught SQL Exception: " + se.getMessage());
-      if ( !se.getMessage().equals("No results were returned by the query.") )
-      {
-			  System.out.println("sql: " + sb.toString());
-        se.printStackTrace();
-      }
-		}
-		return (rows);
+
+   private int getNextId(String tableName) {
+           int rows = -1;
+           StringBuffer sb = new StringBuffer();
+           try {
+                   if (tableName.toUpperCase().equals("TAXONOBSERVATION")) {
+                           //sb.append(
+                           //        "SELECT max(taxonobservation_id)+1 from taxonobservation");
+											sb.append("SELECT nextval('taxonobservation_id_seq')");
+                   } else if (tableName.toUpperCase().equals("STRATUMCOMPOSITION")) {
+                          // sb.append(
+                           //        "SELECT max(stratumcomposition_id)+1 from stratumcomposition");
+										sb.append("SELECT nextval('STRATUMCOMPOSITION_id_seq')");
+                   } else if (tableName.toUpperCase().equals("PLOT")) {
+                          // sb.append("SELECT max(plot_id)+1 from plot");
+										sb.append("SELECT nextval('PLOT_id_seq')");
+                   } else if (tableName.toUpperCase().equals("STRATUM")) {
+                          //sb.append("SELECT max(stratum_id)+1 from stratum");
+										sb.append("SELECT nextval('STRATUM_id_seq')");
+                   } else if (tableName.toUpperCase().equals("PROJECT")) {
+                          // sb.append("SELECT max(project_id)+1 from project");
+										sb.append("SELECT nextval('PROJECT_id_seq')");
+                   } else if (tableName.toUpperCase().equals("OBSERVATION")) {
+                           //sb.append("SELECT max(observation_id)+1 from observation");
+										sb.append("SELECT nextval('OBSERVATION_id_seq')");
+                   } else {
+                          // sb.append("SELECT count(*)+1 from " + tableName);
+										sb.append("SELECT nextval('" + tableName + "_id_seq')");
+                   }
+                   Statement query = conn.createStatement();
+                   ResultSet rs = query.executeQuery(sb.toString());
+                   while (rs.next()) {
+                           rows = rs.getInt(1);
+                   }
+     }
+ 		catch (SQLException se)
+ 		{
+     	System.out.println("Caught SQL Exception: " + se.getMessage());
+   		if ( !se.getMessage().equals("No results were returned by the query.") )
+   		{
+      	System.out.println("sql: " + sb.toString());
+       	se.printStackTrace();
+     	}
+   	}
+	 return (rows);
 	}
 
 	/**

@@ -67,7 +67,7 @@ public class issueStatement
 			 */
 
 			issueStatement i = new issueStatement();
-			i.issueSelect(statement, action, returnFields, returnFieldLength);
+			i.issueSelect(statement, returnFields, returnFieldLength);
 
 			//grab the returned array and print to the screen
 			for (int ii = 0; ii < i.outReturnFieldsNum; ii++)
@@ -146,7 +146,6 @@ public class issueStatement
 
 	public void issueSelect(
 		String inputStatement,
-		String inputAction,
 		String[] inputReturnFields,
 		int inputReturnFieldLength)
 	{
@@ -175,69 +174,62 @@ public class issueStatement
 
 		try
 		{
+			// compose and issue a prepared statement for loading a table
 
-			/**
-			* compose and issue a prepared statement for loading a table
-			*/
-			if (inputAction.equals("select"))
+			//execute the query
+			results = query.executeQuery(inputStatement);
+
+			outReturnFieldsNum = 0;
+			//make a matrix to store the returned values because storing them directly
+			//in a string was giving a jdbc error that couldn't be fixed
+			String verticalStore[] = new String[inputReturnFieldLength];
+
+			//get all the levels returned
+			while (results.next())
 			{
 
-				//execute the query
-				results = query.executeQuery(inputStatement);
-
-				outReturnFieldsNum = 0;
-				//make a matrix to store the returned values because storing them directly
-				//in a string was giving a jdbc error that couldn't be fixed
-				String verticalStore[] = new String[inputReturnFieldLength];
-
-				//get all the levels returned
-				while (results.next())
+				StringBuffer resultLine = new StringBuffer();
+				//match return elements with correct column name
+				for (int i = 0; i < inputReturnFieldLength; i++)
 				{
 
-					StringBuffer resultLine = new StringBuffer();
-					//match return elements with correct column name
-					for (int i = 0; i < inputReturnFieldLength; i++)
+					//if the results is null then handle it below
+					if (results.getString(inputReturnFields[i]) == null)
 					{
-
-						//if the results is null then handle it below
-						if (results.getString(inputReturnFields[i]) == null)
-						{
-							resultLine = resultLine.append(" nullValue");
-							verticalStore[i] = "nullValue";
-							//populate the vertical storage array
-						}
-
-						else
-						{
-							String buf = (results.getString(inputReturnFields[i]));
-							resultLine.append(" ").append(buf.trim());
-							verticalStore[i] = buf; //populate the vertical storage array
-						}
-
+						resultLine = resultLine.append(" nullValue");
+						verticalStore[i] = "nullValue";
+						//populate the vertical storage array
 					}
 
-					//grab the values out of the vertical store and stick them into a string
-					//that is separated by pipes, this way all the data associated with a 
-					//plot is on a sigle line which can be tokenized later and positioned
-					//into an xml structure
-
-					String returnedRow = "";
-					for (int ii = 0; ii < verticalStore.length; ii++)
+					else
 					{
-						returnedRow = returnedRow + "|" + verticalStore[ii];
+						String buf = (results.getString(inputReturnFields[i]));
+						resultLine.append(" ").append(buf.trim());
+						verticalStore[i] = buf; //populate the vertical storage array
 					}
 
-					outReturnFields[outReturnFieldsNum] = returnedRow; //add to the array
-					outReturnFieldsNum++;
-					returnedValues.addElement(returnedRow); //add to the vector
+				}
 
-				} //end while
+				//grab the values out of the vertical store and stick them into a string
+				//that is separated by pipes, this way all the data associated with a 
+				//plot is on a sigle line which can be tokenized later and positioned
+				//into an xml structure
 
-				//clean up the connections and statements
-				query.close();
-				//conn.close();
+				String returnedRow = "";
+				for (int ii = 0; ii < verticalStore.length; ii++)
+				{
+					returnedRow = returnedRow + "|" + verticalStore[ii];
+				}
 
-			} //end if			
+				outReturnFields[outReturnFieldsNum] = returnedRow; //add to the array
+				outReturnFieldsNum++;
+				returnedValues.addElement(returnedRow); //add to the vector
+
+			} //end while
+
+			//clean up the connections and statements
+			query.close();
+
 		} //end try 
 		catch (Exception e)
 		{
@@ -261,7 +253,6 @@ public class issueStatement
 
 	public void issueSelect(
 		String inputStatement,
-		String inputAction,
 		String[] inputReturnFields,
 		int inputReturnFieldLength,
 		Connection pconn)
@@ -291,65 +282,60 @@ public class issueStatement
 			/**
 			* compose and issue a prepared statement for loading a table
 			*/
-			if (inputAction.equals("select"))
+			//execute the query
+			results = query.executeQuery(inputStatement);
+
+			outReturnFieldsNum = 0;
+			//make a matrix to store the returned values because storing them directly
+			//in a string was giving a jdbc error that couldn't be fixed
+			String verticalStore[] = new String[inputReturnFieldLength];
+
+			//get all the levels returned
+			while (results.next())
 			{
 
-				//execute the query
-				results = query.executeQuery(inputStatement);
-
-				outReturnFieldsNum = 0;
-				//make a matrix to store the returned values because storing them directly
-				//in a string was giving a jdbc error that couldn't be fixed
-				String verticalStore[] = new String[inputReturnFieldLength];
-
-				//get all the levels returned
-				while (results.next())
+				StringBuffer resultLine = new StringBuffer();
+				//match return elements with correct column name
+				for (int i = 0; i < inputReturnFieldLength; i++)
 				{
 
-					StringBuffer resultLine = new StringBuffer();
-					//match return elements with correct column name
-					for (int i = 0; i < inputReturnFieldLength; i++)
+					//if the results is null then handle it below
+					if (results.getString(inputReturnFields[i]) == null)
 					{
-
-						//if the results is null then handle it below
-						if (results.getString(inputReturnFields[i]) == null)
-						{
-							resultLine = resultLine.append(" nullValue");
-							verticalStore[i] = "nullValue";
-							//populate the vertical storage array
-						}
-
-						else
-						{
-							String buf = (results.getString(inputReturnFields[i]));
-							resultLine.append(" ").append(buf.trim());
-							verticalStore[i] = buf; //populate the vertical storage array
-						}
-
+						resultLine = resultLine.append(" nullValue");
+						verticalStore[i] = "nullValue";
+						//populate the vertical storage array
 					}
 
-					//grab the values out of the vertical store and stick them into a string
-					//that is separated by pipes, this way all the data associated with a 
-					//plot is on a sigle line which can be tokenized later and positioned
-					//into an xml structure
-
-					String returnedRow = "";
-					for (int ii = 0; ii < verticalStore.length; ii++)
+					else
 					{
-						returnedRow = returnedRow + "|" + verticalStore[ii];
+						String buf = (results.getString(inputReturnFields[i]));
+						resultLine.append(" ").append(buf.trim());
+						verticalStore[i] = buf; //populate the vertical storage array
 					}
 
-					outReturnFields[outReturnFieldsNum] = returnedRow; //add to array
-					outReturnFieldsNum++;
-					returnedValues.addElement(returnedRow); //add to the vector
+				}
 
-				} //end while
+				//grab the values out of the vertical store and stick them into a string
+				//that is separated by pipes, this way all the data associated with a 
+				//plot is on a sigle line which can be tokenized later and positioned
+				//into an xml structure
 
-				/*don't close b/c connection was passed into the method*/
-				//query.close();
-				//conn.close();
+				String returnedRow = "";
+				for (int ii = 0; ii < verticalStore.length; ii++)
+				{
+					returnedRow = returnedRow + "|" + verticalStore[ii];
+				}
 
-			} //end if			
+				outReturnFields[outReturnFieldsNum] = returnedRow; //add to array
+				outReturnFieldsNum++;
+				returnedValues.addElement(returnedRow); //add to the vector
+
+			} //end while
+
+			/*don't close b/c connection was passed into the method*/
+			//query.close();
+			//conn.close();
 		} // end try 
 		catch (Exception e)
 		{
@@ -367,7 +353,6 @@ public class issueStatement
 	 * sets
 	 *
 	 * @param inputStatement
-	 * @param inputAction
 	 * @param inputReturnFields
 	 * @param inputReturnFieldLength
 	 * @param resultHash - the hash table that will be populated with the results 
@@ -376,9 +361,7 @@ public class issueStatement
 
 	public void issueSelect(
 		String inputStatement,
-		String inputAction,
 		String[] inputReturnFields,
-		int inputReturnFieldLength,
 		Hashtable resultHash,
 		Connection pconn)
 	{
@@ -388,7 +371,6 @@ public class issueStatement
 		{
 			conn = pconn;
 			query = conn.createStatement();
-			;
 		}
 
 		catch (Exception e)
@@ -403,83 +385,78 @@ public class issueStatement
 		{
 
 			//compose and issue a prepared statement for loading a table	
-			if (inputAction.equals("select"))
+			//execute the query
+			results = query.executeQuery(inputStatement);
+
+			outReturnFieldsNum = 0;
+			//make a matrix to store the returned values because storing them directly
+			//in a string was giving a jdbc error that couldn't be fixed
+			String verticalStore[] = new String[inputReturnFields.length];
+
+			int repetitionCnt = 0; //number of repetitions of the element
+
+			//get all the levels returned
+			while (results.next())
 			{
+				repetitionCnt++;
 
-				//execute the query
-				results = query.executeQuery(inputStatement);
-
-				outReturnFieldsNum = 0;
-				//make a matrix to store the returned values because storing them directly
-				//in a string was giving a jdbc error that couldn't be fixed
-				String verticalStore[] = new String[inputReturnFieldLength];
-
-				int repetitionCnt = 0; //number of repetitions of the element
-
-				//get all the levels returned
-				while (results.next())
+				StringBuffer resultLine = new StringBuffer();
+				//match return elements with correct column name
+				for (int i = 0; i < inputReturnFields.length; i++)
 				{
-					repetitionCnt++;
 
-					StringBuffer resultLine = new StringBuffer();
-					//match return elements with correct column name
-					for (int i = 0; i < inputReturnFieldLength; i++)
+					//if the results is null then handle it below
+					if (results.getString(inputReturnFields[i]) == null)
+					{
+						resultLine = resultLine.append("nullValue");
+						verticalStore[i] = "nullValue";
+						//populate the vertical storage array
+						//populate the hashtable
+						//resultHash.put(inputReturnFields[i],resultLine);
+					}
+
+					else
 					{
 
-						//if the results is null then handle it below
-						if (results.getString(inputReturnFields[i]) == null)
-						{
-							resultLine = resultLine.append("nullValue");
-							verticalStore[i] = "nullValue";
-							//populate the vertical storage array
-							//populate the hashtable
-							//resultHash.put(inputReturnFields[i],resultLine);
-						}
+						String buf = (results.getString(inputReturnFields[i]));
+						resultLine.append(" ").append(buf.trim());
+						verticalStore[i] = buf; //populate the vertical storage array
 
+						//populate the hash table - but first determine if already
+						// exists
+						if (resultHash.containsKey(inputReturnFields[i]))
+						{
+							resultHash.put(inputReturnFields[i] + "." + repetitionCnt, buf);
+							//System.out.println("flag: "+repetitionCnt+" "+inputReturnFields[i]+" "+buf);
+						}
 						else
 						{
-
-							String buf = (results.getString(inputReturnFields[i]));
-							resultLine.append(" ").append(buf.trim());
-							verticalStore[i] = buf; //populate the vertical storage array
-
-							//populate the hash table - but first determine if already
-							// exists
-							if (resultHash.containsKey(inputReturnFields[i]))
-							{
-								resultHash.put(inputReturnFields[i] + "." + repetitionCnt, buf);
-								//System.out.println("flag: "+repetitionCnt+" "+inputReturnFields[i]+" "+buf);
-							}
-							else
-							{
-								resultHash.put(inputReturnFields[i], buf);
-							}
+							resultHash.put(inputReturnFields[i], buf);
 						}
-
 					}
 
-					//grab the values out of the vertical store and stick them into a string
-					//that is separated by pipes, this way all the data associated with a 
-					//plot is on a sigle line which can be tokenized later and positioned
-					//into an xml structure
+				}
 
-					String returnedRow = "";
-					for (int ii = 0; ii < verticalStore.length; ii++)
-					{
-						returnedRow = returnedRow + "|" + verticalStore[ii];
-					}
+				//grab the values out of the vertical store and stick them into a string
+				//that is separated by pipes, this way all the data associated with a 
+				//plot is on a sigle line which can be tokenized later and positioned
+				//into an xml structure
 
-					outReturnFields[outReturnFieldsNum] = returnedRow; //add to array
-					outReturnFieldsNum++;
-					returnedValues.addElement(returnedRow); //add to the vector
-					outResultHash = resultHash;
-				} //end while
+				String returnedRow = "";
+				for (int ii = 0; ii < verticalStore.length; ii++)
+				{
+					returnedRow = returnedRow + "|" + verticalStore[ii];
+				}
 
-				/*don't close b/c connection was passed into the method*/
-				//query.close();
-				//conn.close();
+				outReturnFields[outReturnFieldsNum] = returnedRow; //add to array
+				outReturnFieldsNum++;
+				returnedValues.addElement(returnedRow); //add to the vector
+				outResultHash = resultHash;
+			} //end while
 
-			} //end if			
+			/*don't close b/c connection was passed into the method*/
+			//query.close();
+			//conn.close();	
 		} // end try 
 		catch (Exception e)
 		{
@@ -500,7 +477,6 @@ public class issueStatement
 	 * sets
 	 *
 	 * @param inputStatement
-	 * @param inputAction
 	 * @param inputReturnFields
 	 * @param inputReturnFieldLength
 	 * @param resultHash - the hash table that will be populated with the results 
@@ -508,9 +484,7 @@ public class issueStatement
 
 	public void issueSelect(
 		String inputStatement,
-		String inputAction,
 		String[] inputReturnFields,
-		int inputReturnFieldLength,
 		Hashtable resultHash)
 	{
 
@@ -540,83 +514,78 @@ public class issueStatement
 		{
 
 			//compose and issue a prepared statement for loading a table	
-			if (inputAction.equals("select"))
+			//execute the query
+			results = query.executeQuery(inputStatement);
+
+			outReturnFieldsNum = 0;
+			//make a matrix to store the returned values because storing them directly
+			//in a string was giving a jdbc error that couldn't be fixed
+			String verticalStore[] = new String[inputReturnFields.length];
+
+			int repetitionCnt = 0; //number of repetitions of the element
+
+			//get all the levels returned
+			while (results.next())
 			{
+				repetitionCnt++;
 
-				//execute the query
-				results = query.executeQuery(inputStatement);
-
-				outReturnFieldsNum = 0;
-				//make a matrix to store the returned values because storing them directly
-				//in a string was giving a jdbc error that couldn't be fixed
-				String verticalStore[] = new String[inputReturnFieldLength];
-
-				int repetitionCnt = 0; //number of repetitions of the element
-
-				//get all the levels returned
-				while (results.next())
+				StringBuffer resultLine = new StringBuffer();
+				//match return elements with correct column name
+				for (int i = 0; i < inputReturnFields.length; i++)
 				{
-					repetitionCnt++;
 
-					StringBuffer resultLine = new StringBuffer();
-					//match return elements with correct column name
-					for (int i = 0; i < inputReturnFieldLength; i++)
+					//if the results is null then handle it below
+					if (results.getString(inputReturnFields[i]) == null)
+					{
+						resultLine = resultLine.append("nullValue");
+						verticalStore[i] = "nullValue";
+						//populate the vertical storage array
+						//populate the hashtable
+						//resultHash.put(inputReturnFields[i],resultLine);
+					}
+
+					else
 					{
 
-						//if the results is null then handle it below
-						if (results.getString(inputReturnFields[i]) == null)
-						{
-							resultLine = resultLine.append("nullValue");
-							verticalStore[i] = "nullValue";
-							//populate the vertical storage array
-							//populate the hashtable
-							//resultHash.put(inputReturnFields[i],resultLine);
-						}
+						String buf = (results.getString(inputReturnFields[i]));
+						resultLine.append(" ").append(buf.trim());
+						verticalStore[i] = buf; //populate the vertical storage array
 
+						//populate the hash table - but first determine if already
+						// exists
+						if (resultHash.containsKey(inputReturnFields[i]))
+						{
+							resultHash.put(inputReturnFields[i] + "." + repetitionCnt, buf);
+							//System.out.println("flag: "+repetitionCnt+" "+inputReturnFields[i]+" "+buf);
+						}
 						else
 						{
-
-							String buf = (results.getString(inputReturnFields[i]));
-							resultLine.append(" ").append(buf.trim());
-							verticalStore[i] = buf; //populate the vertical storage array
-
-							//populate the hash table - but first determine if already
-							// exists
-							if (resultHash.containsKey(inputReturnFields[i]))
-							{
-								resultHash.put(inputReturnFields[i] + "." + repetitionCnt, buf);
-								//System.out.println("flag: "+repetitionCnt+" "+inputReturnFields[i]+" "+buf);
-							}
-							else
-							{
-								resultHash.put(inputReturnFields[i], buf);
-							}
+							resultHash.put(inputReturnFields[i], buf);
 						}
-
 					}
 
-					//grab the values out of the vertical store and stick them into a string
-					//that is separated by pipes, this way all the data associated with a 
-					//plot is on a sigle line which can be tokenized later and positioned
-					//into an xml structure
+				}
 
-					String returnedRow = "";
-					for (int ii = 0; ii < verticalStore.length; ii++)
-					{
-						returnedRow = returnedRow + "|" + verticalStore[ii];
-					}
+				//grab the values out of the vertical store and stick them into a string
+				//that is separated by pipes, this way all the data associated with a 
+				//plot is on a sigle line which can be tokenized later and positioned
+				//into an xml structure
 
-					outReturnFields[outReturnFieldsNum] = returnedRow; //add to array
-					outReturnFieldsNum++;
-					returnedValues.addElement(returnedRow); //add to the vector
-					outResultHash = resultHash;
-				} //end while
+				String returnedRow = "";
+				for (int ii = 0; ii < verticalStore.length; ii++)
+				{
+					returnedRow = returnedRow + "|" + verticalStore[ii];
+				}
 
-				/*don't close b/c connection was passed into the method*/
-				//query.close();
-				//conn.close();
+				outReturnFields[outReturnFieldsNum] = returnedRow; //add to array
+				outReturnFieldsNum++;
+				returnedValues.addElement(returnedRow); //add to the vector
+				outResultHash = resultHash;
+			} //end while
 
-			} //end if			
+			/*don't close b/c connection was passed into the method*/
+			//query.close();
+			//conn.close();	
 		} // end try 
 		catch (Exception e)
 		{
@@ -777,6 +746,7 @@ public class issueStatement
 		}
 		//catch ( Exception e ){System.out.println("Query failed issueStatement.insert method "+e.getMessage());}
 	} //end method
+
 
 	/**
 	 * method to return a valueString from an input of an integer representing

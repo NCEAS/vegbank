@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-01-14 01:12:40 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2003-05-07 01:41:35 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ResourceBundle;
 
 
         
@@ -39,6 +40,7 @@ public class SqlFile
 	private String sqlFile = null;
 	//private String rdbmsType = "access"; //ms access database
 	private String rdbmsType = "postgresql"; //postgres database
+	private ResourceBundle rb = ResourceBundle.getBundle("database");
 
 	/**
 	 * Generic method to make a connection to a postgresql database
@@ -51,10 +53,14 @@ public class SqlFile
  		{
 			if ( this.rdbmsType.equals("postgresql") )
 			{
-				Class.forName("org.postgresql.Driver");
-				//the community database
-				System.out.println("SqlFile> connecting to db on: vegbank ");
-				c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/communities_dev", "datauser", "");
+				String dbConnectString = rb.getString("connectString");
+				String driverClass = rb.getString("driverClass");
+				String user = rb.getString("user");
+				String password = rb.getString("password");
+			
+				Class.forName(driverClass);
+				System.out.println("SqlFile > db connect string: " + dbConnectString);
+				c = DriverManager.getConnection(dbConnectString, user, password);
 			}
 			else if ( this.rdbmsType.equals("access") )
 			{

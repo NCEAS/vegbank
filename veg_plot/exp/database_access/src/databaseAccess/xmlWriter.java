@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-02-24 20:01:45 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2003-05-07 01:41:35 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,52 +44,27 @@ import java.util.Vector;
 public class  xmlWriter
 {
 
-	private StringBuffer printString = new StringBuffer(); //this is the print string
-
-
 	/**
  	 *  This method accepts a hashtable containg plot summary
  	 *  data and prints it to file in an xml format
    *
    */
-	public void writePlotSummary(
-		Hashtable cumulativeSummaryResultHash,
-		String outFile)
+	public String  writePlotSummary(Hashtable cumulativeSummaryResultHash)
 	{
+		String xmlResult = null;
 		try 
 		{
 	
-			//set up the output query file called query.xml	using append mode 
-			PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
-			Hashtable singlePlotSummary = new Hashtable();
-			Hashtable multiPlotComprehensive = new Hashtable();
-
-
-			//get the number of plots stored in hash
-			System.out.println("xmlWriter > hash size: "+cumulativeSummaryResultHash.size());
-
-			//write one plot at a time
-			for (int i=0; i< cumulativeSummaryResultHash.size(); i++) 
-			{
-				//get a single plot and stick into a temporary hash
-				String plotRecord = "plot"+i;
-				singlePlotSummary = (Hashtable)cumulativeSummaryResultHash.get(plotRecord);
-
-				//pass this hash table containing a single plot to the method that will map the 
-				//elements that can be passed directly to the 'PlotXmlWriterClass'	
-				Hashtable singleFormatPlot = mapSummaryElements(singlePlotSummary);
-	
-				//take the single plot that is returned and put it in a hash with all the
-				//other plots in the result set
-	 			multiPlotComprehensive.put("plot"+i,singleFormatPlot);
-			}
+			// Who knows what this is up to ????  Black box
+			Hashtable multiPlotComprehensive =
+				doHashMunging(cumulativeSummaryResultHash);
 
 			//take the returned hash table and pass it to the xml writer class
 			//put a try here b/c this class has been sensitive
 			try 
 			{
 				PlotXmlWriter pxw = new PlotXmlWriter();
-				pxw.writeMultiplePlot(multiPlotComprehensive, outFile);
+				xmlResult = pxw.getMultiplePlotXMLString(multiPlotComprehensive);
 			}
 			catch (Exception e) 
 			{
@@ -105,6 +80,35 @@ public class  xmlWriter
 			+"(using a hash table as input )" + 
 			e.getMessage());
 		}
+		return xmlResult;
+	}
+
+
+	private Hashtable doHashMunging(Hashtable cumulativeSummaryResultHash)
+	{
+		Hashtable singlePlotSummary = new Hashtable();
+		Hashtable multiPlotComprehensive = new Hashtable();
+		
+		
+		//get the number of plots stored in hash
+		System.out.println("xmlWriter > hash size: "+cumulativeSummaryResultHash.size());
+		
+		//write one plot at a time
+		for (int i=0; i< cumulativeSummaryResultHash.size(); i++) 
+		{
+			//get a single plot and stick into a temporary hash
+			String plotRecord = "plot"+i;
+			singlePlotSummary = (Hashtable)cumulativeSummaryResultHash.get(plotRecord);
+		
+			//pass this hash table containing a single plot to the method that will map the 
+			//elements that can be passed directly to the 'PlotXmlWriterClass'	
+			Hashtable singleFormatPlot = mapSummaryElements(singlePlotSummary);
+		
+			//take the single plot that is returned and put it in a hash with all the
+			//other plots in the result set
+			multiPlotComprehensive.put("plot"+i,singleFormatPlot);
+		}
+		return multiPlotComprehensive;
 	}
 
 
@@ -308,41 +312,15 @@ public class  xmlWriter
 		{
 			//set up the output query file called query.xml	using append mode 
 			PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
-			StringBuffer sb = new StringBuffer();
-			System.out.println("xmlWriter > number of plant instances: " + taxaResults.size() ); 
 			
-			// REPLACE THE WILDCARDS WITH THE APPROPRIATE TEXT IN THE QUERY TOKENS
-			if ( taxonNameType.trim().equals("%") )
-				taxonNameType = "ANY";
-			if ( taxonNameLevel.trim().equals("%") )
-				taxonNameLevel = "ALL";
+			String xmlString =
+				getPlantTaxonomySummary(
+					taxaResults,
+					taxonName,
+					taxonNameType,
+					taxonNameLevel);
 				
-			// WRITE THE HEADER
-			sb.append("<plantTaxa> \n");
-			// ADD THE QUERY ELEMENTS TO THE OUTPUT SO THAT THEY CAN BE USED 
-			// BY THE STYLESHEET
-			sb.append("<query> \n");
-			sb.append("	<taxonName>"+taxonName+"</taxonName> \n");
-			sb.append(" <taxonNameType>"+taxonNameType+"</taxonNameType> \n");
-			sb.append("	<taxonNameLevel>"+taxonNameLevel+"</taxonNameLevel> \n");
-			sb.append("</query>");
-			
-			//iterate thru the results
-			for (int i=0;i<taxaResults.size(); i++) 
-			{
-				//the current hashtable used to store the plant instance attributes
-				Hashtable currentTaxonHash = (Hashtable)taxaResults.elementAt(i);
-				
-				sb.append("<taxon> \n");
-				sb.append("	<name> \n");
-				
-				this.hashTable2XML(sb, currentTaxonHash);
-
-				sb.append("	</name> \n");
-				sb.append("</taxon> \n");
-			}
-			sb.append("</plantTaxa> \n");
-			out.println(sb.toString() );
+			out.println( xmlString );
 		}
 		catch (Exception e) 
 		{
@@ -351,6 +329,51 @@ public class  xmlWriter
 			e.printStackTrace();
 		}
 		
+	}
+
+
+	public String getPlantTaxonomySummary(
+		Vector taxaResults,
+		String taxonName,
+		String taxonNameType,
+		String taxonNameLevel)
+	{
+		StringBuffer sb = new StringBuffer();
+		System.out.println("xmlWriter > number of plant instances: " + taxaResults.size() ); 
+		
+		// REPLACE THE WILDCARDS WITH THE APPROPRIATE TEXT IN THE QUERY TOKENS
+		if ( taxonNameType.trim().equals("%") )
+			taxonNameType = "ANY";
+		if ( taxonNameLevel.trim().equals("%") )
+			taxonNameLevel = "ALL";
+			
+		// WRITE THE HEADER
+		sb.append("<plantTaxa> \n");
+		// ADD THE QUERY ELEMENTS TO THE OUTPUT SO THAT THEY CAN BE USED 
+		// BY THE STYLESHEET
+		sb.append("<query> \n");
+		sb.append("	<taxonName>"+taxonName+"</taxonName> \n");
+		sb.append(" <taxonNameType>"+taxonNameType+"</taxonNameType> \n");
+		sb.append("	<taxonNameLevel>"+taxonNameLevel+"</taxonNameLevel> \n");
+		sb.append("</query>");
+		
+		//iterate thru the results
+		for (int i=0;i<taxaResults.size(); i++) 
+		{
+			//the current hashtable used to store the plant instance attributes
+			Hashtable currentTaxonHash = (Hashtable)taxaResults.elementAt(i);
+			
+			sb.append("<taxon> \n");
+			sb.append("	<name> \n");
+			
+			this.hashTable2XML(sb, currentTaxonHash);
+		
+			sb.append("	</name> \n");
+			sb.append("</taxon> \n");
+		}
+		sb.append("</plantTaxa> \n");
+		
+		return sb.toString();
 	}
 
 	private void hashTable2XML ( StringBuffer sb, Hashtable hash)
@@ -385,87 +408,80 @@ public class  xmlWriter
 			//set up the output query file called query.xml	using append mode 
 			PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
 
-			String commName="null";
-			String dateEntered="null";
-			String classCode="null";
-			String classLevel="null";
-			String commDesc="null";
-			String conceptOriginDate="null";
-			String conceptUpdateDate="null";
-			String commConceptId = "null";
-			String recognizingParty="null";
-			String partyConceptStatus="null";
-			String parentCommConceptId = "null";
-			String parentCommConceptCode = "null";
-			String parentCommName = "null";
-			String parentCommDescription="null";
+			String xmlString = getCommunitySummaryXMLString(communitySummary);
 			
-			//header
-			printString.append("<?xml version=\"1.0\"?> \n");
-			//printString.append("<!DOCTYPE vegPlot SYSTEM \"vegCommunity.dtd\">     \n");
-			printString.append("<vegCommunity> \n");
-
-			for (int i=0;i<communitySummary.size(); i++) 
-			{
-			
-				//tokenize each line of the vector
-				StringTokenizer t = new StringTokenizer(communitySummary.elementAt(i).toString().trim(), "|");
-				System.out.println("xmlWriter > number of community elements: " + t.countTokens() );
-				
-				commName=t.nextToken().trim();				
-				dateEntered=t.nextToken();
-				classCode=t.nextToken();
-				classLevel=t.nextToken();
-				commDesc =t.nextToken();
-				conceptOriginDate =t.nextToken();
-				conceptUpdateDate =t.nextToken();
-				commConceptId =t.nextToken();
-				recognizingParty =t.nextToken();
-				partyConceptStatus =t.nextToken();
-				parentCommConceptId =t.nextToken();
-				parentCommConceptCode =t.nextToken();
-				parentCommName=t.nextToken();
-				parentCommDescription=t.nextToken();
-
-				System.out.println("xmlWriter > commName: "+ commName);
-				
-			
-				//temporary fix to trim the description to 100 chars
-				if (commDesc.length() >100) 
-				{
-					commDesc=commDesc.substring(1, 99);
-				}
-
-				printString.append("<community> \n");
-				//printString.append("   <commSummaryId>"+commSummaryId+"</commSummaryId> \n");
-				printString.append("   <commName>"+commName+"</commName> \n");
-				printString.append("   <dateEntered>"+dateEntered+"</dateEntered> \n");
-				printString.append("   <classCode>"+classCode+"</classCode> \n");
-				printString.append("   <classLevel>"+classLevel+"</classLevel> \n");
-				printString.append("   <commDesc>"+commDesc+"</commDesc> \n");	
-				printString.append("   <conceptOriginDate>"+conceptOriginDate+"</conceptOriginDate> \n");
-				printString.append("   <conceptUpdateDate>"+conceptUpdateDate+"</conceptUpdateDate> \n");
-				printString.append("   <commConceptId>"+commConceptId+"</commConceptId> \n");
-				printString.append("   <recognizingParty>"+recognizingParty+"</recognizingParty> \n");
-				printString.append("   <partyConceptStatus>"+partyConceptStatus+"</partyConceptStatus> \n");
-				//the parent info
-				printString.append("   <parentComm> \n");
-				printString.append("     <commName>"+parentCommName+"</commName> \n");
-				printString.append("     <commConceptId>"+parentCommConceptId +"</commConceptId> \n");
-				printString.append("     <classCode>"+parentCommConceptCode+"</classCode> \n");
-				printString.append("     <commDesc>"+parentCommDescription+"</commDesc> \n");
-				printString.append("   </parentComm> \n");
-				printString.append("</community> \n");
-			}
-			//footer
-			printString.append("</vegCommunity>");
 			//print to the output file
-			out.println( printString.toString() );
+			out.println( xmlString );
 		}
 		catch (Exception e)
 		{
 			System.out.println("xmlWriter > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
+	}
+
+
+	public String getCommunitySummaryXMLString(Vector communitySummary)
+	{
+
+		StringBuffer printString = new StringBuffer(); 
+		
+		String commName="null";
+		String dateEntered="null";
+		String classLevel="null";
+		String commDesc="null";
+		String conceptOriginDate="null";
+		String commConceptId = "null";
+		String partyConceptStatus="null";
+		
+		//header
+		printString.append("<?xml version=\"1.0\"?> \n");
+		//printString.append("<!DOCTYPE vegPlot SYSTEM \"vegCommunity.dtd\">     \n");
+		printString.append("<vegCommunity> \n");
+		
+		for (int i=0;i<communitySummary.size(); i++) 
+		{
+		
+			//tokenize each line of the vector
+			StringTokenizer t = new StringTokenizer(communitySummary.elementAt(i).toString().trim(), "|");
+			System.out.println("xmlWriter > number of community elements: " + t.countTokens() );
+			
+			commName=t.nextToken().trim();				
+			dateEntered=t.nextToken();
+			classLevel=t.nextToken();
+			commDesc =t.nextToken();
+			conceptOriginDate =t.nextToken();
+			commConceptId =t.nextToken();
+			partyConceptStatus =t.nextToken();
+		
+		
+			System.out.println("xmlWriter > commName: "+ commName);
+			
+		
+			//temporary fix to trim the description to 100 chars
+			if (commDesc.length() >100) 
+			{
+				commDesc=commDesc.substring(1, 99);
+			}
+		
+			printString.append("<community> \n");
+			//printString.append("   <commSummaryId>"+commSummaryId+"</commSummaryId> \n");
+			printString.append("   <commName>"+commName+"</commName> \n");
+			printString.append("   <dateEntered>"+dateEntered+"</dateEntered> \n");
+			printString.append("   <classLevel>"+classLevel+"</classLevel> \n");
+			printString.append("   <commDesc>"+commDesc+"</commDesc> \n");	
+			printString.append("   <conceptOriginDate>"+conceptOriginDate+"</conceptOriginDate> \n");
+			printString.append("   <commConceptId>"+commConceptId+"</commConceptId> \n");
+			printString.append("   <partyConceptStatus>"+partyConceptStatus+"</partyConceptStatus> \n");
+			//the parent info
+			printString.append("   <parentComm> \n");
+		
+			printString.append("   </parentComm> \n");
+			printString.append("</community> \n");
+		}
+		//footer
+		printString.append("</vegCommunity>");
+		
+		return printString.toString();
 	}
 }

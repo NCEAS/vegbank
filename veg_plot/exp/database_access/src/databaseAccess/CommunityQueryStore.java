@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-01-14 01:12:39 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2003-05-07 01:41:35 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,12 +62,14 @@ public class  CommunityQueryStore
 		Connection c = null;
 		try 
  		{
-			Class.forName("org.postgresql.Driver");
-			//String s = "jdbc:postgresql://vegbank.nceas.ucsb.edu/communities_dev";
-			String s = rb.getString("communitydbconnectstring");
-			this.dbConnectString = s;
-			System.out.println("CommunityQueryStore > db connect string: " + s);
-			c = DriverManager.getConnection(s, "datauser", "");
+			this.dbConnectString = rb.getString("connectString");
+			String driverClass = rb.getString("driverClass");
+			String user = rb.getString("user");
+			String password = rb.getString("password");
+			
+			Class.forName(driverClass);
+			System.out.println("CommunityQueryStore > db connect string: " + dbConnectString);
+			c = DriverManager.getConnection(dbConnectString, user, password);
 		}
 		catch ( Exception e )
 		{
@@ -88,32 +90,40 @@ public class  CommunityQueryStore
 			Connection conn = this.getConnection();
 
 			action = "select";	
-			statement.append("select ");
-			statement.append("commName, ");
-			statement.append("dateentered, ");
-			statement.append("classcode, ");
-			statement.append("classlevel, ");
-			statement.append("commdescription, ");
-			statement.append("conceptorigindate, ");
-			statement.append("conceptupdatedate, ");
-			statement.append("commconcept_id, ");
-			statement.append("recognizingparty, ");
-			statement.append("partyconceptstatus, ");
-			statement.append("parentcommconceptid, ");
-			statement.append("parentcommconceptcode, ");
-			statement.append("parentcommname, ");
-			statement.append("parentcommdescription ");
+			StringBuffer sqlStatement = new StringBuffer(
+				"select commusage.commname, commname.dateentered, commstatus.commlevel, "				+ "commconcept.conceptdescription, commstatus.startdate, commusage.classsystem, "
+				+ "commconcept.commconcept_id, commstatus.commconceptstatus from commusage, "				+ "commstatus, commconcept, commname " 				+ "where commconcept.commname_id = commname.commname_id and "
+				+ "commstatus.commconcept_id = commconcept.commconcept_id and "
+				+ "commusage.commconcept_id = commconcept.commconcept_id "
+			);
+			
+			sqlStatement.append(" and upper(commusage.commname) like " + "'" + communityName.toUpperCase()+"'");
+			sqlStatement.append(" and commstatus.commlevel like '"+communityLevel+"'");
+			
+//			statement.append("select ");
+//			statement.append("commName, ");
+//			statement.append("dateentered, ");
+//			statement.append("classcode, ");
+//			statement.append("classlevel, ");
+//			statement.append("commdescription, ");
+//			statement.append("conceptorigindate, ");
+//			statement.append("conceptupdatedate, ");
+//			statement.append("commconcept_id, ");
+//			statement.append("recognizingparty, ");
+//			statement.append("partyconceptstatus, ");
+//			statement.append("parentcommconceptid, ");
+//			statement.append("parentcommconceptcode, ");
+//			statement.append("parentcommname, ");
+//			statement.append("parentcommdescription ");
 			//MAKE ALL QUERIES CASE INSENSITIVE
-			statement.append("from commSummary where upper(commName) like '");
-			statement.append(communityName.toUpperCase()+"'");
-			statement.append("and classLevel like '"+communityLevel+"'");
+//			statement.append("from commSummary where upper(commName) like '");
+//			statement.append(communityName.toUpperCase()+"'");
+//			statement.append("and classLevel like '"+communityLevel+"'");
 
-			String returnFields[]=new String[14];
-			int returnFieldLength=14;
 
 			System.out.println("CommunityQueryStore > "+ statement.toString()  );
 			PreparedStatement pstmt;
-    	pstmt = conn.prepareStatement( statement.toString()  );
+    	pstmt = conn.prepareStatement( sqlStatement.toString()  );
                 
     	pstmt.execute();
     	ResultSet rs = pstmt.getResultSet();
@@ -129,46 +139,25 @@ public class  CommunityQueryStore
 				serial.append(commname+"|");
 				String  dateentered = rs.getString(2);
 				serial.append(dateentered+"|");
-				String classcode = rs.getString(3);
-				serial.append(classcode+"|");
-				String classlevel = rs.getString(4);
+				String classlevel = rs.getString(3);
 				serial.append(classlevel+"|");
-				String commdescription = rs.getString(5);
+				String commdescription = rs.getString(4);
 				serial.append(commdescription+"|");
-				String conceptorigindate = rs.getString(6);
+				String conceptorigindate = rs.getString(5);
 				serial.append(conceptorigindate+"|");
-				String conceptupdatedate = rs.getString(7);
-				serial.append(conceptupdatedate+"|");
-				String commconceptid = rs.getString(8);
+				String commconceptid = rs.getString(6);
 				serial.append(commconceptid+"|");
-				String recognizingparty = rs.getString(9);
-				serial.append(recognizingparty+"|");
-				String partyconceptstatus = rs.getString(10);
+				String partyconceptstatus = rs.getString(7);
 				serial.append(partyconceptstatus+"|");
-				String parentcommconceptid  = rs.getString(11);
-				serial.append(parentcommconceptid+"|");
-				String parentcommconceptcode  = rs.getString(12);
-				serial.append(parentcommconceptcode+"|");
-				String parentcommname  = rs.getString(13);
-				serial.append(parentcommname+"|");
-				String parentcommdescription  = rs.getString(14);
-				serial.append(parentcommdescription+"|");
 				
 				System.out.println("CommunityQueryStore > commname: "+ commname   );
 				System.out.println("CommunityQueryStore > dateentered: "+ dateentered   );
-				System.out.println("CommunityQueryStore > classcode: "+ classcode    );
 				System.out.println("CommunityQueryStore > classlevel: "+ classlevel    );
 				System.out.println("CommunityQueryStore > commdescription: "+ commdescription    );
 				System.out.println("CommunityQueryStore > conceptorigindate: "+ conceptorigindate   );
-				System.out.println("CommunityQueryStore > conceptupdatedate: "+ conceptupdatedate  );
 				System.out.println("CommunityQueryStore > commconceptid: "+ commconceptid    );
-				System.out.println("CommunityQueryStore > recognizingparty: "+ recognizingparty);
 				System.out.println("CommunityQueryStore > partyconceptstatus: "+ partyconceptstatus );
-				System.out.println("CommunityQueryStore > parentcommconceptid: "+ parentcommconceptid);
-				System.out.println("CommunityQueryStore > parentcommconceptcode: "+ parentcommconceptcode);
-				System.out.println("CommunityQueryStore > parentcommname: "+ parentcommname );
-				System.out.println("CommunityQueryStore > parentcommdescription : "+ parentcommdescription );
-			
+				
 				//System.out.println("CommunityQueryStore > serial string: "+ serial.toString()  );
 				communitySummaryOutput.addElement(serial.toString() );
 			}
