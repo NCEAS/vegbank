@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-23 03:56:12 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2004-09-24 01:39:38 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ package org.vegbank.ui.struts;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.io.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +55,7 @@ import org.vegbank.common.model.VBModelBean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.VBObjectUtils;
 
 public class GenericDispatcherAction extends Action
@@ -90,13 +92,16 @@ public class GenericDispatcherAction extends Action
 		String[] wparam = request.getParameterValues("wparam");
 
 
+		//Map urlParams = new HashMap();
+		Map urlParams = ServletUtility.parameterHash(request);
+		urlParams.remove("command");
+		
 		try
 		{
 			log.debug( "GD: command == " + command );
 			if (command == null) {
 				command = "";
-				errors.add(
-					ActionErrors.GLOBAL_ERROR,
+				errors.add(ActionErrors.GLOBAL_ERROR,
 					new ActionError("errors.general", "param 'command' not specified"));
 
 
@@ -107,6 +112,11 @@ public class GenericDispatcherAction extends Action
 				
 				// view: literal value { detail | summary | dd | bean | xml } 
 				String view = request.getParameter("view").toLowerCase();
+
+				if (view.equals("std")) {
+					// for now just try to get detail view
+					view = "detail";
+				}
 
 				// entity: { VBModelBean name | SQLStore select key }
 				String entity = request.getParameter("entity");
@@ -130,7 +140,7 @@ public class GenericDispatcherAction extends Action
 					selectKey = entity;
 					whereKey = buildWhereKey(entity, params);
 					beanName = Utility.capitalize(entity);
-					wparam = buildWparamArray(params);
+					//wparam = buildWparamArray(params);
 
 					if (!jsp.endsWith("ViewData.jsp")) {
 						jsp += "ViewData.jsp";
@@ -143,16 +153,70 @@ public class GenericDispatcherAction extends Action
 							entity + ", " + beanName + ", " + whereKey + ", (" + params + "), " + jsp);
 
 
-				} else if (view.equalsIgnoreCase("detail") || 
-						view.equalsIgnoreCase("summary")) {
+				} else if (view.equals("detail") || view.equals("summary")) {
 					//////////////////////////////////////////
-					// VIEW: detail or summary
+					// VIEWS: detail or summary
 					//////////////////////////////////////////
 					command = FORWARD;
+
 					fwdURL = "/views/" + entity + "_" + view + ".jsp";
+
+					// see if file exists
+					File viewFile = new File(Utility.WEBAPP_DIR + fwdURL);
+
+					if (!viewFile.exists()) {
+						// no view, try the other one
+						if (view.equals("detail")) {
+							fwdURL = "/views/" + entity + "_summary.jsp";
+						} else {
+							fwdURL = "/views/" + entity + "_detail.jsp";
+						}
+
+						viewFile = new File(Utility.WEBAPP_DIR + fwdURL);
+						if (!viewFile.exists()) {
+							// still no view
+							errors.add(ActionErrors.GLOBAL_ERROR,
+								new ActionError("errors.general", "No views for " + entity));
+						}
+					}
+					
+
 					wparam = buildWparamArray(params);
 
 					if (!Utility.isStringNullOrEmpty(params)) {
+						//
+						// add the comma separated list as one wparam
+						//
+						String wparamList = "";
+
+						boolean first = true;
+						for (int i=0; i<wparam.length; i++) {
+							if (first) {
+								first = false;
+							} else {
+								wparamList += ",";
+							}
+
+							wparamList += wparam[i];
+						}
+						urlParams.put("wparam", wparamList);
+
+
+						/*
+						fwdURL += "?wparam=";
+						boolean first = true;
+						for (int i=0; i<wparam.length; i++) {
+							if (!first) {
+								fwdURL += ",";
+							}
+							fwdURL += wparam[i];
+						}
+						*/
+
+						/*
+						//
+						// Add a wparam for each param
+						//
 						fwdURL += "?";
 						boolean first = true;
 						for (int i=0; i<wparam.length; i++) {
@@ -161,10 +225,11 @@ public class GenericDispatcherAction extends Action
 							}
 							fwdURL += "wparam=" + wparam[i];
 						}
+						*/
 					}
 
 
-				} else if (view.equalsIgnoreCase("dd")) {
+				} else if (view.equals("dd")) {
 					//////////////////////////////////////////
 					// VIEW: dd
 					//////////////////////////////////////////
@@ -177,14 +242,14 @@ public class GenericDispatcherAction extends Action
 						fwdURL += "~field~" + params + "~type~fieldview.html";
 					}
 
-				} else if (view.equalsIgnoreCase("xml")) {
+				} else if (view.equals("xml")) {
 					//////////////////////////////////////////
 					// VIEW: xml
 					//////////////////////////////////////////
 					//command = "GetXML";
 					// make a custom VegbankCommand maybe
 
-				} else if (view.equalsIgnoreCase("bean")) {
+				} else if (view.equals("bean")) {
 					//////////////////////////////////////////
 					// VIEW: bean
 					//////////////////////////////////////////
@@ -245,6 +310,8 @@ public class GenericDispatcherAction extends Action
 				if (Utility.isStringNullOrEmpty(fwdURL)) {
 					fwdURL = request.getParameter("fwd");
 				}
+
+				fwdURL += ServletUtility.buildQueryString(urlParams);
 				log.debug("Forwarding to " + fwdURL);
 				return new ActionForward(fwdURL, true);
 
@@ -271,8 +338,7 @@ public class GenericDispatcherAction extends Action
 		}
 		catch (Exception e)
 		{
-			errors.add(
-				ActionErrors.GLOBAL_ERROR,
+			errors.add(ActionErrors.GLOBAL_ERROR,
 				new ActionError("errors.resource.not.found", e.getMessage()));
 			log.debug( e.getMessage(),e );
 		}
@@ -295,7 +361,7 @@ public class GenericDispatcherAction extends Action
 			return entity;
 		}
 
-		if (isNumericList(csvParams)) {
+		if (Utility.isNumericList(csvParams)) {
 			return "where_" + entity + "_pk";
 		} else {
 			return "where_accessioncode";
@@ -312,37 +378,48 @@ public class GenericDispatcherAction extends Action
 			return null;
 		}
 
-		StringTokenizer st = new StringTokenizer(csvParams, ",");
+		StringTokenizer st = new StringTokenizer(csvParams, ",|");
 		String[] arr = new String[st.countTokens()];
+		String param;
+		boolean first = true;
+		boolean numeric = true;
 		int i=0;
 
 		while (st.hasMoreTokens()) { 
-			arr[i++] = st.nextToken(); 
+			param = st.nextToken(); 
+
+			if (first) {
+				first = false;
+				numeric = Utility.isNumeric(param);
+				if (!numeric) { 
+					// add the initial '
+					//arr[i] = "'"; 
+				}
+
+			} else {
+				//log.debug("Adding comma at iteration #" + i);
+				//arr[i] = ",";
+			}
+
+
+			if (numeric) {
+				// a numeric key
+				arr[i] = param;
+
+			} else {
+				// an accession code
+				if (param.indexOf(";") == -1) {
+					arr[i] = "'" + param.toLowerCase() + "'";
+				}
+			}
+
+			i++;
 		}
+		
+		// add the final '
+		//if (!numeric && i>0) { arr[i-1] += "'"; }
 
 		return arr;
 	}
 
-
-	/**
-	 * @return true if the first/only value of the given 
-	 *    comma-separated list is a number
-	 */
-	private boolean isNumericList(String csvParams) {
-		if (Utility.isStringNullOrEmpty(csvParams)) {
-			return false;
-		}
-
-		String id = csvParams;
-		if (csvParams.indexOf(',') != -1) {
-			// a list
-			StringTokenizer st = new StringTokenizer(csvParams, ",");
-			if (st.hasMoreTokens()) { id = st.nextToken(); }
-		}
-
-		try { Long.parseLong(id); } 
-		catch (NumberFormatException nfex) { return false; }
-
-		return true;
-	}
 }

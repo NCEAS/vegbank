@@ -11,14 +11,7 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.ResourceBundle;
-import java.util.TimeZone;
-import java.util.Vector;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,8 +29,8 @@ import org.vegbank.common.model.Plantstatus;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2004-09-23 19:37:03 $'
- * '$Revision: 1.35 $'
+ * '$Date: 2004-09-24 01:39:38 $'
+ * '$Revision: 1.36 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -729,4 +722,38 @@ public class Utility
 				str.toLowerCase().substring(1);
 	}
 	
+
+	/**
+	 * @return true if the value of the given string is a number
+	 */
+	public static boolean isNumeric(String s) {
+		if (Utility.isStringNullOrEmpty(s)) {
+			return false;
+		}
+
+		try { Long.parseLong(s); } 
+		catch (NumberFormatException nfex) { return false; }
+
+		return true;
+	}
+
+
+	/**
+	 * @return true if the first/only value of the given 
+	 *    comma-separated list is a number
+	 */
+	public static boolean isNumericList(String csv) {
+		if (Utility.isStringNullOrEmpty(csv)) {
+			return false;
+		}
+
+		String value = csv;
+		if (csv.indexOf(',') != -1) {
+			// a list
+			StringTokenizer st = new StringTokenizer(csv, ",|");
+			if (st.hasMoreTokens()) { value = st.nextToken(); }
+		}
+
+		return isNumeric(value);
+	}
 }
