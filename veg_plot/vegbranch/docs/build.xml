@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--    * build_client.xml   *   *	Authors: John Harris, Michael Lee   *	Copyright: 2000 Regents of the University of California and the   *           National Center for Ecological Analysis and Synthesis   *  Build file for the Ant cross-platform build system for metacat   *  See http://jakarta.apache.org for details on Ant     *   	* this build file copies VegBranch files from the vegbank machine (home/lee/VegBranchReleases) to vegbank webspace.  They are separated into two classes: docs and client
+			'$Author: mlee $'  	*     '$Date: 2002-08-21 18:09:31 $'  	*     '$Revision: 1.1 $' -->
+<project name="vegbranch" default="init" basedir=".">
+	<!-- INITIATION -->
+	<target name="init">
+              <echo>Targets:  {init} clean-client | clean-docs | dist-client | dist-docs</echo>
+		<!-- RELEVANT DIRECTORIES -->
+		<property name="current_dir" value="./"/>
+		<property name="src" value="/home/lee/VegBranchReleases"/>
+		<property name="build" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbranch"/>
+		<!-- RELEVANT FILES TO COPY / DELETE -->
+		 		<!-- client files: -->
+		<property name="vegbranch" value="vegbranch-ver-b.3.0.zip"/>
+		<property name="vegbranchLite" value="vegbranch-ver-b.3.0-fewertaxa.zip"/>
+		 		<!-- docs files: -->
+		<property name="helpfile" value="vegbranch-help-ver-b.3.0.zip"/>
+		<property name="samplecsv" value="vegbranch-sample-csv-ver-b.3.0.zip"/>
+		<property name="htmlfile" value="vegbranch.html"/>
+	</target>
+	<target name="clean-client" depends="init">
+	       <delete>
+	             <!-- <del file vegbranch database /> -->
+			<fileset dir="${build}">
+                          <include name="${vegbranchLite}"/>
+                    </fileset>
+	      </delete>
+	       <delete>
+	             <!-- <del file vegbranch database /> -->
+			<fileset dir="${build}">
+                          <include name="${vegbranch}"/>
+                    </fileset>
+	      </delete>
+	</target>
+	<target name="clean-docs" depends="init">
+	       <delete>
+	             <!-- <del file vegbranch help file /> -->
+			<fileset dir="${build}">
+                          <include name="${helpfile}"/>
+                    </fileset>
+	      </delete>
+	       <delete>
+	             <!-- <del file vegbranch example csvs /> -->
+			<fileset dir="${build}">
+                          <include name="${samplecsv}"/>
+                    </fileset>
+	      </delete>
+	       <delete>
+	             <!-- <del file vegbranch html /> -->
+			<fileset dir="${build}">
+                          <include name="${htmlfile}"/>
+                    </fileset>
+	      </delete>
+	</target>
+	<target name="dist-client" depends="clean-client">
+		<!-- <copy file vegbranch database tofile="${build}/file" /> -->
+		<copy todir="${build}" filtering="yes">
+			<fileset dir="${src}">
+				<include name="${vegbranch}"/>
+			</fileset>
+		</copy>
+		<!-- <copy file vegbranch database fewerTaxa tofile="${build}/file" /> -->
+		<copy todir="${build}" filtering="yes">
+			<fileset dir="${src}">
+				<include name="${vegbranchLite}"/>
+			</fileset>
+		</copy>
+	</target>
+	<target name="dist-docs" depends="clean-docs">
+		<!-- <copy file html for users to download all files referenced above tofile="${build}/file" /> -->
+		<copy todir="${build}" filtering="yes">
+			<fileset dir="${src}/docs">
+				<include name="${htmlfile}"/>
+			</fileset>
+		</copy>
+		<!-- <copy file vegbranch help tofile="${build}/file" /> -->
+		<copy todir="${build}" filtering="yes">
+			<fileset dir="${src}/docs">
+				<include name="${helpfile}"/>
+			</fileset>
+		</copy>
+		<!-- <copy file vegbranch sample csv files tofile="${build}/file" /> -->
+		<copy todir="${build}" filtering="yes">
+			<fileset dir="${src}/docs">
+				<include name="${samplecsv}"/>
+			</fileset>
+		</copy>
+	</target>
+</project>
