@@ -16744,6 +16744,26 @@ conditions may change between resampling events.
       <update>1.0.2</update>
     </attribute>
     <attribute>
+      <attName>externalAccessionCode</attName>
+      <attLabel>External Accession Code</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>no</attNulls>
+      <attType>varchar (100)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>accessionCode for an incoming piece of data</attNotes>
+      <attDefinition>Accession Code for an incoming piece of data.</attDefinition>
+      <attForms>
+        <formShow name="Summary">3</formShow>
+        <formShow name="Detail">3</formShow>
+        <formShow name="csvvegbranch">491</formShow>
+      </attForms>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
       <attName>itemType</attName>
       <attLabel>Item Type</attLabel>
       <attModel>implementation</attModel>
