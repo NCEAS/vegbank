@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-03 16:59:23 $'
- * 	'$Revision: 1.15 $'
+ *  '$Date: 2002-04-04 16:48:31 $'
+ * 	'$Revision: 1.16 $'
  */
 package databaseAccess;
 
@@ -69,6 +69,7 @@ public class DBinsertPlotSource
 	int coverMethodId;
 	int stratumMethodId;
 
+	private String loaderEmail = "vegbank@vegbank.org"; //the email of the loader
 
 	// the name of the plots project xml file containing the plot information
 	// to be stored in the database
@@ -678,9 +679,7 @@ public class DBinsertPlotSource
 				pstmt.setInt(5, stratumId);
 				pstmt.setInt(6, taxonObservationId);
 				
-				//execute the p statement
   			pstmt.execute();
-  			// pstmt.close();
 			}
 		}
 		
@@ -815,13 +814,14 @@ public class DBinsertPlotSource
 			//send warnings
 			if ( cnt == 0)
 			{
-				System.out.println("warning: There were no matching strata");
+				System.out.println("warning: There were no strata matching: " + stratumType );
 			}
 			
 		}
 		catch (Exception e) 
 		{
 			System.out.println("Caught Exception  " + e.getMessage());
+			e.printStackTrace();
 		}
 		return(strataId);
 	}
@@ -1199,11 +1199,29 @@ public class DBinsertPlotSource
 			String authorLocation = source.authorLocation;
 			
 			//make a temporary accession number for each unique plot
-			String accessionNumber = "VB."+authorPlotCode.replace('.', '_')+"."+plotId;
+			String accessionNumber = getAccessionNumber( authorPlotCode,  plotId, this.loaderEmail);
 			System.out.println("DBinsertPlotSource > accession number: " + accessionNumber);
 			
 			//print the variables to the screen for debugging
 			debug.append("<authorPlotCode>"+ plotName+"</authorPlotCode>\n");
+			debug.append("<geology>"+surfGeo+"</geology>\n");
+			debug.append("<plotArea>"+plotArea+"</plotArea>\n");
+			debug.append("<altValue>"+altValue+"</altValue>\n");
+			debug.append("<slopeAspect>"+slopeAspect+"</slopeAspect>\n");
+			debug.append("<slopeGradient>"+slopeGradient+"</slopeGradient>\n");
+			debug.append("<topoPosition>"+topoPosition+"</topoPosition>\n");
+			debug.append("<hydrologicRegime>"+hydrologicRegime+"</hydrologicRegime>\n");
+			debug.append("<plotShape>"+plotShape+"</plotShape>\n");
+			debug.append("<xCoord>"+xCoord+"</xCoord>\n");
+			debug.append("<yCoord>"+yCoord+"</yCoord>\n");
+			debug.append("<latitude>"+latitude+"</latitude>\n");
+			debug.append("<longitude>"+longitude+"</longitude>\n");
+			debug.append("<zone>"+zone+"</zone>\n");
+			debug.append("<accessionNumber>"+accessionNumber+"</accessionNumber>\n");
+			
+			debug.append("<country>"+country+"</country>\n");
+			debug.append("<state>"+state+"</state>\n");
+			debug.append("<authorLocation>"+authorLocation+"</authorLocation>\n");
 			
 			
 			//this is the postgresql date function
@@ -1267,6 +1285,57 @@ public class DBinsertPlotSource
 		}
 		return(true);
 	}
+	
+	/**
+	 * utility method for creating the accession number associated with the 
+	 * given plot.  This string has changed content and structure during the 
+	 * initial development.  Basically we are tyring to embed in the string 
+	 * caharacters that would denote:
+	 * 		VegBank System
+	 * 		email of the loader 
+	 * 		date that the plot was observed
+	 * 		name of the plot
+	 *		primary key of the plot in the Vegbank system
+	 *
+	 * @param plotName -- the name of the plot 
+	 * @param plotId -- the PK of the plot in the system
+	 * @param email -- the email address of the user loading the plot
+	 * 
+	 */
+		private String getAccessionNumber( String plotName, int plotId, String
+		email)
+		{
+			StringBuffer sb = new StringBuffer();
+			try
+			{
+				String date = source.getObsStartDate(plotName);
+				StringTokenizer tok = new StringTokenizer(date);
+				String buf = tok.nextToken().replace('-', ' ');
+				StringTokenizer tok2 = new StringTokenizer(buf);
+				StringBuffer sb2 = new StringBuffer();
+				while ( tok2.hasMoreTokens() )
+				{
+					sb2.append( tok2.nextToken() );
+				}
+				String startDate = sb2.toString();
+				
+				sb.append("VB");
+				sb.append(".");
+				sb.append( plotName.replace('.', '_') );
+				sb.append(".");
+				sb.append(plotId);
+				sb.append(".");
+				sb.append(email);
+				sb.append(".");
+				sb.append(startDate);
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception: "+e.getMessage() ); 
+				e.printStackTrace();
+			}
+			return( sb.toString() );
+		}
 	
 	
 	/**
