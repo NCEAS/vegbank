@@ -6,21 +6,23 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-01-08 02:05:57 $'
-  *     '$Revision: 1.8 $'
+  *     '$Date: 2003-01-15 00:57:16 $'
+  *     '$Revision: 1.9 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
-	<property name="servlet_lib" 
-            value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/" />
-  <property name="target" value="${target}" />
-      
-	
-  <target name="init" description="Initialize global variables">
+  <!-- Load volatile properties from a file -->
+  <property file="${basedir}/build.properties"/>
+  
+  <target name="init" description="=> Initialize global variables">
     <property environment="env" />
     <property name="build.dir" value="${basedir}/build" />
+    <property name="java.src.dir" value="${basedir}/src" />
     <property name="lib.dir" value="${basedir}/lib" />
     <property name="doc.dir" value="${basedir}/doc"/>
+    <property name="build.src.dir" value="${build.dir}/src"/>
+    <property name="build.java.src.dir" value="${build.src.dir}/java"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.test.dir" value="${build.dir}/test"/>
     <property name="build.test.integration.dir"
       value="${build.test.dir}/integration"/>
@@ -36,62 +38,141 @@
     <property name="web.docroot" value="${env.TOMCAT_HOME}/webapps" /> 
     <property name="web.servlet.lib.dir"
       value="${web.docroot}/framework/WEB-INF/lib" /> 
+    
+    <!-- Location of jar files -->
     <property name="xmlp" value="${lib.dir}/xalan_1_2_2.jar:${lib.dir}/xerces_1_3_1.jar:${lib.dir}/xml-apis.jar" />
     <property name="jdbc" value="${lib.dir}/jdbc7.0-1.2.jar" />
+    <property name="servlet" value="${lib.dir}/servlet.jar" />
     <property name="xmlresource" value="${build.lib.dir}/xmlresource.jar" />
     <property name="datatranslator" value="${build.lib.dir}/datatranslator.jar" />
-    <property name="servletutil" value="${build.lib.dir}/utilities.jar" />
-    <property name="planttaxonomy" value="${build.lib.dir}/planttaxonomy.jar" />
-    <property name="databaseAccess" value="${build.lib.dir}/database_access.jar" />
+    <property name="rmidatasource" value="${build.lib.dir}/rmidatasource.jar" />
     <property name="cpath" 
-      value="${planttaxonomy}:${databaseAccess}:${servletutil}:${datatranslator}:${xmlresource}:${xmlp}:${jdbc}:${build.class.dir}"/>
+      value="${rmidatasource}:${servlet}:${xmlp}:${jdbc}:${build.classes.dir}"/>
+    <property name="cpath2" 
+      value="${rmidatasource}:${servlet}:${xmlp}:${jdbc}:${xmlresource}:${datatranslator}:${build.classes.dir}"/>
+
 
 
     <filter token="reports.test.dir" value="${reports.test.dir}"/>
+    <!-- This is no longer used ?? -->
     <filter token="outputXML" value="${web.servlet.lib.dir}/atomicResult"/>
-    <filter token="java1.4.home.dir" value="/usr/java/j2sdk1.4.1"/>   
+    <filter token="java1.4.home.dir" value="${java1.4.home.dir}"/>   
     <filter token="build.test.integration.dir"
       value="${build.test.integration.dir}"/>
-    <filter token="" value=""/>
-    
+
+    <!--
+      * The following filters expect the database connection properties
+      * be set in the user custom build.properties file. There is an example 
+      * of this file in cvs.
+    -->
+    <filter token="authenticationServletHost" value="${authenticationServletHost}" />
+    <filter token="communityRequestServletHost" value="${communityRequestServletHost}" />
+    <filter token="plantRequestServletHost" value="${plantRequestServletHost}" />
+    <filter token="geoCoordRequestServletHost" value="${geoCoordRequestServletHost}" />
+    <filter token="databaseType" value="${databaseType}" />
+    <filter token="user" value="${databaseUser}" />
+    <filter token="password" value="${databaseUserPassword}" />
+    <filter token="port" value="${databasePort}" />
+    <filter token="hostname" value="${hostname}"/>
+    <filter token="driverType" value="${databaseDriverType}" />
+    <filter token="driverClass" value="${databaseDriverClass}" />
+    <filter token="connectString" value="${databaseConnectString}"/>
+    <filter token="databaseName" value="${databaseName}" />
+    <filter token="insert.minConnections" value="${insert.minConnections}" />
+    <filter token="insert.maxConnections" value="${insert.maxConnections}" />
+    <filter token="query.minConnections" value="${query.minConnections}" />
+    <filter token="query.maxConnections" value="${query.maxConnections}" />
+    <filter token="maxConnectionUses" value="${maxConnectionUsers}" />
+    <filter token="resetTime" value="${resetTime}" />
+    <filter token="logFile" value="${logFile}" />
+
   </target>
   
   <target name="prepare" depends="init">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.lib.dir}"/>
+    <mkdir dir="${build.src.dir}"/>
+    <mkdir dir="${build.java.src.dir}"/>
+    <mkdir dir="${build.classes.dir}"/>
   </target>
   
   <target name="compile" depends="prepare"
-          description="Compiles all code in veg_plot module">
+          description="=> Compiles all code in veg_plot module">
 		<echo message="Compiling all of ${ant.project.name}"/>
-    <ant dir="exp/client_installer" target="compile"/>
-		<ant dir="exp/database_access" target="compile"/>
-		<ant dir="exp/data-translators" target="compile"/>
-		<ant dir="exp/rmidatasource" target="compile"/> 
-		<ant dir="exp/services" target="compile"/>
-		<ant dir="exp/servlet" target="compile"/>
-		<ant dir="exp/vegclient" target="compile"/>
-		<ant dir="exp/xml-resource" target="compile"/>
-		<ant dir="exp/xml_to_sql" target="compile"/>
+
+    <!-- FIXME: temporary hack to move code up into single tree -->
+    <copy todir="${build.java.src.dir}">
+      <fileset dir="./exp/database_access/src" casesensitive="yes">
+        <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="./exp/data-translators/src/data-translators/" casesensitive="yes">
+        <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="${java.src.dir}" casesensitive="yes">
+        <include name="edu/**/*.java"/>
+      </fileset>
+      <fileset dir="./exp/xml-resource/src" casesensitive="yes">
+        <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="./exp" casesensitive="yes">
+        <include name="servlet/util/*.java"/>
+      </fileset>
+    </copy> 
+
+    <!-- Copy property files -->
+    <copy file="./exp/database_access/lib/database.properties" 
+          todir="${build.classes.dir}"
+          filtering="true"/>
+    
+    <javac  srcdir="${build.java.src.dir}"
+            classpath="${cpath}"
+            includes="**/*.java  "
+            destdir="${build.classes.dir}"
+            debug="on"
+    />
+
+
+    <!-- Call sub-project ant build files -->
+    <!--<ant dir="exp/client_installer" target="compile"/>-->
+    <!--<ant dir="exp/database_access" target="compile"/>-->
+    <!--<ant dir="exp/data-translators" target="compile"/>-->
+    <ant dir="exp/rmidatasource" target="compile"/> 
+    <ant dir="exp/services" target="compile" inheritAll="false"/>
+    <ant dir="exp/servlet" target="compile" inheritAll="false"/>
+    <!--<ant dir="exp/vegclient" target="compile" inheritAll="false"/>-->
+    <ant dir="exp/xml-resource" target="compile" inheritAll="false"/>
+    <ant dir="exp/xml_to_sql" target="compile" inheritAll="false"/>
     <ant antfile="./build-plotvalidation.xml" target="compile"/>
-	</target>
+  </target>
 	
 	<target name="jar" depends="compile"
-          description="Generates all jars in veg_plot module">
+          description="=> Generates all jars in veg_plot module">
 		<echo message="Creating all of jars in ${ant.project.name}"/>
-		<ant dir="exp/database_access" target="jar"/>
+	    
+    <jar  destfile ="${build.lib.dir}/database_access.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="databaseAccess/*.class"/>
+        <include name="database.properties"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="databaseAccess/*.java"/>
+      </fileset>
+    </jar>
+
+  
+    <!--<ant dir="exp/database_access" target="jar"/>-->
 		<ant dir="exp/data-translators" target="jar"/>
 		<ant dir="exp/rmidatasource" target="jar"/> 
-		<ant dir="exp/services" target="jar"/>
-		<ant dir="exp/servlet" target="jar"/>
+		<ant dir="exp/services" target="jar" inheritAll="false"/>
+		<ant dir="exp/servlet" target="jar" inheritAll="false"/>
 		<!--<ant dir="exp/vegbank_web" target="jar"/>-->
-		<ant dir="exp/vegclient" target="jar"/>
+		<!--<ant dir="exp/vegclient" target="jar"/>-->
 		<ant dir="exp/xml-resource" target="jar"/>
 		<ant dir="exp/xml_to_sql" target="jar"/>
 	</target>
 	
 	<target name="deploy" depends="jar"
-          description="Deploys jars in veg_plot module to servlet container">
+          description="=> Deploys jars in veg_plot module to servlet container">
 		<echo message="Distr all of jars in ${ant.project.name}"/>
 		<ant dir="exp/database_access" target="dist-web"/> 
 		<ant dir="exp/data-translators" target="dist"/>
@@ -105,7 +186,7 @@
 		<antcall target="deploy-resources"/>
 	</target>
 
-	<target name="deploy-resources" description="Deploy resources to servlet container">
+	<target name="deploy-resources" description="=> Deploy resources to servlet container">
 		<!-- Copy xml resources to servlet container -->
 		<copy todir="${servlet_lib}">
 			<fileset dir="xml" includes="querySpec.xsl, plotQuery.dtd,
@@ -116,7 +197,8 @@
 		<copy file="../veg_community/sql/update_community_summary.sql" todir="${servlet_lib}"/>
 	</target>
 
-	<target name="clean" description="Remove all generated files">
+	<target name="clean" depends="init" 
+          description="=> Remove all generated files">
     <delete dir="${build.dir}"/>
   
 		<ant dir="exp/client_installer" target="clean"/>
@@ -136,9 +218,16 @@
 		<ant dir="exp/database_access" target="${target}"/>		
 	</target>
 	-->
-  
+ 
+  <!-- ================================================================ -->
+  <!-- TEST RELATED TARGETS                                             -->
+  <!-- ================================================================ -->
+  <!-- Compiling, running and generating reports for tests              -->
+  <!-- This is getting big maybe .. could make separate build file      -->
+  <!-- ================================================================ -->
+
   <target name="test" depends="prepare" 
-          description="Run all the junit tests">
+          description="=> Run all the junit tests">
     
     <property name="build.test.classes.dir" value="${build.test.dir}/classes"/>
     <mkdir dir="${build.test.dir}"/>
@@ -151,6 +240,7 @@
     <copy todir="${build.test.dir}/testdata">
       <fileset dir="${test.dir}/TestData">
         <include name="*xml"/>
+        <include name="*mdb"/>
       </fileset>
     </copy>
     
@@ -163,7 +253,7 @@
     
     <javac srcdir="${test.unit.src.dir}"
            destdir="${build.test.classes.dir}"
-           classpath="${cpath}:${lib}/database_access.jar"
+           classpath="${cpath2}:${lib}/database_access.jar"
            includes="**/*.java" />
 
     <jar jarfile="${build.lib.dir}/${ant.project.name}-junittests.jar"
@@ -174,7 +264,7 @@
     <junit printsummary="yes" haltonfailure="no" fork="no"
            haltonerror="no">
       <classpath>
-        <pathelement path="${cpath}"/>
+        <pathelement path="${cpath2}"/>
         <fileset dir="${build.lib.dir}">
           <include name="**/*.jar"/>
         </fileset>
@@ -192,21 +282,29 @@
   </target>
 
   <target name="dist-testreport" depends="test" 
-          description="Generate a html and distribute a report from tests output">
+          description="=> Generate a html and distribute a report from tests output">
 
     <!-- Create a report from the junit output -->
     <junitreport todir="${reports.test.dir}">
       <fileset dir="${reports.test.dir}">
         <include name="TEST-*.xml"/>
       </fileset>
-      <report format="noframes" todir="${web.docroot}/vegbank/" styledir="${ant.style.dir}"/> 
+      <report format="noframes" 
+              todir="${web.docroot}/vegbank/" 
+              styledir="${ant.style.dir}"/> 
     </junitreport>
 
   </target>
  
   <target name="test-integration" depends="prepare"
-          description="Run Integration Tests">
-    
+          description="=> Run Integration Tests">
+
+    <echo message="+-----------------------------------------------+"/>
+    <echo message="|                                               |"/>
+    <echo message="| Running Integation tests                      |"/>
+    <echo message="|                                               |"/>
+    <echo message="+-----------------------------------------------+"/>
+ 
     <property name="build.test.integration.dir" value="${build.test.dir}/integration"/>
     <mkdir dir="${build.test.integration.dir}"/>
 
@@ -218,8 +316,40 @@
       </fileset>
     </copy>
     
+    <!-- Test Loading a vbaccess plot -->
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
       <env key="CLASSPATH" value="${cpath}"/>
+      <arg value="../testdata/vbaccess-example.mdb"/>
+      <arg value="157"/>
+      <arg value="vbaccessout.xml"/>
+      <arg value="vbaccess"/>
+      <arg value="VegBankAccessPlotInsert"/>
+      <arg value="${rmiserver}"/>
+      <arg value="../testdata/vbaccess-output.xml"/>
+    </exec>
+    
+    <!-- Test Loading a tnc plot -->
+    <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
+      <env key="CLASSPATH" value="${cpath2}"/>
+      <arg value="../testdata/tncplots-example.mdb"/>
+      <arg value="BADL.102"/>
+      <arg value="tncout.xml"/>
+      <arg value="tnc"/>
+      <arg value="TNCPlotInsert"/>
+      <arg value="${rmiserver}"/>
+      <arg value="../testdata/tnc-output.xml"/>
+    </exec>
+    
+    <!-- Test Loading a native plot -->
+    <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
+      <env key="CLASSPATH" value="${cpath2}"/>
+      <arg value="../testdata/nativeDataSource.xml"/>
+      <arg value="Fern-1"/>
+      <arg value="nativeout.xml"/>
+      <arg value="NativeXmlPlugin"/>
+      <arg value="NativePlotInsert"/>
+      <arg value="${rmiserver}"/>
+      <arg value="../testdata/nativeDataSource.xml"/>
     </exec>
   
   </target>
