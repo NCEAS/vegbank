@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2001-10-20 18:15:34 $'
- 	*     '$Revision: 1.4 $'
+ 	*     '$Date: 2001-10-23 02:10:56 $'
+ 	*     '$Revision: 1.5 $'
 --> 
 <project name="VegClient" default="compile" basedir=".">
 	
@@ -50,9 +50,11 @@
 	</target>	
 	
 		<!-- COPY -->
-	<target name="copy" depends="init">
-	 	<copy file="README" tofile="${bin}/README"/>
-		
+<target name="copy" depends="init">
+<!--
+<copy file="README" tofile="${bin}/README"/>
+-->
+
 		<!-- properties files -->
 		<copy todir="${build}" filtering="yes" >
 			<fileset dir="${src}/framework" >
@@ -72,9 +74,17 @@
   	    <include name="**.java"/>
   	  </fileset>
   	</copy>
+		
 		<!-- datarequestor java files -->
 		<copy todir="${build}" filtering="yes" >
 			<fileset dir="${src}/datarequestor" >
+  	    <include name="**.java"/>
+  	  </fileset>
+  	</copy>
+		
+		<!-- ternarysearch java files -->
+		<copy todir="${build}" filtering="yes" >
+			<fileset dir="${src}/ternarysearch" >
   	    <include name="**.java"/>
   	  </fileset>
   	</copy>
@@ -104,7 +114,7 @@
 			StyleSheetInterface.java
 			HtmlViewer.java
 			utility.java
-			transformXML.java
+			
 			
 			DataExchangeClient.java
 			DataRequestClient.java
@@ -113,6 +123,8 @@
 			
 			XPathAPI.java
 			XMLparse.java
+			XMLSAXparse.java
+			transformXML.java
 			
 			ConfigurationFile.java
 			ConfigurationInterface.java
@@ -156,6 +168,13 @@
 			ProjectInitialize.java
 			NewDataLoader.java
 			VegClient.java
+			
+			
+			CharUtility.java
+			DoublyLinkedList.java
+			TernarySearchTree.java
+			TSTLoader.java
+			ObjectLookupInterface.java
 			"
 			destdir="${build}"
 		/>
@@ -184,7 +203,9 @@
 			<zipfileset dir="${data}/native" prefix="data/native"/>
 			<zipfileset dir="${data}/tnc_data" prefix="data/tnc_data"/>
 			<zipfileset dir="${data}/structured_data" prefix="data/structured_data"/>
-			
+<!--
+			<zipfileset dir="${data}/resources" prefix="data/resources"/>
+-->			
 			<zipfileset dir="${bin}" prefix="bin"/>
 			
 			<fileset dir="${doc}" includes="README"/>
