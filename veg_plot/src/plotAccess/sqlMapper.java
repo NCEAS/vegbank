@@ -87,9 +87,8 @@ public class  sqlMapper
 				//fix this so that you can pass a string to the method
 				StringBuffer sqlBuf = new StringBuffer();
 				sqlBuf.append(taxonSql);
-				//issue the statement to the database
-//				Vector plotIdVec = new Vector();
-//				plotIdVec.addElement("1");
+				//issue the statement to the database - to return the 
+				//plot id's of those plots which have the taxon
 				Vector taxonPlotIdVec = is.issuePureSQL(sqlBuf);
 				System.out.println("number of plots found with taxon: "+ taxonPlotIdVec.size() );
 				
@@ -217,11 +216,6 @@ public class  sqlMapper
 					{
 						sb.append("and");
 					}
-					//end the statement
-	//				if ( i == ( queryInstanceNum-1) )
-	//				{
-	//					sb.append(";");
-	//	 			}
 				}
 				//now add the plotId's if there are any in the 
 				//passed in vector
@@ -404,7 +398,8 @@ public class  sqlMapper
 				sb.append(" "+getDBAttribute(criteria)+" ");
 				sb.append(" "+getSQLOperator(operator, getDBAttribute(criteria) )+" " );
 				sb.append( getStringDelimeter( getSQLOperator(operator, getDBAttribute(criteria)), getDBAttribute(criteria) ) );
-				sb.append(value);
+				//sb.append(value);
+				sb.append( getSQLValue(value, getSQLOperator(operator, getDBAttribute(criteria) ) ) );
 				sb.append(getStringDelimeter( getSQLOperator(operator, getDBAttribute(criteria)),  getDBAttribute(criteria) ) );
 			}
 			catch ( Exception e )
@@ -417,6 +412,40 @@ public class  sqlMapper
 		return(sb.toString());
 	}
 	
+	
+	/**
+	 * method to return the criteria values used for querying the database
+	 * a value string may be like:
+	 *	'elevation > value' -- where value is a single string 
+	 * or
+	 *	'authorNameId in (value)' -- where the value should be a comma separated
+	 * 	string
+	 */ 
+	private String getSQLValue(String valueString, String operator)
+	{
+		try
+		{
+			if ( operator.trim().equals("in") )
+			{
+				return("("+valueString+")");
+			}
+			else
+			{
+				return(valueString);
+			}
+		}
+			catch ( Exception e )
+		{
+			System.out.println("failed at:   "
+			+e.getMessage());
+			e.printStackTrace();
+		}
+		return(valueString);
+	}
+	
+	
+	
+	
 	/**
 	 * method to translate the criteria 
 	 * to the correct database attribute name
@@ -426,7 +455,6 @@ public class  sqlMapper
 	{
 		try
 		{
-			
 			if ( criteria.trim().equals("elevation") )
 			{
 				return("altValue");
@@ -522,7 +550,7 @@ public class  sqlMapper
 			}
 			else if ( operator.equals("contains") )
 			{
-				return("like");
+				return("in");
 			}
 			else
 			{
