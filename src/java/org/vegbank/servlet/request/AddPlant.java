@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:46:03 $'
- *	'$Revision: 1.11 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-12-02 02:11:05 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -127,7 +127,7 @@ public class AddPlant implements Constants
 
 				party.setGivenname( userBean.getGivenname() );
 				party.setSurname( userBean.getSurname()  );
-				party.setOrganizationname( userBean.getInsitution() );
+				party.setOrganizationname( userBean.getInstitution() );
 
 				plant.setParty(party);
 
@@ -373,7 +373,7 @@ public class AddPlant implements Constants
 			//get the required elements from the planttaxonobject
 			String email = userBean.getEmail();
 			String name = userBean.getSurname();
-			String institution = userBean.getInsitution();
+			String institution = userBean.getInstitution();
 			String sciName = plant.getScientificName();
 			String commonName = plant.getCommonName();
 			String code = plant.getCode();
@@ -707,7 +707,7 @@ public class AddPlant implements Constants
 			replaceHash.put("plantPartySurName", "" + userBean.getSurname() );
 			replaceHash.put(
 				"plantPartyInstitution",
-				"" + userBean.getInsitution() );
+				"" + userBean.getInstitution() );
 			replaceHash.put("plantPartyEmailAddress", "" + emailAddress);
 
 			su.filterTokenFile(plantStatusUsageTemplate, out, replaceHash);

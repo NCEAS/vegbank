@@ -3,9 +3,9 @@ package org.vegbank.servlet.request;
 /*
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
- *	'$Author: farrell $'
- *  '$Date: 2003-11-25 19:46:03 $'
- *  '$Revision: 1.21 $'
+ *	'$Author: anderson $'
+ *  '$Date: 2003-12-02 02:11:05 $'
+ *  '$Revision: 1.22 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -138,7 +138,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				String salutation = user.getSalutation();
 				String surName = user.getSurname();
 				String givenName = user.getGivenname();
-				String institution = user.getInsitution();
+				String institution = user.getInstitution();
 				String permissionType = user.getPermissiontype();
 				int permissionLevel = 0;
 				try
@@ -376,7 +376,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		String salutation = userBean.getSalutation();
 		String surName = userBean.getSurname();
 		String givenName = userBean.getGivenname();
-		String institution = userBean.getInsitution();
+		String institution = userBean.getInstitution();
 		
 		try
 		{

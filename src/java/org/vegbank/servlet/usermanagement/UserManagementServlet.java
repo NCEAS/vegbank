@@ -3,9 +3,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: farrell $'
- *   '$Date: 2003-11-25 19:48:27 $'
- *   '$Revision: 1.17 $'
+ *   '$Author: anderson $'
+ *   '$Date: 2003-12-02 02:11:05 $'
+ *   '$Revision: 1.18 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -359,7 +359,7 @@ public class UserManagementServlet extends HttpServlet
 				replaceHash.put("country", ""+userBean.getCountry());
 				replaceHash.put("zipCode", ""+userBean.getZipcode() );
 				replaceHash.put("phoneNumber", ""+userBean.getDayphone() );
-				replaceHash.put("institution", "" + userBean.getInsitution());
+				replaceHash.put("institution", "" + userBean.getInstitution());
 				replaceHash.put("ticketCount", ""+userBean.getTicketcount() );
 				replaceHash.put(
 					"permissionType",
