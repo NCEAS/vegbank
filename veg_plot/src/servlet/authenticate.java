@@ -24,7 +24,9 @@ public class authenticate extends HttpServlet
 {
 	public int cookieValidFlag=0;  //1=valid
 	public Cookie registeredCookie;
+	public String servletPath = null;
 	public servletUtility su = new servletUtility();
+	public UserDatabaseAccess uda = new UserDatabaseAccess();
 	
 	ResourceBundle rb = ResourceBundle.getBundle("LocalStrings");
 	//public String clientLogFile = null; //the file to log the client usage
@@ -50,6 +52,8 @@ public class authenticate extends HttpServlet
 		//first block will look for the userName and password as well as valid cookie
 		try
 		{
+			ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
+			servletPath=rb.getString("servlet-path");
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
 	
@@ -86,14 +90,16 @@ public class authenticate extends HttpServlet
 						
  						
 						//send the user to the correct page
-						Thread.currentThread().sleep(500);
-						response.sendRedirect("/harris/servlet/pageDirector?pageType=loggedin");
+						Thread.currentThread().sleep(100);
+						response.sendRedirect(servletPath+"pageDirector?pageType=loggedin");
+						//response.sendRedirect("/harris/servlet/pageDirector?pageType=loggedin");
 					}
 					else 
 					{
 						//send the user to the correct page
-						Thread.currentThread().sleep(500);
-						response.sendRedirect("/harris/servlet/pageDirector?pageType=login");
+						Thread.currentThread().sleep(100);
+						response.sendRedirect(servletPath+"pageDirector?pageType=login");
+						//response.sendRedirect("/harris/servlet/pageDirector?pageType=login");
 					}
 				}
 				// CREATE A NEW USER
@@ -102,8 +108,9 @@ public class authenticate extends HttpServlet
 					System.out.println("creating a new user");
 					if (createNewUser(requestParams, remoteAddress) == true )
 					{
-						Thread.currentThread().sleep(1000);
-        		response.sendRedirect("/harris/servlet/pageDirector?pageType=loggedin");
+						Thread.currentThread().sleep(100);
+						response.sendRedirect(servletPath+"pageDirector?pageType=loggedin");
+        		//response.sendRedirect("/harris/servlet/pageDirector?pageType=loggedin");
 					}
 					else
 					{
@@ -129,21 +136,25 @@ public class authenticate extends HttpServlet
 	 */
 	 private boolean authenticateUser(Hashtable requestParams, String remoteAddress)
 	 {
-		 			//grab the user name and password
+		 	//grab thee user name and password
 			String userName=requestParams.get("userName").toString();
 			String passWord=requestParams.get("password").toString();
 			System.out.println("name password/pair: "+userName+" "+passWord);
-
+		
+			//access the class in the dbAccess class to validate the 
+			//login and password with that stored in the database
+			return( uda.authenticateUser(userName, passWord) );
+		
 			//validate the name password pair
-	 		if (userName.equals("user") && passWord.equals("pass")) 
- 			{
-				System.out.println("authentication successful ");
-				return(true);
- 			}
- 			else 
- 			{
-				return(false);
- 			}
+//	 		if (userName.equals("user") && passWord.equals("pass")) 
+// 			{
+//				System.out.println("authentication successful ");
+//				return(true);
+// 			}
+// 			else 
+// 			{
+//				return(false);
+// 			}
 		// return(false);
 	 }
 	 
@@ -155,20 +166,35 @@ public class authenticate extends HttpServlet
 	 */
 	 private boolean createNewUser(Hashtable requestParams, String remoteAddress)
 	 {
-		 //get the key variables 
+		 //get the key variables that are required 
 		 String emailAddress = requestParams.get("emailAddress").toString();
 		 String passWord =  requestParams.get("password").toString();
-		 String retypePassWord = requestParams.get("password2").toString();
+		 String retypePassWord =  requestParams.get("password2").toString();
+		 System.out.println("REQUEST PARAMS: "+requestParams.toString() );
+		 
+		 //try to get the other variables
+		 String givenName = null;
+		 String surName = null;
+		 if (requestParams.containsKey("givenname") )
+		 {
+			 givenName= requestParams.get("givenname").toString();
+		 }	
+		 if (requestParams.containsKey("surname") )
+		 {
+			surName =  requestParams.get("surname").toString();
+		 } 
+		 System.out.println("given name: "+givenName);
+		 System.out.println("sur name: "+surName);
+		 
 		 
 		 System.out.println("password comparison: '"+passWord+"' '"+retypePassWord+"'");
 		 if ( passWord.equals(retypePassWord) &&  passWord.length() > 2 )
 		 {
 			 System.out.println("equals");
-			 UserDatabaseAccess uda = new UserDatabaseAccess();
-			 uda.createUser(emailAddress, passWord);
 			 
 			 
-			 
+			 uda.createUser(emailAddress, passWord, givenName, surName, remoteAddress);
+
 			 return(true);
 		 }
 		 else
@@ -213,19 +239,19 @@ public class authenticate extends HttpServlet
  	 // Register the cookie in the client log with the following format:
  	 // userName|password|remoteAddress|date|cookieName|cookieValue|cookieAddress
  	 //
-		try 
-		{
-			PrintStream clientLog = new PrintStream(new FileOutputStream(clientLogFile, 
-			true));
-			Date date = new Date();
-			clientLog.println(date+"|"+cookieName+"|"+cookieValue+"|"+cookieAddress);
-		}
-		catch (Exception e) 
-		{
-			System.out.println("failed: " 
-			+e.getMessage());
-			e.printStackTrace();
-		}
+// try 
+//		{
+//			PrintStream clientLog = new PrintStream(new FileOutputStream(clientLogFile, 
+//			true));
+//			Date date = new Date();
+//			clientLog.println(date+"|"+cookieName+"|"+cookieValue+"|"+cookieAddress);
+//		}
+//		catch (Exception e) 
+//		{
+//			System.out.println("failed: " 
+//			+e.getMessage());
+//			e.printStackTrace();
+//		}
 	}
 
 
