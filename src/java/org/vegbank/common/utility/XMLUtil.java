@@ -5,9 +5,9 @@ package org.vegbank.common.utility;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-02-19 17:50:48 $'
- *	'$Revision: 1.3 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-04-12 22:02:58 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ public class XMLUtil
 		StringBuffer fullXML = new StringBuffer();
 		
 		// TODO: This varible need to be configurable
-		String schemaWebLocation = "http://vegbank.nceas.ucsb.edu/xml/";
+		String schemaWebLocation = "http://vegbank.nceas.ucsb.edu/vegdocs/xml/";
 		
 		fullXML.append("<?xml version='1.0' encoding='UTF-8'?>\n");
 		// TODO: Delaring schema to use here, may need to allow refernce to schema and no refernce
