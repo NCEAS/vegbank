@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-07-15 20:19:26 $'
-  *     '$Revision: 1.25 $'
+  *     '$Date: 2003-07-15 22:51:28 $'
+  *     '$Revision: 1.26 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -52,10 +52,6 @@
     <property name="xmlp" value="${top.lib.dir}/xalan_1_2_2.jar:${top.lib.dir}/xerces_1_3_1.jar:${top.lib.dir}/xml-apis.jar" />
     <property name="jdbc" value="${top.lib.dir}/jdbc7.0-1.2.jar" />
     <property name="vegclass_common" value="${top.lib.dir}/vegclass_common.jar" />
-    <property name="servlet" value="${top.lib.dir}/servlet.jar:${top.lib.dir}/multipart.jar" />
-    <property name="xmlresource" value="${build.lib.dir}/xmlresource.jar" />
-    <property name="datatranslator" value="${build.lib.dir}/datatranslator.jar" />
-    <property name="rmidatasource" value="${top.lib.dir}/rmidatasource.jar" />
     <property name="cpath" 
       value="${rmidatasource}:${servlet}:${xmlp}:${jdbc}:${build.classes.dir}:${vegclass_common}:${planttaxonomy}:${vegcommunity}"/>
     <property name="cpath2" 
@@ -172,20 +168,20 @@
     <!-- database_access.jar -->
     <jar  destfile ="${build.lib.dir}/database_access.jar">
       <fileset dir="${build.classes.dir}" casesensitive="yes">
-        <include name="org.vegbank.databaseAccess/*.class"/>
+        <include name="org/vegbank/databaseAccess/*class"/>
         <include name="database.properties"/>
       </fileset>
       <fileset dir="${build.java.src.dir}" casesensitive="yes">
-        <include name="org.vegbank.databaseAccess/*.java"/>
+        <include name="org/vegbank/databaseAccess/*java"/>
       </fileset>
     </jar>
     <!-- xmlresource.jar -->
      <jar  destfile ="${build.lib.dir}/xmlresource.jar">
       <fileset dir="${build.classes.dir}" casesensitive="yes">
-        <include name="xmlresource/**/*.class"/>
+        <include name="org/vegbank/xmlresource/**/*class"/>
       </fileset>
       <fileset dir="${build.java.src.dir}" casesensitive="yes">
-        <include name="xmlresource/**/*.java"/>
+        <include name="org/vegbank/xmlresource/**/*java"/>
       </fileset>
     </jar>
     <!-- plotvalidator.jar -->
