@@ -26,8 +26,8 @@ import org.vegbank.common.utility.PermComparison;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-01 01:10:53 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-01-07 21:47:59 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ public class RegisterNewUserAction extends Action
 				// Fill out defaut fields
 				// Start off as registered user TODO: Get these as Constants
 				usr.setPermission_type(String.valueOf(
-						PermComparison.getRoleConstant("registered")));
+						PermComparison.getRoleConstant("reg")));
 				// FIXME: Should be set upon first logon?
 				usr.setBegin_time(Utility.getCurrentDate());
 
