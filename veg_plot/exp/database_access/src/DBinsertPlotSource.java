@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-03 00:26:56 $'
- * 	'$Revision: 1.13 $'
+ *  '$Date: 2002-04-03 15:34:28 $'
+ * 	'$Revision: 1.14 $'
  */
 package databaseAccess;
 
@@ -859,6 +859,7 @@ public class DBinsertPlotSource
 				String level  = "";
 				String conceptId  = "";
 				String name = "";
+				String nameId = "";
 			
 				// if the hashtable has a single key then it will have 
 				// all the keys associated with a plant
@@ -867,6 +868,7 @@ public class DBinsertPlotSource
 					level =	(String)h.get("level");	
 					conceptId = (String)h.get("conceptId");
 					name = (String)h.get("name");
+					nameId = (String)h.get("nameId");
 				}
 				
 				
@@ -878,13 +880,14 @@ public class DBinsertPlotSource
 				debug.append("<vegbankLevel>"+level+"</vegbankLevel> \n");
 				debug.append("<vegbankName>"+name+"</vegbankName> \n");
 				debug.append("<vegbankConceptId>"+conceptId+"</vegbankConceptId> \n");
+				debug.append("<vegbankNameId>"+nameId+"</vegbankNameId> \n");
 				debug.append("</vegbankMatch> \n");
 				debug.append("</taxonObservation> \n");
 				
 				//insert the values
 				sb.append("INSERT into TAXONOBSERVATION (taxonobservation_id, observation_id, "
-					+" cheatplantName ) "
-					+" values(?,?,?) ");
+					+" cheatplantName, plantname_id ) "
+					+" values(?,?,?,?) ");
 				
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
 				
@@ -892,6 +895,7 @@ public class DBinsertPlotSource
   	  	pstmt.setInt(1, taxonObservationId);
   	  	pstmt.setInt(2, plotObservationId);
 				pstmt.setString(3, authorNameId);
+				pstmt.setString(4, plantNameId);
 				
 				//execute the p statement
   		  pstmt.execute();
@@ -1412,9 +1416,11 @@ public class DBinsertPlotSource
 				Vector levelVec = parser.getValuesForPath(doc, "/plantTaxa/taxon/name/plantLevel");
 				Vector conceptIdVec = parser.getValuesForPath(doc, "/plantTaxa/taxon/name/plantConceptId");
 				Vector nameVec = parser.getValuesForPath(doc, "/plantTaxa/taxon/name/plantDescription");
+				Vector nameIdVec = parser.getValuesForPath(doc, "/plantTaxa/taxon/name/plantNameId");
 				String lev = (String)levelVec.elementAt(0);
 				String conceptId = (String)conceptIdVec.elementAt(0);
 				String name  = (String)nameVec.elementAt(0);
+				String nameId  = (String)nameIdVec.elementAt(0);
 				System.out.println("DBinsertPlotSource > parsed plant taxa xml: " +lev+" "+conceptId);
 			
 				if ( lev != null && conceptId != null)
@@ -1422,6 +1428,7 @@ public class DBinsertPlotSource
 					h.put("level", lev );
 					h.put("conceptId", conceptId );
 					h.put("name", name);
+					h.put("nameId", nameId);
 				}
 				else
 				{
