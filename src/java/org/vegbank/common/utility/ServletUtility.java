@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-11-12 22:27:31 $'
- *  '$Revision: 1.6 $'
+ *  '$Date: 2003-11-13 22:38:16 $'
+ *  '$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -47,9 +46,7 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tools.ant.filters.ReplaceTokens;
 
@@ -212,35 +209,36 @@ public class ServletUtility
 	 * @param  inFile  a string representing the input file
 	 * @param  outFile a string representing the output, compressed, file
 	 */
-	
-	public void fileCopy (String inFile, String outFile) 
+
+	public void fileCopy(String inFile, String outFile)
 	{
 		try
 		{
 			BufferedReader in = new BufferedReader(new FileReader(inFile));
-			PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
-			
+			PrintStream out =
+				new PrintStream(new FileOutputStream(outFile, false));
+
 			System.out.println("ServletUtility > fileCopy");
 			System.out.println("ServletUtility > inFile: " + inFile);
 			System.out.println("ServletUtility > outFile: " + outFile);
-			
+
 			int c;
-			while((c = in.read()) != -1)
+			while ((c = in.read()) != -1)
 			{
-	        out.write(c);
+				out.write(c);
 			}
-			
-			System.out.println("ServletUtility > file size: " + c);	
+
+			System.out.println("ServletUtility > file size: " + c);
 			in.close();
 			out.close();
 		}
-		catch(Exception e) 
+		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * utility method to return the name of the browser type that 
 	 * a client is using given as input an http request
@@ -285,103 +283,7 @@ public class ServletUtility
 		}
 		 return(s);
 	 }
-
-	public void removeCookie(HttpServletRequest req, HttpServletResponse response )
-	{
-		//get the cookies - if there are any
-		Cookie[] cookies = this.getVegbankCookies(req);
-		
-		Cookie delcookie = null;
-		
-		// Remove all the cookies
-		for (int i = 0; i < cookies.length; i++) 
-		{
-			Cookie cookie = cookies[i];
-			
-			// clone the existing cookie
-			delcookie = (Cookie) cookie.clone();
-			// negative value means the cookie lives for the lifetime of the browser
-			// delcookie.setMaxAge(-1);
-			// 0 tells the browser to delete immediately
-			delcookie.setPath("/");
-			delcookie.setMaxAge(1);
-			delcookie.setValue("-1");
-			response.addCookie(delcookie);
-			
-			System.out.println("ServletUtility > Deleting the vegbank cookie!!!");
-		} 		
-	}
-	
- 	/**
-	 * method that returns the name and value of a valid cookie
-	 * assocaited with the servlet that the request is made to
-	 * @param req -- the servlet request
-	 */
-	 public String getCookieValue( HttpServletRequest req)
-	 {
-		String s = null;
-		String cookieValue = "";
-
-		//get the cookies - if there are any
-		Cookie[] cookies = this.getVegbankCookies(req);
-		
-		// This always used the last cookie found to use as the value
-		// Should work but not ideal.
-		for (int i = 0; i < cookies.length; i++) 
-		{
-	      	Cookie cookie = cookies[i];
-			cookieValue=cookie.getValue(); 
-			s = cookieValue.trim();
-		} 
-
-		return(s);
-	}
-
-
-	/**
-	 * Get all the vegbank cookies
-	 * 
-	 * @param req
-	 * @return Cookie[] -- all the vegbank cookies
-	 */
-	private Cookie[]  getVegbankCookies( HttpServletRequest req )
-	{
-		Vector vegbankCookies = new Vector();
-		// TODO: Move this into config options
-		String defaultCookieName = "framework";
-		
-		Cookie[] cookies = req.getCookies();
-		if ( cookies != null  &&  cookies.length >= 0 )
-		{
-			for (int i = 0; i < cookies.length; i++) 
-			{
-				Cookie cookie = cookies[i];
-				System.out.println("Cookie Name: " +cookie.getName());
-				String cookieName=cookie.getName();
-
-				if ( cookieName.equals(defaultCookieName) )
-				{
-					vegbankCookies.add(cookie);
-				}
-			}
-		} 
-		else 
-		{
-			System.out.println("ServletUtility > No valid cookies found");
-		}
-		
-		// Cast into Cookie Array 
-		Object[] objects = vegbankCookies.toArray();
-		Cookie[] results = new Cookie[ objects.length ];
-		for ( int i=0; i < objects.length; i++ )
-		{
-			results[i] = (Cookie) objects[i];
-		}
-		
-		return results;
-	}
-	
-
+	 
 	/**
 	 *  Method to compress an inputstream using GZIP compression
 	 *
@@ -523,40 +425,6 @@ public class ServletUtility
 		}
 		return(result);
 	}		
-
-	 
-	 /**
-	 * method that allows a class (in this case a servlet) to upload
-	 * a file to the dataexcahnge servlet and onto the data file database
-	 * 
-	 * @param fileName -- the name of the file
-	 * @param userName -- actually the email address of the user
-	 * @param fileType -- the type of file as to be specified in the 
-	 * 	user profile database
-	 */
-//	 public void uploadFileDataExcahgeServlet(String fileName, String userName, 
-//	 String fileType)
-//	 {
-//		 try
-//		 {
-//		 	String temp = null;
-//	     	String servlet = "/vegbank/servlet/dataexchange";
-//	     	String protocol = "http://";
-//	     	String host = "vegbank.nceas.ucsb.edu";
-//	     	String server = protocol + host + servlet;
-//	     	String filename = fileName;
-//			
-//	 		// String parameterString = "?action=uploadFile&user=harris02@hotmail.com&exchangeType=upload&submitter=harris&"
-//	  		//	+"password=jasmine&file=test.dat";
-//	 
-//			DataExchangeClient.uploadFile(servlet, protocol, host, server, filename, userName, fileType);
-//		 }
-//		 catch(Exception e)
-//		 {
-//			 System.out.println("Exception: " + e.getMessage() );
-//			 e.printStackTrace();
-//		 }
-//	 }
 
 	/**
 	 * @param request

@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-11-12 22:27:31 $'
- *  '$Revision: 1.19 $'
+ *  '$Date: 2003-11-13 22:38:16 $'
+ *  '$Revision: 1.20 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,6 @@ import org.vegbank.communities.datasource.VegCommunityLoader;
 import org.vegbank.databaseAccess.CommunityQueryStore;
 import org.vegbank.plots.datasource.PlotDataSource;
 import org.vegbank.plots.rmi.DataSourceClient;
-import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.common.utility.datafileexchange.DataFileExchange;
 import org.w3c.dom.Document;
 
@@ -130,20 +129,16 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
 			try 
-			{
-				// GET THE COOKIE FOR THE CURRENT USER WHICH WILL BE REFERENCED 
-				// ELSEWHERE IN THE CLASS AND WILL BE STORED WITH THE DATA THAT 
-				// IS LOADED TO VEGBANK AND THEN GET THE REST OF THE USER-RELATED 
-				// ATTRIBUTES
-				String user = su.getCookieValue(request);
+			{	
+				WebUser user = 
+					(WebUser) request.getSession().getAttribute( Constants.USER_KEY );
 				
-				UserDatabaseAccess uda = new UserDatabaseAccess();
-				WebUser userBean = uda.getUser(user);
-				String salutation = userBean.getSalutation();
-				String surName = userBean.getSurname();
-				String givenName = userBean.getGivenname();
-				String institution = userBean.getInsitution();
-				String permissionType = userBean.getPermissiontype();
+				String userName = user.getUsername();
+				String salutation = user.getSalutation();
+				String surName = user.getSurname();
+				String givenName = user.getGivenname();
+				String institution = user.getInsitution();
+				String permissionType = user.getPermissiontype();
 				int permissionLevel = 0;
 				try
 				{
@@ -163,7 +158,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				{
 					// don't let the user any further into the loading process
 					System.out.println("DataSubmitServlet > ## this user does not have the appropriate permissions");
-					this.handleInvalidPermissions(response, user);
+					this.handleInvalidPermissions(response, userName);
 				}
 				else
 				{
@@ -245,13 +240,13 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 						else if ( submitDataType.trim().equals("vegPlot")  )
 						{
 							//out.println("DataSubmitServlet > action unknown!");
-							StringBuffer sb = handleVegPlotSubmittal(enum, request, response, user, userBean);
+							StringBuffer sb = handleVegPlotSubmittal(enum, request, response, userName, user);
 							out.println( sb.toString() );
 						}
 						else if ( submitDataType.trim().toUpperCase().equals("PLANTTAXA")  )
 						{
 							AddPlant ap = new AddPlant();
-							StringBuffer sb = ap.execute(request, response,userBean);
+							StringBuffer sb = ap.execute(request, response, user);
 							out.println( sb.toString() );
 						}
 						else

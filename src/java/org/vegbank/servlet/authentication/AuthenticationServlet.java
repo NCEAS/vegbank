@@ -9,7 +9,6 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +23,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  * servlets within a domain.  This servlet will recognize varying
  * degrees of authentication for users and will place cookies representing
  * the authentication level
+ * 
+ * Logon and logoff functions are handled now by struts actions.
  *
  * <p>Valid parameters are:<br><br>
  * REQUIRED PARAMETERS
@@ -33,8 +34,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-11-12 22:27:31 $'
- *  '$Revision: 1.12 $'
+ *  '$Date: 2003-11-13 22:38:16 $'
+ *  '$Revision: 1.13 $'
  *
  *  @version
  *  @author
@@ -112,8 +113,6 @@ public class AuthenticationServlet extends HttpServlet
 		{
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
-			
-			Cookie registeredCookie = null;
 
 			//get the request - parameters using the
 			//servlet Utility class
@@ -126,48 +125,41 @@ public class AuthenticationServlet extends HttpServlet
 
 
 			//determine what the client wants to do
-			if ( requestParams.containsKey("authType") == false)
+
+			//GET A LOST PASSWORD
+			if ( requestParams.get("authType").toString().equalsIgnoreCase("GETPASSWORD")  )
 			{
-				out.println("AuthenticationServlet > PARAMETERS INCLUDE: " + this.getParameters() );
+				String s =  handlePasswordRetreival(requestParams);
+				out.println(s);
 			}
-			else
+			// CREATE A NEW USER
+			else if ( requestParams.get("authType").toString().equals("createUser")  )
 			{
-				//figure out what the client wants to do -- exactly
-				//GET A LOST PASSWORD
-				if ( requestParams.get("authType").toString().toUpperCase().equals("GETPASSWORD")  )
+				LogUtility.log("AuthenticationServlet > creating a new user");
+				
+				Vector errors = new Vector();
+				if (createNewUser(requestParams, remoteAddress, errors) == true )
 				{
-					String s =  handlePasswordRetreival(requestParams);
-					out.println(s);
-				}
-				// CREATE A NEW USER
-				else if ( requestParams.get("authType").toString().equals("createUser")  )
-				{
-					LogUtility.log("AuthenticationServlet > creating a new user");
-					
-					Vector errors = new Vector();
-					if (createNewUser(requestParams, remoteAddress, errors) == true )
-					{
-						LogUtility.log("AuthenticationServlet > created a new user");
-						Thread.sleep(100);
+					LogUtility.log("AuthenticationServlet > created a new user");
+					Thread.sleep(100);
 
-						//this response was throwing an exception b/c the user did not yet
-						//have a cookie associated with the browser, so as a fix create a
-						//small statement and allow the oportunity to login
-						//response.sendRedirect("/vegbank/servlet/usermanagement?action=options");
-						String cresponse = getUserCreationResponse(true, request, response, errors);
-						out.println( cresponse );
-					}
-					else
-					{
-						String cresponse = getUserCreationResponse(false, request, response, errors);
-						out.println( cresponse );
-					}
+					//this response was throwing an exception b/c the user did not yet
+					//have a cookie associated with the browser, so as a fix create a
+					//small statement and allow the oportunity to login
+					//response.sendRedirect("/vegbank/servlet/usermanagement?action=options");
+					String cresponse = getUserCreationResponse(true, request, response, errors);
+					out.println( cresponse );
 				}
-
 				else
 				{
-					LogUtility.log("AuthenticationServlet > incorect input paramaters to authenticate");
+					String cresponse = getUserCreationResponse(false, request, response, errors);
+					out.println( cresponse );
 				}
+			}
+
+			else
+			{
+				LogUtility.log("AuthenticationServlet > incorect input paramaters to authenticate");
 			}
 		}
 		catch( Exception e )
@@ -276,101 +268,6 @@ public class AuthenticationServlet extends HttpServlet
 		 su.filterTokenFile( genericForm, out, replaceHash);
 
 		 return( out.toString() );
-		 /*
-		 StringBuffer sb = new StringBuffer();
-		 sb.append("<html> \n");
-		 sb.append("<head> \n");
-		 sb.append(" <title>-- New User Account Created Successfully! -- </title> \n");
-		 sb.append("</head> \n");
-		 sb.append("<body> \n");
-			sb.append(" <p>  Thank you for using VegBank, your user account has successfully created! </p>");
-			sb.append(" <br> To Login Please Click <br> \n");
-		 	sb.append(" <a href=\"/vegbank/general/login.html\">here</a> \n");
-			sb.append("");
-			sb.append("");
-			sb.append("");
-			sb.append("");
-		 sb.append("</body> \n");
-		 sb.append("</html> \n");
-		 return(sb.toString() );
-		 */
-	 }
-
-
-	/**
-	 * method that contains the html and java script to redirect the user to
-	 * an error page and login
-	 */
-	 private String getErrorRedirection()
-	 {
-		 String errorPage = "/vegbank/general/login.html";
-		 LogUtility.log("AuthenticationServlet > compiling error rediection to:  " + errorPage );
-		 StringBuffer sb = new StringBuffer();
-		 sb.append("<html> \n");
-		 sb.append("<head> \n");
-		 sb.append("<title>-- Authentication Failure ! -- </title> \n");
-		 sb.append("</head> \n");
-		 sb.append("<body> \n");
-		 sb.append("<script language=\"JavaScript\"> \n");
-		 //sb.append("window.location=\"/vegbank/general/login.html\"; \n");
-		 sb.append("window.location=\""+errorPage+"\"; \n");
-		 sb.append("</script> \n");
-
-		 sb.append("Please Click \n");
-		 //sb.append("<a href=\"/vegbank/general/login.html\">here</a> \n");
-		 sb.append("<a href=\""+errorPage+"\">here</a> \n");
-		 sb.append("if your browser is not promptly redirected \n");
-		 sb.append("");
-		 sb.append("</body> \n");
-		 sb.append("</html> \n");
-		 return(sb.toString() );
-	 }
-
-
-	/**
-	 * method that returns the user name for the given user from the request
-	 * parameters
-	 */
-	 private String getUserName(Hashtable requestParams)
-	 {
-		 if (requestParams.containsKey("userName") )
-		 {
-			String user = (String)requestParams.get("userName");
-		 	return(user);
-		 }
-		 else
-		 {
-			 return("null");
-		 }
-	 }
-
-	/**
-	 * method that returns the parameters required and accepted by this servlet
-	 *
-	 */
-	 private String getParameters()
-	 {
-		 StringBuffer sb = new StringBuffer();
-		 	sb.append("<br> authType {loginUser, createUser, uploadfile} <br>");
-		 	sb.append("userName <br>");
-		 	sb.append("password <br>");
-		 return(sb.toString());
-	 }
-
-	/**
-	 * method to authenticate a known user
-	 *
-	 */
-	 private boolean authenticateUser(Hashtable requestParams, String remoteAddress)
-	 {
-		 	//grab thee user name and password
-			String userName=requestParams.get("userName").toString();
-			String passWord=requestParams.get("password").toString();
-			LogUtility.log("AuthenticationServlet > authenticating: "+userName);
-
-			//access the class in the dbAccess class to validate the
-			//login and password with that stored in the database
-			return( uda.authenticateUser(userName, passWord) );
 	 }
 
 

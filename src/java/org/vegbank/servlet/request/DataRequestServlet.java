@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-11-12 22:27:31 $'
- *  '$Revision: 1.20 $'
+ *  '$Date: 2003-11-13 22:38:16 $'
+ *  '$Revision: 1.21 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.vegbank.common.Constants;
+import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.LogUtility;
@@ -79,8 +81,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-11-12 22:27:31 $'
- *  '$Revision: 1.20 $'
+ *  '$Date: 2003-11-13 22:38:16 $'
+ *  '$Revision: 1.21 $'
  * 
  */
 
@@ -151,10 +153,6 @@ public class DataRequestServlet extends HttpServlet
 			DBConnectionPool.release();
 	}
 
-
-	
-	
-
 	/** Handle "POST" method requests from HTTP clients */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
  	 throws IOException, ServletException 	
@@ -172,11 +170,11 @@ public class DataRequestServlet extends HttpServlet
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
 			try 
-			{
-				//handle the cookies -- the cookies should start with the user name
-				//which will be used to register the query and results documents 
-				//with the dataexcahnge servlet
-				String userName =  this.su.getCookieValue(request);
+			{	
+				WebUser user = 
+					(WebUser) request.getSession().getAttribute( Constants.USER_KEY );
+				String userName = user.getUsername();
+				
 				LogUtility.log("DataRequstServlet > current user: " +  userName   );
 				
 				//enumeration is needed for those
