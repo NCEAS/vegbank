@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-08-09 14:48:20 $'
- * '$Revision: 1.21 $'
+ *     '$Date: 2002-08-12 14:46:48 $'
+ * '$Revision: 1.22 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -125,6 +125,7 @@ import databaseAccess.*;
 		public Vector getPlantTaxonSummary(String taxonName, String taxonNameType )
 		{
 			Vector returnVector = new Vector();
+			StringBuffer sqlBuf = new StringBuffer();
 			try 
 			{
 				
@@ -133,13 +134,12 @@ import databaseAccess.*;
 				ResultSet results = null;
 				
 				//create and issue the query --
-				StringBuffer sqlBuf = new StringBuffer();
 				///if (taxonNameType.trim().equals("scientificName") )
 				///{
 					sqlBuf.append("SELECT plantname_id, plantconcept_id, plantName, ");
 					sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
 					sqlBuf.append(" plantlevel, parentName, acceptedsynonym, plantConceptRefAuthor, plantConceptRefDate, plantUsagePartyOrgName");
-					sqlBuf.append(" startDate, stopDate, plantNameAlias ");
+					sqlBuf.append(" ,startDate, stopDate, plantNameAlias ");
 					sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"+taxonName.toUpperCase()+"'");
 				///}
 				///else if ( taxonNameType.trim().equals("commonName")  ) 
@@ -210,8 +210,8 @@ import databaseAccess.*;
 			}
 			catch (Exception e) 
 			{
-				System.out.println("failed " 
-				+e.getMessage());
+				System.out.println("failed " + e.getMessage());
+				System.out.println("sql: " + sqlBuf.toString() );
 				e.printStackTrace();
 			}
 			System.out.println("TaxonomyQueryStore > returning results: " + returnVector.size()  );
@@ -343,7 +343,12 @@ import databaseAccess.*;
 		}
 		
 		/**
-		 * method to lookup a commonname 
+		 * method to lookup a commonname based on a concept id.
+		 * The concept for a given plant offen correponds to multiple 
+		 * names in the database.  So this method will look up those 
+		 * names that correspond to the concept that are common names 
+		 * or short names.
+		 * @param conceptId -- the unique plant concept
 		 */
 		 private String getCommonName(int conceptId )
 		 {
@@ -355,7 +360,7 @@ import databaseAccess.*;
 				 Statement query = conn.createStatement();
 				 ResultSet results = null;
 				 sb.append("select plantname from plantusage where plantconcept_id = "+conceptId+" and ");
-				 sb.append(" classsystem like 'COMMONNAME'");
+				 sb.append(" ( upper(classsystem) like 'COMMONNAME' or upper(classsystem) like 'SHORTNAME' ) ");
 				 results = query.executeQuery( sb.toString() );
 				 while (results.next()) 
 				 {
@@ -377,7 +382,12 @@ import databaseAccess.*;
 		
 		
 		/**
-		 * method to lookup a scientificName
+		 * method to lookup a scientific name based on a concept id.
+		 * The concept for a given plant offen correponds to multiple 
+		 * names in the database.  So this method will look up those 
+		 * names that correspond to the concept that are scientific names 
+		 * or long names.
+		 * @param conceptId -- the unique plant concept
 		 */
 		 private String getScientificName(int conceptId )
 		 {
@@ -389,7 +399,7 @@ import databaseAccess.*;
 				 Statement query = conn.createStatement();
 				 ResultSet results = null;
 				 sb.append("select plantname from plantusage where plantconcept_id = "+conceptId+" and ");
-				 sb.append(" classsystem like 'SCI%'");
+				 sb.append(" ( upper(classsystem)  like 'SCI%' or upper(classsystem) like 'LONG%') ");
 				 results = query.executeQuery( sb.toString() );
 				 while (results.next()) 
 				 {
@@ -508,9 +518,37 @@ import databaseAccess.*;
 					{
 						 plantNameAlias="";
 					}
+					if ( plantDescription  == null || plantDescription.trim().startsWith("null") )
+					{
+						plantDescription = "";
+					}
+					if ( plantNameAlias == null || plantNameAlias.trim().startsWith("null") )
+					{
+						plantNameAlias  = "";
+					}
+					if ( code == null || code.trim().startsWith("null") )
+					{
+						code = "";
+					}
 					if ( commonName == null || commonName.trim().startsWith("null") )
 					{
 						commonName = "";
+					}
+					if ( plantConceptRefAuthor == null || plantConceptRefAuthor.trim().startsWith("null")  )
+					{
+						plantConceptRefAuthor = "";
+					}
+					if ( plantConceptRefDate == null || plantConceptRefDate.trim().startsWith("null")  )
+					{
+						 plantConceptRefDate = "";
+					}
+					if ( plantUsagePartyOrgName == null || plantUsagePartyOrgName.trim().startsWith("null") )
+					{
+						plantUsagePartyOrgName = "";
+					}
+					if ( scientificName == null || scientificName.trim().startsWith("null") )
+					{
+						scientificName = "";
 					}
 					
 					returnHash.put("plantNameId", ""+plantNameId);
@@ -526,7 +564,6 @@ import databaseAccess.*;
 					returnHash.put("plantDescription", plantDescription);
 					returnHash.put("plantNameAlias", plantNameAlias);
 					returnHash.put("code", code);
-					System.out.println("putting common name > " + commonName);
 					returnHash.put("commonName", commonName);
 					returnHash.put("plantConceptRefAuthor",	plantConceptRefAuthor);
 					returnHash.put("plantConceptRefDate", plantConceptRefDate);
