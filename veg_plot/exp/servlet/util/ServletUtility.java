@@ -312,7 +312,7 @@ public void getViewOption (String summaryViewType)
 	//+"<html> \n"
 	//+"<body> \n"
 	//+"<head> \n"
-	+"<form action=\"http://"+rb.getString("server")+""+rb.getString("servlet-path")+"viewData\" method=\"GET\"> \n"
+	+"<form action=\"http://vegbank.nceas.ucsb.edu/framework/servlet/viewData\" method=\"GET\"> \n"
 	+"<input type=\"hidden\" name=\"resultType\" value=\"summary\" > \n"
 	+"<input type=\"hidden\" name=\"summaryViewType\" value=\""+summaryViewType+"\"> \n"
 	+"<input type=\"submit\" name=\"submitButton\" value=\"view data\" > \n"
@@ -419,6 +419,26 @@ public void fileVectorizer (String fileName)
 }
 public Vector outVector;
 public int vecElementCnt;
+
+	/**
+	 * method that allows a class (in this case a servlet) to upload
+	 * a file to the dataexcahnge servlet and onto the data file database
+	 */
+	 public void uploadFileDataExcahgeServlet(String fileName, String userName)
+	 {
+		 String temp = null;
+     String servlet = "/framework/servlet/dataexchange";
+     String protocol = "http://";
+     String host = "vegbank.nceas.ucsb.edu";
+     String server = protocol + host + servlet;
+     String filename = fileName;
+	 		// String parameterString = "?action=uploadFile&user=harris02@hotmail.com&exchangeType=upload&submitter=harris&"
+	  	//	+"password=jasmine&file=test.dat";
+	 
+			DataExchangeClient dec = new DataExchangeClient();
+			dec.uploadFile(servlet, protocol, host, server, filename, userName);
+	 }
+	
 
 } //end class	
 
