@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-22 00:31:19 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-03-24 18:36:30 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,6 +69,12 @@ public class LoadPlantList
 				long startAllTime = System.currentTimeMillis();
 				while( i.hasNext() )
 				{
+					if (count%1000 == 0)
+					{
+						// Get a new connection if 1000, 2000, etc
+						 conn.close();
+						 conn = pl.getConnection();
+					}
 					long startTime = System.currentTimeMillis();
 					System.out.println( "-------------------------------------------------------------" );
 					System.out.println( "Starting plant insertion ....... " + count );
@@ -102,6 +108,7 @@ public class LoadPlantList
 	 */
 	private Connection getConnection()
 	{
+		System.out.println("Getting a new connection");
 		Utility u = new Utility();
 		Connection c = u.getConnection("plants_dev");
 		return c;
