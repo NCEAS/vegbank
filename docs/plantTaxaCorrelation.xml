@@ -2,38 +2,82 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
-<contributor> </contributor>
-<description> </description>
-<date> </date>
+
+<title>plantTaxa Plant Taxa Correlation (Table)</title>
+<author>J. Harris</author>
+<institution>NCEAS</institution>
+<contributor>null</contributor>
+<description>null</description>
+<date>Mon Oct  2 13:53:21 PDT 2000</date>
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
+	<entityName>plantTaxa.CORRELATION</entityName>
+	<entitySummary>This relates how different parties use circumscriptions or how a single party may use a circumscription differently over time.</entitySummary>
 	<entityDescription> </entityDescription>
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
-		<attKey> </attKey>
-		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attName>CORRELATION_ID</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>P</attKey>
+		<attNotes></attNotes>
+		<attDefinition>Database assigned value corresponding to a unique relationship between two uses of a circumscription</attDefinition>
 	</attribute>
 
 
 
 	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attName>PARTY_CIRCUM1</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>F</attKey>
+                <attReferences>STATUS</attReferences>
+                <attNotes></attNotes>
+                <attDefinition>This key is related to the key PARTY_CIRCUM2, both of which are pointing to usages of circumscriptions in the STATUS table.</attDefinition>
         </attribute>
 
+
+
+<attribute>
+                <attName>PARTY_CIRCUM2</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>F</attKey>
+		<attReferences>STATUS</attReferences>
+                <attNotes></attNotes>
+                <attDefinition>This key is related to the key PARTY_CIRCUM2, both of which are pointing to usages of circumscriptions in the STATUS table.</attDefinition>
+        </attribute>
+
+
+
+        <attribute>
+                <attName>CONGRUENCE</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes></attNotes>
+                <attDefinition>This attribute is used to describe the relationship between two party-circumscriptions.</attDefinition>
+        </attribute>
+<attribute>
+                <attName>CORR_START</attName>
+                <attNulls>Yes</attNulls>
+                <attType>DATE</attType>
+                <attKey>n/a</attKey>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This attribute is the date on which two party-circumscriptions began to relate to one another.</attDefinition>
+        </attribute>
+
+
+
+        <attribute>
+                <attName>CORR_STOP</attName>
+                <attNulls>Yes</attNulls>
+                <attType>DATE</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes> </attNotes>
+                <attDefinition>This attribute is the date on which two party-circumscriptions stopped relating to aone another.</attDefinition>
+        </attribute>
 
 	<children> </children>
 </entity>

@@ -1,37 +1,78 @@
 <?xml version="1.0"?>
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
-<dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
-<contributor> </contributor>
-<description> </description>
-<date> </date>
+<dataModel>     
+<title>plantTaxa Name (Table)</title>
+<author>J. Harris</author>
+<institution>NCEAS</institution>
+<contributor>null</contributor>
+<description>null</description>
+<date>Mon Oct  2 13:53:21 PDT 2000</date>
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
+	<entityName>plantTaxa.REFERENCE </entityName>
+	<entitySummary>Stores reference information about plant names and circumscriptions.</entitySummary>
 	<entityDescription> </entityDescription>
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
-		<attKey> </attKey>
-		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attName>REF_ID </attName>
+		<attNulls>No </attNulls>	
+		<attType>NUMBER </attType>
+		<attKey>P </attKey>
+		<attNotes>Internal database value </attNotes>
+		<attDefinition>Database assigned value corresponding to a unique reference</attDefinition>
 	</attribute>
 
 
 
 	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
+                <attName>AUTHOR</attName>
+                <attNulls>TEXT</attNulls>
+                <attType>No</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>In upcomming versions, this attribute will be broken down into salutation, givenname and surname</attNotes>
+                <attDefinition>This is the name of the author of a specific reference which may include an author of a
+		reference describing the original use of a taxon name or the author of a reference describing a circumscription. </attDefinition>
+        </attribute>
+
+<attribute>
+                <attName>DATE_ENTERED</attName>
+                <attNulls>No</attNulls>
+                <attType>DATE</attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
                 <attNotes> </attNotes>
+                <attDefinition>This is the date that a reference was added to the database. </attDefinition>
+        </attribute>
+<attribute>
+                <attName>CITATION</attName>
+                <attNulls>Yes</attNulls>
+                <attType>TEXT</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>In later versions, this attribute will be broken into multiple attributes such as title, publication date, edition, etc.</attNotes>
+                <attDefinition>This is information corresponding to a specific citation which may be either a circumscription or an entry 
+		for the first time description for a given plant taxon.</attDefinition>
+        </attribute>
+<attribute>
+                <attName>PAGE/SPECIESNAME</attName>
+                <attNulls>No</attNulls>
+                <attType>TEXT</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>This attribute stores either the page number of the reference or the taxon name the reference is describing.</attNotes>
                 <attDefinition> </attDefinition>
+        </attribute>
+<attribute>
+                <attName>CIRCUMTYPE</attName>
+                <attNulls>TEXT</attNulls>
+                <attType>n/a</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>This value will become obsolete in future versions of the data model because it can be infered from other entities.  It was included for database quality checking.</attNotes>
+                <attDefinition>This atrribute can include values: circumscription or origName only.  References of type circumscription mean the 
+		the reference defines a circumsrcription wheras those references defined as origname refer to a reference used to describe the original
+		ues or a taxon name.</attDefinition>
         </attribute>
 
 

@@ -1,37 +1,37 @@
 <?xml version="1.0"?>
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
-<dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
-<contributor> </contributor>
-<description> </description>
-<date> </date>
+<dataModel>     
+<title>plantTaxa Name (Table)</title>
+<author>J. Harris</author>
+<institution>NCEAS</institution>
+<contributor>null</contributor>
+<description>null</description>
+<date>Mon Oct  2 13:53:21 PDT 2000</date>
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
+	<entityName>plantTaxa.PARTY </entityName>
+	<entitySummary>Stores information about individuals and organizations who use plant taxon names. </entitySummary>
 	<entityDescription> </entityDescription>
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
+		<attName>PARTY_ID</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
 		<attKey> </attKey>
-		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attNotes></attNotes>
+		<attDefinition>Database assigned value corresponding to a unique party - which may be an individual or organization</attDefinition>
 	</attribute>
 
 
 
 	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attName>ORG_NAME</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>This attribute will be, in later versions, broken into multiple attributes including: address, telehone, email.</attNotes>
+                <attDefinition>Stores the name of the organization or individual representing a "party". </attDefinition>
         </attribute>
 
 
