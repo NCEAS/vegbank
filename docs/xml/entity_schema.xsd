@@ -160,7 +160,7 @@
         <xs:element ref="attModel"/>
         <xs:element ref="attNulls"/>
         <xs:element ref="attType"/>
-        <xs:element ref="javaType"/>
+        <xs:element ref="javaType" minOccurs="0"/>
         <xs:element ref="attKey"/>
         <xs:element ref="attRelType"/>
         <xs:element ref="attReferences"/>
