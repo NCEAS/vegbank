@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2003-11-27 00:39:09 $'
-* '$Revision: 1.79 $'
+* '$Date: 2003-11-28 22:59:03 $'
+* '$Revision: 1.80 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -86,11 +86,12 @@
     <property name="manual_server" value="${apache.document.root}/help/manual/"/>
     <property name="server_root" value="${tomcat.home.dir}/webapps/ROOT/"/>
     <property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/${webapp}/WEB-INF/lib"/>
+    <property name="vegbranch_server" value="${apache.document.root}/vegbranch/"/>
     <!-- WEB SERVER LOCATIONS -->
     <filter token="base_url" value=""/>
     <filter token="web_context" value="/${web.context_uri}/"/>
     <filter token="image_server" value="/${web.context_uri}/images/"/>
-<!-- the following is a duplicate : -->
+    <!-- the following is a duplicate : -->
     <filter token="images_link" value="/${web.context_uri}/images/"/>
     <filter token="stylesheet" value="/${web.context_uri}/includes/default.css"/>
     <filter token="plotquery_page" value="/${web.context_uri}/forms/plot-query.jsp"/>
@@ -104,7 +105,7 @@
     <filter token="includes_link" value="/${web.context_uri}/includes/"/>
     <filter token="pubs_link" value="/${web.context_uri}/pubs/"/>
     <filter token="history_link" value="/${web.context_uri}/history/"/>
-    <filter token="news_link" value="/${web.context_uri}/news/"/>    
+    <filter token="news_link" value="/${web.context_uri}/news/"/>
     <!-- add link for page name that links to help frame jsp -->
     <filter token="jspHelpPage" value="/${web.context_uri}/forms/getHelp.jsp"/>
     <!-- location and filename of xml index page -->
@@ -131,6 +132,7 @@
     <mkdir dir="${apache.document.root}/plot/"/>
     <mkdir dir="${help_server}"/>
     <mkdir dir="${manual_server}"/>
+    <mkdir dir="${vegbranch_server}"/>
     <mkdir dir="${manual_src_temp}"/>
   </target>
   <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
