@@ -3,6 +3,7 @@ DROP INDEX plantusage_id_idx;
 DROP INDEX sumconcept_id_idx;
 DROP INDEX plantcon_id_idx;
 DROP INDEX plantuse_id_idx;
+DROP INDEX summary_idx;
 
 DROP INDEX plantdesc_idx;
 DROP INDEX plantlevel_idx;
@@ -58,7 +59,7 @@ update  veg_taxa_summary
  set plantlevel = (select plantlevel from plantconcept where veg_taxa_summary.plantconcept_id = plantconcept.plantconcept_id );
 --UPDATE THE PARENT NAME
 update  veg_taxa_summary 
- set parentName = (select plantparentname from plantstatus where veg_taxa_summary.plantconcept_id = plantstatus.plantconcept_id );
+ set parentName = (select distinct(plantparentname) from plantstatus where veg_taxa_summary.plantconcept_id = plantstatus.plantconcept_id );
 --UPDATE THE CONCEPT AUTHOR AND THE DATE
 update  veg_taxa_summary 
  set plantConceptRefAuthor = (select authors from plantreference where plantreference_id = 
@@ -69,5 +70,14 @@ update  veg_taxa_summary
 --UPDATE THE PARTY OR NAME FOR THE USAGE
 update  veg_taxa_summary 
  set plantUsagePartyOrgName = (select organizationname from plantparty where veg_taxa_summary.plantparty_id = plantparty.plantparty_id );
+
+
+
+--SET THE STOPDATES FOR THE 1986 DATA AT 2002 AND SET THE STOP DATES FOR THE 2002 DATA TILL 2005, WHEN THE NEXT PLANTS LIST WILL BE LOADED
+update veg_taxa_summary  set stopdate  = '2002-06-30' where startdate = '1996-06-30';
+update veg_taxa_summary  set stopdate  = '2005-06-30' where startdate = '2002-08-20';
+
+--CREATE THE INDEX FOR QUERY PERFORMANCE
+create index summary_idx on veg_taxa_summary (plantname, PLANTUSAGEPARTYORGNAME,  STARTDATE, STOPDATE, PLANTLEVEL, CLASSSYSTEM);
 
 
