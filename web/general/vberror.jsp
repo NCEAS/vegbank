@@ -10,9 +10,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: mlee $'
-  *      '$Date: 2004-04-08 05:44:27 $'
-  *  '$Revision: 1.4 $'
+  *    '$Author: anderson $'
+  *      '$Date: 2004-04-30 13:09:35 $'
+  *  '$Revision: 1.5 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -58,7 +58,13 @@ This problem has been reported to the developers.<br/></span>
 
 	<p>
 	<font color="red">ERROR MESSAGES:<br/>
-	<html:errors/>
+<logic:messagesPresent>
+	<ul>
+	<html:messages id="err">
+		<li><bean:write name="err"/></li>
+	</html:messages>
+	</ul>
+</logic:messagesPresent>
 
 </blockquote>
 
