@@ -22,7 +22,7 @@ import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.datafileexchange.DataFileDB;
 import org.vegbank.plots.datasource.VegbankXMLUpload;
 import org.vegbank.plots.datasource.VegbankXMLUpload.LoadingErrors;
-import org.vegbank.plots.rmi.DataSourceClient;
+//import org.vegbank.plots.rmi.DataSourceClient;
 
 /*
  * '$RCSfile: UploadPlotAction.java,v $'
@@ -30,8 +30,8 @@ import org.vegbank.plots.rmi.DataSourceClient;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-10 23:37:14 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-14 18:39:00 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -201,50 +201,50 @@ public class UploadPlotAction extends Action
 	{
 		Vector plots = new Vector();
 
-		if (useRMI)
-		{
+//		if (useRMI)
+//		{
 			// Need to use the RMIServer to read a mdb file 
-			DataSourceClient rmiClient =
-				new DataSourceClient(rmiServer, "" + rmiServerPort);
+//			DataSourceClient rmiClient =
+//				new DataSourceClient(rmiServer, "" + rmiServerPort);
 
 			// Is the RMI Server free 
-			String location = rmiClient.getFileUploadLocation();
+//			String location = rmiClient.getFileUploadLocation();
 
-			if (location == null)
-			{
-				throw new RMIServerBusyException();
-			}
-			else
-			{
-				boolean sendResults =
-					rmiClient.putMDBFile(
-						fileName,
-						format,
-						location);
+//			if (location == null)
+//			{
+//				throw new RMIServerBusyException();
+//			}
+//			else
+//			{
+//				boolean sendResults =
+//					rmiClient.putMDBFile(
+//						fileName,
+//						format,
+//						location);
 
-				System.out.println(
-					"PlotUploadAction > RMI file send results: "
-						+ sendResults);
+//				System.out.println(
+//					"PlotUploadAction > RMI file send results: "
+//						+ sendResults);
 
 				//validate that the plot archive is real
-				boolean fileValidityResults =
-					rmiClient.isMDBFileValid(location);
-				System.out.println(
-					"PlotUploadAction > file validity at RMI server: "
-						+ fileValidityResults);
+//				boolean fileValidityResults =
+//					rmiClient.isMDBFileValid(location);
+//				System.out.println(
+//					"PlotUploadAction > file validity at RMI server: "
+//						+ fileValidityResults);
 
 				// get the name of the plots
-				System.out.println(
-					"PlotUploadAction > instantiating an rmi client on: "
-						+ rmiServer);
-				rmiClient = new DataSourceClient(rmiServer, "" + rmiServerPort);
-				plots = rmiClient.getPlotNames(format);
+//				System.out.println(
+//					"PlotUploadAction > instantiating an rmi client on: "
+//						+ rmiServer);
+//				rmiClient = new DataSourceClient(rmiServer, "" + rmiServerPort);
+//				plots = rmiClient.getPlotNames(format);
 
-				request.getSession().setAttribute(
-					"rmiFileUploadLocation",
-					location);
-			}
-		}
+//				request.getSession().setAttribute(
+//					"rmiFileUploadLocation",
+//					location);
+//			}
+//		}
 		//		  else 
 		//		  {
 		//			  // TODO: Remove hard coding                    
