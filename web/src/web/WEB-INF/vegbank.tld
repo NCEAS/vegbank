@@ -32,6 +32,16 @@
 	<required>false</required>
 	<rtexprvalue>true</rtexprvalue>
 </attribute>
+<attribute>
+	<name>pageNumber</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>perPage</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
 </tag>
 </taglib>
 
