@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+    "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+<web-app>
+
+<!-- Have been putting the new servlets at the top -->
+
+<servlet>
+      <servlet-name>DataSubmitServlet</servlet-name>
+       <description>
+			 as it zounds
+       </description>
+      <servlet-class>DataSubmitServlet</servlet-class>
+      <load-on-startup>5</load-on-startup>
+ </servlet>
+
+
+<servlet>
+      <servlet-name>viewdata</servlet-name>
+       <description>
+	servlet to allow for the viewing of an xml doc
+       </description>
+      <servlet-class>viewData</servlet-class>
+      <load-on-startup>5</load-on-startup>
+ </servlet>
+
+
+<servlet>
+      <servlet-name>stylesheetgenerator</servlet-name>
+       <description>
+        servlet to create a custom stylesheet
+       </description>
+      <servlet-class>servlet.stylesheet.StyleSheetGenerator</servlet-class>
+      <load-on-startup>5</load-on-startup>
+ </servlet>
+
+
+
+<servlet>
+      <servlet-name>result-download</servlet-name>
+       <description>
+	a servlet to handle the downloading of a resultset that was just returned from vegbank
+       </description>
+      <servlet-class>fileDownload</servlet-class>
+      <load-on-startup>5</load-on-startup>
+ </servlet>
+
+
+ <servlet>
+      <servlet-name>framework</servlet-name>
+       <description>
+         The general servlet framework containing a varaiety of utilities
+       </description>
+      <servlet-class>servlet.framework.FrameworkServlet</servlet-class>
+      <load-on-startup>5</load-on-startup>
+    </servlet>
+
+<servlet>
+      <servlet-name>authenticate</servlet-name>
+       <description>
+         A standalone servlet used for authenticating a user
+       </description>
+      <servlet-class>servlet.authentication.AuthenticationServlet</servlet-class>
+      <load-on-startup>5</load-on-startup>
+</servlet>
+
+
+<servlet>
+      <servlet-name>dataexchange</servlet-name>
+       <description>
+         A standalone servlet used for authenticating a user
+       </description>
+      <servlet-class>servlet.datafile_exchange.DataExchangeServlet</servlet-class>
+      <load-on-startup>5</load-on-startup>
+</servlet>
+
+<servlet>
+      <servlet-name>usermanagement</servlet-name>
+       <description>
+         A standalone servlet used for authenticating a user
+       </description>
+      <servlet-class>servlet.usermanagement.UserManagementServlet</servlet-class>
+      <load-on-startup>5</load-on-startup>
+</servlet>
+
+<servlet>
+      <servlet-name>DataRequestServlet</servlet-name>
+       <description>
+         A
+       </description>
+      <servlet-class>DataRequestServlet</servlet-class>
+      <load-on-startup>5</load-on-startup>
+</servlet>
+
+
+
+    <servlet>
+        <servlet-name>
+            servlet1
+        </servlet-name>
+        <servlet-class>
+            requestMap.Servlet1
+        </servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>
+            servlet2
+        </servlet-name>
+        <servlet-class>
+            requestMap.Servlet2
+        </servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>
+            servlet3
+        </servlet-name>
+        <servlet-class>
+            requestMap.Servlet3
+        </servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>
+            servlet4
+        </servlet-name>
+        <servlet-class>
+            requestMap.Servlet4
+        </servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>
+            servletParam1
+        </servlet-name>
+        <servlet-class>
+            ServletParam
+        </servlet-class>
+        <init-param>
+            <param-name>param1</param-name>
+            <param-value>value1</param-value>
+        </init-param>
+        <init-param>
+            <param-name>param2</param-name>
+            <param-value>value2</param-value>
+        </init-param>
+    </servlet>          
+
+    <servlet>
+        <servlet-name>
+            servletParam2
+        </servlet-name>
+        <servlet-class>
+            ServletParam
+        </servlet-class>
+        <init-param>
+            <param-name>param3</param-name>
+            <param-value>value3</param-value>
+        </init-param>
+        <init-param>
+            <param-name>param4</param-name>
+            <param-value>value4</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <servlet-name>
+            PermanentlyUnavailable2
+        </servlet-name>
+        <servlet-class>
+            PermanentlyUnavailable
+        </servlet-class>
+<!--
+        <load-on-startup></load-on-startup>
+-->
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>
+            servlet1
+        </servlet-name>
+        <url-pattern>
+            /foo/bar/*
+        </url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>
+            servlet2
+        </servlet-name>
+        <url-pattern>
+            /baz/*
+        </url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>
+            servlet3
+        </servlet-name>
+        <url-pattern>
+            /catalog
+        </url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>
+            servlet4
+        </servlet-name>
+        <url-pattern>
+            *.bop
+        </url-pattern>
+    </servlet-mapping>
+    
+    <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>a</web-resource-name>
+         <url-pattern>/foo1/*</url-pattern>
+         <url-pattern>/bar1/*</url-pattern>
+         <http-method>GET</http-method>
+         <http-method>POST</http-method>
+      </web-resource-collection>
+
+      <web-resource-collection>
+         <web-resource-name>a</web-resource-name>
+         <url-pattern>/foo2/*</url-pattern>
+         <url-pattern>/bar2/*</url-pattern>
+      </web-resource-collection>
+
+      <auth-constraint>
+         <role-name>manager</role-name>
+         <role-name>role1</role-name>
+      </auth-constraint>
+
+      <user-data-constraint>
+         <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+      </user-data-constraint>
+    </security-constraint>
+</web-app>
