@@ -110,6 +110,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -1362,6 +1363,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
       <attRelType name="n/a" type="n/a"/>
       <attReferences>n/a</attReferences>
@@ -3678,6 +3680,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
       <attRelType name="n/a" type="n/a"/>
       <attReferences>n/a</attReferences>
@@ -9498,6 +9501,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
       <attRelType name="n/a" type="n/a"/>
       <attReferences>n/a</attReferences>
@@ -14830,6 +14834,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -14871,6 +14876,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
       <attRelType name="n/a" type="n/a"/>
       <attReferences>n/a</attReferences>
@@ -15183,7 +15189,7 @@ conditions may change between resampling events.
       <update>1.0.0</update>
     </attribute>
     <attribute>
-      <attName>plantName</attName>
+      <attName>authorPlantName</attName>
       <attLabel>Plant Name</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
