@@ -1,4 +1,4 @@
-<?xml-stylesheet type="text/xsl" href="C:\vegbank\sandbox\vegbank\web\general\faq.xsl"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <faq>
   <category name="general" label="General Questions">
     <question>
@@ -143,7 +143,9 @@ US Geological Survey (USGS)</b>.  We gratefully acknowledge the continuing finan
       <qname>intellectualproperty</qname>
       <qtxt>How can I protect my plots in VegBank?</qtxt>
       <atxt>There are several different ways that one can protect plot data in VegBank.  The first option is to scramble the latitude and longitude so that the exact location of the plot is not known.  This allows full access to the other data about the plot.  This is generally sufficient for protecting endangered species.  You can set the confidentiality status to a distance (i.e. 1km, 10km, 100km) in VegBranch for each plot, or in the Metadata form for all plots.  The field in question is <a href="@dbdictionary_link@dd~table~plot~field~confidentialitystatus~type~fieldview.html">plot.confidentialityStatus</a> (Plot Data Loading table, confidentialityStatus in VegBranch).
-      <br/> <br/>  You can also specify confidentiality and allow certain users to access your plots who have requested permission from you.  To do so, you should select a confidentiality status of "Location embargo" (no place fields are viewable) or "Public embargo" (nothing about the plot is viewable).  Then users may request permission from you to view what isn't normally viewable.  As of July 22, 2004, the latter feature IS NOT implemented on VegBank, meaning that plots cannot be embargoed from users, except with location "fuzzing."  If you need to protect plots in this way, please wait until we implement this feature later in the summer of 2004. <br/><br/>
+      <br/>
+        <br/>  You can also specify confidentiality and allow certain users to access your plots who have requested permission from you.  To do so, you should select a confidentiality status of "Location embargo" (no place fields are viewable) or "Public embargo" (nothing about the plot is viewable).  Then users may request permission from you to view what isn't normally viewable.  As of July 22, 2004, the latter feature IS NOT implemented on VegBank, meaning that plots cannot be embargoed from users, except with location "fuzzing."  If you need to protect plots in this way, please wait until we implement this feature later in the summer of 2004. <br/>
+        <br/>
 Note that if you make plots confidential, you must also provide a reason for the confidentiality in the plot.confidentialityReason field.  This is not a publicly viewable field (as of the implementation of the embargo system).</atxt>
     </question>
     <question>
