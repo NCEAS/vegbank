@@ -7,8 +7,7 @@
   	Targets: {init} allfields logical implementation clean-local-html clean-dest-html  dist-closedlist-tokenfile  dist-dataxml **buildnewbuild **distdatadic **dd-index **dd-guide
   	  ** indicates targets that are referenced automatically by selected one of the first three targets
   </echo>
-
-   <!-- freely editable variables -->
+    <!-- freely editable variables -->
     <property name="origData" value="db_model_vegbank.xml"/>
     <property name="htmlPrefix" value="dd"/>
     <property name="newbuildname" value="buildto_dd_html.xml"/>
@@ -25,7 +24,7 @@
     <property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
     <property name="dictionary_server" value="${tomcat.home.dir}/webapps/vegbank/dbdictionary/"/>
     <property name="style_server" value="${tomcat.home.dir}/webapps/vegbank/includes/"/>
-    <property name="static_xmlserver" value="/var/www/html/xml" />
+    <property name="static_xmlserver" value="/var/www/html/xml"/>
     <!-- filters -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
     <filter token="stylesheet" value="/vegbank/includes/default.css"/>
@@ -114,5 +113,12 @@
         <include name="*.xsl"/>
       </fileset>
     </copy>
+    <copy todir="${static_xmlserver}" flatten="true" filtering="yes">
+      <fileset dir="./dataxml">
+      <include name="*.html"/>
+      </fileset>
+    </copy>
+
+
   </target>
 </project>
