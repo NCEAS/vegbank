@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-07-16 20:54:17 $'
- * 	'$Revision: 1.25 $'
+ *  '$Date: 2002-07-16 23:18:54 $'
+ * 	'$Revision: 1.26 $'
  */
 package databaseAccess;
 
@@ -224,13 +224,12 @@ public class DBinsertPlotSource
 				//System.out.println("DBinsertPlotSource > plots: " + v.toString() );
 				for (int i=0; i < v.size(); i++)
 				{
-
-					String emailAddress = "";
+					String emailAddress = "harris02@hotmail.com";
 					String plot = (String)v.elementAt(i);
 					plot = plot.trim();
 					System.out.println("DBinsertPlotSource > loading plot: " + plot +" \n");
 					db = new DBinsertPlotSource(plugin, plot);
-					db.insertPlot(plot, emailAddress);
+					db.insertPlot(plot, 2, emailAddress);
 					db = null;
 				}
 			}
@@ -654,10 +653,11 @@ public class DBinsertPlotSource
 	 * from the insert taxonObservation method
 	 *
 	 * @param plantName -- the plantName as it is used in the data source
+	 * @param plantCode -- a code that is associated with the name used by the author
 	 * @param taxonObservationId -- the taxonobservation for this plant
 	 *
 	 */
-	private boolean insertStrataComposition(String plantName, int taxonObservationId)
+	private boolean insertStrataComposition(String plantName, String plantCode,  int taxonObservationId)
 	{
 		try 
 		{
@@ -684,12 +684,11 @@ public class DBinsertPlotSource
 					debug.append("<cover>"+cover+"</cover> \n");
 					debug.append("</stratumComposition> \n");
 
-			
 					//insert the strata composition values
 					sb.append("INSERT into STRATUMCOMPOSITION (stratumComposition_id, "
 					+" cheatPlantName, cheatStratumName, taxonStratumCover, stratum_id, " 
-					+" taxonobservation_id) ");
-					sb.append("values(?,?,?,?,?,?)");
+					+" taxonobservation_id, CHEATPLANTCODE) ");
+					sb.append("values(?,?,?,?,?,?,?)");
 				
 					PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
 				
@@ -700,6 +699,7 @@ public class DBinsertPlotSource
 					pstmt.setString(4, cover);
 					pstmt.setInt(5, stratumId);
 					pstmt.setInt(6, taxonObservationId);
+					pstmt.setString(7, plantCode );
   				pstmt.execute();
 				}
 			}
@@ -962,18 +962,19 @@ public class DBinsertPlotSource
 				
 				//insert the values
 				sb.append("INSERT into TAXONOBSERVATION (taxonobservation_id, observation_id, "
-					+" cheatplantName, plantname_id ) "
-					+" values(?,?,?,?) ");
+					+" cheatplantName, plantname_id, CHEATPLANTCODE ) "
+					+" values(?,?,?,?,?) ");
 				
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
   	  	pstmt.setInt(1, taxonObservationId);
   	  	pstmt.setInt(2, plotObservationId);
 				pstmt.setString(3, authorNameId);
 				pstmt.setString(4, nameId);
+					pstmt.setString(5, code);
   		  pstmt.execute();
 			 	
 				// insert the strata composition
-				boolean result = this.insertStrataComposition(authorNameId, taxonObservationId);
+				boolean result = this.insertStrataComposition(authorNameId, code, taxonObservationId);
 			 	if (result == false)
 				{
 					successfulCommit = false; 
