@@ -3028,4 +3028,93 @@ observation.COVERMETHOD_ID</modelChangeComments>
       </attribute>
     </entity>
   </modelChange>
+  <modelChange>
+    <modelChangeID>16</modelChangeID>
+    <modelChangeName>general meta-data additions</modelChangeName>
+    <modelChangeStatus>FALSE</modelChangeStatus>
+    <modelChangeComments>Some general metadata fields need adding - between the highly structured stratumMethod/ coverMethod and the very unstructured "narrative" fields.</modelChangeComments>
+    <modelChangeBugID>1014</modelChangeBugID>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>observation</entityName>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>coverEstimationMethod</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (80)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attListType>closed</attListType>
+        <attList>
+          <attListItem>
+            <attListValue>foliar cover</attListValue>
+            <attListValueDesc>only foliage is included in estimating cover</attListValueDesc>
+            <attListSortOrd>2</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>canopy cover</attListValue>
+            <attListValueDesc>every part of each plant is included in estimating cover</attListValueDesc>
+            <attListSortOrd>1</attListSortOrd>
+          </attListItem>
+        </attList>
+        <attNotes>n/a</attNotes>
+        <attDefinition>The way that cover is estimated on the observation.</attDefinition>
+      </attribute>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>stratumIndividualDivision</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (50)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attListType>no</attListType>
+        <attList>
+          <attListItem>
+            <attListValue>individual division</attListValue>
+            <attListValueDesc>An individual's cover is divided into separate strata if the individual spans multiple strata, as defined by the strata's heights.  For example, a tall tree would have its cover in a Canopy stratum, but its low branches would be in an Understory stratum.</attListValueDesc>
+            <attListSortOrd>1</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>No individual division</attListValue>
+            <attListValueDesc>An individual's cover is completely assigned to one stratum (and one stratum only), regardless of where on the individual the cover occurs.  For example, a tall tree would have all of its cover assigned to the Canopy stratum, including any cover that was contributed by lower branches that do not, by themselves, occupy space in the Canopy stratum.</attListValueDesc>
+            <attListSortOrd>2</attListSortOrd>
+          </attListItem>
+        </attList>
+        <attNotes>n/a</attNotes>
+        <attDefinition>The way that an individual's cover is assigned to the different stratum.  Some methodologies allow an individul to span multiple strata and have stratumCover values in each stratum. Other methodologies require that all cover from an individual be assigned to the upper-most stratum.  Further information about the specifics of stratum Methodologies that deviate from the standard practice of the stratumMethod referened in the field stratumMethod_ID should be described in methodNarrative.</attDefinition>
+      </attribute>
+    </entity>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>plantConcept</entityName>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>conceptResolution</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (80)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attListType>closed</attListType>
+        <attList>
+          <attListItem>
+            <attListValue>fine</attListValue>
+            <attListValueDesc>This concept here referenced is exactly the same for all observation of this concept (i.e. a standard taxon)</attListValueDesc>
+            <attListSortOrd>1</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>coarse</attListValue>
+            <attListValueDesc>The concept referenced here might be, or might not be, the same taxon for all observations (i.e. Carex sp., Poaceae species)</attListValueDesc>
+            <attListSortOrd>2</attListSortOrd>
+          </attListItem>
+        </attList>
+        <attNotes>n/a</attNotes>
+        <attDefinition>The degree to which the taxon is identical across its different observations.</attDefinition>
+      </attribute>
+    </entity>
+  </modelChange>
 </modelChangeDocument>
