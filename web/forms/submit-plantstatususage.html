@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: farrell $'
-  *      '$Date: 2003-05-28 23:57:00 $'
-  *  '$Revision: 1.14 $'
+  *      '$Date: 2003-05-30 18:00:16 $'
+  *  '$Revision: 1.15 $'
   *
   *
   -->
@@ -28,17 +28,17 @@
 <!-- WHERE YOU ARE indicates to user what step in the process she or he is in-->
 
 <p><font size="2" face="Helvetica,Arial,Verdana">	Where you are in the loading process:<br>
-	Enter Names--Match Names--References--<font color="336633" size="3"><b><i>Status</i></b></font>--Check and Submit</font></p>
+  Enter Names--Match Names--References--<font color="336633" size="3"><b><i>Status</i></b></font>--Check and Submit</font></p>
 
-			<font face="Helvetica,Arial,Verdana" size="2" color="336633">
-				<b>Enter the new Plant Status data in the fields provided below. </b>
-			</font>
+  <font face="Helvetica,Arial,Verdana" size="2" color="336633">
+  <b>Enter the new Plant Status data in the fields provided below. </b>
+  </font>
 
-<!-- THE SERVLET TO BE REFERENCED --> 
-<form action="@datasubmitservlet@" method="get">
-<input type="hidden" name="submitDataType" value="plantTaxa">
-<input type="hidden" name="action" value="plantstatususage">		
-<small> <input TYPE="submit" VALUE="continue loading plant">&nbsp;&nbsp;<input TYPE="reset" VALUE=reset> </small>
+  <!-- THE SERVLET TO BE REFERENCED --> 
+  <form action="@datasubmitservlet@" method="get">
+  <input type="hidden" name="submitDataType" value="plantTaxa">
+  <input type="hidden" name="action" value="plantstatususage">		
+  <small> <input TYPE="submit" VALUE="continue loading plant">&nbsp;&nbsp;<input TYPE="reset" VALUE=reset> </small>
 
 <br>&nbsp;
 &nbsp;
@@ -145,19 +145,6 @@
 		</select>
 		</td>
 	</tr>
-	<tr> 
- 		<td width="9%">Dates:
-		<a href="/vegbank/forms/hints.html#dateformats">
-			<img border="0" src="/vegbank/images/question.gif">
-		</a>
-		</td>
-		<td colspan="3"> Status start: 
-  		<input type="text" name="statusStartDate" value="@statusStartDate@" size="30">
-			Status stop: 
-    	<input type="text" name="statusStopDate" value="@statusStopDate@" size="30">
-		</td>
-	</tr>
-
 	<tr> 
 		<td width="9%">Status Description:</td>
 		<td colspan="2"> 

@@ -14,8 +14,8 @@
 *     Authors: @author@
 *
 *    '$Author: farrell $'
-*      '$Date: 2003-05-29 00:22:37 $'
-*  '$Revision: 1.1 $'
+*      '$Date: 2003-05-30 18:00:16 $'
+*  '$Revision: 1.2 $'
 *
 *
 -->
@@ -54,7 +54,7 @@
       </span>
 
       <!-- set up the form which is required by netscape 4.x browsers -->
-      <form name="myform" action="viewData" method="post">
+      <form name="myform" action="@viewdataservlet@" method="post">
 
        <input type="submit" name="downLoadAction" value="Continue to Download Wizard" /> 
        <!-- set up a table -->

@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: farrell $'
-* '$Date: 2003-05-28 23:56:59 $'
-* '$Revision: 1.43 $'
+* '$Date: 2003-05-30 18:00:16 $'
+* '$Revision: 1.44 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -87,6 +87,8 @@
     <filter token="datasubmitservlet" value="/vegbank/servlet/DataSubmitServlet"/>
     <filter token="nestedquerybuilder" value="/vegbank/servlet/QueryBuilderServlet"/>
     <filter token="authenticationservlet" value="/vegbank/servlet/authenticate"/>
+    <filter token="viewdataservlet" value="/vegbank/servlet/viewData"/>
+    <filter token="filedownloadservlet" value="/vegbank/servlet/fileDownload"/>
     <!-- FIXME: Should be in a prepare target -->
     <mkdir dir="${tomcat.home.dir}/webapps/vegbank/"/>
     <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
