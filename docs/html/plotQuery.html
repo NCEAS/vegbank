@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>
-National Plots Database
+Plots Database
 </title>
 
 </head>
@@ -18,7 +18,7 @@ National Plots Database
 <td bgcolor=DFE5FA>
 
 <img align=center border=0 height=144 
- src="owlogo.jpg" alt = "Veg plots logo">
+ src="/images/owlogobev.jpg" alt = "Veg plots logo">
 
 
 <!-- title of page -->
@@ -106,10 +106,10 @@ see also:
 
 <td align=center>
 
-<
 <table border=0 cellspacing=5 cellpadding=5>
 <FORM ACTION="http://beta.nceas.ucsb.edu:8080/examples/servlet/plotQuery" METHOD="POST">
 <input type=hidden name=orderby value=taxon>
+
 
 <tr valign=top>
 <td  align=left valign=middle colspan=2>
@@ -140,11 +140,12 @@ and then click on the "search" button.
 <b>
 <font face="Helvetica,Arial,Verdana" size=1>
 
-   <br>
-   type all or part of a name into the box above, or choose a name from a list:
-   <p>
-   <b>index of taxon names:</b>
-   <br>
+
+<br>
+type all or part of a name into the box above, or choose a name from a list:
+<p>
+<b>index of taxon names:</b>
+<br>
 
 <a href = "/com-A.html">A</a><b>&#183;</b>
 <a href = "/com-B.html">B</a><b>&#183;</b>
@@ -202,7 +203,8 @@ etc..
 <td  align=left valign=top>
 <select name="state" multiple size=5>
         
-        <option selected>any
+        <option selected>%
+	<option>Minnesota
         <option>Alaska
         <option>North Carolina
         <option>California
@@ -230,13 +232,15 @@ etc..
 <td align=left valign=top>
 <font face="Helvetica,Arial,Verdana" size=2>
 occurs between:<br>
-<INPUT TYPE="HIDDEN" NAME="rel-upper_elev_ft" VALUE="gt">
-<input size=10 name="where-upper_elev_ft"> ft. (lower)
+<INPUT TYPE="HIDDEN" NAME="minElevation?" VALUE=contains>
+<input size=10 name="minElevation"> ft. (lower)
 and <br>
-<INPUT TYPE="HIDDEN" NAME="rel-lower_elev_ft" VALUE="lt">
-<input size=10 name="where-lower_elev_ft"> ft. (upper)
+<INPUT TYPE="HIDDEN" NAME="maxElevation?" VALUE=contains>
+<input size=10 name="maxElevation"> ft. (upper)
 elevation.
 </td>
+
+
 
 <tr>
 <td colspan=2 align=left valign=middle>
@@ -254,12 +258,12 @@ elevation.
 <select name="surfGeo" multiple size=4>
 <font face="Helvetica,Arial,Verdana" size=2 color=000000>
 
-<option selected>any
-<option>Glacial till
-<option>Igneous rock
-<option>Sedimentry rock
-<option>Metamorhic rock
-<option>Aluvial sediments
+<option selected>%
+<option value="glacial">Glacial till
+<option value="Ign">Igneous rock
+<option value="Sed">Sedimentry rock
+<option value="Meta"> Metamorphic rock
+<option value="Aluvia">Aluvial sediments
 </select>
 </td>
 
@@ -275,9 +279,9 @@ observations</b>
 </td>
 <font face="Helvetica,Arial,Verdana" size=2 color=000000>
 <td align=left valign=top>
-        <input type = "radio" checked name="where-native" value = "any"> Either single or multiple observations<br>
-        <input type = "radio" name="where-native" value = "T"> Single observation only<br>
-        <input type = "radio" name="where-native" value = "F"> Multiple observations only<br>
+        <input type = "radio" checked name="multipleObs" value = "%"> Either single or multiple observations<br>
+        <input type = "radio" name="multipleObs" value = "T"> Single observation only<br>
+        <input type = "radio" name="multipleObs" value = "F"> Multiple observations only<br>
 </font>
 </td>
 
@@ -298,7 +302,7 @@ community</b>
 
 <td align=left valign=top colspan=2>
 <select name="community" multiple size=5>
-<option selected>any
+<option selected>%
 <option>Coastal Strand
 <option>Coastal Salt Marsh
 <option>Freshwater Wetlands
@@ -352,7 +356,7 @@ community</b>
 <td align=left valign=middle colspan=2>
 <small>
 <font face="Helvetica,Arial,Verdana">
-<input type=checkbox name=where-no_thumbnail value=1> Suppress display of thumbnails on list page.
+<input type=checkbox name=compoundQuery value=1> Multi-component query.
 </font>
 </small>
 </td></tr>
