@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-03-16 16:49:35 $'
-* '$Revision: 1.156 $'
+* '$Date: 2005-03-17 10:34:10 $'
+* '$Revision: 1.157 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -74,6 +74,7 @@
         <isset property="headerImageMachine"/>
       </not>
     </condition>
+    
     <filter token="machine_url" value="${machine_url}"/>
     <filter token="eighty_eighty" value="${eighty_eighty}"/>
     <filter token="headerImageMachine" value="${headerImageMachine}"/>
@@ -192,6 +193,10 @@
     <filter token="datasubmitservlet" value="${machine_url}${eighty_eighty}/${web.context_uri}/servlet/DataSubmitServlet"/>
     <filter token="nestedquerybuilder" value="${machine_url}${eighty_eighty}/${web.context_uri}/servlet/QueryBuilderServlet"/>
     <filter token="authenticationservlet" value="${machine_url}${eighty_eighty}/${web.context_uri}/servlet/authenticate"/>
+   <!-- listserv -->
+    <filter token="listservinfo_link" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/listinfo/"/>
+    <filter token="listservarchive_link" value="http://mercury.nceas.ucsb.edu/vegbank/pipermail/"/>
+
     <!-- Struts -->
     <filter token="DisplayUploadPlotAction" value="${machine_url}${eighty_eighty}/${web.context_uri}/DisplayUploadPlotAction.do"/>
     <!-- FIXME: Should be in a prepare target -->
