@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: anderson $'
-* '$Date: 2004-01-15 18:30:30 $'
-* '$Revision: 1.83 $'
+* '$Date: 2004-01-22 01:02:23 $'
+* '$Revision: 1.84 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -116,7 +116,8 @@
     <filter token="xml_link" value="/xml/"/>
     <filter token="NativeXMLIndexPage" value="/xml/vegbank-xml-index.html"/>
     <filter token="help_link" value="/help/"/>
-    <filter token="manual_link" value="${help}manual/"/>
+    <filter token="help" value="/help/"/>
+    <filter token="manual_link" value="/help/manual/"/>
     <!-- SERVLETS -->
     <filter token="framework_servlet" value="/${web.context_uri}/servlet/framework"/>
     <filter token="usermanagement_servlet" value="/${web.context_uri}/servlet/usermanagement"/>
@@ -139,11 +140,15 @@
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
   <target name="hdrftr" depends="tokenfiles" description="=&gt; sets tokens to be replaced by those in hdrfooter file and other files">
     <!-- set the properties file that replaces tokens with closed list values in picklists -->
-    <filter filtersfile="${style_server}/closedlist-tokens.properties"/>
+	<!--    
+	<filter filtersfile="${style_server}/closedlist-tokens.properties"/>
+	-->
     <!-- set the properties file as a filtersfile to distribute headers and footers -->
+	<!--    
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
     <filter filtersfile="${style_server}/url2get_data.properties"/>
     <filter filtersfile="${style_server}/manual_filters.properties"/>
+	-->
   </target>
   <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
   <target name="includes" depends="hdrftr" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
@@ -153,7 +158,7 @@
       <fileset dir="${style_src}" includes="**.* **/*jsp"/>
     </copy>
   </target>
-  <target name="index" depends="hdrftr" description="=&gt; target to dist. the index.html file">
+  <target name="index" depends="help" description="=&gt; target to dist. the index.html file">
     <copy overwrite="true" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
     <!-- add to second webpage at root/${webapp}/index.html -->
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
@@ -161,7 +166,7 @@
     <copy todir="${apache.document.root}/plot/" filtering="yes" file="${basedir}/plot/.htaccess"/>
   </target>
   <!-- DISTRIBUTE THE IMAGES -->
-  <target name="images" depends="includes" description="=&gt; dist. the images to server">
+  <target name="images" depends="index" description="=&gt; dist. the images to server">
     <copy overwrite="true" todir="${image_server}" filtering="no">
       <fileset dir="${image_src}">
         <include name="**"/>
@@ -172,7 +177,7 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-  <target name="news" depends="hdrftr" description="=&gt; dist the news to server">
+  <target name="news" depends="vbsummary" description="=&gt; dist the news to server">
     <copy overwrite="true" todir="${news_server}" filtering="yes">
       <fileset dir="${news_src}"/>
     </copy>
@@ -181,7 +186,7 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-  <target name="panel" depends="hdrftr" description="=&gt; dist the panel pages to server">
+  <target name="panel" depends="robot" description="=&gt; dist the panel pages to server">
     <copy overwrite="true" todir="${panel_server}" filtering="yes">
       <fileset dir="${panel_src}">
         <include name="*.html"/>
@@ -194,7 +199,7 @@
       <fileset dir="${lrg_binary_src}" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip  NVC_guidelines_v3.pdf TDWG2003_Peet.pdf TDWG2003_Peet.ppt"/>
     </copy>
   </target>
-  <target name="help" depends="hdrftr" description="=&gt; dist the help pages to server">
+  <target name="help" depends="manual" description="=&gt; dist the help pages to server">
     <copy overwrite="true" todir="${help_server}" filtering="yes">
       <fileset dir="${help_src}">
         <include name="*.html"/>
@@ -203,10 +208,12 @@
       </fileset>
     </copy>
   </target>
-  <target name="manual" depends="hdrftr" description="=&gt; build and dist the manual pages to server">
+  <target name="manual" depends="includes" description="=&gt; build and dist the manual pages to server">
     <antcall target="manual-sub-clean"/>
     <antcall target="manual-sub-build"/>
     <antcall target="manual-sub-dist"/>
+    <antcall target="tokenfiles"/>
+    <antcall target="hdrftr"/>
   </target>
   <target name="manual-sub-build" depends="hdrftr">
     <echo>starting to style...</echo>
@@ -232,7 +239,7 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-  <target name="history" depends="hdrftr" description="=&gt; dist the history pages to server ">
+  <target name="history" depends="panel" description="=&gt; dist the history pages to server ">
     <style basedir="${history_src}" destdir="${history_src}" style="${history_src}/normalhtml.xsl" force="yes" includes=" development.xml"/>
     <copy overwrite="true" todir="${history_server}" filtering="yes">
       <fileset dir="${history_src}">
@@ -250,7 +257,7 @@
 	* WEB SERVER
 -->
   <!-- dist workshop files to server : NEW as of 02-MAY-2003, not sure how these files were dist to server before.  -->
-  <target name="workshop" depends="hdrftr" description="=&gt; dist the workshop pages to server ">
+  <target name="workshop" depends="history" description="=&gt; dist the workshop pages to server ">
     <copy overwrite="true" todir="${workshop_server}" filtering="yes">
       <fileset dir="${workshop_src}">
         <include name="**/*.html"/>
@@ -269,7 +276,7 @@
       <fileset dir="${lrg_binary_src}" includes="  VegBank_NVC.pdf  VegBank_NVC.ppt  VegBank_tutorial_model.pdf  VegBank_tutorial_model.ppt VegBank_tutorial_why.pdf  VegBank_tutorial_why.ppt "/>
     </copy>
   </target>
-  <target name="pubs" depends="hdrftr" description="=&gt; dist the pubs pages to server">
+  <target name="pubs" depends="workshop" description="=&gt; dist the pubs pages to server">
     <copy overwrite="true" todir="${pubs_server}" filtering="no">
       <fileset dir="${pubs_src}">
         <exclude name="**/*.htm*"/>
@@ -302,7 +309,7 @@
   <!--
 	* TARGET TO PUT THE DESIGN HTML DOCS INTO THE CORRECT PLACE
 -->
-  <target name="design" depends="hdrftr" description="=&gt; dist the design (info) files to server">
+  <target name="design" depends="pubs" description="=&gt; dist the design (info) files to server">
     <copy overwrite="true" todir="${design_server}" filtering="yes">
       <fileset dir="${design_src}">
         <include name="**/**.html"/>
@@ -344,12 +351,19 @@
   <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
     <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
     <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
+			<!-- set the properties file that replaces tokens with closed list values in picklists -->
+			<filter filtersfile="${style_server}/filters_detokened.properties"/>
     <copy file="${sharedhtml_src}/url2get_data.properties" tofile="${style_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
+			<filter filtersfile="${style_server}/url2get_data.properties"/>
     <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="true"/>
     <copy file="${manual_src}/manual_filters.properties" tofile="${style_server}/manual_filters.properties" filtering="yes" overwrite="yes"/>
+			<filter filtersfile="${style_server}/manual_filters.properties"/>
     <ant dir="${basedir}/../docs/xml" target="dist-closedlist-tokenfile"/>
+			<filter filtersfile="${style_server}/closedlist-tokens.properties"/>
+
+
   </target>
-  <target name="vbsummary" depends="hdrftr" description="=&gt; dist a summary of data in vegbank to the appropriate page">
+  <target name="vbsummary" depends="design" description="=&gt; dist a summary of data in vegbank to the appropriate page">
     <!-- create summary based on current VegBank database status -->
     <exec dir="./general" executable="psql">
       <arg line="vegbank qa -f get_vb_stats_cmds.txt"/>
@@ -365,20 +379,30 @@
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-  <target name="deploy" depends="robot"
+  <target name="deploy" depends="news"
   		description="=&gt; All files that dynamic code depends on">
   	<!-- Deployment uses a dependency chain:
 		init
 		tokenfiles
+		hdrftr
 		includes
+		manual
+		help
 		index
+		images
 		forms
 		general 
-		images
-		init
 		xsl
 		web
 		robot
+		panel
+		history
+		workshop
+		pubs
+		design
+		vbsummary
+		news
+MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
 	-->
   </target>
   <target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
