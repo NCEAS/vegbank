@@ -5,9 +5,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-02-18 02:04:44 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2005-02-16 20:19:03 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ import junit.framework.TestCase;
  * Unit test for AccessionGen methods
  * 
  * @author Gabriel Farrell
- * @version '$Revision: 1.1 $' '$Date: 2004-02-18 02:04:44 $'
+ * @version '$Revision: 1.2 $' '$Date: 2005-02-16 20:19:03 $'
  */
 public class AccessionGenTest extends TestCase
 {
@@ -57,9 +57,8 @@ public class AccessionGenTest extends TestCase
 			//	Get Connection
 			DBConnection dbConn = DBConnectionPool.getInstance().getDBConnection("Need connection for testing");
 			dbConn.setAutoCommit(true);
-			conn = dbConn.getConnections();
 			
-			ag = new AccessionGen( conn, "TEST" );
+			ag = new AccessionGen( dbConn, "TEST" );
 
 			// Load some fake data for testing
 			Statement statement = conn.createStatement();

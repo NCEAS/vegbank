@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-11 21:58:06 $'
- *	'$Revision: 1.17 $'
+ *	'$Date: 2005-02-16 20:19:03 $'
+ *	'$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -206,7 +206,7 @@ public class LoadTreeToDatabase
 		}
 
 
-		log.info("commit new data?: " + commit);
+		//log.info("commit new data?: " + commit);
 
         String dsAC = "";
         String receiptTpl, subject;
@@ -219,9 +219,9 @@ public class LoadTreeToDatabase
 
             try {
                 // DATASET CREATION
-			    log.debug("creating dataset");
+                log.debug("====================== DATASET CREATION"); 
                 dsAC = createDataset();
-                dlog.addTag("datasetURL", vbResources.getString("machine_url") + 
+                dlog.addTag("datasetURL", vbResources.getString("serverAddress") + 
                         "/get/std/userdataset/" + dsAC);
             } catch (Exception ex) {
                 log.error("problem creating dataset or dataset items", ex);
@@ -232,7 +232,7 @@ public class LoadTreeToDatabase
 
             try {
                 // ACCESSION CODE GENERATION
-                log.info("Adding AccessionCodes to loaded data");
+                log.debug("====================== ACCESSION GEN"); 
                 List newAccessionCodes = this.addAllAccessionCodes();
                 log.debug("========= DONE adding ACs");
                 accessionCodesAdded.addAll(newAccessionCodes);
@@ -245,6 +245,7 @@ public class LoadTreeToDatabase
 
 
             try {
+                log.debug("====================== DENORMS (not implemented yet)");
                 // RUN DENORMALIZATION SQL
                 //log.info("Running denormalizations");
 
@@ -260,6 +261,7 @@ public class LoadTreeToDatabase
 
             try {
                 // KEYWORD GENERATION
+                log.debug("====================== KEYWORD GEN");
                 KeywordGen kwGen = new KeywordGen(writeConn.getConnections());
                 Iterator tit = tableKeys.keySet().iterator();
                 while (tit.hasNext()) {
@@ -330,7 +332,7 @@ public class LoadTreeToDatabase
 		readConn.setReadOnly(true);
 
 		// Initialize the AccessionGen
-		ag = new AccessionGen(this.writeConn.getConnections(), Utility.getAccessionPrefix() );
+		ag = new AccessionGen(this.writeConn, Utility.getAccessionPrefix() );
 	}
 	
 	/**
@@ -597,9 +599,9 @@ public class LoadTreeToDatabase
 			}
 
             // update the dataload log's insertion count for this table
-            if (Utility.canBeDatasetItem(tableName)) {
+            //if (Utility.canBeDatasetItem(tableName)) {
                 dlog.increment("entityCounts", tableName);
-            }
+            //}
 
 			Statement query = writeConn.createStatement();
 			int rowCount = query.executeUpdate(sb.toString());
@@ -2206,23 +2208,24 @@ public class LoadTreeToDatabase
         dsiBean.setItemaccessioncode(ag.getAccession(tableName, PK));
         dsiBean.setUserdatasetitem_id(-1); // don't check for duplicates
         dsiBean.setItemtype(tableName);
-        log.debug("+++ ADDING userdatasetitem for " + tableName + ": " + dsiBean.getItemaccessioncode());
+        //log.debug("+++ ADDING userdatasetitem for " + tableName + ": " + dsiBean.getItemaccessioncode());
         return dsiBean;
     }
 
     /**
-     * Creates and inserts into the DB a userdataset 
-     * along with all of its userdatasetitem records.
+     * Uses DatasetUtility to creates and insert a userdataset 
+     * along with all of its userdatasetitem children records.
      * @return new userdataset's accession code
      */
     private String createDataset() throws SQLException, Exception {
 
-        // insert a userdatasetitem for each appropriate record
+        // create a userdatasetitem for each appropriate record
         String tableName;
         Userdatasetitem dsiBean = null;
         List dsiBeanList = new ArrayList();
         Iterator it = tableKeys.keySet().iterator();
 
+        // add the children as Userdatasetitem instances
         while (it.hasNext()) {
             tableName = (String)it.next();
     
@@ -2246,7 +2249,7 @@ public class LoadTreeToDatabase
 
         // insert the dataset items as a new dataset
         DatasetUtility dsu = new DatasetUtility();
-        String dsAC = dsu.insertDataset(null, xmlFileName, 
+        String dsAC = dsu.insertDataset(dsiBeanList, xmlFileName, 
                 "Created via XML upload", "load", "private", usrId);
 
         log.debug("ADDED userdataset " + dsAC);

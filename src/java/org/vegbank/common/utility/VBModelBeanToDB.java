@@ -3,8 +3,8 @@
  * Authors: @author@ Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2005-02-11 00:35:23 $' 
- * '$Revision: 1.6 $'
+ * '$Date: 2005-02-16 20:19:03 $' 
+ * '$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -29,14 +29,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -85,15 +84,15 @@ public class VBModelBeanToDB
 
 	private DBConnection conn;
 
-	private List accessionCodesAdded = new Vector();
+	private List accessionCodesAdded = new ArrayList();
 
-	private Vector beans = new Vector();
+	private List beans = new ArrayList();
 
-	private Vector classNameList = new Vector();
+	private List classNameList = new ArrayList();
 
-	private HashMap tableKeys = new HashMap();
+	private Map tableKeys = new HashMap();
 
-	private HashMap allTableKeys = new HashMap();
+	private Map allTableKeys = new HashMap();
 	
 	private InputPKTracker inputUniqueIdTracker = new InputPKTracker();
 
@@ -113,7 +112,7 @@ public class VBModelBeanToDB
 
 	private String getPrimaryKeyFieldName()
 	{
-		return classNameList.lastElement() + "_id";
+		return getLastListElement(classNameList) + "_id";
 	}
 
 	/**
@@ -161,36 +160,31 @@ public class VBModelBeanToDB
 		{
 			PK = this.reservePrimaryKey();
 			// Keep track of pks and table names do I can add AccessionCodes later
-			this.storeTableNameAndPK((String) classNameList.lastElement(), PK);
-			allTableKeys.put(classNameList.lastElement(), new Long(PK));
+			this.storeTableNameAndPK((String) getLastListElement(classNameList), PK);
+			allTableKeys.put(getLastListElement(classNameList), new Long(PK));
 			
-			// Need to add this to the datastruture that prevents
-			// the adding duplicate fields
+			// prevent duplicates
 			inputUniqueIdTracker.setAssignedPK(entityName, inputUniqueIdAsString, PK);
-			log.debug("No record added for xmlPK:" + inputUniqueId
-							+ " for table " + entityName + " adding PK now: " + PK);
+			//log.debug("No record added for xml PK: " + inputUniqueId
+			//				+ " for table " + entityName + "; adding PK now: " + PK);
 
 			// Need add the PK to the object
 			bean.putPrimaryKey(PK);
 
-			//TODO: Need to recurse into childObjects for the PKs
-			Hashtable getBeanMethods = this.getBeanGetFKSetPairs(bean);
-			Enumeration pairs = getBeanMethods.elements();
-			while (pairs.hasMoreElements())
+			Map getBeanMethods = this.getBeanGetFKSetPairs(bean);
+			Iterator pairs = getBeanMethods.values().iterator();
+			while (pairs.hasNext())
 			{
-				MemberGetterSetters getBeanSetFKPair = (MemberGetterSetters) pairs
-						.nextElement();
+				MemberGetterSetters getBeanSetFKPair = (MemberGetterSetters)pairs.next();
 				Method getBeanMethod = getBeanSetFKPair.getGetterMethod();
 				Method setFKMethod = getBeanSetFKPair.getSetterMethod();
 
-				log.debug("Processing: " + getBeanMethod + " and " + setFKMethod);
+				//log.debug("Processing: " + getBeanMethod + " and " + setFKMethod);
 
-				// Handle nulls
 				if (getBeanMethod != null && setFKMethod != null)
 				{
 					VBModelBean newBean = (VBModelBean) getBeanMethod.invoke(bean, null);
 
-					// Handle null
 					if (newBean != null)
 					{
 						// TODO: write into db and get PK -- RECURSIVE
@@ -202,7 +196,7 @@ public class VBModelBeanToDB
 						long FKtoUse = this.insert(newBean);
 
 						// TODO: Fill in the FK on the current bean
-						log.debug(">>> Setting " + setFKMethod + " to " + FKtoUse);
+						log.debug("calling " + setFKMethod + "(" + FKtoUse + ")");
 						setFKMethod.invoke(bean, new Object[] {new Long(FKtoUse)});
 					}
 				}
@@ -228,29 +222,28 @@ public class VBModelBeanToDB
 		}
 		else
 		{
-			allTableKeys.put(classNameList.lastElement(), new Long(PK));
+			allTableKeys.put(getLastListElement(classNameList), new Long(PK));
 			log.info("Found an identical record in the Database");
 		}
 
 		// About to drop out of recursion CLEAN UP
-		beans.removeElement(bean);
-		//methodsList.removeElement(methodsList.lastElement());
-		classNameList.removeElement(classNameList.lastElement());
+		beans.remove(bean);
+		//methodsList.remove(getLastListElement(methodsList));
+		classNameList.remove(getLastListElement(classNameList));
 
-		log.info("VBModelBeanToDB: Have " + beans.size()
-				+ " to work on before commiting.");
+		//log.debug("VBModelBeanToDB: Have " + beans.size() + " to work on before commiting.");
 
 		// Commit the transaction if no more work
 		if (beans.size() == 0)
 		{
 			conn.commit();
-			log.info("Commited Transaction");
+			log.info("Committed Transaction");
 
 			// Need to add accessioncodes
 			log.debug("Adding AccessionCodes to loaded data");
 			accessionCodesAdded.addAll(this.addAllAccessionCodes());
 			conn.commit();
-			log.info("Commited AcessionCode updates: " + accessionCodesAdded);
+			//log.debug("Committed AccessionCode updates: " + accessionCodesAdded);
 
 			// All finished with the database connection
 			DBConnectionPool.returnDBConnection(conn);
@@ -304,16 +297,16 @@ public class VBModelBeanToDB
 	 * Each get method that returns a VBModelBean has a corresponding setFK(long) method. 
 	 * <br/>
 	 * I am tring to pair these up in a datastructure, a hashtable of all the pairs 
-	 * using the attibute name as key. Each pair of methods is stored in a Vector 
+	 * using the attibute name as key. Each pair of methods is stored in a List 
 	 * the first element is the get method and the second is the setFK method.
 	 * <br/>
 	 * 
-	 * @return Hashtable that stores the get and set methods for the current bean
+	 * @return Map that stores the get and set methods for the current bean
 	 */
-	public Hashtable getBeanGetFKSetPairs(VBModelBean bean)
+	public Map getBeanGetFKSetPairs(VBModelBean bean)
 	{
-		// The key is the attribute name, contains a Vector with the two methods
-		Hashtable beanGetFKSetHash = new Hashtable();
+		// The key is the attribute name, contains a List with the two methods
+		Map beanGetFKSetHash = new HashMap();
 		String entityName = getEntityName(bean);
 
 		Method[] methods = bean.getClass().getDeclaredMethods();
@@ -335,12 +328,11 @@ public class VBModelBeanToDB
 					// Create an entry with this Key
 					beanGetFKSet = new MemberGetterSetters(entityName);
 				}
-				// Add to this Vector
+				// Add to this List
 				beanGetFKSet.setGetterMethod(method);
 				beanGetFKSetHash.put(key, beanGetFKSet);
 
-				log.debug("After adding a get for : " + key + " >>> "
-						+ beanGetFKSetHash);
+				log.debug("After adding a get for : " + key + " >>> " + beanGetFKSetHash);
 			}
 			// Is this a set method
 			else if (VBObjectUtils.isSetMethod(method))
@@ -395,32 +387,29 @@ public class VBModelBeanToDB
 	/**
 	 *  
 	 */
-	private void handleChildren(HashMap foreignKeys, VBModelBean currentBean)
+	private void handleChildren(Map foreignKeys, VBModelBean currentBean)
 			throws Exception
 	{
 		// Get current declared methods array
-		Vector methodsList = new Vector();
+        log.debug("handleChildren()");
+		List methodsList = new ArrayList();
 		methodsList.add(currentBean.getClass().getDeclaredMethods());
-		Method[] methods = (Method[]) methodsList.lastElement();
+		Method[] methods = (Method[]) getLastListElement(methodsList);
 		for (int i = 0; i < methods.length; i++)
 		{
 			Method method = methods[i];
 
-			if (VBObjectUtils.isGetMethod(method, "java.util.List"))
-			{
-				log.debug("Handling a list");
-				// Need to Loop throught all elements and insert them into the DB
-				List objList = (List) method.invoke(currentBean, null);
+			if (VBObjectUtils.isGetMethod(method, "java.util.List")) {
+				//log.debug(method.getName() + " should return a List of beans");
+				// Need to loop through all elements and insert them into the DB
+				List objList = (List)method.invoke(currentBean, null);
 				Iterator it = objList.iterator();
-				while (it.hasNext())
-				{
-					VBModelBean bean = (VBModelBean) it.next();
+				while (it.hasNext()) {
+					VBModelBean bean = (VBModelBean)it.next();
 					setForeignKeys(foreignKeys, bean);
+                    
 					this.insert(bean);
 				}
-			} else
-			{
-				// I don't care
 			}
 		}
 	}
@@ -430,7 +419,7 @@ public class VBModelBeanToDB
 	 * 
 	 * @param foreignKeys
 	 */
-	private void setForeignKeys(HashMap foreignKeys, VBModelBean bean)
+	private void setForeignKeys(Map foreignKeys, VBModelBean bean)
 	{
 		if (foreignKeys != null)
 		{
@@ -444,10 +433,10 @@ public class VBModelBeanToDB
 				if (key != null && foreignKeyValue != null)
 				{
 					// Do casts
-					String keyName = (String) key;
-					Long keyValue = (Long) foreignKeyValue;
+					String keyName = (String)key;
+					Long keyValue = (Long)foreignKeyValue;
 
-					//log.debug("Set FK name " + keyName + " to " + foreignKeyValue);
+					log.debug("Set FK name " + keyName + " to " + foreignKeyValue);
 					bean.putForeignKey(keyName, keyValue.longValue());
 				}
 			}
@@ -462,10 +451,10 @@ public class VBModelBeanToDB
 		StringBuffer sb = new StringBuffer();
 		StringBuffer parameters = new StringBuffer();
 		sb.append("insert into \""
-				+ ((String) classNameList.lastElement()).toLowerCase() + "\" ( ");
+				+ ((String) getLastListElement(classNameList)).toLowerCase() + "\" ( ");
 
 		// Get the current bean
-		//VBModelBean currentBean = (VBModelBean) beans.lastElement();
+		//VBModelBean currentBean = (VBModelBean) getLastListElement(beans);
 		LinkedHashMap nameValues = currentBean.toOrderedHashMap();
 		Set keys = nameValues.keySet();
 		Iterator it = keys.iterator();
@@ -517,7 +506,7 @@ public class VBModelBeanToDB
 
 		sb.append(" ) VALUES ( " + parameters.toString() + " )");
 
-		log.info("VBModelBeanToDB: SQL >" + sb.toString());
+		log.debug("VBModelBeanToDB: SQL >" + sb.toString());
 		return sb.toString();
 	}
 
@@ -584,7 +573,7 @@ public class VBModelBeanToDB
 				if (Utility.isStringNullOrEmpty(value))
 				{
 					// there is no AC to check
-					log.debug("isObjectInDatabase(): no AC value");
+					//log.debug("isObjectInDatabase(): no AC value");
 					return 0;
 				}
 
@@ -601,8 +590,8 @@ public class VBModelBeanToDB
 	private long reservePrimaryKey() throws SQLException
 	{
 		log.debug("VBModelBeanToDB : Generating key for class: "
-				+ classNameList.lastElement());
-		String tableName = (String) classNameList.lastElement();
+				+ getLastListElement(classNameList));
+		String tableName = (String) getLastListElement(classNameList);
 		String primaryKeyName = Utility.getPKNameFromTableName(tableName);
 		long PK = Utility.dbAdapter
 				.getNextUniqueID(conn, tableName, primaryKeyName);
@@ -617,10 +606,9 @@ public class VBModelBeanToDB
 	 */
 	private void storeTableNameAndPK(String tableName, long PK)
 	{
-		Vector keys = (Vector) tableKeys.get(tableName);
-		if (keys == null)
-		{
-			keys = new Vector();
+		List keys = (List)tableKeys.get(tableName);
+		if (keys == null) {
+			keys = new ArrayList();
 			tableKeys.put(tableName, keys);
 		}
 		keys.add(new Long(PK));
@@ -633,7 +621,7 @@ public class VBModelBeanToDB
 	{
 		List accessionCodes = null;
 		// Initialize the AccessionGen
-		AccessionGen ag = new AccessionGen(this.conn.getConnections(), Utility
+		AccessionGen ag = new AccessionGen(this.conn, Utility
 				.getAccessionPrefix());
 
 		if (Utility.isLoadAccessionCodeOn()) {
@@ -649,7 +637,7 @@ public class VBModelBeanToDB
 	 */
 	public List getRootAccessionCodesLoaded()
 	{
-		List topLevelAccessionCodes = new Vector();
+		List topLevelAccessionCodes = new ArrayList();
 		// Need to filter out non top level elements
 		Iterator iter = accessionCodesAdded.iterator();
 		while (iter.hasNext())
@@ -670,7 +658,7 @@ public class VBModelBeanToDB
 	/**
 	 * Search db for extant  entry
 	 * 
-	 * @param Hashtable of the entry
+	 * @param Map of the entry
 	 * @return long of found PK or 0 otherwise
 	 */
 	private long getExtantPK(VBModelBean bean)
@@ -901,7 +889,21 @@ public class VBModelBeanToDB
     /**
      *
      */
-    public Connection getDBConnection() {
-        return this.conn.getConnections();
+    public DBConnection getDBConnection() {
+        try {
+            if (this.conn.isClosed()) {
+                initDB();
+            }
+        } catch (SQLException sex) {
+            log.error("error while getting DB connection", sex);
+        }
+        return this.conn;
+    }
+
+    private Object getLastListElement(List l) {
+        if (l == null || l.size() == 0) {
+            return null;
+        }
+        return l.get(l.size()-1);
     }
 }
