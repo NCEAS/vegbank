@@ -33,7 +33,7 @@
 	<filter token="port" value="1521" />
 	<filter token="driverType" value="thin" />
 	<filter token="driverClass" value="org.postgresql.Driver" />
-	<filter token="connectString" value="jdbc:postgresql://beta.nceas.ucsb.edu/plots_dev" />
+	<filter token="connectString" value="jdbc:postgresql://127.0.0.1/plots_dev" />
 	<filter token="databaseName" value="nvc" />
 	<filter token="insert.minConnections" value="1" />
 	<filter token="insert.maxConnections" value="3" />
@@ -115,8 +115,9 @@
 <target name="compile" depends="prepare">
 	<javac srcdir="${build}" 
 		classpath="${cpath}"
-		includes="**.java  " 
+		includes="**.java  "
 		destdir="${build}"
+		debug="on"
 	/>
 </target>	
 

@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-07-03 04:32:12 $'
- * '$Revision: 1.13 $'
+ *     '$Date: 2002-07-26 01:26:21 $'
+ * '$Revision: 1.14 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,16 +62,16 @@ public class  sqlMapper
 	private Hashtable metaQueryHash = new Hashtable();
 	
 	//the class that handles the sql requests
-	issueStatement is = new issueStatement();
+	private issueStatement is = new issueStatement();
 	//class that stores the 'canned' sql queries
-	queryStore qs = new queryStore();
+	private queryStore qs = new queryStore();
 	
 	
 	
 /**
  *
  * method to develop the sql query string required for the 
- * extended query -- using nested query html form.  
+ * extended query -- using nested query html form. 
  *
  * @param transformedString string containg the query element type and 
  *		value (| delimeted )
@@ -755,7 +755,7 @@ public class  sqlMapper
 				}
 			}
 			
-			//ELSE IF THE SUMMARIES ARE DESIRED
+			// ELSE IF THE SUMMARIES ARE DESIRED
 			else if ( resultType.equals("summary") )
 			{
 				System.out.println("sqlMapper > compiling a summary results file");
@@ -911,7 +911,16 @@ public class  sqlMapper
 /**
  *
  * Method to map a query xml document containg more than one query element
- * to a query stored in the queryStore class
+ * to a query stored in the queryStore class.  The elements in the array
+ * can be:
+ * 	plotID
+ * 	taxonName -- can have multiple if seperated by commas
+ *	elevationMin
+ * 	elevationMax
+ * 	state
+ * 	surfGeo 
+ * 	multipleObs
+ *  community
  *
  * @param transformedString string containg the query element type and 
  *		value (| delimeted )
@@ -942,6 +951,7 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
  
 		// This is for debugging - and can be commented out later
  		System.out.println("sqlMapper > developCompoundPlotQuery");
+		System.out.println("sqlMapper > resultType: " + resultType);
 		System.out.println("sqlMapper > plotId: " + plotId);
 		System.out.println("sqlMapper > taxonName: " + taxonName);
 		System.out.println("sqlMapper > elevationMin: " + elevationMin);
@@ -949,39 +959,40 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 		System.out.println("sqlMapper > state: " + state);
 		System.out.println("sqlMapper > multipleObs: " + multipleObs);
 		System.out.println("sqlMapper > community: " + community);
-
+		
+		
 		// Check that all the appropriate query elements are there
 		if (taxonName != null && resultType != null && outFile != null) 
 		{
-			if ( resultType.equals("summary") ) 
-			{
-				System.out.println("sqlMapper.developCompoundPlotQuery  calling queryStore.getPlotId (compound)");
-				
-				queryStore j = new queryStore();
-				j.getPlotId(taxonName, state, elevationMin, elevationMax,
-				surfGeo, community);
-				queryOutput=j.outPlotId;
-				queryOutputNum=j.outPlotIdNum;
-			}
+			System.out.println("sqlMapper.developCompoundPlotQuery  calling queryStore.getPlotId(compound)");
+			queryStore j = new queryStore();
+			j.getPlotId(taxonName, state, elevationMin, elevationMax,surfGeo, community);
+			queryOutput=j.outPlotId;
+			queryOutputNum=j.outPlotIdNum;
 		}
 		
-		/// REMOVED THIS CODE -- TO SLOW JHH 20020410
-		//retrieve the summary info
-		//queryStore k = new queryStore();
-		//k.getPlotSummaryNew(queryOutput, queryOutputNum);
-
-		//write to a summary file - that will be read by the requestor
-	/// REMOVED THIS CODE -- TO SLOW JHH 20020410
-	//	xmlWriter xw = new xmlWriter();
-	//	xw.writePlotSummary(k.cumulativeSummaryResultHash, outFile);
 		
-		//instantiate a new instance of the dbAccess class -- probably
-		//should be done above
+		// GET THE PLOTID VECTOR
 		Vector plotIdVec = getVector(queryOutput);
-		String testFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml";
-		System.out.println("sqlMapper > writing the plots using new class - test file: "+testFile );
+		System.out.println("sqlMapper > number of plots returned: " + plotIdVec.size() );
+		
+		// INSTANTIATE AN INSTANCE OF THE DATABASE ACCESS CLASS
 		dbAccess dbaccess = new dbAccess();
-		dbaccess.writeMultipleVegBankPlot(plotIdVec, testFile);
+		
+		if (resultType.equals("summary") )
+		{
+			String testFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml";
+			System.out.println("sqlMapper > writing the plots using new class - test file: "+testFile );
+			dbaccess.writeMultipleVegBankPlot(plotIdVec, testFile);
+		}
+		else if (resultType.equals("identity") )
+		{
+			// IF THE THE RESULT TYPE IS AN IDENTITY THEN PRODUCE THAT
+			String testFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/identity.xml";
+			System.out.println("sqlMapper > writing the plots using new class - test file: " + testFile );
+			dbaccess.writeMultipleVegBankPlotIdentifcation(plotIdVec, testFile);
+		}
+		
 	}
 	catch ( Exception e )
 	{

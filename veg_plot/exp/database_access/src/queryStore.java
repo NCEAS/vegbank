@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-07-03 04:32:12 $'
- * 	'$Revision: 1.9 $'
+ *  '$Date: 2002-07-26 01:26:22 $'
+ * 	'$Revision: 1.10 $'
  *
  *
  */
@@ -506,16 +506,14 @@ public void getPlotId(String queryElement, String queryElementType)
 		try
 		{
 			StringBuffer sb = new StringBuffer();
-			
+			String action="select";
 			System.out.println("queryStore >  taxonName: "+ taxonName);
 			System.out.println("queryStore >  state: "+ state );
 			System.out.println("queryStore >  elevationMin: "+ elevationMin );
 			System.out.println("queryStore >  elevationMax: "+ elevationMax );
 			System.out.println("queryStore >  surfGeo: "+ surfGeo );
 			System.out.println("queryStore >  community: "+ community);
-
-			String action="select";
-			
+			// CREATE THE QUERY
 			sb.append(" select DISTINCT PLOTSITESUMMARY.PLOT_ID from PLOTSITESUMMARY ");
 			sb.append(" WHERE ");
 			sb.append(" ALTVALUE <="+elevationMax );
@@ -527,7 +525,31 @@ public void getPlotId(String queryElement, String queryElementType)
 			sb.append(" STATE like '%"+state+"%' ");
 			sb.append(" and ");
 			sb.append(" PLOTSITESUMMARY.PLOT_ID in ");
-			sb.append(" (SELECT DISTINCT PLOT_ID from PLOTSPECIESSUM where AUTHORNAMEID like '%"+taxonName+"%') ");
+			// DEPENDING ON THE NUMBER OF TAXA COMPOSE A DIFFERENT SUB-QUERY
+			if ( taxonName.indexOf(",") >0 )
+			{
+				StringTokenizer st = new StringTokenizer(taxonName, ",");
+				int num = st.countTokens();
+				sb.append(" (SELECT DISTINCT PLOT_ID from PLOTSPECIESSUM where  PLOT_ID in ( ");
+				for (int i=0;i<num; i++) 
+				{
+					String buf = st.nextToken().trim();
+					if ( i == (num-1) )
+					{
+						sb.append(" select PLOT_ID from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+buf.toUpperCase()+"%' ) )");
+					}
+					else
+					{
+						sb.append(" select PLOT_ID from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+buf.toUpperCase()+"%' ");
+						sb.append(" intersect ");
+					}
+				}
+				
+			}
+			else
+			{
+				sb.append(" (SELECT DISTINCT PLOT_ID from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+taxonName.toUpperCase()+"%') ");
+			}
 			String statement = sb.toString();
 
 			String returnFields[]=new String[1];	
