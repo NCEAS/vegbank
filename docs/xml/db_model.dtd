@@ -20,10 +20,11 @@
 <!ELEMENT dataModel (title, version, author, institution, contributor, description, date, entity+)>
 <!ELEMENT date (#PCDATA)>
 <!ELEMENT description EMPTY>
-<!ELEMENT entity (entityName, entitySummary, entityDescription, attribute+)>
+<!ELEMENT entity (entityName, entitySummary, entityDescription, module, attribute+)>
 <!ELEMENT entityDescription (#PCDATA)>
 <!ELEMENT entityName (#PCDATA)>
 <!ELEMENT entitySummary (#PCDATA)>
 <!ELEMENT institution (#PCDATA)>
+<!ELEMENT module (#PCDATA)>
 <!ELEMENT title (#PCDATA)>
 <!ELEMENT version (#PCDATA)>
