@@ -24,21 +24,22 @@ alter table usercertification rename column veg_sampling_doc to veg_sampling_exp
 alter table usercertification rename column veg_analysis_doc to veg_analysis_exp;
 alter table usercertification rename column usnvc_experience_doc to usnvc_exp;
 alter table usercertification rename column vegbank_experience_doc to vb_exp;
-alter table usercertification rename column vegbank_expected_uses to vb_intention;
 alter table usercertification rename column plotdb_experience_doc to tools_exp;
 alter table usercertification rename column additional_statements to addl_stmt;
 
-alter table usercertification add column exp_region_a varchar (32) NOT NULL;
+alter table usercertification add column vegbank_expected_uses text;
+
+alter table usercertification add column exp_region_a varchar (32);
 alter table usercertification add column exp_region_a_veg integer;
 alter table usercertification add column exp_region_a_flor integer;
 alter table usercertification add column exp_region_a_nvc integer;
 
-alter table usercertification add column exp_region_b varchar (32) NOT NULL;
+alter table usercertification add column exp_region_b varchar (32);
 alter table usercertification add column exp_region_b_veg integer;
 alter table usercertification add column exp_region_b_flor integer;
 alter table usercertification add column exp_region_b_nvc integer;
 
-alter table usercertification add column exp_region_c varchar (32) NOT NULL;
+alter table usercertification add column exp_region_c varchar (32);
 alter table usercertification add column exp_region_c_veg integer;
 alter table usercertification add column exp_region_c_flor integer;
 alter table usercertification add column exp_region_c_nvc integer; 
@@ -78,6 +79,8 @@ UPDATE usercertification SET exp_region_a='uscan-nw' WHERE nvc_exp_region_a='US/
 UPDATE usercertification SET exp_region_a='uscan-rockies' WHERE nvc_exp_region_a='US/CAN - Rocky Mts';
 UPDATE usercertification SET exp_region_a='us-se' WHERE nvc_exp_region_a='US - SE';
 
+UPDATE usercertification SET exp_region_a='n/a' WHERE nvc_exp_region_a IS NULL;
+
 -- Drop these obsolete columns
 ALTER TABLE usercertification DROP COLUMN nvc_exp_region_a;
 ALTER TABLE usercertification DROP COLUMN nvc_exp_vegetation_a;
@@ -114,7 +117,7 @@ ALTER TABLE usr DROP COLUMN zip_code;
 -- to be FIXED afterwards, i.e. link to correct party using email_address.
 ----------------------------------------------------------------------------
 ALTER TABLE usr ADD COLUMN party_id Integer ;
-UPDATE usr SET party_id=3; 
+UPDATE usr SET party_id=17; 
 
 ----------------------------------------------------------------------------
 -- Drop unused tables
@@ -123,7 +126,7 @@ DROP TABLE user_downloads;
 DROP TABLE user_submitted_queries ;
 DROP TABLE datafile;
 DROP TABLE file_accession;
-DROP TABLE graphic;
+-- DROP TABLE graphic;
 DROP TABLE user_certification_old;
 
 
