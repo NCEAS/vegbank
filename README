@@ -1,7 +1,14 @@
 '$Author: farrell $'
-'$Date: 2003-05-29 00:17:04 $'
-'$Revision: 1.12 $'
+'$Date: 2003-08-22 18:50:28 $'
+'$Revision: 1.13 $'
 THIS FILE DESCRIBES THE SETUP AND MAINTAINENCE OF A VEGBANK SYSTEM
+
+Vegbank requires
+Jakarta-tomcat 4.1, 
+PostrgreSQL 7.2, 
+Java 1.3
+Apache 1.3
+Grass
 
 REQUIRED JAR FILES
 -----------------
@@ -10,7 +17,6 @@ the following jar files are required in the servlet container
 vegcommunity.jar
 planttaxonomy.jar
 jdbc7.0-1.2.jar
-web.xml
 utilities.jar
 servlet.jar
 multipart.jar
@@ -24,18 +30,20 @@ stylesheet-generator.jar
 frameworkservletmodule.jar
 datafile-exchange.jar
 authservletmodule.jar
-xalan_1_2_2.jar
 xmlresource.jar
-xml-apis.jar
-xerces_1_4.jar
+vegclass_common.jar
+vegbank_datamodel.jar
+
+and all the third party jars in the vegbank/lib directory.
 
 OTHER REQUIRED SERVLET FILES
 ----------------------------
-/vegclass/veg_plot/src/utilities/coord_transform.sh
+/vegbank/veg_plot/src/utilities/coord_transform.sh
+All the files in the /vegbank/veg_plot/exp/vegbank_websrc/web/WEB-INF/
 
 PROPERTIES FILES:
 ----------------
-./veg_plot/exp/servlet/build/authentication.properties -- edit the name of the server
+./veg_plot/build.properties - edit for your environment. 
 
 
 
@@ -87,6 +95,10 @@ host       all  127.0.0.1                 255.255.255.255    trust
 
 This is open source program that is used by vegbank to work with geographic
 position data.
+
+Right now it is only used for geocoordinate coversion, it is a large dependancy
+just for that.
+
 The programs homepage is "http://www3.baylor.edu/grass/"
 
 EOF 
