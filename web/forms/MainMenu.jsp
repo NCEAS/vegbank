@@ -12,9 +12,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2005-02-02 00:43:51 $'
-*  '$Revision: 1.15 $'
+*  '$Author: anderson $'
+*  '$Date: 2005-02-10 21:20:00 $'
+*  '$Revision: 1.16 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@
 
      
       <span class=" sizelarge">Search for 
-	  <a href="@forms_link@community-query.html">Community Types</a></span>
+	  <a href="@forms_link@CommQuery.jsp">Community Types</a></span>
       </td> </tr>
 	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
 
@@ -91,7 +91,15 @@
 		
       
       </span>
+
     </td> <td valign="middle"> <p>e.g. Methods, People, Projects, References</p></td></tr>
+
+    <tr valign="middle"><td valign="middle"> 
+      <span class=" sizelarge">
+        View <a href="@web_context@DisplayDatasets.do">Your Datasets</a>
+	  </TD></TR>
+
+
 	  </table>
 	  </TD></TR>
 	<TR valign="middle"><TD align="center" valign="middle">&nbsp;</TD><TD></TD></TR><!--spacer -->

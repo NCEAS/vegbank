@@ -144,7 +144,7 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 	<td align="center">
 		&raquo; <a href="@forms_link@PlantQuery.jsp">Explore Plant Taxa</a> 
 	</td>
-	<td align="center">&raquo; <a href="@forms_link@community-query.html">View Community Types</a>
+	<td align="center">&raquo; <a href="@forms_link@CommQuery.jsp">View Community Types</a>
 	</td>	
 	<td align="center">	
 

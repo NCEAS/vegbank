@@ -10,8 +10,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-12-14 01:59:36 $'
-  *  '$Revision: 1.9 $'
+  *      '$Date: 2005-02-10 21:20:00 $'
+  *  '$Revision: 1.10 $'
   *
   *
   -->
@@ -102,7 +102,7 @@ function setNameMatchType() {
 
       <td align="left">
 
-        <form action="@web_context@views/plantconcept_detail.jsp" method="get" name="queryform" onsubmit="prepareForm()">
+        <form action="@views_link@plantconcept_detail.jsp" method="get" name="queryform" onsubmit="prepareForm()">
 			<input type="hidden" name="where" value="where_plantconcept_mpq"/>
 
           <table>
@@ -111,7 +111,7 @@ function setNameMatchType() {
                 <span class="c2">
 				<b>All search criteria are optional.</b>
 				<br>
-				Try the <a href="@web_context@forms/CommQuery.jsp">community query</a> too.
+				Try the <a href="@forms_link@CommQuery.jsp">community query</a> too.
 				</span>
               </td>
             </tr>

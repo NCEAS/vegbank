@@ -152,9 +152,9 @@ more specific instructions on each search page.
      plant name = 'table%pine' (to get Table Mountain Pine, Pinus pungens) <br/>
       </manualHTML>
     </manualItem>
-    <manualItem refURL="@forms_url@community-query.html" name="search-for-communities" topic="Search for Communities">
+    <manualItem refURL="@forms_url@CommQuery.jsp" name="search-for-communities" topic="Search for Communities">
       <manualHTML>
-        <a href="@forms_url@community-query.html">Community Query</a>
+        <a href="@forms_url@CommQuery.jsp">Community Query</a>
      - search for community concepts in VegBank, by name or some portion of a name. 
       <br/>
         <br/>

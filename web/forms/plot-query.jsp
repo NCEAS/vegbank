@@ -10,9 +10,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: mlee $'
-*      '$Date: 2005-02-10 18:58:22 $'
-*  '$Revision: 1.30 $'
+*    '$Author: anderson $'
+*      '$Date: 2005-02-10 21:20:00 $'
+*  '$Revision: 1.31 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -1003,7 +1003,7 @@ VegBank - Advanced Plot Query
 	  <table border="0" cellspacing="1" cellpadding="1">
 	    <tr bgcolor="#DDDDDD">
 	      <th rowspan="2">Row</th>
-	      <th rowspan="2">Community Name <a target="_blank" href="@forms_link@community-query.html">search</a></th>
+	      <th rowspan="2">Community Name <a target="_blank" href="@forms_link@CommQuery.jsp">search</a></th>
 	      <!-- TODO:
 	      <th rowspan="2"><p><span class="thsmall">Fit</span></p></th>
 	      <th rowspan="2"><p><span class="thsmall">Confidence</span></p></th>
