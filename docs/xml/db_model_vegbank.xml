@@ -1209,7 +1209,7 @@ change through time.</entitySummary>
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
-      <attDefinition>This is the descriptive attribute that is used to relate the congruence between two concepts.</attDefinition>
+      <attDefinition>This is the descriptive attribute that is used to relate the congruence between two concepts.  The concept that is represented in the party perspective, via the Status_ID field is [this field, i.e. &lt;,&gt;,=] the concept represented in Concept_ID field.  As normally used, (no Longer Valid Concept) [convergence] (Valid Concept).  For example, if a concept is split, the convergence would be 'greater than' (The old concept is 'greater than' the new concept).</attDefinition>
       <attForms>
         <formShow name="Austere">134</formShow>
         <formShow name="Summary">135</formShow>
@@ -14872,7 +14872,7 @@ conditions may change between resampling events.
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attRelType type="inverted" name="n/a"/>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
