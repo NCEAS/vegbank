@@ -12,9 +12,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2004-01-08 23:44:39 $'
-*  '$Revision: 1.17 $'
+*    '$Author: farrell $'
+*      '$Date: 2004-03-01 05:26:35 $'
+*  '$Revision: 1.18 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -142,14 +142,20 @@
      <tr class="<%= rowClass %>" valign="top">
 
 	    <!-- First Cell-->
-	    <td width="20%" bgcolor="<%= marginBgColor %>" align="center" nowrap>
-	      
+	    <th width="20%" class="<%= rowClass %>" align="center" nowrap>
+	     
+             <!-- THE LINK TO THE SUMMARY-->
+             <html:link page="/GenericDispatcher.do?command=RetrieveVBModelBean&jsp=GenericDisplay.jsp&rootEntity=Observation" title="summary report" paramId="accessionCode" paramName="row" paramProperty="accessionCode">
+                <img align="center" src="@image_server@report_sm.gif" alt="Summary view"></img>
+              </html:link>
+
+
 	      <!-- THE LINK TO THE SUMMARY-->
-             <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;vegbankAccessionNumber=<bean:write property="accessionCode" name="row"/>" title="summary report"><img align="center" border="0" 
+             <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;accessionCode=<bean:write property="accessionCode" name="row"/>" title="summary report"><img align="center" border="0" 
 	     	src="@image_server@report_sm.gif" alt="Summary view"></img></a>
 
 	      <!-- THE LINK TO THE COMPREHENSIVE REPORT-->
-	      <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;vegbankAccessionNumber=<bean:write property="accessionCode" name="row"/>" title="comprehensive report"><img align="center" border="0" 
+	      <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;accessionCode=<bean:write property="accessionCode" name="row"/>" title="comprehensive report"><img align="center" border="0" 
 	      	src="@image_server@comprehensive_sm.gif" alt="Comprehensive view"></img></a>
 	      
 	      <!-- THE LINK TO THE LOCATION -->
@@ -162,18 +168,20 @@
 		  -->
 	      
 	      <!-- THE LINK TO THE RAW XML-->
-              <html:link page="/DisplayPlot.do?resultType=rawXML" paramId="accessionCode" paramName="row" paramProperty="accessionCode" title="view raw XML">
+              <html:link page="/DisplayEntity.do?resultType=rawXML" paramId="accessionCode" paramName="row" paramProperty="accessionCode" title="view raw XML">
+        
                 <img align="center" border="0" src="@image_server@xml_icon.gif" alt="Raw XML view"></img>
               </html:link>
 		      
 	      <!-- THE LINK TO THE Environmental Data ASCII report -->
-              <html:link page="/DisplayPlot.do?resultType=ASCIIEnvironment" paramId="accessionCode" paramName="row" paramProperty="accessionCode" title="Environmental ASCII Report">
+
+              <html:link page="/DisplayEntity.do?resultType=ASCIIEvironment" paramId="accessionCode" paramName="row" paramProperty="accessionCode" title="Environmental ASCII Report">
                 <img align="center" border="0" src="@image_server@environmental_text.gif" alt="Environmental ASCII Report"></img>
               </html:link>
 
       
 	      <!-- THE LINK TO THE Species Data ASCII report -->
-              <html:link page="/DisplayPlot.do?resultType=ASCIISpecies" paramId="accessionCode" paramName="row" paramProperty="accessionCode" title="Species ASCII Report">
+              <html:link page="/DisplayEntity.do?resultType=ASCIISpecies" paramId="accessionCode" paramName="row" paramProperty="accessionCode" title="Species ASCII Report">
                 <img align="center" border="0" src="@image_server@species_text.gif" alt="Species ASCII Report"></img>
               </html:link>
 
@@ -186,7 +194,7 @@
 					<label for='<bean:write property="accessionCode" name="row"/>'>download</label></span>
               </input>
 
-	    </td>
+	    </th>
 
 	    <td align="center" valign="middle">
 	        <span class="category">
