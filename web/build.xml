@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2003-10-24 15:17:27 $'
-* '$Revision: 1.55 $'
+* '$Date: 2003-10-24 19:24:29 $'
+* '$Revision: 1.56 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -48,7 +48,6 @@
     <property name="style_src" value="./includes"/>
     <property name="image_src" value="./images"/>
     <property name="hostname" value="vegbank"/>
-   
     <property name="sharedhtml_src" value="./sharedhtml"/>
     <property name="workshop_src" value="./workshop"/>
     <property name="apache.document.root" value="/var/www/html"/>
@@ -84,11 +83,12 @@
     <filter token="stylesheet_generator" value="/vegbank/forms/stylesheet-generator.html"/>
     <filter token="general_link" value="/vegbank/general/"/>
     <filter token="forms_url" value="/vegbank/forms/"/>
-    <filter token="forms_link" value="/vegbank/forms/"/> <!-- add second token for forms, which is similarly named as other links -->
+    <!-- add second token for forms, which is similarly named as other links -->
+    <filter token="forms_link" value="/vegbank/forms/"/>
     <filter token="design_link" value="/vegbank/design/"/>
     <filter token="panel_link" value="/vegbank/panel/"/>
-    
-    <filter token="help_link" value="/help/"/>  
+    <filter token="help_link" value="/help/"/>
+    <filter token="manual_link" value="/help/manual/"/>
     <!-- SERVLETS -->
     <filter token="framework_servlet" value="/vegbank/servlet/framework"/>
     <filter token="stylesheet_generator_servlet" value="/vegbank/servlet/stylesheetgenerator"/>
@@ -104,6 +104,7 @@
     <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
     <mkdir dir="${apache.document.root}/plot/"/>
     <mkdir dir="${help_server}"/>
+    <mkdir dir="${help_server}manual/"/>
   </target>
   <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
@@ -117,8 +118,8 @@
   <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
   <target name="includes" depends="init" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
     <copy overwrite="true" todir="${style_server}" filtering="no">
-	<!-- <fileset dir="${style_src}" includes="**.css **/*jsp **.js"/> -->
-	<!-- Why not just copy all? -->
+      <!-- <fileset dir="${style_src}" includes="**.css **/*jsp **.js"/> -->
+      <!-- Why not just copy all? -->
       <fileset dir="${style_src}" includes="**.* **/*jsp"/>
     </copy>
   </target>
@@ -159,8 +160,10 @@
   <target name="help" depends="hdrftr" description="=&gt; dist the help pages to server">
     <copy overwrite="true" todir="${help_server}" filtering="yes">
       <fileset dir="${help_src}">
-        <include name="*.html"/>
-        <exclude name="template.html" /> <!-- don't copy the template file -->
+        <include name="**/*.html"/>
+        <!-- manual, copied too -->
+        <exclude name="**/template.html"/>
+        <!-- don't copy the template file -->
       </fileset>
     </copy>
   </target>
@@ -297,29 +300,26 @@
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-	<target name="dist" description="=&gt; Distribute all web files">
-		<antcall target="tokenfiles" />
-		<antcall target="includes" />
-		<antcall target="help" />
-		<antcall target="index" />
-		<antcall target="design" />
-		<antcall target="forms" />
-		<antcall target="general" />
-		<antcall target="images" />
-		<antcall target="vbsummary" />
-		<antcall target="history" />
-
-		<antcall target="init" />
-		<antcall target="news" />
-		<antcall target="panel" />
-		<antcall target="pubs" />
-		<antcall target="xsl" />
-		<antcall target="web" />
-		<antcall target="robot" />
-		<antcall target="workshop" />
-	</target>
-
-
+  <target name="dist" description="=&gt; Distribute all web files">
+    <antcall target="tokenfiles"/>
+    <antcall target="includes"/>
+    <antcall target="help"/>
+    <antcall target="index"/>
+    <antcall target="design"/>
+    <antcall target="forms"/>
+    <antcall target="general"/>
+    <antcall target="images"/>
+    <antcall target="vbsummary"/>
+    <antcall target="history"/>
+    <antcall target="init"/>
+    <antcall target="news"/>
+    <antcall target="panel"/>
+    <antcall target="pubs"/>
+    <antcall target="xsl"/>
+    <antcall target="web"/>
+    <antcall target="robot"/>
+    <antcall target="workshop"/>
+  </target>
   <target name="dist-bins" depends="init, panel-big-bin " description="=&gt; dist. all targets that require access to big binary storage "/>
   <target name="dist-everything" depends="dist, dist-bins, dictionary" description="=&gt; dist all targets in the dist target and dist-bins target : DIST EVERYTHING! "/>
   <!-- FIXME [Fixed:(MTL)dictionary], images target expects files not in cvs -->
