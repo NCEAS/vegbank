@@ -16,12 +16,41 @@
   @possibly_center@ 
 
 <h2>View Community Concepts - Summary</h2>
-  <vegbank:get id="concept" select="commconcept_forquery" beanName="map" pager="true" xwhereEnable="true"  where="where_commconcept_query"/>
+  <vegbank:get id="concept" select="commconcept_forquery" beanName="map" pager="true" xwhereEnable="true"  />
+  
+  <bean:parameter id="beanwparam" name="wparam" value="" />
+<logic:empty name="concept-BEANLIST">
+  <!-- try to append wildcard to plantName if not there already -->
+  <logic:notMatch name="beanwparam" value="%">
+    <!-- if user isn't using wildcards, add them if no plants were found -->
+    <bean:define id="beanwparamwild1"><bean:write name="beanwparam" />%</bean:define>
+    <bean:define id="beanwparamwild2">%<bean:write name="beanwparam" />%</bean:define>
+  </logic:notMatch>
+  <!-- try get again, but specify wparam here -->
+  <vegbank:get id="concept" select="commconcept_forquery" 
+    beanName="map" pager="true" xwhereEnable="true" wparam="beanwparamwild1" />
+     
+    <logic:empty name="concept-BEANLIST">
+      <!-- try last time, with wildcard start and end -->
+      <vegbank:get id="concept" select="commconcept_forquery" 
+    beanName="map" pager="true" xwhereEnable="true" wparam="beanwparamwild2" />
+     
+    </logic:empty>
+  
+</logic:empty>
+
+
+
+ <logic:empty name="concept-BEANLIST">
+             <p>Sorry, no Community concepts match your criteria.  Please <a href="javascript:history.back()">try again</a>.</p>
+ </logic:empty>
+          
+ <logic:notEmpty name="beanwparam">
+  <p>You searched for communities with names like: "<bean:write name="beanwparam" />" .  Try <a href="@forms_link@plot-query-simple.jsp">another search</a>.</p>
+ </logic:notEmpty>
 
 <vegbank:pager />
-<logic:empty name="concept-BEANLIST">
-             <p>Sorry, no Community concepts match your criteria.</p>
-          </logic:empty>
+          
 <logic:notEmpty name="concept-BEANLIST"><!-- set up table -->
 <table width="100%" cellpadding="2" class="leftrightborders" ><!--each field, only write when HAS contents-->
 <!-- header -->
