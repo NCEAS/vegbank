@@ -17,6 +17,11 @@ table.outsideborder {border-style: solid;
                  border-collapse: collapse;
                  border-color:#333333 }
 
+table.noborder {border-style: none; border-width:0px ; border-collapse: collapse}
+table.noborder th {border-style: none; border-width:0px }
+table.noborder td {border-style: none; border-width:0px }
+
+
 A:Link			{ color: #005680; text-decoration: underline }
 A:Visited		{ color: #003366; text-decoration: underline }
 /* A:Visited		{ color: #6699CC; } */
