@@ -152,7 +152,9 @@
                   <!-- extra stuff before something : -->
         <xsl:if test="string-length($currentAtt/attFormsHTMLpre)&gt;0">
           <!-- insert extra stuff -->
-          <xsl:value-of select="$currentAtt/attFormsHTMLpre"/>
+          <!--logic:notEqual parameter="textoutput" value="true"-->
+            <xsl:value-of select="$currentAtt/attFormsHTMLpre"/>
+          <!--/logic:notEqual-->
         </xsl:if>
           <!-- this is what gets written on cell -->
           <xsl:variable name="currFldMaybeTransl">
@@ -181,12 +183,17 @@
           <!-- units -->
         <xsl:if test="string-length($currentAtt/attUnits)&gt;0"><xsl:if test="contains($view,'csv')=false"><!-- do not write units to csv data views -->
           <xsl:comment>only write units if there is something here:</xsl:comment>
-          <span class="units"><xsl:value-of select="$currentAtt/attUnits"/></span>
+          <logic:notEqual parameter="textoutput" value="true">
+                    <span class="units"><xsl:value-of select="$currentAtt/attUnits"/></span></logic:notEqual>
         </xsl:if></xsl:if>
         <!-- extra -->
+      
         <xsl:if test="string-length($currentAtt/attFormsHTMLpost)&gt;0">
           <!-- insert extra stuff -->
-          <xsl:value-of select="$currentAtt/attFormsHTMLpost"/>
+          <!--logic:notEqual parameter="textoutput" value="true"-->          
+             <xsl:value-of select="$currentAtt/attFormsHTMLpost"/>
+          <!--/logic:notEqual-->
+
         </xsl:if>
         
         </xsl:element>
@@ -196,7 +203,8 @@
         <xsl:if test="$container!='span'">
       <logic:empty name="onerowof{$currEnt}" property="{$currFld}">
         <!-- only extra bit if empty and container is not p-->
-        <xsl:if test="contains($view,'csv')=false"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></xsl:if>
+        <xsl:if test="contains($view,'csv')=false"><logic:notEqual parameter="textoutput" value="true">
+<xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></logic:notEqual></xsl:if>
       </logic:empty>
         </xsl:if>
     </xsl:element><!-- td or p -->
