@@ -7,8 +7,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2003-01-03 18:20:05 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2003-01-09 03:24:20 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -421,114 +421,133 @@ public class utility
 			 sb = new StringBuffer();
 			 this.conn = this.getPlotDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
+       
+			 // check that the plot exists if not then bail
+       sb.append("select count(plot_id) from plot where plot_id = "+plotId);
+			 Statement query = conn.createStatement();
+			 ResultSet dbresults = null;
+       dbresults = query.executeQuery( sb.toString() );
+       //retrieve the results
+       int res = 0;
+       while (dbresults.next())
+       {
+        res = dbresults.getInt(1);
+       }
+       // if the res -- number of plots is 0 then alert 
+       if ( res == 0 )
+       {
+        System.out.println("utility > This plot does not exist in the database and will not be removed: " + res);
+       }
+       else
+       {
+        System.out.println("utility > This plot exists in the database and will be removed: " + res);
+        // do the deletion 
+        sb = new StringBuffer();
+			  sb.append("delete from stratumcomposition where taxonobservation_id in ( ");
+			  sb.append("select taxonobservation_id from taxonobservation where observation_id = ( ");
+			  sb.append("select observation_id from observation where plot_id = ("+plotId+"))); \n");
+			  pstmt = conn.prepareStatement( sb.toString() );
+			  SQLWarning warning = pstmt.getWarnings();
+			  if ( warning != null )
+			  {
+			  	 System.out.println("WARNINGS > " + warning.toString());
+			  }
+			  else
+			  {
+			  	 results = pstmt.execute();
+			  	 System.out.println("utility  > dropped stratumcomposition: " );
+			  }
 			 
-			 sb.append("delete from stratumcomposition where taxonobservation_id in ( ");
-			 sb.append("select taxonobservation_id from taxonobservation where observation_id = ( ");
-			 sb.append("select observation_id from observation where plot_id = ("+plotId+"))); \n");
-			 pstmt = conn.prepareStatement( sb.toString() );
-			 SQLWarning warning = pstmt.getWarnings();
-			 if ( warning != null )
-			 {
-				 System.out.println("WARNINGS > " + warning.toString());
-			 }
-			 else
-			 {
-				 results = pstmt.execute();
-				 System.out.println("utility  > dropped stratumcomposition: " + results);
-			 }
+			   sb = new StringBuffer();
+			   sb.append("delete from commclass where observation_id = ( ");
+			  sb.append("select observation_id from observation where plot_id = "+plotId+" )");
+			  pstmt = conn.prepareStatement( sb.toString() );
+			  warning = pstmt.getWarnings();
+			  if ( warning != null )
+			  {
+			  	 System.out.println("WARNINGS > " + warning.toString());
+			  }
+			  else
+			  {
+			  	 results = pstmt.execute();
+			  	 System.out.println("utility  > dropped commclass: " );
+			  }
+			  sb = new StringBuffer();
+			  sb.append("delete from stratum where observation_id = (  ");
+			  sb.append(" select observation_id from observation where plot_id = ("+plotId+" ))");
+			  pstmt = conn.prepareStatement( sb.toString() );
+			  warning = pstmt.getWarnings();
+			  if ( warning != null )
+			  {
+				   System.out.println("WARNINGS > " + warning.toString());
+			  }
+			  else
+			  {
+				   results = pstmt.execute();
+				  System.out.println("utility  > dropped stratum: " );
+			  }
 			 
-			 sb = new StringBuffer();
-			 sb.append("delete from commclass where observation_id = ( ");
-			 sb.append("select observation_id from observation where plot_id = "+plotId+" )");
-			 pstmt = conn.prepareStatement( sb.toString() );
-			 warning = pstmt.getWarnings();
-			 if ( warning != null )
-			 {
-				 System.out.println("WARNINGS > " + warning.toString());
-			 }
-			 else
-			 {
-				 results = pstmt.execute();
-				 System.out.println("utility  > dropped commclass: " + results);
-			 }
+			  sb = new StringBuffer();
+			  sb.append("delete from taxonobservation where observation_id = ( ");
+			  sb.append("select observation_id from observation where plot_id = ( "+plotId+" ))");
+			  pstmt = conn.prepareStatement( sb.toString() );
+			  warning = pstmt.getWarnings();
+			  if ( warning != null )
+			  {
+			 	 System.out.println("WARNINGS > " + warning.toString());
+			  }
+			  else
+			  {
+			 	 results = pstmt.execute();
+				 System.out.println("utility  > dropped taxonobservation: ");
+			  }
+        sb = new StringBuffer();
+			  sb.append(" delete from observation where plot_id = "+plotId );
+			  pstmt = conn.prepareStatement( sb.toString() );
+			  warning = pstmt.getWarnings();
+			  if ( warning != null )
+			  {
+			  	 System.out.println("WARNINGS > " + warning.toString());
+			  }
+			  else
+			  {
+			  	 results = pstmt.execute();
+			  	 System.out.println("utility  > dropped observation: " );
+			  }
+			   
+			  sb = new StringBuffer();
+			  sb.append(" delete from plot where plot_id = "+plotId );
+			  pstmt = conn.prepareStatement( sb.toString() );
+			  warning = pstmt.getWarnings();
+			  if ( warning != null )
+			  {
+				   System.out.println("WARNINGS > " + warning.toString());
+			  }
+			  else
+			  {
+				   results = pstmt.execute();
+			  	 System.out.println("utility  > dropped plot: " );
+			  }
 			 
-			 sb = new StringBuffer();
-			 sb.append("delete from stratum where observation_id = (  ");
-			 sb.append(" select observation_id from observation where plot_id = ("+plotId+" ))");
-			 pstmt = conn.prepareStatement( sb.toString() );
-			 warning = pstmt.getWarnings();
-			 if ( warning != null )
-			 {
-				 System.out.println("WARNINGS > " + warning.toString());
+			  // DROP ALSO FROM THE SUMMARY TABLES
+			  sb = new StringBuffer();
+			  sb.append(" delete from plotspeciessum where plot_id = "+plotId +";" );
+			  sb.append(" delete from plotsitesummary where plot_id = "+plotId );
+			  pstmt = conn.prepareStatement( sb.toString() );
+			  warning = pstmt.getWarnings();
+			  if ( warning != null )
+			  {
+			  	 System.out.println("WARNINGS > " + warning.toString());
+			  }
+			  else
+			  {
+			  	 results = pstmt.execute();
+			  	 System.out.println("utility  > dropped plotsitesummary: " );
+			  }
+			  pstmt.close();
 			 }
-			 else
-			 {
-				 results = pstmt.execute();
-				 System.out.println("utility  > dropped stratum: " + results);
-			 }
-			 
-			 sb = new StringBuffer();
-			 sb.append("delete from taxonobservation where observation_id = ( ");
-			 sb.append("select observation_id from observation where plot_id = ( "+plotId+" ))");
-			 pstmt = conn.prepareStatement( sb.toString() );
-			 warning = pstmt.getWarnings();
-			 if ( warning != null )
-			 {
-				 System.out.println("WARNINGS > " + warning.toString());
-			 }
-			 else
-			 {
-				 results = pstmt.execute();
-				 System.out.println("utility  > dropped taxonobservation: " + results);
-			 }
-			 
-			 sb = new StringBuffer();
-			 sb.append(" delete from observation where plot_id = "+plotId );
-			 pstmt = conn.prepareStatement( sb.toString() );
-			 warning = pstmt.getWarnings();
-			 if ( warning != null )
-			 {
-				 System.out.println("WARNINGS > " + warning.toString());
-			 }
-			 else
-			 {
-				 results = pstmt.execute();
-				 System.out.println("utility  > dropped observation: " + results);
-			 }
-			 
-			 sb = new StringBuffer();
-			 sb.append(" delete from plot where plot_id = "+plotId );
-			 pstmt = conn.prepareStatement( sb.toString() );
-			 warning = pstmt.getWarnings();
-			 if ( warning != null )
-			 {
-				 System.out.println("WARNINGS > " + warning.toString());
-			 }
-			 else
-			 {
-				 results = pstmt.execute();
-				 System.out.println("utility  > dropped plot: " + results);
-			 }
-			 
-			 // DROP ALSO FROM THE SUMMARY TABLES
-			 sb = new StringBuffer();
-			 sb.append(" delete from plotspeciessum where plot_id = "+plotId +";" );
-			 sb.append(" delete from plotsitesummary where plot_id = "+plotId );
-			 pstmt = conn.prepareStatement( sb.toString() );
-			 warning = pstmt.getWarnings();
-			 if ( warning != null )
-			 {
-				 System.out.println("WARNINGS > " + warning.toString());
-			 }
-			 else
-			 {
-				 results = pstmt.execute();
-				 System.out.println("utility  > dropped plotsitesummary: " + results);
-			 }
-			 
-			 conn.commit();
-			 pstmt.close();
-			 conn.close();
+			  conn.commit();
+			  conn.close();
 		 }
 		 catch ( Exception e )
 		 {
