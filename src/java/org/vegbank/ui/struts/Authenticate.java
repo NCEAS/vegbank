@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-10 23:37:14 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-14 17:09:36 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ public class Authenticate implements Authentication {
 		{
 			result = true;
 		}
-		
+		System.out.println("Authenticate: succeeded? "+ result);
 		return result;
 	}
 
