@@ -1,14 +1,14 @@
 /**
 * '$RCSfile: DBinsertPlotSource.java,v $'
-* Purpose: A Class that loads plot data to the vegbank database systemr
+* Purpose: A Class that loads plot data to the vegbank database system
 * Copyright: 2000 Regents of the University of California and the
 *            National Center for Ecological Analysis and Synthesis
 * Authors: John Harris
-* Release: @release@
+* Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-06-03 01:11:45 $'
-*   '$Revision: 1.19 $'
+*   '$Date: 2003-06-03 21:41:33 $'
+*   '$Revision: 1.20 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -25,11 +25,6 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 package databaseAccess;
-
-import org.vegbank.plots.datasource.PlotDataSource;
-
-import org.vegbank.common.utility.*;
-import org.vegbank.common.utility.Utility;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -50,10 +45,13 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.vegbank.common.utility.LocalDbConnectionBroker;
+import org.vegbank.common.utility.Utility;
+import org.vegbank.plots.datasource.PlotDataSource;
+import org.vegbank.servlet.util.GetURL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import org.vegbank.servlet.util.GetURL;
 import xmlresource.datatype.VegProject;
 import xmlresource.utils.XMLparse;
 
@@ -72,15 +70,11 @@ public class DBinsertPlotSource {
 
 	public Node plotNode;
 	public Connection conn;
-	public Statement query = null;
 	private PrintWriter out;
 	private String logFile = "loadlog.txt";
 
-	//refers to the project for which the data is to be used in the db class
+
 	public VegProject project;
-	//refers to the given plot, a sub-set of data of the above project, for use in
-	//the class
-	//public Plot plot;
 	private XMLparse parser;
 
 	// variables that are quite general to the class
@@ -102,7 +96,7 @@ public class DBinsertPlotSource {
 	int namedPlaceId;
 	int plotObservationId;
 	int strataId;
-	int taxonObservationId;
+	//int taxonObservationId;
 	int coverMethodId;
 	int stratumMethodId;
 
@@ -452,7 +446,6 @@ public class DBinsertPlotSource {
 			// CLOSE THE OBJECTS
 			System.out.println("DBinsertPlotSource > closing objects");
 			pstmt.close();
-			//this.conn.close();
 			// let the connection pool know that the connection pool is to be destroyed
 			//System.out.println("DBinsertPlotSource > destroying the conn. pool");
 			//connectionBroker.manageLocalDbConnectionBroker("destroy");
@@ -618,6 +611,7 @@ public class DBinsertPlotSource {
 			try
 			{
 				System.out.println("DBinsertPlotSource > inserting plot: " + plotName);
+				
 				// update the instance vraible with the user's email address
 				// which will be used for loading the plot and for constructing the 
 				// accession number
@@ -715,17 +709,26 @@ public class DBinsertPlotSource {
 				}
 				else
 				{
-					if (insertCoverMethod() == false)
+					// Check if the CoverMethod Exists 
+					int possibleCoverMethodId = this.getCoverMethodId();
+					if ( possibleCoverMethodId != 0 )
 					{
-						commit = false;
-						System.out.println("DBinsertPlotSource > insert covermethod: " + commit);
+						this.coverMethodId = possibleCoverMethodId;
+					}
+					else
+					{
+						if (insertCoverMethod() == false)
+						{
+							commit = false;
+							System.out.println("DBinsertPlotSource > insert covermethod: " + commit);
+						}
 					}
 
 					// Check if the StratumMethod Exists 
 					int possibleStratumeMethodId = this.getStatumMethodId();
 					if ( possibleStratumeMethodId != 0 )
 					{
-						possibleStratumeMethodId = this.stratumMethodId;
+						this.stratumMethodId = possibleStratumeMethodId;
 					}
 					else
 					{
@@ -736,13 +739,11 @@ public class DBinsertPlotSource {
 						}
 					}
 						
-
 					if (insertPlotObservation() == false)
 					{
 						commit = false;
 						System.out.println("DBinsertPlotSource > insert observation: " + commit);
 					}
-
 					if (insertCommunities() == false)
 					{
 						commit = false;
@@ -780,6 +781,7 @@ public class DBinsertPlotSource {
 					conn.rollback();
 					debug.append("<insert>false</insert>\n");
 				}
+				//this.testSimpleQuery("about to finish");
 				LocalDbConnectionBroker.manageLocalDbConnectionBroker("destroy");
 			}
 			catch (Exception e)
@@ -789,6 +791,74 @@ public class DBinsertPlotSource {
 					"<exceptionMessage>" + e.getMessage() + "</exceptionMessage>\n");
 				e.printStackTrace();
 			}
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	private int getCoverMethodId()
+	{
+		int result = 0;
+		try
+		{
+			StringBuffer sb = new StringBuffer();
+
+			sb.append(
+				"SELECT covermethod_id from COVERMETHOD where covertype = '"
+					+ source.getCoverMethodName(plotName)
+					+ "'");
+
+			Statement query = conn.createStatement();
+			ResultSet rs = query.executeQuery(sb.toString());
+			int cnt = 0;
+			while (rs.next())
+			{
+				result = rs.getInt(1);
+				cnt++;
+			}
+			//send warnings
+			if (cnt == 0)
+			{
+				System.out.println(
+					"warning: There were no covermethods matching: "
+						+ source.getCoverMethodName(plotName));
+			}
+		}
+		catch (SQLException se)
+		{
+			System.out.println("Caught SQL Exception: " + se.getMessage());
+			if (!se.getMessage().equals("No results were returned by the query."))
+			{
+				se.printStackTrace();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	 */
+	private void testSimpleQuery(String message)
+	{
+		System.out.println(message);
+		try 
+		{
+				StringBuffer sb = new StringBuffer();
+
+				sb.append("select organizationname from party"); 
+
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery(sb.toString());
+				
+				while (rs.next())
+				{
+							System.out.println(rs.getString(1));
+			  }
+		}
+		catch ( Exception e )
+		{
+			System.out.println("########## Come Onnn there must be journals in the db");
 		}
 	}
 
@@ -1222,6 +1292,48 @@ public class DBinsertPlotSource {
 		}
 		return (i);
 	}
+	
+	/**
+	 * Gets the party id for an the matching individual
+	 * otherwise return code of 0 is returned ... 
+	 * A 0 return represents a failure to get the party id
+	 * 
+	 * @param organizationName
+	 */
+	private int getPartyId(	String organizationName)
+	{
+		int i = 0;
+		StringBuffer sb = new StringBuffer();
+
+		try 
+		{
+			sb.append("SELECT party_id from PARTY where ");
+
+      
+			sb.append(" upper(organizationName) ");
+			sb.append(" like '" + organizationName.toUpperCase() + "'");
+			Statement query = conn.createStatement();
+			ResultSet rs = query.executeQuery(sb.toString());
+			
+			rs.next();
+			i = rs.getInt(1);
+		} 
+		catch (SQLException se) 
+		{
+			System.out.println("Caught SQL Exception: " + se.getMessage());
+			if ( !se.getMessage().equals("No results were returned by the query.") )
+			{
+				System.out.println("sql: " + sb.toString());
+				se.printStackTrace();
+			}
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Caught Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return (i);
+	}
 
 	/**
 	 * method that returns true if the party already exists in the database
@@ -1436,7 +1548,7 @@ public class DBinsertPlotSource {
 			StringBuffer sb = new StringBuffer();
 			//get the strataId number
 			coverMethodId = getNextId("covermethod");
-			String coverType = "replace this";
+			String coverType = source.getCoverMethodName(plotName);
 			//insert the strata values
 			sb.append("INSERT into COVERMETHOD (covermethod_id, coverType) ");
 			sb.append("values(?,?)");
@@ -1461,14 +1573,17 @@ public class DBinsertPlotSource {
 	}
 
 	/**
-	 * method to insert the cover method data
+	 * method to insert the stratum method data
 	 */
-	private boolean insertStratumMethod() {
+	private boolean insertStratumMethod()
+	{
+		//this.testSimpleQuery("INSERTING STRATUMMETHOD:");
 		StringBuffer sb = new StringBuffer();
-		try {
+		try
+		{
 			//get the strataId number
 			stratumMethodId = getNextId("stratummethod");
-			String stratumMethodName = source.getStratumMethodName(plotName); 
+			String stratumMethodName = source.getStratumMethodName(plotName);
 			//insert the strata values
 			sb.append(
 				"INSERT into STRATUMMETHOD (stratummethod_id, stratummethodname) ");
@@ -1480,7 +1595,9 @@ public class DBinsertPlotSource {
 			//execute the p statement
 			pstmt.execute();
 			// pstmt.close();
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			System.out.println("Caught Exception: " + e.getMessage());
 			System.out.println("sql: " + sb.toString());
 			e.printStackTrace();
@@ -1488,21 +1605,17 @@ public class DBinsertPlotSource {
 			return (false);
 			//System.exit(0);
 		}
-		
+
 		Vector strataTypes = source.uniqueStrataNames;
-		for (int i = 0; i < strataTypes.size() ; i++ )
+		for (int i = 0; i < strataTypes.size(); i++)
 		{
 			String sName = strataTypes.elementAt(i).toString();
 			String description = "";
-	
-			int stratumTypeId = 
-				this.insertStratumType( 
-					this.stratumMethodId,
-					sName,
-					sName,
-					description);
+
+			int stratumTypeId =
+				this.insertStratumType(this.stratumMethodId, sName, sName, description);
 		}
-		
+
 		return (true);
 	}
 
@@ -1563,9 +1676,8 @@ public class DBinsertPlotSource {
 	{
 		boolean successfulCommit = true;
 
-		System.out.println(
-			"DBinsertPlotSource > inserting taxonomy data for: "+ plotName
-		);
+		System.out.println("DBinsertPlotSource > inserting taxonomy data for: "+plotName);
+		//this.testSimpleQuery("Inserting taxon data");
 		//get the number of taxonObservations
 		Vector uniqueTaxa = source.plantTaxaNames;
 		// INSERT EACH OF THE PLANTS ASSOCIATED WITH THIS PLOT
@@ -1573,7 +1685,7 @@ public class DBinsertPlotSource {
 		{
 			StringBuffer sb = new StringBuffer();
 			int nameId = 0;
-			//sb = new StringBuffer();
+			int taxonObservationId = 0;
 			
 			// get the taxonObservation number which will be used in the 
 			taxonObservationId = getNextId("taxonObservation");
@@ -1604,6 +1716,15 @@ public class DBinsertPlotSource {
 				// Could not find a matching name in the database
 				debug.append(
 					"<exceptionMessage>Could not find plant taxon '"+ authorNameId + "' in database</exceptionMessage>\n"
+				);
+				successfulCommit  = false;
+			}
+			
+			if ( taxonCover == null || taxonCover.equals("") )
+			{
+				// Could not find a taxonCover for this plant
+				debug.append(
+					"<exceptionMessage>Did not find a valid plant taxon cover for  '"+ authorNameId + "' in data source</exceptionMessage>\n"
 				);
 				successfulCommit  = false;
 			}
@@ -1670,29 +1791,126 @@ public class DBinsertPlotSource {
 				e.printStackTrace();
 				successfulCommit = false;
 			}
+			
+			boolean result = insertTaxonInterpritation(nameId, taxonObservationId);
+			if ( result == false)
+			{
+				successfulCommit = false;
+			}
 		}
 
 		return (successfulCommit);
 	}
 
-	private int getPlantNameId(String searchName)
+	/**
+	 * @param nameId
+	 * @param taxonObservationId
+	 */
+	private boolean insertTaxonInterpritation(int nameId, int taxonObservationId)
+	{
+		boolean result = true;
+		
+		// Need to get the PK, the conceptId, partyId and date
+		int taxonInterpretationId = getNextId("taxonInterpretation");
+		int conceptId = this.getPlantConceptId(nameId);
+		int partyId = this.getPartyId("NPS");   // FIXME: get from loader
+		int roleId = this.getRoleId("Not specified");
+		
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append(
+			"INSERT into TAXONINTERPRETATION (TAXONOBSERVATION_ID, TAXONINTERPRETATION_ID, ");
+		sb.append(" PLANTNAME_ID, PARTY_ID, PLANTCONCEPT_ID, ROLE_ID, originalinterpretation, currentinterpretation, interpretationdate ) ");
+		sb.append(" values(?,?,?,?,?,?,?,?,?) ");
+
+		try
+		{
+			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setInt(1, taxonObservationId);
+			pstmt.setInt(2, taxonInterpretationId);
+			pstmt.setInt(3, nameId);
+			pstmt.setInt(4, partyId);
+			pstmt.setInt(5, conceptId);
+			pstmt.setInt(6, roleId); 
+			pstmt.setBoolean(7, true);
+			pstmt.setBoolean(8, true);	
+			pstmt.setString(9, "now()");					
+			pstmt.execute();
+		}
+		catch (Exception e)
+		{
+			System.out.println("Caught Exception: " + e.getMessage());
+			System.out.println("sql: " + sb.toString());
+			e.printStackTrace();
+			result = false;
+		}
+		return result;
+	}
+
+	/**
+	 * @param string
+	 * @return
+	 */
+	private int getRoleId(String string)
 	{
 		int result = 0;
-		String sql = "select plantname_id from plantusage where plantname = '"+ searchName + "'";
+		String sql = "select role_id from aux_role where rolecode = '"+  string + "'";
 		try
 		{
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			// Just get the first match --- TODO: Check for > 1 .. this is an error
-			while (rs.next() )
-			{
-				result = rs.getInt(1);
-			}
+			rs.next();
+			result = rs.getInt(1);
+		}
+		catch (Exception e)
+		{ 
+			System.out.println("DBinsertPlotSource > Could not find roleId for '" + string + "'" );
+			System.out.println("DBinsertPlotSource > error was: " + e.getMessage() );
+		}
+		return result;
+	}
+
+	/**
+	 * @param nameId
+	 * @return
+	 */
+	private int getPlantConceptId(int nameId)
+	{
+		int result = 0;
+		String sql = "select plantconcept_id from plantusage where plantname_id = "+  nameId;
+		try
+		{
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			// Just get the first match --- TODO: Check for > 1 .. this is an error
+			rs.next();
+			result = rs.getInt(1);
+		}
+		catch (Exception e)
+		{ 
+			System.out.println("DBinsertPlotSource > Could not find plantConceptId for " + nameId );
+			System.out.println("DBinsertPlotSource > error was: " + e.getMessage() );
+		}
+		return result;
+	}
+
+	private int getPlantNameId(String searchName)
+	{
+		int result = 0;
+		String sql = "select plantname_id from plantname where plantname = '"+ searchName + "'";
+		try
+		{
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			// Just get the first match --- TODO: Check for > 1 .. this is an error
+			rs.next();
+			result = rs.getInt(1);
 		}
 		catch (Exception e)
 		{ 
 			System.out.println("DBinsertPlotSource > Could not find plantNameId for " + searchName );
-			System.out.println("DBinsertPlotSource > error was " + e.getMessage() );
+			System.out.println("DBinsertPlotSource > error was: " + e.getMessage() );
 		}
 		return result;
 	}
@@ -1706,7 +1924,7 @@ public class DBinsertPlotSource {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			// Just get the first match --- TODO: Check for > 1 .. this is an error
-			while (rs.next() )
+			while ( rs.next() )
 			{
 				result = rs.getInt(1);
 			}
@@ -1889,6 +2107,7 @@ public class DBinsertPlotSource {
 	 */
 	private boolean insertStrata() 
 	{
+		//this.testSimpleQuery("Before inserting strata");
 		StringBuffer sb = new StringBuffer();
 		try 
 		{
@@ -1905,17 +2124,14 @@ public class DBinsertPlotSource {
 				String base = Utility.escapeCharacters( source.getStrataBase(plotName, sName) );
 				String height = Utility.escapeCharacters( source.getStrataHeight(plotName, sName) );
 				String description = "";
-				System.out.println(
-					"DBinsertPlotSource > inserting stratum type: " + sName);
-				System.out.println(
-					"DBinsertPlotSource > stratum height: "
-						+ height
-						+ " base: "
-						+ base);
+				System.out.println("DBinsertPlotSource > inserting stratum type: " + sName);
+				System.out.println("DBinsertPlotSource > stratum height: "
+						+ height+ " base: "+ base);
 
 				// Get the stratumTypeId
 				int stratumTypeId = getStratumTypeId(sName);
 
+				//this.testSimpleQuery("After getting stratumTypeId:" + stratumTypeId);
 				if (height != null && height.length() >= 1) 
 				{
 					//insert the strata values
@@ -1954,7 +2170,7 @@ public class DBinsertPlotSource {
 	 */
 	private int getStratumTypeId(String sName)
 	{
-		int result=0;
+		int strataTypeId = 0;
 		try {
 			StringBuffer sb = new StringBuffer();
 
@@ -1966,7 +2182,7 @@ public class DBinsertPlotSource {
 			ResultSet rs = query.executeQuery(sb.toString());
 			int cnt = 0;
 			while (rs.next()) {
-				strataId = rs.getInt(1);
+				strataTypeId = rs.getInt(1);
 				cnt++;
 			}
 			//send warnings
@@ -1983,7 +2199,7 @@ public class DBinsertPlotSource {
 				se.printStackTrace();
 			}
 		}
-		return result;
+		return strataTypeId;
 	}
 
 	/**

@@ -20,8 +20,8 @@ import java.util.Vector;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2003-06-03 01:11:45 $' <br>
- * 	'$Revision: 1.3 $' <br>
+ *  '$Date: 2003-06-03 21:41:33 $' <br>
+ * 	'$Revision: 1.4 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -3570,7 +3570,15 @@ public static void main(String[] args)
 	 */
 	public String getStratumMethodName(String plotName)
 	{
-		return "NatureServe StratumMethod"; 
+		return "NPS StratumMethod"; 
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getCoverMethodName(java.lang.String)
+	 */
+	public String getCoverMethodName(String plotName)
+	{
+		return "NPS CoverMethod"; 
 	}
 
 }

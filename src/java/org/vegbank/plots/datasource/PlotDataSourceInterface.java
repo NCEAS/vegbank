@@ -17,8 +17,8 @@ import java.util.Vector;
  * 
  * Release: @release@ <br>
  * '$Author: farrell $' <br>
- * '$Date: 2003-06-03 01:11:45 $' <br>
- * '$Revision: 1.3 $' <br>
+ * '$Date: 2003-06-03 21:41:33 $' <br>
+ * '$Revision: 1.4 $' <br>
  */
 public interface PlotDataSourceInterface
 {
@@ -657,5 +657,12 @@ public interface PlotDataSourceInterface
 	 * @param strataName -- the name of the stratum 
 	 */
 	 String getStratumMethodName(String plotName);
-		
+	
+	/**
+	 * method that returns the name of the coverMethod used
+	 *
+	 * @param plotName -- the name of the plot
+	 * @param strataName -- the name of the stratum 
+	 */
+	 String getCoverMethodName(String plotName);	
 }

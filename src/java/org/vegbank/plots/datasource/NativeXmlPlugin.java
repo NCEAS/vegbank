@@ -14,8 +14,8 @@ import xmlresource.utils.XMLparse;
  * Access to the data stored in the native VegBank XML structure.
  * 
  *	'$Author: farrell $'
- *	'$Date: 2003-06-03 01:11:45 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-06-03 21:41:33 $'
+ *	'$Revision: 1.4 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -1764,6 +1764,15 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getStratumMethodName(java.lang.String)
 	 */
 	public String getStratumMethodName(String plotName)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getCoverMethodName(java.lang.String)
+	 */
+	public String getCoverMethodName(String plotName)
 	{
 		// TODO Auto-generated method stub
 		return null;

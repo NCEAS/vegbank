@@ -13,8 +13,8 @@ import java.util.*;
  *  Release: @release@
  *	
  *  '$Author: farrell $'
- *  '$Date: 2003-06-03 01:11:45 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-06-03 21:41:33 $'
+ *  '$Revision: 1.4 $'
  */
 public class PlotDataSource 
 {
@@ -1793,6 +1793,16 @@ public String getSurficialDeposits(String plotName)
 	public String getStratumMethodName(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getStratumMethodName(plotName);
+		return(s);
+	}
+	
+	/**
+	 * @param plotName
+	 * @return
+	 */
+	public String getCoverMethodName(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCoverMethodName(plotName);
 		return(s);
 	}
 	

@@ -9,8 +9,8 @@ import java.sql.*;
  *
  *	
  *	'$Author: farrell $' <br>
- *	'$Date: 2003-06-03 01:11:45 $' <br>
- *	'$Revision: 1.3 $' <br>
+ *	'$Date: 2003-06-03 21:41:33 $' <br>
+ *	'$Revision: 1.4 $' <br>
  */
  
 public class VegBankDataSourcePlugin implements PlotDataSourceInterface
@@ -2683,6 +2683,15 @@ public boolean  getRevisions(String plotName)
 	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getStratumMethodName(java.lang.String)
 	 */
 	public String getStratumMethodName(String plotName)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getCoverMethodName(java.lang.String)
+	 */
+	public String getCoverMethodName(String plotName)
 	{
 		// TODO Auto-generated method stub
 		return null;
