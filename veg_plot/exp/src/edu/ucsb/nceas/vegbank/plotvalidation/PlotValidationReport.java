@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-13 17:59:08 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2002-12-19 00:34:46 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,9 @@ public class PlotValidationReport
 	
 	/**
 	 * method called by the validator to set a message in the report
+	 * @param  target -- this is the value used in the 'PlotDataSource'
+	 * @param  constraints -- the vector containing the allowable element values
+	 *
 	 */
 	public void setMessage(String target, Vector constraints)
 	{

@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-13 22:25:15 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2002-12-19 00:34:46 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ public class ValidationConstraint
 					 String table = ((String)tNames.elementAt(i)).toUpperCase();
 					 String attribute = ((String)aNames.elementAt(i)).toUpperCase();
 					 String key = table+"|"+attribute;
-					 System.out.println(table+"|"+attribute);
+					 //System.out.println(table+"|"+attribute);
 					 listMap.put(key, ""+i);
 				 }
 			 }
