@@ -104,8 +104,8 @@
 	
 	<jar jarfile ="${build}/plotQuery.jar"
 		basedir="${build}"
-		includes="${build}/ **"
-
+		includes="${build}/ **.class **.java **.properties"
+		excludes="${build}/**.jar"
 	/>
 
 	<jar jarfile ="${build}/plotAccess.jar"
