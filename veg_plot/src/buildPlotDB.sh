@@ -19,15 +19,21 @@ EOF
 sqlplus harris/use4dev @vegPlotTables.sql <<EOF
 EOF
 
+
+end 
+
+
+
+
 # Verify that the tables are on the DB
 /usr/local/devtools/jdk1.2.2/bin/java -classpath /usr/local/devtools/jdk1.2.2/lib/rt.jar:/usr/local/devtools/jdk1.2.2/lib/dev.jar:./oracleJDBC.jar:./ loadTNCspecies -Q
 
 # Load the tnv plot data first
-##/usr/local/devtools/jdk1.2.2/bin/java -classpath /usr/local/devtools/jdk1.2.2/lib/rt.jar:/usr/local/devtools/jdk1.2.2/lib/dev.jar:./oracleJDBC.jar:./ loadTNCplot -plot tncYosemitePlotsInput
+/usr/local/devtools/jdk1.2.2/bin/java -classpath /usr/local/devtools/jdk1.2.2/lib/rt.jar:/usr/local/devtools/jdk1.2.2/lib/dev.jar:./oracleJDBC.jar:./ loadTNCplot -plot tncYosemitePlotsInput
 /usr/local/devtools/jdk1.2.2/bin/java -classpath /usr/local/devtools/jdk1.2.2/lib/rt.jar:/usr/local/devtools/jdk1.2.2/lib/dev.jar:./oracleJDBC.jar:./ loadTNCplot -plot tncSamplePlotsInput
 
 # Load the tnc species data associate with the plot data loaded above
-##/usr/local/devtools/jdk1.2.2/bin/java -classpath /usr/local/devtools/jdk1.2.2/lib/rt.jar:/usr/local/devtools/jdk1.2.2/lib/dev.jar:./oracleJDBC.jar:./ loadTNCspecies -species tncYosemiteSpeciesInput
+/usr/local/devtools/jdk1.2.2/bin/java -classpath /usr/local/devtools/jdk1.2.2/lib/rt.jar:/usr/local/devtools/jdk1.2.2/lib/dev.jar:./oracleJDBC.jar:./ loadTNCspecies -species tncYosemiteSpeciesInput
 /usr/local/devtools/jdk1.2.2/bin/java -classpath /usr/local/devtools/jdk1.2.2/lib/rt.jar:/usr/local/devtools/jdk1.2.2/lib/dev.jar:./oracleJDBC.jar:./ loadTNCspecies -species tncSampleSpeciesInput
 
 # send a query to the DB

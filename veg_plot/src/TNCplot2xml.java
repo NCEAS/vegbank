@@ -292,7 +292,7 @@ for (int ii=0; ii<speciesLineNum; ii++) {
 		while (speciesTok.hasMoreTokens() && bufCount<4 ) {speciesBuf= speciesTok.nextToken();bufCount++;}
 				speciesInfoArray[speciesCount]=speciesBuf;
 				speciesCount++;
-			//	System.out.println(speciesBuf);
+				//System.out.println(speciesBuf);
 		} //end if
 } //end for
 
@@ -387,8 +387,8 @@ out.println("			</strata>        ");
 
 
 /*this is where to print out the species list*/
- for (int i=0; i<lineNum; i++) { 
-//	out.println(speciesInfoArray[i]);
+ for (int i=0; i<speciesCount; i++) { 
+//System.out.println("test "+speciesInfoArray[i]);
 
 out.println("                   <taxonObservations>        ");
 out.println("                           <authNameId>"+speciesInfoArray[i]+"</authNameId>       ");
