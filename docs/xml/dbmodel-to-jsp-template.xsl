@@ -3,8 +3,8 @@
   <xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes" />
 
   <xsl:param name="view">Detail</xsl:param>
-  <xsl:param name="oneTbl">project</xsl:param>
-  <xsl:param name="detailAdd">projectContributor</xsl:param>
+  <xsl:param name="oneTbl">coverMethod</xsl:param>
+  <xsl:param name="detailAdd">coverIndex</xsl:param>
   <xsl:param name="more">yes</xsl:param><!-- yes if you want a link to details for each summary row -->
   <xsl:param name="alphalow">abcdefghijklmnopqrstuvwxyz</xsl:param>
   <xsl:param name="alphahigh">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:param>
@@ -58,7 +58,7 @@ Copy from after the START: comment to the END: comment for contents of the file!
         <xsl:call-template name="htmlbreak" />
 <xsl:call-template name="htmlbreak" />
 
-
+<vegbank:pager /><!-- top copy of pager -->
         <logic:empty name="{$currEnt}-BEANLIST">
           <p>  Sorry, no <xsl:value-of select="entityName"/>s found.</p>
         </logic:empty>
@@ -98,7 +98,7 @@ Copy from after the START: comment to the END: comment for contents of the file!
               <!-- default view -->
               <logic:iterate id="onerowof{$currEnt}" name="{$currEnt}-BEANLIST">
                 <xsl:comment> iterate over all records in set : new table for each </xsl:comment>
-                <table class="leftrightborders" cellpadding="0">
+                <table class="leftrightborders" cellpadding="2">
         <xsl:text disable-output-escaping="yes">
         &lt;</xsl:text>%@ include file="autogen/<xsl:value-of select="$currEnt" />_<xsl:value-of select="translate($view,$alphahigh,$alphalow)" />_data.jsp" %<xsl:text disable-output-escaping="yes">&gt;
         </xsl:text>
@@ -107,17 +107,18 @@ Copy from after the START: comment to the END: comment for contents of the file!
                    <xsl:if test="string-length($detailAdd)&gt;0">
                    <xsl:variable name="subtbl" select="translate($detailAdd,$alphahigh,$alphalow)" />
                      <!-- add a inside table -->
-<tr><th colspan="2"><xsl:value-of select="$detailAdd"/>s:</th></tr>
+
                       <TR><TD COLSPAN="2">
   
   <vegbank:get id="{$subtbl}" select="{$subtbl}" beanName="map"  pager="false" where="where_{$currEnt}_pk" wparam="{$currEnt}_pk" perPage="-1"/>
-
+  <table class="leftrightborders" cellpadding="2" >
+<tr><th colspan="9"><xsl:value-of select="$detailAdd"/>s:</th></tr>  
 <logic:empty name="{$subtbl}-BEANLIST">
-<p  class="@nextcolorclass@">  Sorry, no <xsl:value-of select="$subtbl"/>s found.</p>
+<tr><td  class="@nextcolorclass@">  Sorry, no <xsl:value-of select="$subtbl"/>s found.</td></tr>
 </logic:empty>
 
 <logic:notEmpty name="{$subtbl}-BEANLIST">
-  <table class="leftrightborders" cellpadding="2" >
+
 <tr>    <xsl:text disable-output-escaping="yes">
 &lt;</xsl:text>%@ include file="autogen/<xsl:value-of select="$subtbl"/>_summary_head.jsp" %<xsl:text disable-output-escaping="yes">&gt;
 </xsl:text> </tr>
@@ -127,9 +128,9 @@ Copy from after the START: comment to the END: comment for contents of the file!
 &lt;</xsl:text>%@ include file="autogen/<xsl:value-of select="$subtbl"/>_summary_data.jsp" %<xsl:text disable-output-escaping="yes">&gt;
 </xsl:text> </tr>        
     </logic:iterate>
-  </table>
-</logic:notEmpty>
 
+</logic:notEmpty>
+  </table>
   </TD></TR>
   
                    </xsl:if>
@@ -168,7 +169,7 @@ Copy from after the START: comment to the END: comment for contents of the file!
    <xsl:comment>Insert a nested get statement here:
    example:   
 <xsl:text disable-output-escaping="yes">
-&lt;</xsl:text>vegbank:get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_<xsl:value-of select="$currEnt"/>_pk" wparam="<xsl:value-of select="$currEnt"/>_pk" /<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+&lt;</xsl:text>vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_<xsl:value-of select="$currEnt"/>_pk" wparam="<xsl:value-of select="$currEnt"/>_pk" /<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
    <xsl:element name="vegbank:get">
           <xsl:attribute name="id">related_table</xsl:attribute>
           <xsl:attribute name="select">related_table</xsl:attribute>
