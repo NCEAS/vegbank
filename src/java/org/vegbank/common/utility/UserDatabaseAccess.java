@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-26 20:42:46 $'
- *	'$Revision: 1.15 $'
+ *	'$Date: 2004-04-30 13:11:48 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-04-26 20:42:46 $'
- *     '$Revision: 1.15 $'
+ *     '$Date: 2004-04-30 13:11:48 $'
+ *     '$Revision: 1.16 $'
  */
 
 import java.sql.PreparedStatement;
@@ -444,42 +444,52 @@ public class UserDatabaseAccess
 	/**
 	 * Returns List of all header CertificationForms in the system.
 	 * 
+	 * @param sortBy 
 	 * @return List of partially complete CertificationForms
 	 */
-	 public List getAllCertificationAppHeaders() 
+	 public List getAllCertificationAppHeaders(String sortBy) 
 		 	throws java.sql.SQLException
 	 {
-	 	return getAllCertificationApps(true);
+	 	return getAllCertificationApps(sortBy, true);
 	 }
 
 
 	/**
 	 * Returns List of all CertificationForms in the system.
 	 * 
+	 * @param sortBy 
 	 * @return List of CertificationForms
 	 */
-	 public List getAllCertificationApps()
+	 public List getAllCertificationApps(String sortBy)
 		 	throws java.sql.SQLException
 	 {
-	 	return getAllCertificationApps(false);
+	 	return getAllCertificationApps(sortBy, false);
 	 }
 
 	 /**
 	  * The private method that actually gets the cert. apps.
+	  *
+	  * @param sortBy 
 	  * @return List of CertificationForms
 	  */
-	 private List getAllCertificationApps(boolean headersOnly)
+	 private List getAllCertificationApps(String sortBy, boolean headersOnly)
 		 	throws java.sql.SQLException
 	 {
 		List allApps = new ArrayList();
 		DBConnection conn = getConnection();
 		CertificationForm tmpCertForm;
+
+		// make sure give sort string is safe
+		sortBy = (Utility.isStringNullOrEmpty(sortBy) ? "usercertification_id" : sortBy);
+		if (sortBy.indexOf(' ') != -1) {
+			sortBy = "usercertification_id";
+		}
 		 
 		Statement query = conn.createStatement();
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT ");
 		sb.append(CertificationForm.getDBFieldNames(headersOnly));
-		sb.append(" FROM usercertification ORDER BY certificationstatus ");
+		sb.append(" FROM usercertification ORDER BY " + sortBy);
 	
 		//issue the query
 		ResultSet results = query.executeQuery(sb.toString());
@@ -568,7 +578,6 @@ public class UserDatabaseAccess
 	 */
 	 public WebUser getUser(long usrId) throws SQLException
 	 {
-		log.debug("UserDatabaseAccess.getUser: usr_id= " + usrId);
 		return getAllUserData(" usr_id=" + usrId);
 	 }
 	 
