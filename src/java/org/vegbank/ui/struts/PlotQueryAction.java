@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-22 20:33:09 $'
- *	'$Revision: 1.20 $'
+ *	'$Date: 2004-07-24 00:50:19 $'
+ *	'$Revision: 1.21 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ public class PlotQueryAction extends VegbankAction
 	static {
 		StringBuffer sb = new StringBuffer(512);
 		for (int i=0; i < NUM_TOP_TAXA; i++) {
-			sb.append(", (SELECT authorPlantName || ' (' || cover || ')' FROM taxonObservation as tob, ")
+			sb.append(", (SELECT authorPlantName || ' (' || cover || '%)' FROM taxonObservation as tob, ")
 				.append(" taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id ")
 				.append(" is null and cover is not null and authorPlantName is not null AND ")
 				.append(" tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET ")
@@ -446,7 +446,7 @@ public class PlotQueryAction extends VegbankAction
 				
 				// Have my query now run it!!
 				DatabaseAccess da = new DatabaseAccess();
-				log.debug("PLOT QUERY (plants): " + plantQuery.toString());
+				//log.debug("PLOT QUERY (plants): " + plantQuery.toString());
 				ResultSet rs2 = da.issueSelect(plantQuery.toString());
 				plantResultSets.add(rs2);
 			}
