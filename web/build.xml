@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: farrell $'
-* '$Date: 2003-10-29 17:19:26 $'
-* '$Revision: 1.61 $'
+* '$Author: anderson $'
+* '$Date: 2003-10-29 18:59:10 $'
+* '$Revision: 1.62 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -38,9 +38,9 @@
 	<echo>init webapp '${webapp}'</echo>
 
 	<!-- The webapp that contains copy, images and other
-		resources is defined by web.app.resources and
+		resources is defined by web.context_uri and
 		makes the first part of the URI. -->
-    <property name="web.app.resources" value="vegbank"/>
+    <property name="web.context_uri" value="vegbank"/>
 
     <property name="forms" value="./forms"/>
     <property name="general_src" value="./general"/>
@@ -85,30 +85,30 @@
     <property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/${webapp}/WEB-INF/lib"/>
     <!-- WEB SERVER LOCATIONS -->
     <filter token="base_url" value=""/>
-    <filter token="image_server" value="/${web.app.resources}/images/"/>
-    <filter token="stylesheet" value="/${web.app.resources}/includes/default.css"/>
-    <filter token="plotquery_page" value="/${web.app.resources}/forms/plot-query.jsp"/>
-    <filter token="nestedplotquery_page" value="/${web.app.resources}/forms/nested-plot-query.html"/>
-    <filter token="uploaddata_page" value="/${web.app.resources}/forms/uploadFile.html"/>
-    <filter token="stylesheet_generator" value="/${web.app.resources}/forms/stylesheet-generator.html"/>
-    <filter token="general_link" value="/${web.app.resources}/general/"/>
-    <filter token="forms_url" value="/${web.app.resources}/forms/"/>
+    <filter token="image_server" value="/${web.context_uri}/images/"/>
+    <filter token="stylesheet" value="/${web.context_uri}/includes/default.css"/>
+    <filter token="plotquery_page" value="/${web.context_uri}/forms/plot-query.jsp"/>
+    <filter token="nestedplotquery_page" value="/${web.context_uri}/forms/nested-plot-query.html"/>
+    <filter token="uploaddata_page" value="/${web.context_uri}/forms/uploadFile.html"/>
+    <filter token="stylesheet_generator" value="/${web.context_uri}/forms/stylesheet-generator.html"/>
+    <filter token="general_link" value="/${web.context_uri}/general/"/>
+    <filter token="forms_url" value="/${web.context_uri}/forms/"/>
     <!-- add second token for forms, which is similarly named as other links -->
-    <filter token="forms_link" value="/${web.app.resources}/forms/"/>
-    <filter token="design_link" value="/${web.app.resources}/design/"/>
-    <filter token="panel_link" value="/${web.app.resources}/panel/"/>
+    <filter token="forms_link" value="/${web.context_uri}/forms/"/>
+    <filter token="design_link" value="/${web.context_uri}/design/"/>
+    <filter token="panel_link" value="/${web.context_uri}/panel/"/>
     <filter token="help_link" value="/help/"/>
     <filter token="manual_link" value="/help/manual/"/>
     <!-- SERVLETS -->
-    <filter token="framework_servlet" value="/${web.app.resources}/servlet/framework"/>
-    <filter token="stylesheet_generator_servlet" value="/${web.app.resources}/servlet/stylesheetgenerator"/>
-    <filter token="usermanagement_servlet" value="/${web.app.resources}/servlet/usermanagement"/>
-    <filter token="datarequestservlet" value="/${web.app.resources}/servlet/DataRequestServlet"/>
-    <filter token="datasubmitservlet" value="/${web.app.resources}/servlet/DataSubmitServlet"/>
-    <filter token="nestedquerybuilder" value="/${web.app.resources}/servlet/QueryBuilderServlet"/>
-    <filter token="authenticationservlet" value="/${web.app.resources}/servlet/authenticate"/>
-    <filter token="viewdataservlet" value="/${web.app.resources}/servlet/viewData"/>
-    <filter token="filedownloadservlet" value="/${web.app.resources}/servlet/fileDownload"/>
+    <filter token="framework_servlet" value="/${web.context_uri}/servlet/framework"/>
+    <filter token="stylesheet_generator_servlet" value="/${web.context_uri}/servlet/stylesheetgenerator"/>
+    <filter token="usermanagement_servlet" value="/${web.context_uri}/servlet/usermanagement"/>
+    <filter token="datarequestservlet" value="/${web.context_uri}/servlet/DataRequestServlet"/>
+    <filter token="datasubmitservlet" value="/${web.context_uri}/servlet/DataSubmitServlet"/>
+    <filter token="nestedquerybuilder" value="/${web.context_uri}/servlet/QueryBuilderServlet"/>
+    <filter token="authenticationservlet" value="/${web.context_uri}/servlet/authenticate"/>
+    <filter token="viewdataservlet" value="/${web.context_uri}/servlet/viewData"/>
+    <filter token="filedownloadservlet" value="/${web.context_uri}/servlet/fileDownload"/>
     <!-- Struts -->
     <filter token="DisplayUploadPlotAction" value="/${webapp}/DisplayUploadPlotAction.do"/>
 	<!-- FIXME: Should be in a prepare target -->
