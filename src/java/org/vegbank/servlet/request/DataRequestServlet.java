@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-30 18:01:59 $'
- *  '$Revision: 1.6 $'
+ *  '$Date: 2000-11-20 15:45:44 $'
+ *  '$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,8 +76,8 @@ import databaseAccess.dbAccess;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-05-30 18:01:59 $'
- *  '$Revision: 1.6 $'
+ *  '$Date: 2000-11-20 15:45:44 $'
+ *  '$Revision: 1.7 $'
  * 
  */
 
@@ -96,6 +96,7 @@ public class DataRequestServlet extends HttpServlet
 	// TODO: This need to taken out of here !!
 	private static final String summaryViewStyleSheet = SERVLET_DIR + "transformPlotSummary.xsl";
 	private static final String comprehensiveViewStyleSheet = SERVLET_DIR + "transformFullPlot.xsl";
+	private static final String returnXMLStyleSheet = SERVLET_DIR + "copy.xsl";
 	private static final String communityQueryPage = "/vegbank/forms/community-query.html";
 	
 	/**
@@ -390,6 +391,10 @@ public class DataRequestServlet extends HttpServlet
 					{
 						out.println(this.getPlotView(summaryViewStyleSheet,  qr.getXMLString() ));
 					}
+					else if  ( resultType.equalsIgnoreCase("rawXML") )
+					{
+						out.println(this.getPlotView(returnXMLStyleSheet,  qr.getXMLString() ));
+					}
 					else
 					{
 						out.println(this.getResultsSetOptions());
@@ -515,31 +520,30 @@ public class DataRequestServlet extends HttpServlet
 	 
 
 	 
-	 /**
-	  *  Shows a view of the plot
-	  * 
-	  * @param  String  - the full filename of the stylesheet to use
-	  */
-	 private String getPlotView(String styleSheet, String xmlResult)
-	 {
+	/**
+	 *  Shows a view of the plot
+	 * 
+	 * @param  String  - the full filename of the stylesheet to use
+	 */
+	private String getPlotView(String styleSheet, String xmlResult)
+	{
 		StringBuffer sb = new StringBuffer();
-				 try
-				 {
-					 System.out.println("DataRequestServlet > getPlotView ");
+		try
+		{
+			System.out.println("DataRequestServlet > getPlotView ");
 
-					 //System.out.println("DataRequestServlet > xml document: '" + xmlResult +"'" );
-					 System.out.println("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
+			System.out.println("DataRequestServlet > xml document: '" + xmlResult +"'" );
+			//System.out.println("DataRequestServlet > stylesheet name: '"+styleSheet +"'");
 
-			 
-					sb.append( transformer.getTransformedFromString( xmlResult, styleSheet ) );
-				 }
-				 catch( Exception e ) 
-				 {
-					System.out.println("DataRequestServlet Exception: " + e.getMessage());
-					e.printStackTrace();
-				 }
-				return( sb.toString() );
-	 }
+			sb.append(transformer.getTransformedFromString(xmlResult, styleSheet));
+		}
+		catch (Exception e)
+		{
+			System.out.println("DataRequestServlet Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return (sb.toString());
+	}
 
 	 
 	/**
@@ -724,7 +728,7 @@ public class DataRequestServlet extends HttpServlet
 			//modules so cheating here first
 			if (
 				plotId != null
-					&& (resultType.equals("full") || resultType.equals("summary")))
+					&& (resultType.equals("full") || resultType.equals("summary") || resultType.equals("rawXML") ))
 			{
 				new FullPlotQuery().execute(qr, plotId);
 			}

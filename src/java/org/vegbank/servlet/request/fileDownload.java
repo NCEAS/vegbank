@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: fileDownload.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-30 18:01:59 $'
- *  '$Revision: 1.4 $'
+ *  '$Date: 2000-11-20 15:45:44 $'
+ *  '$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ package org.vegbank.servlet.request;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletException;

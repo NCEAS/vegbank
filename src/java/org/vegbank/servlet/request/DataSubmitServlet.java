@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-06-04 19:11:42 $'
- *  '$Revision: 1.11 $'
+ *  '$Date: 2000-11-20 15:45:44 $'
+ *  '$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,8 +62,8 @@ import databaseAccess.CommunityQueryStore;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-06-04 19:11:42 $'
- *  '$Revision: 1.11 $'
+ *  '$Date: 2000-11-20 15:45:44 $'
+ *  '$Revision: 1.12 $'
  */
 
 
@@ -552,8 +552,6 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				String location = 
 					(String) request.getSession().getAttribute("rmiFileUploadLocation");
 				rmiClient.releaseFileUploadLocation(location);
-				
-				
 			}
 			else
 			{
@@ -569,7 +567,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	}
 	
 	
-  public StringBuffer handleVegPlotUpload(String plotsArchiveType, HttpServletRequest request)
+  private StringBuffer handleVegPlotUpload(String plotsArchiveType, HttpServletRequest request)
   {
     StringBuffer sb = new StringBuffer();
 		DataSourceClient rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
