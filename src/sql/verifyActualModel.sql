@@ -1,9 +1,9 @@
 
 select (select relname from pg_statio_all_tables where attrelid=relid) as mtl_tableName, attname, 
 
-(select typname from pg_type where pg_type.oid=atttypid) || CASE WHEN atttypmod>4 THEN ' (' || atttypmod-4 || ') ' ELSE ' ' END as mtl_dataType, CASE WHEN attnotnull THEN 'no' ELSE 'yes' END as mtl_nulls, 
+(select typname from pg_type where pg_type.oid=atttypid) || CASE WHEN atttypmod>4 THEN ' (' || atttypmod-4 || ') ' ELSE ' ' END as mtl_dataType, CASE WHEN attnotnull THEN 'no nulls' ELSE 'yes nulls' END as mtl_nulls, 
 
-mtl_FTbl || '.' || mtl_fFldNm as MTL_references, 'dil' as unknownModel from pg_attribute LEFT JOIN (select conname, 
+mtl_FTbl || '.' || mtl_fFldNm as MTL_references, 'dil' as unknownModel, 'if i''m lowercase, i''m from database, else from model xml' as unkn2 from pg_attribute LEFT JOIN (select conname, 
 (select relname from pg_statio_all_tables where pg_constraint.conrelid=pg_statio_all_tables.relid) as mtl_tblNm, 
 
 (select relname from pg_statio_all_tables where pg_constraint.confrelid=pg_statio_all_tables.relid) as mtl_FTbl, 
