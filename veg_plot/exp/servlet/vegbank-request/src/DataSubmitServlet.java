@@ -29,8 +29,8 @@ import servlet.authentication.UserDatabaseAccess;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-06-28 17:20:57 $'
- *  '$Revision: 1.38 $'
+ *  '$Date: 2002-07-12 18:19:35 $'
+ *  '$Revision: 1.39 $'
  */
 
 
@@ -384,23 +384,24 @@ public class DataSubmitServlet extends HttpServlet
 			else if ( action.equals("plantconcept") )
 			{
 				System.out.println("DataSubmitServlet > getting the name reference ");
-				conceptDescription = (String)params.get("conceptDescription");
-				conceptRefAuthors = (String)params.get("conceptRefAuthors");
-				conceptRefTitle  = (String)params.get("conceptRefTitle");
-				conceptRefDate  = (String)params.get("conceptRefDate");
-				conceptRefEdition  = (String)params.get("conceptRefEdition");
-				conceptRefSeriesName  = (String)params.get("conceptRefSeriesName");
-				conceptRefVolume  = (String)params.get("conceptRefVolume");
-				conceptRefPage  = (String)params.get("conceptRefPage");
-				conceptRefISSN  = (String)params.get("conceptRefISSN");
-				conceptRefISBN  = (String)params.get("conceptRefISBN");
-				conceptRefOtherCitDetails = (String)params.get("conceptRefOtherCitDetails");
+				conceptDescription = ""+(String)params.get("conceptDescription");
+				conceptRefAuthors = ""+(String)params.get("conceptRefAuthors");
+				conceptRefTitle  = ""+(String)params.get("conceptRefTitle");
+				conceptRefDate  = ""+(String)params.get("conceptRefDate");
+				conceptRefEdition  = ""+(String)params.get("conceptRefEdition");
+				conceptRefSeriesName  = ""+(String)params.get("conceptRefSeriesName");
+				conceptRefVolume  = ""+(String)params.get("conceptRefVolume");
+				conceptRefPage  = ""+(String)params.get("conceptRefPage");
+				conceptRefISSN  = ""+(String)params.get("conceptRefISSN");
+				conceptRefISBN  = ""+(String)params.get("conceptRefISBN");
+				conceptRefOtherCitDetails = ""+(String)params.get("conceptRefOtherCitDetails");
 				
 				plantParentName = (String)params.get("plantParentName");
 				plantParentRefTitle =(String)params.get("plantParentRefTitle");
 				plantParentRefAuthors = (String)params.get("plantParentRefAuthors");
 				
 				// send the user the attributes related to the plant status/usage
+				// this is where the instance variables (surName,givenName etc..) are updated
 				updatePlantStatusUsagePage(emailAddress, longName, shortName, code);
 				response.sendRedirect("/forms/plant-valid.html");
 			}
@@ -421,6 +422,101 @@ public class DataSubmitServlet extends HttpServlet
 				updatePlantSubmittalRecipt(emailAddress);
 				response.sendRedirect("/forms/plant-valid.html");
 			}
+			// STEP WHERE THE PLANT ACTUALLY GETS LOADED TO THE DATABASE
+			else if ( action.equals("plantsubmittalreceipt") )
+			{
+				System.out.println("submittal to the database taking place ");
+				//init the plant loader
+				PlantTaxaLoader plantLoader = new PlantTaxaLoader();
+				
+				Hashtable h = new Hashtable();
+			
+				//new elements
+				h.put("longNameRefAuthors", longNameRefAuthors);
+				h.put("longNameRefTitle",longNameRefTitle );
+				h.put("longNameRefDate", longNameRefDate );
+				h.put("longNameRefEdition", longNameRefEdition );
+				h.put("longNameRefSeriesName", longNameRefSeriesName );
+				h.put("longNameRefVolume", longNameRefVolume );
+				h.put("longNameRefPage", longNameRefPage );
+				h.put("longNameRefISSN", longNameRefISSN );
+				h.put("longNameRefISBN", longNameRefISBN );
+				h.put("longNameRefOtherCitDetails", longNameRefOtherCitDetails );
+				System.out.println("1");
+				h.put("shortNameRefAuthors", shortNameRefAuthors );
+				h.put("shortNameRefTitle", shortNameRefTitle );
+				h.put("shortNameRefDate", shortNameRefDate );
+				h.put("shortNameRefEdition", shortNameRefEdition );
+				h.put("shortNameRefSeriesName", shortNameRefSeriesName );
+				h.put("shortNameRefVolume", shortNameRefVolume );
+				h.put("shortNameRefPage", shortNameRefPage );
+				h.put("shortNameRefISSN", shortNameRefISSN );
+				h.put("shortNameRefISBN", shortNameRefISBN );
+				h.put("shortNameRefOtherCitDetails", shortNameRefOtherCitDetails );
+				System.out.println("2");
+				h.put("codeRefAuthors", codeRefAuthors);
+				h.put("codeRefTitle", codeRefTitle );
+				h.put("codeRefDate", codeRefDate );
+				h.put("codeRefEdition", codeRefEdition );
+				h.put("codeRefSeriesName", codeRefSeriesName );
+				h.put("codeRefVolume", codeRefVolume);
+				h.put("codeRefPage", codeRefPage );
+				h.put("codeRefISSN", codeRefISSN );
+				h.put("codeRefISBN", codeRefISBN );
+				h.put("codeRefOtherCitDetails",codeRefOtherCitDetails );
+				System.out.println("3");
+				
+				//System.out.println("test: " + conceptDescription);
+				h.put("conceptDescription", conceptDescription );
+				//System.out.println(conceptDescription);
+				h.put("conceptRefAuthors", conceptRefAuthors );
+				//System.out.println(conceptRefAuthors);
+				h.put("conceptRefTitle", conceptRefTitle );
+				//System.out.println(conceptRefTitle);
+				h.put("conceptRefDate", conceptRefDate);
+				//System.out.println(conceptRefDate);
+				h.put("conceptRefEdition", conceptRefEdition);
+				//System.out.println(conceptRefEdition);
+				h.put("conceptRefSeriesName", conceptRefSeriesName );
+				//System.out.println(conceptRefSeriesName);
+				h.put("conceptRefVolume", conceptRefVolume );
+				//System.out.println(conceptRefVolume);
+				h.put("conceptRefPage", conceptRefPage );
+				//System.out.println(conceptRefPage);
+				h.put("conceptRefISSN",conceptRefISSN );
+				//System.out.println(conceptRefISSN);
+				h.put("conceptRefISBN", conceptRefISBN );
+				//System.out.println(conceptRefISBN);
+				h.put("conceptRefOtherCitDetails", conceptRefOtherCitDetails );
+				//System.out.println(conceptRefOtherCitDetails);
+				
+				System.out.println("4");
+				h.put("conceptStatus", conceptStatus );
+				h.put("statusStartDate", statusStartDate);
+				h.put("statusStopDate", statusStopDate );
+				h.put("statusDescription",statusDescription );
+				h.put("taxonLevel", taxonLevel );
+				h.put("plantParentName", plantParentName );
+				h.put("plantParentRefTitle", plantParentRefTitle);
+				h.put("plantParentRefAuthors",plantParentRefAuthors );
+				System.out.println("5");
+				
+				h.put("longName", ""+longName);
+				h.put("shortName", ""+shortName);
+				h.put("code", ""+code);
+				h.put("salutation", ""+salutation);
+				h.put("givenName", ""+givenName);
+				h.put("surName", ""+surName);
+				h.put("orgName", ""+institution);
+				h.put("email", ""+emailAddress);
+				
+				boolean results = plantLoader.loadGenericPlantTaxa(h);
+				
+				// WRITE THE RESULTS BACK TO THE BROWSER
+				PrintWriter out = response.getWriter();
+				String receipt = this.getPlantInsertionReceipt(h, results);
+				out.println(receipt);
+			}
 			else
 			{
 				System.out.println("DataSubmitServlet > unknown step in the plant taxa process " + action);
@@ -433,6 +529,71 @@ public class DataSubmitServlet extends HttpServlet
 		}
 		return(sb);
 	}
+	/**
+	 * method that composes the plant-insert receipt from the hashtable 
+	 * which is passed to the plant taxonomy loader
+	 * 
+	 * @param plantAtts -- the hashtable that contains the plant attributes and that
+	 * conforms to the hashtable to be loaded via the 'PlantTaxaLoader'
+	 * @see PlantTaxaLoade
+	 * @param results -- true if the plant was successfully loaded, otherwise false
+	 * @return s -- an html-encoded string containing the receipt 
+	 *
+	 */
+	 private String getPlantInsertionReceipt(Hashtable plantAtts, boolean results)
+	 {
+		 StringBuffer sb = new StringBuffer();
+		 try
+		 {
+			 sb.append("<html> \n ");
+			 sb.append("<head> \n	");
+			 sb.append("<link href=\"http://numericsolutions.com/includes/default.css\" type=\"text/css\" rel=\"stylesheet\"> ");
+			 sb.append("<title> Plant Submittal Receipt </title>");
+			 sb.append("</head> \n");
+			 // THE RESULTS 
+			 sb.append("<span class=\"category\"> Plant loading results: " + results +" </span> <br> \n ");
+			 // THE CONTENTS -- 
+			 sb.append("<br>");
+			 sb.append("<table> ");
+			 sb.append("<span class=\"item\">");
+			 sb.append("<tr> <td> First Name: </td> <td> "+ plantAtts.get("givenName") +" </td> </tr> \n");
+			 sb.append("<tr> <td> Last Name: </td> <td> "+ plantAtts.get("surName") +" </td> </tr> \n");
+			 sb.append("<tr> <td> Organization Name: </td> <td> "+ plantAtts.get("institution") +" </td> </tr> \n");
+			 sb.append("</span>");
+			 sb.append("</table>");
+			 sb.append("<br>");
+			 sb.append("<table> ");
+			 sb.append("<span class=\"item\">");
+			 sb.append("<tr> <td> Scientific Name: </td> <td> "+ plantAtts.get("longName") +" </td> </tr> \n");
+			 sb.append("<tr> <td> Common Name: </td> <td> "+ plantAtts.get("shortName") +" </td> </tr> \n");
+			 sb.append("<tr> <td> Code: </td> <td> "+ plantAtts.get("code") +" </td> </tr> \n");
+			 sb.append("</span>");
+			 sb.append("</table>");
+			 sb.append("<br>");
+			 sb.append("<table> ");
+			 sb.append("<span class=\"item\">");
+			 sb.append("<tr> <td> Concept Description: </td> <td> "+ plantAtts.get("conceptDescription") +" </td> </tr> \n");
+			 sb.append("<tr> <td> Rank: </td> <td> "+ plantAtts.get("taxonLevel") +" </td> </tr> \n");
+			 sb.append("<tr> <td> Staus: </td> <td> "+ plantAtts.get("conceptStatus") +" </td> </tr> \n");
+			 sb.append("</span>");
+			 sb.append("</table>");
+		
+			 
+			 //sb.append("contents: " + plantAtts.toString() );
+			 
+			 sb.append("");
+			 
+			 sb.append("<br>");
+			 sb.append("</html>");
+		 }
+		 catch (Exception e )
+		 {
+			 System.out.println("Exception > " + e.getMessage() );
+		 }
+		 return(sb.toString() );
+	 }
+	 
+	
 	/**
 	 * method that updates the plant submittal receipt page --
 	 * this is the last sub-step in the plant submittal process
