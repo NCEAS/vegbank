@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-24 05:27:22 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-10-27 20:27:55 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,9 +70,15 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
   	
 		try
 		{
-			DBObservationReader ob = new DBObservationReader();
-			// TODO:  Get a single observation_id for this plot
-			observation = ob.getObservation("observation_id", observation_id);
+			DBModelBeanReader mbReader = new DBModelBeanReader();
+			// TODO:  Get a single observation_id for this plot  
+			Plot plot =
+				mbReader.getPlotObservationBeanTree(observation_id);
+				
+			observation = (Observation) plot.getplot_observations().get(0);
+			
+			// hack to make this work
+			observation.setPlotobject(plot);
 		}
 		catch (Exception e)
 		{

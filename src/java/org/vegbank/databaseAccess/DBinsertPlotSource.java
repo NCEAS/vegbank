@@ -7,8 +7,8 @@
 * Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-10-17 22:09:14 $'
-*   '$Revision: 1.6 $'
+*   '$Date: 2003-10-27 20:27:55 $'
+*   '$Revision: 1.7 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -631,13 +631,13 @@ public class DBinsertPlotSource {
 				conn.setAutoCommit(false);
 
 				this.projectName =
-					Utility.escapeCharacters(source.getProjectName(plotName));
+					Utility.encodeForDB(source.getProjectName(plotName));
 				this.projectDescription =
-					Utility.escapeCharacters(source.getProjectDescription(plotName));
+					Utility.encodeForDB(source.getProjectDescription(plotName));
 				this.projectStartDate =
-					Utility.escapeCharacters(source.getProjectStartDate(plotName));
+					Utility.encodeForDB(source.getProjectStartDate(plotName));
 				this.projectStopDate =
-					Utility.escapeCharacters(source.getProjectStopDate(plotName));
+					Utility.encodeForDB(source.getProjectStopDate(plotName));
 
 				System.out.println("DBinsertPlotSource > projectName: " + projectName);
 				System.out.println(
@@ -674,23 +674,23 @@ public class DBinsertPlotSource {
 					{
 						String contributor = (String) projContributors.elementAt(ii);
 						String salutation =
-							Utility.escapeCharacters(
+							Utility.encodeForDB(
 								source.getProjectContributorSalutation(contributor));
 						String surName =
-							Utility.escapeCharacters(
+							Utility.encodeForDB(
 								source.getProjectContributorSurName(contributor));
 						String givenName =
-							Utility.escapeCharacters(
+							Utility.encodeForDB(
 								source.getProjectContributorGivenName(contributor));
 						String email =
-							Utility.escapeCharacters(
+							Utility.encodeForDB(
 								source.getProjectContributorEmailAddress(contributor));
 						String role = "project manager";
 						String orgName =
-							Utility.escapeCharacters(
+							Utility.encodeForDB(
 								source.getProjectContributorOrganizationName(contributor));
 						String contact =
-							Utility.escapeCharacters(
+							Utility.encodeForDB(
 								source.getProjectContributorContactInstructions(contributor));
 
 						insertProjectContributor(
@@ -1144,7 +1144,7 @@ public class DBinsertPlotSource {
    **/
   private void insertProjectContributorTelephone(int partyId, String contributor)
 	{
-		String number = Utility.escapeCharacters( source.getProjectContributorPhoneNumber(contributor) );	
+		String number = Utility.encodeForDB( source.getProjectContributorPhoneNumber(contributor) );	
 		this.insertTelephone(partyId, number);
 	}
 	
@@ -1157,7 +1157,7 @@ public class DBinsertPlotSource {
    **/
 	private void insertObservationContributorTelephone(int partyId, String contributor) 
   {
-		String number = Utility.escapeCharacters( source.getObservationContributorPhoneNumber(contributor) );	
+		String number = Utility.encodeForDB( source.getObservationContributorPhoneNumber(contributor) );	
 		this.insertTelephone(partyId, number);
   }
   
@@ -1209,12 +1209,12 @@ public class DBinsertPlotSource {
   
 	private void insertObservationContributorAddress(int partyId, String contributor)
 	{
-		String email = Utility.escapeCharacters( source.getObservationContributorEmailAddress(contributor) );
-		String street = Utility.escapeCharacters( source.getObservationContributorDeliveryPoint(contributor) );
-		String adminArea = Utility.escapeCharacters( source.getObservationContributorAdministrativeArea(contributor) );
-		String city = Utility.escapeCharacters( source.getObservationContributorCity(contributor) );
-		String postalCode = Utility.escapeCharacters( source.getObservationContributorPostalCode(contributor) );
-		String country =  Utility.escapeCharacters( source.getObservationContributorCountry(contributor) );
+		String email = Utility.encodeForDB( source.getObservationContributorEmailAddress(contributor) );
+		String street = Utility.encodeForDB( source.getObservationContributorDeliveryPoint(contributor) );
+		String adminArea = Utility.encodeForDB( source.getObservationContributorAdministrativeArea(contributor) );
+		String city = Utility.encodeForDB( source.getObservationContributorCity(contributor) );
+		String postalCode = Utility.encodeForDB( source.getObservationContributorPostalCode(contributor) );
+		String country =  Utility.encodeForDB( source.getObservationContributorCountry(contributor) );
 
 		this.insertAddress(partyId, email, street, city, adminArea, postalCode, country);		
 	}
@@ -1229,12 +1229,12 @@ public class DBinsertPlotSource {
   
 	private void insertProjectContributorAddress(int partyId, String contributor)
 	{
-		String email = Utility.escapeCharacters( source.getProjectContributorEmailAddress(contributor) );
-		String street = Utility.escapeCharacters( source.getProjectContributorDeliveryPoint(contributor) );
-		String adminArea = Utility.escapeCharacters( source.getProjectContributorAdministrativeArea(contributor) );
-		String city = Utility.escapeCharacters( source.getProjectContributorCity(contributor) );
-		String postalCode = Utility.escapeCharacters( source.getProjectContributorPostalCode(contributor) );
-		String country =  Utility.escapeCharacters( source.getProjectContributorCountry(contributor) );
+		String email = Utility.encodeForDB( source.getProjectContributorEmailAddress(contributor) );
+		String street = Utility.encodeForDB( source.getProjectContributorDeliveryPoint(contributor) );
+		String adminArea = Utility.encodeForDB( source.getProjectContributorAdministrativeArea(contributor) );
+		String city = Utility.encodeForDB( source.getProjectContributorCity(contributor) );
+		String postalCode = Utility.encodeForDB( source.getProjectContributorPostalCode(contributor) );
+		String country =  Utility.encodeForDB( source.getProjectContributorCountry(contributor) );
 	
     this.insertAddress(partyId, email, street, city, adminArea, postalCode, country);		
 	}
@@ -1486,7 +1486,7 @@ public class DBinsertPlotSource {
 
 				// get the cover of the plant within that strata -- if this comes back
 				// null then there was no observation of this plant in the strata
-				String cover = Utility.escapeCharacters( source.getTaxaStrataCover(plantName, plotName, curStrata) );
+				String cover = Utility.encodeForDB( source.getTaxaStrataCover(plantName, plotName, curStrata) );
 				if (cover != null) 
         {
 					//get the strataCompId number
@@ -1705,11 +1705,11 @@ public class DBinsertPlotSource {
 			// get the taxonObservation number which will be used in the 
 			taxonObservationId = getNextId("taxonObservation");
 			String authorNameOfPlant =
-				Utility.escapeCharacters(uniqueTaxa.elementAt(i).toString());
+				Utility.encodeForDB(uniqueTaxa.elementAt(i).toString());
 			String code =
-				Utility.escapeCharacters(source.getPlantTaxonCode(authorNameOfPlant));
+				Utility.encodeForDB(source.getPlantTaxonCode(authorNameOfPlant));
 			String taxonCover =
-				Utility.escapeCharacters(source.getPlantTaxonCover(authorNameOfPlant, this.plotName));
+				Utility.encodeForDB(source.getPlantTaxonCover(authorNameOfPlant, this.plotName));
 			System.out.println(
 				"DBinsertPlotSource > cur. tax. name: "+ authorNameOfPlant+" code: "+ code 
 				+ " cover: " + taxonCover
@@ -1899,19 +1899,19 @@ public class DBinsertPlotSource {
 		
 		StringBuffer sb = new StringBuffer();
 		
-		String name = Utility.escapeCharacters( source.getCommunityName(plotName) );
-		String code = Utility.escapeCharacters( source.getCommunityCode(plotName) );
-		String framework = Utility.escapeCharacters( source.getCommunityFramework(plotName) );
-		String level = Utility.escapeCharacters( source.getCommunityLevel(plotName) );
-		String classNotes = Utility.escapeCharacters( source.getClassNotes(plotName) );
+		String name = Utility.encodeForDB( source.getCommunityName(plotName) );
+		String code = Utility.encodeForDB( source.getCommunityCode(plotName) );
+		String framework = Utility.encodeForDB( source.getCommunityFramework(plotName) );
+		String level = Utility.encodeForDB( source.getCommunityLevel(plotName) );
+		String classNotes = Utility.encodeForDB( source.getClassNotes(plotName) );
 			
-		String classPublication = Utility.escapeCharacters( source.getCommunityPublication(plotName) );
-		String classStartDate = Utility.escapeCharacters( source.getCommunityStartDate(plotName) );
-		String classStopDate = Utility.escapeCharacters( source.getCommunityStopDate(plotName) );
-		String classInspection = Utility.escapeCharacters( source.getCommunityInspection(plotName) );
-		String classTableAnalysis = Utility.escapeCharacters( source.getCommunityTableAnalysis(plotName) );
-		String classMultiVariateAnalysis = Utility.escapeCharacters( source.getCommunityMultiVariateAnalysis(plotName) );
-		String classExpertSystem = Utility.escapeCharacters( source.getCommunityExpertSystem(plotName) );
+		String classPublication = Utility.encodeForDB( source.getCommunityPublication(plotName) );
+		String classStartDate = Utility.encodeForDB( source.getCommunityStartDate(plotName) );
+		String classStopDate = Utility.encodeForDB( source.getCommunityStopDate(plotName) );
+		String classInspection = Utility.encodeForDB( source.getCommunityInspection(plotName) );
+		String classTableAnalysis = Utility.encodeForDB( source.getCommunityTableAnalysis(plotName) );
+		String classMultiVariateAnalysis = Utility.encodeForDB( source.getCommunityMultiVariateAnalysis(plotName) );
+		String classExpertSystem = Utility.encodeForDB( source.getCommunityExpertSystem(plotName) );
 
 		int commClassId = 0;
 		
@@ -2074,9 +2074,9 @@ public class DBinsertPlotSource {
 				//get the strataId number
 				strataId = getNextId("stratum");
 				String sName = strataTypes.elementAt(i).toString();
-				String cover = Utility.escapeCharacters( source.getStrataCover(plotName, sName) );
-				String base = Utility.escapeCharacters( source.getStrataBase(plotName, sName) );
-				String height = Utility.escapeCharacters( source.getStrataHeight(plotName, sName) );
+				String cover = Utility.encodeForDB( source.getStrataCover(plotName, sName) );
+				String base = Utility.encodeForDB( source.getStrataBase(plotName, sName) );
+				String height = Utility.encodeForDB( source.getStrataHeight(plotName, sName) );
 				String description = "";
 				System.out.println("DBinsertPlotSource > inserting stratum type: " + sName);
 				System.out.println("DBinsertPlotSource > stratum height: "
@@ -2235,13 +2235,13 @@ public class DBinsertPlotSource {
 			for (int i = 0; i < obsContributors.size(); i++) 
 			{			
 				String wholeName = source.observationContributors.elementAt(i).toString();
-				String salutation = Utility.escapeCharacters( source.getObservationContributorSalutation(wholeName) );
-				String givenName = Utility.escapeCharacters( source.getObservationContributorGivenName(wholeName) );
-				String surName = Utility.escapeCharacters( source.getObservationContributorSurName(wholeName) );
-				String email = Utility.escapeCharacters( source.getObservationContributorEmailAddress(wholeName) );
+				String salutation = Utility.encodeForDB( source.getObservationContributorSalutation(wholeName) );
+				String givenName = Utility.encodeForDB( source.getObservationContributorGivenName(wholeName) );
+				String surName = Utility.encodeForDB( source.getObservationContributorSurName(wholeName) );
+				String email = Utility.encodeForDB( source.getObservationContributorEmailAddress(wholeName) );
 				String role = "project manager";
-				String organizationName = Utility.escapeCharacters( source.getObservationContributorOrganizationName(wholeName) );
-				String contactInstructions = Utility.escapeCharacters( source.getObservationContributorContactInstructions(wholeName) );
+				String organizationName = Utility.encodeForDB( source.getObservationContributorOrganizationName(wholeName) );
+				String contactInstructions = Utility.encodeForDB( source.getObservationContributorContactInstructions(wholeName) );
 				
 				insertObservationContributor(
 					salutation,
@@ -2261,77 +2261,77 @@ public class DBinsertPlotSource {
 				getObservationAccessionNumber(plotObservationId);
 			System.out.println("############### " + obsAccession);
 
-			String observationCode = Utility.escapeCharacters( source.getAuthorObsCode(plotName) );
-			String startDate = Utility.escapeCharacters( source.getObsStartDate(plotName) );
-			String stopDate = Utility.escapeCharacters( source.getObsStopDate(plotName) );
+			String observationCode = Utility.encodeForDB( source.getAuthorObsCode(plotName) );
+			String startDate = Utility.encodeForDB( source.getObsStartDate(plotName) );
+			String stopDate = Utility.encodeForDB( source.getObsStopDate(plotName) );
 			String taxonObservationArea =
-				Utility.escapeCharacters( source.getTaxonObservationArea(plotName) );
+				Utility.encodeForDB( source.getTaxonObservationArea(plotName) );
 			boolean autoTaxonCover = source.getAutoTaxonCover(plotName);
-			String coverDispersion = Utility.escapeCharacters( source.getCoverDispersion(plotName) );
+			String coverDispersion = Utility.encodeForDB( source.getCoverDispersion(plotName) );
 			boolean permanence = source.isPlotPermanent(plotName);
 			String stemObservationArea =
-				Utility.escapeCharacters( source.getStemObservationArea(plotName) );
+				Utility.encodeForDB( source.getStemObservationArea(plotName) );
 
 			// ADDED 
-			String dateAccuracy = Utility.escapeCharacters( source.getObsDateAccuracy(plotName) );
-			String hydrologicRegime = Utility.escapeCharacters( source.getHydrologicRegime(plotName) );
-			String stemSampleMethod = Utility.escapeCharacters( source.getStemSampleMethod(plotName) );
-			String originalData = Utility.escapeCharacters( source.getOriginalData(plotName) );
-			String effortLevel = Utility.escapeCharacters( source.getEffortLevel(plotName) );
+			String dateAccuracy = Utility.encodeForDB( source.getObsDateAccuracy(plotName) );
+			String hydrologicRegime = Utility.encodeForDB( source.getHydrologicRegime(plotName) );
+			String stemSampleMethod = Utility.encodeForDB( source.getStemSampleMethod(plotName) );
+			String originalData = Utility.encodeForDB( source.getOriginalData(plotName) );
+			String effortLevel = Utility.encodeForDB( source.getEffortLevel(plotName) );
 			String plotValidationLevel =
-				Utility.escapeCharacters( source.getPlotValidationLevel(plotName) );
-			String floristicQuality = Utility.escapeCharacters( source.getFloristicQuality(plotName) );
-			String bryophyteQuality = Utility.escapeCharacters( source.getBryophyteQuality(plotName) );
-			String lichenQuality = Utility.escapeCharacters( source.getLichenQuality(plotName) );
+				Utility.encodeForDB( source.getPlotValidationLevel(plotName) );
+			String floristicQuality = Utility.encodeForDB( source.getFloristicQuality(plotName) );
+			String bryophyteQuality = Utility.encodeForDB( source.getBryophyteQuality(plotName) );
+			String lichenQuality = Utility.encodeForDB( source.getLichenQuality(plotName) );
 			String observationNarrative =
-				Utility.escapeCharacters( source.getObservationNarrative(plotName) );
-			String homogeneity = Utility.escapeCharacters( source.getHomogeneity(plotName) );
-			String representativeness = Utility.escapeCharacters( source.getRepresentativeness(plotName) );
-			String basalArea = Utility.escapeCharacters( source.getBasalArea(plotName) );
-			String soilMoistureRegime = Utility.escapeCharacters( source.getSoilMoistureRegime(plotName) );
-			String soilDrainage = Utility.escapeCharacters( source.getSoilDrainage(plotName) );
-			String waterSalinity = Utility.escapeCharacters( source.getWaterSalinity(plotName) );
-			String shoreDistance = Utility.escapeCharacters( source.getShoreDistance(plotName) );
-			String soilDepth = Utility.escapeCharacters( source.getSoilDepth(plotName) );
-			String organicDepth = Utility.escapeCharacters( source.getOrganicDepth(plotName) );
-			String percentBedRock = Utility.escapeCharacters( source.getPercentBedRock(plotName) );
-			String percentRockGravel = Utility.escapeCharacters( source.getPercentRockGravel(plotName) );
-			String percentWood = Utility.escapeCharacters( source.getPercentWood(plotName) );
-			String percentLitter = Utility.escapeCharacters( source.getPercentLitter(plotName) );
-			String percentBareSoil = Utility.escapeCharacters( source.getPercentBareSoil(plotName) );
-			String percentWater = Utility.escapeCharacters( source.getPercentWater(plotName) );
-			String percentOther = Utility.escapeCharacters( source.getPercentOther(plotName) );
-			String nameOther = Utility.escapeCharacters( source.getNameOther(plotName) );
-			String standMaturity = Utility.escapeCharacters( source.getStandMaturity(plotName) );
-			String successionalStatus = Utility.escapeCharacters( source.getSuccessionalStatus(plotName) );
-			String treeHt = Utility.escapeCharacters( source.getTreeHt(plotName) );
-			String shrubHt = Utility.escapeCharacters( source.getShrubHt(plotName) );
-			String nonvascularHt = Utility.escapeCharacters( source.getNonvascularHt(plotName) );
-			String floatingCover = Utility.escapeCharacters( source.getFloatingCover(plotName) );
+				Utility.encodeForDB( source.getObservationNarrative(plotName) );
+			String homogeneity = Utility.encodeForDB( source.getHomogeneity(plotName) );
+			String representativeness = Utility.encodeForDB( source.getRepresentativeness(plotName) );
+			String basalArea = Utility.encodeForDB( source.getBasalArea(plotName) );
+			String soilMoistureRegime = Utility.encodeForDB( source.getSoilMoistureRegime(plotName) );
+			String soilDrainage = Utility.encodeForDB( source.getSoilDrainage(plotName) );
+			String waterSalinity = Utility.encodeForDB( source.getWaterSalinity(plotName) );
+			String shoreDistance = Utility.encodeForDB( source.getShoreDistance(plotName) );
+			String soilDepth = Utility.encodeForDB( source.getSoilDepth(plotName) );
+			String organicDepth = Utility.encodeForDB( source.getOrganicDepth(plotName) );
+			String percentBedRock = Utility.encodeForDB( source.getPercentBedRock(plotName) );
+			String percentRockGravel = Utility.encodeForDB( source.getPercentRockGravel(plotName) );
+			String percentWood = Utility.encodeForDB( source.getPercentWood(plotName) );
+			String percentLitter = Utility.encodeForDB( source.getPercentLitter(plotName) );
+			String percentBareSoil = Utility.encodeForDB( source.getPercentBareSoil(plotName) );
+			String percentWater = Utility.encodeForDB( source.getPercentWater(plotName) );
+			String percentOther = Utility.encodeForDB( source.getPercentOther(plotName) );
+			String nameOther = Utility.encodeForDB( source.getNameOther(plotName) );
+			String standMaturity = Utility.encodeForDB( source.getStandMaturity(plotName) );
+			String successionalStatus = Utility.encodeForDB( source.getSuccessionalStatus(plotName) );
+			String treeHt = Utility.encodeForDB( source.getTreeHt(plotName) );
+			String shrubHt = Utility.encodeForDB( source.getShrubHt(plotName) );
+			String nonvascularHt = Utility.encodeForDB( source.getNonvascularHt(plotName) );
+			String floatingCover = Utility.encodeForDB( source.getFloatingCover(plotName) );
       
-			String stemSizeLimit = Utility.escapeCharacters( source.getStemSizeLimit(plotName) );
-			String landscapeNarrative = Utility.escapeCharacters( source.getLandscapeNarrative(plotName) );
-			String phenologicalAspect = Utility.escapeCharacters( source.getPhenologicalAspect(plotName) );
-			String waterDepth = Utility.escapeCharacters( source.getWaterDepth(plotName) );
-			String fieldHt = Utility.escapeCharacters( source.getFieldHt(plotName) );
-			String submergedHt = Utility.escapeCharacters( source.getSubmergedHt(plotName) );
-			String treeCover = Utility.escapeCharacters( source.getTreeCover(plotName) );
-			String shrubCover = Utility.escapeCharacters( source.getShrubCover(plotName) );
-			String fieldCover = Utility.escapeCharacters( source.getFieldCover(plotName) );
-			String nonvascularCover = Utility.escapeCharacters( source.getNonvascularCover(plotName) );
+			String stemSizeLimit = Utility.encodeForDB( source.getStemSizeLimit(plotName) );
+			String landscapeNarrative = Utility.encodeForDB( source.getLandscapeNarrative(plotName) );
+			String phenologicalAspect = Utility.encodeForDB( source.getPhenologicalAspect(plotName) );
+			String waterDepth = Utility.encodeForDB( source.getWaterDepth(plotName) );
+			String fieldHt = Utility.encodeForDB( source.getFieldHt(plotName) );
+			String submergedHt = Utility.encodeForDB( source.getSubmergedHt(plotName) );
+			String treeCover = Utility.encodeForDB( source.getTreeCover(plotName) );
+			String shrubCover = Utility.encodeForDB( source.getShrubCover(plotName) );
+			String fieldCover = Utility.encodeForDB( source.getFieldCover(plotName) );
+			String nonvascularCover = Utility.encodeForDB( source.getNonvascularCover(plotName) );
 			
-      String submergedCover = Utility.escapeCharacters( source.getSubmergedCover(plotName) );
-			String dominantStratum = Utility.escapeCharacters( source.getDominantStratum(plotName) );
-			String growthform1Type = Utility.escapeCharacters( source.getGrowthform1Type(plotName) );
-			String growthform2Type = Utility.escapeCharacters( source.getGrowthform2Type(plotName) );
-			String growthform3Type = Utility.escapeCharacters( source.getGrowthform3Type(plotName) );
-			String growthform1Cover = Utility.escapeCharacters( source.getGrowthform1Cover(plotName) );
-			String growthform2Cover = Utility.escapeCharacters( source.getGrowthform2Cover(plotName) );
-			String growthform3Cover = Utility.escapeCharacters( source.getGrowthform3Cover(plotName) );
+      String submergedCover = Utility.encodeForDB( source.getSubmergedCover(plotName) );
+			String dominantStratum = Utility.encodeForDB( source.getDominantStratum(plotName) );
+			String growthform1Type = Utility.encodeForDB( source.getGrowthform1Type(plotName) );
+			String growthform2Type = Utility.encodeForDB( source.getGrowthform2Type(plotName) );
+			String growthform3Type = Utility.encodeForDB( source.getGrowthform3Type(plotName) );
+			String growthform1Cover = Utility.encodeForDB( source.getGrowthform1Cover(plotName) );
+			String growthform2Cover = Utility.encodeForDB( source.getGrowthform2Cover(plotName) );
+			String growthform3Cover = Utility.encodeForDB( source.getGrowthform3Cover(plotName) );
 			boolean notesPublic = source.getNotesPublic(plotName);
 			boolean notesMgt = source.getNotesMgt(plotName);
 			boolean revisions = source.getRevisions(plotName);
-			String methodNarrative = Utility.escapeCharacters( source.getMethodNarrative(plotName) );
+			String methodNarrative = Utility.encodeForDB( source.getMethodNarrative(plotName) );
 
 			// update the debugging stringbuffer
 			debug.append("<plotId>" + plotId + "</plotId> \n");
@@ -2491,29 +2491,29 @@ public class DBinsertPlotSource {
 
 			//the variables from the plot file
 
-			String authorPlotCode = Utility.escapeCharacters( source.getPlotCode(plotName) );
-			String rockType = Utility.escapeCharacters( source.getRockType(plotName) );
-			String surficialDeposits = Utility.escapeCharacters( source.getSurficialDeposits(plotName) ); 	
-			String plotArea = Utility.escapeCharacters( source.getPlotArea(plotName) );
-			String elevation = Utility.escapeCharacters( source.getElevation(plotName) );
-			String datumType = Utility.escapeCharacters( source.getDatumType(plotName) );
-      String elevationAccuracy = Utility.escapeCharacters( source.getElevationAccuracy(plotName) );
-			String slopeAspect = Utility.escapeCharacters( source.getSlopeAspect(plotName) );
-			String slopeGradient = Utility.escapeCharacters( source.getSlopeGradient(plotName) );
-			String topoPosition = Utility.escapeCharacters( source.getTopoPosition(plotName) );
-			String hydrologicRegime = Utility.escapeCharacters( source.getHydrologicRegime(plotName) );
-			String plotShape = Utility.escapeCharacters( source.getPlotShape(plotName) );
-			String confidentialityStatus = Utility.escapeCharacters( source.getConfidentialityStatus(plotName) );
-			String confidentialityReason = Utility.escapeCharacters( source.getConfidentialityReason(plotName) );
-			String azimuth = Utility.escapeCharacters( source.getAzimuth(plotName) );
-			String dsgPoly = Utility.escapeCharacters( source.getDSGPoly(plotName) );
-			String xCoord = Utility.escapeCharacters( source.getXCoord(plotName) );
-			String yCoord = Utility.escapeCharacters( source.getYCoord(plotName) );
-			String zone = Utility.escapeCharacters( source.getUTMZone(plotName) );
+			String authorPlotCode = Utility.encodeForDB( source.getPlotCode(plotName) );
+			String rockType = Utility.encodeForDB( source.getRockType(plotName) );
+			String surficialDeposits = Utility.encodeForDB( source.getSurficialDeposits(plotName) ); 	
+			String plotArea = Utility.encodeForDB( source.getPlotArea(plotName) );
+			String elevation = Utility.encodeForDB( source.getElevation(plotName) );
+			String datumType = Utility.encodeForDB( source.getDatumType(plotName) );
+      String elevationAccuracy = Utility.encodeForDB( source.getElevationAccuracy(plotName) );
+			String slopeAspect = Utility.encodeForDB( source.getSlopeAspect(plotName) );
+			String slopeGradient = Utility.encodeForDB( source.getSlopeGradient(plotName) );
+			String topoPosition = Utility.encodeForDB( source.getTopoPosition(plotName) );
+			String hydrologicRegime = Utility.encodeForDB( source.getHydrologicRegime(plotName) );
+			String plotShape = Utility.encodeForDB( source.getPlotShape(plotName) );
+			String confidentialityStatus = Utility.encodeForDB( source.getConfidentialityStatus(plotName) );
+			String confidentialityReason = Utility.encodeForDB( source.getConfidentialityReason(plotName) );
+			String azimuth = Utility.encodeForDB( source.getAzimuth(plotName) );
+			String dsgPoly = Utility.encodeForDB( source.getDSGPoly(plotName) );
+			String xCoord = Utility.encodeForDB( source.getXCoord(plotName) );
+			String yCoord = Utility.encodeForDB( source.getYCoord(plotName) );
+			String zone = Utility.encodeForDB( source.getUTMZone(plotName) );
 			// if the plot data source has geocoordinates (latitude, logitude )
 			// use them otherwise lookup the information from the web service
-			String latitude = Utility.escapeCharacters( source.getLatitude(plotName) );
-			String longitude = Utility.escapeCharacters( source.getLongitude(plotName) );
+			String latitude = Utility.encodeForDB( source.getLatitude(plotName) );
+			String longitude = Utility.encodeForDB( source.getLongitude(plotName) );
 			if (latitude == null || latitude.length() < 2) 
 			{
 				Hashtable geoCoords = getGeoCoords(xCoord, yCoord, zone);
@@ -2521,14 +2521,14 @@ public class DBinsertPlotSource {
 				longitude = (String) geoCoords.get("longitude");
 			}
 
-			String state = Utility.escapeCharacters( source.getState(plotName) );
-			String country = Utility.escapeCharacters( source.getCountry(plotName) );
-			String authorLocation = Utility.escapeCharacters( source.getAuthorLocation(plotName) );
+			String state = Utility.encodeForDB( source.getState(plotName) );
+			String country = Utility.encodeForDB( source.getCountry(plotName) );
+			String authorLocation = Utility.encodeForDB( source.getAuthorLocation(plotName) );
 			boolean permanence = source.isPlotPermanent(plotName);
-     	String layoutNarrative = Utility.escapeCharacters( source.getLayoutNarrative(plotName) );
-     	String locationNarrative = Utility.escapeCharacters( source.getLocationNarrative(plotName) );
-			String landForm = Utility.escapeCharacters( source.getLandForm(plotName) );
-     	String standSize = Utility.escapeCharacters( source.getStandSize(plotName) );
+     	String layoutNarrative = Utility.encodeForDB( source.getLayoutNarrative(plotName) );
+     	String locationNarrative = Utility.encodeForDB( source.getLocationNarrative(plotName) );
+			String landForm = Utility.encodeForDB( source.getLandForm(plotName) );
+     	String standSize = Utility.encodeForDB( source.getStandSize(plotName) );
 
 			//make a temporary accession number for each unique plot
 			String accessionNumber =
@@ -2668,13 +2668,13 @@ public class DBinsertPlotSource {
 		StringBuffer sb = new StringBuffer();
 		try 
     {
-			String date = Utility.escapeCharacters( source.getObsStartDate(plotName) );
+			String date = Utility.encodeForDB( source.getObsStartDate(plotName) );
 
 			// THE PLOTNAME HEAR REFERS TO THE UNIQUE PLOT IDENTIFIER FOR A
 			// GIVEN CLASS SO THE CODE FOR THAT CLASS MUST BE LOOKED UP AND
 			// USED 
 
-			String plotCode = Utility.escapeCharacters( source.getPlotCode(plotName) );
+			String plotCode = Utility.encodeForDB( source.getPlotCode(plotName) );
 
 			StringTokenizer tok = new StringTokenizer(date);
 			String buf = tok.nextToken().replace('-', ' ');
