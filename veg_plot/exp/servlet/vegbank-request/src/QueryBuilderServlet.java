@@ -1,15 +1,17 @@
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
+ import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
-import servlet.util.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import servlet.util.GetURL;
+import servlet.util.ServletUtility;
 
 
 /**
@@ -33,9 +35,9 @@ import servlet.util.*;
  * 
  * 
  *
- *	'$Author: harris $'
- *  '$Date: 2002-07-29 17:25:11 $'
- *  '$Revision: 1.4 $'
+ *	'$Author: farrell $'
+ *  '$Date: 2003-02-24 19:37:18 $'
+ *  '$Revision: 1.5 $'
  * 
  */
 
@@ -168,7 +170,7 @@ public class QueryBuilderServlet extends HttpServlet
 			System.out.println("QueryBuilderServlet > sending http: " + uri);
       int port=80;
       String requestType="POST";
-      htmlResults = gurl.requestURL(uri);
+      htmlResults = GetURL.requestURL(uri);
     
 		
 		}

@@ -720,12 +720,12 @@ public class StyleSheetGenerator extends HttpServlet
 
 			String teststyle =
 				"/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
-			transformer.getTransformed(
+			s = transformer.getTransformedFromString(
 				"/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml",
 				teststyle);
-			StringWriter transformedData = transformer.outTransformedData;
-
-			s = transformedData.toString();
+				
+			//StringWriter transformedData = transformer.outTransformedData;
+			//s = transformedData.toString();
 
 		}
 		catch (Exception e)

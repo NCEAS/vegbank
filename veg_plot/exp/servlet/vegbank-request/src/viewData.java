@@ -1,27 +1,22 @@
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Enumeration;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
-//this is the new xalan
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-
-import xmlresource.utils.transformXML;
 import servlet.util.GetURL;
+import xmlresource.utils.transformXML;
 
 
 
@@ -264,8 +259,9 @@ public class viewData extends HttpServlet
 				// retrieve the string writer
 				String teststyle = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
 				
-				m.getTransformed(xmlDoc, styleSheet);
-				StringWriter transformedData = m.outTransformedData;
+				StringWriter transformedData = new StringWriter();
+				m.getTransformed(xmlDoc, styleSheet, transformedData);
+				
 				Vector contents = this.convertStringWriter(transformedData);
 
 				//##/test the new method in the xmlTransformer class
@@ -310,8 +306,9 @@ public class viewData extends HttpServlet
 				System.out.println("ViewData > xml document: '" + xmlDoc +"'" );
 				System.out.println("ViewData > stylesheet name: '" + styleSheet +"'" );
 				
-				m.getTransformed(xmlDoc, styleSheet);
-				StringWriter transformedData = m.outTransformedData;
+				StringWriter transformedData = new StringWriter();
+				m.getTransformed(xmlDoc, styleSheet, transformedData);
+
 				Vector contents = this.convertStringWriter(transformedData);
 				for (int ii=0;ii< contents.size() ; ii++) 
 				{

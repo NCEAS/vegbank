@@ -1,11 +1,16 @@
 package servlet.authentication;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Hashtable;
+import java.util.ResourceBundle;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import servlet.util.ServletUtility;
-import servlet.authentication.UserDatabaseAccess;
 
 
 
@@ -23,8 +28,8 @@ import servlet.authentication.UserDatabaseAccess;
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2002-12-27 19:52:16 $'
- *  '$Revision: 1.13 $'
+ *  '$Date: 2003-02-24 19:37:15 $'
+ *  '$Revision: 1.14 $'
  *
  *  @version
  *  @author
@@ -135,7 +140,7 @@ public class AuthenticationServlet extends HttpServlet
 						response.addCookie(m.registeredCookie);
 						//send the user to the correct page
 						Thread.currentThread().sleep(1100);
-						String redirect = "http://"+this.serverUrl+"/framework/servlet/usermanagement?action=options";
+						String redirect = "/framework/servlet/usermanagement?action=options";
 						System.out.println("AuthentictionServlet > redirecting to: " + redirect);
 						response.sendRedirect(redirect);
 					}
@@ -334,7 +339,7 @@ public class AuthenticationServlet extends HttpServlet
 	 */
 	 private String getErrorRedirection()
 	 {
-		 String errorPage = "http://"+this.serverUrl+"/vegbank/general/login.html";
+		 String errorPage = "/vegbank/general/login.html";
 		 System.out.println("AuthenticationServlet > compiling error rediection to:  " + errorPage );
 		 StringBuffer sb = new StringBuffer();
 		 sb.append("<html> \n");
@@ -343,12 +348,12 @@ public class AuthenticationServlet extends HttpServlet
 		 sb.append("</head> \n");
 		 sb.append("<body> \n");
 		 sb.append("<script language=\"JavaScript\"> \n");
-		 //sb.append("window.location=\"http://"+this.serverUrl+"/vegbank/general/login.html\"; \n");
+		 //sb.append("window.location=\"/vegbank/general/login.html\"; \n");
 		 sb.append("window.location=\""+errorPage+"\"; \n");
 		 sb.append("</script> \n");
 
 		 sb.append("Please Click \n");
-		 //sb.append("<a href=\"http://"+this.serverUrl+"/vegbank/general/login.html\">here</a> \n");
+		 //sb.append("<a href=\"/vegbank/general/login.html\">here</a> \n");
 		 sb.append("<a href=\""+errorPage+"\">here</a> \n");
 		 sb.append("if your browser is not promptly redirected \n");
 		 sb.append("");

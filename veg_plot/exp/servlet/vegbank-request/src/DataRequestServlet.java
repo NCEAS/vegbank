@@ -1,23 +1,26 @@
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.net.URL;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.ResourceBundle;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import servlet.util.ServletUtility;
 import xmlresource.utils.transformXML;
 import databaseAccess.dbAccess;
-import servlet.util.ServletUtility;
 
 
 /**
@@ -51,8 +54,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-01-28 21:27:33 $'
- *  '$Revision: 1.30 $'
+ *  '$Date: 2003-02-24 19:37:17 $'
+ *  '$Revision: 1.31 $'
  * 
  */
 
@@ -133,8 +136,7 @@ public class DataRequestServlet extends HttpServlet
 	
 
 	/** Handle "POST" method requests from HTTP clients */
-	public void doGet(HttpServletRequest request,
-		HttpServletResponse response)
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
  	 throws IOException, ServletException 	
 		{
 			System.out.println("DataRequestServlet > GET");
@@ -143,8 +145,7 @@ public class DataRequestServlet extends HttpServlet
 
 
 	/** Handle "POST" method requests from HTTP clients */ 
-	public void doPost(HttpServletRequest request, 
-		HttpServletResponse response)
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 		throws IOException, ServletException  
 		{
 			System.out.println("DataRequestServlet > POST");
@@ -356,8 +357,9 @@ public class DataRequestServlet extends HttpServlet
 	{
 		try 
 		{
-			System.out.println("DataRequstServlet > result sets: "+queryOutputNum+" to: "+clientType);
+			System.out.println("DataRequestServlet > result sets: "+queryOutputNum+" to: "+clientType);
 			// THIS STATEMENT IS CARRIED OUT IF THE CLIENT IS AN APPLICATION
+      /* When can that happen ???
 			if ( clientType.trim().equals("clientApplication")  || clientType.trim().equals("app") )
 			{
 				//does the client want xml or html?
@@ -401,6 +403,7 @@ public class DataRequestServlet extends HttpServlet
 			// the browser
 			else
 			{
+      */
 				//pass back the summary of parameters passed to the servlet
 				//returnQueryElementSummary(out, params, response);
 				if (this.requestDataType.equals("vegPlot") )
@@ -453,7 +456,7 @@ public class DataRequestServlet extends HttpServlet
 						out.println(su.outString);
 					}
 				}
-			}
+			//}
 		}
 		catch( Exception e ) 
 		{
@@ -477,8 +480,9 @@ public class DataRequestServlet extends HttpServlet
 			 String xmlDoc = servletDir+"summary.xml";
 			 System.out.println("DataRequestServlet > xml document: '" + xmlDoc +"'" );
 			 System.out.println("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
-			 transformer.getTransformed(xmlDoc, styleSheet);
-			 StringWriter transformedData = transformer.outTransformedData;
+			StringWriter transformedData = new StringWriter();
+			transformer.getTransformed(xmlDoc, styleSheet, transformedData);
+
 			 Vector contents = this.convertStringWriter(transformedData);
 			 for (int ii=0;ii< contents.size() ; ii++) 
 			 {
@@ -510,8 +514,10 @@ public class DataRequestServlet extends HttpServlet
 			 String xmlDoc = servletDir+"summary.xml";
 			 System.out.println("DataRequestServlet > xml document: '" + xmlDoc +"'" );
 			 System.out.println("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
-			 transformer.getTransformed(xmlDoc, styleSheet);
-			 StringWriter transformedData = transformer.outTransformedData;
+
+			 	StringWriter transformedData = new StringWriter();
+				transformer.getTransformed(xmlDoc, styleSheet, transformedData);
+			
 			 Vector contents = this.convertStringWriter(transformedData);
 			 for (int ii=0;ii< contents.size() ; ii++) 
 			 {
@@ -547,8 +553,10 @@ public class DataRequestServlet extends HttpServlet
 			 String styleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/transformFullPlot.xsl";
 			 System.out.println("DataRequestServlet > xml document: '" + xmlDoc +"'" );
 			 System.out.println("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
-			 transformer.getTransformed(xmlDoc, styleSheet);
-			 StringWriter transformedData = transformer.outTransformedData;
+			 
+			StringWriter transformedData = new StringWriter();
+			transformer.getTransformed(xmlDoc, styleSheet, transformedData);
+			
 			 Vector contents = this.convertStringWriter(transformedData);
 			 for (int ii=0;ii< contents.size(); ii++) 
 			 {
@@ -578,8 +586,10 @@ public class DataRequestServlet extends HttpServlet
 					 String xmlDoc = servletDir + "atomicResult";
 					 System.out.println("DataRequestServlet > xml document: '" + xmlDoc +"'" );
 					 System.out.println("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
-					 transformer.getTransformed(xmlDoc, styleSheet);
-					 StringWriter transformedData = transformer.outTransformedData;
+
+					StringWriter transformedData = new StringWriter();
+					transformer.getTransformed(xmlDoc, styleSheet, transformedData);
+			
 					 Vector contents = this.convertStringWriter(transformedData);
 					 for (int ii=0;ii< contents.size(); ii++) 
 					 {
@@ -609,8 +619,10 @@ public class DataRequestServlet extends HttpServlet
 			 String styleSheet = this.defaultPlotIdentityStyleSheet;
 			 System.out.println("DataRequestServlet > xml document: '" + xmlDoc +"'" );
 			 System.out.println("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
-			 transformer.getTransformed(xmlDoc, styleSheet);
-			 StringWriter transformedData = transformer.outTransformedData;
+			 
+			StringWriter transformedData = new StringWriter();
+			transformer.getTransformed(xmlDoc, styleSheet, transformedData);
+			
 			 Vector contents = this.convertStringWriter(transformedData);
 			 for (int ii=0;ii< contents.size() ; ii++) 
 			 {
@@ -746,8 +758,10 @@ public class DataRequestServlet extends HttpServlet
  * @param out - the output stream to the client
  * @param response - the response object linked to the client 
  */
-	private void handleSimpleQuery(Hashtable params, PrintWriter out, 
-	HttpServletResponse response) 
+	private void handleSimpleQuery( Hashtable params, 
+                                  PrintWriter out, 
+	                                HttpServletResponse response
+                                ) 
 	{
 		try
 		{
@@ -889,8 +903,11 @@ public class DataRequestServlet extends HttpServlet
 	 * @param response - the response object linked to the client 
 	 * 
 	 */
-	private void handlePlantTaxonQuery(Hashtable params, PrintWriter out, 
-	String requestDataType, HttpServletResponse response)
+	private void handlePlantTaxonQuery(
+		Hashtable params, 
+		PrintWriter out, 
+		String requestDataType, 
+		HttpServletResponse response)
 	{
 		try
 		{
@@ -1154,88 +1171,90 @@ public class DataRequestServlet extends HttpServlet
 			
 			//grab the relevent query attributes out of the hash
 			String taxonName = (String)params.get("taxonName");
+			
+			// Special handling here
 			String taxonNameType = (String)params.get("taxonNameType");
 			String taxonLevel = (String)params.get("taxonLevel");
+			
+			// Check for nulls .... Query does't work with nulls for these values 
+			//	because the null gets converted into a string bellow and the query
+			// uses this "null" for its search 
+			//	FIXME: do this in a better way ... hack
+			if (taxonNameType == null)
+			{
+				taxonNameType = "";
+			}
+			if (taxonLevel == null )
+			{
+				taxonLevel = "";
+			}
+			
 			String party = (String)params.get("party");
 			String startDate = (String)params.get("startDate");
 			String stopDate = (String)params.get("stopDate");
 			String targetDate = (String)params.get("targetDate");
-		
-
-			System.out.println("DataRequstServlet > printing composePlantTaxonomyQuery: "+
-			"taxonName: "+taxonName);
+	
 			
+			System.out.println(
+				"DataRequstServlet > printing composePlantTaxonomyQuery: "+
+				"taxonName: "+taxonName +
+				" taxonNameType: " + taxonNameType +
+				" taxonLevel: " + taxonLevel
+			);
+			
+			
+			
+			query.append("<?xml version=\"1.0\"?> \n");       
+			query.append(	"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n");
+			query.append(	"	<dbQuery> \n");
+			query.append(	"		<query> \n");
+			query.append(	"			<queryElement>taxonName</queryElement> \n");
+			query.append(	"			<elementString>"+taxonName+"</elementString> \n");
+			query.append(	"		</query> \n");
+			query.append(	"		<query> \n");
+			query.append(	"			<queryElement>taxonNameType</queryElement> \n");
+			query.append(	"			<elementString>"+taxonNameType+"</elementString> \n");
+			query.append(	"		</query> \n");
+			query.append(	"		<query> \n");
+			query.append(	"			<queryElement>taxonLevel</queryElement> \n");
+			query.append(	"			<elementString>"+taxonLevel+"</elementString> \n");
+			query.append(	"		</query> \n");
+			query.append(	"		<query> \n");
+			query.append(	"			<queryElement>party</queryElement> \n");
+			query.append(	"			<elementString>"+party+"</elementString> \n");
+			query.append(	"		</query> \n");
+
 			
 			// if the target date was passed instead of the start and stop compose a 
 			// slightly different query 
 			if ( targetDate != null )
 			{
-				query.append("<?xml version=\"1.0\"?> \n");       
- 				query.append(	"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n");
-				query.append(	"	<dbQuery> \n");
-				query.append(	"		<query> \n");
-				query.append(	"			<queryElement>taxonName</queryElement> \n");
-				query.append(	"			<elementString>"+taxonName+"</elementString> \n");
-				query.append(	"		</query> \n");
-				query.append(	"		<query> \n");
-				query.append(	"			<queryElement>taxonNameType</queryElement> \n");
-				query.append(	"			<elementString>"+taxonNameType+"</elementString> \n");
-				query.append(	"		</query> \n");
-				query.append(	"		<query> \n");
-				query.append(	"			<queryElement>taxonLevel</queryElement> \n");
-				query.append(	"			<elementString>"+taxonLevel+"</elementString> \n");
-				query.append(	"		</query> \n");
-				query.append(	"		<query> \n");
-				query.append(	"			<queryElement>party</queryElement> \n");
-				query.append(	"			<elementString>"+party+"</elementString> \n");
-				query.append(	"		</query> \n");
 				query.append(	"		<query> \n");
 				query.append(	"			<queryElement>targetDate</queryElement> \n");
 				query.append(	"			<elementString>"+targetDate+"</elementString> \n");
 				query.append(	"		</query> \n");
 				
-				query.append(	"		<requestDataType>"+requestDataType+"</requestDataType> \n");
-				query.append(	"		<resultType>"+resultType+"</resultType> \n");
-				query.append(	"		<outFile>"+servletDir+"summary.xml</outFile> \n");
-				query.append(	"</dbQuery>");
-				queryOutFile.println( query.toString() );
+
 			}
 			else
 			{
 				//print the query instructions in the xml document
-				queryOutFile.println("<?xml version=\"1.0\"?> \n"+       
- 					"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n"+     
-					"	<dbQuery> \n"+
-					"		<query> \n"+
-					"			<queryElement>taxonName</queryElement> \n"+
-					"			<elementString>"+taxonName+"</elementString> \n"+
-					"		</query> \n"+
-					"		<query> \n"+
-					"			<queryElement>taxonNameType</queryElement> \n"+
-					"			<elementString>"+taxonNameType+"</elementString> \n"+
-					"		</query> \n"+
-					"		<query> \n"+
-					"			<queryElement>taxonLevel</queryElement> \n"+
-					"			<elementString>"+taxonLevel+"</elementString> \n"+
-					"		</query> \n"+
-					"		<query> \n"+
-					"			<queryElement>party</queryElement> \n"+
-					"			<elementString>"+party+"</elementString> \n"+
-					"		</query> \n"+
-					"		<query> \n"+
-					"			<queryElement>startDate</queryElement> \n"+
-					"			<elementString>"+startDate+"</elementString> \n"+
-					"		</query> \n"+
-					"		<query> \n"+
-					"			<queryElement>stopDate</queryElement> \n"+
-					"			<elementString>"+stopDate+"</elementString> \n"+
-					"		</query> \n"+
-					"		<requestDataType>"+requestDataType+"</requestDataType> \n"+
-					"		<resultType>"+resultType+"</resultType> \n"+
-					"		<outFile>"+servletDir+"summary.xml</outFile> \n"+
-					"</dbQuery>"
-					);
+				query.append(	"		<query> \n");
+				query.append(	"			<queryElement>startDate</queryElement> \n");
+				query.append(	"			<elementString>"+startDate+"</elementString> \n");
+				query.append(	"		</query> \n");
+				query.append(	"		<query> \n");
+				query.append(	"			<queryElement>stopDate</queryElement> \n");
+				query.append(	"			<elementString>"+stopDate+"</elementString> \n");
+				query.append(	"		</query> \n");				
 			}
+			
+			query.append(	"		<requestDataType>"+requestDataType+"</requestDataType> \n");
+			query.append(	"		<resultType>"+resultType+"</resultType> \n");
+			query.append(	"		<outFile>"+servletDir+"summary.xml</outFile> \n");
+			query.append(	"</dbQuery>");
+			queryOutFile.println( query.toString() );
+			
 			queryOutFile.close();
  		}
 		catch (Exception e) 

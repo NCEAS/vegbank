@@ -22,8 +22,8 @@ import servlet.util.GetURL;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-01-15 22:52:52 $'
- *  '$Revision: 1.19 $'
+ *  '$Date: 2003-02-24 19:37:16 $'
+ *  '$Revision: 1.20 $'
  *
  */
 
@@ -263,9 +263,9 @@ public class ServletUtility
 		}
 		catch( Exception e ) 
 		{
-			System.out.println("** failed in:  "
-			+" first try - reading parameters "
-			+e.getMessage());
+			System.out.println(
+					"** failed in:  " + " first try - reading parameters " + e.getMessage()
+			);
 		}
 		return(params);
 	}
