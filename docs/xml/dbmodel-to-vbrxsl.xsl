@@ -79,8 +79,8 @@
 
   *
   *     '$Author: mlee $'
-  *     '$Date: 2004-04-27 01:21:10 $'
-  *     '$Revision: 1.5 $'
+  *     '$Date: 2004-05-08 00:14:12 $'
+  *     '$Revision: 1.6 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -106,7 +106,7 @@
 
     <xsl:element name="xsl:output">
       <xsl:attribute name="method">text</xsl:attribute>
-      <xsl:attribute name="encoding">UTF-8</xsl:attribute>
+      <xsl:attribute name="encoding">UTF-16</xsl:attribute>
     </xsl:element><!-- /xsl:output -->
     <xsl:element name="xsl:template">
       <xsl:attribute name="match">doc-VegBankVersion | doc-date | doc-author | doc-authorSoftware | doc-comments</xsl:attribute><!-- do nothing for these preset elements -->
