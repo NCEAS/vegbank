@@ -1,0 +1,11 @@
+/var/log/postgresql {
+    compress
+    rotate 2
+    size=10000k
+    create 0664 postgres postgres
+    daily
+    postrotate
+      /usr/bin/killall -HUP syslogd
+    endscript
+}
+                                             

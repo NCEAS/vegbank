@@ -1,0 +1,16 @@
+To allow the use of the tomcat manager application the tomcat-user.xml needs to
+be edited and placed into $TOMCAT_HOME/conf
+
+Working with Apache
+1) Install mod_jk
+2) Add the following to the end of httpd.conf
+  <IfDefine HAVE_JK>
+  LoadModule jk_module modules/mod_jk.so
+  AddModule  mod_jk.c
+  Include /etc/httpd/conf/mod_jk.conf
+  </IfDefine>
+3) Put the mod_jk.conf file and the workers.properties files into
+/etc/httpd/conf directory.
+
+
+NOTE: The mod_jk.conf must be edited if a new context is added.

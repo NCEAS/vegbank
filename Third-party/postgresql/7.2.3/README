@@ -1,0 +1,24 @@
+
+SETUP LOG ROTATION
+1) Edit postgresql.conf the following lines:
+
+syslog = 2
+syslog_facility = 'LOCAL0'
+syslog_ident = 'postgres'
+
+2)  Put into the directory /etc/logrotate.d the file called 'logrotate_postgresql'
+
+3) Add the following lines on your '/etc/syslog.conf'
+
+#Save postgresql logs
+LOCAL0.*
+/var/log/postgresql.log
+
+
+ALLOW TCP/IP CONNECTIONS
+
+1) Uncomment and edit the following lines in postgresql.conf
+
+  #tcpip_socket = false -> tcpip_socket = true
+  
+                                             
