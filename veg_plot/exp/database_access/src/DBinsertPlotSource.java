@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-07-22 23:28:41 $'
- * 	'$Revision: 1.27 $'
+ *  '$Date: 2002-07-23 21:41:17 $'
+ * 	'$Revision: 1.28 $'
  */
 package databaseAccess;
 
@@ -332,7 +332,10 @@ public class DBinsertPlotSource
 	
 	/**
 	 * method to initiate the insertion of a plot, there are a series of private
-	 * methods that will be called to actually get the data into the database
+	 * methods that will be called to actually get the data into the database.  
+	 * This is the main method that initiates the loading of a plot and the input
+	 * parameter 'plotName' refers to the actual plotName for the tnc database and 
+	 * the plot_id value for the vegbank (both central and access client)
 	 *
 	 * @param plotName -- the name of the plot that exists in the archive
 	 * @param emailAddress -- the VegBank valid email address of the person
@@ -342,10 +345,12 @@ public class DBinsertPlotSource
 	{
 		try 
 		{
+			System.out.println("DBinsertPlotSource > inserting plot: " + plotName);
 			// update the instance vraible with the user's email address
 			// which will be used for loading the plot and for constructing the 
 			// accession number
 			this.submitterEmail = emailAddress;
+			this.plotName = plotName;
 		
 			//add a line for the user that is inserting the data
 			debug.append( "<vegbankUser>"+emailAddress+"</vegbankUser> \n" );
@@ -657,10 +662,11 @@ public class DBinsertPlotSource
 	 * @param taxonObservationId -- the taxonobservation for this plant
 	 *
 	 */
-	private boolean insertStrataComposition(String plantName, String plantCode,  int taxonObservationId)
+	private boolean insertStrataComposition(String plantName, String plantCode, int taxonObservationId)
 	{
 		try 
 		{
+			System.out.println("DBinsertPlotSource > getting the strata for plot: " + plotName + " "+ plotId);
 			Vector strataVec = source.getTaxaStrataExistence(plantName, plotName);
 			for (int ii =0; ii < strataVec.size(); ii++)
 			{
@@ -860,11 +866,12 @@ public class DBinsertPlotSource
 		boolean successfulCommit = true;
 		try 
 		{
+			System.out.println("DBinsertPlotSource > inserting taxonomy data for: " + plotName+" " + plot);
 			//get the number of taxonObservations
 			Vector uniqueTaxa = source.plantTaxaNames;
 			//getPlantTaxaNames(String plotName)
 			System.out.println("DBinsertPlotSource > number of assocated taxa: " + uniqueTaxa.size() );
-			System.out.println("DBinsertPlotSource > taxa: " + uniqueTaxa.toString() );
+			//System.out.println("DBinsertPlotSource > taxa: " + uniqueTaxa.toString() );
 			
 			for (int i =0; i < uniqueTaxa.size(); i++)
 			{
@@ -881,7 +888,7 @@ public class DBinsertPlotSource
 				String code = source.getPlantTaxonCode(authorNameId);
 				if ( code == null || code.length() < 1 )
 				{
-					System.out.println("DBinsertPlotSource > no plant code id data source " );
+					System.out.println("DBinsertPlotSource > no plant code in data source " );
 					code = authorNameId;
 				}
 				System.out.println("DBinsertPlotSource > current taxon code: " + code );
@@ -931,10 +938,10 @@ public class DBinsertPlotSource
 					if ( results == false )
 					{
 						//successfulCommit = false;
-							level =	"";	
-							conceptId = "0";
-							name = authorNameId;
-							nameId = "0";
+						level =	"";	
+						conceptId = "0";
+						name = authorNameId;
+						nameId = "0";
 					}
 					else
 					{
@@ -962,15 +969,15 @@ public class DBinsertPlotSource
 				
 				//insert the values
 				sb.append("INSERT into TAXONOBSERVATION (taxonobservation_id, observation_id, "
-					+" cheatplantName, plantname_id, CHEATPLANTCODE ) "
-					+" values(?,?,?,?,?) ");
+				+" cheatplantName, plantname_id, CHEATPLANTCODE ) "
+				+" values(?,?,?,?,?) ");
 				
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
   	  	pstmt.setInt(1, taxonObservationId);
   	  	pstmt.setInt(2, plotObservationId);
 				pstmt.setString(3, authorNameId);
 				pstmt.setString(4, nameId);
-					pstmt.setString(5, code);
+				pstmt.setString(5, code);
   		  pstmt.execute();
 			 	
 				// insert the strata composition
@@ -1283,6 +1290,9 @@ public class DBinsertPlotSource
 	 * and if it catches an exception then false is returned to the calling 
 	 * class so that a roll-back can be issued
 	 *
+	 * @param projectId -- the projectId
+	 * @return boolean -- true if successfull insert
+	 *
 	 */
 	private boolean insertStaticPlotData(int projectId)
 	{
@@ -1293,8 +1303,9 @@ public class DBinsertPlotSource
 			plotId = getNextId("plot");
 			
 			//the variables from the plot file
-			plotName = source.plotCode;
-			String authorPlotCode = plotName;
+			
+			//plotName = source.plotCode;
+			String authorPlotCode = source.getPlotCode(plotName);
 			String surfGeo = source.surfGeo;
 			String parentPlot = "9";
 			String plotArea = source.plotArea;
@@ -1326,11 +1337,11 @@ public class DBinsertPlotSource
 			String authorLocation = source.authorLocation;
 			
 			//make a temporary accession number for each unique plot
-			String accessionNumber = getAccessionNumber(authorPlotCode, plotId, this.submitterEmail);
+			String accessionNumber = getAccessionNumber(plotName, plotId, this.submitterEmail);
 			System.out.println("DBinsertPlotSource > accession number: " + accessionNumber);
 			
 			//print the variables to the screen for debugging
-			debug.append("<authorPlotCode>"+ plotName+"</authorPlotCode>\n");
+			debug.append("<authorPlotCode>"+authorPlotCode+"</authorPlotCode>\n");
 			debug.append("<geology>"+surfGeo+"</geology>\n");
 			debug.append("<plotArea>"+plotArea+"</plotArea>\n");
 			debug.append("<altValue>"+altValue+"</altValue>\n");
@@ -1367,7 +1378,7 @@ public class DBinsertPlotSource
 			
   	  // Bind the values to the query and execute it
   	  pstmt.setInt(1, projectId);
-  	  pstmt.setString(2, plotName);
+  	  pstmt.setString(2, authorPlotCode);
 			pstmt.setInt(3, plotId);
 			pstmt.setString(4, surfGeo);
 			pstmt.setString(5, latitude);
@@ -1390,7 +1401,6 @@ public class DBinsertPlotSource
 			pstmt.setString(22, this.submitterSurName);
 			pstmt.setString(23, this.submitterGivenName);
 			pstmt.setString(24, this.submitterEmail);
-
 			pstmt.getWarnings();
   	  pstmt.execute();
   	  pstmt.close();
@@ -1428,13 +1438,19 @@ public class DBinsertPlotSource
 	 * @param email -- the email address of the user loading the plot
 	 * 
 	 */
-		private String getAccessionNumber( String plotName, int plotId, String
+		private String getAccessionNumber(String plotName, int plotId, String
 		email)
 		{
 			StringBuffer sb = new StringBuffer();
 			try
 			{
 				String date = source.getObsStartDate(plotName);
+				// THE PLOTNAME HEAR REFERS TO THE UNIQUE PLOT IDENTIFIER FOR A
+				// GIVEN CLASS SO THE CODE FOR THAT CLASS MUST BE LOOKED UP AND
+				// USED 
+				
+				String plotCode = source.getPlotCode(plotName);
+				
 				StringTokenizer tok = new StringTokenizer(date);
 				String buf = tok.nextToken().replace('-', ' ');
 				StringTokenizer tok2 = new StringTokenizer(buf);
@@ -1447,7 +1463,7 @@ public class DBinsertPlotSource
 				
 				sb.append("VB");
 				sb.append(".");
-				sb.append( plotName.replace('.', '_') );
+				sb.append( plotCode.replace('.', '_') );
 				sb.append(".");
 				sb.append(plotId);
 				sb.append(".");
@@ -1590,6 +1606,7 @@ public class DBinsertPlotSource
 	 * 
 	 * @param code -- the plant taxonomy code used to lookup the related data
 	 * 	that will be returned to from the web service in an xml format
+	 * @see 
 	 */
 	private Hashtable getPlantTaxonomyData(String code)
 	{
