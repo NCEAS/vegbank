@@ -3,13 +3,15 @@
   <xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes" />
 
   <xsl:param name="view">Detail</xsl:param>
-  <xsl:param name="oneTbl">referenceParty</xsl:param>
+  <xsl:param name="oneTbl">soilObs</xsl:param>
   <xsl:param name="detailAdd"></xsl:param>
   <xsl:param name="more">no</xsl:param><!-- yes if you want a link to details for each summary row -->
   <xsl:param name="alphalow">abcdefghijklmnopqrstuvwxyz</xsl:param>
   <xsl:param name="alphahigh">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:param>
   <xsl:template match="entity">
     <xsl:if test="string-length($oneTbl)&lt;1 or entityName=$oneTbl">
+        <xsl:variable name="currEnt" select="translate(entityName,$alphahigh,$alphalow)"/>
+        <xsl:variable name="currPK" select="translate(attribute[attKey='PK']/attName,$alphahigh,$alphalow)"/>
 <xsl:comment>
 This file is a template that should be edited to create jsp files that will be accessed in /get/ views of vegbank data.  The SQL is generated with this file, and should be edited and added to SQLStore as needed.
 
@@ -21,7 +23,8 @@ Copy from after the START: comment to the END: comment for contents of the file!
           <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>
           <xsl:if test="string-length(attFKTranslationSQL)&gt;0">, <xsl:value-of select="attFKTranslationSQL"/> AS <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>_transl</xsl:if>
           <xsl:if test="position()!=last()">,</xsl:if> \
-      </xsl:for-each>           FROM <xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>
+      </xsl:for-each>           FROM <xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>  WHERE true
+where_<xsl:value-of select="$currEnt"/>_pk=<xsl:value-of select="$currPK" /> IN ({0})
       </xsl:comment>
       <xsl:comment> ____________________________START:  <xsl:value-of select="entityName"/> _______________________________________ 
 </xsl:comment> 
@@ -47,8 +50,7 @@ Copy from after the START: comment to the END: comment for contents of the file!
         <xsl:text disable-output-escaping="yes">
         &lt;% String rowClass = "evenrow"; %&gt;
         </xsl:text>
-        <xsl:variable name="currEnt" select="translate(entityName,$alphahigh,$alphalow)"/>
-        <xsl:variable name="currPK" select="translate(attribute[attKey='PK']/attName,$alphahigh,$alphalow)"/>
+
        
        
         <xsl:element name="vegbank:get">
