@@ -19,6 +19,47 @@
 	<target name="init">
 	<tstamp/>
 	
+	<!-- 
+		* Below are the database connection settings
+		* that should be customized by the user before 
+		* the ant build process is run
+		*
+		* the default settings are for:
+	-->
+	<filter token="user" value="datauser" />
+  <filter token="password" value="pass" />
+	<filter token="port" value="1521" />
+	<filter token="driverType" value="thin" />
+	<filter token="driverClass" value="org.postgresql.Driver" />
+	<filter token="connectString" value="jdbc:postgresql://dev.nceas.ucsb.edu/nvc" />
+	<filter token="databaseName" value="nvc" />
+	<filter token="insert.minConnections" value="8" />
+	<filter token="insert.maxConnections" value="20" />
+	<filter token="query.minConnections" value="4" />
+	<filter token="query.maxConnections" value="8" />
+	<filter token="maxConnectionUses" value="100" />
+	<filter token="resetTime" value="0.01" />
+	<filter token="logFile" value="connectionPool.log" />
+													
+
+
+<!--
+	<filter token="user" value="nvc" />
+	<filter token="password" value="jhhtpass" />
+	<filter token="port" value="1521" />
+	<filter token="driverType" value="thin" />
+	<filter token="driverClass" value="oracle.jdbc.driver.OracleDriver" />
+	<filter token="connectString" value="jdbc:oracle:thin:@dev.nceas.ucsb.edu:1521:exp" />
+	<filter token="databaseName" value="exp" />
+	<filter token="insert.minConnections" value="8" />
+	<filter token="insert.maxConnections" value="20" />
+	<filter token="query.minConnections" value="4" />
+	<filter token="query.maxConnections" value="8" />
+	<filter token="maxConnectionUses" value="100" />
+	<filter token="resetTime" value="0.01" />
+	<filter token="logFile" value="connectionPool.log" />
+-->
+	
 	<property name="current" value="./" />
 	<property name="build" value="build" />
 	<property name="build_lib" value="${build}/lib" />
@@ -43,6 +84,7 @@
 	<property name="xmlp" value="${src_lib}/xalan.jar:${src_lib}/xerces.jar:" />
 	<property name="jdbc" value="" />
 	<property name="cpath" value="${xmlp}:${jdbc}:${jserv}:${jsdk}:${build}:${localToolsDir}:./"/>
+
 </target>
 
 <target name="prepare" depends="init">
@@ -77,15 +119,36 @@
     excludes="**/CVS* "
 	/> 
 	
-	
-	<copydir src="${src_lib}"
+
+
+<copyfile src="${src_lib}/database.properties" filtering="yes" dest="${build_src}/database.properties" />
+
+
+<!--
+	<copy todir="${build_src}"
+		filtering="true">
+		<fileset dir="${src_lib}/database.properties"/>
+	</copy>
+-->
+
+<!--
 		dest="${build_src}"
-		filtering="yes"
+		filtering="true"
 		includes="database.properties"
 		excludes="**/CVS* "
 	/>
-	
-	
+-->
+	<!--
+		* set the correct values in the 
+		* database properties file
+	-->
+<!--	
+	<replace file="${build_src}/database.properties" 
+		token="user=" 
+		value="user=testUser"
+	/>
+-->
+
 	<copydir src="${src_bin}"
 		dest="${build_bin}"
 		filtering="yes"
