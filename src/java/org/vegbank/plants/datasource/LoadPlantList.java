@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-16 00:15:51 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-05-29 18:42:18 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import java.util.AbstractList;
 import java.util.Collections;
 import java.util.Iterator;
 
+import org.vegbank.common.command.AddCorrelation;
 import org.vegbank.common.model.*;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.plants.datasink.*;
@@ -85,6 +86,27 @@ public class LoadPlantList
 					System.out.println( "-------------------------------------------------------------\n" );
 					count++;
 				}
+				
+				// Need to correlate the synoymns
+				Iterator i2 = plantList.iterator();
+				while( i2.hasNext() )
+				{
+					Plant plant = (Plant) i2.next();
+					if ( ! Utility.isStringNullOrEmpty( plant.getSynonymName() ) )
+					{
+						System.out.println( "-------------------------------------------------------------\n" );
+						// This plant needs to be correlated with an accepted plant
+						AddCorrelation ac = new AddCorrelation();
+						ac.execute(
+							plant.getSynonymName(),
+							plant.getScientificName(),
+							plant.getStatusStartDate(),
+							plant.getStatusStopDate(),
+							"equal");
+						System.out.println( "-------------------------------------------------------------\n" );
+					}
+				}
+				
 				long stopAllTime = System.currentTimeMillis();
 				float totalAllMilliSeconds =  stopAllTime - startAllTime ;
 				System.out.println(
@@ -99,6 +121,7 @@ public class LoadPlantList
 				e.printStackTrace();
 			}  
 		}
+		System.exit(0);
 	}
 	
 	/**

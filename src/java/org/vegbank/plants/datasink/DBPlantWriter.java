@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:26:14 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2003-05-29 18:42:18 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,36 +26,30 @@ package org.vegbank.plants.datasink;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.AbstractList;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import org.vegbank.common.model.DBPartyWriter;
-import org.vegbank.common.model.DBReferenceWriter;
-import org.vegbank.common.model.Party;
+import org.vegbank.common.Constants;
+import org.vegbank.common.command.Query;
 import org.vegbank.common.model.Plant;
+import org.vegbank.common.model.PlantParty;
 import org.vegbank.common.model.PlantUsage;
-import org.vegbank.common.model.Reference;
+import org.vegbank.common.utility.ObjectToDB;
 import org.vegbank.common.utility.Utility;
 
 /**
  * @author farrell
  */
 
-public class DBPlantWriter
+public class DBPlantWriter implements Constants
 {
 
+	private Query query = new Query();
 	private Connection conn = null;
 	private boolean commit = true;
 	private boolean writeSuccess = false;
-
-//	public DBPlantWriter(Plant plant)
-//	{
-//
-//			this(plant, this.getConnection());
-//	}
 	
 	public DBPlantWriter(Plant plant, Connection conn)
 	{
@@ -71,19 +65,27 @@ public class DBPlantWriter
 			conn.setAutoCommit(false);
 	
 	
-			// Need to get the referenceId;
-			Reference ref = plant.getScientificNameNoAuthorsReference();
-			DBReferenceWriter  dbrw = 
-				new DBReferenceWriter(ref, conn, "reference", "reference_id");
-			int refId = dbrw.getReferenceId();
-				
-	
+			// Need to get the referenceIds;
+			int conceptRefId = this.getIntFromString(plant.getConceptReferenceId());
+			int snRefId =  this.getIntFromString(plant.getScientificNameReferenceId());
+			int codeRefId =  this.getIntFromString(plant.getCodeNameReferenceId());
+			int commonRefId =  this.getIntFromString(plant.getCommonNameReferenceId());
+							
 			// Need to get the partyId
-			Party party = plant.getParty();
-			DBPartyWriter dbpw =
-				new DBPartyWriter(party, conn, "plantparty", "plantparty_id");
-			int partyId = dbpw.getPartyId();
-	
+			PlantParty party = plant.getPlantParty();
+			int partyId;
+			if (party == null)
+			{
+				String partyIdString = plant.getPlantPartyId();
+				partyId = new Integer(partyIdString).intValue();
+			}
+			else
+			{
+				ObjectToDB pp2db = new ObjectToDB(party);
+				pp2db.insert();
+				partyId = pp2db.getPrimaryKey();
+			}
+
 
 			Hashtable plantNameIds = new Hashtable();
 			AbstractList plantUsages = plant.getPlantUsages();
@@ -92,6 +94,7 @@ public class DBPlantWriter
 			while(i.hasNext())
 			{
 				PlantUsage pu = (PlantUsage) i.next();
+				//System.out.println( " My Name >>> " + pu.getPlantName() + "and classsystem is " + pu.getClassSystem() );
 				
 				if (pu.getPlantName() == null || pu.getPlantName().trim().equals(""))
 				{
@@ -99,6 +102,27 @@ public class DBPlantWriter
 				}
 				else
 				{
+					// Get the correct ReferenceId
+					int refId = 0;
+					
+					if (pu.getClassSystem().equals( USAGE_NAME_CODE) )
+					{
+						refId = codeRefId;
+					}
+					else if ( pu.getClassSystem().equals( USAGE_NAME_COMMON) )
+					{
+						refId = commonRefId;
+					}
+					else if ( pu.getClassSystem().equals( USAGE_NAME_SCIENTIFIC) )
+					{
+						refId = snRefId;
+					}
+					else
+					{
+						System.out.println("DBPlantWriter: Name classsystem not recoginized");
+					}
+					
+					
 					int plantNameId =
 						this.insertPlantName(
 							refId,
@@ -109,33 +133,42 @@ public class DBPlantWriter
 				}
 			}
 	
+			//System.out.println("Get a PlantParty Id of " + partyId + " " + refId + " ---> " + plantNameIds);
+			//System.out.println(">>>> Loaded Names and " + plantNameIds.get("Scientific") );
+			
+			int sciNameId = ( (Integer) plantNameIds.get("Scientific")).intValue(); 
+			
+			System.out.println("sciNameId: " + sciNameId);
 			// Insert the Concept
 			int conceptId =
 				this.insertPlantConcept(
-					( (Integer) plantNameIds.get("Scientific")).intValue(),
-					refId,
-					plant.getScientificNameNoAuthors(),
-					plant.getDescription(),
+					sciNameId,
+					conceptRefId,
+					plant.getScientificName(),
+					plant.getPlantDescription(),
 					plant.getCode());
 	
+			//System.out.println(">>>> Loaded Concept");
+			//System.out.println(">>>>  " + plant.getStatusStopDate());
+			
 			// Insert the Status
 			int statusId = 
 				this.insertPlantStatus(
 					conceptId,
-					refId,
+					conceptRefId,
 					partyId,
 					plant.getStatus(),
 					plant.getParentName(),
 					plant.getStatusStartDate(),
-					plant.getClassLevel()
+					plant.getStatusStopDate(),
+					plant.getClassLevel(),
+					plant.getStatusPartyComments()
 				);
 			
-				
+			//System.out.println(">>>>  " + plant.getStatusStopDate());
+			//System.out.println("Got  StatusId:  " + statusId + "Got  ConceptId:  " + conceptId + "Got  ConceptId:  " + conceptId);
+			
 			// Insert all the usages
-			// Usage may need to be a separate class,  for now this
-				
-			//AbstractList plantUsages = plant.getPlantUsages();
-				
 			Iterator it = plantUsages.iterator();
 			while( it.hasNext()) 
 			{
@@ -163,7 +196,7 @@ public class DBPlantWriter
 				}
 			}
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			// If any step fails the transaction is void
 			commit = false;
@@ -194,6 +227,26 @@ public class DBPlantWriter
 	}
 
 	/**
+	 * Wrapper for getting int from string,
+	 * suppresses expections and returns a 0
+	 * @return
+	 */
+	private int getIntFromString( String string )
+	{
+		int result = 0;
+		try
+		{
+			result = new Integer(string).intValue();
+		}
+		catch ( Exception e)
+		{
+			// just return a 0
+			result = 0;
+		}
+		return result;
+	}
+
+	/**
 	 * @return int Primary Key
 	 */
 	private int insertPlantStatus(
@@ -203,13 +256,24 @@ public class DBPlantWriter
 		String plantConceptStatus,
 		String plantParentName,
 		String startDate,
-		String plantLevel) 
+		String stopDate,
+		String plantLevel,
+		String partyComments) 
 		throws SQLException
 	{
+		int statusId = 0;
+		int plantParentConceptId = 0;
 		
-		int plantParentConceptId = this.getPlantParentConceptId(plantParentName);
-		
-		int statusId =
+		try
+		{
+			plantParentConceptId = query.getPlantConceptId(plantParentName);
+		} 
+		catch (Exception e)
+		{
+			System.out.println("Could not find parent: " + e.getMessage() );
+			}	
+			
+		statusId =
 			(int) Utility.dbAdapter.getNextUniqueID(
 				conn,
 				"PLANTSTATUS",
@@ -218,31 +282,40 @@ public class DBPlantWriter
 		PreparedStatement pstmt =
 					conn.prepareStatement(
 			" insert into PLANTSTATUS (PLANTCONCEPT_ID, REFERENCE_ID,  "
-		+ " PLANTPARTY_ID, PLANTCONCEPTSTATUS,  startdate, PLANTLEVEL, " 
-		+ "plantstatus_id, plantparent_id, plantparentname)"
-		+ " values (?,?,?,?,?,?,?,?,?)");
+		+ " PLANTPARTY_ID, PLANTCONCEPTSTATUS,  startdate, stopdate, PLANTLEVEL, " 
+		+ "plantstatus_id, plantparent_id, plantparentname, plantpartycomments)"
+		+ " values (?,?,?,?,?,?,?,?,?,?,?)");
 		
 		pstmt.setInt(1, plantConceptId);
-		pstmt.setInt(2, 	referenceId);
-		pstmt.setInt(3, plantPartyId);
-		pstmt.setString(4, plantConceptStatus);
-		Utility.insertDateField(startDate, pstmt, 5);  
-		pstmt.setString(6, plantLevel);		
-		pstmt.setInt(7, statusId);		
-		// 0 => that no plantconcept_id was found
-		if (plantParentConceptId == 0)
+		if ( referenceId == 0)
 		{
-			pstmt.setNull(8, java.sql.Types.INTEGER);
+			pstmt.setNull(2, java.sql.Types.INTEGER);
 		}
 		else
 		{
-			pstmt.setInt(8, plantParentConceptId);		
+			pstmt.setInt(2, referenceId);
+		} 
+		pstmt.setInt(3, plantPartyId);
+		pstmt.setString(4, plantConceptStatus);
+		Utility.insertDateField(startDate, pstmt, 5);  
+		Utility.insertDateField(stopDate, pstmt, 6);  
+		pstmt.setString(7, plantLevel);		
+		pstmt.setInt(8, statusId);		
+		// 0 => that no plantconcept_id was found
+		if (plantParentConceptId == 0)
+		{
+			pstmt.setNull(9, java.sql.Types.INTEGER);
 		}
-		pstmt.setString(9, plantParentName);
+		else
+		{
+			pstmt.setInt(9, plantParentConceptId);		
+		}
+		pstmt.setString(10, plantParentName);
+		pstmt.setString(11, partyComments);
 				
 		pstmt.executeUpdate();
 		pstmt.close();
-					
+
 		return statusId;
 	}
 
@@ -318,7 +391,14 @@ public class DBPlantWriter
 					+ "plantname_id) values(?,?,?,?) ");
 
 		//bind the values
-		pstmt.setInt(1, refId);
+		if ( refId == 0)
+		{
+			pstmt.setNull(1, java.sql.Types.INTEGER);
+		}
+		else
+		{
+			pstmt.setInt(1, refId);
+		} 
 		pstmt.setString(2, plantName);
 		pstmt.setString(3, dateEntered);
 		pstmt.setInt(4, plantNameId);
@@ -360,7 +440,14 @@ public class DBPlantWriter
 					+ " PLANTDESCRIPTION,  PLANTCODE, plantconcept_id)   values (?,?,?,?,?,?)");
 
 		pstmt.setInt(1, plantNameId);
-		pstmt.setInt(2, refId);
+		if ( refId == 0)
+		{
+			pstmt.setNull(2, java.sql.Types.INTEGER);
+		}
+		else
+		{
+			pstmt.setInt(2, refId);
+		} 
 		pstmt.setString(3, plantName);
 		pstmt.setString(4, plantDescription);
 		pstmt.setString(5, plantCode);
@@ -371,25 +458,6 @@ public class DBPlantWriter
 		return nextId;
 	}
 
-	private int getPlantParentConceptId(String plantName)
-		throws SQLException
-	{
-		int plantConceptId = 0;
-		
-		// This is referring to a different plant
-		PreparedStatement pstmt =
-			conn.prepareStatement(
-				" select plantconcept_id from plantconcept where plantname = '" + plantName +"'"
-			);
-		
-		ResultSet rs = pstmt.executeQuery();
-		while ( rs.next() )
-		{
-			plantConceptId = rs.getInt(1);
-		}
-		
-		return plantConceptId;
-	}
 	/**
 	 * @return boolean
 	 */

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-16 05:46:24 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-29 18:42:18 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +38,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.vegbank.common.Constants;
+import org.vegbank.common.command.QueryReferences;
+import org.vegbank.common.command.QueryReferences.ReferenceSummary;
 import org.vegbank.common.model.Plant;
 import org.vegbank.common.model.PlantParty;
 import org.vegbank.common.model.Reference;
@@ -234,11 +238,28 @@ public class AddPlant implements Constants
 				String codeReferenceId = request.getParameter("code.reference_id");
 				String conceptDescription = request.getParameter("conceptDescription");
 
-				plant.setCommonNameReferenceId(commonReferenceId);
-				plant.setConceptReferenceId(conceptReferenceId);
+
+			  String NOREFERENCE = "none";
+        
+        if (! commonReferenceId.equals(NOREFERENCE)) 
+        {
+          System.out.println("Accepting Reference: " + commonReferenceId);
+          plant.setCommonNameReferenceId(commonReferenceId);
+        }
+				
+        plant.setConceptReferenceId(conceptReferenceId);
 				plant.setPlantDescription(conceptDescription);
-				plant.setScientificNameReferenceId(scientificReferenceId);
-				plant.setCodeNameReferenceId(codeReferenceId);
+	      
+        if (! scientificReferenceId.equals(NOREFERENCE)) 
+        {
+				  plant.setScientificNameReferenceId(scientificReferenceId);
+        }
+        
+        if (! codeReferenceId.equals(NOREFERENCE)) 
+        {
+          System.out.println("-->" + codeReferenceId);
+			    plant.setCodeNameReferenceId(codeReferenceId);
+        }
 
 				updatePlantStatusUsagePage(
 					emailAddress,
@@ -477,23 +498,25 @@ public class AddPlant implements Constants
 			// THE CONCEPT
 			replaceHash.put("conceptDescription", plant.getPlantDescription());
 
+			Collection references = getReferencesCollection();
+			
 			// THE REFERENCES
-
+			
 			replaceHash.put(
-				"conceptReferenceLink",
-				HTMLUtil.getReferenceLinkHTML(plant.getConceptReferenceId())
+				"conceptReferenceName",
+				this.getReferenceShortName( plant.getConceptReferenceId(), references )
 			);
 			replaceHash.put(
-				"scientificReferenceLink",
-				HTMLUtil.getReferenceLinkHTML(plant.getScientificNameReferenceId())
+				"scientificReferenceName",
+				this.getReferenceShortName( plant.getScientificNameReferenceId(), references )
 			);
 			replaceHash.put(
-				"codeReferenceLink",
-				HTMLUtil.getReferenceLinkHTML(plant.getCodeNameReferenceId())
+				"codeReferenceName",
+				this.getReferenceShortName( plant.getCodeNameReferenceId(), references )
 			);
 			replaceHash.put(
-				"commonReferenceLink",
-				HTMLUtil.getReferenceLinkHTML(plant.getCommonNameReferenceId())
+				"commonReferenceName",
+				this.getReferenceShortName( plant.getCommonNameReferenceId(), references )
 			);
 
 			// STATUS AND USAGE
@@ -631,7 +654,7 @@ public class AddPlant implements Constants
 			// UPDATE THE DATES B/C THEY ARE REQUIRED BY THE LOADER
 			String curDate = su.getCurrentDate();
 			replaceHash.put("statusStartDate", curDate);
-			replaceHash.put("statusStopDate", curDate);
+			replaceHash.put("statusStopDate", "");
 
 			su.filterTokenFile(plantStatusUsageTemplate, out, replaceHash);
 			// the calling method will redirect the browser
@@ -641,5 +664,48 @@ public class AddPlant implements Constants
 			System.out.println("Exception:  " + e.getMessage());
 			e.printStackTrace();
 		}
+	}
+	
+	private String getReferenceShortName( String pKey, Collection references )
+	{
+		String noReferenceMessage = "No Reference Selected";
+		// Check for obviously nonvalid pKey
+			try
+			{
+				int pK = new Integer(pKey).intValue();
+			}
+			catch (NumberFormatException e)
+			{
+				// This is not an int so return no reference
+				return noReferenceMessage;
+			}
+
+		
+		Iterator refIt = references.iterator();
+		while (refIt.hasNext())
+		{
+			ReferenceSummary refSumm = (ReferenceSummary) refIt.next();
+			if ( refSumm.getId().equals(pKey) )
+			{
+				return refSumm.getTitle();
+			}
+		}
+		return noReferenceMessage;
+	}
+
+	private Collection getReferencesCollection()
+	{
+		Collection references = null;
+		
+		QueryReferences qr = new QueryReferences();
+		try
+		{
+			references = qr.execute();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return references;
 	}
 }

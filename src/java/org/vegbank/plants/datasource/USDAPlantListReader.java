@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-22 18:52:09 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-05-29 18:42:18 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,9 +35,16 @@ import java.util.Vector;
 import org.vegbank.common.Constants;
 import org.vegbank.common.model.*;
 import org.vegbank.common.model.Reference;
+import org.vegbank.common.utility.ObjectToDB;
 
 import com.Ostermiller.util.CSVParser;
 
+/**
+ * @author farrell
+ *
+ * To change this generated comment go to 
+ * Window>Preferences>Java>Code Generation>Code Template
+ */
 /**
  * @author farrell
  */
@@ -66,30 +73,90 @@ public class USDAPlantListReader implements Constants, PlantListReader
 	private static final String contactInstructions = "http://plants.usda.gov";
 	
 	private static Reference ref;
+	private static int refId;
 	{
 		// Initialize the Reference
 		ref = new Reference();
 		ref.setEdition(edition);
 		ref.setPubDate(pubdate);
 		ref.setTitle(title);
+
+		// Write the reference into the database
+		ObjectToDB ref2db = new ObjectToDB(ref);
+		try 
+		{
+			ref2db.insert();
+			refId = ref2db.getPrimaryKey();
+		}
+		catch ( Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
-	private static Party party;
+	private static ReferenceParty rp = new ReferenceParty();
+	private static int refPartyId;
 	{
-		// Initialize the Party
-		party = new Party();
-		party.setOrganizationName(organization);
-		party.setContactInstructions(contactInstructions);
-	}
-	
-	private static CitationContributor citationContributor;
-	{
-		// Initailize CitationContibutor
-		citationContributor = new CitationContributor();
-		citationContributor.setReference(ref);
-		citationContributor.setOrganizationName(organization);
+		// Initailize ReferenceParty
+		rp.setOrganizationName(organization);
+		// Write the ReferenceParty into the database
+		ObjectToDB refp2db = new ObjectToDB(rp);
+		try 
+		{
+			refp2db.insert();
+			refPartyId = refp2db.getPrimaryKey();
+		}
+		catch ( Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
+	private static ReferenceContributor rc = new ReferenceContributor();
+	{
+		// Initailize ReferenceContributor
+		rc.setReference_ID( new Integer(refId).intValue() );	
+		rc.setReferenceParty_ID(refPartyId);
+		rc.setPosition("0");
+		
+		// Write the ReferenceContributor into the database
+		ObjectToDB refc2db = new ObjectToDB(rc);
+		try 
+		{
+			refc2db.insert();
+		}
+		catch ( Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	private static PlantParty plantParty=new PlantParty();
+	private static int plantPartyId;
+	{
+		// Initialize the PlantParty
+		plantParty.setOrganizationName(organization);
+		plantParty.setContactInstructions(contactInstructions);
+		
+		// Write the PlantParty into the database
+		ObjectToDB pp2db = new ObjectToDB(plantParty);
+		try 
+		{
+			pp2db.insert();
+			plantPartyId = pp2db.getPrimaryKey();
+		}
+		catch ( Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Takes the USDA standard .csv file reads it and generates vegbank datamodel objects 
+	 * that can then be writtian to the database or to XML.
+	 * 
+	 * @param reader
+	 */
 	public USDAPlantListReader(Reader reader)
 	{
 		try
@@ -103,6 +170,9 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.vegbank.plants.datasource.PlantListReader#getAllPlants()
+	 */
 	public AbstractList getAllPlants()
 	{
 		Vector plantsV = new Vector();
@@ -139,9 +209,8 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		Plant plant = new Plant();
 
 		plant.setStatusStartDate(statusStartDate);
-		plant.setAllReferences(ref);
-		plant.setParty(party);
-
+		plant.setAllReferenceIds( new Integer(refId).toString() );
+		plant.setPlantPartyId( new Integer(plantPartyId).toString());
 		/* Examples:
 		 * code, name, common name, genus
 		*"ABMO3","Abama montana Small ","=Narthecium americanum","Liliaceae"
@@ -196,11 +265,17 @@ public class USDAPlantListReader implements Constants, PlantListReader
 	private void parseOtherNameField(Plant plant, String otherNameField)
 	{
 		// This ethier the common name or the accepted synomyn
-		if (otherNameField.startsWith("="))
+		if ( otherNameField.startsWith("=")   )
 		{
 			// We have an unaccepted plant with an accepted synomyn 
 			plant.setStatus(CONCEPT_STATUS_NOT_ACCEPTED);
 			plant.setSynonymName(otherNameField.substring(1));
+		}
+		else if ( otherNameField.startsWith(">>") )
+		{
+			// We have an unaccepted plant with an accepted synomyn 
+			plant.setStatus(CONCEPT_STATUS_NOT_ACCEPTED);
+			plant.setSynonymName(otherNameField.substring(2));
 		}
 		else
 		{
