@@ -16,13 +16,15 @@ import java.net.URL;
  *
  * <p>Valid parameters are:<br><br>
  * 
+ *
+ * 
  * @version @version@
  * @author John Harris
- * 
- *	'$Author: harris $'
- *	'$Date: 2001-06-12 17:09:26 $'
- *	'$Revision: 1.6 $'
  *
+ *	'$Author: harris $'
+ *  '$Date: 2001-06-21 21:23:04 $'
+ *  '$Revision: 1.7 $'
+ * 
  */
 
 public class QueryBuilderServlet extends HttpServlet 
@@ -31,8 +33,8 @@ public class QueryBuilderServlet extends HttpServlet
 ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 public DataRequestServlet drs = new DataRequestServlet();
 public servletUtility su = new servletUtility();
+public GetURL gurl = new GetURL();
 static Vector queryVector = new Vector();
-public GetURL gurl  =new GetURL(); 
 
 
 /** Handle "POST" method requests from HTTP clients */
@@ -96,39 +98,40 @@ public void doGet(HttpServletRequest request,
 		}
 	}
 	
-			
+
+	
 	/**
 	 * method to pass the extended query to the DataRequestServlet
+	 * using the GetUrl Class 
+	 *
 	 */
 	private String submitExtendedQuery (Vector queryVector) 
 	{
 		String htmlResults = "test";
 		try 
 		{
-			//create the parameter string to be passed to the DataRequestServlet
-			StringBuffer sb = new StringBuffer();
-			sb.append("?requestDataType=vegPlot&queryType=extended&resultType=summary");
+			//put these into the properties file
+			String servlet = "/harris/servlet/DataRequestServlet";
+			String protocol = "http://";
+	  	String host = "dev.nceas.ucsb.edu";
+		
+			//set the query into the properties
+			Properties parameters = new Properties();
+			parameters.setProperty("requestDataType", "vegPlot");
+			parameters.setProperty("queryType", "extended");
+			parameters.setProperty("resultType", "summary");
 			for (int i=0; i<queryVector.size(); i++) 
 			{
-					sb.append("&");
-					//get each instance query
-					Hashtable queryInstanceHash = (Hashtable)queryVector.elementAt(i);
-					String criteria = queryInstanceHash.get("criteria").toString();
-					String operator = queryInstanceHash.get("operator").toString();
-					String value = queryInstanceHash.get("value").toString();
-					sb.append("operator="+operator+"&criteria="+criteria+"&value="+value);
-					
+				Hashtable queryInstanceHash = (Hashtable)queryVector.elementAt(i);
+				parameters.setProperty("criteria", queryInstanceHash.get("criteria").toString() );
+				parameters.setProperty("operator", queryInstanceHash.get("operator").toString());
+				parameters.setProperty("value", queryInstanceHash.get("value").toString());
 			}
+		
 			
-			//connect to the DataRequestServlet
-			String uri = "http://dev.nceas.ucsb.edu/harris/servlet/DataRequestServlet"
-				+sb.toString().trim();
-			int port=80;
-			String requestType="POST";
-			
-			htmlResults = gurl.requestURL(uri);
-			
-			
+			//request the data from the servlet and print the results to the system	
+			htmlResults = gurl.requestURL(servlet, protocol, host, parameters);
+			//System.out.println(htmlResults);
 		
 		}
 		catch( Exception e ) 
@@ -140,7 +143,6 @@ public void doGet(HttpServletRequest request,
 	}
 	
 	
-		
 	/**
 	 * method to re-stream the client html
 	 * with the textarea showing the aggregated
