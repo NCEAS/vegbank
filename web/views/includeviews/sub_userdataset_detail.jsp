@@ -28,7 +28,7 @@
 
 <logic:notEmpty name="onerow" property="datasetdescription">
 <tr class='@nextcolorclass@'><td class="datalabel">Dataset Description</td>
-<td class="sizetiny"><bean:write name="onerow" property="datasetdescription"/>&nbsp;</td>
+<td class="largefield"><bean:write name="onerow" property="datasetdescription"/>&nbsp;</td>
 </tr>
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="datasettype">
@@ -54,7 +54,7 @@
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="accessioncode">
 <tr class='@nextcolorclass@'><td class="datalabel"> Accession Code</td>
-<td class="sizetiny"><bean:write name="onerow" property="accessioncode"/>&nbsp;</td>
+<td class="largefield"><bean:write name="onerow" property="accessioncode"/>&nbsp;</td>
 </tr>
 </logic:notEmpty>
 <!-- show dataset items -->
@@ -77,7 +77,7 @@ Items in this dataset:
 </tr>
 <logic:iterate id="oneitem" name="userdatasetitem-BEANLIST">
 <tr class='@nextcolorclass@'>
-<td class="sizetiny"><bean:write name="oneitem" property="itemaccessioncode"/>&nbsp;</td>
+<td class="largefield"><bean:write name="oneitem" property="itemaccessioncode"/>&nbsp;</td>
 <td><bean:write name="oneitem" property="itemtype"/>&nbsp;</td>
 <td><bean:write name="oneitem" property="notes"/>&nbsp;</td>
 </tr>

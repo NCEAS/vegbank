@@ -38,8 +38,8 @@
 <td><a href='@get_link@detail/plantconcept/<bean:write name="onerow" property="plantconcept_id"/>'>details</a></td>
 <td><bean:write name="onerow" property="plantname_id_transl"/>&nbsp;</td>
 <td><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_idl"/>'><bean:write name="onerow" property="reference_id_transl"/></a>&nbsp;</td>
-<td class="sizetiny"><bean:write name="onerow" property="plantdescription"/>&nbsp;</td>
-<td class="sizetiny"><bean:write name="onerow" property="accessioncode"/>&nbsp;</td>
+<td class="largefield"><bean:write name="onerow" property="plantdescription"/>&nbsp;</td>
+<td class="largefield"><bean:write name="onerow" property="accessioncode"/>&nbsp;</td>
 </td>
 </tr>
 

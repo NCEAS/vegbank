@@ -136,6 +136,7 @@ H1, H2, H3, H4, H5, H6	{
 
 .datalabel { font-size: 10pt ; font-weight: bold;}
 .datalabelsmall {font-size:8pt ; font-style:italic; }
+.largefield  { font-size: 8pt }
 
 .sizetiny { font-size: 8pt }
 .sizesmall { font-size: 10pt }

@@ -27,7 +27,7 @@
                   <%@ include file="autogen/project_summary_head.jsp" %></tr>
 <logic:iterate id="onerowofproject" name="project-BEANLIST">
 <tr class="@nextcolorclass@">
-<td class="sizetiny">
+<td class="largefield">
 <a href="@get_link@detail/project/@subst_lt@bean:write name='onerowofproject' property='project_id' /@subst_gt@">
                             Details
                             </a>

@@ -29,8 +29,8 @@
 <span class="datalabelsmall">Name: </span><bean:write name="onerow" property="commname_id_transl"/><br/>
 <span class="datalabelsmall">Reference: </span><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a><br/>
 <logic:notEmpty name="onerow" property="commdescription">
-<span class="datalabelsmall">Description: </span><span class="sizetiny"><bean:write name="onerow" property="commdescription"/>&nbsp;</span><br/>
-<span class="datalabelsmall">Accession Code: </span><span class="sizetiny"><bean:write name="onerow" property="accessioncode"/></span>
+<span class="datalabelsmall">Description: </span><span class="largefield"><bean:write name="onerow" property="commdescription"/>&nbsp;</span><br/>
+<span class="datalabelsmall">Accession Code: </span><span class="largefield"><bean:write name="onerow" property="accessioncode"/></span>
 </logic:notEmpty>
 </td>
 </tr>

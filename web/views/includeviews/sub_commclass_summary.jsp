@@ -13,7 +13,7 @@
 </tr>
 <logic:iterate id="onerowofcommclass" name="commclass-BEANLIST">
 <tr class="@nextcolorclass@">
-<td class="sizetiny"><a href="@get_link@detail/commclass/<bean:write name='onerowofcommclass' property='commclass_id' />">
+<td class="largefield"><a href="@get_link@detail/commclass/<bean:write name='onerowofcommclass' property='commclass_id' />">
                             Details
                             </a></td>
 <%@ include file="../autogen/commclass_summary_data.jsp" %>

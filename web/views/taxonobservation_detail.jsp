@@ -54,7 +54,7 @@
 </tr>-->
 <logic:iterate id="onerowoftaxoninterpretation" name="taxoninterpretation-BEANLIST">
 <tr class="@nextcolorclass@">
-<td class="sizetiny">
+<td class="largefield">
 <a href="@get_link@detail/taxoninterpretation/@subst_lt@bean:write name='onerowoftaxoninterpretation' property='taxoninterpretation_id' /@subst_gt@">
                             Details
                             </a>

@@ -27,7 +27,7 @@
                   <%@ include file="autogen/stratummethod_summary_head.jsp" %></tr>
 <logic:iterate id="onerowofstratummethod" name="stratummethod-BEANLIST">
 <tr class="@nextcolorclass@">
-<td class="sizetiny">
+<td class="largefield">
 <a href="@get_link@detail/stratummethod/@subst_lt@bean:write name='onerowofstratummethod' property='stratummethod_id' /@subst_gt@">
                             Details
                             </a>
