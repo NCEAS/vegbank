@@ -13180,7 +13180,6 @@ conditions may change between resampling events.
       <attNotes>Foreign key into the StemLocation table.</attNotes>
       <attDefinition>StemLocation record of a particular stem that is to be interpreted by this taxonInterpretation record.</attDefinition>
       <attForms>
-        <formShow name="Summary">1250.5</formShow>
         <formShow name="Detail">1251.5</formShow>
       </attForms>
       <update>1.0.1</update>
@@ -13194,6 +13193,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
+      <attFKTranslationSQL>(select plantname FROM plantconcept where plantconcept.plantconcept_ID=taxoninterpretation.plantconcept_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the plantConcept table.</attNotes>
@@ -13233,12 +13233,12 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>plantName.PLANTNAME_ID</attReferences>
+      <attFKTranslationSQL>(select plantname from plantname where plantname.plantname_ID=taxoninterpretation.plantname_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the taxonName table.</attNotes>
       <attDefinition>Foreign key into the plantName (in the plantTaxa database) table to identify the name applied by the interpreter to the plantConcept. This field is not needed except in cases where there is a publication associated with the interpretation.</attDefinition>
       <attForms>
-        <formShow name="Summary">1257</formShow>
         <formShow name="Detail">1258</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -13252,6 +13252,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
+      <attFKTranslationSQL>(SELECT CASE WHEN surname is null THEN 'org:' || organizationname ELSE surname || ', ' || givenname END  FROM party WHERE party.party_id=taxoninterpretation.party_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the party table.</attNotes>
@@ -13271,12 +13272,12 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
+      <attFKTranslationSQL>(SELECT rolecode from aux_role where aux_role.role_id=taxoninterpretation.role_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into aux_Role table</attNotes>
       <attDefinition>Foreign key that identifies the role of the party making the interpretation (e.g.,  plot author, publication author, database manager, automated, plot contributor).</attDefinition>
       <attForms>
-        <formShow name="Summary">1261</formShow>
         <formShow name="Detail">1262</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -13341,12 +13342,12 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
+      <attFKTranslationSQL>(SELECT shortname from reference where reference.reference_id=taxoninterpretation.reference_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the reference table.</attNotes>
       <attDefinition>Foreign key into reference table, which identifies a publication in which the interpretation was formally made, or in which the plot was used in a formal analysis.</attDefinition>
       <attForms>
-        <formShow name="Summary">1266</formShow>
         <formShow name="Detail">1267</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -13360,6 +13361,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN originalinterpretation THEN 'Yes' ELSE 'No' END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -13380,6 +13382,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN currentinterpretation THEN 'Yes' ELSE 'No' END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -13432,7 +13435,7 @@ conditions may change between resampling events.
       <attDefinition>Indicates the degree of fit with the plant concept being assigned. Values derive from Gopal, S., and Woodcock, C. (1994), Theory and methods for accuracy assessment of thematic maps using fuzzy sets. Photogrammetric Engineering and Remote Sensing 60(2):181-188.</attDefinition>
       <attForms>
         <formShow name="Austere">1272</formShow>
-        <formShow name="Summary">1273</formShow>
+        <formShow name="Summary">1253</formShow>
         <formShow name="Detail">1274</formShow>
       </attForms>
       <update>1.0.1</update>
@@ -13468,7 +13471,7 @@ conditions may change between resampling events.
       <attDefinition>Indicates the degree of confidence of the interpreter(s) in the interpretation made. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</attDefinition>
       <attForms>
         <formShow name="Austere">1273</formShow>
-        <formShow name="Summary">1274</formShow>
+        <formShow name="Summary">1253.5</formShow>
         <formShow name="Detail">1275</formShow>
       </attForms>
       <update>1.0.1</update>
@@ -13482,6 +13485,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
+      <attFKTranslationSQL>(SELECT CASE WHEN surname is null THEN 'org:' || organizationname ELSE surname || ', ' || givenname END  FROM party AS pcoll WHERE pcoll.party_id=taxoninterpretation.collector_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>foreign key into the Party table</attNotes>
@@ -13536,6 +13540,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
+      <attFKTranslationSQL>(SELECT CASE WHEN surname is null THEN 'org:' || organizationname ELSE surname || ', ' || givenname END  FROM party AS pmus WHERE pmus.party_id=taxoninterpretation.museum_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>foreign key into the Party table</attNotes>
@@ -13614,7 +13619,6 @@ conditions may change between resampling events.
       <attDefinition>These are notes that the interpreter has included with the interpretation (generally, the reason for the interpretation).</attDefinition>
       <attForms>
         <formShow name="Austere">1274</formShow>
-        <formShow name="Summary">1275</formShow>
         <formShow name="Detail">1276</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -13704,6 +13708,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
       <attReferences>observation.OBSERVATION_ID</attReferences>
+      <attFKTranslationSQL>(select authorObsCode from observation where observation.observation_id=taxonobservation.observation_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the Observation table.</attNotes>
@@ -13742,6 +13747,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
+      <attFKTranslationSQL>(SELECT shortname from reference where reference.reference_id=taxonobservation.reference_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the reference table.</attNotes>
