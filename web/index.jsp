@@ -158,23 +158,19 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
   
   <tr>
           <td  valign="top" > 
-              <p class="sizelarge">News</p>
+              <h3>News</h3>
               <ul>
-                <li><span class="bright">New</span>, November 2004:
-                  See the new <a href="@forms_link@vbsummary.jsp">Summary of VegBank Data</a> with an 
-                  overview map.
-                </li>
-                <li><span class="bright">New</span>, September 2004: Views of everything in VegBank have
-                  been upgraded.  Query results will show you the new views.
-                </li>  
-                <li>
-					Try the simple new 
-					<a href="@web_context@forms/plot-query-simple.jsp">3-in-1 Query</a>
-					to find plots, plants and communities.
-                </li>
-               
-                <li>Take the VegBank <a href="@general_link@instructions.html"> 
-                  tutorial.</a> </li>
+                <li><span class="bright category">New</span>, November 19, 2004: VegBank.org has been
+                rebuilt with new plots <a href="@forms_link@vbsummary.jsp">(~19,000)</a>, 
+                new <a href="@forms_link@metasearch.jsp">querying tools</a>, a much faster server,
+                an upgraded <a href="@vegbranch_link@vegbranch.html">VegBranch</a>, 
+                and better integrated views of data. (examples: 
+                <a href="@get_link@std/observation/3546">plot</a> |
+                <a href="@get_link@std/plantconcept/10219">plant</a> |
+                <a href="@views_link@commconcept_query.jsp?wparam=%25symplocos%25">communities</a>)
+      
+         
+           
                 <li>Version 4 of the ESA <i><a 
 href="@panel_link@standards.html">Guidelines for Describing 
                   Associations and Alliances of the U.S. National Vegetation 
