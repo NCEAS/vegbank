@@ -1,30 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- xsl takes the vegbank database model xml and transforms into xsl that transforms the data xml into vegbranch csv import files. Written by Michael Lee (mikelee@unc.edu) 23-APR-2004 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
   <xsl:output method="xml" encoding="UTF-8"/>
-  
+  <xsl:param name="txtdelim">"</xsl:param>
+  <xsl:param name="maxFields"><xsl:for-each select="/dataModel/entity"><xsl:sort select="count(attribute)" order="descending" data-type="number" /><xsl:if test="position()=1" ><xsl:value-of select="number(count(attribute)+1)" /></xsl:if></xsl:for-each></xsl:param>
   <xsl:template name="DoApplyTempl">
      <xsl:element name="xsl:apply-templates" />
   </xsl:template>
   
-  <xsl:template name="DoCSV"><xsl:param name="nodeName" />
+  <xsl:template name="DoCSV"><xsl:param name="nodeName" /><xsl:param name="literalText" />
     <xsl:element name="xsl:call-template">
       <xsl:attribute name="name">csvIt</xsl:attribute>
       <xsl:element name="xsl:with-param">
         <xsl:attribute name="name">text</xsl:attribute>
-        <xsl:attribute name="select"><xsl:value-of select="$nodeName" /></xsl:attribute>
+        <xsl:choose>
+          <xsl:when test="string-length($literalText)&gt;0"><xsl:value-of select="$literalText" /></xsl:when>
+          <xsl:otherwise><!-- normal get value from doc -->
+                  <xsl:attribute name="select">
+                  <xsl:value-of select="$nodeName" /></xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:element>
     </xsl:element>
   </xsl:template>
   
-  <xsl:template name="DoGetName"><xsl:call-template name="DoCSV"><xsl:with-param name="nodeName" >name()</xsl:with-param></xsl:call-template>,</xsl:template>
+  <xsl:template name="DoGetName"><xsl:call-template name="DoCSV"><xsl:with-param name="nodeName" >name()</xsl:with-param></xsl:call-template></xsl:template>
+
+<xsl:template name="writeMaxFields"><xsl:param name="currCount" /><xsl:param name="writeWhat" />
+  <xsl:if test="$currCount&lt;=$maxFields"><xsl:value-of select="$writeWhat" /><xsl:if test="$writeWhat='field'"><xsl:value-of select="$currCount" /></xsl:if><xsl:if test="$currCount&lt;$maxFields">,</xsl:if><xsl:call-template name="writeMaxFields"><xsl:with-param name="currCount" select="number($currCount+1)" /><xsl:with-param name="writeWhat" select="$writeWhat" /></xsl:call-template></xsl:if>
+</xsl:template>
+
+  <xsl:template name="writeSomeFields"><xsl:param name="currCount" /><xsl:param name="type"/>
+    <xsl:if test="$currCount&lt;$maxFields">
+    <xsl:choose>
+      <xsl:when test="$type='1'">field<xsl:value-of select="$currCount" /></xsl:when>
+      <xsl:otherwise>null</xsl:otherwise>
+    </xsl:choose><xsl:if test="number($currCount+1)!=$maxFields">,</xsl:if><xsl:call-template name="writeSomeFields"><xsl:with-param name="currCount" select="number($currCount+1)" /><xsl:with-param name="type" select="$type" /></xsl:call-template></xsl:if>
+    <xsl:if test="$currCount=$maxFields">null</xsl:if>
+  </xsl:template>
   <xsl:template match="/">
 <xsl:comment>
 
   *
   *     '$Author: mlee $'
-  *     '$Date: 2004-04-23 18:45:42 $'
-  *     '$Revision: 1.2 $'
+  *     '$Date: 2004-04-24 01:14:26 $'
+  *     '$Revision: 1.3 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -56,19 +76,29 @@
       <xsl:attribute name="match">doc-VegBankVersion | doc-date | doc-author | doc-authorSoftware | doc-comments</xsl:attribute><!-- do nothing for these preset elements -->
     </xsl:element>
     <xsl:element name="xsl:template">
-      <xsl:attribute name="match">VegBankPackage</xsl:attribute>
+      <xsl:attribute name="match">VegBankPackage</xsl:attribute><!-- header line for whole file -->HD,tableName,<xsl:call-template name="writeMaxFields">
+      <xsl:with-param name="currCount">1</xsl:with-param><xsl:with-param name="writeWhat">field</xsl:with-param>
+      </xsl:call-template>
+            <xsl:for-each select="/dataModel/entity">
+<!-- write header lines --><xsl:element name="xsl:value-of"><xsl:attribute name="select">$LF</xsl:attribute></xsl:element><xsl:value-of select="$txtdelim" />H<xsl:value-of select="$txtdelim" />,<xsl:call-template name="DoCSV"><xsl:with-param name="literalText" select="entityName" /></xsl:call-template>,<xsl:for-each select="attribute"><xsl:call-template name="DoCSV"><xsl:with-param name="literalText" select="attName" /></xsl:call-template>,</xsl:for-each>
+<xsl:call-template name="writeMaxFields">
+      <xsl:with-param name="currCount" select="number(count(attribute)+1)"/><xsl:with-param name="writeWhat">null</xsl:with-param>
+      </xsl:call-template>
+
+            </xsl:for-each> <!-- ent -->
       <xsl:call-template name="DoApplyTempl" />
     </xsl:element>
+
+
 <!-- loop through tables, getting values to write for that table -->
-            <xsl:for-each select="/dataModel/entity">
+     <xsl:for-each select="/dataModel/entity">
+
 <xsl:element name="xsl:template">
   <xsl:attribute name="match"><xsl:value-of select="entityName" /></xsl:attribute>
   <!-- label this row with element name -->
-<xsl:element name="xsl:value-of"><xsl:attribute name="select">$LF</xsl:attribute></xsl:element>
-  <xsl:call-template name="DoGetName" />
-  <xsl:for-each select="attribute">
+<xsl:element name="xsl:value-of"><xsl:attribute name="select">$LF</xsl:attribute></xsl:element><xsl:value-of select="$txtdelim" />d<xsl:value-of select="$txtdelim" />,<!-- data row --><xsl:call-template name="DoGetName" />,<xsl:for-each select="attribute">
     <!-- get att Value for this entity -->
-    <!-- 3 cases to consider: normal data (easy), normal FK (downstream), inverted FK (upstream) -->(<xsl:value-of select="attName" />)<xsl:call-template name="DoCSV"><xsl:with-param name="nodeName">
+    <!-- 3 cases to consider: normal data (easy), normal FK (downstream), inverted FK (upstream) --><!-- can add parenthetical field name here (<xsl:value-of select="attName" />) --><xsl:call-template name="DoCSV"><xsl:with-param name="nodeName">
         <xsl:choose>
       <xsl:when test="attKey!='FK'"><xsl:value-of select="../entityName" />.<xsl:value-of select="attName"/></xsl:when>
       <xsl:otherwise>
@@ -88,7 +118,11 @@
   </xsl:with-param></xsl:call-template>,<!-- value-of -->
     
   </xsl:for-each> <!-- looping thru atts -->
-  
+  <xsl:call-template name="writeMaxFields">
+      <xsl:with-param name="currCount" select="number(count(attribute)+1)"/><xsl:with-param name="writeWhat">null</xsl:with-param>
+      </xsl:call-template>
+
+
   <!-- continue through elements -->
   <xsl:call-template name="DoApplyTempl" />
 </xsl:element>
