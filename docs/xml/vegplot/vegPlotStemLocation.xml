@@ -45,7 +45,7 @@
 			<attType>NUMERIC(3,2)</attType>
 			<attKey>n/a</attKey>
 			<attReferences>n/a </attReferences>
-			<attNotes/>
+			<attNotes>n/a</attNotes>
 			<attDefinition>The X-coordinate of the stem position in m. The user will enter the relative position of stems with respect to the plot origin (in meters) with the x-axis defined by the plot azimuth.</attDefinition>
 		</attribute>
 		<attribute>
