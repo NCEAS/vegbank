@@ -43,8 +43,8 @@ import PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2002-12-28 00:30:39 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2003-01-08 01:54:13 $'
+ * 	'$Revision: 1.3 $'
  */
 
 
@@ -304,13 +304,15 @@ public void accessDatabase(String inputXml, String inputXSL, String action)
 	 {
 		 if (args.length != 3) 
 		 {
-			 System.out.println("Usage: java dbAccess  [XML] [XSL] [action] \n"
-			 +"version: Feb 2001 \n \n"
-			 +"actions:  query, compoundQuery, extendedQuery, insert, insertPlot "
-			 +"verify, simpleCommunityQuery");
-			 System.out.println("descriptions of input parameters to come soon!");
+			 System.out.println("Usage: java dbAccess [parameters]+ [action] \n"
+			 +"version: Jan 2003 \n \n"
+			 +"actions: writeSingleVegbankPlot  [plotId] and [outputFile]"
+       +"         query, compoundQuery, extendedQuery, insert, insertPlot "
+       +"         verify, simpleCommunityQuery"
+       +"         takes - [inputXML] [inputXSL]");
 			 System.exit(0);
 		 }
+
 		 String action=args[2];
 
 		 //call the public method

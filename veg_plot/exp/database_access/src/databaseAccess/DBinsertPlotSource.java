@@ -6,9 +6,9 @@
 * Authors: John Harris
 * Release: @release@
 *
-*   '$Author: harris $'
-*   '$Date: 2003-01-03 18:17:09 $'
-*   '$Revision: 1.9 $'
+*   '$Author: farrell $'
+*   '$Date: 2003-01-08 01:54:13 $'
+*   '$Revision: 1.10 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -1251,42 +1251,39 @@ public class DBinsertPlotSource {
 	 * @param taxonObservationId -- the taxonobservation for this plant
 	 *
 	 */
-	private boolean insertStrataComposition(
-		String plantName,
-		String plantCode,
-		int taxonObservationId) {
+	private boolean insertStrataComposition(	String plantName,
+		                                        														String plantCode,
+		                                      	  													int taxonObservationId ) 
+  {
 		StringBuffer sb = new StringBuffer();
-		try {
+		try 
+    {
 			System.out.println(
 				"DBinsertPlotSource > getting the strata for plot: "
 					+ plotName
 					+ " "
 					+ plotId);
-			Vector strataVec =
-				source.getTaxaStrataExistence(plantName, plotName);
-			for (int ii = 0; ii < strataVec.size(); ii++) {
+          
+			Vector strataVec = source.getTaxaStrataExistence(plantName, plotName);
+			for (int ii = 0; ii < strataVec.size(); ii++) 
+      {
 				sb = new StringBuffer();
 				String curStrata = strataVec.elementAt(ii).toString();
 
-				// get th cover of the plant within that strata -- if this comes back
+				// get the cover of the plant within that strata -- if this comes back
 				// null then there was no observation of this plant in the strata
-				String cover =
-					source.getTaxaStrataCover(plantName, plotName, curStrata);
-				if (cover != null) {
+				String cover = source.getTaxaStrataCover(plantName, plotName, curStrata);
+				if (cover != null) 
+        {
 					//get the strataCompId number
 					int stratumCompositionId = getNextId("stratumComposition");
 
 					//get the strata ID
-					int stratumId =
-						this.getStrataId(plotObservationId, curStrata);
+					int stratumId = this.getStrataId(plotObservationId, curStrata);
 
 					debug.append("<stratumComposition> \n");
-					debug.append(
-						"<stratumName>" + curStrata + "</stratumName> \n");
-					debug.append(
-						"<taxonName>"
-							+ plantName.replace('&', '_')
-							+ "</taxonName> \n");
+					debug.append("<stratumName>" + curStrata + "</stratumName> \n");
+					debug.append("<taxonName>"+plantName.replace('&', '_')+"</taxonName>\n");
 					debug.append("<cover>" + cover + "</cover> \n");
 					debug.append("</stratumComposition> \n");
 
@@ -1311,7 +1308,9 @@ public class DBinsertPlotSource {
 					pstmt.execute();
 				}
 			}
-		} catch (SQLException sqle) {
+		} 
+    catch (SQLException sqle) 
+    {
 			System.out.println("Caught SQL Exception: " + sqle.getMessage());
 			System.out.println("sql: " + sb.toString());
 			debug.append(
@@ -1320,7 +1319,9 @@ public class DBinsertPlotSource {
 					+ " (sqle) loading strata Composition data</exceptionMessage>\n");
 			sqle.printStackTrace();
 			return (false);
-		} catch (Exception e) {
+		} 
+    catch (Exception e) 
+    {
 			System.out.println("Caught Exception: " + e.getMessage());
 			debug.append(
 				"<exceptionMessage>"
@@ -1452,6 +1453,7 @@ public class DBinsertPlotSource {
 	private boolean insertTaxonObservations() {
 		boolean successfulCommit = true;
 		StringBuffer sb = new StringBuffer();
+		
 		try {
 			System.out.println(
 				"DBinsertPlotSource > inserting taxonomy data for: "+ plotName+ " "+ plot);
@@ -1471,8 +1473,11 @@ public class DBinsertPlotSource {
 				String authorNameId = uniqueTaxa.elementAt(i).toString();
 				//sci name
 				String code = source.getPlantTaxonCode(authorNameId);
+        String taxonCover = source.getPlantTaxonCover(authorNameId);
 				//corresponding code
-				System.out.println("DBinsertPlotSource > cur. tax. name: "+ authorNameId+ " code: "+ code);
+				System.out.println(
+          "DBinsertPlotSource > cur. tax. name: "+ authorNameId+ " code: "+ code
+        );
 
 				// IF THE CODE HAS A VALID VALUE THEN ATTEMPT FIRST TO LOOKUP THE TAXON
 				if (code != null && code.length() > 1) 
@@ -1498,33 +1503,25 @@ public class DBinsertPlotSource {
 				}
 
 				//add the taxon name info to the debugging output
-				debug.append("<taxonObservation> \n");
+				debug.append("<taxonObservation>\n");
 				debug.append(
-					"<authorTaxonName>"
-						+ authorNameId.replace('&', '_')
-						+ "</authorTaxonName> \n");
-				debug.append(
-					"<authorTaxonCode>" + code + "</authorTaxonCode> \n");
+        "<authorTaxonName>"+authorNameId.replace('&', '_')+"</authorTaxonName>\n");
+				debug.append("<authorTaxonCode>" + code + "</authorTaxonCode>\n");
+				debug.append("<taxonCover>" + taxonCover + "</taxonCover>\n");
 				debug.append("<vegbankMatch> \n");
 				debug.append("<vegbankLevel>" + level + "</vegbankLevel> \n");
-				debug.append(
-					"<vegbankName>"
-						+ name.replace('&', '_')
-						+ "</vegbankName> \n");
-				debug.append(
-					"<vegbankConceptId>"
-						+ conceptId
-						+ "</vegbankConceptId> \n");
-				debug.append(
-					"<vegbankNameId>" + nameId + "</vegbankNameId> \n");
+				debug.append("<vegbankName>"+name.replace('&', '_')+"</vegbankName>\n");
+				debug.append("<vegbankConceptId>"+conceptId+"</vegbankConceptId>\n");
+				debug.append("<vegbankNameId>"+nameId+"</vegbankNameId>\n");
+				debug.append("<vegbankTaxonCover>"+nameId+"</vegbankTaxonCover>\n");
 				debug.append("</vegbankMatch> \n");
 				debug.append("</taxonObservation> \n");
 
 				//insert the values
 				sb.append(
 					"INSERT into TAXONOBSERVATION (TAXONOBSERVATION_ID, OBSERVATION_ID, ");
-				sb.append(" CHEATPLANTNAME, PLANTNAME_ID, CHEATPLANTCODE ) ");
-				sb.append(" values(?,?,?,?,?) ");
+				sb.append(" CHEATPLANTNAME, PLANTNAME_ID, CHEATPLANTCODE, TAXONCOVER ) ");
+				sb.append(" values(?,?,?,?,?,?) ");
 
 				PreparedStatement pstmt = conn.prepareStatement(sb.toString());
 				pstmt.setInt(1, taxonObservationId);
@@ -1532,22 +1529,24 @@ public class DBinsertPlotSource {
 				pstmt.setString(3, authorNameId);
 				pstmt.setString(4, nameId);
 				pstmt.setString(5, code);
+				pstmt.setString(6, taxonCover);
 				pstmt.execute();
 
 				// insert the strata composition
-				boolean result =
-					this.insertStrataComposition(
-						authorNameId,
-						code,
-						taxonObservationId);
-				if (result == false) {
+				boolean result = this.insertStrataComposition(authorNameId,
+						                                          code,
+						                                          taxonObservationId);
+				if (result == false) 
+        {
 					successfulCommit = false;
 				}
-				debug.append(
-					"<insertStrataComp>" + result + "</insertStrataComp> \n");
+        
+				debug.append("<insertStrataComp>"+result+"</insertStrataComp>\n");
 				pstmt.close();
 			}
-		} catch (Exception e) {
+		} 
+    catch (Exception e) 
+    {
 			System.out.println("Caught Exception: " + e.getMessage());
 			System.out.println("sql: " + sb.toString());
 			e.printStackTrace();
@@ -1571,6 +1570,7 @@ public class DBinsertPlotSource {
 			String code = source.getCommunityCode(plotName);
 			String framework = source.getCommunityFramework(plotName);
 			String level = source.getCommunityLevel(plotName);
+			String classNotes = source.getClassNotes(plotName);
 			String conceptId = "";
 			// get the appropriate codes for this community via the web service
 			// store the data in a hashtable
@@ -1592,19 +1592,14 @@ public class DBinsertPlotSource {
 			debug.append("<communityName>" + name + "</communityName> \n");
 			debug.append("<communityCode>" + code + "</communityCode> \n");
 			debug.append("<communityLevel>" + level + "</communityLevel> \n");
-			debug.append(
-				"<communityFramework>"
-					+ framework
-					+ "</communityFramework> \n");
-			debug.append(
-				"<communityConceptId>"
-					+ conceptId
-					+ "</communityConceptId> \n");
+			debug.append("<classNotes>" + classNotes + "</classNotes> \n");
+			debug.append("<communityFramework>"+framework+"</communityFramework> \n");
+			debug.append("<communityConceptId>"+conceptId+"</communityConceptId> \n");
 			//insert the values
 			sb.append(
 				"INSERT into commclass (observation_id, commName, "
-					+ " commCode, commFramework, commLevel) "
-					+ " values(?,?,?,?,?)");
+					+ " commCode, commFramework, commLevel, classNotes) "
+					+ " values(?,?,?,?,?,?)");
 
 			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
 			// Bind the values to the query and execute it
@@ -1613,6 +1608,7 @@ public class DBinsertPlotSource {
 			pstmt.setString(3, code);
 			pstmt.setString(4, framework);
 			pstmt.setString(5, level);
+			pstmt.setString(6, classNotes);
 			//execute the p statement
 			pstmt.execute();
 		} catch (Exception e) {
@@ -2548,32 +2544,37 @@ public class DBinsertPlotSource {
 	 * method that returns true if the project with this name exists in the 
 	 * database
 	 */
-	private boolean projectExists(String projectName) {
+	private boolean projectExists(String projectName) 
+  {
 		int rows = 0;
-		try {
+		try 
+    {
 			StringBuffer sb = new StringBuffer();
 			sb.append(
-				"SELECT count(*) from PROJECT where projectName like '"
-					+ projectName
-					+ "'");
+				"SELECT count(*) from PROJECT where projectName = '"+projectName+"'");
 			//System.out.println("DBinsertPlotSource > query: " + sb.toString());
 			Statement query = conn.createStatement();
 			ResultSet rs = query.executeQuery(sb.toString());
-			while (rs.next()) {
+			while (rs.next()) 
+      {
 				rows = rs.getInt(1);
 			}
     }
-    catch ( SQLException se ) {      
+    catch ( SQLException se ) 
+    {      
 	    System.out.println("Caught SQL Exception: " + se.getMessage());
       if ( !se.getMessage().equals("No results were returned by the query.") )
       {
 			  se.printStackTrace();
       }
 		}
-		if (rows == 0) {
+		if (rows == 0) 
+    {
 			System.out.println("DBinsertPlotSource > project does not exist");
 			return (false);
-		} else {
+		} 
+    else 
+    {
 			System.out.println("DBinsertPlotSource > project does exist");
 			return (true);
 		}
@@ -2585,17 +2586,19 @@ public class DBinsertPlotSource {
 	 * called make sure that the project does actually exist
 	 * using the method 'projectExists'
 	 */
-	private int getProjectId(String projectName) {
+	private int getProjectId(String projectName) 
+  {
 		int projectId = 0;
 		StringBuffer sb = new StringBuffer();
-		try {
+		try 
+    {
 			sb.append(
-				"SELECT project_id from PROJECT where projectName like '"
-					+ projectName
-					+ "'");
+				"SELECT project_id from PROJECT where projectName = '"+projectName+"'"
+      );
 			Statement query = conn.createStatement();
 			ResultSet rs = query.executeQuery(sb.toString());
-			while (rs.next()) {
+			while (rs.next()) 
+      {
 				projectId = rs.getInt(1);
 			}
     } 
