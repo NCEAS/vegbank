@@ -10,7 +10,7 @@
 <logic:notEqual name="partyShown" value="yes">
 <th>Party</th>
 </logic:notEqual>
-          <th>Total Plots</th>
+          <th><logic:notEqual name="onlytotalplots" value="yes">Total </logic:notEqual>Plots</th><!-- doesn't need to say total if that's all that's happening on this form -->
 
 <logic:notEqual name="onlytotalplots" value="yes">
 
