@@ -48,7 +48,11 @@
     	
     	<property name="current" value="./" />
     	<property name="build" value="./build" />
-    	<property name="src" value="src" />
+      <property name="doc.dir" value="${basedir}/doc"/>
+      <property name="build.test" value="${build}/test"/>
+      <property name="reports.dir" value="${build}/reports"/>
+      <property name="reports.test.dir" value="${reports.dir}/testreports"/>
+      <property name="src" value="src" />
     	<property name="dist" value="dist" />
     	<property name="release" value="alpha-20011008"/>
     	<property name="lib" value="./lib"/>
@@ -80,9 +84,9 @@
     						excludes="Plot.java XPathAPI.java"/>
     	</copy>
     	
-    	<copyfile src="${lib}/database.properties" 
+    	<copy file="${lib}/database.properties" 
     		filtering="yes" 
-    		dest="${build}/database.properties" 
+    		todir="${build}" 
     	/>
     
     </target>	
@@ -99,24 +103,26 @@
     	/>
     </target>	
     
-	<!-- DIST -->
-	<target name="dist" depends="compile">
+	<!-- JAR -->
+	<target name="jar" depends="compile">
 		<jar jarfile ="${lib}/database_access.jar"
 			basedir="${build}"
 			includes="${build}/ ** "
 		/>
+    <copy file="${lib}/database_access.jar" 
+						  filtering="no" 
+						  todir="../../build/lib/"/>
 	</target>
 	
 	<!-- 
 		DISTWEB - this puts the jar file in the correct location for the 
 		servlets to use
 	-->
-	<target name="dist-web" depends="dist">
-		 <echo message="copying jar to web server: ${servlet_lib}"/>
-		
-		<copyfile src="${lib}/database_access.jar" 
+	<target name="dist-web" depends="jar">
+		<echo message="copying jar to web server: ${servlet_lib}"/>
+		<copy file="${lib}/database_access.jar" 
 						filtering="no" 
-						dest="${servlet_lib}/database_access.jar" 
+						todir="${servlet_lib}" 
 		/>
 	
 	</target>
@@ -125,7 +131,5 @@
 	<target name="clean" depends="init">
 		<delete dir="${build}" />
 	</target>
-	
-	
 	
 </project>
