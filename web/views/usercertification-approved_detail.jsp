@@ -32,7 +32,7 @@
 <table  class="leftrightborders" cellpadding="2" >
 <!--each field, only write when HAS contents-->
 
-<tr><th colspan="2"><strong>
+<tr><th colspan="2" class="major"><strong>
 <bean:write name="onerow" property="givenname"/>&nbsp;<bean:write name="onerow" property="surname"/>
 </strong></th>
 </tr>
