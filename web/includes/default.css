@@ -311,8 +311,8 @@ TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 .gdRowLabel { color: Bisque; }
 .gdAttName { background-color : #686868; color: LightSalmon; }
 
-.oddrow { background-color : #FFFFCC }
-.evenrow {background-color : #FFFFFF }
+.oddrow { background-color : #FFFFFF }
+.evenrow {background-color : #DDDDDD }
 
 .listhead { 
 	color: #000000; 

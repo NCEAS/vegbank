@@ -29,7 +29,7 @@
         </logic:empty>
 
         <logic:notEmpty name="MY_ROLES-BEANLIST">
-          <table border="1">
+          <table border="1" cellspacing="0" cellpadding="3">
            <tr>
 
         <th>     role Code          </th>  
@@ -45,7 +45,7 @@
 		       //**************************************************************************************
 		       //  Set up alternating row colors
 		       //**************************************************************************************
-		       String bgColor = "#FFFFF";
+		       String rowClass = "evenrow";
     %>
           <logic:iterate id="onerec" name="MY_ROLES-BEANLIST" >     
            
@@ -53,9 +53,9 @@
 		       //**************************************************************************************
 		       //  Set up alternating row colors
 		       //**************************************************************************************
-		       bgColor = bgColor.equals("#FFFFF")? "#FFFFC" : "#FFFFF";
+		       rowClass = rowClass.equals("oddrow")? "evenrow" : "oddrow";
     %>
-           <tr bgcolor="<%= bgColor %>">
+           <tr class="<%= rowClass %>">
            
               <td>     <bean:write name="onerec" property="rolecode"/>  &nbsp;               </td>
            	<td>   <bean:write name="onerec" property="roledescription"/>&nbsp;      </td>
