@@ -11,8 +11,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: harris $' <br>
- *  '$Date: 2002-05-24 20:22:25 $' <br>
- * 	'$Revision: 1.12 $' <br>
+ *  '$Date: 2002-07-18 03:57:25 $' <br>
+ * 	'$Revision: 1.13 $' <br>
  */
  
 //public class VegBankDataSourcePlugin
@@ -1588,22 +1588,31 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	/**
 	 * method that returns the strata in which the input plant
 	 * exists within the input plot
+	 * @param plantName 
+	 * @param plotName
 	 */
 	 public Vector getTaxaStrataExistence(String plantName, String plotName)
 	 {
-		 //kinda randomize the results here so that all the plant are not 
-		 //all in the same strata
+		 StringBuffer sb = new StringBuffer();
 		 Vector v = new Vector();
-		 if (plantName.startsWith("A") )
-		 {
-			 v.addElement("shrub");
-		 }
-		 else
-		 {
-			 v.addElement("tree");
-			 v.addElement("shrub");
-			 v.addElement("herb");
-		 }
+		try
+		{
+			sb.append( " SELECT distinct(STRATUMTYPE) FROM PLOTSPECIESSUM where  " );
+			sb.append(" PLOT_ID = " + plotName +" and AUTHORNAMEID LIKE '"+plantName+"'");
+			System.out.println("sql: " + sb.toString() );
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery( sb.toString() );
+			while (rs.next()) 
+			{
+				String buf = rs.getString(1);
+				v.addElement(buf);		
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
 		 return(v);
 	 }
 	 
@@ -1699,14 +1708,28 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	 public String getTaxaStrataCover(String plantName, String plotName, String stratum)
 	 {
-		 if (plantName.startsWith("T"))
+		 String cover = "";
+		 StringBuffer sb = new StringBuffer();
+		 try
 		 {
-			return("10");
+			 	// SELECT THE COVER VALUE DIRECTLY FROM THE DENORMALIZED TABLES
+				sb.append("SELECT PERCENTCOVER from PLOTSPECIESSUM WHERE ");
+				sb.append(" PLOT_ID = "+plotName+" and STRATUMTYPE like '"+stratum+"' and ");
+				sb.append(" AUTHORNAMEID like '"+plantName+"'");
+				//System.out.println("sql: " + sb.toString() );
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery( sb.toString() );
+				while (rs.next()) 
+				{
+					cover = rs.getString(1);
+				}
 		 }
-		 else 
-		 {
-			 return("12");
-		 }
+		 catch (java.lang.Exception ex) 
+			{   
+				System.out.println("Exception: " + ex );
+				ex.printStackTrace();
+			}
+			return(cover);
 	 }
 	 
 	/**
