@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 20:03:05 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-03-21 18:35:30 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,37 +50,48 @@ public class DBPlantWriter
 	private boolean commit = true;
 	private boolean writeSuccess = false;
 
-	public DBPlantWriter(Plant plant)
+//	public DBPlantWriter(Plant plant)
+//	{
+//
+//			this(plant, this.getConnection());
+//	}
+	
+	public DBPlantWriter(Plant plant, Connection conn)
 	{
 		System.out.println("DBPlantWriter > inserting '" + plant.getScientificName() + "'");
 		// This is going to know about the Data Model the database has 
 		try
 		{
-			conn = this.getConnection();
+			if (conn == null)
+			{
+				conn = this.getConnection();
+				this.conn = conn;
+			}
 			conn.setAutoCommit(false);
-
+	
+	
 			// Need to get the referenceId;
 			Reference ref = plant.getScientificNameNoAuthorsReference();
 			DBReferenceWriter  dbrw = 
 				new DBReferenceWriter(ref, conn, "PlantReference", "plantreference_id");
 			int plantRefId = dbrw.getReferenceId();
-			
-
+				
+	
 			// Need to get the partyId
 			Party party = plant.getParty();
 			DBPartyWriter dbpw =
 				new DBPartyWriter(party, conn, "plantparty", "plantparty_id");
 			int partyId = dbpw.getPartyId();
-
+	
 			// Insert the Scientific Name
 			int plantNameId =
 				this.insertPlantName(
 					plantRefId,
 					plant.getScientificNameNoAuthors(),
 					Utility.dbAdapter.getDateTimeFunction() );
-
+	
 			// Insert Other Names ???
-
+	
 			// Insert the Concept
 			int conceptId =
 				this.insertPlantConcept(
@@ -89,7 +100,7 @@ public class DBPlantWriter
 					plant.getScientificNameNoAuthors(),
 					plant.getDescription(),
 					plant.getCode());
-
+	
 			// Insert the Status
 			int statusId = 
 				this.insertPlantStatus(
@@ -101,13 +112,13 @@ public class DBPlantWriter
 					plant.getStatusStartDate(),
 					plant.getClassLevel()
 				);
-		
 			
+				
 			// Insert all the usages
 			// Usage may need to be a separate class,  for now this
-			
+				
 			AbstractList plantUsages = plant.getPlantUsages();
-			
+				
 			Iterator i = plantUsages.iterator();
 			while( i.hasNext()) 
 			{
@@ -123,7 +134,7 @@ public class DBPlantWriter
 						pu.getPlantNameStatus(),
 						pu.getClassSystem()
 				);
-			
+				
 			}
 		}
 		catch (SQLException e)
@@ -133,7 +144,7 @@ public class DBPlantWriter
 			System.out.println("Could not write this plant to the database");
 			e.printStackTrace();
 		}
-
+	
 		try
 		{
 			// decide on the transaction
@@ -148,14 +159,12 @@ public class DBPlantWriter
 				System.out.println("DBPlantWriter >  not commiting transaction");
 				conn.rollback();
 			}
-			conn.close();
 		}
 		catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-
+		}		
 	}
 
 	/**
