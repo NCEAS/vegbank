@@ -8,8 +8,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-01-28 20:08:28 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2002-03-29 20:13:42 $'
+ * '$Revision: 1.3 $'
  */
 //package vegclient.framework;
 package xmlresource.utils; 
@@ -34,7 +34,8 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
-
+import org.xml.sax.InputSource;
+	
 import xmlresource.utils.*;
 
 
@@ -56,7 +57,7 @@ public class  transformXML
 	}
 	
 	
-	/**
+ /**
 	*
 	* This is a method that will transform an xml document with an xsl style sheet
 	*
@@ -69,7 +70,6 @@ public class  transformXML
 		java.net.MalformedURLException,
 		org.xml.sax.SAXException
 	{
-	
 		try
 		{
 			//System.out.println("transforming xml file: '"+inputXML+"'");
@@ -95,11 +95,56 @@ public class  transformXML
 		}
 	}
 	
+
+	/**
+	*
+	* This is a method that will transform xml stored 
+	* as a java string with an xsl style sheet
+	*
+	* @param inXml -- the java String that contains the xml
+	* @param inputXSL -- the file name of the input xsl style sheet
+	*
+	*/
+	public String getTransformedFromString(String inXml, String inputXSL)
+	throws java.io.IOException,
+		java.net.MalformedURLException,
+		org.xml.sax.SAXException
+	{
+		StringWriter out = new StringWriter();
+		try
+		{
+			System.out.println("transformXML > input xml string: \n '"+inXml+"'");
+			StringReader sr = new StringReader(inXml);
+			InputSource in = new InputSource(sr);
+			//out =new StringWriter();
+			// Have the XSLTProcessorFactory obtain a interface to a
+			// new XSLTProcessor object.
+			XSLTProcessor processor = XSLTProcessorFactory.getProcessor();
+
+			// Have the XSLTProcessor processor object transform inputXML  to
+			// StringWriter, using the XSLT instructions found in "*.xsl".
+			processor.process(new XSLTInputSource(in), 
+			new XSLTInputSource(inputXSL),
+			new XSLTResultTarget(out));
+			out.toString();
+			outTransformedData=out;
+		}
+		catch( Exception e ) 
+		{
+			System.out.println(" Exception: "	+ e.getMessage() );
+			e.printStackTrace();
+		}
+		return( out.toString() );
+	}
+
+	
+	
+	
 	/**
 	 * method that does the same as the above method, but 
 	 * does not crate errors
 	 */
-	public String  getTransformedNoErrors(String inputXML, String inputXSL)
+	public String getTransformedNoErrors(String inputXML, String inputXSL)
 	{
 	
 		String s = null;
@@ -111,11 +156,8 @@ public class  transformXML
 			Transformer transformer = tFac.newTransformer(
 				new StreamSource( inputXSL ));
 			transformer.transform( new StreamSource( new StringReader(inputXML) ),
-														new StreamResult(out) );
-			
+			new StreamResult(out) );
 			s = out.toString();
-	
-	
 		}
 		catch( Exception e ) 
 		{
