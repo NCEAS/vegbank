@@ -8,8 +8,8 @@ package vegclient.framework;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-10 18:05:23 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2001-10-10 18:12:41 $'
+ * 	'$Revision: 1.3 $'
  */
 
 import vegclient.framework.*;
