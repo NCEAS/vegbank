@@ -29,9 +29,9 @@ import xmlresource.utils.transformXML;
  *  Release: @release@
  *	
  *  <br> <br>
- *  '$Author: farrell $'
- *  '$Date: 2002-12-03 23:55:06 $'
- * 	'$Revision: 1.21 $'
+ *  '$Author: harris $'
+ *  '$Date: 2003-01-08 02:47:16 $'
+ * 	'$Revision: 1.22 $'
  *
  *
  */
@@ -56,7 +56,6 @@ public class DataSourceClient
 	{
 		try
 		{
-
 			System.out.println("DataSourceClient > connecting to server: " +hostName );
 			System.out.println("DataSourceClient > on port: " +port );
 			this.serverHost = hostName;
@@ -855,17 +854,39 @@ public class DataSourceClient
 		 boolean results = true;
 		 try
 		 {
-		 		results = source.isMDBFileValid();
+      results = source.isMDBFileValid();
 		 }
 		 catch(Exception e)
-			{
-				System.out.println("FileImpl: "+e.getMessage());
-         e.printStackTrace();
-				 results = false;
-      }
+     {
+      System.out.println("FileImpl: "+e.getMessage());
+      e.printStackTrace();
+		  results = false;
+     }
 		 return(results);
 	 }
-	
+   
+   /**
+    * method that calls the same method at the server -- which validates the
+    * plot
+    * this metod uses the  plotvalidator to test that the input plot is valid.
+    * @param plotName -- the name of the plot to test for validity 
+    * @return receipt -- the xml recipt containing the terms of validitity 
+    */
+	  public String isPlotValid(String plot)
+    {
+     String result = null;
+		 try
+		 {
+      result = source.isPlotValid(plot);
+		 }
+		 catch(Exception e)
+     {
+      System.out.println("FileImpl: "+e.getMessage());
+      e.printStackTrace();
+     }
+		 return(result);
+    }
+  
 	/**
 	 * method that will insert a plot on the windows machine based on the name
 	 * of that plot
@@ -1006,6 +1027,12 @@ public class DataSourceClient
 					//just load the single plot identified on the command line
 					else
 					{
+            // validate the plot -- get the xml doc that contains the validation
+            // info
+						System.out.println("DataSourceClient > validating plot: " + testPlot );
+            String validation = client.isPlotValid(testPlot);
+            System.out.println("DataSourceClient > validation info: " +validation);
+
 						System.out.println("DataSourceClient > inserting the plot: " + testPlot );
 						String insertResults = client.insertPlot(testPlot, fileType, email);
 						//transform and display the results to the user
@@ -1014,7 +1041,6 @@ public class DataSourceClient
 						System.out.println("DataSourceClient > insertion results html: \n" + tr );
 					}
 				}
-				
 			} 
 			catch(Exception e) 
 			{

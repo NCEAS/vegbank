@@ -7,6 +7,7 @@ import java.net.*;
 import java.io.*;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
+import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidator;
 
 
 //the data translator classes
@@ -33,9 +34,8 @@ import databaseAccess.utility;
  *	
  * <br> <br>
  *  '$Author: harris $'
- *  '$Date: 2003-01-04 02:11:17 $'
- * 	'$Revision: 1.18 $'
- *
+ *  '$Date: 2003-01-08 02:47:16 $'
+ * 	'$Revision: 1.19 $'
  *
  */
 
@@ -47,12 +47,15 @@ public class DataSourceImpl extends UnicastRemoteObject
 		private String mdbFile = ""; //the file that the uploaded access files are written to
 	  private String xmlFile = ""; //the file that the uploaded xml files are written to
 	 
-	 	//loader stuff
+	 	//loader stuff -- default to the native xml because it can be run on any
+    //architecture and OS
 	 	private DBinsertPlotSource dbinsert;
-	 	private String loaderPlugin = "TNCPlotsDB";
+	 	private String loaderPlugin = "NativeXmlPlugin";
 	 
 	 // properties file
 	 	private ResourceBundle rb;
+   //plot validator 
+   private PlotValidator validator;
 	 
 	 //constructor
    public DataSourceImpl(String sourcePluginClass) 
@@ -62,6 +65,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 		 try
 		 {
 				System.out.println("DataSourceImpl >  starting the rmi server:  " );
+				
 				// test the vegbank systrem
 				System.out.println("DataSourceImpl >  testing the VegBank services:  " );
 				utility util = new utility();
@@ -76,6 +80,8 @@ public class DataSourceImpl extends UnicastRemoteObject
 				System.out.println("DataSourceImpl > plugin to be used: " + sourcePluginClass);
 				source = new PlotDataSource(sourcePluginClass);
 				System.out.println("DataSourceImpl > number of plots:  " + source.getPlotNames().size() );
+        // instantiate the plot validator 
+        validator = new PlotValidator(source);
 			
 		 }
 		 catch (Exception e)
@@ -241,7 +247,27 @@ public class DataSourceImpl extends UnicastRemoteObject
 		 return(true);
 	 }
 	 
-	 
+	
+  /**
+   * this metod uses the  plotvalidator to test that the input plot is valid.
+   * @param plotName -- the name of the plot to test for validity 
+   * @return receipt -- the xml recipt containing the terms of validitity 
+   */
+   public String isPlotValid(String plot)
+   {
+    String result = null;
+    try
+    {
+      boolean b  = validator.isPlotValid(plot);
+      result = validator.getValidationReport();
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+    return(result);
+   }
+  
 	 /**
 	  * 	method that examines the mdbFile stored in the location described by 
 		* 	'mdbFile' instance variable to verify that it is indeed an ms access 

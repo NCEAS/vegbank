@@ -9,8 +9,16 @@ import java.rmi.RemoteException;
 
 public interface DataSourceServerInterface extends Remote 
 {
-	
-	//method for inserting a plot into the database
+
+  /**
+   * this metod uses the  plotvalidator to test that the input plot is valid.
+   * @param plotName -- the name of the plot to test for validity 
+   * @return receipt -- the xml recipt containing the terms of validitity 
+	 */
+   public String isPlotValid(String plot)
+   throws Exception;
+
+  //method for inserting a plot into the database
 	public String insertPlot(String plot, String emailAddress)
 	throws Exception;
 	

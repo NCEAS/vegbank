@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2003-01-02 22:18:22 $'
- 	*     '$Revision: 1.17 $'
+ 	*     '$Date: 2003-01-08 02:47:16 $'
+ 	*     '$Revision: 1.18 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -33,11 +33,12 @@
 		<property name="translators" value="./lib/datatranslator.jar" />
 		<property name="dbaccess" value="./lib/database_access.jar" />
 		<property name="xmlresource" value="./lib/xmlresource.jar" />
+		<property name="plotvalidation" value="../../lib/plotvalidator.jar" />
 
 		
 		<filter token="release" value=" "/>
 		<filter token="authors" value="HARRIS"/>
-		<property name="cpath" value="${dbaccess}:${translators}:${xmlresource}:${xalan}:${build}"/>
+		<property name="cpath" value="${plotvalidation}:${dbaccess}:${translators}:${xmlresource}:${xalan}:${build}"/>
 </target>
 
 	
