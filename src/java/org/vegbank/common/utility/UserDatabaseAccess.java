@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 19:28:55 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-01-31 01:27:17 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-01-16 19:28:55 $'
- *     '$Revision: 1.4 $'
+ *     '$Date: 2004-01-31 01:27:17 $'
+ *     '$Revision: 1.5 $'
  */
 
 import java.sql.PreparedStatement;
@@ -50,6 +50,7 @@ import org.vegbank.common.model.Address;
 import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Telephone;
 import org.vegbank.common.model.WebUser;
+import org.vegbank.common.utility.PermComparison;
 import org.vegbank.ui.struts.CertificationForm;
 
 public class UserDatabaseAccess 
@@ -113,11 +114,10 @@ public class UserDatabaseAccess
 	/**
 	 * method that returns true if the input user alraedy has an entry in the 
 	 * certification table
-	 * @param  emailAddress -- the email address of the user
+	 * @param  usrId -- the usr_id of the user
 	 */
-	public boolean userCertificationExists(String emailAddress)
+	public boolean userCertificationExists(int usrId)
 	{
-		//LogUtility.log("UserDatabaseAccess > looking up the user id for user: " + emailAddress);
 		int s = 0;
 		StringBuffer sb = new StringBuffer();
 		try 
@@ -125,9 +125,8 @@ public class UserDatabaseAccess
 			//get the connections etc
 			DBConnection conn = getConnection();
 			Statement query = conn.createStatement();
-			sb.append("select CERTIFICATION_ID from USER_CERTIFICATION ");
-			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"'");
-			//LogUtility.log("sql: " + sb.toString() );
+			sb.append("select CERTIFICATION_ID from USERCERTIFICATION ");
+			sb.append("where usr_id=" + usrId);
 			
 			//issue the query
 			query.executeQuery(sb.toString());
@@ -136,32 +135,16 @@ public class UserDatabaseAccess
 			int resultCnt = 0;
 			while (rs.next() ) 
 			{
-				resultCnt++;
-     		s = rs.getInt(1);
-				LogUtility.log("result: " + s);
-				if ( s > 0 )
-				{
-					return( true );
-				}
-				else
-				{
-					return(false);
-				}
-    	}
-			// if there were zero results returned then return false
-			if ( resultCnt == 0) 
-			{
-				return(false);
+				s = rs.getInt(1);
+				return (s > 0);
 			}
 		}
 		catch (Exception e) 
 		{
 			LogUtility.log("Exception: " + e.getMessage());
 			LogUtility.log("sql: " + sb.toString() );
-			e.printStackTrace();
-			return(false);
 		}
-		return(true);
+		return(false);
 	 }
 	 
 	/**
@@ -170,86 +153,72 @@ public class UserDatabaseAccess
 	 * @param form
 	 *
 	 */
-	public boolean insertUserCertificationInfo(CertificationForm form) {
+	public boolean insertUserCertificationInfo(CertificationForm form) 
+			throws SQLException {
 
-		 StringBuffer sqlInsert = new StringBuffer();
-		 try {	
-			 LogUtility.log("UserDatabaseAccess > inserting user cert info");
-			 //get the connections etc
-			 DBConnection conn = getConnection();
+		StringBuffer sqlInsert = new StringBuffer();
+		
+		LogUtility.log("UserDatabaseAccess > inserting user cert info");
+		DBConnection conn = getConnection();
 
-			 //see if this user has an entry in this table and ifso then update it
-			 if ( this.userCertificationExists(form.getEmailAddress()) == true ) {
-				 return(false);
-			 } else {
-
-				//get the userId of the user 
-				int userid = this.getUserId( form.getEmailAddress() );
-				// now make the entry in the download table
-				// this is the postgresql date function
-				sqlInsert.append("INSERT into usercertification ")
-					.append(" (current_cert_level, requested_cert_level, ")
-					.append(" highest_degree, degree_year, degree_institution, current_org, ")
-					.append(" current_pos, esa_member, prof_exp, relevant_pubs, veg_sampling_exp, ")
-					.append(" veg_analysis_exp, usnvc_exp, vb_exp, tools_exp, vb_intention")
-					.append(" exp_region_a, exp_region_a_veg, exp_region_a_flor, exp_region_a_nvc, ")
-					.append(" exp_region_b, exp_region_b_veg, exp_region_b_flor, exp_region_b_nvc, ")
-					.append(" exp_region_c, exp_region_c_veg, exp_region_c_flor, exp_region_c_nvc, ")
-					.append(" esa_sponsor_name_a,  esa_sponsor_email_a, ")
-					.append(" esa_sponsor_name_b,  esa_sponsor_email_b, ")
-					.append(" peer_review, addl_stmt) ")
-					.append(" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
-
-				// create the statement
-				PreparedStatement pstmt = conn.prepareStatement( sqlInsert.toString() );
-
-				pstmt.setString(1, form.getCurrentCertLevel());
-				pstmt.setString(2, form.getRequestedCert());
-				pstmt.setString(3, form.getHighestDegree());
-				pstmt.setString(4, form.getDegreeYear());
-				pstmt.setString(5, form.getDegreeInst());
-				pstmt.setString(6, form.getCurrentOrg());
-				pstmt.setString(7, form.getCurrentPos());
-				pstmt.setString(8, form.getEsaMember());
-				pstmt.setString(9, form.getProfExp());
-				pstmt.setString(10, form.getRelevantPubs());
-				pstmt.setString(11, form.getVegSamplingExp());
-				pstmt.setString(12, form.getVegAnalysisExp());
-				pstmt.setString(13, form.getUsnvcExp());
-				pstmt.setString(14, form.getVbExp());
-				pstmt.setString(15, form.getToolsExp());
-				pstmt.setString(16, form.getVbIntention());
-				pstmt.setString(17, form.getExpRegionA());
-				pstmt.setString(18, form.getExpRegionAVeg());
-				pstmt.setString(19, form.getExpRegionAFlor());
-				pstmt.setString(20, form.getExpRegionANVC());
-				pstmt.setString(21, form.getExpRegionB());
-				pstmt.setString(22, form.getExpRegionBVeg());
-				pstmt.setString(23, form.getExpRegionBFlor());
-				pstmt.setString(24, form.getExpRegionBNVC());
-				pstmt.setString(25, form.getExpRegionC());
-				pstmt.setString(26, form.getExpRegionCVeg());
-				pstmt.setString(27, form.getExpRegionCFlor());
-				pstmt.setString(28, form.getExpRegionCNVC());
-				pstmt.setString(29, form.getEsaSponsorNameA());
-				pstmt.setString(30, form.getEsaSponsorEmailA());
-				pstmt.setString(31, form.getEsaSponsorNameB());
-				pstmt.setString(32, form.getEsaSponsorEmailB());
-				pstmt.setString(33, form.getPeerReview());
-				pstmt.setString(34, form.getAddlStmt());
-
-				// execute the insert
-				pstmt.execute();
-				return(true);
-			 }
-		 }
-		 catch (Exception e) 
-		 {
-			 LogUtility.log("Exception: " + e.getMessage());
-			 LogUtility.log("sql: " + sqlInsert.toString() );
-			 e.printStackTrace();
-			 return(false);
-		 }
+		//get the userId of the user 
+		sqlInsert.append("INSERT into usercertification ")
+			.append(" (current_cert_level, requested_cert_level, ")
+			.append(" highest_degree, degree_year, degree_institution, current_org, ")
+			.append(" current_pos, esa_member, prof_exp, relevant_pubs, veg_sampling_exp, ")
+			.append(" veg_analysis_exp, usnvc_exp, vb_exp, tools_exp, vb_intention,")
+			.append(" exp_region_a, exp_region_a_veg, exp_region_a_flor, exp_region_a_nvc, ")
+			.append(" exp_region_b, exp_region_b_veg, exp_region_b_flor, exp_region_b_nvc, ")
+			.append(" exp_region_c, exp_region_c_veg, exp_region_c_flor, exp_region_c_nvc, ")
+			.append(" esa_sponsor_name_a,  esa_sponsor_email_a, ")
+			.append(" esa_sponsor_name_b,  esa_sponsor_email_b, ")
+			.append(" peer_review, addl_stmt, usr_id) ")
+			.append(" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
+		
+		// create the statement
+		PreparedStatement pstmt = conn.prepareStatement( sqlInsert.toString() );
+		
+		pstmt.setInt(1, form.getCurrentCertLevel());
+		pstmt.setInt(2, PermComparison.getRoleConstant(form.getRequestedCert()));
+		pstmt.setString(3, form.getHighestDegree());
+		pstmt.setString(4, form.getDegreeYear());
+		pstmt.setString(5, form.getDegreeInst());
+		pstmt.setString(6, form.getCurrentOrg());
+		pstmt.setString(7, form.getCurrentPos());
+		pstmt.setString(8, form.getEsaMember());
+		pstmt.setString(9, form.getProfExp());
+		pstmt.setString(10, form.getRelevantPubs());
+		pstmt.setString(11, form.getVegSamplingExp());
+		pstmt.setString(12, form.getVegAnalysisExp());
+		pstmt.setString(13, form.getUsnvcExp());
+		pstmt.setString(14, form.getVbExp());
+		pstmt.setString(15, form.getToolsExp());
+		pstmt.setString(16, form.getVbIntention());
+		pstmt.setString(17, form.getExpRegionA());
+		pstmt.setString(18, form.getExpRegionAVeg());
+		pstmt.setString(19, form.getExpRegionAFlor());
+		pstmt.setString(20, form.getExpRegionANVC());
+		pstmt.setString(21, form.getExpRegionB());
+		pstmt.setString(22, form.getExpRegionBVeg());
+		pstmt.setString(23, form.getExpRegionBFlor());
+		pstmt.setString(24, form.getExpRegionBNVC());
+		pstmt.setString(25, form.getExpRegionC());
+		pstmt.setString(26, form.getExpRegionCVeg());
+		pstmt.setString(27, form.getExpRegionCFlor());
+		pstmt.setString(28, form.getExpRegionCNVC());
+		pstmt.setString(29, form.getEsaSponsorNameA());
+		pstmt.setString(30, form.getEsaSponsorEmailA());
+		pstmt.setString(31, form.getEsaSponsorNameB());
+		pstmt.setString(32, form.getEsaSponsorEmailB());
+		pstmt.setString(33, form.getPeerReview());
+		pstmt.setString(34, form.getAddlStmt());
+		pstmt.setLong(35, form.getUsrId());
+		
+		// execute the insert
+		
+		LogUtility.log("UserDatabaseAccess: saving cert. app");
+		pstmt.execute();
+		return(true);
 	 }
 	 
 	/**
