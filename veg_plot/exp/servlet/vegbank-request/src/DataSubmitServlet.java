@@ -29,9 +29,9 @@ import servlet.authentication.UserDatabaseAccess;
  * @param submitDataType -- 
  * 
  *
- *	'$Author: farrell $'
- *  '$Date: 2002-12-23 22:51:27 $'
- *  '$Revision: 1.45 $'
+ *	'$Author: harris $'
+ *  '$Date: 2003-01-08 20:02:46 $'
+ *  '$Revision: 1.46 $'
  */
 
 
@@ -1415,18 +1415,21 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 				//and pass it onto the winnt machine
 				System.out.println("DataSubmitServlet > using RMI client to pass file: " + plotsArchiveFile );
 				System.out.println("DataSubmitServlet > file type: " +  plotsArchiveType);
+				System.out.println("DataSubmitServlet > instantiating an rmi client on: " + rmiServer);
 				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 				boolean sendResults = rmiClient.putMDBFile(plotsArchiveFile, plotsArchiveType);
 				
 				System.out.println("DataSubmitServlet > RMI file send results: " + sendResults);
 				
 				//validate that the plot archive is real
+				System.out.println("DataSubmitServlet > instantiating an rmi client on: " + rmiServer);
 				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 				boolean fileValidityResults = rmiClient.isMDBFileValid();
 				System.out.println("DataSubmitServlet > file validity at RMI server: " + fileValidityResults);
 				
 				// get the name of the plots and update the selection form and redircet
 				// the browser there
+				System.out.println("DataSubmitServlet > instantiating an rmi client on: " + rmiServer);
 				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 				Vector plots = rmiClient.getPlotNames(plotsArchiveType);
 				System.out.println("DataSubmitServlet > number of plots in archive: " + plots.size() );
@@ -1470,8 +1473,19 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 							{
 								String thisPlot = values[i];
 								System.out.println("DataSubmitServlet > requesting an rmi plot insert: '"+values[i]+"'" );
-								//insert the plot over the rmi system
+								//insert the plot over the rmi system -- first test that the plot is valid
 								System.out.println("DataSubmitServlet > plot being loaded by: " + user );
+								
+								//JHH 20030108
+								boolean valid = rmiClient.isPlotValid(thisPlot);
+								System.out.println("DataSubmitServlet > plot is valid: " + valid);
+								if ( valid == false )
+								{
+									String report = rmiClient.getValidationReport();
+									sb.append(report);
+								}
+								
+				
 								String result = rmiClient.insertPlot(thisPlot, this.plotsArchiveType, user);
 								String receipt = getPlotInsertionReceipt(thisPlot, result, receiptType, i, values.length);
 								sb.append( receipt );
