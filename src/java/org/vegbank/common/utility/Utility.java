@@ -30,8 +30,8 @@ import org.vegbank.common.utility.mail.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2005-02-11 00:51:43 $'
- * '$Revision: 1.43 $'
+ * '$Date: 2005-02-16 20:14:22 $'
+ * '$Revision: 1.44 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,6 +83,7 @@ public class Utility
 	public static String VB_EMAIL_ADMIN_TO;
 	public static String VB_EMAIL_ADMIN_FROM;
 	public static List DS_CANDIDATES;
+	public static String PARAM_DELIM = ";"; 
 
 
 	static { try {
@@ -105,6 +106,7 @@ public class Utility
 		VEGBANK_XML_SCHEMA = VEGBANK_SCHEMA_LOCATION + VEGBANK_SCHEMA_NAME;
 
 		VB_HOME_DIR = vegbankPropFile.getString("vegbank.home.dir");
+		VB_DATA_DIR = vegbankPropFile.getString("vegbank.data.dir");
 		VB_EXPORT_DIR = vegbankPropFile.getString("vegbank.export.dir");
 		WEBAPP_DIR = vegbankPropFile.getString("vegbank.webapp.dir");
 		MODELBEAN_CACHING = vegbankPropFile.getString("modelbean.caching");
@@ -808,7 +810,7 @@ public class Utility
 		}
 
 		String value = csv;
-		if (csv.indexOf(',') != -1) {
+		if (csv.indexOf(',') != -1 || csv.indexOf('|') != -1) {
 			// a list
 			StringTokenizer st = new StringTokenizer(csv, ",|");
 			if (st.hasMoreTokens()) { value = st.nextToken(); }
