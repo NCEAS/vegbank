@@ -302,6 +302,94 @@ catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery 
 
 
 
+
+
+/**
+ *
+ * Method to map a query xml document, containing a 'requestDataType' of
+ * community to either a SQL query stored in the 'CommunityQueryStore' class
+ * or to a method in that class that will generate a SQL query 
+ *
+ * @param transformedString string containg the query element type and 
+ *		value (| delimeted )
+ * @param transformedSringNum integer defining number of query elements
+ */
+
+public void developSimpleCommunityQuery(String[] transformedString, 
+	int transformedStringNum)
+{
+
+
+// First set up a pool of connections that can be passed to the queryStore class
+//get the database parameters from the database.parameters file
+ utility g =new utility(); 
+ g.getDatabaseParameters("database", "query");
+ Connection pconn=null; 
+ DbConnectionBroker myBroker;
+
+try {
+
+myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
+	g.login,g.passwd,g.minConnections,g.maxConnections, g.logFile,1.0);
+				  
+// Get a DB connection from the Broker
+int thisConnection;
+pconn=myBroker.getConnection(); //grab one connectionfrom pool
+
+//add the connection counting stuff later
+
+//get the query elements into a hash table
+getQueryElementHash(transformedString, transformedStringNum);
+
+
+//get the needed elements
+String resultType = (String)metaQueryHash.get("resultType");
+String outFile = (String)metaQueryHash.get("outFile");
+
+String communityName = (String)queryElementHash.get("communityName");
+String communityLevel = (String)queryElementHash.get("communityLevel");
+Integer queryElementNum = (Integer)metaQueryHash.get("elementTokenNum");
+
+//This is for debugging - and can be commented out later**/
+ System.out.println("sqlMapper.developSimpleCommunityQuery > \n"
+ 	+" resultType: "+ resultType +"\n "
+	+"outFile: "+outFile+"\n communityName: "+communityName
+	+"\n communityLevel: "	+communityLevel+"\n queryElementNum: "+queryElementNum);
+	
+//call the method in the CommunityQueryStore class to develop the query
+CommunityQueryStore j = new CommunityQueryStore();
+j.getCommunitySummary(communityName, communityLevel, pconn);
+queryOutputNum=j.communitySummaryOutput.size(); //assign the number of returned values
+
+
+//print the results by passing the summary vector to the writer class
+xmlWriter l = new xmlWriter();
+l.writeCommunitySummary(j.communitySummaryOutput, outFile);
+
+
+//return the connection to the Broker
+myBroker.freeConnection(pconn);
+myBroker.destroy();
+
+} //end try - for conn pooler
+catch ( Exception e ){System.out.println("failed at: sqlMapper.developSimpleCommunityQuery  "
+	+e.getMessage());e.printStackTrace();}
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * General method to tokenize a string of type: col1|col2 into two seperate strings 
  * usually refered to as element and value.  In the future this method, being a 
@@ -376,6 +464,7 @@ for (int i=0;i<pipeDelimitStringNum; i++) {
 	if (value[i] != null) {
 		
 		if (element[i].equals("queryElement")) {
+			System.out.println("*"+value[i]+" "+value[i+1]);
 			queryElementHash.put(value[i],value[i+1]);
 			elementTokenNum++;
 		}
@@ -386,6 +475,7 @@ for (int i=0;i<pipeDelimitStringNum; i++) {
 
  }
 
+ //embed the number of query elements stored in the hastable
  metaQueryHash.put("elementTokenNum", new Integer(elementTokenNum) );
 
 } //end method
