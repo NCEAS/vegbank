@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-12-10 19:42:08 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-01-01 01:13:35 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ public class Authenticate implements  Authentication
 		WebUser user = 
 			(WebUser) request.getSession().getAttribute(Constants.USER_KEY);
 			
-		String userPerms = user.getPermissions();
+		String userPerms = user.getPermissiontype();
 		LogUtility.log(
 			"Authenticate: Comparing user's roles;  "
 				+ userPerms

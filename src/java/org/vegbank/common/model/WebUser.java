@@ -8,8 +8,8 @@ import org.vegbank.common.utility.LogUtility;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-12-10 19:40:14 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-01-01 01:13:35 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ public class WebUser
 	private String organizationname = "";
 	private String email = "";
 	private String password = "";
-	private String permissions = "";
+	private String permissiontype = "";
 	private String institution = "";
 	private String salutation = "";
 	private String ticketcount = "";
@@ -198,17 +198,17 @@ public class WebUser
 	/**
 	 * @return
 	 */
-	public String getPermissions()
+	public String getPermissiontype()
 	{
-		return permissions;
+		return permissiontype;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setPermissions(String string)
+	public void setPermissiontype(String string)
 	{
-		permissions = string;
+		permissiontype = string;
 	}
 
 	/**
