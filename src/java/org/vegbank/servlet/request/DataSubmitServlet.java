@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: anderson $'
- *  '$Date: 2003-12-02 02:11:05 $'
- *  '$Revision: 1.22 $'
+ *  '$Date: 2004-01-16 20:41:27 $'
+ *  '$Revision: 1.23 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -139,16 +139,8 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				String surName = user.getSurname();
 				String givenName = user.getGivenname();
 				String institution = user.getInstitution();
-				String permissionType = user.getPermissiontype();
-				int permissionLevel = 0;
-				try
-				{
-					permissionLevel = Integer.parseInt(permissionType);
-				}
-				catch ( Exception e1 )
-				{
-					System.out.println("Exception: could not parse the permission level: " + e1.getMessage() );
-				}
+				int permissionLevel = user.getPermissiontype();
+				
 				System.out.println("DataSubmitServlet > current user email: " + user);
 				System.out.println("DataSubmitServlet > current user salutation: " + salutation);
 				System.out.println("DataSubmitServlet > current user surName: " + surName);
