@@ -101,13 +101,9 @@ function setNameMatchType() {
 			<option value="" selected>--ANY--</option>
 			<!--html:options property="commLevels"/-->
 
-<vegbank:get id="commlevel" select="commstatus_commlevel" where="where" pager="false" perPage="-1"/>
-<logic:notEmpty name="commlevel-BEANLIST">
-	<logic:iterate id="onerow" name="commlevel-BEANLIST">
-	<option value="<bean:write name="onerow" property="commlevel"/>">
-			<bean:write name="onerow" property="commlevel"/></option>
-	</logic:iterate>
-</logic:notEmpty>
+<!--vegbank:get id="commlevel" select="commstatus_commlevel" where="where" pager="false" perPage="-1"/-->
+        <!-- ORDERED list of levels -->
+        <%@ include file="../includes/CommLevelList.jsp" %> 
 
 
 		<!--/html:select-->
