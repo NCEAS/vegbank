@@ -11,8 +11,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2003-10-16 23:59:18 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2003-10-17 01:12:10 $'
+  *  '$Revision: 1.4 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -42,12 +42,15 @@
 <!--xxx-->
 
 <br/>
+<h3><font color="red">A problem occured</font></h3>Please review the following error(s) before proceeding.
 
-<html:errors/>
-<br>
-<html:messages id="message" message="true">
-<bean:write name="message"/><br>
-</html:messages>
+<logic:messagesPresent message="false">
+	<ul>
+	<html:messages id="error" message="false">
+		<li><bean:write name="error"/></li>
+	</html:messages>
+	</ul>
+</logic:messagesPresent>
 
 
 <br/>
