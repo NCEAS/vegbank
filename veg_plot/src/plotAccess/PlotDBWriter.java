@@ -756,19 +756,20 @@ catch (Exception e) {System.out.println("failed in PlotDBWriter.putTaxonObservat
 private void putStrataComposition (Connection conn) {
 try {
 
+System.out.println("TOAST: "+strataCompositionId);
 //get the strataId value associated with this specific taxon
 getStrataComposition(plotObservationId, stratumType, conn);	
 	
 String insertString="INSERT INTO STRATACOMPOSITION";
-String attributeString="STRATACOMPOSITION_ID, TAXONOBSERVATION_ID, STRATA_ID, "
+String attributeString="TAXONOBSERVATION_ID, STRATA_ID, "
 	+"CHEATSTRATUMTYPE, PERCENTCOVER";
-int inputValueNum=5;
-String inputValue[]=new String[5];	
-inputValue[0]=strataCompositionId;
-inputValue[1]=taxonObservationId;
-inputValue[2]=strataId;
-inputValue[3]=stratumType;
-inputValue[4]=percentCover;
+int inputValueNum=4;
+String inputValue[]=new String[4];	
+//inputValue[0]=strataCompositionId;
+inputValue[0]=taxonObservationId;
+inputValue[1]=strataId;
+inputValue[2]=stratumType;
+inputValue[3]=percentCover;
 
 //get the valueString from the method
 issueStatement k = new issueStatement();
