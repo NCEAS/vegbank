@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-01 04:43:33 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-03-01 17:26:29 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1551,7 +1551,7 @@ import org.vegbank.common.utility.Utility;
 			long collectorId = insertParty(collectorParty);
 			
 			// Get the PlantName
-			Hashtable plantName =  this.getFKChildTable(taxonInterpretation, Taxoninterpretation.PLANTNAME_ID, "plantname");
+			Hashtable plantName =  this.getFKChildTable(taxonInterpretation, Taxoninterpretation.PLANTNAME_ID, "plantName");
 			long plantNameId = insertTable("plantname", plantName);
 			
 			
