@@ -16,6 +16,11 @@
 
 <target name="init">
 	<tstamp/>
+	<!-- LET THE USER KNOW THE TARGETS -->
+	<echo>
+	Targets:  {init} includes, news, panel, history, pubs, forms, general, design,
+	dictionary
+	</echo>
 	<!-- 
 		* Below are the basic propoerties and tokens for
 		* building the vegbank web site
@@ -24,11 +29,25 @@
 	<property name="general_src" value="./general" />
 	<property name="design_src" value="./design" />
 	<property name="dictionary_src" value="./dbdictionary" />
+	<property name="news_src" value="./news" />
+	<property name="panel_src" value="./panel" />
+	<property name="history_src" value="./history" />
+	<property name="pubs_src" value="./pubs" />
+	<property name="style_src" value="./includes" />
 	
 	<property name="forms_server" value="/usr/local/devtools/jakarta-tomcat/webapps/forms"/>
 	<property name="general_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/"/>
 	<property name="design_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/design/"/>
 	<property name="dictionary_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/dbdictionary/"/>
+	<property name="news_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/news/"/>
+	<property name="panel_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/panel/"/>
+	<property name="history_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/history/"/>
+	<property name="pubs_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/pubs/"/>
+	<property name="style_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/includes/"/>
+	
+	
+	
+	
 	
 	<filter token="plotquery_page" value="http://vegbank.nceas.ucsb.edu/forms/plot-query.html"/>
 	<filter token="nestedplotquery_page" value="http://vegbank.nceas.ucsb.edu/forms/nested-plot-query.html"/>
@@ -41,18 +60,69 @@
 	<filter token="dist" value="dist"/>
 	<filter token="version" value="development"/>
 	<filter token="image_server" value="http://vegbank.nceas.ucsb.edu/vegbank/images/"/>
+	<filter token="stylesheet" value="http://vegbank.nceas.ucsb.edu/vegbank/includes/default.css"/>
+</target>
+
+
+<!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
+<target name="includes" depends="init">
+        <copy todir="${style_server}" filtering="no" >
+                <fileset dir="${style_src}" >    
+        </fileset>
+        </copy>
 </target>
 
 
 
 <!--
-	* TARGET TO BUILD THE DATABASE DICTIONARY BY
-	* TRANSLATING THE XML INTO HTML
+	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
+	* WEB SERVER
 -->
-<target name="db_dictionary" depends="init">
-	
-
+<target name="news" depends="init">
+	<copy todir="${news_server}" filtering="yes" >
+		<fileset dir="${news_src}" >    
+  	</fileset>
+	</copy>
 </target>
+
+
+<!--
+	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
+	* WEB SERVER
+-->
+<target name="panel" depends="init">
+	<copy todir="${panel_server}" filtering="yes" >
+		<fileset dir="${panel_src}" >    
+  	</fileset>
+	</copy>
+</target>
+
+
+<!--
+	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
+	* WEB SERVER
+-->
+<target name="history" depends="init">
+	<copy todir="${history_server}" filtering="yes" >
+		<fileset dir="${history_src}" >    
+  	</fileset>
+	</copy>
+</target>
+
+<!--
+	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
+	* WEB SERVER
+-->
+<target name="pubs" depends="init">
+	<copy todir="${pubs_server}" filtering="yes" >
+		<fileset dir="${pubs_src}" >    
+  	</fileset>
+	</copy>
+</target>
+
+
+
+
 
 
 
@@ -66,7 +136,8 @@
 		filtering="yes"
 		includes="
 			resultset-download.html
-			plot-query.html"
+			plot-query.html
+			plant-query.html"
 		excludes="**/CVS* "
 	/>
 </target>

@@ -1,0 +1,115 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+      <title>Tips for composing extended queries to retrieve plots </title>
+</head>
+<body>
+<body bgcolor="#FFFFFF">
+&nbsp;
+<br>&nbsp;
+<table BORDER=0 WIDTH="100%" >
+<tr BGCOLOR="#9999CC">
+<td>&nbsp;<b><font face="arial"><font color="#FFFFFF"><font size=-1>
+TIPS FOR DEVELOPING QUERIES</font></font></font></b></td>
+</tr>
+</table>
+
+<td>
+<ul>
+<li>
+<font face="arial"><font size=-1>Query Criteria</font></font></li>
+</ul>
+<font face="arial">
+	<font size=-1>
+		Plot Code -- name that the author applied to the plot<br> 
+		State -- state in which the plot was collected<br>
+		Elevation -- elevation at which the plot was collected<br>
+		Plant Taxon -- a string of plant names <br> 
+		&nbsp;  &nbsp; (comma separated with no spaces) <br>
+		&nbsp; &nbsp;  potentially included in the plot observations <br>
+		Geology -- the surficial geology at the plot collection location<br>
+		Plot shape -- the shape of the plot<br>
+		Slope gradient -- slope gradient in degrees<br>
+		Slope position -- slope postion includes: <br>
+		Slope aspect slope aspect in degrees <br>
+		Latitude -- latitude of the origin of the plot <br>
+		Longitude -- longitde of the origin of the plot <br>
+	</font>
+</font>
+</td>
+
+
+<td>
+<ul>
+<li>
+<font face="arial"><font size=-1>Query Operators</font></font></li>
+</ul>
+<font face="arial">
+	<font size=-1>
+	contains -- plot that has one of the following <br>
+	is equal to -- criteria is equal to the value <br>
+	contains -- plot that has at least one of the following values<br>
+	is greater than -- criteria is greater than the value <br>
+	&nbsp; &nbsp; (for numeric values)<br>
+	is less than -- criteria is less than the value <br>
+	begins with -- critiera starts with the string value <br>
+	ends with -- criteria ends with the string value <br>
+	</font>
+</font>
+</td>
+
+<td>
+<ul>
+<li>
+<font face="arial"><font size=-1>Query Criteria Values</font></font></li>
+</ul>
+<font face="arial">
+	<font size=-1>
+	operator: is equal to -- single token (string or numeric value) <br>
+	operator: contains -- comma separated tokens (with no spaces) <br>
+	operator: is greater than -- single numeric value <br>
+	operator: is less than -- single numeric value <br>
+	operator begins with -- single string value <br>
+	operator ends with -- single string value <br>
+	</font>
+</font>
+</td>
+
+<!-- QUERY EXAMPLES-->
+<td>
+<ul>
+<li>
+<font face="arial"><font size=-1>Query Examples</font></font></li>
+</ul>
+<font face="arial">
+	<font size=-1>
+	'State	is equal to	WY' <br>
+	&nbsp; append query <br>
+	'Plant Taxon contains 1,2,3,4' <br>
+	</font>
+</font>
+</td>
+
+
+</tr>
+</table>
+
+<ul>
+<ul>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</ul>
+
+<ul>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;</ul>
+</ul>
+
+<dl>
+<dt>
+</dt>
+</dl>
+
+</body>
+</html>
