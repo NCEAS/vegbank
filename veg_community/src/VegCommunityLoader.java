@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-13 00:20:09 $'
- * '$Revision: 1.15 $'
+ *     '$Date: 2002-03-13 02:31:36 $'
+ * '$Revision: 1.16 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -400,6 +400,87 @@ public class VegCommunityLoader
 			System.out.println(" codeName: " + conceptCode);
 			System.out.println(" transName: " + allianceTransName );
 		}
+		
+		
+		/**
+		 * method that is sort of out ouf plave because it is used to get a status
+		 * id out of the database in order to perform a correlation
+		 *
+		 * @param refTitle -- the title of the reference, which in the case of the 
+		 *  addition of a correlation will refer to that person who entered the
+		 *	concept -- the conceptRef
+		 
+		 */
+		public int getStatusId(String refTitle, String refAuthor, 
+		String status, String commName, String salutation, String givenName, 
+		String surName, String emailAddress, String orgName )
+		{
+		int statusId = 0; 
+		 try
+		 {
+				//GET THE REFERENCE ID OF THE CONCEPT WHICH IN THE CASE OF A CORRELATION
+				//THIS WILL BE THE REFERENCE RELATED TO THE PERSON ENTERING THE NEW
+				//CONCEPT
+				int refId = getCommunityReferenceId(refAuthor, refTitle);
+				System.out.println("VegCommunityLoader > ref id: " + refId );
+				
+				//GET THE NAME ID -- THERE SHOULD BE ONLY ONE
+				int nameId = getCommunityNameId(commName);
+				System.out.println("VegCommunityLoader > name id: " + nameId );
+				
+				String middleName = "";
+				String contactInstructions = emailAddress;
+				//GET THE PARTY ID FOR THE KEY IN THE STATUS TABLE
+				int partyId = getCommunityPartyId(salutation, givenName, 
+				surName,  middleName, orgName, contactInstructions);
+		 		System.out.println("VegCommunityLoader > party id: " + partyId );
+				
+				int conceptId = getCommunityConceptId(nameId, refId);
+		 		System.out.println("VegCommunityLoader > concept id: " + conceptId );
+				
+				statusId = getCommunityStatusId(conceptId, partyId, status);
+				System.out.println("VegCommunityLoader > status id: " + statusId );
+		 }
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(statusId);
+		}
+		
+		/**
+		 * method that returns the status id
+		 */
+		 private int getCommunityStatusId(int conceptId, int partyId,  String status)
+	  	{
+		 	int statusId = 0; 
+			try
+			{
+		 		StringBuffer sb = new StringBuffer();
+				sb.append("SELECT commstatus_id from COMMSTATUS where ");
+				sb.append(" commconcept_id = "+conceptId);
+				sb.append(" and commparty_id = "+partyId);
+				sb.append(" and upper(commconceptstatus)  like  '"+status.toUpperCase()+"'");
+				
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+				
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					statusId = rs.getInt(1);
+					cnt++;
+				}
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(statusId);
+	 }
+		
 		
 		
 	   /**
@@ -829,6 +910,39 @@ public class VegCommunityLoader
 		 return(refId);
 	 }
 	 
+	 /** 
+	  * method that overloads the above method to get a reference ID
+		* uses the authors and a title to get the refId
+		*/
+		private int getCommunityReferenceId(String authors, String title)
+	  {
+		 	int refId = 0; 
+			try
+			{
+		 		StringBuffer sb = new StringBuffer();
+				sb.append("SELECT commreference_id from COMMREFERENCE where upper(authors)"
+				+" like '"+authors.toUpperCase()+"' and upper(title) like '%"+title.toUpperCase()+"%'");
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					refId = rs.getInt(1);
+					cnt++;
+				}
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(refId);
+	 }
+	 
+	 
+	 
+	 
+	 
 	   /** 
 	  * method that inserts the reference data 
 		*/
@@ -953,6 +1067,39 @@ public class VegCommunityLoader
 		 }
 		 return(commConceptId);
 	 }
+	 
+	 
+	 /**
+	  * method to get the concept id
+		*
+		*/
+		private int getCommunityConceptId(int commNameId, int commReferenceId)
+	  {
+		 	int commConceptId = 0; 
+			try
+			{
+		 		StringBuffer sb = new StringBuffer();
+				sb.append("SELECT commconcept_id from COMMCONCEPT where commName_Id ="
+				+commNameId+" and commReference_id = "+commReferenceId);
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+				
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					commConceptId = rs.getInt(1);
+					cnt++;
+				}
+			}
+			catch (Exception e)
+		 {
+			 //System.out.println("VegCommunityLoader > comm desc: " +  conceptDescription );
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(commConceptId);
+	 }
+	 
 	 
 	 
 	  /** 
