@@ -12,9 +12,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: mlee $'
-  *      '$Date: 2004-07-16 18:44:10 $'
-  *  '$Revision: 1.5 $'
+  *    '$Author: anderson $'
+  *      '$Date: 2004-07-28 07:41:25 $'
+  *  '$Revision: 1.6 $'
   *
   *
   -->
@@ -65,7 +65,7 @@
       <td width="15%" bgcolor="white" align="left" valign="top">
 
       <td align="left">
-        <html:form action="/PlantQuery">
+        <html:form action="/PlantQuery" method="get">
           <table>
             <tr valign="top">
               <td align="left" valign="middle" colspan="2">
