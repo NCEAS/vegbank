@@ -12,10 +12,10 @@ CREATE TABLE plantUsage
     PLANTCONCEPT_ID integer NOT NULL,
     usageStart timestamp ,
     usageStop timestamp,
-    plantNameStatus varchar (22) ,
+    plantNameStatus varchar (20) ,
     plantName varchar (220),
     PLANTPARTY_ID integer ,
-    classSystem varchar (22),
+    classSystem varchar (20),
     acceptedSynonym varchar (220),
     PRIMARY KEY(PLANTUSAGE_ID)
 );
@@ -31,10 +31,10 @@ CREATE TABLE plantStatus
     PLANTSTATUS_ID serial,
     PLANTCONCEPT_ID integer NOT NULL,
     PLANTREFERENCE_ID integer,
-    plantConceptStatus varchar (22) NOT NULL,
+    plantConceptStatus varchar (20) NOT NULL,
     startDate timestamp NOT NULL,
     stopDate timestamp,
-    plantPartyComments varchar (22),
+    plantPartyComments varchar (500),
     PLANTPARTY_ID integer NOT NULL,
     plantParentName varchar (200),
 plantParentConcept_id integer,
@@ -50,18 +50,18 @@ drop table plantReference;
 CREATE TABLE plantReference
 (
     PLANTREFERENCE_ID serial,
-    authors varchar (22),
-    title varchar (22),
+    authors varchar (200),
+    title varchar (200),
     pubDate timestamp,
-    edition varchar (22),
-    seriesName varchar (22),
-    issueIdentification varchar (22),
-    otherCitationDetails varchar (22),
-    page varchar (22),
-    tableCited varchar (22),
-    ISBN varchar (22),
-    ISSN varchar (22),
-    plantDescription varchar (200),
+    edition varchar (20),
+    seriesName varchar (50),
+    issueIdentification varchar (20),
+    otherCitationDetails varchar (100),
+    page varchar (20),
+    tableCited varchar (20),
+    ISBN varchar (20),
+    ISSN varchar (20),
+    plantDescription text,
     PRIMARY KEY(PLANTREFERENCE_ID)
 );
 
@@ -74,20 +74,20 @@ drop table plantName;
 CREATE TABLE plantName
 (
     PLANTNAME_ID serial,
-    plantName varchar (220) NOT NULL,
-    plantNameWithAuthor varchar (222),
-    PLANTREFERENCE_ID integer NOT NULL,
+    plantName varchar (255) NOT NULL,
+    plantNameWithAuthor varchar (255),
+    PLANTREFERENCE_ID integer,
     dateEntered timestamp,
     PRIMARY KEY(PLANTNAME_ID)
 );
 
 -----------------------------------------------------------------------------
--- plantLineation
+-- plantLineage
 -----------------------------------------------------------------------------
-drop sequence plantLineation_PLANTLINEAGE_ID_seq;
-drop table plantLineation;
+drop sequence plantLineage_PLANTLINEAGE_ID_seq;
+drop table plantLineage;
 
-CREATE TABLE plantLineation
+CREATE TABLE plantLineage
 (
     PLANTLINEAGE_ID serial,
     PLANTSTATUS1_ID integer,
@@ -106,7 +106,7 @@ CREATE TABLE plantCorrelation
     PLANTCORRELATION_ID serial,
     PLANTSTATUS_ID integer NOT NULL,
     PLANTCONCEPT_ID integer NOT NULL,
-    plantConvergence varchar (22) NOT NULL,
+    plantConvergence varchar (20) NOT NULL,
     correlationStart timestamp NOT NULL,
     correlationStop timestamp NOT NULL,
     PRIMARY KEY(PLANTCORRELATION_ID)
@@ -123,10 +123,10 @@ CREATE TABLE plantConcept
     PLANTCONCEPT_ID serial,
     PLANTNAME_ID integer NOT NULL,
     PLANTREFERENCE_ID integer NOT NULL,
-	plantname varchar(200),
-	plantCode varchar(23),
-	plantDescription varchar(600),
-    plantLevel varchar (22),
+	plantname varchar (200),
+	plantCode varchar (23),
+	plantDescription varchar (600),
+    plantLevel varchar (20),
     plantParent integer,
     PRIMARY KEY(PLANTCONCEPT_ID)
 );
@@ -140,13 +140,13 @@ drop table plantParty;
 CREATE TABLE plantParty
 (
     PLANTPARTY_ID serial,
-    salutation varchar (22),
-    givenName varchar (22),
-    middleName varchar (22),
-    surName varchar (22),
-    organizationName varchar (22),
+    salutation varchar (20),
+    givenName varchar (50),
+    middleName varchar (50),
+    surName varchar (50),
+    organizationName varchar (100),
     currentName integer,
-    contactInstructions varchar (22),
+    contactInstructions varchar (1000),
     owner integer,
     PRIMARY KEY(PLANTPARTY_ID)
 );
@@ -198,16 +198,16 @@ ALTER TABLE plantName
 -- plantName
 ----------------------------------------------------------------------------
 
-ALTER TABLE plantLineation
+ALTER TABLE plantLineage
     ADD CONSTRAINT PLANTSTATUS1_ID FOREIGN KEY (PLANTSTATUS1_ID)
     REFERENCES plantStatus (PLANTSTATUS_ID);
 
-ALTER TABLE plantLineation
+ALTER TABLE plantLineage
     ADD CONSTRAINT PLANTSTATUS2_ID FOREIGN KEY (PLANTSTATUS2_ID)
     REFERENCES plantStatus (PLANTSTATUS_ID);
 
 ----------------------------------------------------------------------------
--- plantLineation
+-- plantLineage
 ----------------------------------------------------------------------------
 
 ALTER TABLE plantCorrelation
