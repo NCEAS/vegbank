@@ -10,9 +10,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: farrell $'
-  *      '$Date: 2003-08-21 21:16:43 $'
-  *  '$Revision: 1.2 $'
+  *    '$Author: anderson $'
+  *      '$Date: 2003-10-16 23:59:18 $'
+  *  '$Revision: 1.3 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,13 @@
 <!--xxx-->
 
 <br/>
+
 <html:errors/>
+<br>
+<html:messages id="message" message="true">
+<bean:write name="message"/><br>
+</html:messages>
+
 
 <br/>
 <br/>
