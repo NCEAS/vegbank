@@ -10,6 +10,7 @@ CREATE SEQUENCE commSummary_id_seq;
 CREATE TABLE commSummary (
 	COMMSUMMARY_ID  NUMERIC(20) default nextval('commSummary_id_seq'),
 	commName VARCHAR(500),
+	commName_id integer,
 	dateEntered date,
 	classCode VARCHAR(50),
 	classLevel VARCHAR(50), 
@@ -17,6 +18,7 @@ CREATE TABLE commSummary (
 	conceptOriginDate date,  --origin date of the concept
 	conceptUpdateDate date, --date that the concept was updated
 	commconcept_id  integer,
+	nameRefAuthors  VARCHAR(50), --the name reference authors in the party
 	recognizingParty VARCHAR(50),  -- the party that recognizes the concept
 	partyConceptStatus VARCHAR(50), -- status of the party recognition
 	parentCommConceptId integer, -- the concept ID if the community in this database
@@ -28,12 +30,14 @@ CREATE TABLE commSummary (
 
 -- LOAD THE SUMMARY TABLE WITH APPROXIMATES
 insert into commSummary (
-	commName, 
+	commName,
+	commName_id,
 	classCode, 
 	commConcept_id
 	)
 		select 
-		commUsage.commName, 
+		commUsage.commName,
+		commUsage.commName_id,
 		commUsage.ceglCode, 
 		commUsage.commConcept_id
 		from commUsage where commUsage.commusage_id > 0;
@@ -50,6 +54,14 @@ update commSummary
 set classlevel =
 (select commlevel from commconcept
 where  commsummary.commconcept_id = commconcept.commconcept_id  );
+
+
+--UPDATE THE NAMEREFAUTHORS
+update commSummary
+set nameRefAuthors =
+(select authors from commreference
+where  commreference.commreference_id = (select commreference_id from commname where commname.commname_id = commsummary.commname_id)  );
+
 
 --UPDATE THE DESCRIPTIONS
 update commSummary
