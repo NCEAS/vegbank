@@ -43,21 +43,21 @@ import PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: harris $'
- *  '$Date: 2002-01-23 17:09:52 $'
- * 	'$Revision: 1.3 $'
+ *  '$Date: 2002-04-05 19:19:52 $'
+ * 	'$Revision: 1.4 $'
  */
 
 
 public class dbAccess 
 {
 
-//constructor -- define as static the LocalDbConnectionBroker so that methods
-// called by this class can access the 'local' pool of database connections
-static LocalDbConnectionBroker lb;
+	//constructor -- define as static the LocalDbConnectionBroker so that methods
+	// called by this class can access the 'local' pool of database connections
+	static LocalDbConnectionBroker lb;
 
 
-public String queryOutput[] = new String[10000];  //the output from query
-public int queryOutputNum; //the number of output rows from the query
+	public String queryOutput[] = new String[10000];  //the output from query
+	public int queryOutputNum; //the number of output rows from the query
 
  /**
   * constructor method
@@ -66,6 +66,7 @@ public int queryOutputNum; //the number of output rows from the query
 	{
 		System.out.println("init: databaseAccess.dbAccess ");
 	}
+
 
  /**
   * this method will take a plot id number used in vegbank and a
@@ -81,15 +82,12 @@ public int queryOutputNum; //the number of output rows from the query
 	{
 		try
 		{
-			//convert the input integer to a string so that 
-			//it can be passed to the xml writer
-//			String plot = ""+plotId;
+			System.out.println("dbAccess > printing single plot");
 			//this class allows access to the vegbank databases
 			//so the plugin will always be the same 
 			String pluginClass = "VegBankDataSourcePlugin";
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
 			writer.writeSinglePlot(plotId, outFile);
-			
 		}
 		catch (Exception e)
 		{
@@ -100,7 +98,7 @@ public int queryOutputNum; //the number of output rows from the query
 		return(true);
 	}
 	
-	/**
+ /**
   * this method will take a plot id number used in vegbank and a
 	* filename to write all the plot data associated with that plot 
 	* into an xml document -- this method is much newer than the
@@ -114,14 +112,11 @@ public int queryOutputNum; //the number of output rows from the query
 	{
 		try
 		{
-			//convert the input integer to a string so that 
-			//it can be passed to the xml writer
-//			String plot = ""+plotId;
+			System.out.println("dbAccess > printing multiple plots");
 			//this class allows access to the vegbank databases
 			//so the plugin will always be the same 
 			String pluginClass = "VegBankDataSourcePlugin";
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
-			//writer.writeSinglePlot(plotIdVec.elementAt(0).toString(), outFile);
 			writer.writeMultiplePlot(plotIdVec, outFile);
 		}
 		catch (Exception e)

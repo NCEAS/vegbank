@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-04-05 01:29:40 $'
- * 	'$Revision: 1.4 $'
+ *  '$Date: 2002-04-05 19:17:38 $'
+ * 	'$Revision: 1.5 $'
  *
  *
  */
@@ -121,7 +121,7 @@ public class queryStore
 		////g.getDatabaseParameters("database", "query");
 		java.util.Date startDate = new java.util.Date();
 		int startSeconds = startDate.getSeconds();
-		System.out.println("StartQuery: "+startDate );
+		System.out.println("queryStore > StartQuery: "+startDate );
 		try 
 		{
 
@@ -253,9 +253,8 @@ public class queryStore
 		//print the end date
 		java.util.Date stopDate = new java.util.Date();
 		int stopSeconds = stopDate.getSeconds();
-		
-		System.out.println("Stop Query: "+stopDate );
-		System.out.println("elapsed time (secs) : "+ (stopSeconds - startSeconds) );
+		System.out.println("queryStore > Stop Query: "+stopDate );
+		System.out.println("queryStore > elapsed time (secs) : "+ (stopSeconds - startSeconds) );
 		
 	}
 	catch (Exception e) 
@@ -264,20 +263,6 @@ public class queryStore
 		+" " + e.getMessage()); e.printStackTrace();
 	}	
 }//end method
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -554,4 +539,3 @@ public void getPlotId(String taxonName, String state, String elevationMin,
 
 
 }
-                      
