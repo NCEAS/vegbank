@@ -1,4 +1,4 @@
-/* $Id: header_search.js,v 1.5 2005-03-18 18:18:19 anderson Exp $ */
+/* $Id: header_search.js,v 1.6 2005-03-22 01:00:00 anderson Exp $ */
 
 function doSubmit() {
     var ent = document.quicksearch_form.selEntity.value;
@@ -9,12 +9,13 @@ function doSubmit() {
     if (xwhereParams == null || xwhereParams == "") {
         // submit to metasearch
         ent = "anything";
-        document.quicksearch_form.xwhereParams.value="vb";
+        xwp = "xwhereParams=vb";
     }
 
     if (ent == 'anything') {
         // set action
         document.quicksearch_form.action = "@forms_link@metasearch.jsp?" + qsent + "&" + xwp;
+        document.quicksearch_form.clearSearch.value = 1;
         document.quicksearch_form.submit();
 
     } else {
@@ -66,6 +67,8 @@ function updateQuicksearch() {
     if (ent != null && ent != '') {
         //document.getElementById("selEntity").selectedIndex = ent;
         document.quicksearch_form.selEntity.selectedIndex = ent;
-        document.quicksearch_form.xwhereParams.value = urlDecode(xwp);
+		if (xwp != 'vb') {
+        	document.quicksearch_form.xwhereParams.value = urlDecode(xwp);
+		}
     }
 }
