@@ -7,8 +7,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-08-30 03:50:13 $'
- * '$Revision: 1.36 $'
+ *     '$Date: 2002-08-30 18:25:17 $'
+ * '$Revision: 1.37 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1553,6 +1553,12 @@ public class DBinsertPlotSource
 			{
 				//get the plotid number
 				plotObservationId = getNextId("observation");
+				
+				// get the observation accession number
+				String obsAccession  = getObservationAccessionNumber(plotName,  plotObservationId);
+				System.out.println("############### " + obsAccession);
+				
+			
 				String observationCode = source.getAuthorObsCode(plotName);
 				String startDate = source.getObsStartDate(plotName);
 				String stopDate = source.getObsStopDate(plotName);
@@ -1630,12 +1636,13 @@ public class DBinsertPlotSource
 				sb.append(" standMaturity, successionalStatus, treeHt, shrubHt, nonvascularHt, ");
 				sb.append(" floatingCover, submergedCover, dominantStratum, growthform1Type, ");
 				sb.append(" growthform2Type, growthform3Type, growthform1Cover, growthform2Cover, ");
-				sb.append(" growthform3Cover, notesPublic, notesMgt, revisions, methodnarrative )");
+				sb.append(" growthform3Cover, notesPublic, notesMgt, revisions, methodnarrative, ");
+				sb.append(" accession_number, vbsequence )");
 				
 				//55 total
-				sb.append(" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?, ");
+				sb.append(" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,");
 				sb.append("?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?");
-				sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" );
+				sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" );
 				//56
 			
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
@@ -1698,10 +1705,11 @@ public class DBinsertPlotSource
 				pstmt.setBoolean(55, notesMgt);
 				pstmt.setBoolean(56, revisions);
 				pstmt.setString(57, methodNarrative);
-				
+				pstmt.setString(58, obsAccession);
+				pstmt.setInt(59, plotObservationId);
 				
   		  pstmt.execute();
-				//Thread.sleep(20000);
+				Thread.sleep(2000);
 				pstmt.close();
 			}
 			catch (Exception e)
@@ -1903,7 +1911,7 @@ public class DBinsertPlotSource
 	 * @param plotName -- the name of the plot 
 	 * @param plotId -- the PK of the plot in the system
 	 * @param email -- the email address of the user loading the plot
-	 * 
+	 * @see getObservationAccessionNumber
 	 */
 		private String getAccessionNumber(String plotName, int plotId, String
 		email)
@@ -1945,6 +1953,78 @@ public class DBinsertPlotSource
 			}
 			return( sb.toString() );
 		}
+		
+		/**
+		 * this is the second accession number that refers to a unique observation.
+		 * This was added Aug. 2002, so based on a request by RPK.  This should 
+		 * ultimately replace the accession number in the plot table, but for now 
+		 * it is being added with the hope that nothing breaks
+		 *
+		 * @param observationId -- the PK of the observation in the system
+		 * @param email -- the email address of the user loading the plot
+		 * @return accession number like: VB-obsId-yyyymmdd
+		 * @see getAccessionNumber
+		 */
+		 private String getObservationAccessionNumber(String plotName, int observationId)
+		 {
+			StringBuffer sb = new StringBuffer();
+			try
+			{
+			
+				//int observationId =  getNextId("observation");
+				
+				// get the database data and parse it
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery("select now()");
+				String date = null;
+				while ( rs.next() ) 
+				{
+					date = rs.getString(1);
+					//System.out.println("date: " + date);
+				}
+				
+				
+				StringTokenizer tok = new StringTokenizer(date);
+				// the first token is the date
+				String datePart = tok.nextToken().replace('-', ' ');
+				// the second token is the time
+				String time = tok.nextToken().replace(':', ' ');
+				
+				StringTokenizer tok2 = new StringTokenizer(datePart);
+				StringBuffer sb2 = new StringBuffer();
+				while ( tok2.hasMoreTokens() )
+				{
+					sb2.append( tok2.nextToken() );
+				}
+				//tokenize the time-part
+				StringTokenizer tok3 = new StringTokenizer(time);
+				StringBuffer sb3 = new StringBuffer();
+				while ( tok3.hasMoreTokens() )
+				{
+					sb3.append( tok3.nextToken() );
+				}
+				
+				// append
+				String startDate = sb2.toString()+sb3.toString();
+				
+				sb.append("VB");
+				sb.append(".");
+				sb.append(observationId);
+				sb.append(".");
+				sb.append(startDate);
+				
+				Thread.sleep(4000);
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception: "+e.getMessage() ); 
+				e.printStackTrace();
+			}
+			return( sb.toString() );
+		 }
+		 
+		 
+		 
 	
 	
 	/**

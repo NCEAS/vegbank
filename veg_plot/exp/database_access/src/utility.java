@@ -7,8 +7,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-08-15 03:07:48 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2002-08-30 18:25:17 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -539,6 +539,40 @@ public class utility
 		 }
 	 }
 	
+	 /**
+	 * method to update a users password  
+	 * @param email -- the emailaddress of the user that should be dropped 
+	 * @param host -- the host machine that the user database is running on
+	 * @param password -- the new password  
+	 * 
+	 */
+	 public void changeUserPassword(String email, String dbHost, String password)
+	 {
+		 StringBuffer sb;
+		 boolean results = true;
+		 PreparedStatement pstmt = null;
+		 try
+		 {
+			 sb = new StringBuffer();
+			 this.conn = this.getUserDBConnection(dbHost);
+			 this.conn.setAutoCommit(false);
+			 System.out.println("utility > updating user's : " + email +" password to  : " + password );
+			 sb.append("update user_info set password = '"+password+"' where email_address like '"+email+"';");
+			 pstmt = conn.prepareStatement( sb.toString() );
+			 
+			 pstmt.execute();
+			 conn.commit();
+			 pstmt.close();
+			 conn.close();
+		 }
+		 catch ( Exception e )
+		 {
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		 }
+	 }
+	
+	
 	
 	/**
 	 * main method for running the methods internal to 
@@ -571,6 +605,13 @@ public class utility
 				String level = args[3];
 				dplot.updateUserPermission(email, host, level);
 			}
+			else if ( action.equals("changepassword") )
+			{
+				String email = args[1];
+				String host = args[2];
+				String passwd = args[3];
+				dplot.changeUserPassword(email, host, passwd);
+			}
 			else
 			{
 				System.out.println("unknown action: " + action);
@@ -584,6 +625,7 @@ public class utility
 			System.out.println("2] dropuser email host ");
 			System.out.println("3] updatepermission email host level ");
 			System.out.println(" levels: {1=registered 2=certified 3=professional 4=senior 5=manager}");
+			System.out.println("3] changepassword email host newpassword ");
 		}
 	}
 	

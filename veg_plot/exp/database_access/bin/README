@@ -1,6 +1,6 @@
 #	 '$Author: harris $'
-#  '$Date: 2002-08-29 17:18:53 $'
-#  '$Revision: 1.1 $'
+#  '$Date: 2002-08-30 18:25:16 $'
+#  '$Revision: 1.2 $'
 
 ADMINISTRATIVE TOOLS 
 --------------------
@@ -48,7 +48,18 @@ To drop a plot from the database use:
 	VB.046-01-0662.395.harris02@hotmail.com.20010715 -- the plotid value is '395'
 )
 
+To change a user's password use:
+	changepassword.sh
+1] make sure that you are currently in the bin directory
+2] the usage is like:
+[harris@vegbank]% ./changepassword.sh  harris02@hotmail vegbank.nceas.ucsb.edu plotLover1
+utility > updating user's : harris02@hotmail password to  : plotLover1
 
+USAGE: changepassword.sh <email> <host> <newpassword>  
+  email: the email address of the user
+	host: the host machine like beta.nceas.ucsb.edu
+	newpassword: a new password 
+			
 
 
 
