@@ -10,16 +10,46 @@
 <xsl:output method="xml"/>
 <xsl:template match="/dbQuery">
 
+
+<!--
+ * this first faor each select is for quries that 
+ * have the queryElement and queryString - the 
+ * next select is for those which have queryCriteria
+ * queryOperator, and queryValues
+-->
 <xsl:for-each select="query">
-
-<!--Query element(S) -->
-<xsl:text>queryElement|</xsl:text> <xsl:value-of select="queryElement"/>
-<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
-<xsl:text>elementString|</xsl:text> <xsl:value-of select="elementString"/>
-<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
-
-
+	<!--Query element(S) -->
+	<xsl:text>queryElement|</xsl:text> <xsl:value-of select="queryElement"/>
+	<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
+	<xsl:text>elementString|</xsl:text> <xsl:value-of select="elementString"/>
+	<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
 </xsl:for-each>
+
+<!--
+	*
+	* this for each select is used to transform the 
+	* extended query xml document which contains a
+	* triple consisting of a queryCriteria (like state
+	* or elevation) queryOperator (like contains or 
+	* greater than), and a queryValue (like California
+	* or 500)
+	*
+-->
+<xsl:for-each select="extendedQuery">
+		<xsl:for-each select="queryTriple">
+		
+			<xsl:text>queryCriteria|</xsl:text> <xsl:value-of select="queryCriteria"/>
+			<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
+			
+			<xsl:text>queryOperator|</xsl:text> <xsl:value-of select="queryOperator"/>
+			<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
+			
+			<xsl:text>queryValue|</xsl:text> <xsl:value-of select="queryValue"/>
+			<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
+			
+		</xsl:for-each>
+</xsl:for-each>
+
 
 <!--desired requested data type-->
 <xsl:text>requestDataType|</xsl:text> <xsl:value-of select="requestDataType"/>
