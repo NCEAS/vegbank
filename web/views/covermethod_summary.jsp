@@ -40,7 +40,7 @@
 <!--Insert a nested get statement here:
    example:   
 
-<vegbank:get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_covermethod_pk" wparam="covermethod_pk" />-->
+<vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_covermethod_pk" wparam="covermethod_pk" />-->
 </logic:iterate>
 </table>
 </logic:notEmpty>

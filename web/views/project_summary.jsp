@@ -91,7 +91,7 @@
 <!--Insert a nested get statement here:
    example:   
 
-<NOT vegbank:get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_project_pk" wparam="project_pk" />-->
+<NOT vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_project_pk" wparam="project_pk" />-->
 </logic:iterate>
 </table>
 </logic:notEmpty>
