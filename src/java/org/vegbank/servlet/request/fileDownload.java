@@ -1,5 +1,27 @@
 package org.vegbank.servlet.request;
 
+/*
+ *  '$RCSfile: fileDownload.java,v $'
+ *
+ *	'$Author: farrell $'
+ *  '$Date: 2003-04-16 00:12:48 $'
+ *  '$Revision: 1.2 $'
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 import java.io.*;
 import java.util.*;
 import javax.servlet.*;
@@ -44,30 +66,33 @@ import xmlresource.utils.transformXML;
 public class fileDownload extends HttpServlet 
 {
 
-	ResourceBundle rb = ResourceBundle.getBundle("fileDownload");
+	static ResourceBundle rb = ResourceBundle.getBundle("fileDownload");
 
-	private String fileName = null;
-	private String downloadPath=null;
-	private String fileNamePath = null;
-	private String fileFormatType = null;
-	private String userNotes = null;
-	private String aggregationType = null;
-	private String dataType = null;
-	private String plotRequestList = null;
-	private String atomicResultSet = null;
-	private String cummulativeResultSet= null;
-	private String DataRequestServletURL=null;
-	private int debugLevel=1;
-	private ServletUtility sutil; 
-	private GetURL gurl;
-	private transformXML transformer; 
+	private static final String  downloadPath=(rb.getString("requestparams.downloadPath"));
+	private static final String plotRequestList=(rb.getString("requestparams.plotRequestList"));
+	private static final String atomicResultSet = (rb.getString("requestparams.atomicResultSet"));
+	private static final String  cummulativeResultSet = (rb.getString("requestparams.cummulativeResultSet"));		
+	private static final String DataRequestServletURL= (rb.getString("requestparams.DataRequestServletURL"));
 	
-	private String htmlStyleSheet =  "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl";
+	//private String fileName = null;
+
+	//private String fileNamePath = null;
+	//private String fileFormatType = null;
+	//private String userNotes = null;
+	//private String aggregationType = null;
+	//private String dataType = null;
+
+	//private int debugLevel=1;
+	private ServletUtility  sutil = new ServletUtility();
+	private GetURL gurl  = new GetURL();
+	private transformXML  transformer = new transformXML(); 
+	
+	private static final String htmlStyleSheet =  "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl";
 	
 	//below are the stylesheets for the flat ascii file tarnsformation process 
-	private String asciiSitesStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotsites-flatascii.xsl";
-	private String asciiSpeciesStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotspecies-flatascii.xsl";
-	private String condensedAsciiSpeciesStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotspecies-condensedascii.xsl";
+	private static final String asciiSitesStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotsites-flatascii.xsl";
+	private static final String asciiSpeciesStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotspecies-flatascii.xsl";
+	private static final String condensedAsciiSpeciesStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotspecies-condensedascii.xsl";
 	
 	
 	/**
@@ -78,11 +103,7 @@ public class fileDownload extends HttpServlet
 	 	try
 		{
 		 System.out.println("init: fileDownload");
-		 this.DataRequestServletURL= (rb.getString("requestparams.DataRequestServletURL"));
-		 System.out.println("fileDownload init > datarequest url: " +  this.DataRequestServletURL);
-		 sutil = new ServletUtility();
-		 gurl = new GetURL();
-		 transformer = new transformXML();
+		 System.out.println("fileDownload init > datarequest url: " +  DataRequestServletURL);
 		}
 		 catch (Exception e )
 		 {
@@ -113,23 +134,18 @@ public class fileDownload extends HttpServlet
 			Hashtable params = new Hashtable();
 			params = sutil.parameterHash(request);
 		
-			fileName = (String)params.get("fileName");
-			fileFormatType = (String)params.get("formatType");
-			aggregationType = (String)params.get("aggregationType");
-			userNotes = (String)params.get("userNotes");
-			dataType = (String)params.get("dataType");
+			String fileName = (String)params.get("fileName");
+			String fileFormatType = (String)params.get("formatType");
+			String aggregationType = (String)params.get("aggregationType");
+			String userNotes = (String)params.get("userNotes");
+			String dataType = (String)params.get("dataType");
 
-			//get the variables privately held in the properties file
-			downloadPath=(rb.getString("requestparams.downloadPath"));
-			plotRequestList=(rb.getString("requestparams.plotRequestList"));
-			atomicResultSet = (rb.getString("requestparams.atomicResultSet"));
-			cummulativeResultSet= (rb.getString("requestparams.cummulativeResultSet"));
 			//DataRequestServletURL= (rb.getString("requestparams.DataRequestServletURL"));
 		
 			//this is the path and filename of the download file
 			//and should be passed to the file copy method the downLoad
 			//path should be absolute
-			fileNamePath = downloadPath+"/"+fileName.trim();
+			String  fileNamePath = downloadPath+"/"+fileName.trim();
 			System.out.println("fileDownload > fileNamePath: "+ fileNamePath);
 			System.out.println("fileDownload > dataType: "+ dataType);
 			System.out.println("fileDownload > userNotes: "+ userNotes);
@@ -137,16 +153,7 @@ public class fileDownload extends HttpServlet
 			System.out.println("fileDownload > fileFormatType: "+ fileFormatType);
 			System.out.println("fileDownload > fileName: "+ fileName);
 		
-		}//end try
-		catch( Exception e ) 
-		{
-			System.out.println("servlet failed in: fileDownload.main "
-			+" first try - reading parameters "
-			+e.getMessage());
-		}
-		
-		try 
-		{
+
 			String downloadFile = "";
 			
 			//request the plots from the database  

@@ -27,10 +27,10 @@ public class StyleSheetGenerator extends HttpServlet
 {
 
 	//this is the tmp file that will be written
-	private String fileName =
+	private static final String fileName =
 		"/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
 	private ServletUtility util = new ServletUtility();
-	private String userEmail = null;
+	//private String userEmail = null;
 	private transformXML transformer = new transformXML();
 	private GetURL gurl = new GetURL();
 
@@ -68,8 +68,8 @@ public class StyleSheetGenerator extends HttpServlet
 				"StyleSheetGenerator > INPUT PARAMS: " + params.toString());
 
 			//first get the cookie value and action etc
-			this.userEmail = this.getCookieValue(request);
-			System.out.println("StyleSheetGenerator > user: " + this.userEmail);
+			String userEmail = this.getCookieValue(request);
+			System.out.println("StyleSheetGenerator > user: " + userEmail);
 			String action = getAction(params);
 			System.out.println("StyleSheetGenerator > action: " + action);
 
@@ -82,7 +82,7 @@ public class StyleSheetGenerator extends HttpServlet
 						"StyleSheetGenerator > deleting default style ");
 					System.out.println(
 						"StyleSheetGenerator > results: "
-							+ this.deleteSavedStyleSheets());
+							+ this.deleteSavedStyleSheets(userEmail));
 
 				}
 			}
@@ -94,7 +94,7 @@ public class StyleSheetGenerator extends HttpServlet
 				StringBuffer fileContents = new StringBuffer();
 
 				//print the xslt file in order from left to right
-				fileContents.append(getHeader().toString());
+				fileContents.append(getHeader(userEmail).toString());
 				fileContents.append(
 					this.getIdentificationAttributes(params).toString());
 				//fileContents.append( getBody(params).toString() );
@@ -107,8 +107,8 @@ public class StyleSheetGenerator extends HttpServlet
 
 				//register the document
 				this.registerDocument(
-					this.fileName,
-					this.userEmail,
+					fileName,
+					userEmail,
 					"stylesheet");
 
 				//SHOW THE USER THE STYLE SHEET THAT THE GENERATED 
@@ -156,11 +156,11 @@ public class StyleSheetGenerator extends HttpServlet
 	 * method allowing the user to delete the current
 	 * style sheet
 	 */
-	private boolean deleteSavedStyleSheets()
+	private boolean deleteSavedStyleSheets( String userEmail )
 	{
 		try
 		{
-			String styleSheet = this.getUserDefaultStyle(this.userEmail);
+			String styleSheet = this.getUserDefaultStyle(userEmail);
 			System.out.println(
 				"StyleSheetGenerator > stylesheet file name: " + styleSheet);
 
@@ -170,7 +170,7 @@ public class StyleSheetGenerator extends HttpServlet
 			StringBuffer sb = new StringBuffer();
 			sb.append(
 				"?action=deletefiletype&username="
-					+ this.userEmail
+					+ userEmail
 					+ "&filetype=stylesheet");
 
 			//connect to the dataExchaneServlet
@@ -291,7 +291,7 @@ public class StyleSheetGenerator extends HttpServlet
 	/**
 	 * method that returns the head for the style  sheet
 	 */
-	private StringBuffer getHeader()
+	private StringBuffer getHeader( String userEmail)
 	{
 		StringBuffer sb = new StringBuffer();
 
@@ -305,7 +305,7 @@ public class StyleSheetGenerator extends HttpServlet
 		sb.append("<head> \n");
 		sb.append(
 			"		<title> default style for "
-				+ this.userEmail
+				+ userEmail
 				+ "</title> \n");
 		sb.append("</head> \n");
 		sb.append("<body bgcolor=\"FFFFFF\"> \n");
@@ -661,7 +661,7 @@ public class StyleSheetGenerator extends HttpServlet
 	{
 		try
 		{
-			PrintWriter out = new PrintWriter(new FileWriter(this.fileName));
+			PrintWriter out = new PrintWriter(new FileWriter(fileName));
 			out.println(sb.toString());
 			out.close();
 			System.out.println(

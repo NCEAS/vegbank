@@ -87,9 +87,10 @@ public class PlantNameList implements ServletPluginInterface
 		Connection c = null;
 		try 
  		{
+ 			// TODO: Pull in values from properties file
 			Class.forName("org.postgresql.Driver");
 			//the framework database
-			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plots_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/vegbank", "datauser", "");
 		}
 		catch ( Exception e )
 		{

@@ -1,5 +1,6 @@
 package org.vegbank.servlet.util;
-/**
+
+/*
  *  '$RCSfile: DataExchangeClient.java,v $'
  *    Purpose: A test driver for the DataFileServer class
  *  Copyright: 2000 Regents of the University of California and the
@@ -8,19 +9,39 @@ package org.vegbank.servlet.util;
  *  Release: @release@
  *	
  *
- *   '$Author: farrell $'
- *     '$Date: 2003-02-26 19:16:35 $'
- * '$Revision: 1.1 $'
+ * 	'$Author: farrell $'
+ *  	'$Date: 2003-04-16 00:12:48 $'
+ * 	'$Revision: 1.2 $'
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
  
 
 
-import java.io.*;
-import java.lang.*;
-import java.util.*;
-import java.net.*;
-
-import org.vegbank.servlet.util.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.StringTokenizer;
 
 
 
@@ -169,8 +190,14 @@ public class DataExchangeClient
 	* @param fileType -- the type of file to be specified in the database
 	*
   */
-	  public static void uploadFile(String servlet, String protocol, String host, 
-		String server, String filename, String userName, String fileType) 
+		public static void uploadFile(
+			String servlet,
+			String protocol,
+			String host,
+			String server,
+			String filename,
+			String userName,
+			String fileType)
 		{
    	 System.out.println("DataExchangeClient > Begining the DataExchangeClient.uploadFile negotiations" );
     	try

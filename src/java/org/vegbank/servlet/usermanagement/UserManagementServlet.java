@@ -6,8 +6,8 @@ package org.vegbank.servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *   '$Date: 2003-03-25 20:17:45 $'
- *   '$Revision: 1.4 $'
+ *   '$Date: 2003-04-16 00:12:48 $'
+ *   '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,8 +63,6 @@ public class UserManagementServlet extends HttpServlet
 	//this is the html paget that will get edited by this servlet so that is
 	//appers to be a custom page for the correponding client
 	private static final String  actionFile = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/actions.html";
-	//this is the modified page that is to be sent back to the client
-	//private String outFile ="/tmp/actions_dev.html";
 
 	// these are the forms for the certification input:
 	private static final String certificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/certification_valid.html";
@@ -108,12 +106,8 @@ public class UserManagementServlet extends HttpServlet
 				{
 					res.setContentType("text/html");
 					PrintWriter out = res.getWriter();
-					//copy the actions file and then displat to the browser
-					//String actionFile = "/usr/local/devtools/jakarta-tomcat_dev/webapps/vegbank/general/actions.html";
-					//String outFile ="/tmp/actions_dev.html";
 					String token = "user";
 					String value = cookieValue;
-					//util.filterTokenFile(actionFile, outFile, token, value);
 					// if the value or token are null then send an error
 					if ( value == null || token == null )
 					{

@@ -1,7 +1,30 @@
 package org.vegbank.servlet.request;
 
+/*
+ *  '$RCSfile: DataSubmitServlet.java,v $'
+ *
+ *	'$Author: farrell $'
+ *  '$Date: 2003-04-16 00:12:48 $'
+ *  '$Revision: 1.5 $'
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 import VegCommunityLoader;
 
+import org.vegbank.plots.datasource.PlotDataSource;
 import org.vegbank.plots.rmi.DataSourceClient;
 //import org.vegbank.communities.datasink.DBCommunityWriter;
 
@@ -33,6 +56,7 @@ import org.vegbank.common.model.PlantUsage;
 import org.vegbank.common.model.Reference;
 import org.vegbank.plants.datasink.DBPlantWriter;
 import org.vegbank.servlet.authentication.UserDatabaseAccess;
+import org.vegbank.servlet.datafileexchange.DataFileExchange;
 import org.vegbank.servlet.util.ServletUtility;
 import org.w3c.dom.Document;
 
@@ -48,8 +72,8 @@ import databaseAccess.TaxonomyQueryStore;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-03-21 22:26:39 $'
- *  '$Revision: 1.4 $'
+ *  '$Date: 2003-04-16 00:12:48 $'
+ *  '$Revision: 1.5 $'
  */
 
 
@@ -64,7 +88,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	//this is the name/loaction of the uploaded file and must be consistent with 
 	//the name in the DataExchangeServlet
 	private static String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/input.data";
-	private static String plotsArchiveType = "tnc";
+	//private static String plotsArchiveType = "tnc";
 	private static String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit-select.html";
 	private static String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot_select.html";
 	private static String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
@@ -81,97 +105,22 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	private static String plotSubmittalInitForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-valid.html";
 	// END FIXME: Should be in properties
 				
+	// Construct Objects
+	private static final ServletUtility su = new ServletUtility();
+	private static final XMLparse parser = new XMLparse();	
+	
 	// ResourceBundle properties
-	private ResourceBundle rb = ResourceBundle.getBundle("vegbank");
-	//private String serverUrl = "";
-	private String mailHost = "";
-	private String cc = "";
-	
-	
-	private SqlFile sqlFile = new SqlFile(); 
-	private ServletUtility su = new ServletUtility();
-	private CommunityQueryStore qs;
-	private TaxonomyQueryStore tqs;
-	private VegCommunityLoader commLoader = new VegCommunityLoader();
-	private UserDatabaseAccess userdb = new UserDatabaseAccess();
-	private XMLparse parser;
-	
-	private String rmiServer = "";  //this will be replaced with prop file
-	private int rmiServerPort = 1099;
-	private DataSourceClient rmiClient;
+	private static ResourceBundle rb = ResourceBundle.getBundle("vegbank");
+	private static final String rmiServer= rb.getString("rmiserver");
+	private static final String mailHost = rb.getString("mailHost");
+	private static final String cc = rb.getString("systemEmail");	
+	private static final int rmiServerPort = 1099;
 
 
-	private String browserType = "";
+
+	//private String browserType = "";
 	// THESE VARIBLES ARE USED BY THE VARIOUS SUBMITTAL ROUTINES
-	private String user = ""; //the email addy of the user as stored in the framwork cookie
-	private String salutation = "";
-	private String givenName = "";
-	private String surName = "";
-	private String institution ="";
-	private String permissionType ="";
-	
-	//private String longName = "";
-	//private String shortName = "";
-	//private	String code = "";
 
-	//private String longNameRefAuthors = "";
-	//private String longNameRefTitle = "";
-	//private String longNameRefDate = "";
-	//private String longNameRefEdition = "";
-	//private String longNameRefSeriesName = "";
-	//private String longNameRefVolume = "";
-	//private String longNameRefPage = "";
-	//private String longNameRefISSN = "";
-	//private String longNameRefISBN = "";
-	//private String longNameRefOtherCitDetails = "";
-	
-	//private String shortNameRefAuthors = "";
-	//private String shortNameRefTitle = "";
-	//private String shortNameRefDate = "";
-	//private String shortNameRefEdition = "";
-	//private String shortNameRefSeriesName = "";
-	//private String shortNameRefVolume = "";
-	//private String shortNameRefPage = "";
-	//private String shortNameRefISSN = "";
-	//private String shortNameRefISBN = "";
-	//private String shortNameRefOtherCitDetails = "";
-	
-	//private String codeRefAuthors = "";
-	//private String codeRefTitle = "";
-	//private String codeRefDate = "";
-	//private String codeRefEdition = "";
-	//private String codeRefSeriesName = "";
-	//private String codeRefVolume = "";
-	//private String codeRefPage = "";
-	//private String codeRefISSN = "";
-	//private String codeRefISBN = "";
-	//private String codeRefOtherCitDetails = "";
-	
-//	private String conceptDescription = "";
-//	private String conceptRefAuthors = "";
-//	private String conceptRefTitle = "";
-//	private String conceptRefDate = "";
-//	private String conceptRefEdition = "";
-//	private String conceptRefSeriesName = "";
-//	private String conceptRefVolume = "";
-//	private String conceptRefPage = "";
-//	private String conceptRefISSN = "";
-//	private String conceptRefISBN = "";
-//	private String conceptRefOtherCitDetails = "";
-//	
-//	private String conceptStatus = "";
-//	private String statusStartDate = "";
-//	private String statusStopDate = "";
-//	private String usageStartDate = "";
-//	private String usageStopDate = "";
-//	
-//	private String statusDescription = "";
-//	private String taxonLevel = "";
-//	private String plantParentName = "";
-//	private String plantParentRefTitle ="";
-//	private String plantParentRefAuthors ="";
-	
-	//private PlantTaxon plantTaxon;
 	
 	/**
 	 * constructor method
@@ -181,13 +130,9 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		try
 		{
 			System.out.println("init: DataSubmitServlet");
-			this.rmiServer = rb.getString("rmiserver");
-			this.mailHost = rb.getString("mailHost");
-			this.cc = rb.getString("systemEmail");	
-				
 			System.out.println("DataSumbitServlet > init rmiserver: " + rmiServer);
 			//construct a new instance of the rmi client
-			rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
+			DataSourceClient rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 			
 		}
 		catch (Exception e)
@@ -200,11 +145,147 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	
 
 	/** Handle "POST" method requests from HTTP clients */
-	public void doPost(HttpServletRequest request,
-		HttpServletResponse response)
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
  	 throws IOException, ServletException 	
 		{
-			doGet(request, response);
+			System.out.println("IN DoPost");
+			response.setContentType("text/html");
+			PrintWriter out = response.getWriter();
+			try 
+			{
+				// GET THE COOKIE FOR THE CURRENT USER WHICH WILL BE REFERENCED 
+				// ELSEWHERE IN THE CLASS AND WILL BE STORED WITH THE DATA THAT 
+				// IS LOADED TO VEGBANK AND THEN GET THE REST OF THE USER-RELATED 
+				// ATTRIBUTES
+				String user = su.getCookieValue(request);
+				Hashtable userAtts = this.getUserIdParameters(user);
+				String salutation = (String)userAtts.get("salutation");
+				String surName = (String)userAtts.get("surName");
+				String givenName = (String)userAtts.get("givenName");
+				String institution = (String)userAtts.get("institution");
+				String permissionType = (String)userAtts.get("permissionType");
+				int permissionLevel = 0;
+				try
+				{
+					permissionLevel = Integer.parseInt(permissionType);
+				}
+				catch ( Exception e1 )
+				{
+					System.out.println("Exception: could not parse the permission level: " + e1.getMessage() );
+				}
+				System.out.println("DataSubmitServlet > current user email: " + user);
+				System.out.println("DataSubmitServlet > current user salutation: " + salutation);
+				System.out.println("DataSubmitServlet > current user surName: " + surName);
+				System.out.println("DataSubmitServlet > current user givenName: " + givenName);
+				System.out.println("DataSubmitServlet > current user institution: " + institution);
+				System.out.println("DataSubmitServlet > current user permission lev: " + permissionLevel);
+				if ( permissionLevel <= 1)
+				{
+					// don't let the user any further into the loading process
+					System.out.println("DataSubmitServlet > ## this user does not have the appropriate permissions");
+					this.handleInvalidPermissions(response, user);
+				}
+				else
+				{
+					String contentType =  request.getContentType();
+					System.out.println("DataSubmitServlet >contentType == " + contentType);
+					if (contentType != null && contentType.startsWith("multi") )
+					{
+						DataFileExchange dfe = new DataFileExchange(request);
+						
+            String action = dfe.getMultiPartParameter("action");
+            String submitDataType = dfe.getMultiPartParameter("submitDataType");
+            System.out.println("DataSubmitServlet > action: " + action);
+            System.out.println("DataSubmitServlet > submitDataType " + submitDataType);
+
+            if (action.equals("upload") && submitDataType.equals("vegPlot") )
+            {
+						  if ( dfe.uploadMultiPartFile() )
+						  {
+							  // Success
+							  System.out.println("DataSubmitServlet > file is LOADED");
+						  }
+						  else
+						  {
+							  // FAIL
+							  System.out.println("DataSubmitServlet > file  FAILED to load ... oh oh");
+						  }		
+              // Get the plotsArchiveType from the session
+              String plotsArchiveType = (String) request.getSession().getAttribute("plotsArchiveType");
+              System.out.println("DataSubmitServlet > plotsArchiveType: " + plotsArchiveType);
+
+						  
+              StringBuffer sb = handleVegPlotUpload(plotsArchiveType, request);
+						  out.println( sb.toString() );
+            }
+            else
+            {
+              // I do not expext this
+              System.out.println(
+                "DataSubmitServlet > a mutipart request with action: " + action 
+                +" and submitDataType: " + submitDataType);
+            }
+					}
+					else
+					{
+
+
+						//Hashtable params = new Hashtable();
+						//params = su.parameterHash(request);
+						// there will be cases where there will be multiple parameters 
+						// with the same name and they all need to be accessed so 
+						// capture an ennumeration here
+						Enumeration enum = request.getParameterNames();
+				
+						//get the browser type 
+						String browserType = su.getBrowserType(request); 
+				
+	
+						System.out.println("DataSubmitServlet > IN PARAMETERS: "+ su.printParameters(request) );
+						System.out.println("DataSubmitServlet > IN ATTRIBUTES: "+ su.printAttributes(request) );
+						submitDataType = request.getParameter("submitDataType");
+						String action = request.getParameter("action");
+						System.out.println("DataSubmitServlet > browserType: " + browserType);
+						System.out.println("DataSubmitServlet > submit data type: " + submitDataType);
+						System.out.println("DataSubmitServlet >> action : '" + action + "'");
+					
+
+					
+						// FIGURE OUT WHAT TO DO WITH THE REQUEST
+						if ( submitDataType.trim().equals("vegCommunity") )
+						{
+							StringBuffer sb = handleVegCommunitySubmittal(request, response);
+							out.println( sb.toString() );
+						}
+						else if ( submitDataType.trim().equals("vegCommunityCorrelation")  )
+						{
+							submitDataType.trim().equals("vegCommunityCorrelation");
+							StringBuffer sb = handleVegCommunityCorrelation(request, response);
+							out.println( sb.toString() );
+						}
+						else if ( submitDataType.trim().equals("vegPlot")  )
+						{
+							//out.println("DataSubmitServlet > action unknown!");
+							StringBuffer sb = handleVegPlotSubmittal(enum, request, response, user, userAtts);
+							out.println( sb.toString() );
+						}
+						else if ( submitDataType.trim().toUpperCase().equals("PLANTTAXA")  )
+						{
+							StringBuffer sb = handlePlantTaxaSubmittal(request, response,userAtts);
+							out.println( sb.toString() );
+						}
+						else
+						{
+							out.println("DataSubmitServlet > action unknown!");
+						}
+					}
+				}
+			}
+			catch( Exception e ) 
+			{
+				System.out.println("Exception:  " + e.getMessage() );
+				e.printStackTrace();
+			}
 		}
 
 
@@ -213,94 +294,8 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		HttpServletResponse response)
 		throws IOException, ServletException  
 	{
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-		try 
-		{
-			// GET THE COOKIE FOR THE CURRENT USER WHICH WILL BE REFERENCED 
-			// ELSEWHERE IN THE CLASS AND WILL BE STORED WITH THE DATA THAT 
-			// IS LOADED TO VEGBANK AND THEN GET THE REST OF THE USER-RELATED 
-			// ATTRIBUTES
-			user = su.getCookieValue(request);
-			Hashtable userAtts = this.getUserIdParameters(user);
-			this.salutation = (String)userAtts.get("salutation");
-			this.surName = (String)userAtts.get("surName");
-			this.givenName = (String)userAtts.get("givenName");
-			this.institution = (String)userAtts.get("institution");
-			this.permissionType = (String)userAtts.get("permissionType");
-			int permissionLevel = 0;
-			try
-			{
-				permissionLevel = Integer.parseInt(this.permissionType);
-			}
-			catch ( Exception e1 )
-			{
-				System.out.println("Exception: could not parse the permission level: " + e1.getMessage() );
-			}
-			System.out.println("DataSubmitServlet > current user email: " + user);
-			System.out.println("DataSubmitServlet > current user salutation: " + salutation);
-			System.out.println("DataSubmitServlet > current user surName: " + surName);
-			System.out.println("DataSubmitServlet > current user givenName: " + givenName);
-			System.out.println("DataSubmitServlet > current user institution: " + institution);
-			System.out.println("DataSubmitServlet > current user permission lev: " + permissionLevel);
-			if ( permissionLevel <= 1)
-			{
-				// don't let the user any further into the loading process
-				System.out.println("DataSubmitServlet > ## this user does not have the appropriate permissions");
-				this.handleInvalidPermissions(response);
-			}
-			else
-			{
-			
-				Hashtable params = new Hashtable();
-				params = su.parameterHash(request);
-				// there will be cases where there will be multiple parameters 
-				// with the same name and they all need to be accessed so 
-				// capture an ennumeration here
-				Enumeration enum = request.getParameterNames();
-			
-				//get the browser type 
-				this.browserType = su.getBrowserType(request); 
-			
-				System.out.println("DataSubmitServlet > IN PARAMETERS: "+params.toString() );
-				submitDataType = (String)params.get("submitDataType");
-				System.out.println("DataSubmitServlet > submit data type: " + submitDataType);
-			
-			
-				// FIGURE OUT WHAT TO DO WITH THE REQUEST
-				if ( submitDataType.trim().equals("vegCommunity") )
-				{
-					StringBuffer sb = handleVegCommunitySubmittal(params, response);
-					out.println( sb.toString() );
-				}
-				else if ( submitDataType.trim().equals("vegCommunityCorrelation")  )
-				{
-					submitDataType.trim().equals("vegCommunityCorrelation");
-					StringBuffer sb = handleVegCommunityCorrelation(params, response);
-					out.println( sb.toString() );
-				}
-				else if ( submitDataType.trim().equals("vegPlot")  )
-				{
-					//out.println("DataSubmitServlet > action unknown!");
-					StringBuffer sb = handleVegPlotSubmittal(enum, params, request, response);
-					out.println( sb.toString() );
-				}
-				else if ( submitDataType.trim().toUpperCase().equals("PLANTTAXA")  )
-				{
-					StringBuffer sb = handlePlantTaxaSubmittal(params, response, request);
-					out.println( sb.toString() );
-				}
-				else
-				{
-					out.println("DataSubmitServlet > action unknown!");
-				}
-			}
-		}
-		catch( Exception e ) 
-		{
-			System.out.println("Exception:  " + e.getMessage() );
-			e.printStackTrace();
-		}
+		System.out.println("GET Method called !!!");
+		doPost(request, response);
 	}
 	
 	
@@ -312,13 +307,13 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	 * 
 	 * @param response -- the http response object
 	 */
-	 private void handleInvalidPermissions(HttpServletResponse response)
+	 private void handleInvalidPermissions(HttpServletResponse response, String user)
 	 {
 		 StringBuffer message = new StringBuffer();
 		 try
 		 {
 			  message.append("<span class=\"category\"> INVALID PERMISSIONS ERROR </span> <br> <br> \n");
-				message.append("<span class=\"item\"> User: "+this.user+" Does Not Have Permission to Load Data To Vegbank <br> \n");
+				message.append("<span class=\"item\"> User: "+user+" Does Not Have Permission to Load Data To Vegbank <br> \n");
 				message.append("In order to attain this privilege, please fill out the certification form at: \n");
 				message.append("<a href=\"/forms/certification.html\">Certification Form");
 				message.append("</span>");
@@ -354,9 +349,9 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		 *
 		 */
 		private StringBuffer handlePlantTaxaSubmittal(
-			Hashtable params, 
+			HttpServletRequest request,
 			HttpServletResponse response,
-			HttpServletRequest request)
+			Hashtable userAtts)
 		{
 			StringBuffer sb = new StringBuffer();
 			PrintWriter out = null;
@@ -379,6 +374,8 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			{
 				e.printStackTrace();
 			}
+					
+			TaxonomyQueryStore tqs = new TaxonomyQueryStore();
 			try
 			{
 				String taxonDescription= "";
@@ -388,7 +385,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				String emailAddress = "";
 				String orgName = "";
 				
-				String action = (String)params.get("action");
+				String action = request.getParameter("action");
 				// if the wizard is initiated the plant names will be checked against the 
 				// vegbank database for near matches and a form with these matches will be 
 				// sent to the client
@@ -399,9 +396,9 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	
 					Party party = new Party();
 					
-					party.setGivenName(givenName);
-					party.setSurname(surName);
-					party.setOrganizationName(institution);
+					party.setGivenName( (String) userAtts.get("givenName") );
+					party.setSurname( (String) userAtts.get("surName") );
+					party.setOrganizationName( (String) userAtts.get("institution") );
 					
 					plant.setParty(party);
 					
@@ -409,9 +406,9 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					
 					// the next 3 attributes refer to the plant name that the 
 					// user is trying to insert into the database
-					String longName = (String)params.get("longName");
-					String shortName = (String)params.get("shortName");
-					String code = (String)params.get("code");
+					String longName = request.getParameter("longName");
+					String shortName = request.getParameter("shortName");
+					String code = request.getParameter("code");
 			
 					System.out.println("DataSubmitServlet > longName: " + longName);
 					System.out.println("DataSubmitServlet > shortName: " + shortName);
@@ -421,8 +418,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					String longNameMessage = "";
 					String shortNameMessage = "";
 					String codeMessage = "";
-					
-					tqs = new TaxonomyQueryStore();
+
 					Vector lv = tqs.getPlantTaxonSummary(longName, "%" );
 					Vector sv = tqs.getPlantTaxonSummary(shortName, "%" );
 					Vector cv = tqs.getPlantTaxonSummary(code, "%" );
@@ -465,9 +461,9 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					System.out.println("DataSubmitServlet > performing the name rectification ");
 					// GET THE NAME REFERENCES FOR THE INPUT NAMES OR GIVE THE 
 					// USER THE FORM TO FILL OUT
-					String longNameMatch = (String)params.get("longNameMatches");
-					String shortNameMatch = (String)params.get("shortNameMatches");
-					String codeMatch = (String)params.get("codeMatches");
+					String longNameMatch = request.getParameter("longNameMatches");
+					String shortNameMatch = request.getParameter("shortNameMatches");
+					String codeMatch = request.getParameter("codeMatches");
 					
 					
 					// UPDATE THE DATA CLASS
@@ -499,38 +495,38 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					System.out.println("DataSubmitServlet > getting the name reference ");
 					
 					// LOAD THE NAME REFERENCE ATTRIBUTES 
-					String longNameRefAuthors = (String)params.get("longNameRefAuthors");
-					String longNameRefTitle = (String)params.get("longNameRefTitle");
-					String longNameRefDate = (String)params.get("longNameRefDate");
-					String longNameRefEdition = (String)params.get("longNameRefEdition");
-					String longNameRefSeriesName = (String)params.get("longNameRefSeriesName");
-					String longNameRefVolume = (String)params.get("longNameRefVolume");
-					String longNameRefPage = (String)params.get("longNameRefPage");
-					String longNameRefISSN = (String)params.get("longNameRefISSN");
-					String longNameRefISBN = (String)params.get("longNameRefISBN");
-					String longNameRefOtherCitDetails = (String)params.get("longNameRefOtherCitDetails");
+					String longNameRefAuthors = request.getParameter("longNameRefAuthors");
+					String longNameRefTitle = request.getParameter("longNameRefTitle");
+					String longNameRefDate = request.getParameter("longNameRefDate");
+					String longNameRefEdition = request.getParameter("longNameRefEdition");
+					String longNameRefSeriesName = request.getParameter("longNameRefSeriesName");
+					String longNameRefVolume = request.getParameter("longNameRefVolume");
+					String longNameRefPage = request.getParameter("longNameRefPage");
+					String longNameRefISSN = request.getParameter("longNameRefISSN");
+					String longNameRefISBN = request.getParameter("longNameRefISBN");
+					String longNameRefOtherCitDetails = request.getParameter("longNameRefOtherCitDetails");
 					
-					String shortNameRefAuthors = (String)params.get("shortNameRefAuthors");
-					String shortNameRefTitle = (String)params.get("shortNameRefTitle");
-					String shortNameRefDate = (String)params.get("shortNameRefDate");
-					String shortNameRefEdition = (String)params.get("shortNameRefEdition");
-					String shortNameRefSeriesName = (String)params.get("shortNameRefSeriesName");
-					String shortNameRefVolume = (String)params.get("shortNameRefVolume");
-					String shortNameRefPage = (String)params.get("shortNameRefPage");
-					String shortNameRefISSN = (String)params.get("shortNameRefISSN");
-					String shortNameRefISBN = (String)params.get("shortNameRefISBN");
-					String shortNameRefOtherCitDetails = (String)params.get("shortNameRefOtherCitDetails");
+					String shortNameRefAuthors = request.getParameter("shortNameRefAuthors");
+					String shortNameRefTitle = request.getParameter("shortNameRefTitle");
+					String shortNameRefDate = request.getParameter("shortNameRefDate");
+					String shortNameRefEdition = request.getParameter("shortNameRefEdition");
+					String shortNameRefSeriesName = request.getParameter("shortNameRefSeriesName");
+					String shortNameRefVolume = request.getParameter("shortNameRefVolume");
+					String shortNameRefPage = request.getParameter("shortNameRefPage");
+					String shortNameRefISSN = request.getParameter("shortNameRefISSN");
+					String shortNameRefISBN = request.getParameter("shortNameRefISBN");
+					String shortNameRefOtherCitDetails = request.getParameter("shortNameRefOtherCitDetails");
 					
-					String codeRefAuthors = (String)params.get("codeRefAuthors");
-					String codeRefTitle = (String)params.get("codeRefTitle");
-					String codeRefDate = (String)params.get("codeRefDate");
-					String codeRefEdition = (String)params.get("codeRefEdition");
-					String codeRefSeriesName = (String)params.get("codeRefSeriesName");
-					String codeRefVolume = (String)params.get("codeRefVolume");
-					String codeRefPage = (String)params.get("codeRefPage");
-					String codeRefISSN = (String)params.get("codeRefISSN");
-					String codeRefISBN = (String)params.get("codeRefISBN");
-					String codeRefOtherCitDetails = (String)params.get("codeRefOtherCitDetails");
+					String codeRefAuthors = request.getParameter("codeRefAuthors");
+					String codeRefTitle = request.getParameter("codeRefTitle");
+					String codeRefDate = request.getParameter("codeRefDate");
+					String codeRefEdition = request.getParameter("codeRefEdition");
+					String codeRefSeriesName = request.getParameter("codeRefSeriesName");
+					String codeRefVolume = request.getParameter("codeRefVolume");
+					String codeRefPage = request.getParameter("codeRefPage");
+					String codeRefISSN = request.getParameter("codeRefISSN");
+					String codeRefISBN = request.getParameter("codeRefISBN");
+					String codeRefOtherCitDetails = request.getParameter("codeRefOtherCitDetails");
 					
 					Reference scientificNameNoAuthorsRef = new Reference();
 					Reference codeNameRef = new Reference(); 
@@ -583,21 +579,21 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				else if ( action.equals("plantconcept") )
 				{
 					System.out.println("DataSubmitServlet > getting the name reference ");
-					String conceptDescription = ""+(String)params.get("conceptDescription");
-					String conceptRefAuthors = ""+(String)params.get("conceptRefAuthors");
-					String conceptRefTitle  = ""+(String)params.get("conceptRefTitle");
-					String conceptRefDate  = ""+(String)params.get("conceptRefDate");
-					String conceptRefEdition  = ""+(String)params.get("conceptRefEdition");
-					String conceptRefSeriesName  = ""+(String)params.get("conceptRefSeriesName");
-					String conceptRefVolume  = ""+(String)params.get("conceptRefVolume");
-					String conceptRefPage  = ""+(String)params.get("conceptRefPage");
-					String conceptRefISSN  = ""+(String)params.get("conceptRefISSN");
-					String conceptRefISBN  = ""+(String)params.get("conceptRefISBN");
-					String conceptRefOtherCitDetails = ""+(String)params.get("conceptRefOtherCitDetails");
+					String conceptDescription = ""+request.getParameter("conceptDescription");
+					String conceptRefAuthors = ""+request.getParameter("conceptRefAuthors");
+					String conceptRefTitle  = ""+request.getParameter("conceptRefTitle");
+					String conceptRefDate  = ""+request.getParameter("conceptRefDate");
+					String conceptRefEdition  = ""+request.getParameter("conceptRefEdition");
+					String conceptRefSeriesName  = ""+request.getParameter("conceptRefSeriesName");
+					String conceptRefVolume  = ""+request.getParameter("conceptRefVolume");
+					String conceptRefPage  = ""+request.getParameter("conceptRefPage");
+					String conceptRefISSN  = ""+request.getParameter("conceptRefISSN");
+					String conceptRefISBN  = ""+request.getParameter("conceptRefISBN");
+					String conceptRefOtherCitDetails = ""+request.getParameter("conceptRefOtherCitDetails");
 					
-	//				plantParentName = (String)params.get("plantParentName");
-	//				plantParentRefTitle =(String)params.get("plantParentRefTitle");
-	//				plantParentRefAuthors = (String)params.get("plantParentRefAuthors");
+	//				plantParentName = request.getParameter("plantParentName");
+	//				plantParentRefTitle =request.getParameter("plantParentRefTitle");
+	//				plantParentRefAuthors = request.getParameter("plantParentRefAuthors");
 					
 	
 					Reference conceptReference = new Reference();
@@ -622,24 +618,25 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 						plant.getScientificNameNoAuthors(),
 						plant.getCommonName(),
 						plant.getCode(),
-						out);
+						out,
+						userAtts);
 				}
 				// STEP WHEREBY THE USER SUBMITS THE STATUS USAGE DATA AND 
 				// THE RECIPT IS RETURNED
 				else if ( action.equals("plantstatususage") )
 				{
 					System.out.println("DataSubmitServlet > getting the status-usage data, returnig recipt");
-					String conceptStatus = (String)params.get("conceptStatus");
-					String  statusStartDate = (String)params.get("statusStartDate");
-					String  statusStopDate = (String)params.get("statusStopDate");
+					String conceptStatus = request.getParameter("conceptStatus");
+					String  statusStartDate = request.getParameter("statusStartDate");
+					String  statusStopDate = request.getParameter("statusStopDate");
 					// ASSUME THAT THE ABOVE DATES ARE THE SAME FOR THE USAGE
-					String  usageStartDate = (String)params.get("statusStartDate");
-					String  usageStopDate = (String)params.get("statusStopDate");
-					String statusDescription = (String)params.get("statusDescription");
-					String taxonLevel = (String)params.get("taxonLevel");
-					String plantParentName = (String)params.get("plantParentName");
-					String plantParentRefAuthors = (String)params.get("plantParentRefAuthors");
-					String plantParentRefTitle = (String)params.get("plantParentRefTitle");
+					String  usageStartDate = request.getParameter("statusStartDate");
+					String  usageStopDate = request.getParameter("statusStopDate");
+					String statusDescription = request.getParameter("statusDescription");
+					String taxonLevel = request.getParameter("taxonLevel");
+					String plantParentName = request.getParameter("plantParentName");
+					String plantParentRefAuthors = request.getParameter("plantParentRefAuthors");
+					String plantParentRefTitle = request.getParameter("plantParentRefTitle");
 					
 					// TODO: Need to handle setting a reference for the parent
 					// Need to set a reference for the parent ????
@@ -674,7 +671,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					commonUsage.setStartDate(statusStartDate);
 					commonUsage.setStopDate(statusStopDate);		
 					
-					updatePlantSubmittalRecipt(emailAddress, plant, out);
+					updatePlantSubmittalRecipt(emailAddress, plant, out, userAtts);
 				}
 				// STEP WHERE THE PLANT ACTUALLY GETS LOADED TO THE DATABASE
 				else if ( action.equals("plantsubmittalreceipt") )
@@ -724,7 +721,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			 //get the required elements from the planttaxonobject
 			 String email = "";
 			 String name = "";
-			 institution = "";
+			 String institution = "";
 			 String sciName  = plant.getScientificName();
 			 String commonName = plant.getCommonName();
 			 String code = plant.getCode();
@@ -775,7 +772,11 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	 * method that updates the plant submittal receipt page --
 	 * this is the last sub-step in the plant submittal process
 	 */
-	 private void updatePlantSubmittalRecipt(String emailAddress, Plant plant, Writer out)
+	private void updatePlantSubmittalRecipt(
+		String emailAddress,
+		Plant plant,
+		Writer out,
+		Hashtable userAtts)
 	 {
 	 	Reference snRef = plant.getScientificNameNoAuthorsReference();
 		Reference codeRef = plant.getCodeNameReference();
@@ -789,8 +790,8 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			 
 			 // THE INFORMATION ABOUT THE SUBMITTER
 			 replaceHash.put("emailAddress", ""+emailAddress);
-			 replaceHash.put("givenName", ""+givenName);
-			 replaceHash.put("surName", ""+surName);
+			 replaceHash.put("givenName", ""+ userAtts.get("givenName") );
+			 replaceHash.put("surName", ""+ userAtts.get("surName"));
 			 
 			 // THE NAMES OF THE PLANT
 			  replaceHash.put("longName", ""+ plant.getScientificNameNoAuthors());
@@ -893,7 +894,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			Hashtable h = new Hashtable();
 			try
 			{
-				userdb = new UserDatabaseAccess();
+				UserDatabaseAccess userdb = new UserDatabaseAccess();
 				h = userdb.getUserInfo(emailAddress);
 			}
 			catch( Exception e ) 
@@ -919,7 +920,8 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		String longName,
 		String shortName,
 		String code,
-		Writer out)
+		Writer out,
+		Hashtable userAtts)
 	 {
 		try
 		{		
@@ -933,9 +935,9 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			replaceHash.put("code", ""+code);
 			
 			replaceHash.put("emailAddress", ""+emailAddress);
-			replaceHash.put("plantPartyGivenName", ""+givenName );
-			replaceHash.put("plantPartySurName", ""+surName);
-			replaceHash.put("plantPartyInstitution", ""+institution );
+			replaceHash.put("plantPartyGivenName", ""+userAtts.get("givenName") );
+			replaceHash.put("plantPartySurName", ""+userAtts.get("surName"));
+			replaceHash.put("plantPartyInstitution", ""+userAtts.get("institution") );
 			replaceHash.put("plantPartyEmailAddress", ""+emailAddress );
 
 			// UPDATE THE DATES B/C THEY ARE REQUIRED BY THE LOADER
@@ -1142,25 +1144,25 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 			String emailAddress = this.user;
 			String orgName = "";
 			
-			String action = (String)params.get("action");
+			String action = request.getParameter("action");
 			// if the wizard is initiated the plant names will be checked against the 
 			// vegbank database for near matches and a form with these matches will be 
 			// sent to the client
 			if ( action.equals("init") )
 			{
 				System.out.println("DataSubmitServlet > init plantTaxa");
-			//	salutation = (String)params.get("salutation");;
-			//	firstName =  (String)params.get("firstName");
-			//	lastName =  (String)params.get("lastName");
-			//	emailAddress =  (String)params.get("emailAddress");
-			//	orgName =  (String)params.get("orgName");
+			//	salutation = request.getParameter("salutation");;
+			//	firstName =  request.getParameter("firstName");
+			//	lastName =  request.getParameter("lastName");
+			//	emailAddress =  request.getParameter("emailAddress");
+			//	orgName =  request.getParameter("orgName");
 				
 				// the next 3 attributes refer to the plant name that the 
 				// user is trying to insert into the database
-				longName = (String)params.get("longName");
-				shortName = (String)params.get("shortName");
-				code = (String)params.get("code");
-		//		taxonDescription = (String)params.get("taxonDescription");
+				longName = request.getParameter("longName");
+				shortName = request.getParameter("shortName");
+				code = request.getParameter("code");
+		//		taxonDescription = request.getParameter("taxonDescription");
 		
 				System.out.println("DataSubmitServlet > longName: " + longName);
 				System.out.println("DataSubmitServlet > shortName: " + shortName);
@@ -1208,15 +1210,15 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 				//init the plant loader
 				PlantTaxaLoader plantLoader = new PlantTaxaLoader();
 				
-				salutation = (String)params.get("salutation");;
-				firstName =  (String)params.get("firstName");
-				lastName =  (String)params.get("lastName");
-				emailAddress =  (String)params.get("emailAddress");
-				orgName =  (String)params.get("orgName");
-				longName = (String)params.get("longName");
-				shortName = (String)params.get("shortName");
-				code = (String)params.get("code");
-				taxonDescription = (String)params.get("taxonDescription");
+				salutation = request.getParameter("salutation");;
+				firstName =  request.getParameter("firstName");
+				lastName =  request.getParameter("lastName");
+				emailAddress =  request.getParameter("emailAddress");
+				orgName =  request.getParameter("orgName");
+				longName = request.getParameter("longName");
+				shortName = request.getParameter("shortName");
+				code = request.getParameter("code");
+				taxonDescription = request.getParameter("taxonDescription");
 				
 				Hashtable h = new Hashtable();
 				h.put("longName", ""+longName);
@@ -1334,7 +1336,12 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 	  * mrthod to read, format and return as a string the plot submittal 
 		* initaition page.
 		*/
-		private String updatePlotInitPage()
+		private String updatePlotInitPage(
+			String user, 
+			String salutation, 
+			String givenName, 
+			String surName,
+			String institution)
 		{
 			StringWriter output = new StringWriter();
 			try
@@ -1377,14 +1384,24 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 	 * @param response -- http reponse sent to the servlet
 	 * 
 	 */
-	 private StringBuffer handleVegPlotSubmittal(Enumeration enum,
-	 Hashtable params, HttpServletRequest request, HttpServletResponse response)
+	 private StringBuffer handleVegPlotSubmittal(
+	 	Enumeration enum,
+	 	HttpServletRequest request, 
+	 	HttpServletResponse response, 
+	 	String user,
+	 	Hashtable userAtts)
 	{
 		StringBuffer sb = new StringBuffer();
+		
+		String salutation = (String)userAtts.get("salutation");
+		String surName = (String)userAtts.get("surName");
+		String givenName = (String)userAtts.get("givenName");
+		String institution = (String)userAtts.get("institution");
+		
 		try
 		{
 			String inputEmail = "";
-			String action = (String)params.get("action");
+			String action = request.getParameter("action");
 			System.out.println("DataSubmitServlet > action: " + action);
 			
 			PrintWriter out = response.getWriter();
@@ -1398,25 +1415,27 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 			{
 				System.out.println("DataSubmitServlet > loading plots preinit ");
 				// GET THE FORM WITH THE UPDATED ATTRIBUTES AND SEND IT TO THE USER
-				htmlContents = updatePlotInitPage();
+				htmlContents = updatePlotInitPage(user, salutation, givenName, surName, institution);
 				out.println(htmlContents);
 			}
 			
 			else if ( action.equals("init") )
 			{
 				//get the paramter refering to the plot archive type (ie tnc, vbaccess, nativexml)
-				String plotFileType = (String)params.get("plotFileType");
+				String plotFileType = request.getParameter("plotFileType");
 				
 				//quick hack to cahnge the type of plots archive
-				plotsArchiveType = plotFileType;
+				String plotsArchiveType = plotFileType;
 				System.out.println("DataSubmitServlet > plotsArchiveType: " + plotsArchiveType);
-				
+			  // put this into the users session for retrival latter
+        request.getSession().setAttribute("plotsArchiveType", plotsArchiveType);
+      
 				// check that the uer has valid priveleges to load a data 
 				// file to the database and if so give the use a window 
 				// to upload some data
-				if ( params.containsKey("emailAddress") )
+				if ( request.getParameter("emailAddress") != null )
 				{
-					inputEmail = (String)params.get("emailAddress");
+					inputEmail = request.getParameter("emailAddress");
 					//make sure that the login email matches the passed here
 					if ( inputEmail.equals(user) )
 					{
@@ -1440,62 +1459,18 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 					}
 				}
 			}
-			// if the action is upload that is basically ar referal 
-			// from the data exchange client after the file has been 
-			// upload
-			else if ( action.equals("upload") )
-			{
-				//take the file that was just deposited via the data exchange servlet
-				//and pass it onto the winnt machine
-				System.out.println("DataSubmitServlet > using RMI client to pass file: " + plotsArchiveFile );
-				System.out.println("DataSubmitServlet > file type: " +  plotsArchiveType);
-				System.out.println("DataSubmitServlet > instantiating an rmi client on: " + rmiServer);
-				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
-				boolean sendResults = rmiClient.putMDBFile(plotsArchiveFile, plotsArchiveType);
-				
-				System.out.println("DataSubmitServlet > RMI file send results: " + sendResults);
-				
-				//validate that the plot archive is real
-				System.out.println("DataSubmitServlet > instantiating an rmi client on: " + rmiServer);
-				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
-				boolean fileValidityResults = rmiClient.isMDBFileValid();
-				System.out.println("DataSubmitServlet > file validity at RMI server: " + fileValidityResults);
-				
-				// get the name of the plots and update the selection form and redircet
-				// the browser there
-				System.out.println("DataSubmitServlet > instantiating an rmi client on: " + rmiServer);
-				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
-				Vector plots = rmiClient.getPlotNames(plotsArchiveType);
-				System.out.println("DataSubmitServlet > number of plots in archive: " + plots.size() );
-				// prepare the plots element
-				StringBuffer sb2 = new StringBuffer();
-				for (int i=0; i<plots.size(); i++) 
-				{
-					sb2.append("<option>" + (String)plots.elementAt(i) + "</option> \n");
-					System.out.println("DataSubmitServlet > add plot: " + (String)plots.elementAt(i) );
-				}
-				//create the form
-        StringWriter output = new StringWriter();
-        FileReader inFile = new FileReader(plotSelectTemplate);
-				su.filterTokenFile(inFile, output, "plots", sb2.toString() );
-				// send the user there -- this is getting cached so print it to the user 
-				// instead
-				//response.sendRedirect("/forms/plot_select.html");
-				//String s = su.fileToString(plotSelectForm);
-				sb.append( output.toString() );
-			}
 			// this is the actual submittal of one or many plots from the 
 			// uploaded archive
 			else if ( action.equals("submit") )
 			{
-				String receiptType  = (String)params.get("receiptType");
+				String receiptType  = request.getParameter("receiptType");
 				//the plot file can only be tnc, vbaccess, nativexml
-				//String plotFileType = (String)params.get("plotFileType");
+				//String plotFileType = request.getParameter("plotFileType");
 				
 				System.out.println("DataSubmitServlet > requesting a receipt type: "+receiptType );
-				System.out.println("DataSubmitServlet > plot file type: "+ plotsArchiveType);
 				//sleep so that admin can see the debugging
-				Thread.sleep(2000);
+				
+				DataSourceClient rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 				
 				while (enum.hasMoreElements()) 
 				{
@@ -1527,9 +1502,21 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 								// if the plot is valid then load it
 								else
 								{
+                  // get the plotsArchiveType from the session
+                  String plotsArchiveType =
+                    (String) request.getSession().getAttribute("plotsArchiveType");
+									System.out.println("DataSubmitServlet > About to insert Plot");
 									String result = rmiClient.insertPlot(thisPlot, plotsArchiveType, user);
-									String receipt = getPlotInsertionReceipt(thisPlot, result, receiptType, i, values.length);
-									sb.append( receipt );
+									//System.out.println("DataSubmitServlet > Plot insert result = '" + result + "'");
+									String receipt =
+										getPlotInsertionReceipt(
+											thisPlot,
+											result,
+											receiptType,
+											i,
+											values.length,
+											su.getBrowserType(request));
+									sb.append(receipt);
 									System.out.println("DataSubmitServlet > requesting a receipt: '"+i+"' out of: " + values.length );
 								}
 							}
@@ -1540,6 +1527,12 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 				// email the receipt to the user
 				System.out.println("DataSubmitServlet > emailing the receipt to the user: " + user);
 				this.emailPlotSubmitalReceipt(user, sb.toString() );
+				// Remove the lock
+				String location = 
+					(String) request.getSession().getAttribute("rmiFileUploadLocation");
+				rmiClient.releaseFileUploadLocation(location);
+				
+				
 			}
 			else
 			{
@@ -1554,7 +1547,92 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 		return(sb);
 	}
 	
-	/**
+	
+  public StringBuffer handleVegPlotUpload(String plotsArchiveType, HttpServletRequest request)
+  {
+    StringBuffer sb = new StringBuffer();
+		DataSourceClient rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
+		    
+	  System.out.println("DataSubmitServlet > file type: " +  plotsArchiveType);
+	  Vector plots = new Vector();
+				
+	  //take the file that was just deposited via the data exchange servlet
+		//and pass it onto the winnt machine if it is an mdb file
+		if ( ! plotsArchiveType.equals("nativexml") )
+		{
+		  System.out.println("DataSubmitServlet > using RMI client to pass file: " + plotsArchiveFile );
+			System.out.println("DataSubmitServlet > instantiating an rmi client on: " + rmiServer);
+
+      // Need to use the RMIServer to read a mdb file 
+      rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
+      
+      // Is the RMI Server free 
+      String location = rmiClient.getFileUploadLocation();
+      
+      
+      if (location == null)
+      {
+      	System.out.println("DataSubmitServlet > The RMI server is busy, no location to save file");
+      	// Display error message and end
+				StringWriter sw = new StringWriter();
+				Hashtable replaceHash = new Hashtable();
+				replaceHash.put("messages","Sorry the system is busy, try again later");
+				su.filterTokenFile(genericTemplate, sw, replaceHash);
+				sb.append(sw.toString());
+				return sb;
+      }
+      else
+      {
+				boolean sendResults = rmiClient.putMDBFile(plotsArchiveFile, plotsArchiveType, location);
+				
+				System.out.println("DataSubmitServlet > RMI file send results: " + sendResults);
+				
+				//validate that the plot archive is real
+				boolean fileValidityResults = rmiClient.isMDBFileValid(location);
+				System.out.println("DataSubmitServlet > file validity at RMI server: " + fileValidityResults);
+				
+				// get the name of the plots and update the selection form and redircet
+				// the browser there
+				System.out.println("DataSubmitServlet > instantiating an rmi client on: " + rmiServer);
+				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
+				plots = rmiClient.getPlotNames(plotsArchiveType);
+				
+				request.getSession().setAttribute("rmiFileUploadLocation", location );
+      }
+
+		}
+		else 
+		{
+			// TODO: Remove hard coding                    
+			PlotDataSource pds = new PlotDataSource("VegbankXMLPlugin");
+			plots = pds.getPlotNames();
+		}
+			
+		System.out.println("DataSubmitServlet > number of plots in archive: " + plots.size() );
+		// prepare the plots element
+		StringBuffer sb2 = new StringBuffer();
+		for (int i=0; i<plots.size(); i++) 
+		{
+			sb2.append("<option>" + (String)plots.elementAt(i) + "</option> \n");
+			System.out.println("DataSubmitServlet > add plot: " + (String)plots.elementAt(i) );
+		}
+				
+		//create the form
+		StringWriter output = new StringWriter();
+		try
+    {
+      FileReader inFile = new FileReader(plotSelectTemplate);
+		  su.filterTokenFile(inFile, output, "plots", sb2.toString() );
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+		sb.append( output.toString() );
+    return sb;
+  }
+  
+  /**
 	  * this method takes the xml report from the from the plot validation module
 		* and then returns an html receipt that can be presented to the user attemplting 
 		* to load the plot
@@ -1631,7 +1709,8 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 		String to = inputEmail;
 		String subject = "VEGBANK PLOT INSERTION RECEIPT";
 	 	String body = receipt;
-		su.sendEmail(this.mailHost, from, to, this.cc, subject, body);
+		//su.sendEmail(this.mailHost, from, to, this.cc, subject, body);
+		su.sendHTMLEmail(mailHost, from, to, cc, subject, body);
 	 }
 		
 	
@@ -1660,8 +1739,13 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 	 * @param totalPlotNumber -- the total number of plots for which a receipt
 	 *  will be requested for
 	 */
-	 private String getPlotInsertionReceipt(String plot, String results, 
-	 String receiptType, int curPlotNumber, int totalPlotNumber)
+	 private String getPlotInsertionReceipt(
+	 	String plot, 
+	 	String results, 
+	 	String receiptType, 
+	 	int curPlotNumber, 
+	 	int totalPlotNumber,
+	 	String browserType)
 	 {
 	 		StringBuffer sb = new StringBuffer();
 			System.out.println("DataSubmitServlet > currentPlot: " + curPlotNumber +" total number: "+ totalPlotNumber );
@@ -1669,7 +1753,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 			{
 				if (receiptType.equals("extensive") ) 
 				{
-					if ( this.browserType.equals("msie") )
+					if ( browserType.equals("msie") )
 					{
 						//if there is only one plot for which a receipt will be prepared
 						if ( curPlotNumber == 0 && (totalPlotNumber == 1) )
@@ -1714,6 +1798,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 				}
 				else if (receiptType.equals("minimal") ) 
 				{
+					//System.out.println("DataSubmitServlet > Get minimal receipt from results ='" + results + "'");
 					String s = getMinimalInsertionReceipt(plot, results);
 					sb.append( s );
 				}
@@ -1745,7 +1830,6 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 			StringBuffer sb = new StringBuffer();
 			try
 			{
-				parser = new XMLparse();	
 				Document doc = parser.getDocumentFromString(results);
 				Vector accessionNumber = parser.getValuesForPath(doc, "/plotInsertion/accessionNumber");
 				Vector latitude = parser.getValuesForPath(doc, "/plotInsertion/latitude");
@@ -1820,41 +1904,46 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 	 * this method is used to handle the coorrelation of communities
 	 * 
 	 */
-	 private StringBuffer handleVegCommunityCorrelation(Hashtable params, 
-	 HttpServletResponse response)
+	 private StringBuffer handleVegCommunityCorrelation(
+	 	HttpServletRequest request, 
+	 	HttpServletResponse response)
 	{
 		StringBuffer sb = new StringBuffer();
 		try
 		{
-			String action = (String)params.get("action");
+			String action = request.getParameter("action");
 			if ( action.equals("init") )
 			{
 				sb.append("<html>");
 				
 				System.out.println("DataSubmitServlet > init vegCommunityCorrelation");
-				String salutation = (String)params.get("salutation");;
-				String firstName =  (String)params.get("firstName");
-				String lastName =  (String)params.get("lastName");
-				String emailAddress = (String)params.get("emailAddress");
-				String orgName =  (String)params.get("orgName");
-				String commName = (String)params.get("communityName");
-				String correlationTaxon = (String)params.get("correlationTaxon");
-				String correlationTaxonLevel = (String)params.get("correlationTaxonLevel");
+				String salutation = request.getParameter("salutation");;
+				String firstName =  request.getParameter("firstName");
+				String lastName =  request.getParameter("lastName");
+				String emailAddress = request.getParameter("emailAddress");
+				String orgName =  request.getParameter("orgName");
+				String commName = request.getParameter("communityName");
+				String correlationTaxon = request.getParameter("correlationTaxon");
+				String correlationTaxonLevel = request.getParameter("correlationTaxonLevel");
 				String status = "accepted";
 				String nameRefAuthor = salutation+" "+firstName+" "+lastName;
 				String nameRefTitle = "vegbank";
 				sb.append("<b> communityName: " + commName + " </b> <br>" );
 				//HERE NEED TO GET THE STATUS ID ASSOCIATED WITH THIS PLANT
-				commLoader = new VegCommunityLoader();
+				VegCommunityLoader commLoader = new VegCommunityLoader();
 				int statusId = commLoader.getStatusId(nameRefTitle, nameRefAuthor, 
 				status, commName, salutation, firstName, lastName, emailAddress,
 				orgName );
 				
+				
 				//get a vector that contains hashtables with all the possible 
 				//correlation ( name, recognizing party, system, status, level)
-				qs = new CommunityQueryStore( );
-				Vector correlationTargets = qs.getCorrelationTargets(correlationTaxon, 
-				"natureserve", correlationTaxonLevel);
+				CommunityQueryStore qs = new CommunityQueryStore();
+				Vector correlationTargets =
+					qs.getCorrelationTargets(
+						correlationTaxon,
+						"natureserve",
+						correlationTaxonLevel);
 						
 				for (int i=0; i<correlationTargets.size(); i++) 
 				{
@@ -1899,23 +1988,23 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 			else if ( action.equals("submit") )
 			{
 				//GET THE ATTRIBUTES TO LOAD TO THE DATABASE
-				String conceptId = (String)params.get("conceptId");
+				String conceptId = request.getParameter("conceptId");
 				int concept = Integer.parseInt(conceptId);
-				String statusId =  (String)params.get("statusId");
+				String statusId =  request.getParameter("statusId");
 				int status = Integer.parseInt(statusId);
-				String correlation =  (String)params.get("correlation");
+				String correlation =  request.getParameter("correlation");
 				
-				String communityName = (String)params.get("commName");
-				String correlationTargetName = (String)params.get("correlationTargetName");
-				String correlationTargetLevel = (String)params.get("correlationTargetLevel");
+				String communityName = request.getParameter("commName");
+				String correlationTargetName = request.getParameter("correlationTargetName");
+				String correlationTargetLevel = request.getParameter("correlationTargetLevel");
 				
 				String startDate = null;
 				String stopDate = null;
-				commLoader = new VegCommunityLoader();
+				VegCommunityLoader commLoader = new VegCommunityLoader();
 				commLoader.insertCommunityCorrelation(status, concept, correlation
 				, startDate, stopDate);
 				//UPDATE THE DATABASE SUMMARY TABLE
-				sqlFile.issueSqlFile(commUpdateScript);
+				new SqlFile().issueSqlFile(commUpdateScript);
 				
 				//assume that all went ok and return a recipt
 				System.out.println("DataSubmitServlet > preparing results page");
@@ -1972,22 +2061,24 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 	 * @return sb -- A string buffer with the response by the database
 	 * and application about the success of the submittal to the database
 	 */
-	private StringBuffer handleVegCommunitySubmittal(Hashtable params, HttpServletResponse response)
+	private StringBuffer handleVegCommunitySubmittal(
+		HttpServletRequest request, 
+		HttpServletResponse response)
 	{
 		StringBuffer sb = new StringBuffer();
 		try
 		{
-			String action = (String)params.get("action");
+			String action = request.getParameter("action");
 			if ( action.equals("init") )
 			{
 				
 				System.out.println("DataSubmitServlet > init vegCommunity");
-				String salutation = (String)params.get("salutation");;
-				String firstName =  (String)params.get("firstName");
-				String lastName =  (String)params.get("lastName");
-				String emailAddress =  (String)params.get("emailAddress");
-				String orgName =  (String)params.get("orgName");
-				String commName = (String)params.get("communityName");
+				String salutation = request.getParameter("salutation");;
+				String firstName =  request.getParameter("firstName");
+				String lastName =  request.getParameter("lastName");
+				String emailAddress =  request.getParameter("emailAddress");
+				String orgName =  request.getParameter("orgName");
+				String commName = request.getParameter("communityName");
 				String dateEntered = "11-MAR-2002";
 				String authors = salutation.trim()+" "+firstName+" "+lastName ;
 				String title = "VegBank2002";
@@ -2015,6 +2106,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 				}
 					
 				//SEE IF THE NAME ALREADY EXISTS IN THE DATABASE
+				CommunityQueryStore qs = new CommunityQueryStore();
 				qs = new CommunityQueryStore();
 				Vector v = qs.getCommunityNames(commName);
 				if ( v.size() < 1)
@@ -2081,24 +2173,24 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 			else if ( action.equals("submit") )
 			{
 				
-				String salutation = (String)params.get("salutation");
-				String givenName = (String)params.get("firstName");
-				String surName = (String)params.get("lastName");
+				String salutation = request.getParameter("salutation");
+				String givenName = request.getParameter("firstName");
+				String surName = request.getParameter("lastName");
 				String middleName = "";
-				String orgName = (String)params.get("orgName");
-				String contactInstructions = (String)params.get("emailAddress");
+				String orgName = request.getParameter("orgName");
+				String contactInstructions = request.getParameter("emailAddress");
 				
-				String conceptReferenceTitle = (String)params.get("conceptRefTitle");
-				String conceptReferenceAuthor = (String)params.get("conceptRefAuthors");
+				String conceptReferenceTitle = request.getParameter("conceptRefTitle");
+				String conceptReferenceAuthor = request.getParameter("conceptRefAuthors");
 				String conceptReferenceDate = "12-MAR-2002";
 
-				String nameReferenceTitle = (String)params.get("nameRefTitle");
-				String nameReferenceAuthor = (String)params.get("nameRefAuthors");
+				String nameReferenceTitle = request.getParameter("nameRefTitle");
+				String nameReferenceAuthor = request.getParameter("nameRefAuthors");
 				String nameReferenceDate = "12-MAR-2002";
 				
-				String communityCode = (String)params.get("communityCode");
-				String communityLevel = (String)params.get("communityLevel");
-				String communityName = (String)params.get("communityName");
+				String communityCode = request.getParameter("communityCode");
+				String communityLevel = request.getParameter("communityLevel");
+				String communityName = request.getParameter("communityName");
 				String dateEntered = "12-MAR-2002";
 				String parentCommunity = "";
 				String partyName = "vegbank";
@@ -2106,6 +2198,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 				System.out.println("DataSubmitServlet > submit vegCommunity");
 				
 				//SUBMIT THE DATA TO THE DATABASE
+				VegCommunityLoader commLoader = new VegCommunityLoader();
 				StringBuffer sbr = commLoader.insertGenericCommunity( salutation,  givenName, surName,
 				middleName, orgName, contactInstructions,conceptReferenceTitle, 
 				conceptReferenceAuthor, conceptReferenceDate, nameReferenceTitle,
@@ -2124,7 +2217,7 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 					sb.append( resultPage );
 				}
 				//UPDATE THE DATABASE SUMMARY TABLE
-				sqlFile.issueSqlFile(commUpdateScript);
+				new SqlFile().issueSqlFile(commUpdateScript);
 			}
 		}
 		catch( Exception e ) 

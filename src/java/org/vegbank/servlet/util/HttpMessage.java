@@ -7,19 +7,36 @@ package org.vegbank.servlet.util;
  *   Copyright: 2000 Regents of the University of California and the
  *              National Center for Ecological Analysis and Synthesis
  *     Authors: Dan Higgins modified for metacat by Chad Berkley
- *     Version: '$Id: HttpMessage.java,v 1.1 2003-02-26 19:16:35 farrell Exp $'
+ *     Version: '$Id: HttpMessage.java,v 1.2 2003-04-16 00:12:48 farrell Exp $'
  *
  *     '$Author: farrell $'
- *     '$Date: 2003-02-26 19:16:35 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2003-04-16 00:12:48 $'
+ *     '$Revision: 1.2 $'
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import org.vegbank.servlet.util.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.Enumeration;
+import java.util.Properties;
 
 
 public class HttpMessage {

@@ -31,8 +31,8 @@ import org.vegbank.servlet.util.ServletUtility;
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-03-25 20:17:45 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-04-16 00:12:48 $'
+ *  '$Revision: 1.3 $'
  *
  *  @version
  *  @author
@@ -41,17 +41,12 @@ import org.vegbank.servlet.util.ServletUtility;
 
 public class AuthenticationServlet extends HttpServlet
 {
-	public int cookieValidFlag=0;  //1=valid
-	public Cookie registeredCookie;
-	public String servletPath = null;
 	public ServletUtility su = new ServletUtility();
 	public UserDatabaseAccess uda = new UserDatabaseAccess();
 
 	// THE RESOURCE BUNDLE AND THE ASSOCIATED PARAMETERS
-	private ResourceBundle rb = ResourceBundle.getBundle("authentication");
 	private String mailHost = "";
 	private String cc = "";
-	//public String clientLogFile = null; //the file to log the client usage
 	private String genericForm = "";
 	private String genericTemplate = "";
 
@@ -60,17 +55,19 @@ public class AuthenticationServlet extends HttpServlet
 	{
 		try
 		{
-				System.out.println("AuthenticationServlet > init");
-				this.mailHost = rb.getString("mailHost");
-				this.cc = rb.getString("systemEmail");		
-				this.genericForm =  rb.getString("genericForm");
-				this.genericTemplate = 	 rb.getString("genericTemplate");
-				System.out.println("AuthenticationServlet > init" );
+			System.out.println("AuthenticationServlet > init");
+			ResourceBundle rb = ResourceBundle.getBundle("authentication");
+			this.mailHost = rb.getString("mailHost");
+			this.cc = rb.getString("systemEmail");		
+			this.genericForm =  rb.getString("genericForm");
+			this.genericTemplate = 	 rb.getString("genericTemplate");
+				
+			System.out.println("AuthenticationServlet > init" );
 		}
 		catch (Exception e)
 		{
-				System.out.println("Exception: " + e.getMessage() );
-				e.printStackTrace();
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
 		}
 	}
 
@@ -97,10 +94,10 @@ public class AuthenticationServlet extends HttpServlet
 		//first block will look for the userName and password as well as valid cookie
 		try
 		{
-			ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
-			servletPath=rb.getString("servlet-path");
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
+			
+			Cookie registeredCookie = null;
 
 			//get the request - parameters using the
 			//servlet Utility class
@@ -136,9 +133,9 @@ public class AuthenticationServlet extends HttpServlet
 						//set a cookie
 						String user = getUserName(requestParams);
 						Cookie cookie = new Cookie("null", "null");
-						AuthenticationServlet m =new AuthenticationServlet();
-						m.cookieDelegator(cookie, requestParams, remoteAddress, user);
-						response.addCookie(m.registeredCookie);
+						//AuthenticationServlet m =new AuthenticationServlet();
+						registeredCookie = cookieDelegator(cookie, requestParams, remoteAddress, user);
+						response.addCookie(registeredCookie);
 						HttpSession session = request.getSession();
 						session.setAttribute("emailAddress", request.getParameter("userName") );
 						//send the user to the correct page
@@ -165,7 +162,7 @@ public class AuthenticationServlet extends HttpServlet
 						Cookie cookie = new Cookie("null", "null");
 						AuthenticationServlet m =new AuthenticationServlet();
 						m.cookieDelegator(cookie, requestParams, remoteAddress, user);
-						response.addCookie(m.registeredCookie);
+						response.addCookie(registeredCookie);
 					}
 					else
 					{
@@ -545,8 +542,11 @@ public class AuthenticationServlet extends HttpServlet
  * @param passWord - the issued password
  *
  */
-	private void cookieDelegator (Cookie cookie, Hashtable requestParams,
-		String remoteAddress, String userName)
+	private Cookie cookieDelegator (
+		Cookie cookie, 
+		Hashtable requestParams,
+		String remoteAddress, 
+		String userName)
 	{
 
 		// below is quite crude but will suffice for the time being.
@@ -561,6 +561,9 @@ public class AuthenticationServlet extends HttpServlet
 		System.out.println("AuthenticationServlet > USER NAME: " + userName );
 		String cookieValue = uda.getUserCookieValue(userName);
 		String cookieName = "framework";
+		
+		Cookie registeredCookie = null;
+		
 		if (cookieName != null)
 		{
 			String cookieAddress = remoteAddress; //same
@@ -573,31 +576,7 @@ public class AuthenticationServlet extends HttpServlet
 		{
 			System.out.println("AuthenticationServlet > ERROR null user name");
 		}
-
-	}
-
-/**
- *  Method to check and see if a cookie is valid using as inputs the name of the
- * cookie, the value of the cookie and the remote host information
- *
- * @param cookieName - name of the cookie for validation
- * @param cookieValue - value of the cookie
- * @param remoteHost - remote host's address
- *
- */
-	public void cookieChecker (String cookieName, String cookieValue,
-		String remoteHost)
-	{
-		ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
- 		if (cookieName.equals("xploit") && cookieValue.equals("001"))
-		{
-			cookieValidFlag=1;
- 		}
-
- 		else
-		{
-			cookieValidFlag=0;
- 		}
+		return registeredCookie;
 	}
 
 }

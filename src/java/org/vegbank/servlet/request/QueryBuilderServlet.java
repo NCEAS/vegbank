@@ -1,5 +1,27 @@
 package org.vegbank.servlet.request;
 
+/*
+ *  '$RCSfile: QueryBuilderServlet.java,v $'
+ *
+ *	'$Author: farrell $'
+ *  '$Date: 2003-04-16 00:12:48 $'
+ *  '$Revision: 1.2 $'
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
@@ -38,8 +60,8 @@ import org.vegbank.servlet.util.ServletUtility;
  * 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-02-26 19:16:32 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2003-04-16 00:12:48 $'
+ *  '$Revision: 1.2 $'
  * 
  */
 
@@ -199,12 +221,12 @@ public class QueryBuilderServlet extends HttpServlet
 		try 
 		{
 			//su.fileVectorizer("../../html/plotQueryBuilder.html");
-			su.fileVectorizer(clientHtml);
-			for (int i=0; i<su.outVector.size(); i++) 
+			Vector vectoredFile = su.fileVectorizer(clientHtml);
+			for (int i=0; i<vectoredFile.size(); i++) 
 			{
 				//check for the line(s) for
 				//updating
-				if ( su.outVector.elementAt(i).toString().indexOf("replaceAggregateQuery") >0 )
+				if ( vectoredFile.elementAt(i).toString().indexOf("replaceAggregateQuery") >0 )
 				{
 					//add the aggregated query to the stringbuffer 
 					//instead of the taged line in the vector
@@ -215,7 +237,7 @@ public class QueryBuilderServlet extends HttpServlet
 				}
 				else
 				{
-					sb.append( su.outVector.elementAt(i)+"\n" );
+					sb.append( vectoredFile.elementAt(i)+"\n" );
 				}
 			}
 		}

@@ -10,10 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.w3c.dom.Document;
-
 import org.vegbank.servlet.util.ServletUtility;
-import xmlresource.utils.XMLparse;
 
 
 /**
@@ -31,13 +28,6 @@ public class FrameworkServlet extends HttpServlet
 	
 	//required classes
 	ServletUtility util = new ServletUtility();
-	XMLparse parse = new XMLparse();
-	
-	//class variables
-	private Document doc;
-	private Hashtable pluginNameClass = new Hashtable();
-	private Object pluginObj = null;
-	
 	
 	/**
 	 * constructor method
@@ -45,13 +35,6 @@ public class FrameworkServlet extends HttpServlet
 	public FrameworkServlet()
 	{
 		System.out.println("init: FrameworkServlet");
-		//the xml config document
-		System.out.println("FrameworkServlet > reading xml config file");
-		doc = parse.getDocument("frameworkservlet-config.xml");
-		//method to initialize the plugin names and corresponding classes
-		//--not sure if this really belongs here -- might want to write this
-		//data to the browser
-		getPluginNames();
 	}
 	
 	/** Handle "POST" method requests from HTTP clients */
@@ -99,7 +82,7 @@ public class FrameworkServlet extends HttpServlet
     			 { 
 							//String className = "servlet.plugin.spatial.CoordinateTransform";
 							//create a generic object of the type specified in the config file.
-      				pluginObj = ServletUtility.createObject(pluginClassName);
+							Object pluginObj = ServletUtility.createObject(pluginClassName);
 							StringBuffer sb =((ServletPluginInterface)pluginObj).servletRequestHandler(action,  params);
 							//System.out.println("FrameworkServlet > plugin results: "+ sb.toString() );
 							out.println( sb.toString() );
@@ -133,24 +116,24 @@ public class FrameworkServlet extends HttpServlet
 		 {		 
 		 	if ( actionParameter.equals("coordinateTransform") )
 		 	{
-		 		s="servlet.plugin.spatial.CoordinateTransform";
+		 		s="org.vegbank.servlet.plugin.CoordinateTransform";
 		 	}
 		 
 			//this will initiate the loading
 		 	else if ( actionParameter.equals("initPlotLoad") )
 		 	{
-		 		s="servlet.plugin.db.PlotDBInsert";
+		 		s="org.vegbank.servlet.plugin.db.PlotDBInsert";
 		 	}
 		 
 		 	//this will actually load the plots
 			 else if ( actionParameter.equals("loadTNCData") )
 		 	{
-		 		s="servlet.plugin.db.PlotDBInsert";
+		 		s="org.vegbank.servlet.plugin.PlotDBInsert";
 		 	}
 			//this will look up the names of the plants in the database
 			 else if ( actionParameter.equals("plantlookup") )
 		 	{
-		 		s="servlet.plugin.PlantNameList";
+		 		s="org.vegbank.servlet.plugin.PlantNameList";
 		 	}
 			else
 			{
@@ -189,27 +172,8 @@ public class FrameworkServlet extends HttpServlet
 	 */
 	 private boolean getPluginActionViable(String action)
 	 {
+	 		// TODO: Implement this whatever it is ??
 		 return(true);
-	 }
-	 
-	 /**
-	  * method that will update the class level variables related
-		* to the pluginNames and related classes from the framework
-		* servlet configuration xml file
-		*/
-	 private void getPluginNames()
-	 {
-		 try
-		 {
-			 String name = parse.getNodeValue(doc, "pluginName");
-			 String className = parse.getNodeValue(doc, "pluginClass");
-			 System.out.println( name +" "+ className);
-		 }
-		 catch (Exception e)
-		 {
-			 System.out.println( "Exception: " + e.getMessage() );
-		 }
-		 
 	 }
 	 
 }

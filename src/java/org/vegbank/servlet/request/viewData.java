@@ -1,5 +1,27 @@
 package org.vegbank.servlet.request;
 
+/*
+ *  '$RCSfile: viewData.java,v $'
+ *
+ *	'$Author: farrell $'
+ *  '$Date: 2003-04-16 00:12:48 $'
+ *  '$Revision: 1.2 $'
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,14 +65,13 @@ import xmlresource.utils.transformXML;
 public class viewData extends HttpServlet 
 {
 
-	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
+	private static ResourceBundle  rb = ResourceBundle.getBundle("plotQuery");
 
-	private String downLoadAction=null;
-	private String summaryViewType=null;
-	private String resultType=null;
-	private String servletDir= null; //like: /opt/jakarta/harris/servlet
-	private String servletPath=null; //like: /harris/servlet
-	private String userEmail = null;
+	//private String downLoadAction=null;
+	//private String summaryViewType=null;
+	//private String resultType=null;
+	private static final String servletDir=  rb.getString("requestparams.servletDir");
+	private static final String servletPath = rb.getString("servlet-path");
 	
 	
 	//access the method to transfor the xml document and retrieve 
@@ -65,8 +86,6 @@ public class viewData extends HttpServlet
 		try
 		{
 			System.out.println("init: viewData" );
-			servletDir = rb.getString("requestparams.servletDir");
-			servletPath = rb.getString("servlet-path");
 			System.out.println("ViewData > servlet dir: " + servletDir );
 			System.out.println("ViewData > servlet path: " + servletPath );
 		}
@@ -90,21 +109,19 @@ public class viewData extends HttpServlet
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException  
 	{
-		servletDir = rb.getString("requestparams.servletDir");
-		servletPath = rb.getString("servlet-path");
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 
 		//grab all the input parameters
-		downLoadAction=request.getParameter("downLoadAction");
-		summaryViewType=request.getParameter("summaryViewType");
-		resultType=request.getParameter("resultType");
-		this.userEmail = this.getCookieValue(request);
+		String downLoadAction=request.getParameter("downLoadAction");
+		String summaryViewType=request.getParameter("summaryViewType");
+		String resultType=request.getParameter("resultType");
+		String userEmail = this.getCookieValue(request);
 		
 		//print the input to the system
 		System.out.println("ViewData > downLoadAction: " + downLoadAction);
 		System.out.println("ViewData > summaryViewType: " + summaryViewType );
-		System.out.println("ViewData > user: " + this.userEmail);
+		System.out.println("ViewData > user: " + userEmail);
 		System.out.println("ViewData > resultType: " + resultType );
 
 		//handle a download request
@@ -211,9 +228,7 @@ public class viewData extends HttpServlet
 
 		String styleSheet=null; //the stylesheet to use
 		String xmlDoc = null;
-		//get the servlet directory
-	//	ResourceBundle rbun = ResourceBundle.getBundle("plotQuery");
-		servletDir = rb.getString("requestparams.servletDir");
+
 		try 
 		{
 			//determine the style sheet to use for the xsl transform
@@ -298,7 +313,6 @@ public class viewData extends HttpServlet
 
 		String styleSheet=null; //the stylesheet to use
 		String xmlDoc = null;
-		servletDir = rb.getString("requestparams.servletDir");
 		try 
 		{
 			if (summaryViewType.equals("vegPlot")) 

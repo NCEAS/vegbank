@@ -139,7 +139,8 @@ public class CoordinateTransform implements ServletPluginInterface
 			String responseLine = null;
 			Process listener;  
 			DataInputStream nativeResponse;
-			listener = Runtime.getRuntime().exec("/usr/local/devtools/jakarta-tomcat/webapps/vegbank/WEB-INF/lib/coord_transform.sh tmp_utm_file tmp_ll_file "+zone);
+			// FIXME: Needs to be in a property file
+			listener = Runtime.getRuntime().exec("/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/coord_transform.sh tmp_utm_file tmp_ll_file "+zone);
 			nativeResponse = new DataInputStream(new BufferedInputStream(listener.getInputStream()));
 			BufferedReader in4=new BufferedReader(new InputStreamReader(nativeResponse));
 			

@@ -1,5 +1,31 @@
 package org.vegbank.servlet.util;
 
+/*
+ * Utility class for java servltes for doing a range of utility 
+ * type functions including:
+ * 		emailing
+ * 		figuring the the type of client browser
+ *    etc.. 
+ *
+ *	'$Author: farrell $'
+ *  '$Date: 2003-04-16 00:12:48 $'
+ *  '$Revision: 1.4 $'
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,8 +37,10 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
 import java.util.zip.GZIPOutputStream;
@@ -26,28 +54,17 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.tools.ant.filters.ReplaceTokens;
 import org.apache.tools.mail.MailMessage;
 
-
-/**
- * Utility class for java servltes for doing a range of utility 
- * type functions including:
- * 		emailing
- * 		figuring the the type of client browser
- *    etc.. 
- *
- *	'$Author: farrell $'
- *  '$Date: 2003-03-20 20:50:18 $'
- *  '$Revision: 1.3 $'
- *
- */
-
-
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.*;
 
 public class ServletUtility 
 {
 	private GetURL gurl = new GetURL();
-	public Vector outVector;
-	public int vecElementCnt;
-
+	//public Vector outVector;
+	//public int vecElementCnt;
+	//public String outString = null;	
 
 	
 	/**
@@ -164,6 +181,56 @@ public class ServletUtility
   }
 	
 	
+	public void sendHTMLEmail(
+		String smtpServer,
+		String from,
+		String to,
+		String cc,
+		String subject,
+		String body)
+	{
+		try
+		{
+			Properties props =new Properties();
+			props.put("mail.smtp.host", smtpServer);
+			Session session = Session.getDefaultInstance(props, null);
+			
+			//	-- Create a new message --
+			Message msg = new MimeMessage(session);
+			
+			// -- Set the FROM and TO fields --
+			msg.setFrom(new InternetAddress(from));
+			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
+			
+			// -- Include CC recipients too --
+		 	if (cc != null)
+		 	{
+				msg.setRecipients(Message.RecipientType.CC ,InternetAddress.parse(cc, false));
+		 	}
+
+			// -- Set the subject and body text --
+			msg.setSubject(subject);
+			//msg.setText(body);
+			msg.setContent(body, "text/html");
+
+			// -- Set some other header information --
+			msg.setSentDate(new Date());
+
+
+			
+
+
+			// -- Send the message --
+			Transport.send(msg);
+
+			System.out.println("Message sent OK.");
+		}
+		catch ( Exception e)
+		{
+			System.out.println("ServletUtility > Problem sending mail message");
+			e.printStackTrace();
+		}
+	}
 		/**
 		 * method to mail the a message to an email address
 		 *
@@ -173,9 +240,16 @@ public class ServletUtility
 		 * @param cc -- like vegbank@nceas.ucsb.edu
 		 * @param subject -- like 'hi'
 		 * @param body -- the main body
+		 * 
+		 * @deprecated use sendHTMLMail instead 
 		 */
-		 public void sendEmail( String mailHost, String from, String to, String cc,
-		 String subject, String body)
+		public void sendEmail(
+			String mailHost,
+			String from,
+			String to,
+			String cc,
+			String subject,
+			String body)
 		 {
 			 try
 			 {
@@ -190,6 +264,7 @@ public class ServletUtility
  				msg.from(from);
  				msg.to(to);
  				msg.cc(cc);
+ 				
  				msg.setSubject(subject);
  				PrintStream out = msg.getPrintStream();
   			out.println(body);
@@ -246,6 +321,47 @@ public class ServletUtility
     return(htmlResults);
   }
 	
+
+	/**
+	 *  Method to store html code that can be accessed based on the requests
+	 * made by the user
+	 */
+
+	public String htmlStore()
+	{
+		ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
+
+		//compose a very simple html page to dispaly that the user query is being
+		//handled by the servlet engine
+		String mainPage="<html> \n"
+		//+"<body> \n"
+		+"<head> \n"
+		+"  <title> VEGBANK - QUERY ENGINE </title> \n"
+		+"</head>  \n"
+		+"  <body bgcolor=\"white\"> \n"
+		+"  <table border=\"0\" width=\"100%\"> \n"
+		+"  <tr bgcolor=\"#9999CC\"><td>&nbsp;<B><FONT FACE=\"arial\" COLOR=\"FFFFFF\" SIZE=\"-1\"> "
+		+"  VegBank - Query Engine  "
+		+"  </FONT></B></td></tr> \n"
+		+"</table> \n"
+		+" \n"
+		+"<br><i><small> \n"
+		+rb.getString("requestparams.servletPosition")+"<br> \n"
+		+"<br></i></small> \n"
+		+"<p> \n"
+		+"<A HREF="+rb.getString("requestparams.servletAccessPosition")+"> "
+		+"<B><FONT SIZE=\"-1\" FACE=\"arial\">Back to the query mechanism</FONT></B></A> \n"
+		+"<br></i> \n"
+		+"<P> \n"
+		+"<table border=\"0\" width=\"100%\"> \n"
+		+"<tr bgcolor=\"#9999CC\"><td>&nbsp;<B><FONT FACE=\"arial\" COLOR=\"FFFFFF\" SIZE=\"-1\"> "
+		+" "
+		+"</FONT></B></td></tr> \n"
+		+"</table> \n"
+		+"<br><br> \n";
+	
+		return mainPage;
+	}
 	
 	
 	
@@ -404,87 +520,6 @@ public void fileCopy (String inFile, String outFile)
 	}
 }
 
-
-
-
-
-/**
- *  Method to store html code that can be accessed based on the requests
- * made by the user 
- */
-
-public void htmlStore() 
-{
-	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
-
-	//compose a very simple html page to dispaly that the user query is being
-	//handled by the servlet engine
-	String mainPage="<html> \n"
-	//+"<body> \n"
-	+"<head> \n"
-	+"	<title> VEGBANK - QUERY ENGINE </title> \n"
-	+"</head>  \n"
-	+" 	<body bgcolor=\"white\"> \n"
-	+" 	<table border=\"0\" width=\"100%\"> \n"
-	+" 	<tr bgcolor=\"#9999CC\"><td>&nbsp;<B><FONT FACE=\"arial\" COLOR=\"FFFFFF\" SIZE=\"-1\"> "
-	+" 	VegBank - Query Engine  "
-	+" 	</FONT></B></td></tr> \n"
-	+"</table> \n"
-	+" \n"
-	+"<br><i><small> \n"
-	+rb.getString("requestparams.servletPosition")+"<br> \n"
-	+"<br></i></small> \n"
-	+"<p> \n"
-	+"<A HREF="+rb.getString("requestparams.servletAccessPosition")+"> "
-	+"<B><FONT SIZE=\"-1\" FACE=\"arial\">Back to the query mechanism</FONT></B></A> \n"
-	+"<br></i> \n"
-	+"<P> \n"
-	+"<table border=\"0\" width=\"100%\"> \n"
-	+"<tr bgcolor=\"#9999CC\"><td>&nbsp;<B><FONT FACE=\"arial\" COLOR=\"FFFFFF\" SIZE=\"-1\"> "
-	+" "
-	+"</FONT></B></td></tr> \n"
-	+"</table> \n"
-	+"<br><br> \n";
-	outString = mainPage;
-}
-
-
-	
-/**
- * Method to store html code that can be accessed based on the requests
- * made by the user that will allow the user to access the summary viewer class
- * called 'viewData' and depending on the input parameter passed will show the 
- * user the summary of the selected plots, veg vommunities, or plant taxonmies.
- *
- * @param summaryViewType -- the type of summary to view, can include vegPlot, 
- *	vegCommunity, or plantTaxa
- * 
- * @deprecated -- this code has been moved to the data request servlet 20020415
- *
- */
-public void getViewOption(String summaryViewType) 
-{
-	System.out.println("ServletUtility > accessing the getViewOptionMethod");
-	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
-	StringBuffer responseBuf=null; //use this string buffer instead
-	String response=
-	" "
-	//+"<html> \n"
-	//+"<body> \n"
-	//+"<head> \n"
-	+"<form action=\"/framework/servlet/viewData\" method=\"GET\"> \n"
-	+"<input type=\"hidden\" name=\"resultType\" value=\"summary\" > \n"
-	+"<input type=\"hidden\" name=\"summaryViewType\" value=\""+summaryViewType+"\"> \n"
-	+"<input type=\"submit\" name=\"submitButton\" value=\"view data\" > \n"
-	+"</form> \n"
-	//+"</body> \n"
-	+"</html> \n";
-	outString=response;	
-}
-
-
-
-
 /**
  * utility method to return the name of the browser type that 
  * a client is using given as input an http request
@@ -568,40 +603,6 @@ public void getViewOption(String summaryViewType)
 		}
 		return(s);
 	}
- 
- 
-	
-/**
- * Method to store html code showing the end user the
- * options for interacting with the data that was in 
- * the result set
- */
-
-public void getViewMethod() 
-{
-	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
-	String response="<html> \n"
-	+"<body> \n"
-	+"<head> \n"
-	+"<form action=\""  //these should be together
-	+"viewData\"  \n"
-	+"method=POST> \n"
-	+"<input type=\"submit\" name=\"formatType\" value=\"view Summary\" /> \n"
-	+"<input type=\"submit\" name=\"formatType\" value=\"view Species List\" /> \n"
-	+"<input type=\"submit\" name=\"formatType\" value=\"download data\" /> \n"
-	//+"<A HREF=\"http://beta.nceas.ucsb.edu:8080/examples/servlet/plotQuery\">"
-	+"<A HREF=\"http://"+rb.getString("server")+""+rb.getString("servlet-path")+"plotQuery\">"
-	
-	+"<br>"
-	+"<B><FONT SIZE=\"-1\" FACE=\"arial\">Back to Query</FONT></B></A>"
-	+"</form> \n"
-	+"</body> \n"
-	+"</html> \n";
-	outString=response;
-}
-public String outString = null;	
-
-
 
 /**
  *  Method to compress a file using GZIP compression using as input both the
@@ -645,28 +646,28 @@ catch(Exception e)
  *
  * @param fileName name of the file that whose contents should be written to a vector
  */
-public void fileVectorizer(String fileName) 
+public Vector fileVectorizer(String fileName) 
 {
+	Vector vector = new Vector();
 	try 
 	{
 		System.out.println("ServletUtility > vectorizing file: " + fileName);
-		vecElementCnt=0;
+		int vecElementCnt=0;
 		BufferedReader in = new BufferedReader(new FileReader(fileName));
-		Vector localVector = new Vector();
 		String s;
 		while((s = in.readLine()) != null) 
 		{
 			//System.out.println(s);	
-			localVector.addElement(s);
+			vector.addElement(s);
 			vecElementCnt++;
 		}
-		outVector=localVector;
 	}
 	catch (Exception e) 
 	{
 		System.out.println("failed in servletUtility.fileVectorizer" + 
 		e.getMessage());
 	}
+	return vector;
 }
 
 
@@ -684,7 +685,7 @@ public Vector fileToVector(String fileName)
 	Vector v = new Vector();
 	try 
 	{
-		vecElementCnt=0;
+		int vecElementCnt=0;
 		BufferedReader in = new BufferedReader(new FileReader(fileName));
 		Vector localVector = new Vector();
 		String s;
@@ -880,6 +881,44 @@ public String fileToString(String fileName)
 			 e.printStackTrace();
 		 }
 	 }
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	public String printParameters(HttpServletRequest request)
+	{
+		StringBuffer sb = new StringBuffer();
+		 Enumeration enum = request.getParameterNames();
+		 
+		 while ( enum.hasMoreElements() )
+		 {
+		 	String parameterName = (String) enum.nextElement();
+			sb.append( parameterName + " --> " + request.getParameter(parameterName) );
+			sb.append(",");
+		 }
+		
+		return sb.toString();
+	}
+	
+	/**
+	 * @param request
+	 * @return
+	 */
+	public String printAttributes(HttpServletRequest request)
+	{
+		StringBuffer sb = new StringBuffer();
+		 Enumeration enum = request.getAttributeNames();
+		 
+		 while ( enum.hasMoreElements() )
+		 {
+				String attributeName = (String) enum.nextElement();
+			sb.append( attributeName + " --> " + request.getAttribute(attributeName) );
+			sb.append(",");
+		 }
+		
+		return sb.toString();
+	}
 	
 
 }	

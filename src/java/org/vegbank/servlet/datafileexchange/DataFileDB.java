@@ -83,42 +83,44 @@ public class DataFileDB  {
     return uniqueid;
   }
   
-    // get Unique ID from DB sequence
-  protected int getNewAccessionId() 
-  {
-    int accessionId=0; 
-
-    try 
-    {
-		//conn = getConnection();
-      	PreparedStatement pstmt;
-      	pstmt = conn.prepareStatement
-              ("INSERT into file_accession (create_date) " +
-               "VALUES (now())");
-      	pstmt.execute();
-      	pstmt.close();
- 			
-		//create the accession number
-		//PreparedStatement pstmt;
-      	pstmt = conn.prepareStatement(
-                	"SELECT max(accession_id) FROM file_accession " 
-                	);
-      	pstmt.execute();
-      	ResultSet rs = pstmt.getResultSet();
-					
-		while (rs.next()) 
+		// get Unique ID from DB sequence
+		protected int getNewAccessionId()
 		{
-      		if (rs != null)
+			int accessionId = 0;
+
+			try
 			{
-				accessionId = rs.getInt(1);
+				//conn = getConnection();
+				PreparedStatement pstmt =
+					conn.prepareStatement(
+						"INSERT into file_accession (create_date) " + "VALUES (now())");
+				pstmt.execute();
+				pstmt.close();
+
+				//create the accession number
+				//PreparedStatement pstmt;
+				pstmt =
+					conn.prepareStatement(
+						"SELECT max(accession_id) FROM file_accession ");
+				pstmt.execute();
+				ResultSet rs = pstmt.getResultSet();
+
+				while (rs.next())
+				{
+					if (rs != null)
+					{
+						accessionId = rs.getInt(1);
+					}
+				}
 			}
+			catch (Exception e)
+			{
+				System.out.println(
+					"Error on DataFileDB.getUniqueID(): " + e.getMessage());
+				e.printStackTrace();
+			}
+			return accessionId;
 		}
-    } catch (Exception e) {
-      	System.out.println("Error on DataFileDB.getUniqueID(): "+e.getMessage());
-		e.printStackTrace();
-    }
-    return accessionId;
-  }
 
 	
 	
