@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *   '$Date: 2003-02-03 19:15:33 $'
-  *   '$Revision: 1.13 $'
+  *   '$Date: 2003-02-04 00:39:45 $'
+  *   '$Revision: 1.14 $'
   *
   *  Authors: John Harris
   *  Copyright: 2000 Regents of the University of California and the
@@ -47,6 +47,7 @@
     	  <property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat_dev/webapps/framework/WEB-INF/lib" />
     	  <property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat_dev/bin" />
         -->
+
 	  <property name="xmlresource" value="lib/xmlresource.jar" />
 	  <property name="dbaccess" value="lib/database_access.jar" />
 	  <property name="data-source" value="lib/datatranslator.jar" />
@@ -65,17 +66,24 @@
 	
 	  <property name="cpath" value="${multipart}:${ant}:${build}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
 	
-		<!-- Filters -->
-	  <filter token="serverUrl" value="beta.nceas.ucsb.edu" />
-	  <filter token="servlet-path" value="${servlet-path}" />
-	  <filter token="mailHost" value="nceas.ucsb.edu"/>
-	  <filter token="systemEmail" value="dba@vegbank.org"/>
-	  <filter token="genericForm" value="${servlet.webapp.dir}/forms/generic_form.html"/>
-	  <filter token="genericTemplate" value="${servlet.webapp.dir}/forms/tmp.html"/>
-	  <filter token="rmiserver"  value="128.111.220.59"/>  
-	  <filter token="uploadDir" value="${servlet_location}"/>
-	  <!-- End Filters -->
+ 
+    <property name="vegbank.home.dir" value="/usr/vegbank"/>
+    <property name="originalDataStore" value="${vegbank.home.dir}/originalDataStore"/>
+        
+    <!-- Filters -->
+    <filter token="serverUrl" value="tekka.nceas.ucsb.edu" />
+    <filter token="servlet-path" value="${servlet-path}" />
+    <filter token="mailHost" value="nceas.ucsb.edu"/>
+    <filter token="systemEmail" value="dba@vegbank.org"/>
+    <filter token="genericForm" value="${servlet.webapp.dir}/forms/generic_form.html"/>
+    <filter token="genericTemplate" value="${servlet.webapp.dir}/forms/tmp.html"/>
+    <filter token="rmiserver"  value="192.168.0.2"/>  
+    <filter token="uploadDir" value="${servlet_location}"/>
+    <filter token="originalDataStore" value="${originalDataStore}"/>
+    <!-- End Filters -->
+        
   </target>
+
 
 
 

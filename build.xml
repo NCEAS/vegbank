@@ -6,15 +6,21 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-02-03 19:43:24 $'
-  *     '$Revision: 1.2 $'
+  *     '$Date: 2003-02-04 00:39:40 $'
+  *     '$Revision: 1.3 $'
 --> 
 <project name="vegclass" default="compile" basedir=".">
 
-  <target name="compile"
+
+  <target name="prepare">
+    <mkdir dir="lib"/>
+  </target>
+    
+  <target name="compile" depends="prepare"
           description=" => Compiles all code in vegclass module">
 		<echo message="Compiling all of ${ant.project.name}"/>
     
+    <ant dir="common" target="compile" inheritAll="false"/>
     <ant dir="veg_plot" target="compile" inheritAll="false"/>
     <ant dir="veg_community" target="compile" inheritAll="false"/>
     <ant dir="veg_taxa" target="compile" inheritAll="false"/>
@@ -24,6 +30,7 @@
   <target name="jar" depends="compile"
           description=" => Generates all jars in vegclass module">
     
+    <ant dir="common" target="jar" inheritAll="false"/>
     <ant dir="veg_plot" target="jar" inheritAll="false"/>
     <ant dir="veg_community" target="jar" inheritAll="false"/>
     <ant dir="veg_taxa" target="jar" inheritAll="false"/>
@@ -33,6 +40,7 @@
   <target name="deploy" depends="jar"
           description=" => deploys vegclass module jars, html and other resources">
     
+    <ant dir="common" target="deploy" inheritAll="false"/>
     <ant dir="veg_plot" target="deploy" inheritAll="false"/>
     <ant dir="veg_community" target="deploy" inheritAll="false"/>
     <ant dir="veg_taxa" target="deploy" inheritAll="false"/>
@@ -40,6 +48,7 @@
   </target>
 
 	<target name="clean" description="=> Remove all generated files">
+    <ant dir="common" target="clean" inheritAll="false"/>
     <ant dir="veg_plot" target="clean" inheritAll="false"/>
     <ant dir="veg_community" target="clean" inheritAll="false"/>
     <ant dir="veg_taxa" target="clean" inheritAll="false"/>

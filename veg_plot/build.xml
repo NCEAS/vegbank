@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-02-03 21:22:54 $'
-  *     '$Revision: 1.12 $'
+  *     '$Date: 2003-02-04 00:39:41 $'
+  *     '$Revision: 1.13 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -43,7 +43,7 @@
     <!-- Location of jar files -->
     <property name="xmlp" value="${lib.dir}/xalan_1_2_2.jar:${lib.dir}/xerces_1_3_1.jar:${lib.dir}/xml-apis.jar" />
     <property name="jdbc" value="${lib.dir}/jdbc7.0-1.2.jar" />
-    <property name="vegclass_common" value="${lib.dir}/vegclass_common.jar" />
+    <property name="vegclass_common" value="../lib/vegclass_common.jar" />
     <property name="servlet" value="${lib.dir}/servlet.jar" />
     <property name="xmlresource" value="${build.lib.dir}/xmlresource.jar" />
     <property name="datatranslator" value="${build.lib.dir}/datatranslator.jar" />
@@ -52,7 +52,7 @@
       value="${rmidatasource}:${servlet}:${xmlp}:${jdbc}:${build.classes.dir}:${vegclass_common}"/>
     <property name="cpath2" 
       value="${rmidatasource}:${servlet}:${xmlp}:${jdbc}:${xmlresource}:${datatranslator}:${build.classes.dir}:${vegclass_common}"/>
-    <!-- Classpaths -->
+    <!-- Classpaths 
     <path id="classpath.compilation">
       <pathelement location="${build.classes.dir}"/>
       <fileset dir="${build.lib.dir}">
@@ -62,7 +62,7 @@
         <include name="**/*jar"/>
       </fileset>
     </path>
-
+    -->
 
     <filter token="reports.test.dir" value="${reports.test.dir}"/>
     <!-- This is no longer used ?? -->
