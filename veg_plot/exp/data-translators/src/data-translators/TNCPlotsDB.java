@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 22:52:41 $'
- * 	'$Revision: 1.13 $'
+ *  '$Date: 2002-03-28 04:23:09 $'
+ * 	'$Revision: 1.14 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -1064,7 +1064,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	public String getObsStartDate(String plotName)
 	{
-		return("");
+		return("02-JAN-2001");
 	}
 	
 	/**
@@ -1073,7 +1073,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	public String getObsStopDate(String plotName)
 	{
-		return("");
+		return("02-JAN-2001");
 	}
 	
 	/**
@@ -1320,8 +1320,40 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	 public boolean isPlotPermanent(String plotName)
 	 {
-	 	return(true);
+		Statement stmt = null;
+		String p = null;
+		boolean r = true;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Permanent]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					p=rs.getString(1);
+				}
+				if ( p.toUpperCase().equals("Yes") )
+				{
+				 	r = true;
+				}
+				else
+				{	
+					r = false;
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch (Exception e) 
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+	 	return(r);
 	 }
+ 
  
  /**
 	* returns the soil taxon for the plot -- this is the USDA class
