@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-09-18 22:37:28 $'
-*  '$Revision: 1.7 $'
+*  '$Date: 2004-09-18 22:45:43 $'
+*  '$Revision: 1.8 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@
 <TR><TD width="55%" valign="top"><!-- plot level info -->
 
 
-<table class="leftright" cellpadding="1"><!--each field, only write when HAS contents-->
+<table class="leftrightborders" cellpadding="1"><!--each field, only write when HAS contents-->
 <tr><th colspan="2">Plot Level Data: <bean:write name="onerow" property="authorplotcode"/></th></tr>
 
 <tr><th class="subheader">Plot ID Fields:</th><th class="subheader">&nbsp;</th></tr>
@@ -354,7 +354,7 @@ name="onerow" property="covermethod_id_transl"/></a>&nbsp;</td>
 
 <vegbank:get select="taxonimportance" where="where_observation_pk" beanName="map" wparam="obsId" perPage="-1"/>
 
-     <table cellpadding="1" class="leftright">
+     <table cellpadding="1" class="leftrightborders">
      <tr><th colspan="2"><strong>Taxa occurring on <bean:write name="onerow" property="authorplotcode"/></strong></th></tr>
   <logic:empty name="BEANLIST">
                 <tr class='@nextcolorclass@'><td colspan="2">(no plants recorded on this plot: error!)</td></tr>

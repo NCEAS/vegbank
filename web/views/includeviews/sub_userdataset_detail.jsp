@@ -12,7 +12,7 @@
 <logic:notEmpty name="BEANLIST"><!-- set up table -->
 
 <logic:iterate id="onerow" name="BEANLIST"><!-- iterate over all records in set : new table for each -->
-<table class="leftright" cellpadding="3"><!--each field, only write when HAS contents-->
+<table class="leftrightborders" cellpadding="3"><!--each field, only write when HAS contents-->
 
 <tr class='@nextcolorclass@'><th colspan="2">Dataset :
 <bean:write name="onerow" property="datasetname"/></th>
@@ -69,7 +69,7 @@ Items in this dataset:
    </logic:empty>
 
 <logic:notEmpty name="userdatasetitem-BEANLIST">
-<table class="leftright" cellpadding="2" >
+<table class="leftrightborders" cellpadding="2" >
 <tr>
 <th>Accession Code</th>
 <th>Item Type</th>

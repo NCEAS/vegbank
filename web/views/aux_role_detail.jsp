@@ -34,7 +34,7 @@
         </logic:empty>
 
         <logic:notEmpty name="MY_ROLES-BEANLIST">
-          <table class="leftright" cellpadding="3">
+          <table class="leftrightborders" cellpadding="3">
            <tr>
 
         <th>     role Code          </th>  

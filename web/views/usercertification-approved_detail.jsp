@@ -29,7 +29,7 @@
 <h2>Certified VegBank Users</h2>
 
 <logic:iterate id="onerow" name="BEANLIST">
-<table  class="leftright" cellpadding="2" >
+<table  class="leftrightborders" cellpadding="2" >
 <!--each field, only write when HAS contents-->
 
 <tr><th colspan="2"><strong>
