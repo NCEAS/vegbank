@@ -1,6 +1,6 @@
 '$Author: farrell $'
-'$Date: 2002-12-30 22:20:33 $'
-'$Revision: 1.8 $'
+'$Date: 2003-02-03 19:37:20 $'
+'$Revision: 1.9 $'
 THIS FILE DESCRIBES THE SETUP AND MAINTAINENCE OF A VEGBANK SYSTEM
 
 REQUIRED JAR FILES
@@ -56,7 +56,7 @@ initdb databasefile
 # Start database ( with debuging output )
 postmaster -d2 -i -D databasefile 
 
-# Create databases for "plots_dev, plants_dev, framework and community_dev"
+# Create databases for "plots_dev, plants_dev, framework and communities_dev"
 createdb "name of database" #repeat for each 
 
 # Create the database user 'datauser' as follows:
@@ -79,10 +79,14 @@ createdb "name of database" #repeat for each
 
 # Edit the pg_hba.conf file so that connections may be made to the database 
 # add the following:
-local      all                                          trust
-host       all         127.0.0.1     255.255.255.255    trust
+local      all                                               trust
+host       all  127.0.0.1                 255.255.255.255    trust
+#host       all  ip of RMI server etc.    255.255.255.255    trust
 
+# GRASS GIS SETUP
 
-
+This is open source program that is used by vegbank to work with geographic
+position data.
+The programs homepage is "http://www3.baylor.edu/grass/"
 
  
