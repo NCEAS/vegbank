@@ -16,9 +16,9 @@ import java.util.*;
  * Client tool. <br> <br>
  * 
  * Release: @release@ <br>
- * '$Author: harris $' <br>
- * '$Date: 2002-08-30 19:12:03 $' <br>
- * '$Revision: 1.12 $' <br>
+ * '$Author: farrell $' <br>
+ * '$Date: 2002-12-02 23:01:10 $' <br>
+ * '$Revision: 1.13 $' <br>
  */
 public interface PlotDataSourceInterface
 {
@@ -196,6 +196,7 @@ public interface PlotDataSourceInterface
 	/**
 	 * retuns the elevation and must be either a numeric 
 	 * value or an empty string and cannot be 'null'
+	 * The retruned value should be in Meters
 	 * @param plotName -- the plot
 	 */
 	String getElevation(String plotName);
