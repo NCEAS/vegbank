@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-07-02 20:47:56 $'
- * 	'$Revision: 1.8 $'
+ *  '$Date: 2002-07-03 04:32:12 $'
+ * 	'$Revision: 1.9 $'
  *
  *
  */
@@ -355,13 +355,8 @@ public void getPlotSummary(String plotId[], int plotIdNum)
 	catch (Exception e) 
 	{
 		System.out.println("failed in queryStore.getPlotSummary"+" " + e.getMessage());
-	}
-		
-}//end method
-
-
-
-
+	}		
+}
 
 
 
@@ -370,8 +365,10 @@ public void getPlotSummary(String plotId[], int plotIdNum)
  * Method to query the database to get all the plotId's by using a single 
  * attribute including taxonName, surfGeo, communityName, etc.  This method is
  * linked to the 'handleSimpleQuery' method in the DataRequestServlet
+ * 
  * @param     queryElement  the value of the attribute used to query
  * @param     queryElementType  the type of element used for querying the DB
+ *  types may include taxonname, state, surfgeo, currentcommunity, plotid
  */
 public void getPlotId(String queryElement, String queryElementType)
 {
