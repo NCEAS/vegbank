@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-11-09 02:28:06 $'
-* '$Revision: 1.131 $'
+* '$Date: 2004-11-17 21:20:42 $'
+* '$Revision: 1.132 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -230,8 +230,8 @@
     <copy overwrite="true" todir="${image_server}" filtering="no">
       <fileset dir="${image_src}">
         <include name="**"/>
-        <exclude name="*.psf" />
-        <exclude name="*.readme" />
+        <exclude name="*.psf"/>
+        <exclude name="*.readme"/>
       </fileset>
     </copy>
   </target>
@@ -248,9 +248,9 @@
 	* WEB SERVER
 	-->
   <target name="stuff" depends="vbsummary" description="=&gt; dist other static content">
-    <copy overwrite="true" todir="${news_server}" filtering="yes">
+    <!-- no more news: Nov17,2004 MTL : could be added back if we wanted to : <copy overwrite="true" todir="${news_server}" filtering="yes">
       <fileset dir="${news_src}"/>
-    </copy>
+    </copy> -->
     <copy overwrite="true" todir="${apache.document.root}/upload" filtering="yes">
       <fileset dir="upload"/>
     </copy>
