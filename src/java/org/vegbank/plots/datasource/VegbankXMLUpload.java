@@ -6,8 +6,8 @@ package org.vegbank.plots.datasource;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-29 22:08:45 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2003-10-30 04:51:28 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -282,8 +282,7 @@ public class VegbankXMLUpload
 			{
 				tableNames.add(localName);
 				this.addTable(localName);
-				// special handling? ... particular name handled differently?
-						
+				// special handling? ... particular name handled differently?	
 			}
 			// New Field?
 			else
@@ -686,6 +685,8 @@ public class VegbankXMLUpload
 		private Hashtable vegbankPackage = null;
 		private LoadingErrors errors = null;
 		private boolean commit = false;
+		// TODO: This may need to be a configurable property
+		private static final String VegbankAccessionPrefix = "VB.";
 		
 		public LoadTreeToDatabase(LoadingErrors errors)
 		{
@@ -1016,18 +1017,25 @@ public class VegbankXMLUpload
 		 * @param PK
 		 */
 		private void addAccessionCode(Hashtable fieldValueHash, String tableName, int PK)
-		{
-			// TODO: This may need to be a configurable property
-			String prefix = "VB";
-			
+		{	
 			String fieldName = Utility.getAccessionCodeAttributeName(tableName);
 			
-			if (fieldName != null )
+			if (fieldName != null)
 			{
-				fieldValueHash.put(fieldName, prefix + "." + PK );
+				String accessionCode = VegbankAccessionPrefix + PK;
+				fieldValueHash.put(fieldName, accessionCode);
+
+				LogUtility.log(
+					"LoadTreeToDatabase: Adding "
+						+ fieldName
+						+ " = "
+						+ accessionCode
+						+ " to "
+						+ tableName);
 			}
 			else
 			{
+				LogUtility.log("LoadTreeToDatabase: Not adding accessionCode for " + tableName);
 				// do nothing
 			}	
 		}
@@ -1056,7 +1064,7 @@ public class VegbankXMLUpload
 				LogUtility.log("LoadTreeToDatabase: Found no accessionCode for " + tableName);
 				// do nothing
 			}
-			else
+			else if ( accessionCode.startsWith(VegbankAccessionPrefix) )
 			{
 				// Need to get the pK of the table
 				Hashtable simpleHash = new Hashtable();
@@ -1092,6 +1100,16 @@ public class VegbankXMLUpload
 						LoadingErrors.DATABASELOADINGERROR,
 						errorMessage);
 				}
+			}
+			else
+			{
+				LogUtility.log(
+					"LoadTreeToDatabase: Got an alien "
+						+ fieldName
+						+ " in table "
+						+ tableName
+						+ " --> "
+						+ accessionCode);
 			}
 			
 			return PK;
@@ -1509,7 +1527,7 @@ public class VegbankXMLUpload
 			
 			if (ownerParty != null)
 			{
-				
+				//LogUtility.log(">>>>" + ownerParty);			
 				ownerPartyPK = insertParty(ownerParty);
 			}
 			

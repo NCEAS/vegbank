@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-29 18:25:35 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-10-30 04:51:28 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,6 +51,7 @@ import org.vegbank.common.model.Taxonobservation;
 import org.vegbank.common.model.VBModelBean;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
+import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.VBObjectUtils;
 import org.vegbank.common.utility.XMLUtil;
@@ -424,7 +425,7 @@ public class DBModelBeanReader
 		// Get all the PK associated with this object
 		Vector keys = new Vector();
 		
-		String PKName = table + "_ID";
+		String PKName = Utility.getPKNameFromTableName( table );
 		String SQLQuery = 
 			"SELECT " + PKName + " FROM " + table + " WHERE " + FKName + " = " + FKValue;
 		
@@ -478,8 +479,6 @@ public class DBModelBeanReader
 
 	private void getObjectFromDB(VBModelBean bean, String PKName, int PKValue)
 	{
-		// Place to store name values for populating object
-		HashMap hmap = new HashMap();
 		HashMap objectSetMethods = new HashMap();
 		
 		Method[] methods = bean.getClass().getMethods();
@@ -536,6 +535,9 @@ public class DBModelBeanReader
 			{
 				ResultSetMetaData metaData = rs.getMetaData();
 				
+				// Place to store name values for populating object
+				HashMap hmap = new HashMap();
+				
 				// For each value add to the HashMap
 				for ( int ii=0; ii < columnNumber; ii++ )
 				{
@@ -563,9 +565,20 @@ public class DBModelBeanReader
 						VBModelBean newObject = (VBModelBean) Utility.createObject(fullyQualifiedClassName);
 						try
 						{
-							System.out.println("Getting "  + propertyName + " for " + className);
-								
-							//	Fill out this object
+							LogUtility.log("DBModelBeanReader: Getting "  + propertyName + " for " + className);
+							
+							// new method -- maybe
+							// Don't know what i'm doing here -- tring to solve a bug
+							// maybe need special handling depending on PK search or FK search ?	
+							if ( fieldName.equalsIgnoreCase(Party.OWNER_ID))
+							{
+								fieldName = Party.PKNAME;
+							}
+							// New Method end -- maybe
+							
+							LogUtility.log("]]]" + hmap);
+							//	Fill out this object  --- RECURSIVE carefull
+							LogUtility.log("this.getObjectFromDB( " + newObject + "," + fieldName+ ", " +  new Integer(value).intValue() + ")" );
 							this.getObjectFromDB(newObject, fieldName, new Integer(value).intValue() );
 							Object[] parameters =  {newObject} ;
 							//	Add it using the set method

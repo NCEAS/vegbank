@@ -13,6 +13,7 @@ import java.util.TimeZone;
 import java.util.Vector;
 
 import org.vegbank.common.dbAdapter.*;
+import org.vegbank.common.model.*;
 
 /**
  * '$RCSfile: Utility.java,v $'
@@ -20,8 +21,8 @@ import org.vegbank.common.dbAdapter.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-10-27 19:49:02 $'
- * '$Revision: 1.17 $'
+ * '$Date: 2003-10-30 04:51:28 $'
+ * '$Revision: 1.18 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -441,21 +442,46 @@ public class Utility
 		
 		if ( entityName.equalsIgnoreCase("observation") )
 		{
-			accessionCodeName = "obsaccessionnumber";
+			accessionCodeName = Observation.OBSACCESSIONNUMBER;
 		}
-		else if (
-			entityName.equalsIgnoreCase("plantConcept")
-			|| entityName.equalsIgnoreCase("commConcept")
-			|| entityName.equalsIgnoreCase("party")
-			|| entityName.equalsIgnoreCase("reference"))
+		else if ( entityName.equalsIgnoreCase("plantConcept") )
 		{
-			accessionCodeName = "accessioncode";
+			accessionCodeName = Plantconcept.ACCESSIONCODE;
 		}
-		// commConcept, party, references
+		else if ( entityName.equalsIgnoreCase("commConcept"))
+		{
+			accessionCodeName = Commconcept.ACCESSIONCODE;
+		}
+		else if ( entityName.equalsIgnoreCase("party") )
+		{
+			accessionCodeName = Party.ACCESSIONCODE;
+		}
+		else if ( entityName.equalsIgnoreCase("reference") )
+		{
+			accessionCodeName = Reference.ACCESSIONCODE;
+		}
 		else
 		{
 			// Has no known accessionCode
 		}
-		return null;
+		return accessionCodeName;
+	}
+
+	/**
+	 * @param table
+	 * @return
+	 */
+	public static String getPKNameFromTableName(String table)
+	{
+		String PKname = "";
+		if ( table.equalsIgnoreCase("place"))
+		{
+			PKname = Place.PKNAME;
+		}
+		else
+		{
+			PKname = table + "_ID";
+		}
+		return PKname;
 	}
 }
