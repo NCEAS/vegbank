@@ -11,8 +11,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-11-16 06:19:25 $'
-  *  '$Revision: 1.4 $'
+  *      '$Date: 2004-11-16 06:37:20 $'
+  *  '$Revision: 1.5 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -45,7 +45,7 @@
 
 <blockquote>
 <h3>Please wait</h3>
-<span class="sizelarge">Your request is being processed.</span><br/>
+<p class="sizelarge">Your request is being processed.</p><br/>
 <br/>
 <br/>
 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
@@ -63,11 +63,10 @@
 </logic:messagesPresent>
 
 <br/> 
-<p>
-<span class="sizenormal">
+<p class="sizenormal">
 	Thank you for your patience.<br/>
 	<a href="mailto:help@vegbank.org">help@vegbank.org</a>
-</span>	
+</p>	
 
 </blockquote>
 
