@@ -768,7 +768,7 @@ drop table userDefined;
 CREATE TABLE userDefined
 (
     USERDEFINED_ID serial,
-    userDefinedName varchar (30),
+    userDefinedName varchar (50),
     userDefinedMetadata text,
     userDefinedCategory varchar (30),
     userDefinedType varchar (20) NOT NULL,
