@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-10-24 19:26:40 $'
- *  '$Revision: 1.9 $'
+ *  '$Date: 2003-10-25 01:48:41 $'
+ *  '$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -195,7 +195,7 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
         xml.append("&lt;/<xsl:value-of select="$XMLElementName"/>&gt;\n");
       }
         </xsl:when>
-        <xsl:when test="./attRelType/@type ='n/a' and attKey='PK'">
+        <xsl:when test="attKey='PK'">
       if ( this.get<xsl:value-of select="$cappedVariableName"/>() != 0)
       {
         xml.append(getIdent( indent ) + "&lt;<xsl:value-of select="$XMLElementName"/>&gt;");
@@ -214,7 +214,7 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
         </xsl:when>
         <xsl:otherwise>
           // Got <xsl:value-of select="./javaType/@type"/> <xsl:value-of select="./attName"/>
-          xml.append(getIdent( indent ) + "&lt;!-- Ignoring " + <xsl:value-of select="./attName"/> + " --&gt;\n");
+          xml.append(getIdent( indent ) + "&lt;!-- Ignoring <xsl:value-of select="$XMLElementName"/>  --&gt;\n");
         </xsl:otherwise>
       </xsl:choose>
 
