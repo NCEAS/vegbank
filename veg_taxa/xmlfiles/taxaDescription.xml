@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE plantTaxa SYSTEM "file:C:\plot_database\taxa.dtd">
+<plantTaxa>
+	<name>
+		<symbol>Symbol</symbol>
+		<genus>Genus</genus>
+		<species>Species</species>
+		<startDate>Start Date</startDate>
+	</name>
+	<reference>
+		<author>Author</author>
+		<dateEntered>Date entered</dateEntered>
+		<citation>Citation Information</citation>
+	</reference>
+	<circumscription>
+		<type>Circumscription Type</type>
+		<startDate>Start Date</startDate>
+		<stopDate>Stop Date</stopDate>
+	</circumscription>
+	<party>
+		<orgName>Organization Name</orgName>
+		<status>The status of this entry - is it Standard/nonStandrd</status>
+	</party>
+	<correlation>
+		<correlationParty> Name of the party that uses a correlative circumscription </correlationParty>
+		
+		<correlationReference>
+				<correlationAuthor>Author of the reference cited by the citation of the correlating circumscription</correlationAuthor>
+				<correlationDateEntered>Date inwhich the correlating reference was entered</correlationDateEntered>
+				<correlationCitation>Information about the reference citation of the correlating circumscription</correlationCitation>
+		</correlationReference>
+		
+		<correlationName>
+			<correlationSymbol>Symbol refering to the name of the plant which correlates </correlationSymbol> 
+			<correlationGenus>Genus name of the plant that correlates </correlationGenus>
+			<correlationSpecies>Species name of the plant that correlates </correlationSpecies> 
+		</correlationName>
+		
+		<congruence>Type of correlation between the plants (eg. subset, superset, equality, intersection</congruence> 
+	</correlation>
+	
+	
+</plantTaxa>

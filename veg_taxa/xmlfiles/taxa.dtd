@@ -1,0 +1,57 @@
+<!ENTITY % Boolean "(true | false) 'false'">
+
+<!-- JHH 7_2000: first stab at defining a vegetation description model for the plant taxa database
+
+	Purpose:  	this dtd is used for the taxa xml
+
+	Copyright:	2000 Regents of the University of California and the 
+			National Center for Ecological Analysis and Synthesis
+
+	Authors:	John Harris
+
+-->
+
+<!-- The root element -->
+
+
+<!ELEMENT plantTaxa (name, reference, circumscription,party,correlation)>
+<!ELEMENT name (symbol,genus,species,startDate+)>
+	<!ELEMENT symbol (#PCDATA)>
+	<!ELEMENT genus (#PCDATA)>
+	<!ELEMENT species (#PCDATA)>
+	<!ELEMENT startDate (#PCDATA)>
+	<!--the stop date will probably not be known by the user and will have to be calculated
+		what is the method for doing this?-->
+	
+<!ELEMENT reference (author, dateEntered, citation)>
+	<!ELEMENT author (#PCDATA)>
+	<!ELEMENT dateEntered (#PCDATA)>
+	<!ELEMENT citation (#PCDATA)>
+	
+<!ELEMENT circumscription (type,date)>
+	<!ELEMENT type (#PCDATA)>
+	<!ELEMENT startDate (#PCDATA)>
+	<!ELEMENT stopDate (#PCDATA)>
+	
+<!ELEMENT party (orgName, status)>
+	<!ELEMENT orgName (#PCDATA)>
+	<!ELEMENT status (#PCDATA)>
+	
+	
+<!ELEMENT correlation (correlationParty, correlationReference, correlationName, congruence)>
+	<!ELEMENT correlationParty (#PCDATA)>
+	
+	<!ELEMENT correlationReference (correlationAuthor, correlationDateEntered, correlationCitation)>
+		<!ELEMENT correlationAuthor (#PCDATA)>
+		<!ELEMENT correlationDateEntered (#PCDATA)>
+		<!ELEMENT correlationCitation (#PCDATA)>
+	
+	<!ELEMENT correlationName (correlationSymbol,correlationGenus,correlationSpecies+)>
+		<!ELEMENT correlationSymbol (#PCDATA)>
+		<!ELEMENT correlationGenus (#PCDATA)>
+		<!ELEMENT correlationSpecies (#PCDATA)>
+	<!ELEMENT congruence (#PCDATA)>	
+<!-- EOF -->
+
+
+
