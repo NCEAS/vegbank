@@ -5,7 +5,7 @@
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
   -->
 <!--<?xml-stylesheet type="text/xsl" href="check_attForms.xsl"?>-->
-<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp-autogen.xsl"?>
+<?xml-stylesheet type="text/xsl" href="dbmodel-to-schema.xsl"?>
 <!--
 -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
@@ -742,7 +742,7 @@
     <attribute>
       <attName>COMMCONCEPT_ID</attName>
       <attLabel>Community Concept</attLabel>
-      <attModel>logical</attModel>
+      <attModel>implementation</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
@@ -882,7 +882,7 @@
     <attribute>
       <attName>PARTY_ID</attName>
       <attLabel>Party</attLabel>
-      <attModel>logical</attModel>
+      <attModel>implementation</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
@@ -901,11 +901,11 @@
     <attribute>
       <attName>COMMSTATUS_ID</attName>
       <attLabel>Comm Status</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attRelType type="normal" name="n/a"/>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>commStatus.COMMSTATUS_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -1738,7 +1738,7 @@ change through time.</entitySummary>
     <attribute>
       <attName>PLANTCONCEPT_ID</attName>
       <attLabel>Plant Concept</attLabel>
-      <attModel>logical</attModel>
+      <attModel>implementation</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
@@ -1913,7 +1913,7 @@ change through time.</entitySummary>
     <attribute>
       <attName>PARTY_ID</attName>
       <attLabel>Party</attLabel>
-      <attModel>logical</attModel>
+      <attModel>implementation</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
@@ -1933,11 +1933,11 @@ change through time.</entitySummary>
     <attribute>
       <attName>PLANTSTATUS_ID</attName>
       <attLabel>Plant Status</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attRelType type="normal" name="n/a"/>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>plantStatus.PLANTSTATUS_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
