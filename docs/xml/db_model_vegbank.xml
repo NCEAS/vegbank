@@ -39,16 +39,16 @@
       <attDefinition>Foreign key into the commName table providing the name used for the community when it was defined by usage in a publication (which could be this database).</attDefinition>
     </attribute>
     <attribute>
-      <attName>COMMREFERENCE_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>commReference.COMMREFERENCE_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the Reference table to identify a reference in which the community was identified by a name.  This could be a regular publication, or a self reference created by completing the commDescription field in commReference</attDefinition>
+      <attDefinition>Foreign key into the Reference table to identify a reference in which the community was identified by a name.  This could be a regular publication, or a self reference created by completing the commDescription field in reference</attDefinition>
     </attribute>
     <attribute>
       <attName>conceptDescription</attName>
@@ -246,16 +246,16 @@
       <attDefinition>The community name.</attDefinition>
     </attribute>
     <attribute>
-      <attName>COMMREFERENCE_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>commReference.COMMREFERENCE_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into commReference to identify the source of the name.</attDefinition>
+      <attDefinition>Foreign key into reference to identify the source of the name.</attDefinition>
     </attribute>
     <attribute>
       <attName>dateEntered</attName>
@@ -414,12 +414,12 @@
       <attDefinition>Foreign key to identify the concept to which a party assigns a status</attDefinition>
     </attribute>
     <attribute>
-      <attName>COMMREFERENCE_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>commReference.COMMREFERENCE_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -626,18 +626,6 @@
       <attDefinition>This field is the foreign key into the commConcept table.</attDefinition>
     </attribute>
     <attribute>
-      <attName>ceglCode</attName>
-      <attModel>implementation</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (200)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes/>
-      <attDefinition/>
-    </attribute>
-    <attribute>
       <attName>usageStart</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
@@ -746,656 +734,6 @@
     </attribute>
   </entity>
   <entity>
-    <entityName>commReference</entityName>
-    <entitySummary>This table stores references which are linked to community concepts.</entitySummary>
-    <entityDescription/>
-    <module>community</module>
-    <attribute>
-      <attName>commReference_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>serial</attType>
-      <attKey>PK</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the commReference table. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>shortName</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The 'shortName' field provides a concise or abbreviated name that describes the resource that is being documented.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>commReferenceType</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>closed</attListType>
-      <attList>
-        <attListItem>
-          <attListValue>Article</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Book</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Chapter</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>EditedBook</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Manuscript</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Report</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Thesis</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>ConferenceProceedings</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>PersonalCommunication</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Presentation</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Website</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Generic</attListValue>
-        </attListItem>
-      </attList>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Describes the type of reference this generic type is being used to represent.  Examples: book, journal article, webpage.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>title</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The formal title given to the work by its author or publisher.  The 'title' field provides a description of the resource that is being documented that is long enough to differentiate it from other similar resources.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>titleSuperior</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>A second, higher order title where appropriate, which in the case of a reference to a chapter is the Book title, and in the case of a Conference Presentation is the Name of the Conference.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>pubDate</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Date</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The 'pubDate' field represents the date that the resource was published. The format should be represented as: CCYY, which represents a 4 digit year, or as CCYY-MM-DD, which denotes the full year, month, and day. Note that month and day are optional components. Formats must conform to ISO 8601. For example: 1999-10-26</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>accessDate</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Date</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The date the resource being referenced was accessed.  This is useful if the resource is could be changed after formal publication, such as websites or databases.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>conferenceDate</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Date</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The date the conference was held.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>commReferenceJournal_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attReferences>commReferenceJournal.commReferenceJournal_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the journal table to identify the journal of this commReference.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>volume</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The volume field is used to describe the volume of the journal in which the article appears.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>issue</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The issue field is used to describe the issue of the journal in which the article appears.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>pageRange</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The page range field is used for the beginning and ending pages of the journal article that is being documented.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>totalPages</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The total pages field is used to describe the total number of pages in the book that is being described.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>publisher</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The organization that physically put together the report and publishes it.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>publicationPlace</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The location at which the work was published. This is usually the name of the city in which the publishing house produced the work.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>isbn</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The ISBN, or International Standard Book Number that has been assigned to this literature resource.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>edition</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The edition field is to document the edition of the generic reference type that is being described.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>numberOfVolumes</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Number of volumes in a collection</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>chapterNumber</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The chapter number of the chapter of a book that is being described.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>reportNumber</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The report number field is used to describe the unique identification number that has been issued by the report institution for the report being described.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>communicationType</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The type of personal communication. Could be an email, letter, memo, transcript of conversation either hardcopy or online.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>degree</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The degree field is used to describe the name or degree level for which the thesis was completed.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>url</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>text</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>A URL (Uniform Resource Locator) from which this resource can be downloaded or additional information can be obtained.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>doi</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>text</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>A Digital Object Identifier - a digital identifier for any object of intellectual property. A DOI provides a means of persistently identifying a piece of intellectual property on a digital network and associating it with related current data.  (www.doi.org)</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>additionalInfo</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>text</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>This field provides any information that is not characterized by the other resource metadata fields. Example: Copyright 2001, Robert Warner</attDefinition>
-    </attribute>
-  </entity>
-  <entity>
-    <entityName>commReferenceAltIdent</entityName>
-    <entitySummary>This table stores information about identifiers that can be used to indicate a particular commReference.</entitySummary>
-    <entityDescription/>
-    <module>community</module>
-    <attribute>
-      <attName>commReferenceAltIdent_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>PK</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the commReferenceAltIdent table. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>commReference_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attReferences>commReference.commReference_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the commReference table to indicate which commReference is referenced by this alternate identifier.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>system</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The data management system within which an identifier is in scope and therefore unique. This is typically a URL (Uniform Resource Locator) that indicates a data management system. All identifiers that share a system must be unique. In other words, if the same identifier is used in two locations with identical systems, then by definition the objects at which they point are in fact the same object. Example(s): http://metacat.somewhere.org/svc/mc/</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>identifier</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>An additional, secondary identifier for this entity. The primary identifier belongs in the commReference table, but additional identifiers that are used to label this entity, possibly from different data management systems, can be listed here. Example: VCR3465</attDefinition>
-    </attribute>
-  </entity>
-  <entity>
-    <entityName>commReferenceContributor</entityName>
-    <entitySummary>This table links commReference parties with commReferences and shows how a contribution was made by the party.</entitySummary>
-    <entityDescription/>
-    <module>community</module>
-    <attribute>
-      <attName>commReferenceContributor_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>PK</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the commReferenceContributor table. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>commReference_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attReferences>commReference.commReference_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the commReference table to indicate which commReference is referenced by this alternate identifier.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>commReferenceParty_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attReferences>commReferenceParty.commReferenceParty_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the commReferenceParty table to indicate which person contributed.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>roleType</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>closed</attListType>
-      <attList>
-        <attListItem>
-          <attListValue>Author</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Editor</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Originator</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Performer</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Recipient</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>CustodianSteward</attListValue>
-        </attListItem>
-      </attList>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Use this field to describe the role the party played with respect to the resource. Some potential roles include technician, reviewer, principal investigator, and many others.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>position</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Numerical order in which this contributor's name should be in the order of contributors, if applicable.  Examples: 1 [for the first author], 2, [for the second author], etc.</attDefinition>
-    </attribute>
-  </entity>
-  <entity>
-    <entityName>commReferenceParty</entityName>
-    <entitySummary>This table stores information about parties that contributed to a commReference.</entitySummary>
-    <entityDescription/>
-    <module>community</module>
-    <attribute>
-      <attName>commReferenceParty_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>PK</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the commReferenceParty table. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>type</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Type of Party this record refers to: usually person or institution.  Type determines rules for which fields must be completed.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>positionName</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>This field is intended to be used instead of a particular person or full organization name. If the associated person that holds the role changes frequently, then Position Name would be used for consistency. Note that this field, used in conjunction with 'organizationName' and 'individualName' make up a single logical originator. Because of this, an originator with only the individualName of 'Joe Smith' is NOT the same as an originator with the name of 'Joe Smith' and the organizationName of 'NSF'. Also, the positionName should not be used in conjunction with individualName unless only that individual at that position would be considered an originator for the data package. If a positionName is used in conjunction with an organizationName, then that implies that any person who currently occupies said positionName at organizationName is the originator of the data package. Example(s): Niwot Ridge Data Manager</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>salutation</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The salutation field is used in addressing an individual with a particular title, such as Dr., Ms., Mrs., Mr., etc.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>givenName</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>All names except surname</attNotes>
-      <attDefinition>The given name field is used for the all names, except the surname, of the individual associated with the resource.  Possible usages include: first name and middle name, first name and middle initials, first name, etc.  Example(s): Jo, Jo R., Jo R.W., John Robert Peter</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>surname</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The surname field is used for the last name of the individual associated with the resource.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>suffix</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>A suffix or suffix abbreviation that follows a name.  Examples: Jr., Senior, III, etc. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>organizationName</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The responsible party field contains the full name of the organization that is associated with the resource. This field is intended to describe which institution or overall organization is associated with the resource being described. Note that this field, used in conjunction with 'individualName' and 'positionName' make up a single logical originator. Because of this, an originator with only the individualName of 'Joe Smith' is NOT the same as an originator with the name of 'Joe Smith' and the organizationName of 'NSF'. Also, the positionName should not be used in conjunction with individualName unless only that individual at that position would be considered an originator for the data package. If a positionName is used in conjunction with an organizationName, then that implies that any person who currently occupies said positionName at organizationName is the originator of the data package. Example(s): National Center for Ecological Analysis and Synthesis</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>currentParty</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attReferences>commReferenceParty.commReferenceParty_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>recursive FK</attNotes>
-      <attDefinition>Recursive Foreign key into the commReferenceParty table to indicate the current name of the party.</attDefinition>
-    </attribute>
-  </entity>
-  <entity>
-    <entityName>commReferenceJournal</entityName>
-    <entitySummary>This table stores information about journals used as part of a commReference.</entitySummary>
-    <entityDescription/>
-    <module>community</module>
-    <attribute>
-      <attName>commReferenceJournal_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>PK</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the commReferenceJournal table. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>journal</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The name of the journal, magazine, newspaper, zine, etc... in which the article was published. Example(s): Ecology, New York Times, Harper's, Canadian Journal of Botany/Revue Canadienne de Botanique ,The Journal of the American Medical Association</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>issn</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The ISSN, or International Standard Serial Number that has been assigned to this literature resource. Example(s): ISSN 1234-5679</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>abbreviation</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Standard abbreviation or shorter name of the journal.  Example(s): Can. J. Bot./Rev. Can. Bot., JAMA</attDefinition>
-    </attribute>
-  </entity>
-  <entity>
     <entityName>plantConcept</entityName>
     <entitySummary>This table store the concepts that are linked to plant names through the plantUsage table.</entitySummary>
     <entityDescription/>
@@ -1425,12 +763,12 @@
       <attDefinition>This is a foreign key into the plant name list, the entery in which when combined wiht a reference constitutes a concept.</attDefinition>
     </attribute>
     <attribute>
-      <attName>PLANTREFERENCE_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>plantReference.PLANTREFERENCE_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -1657,16 +995,16 @@ change through time.</entitySummary>
       <attDefinition>The plant name.</attDefinition>
     </attribute>
     <attribute>
-      <attName>PLANTREFERENCE_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>plantReference.PLANTREFERENCE_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the plantReference table to identify the original source of the name (usually the type description).</attDefinition>
+      <attDefinition>Foreign key into the reference table to identify the original source of the name (usually the type description).</attDefinition>
     </attribute>
     <attribute>
       <attName>dateEntered</attName>
@@ -1837,12 +1175,12 @@ change through time.</entitySummary>
       <attDefinition>Foreign key to identify the concept to which a party assigns a status</attDefinition>
     </attribute>
     <attribute>
-      <attName>PLANTREFERENCE_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>plantReference.PLANTREFERENCE_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -2248,807 +1586,6 @@ change through time.</entitySummary>
     </attribute>
   </entity>
   <entity>
-    <entityName>plantReference</entityName>
-    <entitySummary>This table stores references which are linked to plant names and plant concepts.</entitySummary>
-    <entityDescription/>
-    <module>plant</module>
-    <attribute>
-      <attName>plantReference_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>serial</attType>
-      <attKey>PK</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the plantReference table. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>shortName</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The 'shortName' field provides a concise or abbreviated name that describes the resource that is being documented.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>plantReferenceType</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>closed</attListType>
-      <attList>
-        <attListItem>
-          <attListValue>Article</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Book</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Chapter</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>EditedBook</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Manuscript</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Report</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Thesis</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>ConferenceProceedings</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>PersonalCommunication</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Presentation</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Website</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Generic</attListValue>
-        </attListItem>
-      </attList>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Describes the type of reference this generic type is being used to represent.  Examples: book, journal article, webpage.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>title</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The formal title given to the work by its author or publisher.  The 'title' field provides a description of the resource that is being documented that is long enough to differentiate it from other similar resources.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>titleSuperior</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>A second, higher order title where appropriate, which in the case of a reference to a chapter is the Book title, and in the case of a Conference Presentation is the Name of the Conference.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>pubDate</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Date</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The 'pubDate' field represents the date that the resource was published. The format should be represented as: CCYY, which represents a 4 digit year, or as CCYY-MM-DD, which denotes the full year, month, and day. Note that month and day are optional components. Formats must conform to ISO 8601. For example: 1999-10-26</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>accessDate</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Date</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The date the resource being referenced was accessed.  This is useful if the resource is could be changed after formal publication, such as websites or databases.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>conferenceDate</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Date</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The date the conference was held.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>plantReferenceJournal_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attReferences>plantReferenceJournal.plantReferenceJournal_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the journal table to identify the journal of this plantReference.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>volume</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The volume field is used to describe the volume of the journal in which the article appears.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>issue</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The issue field is used to describe the issue of the journal in which the article appears.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>pageRange</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The page range field is used for the beginning and ending pages of the journal article that is being documented.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>totalPages</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The total pages field is used to describe the total number of pages in the book that is being described.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>publisher</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The organization that physically put together the report and publishes it.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>publicationPlace</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The location at which the work was published. This is usually the name of the city in which the publishing house produced the work.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>isbn</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The ISBN, or International Standard Book Number that has been assigned to this literature resource.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>edition</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The edition field is to document the edition of the generic reference type that is being described.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>numberOfVolumes</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Number of volumes in a collection</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>chapterNumber</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The chapter number of the chapter of a book that is being described.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>reportNumber</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The report number field is used to describe the unique identification number that has been issued by the report institution for the report being described.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>communicationType</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The type of personal communication. Could be an email, letter, memo, transcript of conversation either hardcopy or online.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>degree</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The degree field is used to describe the name or degree level for which the thesis was completed.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>url</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>text</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>A URL (Uniform Resource Locator) from which this resource can be downloaded or additional information can be obtained.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>doi</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>text</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>A Digital Object Identifier - a digital identifier for any object of intellectual property. A DOI provides a means of persistently identifying a piece of intellectual property on a digital network and associating it with related current data.  (www.doi.org)</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>additionalInfo</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>text</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>This field provides any information that is not characterized by the other resource metadata fields. Example: Copyright 2001, Robert Warner</attDefinition>
-    </attribute>
-  </entity>
-  <entity>
-    <entityName>plantReferenceAltIdent</entityName>
-    <entitySummary>This table stores information about identifiers that can be used to indicate a particular plantReference.</entitySummary>
-    <entityDescription/>
-    <module>plant</module>
-    <attribute>
-      <attName>plantReferenceAltIdent_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>PK</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the plantReferenceAltIdent table. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>plantReference_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attReferences>plantReference.plantReference_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the plantReference table to indicate which plantReference is referenced by this alternate identifier.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>system</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The data management system within which an identifier is in scope and therefore unique. This is typically a URL (Uniform Resource Locator) that indicates a data management system. All identifiers that share a system must be unique. In other words, if the same identifier is used in two locations with identical systems, then by definition the objects at which they point are in fact the same object. Example(s): http://metacat.somewhere.org/svc/mc/</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>identifier</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>An additional, secondary identifier for this entity. The primary identifier belongs in the plantReference table, but additional identifiers that are used to label this entity, possibly from different data management systems, can be listed here. Example: VCR3465</attDefinition>
-    </attribute>
-  </entity>
-  <entity>
-    <entityName>plantReferenceContributor</entityName>
-    <entitySummary>This table links plantReference parties with plantReferences and shows how a contribution was made by the party.</entitySummary>
-    <entityDescription/>
-    <module>plant</module>
-    <attribute>
-      <attName>plantReferenceContributor_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>PK</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the plantReferenceContributor table. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>plantReference_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attReferences>plantReference.plantReference_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the plantReference table to indicate which plantReference is referenced by this alternate identifier.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>plantReferenceParty_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attReferences>plantReferenceParty.plantReferenceParty_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the plantReferenceParty table to indicate which person contributed.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>roleType</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>closed</attListType>
-      <attList>
-        <attListItem>
-          <attListValue>Author</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Editor</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Originator</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Performer</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>Recipient</attListValue>
-        </attListItem>
-        <attListItem>
-          <attListValue>CustodianSteward</attListValue>
-        </attListItem>
-      </attList>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Use this field to describe the role the party played with respect to the resource. Some potential roles include technician, reviewer, principal investigator, and many others.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>position</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Numerical order in which this contributor's name should be in the order of contributors, if applicable.  Examples: 1 [for the first author], 2, [for the second author], etc.</attDefinition>
-    </attribute>
-  </entity>
-  <entity>
-    <entityName>plantReferenceParty</entityName>
-    <entitySummary>This table stores information about parties that contributed to a plantReference.</entitySummary>
-    <entityDescription/>
-    <module>plant</module>
-    <attribute>
-      <attName>plantReferenceParty_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>PK</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the plantReferenceParty table. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>type</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Type of Party this record refers to: usually person or institution.  Type determines rules for which fields must be completed.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>positionName</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>This field is intended to be used instead of a particular person or full organization name. If the associated person that holds the role changes frequently, then Position Name would be used for consistency. Note that this field, used in conjunction with 'organizationName' and 'individualName' make up a single logical originator. Because of this, an originator with only the individualName of 'Joe Smith' is NOT the same as an originator with the name of 'Joe Smith' and the organizationName of 'NSF'. Also, the positionName should not be used in conjunction with individualName unless only that individual at that position would be considered an originator for the data package. If a positionName is used in conjunction with an organizationName, then that implies that any person who currently occupies said positionName at organizationName is the originator of the data package. Example(s): Niwot Ridge Data Manager</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>salutation</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The salutation field is used in addressing an individual with a particular title, such as Dr., Ms., Mrs., Mr., etc.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>givenName</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>All names except surname</attNotes>
-      <attDefinition>The given name field is used for the all names, except the surname, of the individual associated with the resource.  Possible usages include: first name and middle name, first name and middle initials, first name, etc.  Example(s): Jo, Jo R., Jo R.W., John Robert Peter</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>surname</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The surname field is used for the last name of the individual associated with the resource.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>suffix</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>A suffix or suffix abbreviation that follows a name.  Examples: Jr., Senior, III, etc. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>organizationName</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The responsible party field contains the full name of the organization that is associated with the resource. This field is intended to describe which institution or overall organization is associated with the resource being described. Note that this field, used in conjunction with 'individualName' and 'positionName' make up a single logical originator. Because of this, an originator with only the individualName of 'Joe Smith' is NOT the same as an originator with the name of 'Joe Smith' and the organizationName of 'NSF'. Also, the positionName should not be used in conjunction with individualName unless only that individual at that position would be considered an originator for the data package. If a positionName is used in conjunction with an organizationName, then that implies that any person who currently occupies said positionName at organizationName is the originator of the data package. Example(s): National Center for Ecological Analysis and Synthesis</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>currentParty</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attReferences>plantReferenceParty.plantReferenceParty_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>recursive FK</attNotes>
-      <attDefinition>Recursive Foreign key into the plantReferenceParty table to indicate the current name of the party.</attDefinition>
-    </attribute>
-  </entity>
-  <entity>
-    <entityName>plantReferenceJournal</entityName>
-    <entitySummary>This table stores information about journals used as part of a plantReference.</entitySummary>
-    <entityDescription/>
-    <module>plant</module>
-    <attribute>
-      <attName>plantReferenceJournal_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>PK</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the plantReferenceJournal table. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>journal</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The name of the journal, magazine, newspaper, zine, etc... in which the article was published. Example(s): Ecology, New York Times, Harper's, Canadian Journal of Botany/Revue Canadienne de Botanique ,The Journal of the American Medical Association</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>issn</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The ISSN, or International Standard Serial Number that has been assigned to this literature resource. Example(s): ISSN 1234-5679</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>abbreviation</attName>
-      <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
-      <attType>varchar (250)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Standard abbreviation or shorter name of the journal.  Example(s): Can. J. Bot./Rev. Can. Bot., JAMA</attDefinition>
-    </attribute>
-  </entity>
-  <entity>
-    <entityName>address</entityName>
-    <entitySummary>This table contains the postal address, email address and/or organizational affiliation for a parties at the time of a plot event. </entitySummary>
-    <entityDescription/>
-    <module>plot</module>
-    <attribute>
-      <attName>ADDRESS_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>serial</attType>
-      <attKey>PK</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>Primary key for the address table. </attNotes>
-      <attDefinition>Database generated identifier assigned to each unique party address (note that a single party may have multiple addresses but that only one may be 'current').</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>PARTY_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attReferences>party.PARTY_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>Foreign key into the party table. </attNotes>
-      <attDefinition>Link to the party to which this address applies</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>ORGANIZATION_ID</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Integer</attType>
-      <attKey>FK</attKey>
-      <attReferences>party.PARTY_ID</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>Foreign key into the party table</attNotes>
-      <attDefinition>Link to an organization with which a party is affiliated</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>orgPosition</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (50)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a </attNotes>
-      <attDefinition>Position of party within organization.</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>email</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (100)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>email address</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>deliveryPoint</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (200)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a </attNotes>
-      <attDefinition>Address line for the location
-(Street name, box number, suite).</attDefinition>
-    </attribute>
-    <attribute>
-      <attName>city</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (50)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a </attNotes>
-      <attDefinition>City of the location. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>administrativeArea</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (50)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a </attNotes>
-      <attDefinition>State, province of the location. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>postalCode</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (10)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a </attNotes>
-      <attDefinition>Zip code or other postal code. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>country</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (50)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Country of the physical address. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>currentFlag</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Boolean</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a </attNotes>
-      <attDefinition>This flag signifies whether the address is the current address of the party. </attDefinition>
-    </attribute>
-    <attribute>
-      <attName>addressStartDate</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Date</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The first database date on which the address/organization information applied (have a discrete date on which address is known to applied -- not necessarily the first date on which the address applied).</attDefinition>
-    </attribute>
-  </entity>
-  <entity>
     <entityName>aux_Role</entityName>
     <entitySummary>This table stores valid role codes for use in contributor tables</entitySummary>
     <entityDescription/>
@@ -3139,12 +1676,12 @@ change through time.</entitySummary>
     </attribute>
   </entity>
   <entity>
-    <entityName>citation</entityName>
+    <entityName>reference</entityName>
     <entitySummary>This table stores information about references cited within the database</entitySummary>
     <entityDescription/>
     <module>plot</module>
     <attribute>
-      <attName>citation_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>serial</attType>
@@ -3153,7 +1690,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the citation table. </attDefinition>
+      <attDefinition>Primary key for the reference table. </attDefinition>
     </attribute>
     <attribute>
       <attName>shortName</attName>
@@ -3168,7 +1705,7 @@ change through time.</entitySummary>
       <attDefinition>The 'shortName' field provides a concise or abbreviated name that describes the resource that is being documented.</attDefinition>
     </attribute>
     <attribute>
-      <attName>citationType</attName>
+      <attName>referenceType</attName>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
@@ -3277,16 +1814,16 @@ change through time.</entitySummary>
       <attDefinition>The date the conference was held.</attDefinition>
     </attribute>
     <attribute>
-      <attName>citationJournal_ID</attName>
+      <attName>referenceJournal_ID</attName>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>citationJournal.citationJournal_ID</attReferences>
+      <attReferences>referenceJournal.referenceJournal_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the journal table to identify the journal of this citation.</attDefinition>
+      <attDefinition>Foreign key into the journal table to identify the journal of this reference.</attDefinition>
     </attribute>
     <attribute>
       <attName>volume</attName>
@@ -3482,12 +2019,12 @@ change through time.</entitySummary>
     </attribute>
   </entity>
   <entity>
-    <entityName>citationAltIdent</entityName>
-    <entitySummary>This table stores information about identifiers that can be used to indicate a particular citation.</entitySummary>
+    <entityName>referenceAltIdent</entityName>
+    <entitySummary>This table stores information about identifiers that can be used to indicate a particular reference.</entitySummary>
     <entityDescription/>
     <module>plot</module>
     <attribute>
-      <attName>citationAltIdent_ID</attName>
+      <attName>referenceAltIdent_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
@@ -3496,19 +2033,19 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the citationAltIdent table. </attDefinition>
+      <attDefinition>Primary key for the referenceAltIdent table. </attDefinition>
     </attribute>
     <attribute>
-      <attName>citation_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>citation.citation_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the citation table to indicate which citation is referenced by this alternate identifier.</attDefinition>
+      <attDefinition>Foreign key into the reference table to indicate which reference is referenced by this alternate identifier.</attDefinition>
     </attribute>
     <attribute>
       <attName>system</attName>
@@ -3532,16 +2069,16 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>An additional, secondary identifier for this entity. The primary identifier belongs in the citation table, but additional identifiers that are used to label this entity, possibly from different data management systems, can be listed here. Example: VCR3465</attDefinition>
+      <attDefinition>An additional, secondary identifier for this entity. The primary identifier belongs in the reference table, but additional identifiers that are used to label this entity, possibly from different data management systems, can be listed here. Example: VCR3465</attDefinition>
     </attribute>
   </entity>
   <entity>
-    <entityName>citationContributor</entityName>
-    <entitySummary>This table links citation parties with citations and shows how a contribution was made by the party.</entitySummary>
+    <entityName>referenceContributor</entityName>
+    <entitySummary>This table links reference parties with references and shows how a contribution was made by the party.</entitySummary>
     <entityDescription/>
     <module>plot</module>
     <attribute>
-      <attName>citationContributor_ID</attName>
+      <attName>referenceContributor_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
@@ -3550,31 +2087,31 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the citationContributor table. </attDefinition>
+      <attDefinition>Primary key for the referenceContributor table. </attDefinition>
     </attribute>
     <attribute>
-      <attName>citation_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>citation.citation_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the citation table to indicate which citation is referenced by this alternate identifier.</attDefinition>
+      <attDefinition>Foreign key into the reference table to indicate which reference is referenced by this alternate identifier.</attDefinition>
     </attribute>
     <attribute>
-      <attName>citationParty_ID</attName>
+      <attName>referenceParty_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>citationParty.citationParty_ID</attReferences>
+      <attReferences>referenceParty.referenceParty_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Foreign key into the citationParty table to indicate which person contributed.</attDefinition>
+      <attDefinition>Foreign key into the referenceParty table to indicate which person contributed.</attDefinition>
     </attribute>
     <attribute>
       <attName>roleType</attName>
@@ -3621,12 +2158,12 @@ change through time.</entitySummary>
     </attribute>
   </entity>
   <entity>
-    <entityName>citationParty</entityName>
-    <entitySummary>This table stores information about parties that contributed to a citation.</entitySummary>
+    <entityName>referenceParty</entityName>
+    <entitySummary>This table stores information about parties that contributed to a reference.</entitySummary>
     <entityDescription/>
     <module>plot</module>
     <attribute>
-      <attName>citationParty_ID</attName>
+      <attName>referenceParty_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
@@ -3635,7 +2172,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the citationParty table. </attDefinition>
+      <attDefinition>Primary key for the referenceParty table. </attDefinition>
     </attribute>
     <attribute>
       <attName>type</attName>
@@ -3727,20 +2264,20 @@ change through time.</entitySummary>
       <attNulls>YES</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>citationParty.citationParty_ID</attReferences>
+      <attReferences>referenceParty.referenceParty_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>recursive FK</attNotes>
-      <attDefinition>Recursive Foreign key into the citationParty table to indicate the current name of the party.</attDefinition>
+      <attDefinition>Recursive Foreign key into the referenceParty table to indicate the current name of the party.</attDefinition>
     </attribute>
   </entity>
   <entity>
-    <entityName>citationJournal</entityName>
-    <entitySummary>This table stores information about journals used as part of a citation.</entitySummary>
+    <entityName>referenceJournal</entityName>
+    <entitySummary>This table stores information about journals used as part of a reference.</entitySummary>
     <entityDescription/>
     <module>plot</module>
     <attribute>
-      <attName>citationJournal_ID</attName>
+      <attName>referenceJournal_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
@@ -3749,7 +2286,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the citationJournal table. </attDefinition>
+      <attDefinition>Primary key for the referenceJournal table. </attDefinition>
     </attribute>
     <attribute>
       <attName>journal</attName>
@@ -3950,10 +2487,10 @@ a specific plot classification event.</entityDescription>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>citation.CITATION_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes>Foreign key into the citation table</attNotes>
+      <attNotes>Foreign key into the reference table</attNotes>
       <attDefinition>Link to a publication wherein the observation was classified.</attDefinition>
     </attribute>
     <attribute>
@@ -4154,11 +2691,11 @@ a specific plot classification event.</entityDescription>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>citation.CITATION_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes>Foreign key into the citation table</attNotes>
-      <attDefinition>Link to the reference from which information on the community concept was obtained during the classification event. (A case could be made for thisd being moved to commReference.)</attDefinition>
+      <attNotes>Foreign key into the reference table</attNotes>
+      <attDefinition>Link to the reference from which information on the community concept was obtained during the classification event. (A case could be made for thisd being moved to reference.)</attDefinition>
     </attribute>
     <attribute>
       <attName>notes</attName>
@@ -4293,16 +2830,16 @@ a specific plot classification event.</entityDescription>
       <attDefinition>Database generated identifier assigned to each unique coverclass methodology. </attDefinition>
     </attribute>
     <attribute>
-      <attName>CITATION_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>citation.CITATION_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes>Foreign key into the citation table.</attNotes>
-      <attDefinition>Foreign Key into the citation table, linking the defining reference to a cover method.</attDefinition>
+      <attNotes>Foreign key into the reference table.</attNotes>
+      <attDefinition>Foreign Key into the reference table, linking the defining reference to a cover method.</attDefinition>
     </attribute>
     <attribute>
       <attName>coverType</attName>
@@ -4824,15 +3361,15 @@ a specific plot classification event.</entityDescription>
       <attDefinition>Although sometwhat redundant with the owner information contained in observationContributor with roleCode of owner, this allows the program to provide ownership information automatically.  The ownership field supercedes this field in priority.</attDefinition>
     </attribute>
     <attribute>
-      <attName>CITATION_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>citation.CITATION_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes>Foreign key into the citation table</attNotes>
+      <attNotes>Foreign key into the reference table</attNotes>
       <attDefinition>Link to a reference that contains further information on the named place.</attDefinition>
     </attribute>
   </entity>
@@ -7181,16 +5718,16 @@ conditions may change between resampling events.
       <attDefinition/>
     </attribute>
     <attribute>
-      <attName>CITATION_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>citation.CITATION_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes>Foreign key into the citation table</attNotes>
-      <attDefinition>Link to the source citation from which this plot record was taken</attDefinition>
+      <attNotes>Foreign key into the reference table</attNotes>
+      <attDefinition>Link to the source reference from which this plot record was taken</attDefinition>
     </attribute>
     <attribute>
       <attName>PARENT_ID</attName>
@@ -10103,15 +8640,15 @@ conditions may change between resampling events.
       <attDefinition>Database generated identifier assigned to each unique stratum methodology. </attDefinition>
     </attribute>
     <attribute>
-      <attName>CITATION_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>citation.CITATION_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes>Foreign key into the citation table</attNotes>
+      <attNotes>Foreign key into the reference table</attNotes>
       <attDefinition>Link to a publication defining the stratum method.</attDefinition>
     </attribute>
     <attribute>
@@ -10338,16 +8875,16 @@ conditions may change between resampling events.
       <attDefinition>Categories for the interpretation (e.g.,  author, computer generated, simplified for comparative analysis, correction,finer resolution).</attDefinition>
     </attribute>
     <attribute>
-      <attName>CITATION_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>citation.CITATION_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes>Foreign key into the citation table.</attNotes>
-      <attDefinition>Foreign key into Citation table, which identifies a publication in which the interpretation was formally made, or in which the plot was used in a formal analysis.</attDefinition>
+      <attNotes>Foreign key into the reference table.</attNotes>
+      <attDefinition>Foreign key into reference table, which identifies a publication in which the interpretation was formally made, or in which the plot was used in a formal analysis.</attDefinition>
     </attribute>
     <attribute>
       <attName>originalInterpretation</attName>
@@ -10425,7 +8962,7 @@ conditions may change between resampling events.
   <entity>
     <entityName>taxonObservation</entityName>
     <entitySummary>This table contains the author's determination of a taxon and the overall cover of that taxon.</entitySummary>
-    <entityDescription>This table stores information about the original identification by the author of the plot and the taxonomic authority used by that author (i.e. a name - citation pair constituting a taxnomic concept).  The table also contains a record of cumulative cover </entityDescription>
+    <entityDescription>This table stores information about the original identification by the author of the plot and the taxonomic authority used by that author (i.e. a name - reference pair constituting a taxnomic concept).  The table also contains a record of cumulative cover </entityDescription>
     <module>plot</module>
     <attribute>
       <attName>TAXONOBSERVATION_ID</attName>
@@ -10464,15 +9001,15 @@ conditions may change between resampling events.
       <attDefinition>The taxon name that the author of the plot used to refer to a taxon observed within the plot. </attDefinition>
     </attribute>
     <attribute>
-      <attName>PLANTREFERENCE_ID</attName>
+      <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attReferences>plantReference.plantReference_ID</attReferences>
+      <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes>Foreign key into the plantReference table.</attNotes>
+      <attNotes>Foreign key into the reference table.</attNotes>
       <attDefinition>The authority for the taxon that was used by the plot author.  If the authority is unknown  the author of the plot is the authority. For other than legacy data, this field plus plantName_ID will be sufficient to determine taxonInterpretation.plantConcept_</attDefinition>
     </attribute>
     <attribute>
