@@ -1,6 +1,7 @@
 package org.vegbank.common.model;
 
 import org.vegbank.common.utility.LogUtility;
+import org.vegbank.common.utility.Utility;
 
 /*
  * '$RCSfile: WebUser.java,v $'
@@ -8,8 +9,8 @@ import org.vegbank.common.utility.LogUtility;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-02-07 06:45:56 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-02-28 11:19:35 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,13 +36,13 @@ public class WebUser
 	private String givenname = "";
 	private String middlename = "";
 	private String surname = "";
+	private String preferredname = "";
 	private String organizationname = "";
 	private String email = "";
 	private String password = "";
 	private int permissiontype = 0;
-	private String institution = "";
 	private String salutation = "";
-	private String ticketcount = "";
+	private int ticketcount = 0;
 	private String address = "";
 	private String city = "";
 	private String state = "";
@@ -49,15 +50,20 @@ public class WebUser
 	private String postalcode = "";
 	private String dayphone = "";
 	private long userid = 0;
+	private long addressid = 0;
 	private int partyid = 0;
 	private boolean guestUser = false;
+	private boolean sqlSafe = false;
 
 	/**
 	 * @return
 	 */
 	public String getEmail()
 	{
-		return email;
+		if (sqlSafe)
+			return Utility.encodeForDB(email);
+		else
+			return Utility.decodeFromDB(email);
 	}
 
 	/**
@@ -65,7 +71,10 @@ public class WebUser
 	 */
 	public String getGivenname()
 	{
-		return givenname;
+		if (sqlSafe)
+			return Utility.encodeForDB(givenname);
+		else
+			return Utility.decodeFromDB(givenname);
 	}
 
 	/**
@@ -73,7 +82,23 @@ public class WebUser
 	 */
 	public String getMiddlename()
 	{
-		return middlename;
+		if (sqlSafe)
+			return Utility.encodeForDB(middlename);
+		else
+			return Utility.decodeFromDB(middlename);
+	}
+
+	/**
+	 * @return
+	 */
+	public String getPreferredname() {
+		LogUtility.log("####### WebUser ############");
+		LogUtility.log("WebUser.getPreferredname: " + preferredname);
+		LogUtility.log("####### WebUser ############");
+		if (sqlSafe)
+			return Utility.encodeForDB(preferredname);
+		else
+			return Utility.decodeFromDB(preferredname);
 	}
 
 	/**
@@ -81,7 +106,10 @@ public class WebUser
 	 */
 	public String getOrganizationname()
 	{
-		return organizationname;
+		if (sqlSafe)
+			return Utility.encodeForDB(organizationname);
+		else
+			return Utility.decodeFromDB(organizationname);
 	}
 
 
@@ -112,6 +140,13 @@ public class WebUser
 	/**
 	 * @param string
 	 */
+	public void setPreferredname(String string) {
+		this.preferredname = string;
+	}
+
+	/**
+	 * @param string
+	 */
 	public void setOrganizationname(String string)
 	{
 		organizationname = string;
@@ -131,7 +166,10 @@ public class WebUser
 	 */
 	public String getSurname()
 	{
-		return surname;
+		if (sqlSafe)
+			return Utility.encodeForDB(surname);
+		else
+			return Utility.decodeFromDB(surname);
 	}
 
 	/**
@@ -166,25 +204,12 @@ public class WebUser
 	/**
 	 * @return
 	 */
-	public String getInstitution()
-	{
-		return institution;
-	}
-
-	/**
-	 * @return
-	 */
 	public String getSalutation()
 	{
-		return salutation;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setInstitution(String string)
-	{
-		institution = string;
+		if (sqlSafe)
+			return Utility.encodeForDB(salutation);
+		else
+			return Utility.decodeFromDB(salutation);
 	}
 
 	/**
@@ -216,7 +241,10 @@ public class WebUser
 	 */
 	public String getAddress()
 	{
-		return address;
+		if (sqlSafe)
+			return Utility.encodeForDB(address);
+		else
+			return Utility.decodeFromDB(address);
 	}
 
 	/**
@@ -224,7 +252,10 @@ public class WebUser
 	 */
 	public String getCity()
 	{
-		return city;
+		if (sqlSafe)
+			return Utility.encodeForDB(city);
+		else
+			return Utility.decodeFromDB(city);
 	}
 
 	/**
@@ -232,7 +263,10 @@ public class WebUser
 	 */
 	public String getCountry()
 	{
-		return country;
+		if (sqlSafe)
+			return Utility.encodeForDB(country);
+		else
+			return Utility.decodeFromDB(country);
 	}
 
 	/**
@@ -240,7 +274,10 @@ public class WebUser
 	 */
 	public String getDayphone()
 	{
-		return dayphone;
+		if (sqlSafe)
+			return Utility.encodeForDB(dayphone);
+		else
+			return Utility.decodeFromDB(dayphone);
 	}
 
 	/**
@@ -256,13 +293,16 @@ public class WebUser
 	 */
 	public String getState()
 	{
-		return state;
+		if (sqlSafe)
+			return Utility.encodeForDB(state);
+		else
+			return Utility.decodeFromDB(state);
 	}
 
 	/**
 	 * @return
 	 */
-	public String getTicketcount()
+	public int getTicketcount()
 	{
 		return ticketcount;
 	}
@@ -278,6 +318,14 @@ public class WebUser
 	/**
 	 * @return
 	 */
+	public long getAddressid()
+	{
+		return addressid;
+	}
+
+	/**
+	 * @return
+	 */
 	public Long getUseridLong()
 	{
 		return new Long(userid);
@@ -288,7 +336,10 @@ public class WebUser
 	 */
 	public String getPostalcode()
 	{
-		return postalcode;
+		if (sqlSafe)
+			return Utility.encodeForDB(postalcode);
+		else
+			return Utility.decodeFromDB(postalcode);
 	}
 
 	/**
@@ -340,19 +391,27 @@ public class WebUser
 	}
 
 	/**
-	 * @param string
+	 * @param i
 	 */
-	public void setTicketcount(String string)
+	public void setTicketcount(int i)
 	{
-		ticketcount = string;
+		ticketcount = i;
 	}
 
 	/**
-	 * @param i
+	 * @param l
 	 */
 	public void setUserid(long l)
 	{
 		userid = l;
+	}
+
+	/**
+	 * @param l
+	 */
+	public void setAddressid(long l)
+	{
+		addressid = l;
 	}
 
 	/**
@@ -363,6 +422,14 @@ public class WebUser
 		postalcode = string;
 	}
 
+	/**
+	 * Encodes SQL for DB or not.
+	 */
+	public void setSQLSafe(boolean b)
+	{
+		sqlSafe = b;
+	}
+	
 	/**
 	 * @param b
 	 */
@@ -379,4 +446,12 @@ public class WebUser
 		return this.guestUser;
 	}
 
+	/**
+	 * Encodes SQL for DB or not.
+	 */
+	public boolean isSQLSafe()
+	{
+		return this.sqlSafe;
+	}	
+	
 }
