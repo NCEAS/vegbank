@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-27 03:45:29 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-11-29 17:03:15 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ public class KeywordGen {
 	private static final int SINGLE = 1;
 	private static final int MULTI = 2;
 	private static final int BUILD_MODE = SINGLE;
+	private static final int MAX_PER_XACTION = 500;
 
 	private Connection conn = null;
 	private static ResourceBundle res = null;
@@ -323,6 +324,7 @@ public class KeywordGen {
 			sb.setupStatusBar(count);
 		}
 
+		long l=0;
 		while (rs.next()) {
 
 			try {
@@ -374,21 +376,26 @@ public class KeywordGen {
 			} else {
 				insertRow(pstmt, lTmpId, entityName, sbKeywords.toString());
 				sb.updateStatusBar();
+
+				if (l++ > MAX_PER_XACTION) {
+					conn.commit();
+				}
 			}
-
-
 		} // end while all results 
 
 		if (isUpdate) {
 			sb.setupStatusBar(kwIdMap.size());
 			// update each record en masse
-			long l=0;
+			l=0;
 			Iterator uit = kwIdMap.keySet().iterator();
 			while (uit.hasNext()) {
 				tmpId = (String)uit.next();
 				updateRow(pstmt, Long.parseLong(tmpId), entityName,
 						((StringBuffer)kwIdMap.get(tmpId)).toString());
 				sb.updateStatusBar();
+				if (l++ > MAX_PER_XACTION) {
+					conn.commit();
+				}
 			}
 		}
 
