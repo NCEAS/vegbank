@@ -1,0 +1,15 @@
+ALTER TABLE commClass drop column commLevel;
+ALTER TABLE commClass drop column commFramework;
+ALTER TABLE commClass drop column commCode;
+ALTER TABLE commClass drop column commName;
+ALTER TABLE commInterpretation drop column commcode;
+ALTER TABLE plantConcept drop column plantCode;
+ALTER TABLE plantStatus drop column plantParentConcept_id;
+ALTER TABLE plantStatus drop column plantParentName;
+ALTER TABLE plantUsage drop column acceptedSynonym;
+ALTER TABLE plot drop column submitter_email;
+ALTER TABLE plot drop column submitter_givenname;
+ALTER TABLE plot drop column submitter_surname;
+ALTER TABLE projectContributor drop column cheatRole;
+ALTER TABLE projectContributor drop column surname;
+ALTER TABLE stratum drop column stratumDescription;
