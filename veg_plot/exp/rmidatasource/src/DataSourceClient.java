@@ -25,8 +25,8 @@ import xmlresource.utils.transformXML;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-29 21:22:26 $'
- * 	'$Revision: 1.15 $'
+ *  '$Date: 2002-04-05 03:54:10 $'
+ * 	'$Revision: 1.16 $'
  *
  *
  */
@@ -826,14 +826,16 @@ public class DataSourceClient
 	/**
 	 * method that will insert a plot on the windows machine based on the name
 	 * of that plot
+	 * THIS METHOD SHOULD NOT BE USED
 	 * @param plot -- the plot that should be loaded 
 	 */
 	 public String insertPlot(String plot)
 	 {
 		 String s = null;
+		 String email = "test";
 		 try
 			{
-				s= source.insertPlot(plot);
+				s= this.insertPlot(plot, email);
 			}
 			catch(Exception e) 
 			{
@@ -842,6 +844,30 @@ public class DataSourceClient
 			}
 			return(s);
 	 }
+
+	
+	/**
+	 * method that will insert a plot on the windows machine based on the name
+	 * of that plot
+	 * @param plot -- the plot that should be loaded 
+	 * @param emailAddress -- the emailAddress of the person submitting the plots
+	 */
+	 public String insertPlot(String plot, String emailAddress)
+	 {
+		 String s = null;
+		 try
+			{
+				s= source.insertPlot(plot, emailAddress);
+			}
+			catch(Exception e) 
+			{
+				System.err.println("Exception: "+ e.getMessage());
+				e.printStackTrace();
+			}
+			return(s);
+	 }
+
+	
 	
 	 
 	/**
@@ -916,7 +942,8 @@ public class DataSourceClient
 						System.out.println("DataSourceCleint > inserting the first plot in the archive: " + testPlot );
 						//String insertResults =  "<?xml version=\"1.0\"?> \n"+client.insertPlot(testPlot);
 						
-						String insertResults =   client.insertPlot(testPlot);
+						String email = "harris@nceas.ucsb.edu";
+						String insertResults =   client.insertPlot(testPlot, email);
 						
 						//System.out.println("DataSourceCleint > insertion results: \n" + insertResults );
 						//transform the xml using a generic xslt sheet
