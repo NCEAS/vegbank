@@ -8,8 +8,8 @@
   *  % echo "[build.context]" | ant [target]
   *
   *     '$Author: anderson $'
-  *     '$Date: 2004-06-10 21:48:10 $'
-  *     '$Revision: 1.46 $'
+  *     '$Date: 2004-06-29 07:17:11 $'
+  *     '$Revision: 1.47 $'
 --> 
 <project name="Vegbank" default="jar" basedir=".">
 
@@ -165,6 +165,9 @@
 				<include name="**/*.java"/>
 				<include name="**/*.properties"/>
       			</fileset>
+			<fileset dir="web/sharedhtml" casesensitive="yes">
+				<include name="*.properties"/>
+      			</fileset>
 			<fileset dir="${src.dir}/xsl" casesensitive="yes">
 				<include name="**/*.xsl"/>
       			</fileset>
@@ -290,7 +293,7 @@
   </target>
 
   
-  <target name="deploy-jars" depends="jar,deploy-prepare"
+  <target name="deploy-jars" depends="jar,deploy-prepare,deploy-props"
           description="==> deploys vegbank module jars and deletes WEB-INF/classes">
     
 	<echo message="Distr all of jars in ${ant.project.name}"/>
@@ -300,8 +303,8 @@
 		<fileset dir="${build.lib.dir}" includes="*jar" excludes="servlet.jar"/>
 	</copy> 
 
-	<echo>deleting ${web.classes.dir}</echo>
-    <delete dir="${web.classes.dir}"/>
+	<!--echo>deleting ${web.classes.dir}</echo>
+    <delete dir="${web.classes.dir}"/-->
 	
   </target>
 
@@ -322,6 +325,7 @@
 	<copy todir="${web.context}">
 		<fileset dir="${build.java.src.dir}" includes="velocity.properties"/>
 	</copy> 
+
   </target>
 
 
