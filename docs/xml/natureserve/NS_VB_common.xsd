@@ -4,8 +4,8 @@
 
   *
   *     '$Author: mlee $'
-  *     '$Date: 2004-10-15 03:52:45 $'
-  *     '$Revision: 1.1 $'
+  *     '$Date: 2004-12-17 18:32:50 $'
+  *     '$Revision: 1.2 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -47,7 +47,7 @@
   </xs:simpleType>
   <xs:simpleType name="entity.classification_level__closedlistType">
     <xs:restriction base="nonEmptyString">
-      <xs:enumeration value="species"/>
+      <xs:enumeration value="Species"/>
       <xs:enumeration value="subspecies"/>
       <xs:enumeration value="variety"/>
       <xs:enumeration value="association"/>
@@ -96,7 +96,7 @@
         <xs:element ref="entity.entity_desc" minOccurs="0"/>
         <xs:element ref="entity.entity_type_cd" minOccurs="0"/>
         <xs:element ref="entity.ns_uid" minOccurs="1"/>
-        <xs:element ref="entity.vb_uid"  minOccurs="0"/>
+        <xs:element ref="entity.vb_uid" minOccurs="0"/>
         <xs:element ref="entity_lineage" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="entity_usage" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -281,7 +281,7 @@
   <xs:element name="reference">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="reference.reference_id"/>
+        <xs:element ref="reference.reference_id" minOccurs="0"/>
         <xs:element ref="reference.full_citation"/>
       </xs:sequence>
     </xs:complexType>
