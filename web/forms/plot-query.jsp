@@ -40,7 +40,7 @@ VegBank - Advanced Plot Query
 	 
 		<p class="item">
 	      Country (plot count)<br/>
-	      <html:select property="countries" size="6" multiple="true">
+	      <html:select property="countries" size="3" multiple="true">
 		      <option value="ANY">--ANY--</option>
        	
      <!-- 	<option value="Canada">Canada</option>
@@ -98,7 +98,7 @@ VegBank - Advanced Plot Query
 	    </p>
      
 	  
-	<hr size=".5" />
+	<hr/>
 	
       
     <!-- Find Based on Plot Attributes -->
@@ -114,11 +114,11 @@ VegBank - Advanced Plot Query
 	  
 	<table>
 	  <tr>
-	    <th><p><span class="thsmall">Field</span></p></th>
-	    <th><p><span class="thsmall">Minimum</span></p></th>
-	    <th><p><span class="thsmall">Maximum</span></p></th>
-	    <th><p><span class="thsmall">Units</span></p></th>
-	    <th><p><span class="thsmall">Include Nulls?</span></p></th>
+	    <th>Field</th>
+	    <th>Minimum</th>
+	    <th>Maximum</th>
+	    <th>Units</th>
+	    <th>Include Nulls?</th>
 	  </tr>
 	  <tr><!-- ELEVATION --> 
 	    <td>&nbsp;</td>
@@ -138,7 +138,7 @@ VegBank - Advanced Plot Query
 	    </td>
 	    <td class="units">meters</td>
 	    <td>
-	      <html:checkbox property="allowNullElevation" value="false"/>
+	      <html:checkbox property="allowNullElevation" />
 	    </td>
 	  </tr>
 	  <tr><!-- Slope Aspect -->
@@ -181,7 +181,7 @@ VegBank - Advanced Plot Query
 	  </tr>
 		  
 	</table>
-	<hr size=".5" />
+	<hr/>
 	<!-- closed list fields -->
 	
 	      <h4>Picklist fields:</h4> 
@@ -218,7 +218,7 @@ VegBank - Advanced Plot Query
 	    </p>
 	    
 	  
-	<!--  <hr size=".5"> -->
+	<!--  <hr/> -->
 	
 	    <!-- picklist values to select -->               
 	    <p>Topo Position<br />
@@ -347,7 +347,7 @@ VegBank - Advanced Plot Query
 	  </tr>
 	  
 	</table>
-	<hr size=".5" /> 
+	<hr/> 
 	
 	<!-- sampling methodology : MORE -->
 	
@@ -426,7 +426,7 @@ VegBank - Advanced Plot Query
   {
   %>
   <tr>
-    <td><p><span class="item"><%= i+1 %></span></p></td>    
+    <td><span class="item"><%= i+1 %></span></td>    
     <td><html:text property='<%= "plantName[" + i + "]" %>' size="30"/></td>
     <td><html:text property='<%= "minTaxonCover[" + i + "]" %>' size="5"/></td>
     <td><html:text property='<%= "maxTaxonCover[" + i + "]" %>' size="5"/></td>
@@ -437,7 +437,7 @@ VegBank - Advanced Plot Query
   }
   %>
 </table>
-<hr size=".5" /> 
+<hr/> 
       
       <!-- FIND USING COMMUNITIES -->
       
@@ -459,12 +459,12 @@ VegBank - Advanced Plot Query
 	      <th rowspan="2">Row</th>
 	      <th rowspan="2">Community Name <a target="_blank" href="@forms_link@CommQuery.jsp">search</a></th>
 	      <!-- TODO:
-	      <th rowspan="2"><p><span class="thsmall">Fit</span></p></th>
-	      <th rowspan="2"><p><span class="thsmall">Confidence</span></p></th>
+	      <th rowspan="2">Fit</th>
+	      <th rowspan="2">Confidence</th>
 	      -->
 	      <th colspan="2">Date Classified</th>
 	      <!--
-	      <th rowspan="2"><p><span class="thsmall">Name of Person Classifying</span></p></th>
+	      <th rowspan="2">Name of Person Classifying</th>
 	      -->
 	    </tr>
 	    <tr>
@@ -477,7 +477,7 @@ VegBank - Advanced Plot Query
 	      {
 	      %>
 	      <tr>
-		<td><p><span class="item"><%= i+1 %></span></p></td>    
+		<td><span class="item"><%= i+1 %></span></td>    
 		<td><html:text property='<%= "commName[" + i + "]" %>' size="30"/></td>
 		
 	      <td><html:text property='<%= "maxCommStartDate[" + i + "]" %>' size="10"/></td>
