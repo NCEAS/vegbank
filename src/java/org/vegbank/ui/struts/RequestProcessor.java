@@ -18,9 +18,9 @@ import org.vegbank.ui.struts.Authentication;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-12-02 19:59:36 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-12-10 19:42:08 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,7 +90,7 @@ public class RequestProcessor extends org.apache.struts.action.RequestProcessor
 		String authClassName = vbMapping.getAuthClass();
 		if (null != authClassName)
 		{
-			Authentication authClass= processAuthClassCreate(response, authClassName);
+			Authentication authClass = processAuthClassCreate(response, authClassName);
 			if (null == authClass)
 			{
 					return true;
@@ -102,8 +102,8 @@ public class RequestProcessor extends org.apache.struts.action.RequestProcessor
 				return false;
 			}
 				
-			int minCertLevel = vbMapping.getMinCertLevel();
-			if ( ! authClass.checkCertLevel(request, minCertLevel))
+			String reqRoles = vbMapping.getReqRoles();
+			if (!authClass.checkReqRoles(request, reqRoles))
 			{
 				ActionForward forward = mapping.findForward(CERTIFICATION_VIOLATION_FORWARD);
 				super.processForwardConfig(request, response, forward);

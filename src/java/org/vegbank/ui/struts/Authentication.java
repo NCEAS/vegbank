@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletRequest;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:22:18 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-12-10 19:42:08 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletRequest;
  * 
  *
  * @author Farrell
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
                                                                                                                                                             
 public interface Authentication
@@ -55,10 +55,10 @@ public interface Authentication
 	/**
 	 * Check whether the user has a certification level higher or equal to the minimum 
 	 * certification level required.
-	 * @param minCertLevel level required
+	 * @param reqRoles all of these roles are required 
 	 * @param request the request object
 	 * @return true, if the user passed this check, false otherwise
 	 */     
-	public boolean checkCertLevel(HttpServletRequest request, int minCertLevel);
+	public boolean checkReqRoles(HttpServletRequest request, String reqRoles);
 }
 

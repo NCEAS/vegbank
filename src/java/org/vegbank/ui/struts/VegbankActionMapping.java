@@ -7,9 +7,9 @@ import org.apache.struts.action.ActionMapping;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:22:18 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-12-10 19:42:08 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,13 +38,13 @@ import org.apache.struts.action.ActionMapping;
  * </p>
  * 
  * @author farrell
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class VegbankActionMapping extends ActionMapping
 {
 
 	protected String authClass;
-	protected int minCertLevel = 0;
+	protected String reqRoles;
 	
 	/**
 	 * Constructor
@@ -65,25 +65,25 @@ public class VegbankActionMapping extends ActionMapping
 	/**
 	 * @return
 	 */
-	public int getMinCertLevel()
+	public String getReqRoles()
 	{
-		return minCertLevel;
+		return reqRoles;
 	}
 
 	/**
-	 * @param string
+	 * @param authClass
 	 */
-	public void setAuthClass(String string)
+	public void setAuthClass(String authClass)
 	{
-		authClass = string;
+		this.authClass = authClass;
 	}
 
 	/**
-	 * @param i
+	 * @param reqRoles
 	 */
-	public void setMinCertLevel(int i)
+	public void setReqRoles(String reqRoles)
 	{
-		minCertLevel = i;
+		this.reqRoles = reqRoles;
 	}
 
 }
