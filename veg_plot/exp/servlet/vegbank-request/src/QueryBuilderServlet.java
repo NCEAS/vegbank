@@ -34,15 +34,15 @@ import servlet.util.*;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2001-12-03 17:49:11 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2002-01-16 22:19:13 $'
+ *  '$Revision: 1.2 $'
  * 
  */
 
 public class QueryBuilderServlet extends HttpServlet 
 {
 
-	ResourceBundle rb = ResourceBundle.getBundle("veg_servlet");
+	ResourceBundle rb = ResourceBundle.getBundle("vegbank");
 	private String DataRequestServletURL = rb.getString("requestparams.DataRequestServletURL");
 	public DataRequestServlet drs = new DataRequestServlet();
 	public ServletUtility su = new ServletUtility();
