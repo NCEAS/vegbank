@@ -183,8 +183,8 @@
         <xsl:value-of select="$currFld"/>
       </xsl:otherwise>
     </xsl:choose>
-    <a href="@get_link@dd/{$currEnt}/{$currFld}">
+   <!-- <a href="@get_link@dd/{$currEnt}/{$currFld}">
       <img src="@images_link@question.gif" alt="?" border="0"/>
-    </a>
+    </a>-->
   </xsl:template>
 </xsl:stylesheet>
