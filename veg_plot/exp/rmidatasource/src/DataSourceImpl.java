@@ -31,8 +31,8 @@ import databaseAccess.DBinsertPlotSource;
  *	
  * <br> <br>
  *  '$Author: harris $'
- *  '$Date: 2002-05-21 17:09:22 $'
- * 	'$Revision: 1.15 $'
+ *  '$Date: 2002-07-25 16:47:20 $'
+ * 	'$Revision: 1.16 $'
  *
  *
  */
@@ -59,13 +59,16 @@ public class DataSourceImpl extends UnicastRemoteObject
 		 super();
 		 try
 		 {
-		 	System.out.println("DataSourceImpl > plugin to be used: " + sourcePluginClass);
-		 	source = new PlotDataSource(sourcePluginClass);
-		 	System.out.println("DataSourceImpl > number of plots:  " + source.getPlotNames().size() );
-			
-			rb = ResourceBundle.getBundle("rmidatasource");
-			mdbFile = rb.getString("access_file");
-			xmlFile = rb.getString("xml_file");
+				System.out.println("DataSourceImpl >  starting the rmi server:  " );
+				rb = ResourceBundle.getBundle("rmidatasource");
+				mdbFile = rb.getString("access_file");
+				System.out.println("DataSourceImpl > ms database file:  " + mdbFile );
+				xmlFile = rb.getString("xml_file");
+				System.out.println("DataSourceImpl > xml file:  " + xmlFile );
+				
+			 System.out.println("DataSourceImpl > plugin to be used: " + sourcePluginClass);
+			 source = new PlotDataSource(sourcePluginClass);
+			 System.out.println("DataSourceImpl > number of plots:  " + source.getPlotNames().size() );
 			
 		 }
 		 catch (Exception e)
