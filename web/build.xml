@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   * '$Author: mlee $'
-  * '$Date: 2002-10-07 19:55:29 $'
-  * '$Revision: 1.22 $'
+  * '$Date: 2002-10-07 20:04:22 $'
+  * '$Revision: 1.23 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -56,6 +56,7 @@
 	<property name="history_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/history/"/>
 	<property name="pubs_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/pubs/"/>
 	<property name="style_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/includes/"/>
+  <property name="vegbank_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/"/>
 	<property name="server_root" value="/usr/local/devtools/jakarta-tomcat/webapps/ROOT/"/>
 	
 	<!-- WEB SERVER LOCATIONS -->
@@ -97,7 +98,7 @@
         </fileset>
   </copy>
   <!-- add to second webpage at root/vegbank/index.html -->
-  <copy todir="${server_root}vegbank/" filtering="yes" >
+  <copy todir="${vegbank_server}" filtering="yes" >
           <fileset dir="./" >
           <include name="index.html"/>    
           </fileset>
