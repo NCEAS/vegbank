@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-01 17:26:29 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-03-01 23:34:21 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -591,7 +591,7 @@ import org.vegbank.common.utility.Utility;
 				LogUtility.log("LoadTreeToDatabase: Found no accessionCode for " + tableName, LogUtility.TRACE);
 				// do nothing
 			}
-			else if ( accessionCode.startsWith(Utility.getAccessionPrefix() + ".") )
+			else 
 			{
 				// Need to get the pK of the table
 				PK = this.getTablePK(tableName, accessionCode);
@@ -624,17 +624,17 @@ import org.vegbank.common.utility.Utility;
 						errorMessage);
 				}
 			}
-			else
-			{
-				LogUtility.log(
-					"LoadTreeToDatabase: Got an alien accessionCode in table "
-						+ tableName
-						+ " --> "
-						+ accessionCode, LogUtility.TRACE);
-						
-				// Remove from hash
-				fieldValueHash.remove(Constants.ACCESSIONCODENAME);
-			}
+//			else
+//			{
+//				LogUtility.log(
+//					"LoadTreeToDatabase: Got an alien accessionCode in table "
+//						+ tableName
+//						+ " --> "
+//						+ accessionCode, LogUtility.TRACE);
+//						
+//				// Remove from hash
+//				fieldValueHash.remove(Constants.ACCESSIONCODENAME);
+//			}
 			
 			LogUtility.log(
 					"LoadTreeToDatabase: Using accessionCode " + accessionCode + " in table "
@@ -1988,7 +1988,8 @@ import org.vegbank.common.utility.Utility;
 			else if ( tableName.equalsIgnoreCase("aux_role"))
 			{
 				String errorMessage = "You are not allowed to load a new record in the '"
-					+ tableName +"' table. \n Please use an existing records AccessionCode to"
+					+ tableName +"' table. + [ table: " + tableName + " AcessionCode in XML: " +  hashtable.get(Constants.ACCESSIONCODENAME)  
+					+ "] \n Please use an existing records AccessionCode to"
 					+ " load or have someone with permissions load this record and use the"
 					+ " assigned AccessionCode. ";
 				LogUtility.log("LoadTreeToDatabase:  : " + errorMessage, LogUtility.ERROR );
