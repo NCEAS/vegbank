@@ -71,37 +71,19 @@ try {
 //get the query elements into a hash table
 getQueryElementHash(transformedString, transformedStringNum);
 
-/** Grab the meta elements - like filename & number of query elements */
+// Grab the meta elements - like filename & number of query elements
  String resultType = (String)metaQueryHash.get("resultType");
  String outFile = (String)metaQueryHash.get("outFile");
 
-/** Look for commonly used queries elements */
- String plotId = (String)queryElementHash.get("plotId");
- String taxonName = (String)queryElementHash.get("taxonName");
- String elevationMin = (String)queryElementHash.get("elevationMin");
- String elevationMax = (String)queryElementHash.get("elevationMax");
- String state = (String)queryElementHash.get("state");
- String surfGeo = (String)queryElementHash.get("surfGeo");
- String multipleObs = (String)queryElementHash.get("multipleObs");
- String community = (String)queryElementHash.get("community");
- 
- 
- 
-/** This is for debugging - and can be commented out later**/
- System.out.println("sqlMapper.developPlotQuery > \n resultType: "+ resultType +"\n "
-	+"outFile: "+outFile+"\n plotId: "+plotId +"\n taxonName: "+taxonName 
-	+"\n elevationMin: "+elevationMin+"\n elavationMax: "+elevationMax
-	+"\n state: "+state+"\n multipleObs: "+multipleObs+"\n community: "+community);
 
-	
-
-// at the next line do a cardinality test
-/** Check which elements are there -- plotId specific queries */
-if (plotId != null && resultType != null && outFile != null) {
-	
-	/** Start a search for specific queries*/
+// the first if statement is taggetinng those queries requesting an entire plot
+// via the plotID number, in this case the query element: 'resultType' full is
+// passed to the method
 	if ( resultType.equals("full") ) {
-	
+		
+		//assume that the user has passed the plotId
+		String plotId = (String)queryElementHash.get("plotId");
+		
 		System.out.println("sqlMapper.developPlotQuery - "
 		+" calling queryStore.getEntireSinglePlot");
 		queryStore b = new queryStore();
@@ -109,48 +91,51 @@ if (plotId != null && resultType != null && outFile != null) {
 		
 		xmlWriter l = new xmlWriter();
 		l.writePlotSummary(b.entireSinglePlotOutput, 
-			b.entireSinglePlotOutputNum, outFile);
+		b.entireSinglePlotOutputNum, outFile);
 		
-	
 	}
 
-}
 
-/** Check which elements are there -- taxonName specific queries */
-if (taxonName != null && resultType != null && outFile != null) {
-
-	if ( resultType.equals("summary") ) { //retrieve the plotId's w taxon
-
+// this if targets those queries requesting summary information for plots using
+// a specific query element lime taxonName, communityName, state etc
+	else if ( resultType.equals("summary") && (queryElementHash.size() == 1) ) {
+		
+		//grab the queryElementType from the hash
+		String queryElementType	= (String)queryElementHash.keys().nextElement().toString();
+		//grab the queryElementValue from the hash
+		String queryElementValue = (String)queryElementHash.get(queryElementType);
+		
+		System.out.println("> the query element key: "+queryElementType);
+		System.out.println("> the query element value: "+queryElementValue);
+		
 		System.out.println("sqlMapper.developPlotQuery - "
-		+" calling queryStore.getPlotId (taxonName)");
-			queryStore j = new queryStore();
-			j.getPlotId(taxonName, "taxonName", pconn);
-			queryOutput=j.outPlotId;
-			queryOutputNum=j.outPlotIdNum;
-
+		+" calling queryStore.getPlotId (single query element)");
+		queryStore j = new queryStore();
+		j.getPlotId(queryElementValue, queryElementType, pconn);
+		queryOutput=j.outPlotId;
+		queryOutputNum=j.outPlotIdNum;
 	}
-}
 
-/** Check which elements are there -- elevation specific queries */
-if (elevationMin != null && elevationMax != null && resultType != null && outFile != null) {
+// this if targets thosequeries requesting summary information for plots having
+// some minimum and maximum value for a specific attribute like elevation or
+// latitude
 
-	if ( resultType.equals("summary") ) { //retrieve the plotId's w	elevation
+	else if ( resultType.equals("summary") && (queryElementHash.size() == 2) ) {
 
+		//assume for now that the query elements being targetd here are
+		// elevation and grab the results
+		String elevationMin = (String)queryElementHash.get("elevationMin");
+		String elevationMax = (String)queryElementHash.get("elevationMax");
+		
+		
 		System.out.println("sqlMapper.developPlotQuery - "
 		+" calling queryStore.getPlotId (elevation option)");
 		queryStore j = new queryStore();
-		j.getPlotId(elevationMin,  elevationMax, "elevation", pconn);
+		j.getPlotId(elevationMin, elevationMax, "elevation", pconn);
 
 		queryOutput=j.outPlotId;
 		queryOutputNum=j.outPlotIdNum;
-
 	}
-}
-
-
-//retrieve the summary info
-///queryStore k = new queryStore();
-///k.getPlotSummary(queryOutput, queryOutputNum, pconn);
 
 // manage the database connections -- this doesn't really work here but keep it
 // for later
@@ -166,13 +151,7 @@ if (connectionUses>12) {
 		connectionUses=0;
 	} catch (Exception e) {System.out.println("failed calling "
 		+" dbConnect.makeConnection call" + e.getMessage());}
-
 }
-
-
-//write to a summary file -- this is an old method
-///xmlWriter l = new xmlWriter();
-///l.writePlotSummary(k.summaryOutput, k.summaryOutputNum, outFile);
 
 //just test the new method
 queryStore k1 = new queryStore();
@@ -180,9 +159,7 @@ k1.getPlotSummaryNew(queryOutput, queryOutputNum, pconn);
 
 //write to a summary file - again this is a test
 xmlWriter xw = new xmlWriter();
-xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile+".xml");
-
-
+xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
 
 // The connection is returned to the Broker
 myBroker.freeConnection(pconn);
