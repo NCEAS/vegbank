@@ -10,10 +10,10 @@ CREATE TABLE commUsage
     COMMUSAGE_ID serial,
     COMMNAME_ID integer NOT NULL,
     COMMCONCEPT_ID integer NOT NULL,
-    usageStart timestamp NOT NULL,
+    usageStart timestamp ,
     usageStop timestamp,
-    commNameStatus varchar (22) NOT NULL,
-    COMMPARTY_ID integer NOT NULL,
+    commNameStatus varchar (22) ,
+    COMMPARTY_ID integer ,
     classSystem varchar (22),
     PRIMARY KEY(COMMUSAGE_ID)
 );
