@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.8 2005-03-22 20:32:02 mlee Exp $
+# $Id: .htaccess,v 1.9 2005-04-02 04:17:04 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -38,9 +38,8 @@ RewriteRule ^get/(.*)/(.*)      @server_address@/vegbank/GenericDispatcher.do?co
 
 
 
-RewriteRule ^cite/([^\.]+)\.Ob\.(.*)$       @get_link@std/observation/'$1.Ob.$2'              [NC,QSA,L]
+RewriteRule ^cite/([^\.]+)\.Ob\.(.*)$       @get_link@comprehensive/observation/'$1.Ob.$2'              [NC,QSA,L]
 RewriteRule ^cite/([^\.]+)\.Pl\.(.*)$	  @get_link@std/plot/'$1.Pl.$2'              [NC,QSA,L] 
-RewriteRule ^cite/([^\.]+)\.Ob\.(.*)$	  @get_link@std/observation/'$1.Ob.$2'       [NC,QSA,L]
 RewriteRule ^cite/([^\.]+)\.PC\.(.*)$	  @get_link@std/plantconcept/'$1.PC.$2'      [NC,QSA,L]
 RewriteRule ^cite/([^\.]+)\.CC\.(.*)$	  @get_link@std/commconcept/'$1.CC.$2'       [NC,QSA,L]
 RewriteRule ^cite/([^\.]+)\.Py\.(.*)$	  @get_link@std/party/'$1.Py.$2'	       [NC,QSA,L]
