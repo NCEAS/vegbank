@@ -16,11 +16,13 @@ import java.net.URL;
  *
  * <p>Valid parameters are:<br><br>
  * 
- *
- * 
  * @version @version@
  * @author John Harris
  * 
+ *	'$Author: harris $'
+ *	'$Date: 2001-06-12 17:09:26 $'
+ *	'$Revision: 1.6 $'
+ *
  */
 
 public class QueryBuilderServlet extends HttpServlet 
@@ -30,6 +32,7 @@ ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 public DataRequestServlet drs = new DataRequestServlet();
 public servletUtility su = new servletUtility();
 static Vector queryVector = new Vector();
+public GetURL gurl  =new GetURL(); 
 
 
 /** Handle "POST" method requests from HTTP clients */
@@ -122,13 +125,10 @@ public void doGet(HttpServletRequest request,
 				+sb.toString().trim();
 			int port=80;
 			String requestType="POST";
-
-			GetURL b =new GetURL();  
-			b.getPost(uri, port, requestType);
 			
-			//print the results back to the client
+			htmlResults = gurl.requestURL(uri);
 			
-			htmlResults=b.responseVector.toString();
+			
 		
 		}
 		catch( Exception e ) 
