@@ -9,9 +9,9 @@ package org.vegbank.xmlresource;
  * 		@author @author@ 
  * 		@version @release@ 
  *
- *     '$Author: farrell $'
- *     '$Date: 2003-08-21 21:16:45 $'
- *     '$Revision: 1.2 $'
+ *     '$Author: anderson $'
+ *     '$Date: 2004-10-14 09:44:37 $'
+ *     '$Revision: 1.3 $'
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@ package org.vegbank.xmlresource;
 
 
 import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -118,7 +118,7 @@ public void writePlot (Hashtable comprehensivePlot, String outFile)
 	//now print to the file system
 	try 
 	{
-		PrintStream out = new PrintStream(new FileOutputStream(outFile, false));
+		PrintWriter out = new PrintWriter(new FileOutputStream(outFile, false));
 		out.println(output.toString());
 	}
 	catch (Exception ex) 
@@ -181,7 +181,7 @@ public void writePlot (Hashtable comprehensivePlot, String outFile)
 		}
 		try 
 		{
-			PrintStream out = new PrintStream(new FileOutputStream(fileName));
+			PrintWriter out = new PrintWriter(new FileOutputStream(fileName));
 			out.println(output.toString());
 		}
 		catch (Exception ex) 
@@ -239,7 +239,7 @@ public void writeMultiplePlot(Hashtable multiPlotComprehensive, String outFile)
 
 	try 
 	{
-		PrintStream out = new PrintStream(new FileOutputStream(outFile));
+		PrintWriter out = new PrintWriter(new FileOutputStream(outFile));
 		out.println(output.toString());
 	}
 	catch (Exception ex) 

@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: anderson $'
- *  '$Date: 2004-07-29 01:06:12 $'
- *  '$Revision: 1.30 $'
+ *  '$Date: 2004-10-14 09:44:37 $'
+ *  '$Revision: 1.31 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -86,8 +86,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: anderson $'
- *  '$Date: 2004-07-29 01:06:12 $'
- *  '$Revision: 1.30 $'
+ *  '$Date: 2004-10-14 09:44:37 $'
+ *  '$Revision: 1.31 $'
  * 
  */
 
@@ -284,7 +284,7 @@ public class DataRequestServlet extends HttpServlet
 		try
 		{
 			File outputfile = new File("/usr/vegbank/currentXML.xml");
-			PrintStream fileOut = new PrintStream(new FileOutputStream(outputfile));
+			PrintWriter fileOut = new PrintWriter(new FileOutputStream(outputfile));
 			fileOut.println(qr.getXMLString());
 			fileOut.close(); 
 			
@@ -702,7 +702,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 { 
  try 
  {
- 		PrintStream clientLogger = new PrintStream(new FileOutputStream(clientLog, true));
+ 		PrintWriter clientLogger = new PrintWriter(new FileOutputStream(clientLog, true));
  		SimpleDateFormat formatter = new SimpleDateFormat ("yy-MM-dd HH:mm:ss");
  		java.util.Date localtime = new java.util.Date();
  		String dateString = formatter.format(localtime);
@@ -766,7 +766,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 		try 
 		{
 			//set up the output query file called query.xml	using append mode to build  
-			PrintStream outFile  = new PrintStream(new FileOutputStream(
+			PrintWriter outFile  = new PrintWriter(new FileOutputStream(
 			SERVLET_DIR+"query.xml", false)); 
 			
 			StringBuffer sb = new StringBuffer();

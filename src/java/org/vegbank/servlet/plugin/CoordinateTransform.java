@@ -5,9 +5,9 @@ package org.vegbank.servlet.plugin;
  *
  * Purpose: 
  *
- * '$Author: farrell $'
- * '$Date: 2003-08-21 21:16:45 $'
- * '$Revision: 1.3 $'
+ * '$Author: anderson $'
+ * '$Date: 2004-10-14 09:44:37 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
@@ -157,7 +157,7 @@ public class CoordinateTransform implements ServletPluginInterface
 		{ 
 			//write the coordinates to the file system
       System.out.println("CoordinateTransform  > writing input coordinates: " +xCoord+" "+yCoord+" to: tmp_utm_file");
-			PrintStream out = new PrintStream(new FileOutputStream("tmp_utm_file"));
+			PrintWriter out = new PrintWriter(new FileOutputStream("tmp_utm_file"));
 			out.println(xCoord+" "+yCoord);
 			
 			//set up for the external proccess using the grass library

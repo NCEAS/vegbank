@@ -5,9 +5,9 @@ package org.vegbank.databaseAccess;
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: farrell $'
- *     '$Date: 2003-07-11 23:14:04 $'
- * '$Revision: 1.1 $'
+ *   '$Author: anderson $'
+ *     '$Date: 2004-10-14 09:44:37 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ package org.vegbank.databaseAccess;
  */
 
 import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
@@ -311,7 +311,7 @@ public class  xmlWriter
 		try 
 		{
 			//set up the output query file called query.xml	using append mode 
-			PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
+			PrintWriter out  = new PrintWriter(new FileOutputStream(outFile, false));
 			
 			String xmlString =
 				getPlantTaxonomySummary(
@@ -406,7 +406,7 @@ public class  xmlWriter
 		try 
 		{
 			//set up the output query file called query.xml	using append mode 
-			PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
+			PrintWriter out  = new PrintWriter(new FileOutputStream(outFile, false));
 
 			String xmlString = getCommunitySummaryXMLString(communitySummary);
 			
