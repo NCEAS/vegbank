@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: farrell $'
-*  '$Date: 2003-05-12 23:12:03 $'
-*  '$Revision: 1.2 $'
+*  '$Date: 2003-07-22 22:33:29 $'
+*  '$Revision: 1.3 $'
 *
 *
 -->
@@ -75,7 +75,7 @@
 	      <p><a href="/vegbank/dbdictionary/dd~table~party~field~salutation~type~tableview.html">First Name:</a></p> 
 	    </td>
 	    <td>
-	      <html:text property="party.givenName" size="40"/>
+	      <html:text property="party.givenname" size="40"/>
 	    </td>
 	  </tr>
 
@@ -84,7 +84,7 @@
 	      <p><a href="/vegbank/dbdictionary/dd~table~party~field~middlename~type~tableview.html">Middle Name:</a></p> 
 	    </td>
 	    <td>
-	      <html:text property="party.middleName" size="40"/>
+	      <html:text property="party.middlename" size="40"/>
 	    </td>
 	  </tr>
 
@@ -96,7 +96,7 @@
 	      </p> 
 	    </td>
 	    <td>
-	      <html:text property="party.surName" size="40"/>
+	      <html:text property="party.surname" size="40"/>
 	    </td>
 	  </tr>
 
@@ -106,7 +106,7 @@
 	      <a href="/vegbank/dbdictionary/dd~table~party~field~organizationname~type~tableview.html">Organization:</a></p> 
 	    </td>
 	    <td>
-	      <html:text property="party.organizationName" size="40"/>
+	      <html:text property="party.organizationname" size="40"/>
 	    </td>
 	  </tr>
 
@@ -115,7 +115,7 @@
 	      <p><a href="/vegbank/dbdictionary/dd~table~party~field~contactinstructions~type~tableview.html">Contact Instructions:</a></p> 
 	    </td>
 	    <td>
-	      <html:textarea property="party.contactInstructions" rows="3" cols="40"/>
+	      <html:textarea property="party.contactinstructions" rows="3" cols="40"/>
 	    </td>
 	  </tr>
 
@@ -198,7 +198,7 @@
 	      Organization Position</a>:</p>
 	    </td> 
 	    <td>
-	      <html:text property="address.orgPosition" size="35"/>
+	      <html:text property="address.orgposition" size="35"/>
 	    </td>
 	  </tr>
 	  <!-- explanation -->
@@ -223,7 +223,7 @@
 	    Street Address</a>:</p>
 	  </td> 
 	  <td>
-	    <html:text property="address.deliveryPoint" size="35"/>
+	    <html:text property="address.deliverypoint" size="35"/>
 	  </td>
 	</tr>
 	<tr class="oddrow">
@@ -241,7 +241,7 @@
 	    <p><a href="/vegbank/dbdictionary/dd~table~address~field~administrativearea~type~tableview.html">State/Province</a>:</p>
 	  </td> 
 	  <td>
-	    <html:text property="address.administrativeArea" size="35"/>
+	    <html:text property="address.administrativearea" size="35"/>
 	  </td>
 	</tr>
 	<tr class="oddrow">
@@ -251,7 +251,7 @@
 	    ZIP/Postal Code</a>:</p>
 	  </td> 
 	  <td>
-	    <html:text property="address.postalCode" size="35"/>
+	    <html:text property="address.postalcode" size="35"/>
 	  </td>
 	</tr>
 	<tr class="oddrow">
@@ -272,7 +272,7 @@
 	    Start Date for Address</a>:</p>
 	  </td> 
 	  <td>
-	    <html:text property="address.addressStartDate" size="35"/>
+	    <html:text property="address.addressstartdate" size="35"/>
 	  </td>
 	</tr>
 
