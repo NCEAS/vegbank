@@ -41,6 +41,7 @@
 		</form-bean>
 		<form-bean name="EntityNameForm" type="org.vegbank.ui.struts.EntityNameForm" />
 		<form-bean name="InterpretPlantForm" type="org.vegbank.ui.struts.InterpretPlantForm" />
+		<form-bean name="InterpretCommForm" type="org.vegbank.ui.struts.InterpretCommForm" />
 		<form-bean name="LogonForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="username" type="java.lang.String" />
 			<form-property name="password" type="java.lang.String" />
@@ -76,9 +77,11 @@
 		<forward name="CertificationList" path="/ListCertifications.do" />
 		<forward name="ChangePassword" path="/forms/change_pwd.jsp" redirect="false" />
 		<forward name="InterpretTaxonObservation" path="/InterpretTaxonObservation.do" redirect="false" />
+		<forward name="InterpretCommObservation" path="/InterpretCommObservation.do" redirect="false" />
 		<forward name="DownLoad" path="/forms/DownLoad.jsp" />
 		<forward name="DownLoadManager" path="/DownLoadManager.do" />
 		<forward name="DisplayLoadReport" path="/forms/DisplayLoadReport.jsp" redirect="true" />
+		<forward name="DisplayLoadSummary" path="/forms/plot-upload-summary.jsp" redirect="true" />
 		<forward name="DisplayResults" path="/forms/DisplayResults.jsp" />
 		<forward name="DisplayUploadPlotAction" path="/forms/plot-submit.jsp" />
 		<forward name="DropPlotAction" path="/forms/plot-drop.jsp" />
@@ -135,6 +138,11 @@
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="pro" />
 		</action>
+		<action path="/InterpretCommObservation" parameter="edit" type="org.vegbank.ui.struts.InterpretCommAction" scope="request" name="InterpretCommForm" input="InterpretCommObservation" validate="false">
+			<forward name="edit" path="/forms/CommInterpretation.jsp" redirect="false" />
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="pro" />
+		</action>
 		<action path="/ListCertifications" type="org.vegbank.ui.struts.admin.CertificationListAction" name="CertificationForm" scope="request" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="dba" />
@@ -181,14 +189,18 @@
 		<action path="/SaveTaxonInterpretation" validate="true" parameter="save" type="org.vegbank.ui.struts.InterpretPlantAction" name="InterpretPlantForm"  input="InterpretTaxonObservation" scope="request">
 			<forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" redirect="false" />
 		</action>
+		<action path="/SaveCommInterpretation" validate="true" parameter="save" type="org.vegbank.ui.struts.InterpretCommAction" name="InterpretCommForm"  input="InterpretCommObservation" scope="request">
+			<forward name="edit" path="/forms/CommInterpretation.jsp" redirect="false" />
+		</action>
 		<action path="/UpdatePassword" type="org.vegbank.ui.struts.UserProfileAction" name="ChangePasswordForm" parameter="pwd" scope="request" validate="true" input="ChangePassword">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="reg" />
 			<forward name="change_pwd" path="/forms/change_pwd.jsp" redirect="false" />
 		</action>
-		<action path="/UploadPlot" type="org.vegbank.ui.struts.UploadPlotAction" name="UploadPlotForm" scope="session" validate="true" input="DisplayUploadPlotAction">
+		<action path="/UploadPlot" type="org.vegbank.ui.struts.UploadPlotAction" name="UploadPlotForm" scope="request" validate="true" input="DisplayUploadPlotAction">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="cert" />
+			<forward name="summary" path="/forms/plot-upload-summary.jsp" redirect="false" />
 		</action>
 		<action path="/UpdateUser" name="UserProfileForm" scope="session" validate="true" parameter="user" input="edit_user" type="org.vegbank.ui.struts.UserProfileAction">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
