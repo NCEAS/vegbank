@@ -17,34 +17,22 @@
 <BODY >@vegbank_header_html_normal@
 
 <h3>Data Currently in VegBank </h3>
-<table border="0" cellpadding="0" cellspacing="0" class="item">
-
+<table class="leftrightborders" cellpadding="2">
+<% String rowClass = "evenrow"; %>
 <vegbank:get select="observation_summ" beanName="map" />
  <logic:empty name="BEANLIST">
-  <tr><td colspan="2">ERROR! There are no observations!</td></tr>
+  <tr class="@nextcolorclass@"><td colspan="2">ERROR! There are no observations!</td></tr>
  </logic:empty>
  <logic:notEmpty name="BEANLIST">
-   <tr>
-     <td colspan="2" >Observations:</td>
+   <tr class="@nextcolorclass@">
+     <td colspan="2" >Plot-Observations:</td>
      <td  align="right">&nbsp;<bean:write name="BEAN" property="count_observation"/></td>
    </tr> 
  </logic:notEmpty>
- <vegbank:get select="place_summ" beanName="map" />
- <logic:notEmpty name="BEANLIST">
- <!-- <tr><td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-  <td  colspan="2">
-   <table class="item" border="1" cellpadding="0" cellspacing="0"> --><tr><TD/><th>Place</th><th># Obs</th></tr>
-     <logic:iterate id="onerec" name="BEANLIST" >
-       <!-- loop over list of states -->
-       <tr><TD/><td ><bean:write name="onerec" property="region_name"/>&nbsp;</td><td  align="right">&nbsp;<bean:write name="onerec" property="count_obs"/></td></tr>
-     </logic:iterate>
-   <!--</table></td>
-  </tr> -->
- </logic:notEmpty> 
- <tr><td colspan="3"><hr/></td></tr>
+
 <vegbank:get select="plantconcept_summ" beanName="map"/>
  <logic:notEmpty name="BEANLIST">
-   <tr>
+   <tr class="@nextcolorclass@">
      <td colspan="2">Plant Concepts:</td>
      <td align="right">&nbsp;<bean:write name="BEAN" property="count_plantconcept"/></td>
    </tr> 
@@ -53,7 +41,7 @@
 
 <vegbank:get select="commconcept_summ" beanName="map"/>
  <logic:notEmpty name="BEANLIST">
-   <tr>
+   <tr class="@nextcolorclass@">
      <td colspan="2">Community Concepts:</td>
      <td align="right">&nbsp;<bean:write name="BEAN" property="count_commconcept"/></td>
    </tr> 
@@ -61,7 +49,7 @@
 
 <vegbank:get select="party_summ" beanName="map"/>
  <logic:notEmpty name="BEANLIST">
-   <tr>
+   <tr class="@nextcolorclass@">
      <td colspan="2">Parties:</td>
      <td align="right">&nbsp;<bean:write name="BEAN" property="count_party"/></td>
    </tr> 
@@ -69,13 +57,30 @@
 
 <vegbank:get select="taxonobservation_summ" beanName="map"/>
  <logic:notEmpty name="BEANLIST">
-   <tr>
+   <tr class="@nextcolorclass@">
      <td colspan="2">Taxa observed on plots:</td>
      <td align="right">&nbsp;<bean:write name="BEAN" property="count_taxonobservation"/></td>
    </tr> 
  </logic:notEmpty>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+ <!--- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr> -->
 </table>
+
+
+
+ <vegbank:get select="place_summ" beanName="map" perPage="-1" pager="false"/>
+ <logic:notEmpty name="BEANLIST">
+<h4>Geographical Distribution of Observations</h4>
+
+   <table class="thinlines" cellpadding="2"> 
+   
+   <tr><th>State/Province</th><th>Plot-Observations</th></tr>
+     <logic:iterate id="onerec" name="BEANLIST" >
+       <!-- loop over list of states -->
+       <tr class="@nextcolorclass@"><td ><bean:write name="onerec" property="region_name"/>&nbsp;</td><td  align="right">&nbsp;<bean:write name="onerec" property="count_obs"/></td></tr>
+     </logic:iterate>
+   </table>
+ </logic:notEmpty> 
+
 
 @vegbank_footer_html_tworow@
 </BODY>
