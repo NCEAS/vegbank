@@ -13,8 +13,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-08-27 17:39:55 $'
-*  '$Revision: 1.7 $'
+*  '$Date: 2004-08-27 19:30:27 $'
+*  '$Revision: 1.8 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -47,8 +47,8 @@
 
 
   <h1 align="center">
-    <span >Welcome to Vegbank</span></h1>
-  <h4 >Here are your options:</h4>	
+    Welcome to Vegbank</h1>
+  <span class="headequiv sizelarge">Here are your options:</span>	
 	         
            
 	<TABLE  cellpadding="0" cellspacing="0" border="0">
@@ -58,90 +58,90 @@
 	<TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">View Data</span></TD><td/></TR>
 	   
 	<TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@magnglas.png" /> </TD><TD>	       
-  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
   
      
-      <h2 >Search for <a href="@general_link@plots.html">Plots</a></h2>
-      </td><td>
-        <p >&raquo; <a href="@forms_link@plot-query-simple.jsp">Simple 3-in-1 query</a>  &raquo; 
+      <span class="headequiv sizelarger">Search for <a href="@general_link@plots.html">Plots</a></span>
+      </td><td valign="middle"> 
+        <p>&raquo; <a href="@forms_link@plot-query-simple.jsp">Simple 3-in-1 query</a>  &raquo; 
         <a href="@plotquery_page@">Advanced query</a> </p>
       </td>
-	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
     
 
      
-      <h4 >Search for 
-	  <a href="@forms_link@community-query.html">Community Types</a></h4>
+      <span class="headequiv sizelarge">Search for 
+	  <a href="@forms_link@community-query.html">Community Types</a></span>
       </td> </tr>
-	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
 
      
-      <h4 ><span >Search for  
-	  <a href="@forms_link@PlantQuery.jsp">Plants</a> </span></h4>
+      <span class="headequiv sizelarge"><span>Search for  
+	  <a href="@forms_link@PlantQuery.jsp">Plants</a> </span></span>
     </td> </tr>
-	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
 
     
-      <h4 >
+      <span class="headequiv sizelarge">
         View  
 		<a href="@general_link@metadata.html">Supplemental Data</a> 
 		
       
-      </h4>
-    </td> <td><p>e.g. Methods, People, Projects, References</p></td></tr>
+      </span>
+    </td> <td valign="middle"> <p>e.g. Methods, People, Projects, References</p></td></tr>
 	  </table>
 	  </TD></TR>
 	 <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
 		  	   <TR><TD colspan="1" bgcolor="#CCCCCC" align="center"><span class="greytext">My Preferences</span></TD><td/></TR>
 	 <TR valign="middle"><TD align="center"><img src="@images_link@users.png" /></TD><TD>
-	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
     
     
 	<!--li> 
-		<h4 >Access or submit <a href="@general_link@parties.html">Parties</a> data</h4>
-		<h4 >Access or Submit Parties data 
-		<font color="#F90000"> <b> Coming soon! </b></font> </h4>
+		<span class="headequiv sizelarge">Access or submit <a href="@general_link@parties.html">Parties</a> data</span>
+		<span class="headequiv sizelarge">Access or Submit Parties data 
+		<font color="#F90000"> <b> Coming soon! </b></font> </span>
     </li-->
 <!--
      
-      <h4 >
+      <span class="headequiv sizelarge">
           Edit your VegBank <html:link action="LoadUser.do">Profile</html:link>
         
-      </h4> 
+      </span> 
 -->			
 	
-      <h4 >View your <a href="@general_link@account.html">VegBank Account </a> 
-		 </h4>
+      <span class="headequiv sizelarge">View your <a href="@general_link@account.html">VegBank Account </a> 
+		 </span>
 		</td> </tr>
 	  </table>
 	      </TD></TR>
 	        <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
-	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext" >Info</span></TD><td/></TR>
+	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Info</span></TD><td/></TR>
 	   
 		  	  
 	<TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@info.png" /></TD><TD>
 
 	  
-	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
     
     
   <!--  
-      <h4 >
+      <span class="headequiv sizelarge">
         
           Apply to become a <html:link action="LoadCertification.do">Certified VegBank User</html:link>
 	<a href="@help-for-certification-href@"><img border="0" src="@image_server@question.gif"></a>
-      </h4>
+      </span>
      -->
      
-      <h4 >See our 
-	  	<a href="@general_link@sitemap.html">Site Map</a> </h4></td><td>
+      <span class="headequiv sizelarge">See our 
+	  	<a href="@general_link@sitemap.html">Site Map</a> </span></td><td valign="middle"> 
 		<p><font color="#F90000"> Newly updated! </font></p>
     		
 
     </td> </tr>
-	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
-      <h4 >See a <a href="@forms_link@vbsummary.jsp">Summary of data</a> 
-      </h4>
+	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
+      <span class="headequiv sizelarge">See <a href="@forms_link@vbsummary.jsp">an overview of VegBank Data</a> 
+      </span> 
       </td> </tr>
 	  </table>
 	  </TD></TR>
@@ -149,38 +149,38 @@
 		 <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Add Data</span></TD><td/></TR>
  
 	  <TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@upload.png" /></TD><TD>
-	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
     
-      <h4 >Load <a href="@DisplayUploadPlotAction@">Plot Data</a></h4>
-     </td><td>
-	  <p >
+      <span class="headequiv sizelarge">Load <a href="@DisplayUploadPlotAction@">Plot Data</a></span>
+     </td><td valign="middle"> 
+	  <p>
       
      &raquo; Download<a href="@vegbranch_link@vegbranch.html"> VegBranch</a></p>
      </td> </tr>
-	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
 
      
-      <h4 >Annotate data</h4></td><td>
+      <span class="headequiv sizelarge">Annotate data</span></td><td valign="middle"> 
 	  <p><font color="#F90000"> Coming soon! </font></p>
     		
 	
 	<!--li>
-      <h4 ><a href="@general_link@client.html">Download</a> 
-        the Desktop Client</h4>
+      <span class="headequiv sizelarge"><a href="@general_link@client.html">Download</a> 
+        the Desktop Client</span>
 	</li-->
   </td></tr>
 </table>
  
- <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td>
+ <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
  
       
-       <h4><a href="@general_link@input.html">Input Data</a> In Forms</h4></td><td>
+       <span class="headequiv sizelarge"><a href="@general_link@input.html">Input Data</a> In Forms</span></td><td valign="middle"> 
  	 
      		
  	
  	<!--li>
-       <h4 ><a href="@general_link@client.html">Download</a> 
-         the Desktop Client</h4>
+       <span class="headequiv sizelarge"><a href="@general_link@client.html">Download</a> 
+         the Desktop Client</span>
  	</li-->
    </td></tr>
 </table>
@@ -194,10 +194,10 @@
 		if (isAdmin.booleanValue()) {
 %>
     <hr true/>
-      <h4 >ADMINISTRATION</h4>
+      <span class="headequiv sizelarge">ADMINISTRATION</span>
 	  
-		<h4 >Go to the 
-			<html:link action="AdminMenu.do">Admin Menu</html:link></h4>
+		<span class="headequiv sizelarge">Go to the 
+			<html:link action="AdminMenu.do">Admin Menu</html:link></span>
 		
 	  
 <% 
