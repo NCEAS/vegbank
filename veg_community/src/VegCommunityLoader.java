@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 19:57:37 $'  
- *	'$Revision: 1.26 $'
+ *	'$Date: 2003-05-16 05:49:15 $'  
+ *	'$Revision: 1.27 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,9 +80,7 @@ public class VegCommunityLoader
 		try 
  		{
 			Class.forName("org.postgresql.Driver");
-			//c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/communities_dev", "datauser", "");
-			c = DriverManager.getConnection("jdbc:postgresql://"+host+"/communities_dev", "datauser", "");
-			//c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/communities_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://"+host+"/vegbank", "datauser", "");
 		}
 		catch ( Exception e )
 		{
@@ -131,57 +129,59 @@ public class VegCommunityLoader
 			
 			
 			// INSERT THE CONCEPT
-			int commConceptId = insertCommunityConcept(	conceptCode, 
-																																												commCodeId,  
-																																												communityDescription, 
-																																												refId );
+			int commConceptId =
+				insertCommunityConcept(
+					conceptCode,
+					commCodeId,
+					communityDescription,
+					refId);
 
 			// THE STATUS -- there may be a proble with the date entered
-			int commStatusId = insertCommunityStatus(	commConceptId, 
-																																									"accepted", 
-																																									dateEntered, 
-																																									partyId, 
-																																									refId,
-																																									commLevel, 
-																																									parentCommunity );
-			
-			
+			int commStatusId =
+				insertCommunityStatus(
+					commConceptId,
+					"accepted",
+					dateEntered,
+					partyId,
+					refId,
+					commLevel,
+					parentCommunity);
+
 			//UPDATE THE USAGE FOR THE NAMES 
-			
+
 			// - name = Code
-			insertCommunityUsage( 	commCodeId, 
-																								commConceptId, 
-																								partyId, 
-																								"standard", 
-																								dateEntered, 
-																								"Code", 
-																								conceptCode, 
-																								conceptCode
-																							);
+			insertCommunityUsage(
+				commCodeId,
+				commConceptId,
+				partyId,
+				"standard",
+				dateEntered,
+				"Code",
+				conceptCode,
+				conceptCode);
 			// - name = Scientific 
-			insertCommunityUsage( 	commNameId, 
-																								commConceptId, 
-																								partyId, 
-																								"standard",
-																								dateEntered, 
-																								"Scientific", 
-																								commName, 
-																								conceptCode
-																							);
+			insertCommunityUsage(
+				commNameId,
+				commConceptId,
+				partyId,
+				"standard",
+				dateEntered,
+				"Scientific",
+				commName,
+				conceptCode);
 			// name = Scientific translated (alliance only)
-			if ( commLevel.equals("alliance") &&  allianceTransName != null )
+			if (commLevel.equals("alliance") && allianceTransName != null)
 			{
-				insertCommunityUsage( 	commTransId, 
-																									commConceptId, 
-																									partyId, 
-																									"standard", 
-																									dateEntered, 
-																									"Scientific translated", 
-																									allianceTransName,
-																									conceptCode
-																								);
+				insertCommunityUsage(
+					commTransId,
+					commConceptId,
+					partyId,
+					"standard",
+					dateEntered,
+					"Scientific translated",
+					allianceTransName,
+					conceptCode);
 			}
-			
 			
 			// DO THE TRANSACTION
 			if (this.commit == true)
@@ -221,24 +221,21 @@ public class VegCommunityLoader
 	 *
 	 *
 	 */
-	 public StringBuffer insertGenericCommunity(	String partySalutation, 
-																	                                              String partyGivenName, 
-																	                                              String partySurName, 
-																	                                              String partyMiddleName, 
-																	                                              String orgName,
-																		                                            String contactInstructions, 
-																		                                            String conceptReferenceTitle, 
-																	                                              String conceptReferenceAuthor,
-																		                                            String conceptReferenceDate,
-																		                                            String nameReferenceTitle, 
-																	                                              String nameReferenceAuthor,
-																		                                            String nameReferenceDate,
-																		                                            String conceptCode, 
-																	                                              String commLevel, 
-																		                                            String commName, 
-																	                                              String dateEntered, 
-																	                                              String parentCommunity, 
-																		                                            String otherName  )
+	public StringBuffer insertGenericCommunity(
+		String partySalutation,
+		String partyGivenName,
+		String partySurName,
+		String partyMiddleName,
+		String orgName,
+		String contactInstructions,
+		int conceptRefId,
+		int nameRefId,
+		String conceptCode,
+		String commLevel,
+		String commName,
+		String dateEntered,
+		String parentCommunity,
+		String otherName)
 	 {
 	 	StringBuffer sb = new StringBuffer();
     System.out.println( "VegCommunityLoader > conceptCode = '" + conceptCode + 
@@ -246,7 +243,6 @@ public class VegCommunityLoader
                         "' commName= '" + commName+
                         "' dateEntered= '" + dateEntered+
                         "' parentCommunity= '" + parentCommunity+
-                        "' nameReferenceTitle = '" + nameReferenceTitle +
                         "' partyName= '" + partySalutation + partyGivenName + partyMiddleName + partySurName + "'");
  
 		 try
@@ -254,22 +250,19 @@ public class VegCommunityLoader
 		 	
 			//turn off autocommit
 			conn.setAutoCommit(false);
-			int partyId = insertCommunityPartyIndividual(partySalutation, 
-			partyGivenName, partySurName, partyMiddleName, orgName
-			, contactInstructions
-			);
+			int partyId =
+				insertCommunityPartyIndividual(
+					partySalutation,
+					partyGivenName,
+					partySurName,
+					partyMiddleName,
+					orgName,
+					contactInstructions);
+					
 			System.out.println("VegCommunityLoader > party id: " + partyId);
 			if (partyId == 0) this.commit = false;
 			
 			//GET THE NAME AND CONCEPT REFERENCE
-			int conceptRefId = insertCommunityReference(conceptReferenceAuthor, 
-			conceptReferenceTitle, conceptReferenceDate,  conceptReferenceAuthor);
-			System.out.println("VegCommunityLoader >  concept ref id: " + conceptRefId);
-			
-			int nameRefId = insertCommunityReference(nameReferenceAuthor, 
-			nameReferenceTitle, nameReferenceDate,  nameReferenceAuthor);
-			System.out.println("VegCommunityLoader > name ref id: " + nameRefId);
-			if (conceptRefId == 0 || nameRefId == 0  ) this.commit = false;
 			
 			// INSERT THE NAMES
 			int commNameId = insertCommunityName(commName, nameRefId, dateEntered);
@@ -279,31 +272,37 @@ public class VegCommunityLoader
 			//FORGET THE CODE NAMES FOR NOW
 			
 			// INSERT THE CONCEPT
-			int commConceptId = insertCommunityConcept(	conceptCode, 
-																																												commNameId, 
-																																												commName, 
-																																												conceptRefId 
-																																											);
+			int commConceptId =
+				insertCommunityConcept(conceptCode, commNameId, commName, conceptRefId);
 			System.out.println("VegCommunityLoader > concept id: " + commConceptId);
-			if (commConceptId == 0  ) this.commit = false;
-			
+			if (commConceptId == 0)
+				this.commit = false;
+
 			// THE STATUS -- there may be a proble with the date entered
-			int commStatusId = insertCommunityStatus(	commConceptId, 
-																																									"accepted", 
-																																									dateEntered, 
-																																									partyId, 
-																																									conceptRefId, 
-																																									commLevel,
-																																									parentCommunity 
-																								);
+			int commStatusId =
+				insertCommunityStatus(
+					commConceptId,
+					"accepted",
+					dateEntered,
+					partyId,
+					conceptRefId,
+					commLevel,
+					parentCommunity);
 																								
 			System.out.println("VegCommunityLoader > status id: " + commStatusId);
 			if (commStatusId == 0  ) this.commit = false;
 						
 			//UPDATE THE USAGE FOR THE NAMES 
 			// - the name
-			insertCommunityUsage( commNameId, commConceptId, partyId, "standard"
-			, dateEntered, "VEGBANK", commName, conceptCode);
+			insertCommunityUsage(
+				commNameId,
+				commConceptId,
+				partyId,
+				"standard",
+				dateEntered,
+				"VEGBANK",
+				commName,
+				conceptCode);
 			System.out.println("VegCommunityLoader > usage id: " );
 			//if (commStatusId == 0  ) this.commit = false;
 			
@@ -344,52 +343,52 @@ public class VegCommunityLoader
 		}
 		
 		
-		/**
-		 * method that is sort of out ouf plave because it is used to get a status
-		 * id out of the database in order to perform a correlation
-		 *
-		 * @param refTitle -- the title of the reference, which in the case of the 
-		 *  addition of a correlation will refer to that person who entered the
-		 *	concept -- the conceptRef
-		 
-		 */
-		public int getStatusId(String refTitle, String refAuthor, 
-		String status, String commName, String salutation, String givenName, 
-		String surName, String emailAddress, String orgName )
-		{
-		int statusId = 0; 
-		 try
-		 {
-				//GET THE REFERENCE ID OF THE CONCEPT WHICH IN THE CASE OF A CORRELATION
-				//THIS WILL BE THE REFERENCE RELATED TO THE PERSON ENTERING THE NEW
-				//CONCEPT
-				int refId = getCommunityReferenceId(refAuthor, refTitle);
-				System.out.println("VegCommunityLoader > ref id: " + refId );
-				
-				//GET THE NAME ID -- THERE SHOULD BE ONLY ONE
-				int nameId = getCommunityNameId(commName);
-				System.out.println("VegCommunityLoader > name id: " + nameId );
-				
-				String middleName = "";
-				String contactInstructions = emailAddress;
-				//GET THE PARTY ID FOR THE KEY IN THE STATUS TABLE
-				int partyId = getCommunityPartyId(salutation, givenName, 
-				surName,  middleName, orgName, contactInstructions);
-		 		System.out.println("VegCommunityLoader > party id: " + partyId );
-				
-				int conceptId = getCommunityConceptId(nameId, refId);
-		 		System.out.println("VegCommunityLoader > concept id: " + conceptId );
-				
-				statusId = getCommunityStatusId(conceptId, partyId, status);
-				System.out.println("VegCommunityLoader > status id: " + statusId );
-		 }
-			catch (Exception e)
-		 {
-			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-		 return(statusId);
-		}
+//		/**
+//		 * method that is sort of out ouf plave because it is used to get a status
+//		 * id out of the database in order to perform a correlation
+//		 *
+//		 * @param refTitle -- the title of the reference, which in the case of the 
+//		 *  addition of a correlation will refer to that person who entered the
+//		 *	concept -- the conceptRef
+//		 
+//		 */
+//		public int getStatusId(String refTitle, String refAuthor, 
+//		String status, String commName, String salutation, String givenName, 
+//		String surName, String emailAddress, String orgName )
+//		{
+//		int statusId = 0; 
+//		 try
+//		 {
+//				//GET THE REFERENCE ID OF THE CONCEPT WHICH IN THE CASE OF A CORRELATION
+//				//THIS WILL BE THE REFERENCE RELATED TO THE PERSON ENTERING THE NEW
+//				//CONCEPT
+//				int refId = getCommunityReferenceId(refAuthor, refTitle);
+//				System.out.println("VegCommunityLoader > ref id: " + refId );
+//				
+//				//GET THE NAME ID -- THERE SHOULD BE ONLY ONE
+//				int nameId = getCommunityNameId(commName);
+//				System.out.println("VegCommunityLoader > name id: " + nameId );
+//				
+//				String middleName = "";
+//				String contactInstructions = emailAddress;
+//				//GET THE PARTY ID FOR THE KEY IN THE STATUS TABLE
+//				int partyId = getCommunityPartyId(salutation, givenName, 
+//				surName,  middleName, orgName, contactInstructions);
+//		 		System.out.println("VegCommunityLoader > party id: " + partyId );
+//				
+//				int conceptId = getCommunityConceptId(nameId, refId);
+//		 		System.out.println("VegCommunityLoader > concept id: " + conceptId );
+//				
+//				statusId = getCommunityStatusId(conceptId, partyId, status);
+//				System.out.println("VegCommunityLoader > status id: " + statusId );
+//		 }
+//			catch (Exception e)
+//		 {
+//			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+//			 e.printStackTrace();
+//		 }
+//		 return(statusId);
+//		}
 		
 		/**
 		 * public method to update the correlation table.  This is intended to be 
@@ -428,52 +427,52 @@ public class VegCommunityLoader
 		 	return(result);	 	
 		}
 		
-		/**
-		 * method that returns the status id
-		 */
-		 private int getCommunityStatusId(int conceptId, int partyId,  String status)
-	  	{
-		 	int statusId = 0; 
-			try
-			{
-		 		StringBuffer sb = new StringBuffer();
-				sb.append("SELECT commstatus_id from COMMSTATUS where ");
-				sb.append(" commconcept_id = "+conceptId);
-				sb.append(" and commparty_id = "+partyId);
-				sb.append(" and upper(commconceptstatus)  =  '"+status.toUpperCase()+"'");
-				
-				Statement query = conn.createStatement();
-				ResultSet rs = query.executeQuery( sb.toString() );
-				
-				int cnt = 0;
-				while ( rs.next() ) 
-				{
-					statusId = rs.getInt(1);
-					cnt++;
-				}
-			}
-			catch (Exception e)
-		 {
-			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-		 return(statusId);
-	 }
+//		/**
+//		 * method that returns the status id
+//		 */
+//		 private int getCommunityStatusId(int conceptId, int partyId,  String status)
+//	  	{
+//		 	int statusId = 0; 
+//			try
+//			{
+//		 		StringBuffer sb = new StringBuffer();
+//				sb.append("SELECT commstatus_id from COMMSTATUS where ");
+//				sb.append(" commconcept_id = "+conceptId);
+//				sb.append(" and commparty_id = "+partyId);
+//				sb.append(" and upper(commconceptstatus)  =  '"+status.toUpperCase()+"'");
+//				
+//				Statement query = conn.createStatement();
+//				ResultSet rs = query.executeQuery( sb.toString() );
+//				
+//				int cnt = 0;
+//				while ( rs.next() ) 
+//				{
+//					statusId = rs.getInt(1);
+//					cnt++;
+//				}
+//			}
+//			catch (Exception e)
+//		 {
+//			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+//			 e.printStackTrace();
+//		 }
+//		 return(statusId);
+//	 }
 		
 		
 		
 	   /**
 	  * method to insert data into the commname table
 		*/
-		private int insertCommunityUsage(	int commNameId, 
-																																int commConceptId, 
-																																int commPartyId, 
-																																String commNameStatus, 
-																																String usageStart, 
-																																String classSystem, 
-																																String commName, 
-																																String commCode
-																															)
+		private int insertCommunityUsage(
+			int commNameId,
+			int commConceptId,
+			int commPartyId,
+			String commNameStatus,
+			String usageStart,
+			String classSystem,
+			String commName,
+			String commCode)
 	  {
 		 int usageId = 0; 
 		 try
@@ -484,8 +483,8 @@ public class VegCommunityLoader
 		 	
 				PreparedStatement pstmt = conn.prepareStatement(
 					"INSERT into COMMUSAGE( commname_id, commconcept_id, commparty_id, commNameStatus,"
-					+"  usageStart, classSystem, commName, ceglcode, commusage_id) "
-					+" values(?,?,?,?,?,?, ?, ?,?)");
+					+"  usageStart, classSystem, commName, commusage_id) "
+					+" values(?,?,?,?,?,?,?,?)");
 					
   			// Bind the values to the query and execute it
   			pstmt.setInt(1, commNameId);
@@ -495,8 +494,7 @@ public class VegCommunityLoader
 				Utility.insertDateField(usageStart, pstmt, 5); //pstmt.setString(5, usageStart);
 				pstmt.setString(6, classSystem);
 				pstmt.setString(7, commName);
-				pstmt.setString(8, commCode);
-				pstmt.setInt(9, usageId);
+				pstmt.setInt(8, usageId);
 				//execute the p statement
   			pstmt.execute();
   			pstmt.close();
@@ -523,13 +521,14 @@ public class VegCommunityLoader
 		 * @param parentCommunity
 		 * @return int
 		 */
-		private int insertCommunityStatus(	int commConceptId, 
-																																String status,  
-																																String startDate, 
-																																int partyId, 
-																																int refId, 
-																																String commLevel,
-																																String parentCommunity)
+		private int insertCommunityStatus(
+			int commConceptId,
+			String status,
+			String startDate,
+			int partyId,
+			int refId,
+			String commLevel,
+			String parentCommunity)
 	  {
 		 int statusId = 0; 
 		 try
@@ -540,7 +539,7 @@ public class VegCommunityLoader
 				(int) Utility.dbAdapter.getNextUniqueID(conn, "COMMSTATUS", "commstatus_id");
 		 	
 				PreparedStatement pstmt = conn.prepareStatement(
-					"INSERT into COMMSTATUS( commconcept_id, commreference_id, "
+					"INSERT into COMMSTATUS( commconcept_id, reference_id, "
 					+" commconceptstatus, startDate, commparty_id, commlevel, commstatus_id) "
 					+" values(?,?,?,?,?,?,?)");
 
@@ -561,8 +560,10 @@ public class VegCommunityLoader
 				{
 					//System.out.println("VegCommunityLoader > updating parentCommunity" );
 					PreparedStatement pstmt2 = conn.prepareStatement(
-						"UPDATE commstatus set commparent = "
-						+ "(select commconcept_id from commconcept where ceglcode = '" + parentCommunity +"')"
+						"UPDATE commstatus set commparent_id = "
+						+ "(select commconcept_id from commusage, commname " 
+						+ " where upper(commname.commname) = '" + parentCommunity.toUpperCase()
+						+"' and commname.commname_id = commusage.commname_id) "
 						+ " where commconcept_id = "+commConceptId+""
 					);
 					pstmt2.execute();
@@ -636,9 +637,7 @@ public class VegCommunityLoader
 		 }
 		 return(partyId);
 	 }
-	 
-	 
-	 
+
 	  /**
 	  * this is the method that is to be used when entering a party that is
 		* specific to a given individual.  When a web form is used to fill out 
@@ -648,9 +647,13 @@ public class VegCommunityLoader
 		*
 		* @param partyOrgName
 		*/
-		private int insertCommunityPartyIndividual(String partySalutation, 
-		String partyGivenName, String partySurName, String partyMiddleName, 
-		String orgName, String contactInstructions)
+		private int insertCommunityPartyIndividual(
+			String partySalutation,
+			String partyGivenName,
+			String partySurName,
+			String partyMiddleName,
+			String orgName,
+			String contactInstructions)
 	  {
 		 int partyId = 0; 
 		 try
@@ -738,7 +741,7 @@ public class VegCommunityLoader
 			{
 				StringBuffer sb = new StringBuffer();
 				//insert the VALS
-				sb.append("INSERT into COMMNAME (commname, commreference_id, dateEntered) "
+				sb.append("INSERT into COMMNAME (commname, reference_id, dateEntered) "
 				+" values(?, ?, ?)");
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
   			// Bind the values to the query and execute it
@@ -776,10 +779,11 @@ public class VegCommunityLoader
 	 /**
 	  * method to insert data into the commname table
 		*/
-		private int insertCommunityConcept(	String commConceptCode, 
-																																		int commNameId, 
-																																		String conceptDescription, 
-																																		int refId )
+		private int insertCommunityConcept(
+			String commConceptCode,
+			int commNameId,
+			String conceptDescription,
+			int refId)
 	  {
 		 int commConceptId = 0; 
 		 try
@@ -787,23 +791,22 @@ public class VegCommunityLoader
 		 	// Get Primary key for table		
 			commConceptId =  
 				(int) Utility.dbAdapter.getNextUniqueID(conn, "COMMCONCEPT", "commconcept_id");
+				
+				//System.out.println("Got a primary key of >>> " + commConceptId);
 		 	
 				PreparedStatement pstmt = conn.prepareStatement(
-						"INSERT into COMMCONCEPT (commname_id, ceglcode, "
-						+" conceptDescription, commreference_id, commconcept_id) "
-						+" values(?, ?, ?, ?, ?)");
+						"INSERT into COMMCONCEPT (commname_id, "
+						+" commdescription, reference_id, commconcept_id) "
+						+" values(?, ?, ?, ?)");
 
 	  		// Bind the values to the query and execute it
 	  		pstmt.setInt(1, commNameId);
-				pstmt.setString(2, commConceptCode);
-				pstmt.setString(3, conceptDescription);
-				pstmt.setInt(4, refId);
-				pstmt.setInt(5, commConceptId);			
+				pstmt.setString(2, conceptDescription);
+				pstmt.setInt(3, refId);
+				pstmt.setInt(4, commConceptId);			
 				
 				//execute the insert statement getting the "row count in return"
-				pstmt.executeUpdate();     
-
-			
+				pstmt.executeUpdate();    
 			 }
 			catch (Exception e)
 		 {
@@ -843,7 +846,7 @@ public class VegCommunityLoader
 			else
 			{
 				//insert the strata values
-				sb.append("INSERT into COMMREFERENCE (authors, pubDate, title, othercitationdetails) "
+				sb.append("INSERT into REFERENCE (authors, pubDate, title, othercitationdetails) "
 				+" values(?,?,?,?)");
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
 				// Bind the values to the query and execute it
@@ -856,7 +859,7 @@ public class VegCommunityLoader
   			// pstmt.close();
 				//get the refId
 				sb = new StringBuffer();
-				sb.append("SELECT commreference_id from COMMREFERENCE where othercitationdetails"
+				sb.append("SELECT reference_id from REFERENCE where othercitationdetails"
 				+" like '"+otherCitationDetails+"'");
 				Statement query = conn.createStatement();
 				ResultSet rs = query.executeQuery( sb.toString() );
@@ -894,7 +897,7 @@ public class VegCommunityLoader
 			try
 			{
 		 		StringBuffer sb = new StringBuffer();
-				sb.append("SELECT commreference_id from COMMREFERENCE where othercitationdetails"
+				sb.append("SELECT reference_id from REFERENCE where othercitationdetails"
 				+" like '"+otherCitationDetails+"'");
 				Statement query = conn.createStatement();
 				ResultSet rs = query.executeQuery( sb.toString() );
@@ -923,7 +926,7 @@ public class VegCommunityLoader
 			try
 			{
 		 		StringBuffer sb = new StringBuffer();
-				sb.append("SELECT commreference_id from COMMREFERENCE where upper(authors)"
+				sb.append("SELECT reference_id from REFERENCE where upper(authors)"
 				+" like '"+authors.toUpperCase()+"' and upper(title) like '%"+title.toUpperCase()+"%'");
 				Statement query = conn.createStatement();
 				ResultSet rs = query.executeQuery( sb.toString() );
@@ -1083,7 +1086,7 @@ public class VegCommunityLoader
 			{
 		 		StringBuffer sb = new StringBuffer();
 				sb.append("SELECT commconcept_id from COMMCONCEPT where commName_Id ="
-				+commNameId+" and commReference_id = "+commReferenceId);
+				+commNameId+" and reference_id = "+commReferenceId);
 				Statement query = conn.createStatement();
 				ResultSet rs = query.executeQuery( sb.toString() );
 				
@@ -1116,7 +1119,7 @@ public class VegCommunityLoader
 		 	StringBuffer sb = new StringBuffer();
 			//get the refId
 			sb = new StringBuffer();
-			sb.append("SELECT commreference_id from COMMREFERENCE where othercitationdetails"
+			sb.append("SELECT reference_id from REFERENCE where othercitationdetails"
 			+" like '"+otherCitationDetails+"'");
 			
 			Statement query = conn.createStatement();
