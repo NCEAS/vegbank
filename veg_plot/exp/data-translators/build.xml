@@ -13,9 +13,9 @@
 	* embedded database(s) etc.  Before building this check the 
 	* dependencies
 	*
-	* 		'$Author: harris $'
- 	*     '$Date: 2003-01-02 17:16:55 $'
- 	*     '$Revision: 1.15 $'
+	* 		'$Author: farrell $'
+ 	*     '$Date: 2003-01-16 01:03:51 $'
+ 	*     '$Revision: 1.16 $'
 --> 
 <project name="data-translators" default="compile" basedir=".">
 	
@@ -126,6 +126,11 @@
 			basedir="${build}"
 			includes="** "
 		/>
+
+    <!-- Copy jar up to the main lib directory -->
+    <copy file="${lib}/datatranslator.jar"
+          filtering="no"
+          todir="../../build/lib/"/>
 	</target>
 	
 		

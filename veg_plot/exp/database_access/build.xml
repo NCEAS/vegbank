@@ -27,19 +27,19 @@
     		*
     		* the default settings are for:
     	-->
-			<filter token="authenticationServletHost" value="tekka.nceas.ucsb.edu" />
-    	<filter token="communityRequestServletHost" value="vegbank.nceas.ucsb.edu" />
-			<filter token="plantRequestServletHost" value="vegbank.nceas.ucsb.edu" />
-			<filter token="geoCoordRequestServletHost" value="vegbank.nceas.ucsb.edu" />
+			<filter token="authenticationServletHost" value="beta.nceas.ucsb.edu" />
+    	<filter token="communityRequestServletHost" value="beta.nceas.ucsb.edu" />
+			<filter token="plantRequestServletHost" value="beta.nceas.ucsb.edu" />
+			<filter token="geoCoordRequestServletHost" value="beta.nceas.ucsb.edu" />
 			
 			<filter token="databaseType" value="postgresql" />
     	<filter token="user" value="datauser" />
     	<filter token="password" value="pass" />
     	<filter token="port" value="1521" />
-    	<filter token="hostname" value="127.0.0.1"/>
+    	<filter token="hostname" value="beta.nceas.ucsb.edu"/>
     	<filter token="driverType" value="thin" />
     	<filter token="driverClass" value="org.postgresql.Driver" />
-    	<filter token="connectString" value="jdbc:postgresql://127.0.0.1/plots_dev" />
+    	<filter token="connectString" value="jdbc:postgresql://beta.nceas.ucsb.edu/plots_dev" />
     	<filter token="databaseName" value="nvc" />
     	<filter token="insert.minConnections" value="1" />
     	<filter token="insert.maxConnections" value="3" />
@@ -52,10 +52,6 @@
     	
     	<property name="current" value="./" />
     	<property name="build" value="./build" />
-      <property name="doc.dir" value="${basedir}/doc"/>
-      <property name="build.test" value="${build}/test"/>
-      <property name="reports.dir" value="${build}/reports"/>
-      <property name="reports.test.dir" value="${reports.dir}/testreports"/>
       <property name="src" value="src" />
     	<property name="dist" value="dist" />
     	<property name="release" value="alpha-20011008"/>
@@ -68,15 +64,8 @@
     	<property name="datatranslator" value="./lib/datatranslator.jar" />
     	<property name="servletutil" value="./lib/utilities.jar" />
     	<property name="planttaxonomy" value="./lib/planttaxonomy.jar" />
-    	
     	<property name="cpath" value="${planttaxonomy}:${servletutil}:${datatranslator}:${xmlresource}:${xmlp}:${jdbc}:${build}:./"/>
-    
-    	<!-- SERVLET LOCATION 
-    	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib//" />
-    	-->
     	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat_dev/webapps/framework/WEB-INF/lib//" />
-    	
-    	
     </target>
     
     <target name="prepare" depends="init">

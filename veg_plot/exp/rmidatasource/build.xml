@@ -13,9 +13,9 @@
 	* embedded database(s) etc.  Before building this check the 
 	* dependencies
 	*
-	* 		'$Author: harris $'
- 	*     '$Date: 2003-01-08 17:24:25 $'
- 	*     '$Revision: 1.19 $'
+	* 		'$Author: farrell $'
+ 	*     '$Date: 2003-01-16 01:03:52 $'
+ 	*     '$Revision: 1.20 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -34,7 +34,7 @@
 		<property name="dbaccess" value="./lib/database_access.jar" />
 		<property name="xmlresource" value="./lib/xmlresource.jar" />
 		<property name="plotvalidation" value="../../lib/plotvalidator.jar" />
-    <!-- THESE ARE THE PLOTVALIDATION FILES TAHT ARE NEEDED  -->
+    <!-- THESE ARE THE PLOTVALIDATION FILES THAT ARE NEEDED  -->
     <property name="constraintlist" value="../../xml/constraints.xml"/>
     <property name="constraintmap" value="../../xml/constraint-map.xml"/>
     <!-- A NATIVE XML DOC TO BE USED AT STARTUP OF THE RMI SERVER --> 
@@ -94,6 +94,9 @@
 			basedir="${build}"
 			includes="** "
 		/>
+    <copy file="${lib}/rmidatasource.jar"
+          filtering="no"
+          todir="../../build/lib/"/>
 	</target>
 	
 		
