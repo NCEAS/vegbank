@@ -4,9 +4,9 @@
  *  Authors: @author@
  *  Release: @release@
  *
- *  '$Author: farrell $'
- *  '$Date: 2004-01-20 21:17:23 $'
- *  '$Revision: 1.2 $'
+ *  '$Author: mlee $'
+ *  '$Date: 2004-11-24 22:28:33 $'
+ *  '$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@
   </xsl:template>
 
   <xsl:template match="entity">
+
    <xsl:variable name="entityName" select="entityName"/>
    <xsl:variable name="CappedEntityName">
      <xsl:call-template name="UpperFirstLetter">
@@ -55,7 +56,7 @@
      </xsl:call-template>
    </xsl:variable>
    <xsl:variable name="aFile" select="concat($outdir, $CappedEntityName, '.java')"/>
-
+  <xsl:if test="module!='extra'"> 
    <redirect:write select="$aFile">
 /*
  * This is an auto-generated javabean 
@@ -149,6 +150,7 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
 }
 
     </redirect:write>
+ </xsl:if>
  </xsl:template>
 
  <xsl:template match="attribute" mode="Lists">

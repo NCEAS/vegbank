@@ -4,9 +4,9 @@
  *  Authors: @author@
  *  Release: @release@
  *
- *  '$Author: anderson $'
- *  '$Date: 2004-04-30 13:07:53 $'
- *  '$Revision: 1.4 $'
+ *  '$Author: mlee $'
+ *  '$Date: 2004-11-24 22:28:33 $'
+ *  '$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +76,8 @@
    <xsl:variable name="aFile" select="concat($outdir, 'Display', $CappedEntityName, '.jsp')"/>
 
    <!-- Create a new file for this entity -->
-   <redirect:write select="$aFile">
+  <xsl:if test="module!='extra'">
+    <redirect:write select="$aFile">
 
      <!-- Generated files need access to some resources, defined here -->
      <xsl:text disable-output-escaping="yes">
@@ -203,6 +204,8 @@
      
  
    </redirect:write>
+</xsl:if>
+
  </xsl:template>
 
  <!-- ********************************************************************* -->
@@ -410,9 +413,11 @@
  <!--  Display Summary in a row                                          -->
  <!-- ********************************************************************* -->
  <xsl:template match="entity" mode="displaySummaryRow">
+    
+
    <xsl:param name="lcEntityName"/>
    <xsl:param name="CappedEntityName"/>
-   
+<xsl:if test="module!='extra'">   
    <xsl:comment>The Values of the summary Row</xsl:comment>
    <xsl:for-each select="attribute[attForms/formShow/@name='Summary'  and attForms/formShow[@name = 'Summary'] != -1]">
      <xsl:sort data-type="number" select="attForms/formShow[@name='Summary']" />
@@ -435,6 +440,8 @@
        </span>
      </td>
    </xsl:for-each>
+</xsl:if>
+
  </xsl:template>
 
 
@@ -442,6 +449,7 @@
  <!--  Display the Summary FieldNames                                       -->
  <!-- ********************************************************************* -->
  <xsl:template match="entity" mode="SummaryFieldsRow">
+    <xsl:if test="module!='extra'">
    <xsl:comment>Summary fields header row</xsl:comment>
    <tr>
      <td><xsl:comment>Empty cell for expand contract icon</xsl:comment></td>
@@ -453,6 +461,9 @@
      </xsl:for-each>
    </tr>
    <xsl:comment>End summary fields header row</xsl:comment>
+</xsl:if>
+ 
+
  </xsl:template>
 
  <!-- ********************************************************************* -->
