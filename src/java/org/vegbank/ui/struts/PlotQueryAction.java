@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-29 00:38:52 $'
- *	'$Revision: 1.25 $'
+ *	'$Date: 2004-11-12 17:55:31 $'
+ *	'$Revision: 1.26 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,20 +62,16 @@ public class PlotQueryAction extends VegbankAction
 	private static final int NUM_TOP_TAXA =	5;
 	private static String selectClause =	
 		" SELECT DISTINCT(observation.accessioncode), observation.authorobscode, " +	
-		" plot.latitude, plot.longitude, observation.observation_id ";
+		" plot.latitude, plot.longitude, observation.observation_id";
 
 	
 	// add sql to get the top taxa
 	static {
 		StringBuffer sb = new StringBuffer(512);
-		for (int i=0; i < NUM_TOP_TAXA; i++) {
-			sb.append(", (SELECT authorPlantName || ' (' || cover || '%)' FROM taxonObservation as tob, ")
-				.append(" taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id ")
-				.append(" is null and cover is not null and authorPlantName is not null AND ")
-				.append(" tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET ")
-				.append(i)
-				.append(") as topspp")
-				.append(i+1);
+		for (int i=1; i <= NUM_TOP_TAXA; i++) {
+			sb.append(", (topTaxon").append(i)
+				.append("Name || ' (' || topTaxon").append(i)
+				.append("Cover || '%)') as topspp").append(i);
 		}
 		selectClause += sb.toString();
 	}
@@ -92,9 +88,14 @@ public class PlotQueryAction extends VegbankAction
 		StringBuffer query = new StringBuffer(1024);
 		query.append(selectClause)
 				.append(" FROM plot, project, observation, covermethod, stratummethod ")	
-				.append(" WHERE plot." + Plot.PKNAME + " = observation." + Observation.PLOT_ID)
-				.append(" AND project." + Project.PKNAME + " = observation." + Observation.PROJECT_ID + " AND observation." + Observation.COVERMETHOD_ID + " = covermethod." + Covermethod.PKNAME )
-				.append(" AND observation." + Observation.STRATUMMETHOD_ID + " = stratummethod." + Stratummethod.PKNAME);
+				.append(" WHERE plot.").append(Plot.PKNAME)
+				.append(" = observation.").append(Observation.PLOT_ID)
+				.append(" AND project.").append(Project.PKNAME)
+				.append(" = observation.").append(Observation.PROJECT_ID)
+				.append(" AND observation.").append(Observation.COVERMETHOD_ID)
+				.append(" = covermethod.").append(Covermethod.PKNAME)
+				.append(" AND observation.").append(Observation.STRATUMMETHOD_ID)
+				.append(" = stratummethod.").append(Stratummethod.PKNAME);
 
 		// Get the form
 		PlotQueryForm pqForm = (PlotQueryForm) form;
