@@ -10,9 +10,9 @@ import java.sql.*;
  * database <br> <br>
  *
  *	
- *  '$Author: harris $' <br>
- *  '$Date: 2002-08-30 19:12:03 $' <br>
- * 	'$Revision: 1.19 $' <br>
+ *  '$Author: farrell $' <br>
+ *  '$Date: 2002-12-05 23:41:00 $' <br>
+ * 	'$Revision: 1.20 $' <br>
  */
  
 //public class VegBankDataSourcePlugin
@@ -138,6 +138,100 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		return(s);
 	}
 	
+
+	public Vector getObservationContributors ( String plotName )
+	{
+		return null;
+	}
+	
+	public String getObservationContributorSalutation(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorGivenName(String contributorWholeName) 
+	{
+		return null;
+	}
+	
+	public String getObservationContributorMiddleName(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorSurName(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorOrganizationName(String contributorWholeName){
+		return null;
+	}
+	
+	public String getObservationContributorContactInstructions(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorPhoneNumber(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorCellPhoneNumber(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorFaxPhoneNumber(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorOrgPosition(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorEmailAddress(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorDeliveryPoint(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorCity(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorAdministrativeArea(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorPostalCode(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorCountry(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorCurrentFlag(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorAddressStartDate(String contributorWholeName)
+	{
+		return null;
+	}
 	
 	/** 
 	 * method that returns the accession number associated with a plot obs
