@@ -3,9 +3,9 @@
 
 <?xml-stylesheet type="text/xsl" href="dbmodel_2AccessZTbl.xsl"?>
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
-
 <?xml-stylesheet type="text/xsl" href="dbmodel-to-schema.xsl"?>
- -->
+-->
+
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
   <title>Vegetation Database Component Description: --all modules--</title>
   <version>1.0.2</version>
@@ -5530,7 +5530,7 @@ conditions may change between resampling events.
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attRelType type="inverted" name="n/a"/>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plot.PLOT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -8834,7 +8834,7 @@ conditions may change between resampling events.
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attRelType type="inverted" name="subplot"/>
+      <attRelType type="normal" name="n/a"/>
       <attReferences>plot.PLOT_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -15405,186 +15405,186 @@ conditions may change between resampling events.
       <attDefinition>Comments about the certification status, i.e. more information</attDefinition>
       <update>1.0.2</update>
     </attribute>
-						<attribute>
-						  <attName>exp_region_a</attName>
-						  <attLabel>Region of Expertise #1</attLabel>
-						  <attModel>implementation</attModel>
-						  <attNulls>yes</attNulls>
-						  <attType>text</attType>
-						  <attKey>n/a</attKey>
-						  <attRelType type="n/a" name="n/a"/>
-						  <attReferences>n/a</attReferences>
-						  <attListType>no</attListType>
-						  <attList/>
-						  <attNotes>n/a</attNotes>
-						  <attDefinition>Geographical region of expertise.</attDefinition>
-						  <update>1.0.2</update>
-						</attribute>
-						<attribute>
-						  <attName>exp_region_b</attName>
-						  <attLabel>Region of Expertise #2</attLabel>
-						  <attModel>implementation</attModel>
-						  <attNulls>yes</attNulls>
-						  <attType>text</attType>
-						  <attKey>n/a</attKey>
-						  <attRelType type="n/a" name="n/a"/>
-						  <attReferences>n/a</attReferences>
-						  <attListType>no</attListType>
-						  <attList/>
-						  <attNotes>n/a</attNotes>
-						  <attDefinition>Geographical region of expertise.</attDefinition>
-						  <update>1.0.2</update>
-						</attribute>
-						<attribute>
-						  <attName>exp_region_c</attName>
-						  <attLabel>Region of Expertise #3</attLabel>
-						  <attModel>implementation</attModel>
-						  <attNulls>yes</attNulls>
-						  <attType>text</attType>
-						  <attKey>n/a</attKey>
-						  <attRelType type="n/a" name="n/a"/>
-						  <attReferences>n/a</attReferences>
-						  <attListType>no</attListType>
-						  <attList/>
-						  <attNotes>n/a</attNotes>
-						  <attDefinition>Geographical region of expertise.</attDefinition>
-						  <update>1.0.2</update>
-						</attribute>
-						<attribute>
-						  <attName>exp_region_a_veg</attName>
-						  <attLabel>Vegetation Expertise in region #1</attLabel>
-						  <attModel>implementation</attModel>
-						  <attNulls>yes</attNulls>
-						  <attType>text</attType>
-						  <attKey>n/a</attKey>
-						  <attRelType type="n/a" name="n/a"/>
-						  <attReferences>n/a</attReferences>
-						  <attListType>no</attListType>
-						  <attList/>
-						  <attNotes>n/a</attNotes>
-						  <attDefinition>Geographical region of expertise.</attDefinition>
-						  <update>1.0.2</update>
-						</attribute>
-						<attribute>
-						  <attName>exp_region_b_veg</attName>
-						  <attLabel>Vegetation Expertise in region #2</attLabel>
-						  <attModel>implementation</attModel>
-						  <attNulls>yes</attNulls>
-						  <attType>text</attType>
-						  <attKey>n/a</attKey>
-						  <attRelType type="n/a" name="n/a"/>
-						  <attReferences>n/a</attReferences>
-						  <attListType>no</attListType>
-						  <attList/>
-						  <attNotes>n/a</attNotes>
-						  <attDefinition>Geographical region of expertise.</attDefinition>
-						  <update>1.0.2</update>
-						</attribute>
-						<attribute>
-						  <attName>exp_region_c_veg</attName>
-						  <attLabel>Vegetation Expertise in region #3</attLabel>
-						  <attModel>implementation</attModel>
-						  <attNulls>yes</attNulls>
-						  <attType>text</attType>
-						  <attKey>n/a</attKey>
-						  <attRelType type="n/a" name="n/a"/>
-						  <attReferences>n/a</attReferences>
-						  <attListType>no</attListType>
-						  <attList/>
-						  <attNotes>n/a</attNotes>
-						  <attDefinition>Geographical region of expertise.</attDefinition>
-						  <update>1.0.2</update>
-						</attribute>
-						<attribute>
-						  <attName>exp_region_a_flor</attName>
-						  <attLabel>Floristics Expertise in region #1</attLabel>
-						  <attModel>implementation</attModel>
-						  <attNulls>yes</attNulls>
-						  <attType>text</attType>
-						  <attKey>n/a</attKey>
-						  <attRelType type="n/a" name="n/a"/>
-						  <attReferences>n/a</attReferences>
-						  <attListType>no</attListType>
-						  <attList/>
-						  <attNotes>n/a</attNotes>
-						  <attDefinition>Geographical region of expertise.</attDefinition>
-						  <update>1.0.2</update>
-						</attribute>
-						<attribute>
-						  <attName>exp_region_b_flor</attName>
-						  <attLabel>Floristics Expertise in region #2</attLabel>
-						  <attModel>implementation</attModel>
-						  <attNulls>yes</attNulls>
-						  <attType>text</attType>
-						  <attKey>n/a</attKey>
-						  <attRelType type="n/a" name="n/a"/>
-						  <attReferences>n/a</attReferences>
-						  <attListType>no</attListType>
-						  <attList/>
-						  <attNotes>n/a</attNotes>
-						  <attDefinition>Geographical region of expertise.</attDefinition>
-						  <update>1.0.2</update>
-						</attribute>
-						<attribute>
-						  <attName>exp_region_c_flor</attName>
-						  <attLabel>Floristics Expertise in region #3</attLabel>
-						  <attModel>implementation</attModel>
-						  <attNulls>yes</attNulls>
-						  <attType>text</attType>
-						  <attKey>n/a</attKey>
-						  <attRelType type="n/a" name="n/a"/>
-						  <attReferences>n/a</attReferences>
-						  <attListType>no</attListType>
-						  <attList/>
-						  <attNotes>n/a</attNotes>
-						  <attDefinition>Geographical region of expertise.</attDefinition>
-						  <update>1.0.2</update>
-						</attribute>
-						<attribute>
-						  <attName>exp_region_a_nvc</attName>
-						  <attLabel>US-NVC Expertise in region #1</attLabel>
-						  <attModel>implementation</attModel>
-						  <attNulls>yes</attNulls>
-						  <attType>text</attType>
-						  <attKey>n/a</attKey>
-						  <attRelType type="n/a" name="n/a"/>
-						  <attReferences>n/a</attReferences>
-						  <attListType>no</attListType>
-						  <attList/>
-						  <attNotes>n/a</attNotes>
-						  <attDefinition>Geographical region of expertise.</attDefinition>
-						  <update>1.0.2</update>
-						</attribute>
-						<attribute>
-						  <attName>exp_region_b_nvc</attName>
-						  <attLabel>US-NVC Expertise in region #2</attLabel>
-						  <attModel>implementation</attModel>
-						  <attNulls>yes</attNulls>
-						  <attType>text</attType>
-						  <attKey>n/a</attKey>
-						  <attRelType type="n/a" name="n/a"/>
-						  <attReferences>n/a</attReferences>
-						  <attListType>no</attListType>
-						  <attList/>
-						  <attNotes>n/a</attNotes>
-						  <attDefinition>Geographical region of expertise.</attDefinition>
-						  <update>1.0.2</update>
-						</attribute>
-						<attribute>
-						  <attName>exp_region_c_nvc</attName>
-						  <attLabel>US-NVC Expertise in region #3</attLabel>
-						  <attModel>implementation</attModel>
-						  <attNulls>yes</attNulls>
-						  <attType>text</attType>
-						  <attKey>n/a</attKey>
-						  <attRelType type="n/a" name="n/a"/>
-						  <attReferences>n/a</attReferences>
-						  <attListType>no</attListType>
-						  <attList/>
-						  <attNotes>n/a</attNotes>
-						  <attDefinition>Geographical region of expertise.</attDefinition>
-						  <update>1.0.2</update>
-						</attribute>
+    <attribute>
+      <attName>exp_region_a</attName>
+      <attLabel>Region of Expertise #1</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Geographical region of expertise.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>exp_region_b</attName>
+      <attLabel>Region of Expertise #2</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Geographical region of expertise.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>exp_region_c</attName>
+      <attLabel>Region of Expertise #3</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Geographical region of expertise.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>exp_region_a_veg</attName>
+      <attLabel>Vegetation Expertise in region #1</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Geographical region of expertise.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>exp_region_b_veg</attName>
+      <attLabel>Vegetation Expertise in region #2</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Geographical region of expertise.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>exp_region_c_veg</attName>
+      <attLabel>Vegetation Expertise in region #3</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Geographical region of expertise.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>exp_region_a_flor</attName>
+      <attLabel>Floristics Expertise in region #1</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Geographical region of expertise.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>exp_region_b_flor</attName>
+      <attLabel>Floristics Expertise in region #2</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Geographical region of expertise.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>exp_region_c_flor</attName>
+      <attLabel>Floristics Expertise in region #3</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Geographical region of expertise.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>exp_region_a_nvc</attName>
+      <attLabel>US-NVC Expertise in region #1</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Geographical region of expertise.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>exp_region_b_nvc</attName>
+      <attLabel>US-NVC Expertise in region #2</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Geographical region of expertise.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>exp_region_c_nvc</attName>
+      <attLabel>US-NVC Expertise in region #3</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Geographical region of expertise.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>userRegionalExp</entityName>
