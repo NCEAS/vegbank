@@ -1,52 +1,57 @@
 
-
 @stdvegbankget_jspdeclarations@
 
-
-<HEAD   >
-<META http-equiv="Content-Type" content="text/html; charset=UTF-16">
-
+<html>
+<HEAD>
 @defaultHeadToken@
-
-<TITLE>View Data in VegBank : project(s) : Detail</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ 
+<TITLE>View VegBank Data: projects - Detail</TITLE>
+<link rel="stylesheet" href="@stylesheet@" type="text/css" />
 </HEAD>
-<body   >@vegbank_header_html_normal@  <br><h2>View VegBank Projects</h2><% String rowClass = "evenrow"; %><vegbank:get id="project" select="project" beanName="map" pager="true"/>
+<body>@vegbank_header_html_normal@  <br />
+<h2>View VegBank Projects</h2>
+<!--Get standard declaration of rowClass as string: -->
+        <% String rowClass = "evenrow"; %>
+        <vegbank:get id="project" select="project" beanName="map" pager="true" />
+<!--Where statement removed from preceding: -->
 <logic:empty name="project-BEANLIST">
 <p>  Sorry, no projects found.</p>
 </logic:empty>
 <logic:notEmpty name="project-BEANLIST">
-<logic:iterate id="onerow" name="project-BEANLIST"><!-- iterate over all records in set : new table for each -->
-<table class="leftrightborders" cellpadding="0"><!--each field, only write when field HAS contents-->
-<logic:notEmpty name="onerow" property="projectname">
-<tr class="@nextcolorclass@"><td class="datalabel">Project Name</td>
-<td class="sizetiny">
-<bean:write name="onerow" property="projectname"/>&nbsp;</td></tr>
+<logic:iterate id="onerowofproject" name="project-BEANLIST">
+<!-- iterate over all records in set : new table for each -->
+<table class="leftrightborders" cellpadding="0">
+        <%@ include file="autogen/project_detail_data.jsp" %>
+        <bean:define id="project_pk" name="onerowofproject" property="project_id" />
+<!--Insert a nested get statement here:
+   example:   
+
+<vegbank:get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_project_pk" wparam="project_pk" />-->
+<tr><th colspan="2">projectContributors:</th></tr>
+<TR><TD COLSPAN="2">
+<vegbank:get id="projectcontributor" select="projectcontributor" beanName="map" pager="false" where="where_project_pk" wparam="project_pk" perPage="-1" />
+<logic:empty name="projectcontributor-BEANLIST">
+<p class="@nextcolorclass@">  Sorry, no projectcontributors found.</p>
+</logic:empty>
+<logic:notEmpty name="projectcontributor-BEANLIST">
+<table class="leftrightborders" cellpadding="2" >
+<tr>
+<%@ include file="autogen/projectcontributor_summary_head.jsp" %>
+</tr>
+<logic:iterate id="onerowofprojectcontributor" name="projectcontributor-BEANLIST">
+<tr class="@nextcolorclass@">
+<%@ include file="autogen/projectcontributor_summary_data.jsp" %>
+</tr>
+</logic:iterate>
+</table>
 </logic:notEmpty>
-<logic:notEmpty name="onerow" property="projectdescription">
-<tr class="@nextcolorclass@"><td class="datalabel">Project Description</td>
-<td class="sizetiny">
-<bean:write name="onerow" property="projectdescription"/>&nbsp;</td></tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="startdate">
-<tr class="@nextcolorclass@"><td class="datalabel">Start Date</td>
-<td>
-<bean:write name="onerow" property="startdate"/>&nbsp;</td></tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="stopdate">
-<tr class="@nextcolorclass@"><td class="datalabel">Stop Date</td>
-<td>
-<bean:write name="onerow" property="stopdate"/>&nbsp;</td></tr>
-</logic:notEmpty>
-<logic:notEmpty name="onerow" property="accessioncode">
-<tr class="@nextcolorclass@"><td class="datalabel">Accession Code</td>
-<td class="sizetiny">
-<bean:write name="onerow" property="accessioncode"/>&nbsp;</td></tr>
-</logic:notEmpty>
+</TD></TR>
 </table>
 <p>&nbsp;</p>
 </logic:iterate>
-</logic:notEmpty><br><vegbank:pager/>
+</logic:notEmpty>
+<br />
+<vegbank:pager />
+</body></html>
           @vegbank_footer_html_tworow@
-</body>
+
