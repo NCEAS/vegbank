@@ -1,7 +1,20 @@
-<HTML><!-- #BeginTemplate "/Templates/VegBank_Master.dwt" -->
+<!-- 
+  *   '$RCSfile: submit-plantconcept.html,v $'
+  *     Purpose: web form to submit plant-taxonomy data to vegbank system
+  *   Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *     Authors: @author@
+  *
+  *    '$Author: harris $'
+  *      '$Date: 2002-06-20 21:56:59 $'
+  *  '$Revision: 1.2 $'
+  *
+  *
+  -->
+<HTML>
 <HEAD>
 <!-- #BeginEditable "doctitle" --> 
-<TITLE>VegBank Certification</TITLE>
+<TITLE> </TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <!-- #EndEditable --> 
 <meta http-equiv="Content-Type" content="text/html; charset=">
@@ -116,11 +129,25 @@
 &nbsp;
 
 <table width="95%" align="center">
+
+
+	<tr> 
+		<td width="20%" height="37">Title:</td>
+		<td width="37%" height="37"> 
+			<input type="text" name="conceptPubAuthors" size="20" maxlength="20">
+		</td>
+	</tr>
+	
+	<tr> 
+		<td width="20%" height="37">Authors:</td>
+		<td width="37%" height="37"> 
+			<input type="text" name="conceptPubTitle" size="20" maxlength="20">
+		</td>
+	</tr>
+
 <!-- PUB DATE -->	
 	<tr> 
-		<td width="20%" height="37">
-			<font face="Geneva, Arial, Helvetica, san-serif" size="2">Pub. Date</font>
-		</td>
+		<td width="20%" height="37">Pub. Date:</td>
 		<td width="37%" height="37"> 
 			<input type="text" name="conceptPubDate" size="20" maxlength="20">
 		</td>
@@ -128,91 +155,55 @@
 	
 <!-- REFERENCE DATE -->	
 	<tr> 
-		<td width="20%" height="37">
-			<font face="Geneva, Arial, Helvetica, san-serif" size="2">Edition</font>
-		</td>
+		<td width="20%" height="37">Edition:</td>
 		<td width="37%" height="37"> 
 			<input type="text" name="conceptRefEdition" size="20" maxlength="20">
 		</td>
 	</tr>
 	
 	<tr>
-		<td width="20%" height="37">
-			<font face="Geneva, Arial, Helvetica, san-serif" size="2">Series name</font>
-		</td>
+		<td width="20%" height="37">Series name:</td>
 		<td width="37%" height="37"> 
 			<input type="text" name="conceptRefSeriesName" value="" size="54" maxlength="200">
 		</td>
 	</tr>
 
-	
 	<tr> 
-		<td width="20%" height="37"> 
-			<p><font face="Geneva, Arial, Helvetica, san-serif" size="2">Volume</font></p>
-		</td>
+		<td width="20%" height="37"> Volume:</td>
 		<td width="37%" height="37"> 
 			<input type="text" name="conceptRefVolume" size="20" maxlength="20">
 		</td>
 	</tr>
 	
 	<tr> 
-		<td width="20%" height="2">
-			<font face="Geneva, Arial, Helvetica, san-serif" size="2">Page</font>
-		</td>
-		<td width="37%" height="2">
+		<td width="20%" height="37">Page:</td>
+		<td width="37%" height="37">
 			<input type="text" name="conceptRefPage" size="20" maxlength="20">
 		</td>
 	</tr>
 	
 	<tr> 
-		<td width="20%">
-			<font face="Geneva, Arial, Helvetica, san-serif" size="2">ISSN 
-      <input type="radio" name="issn" value="radiobutton" checked>/ ISBN 
-      <input type="radio" name="issn" value="radiobutton">
-			</font>
-		</td>
-		<td width="37%">
-			<font face="Geneva, Arial, Helvetica, san-serif" size="2">
-			<input type="text" name="conceptRefIsxxValue" size="20" maxlength="20">
-			</font>
+		<td width="20%" height="37">ISBN:</td>
+		<td width="37%" height="37">
+			<input type="text" name="conceptRefISBNValue" size="20" maxlength="20">
 		</td>
 	</tr>
 	
 	<tr> 
-		<td width="20%">
-			<font face="Geneva, Arial, Helvetica, san-serif" size="2">Other citation details</font>
-		</td>
-		<td width="37%"> 
-			<div align="left"> 
-			<font face="Geneva, Arial, Helvetica, san-serif" size="2">
-			<input type="text" name="conceptRefOtherCitationDetails" size="54" maxlength="200"></font></div>
-			<div align="center"></div>
-		</td>
-		<td width="9%"> 
-			<font face="Geneva, Arial, Helvetica, san-serif" size="2"> 
-			</font>
+		<td width="20%" height="37" >Other citation details:</td>
+		<td width="37%" height="37"> 
+			<input type="text" name="conceptRefOtherCitationDetails" size="54" maxlength="200">
 		</td>
 	</tr>
-</table>
+	
 
-<table width="95%" align="center">
 	<tr> 
-		<td width="20%" height="79">
-			<font face="Geneva, Arial, Helvetica, san-serif" size="2">3. Concept Description</font>
-		</td>
-		<td width="37%" height="79"> 
-			<h2><font face="Geneva, Arial, Helvetica, san-serif" size="2"> 
-			<textarea name="conceptDescription" cols="50"> </textarea></font></h2>
-		</td>
-		<td rowspan="2" width="34%">&nbsp;</td>
+		<td width="20%" height="79">Concept description:</td>
+		<td width="37%" height="79">  
+			<textarea name="conceptDescription" rows="6" cols="50">
 	</tr>
-	<tr> 
 </table>
 </form>
-
-
-	
-
 
 </BODY>
 </HTML>

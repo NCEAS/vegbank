@@ -1,4 +1,18 @@
-<HTML><!-- #BeginTemplate "/Templates/VegBank_Master.dwt" -->
+<!-- 
+  *   '$RCSfile: submit-plantstatususage.html,v $'
+  *     Purpose: web form to submit plant-taxonomy data to vegbank system
+  *   Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *     Authors: @author@
+  *
+  *    '$Author: harris $'
+  *      '$Date: 2002-06-20 21:56:59 $'
+  *  '$Revision: 1.2 $'
+  *
+  *
+  -->
+
+<HTML>
 <HEAD>
 <!-- #BeginEditable "doctitle" --> 
 <TITLE>VegBank Certification</TITLE>
@@ -38,7 +52,7 @@
 <!-- THE SERVLET TO BE REFERENCED --> 
 <form action="@datasubmitservlet@" method="get">
 <input type="hidden" name="submitDataType" value="plantTaxa">
-<input type="hidden" name="action" value="namereference">		
+<input type="hidden" name="action" value="namestatususage">		
 <small> <input TYPE="submit" VALUE="continue">&nbsp;&nbsp;<input TYPE="reset" VALUE=reset> </small>
 
 <!-- PARTY DATA TABLE WITH DESCRIPTIONS-->
@@ -70,7 +84,7 @@
 	<tr>
 		<td  align=left valign=top width="5%" >
 			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
-			<b>Plant Concept:</b>
+			<b>Plant:</b>
 		</td>
 		</font>
 	</tr>
@@ -92,17 +106,72 @@
 &nbsp;
 
 <!-- THE PARTY WITH THE PERSPECTIVE -->
+<table border="0" width="100%" bgcolor="#DFE5FA">
+	<tr>
+		<td  align=left valign=top width="5%" >
+			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+			<b>Party:</b>
+		</td>
+		</font>
+	</tr>
+	<tr>
+		<td align="center" width="5%">
+			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+		</td>
+		<td class="item">
+		The attributes below describe you as a party, whose perspective on the plant names  <br>
+		and conepts are to be loaded to VegBank.
+		</td>
+	</tr>
+</table>
 <table>
 	<tr> 
-	<td width="9%">Party:</td>
-	<td colspan="2"> 
-		<input type="text" name="partyFullName" value="@PartyFullName@">
-	</td>
-</tr>
+		<td width="9%">First Name:</td>
+		<td colspan="2"> 
+			<input type="text" name="plantPartyGivenName" value="@plantPartyGivenName@">
+		</td>
+	</tr>
+	<tr> 
+		<td width="9%">Last Name:</td>
+		<td colspan="2"> 
+			<input type="text" name="plantPartySurName" value="@plantPartySurName@">
+		</td>
+	</tr>
+	<tr> 
+		<td width="9%">Institution:</td>
+		<td colspan="2"> 
+			<input type="text" name="plantPartyInstitution" value="@plantPartyInstitution@">
+		</td>
+	</tr>
+	<tr> 
+		<td width="9%">Email Address:</td>
+		<td colspan="2"> 
+			<input type="text" name="plantPartyEmailAddress" value="@plantPartyEmailAddress@">
+		</td>
+	</tr>
 </table>
 
 <!-- CONCEPT STATUS -->
+<table border="0" width="100%" bgcolor="#DFE5FA">
+	<tr>
+		<td  align=left valign=top width="5%" >
+			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+			<b>Status:</b>
+		</td>
+		</font>
+	</tr>
+	<tr>
+		<td align="center" width="5%">
+			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+		</td>
+		<td class="item">
+		The attributes below describe the status of the plant, as viewed by you -- the <br>
+		party described above.
+		</td>
+	</tr>
+</table>
 <table>
+<table border="0">
 	<tr> 
 		<td width="9%">Concept Status:</td>
 		<td colspan="2">  
@@ -114,18 +183,18 @@
 		</td>
 	</tr>
 	<tr> 
- 		<td width="9%">Dates:</td>
+ 		<td width="9%">Dates: (like: 20-JUN-2002)</td>
 		<td colspan="3"> Status start: 
-  		<input type="text" name="startDate" value="@startDate@" size="30">
+  		<input type="text" name="startDate" value="" size="30">
 			Status stop: 
-    	<input type="text" name="stopDate" value="@stopDate@" size="30">
+    	<input type="text" name="stopDate" value="" size="30">
 		</td>
 	</tr>
 
 	<tr> 
 		<td width="9%">Status Description:</td>
 		<td colspan="2"> 
-			<textarea name="plantPartyComments" rows="6" cols="50">@plantPartyComments@</textarea>
+			<textarea name="plantPartyComments" rows="6" cols="50"></textarea>
 		</td>
 	</tr>
 	
@@ -156,33 +225,20 @@
 	</select>
 	</td>
 	</tr>
-
-
-
+	
 	<tr> 
 		<td width="9%">Plant Parent Concept:</td>
-		<td width="26%"> Plant Parent Name: <br>
-			<input type="text" name="plantParentName" maxlength="50" size="50" value="@plantParentName@">
+		<td width="16%"> Plant Parent Name: <br>
+			<input type="text" name="plantParentName" maxlength="200" size="45" value="">
 		</td>
 		<td width="22%"> Plant Reference Title, Author:<br>
-			<input type="text" name="parentRefTitle" value="@parentRefTitle@">
-			<input type="text" name="parentRefAuthor" value="@parentRefAuthor@">
+			<input type="text" name="parentRefTitle" value="">
+			<input type="text" name="parentRefAuthor" value="">
 		</td>
 	</tr>
 
-
-
-
 </table>
-
-
-
-
-
-
-
 </form>
-
 </BODY>
 </HTML>
 
