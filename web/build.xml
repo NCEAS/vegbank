@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-10-30 02:20:14 $'
-* '$Revision: 1.126 $'
+* '$Date: 2004-11-02 00:54:35 $'
+* '$Revision: 1.127 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -476,7 +476,7 @@
     <property name="vegbr_docs_include" value=" **/*.html **/*.csv"/>
     <!-- images files: -->
     <property name="vegbr_img_include" value="*.jpg *.gif *.png"/>
-    <property name="vegbr_examples_include" value=" vegbranch-samplecsv1-b.4.0.zip  vegbranch-samplecsv2-b.4.0.zip normalizer_examples.zip"/>
+    <property name="vegbr_examples_include" value=" vegbranch-sample-csv*.zip   normalizer_examples.zip"/>
     <property name="vegbr_htmlfile" value="vegbranch.html vbr*.html"/>
     <!-- include these as html files in root of vegbranhc dir -->
     <!--tokens particular to vegbranch html files.-->
