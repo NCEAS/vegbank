@@ -7,8 +7,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-08-29 17:22:51 $'
- * '$Revision: 1.35 $'
+ *     '$Date: 2002-08-30 03:50:13 $'
+ * '$Revision: 1.36 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1608,14 +1608,13 @@ public class DBinsertPlotSource
 				boolean notesPublic = source.getNotesPublic(plotName) ;
 				boolean notesMgt = source.getNotesMgt(plotName);
 				boolean revisions =   source.getRevisions(plotName);
+				String methodNarrative = source.getMethodNarrative(plotName);
 				
 				// update the debugging stringbuffer
 				debug.append("<plotId>"+ plotId+"</plotId> \n");
 				debug.append("<observationCode>"+observationCode+"</observationCode>\n");
 				debug.append("<obsStartDate>"+startDate+"</obsStartDate>\n");
 				debug.append("<obsStopDate>"+stopDate+"</obsStopDate> \n");
-				debug.append("<permanent>"+permanence+"</permanent> \n");
-				
 				
 				sb.append("INSERT into OBSERVATION (observation_id, covermethod_id,  ");
 				sb.append(" plot_Id, authorobscode, obsStartDate, obsEndDate, ");
@@ -1631,11 +1630,11 @@ public class DBinsertPlotSource
 				sb.append(" standMaturity, successionalStatus, treeHt, shrubHt, nonvascularHt, ");
 				sb.append(" floatingCover, submergedCover, dominantStratum, growthform1Type, ");
 				sb.append(" growthform2Type, growthform3Type, growthform1Cover, growthform2Cover, ");
-				sb.append(" growthform3Cover, notesPublic, notesMgt, revisions )");
+				sb.append(" growthform3Cover, notesPublic, notesMgt, revisions, methodnarrative )");
 				
 				//55 total
 				sb.append(" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?, ");
-				sb.append("?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?");
+				sb.append("?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?");
 				sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" );
 				//56
 			
@@ -1697,7 +1696,9 @@ public class DBinsertPlotSource
 				pstmt.setString(53, growthform3Cover);
 				pstmt.setBoolean(54, notesPublic);
 				pstmt.setBoolean(55, notesMgt);
-				pstmt.setBoolean(56, revisions);//13
+				pstmt.setBoolean(56, revisions);
+				pstmt.setString(57, methodNarrative);
+				
 				
   		  pstmt.execute();
 				//Thread.sleep(20000);
@@ -1781,7 +1782,7 @@ public class DBinsertPlotSource
 			String confidentialityReason = source.confidentialityReason; //not null
 			String xCoord = source.xCoord;
 			String yCoord = source.yCoord;
-			String zone = source.utmZone;
+			String zone = source.getUTMZone(plotName);
 			// if the plot data source has geocoordinates (latitude, logitude )
 			// use them otherwise lookup the information from the web service
 			String latitude = source.getLatitude(plotName);
@@ -1797,6 +1798,8 @@ public class DBinsertPlotSource
 			String state = source.state;
 			String country = source.country;
 			String authorLocation = source.authorLocation;
+			boolean permanence = source.isPlotPermanent(plotName);
+			String landForm =  source.getLandForm(plotName);
 			
 			//make a temporary accession number for each unique plot
 			String accessionNumber = getAccessionNumber(plotName, plotId, this.submitterEmail);
@@ -1818,23 +1821,22 @@ public class DBinsertPlotSource
 			debug.append("<longitude>"+longitude+"</longitude>\n");
 			debug.append("<zone>"+zone+"</zone>\n");
 			debug.append("<accessionNumber>"+accessionNumber+"</accessionNumber>\n");
-			
 			debug.append("<country>"+country+"</country>\n");
 			debug.append("<state>"+state+"</state>\n");
 			debug.append("<authorLocation>"+authorLocation+"</authorLocation>\n");
-			
+			debug.append("<permanence>"+permanence+"</permanence>\n");
 			
 			//this is the postgresql date function
 			String sysdate = "now()";
 
 			sb.append("INSERT into PLOT (project_id, authorPlotCode, plot_id, "
-				+"geology, "
-				+"latitude, longitude, area, elevation,"
+				+"geology, latitude, longitude, area, elevation,"
 				+"slopeAspect, slopeGradient, topoPosition, "
 				+"shape, confidentialityStatus, confidentialityReason, "
 				+"authore, authorn, state, country, authorLocation, accession_number, "
-				+"dateEntered, submitter_surname, submitter_givenname, submitter_email) "
-				+"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				+"dateEntered, submitter_surname, submitter_givenname, submitter_email, "
+				+"authorzone, permanence, landform) "
+				+"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				
 			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
 			
@@ -1863,6 +1865,9 @@ public class DBinsertPlotSource
 			pstmt.setString(22, this.submitterSurName);
 			pstmt.setString(23, this.submitterGivenName);
 			pstmt.setString(24, this.submitterEmail);
+			pstmt.setString(25, zone);
+			pstmt.setBoolean(26, permanence);
+			pstmt.setString(27, landForm);
 			pstmt.getWarnings();
   	  pstmt.execute();
   	  pstmt.close();

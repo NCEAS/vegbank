@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-07-30 15:58:52 $'
- * 	'$Revision: 1.12 $'
+ *  '$Date: 2002-08-30 03:50:13 $'
+ * 	'$Revision: 1.13 $'
  *
  *
  */
@@ -438,7 +438,7 @@ public void getPlotId(String queryElement, String queryElementType)
 					String buf = st.nextToken().trim();
 					if ( i == (num-1) )
 					{
-						sb.append(" select PLOT_ID from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+buf.toUpperCase()+"%' ) )");
+						sb.append(" select distinct( PLOT_ID ) from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+buf.toUpperCase()+"%' ) )");
 					}
 					else
 					{
@@ -450,7 +450,7 @@ public void getPlotId(String queryElement, String queryElementType)
 			// ELSE IF JUST A SINGLE PLANT PASSED
 			else
 			{
-				sb.append(" select PLOT_ID from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+queryElement.toUpperCase()+"%'");
+				sb.append(" select distinct( PLOT_ID ) from PLOTSPECIESSUM where upper(AUTHORNAMEID) like '%"+queryElement.toUpperCase()+"%'");
 			}
 	}
 	// ALSO HANDLE THE COMMUNITIES A LITTLE DIFFERENTLY BECAUSE THEY CAN 
