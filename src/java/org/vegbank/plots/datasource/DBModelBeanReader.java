@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-03-07 19:23:40 $'
- *	'$Revision: 1.19 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-06-29 06:57:24 $'
+ *	'$Revision: 1.20 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -221,6 +221,10 @@ public class DBModelBeanReader
 		{
 			bean = this.getObservationBeanTree(accessionCode);
 		}
+		else if ( entityCode.equalsIgnoreCase("To") )
+		{
+			bean = this.getTaxonobservationBeanTree(accessionCode);
+		}
 		
 		// Add to cache
 		mbCache.addToCache(bean, accessionCode);
@@ -322,6 +326,22 @@ public class DBModelBeanReader
 		obs.setPlotobject(plot);
 
 		return obs;
+	}
+	
+	private Taxonobservation getTaxonobservationBeanTree(String accessionCode) throws Exception
+	{	
+		long pK = 0; 
+		pK = this.getPKFromAccessionCode( "taxonObservation", accessionCode, Taxonobservation.PKNAME );
+		return this.getTaxonobservationBeanTree(pK);	
+	}
+	
+	private Taxonobservation getTaxonobservationBeanTree(long pkValue) throws Exception
+	{
+		Taxonobservation to = new Taxonobservation();
+		getObjectFromDB(to, Taxonobservation.PKNAME, pkValue);
+		//getRelatedObjectsFromDB(Taxonobservation.PKNAME, pkValue, to);
+		
+		return to;
 	}
 	
 	// TODO: Reference, Party, Commconcept
@@ -604,7 +624,7 @@ public class DBModelBeanReader
 			else
 			{
 				// No observation found
-				log.info("DBModelBeanReader: Did not find any results for " + PKName  + " = " + PKValue);
+				log.debug("Did not find any results for " + PKName  + " = " + PKValue);
 			}
 			rs.close();
 	
@@ -778,7 +798,7 @@ public class DBModelBeanReader
 		{
 			if (null == instance)
 			{
-				log.info("Creating Instance");
+				log.debug("Creating Instance");
 				instance = new ModelBeanCache();
 			}
 			return instance;
@@ -803,7 +823,7 @@ public class DBModelBeanReader
 				}
 				else
 				{
-					log.info("Reading all disk cached bean: " + cachedFiles.length+" files"); 
+					log.debug("Reading all disk cached bean: " + cachedFiles.length+" files"); 
 					for ( int i=0; i<cachedFiles.length ; i++ )
 					{
 						String  fileName = cachedFiles[i].getName();
@@ -831,10 +851,7 @@ public class DBModelBeanReader
 		{
 			if ( memoryCache.size() >= MAX_MEM_CACHE_SIZE )
 			{
-				log.info(
-					"Memory Cache Full: "
-						+ MAX_MEM_CACHE_SIZE
-						+ " files.");
+				log.debug("Memory Cache Full: " + MAX_MEM_CACHE_SIZE + " files.");
 				
 				// Remove item from memory cache
 				memoryCache.removeElementAt(0);
@@ -844,7 +861,8 @@ public class DBModelBeanReader
 			newElement.add(accessionCode);
 			newElement.add(bean);
 			memoryCache.add( newElement );
-			log.info("ModelBeanCache: Added to Memory Cache: " + accessionCode);
+			log.debug("Added to Memory Cache: " + accessionCode);
+
 			
 			// Also add to diskCache
 			addToDiskCache(accessionCode, bean);
@@ -877,7 +895,7 @@ public class DBModelBeanReader
 						String fileNameToAxe = (String) diskCacheKeys.firstElement();
 						File fileToAxe = new File(CACHE_DIR, fileNameToAxe);
 						fileToAxe.delete();
-						log.info("ModelBeanCache: Deleted from Disk Cache: " + fileNameToAxe);
+						log.debug("Deleted from Disk Cache: " + fileNameToAxe);
 					}
 					saveToDisk(beanToSave, fileName);			
 					log.debug("Added to Disk Cache: " + fileName);
@@ -907,7 +925,7 @@ public class DBModelBeanReader
 				log.debug( "accessionCode" + currentElement.elementAt(0) + " = " + currentElement.elementAt(1));
 				if ( accessionCode.equalsIgnoreCase( (String) currentElement.elementAt(0) ) )
 				{
-					log.info("Retrived from memory Cache: " + accessionCode);
+					log.debug("Retrieved from memory Cache: " + accessionCode);
 					return (VBModelBean) currentElement.elementAt(1);
 				}
 			}
@@ -922,7 +940,7 @@ public class DBModelBeanReader
 					try
 					{
 						bean = (VBModelBean) readBeanFromDisk(fileName);
-						log.info("Retrived from disk Cache: " + fileName);
+						log.debug("Retrieved from disk Cache: " + fileName);
 						return bean;
 					}
 					catch (Exception e)
