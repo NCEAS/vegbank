@@ -1,8 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/vegbank.tld" prefix="vegbank" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+@stdvegbankget_jspdeclarations@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
@@ -68,18 +64,14 @@
 
 
 
- <vegbank:get select="place_summ" beanName="map" perPage="-1" pager="false" where="where_group_place_summ" wparam="1"/>
+ <vegbank:get id="namedplace" select="place_summ" beanName="map" perPage="-1" pager="false" where="where_group_place_summ" wparam="1"/>
  <logic:notEmpty name="BEANLIST">
 <h2>Geographical Distribution of Observations</h2>
 
    <table class="thinlines" cellpadding="2"> 
-   
-   <tr><th>State/Province</th><th>Plot-Observations</th></tr>
-     <logic:iterate id="onerec" name="BEANLIST" >
-       <!-- loop over list of states -->
-       <tr class="@nextcolorclass@"><td ><bean:write name="onerec" property="region_name"/>&nbsp;</td><td  align="right">&nbsp;<bean:write name="onerec" property="count_obs"/></td></tr>
-     </logic:iterate>
-   </table>
+   <%@ include file="../views/includeviews/sub_namedplace_states.jsp" %>
+  
+  
  </logic:notEmpty> 
 <%@ include file="plot-map-northamerica.html" %>
 
