@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<!-- 
+  * build.xml
+  *
+  *      Authors: John Harris
+  *    Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *  Build file for the Ant cross-platform build system for metacat
+  *  See http://jakarta.apache.org for details on Ant  
+  *  
+  * This build file will build the plot database access 
+  * module and insert into a working version of the plots 
+  * database an xml plot record, then query that database
+  * for all plots containing a taxon containing the string
+  * "Carya".
+  * usage: ant [compile|jar|install|jdoc]
+--> 
+<project name="plotLoader" default="dist" basedir=".">
+	<target name="init">
+	<tstamp/>
+        <property name="current" value="./" />
+	<property name="build" value="build" />
+	<property name="dist" value="dist" />
+	<property name="release" value="development"/>
+	<property name="src" value="./plotAccess"/>
+	<property name="xmlFiles" value="../xml"/>
+	<filter token="dist" value="dist"/>
+	<filter token="version" value="development"/>
+	
+	<property name="oracle_home" 
+                value="/oracle01/app/oracle/product/8.1.6" />
+	<property name="toolsdir" 
+                value="/usr/local/devtools" />
+	<property name="localToolsDir" 
+                value="/home/computer/harris/tools" />	
+	<property name="xmlp" 
+                value="${localToolsDir}/xmlTools/xalan.jar:${localToolsDir}/xmlTools/xerces.jar:" />
+	<property name="jdbc" 
+                value="${oracle_home}/jdbc/lib/classes111.zip" />
+	<property name="cpath" 
+                value="${xmlp}:${jdbc}:${jserv}:${jsdk}:${build}:${localToolsDir}:./"/>
+</target>
+
+<target name="prepare" depends="init">
+	<mkdir dir="${build}" />
+	<mkdir dir="${dist}" />
+	
+	<copydir src="${src}" 
+               dest="${build}" 
+               filtering="yes"
+               includes="dbConnect.java plotWriter.java dbAccess.java utility.java transformXML.java sqlMapper.java issueStatement.java "
+               excludes="**/CVS* "/>
+
+        <copydir src="${xmlFiles}" 
+               dest="${build}" 
+               filtering="yes"
+               includes="artificialPlotExample.xml plot2DBaddress.xsl vegPlot.dtd plotQuery.dtd querySpec.xsl examplePlotQuery.xml"
+               excludes="**/CVS* "/>
+	 
+        <copydir src="${current}" 
+               dest="${build}" 
+               filtering="yes"
+               includes="database.properties"
+               excludes="**/CVS* "/> 
+	
+        </target>	
+	
+<target name="compile" depends="prepare">
+	<javac srcdir="${build}" 
+	classpath="${cpath}"
+	includes="**.java  " 
+	destdir="${build}"
+	/>
+	</target>	
+	
+<target name="dist" depends="compile">
+	<mkdir dir="${dist}/lib" />
+	<deltree dir="${dist}" />
+	
+	<!-- Load a plot-->
+	<java classname="dbAccess" 
+	classpath="${cpath}"
+	args="${build}/artificialPlotExample.xml ${build}/plot2DBaddress.xsl insert"
+	fork="yes"
+	/>
+	
+	<!--Query for all plots with a taxon containing the string: "Carya" -->
+	<java classname="dbAccess"
+	args="${build}/examplePlotQuery.xml ${build}/querySpec.xsl query"
+	classpath="${cpath}"
+	fork="yes"
+	
+	/>
+</target>		
+
+
+
+</project>
