@@ -6,6 +6,9 @@ import javax.servlet.http.*;
 
 import servlet.util.ServletUtility;
 import servlet.util.GetURL;
+import servlet.util.HttpMessage;
+import java.net.*;
+import xmlresource.utils.transformXML;
 
 /**
  * Servlet to perform file downloading operations 
@@ -52,30 +55,32 @@ public class fileDownload extends HttpServlet
 	private String plotRequestList = null;
 	private String atomicResultSet = null;
 	private String cummulativeResultSet= null;
-	public String DataRequestServletURL=null;
-
-	int debugLevel=0;
-
-
+	private String DataRequestServletURL=null;
+	private int debugLevel=1;
+	private ServletUtility sutil; 
+	private GetURL gurl;
+	private transformXML transformer; 
+	private String asciiStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl";
+	private String htmlStyleSheet =  "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl";
 	
 	/**
 	 * constructor method -- just to show status on startup
-	 *
 	 */
 	 public fileDownload()
 	 {
 		 System.out.println("init: fileDownload");
+		 sutil = new ServletUtility();
+		 gurl = new GetURL();
+		 transformer = new transformXML();
 	 }
 
 	/** Handle "POST" method requests from HTTP clients */
 	public void doPost(HttpServletRequest request,
-    HttpServletResponse response)
-    throws IOException, ServletException
+  HttpServletResponse response)
+  throws IOException, ServletException
 	{
         doGet(request, response);
 	}
-    
-    
     
     
 	/** Handle "GET" method requests from HTTP clients */  
@@ -83,62 +88,38 @@ public class fileDownload extends HttpServlet
   	HttpServletResponse response)
     throws IOException, ServletException
 	{
-
-	response.setContentType("text/html");
-	PrintWriter out = response.getWriter();
-
-
-/**
- * The first try block is for reading the parameters into a hash table and then 
- * assigning the parameters to their respective variables
- */
-	try 
-	{
-		Enumeration enum =request.getParameterNames();
-		Hashtable params = new Hashtable();
-
-		while (enum.hasMoreElements()) 
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		try 
 		{
-			String name = (String) enum.nextElement();
-			String values[] = request.getParameterValues(name);
-			if (values != null) 
-			{
-				for (int i=0; i<values.length; i++) 
-				{
-					//out.println(name +" ("+ i + "): " +values[i]+"; <br>");
-					params.put(name,values[i]);
-				}
-			}
-		}
-
-		//get the variables from the form
-		String buf = (String)params.get("debugLevel");
-		debugLevel = 0;
-		if (buf != null) 
-		{
-			debugLevel =  Integer.parseInt(buf);	
-		}	
-		fileName = (String)params.get("fileName");
-		//fileNamePath = downloadPath+fileName.trim();
+			Enumeration enum =request.getParameterNames();
+			Hashtable params = new Hashtable();
+			params = sutil.parameterHash(request);
 		
+			fileName = (String)params.get("fileName");
+			fileFormatType = (String)params.get("formatType");
+			aggregationType = (String)params.get("aggregationType");
+			userNotes = (String)params.get("userNotes");
+			dataType = (String)params.get("dataType");
+
+			//get the variables privately held in the properties file
+			downloadPath=(rb.getString("requestparams.downloadPath"));
+			plotRequestList=(rb.getString("requestparams.plotRequestList"));
+			atomicResultSet = (rb.getString("requestparams.atomicResultSet"));
+			cummulativeResultSet= (rb.getString("requestparams.cummulativeResultSet"));
+			DataRequestServletURL= (rb.getString("requestparams.DataRequestServletURL"));
 		
-		fileFormatType = (String)params.get("formatType");
-		aggregationType = (String)params.get("aggregationType");
-		userNotes = (String)params.get("userNotes");
-		dataType = (String)params.get("dataType");
-
-		//get the variables privately held in the properties file
-		downloadPath=(rb.getString("requestparams.downloadPath"));
-		plotRequestList=(rb.getString("requestparams.plotRequestList"));
-		atomicResultSet = (rb.getString("requestparams.atomicResultSet"));
-		cummulativeResultSet= (rb.getString("requestparams.cummulativeResultSet"));
-		DataRequestServletURL= (rb.getString("requestparams.DataRequestServletURL"));
-		//this is the path and filename of the download file
-		//and should be passed to the file copy method the downLoad
-		//path should be absolute
-		fileNamePath = downloadPath+"/"+fileName.trim();
-		System.out.println("download file will be copied to: "+fileNamePath);
-
+			//this is the path and filename of the download file
+			//and should be passed to the file copy method the downLoad
+			//path should be absolute
+			fileNamePath = downloadPath+"/"+fileName.trim();
+			System.out.println("fileDownload > fileNamePath: "+ fileNamePath);
+			System.out.println("fileDownload > dataType: "+ dataType);
+			System.out.println("fileDownload > userNotes: "+ userNotes);
+			System.out.println("fileDownload > aggregationType: " + aggregationType);
+			System.out.println("fileDownload > fileFormatType: "+ fileFormatType);
+			System.out.println("fileDownload > fileName: "+ fileName);
+		
 		}//end try
 		catch( Exception e ) 
 		{
@@ -146,58 +127,55 @@ public class fileDownload extends HttpServlet
 			+" first try - reading parameters "
 			+e.getMessage());
 		}
-
-
-
-/**
- * In the second try the parameters read in the first try are analyzed and
- * actions are taken reflecting this information
- */
-try 
-{
-	if (debugLevel !=1) 
-	{
-		//request the plots from the database  
-		dataRequester(plotRequestList, atomicResultSet, cummulativeResultSet, 
-			"entirePlot");
 		
-		//transform the data to the appropriate data type 
-
-		//compress the file to the appropriate compression type
-		dataCompressor(cummulativeResultSet, fileNamePath, "gzip"); 
-
-		//redirect the user to the appropriate file - if the debugger is off == 0
-		//this has to be fixed
-		response.sendRedirect("/downloads/"+fileName);
+		try 
+		{
+			String downloadFile = "";
+			
+			//request the plots from the database  
+			dataRequester(plotRequestList, atomicResultSet, cummulativeResultSet, 
+			"entirePlot");
+			if ( fileFormatType.equals("html") )
+			{
+				downloadFile = "download.html";
+			}
+			else if ( fileFormatType.equals("flat") )
+			{
+				downloadFile = "download.txt";
+			}
+			else if ( fileFormatType.equals("xml") )
+			{
+				downloadFile = "download.xml";
+			}
+			else
+			{
+				System.out.println("fileDownload > unknown fileFormatType ");
+				downloadFile = downloadPath+"/download.xml";
+			}
+			//transform the file into the appropriate type
+			this.dataTransformer(cummulativeResultSet, fileFormatType);
+			
+			// if the user requested compression then do it otherwise just pass
+			// them the file
+			if ( aggregationType.equals("compress") )
+			{
+				//compress the file to the appropriate compression type
+				dataCompressor(cummulativeResultSet, downloadPath+downloadFile+".gz", "gzip");
+				//redirect the user to the appropriate file 
+				response.sendRedirect("/downloads/"+downloadFile+".gz");
+			}
+			else
+			{
+				sutil.fileCopy(cummulativeResultSet, downloadPath+downloadFile);
+				//redirect the user to the appropriate file 
+				response.sendRedirect("/downloads/"+downloadFile);
+			}
+		}
+		catch(Exception e) 
+		{
+			System.out.println("Exception  " + e.getMessage() );
+		}
 	}
-
-	else 
-	{
-		out.println("Servlet: fileDownload > <br>");
-		out.println("fileName: " + fileName +"<br>"
-		+"debugLevel: " + debugLevel +"<br>"
-		+"downloadPath: " + downloadPath +"<br>"
-		+"fileNamePath: " + fileNamePath +"<br>"
-		+"fileFormatType: " + fileFormatType +"<br>"
-		+"aggregationType: " + aggregationType +"<br>"
-		+"userNotes: " + userNotes +"<br>"
-		+"debugLevel: " + debugLevel +"<br>"
-		+"plotRequestList: " + plotRequestList +"<br>"
-		+"aggregationType: " + aggregationType +"<br>"
-		+"dataType: " + dataType +"<br>"
-		+"atomicResultSet " + atomicResultSet +"<br>"
-		+"cummulativeResultSet " + cummulativeResultSet +"<br>"
-		);
-	}
-}//end try
-catch( Exception e ) 
-{
-	System.out.println("servlet failed in: fileDownload.main "
-	+" second try   "
-	+e.getMessage());
-}
-
-}//end method
 
 
 
@@ -220,51 +198,73 @@ catch( Exception e )
 	{
 		
 		try
-		{
-		
+		{		
 			//pass the filename to the fileVectorizer method to make the file a vector
-			ServletUtility a =new ServletUtility();  
-			a.fileVectorizer(plotList);
-
-			/** Flush the temporary download files */
-			ServletUtility c =new ServletUtility();  
-			c.flushFile(atomicResultSet);
+			Vector fileVec = sutil.fileToVector(plotList);
+			sutil.flushFile(atomicResultSet);
 			//flush a different way
 			(new File(cummulativeResultSet)).delete();
 
-
-			//for each plotId request the plot from the 
-			//DataRequestServlet
-			for (int i=0; i<a.vecElementCnt; i++) 
+	
+			// this is the stringbuffer that will store the plot id numbers
+			// and will be then transformed into a comma-separated string before
+			// being passed to the data request servlet
+			StringBuffer plotBuf = new StringBuffer();
+			for (int i=0; i< fileVec.size(); i++) 
 			{
-				if (a.outVector.elementAt(i) != null )
+				if (fileVec.elementAt(i) != null )
 				{
-					System.out.println("fileDownload.plotRequstor - plotId > "
-					+a.outVector.elementAt(i));
-
-					String plotId = a.outVector.elementAt(i).toString().trim();
-			
-					String uri = DataRequestServletURL+"?requestDataType=vegPlot&plotId="
-					+plotId+"&"+"resultType=full&queryType=simple&clientType=app&requestDataFormatType=xml";
+					String plotId = fileVec.elementAt(i).toString().trim();
 					
-					//http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?
-					//queryType=simple&requestDataType=vegPlot&plotId=32&resultType=full&
-					//clientType=app&requestDataFormatType=xml
-					int port=80;
-					String requestType="POST";
-					GetURL b = new GetURL();  
-					b.getPost(uri, port, requestType);
-
-					// Concatenate the resulting file so that it isnt overwritten
-					ServletUtility d =new ServletUtility();  
-					d.fileCopy(atomicResultSet, cummulativeResultSet, "concat");
+					if ( i == 0)
+					{
+						plotBuf.append(plotId);
+					}
+					else
+					{
+						plotBuf.append(","+plotId);
+					}
 				}
 				else
 				{
-					System.out.println("FileDownloadServlet encountered a null value in "
-					+"plot download list");
+					System.out.println("FileDownloadServlet > encountered a null");
 				}
 			}
+				//THIS USES THE REQUESTURL METHOD
+			String protocol = "http://";
+	  	String host = "vegbank.nceas.ucsb.edu";
+			String s = null;		
+			String servlet = "/framework/servlet/DataRequestServlet";
+			//try a different method
+			 StringBuffer urlBuf = new StringBuffer();
+			 urlBuf.append(protocol+host+servlet+"/?");
+			 urlBuf.append("requestDataType=vegPlot&");
+			 urlBuf.append("resultType=full&");
+			 urlBuf.append("queryType=simple&");
+			 urlBuf.append("requestDataFormatType=xml&");
+			 urlBuf.append("clientType=app&");
+			 urlBuf.append("plotId="+plotBuf.toString());
+			 
+			 String  u1str = urlBuf.toString();
+       System.out.println("fileDownload > server string: " + u1str);
+       
+			 URL u1 = new URL(u1str);
+       HttpMessage msg = new HttpMessage(u1);
+ 			 InputStream in =   msg.sendPostMessage();
+
+       InputStreamReader isr = new InputStreamReader(in);
+       char c;
+       int i = isr.read();
+       String temp2 = "";
+       while(i != -1)
+       { 
+         c = (char)i;
+         temp2 += c;
+       	 i = isr.read();
+       }
+			System.out.println("fileDownload > initial server output string: " + temp2 );
+			// Concatenate the resulting file so that it isnt overwritten  
+			sutil.fileCopy(atomicResultSet, cummulativeResultSet, "concat");
 		}
 		catch( Exception e)
 		{
@@ -288,7 +288,33 @@ catch( Exception e )
  */
 	private void dataTransformer (String plotFile, String formatType) 
 	{
-
+		String workFile = "/tmp/filedownload-work.txt";
+		try
+		{
+			if ( formatType.equals("flat") )
+			{
+				System.out.println("fileDownload > transforming data to flat-ascii");
+				transformer.transformXMLDocumentToFile(plotFile,asciiStyleSheet,workFile);
+				//copy the work file to the target file
+				sutil.fileCopy(workFile, cummulativeResultSet, "append");
+			}
+			else if ( formatType.equals("html") ) 
+			{
+				System.out.println("fileDownload > transforming data to html");
+				transformer.transformXMLDocumentToFile(plotFile,htmlStyleSheet,workFile);
+				//copy the work file to the target file
+				sutil.fileCopy(workFile, cummulativeResultSet, "append");
+			}
+			else
+			{
+				System.out.println("fileDownload > no transformation");
+			}
+		}
+		catch ( Exception e )
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
 	}
 
 
@@ -306,7 +332,6 @@ catch( Exception e )
  * @param aggregationType the format of the file desired by the user including
  *	gzipped single file, zipped, aggregate files, or both
  */
-
 	private void dataCompressor (String inFile, String outFile, 
 	String aggregationType) 
 	{

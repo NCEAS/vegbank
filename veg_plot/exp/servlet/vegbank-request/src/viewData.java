@@ -70,8 +70,8 @@ public class viewData extends HttpServlet
 			System.out.println("init: viewData" );
 			servletDir = rb.getString("requestparams.servletDir");
 			servletPath = rb.getString("servlet-path");
-			System.out.println("viewData > servlet dir: " + servletDir );
-			System.out.println("viewData > servlet path: " + servletPath );
+			System.out.println("ViewData > servlet dir: " + servletDir );
+			System.out.println("ViewData > servlet path: " + servletPath );
 		}
 		catch(Exception e)
 		{
@@ -104,7 +104,7 @@ public class viewData extends HttpServlet
 		this.userEmail = this.getCookieValue(request);
 		
 		//print the input to the system
-		System.out.println("viewData.doGet - input params > \n downLoadAction: "
+		System.out.println("ViewData.doGet - input params > \n downLoadAction: "
 		+downLoadAction
 		+" \n summaryViewType: "+summaryViewType
 		+" \n user: " + this.userEmail
@@ -122,7 +122,6 @@ public class viewData extends HttpServlet
  		* specified by the form (download.html) calling the fileDownload servlet
  		*
  		*/
-
 		//handle a download request
 		if (downLoadAction != null)
 		{
@@ -149,7 +148,7 @@ public class viewData extends HttpServlet
 						{
 							if (name.equals("plotName")) 
 							{
-								System.out.println(name+" "+values[i]);
+								System.out.println("viewData > name: " + values[i]);
 								outFile.println(values[i]);	
 								out.println(name +" ("+ i + "): "
 								+values[i]+"; <br>");
@@ -162,7 +161,7 @@ public class viewData extends HttpServlet
 			}
 			catch( Exception e ) 
 			{
-				System.out.println("servlet failed in: viewData.main"
+				System.out.println("Exception: ViewData.main"
 				+e.getMessage());
 			}
 		}
@@ -246,6 +245,7 @@ public class viewData extends HttpServlet
 				//JHH TURND THIS FUNCTION OFF 20020315
 				//String stylefile = getUserDefaultStyle("user").trim();
 				String stylefile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/transformMultiPlotSummary.xsl";
+				System.out.println("ViewData > xml document: '" + xmlDoc +"'" );
 				System.out.println("ViewData > stylesheet name: '" + stylefile +"'" );
 				
 				if ( stylefile == null  ||  stylefile.equals("null")   )
@@ -262,21 +262,20 @@ public class viewData extends HttpServlet
 			//let the user know that there is a problem with the request
 			else 
 			{
-				out.println("viewData.viewResultsSummary: unknown request for xsl: '"
+				out.println("ViewData.viewResultsSummary: unknown request for xsl: '"
 					+summaryViewType+"'" );
 			}
 			
-				System.out.println("viewData > used old transformer");
+				System.out.println("ViewData > used old transformer");
 				// access the method to transfor the xml document and 
 				// retrieve the string writer
 				String teststyle = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
 				
+				
 				m.getTransformed(xmlDoc, styleSheet);
 				StringWriter transformedData = m.outTransformedData;
-				
-				
 				Vector contents = this.convertStringWriter(transformedData);
-				
+
 				//##/test the new method in the xmlTransformer class
 ///			transformXML transformer = new transformXML();
 ///			String test = transformer.getTransformedNoErrors(servletDir+"summary.xml", styleSheet); 
@@ -290,9 +289,7 @@ public class viewData extends HttpServlet
 		} 
 		catch( Exception e ) 
 		{
-			System.out.println("servlet failed in: "
-			+"viewData.viewResultsSummary: "
-			+e.getMessage());
+			System.out.println("Exception: ViewData.viewResultsSummary: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}

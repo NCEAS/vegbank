@@ -44,8 +44,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-04-04 00:06:32 $'
- *  '$Revision: 1.12 $'
+ *  '$Date: 2002-04-11 23:47:40 $'
+ *  '$Revision: 1.13 $'
  * 
  */
 
@@ -100,19 +100,21 @@ public class DataRequestServlet extends HttpServlet
 	
 
 	/** Handle "POST" method requests from HTTP clients */
-	public void doPost(HttpServletRequest request,
+	public void doGet(HttpServletRequest request,
 		HttpServletResponse response)
  	 throws IOException, ServletException 	
 		{
-			doGet(request, response);
+			System.out.println("DataRequestServlet > GET");
+			doPost(request, response);
 		}
 
 
 	/** Handle "GET" method requests from HTTP clients */ 
-	public void doGet(HttpServletRequest request, 
+	public void doPost(HttpServletRequest request, 
 		HttpServletResponse response)
 		throws IOException, ServletException  
 		{
+			System.out.println("DataRequestServlet > POST");
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
 			try 
@@ -187,7 +189,6 @@ public class DataRequestServlet extends HttpServlet
 			{
 				System.out.println("DataRequstServlet > unknown 'requestDataType' parameter "
 					+" must be: vegPlot or plantTaxon or vegCommunity ");
-				
 			}
 			
 			
@@ -384,6 +385,8 @@ public class DataRequestServlet extends HttpServlet
 	private void handleSimpleQuery (Hashtable params, PrintWriter out, 
 	HttpServletResponse response) 
 	{
+		try
+		{
 		// Get all possible parameters from the hash 	
  		taxonName = (String)params.get("taxon");
  		communityName = (String)params.get("community");
@@ -417,12 +420,28 @@ public class DataRequestServlet extends HttpServlet
 		//modules so cheating here first
 		else if (plotId != null && resultType.equals("full") ) 
 		{
+			System.out.println("DataRequestServlet > requesting full data set for plot: " + plotId );
 			String outFile=servletDir+"atomicResult";
-			out.println("<br>DataRequestServlet.handleSimpleQuery - returning a full data set "
-				+"for plot: "+plotId+" <br>");
-//			composeSinglePlotQuery(plotId, resultType, outFile);
-//			issueQuery("simpleQuery");
-			 dba.writeSingleVegBankPlot(plotId, outFile);
+			out.println("<br>DataRequestServlet.handleSimpleQuery returning a full data set "
+			+"for plot: "+plotId+" <br>");
+			//check to see how many plots are being requested -- if there are 
+			//commas then there are multiple
+			if ( plotId.indexOf(",") > 0 )
+			{
+				System.out.println("DataRequestServlet plot collection: " + plotId);
+				Vector vec = new Vector();
+				StringTokenizer tok = new StringTokenizer(plotId, ",");
+				while ( tok.hasMoreTokens() )
+				{
+					String buf = tok.nextToken();
+					vec.addElement(buf);
+				}
+				dba.writeMultipleVegBankPlot(vec, outFile);
+			}
+			else
+			{
+				dba.writeSingleVegBankPlot(plotId, outFile);
+			}
 		}
 		// this is where the query element checking is done for the vegetation plots
 		// the way that this is structured currently the user is not forced to choose a
@@ -485,6 +504,11 @@ public class DataRequestServlet extends HttpServlet
 			out.println("<a href = \"http://vegbank.nceas.ucsb.edu/forms/plot-query.html\">"
 			+"return to query page</a><b>&#183;</b>"); //put in rb
 		}
+	}
+	catch( Exception e)
+	{
+		System.out.println("Exception: " + e.getMessage() );
+	}
 	}
 
 	
@@ -1170,7 +1194,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 	
 	/**
 	 * method that returns the name and value of a valid cookie
-	 *
+	 * REMOVE THIS METHOD -- THE SAME ONE EXISTS IN THE 'SERVLETUTILITY CLASS'
 	 */
 	 private String getCookieValue( HttpServletRequest req)
 	 {
