@@ -16747,7 +16747,7 @@ conditions may change between resampling events.
       <attName>externalAccessionCode</attName>
       <attLabel>External Accession Code</attLabel>
       <attModel>implementation</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
