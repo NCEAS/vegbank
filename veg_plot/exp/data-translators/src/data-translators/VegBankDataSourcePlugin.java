@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-23 08:09:13 $'
- * 	'$Revision: 1.4 $'
+ *  '$Date: 2002-03-15 19:23:13 $'
+ * 	'$Revision: 1.5 $'
  */
  
 //public class VegBankDataSourcePlugin
@@ -21,7 +21,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 {
 	
 	private String driver = "org.postgresql.Driver";
-	private String dbUrl = "jdbc:postgresql://beta.nceas.ucsb.edu/vegbank";
+	private String dbUrl = "jdbc:postgresql://vegbank.nceas.ucsb.edu/plots_dev";
 	private String dbUser = "datauser";
 	private Connection con = null;
 
@@ -38,10 +38,10 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			// some information about the connection
 			DatabaseMetaData dma = con.getMetaData();
 			
-			System.out.println("Connected to " + dma.getURL() );
-			System.out.println("Driver       " + dma.getDriverName() );
-			System.out.println("Version      " + dma.getDriverVersion() );
-			System.out.println("Catalog      " + con.getCatalog() );
+			System.out.println("VegBankDataSourcePlugin > Connected to " + dma.getURL() );
+			System.out.println("VegBankDataSourcePlugin > Driver       " + dma.getDriverName() );
+			System.out.println("VegBankDataSourcePlugin > Version      " + dma.getDriverVersion() );
+			System.out.println("VegBankDataSourcePlugin > Catalog      " + con.getCatalog() );
 		}
 		catch (SQLException ex) 
 		{
@@ -422,7 +422,35 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	
 	//returns the plot code for the current plot
 	public String getPlotCode(String plotName)
-	{ return(plotName); }
+	{ 
+		
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  authorPlotCode "
+			+" from PLOT where PLOT_ID = " + plotName );
+							
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+		
+		//return(plotName);
+	}
 	
 	//returns the easting 
 	public String getXCoord(String plotName)
@@ -745,7 +773,9 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 							
 			while (rs.next()) 
 			{
-				 s = rs.getString(1);
+				//remove the apersand so that the xml can be parsed
+				 String buf  = rs.getString(1);
+				 s = buf.replace('&', 'a');
 			}
 		}
 		catch (SQLException ex) 
@@ -1072,9 +1102,9 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		{
 			while (ex != null)
 			{
-				System.out.println ("ErrorCode: " + ex.getErrorCode () );
-				System.out.println ("SQLState:  " + ex.getSQLState () );
-				System.out.println ("Message:   " + ex.getMessage () );
+				System.out.println ("VegBankDataSourcePlugin > ErrorCode: " + ex.getErrorCode () );
+				System.out.println ("VegBankDataSourcePlugin > SQLState:  " + ex.getSQLState () );
+				System.out.println ("VegBankDataSourcePlugin > Message:   " + ex.getMessage () );
 				ex.printStackTrace();
 				ex = ex.getNextException();
 			}
@@ -1100,7 +1130,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		{
 			String plotName = args[0];
 			VegBankDataSourcePlugin db = new VegBankDataSourcePlugin();
-			System.out.println(" getting info for: " + plotName );
+			System.out.println(" VegBankDataSourcePlugin > getting info for: " + plotName );
 		}
 		else
 		{
