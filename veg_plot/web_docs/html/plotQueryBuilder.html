@@ -100,7 +100,7 @@ src="@image-path@/owlogoBev.jpg" alt = "Vegetation plots logo">
 </select><br clear=left>
 
 <!-- operator -->
-<td  align=right valign=top>
+<td  align=left valign=top>
 <font face="Helvetica,Arial,Verdana" size=3 color=23238E>
 <b>Operator</b>
 </td>
@@ -124,10 +124,24 @@ src="@image-path@/owlogoBev.jpg" alt = "Vegetation plots logo">
   <b>Value</b>
  </td>
  <td  align=left valign=top>
-	 <input size=35 name=value>
+	 <input size=28 name=value>
+
+
+<!-- QUERY TIPS  -->
+<!-- 
+	<a href=/harris/html/query_tips.html>
+	<img src=@image-path@/question.gif border=0 align=middle> Query tips </a>
+-->	
+	<B><FONT SIZE="-1" FACE="arial">Query tips</FONT></B>
+	<A HREF="" onclick="WinOpen()"> <a href="/harris/html/plotQueryBuilder.html" onclick="WinOpen()"><img
+	SRC="@image-path@/question.gif" BORDER=0 height=16 width=16 align=TOP></a> 
+									
+						 
+	 
  </td>
 </tr>
- 
+
+
  <!-- append/ send query -->
  <tr>
  </tr>
@@ -166,12 +180,28 @@ src="@image-path@/owlogoBev.jpg" alt = "Vegetation plots logo">
     <tr>
  <td>
  <font face="Helvetica,Arial,Verdana" size=2>
+ 
+<!-- JAVA SCRIPT--> 
  <script language=JavaScript alt="JavaScript not enabled!">
    <!-- 
     today = new Date()
     document.write("(Accessed: " + today + ")")
    //-->
  </script>
+
+	<SCRIPT LANGUAGE="JAVASCRIPT">
+		<!--
+		function WinOpen() 
+		{
+			open("/harris/html/query_tips.html","Window1","width=400,height=600");
+		}
+		//-->
+
+</SCRIPT>
+
+
+
+ 
 </dd></dt></dl-->
 <table border=0 cellpadding=5 cellspacing=5 align=left><tr><td bgcolor=FFFFFF>
 </td></tr<tr><td bgcolor=FFFFFF>
@@ -187,7 +217,7 @@ src="@image-path@/owlogoBev.jpg" alt = "Vegetation plots logo">
 <font face="Helvetica,Arial,Verdana">
 <small>The National Plots Database website is hosted by 
  <a href=http://www.nceas.ucsb.edu target="_new">
- <img src=http://www.nceas.ucsb.edu/logo.gif border=0 align=middle></a>
+ <img src=@image-path@/logo.gif border=0  height=16 width=16 align=middle></a>
 </small>
 </font>
 </p>
