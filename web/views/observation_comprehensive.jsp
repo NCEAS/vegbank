@@ -22,6 +22,7 @@
 <TR><TD width="55%" valign="top"><!-- plot level info -->
 <table class="leftrightborders" cellpadding="2"><!--each field, only write when HAS contents-->
 <tr><th class="major" colspan="2">Plot Level Data: <bean:write name="onerowofplot" property="authorplotcode"/></th></tr>
+<tr><td colspan="2">Cite this plot with URL: <a href='/cite/<bean:write name="onerowofplot" property="observationaccessioncode" />'>http://vegbank.org/cite/<bean:write name="onerowofplot" property="observationaccessioncode" /></a>, more <a href="@general_link@cite.html">info</a></td></tr>
 <tr><th>Plot ID Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> 
 <%@ include file="autogen/plot_plotidlong_data.jsp" %>         
