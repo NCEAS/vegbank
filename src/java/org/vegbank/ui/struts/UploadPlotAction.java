@@ -29,8 +29,8 @@ import org.vegbank.plots.datasource.VegbankXMLUpload.LoadingErrors;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:23:28 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-02-19 17:49:50 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,6 +76,10 @@ public class UploadPlotAction extends Action
 		int archiveType = theForm.getArchiveType();
 		// Always false for now
 		String updateArchivedPlot = theForm.getUpdateArchivedPlot();
+		boolean validate = theForm.isValidate();
+		boolean rectify = theForm.isRectify();
+		boolean upload = theForm.isUpload();
+		
 		FormFile file = theForm.getPlotFile();
 		String savedFileName = null;
 		
@@ -109,7 +113,7 @@ public class UploadPlotAction extends Action
 					
 				case UploadPlotForm.VEGBANK_XML_FORMAT:
 					System.out.println("UploadPlotAction: VEGBANK_XML_FORMAT format uploaded");
-					loadingErrors = this.uploadVegbankXML(savedFileName);
+					loadingErrors = this.uploadVegbankXML(savedFileName, validate, upload, rectify);
 					break;
 					
 				default:
@@ -118,15 +122,6 @@ public class UploadPlotAction extends Action
 						new ActionError("Unkown format type uploaded"));
 			}
 		} 
-		catch ( RMIServerBusyException e)
-		{
-			errors.add(
-				ActionErrors.GLOBAL_ERROR,
-				new ActionError(
-				"errors.action.failed",
-				"RMIServer Busy, please try upload latter")
-			);
-		}
 		catch ( Exception e )
 		{
 			errors.add(
@@ -154,9 +149,10 @@ public class UploadPlotAction extends Action
 	/**
 	 * @param savedFileName
 	 */
-	private LoadingErrors uploadVegbankXML(String savedFileName) throws Exception
+	private LoadingErrors uploadVegbankXML(String savedFileName, boolean validate, boolean upload, boolean rectify) throws Exception
 	{
-		VegbankXMLUpload xmlUpload = new VegbankXMLUpload();
+		//System.out.println(validate + " , " +  upload + " , " + rectify);
+		VegbankXMLUpload xmlUpload = new VegbankXMLUpload(validate, rectify, upload);
 		xmlUpload.processXMLFile(savedFileName);
 		return xmlUpload.getErrors();
 	}
