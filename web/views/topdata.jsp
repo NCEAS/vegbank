@@ -43,7 +43,7 @@
   <logic:match name="writetops" value="<%= currentNum %>">
   <vegbank:get id="namedplace" select="browsenamedplacebystate" beanName="map" 
     pager="true" />
-  <logic:notEmpty name="BEANLIST">
+  <logic:notEmpty name="namedplace-BEANLIST">
 
   <TABLE cellpadding="5" cellspacing="3">
   <TR><TD colspan="3"><h3>Where Plots Are:</h3></TD></TR>
@@ -64,7 +64,7 @@
    <vegbank:pager />
  </logic:equal>
  
- </logic:notEmpty> 
+
  
  
  </TD><TD>
@@ -72,6 +72,7 @@
  <bean:write name="mapfile" filter="false" />
  </TD></TR>
  </TABLE>
+ </logic:notEmpty> 
  </logic:match>
  <!-- end of section 1 -->
  
@@ -94,7 +95,7 @@
     </logic:equal>
    
    
-  </logic:notEmpty> 
+  
   </logic:match>
   
   <%  currentNum = "3"; %>
