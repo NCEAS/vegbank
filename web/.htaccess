@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.1 2004-05-13 02:37:28 anderson Exp $
+# $Id: .htaccess,v 1.2 2004-05-13 02:40:35 anderson Exp $
 ###############################################
 
 RewriteEngine  on
@@ -13,10 +13,13 @@ RewriteEngine  on
 RewriteRule ^plotsearch$      /vegbank/LoadPlotQuery.do   [NC,QSA,L]
 
 #### Vegdocs Links
+## The cool general case one doesn't work yet
 #RewriteCond %{REQUEST_URI}  ^/workshop
   #  ADD OTHER VEGDOCS SHORTCUTS HERE
-#RewriteRule ^(.+)/?$      /vegdocs/$1   [NC,QSA, L]
+#RewriteRule ^(.+)$      /vegdocs/$1   [NC,QSA, L]
 
+## But this direct link to workshop does
+RewriteRule ^workshop$      /vegdocs/workshop   [NC,QSA,L]
 
 
 # Rewrite Example
