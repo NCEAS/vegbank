@@ -71,11 +71,12 @@
    <table class="thinlines" cellpadding="2"> 
    <%@ include file="../views/includeviews/sub_namedplace_states.jsp" %>
   
-  
+   </table>
  </logic:notEmpty> 
+  
 <%@ include file="plot-map-northamerica.html" %>
 
-
+  
 
 </div>
 
