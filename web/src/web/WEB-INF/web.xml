@@ -9,146 +9,183 @@
     <display-name>Vegbank Web Interface</display-name>
     <description>Vegbank servlets</description>
 
-
-    <servlet>
-      <servlet-name>DataSubmitServlet</servlet-name>
-      <description>as it zounds</description>
-      <servlet-class>org.vegbank.servlet.request.DataSubmitServlet</servlet-class>
-      <load-on-startup>5</load-on-startup>
-    </servlet>
-    
-
-    <servlet>
-      <servlet-name>viewData</servlet-name>
-      <description>servlet to allow for the viewing of an xml doc</description>
-      <servlet-class>org.vegbank.servlet.request.viewData</servlet-class>
-      <load-on-startup>5</load-on-startup>
-    </servlet>
-
-
-    <servlet>
-      <servlet-name>stylesheetgenerator</servlet-name>
-      <description>servlet to create a custom stylesheet</description>
-      <servlet-class>org.vegbank.servlet.stylesheet.StyleSheetGenerator</servlet-class>
-      <load-on-startup>5</load-on-startup>
-    </servlet>
+  <!-- Action Servlet Configuration -->
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>/WEB-INF/struts-config.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>application</param-name>
+      <param-value>org.vegbank.ui.struts.application</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
 
 
+            <servlet>
+              <servlet-name>DataSubmitServlet</servlet-name>
+              <description>as it zounds</description>
+              <servlet-class>org.vegbank.servlet.request.DataSubmitServlet</servlet-class>
+              <load-on-startup>5</load-on-startup>
+            </servlet>
+            
 
-    <servlet>
-      <servlet-name>result-download</servlet-name>
-       <description>a servlet to handle the downloading of a resultset that was just returned from vegbank</description>
-      <servlet-class>org.vegbank.servlet.request.fileDownload</servlet-class>
-      <load-on-startup>5</load-on-startup>
-    </servlet>
-
-
-    <servlet>
-      <servlet-name>framework</servlet-name>
-      <description>The general servlet framework containing a varaiety of utilities</description>
-      <servlet-class>org.vegbank.servlet.framework.FrameworkServlet</servlet-class>
-      <load-on-startup>5</load-on-startup>
-    </servlet>
-
-    <servlet>
-      <servlet-name>authenticate</servlet-name>
-       <description>A standalone servlet used for authenticating a user</description>
-      <servlet-class>org.vegbank.servlet.authentication.AuthenticationServlet</servlet-class>
-      <load-on-startup>5</load-on-startup>
-    </servlet>
+            <servlet>
+              <servlet-name>viewData</servlet-name>
+              <description>servlet to allow for the viewing of an xml doc</description>
+              <servlet-class>org.vegbank.servlet.request.viewData</servlet-class>
+              <load-on-startup>5</load-on-startup>
+            </servlet>
 
 
-    <servlet>
-      <servlet-name>dataexchange</servlet-name>
-      <description>Handles uploading and downloading of files</description>
-      <servlet-class>org.vegbank.servlet.datafileexchange.DataExchangeServlet</servlet-class>
-      <load-on-startup>5</load-on-startup>
-    </servlet>
-
-    <servlet>
-      <servlet-name>usermanagement</servlet-name>
-      <description>A standalone servlet used for authenticating a user</description>
-      <servlet-class>org.vegbank.servlet.usermanagement.UserManagementServlet</servlet-class>
-      <load-on-startup>5</load-on-startup>
-    </servlet>
-
-    <servlet>
-      <servlet-name>DataRequestServlet</servlet-name>
-      <description>A</description>
-      <servlet-class>org.vegbank.servlet.request.DataRequestServlet</servlet-class>
-      <load-on-startup>5</load-on-startup>
-    </servlet>
-
-    <servlet>
-      <servlet-name>QueryBuilderServlet</servlet-name>
-      <description>Currently used for building nested queries</description>
-      <servlet-class>org.vegbank.servlet.request.QueryBuilderServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-      <servlet-name>VegbankController</servlet-name>
-      <description>A dispatcher to the commands</description>
-      <servlet-class>org.vegbank.servlet.VegbankController</servlet-class>
-    </servlet>
-
-    <!-- The Mappings -->
-
-    <servlet-mapping>
-      <servlet-name>DataSubmitServlet</servlet-name>
-      <url-pattern>/servlet/DataSubmitServlet</url-pattern>
-    </servlet-mapping>  
-    
-    <servlet-mapping>
-      <servlet-name>viewData</servlet-name>
-      <url-pattern>/servlet/viewData</url-pattern>
-    </servlet-mapping>  
-    
-    <servlet-mapping>
-      <servlet-name>stylesheetgenerator</servlet-name>
-      <url-pattern>/servlet/stylesheetgenerator</url-pattern>
-    </servlet-mapping>  
+            <servlet>
+              <servlet-name>stylesheetgenerator</servlet-name>
+              <description>servlet to create a custom stylesheet</description>
+              <servlet-class>org.vegbank.servlet.stylesheet.StyleSheetGenerator</servlet-class>
+              <load-on-startup>5</load-on-startup>
+            </servlet>
 
 
-    <servlet-mapping>
-      <servlet-name>result-download</servlet-name>
-      <url-pattern>/servlet/fileDownload</url-pattern>
-    </servlet-mapping>  
 
-    
-    <servlet-mapping>
-      <servlet-name>framework</servlet-name>
-      <url-pattern>/servlet/framework</url-pattern>
-    </servlet-mapping>
+            <servlet>
+              <servlet-name>result-download</servlet-name>
+               <description>a servlet to handle the downloading of a resultset that was just returned from vegbank</description>
+              <servlet-class>org.vegbank.servlet.request.fileDownload</servlet-class>
+              <load-on-startup>5</load-on-startup>
+            </servlet>
 
-    <servlet-mapping>
-      <servlet-name>authenticate</servlet-name>
-      <url-pattern>/servlet/authenticate</url-pattern>
-    </servlet-mapping> 
 
-    <servlet-mapping>
-      <servlet-name>dataexchange</servlet-name>
-      <url-pattern>/servlet/dataexchange</url-pattern>
-    </servlet-mapping>  
-    
-    <servlet-mapping>
-      <servlet-name>usermanagement</servlet-name>
-      <url-pattern>/servlet/usermanagement</url-pattern>
-    </servlet-mapping>  
-    
-    <servlet-mapping>
-      <servlet-name>DataRequestServlet</servlet-name>
-      <url-pattern>/servlet/DataRequestServlet</url-pattern>
-    </servlet-mapping>  
-    
-    <servlet-mapping>
-      <servlet-name>QueryBuilderServlet</servlet-name>
-      <url-pattern>/servlet/QueryBuilderServlet</url-pattern>
-    </servlet-mapping>  
- 
-    <servlet-mapping>
-      <servlet-name>VegbankController</servlet-name>
-      <url-pattern>/servlet/VegbankController</url-pattern>
-    </servlet-mapping>  
-    
+            <servlet>
+              <servlet-name>framework</servlet-name>
+              <description>The general servlet framework containing a varaiety of utilities</description>
+              <servlet-class>org.vegbank.servlet.framework.FrameworkServlet</servlet-class>
+              <load-on-startup>5</load-on-startup>
+            </servlet>
+
+            <servlet>
+              <servlet-name>authenticate</servlet-name>
+               <description>A standalone servlet used for authenticating a user</description>
+              <servlet-class>org.vegbank.servlet.authentication.AuthenticationServlet</servlet-class>
+              <load-on-startup>5</load-on-startup>
+            </servlet>
+
+
+            <servlet>
+              <servlet-name>dataexchange</servlet-name>
+              <description>Handles uploading and downloading of files</description>
+              <servlet-class>org.vegbank.servlet.datafileexchange.DataExchangeServlet</servlet-class>
+              <load-on-startup>5</load-on-startup>
+            </servlet>
+
+            <servlet>
+              <servlet-name>usermanagement</servlet-name>
+              <description>A standalone servlet used for authenticating a user</description>
+              <servlet-class>org.vegbank.servlet.usermanagement.UserManagementServlet</servlet-class>
+              <load-on-startup>5</load-on-startup>
+            </servlet>
+
+            <servlet>
+              <servlet-name>DataRequestServlet</servlet-name>
+              <description>A</description>
+              <servlet-class>org.vegbank.servlet.request.DataRequestServlet</servlet-class>
+              <load-on-startup>5</load-on-startup>
+            </servlet>
+
+            <servlet>
+              <servlet-name>QueryBuilderServlet</servlet-name>
+              <description>Currently used for building nested queries</description>
+              <servlet-class>org.vegbank.servlet.request.QueryBuilderServlet</servlet-class>
+            </servlet>
+
+            <servlet>
+              <servlet-name>VegbankController</servlet-name>
+              <description>A dispatcher to the commands</description>
+              <servlet-class>org.vegbank.servlet.VegbankController</servlet-class>
+            </servlet>
+
+            <!-- The Mappings -->
+
+            <!-- Action Servlet Mapping -->
+            <servlet-mapping>
+              <servlet-name>action</servlet-name>
+              <url-pattern>*.do</url-pattern>
+            </servlet-mapping>
+
+
+            <servlet-mapping>
+              <servlet-name>DataSubmitServlet</servlet-name>
+              <url-pattern>/servlet/DataSubmitServlet</url-pattern>
+            </servlet-mapping>  
+            
+            <servlet-mapping>
+              <servlet-name>viewData</servlet-name>
+              <url-pattern>/servlet/viewData</url-pattern>
+            </servlet-mapping>  
+            
+            <servlet-mapping>
+              <servlet-name>stylesheetgenerator</servlet-name>
+              <url-pattern>/servlet/stylesheetgenerator</url-pattern>
+            </servlet-mapping>  
+
+
+            <servlet-mapping>
+              <servlet-name>result-download</servlet-name>
+              <url-pattern>/servlet/fileDownload</url-pattern>
+            </servlet-mapping>  
+
+            
+            <servlet-mapping>
+              <servlet-name>framework</servlet-name>
+              <url-pattern>/servlet/framework</url-pattern>
+            </servlet-mapping>
+
+            <servlet-mapping>
+              <servlet-name>authenticate</servlet-name>
+              <url-pattern>/servlet/authenticate</url-pattern>
+            </servlet-mapping> 
+
+            <servlet-mapping>
+              <servlet-name>dataexchange</servlet-name>
+              <url-pattern>/servlet/dataexchange</url-pattern>
+            </servlet-mapping>  
+            
+            <servlet-mapping>
+              <servlet-name>usermanagement</servlet-name>
+              <url-pattern>/servlet/usermanagement</url-pattern>
+            </servlet-mapping>  
+            
+            <servlet-mapping>
+              <servlet-name>DataRequestServlet</servlet-name>
+              <url-pattern>/servlet/DataRequestServlet</url-pattern>
+            </servlet-mapping>  
+            
+            <servlet-mapping>
+              <servlet-name>QueryBuilderServlet</servlet-name>
+              <url-pattern>/servlet/QueryBuilderServlet</url-pattern>
+            </servlet-mapping>  
+         
+            <servlet-mapping>
+              <servlet-name>VegbankController</servlet-name>
+              <url-pattern>/servlet/VegbankController</url-pattern>
+            </servlet-mapping>  
+            
+          <!-- Struts Tag Library Descriptors -->
+          <taglib>
+            <taglib-uri>/WEB-INF/struts-bean.tld</taglib-uri>
+            <taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+          </taglib>
+
+          <taglib>
+            <taglib-uri>/WEB-INF/struts-html.tld</taglib-uri>
+            <taglib-location>/WEB-INF/struts-html.tld</taglib-location>
+          </taglib>
+
+          <taglib>
+            <taglib-uri>/WEB-INF/struts-logic.tld</taglib-uri>
+            <taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+          </taglib>
 
 </web-app>

@@ -148,13 +148,13 @@ PREV || NEXT
 			</a>
 			&#160;
 			<!-- THE LINK TO THE COMPREHENSIVE REPORT-->
-			<a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId={$PLOTID}"> 
+			<a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId={$PLOTID}"> 
 				<img align="center" border="0" src="/vegbank/images/comprehensive_sm.gif" alt="Comprehensive view"> </img> 
 			</a>
 			&#160;
 			<!-- THE LINK TO THE SUMMARY-->
 			
-			<a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId={$PLOTID}"> 
+			<a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId={$PLOTID}"> 
 				<img align="center" border="0" src="/vegbank/images/report_sm.gif" alt="Summary view"> </img> 
 			</a>
 			
@@ -207,13 +207,13 @@ PREV || NEXT
 			</a>
 			&#160;
 			<!-- THE LINK TO THE COMPREHENSIVE REPORT-->
-			<a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId={$PLOTID}"> 
+			<a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId={$PLOTID}"> 
 				<img align="center" border="0" src="/vegbank/images/comprehensive_sm.gif" alt="Comprehensive view"> </img> 
 			</a>
 			&#160;
 			<!-- THE LINK TO THE SUMMARY-->
 			
-			<a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId={$PLOTID}"> 
+			<a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId={$PLOTID}"> 
 				<img align="center" border="0" src="/vegbank/images/report_sm.gif" alt="Summary view"> </img> 
 			</a>
 			

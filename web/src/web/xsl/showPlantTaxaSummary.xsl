@@ -129,7 +129,7 @@ Parent: <span class="item"> <xsl:value-of select="name/parentName"/> </span> </f
 <td vAlign="top" align="left" width="34%" bgcolor="{$evenRowColor}"  height="106">
 <b><font face="Arial, Helvetica, sans-serif" size="-1">
 Synonym:  <span class="item"> 
-<a href="/framework/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonName={$SYNONYM}&amp;taxonNameType=%25&amp;taxonLevel=%25&amp;party=%25">  <xsl:value-of select="name/acceptedSynonym"/> </a> </span> <br> </br>
+<a href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonName={$SYNONYM}&amp;taxonNameType=%25&amp;taxonLevel=%25&amp;party=%25">  <xsl:value-of select="name/acceptedSynonym"/> </a> </span> <br> </br>
 </font></b>
 </td>
 
@@ -170,7 +170,7 @@ Parent: <span class="item"> <xsl:value-of select="name/parentName"/> </span> </f
 <td vAlign="top" align="left" width="34%" bgcolor="{$oddRowColor}"  height="106">
 <b><font face="Arial, Helvetica, sans-serif" size="-1">
 Synonym:  <span class="item"> 
-<a href="/framework/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonName={$SYNONYM}&amp;taxonNameType=%25&amp;taxonLevel=%25&amp;party=%25">  <xsl:value-of select="name/acceptedSynonym"/> </a> </span> <br> </br>
+<a href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonName={$SYNONYM}&amp;taxonNameType=%25&amp;taxonLevel=%25&amp;party=%25">  <xsl:value-of select="name/acceptedSynonym"/> </a> </span> <br> </br>
 </font></b>
 </td>
 
