@@ -6,9 +6,9 @@
  *  Authors: @@
  *  Release: @@
  *
- *  '$Author: farrell $'
- *  '$Date: 2003-12-05 22:16:23 $'
- *  '$Revision: 1.7 $'
+ *  '$Author: anderson $'
+ *  '$Date: 2003-12-09 18:25:28 $'
+ *  '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
   
-package org.vegbank.common.utility;
+package org.vegbank.common.utility.test; 
 
 import java.util.HashMap;
 

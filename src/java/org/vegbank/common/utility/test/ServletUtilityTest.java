@@ -1,12 +1,12 @@
-package org.vegbank.common.utility;
+package org.vegbank.common.utility.test; 
 /*
  * '$RCSfile: ServletUtilityTest.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:37:42 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-12-09 18:25:28 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

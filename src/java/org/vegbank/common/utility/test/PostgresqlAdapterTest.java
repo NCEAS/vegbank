@@ -6,9 +6,9 @@
  *  Authors: @@
  *  Release: @@
  *
- *  '$Author: farrell $'
- *  '$Date: 2003-03-20 19:34:17 $'
- *  '$Revision: 1.2 $'
+ *  '$Author: anderson $'
+ *  '$Date: 2003-12-09 18:25:28 $'
+ *  '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
  
-package org.vegbank.common.dbAdapter;
+package org.vegbank.common.utility.test;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

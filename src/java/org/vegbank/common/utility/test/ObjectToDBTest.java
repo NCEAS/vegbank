@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:37:42 $'
- *	'$Revision: 1.5 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-12-09 18:25:28 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
  
-package org.vegbank.common.utility;
+package org.vegbank.common.utility.test; 
 
 import org.vegbank.common.model.Address;
 import org.vegbank.common.model.Community;
