@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: anderson $'
-*  '$Date: 2005-01-20 14:26:21 $'
-*  '$Revision: 1.14 $'
+*  '$Date: 2005-01-28 05:49:17 $'
+*  '$Revision: 1.15 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@
 <link REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css"/>
 
 <script language="javascript">
-function selectRadio(pathField, radioIndex) {
+function selectRadio(radioIndex) {
     document.UploadPlotForm.dataFileLocation[radioIndex].checked = true;
 }
 </script>
@@ -133,7 +133,7 @@ function selectRadio(pathField, radioIndex) {
 			&nbsp; &nbsp; &nbsp; Local data file path:
 		</td>
 		<td>
-			<html:file property="plotFile" size="50" onclick="selectRadio(this, 0)"/>
+			<html:file property="plotFile" size="50" onclick="selectRadio(0)"/>
 		</td>
 	</tr>
 
@@ -154,7 +154,7 @@ function selectRadio(pathField, radioIndex) {
 		</td>
 		<td>
 			<html:text property="plotFileURL" size="50" value="http://" 
-				onclick="if(this.value=='http://'){this.value='';} selectRadio(this, 1);" 
+				onclick="if(this.value=='http://'){this.value='';} selectRadio(1);" 
 				onblur="if(this.value==''){this.value='http://';}"/>
 		</td>
 	</tr>
