@@ -17,6 +17,7 @@
         <xsl:call-template name="checkList"/>
         <xsl:call-template name="checkVersion" />
         <xsl:call-template name="checkUnits" />
+        <xsl:call-template name="checkDenormNotReqd" />
       </xsl:when>
       <xsl:otherwise>
         <!-- generate spellCheck document to sort and spell check -->
@@ -127,6 +128,11 @@
      <xsl:if test="not(contains(../../@type,'drop'))"><!-- ignore if a drop -->
 79 <xsl:value-of select="../entityName"/>.<xsl:value-of select="attName"/>  : version (<xsl:value-of select="../../../modelChangeVersion" />) and update (<xsl:value-of select="update" />)do not match! </xsl:if>
     </xsl:if></xsl:if>
+  </xsl:template>
+  <xsl:template name="checkDenormNotReqd">
+    <xsl:if test="attModel='denorm' and attNulls='no'">
+81 can't have denorm field that is required!   :  <xsl:value-of select="../entityName"/>.<xsl:value-of select="attName"/>
+    </xsl:if>
   </xsl:template>
   <xsl:template name="checkExist">
     <xsl:param name="tbl"/>

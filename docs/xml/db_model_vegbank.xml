@@ -781,7 +781,7 @@
       <attName>COMMCONCEPT_ID</attName>
       <attLabel>Community Concept</attLabel>
       <attModel>denorm</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
@@ -927,7 +927,7 @@
       <attName>PARTY_ID</attName>
       <attLabel>Party</attLabel>
       <attModel>denorm</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
@@ -1831,7 +1831,7 @@ change through time.</entitySummary>
       <attName>PLANTCONCEPT_ID</attName>
       <attLabel>Plant Concept</attLabel>
       <attModel>denorm</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
@@ -2013,7 +2013,7 @@ change through time.</entitySummary>
       <attName>PARTY_ID</attName>
       <attLabel>Party</attLabel>
       <attModel>denorm</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
