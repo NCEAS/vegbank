@@ -45,8 +45,8 @@
  <div id="header">
   <div id="header-left">
 
-   <form action="@forms_link@metasearch.jsp"
-        method="post" name="quicksearch_form">
+   <form action="@forms_link@metasearch.jsp" method="post" 
+        name="quicksearch_form" onsubmit="javascript:doSubmit()">
 
    find 
    <select class="input-box" name="selEntity" id="selEntity" value="entity" />
@@ -62,8 +62,7 @@
    containing
    <input class="input-box" type="text" name="xwhereParams" size="15" value="" 
    style="width: 115px" />
-   <input class="input-button" type="submit" value="go" 
-   onclick="javascript:doSubmit()" style="width: 35px" />
+   <input class="input-button" type="submit" value="go" style="width: 35px" />
    </form>
 
     <div id="header-data-links">
