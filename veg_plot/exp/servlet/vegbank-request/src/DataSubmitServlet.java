@@ -30,8 +30,8 @@ import servlet.authentication.UserDatabaseAccess;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2003-01-10 21:44:53 $'
- *  '$Revision: 1.47 $'
+ *  '$Date: 2003-01-13 23:31:07 $'
+ *  '$Revision: 1.48 $'
  */
 
 
@@ -1485,19 +1485,17 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 									String report = rmiClient.getValidationReport();
 									// create a document 
 									System.out.println("DataSubmitServlet > validation report length: " + report.length() );
-									//System.out.println("DataSubmitServlet > validation report: " + report );
-									parser = new XMLparse();
-									Document validationDoc = parser.getDocumentFromString(report.replace('&', '_' ));
-									// get the failed elements 
-									Vector failedAttributes = parser.get(validationDoc, "dbAttribute" );
-									sb.append(failedAttributes.toString());
+									String htmlReceipt = this.getPlotValidationReceipt(report) ;
+									sb.append(htmlReceipt);
 								}
-								
-				
-								String result = rmiClient.insertPlot(thisPlot, this.plotsArchiveType, user);
-								String receipt = getPlotInsertionReceipt(thisPlot, result, receiptType, i, values.length);
-								sb.append( receipt );
-								System.out.println("DataSubmitServlet > requesting a receipt: '"+i+"' out of: " + values.length );
+								// if the plot is valid then load it
+								else
+								{
+									String result = rmiClient.insertPlot(thisPlot, this.plotsArchiveType, user);
+									String receipt = getPlotInsertionReceipt(thisPlot, result, receiptType, i, values.length);
+									sb.append( receipt );
+									System.out.println("DataSubmitServlet > requesting a receipt: '"+i+"' out of: " + values.length );
+								}
 							}
 						}
 					}
@@ -1519,6 +1517,68 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 		}
 		return(sb);
 	}
+	
+	/**
+	  * this method takes the xml report from the from the plot validation module
+		* and then returns an html receipt that can be presented to the user attemplting 
+		* to load the plot
+		* @param report -- the plot validation report from the plot validation module:
+		*  <plotValidationReport>
+		*			<failedValidationAttribute>
+		*				<dbTable>
+		* 			<dbAttribute>
+		*				<methodName>
+		*				<methodParams>
+		*				<failedTarget>
+		*				<constraints>
+		*					<constraint>
+		*				</constraints>					
+		* @return html -- the html receipt 
+		*/
+		private String getPlotValidationReceipt(String plotValidationRept)
+		{
+			StringBuffer sb = new StringBuffer();
+			try
+			{
+				System.out.println("receipt: " + plotValidationRept);
+				transformXML trans  = new transformXML();
+				String tr = trans.getTransformedFromString(plotValidationRept.replace('&', '_' ), "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/validation-report.xsl");
+				sb.append(tr);		
+/*				
+				//transformXML trans  = new transformXML();
+				//String tr = trans.getTransformedFromString(plotValidationRept.replace('&', '_' ), "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl");
+				parser = new XMLparse();
+				Document doc = parser.getDocumentFromString( plotValidationRept.replace('&', '_' ) );
+				Vector tables = parser.get(doc, "dbTable");
+				Vector attributes = parser.get(doc, "dbAttribute");
+				Vector values = parser.get(doc, "failedTarget");
+				Vector constraints = parser.getValuesForPath(doc, "/failedValidationAttribute/constraints/constraint");
+				
+				sb.append("<html> \n");
+				sb.append("<body> \n");
+				sb.append("<br>Plot is not valid: problems associated with: <br>");
+				sb.append("<table>");
+				sb.append("<tr> <td>TABLE </td> <td> ATTRIBUTE </td> <td> VALUE </td> </tr>");
+				for (int i=0; i < tables.size(); i++) 
+				{
+					sb.append("<tr> <td> " + (String)tables.elementAt(i)  
+					+" </td> <td> "+ (String)attributes.elementAt(i) 
+					+" </td> <td> "+(String)values.elementAt(i)+" </td> <td>"+constraints.toString()+"</td> </tr> "   );
+					
+				}
+				sb.append("</table>");
+				sb.append("</body> \n");
+				sb.append("</html> \n");
+*/			
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			return(sb.toString() );
+		}
+	
+	
 	
 	/**
 	 * this method will email the plot submital receipt form to the 
