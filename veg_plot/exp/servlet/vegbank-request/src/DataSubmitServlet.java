@@ -25,8 +25,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-04-09 21:54:33 $'
- *  '$Revision: 1.24 $'
+ *  '$Date: 2002-04-15 20:32:36 $'
+ *  '$Revision: 1.25 $'
  */
 
 
@@ -188,7 +188,7 @@ public class DataSubmitServlet extends HttpServlet
 						//they are just not logged in
 						else
 						{
-							sb.append("<a href=\"www.vegbank.org\">You are not logged in! </a> ");
+							sb.append("<a href=\"http://www.vegbank.org\">You are not logged in! </a> ");
 						}
 					}
 				}
