@@ -160,4 +160,10 @@
             <taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
           </taglib>
 
+
+          <!-- Apache Tag Library Descriptors -->
+          <taglib>
+              <taglib-uri>http://jakarta.apache.org/taglibs/datetime-1.0</taglib-uri>
+              <taglib-location>/WEB-INF/taglibs-datetime.tld</taglib-location>
+          </taglib>
 </web-app>
