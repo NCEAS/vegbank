@@ -203,7 +203,7 @@ pdm.plotElementMapper("national veg plots database entry", "projectName", "proje
 
 //site info
 pdm.plotElementMapper(plotId, "plotId", "site");
-pdm.plotElementMapper(authorPlotCode, "authorCode", "site");
+pdm.plotElementMapper(authorPlotCode, "authorPlotCode", "site");
 pdm.plotElementMapper(plotShape, "shape", "site");
 pdm.plotElementMapper(slopeGradient, "slopeGradient", "site");
 pdm.plotElementMapper(slopeAspect,"slopeAspect", "site");
