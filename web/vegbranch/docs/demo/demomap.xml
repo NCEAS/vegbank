@@ -1,0 +1,77 @@
+<?xml-stylesheet type="text/xsl" href="maptofilters.xsl"?>
+<demos>
+  <demo>
+    <file>vegbranch_download.html</file>
+    <label>Download VegBranch</label>
+    <version>1.5</version>
+  </demo>
+  <demo>
+    <file>vegbranch_unzip.html</file>
+    <label>Unzipping VegBranch Files</label>
+    <version>1.5</version>
+  </demo>
+  <demo>
+    <file>vegbranch_setup.html</file>
+    <label>VegBranch Setup</label>
+    <version>1.5</version>
+  </demo>
+  <demo>
+    <file>vegbranch_mainmenu.html</file>
+    <label>VegBranch Main Menu</label>
+    <version>1.5</version>
+    <form>NavForm</form>
+  </demo>
+  <demo>
+    <file>vegbranch_example1data.html</file>
+    <label>Example Data Files (1)</label>
+    <version>1.5</version>
+  </demo>
+  <demo>
+    <file>vegbranch_loaddata_basic.html</file>
+    <label>Loading Data into VegBranch</label>
+    <version>1.5</version>
+    <form>Master_Switchboard</form>
+    <demo>
+      <file>vegbranch_loaddata_convertfields.html</file>
+      <version>1.5</version>
+      <label>Loading Data with field conversions</label>
+      <form>Master_Switchboard</form>
+    </demo>
+  </demo>
+  <demo>
+    <file>vegbranch_metadata.html</file>
+    <label>Metadata</label>
+    <version>1.5</version>
+    <form>MetaDataSwitchboard</form>
+  </demo>
+  <demo>
+    <file>vegbranch_translate_basic.html</file>
+    <label>Translations</label>
+    <version>1.5</version>
+    <form>TranslateYourDataForm</form>
+  </demo>
+  <demo>
+    <file>vegbranch_datacheck_noerrs.html</file>
+    <label>Data Checking</label>
+    <version>1.5</version>
+    <form>DataCheckSwitchboard</form>
+  </demo>
+  <demo>
+    <file>vegbranch_migrate.html</file>
+    <label>Migrate Data</label>
+    <version>1.5</version>
+    <form>MigrateData_Final</form>
+  </demo>
+  <demo>
+    <file>vegbranch_viewvbmod.html</file>
+    <label>View VegBank Module Data</label>
+    <version>1.5</version>
+    <form>ViewVBSwitch</form>
+  </demo>
+  <demo>
+    <file>vegbranch_exportxml.html</file>
+    <label>Export Data to XML</label>
+    <version>1.5</version>
+    <form>ExportData</form>
+  </demo>
+</demos>
