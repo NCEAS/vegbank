@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-28 04:23:09 $'
- * 	'$Revision: 1.14 $'
+ *  '$Date: 2002-03-28 23:07:24 $'
+ * 	'$Revision: 1.15 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -867,6 +867,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		try
 		{
 			String className = getClassifiedCommunityName(plotName);
+			System.out.println("TNCPlotsDB > class community name: " + className);
 			if ( className != null )
 			{
 				cn = className ;
@@ -874,6 +875,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			else
 			{
 				String provisionalName = getProvisionalName(plotName);
+				System.out.println("TNCPlotsDB > provisional community name: " + provisionalName);
 				if (provisionalName != null )
 				{
 					cn = provisionalName;
@@ -889,17 +891,39 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
-	return( cn);	
+	return(cn);	
 	}
 	
 	
 	/**
-	 * returns the community code for the named plot
+	 * returns the community code for the named plot.  In this
+	 * case this is the tnc elcode
 	 */
 	public String getCommunityCode(String plotName)
 	{
-		String s = "";
-		return(s);
+			Statement stmt = null;
+			String code = null;
+			try
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([TNC Elcode])  "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					code = rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch( Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+			return(code);
 	}
 	
 	/**
@@ -916,8 +940,33 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	public String getCommunityFramework(String plotName)
 	{
-		String s = "";
-		return(s);
+		String cf = null;
+		try
+		{
+			String className = getClassifiedCommunityName(plotName);
+			if ( className != null )
+			{
+				cf = "nvc" ;
+			}
+			else
+			{
+				String provisionalName = getProvisionalName(plotName);
+				if (provisionalName != null )
+				{
+					cf = "provisional";
+				}
+				else
+				{
+					cf = "";
+				}
+			}
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(cf);
 	}
 	
 	
@@ -963,8 +1012,29 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 		private String getClassifiedCommunityName(String plotName)
 		{
-			//is seems that this attribute is always null
-			return(null);
+			Statement stmt = null;
+			String name = null;
+			try
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Classified Community Name])  "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					name = rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch( Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+			return(name);
 		}
 
 
