@@ -1,0 +1,145 @@
+<!ENTITY % Boolean "(true | false) 'false'">
+
+<!-- JHH 2000  DTD which will be parsed into the vegplot database -->
+
+<!ELEMENT vegPlot (project)>
+
+
+<!ELEMENT project (projectName, projectDescription, plot, projectContributor)>
+<!ELEMENT projectName (#PCDATA)> 
+<!ELEMENT projectDescription (#PCDATA)>
+
+<!ELEMENT plot (plotId, authorPlotCode, parentPlot, plotType, samplingMethod, 
+	coverScale, plotOriginLat, plotOriginLong, plotShape, plotSize, 
+	plotSizeAcc, altValue, altPosAcc, slopeAspect, slopeGradient,
+	slopePosition, hydrologicRegime, soilDrainage, surfGeo, plotObservation, 
+	namedPlace, stand, graphic, plotContributor)>
+	
+	<!ELEMENT plotId (#PCDATA)>
+ 	<!ELEMENT authorPlotCode (#PCDATA)>
+	<!ELEMENT parentPlot (#PCDATA)>
+	<!ELEMENT plotType (#PCDATA)>
+	<!ELEMENT samplingMethod (#PCDATA)>
+	<!ELEMENT coverScale (#PCDATA)>
+	<!ELEMENT plotOriginLat (#PCDATA)>
+	<!ELEMENT plotOriginLong (#PCDATA)>
+	<!ELEMENT plotShape (#PCDATA)>
+	<!ELEMENT plotSize (#PCDATA)>
+	<!ELEMENT plotSizeAcc (#PCDATA)>
+	<!ELEMENT altValue (#PCDATA)>
+	<!ELEMENT altPosAcc (#PCDATA)>
+	<!ELEMENT slopeAspect (#PCDATA)>
+	<!ELEMENT slopeGradient (#PCDATA)>
+	<!ELEMENT slopePosition (#PCDATA)>
+	<!ELEMENT hydrologicRegime (#PCDATA)>
+	<!ELEMENT soilDrainage (#PCDATA)>
+	<!ELEMENT surfGeo (#PCDATA)>
+	<!ELEMENT state (#PCDATA)>
+	<!ELEMENT currentCommunity  (#PCDATA)>
+
+	<!ELEMENT plotObservation (parentPlot, previousObs, authorObsCode, plotStartDate, plotStopDate, 
+		dateAccuracy, effortLevel,  strata, taxonObservations, communityType, citation)>
+		<!ELEMENT parentPlot (#PCDATA)>
+		<!ELEMENT previousObs (#PCDATA)>
+		<!ELEMENT authorObsCode (#PCDATA)>
+		<!ELEMENT plotStartDate (#PCDATA)>
+		<!ELEMENT plotStopDate (#PCDATA)>
+		<!ELEMENT dateAccuracy (#PCDATA)>
+		<!ELEMENT effortLevel (#PCDATA)>
+		<!ELEMENT strata (stratumCover, stratumHeight)>
+			<!ELEMENT stratumCover (#PCDATA)>
+			<!ELEMENT stratumHeight (#PCDATA)>
+
+		<!--Because it was the attempt to keep the database normalized I have set up this dtd so that the same
+		 taxon can be represented more than once - it should be replicated every time there it occurs in a new stratum
+		-->	
+		<!ELEMENT taxonObservation (authNameId, originalAuthority, strataComposition, interptretation)>
+			<!ELEMENT authNameId (#PCDATA)>
+			<!ELEMENT originalAuthority (#PCDATA)>
+			<!ELEMENT strataComposition (strataType, percentCover)>
+				<!ELEMENT strataType (#PCDATA)>
+				<!ELEMENT percentCover (#PCDATA)>	
+
+			<!ELEMENT interpretation (party, taxonName, authority, usageStartDate, usageStopDate, circum_id, role, date, notes)>
+				<!ELEMENT party (#PCDATA)>
+				<!ELEMENT taxonName (#PCDATA)>
+				<!ELEMENT authority (#PCDATA)>
+				<!ELEMENT usageStartDate (#PCDATA)>
+				<!ELEMENT usageStopDate (#PCDATA)>
+				<!ELEMENT circum_id (#PCDATA)> 
+				<!ELEMENT role (#PCDATA)> 
+				<!ELEMENT date (#PCDATA)> 
+				<!ELEMENT notes (#PCDATA)> 
+	
+		<!ELEMENT communityAssignment (communityName, CEGLCode, startDate, stopDate)>
+			<!ELEMENT communityName (#PCDATA)>
+			<!ELEMENT CEGLCode (#PCDATA)>
+			<!ELEMENT strartDate (#PCDATA)>
+			<!ELEMENT stopDate (#PCDATA)>
+
+		<!ELEMENT citation (title, altTitle, pubDate, edition, editionDate, seriesName, 
+		issueIdentification, otherCredentials, 
+			page, isbn, issn,citationContributor)>
+			<!ELEMENT title (#PCDATA)>
+			<!ELEMENT altTitle (#PCDATA)>
+			<!ELEMENT pubDate (#PCDATA)>
+			<!ELEMENT edition (#PCDATA)>
+			<!ELEMENT editionDate (#PCDATA)>
+			<!ELEMENT seriesName (#PCDATA)>
+			<!ELEMENT issueIdentification (#PCDATA)>
+			<!ELEMENT otherCredentials (#PCDATA)>
+			<!ELEMENT page (#PCDATA)>
+			<!ELEMENT isbn (#PCDATA)>
+			<!ELEMENT issn (#PCDATA)>
+
+			<!ELEMENT citationContributor (role,party)>
+
+
+	<!ELEMENT namedPlace (placeName, placeDescription, gazeteerRef)>
+		<!ELEMENT placeName (#PCDATA)>
+		<!ELEMENT placeDescription (#PCDATA)>
+		<!ELEMENT gazeteerRef (#PCDATA)>
+
+	<!ELEMENT stand (standSize, standDescription, standName)>
+		<!ELEMENT standSize (#PCDATA)>
+		<!ELEMENT standDescription (#PCDATA)>
+		<!ELEMENT standName (#PCDATA)>
+
+	<!ELEMENT  graphic (browseName, browseDescription, browseType, browseData)>
+		<!ELEMENT browseName (#PCDATA)>
+		<!ELEMENT browseDescription (#PCDATA)>
+		<!ELEMENT browseType (#PCDATA)>
+		<!ELEMENT browseData (#PCDATA)>
+
+	<!ELEMENT  plotContributor (role,party)> 
+	
+<!-- Identification of the project contributor-->	
+	<!ELEMENT projectContributor (role, party)>
+	<!ELEMENT role (#PCDATA)>
+	<!ELEMENT party (salutation, givenName, surName, organizationName, 
+	positionName, hoursOfService, contactInstructions,  onlineResource, 
+	telephone, email, address)>
+		<!ELEMENT salutation (#PCDATA)>
+		<!ELEMENT givenName (#PCDATA)>
+		<!ELEMENT surName (#PCDATA)>
+		<!ELEMENT organizationName (#PCDATA)>
+		<!ELEMENT positionName (#PCDATA)>
+		<!ELEMENT hoursOfService (#PCDATA)>
+		<!ELEMENT contactInstructions (#PCDATA)>
+
+			<!ELEMENT telephone (phoneNumber, phoneType)>
+			<!ELEMENT phoneNumber (#PCDATA)>
+			<!ELEMENT phoneType (#PCDATA)>
+			
+			<!ELEMENT email (emailAddress)>
+			<!ELEMENT emailAddress (#PCDATA)>
+			
+			<!ELEMENT address (deliveryPoint, city, administrativeArea, 
+				postalCode, country, currentFlag)>
+			<!ELEMENT deliveryPoint (#PCDATA)>
+			<!ELEMENT city (#PCDATA)>
+			<!ELEMENT administrativeArea (#PCDATA)>
+			<!ELEMENT postalCode (#PCDATA)>
+			<!ELEMENT country (#PCDATA)>
+			<!ELEMENT currentFlag (#PCDATA)>
+
