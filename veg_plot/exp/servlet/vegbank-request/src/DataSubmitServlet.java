@@ -13,6 +13,7 @@ import databaseAccess.dbAccess;
 import databaseAccess.CommunityQueryStore;
 import databaseAccess.SqlFile;
 import servlet.util.ServletUtility;
+import DataSourceClient; //this is the rmi client for loading mdb files
 
 
 
@@ -31,12 +32,22 @@ public class DataSubmitServlet extends HttpServlet
 	private CommunityQueryStore qs;
 	private VegCommunityLoader commLoader = new VegCommunityLoader();
 	
+	private String rmiServer = "guest06.nceas.ucsb.edu";
+	private int rmiServerPort = 1099;
+	private DataSourceClient rmiClient;
+	
+	private String plotsArchiveFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/input.data";
+	private String plotsArchiveType = "tncplots";
+	
+	
 	/**
 	 * constructor method
 	 */
 	public DataSubmitServlet()
 	{
 		System.out.println("init: DataSubmitServlet");
+		//construct a new instance of the rmi client
+		rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 	}
 	
 	
@@ -80,6 +91,12 @@ public class DataSubmitServlet extends HttpServlet
 				StringBuffer sb = handleVegCommunityCorrelation(params, response);
 				out.println( sb.toString() );
 			}
+			else if ( submitDataType.trim().equals("vegPlot")  )
+			{
+				//out.println("DataSubmitServlet > action unknown!");
+				StringBuffer sb = handleVegPlotSubmittal(params, response);
+				out.println( sb.toString() );
+			}
 			else
 			{
 				out.println("DataSubmitServlet > action unknown!");
@@ -92,6 +109,53 @@ public class DataSubmitServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	}
+	
+		
+	/**
+	 * this method is used to handle the submittal of a vegplot
+	 * 
+	 */
+	 private StringBuffer handleVegPlotSubmittal(Hashtable params, 
+	 HttpServletResponse response)
+	{
+		StringBuffer sb = new StringBuffer();
+		try
+		{
+			String action = (String)params.get("action");
+			if ( action.equals("init") )
+			{
+				//check that the uer has valid priveleges to load a data 
+				//file to the database and if so give the use a window 
+				//to upload some data
+				
+				//make sure the correct parameters were passed and 
+				//authenticate the user
+				
+				//redirect the user to the data selection form to either
+				//upload or choose from a previosly uploaded file
+				response.sendRedirect("/forms/plot-upload.html");
+			}
+			
+			// if the action is upload that is basically ar referal 
+			// from the data exchange client after the file has been 
+			// upload
+			if ( action.equals("upload") )
+			{
+				//take the file that was just deposited via the data exchange servlet
+				//and pass it onto the winnt machine
+				boolean sendResults = rmiClient.putMDBFile(plotsArchiveFile, plotsArchiveType);
+			}
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("Exception:  " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(sb);
+	}
+		
+		
+	
 	
 	/**
 	 * this method is used to handle the coorrelation of communities
