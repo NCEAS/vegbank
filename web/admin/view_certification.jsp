@@ -1,36 +1,35 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
 <!-- 
-  *   '$Id: view_certification.jsp,v 1.9 2004-11-16 06:19:25 mlee Exp $ '
+  *   '$Id: view_certification.jsp,v 1.10 2005-03-15 12:36:19 mlee Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-11-16 06:19:25 $'
-  *  '$Revision: 1.9 $'
+  *      '$Date: 2005-03-15 12:36:19 $'
+  *  '$Revision: 1.10 $'
   *
   *
   -->
-<html>
-<HEAD>@defaultHeadToken@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+
 
 <TITLE>VegBank Certification Administration</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
-
-<meta http-equiv="Content-Type" content="text/html; charset=">
 
 
-</HEAD>
-<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005660" alink="#0066FF">
+
+
+
+
+@webpage_masthead_html@
+
 <a name="top"/>
 
-@vegbank_header_html_normal@
+
 
         <h2 align="center" class="vegbank">Certification Application: 
 			<i><bean:write name="certBean" property="surName"/></i>
@@ -444,6 +443,6 @@
   </table>
            
 
-@vegbank_footer_html_tworow@
-</BODY>
-</HTML>
+
+
+@webpage_footer_html@

@@ -1,20 +1,13 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-
 <!--
-*  '$Id: admin_menu.jsp,v 1.4 2004-04-26 20:49:43 anderson Exp $'
+*  '$Id: admin_menu.jsp,v 1.5 2005-03-15 12:36:18 mlee Exp $'
 *   Purpose: Home for admins
 *   Copyright: 2000 Regents of the University of California and the
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-04-26 20:49:43 $'
-*  '$Revision: 1.4 $'
+*  '$Author: mlee $'
+*  '$Date: 2005-03-15 12:36:18 $'
+*  '$Revision: 1.5 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -31,17 +24,19 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 -->
 
-<html>
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
 
-<head>@defaultHeadToken@
+
  
 <title>VegBank Admin Main Menu</title>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
+
  
-<meta http-equiv="content-type" content="text/html; charset=">
-</head>
+
+
 <body bgcolor="#ffffff" text="#531100" link="#0033cc" vlink="#005680" alink="#0066ff">
-@vegbank_header_html_normal@
+@webpage_masthead_html@
  
 <blockquote> 
   <h2 align="center"><br/>
@@ -64,6 +59,6 @@
 </blockquote>
 
 <br/>
-@vegbank_footer_html_tworow@
-</body>
-</html>
+
+
+@webpage_footer_html@
