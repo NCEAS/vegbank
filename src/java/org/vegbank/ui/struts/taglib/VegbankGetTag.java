@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-09 00:58:44 $'
- *	'$Revision: 1.17 $'
+ *	'$Date: 2004-12-13 06:44:34 $'
+ *	'$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,13 +51,14 @@ import org.apache.struts.taglib.bean.WriteTag;
 import org.vegbank.common.command.GenericCommand;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.CompositeRequestParamUtil;
+import org.vegbank.common.utility.DatabaseUtility;
 
 /**
  * Tag that queries the DB and puts a map or bean in the 
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.17 $ $Date: 2004-12-09 00:58:44 $
+ * @version $Revision: 1.18 $ $Date: 2004-12-13 06:44:34 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -162,7 +163,8 @@ public class VegbankGetTag extends VegbankTag {
 
 					if (Utility.isStringNullOrEmpty(where)) {
 						// still null, set default non-numeric
-						where = "where_ac";
+						where = "where_accessioncode";
+						////////where = "where_ac";  // this one uses IN ({0})
 						log.debug("was null so is now: " + where);
 					}
 				}
@@ -275,12 +277,12 @@ public class VegbankGetTag extends VegbankTag {
 			// check for xwhere
 			if (getXwhereEnable()) {
 				arr = new String[2];
-				arr[0] = getWparam();
+				arr[0] = DatabaseUtility.makeSQLSafe(getWparam(), false);
 				arr[1] = getXwhereClause();
 				log.debug(this.select + " has 1 WPARAM + XWHERE");
 			} else {
 				arr = new String[1];
-				arr[0] = getWparam();
+				arr[0] = DatabaseUtility.makeSQLSafe(getWparam(), false);
 				log.debug(this.select + " has 1 WPARAM");
 			}
 
@@ -291,7 +293,8 @@ public class VegbankGetTag extends VegbankTag {
 		arr = findAttributeArray("wparam", null);
 		if (arr != null) {
 			for (int i=0; i<arr.length; i++) {
-				arr[i] = stripSingleQuotes(arr[i]);
+				///////////arr[i] = stripSingleQuotes(arr[i]);
+				arr[i] = DatabaseUtility.makeSQLSafe(arr[i], false);
 			}
 		}
 
