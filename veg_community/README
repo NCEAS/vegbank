@@ -1,0 +1,26 @@
+This directory contains the tools to create and load the 
+vegetation community database.  These tools include the 
+sql schemas to create the database and the lodaders which 
+will directly load the database from the ecoart MDB file 
+must be on a win machine.  There are also dtd's and 
+stylesheets which can be used for creating html documentation 
+from the community data.  The tagetes for the ant build file
+are:
+
+Default target:
+
+ compile   ==> compiles the community loaders
+
+Main targets:
+
+ compile   ==> compiles the community loaders
+ dist      ==> copies the jar file to the lib directory
+ dist-web  ==> copies the jar files to the webdir
+ dist-xml  ==> copies the xml resources (dtd's and stylesheets to the webdirectory
+ jar       ==> creates the jar archive
+ prepare   ==> prepares the project
+
+Subtargets:
+
+ init
+

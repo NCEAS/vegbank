@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: harris $'
-  *     '$Date: 2002-03-09 00:28:46 $'
-  * '$Revision: 1.1 $'
+  *     '$Date: 2002-09-05 14:34:01 $'
+  * '$Revision: 1.2 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -35,16 +35,14 @@
 	<property name="build" value="./build" />
 	<property name="src" value="src" />
 	<property name="lib" value="./lib" />
-	
-
-
+	<property name="xml_dir" value="./xml"/>
 	<property name="jdbc" value="../lib/jdbc7.0-1.2.jar" />
 	<property name="cpath" value="${jdbc}:${build}:./"/>
 	
 </target>
 
 <!-- PREPARE -->
-<target name="prepare" depends="init">
+<target name="prepare" depends="init" description="==> prepares the project">
 	<mkdir dir="${build}" />
 	
 	<copydir src="${src}" 
@@ -56,7 +54,7 @@
 </target>	
 	
 	<!-- COMPILE -->
-<target name="compile" depends="prepare">
+<target name="compile" depends="prepare"  description="==> compiles the community loaders">
 	<javac srcdir="${build}" 
 		classpath="${cpath}"
 		includes="  VegCommunityLoader.java EcoartVegCommunitySource.java" 
@@ -66,7 +64,7 @@
 </target>	
 
 <!-- JAR -->	
-<target name="jar" depends="compile">
+<target name="jar" depends="compile" description="==> creates the jar archive" >
 	<jar jarfile ="${lib}/vegcommunity.jar"
 		basedir="${build}"
 		includes="**"
@@ -75,7 +73,7 @@
 
 
 <!-- DIST -->	
-<target name="dist" depends="jar">
+<target name="dist" depends="jar" description="==> copies the jar file to the lib directory">
 	<!-- JAR LIBRARIES INCL: xml parsers/xformers, jdbc drivers, db access, servlet-->
 	<copydir src="${build}" 
   	dest="${lib}" 
@@ -88,18 +86,28 @@
 </target>
 
 <!-- DISTWEB  -->	
-<target name="dist-web" depends="dist">
+<target name="dist-web" depends="dist" description="==> copies the jar files to the webdir">
 	<echo>
 			copying jar to web server: ${servlet_lib}
 	</echo>
-
-
 	<copyfile src="${lib}/vegcommunity.jar" 
 			filtering="no" 
 			dest="${servlet_lib}/vegcommunity.jar" 
 	/>
-
 </target>		
+
+<!-- DISTXML  -->	
+<target name="dist-xml" depends="init" description="==> copies the xml resources (dtd'd and stylesheets to the webdirectory" >
+	<echo>
+			copying xml resources from ${xml_dir} to web server: ${servlet_lib}
+	</echo>
+	<copyfile src="${xml_dir}/showCommunitySummary.xsl" 
+			filtering="no" 
+			dest="${servlet_lib}/showCommunitySummary.xsl" 
+	/>
+</target>		
+
+
 
 
 </project>
