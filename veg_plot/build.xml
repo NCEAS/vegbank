@@ -5,9 +5,9 @@
   * Global build script for veg_plot. This simply allows running all the sub 
   * scripts from one place 
   *
-  *     '$Author: harris $'
-  *     '$Date: 2003-01-06 16:43:31 $'
-  *     '$Revision: 1.7 $'
+  *     '$Author: farrell $'
+  *     '$Date: 2003-01-08 02:05:57 $'
+  *     '$Revision: 1.8 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -19,6 +19,7 @@
   <target name="init" description="Initialize global variables">
     <property environment="env" />
     <property name="build.dir" value="${basedir}/build" />
+    <property name="lib.dir" value="${basedir}/lib" />
     <property name="doc.dir" value="${basedir}/doc"/>
     <property name="build.test.dir" value="${build.dir}/test"/>
     <property name="build.test.integration.dir"
@@ -35,6 +36,16 @@
     <property name="web.docroot" value="${env.TOMCAT_HOME}/webapps" /> 
     <property name="web.servlet.lib.dir"
       value="${web.docroot}/framework/WEB-INF/lib" /> 
+    <property name="xmlp" value="${lib.dir}/xalan_1_2_2.jar:${lib.dir}/xerces_1_3_1.jar:${lib.dir}/xml-apis.jar" />
+    <property name="jdbc" value="${lib.dir}/jdbc7.0-1.2.jar" />
+    <property name="xmlresource" value="${build.lib.dir}/xmlresource.jar" />
+    <property name="datatranslator" value="${build.lib.dir}/datatranslator.jar" />
+    <property name="servletutil" value="${build.lib.dir}/utilities.jar" />
+    <property name="planttaxonomy" value="${build.lib.dir}/planttaxonomy.jar" />
+    <property name="databaseAccess" value="${build.lib.dir}/database_access.jar" />
+    <property name="cpath" 
+      value="${planttaxonomy}:${databaseAccess}:${servletutil}:${datatranslator}:${xmlresource}:${xmlp}:${jdbc}:${build.class.dir}"/>
+
 
     <filter token="reports.test.dir" value="${reports.test.dir}"/>
     <filter token="outputXML" value="${web.servlet.lib.dir}/atomicResult"/>
@@ -203,10 +214,13 @@
       <fileset dir="${test.integration.dir}">
         <include name="*sh"/>
         <include name="*xsl"/>
+        <include name="*sql"/>
       </fileset>
     </copy>
     
-    <exec executable="${build.test.integration.dir}/LoadPlotTest.sh"/>
+    <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
+      <env key="CLASSPATH" value="${cpath}"/>
+    </exec>
   
   </target>
 </project>
