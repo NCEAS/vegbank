@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-11 00:29:49 $'
- *	'$Revision: 1.15 $'
+ *	'$Date: 2005-02-16 20:16:39 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@ package org.vegbank.common.utility;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,7 +38,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.ArrayList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -52,10 +51,10 @@ public class AccessionGen {
 
 	private static Log log = LogFactory.getLog(AccessionGen.class);
 
-	private Connection conn = null;
+	private DBConnection conn = null;
 	private static ResourceBundle res = null;
 
-	private HashMap tableCodes;
+	private Map tableCodes;
 	private String dbCode;
 	private boolean overwriteExtant;
 
@@ -65,7 +64,7 @@ public class AccessionGen {
         setDbCode(null);
 	}
 	
-	public AccessionGen(Connection dbconn) {
+	public AccessionGen(DBConnection dbconn) {
 		init();
 		this.conn = dbconn;
         dbCode = Utility.getAccessionPrefix();
@@ -76,7 +75,7 @@ public class AccessionGen {
 	 * not being initialized.
 	 * Allowing it to be passed in via the constructor if need be. * 
 	 */
-	public AccessionGen( Connection dbconn, String dbCode) {
+	public AccessionGen( DBConnection dbconn, String dbCode) {
 		init();
 		this.conn = dbconn;
 		this.dbCode = dbCode;
@@ -92,7 +91,8 @@ public class AccessionGen {
 		for (Enumeration e = res.getKeys(); e.hasMoreElements() ;) {
 			key = (String)e.nextElement();
 			if (key.startsWith("abbr.")) {
-				tableCodes.put(key.substring(5), res.getString(key));
+				tableCodes.put(key.substring(5).toLowerCase(), 
+                        res.getString(key));
 			}
 		}
 
@@ -145,7 +145,7 @@ public class AccessionGen {
 		    .append(pk).append(".")
             .append(formatConfirmCode(unformattedConf));
 
-		return accCode.toString();
+		return accCode.toString().toUpperCase();
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class AccessionGen {
 			if (tmpConfirm == null) {
 				tmpConfirm = rs.getString(3);
 			}
-			log.debug("generated accession code: " + formatConfirmCode(tmpConfirm));
+			//log.debug("generated accession code: " + formatConfirmCode(tmpConfirm));
 			return formatConfirmCode(tmpConfirm);
 		}
 
@@ -203,8 +203,22 @@ public class AccessionGen {
 	 * Given a full table name, returns table code (abbreviation).
 	 */
 	public String getTableCode(String tableName) {
-		return (String)tableCodes.get(tableName);
+        if (Utility.isStringNullOrEmpty(tableName)) { return null; }
+
+		return (String)tableCodes.get(tableName.toLowerCase());
 	}
+
+
+    /**
+     * Tests if a given table is configured to have an accession code.
+     * @param tableName
+     * @return true if given table has an accession code
+     */
+    public boolean hasAccessionCode(String tableName) {
+        if (Utility.isStringNullOrEmpty(tableName)) { return false; }
+
+		return (getTableCode(tableName) != null);
+    }
 
 
 	/**
@@ -250,8 +264,11 @@ public class AccessionGen {
 		this.overwriteExtant = overwriteExtant;
 
 		try {
-			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection(dbURL, "datauser", "");			
+            if (conn == null) {
+                Class.forName("org.postgresql.Driver");
+                conn = new DBConnection();
+                conn.setConnections(DriverManager.getConnection(dbURL, "datauser", ""));
+            }
 
 			//countRecords();
 
@@ -381,53 +398,47 @@ public class AccessionGen {
 	/**
 	 * Utility that updates a discrete set of rows with AccessionCodes.
 	 * It takes a HashMap of tableNames.
-	 * Each tableName is associated with a Vector of primary  keys for the 
+	 * Each tableName is associated with a List of primary keys for the 
 	 * specific rows to be updated with newly generated AccessionCodes.
 	 * 
 	 * @param tablesAndKeys
 	 * @return List of AccessionCodes for root entities
 	 * @throws SQLException
 	 */
-	public List updateSpecificRows(HashMap tablesAndKeys) throws SQLException
+	public List updateSpecificRows(Map tablesAndKeys) throws SQLException
 	{
+
 		String tableName;
-		List accessionCodeList = new Vector();
+		List accessionCodeList = new ArrayList();
 
 		Iterator it = tablesAndKeys.keySet().iterator();
 		while (it.hasNext()) {
-			tableName = ((String)it.next()).toLowerCase();
+			tableName = (String)it.next();
 	
 			// Only deal with tableNames that are defined in the property file
 			// i.e. filter junk and tables without accessionCode rules
-			Iterator tcodesIt = tableCodes.keySet().iterator();
-			while ( tcodesIt.hasNext() )
-			{
-				String supportedTableName = (String) tcodesIt.next();
-				
-				// Is this a supported table ?
-				if ( supportedTableName.equalsIgnoreCase(tableName) )
-				{
-					Vector keys = (Vector) tablesAndKeys.get(tableName);
-			
-					if ( keys != null && !keys.isEmpty() )
-					{
-						// Add an AccessionCode for each Key
-						PreparedStatement pstmt = this.getUpdatePreparedStatement(tableName);
-				
-						for ( int i=0; i<keys.size(); i++ )
-						{
-							Long key = (Long) keys.elementAt(i);
-							String baseAC = this.getBaseAccessionCode(tableName);
-							String confirmCode = getConfirmation(tableName, key.toString());
-					
-							String accessionCode = this.updateRowAC(key.longValue(), baseAC, confirmCode, pstmt);
-							log.debug("Set accessionCode for PK: " + key + " on " + tableName);
-							accessionCodeList.add(accessionCode);
-						}
-					} else {
-                        log.debug("but there are no PKs given to update " + tableName);
+            // Loop through all so that cases match
+            if (hasAccessionCode(tableName)) {
+
+                List keys = (List)tablesAndKeys.get(tableName);
+        
+                if (keys != null) {
+                    // Add an AccessionCode for each Key
+                    PreparedStatement pstmt = this.getUpdatePreparedStatement(tableName);
+            
+                    Iterator kit = keys.iterator();
+                    while (kit.hasNext()) {
+                        Long key = (Long)kit.next();
+                        String baseAC = this.getBaseAccessionCode(tableName);
+                        String confirmCode = getConfirmation(tableName, key.toString());
+                
+                        String accessionCode = this.updateRowAC(key.longValue(), baseAC, confirmCode, pstmt);
+                        log.debug("updated accessionCode: " + accessionCode);
+                        accessionCodeList.add(accessionCode);
                     }
-				}
+                } else {
+                    log.debug("no keys on which to gen ACs for table: " + tableName);
+                }
 			}
 		}
 		return accessionCodeList;
@@ -450,6 +461,9 @@ public class AccessionGen {
 
 	private PreparedStatement getUpdatePreparedStatement(String tableName) throws SQLException
 	{
+        if (Utility.isStringNullOrEmpty(tableName)) { return null; }
+        tableName = tableName.toLowerCase();
+
 		// prepare the update statement
 		String pKName = Utility.getPKNameFromTableName(tableName);
 		
@@ -469,7 +483,7 @@ public class AccessionGen {
 	{
 		String baseAC;
 		// table -- do case insensitive lookup
-		String tableCode = (String)tableCodes.get( tableName.toLowerCase() );
+		String tableCode = getTableCode(tableName);
 		if (tableCode == null) {
 			tableCode = "??";
 		}
@@ -547,7 +561,7 @@ public class AccessionGen {
 		System.out.println("SQL: " + sql);
 	}
 
-    public void setDbConnection(Connection conn) {
+    public void setDbConnection(DBConnection conn) {
         this.conn = conn;
     }
 
