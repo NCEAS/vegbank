@@ -23,7 +23,7 @@ VegBank - Advanced Plot Query
 		 
 	    </p>
     <!-- ERROR DISPLAY -->
-    <p class="errors">
+    <p class="error">
 	<html:errors/>
       </p>
     
