@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2004-03-02 23:55:01 $'
-* '$Revision: 1.92 $'
+* '$Author: mlee $'
+* '$Date: 2004-03-03 19:15:33 $'
+* '$Revision: 1.93 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -32,7 +32,7 @@
 		* Below are the basic propoerties and tokens for
 		* building the vegbank web site
 	-->
-    <condition property="webapp" value="vegtest">
+    <condition property="webapp" value="vegbank">
       <not>
         <isset property="webapp"/>
       </not>
