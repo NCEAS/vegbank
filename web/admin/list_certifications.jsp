@@ -5,15 +5,15 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!-- 
-  *   '$Id: list_certifications.jsp,v 1.5 2004-11-16 04:51:22 mlee Exp $ '
+  *   '$Id: list_certifications.jsp,v 1.6 2004-11-16 05:07:02 mlee Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-11-16 04:51:22 $'
-  *  '$Revision: 1.5 $'
+  *      '$Date: 2004-11-16 05:07:02 $'
+  *  '$Revision: 1.6 $'
   *
   *
   -->
@@ -27,7 +27,7 @@
 
 
 </HEAD>
-<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005660" alink="#0066FF">
+<BODY>
 
 @vegbank_header_html_normal@
 
@@ -55,10 +55,10 @@
 	<bean:define id="sortbyStatus" value="certificationstatus"/>
 
     <tr> 
-      <th><html:link styleClass="headerLink" action="ListCertifications" paramId="sortby" paramName="sortbyId">Applicant</html:link></th>
+      <th><html:link action="ListCertifications" paramId="sortby" paramName="sortbyId">Applicant</html:link></th>
       <th>Permissions at Time of Submission</th>
-      <th><html:link styleClass="headerLink" action="ListCertifications" paramId="sortby" paramName="sortbyReq">Requested Permission</html:link></th>
-      <th><html:link styleClass="headerLink" action="ListCertifications" paramId="sortby" paramName="sortbyStatus">Status</html:link></th>
+      <th><html:link  action="ListCertifications" paramId="sortby" paramName="sortbyReq">Requested Permission</html:link></th>
+      <th><html:link  action="ListCertifications" paramId="sortby" paramName="sortbyStatus">Status</html:link></th>
       <th><b>ACTION</b></th>
 	</tr>
 
