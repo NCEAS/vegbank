@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-10-09 00:54:32 $'
-*  '$Revision: 1.1 $'
+*  '$Date: 2004-10-10 21:18:55 $'
+*  '$Revision: 1.2 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,11 @@
 
 <logic:iterate id="onerowofobservation" name="BEANLIST"><!-- iterate over all records in set : new table for each -->
 <bean:define id="onerowofplot" name="onerowofobservation" />
+
+
+<bean:define id="observation_pk" name="onerowofplot" property="observation_id"/>
+<bean:define id="plot_pk" name="onerowofplot" property="plot_id"/>
+
 <!-- start of plot & obs fields-->
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="2">
 <TR><TD width="55%" valign="top"><!-- plot level info -->
@@ -86,6 +91,9 @@
 
 <%@ include file="autogen/plot_plotloclong_data.jsp" %>
 <%@ include file="autogen/observation_plotloclong_data.jsp" %>
+
+
+<%@ include file="includeviews/sub_place.jsp" %>
 
 
 <%@ include file="includeviews/sub_haddata.jsp" %>
@@ -139,9 +147,6 @@
 </table>
 
 
-<bean:define id="observation_pk" name="onerowofplot" property="observation_id"/>
-
-
 </TD><TD valign="top"><!-- plants in this plot -->
 
 <%@ include file="includeviews/sub_taxonobservation.jsp" %>
@@ -160,15 +165,13 @@
 <%@ include file="includeviews/sub_commclass_summary.jsp" %>
 
 
-<br/><br/>
-<vegbank:get id="soilobs" select="soilobs" beanName="map" pager="false" where="where_observation_pk" wparam="observation_pk" perPage="-1" />
-<table class="leftrightborders" cellpadding="2">
 
-<tr><th colspan="19">Soil Observations:</th></tr>
-<logic:empty name="soilobs-BEANLIST">
-<tr><td class="@nextcolorclass@">  Sorry, no Soil Observations found.</td></tr>
-</logic:empty>
+<vegbank:get id="soilobs" select="soilobs" beanName="map" pager="false" where="where_observation_pk" wparam="observation_pk" perPage="-1" />
+
 <logic:notEmpty name="soilobs-BEANLIST">
+<br/><br/>
+<table class="leftrightborders" cellpadding="2">
+<tr><th colspan="19">Soil Observations:</th></tr>
 <tr>
 <%@ include file="autogen/soilobs_summary_head.jsp" %>
 </tr>
@@ -177,16 +180,17 @@
 <%@ include file="autogen/soilobs_summary_data.jsp" %>
 </tr>
 </logic:iterate>
-</logic:notEmpty>
 </table>
-<br/><br/>
+
+</logic:notEmpty>
+
+
 <vegbank:get id="disturbanceobs" select="disturbanceobs" beanName="map" pager="false" where="where_observation_pk" wparam="observation_pk" perPage="-1" />
+<logic:notEmpty name="disturbanceobs-BEANLIST">
+<br/><br/>
 <table class="leftrightborders" cellpadding="2">
 <tr><th colspan="9">Disturbance Data:</th></tr>
-<logic:empty name="disturbanceobs-BEANLIST">
-<tr><td class="@nextcolorclass@">  Sorry, no Disturbance Data found.</td></tr>
-</logic:empty>
-<logic:notEmpty name="disturbanceobs-BEANLIST">
+
 <tr>
 <%@ include file="autogen/disturbanceobs_summary_head.jsp" %>
 </tr>
@@ -195,8 +199,9 @@
 <%@ include file="autogen/disturbanceobs_summary_data.jsp" %>
 </tr>
 </logic:iterate>
-</logic:notEmpty>
 </table>
+</logic:notEmpty>
+
 
 </TD>
 
