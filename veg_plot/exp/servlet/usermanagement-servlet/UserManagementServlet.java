@@ -48,42 +48,31 @@ public class UserManagementServlet extends HttpServlet
 				
 				//the cookie value is the same as the user name and email addy
 				cookieValue = getCookieValue(req);
+				String action = getAction( params );
+				if (action == null)
+				{
+					System.out.println("UserManagementServlet > action parameter required: ");
+				}
 				
-				//copy the actions file and then displat to the browser
-				String actionFile = "/usr/local/devtools/jakarta-tomcat/webapps/forms/actions.html";
-				String outFile ="/tmp/actions.html";
-				String token = "user";
-				String value = cookieValue;
-				util.filterTokenFile(actionFile, outFile, token, value);
-				String s = util.fileToString(outFile);
-				out.println(s);
-				
-/*				
-				out.println("<html> \n");
-				out.println("<head> \n");
-				out.println("<body class=\"BODY\" >");
-				out.println("<title> Database User Manager: "+ cookieValue+" </title> \n");
-				out.println("<link rel=\"STYLESHEET\" href=\"http://numericsolutions.com/includes/default.css\" type=\"text/css\">");
-				
-				//get the java-script functions into the html here -- later remove this
-				//and add a link to an external js file
-				out.println( getJavaScriptFunctions() );
-				out.println("</head> \n");
-				
-				//out.println("<br class=\"category\"> Welcome Vegbank User: " + cookieValue +"<br> \n");
-				out.println( getNavigationHeader() );
-				
-				//this is the table that has all the registered queries
-				out.println( getUserRegisteredQuerySummary(cookieValue) );
-				
-				//some space
-				out.println("<br> <br>");
-				
-				//out.println("<br> you have uploaded "+getUserRegisteredFileNum(cookieValue)+"files registered on the server <br>");
-				out.println( getUserRegisteredFileSummary(cookieValue) );
-				out.println("</body>");
-				out.println("</html>");
-*/	
+				if ( action.equals("options") )
+				{
+					//copy the actions file and then displat to the browser
+					String actionFile = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/actions.html";
+					String outFile ="/tmp/actions.html";
+					String token = "user";
+					String value = cookieValue;
+					util.filterTokenFile(actionFile, outFile, token, value);
+					String s = util.fileToString(outFile);
+					out.println(s);
+				}
+				else if ( action.equals("showfiles") )
+				{
+					this.showUserFiles(req, res, out);
+				}
+				else
+				{
+					System.out.println("UserManagementServlet > unrecognized action: " + action);
+				}
 		}
 			catch (Exception e)
 			{
@@ -91,6 +80,30 @@ public class UserManagementServlet extends HttpServlet
 				e.printStackTrace();
 			}
 		}
+	
+		
+	/**
+	 * method that returns the desired action requested by the user
+	 *
+	 * @param params - hashtable with all the servlet parameters
+	 *
+	 */
+	 private String getAction(Hashtable params)
+	 {
+		 String s = null;
+		 try
+		 {
+		 	s=(String)params.get("action");
+		 }
+		 catch(Exception e)
+		 {
+			 System.out.println("Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		  return(s);
+	 }
+
+	
 	
 	/**
 	 * method to show the user the files that they
