@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: anderson $'
- *   '$Date: 2003-11-09 00:12:02 $'
- *   '$Revision: 1.12 $'
+ *   '$Date: 2003-11-10 19:18:56 $'
+ *   '$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -717,11 +717,9 @@ public class UserManagementServlet extends HttpServlet
 			 // send email message to the user 
 			 String mailHost = "nceas.ucsb.edu";
 			 String from = "vegbank";
-String to = "anderson@nceas.ucsb.edu";
-String cc = "";
-//String to = vegBankAdmin;
-//String cc = "dba@vegbank.org";
-			 String subject = "VEGBANK CERTIFICATION REQUEST";
+			 String to = vegBankAdmin;
+			 String cc = "panel@vegbank.org";
+			 String subject = "VegBank Certification for " + givenName + " " + surName;
 			 String body = messageBody.toString();
 			 util.sendHTMLEmail(mailHost, from, to, cc, subject, body);
 			
