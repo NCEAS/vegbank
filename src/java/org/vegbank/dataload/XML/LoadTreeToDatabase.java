@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-16 20:19:03 $'
- *	'$Revision: 1.18 $'
+ *	'$Date: 2005-03-11 01:52:10 $'
+ *	'$Revision: 1.19 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -315,6 +315,9 @@ public class LoadTreeToDatabase
         } catch (Exception ex) {
             log.error("problem sending dataload receipt via email: " + ex.getMessage());
         }
+
+
+        runDenorms();
 		
 		//Return dbconnection to pool
 		DBConnectionPool.returnDBConnection(writeConn);
@@ -1197,7 +1200,7 @@ public class LoadTreeToDatabase
 	}
 
 	/**
-	 * Party, PlantParty and CommParty are very similar.
+     * PlantParty and CommParty are obsolete.
 	 * This method does shared functions need for insertion.
 	 * 
 	 * @param party
@@ -1554,13 +1557,12 @@ public class LoadTreeToDatabase
         //log.debug("**** attempting to insert a stratumType: ");
         //Utility.prettyPrintHash(stratumType);
         Hashtable dup = (Hashtable)stratumType.clone();
-        dup.remove(Stratumtype.PKNAME);
-        dup.remove(Stratumtype.STRATUMNAME);
-        dup.remove(Stratumtype.STRATUMDESCRIPTION);
+        String pk = (String)dup.remove(Stratumtype.PKNAME);
+        String name = (String)dup.remove(Stratumtype.STRATUMNAME);
+        String desc = (String)dup.remove(Stratumtype.STRATUMDESCRIPTION);
 
 	    pKey = findDuplicateRecord("stratumType", dup);
 	    if (pKey == 0) {
-            log.debug("tableExists() did NOT find stratumType, so inserting...");
 		    pKey = insertTable("stratumType", stratumType);
         }
 
@@ -1777,8 +1779,8 @@ public class LoadTreeToDatabase
 		}
 	    log.debug("########## INSERTING NEW PLANT CONCEPT");
 		
-	    log.debug("pc: ");
-		Utility.prettyPrintHash(plantConcept);
+	    //log.debug("pc: ");
+		//Utility.prettyPrintHash(plantConcept);
 		
 		// TODO: depends on PlantName
 		Hashtable plantName = this.getFKChildTable(plantConcept, Plantconcept.PLANTNAME_ID, "plantName");
@@ -1903,12 +1905,12 @@ public class LoadTreeToDatabase
 		Hashtable commParent = this.getFKChildTable(commStatus, Commstatus.COMMPARENT_ID, "commConcept");
 		long commParentId = insertCommConcept(commParent); // recursive
 	
-		// Add commParty
-		Hashtable commParty = this.getFKChildTable(commStatus, Commstatus.PARTY_ID, "party");
-		long commPartyId = insertCommParty(commParty);
+		// Add party
+		Hashtable party = this.getFKChildTable(commStatus, Commstatus.PARTY_ID, "party");
+		long partyId = insertParty(party);
 		
 		addForeignKey(commStatus, Commstatus.COMMPARENT_ID, commParentId);
-		addForeignKey(commStatus, Commstatus.PARTY_ID, commPartyId);
+		addForeignKey(commStatus, Commstatus.PARTY_ID, partyId);
 		
 		pKey = this.insertTable("commStatus", commStatus);
 		
@@ -1951,12 +1953,12 @@ public class LoadTreeToDatabase
 		Hashtable commName = this.getFKChildTable(commUsage, Commusage.COMMNAME_ID, "commName");
 		long commNameId = insertTable("commName", commName);
 		
-		// Add commParty
-		Hashtable commParty = this.getFKChildTable(commUsage, Commusage.PARTY_ID, "party");
-		long commPartyId = insertCommParty(commParty);
+		// Add party
+		Hashtable party = this.getFKChildTable(commUsage, Commusage.PARTY_ID, "party");
+		long partyId = insertParty(party);
 		
 		addForeignKey(commUsage,  Commusage.COMMNAME_ID, commNameId);
-		addForeignKey(commUsage, Commusage.PARTY_ID, commPartyId);
+		addForeignKey(commUsage, Commusage.PARTY_ID, partyId);
 		
 		pKey =insertTable( "commUsage", commUsage);
 	}
@@ -1965,6 +1967,7 @@ public class LoadTreeToDatabase
 	 * @param commParty
 	 * @return
 	 */
+    /*
 	private long insertCommParty(Hashtable commParty) throws SQLException
 	{
 		long pKey = 0;
@@ -1983,6 +1986,7 @@ public class LoadTreeToDatabase
 		
 		return pKey;
 	}
+    */
 
 	private long insertPlantUsage(Hashtable plantUsage) throws SQLException
 	{
@@ -2256,5 +2260,36 @@ public class LoadTreeToDatabase
         return dsAC;
     }
 
+
+    private void runDenorms() {
+
+        try {
+            String psqlPath = Utility.dbPropFile.getString("psqlPath");
+            String user = Utility.dbPropFile.getString("user");
+            String pwd = Utility.dbPropFile.getString("password");
+            String dbName = Utility.dbPropFile.getString("databaseName");
+            String vbHomeDir = Utility.VB_HOME_DIR;
+            String sqlScriptName = "denorm-nullsonly.sql";
+
+            if (!psqlPath.endsWith(File.separator)) { psqlPath += File.separator; }
+
+            if (!vbHomeDir.endsWith(File.separator)) { vbHomeDir += File.separator; }
+
+            String cmd = psqlPath + " -U " + user;
+
+            /* not using password for now
+            if (!Utility.isStringNullOrEmpty(pwd)) {
+                cmd += " -p " + pwd;
+            } */
+
+            cmd += " -f " + vbHomeDir + "sql/" + sqlScriptName + " " + dbName;
+
+            log.debug("executing denorm sql script: " + cmd);
+            Runtime.getRuntime().exec(cmd);
+
+        } catch (Exception ex) {
+            log.error("Problem running denormalizations", ex);
+        }
+    }
 
 }

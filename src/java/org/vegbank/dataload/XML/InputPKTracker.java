@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-01-29 01:06:54 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2005-03-11 01:52:10 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,6 +57,8 @@ public class InputPKTracker
 			if ( tempdbPK != null && tempdbPK instanceof Long )
 			{
 				dbPK = ((Long)tempdbPK).longValue();
+                //log.debug("Using previous instance of " + xmlPK + " in " + tableName + 
+                //       ", which has DB PK " + dbPK);
 			}
 		}
 		return dbPK;

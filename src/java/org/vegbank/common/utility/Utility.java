@@ -30,8 +30,8 @@ import org.vegbank.common.utility.mail.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2005-02-16 20:14:22 $'
- * '$Revision: 1.44 $'
+ * '$Date: 2005-03-11 01:52:10 $'
+ * '$Revision: 1.45 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,6 +67,7 @@ public class Utility
 
 	// Bundle:  vegbank
 	public static ResourceBundle vegbankPropFile;
+	public static ResourceBundle dbPropFile;
 	public static String SMTP_SERVER;
 	public static String SMTP_PORT;
 	public static String VEGBANK_SCHEMA_LOCATION;
@@ -87,8 +88,9 @@ public class Utility
 
 
 	static { try {
-		// Bundle:  database
-		DATABASE_NAME = ResourceBundle.getBundle("database").getString("databaseName");
+		// Bundle:  database; used elsewhere (e.g. dataload)
+		dbPropFile = ResourceBundle.getBundle("database");
+		DATABASE_NAME = dbPropFile.getString("databaseName");
 
 		// Bundle:  general
 		AUTO_APPEND_WILDCARD = false;
