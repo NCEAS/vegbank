@@ -14,9 +14,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: farrell $'
-*      '$Date: 2003-10-10 23:41:10 $'
-*  '$Revision: 1.10 $'
+*    '$Author: mlee $'
+*      '$Date: 2003-10-23 17:28:46 $'
+*  '$Revision: 1.11 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -93,7 +93,7 @@ VEGBANK - Simple Plots Query
 	      Each section allows querying of different types of attributes.  Leave
 	      fields blank to ignore these fields in the query.  Make sure you select whether the query
 	      should match ALL or ANY criteria you specify at the <a href="#typeOfQuery">end of this form</a>. <br />
-	      For more instructions for this form, <a href="#instructions">click here</a>.
+	      For more instructions for this form, find <a href="@help-for-plot-query-href@">help here</a>.
 	      </b>
 
 	      </font> 
@@ -729,7 +729,7 @@ VEGBANK - Simple Plots Query
 	      <td>
 	      </td>
 	      <td class="itemsmall">
-		      <b>index of taxon names currently in the DB - by scientific	name:</b> <br>
+		<!--      <b>index of taxon names currently in the DB - by scientific	name:</b> <br>
       		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=A%25">A</a><b>&middot;</b>
       		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=B%25">B</a><b>&middot;</b>
       		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=C%25">C</a><b>&middot;</b>
@@ -755,7 +755,7 @@ VEGBANK - Simple Plots Query
       		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=W%25">W</a><b>&middot;</b>
       		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=X%25">X</a><b>&middot;</b>
       		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=Y%25">Y</a><b>&middot;</b>
-      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=Z%25">Z</a><b>&middot;</b>
+      		<a target="_blank" href="/vegbank/servlet/DataRequestServlet?requestDataType=plantTaxon&amp;requestDataFormatType=html&amp;clientType=browser&amp;taxonNameType=&amp;taxonLevel=&amp;targetDate=&amp;party=&amp;taxonName=Z%25">Z</a><b>&middot;</b>-->
       </td>
     </tr>
   </table>
@@ -764,7 +764,7 @@ VEGBANK - Simple Plots Query
   <tr bgcolor="#DDDDDD">
 
     <th rowspan="2"><p><span class="item">Row</span></p></th>
-    <th rowspan="2"><p><span  class="category">Plant Name</span></p></th>
+    <th rowspan="2"><p><span  class="category">Plant Name <a target="_blank" href="/vegbank/forms/plant-query.html">search</a></span></p></th>
     <th colspan="2"><p><span class="category">Cover (%)</span></p></th>
 
     <!-- no basal area <th colspan="2"><p><span class="category">Basal Area (m2/ha)</span></p></th> -->
@@ -1191,142 +1191,7 @@ VEGBANK - Simple Plots Query
 
 
       
-      
-	    <!-- HOW TO USE THIS FORM -->
-	    <tr bgcolor="#FFFFCC" >
-	      <td width="10%"></td>
-	      <td colspan="2">
-		<p><a name="instructions" /> </a><font face="Helvetica,Arial,Verdana" size="3"><b>Notes on how to use this form</b></font></p>
-	      </td>
-	      <tr>
-		<td colspan="2"></td><td>
-
-      <!-- Note about Rows -->
-      <table border="0" width="100%" bgcolor="#DFE5FA">
-	<tr>
-	  <td align="left" valign="top" width="5%" colspan="2">
-	    <font face="Helvetica,Arial,Verdana" size="3" color="
-	    #23238E"><b>Note about Marked Rows:</b></font> 
-	  </td>
-
-	</tr>
-	<tr>
-	  <td align="center" width="5%">
-	    <img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
-	    width="15" height="15"> 
-	  </td>
-	  <td class="item"><p>
-	    For criteria on this page that are numbered in Rows (for example, querying by plant names),
-	    an observation is returned if it matches ALL crieria for a row.  If you want to match ANY
-	    criteria, use different rows.  <br />
-	    For example, if you specify :<br />
-	    ROW 1: plant name = "Acer" , cover minumum = "20" , cover maximum = "40"<br />
-
-	    ---VegBank returns plots that have plants that are named "Acer" AND have a cover &gt;= 20% AND cover &lt;= 40%  
-	    <br />If you specify:<br />
-	    ROW 1: plant name = "Acer"  <br />
-	    ROW 2: cover minumum = "20" <br />
-	    ROW 3: cover maximum = "40" <br />
-	    ---VegBank returns plots that have "Acer" on the plot (regardless of its cover value) AND/OR a taxon (regardless of name) of the plot has a 
-	    cover &gt;= 20% AND/OR a taxon (regardless of name, not necessarily the same taxon as above) on the plot has a cover 
-	    &lt;= 40% (where AND/OR is specified at the <a href="#typeOfQuery">end of the form</a>, as mentioned above).</p>
-
-	  </td>
-	</tr>
-
-      </table>
-
-      <hr size=".5"> 
-
-      <!-- Minimums, Maximums, Include Nulls -->
-      <table border="0" width="100%" bgcolor="#DFE5FA">
-	<tr>
-	  <td align="left" valign="top" width="5%" colspan="2">
-
-	    <font face="Helvetica,Arial,Verdana" size="3" color="
-	    #23238E"><b>Minimums, Maximums, Include Nulls:</b></font> 
-	  </td>
-	</tr>
-	<tr>
-	  <td align="center" width="5%">
-	    <img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
-	    width="15" height="15"> 
-	  </td>
-	  <td class="item"><p>
-	    Similarly, if a field has min and max fields, observations will be returned that
-	    have attribute values greater than or equal to the minimum AND less than or equal to the maxiumum. <br />
-
-	    Any fields that have the option of including nulls in the query results will look for plots that have 
-	    the attribute value specified (if any value is specified) OR the attribute value is null. <br />
-	    For example, if you search for plots with elevation minimum of "50" and maximum of "200" and check the "include nulls?" box, <br/>
-	    ---VegBank returns all plots that have an elevation between (50 AND 200) OR have no elevation value at all.<br/>
-
-	    </p>
-	  </td>
-	</tr>
-
-      </table>
-
-      <hr size=".5"> 
-
-
-      <!-- --NULL-- and --NOT NULL-- picklist values -->
-      <table border="0" width="100%" bgcolor="#DFE5FA">
-	<tr>
-	  <td align="left" valign="top" width="5%" colspan="2">
-	    <font face="Helvetica,Arial,Verdana" size="3" color="
-	    #23238E"><b>--NULL-- and --NOT NULL-- picklist values</b></font> 
-	  </td>
-	</tr>
-	<tr>
-	  <td align="center" width="5%">
-
-	    <img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
-	    width="15" height="15"> 
-	  </td>
-	  <td class="item"><p>
-	    Note also that you may select multiple choices in fields that have choices specified.  Choose "--ANY--" to ignore the field.  
-	    The values "--NOT NULL--" and "--NULL--" appear at the end of each list, and can be used to specify
-	    where the attribute value is non-null (the field has a value) or is null (the field in blank).  These, too, may
-	    be selected along with other values in the list.
-
-
-	    </p>
-	  </td>
-	</tr>
-
-      </table>
-
-      <hr size=".5">  
-
-
-      <!-- Formats in which to enter data -->
-      <table border="0" width="100%" bgcolor="#DFE5FA">
-	<tr>
-	  <td align="left" valign="top" width="5%" colspan="2">
-	    <font face="Helvetica,Arial,Verdana" size="3" color="
-	    #23238E"><b>How to Enter People, Dates, Units</b></font> 
-	  </td>
-	</tr>
-	<tr>
-	  <td align="center" width="5%">
-
-	    <img src="/vegbank/images/icon_cat31.gif" alt="exclamation"
-	    width="15" height="15"> 
-	  </td>
-	  <td class="item"><p>
-	    Enter a person's name as "Surname, GivenName(s)" (example: "Doe, John" or "Smith, Paula Esther"). </p>
-	    <p>
-	    Enter dates either in the format "MM/DD/YYYY" (example: "10/23/1967") or "DD-MMM-YYYY" (example: "25-JUN-2002"). </p>
-	    <p>
-	    Enter numerical values without any units (example: for "500 feet", enter "500").  <br/>For fields that have a unit of percent, enter the value of the 
-	    percent, not the decimal equivalent (example: for "35%", enter "35", not "0.35").
-
-	    </p>
-	  </td>
-	</tr>
-
-      </table>
+     
 
     
 
@@ -1335,6 +1200,7 @@ VEGBANK - Simple Plots Query
       <tr>
 	<td colspan="3">
 	  <!-- VEGBANK FOOTER -->
+<br /><br />
 	  @vegbank_footer_html_tworow@
 	</td>
       </tr>
