@@ -2,36 +2,81 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
+<title> Prototype Veg Plots Database Component Description: Interpretation </title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date> </date>
+<date></date>
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
-	<entityDescription> </entityDescription>
+	<entityName>vegPlot.INTERPRETATION </entityName>
+	<entitySummary>This table was designed to allow users other than the author of the plot to interpret taxon names and authorities used to describe a population. </entitySummary>
+	<entityDescription>The development of this table was initiated at the working group meeting at NCEAS in September 2000.  The desire to re-interpret the taxon names used by the plot author was realized and this table subsequently initiated.</entityDescription>
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
-		<attKey> </attKey>
-		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attName>interpretationId</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>P</attKey>
+		<attNotes>Primary key for the interpretation table.</attNotes>
+		<attDefinition>Database assigned value for a unique interpretation of a taxon used in a plot observation.</attDefinition>
 	</attribute>
 
+        <attribute>
+                <attName>party_id </attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>F </attKey>
+                <attReferences>PARTY </attReferences>
+                <attNotes>Foreign key into the party table. </attNotes>
+                <attDefinition>This key links a party to an interpretation. </attDefinition>
+        </attribute>
+        <attribute>
+                <attName>taxonObservationId</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER </attType>
+                <attKey>F</attKey>
+                <attReferences>taxonObservation </attReferences>
+                <attNotes>Foreign key into the taxonObservation table. </attNotes>
+                <attDefinition>This key 'links' the interpretation to a particular taxon recognized in a plot. </attDefinition>
+        </attribute>
+        <attribute>
+                <attName>circum_id</attName>
+                <attNulls>No </attNulls>
+                <attType>NUMBER </attType>
+                <attKey>F</attKey>
+                <attReferences>plantTaxa.CIRCUMSCRIPTION </attReferences>
+                <attNotes>This is the foreign key into the plantTaxa database, that will store the circumscription corresponding to the re-interpretaion of the taxon.</attNotes>
+                <attDefinition>Circumscription number updated from the plant taxa database. </attDefinition>
+        </attribute>
+        <attribute>
+                <attName>role </attName>
+                <attNulls>No </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>This is the role of the party making the interpretation.  Expected values may be: author, interpreter. </attDefinition>
+        </attribute>
+        <attribute>
+                <attName>date </attName>
+                <attNulls>No </attNulls>
+                <attType>DATE </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>This is the date that the interpretation was made. </attNotes>
+                <attDefinition> </attDefinition>
+        </attribute>
 
 
 	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attName>notes </attName>
+                <attNulls>Yes </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>These are the notes that the interpreter would like to include with the interpretation. </attDefinition>
         </attribute>
 
 

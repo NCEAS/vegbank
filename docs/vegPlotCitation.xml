@@ -2,24 +2,161 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
+
+<title> Prototype Veg Plots Database Component Description: citation</title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date> </date>
+<date></date>
+
+
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
+	<entityName>vegPlot.CITATION </entityName>
+	<entitySummary>This table stores information about citations in which plots are referenced. </entitySummary>
 	<entityDescription> </entityDescription>
+
+
+
+<attribute>
+                <attName>citation_id </attName>
+                <attNulls>No </attNulls>
+                <attType>NUMBER </attType>
+                <attKey>P </attKey>
+                <attNotes>Primary key of the citation table. </attNotes>
+                <attDefinition>Database assigned value that will be unique
+                                         for each citation. </attDefinition>
+        </attribute>
+
+
+
+        <attribute>
+                <attName>OBS_ID </attName>
+                <attNulls>No </attNulls>
+                <attType>NUMBER </attType>
+                <attKey>F </attKey>
+                <attReferences>plotObservation </attReferences>
+                <attNotes>Foreign key into the plotObservation table.</attNotes>
+                <attDefinition>Database assigned value that is unique to
+                                         each plot observation, this is how citations are linked to
+                                         plots. </attDefinition>
+        </attribute>
+<attribute>
+                <attName>title </attName>
+                <attNulls>No </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Name by which the cited resource is
+                                         known. </attDefinition>
+        </attribute>
+
+
+
+        <attribute>
+                <attName>alternateTitle </attName>
+                <attNulls>No </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Short name or other language name by
+                                         which the cited information is known. 
+                                         Example: "Digital Chart of the World or
+                                         DCW. </attDefinition>
+        </attribute>
+<attribute>
+                <attName>pubDate </attName>
+                <attNulls>No </attNulls>
+                <attType>DATE </attType>
+                <attKey>n/a </attKey>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Date the citation was published. </attDefinition>
+        </attribute>
+
+
+
+        <attribute>
+                <attName>edition </attName>
+                <attNulls>No </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Version of the cited resource. </attDefinition>
+        </attribute>
+<attribute>
+                <attName>editionDate </attName>
+                <attNulls> No</attNulls>
+                <attType>DATE </attType>
+                <attKey>n/a </attKey>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Date of the edition. </attDefinition>
+        </attribute>
+
+
+
+        <attribute>
+                <attName>seriesName </attName>
+                <attNulls>Yes  </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Name of a series. </attDefinition>
+        </attribute>
+<attribute>
+                <attName>issueIdentification </attName>
+                <attNulls>Yes </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Information identifying the issue of the
+                                         series. </attDefinition>
+        </attribute>
+
+
+
+        <attribute>
+                <attName>otherCitationDetails </attName>
+                <attNulls>Yes </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Other information required to complete the
+                                         citation, like a URL. </attDefinition>
+        </attribute>
+<attribute>
+                <attName>page </attName>
+                <attNulls>No </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Details on which page of the periodical the
+                                         article was published. </attDefinition>
+        </attribute>
+
+
+
+        <attribute>
+                <attName>ISBN </attName>
+                <attNulls>Yes </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>International Standard Book Number. </attDefinition>
+        </attribute>
+
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
-		<attKey> </attKey>
-		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attName>ISSN </attName>
+		<attNulls>Yes </attNulls>	
+		<attType>VARCHAR2 </attType>
+		<attKey>n/a </attKey>
+		<attNotes>n/a </attNotes>
+		<attDefinition>International Standard Serial Number. </attDefinition>
 	</attribute>
 
 

@@ -20,7 +20,7 @@
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
 		<attKey>P</attKey>
-		<attNotes> </attNotes>
+		<attNotes>n/a </attNotes>
 		<attDefinition>Internal database unique value assigned to every named place 
 		entered in the database.</attDefinition>
 	</attribute>
@@ -31,8 +31,8 @@
                 <attName>placeName </attName>
                 <attNulls>No</attNulls>
                 <attType>VARCHAR2</attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
                 <attNotes>Name of a place like: Yosemitie National Park. </attNotes>
                 <attDefinition>The name of the place at which a plot was sampled. </attDefinition>
         </attribute>
@@ -42,7 +42,7 @@
                 <attName>placeDescription </attName>
                 <attNulls>No</attNulls>
                 <attType>VARCHAR2 </attType>
-                <attKey> </attKey>
+                <attKey>n/a </attKey>
                 <attReferences> </attReferences>
                 <attNotes></attNotes>
                 <attDefinition>This is the description of a named place. </attDefinition>
@@ -53,7 +53,7 @@
                 <attName>gazetterRef </attName>
                 <attNulls>Yes</attNulls>
                 <attType>VARCHAR2</attType>
-                <attKey> </attKey>
+                <attKey>n/a </attKey>
                 <attReferences> </attReferences>
                 <attNotes></attNotes>
                 <attDefinition>This is a reference to a gazeteer containing the named place.</attDefinition>

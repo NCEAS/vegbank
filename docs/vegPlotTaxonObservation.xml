@@ -2,36 +2,84 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
+<title> Prototype Veg Plots Database Component Description: TaxonObservation </title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date> </date>
+<date></date>
+
+
+
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
-	<entityDescription> </entityDescription>
+	<entityName>vegPlot.TAXONOBSERVATION </entityName>
+	<entitySummary>This table stores information about cummulative coverage (coverage accross all strata) of all the taxon recognized within a plot observation.</entitySummary>
+	<entityDescription>At the working group meeting at NCEAS in September 2000, it was recognized that this table would store the cummulative coverages of the taxa recognized by the author of the plot.  Also recognized was the importance of maintaining an entity for interpretations of the originak taxa recognized by the plot author, and therefore the entity interpretation was added.</entityDescription>
+
+
+<attribute>
+                <attName>taxonObservationId</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>P</attKey>
+                <attNotes>Primary key of the table.</attNotes>
+                <attDefinition>Database assigned value for a unique taxa within a given plot observation.</attDefinition>
+        </attribute>
+
+
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
-		<attKey> </attKey>
-		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attName>obs_id</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>F</attKey>
+		<attNotes>Foreign key into the plotObservation table.</attNotes>
+		<attDefinition>Database assigned value for a unique plot observation.</attDefinition>
 	</attribute>
 
 
 
 	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attName>authorName</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is the taxon name that the author of the plot used to refer to a plant observed within the plot.</attDefinition>
+        </attribute>
+
+
+ <attribute>
+                <attName>originalAuthority</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attNotes>The authority coupled with
+                              the original taxon name
+                              from that authority is all
+                              that is needed to define a
+                              taxon.  This is like
+                              Berendsohn's potential
+                              species concept.  Both the
+                              originalTaxonName and the
+                              authority might best viewed
+                              as foreign keys to tables in
+                              the plants database.
+		</attNotes>
+                <attDefinition>This is the authority for the taxon that was used by the plot author to describe a population.</attDefinition>
+        </attribute>
+
+
+
+        <attribute>
+                <attName>cumStrataCoverage</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>This is NOT a summation of cover in each stratum, but rather total coverage in the plot.</attNotes>
+                <attDefinition>Percent coverage of a species in all recorded strata combined. </attDefinition>
         </attribute>
 
 

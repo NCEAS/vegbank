@@ -2,37 +2,76 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
+
+<title> Prototype Veg Plots Database Component Description: vegPlotStrata </title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date> </date>
+<date></date>
+
+
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
-	<entityDescription> </entityDescription>
+	<entityName>vegPlot.STRATA</entityName>
+	<entitySummary>This table stores the various types of strata defined within a plot observation.</entitySummary>
+	<entityDescription>This table was added to the data model during the working group meeting that met at NCEAS in September 2000.  Although it is expected that most stratum types recognized by plot authors would include only a handful of types, it was recognized that in order to allow the database the flexibility needed to be truly international; all users should have the ability to include any/all strata that they commonly use.  Further, it was demonstrated that the European community does in deed commonly use different strata that cannot be directly mapped to the strata commonly used by American workers. </entityDescription>
+	
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
-		<attKey> </attKey>
-		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attName>strataId</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>P</attKey>
+		<attNotes>Primary key for the STRATA table.</attNotes>
+		<attDefinition>Database assigned value for a unique existence of a stratum within a plot observation.</attDefinition>
 	</attribute>
+
+
+<attribute>
+                <attName>OBS_ID</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>F</attKey>
+		 <attReferences>plotObservation</attReferences>
+                <attNotes>Foreign key into the plotObservation table.</attNotes>
+                <attDefinition>Database assigned value for a unique plot observation.</attDefinition>
+        </attribute>
+
 
 
 
 	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attName>stratumType</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes></attNotes>
+                <attDefinition>This attribute will include the stratum types recognized within a plot observation.</attDefinition>
         </attribute>
+
+
+	<attribute>
+                <attName>stratumCover</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attNotes>There was much discussion about this attribute at the working group meeting at NCEAS in September 2000.  Basically there was concern over how the percent coverage was to be measured; should the coverage be measured at the base or at the top of the stratum or where the vegetation has the greatest width.  It was decided that the measurement should mimic the shaded area if a light were shining up from below the stratum of interest.  </attNotes>
+                <attDefinition>This attribute stores the coverage of the vegetation within the given stratum in percent (the percentage may not exceed 100%). </attDefinition>
+        </attribute>
+                
+                
+                
+        <attribute>
+                <attName>stratumHeight</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is the average height of the base of the stratum in meters.</attDefinition>
+        </attribute>
+
 
 
 	<children> </children>

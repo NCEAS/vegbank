@@ -2,36 +2,62 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
+
+<title> Prototype Veg Plots Database Component Description: CitationContributor </title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date> </date>
+<date></date>
+
+
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
+	<entityName>vegPlot.CITATIONCONTRIBUTOR </entityName>
+	<entitySummary>This table is the intersection between citation and party and relates the role a party has had in a citation(s). </entitySummary>
+
 	<entityDescription> </entityDescription>
+
+ <attribute>
+                <attName>citationContributor_id </attName>
+                <attNulls>No </attNulls>
+                <attType>NUMBER </attType>
+                <attKey>P </attKey>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Database assigned value for a uniquely identifying a particular party with a particular citation. </attDefinition>
+        </attribute>
+
+
+
+        <attribute>
+                <attName>citation_id </attName>
+                <attNulls>No </attNulls>
+                <attType>NUMBER </attType>
+                <attKey>F </attKey>
+                <attReferences>CITATION </attReferences>
+                <attNotes>Foreign key into the citation table. </attNotes>
+                <attDefinition>This key provides a link to a citation.</attDefinition>
+        </attribute>
+
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
-		<attKey> </attKey>
-		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attName>party_id </attName>
+		<attNulls>No </attNulls>	
+		<attType>NUMBER </attType>
+		<attKey>F </attKey>
+		<attNotes>Foreign key into the party table. </attNotes>
+		<attDefinition>This key provides a link to a party. </attDefinition>
 	</attribute>
 
 
 
 	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attName>roleCode </attName>
+                <attNulls>No </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>This is the role that a particular party had in a particular citation. </attDefinition>
         </attribute>
 
 

@@ -7,7 +7,7 @@
 <institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date>Wed Sep 27 09:06:55 PDT 2000 </date>
+<date></date>
 
 <entity>
 	<entityName>vegPlot.PLOT </entityName>
@@ -23,7 +23,7 @@
 	</attribute>
 
 	<attribute>
-                <attName> project_id</attName>
+                <attName>project_id</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>F</attKey>
@@ -48,8 +48,8 @@ the plot was sampled. </attDefinition>
                 <attName>authorPlotCode</attName>
                 <attNulls>No</attNulls>
                 <attType>VARCHAR2</attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
                 <attNotes> In case of plot records taken from the literature, this field will link 
             the plot record with a citation in a child entity.</attNotes>
                 <attDefinition>Author's Plot number/code - original plot number. </attDefinition>
@@ -82,8 +82,8 @@ area corresponding to a 'named place'.</attDefinition>
                 <attName> plotType</attName>
                 <attNulls>No </attNulls>
                 <attType>NARCHAR2</attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
                 <attNotes>Database will determine this based on the number of fields
             in which data are entered. If the database determines
             the plot to be 'ancillary' the person entering the data will be warned. </attNotes>
@@ -91,51 +91,89 @@ area corresponding to a 'named place'.</attDefinition>
         </attribute>
 
 <attribute>
-                <attName>SampleMethod</attName>
+                <attName>sampleMethod</attName>
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition>ampling method used to describe the plot. </attDefinition>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>Each method will have its own metadata record with more descriptive detail about sampling method, especially if it is not a                            standard method. This will include dimensions, number and arrangement of subplots (quadrats, microplots, etc.) in stand, etc. Each combination of method and cover scale will have its own (external) application to convert cover data to the database standard.</attNotes>
+                <attDefinition>Sampling method used to describe the plot.  
+This will be a pick list with standard plot description methods, such as Daubenmire, modified Daubenmire, Zurich-Montpellier, North Carolina Vegetation Survey and TNC (I am not sure whether TNC should be listed separately or should be considered a ZM sampling approach using a different cover scale). Other methods can be added to pick list as needed.</attDefinition>
         </attribute>
 
 <attribute>
                 <attName>coverScale</attName>
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2</attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes> A note should be attached
+                            to this field describing the
+                            cover classes if a
+                            non-standard cover scale
+                            or a modification of a
+                            standard scale is used. 
+                            Alternatively, a separate
+                            field could be used to
+                            describe the cover scale,
+                            and the system could fill in
+                            this information
+                            automatically for the
+                            scales in the picklist. </attNotes>
+                <attDefinition> Scale used to estimate species
+                                                cover. This does not follow
+                                                necessarily from the sampling
+                                                method in the previous field. For
+                                                instance, the ZM method can use
+                                                the standard Braun-Blanquet
+                                                scale, the Barkman et al. cover
+                                                scale, or some other modified
+                                                BB scale. Similarly, the
+                                                modified Daubenmire method
+                                                can use the Franklin et al. or the
+                                                Pfister-Arnold cover scale. The
+                                                pick list will include the
+                                                following categories: several
+                                                frequently used standard cover
+                                                scales, and a choice of "absolute
+                                                cover and "non-standard cover
+                                                scale.
+		</attDefinition>
         </attribute>
 
 <attribute>
                 <attName>plotOrigLat</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER</attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition>Original latitude of the plot. </attDefinition>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>I suggest we use
+                                Lat./Long. rather than
+                                the UTM grid reference,
+                                because the latter cannot
+                                be used in polar regions.
+                                Our input tools will need
+                                converters between
+                                UTM and Lat/Long.</attNotes>
+                <attDefinition>Original latitude of the plot origin. </attDefinition>
         </attribute>
 
 <attribute>
                 <attName>plotOrigLong </attName>
                 <attNulls> No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition>Original longitude of the plot. </attDefinition>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>See notes above</attNotes>
+                <attDefinition>Original longitude of the plot origin. </attDefinition>
         </attribute>
 
 <attribute>
                 <attName>plotShape</attName>
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
                 <attNotes>This will be used to calculate the Lat/Long points stored within the
             attribute dsgpolyo </attNotes>
                 <attDefinition>Shape of the plot area. </attDefinition>
@@ -145,8 +183,8 @@ area corresponding to a 'named place'.</attDefinition>
                 <attName> plotSize</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
                 <attNotes>Plot size is an aggregate of noncontiguous plots,
             we need to flag this in someway or we will get inflated estimates of
             species density. </attNotes>
@@ -158,9 +196,20 @@ area corresponding to a 'named place'.</attDefinition>
                 <attName>plotSizeAcc </attName>
                 <attNulls>Yes</attNulls>
                 <attType>NUMBER</attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
+                <attKey>n/a</attKey>
+                <attReferences>na/</attReferences>
+                <attNotes>Initially we were thinking of measuring this value in meters and using the following criteria: 1 = GPS within 10-20 m  
+                                2 = GPS within 25 50 m 
+                                3 = Determined by map;
+                                within 200 m 
+                                4 = Weak guess from map;
+                                within 1 km 
+                                5 = General locality; within
+                                10 km 
+                                6 = Region only; within 100
+                                km 
+                                7=user entered numeric
+                                value</attNotes>
                 <attDefinition>The accuracy of the plotSize in percentage of the plotSize. </attDefinition>
         </attribute>
 
@@ -168,19 +217,19 @@ area corresponding to a 'named place'.</attDefinition>
                 <attName>altValue</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
+                <attKey>n/a </attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
                 <attDefinition>The altitude of the plot origin in meters. </attDefinition>
         </attribute>
 
 <attribute>
-                <attName>altPosAcc </attName>
+                <attName>altPosAcc</attName>
                 <attNulls>Yes</attNulls>
                 <attType>NUMBER</attType>
-                <attKey></attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
                 <attDefinition>The accuracy of the altValue in percentage of the altValue.</attDefinition>
         </attribute>
 
@@ -188,8 +237,8 @@ area corresponding to a 'named place'.</attDefinition>
                 <attName>slopeAspect</attName>
                 <attNulls>Yes </attNulls>
                 <attType>NUMBER </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
                 <attNotes>User to enter general values like: NE which would be
             translated via the interface to 045 degrees, or allow user to enter
             exact coordinates. </attNotes>
@@ -200,10 +249,11 @@ area corresponding to a 'named place'.</attDefinition>
                 <attName>slopeGradient</attName>
                 <attNulls>Yes</attNulls>
                 <attType>NUMBER</attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes>Provide user with categories to choose from
-            such as: Gentle; slope 1-10% </attNotes>
+                <attKey>n/a</attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>
+Provide user with categories to choose from such as: Flat; slope less than 1% (less than 0deg  34')  Gentle; slope 1-10% (0deg 34'-5deg 43')  Moderately sloping; slope 10-25% (5deg 43'-13deg 59') Steep; slope 25-50% (13deg 59'-26deg 34') Very steep; slope 50-100% (26deg 34'-45deg  0')  Cliff; slope greater than 100% (greater than 45 deg) 
+		</attNotes>
                 <attDefinition>Inclination of slope in degrees. </attDefinition>
         </attribute>
 
@@ -211,8 +261,8 @@ area corresponding to a 'named place'.</attDefinition>
                 <attName>slopePosition </attName>
                 <attNulls> Yes</attNulls>
                 <attType>VARCHAR2</attType>
-                <attKey></attKey>
-                <attReferences> </attReferences>
+                <attKey>n/a </attKey>
+                <attReferences> n/a </attReferences>
                 <attNotes>Categories may include: Summit, shoulder, upper slope, middle slope, lower slope, toeslope, no
             slope. </attNotes>
                 <attDefinition>Position of the plot on slope. </attDefinition>
@@ -222,28 +272,36 @@ area corresponding to a 'named place'.</attDefinition>
                 <attName> hydrologicRegime</attName>
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
 <attNotes> 
-Permanently flooded,
-Semi-permanently flooded
-Seasonally flooded
-Saturated
-Temporarily flooded
-Intermittently flooded
-Artificially flooded
-Unknown
-
+Non-Tidal  
+                                 1) Permanently flooded 
+                                2) Intermittently exposed 
+                                3) Semi-permanently
+                                flooded 
+                                4) Seasonally flooded 
+                                5) Saturated 
+                                6) Temporarily flooded 
+                                7) Intermittently flooded 
+                                8) Artificially flooded 
+                                9) Unknown 
+                                 Tidal  
+                                 1)  Subtidal 
+                                 2) Irregularly exposed 
+                                1) Regularly exposed  
+                                2) Irregularly flooded 
+                                3) Unknown
 </attNotes>
                 <attDefinition>FGDC hydrologic regime (follows Cowardin et al. 1979.) </attDefinition>
 </attribute>
 
 <attribute>
-                <attName>geoSurf </attName>
-                <attNulls>No </attNulls>
+                <attName>geoSurf</attName>
+                <attNulls>No</attNulls>
                 <attType>VARCHAR2 </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
                 <attNotes>e.g., outwash sand, glacial till, etc. </attNotes>
                 <attDefinition>Surface geology type. </attDefinition>
         </attribute>
@@ -251,9 +309,9 @@ Unknown
 <attribute>
                 <attName>userDefined</attName>
                 <attNulls>Yes</attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
+                <attType>n/a</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
                 <attNotes>The number of user defined fields must be determined.  
 As of the Septemeber 2000 working group meeting at NCEAS the actual number has yet to be defined.</attNotes>
                 <attDefinition>User defined field </attDefinition>

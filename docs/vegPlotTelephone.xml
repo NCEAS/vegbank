@@ -2,38 +2,61 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
+<title>Prototype Veg Plots Database Component Description: telephone</title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date> </date>
+<date></date>
+
+
 
 <entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
+	<entityName>vegPlot.TELEPHONE</entityName>
+	<entitySummary>This table stores telephone numbers for the various entries in the PARTY table.</entitySummary>
 	<entityDescription> </entityDescription>
 	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
-		<attKey> </attKey>
-		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
+		<attName>telephone_id</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>P</attKey>
+		<attNotes>Primary key for the telephone table.</attNotes>
+		<attDefinition>Database assigned value for a uniquely associated telephone number.</attDefinition>
 	</attribute>
 
 
 
 	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attName>party_id</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>F </attKey>
+                <attReferences>PARTY</attReferences>
+                <attNotes>Foreign key into the PARTY table.</attNotes>
+                <attDefinition>This is the 'link' between a PARTY and an entry in the TELEPHONE table.</attDefinition>
         </attribute>
 
+<attribute>
+                <attName>phoneNumber</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+		<attReferences>n/a</attReferences>
+                <attNotes></attNotes>
+                <attDefinition>Telephone number.</attDefinition>
+        </attribute>
+
+
+
+        <attribute>
+                <attName>phoneType</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is the type of phone that the number is related to (examples: home, work, fax and cell).</attDefinition>
+        </attribute>
 
 	<children> </children>
 </entity>

@@ -7,7 +7,7 @@
 <institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date>Wed Sep 27 08:48:56 PDT 2000 </date>
+<date></date>
 
 <entity>
 	<entityName>vegPlot.PROJECT</entityName>
@@ -17,18 +17,18 @@
 		<attName>project_id </attName>
 		<attNulls>No </attNulls>	
 		<attType>NUMBER </attType>
-		<attKey></attKey>
-		<attNotes></attNotes>
-		<attDefinition> Database assigned value for a given project.</attDefinition>
+		<attKey>P</attKey>
+		<attNotes>n/a</attNotes>
+		<attDefinition>Database assigned value for a given project.</attDefinition>
 	</attribute>
 
 	<attribute>
                 <attName>projectName </attName>
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
                 <attDefinition>Project name as defined by the PI.</attDefinition>
         </attribute>
 	
@@ -36,10 +36,10 @@
                 <attName>description</attName>
                 <attNulls>Yes</attNulls>
                 <attType>VARCHAR2</attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> Short description of the project.</attDefinition>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>Not sure what would show up here.  Do we want a pick list so as to force convergence to some consistent set of terms? </attNotes>
+                <attDefinition> Short description of the project including the purpose for doing the project.</attDefinition>
         </attribute>
 
 

@@ -23,7 +23,7 @@
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
 		<attKey>P</attKey>
-		<attNotes> </attNotes>
+		<attNotes>n/a </attNotes>
 		<attDefinition>This is an internal database identifier assigned to each unique observation. </attDefinition>
 	</attribute>
 
@@ -42,57 +42,63 @@
 
 	<attribute>
                 <attName>previousObs</attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>F</attKey>
+                <attReferences>PLOTOBSERVATION</attReferences>
+                <attNotes>Recursive foreign key which points to the previous observation in this area</attNotes>
+                <attDefinition>This is the plot observtion that was previously made at this plot location.  If observations at a plot are made every year then this key points to the observation number that corresponds to the observation made the year before.</attDefinition>
         </attribute>
 <attribute>
                 <attName>authorObsCode</attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attNulls>Yes</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is the code that the author uses to identify this observation.</attDefinition>
         </attribute>
 <attribute>
                 <attName>plotStartDate</attName>
-                <attNulls></attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attNulls>Yes</attNulls>
+                <attType>DATE</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>Attribute added at the September meeting at NCEAS.</attNotes>
+                <attDefinition>If the observation takes more than a single day then this is the first day in which observations were made.</attDefinition>
         </attribute>
 <attribute>
                 <attName>plotEndDate</attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attNulls>Yes</attNulls>
+                <attType>DATE</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>Attribute added at the September meeting at NCEAS.</attNotes>
+                <attDefinition>If the observation takes more than a single day then this is the last day in which observations were made. </attDefinition>
         </attribute>
 <attribute>
                 <attName>dateAcc</attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition>Date accuracy</attDefinition>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>Added at the September meeting at NCEAS. </attNotes>
+                <attDefinition>Estimated Accuracy of the observation date.</attDefinition>
         </attribute>
 <attribute>
                 <attName>effortLevel</attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
+                <attNulls>Yes</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>Use pick list; 
+                                 1) Very thorough 
+                                 2) Average effort 
+                                 3) Hurried description;
+                                some less common
+                                species may have been
+                                missed.</attNotes>
+                <attDefinition>This is the effort spent making the observations as estimated by the data collector.</attDefinition>
         </attribute>
 
 	

@@ -7,7 +7,7 @@
 <institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date>Wed Sep 27 09:06:55 PDT 2000 </date>
+<date></date>
 
 
 <entity>
@@ -21,8 +21,8 @@
 		<attName>graphic_id</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
-		<attKey> </attKey>
-		<attNotes> </attNotes>
+		<attKey>n/a </attKey>
+		<attNotes>n/a </attNotes>
 		<attDefinition>This is an internal database identifier assigned to each unique grapical file.</attDefinition>
 	</attribute>
 
@@ -42,9 +42,9 @@
                 <attName>graphicName</attName>
                 <attNulls>No</attNulls>
                 <attType>VARCHAR</attType>
-                <attKey></attKey>
-                <attReferences></attReferences>
-                <attNotes></attNotes>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
                 <attDefinition>Name of the grapical file.</attDefinition>
         </attribute>
 	
@@ -52,9 +52,9 @@
                 <attName>graphicDescription</attName>
                 <attNulls>No</attNulls>
                 <attType>VARCHAR</attType>
-                <attKey></attKey>
-                <attReferences></attReferences>
-                <attNotes></attNotes>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
                 <attDefinition>Description of the graphical file.</attDefinition>
         </attribute>
 	
@@ -62,8 +62,8 @@
                 <attName>graphicType</attName>
                 <attNulls>No</attNulls>
                 <attType>VARCHAR</attType>
-                <attKey></attKey>
-                <attReferences></attReferences>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
                 <attNotes>This may, in later versions, become domain locked to a few specif types of 
 		graphical files.  Currently any file type can be stored.</attNotes>
                 <attDefinition>The type of the graphical file format.</attDefinition>
@@ -73,9 +73,9 @@
                 <attName>graphicData</attName>
                 <attNulls>No</attNulls>
                 <attType>BLOB</attType>
-                <attKey></attKey>
-                <attReferences></attReferences>
-                <attNotes></attNotes>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
                 <attDefinition>The graphical file data.</attDefinition>
         </attribute>
 	

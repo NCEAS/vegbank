@@ -2,37 +2,110 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> </title>
-<author> </author>
-<institution> </institution>
+<title> Prototype Veg Plots Database Component Description: party</title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date> </date>
+<date></date>
 
-<entity>
-	<entityName> </entityName>
-	<entitySummary> </entitySummary>
+
+
+
+	<entity>
+	<entityName>vegPlot.PARTY </entityName>
+	<entitySummary>This table stores information relevent to a party which may be either an individual or an organization.</entitySummary>
 	<entityDescription> </entityDescription>
-	<attribute> 
-		<attName> </attName>
-		<attNulls> </attNulls>	
-		<attType> </attType>
-		<attKey> </attKey>
-		<attNotes> </attNotes>
-		<attDefinition> </attDefinition>
-	</attribute>
+	
 
+<attribute>
+                <attName>party_id</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>P</attKey>
+                <attNotes>Primary key for PARTY table.</attNotes>
+                <attDefinition> Database assigned value that is
+                                                 unique to each party
+                                                 contributing in the collection of
+                                                 plots.
+		</attDefinition>
 
-
-	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
         </attribute>
+        
+                
+                
+        <attribute>
+                <attName>salutation</attName>
+                <attNulls>yes</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Salutation preceding one's given name.</attDefinition>
+        </attribute>
+
+<attribute>
+                <attName>givenName</attName>
+                <attNulls>Yes</attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a</attKey>
+                <attNotes>n/a</attNotes>
+                <attDefinition>One's first name.</attDefinition>
+        </attribute>
+        
+                
+                
+        <attribute>
+                <attName>surName </attName>
+                <attNulls>No </attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Name shared in common to identify the members of a family, as distinguished from each member's given name.</attDefinition>
+        </attribute>
+<attribute>
+                <attName>organizationName</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Name of an organization. </attDefinition>
+        </attribute>
+        
+                
+                
+        <attribute>
+                <attName>positionName</attName>
+                <attNulls>Yes</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Name of one's position. </attDefinition>
+        </attribute>
+<attribute>
+                <attName>hoursOfService</attName>
+                <attNulls>Yes </attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a </attKey>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Hours in which one may contact the party. </attDefinition>
+        </attribute>
+        
+                
+                
+        <attribute>
+                <attName>contactInstructions </attName>
+                <attNulls>Yes </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Instructions for contacting a party. </attDefinition>
+        </attribute>
+	
+
 
 
 	<children> </children>

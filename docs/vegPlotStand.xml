@@ -7,11 +7,11 @@
 <institution>NCEAS </institution>
 <contributor> </contributor>
 <description> </description>
-<date>Wed Sep 27 09:06:55 PDT 2000 </date>
+<date></date>
 
 <entity>
 	<entityName>vegPlot.STAND </entityName>
-	<entitySummary>This table stores information about stands from which plots may have been sample. </entitySummary>
+	<entitySummary>This table stores information about the stand from which a plot was sampled. </entitySummary>
 	<entityDescription>A stand is a spatially continuous distribution of vegetation.  The goal
 	of many plot collections is to sample vegetation thought to reflect a stand and thus plots
 	are usually recorded within a stand.  Information in this table is intended to describe the
@@ -21,8 +21,8 @@
 		<attName>stand_id </attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
-		<attKey>P </attKey>
-		<attNotes> </attNotes>
+		<attKey>P</attKey>
+		<attNotes>n/a</attNotes>
 		<attDefinition>This is an internal database identifier assigned to each uniquely used stand.  </attDefinition>
 	</attribute>
 
@@ -32,9 +32,9 @@
                 <attName> standSize</attName>
                 <attNulls>Yes</attNulls>
                 <attType>Number</attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
                 <attDefinition>This is the estimated size of a stand in meters-squared. </attDefinition>
         </attribute>
 
@@ -42,8 +42,8 @@
                 <attName>standDescription</attName>
                 <attNulls>Yes</attNulls>
                 <attType>VARCHAR2</attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
                 <attNotes>Stands are not usually named, so a description is best way to identify a unique stand. </attNotes>
                 <attDefinition>This is the estimated size of a stand in meters-squared. </attDefinition>
         </attribute>

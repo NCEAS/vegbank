@@ -1,7 +1,7 @@
 #!/bin/sh -e 
 
-#ls -lrt vegPl*.xml | awk '{print $9}' > list
-ls -lrt plantTaxa*.xml | awk '{print $9}' >> list
+ls -lt vegPl*.xml | awk '{print $9}' > list
+#ls -lrt plantTaxa*.xml | awk '{print $9}' > list
 
 cat list |
 while read line
