@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+
+<dataModel>	
+
+
+<title> Prototype Veg Plots Database Component Description: definedValue </title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
+<contributor> </contributor>
+<description>This table stores the names and values of user defined attributes.   </description>
+<date></date>
+
+<entity>
+	<entityName>vegPlot.definedValue </entityName>
+	<entitySummary>This table stores the user defined information.</entitySummary>
+	<entityDescription>This table stores information representing user defined attributes.  Through 
+	the 'userDefined' table these attributes are associated with a plot observation and catagorized into 
+	as specific types, such as environmental or vegetation.</entityDescription>
+
+        <attribute>
+                <attName>definedValueId</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>PK </attKey>
+		<attReferences>n/a</attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Primary key in the definedValue table.</attDefinition>
+        </attribute>
+
+
+	<attribute> 
+		<attName>userDefinedId</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>FK </attKey>
+		<attReferences>userDefined </attReferences>
+		<attNotes>Foreign key into the userDefined table.</attNotes>
+		<attDefinition>This key links a user defined attribute to a specific plot observation and catagory.</attDefinition>
+	</attribute>
+
+
+
+	<attribute>
+                <attName>definedValueName </attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>The name of the user defined value.</attDefinition>
+        </attribute>
+
+<attribute>
+                <attName>definedValueType </attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>The data type of the user defined value.</attDefinition>
+</attribute>
+
+<attribute>
+                <attName>definedValue</attName>
+                <attNulls>No</attNulls>
+                <attType>TEXT/BLOB </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>The actual data associated with the user defined attribute.</attDefinition>
+</attribute>
+
+	
+	
+	<children> </children>
+</entity>
+</dataModel>	

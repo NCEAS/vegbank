@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+
+<dataModel>	
+
+
+<title> Prototype Veg Plots Database Component Description: notationIntersection </title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
+<contributor> </contributor>
+<description>This table stores information linking a notation to a specific attribute associated with a plot.</description>
+<date></date>
+
+<entity>
+	<entityName>vegPlot.notationIntersection </entityName>
+	<entitySummary>This table stores the email addresses of the various parties involved in the collection of plots. </entitySummary>
+	<entityDescription>This table was developed with the goal of keeping all the notes associated with 
+	the plots in a sigle table rather than disseminated thoughout the database.  Generally this table will point a note to a 
+	plot record and specifically to a discreet attribute associated with that plot.</entityDescription>
+
+        <attribute>
+                <attName>notationIntersectionId</attName>
+                <attNulls>No </attNulls>
+                <attType>NUMBER </attType>
+                <attKey>PK </attKey>
+		<attReferences>n/a</attReferences>
+                <attNotes>Primary Key </attNotes>
+                <attDefinition>This is the primary key for the notationIntersection table.</attDefinition>
+        </attribute>
+
+
+	<attribute> 
+		<attName>obsId</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>FK </attKey>
+		<attReferences>plotObservation</attReferences>
+		<attNotes>Foreign key into the plotObservation table.</attNotes>
+		<attDefinition>This key links a note with a plotObservation. </attDefinition>
+	</attribute>
+
+
+
+	<attribute>
+                <attName>tableName</attName>
+                <attNulls>Yes</attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey>n/a </attKey>
+                <attReferences>n/a </attReferences>
+                <attNotes>Name of the table that the note should be associated with.</attNotes>
+                <attDefinition>This column stores the name of the table that the note is associated with.  
+		In the case where the note is to be generally applied to the entire observation the string stored 
+		here will be "plotObservation" which denotes the broad application of the notation to the entire 
+		plot observation.</attDefinition>
+        </attribute>
+
+	
+	<attribute> 
+		<attName>attributeName</attName>
+		<attNulls>Yes</attNulls>	
+		<attType>VARCHAR2</attType>
+		<attKey>n/a</attKey>
+		<attReferences>n/a</attReferences>
+		<attNotes>Name of the attribute in the table (stored in tableName) that the notation is associated with.</attNotes>
+		<attDefinition>This column stores the name of the attribute in the table (stored in tableName) 
+		that the notation is associated with.  Business rules maintain that if the tableName equals 'plotObservation' then 
+		then this field must be null.</attDefinition>
+	</attribute>
+	
+	
+	
+	<attribute> 
+		<attName>tableRecord</attName>
+		<attNulls>Yes</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>n/a</attKey>
+		<attReferences>n/a</attReferences>
+		<attNotes>Record number of the row where the attribute (stored in the "attributeName" column) is located.</attNotes>
+		<attDefinition>This column stores the record number (which translates to the primary key value for the table 
+		where the 'attributeName' is stored) for the row containing the attribute which the note is associated with.</attDefinition>
+	</attribute>
+	
+	
+	
+	<attribute> 
+		<attName>notationId</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>FK</attKey>
+		<attReferences>notation</attReferences>
+		<attNotes>Foreign key into the notation table.</attNotes>
+		<attDefinition>This key points to a specific notation entry.</attDefinition>
+	</attribute>
+
+	<children> </children>
+</entity>
+</dataModel>	
