@@ -25,8 +25,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-04-04 03:31:02 $'
- *  '$Revision: 1.21 $'
+ *  '$Date: 2002-04-04 22:18:48 $'
+ *  '$Revision: 1.22 $'
  */
 
 
@@ -57,6 +57,7 @@ public class DataSubmitServlet extends HttpServlet
 	private String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot_select.html";
 	
 	private String browserType = "";
+	private String user = ""; //the email addy of the user as stored in the framwork cookie
 	
 	/**
 	 * constructor method
@@ -88,11 +89,10 @@ public class DataSubmitServlet extends HttpServlet
 		PrintWriter out = response.getWriter();
 		try 
 		{
-			//handle the cookies -- the cookies should start with the user name
-			//which will be used to register the query and results documents 
-			//with the dataexcahnge servlet
-			String userName = su.getCookieValue(request);
-			System.out.println("DataSubmitServlet > current user: " +  userName   );
+			// get the cookie for the current user which will be referenced elsewhere in the class
+			// and will be stored with the data that is loaded to vegbank
+			user= su.getCookieValue(request);
+			System.out.println("DataSubmitServlet > current user email: " + user   );
 			
 			Hashtable params = new Hashtable();
 			params = su.parameterHash(request);
@@ -132,7 +132,6 @@ public class DataSubmitServlet extends HttpServlet
 			{
 				out.println("DataSubmitServlet > action unknown!");
 			}
-			
 		}
 		catch( Exception e ) 
 		{
@@ -164,16 +163,30 @@ public class DataSubmitServlet extends HttpServlet
 			String action = (String)params.get("action");
 			if ( action.equals("init") )
 			{
-				//check that the uer has valid priveleges to load a data 
-				//file to the database and if so give the use a window 
-				//to upload some data
-				
-				//make sure the correct parameters were passed and 
-				//authenticate the user
+				// check that the uer has valid priveleges to load a data 
+				// file to the database and if so give the use a window 
+				// to upload some data
+				String inputEmail = "";
+				if ( params.containsKey("emailAddress") )
+				{
+					inputEmail = (String)params.get("emailAddress");
+					//make sure that the login email matches the passed here
+					if ( inputEmail.equals(user) )
+					{
+						//redirect the user to the data selection form to either                                            
+						//upload or choose from a previosly uploaded file                                                   
+						response.sendRedirect("/forms/plot-upload.html"); 
+					}
+					// if not then send the user to a login
+					else
+					{
+						sb.append("<a href=\"www.vegbank.org\">You are not logged in! </a> ");
+					}
+				}
 				
 				//redirect the user to the data selection form to either
 				//upload or choose from a previosly uploaded file
-				response.sendRedirect("/forms/plot-upload.html");
+				//response.sendRedirect("/forms/plot-upload.html");
 			}
 			
 			// if the action is upload that is basically ar referal 
@@ -231,7 +244,8 @@ public class DataSubmitServlet extends HttpServlet
 								String thisPlot = values[i];
 								System.out.println("DataSubmitServlet > requesting an rmi plot insert: '"+values[i]+"'" );
 								//insert the plot over the rmi system
-								String result = rmiClient.insertPlot(thisPlot);
+								System.out.println("DataSubmitServlet > plot being loaded by: " + user );
+								String result = rmiClient.insertPlot(thisPlot, user);
 								String receipt = getPlotInsertionReceipt(thisPlot, result, receiptType, i, values.length);
 								sb.append( receipt );
 								System.out.println("DataSubmitServlet > requesting a receipt: '"+i+"' out of: " + values.length );
@@ -374,6 +388,8 @@ public class DataSubmitServlet extends HttpServlet
 				Vector latitude = parser.getValuesForPath(doc, "/plotInsertion/latitude");
 				Vector longitude = parser.getValuesForPath(doc, "/plotInsertion/longitude");
 				Vector state =  parser.getValuesForPath(doc, "/plotInsertion/state");
+				Vector exceptions = parser.getValuesForPath(doc, "/plotInsertion/exceptionMessage");
+				Vector insertion = parser.getValuesForPath(doc, "/plotInsertion/insert");
 				
 			//	String plotName = rmiClient.getAuthorPlotCode(plot);
 			//	String state = rmiClient.getState(plot);
@@ -413,6 +429,19 @@ public class DataSubmitServlet extends HttpServlet
 			//	sb.append(" 	<td> Commmunity: </td> \n");	
 			//	sb.append(" 	<td> "+community+" </td> \n");	
 			//	sb.append(" </tr> \n");
+
+				// the exceptions 
+				sb.append(" <tr> \n");                                                                                             
+				sb.append("   <td> Errors: </td> \n");                                                                         
+				sb.append("   <td> "+exceptions+" </td> \n");                                                                       
+				sb.append(" </tr> \n");
+
+				// insertions results
+				sb.append(" <tr> \n");                                                                                             
+				sb.append("   <td> Insert: </td> \n");                                                                         
+				sb.append("   <td> "+insertion+" </td> \n");                                                                       
+				sb.append(" </tr> \n");
+				
 				sb.append("</table> \n");
 			}
 			catch( Exception e ) 
