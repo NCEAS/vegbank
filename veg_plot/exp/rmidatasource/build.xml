@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-03-20 21:38:03 $'
- 	*     '$Revision: 1.5 $'
+ 	*     '$Date: 2002-03-22 18:09:14 $'
+ 	*     '$Revision: 1.6 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -114,7 +114,25 @@
 		<delete dir="build" />
 	</target>
 	
-	
+
+<!-- JAVA DOC -->
+<target name="jdoc">                                                                                                                                
+	<javadoc 
+		sourcepath="src"
+		sourcefiles="./src/DataSourceClient.java  
+		./src/DataSourceServer.java
+	 	./src/DataSourceServerInterface.java
+	 	./src/DataSourceImpl.java
+		./src/DBinsertPlotSource.java
+		./src/DataSourceClient.java
+		"
+		destdir="doc/api"
+		author="true"
+		version="true"
+		use="true"
+		windowtitle="Test API"
+/>
+</target>      
 	
 	
 
