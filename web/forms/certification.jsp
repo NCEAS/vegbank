@@ -12,9 +12,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: anderson $'
-  *      '$Date: 2004-07-13 18:46:15 $'
-  *  '$Revision: 1.14 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2004-07-26 15:33:54 $'
+  *  '$Revision: 1.15 $'
   *
   *
   -->
@@ -267,7 +267,7 @@
 	    <br/> 
 	    <font color="blue" size=-1>#</font> 
 		<span class="vegbank_small">
-	    Please rate your expertise for the <b>3 REGIONS</b> you know best in terms 
+	    Please rate your expertise for up to <b>3 REGIONS</b> you know best in terms 
 	    of knowledge of the vegetation, the flora, and the US-NVC (1=Weak, 5=Expert) 
 		</span>
 	    <br/>
@@ -290,7 +290,7 @@
 		</tr>
 
 		<tr bgcolor="#FFFFFF"> 
-		  <td align="center"> 
+		  <td align="center"><font color="red">*</font>
 			<html:select property="expRegionA">
 			  <option value="">--select a region--</option>
 			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
