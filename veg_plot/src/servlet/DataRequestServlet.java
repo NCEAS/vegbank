@@ -48,68 +48,67 @@ import java.net.URL;
 public class DataRequestServlet extends HttpServlet 
 {
 
-ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
-public servletUtility suy = new servletUtility();
+	ResourceBundle rb = ResourceBundle.getBundle("veg_servlet");
+	public servletUtility suy = new servletUtility();
 
-public String queryOutput[] = new String[10000];  //the output from query
-public int queryOutputNum; //the number of output rows from the query
+	public String queryOutput[] = new String[10000];  //the output from query
+	public int queryOutputNum; //the number of output rows from the query
 
-private String taxonName = null;
-private String communityName = null;
-private String taxonOperation = null;
-private String commOperation = null;
-private String minElevation = null;
-private String maxElevation = null;
-private String state = null;
-private String surfGeo = null;
-private String multipleObs = null;
-private String compoundQuery = null;
-private String plotId = null;
-private String resultType = null;
-private String clientLog = null;
-private String remoteHost = null;
-private String requestDataType = null;
-private String servletDir = null; // the absolute path to the servlet
+	private String taxonName = null;
+	private String communityName = null;
+	private String taxonOperation = null;
+	private String commOperation = null;
+	private String minElevation = null;
+	private String maxElevation = null;
+	private String state = null;
+	private String surfGeo = null;
+	private String multipleObs = null;
+	private String compoundQuery = null;
+	private String plotId = null;
+	private String resultType = null;
+	private String clientLog = null;
+	private String remoteHost = null;
+	private String requestDataType = null;
+	private String servletDir = null; // the absolute path to the servlet
 
-// community related attributes
-// commmunity name already defined above
-private String communityLevel = null;
-public servletUtility su = new servletUtility();
-public dbAccess dba =new dbAccess(); 
+	// community related attributes
+	// commmunity name already defined above
+	private String communityLevel = null;
+	public servletUtility su = new servletUtility();
+	public dbAccess dba =new dbAccess(); 
 
-/** Handle "POST" method requests from HTTP clients */
-public void doPost(HttpServletRequest request,
-	HttpServletResponse response)
-  throws IOException, ServletException 	
-	{
-		doGet(request, response);
-	}
-
-
-/** Handle "GET" method requests from HTTP clients */ 
-public void doGet(HttpServletRequest request, 
-	HttpServletResponse response)
-	throws IOException, ServletException  
-	{
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-
-		try 
+	/** Handle "POST" method requests from HTTP clients */
+	public void doPost(HttpServletRequest request,
+		HttpServletResponse response)
+ 	 throws IOException, ServletException 	
 		{
+			doGet(request, response);
+		}
+
+
+	/** Handle "GET" method requests from HTTP clients */ 
+	public void doGet(HttpServletRequest request, 
+		HttpServletResponse response)
+		throws IOException, ServletException  
+		{
+			response.setContentType("text/html");
+			PrintWriter out = response.getWriter();
+			try 
+			{
 			//enumeration is needed for those
 			//cases where there are multiple values 
 			// for a given parameter
-			Enumeration enum =request.getParameterNames();
-			Hashtable params = new Hashtable();
-			params = su.parameterHash(request);
+				Enumeration enum =request.getParameterNames();
+				Hashtable params = new Hashtable();
+				params = su.parameterHash(request);
 			
-			System.out.println("IN PARAMETERS: "+params.toString() );
+				System.out.println("IN PARAMETERS: "+params.toString() );
  
- 			//how much data is being requested -- summary set, full data set etc
- 			if ( (String)params.get("resultType") != null )
-		 	{
- 				resultType = (String)params.get("resultType");
- 			}
+ 				//how much data is being requested -- summary set, full data set etc
+ 				if ( (String)params.get("resultType") != null )
+		 		{
+ 					resultType = (String)params.get("resultType");
+ 				}
  			//what type of data is being requested -- ie. plot, plantTaxon, vegCommunity
  			if ( (String)params.get("requestDataType") != null )
  			{
@@ -118,16 +117,13 @@ public void doGet(HttpServletRequest request,
  			//get the variables privately held in the properties file
  			clientLog=(rb.getString("requestparams.clientLog"));
 			servletDir = rb.getString("requestparams.servletDir");
-
  			remoteHost=request.getRemoteHost();
 			System.out.println("accessed by: "+remoteHost);
-			
 			//log the use of the servlet by the client
 			updateClentLog (clientLog, remoteHost);
-
 			//return to the browser a summary of the request being made of the servlet this
 			//method also adds some tags that are required many browsers
-			returnQueryElemenySummary (out, params, response);
+//			returnQueryElemenySummary (out, params, response);
 			
 			//figure out what of data request type the client is requesting?
 			if ( requestDataType.trim().equals("vegPlot") )
@@ -217,6 +213,7 @@ public void doGet(HttpServletRequest request,
 			//figure out what type of client that is accessing the servlet
 			//the results that are returned depend on this parameter
 			String clientType = param.get("clientType").toString();
+			String requestDataFormatType  = param.get("requestDataFormatType").toString();
 			
 			//validate that there are the correct type and number
 			//of parameters being passed to thie method
@@ -254,26 +251,13 @@ public void doGet(HttpServletRequest request,
 				composeExtendedQuery( extendedParamsHash ) ;
 				//issue the extended query
 				issueQuery("extendedQuery");
-				//the number of plots in the result set\
-				out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+				
 				
 				//if the query had results respond accordingly to various clients
 				if (queryOutputNum>=1)
 				{
-					System.out.println("result sets: "+queryOutputNum+" to: "+clientType);
-					if ( clientType.trim().equals("clientApplication") )
-					{
-						out.println("sending xml");
-						suy.fileVectorizer(servletDir+"summary.xml");
-						out.println(suy.outVector); 
-					}
-					else  //the browser
-					{
-						//this passes the browser an html form to view the summary data
- 						servletUtility l =new servletUtility();  
- 						l.getViewOption(requestDataType);
- 						out.println(l.outString);
-					}
+					handleQueryResultsResponse(clientType, requestDataFormatType, out, 
+						response, param);
 				}
 				else 
 				{ 
@@ -281,8 +265,6 @@ public void doGet(HttpServletRequest request,
 					out.println("<a href = \"/examples/servlet/pageDirector?pageType=DataRequestServlet\">"
 					+"return to query page</a><b>&#183;</b>"); //put in rb
 				}
-				
-				
 			}
 		}
 		catch( Exception e ) 
@@ -293,6 +275,71 @@ public void doGet(HttpServletRequest request,
 		}
 	}
 
+	/**
+	 * this method is to be used for passing the results from the 
+	 * servlet to the client that has accessed the client.  Depending 
+	 * on the client type and the data format type that the client has 
+	 * requested, either text, html, or xml will be passed back to the 
+	 * client
+	 * 
+	 * @param out -- PrintWriter back to the client
+	 * @param clientType -- the type of client {browser, clientApplication}
+	 * @param requestDataFormatType -- the data format type that the client has 
+	 *		requested {tsxt, html, xml}
+	 * @param response -- the servlet response to the client 
+	 * @param params -- the parameters passed to the servlet
+	 */
+	private void handleQueryResultsResponse(String clientType, 
+		String requestDataFormatType, PrintWriter out, 
+		HttpServletResponse response, Hashtable params)
+	{
+		try 
+		{
+			System.out.println("result sets: "+queryOutputNum+" to: "+clientType);
+			if ( clientType.trim().equals("clientApplication") )
+			{
+				//does the client want xml or html?
+				if ( requestDataFormatType.trim().equals("xml") )
+				{
+					//out.println("sending xml");
+					suy.fileVectorizer(servletDir+"summary.xml");
+					Vector resultsVector = suy.outVector;
+					for (int i=0; i<resultsVector.size(); i++) 
+					{
+						out.println( resultsVector.elementAt(i) );
+					}
+					//suy.fileVectorizer(servletDir+"summary.xml");
+					//out.println(suy.outVector);
+				}
+				else //assume that client wants html 
+				{
+					//pass back the summary of parameters passed to the servlet
+					returnQueryElemenySummary (out, params, response);
+					//the number of plots in the result set\
+					out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+					//send to the client the html summary page
+					//+"<form action=\"http://"+rb.getString("server")+""+rb.getString("servlet-path")+"viewData\" method=\"GET\"> \n"
+					response.sendRedirect("/harris/servlet/viewData?resultType=summary&summaryViewType=vegPlot");
+				}
+			}
+			else  //the browser
+			{
+				//pass back the summary of parameters passed to the servlet
+				returnQueryElemenySummary(out, params, response);
+				//the number of plots in the result set\
+				out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+				//this passes the browser an html form to view the summary data
+ 				servletUtility l =new servletUtility();  
+ 				l.getViewOption(requestDataType);
+ 				out.println(l.outString);
+			}
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("** failed: "
+			+e.getMessage());
+		}
+	}
 
 /**
  * Handles simple queries which are those queries where there is only one 
