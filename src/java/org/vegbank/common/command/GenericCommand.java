@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-17 05:35:52 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2004-09-17 05:37:19 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -215,8 +215,6 @@ public class GenericCommand
 			pn = numTotalPages; 
 		} 
 		setPageNumber(Integer.toString(pn));
-		log.debug(":GC pageNumber: " + pn);
-		log.debug(":GC numTotalPages: " + numTotalPages);
 
 
 
