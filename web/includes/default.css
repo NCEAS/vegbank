@@ -350,10 +350,10 @@ TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 .irform { color: #000000; background: #cccc99; font-weight: normal; font-size: 8pt; }
 
 .error { font-weight: bold; color: red;}
-.useraction  {font-weight: bold; color: #FF0000 }
-.useraction A:Link {color: #FF0000}
-.useraction A:Visited {color: #BB0000 }
-.useraction A:hover {color: #FF9999 }
+td.useraction  {font-weight: bold; color: #FF0000 ; background: #ffffcc }
+td.useraction A:Link {color: #FF0000}
+td.useraction A:Visited {color: #BB0000 }
+td.useraction A:hover {color: #FF9999 }
 
 .verticaltext { layout-flow: vertical-ideographic }
 
