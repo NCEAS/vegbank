@@ -5,9 +5,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  *   '$Author: farrell $'
-  *     '$Date: 2002-11-22 19:22:24 $'
-  * '$Revision: 1.6 $'
+  *   '$Author: harris $'
+  *     '$Date: 2002-11-26 19:13:23 $'
+  * '$Revision: 1.7 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -102,15 +102,6 @@
 		includes="**.* "
 		excludes="**/CVS* "
 	/>
-	<!-- the multipart encoders decoders -->
-	<!--
-	<copydir src="${multipart_src}" 
-		dest="${build}" 
-		filtering="yes"
-		includes="**.* "
-		excludes="**/CVS* "
-	/>
-	-->
 	
 	<!-- the framework -->
 	<copydir src="${frameworksrc}" 
@@ -149,7 +140,7 @@
 
 
 <!-- COMPILE TARGET -->	
-<target name="compile" depends="copy">
+<target name="compile" depends="copy" description="-- the main compile target that compiles all the servlet code">
 
 	
 	<echo message="compiling utility classes" />
@@ -176,7 +167,7 @@
 
 
 <!-- JAR TARGET -->
-<target name="jar" depends="compile">
+<target name="jar" depends="compile" description="-- main jar target put the servlets into jar files.">
 	
 	<jar jarfile ="${lib}/utilities.jar"
 		basedir="${build}"
@@ -201,13 +192,6 @@
 		excludes="${build}/servlet/authentication"
 	/>
 	
-<!--
-	<jar jarfile ="${lib}/multipart.jar"
-		basedir="${build}"
-		includes="servlet/multipart/** "
-		excludes="${build}/servlet/authentication"
-	/>
-	-->
 	<jar jarfile ="${lib}/datafile-exchange.jar"
 		basedir="${build}"
 		includes="servlet/datafile_exchange/** "
@@ -226,7 +210,7 @@
 
 
 <!-- DIST TARGET -->
-<target name="dist" depends="jar">
+<target name="dist" depends="jar" description="--copies the jar files to the servlet container">
 
 	<copy todir="${servlet_location}" filtering="no" >
 		<fileset dir="${lib}" >
