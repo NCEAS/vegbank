@@ -28,8 +28,8 @@ import PlantTaxaLoader;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-06-08 18:46:14 $'
- *  '$Revision: 1.31 $'
+ *  '$Date: 2002-06-19 14:59:28 $'
+ *  '$Revision: 1.32 $'
  */
 
 
@@ -256,15 +256,15 @@ public class DataSubmitServlet extends HttpServlet
 				taxonDescription = (String)params.get("taxonDescription");
 				
 				Hashtable h = new Hashtable();
-				h.put("longName", longName);
-				h.put("shortName", shortName);
-				h.put("code", code);
-				h.put("taxonDescription", taxonDescription);
-				h.put("salutation", salutation);
-				h.put("givenName", firstName);
-				h.put("surName", lastName);
-				h.put("orgName", orgName);
-				h.put("email", emailAddress);
+				h.put("longName", ""+longName);
+				h.put("shortName", ""+shortName);
+				h.put("code", ""+code);
+				h.put("taxonDescription", ""+taxonDescription);
+				h.put("salutation", ""+salutation);
+				h.put("givenName", ""+firstName);
+				h.put("surName", ""+lastName);
+				h.put("orgName", ""+orgName);
+				h.put("email", ""+emailAddress);
 				h.put("citationDetails", "VB2002");
 				h.put("dateEntered", "2005-MAY-30" );
 				h.put("usageStopDate", "2005-MAY-30" );
