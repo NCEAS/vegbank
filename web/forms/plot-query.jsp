@@ -14,8 +14,8 @@
 *     Authors: @author@
 *
 *    '$Author: mlee $'
-*      '$Date: 2003-07-09 21:47:37 $'
-*  '$Revision: 1.3 $'
+*      '$Date: 2003-07-10 21:54:20 $'
+*  '$Revision: 1.4 $'
 *
 *
 -->
@@ -1090,7 +1090,7 @@ VEGBANK - Simple Plots Query
 		      Plots can be selected that <b>match all</b> the above criteria (AND)
 		      or that <b>match any</b> of the above criteria (OR). <br />
 
-		      For more complicated queries that allow a combination of AND and OR queries, see our <a href="nested-plot-query.html">nested query page</a>.</p>
+		      <!-- For more complicated queries that allow a combination of AND and OR queries, see our <a href="nested-plot-query.html">nested query page</a>.--></p>
 		    </td>
 		  </tr>
 		</table>
