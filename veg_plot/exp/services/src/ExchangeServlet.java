@@ -37,6 +37,7 @@ public class ExchangeServlet extends HttpServlet
 			
     	// bind to web service whose WSDL is at the specified URL
     	String url = "http://localhost:8004/vegbank/exchange.wsdl";
+			System.out.println("ExchangeServlet > binding to: " + url);
     	ExchangeInterface exchange = (ExchangeInterface) Registry.bind( url, ExchangeInterface.class );
 
     	// invoke the web service as if it was a local java object
@@ -65,7 +66,9 @@ public class ExchangeServlet extends HttpServlet
 		 
 		 sb.append("<table width=\"500\"> \n");
 		 sb.append("<tr>");
+		 sb.append("<span class=\"category\">");
 		 sb.append("<td width=40> PLOT </td> <td width=20>LOCATION</td> <td width=20> STATE </td>");
+		 sb.append("</span>");
 		 sb.append("</tr>");
 		 int row = 0;
 		 for (int i=0; i< v.size() ; i++)
@@ -87,13 +90,13 @@ public class ExchangeServlet extends HttpServlet
 					sb.append("<tr bgcolor=\"#C0D3E7\" >");
 					// THE ACCESSION NUMBER AND THE COMPREHENSIVE VIEW 
 					sb.append("<td> <span class=\"itemsmall\">  "+accessionNumber+"  ");
-					sb.append(" <a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=full&queryType=simple&plotId="+plotId+"\"><img alt=\"Comprehensive view\" src=\"/vegbank/images/comprehensive_sm.gif\" border=\"0\" align=\"left\"></a>");
+					sb.append(" <a href=\"/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=full&queryType=simple&plotId="+plotId+"\"><img alt=\"Comprehensive view\" src=\"/vegbank/images/comprehensive_sm.gif\" border=\"0\" align=\"left\"></a>");
 					sb.append(" &nbsp;");
-					sb.append(" <a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=summary&queryType=simple&plotId="+plotId+"\"><img alt=\"Comprehensive view\" src=\"/vegbank/images/report_sm.gif\" border=\"0\" align=\"left\"></a>");
+					sb.append(" <a href=\"/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=summary&queryType=simple&plotId="+plotId+"\"><img alt=\"Comprehensive view\" src=\"/vegbank/images/report_sm.gif\" border=\"0\" align=\"left\"></a>");
 					sb.append(" </span> </td>");
 					
 					sb.append("<td> <span class=\"itemsmall\"> ");
-					sb.append(" <a href=\"http://beta.nceas.ucsb.edu:8080/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&longitude="+longitude+"&latitude="+latitude+"\">");
+					sb.append(" <a href=\"/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&longitude="+longitude+"&latitude="+latitude+"\">");
 					sb.append(" <img alt=\"Location\" src=\"/vegbank/images/small_globe.gif\" border=\"0\" align=\"center\"> </a> </span> </td> ");
 					sb.append("<td> <span class=\"itemsmall\"> "+state+"</span> </td> ");
 					row = 1;
@@ -103,13 +106,13 @@ public class ExchangeServlet extends HttpServlet
 					sb.append("<tr bgcolor=\"white\" >");
 						// THE ACCESSION NUMBER AND THE COMPREHENSIVE VIEW 
 					sb.append("<td> <span class=\"itemsmall\">  "+accessionNumber+"  ");
-					sb.append(" <a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=full&queryType=simple&plotId="+plotId+"\"><img alt=\"Comprehensive view\" src=\"/vegbank/images/comprehensive_sm.gif\" border=\"0\" align=\"left\"></a>");
+					sb.append(" <a href=\"/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=full&queryType=simple&plotId="+plotId+"\"><img alt=\"Comprehensive view\" src=\"/vegbank/images/comprehensive_sm.gif\" border=\"0\" align=\"left\"></a>");
 					sb.append(" &nbsp;");
-					sb.append(" <a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=summary&queryType=simple&plotId="+plotId+"\"><img alt=\"Comprehensive view\" src=\"/vegbank/images/report_sm.gif\" border=\"0\" align=\"left\"></a>");
+					sb.append(" <a href=\"/framework/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=summary&queryType=simple&plotId="+plotId+"\"><img alt=\"Comprehensive view\" src=\"/vegbank/images/report_sm.gif\" border=\"0\" align=\"left\"></a>");
 					sb.append(" </span> </td>");
 					
 					sb.append("<td> <span class=\"itemsmall\"> ");
-					sb.append(" <a href=\"http://beta.nceas.ucsb.edu:8080/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&longitude="+longitude+"&latitude="+latitude+"\">");
+					sb.append(" <a href=\"/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&longitude="+longitude+"&latitude="+latitude+"\">");
 					sb.append(" <img alt=\"Location\" src=\"/vegbank/images/small_globe.gif\" border=\"0\" align=\"center\"> </a> </span> </td> ");
 					sb.append("<td> <span class=\"itemsmall\"> "+state+"</span> </td> ");
 					

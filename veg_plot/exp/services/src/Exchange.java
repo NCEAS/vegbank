@@ -32,8 +32,8 @@ public class Exchange implements ExchangeInterface
 			sqlBuf.append(" or upper(surfgeo) like '%"+plantName.toUpperCase()+"%'");
 			sqlBuf.append(" or upper(plottype) like '%"+plantName.toUpperCase()+"%'");
 			sqlBuf.append(" or upper(plotarea) like '%"+plantName.toUpperCase()+"%'");
-			sqlBuf.append(" or upper(slopeaspect) like '%"+plantName.toUpperCase()+"%'");
-			sqlBuf.append(" or upper(slopegradient) like '%"+plantName.toUpperCase()+"%'");
+			// sqlBuf.append(" or upper(slopeaspect) like %"+plantName.toUpperCase()+"%'");
+			// sqlBuf.append(" or upper(slopegradient) like '%"+plantName.toUpperCase()+"%'");
 			sqlBuf.append(" or upper(hydrologicregime) like '%"+plantName.toUpperCase()+"%'");
 			sqlBuf.append(" or upper(soildrainage) like '%"+plantName.toUpperCase()+"%'");
 			sqlBuf.append(" or upper(currentcommunity) like '%"+plantName.toUpperCase()+"%'");
@@ -86,7 +86,8 @@ public class Exchange implements ExchangeInterface
 		try 
  		{
 			Class.forName("org.postgresql.Driver");
-			String driverString = "jdbc:postgresql://vegbank.nceas.ucsb.edu/plots_dev";
+
+			String driverString = "jdbc:postgresql://127.0.0.1/plots_dev";
 			System.out.println("Exchange > connecting to: " + driverString   );
 			c = DriverManager.getConnection(driverString, "datauser", "");
 		}
