@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <vegPlotPackage>
   <project>
-    <projectName>Gregarious Ferns of B.C. - TEST UPLOAD 1234</projectName>
+    <projectName>Gregarious Ferns of B.C. - TEST UPLOAD 45</projectName>
     <projectDescription>Investigation of fern species in Garibaldi Provincial Park</projectDescription>
     <startDate>9/02/02</startDate>
     <stopDate>9/05/02</stopDate>
@@ -214,11 +214,6 @@
             <taxonStratumCover>33</taxonStratumCover>
             <stratumName>T53.10</stratumName>
           </stratumComposition>
-        </taxonObservation>
-        <taxonObservation>
-          <authorNameId>Bouteloua curtipendula (Michx.) Torr.</authorNameId>
-          <authorCodeId>BOCU</authorCodeId>
-          <taxonCover/>
         </taxonObservation>
         <taxonObservation>
           <authorNameId>Mammillaria Haw.</authorNameId>
