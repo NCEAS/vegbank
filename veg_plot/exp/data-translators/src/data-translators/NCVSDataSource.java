@@ -6,17 +6,20 @@ import java.sql.*;
 
 
 /**
- * plugin to read the NCVS dataset
- *  Authors: 
+ * plugin to allow access the North Carolina Vegetation Society (NCVS)
+ * database, which is an MS ACCESS database
+ *
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-10 21:48:47 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2002-01-10 22:29:03 $'
+ * 	'$Revision: 1.2 $'
  */
 public class NCVSDataSource implements PlotDataSourceInterface
 //public class NCVSDataSource
 {
+	
+	//the name of the odbc source
 	private String dbUrl = "jdbc:odbc:ncvs-datasource"; 
 	private Connection con = null;
 	
@@ -247,12 +250,15 @@ public class NCVSDataSource implements PlotDataSourceInterface
 	
 	
 	
-	//retuns the unique names of all the strata in a given plot -- as of 20010102,
-	//I do not understand how bob lists the unique plants.  It appears that he
+	// retuns the unique names of all the strata in a given plot -- as of 20020102,
+	// I do not understand how bob lists the unique plants.  It appears that he
 	// recognizes the plants in the tree and herb layers b/c those are the names
-	// of the tables where the data are stored
+	// of the tables where the data are stored.  Bob recently mentioned that he
+	// was only concerned about those plants listed in the herb layer and I think
+	// that they don't really recognize the data within a specific strata
 	public Vector getUniqueStrataNames(String plotName)
 	{
+		/** removed this temporarily until bob can describe what he is doing here
 		Statement stmt = null;
 		Vector v = new Vector();
 			try 
@@ -279,6 +285,11 @@ public class NCVSDataSource implements PlotDataSourceInterface
 				System.out.println("Exception: " + x.getMessage() );
 				x.printStackTrace();
 			}
+		return(v);
+		*/
+		//a quick fix -- just return the 'tree' layer for all plants & plots
+		Vector v = new Vector();
+		v.addElement("tree");
 		return(v);
 	}
 	
@@ -1070,6 +1081,8 @@ public class NCVSDataSource implements PlotDataSourceInterface
 	 */
 	 public String getStrataCover(String plotName, String stratumName)
 	 {
+		 /* a hack to get bobs plots loaded until he has a chance to talk about
+		  * how he is handling the strata
 		Statement stmt = null;
 		String percentCover = null;
 		try 
@@ -1093,14 +1106,19 @@ public class NCVSDataSource implements PlotDataSourceInterface
 			e.printStackTrace();
 		}
 		return(percentCover);
+		*/
+		return("45");
 	 }
 	 
 	  /**
 	 * method to return the cover for a given strata for a given 
-	 * plot
+	 * plot.  
 	 */
 	 public String getStrataBase(String plotName, String stratumName)
 	 {
+		 
+		 /* a hack to get bobs plots loaded until he has a chance to talk about
+		  * how he is handling the strata
 		 Statement stmt = null;
 		 String base = null;
 		try 
@@ -1124,6 +1142,8 @@ public class NCVSDataSource implements PlotDataSourceInterface
 			e.printStackTrace();
 		}
 		return(base);
+		*/
+		return("0");
 	 }
 	 
 	/**
@@ -1132,6 +1152,8 @@ public class NCVSDataSource implements PlotDataSourceInterface
 	 */
 	 public String getStrataHeight(String plotName, String stratumName)
 	 {
+		 /* a hack to get bobs plots loaded until he has a chance to talk about
+		  * how he is handling the strata
 		  Statement stmt = null;
 		  String top = null;
 		try 
@@ -1155,6 +1177,8 @@ public class NCVSDataSource implements PlotDataSourceInterface
 			e.printStackTrace();
 		}
 		return(top);
+		*/
+		return("300");
 	 }
 	 
 	 
@@ -1457,9 +1481,9 @@ public class NCVSDataSource implements PlotDataSourceInterface
 	 */
 	 public Vector getTaxaStrataExistence(String plantName, String plotName)
 	 {
-		 
+		 /* a hack to get bobs plots loaded until he has a chance to talk about
+		  * how he is handling the strata
 		 Vector v = new Vector();
-		 /*
 		 Statement stmt = null;
 		try 
 		{
@@ -1482,7 +1506,9 @@ public class NCVSDataSource implements PlotDataSourceInterface
 			e.printStackTrace();
 		}
 		*/
-		 return(v);
+			Vector v = new Vector();
+		 	v.addElement("tree");
+			return(v);
 	 }
 	 
 	 
@@ -1492,6 +1518,8 @@ public class NCVSDataSource implements PlotDataSourceInterface
 	 */
 	 public String getTaxaStrataCover(String plantName, String plotName, String stratum)
 	 {
+		 /* a hack to get bobs plots loaded until he has a chance to talk about
+		  * how he is handling the strata
 		 Vector v = new Vector();
 		 String s = null;
 		 Statement stmt = null;
@@ -1520,7 +1548,8 @@ public class NCVSDataSource implements PlotDataSourceInterface
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
-		 return(s);
+		*/
+		 return("55");
 	 }
 	 
 	 
