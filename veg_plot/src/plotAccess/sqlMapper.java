@@ -88,22 +88,24 @@ public class  sqlMapper
 				StringBuffer sqlBuf = new StringBuffer();
 				sqlBuf.append(taxonSql);
 				//issue the statement to the database
-				Vector plotIdVec = is.issuePureSQL(sqlBuf);
-				System.out.println("number of plots found with taxon: "+ plotIdVec.size() );
-				
-				
+//				Vector plotIdVec = new Vector();
+//				plotIdVec.addElement("1");
+				Vector taxonPlotIdVec = is.issuePureSQL(sqlBuf);
+				System.out.println("number of plots found with taxon: "+ taxonPlotIdVec.size() );
 				
 				//get the sql query for the attributes 
 				//that are not related to the taxonomy
-				nonTaxonSql = getExtendedNonTaxonomicQuery(extendedQueryHash) ;
+				nonTaxonSql = getExtendedNonTaxonomicQuery(extendedQueryHash, taxonPlotIdVec) ;
 			}
 			else 
 			{
-				nonTaxonSql = getExtendedNonTaxonomicQuery(extendedQueryHash);
+				//make an empty vector to pass the the below method -- in time write a 
+				//overloaded method so that this does not have to be done
+				Vector plotIdVec = new Vector();
+				nonTaxonSql = getExtendedNonTaxonomicQuery(extendedQueryHash, plotIdVec);
 			}
 			
-			
-		
+			issueStatement is = new issueStatement();
 			
 			StringBuffer sqlBuf = new StringBuffer();
 			sqlBuf.append(nonTaxonSql);
@@ -111,7 +113,8 @@ public class  sqlMapper
 			System.out.println("NEW SQL QUERY: \n" + sqlBuf.toString() );
 			
 			//issue the statement to the database
-			Vector plotIdVec = is.issuePureSQL(sqlBuf);
+			Vector plotIdVec = new Vector();
+			plotIdVec = is.issuePureSQL(sqlBuf);
 			System.out.println("number of plots found: "+ plotIdVec.size() );
 			//update this public variable for 
 			//the calling method
@@ -191,8 +194,12 @@ public class  sqlMapper
 	 * 
 	 * @param extendedQueryHash - the hashtables containg the 
 	 *		query elemets etc 
+	 * @param plotIdvec - this is a vector which contains a number
+	 * 	of plotId numbers that can be used to further constrain the 
+	 *	query developed in this method 
 	 */
-	private String getExtendedNonTaxonomicQuery( Hashtable extendedQueryHash)
+	private String getExtendedNonTaxonomicQuery( Hashtable extendedQueryHash, 
+	Vector plotIdVec)
 	{
 		StringBuffer sb = new StringBuffer();
 		try 
@@ -211,10 +218,33 @@ public class  sqlMapper
 						sb.append("and");
 					}
 					//end the statement
-					if ( i == ( queryInstanceNum-1) )
+	//				if ( i == ( queryInstanceNum-1) )
+	//				{
+	//					sb.append(";");
+	//	 			}
+				}
+				//now add the plotId's if there are any in the 
+				//passed in vector
+				if (plotIdVec.size() > 0)
+				{
+					sb.append("AND PLOT_ID IN ( " );
+					System.out.println("FUTHER CONSTRAINING THE SQL");
+					for (int j=0;j<plotIdVec.size(); j++)
 					{
-						sb.append(";");
+						sb.append(plotIdVec.elementAt(j) );
+						if (j == (plotIdVec.size() -1))
+						{
+							sb.append(");");
+						}
+						else
+						{
+							sb.append(", ");
+						}
 					}
+				}
+				else
+				{
+					sb.append(";");
 				}
 		}
 		catch ( Exception e )
