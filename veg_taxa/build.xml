@@ -100,6 +100,12 @@
 	filtering="yes"
 	includes="**.xsl"
 />
+
+<copydir src="${sql}"
+  dest="${build_lib}"
+	filtering="yes"
+	includes="denormPlantTaxonDb.sql createPlantTaxonDb.sql"
+/>
 			
 
 
