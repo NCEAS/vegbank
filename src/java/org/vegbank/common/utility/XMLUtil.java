@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-27 20:04:29 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-31 01:48:41 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -127,6 +127,7 @@ public class XMLUtil
 	{
 		String xsDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss";
 		SimpleDateFormat df = new SimpleDateFormat(xsDateTimePattern);
+		//LogUtility.log("Utility: " + df.format(date));
 		return df.format(date);
 	}
 

@@ -6,8 +6,8 @@ package org.vegbank.plots.datasource;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-30 04:51:28 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2003-10-31 01:48:41 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.vegbank.common.model.*;
+import org.vegbank.common.utility.AccessionGen;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.LogUtility;
@@ -686,7 +687,11 @@ public class VegbankXMLUpload
 		private LoadingErrors errors = null;
 		private boolean commit = false;
 		// TODO: This may need to be a configurable property
-		private static final String VegbankAccessionPrefix = "VB.";
+		private static final String VegbankAccessionPrefix = "VB";
+		private AccessionGen ag  = new AccessionGen();
+		
+		// This holds the name of the current concept
+		private String currentConceptName = null;
 		
 		public LoadTreeToDatabase(LoadingErrors errors)
 		{
@@ -908,6 +913,7 @@ public class VegbankXMLUpload
 			while( tables.hasMoreElements()  )
 			{
 				Hashtable table = (Hashtable) tables.nextElement();
+				LogUtility.log("LoadTreeToDatabase: " + tableName + " : " + table);
 				addForeignKey(table, fKName, fKValue);
 				insertTable(tableName, table);
 			}
@@ -1019,11 +1025,31 @@ public class VegbankXMLUpload
 		private void addAccessionCode(Hashtable fieldValueHash, String tableName, int PK)
 		{	
 			String fieldName = Utility.getAccessionCodeAttributeName(tableName);
+			String accessionCode = "";
 			
-			if (fieldName != null)
+			//LogUtility.log("LoadTreeToDatabase: " + fieldName + " and " + Utility.isLoadAccessionCodeOn());
+			if (fieldName != null && Utility.isLoadAccessionCodeOn() )
 			{
-				String accessionCode = VegbankAccessionPrefix + PK;
-				fieldValueHash.put(fieldName, accessionCode);
+				if (tableName.equalsIgnoreCase("Plantconcept") 
+					|| tableName.equalsIgnoreCase("Commconcept"))
+				{
+					// Use the AccessionGen for these tables
+					LogUtility.log("LoadTreeToDatabase: Calling AccessionGen"); 
+					accessionCode =
+						ag.getCode(
+							VegbankAccessionPrefix,
+							tableName,
+							new Integer(PK).toString(),
+							this.currentConceptName);
+							
+					fieldValueHash.put(fieldName, accessionCode);
+				}
+				else
+				{
+					accessionCode = VegbankAccessionPrefix + "." + PK;
+					fieldValueHash.put(fieldName, accessionCode);
+				}
+
 
 				LogUtility.log(
 					"LoadTreeToDatabase: Adding "
@@ -1064,7 +1090,7 @@ public class VegbankXMLUpload
 				LogUtility.log("LoadTreeToDatabase: Found no accessionCode for " + tableName);
 				// do nothing
 			}
-			else if ( accessionCode.startsWith(VegbankAccessionPrefix) )
+			else if ( accessionCode.startsWith(VegbankAccessionPrefix + ".") )
 			{
 				// Need to get the pK of the table
 				Hashtable simpleHash = new Hashtable();
@@ -1110,6 +1136,9 @@ public class VegbankXMLUpload
 						+ tableName
 						+ " --> "
 						+ accessionCode);
+						
+				// Remove from hash
+				fieldValueHash.remove(fieldName);
 			}
 			
 			return PK;
@@ -1481,6 +1510,8 @@ public class VegbankXMLUpload
 		 */
 		private int insertParty( Hashtable party)
 		{
+			//LogUtility.log("### " +party);
+			
 			int pKey = 0;
 			// Handle null
 			if ( party == null )
@@ -1499,7 +1530,7 @@ public class VegbankXMLUpload
 			// Insert Tables that depend on this PK
 			Enumeration telephones =getChildTables( party, "telephone");
 			insertTables("telephone", telephones, getPKName("party") ,pKey );
-			Enumeration addresses =getChildTables( party, "address");
+			Enumeration addresses = getChildTables( party, "address");
 			insertTables("address", addresses, getPKName("party") ,pKey );	
 			
 			return pKey;
@@ -1515,8 +1546,6 @@ public class VegbankXMLUpload
 		private int insertPartyBase(Hashtable party, String tableName)
 		{
 			int pKey = 0;
-			
-			//LogUtility.log("### " +party);
 			
 			// recursivly deal with FK party's
 			Hashtable ownerParty = getFKChildTable(party, "owner_ID", "party");
@@ -1697,7 +1726,7 @@ public class VegbankXMLUpload
 
 			// StratumMethod			
 			Hashtable stratumMethod = getFKChildTable(observationHash, Observation.STRATUMMETHOD_ID, "stratumMethod");
-			int stratumMethodId = insertTable("stratumMethod", stratumMethod);
+			int stratumMethodId = insertStratumMethod(stratumMethod);
 			addForeignKey(observationHash, Observation.STRATUMMETHOD_ID, stratumMethodId);
 
 			// SoilTaxon
@@ -1793,6 +1822,21 @@ public class VegbankXMLUpload
 			}
 			
 			return observationId;
+		}
+
+		private int insertStratumMethod(Hashtable stratumMethod)
+		{
+			int stratumMethodId = insertTable("stratumMethod", stratumMethod);
+			// And the child stratumTypes
+			Enumeration stratumTypes =  getChildTables(stratumMethod, "stratumType");
+			while ( stratumTypes.hasMoreElements() )
+			{
+				Hashtable stratumType = (Hashtable) stratumTypes.nextElement();
+				addForeignKey(stratumType, Stratumtype.STRATUMMETHOD_ID, stratumMethodId);
+				int stratumTypeId = insertTable("stratumType", stratumType);
+			}
+			
+			return stratumMethodId;
 		}
 
 		/**
@@ -1962,6 +2006,7 @@ public class VegbankXMLUpload
 			
 			// TODO: depends on PlantName
 			Hashtable plantName = this.getFKChildTable(plantConcept, Plantconcept.PLANTNAME_ID, "plantName");
+			currentConceptName = (String) plantName.get(Plantname.PLANTNAME);
 			int plantNameId = insertTable("plantName", plantName);
 			
 			addForeignKey(plantConcept, Plantconcept.PLANTNAME_ID, plantNameId);
@@ -2016,6 +2061,7 @@ public class VegbankXMLUpload
 			
 			//  depends on commName
 			Hashtable commName = this.getFKChildTable(commConcept, Commconcept.COMMNAME_ID, "commName");
+			currentConceptName = (String) commName.get(Commname.COMMNAME);
 			int commNameId = insertTable("commName", commName);
 			
 			addForeignKey(commConcept, Commconcept.COMMNAME_ID, commNameId);

@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.util.Vector;
 
@@ -21,8 +22,8 @@ import org.vegbank.common.model.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-10-30 04:51:28 $'
- * '$Revision: 1.18 $'
+ * '$Date: 2003-10-31 01:48:41 $'
+ * '$Revision: 1.19 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +46,8 @@ public class Utility
 	public static AbstractDatabase dbAdapter;
 	// Make a configuration option
 	public static  String dbAdapterName = "org.vegbank.common.dbAdapter.PostgresqlAdapter";
+	
+	public static final String databaseName = ResourceBundle.getBundle("database").getString("databaseName");
 	
 	/** 
 	 * Determine our db adapter class and create an instance of that class
@@ -483,5 +486,50 @@ public class Utility
 			PKname = table + "_ID";
 		}
 		return PKname;
+	}
+
+	/**
+	 * Only certain database names need to have accessionCodes loaded
+	 * 
+	 * @return boolean 
+	 */
+	public static boolean isLoadAccessionCodeOn()
+	{
+		boolean result = false;
+		LogUtility.log("Utility: databaseName = " + databaseName);
+		
+		if ( databaseName.equalsIgnoreCase("vegbank"))
+		{
+			result = true;
+		}
+		else
+		{
+			result = false;
+		}
+		return result;
+	}
+
+	/**
+	 * @return
+	 */
+	public static String getAccessionPrefix()
+	{
+		String accessionPrefix = "";
+		
+		// This is a function of database name and host machine
+		if ( databaseName.equalsIgnoreCase("vegbank"))
+		{
+			accessionPrefix = "VB";
+		}
+		else if ( databaseName.equalsIgnoreCase("vegtest"))
+		{
+			accessionPrefix = "VT";
+		}
+		else
+		{
+			accessionPrefix = "NOTVALID";
+		}
+		
+		return accessionPrefix;
 	}
 }

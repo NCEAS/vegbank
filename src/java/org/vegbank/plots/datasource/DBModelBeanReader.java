@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-30 04:51:28 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-10-31 01:48:41 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.vegbank.common.model.Covermethod;
 import org.vegbank.common.model.Observation;
 import org.vegbank.common.model.Observationsynonym;
 import org.vegbank.common.model.Party;
@@ -46,6 +47,7 @@ import org.vegbank.common.model.Plot;
 import org.vegbank.common.model.Project;
 import org.vegbank.common.model.Projectcontributor;
 import org.vegbank.common.model.Stratum;
+import org.vegbank.common.model.Stratummethod;
 import org.vegbank.common.model.Taxoninterpretation;
 import org.vegbank.common.model.Taxonobservation;
 import org.vegbank.common.model.VBModelBean;
@@ -244,6 +246,14 @@ public class DBModelBeanReader
 		// Project 
 		Project project = obs.getProjectobject();
 		getRelatedObjectsFromDB(Project.PKNAME, project.getProject_id(), project );
+		
+		// CoverMethod
+		Covermethod coverMethod = obs.getCovermethodobject();
+		getRelatedObjectsFromDB(Covermethod.PKNAME, coverMethod.getCovermethod_id(), coverMethod );
+		
+		// StratumMethod
+		Stratummethod stratumMethod = obs.getStratummethodobject();
+		getRelatedObjectsFromDB(Stratummethod.PKNAME, stratumMethod.getStratummethod_id(), stratumMethod );
 		
 		// ProjectContributors
 		Iterator projectContributors =project.getproject_projectcontributors().iterator();
@@ -523,6 +533,7 @@ public class DBModelBeanReader
 		}
 		
 		String sqlStatement = this.getSQLSelectStatement(fieldNames, className, PKName, PKValue);
+		LogUtility.log("BDModelBeanReader: " + sqlStatement);
 		
 		try
 		{
@@ -661,7 +672,7 @@ public class DBModelBeanReader
 			}
 			else
 			{	
-				XMLUtil.convertDateToXSdatetime(dateValue);
+				value = XMLUtil.convertDateToXSdatetime(dateValue);
 			}
 		}
 		else
