@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-07-23 21:51:18 $'
-  *     '$Revision: 1.28 $'
+  *     '$Date: 2003-07-25 23:05:10 $'
+  *     '$Revision: 1.29 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -351,7 +351,12 @@
     
     <!-- Copy Third Party jars -->
     <copy todir="${web.servlet.lib.dir}">
-      <fileset dir="${top.lib.dir}"/>
+      <fileset dir="${top.lib.dir}" 
+               excludes=" xalan.jar 
+                          xerces_1_4.jar
+                          servlet.jar
+                          xml-apis.jar"
+      />
     </copy>
     <copy todir="${web.servlet.lib.dir}" file="${planttaxonomy}"/>
     <copy todir="${web.servlet.lib.dir}" file="${vegcommunity}"/>
