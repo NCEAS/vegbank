@@ -11,8 +11,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2004-04-15 02:56:29 $'
-*  '$Revision: 1.4 $'
+*      '$Date: 2004-04-26 20:49:43 $'
+*  '$Revision: 1.5 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -46,8 +46,7 @@
 	</span>
 	<br/>
 	<br/>
-	Please <html:link href="@forms_link@RegisterNewUser.jsp">REGISTER</html:link> or
-	<html:link href="@general_link@login.jsp">LOGIN</html:link> to your VegBank account.
+	Please login to your VegBank account.
 	</span>
 	<br/>
 	<span class="vegbank_small">
@@ -59,6 +58,8 @@
 		Thank you,<br/>
 		<a href="mailto:help@vegbank.org">help@vegbank.org</a>
 	</span>	
+	<br/>
+    <%@ include file="../includes/Logon.jsp" %>
 </p>
 </blockquote>
 <br/>

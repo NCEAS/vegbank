@@ -6,15 +6,15 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <!--
-*  '$Id: admin_menu.jsp,v 1.3 2004-04-17 02:52:06 anderson Exp $'
+*  '$Id: admin_menu.jsp,v 1.4 2004-04-26 20:49:43 anderson Exp $'
 *   Purpose: Home for admins
 *   Copyright: 2000 Regents of the University of California and the
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
 *  '$Author: anderson $'
-*  '$Date: 2004-04-17 02:52:06 $'
-*  '$Revision: 1.3 $'
+*  '$Date: 2004-04-26 20:49:43 $'
+*  '$Revision: 1.4 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -49,16 +49,16 @@
   <h4 class="vegbank">Welcome, VegBank administrator.</h4>
   <ul>
     <li> 
-      <h4 class="vegbank"><html:link forward="CertificationList">Certification applications</html:link></h4>
+      <h4 class="vegbank"><html:link forward="CertificationList">Certify Users</html:link></h4>
     </li>
     <li> 
       <h4 class="vegbank"><html:link forward="DropPlotAction">Delete plots</html:link></h4>
     </li>
     <li> 
-      <h4 class="vegbank"><html:link forward="ManageUsers">Manage users &amp; roles</html:link> (not ready)</h4>
+      <h4 class="vegbank"><!--html:link forward="ManageUsers"-->Manage users &amp; roles<!--/html:link--> (not ready)</h4>
     </li>
     <li> 
-      <h4 class="vegbank"><a href="#">System administration</a> (not ready)</h4>
+      <h4 class="vegbank"><!--a href="#"-->System administration<!--/a--> (not ready)</h4>
     </li>
   </ul>
 </blockquote>

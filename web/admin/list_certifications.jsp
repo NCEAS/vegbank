@@ -5,15 +5,15 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!-- 
-  *   '$Id: list_certifications.jsp,v 1.2 2004-04-17 02:52:06 anderson Exp $ '
+  *   '$Id: list_certifications.jsp,v 1.3 2004-04-26 20:49:43 anderson Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-04-17 02:52:06 $'
-  *  '$Revision: 1.2 $'
+  *      '$Date: 2004-04-26 20:49:43 $'
+  *  '$Revision: 1.3 $'
   *
   *
   -->
@@ -33,7 +33,9 @@
 
         <h2 align="center" class="vegbank">Certification Administration</h2>
 
-		<html:errors/>
+		Updated: 
+		<br>
+		<html:messages id="updated"/>
 
         <p class="vegbank_normal">
 			Below is a list of all VegBank certification applications.
@@ -42,7 +44,6 @@
 	
 	<!-- main table -->
 	<table width="700" border="0" cellspacing="5" cellpadding="2">
-	<html:form method="post" action="SaveCertification.do">
 		<!--  display list containing applicant name, date, requested perm. Delim by status. -->
 
     <tr> 
@@ -53,45 +54,34 @@
       <th><b>ACTION</b></th>
 	</tr>
 
+	<tr>
+
     <logic:iterate id="certBean" name="allApps">
+	<html:form method="get" action="ListCertifications.do">
+		<html:hidden name="certBean" property="certId"/>
     <tr> 
 		<td>
-			<bean:write name="certBean" property="surName"/>, <bean:write name="certBean" property="givenName"/>
+			#<bean:write name="certBean" property="certId"/>: 
+			<bean:write name="certBean" property="surName"/>, 
+			<bean:write name="certBean" property="givenName"/>
 			<br/>
 			(<html:link action="LoadUser" paramId="usrId" paramName="certBean" paramProperty="usrId" title="edit user">
 				<bean:write name="certBean" property="emailAddress"/>
 			</html:link>)
 		</td>
 
-		<td>
-        	<bean:write name="certBean" property="requestedCertName"/>
-		</td>
+		<td align="center"> <bean:write name="certBean" property="requestedCertName"/> </td>
 
-		<td>
-        	<bean:write name="certBean" property="currentCertLevelName"/>
-		</td>
+		<td align="center"> <bean:write name="certBean" property="currentCertLevelName"/> </td>
 
-		<td>
-			<html:select property="certificationstatus">
-			  <option value="">--<bean:write name="certBean" property="certificationstatus"/>--</option>
-			  <html:optionsCollection name="certstatuslistbean" property="allCertStatusesNames"/>
-			</html:select>
+		<td align="center"> <bean:write name="certBean" property="certificationstatus"/> </td>
+		<td align="center" class="vegbank">
+			<html:link action="ViewCertification" paramId="certId" 
+						paramName="certBean" paramProperty="certId" title="view">View</html:link>
 		</td>
-		<td>
-			<html:select property="certificationstatus">
-			  <option value="<bean:write name="certBean" property="certificationstatus"/>">
-			  	--<bean:write name="certBean" property="certificationstatus"/>--</option>
-			  <html:optionsCollection name="certstatuslistbean" property="allCertStatusesNames"/>
-			</html:select>
-		</td>
-		<td>
-			<html:submit indexed="true" value="update status" property="action"/>
-			&nbsp;&nbsp;
-			<html:submit indexed="true" value="view" property="action"/>
-		</td>
+		</html:form>
     </tr>
 	</logic:iterate>
-	</html:form>
   </table>
 
 

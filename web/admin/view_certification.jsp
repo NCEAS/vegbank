@@ -5,15 +5,15 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!-- 
-  *   '$Id: view_certification.jsp,v 1.4 2004-04-17 02:52:06 anderson Exp $ '
+  *   '$Id: view_certification.jsp,v 1.5 2004-04-26 20:49:43 anderson Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-04-17 02:52:06 $'
-  *  '$Revision: 1.4 $'
+  *      '$Date: 2004-04-26 20:49:43 $'
+  *  '$Revision: 1.5 $'
   *
   *
   -->
@@ -28,6 +28,7 @@
 
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005660" alink="#0066FF">
+<a name="top"/>
 
 @vegbank_header_html_normal@
 
@@ -43,13 +44,34 @@
 	<!-- main table -->
 	<table width="700" border="0" cellspacing="5" cellpadding="2">
 	<html:form method="post" action="ViewCertification.do">
-        <html:hidden name="dform" property="certId"/>
-        <html:hidden name="dform" property="usrId"/>
+		<html:hidden property="usrId"/>
+		<html:hidden property="certId"/>
 
-	<!--form method="post" action="@web_context@ViewCertification.do"-->
-		<!--input type="hidden" name="certId" value="<%= (String)request.getAttribute("certId") %>"-->
-		<!--input type="hidden" name="usrId" value="<%= (String)request.getAttribute("usrId") %>"-->
-
+    <tr> 
+      <td colspan="2" class="vegbank_small">
+	    <br/>
+        <b>Enter comments</b> (optional):
+        <br/>
+        <html:textarea property="certificationstatuscomments" cols="60" rows="3"/>
+      </td>
+    </tr>
+    <tr> 
+      <td colspan="3" class="vegbank_small"> 
+		<b>Choose a new status:</b>
+			<html:select property="certificationstatus">
+			  <option value="<bean:write name="certBean" property="certificationstatus"/>">
+			  	--<bean:write name="certBean" property="certificationstatus"/>--</option>
+			  <html:optionsCollection name="certstatuslistbean" property="allCertstatusesNames"/>
+			</html:select>
+		<!-- action is the language-specific button label -->
+        <input type="submit" value="update status" name="action">  
+		<!-- cmd is an implementation field that represents the action -->
+        <input type="hidden" value="updateStatus" name="cmd">  
+		<br/>
+		= = = = = = = = = = = = = = = = = = = = = = = = = = =
+		<br/>&nbsp;
+	  </td>
+	</tr>
     <tr> 
       <td colspan="2">
 	    <!-- user personal info table -->
@@ -82,18 +104,6 @@
 		</td></tr>
 		</table>
     </tr>
-    <tr> 
-      <td colspan="3"> 
-		&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" value="APPROVE" name="action">  
-		&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" value="REJECT" name="action">
-		&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" value="DISCARD" name="action">
-		<br/>&nbsp;
-           
-	  </td>
-	</tr>
     <tr> 
       <td> 
 		 
@@ -418,23 +428,10 @@
     </tr>
     <tr> 
       <td colspan="2">
-	    <br/>
-		<span class="vegbank_small">
-        Panel Member's Comments (optional):
-		</span>
         <br/>
-        <html:textarea property="certificationstatuscomments" cols="60" rows="3"/>
-      </td>
-    </tr>
-    <tr> 
-      <td colspan="2">
-        <br/>
-		&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" value="APPROVE" name="action">  
-		&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" value="REJECT" name="action">
-		&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" value="DISCARD" name="action">
+		&nbsp;
+		<a href="#top">Jump to top of page</a>
+
       </td>
     </tr>
 </html:form>

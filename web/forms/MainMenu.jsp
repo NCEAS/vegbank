@@ -12,9 +12,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2004-04-08 05:44:28 $'
-*  '$Revision: 1.4 $'
+*  '$Author: anderson $'
+*  '$Date: 2004-04-26 20:49:43 $'
+*  '$Revision: 1.5 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -44,83 +44,98 @@
 @vegbank_header_html_normal@
  
 <blockquote> 
-  <h2 align="center"><font face="Georgia, Times New Roman, Times, serif"><br>
-    <span class="VegBank">Welcome to Vegbank</span></font></h2>
-  <h4 class="VegBank"><font face="Georgia, Times New Roman, Times, serif">Do you 
-    wish to:</font></h4>
+  <h2 align="center"><br>
+    <span class="VegBank">Welcome to Vegbank</span></h2>
+  <h4 class="VegBank">Here are your options:</h4>
+
   <ul>
     <li> 
-      <h4 class="VegBank"><font face="Georgia, Times New Roman, Times, serif">Access 
-        or submit <a href="@general_link@plots.html">Plot</a> data</font></h4>
+      <h4 class="VegBank">Access or submit 
+	  <a href="@general_link@plots.html">Plot</a> data</h4>
     </li>
+
     <li> 
-      <h4 class="VegBank"><font face="Georgia, Times New Roman, Times, serif">Access 
-        or submit <a href="@general_link@types.html">Community Type</a> data</font></h4>
+      <h4 class="VegBank">Access or submit 
+	  <a href="@general_link@types.html">Community Type</a> data</h4>
     </li>
+
     <li> 
-      <h4 class="VegBank"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif">Access 
-        or submit <a href="@general_link@plants.html">Plant Taxon</a> data</font></span></h4>
+      <h4 class="VegBank"><span class="VegBank">Access or submit 
+	  <a href="@general_link@plants.html">Plant Taxon</a> data</span></h4>
     </li>
+
     <li>
       <h4 class="VegBank">
-        <span class="VegBank">
-          <font face="Georgia, Times New Roman, Times, serif">
-            Access or submit <a href="@general_link@metadata.html">Supplemental Data in VegBank</a>, i.e. Methods, People, Projects, References <br/>
-          </font>
+        <span class="VegBank">Access or submit 
+		<a href="@general_link@metadata.html">Supplemental Data in VegBank</a>, 
+		e.g. Methods, People, Projects, References<br/>
         </span>
       </h4>
     </li>
     
     
-   <!-- 
-		<li> 
-			<h4 class="VegBank"><font face="Georgia, Times New Roman, Times, serif">Access 
-        or submit <a href="@general_link@parties.html">Parties</a> data</font></h4>
-      <h4 class="VegBank"><font face="Georgia, Times New Roman, Times, serif">Access 
-        or Submit Parties data</font> <font color="#F90000"> <b> coming soon! </b></font> </h4>
-    </li>
-		-->
+	<!--li> 
+		<h4 class="VegBank">Access or submit <a href="@general_link@parties.html">Parties</a> data</h4>
+		<h4 class="VegBank">Access or Submit Parties data 
+		<font color="#F90000"> <b> Coming soon! </b></font> </h4>
+    </li-->
+
     <li> 
       <h4 class="VegBank">
-        <font face="Georgia, Times New Roman, Times, serif">
           Edit your VegBank <html:link action="LoadUser.do">Profile</html:link>
-        </font>
+        
       </h4>
 			
 		<!--
-      <h4 class="VegBank"><font face="Georgia, Times New Roman, Times, serif">View 
-        your VegBank Account </font> <font color="#F90000"> <b> coming soon! </b></font> </h4>
+      <h4 class="VegBank">View your VegBank Account  
+		<font color="#F90000"> <b> Coming soon! </b></font> </h4>
 		-->
     </li>
     
     <li>
       <h4 class="VegBank">
-        <font face="Georgia, Times New Roman, Times, serif">
+        
           Apply to become a <html:link action="LoadCertification.do">Certified VegBank User</html:link>
-        </font> 
         <font color="#F90000"> <b> New! </b></font>
 	<a href="@help-for-certification-href@"><img border="0" src="@image_server@question.gif"></a>
       </h4>
     </li>
     
     <li> 
-      <h4 class="VegBank"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif">See 
-        our <a href="@general_link@sitemap.html">Site Map</a></font></span><font color="#F90000"><b> Newly updated! </b></font></h4>
+      <h4 class="VegBank"><span class="VegBank">See our 
+	  	<a href="@general_link@sitemap.html">Site Map</a></span>
+		<font color="#F90000"><b> Newly updated! </b></font></h4>
     </li>		
 
     <li> 
-      <h4 class="VegBank"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif">Annotate 
-        data</font></span><font color="#F90000"><b> Coming soon! </b></font></h4>
+      <h4 class="VegBank"><span class="VegBank">Annotate data</span>
+	  <font color="#F90000"><b> Coming soon! </b></font></h4>
     </li>		
 		
-		<!--
-		<li>
-		
-      <h4 class="VegBank"><font face="Georgia, Times New Roman, Times, serif"><a href="@general_link@client.html">Download</a> 
-        the Desktop Client</font></h4>
-		</li>
-		-->
+	<!--li>
+      <h4 class="VegBank"><a href="@general_link@client.html">Download</a> 
+        the Desktop Client</h4>
+	</li-->
   </ul>
+
+	<!-- Admin -->
+<% 
+	Boolean isAdmin = (Boolean)(request.getSession().getAttribute("isAdmin"));
+
+	if (isAdmin != null) {
+		if (isAdmin.booleanValue()) {
+%>
+    <hr noshade="true"/>
+      <h4 class="VegBank">ADMINISTRATION
+	  <ul>
+		<li><h4 class="VegBank">Go to the 
+			<html:link action="AdminMenu.do">Admin Menu</html:link></h4>
+		</li>
+	  </ul>
+<% 
+		}
+	} 
+%>
 </blockquote>
 <br/>
 @vegbank_footer_html_tworow@

@@ -10,9 +10,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: mlee $'
-*      '$Date: 2004-04-08 05:44:28 $'
-*  '$Revision: 1.3 $'
+*    '$Author: anderson $'
+*      '$Date: 2004-04-26 20:49:43 $'
+*  '$Revision: 1.4 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -42,10 +42,12 @@
 <blockquote>
 <p class="vegbank_large">
 	<br>
-	Please <html:link href="@general_link@login.jsp">LOGIN</html:link> to your VegBank account.<br>
+	Please login to your VegBank account.<br>
 	<span class="vegbank_small">The page you tried to access requires special permissions.
 	</span>
 	<br>
+	<br/>
+    <%@ include file="../includes/Logon.jsp" %>
 	<br>
 	<span class="vegbank_normal">
 		Thank you<br>
