@@ -4,9 +4,9 @@
  *  Copyright: 2002 Regents of the University of California and the
  *             National Center for Ecological Analysis and Synthesis
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-10-20 22:59:34 $'
- *	'$Revision: 1.6 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2004-02-18 00:55:22 $'
+ *	'$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -385,7 +385,7 @@ public class DatabaseUtility
 	* @param host -- the host machine on which the plots database is running
 	* @return conn -- an active connection
 	*/
-	private Connection getPlotDBConnection(String host)
+	private Connection getDBConnection(String host)
 	{
 		Connection c = null;
 		try 
@@ -417,7 +417,7 @@ public class DatabaseUtility
 		if (plotIds ==  null)
 			return;
 	
-		this.conn = this.getPlotDBConnection("localhost");
+		this.conn = this.getDBConnection("localhost");
 		this.conn.setAutoCommit(false);
 
 		for (int i=0; i < plotIds.length; i++) {
@@ -446,7 +446,7 @@ public class DatabaseUtility
 	public void dropPlot( String plotId, String dbHost )
 				throws java.sql.SQLException {
 
-		this.conn = this.getPlotDBConnection(dbHost);
+		this.conn = this.getDBConnection(dbHost);
 		this.conn.setAutoCommit(false);
 
 		dropSinglePlot(plotId);
@@ -490,7 +490,10 @@ public class DatabaseUtility
 		String stmtMultiO = "DELETE FROM ? WHERE ? IN ( SELECT ? from ? where observation_id IN (?) )";
 		String stmtMulti8 = "DELETE FROM ? WHERE ? IN ( SELECT ? from ? where ? IN " +
 			"( SELECT ? from ? where observation_id IN (?) ) )";
-
+		String stmtMulti11 = "DELETE FROM ? WHERE ? IN ( SELECT ? from ? where ? IN " +
+			"( SELECT ? from ? where ? IN " +
+			"( SELECT ? from ? where observation_id IN (?) ) ) )";
+		
 		if (obsIds != null && !obsIds.equals("")) {
 			System.out.println("DatabaseUtility.dropSinglePlot > got obs IDs: " + obsIds);
 			
@@ -504,28 +507,34 @@ public class DatabaseUtility
 			values.add("taxonobservation_id");  
 			values.add("taxonobservation");  
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtMulti8, values) );
+			executeStatement(values, stmtMulti8);
 
 			// STEMLOCATION
-			values = new ArrayList(8);
+			values = new ArrayList(11);
 			values.add("stemlocation");
 			values.add("stemcount_id");  
 			values.add("stemcount_id");  
-			values.add("stemcount");  
-			values.add("taxonobservation_id");  
-			values.add("taxonobservation_id");  
-			values.add("taxonobservation");  
-			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtMulti8, values) );
-
-			// STEMCOUNT
-			values = new ArrayList(5);
 			values.add("stemcount");
+			values.add("taxonimportance_id");
+			values.add("taxonimportance_id");
+			values.add("taxonimportance");
 			values.add("taxonobservation_id");  
 			values.add("taxonobservation_id");  
 			values.add("taxonobservation");  
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtMultiO, values) );
+			executeStatement(values, stmtMulti11);
+			
+			// STEMCOUNT
+			values = new ArrayList(8);
+			values.add("stemcount");
+			values.add("taxonimportance_id");
+			values.add("taxonimportance_id");
+			values.add("taxonimportance");
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation");  
+			values.add(obsIds);
+			executeStatement(values, stmtMulti8);
 
 			// TAXONINTERPRETATION
 			values = new ArrayList(5);
@@ -534,30 +543,30 @@ public class DatabaseUtility
 			values.add("taxonobservation_id");  
 			values.add("taxonobservation");  
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtMultiO, values) );
+			executeStatement(values, stmtMultiO);
 
-			// STRATUMCOMPOSITION
+			// TAXONIMPORTANCE
 			values = new ArrayList(5);
-			values.add("stratumcomposition");
+			values.add("taxonimportance");
 			values.add("taxonobservation_id");  
 			values.add("taxonobservation_id");  
 			values.add("taxonobservation");  
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtMultiO, values) );
+			executeStatement(values, stmtMultiO);
 
 			// STRATUM
 			values = new ArrayList(3);
 			values.add("stratum"); 
 			values.add("observation_id"); 
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+			executeStatement(values, stmtSingle);
 
 			// TAXONOBSERVATION
 			values = new ArrayList(3);
 			values.add("taxonobservation"); 
 			values.add("observation_id"); 
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+			executeStatement(values, stmtSingle);
 
 			// CLASSCONTRIBUTOR
 			values = new ArrayList(5);
@@ -566,7 +575,7 @@ public class DatabaseUtility
 			values.add("commclass_id"); 
 			values.add("commclass"); 
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtMultiO, values) );
+			executeStatement(values, stmtMultiO);
 
 			// COMMINTERPRETATION
 			values = new ArrayList(5);
@@ -575,49 +584,49 @@ public class DatabaseUtility
 			values.add("commclass_id"); 
 			values.add("commclass"); 
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtMultiO, values) );
+			executeStatement(values, stmtMultiO);
 
 			// COMMCLASS
 			values = new ArrayList(3);
 			values.add("commclass"); 
 			values.add("observation_id"); 
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+			executeStatement(values, stmtSingle);
 
 			// DISTURBANCEOBS
 			values = new ArrayList(3);
 			values.add("disturbanceobs"); 
 			values.add("observation_id"); 
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+			executeStatement(values, stmtSingle);
 
 			// SOILOBS
 			values = new ArrayList(3);
 			values.add("soilobs"); 
 			values.add("observation_id"); 
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+			executeStatement(values, stmtSingle);
 
 			// OBSERVATIONSYNONYM
 			values = new ArrayList(3);
 			values.add("observationsynonym"); 
 			values.add("primaryobservation_id"); 
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+			executeStatement(values, stmtSingle);
 
 			// OBSERVATIONSYNONYM
 			values = new ArrayList(3);
 			values.add("observationsynonym"); 
 			values.add("synonymobservation_id"); 
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+			executeStatement(values, stmtSingle);
 
 			// OBSERVATIONCONTRIBUTOR
 			values = new ArrayList(3);
 			values.add("observationcontributor"); 
 			values.add("observation_id"); 
 			values.add(obsIds);
-			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+			executeStatement(values, stmtSingle);
 		}
 
 		// PLACE
@@ -625,38 +634,31 @@ public class DatabaseUtility
 		values.add("place"); 
 		values.add("plot_id"); 
 		values.add(plotId);
-		conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
-
-		// PLOTSPECIESSUM
-		values = new ArrayList(3);
-		values.add("plotspeciessum"); 
-		values.add("plot_id"); 
-		values.add(plotId);
-		conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
-
-		// PLOTSITESUMMARY
-		values = new ArrayList(3);
-		values.add("plotsitesummary"); 
-		values.add("plot_id"); 
-		values.add(plotId);
-		conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+		executeStatement(values, stmtSingle);
 
 		// OBSERVATION
 		values = new ArrayList(3);
 		values.add("observation"); 
 		values.add("plot_id"); 
 		values.add(plotId);
-		conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+		executeStatement(values, stmtSingle);
 
 		// PLOT
 		values = new ArrayList(3);
 		values.add("plot"); 
 		values.add("plot_id"); 
 		values.add(plotId);
-		conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+		executeStatement(values, stmtSingle);
 
 		System.out.println("DatabaseUtility.dropSinglePlot: DONE");
 	}
+
+	private void executeStatement(List values, String sql) throws SQLException
+	{
+		//System.out.println( "DatabaseUtility.dropSinglePlot > SQL:\n" + constructQuery(sql, values) );
+		conn.createStatement().executeUpdate( constructQuery(sql, values) );
+	}
+
 
 	/**
 	 *
@@ -706,31 +708,6 @@ public class DatabaseUtility
 	
 	
 	/**
-	* method that will return a database connection for use with the 
-	* vegbank user database on the machine described in the input 
-	* parameter.
-	*
-	* @param host -- the host machine on which the plots database is running
-	* @return conn -- an active connection
-	*/
-	private Connection getUserDBConnection(String host)
-	{
-		Connection c = null;
-		try 
- 		{
-			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection("jdbc:postgresql://"+host+"/framework", "datauser", "");
-		}
-		catch ( Exception e )
-		{
-			System.out.println("DatabaseUtility > Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return(c);
-	}
-	
-	
-	/**
 	 * method to drop a user from the vegbank user database 
 	 * @param email -- the emailaddress of the user that should be dropped 
 	 * @param host -- the host machine that the user database is running on
@@ -744,11 +721,24 @@ public class DatabaseUtility
 		 try
 		 {
 			 sb = new StringBuffer(256);
-			 this.conn = this.getUserDBConnection(dbHost);
+			 this.conn = this.getDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
-			 System.out.println("DatabaseUtility > dropping user profile for: " + email );
-			 sb.append("delete from user_info where email_address like '"+email+"';");
-			 sb.append("delete from user_certification where email_address like '"+email+"'");
+			 System.out.println("DatabaseUtility >>> dropping user profile for: " + email );
+			 
+			 long usrId = getUserId(email);
+			 
+			 
+			 sb.append("delete from usr where usr_id = '"+usrId+"';");
+			 sb.append("delete from usercertification where usr_id = '"+usrId+"';");
+			 sb.append("delete from usernotify where usr_id = '"+usrId+"';");
+			 sb.append("delete from userdataset where usr_id = '"+usrId+"';");
+			 sb.append("delete from userpermission where usr_id = '"+usrId+"';");
+			 sb.append("delete from userpreference where usr_id = '"+usrId+"';");
+			 sb.append("delete from userquery where usr_id = '"+usrId+"';");
+			 sb.append("delete from userrecordowner where usr_id = '"+usrId+"';");
+			 
+			 //System.out.println(sb.toString());
+			 
 			 pstmt = conn.prepareStatement( sb.toString() );
 			 
 			 pstmt.execute();
@@ -763,7 +753,21 @@ public class DatabaseUtility
 		 }
 	 }
 	 
-	 /**
+	 private long getUserId(String email) throws SQLException
+	{
+		// Get the usr_id
+		 long usrId = 0;
+		 PreparedStatement getUserId = conn.prepareStatement("select usr_id from usr where email_address = '" + email + "'");
+		 ResultSet rs = getUserId.executeQuery();
+		 while ( rs.next() )
+		 {
+			usrId = rs.getLong(1);
+		 }
+		return usrId;
+	}
+
+
+	/**
 	 * method to update a users permission type  
 	 * @param email -- the emailaddress of the user that should be dropped 
 	 * @param host -- the host machine that the user database is running on
@@ -784,10 +788,10 @@ public class DatabaseUtility
 		 try
 		 {
 			 sb = new StringBuffer();
-			 this.conn = this.getUserDBConnection(dbHost);
+			 this.conn = this.getDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
 			 System.out.println("DatabaseUtility > updating user: " + email +" to permission type: " + level );
-			 sb.append("update  user_info set permission_type = '"+level+"' where email_address like '"+email+"';");
+			 sb.append("update  usr set permission_type = '"+level+"' where email_address like '"+email+"';");
 			 pstmt = conn.prepareStatement( sb.toString() );
 			 
 			 pstmt.execute();
@@ -817,10 +821,10 @@ public class DatabaseUtility
 		 try
 		 {
 			 sb = new StringBuffer();
-			 this.conn = this.getUserDBConnection(dbHost);
+			 this.conn = this.getDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
 			 System.out.println("DatabaseUtility > updating user's : " + email +" password to  : " + password );
-			 sb.append("update user_info set password = '"+password+"' where email_address like '"+email+"';");
+			 sb.append("update usr set password = '"+password+"' where email_address like '"+email+"';");
 			 pstmt = conn.prepareStatement( sb.toString() );
 			 
 			 pstmt.execute();
@@ -850,7 +854,7 @@ public class DatabaseUtility
 			DatabaseUtility dplot = new DatabaseUtility();
 			if ( action.equals("dropplot") )
 			{
-				String inPlot = args[1];
+				String inPlot = args[1]; 
 				String host = args[2];
 				//int plotid = Integer.parseInt(inPlot);
 				try {
@@ -864,6 +868,7 @@ public class DatabaseUtility
 			{
 				String email = args[1];
 				String host = args[2];
+				System.out.println("Dropuser > " + email + " on db " + host);
 				dplot.dropUser(email, host);
 			}
 			else if ( action.equals("updatepermission") )
