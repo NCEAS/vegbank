@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output omit-xml-declaration="yes" method="xml"/>
+  <xsl:output method="xml" />
   <xsl:param name="alphahigh">QWERTYUIOPASDFGHJKLZXCVBNM</xsl:param>
   <xsl:param name="alphalow">qwertyuiopasdfghjklzxcvbnm</xsl:param>
-  
+  <!-- rules for filling in ID's: generated ID's from this doc will always be odd, incoming from NS will be even!  (names only) -->
 <xsl:template match="/VegBankPackage">
-     <VegBankPackage> 
+<xsl:text disable-output-escaping="yes">&lt;VegBankPackage&gt;</xsl:text>
+  <!-- allow to add an xsd automatically:   <xsl:text disable-output-escaping="yes">&lt;VegBankPackage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                    xsi:noNamespaceSchemaLocation="cp_vegbank-data-ver1.0.2usage.xsd"&gt;</xsl:text> -->
+    
       <doc-VegBankVersion><xsl:value-of select="doc-VegBankVersion" /></doc-VegBankVersion>
 <doc-date><xsl:value-of select="doc-date" /></doc-date>
 <doc-author><xsl:value-of select="doc-author" /></doc-author>
@@ -17,7 +20,7 @@
     <xsl:for-each select="entity[entity.entity_type_cd='P']">
       <xsl:call-template name="writePlantConcept"/>
     </xsl:for-each>
-      </VegBankPackage>
+      <xsl:text disable-output-escaping="yes">&lt;/VegBankPackage&gt;</xsl:text>
   </xsl:template>
   <xsl:template match="entity[entity.entity_type_cd='P']" name="writePlantConcept">
     <plantConcept>
@@ -119,11 +122,11 @@
         </plantUsage>
         <!-- ready -->
       </xsl:for-each>
-      <!-- ready -->
+      <!-- ready write also the UID as a usage. -->
       <plantUsage>
           <plantUsage.PLANTNAME_ID>
             <plantName>
-              <plantName.PLANTNAME_ID>-<xsl:number count="*" level="any" /></plantName.PLANTNAME_ID>
+              <plantName.PLANTNAME_ID><xsl:variable name="plantNameLoc"><xsl:number count="*" level="any" /></xsl:variable><xsl:value-of select="number(1+(2*$plantNameLoc))" /></plantName.PLANTNAME_ID>
               <plantName.plantName><xsl:value-of select="entity.ns_uid" /></plantName.plantName>
             </plantName>
           </plantUsage.PLANTNAME_ID>
@@ -148,7 +151,7 @@
     <plantName>
       <xsl:if test="string-length($NameEnt/entity_name.entity_name_id)&gt;0">
         <plantName.PLANTNAME_ID>
-          <xsl:value-of select="$NameEnt/entity_name.entity_name_id"/>
+          <xsl:value-of select="number(2*$NameEnt/entity_name.entity_name_id)"/>
         </plantName.PLANTNAME_ID>
       </xsl:if>
       <plantName.plantName>
@@ -167,8 +170,8 @@
   <xsl:template name="writeReference">
     <xsl:param name="RefEnt"/>
     <reference>
-      <reference.reference_ID>
-        <xsl:value-of select="$RefEnt/reference.reference_id"/>
+      <reference.reference_ID><xsl:if test="string-length(reference.reference_ID)=0"><xsl:variable name="refCount"><xsl:number count="*" level="any" /></xsl:variable><xsl:value-of select="number(1+(2*$refCount))" /></xsl:if>
+        <xsl:value-of select="number(2*$RefEnt/reference.reference_id)"/>
       </reference.reference_ID>
       <reference.fulltext>
         <xsl:value-of select="$RefEnt/reference.full_citation"/>
@@ -299,13 +302,14 @@ doc-comments	"/>
         <!-- ready -->
       </xsl:for-each>
          <!-- ready -->
+      <!-- ready write also the UID as a usage. -->
       <commUsage>
-          <commUsage.commNAME_ID>
+          <commUsage.COMMNAME_ID>
             <commName>
-              <commName.commNAME_ID>-<xsl:number count="*" level="any" /></commName.commNAME_ID>
+              <commName.COMMNAME_ID><xsl:variable name="commNameLoc"><xsl:number count="*" level="any" /></xsl:variable><xsl:value-of select="number(1+(2*$commNameLoc))" /></commName.COMMNAME_ID>
               <commName.commName><xsl:value-of select="entity.ns_uid" /></commName.commName>
             </commName>
-          </commUsage.commNAME_ID>
+          </commUsage.COMMNAME_ID>
             <commUsage.usageStart>
               <xsl:value-of select="/VegBankPackage/doc-date"/>
             </commUsage.usageStart>
@@ -317,7 +321,7 @@ doc-comments	"/>
           <commUsage.classSystem>UID</commUsage.classSystem>
 
       </commUsage>
-      
+
           </commStatus>
     </commConcept>
     <!-- ready -->
@@ -327,7 +331,7 @@ doc-comments	"/>
     <commName>
       <xsl:if test="string-length($NameEnt/entity_name.entity_name_id)&gt;0">
         <commName.COMMNAME_ID>
-          <xsl:value-of select="$NameEnt/entity_name.entity_name_id"/>
+          <xsl:value-of select="number(2*$NameEnt/entity_name.entity_name_id)"/>
         </commName.COMMNAME_ID>
       </xsl:if>
       <commName.commName>
