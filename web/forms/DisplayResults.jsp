@@ -4,7 +4,6 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-
 <html>
 <!-- 
 *   '$RCSfile: DisplayResults.jsp,v $'
@@ -13,9 +12,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: farrell $'
-*      '$Date: 2003-10-24 19:26:40 $'
-*  '$Revision: 1.7 $'
+*    '$Author: anderson $'
+*      '$Date: 2003-10-24 19:58:31 $'
+*  '$Revision: 1.8 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -130,17 +129,15 @@
      <tr class="<%= rowClass %>" valign="top">
 
 	    <!-- First Cell-->
-	    <td width="20%" bgcolor="<%= marginBgColor %>" align="center">
+	    <td width="20%" bgcolor="<%= marginBgColor %>" align="center" nowrap>
 	      
 	      <!-- THE LINK TO THE SUMMARY-->
              <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId=<bean:write property="plotId" name="row"/>"><img align="center" border="0" 
 	     	src="/vegbank/images/report_sm.gif" alt="Summary view"></img></a>
-	      &#160;
 
 	      <!-- THE LINK TO THE COMPREHENSIVE REPORT-->
 	      <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId=<bean:write property="plotId" name="row"/>"><img align="center" border="0" 
 	      	src="/vegbank/images/comprehensive_sm.gif" alt="Comprehensive view"></img></a>
-	      &#160;
 	      
 	      <!-- THE LINK TO THE LOCATION -->
 	      <a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>"><img align="center" border="0" 
@@ -150,8 +147,6 @@
               <html:link page="/DisplayPlot.do?resultType=rawXML" paramId="plotId" paramName="row" paramProperty="plotId" >
                 <img align="center" border="0" src="/vegbank/images/xml_icon.gif" alt="Raw XML view"></img>
               </html:link>
-              &#160;
-	      <br/>
 
 		<!-- Checkbox for download -->
 		<br/>

@@ -24,18 +24,18 @@ th.grey, td.grey, tr.grey {background-color : #DDDDDD}
 .listRowA-Hi {background-color : #FF9933 }						
 .listRowB-Hi {background-color : #FF9933 }						
 
-.whitetext 		{ font-family: Verdana, Arial, Helvetica, Geneva, sans-serif; color : #FFFFFF; font-size: 8pt}
-
+.whitetext 		{ font-family: Verdana, Arial, Helvetica, Geneva, sans-serif; 
+				color: #FFFFFF; 
+			 	font-size: 8pt}
 a.whitetext:link	{ color: #FFFFFF; text-decoration: none}
-a.whitetext:hover	{ color: #3399FF; text-decoration: none}
 a.whitetext:visited	{ color: #FFFFFF; text-decoration: none}
+a.whitetext:hover	{ color: #3399FF; text-decoration: none}
 
-.vegbank 		{ font-family: Georgia, Times New Roman, Times, serif; color : #531100}
-.sansserif          { font-family: Verdana, Arial, Helvetica, sans-serif ; color : #531100}
 
-UL.constsize,LI.constsize {  font: 10pt Verdana, Arial, Helvetica, Geneva, sans-serif;
-			     
-				}						
+.vegbank		{ font-family: Georgia, Times New Roman, Times, serif; color : #531100}
+.sansserif		{ font-family: Verdana, Arial, Helvetica, sans-serif ; color : #531100}
+
+UL.constsize,LI.constsize {  font: 10pt Verdana, Arial, Helvetica, Geneva, sans-serif; }						
 
 .external		{
 					cursor: n-resize; 
