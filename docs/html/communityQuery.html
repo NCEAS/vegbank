@@ -1,0 +1,264 @@
+<html>
+<head>
+<title>
+Plots Database - vegetation communities
+</title>
+
+</head>
+
+<body bgcolor=#FFFFFF>
+
+<!-- colors: silver=#E6E8FA navyblu=#23238E ltblue=DFE5FA  -->
+
+<table align=center border=0 width=90% cellspacing=0 cellpadding=0>
+
+<!-- logo (optional) on lt. blue background -->
+
+<tr>
+<td bgcolor=DFE5FA>
+
+<img align=center border=0 height=144 
+ src="/images/owlogocom.jpg" alt = "Veg plots logo">
+
+
+<!-- title of page -->
+
+<td align=left valign=bottom>
+    <table border=0 cellpadding=5>
+    <tr>
+    <td align=left valign=bottom>
+    <font face="Helvetica,Arial,Verdana" size=6 color=23238E> community query
+    </font><br>
+    &nbsp;&nbsp;
+    <font face="Helvetica,Arial,Verdana" size=2 color=000000>
+    <b>Web-based Vegetation Science Information</b>
+    </font>
+    </td>
+    </table>
+</td>
+</tr>
+
+<!-- cool blue horizontal bar bar -->
+<tr>
+<td colspan=2 bgcolor=9999CC align=center valign=center>
+&nbsp;<br>
+&nbsp;
+&nbsp;
+<br>
+
+
+</td></tr>
+
+<!-- left side lt. blue bar with links -->
+
+<tr>
+<td width=15%  bgcolor=DFE5FA align=center valign=top>
+
+<table border=0 cellspacing=5>
+<tr><td bgcolor=FFFFFF align=center>
+ <a href=index.html>
+  <font face="Verdana,Arial,Helvetica" size=2 color=23238E><b>
+  Overview
+  </b></font>
+ </a>
+</td></tr>
+<tr><td bgcolor=FFFFFF align=center>
+ <a href=index.html>
+  <font face="Verdana,Arial,Helvetica" size=2 color=23238E><b>
+  Underlying Databases
+  </b></font>
+ </a>
+</td></tr>
+</table>
+<hr width=50% size=".5">
+
+<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+see also:
+</font>
+<p>
+<font face="Helvetica,Arial,Verdana" size=1>
+ <a href=about_plot.html>about Plots Data</a>
+<p>
+ <a href=about_plant.html>about Plant Data</a>
+<p>
+ <a href=news.html>what's new?</a><br>
+<p>
+ <a href=faq.html>frequently asked questions</a>
+<p>
+ <a href=references.html>references</a>
+<p>
+ <a href=people.html>staff</a>
+<p>
+ <a href=collab.html>collaborators</a>
+ </font>
+</td>
+
+
+<!-- main menu -->
+
+<td align=left>
+
+<table border=0 cellspacing=5 cellpadding=5>
+<FORM ACTION="http://beta.nceas.ucsb.edu:8080/examples/servlet/DataRequestServlet" METHOD="GET">
+
+<tr valign=top>
+<td  align=left valign=middle colspan=2>
+<!-- <font face="Helvetica,Arial,Verdana" size=2 color=2F4F2F> -->
+<font face="Helvetica,Arial,Verdana" size=2 color=209020>
+
+<b>
+To query a concept-based vegetation community database containing the Association
+for Biodiversity Information (ABI) ecological community data
+<!--put instructions here later -->
+</b>
+
+<!-- horizontal line -->
+<tr>
+<td  colspan=2 rowspan=1 align=left valign=middle>
+<hr size=.5>
+
+<!--variables that are used by the servlet to figure out which query(s) to issue -->
+<input type="hidden" name="requestDataType" value="community">
+<input type="hidden" name="resultType" value="summary">
+
+
+</font>
+<p>
+<small>
+<INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
+</small>
+
+<tr>
+ <td  align="left" valign="top">
+  <font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+  Enter the name of any ecological community:
+ </td>
+</tr>
+
+<tr>
+ <td  align=left valign=top>
+  <input size="45" name=communityName value="Carya illinoinensis Planted Woodland">
+  <b>
+  <font face="Helvetica,Arial,Verdana" size=1>
+  </font>
+  </small>
+  </font>
+</tr>
+
+<tr>
+ <td>
+	<font face="Arial, Helvetica, sans-serif"> 
+        <font size="2"> <b> 
+         <input type="RADIO" name="communityLevel" value="ASSOCIATION" >
+          Associations 
+         <input type="RADIO" name="communityLevel" value="ALLIANCE" >
+         Alliances 
+         <input type="RADIO" name="communityLevel" value="%" checked>
+         Both</b></font></font> <font face="Arial, Helvetica, sans-serif" size="2"><br>
+ </td>                  
+</tr>
+
+
+<!-- horizontal line -->
+<tr>
+<td  colspan=2 rowspan=1 align=left valign=middle>
+<hr size=.5>
+
+
+<tr>
+<td align=left valign=top>
+<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+plant community -- Alliances
+</td>
+</tr>
+
+
+<tr>
+<td align=left valign=top colspan=2>
+<select name="community" multiple size=5>
+<option selected>
+
+<option>QUERCUS HAVARDII SHRUBLAND ALLIANCE
+<option>ARCTOSTAPHYLOS VISCIDA SHRUBLAND ALLIANCE
+<option>AVICENNIA GERMINANS TIDAL FOREST ALLIANCE
+<option>CYTISUS SCOPARIUS SEMI-NATURAL SHRUBLAND ALLIANCE
+<option>ARTEMISIA TRIDENTATA SSP. TRIDENTATA SHRUBLAND ALLIANCE
+<option>BACCHARIS SAROTHROIDES INTERMITTENTLY FLOODED SHRUBLAND ALLIANCE
+<option>DASYLIRION LEIOPHYLLUM - (AGAVE LECHUGUILLA, VIGUIERA STENOLOBA) SHRUBLAND ALLIANCE
+<option>ENCELIA VIRGINENSIS SHRUBLAND ALLIANCE
+</select>
+</td>
+</tr>
+<tr>
+<td align=left valign=middle colspan=2>
+<small>
+<font face="Helvetica,Arial,Verdana">
+<input type=checkbox name=compoundQuery value=1> Multi-component query.
+</font>
+</small>
+</td></tr>
+
+
+
+<tr>
+<td  align=left valign=middle colspan=2>
+<small>
+<INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;
+<INPUT TYPE="reset" VALUE="reset">
+</small>
+  </tr>
+    </table>
+
+<!-- bottom section -->
+
+<tr>
+<td colspan=2 bgcolor=DFE5FA>
+    <table cellpadding=15 width=100%>
+    <tr>
+    <td>
+ <font face="Helvetica,Arial,Verdana" size=2>
+
+ 
+  <script language=JavaScript alt="JavaScript not enabled!">
+   <!-- 
+    today = new Date()
+    document.write("(Accessed: " + today + ")")
+   //-->
+ </script>
+</dd></dt></dl-->
+<table border=0 cellpadding=5 cellspacing=5 align=left><tr><td bgcolor=FFFFFF>
+
+</td></tr<tr><td bgcolor=FFFFFF>
+ <a href=contributions.html#suggestions>
+ <font face="Helvetica,Arial,Verdana" size=1 color=23238E>
+ Suggestions Box</a><br>
+</td><td bgcolor=FFFFFF>
+ <a href=questions.html>
+ <font face="Helvetica,Arial,Verdana" size=1 color=23238E>
+ questions and comments</a>
+</td></tr></table>
+</font>
+
+    </td>
+    </tr>
+    </table>
+</td></tr><tr><td align=center bgcolor=#FFFFFF colspan=2>
+ <P align=center>
+<font face="Helvetica,Arial,Verdana">
+<small>The National Plots Database website is hosted by 
+ <a href=http://www.nceas.ucsb.edu target="_new">
+ <img src=http://www.nceas.ucsb.edu/logo.gif border=0 align=middle></a>
+</small>
+</font>
+</p>
+
+</td>
+</tr>
+
+
+</table>
+</body>
+</html>
+
+
+
