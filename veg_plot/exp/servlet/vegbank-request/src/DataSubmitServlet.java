@@ -99,6 +99,7 @@ public class DataSubmitServlet extends HttpServlet
 			if ( action.equals("init") )
 			{
 				sb.append("<html>");
+				
 				System.out.println("DataSubmitServlet > init vegCommunityCorrelation");
 				String salutation = (String)params.get("salutation");;
 				String firstName =  (String)params.get("firstName");
@@ -108,7 +109,7 @@ public class DataSubmitServlet extends HttpServlet
 				String commName = (String)params.get("communityName");
 				String correlationTaxon = (String)params.get("correlationTaxon");
 				
-				sb.append("communityName: " + commName + " <br>" );
+				sb.append("<b> communityName: " + commName + " </b> <br>" );
 				
 				System.out.println("DataSubmitServlet > correlation taxon:" + correlationTaxon);
 				qs = new CommunityQueryStore();
@@ -120,7 +121,7 @@ public class DataSubmitServlet extends HttpServlet
 					{
 						String correlationName = v.elementAt(i).toString() ;
 						System.out.println( correlationName );
-						sb.append( "<br> correlationName: "+ correlationName +"<br>");
+						//sb.append( "<br> correlationName: "+ correlationName +"<br>");
 						
 						qs = new CommunityQueryStore();
 						//get a vector that contains hashtables with all the possible 
@@ -128,9 +129,30 @@ public class DataSubmitServlet extends HttpServlet
 						Vector correlationTagets = qs.getCorrelationTargets(correlationTaxon);
 						//get the hashtables form the vector
 						Hashtable hash = (Hashtable)correlationTagets.elementAt(i);
-						sb.append(hash.toString() + "<br> ");
+						correlationName = (String)hash.get("commName");
+						String recognizingParty  = (String)hash.get("recognizingParty");
+						String level  = (String)hash.get("level");
+						String conceptStatus  = (String)hash.get("conceptStatus");
 						
+						sb.append("<form action=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataSubmitServlet\" method=\"get\" >");
+						sb.append(" <input type=hidden name=submitDataType value=vegCommunityCorrelation> ");
+						sb.append(" <input type=hidden name=action value=submit> ");
+						sb.append("commName: " +correlationName + "<br> ");
+						sb.append("party: " +recognizingParty + "<br> ");
+						sb.append("level: " +level + "<br> ");
+						sb.append("status: "+conceptStatus + "<br> ");
+						sb.append("<select class=item name=correlation multiple size=3>");
+						sb.append("<option selected>unknown");
+						sb.append("<option>gt");
+						sb.append("<option>lt");
+						sb.append("<option>overlap");
+						sb.append("</select>");
+						sb.append("<br> <input type=\"submit\" VALUE=\"submit correlation\">");
+						sb.append("<br>");
+					
+						sb.append("</form>");
 					}
+					
 					
 				}
 				
