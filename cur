@@ -1,0 +1,1 @@
+vim web/forms/metasearch.jsp web/index.jsp src/java/keywords.properties src/java/org/vegbank/common/utility/KeywordGen.java src/java/org/vegbank/common/SQLStore.properties src/java/org/vegbank/common/command/GenericCommand.java src/java/org/vegbank/ui/struts/taglib/VegbankGetTag.java
