@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-11 21:58:06 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2005-02-16 20:18:13 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,6 +85,8 @@ public class DatasetUtility
             dsSharing = "private";
         }
 
+        log.debug("inserting dataset: " + dsName + " for usr_id: " + usrId);
+
         Userdataset dsBean = new Userdataset();
         dsBean.setDatasetname(dsName);
         dsBean.setDatasetdescription(dsDescription);
@@ -122,8 +124,10 @@ public class DatasetUtility
         }
 
         try {
+            //log.debug("inserting bean");
             long dsPK = bean2db.insert(dsBean);
             AccessionGen ag = new AccessionGen(bean2db.getDBConnection());
+            //log.debug("getting accession code for new dataset");
             newAC = ag.buildAccession("userdataset", Long.toString(dsPK), dsName);
             log.debug("inserted new userdataset with its children: " + newAC);
 
