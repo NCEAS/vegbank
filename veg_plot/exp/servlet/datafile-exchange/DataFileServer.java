@@ -9,8 +9,8 @@ package servlet.datafile_exchange;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2001-12-03 16:24:07 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2002-01-24 00:26:35 $'
+ * '$Revision: 1.2 $'
  */
 
 
@@ -20,23 +20,31 @@ import java.util.*;
 import java.text.*;
 import java.sql.*;
 
+import servlet.util.ServletUtility;
+
 	public class DataFileServer extends Thread 
 	{
+		private ServletUtility util = new ServletUtility();
+		//this class needs the file database classes 
+		private DataFileDB filedb = new DataFileDB();
 		ResourceBundle rb = ResourceBundle.getBundle("veg_servlet");
 		private String uploadDir = "/usr/local/devtools/jakarta-tomcat/webapps/uploads/";
   	static String filedir = "";
+		private String fileType = null;
   	String user = null;
   	String sess_id = null;
   	int port;
   	static String httpstring = "http://dev.nceas.ucsb.edu:8090/metacat/upload/";
   	protected Socket s;
-  
-  	DataFileServer(int port, String user, String sess_id) 
+  	
+		//constructor
+  	DataFileServer(int port, String user, String sess_id, String filetype) 
   	{
     	this.sess_id = sess_id;
     	this.user = user;
     	this.port = port;
-			filedir = uploadDir; 
+			filedir = uploadDir;
+			this.fileType = filetype;
   	}
  
  
@@ -49,7 +57,7 @@ import java.sql.*;
 		int newPort=8081;
 		String newUser="harris";
 		String newSess_id="abc";
-		DataFileServer dfs = new DataFileServer(newPort, newUser, newSess_id);
+		DataFileServer dfs = new DataFileServer(newPort, newUser, newSess_id, "knknown");
 		//DataFileServer dfs = new DataFileServer(Port, newUser, newSess_id);
     dfs.start();
 		//run();
@@ -90,7 +98,7 @@ import java.sql.*;
   /**
    * This method is invoked when this class is broken off into a new thread
    */
-  public void run () 
+  public void run() 
   {
     ServerSocket server = null;
     Socket client = null;
@@ -134,10 +142,13 @@ import java.sql.*;
       String session_id = (new String(str,0, i-1)).trim();
       System.out.println("DataFileServer.run > session_id: " + session_id);
       
-      if(!sess_id.equals(session_id))
-      {//this is an unauthorized connection to this port
+      if(! sess_id.equals(session_id))
+      {
+				//this is an unauthorized connection to this port
         System.out.println("DataFileServer.run > unauthorized request");
-        return;
+        System.out.println("DataFileServer.run > sessid: '"+ sess_id+"'");
+				System.out.println("DataFileServer.run > session_id (required): '"+ session_id+"'");
+				return;
       }
       else
       {
@@ -160,10 +171,6 @@ import java.sql.*;
        
       try
       {
-//        AccessionNumber anum = new AccessionNumber();
-//        String accnum = anum.generate(null, "INSERT");
-        //osw.write(restext,0,restext.length());
-        //osw.flush();
         FileOutputStream out = new FileOutputStream(outfile);
         byte[] buf = new byte[1024];
         int cnt = 0;
@@ -177,9 +184,13 @@ import java.sql.*;
         }
         out.flush();
         out.close();
-//		put the new document info into the DB
-//      updateDB(accnum, filename, user);
-      }
+			
+				//put the new document info into the DB
+				//now register the document with the database
+				boolean registered = registerUserDocument( user, filename, this.fileType);
+				System.out.println( "DataFileServer >  registration results: " + registered);
+      
+			}
       catch(Exception e)
       {
         System.out.println("error in DataFileServer.run(): " + e.getMessage());
@@ -205,5 +216,46 @@ import java.sql.*;
       }
       System.out.println("DataFileServer.run > done");
     }
+
   }
+	
+	
+	/**
+	 * method to handle the registration of a document to a specified user
+	 */
+	 private boolean registerUserDocument(String username, String filename, 
+	 	String fileType)
+	 {
+		try
+		{
+		 System.out.println("DataFileServer > REGISTERED USER: " + username);
+		 //figure out a way for determinin file size
+		 String fileSize = "0";
+		 
+		 //register the document with the database
+			String currentDate = filedb.getCurrentDate();
+			//register and make sure that we get back an
+			//accession number 
+			String accessionNumber = filedb.registerDocument(username, 
+				"givenname",
+				 currentDate, 
+				 fileSize, 
+				 uploadDir, 
+				 filename, 
+				 fileType
+			);
+					
+			//copy the file to a file with the name of the accesion number
+			util.fileCopy(uploadDir+filename, uploadDir+accessionNumber);
+			//delete the file
+			util.flushFile(uploadDir+filename);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(true);
+	 }
+	
 }

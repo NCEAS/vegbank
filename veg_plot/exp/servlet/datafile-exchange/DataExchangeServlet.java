@@ -61,6 +61,14 @@ public class DataExchangeServlet extends HttpServlet
   private MultipartRequest multi;
 	private DataFileDB filedb = new DataFileDB();
 	
+	/**
+	 * constructor method
+	 */
+	public DataExchangeServlet()
+	{
+		System.out.println("init: DataExchangeServlet");
+	}
+	
 	
 	/** Handle "GET" method requests from HTTP clients */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -78,14 +86,16 @@ public class DataExchangeServlet extends HttpServlet
 			//for now all the authentication of users for data transfer is going to
 			//be handled using the username and password, so if they do not exist let
 			//the user know it
+			
+			
 			try 
 			{
 				//this variable will remain null inless there it is accessed thru a
 				//multipart browser
 				
 				requestContentType = getRequestContentType(req);
-				System.out.println("Request Content Type: " + requestContentType);
-				System.out.println("DataExchangeServlet contacted");
+				System.out.println("DataExchangeServlet > Request Content Type: " + requestContentType);
+				System.out.println("DataExchangeServlet > DataExchangeServlet contacted");
 				
 				//determine if the client is using multipart encoding
 				// which if it is -- assume that they want to upload a file
@@ -93,7 +103,7 @@ public class DataExchangeServlet extends HttpServlet
 				{
 					try 
 					{
-						System.out.println("client connected using multipart encoding");
+						System.out.println("DataExchangeServlet > client connected using multipart encoding");
 						//then get the user name and password -- this is where the upload 
 						//file is defined
 						multi=new MultipartRequest(req, uploadDir, 5 * 1024 * 1024);
@@ -112,7 +122,7 @@ public class DataExchangeServlet extends HttpServlet
 						}
 						else
 						{
-							System.out.println("go home you perp");
+							System.out.println("DataExchangeServlet > go home you perp");
 						}
 					}
 					catch(Exception e)
@@ -125,10 +135,11 @@ public class DataExchangeServlet extends HttpServlet
 				//no encoding
 				else
 				{
-					System.out.println("client connected using no encoding");
+					System.out.println("DataExchangeServlet > client connected using no encoding");
 					// figure out the action
 					if ( req.getParameter("action") == null )
 					{
+						System.out.println("DataExchangeServlet > input params: " + req.toString() );
 						out.println( getServletParameters() );
 					}
 					else
@@ -148,20 +159,30 @@ public class DataExchangeServlet extends HttpServlet
 						//this is for an application to upload a file to the servlet
 						else if (action.equals("uploadFile") && ( req.getParameter("username") != null) )
 						{
-							System.out.println("handleing a file upload from an application");
+							System.out.println("DataExchangeServlet >  handleing a file upload from an application");
 							String s = handleRawDataExchange(req, res) ;
-							System.out.println("the response to the client: " + s);
+							System.out.println("DataExchangeServlet >  the response to the client: " + s);
+							out.println(s); 
+						}
+						//this is to delete a file from the data file database
+						//based on a user name and an file accession number
+						else if (action.equals("deletefile") && ( req.getParameter("username") != null) )
+						{
+							System.out.println("DataExchangeServlet > deleting a file from the database");
+							String s = handleFileDeletion(req, res) ;
+							System.out.println("DataExchangeServlet > the response to the client: " + s);
 							out.println(s ); 
 						}
 						
+						
 						else 
 						{
+							System.out.println("DataExchangeServlet > unrecognized parameter string");
 							out.println( getServletParameters() );
+							
 						}
 					}
 				}
-			
-			
 			
 			}
 			catch (Exception e)
@@ -170,6 +191,53 @@ public class DataExchangeServlet extends HttpServlet
 				e.printStackTrace();
 			}
 		}
+	
+	/**
+	 * methodf to delete a file from the database -- uses the username and the 
+	 * file accession number
+	 */
+	 private String handleFileDeletion(HttpServletRequest req, HttpServletResponse res)
+	 {
+			StringBuffer s = new StringBuffer();
+			
+		 //start the html -- do not do this in the post method bc
+		 // it screws up the upload
+		 s.append("<html>");
+		 Hashtable params = util.parameterHash(req);
+		 String user = params.get("username").toString();
+		 String fileAccession = params.get("filenumber").toString() ;
+		 //make sure they are not null
+		 if (user == null || fileAccession == null)
+		 {
+			 s.append("failed because the fileAccessionNumber of username is null");
+			 return( s.toString() );
+		 }
+		 else
+		 {
+			 boolean deletion = filedb.deleteFile(user, fileAccession);
+			 
+			 //determin if the deletion succedded at the 
+			 //database and if so copy the file to delete
+			 //to be cleaned up by the DBA
+			 if (deletion == false)
+			 {
+				 s.append("database deletion failed");
+			 }
+			 else
+			 {
+				 s.append("<br> database deletion succeeded <br>");
+				 util.fileCopy(uploadDir+fileAccession, uploadDir+fileAccession+".delete");
+			 	 s.append("<br> set the file for deletion by DBA <br>");
+				 s.append("<a href=\"http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement\"> profile home </a>" );
+			 }
+		 }
+
+			s.append("</html>");
+		 return(s.toString());
+		 
+		 
+	 }
+	 
 	
 	/** 
 	 * merthod that passes back a string explaining the parameters that 
@@ -196,7 +264,7 @@ public class DataExchangeServlet extends HttpServlet
 			 String s = null;
 			 try
 			 {
-				 System.out.println(" \n \n content type> " + req.getContentType() );
+				 System.out.println("DataExchangeServlet > content type: " + req.getContentType() );
 				 if ( req.getContentType() != null )
 				 {
 						 s = req.getContentType();
@@ -227,7 +295,7 @@ public class DataExchangeServlet extends HttpServlet
 			String xmlResponse = util.httpAuthenticationHandler(userName, passWord
 			, "uploadfile");
 			
-			System.out.println( xmlResponse );
+			System.out.println("DataExchangeServlet > " + xmlResponse );
 			//if the authentication returns a true response it will look like
 			//<authentivation>true</authentication>
 			if ( xmlResponse.trim().indexOf("true") > 0)
@@ -254,7 +322,7 @@ public class DataExchangeServlet extends HttpServlet
 			{
 				Enumeration enum =req.getParameterNames();
 				Hashtable params = new Hashtable();
-				System.out.println("Request Content Type: "+req.getContentType());
+				System.out.println("DataExchangeServlet > Request Content Type: "+req.getContentType());
 
 				// determine if the request is encoded and if so pass to the MultipartRequest
 				// assuming that the user wants to upload a file and if not multipart encoded
@@ -263,15 +331,15 @@ public class DataExchangeServlet extends HttpServlet
 
 				if (req.getContentType().startsWith("multipart")) 
 				{
-					System.out.println("request type: multipart encoded");
+					System.out.println("DataExchangeServlet > request type: multipart encoded");
 					String s = uploadMultipartDataFile(req, res);
 					sb.append(" \n" + s + " \n" );
-					System.out.println("handleExchangeRequest: " + s);
+					System.out.println("DataExchangeServlet > handleExchangeRequest: " + s);
 					
 				}
 				else if ( req.getContentType().startsWith("application") ) 
 				{ 
-					System.out.println("request type: not encoded");
+					System.out.println("DataExchangeServlet > request type: not encoded");
 					//determine the file exchange type (up or down - load)
 					if (req.getParameter("exchangeType") != null ) 
 					{
@@ -281,7 +349,7 @@ public class DataExchangeServlet extends HttpServlet
 					}
 					else 
 					{
-						System.out.println("unrecognized parameters");
+						System.out.println("DataExchangeServlet: unrecognized parameters");
 					}
 				}
 			}
@@ -421,14 +489,14 @@ public class DataExchangeServlet extends HttpServlet
 			Hashtable params = new Hashtable();
 			while (enum.hasMoreElements()) 
 			{
-				String name = (String) enum.nextElement();
+				String name = (String)enum.nextElement();
 				String values[] = request.getParameterValues(name);
 				if (values != null) 
 				{
 					for (int i=0; i<values.length; i++) 
 					{
 						params.put(name,values[i]);
-						System.out.println( name+" "+values[i] );
+						System.out.println("DataExchangeServlet > param: " +name+ ", param val: " + values[i] );
 					}
 				}
 			}
@@ -437,18 +505,21 @@ public class DataExchangeServlet extends HttpServlet
 			if ( (String)params.get("exchangeType") != null )
 			{
  				exchangeType = ((String)params.get("exchangeType")).trim();
-				//sb.append("exchangeType: "+exchangeType);
-	
+				
+				//UPLOAD A FILE
 				if (exchangeType.equals("upload")) 
 				{
 					//assume that if the user wants to upload a file he/she will include a
 					//username and password as an input parameter -- which should be validated
-		
+					
+					this.fileType = ((String)params.get("filetype")).trim();
 					submitter=((String)params.get("submitter")).trim();
-					password=((String)params.get("password")).trim();
-	
+					
 					//later check this information in the authenticate method
-					sb.append(handleRawDataUpload(request, response));
+					sb.append(handleRawDataUpload(request, response, submitter, this.fileType));
+					//attempt to register the document in the database
+					
+				
 				}
 				if (exchangeType.equals("download")) 
 				{
@@ -460,10 +531,12 @@ public class DataExchangeServlet extends HttpServlet
 		{
 			System.out.println("** failed in: DataExchangeServlet.handleRawDataExchange "
 			+e.getMessage());
+			e.printStackTrace();
 		}
 		return(sb.toString());
 	}
 
+	
 
 
 	/**
@@ -477,7 +550,7 @@ public class DataExchangeServlet extends HttpServlet
  	 *
  	 */
  private String handleRawDataUpload (HttpServletRequest request,  
-	HttpServletResponse response) 
+	HttpServletResponse response, String userName, String fileType) 
 	{
 		//this is the response to the client
 		 //the input looks like 'port|xxxx|cookie|xxx' tokenize the interger on the pipe
@@ -490,11 +563,10 @@ public class DataExchangeServlet extends HttpServlet
 			//grab an open port from a random pool between 0-8089
 			Random r = new Random();
 			int port = r.nextInt(8089);
-			System.out.println("random port is: " + port);
+			System.out.println("DataExchangeServlet >  random port is: " + port);
 			while(!DataFileServer.portIsAvailable(port))
 			{
 				port = r.nextInt(8090);
-				//System.out.println("next port used: " + port);
 			}
 			//pass the port back to the client
 			sb.append("port|"+port);
@@ -504,14 +576,18 @@ public class DataExchangeServlet extends HttpServlet
 			int c = r.nextInt(999);
 			String cookie=""+c;
 			sb.append("|cookie|"+cookie);
-			System.out.println("cookie: " + cookie);
+			System.out.println("DataExchangeServlet > cookie: " + cookie);
 
 			//assign the user name of the client to authorize for connection
-			String user="authenticatedUser";
+			String user= userName;
 
 			//spawn the DataFileServer thread
-			DataFileServer dfs = new DataFileServer(port, user, cookie.trim());
+			System.out.println("DataExchangeServlet > spawning: DataFileServer");
+			System.out.println("DataExchangeServlet > constructing DFS with: " 
+				+ fileType+" "+port+" "+user+" "+cookie.trim() );
+			DataFileServer dfs = new DataFileServer(port, user, cookie.trim(), fileType);
 			dfs.start();
+			
 		}
 		catch (Exception e) 
 		{

@@ -206,6 +206,33 @@ public class DataFileDB  {
 	
 	
 	/**
+	 * method to delete an instance of a file owned by a specific user
+	 */
+	 public boolean deleteFile(String user, String fileAccessionNumber)
+	 {
+		 boolean validDelet = false;
+		 
+		 try
+	 		{
+				PreparedStatement pstmt;
+				pstmt = conn.prepareStatement
+				("DELETE from datafile where user_surname ='"
+				+user+"' and db_filename='"+fileAccessionNumber+"'");
+				
+				
+				pstmt.execute();
+				pstmt.close();
+				return(true);
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				return(false);
+			}
+		 
+	 }
+	
+	/**
 	 * method that will register a document with the database - insert 
 	 * the accession number, username, create date etcc
 	 *
