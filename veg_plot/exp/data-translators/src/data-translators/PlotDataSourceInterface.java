@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-27 22:24:49 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2002-03-27 22:52:41 $'
+ * '$Revision: 1.5 $'
  *
  *
  */
@@ -167,7 +167,7 @@ public interface PlotDataSourceInterface
 	/**
 	 * returns the community framework for the named plot
 	 */
-	String getCommunityFarmework(String plotName);
+	String getCommunityFramework(String plotName);
 	
 	
 	

@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 21:12:42 $'
- * 	'$Revision: 1.11 $'
+ *  '$Date: 2002-03-27 22:52:41 $'
+ * 	'$Revision: 1.12 $'
  */
 public class PlotDataSource 
 {
@@ -106,7 +106,123 @@ public class PlotDataSource
 		}
 	}
 	
+	/**
+ 	 * returns the community code for the named plot
+ 	 */
+ 	public String getCommunityCode(String plotName)
+ 	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCommunityCode(plotName);	
+		return(s);
+ 	}
+ 	
+ 	/**
+ 	 * returns the community level of the framework for the named plot
+ 	 */
+ 	public String getCommunityLevel(String plotName)
+ 	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCommunityLevel(plotName);	
+		return(s);
+		
+ 	}
+ 	
+ 	/**
+ 	 * returns the community framework for the named plot
+ 	 */
+ 	public String getCommunityFramework(String plotName)
+ 	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCommunityFramework(plotName);	
+		return(s);
+ 	}
 	
+		/**
+ 	 * returns the soil drainage of a plot
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getSoilDrainage(String plotName)
+ 	{
+		String s = ((PlotDataSourceInterface)pluginObj).getSoilDrainage(plotName);	
+		return(s);
+ 	}
+ 	
+ 	/**
+ 	 * returns the author's observation code
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getAuthorObsCode(String plotName)
+ 	{
+		String s = ((PlotDataSourceInterface)pluginObj).getAuthorObsCode(plotName);	
+		return(s);
+ 	}
+ 	
+ 	/**
+ 	 * returns the start date for the plot observation
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getObsStartDate(String plotName)
+ 	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObsStartDate(plotName);	
+		return(s);
+ 	}
+ 	
+ 	/**
+ 	 * returns the stop date for the plot observation
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getObsStopDate(String plotName)
+ 	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObsStopDate(plotName);	
+		return(s);
+ 	}
+ 	
+ 	/**
+ 	 * returns the soil depth of a plot
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getSoilDepth(String plotName) 
+ 	{
+		String s = ((PlotDataSourceInterface)pluginObj).getSoilDepth(plotName);	
+		return(s);
+ 	}
+ 
+
+	/**
+ 	 * returns true if the plot is a permanent plot or false if not
+ 	 * @param plotName -- the plot
+ 	 */
+ 	 public boolean isPlotPermanent(String plotName)
+ 	 {
+ 	 	return(true);
+ 	 }
+  
+  /**
+ 	* returns the soil taxon for the plot -- this is the USDA class
+ 	* heirarchy (eg., Order, Group, Family, Series etc..)
+ 	* @param plotName -- the plot
+ 	*/
+ 	public String getSoilTaxon(String plotName)
+ 	{
+		String s = ((PlotDataSourceInterface)pluginObj).getSoilTaxon(plotName);	
+		return(s);
+ 	}
+ 	
+ 	/**
+ 	 * returns how the soil taxon was determined (eg., field observation
+ 	 * mapping, other ...)
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getSoilTaxonSource(String plotName)
+ 	{
+		String s = ((PlotDataSourceInterface)pluginObj).getSoilTaxonSource(plotName);	
+		return(s);
+ 	}
+
+
+	
+
+		
+
+
+
 	/**
 	 * method that returns the names of the plots stored in this data 
 	 * source 

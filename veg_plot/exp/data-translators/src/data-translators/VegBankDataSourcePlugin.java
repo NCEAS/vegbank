@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 22:24:49 $'
- * 	'$Revision: 1.6 $'
+ *  '$Date: 2002-03-27 22:52:41 $'
+ * 	'$Revision: 1.7 $'
  */
  
 //public class VegBankDataSourcePlugin
@@ -143,8 +143,85 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		}
 		return(v);
 	}
-	
-	
+ 	
+
+		/**
+ 	 * returns the soil drainage of a plot
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getSoilDrainage(String plotName)
+ 	{
+ 		return("");
+ 	}
+ 	
+ 	/**
+ 	 * returns the author's observation code
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getAuthorObsCode(String plotName)
+ 	{
+ 		return("");
+ 	}
+ 	
+ 	/**
+ 	 * returns the start date for the plot observation
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getObsStartDate(String plotName)
+ 	{
+ 		return("");
+ 	}
+ 	
+ 	/**
+ 	 * returns the stop date for the plot observation
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getObsStopDate(String plotName)
+ 	{
+ 		return("");
+ 	}
+ 	
+ 	/**
+ 	 * returns the soil depth of a plot
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getSoilDepth(String plotName) 
+ 	{
+ 		return("");
+ 	}
+
+
+	/**
+ 	 * returns true if the plot is a permanent plot or false if not
+ 	 * @param plotName -- the plot
+ 	 */
+ 	 public boolean isPlotPermanent(String plotName)
+ 	 {
+ 	 	return(true);
+ 	 }
+  
+  /**
+ 	* returns the soil taxon for the plot -- this is the USDA class
+ 	* heirarchy (eg., Order, Group, Family, Series etc..)
+ 	* @param plotName -- the plot
+ 	*/
+ 	public String getSoilTaxon(String plotName)
+ 	{
+ 		return("");
+ 	}
+ 	
+ 	/**
+ 	 * returns how the soil taxon was determined (eg., field observation
+ 	 * mapping, other ...)
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getSoilTaxonSource(String plotName)
+ 	{
+ 		return("");
+ 	}
+
+
+
 	//returns all the plots stored in the access file
 	public Vector getPlotNames()
 	{
@@ -720,7 +797,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	/**
 	 * returns the community framework for the named plot
 	 */
-	public String getCommunityFarmework(String plotName)
+	public String getCommunityFramework(String plotName)
 	{
 		String s = "";
 		return(s);

@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 22:24:49 $'
- * 	'$Revision: 1.12 $'
+ *  '$Date: 2002-03-27 22:52:41 $'
+ * 	'$Revision: 1.13 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -914,7 +914,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	/**
 	 * returns the community framework for the named plot
 	 */
-	public String getCommunityFarmework(String plotName)
+	public String getCommunityFramework(String plotName)
 	{
 		String s = "";
 		return(s);

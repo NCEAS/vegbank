@@ -13,8 +13,8 @@ import java.sql.*;
  *  Release:
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 22:24:49 $'
- * 	'$Revision: 1.4 $'
+ *  '$Date: 2002-03-27 22:52:41 $'
+ * 	'$Revision: 1.5 $'
  */
 public class TestPlotSourcePlugin implements PlotDataSourceInterface
 {
@@ -478,7 +478,7 @@ public class TestPlotSourcePlugin implements PlotDataSourceInterface
 	/**
 	 * returns the community framework for the named plot
 	 */
-	public String getCommunityFarmework(String plotName)
+	public String getCommunityFramework(String plotName)
 	{
 		String s = "";
 		return(s);
