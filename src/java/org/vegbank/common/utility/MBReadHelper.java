@@ -15,8 +15,8 @@ import org.vegbank.common.model.Taxonobservation;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-02 19:04:37 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-03-05 22:35:05 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -159,7 +159,7 @@ public class MBReadHelper
 				
 			}
 		}
-		LogUtility.log("Searched " + to.getAccessioncode() + " for cover of stratumName " + strata + " : " + taxonCover  , LogUtility.TRACE);
+		LogUtility.log("Searched " + to.getAccessioncode() + " for cover of stratumName " + strata + " : " + taxonCover  , LogUtility.DEBUG);
 		return taxonCover;
 	}
 }
