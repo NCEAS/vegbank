@@ -158,9 +158,9 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 		  </select>
 	</td>
 	<td>
-		&raquo; <a href="@forms_link@community-query.html">View Community Types</a>
+		&raquo; <a href="@forms_link@PlantQuery.jsp">Explore Plant Taxa</a>
 		<br>
-		&raquo; <a href="@web_context@forms/plot-query-simple.jsp">3-in-1 Simple Query</a>
+		&raquo; <a href="@forms_link@community-query.html">View Community Types</a>
 		<br>
 		&raquo; <a href="@web_context@DisplayUploadPlotAction.do">Share your data</a>
 	</td>
