@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:14 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2003-07-23 18:06:06 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -192,21 +192,8 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		// Loop over the array of plants
 		for (int i = 0; i < plants.length; i++)
 		{
-			if (i == 0)
-			{
-				// Ignore first record that I assume is the column names
-				StringBuffer firstRow = new StringBuffer();
-				for (int ii=0; ii<4; ii++ )
-				{
-					firstRow.append(plants[i][ii]);
-				}
-				System.out.println("Ignoring the first row of column names: "  + firstRow );
-			}
-			else
-			{
-				// Get Plant
-				plantsV.add(this.getPlant(plants[i]));
-			}
+			// Get Plant
+			plantsV.add(this.getPlant(plants[i]));
 		}
 		// Need to add in the Families
 		plantsV.addAll(this.getAllFamillies());

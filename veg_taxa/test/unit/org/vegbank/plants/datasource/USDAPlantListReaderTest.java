@@ -7,8 +7,8 @@
  *  Release: @@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-03-20 20:03:06 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-07-23 18:06:06 $'
+ *  '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -158,14 +158,14 @@ public class USDAPlantListReaderTest extends TestCase implements Constants
 			assertEquals("Isocarpha", plant.getScientificNameNoAuthors());
 			assertEquals("ISOCA", plant.getCode());
 			assertEquals(PLANT_CLASS_GENUS, plant.getClassLevel());
-			assertEquals("", plant.getParentName() );
+			assertEquals("Asteraceae", plant.getParentName() );
 		}
 	
 	public void testReadSinglePlantHybrid()
 	{
 			StringReader sr =
 						new StringReader(
-							"\"ADTR3\",\"Adiantum ×tracyi C.C. Hall ex W.H. Wagner \",\",\"Pteridaceae\""
+							"\"ADTR3\",\"Adiantum ×tracyi C.C. Hall ex W.H. Wagner \",\"\",\"Pteridaceae\""
 						);
 			PlantListReader plr = new USDAPlantListReader(sr);
 			AbstractList plantList = plr.getAllPlants();
