@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-16 00:16:45 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-05-06 17:32:49 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,6 +61,7 @@ public class LoadCommunities
 		}
 		try
 		{
+			System.out.println("Get connection to database on " + databaseHost);
 			conn = LoadCommunities.getDBConnection(databaseHost);
 			
 			LoadCommunities lc = new LoadCommunities();

@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *     '$Date: 2003-04-16 00:16:45 $'
-  * '$Revision: 1.10 $'
+  *     '$Date: 2003-05-06 17:32:49 $'
+  * '$Revision: 1.11 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -44,7 +44,7 @@
   	<property name="lib" value="./lib" />
 	  <property name="xml_dir" value="./xml"/>
   	<property name="jdbc" value="../lib/jdbc7.0-1.2.jar" />
-	  <property name="cpath" value="${jdbc}:${build.dir}:.:${toplib}/vegclass_common.jar"/>
+	  <property name="cpath" value="${jdbc}:${build.dir}:.:${toplib}/vegclass_common.jar:${toplib}/vegbank_datamodel.jar"/>
 	
     <!-- FIXME: Move into higher level -->
     <property name="hostname" value="beta.nceas.ucsb.edu"/>

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-16 19:11:06 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-05-06 17:32:49 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.AbstractList;
+import java.util.Hashtable;
 import java.util.Iterator;
 
+import org.vegbank.common.Constants;
 import org.vegbank.common.model.Community;
 import org.vegbank.common.model.CommunityUsage;
 import org.vegbank.common.model.DBPartyWriter;
@@ -46,14 +48,14 @@ import org.vegbank.common.utility.Utility;
  * @author farrell
  */
 
-public class DBCommunityWriter
+public class DBCommunityWriter implements Constants
 {
 
 		private Connection conn = null;
 		private boolean commit = true;
 		private boolean writeSuccess = false;
 
-	public DBCommunityWriter(Community comm, Connection conn)
+	public DBCommunityWriter(Community comm, Connection conn) 
 	{
 		System.out.println("DBCommunityWriter > inserting '" + comm.getName() + "'");
 		// This is going to know about the Data Model the database has 
@@ -74,38 +76,66 @@ public class DBCommunityWriter
 				new DBPartyWriter(party, conn, "commparty", "commparty_id");
 			int partyId = dbpw.getPartyId();
 
-			// Insert the  Name
-			int commNameId =
-				this.insertName(
-					refId,
-					comm.getName(),
-					Utility.dbAdapter.getDateTimeFunction() );
+			Hashtable commNameIds = new Hashtable();
+			AbstractList communityUsages = comm.getCommunityUsages();
+
+			System.out.println("DBCommunityWriter > insert names");
+			// Insert the names -- using communityUsages for expediency 
+			Iterator i = communityUsages.iterator();
+			while(i.hasNext())
+			{
+				CommunityUsage cu = (CommunityUsage) i.next();
+				
+				if (cu.getName() == null || cu.getName().trim().equals(""))
+				{
+					// No need to load this
+				}
+				else
+				{
+					int plantNameId =
+						this.insertName(
+							refId,
+							cu.getName(),
+							Utility.dbAdapter.getDateTimeFunction() );
+						
+					commNameIds.put(cu.getClassSystem(), new Integer(plantNameId) );
+				}
+			}
+			
+//			// Insert the  Name
+//			int commNameId =
+//				this.insertName(
+//					refId,
+//					comm.getName(),
+//					Utility.dbAdapter.getDateTimeFunction() );
 
 			// Insert the Code
-			int commCodeId =
-				this.insertName(
-					refId,
-					comm.getCode(),
-					Utility.dbAdapter.getDateTimeFunction() );
-					
-			// Insert the CommonName
-			int commCommonId =
-				this.insertName(
-					refId,
-					comm.getCommonName(),
-					Utility.dbAdapter.getDateTimeFunction() );
+//			int commCodeId =
+//				this.insertName(
+//					refId,
+//					comm.getCode(),
+//					Utility.dbAdapter.getDateTimeFunction() );
+//					
+//			// Insert the CommonName
+//			int commCommonId =
+//				this.insertName(
+//					refId,
+//					comm.getCommonName(),
+//					Utility.dbAdapter.getDateTimeFunction() );
 			
 			// Insert Other Names ???
 
 
+			//System.out.println("DBCommunityWriter > insert concept with FK of " 
+			//	+ commNameIds.get("CEGL") + "  from "  + commNameIds );
 			// Insert the Concept using the code as the FK to the name table
 			int conceptId =
 				this.insertCommConcept(
-					commCodeId,
+					( (Integer) commNameIds.get("CEGL")).intValue(),
 					refId,
 					comm.getDescription());
 
-
+			System.out.println("DBCommunityWriter > insert status");
 			// Insert the Status
 			int statusId = 
 				this.insertStatus(
@@ -119,17 +149,17 @@ public class DBCommunityWriter
 				);
 		
 
-	
+			System.out.println("DBCommunityWriter > insert usages");
 			// Insert all the usages
 			AbstractList commUsages = comm.getUsages();
 			
-			Iterator i = commUsages.iterator();
-			while( i.hasNext()) 
+			Iterator ii = commUsages.iterator();
+			while( ii.hasNext()) 
 			{
-				CommunityUsage cu = (CommunityUsage) i.next();
+				CommunityUsage cu = (CommunityUsage) ii.next();
 				int usageId = 
 					this.insertUsage(
-						commNameId,
+						( (Integer) commNameIds.get(cu.getClassSystem())).intValue(),
 						conceptId,
 						cu.getName(),
 						partyId,				
@@ -144,7 +174,7 @@ public class DBCommunityWriter
 		{
 			// If any step fails the transaction is void
 			commit = false;
-			System.out.println("Could not write this plant to the database");
+			System.out.println("Could not write this Community to the database");
 			e.printStackTrace();
 		}
 
@@ -153,7 +183,7 @@ public class DBCommunityWriter
 			// decide on the transaction
 			if (commit == true)
 			{
-				System.out.println("DBPlantWriter > commiting transaction");
+				System.out.println("DBCommunityWriter > commiting transaction");
 				conn.commit();
 				writeSuccess = true;
 			}
@@ -194,11 +224,11 @@ public class DBCommunityWriter
 					"commstatus_id");
 						
 			PreparedStatement pstmt =
-						conn.prepareStatement(
-				" insert into COMMSTATUS (COMMCONCEPT_ID, REFERENCE_ID,  "
-			+ " COMMPARTY_ID, COMMCONCEPTSTATUS,  startdate, COMMLEVEL, " 
-			+ "commstatus_id, commparent_id)"
-			+ " values (?,?,?,?,?,?,?,?)");
+				conn.prepareStatement(
+					" insert into COMMSTATUS (COMMCONCEPT_ID, REFERENCE_ID,  "
+						+ " COMMPARTY_ID, COMMCONCEPTSTATUS,  startdate, COMMLEVEL, "
+						+ "commstatus_id, commparent_id)"
+						+ " values (?,?,?,?,?,?,?,?)");
 		
 			pstmt.setInt(1, conceptId);
 			pstmt.setInt(2, 	referenceId);
@@ -327,7 +357,7 @@ public class DBCommunityWriter
 			PreparedStatement pstmt =
 				conn.prepareStatement(
 					" insert into COMMCONCEPT (COMMNAME_ID, REFERENCE_ID, "
-						+ " CONCEPTDESCRIPTION, commconcept_id)   values (?,?,?,?)");
+						+ " COMMDESCRIPTION, commconcept_id)   values (?,?,?,?)");
 
 			pstmt.setInt(1, nameId);
 			pstmt.setInt(2, refId);
