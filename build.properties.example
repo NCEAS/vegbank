@@ -26,6 +26,10 @@ machine_url=http://gyro.nceas.ucsb.edu
 # the colon plus port number used for tomcat.  If JK enabled, neither of these is needed.
 eighty_eighty=:8080
 
+# New value to indicate what image to use: valid options: (none)=vegbank, gyro, aldo
+headerImageMachine=aldo
+
+
 # Vegbank Directories
 vegbank.home.dir=/usr/vegbank
 vegbank.data.dir=/usr/vegbank/upload
