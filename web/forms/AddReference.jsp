@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: farrell $'
-*  '$Date: 2003-05-12 23:12:03 $'
-*  '$Revision: 1.2 $'
+*  '$Date: 2003-06-09 22:34:11 $'
+*  '$Revision: 1.3 $'
 *
 *
 -->
@@ -428,16 +428,6 @@
 
 	
 	
-      </td>
-      <!-- End Left  hand column -->
-
-      <!-- blank column in between left and right panels -->
-      <td width="10%"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></td>
-
-      <!-- Start Right hand column -->
-      <td width="45%" valign="top" align="left">
-
-
 	<br/>
 	<br/>
 
