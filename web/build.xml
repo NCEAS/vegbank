@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: farrell $'
-* '$Date: 2003-02-14 21:02:19 $'
-* '$Revision: 1.32 $'
+* '$Date: 2003-02-21 18:13:32 $'
+* '$Revision: 1.33 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -46,8 +46,10 @@
 	<property name="pubs_src" value="./pubs" />
 	<property name="style_src" value="./includes" />
 	<property name="image_src" value="./images" />
+	<property name="hostname" value="beta" />
 	<property name="sharedhtml_src" value="./sharedhtml"/>
 	<filter token="dist" value="dist"/>
+	<filter token="hostname" value="${hostname}"/>
 	<filter token="version" value="development"/>
 	
 	<!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
@@ -85,7 +87,9 @@
 	<filter token="datasubmitservlet" value="/framework/servlet/DataSubmitServlet" />
 	<filter token="nestedquerybuilder" value="/framework/servlet/QueryBuilderServlet" />
 	<filter token="authenticationservlet" value="/framework/servlet/authenticate" />
-	
+
+  <!-- FIXME: Should be in a prepare target -->
+  <mkdir dir="${tomcat.home.dir}/webapps/vegbank/"/>
 </target>
 <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
 <!-- this copy stays local on the machine that it is on - not needed on webserver -->
@@ -98,26 +102,17 @@
 
 <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
 <target name="includes" depends="init">
-        <copy todir="${style_server}" filtering="no" >
-		<fileset dir="${style_src}" >
-			<include name="**.css"/>
-        	</fileset>
-        </copy>
+  <copy todir="${style_server}" filtering="no" >
+    <fileset dir="${style_src}" >
+      <include name="**.css"/>
+    </fileset>
+  </copy>
 </target>
 
 <target name="index" depends="hdrftr" description="target to dist. the index.html file">
-	<copy todir="${server_root}" filtering="yes" >
-     		<fileset dir="./" >
-			<include name="index.html"/>
-        	</fileset>
-	</copy>
+	<copy tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
 	<!-- add to second webpage at root/vegbank/index.html -->
-	<copy todir="${vegbank_server}" filtering="yes" >
-		<fileset dir="./" >
-			<include name="index.html"/>
-          	</fileset>
-  	</copy>
-
+	<copy todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
 </target>
 
 <!-- DISTRIBUTE THE IMAGES -->
@@ -237,6 +232,14 @@
 		excludes="**/CVS* "
 	/>
 
+  <copy todir="${forms_server}" filtering="yes">
+    <fileset dir="${forms}">
+      <!-- FIXME: html handled in previous copy , is there a point to listing
+      all the files explicitly ??? --> 
+      <exclude name="**/*html"/>
+    </fileset>
+  </copy>
+
 </target>
 
 
@@ -271,6 +274,16 @@
 		<fileset dir="${xsl.src.dir}" />
 	</copy>
 </target>
+
+<!--
+	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
+-->
+<target name="web" depends="hdrftr">
+	<copy todir="${vegbank_server}" filtering="yes" >
+		<fileset dir="${web.src.dir}" />
+	</copy>
+</target>
+
 
 <!--
 	* TARGET TO PUT THE DICTIONARY HTML DOCS INTO THE CORRECT PLACE
