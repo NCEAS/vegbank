@@ -3,7 +3,11 @@
  *
  * Created on February 20, 2001, 2:52 PM
  */
-import client.*;
+//import client.*;
+import java.io.*;
+import java.sql.*;
+import java.text.*;
+import java.util.*;
 
 /**
  *  This class is used to view html, txt, and xml returened by the veg plot related 
@@ -179,6 +183,47 @@ public class HtmlViewer extends javax.swing.JFrame {
             //jEditorPane1.setPage("http://www.cnn.com");
          } catch (Exception e) {System.err.println(e);}
     }
+    
+    /**
+    * Method to set the exet in the pane from an input file
+    * which can be called by other interfaces
+    */
+    public void showData (String inXML, String styleSheet, String contentType) {
+        try { 
+            
+            //this is where the transformed xml document is to be stored
+            StringBuffer results = new StringBuffer();
+            
+            jEditorPane1.setContentType(contentType);
+            
+            //now transform the xml with the style sheet
+             transformXML m = new transformXML();
+             m.getTransformed(inXML, styleSheet);
+    
+    
+            //the stringwriter containg all the transformed data
+            StringWriter transformedData=m.outTransformedData;  
+
+            //pass to the utility class to convert the StringWriter to an array
+            utility u =new utility();
+            u.convertStringWriter(transformedData);
+
+            String transformedString[]=u.outString; 
+            int transformedStringNum=u.outStringNum; 
+    
+            for (int i=0; i<transformedStringNum; i++) 
+	    {
+		//System.out.println(transformedString[i]);	
+                results.append(transformedString[i]+"\n");
+            }
+    
+            
+            
+            jEditorPane1.setText(results.toString()); 
+
+         } catch (Exception e) {System.err.println(e);}
+    }
+    
     
     
     /**

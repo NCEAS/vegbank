@@ -13,6 +13,8 @@ import javax.swing.event.*;
 import javax.swing.text.*;
 import java.net.*; // For Socket stuff 
 
+//import client.*;
+
 /**
  *  This class allows a user to either upload an xml document that contains plot 
  *  data, community data or plant data to the central server, where the data will

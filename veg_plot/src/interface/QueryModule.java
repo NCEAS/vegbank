@@ -26,7 +26,6 @@ public class QueryModule extends javax.swing.JFrame {
 //make a string buffer to hold the results that are passed back
 //from the DataRequestClient
 StringBuffer results = new StringBuffer();
-
 ResourceBundle rb = ResourceBundle.getBundle("interface");
 
     /** Creates new form QueryModule */
@@ -288,7 +287,8 @@ private void initComponents() {//GEN-BEGIN:initComponents
 
 
   
-  private void submitQuery(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitQuery
+  private void submitQuery(java.awt.event.ActionEvent evt) 
+	{//GEN-FIRST:event_submitQuery
    try {
    //get the properties out of the resource bundle
       String host=(rb.getString("requestparams.host"));
