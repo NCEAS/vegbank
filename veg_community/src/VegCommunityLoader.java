@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-02-07 17:46:49 $'  
- *	'$Revision: 1.24 $'
+ *	'$Date: 2003-02-13 01:03:08 $'  
+ *	'$Revision: 1.25 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Vector;
+import org.vegbank.common.utility.Utility;
 
 	
 	
@@ -49,7 +50,12 @@ public class VegCommunityLoader
 		private String refPubDate = null;
 		private String partyOrgName = null;
 		private static String host = "localhost";
+
+
 		
+		private static String[] levelNames = {  "class",  "subclass", "group",  "subgroup",  "formation", "alliance", "association" };
+		//private static String[] levelNames = {  "association" };
+
 		//constructor
 		public VegCommunityLoader()
 		{
@@ -93,21 +99,25 @@ public class VegCommunityLoader
 	 * method should really be called load ecoart (or nvc) community
 	 */
 	 private void insertCommunity(	String conceptCode, 
-	 																	String commLevel, 
-	 																	String commName, 
-	 																	String otherCitationDetails, 
-	 																	String dateEntered, 
-	 																	String parentCommunity, 
-	 																	String allianceTransName 
-	 															)
+											 																	String commLevel, 
+											 																	String commName, 
+											 																	String otherCitationDetails, 
+											 																	String dateEntered, 
+											 																	String parentCommunity, 
+											 																	String allianceTransName,
+											 																	String communityDescription
+	 																										)
 	 {
 		 try
 		 {
 			//turn off autocommit
 			conn.setAutoCommit(false);
 			int partyId = insertCommunityParty(this.partyOrgName);
-			int refId = insertCommunityReference(this.refAuthors, this.refTitle, 
-			this.refPubDate, this.otherCitationDetails);
+			int refId = insertCommunityReference( 	this.refAuthors, 
+																																				this.refTitle, 
+																																				this.refPubDate, 
+																																				this.otherCitationDetails
+																																			);
 			
 			// INSERT THE NAMES
 			int commNameId = insertCommunityName(commName, refId, dateEntered);
@@ -122,31 +132,55 @@ public class VegCommunityLoader
 			
 			// INSERT THE CONCEPT
 			int commConceptId = insertCommunityConcept(	conceptCode, 
-																										commCodeId,  
-																										commName, 
-																										refId );
+																																												commCodeId,  
+																																												communityDescription, 
+																																												refId );
 
 			// THE STATUS -- there may be a proble with the date entered
 			int commStatusId = insertCommunityStatus(	commConceptId, 
-																									"accepted", 
-																									dateEntered, 
-																									partyId, 
-																									refId,
-																									commLevel, 
-																									parentCommunity );
+																																									"accepted", 
+																																									dateEntered, 
+																																									partyId, 
+																																									refId,
+																																									commLevel, 
+																																									parentCommunity );
 			
 			
 			//UPDATE THE USAGE FOR THE NAMES 
-			// - the code
-			insertCommunityUsage( commCodeId, commConceptId, partyId, "standard"
-			, dateEntered, "NVC", conceptCode, conceptCode);
-			// - the name
-			insertCommunityUsage( commNameId, commConceptId, partyId, "standard"
-			, dateEntered, "NVC", commName, conceptCode);
-			//the trans name (alliance only)
+			
+			// - name = Code
+			insertCommunityUsage( 	commCodeId, 
+																								commConceptId, 
+																								partyId, 
+																								"standard", 
+																								dateEntered, 
+																								"Code", 
+																								conceptCode, 
+																								conceptCode
+																							);
+			// - name = Scientific 
+			insertCommunityUsage( 	commNameId, 
+																								commConceptId, 
+																								partyId, 
+																								"standard",
+																								dateEntered, 
+																								"Scientific", 
+																								commName, 
+																								conceptCode
+																							);
+			// name = Scientific translated (alliance only)
 			if ( commLevel.equals("alliance") &&  allianceTransName != null )
-				insertCommunityUsage( commTransId, commConceptId, partyId, "standard"
-				, dateEntered, "NVC", allianceTransName ,conceptCode);
+			{
+				insertCommunityUsage( 	commTransId, 
+																									commConceptId, 
+																									partyId, 
+																									"standard", 
+																									dateEntered, 
+																									"Scientific translated", 
+																									allianceTransName,
+																									conceptCode
+																								);
+			}
 			
 			
 			// DO THE TRANSACTION
@@ -187,24 +221,24 @@ public class VegCommunityLoader
 	 *
 	 *
 	 */
-	 public StringBuffer insertGenericCommunity(String partySalutation, 
-                                              String partyGivenName, 
-                                              String partySurName, 
-                                              String partyMiddleName, 
-                                              String orgName,
-	                                            String contactInstructions, 
-	                                            String conceptReferenceTitle, 
-                                              String conceptReferenceAuthor,
-	                                            String conceptReferenceDate,
-	                                            String nameReferenceTitle, 
-                                              String nameReferenceAuthor,
-	                                            String nameReferenceDate,
-	                                            String conceptCode, 
-                                              String commLevel, 
-	                                            String commName, 
-                                              String dateEntered, 
-                                              String parentCommunity, 
-	                                            String otherName  )
+	 public StringBuffer insertGenericCommunity(	String partySalutation, 
+																	                                              String partyGivenName, 
+																	                                              String partySurName, 
+																	                                              String partyMiddleName, 
+																	                                              String orgName,
+																		                                            String contactInstructions, 
+																		                                            String conceptReferenceTitle, 
+																	                                              String conceptReferenceAuthor,
+																		                                            String conceptReferenceDate,
+																		                                            String nameReferenceTitle, 
+																	                                              String nameReferenceAuthor,
+																		                                            String nameReferenceDate,
+																		                                            String conceptCode, 
+																	                                              String commLevel, 
+																		                                            String commName, 
+																	                                              String dateEntered, 
+																	                                              String parentCommunity, 
+																		                                            String otherName  )
 	 {
 	 	StringBuffer sb = new StringBuffer();
     System.out.println( "VegCommunityLoader > conceptCode = '" + conceptCode + 
@@ -246,21 +280,21 @@ public class VegCommunityLoader
 			
 			// INSERT THE CONCEPT
 			int commConceptId = insertCommunityConcept(	conceptCode, 
-																										commNameId, 
-																										commName, 
-																										conceptRefId 
-																									);
+																																												commNameId, 
+																																												commName, 
+																																												conceptRefId 
+																																											);
 			System.out.println("VegCommunityLoader > concept id: " + commConceptId);
 			if (commConceptId == 0  ) this.commit = false;
 			
 			// THE STATUS -- there may be a proble with the date entered
 			int commStatusId = insertCommunityStatus(	commConceptId, 
-																									"accepted", 
-																									dateEntered, 
-																									partyId, 
-																									conceptRefId, 
-																									commLevel,
-																									parentCommunity 
+																																									"accepted", 
+																																									dateEntered, 
+																																									partyId, 
+																																									conceptRefId, 
+																																									commLevel,
+																																									parentCommunity 
 																								);
 																								
 			System.out.println("VegCommunityLoader > status id: " + commStatusId);
@@ -294,155 +328,6 @@ public class VegCommunityLoader
 		 }
 		 return(sb);
 	 }
-	 
-	 
-	/**
-	 * HINT: METHOD TO INSERT THE COMMUNITY NAME AND CONCEPT FROM WEB SITE
-	 *
-	 * method that inserts a community -- this is the method that is for loading
-	 * generic communities into the database ie, those enetered through the 
-	 * web site.  It is imaginned that the form on the website is to have 
-	 * a name for the plant, a description, level, code, and the name of the 
-	 * person / party that recognises this community.  All the other attributes 
-	 * either have to be simulated or looked up in the database.  This particular
-	 * method is used in the case where the plant name does not exist and for that 
-	 * reason the reference to both the name and the concept will be equal to vegbank
-	 *
-	 * @param conceptCode -- the code associated with a new concept
-	 *
-	 * FIXME: No longer used???
-	 *
-	 */
-	 public StringBuffer insertGenericCommunity(String conceptCode, 
-                                              String commLevel, 
-	                                            String commName, 
-                                              String dateEntered, 
-                                              String parentCommunity, 
-	                                            String allianceTransName, 
-                                              String partyName )
-	 {
-	 	StringBuffer sb = new StringBuffer();
-
-    System.out.println("conceptCode = '" + conceptCode + "' commLevel = '" + commLevel+ 
-                        "' commName= '" + commName+
-                        "' dateEntered= '" + dateEntered+
-                        "' parentCommunity= '" + parentCommunity+
-                        "' allianceTransName= '" + allianceTransName+
-                        "' partyName= '" + partyName+ "'");
-    
-		 try
-		 {
-		 	//this is kinda a hack but will work for now
-			sb.append("<commName>" +commName+"</commName>");
-			sb.append("<partyName>" +partyName+"</partyName>");
-			//do a quick validation on the input parameters
-			if ( conceptCode == null ||  conceptCode.length() < 2 )
-			{
-				System.out.println("VegCommunityLoader > null code");
-				//create a concept code that is the term vegbank and the date
-				String timeBit = getDBTime().replace('-', ' ');
-				conceptCode = "vegbank"+getDBTime();
-				sb.append("<commCode>"+conceptCode+"</commCode>");
-				System.out.println("VegCommunityLoader > created code: " + conceptCode);
-			}
-			//fix the date if it is messed up
-			if ( dateEntered == null ||  dateEntered.length() < 2 )
-			{
-				dateEntered = getDBTime();
-			}
-			
-			//turn off autocommit
-			conn.setAutoCommit(false);
-			int partyId = insertCommunityParty(partyName);
-			int refId = insertCommunityReference(partyName, "", 
-			dateEntered, "");
-			
-			// INSERT THE NAMES
-			int commNameId = insertCommunityName(commName, refId, dateEntered);
-			
-			//In this case were are not going to enter the code into the name 
-			//table because the code was generated by the application and is not
-			//recognized by the user
-			//int commCodeId = insertCommunityName(conceptCode, refId, dateEntered);
-			
-			//IN THE FUTUERE ADD HERE THE OTHER NAME GIVEN BY THE USER
-			
-			
-			// INSERT THE CONCEPT
-			int commConceptId = insertCommunityConcept(	conceptCode, 
-																										commNameId, 
-																										commName, 
-																										refId 
-																									);
-
-			// THE STATUS -- there may be a proble with the date entered
-			int commStatusId = insertCommunityStatus(	commConceptId, 
-																									"accepted", 
-																									dateEntered, 
-																									partyId, 
-																									refId, 
-																									commLevel,
-																									parentCommunity 
-																								);
-			
-			
-			//UPDATE THE USAGE FOR THE NAMES 
-			// - the name
-			insertCommunityUsage( commNameId, commConceptId, partyId, "standard"
-			, dateEntered, "NVC", commName, conceptCode);
-			//the other name -- add if we need to implement
-			
-			// DO THE TRANSACTION -- ROLLBACK ALL FOR TESTING
-			if (this.commit == true)
-			{
-				conn.commit();
-				sb.append("<commit>true</commit>");
-			}
-			else
-			{
-				conn.rollback();
-				debugInstanceFailure( commName, conceptCode, allianceTransName);
-				//fail
-				sb.append("<commit>false</commit>");
-				//System.exit(0);
-			}
-		 }
-			catch (Exception e)
-		 {
-			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-		 return(sb);
-	 }
-	 
-	 /**
-	  * utility method to get the database time
-		*/
-		private String getDBTime()
-		{
-			String timeString = null; 
-			try
-			{
-		 		StringBuffer sb = new StringBuffer();
-				sb.append("SELECT now()");
-				Statement query = conn.createStatement();
-				ResultSet rs = query.executeQuery( sb.toString() );
-				int cnt = 0;
-				while ( rs.next() ) 
-				{
-					timeString = rs.getString(1);
-					cnt++;
-				}
-			}
-			catch (Exception e)
-		 {
-			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-		 return(timeString);
-		}
-		
-		
 	 
 	 /**
 	  * method for printing to the system some of the debugging 
@@ -529,8 +414,8 @@ public class VegCommunityLoader
   				pstmt.setInt(1, statusId);
 					pstmt.setInt(2, conceptId);
 					pstmt.setString(3, convergence);
-					pstmt.setString(4, startDate);
-					pstmt.setString(5, stopDate);
+					Utility.insertDateField(startDate, pstmt, 4); // pstmt.setString(4, startDate);
+					Utility.insertDateField(stopDate, pstmt, 5); //pstmt.setString(5, stopDate);
 					//execute the p statement
   				pstmt.execute();
 		 	}
@@ -555,7 +440,7 @@ public class VegCommunityLoader
 				sb.append("SELECT commstatus_id from COMMSTATUS where ");
 				sb.append(" commconcept_id = "+conceptId);
 				sb.append(" and commparty_id = "+partyId);
-				sb.append(" and upper(commconceptstatus)  like  '"+status.toUpperCase()+"'");
+				sb.append(" and upper(commconceptstatus)  =  '"+status.toUpperCase()+"'");
 				
 				Statement query = conn.createStatement();
 				ResultSet rs = query.executeQuery( sb.toString() );
@@ -580,28 +465,38 @@ public class VegCommunityLoader
 	   /**
 	  * method to insert data into the commname table
 		*/
-		private int insertCommunityUsage(int commNameId, int commConceptId, 
-		int commPartyId, String commNameStatus, String usageStart, 
-		String classSystem, String commName, String commCode)
+		private int insertCommunityUsage(	int commNameId, 
+																																int commConceptId, 
+																																int commPartyId, 
+																																String commNameStatus, 
+																																String usageStart, 
+																																String classSystem, 
+																																String commName, 
+																																String commCode
+																															)
 	  {
 		 int usageId = 0; 
 		 try
 		 {
-				StringBuffer sb = new StringBuffer();
-				//insert the VALS
-				sb.append("INSERT into COMMUSAGE( commname_id, commconcept_id, "
-				+" commparty_id, commNameStatus, usageStart, classSystem, commName, ceglcode) "
-				+" values(?,?,?,?,?,?, ?, ?)"); 
-				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+			// Get Primary key for table		
+			usageId =  
+				(int) Utility.dbAdapter.getNextUniqueID(conn, "COMMUSAGE", "commusage_id");
+		 	
+				PreparedStatement pstmt = conn.prepareStatement(
+					"INSERT into COMMUSAGE( commname_id, commconcept_id, commparty_id, commNameStatus,"
+					+"  usageStart, classSystem, commName, ceglcode, commusage_id) "
+					+" values(?,?,?,?,?,?, ?, ?,?)");
+					
   			// Bind the values to the query and execute it
   			pstmt.setInt(1, commNameId);
 				pstmt.setInt(2, commConceptId);
 				pstmt.setInt(3, commPartyId);
 				pstmt.setString(4, commNameStatus);
-				pstmt.setString(5, usageStart);
+				Utility.insertDateField(usageStart, pstmt, 5); //pstmt.setString(5, usageStart);
 				pstmt.setString(6, classSystem);
 				pstmt.setString(7, commName);
 				pstmt.setString(8, commCode);
+				pstmt.setInt(9, usageId);
 				//execute the p statement
   			pstmt.execute();
   			pstmt.close();
@@ -617,56 +512,70 @@ public class VegCommunityLoader
 	 
 	 
 	  /**
-	  * method to insert data into the commname table
-		*/
+		 * Inserts values into the commstatus table of the database
+		 * 
+		 * @param commConceptId
+		 * @param status
+		 * @param startDate
+		 * @param partyId
+		 * @param refId
+		 * @param commLevel
+		 * @param parentCommunity
+		 * @return int
+		 */
 		private int insertCommunityStatus(	int commConceptId, 
-																					String status,  
-																					String startDate, 
-																					int partyId, 
-																					int refId, 
-																					String commLevel,
-																					String parentCommunity)
+																																String status,  
+																																String startDate, 
+																																int partyId, 
+																																int refId, 
+																																String commLevel,
+																																String parentCommunity)
 	  {
 		 int statusId = 0; 
 		 try
 		 {
-				StringBuffer sb = new StringBuffer();
-				//insert the VALS
-				sb.append("INSERT into COMMSTATUS( commconcept_id, commreference_id, "
-				+" commconceptstatus, startDate, commparty_id, commlevel) "
-				+" values(?,?,?,?,?,?)"); 
-				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+				
+			// Get Primary key for table		
+			statusId =  
+				(int) Utility.dbAdapter.getNextUniqueID(conn, "COMMSTATUS", "commstatus_id");
+		 	
+				PreparedStatement pstmt = conn.prepareStatement(
+					"INSERT into COMMSTATUS( commconcept_id, commreference_id, "
+					+" commconceptstatus, startDate, commparty_id, commlevel, commstatus_id) "
+					+" values(?,?,?,?,?,?,?)");
+
   			// Bind the values to the query and execute it
   			pstmt.setInt(1, commConceptId);
 				pstmt.setInt(2, refId);
 				pstmt.setString(3, status);
-				pstmt.setString(4, startDate);
+				Utility.insertDateField(startDate, pstmt, 4); //pstmt.setString(4, startDate);
 				pstmt.setInt(5, partyId);
 				pstmt.setString(6, commLevel);
+				pstmt.setInt(7, statusId);
 				//execute the p statement
-  			pstmt.execute();
+  			pstmt.executeUpdate();
   			pstmt.close();
 				
 				//update the parentCommunity
 				if (parentCommunity != null)
 				{
 					//System.out.println("VegCommunityLoader > updating parentCommunity" );
-					sb = new StringBuffer();
-					sb.append("UPDATE commstatus set commparent = ");
-					sb.append("(select commconcept_id from commconcept where ceglcode = '"+parentCommunity+"')");
-					sb.append(" where commconcept_id = "+commConceptId+"");
-					PreparedStatement pstmt2 = conn.prepareStatement( sb.toString() );
+					PreparedStatement pstmt2 = conn.prepareStatement(
+						"UPDATE commstatus set commparent = "
+						+ "(select commconcept_id from commconcept where ceglcode = '" + parentCommunity +"')"
+						+ " where commconcept_id = "+commConceptId+""
+					);
 					pstmt2.execute();
 					//pstmt2.close();
 				}
 				
-		 }
-			catch (Exception e)
-		 {
-			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+      }
+		  catch (Exception e)
+		  {
+			  System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
-		 return(partyId);
+		 return(statusId);
 	 }
 	 
 	 
@@ -843,7 +752,7 @@ public class VegCommunityLoader
 				//get the refId
 				sb = new StringBuffer();
 				sb.append("SELECT commname_id from COMMNAME where commname"
-				+" like '"+commName+"'");
+				+" = '"+commName+"'");
 				Statement query = conn.createStatement();
 				ResultSet rs = query.executeQuery( sb.toString() );
 				int cnt = 0;
@@ -867,34 +776,33 @@ public class VegCommunityLoader
 	 /**
 	  * method to insert data into the commname table
 		*/
-		private int insertCommunityConcept(String commConceptCode, 
-																				int commNameId, 
-																				String conceptDescription, 
-																				int refId )
+		private int insertCommunityConcept(	String commConceptCode, 
+																																		int commNameId, 
+																																		String conceptDescription, 
+																																		int refId )
 	  {
 		 int commConceptId = 0; 
 		 try
 		 {
-			StringBuffer sb = new StringBuffer();
+		 	// Get Primary key for table		
+			commConceptId =  
+				(int) Utility.dbAdapter.getNextUniqueID(conn, "COMMCONCEPT", "commconcept_id");
+		 	
+				PreparedStatement pstmt = conn.prepareStatement(
+						"INSERT into COMMCONCEPT (commname_id, ceglcode, "
+						+" conceptDescription, commreference_id, commconcept_id) "
+						+" values(?, ?, ?, ?, ?)");
+
+	  		// Bind the values to the query and execute it
+	  		pstmt.setInt(1, commNameId);
+				pstmt.setString(2, commConceptCode);
+				pstmt.setString(3, conceptDescription);
+				pstmt.setInt(4, refId);
+				pstmt.setInt(5, commConceptId);			
 				
-			//insert the strata values
-			sb.append("INSERT into COMMCONCEPT (commname_id, ceglcode, "
-			+" conceptDescription, commreference_id) "
-			+" values(?, ?, ?, ?,?)");
-				
-			
-			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
-  		// Bind the values to the query and execute it
-  		pstmt.setInt(1, commNameId);
-			pstmt.setString(2, commConceptCode);
-			pstmt.setString(4, conceptDescription);
-			pstmt.setInt(5, refId);
-			//execute the p statement
-  		pstmt.execute();
-			
-			//get the concept id for return
-			commConceptId = getCommunityConceptId(conceptDescription);
-			
+				//execute the insert statement getting the "row count in return"
+				pstmt.executeUpdate();     
+
 			
 			 }
 			catch (Exception e)
@@ -971,9 +879,15 @@ public class VegCommunityLoader
 	 
 	 
 	 
-	  /** 
-	  * method that inserts the reference data 
-		*/
+	  /**
+		 * Method getCommunityReferenceId.
+		 * 
+		 * Finds the primaryKey for a reference.
+		 * 
+		 * @param otherCitationDetails - used to lookup the PK
+		 * 
+		 * @return int	- The primary key of the reference
+		 */
 		private int getCommunityReferenceId(String otherCitationDetails)
 	  {
 		 	int refId = 0; 
@@ -1042,7 +956,7 @@ public class VegCommunityLoader
 			{
 		 		StringBuffer sb = new StringBuffer();
 				sb.append("SELECT commname_id from COMMNAME where commName"
-				+" like '"+commName+"'");
+				+" = '"+commName+"'");
 				Statement query = conn.createStatement();
 				ResultSet rs = query.executeQuery( sb.toString() );
 				int cnt = 0;
@@ -1071,7 +985,7 @@ public class VegCommunityLoader
 			{
 		 		StringBuffer sb = new StringBuffer();
 				sb.append("SELECT commparty_id from COMMPARTY where organizationName"
-				+" like '"+partyName+"'");
+				+" = '"+partyName+"'");
 				Statement query = conn.createStatement();
 				ResultSet rs = query.executeQuery( sb.toString() );
 				int cnt = 0;
@@ -1136,8 +1050,8 @@ public class VegCommunityLoader
 			try
 			{
 		 		StringBuffer sb = new StringBuffer();
-				sb.append("SELECT commconcept_id from COMMCONCEPT where conceptDescription"
-				+" like '"+conceptDescription+"'");
+				sb.append("SELECT commconcept_id from COMMCONCEPT where conceptDescription = '"  
+													+ conceptDescription + "'");
 				Statement query = conn.createStatement();
 				ResultSet rs = query.executeQuery( sb.toString() );
 				int cnt = 0;
@@ -1215,8 +1129,7 @@ public class VegCommunityLoader
 			}
 			if (cnt > 0)
 			{
-				System.out.println("VegCommunityLoader > matching reference: " +
-        otherCitationDetails  );
+				//System.out.println("VegCommunityLoader > matching reference: " + otherCitationDetails  );
 				exists = true;
 			}
 			else
@@ -1364,311 +1277,77 @@ public class VegCommunityLoader
 		 return(exists);
 	 }
 	 
-	 /**
-	  * method to load the ecoart associations
-		*/
-		private void loadEcoartAssociations()
-		{
-			try
-			{
-				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
-				this.otherCitationDetails = source.otherCitationDetails;
-				Vector v = source.getCommunityCodes("association");
-				//this is a hack to restart the ecoart connections after 100 uses
-				int connCnt = 0;
-				for (int i =0; i < v.size(); i++)
-				//for (int i =0; i < 600; i++)
-				{
-					connCnt++;
-					if (connCnt == 100)
-					{
-						//close the connection or run out of memory soon
-						source.con.close();
-						source = new EcoartVegCommunitySource();
-						connCnt = 0;
-					}
-					String communityCode = v.elementAt(i).toString();
-					String commName = source.getCommunityName(communityCode);
-					//this variable should be moved from here
-					String allianceTransName = "";
-					String level = "association";
-					//String dateEntered = "11-FEB-2002";
-					String dateEntered = source.getDateEntered(communityCode, level);
-					String parentCommunity = source.getParentCode(communityCode);
-					if (commName != null)
-					{
-						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
-						dateEntered, parentCommunity, allianceTransName );
-					}
-				}
-				//close the connections 
-				source.con.close();
-			}
-			catch (Exception e)
-		 {
-			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-		}
-	 
-	  /**
-	  * method to load the ecoart alliances
-		*/
-		private void loadEcoartAlliances()
-		{
-			try
-			{
-				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
-				//update the class varaibles
-				this.otherCitationDetails = source.otherCitationDetails;
-				this.refAuthors =source.refAuthors;
-				this.refTitle = source.refTitle;
-				this.refPubDate = source.refPubDate;
-				this.partyOrgName = source.partyOrgName;
-				
-				Vector v = source.getCommunityCodes("alliance");
-				
-				//this is a hack to restart the ecoart connections after 100 uses
-				int connCnt = 0;
-				for (int i =0; i < v.size(); i++)
-				{
-					connCnt++;
-					if (connCnt == 100)
-					{
-						//close the connection or run out of memory soon
-						source.con.close();
-						source = new EcoartVegCommunitySource();
-						connCnt = 0;
-					}
-					String communityCode = v.elementAt(i).toString();
-					String commName = source.getCommunityName(communityCode);
-					String allianceTransName = source.getAllianceNameTrans(communityCode);
-					String level = "alliance";
-					//pass the code and the level to the method below
-					String dateEntered = source.getDateEntered(communityCode, "alliance");
-					String parentCommunity = null; //this means top level
-					if (commName != null)
-					{
-						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
-						dateEntered, parentCommunity, allianceTransName);
-					}
-				}
-				//close the connections 
-				source.con.close();
-			}
-			catch (Exception e)
-		 {
-			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-		}
-	 
-	 
-	  /**
-	  * method to load the ecoart alliances
-		*/
-		private void loadEcoartFormations()
-		{
-			try
-			{
-				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
-				//update the class varaibles
-				this.otherCitationDetails = source.otherCitationDetails;
-				this.refAuthors =source.refAuthors;
-				this.refTitle = source.refTitle;
-				this.refPubDate = source.refPubDate;
-				this.partyOrgName = source.partyOrgName;
-				
-				Vector v = source.getCommunityCodes("formation");
-				for (int i =0; i < v.size(); i++)
-				{
-					String communityCode = v.elementAt(i).toString();
-					String commName = source.getCommunityName(communityCode);
-					String level = "formation";
-					//pass the code and the level to the method below
-					String dateEntered = source.getDateEntered(communityCode, "formation");
-					String parentCommunity = source.getParentCode(communityCode);
-					if (commName != null)
-					{
-						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
-						dateEntered, parentCommunity, "");
-					}
-				}
-				//close the connections 
-				source.con.close();
-			}
-			catch (Exception e)
-		 {
-			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-		}
-	 
-	 
-	  /**
-	  * method to load the ecoart alliances
-		*/
-		private void loadEcoartSubGroups()
-		{
-			try
-			{
-				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
-				//update the class varaibles
-				this.otherCitationDetails = source.otherCitationDetails;
-				this.refAuthors =source.refAuthors;
-				this.refTitle = source.refTitle;
-				this.refPubDate = source.refPubDate;
-				this.partyOrgName = source.partyOrgName;
-				
-				Vector v = source.getCommunityCodes("subgroup");
-				for (int i =0; i < v.size(); i++)
-				{
-					String communityCode = v.elementAt(i).toString();
-					String commName = source.getCommunityName(communityCode);
-					String level = "subgroup";
-					//pass the code and the level to the method below
-					String dateEntered = source.getDateEntered(communityCode, "subgroup");
-					String parentCommunity = source.getParentCode(communityCode);
-					if (commName != null)
-					{
-						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
-						dateEntered, parentCommunity, "");
-					}
-				}
-				//close the connections 
-				source.con.close();
-			}
-			catch (Exception e)
-		 {
-			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-		}
-	 
-	 
-	  /**
-	  * method to load the ecoart alliances
-		*/
-		private void loadEcoartGroups()
-		{
-			try
-			{
-				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
-				//update the class varaibles
-				this.otherCitationDetails = source.otherCitationDetails;
-				this.refAuthors =source.refAuthors;
-				this.refTitle = source.refTitle;
-				this.refPubDate = source.refPubDate;
-				this.partyOrgName = source.partyOrgName;
-				
-				Vector v = source.getCommunityCodes("group");
-				for (int i =0; i < v.size(); i++)
-				{
-					String communityCode = v.elementAt(i).toString();
-					String commName = source.getCommunityName(communityCode);
-					String level = "group";
-					//pass the code and the level to the method below
-					String dateEntered = source.getDateEntered(communityCode, "group");
-					String parentCommunity = source.getParentCode(communityCode);
-					if (commName != null)
-					{
-						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
-						dateEntered, parentCommunity, "");
-					}
-				}
-				//close the connections 
-				source.con.close();
-			}
-			catch (Exception e)
-		 {
-			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-		}
-		
+
 		 
 	  /**
-	  * method to load the ecoart alliances
+	  *  Load  the ecoart alliances
+	  * 
+	  * 	@param String levelName -  The level to load this time
 		*/
-		private void loadEcoartSubClasses()
+		private void loadEcoartLevel ( String levelName )
 		{
 			try
 			{
 				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
 				//update the class varaibles
-				this.otherCitationDetails = source.otherCitationDetails;
-				this.refAuthors =source.refAuthors;
-				this.refTitle = source.refTitle;
-				this.refPubDate = source.refPubDate;
-				this.partyOrgName = source.partyOrgName;
+				this.otherCitationDetails = Utility.escapeCharacters( source.otherCitationDetails );
+				this.refAuthors = Utility.escapeCharacters( source.refAuthors );
+				this.refTitle = Utility.escapeCharacters( source.refTitle );
+				this.refPubDate = Utility.escapeCharacters( source.refPubDate );
+				this.partyOrgName = Utility.escapeCharacters( source.partyOrgName );
 				
-				Vector v = source.getCommunityCodes("subclass");
+				Vector v = source.getCommunityCodes( levelName );
+
+				//	this is a hack to restart the ecoart connections after 100 uses
+				int connCnt = 0;	
+				
 				for (int i =0; i < v.size(); i++)
+        //for (int i =0; i < 200; i++)  // hack tor testing
 				{
-					String communityCode = v.elementAt(i).toString();
-					String commName = source.getCommunityName(communityCode);
-					String level = "subclass";
-					//pass the code and the level to the method below
-					String dateEntered = source.getDateEntered(communityCode, "subclass");
+
+					connCnt++;
+					if (connCnt == 100)
+					{
+						//close the connection or run out of memory soon
+						source.con.close();
+						source = new EcoartVegCommunitySource();
+						connCnt = 0;
+					}							
+					
+					String communityCode =  Utility.escapeCharacters( v.elementAt(i).toString() );
+					String commName = 
+						Utility.escapeCharacters( source.getCommunityName(communityCode) );
+					String dateEntered = source.getDateEntered(communityCode, levelName);
+					String communityDescription = 
+						Utility.escapeCharacters(source.getCommunityDescription(communityCode) );					
 					String parentCommunity = source.getParentCode(communityCode);
+					String allianceTransName = 
+							Utility.escapeCharacters(source.getAllianceNameTrans(communityCode) );
+					
+					
 					if (commName != null)
 					{
-						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
-						dateEntered, parentCommunity, "");
+						this.insertCommunity(	communityCode, 
+																									levelName, 
+																									commName, 
+																									otherCitationDetails, 
+																									dateEntered, 
+																									parentCommunity, 
+																								  allianceTransName,
+																									communityDescription
+																								);
 					}
 				}
 				//close the connections 
 				source.con.close();
 			}
 			catch (Exception e)
-		 {
+		 	{
 			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
 			 e.printStackTrace();
-		 }
-		}
-		
-		 /**
-	  * method to load the ecoart alliances
-		*/
-		private void loadEcoartClasses()
-		{
-			try
-			{
-				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
-				//update the class varaibles
-				this.otherCitationDetails = source.otherCitationDetails;
-				this.refAuthors =source.refAuthors;
-				this.refTitle = source.refTitle;
-				this.refPubDate = source.refPubDate;
-				this.partyOrgName = source.partyOrgName;
-				
-				Vector v = source.getCommunityCodes("class");
-				for (int i =0; i < v.size(); i++)
-				{
-					String communityCode = v.elementAt(i).toString();
-					String commName = source.getCommunityName(communityCode);
-					String level = "class";
-					//pass the code and the level to the method below
-					String dateEntered = source.getDateEntered(communityCode, "class");
-					String parentCommunity = null; //this means top level
-					if (commName != null)
-					{
-						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
-						dateEntered, parentCommunity, "");
-					}
-				}
-				//close the connections 
-				source.con.close();
 			}
-			catch (Exception e)
-		 {
-			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
 		}
 		
-		
-	 
 	 /**
 	  * main method for testing this code
 		*/
@@ -1682,14 +1361,14 @@ public class VegCommunityLoader
 				  VegCommunityLoader loader = new VegCommunityLoader();
 					String dataset = args[0];
 					if ( dataset.trim().equals("ecoart") )
-					{
-						loader.loadEcoartClasses();
-						loader.loadEcoartSubClasses();
-						loader.loadEcoartGroups();
-						loader.loadEcoartSubGroups();
-						loader.loadEcoartFormations();
-						loader.loadEcoartAlliances();
-						loader.loadEcoartAssociations();
+					{	
+						for ( int i=0; i < levelNames.length; i++ )
+						{
+							System.out.println("\n#########################");
+							System.out.println("VegCommunityLoader > loading: " +  levelNames[i]);
+							System.out.println("#########################\n");
+							loader.loadEcoartLevel( levelNames[i] );
+						}
 					}
 					else if ( dataset.trim().equals("test") )
 					{

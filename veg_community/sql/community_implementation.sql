@@ -33,6 +33,7 @@ CREATE TABLE commStatus
     COMMREFERENCE_ID integer,
     commConceptStatus varchar (20) NOT NULL,
     commParent integer, -- the concept id for the parent
+    commLevel varchar (50),
     startDate timestamp NOT NULL,
     stopDate timestamp,
     partyComments varchar (500),
@@ -122,9 +123,7 @@ CREATE TABLE commConcept
     COMMNAME_ID integer NOT NULL,
     COMMREFERENCE_ID integer,
     ceglCode varchar (20),
-    commLevel varchar (50),
-    commParent integer,
-		conceptDescription varchar (500),
+		conceptDescription varchar (5000),
     PRIMARY KEY(COMMCONCEPT_ID)
 );
 
@@ -179,6 +178,11 @@ ALTER TABLE commStatus
     ADD CONSTRAINT COMMPARTY_ID FOREIGN KEY (COMMPARTY_ID)
     REFERENCES commParty (COMMPARTY_ID);
 
+ALTER TABLE commConcept
+    ADD CONSTRAINT commParent FOREIGN KEY (commParent)
+    REFERENCES commConcept (COMMCONCEPT_ID);
+
+
 ----------------------------------------------------------------------------
 -- commStatus
 ----------------------------------------------------------------------------
@@ -226,11 +230,6 @@ ALTER TABLE commConcept
 ALTER TABLE commConcept
     ADD CONSTRAINT COMMREFERENCE_ID FOREIGN KEY (COMMREFERENCE_ID)
     REFERENCES commReference (COMMREFERENCE_ID);
-
-ALTER TABLE commConcept
-    ADD CONSTRAINT commParent FOREIGN KEY (commParent)
-    REFERENCES commConcept (COMMCONCEPT_ID);
-
 ----------------------------------------------------------------------------
 -- commConcept
 ----------------------------------------------------------------------------

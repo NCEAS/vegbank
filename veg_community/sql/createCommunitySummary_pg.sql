@@ -55,8 +55,8 @@ create index commStatus_commConcept_id on commStatus  (commConcept_id);
 --UPDATE THE LEVEL IN THE HEIRACRCY
 update commSummary
 set classlevel =
-(select commlevel from commconcept
-where  commsummary.commconcept_id = commconcept.commconcept_id  );
+(select commlevel from commstatus
+where  commsummary.commconcept_id = commstatus.commconcept_id  );
 
 
 --UPDATE THE NAMEREFAUTHORS

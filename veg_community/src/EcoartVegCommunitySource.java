@@ -1,11 +1,9 @@
 /**
  *  '$RCSfile: EcoartVegCommunitySource.java,v $'
- *    Authors: @authors@
- *    Release: @release@
  *
- *   '$Author: farrell $'
- *     '$Date: 2003-01-14 01:12:38 $'
- * '$Revision: 1.14 $'
+ * '$Author: farrell $'     
+ * '$Date: 2003-02-13 01:03:08 $' 
+ * '$Revision: 1.15 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +45,7 @@ import java.sql.*;
 	+" NatureServe, Arlington, VA.";
 	public String refAuthors = "NatureServe";
 	public String refTitle = "International Classification of Ecological "
-	+" Communities: Terrestrial Vegetation. EcoArt version 2.55";
+	+" Communities: Terrestrial Vegetation. EcoArt version 2.65";
 	public String refPubDate = "13-FEB-2002";
 	public String partyOrgName = "U.S. National Vegetation Classification System";
 	
@@ -117,31 +115,31 @@ import java.sql.*;
 			
 			if (level.equals("association") )
 			{
-				query = "select ([Gname]) from ETC where ([Elcode]) like '"+community+"'";
+				query = "select ([Gname]) from ETC where ([Elcode]) = '"+community+"'";
 			}
 			else if (level.equals("alliance") )
 			{
-				query = "select ([AllianceName]) from Alliance where ([AllianceKey]) like '"+community+"'";
+				query = "select ([AllianceName]) from Alliance where ([AllianceKey]) = '"+community+"'";
 			}
 			else if (level.equals("formation") )
 			{
-				query = "select ([FormationName]) from Formation where ([FormationKey]) like '"+community+"'";
+				query = "select ([FormationName]) from Formation where ([FormationKey]) = '"+community+"'";
 			}
 			else if (level.equals("subgroup") )
 			{
-				query = "select ([Subgroupname]) from subgroup where ([subgroupKey]) like '"+community+"'";
+				query = "select ([Subgroupname]) from subgroup where ([subgroupKey]) = '"+community+"'";
 			}
 			else if (level.equals("group") )
 			{
-				query = "select ([Groupname]) from group_ where ([GroupKey]) like '"+community+"'";
+				query = "select ([Groupname]) from group_ where ([GroupKey]) = '"+community+"'";
 			}
 			else if (level.equals("subclass") )
 			{
-				query = "select ([SubClassname]) from subclass where ([subclassKey]) like '"+community+"'";
+				query = "select ([SubClassname]) from subclass where ([subclassKey]) = '"+community+"'";
 			}
 			else if (level.equals("class") )
 			{
-				query = "select ([Classname]) from class where ([classKey]) like '"+community+"'";
+				query = "select ([Classname]) from class where ([classKey]) = '"+community+"'";
 			}
 			
 			//execute the query
@@ -175,28 +173,35 @@ import java.sql.*;
 		public String getAllianceNameTrans(String code)
 		{
 			String allianceNameTrans = null;
-		 try
-		 {
-			// Create a Statement so we can submit SQL statements to the driver
-			Statement stmt = con.createStatement();
-			String query = null;
-			query = "select ([alliancenametrans]) from alliance where ([alliancekey]) like '"+code+"'";
-			ResultSet rs = stmt.executeQuery(query);
-			while (rs.next()) 
+			//first figure out the level in the heirarcy
+			this.level = this.getCommunityLevel(code);
+			
+			//if NOT alliance
+			if ( ! level.equals("alliance"))
 			{
-				//trim out the faulty characters
-				String s =  rs.getString(1);
-				allianceNameTrans =s.replace('\'', ' ');
+				return null;
 			}
-			rs.close();
-			stmt.close();
-		 }
-		 catch (Exception e)
-		 {
-			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-		 return(allianceNameTrans);
+			try
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				Statement stmt = con.createStatement();
+				String query = null;
+				query = "select ([alliancenametrans]) from alliance where ([alliancekey]) = '"+code+"'";
+				ResultSet rs = stmt.executeQuery(query);
+				while (rs.next()) 
+				{
+					//trim out the faulty characters
+					String s =  rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch (Exception e)
+			{
+				 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
+				 e.printStackTrace();
+			}
+			return(allianceNameTrans);
 		}
 		
 		
@@ -230,11 +235,11 @@ import java.sql.*;
 			String query = null;
 			if (level.equals("association") )
 			{
-				query = "select ([GnameTrans]) from ETC where ([Elcode]) like '"+community+"'";
+				query = "select ([GnameTrans]) from ETC where ([Elcode]) = '"+community+"'";
 			}
 			else if (level.equals("alliance") )
 			{
-				query = "select ([AllianceNameTrans]) from Alliance where ([AllianceKey]) like '"+community+"'";
+				query = "select ([AllianceNameTrans]) from Alliance where ([AllianceKey]) = '"+community+"'";
 			}
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) 
@@ -265,32 +270,32 @@ import java.sql.*;
 				String query = null;
 				if ( level.equals("alliance") )
 				{
-					query = "select ([AllianceOriginDate]) from ALLIANCE where ([AllianceKey]) like '"+communityCode+"'";
+					query = "select ([AllianceOriginDate]) from ALLIANCE where ([AllianceKey]) = '"+communityCode+"'";
 				}
 				else if ( level.equals("association"))
 				{
-					query = "select ([AssocOriginDate]) from ETC where ([Elcode]) like '"+communityCode+"'";
+					query = "select ([AssocOriginDate]) from ETC where ([Elcode]) = '"+communityCode+"'";
 				}
 				else if  ( level.equals("formation"))
 				{
-					query = "select ([Update]) from Formation where ([FormationKey]) like '"+communityCode+"'";
+					query = "select ([Update]) from Formation where ([FormationKey]) = '"+communityCode+"'";
 				}
 				else if  ( level.equals("subgroup"))
 				{
-					query = "select ([Update]) from subgroup where ([subgroupKey]) like '"+communityCode+"'";
+					query = "select ([Update]) from subgroup where ([subgroupKey]) = '"+communityCode+"'";
 				}
 				
 				else if  ( level.equals("group"))
 				{
-					query = "select ([Update]) from group_ where ([groupKey]) like '"+communityCode+"'";
+					query = "select ([Update]) from group_ where ([groupKey]) = '"+communityCode+"'";
 				}
 				else if  ( level.equals("subclass"))
 				{
-					query = "select ([Update]) from subclass where ([subclassKey]) like '"+communityCode+"'";
+					query = "select ([Update]) from subclass where ([subclassKey]) = '"+communityCode+"'";
 				}
 				else if  ( level.equals("class"))
 				{
-					query = "select ([Update]) from class where ([classKey]) like '"+communityCode+"'";
+					query = "select ([Update]) from class where ([classKey]) = '"+communityCode+"'";
 				}
 				//System.out.println("EcoartVegCommunity > query: " + query);
 				ResultSet rs = stmt.executeQuery(query);
@@ -359,9 +364,18 @@ import java.sql.*;
  			ResultSet rs = stmt.executeQuery(query);
  			while (rs.next()) 
  			{
-				String resp = rs.getString(1);
+				String code = rs.getString(1);
 				 //System.out.println("EcoartVegCommunity > resp: " + resp );
- 				 communities.addElement( resp );
+				 
+				 // Filter out CAVE & COMPLEX rows
+				 if ( code.startsWith("CAVE") || code.startsWith("COMPLEX") || code.startsWith("CECX"))
+				 {
+				 	// Do not add to communities vector
+				 }
+				 else
+				 {
+ 				 	communities.addElement( code );
+				 }
  			}
 			rs.close();
 			stmt.close();
@@ -441,31 +455,36 @@ import java.sql.*;
 			
 			if ( level.equals("association") )
 			{
-				query = "select ([ClassifKey]) from ETC where ([Elcode]) like '"+community+"'" ;
-			}
-			
-			if ( level.equals("alliance") )
+				query = "select ([ClassifKey]) from ETC where ([Elcode]) = '"+community+"'" ;
+			}	
+			else if ( level.equals("alliance") )
 			{
-				query = "select ([FormationKey]) from Alliance where ([AllianceKey]) like '"+community+"'" ;
+				query = "select ([FormationKey]) from Alliance where ([AllianceKey]) = '"+community+"'" ;
 			}
-			
 			else if ( level.equals("formation") )
 			{
-				query = "select ([SubGroupKey]) from Formation where ([FormationKey]) like '"+community+"'" ;
-			}
-			
+				query = "select ([SubGroupKey]) from Formation where ([FormationKey]) = '"+community+"'" ;
+			}			
 			else if ( level.equals("subgroup") )
 			{
-				query = "select ([GroupKey]) from subGroup where ([SubGroupKey]) like '"+community+"'" ;
-			}
-			
+				query = "select ([GroupKey]) from subGroup where ([SubGroupKey]) = '"+community+"'" ;
+			}			
 			else if ( level.equals("group") )
 			{
-				query = "select ([SubclassKey]) from Group_ where ([GroupKey]) like '"+community+"'" ;
+				query = "select ([SubclassKey]) from Group_ where ([GroupKey]) = '"+community+"'" ;
 			}
 			else if ( level.equals("subclass") )
 			{
-				query = "select ([classKey]) from  subclass where ([subclassKey]) like '"+community+"'" ;
+				query = "select ([classKey]) from  subclass where ([subclassKey]) = '"+community+"'" ;
+			}
+			else if ( level.equals("class") )
+			{
+				return null; // class is the top of the tree ... no parent
+			}
+			else
+			{
+				// Should throw exception here
+				System.out.println("EcoartVegCommunity > Invalid level: " + level );
 			}
 				
 			//execute the query
@@ -481,7 +500,9 @@ import java.sql.*;
 				stmt.close();
 			}
 			else
-				return("class");
+			{
+				return(null);  
+			}
 			
 		 }
 		 catch (Exception e)
@@ -490,6 +511,66 @@ import java.sql.*;
 			 e.printStackTrace();
 		 }
 		 return(parentCode);
+	 }
+	 
+	 
+	 /**
+	  * Get community description from the datasource given the communityCode
+	  * 
+	  * @param String communityCode
+	  * @return String communityDescription
+	  */
+	 public String getCommunityDescription( String communityCode )
+	 {
+		String communityDescription = null;
+		try
+		{
+			//first figure out the level in the heirarcy
+		 this.level = this.getCommunityLevel(communityCode);
+			
+		 // Create a Statement so we can submit SQL statements to the driver
+		 Statement stmt = con.createStatement();
+		 //System.out.println("EcoartVegCommunity > internal level: " + level);
+		 String query = null;
+			
+		 if ( level.equals("alliance") )
+		 {
+			 query = "select ([AllianceDesc]) from Alliance where ([AllianceKey]) = '"+communityCode+"'" ;
+		 }
+		 else if (level.equals("subclass") )
+		 {
+			 query = "select ([SubclassDesc]) from subclass where ([subclassKey]) = '"+communityCode+"'";
+		 }
+		 else if (level.equals("class"))
+		 {
+			query = "select ([ClassDesc]) from class where ([classKey]) = '"+communityCode+"'" ;
+		 }
+		 // The other level types don't have a real description -- use null
+		 else
+		 {
+				communityDescription =	null;
+		 }		
+		 
+		 //execute the query
+		 if ( query != null)
+		 {
+			 //create the result set
+			 ResultSet rs = stmt.executeQuery( query);
+			 while (rs.next()) 
+			 {
+				communityDescription = rs.getString(1);
+			 }
+			 rs.close();
+			 stmt.close();
+		 }
+		 
+		}
+		catch (Exception e)
+		{
+			System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(communityDescription);			
 	 }
 	 
 	 /**

@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *     '$Date: 2003-01-13 17:37:34 $'
-  * '$Revision: 1.5 $'
+  *     '$Date: 2003-02-13 01:03:06 $'
+  * '$Revision: 1.6 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -23,44 +23,56 @@
   * "Carya".
   * usage: ant [compile|jar|install|jdoc]
 --> 
-<project name="veg_community" default="compile" basedir=".">
-	<target name="init">
-	<tstamp/>
+<project name="communities_dev" default="compile" basedir=".">
+	
+  
+  <target name="init">
+	  <tstamp/>
 
 	
-	<!-- NOTICE THE DIFFERENCES BETWEEN THE DEV AND PRODUCTION SERVLETS-->
-	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/" />
+	  <!-- NOTICE THE DIFFERENCES BETWEEN THE DEV AND PRODUCTION SERVLETS-->
+	  <property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/" />
 
-	<property name="current" value="./" />
-	<property name="build" value="./build" />
-	<property name="src" value="src" />
-	<property name="lib" value="./lib" />
-	<property name="xml_dir" value="./xml"/>
-	<property name="jdbc" value="../lib/jdbc7.0-1.2.jar" />
-	<property name="cpath" value="${jdbc}:${build}:./"/>
+	  <property name="current" value="./" />
+    <property name="toplib" value="${basedir}/../lib"/>
+  	<property name="build.dir" value="./build" />
+	  <property name="src" value="src" />
+  	<property name="lib" value="./lib" />
+	  <property name="xml_dir" value="./xml"/>
+  	<property name="jdbc" value="../lib/jdbc7.0-1.2.jar" />
+	  <property name="cpath" value="${jdbc}:${build.dir}:.:${toplib}/vegclass_common.jar"/>
 	
-</target>
+    <!-- FIXME: Move into higher level -->
+    <property name="torque.home" value="../common/datamodel/torque-3.0" />
+    <property name="torque.contextProperties" value="${build.dir}/torque-build.properties"/>
+    <property name="hostname" value="beta.nceas.ucsb.edu"/>
 
-<!-- PREPARE -->
-<target name="prepare" depends="init" description="==> prepares the project">
-	<mkdir dir="${build}" />
-	<mkdir dir="${lib}" />
+    <filter token="ant.project.name" value="${ant.project.name}"/>
+    <filter token="database.hostname" value="${hostname}"/>
+
+  </target>
+
+  <!-- PREPARE -->
+  <target name="prepare" depends="init" description="==> prepares the project">
+	  <mkdir dir="${build.dir}" />
+	  <mkdir dir="${lib}" />
 	
-	<copydir src="${src}" 
-		dest="${build}" 
-		filtering="yes"
-		includes="**.java"
-		excludes="**/CVS*"
-	/>
-</target>	
+	  <copydir  src="${src}" 
+		          dest="${build.dir}" 
+		          filtering="yes"
+		          includes="**.java"
+		          excludes="**/CVS*"
+	  />
+  </target>	
 	
 	<!-- COMPILE -->
 <target name="compile" depends="prepare"  description="==> compiles the community loaders">
-	<javac srcdir="${build}" 
+
+  <javac srcdir="${build.dir}" 
     debug="on"
 		classpath="${cpath}"
 		includes="  VegCommunityLoader.java EcoartVegCommunitySource.java" 
-		destdir="${build}"
+		destdir="${build.dir}"
 	/>
 	
 </target>	
@@ -68,7 +80,7 @@
 <!-- JAR -->	
 <target name="jar" depends="compile" description="==> creates the jar archive" >
 	<jar jarfile ="${lib}/vegcommunity.jar"
-		basedir="${build}"
+		basedir="${build.dir}"
 		includes="**"
 	/>
 </target>		
@@ -77,7 +89,7 @@
 <!-- DIST -->	
 <target name="dist" depends="jar" description="==> copies the jar file to the lib directory">
 	<!-- JAR LIBRARIES INCL: xml parsers/xformers, jdbc drivers, db access, servlet-->
-	<copydir src="${build}" 
+	<copydir src="${build.dir}" 
   	dest="${lib}" 
     filtering="no"
     includes=" vegcommunity.jar"
@@ -114,8 +126,46 @@
 </target>
 
   <target name="clean" depends="init" description="Remove all generated files">
-      <delete dir="${build}"/>
+      <delete dir="${build.dir}"/>
   </target>
 
+  <!-- TORQUE TASKS -->
+
+  <target name="torque-prepare" depends="init">
+    <copy file="${lib}/torque-build.properties" todir="${build.dir}"
+          filtering="true"/>
+  </target>
+  
+  <target name="torque-jdbc" depends="torque-prepare" if="torque.home" 
+          description="==> Generate datamodel schema from existing database">
+    <ant antfile="${torque.home}/build-torque.xml" target="jdbc">
+      <property name="torque.lib.dir" location="${torque.home}/lib"/>
+    </ant>
+    <copy file="torque-output/schema/schema.xml"
+          tofile="torque-output/schema/${ant.project.name}-schema.xml"/>
+
+  </target>
+  
+  <target name="torque-doc" depends="torque-prepare" if="torque.home" 
+          description="==> Generate datamodel documentation from existing database">
+    <ant antfile="${torque.home}/build-torque.xml" target="doc">
+      <property name="torque.lib.dir" location="${torque.home}/lib"/>
+    </ant>
+  </target>
+
+  <target name="torque-sql" depends="torque-prepare" if="torque.home" 
+          description="==> Generate sql from datamodel schema">
+    <ant antfile="${torque.home}/build-torque.xml" target="sql">
+      <property name="torque.lib.dir" location="${torque.home}/lib"/>
+    </ant>
+  </target>
+
+
+  <target name="torque-datasql" depends="torque-prepare" if="torque.home" 
+          description="==> Generates sql from an xml data file">
+    <ant antfile="${torque.home}/build-torque.xml" target="datasql">
+      <property name="torque.lib.dir" location="${torque.home}/lib"/>
+    </ant>
+  </target>
 
 </project>
