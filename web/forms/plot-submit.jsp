@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2004-11-16 07:41:14 $'
-*  '$Revision: 1.13 $'
+*  '$Author: anderson $'
+*  '$Date: 2005-01-20 14:26:21 $'
+*  '$Revision: 1.14 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -36,10 +36,14 @@
 
 
 <head>@defaultHeadToken@
-<title> VEGBANK VEGETATION PLOT DATA SUBMITTAL WIZARD </title>
-<link REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css">
+<title>Vegbank XML Upload</title>
+<link REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css"/>
 
-
+<script language="javascript">
+function selectRadio(pathField, radioIndex) {
+    document.UploadPlotForm.dataFileLocation[radioIndex].checked = true;
+}
+</script>
 
 </head>
 
@@ -77,11 +81,11 @@
 		<td colspan="2">
 			<p>In order to share your plot observation data, it must be contained 
 			in a VegBank native XML file.  
-			<a href="http://gyro.nceas.ucsb.edu/vegdocs/vegbranch/vbr-overview.html">VegBranch</a>
+			<a href="/vegdocs/vegbranch/vbr-overview.html">VegBranch</a>
 			is a Microsoft Access tool which you can use to generate this XML file.
 
 			<p>Please see the 
-			<a href="http://gyro.nceas.ucsb.edu:8080/vegbank/general/faq.html#catg_loading">FAQ</a>
+			<a href="/vegbank/general/faq.html#catg_loading">FAQ</a>
 			to learn more about how to submit plots.  See the 
 			<a href="@NativeXMLIndexPage@">VegBank native XML</a> page for more information, 
 			sample XML documents and schemas.  Although the schema is still evolving, that 
@@ -129,7 +133,7 @@
 			&nbsp; &nbsp; &nbsp; Local data file path:
 		</td>
 		<td>
-			<html:file property="plotFile" size="50"/>
+			<html:file property="plotFile" size="50" onclick="selectRadio(this, 0)"/>
 		</td>
 	</tr>
 
@@ -149,19 +153,24 @@
 			&nbsp; &nbsp; &nbsp; Data file URL:
 		</td>
 		<td>
-			<html:text property="plotFileURL" size="50" value="http://"/>
+			<html:text property="plotFileURL" size="50" value="http://" 
+				onclick="if(this.value=='http://'){this.value='';} selectRadio(this, 1);" 
+				onblur="if(this.value==''){this.value='http://';}"/>
 		</td>
 	</tr>
 
 
 </table>
 
-<table>
-
 
 <table border="0">
 	<tr>
 	 <td>
+     <br>
+After your data is loaded, an email will be sent to <bean:write name="email"/> containing load results.  
+<br>
+&nbsp;&raquo; <html:link action="/LoadUser.do">update email address</html:link>
+	 	<br>
 	 	<br>
 		<html:submit property="submit" value="continue"/>
 	 </td>

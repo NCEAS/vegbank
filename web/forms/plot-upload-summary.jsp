@@ -14,8 +14,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-12-16 23:24:20 $'
-  *  '$Revision: 1.1 $'
+  *      '$Date: 2005-01-20 14:26:22 $'
+  *  '$Revision: 1.2 $'
   *
   *
   -->
@@ -23,12 +23,12 @@
 
 <HEAD>@defaultHeadToken@
  
-<TITLE>Upload Summary</TITLE>
+<TITLE>Upload Received</TITLE>
 
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
+<link rel="stylesheet" href="@stylesheet@" type="text/css"/>
 
  
-<meta http-equiv="Content-Type" content="text/html; charset=">
+<meta http-equiv="Content-Type" content="text/html; charset="/>
 </HEAD>
 <BODY>
 
@@ -37,25 +37,32 @@
 
   
 <blockquote>
-<h2>Upload Summary</h2>
+<h2>Upload Received</h2>
 <p>
 <br/>
 <span class="vegbank_normal">
-Upload Summary<br/>
+Upload Received<br/>
 
+<p>Thanks for contributing your work to the project.
+<br>
+An email will be sent to <bean:write name="email"/> containing load results.
+
+<!--
 <p>Are you sure you want to add this data to Vegbank?
+-->
 
-<html:form action="/UploadPlot">
-	<html:hidden property="plotFilePath" value="<%= (String)request.getSession().getAttribute("plotFilePath") %>"/>
-	<html:hidden property="action" value="load"/>
+<!--html:form action="/UploadPlot"-->
+	<!--html:hidden property="ulpath" value="<%= (String)request.getSession().getAttribute("ulpath") %>"/-->
+	<!--html:hidden property="action" value="load"/-->
 	&nbsp; &nbsp; &nbsp; &nbsp; 
-	<html:submit property="submit" value="Yes, load data now"/>
-</html:form>
+	<!--html:submit property="submit" value="Yes, load data now"/-->
+<!--/html:form-->
 
 <p>&raquo; <html:link action="/DisplayUploadPlotAction.do">Back to upload page</html:link>
 
 <blockquote>
-<table>
+
+<!--table>
 <tr>
 	<th>entity</th>
 	<th>count</th>
@@ -85,7 +92,7 @@ while (kit.hasNext()) {
 <%
 }
 %>
-	</table>
+	</table-->
 	</blockquote>
 
 	</span>
