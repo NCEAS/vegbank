@@ -68,6 +68,6 @@
 </map>
 
 
-<img src="@images_link@plots_northamerica_map_third.png" usemap="#mapthird" border="0" id="home-img" /> 
+<img src="@images_link@plots_northamerica_map_third.png" usemap="#mapthird" /> 
 <br />
-<%@ include file="plot-map-northamerica-key.html" %>
+
