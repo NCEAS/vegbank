@@ -1,23 +1,19 @@
 <?xml version="1.0"?>
-<!-- sources for field definitions:
-  http://knb.ecoinformatics.org/software/eml/eml-2.0.0/eml-party.html
-  http://knb.ecoinformatics.org/software/eml/eml-2.0.0/eml-resource.html
-  http://knb.ecoinformatics.org/software/eml/eml20docs/eml-resource.html
-  http://knb.ecoinformatics.org/software/eml/eml-2.0.0/eml-literature.html
--->
 <!-- This stylesheet is a rough beginning and not checked into cvs initially: -->
-<?xml-stylesheet type="text/xsl" href="viewFieldsDefn.xsl"?>
-<!-- empty comment -->
+<?xml-stylesheet type="text/xsl" href="changedoc_2ALTER.xsl"?>
+<!-- <?xml-stylesheet type="text/xsl" href="dbmodel_2csv_5flds_version.xsl"?> -->
+<!-- <?xml-stylesheet type="text/xsl" href="changedoc_2dbdoc.xsl"?> -->
 <modelChangeDocument>
   <modelChange>
     <modelChangeID>1</modelChangeID>
     <modelChangeName>New Permissions schema</modelChangeName>
     <modelChangeStatus>FALSE</modelChangeStatus>
+    <modelChangeVersion/>
     <modelChangeComments>not yet implemented -- 2.0.0 ? -- may need some revision of this proposed new model in that plot-level embargoes may not be the only embargoes desired - project level or observation level embargoes may also be required.</modelChangeComments>
     <modelChangeBugID>836</modelChangeBugID>
     <entity>
       <entityChangeType>add</entityChangeType>
-      <entityModule>plots</entityModule>
+      <entityModule>frameWork</entityModule>
       <entityName>embargo</entityName>
       <entitySummary/>
       <entityDescription/>
@@ -150,7 +146,7 @@
     </entity>
     <entity>
       <entityChangeType>add</entityChangeType>
-      <entityModule>plots</entityModule>
+      <entityModule>frameWork</entityModule>
       <entityName>permission</entityName>
       <entitySummary/>
       <entityDescription/>
@@ -246,8 +242,8 @@
   <modelChange>
     <modelChangeID>2</modelChangeID>
     <modelChangeName>Plant and Comm level,parent move to Status</modelChangeName>
-    <modelChangeStatus>TRUE beta.2!</modelChangeStatus>
-    <modelChangeComments>not yet implemented : 1.0.0beta1</modelChangeComments>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>beta.2</modelChangeVersion>
     <modelChangeBugID>685</modelChangeBugID>
     <entity>
       <entityChangeType>edit</entityChangeType>
@@ -583,7 +579,8 @@
   <modelChange>
     <modelChangeID>3</modelChangeID>
     <modelChangeName>Accession number revision</modelChangeName>
-    <modelChangeStatus>TRUE beta.1!</modelChangeStatus>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>beta.1</modelChangeVersion>
     <modelChangeComments>Implemented in VegBank design, not fully functioning? -- see bug -- not implemented in VegBranch</modelChangeComments>
     <modelChangeBugID>781</modelChangeBugID>
     <entity>
@@ -611,7 +608,6 @@
     <modelChangeID>4</modelChangeID>
     <modelChangeName>Revision track record additions and deletions</modelChangeName>
     <modelChangeStatus>FALSE</modelChangeStatus>
-    <modelChangeComments>Not yet fully designed</modelChangeComments>
     <modelChangeBugID>820</modelChangeBugID>
     <entity>
       <entityChangeType>edit</entityChangeType>
@@ -649,33 +645,56 @@
   </modelChange>
   <modelChange>
     <modelChangeID>5</modelChangeID>
-    <modelChangeName>Allow individual stems tracking in Taxon Obs</modelChangeName>
-    <modelChangeStatus>FALSE</modelChangeStatus>
-    <modelChangeComments>Not yet implemented</modelChangeComments>
+    <modelChangeName>Allow individual stems tracking in TaxonInterpretation; add stemHealth field to stemLocation to describe dead trees, perhaps other descriptions of health, too.</modelChangeName>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>1.0.1</modelChangeVersion>
     <modelChangeBugID>786</modelChangeBugID>
     <entity>
       <entityChangeType>edit</entityChangeType>
       <entityModule>plots</entityModule>
-      <entityName>taxonObservation</entityName>
-      <entitySummary/>
-      <entityDescription/>
+      <entityName>taxonInterpretation</entityName>
       <attribute>
         <attChangeType>add</attChangeType>
-        <attName>taxonObsType</attName>
+        <attName>stemLocation_ID</attName>
         <attModel>logical</attModel>
         <attNulls>yes</attNulls>
-        <attType>varchar (30)</attType>
+        <attType>integer</attType>
+        <attKey>FK</attKey>
+        <attReferences>stemLocation.stemLocation_ID</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>stemLocation record of a particular stem that is to be interpreted by this taxonInterpretation record.</attDefinition>
+      </attribute>
+    </entity>
+    <entity>
+      <entityChangeType>edit</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>stemLocation</entityName>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>stemHealth</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (50)</attType>
         <attKey>n/a</attKey>
         <attReferences>n/a</attReferences>
-        <attNotes>Nulls set to yes, default should be "collective"</attNotes>
-        <attDefinition>"Collective" if Taxon Observation applies to a collection of individuals (i.e. individuals of the same species) or just one individual "individual"</attDefinition>
-        <attListType>yes</attListType>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Health of the stem referenced in this stemLocation record. Usually used to describe "dead" stems.</attDefinition>
+        <attListType>open</attListType>
         <attList>
           <attListItem>
-            <attListValue>Collective</attListValue>
+            <attListValue>dead</attListValue>
+            <attListValueDesc>stem is dead</attListValueDesc>
+            <attListSortOrd>1</attListSortOrd>
           </attListItem>
           <attListItem>
-            <attListValue>Individual</attListValue>
+            <attListValue>uprooted, but alive</attListValue>
+            <attListValueDesc>stem is uprooted, but still alive</attListValueDesc>
+            <attListSortOrd>2</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>leaning</attListValue>
+            <attListValueDesc>stem leans in a non-trivial manner</attListValueDesc>
+            <attListSortOrd>3</attListSortOrd>
           </attListItem>
         </attList>
       </attribute>
@@ -721,7 +740,8 @@
   <modelChange>
     <modelChangeID>7</modelChangeID>
     <modelChangeName>New Reference Model</modelChangeName>
-    <modelChangeStatus>TRUE beta.2!</modelChangeStatus>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>beta.2</modelChangeVersion>
     <modelChangeComments>Not yet implemented - scheduled for 1.0.0beta2</modelChangeComments>
     <modelChangeBugID>696</modelChangeBugID>
     <entity>
@@ -2860,7 +2880,8 @@
   <modelChange>
     <modelChangeID>8</modelChangeID>
     <modelChangeName>plotValidationLevel is an implementation field</modelChangeName>
-    <modelChangeStatus>TRUE beta.2!</modelChangeStatus>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>beta.2</modelChangeVersion>
     <modelChangeComments>this field should be hidden from the user, as it is generated by VegBank as a summary of information available for this observation.  Should also be changed to a numeric field from long varchar</modelChangeComments>
     <modelChangeBugID/>
     <entity>
@@ -2903,7 +2924,8 @@
   <modelChange>
     <modelChangeID>9</modelChangeID>
     <modelChangeName>observation.representativeness no longer has a list of values - is just a text field</modelChangeName>
-    <modelChangeStatus>TRUE beta.2!</modelChangeStatus>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>beta.2</modelChangeVersion>
     <modelChangeComments>used to be a closed list, now is just an open text field. Should increase size of field to 250 characters.</modelChangeComments>
     <modelChangeBugID/>
     <entity>
@@ -2930,7 +2952,8 @@
   <modelChange>
     <modelChangeID>10</modelChangeID>
     <modelChangeName>geology as an open list</modelChangeName>
-    <modelChangeStatus>TRUE beta.2!</modelChangeStatus>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>beta.2</modelChangeVersion>
     <modelChangeComments>geology was a closed list, but should be made an open list. The list of values is long and not needed here, therefore it is left out.</modelChangeComments>
     <modelChangeBugID/>
     <entity>
@@ -2957,23 +2980,29 @@
   <modelChange>
     <modelChangeID>11</modelChangeID>
     <modelChangeName>geology will be split into two fields, rockType and surficialDeposit</modelChangeName>
-    <modelChangeStatus>TRUE beta.2</modelChangeStatus>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>beta.2</modelChangeVersion>
     <modelChangeComments>details still on the way...</modelChangeComments>
   </modelChange>
   <modelChange>
     <modelChangeID>12</modelChangeID>
     <modelChangeName>soilTexture values revision</modelChangeName>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>1.0.0</modelChangeVersion>
     <modelChangeComments>SoilTexture values will be somewhere between 12 and 21 standard values.  Details still in process.</modelChangeComments>
   </modelChange>
   <modelChange>
     <modelChangeID>13</modelChangeID>
     <modelChangeName>commStatus.level adds values to list</modelChangeName>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>1.0.0</modelChangeVersion>
     <modelChangeComments>level will probably be an open list -- values will be added to include Braun-Blanquet values. May need to mimic coverMethod / coverIndex table structure.</modelChangeComments>
   </modelChange>
   <modelChange>
     <modelChangeID>14</modelChangeID>
     <modelChangeName>fewer reqd fields</modelChangeName>
-    <modelChangeStatus>TRUE beta.2</modelChangeStatus>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>beta.2</modelChangeVersion>
     <modelChangeComments>the following fields are no longer required (nulls=no) :   plot.confidentialityReason
 observation.taxonObservationArea
 plot.area
@@ -2985,7 +3014,8 @@ observation.COVERMETHOD_ID</modelChangeComments>
   <modelChange>
     <modelChangeID>15</modelChangeID>
     <modelChangeName>Braun-Blanquet comm considerations</modelChangeName>
-    <modelChangeStatus>TRUE beta.2</modelChangeStatus>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>beta.2</modelChangeVersion>
     <modelChangeComments>1 field needs adding and some additional name Systems are necessary for Braun-Blanquet communities.</modelChangeComments>
     <entity>
       <entityChangeType>change</entityChangeType>
@@ -3120,7 +3150,8 @@ observation.COVERMETHOD_ID</modelChangeComments>
   <modelChange>
     <modelChangeID>17</modelChangeID>
     <modelChangeName>add observation.dateEntered</modelChangeName>
-    <modelChangeStatus>FALSE</modelChangeStatus>
+    <modelChangeStatus>TRUE 1.0.1</modelChangeStatus>
+    <modelChangeVersion>1.0.1</modelChangeVersion>
     <modelChangeComments>need field to track when observations are added</modelChangeComments>
     <modelChangeBugID>780, in part</modelChangeBugID>
     <entity>
@@ -3133,13 +3164,519 @@ observation.COVERMETHOD_ID</modelChangeComments>
         <attChangeType>add</attChangeType>
         <attName>dateEntered</attName>
         <attModel>logical</attModel>
-        <attNulls>no</attNulls>
+        <attNulls>yes</attNulls>
         <attType>Date</attType>
         <attKey>n/a</attKey>
         <attReferences>n/a</attReferences>
         <attNotes/>
         <attDefinition>Date that the observation was added to VegBank</attDefinition>
         <attListType>n/a</attListType>
+        <attList/>
+      </attribute>
+    </entity>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>18</modelChangeID>
+    <modelChangeName>add recursive key to taxonInterpretation for irregular taxa</modelChangeName>
+    <modelChangeStatus>rejected.</modelChangeStatus>
+    <modelChangeComments>add several fields to taxInt: recursive key: corr (union, intersection), fit, confidence.</modelChangeComments>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>taxonInterpretation</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>groupInterpretation_ID</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>Integer</attType>
+        <attKey>FK</attKey>
+        <attReferences>taxonInterpretation.taxonInterpretation_ID</attReferences>
+        <attNotes>recursive foreign key into the TaxonInterpretation table</attNotes>
+        <attDefinition>Link to another TaxonInterpretation record which contains other plantConcepts which the Interpreter wishes to group, according to the field: groupType</attDefinition>
+        <attListType>no</attListType>
+        <attList/>
+      </attribute>
+    </entity>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>19</modelChangeID>
+    <modelChangeName>Parallel taxonInterpreation to model after commClass model.</modelChangeName>
+    <modelChangeStatus>false: 2.0 or future</modelChangeStatus>
+    <modelChangeComments>kill TaxonInt, add TaxonClass, TaxonContrib, TaxonInterp.</modelChangeComments>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>20</modelChangeID>
+    <modelChangeName>add voucher info to TaxonInterp</modelChangeName>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>1.0.1</modelChangeVersion>
+    <modelChangeComments>adds voucher fields to taxonInterp</modelChangeComments>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>taxonInterpretation</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>collector_ID</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>Integer</attType>
+        <attKey>FK</attKey>
+        <attReferences>party.party_ID</attReferences>
+        <attNotes>foreign key into the Party table</attNotes>
+        <attDefinition>Party who collected the voucher which was used to make this taxonInterpretation.</attDefinition>
+        <attListType>no</attListType>
+        <attList/>
+      </attribute>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>collectionNumber</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (100)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>The Collector's identification code for the voucher.</attDefinition>
+        <attListType>no</attListType>
+        <attList/>
+      </attribute>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>collectionDate</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>Date</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Date on which the voucher was collected.</attDefinition>
+        <attListType>no</attListType>
+        <attList/>
+      </attribute>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>museum_ID</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>Integer</attType>
+        <attKey>FK</attKey>
+        <attReferences>party.party_ID</attReferences>
+        <attNotes>foreign key into the Party table</attNotes>
+        <attDefinition>Link to the Party which is the museum which archives the voucher.</attDefinition>
+        <attListType>no</attListType>
+        <attList/>
+      </attribute>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>museumAccessionNumber</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (100)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Museum Code which identifies the voucher.</attDefinition>
+        <attListType>no</attListType>
+        <attList/>
+      </attribute>
+    </entity>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>21</modelChangeID>
+    <modelChangeName>add taxonAlt table to solve irregular taxa issue</modelChangeName>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>1.0.1</modelChangeVersion>
+    <modelChangeComments>add new resolution table between taxonInterpretation and plantConcept to allow groups to be formed</modelChangeComments>
+    <entity>
+      <entityChangeType>add</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>taxonAlt</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>taxonAlt_ID</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>serial</attType>
+        <attKey>PK</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Database generated number to uniquely identify this record, and thus taxonGroup.</attDefinition>
+        <attListType>no</attListType>
+        <attList/>
+      </attribute>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>taxonInterpretation_ID</attName>
+        <attModel>logical</attModel>
+        <attNulls>no</attNulls>
+        <attType>Integer</attType>
+        <attKey>FK</attKey>
+        <attReferences>taxonInterpretation.taxonInterpretation_ID</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Links to the taxonInterpretation for which several plantConcepts are grouped to form an irregular taxon.  The plantConcept referenced here is one member of the group.</attDefinition>
+        <attListType>no</attListType>
+        <attList/>
+      </attribute>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>plantConcept_ID</attName>
+        <attModel>logical</attModel>
+        <attNulls>no</attNulls>
+        <attType>Integer</attType>
+        <attKey>FK</attKey>
+        <attReferences>plantConcept.plantConcept_ID</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Links to the plantConcept that is part of the taxonGroup formed by all records in this table with the same taxonInterpretation_ID.</attDefinition>
+        <attListType>no</attListType>
+        <attList/>
+      </attribute>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>taxonAltFit</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (50)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Indicates the degree of fit with the plant concept being assigned. Values derive from Gopal, S., and Woodcock, C. (1994), Theory and methods for accuracy assessment of thematic maps using fuzzy sets. Photogrammetric Engineering and Remote Sensing 60(2):181-188.</attDefinition>
+        <attListType>closed</attListType>
+        <attList>
+          <attListItem>
+            <attListValue>Absolutely correct</attListValue>
+            <attListValueDesc>(Fits well)  No doubt about the match. Perfect fit.</attListValueDesc>
+            <attListSortOrd>5</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>Absolutely wrong</attListValue>
+            <attListValueDesc>(Absolutely doesn't fit)  This answer is absolutely unacceptable. Unambiguously incorrect.</attListValueDesc>
+            <attListSortOrd>1</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>Good answer</attListValue>
+            <attListValueDesc>(Fits reasonably well)  Good match with the concept.  Unambiguously correct.</attListValueDesc>
+            <attListSortOrd>4</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>Reasonable or acceptable answer</attListValue>
+            <attListValueDesc>(Possibly fits)  Maybe not the best possible answer but it is acceptable; this answer does not pose a problem to the user. Correct.</attListValueDesc>
+            <attListSortOrd>3</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>Understandable but wrong</attListValue>
+            <attListValueDesc>(Doesn't fit but is close)  Not a good answer. There is something about the plot that makes the answer understandable, but there is clearly a better answer. This answer would pose a problem for users.  Incorrect.</attListValueDesc>
+            <attListSortOrd>2</attListSortOrd>
+          </attListItem>
+        </attList>
+      </attribute>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>taxonAltConfidence</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (50)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Indicates the degree of confidence of the interpretor(s) in the interpretation made. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</attDefinition>
+        <attListType>closed</attListType>
+        <attList>
+          <attListItem>
+            <attListValue>High</attListValue>
+            <attListValueDesc>The party making the taxon interpretation has a high confidence in the accuracy of this interpretation. A party can have high confidence that a plot has a fit of "absolutely wrong" for a particular community.</attListValueDesc>
+            <attListSortOrd>1</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>Low</attListValue>
+            <attListValueDesc>The party making the taxon interpretation has a low confidence in the accuracy of this interpretation.</attListValueDesc>
+            <attListSortOrd>3</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>Medium</attListValue>
+            <attListValueDesc>The party making the taxon interpretation has a medium amount of confidence in the accuracy of this interpretation.</attListValueDesc>
+            <attListSortOrd>2</attListSortOrd>
+          </attListItem>
+        </attList>
+      </attribute>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>taxonAltNotes</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>text</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>notes about this taxonAlt assignment.</attDefinition>
+        <attListType>no</attListType>
+      </attribute>
+    </entity>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>22</modelChangeID>
+    <modelChangeName>changes agreed on for dealing with irregular taxa</modelChangeName>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>1.0.1</modelChangeVersion>
+    <modelChangeComments>add TaxonObs.plantName, fit/confidence to taxonInterpretation</modelChangeComments>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>taxonObservation</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>plantName</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (255)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Plot Author's name of the plant used during the taxonObservation</attDefinition>
+        <attListType>no</attListType>
+        <attList/>
+      </attribute>
+    </entity>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>taxonInterpretation</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>groupType</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (20)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>The type of group to be formed by linking to groupInterpretation_ID. </attDefinition>
+        <attListType>closed</attListType>
+        <attList>
+          <attListItem>
+            <attListValue>one of</attListValue>
+            <attListValueDesc>One of several plant concepts is interpreted to be the TaxonObservation in question.  For example, this is either species A OR species B.  Plants observed were one or the other, but not both, but which species cannot be determined.</attListValueDesc>
+            <attListSortOrd>1</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>union</attListValue>
+            <attListValueDesc>Several plant concepts are grouped to describe this taxon.  For example, taxonObservation applies to the union of both species A and species B.  Plants observed were from both species.</attListValueDesc>
+            <attListSortOrd>2</attListSortOrd>
+          </attListItem>
+        </attList>
+      </attribute>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>taxonFit</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (50)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Indicates the degree of fit with the plant concept being assigned. Values derive from Gopal, S., and Woodcock, C. (1994), Theory and methods for accuracy assessment of thematic maps using fuzzy sets. Photogrammetric Engineering and Remote Sensing 60(2):181-188.</attDefinition>
+        <attListType>closed</attListType>
+        <attList>
+          <attListItem>
+            <attListValue>Absolutely correct</attListValue>
+            <attListValueDesc>(Fits well)  No doubt about the match. Perfect fit.</attListValueDesc>
+            <attListSortOrd>5</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>Absolutely wrong</attListValue>
+            <attListValueDesc>(Absolutely doesn't fit)  This answer is absolutely unacceptable. Unambiguously incorrect.</attListValueDesc>
+            <attListSortOrd>1</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>Good answer</attListValue>
+            <attListValueDesc>(Fits reasonably well)  Good match with the concept.  Unambiguously correct.</attListValueDesc>
+            <attListSortOrd>4</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>Reasonable or acceptable answer</attListValue>
+            <attListValueDesc>(Possibly fits)  Maybe not the best possible answer but it is acceptable; this answer does not pose a problem to the user. Correct.</attListValueDesc>
+            <attListSortOrd>3</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>Understandable but wrong</attListValue>
+            <attListValueDesc>(Doesn't fit but is close)  Not a good answer. There is something about the plot that makes the answer understandable, but there is clearly a better answer. This answer would pose a problem for users.  Incorrect.</attListValueDesc>
+            <attListSortOrd>2</attListSortOrd>
+          </attListItem>
+        </attList>
+      </attribute>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>taxonConfidence</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (50)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Indicates the degree of confidence of the interpretor(s) in the interpretation made. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</attDefinition>
+        <attListType>closed</attListType>
+        <attList>
+          <attListItem>
+            <attListValue>High</attListValue>
+            <attListValueDesc>The party making the taxon interpretation has a high confidence in the accuracy of this interpretation. A party can have high confidence that a plot has a fit of "absolutely wrong" for a particular community.</attListValueDesc>
+            <attListSortOrd>1</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>Low</attListValue>
+            <attListValueDesc>The party making the taxon interpretation has a low confidence in the accuracy of this interpretation.</attListValueDesc>
+            <attListSortOrd>3</attListSortOrd>
+          </attListItem>
+          <attListItem>
+            <attListValue>Medium</attListValue>
+            <attListValueDesc>The party making the taxon interpretation has a medium amount of confidence in the accuracy of this interpretation.</attListValueDesc>
+            <attListSortOrd>2</attListSortOrd>
+          </attListItem>
+        </attList>
+      </attribute>
+    </entity>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>23</modelChangeID>
+    <modelChangeName>accessionCodes for party, concept, reference</modelChangeName>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>1.0.1</modelChangeVersion>
+    <modelChangeComments>add AccessionCode to concept/party/refernece</modelChangeComments>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>plantConcept</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>accessionCode</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (100)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+        <attListType>no</attListType>
+      </attribute>
+    </entity>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>commConcept</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>accessionCode</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (100)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+        <attListType>no</attListType>
+      </attribute>
+    </entity>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>party</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>accessionCode</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (100)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+        <attListType>no</attListType>
+      </attribute>
+    </entity>
+    <entity>
+      <entityChangeType>change</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>reference</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>accessionCode</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>varchar (100)</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+        <attListType>no</attListType>
+      </attribute>
+    </entity>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>24</modelChangeID>
+    <modelChangeName>add fulltext field to reference</modelChangeName>
+    <modelChangeStatus>TRUE</modelChangeStatus>
+    <modelChangeVersion>1.0.1</modelChangeVersion>
+    <modelChangeComments>add a full text field to reference which would contain either 1)the original text of the reference as presented to vegbank, such as from NatureSever, or 2) the concatenated fields string from the original parsed fields in VegBank which will often need displaying for users.</modelChangeComments>
+    <entity>
+      <entityChangeType>edit</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>reference</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>fulltext</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>text</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>The full text of the reference to be used as a citation.  This could either be the original citation as presented to VegBank where parsed reference fields were unavailable, or concatenated reference fields where the parsed format is entered into VegBank.</attDefinition>
+        <attListType>no</attListType>
+        <attList/>
+      </attribute>
+    </entity>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>25</modelChangeID>
+    <modelChangeName>add total cover for observation</modelChangeName>
+    <modelChangeStatus>FALSE</modelChangeStatus>
+    <modelChangeComments>field to describe total cover for an observation</modelChangeComments>
+    <entity>
+      <entityChangeType>edit</entityChangeType>
+      <entityModule>plots</entityModule>
+      <entityName>observation</entityName>
+      <entitySummary/>
+      <entityDescription/>
+      <attribute>
+        <attChangeType>add</attChangeType>
+        <attName>totalCover</attName>
+        <attModel>logical</attModel>
+        <attNulls>yes</attNulls>
+        <attType>Float</attType>
+        <attKey>n/a</attKey>
+        <attReferences>n/a</attReferences>
+        <attNotes>n/a</attNotes>
+        <attDefinition>The total cover, in percent, of all vegetation on the plot.</attDefinition>
+        <attListType>no</attListType>
         <attList/>
       </attribute>
     </entity>
