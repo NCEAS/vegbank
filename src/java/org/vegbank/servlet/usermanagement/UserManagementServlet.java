@@ -3,9 +3,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: farrell $'
- *   '$Date: 2003-11-05 20:54:35 $'
- *   '$Revision: 1.11 $'
+ *   '$Author: anderson $'
+ *   '$Date: 2003-11-09 00:12:02 $'
+ *   '$Revision: 1.12 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -669,57 +669,58 @@ public class UserManagementServlet extends HttpServlet
 			 String peerReview = (String)params.get("peerReview");
 			 String additionalStatements = (String)params.get("additionalStatements");
 			 
-			 messageBody.append("VegBank Administrator: \n");
-			 messageBody.append(" The following user has requested a certification change with the following details: \n");
-			 messageBody.append(" Email: "+submittedEmail+" \n");
-			 messageBody.append(" Sur Name: "+surName +" \n");
-			 messageBody.append(" Given Name: "+givenName+" \n");
-			 messageBody.append(" Phone Number: "+phoneNumber+" \n");
-			 messageBody.append(" Phone Type: "+phoneType+" \n");
-			 messageBody.append(" Current Cert Level: "+currentCertLevel+" \n");
-			 messageBody.append(" Requested Cert Level: " + certReq +" \n");
-			 messageBody.append(" Highest Degree: "+highestDegree+" \n");
-			 messageBody.append(" Degree Year: "+degreeYear+" \n");
-			 messageBody.append(" Degree Isnt: "+degreeInst+" \n");
-			 messageBody.append(" Current Inst: "+currentInst+" \n");
-			 messageBody.append(" Current Position: "+currentPos+" \n");
-			 messageBody.append(" ESA Memeber: "+esaPos+" \n");
-			 messageBody.append(" Prof. Experience: "+profExperienceDoc+" \n");
-			 messageBody.append(" Relevant Pubs: "+relevantPubs+" \n");
-			 messageBody.append(" Veg Sampling Exp: "+vegSamplingDoc+" \n");
-			 messageBody.append(" Veg Analaysis Exp: "+vegAnalysisDoc+" \n");
-			 messageBody.append(" USNVC Exp: "+usnvcExpDoc+" \n");
-			 messageBody.append(" VegBank Experience: "+vegbankExpDoc+" \n");
-			 messageBody.append(" Intended VB Use: "+useVegbank+" \n");
-			 messageBody.append(" Plot DB/Tools Exp: "+ plotdbDoc+" \n");
-			 messageBody.append(" nvcExpRegionA: "+nvcExpRegionA+" \n");
-			 messageBody.append(" nvcExpVegA: "+nvcExpVegA+" \n");
-			 messageBody.append(" nvcExpFloristicsA: "+nvcExpFloristicsA+" \n");
-			 messageBody.append(" nvcExpNVCA: "+nvcExpNVCA+" \n");
-			 messageBody.append(" esaSponsorNameA: "+esaSponsorNameA+" \n");
-			 messageBody.append(" esaSponsorEmailA: "+esaSponsorEmailA+" \n");
-			 messageBody.append(" esaSponsorNameB: "+esaSponsorNameB+" \n");
-			 messageBody.append(" esaSponsorEmailB: "+esaSponsorEmailB+" \n");
-			 messageBody.append(" nvcExpRegionB: "+nvcExpRegionB+" \n");
-			 messageBody.append(" nvcExpVegB: "+nvcExpVegB+" \n");
-			 messageBody.append(" nvcExpFloristicsB: "+nvcExpFloristicsB+" \n");
-			 messageBody.append(" nvcExpNVCB: "+nvcExpNVCB+" \n");
+			 messageBody.append("VegBank Administrator, <br>\n");
+			 messageBody.append(" Please review the following certification information. <br><br>\n");
+			 messageBody.append(" Email: "+submittedEmail+" <br>\n");
+			 messageBody.append(" Sur Name: "+surName +" <br>\n");
+			 messageBody.append(" Given Name: "+givenName+" <br>\n");
+			 messageBody.append(" Phone Number: "+phoneNumber+" <br>\n");
+			 messageBody.append(" Phone Type: "+phoneType+" <br>\n");
+			 messageBody.append(" Current Cert Level: "+currentCertLevel+" <br>\n");
+			 messageBody.append(" Requested Cert Level: " + certReq +" <br>\n");
+			 messageBody.append(" Highest Degree: "+highestDegree+" <br>\n");
+			 messageBody.append(" Degree Year: "+degreeYear+" <br>\n");
+			 messageBody.append(" Degree Isnt: "+degreeInst+" <br>\n");
+			 messageBody.append(" Current Inst: "+currentInst+" <br>\n");
+			 messageBody.append(" Current Position: "+currentPos+" <br>\n");
+			 messageBody.append(" ESA Memeber: "+esaPos+" <br>\n");
+			 messageBody.append(" Prof. Experience: "+profExperienceDoc+" <br>\n");
+			 messageBody.append(" Relevant Pubs: "+relevantPubs+" <br>\n");
+			 messageBody.append(" Veg Sampling Exp: "+vegSamplingDoc+" <br>\n");
+			 messageBody.append(" Veg Analaysis Exp: "+vegAnalysisDoc+" <br>\n");
+			 messageBody.append(" USNVC Exp: "+usnvcExpDoc+" <br>\n");
+			 messageBody.append(" VegBank Experience: "+vegbankExpDoc+" <br>\n");
+			 messageBody.append(" Intended VB Use: "+useVegbank+" <br>\n");
+			 messageBody.append(" Plot DB/Tools Exp: "+ plotdbDoc+" <br>\n");
+			 messageBody.append(" nvcExpRegionA: "+nvcExpRegionA+" <br>\n");
+			 messageBody.append(" nvcExpVegA: "+nvcExpVegA+" <br>\n");
+			 messageBody.append(" nvcExpFloristicsA: "+nvcExpFloristicsA+" <br>\n");
+			 messageBody.append(" nvcExpNVCA: "+nvcExpNVCA+" <br>\n");
+			 messageBody.append(" esaSponsorNameA: "+esaSponsorNameA+" <br>\n");
+			 messageBody.append(" esaSponsorEmailA: "+esaSponsorEmailA+" <br>\n");
+			 messageBody.append(" esaSponsorNameB: "+esaSponsorNameB+" <br>\n");
+			 messageBody.append(" esaSponsorEmailB: "+esaSponsorEmailB+" <br>\n");
+			 messageBody.append(" nvcExpRegionB: "+nvcExpRegionB+" <br>\n");
+			 messageBody.append(" nvcExpVegB: "+nvcExpVegB+" <br>\n");
+			 messageBody.append(" nvcExpFloristicsB: "+nvcExpFloristicsB+" <br>\n");
+			 messageBody.append(" nvcExpNVCB: "+nvcExpNVCB+" <br>\n");
 			 
-			 messageBody.append(" nvcExpRegionC: "+nvcExpRegionC+" \n");
-			 messageBody.append(" nvcExpVegC: "+nvcExpVegC+" \n");
-			 messageBody.append(" nvcExpFloristicsC: "+nvcExpFloristicsC+" \n");
-			 messageBody.append(" nvcExpNVCC: "+nvcExpNVCC+" \n");
-			 
-			 messageBody.append(" peerReview: "+peerReview+" \n");
-			 messageBody.append(" additionalStatements: "+additionalStatements+" \n");
+			 messageBody.append(" nvcExpRegionC: "+nvcExpRegionC+" <br>\n");
+			 messageBody.append(" nvcExpVegC: "+nvcExpVegC+" <br>\n");
+			 messageBody.append(" nvcExpFloristicsC: "+nvcExpFloristicsC+" <br>\n");
+			 messageBody.append(" nvcExpNVCC: "+nvcExpNVCC+" <br>\n");
+			 messageBody.append(" peerReview: "+peerReview+" <br>\n");
+			 messageBody.append(" additionalStatements: "+additionalStatements+" <br>\n");
 			 
 			 System.out.println( messageBody.toString() );
 			 //email this to the vegbank admin
 			 // send email message to the user 
 			 String mailHost = "nceas.ucsb.edu";
 			 String from = "vegbank";
-			 String to = vegBankAdmin;
-			 String cc = "dba@vegbank.org";
+String to = "anderson@nceas.ucsb.edu";
+String cc = "";
+//String to = vegBankAdmin;
+//String cc = "dba@vegbank.org";
 			 String subject = "VEGBANK CERTIFICATION REQUEST";
 			 String body = messageBody.toString();
 			 util.sendHTMLEmail(mailHost, from, to, cc, subject, body);
