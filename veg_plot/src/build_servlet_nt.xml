@@ -45,6 +45,11 @@
 	<property name="dbaccess_src" value="./plotAccess"/>
 	<property name="utility_src" value="./utilities"/>	
 	<property name="src_xml" value="../xml"/>
+	<!-- THE XML RESOURCES FOR THE PLANT TAXONOMY AN VEG_COMMUNITY 
+	ALSO NEEDED TO RUN THE SERVLET-->	
+  <property name="veg_community_xml" value="../../veg_community/xml" />
+	<property name="plant_taxonomy_xml" value="../../veg_taxa/xmlfiles" />
+	
 	<property name="src_bin" value="../bin" />
 	<property name="src_lib" value="../lib" />
 	
@@ -198,11 +203,25 @@
 		excludes="**/CVS* "
 	/>
 	
+	<!-- COPY THE XML RESOURCES DIRECTLY INTO THE SERVLET LIB DIRECTORY-->	
 	<copydir src="${src_xml}" 
   	dest="${installDir}"
 		filtering="no"
 		includes="**.dtd **.xsl"
 		excludes="**/CVS* " 
 	/>
+	<copydir src="${veg_community_xml}" 
+  	dest="${installDir}"
+		filtering="no"
+		includes="**.dtd **.xsl"
+		excludes="**/CVS* " 
+	/>
+	<copydir src="${plant_taxonomy_xml}" 
+  	dest="${installDir}"
+		filtering="no"
+		includes="**.dtd **.xsl"
+		excludes="**/CVS* " 
+	/>
+	
 </target>		
 </project>
