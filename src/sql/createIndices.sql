@@ -9,6 +9,7 @@ CREATE INDEX plantusage_plantname_id_x on plantusage ( plantname_id ); -- t
 CREATE INDEX plantusage_plantconcept_id_x on plantusage ( plantconcept_id ); -- t
 CREATE INDEX plantusage_classsystem_x on plantusage ( classsystem ); -- t
 CREATE INDEX plantusage_party_id_x ON plantusage (party_id);
+CREATE INDEX plantusage_plantstatus_id_x ON plantusage (plantstatus_id);
 
 -- plantname
 CREATE INDEX plantname_plantname_x on plantname ( plantname ); -- t
@@ -268,3 +269,6 @@ CREATE INDEX commstatus_commlevel_x ON commstatus (commlevel); -- t
 -- plantcorrelation 
 CREATE INDEX plantcorrelation_plantstatus_id_x ON plantcorrelation (plantstatus_id);
 CREATE INDEX plantcorrelation_plantconcept_id_x ON plantcorrelation (plantconcept_id);
+
+-- keywords
+CREATE INDEX keywords_table_id_entity_key ON keywords (table_id,entity);
