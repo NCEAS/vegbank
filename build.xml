@@ -8,8 +8,8 @@
   *  % echo "[build.context]" | ant [target]
   *
   *     '$Author: farrell $'
-  *     '$Date: 2004-02-19 17:35:13 $'
-  *     '$Revision: 1.36 $'
+  *     '$Date: 2004-02-24 20:11:08 $'
+  *     '$Revision: 1.37 $'
 --> 
 <project name="Vegbank" default="jar" basedir=".">
 
@@ -46,6 +46,8 @@
     <property name="ant.style.dir" location="${env.ANT_HOME}/etc" />
 
     <property name="model.generated.flag" value="${build.java.src.dir}/generate_java_datamodel-HAS_BEEN_RUN_FLAG" />
+    <property name="vegbankVersion" value="1.0.2" />
+    <property name="vegbankSchemaName" value="vegbank-data-ver${vegbankVersion}.xsd" />
   </target>
 	
   <!-- ================================================================= -->
@@ -80,10 +82,6 @@
       * be set in the user custom build.properties file. There is an example 
       * of this file in cvs.
     -->
-    <filter token="authenticationServletHost" value="${authenticationServletHost}" />
-    <filter token="communityRequestServletHost" value="${communityRequestServletHost}" />
-    <filter token="plantRequestServletHost" value="${plantRequestServletHost}" />
-    <filter token="geoCoordRequestServletHost" value="${geoCoordRequestServletHost}" />
     <filter token="databaseType" value="${databaseType}" />
     <filter token="databaseUser" value="${databaseUser}" />
     <filter token="databaseUserPassword" value="${databaseUserPassword}" />
@@ -93,15 +91,8 @@
     <filter token="databaseDriverClass" value="${databaseDriverClass}" />
     <filter token="databaseConnectString" value="${databaseConnectString}"/>
     <filter token="databaseName" value="${databaseName}" />
-    <filter token="insert.minConnections" value="${insert.minConnections}" />
-    <filter token="insert.maxConnections" value="${insert.maxConnections}" />
-    <filter token="query.minConnections" value="${query.minConnections}" />
-    <filter token="query.maxConnections" value="${query.maxConnections}" />
-    <filter token="maxConnectionUses" value="${maxConnectionUsers}" />
-    <filter token="resetTime" value="${resetTime}" />
-    <filter token="logFile" value="${logFile}" />
     <filter token="vegbankSchemaName" value="${vegbankSchemaName}" />
-    <filter token="vegbankVersion" value="1.0.2" />
+    <filter token="vegbankVersion" value="${vegbankVersion}" />
     <filter token="vegbank.home.dir" value="${vegbank.home.dir}/" />
     <filter token="originalDataStore" value="${vegbank.home.dir}/originalDataStore"/>
     <filter token="schemaLocation" value="${vegbank.home.dir}/lib"/>
@@ -237,7 +228,7 @@
 	<echo>deploying jars to ${web.lib.dir}</echo>
 	<echo>db connect: ${databaseConnectString}</echo>
 	<copy todir="${web.lib.dir}">
-		<fileset dir="${build.lib.dir}" includes="*jar"/>
+		<fileset dir="${build.lib.dir}" includes="*jar" excludes="servlet.jar"/>
 	</copy> 
 	
 	<mkdir dir="${web.context}/GenJSP"/>
@@ -310,7 +301,7 @@
   <!-- javabeans                                                         -->
   <!-- ================================================================= -->
   <target name="generate_java_datamodel"
-          description="==> Generate the java datamodel"
+          description="==> Generate the java datamodel -- beans, utility classes and schema"
           depends="prepare"
           unless="modelBeanGenerate.notRequired">
          
@@ -320,9 +311,9 @@
 		<param name="outdir" expression="${build.javadatamodel.src.dir}"/>
 		<classpath refid="classpath.compilation"/>
 	</xslt>
-	-->
 
-	<!-- Generate the regular VBModelBeans --> 
+	-->
+	<echo>Generating the regular VBModelBeans into ... ${build.javadatamodel.src.dir}/</echo> 
 	<java classname="org.apache.xalan.xslt.Process"
 		fork="true">
 		<arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/VegBankModel2Java.xsl -OUT ${model.generated.flag} -PARAM outdir ${build.javadatamodel.src.dir}/"/>
@@ -330,15 +321,14 @@
 	</java>
 	
 
-	<!-- Generate the Utility javabeans e.g. state --> 
+	<echo>Generate the Utility javabeans e.g. state into ... ${build.javadatamodel.utility.src.dir}/ </echo> 
 	<java classname="org.apache.xalan.xslt.Process"
 		fork="true">
 		<arg line="-IN ${docs.dir}/xml/utility/UtilityBeans.xml -XSL ${xsl.src.dir}/UtilityXMLToJavaBeans.xsl -OUT ${model.generated.flag} -PARAM outdir ${build.javadatamodel.utility.src.dir}/"/>
 		<jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
 	</java>
 	
-
-	<!-- Generate the jsp for displaying entities -->
+	<echo>Generate the jsp for displaying entities into ... ${build.jsp.src.dir}/ </echo>
 	<java classname="org.apache.xalan.xslt.Process"
 		fork="true">
 		<arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/VegBankModel2JSP.xsl -OUT ${model.generated.flag} -PARAM outdir ${build.jsp.src.dir}/"/>
@@ -352,6 +342,14 @@
 	<replaceregexp match='xmlns:[^=]*="dummy"' replace="" flags="gs" byline="true">
     		<fileset dir="${build.jsp.src.dir}" includes="**/*.jsp" />
 	</replaceregexp>
+	
+	<echo>Generate the vegbank schema xsd file ... ${build.lib.dir}/${vegbankSchemaName}</echo>
+	<java classname="org.apache.xalan.xslt.Process"
+		fork="true">
+		<arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${docs.dir}/xml/dbmodel-to-schema.xsl -OUT ${build.lib.dir}/${vegbankSchemaName}"/>
+		<jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
+	</java>
+
   </target>
   
   <target name="compile"
@@ -408,9 +406,6 @@
     <copy todir="${vegbank.home.dir}/lib">
       <fileset dir="${lib.dir}">
          <include name="**/*.jar"/>
-      </fileset>
-      <fileset dir="${docs.dir}/xml/dataxml">
-	<include name="**/*.xsd"/>
       </fileset>
     </copy>
     <copy todir="${vegbank.home.dir}/lib">
@@ -491,9 +486,16 @@
 
           
             <xslt in="${docs.dir}/xml/db_model_vegbank.xml" 
-                  out="${build.sql.src.dir}/vegbank.sql" 
+                  out="${build.sql.src.dir}/vegbank-GF.sql" 
                   style="${xsl.src.dir}/VegBankModel2SQL.xsl">
             </xslt>
+
+	    <!-- Alternate XSL for genrating Vegbank.sql -->
+            <xslt in="${docs.dir}/xml/db_model_vegbank.xml" 
+                  out="${build.sql.src.dir}/vegbank-ML.sql" 
+                  style="${docs.dir}/xml/dbmodel-to-sql.xsl">
+            </xslt>
+           
   </target>
 
   <!-- A simple checker between the model and the database, NOT definative -->

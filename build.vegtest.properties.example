@@ -6,10 +6,6 @@ java1.4.home.dir = /usr/java
 servlet_lib = /usr/local/devtools/tomcat/webapps/framework/WEB-INF/lib/
 
 # Database Connection Settings
-authenticationServletHost = localhost
-communityRequestServletHost = localhost
-plantRequestServletHost = localhost
-geoCoordRequestServletHost = localhost
 databaseType = postgresql
 databaseUser = postgres
 databaseUserPassword = 
@@ -19,16 +15,6 @@ databaseDriverType = thin
 databaseDriverClass = org.postgresql.Driver
 databaseConnectString = jdbc:postgresql://localhost/vegtest
 databaseName = vegtest
-insert.minConnections = 1
-insert.maxConnections = 3
-query.minConnections = 1
-query.maxConnections = 3
-maxConnectionUsers = 100
-resetTime = 0.01
-logFile = connectionPool.log
 
 # Vegbank Directories
 vegbank.home.dir=/usr/vegtest
-
-# XML Schema
-vegbankSchemaName=vegbank-data-ver1.0.1.xsd
