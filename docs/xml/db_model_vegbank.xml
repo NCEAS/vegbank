@@ -14872,7 +14872,7 @@ conditions may change between resampling events.
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attRelType type="normal" name="n/a"/>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -14900,7 +14900,7 @@ conditions may change between resampling events.
       <attLabel>Permission Type</attLabel>
       <attModel>implementation</attModel>
       <attNulls>no</attNulls>
-      <attType>Integer</attType>
+      <attType>Long</attType>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>

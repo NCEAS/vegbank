@@ -4,9 +4,9 @@
  *  Authors: @author@
  *  Release: @release@
  *
- *  '$Author: farrell $'
- *  '$Date: 2004-03-05 16:33:20 $'
- *  '$Revision: 1.18 $'
+ *  '$Author: anderson $'
+ *  '$Date: 2004-04-30 00:12:50 $'
+ *  '$Revision: 1.19 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -264,7 +264,7 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
      <!-- Handle one to many's   -->
      <!-- ***************************************************************************** -->
      <!-- choose all entities that have an inverted FK relationship to this entity -->
-    <xsl:for-each select="../entity/attribute[starts-with(attReferences, concat(current()/entityName,'.') ) and attRelType/@type = 'inverted'] ">
+    <xsl:for-each select="../entity/attribute[starts-with(attReferences, concat(current()/entityName,'.') ) and attRelType/@type = 'inverted' and attModel = 'logical'] ">
       
       <xsl:variable name="javaType">
         <xsl:call-template name="UpperFirstLetter">
