@@ -35,14 +35,7 @@ if (restore) selObj.selectedIndex=0;
   </td></tr>
   <tr valign="top"><td class="vegbank" width="380">
       <ul class="constsize">
-        <li>News</li>
-        <ul class="constsize">
-          <li><a href="@vegbranch_link@vegbranch.html">VegBranch released</a></li>
-		<!--  <li><a href="/services/index.html">VegBank Web Services</a></li> -->
-		  <li><a href="@panel_link@standards.html"><i>Standards
-		       for Associations and Alliances of the U.S. National Vegetation Classification</i></a></li>
-			<li><a href="http://bugzilla.ecoinformatics.org/enter_bug.cgi?product=VegBank">Bugzilla error reporting</a></li>
-        </ul>
+       
         <li><a href="@general_link@login.jsp">Login</a></li>
         <li><a href="@general_link@logout.html">Logout</a></li>
         <li><a href="@general_link@instructions.html">Instructions</a></li>
@@ -50,6 +43,7 @@ if (restore) selObj.selectedIndex=0;
         <ul class="constsize">
        <li>Overview</li>
 	   <ul class="constsize">
+	   <li><a href="@general_link@faq.html">FAQ</a></li>
 	   <li><a href="@forms_link@RegisterNewUser.jsp">Become a user</a></li>
 	   <li>Search for data</li>
 	   <!-- <li>View data</li> -->
@@ -180,9 +174,9 @@ if (restore) selObj.selectedIndex=0;
 	    <li><a href="@general_link@plots.html">Access or submit Plot data</a></li>
 	      <ul class="constsize">
             <li><a href="@general_link@vbsummary.html">Summary of VegBank Data</a></li>
-            <li><a href="@web_context@LoadPlotQuery.do">Simple Query</a> 
-              | <!-- <a href="@forms_link@nested-plot-query.html">-->Nested (Advanced) Query<!--</a>-->
-              <font color="darkSalmon">redesign(v1.1)</font></li>
+            <li><a href="@forms_link@plot-query-simple.jsp">Simple Query</a> 
+              |  <a href="@web_context@LoadPlotQuery.do">Advanced Plot Query</a>
+              </li>
             <li><a href="@general_link@metadata.html">View Metadata</a></li>
             <li>View plot : 
             <a href="@datarequestservlet@?requestDataType=vegPlot&resultType=summary&queryType=simple&accessionCode=VB.Ob.682.YOSE99S106001">
@@ -190,7 +184,7 @@ if (restore) selObj.selectedIndex=0;
             <a href="@datarequestservlet@?requestDataType=vegPlot&resultType=full&queryType=simple&accessionCode=VB.Ob.682.YOSE99S106001">
             extended</a></li>
             <ul class="constsize">
-              <li>Add interpretation of plant in plot<font color="darkSalmon">(v1.1)</font></li>
+              <li><a href="@forms_link@getHelp.jsp?mainPage=@web_context@LoadPlotQuery.do&helpPage=@manual_link@interpret-taxon-on-plot.html">Add interpretation of plant in plot</a></li>
               <li>Assign a plot to a community<font color="darkSalmon">(v1.1)</font></li>
               <li>Create a note about a field in a plot<font color="darkSalmon">(v2.0)</font></li>
             </ul>

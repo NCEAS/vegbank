@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: mlee $'
- *  '$Date: 2003-11-08 22:35:04 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2004-07-29 09:07:16 $'
+ *  '$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@
     <redirect:write select="$aFile">
       <html>
         <head>
-          <title>VegBank Manual -- <xsl:value-of select="@topic"/>
+          <title>VegBank Tutorial -- <xsl:value-of select="@topic"/>
           </title>
           <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
           <meta http-equiv="Content-Type" content="text/html; charset="/>
@@ -316,7 +316,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
     </xsl:if>
   </xsl:template>
 <xsl:template name="closeManual">
-<a style="COLOR: #ff0000" target="_top" href="javascript:window.top.location=window.upperframe.location">close manual</a>
+<a style="COLOR: #ff0000" href="javascript:document.top.location=window.upperframe.location">close tutorial</a>
 </xsl:template>
 
 </xsl:stylesheet>
