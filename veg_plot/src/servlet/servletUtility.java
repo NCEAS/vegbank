@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.*;
 import java.util.*;
+import java.util.zip.*;
 
 
 /**
@@ -104,6 +105,71 @@ String response="<html> \n"
 outString=response;
 }
 public String outString = null;	
+
+
+/**
+*  Method to compress a file using GZIP compression using as input both the
+*  input file name and the output file name
+*
+* @param  inFile  a string representing the input file
+* @param  outFile a string representing the output, compressed, file
+*/
+
+public void gzipCompress (String inFile, String outFile) {
+try {
+BufferedReader in = new BufferedReader(new FileReader(inFile));
+BufferedOutputStream out = new BufferedOutputStream(new GZIPOutputStream(
+	new FileOutputStream(outFile)));
+
+System.out.println("servletUtility.gzipCompress Writing a compressed file");
+int c;
+while((c = in.read()) != -1)
+	out.write(c);
+in.close();
+out.close();
+
+/*
+System.out.println("Reading file");
+BufferedReader in2 =new BufferedReader(new InputStreamReader(new GZIPInputStream(
+	new FileInputStream(outFile))));
+String s;
+while((s = in2.readLine()) != null)
+System.out.println(s);	
+*/
+} 
+catch(Exception e) {e.printStackTrace();}
+}
+
+
+
+/**
+ *  Method that takes as input a name of a file and writes the file contents 
+ *  to a vector and then makes the vector and number of vector elements access
+ *  to the public 
+ *
+ * @param fileName name of the file that whose contents should be written to a vector
+ */
+
+public void fileVectorizer (String fileName) {
+
+try {
+vecElementCnt=0;
+BufferedReader in = new BufferedReader(new FileReader(fileName));
+Vector localVector = new Vector();
+String s;
+while((s = in.readLine()) != null) {
+	//System.out.println(s);	
+	localVector.addElement(s);
+	vecElementCnt++;
+}
+outVector=localVector;
+
+}
+catch (Exception e) {System.out.println("failed in servletUtility.fileVectorizer" + 
+	e.getMessage());}
+} 
+public Vector outVector;
+public int vecElementCnt;
 
 
 

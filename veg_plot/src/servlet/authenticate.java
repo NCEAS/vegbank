@@ -22,48 +22,42 @@ public class authenticate extends HttpServlet {
         throws IOException, ServletException
     {
 
-//first block will read all the inputs and write them back to the screen
+//first block will look for the userName and password as well as valid cookie
 try {
 	response.setContentType("text/html");
 	PrintWriter out = response.getWriter();
 	
-	/*
-	//use this function to figure out the type and number of inputs
-	//it is a temporary function - comment out later
-		Enumeration enum =request.getParameterNames();
-		while (enum.hasMoreElements()) {
-			String name = (String) enum.nextElement();
-			String values[] = request.getParameterValues(name);
-			if (values != null) {
-				for (int i=0; i<values.length; i++) {
-					out.println(name +" ("+ i + "): "
-					+values[i]+"; <br>");
-				}
-			}
-		}
-	*/
-	
 	//grab the user name and password
 	String userName=request.getParameter("userName");
 	String passWord=request.getParameter("password");
-	out.println(userName+" "+passWord);
+	System.out.println(userName+" "+passWord);
 	
 	//grab the remote host information
 	String remoteHost=request.getRemoteHost();
-	out.println(remoteHost);
+	System.out.println(remoteHost);
 	
 	//validate the name password pair
 	int validate=0;  //0=invalid
 	if (userName.equals("user") && passWord.equals("pass")) {
 		validate=1;
-		out.println("authentication successful");
+		out.println("authentication successful - return to the previous \n"
+		+"page to access the database - Soon there will be a redirection "
+		+"to a more relevant page ");
+		
 		//log the login in the clientLogger
 		//set a cookie
 		Cookie cookie = new Cookie("null", "null");
 		authenticate m =new authenticate();  
 		m.cookieDelegator(cookie, userName, passWord, remoteHost);
 		response.addCookie(m.registeredCookie);
-	
+		
+		/** redirect to the 'logged in' page with options for db interaction
+		* this however is not working with netscape6 */
+		//redirect to the 'logged in' page
+		
+		//try sleeping 
+		//Thread.currentThread().sleep(3000);
+                //response.sendRedirect("/examples/servlet/pageDirector?pageType=loggedin");
 	
 	}
 	
@@ -73,24 +67,19 @@ try {
 		//log the login attemp in the clientLogger
 		
 		//redirect to the login page
+		//response.sendRedirect("/examples/servlet/pageDirector?pageType=login");
 	}
 
+	
 	
 	}  //end try
 	
 	
-	catch( Exception e ) {System.out.println("servlet failed in: viewData.main second try   "+e.getMessage());}
+	catch( Exception e ) {System.out.println("servlet failed in: authenticate.main second try   "+e.getMessage());}
 
 	    
 //if statement to see if a username and password are being passed to the serv
-
-
-
-   
-
-    
-	    
-	    
+/**
         response.setContentType("text/html");
 
         PrintWriter out = response.getWriter();
@@ -156,6 +145,8 @@ try {
             
         out.println("</body>");
         out.println("</html>");
+*/
+	
     }
 
     public void doPost(HttpServletRequest request,
@@ -173,7 +164,7 @@ public void cookieDelegator (Cookie cookie, String userName, String passWord,
 	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 	String cookieName = "xploit";
 	String cookieValue = "001";
-	String cookieAddress = "30.8.11.31";
+	String cookieAddress = "ipAddress";
 	cookie = new Cookie(cookieName, cookieValue);
 	cookie.setMaxAge(3600);  //set cookie for an hour
 	registeredCookie=cookie;

@@ -25,48 +25,63 @@ response.setContentType("text/html");
 PrintWriter out = response.getWriter();
 
 /**
-* determine if the user wants to download the data or just to view the summary
+* Determine if the user wants to download the data or just to view the summary
 * table  - in the future these options will increase
 */
 
-//check to see if the user wants to download the data
+/**
+* Check to see if the user wants to download the data and if so do below - which
+* is to write a list of the selected plots (checked check-boxes) to the local
+* (lib) directory and then call the fileDownload servlet to seperate the desied
+* plots form the undesired plots and then transform the data into the format
+* specified by the form (download.html) calling the fileDownload servlet
+*
+*/
 String downLoadAction= request.getParameter("downLoadAction");
 if (downLoadAction != null) {
 
-//get the other input from the form, like the names of the plots that are
-//needed and pass to the xml transform utility to get correct dataset
-	
-//pass the download dataset to the compression utility
-
-//pass the download-related attributes like filename etc to the function that 
-//creates the html-page for download
+// 1. get the other input from the form, like the names of the plots that are
+// 2. needed and pass to the xml transform utility to get correct dataset	
+// 3. pass the download dataset to the compression utility
+// 4. pass the download-related attributes like filename etc to the function that 
+// 5. creates the html-page for download
 
 	
-	try {
-				
-		//use this function to figure out the type and number of inputs
-		//it is a temporary function - comment out later
-		Enumeration enum =request.getParameterNames();
-		while (enum.hasMoreElements()) {
-			String name = (String) enum.nextElement();
-			String values[] = request.getParameterValues(name);
-			if (values != null) {
-				for (int i=0; i<values.length; i++) {
-					out.println(name +" ("+ i + "): "
-					+values[i]+"; <br></br>");
-				}
+try {
+//print out to file the names of the plots and their plotId's for use by the 
+//fileDownload servlet
+PrintStream outFile  = new PrintStream(
+	new FileOutputStream("/jakarta-tomcat/webapps/examples/WEB-INF/lib/plotDownloadList", false));
+
+Enumeration enum =request.getParameterNames();
+while (enum.hasMoreElements()) {
+	String name = (String) enum.nextElement();
+	String values[] = request.getParameterValues(name);
+	if (values != null) {
+		for (int i=0; i<values.length; i++) {
+			
+			if (name.equals("plotName")) {
+				outFile.println(values[i]);
 			}
+			out.println(name +" ("+ i + "): " +values[i]+"; <br></br>");
+			
 		}
+	}
+}
+
+//now call the download page
+response.sendRedirect("/examples/servlet/pageDirector?pageType=download");
+
 	
-	
-	out.println("<a href=\"/downloads/test.zip\">DownloadFile From Here</a>");
-	//response.sendRedirect("/downloads/test.zip");
+out.println("<a href=\"/downloads/test.zip\">DownloadFile From Here</a>");
+//response.sendRedirect("/downloads/test.zip");
 
 
 	
 	}  //end try
 	
-	catch( Exception e ) {System.out.println("servlet failed in: viewData.main second try   "+e.getMessage());}
+catch( Exception e ) {System.out.println("servlet failed in: viewData.main"
+	+e.getMessage());}
 
 	
 }

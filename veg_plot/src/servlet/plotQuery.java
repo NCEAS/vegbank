@@ -90,16 +90,6 @@ String compoundQuery = request.getParameter("compoundQuery");
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 //broad check for attributes for single attribute queries
 if ( (taxonName != null && compoundQuery == null) ) {
 	

@@ -22,7 +22,7 @@ ServletOutputStream out = res.getOutputStream();
 String contentType = getServletContext().getMimeType("login.html");
 res.setContentType(contentType);
 
-//get the cookie
+//get the cookies - if there are any
 String cookieName = null;
 String cookieValue = null;
 
@@ -31,15 +31,16 @@ Cookie[] cookies = req.getCookies();
          
             for (int i = 0; i < cookies.length; i++) {
                 Cookie cookie = cookies[i];
-                
-	//	out.print("Cookie Name: " +cookie.getName()  + "<br>");
+		//out.print("Cookie Name: " +cookie.getName()  + "<br>");
                 	cookieName=cookie.getName();
-	//	out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
+		//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
 			cookieValue=cookie.getValue();
             }
-  	} else {
-          //  out.println("cookies.no-cookies");
-}
+  	} 
+	
+	else {
+           out.println("cookies.no-cookies");
+	}
 
 
 //get the requested page type
@@ -48,14 +49,17 @@ String pageType = req.getParameter("pageType");
 //first determine if the browser has a valid cookie
 //out.println("debug flag val "+cookieName+" "+cookieValue);
 if (cookieName != null && cookieValue != null) {
+	
+	//check that the cookie is a valid one
 	authenticate m =new authenticate();  
 	m.cookieChecker(cookieName, cookieValue, "remoteHost");
 	
-//	out.println("debug flag val "+m.cookieValidFlag);
+	//if valid cookie then forward to page
 	if (m.cookieValidFlag==1) {
 		pageDirector n =new pageDirector();  
 		n.pageTranslator(pageType);
 		ViewFile.returnFile(n.pageFileName, out);
+	
 	}
 	
 	else {
@@ -107,6 +111,10 @@ public void pageTranslator (String pageType)
 	if (pageType.equals("plantQuery")) pageFileName="C:\\\\jakarta-tomcat\\webapps\\examples\\WEB-INF\\lib\\plantQuery.html";
 	
 	if (pageType.equals("login")) pageFileName="C:\\\\jakarta-tomcat\\webapps\\examples\\WEB-INF\\lib\\login.html";
+	
+	if (pageType.equals("loggedin")) pageFileName="C:\\\\jakarta-tomcat\\webapps\\examples\\WEB-INF\\lib\\loggedin.html";
+
+	if (pageType.equals("download")) pageFileName="C:\\\\jakarta-tomcat\\webapps\\examples\\WEB-INF\\lib\\download.html";
 	
 	}
 public String pageFileName; 
