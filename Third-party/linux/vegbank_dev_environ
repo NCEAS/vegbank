@@ -1,7 +1,0 @@
-# Drop this file into /etc/profile.d for all use to get these settings at login.
-export JAVA_HOME=/usr/java/jdk
-export TOMCAT_HOME=/usr/local/devtools/jakarta-tomcat
-export CATALINA_HOME=/usr/local/devtools/jakarta-tomcat
-export ANT_HOME=/usr/local/ant/ant
-export PATH=$PATH:$HOME/bin:$ANT_HOME/bin:$TOMCAT_HOME/bin:$JAVA_HOME/bin
-
