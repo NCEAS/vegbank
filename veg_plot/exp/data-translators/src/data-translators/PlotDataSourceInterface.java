@@ -17,8 +17,8 @@ import java.util.*;
  * 
  * Release: @release@ <br>
  * '$Author: farrell $' <br>
- * '$Date: 2002-12-02 23:01:10 $' <br>
- * '$Revision: 1.13 $' <br>
+ * '$Date: 2002-12-05 23:41:41 $' <br>
+ * '$Revision: 1.14 $' <br>
  */
 public interface PlotDataSourceInterface
 {
@@ -280,7 +280,31 @@ public interface PlotDataSourceInterface
 	 ** THE OBSERVATION - RELATED DATA
 	 **
 	 **/
-	
+	 
+	/**
+	* Observation Contributors 
+	*/
+	 
+	Vector getObservationContributors( String plotName );
+	String getObservationContributorSalutation(String contributorWholeName);
+	String getObservationContributorGivenName(String contributorWholeName);
+	String getObservationContributorMiddleName(String contributorWholeName);
+	String getObservationContributorSurName(String contributorWholeName);
+	String getObservationContributorOrganizationName(String contributorWholeName);
+	String getObservationContributorContactInstructions(String contributorWholeName);
+	String getObservationContributorPhoneNumber(String contributorWholeName);
+	String getObservationContributorCellPhoneNumber(String contributorWholeName);
+	String getObservationContributorFaxPhoneNumber(String contributorWholeName);
+	String getObservationContributorOrgPosition(String contributorWholeName);
+	String getObservationContributorEmailAddress(String contributorWholeName);
+	String getObservationContributorDeliveryPoint(String contributorWholeName);
+	String getObservationContributorCity(String contributorWholeName);
+	String getObservationContributorAdministrativeArea(String contributorWholeName);
+	String getObservationContributorPostalCode(String contributorWholeName);
+	String getObservationContributorCountry(String contributorWholeName);
+	String getObservationContributorCurrentFlag(String contributorWholeName);
+	String getObservationContributorAddressStartDate(String contributorWholeName);
+	 
 	/**
 	 * returns the hydrologic regime of a plot (this is a closed list
 	 * that can be looked up)
@@ -452,46 +476,46 @@ public interface PlotDataSourceInterface
 	String getEffortLevel( String plotName );	 
 
 	//START
- String getPlotValidationLevel(String plotName);
-String  getFloristicQuality(String plotName);
- String  getBryophyteQuality(String plotName);
- String  getLichenQuality(String plotName);
- String  getObservationNarrative(String plotName);
- String  getHomogeneity(String plotName);
- String  getPhenologicAspect(String plotName);
- String  getRepresentativeness(String plotName);
- String  getBasalArea(String plotName);
- String  getSoilMoistureRegime(String plotName);
- String  getWaterSalinity(String plotName);
- String  getShoreDistance(String plotName);
- String  getOrganicDepth(String plotName);
- String  getPercentBedRock(String plotName);
- String  getPercentRockGravel(String plotName);
- String  getPercentWood(String plotName);
- String  getPercentLitter(String plotName);
- String  getPercentBareSoil(String plotName);
- String  getPercentWater(String plotName);
- String  getPercentOther(String plotName);
- String  getNameOther(String plotName);
- String  getStandMaturity(String plotName);
- String  getSuccessionalStatus(String plotName);
- String  getTreeHt(String plotName);
- String  getShrubHt(String plotName);
- String  getNonvascularHt(String plotName);
- String  getFloatingCover(String plotName);
- String  getSubmergedCover(String plotName);
- String  getDominantStratum(String plotName);
- String  getGrowthform1Type(String plotName);
- String  getGrowthform2Type(String plotName);
- String  getGrowthform3Type(String plotName);
- String  getGrowthform1Cover(String plotName);
- String  getGrowthform2Cover(String plotName);
- String  getGrowthform3Cover(String plotName);
- boolean  getNotesPublic(String plotName);
- boolean  getNotesMgt(String plotName);
- boolean  getRevisions(String plotName);
-
-//END
+	String getPlotValidationLevel(String plotName);
+	String  getFloristicQuality(String plotName);
+	String  getBryophyteQuality(String plotName);
+	String  getLichenQuality(String plotName);
+	String  getObservationNarrative(String plotName);
+	String  getHomogeneity(String plotName);
+	String  getPhenologicAspect(String plotName);
+	String  getRepresentativeness(String plotName);
+	String  getBasalArea(String plotName);
+	String  getSoilMoistureRegime(String plotName);
+	String  getWaterSalinity(String plotName);
+	String  getShoreDistance(String plotName);
+	String  getOrganicDepth(String plotName);
+	String  getPercentBedRock(String plotName);
+	String  getPercentRockGravel(String plotName);
+	String  getPercentWood(String plotName);
+	String  getPercentLitter(String plotName);
+	String  getPercentBareSoil(String plotName);
+	String  getPercentWater(String plotName);
+	String  getPercentOther(String plotName);
+	String  getNameOther(String plotName);
+	String  getStandMaturity(String plotName);
+	String  getSuccessionalStatus(String plotName);
+	String  getTreeHt(String plotName);
+	String  getShrubHt(String plotName);
+	String  getNonvascularHt(String plotName);
+	String  getFloatingCover(String plotName);
+	String  getSubmergedCover(String plotName);
+	String  getDominantStratum(String plotName);
+	String  getGrowthform1Type(String plotName);
+	String  getGrowthform2Type(String plotName);
+	String  getGrowthform3Type(String plotName);
+	String  getGrowthform1Cover(String plotName);
+	String  getGrowthform2Cover(String plotName);
+	String  getGrowthform3Cover(String plotName);
+	boolean  getNotesPublic(String plotName);
+	boolean  getNotesMgt(String plotName);
+	boolean  getRevisions(String plotName);
+	
+	//END
 	 
 	//END
 	/**
