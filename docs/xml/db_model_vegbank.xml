@@ -727,7 +727,7 @@
     <attribute>
       <attName>commName</attName>
       <attLabel>Community Name</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
       <attKey>n/a</attKey>
@@ -742,7 +742,7 @@
     <attribute>
       <attName>COMMCONCEPT_ID</attName>
       <attLabel>Community Concept</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>denorm</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
@@ -882,7 +882,7 @@
     <attribute>
       <attName>PARTY_ID</attName>
       <attLabel>Party</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>denorm</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
@@ -981,7 +981,7 @@
     <attribute>
       <attName>plantname</attName>
       <attLabel>Plant Name</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
       <attKey>n/a</attKey>
@@ -1738,7 +1738,7 @@ change through time.</entitySummary>
     <attribute>
       <attName>PLANTCONCEPT_ID</attName>
       <attLabel>Plant Concept</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>denorm</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
@@ -1827,7 +1827,7 @@ change through time.</entitySummary>
     <attribute>
       <attName>plantName</attName>
       <attLabel>Plant Name</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (220)</attType>
       <attKey>n/a</attKey>
@@ -1913,7 +1913,7 @@ change through time.</entitySummary>
     <attribute>
       <attName>PARTY_ID</attName>
       <attLabel>Party</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>denorm</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
@@ -3843,7 +3843,7 @@ change through time.</entitySummary>
     <attribute>
       <attName>commname</attName>
       <attLabel>Community Name</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
       <attKey>n/a</attKey>
@@ -11248,7 +11248,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>stateProvince</attName>
       <attLabel>State or Province</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (55)</attType>
       <attKey>n/a</attKey>
@@ -11267,7 +11267,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>country</attName>
       <attLabel>Country</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
       <attKey>n/a</attKey>
@@ -12811,7 +12811,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>STRATUMMETHOD_ID</attName>
       <attLabel>Stratum Method</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
@@ -12826,7 +12826,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>stratumName</attName>
       <attLabel>Stratum Name</attLabel>
-      <attModel>implementation</attModel>
+      <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
       <attKey>n/a</attKey>
