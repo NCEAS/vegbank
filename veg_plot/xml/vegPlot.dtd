@@ -65,9 +65,11 @@
 	 <!ELEMENT soilDrainage (#PCDATA)>
 	 <!ELEMENT surfGeo (#PCDATA)>
 
-	<!ELEMENT plotObservation (previousPlot, plotStartDate, plotStopDate, 
+	<!ELEMENT plotObservation (parentPlot, previousObs, authorObsCode, plotStartDate, plotStopDate, 
 	dateAccuracy, effortLevel,  strata, taxonObservations, communityType, citation)>
-		<!ELEMENT previousPlot (#PCDATA)>
+		<!ELEMENT parentPlot (#PCDATA)>
+		<!ELEMENT previousObs (#PCDATA)>
+		<!ELEMENT authorObsCode (#PCDATA)>
 		<!ELEMENT plotStartDate (#PCDATA)>
 		<!ELEMENT plotStopDate (#PCDATA)>
 		<!ELEMENT dateAccuracy (#PCDATA)>
@@ -76,6 +78,9 @@
 			<!ELEMENT stratumCover (#PCDATA)>
 			<!ELEMENT stratumHeight (#PCDATA)>
 
+		<!--Because it was the attempt to keep the database normalized I have set up this dtd so that the same
+		 taxon can be represented more than once - it should be replicated every time there it occurs in a new stratum
+		-->	
 		<!ELEMENT taxonObservations (authNameId, originalAuthority, strataComposition, interptretation)>
 			<!ELEMENT authNameId (#PCDATA)>
 			<!ELEMENT originalAuthority (#PCDATA)>
