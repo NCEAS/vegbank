@@ -135,11 +135,7 @@
     </xsl:comment>-->
     <xsl:element name="{$container}">
       <logic:notEmpty name="onerowof{$currEnt}" property="{$currFld}">
-        <!-- extra stuff before something : -->
-        <xsl:if test="string-length($currentAtt/attFormsHTMLpre)&gt;0">
-          <!-- insert extra stuff -->
-          <xsl:value-of select="$currentAtt/attFormsHTMLpre"/>
-        </xsl:if>
+
         <xsl:element name="span">
           <xsl:choose>
             <xsl:when test="string-length(@useClass)=0">
@@ -153,6 +149,11 @@
               <xsl:attribute name="class"><xsl:value-of select="@useClass"/></xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
+                  <!-- extra stuff before something : -->
+        <xsl:if test="string-length($currentAtt/attFormsHTMLpre)&gt;0">
+          <!-- insert extra stuff -->
+          <xsl:value-of select="$currentAtt/attFormsHTMLpre"/>
+        </xsl:if>
           <!-- this is what gets written on cell -->
           <xsl:variable name="currFldMaybeTransl">
             <xsl:value-of select="$currFld"/>
@@ -179,9 +180,7 @@
               </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:element>
-        <!--</span>-->
-        <!-- units -->
+          <!-- units -->
         <xsl:if test="string-length($currentAtt/attUnits)&gt;0">
           <xsl:comment>only write units if there is something here:</xsl:comment>
           <span class="units">
@@ -193,6 +192,10 @@
           <!-- insert extra stuff -->
           <xsl:value-of select="$currentAtt/attFormsHTMLpost"/>
         </xsl:if>
+        
+        </xsl:element>
+        <!--</span>-->
+      
       </logic:notEmpty>
         <xsl:if test="$container!='span'">
       <logic:empty name="onerowof{$currEnt}" property="{$currFld}">
