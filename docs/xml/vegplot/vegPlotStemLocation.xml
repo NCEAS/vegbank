@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: stemLocation</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>1 November 2001</date>
+	<entity>
+		<entityName>vegPlot.stemLocation</entityName>
+		<entitySummary>This table is intended to store location information about indivdual tree stems.</entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>STEMLOCATION_ID</attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>PK </attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary Key for the stemLocation table.</attNotes>
+			<attDefinition>Database generated identifier assigned to each unique stem observation. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>STEMCOUNT_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>stemCount.STEMCOUNT_ID</attReferences>
+			<attNotes>Foreign key into the stemSize table</attNotes>
+			<attDefinition>Foreign key into the stemSize table, thereby assigning a location to a particular stem of a specific size</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>stemCode</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Name or code applied to a specific stem in the plot. This is generally a numeric label to associate a fielddata entry with a stem in the database.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>stemXPosition</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMBER(3,2)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes/>
+			<attDefinition>The X-coordinate of the stem position in m. The user will enter the relative position of stems with respect to the plot origin (in meters) with the x-axis defined by the plot azimuth.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>stemYPosition</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMBER(3,2)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The Y-coordinate of the stem position, as above.</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

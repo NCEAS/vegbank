@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: sampleMethod </title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>31 October 2001</date>
+	<entity>
+		<entityName>vegPlot.sampleMethod </entityName>
+		<entitySummary>Sampling protocols used to establish and observe plots.   </entitySummary>
+		<entityDescription>This table is used to define a set of default values pertaining to methods used to establish and observe a plot. By selecting a method, a user can have the default values automatically populate appropriate fields in the plot and observation tables. </entityDescription>
+		<attribute>
+			<attName>SAMPLEMETHOD_ID</attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>PK </attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary key for the sampleMethod table</attNotes>
+			<attDefinition>Database generated identifier assigned to each unique sample methodology. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>sampleMethodName </attName>
+			<attNulls>No </attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Name of the sampling method.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>sampleMethodDescription </attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Metadata describing the sampling method. This is similar to and can substitute in part or in whole for observation.methodNarrative</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>CITATION_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>citation.CITATION_ID</attReferences>
+			<attNotes>Foreign key into the citation table</attNotes>
+			<attDefinition>Link to a specific publication wherein the methodlogy is documented. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>shape</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(50)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>open list</attNotes>
+			<attDefinition>see plot</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>area</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(5,3)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>see plot</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>areaAccuracy</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>see plot</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>dsgpoly</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>see plot</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>permanent</attName>
+			<attNulls>Yes</attNulls>
+			<attType>BOOLEAN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>see plot</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>taxonInferenceArea</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(5,3)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>see observation</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>stemInferenceArea</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(5,0)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>see observation</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>subplotDispersion</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>see observation</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>COVERMETHOD_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>coverMethod.COVERMETHOD_ID</attReferences>
+			<attNotes>Foreign key into the coverMethod table</attNotes>
+			<attDefinition>see observation</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>STRATUMMETHOD_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>stratumMethod.STRATUMMETHOD_ID</attReferences>
+			<attNotes>Foreign key into the stratumMethod table</attNotes>
+			<attDefinition>see observation</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>autoTaxonCover</attName>
+			<attNulls>No</attNulls>
+			<attType>BOOLEAN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>see observation</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>stemSampleMethod</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>see observation</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: observationContributor</title>
+	<author>John Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>31 October 2001</date>
+	<entity>
+		<entityName>vegPlot.observationContributor</entityName>
+		<entitySummary>This table stores information about which parties contributed to specific plot observation events.</entitySummary>
+		<entityDescription>This table serves as an interesection that links a party with a specific plot observation event.  Note that there is no plotContributor table because all contributions take place at a particular observation, such as the first observation.</entityDescription>
+		<attribute>
+			<attName>PLOTCONTRIBUTOR_ID </attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Database generated identifier assigned to each unique contribution to an observation event. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>OBSERVATION_ID</attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>Observation.OBSERVATION_ID</attReferences>
+			<attNotes>This is tforeign key into the Observation table. </attNotes>
+			<attDefinition>Foreign key pointing to a given plot observation event to which the contribution was made.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PARTY_ID</attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>FK </attKey>
+			<attReferences>party.PARTY_ID </attReferences>
+			<attNotes>This is the foreign key into the party table.</attNotes>
+			<attDefinition>Foreign key pointing to the specific party that made the contribution.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>ROLE_ID</attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>aux_Role.ROLE_ID</attReferences>
+			<attNotes>This is the foreign key into the aux_Role table</attNotes>
+			<attDefinition>Foreign key that identifies the role that the party had in the plot obsevation (e.g.,  PI, contact, research advisor, field assistant, taxonomist, owner, guide, etc.).  </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>contributionDate</attName>
+			<attNulls>Yes</attNulls>
+			<attType>DATE</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The date of the specific contribution, which will generally be within the time span of the plot observation event defined by the obsStartDate and obsStopDate</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

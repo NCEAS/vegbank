@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: projectContributor</title>
+	<author>John Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>31 October 2001</date>
+	<entity>
+		<entityName>vegPlot.projectContributor</entityName>
+		<entitySummary>This table stores information about a party contributing to a project.</entitySummary>
+		<entityDescription>This table serves as an intersection entity used to 'link' a party with a specific project wherin vegetation plots are described. </entityDescription>
+		<attribute>
+			<attName>PROJECTCONTRIBUTOR_ID </attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>PK </attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary key for the projectContributor table. </attNotes>
+			<attDefinition>Database generated identifier assigned to each unique contribution to a project. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PROJECT_ID</attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>FK </attKey>
+			<attReferences>project.PROJECT_ID</attReferences>
+			<attNotes>Foreign key into the project table</attNotes>
+			<attDefinition>Foreign key linking the contribution to a specific project.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PARTY_ID</attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>FK </attKey>
+			<attReferences>party.PARTY_ID </attReferences>
+			<attNotes>Foreign key into the party table</attNotes>
+			<attDefinition>Foreign key linking the contribution to a specific party.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>ROLE_ID</attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>aux_Role.ROLE_ID</attReferences>
+			<attNotes>Foreign key into aux_Role table</attNotes>
+			<attDefinition>Foreign key that identifies the role that a specific party played in the project (e.g.,  PI, coPI, contact, author, research advisor, etc.).</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

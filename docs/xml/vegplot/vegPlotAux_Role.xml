@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: aux_Role</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>18 Sept 2001</date>
+	<entity>
+		<entityName>vegPlot.aux_Role</entityName>
+		<entitySummary>This table stores valid role codes for use in contributor tables</entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>ROLE_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>P</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary key for the aux_Role table.</attNotes>
+			<attDefinition>Database assigned value for a unique role code</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>roleCode</attName>
+			<attNulls>No</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>constraining list of role codes for *Contributor tables</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>roleDescription</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(200)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Description of the role</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>roleProject</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>1=required, 2=allowed</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>roleObservation</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>1=required, 2=allowed</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>roleTaxonInt</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>1=required, 2=allowed</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>roleClassInt</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>1=required, 2=allowed</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

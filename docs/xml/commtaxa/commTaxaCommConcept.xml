@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: commConcept</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>17 October 2001</date>
+	<entity>
+		<entityName>commTaxa.commConcept</entityName>
+		<entitySummary>This table store the concepts (assertions) that are linked to community names through the commUsage table.</entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>COMMCONCEPT_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Database assigned value to each unique record in the commConcept table.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>COMMNAME_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>commName.COMMNAME_ID</attReferences>
+			<attNotes>na</attNotes>
+			<attDefinition>Foreign key into the commName table providing the name used for the community when it was defined by usage in a publication (which could be this database).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>COMMREFERENCE_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>commReference.COMMREFERENCE_ID</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Foreign key into the Reference table to identify a reference in which the community was identified by a name.  This could be a regular publication, or a self reference created by completing the commDescription field in commReference</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>ceglCode</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The ceglCode is the CEGL code used by TNC/ABI/NatureServe, which is a unique identifier for a specific vegetation community.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>commLevel</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(50)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>The commLevel attribute specifies a level in the taxonomic hierarcy to which  a class belongs.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>commParent</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>commConcept.COMMCONCEPT_ID</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The commParent is a recursive key to the concept of the parent level in the classification hierarchy.  For example, if this concept were at the association level, the parentClass would be a concept that is the parent alliance type.</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

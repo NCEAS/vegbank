@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: plantConcept</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date/>
+	<entity>
+		<entityName>plantTaxa.plantConcept</entityName>
+		<entitySummary>This table store the concepts that are linked to plant names through the plantUsage table.</entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>PLANTCONCEPT_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Database assigned value to each unique record in the commConcept table.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PLANTNAME_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>plantName.PLANTNAME_ID</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This is a foreign key into the plant name list, the entery in which when combined wiht a reference constitutes a concept.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PLANTREFERENCE_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>plantReference.PLANTREFERENCE_ID</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This is a foreign key to the reference in which the name was used, thereby defining a concept.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>plantLevel</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The classLevel attribute specifies a level in the taxonomic hierarcy that a class belongs.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>plantParent</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The plantParent is a recursive key to the concept of the parent level in the classification hierarchy.  For example if this plantConcept were at the genus level the plantParent would be the plantConcept that is the family level (or subfamily level).</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

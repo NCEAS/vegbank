@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: stratumType </title>
+	<author>R.K. Peet</author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>24 January 2002</date>
+	<entity>
+		<entityName>vegPlot.stratumType</entityName>
+		<entitySummary>This table stores collective information about strata defined within a plot observation.</entitySummary>
+		<entityDescription>This table is used to record non-species-specific information about a stratum. Examples include total cover of the stratum and maximum height of the stratum.</entityDescription>
+		<attribute>
+			<attName>STRATUMTYPE_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary key for the stratum table.</attNotes>
+			<attDefinition>Database assigned value for a unique existence of a stratum within a plot observation.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>STRATUMMETHOD_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>stratumMethod.STRATUMMETHOD_ID</attReferences>
+			<attNotes>Foreign key into the stratumMethod table.</attNotes>
+			<attDefinition>This attribute will link to the stratum to the stratum methodology used. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>stratumIndex</attName>
+			<attNulls>No</attNulls>
+			<attType>VARCHAR(10)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Short code used to identify the stratum</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>stratumName</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Name associated with this stratum by the stratumMethod</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>stratumDescription</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>This field describes the specific stratum.  For example, a value of "F" under stratumIndex might have a stratumName = "Floating" and a stratumDescription  = "foliage floating on or near the surface of water"</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

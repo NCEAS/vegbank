@@ -1,6 +1,22 @@
-#!/bin/sh
+#!/bin/sh -e
 
-ls -lt community*.xml | awk '{print $9}' > list
+
+# SHELL SCRIPT TO CONVERT THE XML DOCUMENTATION OF THE 
+# VEGCLASS DATABASE PROJECT INTO HTML THAT WILL BE DISPLAYED 
+# ON THE WEB SERVER
+#     '$Author: harris $'
+#     '$Date: 2002-06-17 21:00:49 $'
+#     '$Revision: 1.2 $'
+
+
+#	REMOVE AND RECREATE THE TARGET DIRECTORY
+rm -rf dbdictionary/commtaxa
+mkdir dbdictionary/commtaxa
+
+
+ 
+ls -lt xml/commtaxa/*.xml | awk '{print $9}' > list
+
 
 cat list |
 while read line
@@ -12,17 +28,16 @@ rm tmp
 
 
 #update the date attribute in the xml and then write it to the rtest file
-java -classpath /usr/local/devtools/jdk1.2.2/lib/rt.jar:/usr/local/devtools/jdk1.2.2/lib/dev.jar:/home/computer/harris/java/xml/xalan_1_0_0/xalan.jar:/home/computer/harris/java/xml/xalan_1_0_0/xerces.jar:/home/computer/harris/java:./  updateXML $line test
-
+#java  updateXML $line test
+cp $line test
 
 #convert to the html
-java -classpath /usr/local/devtools/jdk1.2.2/lib/rt.jar:/usr/local/devtools/jdk1.2.2/lib/dev.jar:/home/computer/harris/java/xml/xalan_1_0_0/xalan.jar:/home/computer/harris/java/xml/xalan_1_0_0/xerces.jar:./ org.apache.xalan.xslt.Process -IN test  -XSL tableXml2Html.xsl  -out $OUTFILE
+java -classpath $CLASSPATH:../../lib/xalan_1_2_2.jar:../../lib/xerces_1_3_1.jar  org.apache.xalan.xslt.Process -IN test  -XSL tableXml2Html.xsl  -out $OUTFILE
 
-
-#java org.apache.xalan.xslt.Process -IN $line  -XSL tableXml2Html.xsl  -out $OUTFILE
 
 #move the html files to their respective directories
-mv $OUTFILE ../veg_community/docs/html/
+mv $OUTFILE dbdictionary/commtaxa/
 
 done
 
+rm list test

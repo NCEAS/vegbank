@@ -1,0 +1,406 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: plot</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>1 November 2001</date>
+	<entity>
+		<entityName>vegPlot.plot</entityName>
+		<entitySummary>This table stores general, constant information about the a given plot </entitySummary>
+		<entityDescription>plot contains Plot location, dimension, and similarly constant site data, plus metadata that need be stored only once.   Transient observational information (procured during the first or subsequent observation events) are stored separately in observation or its children. 	</entityDescription>
+		<attribute>
+			<attName>PLOT_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary key for plot</attNotes>
+			<attDefinition>Database generated identifier assigned to each unique plot. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>authorPlotCode</attName>
+			<attNulls>No</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Author's Plot number/code, or the original plot number if taken from literature. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>CITATION_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>citation.CITATION_ID</attReferences>
+			<attNotes>Foreign key into the citation table</attNotes>
+			<attDefinition>Link to the source citation from which this plot record was taken</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PARENT_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>plot.PLOT_ID</attReferences>
+			<attNotes>Recursive foreign key</attNotes>
+			<attDefinition>Link to the parent plot when plot is nested within another plot. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>SAMPLEMETHOD_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>sampleMethod.SAMPLEMETHOD_ID</attReferences>
+			<attNotes>Foreign key into the sampleMethod table</attNotes>
+			<attDefinition>Link to a specific methodology which provides a general name and description, plus many default values for use in the plot table</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>realLatitude</attName>
+			<attNulls>No </attNulls>
+			<attType>NUMERIC(3,8)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Latitude of the plot origin in degrees and decimals, datum =WGS84 </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>realLongitude</attName>
+			<attNulls>No</attNulls>
+			<attType>NUMERIC(3,8)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Longitude of the plot origin in degrees and decimals, datum = WGS84</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>locationAccuracy </attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,8)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Estimated accuracy of the location of the plot. Plot origin has a 95% or greater probability of being within this many meters of the reported location.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>confidentialityStatus</attName>
+			<attNulls>No</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list, default=0</attNotes>
+			<attDefinition>Are the data to be considered confidential? 0=no, 1= 1km radius, 2=10km radius, 3=100km radius, 4=location embargo, 5=public embargo on all plot data, 6=full embargo on all plot data. This applies also to region. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>confidentialityReason</attName>
+			<attNulls>No</attNulls>
+			<attType>VARCHAR(200)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The reason for confidentiality.  This field should not be open to public view.  Reasons might include specific rare species, ownership, prepublication embargo, or many other reason</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>Latitude</attName>
+			<attNulls>No </attNulls>
+			<attType>NUMERIC(3,8)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Latitude of the plot origin in degrees and decimals, datum =WGS84, fuzzing applied </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>Longitude</attName>
+			<attNulls>No</attNulls>
+			<attType>NUMERIC(3,8)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Longitude of the plot origin in degrees and decimals, datum = WGS84, fuzzing applied</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>authorE</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Original E-W coordinate as recorded by the author</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>authorN</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Original N-S coordinate as recorded by the author</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>authorZone</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Original UTM zone reported by the author</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>authorDatum</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Original datum reported by the author</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>authorLocation</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(200)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Original location as described by author (eg Town-Range-Section)</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>locationNarrative</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Text description that provides information useful for plot relocation.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>azimuth </attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,0)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This element stores the azimuth of the x-axis used to describe the relative coordinate system for plot shape (dsgpoly) and other spatial information about the plot. Typically the azimuth is parallel to the long axis of the plot (in the case of a rectangle).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>dsgpoly</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(2000)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This field is a text string containing the points circumscribing a plot area.  These points are anticipated to have been collected using tapes, GPS, or calculated from the plot shape and area. Points are x-y coordinates in m relative to plot origin.
+		</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>shape</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(50) </attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>open list</attNotes>
+			<attDefinition>Shape of the plot area. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>area</attName>
+			<attNulls>No </attNulls>
+			<attType>NUMERIC(5,3)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Total area of the plot in m2.  If many subplots, this area includes the subplots and the intersticial space
+		</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>standSize</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(10)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>The extent of this community occurrence in relation to the plot size: very extensive (>1000x plot), extensive (>100x plot), large (10-100x plot), small (3-10x plot), very small (1-3x plot).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>placementMethod</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Description of the method used to determine the placement of a plot.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>permanence</attName>
+			<attNulls>Yes</attNulls>
+			<attType>BOOLEAN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Is the plot monumented so as to assure permanence?  If so, this should be described in the layoutNarrative</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>layoutNarative</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Text description of and the rationale for the layout of the plot.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>elevation</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(4,1)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The elevation of the plot origin in meters above sea level.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>elevationAccuracy</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(4,0)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The accuracy of the elevation in percentage of the elevation reported.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>elevationRange</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(4,1)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Meters of difference in elevations of the high and low points in the plot.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>slopeAspect</attName>
+			<attNulls>Yes </attNulls>
+			<attType>NUMERIC(3,0) </attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>optional list that converts</attNotes>
+			<attDefinition>Representative azimuth of slope gradient (0-360 degrees); if too flat to determine = -1; if too irregular to determine = -2.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>minSlopeAspect</attName>
+			<attNulls>Yes </attNulls>
+			<attType>NUMERIC(3,0) </attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>optional list that converts</attNotes>
+			<attDefinition>Minimum azimuth of slope gradient (0-360 degrees), counterclockwise from representative azmuth.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>maxSlopeAspect</attName>
+			<attNulls>Yes </attNulls>
+			<attType>NUMERIC(3,0) </attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>optional list that converts</attNotes>
+			<attDefinition>Maximum azimuth of slope gradient (0-360 degrees), clockwise from representative azmuth</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>slopeGradient</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,0)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>optional list that converts</attNotes>
+			<attDefinition>Representative inclination of slope in degrees; if too irregular to determine, = -1.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>minSlopeGradient</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,0)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>optional list that converts</attNotes>
+			<attDefinition>Minimum inclindation of slope in degrees.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>maxSlopeGradient</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(3,0)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>optional list that converts</attNotes>
+			<attDefinition>Maximum inclination of slope in degrees.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>topoPosition </attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(50)</attType>
+			<attKey>n/a </attKey>
+			<attReferences> n/a </attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Position of the plot on land surface (e.g., Summit, shoulder, upper slope, middle slope, lower slope, toeslope, no slope, channel bed, dune swale, pond).  </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>landform</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(50)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Landform type.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>geology</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(50) </attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list (perhaps 2-tier heirarchy)</attNotes>
+			<attDefinition>Surface geology type. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>SOILTAXON_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(50) </attType>
+			<attKey>FK</attKey>
+			<attReferences>soilTaxon.SOILTAXON_ID</attReferences>
+			<attNotes>closed list; hierarchy</attNotes>
+			<attDefinition>Foreign key into table of soil taxa within the USDA classification hierarchy, including Order, Suborder, Greatgroup, Subgroup, Family and Series.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>soilTaxonSource</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>How was the soil taxon determined (e.g., field observation, map,  other sources)?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>notesPublic</attName>
+			<attNulls>Yes</attNulls>
+			<attType>BOOLEAN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>TRUE indicates that public notes pertaining to this plot exist in "vegPlot.note"</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>notesMgt</attName>
+			<attNulls>Yes</attNulls>
+			<attType>BOOLEAN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>TRUE indicates that nonpublic management notes pertaining to this plot exist in "vegPlot.note"</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>revisions</attName>
+			<attNulls>Yes</attNulls>
+			<attType>BOOLEAN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>TRUE indicates that revisions exist in vegPlot.Revision</attDefinition>
+		</attribute>
+		<children>observation, place, graphic </children>
+	</entity>
+</dataModel>

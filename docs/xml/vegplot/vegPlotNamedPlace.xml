@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: namedPlace</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>31 October 2001 </date>
+	<entity>
+		<entityName> vegPlot.namedPlace</entityName>
+		<entitySummary>This tables stores information about the various 'named places' that a plot may have been located within. Such places could include geographic regions, study sites, ownership units, managed units, any placename in the USGS glossary (http://www-nmd.usgs.gov/www/gnis/), or equivalent glossary.</entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>NAMEDPLACE_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences> n/a </attReferences>
+			<attNotes>Primary for the namedPlace table </attNotes>
+			<attDefinition>Database generated identifier assigned to each unique named place. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>placeSystem</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(50)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Name of the system of names.  These can be treated as points as with placenames, or as a coverage or set of polygons (e.g., geographic area names, HUC codes, Ecoregions, Quadrangles). </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>placeName </attName>
+			<attNulls>No</attNulls>
+			<attType>VARCHAR(100)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>open or closed list, depending on the system</attNotes>
+			<attDefinition>The name of a place in or at which a plot is located. The system "placenames" is an open list defined within this table.  The other systems are generally closed lists constrained by aux_tables.  These include at least USGSQuad, Continent, Country, State, County, HUC, and Ecoregion.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>placeDescription </attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This is the description of a named place. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>placeCode</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(15)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Optional code for location identification</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>owner</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(100)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Although sometwhat redundant with the owner information contained in observationContributor with roleCode of owner, this allows the program to provide ownership information automatically.  The ownership field supercedes this field in priority.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>CITATION_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>citation.CITATION_ID</attReferences>
+			<attNotes>Foreign key into the citation table</attNotes>
+			<attDefinition>Link to a reference that contains further information on the named place.</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

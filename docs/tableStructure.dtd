@@ -1,27 +1,34 @@
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!ENTITY % Boolean "(true | false) 'false'">
-
-<!-- JHH 2000 -->
-
-<!ELEMENT dataModel (title,author,institution,contributor,description,date,entity)>
-
-<!ELEMENT title (#PCDATA)>
-<!ELEMENT author (#PCDATA)>
+<!ELEMENT dataModel (title, author, institution, contributor, description, date, entity)>
+<!ELEMENT entity (entityName*, entitySummary*, entityDescription*, attribute*, children*, childrenRef*)>
+<!ELEMENT attribute (attName, attNulls, attType, attKey, attReferences, attNotes, attDefinition, defaultValue*, TVCompliant*, TVName*, businessRules*)>
+<!ELEMENT businessRules (constraintAttribute | required | (minCharacterLength | maxCharacterLength)* | (minNumericValue, maxNumericValue))>
 <!ELEMENT institution (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT title (#PCDATA)>
 <!ELEMENT contributor (#PCDATA)>
-<!ELEMENT description (#PCDATA)>
 <!ELEMENT date (#PCDATA)>
-
-<!ELEMENT entity (entityName,entitySummary,entityDescription,attribute,children, childrenRef+)>
-	<!ELEMENT entityName (#PCDATA)>
-	<!ELEMENT entitySummary (#PCDATA)>
-	<!ELEMENT entityDescription (#PCDATA)>
-	<!ELEMENT attribute (attName, attNulls, attType, attKey, attReferences, attNotes, attDefinition)>
-		<!ELEMENT attName (#PCDATA)>
-		<!ELEMENT attNulls (#PCDATA)>
-		<!ELEMENT attType (#PCDATA)>
-		<!ELEMENT attKey (#PCDATA)>
-		<!ELEMENT attReferences (#PCDATA)>
-		<!ELEMENT attNotes (#PCDATA)>
-		<!ELEMENT attDefinition (#PCDATA)>
-	<!ELEMENT children (#PCDATA)>
-	<!ELEMENT childrenRef (#PCDATA)>	
+<!ELEMENT entityName (#PCDATA)>
+<!ELEMENT entitySummary (#PCDATA)>
+<!ELEMENT entityDescription (#PCDATA)>
+<!ELEMENT attName (#PCDATA)>
+<!ELEMENT attNulls (#PCDATA)>
+<!ELEMENT attType (#PCDATA)>
+<!ELEMENT attKey (#PCDATA)>
+<!ELEMENT attReferences (#PCDATA)>
+<!ELEMENT attNotes (#PCDATA)>
+<!ELEMENT attDefinition (#PCDATA)>
+<!ELEMENT TVCompliant (#PCDATA)>
+<!ELEMENT TVName (#PCDATA)>
+<!ELEMENT children (#PCDATA)>
+<!ELEMENT childrenRef (#PCDATA)>
+<!ELEMENT required (#PCDATA)>
+<!ELEMENT constraintAttribute (#PCDATA)>
+<!ELEMENT minCharacterLength (#PCDATA)>
+<!ELEMENT maxCharacterLength (#PCDATA)>
+<!ELEMENT minNumericValue (#PCDATA)>
+<!ELEMENT maxNumericValue (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT defaultValue (#PCDATA)>
+<!-- -->

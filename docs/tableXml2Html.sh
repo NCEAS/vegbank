@@ -1,4 +1,8 @@
 #!/bin/sh -e
+#     '$Author: harris $'
+#     '$Date: 2002-06-17 21:00:50 $'
+#     '$Revision: 1.3 $'
+
 
 
 echo "USAGE % tableXml2Html.sh <infile> <outfile>"

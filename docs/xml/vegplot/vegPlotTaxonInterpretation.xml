@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: taxonInterpretation </title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>31 October 2001</date>
+	<entity>
+		<entityName>vegPlot.taxonInterpretation </entityName>
+		<entitySummary>This table allows all users, including the author and/or subsequent interpreters, to attach taxon names and authorities to a specific taxon observation</entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>TAXONINTERPRETATION_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary key for the TaxonInterpretation table.</attNotes>
+			<attDefinition>Database generated identifier assigned to each unique interpretation of a taxon. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>TAXONOBSERVATION_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>taxonObservation.TAXONOBSERVATION_ID </attReferences>
+			<attNotes>Foreign key into the taxonObservation table. </attNotes>
+			<attDefinition>Link  to a particular taxon observation.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PLANTCONCEPT_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>plantConcept.PLANTCONCEPT_ID     </attReferences>
+			<attNotes>Foreign key into the plantConcept table.</attNotes>
+			<attDefinition>Link to a taxon in the plantConcept table. The entry in the plantConcept table will in turn point to a reference and a name used in the reference, thereby defining the taxon concept.  The name that should be applied to the plantConcept will be party specific and will be found in the plantUsage table. For other than legacy data, the first interpretation recorded for a taxon observation should be redundant with the information contained in taxonObservation.PLANTNAME_ID + PLANTREFERENCE_ID.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>interpretationDate</attName>
+			<attNulls>No </attNulls>
+			<attType>DATE </attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>The date that the interpretation was made. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PLANTNAME_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>plantName.PLANTNAME_ID</attReferences>
+			<attNotes>Foreign key into the taxonName table.</attNotes>
+			<attDefinition>Foreign key into the plantName (in the plantTaxa database) table to identify the name applied by the interpreter to the plantConcept. This field is not needed except in cases where there is a publication associated with the interpretation.  </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PARTY_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK </attKey>
+			<attReferences>party.PARTY_ID </attReferences>
+			<attNotes>Foreign key into the party table. </attNotes>
+			<attDefinition>Foreign key that identifies the party that made the interpretation, which could be the observation author. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>ROLE_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>aux_Role.ROLE_ID</attReferences>
+			<attNotes>Foreign key into aux_Role table</attNotes>
+			<attDefinition>Foreign key that identifies the role of the party making the interpretation (e.g.,  plot author, publication author, database manager, automated, plot contributor). </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>interpretationType</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30) </attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Categories for the interpretation (e.g.,  author, computer generated, simplified for comparative analysis, correction,finer resolution).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>CITATION_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>Citation.CITATION_ID</attReferences>
+			<attNotes>Foreign key into the citation table.</attNotes>
+			<attDefinition>Foreign key into Citation table, which identifies a publication in which the interpretation was formally made, or in which the plot was used in a formal analysis.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>originalInterpretation</attName>
+			<attNulls>No</attNulls>
+			<attType>BOOLEAN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This interpretation corrsponds to the original interpretation of the plot author, as best as can be determined.  There is no requirement that the authority match the authority of the author; only that the concepts are synonymous.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>currentInterpretation</attName>
+			<attNulls>No</attNulls>
+			<attType>BOOLAN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>This interpretation is the most accurate and precise interpretation currently available.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>notes</attName>
+			<attNulls>Yes </attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>These are notes that the interpreter has included with the interpretation (generally, the reason for the interpretation).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>notesPublic</attName>
+			<attNulls>Yes</attNulls>
+			<attType>BOOLEAN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>TRUE indicates that public notes pertaining to this plot exist in "vegPlot.note"</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>notesMgt</attName>
+			<attNulls>Yes</attNulls>
+			<attType>BOOLEAN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>TRUE indicates that nonpublic management notes pertaining to this plot exist in "vegPlot.note"</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>revisions</attName>
+			<attNulls>Yes</attNulls>
+			<attType>BOOLEAN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>TRUE indicates that revisions exist in vegPlot.Revision</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

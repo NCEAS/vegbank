@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+<dataModel>
+	<title>Vegetation Plots Database Component Description: commReference</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>7 February 2002</date>
+	<entity>
+		<entityName>commTaxa.commReference</entityName>
+		<entitySummary>This table stores references which are linked to community concepts.</entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>COMMREFERENCE_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Database assigned value to each unique record in the commReference table.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>authors</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(200)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Names of authors as they appear within the entity being cited. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>title</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(200)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Name by which the cited resource is known. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>pubDate </attName>
+			<attNulls>Yes</attNulls>
+			<attType>DATE </attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Date the citation was published. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>edition </attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Version of the cited resource. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>seriesName </attName>
+			<attNulls>Yes  </attNulls>
+			<attType>VARCHAR(50)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Name of a series. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>issueIdentification </attName>
+			<attNulls>Yes </attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Information identifying the issue of the series. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>otherCitationDetails </attName>
+			<attNulls>Yes </attNulls>
+			<attType>VARCHAR(100)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Other information required for a complete citation, like a URL. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>page </attName>
+			<attNulls>Yes </attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Page of the book or serial where the article appears. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>tableCited</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>name/number of published table containing community name, or an entity name if in an archival database.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>ISBN </attName>
+			<attNulls>Yes </attNulls>
+			<attType>VARCHAR(20) </attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>International Standard Book Number. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>ISSN </attName>
+			<attNulls>Yes </attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>International Standard Serial Number. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>commDescription</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Description of the community. Used where the commReference table record serves as a self reference for purposes of establishing a community concept (community assertion).</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>
