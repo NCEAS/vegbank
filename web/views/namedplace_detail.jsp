@@ -47,7 +47,7 @@
 <a href="@get_link@summary/observation/<bean:write name='namedplace_pk' />?where=where_place_complex">View observations</a>
 </logic:notEqual>
 </logic:notEmpty>
-
+</td></tr>
 </table>
 <p>&nbsp;</p>
 </logic:iterate>
