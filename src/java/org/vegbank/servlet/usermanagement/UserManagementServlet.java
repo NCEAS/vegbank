@@ -3,9 +3,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: farrell $'
- *   '$Date: 2003-11-12 22:27:32 $'
- *   '$Revision: 1.15 $'
+ *   '$Author: anderson $'
+ *   '$Date: 2003-11-24 18:51:49 $'
+ *   '$Revision: 1.16 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -509,7 +509,7 @@ public class UserManagementServlet extends HttpServlet
 						
 						// send email message to the user 
 						String mailHost = "hyperion.nceas.ucsb.edu";
-						String from = "help@vegbank.org";
+						String from = "panel@vegbank.org";
 						String to = emailAddress;
 						//String cc = "vegbank@vegbank.org";
 						String cc = "";
