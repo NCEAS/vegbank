@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!-- 
+  * build.xml
+  *
+  *      Authors: John Harris
+  *    Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *  Build file for the Ant cross-platform build system for metacat
+  *  See http://jakarta.apache.org for details on Ant  
+  *  
+  * This build file will build the plot database access 
+  * module and insert into a working version of the plots 
+  * database an xml plot record, then query that database
+  * for all plots containing a taxon containing the string
+  * "Carya".
+  * usage: ant [compile|jar|install|jdoc]
+--> 
+<project name="plotLoader" default="dist" basedir=".">
+	<target name="init">
+	<tstamp/>
+        <property name="current" value="./" />
+	<property name="build" value="interfaceBuild" />
+	 <property name="client_build" value="interfaceBuild/client" />
+	 <property name="client" value="client" />
+
+
+	<property name="dist" value="dist" />
+	<property name="release" value="development"/>
+	<property name="src" value="./interface"/>
+	<property name="dbAccess_src" value="./plotAccess"/>
+	<property name="xmlFiles" value="../xml"/>
+	<filter token="dist" value="dist"/>
+	<filter token="version" value="development"/>
+	
+	<property name="servlet_home" 
+                value="D:\\jakarta-tomcat-3.2.1/lib/servlet.jar" />
+	<property name="toolsDir" 
+                value="D:\\devtools" />
+	<property name="devtools" 
+                value="D:\\devtools" />	
+	<property name="xmlp" 
+                value="${toolsDir}/xalan.jar:${toolsDir}/xerces.jar"/>
+	<property name="cpath" 
+                value="${build}:${xmlp}:${toolsDir}:./"/>
+</target>
+
+<target name="prepare" depends="init">
+	<mkdir dir="${build}" />
+	<mkdir dir="${dist}" />
+	<mkdir dir="${client_build}" />
+
+	<!-- client library -->
+               <copydir src="${client}"
+               dest="${client_build}"
+               filtering="yes"
+               includes="**.java **.properties"
+               excludes="**/CVS* "/>
+
+	       
+	<copydir src="${src}" 
+               dest="${build}" 
+               filtering="yes"
+               includes="**.java "
+               excludes="**/CVS* "/>
+
+	       
+<!-- get the properties file -->	       
+	 <copydir src="${client}" 
+               dest="${build}" 
+               filtering="yes"
+               includes="**.properties "
+               excludes="**/CVS* "/>
+	
+        </target>	
+	
+<target name="compile" depends="prepare">
+	<javac srcdir="${build}" 
+	classpath="${cpath}"
+	includes="**.java  " 
+	destdir="${build}"
+	/>
+	</target>	
+	
+<target name="dist" depends="compile">
+	<mkdir dir="${dist}/lib" />
+	<deltree dir="${dist}" />
+	
+	<jar jarfile ="${build}/interface.jar"
+		basedir="${build}"
+		includes="${build}/ **"
+	/>
+
+
+	
+</target>		
+
+<!--
+<jar jarfile ="${build}/plotAccess.jar"
+		basedir="${build}"
+		includes="${build}/ database.properties xmlWriter.class dbAccess.class 
+		dbConnect.class issueStatement.class plotWriter.class 
+		queryStore.class sqlMapper.class transformXML.class utility.class  
+		DbConnectionBroker.class"
+	/>
+-->
+<!--
+LocalStrings.properties wellQuery9.class wellQuery9.java 
+		fileDownload.properties GetURL.class inputReader.class fileDownload.class 
+		wellQuery.properties wellQuery.class 
+		servletUtility.class viewData.class authenticate.class 
+		ViewFile.class pageDirector.class"
+		-->
+
+
+</project>

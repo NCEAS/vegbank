@@ -35,20 +35,36 @@ private StringBuffer statement = new StringBuffer(); //sql statement
 public void getCommunitySummary(String communityName, String communityLevel, 
 	Connection conn)
 {
-action = "select";
+action = "select"; 
 statement.append("select ");
-statement.append("commName, abiCode, commDescription, parentCommName ");
+statement.append("commName, abiCode, commDescription, parentCommName, "
++" dateEntered, classCode, classLevel, conceptOriginDate, conceptUpdateDate, "
++" parentAbiCode, recognizingParty, partyConceptStatus,  " 
++" parentCommDescription, commSummary_Id ");
 statement.append("from commSummary where commName like '");
 statement.append(communityName+"'");
 statement.append("and classLevel like '"+communityLevel+"'");
 
-String returnFields[]=new String[4];
-int returnFieldLength=4;
+String returnFields[]=new String[14];
+int returnFieldLength=14;
 	
 returnFields[0]="commName";
 returnFields[1]="abiCode";
 returnFields[2]="commDescription";
 returnFields[3]="parentCommName";
+returnFields[4]="dateEntered";
+returnFields[5]="classCode";
+returnFields[6]="classLevel";
+returnFields[7]="conceptOriginDate";
+returnFields[8]="conceptUpdateDate";
+returnFields[9]="parentAbiCode";
+returnFields[10]="recognizingParty";
+returnFields[11]="partyConceptStatus";
+returnFields[12]="parentCommDescription";
+returnFields[13]="commSummary_Id";
+
+
+
 
 //issue the statement
 issueStatement j = new issueStatement();

@@ -20,6 +20,7 @@
 	<tstamp/>
         <property name="current" value="./" />
 	<property name="build" value="servletBuild" />
+	<property name="multipart_build" value="servletBuild/multipart" />
 	<property name="dist" value="dist" />
 	<property name="release" value="development"/>
 	<property name="src" value="./servlet"/>
@@ -40,22 +41,34 @@
                 value="${localToolsDir}/xmlTools/xalan.jar:${localToolsDir}/xmlTools/xerces.jar:" />
 	<property name="jdbc" 
                 value="${oracle_home}/jdbc/lib/classes111.zip" />
+	<property name="multipart" 
+                value="./servlet/multipart" />
 	<property name="cpath" 
                 value="${servlet_home}:${xmlp}:${jdbc}:${jserv}:${jsdk}:${build}:${localToolsDir}:./"/>
+	
+				
 </target>
 
 <target name="prepare" depends="init">
 	<mkdir dir="${build}" />
 	<mkdir dir="${dist}" />
+	<mkdir dir="${multipart_build}" />
 	
 	<copydir src="${src}" 
                dest="${build}" 
                filtering="yes"
-               includes="**.java plotQuery.properties"
-               excludes="**/CVS* "/>
+               includes="**.java pageDirector.properties fileDownload.properties  plotQuery.properties"
+               excludes="**/CVS* MetaCatServlet.java"/>
 
         <copydir src="${dbAccess_src}" 
                dest="${build}" 
+               filtering="yes"
+               includes="**.java"
+               excludes="**/CVS* "/>
+			   
+	<!-- this is the directory to store all the multipart decoding stuff -->
+		<copydir src="${multipart}" 
+               dest="${multipart_build}" 
                filtering="yes"
                includes="**.java"
                excludes="**/CVS* "/>
@@ -64,11 +77,15 @@
         </target>	
 	
 <target name="compile" depends="prepare">
+<!--	the files in the multipart directory will get compiled also
+-->	
 	<javac srcdir="${build}" 
 	classpath="${cpath}"
 	includes="**.java  " 
 	destdir="${build}"
 	/>
+	
+
 	</target>	
 	
 <target name="dist" depends="compile">
@@ -77,12 +94,13 @@
 	
 	<jar jarfile ="${build}/plotQuery.jar"
 		basedir="${build}"
-		includes="${build}/ plotQuery.properties plotQuery.class servletUtility.class viewData.class"
+		includes="${build}/ **"
+
 	/>
 
 	<jar jarfile ="${build}/plotAccess.jar"
 		basedir="${build}"
-		includes="${build}/ xmlWriter.class dbAccess.class dbConnect.class issueStatement.class plotWriter.class queryStore.class sqlMapper.class transformXML.class utility.class "
+		includes="${build}/ xmlWriter.class CommunityQueryStore.class  dbAccess.class dbConnect.class issueStatement.class plotWriter.class queryStore.class sqlMapper.class transformXML.class utility.class  DbConnectionBroker.class"
 	/>
 	
 </target>		

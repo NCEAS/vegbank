@@ -39,7 +39,22 @@ String commName=null;
 String commDesc=null;
 String abiCode=null;
 String parentCommName=null;
+String dateEntered=null;
+String classCode=null;
+String classLevel=null;
+String conceptOriginDate=null;
+String conceptUpdateDate=null;
+String parentAbiCode=null;
+String recognizingParty=null;
+String partyConceptStatus=null;
+String parentCommDescription=null;
+String commSummaryId=null;
 String nullValue = "-999.25";
+
+//header
+printString.append("<?xml version=\"1.0\"?> \n");
+printString.append("<!DOCTYPE vegPlot SYSTEM \"vegCommunity.dtd\">     \n");
+printString.append("<vegCommunity> \n");
 
 for (int i=0;i<communitySummary.size(); i++) {
 
@@ -49,27 +64,42 @@ commName=t.nextToken().trim();
 abiCode=t.nextToken();
 commDesc=t.nextToken();
 parentCommName=t.nextToken();
+dateEntered=t.nextToken();
+classCode=t.nextToken();
+classLevel=t.nextToken();
+conceptOriginDate=t.nextToken();
+conceptUpdateDate=t.nextToken();
+parentAbiCode=t.nextToken();
+recognizingParty=t.nextToken();
+partyConceptStatus=t.nextToken();
+parentCommDescription=t.nextToken();
+commSummaryId=t.nextToken();
 
-printString.append("<?xml version=\"1.0\"?> \n");
-printString.append("<!DOCTYPE vegPlot SYSTEM \"vegCommunity.dtd\">     \n");
-printString.append("<vegCommunity> \n");
+//temporary fix to trim the description to 100 chars
+if (commDesc.length() >100) commDesc=commDesc.substring(1, 99);
+
+printString.append("<community> \n");
+printString.append("   <commSummaryId>"+commSummaryId+"</commSummaryId> \n");
 printString.append("   <commName>"+commName+"</commName> \n");
 printString.append("   <commDesc>"+commDesc+"</commDesc> \n");
 printString.append("   <abiCode>"+abiCode+"</abiCode> \n");
-printString.append("   <classCode>"+nullValue+"</classCode> \n");
-printString.append("   <classLevel>"+nullValue+"</classLevel> \n");
-printString.append("   <originDate>"+nullValue+"</originDate> \n");
-printString.append("   <updateDate>"+nullValue+"</updateDate> \n");
+printString.append("   <classCode>"+classCode+"</classCode> \n");
+printString.append("   <classLevel>"+classLevel+"</classLevel> \n");
+printString.append("   <originDate>"+conceptOriginDate+"</originDate> \n");
+printString.append("   <updateDate>"+conceptUpdateDate+"</updateDate> \n");
+printString.append("   <recognizingParty>"+recognizingParty+"</recognizingParty> \n");
+printString.append("   <partyConceptStatus>"+partyConceptStatus+"</partyConceptStatus> \n");
 
 printString.append("   <parentComm> \n");
 printString.append("     <commName>"+parentCommName+"</commName> \n");
-printString.append("     <abiCode>"+nullValue+"</abiCode> \n");
-printString.append("     <commDesc>"+nullValue+"</commDesc> \n");
-printString.append("   </parentComm>");
-
+printString.append("     <abiCode>"+parentAbiCode+"</abiCode> \n");
+printString.append("     <commDesc>"+parentCommDescription+"</commDesc> \n");
+printString.append("   </parentComm> \n");
+printString.append("</community> \n");
+}
+//footer
 printString.append("</vegCommunity>");
 
-}
 //print to the output file
 out.println( printString.toString() );
 
