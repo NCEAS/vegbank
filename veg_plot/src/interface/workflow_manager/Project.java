@@ -21,8 +21,8 @@ import org.w3c.dom.Document;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-08-21 22:59:27 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2001-08-23 04:20:05 $'
+ * 	'$Revision: 1.3 $'
  */
  
 public class Project extends JFrame 
@@ -34,11 +34,18 @@ public class Project extends JFrame
 	//the main frame panel
 	public  JPanel mainPane = new JPanel();
 	
+	public JScrollPane scroller = new JScrollPane();
+	
 	//the main categories for the manager
 	public  JPanel projectSummaryPanel = new JPanel();
+	//this is the panel that contains all the project cont panels
 	public  JPanel projectContributorPanel = new JPanel();
 	public  JPanel projectDatePanel = new JPanel();
 	public  JPanel projectLocationPanel = new JPanel();
+	
+	//this is the current (most recent) projectContributorPanel
+	public  JPanel currentProjectContributorPanel = new JPanel();
+	
 	
 	
 	//the labels for the main catagory panels
@@ -50,15 +57,19 @@ public class Project extends JFrame
 	
 	
 	//test status stuff
-	public  JTextField projectNameText = new JTextField();
-	public  JTextField projectDescriptionText = new JTextField();
-	public  JTextField contributorSurNameText = new JTextField();
-	public  JTextField contributorGivenNameText  = new JTextField();
-	public  JTextField contributorInstitutionText = new JTextField();
+	public JTextField projectNameText = new JTextField();
+	public JTextField projectDescriptionText = new JTextField();
+	public JTextField contributorSurNameText = new JTextField();
+	public JTextField contributorGivenNameText  = new JTextField();
+	public JTextField contributorInstitutionText = new JTextField();
 	public JTextField projectStartDateText = new JTextField();
 	public JTextField projectStopDateText = new JTextField();
 	public JTextField projectStateNameText = new JTextField();
 	public JTextField projectPlaceNameText = new JTextField();
+	
+	public Vector contributorGivenNameTextVector = new Vector();
+	public Vector contributorSurNameTextVector = new Vector();
+	public Vector contributorInstitutionTextVector = new Vector();
 	
 	
 	//selectors
@@ -111,6 +122,7 @@ public class Project extends JFrame
 	 */
 	 public void initComponents(Hashtable componentHash ) 
 		{
+			JPanel contributorSelectorPanel = new JPanel();
       frame.getContentPane().setLayout(new BoxLayout(getContentPane(), 1));
       addWindowListener(new java.awt.event.WindowAdapter() 
 			{
@@ -128,12 +140,15 @@ public class Project extends JFrame
 					projectSummaryPanel = projectSummary();
 				}
 			}
+			//the contributors panel
 			if (componentHash.containsKey("projectContributorPanel") == true )
 			{
 				if (componentHash.get("projectContributorPanel").toString().equals("true") )
 				{
-					projectContributorPanel = new JPanel();
-					projectContributorPanel = projectContributor();
+					projectContributorPanel.setLayout(new BoxLayout(projectContributorPanel, BoxLayout.Y_AXIS));
+				//	currentProjectContributorPanel = new JPanel();
+					currentProjectContributorPanel = projectContributor();
+					projectContributorPanel.add(currentProjectContributorPanel);
 				}
 			}
 			//the date panel
@@ -160,15 +175,35 @@ public class Project extends JFrame
 			mainPane.add(Box.createRigidArea(new Dimension(2,15)));
 			mainPane.add( projectSummaryPanel );
 			mainPane.add(Box.createRigidArea(new Dimension(2,15)));		
-			mainPane.add( projectContributorPanel );
+				scroller.setOpaque(true);
+				scroller.setPreferredSize(new Dimension(300, 100));
+				scroller.setMinimumSize(new Dimension(300, 100));
+				scroller.setAlignmentX(RIGHT_ALIGNMENT);
+				scroller.getViewport().add(projectContributorPanel);
+			mainPane.add( scroller);	
+			
+			addContributorSelector.setText("Add Contributor");
+
+			
+			//setup the selector panel
+				contributorSelectorPanel.setLayout(new FlowLayout(0,5,1));
+				contributorSelectorPanel.add(addContributorSelector);
+				contributorSelectorPanel.setPreferredSize(new Dimension(220, 30));
+				contributorSelectorPanel.setMinimumSize(new Dimension(220, 30));
+
+			
+				mainPane.add( contributorSelectorPanel );
 			mainPane.add(Box.createRigidArea(new Dimension(2,30)));
 			mainPane.add( projectDatePanel);
 			mainPane.add(Box.createRigidArea(new Dimension(2,15)));		
-				mainPane.add( projectLocationPanel);
+			mainPane.add( projectLocationPanel);
 			mainPane.add(Box.createRigidArea(new Dimension(2,15)));		
 			mainPane.add( updateProject() );
 			mainPane.add(Box.createRigidArea(new Dimension(2,20)));
 		
+				
+		
+			
 			//show the panes
 		  setContentPane(mainPane);
       //frame.getContentPane().add(mainPane);
@@ -186,7 +221,7 @@ public class Project extends JFrame
 		{
       public void actionPerformed(ActionEvent evt) 
 			{
-				handleAddContributorActivator(evt);
+				handleAddContributorActivator_ed(evt);
        }
     });
 		
@@ -337,6 +372,15 @@ public class Project extends JFrame
 			JPanel institutionPanel = new JPanel();
 			JPanel selectorPanel = new JPanel();
 			
+			//make a new instance of the textareas and add to the 
+			//respective vectors
+			contributorGivenNameText = new JTextField();
+			contributorSurNameText = new JTextField();
+			contributorInstitutionText = new JTextField();
+			contributorGivenNameTextVector.addElement(contributorGivenNameText);
+			contributorSurNameTextVector.addElement(contributorSurNameText);
+			contributorInstitutionTextVector.addElement(contributorInstitutionText);
+			
 			//setup the label panel
 			labelPanel.setLayout(new FlowLayout(0,5,1));
 			labelPanel.add( new JLabel("Project Contributors") );
@@ -365,16 +409,19 @@ public class Project extends JFrame
 			contributorInstitutionText.setBackground(Color.pink);
 			contributorInstitutionText.setText("");
 			institutionPanel.add( contributorInstitutionText );
-			 addContributorSelector.setText("Add Contributor");
-			//institutionPanel.add( addContributorSelector );
+///			 addContributorSelector.setText("Add Contributor");
+///			//institutionPanel.add( addContributorSelector );
 			
 			//setup the selector panel
-			selectorPanel.setLayout(new FlowLayout(0,5,1));
-			selectorPanel.add(addContributorSelector);
+///			selectorPanel.setLayout(new FlowLayout(0,5,1));
+///			selectorPanel.add(addContributorSelector);
+///			selectorPanel.setPreferredSize(new Dimension(220, 30));
+///			selectorPanel.setMinimumSize(new Dimension(220, 30));
 			
 			//add the components to the main panel
 			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-			panel.setPreferredSize(new Dimension(220, 23));
+			panel.setPreferredSize(new Dimension(220, 135));
+			panel.setMinimumSize(new Dimension(220, 135));
 			
 			panel.add( labelPanel);
 			panel.add( givenNamePanel );
@@ -478,6 +525,19 @@ public class Project extends JFrame
 		repaint();
 		
 			new Project(componentHash).show();
+		}
+		
+		
+		
+		private void handleAddContributorActivator_ed( ActionEvent evt)
+		{
+			JPanel currentPanel = new JPanel();
+			currentPanel = projectContributor();
+			projectContributorPanel.add( currentPanel );
+			//mainPane.add(currentPanel);
+			scroller.validate();
+			mainPane.validate();
+	
 		}
 		
 		
