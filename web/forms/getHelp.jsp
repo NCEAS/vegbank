@@ -15,7 +15,7 @@
  <%
 
    String strHelpPg = request.getParameter("helpPage");
-   strHelpPg = strHelpPg!=null?strHelpPg:"/help/manual/manual-index.html";
+   strHelpPg = strHelpPg!=null?strHelpPg:"@manual_link@manual-index.html";
    
   %>
 
