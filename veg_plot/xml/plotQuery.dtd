@@ -5,10 +5,10 @@ file which when passed to the query module will trigger
 a query based on the elements stored in the xml document 
 -->
 
-<!ELEMENT dbQuery (query)>
+<!ELEMENT dbQuery (query*,requestDataType*,resultType*,outFile*)>
 
 
-<!ELEMENT query (queryElement, queryString)>
+<!ELEMENT query (queryElement, elementString)>
 <!ELEMENT queryElement (#PCDATA)>  <!--query Element name like taxonName, namedPlace, PlotId-->
 <!ELEMENT elementString (#PCDATA)> <!--element: like Carya for a taxon-->
 
@@ -17,5 +17,6 @@ a query based on the elements stored in the xml document
 	plot, plotID -->
 <!ELEMENT resultType (#PCDATA)>
 <!ELEMENT outFile (#PCDATA)>  <!-- include path -->
+<!ELEMENT requestDataType (#PCDATA)>  <!-- include path -->
 
 
