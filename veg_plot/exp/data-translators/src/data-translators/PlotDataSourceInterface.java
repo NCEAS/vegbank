@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-27 22:52:41 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2002-04-03 00:28:33 $'
+ * '$Revision: 1.6 $'
  *
  *
  */
@@ -231,6 +231,15 @@ public interface PlotDataSourceInterface
 	String getTaxaStrataCover(String plantName, String plotCode, String
 	stratumName);
 
+	/**
+	 * method to return the taxa code from a data source using as input 
+	 * the scientific plant name -- or the plant name that comes from 
+	 * the 'getPlantTaxaNames' method
+	 *
+	 * @param plantName -- the scientific plantName
+	 */
+	 String getPlantTaxonCode(String plantName);
+	
 	
 	/**
 	 * method that retuns the names of the unique strata elements 

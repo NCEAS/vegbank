@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 22:52:41 $'
- * 	'$Revision: 1.12 $'
+ *  '$Date: 2002-04-03 00:28:33 $'
+ * 	'$Revision: 1.13 $'
  */
 public class PlotDataSource 
 {
@@ -497,6 +497,21 @@ public class PlotDataSource
 		return(s);
 	}
 	
+	
+	/**
+	 * method to return the taxa code from a data source using as input 
+	 * the scientific plant name -- or the plant name that comes from 
+	 * the 'getPlantTaxaNames' method
+	 *
+	 * @param plantName -- the scientific plantName
+	 */
+	 public String getPlantTaxonCode(String plantName)
+	 {
+		 String s = ((PlotDataSourceInterface)pluginObj).getPlantTaxonCode(plantName);
+		return(s);
+	 }
+	 
+	 
 	
 	 /**
    * creates an object of a type className.  this is used for instantiating

@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-02 19:03:20 $'
- * 	'$Revision: 1.16 $'
+ *  '$Date: 2002-04-03 00:28:33 $'
+ * 	'$Revision: 1.17 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -1622,6 +1622,40 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			 return( scientificNames );
 		 }
 		 
+		/**
+		 * method to return the taxa code from a data source using as input 
+		 * the scientific plant name -- or the plant name that comes from 
+		 * the 'getPlantTaxaNames' method
+	 	 *
+	 	 * @param plantName -- the scientific plantName
+	 	 */
+		public String getPlantTaxonCode(String plantName)
+	 	{
+			Statement stmt = null;
+			String code = null;
+			try
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Plant Symbol])  "
+				+" from ([Plots-Species]) where ([Scientific Name]) like '"+plantName+"'");
+				while (rs.next()) 
+				{
+					code = rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch( Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+			return(code);
+	 	}
+		 
 		 
 	 /**
 	  * method that updates the publicly accessible variables with the 
@@ -1654,8 +1688,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				//unique scientific names
 				uniquePlantNameNumber = cnt;
 				System.out.println("TNCPlotsDB > " + uniquePlantNameNumber + " unique plant names for plot: " + plotName);
-			rs.close();
-			stmt.close();
+				rs.close();
+				stmt.close();
 			}
 			catch (SQLException ex) 
 			{
@@ -1877,6 +1911,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		 return(s);
 	 }
+	 
 	 
 	 
 	 /**
