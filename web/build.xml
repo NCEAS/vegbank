@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-03-04 06:01:56 $'
-* '$Revision: 1.144 $'
+* '$Date: 2005-03-11 17:28:11 $'
+* '$Revision: 1.145 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -64,7 +64,6 @@
         <isset property="machine_url"/>
       </not>
     </condition>
-
     <condition property="eighty_eighty" value="">
       <not>
         <isset property="eighty_eighty"/>
@@ -75,10 +74,9 @@
         <isset property="headerImageMachine"/>
       </not>
     </condition>
-    <filter token="machine_url" value="${machine_url}" />
-    <filter token="eighty_eighty" value="${eighty_eighty}" />
+    <filter token="machine_url" value="${machine_url}"/>
+    <filter token="eighty_eighty" value="${eighty_eighty}"/>
     <filter token="headerImageMachine" value="${headerImageMachine}"/>
-
     <echo>BASE URL:  ${machine_url}(${eighty_eighty})
     </echo>
     <!-- set the apache doc root -->
@@ -155,7 +153,8 @@
     <!-- this is the minimum value for width of header and footer -->
     <!-- the following is a duplicate : -->
     <filter token="images_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/images/"/>
-    <filter token="stylesheet" value=""/> <!-- this is handled in default head token -->
+    <filter token="stylesheet" value=""/>
+    <!-- this is handled in default head token -->
     <filter token="plotquery_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/LoadPlotQuery.do"/>
     <filter token="nestedplotquery_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/nested-plot-query.html"/>
     <filter token="uploaddata_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/uploadFile.html"/>
@@ -265,19 +264,19 @@
       <fileset dir="upload"/>
     </copy>
   </target>
-  <target name="searchplugins" depends="stuff" description="=&gt; dist search plugin info to website" >
-    <mkdir dir="${vegdocs_server}/searchplugins" />
+  <target name="searchplugins" depends="stuff" description="=&gt; dist search plugin info to website">
+    <mkdir dir="${vegdocs_server}/searchplugins"/>
     <copy overwrite="true" todir="${vegdocs_server}/searchplugins" filtering="yes">
-      <fileset dir="searchplugins" >
-        <include name="*.html" />
+      <fileset dir="searchplugins">
+        <include name="*.html"/>
       </fileset>
     </copy>
     <copy overwrite="true" todir="${vegdocs_server}/searchplugins" filtering="no">
-      <fileset dir="searchplugins" >
-        <exclude name="*.html" /><!-- everything else dist without filtering -->
+      <fileset dir="searchplugins">
+        <exclude name="*.html"/>
+        <!-- everything else dist without filtering -->
       </fileset>
     </copy>
-
   </target>
   <!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
@@ -387,7 +386,7 @@
 -->
   <target name="forms" depends="images" description="=&gt; dist the forms to server ">
     <!-- style business rules to create .jsp -->
-    <style  in="${forms}/businessrules.xml" style="${forms}/businessrules.xsl" out="${forms}/businessrules.jsp" force="yes" />
+    <style in="${forms}/businessrules.xml" style="${forms}/businessrules.xsl" out="${forms}/businessrules.jsp" force="yes"/>
     <copy overwrite="true" todir="${forms_server}" filtering="yes">
       <fileset dir="${forms}" includes="*jsp *html" excludes="**/CVS* *.xsl *.xsd businessrules.xml "/>
     </copy>
@@ -448,7 +447,7 @@
 -->
   <target name="web" depends="xsl" description="==> Distribute Web Files ">
     <xmlvalidate file="${web.src.dir}/WEB-INF/struts-config.xml" failonerror="true">
-      <dtd publicId="-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" location="http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd" />
+      <dtd publicId="-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" location="http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd"/>
     </xmlvalidate>
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes">
       <fileset dir="${web.src.dir}"/>
@@ -469,6 +468,22 @@
   <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
     <!-- pattern for this target: (optional: style xml to get tokens), copy from includes to includes_server, set filtersfile on server copy, post filtering -->
     <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
+    <!-- load header and footer from file -->
+   <loadfile srcfile="${includes_src}/header.html" property="vegbank_header_html_help" />
+   <filter token="vegbank_header_html_help" value="${vegbank_header_html_help}" />
+ 
+   <loadfile srcfile="${includes_src}/header.html" property="vegbank_header_html_front" />
+   <filter token="vegbank_header_html_front" value="${vegbank_header_html_front}" />
+   
+   <loadfile srcfile="${includes_src}/header.html" property="vegbank_header_html_normal" />
+   <filter token="vegbank_header_html_normal" value="${vegbank_header_html_normal}" />
+   
+   <loadfile srcfile="${includes_src}/footer.html" property="vegbank_footer_html_tworow" />
+   <filter token="vegbank_footer_html_tworow" value="${vegbank_footer_html_tworow}" />
+   
+   <loadfile srcfile="${includes_src}/footer.html" property="vegbank_footer_html_help" />
+   <filter token="vegbank_footer_html_help" value="${vegbank_footer_html_help}" />
+   
     <copy file="${includes_src}/filters.properties" tofile="${includes_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${includes_server}/filters_detokened.properties"/>
     <copy file="${includes_src}/placeurl.properties" tofile="${includes_server}/placeurl_detokened.properties" filtering="yes" overwrite="yes"/>
