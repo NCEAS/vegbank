@@ -7,9 +7,9 @@
   * can call ant like this:
   *  % echo "[build.context]" | ant [target]
   *
-  *     '$Author: farrell $'
-  *     '$Date: 2004-03-07 19:23:39 $'
-  *     '$Revision: 1.40 $'
+  *     '$Author: anderson $'
+  *     '$Date: 2004-03-11 00:01:22 $'
+  *     '$Revision: 1.41 $'
 --> 
 <project name="Vegbank" default="jar" basedir=".">
 
@@ -235,6 +235,19 @@
 	<copy todir="${web.context}/GenJSP">
 		<fileset dir="${build.jsp.src.dir}" includes="*jsp"/>
  	</copy>
+  </target>
+
+  
+  <target name="deploy-jars" depends="jar,deploy-prepare"
+          description="==> deploys vegclass module jars">
+    
+	<echo message="Distr all of jars in ${ant.project.name}"/>
+
+	<echo>deploying jars to ${web.lib.dir}</echo>
+	<copy todir="${web.lib.dir}">
+		<fileset dir="${build.lib.dir}" includes="*jar" excludes="servlet.jar"/>
+	</copy> 
+	
   </target>
 
 
