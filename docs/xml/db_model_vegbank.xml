@@ -15833,7 +15833,7 @@ conditions may change between resampling events.
   </entity>
   <entity>
     <entityName>userDataset</entityName>
-    <entityLabel>User Dataset</entityLabel>
+    <entityLabel>Dataset</entityLabel>
     <entitySummary>User stored datasets</entitySummary>
     <entityDescription/>
     <module>user</module>
@@ -15850,6 +15850,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Database generated unique key for each record in this table.</attDefinition>
+      <attForms>
+        <formShow name="Summary">1</formShow>
+        <formShow name="Detail">1</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15865,6 +15869,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Foreign key pointing to the user to whom this dataset belongs.</attDefinition>
+      <attForms>
+        <formShow name="Summary">2</formShow>
+        <formShow name="Detail">2</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15880,6 +15888,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>maybe we don't need</attNotes>
       <attDefinition>Date of start of dataset.</attDefinition>
+      <attForms>
+        <formShow name="Summary">3</formShow>
+        <formShow name="Detail">3</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15895,6 +15907,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>maybe we don't need</attNotes>
       <attDefinition>Date of end of dataset, if deemed no longer active.</attDefinition>
+      <attForms>
+        <formShow name="Summary">4</formShow>
+        <formShow name="Detail">4</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15910,6 +15926,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Accession Code of the dataset, to be used to reference the observations contained here with a URL pointing to this dataset.  Helps avoid URL's that are too long.</attDefinition>
+      <attForms>
+        <formShow name="Summary">5</formShow>
+        <formShow name="Detail">5</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15925,6 +15945,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Name of Dataset, should be unique for each user.</attDefinition>
+      <attForms>
+        <formShow name="Summary">6</formShow>
+        <formShow name="Detail">6</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15940,6 +15964,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Description of dataset.</attDefinition>
+      <attForms>
+        <formShow name="Summary">7</formShow>
+        <formShow name="Detail">7</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15955,6 +15983,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Type of dataset.</attDefinition>
+      <attForms>
+        <formShow name="Summary">8</formShow>
+        <formShow name="Detail">8</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15986,6 +16018,10 @@ conditions may change between resampling events.
       </attList>
       <attNotes>public, private, password</attNotes>
       <attDefinition>OK to share this dataset with others?  Note that the dataset must be public or password-protected to be accessed via the accessionCode.</attDefinition>
+      <attForms>
+        <formShow name="Summary">9</formShow>
+        <formShow name="Detail">9</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -16001,12 +16037,16 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Password to access the dataset if the dataset is password protected.</attDefinition>
+      <attForms>
+        <formShow name="Summary">10</formShow>
+        <formShow name="Detail">10</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
   </entity>
   <entity>
     <entityName>userDatasetItem</entityName>
-    <entityLabel>Item in User's Dataset</entityLabel>
+    <entityLabel>Items of Dataset</entityLabel>
     <entitySummary>Items (entities) that belong to a user's dataset.</entitySummary>
     <entityDescription/>
     <module>user</module>
@@ -16023,6 +16063,9 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Database generated unique key for each record in this table.</attDefinition>
+      <attForms>
+        <formShow name="Detail">1</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -16038,6 +16081,9 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Foreign key to the dataset in which the observation in this record is a member.</attDefinition>
+      <attForms>
+        <formShow name="Detail">2</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -16053,6 +16099,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>accessionCode for observation that is part of dataset: used instead of observation_ID to allow observations from any database</attNotes>
       <attDefinition>Accession Code for the observation which is a member of the dataset referenced in userDataset_ID.  Accession codes are used so that observations from any VegBank database can be included in the dataset.</attDefinition>
+      <attForms>
+        <formShow name="Summary">3</formShow>
+        <formShow name="Detail">3</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -16068,6 +16118,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>plant, community, plot, observation, etc.</attNotes>
       <attDefinition>Type of item/entity that this is.</attDefinition>
+      <attForms>
+        <formShow name="Summary">4</formShow>
+        <formShow name="Detail">4</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -16083,6 +16137,9 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Start date for the validity of this record.</attDefinition>
+      <attForms>
+        <formShow name="Detail">5</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -16098,6 +16155,9 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Stop date for the validity of this record.</attDefinition>
+      <attForms>
+        <formShow name="Detail">6</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -16113,6 +16173,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Notes about the observation as part of the dataset.</attDefinition>
+      <attForms>
+        <formShow name="Summary">7</formShow>
+        <formShow name="Detail">7</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
   </entity>
