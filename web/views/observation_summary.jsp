@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-10-06 00:07:41 $'
-*  '$Revision: 1.17 $'
+*  '$Date: 2004-10-07 17:41:20 $'
+*  '$Revision: 1.18 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -46,10 +46,12 @@
 </head>
 
 
-<body class="center">
+<body>  
+
+ 
 
 @vegbank_header_html_normal@
-
+ @possibly_center@  
   <h2>View Plot Observation(s)</h2>
   <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
     whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
@@ -70,16 +72,16 @@
 
 
 <table class="leftrightborders" cellpadding="1"><!--each field, only write when HAS contents-->
-<tr><th colspan="2">Plot Level Data: <bean:write name="onerowofplot" property="authorplotcode"/></th></tr>
+<tr><th class="major" colspan="2">Plot Level Data: <bean:write name="onerowofplot" property="authorplotcode"/></th></tr>
 
-<tr><th class="subheader">Plot ID Fields:</th><th class="subheader">&nbsp;</th></tr>
+<tr><th>Plot ID Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
 
 <%@ include file="autogen/plot_plotidshort_data.jsp" %>         
 <%@ include file="autogen/observation_plotidshort_data.jsp" %>
 
 <%@ include file="includeviews/sub_haddata.jsp" %>
-<tr><th class="subheader">Location Fields:</th><th class="subheader">&nbsp;</th></tr>
+<tr><th>Location Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
 
 <%@ include file="autogen/plot_plotlocshort_data.jsp" %>
@@ -87,7 +89,7 @@
 
 
 <%@ include file="includeviews/sub_haddata.jsp" %>
-<tr><th class="subheader">Layout Fields:</th><th class="subheader">&nbsp;</th></tr>
+<tr><th>Layout Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
 
 
@@ -95,7 +97,7 @@
 <%@ include file="autogen/observation_plotlayoutshort_data.jsp" %>
 
 <%@ include file="includeviews/sub_haddata.jsp" %>
-<tr><th class="subheader">Environment Fields:</th><th class="subheader">&nbsp;</th></tr>
+<tr><th>Environment Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
 
 <%@ include file="autogen/plot_plotenvshort_data.jsp" %>
@@ -103,7 +105,7 @@
 
 
 <%@ include file="includeviews/sub_haddata.jsp" %>
-<tr><th class="subheader">Methods Fields:</th><th class="subheader">&nbsp;</th></tr>
+<tr><th>Methods Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
 
 <%@ include file="autogen/plot_plotmethodshort_data.jsp" %>
@@ -111,14 +113,14 @@
 
 
 <%@ include file="includeviews/sub_haddata.jsp" %>
-<tr><th class="subheader">Plot quality Fields:</th><th class="subheader">&nbsp;</th></tr>
+<tr><th>Plot quality Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
 
 <%@ include file="autogen/plot_plotqualityshort_data.jsp" %>
 <%@ include file="autogen/observation_plotqualityshort_data.jsp" %>
 
 <%@ include file="includeviews/sub_haddata.jsp" %>
-<tr><th class="subheader">Overall Plot Vegetation Fields:</th><th class="subheader">&nbsp;</th></tr>
+<tr><th>Overall Plot Vegetation Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
 
 <%@ include file="autogen/plot_plotoverallvegshort_data.jsp" %>
@@ -126,7 +128,7 @@
 
 <%@ include file="includeviews/sub_haddata.jsp" %>
 
-<tr><th class="subheader">Misc Fields:</th><th class="subheader">&nbsp;</th></tr>
+<tr><th>Misc Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
 <%@ include file="autogen/plot_plotmiscshort_data.jsp" %>
 <%@ include file="autogen/observation_plotmiscshort_data.jsp" %>
@@ -138,7 +140,7 @@
 
 
 <bean:define id="obsId" name="onerowofplot" property="observation_id"/>
-<tr><th class="subheader">Community Classification:</th><th class="subheader">&nbsp;</th></tr>
+<tr><th>Community Classification:</th><th>&nbsp;</th></tr>
 
 <!-- community info -->
 <vegbank:get id="comminterpretation" select="comminterpretation_withobs" beanName="map" 
@@ -179,7 +181,7 @@
  wparam="obsId" perPage="-1"/>
 
      <table cellpadding="1" class="leftrightborders">
-     <tr><th colspan="2"><strong>Taxa occurring on <bean:write name="onerowofplot" property="authorplotcode"/></strong></th></tr>
+     <tr><th colspan="2" class="major">Taxa occurring on <bean:write name="onerowofplot" property="authorplotcode"/></th></tr>
   <logic:empty name="taxonimportance-BEANLIST">
                 <tr class='@nextcolorclass@'><td colspan="2">(no plants recorded on this plot: error!)</td></tr>
   </logic:empty>
