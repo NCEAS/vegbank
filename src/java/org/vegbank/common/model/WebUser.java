@@ -7,9 +7,9 @@ import org.vegbank.common.utility.LogUtility;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:22:17 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-12-01 19:25:00 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public class WebUser
 	private String email = "";
 	private String password = "";
 	private String permissiontype = "";
-	private String insitution = "";
+	private String institution = "";
 	private String salutation = "";
 	private String ticketcount = "";
 	private String address = "";
@@ -180,9 +180,9 @@ public class WebUser
 	/**
 	 * @return
 	 */
-	public String getInsitution()
+	public String getInstitution()
 	{
-		return insitution;
+		return institution;
 	}
 
 	/**
@@ -196,9 +196,9 @@ public class WebUser
 	/**
 	 * @param string
 	 */
-	public void setInsitution(String string)
+	public void setInstitution(String string)
 	{
-		insitution = string;
+		institution = string;
 	}
 
 	/**
