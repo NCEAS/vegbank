@@ -3,8 +3,8 @@
  * Authors: @author@ Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2004-07-13 18:54:20 $' 
- * '$Revision: 1.5 $'
+ * '$Date: 2005-02-11 00:35:23 $' 
+ * '$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -25,6 +25,7 @@ package org.vegbank.common.utility;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Enumeration;
@@ -142,18 +143,19 @@ public class VBModelBeanToDB
 		// Handle dups prevention
 
 		// Check if this has already been added to db
-		long assignedPK = inputUniqueIdTracker.getAssignedPK(entityName, inputUniqueIdAsString);
-		if (assignedPK != 0) 
-		{
-			log.info(
-					"Already entered record for  inputUniqueId " + inputUniqueId + " into " + entityName + " using PK of " + assignedPK);
-			PK = assignedPK;
-		}
-		else
-		{
-			PK = this.isObjectInDatabase(bean);
-		}
-
+        if (inputUniqueId == -1) {
+            log.debug("PK is -1 so not checking for duplicates");
+            PK = 0;
+        } else {
+            long assignedPK = inputUniqueIdTracker.getAssignedPK(entityName, inputUniqueIdAsString);
+            if (assignedPK != 0) {
+                log.info("Already entered record for  inputUniqueId " + inputUniqueId + 
+                        " into " + entityName + " using PK of " + assignedPK);
+                PK = assignedPK;
+            } else {
+                PK = this.isObjectInDatabase(bean);
+            }
+        }
 		
 		if (PK == 0)
 		{
@@ -165,7 +167,7 @@ public class VBModelBeanToDB
 			// Need to add this to the datastruture that prevents
 			// the adding duplicate fields
 			inputUniqueIdTracker.setAssignedPK(entityName, inputUniqueIdAsString, PK);
-			log.debug("No record added for xmlPK :" + inputUniqueId
+			log.debug("No record added for xmlPK:" + inputUniqueId
 							+ " for table " + entityName + " adding PK now: " + PK);
 
 			// Need add the PK to the object
@@ -223,7 +225,7 @@ public class VBModelBeanToDB
 			// Write Objects that depend on this PK to database
 			handleChildren(foreignKeys, bean);
 
-		} 
+		}
 		else
 		{
 			allTableKeys.put(classNameList.lastElement(), new Long(PK));
@@ -351,7 +353,7 @@ public class VBModelBeanToDB
 					String fieldName = VBObjectUtils.getFieldName(method.getName(), null,
 							null);
 
-					log.debug(">>>> " + fieldName + " vs. " + entityName + "_ID");
+					//log.debug(">>>> " + fieldName + " vs. " + entityName + "_ID");
 					// Make sure not the PK
 					if (Utility.getPKNameFromTableName(entityName).equalsIgnoreCase(fieldName))
 					{
@@ -377,8 +379,7 @@ public class VBModelBeanToDB
 						}
 						beanGetFKSet.setSetterMethod(method);
 						beanGetFKSetHash.put(key, beanGetFKSet);
-						log.debug("After adding a set for : " + key + " >>> "
-								+ beanGetFKSetHash);
+						//log.debug("After adding a set for : " + key + " >>> " + beanGetFKSetHash);
 					}
 				}
 			} else
@@ -414,7 +415,6 @@ public class VBModelBeanToDB
 				while (it.hasNext())
 				{
 					VBModelBean bean = (VBModelBean) it.next();
-
 					setForeignKeys(foreignKeys, bean);
 					this.insert(bean);
 				}
@@ -447,7 +447,7 @@ public class VBModelBeanToDB
 					String keyName = (String) key;
 					Long keyValue = (Long) foreignKeyValue;
 
-					log.debug("Set FK name " + keyName + " to " + foreignKeyValue);
+					//log.debug("Set FK name " + keyName + " to " + foreignKeyValue);
 					bean.putForeignKey(keyName, keyValue.longValue());
 				}
 			}
@@ -565,7 +565,7 @@ public class VBModelBeanToDB
 
 		// Need to find the accessionCode in the bean
 		LinkedHashMap nameValues = currentBean.toOrderedHashMap();
-		log.debug("Bean values: " + nameValues);
+		//log.debug("isObjectInDB: Bean values: " + nameValues);
 		Set keys = nameValues.keySet();
 		Iterator it = keys.iterator();
 
@@ -694,7 +694,7 @@ public class VBModelBeanToDB
 		
 		// Need to find the accessionCode in the bean
 		LinkedHashMap nameValues = bean.toOrderedHashMap();
-		log.debug("Bean values: " + nameValues);
+		//log.debug("getAC: Bean values: " + nameValues);
 		Set keys = nameValues.keySet();
 		Iterator it = keys.iterator();
 
@@ -724,7 +724,7 @@ public class VBModelBeanToDB
 		
 		// Need to find the accessionCode in the bean
 		LinkedHashMap nameValues = bean.toOrderedHashMap();
-		log.debug("Bean values: " + nameValues);
+		log.debug("getInputUniqueId: Bean values: " + nameValues);
 		Set keys = nameValues.keySet();
 		Iterator it = keys.iterator();
 
@@ -735,7 +735,7 @@ public class VBModelBeanToDB
 			// For now the Unique Identifier is defined as the PK field
 			if (key.equalsIgnoreCase( Utility.getPKNameFromTableName(entityName)))
 			{
-				log.debug(nameValues.get(key));
+				//log.debug(nameValues.get(key));
 				inputUniqueId = ((Long) nameValues.get(key)).longValue();
 			}
 		}
@@ -786,9 +786,8 @@ public class VBModelBeanToDB
 			}
 		}
 		
-		log.debug(
-				"Using accessionCode " + accessionCode + " in table "
-					+ entityName + " got DB PK of " + PK);
+		//log.debug("Using accessionCode " + accessionCode + " in table "
+		//			+ entityName + " got DB PK of " + PK);
 		return PK;
 	}
 
@@ -899,4 +898,10 @@ public class VBModelBeanToDB
 		}
 	}
 
+    /**
+     *
+     */
+    public Connection getDBConnection() {
+        return this.conn.getConnections();
+    }
 }
