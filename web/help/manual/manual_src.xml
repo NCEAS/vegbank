@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- <?xml-stylesheet type="text/xsl" href="manual2tokens.xsl"?> -->
 <manualDoc>
   <manualItem refURL="@general_link@info.html" name="vegbank-information" topic="VegBank Information">
     <manualItem refURL="" name="what-is-a-plot" topic="What is a Plot?">
@@ -34,7 +33,7 @@
         An Entity Relationship Diagram (ERD) shows how different tables (entities) in a database are related.  This is quite helpful for visualizing what the database contains and how these data are interconnected.  The <a href="@design_link@erd/vegbank_erd.pdf">VegBank ERD</a> is a PDF file (you will need a reader for this, such as <a target="_new" href="http://www.adobe.com/products/acrobat/readstep2.html">Adobe Acrobat Reader</a>), which allows you to control zooming.  Zooming out (~ 75%) is recommended for getting an overall picture of how all the tables relate; zooming in (120% +) is recommended for understanding how a smaller section of the database works.  Click on a table in the ERD (the "hand" tool may need to be selected on the PDF toolbar in Adobe Acrobat Reader) to see that table in the <a href="/vegbank/dbdictionary/dd-index.html">data dictionary</a> (described in previous topic).
       </manualHTML>
     </manualItem>
-    <manualItem refURL="" name="how-to-cite-vegbank" topic="How to Cite VegBank">
+    <manualItem refURL="@general_link@info.html" name="how-to-cite-vegbank" topic="How to Cite VegBank">
       <manualItem refURL="" name="understanding-accession-codes" topic="Understanding Accession Codes">
         <manualHTML>
           <p>Accession Codes for observations* look like this: 'VB.147.2003-04-18T14:43:27'  (without single quotes).  Each code is broken into several parts, using a period (.) to separate the parts.  The first part (VB=VegBank) stands for the database which contains the data in question.  The next part (147) is the number of the observation in VegBank.  The last part (2003-04-18T14:43:27) is the date in standard XML format: CCYY-MM-DDTHH:MM:SS, in UTC (Greenwich/Zulu) time.  The 'T' separates date and time.</p>
@@ -82,7 +81,7 @@ The
           Certain types of annotation or interpretation will require user certification. <br/>
  
 Click 
- <a target="_new" href="@help-for-userlevels-href@">
+ <a  href="@help-for-userlevels-href@">
  here</a> to see help on the levels of certification.
 
       </manualHTML>
@@ -100,7 +99,7 @@ You will sign onto VegBank using your email account and a password of your choos
   terms of use</a>.
     </manualHTML>
   </manualItem>
-  <manualItem refURL="" name="search-for-data" topic="Search for Data">
+  <manualItem refURL="@general_link@info.html" name="search-for-data" topic="Search for Data">
     <manualHTML>
       <p>VegBank contains many different kinds of vegetation plot data and offers several different search 
 pages to find data of interest.  Each search page is generally called a "query" page,
@@ -145,7 +144,7 @@ more specific instructions on each search page.
      </manualHTML>
     </manualItem>
   </manualItem>
-  <manualItem refURL="" name="submit-data-to-vegbank" topic="Submit Data to VegBank">
+  <manualItem refURL="@general_link@info.html" name="submit-data-to-vegbank" topic="Submit Data to VegBank">
     <manualHTML>
       <p>VegBank users may <a href="@manual_link@search-for-data.html">search for data</a> 
 already in VegBank, but they may also share their own data with other VegBank users
@@ -174,9 +173,9 @@ formats (click links for more information on each).  See the next few screens fo
     on your machine.  We hope to create a new version of VegBranch that will be platform independant
     in the future.</manualHTML>
       </manualItem>
-      <manualItem refURL="/xml/vegbank-xml.html" name="vegbank-xml" topic="VegBank XML">
+      <manualItem refURL="@NativeXMLIndexPage@" name="vegbank-xml" topic="VegBank XML">
         <manualHTML>
-          <a href="/xml/vegbank-xml.html">XML</a> - VegBank's native XML format can be imported
+          <a href="@NativeXMLIndexPage@">XML</a> - VegBank's native XML format can be imported
     directly into VegBank.  While we recommend VegBranch as a tool to help create this XML
     file, you may create the file yourself from another program (advanced XML programmers).</manualHTML>
       </manualItem>
@@ -224,7 +223,7 @@ formats (click links for more information on each).  See the next few screens fo
      </manualHTML>
     </manualItem>
   </manualItem>
-  <manualItem refURL="" name="annotate-data-in-vegbank" topic="Annotate Data in VegBank">
+  <manualItem refURL="@general_link@info.html" name="annotate-data-in-vegbank" topic="Annotate Data in VegBank">
     <manualItem refURL="" name="interpret-a-plot" topic="Interpret a Plot">
       <manualHTML>
         <p>Once a user has researched a plot-observation in VegBank, he or she may decide that it
