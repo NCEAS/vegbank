@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-22 22:07:52 $'
- * 	'$Revision: 1.8 $'
+ *  '$Date: 2002-03-27 01:11:15 $'
+ * 	'$Revision: 1.9 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -178,16 +178,54 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		 this.projectDescription = "tncplotsDes"+this.placeName;
 	 }
 	
-	// see the interface for method descriptions
+	/**
+	 * method that returns the project name as it is viewed by tnc
+	 * this is basically the location code plus the string: 
+	 * "Vegetation Mapping Project"
+	 */
 	public String getProjectName(String plotName)
 	{
-		return(" tnc project");
+		String s = null;
+		Statement stmt = null;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Location Code]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					s = rs.getString(1);
+					s = s.trim()+" Vegetation Mapping Project";
+				}
+				rs.close();
+			stmt.close();
+			}
+			catch (Exception x) 
+			{
+				System.out.println("Exception: " + x.getMessage() );
+			}
+		return(s);
+		
 	}
 	
-	// see the interface for method descriptions
+	/**
+	 * method that returns the project description for a plot 
+	 * which is basically the string: " Plots were collected in the national
+	 * park as part of the USGS - NPS Vegetation Mapping Program (Grossman 
+	 * et al. 1994) Further details are available at:
+	 * http://biology.usgs.gov/npsveg/
+	 *
+	 */
 	public String getProjectDescription(String plotName)
 	{
-		return(" tnc project");
+		String s = " Plots were collected in the national "
+		+ " park as part of the USGS - NPS Vegetation Mapping Program (Grossman " 
+	  + "et al. 1994) Further details are available at: "
+	  + " http://biology.usgs.gov/npsveg/ ";
+		return(s);
 	}
 	
 	// see the interface for method descriptions
@@ -197,8 +235,12 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		Statement stmt = null;
 		try 
 		{
-			stmt = con.createStatement();
+			v.addElement("Jim Drake");
 			
+			
+			// USE THE CODE BELOW FOR THE OBSERVATION CONTRIBUTOR
+			/*
+			stmt = con.createStatement();
 			String query = " select ([Surveyors])  "
 			+" from ([Plots])  where ([Plot Code]) = '"+plotName+"'";
 			//System.out.println(query);
@@ -239,6 +281,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 			rs.close();
 			stmt.close();
+		*/
+		
 		}
 		catch( Exception e)
 		{
