@@ -10,9 +10,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: farrell $'
-*      '$Date: 2003-12-05 22:49:35 $'
-*  '$Revision: 1.1 $'
+*    '$Author: anderson $'
+*      '$Date: 2004-01-24 20:52:01 $'
+*  '$Revision: 1.2 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -33,18 +33,34 @@
 <html:html locale="true">
 <head>
 <meta http-equiv="expires" content="0">
-<title>Vegbank Authentication Exeception</title>
+<title>Vegbank Authentication Required</title>
+<link rel="stylesheet" href="@stylesheet@" type="text/css">
 </head>
 <body>
 @vegbank_header_html_normal@
 
-<p>
-	An Authentication Exception was thrown. This happened, because you tried to access
-	an action that you are not allowed to access without being correctly logged in.
+<blockquote>
+<p class="vegbank_large">
+	<br>
+	Please <html:link href="@general_link@login.jsp">LOGIN</html:link> to your VegBank account.<br>
+	<span class="vegbank_small">The page you tried to access requires special permissions.
+	</span>
+	<br>
+	<br>
+	<span class="vegbank_normal">
+		Thank you<br>
+		<a href="mailto:help@vegbank.org">help@vegbank.org</a>
+	</span>	
 </p>
-<p>
-	Click <html:link href="@general_link@login.jsp">here</html:link> to log in.
-</p>
+</blockquote>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 <!-- VEGBANK FOOTER -->
 @vegbank_footer_html_tworow@
