@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-01-29 01:07:19 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2005-01-29 01:29:14 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,7 +130,7 @@ public class LoadTreeToDatabase
 		throws SQLException
 	{
 		this.vegbankPackage = vegbankpackage;
-		Utility.prettyPrintHash(vegbankPackage);
+		//Utility.prettyPrintHash(vegbankPackage);
 
 		//this boolean determines if the dataset should be commited or rolled-back
 		commit = true;
@@ -1736,17 +1736,19 @@ public class LoadTreeToDatabase
 			Hashtable commStatus = (Hashtable) commStatuses.nextElement();
 			addForeignKey(commStatus, Commstatus.COMMCONCEPT_ID, pKey);
 			commStatusId = insertCommStatus(commStatus);
+
+            // Add commUsage
+            Enumeration commUsages = getChildTables(commStatus, "commUsage");
+            while ( commUsages.hasMoreElements())
+            {
+                log.debug("adding commUsage to commStatus #" + commStatusId);
+                Hashtable commUsage = (Hashtable) commUsages.nextElement();
+                addForeignKey(commUsage, Commusage.COMMCONCEPT_ID, pKey);
+                addForeignKey(commUsage, Commusage.COMMSTATUS_ID, commStatusId);
+                insertCommUsage(commUsage);
+            }
 		}
 		
-		// Add commUsage
-		Enumeration commUsages = getChildTables(commConcept, "commUsage");
-		while ( commUsages.hasMoreElements())
-		{
-			Hashtable commUsage = (Hashtable) commUsages.nextElement();
-			addForeignKey(commUsage, Commusage.COMMCONCEPT_ID, pKey);
-			addForeignKey(commUsage, Commusage.COMMSTATUS_ID, commStatusId);
-			insertCommUsage(commUsage);
-		}
 		
 		return pKey;
 	}		
