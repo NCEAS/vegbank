@@ -24,7 +24,7 @@
 	
 	<property name="current" value="./" />
 	<property name="db_prop_file" value="./lib/database.properties" />
-	<property name="build" value="build" />
+	<property name="build" value="${basedir}/build" />
 	<property name="build_bin" value="${build}/bin" />
 	<property name="build_sql" value="${build}/sql" />
 	<property name="build_lib" value="${build}/lib" />
@@ -166,7 +166,10 @@
 		basedir="${build_src}"
 		includes="${build_src}/ **.class **.dtd **.xsl  **.properties"
 	/>
-
+  <!-- PLACE JAR IN THE VEG_PLOT LIB DIR -->
+  <copy file="${lib}/planttaxonomy.jar"
+        filtering="no"
+        todir="../veg_plots/build/lib/"/>
 	
 	<!-- COPY THE JAR ARCHIVE BACK TO THE LIB DIRECTORY -->
 	<copydir src="${build_lib}"
@@ -188,6 +191,12 @@
 	/>
 </target>		
 
+<target name="deploy" depends="dist, dist-xml"
+        description="==> deploys all the project resources">
+</target>
 
+  <target name="clean" depends="init" description="Remove all generated files">
+      <delete dir="${build}"/>
+  </target>
 
 </project>

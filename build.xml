@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!-- 
+  * build.xml
+  *
+  * Global build script for vegclass. This simply allows running all the sub 
+  * scripts from one place.
+  *
+  *     '$Author: farrell $'
+  *     '$Date: 2003-01-13 17:37:34 $'
+  *     '$Revision: 1.1 $'
+--> 
+<project name="vegclass" default="compile" basedir=".">
+
+  <target name="compile"
+          description=" => Compiles all code in vegclass module">
+		<echo message="Compiling all of ${ant.project.name}"/>
+    
+    <ant dir="veg_plot" target="compile" inheritAll="false"/>
+    <ant dir="veg_community" target="compile" inheritAll="false"/>
+    <ant dir="veg_taxa" target="compile" inheritAll="false"/>
+  
+  </target>
+
+  <target name="jar" depends="compile"
+          description=" => Generates all jars in vegclass module">
+    
+    <ant dir="veg_plot" target="jar" inheritAll="false"/>
+    <ant dir="veg_community" target="jar" inheritAll="false"/>
+    <ant dir="veg_taxa" target="dist" inheritAll="false"/>
+    
+  </target>
+
+  <target name="deploy" depends="jar"
+          description=" => deploys vegclass module jars, html and other resources">
+    
+    <ant dir="veg_plot" target="deploy" inheritAll="false"/>
+    <ant dir="veg_community" target="deploy" inheritAll="false"/>
+    <ant dir="veg_taxa" target="deploy" inheritAll="false"/>
+  
+  </target>
+
+	<target name="clean" description="=> Remove all generated files">
+    <ant dir="veg_plot" target="clean" inheritAll="false"/>
+    <ant dir="veg_community" target="clean" inheritAll="false"/>
+    <ant dir="veg_taxa" target="clean" inheritAll="false"/>
+  </target>
+
+</project>

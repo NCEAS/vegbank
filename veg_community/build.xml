@@ -6,9 +6,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  *   '$Author: harris $'
-  *     '$Date: 2002-12-18 22:32:05 $'
-  * '$Revision: 1.4 $'
+  *   '$Author: farrell $'
+  *     '$Date: 2003-01-13 17:37:34 $'
+  * '$Revision: 1.5 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -99,7 +99,7 @@
 </target>		
 
 <!-- DISTXML  -->	
-<target name="dist-xml" depends="init" description="==> copies the xml resources (dtd'd and stylesheets to the webdirectory" >
+<target name="dist-xml" depends="init" description="==> copies the xml resources (dtd'd and stylesheets) to the webdirectory" >
 	<echo>
 			copying xml resources from ${xml_dir} to web server: ${servlet_lib}
 	</echo>
@@ -107,9 +107,15 @@
 			filtering="no" 
 			dest="${servlet_lib}/showCommunitySummary.xsl" 
 	/>
-</target>		
+</target>	
 
+<target name="deploy" depends="dist-web, dist-xml" 
+        description="==> deploys all the veg_community resources">
+</target>
 
+  <target name="clean" depends="init" description="Remove all generated files">
+      <delete dir="${build}"/>
+  </target>
 
 
 </project>
