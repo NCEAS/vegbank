@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2003-11-26 21:22:37 $'
-* '$Revision: 1.76 $'
+* '$Date: 2003-11-26 21:31:47 $'
+* '$Revision: 1.77 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -103,11 +103,13 @@
     <!-- add link for page name that links to help frame jsp -->
     <filter token="jspHelpPage" value="/${web.context_uri}/forms/getHelp.jsp"/>
     <!-- location and filename of xml index page -->
-    <filter token="NativeXMLIndexPage" value="/xml/vegbank-xml-index.html"/>
+    
     <filter token="design_link" value="/${web.context_uri}/design/"/>
     <filter token="panel_link" value="/${web.context_uri}/panel/"/>
     <filter token="workshop_link" value="/${web.context_uri}/workshop/"/>
+    <filter token="vegbranch_link" value="/vegbranch/"/>
     <filter token="xml_link" value="/xml/"/>
+    <filter token="NativeXMLIndexPage" value="/xml/vegbank-xml-index.html"/>
     <filter token="help_link" value="/help/"/>
     <filter token="manual_link" value="${help}manual/"/>
     <!-- SERVLETS -->
