@@ -87,7 +87,8 @@ public class DataSubmitServlet extends HttpServlet
 	}
 	
 	/**
-	 * this method is used to handle the coorelation of communoities
+	 * this method is used to handle the coorrelation of communities
+	 * 
 	 */
 	 private StringBuffer handleVegCommunityCorrelation(Hashtable params, 
 	 HttpServletResponse response)
@@ -104,65 +105,75 @@ public class DataSubmitServlet extends HttpServlet
 				String salutation = (String)params.get("salutation");;
 				String firstName =  (String)params.get("firstName");
 				String lastName =  (String)params.get("lastName");
-				String emailAddress =  (String)params.get("emailAddress");
+				String emailAddress = (String)params.get("emailAddress");
 				String orgName =  (String)params.get("orgName");
 				String commName = (String)params.get("communityName");
 				String correlationTaxon = (String)params.get("correlationTaxon");
-				
+				String status = "accepted";
+				String nameRefAuthor = salutation+" "+firstName+" "+lastName;
+				String nameRefTitle = "vegbank";
 				sb.append("<b> communityName: " + commName + " </b> <br>" );
+				//HERE NEED TO GET THE STATUS ID ASSOCIATED WITH THIS PLANT
+				commLoader = new VegCommunityLoader();
+				int statusId = commLoader.getStatusId(nameRefTitle, nameRefAuthor, 
+				status, commName, salutation, firstName, lastName, emailAddress,
+				orgName );
 				
-				System.out.println("DataSubmitServlet > correlation taxon:" + correlationTaxon);
-				qs = new CommunityQueryStore();
-				Vector v = qs.getCommunityNames(correlationTaxon);
-				if ( v.size() > 0)
+				//get a vector that contains hashtables with all the possible 
+				//correlation ( name, recognizing party, system, status, level)
+				qs = new CommunityQueryStore( );
+				Vector correlationTargets = qs.getCorrelationTargets(correlationTaxon, "natureserve");
+						
+				for (int i=0; i<correlationTargets.size(); i++) 
 				{
-					
-					for (int i=0; i<v.size(); i++) 
-					{
-						String correlationName = v.elementAt(i).toString() ;
-						System.out.println( correlationName );
-						//sb.append( "<br> correlationName: "+ correlationName +"<br>");
+					//get the hashtables form the vector
+					Hashtable hash = (Hashtable)correlationTargets.elementAt(i);
+					String correlationName = (String)hash.get("commName");
+					String recognizingParty  = (String)hash.get("recognizingParty");
+					String level  = (String)hash.get("level");
+					String conceptStatus  = (String)hash.get("conceptStatus");
+					String commConceptId  = (String)hash.get("commConceptId");
+					String usageId  = (String)hash.get("usageId");
 						
-						qs = new CommunityQueryStore();
-						//get a vector that contains hashtables with all the possible 
-						//correlation ( name, recognizing party, system, status, level)
-						Vector correlationTagets = qs.getCorrelationTargets(correlationTaxon);
-						//get the hashtables form the vector
-						Hashtable hash = (Hashtable)correlationTagets.elementAt(i);
-						correlationName = (String)hash.get("commName");
-						String recognizingParty  = (String)hash.get("recognizingParty");
-						String level  = (String)hash.get("level");
-						String conceptStatus  = (String)hash.get("conceptStatus");
-						String commConceptId  = (String)hash.get("commConceptId");
+					sb.append("<form action=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataSubmitServlet\" method=\"get\" >");
+					sb.append(" <input type=hidden name=submitDataType value=vegCommunityCorrelation> ");
+					sb.append(" <input type=hidden name=action value=submit> ");
+					sb.append(" <input type=hidden name=statusId value="+statusId+"> ");
+					sb.append(" <input type=hidden name=conceptId value="+commConceptId+"> ");
+					sb.append("commName: " +correlationName + "<br> ");
+					sb.append("party: " +recognizingParty + "<br> ");
+					sb.append("level: " +level + "<br> ");
+					sb.append("status: "+conceptStatus + "<br> ");
+					sb.append("concept: "+commConceptId + "<br> ");
 						
-						sb.append("<form action=\"http://vegbank.nceas.ucsb.edu/framework/servlet/DataSubmitServlet\" method=\"get\" >");
-						sb.append(" <input type=hidden name=submitDataType value=vegCommunityCorrelation> ");
-						sb.append(" <input type=hidden name=action value=submit> ");
-						sb.append("commName: " +correlationName + "<br> ");
-						sb.append("party: " +recognizingParty + "<br> ");
-						sb.append("level: " +level + "<br> ");
-						sb.append("status: "+conceptStatus + "<br> ");
-						sb.append("concept: "+commConceptId + "<br> ");
-						
-						sb.append("<select class=item name=correlation multiple size=3>");
-						sb.append("<option selected>unknown");
-						sb.append("<option>gt");
-						sb.append("<option>lt");
-						sb.append("<option>overlap");
-						sb.append("</select>");
-						sb.append("<br> <input type=\"submit\" VALUE=\"submit correlation\">");
-						sb.append("<br>");
+					sb.append("<select class=item name=correlation multiple size=3>");
+					sb.append("<option selected>unknown");
+					sb.append("<option>gt");
+					sb.append("<option>lt");
+					sb.append("<option>overlap");
+					sb.append("</select>");
+					sb.append("<br> <input type=\"submit\" VALUE=\"submit correlation\">");
+					sb.append("<br>");
 					
-						sb.append("</form>");
-					}
-					
-					
+					sb.append("</form>");
 				}
-				
 				sb.append("</html>");
 			}
 			else if ( action.equals("submit") )
 			{
+				//GET THE ATTRIBUTES TO LOAD TO THE DATABASE
+				String conceptId = (String)params.get("conceptId");
+				int concept = Integer.parseInt(conceptId);
+				String statusId =  (String)params.get("statusId");
+				int status = Integer.parseInt(statusId);
+				String correlation =  (String)params.get("correlation");
+				String startDate = null;
+				String stopDate = null;
+				commLoader = new VegCommunityLoader();
+				commLoader.insertCommunityCorrelation(status, concept, correlation
+				, startDate, stopDate);
+				
+				
 				
 			}
 			
@@ -231,19 +242,19 @@ public class DataSubmitServlet extends HttpServlet
 					commCode = commCode+buf.toUpperCase();
 				}
 					
-				//see if the name already existis
+				//see if the name does not already exist in the database
 				qs = new CommunityQueryStore();
 				Vector v = qs.getCommunityNames(commName);
 				if ( v.size() < 1)
 				{
-					//if action is init then do the logic and display the user a second form
-				
 					//assume that the name does not already exist in the db
 					//so update the validation page and return it to the user
+					String message = "You have entered a unique name; Vegbank will be the reference";
 					updateCommunityValidationPage(salutation, firstName, lastName, 
 					emailAddress, orgName, commName, commCode, commLevel, conceptStatus, 
 					nameStatus, authors, title, pubDate, edition, seriesName,
-					issueId, otherCitationDetails, pageNumber, isbn, issn, classSystem);
+					issueId, otherCitationDetails, pageNumber, isbn, issn, classSystem, 
+					message);
 					//redirect the browser
 					response.sendRedirect("/forms/valid.html");
 				}
@@ -298,10 +309,37 @@ public class DataSubmitServlet extends HttpServlet
 			}
 			else if ( action.equals("submit") )
 			{
+				
+				String salutation = (String)params.get("salutation");
+				String givenName = (String)params.get("firstName");
+				String surName = (String)params.get("lastName");
+				String middleName = "";
+				String orgName = (String)params.get("orgName");
+				String contactInstructions = (String)params.get("emailAddress");
+				
+				String conceptReferenceTitle = (String)params.get("conceptRefTitle");
+				String conceptReferenceAuthor = (String)params.get("conceptRefAuthors");
+				String conceptReferenceDate = "12-MAR-2002";
+
+				String nameReferenceTitle = (String)params.get("nameRefTitle");
+				String nameReferenceAuthor = (String)params.get("nameRefAuthors");
+				String nameReferenceDate = "12-MAR-2002";
+				
+				String communityCode = (String)params.get("communityCode");
+				String communityLevel = (String)params.get("communityLevel");
+				String communityName = (String)params.get("communityName");
+				String dateEntered = "12-MAR-2002";
+				String parentCommunity = "";
+				String partyName = "vegbank";
+				String otherName = "";
+				
 				sb.append("starting the correlation: ");
 				System.out.println("DataSubmitServlet > submit vegCommunity");
-				//sb = commLoader.insertGenericCommunity( conceptCode, conceptLevel, commName,
-				//dateEntered, parentCommunity, allianceTransName, partyName );
+				sb = commLoader.insertGenericCommunity( salutation,  givenName, surName,
+				middleName, orgName, contactInstructions,conceptReferenceTitle, 
+				conceptReferenceAuthor, conceptReferenceDate, nameReferenceTitle,
+				nameReferenceAuthor, nameReferenceDate, communityCode,communityLevel,
+				communityName,  dateEntered, parentCommunity,  otherName  );
 			}
 			
 			
@@ -323,7 +361,7 @@ public class DataSubmitServlet extends HttpServlet
 	 String nameStatus, String authors, String title, String pubDate, 
 	 String edition,
 	 String seriesName, String issueId, String otherCitationDetails, 
-	 String pageNumber, String isbn, String issn, String classSystem)
+	 String pageNumber, String isbn, String issn, String classSystem, String message)
 	 {
 	 	boolean results = true;
 		Hashtable replaceHash = new Hashtable();
@@ -394,7 +432,7 @@ public class DataSubmitServlet extends HttpServlet
 			replaceHash.put("issn", ""+issn );
 			replaceHash.put("classSystem", ""+classSystem );
 			
-			//replaceHash.put("", );
+			replaceHash.put("message", message );
 			//replaceHash.put("", );
 			//replaceHash.put("", );
 			//replaceHash.put("", );
