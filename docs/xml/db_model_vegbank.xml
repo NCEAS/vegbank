@@ -1094,7 +1094,7 @@
     <entityDescription/>
     <module>community</module>
     <attribute>
-      <attName>commReferenceAlternateIdentifier_ID</attName>
+      <attName>commReferenceAltIdent_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
@@ -1103,7 +1103,7 @@
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the commReferenceAlternateIdentifier table. </attDefinition>
+      <attDefinition>Primary key for the commReferenceAltIdent table. </attDefinition>
     </attribute>
     <attribute>
       <attName>commReference_ID</attName>
@@ -2596,7 +2596,7 @@ change through time.</entitySummary>
     <entityDescription/>
     <module>plant</module>
     <attribute>
-      <attName>plantReferenceAlternateIdentifier_ID</attName>
+      <attName>plantReferenceAltIdent_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
@@ -2605,7 +2605,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the plantReferenceAlternateIdentifier table. </attDefinition>
+      <attDefinition>Primary key for the plantReferenceAltIdent table. </attDefinition>
     </attribute>
     <attribute>
       <attName>plantReference_ID</attName>
@@ -3487,7 +3487,7 @@ change through time.</entitySummary>
     <entityDescription/>
     <module>plot</module>
     <attribute>
-      <attName>citationAlternateIdentifier_ID</attName>
+      <attName>citationAltIdent_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
@@ -3496,7 +3496,7 @@ change through time.</entitySummary>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Primary key for the citationAlternateIdentifier table. </attDefinition>
+      <attDefinition>Primary key for the citationAltIdent table. </attDefinition>
     </attribute>
     <attribute>
       <attName>citation_ID</attName>
@@ -4377,7 +4377,7 @@ a specific plot classification event.</entityDescription>
     <entityDescription>disturbanceObs is  a child of observation; a plot might experience many types of disturbance unique to different observation events.</entityDescription>
     <module>plot</module>
     <attribute>
-      <attName>disturbanceObs</attName>
+      <attName>disturbanceObs_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
@@ -6797,7 +6797,7 @@ conditions may change between resampling events.
     <entityDescription>This table serves as an interesection that links a party with a specific plot observation event.  Note that there is no plotContributor table because all contributions take place at a particular observation, such as the first observation.</entityDescription>
     <module>plot</module>
     <attribute>
-      <attName>PLOTCONTRIBUTOR_ID</attName>
+      <attName>OBSERVATIONCONTRIBUTOR_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
