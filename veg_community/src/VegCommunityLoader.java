@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-22 22:36:46 $'
- * '$Revision: 1.6 $'
+ *     '$Date: 2002-02-25 21:52:07 $'
+ * '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -120,9 +120,7 @@ public class VegCommunityLoader
 			
 			//insert the usage data
 			insertCommunityUsage( commNameId, commConceptId, partyId, "standard"
-			, "01-JAN-1999");
-			
-			
+			, "01-JAN-1999", "NVC");
 			if (this.commit == true)
 			{
 				conn.commit();
@@ -143,7 +141,7 @@ public class VegCommunityLoader
 	  * method to insert data into the commname table
 		*/
 		private int insertCommunityUsage(int commNameId, int commConceptId, 
-		int commPartyId, String commNameStatus, String usageStart)
+		int commPartyId, String commNameStatus, String usageStart, String classSystem)
 	  {
 		 int usageId = 0; 
 		 try
@@ -151,8 +149,8 @@ public class VegCommunityLoader
 				StringBuffer sb = new StringBuffer();
 				//insert the VALS
 				sb.append("INSERT into COMMUSAGE( commname_id, commconcept_id, "
-				+" commparty_id, commNameStatus, usageStart) "
-				+" values(?,?,?,?,?)"); 
+				+" commparty_id, commNameStatus, usageStart, classSystem) "
+				+" values(?,?,?,?,?,?)"); 
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
   			// Bind the values to the query and execute it
   			pstmt.setInt(1, commNameId);
@@ -160,6 +158,7 @@ public class VegCommunityLoader
 				pstmt.setInt(3, commPartyId);
 				pstmt.setString(4, commNameStatus);
 				pstmt.setString(5, usageStart);
+				pstmt.setString(6, classSystem);
 				//execute the p statement
   			pstmt.execute();
   			pstmt.close();
