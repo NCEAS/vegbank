@@ -17,7 +17,7 @@ import java.sql.*;
 public class USDAPlantsLoader2000 
 {
 	
-	private String styleSheet="../lib/plantsToNVC.xsl";
+	private String styleSheet="../xmlfiles/plantsToNVC.xsl";
 	private String attributeFile="attFile.txt";
 	private Vector fileVector = new Vector();
 	private Vector missingPlantNames = new Vector();
@@ -1132,7 +1132,7 @@ public class USDAPlantsLoader2000
  		{
 			Class.forName("org.postgresql.Driver");
 			//c = DriverManager.getConnection("jdbc:postgresql://vegbank/tmp2", "datauser", "");
-			c = DriverManager.getConnection("jdbc:postgresql://192.168.0.21/plants_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/plants_dev", "datauser", "");
 		
 		}
 		catch ( Exception e )
