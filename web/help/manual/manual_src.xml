@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <manualDoc>
   <manualItem refURL="@general_link@info.html" name="vegbank-information" topic="VegBank Information">
     <manualItem refURL="" name="what-is-a-plot" topic="What is a Plot?">
@@ -81,7 +82,7 @@ The
           Certain types of annotation or interpretation will require user certification. <br/>
  
 Click 
- <a  href="@help-for-userlevels-href@">
+ <a href="@help-for-userlevels-href@">
  here</a> to see help on the levels of certification.
 
       </manualHTML>
@@ -112,28 +113,33 @@ more specific instructions on each search page.
       <manualHTML>
         <a href="@forms_url@plot-query.jsp">Plot Query</a> 
      - search for plots by location, species present, community type, 
-  plot collectors, and other plot criteria.</manualHTML>
+  plot collectors, and other plot criteria. <br /> <br />More help is available from that form (click the link here to see the plot-query form).  
+   Some examples of plot queries  that return a few plot-observations are: <br />
+   Elevation from 2120 to 2220 <br />
+   All plots in project: 'ZION Vegetation mapping...'<br/>
+   All plots in South Dakota <br />
+   </manualHTML>
     </manualItem>
     <manualItem refURL="@forms_url@plant-query.html" name="search-for-plants" topic="Search for Plants">
       <manualHTML>
         <a href="@forms_url@plant-query.html">Plant Query</a>
      - search for plant concepts in VegBank, by name or some portion of a name.  
-     <blockquote>
-     A plant concept is more than simply a name of a plant.  It is defined by the combination of 
-     a name and a reference.  This gives someone a framework for understanding what is meant by a plant name.
-     For a more detailed explanation, see the <a href="@design_link@planttaxaoverview.html">overview</a> 
-     of plant taxonomy as handled by VegBank. Note: assertions are the same thing as concepts in that article.</blockquote>
+     <br /><br />See the <a href="@design_link@planttaxaoverview.html">overview</a> 
+     of plant taxonomy as handled by VegBank. Note: assertions are the same thing as concepts in that article. <br /><br />
+     Examples of plant queries are : (without single quotes)<br/>
+     plant name = 'Acer rubrum' <br />
+     plant name = 'Carex%' (for all plants starting with Carex) <br />
+     plant name = 'table%pine' (to get Table Mountain Pine, Pinus pungens) <br />
       </manualHTML>
     </manualItem>
     <manualItem refURL="@forms_url@community-query.html" name="search-for-communities" topic="Search for Communities">
       <manualHTML>
         <a href="@forms_url@community-query.html">Community Query</a>
      - search for community concepts in VegBank, by name or some portion of a name. 
-      <blockquote>
-       A community concept is analogous to a plant concept.  Each community concept is
-       defined by a combination of a name and a reference.  See the previous page for an explanation on plant
-       taxonomy, as it applies directly to community concepts as well.
-      </blockquote>
+      <br /><br />
+      Examples for Community queries: (without single quotes)<br/>
+      community name = 'Juniper%horizon%' (for all communities starting with Juniper and then containing horizon) <br />
+      community name = 'Pinus%pungens' (for all communities with Pinus pungens in the community name) <br />
       </manualHTML>
     </manualItem>
     <manualItem refURL="@general_link@metadata.html" name="view-supplemental-data" topic="View Supplemental Data">
