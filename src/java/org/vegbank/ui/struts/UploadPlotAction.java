@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.Vector; 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,9 +21,7 @@ import org.vegbank.common.utility.FileWrapper;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.datafileexchange.DataFileDB;
-import org.vegbank.plots.datasource.VegbankXMLUpload;
-import org.vegbank.plots.datasource.VegbankXMLUpload.LoadingErrors;
-
+import org.vegbank.dataload.XML.*;
 
 /*
  * '$RCSfile: UploadPlotAction.java,v $'
@@ -31,8 +29,8 @@ import org.vegbank.plots.datasource.VegbankXMLUpload.LoadingErrors;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-27 19:13:52 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2004-03-01 04:43:33 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

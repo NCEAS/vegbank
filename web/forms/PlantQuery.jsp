@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: farrell $'
-  *      '$Date: 2003-12-05 22:45:31 $'
-  *  '$Revision: 1.1 $'
+  *      '$Date: 2004-03-01 04:43:33 $'
+  *  '$Revision: 1.2 $'
   *
   *
   -->
@@ -52,6 +52,8 @@
 <body>
   @vegbank_header_html_normal@ <!-- SECOND TABLE -->
 
+  <html:errors/>
+
   <table align="left" border="0" width="90%" cellspacing="0" cellpadding="0">
     <tr>
       <td bgcolor="white"><img align="center" border="0" height="100" src=
@@ -60,8 +62,7 @@
       <td align="left" valign="middle">
         <table border="0" cellpadding="5" width="366" height="55">
           <tr>
-            <td align="left" valign="bottom"><span class="c1">Plant Concept
-            Lookup</span><br></td>
+            <td align="left" valign="bottom"><span class="c1">Plant Concept Lookup</span><br></td>
           </tr>
         </table>
       </td>
@@ -110,8 +111,9 @@
               <td width="156"></td>
 
               <td width="556"><span class="c3">(wildcard = '%')<br>
-              All Queries are Case-Insensitive</span> 
-              <!-- <input type = "checkbox" name="ignoreCase" value = "true"> Ignore Case<br> --></td>
+                * All Queries are Case Insensitive
+                <!--<input type = "checkbox" name="ignoreCase" value = "true"> Ignore Case<br>-->
+	      </td>
             </tr><!-- HORIZONTAL LINE -->
 
             <tr>
@@ -125,9 +127,9 @@
 
               <td class="c4" align="left" valign="top" width="556">
 		<html:radio property="nameType" value=""/>Any<br/>
-                <html:radio property="nameType" value="scientific"/>Scientific name<br/>
-                <html:radio property="nameType" value="common"/>Common name<br/>
-                <html:radio property="nameType" value="code"/>Code<br/>
+                <html:radio property="nameType" value="Scientific"/>Scientific name<br/>
+                <html:radio property="nameType" value="English Common"/>Common name<br/>
+                <html:radio property="nameType" value="Code"/>Code<br/>
               </td>
             </tr><!-- HORIZONTAL LINE -->
 
@@ -138,9 +140,17 @@
             </tr><!-- TAXON LEVEL -->
 
             <tr>
-              <td width="156" align="left" valign="top"><b>Taxon
-              level:</b></td>
+              <td width="156" align="left" valign="top"><b>Taxon level:</b></td>
+	    
+	      <!-- picklist values to select -->               
+	      <td class="c4" align="left" valign="top" width="556">
+	      	 <html:select property="taxonLevel" size="6" multiple="true">
+		   <option value="ANY" selected>--ANY--</option>
+		   <html:options property="plantLevels"/>
+	      	 </html:select>
+	      </td>
 
+<!-- Using multibox now
               <td class="c4" align="left" valign="top" width="556">
                 <html:radio property="taxonLevel" value=""/> Any<br/>
                 <html:radio property="taxonLevel" value="family"/>Family<br>
@@ -149,13 +159,15 @@
                 <html:radio property="taxonLevel" value="subspecies"/>Sub-species<br>
                 <html:radio property="taxonLevel" value="variety"/>Variety
                 <span class="itemsmall">
-                  -- Names with variety are of form "Genus species var. variety"
+                  ** Names with variety are of form "Genus species var. variety"
                 </span>
                 <br/>
                 <html:radio property="taxonLevel" value="hybrid"/>Hybrid<br>
               </td>
-            </tr><!-- HORIZONTAL LINE -->
+            </tr>
 
+-->	
+            <!-- HORIZONTAL LINE -->
             <tr>
               <td colspan="2" rowspan="1" align="left" valign="middle">
                 <hr size=".5">
@@ -177,9 +189,11 @@
 
             <tr>
               <td width="156"></td>
-              <td class="c4" width="556" align="left" valign="top" height="20"
-              colspan="2"><span class="itemsmall">(Format: DD-MMM-YYYY, like
-              12-AUG-2002)</span></td>
+              <td class="c4" width="556" align="left" valign="top" height="20" colspan="2">
+		<span class="itemsmall">
+			(Format: DD-MMM-YYYY, like 12-AUG-2002)
+		</span>
+		</td>
             </tr>
 
             <tr>
@@ -195,7 +209,7 @@
               <td class="c4" align="left" valign="top" height="54" width="556">
                 <html:select property="accordingToParty">
                   <option value="">All</option>
-                  <option value="usda">USDA</option>
+                  <html:optionsCollection property="partyNameIds"/>
                 </html:select>
               </td>
             </tr>

@@ -14,9 +14,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: mlee $'
-*      '$Date: 2003-11-26 23:59:59 $'
-*  '$Revision: 1.18 $'
+*    '$Author: farrell $'
+*      '$Date: 2004-03-01 04:43:33 $'
+*  '$Revision: 1.19 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -76,12 +76,6 @@ VEGBANK - Simple Plots Query
       <td width="5%"  bgcolor="white" align="left" valign="top"></td>
       
       <td align="left">
-
-	<input name="requestDataFormatType" type="hidden" value="html"/>
-	<input name="clientType" type="hidden" value="browser"/>
-	<input name="requestDataType" type="hidden" value="vegPlot"/>
-	<input name="resultType" type="hidden" value="identity"/> 
-
 	<table border="0" align="center">
 	  <!--variables that are used by the servlet to figure out which query(s) to issue -->
 	  <tbody>

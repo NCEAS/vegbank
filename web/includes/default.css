@@ -24,6 +24,8 @@ th.grey, td.grey, tr.grey {background-color : #DDDDDD}
 .listRowB {background-color : #FFFFFF }						
 .listRowA-Hi {background-color : #FF9933 }						
 .listRowB-Hi {background-color : #FF9933 }						
+th.listRowA {background-color : #CCCCCC }
+th.listRowB {background-color : #EEEEEE }
 
 .whitetext 		{ font-family: Verdana, Arial, Helvetica, Geneva, sans-serif; 
 				color: #FFFFFF; 
@@ -217,4 +219,4 @@ TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 
 .error { font-weight: bold; color: red;}
 
-
+.verticaltext { layout-flow: vertical-ideographic }

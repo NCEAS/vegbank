@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2004-02-19 17:28:34 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2004-03-01 04:43:33 $'
+ *  '$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,6 +87,10 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 ]]>
 </xsl:text>
+     <xsl:comment>Get the accessionCode from the reqest object</xsl:comment>
+     <xsl:text disable-output-escaping="yes">
+	&lt;% String accessionCode = (String) request.getAttribute("accessionCode"); %&gt;
+     </xsl:text>
 
      <!-- Define the bean for this entity -->
      <!-- If passed a bean the same name as this entity use that otherwise use genericBean -->
@@ -130,7 +134,7 @@
                  <xsl:comment>Control to contract this composite</xsl:comment>
                  <th valign="top">
                    <a name="{$lcEntityName}"/>
-                   <html:link action="GenericDispatcher?command=RetrieveVBModelBean&amp;jsp=GenericDisplay.jsp&amp;entityName=Plot&amp;accessionCode=VB.Ob.658.YOSE99K84001&amp;contractEntity={$lcEntityName}" anchor="{$lcEntityName}" title="View {$entityName} Summary">
+                   <html:link action="GenericDispatcher?command=RetrieveVBModelBean&amp;jsp=GenericDisplay.jsp&amp;contractEntity={$lcEntityName}" paramId="accessionCode" paramName="accessionCode" anchor="{$lcEntityName}" title="View {$entityName} Summary">
                      <img valign="top" src="/vegbank/images/yellow_minus.gif"/>
                    </html:link>       
                  </th>
@@ -182,7 +186,7 @@
          
          <th valign="top">
            <a name="{$lcEntityName}"/>
-           <html:link action="GenericDispatcher?command=RetrieveVBModelBean&amp;jsp=GenericDisplay.jsp&amp;entityName=Plot&amp;accessionCode=VB.Ob.658.YOSE99K84001&amp;expandEntity={$lcEntityName}" anchor="{$lcEntityName}" title="View {$entityName} Detail">
+           <html:link action="GenericDispatcher?command=RetrieveVBModelBean&amp;jsp=GenericDisplay.jsp&amp;expandEntity={$lcEntityName}" anchor="{$lcEntityName}" paramId="accessionCode" paramName="accessionCode" title="View {$entityName} Detail">
              <img valign="top" src="/vegbank/images/yellow_plus.gif"/>
            </html:link>
          </th>
@@ -410,7 +414,9 @@
    <xsl:param name="CappedEntityName"/>
    
    <xsl:comment>The Values of the summary Row</xsl:comment>
-   <xsl:for-each select="attribute[attForms/formShow/@name='Austere']">
+   <xsl:for-each select="attribute[attForms/formShow/@name='Summary'  and attForms/formShow[@name = 'Summary'] != -1]">
+     <xsl:sort data-type="number" select="attForms/formShow[@name='Summary']" />
+     <!--<xsl:message><xsl:value-of select="attForms/formShow[@name='Summary']"/></xsl:message>-->
 
      <xsl:variable name="lcAttName">
        <xsl:call-template name="to-lower">
@@ -439,7 +445,8 @@
    <xsl:comment>Summary fields header row</xsl:comment>
    <tr>
      <td><xsl:comment>Empty cell for expand contract icon</xsl:comment></td>
-     <xsl:for-each select="attribute[attForms/formShow/@name='Austere']">
+     <xsl:for-each select="attribute[attForms/formShow/@name='Summary'  and attForms/formShow[@name = 'Summary'] != -1]">
+       <xsl:sort data-type="number" select="attForms/formShow[@name='Summary']" />
        <th class="grey">
          <xsl:value-of select="attName"/>
        </th>

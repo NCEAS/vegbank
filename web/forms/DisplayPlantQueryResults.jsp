@@ -14,8 +14,8 @@
 *     Authors: @author@
 *
 *    '$Author: farrell $'
-*      '$Date: 2003-12-05 22:45:31 $'
-*  '$Revision: 1.1 $'
+*      '$Date: 2004-03-01 04:43:33 $'
+*  '$Revision: 1.2 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -65,10 +65,11 @@
 
     <span class="category">
       <font color="red">
-	<bean:write name="PlantResultsSize"/> plant<logic:notEqual name="PlantResultsSize" value="1">s</logic:notEqual> matched your search criteria<br/>
+	<bean:write name="PlantResultsSize"/> plants matched your search criteria<br/>
       </font>
     </span>
-      
+  </logic:notEqual>
+
       <html:form action="/DownLoadManager">
 
            <!-- set up a table -->
@@ -127,11 +128,19 @@ if ( ! columnName.equalsIgnoreCase("accessioncode") )
      <tr class="<%= rowClass %>" valign="top">
 
 	    <!-- First Cell-->
-	    <td width="20%" bgcolor="<%= marginBgColor %>" align="center" nowrap>
+	    <th width="20%" bgcolor="<%= marginBgColor %>" align="center" nowrap>
+	      <html:link page="/GenericDispatcher.do?command=RetrieveVBModelBean&jsp=GenericDisplay.jsp&rootEntity=PlantConcept" title="summary report" paramId="accessionCode" paramName="row" paramId="accessionCode" paramProperty="accessioncode">
+                <img align="center" src="@image_server@report_sm.gif" alt="Summary view"></img>
+              </html:link>
               <html:link page="/DisplayEntity.do?resultType=rawXML" paramId="accessionCode" paramName="row" paramProperty="accessioncode" title="view raw XML">
                 <img align="center" border="0" src="@image_server@xml_icon.gif" alt="Raw XML view"></img>
               </html:link>
-            </td>
+              
+              <!-- USDA link to plant -->
+              <html:link href="http://plants.usda.gov/cgi_bin/plant_search.cgi?mode=Symbol&go=go" paramId="keywordquery" paramName="row" paramProperty="code" title="View USDA Plants page" target="_new">
+                <img align="center" border="0" src="@image_server@leaficon.gif" alt="View USDA Plants page"></img>
+              </html:link>
+            </th>
 	     
             <logic:iterate id="column" name="PlantQueryResults" property="dynaProperties" indexId="dynaPropertyId"> 
 <%
@@ -169,7 +178,6 @@ if ( ! columnName.equalsIgnoreCase("accessioncode") )
       </table>
 
      </html:form>      
-  </logic:notEqual>
   
   </font>
   </span>

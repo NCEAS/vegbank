@@ -10,9 +10,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: anderson $'
-  *      '$Date: 2003-10-17 01:12:10 $'
-  *  '$Revision: 1.4 $'
+  *    '$Author: farrell $'
+  *      '$Date: 2004-03-01 04:43:33 $'
+  *  '$Revision: 1.5 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -51,7 +51,6 @@
 	</html:messages>
 	</ul>
 </logic:messagesPresent>
-
 
 <br/>
 <br/>

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-01 01:54:42 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-03-01 04:43:33 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -422,7 +422,7 @@ import org.vegbank.common.utility.Utility;
 			
 			// Is the user allowed the load this 
 			// TODO: Make configurable and add user perms. 
-			if ( this.isAllowedToLoad(fieldValueHash) )
+			if ( ! this.isAllowedToLoad(fieldValueHash) )
 			{
 				return PK; // Even if empty
 			}
@@ -502,6 +502,7 @@ import org.vegbank.common.utility.Utility;
 				sb.append(" VALUES (" + Utility.arrayToCommaSeparatedString( fieldValues.toArray() ) +")" );
 				
 				LogUtility.log("Running SQL: " + sb.toString(), LogUtility.TRACE );
+				LogUtility.log("Loaded Table : " +tableName + " with PK of " + PK, LogUtility.INFO );
 				
 				Statement query = dbConn.createStatement();
 				int rowCount = query.executeUpdate(sb.toString());
@@ -1987,9 +1988,9 @@ import org.vegbank.common.utility.Utility;
 			else if ( tableName.equalsIgnoreCase("aux_role"))
 			{
 				String errorMessage = "You are not allowed to load a new record in the '"
-					+ tableName +"' table. Please use an existing records AccessionCode to"
-					+ " load or have someone with permission load a this record and use the"
-					+ " new AccessionCode";
+					+ tableName +"' table. \n Please use an existing records AccessionCode to"
+					+ " load or have someone with permissions load this record and use the"
+					+ " assigned AccessionCode. ";
 				LogUtility.log("LoadTreeToDatabase:  : " + errorMessage, LogUtility.ERROR );
 				commit = false;
 				errors.AddError(
