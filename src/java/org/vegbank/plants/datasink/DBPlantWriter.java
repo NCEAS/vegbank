@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-21 22:26:39 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-03-22 00:31:19 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,8 +65,8 @@ public class DBPlantWriter
 			if (conn == null)
 			{
 				conn = this.getConnection();
-				this.conn = conn;
 			}
+			this.conn = conn;
 			conn.setAutoCommit(false);
 	
 	
@@ -279,7 +279,6 @@ public class DBPlantWriter
 		String dateEntered)
 		throws SQLException
 	{
-
 		// Get Primary key for table		
 		int plantNameId =
 			(int) Utility.dbAdapter.getNextUniqueID(

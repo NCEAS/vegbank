@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-21 22:26:39 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-03-22 00:31:19 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
  
 package org.vegbank.plants.datasource;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.util.AbstractList;
@@ -88,7 +87,7 @@ public class LoadPlantList
 				);
 				
 			}
-			catch (FileNotFoundException e)
+			catch (Exception e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
