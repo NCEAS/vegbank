@@ -93,7 +93,8 @@ public class viewData extends HttpServlet
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException  
 	{
-
+		servletDir = rb.getString("requestparams.servletDir");
+		servletPath = rb.getString("servlet-path");
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 
@@ -104,36 +105,39 @@ public class viewData extends HttpServlet
 		this.userEmail = this.getCookieValue(request);
 		
 		//print the input to the system
-		System.out.println("ViewData.doGet - input params > \n downLoadAction: "
-		+downLoadAction
-		+" \n summaryViewType: "+summaryViewType
-		+" \n user: " + this.userEmail
-		+" \n resultType: "+resultType);
+		System.out.println("ViewData > downLoadAction: " + downLoadAction);
+		System.out.println("ViewData > summaryViewType: " + summaryViewType );
+		System.out.println("ViewData > user: " + this.userEmail);
+		System.out.println("ViewData > resultType: " + resultType );
 
-	
-		/**
- 		* Determine if the user wants to download the data or just to view the summary
- 		* table  - in the future these options will increase
- 		*
- 		* Check to see if the user wants to download the data and if so do below - which
- 		* is to write a list of the selected plots (checked check-boxes) to the local
- 		* (lib) directory and then call the fileDownload servlet to seperate the desied
- 		* plots form the undesired plots and then transform the data into the format
- 		* specified by the form (download.html) calling the fileDownload servlet
- 		*
- 		*/
 		//handle a download request
 		if (downLoadAction != null)
 		{
-			try 
-			{
-				//print out to file the names of the plots and their 
-				//plotId's for use by the fileDownload servlet
-				servletDir = rb.getString("requestparams.servletDir");
-				servletPath = rb.getString("servlet-path");
+			this.initPlotDownload(request);
+ 			response.sendRedirect("http://vegbank.nceas.ucsb.edu/forms/resultset-download.html");	
+		}
+		
+		else if (resultType.equals("identity") )
+		{
+			viewResultsIdentity(response, out, "fileName", summaryViewType.trim());
+		}
+		else 
+		{
+			viewResultsSummary(response, out, "fileName", summaryViewType.trim());
+		}
+	}
 	
- 				PrintStream outFile  = new PrintStream(
-				new FileOutputStream(servletDir+"plotDownloadList", false));
+	/**
+	 * method to handle the request for a download which is basiaclly to
+	 * generate a file locally that has the plot id's that the user 
+	 * wants to capture in the download
+	 */
+	 private void initPlotDownload(HttpServletRequest request)
+	 {
+		 try
+		 {
+			 PrintStream outFile  = new PrintStream(
+			 new FileOutputStream(servletDir+"plotDownloadList", false));
 		
 				//use this function to figure out the type and number of inputs
 				//it is a temporary function - comment out later
@@ -150,28 +154,17 @@ public class viewData extends HttpServlet
 							{
 								System.out.println("viewData > name: " + values[i]);
 								outFile.println(values[i]);	
-								out.println(name +" ("+ i + "): "
-								+values[i]+"; <br>");
 							}
 						}
 					}
 				}
- 			//now call the download page
- 			response.sendRedirect("http://vegbank.nceas.ucsb.edu/forms/resultset-download.html");	
-			}
+				outFile.close();
+		 }
 			catch( Exception e ) 
 			{
-				System.out.println("Exception: ViewData.main"
-				+e.getMessage());
+				System.out.println("Exception: " + e.getMessage());
 			}
-		}
-		//If the download page is not requested then request then show the summary
-		else 
-		{
-			viewResultsSummary(response, out, "fileName", summaryViewType.trim());
-		}
-	}
-	
+	 }
 	
 	
 	/**
@@ -271,7 +264,6 @@ public class viewData extends HttpServlet
 				// retrieve the string writer
 				String teststyle = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
 				
-				
 				m.getTransformed(xmlDoc, styleSheet);
 				StringWriter transformedData = m.outTransformedData;
 				Vector contents = this.convertStringWriter(transformedData);
@@ -283,9 +275,6 @@ public class viewData extends HttpServlet
 				{
 					out.println( (String)contents.elementAt(ii) );
 				}
-
-	
-	
 		} 
 		catch( Exception e ) 
 		{
@@ -294,6 +283,55 @@ public class viewData extends HttpServlet
 		}
 	}
 	
+/**
+ *  Method to print to screen the identity information realetd to a plot
+ * this consists of the location and the name and the accession number
+ *
+ * @param response - the response object linked to the client
+ * @param out - the output stream to the client
+ * @param fileName - name of the xml file for translation/viewing
+ * @param summaryViewType - the type of summary that should be displayed to the
+ * browser including: vegPlot, community, plantTaxa
+ * 
+ */
+	private void viewResultsIdentity(HttpServletResponse response, 
+	PrintWriter out, String fileName, String summaryViewType) 
+	{
+
+		String styleSheet=null; //the stylesheet to use
+		String xmlDoc = null;
+		servletDir = rb.getString("requestparams.servletDir");
+		try 
+		{
+			if (summaryViewType.equals("vegPlot")) 
+			{
+				xmlDoc = servletDir+"test-summary.xml";
+				styleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/transformMultiPlotIdentity.xsl";
+				System.out.println("ViewData > xml document: '" + xmlDoc +"'" );
+				System.out.println("ViewData > stylesheet name: '" + styleSheet +"'" );
+				
+				m.getTransformed(xmlDoc, styleSheet);
+				StringWriter transformedData = m.outTransformedData;
+				Vector contents = this.convertStringWriter(transformedData);
+				for (int ii=0;ii< contents.size() ; ii++) 
+				{
+					out.println( (String)contents.elementAt(ii) );
+				}
+				
+			}
+			//let the user know that there is a problem with the request
+			else 
+			{
+				out.println("ViewData.viewResultsSummary: unknown request for xsl: '"
+					+summaryViewType+"'" );
+			}
+		} 
+		catch( Exception e ) 
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 	
 	
 	

@@ -44,8 +44,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-04-11 23:47:40 $'
- *  '$Revision: 1.13 $'
+ *  '$Date: 2002-04-15 20:19:31 $'
+ *  '$Revision: 1.14 $'
  * 
  */
 
@@ -355,13 +355,8 @@ public class DataRequestServlet extends HttpServlet
 			else  //the browser
 			{
 				//pass back the summary of parameters passed to the servlet
-				returnQueryElemenySummary(out, params, response);
-				//the number of plots in the result set\
-				out.println("Number of results returned: "+queryOutputNum+"<br><br>");
-				//this passes the browser an html form to view the summary data
- 				//ServletUtility l =new ServletUtility();  
- 				su.getViewOption(requestDataType);
- 				out.println(su.outString);
+				//returnQueryElemenySummary(out, params, response);
+				out.println( this.getResultsSetOptions() );
 			}
 		}
 		catch( Exception e ) 
@@ -371,6 +366,77 @@ public class DataRequestServlet extends HttpServlet
 		}
 	}
 
+	/**
+	 * method that presents the number of results returned from the VegBank 
+	 * application layer and the options that the user has to interact 
+	 * with those data.  These options should include: view plot id's 
+	 * view plot summaries, view plot locations.  There should also be a message 
+	 * that tells the user what is going to happen depending on the selection
+	 * criteria and also provide the user with some tips -- this method
+	 * was written to replace the ServletUtility getViewOption method that
+	 * was deprecated 20020415
+	 *
+	 */
+	private String getResultsSetOptions()
+	{
+		StringBuffer su = new StringBuffer();
+		try
+		{
+			
+			su.append("<html> \n");
+			su.append("<head> \n");
+			su.append("<title> \n");
+			su.append("VEGBANK PLOT SELECTION WIZARD \n");
+			su.append("</title> \n");
+			su.append("<link REL=STYLESHEET HREF=\"/vegbank/includes/default.css\" TYPE=\"text/css\"> \n");
+			su.append(" </head>\n");
+			su.append("<table border=\"0\" width=\"85%\" bgcolor=\"#DFE5FA\"> \n");
+			su.append("<tr> \n");
+			su.append("	<td  align=left valign=top  width=\"5%\" > \n");
+			su.append("	<font face=\"Helvetica,Arial,Verdana\" size=\"3\" color=\"23238E\"> \n");
+			su.append("	<b>Options:</b> \n");
+			su.append("	</td> \n");
+			su.append("	</font> \n");
+			su.append("</tr> \n");
+	
+			su.append("<tr> \n");
+			su.append("	<td align=\"center\" width=\"5%\"> \n");
+			su.append("		<img src=\"/vegbank/images/icon_cat31.gif\" alt=\"exclamation\" width=\"15\" height=\"15\" > \n");
+			su.append("	</td> \n");
+			su.append("	<td class=\"item\"> \n");
+			su.append("	Please choose from the selections below.  The options to <br>\n");
+			su.append("	view plot identification tags, or to view the summaries of the <br> \n");
+			su.append("	plots will allow you to download the plot data in a variety of formats \n");
+			su.append("	</td> \n");
+			su.append("</tr> \n");
+			su.append("</table> \n");
+			
+			su.append("<br>");
+			su.append("<br>");
+				
+			su.append("<form action=\"http://vegbank.nceas.ucsb.edu/framework/servlet/viewData\" method=\"GET\"> \n");
+			// the options to view summaries or identifiers -- either way the user
+			// can get to the download option
+			su.append("<input type=\"radio\" name=\"resultType\" value=\"identity\" checked> View Plot Id's \n");
+			su.append("<br>");
+			su.append("<input type=\"radio\" name=\"resultType\" value=\"summary\"> View Plot Summaries \n");
+			su.append("<br>");
+			su.append("<input type=\"hidden\" name=\"summaryViewType\" value=\"vegPlot\"> \n");
+			su.append("<br>");
+			su.append("<br>");
+			su.append("<input type=\"submit\" name=\"submitButton\" value=\"Continue\" > \n");
+			su.append("</form> \n");
+			su.append("</html> \n");
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return(su.toString() );
+	}
+	
+	
 /**
  * Handles simple queries which are those queries where there is only one 
  * queryElemnt such as taxon or community name this is in contrast to a compound
@@ -449,8 +515,8 @@ public class DataRequestServlet extends HttpServlet
 		//look for a taxonName
 		else if ( taxonName != null  && taxonName.length()>0 ) 
 		{
-			out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
-			+"containing plots with taxonName: "+taxonName+" <br>");
+			//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+			//+"containing plots with taxonName: "+taxonName+" <br>");
 			composeQuery("taxonName", taxonName);
 			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
@@ -458,8 +524,8 @@ public class DataRequestServlet extends HttpServlet
  		//look for elevation
 		else if ( minElevation != null  && minElevation.length()>0 ) 
 		{  
-			out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
-			+"containing plots with a minElevation of: "+minElevation+" <br>");
+			//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+			//+"containing plots with a minElevation of: "+minElevation+" <br>");
 			composeQuery("elevationMin", minElevation, "elevationMax", maxElevation);
  			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
@@ -467,8 +533,8 @@ public class DataRequestServlet extends HttpServlet
 		//look for state
 		else if ( state != null  && state.length()>0 ) 
 		{  
-			out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
-			+"containing plots with a state equal to: "+state+" <br>");
+			//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+			//+"containing plots with a state equal to: "+state+" <br>");
 			composeQuery("state", state);
 			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
@@ -476,8 +542,8 @@ public class DataRequestServlet extends HttpServlet
 		//look for the community name
 		else if ( communityName != null  && communityName.length()>0 ) 
 		{  
-			out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
-			+"containing plots with a communityName equal to: "+communityName+" <br>");
+			//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+			//+"containing plots with a communityName equal to: "+communityName+" <br>");
 			composeQuery("communityName", communityName);
  			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
@@ -485,8 +551,8 @@ public class DataRequestServlet extends HttpServlet
 		//look for the surface geology option
 		else if ( surfGeo != null  && surfGeo.length()>0 ) 
 		{  
-			out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
-			+"containing plots with a surface geology like: "+surfGeo+" <br>");
+			//out.println("<br>DataRequestServlet.handleSimpleQuery - returning a summary data set "
+			//+"containing plots with a surface geology like: "+surfGeo+" <br>");
 			composeQuery("surfGeo", surfGeo);
 			issueQuery("simpleQuery");
 			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
@@ -652,11 +718,9 @@ public class DataRequestServlet extends HttpServlet
  		issueQuery("compoundQuery");
  
  		out.println("Number of results returned: "+queryOutputNum);
- 
-		//allow the user to access the summary results
- 		ServletUtility l =new ServletUtility();  
- 		l.getViewOption("vegPlot");  //change the attribute being passed to requestDataType
- 		out.println(l.outString);
+ 		
+		out.println( this.getResultsSetOptions() );
+		
 	}
 
 
