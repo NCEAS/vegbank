@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-01-24 18:29:59 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2005-01-29 00:38:27 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,7 +130,7 @@ public class LoadTreeToDatabase
 		throws SQLException
 	{
 		this.vegbankPackage = vegbankpackage;
-		//Utility.prettyPrintHash(vegbankPackage);
+		Utility.prettyPrintHash(vegbankPackage);
 
 		//this boolean determines if the dataset should be commited or rolled-back
 		commit = true;
@@ -367,7 +367,7 @@ public class LoadTreeToDatabase
 	 */
 	private long insertTable( String tableName, Hashtable fieldValueHash ) throws SQLException
 	{	
-		//log.debug("insert: " + tableName);
+		//log.debug("insertTable: " + tableName);
 		
 		long PK = 0;
 
@@ -397,7 +397,7 @@ public class LoadTreeToDatabase
 		Hashtable reference = getFKChildTable(fieldValueHash, "reference_ID", "reference");
 		if ( reference != null)
 		{
-			log.debug("Inserting extant reference");
+			//log.debug("Inserting extant reference");
 			referenceId = insertReference(reference);
 		}
 		addForeignKey(fieldValueHash, "reference_ID", referenceId);
@@ -409,7 +409,6 @@ public class LoadTreeToDatabase
 //				return this.getTablePK(tableName, fieldValueHash);
 //			}
 		
-		//log.debug("INSERT: " + tableName);
 		PK = this.getNextId(tableName);
 		
 		// Strip out accessionCodes before writing to database
@@ -566,15 +565,7 @@ public class LoadTreeToDatabase
 			if ( PK != 0 )
 			{
 				// great got a real PK
-				/*
-				log.debug(
-					"Found PK ("
-						+ PK
-						+ ") for "
-						+ tableName
-						+ " accessionCode: "
-						+ accessionCode);
-				*/
+				//log.debug("Found PK ("+PK+") for "+tableName+" accessionCode: "+ accessionCode);
 			}
 			else
 			{
@@ -868,14 +859,63 @@ public class LoadTreeToDatabase
 			
 		if (rows == 0) 
 		{
-			log.debug(tableName+" does not exist");
+			//log.debug(tableName+" does not exist");
 			return (false);
 		} 
 		else 
 		{
-			log.debug(tableName+" does exist");
+			//log.debug(tableName+" does exist");
 			return (true);
 		}
+	}
+	
+	/**
+	 * Method that returns the pk value if a record with these values exists in the DB.
+	 */ 
+	private long findDuplicateRecord( String tableName, Hashtable fieldValueHash)
+	{
+		long PK = 0;
+		
+		Vector fieldEqualsValue = new Vector();
+		String strQuery = "";
+		
+		try 
+		{		
+			Enumeration fields = fieldValueHash.keys();
+			while ( fields.hasMoreElements())
+			{					
+				String field = (String) fields.nextElement();
+				//log.debug("===" + field);
+				Object value = fieldValueHash.get(field);
+				if ( this.isDatabaseReadyField(field, value, tableName) )
+				{				
+					fieldEqualsValue.add(field + "=" + "'" + Utility.encodeForDB(value.toString()) + "'");
+				}
+			}
+			
+			
+			strQuery = "SELECT " + Utility.getPKNameFromTableName(tableName) +
+                " from "+tableName+" where " 
+				+ Utility.joinArray(fieldEqualsValue.toArray(), " and ");
+
+			//strQuery += this.getSQLNullValues(tableName, fieldValueHash);
+            //log.debug("searching for extant record: " + strQuery);
+			
+			Statement query = readConn.createStatement();
+			ResultSet rs = query.executeQuery(strQuery);
+			while (rs.next()) {
+				PK = rs.getInt(1);
+			}
+		} catch ( SQLException se ) {      
+			this.filterSQLException(se, strQuery);
+		}
+			
+		if (PK == 0) {
+			//log.debug(tableName+" does not exist");
+		} else {
+			//log.debug(tableName+" does exist");
+		}
+		return PK;
 	}
 	
 	
@@ -1285,21 +1325,23 @@ public class LoadTreeToDatabase
 		}
 		
 		// Add commClass
+        log.debug("Adding commClasses");
 		Enumeration commClasses =  getChildTables(observationHash, "commClass");
 		while ( commClasses.hasMoreElements() )
 		{
 			Hashtable commClass = (Hashtable) commClasses.nextElement();
 			addForeignKey(commClass, Commclass.OBSERVATION_ID, observationId);
 			long commClassId = insertTable("commClass", commClass);
+            log.debug("added commClass #" + commClassId);
 			
 			// Add Classification Contributors
-			Enumeration ccs = this.getChildTables( observationHash, "classContributor");
+			Enumeration ccs = this.getChildTables( commClass, "classContributor");
 			while (ccs.hasMoreElements())
 			{	
 				this.insertContributor( "classContributor", (Hashtable) ccs.nextElement(), "commclass_id",  commClassId);
 			}
 			
-			// Add communtity interpritation
+			// Add communtity interpretation
 			Enumeration commIntepretations =  getChildTables(commClass, "commInterpretation");
 			while ( commIntepretations.hasMoreElements() )
 			{
@@ -1362,8 +1404,42 @@ public class LoadTreeToDatabase
 		{
 			Hashtable stratumType = (Hashtable) stratumTypes.nextElement();
 			addForeignKey(stratumType, Stratumtype.STRATUMMETHOD_ID, pKey);
-			long stratumTypeId = insertTable("stratumType", stratumType);
+			///////// OLD WAY 27 jan 2005
+            //long stratumTypeId = insertTable("stratumType", stratumType);
+            //////////////////////////////////////////////
+			long stratumTypeId = insertStratumType(stratumType);
 		}
+		
+		return pKey;
+	}
+
+    /**
+     * Checks for duplicates in the given stratumMethod.
+     */
+	private long insertStratumType(Hashtable stratumType) throws SQLException
+	{
+
+		long pKey = 0;
+		
+		pKey = getExtantPK(stratumType);
+		if ( pKey != 0 )
+		{
+			return pKey;
+		}
+		
+        //log.debug("**** attempting to insert a stratumType: ");
+        //Utility.prettyPrintHash(stratumType);
+        Hashtable dup = (Hashtable)stratumType.clone();
+        dup.remove(Stratumtype.PKNAME);
+        dup.remove(Stratumtype.STRATUMNAME);
+        dup.remove(Stratumtype.STRATUMDESCRIPTION);
+
+	    pKey = findDuplicateRecord("stratumType", dup);
+	    if (pKey == 0) {
+            log.debug("tableExists() did NOT find stratumType, so inserting...");
+		    pKey = insertTable("stratumType", stratumType);
+        }
+
 		
 		return pKey;
 	}
@@ -1574,35 +1650,45 @@ public class LoadTreeToDatabase
 		{
 			return pKey;
 		}
+	    log.debug("########## INSERTING NEW PLANT CONCEPT");
 		
-		//Utility.prettyPrintHash(plantConcept);
+	    log.debug("pc: ");
+		Utility.prettyPrintHash(plantConcept);
 		
 		// TODO: depends on PlantName
 		Hashtable plantName = this.getFKChildTable(plantConcept, Plantconcept.PLANTNAME_ID, "plantName");
 		currentConceptName = (String) plantName.get(Plantname.PLANTNAME);
+	    log.debug("pc name: " + currentConceptName);
 		long plantNameId = insertTable("plantName", plantName);
+	    log.debug("plantNameId: " + plantNameId);
 		
 		addForeignKey(plantConcept, Plantconcept.PLANTNAME_ID, plantNameId);
 		pKey = this.insertTable("plantConcept", plantConcept);
+	    log.debug("pc_id: " + pKey);
 		
 		// Add PlantStatus 
+	    log.debug("Checking for plantStati");
 		Enumeration plantStatuses = getChildTables(plantConcept, "plantStatus");
 		while ( plantStatuses.hasMoreElements())
 		{
+	        log.debug("found a plantstatus");
 			Hashtable plantStatus = (Hashtable) plantStatuses.nextElement();
 			addForeignKey(plantStatus, Plantstatus.PLANTCONCEPT_ID, pKey);
 			plantStatusId = insertPlantStatus(plantStatus);
 		}
 		
 		// Add plantUsage
+	    log.debug("----------Checking for plantusage(s)");
 		Enumeration plantUsages = getChildTables(plantConcept, "plantUsage");
 		while ( plantUsages.hasMoreElements())
 		{
+	        log.debug("found a plantusage");
 			Hashtable plantUsage = (Hashtable) plantUsages.nextElement();
 			addForeignKey(plantUsage, Plantusage.PLANTCONCEPT_ID, pKey);
 
 			// need to add pu.plantstatus_id needs to be populated
 			addForeignKey(plantUsage, Plantusage.PLANTSTATUS_ID, plantStatusId);
+		    log.debug("added plantusage to plantstatus_id=" + plantStatusId);
 
 			insertPlantUsage(plantUsage);
 		}
@@ -1890,7 +1976,7 @@ public class LoadTreeToDatabase
 		
 		addForeignKey(stratumType, Stratumtype.STRATUMMETHOD_ID, stratumMethodId);
 		
-		long stratumTypeId = insertTable("stratumType", stratumType);
+		long stratumTypeId = insertStratumType(stratumType);
 		
 		addForeignKey(stratum, Stratum.OBSERVATION_ID, observationId);
 		addForeignKey(stratum, Stratum.STRATUMTYPE_ID, stratumTypeId);
