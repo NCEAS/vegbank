@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-10-06 20:39:32 $'
- *	'$Revision: 1.11 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-10-19 22:27:48 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -237,7 +237,7 @@ public class PlotQueryAction extends Action
 			return (mapping.getInputForward());
 		}
 
-		return mapping.findForward("displayResults");
+		return mapping.findForward("DisplayResults");
 	}
 
 	private Collection getPlotSummaries(String conjunction, Vector resultSets)
@@ -283,7 +283,7 @@ public class PlotQueryAction extends Action
 				{
 					if ( isFirstResultSet )	// if empty dump all into collection
 					{
-						//System.out.println("#Adding " + plotsum.getVegbankAccessionNumber());
+						System.out.println("#Adding " + plotsum + " has " + plotsum.getVegbankAccessionNumber());
 						workspace.put(plotsum.getVegbankAccessionNumber(), plotsum);
 					}
 					else //Only add element if in oldWorkspace
@@ -328,7 +328,7 @@ public class PlotQueryAction extends Action
 	private void populatePlotSummary(ResultSet rs, PlotSummary plotsum)
 		throws SQLException
 	{
-		plotsum.setVegbankAccessionNumber(rs.getString(1));
+		plotsum.setVegbankAccessionNumber(rs.getString(1)); 
 		plotsum.setAuthorObservationCode(rs.getString(2));
 		plotsum.setLatitude(rs.getString(3));
 		plotsum.setLongitude(rs.getString(4));
@@ -677,11 +677,11 @@ public class PlotQueryAction extends Action
 	 */
 	public class PlotSummary
 	{
-		private String authorObservationCode;
-		private String vegbankAccessionNumber;
-		private String latitude;
-		private String longitude;
-		private String plotId;
+		private String authorObservationCode = "";
+		private String vegbankAccessionNumber = "";
+		private String latitude = "";
+		private String longitude = "";
+		private String plotId = "";
 
 		public PlotSummary()
 		{

@@ -6,8 +6,8 @@ package org.vegbank.plots.datasource;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-17 22:09:14 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-10-19 22:27:48 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,9 +50,10 @@ public class VegbankXMLUpload
 	private NativeXMLReader nr = null;
 	
 	
-	private boolean validate = false;
-	private boolean rectify = false;	
-	private boolean load = false;
+	private boolean validate = true;
+	// TODO: use this variable as expected
+	private boolean rectify = true;	
+	private boolean load = true;
 	
 	// Errors reported
 	private LoadingErrors errors = null;
@@ -75,27 +76,45 @@ public class VegbankXMLUpload
 		this.errors = new LoadingErrors();
 		nr = new NativeXMLReader(validate);
 		XMLReader xr = nr.getXMLReader();
-		xr.setContentHandler( new SAX2DBContentHandler(errors) );
-		xr.setErrorHandler( new SAXValidationErrorHandler(errors) );
 		return xr;
 	}
 
 
-	public void uploadFromXMLFile( File pFile )
+	public void processXMLFile( File pFile ) throws IOException, SAXException
 	{
-		try
+		System.out.println( "Validation on: " + this.validate);
+		System.out.println( "Rectification on: " + this.rectify);
+		System.out.println( "Database Loading on: " + this.load);
+		
+		SAXValidationErrorHandler errorHandler = new SAXValidationErrorHandler(errors);
+		SAX2DBContentHandler contentHandler = new SAX2DBContentHandler(errors);
+		
+		if ( validate )
 		{
-			FileInputStream mFileInputStream = new FileInputStream( pFile );
-			InputSource mInputSource = new InputSource( mFileInputStream );
-			xr.parse( mInputSource);
+			
+			xr.setErrorHandler( errorHandler );
+			xr.parse( this.getInputSource(pFile) );
+			System.out.println( "This file is valid: " + errorHandler.isValid() );
 		}
-		catch( Exception pException )
+		
+		if ( load && errorHandler.isValid() )
 		{
-			System.err.println( "Error Occured while parsing the xml file!! Check for Error log for more details!");
-			pException.printStackTrace();
+			xr.setContentHandler( contentHandler );
+			xr.parse( this.getInputSource(pFile));
+		}
+		else 
+		{
+			System.out.println( "No attempt was made to rectify or loading this dataset");
+			errors.AddError(LoadingErrors.DATABASELOADINGERROR, "No attempt was made to load this dataset into the database");
+			errors.AddError(LoadingErrors.RECTIFICATIONERROR, "No attempt was made to rectify this dataset with the database");
 		}
 	}
 	
+	private InputSource getInputSource( File pFile) throws FileNotFoundException
+	{
+		FileInputStream mFileInputStream = new FileInputStream( pFile );
+		return new InputSource( mFileInputStream );
+	}
 
 	/**
 	 * Returns the errors that were encountered upon loading
@@ -150,7 +169,7 @@ public class VegbankXMLUpload
 		}
 		else
 		{
-			vbUpload.uploadFromXMLFile(new File(fileName));
+			vbUpload.processXMLFile(new File(fileName));
 			
 			System.out.println("REPORT:\n");
 			System.out.println(vbUpload.getErrors().getSummaryMessage());
@@ -583,12 +602,21 @@ public class VegbankXMLUpload
 	public class SAXValidationErrorHandler implements ErrorHandler
 	{
 		private LoadingErrors errors = null;
+		private boolean valid = true;
 		
 		public SAXValidationErrorHandler(LoadingErrors errors)
 		{
 			this.errors = errors;
 		}
 		
+		/**
+		 * @return
+		 */
+		public boolean isValid()
+		{
+			return valid;
+		}
+
 		/* (non-Javadoc)
 		 * @see org.xml.sax.ErrorHandler#error(org.xml.sax.SAXParseException)
 		 */
@@ -599,6 +627,7 @@ public class VegbankXMLUpload
 			sb.append("\tLine: " + arg0.getLineNumber() + "\n");
 			sb.append("\tColumn : " + arg0.getColumnNumber() + "\n");
 			errors.AddError(LoadingErrors.VALIDATIONERROR, sb.toString() );
+			valid = false;
 		}
 
 		/* (non-Javadoc)
@@ -612,6 +641,7 @@ public class VegbankXMLUpload
 			sb.append("\tColumn : " + arg0.getColumnNumber() + "\n");
 			errors.AddError(LoadingErrors.VALIDATIONERROR, sb.toString() );
 			arg0.printStackTrace();
+			valid = false;
 		}
 
 		/* (non-Javadoc)
@@ -643,24 +673,64 @@ public class VegbankXMLUpload
 		}
 		
 		/**
-		 * @param tmpStore
+		 * Inserts the entire dataset into the database
+		 * 
+		 * @param vegbankPackage -- the root of the dataset 
 		 */
-		public void insertVegbankPackage(Hashtable vegbankPackage) throws SQLException
+		public void insertVegbankPackage(Hashtable vegbankPackage)
+			throws SQLException
 		{
 			this.vegbankPackage = vegbankPackage;
-			
+			//Utility.prettyPrintHash(vegbankPackage);
+
 			//this boolean determines if the dataset should be commited or rolled-back
 			commit = true;
 			this.initDB();
-			
-			Enumeration plots =  getChildTables(vegbankPackage, "plot");
-			while ( plots.hasMoreElements() )
+
+			// insert commConcepts
+			//			Enumeration plots =  getChildTables(vegbankPackage, "plot");
+			//			while ( plots.hasMoreElements() )
+			//			{
+			//				Hashtable plot = (Hashtable) plots.nextElement();
+			//				insertPlot(plot);
+			//			}			
+
+			// insert plantConcepts
+			//		Enumeration plots =  getChildTables(vegbankPackage, "plot");
+			////			while ( plots.hasMoreElements() )
+			////			{
+			////				Hashtable plot = (Hashtable) plots.nextElement();
+			////				insertPlot(plot);
+			////			}
+
+			// insert references
+			Enumeration references =
+				getChildTables(vegbankPackage, "reference");
+			while (references.hasMoreElements())
+			{
+				Hashtable reference = (Hashtable) references.nextElement();
+				this.insertReference(reference);
+			}
+
+			//TODO: PlantConcept, CommConcept, Reference
+			// insert Parties
+			Enumeration parties = getChildTables(vegbankPackage, "party");
+			while (parties.hasMoreElements())
+			{
+				Hashtable party = (Hashtable) parties.nextElement();
+				this.insertParty(party);
+			}
+
+			// insert plots
+			Enumeration plots = getChildTables(vegbankPackage, "plot");
+			while (plots.hasMoreElements())
 			{
 				Hashtable plot = (Hashtable) plots.nextElement();
 				insertPlot(plot);
 			}
-			
-			System.out.println("VegbankXMLUpload > insertion success: " + commit);
+
+			System.out.println(
+				"VegbankXMLUpload > insertion success: " + commit);
 			if (commit == true)
 			{
 				dbConn.commit();
@@ -669,10 +739,12 @@ public class VegbankXMLUpload
 			{
 				dbConn.rollback();
 			}
-			
+
 			System.out.println("Returning the DBConnection to the pool");
 			//Return dbconnection too pool
-			DBConnectionPool.returnDBConnection(dbConn, dbConn.getCheckOutSerialNumber());			
+			DBConnectionPool.returnDBConnection(
+				dbConn,
+				dbConn.getCheckOutSerialNumber());
 		}
 
 		private void initDB() throws SQLException
@@ -723,6 +795,7 @@ public class VegbankXMLUpload
 			{      
 				System.out.println("Caught SQL Exception: " + se.getMessage());
 				se.printStackTrace();
+				commit = false;
 				errors.AddError(LoadingErrors.DATABASELOADINGERROR, se.getMessage());
 			}
 			System.out.println(sb.toString());
@@ -827,12 +900,24 @@ public class VegbankXMLUpload
 		 * Check if there exists a note for each field and add it last.
 		 * Check and insert userdefined table last.
 		 * 
+		 * Returns 0 if null is passed in.
+		 * 
 		 * @param tableName
 		 * @param fieldValueHash
 		 * @return int -- PK of the table
 		 */
 		private int insertTable( String tableName, Hashtable fieldValueHash )
-		{
+		{	
+			System.out.println("LoadTreeToDatabase > insert: " + tableName);
+			
+			int PK = 0;
+
+			// Handle null being passed
+			if ( fieldValueHash == null)
+			{
+				return PK;
+			}
+			
 			// Check if this already exists in the database
 			// TODO: This is unlikely to be valid ... need per table rules for identicalness
 			if ( this.tableExists(tableName, fieldValueHash) )
@@ -850,7 +935,10 @@ public class VegbankXMLUpload
 			AddForeignKey(fieldValueHash, "REFERENCE_ID", referenceId);
 			
 			System.out.println("INSERT: " + tableName);
-			int PK = this.getNextId(tableName);
+			PK = this.getNextId(tableName);
+			
+			// Some tables have accessionCodes that need contructing
+			this.addAccessionCode(fieldValueHash, tableName, PK);
 			
 			Vector fieldNames = new Vector();
 			Vector fieldValues = new Vector();
@@ -899,6 +987,116 @@ public class VegbankXMLUpload
 			return PK;
 		}
 		
+		/**
+		 * Add an accessionCode to the tables that need it
+		 * 
+		 * @param fieldValueHash
+		 * @param tableName
+		 * @param PK
+		 */
+		private void addAccessionCode(Hashtable fieldValueHash, String tableName, int PK)
+		{
+			// TODO: This may need to be a configurable property
+			String prefix = "VB";
+			
+			if ( tableName.equalsIgnoreCase("observation") )
+			{
+				fieldValueHash.put("obsaccessionnumber", prefix + "." + PK );
+			}
+			// commConcept, party, references
+			else if ( 
+					tableName.equalsIgnoreCase("plantConcept")
+					|| tableName.equalsIgnoreCase("commConcept")
+					|| tableName.equalsIgnoreCase("party")
+					|| tableName.equalsIgnoreCase("reference"))
+			{
+				fieldValueHash.put("accessionCode", prefix + "." + PK );
+			}
+			else
+			{
+				// do nothing
+			}	
+		}
+		
+		/**
+		 * Get the accessionCode from the XML
+		 * 
+		 * @param fieldValueHash
+		 * @param tableName
+		 * @param PK
+		 */
+		private int getPKFromAccessionCode(Hashtable fieldValueHash, String tableName)
+		{		
+			int PK = 0;
+			String accessionCode = "";
+			String fieldName = "";
+			
+			if ( tableName.equalsIgnoreCase("observation") )
+			{
+				fieldName = "obsaccessionnumber";
+				accessionCode = (String) fieldValueHash.get(fieldName);
+			}
+			// commConcept, party, references
+			else if ( 
+					tableName.equalsIgnoreCase("plantConcept")
+					|| tableName.equalsIgnoreCase("commConcept")
+					|| tableName.equalsIgnoreCase("party")
+					|| tableName.equalsIgnoreCase("reference"))
+			{
+				fieldName = "accessionCode";
+				accessionCode = (String) fieldValueHash.get(fieldName);
+			}
+			else
+			{
+				// do nothing
+			}	
+			
+			if ( Utility.isStringNullOrEmpty( accessionCode ))
+			{
+				System.out.println("Found no accessionCode for " + tableName);
+				// do nothing
+			}
+			else
+			{
+				// Need to get the pK of the table
+				Hashtable simpleHash = new Hashtable();
+				simpleHash.put(fieldName, accessionCode);
+				PK = this.getTablePK(tableName, simpleHash);
+				
+				if ( PK != 0 )
+				{
+					// great got a real PK
+					System.out.println(
+						"Found PK ("
+							+ PK
+							+ ") for "
+							+ tableName
+							+ " accessionCode: "
+							+ accessionCode);
+				}
+				else
+				{
+					// Problem no accessionCode like that in database -- fail load
+					String errorMessage =
+						"There is no "
+							+ tableName
+							+ " with a "
+							+ fieldName
+							+ " of value '"
+							+ accessionCode
+							+ "' in the database.";
+							
+					System.out.println("Loading Failed: " + errorMessage);
+					commit = false;
+					errors.AddError(
+						LoadingErrors.DATABASELOADINGERROR,
+						errorMessage);
+				}
+			}
+			
+			return PK;
+		}
+
 		/**
 		 * @param FK
 		 * @param fieldValueHash
@@ -1016,7 +1214,12 @@ public class VegbankXMLUpload
 		private int insertReference( Hashtable reference)
 		{
 			System.out.println("Got a reference to add!!");
-			int referenceId = 0;
+			int referenceId = this.getPKFromAccessionCode(reference, "reference"); 
+			if ( referenceId != 0)
+			{
+				// As expected
+				return referenceId;
+			}
 			
 			// Insert Reference Journal
 			Hashtable referenceJournal = getChildTable(reference, "referenceJournal_ID", "referenceJournal");
@@ -1133,6 +1336,8 @@ public class VegbankXMLUpload
 				{
 					System.out.println("Query: " + sb.toString() );
 					se.printStackTrace();
+					commit = false;
+					errors.AddError(LoadingErrors.DATABASELOADINGERROR, se.getMessage());
 				}
 			}
 				
@@ -1216,7 +1421,12 @@ public class VegbankXMLUpload
 		
 		private int insertParty( Hashtable party)
 		{
-			int pKey = 0;
+			int pKey = this.getPKFromAccessionCode(party, "party"); 
+			if ( pKey != 0)
+			{
+				// As expected
+				return pKey;
+			}
 			
 			// recursivly deal with FK party's
 			Hashtable ownerParty = (Hashtable) party.get("owner_ID");
@@ -1252,19 +1462,23 @@ public class VegbankXMLUpload
 		
 		private int insertContributor(String tableName, Hashtable contribHash, String keyName, int keyValue)
 		{
-			int pKey = -1;
+			int pKey = 0;
 			
-			// Get the party
+			// Get the party ( required )
 			Hashtable party = this.getChildTable( (Hashtable) this.getChildTable(contribHash, "PARTY_ID"), "party" );
 			int partyId = insertParty(party);
 							
-			// Get the Role
-			Hashtable role = this.getChildTable( (Hashtable) this.getChildTable(contribHash, "ROLE_ID"), "aux_Role" );
-			int roleId = insertTable("aux_Role", role);
+			// Get the Role  ( not required )
+			Hashtable roleIDHash = (Hashtable) this.getChildTable(contribHash, "ROLE_ID");
+			if ( roleIDHash != null )
+			{
+				Hashtable role = this.getChildTable( roleIDHash, "aux_Role" );
+				int roleId = insertTable("aux_Role", role);
+				AddForeignKey(contribHash, "role_id", roleId);
+			}
 							
 			AddForeignKey(contribHash, keyName, keyValue);
 			AddForeignKey(contribHash, "party_id", partyId);
-			AddForeignKey(contribHash, "role_id", roleId);
 			insertTable(tableName, contribHash);
 			
 			return pKey;
@@ -1277,7 +1491,6 @@ public class VegbankXMLUpload
 		 */
 		private int insertPlot( Hashtable plotHash)
 		{		
-			//Utility.prettyPrintHash(plotHash);
 			int plotId = 0;
 
 			// Insert the parent plot if it exists
@@ -1290,14 +1503,14 @@ public class VegbankXMLUpload
 			}
 			AddForeignKey(plotHash, "PARENT_ID", parentPlotId);
 			
+			// Insert this plot
+			plotId = insertTable("plot", plotHash);
+			
 			Enumeration observations = this.getChildTables(plotHash, "observation");
-			//Hashtable observationHash = this.getChildTable(plotHash, "observation");
-			//System.out.println(observationHash);
 			
 			while ( observations.hasMoreElements() )
 			{
 				Hashtable observationHash = (Hashtable) observations.nextElement();
-
 					
 				Hashtable projectIdFieldValueHash =  this.getChildTable(observationHash, "PROJECT_ID");
 				Hashtable projectFieldValueHash = this.getChildTable(projectIdFieldValueHash, "project");
@@ -1323,8 +1536,6 @@ public class VegbankXMLUpload
 						this.insertContributor( "projectContributor", (Hashtable) pcs.nextElement(), "project_id",  projectId);
 					}	
 				}
-				// Insert the plot
-				plotId = insertTable("plot", plotHash);
 				
 				// Get and insert NamedPlace and place
 				Enumeration places = this.getChildTables(plotHash, "place");
@@ -1359,7 +1570,15 @@ public class VegbankXMLUpload
 		 */
 		private int insertObservation(int plotId, int projectId, Hashtable observationHash)
 		{
-			int observationId = 0;
+			// Check for the obsaccessionnumber
+			int observationId = this.getPKFromAccessionCode(observationHash, "observation"); 
+			if ( observationId != 0)
+			{
+				// As expected
+				return observationId;
+			}
+
+			// Continue loading as normal
 			
 			Hashtable previousObs = getChildTable(observationHash, "PREVIOUSOBS_ID", "observation");
 			
@@ -1388,6 +1607,7 @@ public class VegbankXMLUpload
 			Hashtable soilTaxon = getChildTable(observationHash, "SOILTAXON_ID", "soilTaxon");
 			int soilTaxonId = insertTable("soilTaxon", soilTaxon);
 			AddForeignKey(observationHash, "SOILTAXON_ID", soilTaxonId);
+			
 			
 			// Insert the observation
 			observationId = insertTable("observation", observationHash);
@@ -1756,7 +1976,7 @@ public class VegbankXMLUpload
 			else 
 			{
 				// Plot failed to load
-				message = "Dataset failed to load, see errors bellow";
+				message = "Dataset failed to load, see errors below";
 			}
 			return message;
 		}
