@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: anderson $'
-* '$Date: 2004-04-12 22:29:07 $'
-* '$Revision: 1.98 $'
+* '$Date: 2004-04-21 18:00:56 $'
+* '$Revision: 1.99 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -91,7 +91,7 @@
     <property name="hostname" value="vegbank"/>
     <property name="sharedhtml_src" value="./sharedhtml"/>
     <property name="workshop_src" value="./workshop"/>
-    <property name="apache.document.root" value="/usr/www/${webapp}/htdocs"/>
+	<property name="apache.document.root" value="/usr/www/${webapp}/htdocs"/>
     <property name="vegdocs.dir" value="/vegdocs"/>
     <property name="vegdocs_server" value="${apache.document.root}${vegdocs.dir}"/>
     <!-- large binary files location:   targets that read from large binaries separate -->
@@ -414,7 +414,7 @@
     <!-- create summary based on current VegBank database status -->
 	<echo>Creating vbsummary with databaseUser = ${databaseUser}</echo>
     <exec dir="./general" executable="psql">
-      <arg line="-U ${databaseUser} ${webapp}102 -f get_vb_stats_cmds.txt"/>
+      <arg line="-U ${databaseUser} ${databaseName} -f get_vb_stats_cmds.txt"/>
     </exec>
     <!-- copy summary file with filtering to general dir -->
     <copy overwrite="true" tofile="${general_server}/vbsummary.html" filtering="yes" file="./general/get_vb_stats_temp.html"/>
