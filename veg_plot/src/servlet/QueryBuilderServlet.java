@@ -22,8 +22,8 @@ import java.net.URL;
  * @author John Harris
  *
  *	'$Author: harris $'
- *  '$Date: 2001-06-21 21:23:04 $'
- *  '$Revision: 1.7 $'
+ *  '$Date: 2001-06-22 22:19:44 $'
+ *  '$Revision: 1.8 $'
  * 
  */
 
@@ -97,7 +97,51 @@ public void doGet(HttpServletRequest request,
 			+e.getMessage());
 		}
 	}
+
+
 	
+	 /**
+   * method to pass the extended query to the DataRequestServlet
+   */
+  private String submitExtendedQuery (Vector queryVector)
+  {
+    String htmlResults = "test";
+    try
+    {
+      //create the parameter string to be passed to the DataRequestServlet
+      StringBuffer sb = new StringBuffer();
+      sb.append("?requestDataType=vegPlot&queryType=extended&resultType=summary");
+      for (int i=0; i<queryVector.size(); i++)
+      {
+          sb.append("&");
+          //get each instance query
+          Hashtable queryInstanceHash = (Hashtable)queryVector.elementAt(i);
+          String criteria = queryInstanceHash.get("criteria").toString();
+          String operator = queryInstanceHash.get("operator").toString();
+          String value = queryInstanceHash.get("value").toString();
+          sb.append("operator="+operator+"&criteria="+criteria+"&value="+value);
+
+      }
+
+      //connect to the DataRequestServlet
+      String uri = "http://dev.nceas.ucsb.edu/harris/servlet/DataRequestServlet"
+        +sb.toString().trim();
+      int port=80;
+      String requestType="POST";
+
+      htmlResults = gurl.requestURL(uri);
+
+
+
+    }
+    catch( Exception e )
+    {
+      System.out.println("** failed :  "
+      +e.getMessage());
+    }
+    return(htmlResults);
+  }
+
 
 	
 	/**
@@ -105,7 +149,9 @@ public void doGet(HttpServletRequest request,
 	 * using the GetUrl Class 
 	 *
 	 */
-	private String submitExtendedQuery (Vector queryVector) 
+
+	 /*
+	 private String submitExtendedQuery (Vector queryVector) 
 	{
 		String htmlResults = "test";
 		try 
@@ -131,6 +177,8 @@ public void doGet(HttpServletRequest request,
 			
 			//request the data from the servlet and print the results to the system	
 			htmlResults = gurl.requestURL(servlet, protocol, host, parameters);
+			System.out.println("THE PARAMETERS BEING PASSED TO DATA REQUEST SERVLET: "
+			+parameters.toString() );
 			//System.out.println(htmlResults);
 		
 		}
@@ -142,6 +190,7 @@ public void doGet(HttpServletRequest request,
 		return(htmlResults);
 	}
 	
+	*/
 	
 	/**
 	 * method to re-stream the client html
