@@ -1,0 +1,28 @@
+###############################################
+# Convenient shortcuts to common site content.
+#       
+# $Id: .htaccess,v 1.1 2004-05-13 02:37:28 anderson Exp $
+###############################################
+
+RewriteEngine  on
+
+#### Plot Search
+# NC = No Case match, so case insensitive match
+# QSA = Query String Append
+# L = Last rewrite rule to do, so stop here
+RewriteRule ^plotsearch$      /vegbank/LoadPlotQuery.do   [NC,QSA,L]
+
+#### Vegdocs Links
+#RewriteCond %{REQUEST_URI}  ^/workshop
+  #  ADD OTHER VEGDOCS SHORTCUTS HERE
+#RewriteRule ^(.+)/?$      /vegdocs/$1   [NC,QSA, L]
+
+
+
+# Rewrite Example
+#RewriteCond %{REQUEST_URI}  ^.+\.html
+#RewriteCond %{REQUEST_URI}  !/ignore.html
+#RewriteRule ^(.+\.html)     /someAction.do?page=$1   [NC,QSA,L]
+
+
+
