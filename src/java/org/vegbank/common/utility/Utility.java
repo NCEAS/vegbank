@@ -6,6 +6,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
 import org.vegbank.common.dbAdapter.*;
 
 /**
@@ -14,8 +18,8 @@ import org.vegbank.common.dbAdapter.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-08-21 21:15:54 $'
- * '$Revision: 1.14 $'
+ * '$Date: 2003-10-10 23:37:13 $'
+ * '$Revision: 1.15 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -299,16 +303,27 @@ public class Utility
 	 * @param String[] -- Strings to convert to comma separate string
 	 * @return String 
 	 */
-	public static String arrayToCommaSeparatedString(String[] plots)
+	public static String arrayToCommaSeparatedString(Object[] objects)
 	{
-		String plotList;
+		return joinArray(objects, ",");
+	}
+	
+	/**
+	 * Convience method to create a simple comma separted string from a 
+	 * string array.
+	 *
+	 * @param String[] -- Strings to convert to comma separate string
+	 * @return String 
+	 */
+	public static String joinArray(Object[] objects, String delimiter)
+	{
 		StringBuffer sb = new StringBuffer();
-		for (int i=0; i < plots.length; i++)
+		for (int i=0; i < objects.length; i++)
 		{
-			sb.append(plots[i]);
-			if( (i +1) < plots.length )
+			sb.append(objects[i]);
+			if( (i +1) < objects.length )
 			{
-				sb.append(",");
+				sb.append(delimiter);
 			}
 		}
 		return sb.toString();
@@ -326,5 +341,61 @@ public class Utility
 		return result;
 	}
 	
+	/**
+	 * Prints out a hashtable in an easy to read fashion
+	 * 
+	 * @param hashtable -- hashtable to pretty print
+	 */
+	public static void prettyPrintHash( Hashtable hash )
+	{
+		//System.out.println(hash);
+		System.out.println(prettyPrintHash(hash, 0));
+	}
 	
+	private static String prettyPrintHash( Hashtable hash,  int indent)
+	{
+		//System.out.println(""+indent +" -- "+hash.hashCode());
+		StringBuffer sb = new StringBuffer();
+		Enumeration keys = hash.keys();
+		while ( keys.hasMoreElements() )
+		{
+			Object key = keys.nextElement();
+			sb.append(getIdent( indent ) + key + ":");  
+			Object value = hash.get( key  );
+			if ( value instanceof  java.util.Hashtable )
+			{
+				sb.append("\n");
+				sb.append( prettyPrintHash( (Hashtable) value, indent + 1));
+			}
+			else if ( value instanceof java.util.Vector )
+			{
+				Enumeration elements =  ((Vector) value).elements();
+				while ( elements.hasMoreElements())
+				{
+					Object element = elements.nextElement();
+					if ( element instanceof  java.util.Hashtable )
+					{		
+						sb.append( "--->" +((Hashtable) element).get("TableName") );
+						sb.append("\n");
+						sb.append( prettyPrintHash( (Hashtable) element, indent + 1));
+					}
+				}
+			}
+			else
+			{
+				sb.append( "\t" + value + "\n");
+			}
+		}
+		return sb.toString();
+	}
+	
+	private static String getIdent(int indent)
+	{
+		StringBuffer sb = new StringBuffer();
+		for ( int i=0; i<indent; i++)
+		{
+			sb.append("\t");
+		}
+		return sb.toString();
+	}
 }

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 00:24:54 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-10-10 23:37:13 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,29 +51,6 @@ public class DataLoader
 		Utility u = new Utility();
 		Connection c = u.getConnection(databaseName, databaseHost);
 		return c;
-	}
-
-	private Connection getAccessConnection()
-		throws ClassNotFoundException, SQLException
-	{
-		String dbUrl = "jdbc:odbc:ecoart";
-		// Load the sun jdbc-odbc bridge driver
-		Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-
-		// connect to the jdbc-odbc bridge driver
-		Connection conn = DriverManager.getConnection(dbUrl, "user", "pass");
-
-		// Get the DatabaseMetaData object and display
-		// some information about the connection
-		DatabaseMetaData dma = conn.getMetaData();
-
-		System.out.println("DataLoader > Connected to " + dma.getURL());
-		System.out.println("DataLoader > Driver       " + dma.getDriverName());
-		System.out.println(
-			"DataLoader > Version      " + dma.getDriverVersion());
-		System.out.println("DataLoader > Catalog      " + conn.getCatalog());
-
-		return conn;
 	}
 
 	public static void main(String[] args)

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-10-10 23:37:13 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -172,33 +172,6 @@ public class ObjectToDB extends VegBankObjectWriter
 			this.fieldNames.add(fieldName);
 			this.fieldValues.add(fieldValue);
 		}
-	}
-	
-	public boolean update(Vector uniqueFields) throws Exception
-	{
-		boolean result = true;
-		
-		// Get the Prepared Statement
-		String statement = this.getPreparedUpdateStatementString();
-		int pKey = this.isObjectInDatabase(uniqueFields);
-		
-		try
-		{		
-			PreparedStatement pstmt = getPopulatedPreparedStatement(statement);
-			pstmt.setInt(fieldValues.size() +1, pKey);
-			pstmt.execute();
-			
-		}
-		catch (Exception e)
-		{
-			System.out.println("ObjectToDB > Problem with SQL '" + statement + "'"  );
-			e.printStackTrace();
-			result = false;
-			throw new Exception("Problem with SQL '" + statement + "' --> " + e.getMessage() );
-		}
-
-		// if we get here 
-		return result;
 	}
 
 	private PreparedStatement getPopulatedPreparedStatement(String statement)
@@ -466,13 +439,5 @@ public class ObjectToDB extends VegBankObjectWriter
 		System.out.println("Generating key for class: " + className);
 		this.primaryKey = 
 			Utility.dbAdapter.getNextUniqueID(conn, className, className + "_id");
-	}	
-
-	/**
-	 * @return
-	 */
-	public boolean isExistsInDatabase()
-	{
-		return existsInDatabase;
 	}
 }

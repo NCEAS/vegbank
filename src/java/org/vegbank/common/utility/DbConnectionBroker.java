@@ -60,7 +60,7 @@ public class DbConnectionBroker implements Runnable
 	private long[] connLockTime, connCreateDate;
 	private String[] connID;
 	private String dbDriver, dbServer, dbLogin, dbPassword, logFileString;
-	private int currConnections, connLast, minConns, maxConns, maxConnMSec;
+	private int currConnections, connLast, maxConns, maxConnMSec;
 
 	//available: set to false on destroy, checked by getConnection()
 	private boolean available = true;
@@ -389,15 +389,7 @@ public class DbConnectionBroker implements Runnable
 		return res;
 
 	}
-	/**
-	 * Returns the age of a connection -- the time since it was handed out to
-	 * an application.
-	 */
-	public long getAge(Connection conn)
-	{ // Returns the age of the connection in millisec.
-		int thisconn = idOfConnection(conn);
-		return System.currentTimeMillis() - connLockTime[thisconn];
-	}
+
 	/**
 	 * This method hands out the connections in round-robin order.
 	 * This prevents a faulty connection from locking

@@ -5,8 +5,8 @@
  *             			National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-23 21:51:18 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-10-10 23:37:13 $'
+ *	'$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,12 +42,6 @@ public class DatabaseAccess
 {
 
 	//Global variables for the database connection
-
-	public String outValueString;
-	public String outReturnFields[] = new String[80000];
-	//array containg returned vals
-	public int outReturnFieldsNum; //number of lines returned
-	public Vector returnedValues = new Vector();
 
 	/**
 	 * Runs select against the database

@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  * Purpose: 
  *
  * '$Author: farrell $'
- * '$Date: 2003-08-21 21:16:43 $'
- * '$Revision: 1.3 $'
+ * '$Date: 2003-10-10 23:37:13 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,14 +43,6 @@ import java.util.StringTokenizer;
 
 public class DBConnect
 {
-
-	/*Global variables for the database connection*/
-
-	Connection conn = null;
-	Statement query = null;
-	Statement query1 = null;
-	ResultSet results = null;
-	ResultSet results1 = null;
 
 	/**Main route for testing**/
 	static public void main(String[] args)

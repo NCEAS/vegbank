@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-11 21:24:38 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-10-10 23:37:13 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,5 +54,5 @@ public interface Constants
 	public static final String USAGE_NAME_STATUS_UNDETERMINED =  "Undetermined";	
 	
 	public static final String CONCEPT_STATUS_ACCEPTED = "accepted";
-	public static final String CONCEPT_STATUS_NOT_ACCEPTED = "not accepted";	
+	public static final String CONCEPT_STATUS_NOT_ACCEPTED = "not accepted";
 }

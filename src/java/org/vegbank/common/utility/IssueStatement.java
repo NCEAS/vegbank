@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  * Purpose: 
  *
  * '$Author: farrell $'
- * '$Date: 2003-08-21 21:16:43 $'
- * '$Revision: 1.3 $'
+ * '$Date: 2003-10-10 23:37:13 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -391,112 +391,6 @@ public class IssueStatement
 	 * @param pconn - database connection
 	 */
 
-	public void issueSelect(
-		String inputStatement,
-		String[] inputReturnFields,
-		Hashtable resultHash,
-		Connection pconn)
-	{
-
-		//transfer the database connection
-		try
-		{
-			conn = pconn;
-			query = conn.createStatement();
-		}
-
-		catch (Exception e)
-		{
-			System.out.println(
-				"failed at issueStatement.issueselect transfering "
-					+ " db connections"
-					+ e.getMessage());
-		}
-
-		try
-		{
-
-			//compose and issue a prepared statement for loading a table	
-			//execute the query
-			results = query.executeQuery(inputStatement);
-
-			outReturnFieldsNum = 0;
-			//make a matrix to store the returned values because storing them directly
-			//in a string was giving a jdbc error that couldn't be fixed
-			String verticalStore[] = new String[inputReturnFields.length];
-
-			int repetitionCnt = 0; //number of repetitions of the element
-
-			//get all the levels returned
-			while (results.next())
-			{
-				repetitionCnt++;
-
-				StringBuffer resultLine = new StringBuffer();
-				//match return elements with correct column name
-				for (int i = 0; i < inputReturnFields.length; i++)
-				{
-
-					//if the results is null then handle it below
-					if (results.getString(inputReturnFields[i]) == null)
-					{
-						resultLine = resultLine.append("nullValue");
-						verticalStore[i] = "nullValue";
-						//populate the vertical storage array
-						//populate the hashtable
-						//resultHash.put(inputReturnFields[i],resultLine);
-					}
-
-					else
-					{
-
-						String buf = (results.getString(inputReturnFields[i]));
-						resultLine.append(" ").append(buf.trim());
-						verticalStore[i] = buf; //populate the vertical storage array
-
-						//populate the hash table - but first determine if already
-						// exists
-						if (resultHash.containsKey(inputReturnFields[i]))
-						{
-							resultHash.put(inputReturnFields[i] + "." + repetitionCnt, buf);
-							//System.out.println("flag: "+repetitionCnt+" "+inputReturnFields[i]+" "+buf);
-						}
-						else
-						{
-							resultHash.put(inputReturnFields[i], buf);
-						}
-					}
-
-				}
-
-				//grab the values out of the vertical store and stick them into a string
-				//that is separated by pipes, this way all the data associated with a 
-				//plot is on a sigle line which can be tokenized later and positioned
-				//into an xml structure
-
-				String returnedRow = "";
-				for (int ii = 0; ii < verticalStore.length; ii++)
-				{
-					returnedRow = returnedRow + "|" + verticalStore[ii];
-				}
-
-				outReturnFields[outReturnFieldsNum] = returnedRow; //add to array
-				outReturnFieldsNum++;
-				returnedValues.addElement(returnedRow); //add to the vector
-				outResultHash = resultHash;
-			} //end while
-
-			/*don't close b/c connection was passed into the method*/
-			//query.close();
-			//conn.close();	
-		} // end try 
-		catch (Exception e)
-		{
-			System.out.println(
-				"failed at issueStatement.issueSelect: " + e.getMessage());
-			e.printStackTrace();
-		}
-	} //end method
 
 	/**
 	 * This method does the same as the above method but it accesses a local

@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  * Purpose: 
  *
  * '$Author: farrell $'
- * '$Date: 2003-08-21 21:16:43 $'
- * '$Revision: 1.6 $'
+ * '$Date: 2003-10-10 23:37:13 $'
+ * '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,8 +42,6 @@ public class LocalDbConnectionBroker
 	public static int classUses = 0;
 	//number of times a given connection has been passed out
 	public static int currentConnectionUses = 0;
-	//the current connection number (out of the total in the pool)
-	public static int curentConnectionNum = 0;
 	//define the connection - these are static so that they can be
 	//used by various methods
 	public static Connection pconn=null; 
