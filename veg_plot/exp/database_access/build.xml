@@ -33,7 +33,7 @@
 	<filter token="port" value="1521" />
 	<filter token="driverType" value="thin" />
 	<filter token="driverClass" value="org.postgresql.Driver" />
-	<filter token="connectString" value="jdbc:postgresql://127.0.0.1/nvc" />
+	<filter token="connectString" value="jdbc:postgresql://beta.nceas.ucsb.edu/vegbank" />
 	<filter token="databaseName" value="nvc" />
 	<filter token="insert.minConnections" value="1" />
 	<filter token="insert.maxConnections" value="3" />
@@ -99,6 +99,7 @@
 </target>	
 
 
+<!-- COMPILE -->
 <target name="compile" depends="prepare">
 	<javac srcdir="${build}" 
 		classpath="${cpath}"
@@ -108,7 +109,7 @@
 </target>	
 
 
-	<!-- JAR -->
+	<!-- DIST -->
 	<target name="dist" depends="compile">
 		<jar jarfile ="${lib}/database_access.jar"
 			basedir="${build}"
