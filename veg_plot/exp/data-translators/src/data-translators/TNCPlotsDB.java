@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-03 00:28:33 $'
- * 	'$Revision: 1.17 $'
+ *  '$Date: 2002-04-03 17:07:56 $'
+ * 	'$Revision: 1.18 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -1485,22 +1485,190 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		 return("100");
 	 }
 	 
-	  /**
-	 * method to return the cover for a given strata for a given 
-	 * plot
-	 */
+	 
+	 /**
+	  * method that returns the min height for a stratum
+		* as observerd in a specific plot using as inputs a plot name 
+		* and a stratumName
+		*
+		* @param plot -- the plot
+		* @param stratumName -- the stratum
+	  */
 	 public String getStrataBase(String plotName, String strataName)
 	 {
-		 return("99");
+		 	System.out.println("TNCPlotsDB > strata height lookup: " + strataName );
+		 	String height = "";
+			String trueHeight = "";
+			Statement stmt = null;
+			try 
+			{
+				//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
+				stmt = con.createStatement();
+				StringBuffer sb = new StringBuffer();
+				sb.append("select ");
+				sb.append(" (["+strataName+" Hgt]) ");
+				sb.append(" from ([Plots]) where ([Plot Code]) like '"+plotName+"'" );
+				ResultSet rs = stmt.executeQuery(sb.toString() );
+
+				while (rs.next()) 
+				{
+					height = rs.getString(1);
+					System.out.println("TNCPlotsDB > strata height: '" + height +"'" );
+					if ( height != null )
+					{
+						height = height.trim();
+						if ( height.startsWith("<0.5"))
+						{
+							trueHeight = "0.0";
+						}
+						else if  ( height.startsWith("0.5 -"))
+						{
+							trueHeight = "0.5";
+						}
+						else if  ( height.startsWith("1 -"))
+						{
+							trueHeight = "1.0";
+						}
+						else if  ( height.startsWith("2 -"))
+						{
+							trueHeight = "2.0";
+						}
+						else if  ( height.startsWith("5 -"))
+						{
+							trueHeight = "5.0";
+						}
+						else if  ( height.startsWith("10 -"))
+						{
+							trueHeight = "10.0";
+						}
+						else if  ( height.startsWith("15 -"))
+						{
+							trueHeight = "15.0";
+						}
+						else if  ( height.startsWith("20 -"))
+						{
+							trueHeight = "20";
+						}
+						else if  ( height.startsWith("35 -"))
+						{
+							trueHeight = "35";
+						}
+						else if  ( height.startsWith(">50"))
+						{
+							trueHeight = "50";
+						}
+						else
+						{
+							trueHeight = "";
+						}
+					}
+					else 
+					{
+						trueHeight = "";
+					}
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch( Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+		 	return(trueHeight);
 	 }
 	 
-	  /**
-	 * method to return the cover for a given strata for a given 
-	 * plot
-	 */
+	 
+	 /**
+	  * method that returns the max height for a stratume 
+		* as observerd in a specific plot using as inputs a plot name 
+		* and a stratumName
+		*
+		* @param plot -- the plot
+		* @param stratumName -- the stratum
+	  */
 	 public String getStrataHeight(String plotName, String strataName)
 	 {
-		 return("200");
+		 	System.out.println("TNCPlotsDB > strata height lookup: " + strataName );
+		 	String height = "";
+			String trueHeight = "";
+			Statement stmt = null;
+			try 
+			{
+				//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
+				stmt = con.createStatement();
+				StringBuffer sb = new StringBuffer();
+				sb.append("select ");
+				sb.append(" (["+strataName+" Hgt]) ");
+				sb.append(" from ([Plots]) where ([Plot Code]) like '"+plotName+"'" );
+				ResultSet rs = stmt.executeQuery(sb.toString() );
+
+				while (rs.next()) 
+				{
+					height = rs.getString(1);
+					System.out.println("TNCPlotsDB > strata height: '" + height +"'" );
+					if ( height != null )
+					{
+						height = height.trim();
+						if ( height.startsWith("<0.5"))
+						{
+							trueHeight = "0.5";
+						}
+						else if  ( height.startsWith("0.5 -"))
+						{
+							trueHeight = "1.0";
+						}
+						else if  ( height.startsWith("1 -"))
+						{
+							trueHeight = "2.0";
+						}
+						else if  ( height.startsWith("2 -"))
+						{
+							trueHeight = "5.0";
+						}
+						else if  ( height.startsWith("5 -"))
+						{
+							trueHeight = "10.0";
+						}
+						else if  ( height.startsWith("10 -"))
+						{
+							trueHeight = "15.0";
+						}
+						else if  ( height.startsWith("15 -"))
+						{
+							trueHeight = "20.0";
+						}
+						else if  ( height.startsWith("20 -"))
+						{
+							trueHeight = "35";
+						}
+						else if  ( height.startsWith("35 -"))
+						{
+							trueHeight = "50";
+						}
+						else if  ( height.startsWith(">50"))
+						{
+							trueHeight = "100";
+						}
+						else
+						{
+							trueHeight = "";
+						}
+					}
+					else 
+					{
+						trueHeight = "";
+					}
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch( Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+		 	return(trueHeight);
 	 }
 	 
 	 
