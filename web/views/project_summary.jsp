@@ -48,15 +48,14 @@
 		   
 		  <!-- plot count -->
 		  <td class="numeric">
-		    <vegbank:get id="observation" select="observation_count" beanName="map" pager="false" perPage="-1" 
-		     where="where_project_pk" wparam="project_pk" />
-		   <logic:empty name="observation-BEAN">0</logic:empty>
-		   <logic:notEmpty name="observation-BEAN">
+		    
+		   <logic:empty name="onerowofproject" property="countobs">0</logic:empty>
+		   <logic:notEmpty name="onerowofproject" property="countobs">
 		   
-		   <logic:notEqual name="observation-BEAN" property="count_observations" value="0">
-		   <a href="@get_link@simple/observation/<bean:write name='project_pk' />?where=where_project_pk"><bean:write name="observation-BEAN" property="count_observations" /></a>
+		   <logic:notEqual name="onerowofproject" property="countobs" value="0">
+		   <a href="@get_link@simple/observation/<bean:write name='project_pk' />?where=where_project_pk"><bean:write name="onerowofproject" property="countobs" /></a>
 		   </logic:notEqual>
-		   <logic:equal name="observation-BEAN" property="count_observations" value="0">0</logic:equal>
+		   <logic:equal name="onerowofproject" property="countobs" value="0">0</logic:equal>
 		   </logic:notEmpty>
           </td>
           <!-- classified plot count -->
@@ -97,7 +96,7 @@
 <!--Insert a nested get statement here:
    example:   
 
-<vegbank:get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_project_pk" wparam="project_pk" />-->
+<NOT vegbank:get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_project_pk" wparam="project_pk" />-->
 </logic:iterate>
 </table>
 </logic:notEmpty>
