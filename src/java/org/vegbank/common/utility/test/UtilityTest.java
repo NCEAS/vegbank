@@ -7,8 +7,8 @@
  *  Release: @@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-05-10 00:33:27 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-05-29 20:57:46 $'
+ *  '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,5 +135,17 @@ public class UtilityTest extends TestCase
 		assertEquals(true, Utility.isAnyStringNotNullorEmpty(fullOfStrings) );
 		assertEquals(true, Utility.isAnyStringNotNullorEmpty(onlyOneNull) );
 		assertEquals(false, Utility.isAnyStringNotNullorEmpty(noNonEmptyString) );
+	}
+	
+	public void testArrayToCommaSeparatedString()
+	{
+		String[] emptyArray = {};
+		String[] fullOfStrings = {"full", "of", "strings"};
+		String[] onlyOneNull = {"here", "is", "that", null, "damit"};
+		String[] noNonEmptyString = {"", null, "", null, ""};
+
+		assertEquals("", Utility.arrayToCommaSeparatedString(emptyArray));
+		assertEquals("full,of,strings", Utility.arrayToCommaSeparatedString(fullOfStrings));
+		assertEquals("here,is,that,null,damit", Utility.arrayToCommaSeparatedString(onlyOneNull));
 	}
 }

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 18:42:18 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2003-05-29 20:57:46 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,7 +70,9 @@ public class DBPlantWriter implements Constants
 			int snRefId =  this.getIntFromString(plant.getScientificNameReferenceId());
 			int codeRefId =  this.getIntFromString(plant.getCodeNameReferenceId());
 			int commonRefId =  this.getIntFromString(plant.getCommonNameReferenceId());
-							
+			int statusRefId =  this.getIntFromString(plant.getStatusReferenceId());
+			int snNoAutRefId =  this.getIntFromString(plant.getScientificNameNoAuthorsReferenceId());
+										
 			// Need to get the partyId
 			PlantParty party = plant.getPlantParty();
 			int partyId;
@@ -117,6 +119,10 @@ public class DBPlantWriter implements Constants
 					{
 						refId = snRefId;
 					}
+					else if ( pu.getClassSystem().equals( USAGE_NAME_SCIENTIFIC_NOAUTHORS) )
+					{
+						refId = snNoAutRefId;
+					}
 					else
 					{
 						System.out.println("DBPlantWriter: Name classsystem not recoginized");
@@ -155,7 +161,7 @@ public class DBPlantWriter implements Constants
 			int statusId = 
 				this.insertPlantStatus(
 					conceptId,
-					conceptRefId,
+					statusRefId,
 					partyId,
 					plant.getStatus(),
 					plant.getParentName(),
@@ -287,7 +293,7 @@ public class DBPlantWriter implements Constants
 		+ " values (?,?,?,?,?,?,?,?,?,?,?)");
 		
 		pstmt.setInt(1, plantConceptId);
-		if ( referenceId == 0)
+		if ( referenceId == 0 )
 		{
 			pstmt.setNull(2, java.sql.Types.INTEGER);
 		}

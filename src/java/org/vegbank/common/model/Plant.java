@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-16 02:39:50 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-05-29 20:57:46 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,6 +65,7 @@ public class Plant implements Constants, Comparable
 	private PlantParty plantParty = null;
 	private String plantPartyId = null;
 	private String statusPartyComments = null;
+	private String statusReferenceId = null;	
 	
 	
 	public void setPlantName( String plantName)
@@ -545,6 +546,7 @@ public class Plant implements Constants, Comparable
 		this.scientificNameReferenceId = id;
 		this.codeNameReferenceId = id;
 		this.scientificNameNoAuthorsReferenceId = id;
+		this.statusReferenceId = id;
 	}
 
 	/**
@@ -713,6 +715,22 @@ public class Plant implements Constants, Comparable
 	public void setPlantPartyId(String string)
 	{
 		plantPartyId = string;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getStatusReferenceId()
+	{
+		return statusReferenceId;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setStatusReferenceId(String string)
+	{
+		statusReferenceId = string;
 	}
 
 }

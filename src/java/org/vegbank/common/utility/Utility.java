@@ -9,13 +9,25 @@ import java.sql.SQLException;
 import org.vegbank.common.dbAdapter.*;
 
 /**
+ * @author farrell
+ *
+ * To change this generated comment go to 
+ * Window>Preferences>Java>Code Generation>Code Template
+ */
+/**
+ * @author farrell
+ *
+ * To change this generated comment go to 
+ * Window>Preferences>Java>Code Generation>Code Template
+ */
+/**
  * '$RCSfile: Utility.java,v $'
  * 
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-05-29 18:43:34 $'
- * '$Revision: 1.10 $'
+ * '$Date: 2003-05-29 20:57:46 $'
+ * '$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -244,5 +256,28 @@ public class Utility
 		}
 		return result;
 	}
+	
+	/**
+	 * Convience method to create a simple comma separted string from a 
+	 * string array.
+	 *
+	 * @param String[] -- Strings to convert to comma separate string
+	 * @return String 
+	 */
+	public static String arrayToCommaSeparatedString(String[] plots)
+	{
+		String plotList;
+		StringBuffer sb = new StringBuffer();
+		for (int i=0; i < plots.length; i++)
+		{
+			sb.append(plots[i]);
+			if( (i +1) < plots.length )
+			{
+				sb.append(",");
+			}
+		}
+		return sb.toString();
+	}
+	
 	
 }
