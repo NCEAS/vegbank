@@ -21,6 +21,7 @@ import databaseAccess.SqlFile;
 import servlet.util.ServletUtility;
 import DataSourceClient; //this is the rmi client for loading mdb files
 import PlantTaxaLoader;
+import servlet.authentication.UserDatabaseAccess;
 
 /**
  * REQUIRED PARAMETERS
@@ -28,8 +29,8 @@ import PlantTaxaLoader;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-06-20 18:57:20 $'
- *  '$Revision: 1.33 $'
+ *  '$Date: 2002-06-20 20:58:06 $'
+ *  '$Revision: 1.34 $'
  */
 
 
@@ -47,6 +48,7 @@ public class DataSubmitServlet extends HttpServlet
 	private CommunityQueryStore qs;
 	private TaxonomyQueryStore tqs;
 	private VegCommunityLoader commLoader = new VegCommunityLoader();
+	private UserDatabaseAccess userdb = new UserDatabaseAccess();
 	private XMLparse parser;
 	
 	private String rmiServer = "raptor.nceas.ucsb.edu";
@@ -287,7 +289,7 @@ public class DataSubmitServlet extends HttpServlet
 				System.out.println("DataSubmitServlet > getting the name reference ");
 				// send the user the attributes related to the plant status/usage
 				
-				updatePlantStatusUsagePage(emailAddress);
+				updatePlantStatusUsagePage(emailAddress, longName, shortName, code);
 				response.sendRedirect("/forms/plant-valid.html");
 			}
 			else
@@ -306,7 +308,8 @@ public class DataSubmitServlet extends HttpServlet
 	/**
 	 * method that updates the plant usage / status page 
 	 */
-	 private void updatePlantStatusUsagePage(String emailAddress)
+	 private void updatePlantStatusUsagePage(String emailAddress, String longName, 
+	 String shortName, String code)
 	 {
 		try
 		{		
@@ -314,8 +317,33 @@ public class DataSubmitServlet extends HttpServlet
 			Hashtable replaceHash = new Hashtable();
 			// to this form add the names and the concept description and the 
 			// party names for perspectives
+			userdb = new UserDatabaseAccess();
+			Hashtable h = userdb.getUserInfo(emailAddress);
+			String surName = (String)h.get("surName");
+			String givenName = (String)h.get("givenName");
+			String password = (String)h.get("password");
+			String address = (String)h.get("address");
+			String city = (String)h.get("city");
+			String state = (String)h.get("state");
+			String country = (String)h.get("country");
+			String zipCode = (String)h.get("zipCode");
+			String dayPhone = (String)h.get("dayPhone");
+			String ticketCount =  (String)h.get("ticketCount");
+			String permissionType = (String)h.get("permissionType");
+			String institution = (String)h.get("institution");
+			
+			replaceHash.put("longName", ""+longName);
+			replaceHash.put("shortName", ""+shortName);
+			replaceHash.put("code", ""+code);
 			
 			replaceHash.put("emailAddress", ""+emailAddress);
+			replaceHash.put("plantPartyGivenName", ""+givenName );
+			replaceHash.put("plantPartySurName", ""+surName);
+			replaceHash.put("plantPartyInstitution", ""+institution );
+			replaceHash.put("plantPartyEmailAddress", ""+emailAddress );
+			
+			
+			//replaceHash.put("", );
 			su.filterTokenFile(plantStatusUsageTemplate, plantValidationForm, replaceHash);
 			// the calling method will redirect the browser
 		}

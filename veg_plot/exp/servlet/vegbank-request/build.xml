@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: harris $'
-  *     '$Date: 2002-05-22 20:43:23 $'
-  * '$Revision: 1.4 $'
+  *     '$Date: 2002-06-20 20:58:06 $'
+  * '$Revision: 1.5 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -42,6 +42,7 @@
 
 
 	<property name="vegcommunity" value="../lib/vegcommunity.jar" />
+	<property name="planttaxonomy" value="../lib/planttaxonomy.jar" />
 	<property name="jdbc" value="../lib/jdbc7.0-1.2.jar" />
 	<property name="multipart" value="../lib/multipart.jar" />
 	<property name="servlet-api" value="../lib/servlet.jar" />
@@ -51,7 +52,8 @@
 	<property name="xerces" value="../lib/xerces_1_4.jar" />
 	<property name="framework" value="../lib/frameworkservletmodule.jar" />
 	<property name="rmisystem" value="../lib/rmidatasource.jar" />
-	<property name="cpath" value="${rmisystem}:${vegcommunity}:${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
+	<property name="authentication" value="../lib/authservletmodule.jar" />
+	<property name="cpath" value="${authentication}:${planttaxonomy}:${rmisystem}:${vegcommunity}:${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
 	
 	
 	<filter token="servlet-path" value="${servlet-path}" />
