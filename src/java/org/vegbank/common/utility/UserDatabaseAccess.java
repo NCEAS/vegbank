@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-02-27 19:10:32 $'
- *	'$Revision: 1.8 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-02-28 11:19:11 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ package org.vegbank.common.utility;
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
  * 		
- *		'$Author: farrell $'
- *     '$Date: 2004-02-27 19:10:32 $'
- *     '$Revision: 1.8 $'
+ *		'$Author: anderson $'
+ *     '$Date: 2004-02-28 11:19:11 $'
+ *     '$Revision: 1.9 $'
  */
 
 import java.sql.PreparedStatement;
@@ -99,8 +99,8 @@ public class UserDatabaseAccess
 			ResultSet rs = query.getResultSet();
 			while (rs.next()) 
 			{
-     		s = rs.getString(1);
-    	}
+     			s = rs.getString(1);
+    		}
 			DBConnectionPool.returnDBConnection(conn);
 		}
 		catch (Exception e) 
@@ -117,33 +117,27 @@ public class UserDatabaseAccess
 	 * @param  usrId -- the usr_id of the user
 	 */
 	public boolean userCertificationExists(int usrId)
-	{
+			throws SQLException {
 		int s = 0;
 		StringBuffer sb = new StringBuffer();
-		try 
+		DBConnection conn = getConnection();
+		//get the connections etc
+		Statement query = conn.createStatement();
+		sb.append("SELECT certification_id FROM usercertification ");
+		sb.append("where usr_id=" + usrId);
+		
+		//issue the query
+		query.executeQuery(sb.toString());
+		ResultSet rs = query.getResultSet();
+		
+		int resultCnt = 0;
+		while (rs.next() ) 
 		{
-			//get the connections etc
-			DBConnection conn = getConnection();
-			Statement query = conn.createStatement();
-			sb.append("select CERTIFICATION_ID from USERCERTIFICATION ");
-			sb.append("where usr_id=" + usrId);
-			
-			//issue the query
-			query.executeQuery(sb.toString());
-			ResultSet rs = query.getResultSet();
-			
-			int resultCnt = 0;
-			while (rs.next() ) 
-			{
-				s = rs.getInt(1);
-				return (s > 0);
-			}
+			s = rs.getInt(1);
+			return (s > 0);
 		}
-		catch (Exception e) 
-		{
-			LogUtility.log("Exception: " + e.getMessage());
-			LogUtility.log("sql: " + sb.toString() );
-		}
+
+		DBConnectionPool.returnDBConnection(conn);
 		return(false);
 	 }
 	 
@@ -217,289 +211,45 @@ public class UserDatabaseAccess
 		
 		LogUtility.log("UserDatabaseAccess: saving cert. app");
 		pstmt.execute();
+		DBConnectionPool.returnDBConnection(conn);
 		return(true);
 	 }
 	 
-	/**
-	 * method to create a new user in the vegetation user 
-	 * database.  This is used to create the intial instance 
-	 * of a user.   
-	 * @param emailAddress
-	 * @param passWord
-	 * @param givenName
-	 * @param surName 
-	 * @param remoteAddress
-	 * @param inst
-	 * @param address
-	 * @param city
-	 * @param state
-	 * @param country
-	 * @param phone
-	 * @param zip
-	 * @return b -- true or false result realted to the success of the user creation
-	 */
-	public boolean createUser(
-		String emailAddress,
-		String passWord,
-		String givenName,
-		String surName,
-		String remoteAddress,
-		String inst,
-		String address,
-		String city,
-		String state,
-		String country,
-		String phone,
-		String zip,
-		Vector errors)
-	{
-		StringBuffer sb = new StringBuffer();
-		boolean success = true;
-		try 
-		{
-			// FIGURE OUT IF THE USER HAS AN ACCOUNT
-			long l = this.getUserId(emailAddress);
-			//LogUtility.log("userid: " + l);
-			if (l == 0)
-			{
-				//get the connections etc
-				DBConnection conn = getConnection();
-				Statement query = conn.createStatement();
-				sb.append("INSERT into USER_INFO (EMAIL_ADDRESS, PASSWORD, GIVEN_NAME, SUR_NAME, REMOTE_ADDRESS, TICKET_COUNT, ");
-				sb.append("INSTITUTION, ADDRESS, CITY, STATE, COUNTRY, PHONE_NUMBER, ZIP_CODE, permission_type) ");
-				sb.append("VALUES ('"+emailAddress+"', '"+passWord+"', '"+givenName+"', '"+surName+"', '"+remoteAddress+"', "+"1");
-				sb.append(", '"+inst+"', '"+address+"', '"+city+"', '"+state+"','"+country+"','"+phone+"','"+zip+"',1)" );
-				//issue the query
-				query.executeUpdate(sb.toString());
-				
-				// ALSO NEED TO WRITE TO THE PARTY TABLE !!!!
-				Party party = new Party();
-				Address partyAddress = new Address();
-				Telephone telephone = new Telephone();
-
-				partyAddress.setDeliverypoint(address);
-				partyAddress.setCity(city);
-				partyAddress.setAdministrativearea(state);
-				partyAddress.setCountry(country); 
-				partyAddress.setPostalcode(zip);
-				
-				telephone.setPhonenumber(phone);
-				telephone.setPhonetype("work");
-								
-				party.setEmail(emailAddress);
-				party.setGivenname(givenName);
-				party.setSurname(surName);
-				party.setOrganizationname(inst);
-				party.addparty_telephone(telephone);
-				party.addparty_address( partyAddress );
-
-				// Write to database
-				VBModelBeanToDB party2db = new VBModelBeanToDB();
-				party2db.insert(party);	
-			}
-			else
-			{
-				//User already exits
-				errors.add("The username '" + emailAddress + "' is already taken, choose another"
-				+ "<br/> If you have already registered using that email address, "
-				+ " you can request that the password be sent to your email address by <a href=\"/vegbank/forms/fetch-password.html\">clicking here</a>");
-				success = false;
-			}
-		}
-		catch (Exception e) 
-		{
-			LogUtility.log("Exception: " + e.getMessage());
-			LogUtility.log("sql: " + sb.toString() );
-			e.printStackTrace();
-			success = false;
-		}
-		return(success);
-	}
- 
-
- 
  /**
   * method that retrives a users id from the database and 
 	* returns the value
 	* @param email -- the email address of the user
 	*/
 	public int getUserId(String emailAddress)
-	{
+			throws SQLException {
 		LogUtility.log("UDA.getUserId(): getting usr_id for: " + emailAddress);
 		int usrId = 0;
-		try {
-			//get the connections etc
-			DBConnection conn = getConnection();
-			Statement query = conn.createStatement();
-			StringBuffer sb = new StringBuffer();
-			sb.append("SELECT usr_id FROM usr WHERE LOWER(email_address) LIKE '" +
-					emailAddress.toLowerCase()+"' ");
-			
-			//issue the query
-			query.executeQuery(sb.toString());
-			ResultSet rs = query.getResultSet();
-			if (rs.next()) {
-     			usrId = rs.getInt(1);
-    		}
-
-		} catch (Exception e) {
-			LogUtility.log("UDA.getUserId(): Exception: " + e.getMessage(), e);
+		
+		//get the connections etc
+		DBConnection conn = getConnection();
+		Statement query = conn.createStatement();
+		StringBuffer sb = new StringBuffer();
+		sb.append("SELECT usr_id FROM usr WHERE LOWER(email_address) LIKE '" +
+				emailAddress.toLowerCase()+"' ");
+		
+		//issue the query
+		query.executeQuery(sb.toString());
+		ResultSet rs = query.getResultSet();
+		if (rs.next()) {
+			usrId = rs.getInt(1);
 		}
+
+		DBConnectionPool.returnDBConnection(conn);
 		return(usrId);
 	}
  
  
- /**
-  * method that determines if the user has downloaded the xxx
-	* described in the input parameters before and returns true if 
-	* they have
-	* @param emailAddress -- the email address
-	* @param downloadType -- the type of software requested
-	*/
-	public boolean userDownloadEntryExists(String emailAddress, String downloadType)
-	{
-		LogUtility.log("UserDatabaseAccess > looking up the user id for user: " + emailAddress);
-		int s = 0;
-		StringBuffer sb = new StringBuffer();
-		try 
-		{
-			//get the connections etc
-			DBConnection conn = getConnection();
-			Statement query = conn.createStatement();
-			sb.append("select user_id from USER_DOWNLOADS ");
-			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"' AND ");
-			sb.append(" DOWNLOAD_TYPE like '"+downloadType+"'");
-			
-			//LogUtility.log("sql: " + sb.toString() );
-			
-			//issue the query
-			query.executeQuery(sb.toString());
-			ResultSet rs = query.getResultSet();
-			
-			
-			int resultCnt = 0;
-			while (rs.next() ) 
-			{
-				resultCnt++;
-     		s = rs.getInt(1);
-				LogUtility.log("result: " + s);
-				if ( s > 0 )
-				{
-					return( true );
-				}
-				else
-				{
-					return(false);
-				}
-    	}
-			// if there were zero results returned then return false
-			if ( resultCnt == 0) 
-			{
-				return(false);
-			}
-		}
-		catch (Exception e) 
-		{
-			LogUtility.log("Exception: " + e.getMessage());
-			LogUtility.log("sql: " + sb.toString() );
-			e.printStackTrace();
-			return(false);
-		}
-		return(true);
-	}
-	
 	/**
-	 * method that updates a users download status for a given xxx
-	 * 
+	 * This method updates, umm - what was it?  Hmmm.  
+	 * Oh yeah the user's password.
+	 * @param password new password
+	 * @param emailAddress of the user
 	 */
-	 public void updateDownloadInfo(String emailAddress, String downloadType)
-	 {
-		 LogUtility.log("UserDatabaseAccess > updating download info");
-		 StringBuffer sb = new StringBuffer();
-		try
-		{	
-			//get the connections etc
-			DBConnection conn = getConnection();
-			//get the userId of the user 
-			int userid = this.getUserId( emailAddress );
-			// now make the entry in the download table
-			// this is the postgresql date function
-			String sysdate = "now()";
-			sb.append("UPDATE USER_DOWNLOADS set download_count = DOWNLOAD_COUNT + 1 ");
-			sb.append("WHERE EMAIL_ADDRESS like '"+emailAddress+"'  and download_type like '");
-			sb.append(downloadType+"'");
-			
-			LogUtility.log("sql: " + sb.toString() );
-			
-			// create the statement
-			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
-			
-			// execute the insert
-			pstmt.execute();
-		}
-		catch (Exception e) 
-		{
-			LogUtility.log("Exception: " + e.getMessage());
-			LogUtility.log("sql: " + sb.toString() );
-			e.printStackTrace();
-		}
-	 }
-	 
- 
- /**
-  * method that inserts or updates the download table in the 
-	* user database
-	*/
-	public void insertDownloadInfo(String emailAddress, String downloadType )
-	{
-		StringBuffer sb = new StringBuffer();
-		try
-		{	
-			LogUtility.log("UserDatabaseAccess > inserting download info");
-			//get the connections etc
-			DBConnection conn = getConnection();
-			// update the ticket count
-			this.updateTicketCount(emailAddress);
-			
-			//see if this user has an entry in this table and ifso then update it
-			if ( this.userDownloadEntryExists(emailAddress,  downloadType) == true )
-			{
-				this.updateDownloadInfo(emailAddress, downloadType);
-			}
-			
-			else
-			{
-				//get the userId of the user 
-				int userid = this.getUserId( emailAddress );
-				// now make the entry in the download table
-				// this is the postgresql date function
-				String sysdate = "now()";
-				sb.append("INSERT into USER_DOWNLOADS (user_id, download_type, last_download, ");
-				sb.append(" download_count, email_address ) ");
-				sb.append(" values(?,?,?,?,?) ");
-			
-				// create the statement
-				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
-				// Bind the values to the query and execute it
-				pstmt.setInt(1, userid);
-				pstmt.setString(2, downloadType);
-				pstmt.setString(3, sysdate);
-				pstmt.setInt(4, 1);
-				pstmt.setString(5, emailAddress);
-			
-				// execute the insert
-				pstmt.execute();
-			}
-		}
-		catch (Exception e) 
-		{
-			LogUtility.log("Exception: " + e.getMessage());
-			LogUtility.log("sql: " + sb.toString() );
-			e.printStackTrace();
-		}
-		
-	}
- 
 	public void updatePassword(String password, String emailAddress)
 	{
 		try
@@ -525,100 +275,26 @@ public class UserDatabaseAccess
 	 * @param emailAddress
 	 */
 	public void updateTicketCount(String emailAddress)
-	{
-		try 
-		{
-			//get the connections etc
-			DBConnection conn = getConnection();
-			Statement query = conn.createStatement ();
-			StringBuffer sb = new StringBuffer();
-			
-	//		java.util.SimpleDateFormat formatter = new java.util.SimpleDateFormat("yy-MM-dd HH:mm:ss");
- 			java.util.Date localtime = new java.util.Date();
- 	//		String dateString = formatter.format(localtime);
-			
-			LogUtility.log("UserDatabaseAccess > Database date: "+localtime);
-			
-			sb.append("UPDATE USER_INFO set TICKET_COUNT = TICKET_COUNT + 1 ");
-			sb.append("WHERE EMAIL_ADDRESS like '"+emailAddress+"' ");
-						
-			//issue the query
-			query.executeUpdate(sb.toString());
-		}
-		catch (Exception e) 
-		{
-			LogUtility.log("Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
+			throws SQLException {
+		//get the connections etc
+		DBConnection conn = getConnection();
+		Statement query = conn.createStatement ();
+		StringBuffer sb = new StringBuffer();
+		
+//		java.util.SimpleDateFormat formatter = new java.util.SimpleDateFormat("yy-MM-dd HH:mm:ss");
+		java.util.Date localtime = new java.util.Date();
+//		String dateString = formatter.format(localtime);
+		
+		LogUtility.log("UserDatabaseAccess > Database date: "+localtime);
+		
+		sb.append("UPDATE usr SET ticket_count = ticket_count + 1 ");
+		sb.append("WHERE email_address LIKE '"+emailAddress+"' ");
+					
+		//issue the query
+		query.executeUpdate(sb.toString());
+		DBConnectionPool.returnDBConnection(conn);
 	}
  
- 
- 
- 
- 
-	/**
-	 * methosd to validate the user given a email address and a 
-	 * password with the correponding email - password pairs in
-	 * the database
-	 * @param emailAddress -- the email address that a user passes to the client
-	 * @param passWord -- the password that the user passes to the client	 
-	 */
-
-	public boolean authenticateUser(String emailAddress, String passWord)
-	{
-		try 
-		{
-		
-			//get the connections etc
-			DBConnection conn = getConnection();
-			Statement query = conn.createStatement ();
-			ResultSet results= null;
-			StringBuffer sb = new StringBuffer();
-				sb.append("SELECT EMAIL_ADDRESS, PASSWORD FROM USER_INFO ");
-				sb.append("WHERE 	EMAIL_ADDRESS like '"+emailAddress+"'");
-		
-			//issue the query
-			results = query.executeQuery(sb.toString());
-			
-			//get the results
-			while (results.next()) 
-			{
-				if (results.getString(1) != null) 
-				{
-					String DBEmailAddress = results.getString(1); 
-					String DBPassWord = results.getString(2); 
-					LogUtility.log("UserDatabaseAccess > Retrieved Name: "+emailAddress);
-					//validate the email and passwords
-					if ( emailAddress.trim().equals(DBEmailAddress) 
-						&& passWord.trim().equals(DBPassWord) )
-						{
-							LogUtility.log("UserDatabaseAccess > Accepted at the db level");
-							//update the ticket count
-							updateTicketCount( DBEmailAddress );
-							return(true);
-						}
-						else 
-						{
-							LogUtility.log("UserDatabaseAccess > accepted user but denied access");
-							return(false);
-						}
-				}
-				else 
-				{
-					LogUtility.log("UserDatabaseAccess > User not known in database");
-				}
-			}
-			DBConnectionPool.returnDBConnection(conn);
-		}
-		catch (Exception e) 
-		{
-			LogUtility.log("Exception: " 
-			+e.getMessage());
-			e.printStackTrace();
-		}
-		//default is false
-		return(false);
-	}
 
 	/**
 	 * utility method to provide this class a connection to the 
@@ -626,8 +302,24 @@ public class UserDatabaseAccess
 	 */
 	private DBConnection getConnection() throws SQLException
 	{
+		LogUtility.log("UDA.getConnection(): getting DB connection");
 		DBConnectionPool dbCP = DBConnectionPool.getInstance();
-		return dbCP.getDBConnection("Need Connection for User database requests");
+		DBConnection conn = dbCP.getDBConnection("UserDatabaseAccess");
+
+		LogUtility.log("UDA.getConnection(): DB connection tag: " + conn.getTag() );
+/*  // This makes sure a connection is established
+		int loopCount = 0;
+		while (conn.getTag() == null) {
+			LogUtility.log("UDA.getConnection(): waiting for free DB conn");
+			try { Thread.sleep(1000); } catch (InterruptedException iex) { }
+			if (++loopCount > 4) {
+				LogUtility.log("UDA.getConnection(): couldn't get DB conn!");
+				return null;
+			}
+			conn = dbCP.getDBConnection("UserDatabaseAccess");
+		}
+*/
+		return conn;
 	}
 	
 	/**
@@ -639,17 +331,15 @@ public class UserDatabaseAccess
 	 */
 	 private WebUser getAllUserData(String uniqueClause) throws Exception
 	 {
-		 Hashtable h = new Hashtable();
-		 WebUser userBean = new WebUser();
+		//get the connections etc
+		DBConnection conn = getConnection();
 		 
-		 //get the connections etc
-		 DBConnection conn = getConnection();
-		 Statement query = conn.createStatement ();
-		 ResultSet results= null;
+		 Statement query = conn.createStatement();
 		 StringBuffer sb = new StringBuffer();
-			sb.append("SELECT email_address, password, surname, givenname, ");
+			sb.append("SELECT email_address, password, surname, givenname, preferred_name,");
 			sb.append(" permission_type, organizationname, ticket_count, deliverypoint, ");
-			sb.append(" city, administrativearea, country, postalcode, phonenumber, usr_id, party_id");
+			sb.append(" city, administrativearea, country, postalcode, phonenumber, ");
+			sb.append(" usr_id, party_id, address_id");
 			sb.append(" FROM usr NATURAL JOIN (party LEFT JOIN  ");
 			sb.append(" ( telephone NATURAL JOIN address ) USING (party_id) )");
 			sb.append(" WHERE ( currentflag = true  OR currentflag IS NULL ) AND ");
@@ -658,50 +348,37 @@ public class UserDatabaseAccess
 	
 		LogUtility.log("UDA.getAllUserData(): " + sb.toString() );
 		
-		//issue the query
-		results = query.executeQuery(sb.toString());
+		 //issue the query
+		 ResultSet results = query.executeQuery(sb.toString());
 		
 		//get the results -- assumming 0 or 1 rows returned
+		WebUser userBean = null;
 		if (results.next()) 
 		{
-			h.put("email", ""+results.getString(1));
-			h.put("password", ""+results.getString(2));
-			h.put("surname", ""+results.getString(3));
-			h.put("givenname", ""+results.getString(4));
-			h.put("permissiontype", ""+results.getString(5));
-			h.put("institution", ""+results.getString(6)); 
-			h.put("ticketcount", ""+results.getString(7)); 
-			h.put("address", ""+results.getString(8)); 
-			h.put("city", ""+results.getString(9)); 
-			h.put("state", ""+results.getString(10)); 
-			h.put("country", ""+results.getString(11)); 
-			h.put("postalcode", ""+results.getString(12));
-			h.put("dayphone", ""+results.getString(13));
-			h.put("userid",  new Integer( results.getInt(14) ).toString());
-			h.put("partyid",  new Integer( results.getInt(15) ).toString());		
-			
-			LogUtility.log(">>>> UDA: Got user: " + h.toString());
-		}
-		else
-		{
-			DBConnectionPool.returnDBConnection(conn);
-			return null;	
+			// build the WebUser
+			userBean = new WebUser();
+			userBean.setEmail( results.getString(1) );
+			userBean.setPassword( results.getString(2) );
+			userBean.setSurname( results.getString(3) );
+			userBean.setGivenname( results.getString(4) );
+			userBean.setPreferredname( results.getString(5) );
+			userBean.setPermissiontype( results.getInt(6) );
+			userBean.setOrganizationname( results.getString(7) ); 
+			userBean.setTicketcount( results.getInt(8) ); 
+			userBean.setAddress( results.getString(9) ); 
+			userBean.setCity( results.getString(10) ); 
+			userBean.setState( results.getString(11) ); 
+			userBean.setCountry( results.getString(12) ); 
+			userBean.setPostalcode( results.getString(13) );
+			userBean.setDayphone( results.getString(14) );
+			userBean.setUserid( results.getInt(15) );
+			userBean.setPartyid( results.getInt(16) );		
+			userBean.setAddressid( results.getInt(17) );		
+
 		}
 		
+		conn.close();
 		DBConnectionPool.returnDBConnection(conn);
-		
-		Iterator it = h.keySet().iterator();
-		while ( it.hasNext() )
-		{
-			String name = (String) it.next();
-			String value = (String) h.get(name);
-			//LogUtility.log("DBObservationReader > name: '" + name + "' value: '" + value + "'" );
-					
-			// Populate Object with value
-			BeanUtils.copyProperty(userBean, name, value);
-			//LogUtility.log(BeanUtils.getSimpleProperty(object, name) );
-		}
-		
 		return userBean;
 	 }
 	 
@@ -744,122 +421,71 @@ public class UserDatabaseAccess
 	 }
 	 
 	/**
-	 * method that updates the user info database.  The input to 
-	 * this method is a hashatble with the following parameters: <br> <br>
-	 *
-	 * "emailAddress"
-	 * "password"
-	 * "surName"
-	 * "givenName"
-	 * "permissionType"
-	 * "institution"
-	 * "ticketCount"
-	 * "address"
-	 * "city"
-	 * "state"
-	 * "country"
-	 * "postalcode"
-	 * "dayPhone"
+	 * Updates the user info database. 
 	 *
 	 */
-	public boolean updateUserInfo(Hashtable h)
+	public boolean updateUserInfo(WebUser webuser)
 	{
+		DBConnection conn = null;
 		try
 		{
 			LogUtility.log("Attempting to update Profile");
 
-			String surName = (String) h.get("surName");
-			String givenName = (String) h.get("givenName");
-			String emailAddress = (String) h.get("emailAddress");
-			String institution = (String) h.get("institution");
-			String address = (String) h.get("address");
-			String city = (String) h.get("city");
-			String state = (String) h.get("state");
-			String country = (String) h.get("country");
-			String phoneNumber = (String) h.get("phoneNumber");
-			String postalcode = (String) h.get("postalcode");
-			String userId = (String) h.get("userId");
-			String partyId = (String) h.get("partyId");
-						
-			if ((!emailAddress.trim().equals("null"))
-				&& (emailAddress != null)
-				&& (emailAddress.length() > 2))
-			{
-				StringBuffer sb = new StringBuffer();
-				//get the connections etc
-				DBConnection conn = getConnection();
-				conn.setAutoCommit(false);
+			//get the connections etc
+			conn = getConnection();
+			Statement update = conn.createStatement();
+			conn.setAutoCommit(false);
 
-				//int userid = this.getUserId( emailAddress );
-				sb.append("UPDATE usr SET sur_name='" + surName + "', ");
-				sb.append("given_name='" + givenName + "', ");
-				sb.append("institution='" + institution + "', ");
-				sb.append("address='" + address + "', ");
-				sb.append("city='" + city + "', ");
-				sb.append("state='" + state + "', ");
-				sb.append("country='" + country + "', ");
-				sb.append("postalcode='" + postalcode + "', ");
-				sb.append("phone_number='" + phoneNumber + "', ");
-				sb.append("email_address='" + emailAddress + "' ");
+			webuser.setSQLSafe(true);
+			
+			// usr
+			StringBuffer sb = new StringBuffer();
+			sb.append("UPDATE usr SET preferred_name='" + webuser.getPreferredname() + "', ");
+			sb.append("email_address='" + webuser.getEmail() + "' ");
+			sb.append("WHERE usr_id='" + webuser.getUserid() + "' ");
+			LogUtility.log("UDA.updateUserInfo: usr: " + sb.toString());
+			update.executeUpdate(sb.toString());
 
-				sb.append("WHERE usr_id='" + userId + "' ");
-				
-				LogUtility.log("sql: " + sb.toString());
-				// create the statement
-				PreparedStatement pstmt = conn.prepareStatement(sb.toString());
-				// execute the insert
-				pstmt.execute();
-
-				// Also update the Party and related tables
-				DBConnection vbconn = getConnection();
-				vbconn.setAutoCommit(false);
-
-				String partyIdSubselect = "party_id = '" +  partyId + "' ";
-				String partyUpdateSQL =
-					"update party set givenname=?, surname=?, organizationname=?,"
-						+ "email=? where "+ partyIdSubselect;
-				String telephoneUpdateSQL =
-					"update telephone set phonenumber =? where " + partyIdSubselect;
-				String addressUpdateSQL =
-					"update address set deliverypoint =?, city=?, administrativearea=?, "
-						+ " country=?, postalcode=? where " + partyIdSubselect;
-
-				PreparedStatement partyUpdate = vbconn.prepareStatement(partyUpdateSQL);
-				PreparedStatement telephoneUpdate = vbconn.prepareStatement(telephoneUpdateSQL);
-				PreparedStatement addressUpdate = vbconn.prepareStatement(addressUpdateSQL);
-				
-				partyUpdate.setString(1, givenName );
-				partyUpdate.setString(2, surName );
-				partyUpdate.setString(3, institution );
-				partyUpdate.setString(4, emailAddress );
-				partyUpdate.execute();
-
-				telephoneUpdate.setString(1, phoneNumber );
-				telephoneUpdate.execute();
-				
-				addressUpdate.setString(1, address );
-				addressUpdate.setString(2, city );
-				addressUpdate.setString(3, state );
-				addressUpdate.setString(4, country );
-				addressUpdate.setString(5, postalcode );
-				addressUpdate.execute();
-
-				conn.commit();
-				vbconn.commit();
-				
-				LogUtility.log("Updated Profile");
-			}
+			// address
+			sb = new StringBuffer();
+			sb.append("UPDATE address SET ");
+			sb.append("deliverypoint='" + webuser.getAddress() + "', ");
+			sb.append("city='" + webuser.getCity() + "', ");
+			sb.append("administrativearea='" + webuser.getState() + "', ");
+			sb.append("country='" + webuser.getCountry() + "', ");
+			sb.append("postalcode='" + webuser.getPostalcode() + "' ");
+			sb.append("WHERE address_id='" + webuser.getAddressid() + "' ");
+			LogUtility.log("UDA.updateUserInfo: address: " + sb.toString());
+			update.executeUpdate(sb.toString());
+			
+			// party
+			sb = new StringBuffer();
+			sb.append("UPDATE party SET organizationname='" + webuser.getOrganizationname() + "' ");
+			sb.append("WHERE party_id='" + webuser.getPartyid() + "' ");
+			LogUtility.log("UDA.updateUserInfo: party: " + sb.toString());
+			update.executeUpdate(sb.toString());
+			
+			
+			update.close();
+			conn.commit();
+			
+			LogUtility.log("Updated Profile");
 		}
 		catch (Exception e)
 		{
+			DBConnectionPool.returnDBConnection(conn);
 			LogUtility.log("Exception: " + e.getMessage());
 			e.printStackTrace();
-			return (false);
+			try { if (conn != null)  conn.rollback(); }
+			catch (SQLException sex) { LogUtility.log("Exception: " + e.getMessage()); }
+			
+			return false;
 		}
-		return (true);
+		DBConnectionPool.returnDBConnection(conn);
+		return true;
 	}
 	
-	public  boolean isEmailUnique(String emailAddress) throws SQLException
+	public boolean isEmailUnique(String emailAddress) throws SQLException
 	{
 		boolean result = true;
 		// Get connection, query
@@ -870,11 +496,11 @@ public class UserDatabaseAccess
 		ResultSet rs = query.executeQuery("SELECT usr_id from usr where email_address = '" + emailAddress + "'");
 		
 		// If any results returned then email address is not unique
-		if (rs.next())
-		{
+		if (rs.next()) {
 			result = false;
 		}
 		
+		DBConnectionPool.returnDBConnection(conn);
 		return result;
 	}
 	
