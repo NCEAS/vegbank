@@ -11,7 +11,7 @@
       <qtxt>Who runs VegBank?</qtxt>
       <atxt> VegBank is operated by the Ecological 
             Society of America's <a href="@panel_link@panel.html">Vegetation Panel</a> in cooperation with the <a href="http://www.nceas.ucsb.edu/">National 
-            Center for Ecological Analysis and Synthesis</a>.  The development team for VegBank is listed on the <a href="@general_link@contact.html">contact</a> page.  Further participants can be found on the <a href="@general_link@../history/development.html#particpants">development history</a> page.</atxt>
+            Center for Ecological Analysis and Synthesis</a>.  The development team for VegBank is listed on the <a href="@general_link@contact.html">contact</a> page.  Further participants can be found on the <a href="@history_link@development.html#particpants">development history</a> page.</atxt>
     </question>
     <question>
       <qname>whatisplot</qname>
