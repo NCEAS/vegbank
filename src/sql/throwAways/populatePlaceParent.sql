@@ -60,3 +60,20 @@ drop view usStates;
 update namedplacecorrelation set placeconvergence='overlapping' where childplace_id in 
   (select namedplace_ID from namedplace where placeSystem='quadrangle' 
    AND  placeCode in (select placeCode from namedPlace where placeSystem='quadrangle' group by placecode having count(1) > 1));
+   
+   
+-- now correlate equivalent places:
+--create temp view
+
+create view view_temp_duplQuads AS select placeCode, count(1) as howmany, min(namedPlace_ID) as minNP, max(namedPlacE_ID) as maxNP 
+  from namedplace where placeSystem='quadrangle' group by placeCode having count(1)>1;
+
+
+insert into namedPlaceCorrelation (parentplace_ID, childplace_ID, placeconvergence) 
+ select namedPlace_ID, minNP, 'equal' 
+ from namedPlace, view_temp_duplQuads where namedPlace.placeCode=view_temp_duplQuads.placeCode and namedPlace.namedPlace_ID <> minNP;
+
+--drop temp view
+drop view view_temp_duplQuads;
+
+
