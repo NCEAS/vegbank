@@ -7,8 +7,8 @@
  *	
  *
  * '$Author: harris $'
- * '$Date: 2002-06-18 14:44:06 $'
- * '$Revision: 1.4 $'
+ * '$Date: 2002-08-30 19:08:26 $'
+ * '$Revision: 1.5 $'
  *
  */
 
@@ -36,6 +36,7 @@ CREATE table user_info (
 	sur_name  varchar(50),
 	remote_address  varchar(50),
 	address varchar(500),
+	city varchar(50),
 	phone_number varchar(20),
 	phone_type varchar(12),
 	state varchar(20),

@@ -1,3 +1,18 @@
+-----------------------------------------------------------------------------
+-- aux_commInterpretation_classFit -- jhh 20020830
+-----------------------------------------------------------------------------
+drop table aux_commInterpretation_classFit;
+CREATE TABLE aux_commInterpretation_classFit
+(
+    classFit varchar (200)
+);
+
+insert into aux_commInterpretation_classFit values ('Absolutely wrong');
+insert into aux_commInterpretation_classFit values ('Understandable but wrong');
+insert into aux_commInterpretation_classFit values ('Reasonable or acceptable answer');
+insert into aux_commInterpretation_classFit values ('Good answer');
+insert into aux_commInterpretation_classFit values ('Absolutely Right');
+
 
 -----------------------------------------------------------------------------
 -- address
@@ -310,6 +325,8 @@ CREATE TABLE observation
     PREVIOUSOBS_ID integer,
     PLOT_ID integer NOT NULL,
     PROJECT_ID integer,
+		ACCESSION_NUMBER varchar (200),
+		VBSEQUENCE integer,
     authorObsCode varchar (30),
     obsStartDate timestamp,
     obsEndDate timestamp,
@@ -623,6 +640,7 @@ CREATE TABLE stratumComposition
 			--added these next 2 to make the DB readable JHH 20020122
 		cheatstratumname varchar (200),
 		cheatplantname varchar (200),
+		cheatplantcode varchar (200),
     PRIMARY KEY(STRATUMCOMPOSITION_ID)
 );
 
@@ -722,6 +740,7 @@ CREATE TABLE taxonObservation
     taxonInferenceArea float,
 		--added this tom make the DB readable JHH 20020122
 		cheatplantname varchar (200),
+		cheatplantcode varchar (200),
     PRIMARY KEY(TAXONOBSERVATION_ID)
 );
 
