@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-01 22:33:51 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-07-24 00:53:02 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -178,12 +178,12 @@ import org.vegbank.common.utility.Utility;
 			}
 
 			log.debug(
-				"LoadTreeToDatabase:  insertion success: " + commit);
+				"insertion success: " + commit);
 
 			if (commit == true && doCommit == true)
 			{				
 				writeConn.commit();
-				log.debug("LoadTreeToDatabase: Adding AccessionCodes to loaded data");
+				log.debug("Adding AccessionCodes to loaded data");
 				accessionCodesAdded.addAll(this.addAllAccessionCodes());
 				writeConn.commit();
 			}
@@ -192,7 +192,7 @@ import org.vegbank.common.utility.Utility;
 				writeConn.rollback();
 			}
 			
-			log.debug("LoadTreeToDatabase: Returning the DBConnection to the pool");
+			log.debug("Returning the DBConnection to the pool");
 			//Return dbconnection to pool
 			DBConnectionPool.returnDBConnection(writeConn);
 			readConn.setReadOnly(false);
@@ -239,7 +239,7 @@ import org.vegbank.common.utility.Utility;
 			{ 
 				this.filterSQLException(se, sb.toString());     
 			}
-			log.debug("LoadTreeToDatabase:  Query: '" + sb.toString() + "' got PK = " + PK);
+			log.debug("Query: '" + sb.toString() + "' got PK = " + PK);
 			return PK;
 		}
 		
@@ -259,7 +259,7 @@ import org.vegbank.common.utility.Utility;
 				else
 				{
 
-					log.error("LoadTreeToDatabase: problematic sql: '" + sql + "'");
+					log.error("problematic sql: '" + sql + "'");
 					log.error(se);
 					commit = false;
 					errors.AddError(LoadingErrors.DATABASELOADINGERROR, se.getMessage());
@@ -428,7 +428,7 @@ import org.vegbank.common.utility.Utility;
 					String field = (String) fields.nextElement();
 					Object value = fieldValueHash.get(field);
 					
-					log.debug("Handle fieldName " + field + " with value " + value);
+					//log.debug("Handle fieldName " + field + " with value " + value);
 					
 					// Ignore if not a string, null or empty
 					if ( value instanceof String && ! Utility.isStringNullOrEmpty((String) value) )
@@ -468,7 +468,7 @@ import org.vegbank.common.utility.Utility;
 				sb.append(" (" + Utility.arrayToCommaSeparatedString( fieldNames.toArray() ) + ")" );
 				sb.append(" VALUES (" + Utility.arrayToCommaSeparatedString( fieldValues.toArray() ) +")" );
 				
-				log.debug("Running SQL: " + sb.toString());
+				log.info("Running SQL: " + sb.toString());
 				log.info("Loaded Table : " +tableName + " with PK of " + PK);
 				
 				Statement query = writeConn.createStatement();
@@ -565,7 +565,7 @@ import org.vegbank.common.utility.Utility;
 				if ( PK != 0 )
 				{
 					// great got a real PK
-					log.info(
+					log.debug(
 						"Found PK ("
 							+ PK
 							+ ") for "
@@ -956,12 +956,12 @@ import org.vegbank.common.utility.Utility;
 			}
 			else if ( o == null)
 			{
-				log.debug("LoadTreeToDatabase: Could not find table.. " + tableName + " as child of  table " + parentHash.get("TableName"));
+				log.debug("Could not find table.. " + tableName + " as child of  table " + parentHash.get("TableName"));
 			}
 			else
 			{
 				// Don't know what to do here
-				log.warn("LoadTreeToDatabase: Type: '" + o.getClass() + "' should not exist here in" + tableName + "?.");
+				log.warn("Type: '" + o.getClass() + "' should not exist here in" + tableName + "?.");
 			}
 			return childHash;
 		}
@@ -1398,7 +1398,7 @@ import org.vegbank.common.utility.Utility;
 			
 				
 				taxonObservationId = insertTable("taxonObservation", taxonObservation);
-				//log.debug("LoadTreeToDatabase: taxonObservationId: " + taxonObservationId );
+				//log.debug("taxonObservationId: " + taxonObservationId );
 			
 				//  Add Taxonimportances
 				Enumeration taxonImportances = getChildTables(taxonObservation, "taxonImportance");
@@ -1960,7 +1960,7 @@ import org.vegbank.common.utility.Utility;
 					+ "] \n Please use an existing records AccessionCode to"
 					+ " load or have someone with permissions load this record and use the"
 					+ " assigned AccessionCode. ";
-				log.error("LoadTreeToDatabase:  : " + errorMessage);
+				log.error(": " + errorMessage);
 				commit = false;
 				errors.AddError(
 					LoadingErrors.DATABASELOADINGERROR,
