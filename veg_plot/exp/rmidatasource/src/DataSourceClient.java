@@ -856,12 +856,11 @@ public class DataSourceClient
 				e.printStackTrace();
 			}		
 		}
-		else if (argv.length == 2)
+		else if (argv.length >= 2)
 		{
 			System.out.println("DataSourceCleint >  posting a file " );
 			try 
 			{
-				
 				//START
 				String hostServer =  argv[0];
 				String file =  argv[1];
@@ -874,11 +873,18 @@ public class DataSourceClient
 				System.out.println("DataSourceCleint > access file validity: " + fileValidityResults );
 				Vector v = client.getPlotNames();
 				System.out.println("DataSourceCleint > found : " + v.size() +" plots in archive " );
-				String testPlot =  v.elementAt(0).toString();
+				String testPlot = "";
+				if (argv.length == 3)
+				{
+					testPlot =  argv[2];
+				}
+				else
+				{
+					testPlot =  v.elementAt(0).toString();
+				}
 				System.out.println("DataSourceCleint > inserting the first plot in the archive: " + testPlot );
 				String insertResults = client.insertPlot(testPlot);
 				System.out.println("DataSourceCleint > insertion results: \n" + insertResults );	
-			
 			} 
 			catch(Exception e) 
 			{
