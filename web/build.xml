@@ -45,10 +45,6 @@
 	<property name="pubs_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/pubs/"/>
 	<property name="style_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/includes/"/>
 	
-	
-	
-	
-	
 	<filter token="plotquery_page" value="http://vegbank.nceas.ucsb.edu/forms/plot-query.html"/>
 	<filter token="nestedplotquery_page" value="http://vegbank.nceas.ucsb.edu/forms/nested-plot-query.html"/>
 	<filter token="uploaddata_page" value="http://vegbank.nceas.ucsb.edu/forms/uploadFile.html"/>
@@ -57,6 +53,7 @@
 	
 	<filter token="usermanagement_servlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement"/>
 	<filter token="general_link" value="http://vegbank.nceas.ucsb.edu/vegbank/general/"/>
+	<filter token="panel_link" value="http://vegbank.nceas.ucsb.edu/vegbank/panel/"/>
 	<filter token="dist" value="dist"/>
 	<filter token="version" value="development"/>
 	<filter token="image_server" value="http://vegbank.nceas.ucsb.edu/vegbank/images/"/>
@@ -137,7 +134,9 @@
 		includes="
 			resultset-download.html
 			plot-query.html
-			plant-query.html"
+			plant-query.html
+			plant-name-lookup.html
+			utilities.html"
 		excludes="**/CVS* "
 	/>
 </target>
