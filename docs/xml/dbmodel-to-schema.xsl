@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- xsl takes the vegbank database model xml and transforms into xsd that can be used to validate xml that is compliant with our model.  Written by Michael Lee (mikelee@unc.edu) 05-JUN-2003 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" >
-  <xsl:output method="xml"/>
+  <xsl:output method="xml" encoding="UTF-8"/>
   <xsl:param name="validLevel">1</xsl:param>
   <xsl:template match="/">
 <xsl:comment>
@@ -9,8 +9,8 @@
 
   *
   *     '$Author: mlee $'
-  *     '$Date: 2003-10-19 05:42:18 $'
-  *     '$Revision: 1.4 $'
+  *     '$Date: 2003-11-25 23:56:46 $'
+  *     '$Revision: 1.5 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
