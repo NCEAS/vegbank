@@ -35,7 +35,28 @@
 </td>
 </tr>
 
+
 <bean:define id="concId" name="onerow" property="commconcept_id"/>
+
+<tr><td colspan="4"><span class="datalabelsmall">Plot-observations of this Community Concept:</span>
+<vegbank:get id="observation" select="observation_count" 
+  where="where_commconcept_observation_complex" beanName="map" 
+  wparam="concId" perPage="-1" pager="false" />
+<logic:empty name="observation-BEAN">
+-none-
+</logic:empty>
+<logic:notEmpty name="observation-BEAN">
+<bean:write name="observation-BEAN" property="count_observations" />
+<logic:notEqual name="observation-BEAN" property="count_observations" value="0">
+<a href="@get_link@summary/observation/<bean:write name='concId' />?where=where_commconcept_observation_complex">View 
+  observation(s)</a>
+</logic:notEqual>
+</logic:notEmpty>
+
+
+</td></tr>
+
+
 <vegbank:get id="commstatus" select="commstatus" where="where_commconcept_pk" beanName="map" wparam="concId" perPage="-1" pager="false"/>
 <logic:notEmpty name="commstatus-BEANLIST">
 <logic:iterate id="statusbean" name="commstatus-BEANLIST">
