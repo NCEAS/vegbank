@@ -7,10 +7,7 @@
   <xs:element name="attForms">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="formPKTranslate"/>
-        <xs:element ref="formAustere"/>
-        <xs:element ref="formSummary"/>
-        <xs:element ref="formDetail"/>
+        <xs:element ref="formShow" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
     <!-- this was an attempt at automating what field appear on different types of forms, and in what order, might be removed from this doc if we don't use them soon -->
@@ -195,19 +192,18 @@
   <xs:element name="entityLabel" type="xs:string"/>
   <xs:element name="entityName" type="validFieldTableName"/>
   <xs:element name="entitySummary" type="xs:string"/>
-  <xs:element name="formAustere" type="xs:decimal"/>
-  <xs:element name="formDetail" type="xs:decimal"/>
-  <xs:element name="formPKTranslate">
+
+  <xs:element name="formShow">
     <xs:complexType>
       <xs:simpleContent>
         <xs:extension base="xs:decimal">
+          <xs:attribute name="name" type="xs:string"/>
           <xs:attribute name="suffix" type="xs:string"/>
           <xs:attribute name="prefix" type="xs:string"/>
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>
   </xs:element>
-  <xs:element name="formSummary" type="xs:decimal"/>
   <xs:element name="javaType">
     <xs:complexType>
       <xs:attribute name="type" use="required">
