@@ -107,7 +107,9 @@ if (action.equals("compoundQuery")) {
 	
 	//pass the array to the sql mapping class - compound queries
 	sqlMapper w =new sqlMapper();
-	w.developPlotQuery(transformedString, transformedStringNum, 2);
+	//w.developPlotQuery(transformedString, transformedStringNum, 2);
+	w.developCompoundPlotQuery(transformedString, transformedStringNum);
+	
 	
 	//grab the results from the sqlMapper class
 	queryOutput=w.queryOutput;

@@ -23,6 +23,13 @@ import queryStore.*;  //class that stores all the queries
 public class  sqlMapper
 {
 
+private Hashtable queryElementHash = new Hashtable();
+private Hashtable metaQueryHash = new Hashtable();
+
+
+
+
+
 /**
  *
  * This method will take as input a single  queryElement (like taxonName, 
@@ -39,14 +46,164 @@ public class  sqlMapper
 
 public void developPlotQuery(String[] transformedString, int transformedStringNum)
 {
-/**
- * First set up a pool of connections that can be passed to the queryStore class
- */
+
+// First set up a pool of connections that can be passed to the queryStore class
 //get the database parameters from the database.parameters file
  utility g =new utility(); 
  g.getDatabaseParameters("database", "query");
+ Connection pconn=null; 
+ DbConnectionBroker myBroker;
 
- Connection pconn=null; //this is a connection that is taken from within the pool
+try {
+ myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
+	g.login,g.passwd,g.minConnections,g.maxConnections, g.logFile,1.0);
+				  
+// Get a DB connection from the Broker
+ int thisConnection;
+ pconn= myBroker.getConnection(); //grab one connectionfrom pool
+ thisConnection = myBroker.idOfConnection(pconn);
+
+//This is a scheme to see how many times a database connection is used if 
+//more than like 50 times check it back into the pool and grab a new one - the 
+//exception thrown otherwise is exeeded max cursors
+ int connectionUses=1;
+
+//get the query elements into a hash table
+getQueryElementHash(transformedString, transformedStringNum);
+
+/** Grab the meta elements - like filename & number of query elements */
+ String resultType = (String)metaQueryHash.get("resultType");
+ String outFile = (String)metaQueryHash.get("outFile");
+
+/** Look for commonly used queries elements */
+ String plotId = (String)queryElementHash.get("plotId");
+ String taxonName = (String)queryElementHash.get("taxonName");
+ String elevationMin = (String)queryElementHash.get("elevationMin");
+ String elevationMax = (String)queryElementHash.get("elevationMax");
+ String state = (String)queryElementHash.get("state");
+ String surfGeo = (String)queryElementHash.get("surfGeo");
+ String multipleObs = (String)queryElementHash.get("multipleObs");
+ String community = (String)queryElementHash.get("community");
+ 
+ 
+ 
+/** This is for debugging - and can be commented out later**/
+ System.out.println("sqlMapper.developPlotQuery > \n resultType: "+ resultType +"\n "
+	+"outFile: "+outFile+"\n plotId: "+plotId +"\n taxonName: "+taxonName 
+	+"\n elevationMin: "+elevationMin+"\n elavationMax: "+elevationMax
+	+"\n state: "+state+"\n multipleObs: "+multipleObs+"\n community: "+community);
+
+	
+
+// at the next line do a cardinality test
+/** Check which elements are there -- plotId specific queries */
+if (plotId != null && resultType != null && outFile != null) {
+	
+	/** Start a search for specific queries*/
+	if ( resultType.equals("full") ) {
+	
+		System.out.println("sqlMapper.developPlotQuery - calling queryStore.getEntireSinglePlot");
+		queryStore b = new queryStore();
+		b.getEntireSinglePlot(plotId, pconn);
+		
+		xmlWriter l = new xmlWriter();
+		l.writePlotSummary(b.entireSinglePlotOutput, 
+			b.entireSinglePlotOutputNum, outFile);
+		
+	
+	}
+
+}
+
+/** Check which elements are there -- taxonName specific queries */
+if (taxonName != null && resultType != null && outFile != null) {
+
+	if ( resultType.equals("summary") ) { //retrieve the plotId's w taxon
+
+		System.out.println("sqlMapper.developPlotQuery - calling queryStore.getPlotId");
+			queryStore j = new queryStore();
+			j.getPlotId(taxonName, "taxonName", pconn);
+			queryOutput=j.outPlotId;
+			queryOutputNum=j.outPlotIdNum;
+
+	}
+}
+
+/** Check which elements are there -- elevation specific queries */
+if (elevationMin != null && elevationMax != null && resultType != null && outFile != null) {
+
+	if ( resultType.equals("summary") ) { //retrieve the plotId's w	elevation
+
+		System.out.println("sqlMapper.developPlotQuery - calling queryStore.getPlotId");
+		queryStore j = new queryStore();
+		j.getPlotId(elevationMin,  elevationMax, "elevation", pconn);
+
+		queryOutput=j.outPlotId;
+		queryOutputNum=j.outPlotIdNum;
+
+	}
+}
+
+
+//retrieve the summary info
+queryStore k = new queryStore();
+k.getPlotSummary(queryOutput, queryOutputNum, pconn);
+
+// manage the database connections -- this doesn't really work here but keep it
+// for later
+connectionUses=connectionUses+k.outConnectionUses;
+System.out.println("number of uses of this connection: "+connectionUses);
+if (connectionUses>12) {
+	System.out.println("reseting the current connection");
+
+	try {
+		pconn.close(); 
+		myBroker.freeConnection(pconn); 
+		pconn=myBroker.getConnection();
+		connectionUses=0;
+	} catch (Exception e) {System.out.println("failed calling "
+		+" dbConnect.makeConnection call" + e.getMessage());}
+
+}
+
+
+//write to a summary file
+xmlWriter l = new xmlWriter();
+l.writePlotSummary(k.summaryOutput, k.summaryOutputNum, outFile);
+
+
+// The connection is returned to the Broker
+myBroker.freeConnection(pconn);
+myBroker.destroy();
+} //end try - for conn pooler
+catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery  "
+	+e.getMessage());e.printStackTrace();}
+
+} //end method
+
+
+
+
+
+
+/**
+ *
+ * Method to map a query xml document containg more than one query element
+ * to a query stored in the queryStore class
+ *
+ * @param transformedString string containg the query element type and 
+ *		value (| delimeted )
+ * @param transformedSringNum integer defining number of query elements
+ */
+
+public void developCompoundPlotQuery(String[] transformedString, int transformedStringNum)
+{
+
+// First set up a pool of connections that can be passed to the queryStore class
+//get the database parameters from the database.parameters file
+ utility g =new utility(); 
+ g.getDatabaseParameters("database", "query");
+ Connection pconn=null; 
  DbConnectionBroker myBroker;
 
 try {
@@ -64,158 +221,75 @@ try {
  int connectionUses=1;
 
 
-//pass the inputString to the tokenizer method below
- sqlMapper a =new sqlMapper();
- a.setAttributeAddress(transformedString, transformedStringNum);	
-	String element[]=a.element;  // the returned database address string
-	String value[]=a.value;  // the returened data string
-	int elementNum=a.elementNum; //the number of elements returned
-
-/**
- *  This is an attempt to use a hash table to determine which query should be 
- *  called within the queryStore class and should be extended so that the code
- *  below will become obsolete - for now it is just there to circumvent the
- *  code - when a plotId numbers is passed and the entire plot is expected as
- *  a result
- *
- */
- Hashtable queryElements = new Hashtable();
- Hashtable metaQuery = new Hashtable();
- int elementTokenNum = 0; //number of query elements
- for (int i=0;i<transformedStringNum; i++) {
-	
-	if (value[i] != null) {
-		//System.out.println("sqlMapper.developPlotQuery > "+element[i]+
-		//	" "+value[i]);
-		
-		if (element[i].equals("queryElement")) {
-			queryElements.put(value[i],value[i+1]);
-			elementTokenNum++;
-		}
-		
-		metaQuery.put(element[i], value[i]);
-		
-	}
-
- }
- metaQuery.put("elementTokenNum", new Integer(elementTokenNum) );
-
+//get the query elements into a hash table
+getQueryElementHash(transformedString, transformedStringNum);
 
 /** Grab the meta elements - like filename & number of query elements */
- String resultType = (String)metaQuery.get("resultType");
- String outFile = (String)metaQuery.get("outFile");
+ String resultType = (String)metaQueryHash.get("resultType");
+ String outFile = (String)metaQueryHash.get("outFile");
 
 /** Look for commonly used queries elements */
- String plotId = (String)queryElements.get("plotId");
- String taxonName = (String)queryElements.get("taxonName");
-
+ String plotId = (String)queryElementHash.get("plotId");
+ String taxonName = (String)queryElementHash.get("taxonName");
+ String elevationMin = (String)queryElementHash.get("elevationMin");
+ String elevationMax = (String)queryElementHash.get("elevationMax");
+ String state = (String)queryElementHash.get("state");
+ String surfGeo = (String)queryElementHash.get("surfGeo");
+ String multipleObs = (String)queryElementHash.get("multipleObs");
+ String community = (String)queryElementHash.get("community");
+ 
+ 
 /** This is for debugging - and can be commented out later**/
- System.out.println("sqlMapper.developPlotQuery > \n resultType: "+ resultType +"\n "
-	+"outFile: "+outFile+"\n plotId: "+plotId +"\n taxonName: "+taxonName );
+ System.out.println("sqlMapper.developCompoundPlotQuery > \n resultType: "+ resultType +"\n "
+	+"outFile: "+outFile+"\n plotId: "+plotId +"\n taxonName: "+taxonName 
+	+"\n elevationMin: "+elevationMin+"\n elavationMax: "+elevationMax
+	+"\n state: "+state+"\n multipleObs: "+multipleObs+"\n community: "+community);
 
-	
 
-// at the next line do a cardinality test
-/** Check that all the elements are there */
-if (plotId != null && resultType != null && outFile != null) {
+// Check that all the appropriate query elements are there
+
+if (taxonName != null && resultType != null && outFile != null) {
 	
-	/** Start a search for specific queries*/
-	if ( resultType.equals("full") ) {
-	
-		System.out.println("calling queryStore.getEntireSinglePlot");
-		queryStore b = new queryStore();
-		b.getEntireSinglePlot(plotId, pconn);
-		
-		xmlWriter l = new xmlWriter();
-		l.writePlotSummary(b.entireSinglePlotOutput, 
-			b.entireSinglePlotOutputNum, outFile);
-		
-	
+	if ( resultType.equals("summary") ) { //retrieve the plotId's w taxon
+
+		System.out.println("sqlMapper.developCompoundPlotQuery - calling queryStore.getPlotId");
+		queryStore j = new queryStore();
+		j.getPlotId(taxonName, state, elevationMin, elevationMax,
+		surfGeo, multipleObs, community, pconn);
+		queryOutput=j.outPlotId;
+		queryOutputNum=j.outPlotIdNum;
+
 	}
 
 }
 
 
+//retrieve the summary info
+queryStore k = new queryStore();
+k.getPlotSummary(queryOutput, queryOutputNum, pconn);
+
+// manage the database connections -- this doesn't really work here but keep it
+// for later
+connectionUses=connectionUses+k.outConnectionUses;
+System.out.println("number of uses of this connection: "+connectionUses);
+if (connectionUses>12) {
+	System.out.println("reseting the current connection");
+
+	try {
+		pconn.close(); 
+		myBroker.freeConnection(pconn); 
+		pconn=myBroker.getConnection();
+		connectionUses=0;
+	} catch (Exception e) {System.out.println("failed calling "
+		+" dbConnect.makeConnection call" + e.getMessage());}
+
+}
 
 
+//write to a summary file
+xmlWriter l = new xmlWriter();
+l.writePlotSummary(k.summaryOutput, k.summaryOutputNum, outFile);
 
-
-
-
-
-/** If none of these common queries apply then pass elements thru the remain code*/
-
-
-
-//check to see the type of the query attributes passed depending, assign a sql 
-//query to the query -- this is going to be re-written to use a hastable 
-for (int i=0;i<transformedStringNum; i++) {
-	
-	if (element[i] != null && element[i].startsWith("queryElement")) {
-		
-		if (value[i] != null && value[i].startsWith("taxonName")) { 
-			//if this and the above are true then trigger sql stmt below
-			//call the queryStore method associated with this request
-			//to get the plot id numbers having the associated taxon
-			queryStore j = new queryStore();
-			j.getPlotId(value[i+1], "taxonName", pconn);
-			queryOutput=j.outPlotId;
-			queryOutputNum=j.outPlotIdNum;
-		}  //end if
-		
-		if (value[i] != null && value[i].startsWith("elevationMin")) {
-			//require that an elevation restriction have both min max
-			queryStore l = new queryStore();
-			l.getPlotId(value[i+1],  value[i+3], "elevation", pconn);
-			queryOutput=l.outPlotId;
-			queryOutputNum=l.outPlotIdNum;
-			
-		}
-		
-		
-	} //end if
-
-	
-	/*determine the type of output requested by the calling class*/
-	if (element[i] != null && element[i].startsWith("resultType")) {
-		//if summary - call the method to return the summary elements
-		//using as input the plotId numbers returned in the if clause above
-		if (value[i] != null && value[i].startsWith("summary")) {
-			//System.out.println("outputing the results set as: "+value[i]);
-			queryStore k = new queryStore();
-			k.getPlotSummary(queryOutput, queryOutputNum, pconn);
-			
-			/**
-			* in the near future will want to look here to check
-			* the number of connection uses to determine if need
-			* to close and reopen
-			*/
-			connectionUses=connectionUses+k.outConnectionUses;
-//			System.out.println("number of uses of this connection: "
-//				+connectionUses);
-			if (connectionUses>12) {
-//				System.out.println("reseting the current connection");
-				try {
-				pconn.close(); //close it - it is no good anymore
-				myBroker.freeConnection(pconn); //not sure if this should be 
-							//commented b/c not sure of the 
-							//meaning of 'recycle' in the
-							//broker
-				pconn=myBroker.getConnection();
-				connectionUses=0;
-				} catch (Exception e) {System.out.println("failed calling "
-				+" dbConnect.makeConnection call" + e.getMessage());}
-			}
-			
-			//pass the returned summary results to the xmlWriter
-			//to write the xml file whis is identified in the xml
-			outFile=value[i+1];
-			xmlWriter l = new xmlWriter();
-			l.writePlotSummary(k.summaryOutput, k.summaryOutputNum, outFile);
-			
-		} //end if
-	} //end if	
-} //end for
 
 // The connection is returned to the Broker
 myBroker.freeConnection(pconn);
@@ -225,140 +299,6 @@ catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery 
 	+e.getMessage());e.printStackTrace();}
 
 } //end method
-
-
-
-/**
-* This is an overloaded method of the above for mapping compound queries
-* input includes the transformed query string from the xml query document 
-* and the number of elements as well as the number of query element types 
-* being passed to the method.  Output includes 
-*
-* @param  transformedString string containg the query element type and 
-*		value (| delimeted )
-* @param  transformedSringNum integer defining number of query elements
-* @param  elementTypeNum the number of different element types - usually 2
-*
-*/
-public void developPlotQuery(String[] transformedString, int transformedStringNum,
-	int elementTypeNum)
-{
-sqlMapper a =new sqlMapper();
-a.setAttributeAddress(transformedString, transformedStringNum);	
-String element[]=a.element;  // the returned database address string
-String value[]=a.value;  // the returened data string
-int elementNum=a.elementNum; //the number addresses and attributes in the returned set
-
-
-
-//grab the elements and put into an array mapping the following into an array:
-//	1] taxonName, 2] state, 3] eleveationMin, 4] elevationMax, 5] surfGeo
-//	6] multipleObs, 7]community
-String queryAttributeArray[]=new String [20];
-int queryAttributeArrayNum=0;
-for (int i=0;i<transformedStringNum; i++) {
-	//System.out.println("testing:  "+element[i]+" . "+value[i]);
-	if (value[i] != null) {
-	
-		if (value[i].equals("taxonName")) {queryAttributeArray[0]=value[i+1];
-			queryAttributeArrayNum++;}
-		if (value[i].equals("state")) {queryAttributeArray[1]=value[i+1];
-			queryAttributeArrayNum++;}
-		if (value[i].equals("elevationMin")) {queryAttributeArray[2]=value[i+1];
-			queryAttributeArrayNum++;}
-		if (value[i].equals("elevationMax")) {queryAttributeArray[3]=value[i+1];
-			queryAttributeArrayNum++;}
-		if (value[i].equals("surfGeo")) {queryAttributeArray[4]=value[i+1];
-			queryAttributeArrayNum++;}
-		if (value[i].equals("multipleObs")) {queryAttributeArray[5]=value[i+1];
-			queryAttributeArrayNum++;}
-		if (value[i].equals("community")) {queryAttributeArray[6]=value[i+1];
-			queryAttributeArrayNum++;}
-
-	}
-}
-/*
-*pass the array to the corresponding getPlotId
-*/
-
-//get the database parameters from the database.parameters file
-utility g =new utility(); 
-g.getDatabaseParameters("database", "query");
-Connection pconn=null;
-DbConnectionBroker myBroker;
-try {
-myBroker = new DbConnectionBroker(g.driverClass,
-                                  g.connectionString,
-                                  g.login,g.passwd,
-				  g.minConnections,g.maxConnections,
-                                  g.logFile,1.0);
-
-				  
-// Get a DB connection from the Broker
-int thisConnection;
-pconn= myBroker.getConnection(); //grab one connectionfrom pool
-thisConnection = myBroker.idOfConnection(pconn);
-int connectionUses=1;
-
-//pass the array to the queryStore.getPlotId method
-queryStore j = new queryStore();
-j.getPlotId(queryAttributeArray, queryAttributeArrayNum, pconn);
-queryOutput=j.outPlotId;
-queryOutputNum=j.outPlotIdNum;
-
-connectionUses++;
-
-//pass the results, containing the plot id numbers to the get plot summary method
-queryStore k = new queryStore();
-k.getPlotSummary(queryOutput, queryOutputNum, pconn);
-connectionUses=connectionUses+k.outConnectionUses;
-System.out.println("number of uses of this connection: "+connectionUses);
-
-if (connectionUses>12) {
-	System.out.println("reseting the current connection");
-	try {
-		pconn.close(); 
-		myBroker.freeConnection(pconn); 
-		pconn=myBroker.getConnection();
-		connectionUses=0;
-	} catch (Exception e) {System.out.println("failed calling "
-		+" dbConnect.makeConnection call" + e.getMessage());}
-}
-
-//figure out the type of results to write to output
-String outFile=null;
-for (int i=0;i<transformedStringNum; i++) {
-	if (element[i] != null && element[i].startsWith("resultType")) {
-		//if summary - call the method to return the summary elements
-		//using as input the plotId numbers returned in the if clause above
-		if (value[i] != null && value[i].startsWith("summary")) {
-			outFile = value[i+1];
-			System.out.println("outputing the results set as: "+outFile);
-		}
-	}
-}
-//print the summary results
-
-xmlWriter l = new xmlWriter();
-l.writePlotSummary(k.summaryOutput, k.summaryOutputNum, outFile);  //change out
-
-
-myBroker.freeConnection(pconn);
-myBroker.destroy();
-} //end try - for conn pooler
-catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery  "
-	+e.getMessage());}
-
-
-
-
-//grab the summary data and send to xml writer
-
-} //end method
-
-
-
-
 
 
 
@@ -407,6 +347,48 @@ catch ( Exception e ){System.out.println("failed at: sqlMapper.setAttributeAddre
 
 
 
+/**
+ * Method to make two hastables: 1] contains the query elements and respective 
+ * values 2] contains metadata related to the query elements such as output file
+ * names and data resultType -- uses as input an array of containing a pipe
+ * separted query element and string
+ *
+ * @param  pipeDelimitString - the input pipe delimited string
+ * @param  pipeDelimitStringNum - the number of elements in the array
+ *
+ */
+
+public void getQueryElementHash(String[] pipeDelimitString, 
+	int pipeDelimitStringNum)
+{
+//System.out.println("test from getQueryElementHash");
+//pass the inputString to the tokenizer method below
+sqlMapper a =new sqlMapper();
+a.setAttributeAddress(pipeDelimitString, pipeDelimitStringNum);	
+String element[]=a.element;  // the returned array of query elements
+String value[]=a.value;  // the returned array of query element values
+int elementNum=a.elementNum; //the number of elements returned
+
+
+int elementTokenNum = 0; //number of query elements
+for (int i=0;i<pipeDelimitStringNum; i++) {
+	
+	if (value[i] != null) {
+		
+		if (element[i].equals("queryElement")) {
+			queryElementHash.put(value[i],value[i+1]);
+			elementTokenNum++;
+		}
+		
+		metaQueryHash.put(element[i], value[i]);
+		
+	}
+
+ }
+
+ metaQueryHash.put("elementTokenNum", new Integer(elementTokenNum) );
+
+} //end method
 
 
 

@@ -285,14 +285,14 @@ outPlotIdNum=j.outReturnFieldsNum;
 
 
 /**
-* Method to query the database to get all the plotId's by using a two attributes
-* currently only a min/max elevation will work - soon to implement a community name -
-* this method will be overloaded in methods below
-* @param     queryElement  the value of the attribute used to query
-* @param     queryElement2  the value of the attribute used to query
-* @param     queryElementType  the type of element used for querying the DB
-* @param     conn  a database connection that was presumedly taken from the pool 
-*/
+ * Method to query the database to get all the plotId's by using a two attributes
+ * currently only a min/max elevation will work - soon to implement a community name -
+ * this method will be overloaded in methods below
+ * @param     queryElement  the value of the attribute used to query
+ * @param     queryElement2  the value of the attribute used to query
+ * @param     queryElementType  the type of element used for querying the DB
+ * @param     conn  a database connection that was presumedly taken from the pool 
+ */
 public void getPlotId(String queryElement, String queryElement2, 
 	String queryElementType, Connection conn)
 {
@@ -317,28 +317,24 @@ outPlotIdNum=j.outReturnFieldsNum;
 
 
 /**
-* Method to query the database to get all the plotId's usind as input a array
-* containing the following levels:
-*	1] taxonName, 2] state, 3] elevationMin, 4] elevationMax, 5] surfGeo
-*	6] multipleObs, 7]community
-*
-* @param     queryAttributeArray - array containg the input attributes
-* @param     queryAttributeArrayNum - integer representing the number iof
-*		attributes contained in the array - should be = 7
-* @param     conn  a database connection that was presumedly taken from the pool 
-*/
+ * Method to query the database to get all the plotId's usinf as input the 
+ * following query elements
+ * 
+ * @param taxonName
+ * @param state
+ * @param elevationMin
+ * @param elevationMax
+ * @param surfGeo
+ * @param multipleObs
+ * @param community
+ *
+ */
 
-public void getPlotId(String[] queryAttributeArray, int queryAttributeArrayNum, 
+public void getPlotId(String taxonName, String state, String elevationMin, 
+	String elevationMax, String surfGeo, String multipleObs, String community, 
 	Connection conn)
 {
-//map the array to the appropriate attribute
-String taxonName=queryAttributeArray[0];
-String state=queryAttributeArray[1];
-String elevationMin=queryAttributeArray[2];
-String elevationMax=queryAttributeArray[3];
-String surfGeo=queryAttributeArray[4];
-String multipleObs=queryAttributeArray[5];
-String community=queryAttributeArray[6];
+
 
 System.out.println("queryStore.getPlotId - queryElements > \n"
 	+" taxonName: "+taxonName+" \n state: "+state+" \n elevationMin: "
