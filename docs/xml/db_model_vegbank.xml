@@ -5,7 +5,6 @@
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
 <?xml-stylesheet type="text/xsl" href="dbmodel-to-csv.xsl"?>
 -->
-
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
   <title>Vegetation Database Component Description: --all modules--</title>
   <version>1.0.2</version>
@@ -2465,7 +2464,7 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>Primary key for the reference table.</attDefinition>
       <attForms>
-        <formShow name="Summary">296</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">297</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2503,6 +2502,11 @@ change through time.</entitySummary>
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Full Text of the reference citation.</attDefinition>
+      <attForms>
+        <formShow name="Austere">298.5</formShow>
+        <formShow name="Summary">299.5</formShow>
+        <formShow name="Detail">300.5</formShow>
+      </attForms>
       <update>1.0.1</update>
     </attribute>
     <attribute>
@@ -2580,8 +2584,8 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>Describes the type of reference this generic type is being used to represent.  Examples: book, journal article, web page.</attDefinition>
       <attForms>
-        <formShow name="Austere">301</formShow>
-        <formShow name="Summary">302</formShow>
+        <formShow name="Austere">-1</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">303</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2621,7 +2625,7 @@ change through time.</entitySummary>
       <attDefinition>A second, higher order title where appropriate, which in the case of a reference to a chapter is the Book title, and in the case of a Conference Presentation is the Name of the Conference.</attDefinition>
       <attForms>
         <formShow name="Austere">307</formShow>
-        <formShow name="Summary">308</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">309</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2641,7 +2645,7 @@ change through time.</entitySummary>
       <attDefinition>The 'pubDate' field represents the date that the resource was published. The format should be represented as: CCYY, which represents a 4 digit year, or as CCYY-MM-DD, which denotes the full year, month, and day. Note that month and day are optional components. Formats must conform to ISO 8601. For example: 1999-10-26</attDefinition>
       <attForms>
         <formShow name="Austere">310</formShow>
-        <formShow name="Summary">311</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">312</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2661,7 +2665,7 @@ change through time.</entitySummary>
       <attDefinition>The date the resource being referenced was accessed.  This is useful if the resource is could be changed after formal publication, such as web sites or databases.</attDefinition>
       <attForms>
         <formShow name="Austere">313</formShow>
-        <formShow name="Summary">314</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">315</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2681,7 +2685,7 @@ change through time.</entitySummary>
       <attDefinition>The date the conference was held.</attDefinition>
       <attForms>
         <formShow name="Austere">316</formShow>
-        <formShow name="Summary">317</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">318</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2700,7 +2704,7 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>Foreign key into the journal table to identify the journal of this reference.</attDefinition>
       <attForms>
-        <formShow name="Summary">319</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">320</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2720,7 +2724,7 @@ change through time.</entitySummary>
       <attDefinition>The volume field is used to describe the volume of the journal in which the article appears.</attDefinition>
       <attForms>
         <formShow name="Austere">321</formShow>
-        <formShow name="Summary">322</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">323</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2740,7 +2744,7 @@ change through time.</entitySummary>
       <attDefinition>The issue field is used to describe the issue of the journal in which the article appears.</attDefinition>
       <attForms>
         <formShow name="Austere">324</formShow>
-        <formShow name="Summary">325</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">326</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2760,7 +2764,7 @@ change through time.</entitySummary>
       <attDefinition>The page range field is used for the beginning and ending pages of the journal article that is being documented.</attDefinition>
       <attForms>
         <formShow name="Austere">327</formShow>
-        <formShow name="Summary">328</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">329</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2780,7 +2784,7 @@ change through time.</entitySummary>
       <attDefinition>The total pages field is used to describe the total number of pages in the book that is being described.</attDefinition>
       <attForms>
         <formShow name="Austere">330</formShow>
-        <formShow name="Summary">331</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">332</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2800,7 +2804,7 @@ change through time.</entitySummary>
       <attDefinition>The organization that physically put together the report and publishes it.</attDefinition>
       <attForms>
         <formShow name="Austere">333</formShow>
-        <formShow name="Summary">334</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">335</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2820,7 +2824,7 @@ change through time.</entitySummary>
       <attDefinition>The location at which the work was published. This is usually the name of the city in which the publishing house produced the work.</attDefinition>
       <attForms>
         <formShow name="Austere">336</formShow>
-        <formShow name="Summary">337</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">338</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2840,7 +2844,7 @@ change through time.</entitySummary>
       <attDefinition>The ISBN, or International Standard Book Number that has been assigned to this literature resource.</attDefinition>
       <attForms>
         <formShow name="Austere">339</formShow>
-        <formShow name="Summary">340</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">341</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2860,7 +2864,7 @@ change through time.</entitySummary>
       <attDefinition>The edition field is to document the edition of the generic reference type that is being described.</attDefinition>
       <attForms>
         <formShow name="Austere">342</formShow>
-        <formShow name="Summary">343</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">344</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2880,7 +2884,7 @@ change through time.</entitySummary>
       <attDefinition>Number of volumes in a collection</attDefinition>
       <attForms>
         <formShow name="Austere">345</formShow>
-        <formShow name="Summary">346</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">347</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2900,7 +2904,7 @@ change through time.</entitySummary>
       <attDefinition>The chapter number of the chapter of a book that is being described.</attDefinition>
       <attForms>
         <formShow name="Austere">348</formShow>
-        <formShow name="Summary">349</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">350</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2920,7 +2924,7 @@ change through time.</entitySummary>
       <attDefinition>The report number field is used to describe the unique identification number that has been issued by the report institution for the report being described.</attDefinition>
       <attForms>
         <formShow name="Austere">351</formShow>
-        <formShow name="Summary">352</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">353</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2940,7 +2944,7 @@ change through time.</entitySummary>
       <attDefinition>The type of personal communication. Could be an email, letter, memo, transcript of conversation either hardcopy or online.</attDefinition>
       <attForms>
         <formShow name="Austere">354</formShow>
-        <formShow name="Summary">355</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">356</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2960,7 +2964,7 @@ change through time.</entitySummary>
       <attDefinition>The degree field is used to describe the name or degree level for which the thesis was completed.</attDefinition>
       <attForms>
         <formShow name="Austere">357</formShow>
-        <formShow name="Summary">358</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">359</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -2980,7 +2984,7 @@ change through time.</entitySummary>
       <attDefinition>A URL (Uniform Resource Locator) from which this resource can be downloaded or additional information can be obtained.</attDefinition>
       <attForms>
         <formShow name="Austere">360</formShow>
-        <formShow name="Summary">361</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">362</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3000,7 +3004,7 @@ change through time.</entitySummary>
       <attDefinition>A Digital Object Identifier - a digital identifier for any object of intellectual property. A DOI provides a means of persistently identifying a piece of intellectual property on a digital network and associating it with related current data.  (www.doi.org)</attDefinition>
       <attForms>
         <formShow name="Austere">363</formShow>
-        <formShow name="Summary">364</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">365</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3020,7 +3024,7 @@ change through time.</entitySummary>
       <attDefinition>This field provides any information that is not characterized by the other resource metadata fields. Example: Copyright 2001, Robert Warner</attDefinition>
       <attForms>
         <formShow name="Austere">366</formShow>
-        <formShow name="Summary">367</formShow>
+        <formShow name="Summary">-1</formShow>
         <formShow name="Detail">368</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3038,6 +3042,11 @@ change through time.</entitySummary>
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+      <attForms>
+        <formShow name="Austere">366</formShow>
+        <formShow name="Summary">-1</formShow>
+        <formShow name="Detail">368.5</formShow>
+      </attForms>
       <update>1.0.1</update>
     </attribute>
   </entity>
