@@ -1,12 +1,7 @@
-
-
-TO BUILD THE DATABASES ON POSTGRES 
-
-1] create the following database 
-plots_dev -- the plots database
-plants_dev -- the 
-communities_dev 
-framework 
+'$Author: harris $'
+'$Date: 2002-11-26 19:34:18 $'
+'$Revision: 1.3 $'
+THIS FILE DESCRIBES THE SETUP AND MAINTAINENCE OF A VEGBANK SYSTEM
 
 
 Database Setup:
@@ -14,8 +9,6 @@ Database Setup:
 Vegclass has three separate database parts for Plots, Plant Taxonomy and Plant 
 Community. There is also a Framework database for shared resources like users.
 
-
-<--- paste -->
 
 Initializing PostgresSQL:
 
@@ -41,3 +34,13 @@ psql plants_dev < ../../veg_taxa/sql/createPlantTaxonDb_pg.sql
 psql community_dev < community_implementation.sql  
 psql community_dev < createCommunitySummary_pg.sql  
 psql community_dev < createEcoartTables_pg.sql   
+psql framework < ./veg_plot/sql/create_veguser_tables.sql
+
+# Edit the pg_hba.conf file so that connections may be made to the database 
+add the following:
+local      all                                          trust
+host       all         127.0.0.1     255.255.255.255    trust
+
+# Create the database user 'datauser' as follows:
+> createuser  datauser
+ 
