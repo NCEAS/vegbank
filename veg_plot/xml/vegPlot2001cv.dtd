@@ -1,4 +1,25 @@
 <!ENTITY % Boolean "(true | false) 'false'">
+
+<!--
+  * vegPlot20001cv.dtd
+  *
+  *      Authors: John Harris
+  * Organization: National Center for Ecological Analysis and Synthesis
+  *    Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *  For Details: http://www.nceas.ucsb.edu/
+  *      Created: April 2001
+  *
+  * This DTD describes the structure and content of XML documents used
+  * to represent, store, and exchange a veg plot package or a subset 
+	* of the vegetation plot
+  *
+	*  '$Author: harris $'
+	*  '$Date: 2002-05-21 14:34:29 $'
+	*  '$Revision: 1.5 $'
+	*
+-->
+
 <!ELEMENT vegPlotPackage (project)>
 
 <!ELEMENT project (
@@ -112,8 +133,8 @@
 		state*,
 		country*,
 		
-		observation*,
-		namedPlace*
+		namedPlace*,
+		observation*
 	)>
 		
 	<!ELEMENT	plotId (#PCDATA)> 
