@@ -5,24 +5,22 @@
 # SPECIFIC SQL
 #
 #     '$Author: harris $'
-#     '$Date: 2001-10-17 17:11:12 $'
-#     '$Revision: 1.2 $'
+#     '$Date: 2001-10-17 17:28:27 $'
+#     '$Revision: 1.3 $'
 
 
-PROJECT=./data/vegclass_doc/vegPlotProject.xml
-PLOT=./data/vegclass_doc/vegPlotPlot.xml
+# the directory that contains the documentation for the vegplot database
 PLOTDOCDIR=./data/vegclass_doc/
 
+# transform the xml to the torqu-xml
 java -classpath ./lib/xalan_1_2_2.jar:./lib/xerces_1_4.jar:./lib/xmltosql.jar \
 VegclassXMLDoc  $PLOTDOCDIR
 
-
-
-#java -classpath ./lib/xalan_1_2_2.jar:./lib/xerces_1_4.jar:./lib/xmltosql.jar \
-#VegclassXMLDoc  $PLOT
-#cat test_fix.xml >> ./data/torque_xml/nvc-database.xml
-
-
+# copy the output to he torque directory
 cp test_fix.xml ./torque/schema/project-schema.xml
 
-
+# move into the torque directory and execute ant -- to handle the transformation 
+# to sql
+cd torque
+ant
+cp src/sql/project-schema.sql ../output.sql 
