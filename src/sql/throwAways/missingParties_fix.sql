@@ -70,3 +70,9 @@ INSERT INTO party (surname,givenName,email) values ('Elizabeth','Crowe','ecrowe@
 ---
 ---
 UPDATE usr SET party_ID=(SELECT min(party_ID) from party where email='ecrowe@state.mt.us') WHERE USR_ID=443;
+---
+---
+DELETE FROM party where party_id=226;
+DELETE FROM usr where usr_id=96;
+
+
