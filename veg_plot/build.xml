@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2002-12-27 21:24:07 $'
-  *     '$Revision: 1.5 $'
+  *     '$Date: 2003-01-02 21:54:38 $'
+  *     '$Revision: 1.6 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -101,6 +101,7 @@
 		</copy>
     
 		<copy file="src/utilities/coord_transform.sh" todir="${servlet_lib}"/>
+		<copy file="../veg_community/sql/update_community_summary.sql" todir="${servlet_lib}"/>
 	</target>
 
 	<target name="clean" description="Remove all generated files">
