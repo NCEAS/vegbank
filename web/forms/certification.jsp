@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-04-30 13:10:21 $'
-  *  '$Revision: 1.12 $'
+  *      '$Date: 2004-06-10 21:48:52 $'
+  *  '$Revision: 1.13 $'
   *
   *
   -->
@@ -296,33 +296,36 @@
 			</html:select>
 		  </td>
 		  <td bgcolor="#FFFFFF" align="center"> 
+
 			<html:select property="expRegionAVeg">
-			  <option value="0">0</option>
-			  <option value="1">1</option>
-			  <option value="2">2</option>
-			  <option value="3">3</option>
-			  <option value="4">4</option>
-			  <option value="5">5</option>
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
 			</html:select>
+
+
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionAFlor">
-			  <option value="0">0</option>
-			  <option value="1">1</option>
-			  <option value="2">2</option>
-			  <option value="3">3</option>
-			  <option value="4">4</option>
-			  <option value="5">5</option>
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
 			</html:select>
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionANVC">
-			  <option value="0">0</option>
-			  <option value="1">1</option>
-			  <option value="2">2</option>
-			  <option value="3">3</option>
-			  <option value="4">4</option>
-			  <option value="5">5</option>
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
 			</html:select>
 		  </td>
 		</tr>
@@ -335,32 +338,32 @@
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionBVeg">
-			  <option value="0">0</option>
-			  <option value="1">1</option>
-			  <option value="2">2</option>
-			  <option value="3">3</option>
-			  <option value="4">4</option>
-			  <option value="5">5</option>
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
 			</html:select>
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionBFlor">
-			  <option value="0">0</option>
-			  <option value="1">1</option>
-			  <option value="2">2</option>
-			  <option value="3">3</option>
-			  <option value="4">4</option>
-			  <option value="5">5</option>
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
 			</html:select>
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionBNVC">
-			  <option value="0">0</option>
-			  <option value="1">1</option>
-			  <option value="2">2</option>
-			  <option value="3">3</option>
-			  <option value="4">4</option>
-			  <option value="5">5</option>
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
 			</html:select>
 		  </td>
 		</tr>
@@ -373,32 +376,32 @@
 			</td>
 		  <td bgcolor="#FFFFFF" align="center"> 
 			<html:select property="expRegionCVeg">
-			  <option value="0">0</option>
-			  <option value="1">1</option>
-			  <option value="2">2</option>
-			  <option value="3">3</option>
-			  <option value="4">4</option>
-			  <option value="5">5</option>
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
 			</html:select>
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionCFlor">
-			  <option value="0">0</option>
-			  <option value="1">1</option>
-			  <option value="2">2</option>
-			  <option value="3">3</option>
-			  <option value="4">4</option>
-			  <option value="5">5</option>
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
 			</html:select>
 		  </td>
 		  <td bgcolor="#FFFFFF" align="center"> 
 			<html:select property="expRegionCNVC">
-			  <option value="0">0</option>
-			  <option value="1">1</option>
-			  <option value="2">2</option>
-			  <option value="3">3</option>
-			  <option value="4">4</option>
-			  <option value="5">5</option>
+			  <html:option value="0">0</html:option>
+			  <html:option value="1">1</html:option>
+			  <html:option value="2">2</html:option>
+			  <html:option value="3">3</html:option>
+			  <html:option value="4">4</html:option>
+			  <html:option value="5">5</html:option>
 			</html:select>
 		  </td>
 		</tr>
