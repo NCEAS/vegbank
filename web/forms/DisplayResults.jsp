@@ -13,8 +13,8 @@
 *     Authors: @author@
 *
 *    '$Author: mlee $'
-*      '$Date: 2004-11-16 06:19:24 $'
-*  '$Revision: 1.29 $'
+*      '$Date: 2004-11-19 17:31:36 $'
+*  '$Revision: 1.30 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -63,34 +63,31 @@
   <!-- format the word plot to be plural if not 1 plot -->
 
   <bean:size id="PlotResultsSize" name="PlotsResults"/>
-  <logic:equal value="1" name="PlotsResultsSize">
-    <span class="category"><font color="red">
-      There was one match to your search criteria:<br/>
-    </font></span>
-  </logic:equal>
-
-    <span class="category">
-      <font color="red">
-	<bean:write name="PlotResultsSize"/> plot<logic:notEqual name="PlotResultsSize" value="1">s</logic:notEqual> matched your search criteria<br/>
-      </font>
-    </span>
+  <p class="category bright">
+ 
+    	<bean:write name="PlotResultsSize"/> plot<logic:notEqual name="PlotResultsSize" value="1">s</logic:notEqual> 
+    	 matched your search criteria
+ 
   
+  </p>
       <!-- SOME NOTES ABOUT THE USE OF ICONS-->
       <br/>
+	<TABLE class="noborder" cellpadding="10"><TR><TD valign="top">
+	<p class="category">
 	<logic:notEmpty name="PlotsResults">
-      <span class="intro">Available Reports:</span>
-		&nbsp; &nbsp; &nbsp; &nbsp;
-      <span class="item">
+      Available Reports:
+		</p>
+      <p class="item">
         <img src="@image_server@report_sm.gif"></img>=Summary 
 		&nbsp; &nbsp; &nbsp; &nbsp;
         <img src="@image_server@comprehensive_sm.gif"></img>=Comprehensive
-      </span>
-	  <br/> &nbsp;
-
+      </p>
+	
       <form name="theform" action="" method="post">
 
-	 <span class="item">Choose plots from the search results below, then...</span>
-	 <br/>
+	 <p class="item">Choose plots from the search results below, then...</p>
+	
+	 
 		<input type="button" value="Download Selected Plots" onClick="postAction('DownLoadManager.do')"/> 
 		<!--
 		&nbsp; &nbsp; &nbsp; 
@@ -98,7 +95,9 @@
 		&nbsp; &nbsp; &nbsp; 
 		<input type="button" value="Add Selected Plots to Dataset" onClick="postAction('DatasetAppend.do')"/> 
 		-->
-	   <br/>&nbsp;
+	 </TD><TD valign="top">
+	   @newPlotQueryLink@
+	 </TD></TR></TABLE>
 
            <!-- set up a table -->
            <table cellspacing="0" cellpadding="1">
@@ -259,9 +258,11 @@
 	  </td></tr>
       </table>
 
-	<br/>
-	 <span class="item">Choose plots from the search results above, then...</span>
-	<br/>
+	
+	<TABLE class="noborder" cellpadding="10"><TR><TD valign="top">
+	
+	<p class="item">Choose plots from the search results above, then...</p>
+	
 	<input type="button" value="Download Selected Plots" onClick="postAction('DownLoadManager.do')"/>
 	<!--
 		&nbsp; &nbsp; &nbsp; 
@@ -269,7 +270,10 @@
 		&nbsp; &nbsp; &nbsp; 
 	<input type="button" value="Add Selected Plots to Dataset" onClick="postAction('DatasetAppend.do')"/> 
 		-->
-	<br/>&nbsp;
+	</TD><TD valign="top">
+	@newPlotQueryLink@
+	</TD></TR></TABLE>
+	
 
      </form>      
   
