@@ -8,8 +8,8 @@
  * 		@version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2002-01-23 08:19:41 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2002-04-09 16:09:53 $'
+ *     '$Revision: 1.3 $'
  *
  *
  */
@@ -207,7 +207,7 @@ public class PlotXmlWriterV2
 					+"</namedPlace> \n"
 					+"\n"
 				);
-				System.out.println();
+				//System.out.println();
 			 }
 			 }
 			 catch (Exception e)
@@ -258,7 +258,7 @@ public class PlotXmlWriterV2
 		StringBuffer output = new StringBuffer(); 
 		output.append("<?xml version=\"1.0\"?> \n"
 		//removed the doc type for testing
-		+"<!DOCTYPE vegPlotPackage SYSTEM \"plot-standard1.dtd\"> \n"
+		//+"<!DOCTYPE vegPlotPackage SYSTEM \"plot-standard1.dtd\"> \n"
 		+"<vegPlotPackage> \n");
 		return( output.toString() );
 	}
@@ -707,7 +707,7 @@ public class PlotXmlWriterV2
 			//assume that the two args are 1] plugin and 2] plotName
 			String pluginClass = args[0];
 			String plotName = args[1];
-			System.out.println("plugin: " + pluginClass +" \n " + " plot: " + plotName);
+			System.out.println("PlotXmlWriterV2 > plugin: " + pluginClass +" \n " + " plot: " + plotName);
 			
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
 			writer.writeSinglePlot(plotName);
