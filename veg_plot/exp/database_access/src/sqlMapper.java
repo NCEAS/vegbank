@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-04-11 17:42:03 $'
- * '$Revision: 1.10 $'
+ *     '$Date: 2002-04-19 03:55:35 $'
+ * '$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,8 +79,7 @@ public class  sqlMapper
  * @param transformedSringNum integer defining number of query elements
  */
 
-	public void developExtendedPlotQuery(String[] transformedString, 
-	int transformedStringNum)
+	public void developExtendedPlotQuery(String[] transformedString, int transformedStringNum)
 	{
 		StringBuffer sb = new StringBuffer();
 		try 
@@ -147,8 +146,9 @@ public class  sqlMapper
 			
 			//retrieve the plot summary information, using as input the plotId numbers 
 			//retrieved in the provios query 
-			queryStore k1 = new queryStore();
-			k1.getPlotSummaryNew(  plotIdVec  );
+		/// REMOVED THIS CODE -- TO SLOW JHH 20020410
+		//  queryStore k1 = new queryStore();
+		//  k1.getPlotSummaryNew(  plotIdVec  );
 			
 			//instantiate a new instance of the dbAccess class -- probably
 			//should be done above
@@ -159,8 +159,9 @@ public class  sqlMapper
 
 			//write to a summary information to the file 
 			//that can be used by the application
-			xmlWriter xw = new xmlWriter();
-			xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
+				/// REMOVED THIS CODE -- TO SLOW JHH 20020410
+	//		xmlWriter xw = new xmlWriter();
+	//		xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
 			
 		}
 		catch ( Exception e )
@@ -921,8 +922,8 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 		{
 			if ( resultType.equals("summary") ) 
 			{
-				System.out.println("sqlMapper.developCompoundPlotQuery - "
-				+" calling queryStore.getPlotId (compound)");
+				System.out.println("sqlMapper.developCompoundPlotQuery  calling queryStore.getPlotId (compound)");
+				
 				queryStore j = new queryStore();
 				j.getPlotId(taxonName, state, elevationMin, elevationMax,
 				surfGeo, community);
@@ -930,14 +931,16 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 				queryOutputNum=j.outPlotIdNum;
 			}
 		}
-
+		
+		/// REMOVED THIS CODE -- TO SLOW JHH 20020410
 		//retrieve the summary info
-		queryStore k = new queryStore();
-		k.getPlotSummaryNew(queryOutput, queryOutputNum);
+		//queryStore k = new queryStore();
+		//k.getPlotSummaryNew(queryOutput, queryOutputNum);
 
 		//write to a summary file - that will be read by the requestor
-		xmlWriter xw = new xmlWriter();
-		xw.writePlotSummary(k.cumulativeSummaryResultHash, outFile);
+	/// REMOVED THIS CODE -- TO SLOW JHH 20020410
+	//	xmlWriter xw = new xmlWriter();
+	//	xw.writePlotSummary(k.cumulativeSummaryResultHash, outFile);
 		
 		//instantiate a new instance of the dbAccess class -- probably
 		//should be done above

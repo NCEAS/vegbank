@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-08 20:20:19 $'
- * 	'$Revision: 1.20 $'
+ *  '$Date: 2002-04-19 03:55:35 $'
+ * 	'$Revision: 1.21 $'
  */
 package databaseAccess;
 
@@ -867,6 +867,9 @@ public class DBinsertPlotSource
 			Vector uniqueTaxa = source.plantTaxaNames;
 			//getPlantTaxaNames(String plotName)
 			
+			System.out.println("DBinsertPlotSource > number of assocated taxa: " + uniqueTaxa.size() );
+			System.out.println("DBinsertPlotSource > taxa: " + uniqueTaxa.toString() );
+			
 			for (int i =0; i < uniqueTaxa.size(); i++)
 			{
 				StringBuffer sb = new StringBuffer();
@@ -874,8 +877,12 @@ public class DBinsertPlotSource
 				// strata composition insertion method called below too
 				taxonObservationId = getNextId("taxonObservation");	
 				String authorNameId = uniqueTaxa.elementAt(i).toString();
+				System.out.println("DBinsertPlotSource > current taxon: " + authorNameId );
+				
+				
 				// get the code associated with this name
 				String code = source.getPlantTaxonCode(authorNameId);
+				System.out.println("DBinsertPlotSource > current taxon code: " + code );
 				String percentCover = "25";
 				
 				// get the hashtable with the plant name llok up results from the 

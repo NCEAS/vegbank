@@ -43,8 +43,8 @@ import PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: harris $'
- *  '$Date: 2002-04-05 19:19:52 $'
- * 	'$Revision: 1.4 $'
+ *  '$Date: 2002-04-19 03:55:35 $'
+ * 	'$Revision: 1.5 $'
  */
 
 
@@ -199,6 +199,7 @@ public void accessDatabase(String inputXml, String inputXSL, String action)
 			queryOutput=w.queryOutput;
 			queryOutputNum=w.queryOutputNum;
 		}
+		
 		//insert action -- to insert a plot to the last database
 		else if (action.equals("insert")) 
 		{
@@ -206,6 +207,7 @@ public void accessDatabase(String inputXml, String inputXSL, String action)
 			plotWriter w =new plotWriter();
 			w.insertPlot(transformedString, transformedStringNum);
 		}
+		
 		//insertPlot action -- this is to insert a plot to the most recent DB
 		else if (action.equals("insertPlot")) 	
 		{
@@ -213,6 +215,7 @@ public void accessDatabase(String inputXml, String inputXSL, String action)
 			PlotDBWriter w =new PlotDBWriter();
 			w.insertPlot(transformedString, transformedStringNum, "entirePlot");
 		}
+		
 		//verify action
 		else if (action.equals("verify")) 
 		{
@@ -221,6 +224,7 @@ public void accessDatabase(String inputXml, String inputXSL, String action)
 				System.out.println(transformedString[ii]);	
 			}
 		}
+		
 		//simple community query action
 		else if (action.equals("simpleCommunityQuery")) 
 		{
