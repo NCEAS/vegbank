@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-02-18 22:48:52 $'
-  *     '$Revision: 1.16 $'
+  *     '$Date: 2003-02-24 20:10:09 $'
+  *     '$Revision: 1.17 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -85,6 +85,10 @@
     <filter token="maxConnectionUses" value="${maxConnectionUsers}" />
     <filter token="resetTime" value="${resetTime}" />
     <filter token="logFile" value="${logFile}" />
+    
+    <!-- TODO: Need to define elsewhere-->
+    <filter token="constraintlist" value="./constraints.xml"/>
+    <filter token="constraintmap" value="./constraint-map.xml"/>
 
   </target>
   
@@ -101,6 +105,9 @@
       </fileset>
       <fileset dir="${build.lib.dir}">
         <include name="**/*jar"/>
+      </fileset>
+      <fileset dir="${build.classes.dir}">
+        <include name="**/*class"/>
       </fileset>
     </path>
 
@@ -134,6 +141,11 @@
     <copy file="./exp/database_access/lib/database.properties" 
           todir="${build.classes.dir}"
           filtering="true"/>
+    <copy todir="${build.classes.dir}" filtering="true">
+      <fileset dir="${lib.dir}">
+        <include name="**/*properties"/>
+      </fileset>
+    </copy>
     
     <javac  srcdir="${build.java.src.dir}"
             includes="**/*.java  "
@@ -159,6 +171,7 @@
           description="=> Generates all jars in veg_plot module">
 		<echo message="Creating all of jars in ${ant.project.name}"/>
 	    
+    <!-- database_access.jar -->
     <jar  destfile ="${build.lib.dir}/database_access.jar">
       <fileset dir="${build.classes.dir}" casesensitive="yes">
         <include name="databaseAccess/*.class"/>
@@ -168,14 +181,33 @@
         <include name="databaseAccess/*.java"/>
       </fileset>
     </jar>
+    <!-- xmlresource.jar -->
+     <jar  destfile ="${build.lib.dir}/xmlresource.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="xmlresource/**/*.class"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="xmlresource/**/*.java"/>
+      </fileset>
+    </jar>
+    <!-- plotvalidator.jar -->
+    <jar  destfile ="${build.lib.dir}/plotvalidator.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="edu/ucsb/nceas/vegbank/plotvalidation/**/*.class"/>
+        <include name="plotvalidation.properties"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="edu/ucsb/nceas/vegbank/plotvalidation/**/*.java"/>
+      </fileset>
+    </jar>
+	</target>
 
-  
+  <target name="jar-subprojects" description="==> jar up subprojects">
     <!--<ant dir="exp/database_access" target="jar"/>-->
-    <ant antfile="./build-plotvalidation.xml" target="jar"/>
 		<ant dir="exp/data-translators" target="jar">
       <property name="hostname" value="${hostname}"/>
     </ant>
-		<ant dir="exp/xml-resource" target="jar"/>
+		<!-- <ant dir="exp/xml-resource" target="jar"/> -->
 		<ant dir="exp/rmidatasource" target="jar"> 
       <reference refid="classpath.compilation"/>
     </ant>
@@ -187,33 +219,46 @@
     </ant>
 		<!--<ant dir="exp/vegbank_web" target="jar"/>-->
 		<!--<ant dir="exp/vegclient" target="jar"/>-->
-		<ant dir="exp/xml_to_sql" target="jar"/>
-	</target>
-	
-	<target name="deploy" depends="jar, deploy-resources"
+		<!--<ant dir="exp/xml_to_sql" target="jar"/>-->
+  </target>
+  
+  <target name="jar-all" depends="jar, jar-subprojects" description="==> Generate all jar files"/>
+
+  <target name="deploy" depends="jar, deploy-resources"
           description="=> Deploys jars in veg_plot module to servlet container">
 		<echo message="Distr all of jars in ${ant.project.name}"/>
-
-    <copy todir="${servlet_lib}">
-      <fileset dir="${build.lib.dir}" includes="*jar"/>
-    </copy> 
     
 		<!--<ant dir="exp/database_access" target="dist-web" inheritAll="false"/>-->
-		<ant dir="exp/data-translators" target="dist" inheritAll="false"/>
-		<ant dir="exp/rmidatasource" target="dist" inheritAll="false"/> 
+		<ant dir="exp/data-translators" target="dist" inheritAll="false">
+      <property name="hostname" value="${hostname}"/>
+    </ant>
+		<!--<ant dir="exp/xml-resource" target="jar"/>-->
+		<ant dir="exp/rmidatasource" target="dist" inheritAll="false"> 
+      <reference refid="classpath.compilation"/>
+    </ant>
 		<!-- <ant dir="exp/services" target="jar"/> No dist target -->
-		<ant dir="exp/servlet" target="dist" inheritAll="false"/>
-		<ant dir="exp/vegbank_web" target="dist" inheritAll="false"/>
+		<ant dir="exp/servlet" target="dist" inheritAll="false">
+      <reference refid="classpath.compilation"/>
+      <property name="serverUrl" value="${serverUrl}"/>
+      <property name="rmiserver" value="${rmiserver}"/>
+    </ant>
+		<ant dir="exp/vegbank_web" target="dist" inheritAll="false">
+      <property name="hostname" value="${hostname}"/>
+    </ant>
+    
 		<!-- FIXME <ant dir="exp/vegclient" target="dist"/>  target fails to build -->
 		<!-- <ant dir="exp/xml-resource" target="dist"/> No dist target -->
 		<!-- <ant dir="exp/xml_to_sql" target="jar"/> No dist target -->
+    <copy todir="${servlet_lib}">
+      <fileset dir="${build.lib.dir}" includes="*jar"/>
+    </copy> 
 	</target>
 
 	<target name="deploy-resources" depends="init" 
           description="=> Deploy resources to servlet container">
 		<!-- Copy xml resources to servlet container -->
 		<copy todir="${servlet_lib}">
-			<fileset dir="xml" includes="*xsl, *dtd, *xml"/>
+			<fileset dir="xml" includes="*dtd, *xml"/>
 		</copy>
     
 		<copy file="src/utilities/coord_transform.sh" todir="${servlet_lib}"/>

@@ -1,4 +1,4 @@
-rmiserver_hostname = 128.111.220.59
+rmiserver = 128.111.220.59
 # I am mounting my home dir on the rmiserver so it easy to make updates 
 # Great for development -- production probably not
 rmiserver.home.dir = /home/farrell/muse/rmiserver/beta
