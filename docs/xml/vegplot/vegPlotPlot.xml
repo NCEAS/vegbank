@@ -323,7 +323,7 @@
 		<attribute>
 			<attName>topoPosition </attName>
 			<attNulls>Yes</attNulls>
-			<attType>VARCHAR(50)</attType>
+			<attType>VARCHAR(90)</attType>
 			<attKey>n/a </attKey>
 			<attReferences>n/a </attReferences>
 			<attNotes>closed list</attNotes>
@@ -341,7 +341,7 @@
 		<attribute>
 			<attName>geology</attName>
 			<attNulls>Yes</attNulls>
-			<attType>VARCHAR(50) </attType>
+			<attType>VARCHAR(90) </attType>
 			<attKey>n/a</attKey>
 			<attReferences>n/a</attReferences>
 			<attNotes>closed list (perhaps 2-tier heirarchy)</attNotes>
