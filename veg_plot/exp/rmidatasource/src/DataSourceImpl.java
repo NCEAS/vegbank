@@ -28,13 +28,21 @@ public class DataSourceImpl extends UnicastRemoteObject
 	 
 	 //constructor
    public DataSourceImpl(String sourcePluginClass) 
-	 	throws RemoteException
+	 throws RemoteException
 	 {
 		 super();
-		 System.out.println("DataSourceImpl > plugin to be used: " + sourcePluginClass);
-		 source = new PlotDataSource(sourcePluginClass);
-		 System.out.println("DataSourceImpl > number of plots:  " + source.getPlotNames().size() );
+		 try
+		 {
+		 	System.out.println("DataSourceImpl > plugin to be used: " + sourcePluginClass);
+		 	source = new PlotDataSource(sourcePluginClass);
+		 	System.out.println("DataSourceImpl > number of plots:  " + source.getPlotNames().size() );
      //source.getPlot("VOYA.03");
+		 }
+		 catch (Exception e)
+		 {
+		 	System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+     }
    }
 	
 	
@@ -365,6 +373,9 @@ public class DataSourceImpl extends UnicastRemoteObject
 		Vector v = new Vector();
 		try
 		{
+			// re-instantiate this class
+			source = new PlotDataSource(this.loaderPlugin);
+			
 			System.out.println("DataSourceImpl > get plot names contacted");
 			v = source.getPlotNames();
 			System.out.println("DataSourceImpl > plot names: " + v.toString() );
