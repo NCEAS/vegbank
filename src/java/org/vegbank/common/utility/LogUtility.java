@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:25:57 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-02-24 01:24:59 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,10 @@
 package org.vegbank.common.utility;
 
 import java.util.*;
-import java.util.logging.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 
 /**
@@ -36,27 +39,102 @@ public class LogUtility
 {
 	private static final boolean enable = Boolean.valueOf(ResourceBundle
 			.getBundle("general").getString("logging.enable")).booleanValue();
-	
+		
+    /**
+     * Commons Logging instance.
+     */
+    protected static Log log = LogFactory.getLog(LogUtility.class);
+
+	public static final int TRACE = 1;
+	public static final int DEBUG = 2;
+	public static final int INFO = 3;
+	public static final int WARN = 4;
+	public static final int ERROR = 5;
+	public static final int FATAL = 6;
+		
+    // TODO:
+    // Needs client code to give an indication of severity
+    // Then the logged messages can be filtered according to 
+    // taste using the logging properties files (src/java)
+    
 
 	public static void log(Object message) {
-		if (enable && message != null) {
-			System.out.println("LU--"+message.toString());
+		if (enable && message != null) 
+		{
+			//System.out.println("LU--"+message.toString());
+			if ( log.isDebugEnabled() )
+			{
+				log.debug("LU--"+message.toString());
+			}
 		}
 	}
 	
+	public static void log( Object message, int severity )
+	{
+		switch (severity) 
+		{
+			case TRACE:
+				if ( log.isTraceEnabled() )
+				{
+					log.trace( message.toString() );
+				} 
+				break;
+			case DEBUG:
+				if ( log.isDebugEnabled() )
+				{
+					log.debug( message.toString() );
+				} 
+				break;
+			case INFO:
+				if ( log.isInfoEnabled() )
+				{
+					log.info( message.toString() );
+				} 
+				break;
+			case WARN:
+				if ( log.isWarnEnabled() )
+				{
+					log.warn( message.toString() );
+				} 
+				break;
+			case ERROR:
+				if ( log.isErrorEnabled() )
+				{
+					log.error( message.toString() );
+				} 
+				break;
+			case FATAL:
+				if ( log.isFatalEnabled() )
+				{
+					log.fatal( message.toString() );
+				} 
+				break;
+			default:
+				log.debug( message.toString() );																
+		}
+	
+	}
+	
 	public static void log(Object message, java.lang.Throwable t) {
-		if (enable) {
-			String tmp = "";
-			if (message != null) {
-				tmp += message.toString();
+		if (enable) 
+		{
+			if ( log.isErrorEnabled() )
+			{
+				String tmp = "";
+				if (message != null) {
+					tmp += message.toString();
+				}
+				if (t != null) {
+					tmp += "\nEXCEPTION: " + t.toString();
+					
+					// Print out stackTrace TODO: make turn off configurable
+					tmp = appendStackTrace(t, tmp);
+				}
+				//System.out.println("LU--"+message.toString());
+
+				log.debug(tmp);
 			}
-			if (t != null) {
-				tmp += "\nEXCEPTION: " + t.toString();
-				
-				// Print out stackTrace TODO: make turn off configurable
-				tmp = appendStackTrace(t, tmp);
-			}
-			System.out.println(tmp);
+			//System.out.println(tmp);
 		}
 	}
 
