@@ -184,8 +184,9 @@ public void doGet(HttpServletRequest request,
 		{
 			//validate that there are the correct type and number
 			//of parameters being passed to thie method
-			if ( (param.containsKey("criteria") == false ) || ( param.containsKey("operator")
-				== false )|| ( param.containsKey("value") == false ))
+			if ( (param.containsKey("criteria") == false ) 
+				|| ( param.containsKey("operator")== false )
+				|| ( param.containsKey("value") == false ))
 			{
 				System.out.println("did not get the correct parameters to handleExtendedQuery");	
 			}
@@ -196,7 +197,9 @@ public void doGet(HttpServletRequest request,
 				{
 					//process the criteria data
 					String name = (String)enum.nextElement();
-					if ( name.equals("criteria")  || name.equals("operator") || name.equals("value"))
+					if ( name.equals("criteria")  
+						|| name.equals("operator") 
+						|| name.equals("value"))
 					{
 						Vector  extendedValsVector = new Vector();
 						String values[] = request.getParameterValues(name);
@@ -208,7 +211,27 @@ public void doGet(HttpServletRequest request,
 					}
 				}
 				//compose the query
-				composeExtendedQuery ( extendedParamsHash ) ;
+				composeExtendedQuery( extendedParamsHash ) ;
+				//issue the extended query
+				issueQuery("extendedQuery");
+				//the number of plots in the result set\
+				out.println("Number of results returned: "+queryOutputNum+"<br><br>");
+				
+				
+				if (queryOutputNum>=1) 
+				{
+					System.out.println("result sets: "+queryOutputNum);
+ 					servletUtility l =new servletUtility();  
+ 					l.getViewOption(requestDataType);
+ 					out.println(l.outString);
+				}
+				else 
+				{ 
+					out.println("<br> <b> Please try another query </b> <br>"); 
+					out.println("<a href = \"/examples/servlet/pageDirector?pageType=DataRequestServlet\">"
+					+"return to query page</a><b>&#183;</b>"); //put in rb
+				}
+				
 				
 			}
 		}
@@ -563,7 +586,6 @@ private void updateClentLog (String clientLog, String remoteHost)
  */
 	private String composeExtendedQuery ( Hashtable extendedParamsHash ) 
 	{
-		
 		try 
 		{
 			//set up the output query file called query.xml	using append mode to build  
@@ -583,9 +605,11 @@ private void updateClentLog (String clientLog, String remoteHost)
 				Vector valueVec = (Vector)extendedParamsHash.get("value");
 				for (int i=0; i<criteriaVec.size(); i++) 
 				{
-					sb.append("  <queryCriteria>"+criteriaVec.elementAt(i)+"\n");
-					sb.append("  <queryOperator>"+operatorVec.elementAt(i)+"\n");
-					sb.append("  <queryValue>"+valueVec.elementAt(i)+"\n");
+					sb.append("  <queryTriple> \n");
+					sb.append("  	<queryCriteria>"+criteriaVec.elementAt(i)+"</queryCriteria> \n");
+					sb.append("  	<queryOperator>"+operatorVec.elementAt(i)+"</queryOperator> \n");
+					sb.append("  	<queryValue>"+valueVec.elementAt(i)+"</queryValue> \n");
+					sb.append("  </queryTriple> \n");
 				}
 			}
 			else 
@@ -593,30 +617,13 @@ private void updateClentLog (String clientLog, String remoteHost)
 				//print the error found
 				System.out.println("cannot compose extended query");
 			}
-			sb.append("<extendedQuery>"+"\n");
-			sb.append("<dbQuery>"+"\n");
+			sb.append("</extendedQuery>"+"\n");
+			sb.append("<requestDataType>summary</requestDataType> \n");
 			sb.append("<resultType>summary</resultType> \n");
 			sb.append("<outFile>"+servletDir+"summary.xml</outFile> \n");
-			
+			sb.append("</dbQuery>"+"\n");
 			outFile.println( sb.toString() );
 			
-			
-			
-			
-/*
-			//print the query instructions in the xml document
-			outFile.println("<?xml version=\"1.0\"?> \n"+       
-				"<!DOCTYPE vegPlot SYSTEM \"plotQuery.dtd\"> \n"+     
-				"<dbQuery> \n"+
-				"<query> \n"+
-				"<queryElement>"+queryElement+"</queryElement> \n"+
-				"<elementString>"+elementString+"</elementString> \n"+
-				"</query> \n"+
-				"<resultType>summary</resultType> \n"+
-				"<outFile>"+servletDir+"summary.xml</outFile> \n"+
-				"</dbQuery>"
-			);
-*/		
 		}
 		
 		catch (Exception e) 
@@ -817,6 +824,15 @@ private void updateClentLog (String clientLog, String remoteHost)
 			//call the plot access module
 			g.accessDatabase(servletDir+"query.xml", 
 			servletDir+"querySpec.xsl", "compoundQuery");	
+			//grab the result set from the dbAccess class
+			queryOutput=g.queryOutput;
+			queryOutputNum=g.queryOutputNum;
+		}
+		else if (queryType.equals("extendedQuery")) 
+		{
+			//call the plot access module
+			g.accessDatabase(servletDir+"query.xml", 
+			servletDir+"querySpec.xsl", "extendedQuery");	
 			//grab the result set from the dbAccess class
 			queryOutput=g.queryOutput;
 			queryOutputNum=g.queryOutputNum;
