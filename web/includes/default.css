@@ -14,7 +14,7 @@ H1, H2, H3, H4, H5, H6	{
 							color: #333333;
 						}
 
-.vegbank 		{ color : #531100}
+.vegbank 		{ font-family: Georgia, Times New Roman, Times, serif; color : #531100}
 
 UL.constsize,LI.constsize {  font: 10pt Verdana, Arial, Helvetica, Geneva, sans-serif;
 			     
