@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <manualDoc>
   <manualItem refURL="@general_link@info.html" name="vegbank-information" topic="VegBank Information">
     <manualItem refURL="" name="what-is-a-plot" topic="What is a Plot?">
@@ -26,12 +25,12 @@
     <manualItem refURL="@general_link@sitemap.html" name="sitemap" topic="Sitemap">
       <manualHTML>The <a href="@general_link@sitemap.html">Sitemap</a> shows most of the features available in VegBank at present.  There are also items that are listed, but not links are available, indicating that this feature has not yet been built.  This is to give users an idea about what functionality we hope to build for VegBank in the near future.  Note that some items on the sitemap may not work completely, because you normally need to complete an earlier step.  For example, you may link to "Export Data," but the downloads from this page will not contain data, as those must first be selected from the results of a simple query.</manualHTML>
     </manualItem>
-    <manualItem refURL="/vegbank/dbdictionary/dd-index.html" name="data-dictionary" topic="Data Dictionary">
-      <manualHTML>The Data Dictionary provides detailed information about every table and field in the VegBank database.  This is more useful for those who have already gained some experience with VegBank and wish to understand a particular table or field.  The <a href="/vegbank/dbdictionary/dd-index.html">index page</a> of the data dictionary shows a list of tables and fields that one may select.  Once a table or field has been selected, you will see a <a href="/vegbank/dbdictionary/dd~table~plot~type~tableview.html">view</a> of that table, with a <a href="/vegbank/dbdictionary/dd~table~plot~field~authore~type~tableview.html">field highlighted</a> in orange if you selected a field.  You may click on a field name to see that field in a <a href="/vegbank/dbdictionary/dd~table~plot~field~authore~type~fieldview.html">detailed view</a>.  In that detailed view, you will see the complete list of values for the field, if it is <a href="/vegbank/dbdictionary/dd~table~plot~field~standsize~type~fieldview.html">limited to a closed set of values</a> (or the suggested values if the <a href="/vegbank/dbdictionary/dd~table~plot~field~shape~type~fieldview.html">list is open</a>, meaning this field may contain other values besides these recommended ones).  You can also click on column headers or <a href="/vegbank/dbdictionary/dd~table~observation~field~plot_id~type~tableview.html">referenced fields</a> for foreign keys to find out more about them.</manualHTML>
+    <manualItem refURL="@dbdictionary_link@dd-index.html" name="data-dictionary" topic="Data Dictionary">
+      <manualHTML>The Data Dictionary provides detailed information about every table and field in the VegBank database.  This is more useful for those who have already gained some experience with VegBank and wish to understand a particular table or field.  The <a href="@dbdictionary_link@dd-index.html">index page</a> of the data dictionary shows a list of tables and fields that one may select.  Once a table or field has been selected, you will see a <a href="@dbdictionary_link@dd~table~plot~type~tableview.html">view</a> of that table, with a <a href="@dbdictionary_link@dd~table~plot~field~authore~type~tableview.html">field highlighted</a> in orange if you selected a field.  You may click on a field name to see that field in a <a href="@dbdictionary_link@dd~table~plot~field~authore~type~fieldview.html">detailed view</a>.  In that detailed view, you will see the complete list of values for the field, if it is <a href="@dbdictionary_link@dd~table~plot~field~standsize~type~fieldview.html">limited to a closed set of values</a> (or the suggested values if the <a href="@dbdictionary_link@dd~table~plot~field~shape~type~fieldview.html">list is open</a>, meaning this field may contain other values besides these recommended ones).  You can also click on column headers or <a href="@dbdictionary_link@dd~table~observation~field~plot_id~type~tableview.html">referenced fields</a> for foreign keys to find out more about them.</manualHTML>
     </manualItem>
     <manualItem refURL="@design_link@erd/vegbank_erd.pdf" name="entity-relationship-diagram" topic="Entity Relationship Diagram">
       <manualHTML>
-        An Entity Relationship Diagram (ERD) shows how different tables (entities) in a database are related.  This is quite helpful for visualizing what the database contains and how these data are interconnected.  The <a href="@design_link@erd/vegbank_erd.pdf">VegBank ERD</a> is a PDF file (you will need a reader for this, such as <a target="_new" href="http://www.adobe.com/products/acrobat/readstep2.html">Adobe Acrobat Reader</a>), which allows you to control zooming.  Zooming out (~ 75%) is recommended for getting an overall picture of how all the tables relate; zooming in (120% +) is recommended for understanding how a smaller section of the database works.  Click on a table in the ERD (the "hand" tool may need to be selected on the PDF toolbar in Adobe Acrobat Reader) to see that table in the <a href="/vegbank/dbdictionary/dd-index.html">data dictionary</a> (described in previous topic).
+        An Entity Relationship Diagram (ERD) shows how different tables (entities) in a database are related.  This is quite helpful for visualizing what the database contains and how these data are interconnected.  The <a href="@design_link@erd/vegbank_erd.pdf">VegBank ERD</a> is a PDF file (you will need a reader for this, such as <a target="_new" href="http://www.adobe.com/products/acrobat/readstep2.html">Adobe Acrobat Reader</a>), which allows you to control zooming.  Zooming out (~ 75%) is recommended for getting an overall picture of how all the tables relate; zooming in (120% +) is recommended for understanding how a smaller section of the database works.  Click on a table in the ERD (the "hand" tool may need to be selected on the PDF toolbar in Adobe Acrobat Reader) to see that table in the <a href="@dbdictionary_link@dd-index.html">data dictionary</a> (described in previous topic).
       </manualHTML>
     </manualItem>
     <manualItem refURL="@general_link@info.html" name="how-to-cite-vegbank" topic="How to Cite VegBank">
@@ -113,33 +112,37 @@ more specific instructions on each search page.
       <manualHTML>
         <a href="@forms_url@plot-query.jsp">Plot Query</a> 
      - search for plots by location, species present, community type, 
-  plot collectors, and other plot criteria. <br /> <br />More help is available from that form (click the link here to see the plot-query form).  
-   Some examples of plot queries  that return a few plot-observations are: <br />
-   Elevation from 2120 to 2220 <br />
+  plot collectors, and other plot criteria. <br/>
+        <br/>More help is available from that form (click the link here to see the plot-query form).  
+   Some examples of plot queries  that return a few plot-observations are: <br/>
+   Elevation from 2120 to 2220 <br/>
    All plots in project: 'ZION Vegetation mapping...'<br/>
-   All plots in South Dakota <br />
-   </manualHTML>
+   All plots in South Dakota <br/>
+      </manualHTML>
     </manualItem>
     <manualItem refURL="@forms_url@plant-query.html" name="search-for-plants" topic="Search for Plants">
       <manualHTML>
         <a href="@forms_url@plant-query.html">Plant Query</a>
      - search for plant concepts in VegBank, by name or some portion of a name.  
-     <br /><br />See the <a href="@design_link@planttaxaoverview.html">overview</a> 
-     of plant taxonomy as handled by VegBank. Note: assertions are the same thing as concepts in that article. <br /><br />
+     <br/>
+        <br/>See the <a href="@design_link@planttaxaoverview.html">overview</a> 
+     of plant taxonomy as handled by VegBank. Note: assertions are the same thing as concepts in that article. <br/>
+        <br/>
      Examples of plant queries are : (without single quotes)<br/>
-     plant name = 'Acer rubrum' <br />
-     plant name = 'Carex%' (for all plants starting with Carex) <br />
-     plant name = 'table%pine' (to get Table Mountain Pine, Pinus pungens) <br />
+     plant name = 'Acer rubrum' <br/>
+     plant name = 'Carex%' (for all plants starting with Carex) <br/>
+     plant name = 'table%pine' (to get Table Mountain Pine, Pinus pungens) <br/>
       </manualHTML>
     </manualItem>
     <manualItem refURL="@forms_url@community-query.html" name="search-for-communities" topic="Search for Communities">
       <manualHTML>
         <a href="@forms_url@community-query.html">Community Query</a>
      - search for community concepts in VegBank, by name or some portion of a name. 
-      <br /><br />
+      <br/>
+        <br/>
       Examples for Community queries: (without single quotes)<br/>
-      community name = 'Juniper%horizon%' (for all communities starting with Juniper and then containing horizon) <br />
-      community name = 'Pinus%pungens' (for all communities with Pinus pungens in the community name) <br />
+      community name = 'Juniper%horizon%' (for all communities starting with Juniper and then containing horizon) <br/>
+      community name = 'Pinus%pungens' (for all communities with Pinus pungens in the community name) <br/>
       </manualHTML>
     </manualItem>
     <manualItem refURL="@general_link@metadata.html" name="view-supplemental-data" topic="View Supplemental Data">
