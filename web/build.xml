@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2004-06-03 17:18:07 $'
-* '$Revision: 1.106 $'
+* '$Author: anderson $'
+* '$Date: 2004-07-23 01:17:59 $'
+* '$Revision: 1.107 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -92,7 +92,6 @@
     <property name="hostname" value="vegbank"/>
     <property name="sharedhtml_src" value="./sharedhtml"/>
     <property name="workshop_src" value="./workshop"/>
-    <property name="apache.document.root" value="/usr/www/${webapp}/htdocs"/>
     <property name="vegdocs.dir" value="/vegdocs"/>
     <property name="vegdocs_server" value="${apache.document.root}${vegdocs.dir}"/>
     <!-- large binary files location:   targets that read from large binaries separate -->
