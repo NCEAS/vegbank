@@ -15,8 +15,8 @@
 *     Authors: @author@
 *
 *    '$Author: mlee $'
-*      '$Date: 2003-10-29 17:13:44 $'
-*  '$Revision: 1.12 $'
+*      '$Date: 2003-10-30 20:41:43 $'
+*  '$Revision: 1.13 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -41,6 +41,15 @@
 <title>
 VEGBANK - Simple Plots Query
 </title>
+ <script type="text/javascript">
+<!--
+function getHelp()
+{
+return "@manualFrameFor-search-for-plots@"
+}
+
+-->
+</script>
 </head>
 
 <body>

@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2003-10-30 16:33:55 $'
-*  '$Revision: 1.3 $'
+*  '$Date: 2003-10-30 20:41:43 $'
+*  '$Revision: 1.4 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,17 @@
 <head>
 <title> VEGBANK VEGETATION PLOT DATA SUBMITTAL WIZARD </title>
 <link REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css">
+ <script type="text/javascript">
+<!--
+function getHelp()
+{
+return "@manualFrameFor-submit-plots@"
+}
+
+-->
+</script>
+
+
 </head>
 
 
