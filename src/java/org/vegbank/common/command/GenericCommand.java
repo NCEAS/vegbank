@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-08 23:51:50 $'
- *	'$Revision: 1.18 $'
+ *	'$Date: 2004-10-11 21:59:37 $'
+ *	'$Revision: 1.19 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,12 +78,13 @@ public class GenericCommand
 	private static Pattern attribAsPattern = Pattern.compile("\\S* +as ");
 	private static Pattern afterFromPattern = Pattern.compile(".* from ");
 
-	//// OTHER ATTEMPTS
-	//private static Pattern selectParamPattern = Pattern.compile("\\(.*\\) as ?(.*))+ from.*");
-	//private static Pattern selectParamPattern = Pattern.compile("select[ distinct| all]? [[\\(.*\\) as ]?(.*)[,]?]+ from.*");
-	//private static Pattern selectParamPattern = Pattern.compile("select \\(.*\\) as (.*) from.*");
-	//private static Pattern selectParamPattern = Pattern.compile("select[\s]+[distinct|all]?[\s]+[\\(.*\\) as] (.*)|(.*)]+ from.*");
-	//private static Pattern selectParamPattern = Pattern.compile("select [distinct |all ]? ([[.*|\\(.*\\)][,]?]+) from .*");
+	//
+	////////////////////////////////////////////////////////////////////
+	private String selectClauseWithSimpleAttribs = null;
+	private String whereClauseFormatted = null;
+
+	////////////////////////////////////////////////////////////////////
+	//
 
 
 	/* (non-Javadoc)
@@ -162,7 +163,8 @@ public class GenericCommand
 		//log.debug("execute(req, select, where, bean, (String[])where)");
 
 		String tmp;
-		String sqlMainQuery = getMainQuery(selectClauseKey, whereClauseKey, whereParams);
+		String sqlFullQuery = initQuery(selectClauseKey, whereClauseKey, whereParams);
+
 
 
 		////////////////////////////////////////////////////
@@ -170,15 +172,16 @@ public class GenericCommand
 		////////////////////////////////////////////////////
 		int numItems = 0;
 		
-		// FOR NOW WE'LL COUNT RESULTS EACH TIME 
+		// TODO: 
+		// Only count results if they haven't already been counted
 		if (getPager()) {
-			numItems = countResults(sqlMainQuery);
+			numItems = countResults();
 
 			/* 
 			tmp = getNumItems();
 			if (Utility.isStringNullOrEmpty(tmp)) {
 				// run a query
-				numItems = countResults(sqlMainQuery);
+				numItems = countResults(sqlFullQuery);
 
 			} else {
 				// use the preset numItems
@@ -235,14 +238,14 @@ public class GenericCommand
 		////////////////////////////////////////////////////
 		// Run the query
 		////////////////////////////////////////////////////
-		sqlMainQuery += buildLimitClause();
+		sqlFullQuery += buildLimitClause();
 
-		log.info("--------- " + selectClauseKey + " QUERY::: \n\t" + sqlMainQuery 
+		log.info("--------- " + selectClauseKey + " QUERY::: \n\t" + sqlFullQuery 
 				+ "\n=======================================");
 		DatabaseAccess da = new DatabaseAccess();
-		ResultSet rs = da.issueSelect( sqlMainQuery );
+		ResultSet rs = da.issueSelect( sqlFullQuery );
 		
-		Vector propNames = getPropertyNames(sqlMainQuery);
+		Vector propNames = getPropertyNames(sqlFullQuery);
 		List list = getBeanList(beanName, rs, propNames);
 
 		if (request != null) {
@@ -274,10 +277,13 @@ public class GenericCommand
 	/**
 	 * 
 	 */
-	private int countResults(String origQuery) throws Exception {
+	private int countResults() throws Exception {
 
-		String sql = "SELECT count(1) FROM " + stripSQLAttribs(origQuery);
-
+		String sql = "SELECT COUNT(1) " + 
+				this.selectClauseWithSimpleAttribs.substring( 
+						this.selectClauseWithSimpleAttribs.indexOf("from ")) +
+				this.whereClauseFormatted;
+				
 		log.info("::: COUNT QUERY:::\n\t" + sql + "\n=======================================");
 		DatabaseAccess da = new DatabaseAccess();
 		ResultSet rs = da.issueSelect( sql );
@@ -299,29 +305,43 @@ public class GenericCommand
 	 * @param request
 	 * @return
 	 */
-	private String getMainQuery(String selectClauseKey, String whereClauseKey, String[] whereParams) {
+	private String initQuery(String selectClauseKey, String whereClauseKey, String[] whereParams) {
 		String selectClause = "";
 		String whereClause = "";
 		StringBuffer sql = new StringBuffer(1024);
 		
 		// SELECT
 		if (!Utility.isStringNullOrEmpty(selectClauseKey)) {
-			selectClause = sqlResources.getString(selectClauseKey);
+			selectClause = sqlResources.getString(selectClauseKey).toLowerCase();
 			sql.append(selectClause);
 		}		
+
+		this.selectClauseWithSimpleAttribs = stripSQLAttribsFromSelect(selectClause);
+
 
 		// WHERE
 		if (!Utility.isStringNullOrEmpty(whereClauseKey)) {
 			if (whereClauseKey.startsWith("where_")) {
 				// get the SQL from props file
-				whereClause = sqlResources.getString(whereClauseKey);
+				whereClause = sqlResources.getString(whereClauseKey).toLowerCase();
 
 			} else {
 				// just use the given where clause
 				log.info("Using non-configured (dangerous) where: " + whereClause);
 			}
+
+			sql.append(buildFormattedWhereClause(whereClause, whereParams, selectClause));
 		} 
 
+		return sql.toString();
+
+	}
+
+
+	/**
+	 *
+	 */
+	private String buildFormattedWhereClause(String whereClause, String[] whereParams, String selectClause) {
 
 		boolean hasWhereClause = !Utility.isStringNullOrEmpty(whereClause);
 		boolean hasParams = (whereParams != null && whereParams.length > 0);
@@ -329,6 +349,7 @@ public class GenericCommand
 		log.debug("hasWhereClause: " + hasWhereClause);
 		log.debug("hasParams: " + hasParams);
 
+		// format the where clause
 		if (hasWhereClause && hasParams) {
 
 			if (hasParams) {
@@ -343,16 +364,21 @@ public class GenericCommand
 			}
 
 
-			log.debug("Adding where clause: " + whereClause);
-			if ( selectClause.indexOf("WHERE") > 0 ) {
-				sql.append(" AND " +  whereClause);
-
+			if ( selectClause.indexOf("where") == -1 ) {
+				whereClause = " where " +  whereClause;
 			} else {
-				sql.append(" WHERE " +  whereClause);
+				whereClause = " and " +  whereClause;
 			}
+
+			this.whereClauseFormatted = whereClause;
 		}
 
-		return sql.toString();
+		if (whereClause == null) {
+			return "";
+		} else {
+			log.debug("Adding where clause: " + whereClause);
+			return whereClause;
+		}
 	}
 
 
@@ -465,28 +491,16 @@ public class GenericCommand
 		Vector results = new Vector();
 		
 		// parse selectClause to get all the fieldNames
-		String attribList = null;
-		selectClause = selectClause.toLowerCase();
-		Matcher m;
+		if (Utility.isStringNullOrEmpty(this.selectClauseWithSimpleAttribs)) {
+			this.selectClauseWithSimpleAttribs = stripSQLAttribsFromSelect(selectClause);
+		}
 
-		//log.debug("============================");
-		//log.debug("ORIGINAL: " + selectClause);
-		m = subqueryPattern.matcher(selectClause);
-		selectClause = m.replaceAll("");
-		log.debug("REGEX: " + subqueryPattern.pattern());
-		log.debug("MODIFIED 1: " + selectClause);
+		// extract only the comma-separated attribs
+		String attribList = this.selectClauseWithSimpleAttribs.substring(
+				this.selectClauseWithSimpleAttribs.indexOf("select ")+7, 
+				this.selectClauseWithSimpleAttribs.indexOf("from"));
 
-		m = attribAsPattern.matcher(selectClause);
-		selectClause = m.replaceAll("");
-		log.debug("REGEX: " + attribAsPattern.pattern());
-		log.debug("--------------");
-		log.debug("MODIFIED 2: " + selectClause);
-		log.debug("============================");
-
-		log.debug("========== CENSORED QUERY: " + selectClause);
-
-		selectClause = selectClause.substring(selectClause.indexOf("select ")+7, selectClause.indexOf("from"));
-		StringTokenizer st = new StringTokenizer(selectClause, ",");
+		StringTokenizer st = new StringTokenizer(attribList, ",");
 		int indexOfDot, indexOfComma, indexOfAs;
 		
 		// get the property names
@@ -543,6 +557,37 @@ public class GenericCommand
     /**
      * 
      */
+	private String stripSQLAttribsFromSelect(String selectClause) {
+
+		selectClause = selectClause.toLowerCase();
+		Matcher m;
+
+		log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
+		log.debug("========== ORIGINAL QUERY: " + selectClause);
+		
+		m = subqueryPattern.matcher(selectClause);
+		selectClause = m.replaceAll("");
+		log.debug("========== REGEX 1: " + subqueryPattern.pattern());
+		log.debug("========== MODIFIED QUERY 1: " + selectClause);
+
+		m = attribAsPattern.matcher(selectClause);
+		selectClause = m.replaceAll("");
+		log.debug("========== REGEX 2: " + attribAsPattern.pattern());
+		log.debug("========== MODIFIED 2: " + selectClause);
+
+		//m = afterFromPattern.matcher(selectClause);
+		//selectClause = m.replaceAll("");
+		//log.debug("========== REGEX 3: " + afterFromPattern.pattern());
+		//log.debug("========== MODIFIED 3: " + selectClause);
+
+		log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
+
+		return selectClause;
+	}
+
+    /**
+     * 
+     */
 	private String stripSQLAttribs(String selectClause) {
 
 		selectClause = selectClause.toLowerCase();
@@ -555,11 +600,11 @@ public class GenericCommand
 		selectClause = m.replaceAll("");
 
 		m = afterFromPattern.matcher(selectClause);
-		//log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
-		//log.debug("REGEX: " + afterFromPattern.pattern());
-		//log.debug("BEFORE: " + selectClause);
+		log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
+		log.debug("REGEX: " + afterFromPattern.pattern());
+		log.debug("BEFORE: " + selectClause);
 		selectClause = m.replaceAll("");
-		//log.debug("MODIFIED: " + selectClause);
+		log.debug("MODIFIED: " + selectClause);
 
 		return selectClause;
 	}
