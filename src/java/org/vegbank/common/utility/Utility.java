@@ -12,8 +12,8 @@ import org.vegbank.common.dbAdapter.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-03-07 22:28:44 $'
- * '$Revision: 1.5 $'
+ * '$Date: 2003-03-20 19:34:17 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,15 +86,20 @@ public class Utility
 	*/
 	public Connection getConnection(String databaseName)
 	{
+		String host = "127.0.0.1";  // Default
+		return getConnection(databaseName, host);
+	}
+	
+	public Connection getConnection(String databaseName, String host)
+	{
 		String driverClassName = "org.postgresql.Driver";
-    String databaseUserName = "datauser";
-    String databasePassword = "";
-    String host = "127.0.0.1";
-    String connectionString = "jdbc:postgresql://" + host + "/" + databaseName;
-    Connection c = null;
+		String databaseUserName = "datauser";
+		String databasePassword = "";
+		String connectionString = "jdbc:postgresql://" + host + "/" + databaseName;
+		Connection c = null;
     
 		try 
- 		{
+		{
 			Class.forName(driverClassName);
 			c = DriverManager.getConnection(connectionString, "datauser", "");
 		}

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-07 22:28:42 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-03-20 19:34:13 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,12 +43,15 @@ public interface Constants
 	public static final String PLANT_CLASS_GENUS = "Genus"; 
 	public static final String PLANT_CLASS_HYBRID = "Hybrid"; 
 		
-	public static final String PLANT_NAME_SCIENTIFIC = "Scientific"; 
-	public static final String PLANT_NAME_SCIENTIFIC_NOAUTHORS = "Scientific without authors";
-	public static final String PLANT_NAME_CODE = "Code";  
-	public static final String PLANT_NAME_COMMON = "English Common"; 
+	public static final String USAGE_NAME_SCIENTIFIC = "Scientific"; 
+	public static final String USAGE_NAME_SCIENTIFIC_NOAUTHORS = "Scientific without authors";
+	public static final String USAGE_NAME_CODE = "Code";  
+	public static final String USAGE_NAME_COMMON = "English Common"; 
 	
-	public static final String PLANT_NAME_STATUS_STANDARD =  "Standard";
-	public static final String PLANT_NAME_STATUS_NOT_STANDARD =  "Not Standard";
-	public static final String PLANT_NAME_STATUS_UNDETERMINED =  "Undetermined";	
+	public static final String USAGE_NAME_STATUS_STANDARD =  "Standard";
+	public static final String USAGE_NAME_STATUS_NOT_STANDARD =  "Not Standard";
+	public static final String USAGE_NAME_STATUS_UNDETERMINED =  "Undetermined";	
+	
+	public static final String CONCEPT_STATUS_ACCEPTED = "accepted";
+	public static final String CONCEPT_STATUS_NOT_ACCEPTED = "not accepted";	
 }

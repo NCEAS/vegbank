@@ -3,8 +3,8 @@
  * Purpose: An adapter class for PostgreSQL RDBMS.
  *
  * '$Author: farrell $'     
- * '$Date: 2003-03-07 22:28:42 $' 
- * '$Revision: 1.2 $'
+ * '$Date: 2003-03-20 19:34:14 $' 
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,9 @@ import java.sql.Statement;
 public class PostgresqlAdapter extends AbstractDatabase
 {
 
+	/* (non-Javadoc)
+	 * @see org.vegbank.common.dbAdapter.AbstractDatabase#getNextUniqueID(java.sql.Connection, java.lang.String, java.lang.String)
+	 */
 	/**
 	 * The PostgreSQL unique ID /sequence generator
 	 * The name of the sequence used to generate the unique id 
@@ -61,7 +64,7 @@ public class PostgresqlAdapter extends AbstractDatabase
 		stmt = conn.createStatement();
 		// constructing the name of the seq to call...
 		stmt.execute(
-			"SELECT nextval('" + getSequenceColumnName(tableName, primaryKeyName) + "')");
+			"SELECT nextval('" + getSequenceColumnName(primaryKeyName) + "')");
 		ResultSet rs = stmt.getResultSet();
 		if (rs.next())
 		{
@@ -70,6 +73,33 @@ public class PostgresqlAdapter extends AbstractDatabase
 		stmt.close();
 
 		return uniqueid;
+	}
+
+	/**
+	 * Creates the sequence name from the primarykey name by appended 
+	 * a _seq. Handles the 32Char limit on names in Postgres by trunction.
+	 * 
+	 * @param pKName
+	 * @return String
+	 */
+	public String getSequenceColumnName(String pKName)
+	{
+		String result = "";
+		
+		// Max columnLenght is 32 (but -4 to account for '_seq' ) 
+		int maxAvailibleLength = 27;
+		
+		int nameLength =  pKName.length();
+		//	Do I  need to truncate ?
+		 while ( nameLength - maxAvailibleLength > 0)
+		 {
+			pKName = pKName.substring(0, pKName.length() - 1); 
+			// reset Name Lenght
+			nameLength = pKName.length();
+		 }
+		 
+		result = pKName + "_seq";
+		return result;
 	}
 
 	/**
@@ -89,6 +119,7 @@ public class PostgresqlAdapter extends AbstractDatabase
 	 * @param tableName
 	 * @param pKName
 	 * @return String
+	 * @deprecated using getSequenceColumnName( String pKName )
 	 */
 	public String getSequenceColumnName(String tableName, String pKName)
 	{

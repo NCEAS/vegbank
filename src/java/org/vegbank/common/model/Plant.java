@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-07 22:28:43 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-03-20 19:34:16 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,8 +96,8 @@ public class Plant implements Constants, Comparable
 		this.code = code;
 		PlantUsage pu = new PlantUsage();
 		pu.setPlantName(code);
-		pu.setPlantNameStatus(PLANT_NAME_STATUS_STANDARD);
-		pu.setClassSystem(PLANT_NAME_CODE);	
+		pu.setPlantNameStatus(USAGE_NAME_STATUS_STANDARD);
+		pu.setClassSystem(USAGE_NAME_CODE);	
 		this.addPlantUsage(pu);
 	}
 
@@ -110,8 +110,8 @@ public class Plant implements Constants, Comparable
 		this.scientificName = scientificName;
 		PlantUsage pu = new PlantUsage();
 		pu.setPlantName(scientificName);
-		pu.setPlantNameStatus(PLANT_NAME_STATUS_STANDARD);
-		pu.setClassSystem(PLANT_NAME_SCIENTIFIC);	
+		pu.setPlantNameStatus(USAGE_NAME_STATUS_STANDARD);
+		pu.setClassSystem(USAGE_NAME_SCIENTIFIC);	
 		this.addPlantUsage(pu);
 	}
 
@@ -124,8 +124,8 @@ public class Plant implements Constants, Comparable
 		this.scientificNameNoAuthors = scientificNameNoAuthors;
 		PlantUsage pu = new PlantUsage();
 		pu.setPlantName(scientificNameNoAuthors);
-		pu.setPlantNameStatus(PLANT_NAME_STATUS_STANDARD);
-		pu.setClassSystem(PLANT_NAME_SCIENTIFIC_NOAUTHORS);	
+		pu.setPlantNameStatus(USAGE_NAME_STATUS_STANDARD);
+		pu.setClassSystem(USAGE_NAME_SCIENTIFIC_NOAUTHORS);	
 		this.addPlantUsage(pu);
 	}
 
@@ -284,8 +284,8 @@ public class Plant implements Constants, Comparable
 		this.commonName = commonName;
 		PlantUsage pu = new PlantUsage();
 		pu.setPlantName(commonName);
-		pu.setPlantNameStatus(PLANT_NAME_STATUS_STANDARD);
-		pu.setClassSystem(PLANT_NAME_COMMON);	
+		pu.setPlantNameStatus(USAGE_NAME_STATUS_STANDARD);
+		pu.setClassSystem(USAGE_NAME_COMMON);	
 		this.addPlantUsage(pu);
 	}
 

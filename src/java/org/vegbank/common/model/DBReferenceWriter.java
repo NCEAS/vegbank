@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-07 22:28:43 $'p
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-03-20 19:34:16 $'p
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,8 +30,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.vegbank.common.utility.Utility;
-
 /**
  * @author farrell
  */
@@ -42,25 +40,31 @@ public class DBReferenceWriter
 	private Connection conn = null;
 	boolean commit = true;
 	public int referenceId = 0;
-	
-	public DBReferenceWriter(Reference ref)
+	private String pKName = null;
+	private String tableName = null;
+	 
+	public DBReferenceWriter(
+		Reference ref, 
+		Connection conn,
+		String tableName,	// quick hack to handle plants and communities
+		String pKName
+	)
 	{
+		this.conn = conn;
+		this.pKName = pKName;
+		this.tableName = tableName;
+		
 		try
 		{
-			
-			conn = this.getConnection();
-			conn.setAutoCommit(false);
 
-			if ( !this.referenceExists(ref.getAuthors(), ref.getTitle(), ref.getPubdate() ))
+			if ( !this.referenceExists( ref.getTitle(), ref.getPubDate() ))
 			{
 				referenceId =
 					this.insertReference(
-						ref.getAuthors(),
 						ref.getTitle(),
-						ref.getPubdate(),
+						ref.getPubDate(),
 						ref.getEdition(),
 						null,
-						ref.getOtherCitationDetails(), 
 						null,
 						null,
 						null,
@@ -68,7 +72,7 @@ public class DBReferenceWriter
 			}
 			else
 			{
-				referenceId = this.getReferenceId(ref.getAuthors(), ref.getTitle(), ref.getPubdate() );
+				referenceId = this.getReferenceId( ref.getTitle(), ref.getPubDate() );
 			}
 
 		}
@@ -93,7 +97,6 @@ public class DBReferenceWriter
 				System.out.println("DBReferenceWriter >  not commiting transaction");
 				conn.rollback();
 			}
-			conn.close();
 		}
 		catch (SQLException e)
 		{
@@ -102,24 +105,11 @@ public class DBReferenceWriter
 		}
 
 	}
-	
-	/**
-	 * method that will return a database connection for use with the database
-	 *
-	 * @return conn -- an active connection
-	 */
-	private Connection getConnection()
-	{
-		Utility u = new Utility();
-		Connection c = u.getConnection("plants_dev");
-		return c;
-	}
 
 		/** 
 		 * Does the reference already exist?
 		 */
 		private boolean referenceExists(
-			String authors,
 			String title,
 			String date)
 		{
@@ -128,9 +118,8 @@ public class DBReferenceWriter
 			try
 			{
 				sb = new StringBuffer();
-				sb.append("SELECT plantreference_id from PLANTREFERENCE where authors");
-				sb.append(" like '" + authors + "' ");
-				sb.append(" and title like '" + title + "'");
+				sb.append("SELECT " + pKName + " from " + tableName + " where ");
+				sb.append("  title = '" + title + "'");
 				// IF THE DATE IS A VALID DATE THEN QUERY BY IT TOO
 				if (date.length() > 4)
 				{
@@ -166,14 +155,14 @@ public class DBReferenceWriter
 	 * method that grabs and retuns the referenceId based on the authors' name and
 	 * the otherCitationDetails
 	 */
-	private int getReferenceId(String authors, String title, String date)
+	private int getReferenceId(String title, String date)
 	{
 		StringBuffer sb = new StringBuffer();
 		int refId = 0;
 		try
 		{
-			sb.append("SELECT plantreference_id from PLANTREFERENCE where title");
-			sb.append(" like '" + title + "' and authors like '" + authors + "'");
+			sb.append("SELECT " + pKName + " from " + tableName + " where title");
+			sb.append(" like '" + title + "'");
 			// IF THE DATE IS VALID USE IT ELSE DONT
 			if (date.length() > 4)
 			{
@@ -204,12 +193,10 @@ public class DBReferenceWriter
 	 * does not already exist and it it does it returns the referenece id
 	 */
 	private int insertReference(
-		String authors,
 		String title,
 		String date,
 		String edition,
 		String seriesName,
-		String otherCitationDetails,
 		String page,
 		String isbn,
 		String issn,
@@ -219,41 +206,38 @@ public class DBReferenceWriter
 		StringBuffer sb = new StringBuffer();
 		PreparedStatement pstmt;
 		int refId = 0;
-		System.out.println("title: " + title + " authors: " + authors);
-
+		
 		//first see if the reference already exists
-		boolean refExists = referenceExists(authors, title, date);
+		boolean refExists = referenceExists(title, date);
 		System.out.println("DBReferenceWriter > ref exists: " + refExists);
 		if (refExists == true)
 		{
-			refId = getReferenceId(authors, title, date);
+			refId = getReferenceId(title, date);
 		}
 		else
 		{
 			// IF THE DATE IS VALID THEN USE ONE QUERY ELSE USE ANOTHER
 			if (date.length() > 4)
 			{
-				sb.append("INSERT into PLANTREFERENCE (AUTHORS, TITLE, PUBDATE) ");
-				sb.append(" values(?,?,?)");
-				pstmt = conn.prepareStatement(sb.toString());
-				// Bind the values to the query and execute it
-				pstmt.setString(1, authors);
-				pstmt.setString(2, title);
-				pstmt.setString(3, date);
-			}
-			else
-			{
-				sb.append("INSERT into PLANTREFERENCE (AUTHORS, TITLE) ");
+				sb.append("INSERT into " + tableName + " ( TITLE, PUBDATE) ");
 				sb.append(" values(?,?)");
 				pstmt = conn.prepareStatement(sb.toString());
 				// Bind the values to the query and execute it
-				pstmt.setString(1, authors);
-				pstmt.setString(2, title);
+				pstmt.setString(1, title);
+				pstmt.setString(2, date);
+			}
+			else
+			{
+				sb.append("INSERT into " + tableName + " (TITLE) ");
+				sb.append(" values(?,?)");
+				pstmt = conn.prepareStatement(sb.toString());
+				// Bind the values to the query and execute it
+				pstmt.setString(1, title);
 			}
 			pstmt.execute();
 
 			//now get the reference id to return
-			refId = getReferenceId(authors, title, date);
+			refId = getReferenceId(title, date);
 			System.out.println("DBReferenceWriter > new refId: " + refId);
 		}
 		return (refId);

@@ -7,8 +7,8 @@
  *  Release: @@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-03-07 22:28:45 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2003-03-20 19:34:17 $'
+ *  '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,5 +94,17 @@ public class PostgresqlAdapterTest extends TestCase
 		// tablename is too long
 		assertEquals("A23456789012345678901_A2345_seq", pa.getSequenceColumnName( "A2345678901234567890123456", "A2345") );
   }
+  
+	public void testGetSequenceColumnNameTest() {  
+		PostgresqlAdapter pa = new PostgresqlAdapter();
+		assertEquals("this_seq", pa.getSequenceColumnName("this") );
+		// 32 char 
+		assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1_seq", pa.getSequenceColumnName("ABCDEFGHIJKLMNOPQRSTUVWXYZ1") );
+		// 33 char 
+		assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1_seq", pa.getSequenceColumnName("ABCDEFGHIJKLMNOPQRSTUVWXYZ12") );
+		// 40 char 
+		assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1_seq", pa.getSequenceColumnName("ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789") );
+								
+	}
 
 }

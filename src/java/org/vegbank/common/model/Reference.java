@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-07 22:28:44 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-03-20 19:34:16 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,40 +24,85 @@
 
 package org.vegbank.common.model;
 
+import java.util.AbstractList;
+
 /**
  * @author farrell
  */
 
 public class Reference
 {
-	private String authors = null;
-	private String title = null;
-	private String pubdate = null;
-	private String edition = null;
-	private String otherCitationDetails = null;
-	private String organization = null;
-	private String email = null;
-	private String contactInstructions = null;
-	private String seriesName = null;
-	private String ISBN = null;
-	private String ISSN = null;
-	private String page = null;
-	private String volume = null;
-			
+	private String shortName;
+	private String plantReferenceType;
+	private String title;
+	private String titleSuperior;
+	private String pubDate;
+	private String accessDate;
+	private String conferenceDate;
+	private String volume;
+	private String issue;
+	private String pageRange;
+	private String totalPages;
+	private String publisher;
+	private String publicationPlace;
+	private String isbn;
+	private String edition;
+	private String numberOfVolumes;
+	private String chapterNumber;
+	private String reportNumber;
+	private String communicationType;
+	private String degree;
+	private String url; 
+	
+	// Handles citation journal itself
+	private String journal;
+	private String issn;
+	private String abbreviation;
+		
+	// Probably should not be here
+	private AbstractList citationContributors;
+	
+	
+
+		
 	/**
 	 * @return String
 	 */
-	public String getAuthors()
+	public String getAccessDate()
 	{
-		return authors;
+		return accessDate;
 	}
 
 	/**
 	 * @return String
 	 */
-	public String getContactInstructions()
+	public String getChapterNumber()
 	{
-		return contactInstructions;
+		return chapterNumber;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getCommunicationType()
+	{
+		return communicationType;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getConferenceDate()
+	{
+		return conferenceDate;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getDegree()
+	{
+		return degree;
 	}
 
 	/**
@@ -71,33 +116,81 @@ public class Reference
 	/**
 	 * @return String
 	 */
-	public String getEmail()
+	public String getIsbn()
 	{
-		return email;
+		return isbn;
 	}
 
 	/**
 	 * @return String
 	 */
-	public String getOrganization()
+	public String getIssue()
 	{
-		return organization;
+		return issue;
 	}
 
 	/**
 	 * @return String
 	 */
-	public String getOtherCitationDetails()
+	public String getNumberOfVolumes()
 	{
-		return otherCitationDetails;
+		return numberOfVolumes;
 	}
 
 	/**
 	 * @return String
 	 */
-	public String getPubdate()
+	public String getPageRange()
 	{
-		return pubdate;
+		return pageRange;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getPlantReferenceType()
+	{
+		return plantReferenceType;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getPubDate()
+	{
+		return pubDate;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getPublicationPlace()
+	{
+		return publicationPlace;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getPublisher()
+	{
+		return publisher;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getReportNumber()
+	{
+		return reportNumber;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getShortName()
+	{
+		return shortName;
 	}
 
 	/**
@@ -109,21 +202,80 @@ public class Reference
 	}
 
 	/**
-	 * Sets the authors.
-	 * @param authors The authors to set
+	 * @return String
 	 */
-	public void setAuthors(String authors)
+	public String getTitleSuperior()
 	{
-		this.authors = authors;
+		return titleSuperior;
 	}
 
 	/**
-	 * Sets the contactInstructions.
-	 * @param contactInstructions The contactInstructions to set
+	 * @return String
 	 */
-	public void setContactInstructions(String contactInstructions)
+	public String getTotalPages()
 	{
-		this.contactInstructions = contactInstructions;
+		return totalPages;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getUrl()
+	{
+		return url;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getVolume()
+	{
+		return volume;
+	}
+
+	/**
+	 * Sets the accessDate.
+	 * @param accessDate The accessDate to set
+	 */
+	public void setAccessDate(String accessDate)
+	{
+		this.accessDate = accessDate;
+	}
+
+	/**
+	 * Sets the chapterNumber.
+	 * @param chapterNumber The chapterNumber to set
+	 */
+	public void setChapterNumber(String chapterNumber)
+	{
+		this.chapterNumber = chapterNumber;
+	}
+
+	/**
+	 * Sets the communicationType.
+	 * @param communicationType The communicationType to set
+	 */
+	public void setCommunicationType(String communicationType)
+	{
+		this.communicationType = communicationType;
+	}
+
+	/**
+	 * Sets the conferenceDate.
+	 * @param conferenceDate The conferenceDate to set
+	 */
+	public void setConferenceDate(String conferenceDate)
+	{
+		this.conferenceDate = conferenceDate;
+	}
+
+	/**
+	 * Sets the degree.
+	 * @param degree The degree to set
+	 */
+	public void setDegree(String degree)
+	{
+		this.degree = degree;
 	}
 
 	/**
@@ -136,39 +288,93 @@ public class Reference
 	}
 
 	/**
-	 * Sets the email.
-	 * @param email The email to set
+	 * Sets the isbn.
+	 * @param isbn The isbn to set
 	 */
-	public void setEmail(String email)
+	public void setIsbn(String isbn)
 	{
-		this.email = email;
+		this.isbn = isbn;
 	}
 
 	/**
-	 * Sets the organization.
-	 * @param organization The organization to set
+	 * Sets the issue.
+	 * @param issue The issue to set
 	 */
-	public void setOrganization(String organization)
+	public void setIssue(String issue)
 	{
-		this.organization = organization;
+		this.issue = issue;
 	}
 
 	/**
-	 * Sets the otherCitationDetails.
-	 * @param otherCitationDetails The otherCitationDetails to set
+	 * Sets the numberOfVolumes.
+	 * @param numberOfVolumes The numberOfVolumes to set
 	 */
-	public void setOtherCitationDetails(String otherCitationDetails)
+	public void setNumberOfVolumes(String numberOfVolumes)
 	{
-		this.otherCitationDetails = otherCitationDetails;
+		this.numberOfVolumes = numberOfVolumes;
 	}
 
 	/**
-	 * Sets the pubdate.
-	 * @param pubdate The pubdate to set
+	 * Sets the pageRange.
+	 * @param pageRange The pageRange to set
 	 */
-	public void setPubdate(String pubdate)
+	public void setPageRange(String pageRange)
 	{
-		this.pubdate = pubdate;
+		this.pageRange = pageRange;
+	}
+
+	/**
+	 * Sets the plantReferenceType.
+	 * @param plantReferenceType The plantReferenceType to set
+	 */
+	public void setPlantReferenceType(String plantReferenceType)
+	{
+		this.plantReferenceType = plantReferenceType;
+	}
+
+	/**
+	 * Sets the pubDate.
+	 * @param pubDate The pubDate to set
+	 */
+	public void setPubDate(String pubDate)
+	{
+		this.pubDate = pubDate;
+	}
+
+	/**
+	 * Sets the publicationPlace.
+	 * @param publicationPlace The publicationPlace to set
+	 */
+	public void setPublicationPlace(String publicationPlace)
+	{
+		this.publicationPlace = publicationPlace;
+	}
+
+	/**
+	 * Sets the publisher.
+	 * @param publisher The publisher to set
+	 */
+	public void setPublisher(String publisher)
+	{
+		this.publisher = publisher;
+	}
+
+	/**
+	 * Sets the reportNumber.
+	 * @param reportNumber The reportNumber to set
+	 */
+	public void setReportNumber(String reportNumber)
+	{
+		this.reportNumber = reportNumber;
+	}
+
+	/**
+	 * Sets the shortName.
+	 * @param shortName The shortName to set
+	 */
+	public void setShortName(String shortName)
+	{
+		this.shortName = shortName;
 	}
 
 	/**
@@ -181,62 +387,30 @@ public class Reference
 	}
 
 	/**
-	 * @return String
+	 * Sets the titleSuperior.
+	 * @param titleSuperior The titleSuperior to set
 	 */
-	public String getISBN()
+	public void setTitleSuperior(String titleSuperior)
 	{
-		return ISBN;
+		this.titleSuperior = titleSuperior;
 	}
 
 	/**
-	 * @return String
+	 * Sets the totalPages.
+	 * @param totalPages The totalPages to set
 	 */
-	public String getPage()
+	public void setTotalPages(String totalPages)
 	{
-		return page;
+		this.totalPages = totalPages;
 	}
 
 	/**
-	 * @return String
+	 * Sets the url.
+	 * @param url The url to set
 	 */
-	public String getSeriesName()
+	public void setUrl(String url)
 	{
-		return seriesName;
-	}
-
-	/**
-	 * @return String
-	 */
-	public String getVolume()
-	{
-		return volume;
-	}
-
-	/**
-	 * Sets the iSBN.
-	 * @param iSBN The iSBN to set
-	 */
-	public void setISBN(String iSBN)
-	{
-		ISBN = iSBN;
-	}
-
-	/**
-	 * Sets the page.
-	 * @param page The page to set
-	 */
-	public void setPage(String page)
-	{
-		this.page = page;
-	}
-
-	/**
-	 * Sets the seriesName.
-	 * @param seriesName The seriesName to set
-	 */
-	public void setSeriesName(String seriesName)
-	{
-		this.seriesName = seriesName;
+		this.url = url;
 	}
 
 	/**
@@ -249,20 +423,54 @@ public class Reference
 	}
 
 	/**
-	 * @return String
+	 * @return AbstractList
 	 */
-	public String getISSN()
+	public AbstractList getCitationContributors()
 	{
-		return ISSN;
+		return citationContributors;
 	}
 
 	/**
-	 * Sets the iSSN.
-	 * @param iSSN The iSSN to set
+	 * @return String
 	 */
-	public void setISSN(String iSSN)
+	public String getIssn()
 	{
-		ISSN = iSSN;
+		return issn;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getJournal()
+	{
+		return journal;
+	}
+
+	/**
+	 * Sets the citationContributors.
+	 * @param citationContributors The citationContributors to set
+	 */
+	public void setCitationContributors(AbstractList citationContributors)
+	{
+		this.citationContributors = citationContributors;
+	}
+
+	/**
+	 * Sets the issn.
+	 * @param issn The issn to set
+	 */
+	public void setIssn(String issn)
+	{
+		this.issn = issn;
+	}
+
+	/**
+	 * Sets the journal.
+	 * @param journal The journal to set
+	 */
+	public void setJournal(String journal)
+	{
+		this.journal = journal;
 	}
 
 }

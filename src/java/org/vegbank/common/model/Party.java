@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-07 22:28:43 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-03-20 19:34:16 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,15 +31,14 @@ package org.vegbank.common.model;
 public class Party
 {
 
-	private String email = null;
+	private String middlename = null;
 	private String givenName = null;
 	private String surname = null;
 	private String organizationName = null;
 	private String contactInstructions = null;
 	private String salutation = null;
-	private String suffix  = null;
+	private String owner  = null;
 	private String currentParty = null;
-	private String type = null;
 	
 	/**
 	 * @return String
@@ -55,14 +54,6 @@ public class Party
 	public String getCurrentParty()
 	{
 		return currentParty;
-	}
-
-	/**
-	 * @return String
-	 */
-	public String getEmail()
-	{
-		return email;
 	}
 
 	/**
@@ -92,25 +83,9 @@ public class Party
 	/**
 	 * @return String
 	 */
-	public String getSuffix()
-	{
-		return suffix;
-	}
-
-	/**
-	 * @return String
-	 */
 	public String getSurname()
 	{
 		return surname;
-	}
-
-	/**
-	 * @return String
-	 */
-	public String getType()
-	{
-		return type;
 	}
 
 	/**
@@ -129,15 +104,6 @@ public class Party
 	public void setCurrentParty(String currentParty)
 	{
 		this.currentParty = currentParty;
-	}
-
-	/**
-	 * Sets the email.
-	 * @param email The email to set
-	 */
-	public void setEmail(String email)
-	{
-		this.email = email;
 	}
 
 	/**
@@ -168,15 +134,6 @@ public class Party
 	}
 
 	/**
-	 * Sets the suffix.
-	 * @param suffix The suffix to set
-	 */
-	public void setSuffix(String suffix)
-	{
-		this.suffix = suffix;
-	}
-
-	/**
 	 * Sets the surname.
 	 * @param surname The surname to set
 	 */
@@ -186,12 +143,37 @@ public class Party
 	}
 
 	/**
-	 * Sets the type.
-	 * @param type The type to set
+	 * @return String
 	 */
-	public void setType(String type)
+	public String getMiddlename()
 	{
-		this.type = type;
+		return middlename;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getOwner()
+	{
+		return owner;
+	}
+
+	/**
+	 * Sets the middlename.
+	 * @param middlename The middlename to set
+	 */
+	public void setMiddlename(String middlename)
+	{
+		this.middlename = middlename;
+	}
+
+	/**
+	 * Sets the owner.
+	 * @param owner The owner to set
+	 */
+	public void setOwner(String owner)
+	{
+		this.owner = owner;
 	}
 
 }
