@@ -32,6 +32,8 @@
     <property name="vegdocs.dir" value="/vegdocs"/>
     <property name="vegdocs_server" value="${apache.document.root}${vegdocs.dir}"/>
     <property name="static_xmlserver" value="${vegdocs_server}/xml"/>
+    <property name="local.web.dir" value="../../web" />
+    <property name="local.vegbranch.dir" value="${local.web.dir}/vegbranch" />
     <!-- filters -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
     <filter filtersfile="${style_server}/manual_filters.properties"/>
@@ -126,16 +128,26 @@
     </copy>
   </target>
   <target name="make-jsp">
-    <property file="jsp-template.properties" />
+    <property file="jsp-template.properties"/>
     <echo>Read jsp-template.properties</echo>
-    <style in="${dbmodelfile}" out="${jsptemp}" force="yes" style="${templatexsl}" >
-       <param name="view" expression="${view}"/>
-       <param name="oneTbl" expression="${oneTbl}"/>
-       <param name="detailAdd" expression="${detailAdd}"/>
-       <param name="more" expression="${more}"/>
-
+    <style in="${dbmodelfile}" out="${jsptemp}" force="yes" style="${templatexsl}">
+      <param name="view" expression="${view}"/>
+      <param name="oneTbl" expression="${oneTbl}"/>
+      <param name="detailAdd" expression="${detailAdd}"/>
+      <param name="more" expression="${more}"/>
     </style>
     <echo>wrote ${jsptemp}</echo>
-
+  </target>
+  <!-- VegBranch closed list update file creation: -->
+  <target name="vegbranch-update-lists" depends="init" description="style the model xml to get a complete list of vegBranch closed list values for folks to download to update their VegBank Modules on local machines">
+    <echo>starting to style</echo>
+    <style in="${origData}" out="${local.vegbranch.dir}/current-closed-list.csv" style="dbmodel-to-vegbranchfieldlist.xsl" force="true"/>
+    <echo>style done, starting to zip</echo>
+    <zip destfile="${local.vegbranch.dir}/current-closed-list.zip" compress="true" >
+      <fileset dir="${local.vegbranch.dir}">
+        <include name="current-closed-list.csv" />
+      </fileset>
+    </zip>
+    <echo>zip done</echo>
   </target>
 </project>
