@@ -11,14 +11,14 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: farrell $'
-  *      '$Date: 2004-03-07 17:55:28 $'
-  *  '$Revision: 1.1 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2004-04-08 05:44:28 $'
+  *  '$Revision: 1.2 $'
   *
   *
   -->
 
-<head>
+<head>@defaultHeadToken@
   <meta name="generator" content=
   "HTML Tidy for Linux/x86 (vers 1st November 2003), see www.w3.org">
 

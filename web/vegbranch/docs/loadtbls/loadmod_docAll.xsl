@@ -95,7 +95,7 @@
      <xsl:value-of select="translate($currtbl,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')" /><xsl:if test="$currtbl!='index'">~<xsl:value-of select="$showFlds" /></xsl:if><xsl:value-of select="$suffix"/>.html</xsl:variable>
 <!--@undo@--><redirect:write file="{$fileName}"><!--@undoEnd@--><xsl:comment><xsl:value-of select="$fileName" /></xsl:comment>
   <html>
-    <head>
+    <head>@defaultHeadToken@
       <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
       <style type="text/css">
           

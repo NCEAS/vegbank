@@ -6,7 +6,7 @@
   <xsl:output method="html"/>
   <xsl:template match="/LoadModDoc">
     <html>
-      <head>
+      <head>@defaultHeadToken@
         <link rel="stylesheet" href="@stylesheet@" type="text/css"/> 
         <style type="text/css">
           

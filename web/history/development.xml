@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <HTML>
-  <HEAD>
+  <HEAD>@defaultHeadToken@
     <!-- style for Meeting Participants at bottom -->
     <style type="text/css">
     table.smallertbl {font-size:80% ; text-align : center}

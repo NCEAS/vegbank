@@ -12,9 +12,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-02-28 11:18:16 $'
-*  '$Revision: 1.3 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-04-08 05:44:28 $'
+*  '$Revision: 1.4 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 
 <HTML>
 
-<HEAD>
+<HEAD>@defaultHeadToken@
  
 <TITLE>VegBank Main Menu</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">

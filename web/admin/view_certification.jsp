@@ -6,20 +6,20 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!-- 
-  *   '$Id: view_certification.jsp,v 1.1 2004-03-02 22:30:32 anderson Exp $ '
+  *   '$Id: view_certification.jsp,v 1.2 2004-04-08 05:44:30 mlee Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: anderson $'
-  *      '$Date: 2004-03-02 22:30:32 $'
-  *  '$Revision: 1.1 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2004-04-08 05:44:30 $'
+  *  '$Revision: 1.2 $'
   *
   *
   -->
 <html>
-<HEAD>
+<HEAD>@defaultHeadToken@
 
 <TITLE>VegBank Certification Administration</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">

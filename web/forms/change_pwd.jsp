@@ -5,20 +5,20 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!--
-  * '$Id: change_pwd.jsp,v 1.1 2004-03-01 01:07:10 anderson Exp $'
+  * '$Id: change_pwd.jsp,v 1.2 2004-04-08 05:44:28 mlee Exp $'
   * Purpose: Display change user password form.
   * Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   * Authors: @author@
   *
-  * '$Author: anderson $'
-  * '$Date: 2004-03-01 01:07:10 $'
-  * '$Revision: 1.1 $'
+  * '$Author: mlee $'
+  * '$Date: 2004-04-08 05:44:28 $'
+  * '$Revision: 1.2 $'
   *
   *
   -->
 <html>
-<HEAD>
+<HEAD>@defaultHeadToken@
 <!-- #BeginEditable "doctitle" -->
 <TITLE>Change Your Password</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">

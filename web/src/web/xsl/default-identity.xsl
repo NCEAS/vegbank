@@ -23,7 +23,7 @@
   <xsl:template match="/vegPlotPackage">
 
 <html>
-	<head>
+	<head>@defaultHeadToken@
     <link rel="stylesheet" type="text/css" href="http://vegbank.nceas.ucsb.edu/vegbank/includes/default.css" />
 	
 	<script LANGUAGE="JavaScript">

@@ -16,15 +16,15 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2003-11-26 23:59:59 $'
-  *  '$Revision: 1.2 $'
+  *      '$Date: 2004-04-08 05:44:28 $'
+  *  '$Revision: 1.3 $'
   *
   *
   -->
   
 
 
-<head>
+<head>@defaultHeadToken@
 		<title>VegBank Retrieve your lost password</title>
 		<link REL=STYLESHEET HREF="@stylesheet@" TYPE="text/css">
  

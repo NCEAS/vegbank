@@ -8,7 +8,7 @@
   <xsl:template match="/LoadModDoc">
   <xsl:variable name="suffix"><xsl:if test="$jumpMenu!='yes'">_simple</xsl:if></xsl:variable>
     <html>
-      <head>
+      <head>@defaultHeadToken@
         <link rel="stylesheet" href="@stylesheet@" type="text/css"/> 
 <style type="text/css">
           

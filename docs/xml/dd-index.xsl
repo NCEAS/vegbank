@@ -4,7 +4,7 @@
   <xsl:output method="xml" omit-xml-declaration="no" encoding="UTF-8"/>
   <xsl:template match="/dataModel">
     <html>
-    <head>
+    <head>@defaultHeadToken@
 <title>VegBank Data Dictionary -- Index</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <script language="JavaScript">

@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-02-28 11:18:16 $'
-*  '$Revision: 1.7 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-04-08 05:44:28 $'
+*  '$Revision: 1.8 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 -->
 
-<HEAD>
+<HEAD>@defaultHeadToken@
  
 <TITLE>VegBank Registration</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">

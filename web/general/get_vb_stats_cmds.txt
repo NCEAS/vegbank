@@ -1,5 +1,5 @@
 \o get_vb_stats_temp.html
-\qecho <html><head><title>VegBank Data Summary</title> <link rel="stylesheet" href="@stylesheet@" type="text/css"><meta http-equiv="Content-Type" content="text/html; charset="></head>
+\qecho <html><head>@defaultHeadToken@<title>VegBank Data Summary</title> <link rel="stylesheet" href="@stylesheet@" type="text/css"><meta http-equiv="Content-Type" content="text/html; charset="></head>
 \qecho <body><p>@vegbank_header_html_normal@</p><h2 class="vegbank">Summary of Data currently in VegBank</h2><p class="vegbank">VegBank currently contains: </p>
 \t
 \qecho <!----DATA--->

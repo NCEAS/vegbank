@@ -20,7 +20,7 @@
   <xsl:template match="/">
     <html>
       <xsl:variable name="pageTitle">Observation, full details</xsl:variable>
-      <head>
+      <head>@defaultHeadToken@
         <title>VegBank -- <xsl:copy-of select="$pageTitle"/>
         </title>
         <link rel="stylesheet" type="text/css" href="http://vegbank.nceas.ucsb.edu/vegbank/includes/default.css"/>

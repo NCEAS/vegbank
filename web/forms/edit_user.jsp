@@ -12,14 +12,14 @@
   *               National Center for Ecological Analysis and Synthesis
   * Authors: @author@
   *
-  * '$Author: anderson $'
-  * '$Date: 2004-03-01 01:07:10 $'
-  * '$Revision: 1.1 $'
+  * '$Author: mlee $'
+  * '$Date: 2004-04-08 05:44:28 $'
+  * '$Revision: 1.2 $'
   *
   *
   -->
   
-<HEAD>
+<HEAD>@defaultHeadToken@
 <!-- #BeginEditable "doctitle" --> 
 <TITLE>Edit Your Profile</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">

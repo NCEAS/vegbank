@@ -20,7 +20,7 @@
 	<xsl:output method="html"/>
 	<xsl:template match="/vegCommunity">
 		<html>
-			<head>
+			<head>@defaultHeadToken@
 				<title> VegBank -- Community concept query results </title>
 				<link rel="stylesheet" type="text/css" href="http://vegbank.nceas.ucsb.edu/vegbank/includes/default.css"/>
 			</head>

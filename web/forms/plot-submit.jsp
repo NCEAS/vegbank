@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2003-11-26 23:59:59 $'
-*  '$Revision: 1.8 $'
+*  '$Date: 2004-04-08 05:44:28 $'
+*  '$Revision: 1.9 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
   
 
 
-<head>
+<head>@defaultHeadToken@
 <title> VEGBANK VEGETATION PLOT DATA SUBMITTAL WIZARD </title>
 <link REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css">
 

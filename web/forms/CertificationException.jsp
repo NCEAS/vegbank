@@ -10,9 +10,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2004-02-07 06:43:19 $'
-*  '$Revision: 1.2 $'
+*    '$Author: mlee $'
+*      '$Date: 2004-04-08 05:44:28 $'
+*  '$Revision: 1.3 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@
 -->
 
 <html:html locale="true">
-<head>
+<head>@defaultHeadToken@
 <meta http-equiv="expires" content="0">
 <title>Certification Required</title>
 </head>

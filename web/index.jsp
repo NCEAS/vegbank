@@ -5,7 +5,7 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
 <HTML>
-<HEAD>
+<HEAD>@defaultHeadToken@
 <TITLE>VegBank Home</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">

@@ -12,7 +12,7 @@
   <xsl:template match="/dataModel">
   <xsl:for-each select="entity/attribute" >
  <redirect:write file="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">
-    <head>
+    <head>@defaultHeadToken@
  <title>VegBank Data Dictionary - field view : <xsl:value-of select="../entityName" />.<xsl:value-of select="attName" /></title>
 <link rel="stylesheet" href="@stylesheet@" type="text/css" />
     </head>

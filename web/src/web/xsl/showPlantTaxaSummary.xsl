@@ -23,7 +23,7 @@
   
 
 <html>
-<head>
+<head>@defaultHeadToken@
 		<title> VegBank -- Plant concept query results </title>
 		<link rel="stylesheet" type="text/css" href="http://vegbank.nceas.ucsb.edu/vegbank/includes/default.css" />
 </head>

@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: farrell $'
-*  '$Date: 2003-08-21 21:16:43 $'
-*  '$Revision: 1.2 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-04-08 05:44:28 $'
+*  '$Revision: 1.3 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 *
 -->
-<head>
+<head>@defaultHeadToken@
 
 <title>View Current References -- Details</title>
 <link rel="stylesheet" href="@stylesheet@" type="text/css"/>

@@ -5,7 +5,7 @@
 <% String includeJSP = "../GenJSP/Display" + rootEntity + ".jsp"; %>
 
 <html>
-  <head>
+  <head>@defaultHeadToken@
     <title>View <%= rootEntity %> -- Details</title>
     <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
   </head>

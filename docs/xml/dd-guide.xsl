@@ -3,7 +3,7 @@
   <xsl:param name="htmlPrefix">datadictionary</xsl:param>
   <xsl:output method="html"/>
   <xsl:template match="/dataDictionaryKey">
-    <head>
+    <head>@defaultHeadToken@
       <style type="text/css">
   td , th , p
   {

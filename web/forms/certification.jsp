@@ -12,14 +12,14 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: anderson $'
-  *      '$Date: 2004-03-02 22:31:01 $'
-  *  '$Revision: 1.8 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2004-04-08 05:44:28 $'
+  *  '$Revision: 1.9 $'
   *
   *
   -->
 <html>
-<HEAD>
+<HEAD>@defaultHeadToken@
 
 <TITLE>VegBank Certification</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">

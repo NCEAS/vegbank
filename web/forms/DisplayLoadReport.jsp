@@ -13,9 +13,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: farrell $'
-*      '$Date: 2003-10-17 20:31:40 $'
-*  '$Revision: 1.3 $'
+*    '$Author: mlee $'
+*      '$Date: 2004-04-08 05:44:28 $'
+*  '$Revision: 1.4 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 -->
-<head>
+<head>@defaultHeadToken@
 <link rel="STYLESHEET" href="@stylesheet@" type="text/css" />
   <title>
   VEGBANK - Display Load Report

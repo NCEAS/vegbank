@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: farrell $'
-*  '$Date: 2003-11-06 17:31:11 $'
-*  '$Revision: 1.4 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-04-08 05:44:28 $'
+*  '$Revision: 1.5 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
   
 
 
-<head>
+<head>@defaultHeadToken@
 <title>Drop VegBank Plots</title>
 <link REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css">
 </head>
