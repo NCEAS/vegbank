@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-08 17:36:43 $'
- * '$Revision: 1.12 $'
+ *     '$Date: 2002-03-08 18:33:11 $'
+ * '$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,6 +116,7 @@ import java.sql.*;
 			// Create a Statement so we can submit SQL statements to the driver
 			Statement stmt = con.createStatement();
 			String query = null;
+			
 			if (level.equals("association") )
 			{
 				query = "select ([Gname]) from ETC where ([Elcode]) like '"+community+"'";
@@ -135,7 +136,6 @@ import java.sql.*;
 			else if (level.equals("group") )
 			{
 				query = "select ([Groupname]) from group_ where ([GroupKey]) like '"+community+"'";
-				System.out.println("EcoartVegCommunity > query: " + query );
 			}
 			else if (level.equals("subclass") )
 			{
@@ -145,17 +145,24 @@ import java.sql.*;
 			{
 				query = "select ([Classname]) from class where ([classKey]) like '"+community+"'";
 			}
-			ResultSet rs = stmt.executeQuery(query);
-			while (rs.next()) 
+			
+			//execute the query
+			if ( query != null )
 			{
-				commName = rs.getString(1);
+				ResultSet rs = stmt.executeQuery(query);
+				while (rs.next()) 
+				{
+					commName = rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
 			}
-			rs.close();
-			stmt.close();
 		 }
 		 catch (Exception e)
 		 {
 			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
+			 System.out.println("EcoartVegCommunity > Exception on community: '" 
+			 + community+"'" );
 			 e.printStackTrace();
 		 }
 		 return(commName);
@@ -287,7 +294,7 @@ import java.sql.*;
 				{
 					query = "select ([Update]) from class where ([classKey]) like '"+communityCode+"'";
 				}
-				System.out.println("EcoartVegCommunity > query: " + query);
+				//System.out.println("EcoartVegCommunity > query: " + query);
 				ResultSet rs = stmt.executeQuery(query);
 				while (rs.next()) 
 				{
@@ -317,7 +324,7 @@ import java.sql.*;
  		Vector communities = new Vector();
  		 try
  		 {
-			 System.out.println("EcoartVegCommunity > level: " + level);
+			 //System.out.println("EcoartVegCommunity > level: " + level);
 			 String query = null;
 			 if (level.equals("association"))
 			 {
@@ -347,7 +354,7 @@ import java.sql.*;
 			 {
 				 query = "select distinct([ClassKey]) from Class ";
 			 }
-			System.out.println("EcoartVegCommunity > query: " + query);
+			//System.out.println("EcoartVegCommunity > query: " + query);
  			// Create a Statement so we can submit SQL statements to the driver
  			Statement stmt = con.createStatement();
  			//create the result set
@@ -355,7 +362,7 @@ import java.sql.*;
  			while (rs.next()) 
  			{
 				String resp = rs.getString(1);
-				 System.out.println("EcoartVegCommunity > resp: " + resp );
+				 //System.out.println("EcoartVegCommunity > resp: " + resp );
  				 communities.addElement( resp );
  			}
 			rs.close();
@@ -429,15 +436,45 @@ import java.sql.*;
 			 //first figure out the level in the heirarcy
 			this.level = this.getCommunityLevel(community);
 			
+			// Create a Statement so we can submit SQL statements to the driver
+			Statement stmt = con.createStatement();
+			//System.out.println("EcoartVegCommunity > internal level: " + level);
+			String query = null;
+			
 			if ( level.equals("association") )
 			{
-				System.out.println("EcoartVegCommunity > internal level: " + level); 
-				// Create a Statement so we can submit SQL statements to the driver
-				Statement stmt = con.createStatement();
+				query = "select ([ClassifKey]) from ETC where ([Elcode]) like '"+community+"'" ;
+			}
+			
+			if ( level.equals("alliance") )
+			{
+				query = "select ([FormationKey]) from Alliance where ([AllianceKey]) like '"+community+"'" ;
+			}
+			
+			else if ( level.equals("formation") )
+			{
+				query = "select ([SubGroupKey]) from Formation where ([FormationKey]) like '"+community+"'" ;
+			}
+			
+			else if ( level.equals("subgroup") )
+			{
+				query = "select ([GroupKey]) from subGroup where ([SubGroupKey]) like '"+community+"'" ;
+			}
+			
+			else if ( level.equals("group") )
+			{
+				query = "select ([SubclassKey]) from Group_ where ([GroupKey]) like '"+community+"'" ;
+			}
+			else if ( level.equals("subclass") )
+			{
+				query = "select ([classKey]) from  subclass where ([subclassKey]) like '"+community+"'" ;
+			}
+				
+			//execute the query
+			if ( query != null)
+			{
 				//create the result set
-				ResultSet rs = stmt.executeQuery("select "
-				+" ([ClassifKey]) "
-				+" from ETC where ([Elcode]) like '"+community+"'");
+				ResultSet rs = stmt.executeQuery( query);
 				while (rs.next()) 
 				{
 					parentCode = rs.getString(1);
@@ -446,9 +483,8 @@ import java.sql.*;
 				stmt.close();
 			}
 			else
-			{
-				return("formation");
-			}
+				return("class");
+			
 		 }
 		 catch (Exception e)
 		 {

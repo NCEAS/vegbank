@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-08 17:36:43 $'
- * '$Revision: 1.12 $'
+ *     '$Date: 2002-03-08 18:33:11 $'
+ * '$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -236,7 +236,7 @@ public class VegCommunityLoader
 				//update the parentCommunity
 				if (parentCommunity != null)
 				{
-					System.out.println("VegCommunityLoader > updating parentCommunity" );
+					//System.out.println("VegCommunityLoader > updating parentCommunity" );
 					sb = new StringBuffer();
 					sb.append("UPDATE commstatus set commparent = ");
 					sb.append("(select commconcept_id from commconcept where ceglcode = '"+parentCommunity+"')");
@@ -850,7 +850,7 @@ public class VegCommunityLoader
 					String level = "formation";
 					//pass the code and the level to the method below
 					String dateEntered = source.getDateEntered(communityCode, "formation");
-					String parentCommunity = null; //this means top level
+					String parentCommunity = source.getParentCode(communityCode);
 					if (commName != null)
 					{
 						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
@@ -891,7 +891,7 @@ public class VegCommunityLoader
 					String level = "subgroup";
 					//pass the code and the level to the method below
 					String dateEntered = source.getDateEntered(communityCode, "subgroup");
-					String parentCommunity = null; //this means top level
+					String parentCommunity = source.getParentCode(communityCode);
 					if (commName != null)
 					{
 						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
@@ -932,7 +932,7 @@ public class VegCommunityLoader
 					String level = "group";
 					//pass the code and the level to the method below
 					String dateEntered = source.getDateEntered(communityCode, "group");
-					String parentCommunity = null; //this means top level
+					String parentCommunity = source.getParentCode(communityCode);
 					if (commName != null)
 					{
 						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
@@ -973,7 +973,7 @@ public class VegCommunityLoader
 					String level = "subclass";
 					//pass the code and the level to the method below
 					String dateEntered = source.getDateEntered(communityCode, "subclass");
-					String parentCommunity = null; //this means top level
+					String parentCommunity = source.getParentCode(communityCode);
 					if (commName != null)
 					{
 						this.insertCommunity(communityCode, level, commName, otherCitationDetails, 
