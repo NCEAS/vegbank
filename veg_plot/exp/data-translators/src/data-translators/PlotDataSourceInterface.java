@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2001-12-06 02:07:58 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2002-01-05 19:11:15 $'
+ * '$Revision: 1.2 $'
  *
  *
  */
@@ -20,6 +20,11 @@ import java.util.*;
 public interface PlotDataSourceInterface
 {
 	
+	//method that returns all the plot names, as a vector, stored in a given
+	//source
+	Vector getPlotNames();
+	
+	
 	//this method retrives all the attributes for a gine plotname
   void getPlotData(String plotName)
 		throws Exception;
@@ -27,8 +32,26 @@ public interface PlotDataSourceInterface
 	//returns the project name 
 	String getProjectName(String plotName);
 	
-	//returns the project description
+	//returns a vector containing full name of the project contributors
+	// such as 'bob peet' think about using, in the future a method that 
+	// returns some other unique identifier for a contributor
 	Vector getProjectContributors(String plotName);
+	String getProjectContributorSalutation(String contributorWholeName);
+	String getProjectContributorGivenName(String contributorWholeName);
+	String getProjectContributorMiddleName(String contributorWholeName);
+	String getProjectContributorSurName(String contributorWholeName);
+	String getProjectContributorOrganizationName(String contributorWholeName);
+	String getProjectContributorContactInstructions(String contributorWholeName);
+	String getProjectContributorPhoneNumber(String contributorWholeName);
+	String getProjectContributorCellPhoneNumber(String contributorWholeName);
+	String getProjectContributorFaxPhoneNumber(String contributorWholeName);
+	String getProjectContributorOrgPosition(String contributorWholeName);
+	String getProjectContributorEmailAddress(String contributorWholeName);
+	String getProjectContributorDeliveryPoint(String contributorWholeName);
+	String getProjectContributorCity(String contributorWholeName);
+	String getProjectContributorCountry(String contributorWholeName);
+	String getProjectContributorCurrentFlag(String contributorWholeName);
+	String getProjectContributorAddressStartDate(String contributorWholeName);
 	
 	String getProjectStartDate(String plotName);
 	String getProjectStopDate(String plotName);
@@ -37,6 +60,20 @@ public interface PlotDataSourceInterface
 	String getProjectDescription(String plotName);
 	//returns the current plot code
 	String getPlotCode(String plotName);
+	
+	//returns the placeNames each name can be used to retrieve
+	//other information about a place
+	Vector getPlaceNames(String plotName);
+	//retuns a description of a place based on a placeName
+	String getPlaceDescription(String placeName);
+	//returns a placeCode based on a placeName
+	String getPlaceCode(String placeName);
+	//returns a place system based on a placeName
+	String getPlaceSystem(String placeName);
+	//returns the owner of a place based on the name of a place
+	String getPlaceOwner(String placeName);
+	
+	
 	//returns the easting
 	String getXCoord(String plotName);
 	//returns the northing
@@ -74,7 +111,7 @@ public interface PlotDataSourceInterface
 	//returns the location as described by the author
 	String getAuthorLocation(String plotName);
 	//returns the landForm
-	String getlandForm(String plotName);
+	String getLandForm(String plotName);
 	//retuns the elevation
 	String getElevation(String plotName);
 	//returns the elevation accuracy
@@ -96,9 +133,14 @@ public interface PlotDataSourceInterface
 	//exist for a given plot
 	Vector getTaxaStrataExistence(String plantName, String plotName);
 	
+	// method that retuns the cummulative cover accross all strata for a given
+	// taxa in a given plot
+	String getCummulativeStrataCover( String plantName, String plotCode);
+	
 	//method that returns the coverage of a plant in a strata within a plot
 	String getTaxaStrataCover(String plantName, String plotCode, String
 	stratumName);
+
 	
 	/**
 	 * method that retuns the names of the unique strata elements 

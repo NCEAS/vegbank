@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-12-06 02:07:58 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2002-01-05 19:11:16 $'
+ * 	'$Revision: 1.2 $'
  */
 
 import java.sql.*;
@@ -26,15 +26,24 @@ public class PlotDataSource
 {
 	private Object pluginObj = null;
 	
-	//BELOW ARE THE PLOT VARIABLES WHICH CAN BE ACCESSED
+	//BELOW ARE THE PLOT VARIABLES WHICH CAN BE ACCESSED BY THE CALLING CLASSES
 	public String projectName = null;
 	public String projectDescription = null;
 	public String projectStartDate = null;
 	public String projectStopDate = null;
-	public Vector projectContributors = new Vector() ;
+	
+	//This vector contains the  concatenated given name and sur name for a 
+	//project contributor and each element is used to retrive the data associated
+	//with that specific user explicitly through method calls 
+	public Vector projectContributors = new Vector();
+	
+	
 	
 	public String latitude = null;
 	public String longitude = null;
+	
+	public Vector namedPlaces = new Vector();
+	
 	public String datum = null;
 	public String state = null;
 	public String communityName = null;
@@ -95,6 +104,17 @@ public class PlotDataSource
 	
 	
 	/**
+	 * method that returns the names of the plots stored in this data 
+	 * source 
+	 */
+	 public Vector getPlotNames()
+	 {
+			Vector v = new Vector();
+			v =  ((PlotDataSourceInterface)pluginObj).getPlotNames( );
+			return(v); 
+	 }
+	
+	/**
 	 * method that populates this class with all the data representing a 
 	 * plot using the plugin defined in the constructor method
 	 */
@@ -102,14 +122,15 @@ public class PlotDataSource
 	{
 		try
 		{
-	  	//((PlotDataSourceInterface)pluginObj).getPlotData(plotName);
-			
 			projectName = ((PlotDataSourceInterface)pluginObj).getProjectName(plotName);
 			projectDescription = ((PlotDataSourceInterface)pluginObj).getProjectDescription(plotName);
 	    projectContributors = ((PlotDataSourceInterface)pluginObj).getProjectContributors(plotName);
 			projectStartDate = ((PlotDataSourceInterface)pluginObj).getProjectStartDate(plotName);
 			projectStopDate = ((PlotDataSourceInterface)pluginObj).getProjectStopDate(plotName);
 			plotCode = ((PlotDataSourceInterface)pluginObj).getPlotCode(plotName);
+			
+			namedPlaces = ((PlotDataSourceInterface)pluginObj).getPlaceNames(plotName); 
+			
 			state = ((PlotDataSourceInterface)pluginObj).getState(plotName);
 			plotShape =  ((PlotDataSourceInterface)pluginObj).getPlotShape(plotName);
 			slopeGradient = ((PlotDataSourceInterface)pluginObj).getSlopeGradient(plotName);
@@ -131,7 +152,7 @@ public class PlotDataSource
 			confidentialityStatus = ((PlotDataSourceInterface)pluginObj).getConfidentialityStatus(plotName);
 			authorLocation
 			= ((PlotDataSourceInterface)pluginObj).getAuthorLocation(plotName);
-			landForm = ((PlotDataSourceInterface)pluginObj).getlandForm(plotName);
+			landForm = ((PlotDataSourceInterface)pluginObj).getLandForm(plotName);
 			elevation = ((PlotDataSourceInterface)pluginObj).getElevation(plotName);
 			elevationAccuracy
 			= ((PlotDataSourceInterface)pluginObj).getElevationAccuracy(plotName);
@@ -143,9 +164,129 @@ public class PlotDataSource
 		catch (Exception e)
 		{
 			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
 		}
 		return(true);
 	}
+	
+	
+	//retuns the person's salutation based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorSalutation(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorSalutation(contributorWholeName);	
+		return(s);
+	}
+	//retuns the person's given based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorGivenName(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorGivenName(contributorWholeName);	
+		return(s);
+	}
+	//retuns the person's middle name based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorMiddleName(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorMiddleName(contributorWholeName);	
+		return(s);
+	}
+	//retuns the person's surName based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorSurName(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorSurName(contributorWholeName);	
+		return(s);
+	}
+	//retuns the name of an org. that a person is associated with based on 
+	//their full name which is the concatenated givename and surname of the 
+	//user like 'bob peet'
+	public String getProjectContributorOrganizationName(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorOrganizationName(contributorWholeName);	
+		return(s);
+	}
+	
+	//retuns the person's contactinstructions based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorContactInstructions(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorContactInstructions(contributorWholeName);	
+		return(s);
+	}
+	//retuns the person's phone number based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorPhoneNumber(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorPhoneNumber(contributorWholeName);	
+		return(s);
+	}
+	//retuns the person's cellPhone based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorCellPhoneNumber(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorCellPhoneNumber(contributorWholeName);	
+		return(s);
+	}
+	//retuns the person's fax phone number based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorFaxPhoneNumber(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorFaxPhoneNumber(contributorWholeName);	
+		return(s);
+	}
+	//retuns the party's position within an organization based on their full 
+	// name which is the concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorOrgPosition(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorOrgPosition(contributorWholeName);	
+		return(s);
+	}
+	//retuns the person's email based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorEmailAddress(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorEmailAddress(contributorWholeName);	
+		return(s);
+	}
+	//retuns the person's address line based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorDeliveryPoint(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorDeliveryPoint(contributorWholeName);	
+		return(s);
+	}
+	//retuns the person's city based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorCity(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorCity(contributorWholeName);	
+		return(s);
+	}
+	//retuns the person's country based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorCountry(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorCountry(contributorWholeName);	
+		return(s);
+	}
+	//retuns a boolean 'true' if it is a party's current address based on their 
+	//full name which is the concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorCurrentFlag(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorCurrentFlag(contributorWholeName);	
+		return(s);
+	}
+	//retuns the date that the address became current for a party based on 
+	//their full name which is the concatenated givename and surname of the 
+	//user like 'bob peet'
+	public String getProjectContributorAddressStartDate(String contributorWholeName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getProjectContributorAddressStartDate(contributorWholeName);	
+		return(s);
+	}
+	
+	
 	
 	/**
 	 * method that returns a vector containing the names of the 
@@ -202,6 +343,45 @@ public class PlotDataSource
     	}
     	return object;
   	}
+		
+	
+	/**
+	 * retuns a description of a place based on a placeName
+	 */
+	 public String getPlaceDescription(String placeName)
+	 {
+		 String s = ((PlotDataSourceInterface)pluginObj).getPlaceDescription(placeName);	
+			return(s);
+	 }
+	
+	/**
+	 * returns a placeCode based on a placeName
+	 */
+	 public String getPlaceCode(String placeName)
+	 {
+		 String s = ((PlotDataSourceInterface)pluginObj).getPlaceCode(placeName);	
+			return(s);
+	 }
+
+	/**
+	 * returns a place system based on a placeName
+	 */
+	 public String getPlaceSystem(String placeName)
+	 {
+		 String s = ((PlotDataSourceInterface)pluginObj).getPlaceSystem(placeName);	
+			return(s);
+	 }
+	 
+	 	/**
+	 * returns a place owner based on a placeName
+	 */
+	 public String getPlaceOwner(String placeName)
+	 {
+		 String s = ((PlotDataSourceInterface)pluginObj).getPlaceOwner(placeName);	
+			return(s);
+	 }
+	 
+	 
 	
 	/**
 	 * method to return the cover for a given strata for a given 
@@ -235,18 +415,33 @@ public class PlotDataSource
 		  plotName, strataName);	
 			return(s);
 		}
+		
+		
+		/**
+	 * method that retuns the cummulative cover accoss all strata for a given 
+	 * plant taxa in a given plot
+	 */
+	public String getCummulativeStrataCover( String plantName, String plotName )
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCummulativeStrataCover(
+		plantName, plotName);	
+		return(s);
+	}
 	
 	/**
 	 * method that prints the variables for a given plot to the 
 	 * sys out
 	 */
-	private void printDBVariables(String plotName)
+	private void printDBVariables(String pluginClass, String plotName)
 	{
 		System.out.println(" getting info for: " + plotName );
 		try
 		{
+			//rectify tis damn variable -- use a consistent name
+			plotCode = plotName;
+			
 			//define the plugin
-			PlotDataSource source = new PlotDataSource("TestPlotSourcePlugin");
+			PlotDataSource source = new PlotDataSource(pluginClass);
 			//get all the variables for the given plot
 			source.getPlot(plotName);
 			
@@ -257,7 +452,7 @@ public class PlotDataSource
 			System.out.println("project start date: " + source.projectStartDate );
 			System.out.println("project stop date: " + source.projectStopDate );
 			
-			System.out.println(" \n ----------------------plot info-----------------------------");
+			System.out.println(" \n ----------------------plot site info-----------------------------");
 			System.out.println("authorplotcode: " + source.plotCode );
 			System.out.println("latitude: " + source.latitude );
 			System.out.println("longitude: " + source.longitude );
@@ -275,6 +470,21 @@ public class PlotDataSource
 			System.out.println("landform : " + source.landForm );
 			System.out.println("author location: " + source.authorLocation);
 			System.out.println("stand size: " + source.standSize );
+			System.out.println("slope gradient: " + source.slopeGradient);
+			System.out.println("slope aspect: " + source.slopeAspect);
+			System.out.println("number of named places: " + source.namedPlaces.size() );
+			for (int i=0; i<source.namedPlaces.size(); i++)
+			{
+				String placeName = source.namedPlaces.elementAt(i).toString(); 
+				String placeDescription = getPlaceDescription(placeName);
+				String placeCode = getPlaceCode(placeName);
+				String placeSystem = getPlaceSystem(placeName);
+				String placeOwner = getPlaceOwner(placeName);
+				System.out.println("place name: " + placeName);
+				System.out.println("place description: " + placeDescription);
+				System.out.println("place code: " + placeCode);
+				System.out.println("place owner: " + placeOwner);
+			}
 			
 			
 			System.out.println(" \n ----------------------strata info-----------------------------");
@@ -290,20 +500,22 @@ public class PlotDataSource
 			}
 			
 			System.out.println(" \n ----------------------plant taxa info-----------------------------");
+			System.out.println("number of unique plant names: " + source.plantTaxaNames.size() );
 			System.out.println("unique plant names: " + source.plantTaxaNames.toString() );
 			
 			//get the coverages for the plants for each strata
 			for (int i=0; i<source.plantTaxaNames.size(); i++)
 			{
 				String name = source.plantTaxaNames.elementAt(i).toString();
+				//System.out.println("calling plotName : " + plotCode);
 				Vector strata = getTaxaStrataExistence(name, plotCode);
 				System.out.println("name:  " + name  );
 				for (int ii=0; ii<strata.size(); ii++)
 				{
 					String curStrata = strata.elementAt(ii).toString();
-					System.out.println(" starta: " + curStrata );
+					System.out.println(" strata: " + curStrata );
 					System.out.println(" cover: " + getTaxaStrataCover(name, 
-						curStrata, plotCode ));
+						plotCode, curStrata ));
 				}
 			}
 			
@@ -312,6 +524,7 @@ public class PlotDataSource
 		catch (Exception e)
 		{
 			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
 		}
 	}
 	
@@ -322,9 +535,21 @@ public class PlotDataSource
  */
 	public static void main(String[] args)
 	{
-		//use the plugin with the test data
-		PlotDataSource source = new PlotDataSource("TestPlotSourcePlugin");
-		source.printDBVariables("test-plot");
+		if (args.length == 2) 
+		{
+			//assume that the two args are 1] plugin and 2] plotName
+			String plotName = args[1];
+			String pluginClass = args[0];
+			//should make sure that the plugin exists
+			PlotDataSource source = new PlotDataSource(pluginClass);
+			source.printDBVariables(pluginClass, plotName);
+		}
+		else
+		{
+			//use the plugin with the test data
+			PlotDataSource source = new PlotDataSource("TestPlotSourcePlugin");
+			source.printDBVariables("TestPlotSourcePlugin" , "test-plot");
+		}
 	}
 	
 }
