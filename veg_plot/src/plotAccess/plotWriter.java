@@ -17,7 +17,9 @@ public class plotWriter {
 	
 	/**
 	* This method takes the input stream from the xslt transform and inserts the data into their
-	* respective cells
+	* respective cells, at this point the method is extremely long because there is one or
+	* a series of prepared statements for loading each table.  Currently working on a method 
+	* in the issueSQL class that will replace all the prepared statements.
 	*/
 	
 
@@ -48,6 +50,8 @@ public void insertPlot (String[] transformedString, int transformedStringNum) {
 	int plotObservationId=0; //this is the global variable b/c it will be needed for inserting taxon observations etc.
 	int strataId=0; //this is the global variable b/c it will be needed for inserting taxon observations etc.
 	int taxonObservationId=0;
+	int namedPlaceId=0;
+	int graphicId=0;
 	
 	
 	
@@ -200,7 +204,7 @@ public void insertPlot (String[] transformedString, int transformedStringNum) {
 			pstmt.setInt(1, strataId);
 			pstmt.setInt(2, plotObservationId);
 			pstmt.setString(3, dataString[ii]);  
-			pstmt.setString(4, dataString[ii+1]); //i'll have to take a look at how this works because this should be a integer value
+			pstmt.setString(4, dataString[ii+1]); 
 			pstmt.setString(5, dataString[ii+1]);
 			
 			
@@ -288,6 +292,70 @@ public void insertPlot (String[] transformedString, int transformedStringNum) {
 		}//end if
 		
 		
+/**
+* Use the issue statement class for loading the rest of the tables - this is a 
+* new class as of November 17, 2000
+*/		
+		
+		if (address[ii] != null && address[ii].startsWith("namedPlace.placeName")) {
+			
+			plotWriter g =new plotWriter();  
+			g.getNextId(dataString[ii], "namedPlace");
+			
+			namedPlaceId=g.outNextId;  //grab the nextValue in the namedPlace table
+			
+			//pass the required arguements to the isssue SQl class
+			String insertString="INSERT INTO NAMEDPLACE";
+			String attributeString="namedplace_id, placeName, placeDesc";
+			int inputValueNum=3;
+			String inputValue[]=new String[3];	
+			inputValue[0]=""+namedPlaceId;
+			inputValue[1]=dataString[ii];
+			inputValue[2]=dataString[ii+1];
+
+			//get the valueString from the method
+			issueStatement k = new issueStatement();
+			k.getValueString(inputValueNum);	
+			String valueString = k.outValueString;
+			System.out.println(valueString);
+
+				issueStatement j = new issueStatement();
+				j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+	
+
+//insert the grahical information		
+		}//end if
+		
+		if (address[ii] != null && address[ii].startsWith("graphic.graphicName")) {
+			
+			plotWriter g =new plotWriter();  
+			g.getNextId(dataString[ii], "graphic");
+			
+			graphicId=g.outNextId;  //grab the nextValue in the graphic table
+			
+			//pass the required arguements to the isssue SQl class
+			String insertString="INSERT INTO GRAPHIC";
+			String attributeString="GRAPHIC_ID, PLOT_ID, BROWSEN, BROWSED, BROWSET";
+			int inputValueNum=5;
+			String inputValue[]=new String[5];	
+			inputValue[0]=""+graphicId;
+			inputValue[1]=""+plotId;
+			inputValue[2]=dataString[ii];
+			inputValue[3]=dataString[ii+1];
+			inputValue[4]=dataString[ii+2];
+
+			//get the valueString from the method
+			issueStatement k = new issueStatement();
+			k.getValueString(inputValueNum);	
+			String valueString = k.outValueString;
+			System.out.println(valueString);
+
+				issueStatement j = new issueStatement();
+				j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+	
+
+		
+		}//end if
 		
 		
 		
