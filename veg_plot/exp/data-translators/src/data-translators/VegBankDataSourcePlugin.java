@@ -11,8 +11,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: harris $' <br>
- *  '$Date: 2002-07-18 03:57:25 $' <br>
- * 	'$Revision: 1.13 $' <br>
+ *  '$Date: 2002-07-18 13:45:43 $' <br>
+ * 	'$Revision: 1.14 $' <br>
  */
  
 //public class VegBankDataSourcePlugin
@@ -510,6 +510,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
  	 * returns how the soil taxon was determined (eg., field observation
  	 * mapping, other ...)
  	 * @param plotName -- the plot
+	 * @deprecated -- this element has been removed from the database -- 20020717
  	 */
  	public String getSoilTaxonSource(String plotName)
  	{

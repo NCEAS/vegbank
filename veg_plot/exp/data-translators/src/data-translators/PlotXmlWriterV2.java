@@ -19,8 +19,8 @@ import PlotDataSource;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: harris $' <br>
- *  '$Date: 2002-07-18 03:59:19 $' <br>
- *  '$Revision: 1.6 $' <br>
+ *  '$Date: 2002-07-18 13:45:43 $' <br>
+ *  '$Revision: 1.7 $' <br>
  */
 
  
@@ -482,7 +482,8 @@ public class PlotXmlWriterV2
 				sb.append("		<landform>"+datasrc.getLandForm(plotCode)+"</landform> \n");
 				sb.append("		<geology>"+datasrc.surfGeo+"</geology> \n");
 				sb.append("		<soilTaxon>"+datasrc.getSoilTaxon(plotCode)+"</soilTaxon> \n");
-				sb.append("		<soilTaxonSource>"+datasrc.getSoilTaxonSource(plotCode)+"</soilTaxonSource> \n");
+				// THIS ELEMENT HAS BENN REMOVED FROM THE DATABASE 20020717
+				sb.append("		<soilTaxonSource></soilTaxonSource> \n");
 				sb.append("		<notesPublic></notesPublic> \n");
 				sb.append("		<notesMgt></notesMgt> \n");
 				sb.append("		<revisions></revisions> \n");

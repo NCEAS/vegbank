@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-05-24 20:22:25 $'
- * 	'$Revision: 1.20 $'
+ *  '$Date: 2002-07-18 13:45:43 $'
+ * 	'$Revision: 1.21 $'
  */
 public class PlotDataSource 
 {
@@ -329,6 +329,7 @@ public class PlotDataSource
  	 * returns how the soil taxon was determined (eg., field observation
  	 * mapping, other ...)
  	 * @param plotName -- the plot
+	 * @deprecated -- this element has been removed from the database -- 20020717
  	 */
  	public String getSoilTaxonSource(String plotName)
  	{
