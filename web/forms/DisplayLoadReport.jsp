@@ -14,8 +14,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2004-05-06 22:39:07 $'
-*  '$Revision: 1.5 $'
+*      '$Date: 2004-05-07 19:03:15 $'
+*  '$Revision: 1.6 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,11 @@
   <bean:write name="ErrorsReport" property="HTMLReport" filter="false"/>
 
   <p>
-  <html:link action="MainMenu.do">Go to main menu</a>
+  &raquo; <html:link action="DisplayMainMenu.do">Go to main menu</html:link>
+  <p>
+  <br/>
+  <br/>
+  <br/>
 
   <!-- VEGBANK FOOTER -->
   @vegbank_footer_html_tworow@
