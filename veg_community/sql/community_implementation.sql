@@ -16,7 +16,7 @@ CREATE TABLE commUsage
     usageStop timestamp,
     commNameStatus varchar (20) ,
     COMMPARTY_ID integer ,
-    classSystem varchar (20),
+    classSystem varchar (50),
     PRIMARY KEY(COMMUSAGE_ID)
 );
 
