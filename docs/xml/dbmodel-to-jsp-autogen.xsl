@@ -59,7 +59,29 @@
                   <xsl:with-param name="currEnt" select="$currEnt"/>
                   <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                   <xsl:with-param name="currentAtt" select="ancestor::attribute"/>
+                  <xsl:with-param name="container">td</xsl:with-param>
                 </xsl:call-template>
+              </xsl:for-each>
+            </redirect:write>
+            <xsl:comment>END WRITE FILE: <xsl:value-of select="$currEnt"/>_<xsl:value-of select="$view"/>_data.jsp</xsl:comment>
+          </xsl:when>
+          <xsl:when test="contains($view,'notbl')">
+            <!-- notbl view: just a <p>smalllabel:data <br/></p>-->
+            <xsl:comment>WRITE FILE: <xsl:value-of select="$currEnt"/>_<xsl:value-of select="$view"/>_data.jsp</xsl:comment>
+            <redirect:write file="{$pathToWrite}{$currEnt}_{$view}_data.jsp">
+              <xsl:for-each select="attribute/attForms/formShow[translate(@name,$alphahigh,$alphalow)=$view]">
+                <xsl:sort select="node()" data-type="number"/>
+                     <span class="datalabelsmall"><xsl:call-template name="labelField">
+                        <xsl:with-param name="currEnt" select="$currEnt"/>
+                        <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
+                        <xsl:with-param name="currLbl" select="../../attLabel"/>
+                      </xsl:call-template>: </span>
+                <xsl:call-template name="writeField">
+                  <xsl:with-param name="currEnt" select="$currEnt"/>
+                  <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
+                  <xsl:with-param name="currentAtt" select="ancestor::attribute"/>
+                  <xsl:with-param name="container">span</xsl:with-param>
+                </xsl:call-template><br/>
               </xsl:for-each>
             </redirect:write>
             <xsl:comment>END WRITE FILE: <xsl:value-of select="$currEnt"/>_<xsl:value-of select="$view"/>_data.jsp</xsl:comment>
@@ -83,6 +105,7 @@
                       <xsl:with-param name="currEnt" select="$currEnt"/>
                       <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                       <xsl:with-param name="currentAtt" select="ancestor::attribute"/>
+                     <xsl:with-param name="container">td</xsl:with-param>
                     </xsl:call-template>
                   </tr>
                   <bean:define id="hadData" value="true"/>
@@ -107,9 +130,10 @@
     <xsl:param name="currEnt"/>
     <xsl:param name="currFld"/>
     <xsl:param name="currentAtt"/>
+    <xsl:param name="container" /><!-- p or td -->
     <!--    <xsl:comment>WRITE FIELD: <xsl:value-of select="$currFld"/> and att is: <xsl:value-of select="$currentAtt/attName"/>
     </xsl:comment>-->
-    <td>
+    <xsl:element name="{$container}">
       <logic:notEmpty name="onerowof{$currEnt}" property="{$currFld}">
         <!-- extra stuff before something : -->
         <xsl:if test="string-length($currentAtt/attFormsHTMLpre)&gt;0">
@@ -170,11 +194,13 @@
           <xsl:value-of select="$currentAtt/attFormsHTMLpost"/>
         </xsl:if>
       </logic:notEmpty>
+        <xsl:if test="$container!='span'">
       <logic:empty name="onerowof{$currEnt}" property="{$currFld}">
-        <!-- only extra bit if empty -->
+        <!-- only extra bit if empty and container is not p-->
         <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
       </logic:empty>
-    </td>
+        </xsl:if>
+    </xsl:element><!-- td or p -->
   </xsl:template>
   <xsl:template name="writeOneFieldValue">
     <xsl:param name="currEnt"/>
