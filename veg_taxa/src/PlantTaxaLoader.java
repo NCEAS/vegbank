@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-08-01 23:21:35 $'
- * '$Revision: 1.14 $'
+ *     '$Date: 2002-08-12 19:01:46 $'
+ * '$Revision: 1.15 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -717,7 +717,8 @@ public class PlantTaxaLoader
 	
 	/**
 	 * method to denormalize the plant taxonomy database for querying
-	 * by the VegBank servlet
+	 * by the VegBank servlet.  This method mimics the database procedures 
+	 * carried out by the sql script: denormPlantTaxonDb_pg.sql
 	 */
 	 private void denormTaxonDB()
 	 {
@@ -739,9 +740,10 @@ public class PlantTaxaLoader
 			sb = new StringBuffer();
 			sb.append("INSERT INTO veg_taxa_summary ");
 			sb.append("(plantusage_id, plantname_id, plantconcept_id, plantName, classsystem, ");
-			sb.append(" plantnamestatus, startdate, stopDate, acceptedSynonym) ");
+			sb.append(" plantnamestatus, startdate, stopDate, acceptedSynonym, plantparty_id) ");
 			sb.append(" SELECT plantusage_id, plantname_id, plantconcept_id, plantname, ");
-			sb.append(" classsystem, plantnamestatus, usagestart, usagestop, acceptedSynonym ");
+			sb.append(" classsystem, plantnamestatus, usagestart, usagestop, acceptedSynonym, ");
+			sb.append(" plantparty_id");
 			sb.append(" from plantusage where plantusage_id >= " + minUsageId );
 			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
 			pstmt.execute();
@@ -774,6 +776,36 @@ public class PlantTaxaLoader
 			pstmt = conn.prepareStatement( sb.toString() );
 			pstmt.execute();
 			pstmt.close();	
+			
+			//--UPDATE THE CONCEPT AUTHOR AND THE DATE
+			sb = new StringBuffer();
+			sb.append(" update  veg_taxa_summary "); 
+			sb.append("  set plantConceptRefAuthor = (select authors from plantreference where plantreference_id = ");
+			sb.append("(select plantreference_id from plantconcept where  veg_taxa_summary.plantconcept_id = plantconcept.plantconcept_id  ) ) ");
+			sb.append(" where  plantusage_id >= " + minUsageId );
+			pstmt = conn.prepareStatement( sb.toString() );
+			pstmt.execute();
+			pstmt.close();	
+			
+			sb = new StringBuffer();
+			sb.append(" update  veg_taxa_summary "); 
+			sb.append(" set plantConceptRefDate = (select pubdate from plantreference where plantreference_id = ");
+			sb.append("  (select plantreference_id from plantconcept where  veg_taxa_summary.plantconcept_id = plantconcept.plantconcept_id  ) )");
+			sb.append(" where  plantusage_id >= " + minUsageId );
+			pstmt = conn.prepareStatement( sb.toString() );
+			pstmt.execute();
+			pstmt.close();
+					
+			//--UPDATE THE PARTY OR NAME FOR THE USAGE
+			sb = new StringBuffer();
+			sb.append("update  veg_taxa_summary "); 
+			sb.append("set plantUsagePartyOrgName = "); 
+			sb.append("(select organizationname from plantparty where veg_taxa_summary.plantparty_id = plantparty.plantparty_id )");
+			sb.append(" where  plantusage_id >= " + minUsageId );
+			pstmt = conn.prepareStatement( sb.toString() );
+			pstmt.execute();
+			pstmt.close();
+									
 			}
 
 		}
@@ -1546,6 +1578,8 @@ public class PlantTaxaLoader
 		PreparedStatement pstmt;
 		try
 	 	{
+			System.out.println("title: " +title+" authors: " + authors );
+			
 			//first see if the reference already exists
 			boolean refExists = plantReferenceExists(authors, title, date);
 			System.out.println("PlantTaxaLoader > ref exists: " + refExists);

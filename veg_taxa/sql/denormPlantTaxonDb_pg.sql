@@ -21,7 +21,11 @@ create table veg_taxa_summary (
 	parentName varchar(230),
 	acceptedSynonym varchar(80),
 	startDate date,
-	stopDate date
+	stopDate date,
+	plantConceptRefAuthor varchar(230),
+	plantConceptRefDate date,
+	plantparty_id integer,
+	plantUsagePartyOrgName varchar(230)
 );
 
 --CREATE INDICIES ON BASE TABLES IMPROVE PERFORMANCE ON QUERYING
@@ -31,8 +35,8 @@ create index plantcon_id_idx on plantconcept (plantconcept_id);
 --INSERT ALL THE PLANT NAMES FROM THE USAGE TABLE
 --ALL NAMES SHOULD BE INCLUDED HERE
 INSERT INTO veg_taxa_summary 
- (plantusage_id, plantname_id, plantconcept_id, plantName, classsystem, plantnamestatus, startdate, stopDate, acceptedSynonym)
- SELECT plantusage_id, plantname_id, plantconcept_id, plantname, classsystem, plantnamestatus, usagestart, usagestop, acceptedSynonym
+ (plantusage_id, plantname_id, plantconcept_id, plantName, classsystem, plantnamestatus, startdate, stopDate, acceptedSynonym, plantparty_id)
+ SELECT plantusage_id, plantname_id, plantconcept_id, plantname, classsystem, plantnamestatus, usagestart, usagestop, acceptedSynonym,  plantparty_id
  from plantusage where plantusage_id > 0;
 
 -- CREATE INDICIES ON THE SUMMARY TABLE FOR IMPROVED QUERY PERFORMANCE
@@ -55,4 +59,15 @@ update  veg_taxa_summary
 --UPDATE THE PARENT NAME
 update  veg_taxa_summary 
  set parentName = (select plantparentname from plantstatus where veg_taxa_summary.plantconcept_id = plantstatus.plantconcept_id );
+--UPDATE THE CONCEPT AUTHOR AND THE DATE
+update  veg_taxa_summary 
+ set plantConceptRefAuthor = (select authors from plantreference where plantreference_id = 
+ (select plantreference_id from plantconcept where  veg_taxa_summary.plantconcept_id = plantconcept.plantconcept_id  ) );
+update  veg_taxa_summary 
+ set plantConceptRefDate = (select pubdate from plantreference where plantreference_id = 
+ (select plantreference_id from plantconcept where  veg_taxa_summary.plantconcept_id = plantconcept.plantconcept_id  ) );
+--UPDATE THE PARTY OR NAME FOR THE USAGE
+update  veg_taxa_summary 
+ set plantUsagePartyOrgName = (select organizationname from plantparty where veg_taxa_summary.plantparty_id = plantparty.plantparty_id );
+
 
