@@ -62,6 +62,7 @@ STATE VARCHAR(50),
 COUNTRY VARCHAR(100),
 PARENTPLOT NUMERIC(12),
 AUTHOROBSCODE VARCHAR(100),
+ACCESSION_NUMBER varchar (200),
 CONSTRAINT plotSiteSummary_pk PRIMARY KEY (PLOTSITESUMMARY_ID)
 );
 
@@ -75,7 +76,7 @@ plotoriginlat, plotoriginlong, plotshape, altvalue, slopeaspect,
 slopegradient, slopeposition, hydrologicregime, soildrainage, currentcommunity,
 xcoord, ycoord, coordtype, obsstartdate, obsstopdate, effortlevel,  
 authorplotcode, surfGeo, state, country, parentplot, authorobscode,
-soilDepth, leaftype )
+soilDepth, leaftype, accession_number )
 select plot.plot_id, plot.project_id,  
 plot.latitude, plot.longitude, plot.shape,  plot.elevation,
 plot.slopeaspect, plot.slopegradient, plot.topoposition, observation.hydrologicregime,
@@ -84,7 +85,7 @@ plot.authordatum, observation.obsstartdate, observation.obsenddate,
 observation.effortLevel,
 plot.authorplotcode, plot.geology, plot.state, 
 plot.country, null, observation.authorobscode, 
-observation.soilDepth, null
+observation.soilDepth, null, plot.accession_number
 from plot, observation where observation.plot_id = plot.plot_id;
 
 
@@ -170,9 +171,10 @@ update plotSpeciesSum
 * Send a test query
 */
 
-select PLOT_ID, AUTHORPLOTCODE, AUTHOROBSCODE,  
-AUTHORNAMEID,  STRATUMTYPE, PERCENTCOVER 
-from plotSpeciesSum where AUTHORPLOTCODE like '%';
+select plot_id, accession_number, authorplotcode, plotoriginlat, plotoriginlong from plotsitesummary;
+--select PLOT_ID, AUTHORPLOTCODE, AUTHOROBSCODE,  
+--AUTHORNAMEID,  STRATUMTYPE, PERCENTCOVER 
+--from plotSpeciesSum where AUTHORPLOTCODE like '%';
 
 
 
