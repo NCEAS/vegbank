@@ -36,10 +36,7 @@
         <logic:notEmpty name="MY_ROLES-BEANLIST">
           <table class="leftrightborders" cellpadding="3">
            <tr>
-
-        <th>     role Code          </th>  
-	<th>     role Description   </th>
-	<th>     accession Code     </th>
+<%@ include file="autogen/aux_role_summary_head.jsp" %>
 	<logic:equal value="where_aux_role_project" parameter="where">
 	<th>     Project Contributor	   </th>
 	</logic:equal>
@@ -53,36 +50,23 @@
 	 <th>    Community Interpretation     </th>
 	 </logic:equal>		     
            </tr>
-           <%
-		       //**************************************************************************************
-		       //  Set up alternating row colors
-		       //**************************************************************************************
-		       String rowClass = "evenrow";
-    %>
-          <logic:iterate id="onerec" name="MY_ROLES-BEANLIST" >     
+           <%      String rowClass = "evenrow";   %>
+          <logic:iterate id="onerowofaux_role" name="MY_ROLES-BEANLIST" >     
            
-		       <%
-		       //**************************************************************************************
-		       //  Set up alternating row colors
-		       //**************************************************************************************
-		       rowClass = rowClass.equals("oddrow")? "evenrow" : "oddrow";
-    %>
-           <tr class="<%= rowClass %>">
+           <tr class='@nextcolorclass@'>
            
-            <td>   <bean:write name="onerec" property="rolecode"/>  &nbsp;               </td>
-           	<td>   <bean:write name="onerec" property="roledescription"/>&nbsp;      </td>
-           	<td class="sizetiny">   <bean:write name="onerec" property="accessioncode"/> &nbsp;       </td>
+          <%@ include file="autogen/aux_role_summary_data.jsp" %>
            	<logic:equal value="where_aux_role_project" parameter="where">
-           	<td>   <bean:write name="onerec" property="roleproject_transl"/>&nbsp;	    </td>
+           	<td>   <bean:write name="onerowofaux_role" property="roleproject_transl"/>&nbsp;	    </td>
            	</logic:equal>
            	<logic:equal value="where_aux_role_observation" parameter="where">
-           	<td>   <bean:write name="onerec" property="roleobservation_transl"/> &nbsp;     </td>
+           	<td>   <bean:write name="onerowofaux_role" property="roleobservation_transl"/> &nbsp;     </td>
            	</logic:equal>
            	<logic:equal value="where_aux_role_taxonint" parameter="where">
-           	<td>   <bean:write name="onerec" property="roletaxonint_transl"/>	&nbsp;    </td>
+           	<td>   <bean:write name="onerowofaux_role" property="roletaxonint_transl"/>	&nbsp;    </td>
            	</logic:equal>
            	<logic:equal value="where_aux_role_classint" parameter="where">
-           	<td>   <bean:write name="onerec" property="roleclassint_transl"/>  &nbsp;       </td>
+           	<td>   <bean:write name="onerowofaux_role" property="roleclassint_transl"/>  &nbsp;       </td>
             </logic:equal>
             </tr> 
           </logic:iterate>
@@ -93,7 +77,7 @@
 
 		<p>
 		<br>
-		  <vegbank:pager/>
+		  <vegbank:pager id="MY_ROLES"/>
 
 @vegbank_footer_html_tworow@
 </BODY>
