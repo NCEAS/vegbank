@@ -1,11 +1,62 @@
-DATATRANSLATOR=/usr/vegbank/lib/datatranslator.jar
-XMLRESOURCE=/usr/vegbank/lib/xmlresource.jar
-PG_JDBC=/usr/vegbank/lib/jdbc7.0-1.2.jar
-XERCES=/usr/vegbank/lib/xerces_1_4.jar
-ACCESSRESOURCE=/usr/vegbank/lib/database_access.jar
-UTILS=/usr/vegbank/lib/utilities.jar
-PLANTTAXON=/usr/vegbank/lib/planttaxonomy.jar
-COMMON=/usr/vegbank/lib/vegclass_common.jar
-CLASSPATH=$XMLRESOURCE:$DATATRANSLATOR:$PG_JDBC:$XALAN:$XERCES:$ACCESSRESOURCE:$UTILS:$PLANTTAXON:$COMMON
+# Load jars in colon-separated list of directories $1 into the CLASSPATH
+function addalljars()
+{
+        local JARDIRS=$1        # colon-separated list of dirs
+                                                                                                                                                            
+        for i in `echo ${JARDIRS} | tr ':' '\n'`; do
+                local ABSPATH=`absolutize ${i}`
+                [ -d ${ABSPATH} ] && addjars ${ABSPATH}
+        done
+}
+                                                                                                                                                            
+                                                                                                                                                            
+# Puts jars from directory $1 into CLASSPATH
+function addjars()
+{
+        local JARDIR=$1 # directory from which to add jars
+                                                                                                                                                            
+        echo "Loading jars from ${JARDIR}"
+        if [ -d "${JARDIR}" ]; then
+                for JAR in ${JARDIR}/*.jar ; do
+                        if [ -r "${JAR}" ]; then                #Hack. When the directory is empty, this will be "*.jar".
+                                #echo "  Adding ${JAR}"
+                                export CLASSPATH=${CLASSPATH}:${JAR}
+                        else
+                                echo "${JARDIR} is empty"
+                        fi
+                done
+        else
+                echo "${JARDIR} is not a directory."
+        fi
+}
 
+# Get the absolute form of a (possibly already absolute) path
+# New path returned on stdout
+function absolutize()
+{
+        local DIR=$1
+                                                                                                                                                            
+        if relative ${DIR}; then
+                echo $PWD/${DIR}
+        else
+                echo ${DIR}
+        fi
+}
+
+# Determine whether a directory is relative or absolute
+function relative()
+{
+        local DIR=$1
+                                                                                                                                                            
+        if [ `expr index ${DIR} /` -eq 1 ]; then
+                return 1
+        else
+                return 0
+        fi
+}
+
+
+# Add jars to CLASSPATH
+addalljars @vegbank.home.dir@lib
 export CLASSPATH=$CLASSPATH
+
