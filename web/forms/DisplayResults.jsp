@@ -12,9 +12,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: farrell $'
-*      '$Date: 2003-11-03 03:49:47 $'
-*  '$Revision: 1.11 $'
+*    '$Author: anderson $'
+*      '$Date: 2003-11-03 23:27:10 $'
+*  '$Revision: 1.12 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -151,8 +151,13 @@
 	      	src="/vegbank/images/comprehensive_sm.gif" alt="Comprehensive view"></img></a>
 	      
 	      <!-- THE LINK TO THE LOCATION -->
-	      <a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>" title="location report"><img align="center" border="0" 
-	      	src="/vegbank/images/small_globe.gif" alt="Location"></img></a>
+	      <a href="http://68.171.138.181:8000/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" 
+		  property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>" title="location report"><img align="center" 
+		  border="0" src="/vegbank/images/small_globe.gif" alt="Location"></img></a>
+		  <!--
+	      <a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" 
+		  	property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>" title="location report">
+		  -->
 	      
 	      <!-- THE LINK TO THE RAW XML-->
               <html:link page="/DisplayPlot.do?resultType=rawXML" paramId="plotId" paramName="row" paramProperty="plotId" title="view raw XML">
