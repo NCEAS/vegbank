@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *    '$Date: 2002-07-26 15:13:49 $'
- * 	'$Revision: 1.15 $'
+ *    '$Date: 2002-07-26 17:43:44 $'
+ * 	'$Revision: 1.16 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,9 +83,7 @@ public class  sqlMapper
 		StringBuffer sb = new StringBuffer();
 		try 
 		{
-			Hashtable extendedQueryHash=getQueryTripleHash(transformedString, 
-				transformedStringNum);
-			
+			Hashtable extendedQueryHash=getQueryTripleHash(transformedString, transformedStringNum);
 			//make a completely separate hashtable for use with the 
 			//taxonomic queries for the is something weird when the
 			//same hash is used for creating both sql statements
@@ -95,9 +93,9 @@ public class  sqlMapper
 			System.out.println("sqlMapper > developExtendedPlotQuery");
 			System.out.println("sqlMapper > query elements: " + extendedQueryHash.toString() );
 			String outFile = extendedQueryHash.get("outFile").toString().trim();
+			String resultType = extendedQueryHash.get("resultType").toString().trim();
 			String taxonSql = null;
 			String nonTaxonSql = null;
-			
 			
 			//determine if there is a taxonomic component to the 
 			//query and if create that query to be used as a sub-select
@@ -129,7 +127,6 @@ public class  sqlMapper
 			}
 			
 			issueStatement is = new issueStatement();
-			
 			StringBuffer sqlBuf = new StringBuffer();
 			sqlBuf.append(nonTaxonSql);
 			
@@ -142,31 +139,24 @@ public class  sqlMapper
 			//update this public variable for 
 			//the calling method
 			queryOutputNum=plotIdVec.size();
-			
-			//retrieve the plot summary information, using as input the plotId numbers 
-			//retrieved in the provios query 
-		/// REMOVED THIS CODE -- TO SLOW JHH 20020410
-		//  queryStore k1 = new queryStore();
-		//  k1.getPlotSummaryNew(  plotIdVec  );
-			
-			//instantiate a new instance of the dbAccess class -- probably
-			//should be done above
-			String testFile = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml";
-			System.out.println("sqlMapper > writing the plots using new class - test file: "+testFile );
+			// NEW INSTANCE OF THE DBACCESS CLASS
 			dbAccess dbaccess = new dbAccess();
-			dbaccess.writeMultipleVegBankPlot(plotIdVec, testFile);
-
-			//write to a summary information to the file 
-			//that can be used by the application
-				/// REMOVED THIS CODE -- TO SLOW JHH 20020410
-	//		xmlWriter xw = new xmlWriter();
-	//		xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
-			
+			// HANDLE THE RESPONSES
+			if ( resultType.equals("summary") )
+			{
+				System.out.println("sqlMapper > writing the plots using new class - test file: " + outFile );
+				dbaccess.writeMultipleVegBankPlot(plotIdVec, outFile);
+			}
+			else
+			{
+				// PRINT THE DATA TO FILE USING THE IDENTITY PRINT FUNCTION
+				System.out.println("sqlMapper > writing the plots using new class -  file: " + outFile );
+				dbaccess.writeMultipleVegBankPlotIdentifcation(plotIdVec, outFile);
+			}
 		}
 		catch ( Exception e )
 		{
-			System.out.println("failed :   "
-			+e.getMessage());
+			System.out.println("Exception :   " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -607,7 +597,6 @@ public class  sqlMapper
 	 * each with containg the associated values stuck
 	 * in a vector
 	 */
-	
 	private int getExtendedQueryInstanceNumber(Hashtable transformedString)
 	{
 		int vecSize = 0;
