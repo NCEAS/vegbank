@@ -133,7 +133,7 @@
     <forward   name="AddStratumMethod"	path="/forms/AddStratumMethod.jsp"/>
     <forward   name="AddParty"	path="/forms/AddParty.jsp"/>
     <forward   name="PlotQuery"	path="/forms/plot-query.jsp"/>
-    <forward   name="Certification"	path="/forms/certification.jsp"/>
+    <forward   name="Certification"	path="/LoadCertification.do"/>
     <forward   name="EntityName"	path="/forms/EntityName.jsp"/>
     <forward   name="DisplayResults" path="/forms/DisplayResults.jsp"/>
     <forward   name="DisplayLoadReport" path="/forms/DisplayLoadReport.jsp"/>
