@@ -21,7 +21,7 @@
 <a href="<%= request.getRequestURI() %>">all tables</a> | 
 <a href="<%= request.getRequestURI() %>?where=where_aux_role_project&wparam=1">Project Contributor</a> | 
 <a href="<%= request.getRequestURI() %>?where=where_aux_role_observation&wparam=1">Observation Contributor</a> | 
-<a href="<%= request.getRequestURI() %>?where=where_aux_role_taxonint&wparam=1">Taxon Interpretaters</a> | 
+<a href="<%= request.getRequestURI() %>?where=where_aux_role_taxonint&wparam=1">Taxon Interpreters</a> | 
 <a href="<%= request.getRequestURI() %>?where=where_aux_role_classint&wparam=1">Community Interpreters</a> </p>
 <vegbank:get id="MY_ROLES" select="aux_role" beanName="map" pager="true"/>
 
