@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-09 00:58:44 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-12-13 06:39:12 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,12 +35,12 @@ import org.apache.commons.logging.LogFactory;
  * servlet request parameters.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.5 $ $Date: 2004-12-09 00:58:44 $
+ * @version $Revision: 1.6 $ $Date: 2004-12-13 06:39:12 $
  */
 
 public class CompositeRequestParamUtil {
 
-	private static final String LIST_KEY = ":LIST:";
+	public static final String PARAM_DELIM = "_";
 
 	private static final Log log = LogFactory.getLog(CompositeRequestParamUtil.class);
 	private ServletRequest request = null;
@@ -109,7 +109,7 @@ public class CompositeRequestParamUtil {
 			try {
 				fullPath = (String)theFields.nextElement();
 
-				firstDot = fullPath.indexOf(".");
+				firstDot = fullPath.indexOf(PARAM_DELIM);
 				if (firstDot == -1) {
 					// this param has no children
 					log.debug("skipping single parent: " + fullPath);
@@ -147,7 +147,8 @@ public class CompositeRequestParamUtil {
 		}
 
 		Map m;
-		int firstDot = fullPath.indexOf(".");
+		log.debug("Searching for delim " + PARAM_DELIM + " in " + fullPath);
+		int firstDot = fullPath.indexOf(PARAM_DELIM);
 		if (firstDot == -1) {
 			// this param has no children
 			log.debug("non-composite param: " + fullPath);
@@ -168,7 +169,7 @@ public class CompositeRequestParamUtil {
 			//log.debug("putting (top-level) children with key: " + thisKey);
 			composParams.put(thisKey,
 					parseChildren(fullPath, childKey, m));
-			log.debug("CURRENT TOP LEVEL MAPPINGS: " + composParams.toString() + "\n");
+			log.info("Current top level mappings: " + composParams.toString() + "\n");
 
 			return true;
 		}
@@ -191,7 +192,7 @@ public class CompositeRequestParamUtil {
 
 		log.debug("parseChildren: " + childKey);
 
-		int firstDot = childKey.indexOf(".");
+		int firstDot = childKey.indexOf(PARAM_DELIM);
 		Map childMap;
 
 		if (firstDot != -1 && childKey.length() > firstDot+1) {
@@ -255,7 +256,7 @@ public class CompositeRequestParamUtil {
 	 * If child key is numeric, type is ArrayList, else HashMap.
 	 */
 	private void addTopLevelParent(String fullPath, Map newParentMap) {
-		int dotPos = fullPath.indexOf(".");
+		int dotPos = fullPath.indexOf(PARAM_DELIM);
 		if (dotPos == -1) {
 			log.debug("Not adding top level for: " + fullPath);
 			return;
@@ -271,7 +272,7 @@ public class CompositeRequestParamUtil {
 
 		/*
 		String childKey = fullPath.substring(dotPos+1);
-		dotPos = childKey.indexOf(".");
+		dotPos = childKey.indexOf(PARAM_DELIM);
 		if (dotPos != -1) {
 			// this child is a parent, so make it upper case
 			childKey = childKey.substring(0, dotPos).toUpperCase();
@@ -291,9 +292,9 @@ public class CompositeRequestParamUtil {
 	/**
 	 * Builds a sorted array of values with numeric keys.
 	 */
-	public String[] buildStringArray(Map m) {
+	public Object[] buildObjectArray(Map m) {
 		if (m == null) { return null; }
-		log.debug("buildStringArray: " + m.toString());
+		//log.debug("buildObjectArray: " + m.toString());
 		ArrayList l = new ArrayList();
 
 		Arrays.sort(m.keySet().toArray());
@@ -306,7 +307,13 @@ public class CompositeRequestParamUtil {
 				Object o = null;
 				try {
 					o = m.get(keyName);
-					l.add((String)o);
+
+					if (o instanceof String[]) {
+						//l.add(implodeArray((String[])o, ",", "", true));
+						l.add((String[])o);
+					} else {
+						l.add((String)o);
+					}
 
 				} catch (Exception ex) {
 					// don't worry about non-string values
@@ -321,14 +328,24 @@ public class CompositeRequestParamUtil {
 		}
 
 		//log.debug("about to return this array: " + l.toString());
-		return (String[])l.toArray(new String[1]);
+		//return (String[])l.toArray(new String[1]);
+		return l.toArray();
 	}
 
 	/**
 	 *
 	 */
+	/*
 	public String[] getStringArray(String canon) {
 		return buildStringArray(getMap(canon));
+	}
+	*/
+
+	/**
+	 *
+	 */
+	public Object[] getObjectArray(String canon) {
+		return buildObjectArray(getMap(canon));
 	}
 
 		/*
@@ -372,7 +389,7 @@ public class CompositeRequestParamUtil {
 			return null;
 		}
 
-		int dotPos = canon.indexOf(".");
+		int dotPos = canon.indexOf(PARAM_DELIM);
 		if (dotPos == -1 || canon.length() < dotPos+2) {
 			//log.debug("getting top level map");
 			return (Map)composParams.get(canon.toUpperCase());
@@ -394,7 +411,7 @@ public class CompositeRequestParamUtil {
 		do {
 			rhs = rhs.substring(dotPos+1);
 
-			dotPos = rhs.indexOf(".");
+			dotPos = rhs.indexOf(PARAM_DELIM);
 
 			if (dotPos == -1) {
 				childKey = rhs;
@@ -403,9 +420,18 @@ public class CompositeRequestParamUtil {
 				childKey = rhs.substring(0, dotPos).toUpperCase();
 			}
 
-			//log.debug("attempting to get child map named: " + 
-			//		childKey + " from Map: " + m.toString());
-			m = (Map)m.get(childKey);
+			try {
+				m = (Map)m.get(childKey);
+			} catch (ClassCastException cce) {
+				Object o = m.get(childKey);
+				log.error("Problem while getting child map named '" +
+						childKey + "' from parent map: " + m.toString() +
+						"\n\nCould not cast a " + o.getClass().getName() + 
+						" to a Map.  Its value was: " + o.toString() +
+						"\nCheck the '" + childKey + "' parameter for misconfiguration.\n\n");
+				m = null;
+			}
+
 			if (m == null) { return null; }
 
 		} while (dotPos != -1 && rhs.length() > dotPos+1);
@@ -415,28 +441,22 @@ public class CompositeRequestParamUtil {
 
 
 	/**
-	 *
+	 * Make a string out of array pieces.
 	 */
-	private class IndexedValue {
-		public int index;
-		public Object value;
+	private String implodeArray(String[] sarr, String glue, String wrapper, boolean skipEmpties) {
+		StringBuffer sb = new StringBuffer(sarr.length*10);
+		boolean first = true;
+		for (int i=0; i<sarr.length; i++) {
 
-		public IndexedValue(int i, Object o) {
-			init(i, o);
-		}
-
-		public IndexedValue(String s, Object o) {
-			try {
-				init(Integer.parseInt(s), o);
-			} catch (Exception ex) {
-				// fiddly dee
+			if (skipEmpties && Utility.isStringNullOrEmpty(sarr[i])) {
+				continue;
 			}
-		}
 
-		private void init(int i, Object o) {
-			index = i;
-			value = o;
+			if (first) { first = false; }
+			else { sb.append(glue); }
+
+			sb.append(wrapper).append(sarr[i]).append(wrapper);
 		}
+		return sb.toString();
 	}
-
 }
