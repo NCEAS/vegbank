@@ -95,6 +95,12 @@
 	includes="createPlantNameDBed.sql denormalize.sql"
 />
 							
+<copydir src="${xmlFiles}"
+  dest="${build_lib}"
+	filtering="yes"
+	includes="**.xsl"
+/>
+			
 
 
 </target>	
