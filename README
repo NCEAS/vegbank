@@ -1,6 +1,6 @@
 '$Author: farrell $'
-'$Date: 2002-12-30 19:28:46 $'
-'$Revision: 1.7 $'
+'$Date: 2002-12-30 22:20:33 $'
+'$Revision: 1.8 $'
 THIS FILE DESCRIBES THE SETUP AND MAINTAINENCE OF A VEGBANK SYSTEM
 
 REQUIRED JAR FILES
@@ -63,18 +63,19 @@ createdb "name of database" #repeat for each
 > createuser  datauser
 
 # Run create table scripts for each database ( in each modules sql directory)
->psql plots_dev < ../../veg_plot/sql/create-vegbank-plots2002.sql  
+> psql plots_dev < veg_plot/sql/create-vegbank-plots2002.sql  
+> psql plots_dev < veg_plot/sql/makePlotSummaryTables_postgres.sql
 
->psql plants_dev < veg_taxa/sql/createPlantTaxonDb_pg.sql  
+> psql plants_dev < veg_taxa/sql/createPlantTaxonDb_pg.sql  
 
->psql communities_dev < veg_community/sql/community_implementation.sql  
->psql communities_dev < veg_community/sql/createCommunitySummary_pg.sql  
->psql communities_dev < veg_community/sql/createEcoartTables_pg.sql   
+> psql communities_dev < veg_community/sql/community_implementation.sql  
+> psql communities_dev < veg_community/sql/createCommunitySummary_pg.sql  
+> psql communities_dev < veg_community/sql/createEcoartTables_pg.sql   
 
->psql framework < ./veg_plot/sql/create_veguser_tables.sql
+> psql framework < ./veg_plot/sql/create_veguser_tables.sql
 
 # Run the deNormalization scripts
->psql plants_dev < veg_taxa/sql/denormPlantTaxonDb_pg.sql
+> psql plants_dev < veg_taxa/sql/denormPlantTaxonDb_pg.sql
 
 # Edit the pg_hba.conf file so that connections may be made to the database 
 # add the following:
