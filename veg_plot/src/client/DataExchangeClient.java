@@ -7,11 +7,11 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2001-02-22 21:24:41 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2001-05-18 16:24:16 $'
+ * '$Revision: 1.2 $'
  */
 
-package client;
+//package client;
 
 import java.io.*;
 import java.lang.*;

@@ -7,14 +7,14 @@
  *              National Center for Ecological Analysis and Synthesis
  *     Authors: Dan Higgins modified for metacat by Chad Berkley
  *
- *     Version: '$Id: HttpMessage.java,v 1.1 2001-02-22 21:24:41 harris Exp $'
+ *     Version: '$Id: HttpMessage.java,v 1.2 2001-05-18 16:24:16 harris Exp $'
  *
  *     '$Author: harris $'
- *     '$Date: 2001-02-22 21:24:41 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2001-05-18 16:24:16 $'
+ *     '$Revision: 1.2 $'
  */
 
-package client;
+//package client;
 
 import java.io.*;
 import java.net.*;
