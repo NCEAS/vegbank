@@ -1,0 +1,1 @@
+update taxonObservation SET  authorPlantNAme= (select pc.plantname from plantConcept as pc, taxonInterpretation as tint where tint.plantConcept_ID = pc.plantConcept_ID and tint.taxonobservation_ID=taxonObservation.taxonObservation_ID and tint.originalInterpretation);
