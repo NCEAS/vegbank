@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-21 22:38:05 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2002-02-21 23:11:43 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,12 +102,16 @@ public class VegCommunityLoader
 			this.refPubDate, this.otherCitationDetails);
 			//System.out.println("VegCommunityLoader > refId: " + refId);
 			int commNameId = insertCommunityName(commName, refId, dateEntered);
+			int commCodeId = insertCommunityName(conceptCode, refId, dateEntered);
 			//System.out.println("VegCommunityLoader > commNameId: " + commNameId);
 			int commConceptId = insertCommunityConcept(conceptCode, commNameId, 
-			conceptLevel, parentCommunity, commName);
+			conceptLevel, parentCommunity, commName, refId );
 			//System.out.println("VegCommunityLoader > commConceptId: " + commConceptId);
 			//if the class variable 'commit' is still true then commit
 			//otherwise rollback the connection
+			int commStatusId = insertCommunityStatus(commConceptId, "accepted", 
+			"01-JAN-1999", partyId, refId );
+			
 			if (this.commit == true)
 			{
 				conn.commit();
@@ -123,6 +127,43 @@ public class VegCommunityLoader
 			 e.printStackTrace();
 		 }
 	 }
+	 
+	  /**
+	  * method to insert data into the commname table
+		*/
+		private int insertCommunityStatus(int commConceptId, String status,  
+			String startDate, int partyId, int refId)
+	  {
+		 int statusId = 0; 
+		 try
+		 {
+				StringBuffer sb = new StringBuffer();
+				//insert the VALS
+				sb.append("INSERT into COMMSTATUS( commconcept_id, commreference_id, "
+				+" commconceptstatus, startDate, commparty_id) "
+				+" values(?,?,?,?,?)"); 
+				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+  			// Bind the values to the query and execute it
+  			pstmt.setInt(1, commConceptId);
+				pstmt.setInt(2, refId);
+				pstmt.setString(3, status);
+				pstmt.setString(4, startDate);
+				pstmt.setInt(5, partyId);
+				
+				//execute the p statement
+  			pstmt.execute();
+  			pstmt.close();
+		 }
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(partyId);
+	 }
+	 
+	 
+	 
 	 
 	  /**
 	  * method to insert data into the commname table
@@ -180,6 +221,11 @@ public class VegCommunityLoader
 	 
 	 /**
 	  * method to insert data into the commname table
+		*
+		* @param commName -- the community name or code
+		* @param refId -- the fk value of the reference 
+		* @param dateEntered -- the date that the community was loaded to the source
+		* 	data base
 		*/
 		private int insertCommunityName(String commName, int refId, String dateEntered)
 	  {
@@ -236,7 +282,8 @@ public class VegCommunityLoader
 	  * method to insert data into the commname table
 		*/
 		private int insertCommunityConcept(String commConceptCode, int commNameId, 
-		String conceptLevel, String parentCommunity, String conceptDescription )
+		String conceptLevel, String parentCommunity, String conceptDescription, 
+		int refId )
 	  {
 		 int commConceptId = 0; 
 		 try
@@ -245,8 +292,8 @@ public class VegCommunityLoader
 				
 			//insert the strata values
 			sb.append("INSERT into COMMCONCEPT (commname_id, ceglcode, commlevel, "
-			+" conceptDescription) "
-			+" values(?, ?, ?, ?)");
+			+" conceptDescription, commreference_id) "
+			+" values(?, ?, ?, ?,?)");
 				
 			
 			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
@@ -255,7 +302,7 @@ public class VegCommunityLoader
 			pstmt.setString(2, commConceptCode);
 			pstmt.setString(3, conceptLevel);
 			pstmt.setString(4, conceptDescription);
-				
+			pstmt.setInt(5, refId);
 			//execute the p statement
   		pstmt.execute();
 			
@@ -270,6 +317,9 @@ public class VegCommunityLoader
 				PreparedStatement pstmt2 = conn.prepareStatement( sb.toString() );
 				pstmt2.execute();
 			}
+			//get the concept id for return
+			commConceptId = getCommunityConceptId(conceptDescription);
+			
 			
 			 }
 			catch (Exception e)
@@ -429,6 +479,35 @@ public class VegCommunityLoader
 			 e.printStackTrace();
 		 }
 		 return(commPartyId);
+	 }
+	 
+	 
+	  /** 
+	  * method that returns the concept id based on an org name 
+		*/
+		private int getCommunityConceptId(String conceptDescription)
+	  {
+		 	int commConceptId = 0; 
+			try
+			{
+		 		StringBuffer sb = new StringBuffer();
+				sb.append("SELECT commconcept_id from COMMCONCEPT where conceptDescription"
+				+" like '"+conceptDescription+"'");
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					commConceptId = rs.getInt(1);
+					cnt++;
+				}
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(commConceptId);
 	 }
 	 
 	 
