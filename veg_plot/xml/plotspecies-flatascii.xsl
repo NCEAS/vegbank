@@ -14,10 +14,11 @@
 <xsl:text>PLOT ID, PLANT NAME</xsl:text> 
 <xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
 <xsl:for-each select="project">
-		<xsl:for-each select="plot/observation/taxonObservation">
-	 		<xsl:value-of select="../../../plot/plotId"/> <xsl:text>,&#x20;</xsl:text>
-	 		<xsl:value-of select="authorNameId"/> <xsl:text> &#x20;</xsl:text> 
-	<!-- 		<xsl:value-of select="taxonCover"/> --> 
+		<xsl:for-each select="plot/observation/taxonObservation/stratumComposition">
+	 		<xsl:value-of select="../../../../plot/plotId"/> <xsl:text>,&#x20;</xsl:text>
+	 		<xsl:value-of select="../authorNameId"/> <xsl:text> &#x20;</xsl:text> 
+			<xsl:value-of select="stratumName"/> <xsl:text> &#x20;</xsl:text>
+			<xsl:value-of select="taxonStratumCover"/>
 			<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
 		</xsl:for-each>
 </xsl:for-each>
