@@ -72,7 +72,7 @@ System.out.println("viewData.doGet - input params > \n downLoadAction: "+
  *
  */
 
-
+//handle a download request
 if (downLoadAction != null) {
 	try {
 	//print out to file the names of the plots and their plotId's for use by the 
@@ -142,7 +142,9 @@ if (summaryViewType.equals("plantTaxa")) {
 }
 //the default (plots) stylesheet
 if (summaryViewType.equals("vegPlot")) {
-  styleSheet="/jakarta-tomcat/webapps/examples/WEB-INF/lib/showSummary.xsl";
+///  styleSheet="/jakarta-tomcat/webapps/examples/WEB-INF/lib/showSummary.xsl";
+styleSheet="/jakarta-tomcat/webapps/examples/WEB-INF/lib/transformMultiPlotSummary.xsl";
+
 }
 //let the user know that there is a problem with the request
 else {out.println("viewData.viewResultsSummary: unknown request for xsl sheet");}
@@ -150,7 +152,7 @@ else {out.println("viewData.viewResultsSummary: unknown request for xsl sheet");
 
 //access the method to transfor the xml document and retrieve the string writer
 transformXML m = new transformXML();
-m.getTransformed("/jakarta-tomcat/webapps/examples/WEB-INF/lib/summary.xml", 
+m.getTransformed("/jakarta-tomcat/webapps/examples/WEB-INF/lib/summary.xml.xml", 
 	styleSheet);
 StringWriter transformedData=m.outTransformedData;
 
