@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-15 19:22:21 $'
- * 	'$Revision: 1.10 $'
+ *  '$Date: 2002-03-27 21:12:42 $'
+ * 	'$Revision: 1.11 $'
  */
 public class PlotDataSource 
 {
@@ -545,15 +545,13 @@ public class PlotDataSource
 		return(s);
 	}
 	
-	//returns the state for the current plot
-	String getCommunityName(String plotName)
+	//returns the community name associated with a plot
+	public String getCommunityName(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getCommunityName(plotName);
 		return(s);
 	}
 	
-	
-
 	//returns the state in which the plot exists
 	String getState(String plotName)
 	{
