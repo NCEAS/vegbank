@@ -8,6 +8,8 @@ import javax.servlet.http.*;
 import servlet.util.ServletUtility;
 import servlet.authentication.UserDatabaseAccess;
 
+
+
 /**
  * Servlet to perform user authentication for all the 
  * servlets within a domain.  This servlet will recognize varying 
@@ -102,15 +104,11 @@ public class AuthenticationServlet extends HttpServlet
  						
 						//send the user to the correct page
 						Thread.currentThread().sleep(100);
-						response.sendRedirect("http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement");
+						response.sendRedirect("http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement?action=options");
 					}
 					else 
 					{
-						//send the user to the correct page
-						out.println("<html> Authentication failed - redirecting </html>" );
-						Thread.currentThread().sleep(4000);
-						response.sendRedirect("http://www.vegbank.org/general/login.html");
-						//response.sendRedirect("/harris/servlet/pageDirector?pageType=login");
+						out.println( getErrorRedirection() );
 					}
 				}
 				//AUTHENTICATE THE USER TO UPLOAD A FILE
@@ -129,12 +127,6 @@ public class AuthenticationServlet extends HttpServlet
 						m.cookieDelegator(cookie, requestParams, remoteAddress, user);
 						response.addCookie(m.registeredCookie);
 						
- 						
-						//send the user to the correct page
-						//Thread.currentThread().sleep(100);
-						
-						//response.sendRedirect(servletPath+"pageDirector?pageType=loggedin");
-						//response.sendRedirect("/harris/servlet/pageDirector?pageType=loggedin");
 					}
 					else 
 					{
@@ -148,9 +140,9 @@ public class AuthenticationServlet extends HttpServlet
 					System.out.println("AuthenticationServlet > creating a new user");
 					if (createNewUser(requestParams, remoteAddress) == true )
 					{
+						System.out.println("AuthenticationServlet > created a new user");
 						Thread.currentThread().sleep(100);
-						response.sendRedirect("http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement");
-        		//response.sendRedirect("/harris/servlet/pageDirector?pageType=loggedin");
+						response.sendRedirect("http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement?action=options");
 					}
 					else
 					{
@@ -173,6 +165,32 @@ public class AuthenticationServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * method that contains the html and java script to redirect the user to
+	 * an error page and login
+	 */
+	 private String getErrorRedirection()
+	 {
+		 StringBuffer sb = new StringBuffer();
+		 sb.append("<html> \n");
+		 sb.append("<head> \n");
+		 sb.append("<title>-- Authentication Failure ! -- </title> \n");
+		 sb.append("</head> \n");
+		 sb.append("<body> \n");
+		 sb.append("<script language=\"JavaScript\"> \n");
+		 sb.append("window.location=\"http://www.vegbank.org/general/login.html\"; \n");
+		 sb.append("</script> \n");
+		
+		 sb.append("Please Click \n");
+		 sb.append("<a href=\"http://www.vegbank.org/general/login.html\">here</a> \n");
+		 sb.append("if your browser is not promptly redirected \n");
+		 sb.append("");
+		 sb.append("</body> \n");
+		 sb.append("</html> \n");
+		 return(sb.toString() );
+	 }
+	 
 	
 	/**
 	 * method that returns the user name for the given user from the request 
@@ -228,37 +246,59 @@ public class AuthenticationServlet extends HttpServlet
 	 */
 	 private boolean createNewUser(Hashtable requestParams, String remoteAddress)
 	 {
-		 //get the key variables that are required 
-		 String emailAddress = requestParams.get("emailAddress").toString();
-		 String passWord =  requestParams.get("password").toString();
-		 String retypePassWord =  requestParams.get("password2").toString();
-		 System.out.println("AuthenticationServlet > REQUEST PARAMS: "+requestParams.toString() );
-		 
-		 //try to get the other variables
-		 String givenName = null;
-		 String surName = null;
-		 if (requestParams.containsKey("givenname") )
+		 try 
 		 {
-			 givenName= requestParams.get("givenname").toString();
-		 }	
-		 if (requestParams.containsKey("surname") )
-		 {
-			surName =  requestParams.get("surname").toString();
-		 } 
-		 System.out.println("AuthenticationServlet > given name: "+givenName);
-		 System.out.println("AuthenticationServlet > sur name: "+surName);
+		 	//get the key variables that are required 
+		 	String emailAddress = requestParams.get("emailAddress").toString();
+		 	String passWord =  requestParams.get("password").toString();
+		 	String retypePassWord =  requestParams.get("password2").toString();
+		 	String termsAccept = requestParams.get("termsaccept").toString();
+			System.out.println("AuthenticationServlet > REQUEST PARAMS: "+requestParams.toString() );
+		 	
+			//first see if the user has accepted terms
+		 	System.out.println("AuthenticationServlet > termsaccept: "+ termsAccept);
+		 	if (! termsAccept.equals("accept") )
+			{
+				return(false);
+			}
+		 	
+			else
+			{
+		 		//try to get the other variables
+		 		String givenName = null;
+		 		String surName = null;
+		 		if (requestParams.containsKey("givenname") )
+		 		{
+					 givenName= requestParams.get("givenname").toString();
+		 		}	
+		 		if (requestParams.containsKey("surname") )
+		 		{
+					surName =  requestParams.get("surname").toString();
+		 		} 
+		 		System.out.println("AuthenticationServlet > given name: "+givenName);
+		 		System.out.println("AuthenticationServlet > sur name: "+surName);
 		 
 		 
-		 System.out.println("AuthenticationServlet > password comparison: '"+passWord+"' '"+retypePassWord+"'");
-		 if ( passWord.equals(retypePassWord) &&  passWord.length() > 2 )
-		 {
-			 System.out.println("AuthenticationServlet > equals");
-			 uda.createUser(emailAddress, passWord, givenName, surName, remoteAddress);
-			 return(true);
+		 		System.out.println("AuthenticationServlet > password comparison: '"
+				+passWord+"' '"+retypePassWord+"'");
+		 	
+				if ( passWord.equals(retypePassWord) &&  passWord.length() > 2 )
+		 		{
+					 System.out.println("AuthenticationServlet > equals");
+					 uda.createUser(emailAddress, passWord, givenName, surName, remoteAddress);
+				 	 return(true);
+		 		}
+		 		else
+		 		{
+					 System.out.println("AuthenticationServlet > not equals");
+			 		return(false);
+		 		}
+		 	}
 		 }
-		 else
+		 catch(Exception e)
 		 {
-			 System.out.println("AuthenticationServlet > not equals");
+			 System.out.println("Exception: " + e.getMessage() );
+			 e.printStackTrace();
 			 return(false);
 		 }
 	 }
