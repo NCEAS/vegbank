@@ -46,10 +46,16 @@ Interpret This Plant</a>
 </logic:empty>
 <logic:notEmpty name="taxoninterpretation-BEANLIST">
 <tr>
+<th>More</th>
 <%@ include file="autogen/taxoninterpretation_summary_head.jsp" %>
 </tr>
 <logic:iterate id="onerowoftaxoninterpretation" name="taxoninterpretation-BEANLIST">
 <tr class="@nextcolorclass@">
+<td class="sizetiny">
+<a href="@get_link@detail/taxoninterpretation/@subst_lt@bean:write name='onerowoftaxoninterpretation' property='taxoninterpretation_id' /@subst_gt@">
+                            Details
+                            </a>
+</td>
 <%@ include file="autogen/taxoninterpretation_summary_data.jsp" %>
 </tr>
 </logic:iterate>
