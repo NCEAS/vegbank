@@ -194,12 +194,14 @@ public void doGet(HttpServletRequest request,
 			//else compose and issue the query to the database access module
 			else
 			{
+//				System.out.println("ELEMENTS TO BE PROCESSED: "+enum.toString() );
 				while (enum.hasMoreElements()) 
 				{
 					//process the criteria data to make a hashtbale
 					// with keys that equal 'criteria', 'operator'
 					// and 'value'
 					String name = (String)enum.nextElement();
+//					System.out.println("ELEMENT : "+name  );
 					if ( name.equals("criteria")  
 						|| name.equals("operator") 
 						|| name.equals("value"))
