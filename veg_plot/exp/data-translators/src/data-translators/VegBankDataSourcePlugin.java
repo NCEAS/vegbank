@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 22:52:41 $'
- * 	'$Revision: 1.7 $'
+ *  '$Date: 2002-04-05 01:23:56 $'
+ * 	'$Revision: 1.8 $'
  */
  
 //public class VegBankDataSourcePlugin
@@ -76,7 +76,20 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		return(c);
 	}
  
-
+	
+  /**
+	 * method to return the taxa code from a data source using as input
+	 * the scientific plant name -- or the plant name that comes from
+	 * the 'getPlantTaxaNames' method
+	 *
+	 * @param plantName -- the scientific plantName
+	 */
+	public String getPlantTaxonCode(String plantName)
+	{
+	 	return("code");
+	}
+																																																																																																												
+	
 	
 	/**
 	 * method that returns a vector of PLOT ID'S (Plot table Primary keys) 
@@ -145,7 +158,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	}
  	
 
-		/**
+	/**
  	 * returns the soil drainage of a plot
  	 * @param plotName -- the plot
  	 */
