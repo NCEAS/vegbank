@@ -34,20 +34,59 @@
 <vegbank:get id="observation" select="observation_count" beanName="map" pager="false" perPage="-1" 
   where="where_project_pk" wparam="project_pk" />
 
-<tr  class='@nextcolorclass@'><td class="datalabel">Count of Observations in this project</td>
+<tr  class='@nextcolorclass@'><td class="datalabel">Plots in this Project</td>
 <td>
 <logic:empty name="observation-BEAN">
 -none-
 </logic:empty>
 <logic:notEmpty name="observation-BEAN">
-<bean:write name="observation-BEAN" property="count_observations" />
+<logic:equal name="observation-BEAN" property="count_observations" value="0">0</logic:equal>
+
 <logic:notEqual name="observation-BEAN" property="count_observations" value="0">
-<a href="@get_link@simple/observation/<bean:write name='project_pk' />?where=where_project_pk">View observations</a>
+<a href="@get_link@simple/observation/<bean:write name='project_pk' />?where=where_project_pk"><bean:write name="observation-BEAN" property="count_observations" /></a>
 </logic:notEqual>
 </logic:notEmpty>
+</td></tr>
 
 
 
+           <!-- classified plot count -->
+           <tr  class='@nextcolorclass@'><td class="datalabel">Classified Plots</td>
+           <td>
+		  		    <vegbank:get id="classobservation" select="observation_count" beanName="map" pager="false" perPage="-1" 
+		  		     where="where_project_pk_and_observationclassified" wparam="project_pk" />
+		  		   <logic:empty name="classobservation-BEAN">0</logic:empty>
+		  		   <logic:notEmpty name="classobservation-BEAN">
+		  		   <logic:notEqual name="classobservation-BEAN" property="count_observations" value="0">
+		  		   <a href="@get_link@simple/observation/<bean:write name='project_pk' />?where=where_project_pk_and_observationclassified"><bean:write name="classobservation-BEAN" property="count_observations" /></a>
+		  		   </logic:notEqual>
+                   <!-- write 0 with no link -->
+                   <logic:equal name="classobservation-BEAN" property="count_observations" value="0">0</logic:equal>
+		  		   </logic:notEmpty>
+          </td>
+          </tr>
+          <!-- state/province list -->
+          <tr  class='@nextcolorclass@'><td class="datalabel">Locations of Plots</td>
+          <td> 
+          <vegbank:get id="places" select="place_summ" beanName="map" perPage="-1" pager="false" 
+           where="where_group_place_summ_project" wparam="project_pk"/>
+		   <logic:notEmpty name="places-BEANLIST">
+		 
+		        <bean:define id="firstplace" value="true" />
+			   	<logic:iterate id="oneplace" name="places-BEANLIST" >
+			   	  <!-- loop over list of states -->
+			   	 <logic:notEqual name="firstplace" value="true">; 
+			   	 <!-- add semicolon before states that aren't the first one -->
+		        </logic:notEqual>
+		         <!-- loop over list of states -->
+		         <bean:write name="oneplace" property="region_name"/> 
+		         (<bean:write name="oneplace" property="count_obs"/>)
+		       </logic:iterate>
+		    
+			 </logic:notEmpty>
+          
+          </td>
+          </tr>
 <!--Insert a nested get statement here:
    example:   
 
@@ -58,7 +97,7 @@
 <table class="leftrightborders" cellpadding="2" >
 <tr><th colspan="2">Project Contributors:</th></tr>
 <logic:empty name="projectcontributor-BEANLIST">
-<tr><td class="@nextcolorclass@">  Sorry, no projectcontributors found.</td></tr>
+<tr><td class="@nextcolorclass@"> [None]</td></tr>
 </logic:empty>
 <logic:notEmpty name="projectcontributor-BEANLIST">
 
