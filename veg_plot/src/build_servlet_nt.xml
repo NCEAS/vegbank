@@ -166,12 +166,12 @@
 <!--
 	* copy the revelvant files to the 
 	* install directory under jakarta tomcat 
-	*
 	-->
+		<!-- JAR LIBRARIES INCL: xml parsers/xformers, jdbc drivers, db access, servlet-->
 	<copydir src="${build_lib}" 
   	dest="${installDir}" 
     filtering="no"
-    includes=" servletmodule.jar dbAccess.jar xerces** xalan**"
+    includes=" servletmodule.jar dbAccess.jar xerces** xalan** jdbc7.0-1.2.jar"
 		excludes="**/CVS* "
 	/>
 

@@ -165,12 +165,12 @@
 <!--
 	* copy the revelvant files to the 
 	* install directory under jakarta tomcat 
-	*
 	-->
+	<!-- JAR LIBRARIES INCL: xml parsers/xformers, jdbc drivers, db access, servlet-->
 	<copydir src="${build_lib}" 
   	dest="${installDir}" 
     filtering="no"
-    includes=" servletmodule.jar dbAccess.jar xerces** xalan**"
+    includes=" servletmodule.jar dbAccess.jar xerces** xalan** jdbc7.0-1.2.jar"
 		excludes="**/CVS* "
 	/>
 
@@ -202,11 +202,27 @@
 		excludes="**/CVS* "
 	/>
 	
+	
+<!-- COPY THE XML RESOURCES DIRECTLY INTO THE SERVLET LIB DIRECTORY-->	
 	<copydir src="${src_xml}" 
   	dest="${installDir}"
 		filtering="no"
 		includes="**.dtd **.xsl"
 		excludes="**/CVS* " 
 	/>
+	<copydir src="${veg_community_xml}" 
+  	dest="${installDir}"
+		filtering="no"
+		includes="**.dtd **.xsl"
+		excludes="**/CVS* " 
+	/>
+	<copydir src="${plant_taxonomy_xml}" 
+  	dest="${installDir}"
+		filtering="no"
+		includes="**.dtd **.xsl"
+		excludes="**/CVS* " 
+	/>
+	
+	
 </target>		
 </project>
