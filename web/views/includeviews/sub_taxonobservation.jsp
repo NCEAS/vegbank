@@ -69,8 +69,8 @@
 
   
   
-     <TR><TH colspan="9"><a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=2">show strata</a> | 
-	      <a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=1">show overall cover</a>
+     <TR><TH colspan="9"><a href="@get_link@comprehensive/observation/<bean:write name='observation_pk' />?strata2Show=2">show strata</a> | 
+	      <a href="@get_link@comprehensive/observation/<bean:write name='observation_pk' />?strata2Show=1">show overall cover</a>
 	      | SHOWING strata + overall
 	      </TH></TR>
           
@@ -157,8 +157,8 @@
  
   <logic:notEmpty name="taxonimportance-BEANLIST">
      <tr><th colspan="9">SHOWING STRATA | 
-     <a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=1">show overall cover </a>
-     | <a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=3">show strata + overall </a> 
+     <a href="@get_link@comprehensive/observation/<bean:write name='observation_pk' />?strata2Show=1">show overall cover </a>
+     | <a href="@get_link@comprehensive/observation/<bean:write name='observation_pk' />?strata2Show=3">show strata + overall </a> 
      </th></tr>
    
      <TR><TD colspan="9">
@@ -237,9 +237,9 @@
 
 
      
-     <tr><th colspan="9"><a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=2">show strata</a> | 
+     <tr><th colspan="9"><a href="@get_link@comprehensive/observation/<bean:write name='observation_pk' />?strata2Show=2">show strata</a> | 
 	      SHOWING overall cover
-	      | <a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=3">show strata + overall </a> 
+	      | <a href="@get_link@comprehensive/observation/<bean:write name='observation_pk' />?strata2Show=3">show strata + overall </a> 
 	      </th></tr>
           
        <logic:empty name="taxonimportancens-BEANLIST">
