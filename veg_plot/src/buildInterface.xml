@@ -60,7 +60,7 @@
 	<copydir src="${src}" 
                dest="${build}" 
                filtering="yes"
-               includes="**.java "
+               includes="**.java **.properties"
                excludes="**/CVS* "/>
 
 	       
