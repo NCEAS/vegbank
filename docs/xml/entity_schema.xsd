@@ -166,6 +166,7 @@
         <xs:element ref="attList"/>
         <xs:element ref="attNotes"/>
         <xs:element ref="attDefinition"/>
+        <xs:element ref="attUnits" minOccurs="0"/>
         <xs:element ref="archive" minOccurs="0"/>
         <xs:element ref="attForms" minOccurs="0"/>
         <xs:element ref="update"/>
@@ -173,6 +174,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="attUnits" type="xs:string"/>
   <xs:element name="NS_column" type="xs:string"/>
   <xs:element name="VB_column" type="xs:string"/>
   <xs:element name="attFKTranslationSQL" type="xs:string"/>

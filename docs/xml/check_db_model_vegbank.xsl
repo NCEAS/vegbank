@@ -16,6 +16,7 @@
         <xsl:call-template name="checkName"/>
         <xsl:call-template name="checkList"/>
         <xsl:call-template name="checkVersion" />
+        <xsl:call-template name="checkUnits" />
       </xsl:when>
       <xsl:otherwise>
         <!-- generate spellCheck document to sort and spell check -->
@@ -110,6 +111,15 @@
       <!-- is varchar -->
     </xsl:if>
     <!-- list items exist -->
+  </xsl:template>
+  <xsl:template name="checkUnits">
+    <xsl:if test="attType='Integer' or attType='Float'">
+      <xsl:if test="attKey!='FK' and attKey!='PK' and attModel='logical' and attName!='tableRecord'">
+        <xsl:if test="string-length(attUnits)=0">
+78 No units for numerical non key: <xsl:value-of select="../entityName"/>.<xsl:value-of select="attName"/> type ('Float' rarely OK):  <xsl:value-of select="attType" />
+        </xsl:if>
+      </xsl:if>
+    </xsl:if>
   </xsl:template>
   <xsl:template name="checkVersion">
     <xsl:if test="string-length(../../../modelChangeVersion)&gt;0">
