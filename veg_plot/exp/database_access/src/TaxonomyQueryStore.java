@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-07-05 17:38:12 $'
- * '$Revision: 1.15 $'
+ *     '$Date: 2002-07-10 17:10:11 $'
+ * '$Revision: 1.16 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,8 @@ import databaseAccess.*;
 		try 
  		{
 			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
+			//c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/tmp2", "datauser", "");
 		}
 		catch ( Exception e )
 		{
@@ -122,9 +123,6 @@ import databaseAccess.*;
 			Vector returnVector = new Vector();
 			try 
 			{
-				
-				//get rid of the dependence on the connection broker
-				//Connection conn = lb.manageLocalDbConnectionBroker("getConn");
 				
 				Connection conn = this.getConnection();
 				Statement query = conn.createStatement();
@@ -245,10 +243,10 @@ import databaseAccess.*;
 				sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"
 				+taxonName.toUpperCase()+"'");
 				//add the level in the heirachy
-				sqlBuf.append(" and plantlevel like  '"+taxonLevel+"'");
+				sqlBuf.append(" and upper(plantlevel) like  '"+taxonLevel.toUpperCase()+"'");
 				//add the name type
 				sqlBuf.append(" and ( classsystem like '"+taxonNameType+"' ");
-				sqlBuf.append(" or  classsystem like '"+taxonNameType.toUpperCase()+"' )");
+				sqlBuf.append(" or  upper(classsystem) like '"+taxonNameType.toUpperCase()+"' )");
 				
 				results = query.executeQuery( sqlBuf.toString() );
 			
