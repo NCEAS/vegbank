@@ -7,8 +7,8 @@
 * Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-07-15 20:19:27 $'
-*   '$Revision: 1.2 $'
+*   '$Date: 2003-08-21 21:16:44 $'
+*   '$Revision: 1.3 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -1708,14 +1708,14 @@ public class DBinsertPlotSource {
 			
 			// get the taxonObservation number which will be used in the 
 			taxonObservationId = getNextId("taxonObservation");
-			String authorNameId =
+			String authorNameOfPlant =
 				Utility.escapeCharacters(uniqueTaxa.elementAt(i).toString());
 			String code =
-				Utility.escapeCharacters(source.getPlantTaxonCode(authorNameId));
+				Utility.escapeCharacters(source.getPlantTaxonCode(authorNameOfPlant));
 			String taxonCover =
-				Utility.escapeCharacters(source.getPlantTaxonCover(authorNameId, this.plotName));
+				Utility.escapeCharacters(source.getPlantTaxonCover(authorNameOfPlant, this.plotName));
 			System.out.println(
-				"DBinsertPlotSource > cur. tax. name: "+ authorNameId+" code: "+ code 
+				"DBinsertPlotSource > cur. tax. name: "+ authorNameOfPlant+" code: "+ code 
 				+ " cover: " + taxonCover
 			);
 
@@ -1727,23 +1727,23 @@ public class DBinsertPlotSource {
 			else
 			{
 				// Get the plantName_ID from the scientific name
-				nameId = getPlantNameId(authorNameId);
+				nameId = getPlantNameId(authorNameOfPlant);
 			}
 			
 			if (nameId == 0)
 			{
 				// Could not find a matching name in the database
 				debug.append(
-					"<exceptionMessage>Could not find plant taxon '"+ authorNameId + "' in database</exceptionMessage>\n"
+					"<exceptionMessage>Could not find plant taxon '"+ authorNameOfPlant + "' in database</exceptionMessage>\n"
 				);
-				successfulCommit  = false;
+				successfulCommit  = true;
 			}
 			
 			if ( taxonCover == null || taxonCover.equals("") )
 			{
 				// Could not find a taxonCover for this plant
 				debug.append(
-					"<exceptionMessage>Did not find a valid plant taxon cover for  '"+ authorNameId + "' in data source</exceptionMessage>\n"
+					"<exceptionMessage>Did not find a valid plant taxon cover for  '"+ authorNameOfPlant + "' in data source</exceptionMessage>\n"
 				);
 				successfulCommit  = false;
 			}
@@ -1752,7 +1752,7 @@ public class DBinsertPlotSource {
 			debug.append("<taxonObservation>\n");
 			debug.append(
 				"<authorTaxonName>"
-					+ authorNameId.replace('&', '_')
+					+ authorNameOfPlant.replace('&', '_')
 					+ "</authorTaxonName>\n");
 			debug.append("<authorTaxonCode>" + code + "</authorTaxonCode>\n");
 			debug.append("<taxonCover>" + taxonCover + "</taxonCover>\n");
@@ -1764,8 +1764,8 @@ public class DBinsertPlotSource {
 			//insert the values
 			sb.append(
 				"INSERT into TAXONOBSERVATION (TAXONOBSERVATION_ID, OBSERVATION_ID, ");
-			sb.append(" PLANTNAME_ID, TAXONCOVER ) ");
-			sb.append(" values(?,?,?,?) ");
+			sb.append(" PLANTNAME_ID, TAXONCOVER, CHEATPLANTNAME ) ");
+			sb.append(" values(?,?,?,?,?) ");
 
 			try
 			{
@@ -1789,12 +1789,13 @@ public class DBinsertPlotSource {
 				{
 					pstmt.setString(4, taxonCover);
 				}
+				pstmt.setString(5, authorNameOfPlant);
 
 				pstmt.execute();
 
 				// insert the strata composition
 				boolean result =
-					this.insertStrataComposition(authorNameId, code, taxonObservationId);
+					this.insertStrataComposition(authorNameOfPlant, code, taxonObservationId);
 				if (result == false)
 				{
 					successfulCommit = false;
@@ -1817,7 +1818,6 @@ public class DBinsertPlotSource {
 				successfulCommit = false;
 			}
 		}
-
 		return (successfulCommit);
 	}
 
@@ -2655,11 +2655,15 @@ public class DBinsertPlotSource {
 			// Bind the values to the query and execute it
 			pstmt.setString(1, authorPlotCode);
 			pstmt.setInt(2, plotId);
-			pstmt.setString(3, rockType);
-			pstmt.setString(4, latitude);
-			pstmt.setString(5, longitude);
-			pstmt.setString(6, plotArea);
-			pstmt.setString(7, elevation);
+			pstmt.setString(3, rockType);	
+			Utility.insertDoubleField(latitude, pstmt, 4);
+			//pstmt.setString(4, latitude);
+			Utility.insertDoubleField(longitude, pstmt, 5);
+			//pstmt.setString(5, longitude);
+			Utility.insertDoubleField(plotArea, pstmt, 6);
+			//pstmt.setString(6, plotArea);
+			Utility.insertDoubleField(elevation, pstmt, 7);
+			//pstmt.setString(7, elevation);
 			pstmt.setString(8, slopeAspect);
 			pstmt.setString(9, slopeGradient);
 			pstmt.setString(10, topoPosition);
@@ -2681,8 +2685,10 @@ public class DBinsertPlotSource {
 			pstmt.setString(26, landForm);
 			pstmt.setString(27, layoutNarrative);
 			pstmt.setString(28, locationNarrative);
-			pstmt.setString(29, azimuth);
-			pstmt.setString(30, elevationAccuracy);
+			Utility.insertDoubleField(azimuth, pstmt, 29);
+			//pstmt.setString(29, azimuth);
+			Utility.insertDoubleField(elevationAccuracy, pstmt, 30);
+			//pstmt.setString(30, elevationAccuracy);
 			pstmt.setString(31, dsgPoly);
 			pstmt.setString(32, standSize);
 			pstmt.setString(33, datumType);

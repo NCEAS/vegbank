@@ -3,7 +3,9 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 /**
- * This class provides an interface for the plugins to be used for
+ * '$RCSfile: PlotDataSourceInterface.java,v $'
+ *
+ * Purpose:  This class provides an interface for the plugins to be used for
  * accessing vegplot data.  For the Summer 2002 release there will be 
  * the following plugins to implement this class: <br>
  * NativeXmlPlugin -- a plugin to allow access to data stored in the 
@@ -14,12 +16,26 @@ import java.util.Vector;
  * either on Oracle 8i, or Postgres 7.1
  * VBAccessDataSourcePlugin -- to access mdb files (via ODBC) written by the 
  * Client tool. <br> <br>
- * 
- * Release: @release@ <br>
- * '$Author: farrell $' <br>
- * '$Date: 2003-06-03 21:41:33 $' <br>
- * '$Revision: 1.4 $' <br>
- */
+ *
+ * '$Author: farrell $'
+ * '$Date: 2003-08-21 21:16:45 $'
+ * '$Revision: 1.5 $'
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */  
+
 public interface PlotDataSourceInterface
 {
 	

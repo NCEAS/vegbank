@@ -1,15 +1,31 @@
-import javax.swing.*;
-import java.util.*;
-/*
- * PlotDataViewerInterface.java
+/**
+ * '$RCSfile: PlotDataViewerInterface.java,v $'
  *
- * Created on January 27, 2002, 7:54 PM
+ * Purpose: 
+ *
+ * '$Author: farrell $'
+ * '$Date: 2003-08-21 21:16:43 $'
+ * '$Revision: 1.3 $'
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/**
- *
- * @author  administrator
- */
+
+import javax.swing.*;
+import java.util.*;
+
 public class PlotDataViewerInterface extends javax.swing.JFrame {
 
     /** Creates new form PlotDataViewerInterface */
