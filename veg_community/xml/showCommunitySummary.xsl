@@ -78,25 +78,47 @@ return "Check All"; }
 	<xsl:sort select="commName"/>	
 
 	<tr valign="top">
+	
+	<!-- capture the level as a varaiable -->
+	<xsl:variable name="level">
+		<xsl:value-of select="classLevel"/>
+	</xsl:variable>
 
 
 <!--if even row -->
 <xsl:if test="position() mod 2 = 1">
-			
 	<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="top">
 		<xsl:variable name="COMMNAME">
   		<xsl:value-of select="commSummaryId"/>
 		</xsl:variable>
-  	<a>Community Name:<b> <xsl:value-of select="commName"/> </b> </a> <br></br>
-		<a>Parent Name: <xsl:value-of select="parentComm/commName"/>;  </a><br></br>
-		<a>Date Entered: <xsl:value-of select="conceptOriginDate"/>; </a><br></br>
+  		
+			<xsl:if test="$level='alliance'">
+				<a>Community Name: <b> <xsl:value-of select="commName"/> </b> </a> <br></br>
+				<a>Date Entered: <xsl:value-of select="conceptOriginDate"/>; </a><br></br>
+			</xsl:if>
+			
+			<xsl:if test="$level='association'">
+				<a>Community Name:<b> <xsl:value-of select="commName"/> </b> </a> <br></br>
+				<a>Parent Name: <xsl:value-of select="parentComm/commName"/>;  </a><br></br>
+				<a>Date Entered: <xsl:value-of select="conceptOriginDate"/>; </a><br></br>
+			</xsl:if>
 	</td>
 		
 	<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="top">
-		<a>Code: <b> <xsl:value-of select="classCode"/>; </b>  </a><br></br>
-		<a>Level: <xsl:value-of select="classLevel"/>;  </a><br></br>
-		<a>Parent Code: <xsl:value-of select="parentComm/classCode"/>;  </a><br></br>
-		<a>Recognizing Party: <xsl:value-of select="recognizingParty"/>; </a> <br></br>
+		
+		<xsl:if test="$level='alliance'">
+			<a>Code: <b> <xsl:value-of select="classCode"/>; </b>  </a><br></br>
+			<a>Level: <xsl:value-of select="classLevel"/>;  </a><br></br>
+			<a>Recognizing Party: <xsl:value-of select="recognizingParty"/>; </a> <br></br>
+		</xsl:if>
+
+		<xsl:if test="$level='association'">
+			<a>Code: <b> <xsl:value-of select="classCode"/>; </b>  </a><br></br>
+			<a>Level: <xsl:value-of select="classLevel"/>;  </a><br></br>
+			<a>Parent Code: <xsl:value-of select="parentComm/classCode"/>;  </a><br></br>
+			<a>Recognizing Party: <xsl:value-of select="recognizingParty"/>; </a> <br></br>
+		</xsl:if>
+	
 	</td>
 	
 </xsl:if>
@@ -109,16 +131,36 @@ return "Check All"; }
 		<xsl:variable name="COMMNAME">
   		<xsl:value-of select="commSummaryId"/>
 		</xsl:variable>
-  	<a>Community Name:<b> <xsl:value-of select="commName"/> </b> </a> <br></br>
-		<a>Parent Name: <xsl:value-of select="parentComm/commName"/>;  </a><br></br>
-		<a>Date Entered: <xsl:value-of select="conceptOriginDate"/>; </a><br></br>
+  	
+			<xsl:if test="$level='alliance'">
+				<a>Community Name: <b> <xsl:value-of select="commName"/> </b> </a> <br></br>
+				<a>Date Entered: <xsl:value-of select="conceptOriginDate"/>; </a><br></br>
+			</xsl:if>
+			
+			<xsl:if test="$level='association'">
+				<a>Community Name:<b> <xsl:value-of select="commName"/> </b> </a> <br></br>
+				<a>Parent Name: <xsl:value-of select="parentComm/commName"/>;  </a><br></br>
+				<a>Date Entered: <xsl:value-of select="conceptOriginDate"/>; </a><br></br>
+			</xsl:if>
+			
 	</td>
 		
 	<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
-		<a>Code: <b> <xsl:value-of select="classCode"/>; </b>  </a><br></br>
-		<a>Level: <xsl:value-of select="classLevel"/>;  </a><br></br>
-		<a>Parent Code: <xsl:value-of select="parentComm/classCode"/>;  </a><br></br>
-		<a>Recognizing Party: <xsl:value-of select="recognizingParty"/>; </a> <br></br>
+		
+		<xsl:if test="$level='alliance'">
+			<a>Code: <b> <xsl:value-of select="classCode"/>; </b>  </a><br></br>
+			<a>Level: <xsl:value-of select="classLevel"/>;  </a><br></br>
+			<a>Recognizing Party: <xsl:value-of select="recognizingParty"/>; </a> <br></br>
+		</xsl:if>
+
+		<xsl:if test="$level='association'">
+			<a>Code: <b> <xsl:value-of select="classCode"/>; </b>  </a><br></br>
+			<a>Level: <xsl:value-of select="classLevel"/>;  </a><br></br>
+			<a>Parent Code: <xsl:value-of select="parentComm/classCode"/>;  </a><br></br>
+			<a>Recognizing Party: <xsl:value-of select="recognizingParty"/>; </a> <br></br>
+		</xsl:if>
+
+
 	</td>
     
 </xsl:if>
