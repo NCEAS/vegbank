@@ -8,8 +8,8 @@ package servlet.authentication;
  *    Authors: John Harris
  * 		
  *		 '$Author: harris $'
- *     '$Date: 2002-06-18 18:13:50 $'
- *     '$Revision: 1.5 $'
+ *     '$Date: 2002-06-21 16:14:41 $'
+ *     '$Revision: 1.6 $'
  */
 
 
@@ -242,7 +242,10 @@ public class UserDatabaseAccess
 	/**
 	 * method to create a new user in the vegetation user 
 	 * database.  This is used to create the intial instance 
-	 * of a user
+	 * of a user.  This method is the minimal data that are 
+	 * collected for a new user and probably should not be 
+	 * used when the overloaded method can be used.
+	 * @deprecated
 	 * @param emailAddress
 	 * @param passWord
 	 * @param givenName
@@ -266,11 +269,56 @@ public class UserDatabaseAccess
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " 
-			+e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
+ 
+
+	/**
+	 * method to create a new user in the vegetation user 
+	 * database.  This is used to create the intial instance 
+	 * of a user.   
+	 * @param emailAddress
+	 * @param passWord
+	 * @param givenName
+	 * @param surName 
+	 * @param remoteAddress
+	 * @aparam inst
+	 * @param address
+	 * @param city
+	 * @param state
+	 * @param country
+	 * @param phone
+	 * @param zip
+	 */
+	public void createUser(String emailAddress, String passWord, String givenName, 
+		String surName, String remoteAddress, String inst, String address, String city, 
+		String state, String country, String phone, String zip)
+	{
+		StringBuffer sb = new StringBuffer();
+		try 
+		{
+			//get the connections etc
+			Connection conn = getConnection();
+			Statement query = conn.createStatement ();
+			sb.append("INSERT into USER_INFO (EMAIL_ADDRESS, PASSWORD, GIVEN_NAME, SUR_NAME, REMOTE_ADDRESS, TICKET_COUNT, ");
+			sb.append("INSTITUTION, ADDRESS, CITY, STATE, COUNTRY, PHONE_NUMBER, ZIP_CODE) ");
+			sb.append("VALUES ('"+emailAddress+"', '"+passWord+"', '"+givenName+"', '"+surName+"', '"+remoteAddress+"', "+"1");
+			sb.append(", '"+inst+"', '"+address+"', '"+city+"', '"+state+"','"+country+"','"+phone+"','"+zip+"')" );
+			
+			//issue the query
+			query.executeUpdate(sb.toString());
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Exception: " + e.getMessage());
+			System.out.println("sql: " + sb.toString() ); 
+			e.printStackTrace();
+		}
+	}
+ 
+
  
  /**
   * method that retrives a users id from the database and 

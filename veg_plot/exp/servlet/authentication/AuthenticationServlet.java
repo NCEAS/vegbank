@@ -24,8 +24,8 @@ import servlet.authentication.UserDatabaseAccess;
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-04-05 21:42:37 $'
- *  '$Revision: 1.7 $'
+ *  '$Date: 2002-06-21 16:14:41 $'
+ *  '$Revision: 1.8 $'
  *		 
  *  @version 
  *  @author 
@@ -355,78 +355,63 @@ public class AuthenticationServlet extends HttpServlet
 
 	 /**
 	 * method to create a new user identification 
-	 * in the vegetation user database
+	 * in the vegetation user database. There are a 
+	 * number of required paramteres that must exist in 
+	 * the input hashtable including: <br>
+	 *	emailAddress, passWord, retypePassWord, termsAccept, <br>
+	 *	givenName, surName <br>
+	 * and also optional paramters: <br>
+	 *
 	 *
 	 */
 	 private boolean createNewUser(Hashtable requestParams, String remoteAddress)
 	 {
 		 try 
 		 {
-		 	//get the key variables that are required 
-		 	String emailAddress = requestParams.get("emailAddress").toString();
-		 	String passWord =  requestParams.get("password").toString();
-		 	String retypePassWord =  requestParams.get("password2").toString();
-		 	String termsAccept = requestParams.get("termsaccept").toString();
 			System.out.println("AuthenticationServlet > REQUEST PARAMS: "+requestParams.toString() );
-		 	
-			//first see if the user has accepted terms
-		 	System.out.println("AuthenticationServlet > termsaccept: "+ termsAccept);
-		 	if (! termsAccept.equals("accept") )
+		 	boolean b = validateNewUserAttributes(requestParams);
+			System.out.println("AuthenticationServlet > valid new user attributes: "+ b );
+			if ( b == true )
 			{
-				return(false);
+				//get the key variables that are required 
+		 		String emailAddress = requestParams.get("emailAddress").toString();
+		 		String passWord =  requestParams.get("password").toString();
+				String givenName= requestParams.get("givenname").toString();
+				String surName =  requestParams.get("surname").toString();
+				System.out.println("AuthenticationServlet > given name: "+givenName);
+		 		System.out.println("AuthenticationServlet > sur name: "+surName);
+		 		
+				// GET THE OTHER NOT REQUIRED ATTS
+				String inst = requestParams.get("affilInst").toString();
+				String address = requestParams.get("address").toString();
+				String city = requestParams.get("usaCity").toString();
+				String state = requestParams.get("state").toString();
+				String country = requestParams.get("country").toString();
+				String zip = requestParams.get("zipcode").toString();
+				String acode = requestParams.get("areaCode").toString();
+				String number = requestParams.get("phoneNumber").toString();
+				String phone = acode+" "+number;
+				System.out.println("AuthenticationServlet > institution: "+inst);
+				System.out.println("AuthenticationServlet > address: "+address);
+				System.out.println("AuthenticationServlet > city: "+city);
+				System.out.println("AuthenticationServlet > state: "+state);
+				System.out.println("AuthenticationServlet > country: "+country);
+				System.out.println("AuthenticationServlet > zip: "+zip);
+				System.out.println("AuthenticationServlet > phone: "+phone);
+								
+				
+				
+				// USE THE DB CLASS TO CREATE THE USER
+				//uda.createUser(emailAddress, passWord, givenName, surName, remoteAddress);
+				uda.createUser(emailAddress, passWord, givenName,surName, remoteAddress, 
+				inst, address, city, state, country, phone, zip);
+				return(true);
 			}
 			else
 			{
-		 		//try to get the other variables
-		 		String givenName = null;
-		 		String surName = null;
-		 		if (requestParams.containsKey("givenname") )
-		 		{
-					 givenName= requestParams.get("givenname").toString();
-		 		}	
-		 		if (requestParams.containsKey("surname") )
-		 		{
-					surName =  requestParams.get("surname").toString();
-		 		} 
-		 		
-				System.out.println("AuthenticationServlet > given name: "+givenName);
-		 		System.out.println("AuthenticationServlet > sur name: "+surName);
-		 
-		 
-		 		System.out.println("AuthenticationServlet > password comparison: '"
-				+passWord+"' '"+retypePassWord+"'");
-		 	
-				if ( passWord.equals(retypePassWord) &&  passWord.length() > 2 )
-		 		{
-					System.out.println("AuthenticationServlet > equals");
-					uda.createUser(emailAddress, passWord, givenName, surName, remoteAddress);
-				 	//make sure that there in an @ in the email address
-					if ( emailAddress.indexOf("@") > 0 )
-					{
-						//make sure that the surname and given name were passed
-						if ( surName.length() >= 2 )
-						{
-					 		return(true);
-						}
-						else
-						{
-							System.out.println("AuthenticationServlet > surname is not real");
-							return(false);
-						}
-							
-					}
-					else
-					{
-						System.out.println("AuthenticationServlet > no @ in email address");
-						return(false);
-					}
-		 		}
-		 		else
-		 		{
-					 System.out.println("AuthenticationServlet > not equals");
-			 		return(false);
-		 		}
-		 	}
+				System.out.println("AuthenticationServlet > no @ in email address");
+				return(false);
+			}
 		 }
 		 catch(Exception e)
 		 {
@@ -435,7 +420,59 @@ public class AuthenticationServlet extends HttpServlet
 			 return(false);
 		 }
 	 }
-
+	 
+	/*
+	 * method that returns true if the user attemting to create a new account
+	 * has passed the correct parmmeters
+	 */
+	 private boolean validateNewUserAttributes(Hashtable h)
+	 {
+	 	boolean valid = true;
+		// CHECK THAT ALL THE PARAMTERS WERE SENT
+		if ( h.containsKey("emailAddress")  && h.containsKey("password") && h.containsKey("password2")
+		&& h.containsKey("surname") && h.containsKey("givenname"))
+		{
+			System.out.println("AuthenticationServlet > all required attributes passed");
+			// CHECK THAT THE PASSWORD STRINGS ARE EQUAL
+			String pw = (String)h.get("password");
+			String pw2 = (String)h.get("password2");
+			if ( pw.equals(pw2) )
+			{
+				System.out.println("AuthenticationServlet > password strings match" );
+				// CHECK THAT THERE IS A '@' IN THE EMAIL ADDRESS
+				String email = (String)h.get("emailAddress");
+				if ( email.indexOf("@") > 0 )
+				{
+					System.out.println("AuthenticationServlet > email contains '@'" ); 
+					// CHECK THAT THE SURNAME AND GIVEN NAME HAVE NOT NULL VALUES
+					String sname = (String)h.get("surname");
+					String gname = (String)h.get("givenname");
+					if ( sname.length() > 2 && gname.length() > 2 )
+					{
+						System.out.println("AuthenticationServlet > surname and given names valid" );
+					}
+					else
+					{
+						valid = false;
+					}
+				}
+				else
+				{
+					valid = false;
+				}
+			}
+			else
+			{
+				valid = false;
+			}
+		}
+		else
+		{
+			valid = false;
+		}
+		
+		return(valid);
+	 }
 
 /**
 	* Method to register a cookie and set it in the browser if there is a match 
