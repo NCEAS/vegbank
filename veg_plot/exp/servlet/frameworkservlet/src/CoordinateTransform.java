@@ -129,6 +129,7 @@ public class CoordinateTransform implements ServletPluginInterface
 		try 
 		{ 
 			//write the coordinates to the file system
+      System.out.println("CoordinateTransform  > writing input coordinates: " +xCoord+" "+yCoord+" to: tmp_utm_file");
 			PrintStream out = new PrintStream(new FileOutputStream("tmp_utm_file"));
 			out.println(xCoord+" "+yCoord);
 			
@@ -163,6 +164,7 @@ public class CoordinateTransform implements ServletPluginInterface
 		{
 			System.out.println("failed in: LegacyDataFormatter.readTNCData "
 			+e.getMessage());
+      e.printStackTrace();
 		}
 		return(llCoordinates);
 	}
