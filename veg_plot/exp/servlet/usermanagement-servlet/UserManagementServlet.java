@@ -53,33 +53,79 @@ public class UserManagementServlet extends HttpServlet
 				{
 					System.out.println("UserManagementServlet > action parameter required: ");
 				}
-				
-				if ( action.equals("options") )
-				{
-					//copy the actions file and then displat to the browser
-					String actionFile = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/actions.html";
-					String outFile ="/tmp/actions.html";
-					String token = "user";
-					String value = cookieValue;
-					util.filterTokenFile(actionFile, outFile, token, value);
-					String s = util.fileToString(outFile);
-					out.println(s);
-				}
-				else if ( action.equals("showfiles") )
-				{
-					this.showUserFiles(req, res, out);
-				}
 				else
 				{
-					System.out.println("UserManagementServlet > unrecognized action: " + action);
+					//SHOW THE USER'S CUSTOMIZED OPTIONS PAGE
+					if ( action.equals("options") )
+					{
+						//copy the actions file and then displat to the browser
+						String actionFile = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/actions.html";
+						String outFile ="/tmp/actions.html";
+						String token = "user";
+						String value = cookieValue;
+						util.filterTokenFile(actionFile, outFile, token, value);
+						String s = util.fileToString(outFile);
+						out.println(s);
+					}
+					//SHOW USER FILES 
+					else if ( action.equals("showfiles") )
+					{
+						this.showUserFiles(req, res, out);
+					}
+					//SHOW USER FILES 
+					else if ( action.equals("logout") )
+					{
+						this.handleLogout(req, res, out);
+					}
+					else
+					{
+						System.out.println("UserManagementServlet > unrecognized action: " + action);
+					}
 				}
-		}
+			}
 			catch (Exception e)
 			{
 				System.out.println("Exception: "+ e.getMessage() );
 				e.printStackTrace();
 			}
 		}
+		
+	/**
+	 * method that handles the user logout
+	 */
+	 private void handleLogout(HttpServletRequest req, HttpServletResponse res,
+	 	PrintWriter out)
+	 {
+		 try
+		 {
+		 	System.out.println("UserManagementServlet > performing logout");
+			String cookieVal = this.getCookieValue(req);
+			String cookieName = this.getCookieName(req);
+			System.out.println("UserManagementServlet > cookie value: " + cookieVal);
+			System.out.println("UserManagementServlet > cookie name: " + cookieName);
+			
+			if ( cookieVal == null || cookieName == null )
+			{
+				//the cookie is not valid
+				System.out.println("UserManagementServlet > not setting cookie");
+			}
+			else
+			{
+				Cookie cookie = new Cookie(cookieName, cookieVal);
+				cookie.setMaxAge(0);  //set cookie to end
+				res.addCookie(cookie);
+			}
+			
+			res.sendRedirect("http://vegbank.nceas.ucsb.edu/vegbank/general/login.html");
+			
+		 }
+		 catch(Exception e)
+		 {
+			 System.out.println("Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 
+	 }
 	
 		
 	/**
@@ -93,7 +139,14 @@ public class UserManagementServlet extends HttpServlet
 		 String s = null;
 		 try
 		 {
-		 	s=(String)params.get("action");
+			 if (params.containsKey("action") )
+			 {
+		 		s=(String)params.get("action");
+			 }
+			 else
+			 {
+				 System.out.println("UserManagementServlet > no action found"); 
+			 }
 		 }
 		 catch(Exception e)
 		 {
@@ -476,7 +529,6 @@ public class UserManagementServlet extends HttpServlet
 	 */
 	private String getCookieValue(HttpServletRequest req)
 	{
-		
 		//get the cookies - if there are any
 		String cookieName = null;
 		String cookieValue = null;
@@ -492,12 +544,42 @@ public class UserManagementServlet extends HttpServlet
         cookieName=cookie.getName();
 				//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
 				cookieValue=cookie.getValue();
-				System.out.println("UserManagementServlet > cleint passing the cookie name: "+cookieName+" value: "
+				System.out.println("UserManagementServlet > cleint passing the cookie: "+cookieName+" value: "
 					+cookieValue);
 			}
   	}
 		return(cookieValue);
 	}
+	
+	/**
+	 * method that returns the cookie value associated with the 
+	 * current browser
+	 * 
+	 */
+	private String getCookieName(HttpServletRequest req)
+	{
+		//get the cookies - if there are any
+		String cookieName = null;
+		String cookieValue = null;
+
+		Cookie[] cookies = req.getCookies();
+		//determine if the requested page should be shown
+    if (cookies.length > 0) 
+		{
+			for (int i = 0; i < cookies.length; i++) 
+			{
+      	Cookie cookie = cookies[i];
+				//out.print("Cookie Name: " +cookie.getName()  + "<br>");
+        cookieName=cookie.getName();
+				//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
+				cookieValue=cookie.getValue();
+				System.out.println("UserManagementServlet > cleint passing the name: "+cookieName+" value: "
+					+cookieValue);
+			}
+  	}
+		return(cookieName);
+	}
+	
 	
 	
 	//method that retuns the java script functions for this page -- in the 
