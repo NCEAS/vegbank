@@ -5,7 +5,7 @@
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
   -->
 <!--<?xml-stylesheet type="text/xsl" href="check_attForms.xsl"?>-->
-<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp-template.xsl"?>
+<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp-autogen.xsl"?>
 <!--
 -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
@@ -1321,12 +1321,13 @@ change through time.</entitySummary>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
+      <attFKTranslationSQL>(select shortName from reference where reference.reference_ID=plantname.reference_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Foreign key into the reference table to identify the original source of the name (usually the type description).</attDefinition>
       <attForms>
-        <formShow name="Detail">155</formShow>
+        <formShow name="Summary">155</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -1344,7 +1345,7 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>Field stores the date that the name was entered into the database.</attDefinition>
       <attForms>
-        <formShow name="Austere">156</formShow>
+        <formShow name="Summary">156</formShow>
         <formShow name="Detail">158</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3528,7 +3529,6 @@ change through time.</entitySummary>
       <attNotes>Foreign key into the observation table</attNotes>
       <attDefinition>Link to the observation table identifying which observation is being classified.</attDefinition>
       <attForms>
-        <formShow name="Summary">439</formShow>
         <formShow name="Detail">440</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3685,7 +3685,6 @@ change through time.</entitySummary>
       <attDefinition>Notes about the classification event by the parties participating in the event. This might include the purpose or rationale for the classification.</attDefinition>
       <attForms>
         <formShow name="Austere">459</formShow>
-        <formShow name="Summary">460</formShow>
         <formShow name="Detail">461</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -3971,7 +3970,6 @@ change through time.</entitySummary>
       <attDefinition>Notes pertaining to the classification analysis and decision.</attDefinition>
       <attForms>
         <formShow name="Austere">494</formShow>
-        <formShow name="Summary">495</formShow>
         <formShow name="Detail">496</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -12591,7 +12589,7 @@ conditions may change between resampling events.
   </entity>
   <entity>
     <entityName>stratum</entityName>
-    <entityLabel>Stratum</entityLabel>
+    <entityLabel>Stratum Definition</entityLabel>
     <entitySummary>This table stores collective information about strata defined within a plot observation.</entitySummary>
     <entityDescription>This table is used to record non-species-specific information about a stratum. Examples include total cover of the stratum and maximum height of the stratum.</entityDescription>
     <module>plot</module>
@@ -12625,7 +12623,6 @@ conditions may change between resampling events.
       <attNotes>Foreign key into the observation table.</attNotes>
       <attDefinition>Link to the plot observation event with which this stratum observation is associated.</attDefinition>
       <attForms>
-        <formShow name="Summary">1189</formShow>
         <formShow name="Detail">1190</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -12639,6 +12636,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>stratumType.STRATUMTYPE_ID</attReferences>
+      <attFKTranslationSQL addLink="false">(SELECT stratumtype.stratumname FROM stratumtype WHERE stratum.stratumtype_id=stratumtype.stratumtype_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the stratumType table.</attNotes>
@@ -13028,14 +13026,14 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>stratum_ID</attName>
-      <attLabel>Stratum ID</attLabel>
+      <attLabel>Stratum</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>stratum.STRATUM_ID</attReferences>
-      <attFKTranslationSQL>(SELECT stratumtype.stratumname FROM stratumtype, stratum WHERE stratum.stratumtype_id=stratumtype.stratumtype_id AND stratum.stratum_id=taxonimportance.stratum_id)</attFKTranslationSQL>
+      <attFKTranslationSQL addLink="false">(SELECT stratumtype.stratumname FROM stratumtype, stratum WHERE stratum.stratumtype_id=stratumtype.stratumtype_id AND stratum.stratum_id=taxonimportance.stratum_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -13693,10 +13691,14 @@ conditions may change between resampling events.
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(authorplantname)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Primary key of the table.</attNotes>
       <attDefinition>Database generated identifier assigned to each unique observation of a taxon in a plot.</attDefinition>
+      <attForms>
+        <formShow name="basicID">1</formShow>
+      </attForms>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -13716,6 +13718,7 @@ conditions may change between resampling events.
       <attForms>
         <formShow name="Summary">1288</formShow>
         <formShow name="Detail">1289</formShow>
+        <formShow name="basicID">2</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -13843,6 +13846,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
+      <attFKTranslationSQL>(select plantname FROM plantconcept where plantconcept.plantconcept_ID=taxonalt.plantconcept_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
