@@ -152,11 +152,27 @@ return "Check All"; }
 		</td>
         	
 		<td  width="20%" colspan="1" bgcolor="{$evenRowColor}" align="left" valign="middle">
+					<!-- CREATE A MAP -  GET THE LATS AND LONGS INTO A VARIABLE -->
+					<xsl:variable name="LATITUDE">
+  				<xsl:value-of select="latitude"/>
+					</xsl:variable>
+					<xsl:variable name="LONGITUDE">
+  				<xsl:value-of select="longitude"/>
+					</xsl:variable>
+					<a href="http://beta.nceas.ucsb.edu:8080/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude={$LONGITUDE}&amp;latitude={$LATITUDE}"> 
+					<img align="center" border="0" src="/vegbank/images/small_globe.gif" alt="Location"> </img> 
+					</a>
+					<br> </br>
+					
 					<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a>
 					<a><b>Country:</b> <xsl:value-of select="country"/>  <br></br> </a>
+					
+			<!--
 					<a><b>Latitude:</b> <xsl:value-of select="latitude"/>  <br></br> </a>
 	     		<a><b>Longitude:</b> <xsl:value-of select="longitude"/>  <br></br> </a>
-					<!--
+			-->
+				
+			<!--
 					<a><b>Area:</b> <xsl:value-of select="area"/>  <br></br> </a>
 					-->
 					<a><b>Topo Position:</b> <xsl:value-of select="topoPosition"/>  <br></br> </a>
@@ -235,11 +251,23 @@ return "Check All"; }
 		</td>
         	
 		<td  width="20%" colspan="1" bgcolor="{$oddRowColor}" align="left" valign="middle">
+					<!-- CREATE A MAP -  GET THE LATS AND LONGS INTO A VARIABLE -->
+					<xsl:variable name="LATITUDE">
+  				<xsl:value-of select="latitude"/>
+					</xsl:variable>
+					<xsl:variable name="LONGITUDE">
+  				<xsl:value-of select="longitude"/>
+					</xsl:variable>
+					<a href="http://beta.nceas.ucsb.edu:8080/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude={$LONGITUDE}&amp;latitude={$LATITUDE}"> 
+					<img align="center" border="0" src="/vegbank/images/small_globe.gif" alt="Location"> </img> 
+					</a>
+					<br> </br>
 					<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a>
 					<a><b>Country:</b> <xsl:value-of select="country"/>  <br></br> </a>
-					<a><b>Latitude:</b> <xsl:value-of select="latitude"/>  <br></br> </a>
+	<!--				<a><b>Latitude:</b> <xsl:value-of select="latitude"/>  <br></br> </a>
 	     		<a><b>Longitude:</b> <xsl:value-of select="longitude"/>  <br></br> </a>
-					<!--
+	-->
+		<!--
 					<a><b>Area:</b> <xsl:value-of select="area"/>  <br></br> </a>
 					-->
 					<a><b>Topo Position:</b> <xsl:value-of select="topoPosition"/>  <br></br> </a>
