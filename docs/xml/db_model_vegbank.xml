@@ -13930,9 +13930,9 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Foreign Key into the TaxonObservation table to link to the information about the taxon for which this importance value applies.</attDefinition>
       <attForms>
-        <formShow name="SummaryNoStrata">1298</formShow>
-        <formShow name="SummaryOnlyStrata">1299</formShow>
-        <formShow name="Summary">1299</formShow>
+        <formShow name="SummaryNoStrata" useClass="largefield">1298</formShow>
+        <formShow name="SummaryOnlyStrata" useClass="largefield">1299</formShow>
+        <formShow name="Summary" useClass="largefield">1299</formShow>
         <formShow name="csvvegbranch">396</formShow>
       </attForms>
       <attFormsHTMLpre/>
