@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-12 17:50:11 $'
- *	'$Revision: 1.22 $'
+ *	'$Date: 2004-10-14 09:43:37 $'
+ *	'$Revision: 1.23 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -359,6 +359,7 @@ public class GenericCommand
 		log.debug("hasParams: " + hasParams);
 
 
+		/*
 		if (!Utility.isStringNullOrEmpty(this.whereSubquery)) {
 			// swap whereSubquery into {0} of whereClause
 			String sqlWhereSubquery = sqlResources.getString(this.whereSubquery);
@@ -380,6 +381,7 @@ public class GenericCommand
 			}
 			this.whereSubquery = null;
 		}
+		*/
 
 		// format the where clause
 		if (hasWhereClause && hasParams) {
@@ -720,6 +722,7 @@ public class GenericCommand
     /**
      * 
      */
+	/*
 	protected String whereSubquery;
 
     public String getWhereSubquery() {
@@ -730,6 +733,7 @@ public class GenericCommand
         this.whereSubquery = s;
     }
 
+	*/
 
 
 	

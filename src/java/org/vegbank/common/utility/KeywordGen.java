@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-12 05:51:14 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-10-14 09:43:37 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -163,7 +163,7 @@ public class KeywordGen {
 
 		// count records
 		String sqlFrom = entityQuery.substring( entityQuery.lastIndexOf("FROM") );
-		rs = stmt.executeQuery("SELECT COUNT(*) AS count " + sqlFrom);
+		rs = stmt.executeQuery("SELECT COUNT(*) AS count FROM (" + entityQuery + ") AS entityQuery");
 		if (rs.next()) {
 			count = rs.getLong("count");
 		}
@@ -218,9 +218,6 @@ public class KeywordGen {
 			// update the status bar
 			sb.updateStatusBar();
 
-			//TODO:
-			// extract PK value
-			// concat all other values into one
 			try {
 				// first column MUST be PK for parent entity table
 				tmpId = rs.getLong(1);
@@ -235,22 +232,17 @@ public class KeywordGen {
 
 			for (int i=1; i<numFields; i++) {
 				tmpValue = rs.getString(i);
-				kwDetailed.append(KW_DELIM).append(tmpValue);
+				if (tmpValue != null && !tmpValue.equals("null")) {
+					kwDetailed.append(KW_DELIM).append(tmpValue);
 
-				if (i <= numBriefFields) {
-					kwBrief.append(KW_DELIM).append(tmpValue);
+					if (i <= numBriefFields) {
+						kwBrief.append(KW_DELIM).append(tmpValue);
+					}
 				}
-
-				/*
-				// METHOD B: check each word
-				if (briefKeywordFields.contains(tmpField)) {
-					kwBrief.append(KW_DELIM).append(tmpValue);
-				}
-				*/
 
 			}
 			
-			insertRow(pstmt, tmpId, entityName, kwDetailed.toString(), kwBrief.toString());
+			insertRow(pstmt, tmpId, entityName, kwBrief.toString(), kwDetailed.toString());
 		}
 
 		// tidy up the end of the status bar
@@ -321,7 +313,7 @@ public class KeywordGen {
 		}
 
 		// add the pk field, then the brief fields
-		select = pkField + "," + res.getString("select.brief." + entityName);
+		select = "DISTINCT " + pkField + "," + res.getString("select.brief." + entityName);
 
 		if (!Utility.isStringNullOrEmpty(select) && !select.endsWith(",")) {
 			select += ",";

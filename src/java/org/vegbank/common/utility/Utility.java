@@ -29,8 +29,8 @@ import org.vegbank.common.model.Plantstatus;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2004-09-24 18:08:10 $'
- * '$Revision: 1.37 $'
+ * '$Date: 2004-10-14 09:43:37 $'
+ * '$Revision: 1.38 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -323,16 +323,21 @@ public class Utility
 	 */
 	public static boolean isStringNullOrEmpty(String stringToCheck)
 	{
-		boolean result = false;
-		if ( stringToCheck == null || stringToCheck.equals("") ) 
-		{
-			result = true;
-		}
-		else
-		{
-			result = false;
-		}
-		return result;
+		return ( stringToCheck == null || stringToCheck.equals("") );
+	}
+
+	
+	/**
+	 * <p>
+	 * Utility Method to check for nulls and empty array.
+	 * </p>
+	 * 
+	 * @param arrayToCheck 
+	 * @return Is this Empty or null?
+	 */
+	public static boolean isArrayNullOrEmpty(Object[] arrayToCheck)
+	{
+		return arrayToCheck == null || arrayToCheck.length == 0;
 	}
 	
 	/**

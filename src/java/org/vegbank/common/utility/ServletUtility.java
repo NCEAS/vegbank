@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: anderson $'
- *  '$Date: 2004-08-27 23:28:22 $'
- *  '$Revision: 1.14 $'
+ *  '$Date: 2004-10-14 09:43:37 $'
+ *  '$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -320,7 +320,7 @@ public class ServletUtility
 		{
 			(new File(inFile)).delete();
 			//inFile.delete(); 
-			//PrintStream out  = new PrintStream(new FileOutputStream(inFile, true));
+			//PrintWriter out  = new PrintWriter(new FileOutputStream(inFile, true));
 		}
 		catch(Exception e) 
 		{
@@ -340,8 +340,8 @@ public class ServletUtility
 		try
 		{
 			BufferedReader in = new BufferedReader(new FileReader(inFile));
-			PrintStream out =
-				new PrintStream(new FileOutputStream(outFile, false));
+			PrintWriter out =
+				new PrintWriter(new FileOutputStream(outFile, false));
 
 			log.debug("ServletUtility > fileCopy");
 			log.debug("ServletUtility > inFile: " + inFile);
@@ -604,8 +604,18 @@ public class ServletUtility
 				}
 
 				p = (String)pit.next();
-				qs.append(p).append("=");
-				qs.append( (java.net.URLEncoder.encode((String)params.get(p), "UTF-8")) );
+				Object o = params.get(p);
+
+				if (o instanceof String[]) {
+					for (int i=0; i<((String[])o).length; i++) {
+						if (i>0) { qs.append("&"); }
+
+						qs.append(p).append("=").append( ((String[])o)[i]);
+					}
+				} else {
+					qs.append(p).append("=")
+						.append( (java.net.URLEncoder.encode((String)o, "UTF-8")) ) ;
+				}
 			}
 		} catch (Exception ex) {
 			log.error("problem building query string", ex);
