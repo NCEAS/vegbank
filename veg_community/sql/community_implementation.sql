@@ -32,7 +32,7 @@ CREATE TABLE commStatus
     commConceptStatus varchar (22) NOT NULL,
     startDate timestamp NOT NULL,
     stopDate timestamp,
-    partyComments varchar (22),
+    partyComments varchar (500),
     COMMPARTY_ID integer NOT NULL,
     PRIMARY KEY(COMMSTATUS_ID)
 );
@@ -46,18 +46,18 @@ drop table commReference;
 CREATE TABLE commReference
 (
     COMMREFERENCE_ID serial,
-    authors varchar (22),
-    title varchar (22),
+    authors varchar (200),
+    title varchar (200),
     pubDate timestamp,
-    edition varchar (22),
-    seriesName varchar (22),
-    issueIdentification varchar (22),
-    otherCitationDetails varchar (300),
-    page varchar (22),
-    tableCited varchar (22),
-    ISBN varchar (22),
-    ISSN varchar (22),
-    commDescription varchar (200),
+    edition varchar (20),
+    seriesName varchar (50),
+    issueIdentification varchar (20),
+    otherCitationDetails varchar (100),
+    page varchar (20),
+    tableCited varchar (20),
+    ISBN varchar (20),
+    ISSN varchar (20),
+    commDescription varchar (1000),
     PRIMARY KEY(COMMREFERENCE_ID)
 );
 
@@ -70,7 +70,7 @@ drop table commName;
 CREATE TABLE commName
 (
     COMMNAME_ID serial,
-    commName varchar (3000) NOT NULL,
+    commName varchar (500) NOT NULL,
     COMMREFERENCE_ID integer NOT NULL,
     dateEntered timestamp,
     PRIMARY KEY(COMMNAME_ID)
@@ -134,13 +134,13 @@ drop table commParty;
 CREATE TABLE commParty
 (
     COMMPARTY_ID serial,
-    salutation varchar (22),
-    givenName varchar (22),
-    middleName varchar (22),
-    surName varchar (22),
-    organizationName varchar (22),
+    salutation varchar (20),
+    givenName varchar (50),
+    middleName varchar (50),
+    surName varchar (50),
+    organizationName varchar (100),
     currentName integer,
-    contactInstructions varchar (22),
+    contactInstructions varchar (1000),
     owner integer,
     PRIMARY KEY(COMMPARTY_ID)
 );
