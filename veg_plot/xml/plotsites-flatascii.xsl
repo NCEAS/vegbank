@@ -9,8 +9,8 @@
   *  	For Details: http://www.nceas.ucsb.edu/
   *   Created: 2002 May
 	*  '$Author: harris $'
-	*  '$Date: 2002-07-18 23:16:03 $'
-	*  '$Revision: 1.3 $'		 
+	*  '$Date: 2002-07-23 15:11:14 $'
+	*  '$Revision: 1.4 $'		 
 	-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
@@ -24,15 +24,15 @@
 <xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
 <xsl:for-each select="project">
 		<xsl:for-each select="plot/observation">
-	 		<xsl:value-of select="../../plot/plotId"/> <xsl:text>,&#x20;</xsl:text>
-	 		<xsl:value-of select="../../plot/plotAccessionNumber"/> <xsl:text>,&#x20;</xsl:text>
-	 		<xsl:value-of select="../../plot/observation/communityClassification/className"/> <xsl:text>,&#x20;</xsl:text>
-	 		<xsl:value-of select="obsStartDate"/> <xsl:text>,&#x20;</xsl:text>
-	 		<xsl:value-of select="../../plot/latitude"/> <xsl:text>,&#x20;</xsl:text>
-	 		<xsl:value-of select="../../plot/longitude"/> <xsl:text>, &#x20;</xsl:text>
-	 		<xsl:value-of select="../../plot/elevation"/> <xsl:text> &#x20;</xsl:text>
-	 		<xsl:value-of select="../../plot/slopeAspect"/> <xsl:text>, &#x20;</xsl:text>
-	 		<xsl:value-of select="../../plot/slopeGradient"/> <xsl:text>, &#x20;</xsl:text>
+	 		<xsl:value-of select="../../plot/plotId"/> <xsl:text>,</xsl:text>
+	 		<xsl:value-of select="../../plot/plotAccessionNumber"/> <xsl:text>,</xsl:text>
+	 		<xsl:value-of select="../../plot/observation/communityClassification/className"/> <xsl:text>,</xsl:text>
+	 		<xsl:value-of select="obsStartDate"/> <xsl:text>,</xsl:text>
+	 		<xsl:value-of select="../../plot/latitude"/> <xsl:text>,</xsl:text>
+	 		<xsl:value-of select="../../plot/longitude"/> <xsl:text>,</xsl:text>
+	 		<xsl:value-of select="../../plot/elevation"/> <xsl:text>,</xsl:text>
+	 		<xsl:value-of select="../../plot/slopeAspect"/> <xsl:text>,</xsl:text>
+	 		<xsl:value-of select="../../plot/slopeGradient"/> <xsl:text>,</xsl:text>
 			<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
 		</xsl:for-each>
 </xsl:for-each>
