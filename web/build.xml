@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-10-28 22:58:23 $'
-* '$Revision: 1.125 $'
+* '$Date: 2004-10-30 02:20:14 $'
+* '$Revision: 1.126 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -442,7 +442,6 @@
     <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
     <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
     <copy file="${sharedhtml_src}/placeurl.properties" tofile="${style_server}/placeurl_detokened.properties" filtering="yes" overwrite="yes"/>
-
     <!-- set the properties file that replaces tokens with closed list values in picklists -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
     <filter filtersfile="${style_server}/placeurl_detokened.properties"/>
@@ -474,9 +473,9 @@
     <!-- client files: -->
     <property name="vegbr_client_include" value="vegbank-module*.zip  vegbranch-v*.zip   vegbranch_normalizer.zip "/>
     <!-- docs files: -->
-    <property name="vegbr_docs_include" value=" **/*.html "/>
+    <property name="vegbr_docs_include" value=" **/*.html **/*.csv"/>
     <!-- images files: -->
-    <property name="vegbr_img_include" value="*.jpg *.gif "/>
+    <property name="vegbr_img_include" value="*.jpg *.gif *.png"/>
     <property name="vegbr_examples_include" value=" vegbranch-samplecsv1-b.4.0.zip  vegbranch-samplecsv2-b.4.0.zip normalizer_examples.zip"/>
     <property name="vegbr_htmlfile" value="vegbranch.html vbr*.html"/>
     <!-- include these as html files in root of vegbranhc dir -->
