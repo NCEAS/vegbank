@@ -1,7 +1,7 @@
 /*
- * '$RCSfile: PlantQueryForm.java,v $' Authors: @author@ Release: @release@
+ * '$RCSfile: CommQueryForm.java,v $' Authors: @author@ Release: @release@
  * 
- * '$Author: farrell $' '$Date: 2004-03-05 22:45:16 $' '$Revision: 1.2 $'
+ * '$Author: farrell $' '$Date: 2004-03-05 22:45:16 $' '$Revision: 1.1 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -22,43 +22,45 @@ package org.vegbank.ui.struts;
 import java.util.Collection;
 import java.util.Vector;
 
-
+import org.apache.struts.action.ActionForm;
 import org.apache.struts.validator.ValidatorForm;
-import org.vegbank.common.model.Plantstatus;
-import org.vegbank.common.model.Plantusage;
+import org.vegbank.common.model.Commstatus;
+import org.vegbank.common.model.Commusage;
 import org.vegbank.common.utility.DatabaseUtility;
+import org.vegbank.common.utility.LogUtility;
+
 
 /**
  * @author Gabriel
  */
 
-public class PlantQueryForm extends ValidatorForm
+public class CommQueryForm extends ValidatorForm
 {
 	// Get the properties of the form
-	private String plantname;
-	private String[] nameType = new String[20];
+	private String commname;
+	private String[] nameType= new String[20];
 	private String[] taxonLevel = new String[20];
 	private String nameExistsBeforeDate;
 	private String accordingToParty;
 	
 	// Picklist for party .. use what exists in database.
 	private Collection partyNameIds;
-	private Collection plantLevels;
-	private Collection plantClassSystems;
+	private Collection commLevels;
+	private Collection commClassSystems;
 
 
   /**
-   * @return All valid values for plantLevel
+   * @return All valid values for CommLevel
    */
-  public Collection getPlantLevels()
+  public Collection getCommLevels()
   {
-    if ( plantLevels == null )
+    if ( commLevels == null )
     {
 			// Need to create this object
-			Plantstatus plantStatus = new Plantstatus();
-			plantLevels = plantStatus.getPlantlevelPickList();
+			Commstatus commStatus = new Commstatus();
+			commLevels = commStatus.getCommlevelPickList();
     }
-    return plantLevels;
+    return commLevels;
   }
 
 	/**
@@ -72,7 +74,7 @@ public class PlantQueryForm extends ValidatorForm
 	
 		StringBuffer partyQuery = new StringBuffer(512)
 				.append("SELECT party_id, salutation, givenname, middlename, surname, organizationname  ")
-				.append("FROM party WHERE party_id IN ( SELECT DISTINCT party_id FROM plantstatus )");
+				.append("FROM party WHERE party_id IN ( SELECT DISTINCT party_id FROM commstatus )");
 	
 		DatabaseUtility.getPartyValueLabelBeans(partyIdNames, partyQuery);
 		return partyIdNames;
@@ -134,18 +136,17 @@ public class PlantQueryForm extends ValidatorForm
 	/**
 	 * @return Returns the plantname.
 	 */
-	public String getPlantname()
+	public String getCommname()
 	{
-		return plantname;
+		return commname;
 	}
 	/**
 	 * @param plantname The plantname to set.
 	 */
-	public void setPlantname(String plantname)
+	public void setCommname(String commname)
 	{
-		this.plantname = plantname;
+		this.commname = commname;
 	}
-	
 	/**
 	 * @return Returns the taxonLevel.
 	 */
@@ -153,7 +154,6 @@ public class PlantQueryForm extends ValidatorForm
 	{
 		return taxonLevel;
 	}
-	
 	/**
 	 * @param taxonLevel The taxonLevel to set.
 	 */
@@ -161,20 +161,18 @@ public class PlantQueryForm extends ValidatorForm
 	{
 		this.taxonLevel = taxonLevel;
 	}
-	
 	/**
-	 * @return Returns the plantClassSystems.
+	 * @return Returns the commClassSystems.
 	 */
-	public Collection getPlantClassSystems()
+	public Collection getCommClassSystems()
 	{
-    if ( this.plantClassSystems == null )
+    if ( this.commClassSystems == null )
     {
 			// Using all the system defined values ignore 
     	// values added by users to db, ANY handles that!
-			Plantusage plantUsage = new Plantusage();
-			plantClassSystems = plantUsage.getClasssystemOpenPickList();
+			Commusage commUsage = new Commusage();
+			commClassSystems = commUsage.getClasssystemOpenPickList();
     }
-		return plantClassSystems;
+		return commClassSystems;
 	}
-
 }
