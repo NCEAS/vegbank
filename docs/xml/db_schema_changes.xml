@@ -6237,4 +6237,16 @@ conditions may change between resampling events.
     <modelChangeStatus>false</modelChangeStatus>
     <modelChangeComments>could add this field to observation and possibly also commInterpretation</modelChangeComments>
   </modelChange>
+  <modelChange>
+    <modelChangeID>40</modelChangeID>
+    <modelChangeName>move rank to Usage</modelChangeName>
+    <modelChangeStatus>false</modelChangeStatus>
+    <modelChangeComments>Rank is more dependant on SciName than concept.  Perhaps we should move that field to Usage, and when changes occur, the rank will change when the name changes.  Bob is thinking about this 4/26/04.</modelChangeComments>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>41</modelChangeID>
+    <modelChangeName>spellings/protonyms</modelChangeName>
+    <modelChangeStatus>false</modelChangeStatus>
+    <modelChangeComments>Names change and have lots of spelling, esp. dealing with author names.  It would be nice to avoid using new concepts for each of these.  Maybe have a spelling table, or perhaps a recursive key in name to equivalentName_ID.  Bob thinking about this 4/26/04.</modelChangeComments>
+  </modelChange>
 </modelChangeDocument>
