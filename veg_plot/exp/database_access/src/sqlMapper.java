@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-04-05 01:29:40 $'
- * '$Revision: 1.6 $'
+ *     '$Date: 2002-04-05 19:14:52 $'
+ * '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -736,10 +736,9 @@ public class  sqlMapper
 					// to that plot id
 					String plotId = (String)queryElementHash.get("plotId");
 					
-					System.out.println("sqlMapper.developPlotQuery - "
-					+" calling queryStore.getEntireSinglePlot");
+					System.out.println("sqlMapper > issueing a query through the query store");
 				
-					qs.getEntireSinglePlot(  plotId  );
+					qs.getEntireSinglePlot(plotId);
 
 					//write to a summary information to the file that can be used by the application
 					xmlWriter xw = new xmlWriter();
@@ -747,7 +746,7 @@ public class  sqlMapper
 				}
 				else
 				{
-					System.out.println("didnt recognize the desired query");
+					System.out.println("sqlMapper > didn't recognize the desired query");
 				}
 			}
 			
@@ -774,10 +773,7 @@ public class  sqlMapper
 					queryOutputNum=j.outPlotIdNum;
 				}
 
-				// this if targets thosequeries requesting summary information for plots having
-				// some minimum and maximum value for a specific attribute like elevation or
-				// latitude
-
+				// this block targets the queries that use an elevation range
 				else if ( resultType.equals("summary") && (queryElementHash.size() == 2) ) 
 				{
 
@@ -786,12 +782,9 @@ public class  sqlMapper
 					String elevationMin = (String)queryElementHash.get("elevationMin");
 					String elevationMax = (String)queryElementHash.get("elevationMax");
 		
-		
-					System.out.println("sqlMapper.developPlotQuery - "
-					+" calling queryStore.getPlotId (elevation option)");
+					System.out.println("sqlMapper > developPlotQuery issuing an elevation query");
 					queryStore j = new queryStore();
 					j.getPlotId(elevationMin, elevationMax, "elevation");
-
 					queryOutput=j.outPlotId;
 					queryOutputNum=j.outPlotIdNum;
 				}
@@ -801,25 +794,28 @@ public class  sqlMapper
 				queryStore k1 = new queryStore();
 				k1.getPlotSummaryNew(queryOutput, queryOutputNum);
 
-				//write to a summary information to the file 
+				//write the summary information to the file 
 				//that can be used by the application -- write two
 				//xml files using the two xml writers for testing the 
 				//performance
-				System.out.println("WRITING THE XML RESULTS FILE");
+				System.out.println("sqlMapper > writing the plots to xml file");
 				Vector plotIdVec = getVector(queryOutput);
-				System.out.println(" PLOT'IDS: " + plotIdVec.toString() );
+				System.out.println("sqlMapper > number of plots: " + plotIdVec.size() );
+				
 				//instantiate a new instance of the dbAccess class -- probably
 				//should be done above
+				System.out.println("sqlMapper > writing the plots using new class - file test-"+outFile);
 				dbAccess dbaccess = new dbAccess();
-				dbaccess.writeMultipleVegBankPlot(plotIdVec, 
-					"/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml");
+				dbaccess.writeMultipleVegBankPlot(plotIdVec, "test-"+outFile);
+			
 				
+				System.out.println("sqlMapper > writing the plots using old class - file " + outFile);
 				xmlWriter xw = new xmlWriter();
 				xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
 			}
 			else
 			{
-				System.out.println("didnt recognize the desired query");
+				System.out.println("sqlMapper > didn't recognize the desired query");
 			}
 
 		} 
@@ -1157,4 +1153,4 @@ for (int i=0;i<pipeDelimitStringNum; i++)
 
 
 
-} //en
+} //end class
