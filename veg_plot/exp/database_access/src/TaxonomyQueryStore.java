@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-04 18:05:39 $'
- * '$Revision: 1.11 $'
+ *     '$Date: 2002-03-08 15:43:48 $'
+ * '$Revision: 1.12 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@ import databaseAccess.*;
 					sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
 					sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
 					sqlBuf.append(" startDate, stopDate  ");
-					sqlBuf.append(" from VEG_TAXA_SUMMARY where plantName like '"+taxonName+"'");
+					sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"+taxonName.toUpperCase()+"'");
 				///}
 				///else if ( taxonNameType.trim().equals("commonName")  ) 
 				///{
@@ -206,7 +206,8 @@ import databaseAccess.*;
 				sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
 				sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
 				sqlBuf.append(" startDate, stopDate  ");
-				sqlBuf.append(" from VEG_TAXA_SUMMARY where plantName like '"+taxonName+"'");
+				sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"
+				+taxonName.toUpperCase()+"'");
 				//add the level in the heirachy
 				sqlBuf.append(" and plantlevel like  '"+taxonLevel+"'");
 				//add the name type
