@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 <dataModel>
 	<title>Vegetation Plots Database Component Description: soilTaxon</title>
@@ -16,7 +16,7 @@
 			<attName>SOILTAXON_ID</attName>
 			<attNulls>No</attNulls>
 			<attType>INT</attType>
-			<attKey>P</attKey>
+			<attKey>PK</attKey>
 			<attReferences>n/a</attReferences>
 			<attNotes>Primary key for the aux_Soil table.</attNotes>
 			<attDefinition>Database assigned value for a unique soil type</attDefinition>
@@ -52,9 +52,9 @@
 			<attName>soilParent_ID</attName>
 			<attNulls>Yes</attNulls>
 			<attType>INT</attType>
-			<attKey>F</attKey>
-			<attReferences>auxTaxon.SOILTAXON_ID</attReferences>
-			<attNotes/>
+			<attKey>FK</attKey>
+			<attReferences>soilTaxon.SOILTAXON_ID</attReferences>
+			<attNotes>n/a</attNotes>
 			<attDefinition>Foreign Key to parent soil type, up one or more hierarchical level</attDefinition>
 		</attribute>
 		<children/>

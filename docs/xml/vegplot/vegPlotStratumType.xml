@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 <dataModel>
 	<title>Vegetation Plots Database Component Description: stratumType </title>
@@ -23,7 +23,7 @@
 		</attribute>
 		<attribute>
 			<attName>STRATUMMETHOD_ID</attName>
-			<attNulls>Yes</attNulls>
+			<attNulls>No</attNulls>
 			<attType>INT</attType>
 			<attKey>FK</attKey>
 			<attReferences>stratumMethod.STRATUMMETHOD_ID</attReferences>

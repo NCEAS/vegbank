@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 <dataModel>
 	<title>Vegetation Plots Database Component Description: plot</title>
@@ -49,15 +49,6 @@
 			<attDefinition>Link to the parent plot when plot is nested within another plot. </attDefinition>
 		</attribute>
 		<attribute>
-			<attName>SAMPLEMETHOD_ID</attName>
-			<attNulls>Yes</attNulls>
-			<attType>INT</attType>
-			<attKey>FK</attKey>
-			<attReferences>sampleMethod.SAMPLEMETHOD_ID</attReferences>
-			<attNotes>Foreign key into the sampleMethod table</attNotes>
-			<attDefinition>Link to a specific methodology which provides a general name and description, plus many default values for use in the plot table</attDefinition>
-		</attribute>
-		<attribute>
 			<attName>realLatitude</attName>
 			<attNulls>No </attNulls>
 			<attType>NUMERIC(3,8)</attType>
@@ -87,7 +78,7 @@
 		<attribute>
 			<attName>confidentialityStatus</attName>
 			<attNulls>No</attNulls>
-			<attType>VARCHAR(20)</attType>
+			<attType>INT</attType>
 			<attKey>n/a</attKey>
 			<attReferences>n/a</attReferences>
 			<attNotes>closed list, default=0</attNotes>
@@ -215,7 +206,7 @@
 		<attribute>
 			<attName>standSize</attName>
 			<attNulls>Yes</attNulls>
-			<attType>VARCHAR(10)</attType>
+			<attType>VARCHAR(50)</attType>
 			<attKey>n/a</attKey>
 			<attReferences>n/a</attReferences>
 			<attNotes>closed list</attNotes>
@@ -224,11 +215,11 @@
 		<attribute>
 			<attName>placementMethod</attName>
 			<attNulls>Yes</attNulls>
-			<attType>TEXT</attType>
+			<attType>VARCHAR(50)</attType>
 			<attKey>n/a</attKey>
 			<attReferences>n/a</attReferences>
 			<attNotes>closed list</attNotes>
-			<attDefinition>Description of the method used to determine the placement of a plot.</attDefinition>
+			<attDefinition>Brief description of strategy for determining plot placement within the stand.</attDefinition>
 		</attribute>
 		<attribute>
 			<attName>permanence</attName>
@@ -334,7 +325,7 @@
 			<attNulls>Yes</attNulls>
 			<attType>VARCHAR(50)</attType>
 			<attKey>n/a </attKey>
-			<attReferences> n/a </attReferences>
+			<attReferences>n/a </attReferences>
 			<attNotes>closed list</attNotes>
 			<attDefinition>Position of the plot on land surface (e.g., Summit, shoulder, upper slope, middle slope, lower slope, toeslope, no slope, channel bed, dune swale, pond).  </attDefinition>
 		</attribute>
@@ -355,24 +346,6 @@
 			<attReferences>n/a</attReferences>
 			<attNotes>closed list (perhaps 2-tier heirarchy)</attNotes>
 			<attDefinition>Surface geology type. </attDefinition>
-		</attribute>
-		<attribute>
-			<attName>SOILTAXON_ID</attName>
-			<attNulls>Yes</attNulls>
-			<attType>VARCHAR(50) </attType>
-			<attKey>FK</attKey>
-			<attReferences>soilTaxon.SOILTAXON_ID</attReferences>
-			<attNotes>closed list; hierarchy</attNotes>
-			<attDefinition>Foreign key into table of soil taxa within the USDA classification hierarchy, including Order, Suborder, Greatgroup, Subgroup, Family and Series.</attDefinition>
-		</attribute>
-		<attribute>
-			<attName>soilTaxonSource</attName>
-			<attNulls>Yes</attNulls>
-			<attType>VARCHAR(20)</attType>
-			<attKey>n/a</attKey>
-			<attReferences>n/a</attReferences>
-			<attNotes>closed list</attNotes>
-			<attDefinition>How was the soil taxon determined (e.g., field observation, map,  other sources)?</attDefinition>
 		</attribute>
 		<attribute>
 			<attName>notesPublic</attName>

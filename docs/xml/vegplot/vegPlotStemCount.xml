@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 <dataModel>
 	<title>Vegetation Plots Database Component Description: stemCount</title>
@@ -9,7 +9,7 @@
 	<description/>
 	<date>1 November 2001</date>
 	<entity>
-		<entityName>vegPlot.stemSize</entityName>
+		<entityName>vegPlot.stemCount</entityName>
 		<entitySummary>This table is intended to store information about the abundance of tree stems of a specific size.</entitySummary>
 		<entityDescription/>
 		<attribute>
@@ -42,7 +42,7 @@
 		<attribute>
 			<attName>stemDiameterAccuracy</attName>
 			<attNulls>Yes</attNulls>
-			<attType>NUMBER(2,1)</attType>
+			<attType>NUMERIC(2,1)</attType>
 			<attKey>n/a </attKey>
 			<attReferences>n/a </attReferences>
 			<attNotes>n/a</attNotes>
@@ -51,7 +51,7 @@
 		<attribute>
 			<attName>stemHeight</attName>
 			<attNulls>Yes</attNulls>
-			<attType>NUMBER(3,2)</attType>
+			<attType>NUMERIC(3,2)</attType>
 			<attKey>n/a </attKey>
 			<attReferences>n/a </attReferences>
 			<attNotes>n/a</attNotes>
@@ -60,7 +60,7 @@
 		<attribute>
 			<attName>stemHeightAccuracy</attName>
 			<attNulls>Yes</attNulls>
-			<attType>NUMBER(2,2)</attType>
+			<attType>NUMERIC(2,2)</attType>
 			<attKey>n/a </attKey>
 			<attReferences>n/a </attReferences>
 			<attNotes>n/a</attNotes>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 <dataModel>
 	<title> Vegetation Plots Database Component Description:observation</title>
@@ -191,7 +191,7 @@ conditions may change between resampling events.
 		<attribute>
 			<attName>plotValidationLevel</attName>
 			<attNulls>Yes</attNulls>
-			<attType>VARCHAR(30)</attType>
+			<attType>VARCHAR(60)</attType>
 			<attKey>n/a</attKey>
 			<attReferences>n/a</attReferences>
 			<attNotes>closed list</attNotes>
@@ -245,7 +245,7 @@ conditions may change between resampling events.
 		<attribute>
 			<attName>homogeneity</attName>
 			<attNulls>Yes</attNulls>
-			<attType>VARCHAR(30)</attType>
+			<attType>VARCHAR(50)</attType>
 			<attKey>n/a</attKey>
 			<attReferences>n/a</attReferences>
 			<attNotes>closed list</attNotes>
@@ -263,7 +263,7 @@ conditions may change between resampling events.
 		<attribute>
 			<attName>representativeness</attName>
 			<attNulls>Yes</attNulls>
-			<attType>VARCHAR(30)</attType>
+			<attType>VARCHAR(100)</attType>
 			<attKey>n/a</attKey>
 			<attReferences>n/a</attReferences>
 			<attNotes>closed list</attNotes>
@@ -272,7 +272,7 @@ conditions may change between resampling events.
 		<attribute>
 			<attName>basalArea</attName>
 			<attNulls>Yes</attNulls>
-			<attType> NUMERIC(3,5)</attType>
+			<attType>NUMERIC(3,5)</attType>
 			<attKey>n/a</attKey>
 			<attReferences>n/a</attReferences>
 			<attNotes>n/a</attNotes>
@@ -425,7 +425,7 @@ conditions may change between resampling events.
 		<attribute>
 			<attName>standMaturity</attName>
 			<attNulls>Yes</attNulls>
-			<attType>NUMERIC(4,2)</attType>
+			<attType>VARCHAR(50)</attType>
 			<attKey>n/a</attKey>
 			<attReferences>n/a</attReferences>
 			<attNotes>closed list</attNotes>
@@ -601,6 +601,24 @@ conditions may change between resampling events.
 			<attReferences>n/a</attReferences>
 			<attNotes>n/a</attNotes>
 			<attDefinition>Total cover of the third-most predominent growthform?</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>SOILTAXON_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>soilTaxon.SOILTAXON_ID</attReferences>
+			<attNotes>closed list; hierarchy</attNotes>
+			<attDefinition>Foreign key into table of soil taxa within the USDA classification hierarchy, including Order, Suborder, Greatgroup, Subgroup, Family and Series.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>soilTaxonSrc</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(200)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>How was the soil taxon determined (e.g., field observation, map,  other sources)?</attDefinition>
 		</attribute>
 		<attribute>
 			<attName>notesPublic</attName>

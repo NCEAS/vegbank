@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 <dataModel>
 	<title>Vegetation Plots Database Component Description: taxonInterpretation </title>
@@ -105,7 +105,7 @@
 		<attribute>
 			<attName>currentInterpretation</attName>
 			<attNulls>No</attNulls>
-			<attType>BOOLAN</attType>
+			<attType>BOOLEAN</attType>
 			<attKey>n/a</attKey>
 			<attReferences>n/a</attReferences>
 			<attNotes>n/a</attNotes>
