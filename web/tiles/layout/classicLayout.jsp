@@ -16,7 +16,7 @@
     <title><tiles:getAsString name="title"/></title>
   </HEAD>
 
-  <html:body bgcolor="#ffffff" text="#000000" link="#023264" alink="#023264" vlink="#023264">
+  <html:body>
 
 <table border="0" width="100%" cellspacing="5">
 <tr>
