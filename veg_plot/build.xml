@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-10-29 18:30:51 $'
-  *     '$Revision: 1.41 $'
+  *     '$Date: 2003-11-12 22:59:16 $'
+  *     '$Revision: 1.42 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -381,10 +381,6 @@
 
 	<target name="deploy-resources" depends="init, deploy-prepare" 
           description="=> Deploy resources to servlet container">
-
-    <copy todir="${web.context}">
-      <fileset dir="${src.dir}/web/"/>
-    </copy>
 
     <!-- Copy xml resources to servlet container -->
 		<copy todir="${web.servlet.lib.dir}">
