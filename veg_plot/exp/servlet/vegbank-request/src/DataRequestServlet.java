@@ -74,6 +74,7 @@ public class DataRequestServlet extends HttpServlet
 	private String requestDataType = null;
 	private String servletDir = null; // the absolute path to the servlet
 	private String userName = null; // this is the user of the servlet
+	private String clientType = null;
 
 	// community related attributes
 	// commmunity name already defined above
@@ -236,7 +237,7 @@ public class DataRequestServlet extends HttpServlet
 		{
 			//figure out what type of client that is accessing the servlet
 			//the results that are returned depend on this parameter
-			String clientType = param.get("clientType").toString();
+			this.clientType = param.get("clientType").toString();
 			String requestDataFormatType  = param.get("requestDataFormatType").toString();
 			
 			//validate that there are the correct type and number
@@ -395,7 +396,7 @@ public class DataRequestServlet extends HttpServlet
  		requestDataType = (String)params.get("requestDataType");
 		//the servlet directory
 		servletDir = rb.getString("requestparams.servletDir");
-		String clientType = params.get("clientType").toString();
+		this.clientType = params.get("clientType").toString();
 		String requestDataFormatType  = params.get("requestDataFormatType").toString();
 		
 		//attempt to recognize the request as a query for communities 
@@ -1092,10 +1093,15 @@ private void updateClentLog (String clientLog, String remoteHost)
  */
 	private void issueQuery (String queryType) 
 	{
+		System.out.println("## QUERY TYPE ## " + queryType);
 		if (queryType.equals("simpleQuery")) 
 		{ 
-			System.out.println("## QUERY TYPE ## " + queryType);
-			registerQueryDocument();
+			//if it is a browser query then register the document
+			if (this.clientType.equals("browser") )
+			{
+				System.out.println("registering the doc. -- browser client");
+				registerQueryDocument();
+			}
 			//call the plot access module
 			dba.accessDatabase(servletDir+"query.xml", servletDir+"querySpec.xsl", "query");
 			queryOutput=dba.queryOutput;
