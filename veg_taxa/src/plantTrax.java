@@ -35,7 +35,7 @@ PrintWriter out = response.getWriter();
 out.println("<html>");
 out.println("<body>");
 out.println("<head>");
-String title =("plantTrax");
+String title =("plantTrax - Interface to Plant Taxa Database");
 out.println("<title>" + title + "</title>");
 out.println("</head>");
 out.println("<body bgcolor=\"white\">");
@@ -88,10 +88,14 @@ String circumAuthor=null;
 String citation=null;
 String  refSpeciesName=null;
 String refType=null;
+String correlationRefSpeciesName=null;
+String correlationTaxon=null;
+String correlationCommonName=null;
 
-
-
-
+String curStatus=null;
+int partyCircumId=-999;
+int correlationId=-999;
+String correlationAuthor=null;
 
 /*get the basic name information*/
 try {
@@ -152,8 +156,60 @@ out.println("                   Circumsription Author: <i>"+circumAuthor+" </i><
 out.println("                   Citation: <i>"+citation+" </i><br>\n");
 out.println("                   Taxon Name Used in Citation:  <i>"+refSpeciesName+" </i><br>\n");
 out.println("                   Type of Reference Stored:  <i>"+refType+" </i><br>\n");
-
 } //end while
+
+
+/*gain the status info -  add a second variable when the prototype grows*/
+
+results = query.executeQuery("select status, PARTY_CIRCUM_ID  from status where CIRCUM_ID ="+circumId);
+while (results.next()) {
+        curStatus=results.getString("status");
+	partyCircumId=results.getInt("PARTY_CIRCUM_ID");
+out.println("                   CurrentStatus: <i>"+curStatus+" </i><br>\n");
+out.println("                   partyCircumId: <i>"+partyCircumId+" </i><br>\n");
+
+} //end  while
+
+
+
+/*gain the correlation information*/
+
+out.println("<FONT COLOR=blue>");
+results = query.executeQuery("select CORRELATION_ID from CORRELATION where PARTY_CIRCUM1 ="+partyCircumId);
+while (results.next()) {
+        correlationId=results.getInt("CORRELATION_ID");
+
+out.println("   Correlation(s) found - correlation ID: <i>"+correlationId+" </i><br>\n");
+} //end  while
+
+
+results = query.executeQuery("select AUTHOR, DATE_ENTERED, SPECIESNAME, PAGE, CIRCUMTYPE from reference where(select REF_ID  from CIRCUMSCRIPTION  where(select CIRCUM_ID from STATUS where(select PARTY_CIRCUM2  from CORRELATION where CORRELATION_ID="+correlationId+")=PARTY_CIRCUM_ID)=CIRCUM_ID)=REF_ID");
+
+while (results.next()) {
+        correlationAuthor=results.getString("AUTHOR");
+	correlationRefSpeciesName=results.getString("SPECIESNAME");
+
+out.println("                   Correlation Author: <i>"+correlationAuthor+" </i><br>\n");
+out.println("                   Taxon Used in Citation: <i>"+correlationRefSpeciesName+" </i><br>\n");
+} //end  while
+
+
+results = query.executeQuery("select name, commonName  from name where(select name_id from name_usage where(select CIRCUM_ID from STATUS where(select PARTY_CIRCUM2  from CORRELATION where CORRELATION_ID="+correlationId+")=PARTY_CIRCUM_ID)=circum_id)=name_id");
+
+
+
+while (results.next()) {
+        correlationTaxon=results.getString("name");
+        correlationCommonName=results.getString("commonName");
+
+out.println("                   Correlation Taxon: <i>"+correlationTaxon+" </i><br>\n");
+out.println("                   Correlation Common Name : <i>"+correlationCommonName+" </i><br>\n");
+} //end  while
+
+
+stmt.close();
+query.close();
+conn.close();
 } //end try
 catch ( Exception e ){out.println("The Query Jumbled - circumscription "+e.getMessage());}
 
