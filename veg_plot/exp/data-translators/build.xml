@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-09-16 17:23:10 $'
- 	*     '$Revision: 1.11 $'
+ 	*     '$Date: 2002-12-04 17:02:24 $'
+ 	*     '$Revision: 1.12 $'
 --> 
 <project name="data-translators" default="compile" basedir=".">
 	
@@ -63,7 +63,7 @@
 		
 		<!-- properties files -->
 		<copy todir="${build}" filtering="yes" >
-			<fileset dir="${src}/data-translators" >
+			<fileset dir="${lib}" >
   	    <include name="plugin.properties"/>
   	  </fileset>
   	</copy>
