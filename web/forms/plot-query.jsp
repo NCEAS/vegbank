@@ -2,7 +2,6 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<jsp:useBean id="bean" class="org.vegbank.ui.struts.PlotQueryForm"/>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
@@ -15,8 +14,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2004-05-07 23:21:53 $'
-*  '$Revision: 1.21 $'
+*      '$Date: 2004-06-14 15:14:54 $'
+*  '$Revision: 1.22 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
