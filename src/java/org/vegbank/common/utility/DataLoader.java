@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-16 17:37:44 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-29 00:24:54 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,7 +118,7 @@ public class DataLoader
 				{
 					ObjectToDB o2db = new ObjectToDB(i.next());
 					o2db.setForeignKeys(foreignKeys);
-					o2db.write();
+					o2db.insert();
 					foreignKeys.put(
 						o2db.getPrimaryKeyFieldName(),
 						new Integer(o2db.getPrimaryKey()));

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:33:27 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-29 00:24:54 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ public class AddJournalAction extends Action
 		ObjectToDB jRef2db = new ObjectToDB(jRef);
 		try
 		{
-			jRef2db.write();
+			jRef2db.insert();
 		}
 		catch (Exception e)
 		{

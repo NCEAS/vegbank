@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-16 02:48:34 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-05-29 00:24:54 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@ public class AddCoverMethodAction extends Action
   		ObjectToDB cm2db = new ObjectToDB(cm);
 	  	try
 		  {
-			  cm2db.write();
+			  cm2db.insert();
 		  }
   		catch (Exception e)
 	  	{

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-16 02:46:58 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-29 00:24:54 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,7 +123,7 @@ public class AddReference implements VegbankCommand
 				ReferenceParty rp =  this.getReferenceParty(party);
 				// Must add rp to database to get pk
 				ObjectToDB o2db = new ObjectToDB(rp);
-				o2db.write();
+				o2db.insert();
 				int partyId = o2db.getPrimaryKey();
 				
 				// Now I can fill in the linking object
@@ -137,7 +137,7 @@ public class AddReference implements VegbankCommand
 		
 		// Write the reference to the database
 		ObjectToDB o2db = new ObjectToDB(ref);
-		boolean success = o2db.write();
+		boolean success = o2db.insert();
 
 		// Return the state of play		
 		if (success)

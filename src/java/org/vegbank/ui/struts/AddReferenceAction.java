@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-16 02:48:34 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-05-29 00:24:54 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ public class AddReferenceAction extends Action
 				ObjectToDB rp2db = new ObjectToDB(rp);
 				try
 				{
-					rp2db.write();
+					rp2db.insert();
 				}
 				catch (Exception e)
 				{
@@ -122,7 +122,7 @@ public class AddReferenceAction extends Action
 			ObjectToDB ref2db = new ObjectToDB(ref);
 			try
 			{
-				ref2db.write();
+				ref2db.insert();
 			}
 			catch (Exception e)
 			{

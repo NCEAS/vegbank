@@ -9,6 +9,7 @@ package org.vegbank.common.utility;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -38,22 +39,13 @@ public class DatabaseAccess
 	 * @return ResutSet
 	 */
 
-	public ResultSet issueSelect(String inputStatement)
+	public ResultSet issueSelect(String inputStatement) throws SQLException
 	{
 		ResultSet results = null;
-		try
-		{
-			//compose and issue a prepared statement for loading a table	
-			//execute the query
-			Statement query = this.getConnection().createStatement();
-			results = query.executeQuery(inputStatement);
-
-		} // end try 
-		catch (Exception e)
-		{
-			System.out.println("DatabaseAccess issueSelect sql: " + inputStatement);
-			e.printStackTrace();
-		}
+		//compose and issue a prepared statement for loading a table	
+		//execute the query
+		Statement query = this.getConnection().createStatement();
+		results = query.executeQuery(inputStatement);
 		return results;
 	} //end method
 	
