@@ -9,8 +9,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-12-14 01:59:36 $'
-  *  '$Revision: 1.8 $'
+  *      '$Date: 2005-02-16 21:31:11 $'
+  *  '$Revision: 1.9 $'
   *
   *
   -->
@@ -132,13 +132,15 @@ function setNameMatchType() {
 				<br>
 		<input type="radio" name="matchType" value="is"/>is exactly 
 				<span class="sizetiny">
-				(use % as a wildcard to match anything)
+				(use % as a wildcard: e.g. %sedge)
 				</span>
 				<br>
 		<input type="hidden" name="xwhereKey_commname" value="xwhere_match"/>
 		<input type="hidden" name="xwhereSearch_commname" value="true"/>
 		<input type="hidden" name="xwhereMatchAny_commname" value="false"/>
 				</span>
+                <br>
+					<input type="submit" value="search for communities"/>
 
 	      </td>
             </tr><!-- IGNORE CASE -->
