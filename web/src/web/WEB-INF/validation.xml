@@ -174,9 +174,6 @@
 			<field property="pcAC" depends="required">
 				<arg0 key="Plant concept accession code" resource="false" />
 			</field>
-			<field property="plantName" depends="required">
-				<arg0 key="Name you call this concept" resource="false" />
-			</field>
 			<field property="taxonfit" depends="required">
 				<arg0 key="Taxon fit" resource="false" />
 			</field>
