@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2005-03-15 04:49:35 $'
-* '$Revision: 1.146 $'
+* '$Author: mlee $'
+* '$Date: 2005-03-15 05:23:16 $'
+* '$Revision: 1.147 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -491,6 +491,10 @@
    
    <loadfile srcfile="${includes_src}/footer.html" property="webpage_footer_html" />
    <filter token="webpage_footer_html" value="${webpage_footer_html}" />
+   <loadfile srcfile="${includes_src}/stylesheets_declaration.html" property="stylesheets_declaration.html" />
+   <filter token="stylesheets_declaration.html" value="${stylesheets_declaration.html}" />
+   
+   
    <!-- =========== -->
    
 
