@@ -1,0 +1,4 @@
+RewriteEngine  on
+
+RewriteRule    ^([0-9]+)$  /vegbank/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=summary&queryType=simple&plotId=$1 [L]
+RewriteRule    ^([a-zA-Z][a-zA-Z])(.+)\.(.*)$  /vegbank/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=summary&queryType=simple&plotId=$2&vbi=$1&date=$3   [R,L]
