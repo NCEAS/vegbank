@@ -12,11 +12,11 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 22:52:41 $'
- * 	'$Revision: 1.5 $'
+ *  '$Date: 2002-04-17 01:51:05 $'
+ * 	'$Revision: 1.6 $'
  */
-public class NCVSDataSource implements PlotDataSourceInterface
-//public class NCVSDataSource
+//public class NCVSDataSource implements PlotDataSourceInterface
+public class NCVSDataSource
 {
 	
 	//the name of the odbc source
