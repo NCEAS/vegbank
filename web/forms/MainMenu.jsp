@@ -13,8 +13,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-12-16 10:01:05 $'
-*  '$Revision: 1.14 $'
+*  '$Date: 2005-02-02 00:43:51 $'
+*  '$Revision: 1.15 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -129,7 +129,7 @@
 	<TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@info.png" /></TD><TD>
 
 <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
-      <span class=" sizelarge">See <a href="@forms_link@vbsummary.jsp">an overview of VegBank Data</a> 
+      <span class=" sizelarge">See <a href="@forms_link@vbsummary.jsp">an overview of VegBank Data</a> and Map 
       </span> 
       </td> </tr>
 	  </table>
