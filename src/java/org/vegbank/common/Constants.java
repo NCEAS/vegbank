@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-12-05 23:32:49 $'
- *	'$Revision: 1.7 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-01-31 01:31:13 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,5 +62,6 @@ public interface Constants
 	
 	// Application Scope Beans
 	public static final String STATELISTBEAN_KEY = "statelistbean"; 
-	public static final String COUNTRYLISTBEAN_KEY = "countrylistbean";;
+	public static final String COUNTRYLISTBEAN_KEY = "countrylistbean";
+	public static final String REGIONLISTBEAN_KEY = "regionlistbean";
 }

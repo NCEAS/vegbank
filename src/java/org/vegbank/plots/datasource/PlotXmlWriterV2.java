@@ -12,9 +12,9 @@ import java.util.*;
  *  This class handles the conversion from vegbank and other <br>
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
- *  '$Author: farrell $' <br>
- *  '$Date: 2003-11-05 20:48:59 $' <br>
- *  '$Revision: 1.6 $' <br>
+ *  '$Author: anderson $' <br>
+ *  '$Date: 2004-01-31 01:31:13 $' <br>
+ *  '$Revision: 1.7 $' <br>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -147,7 +147,8 @@ public class PlotXmlWriterV2
 			System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
-    System.out.println("here I am " + sb);
+    System.out.println("PlotXmlWriterV2.getMultiplePlotXMLString(): here I am ");
+//    System.out.println("PlotXmlWriterV2.getMultiplePlotXMLString(): here I am " + sb);
     return sb.toString();
 	}
 

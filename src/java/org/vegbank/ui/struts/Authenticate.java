@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 02:08:03 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-01-31 01:31:13 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,7 +78,13 @@ public class Authenticate implements  Authentication
 				+ userPerms
 				+ " with the required roles; "
 				+ reqRoles);
-				
+			
+		if (reqRoles == null) {
+			LogUtility.log("Authenticate: assuming Action should be " +
+					"configured with min role (reg)");
+			reqRoles = "reg";
+		}
+		
 		return PermComparison.matchesAll(reqRoles, userPerms);
 	}
 

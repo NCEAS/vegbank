@@ -5,9 +5,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-12-05 22:49:35 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-01-31 01:31:13 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import org.apache.struts.config.ModuleConfig;
 import org.vegbank.common.Constants;
 import org.vegbank.common.model.utility.Countrylist;
 import org.vegbank.common.model.utility.Statelist;
+import org.vegbank.common.model.utility.Regionlist;
 
 /**
  * Set up beans in application scope for the vegbank webapp.
@@ -60,12 +61,10 @@ public class VegbankInitPlugin implements PlugIn
 	{
 		ServletContext sc = servlet.getServletContext();
 		
-		Statelist statelist = new Statelist();
-		Countrylist countrylist = new Countrylist();
-		
 		// Make the initialized beans available in application scope
-		sc.setAttribute(Constants.STATELISTBEAN_KEY, statelist);
-		sc.setAttribute(Constants.COUNTRYLISTBEAN_KEY, countrylist);
+		sc.setAttribute(Constants.STATELISTBEAN_KEY, new Statelist());
+		sc.setAttribute(Constants.COUNTRYLISTBEAN_KEY, new Countrylist());
+		sc.setAttribute(Constants.REGIONLISTBEAN_KEY, new Regionlist());
 	}
 
 }

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 07:11:14 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-01-31 01:31:13 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,6 @@ public class PermComparison {
 	}
 
 	/* =============================================================== */
-	
 	/**
 	 * @param required comma separated list of required role names
 	 * @param given comma separated list of given role names
@@ -161,11 +160,15 @@ public class PermComparison {
 	}
 	
 	/**
-	 *
 	 * @param csv Comma separated list of role names found in the 
 	 * properties file.
+	 * @return int added all given roles' integer values
 	 */
 	public static int parsePermissions(String csv) {
+		if (csv == null) {
+			return 0;
+		}
+		
 		StringTokenizer st = new StringTokenizer(csv, ", ");
 		String tmpRole;
 		int roleSum = 0;
