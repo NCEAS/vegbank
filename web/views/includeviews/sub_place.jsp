@@ -5,7 +5,7 @@
 <TR><TD class="datalabel">Named Places</TD><TD>
 <table class="leftrightborders" cellpadding="2" width="100%">
 <!-- <tr>
-< DO NOT include file="../autogen/place_summary_head.jsp" >
+ DO NOT includefile="../autogen/place_summary_head.jsp" 
 </tr>-->
 <logic:iterate id="onerowofplace" name="place-BEANLIST">
 <tr class="@nextcolorclass@">
