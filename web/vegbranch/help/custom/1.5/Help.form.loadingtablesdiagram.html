@@ -1,14 +1,40 @@
 <html>
 <head>
+ 
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>VegBranch help</title>
+<title>VegBranch Help: Loading Tables Diagram </title>
 <link href="@stylesheet@" type="text/css" rel="stylesheet">
 </head>
 <body>@vegbank_header_html_normal@
-<h2>Help for 'Loading Table Diagram<!-- [loadingtablesdiagram]-->'</h2>
-<img border="0" alt="in progress: (screen shot of 'Loading Table Diagram')" src="../screenshots/smaller/loadingtablesdiagram_1.2.png">
+<h2>Help for 'Loading Tables Diagram<!-- [loadingtablesdiagram]-->'</h2>
+<p class="instructions">To open form in VegBranch, use the "View Loading Tables" option on the toolbar, then the button "Diagram of Tables" button on that form.</p>
+
+<img border="0" alt="screen shot of 'Loading Table Diagram'" src="../screenshots/loadingtablesdiagram_1.5.png">
 <p>
-<help>This is a diagram that attempts to show the relationship of the different tables in the loading module to you.  Each table is represented as a box, and different information can be displayed for each table, according to the picklists at the top of the diagram.  This diagram can be resized with the display controls.  You can also double-click a table to get more information that what is seen here, which is controlled also by a picklist at the top of the diagram.</help>
+This diagram shows the relationship between the different tables in the loading module.  Each table is represented as a box, and different information can be displayed for each table, according to the picklists at the top of the diagram.  This diagram can be resized with the display controls.  You can also double-click a table to get more information that what is seen here, which is controlled also by a picklist at the top of the diagram.
+</p>
+
+<p>Each loading module table is described in <a href="@vegbranch_link@/vbr-loadmod.html">greater detail here</a>.  This page describes the relationship between the loading tables.
+</p>
+
+<p>Text fields link data from one row in one table the data in another table.  For example, in <strong class="vbrtbl">Plot Data</strong>, the data on the row with <strong class="vbrfld">AuthorPlotCode</strong>= "plot.5" is linked to all data in <strong class="vbrtbl">Strata Cover Data</strong> with <strong class="vbrfld">authorPlotCode</strong> = "plot.5".  Each link between tables is symbolized by a colored line between the tables in the above diagram.  Each line color represents a certain type of field, shown in the key at the top.</p>
+<p>
+Sometimes, there are multiple fields that link tables, and multiple lines connect these tables in the diagram.  For example, the yellow line <strong class="vbrfld">StratumIndex</strong> and the red line <strong class="vbrfld">AuthorPlotCode</strong> link <strong class="vbrtbl">Plot Normalized</strong> where the strata definitions appear (such as height, cover, valid strata) and <strong class="vbrtbl">Strata Cover</strong> where plant data in each stratum is listed.  Both fields must be the exact same in both tables for the data to be linked together.</p>
+
+<h4>Non-intuative links</h4>
+<p>There are several tables with non-intuative links.  The most widely used are <strong class="vbrfld">PlantCode</strong> and <strong class="vbrfld">commCode/Name</strong>.  
+The lines in the above diagram seem to indicate that plants or communities mentioned in loading tables must
+be defined in the <strong class="vbrtbl">Species List</strong> or <strong class="vbrtbl">Community Concept</strong> tables.  This is optional.  If you use <strong>standard names</strong> for plants and/or communities, you <strong>may not need to use the Species List and/or Community Concept Tables</strong>.  Standard names (such as scientific names, USDA Codes, CEGL codes) can be looked up
+in the VegBank module, directly from the other Loading tables, such as <strong class="vbrtbl">Strata Cover</strong> and <strong class="vbrtbl">Plot Communities</strong>.  
+How these names are looked up is described in the Matching Plants and Matching Communities Forms.
+</p>
+<p>Note also, that Party fields in the loading tables (<strong class="vbrtbl">Plot Data, Plot Norm, Plot Communities</strong>) have names other than UserPartyCode, to signify what the parties are doing, and that there may be more than one party contributing in a particular way.  The names of the party fields are listed in purple in the above diagram.</p>
+
+<p>Note that the names of communities in the <strong class="vbrtbl">Plot Communities</strong> Table are <strong class="vbrfld">commName1-commName4</strong>.  These map onto <strong class="vbrfld">CommCode</strong> in the <strong class="vbrtbl">Community Concept</strong> table, not CommName. </p>
+<p>Note also, that if you use any synonyms or parents in the <strong class="vbrtbl">Species List</strong> or <strong class="vbrtbl">Community Concept</strong> table, these too will be looked up as Plant/Comm Concepts.  First, VegBranch will look up the values in these fields in your <strong class="vbrtbl">Species List</strong>/<strong class="vbrtbl">Community Concept</strong> Loading Tables, then it will try to match the value to VegBank Module concepts.
+</p>
+<p>Key: VegBranch <strong class="vbrfld">Loading Tables Names appear like this.</strong>  <strong class="vbrfld">Field names appear like this</strong>. </p>
+
 
 
 @vegbank_footer_html_tworow@
