@@ -30,6 +30,10 @@
 	<property name="build_src" value="build/src/servlet" />
 	<property name="build_lib" value="build/lib" />
 	<property name="build_html" value="build/html" />
+	<property name="build_xml" value="build/xml" />
+	<property name="build_sql" value="build/sql" />
+	<property name="build_bin" value="build/bin" />
+
 	<property name="build_multipart_src" value="build/src/servlet/multipart" />
 	<property name="database_access_module" value="build/lib/dbAccess.jar" />
 	
@@ -43,7 +47,7 @@
 	<property name="src_lib" value="../lib" />
 	
 	<!-- these properties are for the web content / navigation -->
-	<property name="servlet_home" value="C://jakarta-tomcat/lib/servlet.jar" />
+	<property name="servlet_home" value="/home/computer/harris/tools/servlet.jar" />
 	<property name="server" value="127.0.0.1:8080"/>
 	<property name="servlet-path" value="/examples/servlet/"/>
   <property name="html-path" value="/examples"/>
@@ -155,11 +159,16 @@
     includes=" servletmodule.jar dbAccess.jar xerces** xalan**"
 		excludes="**/CVS* "
 	/>
-	<copyfile src="${build_lib}/database.properties" 
+
+<!--
+<copyfile src="${build_lib}/database.properties" 
 		filtering="yes" 
 		dest="${installDir}/database.properties" 
-	/>
-	<copydir src="${web_docs}" 
+
+/>
+-->
+
+<copydir src="${web_docs}" 
   	dest="${installDir}"
 		filtering="yes"
 		includes="**.html"

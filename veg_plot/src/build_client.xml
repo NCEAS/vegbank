@@ -29,7 +29,7 @@
 	<property name="build_embedded_db" value="./build/src/client/embedded_db" />
 	<property name="src_communication" value="./client" />
 	<property name="src_interface" value="./interface" />
-	<property name="src_embedded_db" value="./embeddedDb" />
+	<property name="src_embedded_db" value="./embeddedDB" />
 	<property name="src_bin" value="../bin" />
 	
 	<property name="src_xml" value="../xml"/>
@@ -44,7 +44,7 @@
 	
 	
 	<property name="cpath" 
-		value="${build_communication}:${build_interface}:${database_access_module}./"/>
+		value="${database_access_module}:${build_communication}:${build_interface}:./"/>
 </target>
 
 <target name="prepare" depends="init">
