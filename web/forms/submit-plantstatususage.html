@@ -6,8 +6,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-08-09 19:43:23 $'
-  *  '$Revision: 1.5 $'
+  *      '$Date: 2002-08-13 13:56:30 $'
+  *  '$Revision: 1.6 $'
   *
   *
   -->
@@ -74,7 +74,7 @@
 			Email address<font color="#F90000"><b>*</b></font>:</font>
 		</td>
 		<td align="left">
-			<input type="text" disabled size="25" maxlength="50"  name="emailAddress" value="@emailAddress@">
+			<input class="iform" type="text" readonly size="25" maxlength="50"  name="emailAddress" value="@emailAddress@">
 		</td>
 	</tr>
 </table>
@@ -128,25 +128,25 @@
 	<tr> 
 		<td width="9%">First Name:</td>
 		<td colspan="2"> 
-			<input type="text" name="plantPartyGivenName" value="@plantPartyGivenName@">
+			<input  class="iform" readonly  type="text" name="plantPartyGivenName" value="@plantPartyGivenName@">
 		</td>
 	</tr>
 	<tr> 
 		<td width="9%">Last Name:</td>
 		<td colspan="2"> 
-			<input type="text" name="plantPartySurName" value="@plantPartySurName@">
+			<input class="iform" readonly type="text" name="plantPartySurName" value="@plantPartySurName@">
 		</td>
 	</tr>
 	<tr> 
 		<td width="9%">Institution:</td>
 		<td colspan="2"> 
-			<input type="text" name="plantPartyInstitution" value="@plantPartyInstitution@">
+			<input  class="iform" readonly size="64"  type="text" name="plantPartyInstitution" value="@plantPartyInstitution@">
 		</td>
 	</tr>
 	<tr> 
 		<td width="9%">Email Address:</td>
 		<td colspan="2"> 
-			<input type="text" name="plantPartyEmailAddress" value="@plantPartyEmailAddress@">
+			<input   class="iform" readonly type="text" name="plantPartyEmailAddress" value="@plantPartyEmailAddress@">
 		</td>
 	</tr>
 </table>
@@ -183,7 +183,11 @@
 		</td>
 	</tr>
 	<tr> 
- 		<td width="9%">Dates: (like: 20-JUN-2002)</td>
+ 		<td width="9%">Dates:
+		<a href="http://vegbank.nceas.ucsb.edu/forms/hints.html#dateformats">
+			<img border="0" src="http://vegbank.nceas.ucsb.edu/vegbank/images/question.gif">
+		</a>
+		</td>
 		<td colspan="3"> Status start: 
   		<input type="text" name="statusStartDate" value="@statusStartDate@" size="30">
 			Status stop: 

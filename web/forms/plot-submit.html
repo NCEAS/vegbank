@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-07-18 04:00:17 $'
-  *  '$Revision: 1.12 $'
+  *      '$Date: 2002-08-13 13:56:30 $'
+  *  '$Revision: 1.13 $'
   *
   *
   -->
@@ -132,12 +132,7 @@ MM_reloadPage(true);
 			Salutation:
 		</font></td>
 		<td>
-			<select class="item"name="salutation" multiple size=3>
-			<option selected>Mr.
-			<option>Mrs.
-			<option>Ms.
-			<option>Dr.
-			</select>
+			<input class="iform" readonly  type="text" size="5" name="salutation" value="@salutation@">
 			</td>
 	</tr>
 	
@@ -148,7 +143,7 @@ MM_reloadPage(true);
 			First name:
 		</font></td>
 		<td align="left">
-			<input type="text"  size="25" maxlength="50"  name="firstName">
+			<input class="iform" readonly type="text"  size="25" maxlength="50"  name="firstName" value="@givenName@">
 		</td>
 	</tr>
 	<tr>
@@ -157,7 +152,7 @@ MM_reloadPage(true);
 				Last name:
 		</font></td>
 		<td align="left">
-			<input type="text"  size="25" maxlength="50"  name="lastName">
+			<input class="iform" readonly  type="text"  size="25" maxlength="50"  name="lastName" value="@surName@">
 		</td>
 	</tr>
 	<tr>
@@ -166,7 +161,7 @@ MM_reloadPage(true);
 			Email address<font color="#F90000"><b>*</b></font>:</font>
 		</td>
 		<td align="left">
-			<input type="text"  size="25" maxlength="50"  name="emailAddress">
+			<input class="iform" readonly  type="text"  size="25" maxlength="50"  name="emailAddress" value="@emailAddress@">
 		</td>
 	</tr>
 	
@@ -176,7 +171,7 @@ MM_reloadPage(true);
 			Organization name:
 		</font></td>
 		<td align="left">
-			<input type="text"  size="55" maxlength="50" required value="" name="orgName">
+			<input class="iform" readonly type="text"  size="55" maxlength="50"   name="orgName" value="@institution@">
 		</td>
 	</tr>
 	
@@ -184,7 +179,7 @@ MM_reloadPage(true);
 
 
 
-&nbsp;
+&nbsp;`
 &nbsp;
 &nbsp;
 &nbsp;
@@ -288,7 +283,7 @@ MM_reloadPage(true);
 <table class="category">
 	<tr>
 	<td>
-		<input name="plotFileType" type="radio" value="tnc">  TNC Plots Archive  
+		<input  name="plotFileType" type="radio" value="tnc" checked>  TNC Plots Archive  
 		<br>
 	</td>
 	</tr>
