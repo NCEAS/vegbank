@@ -16,14 +16,14 @@ import java.sql.*;
 public class  issueStatement
 {
 
-/*Global variables for the database connection*/
+//Global variables for the database connection
 Connection conn=null;
 Statement query = null;
 ResultSet results = null;
 
 
 public String outValueString; 
-public String outReturnFields[] = new String[10000]; //array containg returned vals
+public String outReturnFields[] = new String[80000]; //array containg returned vals
 public int outReturnFieldsNum;  //number of lines returned
 public Vector returnedValues = new Vector(); //vector containg the same as above array
 //hash containg the element name and value
@@ -56,9 +56,9 @@ String action=args[0];
 	int returnFieldLength=3;
 
 /**
-* Call the issueSelect method which will return an array with the return
-* values
-*/
+ * Call the issueSelect method which will return an array with the return
+ * values
+ */
 
 	issueStatement i = new issueStatement();
 	i.issueSelect(statement, action, returnFields, returnFieldLength);	
@@ -106,8 +106,7 @@ if (action.trim().equals("insert")) {
  * @param inputStatement
  * @param inputAction
  * @param inputReturnFields
- * @param inputReturnFieldLength 
- * @param pconn - database connection
+ * @param inputReturnFieldLength
  *
  */
 
@@ -119,12 +118,16 @@ public void issueSelect(String inputStatement, String inputAction,
 * establish the database connection and statement
 */
 try {
-dbConnect m = new dbConnect();
-m.makeConnection(conn, query);
-	System.out.println("Opening db connection by calling dbConnect from \n"
-	+"issueStatement.issueSelect");
-	conn=m.outConn;
-	query=m.outStmt;	
+////dbConnect m = new dbConnect();
+////m.makeConnection(conn, query);
+System.out.println("Grabbing a DB connection from the local pool");
+
+LocalDbConnectionBroker lb = new LocalDbConnectionBroker();
+conn = lb.manageLocalDbConnectionBroker("getConn");
+query = conn.createStatement ();
+
+////	conn=m.outConn;
+////	query=m.outStmt;	
 } catch (Exception e) {System.out.println("failed in the  dbConnect.makeConnection call" + e.getMessage());}
 
 try {
@@ -179,9 +182,9 @@ while (results.next()) {
 	
 }  //end while
 
-/*assume that b/c a database connection was made here that it needs to be closed*/
+//clean up the connections and statements
 query.close();
-conn.close();
+//conn.close();
 
 } //end if			
 } //end try 
@@ -394,6 +397,123 @@ catch ( Exception e ){System.out.println("failed at issueStatement.issueSelect: 
 } //end method
 
 	
+
+/**
+ * This method does the same as the above method but it accesses a local
+ * connection pooling manager for connection
+ *
+ * This method is the same as above except that it needs a db connection passed 
+ * to it and it will not close the connection - it should be closed by the calling 
+ * class where connection management should be accomplished.  Also, this method
+ * requires a hashtable to be passed so that it may be populated with the result
+ * sets
+ *
+ * @param inputStatement
+ * @param inputAction
+ * @param inputReturnFields
+ * @param inputReturnFieldLength
+ * @param resultHash - the hash table that will be populated with the results 
+ */
+
+public void issueSelect(String inputStatement, String inputAction, 
+	String[] inputReturnFields, int inputReturnFieldLength, Hashtable resultHash)
+{
+
+//define a connection
+Connection conn = null;
+
+//grab a connection from the local connection pooling manager
+try {
+
+//this class should have been initialized by the an interface class before this
+// method was called , allowing this method to obtain a connection
+LocalDbConnectionBroker lb = new LocalDbConnectionBroker();
+conn = lb.manageLocalDbConnectionBroker("getConn");
+
+query = conn.createStatement ();
+} 
+
+catch (Exception e) {
+ System.out.println("failed at issueStatement.issueselect obtaining a connection "
+	+" from the local broker " + e.getMessage());
+}
+
+
+try {
+
+//compose and issue a prepared statement for loading a table	
+if (inputAction.equals("select")) {
+
+	//execute the query
+	results = query.executeQuery(inputStatement);
+
+	outReturnFieldsNum=0;
+	//make a matrix to store the returned values because storing them directly
+	//in a string was giving a jdbc error that couldn't be fixed
+	String verticalStore[] = new String[inputReturnFieldLength];
+
+int repetitionCnt=0;  //number of repetitions of the element
+
+	//get all the levels returned
+	while (results.next()) {
+		repetitionCnt++;
+	
+		StringBuffer resultLine = new StringBuffer();
+		//match return elements with correct column name
+		for (int i=0;i<inputReturnFieldLength; i++) {
+		
+			//if the results is null then handle it below
+			if (results.getString(inputReturnFields[i])==null) {
+				resultLine=resultLine.append("nullValue");
+				verticalStore[i]="nullValue"; //populate the vertical storage array
+				//populate the hashtable
+				//resultHash.put(inputReturnFields[i],resultLine);
+			}
+
+		else {
+				
+				String buf =(results.getString(inputReturnFields[i]));
+				resultLine.append(" ").append(buf.trim());
+				verticalStore[i]=buf;	//populate the vertical storage array
+				
+				//populate the hash table - but first determine if already
+				// exists
+				if  ( resultHash.containsKey(inputReturnFields[i]) )
+					{
+						resultHash.put(inputReturnFields[i]+"."+repetitionCnt,buf);
+						//System.out.println("flag: "+repetitionCnt+" "+inputReturnFields[i]+" "+buf);
+					}
+				else {resultHash.put(inputReturnFields[i],buf);}
+			}
+	
+		}
+
+		//grab the values out of the vertical store and stick them into a string
+		//that is separated by pipes, this way all the data associated with a 
+		//plot is on a sigle line which can be tokenized later and positioned
+		//into an xml structure
+	
+		String returnedRow="";
+		for (int ii=0;ii<verticalStore.length; ii++) {
+			returnedRow=returnedRow+"|"+verticalStore[ii];
+		}
+		
+		outReturnFields[outReturnFieldsNum]=returnedRow; //add to array
+		outReturnFieldsNum++;
+		returnedValues.addElement(returnedRow); //add to the vector
+		outResultHash = resultHash;
+	}  //end while
+
+/*don't close b/c connection was passed into the method*/
+//query.close();
+//conn.close();
+
+} //end if			
+} // end try 
+catch ( Exception e ){System.out.println("failed at issueStatement.issueSelect: "
++e.getMessage());e.printStackTrace();}
+} //end method
+
 	
 	
 	
