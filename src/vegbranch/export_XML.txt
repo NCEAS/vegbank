@@ -3,7 +3,7 @@ Option Explicit
 ''add new xml export option
 Const intWriteDebugComments = 0
 Const lngCharsToDumpStrXML = 25000 'not used yet
-Const overwriteDebug = True 'true if should always insert debugging comments into XML
+Const overwriteDebug = False 'true if should always insert debugging comments into XML
 Const blnSkipAllFldsWhereAccCodeRecog = True 'true if skipping all fields, even reqd ones if something is recog: needs new schema!
 
 Public Function interpretXMLSuppress(intCaseAssessionCodeSuppress As Integer) As String
@@ -133,13 +133,13 @@ End If
        End If
      End If
      'loop through collection of tables and request data for each
-     Dim inttemp As Integer
-     For inttemp = 1 To colTbls.Count
+     Dim intTemp As Integer
+     For intTemp = 1 To colTbls.Count
        'add current supporting XML to string that is collecting it
-       strSuppXML = table2xml(colTbls(inttemp), "", , strWHERE, (intWriteDebugComments > 0), True, True, strAccessionPrefixStop)
+       strSuppXML = table2xml(colTbls(intTemp), "", , strWHERE, (intWriteDebugComments > 0), True, True, strAccessionPrefixStop)
        'WRITE SUPPLEMENTAL TABLES TO FILE
        Call WriteLineToFile(strSuppXML, strFile, -1)
-     Next inttemp
+     Next intTemp
      
       
   End Select
@@ -447,10 +447,10 @@ End If
     
     lngCurrent = lngCurrent + 1
        '' START GETTING DATA to XML string
-       Dim inttemp As Integer
-       For inttemp = 1 To colFlds.Count
+       Dim intTemp As Integer
+       For intTemp = 1 To colFlds.Count
          Dim strThisField As String
-         strThisField = colFlds(inttemp)
+         strThisField = colFlds(intTemp)
          Select Case colKeys(strThisField)
            Case "FK"
                'is a FK - see what kind of FK:
@@ -513,7 +513,7 @@ End If
            
           End If 'non-nulls
           End Select '?
-       Next inttemp
+       Next intTemp
        'scan for other tables that are related to this one via inverted relationships:
     'if the current table has the field on it: accessionCode and the value of that accessionCode starts with strAccPrefixToStop ;
     'then we don't get recursive interted elelemtns
@@ -725,7 +725,7 @@ End If
     If blnDebug Then strXML = strXML & "<!-- " & Now() & " -->"
     'increase count of recs
     lngCurrent = lngCurrent + 1
-     Dim inttemp As Integer
+     Dim intTemp As Integer
     If fieldExistOnTbl("accessionCode", strTbl) Then
       'check to see if accessionCode recognized
       Dim strCurrAccCode As String
@@ -734,13 +734,13 @@ End If
         'has accessionCode as field, and it isn't null!  how exciting, now check to see if matches value that escapes rest of fields' printing:
         If doPrefixesMatchAccCode(strAccPrefixToStop, strCurrAccCode) Then
           'escape! print accCode and escape this entity!
-          For inttemp = 1 To colFlds.Count
-            If colFlds(inttemp) = strPKof Or colFlds(inttemp) = "accessionCode" Then
+          For intTemp = 1 To colFlds.Count
+            If colFlds(intTemp) = strPKof Or colFlds(intTemp) = "accessionCode" Then
               'write these: 'don't need to xmlize these 2 fields
-              strXML = strXML & xml_Ent(strRightCapTableName & "." & colFlds(inttemp)) & .Fields(colFlds(inttemp)) & _
-                xml_Ent(strRightCapTableName & "." & colFlds(inttemp), True)
+              strXML = strXML & xml_Ent(strRightCapTableName & "." & colFlds(intTemp)) & .Fields(colFlds(intTemp)) & _
+                xml_Ent(strRightCapTableName & "." & colFlds(intTemp), True)
             End If
-          Next inttemp
+          Next intTemp
           
           GoTo concludeThisEnt
         End If
@@ -749,9 +749,9 @@ End If
     
        '' START GETTING DATA to XML string
       
-       For inttemp = 1 To colFlds.Count
+       For intTemp = 1 To colFlds.Count
          Dim strThisField As String
-         strThisField = colFlds(inttemp)
+         strThisField = colFlds(intTemp)
          Select Case fcnColkey(strTbl, strThisField)
            Case "FK"
                'is a FK - see what kind of FK:
@@ -814,7 +814,7 @@ End If
            
           End If 'non-nulls
           End Select '?
-       Next inttemp
+       Next intTemp
        'scan for other tables that are related to this one via inverted relationships:
     'if the current table has the field on it: accessionCode and the value of that accessionCode starts with strAccPrefixToStop ;
     'then we don't get recursive interted elelemtns
@@ -975,9 +975,9 @@ strRet = ""
   Dim lngCutOff As Long, lngPrinted As Long
   lngCutOff = 100
   Do Until lngPrinted >= Len(strString)
-    Dim inttemp As Long, intAdj As Long
-    For inttemp = 1 To lngCutOff
-      Select Case Mid(strNotYet, lngCutOff + 1 - inttemp, 2)
+    Dim intTemp As Long, intAdj As Long
+    For intTemp = 1 To lngCutOff
+      Select Case Mid(strNotYet, lngCutOff + 1 - intTemp, 2)
         Case "><"
            'break middle
            intAdj = 0
@@ -987,13 +987,13 @@ strRet = ""
           intAdj = -1
        End Select
        If intAdj <> -1 Then Exit For
-     Next inttemp
+     Next intTemp
     
     Dim lngLenPrint As Long
-    If inttemp >= lngCutOff Then
+    If intTemp >= lngCutOff Then
       lngLenPrint = lngCutOff
     Else
-        lngLenPrint = lngCutOff + 1 - inttemp - intAdj
+        lngLenPrint = lngCutOff + 1 - intTemp - intAdj
     End If
     Dim strToPrint As String
     strToPrint = Left(strNotYet, lngLenPrint)
@@ -1137,7 +1137,7 @@ End Function
 Public Function createCodeToDocFlds()
   'creates more functions that streamline xml export process by hardcoding (generated from the model) once the values, rather than always looking up.
   'This needs to be run and the file extracted from this replace the autoGen_xml_export module, if the model changes.
-  Dim strFile As String, inttemp As Integer, strIfNull As String, strWhereForFields As String
+  Dim strFile As String, intTemp As Integer, strIfNull As String, strWhereForFields As String
   strWhereForFields = " and model='logical' and (not (xmlExportSkip=1)) ORDER BY seq"
   strFile = "C:\temp\doc_vbr_fields.txt"
   If prepareFileToWrite(strFile, True, ".txt", strFile) Then
@@ -1162,14 +1162,14 @@ Public Function createCodeToDocFlds()
   colWhat.Add "relType"
   colWhat.Add "relName"
   colWhat.Add "References"
- For inttemp = 1 To colWhat.Count
- If colWhat(inttemp) = "ClosedList" Then
+ For intTemp = 1 To colWhat.Count
+ If colWhat(intTemp) = "ClosedList" Then
    strIfNull = ""
  Else
    strIfNull = "n/a"
  End If
  'function declaration
- Call WriteLineToFile("Public function fcnCol" & colWhat(inttemp) & "(strTbl as string, strFld as string) as string", strFile)
+ Call WriteLineToFile("Public function fcnCol" & colWhat(intTemp) & "(strTbl as string, strFld as string) as string", strFile)
  Call WriteLineToFile("dim strRet as string", strFile)
  Call WriteLineToFile(" select case strTbl", strFile)
     Dim rstTbl As New ADODB.Recordset, rstFld As New ADODB.Recordset
@@ -1188,7 +1188,7 @@ Public Function createCodeToDocFlds()
          Do Until .EOF
            'get each field
            Call WriteLineToFile("    case """ & !FieldName & """", strFile)
-           Call WriteLineToFile("      strRet = """ & Nz(.Fields(colWhat(inttemp)), strIfNull) & """", strFile)
+           Call WriteLineToFile("      strRet = """ & Nz(.Fields(colWhat(intTemp)), strIfNull) & """", strFile)
          .MoveNext
          Loop
          End With
@@ -1203,10 +1203,10 @@ Public Function createCodeToDocFlds()
   
  
  Call WriteLineToFile(" end select 'table ", strFile)
- Call WriteLineToFile(" fcnCol" & colWhat(inttemp) & "=strRet", strFile)
+ Call WriteLineToFile(" fcnCol" & colWhat(intTemp) & "=strRet", strFile)
   'end fcn
  Call WriteLineToFile("end function ", strFile)
- Next inttemp
+ Next intTemp
  'special case, col for fields as collection manually coded
   Call WriteLineToFile("Public function fcnGetFieldsCol(strTbl as string) as collection", strFile)
    Call WriteLineToFile("  dim colFlds as new collection", strFile)
@@ -1242,7 +1242,7 @@ End Function
 Public Function createCodeToDocFlds_morecomplete()
   'creates more functions that streamline xml export process by hardcoding (generated from the model) once the values, rather than always looking up.
   'This needs to be run and the file extracted from this replace the autoGen_xml_export module, if the model changes.
-  Dim strFile As String, inttemp As Integer, strIfNull As String, strWhereForFields As String
+  Dim strFile As String, intTemp As Integer, strIfNull As String, strWhereForFields As String
   strWhereForFields = " and model='logical' and (not (xmlExportSkip=1)) ORDER BY seq"
   strFile = "C:\temp\doc_vbr_fields_more.txt"
   If prepareFileToWrite(strFile, True, ".txt", strFile) Then
