@@ -32,8 +32,9 @@
 <span class="datalabelsmall">Reference: </span><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a><br/>
 <logic:notEmpty name="onerow" property="commdescription">
 <span class="datalabelsmall">Description: </span><span class="largefield"><bean:write name="onerow" property="commdescription"/>&nbsp;</span><br/>
-<span class="datalabelsmall">Accession Code: </span><span class="largefield"><bean:write name="onerow" property="accessioncode"/></span>
 </logic:notEmpty>
+<span class="datalabelsmall">Accession Code: </span><span class="largefield"><bean:write name="onerow" property="accessioncode"/></span>
+
 </td>
 </tr>
 
