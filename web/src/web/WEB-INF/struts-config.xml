@@ -205,7 +205,7 @@
 	</action-mappings>
 	<controller processorClass="org.vegbank.ui.struts.RequestProcessor">
 		<set-property property="inputForward" value="true" />
-		<set-property property="maxFileSize" value="20M" />
+		<set-property property="maxFileSize" value="100M" />
 	</controller>
 	<message-resources parameter="org.apache.struts.webapp.example.ApplicationResources" />
 	<plug-in className="org.apache.struts.plugins.ModuleConfigVerifier" />
