@@ -62,39 +62,56 @@ public class  sqlMapper
 		{
 			Hashtable extendedQueryHash=getQueryTripleHash(transformedString, 
 				transformedStringNum);
-			int queryInstanceNum = getExtendedQueryInstanceNumber( extendedQueryHash );
+			
+			//make a completely separate hashtable for use with the 
+			//taxonomic queries for the is something weird when the
+			//same hash is used for creating both sql statements
+			Hashtable extendedTaxonQueryHash = getQueryTripleHash(transformedString, 
+				transformedStringNum);
+			
+			System.out.println("MAIN INPUT : "+extendedQueryHash.toString() );
 			String outFile = extendedQueryHash.get("outFile").toString().trim();
+			String taxonSql = null;
+			String nonTaxonSql = null;
+			
+			
 			//determine if there is a taxonomic component to the 
 			//query and if create that query to be used as a sub-select
-			int taxonComponentNum = taxonomicComponentExists(extendedQueryHash);
+			int taxonComponentNum = taxonomicComponentExists(extendedTaxonQueryHash);
 			if ( taxonComponentNum > 0)
 			{
 				System.out.println("TAXONOMIC LOOKUP! "+ taxonComponentNum);
+				//create the taxonomic sql query 
+				taxonSql = getExtendedTaxonomicQuery(extendedTaxonQueryHash) ;
+				
+				//fix this so that you can pass a string to the method
+				StringBuffer sqlBuf = new StringBuffer();
+				sqlBuf.append(taxonSql);
+				//issue the statement to the database
+				Vector plotIdVec = is.issuePureSQL(sqlBuf);
+				System.out.println("number of plots found with taxon: "+ plotIdVec.size() );
+				
+				
+				
+				//get the sql query for the attributes 
+				//that are not related to the taxonomy
+				nonTaxonSql = getExtendedNonTaxonomicQuery(extendedQueryHash) ;
 			}
-			
-			//start the sql statement
-			sb.append("select PLOT_ID from PLOTSITESUMMARY where ");
-			
-			for (int i=0;i<queryInstanceNum; i++) 
+			else 
 			{
-				sb.append( getSingleExtendedQueryInstanceSQL(extendedQueryHash, i) );
-				sb.append("\n");
-				//print the 'and'
-				if(i != ( queryInstanceNum-1) )
-				{
-					sb.append("and");
-				}
-				//end the statement
-				if ( i == ( queryInstanceNum-1) )
-				{
-					sb.append(";");
-				}
+				nonTaxonSql = getExtendedNonTaxonomicQuery(extendedQueryHash);
 			}
 			
-			System.out.println("SQL QUERY: \n" + sb.toString() );
+			
+		
+			
+			StringBuffer sqlBuf = new StringBuffer();
+			sqlBuf.append(nonTaxonSql);
+			
+			System.out.println("NEW SQL QUERY: \n" + sqlBuf.toString() );
 			
 			//issue the statement to the database
-			Vector plotIdVec = is.issuePureSQL(sb);
+			Vector plotIdVec = is.issuePureSQL(sqlBuf);
 			System.out.println("number of plots found: "+ plotIdVec.size() );
 			//update this public variable for 
 			//the calling method
@@ -111,13 +128,195 @@ public class  sqlMapper
 			xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
 			
 		}
-				catch ( Exception e )
+		catch ( Exception e )
 		{
 			System.out.println("failed :   "
 			+e.getMessage());
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * method that will create a taxonomic query from the 
+	 * hashtable of extended query elements -- not yet totally
+	 * figured out how this should work
+	 * 
+	 * @param extendedQueryHash - the hashtables containg the 
+	 *		query elemets etc 
+	 */
+	private String getExtendedTaxonomicQuery( Hashtable extendedTaxonQueryHash)
+	{
+		StringBuffer sb = new StringBuffer();
+		try 
+		{
+			int taxonComponentNum = taxonomicComponentExists(extendedTaxonQueryHash);
+			if ( taxonComponentNum > 0)
+			{
+				System.out.println("doing the TAXONOMIC LOOKUP! "+ taxonComponentNum);
+				Hashtable isolatedTaxonQueryHash = isolateTaxonQuery(extendedTaxonQueryHash);
+				//start the sql statement
+				sb.append("select PLOT_ID from PLOTSPECIESSUM where ");
+			
+				for (int i=0;i<taxonComponentNum; i++) 
+				{
+					sb.append( getSingleExtendedQueryInstanceSQL(isolatedTaxonQueryHash, i) );
+					sb.append("\n");
+					//print the 'and'
+					if(i != ( taxonComponentNum-1) )
+					{
+						sb.append("and");
+					}
+					//end the statement
+					if ( i == ( taxonComponentNum-1) )
+					{
+						sb.append(";");
+					}
+				}
+				System.out.println("Taxomomic SQL query: "+sb.toString() );
+			}
+		}
+		catch ( Exception e )
+		{
+			System.out.println("failed :   "
+			+e.getMessage());
+			e.printStackTrace();
+		}
+		return(sb.toString() );
+	}
+	
+		/**
+	 * method that will create a taxonomic query from the 
+	 * hashtable of extended query elements -- not yet totally
+	 * figured out how this should work
+	 * 
+	 * @param extendedQueryHash - the hashtables containg the 
+	 *		query elemets etc 
+	 */
+	private String getExtendedNonTaxonomicQuery( Hashtable extendedQueryHash)
+	{
+		StringBuffer sb = new StringBuffer();
+		try 
+		{
+				Hashtable isolatedNonTaxonQueryHash = isolateNonTaxonQuery(extendedQueryHash);
+				//start the sql statement
+				sb.append("select PLOT_ID from PLOTSITESUMMARY where ");
+				int queryInstanceNum = getExtendedQueryInstanceNumber( isolatedNonTaxonQueryHash );
+				for (int i=0;i<queryInstanceNum; i++) 
+				{
+					sb.append( getSingleExtendedQueryInstanceSQL(isolatedNonTaxonQueryHash, i) );
+					sb.append("\n");
+					//print the 'and'
+					if(i != ( queryInstanceNum-1) )
+					{
+						sb.append("and");
+					}
+					//end the statement
+					if ( i == ( queryInstanceNum-1) )
+					{
+						sb.append(";");
+					}
+				}
+		}
+		catch ( Exception e )
+		{
+			System.out.println("failed :   "
+			+e.getMessage());
+			e.printStackTrace();
+		}
+		return(sb.toString() );
+	}
+	
+	
+		
+	/**
+		*
+		*
+		*/
+	private Hashtable isolateNonTaxonQuery(Hashtable extendedQueryHash)
+	{
+		//extract the vectors from the hashtable 
+		Vector criteriaVector = (Vector)extendedQueryHash.get("criteria");
+		Vector operatorVector = (Vector)extendedQueryHash.get("operator");
+		Vector valueVector = (Vector)extendedQueryHash.get("value");
+		//these are temporary vec's 
+		Vector  criteriaVecBuf = new Vector();
+		Vector  operatorVecBuf = new Vector();
+		Vector  valueVecBuf = new Vector();
+		
+		
+		
+		int origVectorSize = criteriaVector.size();
+		for (int i=0;i<origVectorSize; i++) 
+		{
+			//remove all elements that are not related to a taxonomic query
+			if ( ! criteriaVector.elementAt(i).toString().trim().equals("plantTaxon") )
+			{
+				criteriaVecBuf.addElement( criteriaVector.elementAt(i).toString().trim() );
+				operatorVecBuf.addElement( operatorVector.elementAt(i).toString().trim() );
+				valueVecBuf.addElement( valueVector.elementAt(i).toString().trim() );
+			}
+		}
+		//add the vectors back to the hashtable
+		extendedQueryHash.put("criteria", criteriaVecBuf);
+		extendedQueryHash.put("operator", operatorVecBuf);
+		extendedQueryHash.put("value", valueVecBuf);
+			
+		System.out.println("ISOATED SITE HASH: "+extendedQueryHash.toString() );
+		return(extendedQueryHash);
+	}
+	
+	
+	
+	/**
+		* method to extract only the taxon queries form the 
+		* hashtable containing all the query elements and return
+		* a hashtable that mimics the structure of the input 
+		* hashtable except that it will only contain the 
+		* taxonomic related query elements
+		*
+		*/
+	private Hashtable isolateTaxonQuery(Hashtable extendedQueryHash)
+	{
+		Hashtable extendedTaxonomicQueryHash = extendedQueryHash;
+		//extract the vectors from the hashtable 
+		Vector criteriaVector = (Vector)extendedTaxonomicQueryHash.get("criteria");
+		Vector operatorVector = (Vector)extendedTaxonomicQueryHash.get("operator");
+		Vector valueVector = (Vector)extendedTaxonomicQueryHash.get("value");
+		//these are temporary vec's 
+		Vector  criteriaVecBuf = new Vector();
+		Vector  operatorVecBuf = new Vector();
+		Vector  valueVecBuf = new Vector();
+		
+		
+		System.out.println("INPUT HASH: "+extendedTaxonomicQueryHash.toString() );
+		
+		int origVectorSize = criteriaVector.size();
+		for (int i=0;i<origVectorSize; i++) 
+		{
+			//remove all elements that are not related to a taxonomic query
+			if ( criteriaVector.elementAt(i).toString().trim().equals("plantTaxon") )
+			{
+				criteriaVecBuf.addElement( criteriaVector.elementAt(i).toString().trim() );
+				operatorVecBuf.addElement( operatorVector.elementAt(i).toString().trim() );
+				valueVecBuf.addElement( valueVector.elementAt(i).toString().trim() );
+//				System.out.println("REMOVING: "+criteriaVector.elementAt(i) );
+//				criteriaVector.remove(i);
+//				operatorVector.remove(i);
+//				valueVector.remove(i);
+			}
+		}
+		//add the vectors back to the hashtable
+		extendedTaxonomicQueryHash.put("criteria", criteriaVecBuf);
+		extendedTaxonomicQueryHash.put("operator", operatorVecBuf);
+		extendedTaxonomicQueryHash.put("value", valueVecBuf);
+			
+		System.out.println("ISOATED HASH: "+extendedTaxonomicQueryHash.toString() );
+		return(extendedTaxonomicQueryHash);
+	}
+	
+	
+	
+	
 	
 	/**
 		* method that returns the number of taxa related componets
@@ -152,31 +351,42 @@ public class  sqlMapper
 		int instanceNum)
 	{
 		StringBuffer sb = new StringBuffer();
-		try
+		Vector criteriaVec = (Vector)extendedQueryHash.get("criteria");
+		Vector operatorVec = (Vector)extendedQueryHash.get("operator");
+		Vector valueVec = (Vector)extendedQueryHash.get("value");
+				
+		//make sure that the request is not for a instance number
+		//not contained within the hashtabable
+		System.out.println("queryInstanceNumber: "+instanceNum
+		+"  criteriaVectorSize: "+ criteriaVec.size() );
+		if (instanceNum > criteriaVec.size() )
 		{
-			Vector criteriaVec = (Vector)extendedQueryHash.get("criteria");
-			Vector operatorVec = (Vector)extendedQueryHash.get("operator");
-			Vector valueVec = (Vector)extendedQueryHash.get("value");
-			String criteria=criteriaVec.elementAt(instanceNum).toString();
-			String operator=operatorVec.elementAt(instanceNum).toString();
-			String value=valueVec.elementAt(instanceNum).toString();
-			
-			sb.append(" "+getDBAttribute(criteria)+" ");
-			sb.append(" "+getSQLOperator(operator, getDBAttribute(criteria) )+" " );
-			sb.append( getStringDelimeter( getSQLOperator(operator, getDBAttribute(criteria)), getDBAttribute(criteria) ) );
-			sb.append(value);
-			sb.append(getStringDelimeter( getSQLOperator(operator, getDBAttribute(criteria)),  getDBAttribute(criteria) ) );
+			System.out.println("THIS REQUEST SHOULD NEVER HAPPEN!");
 		}
-		catch ( Exception e )
+		else
 		{
-			System.out.println("failed at:   "
-			+e.getMessage());
-			e.printStackTrace();
+			try
+			{
+				String criteria=criteriaVec.elementAt(instanceNum).toString();
+				String operator=operatorVec.elementAt(instanceNum).toString();
+				String value=valueVec.elementAt(instanceNum).toString();
+			
+				sb.append(" "+getDBAttribute(criteria)+" ");
+				sb.append(" "+getSQLOperator(operator, getDBAttribute(criteria) )+" " );
+				sb.append( getStringDelimeter( getSQLOperator(operator, getDBAttribute(criteria)), getDBAttribute(criteria) ) );
+				sb.append(value);
+				sb.append(getStringDelimeter( getSQLOperator(operator, getDBAttribute(criteria)),  getDBAttribute(criteria) ) );
+			}
+			catch ( Exception e )
+			{
+				System.out.println("failed at:   "
+				+e.getMessage());
+				e.printStackTrace();
+			}
 		}
 		return(sb.toString());
 	}
 	
-		
 	/**
 	 * method to translate the criteria 
 	 * to the correct database attribute name
@@ -231,7 +441,7 @@ public class  sqlMapper
 			}
 			if (operator.equals("=") )
 			{
-				if (criteria.equals("state") )
+				if (criteria.equals("state") ||  criteria.equals("authorNameId") )
 				{
 					return("'");
 				}
@@ -259,7 +469,7 @@ public class  sqlMapper
 		{
 			if ( operator.equals("eq") )
 			{
-				if ( criteria.equals("state") )
+				if ( criteria.equals("state") || criteria.equals("authorNameId") )
 				{
 					return("like");
 				}
