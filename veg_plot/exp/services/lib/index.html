@@ -33,7 +33,7 @@
       <p>Services:</p></td>
     <td width="86%"><p><strong>getPlotAccessionNumber</strong> -- returns the VegBank 
       Accession Numbers which correspond to a Google-like query string (eg. blueberry).</p> 
-      <form action="http://dhcp87:8080/vegbankservice/servlet/ExchangeServlet" method="get">
+      <form action="http://dhcp87.nceas.ucsb.edu:8080/vegbankservice/servlet/ExchangeServlet" method="get">
 	  <span class="item"> query string: </span> 
           <input type="text" name="querytoken">
           <input type="submit" name="Submit" value="Find It!">
@@ -41,7 +41,7 @@
 	  <p>&nbsp;</p>
       <p><strong>getNearestPlaceForPlot</strong> -- returns a place object corresponding 
         to the place registered in the gazetteer which is closest to a plot. </p>
-      <form action="http://dhcp87:8080/vegbankservice/servlet/ExchangeServlet" method="get">
+      <form action="http://dhcp87.nceas.ucsb.edu:8080/vegbankservice/servlet/ExchangeServlet" method="get">
         <span class="item"> plot accession number: </span> 
         <input type="text" name="lookupnearestplotlocation">
           <input type="submit" name="Submit" value="Find It!">
@@ -50,7 +50,7 @@
       <p><strong>getNearestPlaceForLocatio</strong>n -- returns a place object 
         corresponding to the place registered in the gazetteer which is closest 
         to a latitude and longitude. </p>
-      <form action="http://dhcp87:8080/vegbankservice/servlet/ExchangeServlet" method="get">
+      <form action="http://dhcp87.nceas.ucsb.edu:8080/vegbankservice/servlet/ExchangeServlet" method="get">
         <span class="item"> location: </span> 
 		<input type="hidden" name="action" value="lookupnearestlocation">
         latitude: 
