@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-10 18:42:56 $'
- * 	'$Revision: 1.14 $'
+ *  '$Date: 2002-04-17 01:53:21 $'
+ * 	'$Revision: 1.15 $'
  */
 public class PlotDataSource 
 {
@@ -79,7 +79,6 @@ public class PlotDataSource
 	{
 		try
 		{ 
-		
 		}
 		catch(Exception e)
 		{
@@ -92,8 +91,9 @@ public class PlotDataSource
 	 * constructor method that uses a plugin class as an 
 	 * input to make a datasource available to class that
 	 * call this class (e.g., plot loaders, or xml writers)
+	 * @param pluginClass -- the name of the plugin to instantiate
 	 */
-	public PlotDataSource(String pluginClass )
+	public PlotDataSource(String pluginClass)
 	{
 		try
 		{ 
@@ -103,8 +103,11 @@ public class PlotDataSource
 		catch(Exception e)
 		{
 			System.out.println("PlotDataSource > Error getting plugin: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
+	
+	
 	
 	/** 
 	 * method that returns the accession number associated with a plot id
@@ -897,6 +900,10 @@ public class PlotDataSource
 			System.out.println("slope aspect: " + source.slopeAspect);
 			System.out.println("community name: " + source.communityName);
 			System.out.println("number of named places: " + source.namedPlaces.size() );
+			System.out.println("confidentialityStatus: " + source.getConfidentialityStatus(plotName) );
+			System.out.println("confidentialityReason: " + source.getConfidentialityReason(plotName) );
+			System.out.println("permanence: " + source.isPlotPermanent(plotName) );
+			
 			for (int i=0; i<source.namedPlaces.size(); i++)
 			{
 				String placeName = source.namedPlaces.elementAt(i).toString(); 
@@ -942,8 +949,6 @@ public class PlotDataSource
 						plotCode, curStrata ));
 				}
 			}
-			
-			
 		}
 		catch (Exception e)
 		{
@@ -955,15 +960,17 @@ public class PlotDataSource
 	
 	
 /**
- * main method for testing --
+ * main method for testing that the plugin classes work and work well
+ * @param pluginClass
+ * @param plotName
  */
 	public static void main(String[] args)
 	{
 		if (args.length == 2) 
 		{
 			//assume that the two args are 1] plugin and 2] plotName
-			String plotName = args[1];
 			String pluginClass = args[0];
+			String plotName = args[1];
 			//should make sure that the plugin exists
 			PlotDataSource source = new PlotDataSource(pluginClass);
 			source.printDBVariables(pluginClass, plotName);
