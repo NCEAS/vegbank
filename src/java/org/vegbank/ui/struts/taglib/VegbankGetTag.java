@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-28 18:35:49 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-10-01 00:50:06 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.vegbank.common.utility.Utility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.7 $ $Date: 2004-09-28 18:35:49 $
+ * @version $Revision: 1.8 $ $Date: 2004-10-01 00:50:06 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -97,6 +97,10 @@ public class VegbankGetTag extends VegbankTag {
 			try { gc.setPager(Boolean.valueOf(getPager()).booleanValue()); 
 			} catch (Exception ex) { gc.setPager(false); }
 
+
+			log.debug("Setting up WHERE clause");
+			setupWhereClause( (HttpServletRequest)pageContext.getRequest() );
+
 			log.debug("Calling gc.execute()");
 			gc.execute(
 					(HttpServletRequest)pageContext.getRequest(), 
@@ -112,6 +116,64 @@ public class VegbankGetTag extends VegbankTag {
         // Continue processing this page
         return SKIP_BODY;
     }
+
+
+    /**
+     * Chooses the proper SQL where clause to use.
+	 * Sets it in the request.
+     */
+    private void setupWhereClause(HttpServletRequest request) {
+
+		try {
+			//
+			// If the URL does not contain 'where' then set it
+			//
+			
+			String where = request.getParameter("where");
+			if (Utility.isStringNullOrEmpty(where)) {
+				String params = request.getParameter("params");
+				if (Utility.isStringNullOrEmpty(params)) {
+					// this doesn't need to happen if /get/VIEW/ENTITY is used
+					// but it supports direct calls to the jsp
+					params = request.getParameter("wparam");
+				}
+
+				log.debug("Checking numerocity of params: " + params);
+				if (Utility.isNumericList(params)) {
+					// use a PK
+					where = getWhereNumeric();
+					log.debug("got numeric where: " + where);
+
+					if (Utility.isStringNullOrEmpty(where)) {
+						// still null, set default numeric
+						where = "where_" + request.getParameter("entity") + "_pk";
+						log.debug("was null so is now: " + where);
+					}
+
+				} else {
+					// use an AC
+					where = getWhereNonNumeric();
+					log.debug("got non-numeric where: " + where);
+
+					if (Utility.isStringNullOrEmpty(where)) {
+						// still null, set default non-numeric
+						where = "where_ac";
+						log.debug("was null so is now: " + where);
+					}
+				}
+
+				request.setAttribute("where", where);
+
+			}
+
+		} catch (Exception ex) {
+			log.error("Error while setting where clause key", ex);
+		}
+
+    }
+
+
+
 
     /**
      * Key in SQLStore.properties that defines SQL select clause.
@@ -228,6 +290,32 @@ public class VegbankGetTag extends VegbankTag {
 
     public void setPager(String s) {
         this.pager = s;
+    }
+
+    /**
+     * 
+     */
+	protected String whereNumeric;
+
+    public String getWhereNumeric() {
+		return findAttribute("whereNumeric", this.whereNumeric);
+    }
+
+    public void setWhereNumeric(String s) {
+        this.whereNumeric = s;
+    }
+
+    /**
+     * 
+     */
+	protected String whereNonNumeric;
+
+    public String getWhereNonNumeric() {
+        return findAttribute("whereNonNumeric", this.whereNonNumeric);
+    }
+
+    public void setWhereNonNumeric(String s) {
+        this.whereNonNumeric = s;
     }
 
 
