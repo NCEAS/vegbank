@@ -7,8 +7,8 @@
  *    Authors: John Harris
  *
  *		 '$Author: harris $'
- *     '$Date: 2001-11-01 17:00:42 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2002-01-16 04:48:17 $'
+ *     '$Revision: 1.2 $'
  *
  */
 package databaseAccess;
@@ -493,8 +493,7 @@ try {
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed in PlotXmlWriter.writeObservationData "
-			+" " + e.getMessage()   );
+			System.out.println("Exception: " + e.getMessage()   );
 			e.printStackTrace();
 		}
 	}
@@ -506,25 +505,32 @@ try {
  */
 private void writeStrataData()
 {
-	
-	output.append(" \n <!-- stratum elements should go here --> ");
-	
-	if (stratumNameElements.size() > 0)
+	try
 	{
-		for (int i=0; i<stratumNameElements.size(); i++) 
+		output.append(" \n <!-- stratum elements should go here --> ");
+	
+		if (stratumNameElements.size() > 0)
 		{
- 				output.append(" \n"
- 					+"			<strata> \n"
- 					+"				<strataName>"+(String)stratumNameElements.elementAt(i)+"</strataName> \n"
- 					+"				<strataHeight>"+stratumHeightElements.elementAt(i)+"</strataHeight> \n"
- 					+"				<strataCover>"+stratumCoverElements.elementAt(i)+"</strataCover> \n"
- 					+"			</strata> \n"
-				);
+			for (int i=0; i<stratumNameElements.size(); i++) 
+			{
+ 					output.append(" \n"
+ 						+"			<strata> \n"
+ 						+"				<strataName>"+(String)stratumNameElements.elementAt(i)+"</strataName> \n"
+ 						+"				<strataHeight>"+stratumHeightElements.elementAt(i)+"</strataHeight> \n"
+ 						+"				<strataCover>"+stratumCoverElements.elementAt(i)+"</strataCover> \n"
+ 						+"			</strata> \n"
+					);
+			}
+		}
+		else 
+		{
+			output.append(" \n <!-- stratum elements should go here; but none--> \n");
 		}
 	}
-	else 
+	catch (Exception e) 
 	{
-		output.append(" \n <!-- stratum elements should go here; but none--> \n");
+		System.out.println("Exception: " + e.getMessage()   );
+		e.printStackTrace();
 	}
 }
 
@@ -537,25 +543,34 @@ private void writeSpeciesData (
 	Vector strataTypeElements, 
 	Vector coverAmountElements)
 {
-	if (taxonNameElements.isEmpty() == true )
+	try
 	{
-		output.append(" \n <!-- species should go here -->");
-	}
-	else 
-	{
-	//This is set up this way to rectify the failures that was having
+		if (taxonNameElements.isEmpty() == true )
+		{
+			output.append(" \n <!-- species should go here -->");
+		}
+		else 
+		{
+		//This is set up this way to rectify the failures that was having
+		System.out.println("number of taxon elements: " + taxonNameElements.size());
 		for (int i=0; i<taxonNameElements.size(); i++)
 		{
 			String strataType = null;
 			String percentCover =null;
 			String cumStrataCover =null;
 			//check to see if these elements exist
-			if ( strataTypeElements.size() == taxonNameElements.size()  ) 
-				strataType = strataTypeElements.elementAt(i).toString();
-			if ( coverAmountElements.size() == taxonNameElements.size()  ) 
-				percentCover = coverAmountElements.elementAt(i).toString();
-			if ( cumStrataCoverElements.size() == taxonNameElements.size()  ) 
-				cumStrataCover = cumStrataCoverElements.elementAt(i).toString();
+////			if ( strataTypeElements.size() == taxonNameElements.size()  ) 
+////				strataType = strataTypeElements.elementAt(i).toString();
+////			else 
+////				strataType = "fake";
+////			if ( coverAmountElements.size() == taxonNameElements.size()  ) 
+////				percentCover = coverAmountElements.elementAt(i).toString();
+////			else
+////				percentCover = "0";	
+////			if ( cumStrataCoverElements.size() == taxonNameElements.size()  ) 
+////				cumStrataCover = cumStrataCoverElements.elementAt(i).toString();
+////			else
+				cumStrataCover = "0";
 			
 			//clean the taxon string which is prone to having
 			//sensetive characters.
@@ -565,14 +580,20 @@ private void writeSpeciesData (
 			+"				<authNameId>"+taxon.replace('&', '_')+"</authNameId> \n"
 			//+"				<originalAuthority>"+nullValue+"</originalAuthority> \n"
 			+"				<cumStrataCoverage>"+cumStrataCover+"</cumStrataCoverage> \n"
-			+"				<strataComposition> \n"
+////			+"				<strataComposition> \n"
 			//think about how the rest of these attributes shoul be handled
-			+"					<strataType>"+strataType+"</strataType> \n"
-			+"					<percentCover>"+percentCover+"</percentCover> \n"
-			+"				</strataComposition> \n"
+////			+"					<strataType>"+strataType+"</strataType> \n"
+////			+"					<percentCover>"+percentCover+"</percentCover> \n"
+////			+"				</strataComposition> \n"
 			+"			</taxonObservation> \n"
 			);
 		}
+		}
+	}
+	catch (Exception e )
+	{
+		System.out.println("Exception: " + e.getMessage() );
+		e.printStackTrace();
 	}
 }
 
@@ -583,12 +604,20 @@ private void writeSpeciesData (
  */
 private void writeCommunityData ()
 {
+	try
+	{
 	output.append(" \n"
 	+"			<communityAssignment> \n"
 	+"				<communityName>"+plotCommunityParams.get("communityName")+"</communityName> \n"
 	+"				<CEGLCode>"+plotCommunityParams.get("CEGLCode")+"</CEGLCode> \n"
 	+"			</communityAssignment> \n"
 	);
+	}
+	catch (Exception e) 
+	{
+			System.out.println("Exception: " + e.getMessage()   );
+			e.printStackTrace();
+	}
 
 }
 
