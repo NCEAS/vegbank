@@ -11,9 +11,9 @@ import java.sql.*;
  *
  *  Release: 
  *	
- *  '$Author: harris $'
- *  '$Date: 2002-08-30 19:12:03 $'
- * 	'$Revision: 1.8 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2002-12-14 00:03:20 $'
+ * 	'$Revision: 1.9 $'
  */
  
 //public class VBAccessDataSourcePlugin
@@ -299,9 +299,9 @@ public String  getHomogeneity(String plotName)
 	return super.getHomogeneity(plotName);
 }
 
-public String  getPhenologicAspect(String plotName)
+public String  getPhenologicalAspect(String plotName)
 {
-	return super.getPhenologicAspect(plotName);
+	return super.getPhenologicalAspect(plotName);
 }
 
 public String  getRepresentativeness(String plotName)

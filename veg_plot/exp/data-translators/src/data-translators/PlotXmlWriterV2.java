@@ -18,9 +18,9 @@ import PlotDataSource;
  *  This class handles the conversion from vegbank and other <br>
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
- *  '$Author: harris $' <br>
- *  '$Date: 2002-08-30 19:12:03 $' <br>
- *  '$Revision: 1.11 $' <br>
+ *  '$Author: farrell $' <br>
+ *  '$Date: 2002-12-14 00:03:20 $' <br>
+ *  '$Revision: 1.12 $' <br>
  */
 
  
@@ -545,7 +545,7 @@ public class PlotXmlWriterV2
     	sb.append("      <observationNarrative>"+datasrc.getObservationNarrative(plotCode)+"</observationNarrative> \n");
     	sb.append("      <landscapeNarrative></landscapeNarrative> \n");
     	sb.append("      <homogeneity>"+datasrc.getHomogeneity(plotCode)+"</homogeneity> \n");
-    	sb.append("      <phenologicalAspect>"+datasrc.getPhenologicAspect(plotCode)+"</phenologicalAspect> \n");
+    	sb.append("      <phenologicalAspect>"+datasrc.getPhenologicalAspect(plotCode)+"</phenologicalAspect> \n");
     	sb.append("      <representativeness>"+datasrc.getRepresentativeness(plotCode)+"</representativeness> \n");
     	sb.append("      <basalArea>"+datasrc.getBasalArea(plotCode)+"</basalArea> \n");
 			sb.append("      <hydrologicRegime>"+datasrc.hydrologicRegime+"</hydrologicRegime> \n");

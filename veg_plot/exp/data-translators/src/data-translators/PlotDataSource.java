@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: farrell $'
- *  '$Date: 2002-12-12 23:02:08 $'
- *  '$Revision: 1.27 $'
+ *  '$Date: 2002-12-14 00:03:19 $'
+ *  '$Revision: 1.28 $'
  */
 public class PlotDataSource 
 {
@@ -71,9 +71,20 @@ public class PlotDataSource
 	public String dsgPoly = null;
 	public String locationNarrative = null;
 	public String layoutNarrative = null;
-	
-	
-	//constructor method
+	public String stemSizeLimit  = null;
+	public String landscapeNarative= null;
+	public String phenologicalAspect= null;
+  public String waterDepth= null;
+  public String fieldHt= null;
+  public String submergedHt= null;
+  public String treeCover= null;
+  public String shrubCover= null;
+  public String fieldCover= null;
+  public String nonvascularCover= null;
+  
+  
+  
+  //constructor method
 	public PlotDataSource()
 	{
 		try
@@ -321,8 +332,72 @@ public class PlotDataSource
 		String s = ((PlotDataSourceInterface)pluginObj).getStemSampleMethod(plotName);	
 		return(s);
 	}
-	
+
 	/**
+	*/
+	public String getLandscapeNarrative(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getLandscapeNarrative(plotName);	
+		return(s);
+	}
+	/**
+	*/
+	public String getPhenologicalAspect(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getPhenologicalAspect(plotName);	
+		return(s);
+	}
+	/**
+	*/
+	public String getWaterDepth(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getWaterDepth(plotName);	
+		return(s);
+	}
+	/**
+	*/
+	public String getFieldHt(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getFieldHt(plotName);	
+		return(s);
+	}
+	/**
+	*/
+	public String getSubmergedHt(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getSubmergedHt(plotName);	
+		return(s);
+	}
+	/**
+	*/
+	public String getTreeCover(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getTreeCover(plotName);	
+		return(s);
+	}
+	/**
+	*/
+	public String getShrubCover(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getShrubCover(plotName);	
+		return(s);
+	}
+	/**
+	*/
+	public String getFieldCover(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getFieldCover(plotName);	
+		return(s);
+	}
+	/**
+	*/
+	public String getNonvascularCover(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getNonvascularCover(plotName);	
+		return(s);
+  }
+  
+  /**
 	 */
 	public String getOriginalData(String plotName )
 	{
@@ -504,12 +579,6 @@ public class PlotDataSource
 	public String  getHomogeneity(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getHomogeneity(plotName);	
-			 return(s);
-	}
-	
-	public String  getPhenologicAspect(String plotName)
-	{
-		String s = ((PlotDataSourceInterface)pluginObj).getPhenologicAspect(plotName);	
 			 return(s);
 	}
 	
@@ -1406,7 +1475,9 @@ public class PlotDataSource
 			}
 			
 			System.out.println(" \n ---------------------observation info------------------------");
-			System.out.println("PlotDataSource > number of project contributors: " + source.observationContributors.size() );
+			System.out.println("PlotDataSource > number of project contributors: " 
+                          + source.observationContributors.size() );
+
 			for (int i=0; i<source.observationContributors.size(); i++)
 			{
 				String wholeName = source.observationContributors.elementAt(i).toString();
@@ -1508,7 +1579,6 @@ public class PlotDataSource
 			System.out.println("PlotDataSource > LichenQuality: " + source.getLichenQuality(plotName));
 			System.out.println("PlotDataSource > ObservationNarrative: " + source.getObservationNarrative(plotName));
 			System.out.println("PlotDataSource > Homogeneity: " + source.getHomogeneity(plotName));
-			System.out.println("PlotDataSource > PhenologicAspect: " + source.getPhenologicAspect(plotName));
 			System.out.println("PlotDataSource > Representativeness: " + source.getRepresentativeness(plotName));
 			System.out.println("PlotDataSource > BasalArea: " + source.getBasalArea(plotName));
 			System.out.println("PlotDataSource > MoistureRegime: " + source.getSoilMoistureRegime(plotName));

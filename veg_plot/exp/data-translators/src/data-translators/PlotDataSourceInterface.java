@@ -17,8 +17,8 @@ import java.util.*;
  * 
  * Release: @release@ <br>
  * '$Author: farrell $' <br>
- * '$Date: 2002-12-12 22:06:43 $' <br>
- * '$Revision: 1.16 $' <br>
+ * '$Date: 2002-12-14 00:03:20 $' <br>
+ * '$Revision: 1.17 $' <br>
  */
 public interface PlotDataSourceInterface
 {
@@ -493,7 +493,6 @@ public interface PlotDataSourceInterface
 	String  getLichenQuality(String plotName);
 	String  getObservationNarrative(String plotName);
 	String  getHomogeneity(String plotName);
-	String  getPhenologicAspect(String plotName);
 	String  getRepresentativeness(String plotName);
 	String  getBasalArea(String plotName);
 	String  getSoilMoistureRegime(String plotName);

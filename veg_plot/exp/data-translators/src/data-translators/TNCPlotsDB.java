@@ -15,8 +15,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2002-12-12 22:38:12 $' <br>
- * 	'$Revision: 1.30 $' <br>
+ *  '$Date: 2002-12-14 00:03:20 $' <br>
+ * 	'$Revision: 1.31 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -1743,11 +1743,6 @@ public String  getObservationNarrative(String plotName)
 }
 
 public String  getHomogeneity(String plotName)
-{
-	return("");
-}
-
-public String  getPhenologicAspect(String plotName)
 {
 	return("");
 }

@@ -11,8 +11,8 @@ import java.sql.*;
  *
  *	
  *	'$Author: farrell $' <br>
- *	'$Date: 2002-12-12 22:36:53 $' <br>
- *	'$Revision: 1.22 $' <br>
+ *	'$Date: 2002-12-14 00:03:20 $' <br>
+ *	'$Revision: 1.23 $' <br>
  */
  
 //public class VegBankDataSourcePlugin
@@ -739,12 +739,6 @@ public String  getObservationNarrative(String plotName)
 public String  getHomogeneity(String plotName)
 {
 		String s = this.getObservationElement(plotName, "homogeneity");
-		return(s);
-}
-
-public String  getPhenologicAspect(String plotName)
-{
-		String s = this.getObservationElement(plotName, "phenologicaspect");
 		return(s);
 }
 
