@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: farrell $'
-* '$Date: 2003-02-24 19:54:17 $'
-* '$Revision: 1.34 $'
+* '$Author: mlee $'
+* '$Date: 2003-02-28 05:42:27 $'
+* '$Revision: 1.35 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -250,7 +250,7 @@
 		dest="${general_server}"
 		filtering="yes"
 		includes="**.html"
-		excludes="**/CVS* "
+		excludes="**/CVS* vbsummary.html get_vb_stats_temp.html"
 	/>
 </target>
 
@@ -293,6 +293,19 @@
 	</copy>
 </target>
 
+<target name="vbsummary" depends="hdrftr">
+  <!-- create summary based on current VegBank database status -->
+  <exec dir="./general" executable="psql">
+    <arg line="plots_dev qa -f get_vb_stats_cmds.txt"/>
+  </exec>
+  <!-- copy summary file with filtering to general dir -->
+  <copy tofile="${general_server}/vbsummary.html" filtering="yes">
+    <fileset dir="./general" >
+      <include name="get_vb_stats_temp.html" />
+    </fileset>
+  </copy>  
+</target>
+
 <!--
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
@@ -302,7 +315,7 @@
                               forms, 
                               general, 
                               images,
-													    history, 
+			vbsummary,										    history, 
                               includes, 
                               init, 
                               news, 
