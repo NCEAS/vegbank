@@ -5,9 +5,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: farrell $'
-  * '$Date: 2003-02-03 19:30:04 $'
-  * '$Revision: 1.29 $'
+  * '$Author: mlee $'
+  * '$Date: 2003-02-14 07:39:20 $'
+  * '$Revision: 1.30 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -86,9 +86,9 @@
 <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
 <!-- this copy stays local on the machine that it is on - not needed on webserver -->
   <target name="hdrftr" depends="init">
-     <copy file="${sharedhtml_src}/filters.properties" tofile="${sharedhtml_src}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
+     <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
      <!-- set the newly created properties file as a filtersfile to distribute headers and footers -->
-     <filter filtersfile="${sharedhtml_src}/filters_detokened.properties"/>
+     <filter filtersfile="${style_server}/filters_detokened.properties"/>
   </target>
 
 
