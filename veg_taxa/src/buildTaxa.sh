@@ -19,10 +19,20 @@ EOF
 sqlplus harris/use4dev @taxaDB.sql  <<EOF
 EOF
 
-#compile the java code
-#javac loadPlants.java
+#load the Juglandacea and Pinacea families - first separate the synonyms into two filesa (1996)
 
-#/usr/local/devtools/jdk1.2.2/bin/java -classpath /usr/local/devtools/jdk1.2.2/lib/rt.jar:/usr/local/devtools/jdk1.2.2/lib/dev.jar:./oracleJDBC.jar:./ loadPlants test2 
+cat Pinaceae | grep '=' > Pinaceae.synon
+cat Juglandaceae | grep '=' > Juglandaceae.synon
+
+#First load the Juglandaceae Family
+./loadTaxaPrototype.sh Juglandaceae name
+
+#load the synonyms
+./loadTaxaPrototype.sh Juglandaceae.synon correlation
 
 
+#load the Pine Names
+./loadTaxaPrototype.sh  Pinaceae name
 
+#load the synonyms
+./loadTaxaPrototype.sh Pinaceae correlation
