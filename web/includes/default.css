@@ -1,11 +1,11 @@
 
 /* body element, present in all pages */
-BODY			{ background-color: #FFFFFF;
+/*BODY			{ background-color: #FFFFFF;
                   font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 				  					font-size: 10pt;
 					color: #000000
 }
-
+*/
 
 
 
@@ -21,17 +21,17 @@ BODY			{ background-color: #FFFFFF;
 
 
 /* typical links: */
-A:Link			{ color: #005680; text-decoration: underline }
-A:Visited		{ color: #003366; text-decoration: underline }
+/*A:Link			{ color: #005680; text-decoration: underline }
+A:Visited		{ color: #003366; text-decoration: underline } */
 /* A:Visited		{ color: #6699CC; } */
-A:hover			{ color: #3399FF;}
+/*A:hover			{ color: #3399FF;} */
 
 /* links in green backgroun header they are currently white, no underline, and background highlights on hover: */
-  A.headlink         {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt}
+  /*A.headlink         {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt}
   A:Link.headlink    {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt} /* same as prev */
-  A:Visited.headlink {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt} /* same as prev */
-  A:hover.headlink   {font-variant: small-caps ; background-color: #FFFFCC ; color: #336633; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt}
-
+ /* A:Visited.headlink {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt} /* same as prev */
+  /* A:hover.headlink   {font-variant: small-caps ; background-color: #FFFFCC ; color: #336633; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt} */
+*/
 
 /* style removed by MTL 11/15/04:  A.blk { color:#000000 }
 A.brightyellow { color:#FFFF80 }  */
@@ -48,10 +48,7 @@ a.headerLink:hover {
 
 
 
-TH A:Link {color: #FFFF80; text-decoration:underline}
-TH A:hover {color: #FFFF80; text-decoration:underline}
-TH A:visited {color: #FFFF80; text-decoration:underline}
-
+*/
 /* actions user can take from this form: ie interpret plant.*/
 td.useraction  {font-weight: bold; color: #FF0000 ; background: #ffffcc }
 td.useraction A:Link {color: #FF0000}
@@ -100,8 +97,8 @@ a.featureLink:hover {
 */
 
 /* header and footer in filters.properties : */
-.headerTable {background-color:#336633}
-.footerTable {background-color:#eed85b}
+/*.headerTable {background-color:#336633}
+.footerTable {background-color:#eed85b} */
 .clearTable {background-color:#FFFFFF} /* same as BODY background */
 
 /*thin lines for your table gets you a grid of thin lines:
@@ -152,22 +149,19 @@ table.noborder td {border-style: none; border-width:0px }
 
 TH	{
 	font-family:  Arial, Tahoma, Helvetica, Geneva, sans-serif;
-	color: #FFFF80;
 	font-size: 10pt;
-	background-color : #336633;
+	background-color : #e6e6cf;
 	}
 
 .major	{
 	font-family:  Arial, Tahoma, Helvetica, Geneva, sans-serif;
-	color: #FFFF80;
 	font-size: 14pt;
-	background-color : #333333;
+	background-color : #e6e6cf;
 	}
 .major_smaller	{
 	font-family:  Arial, Tahoma, Helvetica, Geneva, sans-serif;
-	color: #FFFF80;
 	font-size: 12pt;
-	background-color : #333333;
+	background-color : #e6e6cf;
 	}
 
 td.numeric
@@ -187,7 +181,7 @@ td.numeric
 
 
 
-H1, H2 {
+/*H1, H2 {
 							font-family: Georgia, Times New Roman, Times, serif;
 							color: #333333;
 							text-align: center;
@@ -197,25 +191,25 @@ H3, H4, H5, H6	{
 							font-family: Georgia, Times New Roman, Times, serif;
 							color: #333333;
 							text-align: left;
-						}
+						} */
 /* allow to manually style left and right */
-H1.left, H2.left, H3.left, H4.left, H5.left, H6.left { 					font-family: Georgia, Times New Roman, Times, serif;
+/*H1.left, H2.left, H3.left, H4.left, H5.left, H6.left { 					font-family: Georgia, Times New Roman, Times, serif;
 							color: #333333;
                         	 text-align: left; }
 
 H1.center, H2.center, H3.center, H4.center, H5.center, H6.center { 					font-family: Georgia, Times New Roman, Times, serif;
 							color: #333333;
                         	 text-align: center; }
-
+*/
 /* text that is equivalent to headers in color and font.  used in main menu and anywhere where headers can't be block level.
 should be combined with a size style as space delimited, ie class="headequiv sizelarge"
 */
-.headequiv	{
+/*.headequiv	{
 							font-family: Georgia, Times New Roman, Times, serif;
 							color: #333333;
 							font-weight: bold;
 						}
-
+*/
 
 /*
 -----------------------------------------------------------------------------------------------------
@@ -229,12 +223,12 @@ should be combined with a size style as space delimited, ie class="headequiv siz
 
 
 
-P, .normal, TD, UL, OL, DL, LI	{
+/*P, .normal, TD, UL, OL, DL, LI	{
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 					font-size: 10pt;
 					color: #000000
 				}
-
+*/
 ul.compact   {
 	             list-style-type:none;  padding-left: 10px; margin-left: 10px;
              }
@@ -275,7 +269,6 @@ THESE are all just normal styles.  The sizes have been changed to size[thesize]
 .largefield  { font-size: 8pt } /* for DATA fields that are larger, thus font is smaller so they are more compressed */
 /* instructions on forms */
 .instructions {
-	        				font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 								font-size: 9pt;
 	                            font-style: italic ;
 
