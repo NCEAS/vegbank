@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-11-18 18:44:07 $'
-* '$Revision: 1.133 $'
+* '$Date: 2004-11-18 18:57:05 $'
+* '$Revision: 1.134 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -345,7 +345,7 @@
   </target>
   <target name="workshop-big-bin" depends="hdrftr" description="=&gt; dist the workshop large binary files to server ">
     <copy overwrite="true" todir="${workshop_server}" filtering="no">
-      <fileset dir="${lrg_binary_src}" includes="  VegBank_NVC.pdf  VegBank_NVC.ppt  VegBank_tutorial_model.pdf  VegBank_tutorial_model.ppt VegBank_tutorial_why.pdf  VegBank_tutorial_why.ppt "/>
+      <fileset dir="${lrg_binary_src}" includes="  VegBank_NVC.pdf  VegBank_NVC.ppt  VegBank_tutorial_model.pdf  VegBank_tutorial_model.ppt VegBank_tutorial_why.pdf  VegBank_tutorial_why.ppt whittaker.pdf plot_form.pdf data_entry.xls  arizona_plants.xls  arizona_nvc.xls "/>
     </copy>
   </target>
   <target name="pubs" depends="workshop" description="=&gt; dist the pubs pages to server">
