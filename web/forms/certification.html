@@ -1,3 +1,17 @@
+<!-- 
+  *   '$RCSfile: certification.html,v $'
+  *     Purpose: web form to submit vegbank cerification request
+  *   Copyright: 2000 Regents of the University of California and the
+  *               National Center for Ecological Analysis and Synthesis
+  *     Authors: @author@
+  *
+  *    '$Author: harris $'
+  *      '$Date: 2002-06-14 18:20:01 $'
+  *  '$Revision: 1.2 $'
+  *
+  *
+  -->
+  
 <HTML><!-- #BeginTemplate "/Templates/VegBank_Master.dwt" -->
 <HEAD>
 <!-- #BeginEditable "doctitle" --> 
@@ -43,13 +57,14 @@
           ESA Vegetation Panel will provide a certification program for VegBank 
           users. Certification is needed for at least two reasons.</font></p>
         <p class="VegBank"><font face="Georgia, Times New Roman, Times, serif">1. 
-          The quality a user attaches to a plot in the archive is likely to vary 
-          with his or her perception of the workers who collected and submitted 
-          the data. In addition, users need a way to evaluate the credentials 
-          of an individual who has contributed an annotation (note) or interpretation 
-          (identification of a plot observation to community type, or a plant 
-          observation to species/taxon). One function of certification is to provide 
-          the user with a means of evaluating the ability of an unknown worker.</font></p>
+          The quality a user attaches to a plot observation in the archive is 
+          likely to vary with his or her perception of the workers who collected 
+          and submitted the data. In addition, users need a way to evaluate the 
+          credentials of an individual who has contributed an annotation (note) 
+          or interpretation (identification of a plot observation to community 
+          type, or a plant observation to species/taxon). One function of certification 
+          is to provide the user with a means of evaluating the ability of an 
+          unknown worker.</font></p>
         <p class="VegBank"><font face="Georgia, Times New Roman, Times, serif">2. 
           The quality of a plot in the archive will increase as additional information 
           is added and interpretation are made. Not all users are qualified to 
@@ -62,44 +77,50 @@
           User. </b>This status requires self registration. Registration is automatic 
           and requires only continued good behavior. Registered users may search 
           and download data, but may not upload plot data.</font></p>
+        <p class="VegBank"><b><font face="Georgia, Times New Roman, Times, serif">Certified 
+          </font></b><font face="Georgia, Times New Roman, Times, serif"><b>User. 
+          </b>Certified users are expected to demonstrate familiarity with (1) 
+          vegetation sampling methodology, (2) plant identification, (3) the US 
+          National Vegetation Classification, and (4) the capabilities and applications 
+          of the VegBank archive. Certified users have all the rights of registered 
+          users, may upload plot data, and may add annotations and interpretations.</font></p>
         <p class="VegBank"><font face="Georgia, Times New Roman, Times, serif"><b>Professional 
-          User. </b>Professional users are expected to demonstrate familiarity 
-          with (1) vegetation sampling methodology, (2) plant identification, 
-          (3) the US National Vegetation Classification, and (4) the capabilities 
-          and applications of the VegBank archive. Professional users have all 
-          the rights of registered users, and may upload plot data.</font></p>
-        <p class="VegBank"><font face="Georgia, Times New Roman, Times, serif"><b>Senior 
-          User.</b> This status requires at least one year of experience as a 
-          Profession User (or equivalent experience), and demonstrated proficiency 
-          with at least two of the four areas of experience required of Professional 
-          Users. Senior users have all the rights of Professional users, and may 
-          add annotations and interpretations.</font></p>
-        <p class="VegBank"><font face="Georgia, Times New Roman, Times, serif"><b>Expert 
-          User.</b> The ESA Vegetation Panel Certification Subcommittee will occasional 
-          honor especially well qualified and experienced users with the rank 
-          of Expert User.</font></p>
+          User.</b> The status of Professional user connotes a high level of experience 
+          and credibility. This status requires at least one year of experience 
+          as a Certified User (or equivalent experience), and demonstrated proficiency 
+          with at least two of the four areas of experience required of Certified 
+          Users. </font></p>
+        <p class="VegBank"><font face="Georgia, Times New Roman, Times, serif"><b> 
+          Senior User.</b> The ESA Vegetation Panel Certification Subcommittee 
+          will designate as Senior Users those individuals responsible for high 
+          level data management and quality control activities. </font></p>
         <p>&nbsp;</p>
         <h3 align="center" class="VegBank"><font face="Georgia, Times New Roman, Times, serif">Application 
           Form for VegBank Certification</font></h3>
         <p class="VegBank"><span class="VegBank">Required fields = *<br>
           Fields that will be listed in the public registry of certified users 
           = #</span></p>
-        <h1 class="VegBank" align="center"><font color="#FF0000">Caution -- This 
-          form is not yet implemented</font></h1>
+<!--       <h1 class="VegBank" align="center"><font color="#FF0000">Caution -- This 
+          form is not yet implemented</font></h1> 
+-->
       </blockquote>
 </td>
   </tr>
 </table>
-<form name="form1" method="post" action="" enctype="multipart/form-data">
-  <table width="800" border="1" cellspacing="0" cellpadding="1">
+
+  
+<form  method="get" action="/framework/servlet/usermanagement" >
+ 	<input type="hidden" name="action" value="certification">
+	
+	<table width="800" border="1" cellspacing="0" cellpadding="1">
     <tr> 
       <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">1 
         - Name* # </font></span></td>
       <td colspan="3"><font face="Georgia, Times New Roman, Times, serif" size="2"> 
         First 
-        <input type="text" name="givenname" size="20" maxlength="20">
+        <input type="text" name="givenName" size="20" maxlength="20">
         Last 
-        <input type="text" name="surname" size="25" maxlength="25">
+        <input type="text" name="surName" size="25" maxlength="25">
         </font></td>
     </tr>
     <tr> 
@@ -113,14 +134,15 @@
       <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">3 
         - phone*</font></span></td>
       <td colspan="3"><font face="Georgia, Times New Roman, Times, serif" size="2"> 
-        <input type="text" name="phone" size="20">
+        <input type="text" name="phoneNumber" size="20">
+ 				<input type="hidden" name="phoneType" value="unknown">	
         </font></td>
     </tr>
     <tr> 
       <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">4 
         - current certification level* #</font></span></td>
       <td colspan="3"><font face="Georgia, Times New Roman, Times, serif" size="2"> 
-        <select name="certLevel">
+        <select name="currentCertLevel">
           <option value="1">Registered User</option>
           <option value="2">Professional User</option>
           <option value="3">Senior User</option>
@@ -152,7 +174,7 @@
       <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">7 
         - Highest degree* </font></span></td>
       <td width="19%"><font face="Georgia, Times New Roman, Times, serif" size="2"> 
-        <select name="degreeType">
+        <select name="highestDegree">
           <option value="0">None</option>
           <option value="1">BA/BS</option>
           <option value="2">MA/MS</option>
@@ -176,14 +198,14 @@
       <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">10 
         - Current institution* #</font></span></td>
       <td colspan="3"><font face="Georgia, Times New Roman, Times, serif" size="2"> 
-        <input type="text" name="Inst">
+        <input type="text" name="currentInst">
         </font></td>
     </tr>
     <tr> 
       <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">11 
         - Current position* #</font></span></td>
       <td colspan="3"><font face="Georgia, Times New Roman, Times, serif" size="2"> 
-        <input type="text" name="position" size="50" maxlength="50">
+        <input type="text" name="currentPos" size="50" maxlength="50">
         </font></td>
     </tr>
     <tr> 
@@ -191,9 +213,9 @@
         - ESA Certified Ecologist ?* #</font></span></td>
       <td colspan="3" height="21"><font face="Georgia, Times New Roman, Times, serif" size="2"> 
         No 
-        <input type="radio" name="esaCertNo" value="radiobutton" checked>
+        <input type="radio" name="esaPos" value="radiobutton" checked>
         ; Yes 
-        <input type="radio" name="esaCertYes" value="radiobutton">
+        <input type="radio" name="esaPos" value="radiobutton">
         </font></td>
     </tr>
     <tr> 
@@ -203,7 +225,7 @@
     <tr> 
       <td width="9%" height="79"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
       <td colspan="4" height="79"> 
-        <textarea name="eProfessional" cols="80" rows="3"></textarea>
+        <textarea name="profExperienceDoc" cols="80" rows="3"></textarea>
       </td>
     </tr>
     <tr> 
@@ -215,7 +237,7 @@
     <tr> 
       <td width="9%"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
       <td colspan="4"> 
-        <textarea name="publications" cols="80" rows="3"></textarea>
+        <textarea name="relevantPubs" cols="80" rows="3"></textarea>
       </td>
     </tr>
     <tr> 
@@ -226,7 +248,7 @@
     <tr> 
       <td width="9%"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
       <td colspan="4"> 
-        <textarea name="eSampling" cols="80" rows="3"></textarea>
+        <textarea name="vegSamplingDoc" cols="80" rows="3"></textarea>
       </td>
     </tr>
     <tr> 
@@ -238,7 +260,7 @@
     <tr> 
       <td width="9%"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
       <td colspan="4"> 
-        <textarea name="eAnalysis" cols="80" rows="3"></textarea>
+        <textarea name="vegAnalysisDoc" cols="80" rows="3"></textarea>
       </td>
     </tr>
     <tr> 
@@ -250,7 +272,7 @@
     <tr> 
       <td width="9%"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
       <td colspan="4"> 
-        <textarea name="eUSnvc" cols="80" rows="3"></textarea>
+        <textarea name="usnvcExpDoc" cols="80" rows="3"></textarea>
       </td>
     </tr>
     <tr> 
@@ -262,7 +284,7 @@
     <tr> 
       <td width="9%"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
       <td colspan="4"> 
-        <textarea name="eVegbank" cols="80" rows="3"></textarea>
+        <textarea name="vegbankExpDoc" cols="80" rows="3"></textarea>
       </td>
     </tr>
     <tr> 
@@ -285,7 +307,7 @@
     <tr> 
       <td width="9%">&nbsp;</td>
       <td colspan="4"> 
-        <textarea name="eTools" cols="80" rows="3"></textarea>
+        <textarea name="plotdbDoc" cols="80" rows="3"></textarea>
       </td>
     </tr>
     <tr> 
@@ -312,7 +334,7 @@
     </tr>
     <tr> 
       <td colspan="2"> 
-        <select name="region1">
+        <select name="nvcExpRegionA">
           <option>US/CAN - NE </option>
           <option>US - SE</option>
           <option>US/CAN - Midwest </option>
@@ -332,7 +354,7 @@
         </select>
       </td>
       <td width="19%"> 
-        <select name="veg1">
+        <select name="nvcExpVegA">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -341,7 +363,7 @@
         </select>
       </td>
       <td width="15%"> 
-        <select name="flora1">
+        <select name="nvcExpFloristicsA">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -350,7 +372,7 @@
         </select>
       </td>
       <td width="33%"> 
-        <select name="nvc1">
+        <select name="nvcExpNVCA">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -466,10 +488,10 @@
     <tr> 
       <td colspan="3"><font face="Georgia, Times New Roman, Times, serif" size="2"> 
         Name 
-        <input type="text" name="refName1" size="50" maxlength="50">
+        <input type="text" name="esaSponsorNameA" size="50" maxlength="50">
         </font></td>
       <td colspan="2"> email 
-        <input type="text" name="refEmail1">
+        <input type="text" name="esaSponsorEmailA">
       </td>
     </tr>
     <tr> 
@@ -485,7 +507,7 @@
         - Check if you would be interested in serving as a peer reviewer for proposed 
         changes in the US-NVC?</font></span></td>
       <td colspan="2"><font face="Georgia, Times New Roman, Times, serif" size="2"> 
-        <input type="radio" name="reviewer" value="radiobutton">
+        <input type="radio" name="peerReview" value="radiobutton">
         </font></td>
     </tr>
     <tr> 
@@ -496,7 +518,7 @@
     <tr> 
       <td width="9%"><font face="Georgia, Times New Roman, Times, serif" size="2"></font></td>
       <td colspan="4"> 
-        <textarea name="other" cols="80" rows="3"></textarea>
+        <textarea name="additionalStatements" cols="80" rows="3"></textarea>
       </td>
     </tr>
     <tr> 
