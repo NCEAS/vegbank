@@ -5,9 +5,9 @@ package org.vegbank.plots.datasource;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-12-02 02:10:12 $'
- *	'$Revision: 1.17 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-12-05 23:12:12 $'
+ *	'$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -915,7 +915,7 @@ public class VegbankXMLUpload
 		 * @param FKValue
 		 * @return boolean -- success or not
 		 */
-		private boolean insertTables( String tableName, Enumeration tables, String fKName, long fKValue )
+		private boolean insertTables( String tableName, Enumeration tables, String fKName, long fKValue ) throws SQLException
 		{
 			boolean result = true;
 			
@@ -943,7 +943,7 @@ public class VegbankXMLUpload
 		 * @param fieldValueHash
 		 * @return long -- PK of the table
 		 */
-		private long insertTable( String tableName, Hashtable fieldValueHash )
+		private long insertTable( String tableName, Hashtable fieldValueHash ) throws SQLException
 		{	
 			//LogUtility.log("LoadTreeToDatabase : insert: " + tableName);
 			
@@ -1030,7 +1030,7 @@ public class VegbankXMLUpload
 		 * @param tableName
 		 * @param PK
 		 */
-		private void addAccessionCode(Hashtable fieldValueHash, String tableName, long PK)
+		private void addAccessionCode(Hashtable fieldValueHash, String tableName, long PK) throws SQLException
 		{	
 			String fieldName = Utility.getAccessionCodeAttributeName(tableName);
 			String accessionCode = "";
@@ -1043,6 +1043,7 @@ public class VegbankXMLUpload
 				{
 					// Use the AccessionGen for these tables
 					LogUtility.log("LoadTreeToDatabase: Calling AccessionGen THIS IS INCOMPLETE!!"); 
+					// FIXME: Commented out active code
 					accessionCode =
 						ag.getAccession(
 							Utility.getAccessionPrefix(),
@@ -1160,7 +1161,7 @@ public class VegbankXMLUpload
 		 * @param FK
 		 * @param fieldValueHash
 		 */
-		private void insertNoteLink(long FK, Hashtable fieldValueHash)
+		private void insertNoteLink(long FK, Hashtable fieldValueHash) throws SQLException
 		{
 			// Does this table have a noteLink
 			Enumeration noteLinks =  getChildTables(fieldValueHash, "noteLinkList");
@@ -1213,7 +1214,7 @@ public class VegbankXMLUpload
 		 * @param FK
 		 * @param fieldValueHash
 		 */
-		private void insertRevision(long FK, Hashtable fieldValueHash)
+		private void insertRevision(long FK, Hashtable fieldValueHash) throws SQLException
 		{
 			// Does this table have a revision
 			Enumeration revisions =  getChildTables(fieldValueHash, "revisionList");
@@ -1270,7 +1271,7 @@ public class VegbankXMLUpload
 		 * Convience method to add a reference and it child tables
 		 * 
 		 **/
-		private long insertReference( Hashtable reference)
+		private long insertReference( Hashtable reference) throws SQLException
 		{
 			long referenceId = 0;
 			// Handle null
@@ -1323,7 +1324,7 @@ public class VegbankXMLUpload
 		 * @param referenceParty
 		 * @return
 		 */
-		private long insertReferenceParty(Hashtable referenceParty)
+		private long insertReferenceParty(Hashtable referenceParty) throws SQLException
 		{
 			long referencePartyId = 0;
 			if (referenceParty != null)
@@ -1337,7 +1338,7 @@ public class VegbankXMLUpload
 			return referencePartyId;
 		}
 
-		private boolean insertUserDefinedTables( String parentTableName, long tableRecordID, Hashtable parentHash)
+		private boolean insertUserDefinedTables( String parentTableName, long tableRecordID, Hashtable parentHash) throws SQLException
 		{
 			boolean result = false;
 			
@@ -1549,7 +1550,7 @@ public class VegbankXMLUpload
 		 * @param party
 		 * @return
 		 */
-		private long insertParty( Hashtable party)
+		private long insertParty( Hashtable party) throws SQLException
 		{
 			//LogUtility.log("### " +party);
 			
@@ -1584,7 +1585,7 @@ public class VegbankXMLUpload
 		 * @param party
 		 * @return
 		 */
-		private long insertPartyBase(Hashtable party, String tableName)
+		private long insertPartyBase(Hashtable party, String tableName) throws SQLException
 		{
 			long pKey = 0;
 			
@@ -1613,7 +1614,7 @@ public class VegbankXMLUpload
 			return pKey;
 		}
 		
-		private long insertContributor(String tableName, Hashtable contribHash, String keyName, long keyValue)
+		private long insertContributor(String tableName, Hashtable contribHash, String keyName, long keyValue) throws SQLException
 		{
 			long pKey = 0;
 			// Handle null
@@ -1651,7 +1652,7 @@ public class VegbankXMLUpload
 		 *
 		 * @param Hashtable -- Hashtable representing plot to load
 		 */
-		private long insertPlot( Hashtable plotHash)
+		private long insertPlot( Hashtable plotHash) throws SQLException
 		{		
 			long plotId = 0;
 
@@ -1728,7 +1729,7 @@ public class VegbankXMLUpload
 		 * 
 		 * @return long -- observationId
 		 */
-		private long insertObservation(long plotId, long projectId, Hashtable observationHash)
+		private long insertObservation(long plotId, long projectId, Hashtable observationHash) throws SQLException
 		{
 			long observationId = 0;
 			// Handle null
@@ -1864,7 +1865,7 @@ public class VegbankXMLUpload
 			return observationId;
 		}
 
-		private long insertStratumMethod(Hashtable stratumMethod)
+		private long insertStratumMethod(Hashtable stratumMethod) throws SQLException
 		{
 			long stratumMethodId = insertTable("stratumMethod", stratumMethod);
 			// And the child stratumTypes
@@ -1889,7 +1890,7 @@ public class VegbankXMLUpload
 		private void insertTaxonObservations(
 			Hashtable observationHash,
 			long observationId,
-			long stratumMethodId)
+			long stratumMethodId) throws SQLException
 		{	
 			// Insert the taxonObservations
 			Enumeration taxonObservations = getChildTables(observationHash, "taxonObservation");
@@ -1970,7 +1971,7 @@ public class VegbankXMLUpload
 		private void insertTaxonInterpretation(
 			long taxonObservationId,
 			long stemLocationId,
-			Hashtable taxonInterpretation)
+			Hashtable taxonInterpretation) throws SQLException
 		{
 			// Get the party
 			Hashtable party =  this.getFKChildTable(taxonInterpretation, Taxoninterpretation.PARTY_ID, "party");
@@ -2025,7 +2026,7 @@ public class VegbankXMLUpload
 		 * @param plantConcept
 		 * @return long -- the PK of  this row
 		 */
-		private long insertPlantConcept(Hashtable plantConcept)
+		private long insertPlantConcept(Hashtable plantConcept) throws SQLException
 		{
 			long pKey = 0;
 			// Handle null
@@ -2078,7 +2079,7 @@ public class VegbankXMLUpload
 		 * @param commConcept
 		 * @return long -- the PK of  this row
 		 */
-		private long insertCommConcept(Hashtable commConcept)
+		private long insertCommConcept(Hashtable commConcept) throws SQLException
 		{
 			long pKey = 0;
 			// Handle null
@@ -2131,7 +2132,7 @@ public class VegbankXMLUpload
 		 * @param commStatus
 		 * @return long -- primary key assigned
 		 */
-		private long insertCommStatus(Hashtable commStatus)
+		private long insertCommStatus(Hashtable commStatus) throws SQLException
 		{
 			long pKey =0;
 		
@@ -2183,7 +2184,7 @@ public class VegbankXMLUpload
 			return pKey;
 		}
 		
-		private void insertCommUsage(Hashtable commUsage)
+		private void insertCommUsage(Hashtable commUsage) throws SQLException
 		{
 			// Add commName 
 			Hashtable commName = this.getFKChildTable(commUsage, Commusage.COMMNAME_ID, "commName");
@@ -2203,7 +2204,7 @@ public class VegbankXMLUpload
 		 * @param commParty
 		 * @return
 		 */
-		private long insertCommParty(Hashtable commParty)
+		private long insertCommParty(Hashtable commParty) throws SQLException
 		{
 			long pKey = 0;
 			if ( commParty == null )
@@ -2216,7 +2217,7 @@ public class VegbankXMLUpload
 			return pKey;
 		}
 
-		private void insertPlantUsage(Hashtable plantUsage)
+		private void insertPlantUsage(Hashtable plantUsage) throws SQLException
 		{
 			// Add plantName 
 			Hashtable plantName = this.getFKChildTable(plantUsage, Plantusage.PLANTNAME_ID, "plantName");
@@ -2236,7 +2237,7 @@ public class VegbankXMLUpload
 		 * @param plantStatus
 		 * @return long -- primary key assigned
 		 */
-		private long insertPlantStatus(Hashtable plantStatus)
+		private long insertPlantStatus(Hashtable plantStatus) throws SQLException
 		{
 			long pKey =0;
 			
@@ -2309,7 +2310,7 @@ public class VegbankXMLUpload
 		 * @param observationId
 		 * @return
 		 */
-		private long insertStratum(Hashtable stratum, long stratumMethodId, long observationId)
+		private long insertStratum(Hashtable stratum, long stratumMethodId, long observationId) throws SQLException
 		{
 			Hashtable stratumType = getFKChildTable(stratum, Stratum.STRATUMTYPE_ID, "stratumType");
 			
@@ -2328,7 +2329,7 @@ public class VegbankXMLUpload
 		 * @param commIntepretation
 		 * @param commClassId
 		 */
-		private long insertCommInterpetation(Hashtable commIntepretation)
+		private long insertCommInterpetation(Hashtable commIntepretation) throws SQLException
 		{			
 			long pKey = 0;
 			// Handle null
