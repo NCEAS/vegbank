@@ -30,8 +30,8 @@ import servlet.authentication.UserDatabaseAccess;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2003-01-08 20:02:46 $'
- *  '$Revision: 1.46 $'
+ *  '$Date: 2003-01-10 21:44:53 $'
+ *  '$Revision: 1.47 $'
  */
 
 
@@ -1481,8 +1481,16 @@ private StringBuffer handlePlantTaxaSubmittalOld(Hashtable params, HttpServletRe
 								System.out.println("DataSubmitServlet > plot is valid: " + valid);
 								if ( valid == false )
 								{
+									// get the validation report and proccess the xml that looks like
 									String report = rmiClient.getValidationReport();
-									sb.append(report);
+									// create a document 
+									System.out.println("DataSubmitServlet > validation report length: " + report.length() );
+									//System.out.println("DataSubmitServlet > validation report: " + report );
+									parser = new XMLparse();
+									Document validationDoc = parser.getDocumentFromString(report.replace('&', '_' ));
+									// get the failed elements 
+									Vector failedAttributes = parser.get(validationDoc, "dbAttribute" );
+									sb.append(failedAttributes.toString());
 								}
 								
 				
