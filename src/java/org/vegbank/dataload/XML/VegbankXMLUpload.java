@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-24 00:55:15 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-11-16 01:21:31 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,10 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -140,22 +137,26 @@ public class VegbankXMLUpload
 		{	
 			xr.setErrorHandler( errorHandler );
 			xr.parse( this.getInputSource(xmlFile) );
-			log.info( "This file is valid: " + errorHandler.isValid());
 		}
 		
 		if ( errorHandler.isValid() )
 		{
-			if ( load ) // Only load if told to
-			{
+			log.info( xmlFileName + " is a valid vegbank XML package");
+
+			//if ( load ) // Only load if told to
+			//{
 				log.debug("Loading XML to DB");
 				xr.setContentHandler( contentHandler );
 				xr.parse( this.getInputSource(xmlFile));	
-			}
+			//} 
 
+			if (!load) {
+				contentHandler.generateSummary(null, 0);
+			}
 		}
 		else 
 		{
-			log.debug( "No attempt was made to rectify or load this dataset");
+			log.debug( "Invalid file.  No attempt was made to rectify or load this dataset");
 		}
 	}
 	
@@ -292,4 +293,12 @@ public class VegbankXMLUpload
 		
 		return topLevelAccessionCodes;
 	}
+
+	/**
+	 *
+	 */
+	public Map getSummary() {
+		return contentHandler.getSummary();
+	}
+
 }

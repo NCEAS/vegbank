@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-28 07:42:37 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-11-16 01:21:31 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,7 @@
 package org.vegbank.dataload.XML;
 
 import java.sql.SQLException;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,12 +46,16 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 	private LoadingErrors errors = null;
 	private boolean load = true;
 	private List accessionCodes = null;
+	private HashMap tableTally = null;
+	private List tallyIgnoreList = null;
 	
 	public SAX2DBContentHandler(LoadingErrors errors, List accessionCodes, boolean load)
 	{
 		this.errors = errors;
 		this.load = load;
 		this.accessionCodes = accessionCodes;
+		this.tableTally = new HashMap();
+		initTallyIgnoreList();
 		tables.add(tmpStore);
 	}
 	
@@ -62,17 +64,22 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 	 */
 	public void endDocument() throws SAXException
 	{
-		LoadTreeToDatabase ltdb = new LoadTreeToDatabase(errors, accessionCodes, load);
-		try
-		{
-			if (keepRunning()) {
-				log.info("inserting vegbank package...");
-				ltdb.insertVegbankPackage( (Hashtable) ( (Vector) tmpStore.get("VegBankPackage")).firstElement());
+		if (load) {
+			//LoadTreeToDatabase ltdb = new LoadTreeToDatabase(errors, accessionCodes, load);
+			try
+			{
+				if (load && keepRunning()) {
+					log.info("!!!! WOULD BE !!!! inserting vegbank package...");
+					//log.info("inserting vegbank package...");
+					//ltdb.insertVegbankPackage( (Hashtable) ( (Vector) tmpStore.get("VegBankPackage")).firstElement());
+				}
 			}
-		}
-		catch (SQLException e)
-		{
-			throw new SAXException(e);
+			catch (SQLException e)
+			{
+				throw new SAXException(e);
+			}
+		} else {
+			log.info("Document parsing complete but NOT loaded, as requested.");
 		}
 	}
 
@@ -349,7 +356,7 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 			//if ( this.getPreviousTable() != null && this.getPreviousTable().containsKey(tableName))
 			if ( this.getCurrentTable() != null && this.getCurrentTable().containsKey(tableName))
 			{
-				log.debug("SAX2DBContentHandler: ... table exists ... adding another : " + tableName);
+				//log.debug("SAX2DBContentHandler: ... table exists ... adding another : " + tableName);
 			
 				//vector = (Vector)  this.getPreviousTable().get(tableName);	
 				vector = (Vector)  this.getCurrentTable().get(tableName);			
@@ -448,5 +455,94 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 	{
 		// Do Nothing
 
+	}
+
+	/**
+	 *
+	 */
+	public void generateSummary(Map m, int indent) {
+		//log.debug("BEGIN level " + indent);
+
+		Iterator keys;
+		if (m == null) {
+			//log.debug("root!");
+			m = tmpStore;
+		} 
+
+		//log.debug("map size is " + m.size());
+		keys = m.keySet().iterator();
+
+
+		try {
+			while (keys.hasNext()) {
+				String key = (String)keys.next();
+				Object o = m.get(key);
+				//log.debug(key + "'s  object type is " + o.getClass().getName());
+				if (key.equals(TABLENAME)) {
+					tallyTable(o.toString());
+				}
+
+				if (o instanceof java.util.Vector && ((Vector)o).size() > 0) {
+					Vector v = (Vector)o;
+					//log.debug(indent + ": found " + v.size() + " items with key " + key);
+					//log.debug(v.toString());
+					Iterator vit = v.iterator();
+
+					while (vit.hasNext()) {
+						o = vit.next();
+						//log.debug(indent + ": got vector item of type " + o.getClass().getName());
+						if (o instanceof java.util.Hashtable) {
+							generateSummary((Map)o, indent+1);
+						} else {
+							//log.debug("skipping vector item of type " + o.getClass().getName());
+						}
+					}
+
+
+				} else {
+					//log.debug(key + " value is of type " + o.getClass().getName());
+					//log.debug(indent + ") " + key + ": " + o.toString());
+				}
+			}
+		} catch (Exception ex) {
+			log.error("problem getting keys/values", ex);
+		}
+
+		//log.debug("END level " + indent);
+	}
+
+	/*
+	 *
+	 */
+	private void tallyTable(String tableName) {
+		if (tableName.startsWith("doc-") ||
+				tallyIgnoreList.contains(tableName.toLowerCase())) {
+			return;
+		}
+
+		//log.debug("TABLE: " + tableName);
+		Integer count = (Integer)tableTally.get(tableName);
+		if (count == null) {
+			count = new Integer(1);
+		} else {
+			count = new Integer(count.intValue() + 1);
+		}
+
+		tableTally.put(tableName, count);
+	}
+	
+	/*
+	 *
+	 */
+	public Map getSummary() {
+		return tableTally;
+	}
+
+	/*
+	 *
+	 */
+	private void initTallyIgnoreList() {
+		tallyIgnoreList = new ArrayList();
+		tallyIgnoreList.add("vegbankpackage");
 	}
 }

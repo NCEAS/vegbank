@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-28 07:42:37 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-11-16 01:21:31 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,10 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionMessage;
@@ -66,6 +63,7 @@ public class VegbankXMLUploadThread extends PleaseWaitThread
 	private VegbankXMLUpload xmlUpload;
 	private String xmlFileName;
 	private String fwdName;
+	private String plotFilePath;
 	private boolean isDone;
 	private int delayLength = 0;
 
@@ -97,8 +95,8 @@ public class VegbankXMLUploadThread extends PleaseWaitThread
 			delayLength = (SEC_PER_DELAY_ZIP / BYTES_PER_DELAY_ZIP) * fileSize;
 		}
 		*/
-		delayLength = 10;
-		log.debug("Delay: " + delayLength);
+		delayLength = 5;
+		log.debug("Delay time: " + delayLength);
 
 
 		// used only in Thread
@@ -108,6 +106,10 @@ public class VegbankXMLUploadThread extends PleaseWaitThread
 		this.messages = new ActionMessages();
 	} 
 
+	public Map getUploadSummary() {
+		return xmlUpload.getSummary();
+	}
+
 	/* ========================================================== */
 	/* PleaseWaitThread implementation */
 	/* ========================================================== */
@@ -115,6 +117,11 @@ public class VegbankXMLUploadThread extends PleaseWaitThread
 	 * 
 	 */
 	public void run() {
+		go();
+	}
+
+
+	public void go() {
 		messages.add(ActionMessages.GLOBAL_MESSAGE,
 				new ActionMessage("errors.general",
 					"Loading XML..."));
@@ -129,7 +136,9 @@ public class VegbankXMLUploadThread extends PleaseWaitThread
 		}
 
 		isDone = true;
-		fwdName = "DisplayLoadReport";
+		if (Utility.isStringNullOrEmpty(fwdName)) {
+			fwdName = "DisplayLoadSummary";
+		}
 
 		messages.add(ActionMessages.GLOBAL_MESSAGE,
 				new ActionMessage("errors.general",
@@ -158,9 +167,32 @@ public class VegbankXMLUploadThread extends PleaseWaitThread
 	}
 
 	/**
+	 *
+	 */
+	public void setForward(String s) {
+		fwdName = s;
+	}
+
+	/**
+	 * 
+	 */
+	public String getPlotFilePath() {
+		return plotFilePath;
+	}
+
+	/**
+	 * 
+	 */
+	public void setPlotFilePath(String s) {
+		plotFilePath = s;
+	}
+
+	/**
 	 * Prepares the request.
 	 */
 	public void prepareRequest(HttpServletRequest request) {
+		request.getSession().setAttribute("summaryMap", this.getUploadSummary());
+		request.getSession().setAttribute("plotFilePath", this.getPlotFilePath());
 		request.getSession().setAttribute("ErrorsReport",  xmlUpload.getErrors());
 		request.getSession().setAttribute("delayLength",  String.valueOf(delayLength));
 	}

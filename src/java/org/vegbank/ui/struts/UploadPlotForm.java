@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-05 02:13:01 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-11-16 01:21:31 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,6 +59,7 @@ public class UploadPlotForm extends ValidatorForm
 	private final String updateArchivedPlot = "false";
 	private FormFile plotFile = null; 
 	private String plotFileURL = null; 
+	private String plotFilePath = null; 
 	
 	// The following variables are for controlling uploader features
 	// defaults are all true
@@ -88,6 +89,14 @@ public class UploadPlotForm extends ValidatorForm
 	public String getPlotFileURL()
 	{
 		return plotFileURL;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getPlotFilePath()
+	{
+		return plotFilePath;
 	}
 
 	/**
@@ -123,6 +132,14 @@ public class UploadPlotForm extends ValidatorForm
 	}
 
 	/**
+	 * @param string
+	 */
+	public void setPlotFilePath(String s)
+	{
+		plotFilePath = s;
+	}
+
+	/**
 	 * @param b
 	 */
 	public void setUpdateArchivedPlot(String b)
@@ -147,23 +164,23 @@ public class UploadPlotForm extends ValidatorForm
 			// check the upload file
 			FormFile plotFile = this.getPlotFile();
 
-			if (plotFile == null || plotFile.getFileSize() == 0)
-			{
-				errors.add(
-					ActionErrors.GLOBAL_ERROR,
-					new ActionError("errors.required", "A valid plot datafile")
-				);
+			if (Utility.isStringNullOrEmpty(plotFilePath)) {
+				if (plotFile == null || plotFile.getFileSize() == 0) {
+					errors.add(
+						ActionErrors.GLOBAL_ERROR,
+						new ActionError("errors.required", "A valid plot datafile")
+					);
+				}
+				
+				// Check to see if the maximum file size has been exceeded!
+				Boolean maxLengthExceeded = (Boolean)
+						req.getAttribute(MultipartRequestHandler.ATTRIBUTE_MAX_LENGTH_EXCEEDED);
+				if ((maxLengthExceeded != null) && (maxLengthExceeded.booleanValue())) {
+					String maxFileSize = am.getModuleConfig().getControllerConfig().getMaxFileSize();
+					errors = new ActionErrors();
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.maxLengthExceeded", maxFileSize ));
+				}		
 			}
-			
-			// Check to see if the maximum file size has been exceeded!
-			Boolean maxLengthExceeded = (Boolean)
-					req.getAttribute(MultipartRequestHandler.ATTRIBUTE_MAX_LENGTH_EXCEEDED);
-			if ((maxLengthExceeded != null) && (maxLengthExceeded.booleanValue()))
-			{
-				String maxFileSize = am.getModuleConfig().getControllerConfig().getMaxFileSize();
-				errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.maxLengthExceeded", maxFileSize ));
-			}		
 
 		} else {
 			// make sure a URL was entered
