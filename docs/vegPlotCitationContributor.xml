@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+
+<dataModel>	
+<title> </title>
+<author> </author>
+<institution> </institution>
+<contributor> </contributor>
+<description> </description>
+<date> </date>
+
+<entity>
+	<entityName> </entityName>
+	<entitySummary> </entitySummary>
+	<entityDescription> </entityDescription>
+	<attribute> 
+		<attName> </attName>
+		<attNulls> </attNulls>	
+		<attType> </attType>
+		<attKey> </attKey>
+		<attNotes> </attNotes>
+		<attDefinition> </attDefinition>
+	</attribute>
+
+
+
+	<attribute>
+                <attName> </attName>
+                <attNulls> </attNulls>
+                <attType> </attType>
+                <attKey> </attKey>
+                <attReferences> </attReferences>
+                <attNotes> </attNotes>
+                <attDefinition> </attDefinition>
+        </attribute>
+
+
+	<children> </children>
+</entity>
+</dataModel>	
