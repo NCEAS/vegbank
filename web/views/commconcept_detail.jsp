@@ -9,7 +9,9 @@
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=">
 </HEAD>
-<body class="center">@vegbank_header_html_normal@ 
+<body>  
+ @vegbank_header_html_normal@ 
+  @possibly_center@ 
 
 <h2>View Community Concepts - Detail</h2>
 

@@ -7,7 +7,9 @@
 <TITLE>View VegBank Data: stratumMethods - Summary</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css" />
 </HEAD>
-<body class="center">@vegbank_header_html_normal@  
+<body>  
+ @vegbank_header_html_normal@ 
+  @possibly_center@  
 <h2>View VegBank Stratum Methods</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>

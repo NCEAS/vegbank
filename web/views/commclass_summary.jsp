@@ -11,7 +11,9 @@
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </HEAD>
-<body class="center">@vegbank_header_html_normal@  <h2>View VegBank Community Classifications</h2>
+<body>  
+ @vegbank_header_html_normal@ 
+  @possibly_center@  <h2>View VegBank Community Classifications</h2>
 <% String rowClass = "evenrow"; %>
 <vegbank:get id="commclass" select="commclass" beanName="map" where="where_observation_pk" pager="true"/>
 <vegbank:pager />

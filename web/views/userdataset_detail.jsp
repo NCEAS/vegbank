@@ -8,7 +8,9 @@
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=">
 </HEAD>
-<body class="center">@vegbank_header_html_normal@  <h2>View Your VegBank Datasets</h2>
+<body>  
+ @vegbank_header_html_normal@ 
+  @possibly_center@  <h2>View Your VegBank Datasets</h2>
 <!-- get user ID -->
 <% 
 Long localPgUserId = (Long)(request.getSession().getAttribute("USER")); 

@@ -9,8 +9,11 @@
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=">
 </HEAD>
-<body class="center">
+<body>  
+ 
+ 
 @vegbank_header_html_normal@
+ @possibly_center@ 
    <%
 		       //**************************************************************************************
 		       //  Set up alternating row colors
