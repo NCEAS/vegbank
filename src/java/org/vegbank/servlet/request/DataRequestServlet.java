@@ -3,9 +3,9 @@ package org.vegbank.servlet.request;
 /*
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
- *	'$Author: farrell $'
- *  '$Date: 2004-03-02 03:36:43 $'
- *  '$Revision: 1.25 $'
+ *	'$Author: anderson $'
+ *  '$Date: 2004-06-09 22:45:20 $'
+ *  '$Revision: 1.26 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,9 +43,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.DBConnectionPool;
-import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.databaseAccess.dbAccess;
@@ -81,14 +83,16 @@ import org.vegbank.xmlresource.transformXML;
  * @param plotId - database plot identification number <br> 
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
- *	'$Author: farrell $'
- *  '$Date: 2004-03-02 03:36:43 $'
- *  '$Revision: 1.25 $'
+ *	'$Author: anderson $'
+ *  '$Date: 2004-06-09 22:45:20 $'
+ *  '$Revision: 1.26 $'
  * 
  */
 
 public class DataRequestServlet extends HttpServlet 
 {
+
+	private static Log log = LogFactory.getLog(DataRequestServlet.class);
 
 	static ResourceBundle rb = ResourceBundle.getBundle("vegbank");
 	private  ServletUtility su = new ServletUtility();
@@ -113,17 +117,17 @@ public class DataRequestServlet extends HttpServlet
 	{
 		try
 		{
-			LogUtility.log("init: DataRequestServlet");
+			log.debug("init: DataRequestServlet");
 			//show some of the instance variablies
-			LogUtility.log("init: DataRequestServlet > user query caching: " + QUERYCACHING);
-			LogUtility.log("init: DataRequestServlet > servlet dir: " + SERVLET_DIR);
-			LogUtility.log("init: DataRequestServlet > default style sheet: " + DEFAULT_PLOT_STYLESHEET);
-			LogUtility.log("init: DataRequestServlet > generic html form: " + GENERICFORM);
+			log.debug("init: DataRequestServlet > user query caching: " + QUERYCACHING);
+			log.debug("init: DataRequestServlet > servlet dir: " + SERVLET_DIR);
+			log.debug("init: DataRequestServlet > default style sheet: " + DEFAULT_PLOT_STYLESHEET);
+			log.debug("init: DataRequestServlet > generic html form: " + GENERICFORM);
 		}
 		catch (Exception e)
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 	}
 	
@@ -133,7 +137,7 @@ public class DataRequestServlet extends HttpServlet
 	public void init( ServletConfig config ) throws ServletException {
 		try {
 			super.init( config );
-			LogUtility.log("DataRequestServlet Initialize");
+			log.debug("DataRequestServlet Initialize");
 
 			//initial DBConnection pool
 			DBConnectionPool.getInstance();
@@ -141,7 +145,7 @@ public class DataRequestServlet extends HttpServlet
 		} catch ( ServletException ex ) {
 			throw ex;
 		} catch (SQLException e) {
-			LogUtility.log("Error in DataRequestServlet.init: "+e.getMessage());
+			log.debug("Error in DataRequestServlet.init: "+e.getMessage());
 		}
 	}
 
@@ -150,7 +154,7 @@ public class DataRequestServlet extends HttpServlet
 	 */
 	public void destroy() {
 			// Close all db connection
-			LogUtility.log("Destroying DataRequestServlet");
+			log.debug("Destroying DataRequestServlet");
 			DBConnectionPool.release();
 	}
 
@@ -158,7 +162,7 @@ public class DataRequestServlet extends HttpServlet
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
  	 throws IOException, ServletException 	
 		{
-			LogUtility.log("DataRequestServlet > GET");
+			log.debug("DataRequestServlet > GET");
 			doPost(request, response);
 		}
 
@@ -169,7 +173,7 @@ public class DataRequestServlet extends HttpServlet
 		HttpServletResponse response)
 		throws IOException, ServletException
 	{
-		LogUtility.log("DataRequestServlet > POST");
+		log.debug("DataRequestServlet > POST");
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		try
@@ -183,7 +187,7 @@ public class DataRequestServlet extends HttpServlet
 			}
 			
 
-			LogUtility.log("DataRequstServlet > current user: " + userName);
+			log.debug("DataRequstServlet > current user: " + userName);
 
 			String resultType = request.getParameter("resultType");
 			String requestDataType = request.getParameter("requestDataType");
@@ -195,12 +199,12 @@ public class DataRequestServlet extends HttpServlet
 			//get the variables privately held in the properties file
 			String clientLog = (rb.getString("requestparams.clientLog"));
 			String remoteHost = request.getRemoteHost();
-			LogUtility.log("DataRequstServlet > accessed by: " + remoteHost);
+			log.debug("DataRequstServlet > accessed by: " + remoteHost);
 
 			// PLOT QUERY
 			if (requestDataType.trim().equals("vegPlot"))
 			{
-				LogUtility.log(
+				log.debug(
 					"DataRequstServlet > determining query type: " + queryType);
 				
 				if (queryType.equalsIgnoreCase("simple"))
@@ -215,13 +219,13 @@ public class DataRequestServlet extends HttpServlet
 				}
 				else if (queryType.equalsIgnoreCase("extended"))
 				{
-					LogUtility.log("DataRequstServlet > Unknown query type ");
+					log.debug("DataRequstServlet > Unknown query type ");
 				}
 			}
 			// VEG COMMUNITY QUERY
 			else if (requestDataType.trim().equals("vegCommunity"))
 			{
-				System.out.println(
+				log.debug(
 					"DataRequstServlet > query on the vegetation community database \n"
 						+ " not yet implemented ");
 				handleVegCommunityQuery(
@@ -236,14 +240,14 @@ public class DataRequestServlet extends HttpServlet
 			//UNKNOWN QUERY
 			else
 			{
-				LogUtility.log(
+				log.debug(
 					"DataRequstServlet > unknown 'requestDataType' parameter "
 						+ " must be: vegPlot or plantTaxon or vegCommunity ");
 			}
 		}
 		catch (Exception e)
 		{
-			LogUtility.log("DataRequestServlet: " + e.getMessage(), e);
+			log.debug("DataRequestServlet: " + e.getMessage(), e);
 		}
 	}
 
@@ -307,9 +311,9 @@ public class DataRequestServlet extends HttpServlet
 			}
 			else
 			{
-				LogUtility.log(
+				log.debug(
 					"DataRequstServlet >  requestDataType: " + requestDataType);
-				LogUtility.log("DataRequstServlet > handling " + requestDataType  +" result set " );
+				log.debug("DataRequstServlet > handling " + requestDataType  +" result set " );
 
 				// IF THEY ARE REQUESTING THE VEG COMMUNITY RETURN THE RESULT SET
 				if (requestDataType.equalsIgnoreCase("vegCommunity"))
@@ -321,8 +325,8 @@ public class DataRequestServlet extends HttpServlet
 		}
 		catch (Exception e)
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 	}
 	
@@ -338,16 +342,16 @@ public class DataRequestServlet extends HttpServlet
 		 {
 			 String styleSheet=SERVLET_DIR+"showCommunitySummary.xsl";
 
-			 //LogUtility.log("DataRequestServlet > xml document: '" + xmlResult +"'" );
-			 LogUtility.log("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
-		         LogUtility.log("DataRequestServlet > XML input: '" + xmlResult+ "'");
+			 //log.debug("DataRequestServlet > xml document: '" + xmlResult +"'" );
+			 log.debug("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
+		         log.debug("DataRequestServlet > XML input: '" + xmlResult+ "'");
 	
 			sb.append( transformer.getTransformedFromString( xmlResult, styleSheet ) );
 		 }
 		 catch( Exception e ) 
 		 {
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		 }
 		return( sb.toString() );
 	 }
@@ -364,17 +368,16 @@ public class DataRequestServlet extends HttpServlet
 		StringBuffer sb = new StringBuffer();
 		try
 		{
-			LogUtility.log("DataRequestServlet > getPlotView ");
-
-			//LogUtility.log("DataRequestServlet > xml document: '" + xmlResult +"'" );
-			//LogUtility.log("DataRequestServlet > stylesheet name: '"+styleSheet +"'");
+			log.debug("DataRequestServlet > getPlotView ");
+			//log.debug("DataRequestServlet > xml document: '" + xmlResult +"'" );
+			log.debug("DataRequestServlet > stylesheet name: '"+styleSheet +"'");
 
 			sb.append(transformer.getTransformedFromString(xmlResult, styleSheet));
 		}
 		catch (Exception e)
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 		return (sb.toString());
 	}
@@ -391,15 +394,15 @@ public class DataRequestServlet extends HttpServlet
 		 {
 
 			 String styleSheet = DEFAULT_PLOT_STYLESHEET;
-			 //LogUtility.log("DataRequestServlet > xml document: '" + xmlResult +"'" );
-			 LogUtility.log("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
+			 //log.debug("DataRequestServlet > xml document: '" + xmlResult +"'" );
+			 log.debug("DataRequestServlet > stylesheet name: '" + styleSheet +"'" );
 			 
 			sb.append( transformer.getTransformedFromString( xmlResult, styleSheet ) );
 		 }
 		 catch( Exception e ) 
 		 {
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		 }
 		return( sb.toString() );
 	 }
@@ -436,8 +439,8 @@ public class DataRequestServlet extends HttpServlet
 		} 
 		catch( Exception e ) 
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 		return(v);
 	}
@@ -506,8 +509,8 @@ public class DataRequestServlet extends HttpServlet
 		}
 		catch( Exception e ) 
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 		return(su.toString() );
 	}
@@ -538,15 +541,15 @@ public class DataRequestServlet extends HttpServlet
 		try
 		{
 
-			LogUtility.log(accessionCode + " == " + resultType);
+			log.debug(accessionCode + " == " + resultType);
 			if ( accessionCode != null && ( resultType.equals("full") || resultType.equals("summary") || resultType.equals("rawXML") ) )
 			{
-				LogUtility.log("About to run plot query");
+				log.debug("About to run plot query");
 				new FullPlotQuery().execute(qr, accessionCode);
 			}
 			else
 			{
-				LogUtility.log("DataRequestServlet > This request is not understood");
+				log.debug("DataRequestServlet > This request is not understood");
 			}
 			// if there are results returned to the servlet from the database in the form 
 			// of a file returned then grab the summary viewer then let the user know
@@ -567,8 +570,8 @@ public class DataRequestServlet extends HttpServlet
 		}
 		catch (Exception e)
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 	}
 	
@@ -598,7 +601,7 @@ public class DataRequestServlet extends HttpServlet
 			while (e.hasMoreElements())
 			{
 				String name = (String) e.nextElement();
-				LogUtility.log("getting : " + name);
+				log.debug("getting : " + name);
 				String value = (String) request.getParameter(name);
 				sb.append(name + ":   " + value + " <br>  \n");
 			}
@@ -610,8 +613,8 @@ public class DataRequestServlet extends HttpServlet
 		}
 		catch (Exception e)
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 		return (output.toString());
 	}
@@ -636,7 +639,7 @@ public class DataRequestServlet extends HttpServlet
 		StringBuffer output = new StringBuffer();
 		try
 		{
-			LogUtility.log(
+			log.debug(
 				"DataRequstServlet > printing from DataRequestServlet.composeCommunityQuery: "
 					+ "communityName: "
 					+ communityName);
@@ -670,8 +673,8 @@ public class DataRequestServlet extends HttpServlet
 		}
 		catch (Exception e)
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 		return output.toString();
 	}
@@ -697,8 +700,8 @@ private void updateClientLog (String clientLog, String remoteHost)
 	}
 	catch (Exception e) 
 	{
-			LogUtility.log("DataRequestServlet", e);
-		e.printStackTrace();
+		log.debug("DataRequestServlet", e);
+		//e.printStackTrace();
 	}
 }
 
@@ -731,8 +734,8 @@ private void updateClientLog (String clientLog, String remoteHost)
 		}
 		catch (Exception e) 
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 		return query.toString();
 	}
@@ -778,7 +781,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 			else 
 			{
 				//print the error found
-				LogUtility.log("DataRequstServlet > cannot compose extended query");
+				log.debug("DataRequstServlet > cannot compose extended query");
 			}
 			sb.append("</extendedQuery>"+"\n");
 			sb.append("<requestDataType>identity</requestDataType> \n");
@@ -790,8 +793,8 @@ private void updateClientLog (String clientLog, String remoteHost)
 		
 		catch (Exception e) 
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 		return("composed extended query");
 	}
@@ -829,8 +832,8 @@ private void updateClientLog (String clientLog, String remoteHost)
 		}
 		catch (Exception e) 
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 		return query.toString();
 	}
@@ -881,8 +884,8 @@ private void updateClientLog (String clientLog, String remoteHost)
 		}
 		catch (Exception e) 
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 		return query.toString();
 	}
@@ -965,8 +968,8 @@ private void updateClientLog (String clientLog, String remoteHost)
 		}
 		catch (Exception e) 
 		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
+			log.debug("DataRequestServlet", e);
+			//e.printStackTrace();
 		}
 		return query.toString();
 	}
@@ -996,7 +999,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 			// get the parameters needed for retuning the results	 
 			if (requestDataType.trim().equals("vegCommunity"))
 			{
-				System.out.println(
+				log.debug(
 					"DataRequestServlet > DataRequestServlet.handleSimpleQuery - requesting "
 						+ "community information - not requesting plot info");
 				String query =
@@ -1006,7 +1009,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 						"simpleCommunityQuery",
 						userName,
 						query);
-				System.out.println(
+				log.debug(
 					"DataRequestServlet > Number of communities returned: "
 						+ qr.getResultsTotal()
 						+ "<br><br>");
@@ -1027,9 +1030,9 @@ private void updateClientLog (String clientLog, String remoteHost)
 		}
 		catch (Exception e)
 		{
-			System.out.println(
+			log.debug(
 				"DataRequestServlet Exception: " + e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	
@@ -1045,18 +1048,18 @@ private void updateClientLog (String clientLog, String remoteHost)
 		String userName,
 		String xmlString)
 	{
-		System.out.println("DataRequestServlet > QUERY TYPE  " + queryType);
+		log.debug("DataRequestServlet > QUERY TYPE  " + queryType);
 
 		// IF IT IS A BROWSER QUERY THEN REGISTER THE DOCUMENT -- IF 	 
 		// CACHING IS TURNED ON	 
 		if (QUERYCACHING.booleanValue())
 		{
-			System.out.println(
+			log.debug(
 				"DataRequestServlet > Caching the query doc");
 		}
 		else
 		{
-			System.out.println(
+			log.debug(
 				"DataRequestServlet > Not caching the query doc");
 		}
 
