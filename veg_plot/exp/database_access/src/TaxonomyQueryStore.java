@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-04 17:55:12 $'
- * '$Revision: 1.10 $'
+ *     '$Date: 2002-03-04 18:05:39 $'
+ * '$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -192,12 +192,13 @@ import databaseAccess.*;
 			Vector returnVector = new Vector();
 			try 
 			{
+				
+				
+				//connection stuff
 				Connection conn = this.getConnection();
 				Statement query = conn.createStatement();
 				ResultSet results = null;
-				
-				
-				
+
 				//create and issue the query --
 				StringBuffer sqlBuf = new StringBuffer();
 
@@ -209,7 +210,8 @@ import databaseAccess.*;
 				//add the level in the heirachy
 				sqlBuf.append(" and plantlevel like  '"+taxonLevel+"'");
 				//add the name type
-				sqlBuf.append(" and classsystem like  '"+taxonNameType+"'");
+				sqlBuf.append(" and ( classsystem like '"+taxonNameType+"' ");
+				sqlBuf.append(" or  classsystem like '"+taxonNameType.toUpperCase()+"' )");
 				
 				results = query.executeQuery( sqlBuf.toString() );
 			
