@@ -45,6 +45,15 @@
   <xs:element name="doc-author" type="xs:string"/>
   <xs:element name="doc-authorSoftware" type="xs:string"/>
   <xs:element name="doc-comments" type="xs:string"/>
+ 
+  <xs:simpleType name="nonEmptyString">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
 
       <!-- first desclare simple types for closed lists -->
       <xsl:for-each select="dataModel/entity/attribute[attListType='closed'][attModel='logical']">
@@ -182,8 +191,8 @@
       <xsl:when test="attType='Float'">xs:decimal</xsl:when>
       <xsl:when test="attType='Integer'">xs:long</xsl:when>
       <xsl:when test="attType='serial'">xs:long</xsl:when>
-      <xsl:when test="attType='text'">xs:string</xsl:when>
-      <xsl:when test="starts-with(attType,'varchar')">xs:string</xsl:when>
+      <xsl:when test="attType='text'"><xsl:choose><xsl:when test="attNulls='no'">nonEmptyString</xsl:when><xsl:otherwise>xs:string</xsl:otherwise></xsl:choose></xsl:when>
+      <xsl:when test="starts-with(attType,'varchar')"><xsl:choose><xsl:when test="attNulls='no'">nonEmptyString</xsl:when><xsl:otherwise>xs:string</xsl:otherwise></xsl:choose></xsl:when>
       <xsl:otherwise>@SOMETHINGELSE:<xsl:value-of select="attType"/>@</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
