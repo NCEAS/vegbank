@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2003-07-02 18:06:58 $'
-*  '$Revision: 1.1 $'
+*  '$Author: farrell $'
+*  '$Date: 2003-07-03 20:30:47 $'
+*  '$Revision: 1.2 $'
 *
 *
 -->
@@ -60,7 +60,7 @@
     String bgColor = "#FFFFF";
     %>
 
-    <logic:iterate id="party" name="parties" type="org.vegbank.common.model.PartySummary">
+    <logic:iterate id="party" name="genericBean" type="org.vegbank.common.model.PartySummary">
 
     <%
     //**************************************************************************************
@@ -78,10 +78,10 @@
       </td>
       <td><span class="item"><bean:write name="party" property="salutation"/>&nbsp;</span></td>
       <td><span class="item"><bean:write name="party" property="surname"/>&nbsp;</span></td>
-      <td><span class="item"><bean:write name="party" property="givenname"/>&nbsp;</span></td>
-      <td><span class="item"><bean:write name="party" property="middlename"/>&nbsp;</span></td>
+      <td><span class="item"><bean:write name="party" property="givenName"/>&nbsp;</span></td>
+      <td><span class="item"><bean:write name="party" property="middleName"/>&nbsp;</span></td>
 	  <td><span class="item"><bean:write name="party" property="organization"/>&nbsp;</span></td>
-      <td><span class="item"><bean:write name="party" property="contactinstructions"/>&nbsp;</span></td>
+      <td><span class="item"><bean:write name="party" property="contactInstructions"/>&nbsp;</span></td>
     </tr>
     </logic:iterate>
 

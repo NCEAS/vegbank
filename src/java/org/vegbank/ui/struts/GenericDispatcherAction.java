@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-06-30 20:08:17 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-03 20:30:47 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,10 +67,14 @@ public class GenericDispatcherAction extends Action
 		{
 			Object commandObject = Utility.createObject(commandLocation + command);
 			Class commandClass = commandObject.getClass();
-			Method commandExecute = commandClass.getMethod("execute",null);
-			Collection refs = (Collection) commandExecute.invoke(commandObject, null);
+			Class[] parameterTypes = null;
+			//	{ Class.forName(" javax.servlet.http.HttpServletRequest"),  
+			//		Class.forName("javax.servlet.http.HttpServletResponse"), };
+			Method commandExecute = commandClass.getMethod("execute",parameterTypes);
+			Object[] arguments = null;//{ request, response };
+			Collection collection = (Collection) commandExecute.invoke(commandObject, arguments);
 			
-			request.setAttribute("references",  refs);
+			request.setAttribute("genericBean",  collection);
 			
 			// Forward to a jsp
 			RequestDispatcher dispatcher = request.getRequestDispatcher(jspLocation + jsp);

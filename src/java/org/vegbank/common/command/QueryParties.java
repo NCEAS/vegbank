@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: mlee $'
- *	'$Date: 2003-07-02 18:06:58 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-07-03 20:30:48 $'
+ *	'$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,17 @@ public class QueryParties  implements VegbankCommand
 		//String[] fields = {"reference_id", "title", "shortname", "referencetype"};
 
 		DatabaseAccess da = new DatabaseAccess();
-		ResultSet rs = da.issueSelect("select party_id, salutation, surname, givenname, middlename, organizationname, contactinstructions from party");
+		String sql = 
+			"SELECT PARTY_ID, salutation, surname, givenname, middlename, organizationname, contactinstructions"
+			+ " FROM party "
+			+ " WHERE (party.PARTY_ID) In (SELECT note.PARTY_ID FROM note) " 
+			+ " OR (party.PARTY_ID) In (SELECT PARTY_ID FROM observationContributor) "
+			+ " OR (party.PARTY_ID) In (SELECT PARTY_ID FROM classContributor) "
+			+ " OR (party.PARTY_ID) In (SELECT PARTY_ID FROM observationSynonym) "
+			+ " OR (party.PARTY_ID) In (SELECT PARTY_ID FROM projectContributor) "
+			+ " OR (party.PARTY_ID) In (SELECT PARTY_ID FROM taxonInterpretation)";
+			
+		ResultSet rs = da.issueSelect(sql);
 
 		Collection col = new Vector();
 		while ( rs.next())
@@ -71,7 +81,7 @@ public class QueryParties  implements VegbankCommand
 			partysum.setSurname( rs.getString(3));
 			partysum.setGivenName( rs.getString(4));
 			partysum.setMiddleName( rs.getString(5));
-			partysum.setOrganizationName( rs.getString(6));
+			partysum.setOrganization( rs.getString(6));
 			partysum.setContactInstructions( rs.getString(7));
 			col.add(partysum);
 		}

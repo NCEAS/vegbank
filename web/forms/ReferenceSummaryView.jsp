@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: farrell $'
-*  '$Date: 2003-07-01 16:57:03 $'
-*  '$Revision: 1.1 $'
+*  '$Date: 2003-07-03 20:30:47 $'
+*  '$Revision: 1.2 $'
 *
 *
 -->
@@ -56,7 +56,7 @@
     String bgColor = "#FFFFF";
     %>
 
-    <logic:iterate id="reference" name="references" type="org.vegbank.common.model.ReferenceSummary">
+    <logic:iterate id="reference" name="genericBean" type="org.vegbank.common.model.ReferenceSummary">
     
     <%
     //**************************************************************************************
