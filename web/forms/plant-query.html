@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-02-28 18:28:41 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2002-03-04 19:30:18 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
@@ -16,30 +16,48 @@
 
 
 <html>
-<head>
-<title>
-Plots Database = plant taxa
-</title>
-</head>
-
-<body bgcolor=#FFFFFF>
-
-<!-- colors: silver=#E6E8FA navyblu=#23238E ltblue=DFE5FA  -->
-
-<table align=center border=0 width=90% cellspacing=0 cellpadding=0>
-
-<!-- logo (optional) on lt. blue background -->
-
-<tr>
-<td bgcolor=DFE5FA>
-
-<img align=center border=0 height=144 
- src="/harris/images/owlogoBev.jpg" alt = "Veg plots logo">
+	<head>
+		<title>
+			VEGBANK PLANT TAXONOMY LOOKUP
+		</title>
+	</head>
 
 
-<!-- title of page -->
+<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
+<table cellspacing="0" cellpadding="0" border="0" width="800">
+  <tr> 
+    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
+    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
+      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
+    </td>
+    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
+    <td width="119" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="@general_link@login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="@general_link@info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="@general_link@help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
+    </td>
+  </tr>
+</table>
 
-<td align=left valign=bottom>
+
+
+<!-- SECOND TABLE -->
+<table align=left border=0 width=90% cellspacing=0 cellpadding=0>
+	<tr>
+	<td bgcolor=DFE5FA>
+
+		<img align=center border=0 height=144 src="/vegbank/images/owlogoBev.jpg" alt = "Veg plots logo		">
+
+		<td align=left valign=bottom>
     <table border=0 cellpadding=5>
     <tr>
     <td align=left valign=bottom>
@@ -52,199 +70,126 @@ Plots Database = plant taxa
     </font>
     </td>
     </table>
-</td>
-</tr>
+		</td>
+	</tr>
 
-<!-- cool blue horizontal bar bar -->
-<tr>
-<td colspan=2 bgcolor=9999CC align=center valign=center>
-<!--&nbsp;<br>
-< SIDEBAR ANNOUNCEMENTS HERE >
-</td>
-<td colspan=1 bgcolor=23238E align=left valign=center>
-
-< SPECIAL ANNOUNCEMENTS HERE -->
-
-&nbsp;<br>
-&nbsp;
-&nbsp;
-<br>
+	<!-- left side lt. blue bar with links -->
 
 
-</td></tr>
-
-<!-- left side lt. blue bar with links -->
-
-<tr>
-<td width=15%  bgcolor=DFE5FA align=center valign=top>
-
-<table border=0 cellspacing=5>
-<tr><td bgcolor=FFFFFF align=center>
- <a href=index.html>
-  <font face="Verdana,Arial,Helvetica" size=2 color=23238E><b>
-  Overview
-  </b></font>
- </a>
-</td></tr>
-<tr><td bgcolor=FFFFFF align=center>
- <a href=index.html>
-  <font face="Verdana,Arial,Helvetica" size=2 color=23238E><b>
-  Underlying Databases
-  </b></font>
- </a>
-</td></tr>
-</table>
-<hr width=50% size=".5">
-
-<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
-see also:
-</font>
-<p>
-<font face="Helvetica,Arial,Verdana" size=1>
- <a href=about_plot.html>about Plots Data</a>
-<p>
- <a href=about_plant.html>about Plant Data</a>
-<p>
- <a href=news.html>what's new?</a><br>
-<p>
- <a href=faq.html>frequently asked questions</a>
-<p>
- <a href=references.html>references</a>
-<p>
- <a href=people.html>staff</a>
-<p>
- <a href=collab.html>collaborators</a>
- 
-</font>
-</td>
+	<tr>
+	<!-- LEFT MARGIN -->
+	<td width="15%"  bgcolor="white" align="left" valign="top">
+	</td>
+	
+	<td align="left">
+		<table border=0 cellspacing=5 cellpadding=5>
+		<form action="@datarequestservlet@" method="get">
+		<input type="hidden" name="requestDataType" value="plantTaxon">
+		<input type="hidden" name="requestDataFormatType" value="html">
+		<input type="hidden" name="clientType" value="browser">
+<!--		<input type="hidden" name="taxonLevel" value="genus"> -->
 
 
-<!-- main menu -->
+		<tr valign=top>
+		<td  align=left valign=middle colspan=2>
+		<!-- <font face="Helvetica,Arial,Verdana" size=2 color=2F4F2F> -->
+		<font face="Helvetica,Arial,Verdana" size="2" color="209020">
+			<b>Enter the taxon name below and toggle the correct type and level of the taxon. </b>
+		</font>
+		<p>
+		<small>
+			<INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
+		</small>
 
-<td align=center>
+		<!--TXON NAME -->
+		<tr>
+			<td width="20%" align=left valign=top>
+				<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+				<b>Taxon name:</b>
+			</td>
 
-<table border=0 cellspacing=5 cellpadding=5>
-
-<!-- servlet on dev 
-<FORM ACTION="http://dev.nceas.ucsb.edu/harris/servlet/DataRequestServlet" METHOD="GET">
--->
-
-<form action="@datarequestservlet@" method="get">
-<input type="hidden" name="requestDataType" value="plantTaxon">
-<input type="hidden" name="requestDataFormatType" value="html">
-<input type="hidden" name="clientType" value="browser">
-<input type="hidden" name="taxonLevel" value="genus">
-
-
-<tr valign=top>
-<td  align=left valign=middle colspan=2>
-<!-- <font face="Helvetica,Arial,Verdana" size=2 color=2F4F2F> -->
-<font face="Helvetica,Arial,Verdana" size=2 color=209020>
-
-<b>
-Enter the plant taxon below and toggle the correct type of name. 
-<!--put instructions here later -->
-</b>
-
-</font>
-<p>
-<small>
-<INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
-</small>
-
-<tr>
-<td  align=left valign=top>
-<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
-<b>plant taxon</b>
-</td>
-
-<!-- 	PLANT TAXON INPUT-->
-<td  align=left valign=top>
-<input size=35 name=taxonName>
-<b>
-<font face="Helvetica,Arial,Verdana" size=1>
-</font>
-</small>
-</font>
-
-</tr>
-
-<tr>
-<td  colspan=2 rowspan=1 align=left valign=middle>
-<hr size=.5>
-</tr>
-
-<tr>
-<td align=left valign=top>
- <!-- to choose the compound query option-->
- <small>
-  <font face="Helvetica,Arial,Verdana" color=000000>
-   <td align=left valign=top>
-   <input type = "radio" checked name="taxonNameType" value = "scientificName">scientific name<br>
-   <input type = "radio" name="taxonNameType" value = "commonName"> common name<br>
-   <input type = "radio" name="taxonNameType" value = "symbolCode">symbol <br>
-  </font>
- </small>
-</td>
-</tr>
-
-<tr>
-<td  align=left valign=middle colspan=2>
-<small>
-<INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;
-<INPUT TYPE="reset" VALUE="reset">
-</small>
-  </tr>
-    </table>
-
-<!-- bottom section -->
-
-<tr>
-<td colspan=2 bgcolor=DFE5FA>
-    <table cellpadding=15 width=100%>
-    <tr>
-    <td>
- <font face="Helvetica,Arial,Verdana" size=2>
-
- 
-  <script language=JavaScript alt="JavaScript not enabled!">
-   <!-- 
-    today = new Date()
-    document.write("(Accessed: " + today + ")")
-   //-->
- </script>
-</dd></dt></dl-->
-<table border=0 cellpadding=5 cellspacing=5 align=left><tr><td bgcolor=FFFFFF>
-
-</td></tr<tr><td bgcolor=FFFFFF>
- <a href=contributions.html#suggestions>
- <font face="Helvetica,Arial,Verdana" size=1 color=23238E>
- Suggestions Box</a><br>
-</td><td bgcolor=FFFFFF>
- <a href=questions.html>
- <font face="Helvetica,Arial,Verdana" size=1 color=23238E>
- questions and comments</a>
-</td></tr></table>
-</font>
-
-    </td>
-    </tr>
-    </table>
-</td></tr><tr><td align=center bgcolor=#FFFFFF colspan=2>
- <P align=center>
-<font face="Helvetica,Arial,Verdana">
-<small>The National Plots Database website is hosted by 
- <a href=http://www.nceas.ucsb.edu target="_new">
- <img src=http://www.nceas.ucsb.edu/logo.gif border=0 align=middle></a>
-</small>
-</font>
-</p>
-
-</td>
-</tr>
-
+			<!-- 	PLANT TAXON INPUT-->
+			<td  align=left valign=top>
+				<input size="35" name="taxonName">
+				<b>
+				<font face="Helvetica,Arial,Verdana" size=1>
+				</font>
+				</small>
+				</font>
+			</td>
+		</tr>
+		
+		<!-- HORIZONTAL LINE -->
+		<tr>
+			<td  colspan=2 rowspan=1 align=left valign=middle>
+			<hr size=.5>
+		</tr>
+		
+		<!-- TAXON TYPE -->
+		<tr>
+			<td width="15%" align=left valign=top>
+					<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+					<b>Taxon type:</b>
+			</td>
+			<td align=left valign=top>
+  				<font face="Helvetica,Arial,Verdana" color=000000>
+   				<input type = "radio" checked name="taxonNameType" value = "scientificName"> Scientific name<br>
+   				<input type = "radio" name="taxonNameType" value = "commonName"> Common name<br>
+   				<input type = "radio" name="taxonNameType" value = "Code"> Code <br>
+					<input type = "radio" name="taxonNameType" value = "%"> Any <br>
+  				</font>
+			</td>
+		</tr>
+		
+		
+			
+		<!-- HORIZONTAL LINE -->
+		<tr>
+			<td  colspan=2 rowspan=1 align=left valign=middle>
+			<hr size=.5>
+		</tr>
+		
+		<!-- TAXON LEVEL -->
+		<tr>
+			<td width="15%" align=left valign=top>
+					<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+					<b>Taxon level:</b>
+			</td>
+			<td align=left valign=top>
+  				<font face="Helvetica,Arial,Verdana" color=000000>
+   				<input type = "radio" checked name="taxonLevel" value = "family"> Family<br>
+   				<input type = "radio" name="taxonLevel" value = "genus"> Genus <br>
+   				<input type = "radio" name="taxonLevel" value = "species"> Species <br>
+					<input type = "radio" name="taxonLevel" value = "%"> Any <br>
+  				</font>
+			</td>
+		</tr>
+		
+	
+	
+		
+		
+		
+		<tr>
+		<td  align=left valign=middle colspan=2>
+		<small>
+		<INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;
+		<INPUT TYPE="reset" VALUE="reset">
+		</small>
+  	</tr>
+   </table>
+	
+	
+	
+	
+	
+	
+	
 
 </table>
+</font>
+</td>
+</tr>
 </body>
 </html>
 
